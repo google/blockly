@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Iframe Blockly</title>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border-style: solid;
+      border-color: #ddd;
+      border-width: 0 1px 1px 0;
+    }
+  </style>
+</head>
+<body>
+  <table width="100%" height="99%">
+    <tr>
+      <td>
+        <h1><a href="http://blockly.googlecode.com/">Blockly</a> &gt;
+          <a href="../index.html">Demos</a> &gt; Iframe Blockly</h1>
+
+        <p>This is a simple demo of injecting Blockly into a resizable 'iframe' element.</p>
+
+        <p>&rarr; More info on <a href="http://code.google.com/p/blockly/wiki/InjectingResizable">injecting resizable Blockly</a>...</p>
+      </td>
+    </tr>
+    <tr>
+      <td height="99%">
+        <script>
+          function blocklyLoaded(blockly) {
+            // Called once Blockly is fully loaded.
+            window.Blockly = blockly;
+          }
+        </script>
+        <iframe src="frame.html"></iframe>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

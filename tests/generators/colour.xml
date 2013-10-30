@@ -1,0 +1,241 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="procedures_defnoreturn" x="630" y="13">
+    <mutation></mutation>
+    <title name="NAME">test rgb</title>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <title name="MESSAGE">from rgb</title>
+        <value name="ACTUAL">
+          <block type="colour_rgb" inline="false">
+            <value name="RED">
+              <block type="math_number">
+                <title name="NUM">100</title>
+              </block>
+            </value>
+            <value name="GREEN">
+              <block type="math_number">
+                <title name="NUM">40</title>
+              </block>
+            </value>
+            <value name="BLUE">
+              <block type="math_number">
+                <title name="NUM">0</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="text">
+            <title name="TEXT">#ff6600</title>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="260" y="14">
+    <mutation></mutation>
+    <title name="NAME">test colour picker</title>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <title name="MESSAGE">static colour</title>
+        <value name="ACTUAL">
+          <block type="colour_picker">
+            <title name="COLOUR">#ff6600</title>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="text">
+            <title name="TEXT">#ff6600</title>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="unittest_main" x="-5" y="49">
+    <statement name="DO">
+      <block type="procedures_callnoreturn">
+        <mutation name="test colour picker"></mutation>
+        <next>
+          <block type="procedures_callnoreturn">
+            <mutation name="test blend"></mutation>
+            <next>
+              <block type="procedures_callnoreturn">
+                <mutation name="test rgb"></mutation>
+                <next>
+                  <block type="procedures_callnoreturn">
+                    <mutation name="test colour random"></mutation>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="520" y="205">
+    <mutation></mutation>
+    <title name="NAME">test blend</title>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <title name="MESSAGE">blend</title>
+        <value name="ACTUAL">
+          <block type="colour_blend" inline="false">
+            <value name="COLOUR1">
+              <block type="colour_picker">
+                <title name="COLOUR">#ff0000</title>
+              </block>
+            </value>
+            <value name="COLOUR2">
+              <block type="colour_rgb" inline="false">
+                <value name="RED">
+                  <block type="math_number">
+                    <title name="NUM">100</title>
+                  </block>
+                </value>
+                <value name="GREEN">
+                  <block type="math_number">
+                    <title name="NUM">40</title>
+                  </block>
+                </value>
+                <value name="BLUE">
+                  <block type="math_number">
+                    <title name="NUM">0</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="RATIO">
+              <block type="math_number">
+                <title name="NUM">0.4</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="text">
+            <title name="TEXT">#ff2900</title>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="-7" y="223">
+    <mutation></mutation>
+    <title name="NAME">test colour random</title>
+    <statement name="STACK">
+      <block type="controls_repeat_ext" inline="true">
+        <value name="TIMES">
+          <block type="math_number">
+            <title name="NUM">100</title>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="variables_set" inline="false">
+            <title name="VAR">item</title>
+            <value name="VALUE">
+              <block type="colour_random"></block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">test name</title>
+                <value name="ACTUAL">
+                  <block type="text_length" inline="false">
+                    <value name="VALUE">
+                      <block type="variables_get">
+                        <title name="VAR">item</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="math_number">
+                    <title name="NUM">7</title>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <title name="MESSAGE">test name</title>
+                    <value name="ACTUAL">
+                      <block type="text_charAt" inline="true">
+                        <mutation at="false"></mutation>
+                        <title name="WHERE">FIRST</title>
+                        <value name="VALUE">
+                          <block type="variables_get">
+                            <title name="VAR">item</title>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="text">
+                        <title name="TEXT">#</title>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="controls_for" inline="true">
+                        <title name="VAR">i</title>
+                        <value name="FROM">
+                          <block type="math_number">
+                            <title name="NUM">2</title>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="math_number">
+                            <title name="NUM">7</title>
+                          </block>
+                        </value>
+                        <statement name="DO">
+                          <block type="unittest_assertvalue" inline="false">
+                            <title name="MESSAGE">test name</title>
+                            <title name="EXPECTED">TRUE</title>
+                            <value name="ACTUAL">
+                              <block type="logic_compare" inline="true">
+                                <title name="OP">NEQ</title>
+                                <value name="A">
+                                  <block type="math_number">
+                                    <title name="NUM">0</title>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="text_indexOf" inline="false">
+                                    <title name="END">FIRST</title>
+                                    <value name="VALUE">
+                                      <block type="text">
+                                        <title name="TEXT">abcdefABDEF0123456789</title>
+                                      </block>
+                                    </value>
+                                    <value name="FIND">
+                                      <block type="text_charAt" inline="true">
+                                        <mutation at="true"></mutation>
+                                        <title name="WHERE">FROM_START</title>
+                                        <value name="VALUE">
+                                          <block type="variables_get">
+                                            <title name="VAR">item</title>
+                                          </block>
+                                        </value>
+                                        <value name="AT">
+                                          <block type="variables_get">
+                                            <title name="VAR">i</title>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>

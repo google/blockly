@@ -1,0 +1,2147 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="unittest_main" x="0" y="1">
+    <statement name="DO">
+      <block type="procedures_callnoreturn">
+        <mutation name="test empty"></mutation>
+        <next>
+          <block type="procedures_callnoreturn">
+            <mutation name="test length"></mutation>
+            <next>
+              <block type="procedures_callnoreturn">
+                <mutation name="test find"></mutation>
+                <next>
+                  <block type="procedures_callnoreturn">
+                    <mutation name="test get"></mutation>
+                    <next>
+                      <block type="procedures_callnoreturn">
+                        <mutation name="test get remove"></mutation>
+                        <next>
+                          <block type="procedures_callnoreturn">
+                            <mutation name="test remove"></mutation>
+                            <next>
+                              <block type="procedures_callnoreturn">
+                                <mutation name="test set"></mutation>
+                                <next>
+                                  <block type="procedures_callnoreturn">
+                                    <mutation name="test insert"></mutation>
+                                    <next>
+                                      <block type="procedures_callnoreturn">
+                                        <mutation name="test sublist"></mutation>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="36" y="439">
+    <mutation></mutation>
+    <title name="NAME">test create</title>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <title name="MESSAGE">test create empty</title>
+        <value name="ACTUAL">
+          <block type="lists_create_with">
+            <mutation items="0"></mutation>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="lists_create_empty"></block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <title name="MESSAGE">test create items</title>
+            <value name="ACTUAL">
+              <block type="lists_create_with" inline="false">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                  <block type="logic_boolean">
+                    <title name="BOOL">TRUE</title>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="text">
+                    <title name="TEXT">love</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="lists_create_with" inline="false">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                  <block type="logic_boolean">
+                    <title name="BOOL">TRUE</title>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="text">
+                    <title name="TEXT">love</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">test create repeated</title>
+                <value name="ACTUAL">
+                  <block type="lists_repeat" inline="true">
+                    <value name="ITEM">
+                      <block type="text">
+                        <title name="TEXT">Eject</title>
+                      </block>
+                    </value>
+                    <value name="NUM">
+                      <block type="math_number">
+                        <title name="NUM">3</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="3"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">Eject</title>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <title name="TEXT">Eject</title>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="text">
+                        <title name="TEXT">Eject</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="33" y="965">
+    <mutation></mutation>
+    <title name="NAME">test empty</title>
+    <statement name="STACK">
+      <block type="unittest_assertvalue" inline="false">
+        <title name="MESSAGE">not empty</title>
+        <title name="EXPECTED">FALSE</title>
+        <value name="ACTUAL">
+          <block type="lists_isEmpty" inline="false">
+            <value name="VALUE">
+              <block type="lists_create_with" inline="false">
+                <mutation items="1"></mutation>
+                <value name="ADD0">
+                  <block type="math_number">
+                    <title name="NUM">0</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertvalue" inline="false">
+            <title name="MESSAGE">empty</title>
+            <title name="EXPECTED">TRUE</title>
+            <value name="ACTUAL">
+              <block type="lists_isEmpty" inline="false">
+                <value name="VALUE">
+                  <block type="lists_create_empty"></block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="25" y="1181">
+    <mutation></mutation>
+    <title name="NAME">test length</title>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <title name="MESSAGE">zero length</title>
+        <value name="ACTUAL">
+          <block type="lists_length" inline="false">
+            <value name="VALUE">
+              <block type="lists_create_empty"></block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="math_number">
+            <title name="NUM">0</title>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <title name="MESSAGE">one length</title>
+            <value name="ACTUAL">
+              <block type="lists_length" inline="false">
+                <value name="VALUE">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="1"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">cat</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="math_number">
+                <title name="NUM">1</title>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">three length</title>
+                <value name="ACTUAL">
+                  <block type="lists_length" inline="false">
+                    <value name="VALUE">
+                      <block type="lists_create_with" inline="false">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <title name="TEXT">cat</title>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="logic_boolean">
+                            <title name="BOOL">TRUE</title>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="lists_create_empty"></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="math_number">
+                    <title name="NUM">3</title>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="24" y="1556">
+    <mutation></mutation>
+    <title name="NAME">test find</title>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <title name="MESSAGE">find first</title>
+        <value name="ACTUAL">
+          <block type="lists_indexOf" inline="false">
+            <title name="END">FIRST</title>
+            <value name="VALUE">
+              <block type="lists_create_with" inline="false">
+                <mutation items="4"></mutation>
+                <value name="ADD0">
+                  <block type="text">
+                    <title name="TEXT">Alice</title>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="text">
+                    <title name="TEXT">Eve</title>
+                  </block>
+                </value>
+                <value name="ADD2">
+                  <block type="text">
+                    <title name="TEXT">Bob</title>
+                  </block>
+                </value>
+                <value name="ADD3">
+                  <block type="text">
+                    <title name="TEXT">Eve</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="FIND">
+              <block type="text">
+                <title name="TEXT">Eve</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="math_number">
+            <title name="NUM">2</title>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <title name="MESSAGE">find last</title>
+            <value name="ACTUAL">
+              <block type="lists_indexOf" inline="false">
+                <title name="END">LAST</title>
+                <value name="VALUE">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="4"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">Alice</title>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <title name="TEXT">Eve</title>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="text">
+                        <title name="TEXT">Bob</title>
+                      </block>
+                    </value>
+                    <value name="ADD3">
+                      <block type="text">
+                        <title name="TEXT">Eve</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="FIND">
+                  <block type="text">
+                    <title name="TEXT">Eve</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="math_number">
+                <title name="NUM">4</title>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">find none</title>
+                <value name="ACTUAL">
+                  <block type="lists_indexOf" inline="false">
+                    <title name="END">FIRST</title>
+                    <value name="VALUE">
+                      <block type="lists_create_with" inline="false">
+                        <mutation items="4"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <title name="TEXT">Alice</title>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="text">
+                            <title name="TEXT">Bob</title>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="text">
+                            <title name="TEXT">Carol</title>
+                          </block>
+                        </value>
+                        <value name="ADD3">
+                          <block type="text">
+                            <title name="TEXT">Dave</title>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="FIND">
+                      <block type="text">
+                        <title name="TEXT">Eve</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="math_number">
+                    <title name="NUM">0</title>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="25" y="2199">
+    <mutation></mutation>
+    <title name="NAME">test get</title>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <title name="VAR">list</title>
+        <value name="VALUE">
+          <block type="lists_create_with" inline="false">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="text">
+                <title name="TEXT">Kirk</title>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="text">
+                <title name="TEXT">Spock</title>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="text">
+                <title name="TEXT">McCoy</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <title name="MESSAGE">get first</title>
+            <value name="ACTUAL">
+              <block type="lists_getIndex" inline="true">
+                <mutation statement="false" at="false"></mutation>
+                <title name="MODE">GET</title>
+                <title name="WHERE">FIRST</title>
+                <value name="VALUE">
+                  <block type="variables_get">
+                    <title name="VAR">list</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="text">
+                <title name="TEXT">Kirk</title>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">get last</title>
+                <value name="ACTUAL">
+                  <block type="lists_getIndex" inline="true">
+                    <mutation statement="false" at="false"></mutation>
+                    <title name="MODE">GET</title>
+                    <title name="WHERE">LAST</title>
+                    <value name="VALUE">
+                      <block type="variables_get">
+                        <title name="VAR">list</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="text">
+                    <title name="TEXT">McCoy</title>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertvalue" inline="false">
+                    <title name="MESSAGE">get random</title>
+                    <title name="EXPECTED">TRUE</title>
+                    <value name="ACTUAL">
+                      <block type="math_number_property" inline="true">
+                        <mutation divisor_input="false"></mutation>
+                        <title name="PROPERTY">POSITIVE</title>
+                        <value name="NUMBER_TO_CHECK">
+                          <block type="lists_indexOf" inline="false">
+                            <title name="END">FIRST</title>
+                            <value name="VALUE">
+                              <block type="variables_get">
+                                <title name="VAR">list</title>
+                              </block>
+                            </value>
+                            <value name="FIND">
+                              <block type="lists_getIndex" inline="true">
+                                <mutation statement="false" at="false"></mutation>
+                                <title name="MODE">GET</title>
+                                <title name="WHERE">RANDOM</title>
+                                <value name="VALUE">
+                                  <block type="variables_get">
+                                    <title name="VAR">list</title>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="unittest_assertequals" inline="false">
+                        <title name="MESSAGE">get #</title>
+                        <value name="ACTUAL">
+                          <block type="lists_getIndex" inline="true">
+                            <mutation statement="false" at="true"></mutation>
+                            <title name="MODE">GET</title>
+                            <title name="WHERE">FROM_START</title>
+                            <value name="VALUE">
+                              <block type="variables_get">
+                                <title name="VAR">list</title>
+                              </block>
+                            </value>
+                            <value name="AT">
+                              <block type="math_number">
+                                <title name="NUM">2</title>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="EXPECTED">
+                          <block type="text">
+                            <title name="TEXT">Spock</title>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <title name="MESSAGE">get #-end</title>
+                            <value name="ACTUAL">
+                              <block type="lists_getIndex" inline="true">
+                                <mutation statement="false" at="true"></mutation>
+                                <title name="MODE">GET</title>
+                                <title name="WHERE">FROM_END</title>
+                                <value name="VALUE">
+                                  <block type="variables_get">
+                                    <title name="VAR">list</title>
+                                  </block>
+                                </value>
+                                <value name="AT">
+                                  <block type="math_number">
+                                    <title name="NUM">3</title>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="text">
+                                <title name="TEXT">Kirk</title>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="23" y="2832">
+    <mutation></mutation>
+    <title name="NAME">test get remove</title>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <title name="VAR">list</title>
+        <value name="VALUE">
+          <block type="lists_create_with" inline="false">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="text">
+                <title name="TEXT">Kirk</title>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="text">
+                <title name="TEXT">Spock</title>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="text">
+                <title name="TEXT">McCoy</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <title name="MESSAGE">getremove first</title>
+            <value name="ACTUAL">
+              <block type="lists_getIndex" inline="true">
+                <mutation statement="false" at="false"></mutation>
+                <title name="MODE">GET_REMOVE</title>
+                <title name="WHERE">FIRST</title>
+                <value name="VALUE">
+                  <block type="variables_get">
+                    <title name="VAR">list</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="text">
+                <title name="TEXT">Kirk</title>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">getremove first list</title>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <title name="VAR">list</title>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">Spock</title>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <title name="TEXT">McCoy</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" inline="false">
+                    <title name="VAR">list</title>
+                    <value name="VALUE">
+                      <block type="lists_create_with" inline="false">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <title name="TEXT">Kirk</title>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="text">
+                            <title name="TEXT">Spock</title>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="text">
+                            <title name="TEXT">McCoy</title>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="unittest_assertequals" inline="false">
+                        <title name="MESSAGE">getremove last</title>
+                        <value name="ACTUAL">
+                          <block type="lists_getIndex" inline="true">
+                            <mutation statement="false" at="false"></mutation>
+                            <title name="MODE">GET_REMOVE</title>
+                            <title name="WHERE">LAST</title>
+                            <value name="VALUE">
+                              <block type="variables_get">
+                                <title name="VAR">list</title>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="EXPECTED">
+                          <block type="text">
+                            <title name="TEXT">McCoy</title>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <title name="MESSAGE">getremove last list</title>
+                            <value name="ACTUAL">
+                              <block type="variables_get">
+                                <title name="VAR">list</title>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="lists_create_with" inline="false">
+                                <mutation items="2"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <title name="TEXT">Kirk</title>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="text">
+                                    <title name="TEXT">Spock</title>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" inline="false">
+                                <title name="VAR">list</title>
+                                <value name="VALUE">
+                                  <block type="lists_create_with" inline="false">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="text">
+                                        <title name="TEXT">Kirk</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="text">
+                                        <title name="TEXT">Spock</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="text">
+                                        <title name="TEXT">McCoy</title>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="unittest_assertvalue" inline="false">
+                                    <title name="MESSAGE">getremove random</title>
+                                    <title name="EXPECTED">TRUE</title>
+                                    <value name="ACTUAL">
+                                      <block type="logic_compare" inline="true">
+                                        <title name="OP">EQ</title>
+                                        <value name="A">
+                                          <block type="lists_indexOf" inline="false">
+                                            <title name="END">FIRST</title>
+                                            <value name="VALUE">
+                                              <block type="variables_get">
+                                                <title name="VAR">list</title>
+                                              </block>
+                                            </value>
+                                            <value name="FIND">
+                                              <block type="lists_getIndex" inline="true">
+                                                <mutation statement="false" at="false"></mutation>
+                                                <title name="MODE">GET_REMOVE</title>
+                                                <title name="WHERE">RANDOM</title>
+                                                <value name="VALUE">
+                                                  <block type="variables_get">
+                                                    <title name="VAR">list</title>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="B">
+                                          <block type="math_number">
+                                            <title name="NUM">0</title>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="unittest_assertequals" inline="false">
+                                        <title name="MESSAGE">getremove random list</title>
+                                        <value name="ACTUAL">
+                                          <block type="lists_length" inline="false">
+                                            <value name="VALUE">
+                                              <block type="variables_get">
+                                                <title name="VAR">list</title>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="EXPECTED">
+                                          <block type="math_number">
+                                            <title name="NUM">2</title>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" inline="false">
+                                            <title name="VAR">list</title>
+                                            <value name="VALUE">
+                                              <block type="lists_create_with" inline="false">
+                                                <mutation items="3"></mutation>
+                                                <value name="ADD0">
+                                                  <block type="text">
+                                                    <title name="TEXT">Kirk</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD1">
+                                                  <block type="text">
+                                                    <title name="TEXT">Spock</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD2">
+                                                  <block type="text">
+                                                    <title name="TEXT">McCoy</title>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="unittest_assertequals" inline="false">
+                                                <title name="MESSAGE">getremove #</title>
+                                                <value name="ACTUAL">
+                                                  <block type="lists_getIndex" inline="true">
+                                                    <mutation statement="false" at="true"></mutation>
+                                                    <title name="MODE">GET_REMOVE</title>
+                                                    <title name="WHERE">FROM_START</title>
+                                                    <value name="VALUE">
+                                                      <block type="variables_get">
+                                                        <title name="VAR">list</title>
+                                                      </block>
+                                                    </value>
+                                                    <value name="AT">
+                                                      <block type="math_number">
+                                                        <title name="NUM">2</title>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                                <value name="EXPECTED">
+                                                  <block type="text">
+                                                    <title name="TEXT">Spock</title>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="unittest_assertequals" inline="false">
+                                                    <title name="MESSAGE">getremove # list</title>
+                                                    <value name="ACTUAL">
+                                                      <block type="variables_get">
+                                                        <title name="VAR">list</title>
+                                                      </block>
+                                                    </value>
+                                                    <value name="EXPECTED">
+                                                      <block type="lists_create_with" inline="false">
+                                                        <mutation items="2"></mutation>
+                                                        <value name="ADD0">
+                                                          <block type="text">
+                                                            <title name="TEXT">Kirk</title>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ADD1">
+                                                          <block type="text">
+                                                            <title name="TEXT">McCoy</title>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="variables_set" inline="false">
+                                                        <title name="VAR">list</title>
+                                                        <value name="VALUE">
+                                                          <block type="lists_create_with" inline="false">
+                                                            <mutation items="3"></mutation>
+                                                            <value name="ADD0">
+                                                              <block type="text">
+                                                                <title name="TEXT">Kirk</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD1">
+                                                              <block type="text">
+                                                                <title name="TEXT">Spock</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD2">
+                                                              <block type="text">
+                                                                <title name="TEXT">McCoy</title>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="unittest_assertequals" inline="false">
+                                                            <title name="MESSAGE">getremove #-end</title>
+                                                            <value name="ACTUAL">
+                                                              <block type="lists_getIndex" inline="true">
+                                                                <mutation statement="false" at="true"></mutation>
+                                                                <title name="MODE">GET_REMOVE</title>
+                                                                <title name="WHERE">FROM_END</title>
+                                                                <value name="VALUE">
+                                                                  <block type="variables_get">
+                                                                    <title name="VAR">list</title>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="AT">
+                                                                  <block type="math_number">
+                                                                    <title name="NUM">3</title>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </value>
+                                                            <value name="EXPECTED">
+                                                              <block type="text">
+                                                                <title name="TEXT">Kirk</title>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="unittest_assertequals" inline="false">
+                                                                <title name="MESSAGE">getremove #-end list</title>
+                                                                <value name="ACTUAL">
+                                                                  <block type="variables_get">
+                                                                    <title name="VAR">list</title>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="EXPECTED">
+                                                                  <block type="lists_create_with" inline="false">
+                                                                    <mutation items="2"></mutation>
+                                                                    <value name="ADD0">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Spock</title>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="ADD1">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">McCoy</title>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="15" y="4378">
+    <mutation></mutation>
+    <title name="NAME">test remove</title>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <title name="VAR">list</title>
+        <value name="VALUE">
+          <block type="lists_create_with" inline="false">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="text">
+                <title name="TEXT">Kirk</title>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="text">
+                <title name="TEXT">Spock</title>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="text">
+                <title name="TEXT">McCoy</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="lists_getIndex" inline="true">
+            <mutation statement="true" at="false"></mutation>
+            <title name="MODE">REMOVE</title>
+            <title name="WHERE">FIRST</title>
+            <value name="VALUE">
+              <block type="variables_get">
+                <title name="VAR">list</title>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">remove first list</title>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <title name="VAR">list</title>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">Spock</title>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <title name="TEXT">McCoy</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" inline="false">
+                    <title name="VAR">list</title>
+                    <value name="VALUE">
+                      <block type="lists_create_with" inline="false">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <title name="TEXT">Kirk</title>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="text">
+                            <title name="TEXT">Spock</title>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="text">
+                            <title name="TEXT">McCoy</title>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="lists_getIndex" inline="true">
+                        <mutation statement="true" at="false"></mutation>
+                        <title name="MODE">REMOVE</title>
+                        <title name="WHERE">LAST</title>
+                        <value name="VALUE">
+                          <block type="variables_get">
+                            <title name="VAR">list</title>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <title name="MESSAGE">remove last list</title>
+                            <value name="ACTUAL">
+                              <block type="variables_get">
+                                <title name="VAR">list</title>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="lists_create_with" inline="false">
+                                <mutation items="2"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <title name="TEXT">Kirk</title>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="text">
+                                    <title name="TEXT">Spock</title>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" inline="false">
+                                <title name="VAR">list</title>
+                                <value name="VALUE">
+                                  <block type="lists_create_with" inline="false">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="text">
+                                        <title name="TEXT">Kirk</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="text">
+                                        <title name="TEXT">Spock</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="text">
+                                        <title name="TEXT">McCoy</title>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="lists_getIndex" inline="true">
+                                    <mutation statement="true" at="false"></mutation>
+                                    <title name="MODE">REMOVE</title>
+                                    <title name="WHERE">RANDOM</title>
+                                    <value name="VALUE">
+                                      <block type="variables_get">
+                                        <title name="VAR">list</title>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="unittest_assertequals" inline="false">
+                                        <title name="MESSAGE">remove random list</title>
+                                        <value name="ACTUAL">
+                                          <block type="lists_length" inline="false">
+                                            <value name="VALUE">
+                                              <block type="variables_get">
+                                                <title name="VAR">list</title>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="EXPECTED">
+                                          <block type="math_number">
+                                            <title name="NUM">2</title>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" inline="false">
+                                            <title name="VAR">list</title>
+                                            <value name="VALUE">
+                                              <block type="lists_create_with" inline="false">
+                                                <mutation items="3"></mutation>
+                                                <value name="ADD0">
+                                                  <block type="text">
+                                                    <title name="TEXT">Kirk</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD1">
+                                                  <block type="text">
+                                                    <title name="TEXT">Spock</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD2">
+                                                  <block type="text">
+                                                    <title name="TEXT">McCoy</title>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="lists_getIndex" inline="true">
+                                                <mutation statement="true" at="true"></mutation>
+                                                <title name="MODE">REMOVE</title>
+                                                <title name="WHERE">FROM_START</title>
+                                                <value name="VALUE">
+                                                  <block type="variables_get">
+                                                    <title name="VAR">list</title>
+                                                  </block>
+                                                </value>
+                                                <value name="AT">
+                                                  <block type="math_number">
+                                                    <title name="NUM">2</title>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="unittest_assertequals" inline="false">
+                                                    <title name="MESSAGE">remove # list</title>
+                                                    <value name="ACTUAL">
+                                                      <block type="variables_get">
+                                                        <title name="VAR">list</title>
+                                                      </block>
+                                                    </value>
+                                                    <value name="EXPECTED">
+                                                      <block type="lists_create_with" inline="false">
+                                                        <mutation items="2"></mutation>
+                                                        <value name="ADD0">
+                                                          <block type="text">
+                                                            <title name="TEXT">Kirk</title>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ADD1">
+                                                          <block type="text">
+                                                            <title name="TEXT">McCoy</title>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="variables_set" inline="false">
+                                                        <title name="VAR">list</title>
+                                                        <value name="VALUE">
+                                                          <block type="lists_create_with" inline="false">
+                                                            <mutation items="3"></mutation>
+                                                            <value name="ADD0">
+                                                              <block type="text">
+                                                                <title name="TEXT">Kirk</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD1">
+                                                              <block type="text">
+                                                                <title name="TEXT">Spock</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD2">
+                                                              <block type="text">
+                                                                <title name="TEXT">McCoy</title>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="lists_getIndex" inline="true">
+                                                            <mutation statement="true" at="true"></mutation>
+                                                            <title name="MODE">REMOVE</title>
+                                                            <title name="WHERE">FROM_END</title>
+                                                            <value name="VALUE">
+                                                              <block type="variables_get">
+                                                                <title name="VAR">list</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="AT">
+                                                              <block type="math_number">
+                                                                <title name="NUM">3</title>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="unittest_assertequals" inline="false">
+                                                                <title name="MESSAGE">remove #-end list</title>
+                                                                <value name="ACTUAL">
+                                                                  <block type="variables_get">
+                                                                    <title name="VAR">list</title>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="EXPECTED">
+                                                                  <block type="lists_create_with" inline="false">
+                                                                    <mutation items="2"></mutation>
+                                                                    <value name="ADD0">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Spock</title>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="ADD1">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">McCoy</title>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="17" y="5626">
+    <mutation></mutation>
+    <title name="NAME">test set</title>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <title name="VAR">x</title>
+        <value name="VALUE">
+          <block type="lists_create_with" inline="false">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="text">
+                <title name="TEXT">Picard</title>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="text">
+                <title name="TEXT">Riker</title>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="text">
+                <title name="TEXT">Crusher</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="lists_setIndex" inline="true">
+            <mutation at="false"></mutation>
+            <title name="MODE">SET</title>
+            <title name="WHERE">FIRST</title>
+            <value name="LIST">
+              <block type="variables_get">
+                <title name="VAR">x</title>
+              </block>
+            </value>
+            <value name="TO">
+              <block type="text">
+                <title name="TEXT">Jean-Luc</title>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">set first list</title>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <title name="VAR">x</title>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="3"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">Jean-Luc</title>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <title name="TEXT">Riker</title>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="text">
+                        <title name="TEXT">Crusher</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" inline="false">
+                    <title name="VAR">x</title>
+                    <value name="VALUE">
+                      <block type="lists_create_with" inline="false">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <title name="TEXT">Picard</title>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="text">
+                            <title name="TEXT">Riker</title>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="text">
+                            <title name="TEXT">Crusher</title>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="lists_setIndex" inline="true">
+                        <mutation at="false"></mutation>
+                        <title name="MODE">SET</title>
+                        <title name="WHERE">LAST</title>
+                        <value name="LIST">
+                          <block type="variables_get">
+                            <title name="VAR">x</title>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="text">
+                            <title name="TEXT">Beverly</title>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <title name="MESSAGE">set last list</title>
+                            <value name="ACTUAL">
+                              <block type="variables_get">
+                                <title name="VAR">x</title>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="lists_create_with" inline="false">
+                                <mutation items="3"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <title name="TEXT">Picard</title>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="text">
+                                    <title name="TEXT">Riker</title>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="text">
+                                    <title name="TEXT">Beverly</title>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" inline="false">
+                                <title name="VAR">x</title>
+                                <value name="VALUE">
+                                  <block type="lists_create_with" inline="false">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="text">
+                                        <title name="TEXT">Picard</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="text">
+                                        <title name="TEXT">Riker</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="text">
+                                        <title name="TEXT">Crusher</title>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="lists_setIndex" inline="true">
+                                    <mutation at="false"></mutation>
+                                    <title name="MODE">SET</title>
+                                    <title name="WHERE">RANDOM</title>
+                                    <value name="LIST">
+                                      <block type="variables_get">
+                                        <title name="VAR">x</title>
+                                      </block>
+                                    </value>
+                                    <value name="TO">
+                                      <block type="text">
+                                        <title name="TEXT">Data</title>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="unittest_assertequals" inline="false">
+                                        <title name="MESSAGE">set random list</title>
+                                        <value name="ACTUAL">
+                                          <block type="lists_length" inline="false">
+                                            <value name="VALUE">
+                                              <block type="variables_get">
+                                                <title name="VAR">x</title>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="EXPECTED">
+                                          <block type="math_number">
+                                            <title name="NUM">3</title>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" inline="false">
+                                            <title name="VAR">x</title>
+                                            <value name="VALUE">
+                                              <block type="lists_create_with" inline="false">
+                                                <mutation items="3"></mutation>
+                                                <value name="ADD0">
+                                                  <block type="text">
+                                                    <title name="TEXT">Picard</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD1">
+                                                  <block type="text">
+                                                    <title name="TEXT">Riker</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD2">
+                                                  <block type="text">
+                                                    <title name="TEXT">Crusher</title>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="lists_setIndex" inline="true">
+                                                <mutation at="true"></mutation>
+                                                <title name="MODE">SET</title>
+                                                <title name="WHERE">FROM_START</title>
+                                                <value name="LIST">
+                                                  <block type="variables_get">
+                                                    <title name="VAR">x</title>
+                                                  </block>
+                                                </value>
+                                                <value name="AT">
+                                                  <block type="math_number">
+                                                    <title name="NUM">3</title>
+                                                  </block>
+                                                </value>
+                                                <value name="TO">
+                                                  <block type="text">
+                                                    <title name="TEXT">Pulaski</title>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="unittest_assertequals" inline="false">
+                                                    <title name="MESSAGE">set # list</title>
+                                                    <value name="ACTUAL">
+                                                      <block type="variables_get">
+                                                        <title name="VAR">x</title>
+                                                      </block>
+                                                    </value>
+                                                    <value name="EXPECTED">
+                                                      <block type="lists_create_with" inline="false">
+                                                        <mutation items="3"></mutation>
+                                                        <value name="ADD0">
+                                                          <block type="text">
+                                                            <title name="TEXT">Picard</title>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ADD1">
+                                                          <block type="text">
+                                                            <title name="TEXT">Riker</title>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ADD2">
+                                                          <block type="text">
+                                                            <title name="TEXT">Pulaski</title>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="variables_set" inline="false">
+                                                        <title name="VAR">x</title>
+                                                        <value name="VALUE">
+                                                          <block type="lists_create_with" inline="false">
+                                                            <mutation items="3"></mutation>
+                                                            <value name="ADD0">
+                                                              <block type="text">
+                                                                <title name="TEXT">Picard</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD1">
+                                                              <block type="text">
+                                                                <title name="TEXT">Riker</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD2">
+                                                              <block type="text">
+                                                                <title name="TEXT">Crusher</title>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="lists_setIndex" inline="true">
+                                                            <mutation at="true"></mutation>
+                                                            <title name="MODE">SET</title>
+                                                            <title name="WHERE">FROM_END</title>
+                                                            <value name="LIST">
+                                                              <block type="variables_get">
+                                                                <title name="VAR">x</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="AT">
+                                                              <block type="math_number">
+                                                                <title name="NUM">1</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="TO">
+                                                              <block type="text">
+                                                                <title name="TEXT">Pulaski</title>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="unittest_assertequals" inline="false">
+                                                                <title name="MESSAGE">set #-end list</title>
+                                                                <value name="ACTUAL">
+                                                                  <block type="variables_get">
+                                                                    <title name="VAR">x</title>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="EXPECTED">
+                                                                  <block type="lists_create_with" inline="false">
+                                                                    <mutation items="3"></mutation>
+                                                                    <value name="ADD0">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Picard</title>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="ADD1">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Riker</title>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="ADD2">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Pulaski</title>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="32" y="6947">
+    <mutation></mutation>
+    <title name="NAME">test insert</title>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <title name="VAR">x</title>
+        <value name="VALUE">
+          <block type="lists_create_with" inline="false">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="text">
+                <title name="TEXT">Picard</title>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="text">
+                <title name="TEXT">Riker</title>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="text">
+                <title name="TEXT">Crusher</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="lists_setIndex" inline="true">
+            <mutation at="false"></mutation>
+            <title name="MODE">INSERT</title>
+            <title name="WHERE">FIRST</title>
+            <value name="LIST">
+              <block type="variables_get">
+                <title name="VAR">x</title>
+              </block>
+            </value>
+            <value name="TO">
+              <block type="text">
+                <title name="TEXT">Data</title>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">insert first list</title>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <title name="VAR">x</title>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="4"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">Data</title>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <title name="TEXT">Picard</title>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="text">
+                        <title name="TEXT">Riker</title>
+                      </block>
+                    </value>
+                    <value name="ADD3">
+                      <block type="text">
+                        <title name="TEXT">Crusher</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" inline="false">
+                    <title name="VAR">x</title>
+                    <value name="VALUE">
+                      <block type="lists_create_with" inline="false">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="text">
+                            <title name="TEXT">Picard</title>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="text">
+                            <title name="TEXT">Riker</title>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="text">
+                            <title name="TEXT">Crusher</title>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="lists_setIndex" inline="true">
+                        <mutation at="false"></mutation>
+                        <title name="MODE">INSERT</title>
+                        <title name="WHERE">LAST</title>
+                        <value name="LIST">
+                          <block type="variables_get">
+                            <title name="VAR">x</title>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="text">
+                            <title name="TEXT">Data</title>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <title name="MESSAGE">insert last list</title>
+                            <value name="ACTUAL">
+                              <block type="variables_get">
+                                <title name="VAR">x</title>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="lists_create_with" inline="false">
+                                <mutation items="4"></mutation>
+                                <value name="ADD0">
+                                  <block type="text">
+                                    <title name="TEXT">Picard</title>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="text">
+                                    <title name="TEXT">Riker</title>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="text">
+                                    <title name="TEXT">Crusher</title>
+                                  </block>
+                                </value>
+                                <value name="ADD3">
+                                  <block type="text">
+                                    <title name="TEXT">Data</title>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" inline="false">
+                                <title name="VAR">x</title>
+                                <value name="VALUE">
+                                  <block type="lists_create_with" inline="false">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="text">
+                                        <title name="TEXT">Picard</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="text">
+                                        <title name="TEXT">Riker</title>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="text">
+                                        <title name="TEXT">Crusher</title>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="lists_setIndex" inline="true">
+                                    <mutation at="false"></mutation>
+                                    <title name="MODE">INSERT</title>
+                                    <title name="WHERE">RANDOM</title>
+                                    <value name="LIST">
+                                      <block type="variables_get">
+                                        <title name="VAR">x</title>
+                                      </block>
+                                    </value>
+                                    <value name="TO">
+                                      <block type="text">
+                                        <title name="TEXT">Data</title>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="unittest_assertequals" inline="false">
+                                        <title name="MESSAGE">insert random list</title>
+                                        <value name="ACTUAL">
+                                          <block type="lists_length" inline="false">
+                                            <value name="VALUE">
+                                              <block type="variables_get">
+                                                <title name="VAR">x</title>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <value name="EXPECTED">
+                                          <block type="math_number">
+                                            <title name="NUM">4</title>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" inline="false">
+                                            <title name="VAR">x</title>
+                                            <value name="VALUE">
+                                              <block type="lists_create_with" inline="false">
+                                                <mutation items="3"></mutation>
+                                                <value name="ADD0">
+                                                  <block type="text">
+                                                    <title name="TEXT">Picard</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD1">
+                                                  <block type="text">
+                                                    <title name="TEXT">Riker</title>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD2">
+                                                  <block type="text">
+                                                    <title name="TEXT">Crusher</title>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="lists_setIndex" inline="true">
+                                                <mutation at="true"></mutation>
+                                                <title name="MODE">INSERT</title>
+                                                <title name="WHERE">FROM_START</title>
+                                                <value name="LIST">
+                                                  <block type="variables_get">
+                                                    <title name="VAR">x</title>
+                                                  </block>
+                                                </value>
+                                                <value name="AT">
+                                                  <block type="math_number">
+                                                    <title name="NUM">3</title>
+                                                  </block>
+                                                </value>
+                                                <value name="TO">
+                                                  <block type="text">
+                                                    <title name="TEXT">Data</title>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="unittest_assertequals" inline="false">
+                                                    <title name="MESSAGE">insert # list</title>
+                                                    <value name="ACTUAL">
+                                                      <block type="variables_get">
+                                                        <title name="VAR">x</title>
+                                                      </block>
+                                                    </value>
+                                                    <value name="EXPECTED">
+                                                      <block type="lists_create_with" inline="false">
+                                                        <mutation items="4"></mutation>
+                                                        <value name="ADD0">
+                                                          <block type="text">
+                                                            <title name="TEXT">Picard</title>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ADD1">
+                                                          <block type="text">
+                                                            <title name="TEXT">Riker</title>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ADD2">
+                                                          <block type="text">
+                                                            <title name="TEXT">Data</title>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ADD3">
+                                                          <block type="text">
+                                                            <title name="TEXT">Crusher</title>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="variables_set" inline="false">
+                                                        <title name="VAR">x</title>
+                                                        <value name="VALUE">
+                                                          <block type="lists_create_with" inline="false">
+                                                            <mutation items="3"></mutation>
+                                                            <value name="ADD0">
+                                                              <block type="text">
+                                                                <title name="TEXT">Picard</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD1">
+                                                              <block type="text">
+                                                                <title name="TEXT">Riker</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD2">
+                                                              <block type="text">
+                                                                <title name="TEXT">Crusher</title>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="lists_setIndex" inline="true">
+                                                            <mutation at="true"></mutation>
+                                                            <title name="MODE">INSERT</title>
+                                                            <title name="WHERE">FROM_END</title>
+                                                            <value name="LIST">
+                                                              <block type="variables_get">
+                                                                <title name="VAR">x</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="AT">
+                                                              <block type="math_number">
+                                                                <title name="NUM">1</title>
+                                                              </block>
+                                                            </value>
+                                                            <value name="TO">
+                                                              <block type="text">
+                                                                <title name="TEXT">Data</title>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="unittest_assertequals" inline="false">
+                                                                <title name="MESSAGE">insert #-end list</title>
+                                                                <value name="ACTUAL">
+                                                                  <block type="variables_get">
+                                                                    <title name="VAR">x</title>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="EXPECTED">
+                                                                  <block type="lists_create_with" inline="false">
+                                                                    <mutation items="4"></mutation>
+                                                                    <value name="ADD0">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Picard</title>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="ADD1">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Riker</title>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="ADD2">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Data</title>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="ADD3">
+                                                                      <block type="text">
+                                                                        <title name="TEXT">Crusher</title>
+                                                                      </block>
+                                                                    </value>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="47" y="8393">
+    <mutation></mutation>
+    <title name="NAME">test sublist</title>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <title name="VAR">list</title>
+        <value name="VALUE">
+          <block type="lists_create_with" inline="false">
+            <mutation items="5"></mutation>
+            <value name="ADD0">
+              <block type="text">
+                <title name="TEXT">Columbia</title>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="text">
+                <title name="TEXT">Challenger</title>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="text">
+                <title name="TEXT">Discovery</title>
+              </block>
+            </value>
+            <value name="ADD3">
+              <block type="text">
+                <title name="TEXT">Atlantis</title>
+              </block>
+            </value>
+            <value name="ADD4">
+              <block type="text">
+                <title name="TEXT">Endeavour</title>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <title name="MESSAGE">sublist # start</title>
+            <value name="ACTUAL">
+              <block type="lists_getSublist" inline="true">
+                <mutation at1="true" at2="true"></mutation>
+                <title name="WHERE1">FROM_START</title>
+                <title name="WHERE2">FROM_START</title>
+                <value name="LIST">
+                  <block type="variables_get">
+                    <title name="VAR">list</title>
+                  </block>
+                </value>
+                <value name="AT1">
+                  <block type="math_number">
+                    <title name="NUM">2</title>
+                  </block>
+                </value>
+                <value name="AT2">
+                  <block type="math_number">
+                    <title name="NUM">3</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="lists_create_with" inline="false">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                  <block type="text">
+                    <title name="TEXT">Challenger</title>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="text">
+                    <title name="TEXT">Discovery</title>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <title name="MESSAGE">sublist # end</title>
+                <value name="ACTUAL">
+                  <block type="lists_getSublist" inline="true">
+                    <mutation at1="true" at2="true"></mutation>
+                    <title name="WHERE1">FROM_END</title>
+                    <title name="WHERE2">FROM_END</title>
+                    <value name="LIST">
+                      <block type="variables_get">
+                        <title name="VAR">list</title>
+                      </block>
+                    </value>
+                    <value name="AT1">
+                      <block type="math_number">
+                        <title name="NUM">3</title>
+                      </block>
+                    </value>
+                    <value name="AT2">
+                      <block type="math_number">
+                        <title name="NUM">2</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="lists_create_with" inline="false">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="text">
+                        <title name="TEXT">Discovery</title>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="text">
+                        <title name="TEXT">Atlantis</title>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <title name="MESSAGE">sublist first-last</title>
+                    <value name="ACTUAL">
+                      <block type="lists_getSublist" inline="true">
+                        <mutation at1="false" at2="false"></mutation>
+                        <title name="WHERE1">FIRST</title>
+                        <title name="WHERE2">LAST</title>
+                        <value name="LIST">
+                          <block type="variables_get">
+                            <title name="VAR">list</title>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="variables_get">
+                        <title name="VAR">list</title>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

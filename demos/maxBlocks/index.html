@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Maximum Block Limit</title>
+  <script type="text/javascript" src="../../blockly_compressed.js"></script>
+  <script type="text/javascript" src="../../blocks_compressed.js"></script>
+  <script type="text/javascript" src="../../msg/js/en.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    #capacity {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="http://blockly.googlecode.com/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Maximum Block Limit</h1>
+
+  <p>This is a demo of Blockly which has been restricted to a maximum of five blocks.</p>
+
+  <p><b>You have <span id="capacity"></span> block(s) left.</b></p>
+
+  <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="Control">
+      <block type="controls_if"></block>
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <title name="NUM">10</title>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <title name="VAR">i</title>
+        <value name="FROM">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <title name="NUM">10</title>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Logic">
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+    </category>
+    <category name="Text">
+      <block type="text"></block>
+      <block type="text_length"></block>
+      <block type="text_print"></block>
+    </category>
+  </xml>
+
+  <script>
+    Blockly.inject(document.getElementById('blocklyDiv'),
+        {path: '../../', maxBlocks: 5, toolbox: document.getElementById('toolbox')});
+
+    function onchange() {
+      document.getElementById('capacity').innerHTML = Blockly.mainWorkspace.remainingCapacity();
+    }
+
+    Blockly.addChangeListener(onchange);
+
+  </script>
+
+</body>
+</html>

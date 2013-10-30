@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+var loc = location.href;
+
+// Blockly files moved from /blockly to /static on 5 Dec 2012.
+if (loc.match('/blockly/')) {
+  loc = loc.replace('/blockly/', '/static/');
+}
+
+// Code, Maze and Turtle moved from demos to apps on 29 Dec 2012.
+if (loc.match(/\/demos\/(code|maze|turtle)\//)) {
+  loc = loc.replace('/demos/', '/apps/');
+}
+
+// Vietnamese apps moved from vn to vi on 9 Jun 2012.
+if (loc.match('/vn.html')) {
+  loc = loc.replace('/vn.html', '/vi.html');
+}
+
+if (loc.match('/apps/code/code.html')) {
+  // Code moved to index.html on 7 Aug 2013.
+  loc = loc.replace('/code.html', '/index.html');
+} else if (loc.match('/apps/code/zh_tw.html')) {
+  // Code became language-agnostic on 20 Jul 2013.
+  loc = loc.replace('/zh_tw.html', '/index.html?lang=zh-tw');
+} else if (loc.match('/apps/code/index.html')) {
+  // NOP.
+} else if (loc.match(/\/apps\/code\/[-a-z]+\.html/)) {
+  // Code became language-agnostic on 20 Jul 2013.
+  loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
+}
+
+if (loc.match('/apps/graph/graph.html')) {
+  // Graph moved to index.html on 7 Aug 2013.
+  loc = loc.replace('/graph.html', '/index.html');
+} else if (loc.match('/apps/graph/index.html')) {
+  // NOP.
+} else if (loc.match(/\/apps\/graph\/[-a-z]+\.html/)) {
+  // Graph became language-agnostic on 20 Jul 2013.
+  loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
+}
+
+if (loc.match('/apps/maze/maze.html')) {
+  // Maze moved to index.html on 7 Aug 2013.
+  loc = loc.replace('/maze.html', '/index.html');
+} else if (loc.match('/apps/maze/index.html')) {
+  // NOP.
+} else if (loc.match(/\/apps\/maze\/[-a-z]+\.html/)) {
+  // Maze became language-agnostic on 20 Jul 2013.
+  if (location.search) {
+    loc = loc.replace(/\/([-a-z]+)\.html\?/, '/index.html?lang=$1&');
+  } else {
+    loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
+  }
+}
+
+if (loc.match('/apps/plane/plane.html')) {
+  // Plane moved to index.html on 7 Aug 2013.
+  loc = loc.replace('/plane.html', '/index.html');
+} else if (loc.match('/apps/code/plane.html')) {
+  // NOP.
+} else if (loc.match(/\/apps\/plane\/[\d_]*[-a-z]+\.html/)) {
+  // Plane became language-agnostic on 20 Jul 2013.
+  loc = loc.replace('vn.html', 'vi.html');
+  if (location.search) {
+    loc = loc.replace(/\/[\d_]*([-a-z]+)\.html\?/, '/index.html?lang=$1&');
+  } else {
+    loc = loc.replace(/\/[\d_]*([-a-z]+)\.html/, '/index.html?lang=$1');
+  }
+}
+
+if (loc.match('/apps/puzzle/puzzle.html')) {
+  // Puzzle moved to index.html on 30 Jul 2013.
+  loc = loc.replace('/puzzle.html', '/index.html');
+} else if (loc.match('/apps/puzzle/index.html')) {
+  // NOP.
+} else if (loc.match(/\/apps\/puzzle\/[-a-z]+\.html/)) {
+  // Puzzle became language-agnostic on 20 Jul 2013.
+  loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
+}
+
+if (loc.match('/apps/turtle/turtle.html')) {
+  // Turtle moved to index.html on 7 Aug 2013.
+  loc = loc.replace('/turtle.html', '/index.html');
+} else if (loc.match('/apps/turtle/index.html')) {
+  // NOP.
+} else if (loc.match(/\/apps\/turtle\/[-a-z]+\.html/)) {
+  // Turtle became language-agnostic on 20 Jul 2013.
+  loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
+}
+
+location = loc;
+
+    </script>
+  </head>
+</html>

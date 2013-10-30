@@ -1,0 +1,64 @@
+.tab {
+  padding: 6px 12px;
+  text-decoration: none;
+  color: #000;
+}
+#selected {
+  font-weight: bold;
+  background-color: #ddd;
+  border-radius: 20px;
+}
+
+#blockly {
+  height: 300px;
+  width: 100%;
+  border-style: solid;
+  border-color: #ddd;
+  border-width: 0 1px 1px 0;
+}
+
+/* SVG Plane. */
+#fuselage {
+  fill: #fff;
+  stroke: #000;
+}
+#wing, #tail {
+  fill: #ddd;
+  stroke: #444;
+}
+.crew {
+  fill: #f44;
+  stroke: #000;
+}
+.seat1st {
+  fill: #88f;
+  stroke: #000;
+}
+.seat2nd {
+  fill: #8b8;
+  stroke: #000;
+}
+#seatYes, #seatNo {
+  font-size: 40pt;
+}
+text {
+  font-family: sans-serif;
+  font-size: 20pt;
+  fill: #444;
+}
+
+/* Slider. */
+.sliderTrack {
+  stroke: #aaa;
+  stroke-width: 6px;
+  stroke-linecap: round;
+}
+.sliderKnob {
+  fill: #ddd;
+  stroke: #bbc;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+.sliderKnob:hover {
+  fill: #eee;
+}

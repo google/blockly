@@ -1,0 +1,72 @@
+#containerCode {
+  direction: ltr;
+  font-size: large;
+  overflow: auto;
+  max-height: 400px;
+}
+
+button.primary {
+  /* Can't use "text-align: start" due to IE. */
+  text-align: left;
+}
+html[dir="RTL"] button.primary {
+  text-align: right;
+}
+
+#toolbarDiv {
+  text-align: center;
+  width: 400px;
+  padding-top: 1em;
+}
+#blockly {
+  position: fixed;
+  bottom: 10px;
+}
+#display {
+  border: 1px solid #ccc;
+}
+#downloadImageLink {
+  display: none;
+}
+#languageMenu {
+  vertical-align: top;
+  margin-top: 12px;
+}
+
+/* Slider. */
+.sliderTrack {
+  stroke: #aaa;
+  stroke-width: 6px;
+  stroke-linecap: round;
+}
+.sliderKnob {
+  fill: #ddd;
+  stroke: #bbc;
+  stroke-width: 1px;
+  stroke-linejoin: round;
+}
+.sliderKnob:hover {
+  fill: #eee;
+}
+
+/* Sprited icons. */
+.icon21 {
+  height: 21px;
+  width: 21px;
+  background-image: url(icons.png);
+}
+.code {
+  background-position: -21px 0px;
+}
+.link {
+  background-position: 0px 0px;
+}
+.img {
+  background-position: -42px 0px;
+}
+.run {
+  background-position: -63px -21px;
+}
+.stop {
+  background-position: -63px 0px;
+}

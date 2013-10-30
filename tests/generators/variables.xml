@@ -1,0 +1,54 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="unittest_main" x="0" y="0">
+    <statement name="DO">
+      <block type="variables_set" inline="false">
+        <title name="VAR">item</title>
+        <value name="VALUE">
+          <block type="math_number">
+            <title name="NUM">123</title>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <title name="MESSAGE">variable</title>
+            <value name="ACTUAL">
+              <block type="variables_get">
+                <title name="VAR">item</title>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="math_number">
+                <title name="NUM">123</title>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" inline="false">
+                <title name="VAR">if</title>
+                <value name="VALUE">
+                  <block type="math_number">
+                    <title name="NUM">123</title>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <title name="MESSAGE">reserved variable</title>
+                    <value name="ACTUAL">
+                      <block type="variables_get">
+                        <title name="VAR">if</title>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="math_number">
+                        <title name="NUM">123</title>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

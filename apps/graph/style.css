@@ -1,0 +1,27 @@
+#linkButton {
+  padding: 5px 10px;
+}
+
+#funcText {
+  margin-top: 1em;
+  margin-left: 1.5em;
+  font-family: sans-serif;
+  font-size: small;
+}
+#funcText>img {
+  height: 3px;
+  width: 15px;
+  vertical-align: middle;
+  margin-right: .5em;
+}
+#y1 {
+  background-color: #36c;
+}
+#blockly {
+  position: fixed;
+  bottom: 10px;
+}
+#languageMenu {
+  vertical-align: top;
+  margin-top: 12px;
+}

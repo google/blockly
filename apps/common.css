@@ -1,0 +1,119 @@
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  margin-top: 0;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+a:hover {
+  color: #f00;
+}
+.farSide {
+  text-align: right;
+}
+html[dir="RTL"] .farSide {
+  text-align: left;
+}
+
+/* Buttons */
+button {
+  margin: 5px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: large;
+  background-color: #eee;
+  color: #000;
+}
+button.primary {
+  border: 1px solid #dd4b39;
+  background-color: #dd4b39;
+  color: #fff;
+}
+button.secondary {
+  border: 1px solid #4d90fe;
+  background-color: #4d90fe;
+  color: #fff;
+}
+button.primary>img,
+button.secondary>img {
+  opacity: 1;
+}
+button>img {
+  opacity: 0.6;
+  vertical-align: text-bottom;
+}
+button:hover>img {
+  opacity: 1;
+}
+button:active {
+  border: 1px solid #888 !important;
+}
+button:hover {
+  box-shadow: 2px 2px 5px #888;
+}
+button.disabled:hover>img {
+  opacity: 0.6;
+}
+button.disabled {
+  display: none;
+}
+button.notext {
+  font-size: 10%;
+}
+
+/* Dialogs */
+#dialog {
+  visibility: hidden;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  position: absolute;
+  border-radius: 8px;
+  box-shadow: 5px 5px 5px #888;
+  padding: 10px;
+}
+#dialogBorder {
+  visibility: hidden;
+  position: absolute;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 6px;
+  box-shadow: 5px 5px 5px #888;
+}
+#dialogShadow {
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  opacity: 0.3
+}
+.dialogAnimate {
+  transition-property: width height left top opacity;
+  transition-duration: 0.2s;
+  transition-timing-function: linear;
+}
+.dialogHiddenContent {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+#dialogHeader {
+  height: 25px;
+  margin: -10px -10px 15px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #ddd;
+  cursor: move;
+}
+#dialog button {
+  min-width: 4em;
+}

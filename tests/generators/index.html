@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blockly Generator Test</title>
+<script type="text/javascript" src="../../blockly_uncompressed.js"></script>
+<script type="text/javascript" src="../../generators/javascript.js"></script>
+<script type="text/javascript" src="unittest_javascript.js"></script>
+<script type="text/javascript" src="../../generators/javascript/logic.js"></script>
+<script type="text/javascript" src="../../generators/javascript/loops.js"></script>
+<script type="text/javascript" src="../../generators/javascript/math.js"></script>
+<script type="text/javascript" src="../../generators/javascript/text.js"></script>
+<script type="text/javascript" src="../../generators/javascript/lists.js"></script>
+<script type="text/javascript" src="../../generators/javascript/colour.js"></script>
+<script type="text/javascript" src="../../generators/javascript/variables.js"></script>
+<script type="text/javascript" src="../../generators/javascript/procedures.js"></script>
+<script type="text/javascript" src="../../generators/python.js"></script>
+<script type="text/javascript" src="unittest_python.js"></script>
+<script type="text/javascript" src="../../generators/python/logic.js"></script>
+<script type="text/javascript" src="../../generators/python/loops.js"></script>
+<script type="text/javascript" src="../../generators/python/math.js"></script>
+<script type="text/javascript" src="../../generators/python/text.js"></script>
+<script type="text/javascript" src="../../generators/python/lists.js"></script>
+<script type="text/javascript" src="../../generators/python/colour.js"></script>
+<script type="text/javascript" src="../../generators/python/variables.js"></script>
+<script type="text/javascript" src="../../generators/python/procedures.js"></script>
+<script type="text/javascript" src="unittest.js"></script>
+<script type="text/javascript" src="../../msg/messages.js"></script>
+<script type="text/javascript" src="../../blocks/logic.js"></script>
+<script type="text/javascript" src="../../blocks/loops.js"></script>
+<script type="text/javascript" src="../../blocks/math.js"></script>
+<script type="text/javascript" src="../../blocks/text.js"></script>
+<script type="text/javascript" src="../../blocks/lists.js"></script>
+<script type="text/javascript" src="../../blocks/colour.js"></script>
+<script type="text/javascript" src="../../blocks/variables.js"></script>
+<script type="text/javascript" src="../../blocks/procedures.js"></script>
+<script type="text/javascript">
+'use strict';
+
+function start() {
+  var toolbox = document.getElementById('toolbox');
+  Blockly.inject(document.getElementById('svg'),
+                 {path: '../../', toolbox: toolbox});
+}
+
+function loadXml() {
+  var dropdown = document.getElementById('testUrl');
+  var url = dropdown.options[dropdown.selectedIndex].value;
+  if (!url) {
+    url = window.prompt('Enter URL of test file.');
+    if (!url) {
+      return;
+    }
+  }
+  var xmlText = fetchFile(url);
+  if (xmlText !== null) {
+    fromXml(xmlText);
+  }
+}
+
+function fetchFile(xmlUrl) {
+  try {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open('GET', xmlUrl, false);
+    xmlHttp.setRequestHeader('Content-Type', 'text/xml');
+    xmlHttp.send('');
+  } catch (e) {
+    // Attempt to diagnose the problem.
+    var msg = 'Error: Unable to load XML data.\n';
+    if (window.location.protocol == 'file:') {
+      msg += 'This may be due to a security restriction preventing\n' +
+          'access when using the file:// protocol.\n' +
+          'Use an http webserver, or a less paranoid browser.\n';
+    }
+    alert(msg + '\n' + e);
+    return null;
+  }
+  return xmlHttp.responseText;
+}
+
+function fromXml(xmlText) {
+  var output = document.getElementById('importExport');
+  output.value = xmlText;
+  Blockly.mainWorkspace.clear();
+  try {
+    var xmlDoc = Blockly.Xml.textToDom(xmlText);
+  } catch (e) {
+    alert('Error parsing XML:\n' + e);
+    return;
+  }
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
+}
+
+function setOutput(text) {
+  var output = document.getElementById('importExport');
+  output.value = text;
+  output.focus();
+  output.select();
+}
+
+function toXml() {
+  var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+  setOutput(xmlText);
+}
+
+function toJavaScript() {
+  var code = '\'use strict\';\n\n'
+  code += Blockly.JavaScript.workspaceToCode();
+  setOutput(code);
+}
+
+function toPython() {
+  var code = Blockly.Python.workspaceToCode();
+  setOutput(code);
+}
+</script>
+
+<style>
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  margin: 0 5px;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#svg {
+  float: right;
+  height: 95%;
+  width: 69%;
+  margin-top: 5px;
+}
+.blocklySvg {
+  border: 1px solid #000;
+}
+#importExport {
+  height: 100%;
+  width: 100%;
+}
+</style>
+</head>
+<body onload="start()">
+
+  <div id="svg"></div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="Unit test">
+      <block type="unittest_main"></block>
+      <block type="unittest_assertequals"></block>
+      <block type="unittest_assertvalue"></block>
+      <block type="unittest_fail"></block>
+    </category>
+    <category name="Logic">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <title name="NUM">10</title>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <title name="NUM">10</title>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_constant"></block>
+      <block type="math_number_property"></block>
+      <block type="math_change">
+        <value name="DELTA">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+      </block>
+      <block type="math_round"></block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo"></block>
+      <block type="math_constrain">
+        <value name="LOW">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+        <value name="HIGH">
+          <block type="math_number">
+            <title name="NUM">100</title>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <title name="NUM">100</title>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+      <block type="text_length"></block>
+      <block type="text_isEmpty"></block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase"></block>
+      <block type="text_trim"></block>
+      <block type="text_print"></block>
+      <block type="text_prompt"></block>
+    </category>
+    <category name="Lists">
+      <block type="lists_create_empty"></block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <block type="math_number">
+            <title name="NUM">5</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Colour">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb"></block>
+      <block type="colour_blend"></block>
+    </category>
+    <category name="Variables" custom="VARIABLE"></category>
+    <category name="Functions" custom="PROCEDURE"></category>
+  </xml>
+
+  <table height="95%" width="30%"><tr><td valign="top">
+    <h1>Blockly Generator Test</h1>
+
+    <p>
+      <select id="testUrl">
+        <option value="logic.xml">Logic</option>
+        <option value="loops1.xml">Loops 1 (repeat, while, foreach)</option>
+        <option value="loops2.xml">Loops 2 (count)</option>
+        <option value="loops3.xml">Loops 3 (continue, break)</option>
+        <option value="math.xml">Math</option>
+        <option value="text.xml">Text</option>
+        <option value="lists.xml">Lists</option>
+        <option value="colour.xml">Colour</option>
+        <option value="variables.xml">Variables</option>
+        <option value="procedures.xml">Procedures</option>
+        <option value="">Other...</option>
+      </select>
+      <input type="button" value="Load" onclick="loadXml()">
+    </p>
+
+    <p>
+      Generate:
+      <input type="button" value="XML" onclick="toXml()">
+      <input type="button" value="JavaScript" onclick="toJavaScript()">
+      <input type="button" value="Python" onclick="toPython()">
+    </p>
+  </td></tr><tr><td height="99%">
+    <textarea id="importExport" readonly="readonly" wrap="off"></textarea>
+  </td></tr></table>
+</body>
+</html>

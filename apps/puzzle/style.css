@@ -1,0 +1,22 @@
+body {
+  overflow: hidden;
+}
+
+#graph {
+  position: absolute;
+  bottom: 25px;
+  height: 15px;
+  width: 100px;
+  border: 1px solid #ddd;
+}
+#graphValue {
+  height: 15px;
+  width: 0;
+  background-color: #0d0;
+  transition-property: width;
+  transition-duration: 1s;
+}
+
+#blockly {
+  position: fixed;
+}

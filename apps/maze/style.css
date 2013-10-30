@@ -1,0 +1,178 @@
+.tab {
+  padding: 6px 12px;
+  text-decoration: none;
+  color: #000;
+}
+#selected {
+  font-weight: bold;
+  background-color: #ddd;
+  border-radius: 20px;
+}
+#blockly {
+  position: fixed;
+  bottom: 10px;
+}
+#visualization {
+  position: relative;
+}
+#capacityBubble {
+  position: absolute;
+  margin-top: -0.5em;
+  left: 10px;
+  top: 375px;
+  width: 380px;
+}
+html[dir="RTL"] #capacityBubble {
+  left: auto;
+  right: 10px;
+}
+#capacity {
+  display: none;
+  color: #fff;
+  padding: 5px 1em;
+  border-radius: 15px;
+  background-color: rgba(64,64,64,0.7);
+  font-size: large;
+}
+.capacityNumber {
+  font-weight: bold;
+}
+#containerCode {
+  direction: ltr;
+  font-size: large;
+  overflow: auto;
+  max-height: 400px;
+}
+#iframeOneTopBlock {
+  height: 100px;
+  width: 100%;
+  border: none;
+}
+#pegSpin {
+  height: 50px;
+  width: 49px;
+  background-position: -343px 0px;
+  margin-top: 10px;
+  position: absolute;
+}
+html[dir="RTL"] #pegSpin {
+  background-position: -441px 0px;
+}
+
+img[src$="help.png"] {
+  height: 64px;
+  width: 64px;
+}
+html[dir="RTL"] .mirrorImg {
+  transform: scaleX(-1);
+  -moz-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
+}
+.helpMenuFake {
+  border-radius: 4px;
+  background-color: #bfcdde;
+  color: #000;
+  padding: 0 1ex;
+  cursor: default;
+}
+img[src$="help_up.png"] {
+  margin: -20px 10px 0;
+  height: 64px;
+  width: 23px;
+}
+img[src$="help_down.png"] {
+  margin: 0 10px -20px;
+  height: 64px;
+  width: 23px;
+}
+
+/* 'Look' icon */
+#look>path {
+  display: none;
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-opacity: 0.7;
+}
+
+/* Buttons */
+button.primary {
+  /* Can't use "text-align: start" due to IE. */
+  text-align: left;
+}
+html[dir="RTL"] button.primary {
+  text-align: right;
+}
+#languageMenu {
+  vertical-align: top;
+  margin-top: 12px;
+}
+
+/* Sprited icons. */
+.icon21 {
+  height: 21px;
+  width: 21px;
+  background-image: url(icons.png);
+}
+.code {
+  background-position: -21px 0px;
+}
+.link {
+  background-position: 0px 0px;
+}
+.run {
+  background-position: 0px -21px;
+}
+.stop {
+  background-position: -21px -21px;
+}
+
+#pegmanButton {
+  padding: 0;
+  margin: 0 5px;
+  position: relative;
+  font-size: large;
+}
+#pegmanButton:active {
+  border: 1px solid #ddd !important;
+}
+#pegmanButton>img {
+  margin-left: -0.5ex;
+  margin-right: 0.5ex;
+  height: 38px;
+  width: 49px;
+  background-position: -980px 0px;
+  opacity: 0.8;
+}
+html[dir="RTL"] #pegmanButton>img {
+  margin-left: 0.5ex;
+  margin-right: -0.5ex;
+}
+#pegmanButton>span {
+  position: absolute;
+  top: 0.8ex;
+  margin-left: -15px;
+}
+html[dir="RTL"] #pegmanButton>span {
+  margin-right: -15px;
+}
+#pegmanMenu {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px #888;
+  display: none;
+  position: absolute;
+}
+#pegmanMenu>div {
+  background-color: #fff;
+}
+#pegmanMenu>div:hover {
+  background-color: #57e;
+}
+#pegmanMenu>div>img {
+  height: 38px;
+  width: 49px;
+  background-position: -980px 0px;
+}

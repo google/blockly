@@ -1,0 +1,104 @@
+{namespace apps}
+
+/**
+ * This is a Closure Template.
+ *
+ * Run the following command after changing the messages in any of the
+ * included apps subdirectories.  If building on Windows, you may need to
+ * substitute '\' for '/'.
+ *
+ * java -jar _soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf --srcs common.soy,code/template.soy,graph/template.soy,maze/template.soy,plane/template.soy,puzzle/template.soy,turtle/template.soy
+ *
+ * Create en.json, keys.json, and qqq.json.
+ * ../i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy {code,graph,maze,plane,puzzle,turtle}/template.soy
+ *
+ * Generate .js files for each project:
+ * for i in code graph maze plane puzzle turtle; do ../i18n/json_to_js.py --output_dir=$i/generated --template common.soy,$i/template.soy json/*.json; done
+ */
+
+/**
+ * All messages to be translated.
+ */
+{template .messages}
+  <div style="display: none">
+    // Only used externally.
+    <span id="subtitle">{msg meaning="Apps.subtitle" desc="A short description of Blockly."}a visual programming environment{/msg}</span>
+
+    // Common messages used in multiple applications are defined here.
+    // The applications' template.soy file may also contain msg statements
+    // with the same "meaning" value.  The "desc" value must be set to "IBID"
+    // (case-insensitive) or identical to the one in this file (not
+    // recommended), or an error will be raised during generation of qqq.json.
+    // The source-language text in the applications' definitions is ignored.
+    <span id="blocklyMessage">{msg meaning="Apps.blocklyMessage" desc="The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (\u0411\u043bo\u043a\u043b\u0438)'."}Blockly{/msg}</span>
+
+    // Buttons and tooltips.
+    <span id="codeTooltip">{msg meaning="Apps.codeTooltip" desc="tooltip - Pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user."}See generated JavaScript code.{/msg}</span>
+    <span id="linkTooltip">{msg meaning="Apps.linkTooltip" desc="tooltip - Clicking on this button will cause the current program to be saved and for a URL to be shown to later retrieve it."}Save and link to blocks.{/msg}</span>
+    <span id="runTooltip">{msg meaning="Apps.runTooltip" desc="tooltip - Pressing this button runs the computer program the user has written."}Run the program defined by the blocks in the workspace.{/msg}</span>
+    <span id="runProgram">{msg meaning="Apps.runProgram" desc="button label - Pressing the button runs the computer program the user has written."}Run Program{/msg}</span>
+    <span id="resetProgram">{msg meaning="Apps.resetProgram" desc="button label - Pressing the button causes the output of the program to be erased but does not delete the user's program)."}Reset{/msg}</span>
+    <span id="dialogOk">{{msg meaning="Apps.dialogOk" desc="Label on button for user to press when done reading help information.\n{lb}{lb}Identical|OK{rb}{rb}"}}OK{{/msg}}</span>
+    <span id="dialogCancel">{{msg meaning="Apps.dialogCancel" desc="Label on button for user to press when not wanting to proceed.\n{lb}{lb}Identical|Cancel{rb}{rb}"}}Cancel{{/msg}}</span>
+
+    // Categories.  Apps can use these names or their own.
+    <span id="catLogic">{msg meaning="Apps.catLogic" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Logic logic]."}Logic{/msg}</span>
+    <span id="catLoops">{msg meaning="Apps.catLoops" desc="category - Blocks related to [http://en.wikipedia.org/wiki/Control_flow#Loops loops]."}Loops{/msg}</span>
+    <span id="catMath">{msg meaning="Apps.catMath" desc="category - Blocks related to mathematics."}Math{/msg}</span>
+    <span id="catText">{msg meaning="Apps.catText" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Text text processing]."}Text{/msg}</span>
+    <span id="catLists">{msg meaning="Apps.catLists" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Lists lists]."}Lists{/msg}</span>
+    <span id="catColour">{msg meaning="Apps.catColour" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Colour colour]."}Colour{/msg}</span>
+    <span id="catVariables">{msg meaning="Apps.catVariables" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Variables variables]."}Variables{/msg}</span>
+    <span id="catProcedures">{msg meaning="Apps.catProcedures" desc="category - Blocks related to [http://en.wikipedia.org/wiki/Subroutine defining or using procedures/functions]."}Procedures{/msg}</span>
+
+    // Error messages related to loading/storing user programs.
+    <span id="httpRequestError">{msg meaning="Apps.httpRequestError" desc="alert - The URL is invalid or a server error occurred.  This message will be followed by technical information useful to engineers trying to understand the problem."}There was a problem with the request.{/msg}</span>
+    <span id="linkAlert">{msg meaning="Apps.linkAlert" desc="alert - After the user has pressed a button to save his/her program, this provides the URL (%1) to retrieve the program.  The characters '\n\n' indicate that a blank line will be displayed before the URL (in English).  Leave those in unless you move %1 to the beginning or middle of the text, in which case you should use your judgment about where blank lines would be most useful.\n\nParameters:\n* %1 - URL of saved program."}Share your blocks with this link:\n\n%1{/msg}</span>
+    <span id="hashError">{{msg meaning="Apps.hashError" desc="alert - A request to retrieve a stored program does not have a valid URL. %1 is the invalid portion of the URL."}}Sorry, '%1' doesn't correspond with any saved program.{{/msg}}</span>
+    <span id="xmlError">{msg meaning="Apps.xmlError" desc="alert - There was a problem loading a file previously saved by the user.  The most likely reason for the problem is that it was created with an earlier, incompatible version of Blockly.  This message will be followed by technical information useful to engineers trying to understand the problem."}Could not load your saved file.  Perhaps it was created with a different version of Blockly?{/msg}</span>
+
+    // Default variable names.
+    <span id="listVariable">{msg meaning="Apps.listVariable" desc="variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Lists list].  This should be a single word, preferably short."}list{/msg}</span>
+    <span id="textVariable">{msg meaning="Apps.textVariable" desc="variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Text piece of text].  This should be a single word, preferably short."}text{/msg}</span>
+  </div>
+{/template}
+
+/**
+ * Dialogs.
+ */
+{template .dialog private="true"}
+  <div id="dialogShadow" class="dialogAnimate"></div>
+  <div id="dialogBorder"></div>
+  <div id="dialog"></div>
+{/template}
+
+/**
+ * Code dialog.
+ */
+{template .codeDialog private="true"}
+  <div id="dialogCode" class="dialogHiddenContent">
+    <pre id="containerCode"></pre>
+    {call apps.ok /}
+  </div>
+{/template}
+
+/**
+ * Storage dialog.
+ */
+{template .storageDialog private="true"}
+  <div id="dialogStorage" class="dialogHiddenContent">
+    <div id="containerStorage"></div>
+    {call apps.ok /}
+  </div>
+{/template}
+
+/**
+ * OK button for dialogs.
+ */
+{template .ok private="true"}
+  <div class="farSide" style="padding: 1ex 3ex 0">
+    <button class="secondary" onclick="BlocklyApps.hideDialog(true)">
+      {{msg meaning="Apps.dialogOk" desc="IBID"}}OK{{/msg}}
+    </button>
+  </div>
+{/template}

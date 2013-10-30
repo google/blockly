@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Blockly Playground</title>
+<script type="text/javascript" src="../blockly_uncompressed.js"></script>
+<script type="text/javascript" src="../generators/javascript.js"></script>
+<script type="text/javascript" src="../generators/javascript/logic.js"></script>
+<script type="text/javascript" src="../generators/javascript/loops.js"></script>
+<script type="text/javascript" src="../generators/javascript/math.js"></script>
+<script type="text/javascript" src="../generators/javascript/text.js"></script>
+<script type="text/javascript" src="../generators/javascript/lists.js"></script>
+<script type="text/javascript" src="../generators/javascript/colour.js"></script>
+<script type="text/javascript" src="../generators/javascript/variables.js"></script>
+<script type="text/javascript" src="../generators/javascript/procedures.js"></script>
+<script type="text/javascript" src="../generators/python.js"></script>
+<script type="text/javascript" src="../generators/python/logic.js"></script>
+<script type="text/javascript" src="../generators/python/loops.js"></script>
+<script type="text/javascript" src="../generators/python/math.js"></script>
+<script type="text/javascript" src="../generators/python/text.js"></script>
+<script type="text/javascript" src="../generators/python/lists.js"></script>
+<script type="text/javascript" src="../generators/python/colour.js"></script>
+<script type="text/javascript" src="../generators/python/variables.js"></script>
+<script type="text/javascript" src="../generators/python/procedures.js"></script>
+<script type="text/javascript" src="../msg/messages.js"></script>
+<script type="text/javascript" src="../blocks/logic.js"></script>
+<script type="text/javascript" src="../blocks/loops.js"></script>
+<script type="text/javascript" src="../blocks/math.js"></script>
+<script type="text/javascript" src="../blocks/text.js"></script>
+<script type="text/javascript" src="../blocks/lists.js"></script>
+<script type="text/javascript" src="../blocks/colour.js"></script>
+<script type="text/javascript" src="../blocks/variables.js"></script>
+<script type="text/javascript" src="../blocks/procedures.js"></script>
+<script type="text/javascript">
+'use strict';
+// Depending on the URL argument, render as LTR or RTL.
+var rtl = (document.location.search == '?rtl');
+var block = null;
+
+function start() {
+  var toolbox = document.getElementById('toolbox');
+  Blockly.inject(document.getElementById('blocklyDiv'),
+                 {'rtl': rtl, path: '../', toolbox: toolbox});
+}
+
+function toXml() {
+  var output = document.getElementById('importExport');
+  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  output.value = Blockly.Xml.domToText(xml);
+  output.focus();
+  output.select();
+}
+
+function fromXml() {
+  var input = document.getElementById('importExport');
+  var xml = Blockly.Xml.textToDom(input.value);
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+}
+
+function toCode(lang) {
+  var output = document.getElementById('importExport');
+  output.value = Blockly[lang].workspaceToCode();
+}
+
+function airstrike(n) {
+  var prototypes = [];
+  var toolbox = document.getElementById('toolbox');
+  var blocks = toolbox.getElementsByTagName('block');
+  for (var x = 0, block; block = blocks[x]; x++) {
+    prototypes.push(block.getAttribute('type'));
+  }
+  for (var x = 0; x < n; x++) {
+    var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
+    var block = new Blockly.Block(Blockly.mainWorkspace, prototype);
+    block.initSvg();
+    block.getSvgRoot().setAttribute('transform', 'translate(' +
+        Math.round(Math.random() * 450 + 40) + ', ' +
+        Math.round(Math.random() * 600 + 40) + ')');
+    block.render();
+  }
+}
+</script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: right;
+  height: 95%;
+  width: 70%;
+}
+</style>
+</head>
+<body onload="start()">
+
+  <div id="blocklyDiv"></div>
+
+  <xml id="toolbox" style="display: none">
+    <category name="Logic">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <title name="NUM">10</title>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <title name="NUM">10</title>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_constant"></block>
+      <block type="math_number_property"></block>
+      <block type="math_change">
+        <value name="DELTA">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+      </block>
+      <block type="math_round"></block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo"></block>
+      <block type="math_constrain">
+        <value name="LOW">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+        <value name="HIGH">
+          <block type="math_number">
+            <title name="NUM">100</title>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <block type="math_number">
+            <title name="NUM">1</title>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <title name="NUM">100</title>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+      <block type="text_length"></block>
+      <block type="text_isEmpty"></block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <title name="VAR">text</title>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase"></block>
+      <block type="text_trim"></block>
+      <block type="text_print"></block>
+      <block type="text_prompt"></block>
+    </category>
+    <category name="Lists">
+      <block type="lists_create_empty"></block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <block type="math_number">
+            <title name="NUM">5</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <title name="VAR">list</title>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Colour">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb"></block>
+      <block type="colour_blend"></block>
+    </category>
+    <category name="Variables" custom="VARIABLE"></category>
+    <category name="Functions" custom="PROCEDURE"></category>
+  </xml>
+
+  <h1>Blockly Playground</h1>
+
+  <p><a href="javascript:void([document.getElementById('blocklyDiv').style.display = 'block', Blockly.mainWorkspace.render()])">Show</a>
+   - <a href="javascript:void(document.getElementById('blocklyDiv').style.display = 'none')">Hide</a></p>
+
+  <script type="text/javascript">
+    if (rtl) {
+      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
+    } else {
+      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
+    }
+  </script>
+
+  <p>
+    <input type="button" value="Export to XML" onclick="toXml()">
+    &nbsp;
+    <input type="button" value="Import from XML" onclick="fromXml()">
+    <br>
+    <input type="button" value="Generate JavaScript" onclick="toCode('JavaScript')">
+    &nbsp;
+    <input type="button" value="Generate Python" onclick="toCode('Python')">
+    <br>
+    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
+  </p>
+  <hr>
+
+  <p>
+    Stress test with an <input type="button" value="Airstrike!" onclick="airstrike(100)">
+  </p>
+
+  </form>
+
+</body>
+</html>

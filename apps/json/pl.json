@@ -3,6 +3,7 @@
         "authors": [
             "Chrumps",
             "Faren",
+            "Rezonansowy",
             "Ty221"
         ]
     },
@@ -58,10 +59,15 @@
     "Maze.nextLevel": "Gratulacje! Czy jeste\u015b gotowy, aby przej\u015b\u0107 do poziomu %1?",
     "Maze.finalLevel": "Gratulacje! Rozwi\u0105za\u0142e\u015b ko\u0144cowy poziom.",
     "Maze.maze": "Labirynt",
+    "Maze.runTooltip": "Sprawia, \u017ce gracz robi to, co m\u00f3wi klocek.",
+    "Maze.resetTooltip": "Przywraca gracza na pocz\u0105tek labiryntu.",
     "Maze.helpStack": "Ustaw kilka polece\u0144 'id\u017a naprz\u00f3d' jedno po drugi abym doszed\u0142 do celu.",
     "Maze.helpOneTopBlock": "Na tym poziomie, musisz u\u0142o\u017cy\u0107 razem wszystkie bloki w bia\u0142ym obszarze roboczym.",
+    "Maze.helpRun": "Uruchom program, aby zobaczy\u0107 co si\u0119 stanie.",
+    "Maze.helpReset": "Program nie rozwi\u0105za\u0142 labiryntu. Naci\u015bnij przycisk \"Reset\" i spr\u00f3buj ponownie.",
     "Maze.helpRepeat": "Komputery maj\u0105 ograniczon\u0105 pami\u0119\u0107. Dotrzyj do ko\u0144ca tej \u015bcie\u017cki za pomoc\u0105 tylko dw\u00f3ch blok\u00f3w. U\u017cyj \"powt\u00f3rz\" aby uruchomi\u0107 blok wi\u0119cej ni\u017c raz.",
-    "Maze.helpRepeatMany": "Osi\u0105gnij cel u\u017cywaj\u0105c tylko pi\u0119ciu blok\u00f3w.",
+    "Maze.helpRepeatMany": "Mo\u017cesz zmie\u015bci\u0107 wi\u0119cej ni\u017c jeden blok wewn\u0105trz bloku \"Powt\u00f3rz\".",
+    "Maze.helpSkins": "Wybierz swojego ulubionego gracza z tego menu.",
     "Maze.helpIf": "Blok \"if (je\u017celi)\" wykona okre\u015blon\u0105 czynno\u015b\u0107 tylko kiedy wyra\u017cenie warunkowe jest prawdziwe. Spr\u00f3buj p\u00f3j\u015b\u0107 w lewo je\u015bli \u015bcie\u017cka jest w lewo.",
     "Maze.helpWallFollow": "Czy dasz rad\u0119 przej\u015b\u0107 ten trudny labirynt? Wypr\u00f3bnuj metod\u0119 trzymania si\u0119 lew\u0105 r\u0119k\u0105 \u015bciany. Tylko dla zaawansowanych programist\u00f3w!",
     "Plane.rows": "Wiersze: %1",

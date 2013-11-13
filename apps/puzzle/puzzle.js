@@ -29,10 +29,10 @@
 var Puzzle = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = ['af', 'ar', 'cs', 'be-tarask', 'br', 'ca',
-    'cdo', 'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fi', 'fo', 'fr',
+BlocklyApps.LANGUAGES = ['af', 'ar', 'be-tarask', 'br', 'ca', 'cdo',
+    'cs', 'da', 'de', 'el', 'en', 'es', 'eu', 'fa', 'fi', 'fo', 'fr',
     'frr', 'gl', 'hak', 'he', 'hu', 'ia', 'it', 'ja', 'ka', 'km', 'ko',
-    'ksh', 'ky', 'la', 'lb', 'lt', 'lv', 'ml', 'mk', 'mr', 'ms', 'mzn',
+    'ksh', 'ky', 'la', 'lb', 'lt', 'lv', 'mk', 'ml', 'mr', 'ms', 'mzn',
     'nb', 'nl', 'oc', 'pa', 'pl', 'pms', 'ps', 'pt-br', 'ro', 'ru', 'sk',
     'sv', 'sw', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();

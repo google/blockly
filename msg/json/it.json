@@ -2,6 +2,7 @@
     "@metadata": {
         "authors": [
             "Beta16",
+            "Espertus",
             "Nerimic"
         ]
     },
@@ -127,6 +128,7 @@
     "MATH_IS_NEGATIVE": "\u00e8 negativo",
     "MATH_IS_DIVISIBLE_BY": "\u00e8 divisibile per",
     "MATH_IS_TOOLTIP": "Verifica se un numero \u00e8 pari, dispari, primo, intero, positivo, negativo o se \u00e8 divisibile per un certo numero. Restituisce vero o falso.",
+    "MATH_CHANGE_HELPURL": "http://it.wikipedia.org/wiki/Addizione",
     "MATH_CHANGE_TITLE_CHANGE": "cambia",
     "MATH_CHANGE_INPUT_BY": "di",
     "MATH_CHANGE_TOOLTIP": "Aggiunge un numero alla variabile '%1'.",

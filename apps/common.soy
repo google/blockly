@@ -7,13 +7,13 @@
  * included apps subdirectories.  If building on Windows, you may need to
  * substitute '\' for '/'.
  *
- * java -jar _soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf --srcs common.soy,code/template.soy,graph/template.soy,maze/template.soy,plane/template.soy,puzzle/template.soy,turtle/template.soy
+ * java -jar _soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf --srcs common.soy,code/template.soy,graph/template.soy,maze/template.soy,plane/template.soy,puzzle/template.soy,turtle/template.soy,index/template.soy
  *
  * Create en.json, keys.json, and qqq.json.
- * ../i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy {code,graph,maze,plane,puzzle,turtle}/template.soy
+ * ../i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy {code,graph,index,maze,plane,puzzle,turtle}/template.soy
  *
- * Generate .js files for each project:
- * for i in code graph maze plane puzzle turtle; do ../i18n/json_to_js.py --output_dir=$i/generated --template common.soy,$i/template.soy json/*.json; done
+ * Generate .js files for each project and the index:
+ * for i in code graph index maze plane puzzle turtle; do ../i18n/json_to_js.py --output_dir=$i/generated --template common.soy,$i/template.soy json/*.json; done
  */
 
 /**
@@ -45,7 +45,7 @@
     <span id="catLogic">{msg meaning="Apps.catLogic" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Logic logic]."}Logic{/msg}</span>
     <span id="catLoops">{msg meaning="Apps.catLoops" desc="category - Blocks related to [http://en.wikipedia.org/wiki/Control_flow#Loops loops]."}Loops{/msg}</span>
     <span id="catMath">{msg meaning="Apps.catMath" desc="category - Blocks related to mathematics."}Math{/msg}</span>
-    <span id="catText">{msg meaning="Apps.catText" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Text text processing]."}Text{/msg}</span>
+    <span id="catText">{{msg meaning="Apps.catText" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Text text processing].\n{lb}{lb}Identical|Text{rb}{rb}"}}Text{{/msg}}</span>
     <span id="catLists">{msg meaning="Apps.catLists" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Lists lists]."}Lists{/msg}</span>
     <span id="catColour">{msg meaning="Apps.catColour" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Colour colour]."}Colour{/msg}</span>
     <span id="catVariables">{msg meaning="Apps.catVariables" desc="category - Blocks related to [https://code.google.com/p/blockly/wiki/Variables variables]."}Variables{/msg}</span>
@@ -59,7 +59,7 @@
 
     // Default variable names.
     <span id="listVariable">{msg meaning="Apps.listVariable" desc="variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Lists list].  This should be a single word, preferably short."}list{/msg}</span>
-    <span id="textVariable">{msg meaning="Apps.textVariable" desc="variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Text piece of text].  This should be a single word, preferably short."}text{/msg}</span>
+    <span id="textVariable">{{msg meaning="Apps.textVariable" desc="variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Text piece of text].  This should be a single word, preferably short.{lb}{lb}Identical|Text{rb}{rb}"}}text{{/msg}}</span>
   </div>
 {/template}
 

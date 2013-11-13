@@ -78,7 +78,7 @@
     "Plane.seats": "Sitze: %1",
     "Plane.placeholder": "?",
     "Plane.setSeats": "Sitze =",
-    "Plane.plane": "Flugzeug",
+    "Plane.plane": "Flugzeugsitzrechner",
     "Plane.description1": "Ein Flugzeug hat eine Anzahl an Reihen mit Passagiersitzen. Jede Reihe enth\u00e4lt vier Sitze.",
     "Plane.description2": "Ein Flugzeug hat zwei Sitze im Pilotenstand (f\u00fcr den Piloten und Co-Piloten) und eine Anzahl an Reihen mit Passagiersitzen. Jede Reihe enth\u00e4lt vier Sitze.",
     "Plane.description3": "Ein Flugzeug hat zwei Sitze im Pilotenstand (f\u00fcr den Piloten und Co-Piloten) und eine Anzahl an Reihen mit Passagiersitzen der 1. und 2. Klasse. Jede 1.-Klasse-Reihe enth\u00e4lt vier Sitze. Jede 2.-Klasse-Reihe enth\u00e4lt f\u00fcnf Sitze.",
@@ -146,5 +146,16 @@
     "Turtle.runTooltip": "Die Schildkr\u00f6te macht das, was die Bausteine sagen.",
     "Turtle.captureTooltip": "Zeichnung speichern.",
     "Turtle.imgFilename": "zeichnung.png",
-    "Turtle.catTurtle": "Schildkr\u00f6te"
+    "Turtle.catTurtle": "Schildkr\u00f6te",
+    "Apps.indexTitle": "Blockly-Anwendungen",
+    "Apps.indexFooter": "Blockly ist frei und Open Source. Um Code oder \u00dcbersetzungen f\u00fcr Blockly beizusteuern oder um Blockly in deiner eigenen Anwendung zu verwenden, besuche %1.",
+    "Apps.choiceIntro": "Blockly ist eine grafische Programmierumgebung. Unten sind einige Beispielanwendungen, die Blockly verwenden.",
+    "Apps.puzzleSubtitle": "Lernen, wie man die Blockly-Oberfl\u00e4che verwendet.",
+    "Apps.mazeSubtitle": "Blockly zum L\u00f6sen eines Labyrinths verwenden.",
+    "Apps.turtleSubtitle": "Blockly zum Zeichnen verwenden.",
+    "Apps.graphSubtitle": "Plotfunktionen mit Blockly.",
+    "Apps.codeSubtitle": "Ein Blockly-Programm in JavaScript, Python oder XML exportieren.",
+    "Apps.planeSubtitle": "Ein mathematisches Problem mit einer oder zwei Variablen l\u00f6sen.",
+    "Apps.blockFactory": "Block-Fabrik",
+    "Apps.blockfactorySubtitle": "Benutzerdefinierte Bl\u00f6cke mit Blockly bauen."
 }

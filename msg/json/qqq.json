@@ -44,7 +44,7 @@
     "COLOUR_BLEND_TOOLTIP": "tooltip - See [https://code.google.com/p/blockly/wiki/Colour#Blending_colours https://code.google.com/p/blockly/wiki/Colour#Blending_colours].",
     "CONTROLS_REPEAT_HELPURL": "url - Describes 'repeat loops' in computer programs; consider using the translation of the page [http://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow].",
     "CONTROLS_REPEAT_TITLE": "block input text - Title of [https://code.google.com/p/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.",
-    "CONTROLS_REPEAT_TITLE_REPEAT": "block text - Text preceding the number of repetitions in a [https://code.google.com/p/blockly/wiki/Loops#repeat repeat block]. (This is redundant with the previous message but is needed to support older code.)",
+    "CONTROLS_REPEAT_TITLE_REPEAT": "block text - Text preceding the number of repetitions in a [https://code.google.com/p/blockly/wiki/Loops#repeat repeat block]. (This is redundant with the previous message but is needed to support older code.)\n{{Identical|Repeat}}",
     "CONTROLS_REPEAT_TITLE_TIMES": "block text - Text following the number of times a [https://code.google.com/p/blockly/wiki/Loops#repeat repeat loop] should be repeated. (This is redundant but is needed to support older code.)",
     "CONTROLS_REPEAT_INPUT_DO": "block text - Preceding the blocks in the body of the loop.  See [https://code.google.com/p/blockly/wiki/Loops https://code.google.com/p/blockly/wiki/Loops].",
     "CONTROLS_REPEAT_TOOLTIP": "tooltip - See [https://code.google.com/p/blockly/wiki/Loops#repeat https://code.google.com/p/blockly/wiki/Loops#repeat].",

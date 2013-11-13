@@ -127,6 +127,7 @@
     "MATH_IS_NEGATIVE": "es negativo",
     "MATH_IS_DIVISIBLE_BY": "es divisible por",
     "MATH_IS_TOOLTIP": "Comprobar si un n\u00famero es par, impar, primo, entero, positivo, negativo, o si es divisible por un n\u00famero determinado. Devuelve verdadero o falso.",
+    "MATH_CHANGE_HELPURL": "http://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter",
     "MATH_CHANGE_TITLE_CHANGE": "cambiar",
     "MATH_CHANGE_INPUT_BY": "por",
     "MATH_CHANGE_TOOLTIP": "A\u00f1adir un n\u00famero a la variable \u00ab%1\u00bb.",

@@ -20,8 +20,12 @@
 import argparse
 import codecs
 import os
-from common import InputError
+import re
+import sys
 from common import read_json_file
+
+
+_NEWLINE_PATTERN = re.compile('[\n\r]')
 
 
 def main():
@@ -55,6 +59,12 @@ def main():
   # Read in source language .json file, which provides any values missing
   # in target languages' .json files.
   source_defs = read_json_file(os.path.join(os.curdir, args.source_lang_file))
+  # Make sure the source file doesn't contain a newline or carriage return.
+  for key, value in source_defs.items():
+    if _NEWLINE_PATTERN.search(value):
+      print('ERROR: definition of {0} in {1} contained a newline character.'.
+            format(key, args.source_lang_file))
+      sys.exit(1)
   sorted_keys = source_defs.keys()
   sorted_keys.sort()
 
@@ -70,6 +80,13 @@ def main():
     target_lang = filename[:filename.index('.')]
     if target_lang not in ('qqq', 'keys', 'synonyms'):
       target_defs = read_json_file(os.path.join(os.curdir, arg_file))
+      # If there's a '\n' or '\r', remove it and print a warning.
+      for key, value in target_defs.items():
+        if _NEWLINE_PATTERN.search(value):
+          print('WARNING: definition of {0} in {1} contained '
+                'a newline character.'.
+                format(key, arg_file))
+          target_defs[key] = _NEWLINE_PATTERN.sub(' ', value)
 
       # Output file.
       outname = os.path.join(os.curdir, args.output_dir, target_lang + '.js')

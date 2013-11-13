@@ -139,6 +139,7 @@
     "MATH_IS_NEGATIVE": "est n\u00e9gatif",
     "MATH_IS_DIVISIBLE_BY": "est divisible par",
     "MATH_IS_TOOLTIP": "V\u00e9rifier si un nombre est pair, impair, premier, entier, positif, n\u00e9gatif, ou s\u2019il est divisible par un certain nombre. Renvoie vrai ou faux.",
+    "MATH_CHANGE_HELPURL": "http://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter",
     "MATH_CHANGE_TITLE_CHANGE": "incr\u00e9menter",
     "MATH_CHANGE_INPUT_BY": "de",
     "MATH_CHANGE_TOOLTIP": "Ajouter un nombre \u00e0 la variable '%1'.",

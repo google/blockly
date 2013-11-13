@@ -129,6 +129,7 @@
     "MATH_IS_NEGATIVE": "l\u00e0 s\u1ed1 \u00e2m",
     "MATH_IS_DIVISIBLE_BY": "chia h\u1ebft cho",
     "MATH_IS_TOOLTIP": "Ki\u1ec3m tra con s\u1ed1 xem n\u00f3 c\u00f3 ph\u1ea3i l\u00e0 s\u1ed1 ch\u1eb5n, l\u1ebb, nguy\u00ean t\u1ed1, nguy\u00ean, d\u01b0\u01a1ng, \u00e2m,  hay xem n\u00f3 c\u00f3 chia h\u1ebft cho s\u1ed1 \u0111\u1ea7u v\u00e0o hay kh\u00f4ng.  Ho\u00e0n tr\u1ea3 \u0111\u00fang hay sai.",
+    "MATH_CHANGE_HELPURL": "https://vi.wikipedia.org/wiki/Ph%C3%A9p_c%E1%BB%99ng",
     "MATH_CHANGE_TITLE_CHANGE": "c\u1ed9ng v\u00e0o",
     "MATH_CHANGE_INPUT_BY": "gi\u00e1 tr\u1ecb",
     "MATH_CHANGE_TOOLTIP": "C\u1ed9ng s\u1ed1 \u0111\u1ea7u v\u00e0o v\u00e0o bi\u1ebfn \"%1\".",

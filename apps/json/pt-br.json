@@ -146,7 +146,7 @@
     "Turtle.fontBold": "negrito",
     "Turtle.fontItalic": "it\u00e1lico",
     "Turtle.unloadWarning": "Deixar est\u00e1 p\u00e1gina resultar\u00e1 na perda de seu trabalho.",
-    "Turtle.title": "Gr\u00e1ficos de Tartaruga (LOGO)",
+    "Turtle.title": "Gr\u00e1ficos de Tartaruga",
     "Turtle.runTooltip": "Faz a tartaruga executar o que os blocos dizem.",
     "Turtle.captureTooltip": "Salvar o desenho.",
     "Turtle.imgFilename": "desenho.png",

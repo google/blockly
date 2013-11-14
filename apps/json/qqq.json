@@ -1,4 +1,12 @@
 {
+    "@metadata": {
+        "authors": [
+            "Beta16",
+            "Espertus",
+            "McDutchie",
+            "Shirayuki"
+        ]
+    },
     "Apps.subtitle": "A short description of Blockly.",
     "Apps.blocklyMessage": "The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (\u0411\u043bo\u043a\u043b\u0438)'.",
     "Apps.codeTooltip": "tooltip - Pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user.",
@@ -21,17 +29,17 @@
     "Apps.hashError": "alert - A request to retrieve a stored program does not have a valid URL. %1 is the invalid portion of the URL.",
     "Apps.xmlError": "alert - There was a problem loading a file previously saved by the user.  The most likely reason for the problem is that it was created with an earlier, incompatible version of Blockly.  This message will be followed by technical information useful to engineers trying to understand the problem.",
     "Apps.listVariable": "variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Lists list].  This should be a single word, preferably short.",
-    "Apps.textVariable": "variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Text piece of text].  This should be a single word, preferably short.{{Identical|Text}}",
+    "Apps.textVariable": "variable name - Default [https://code.google.com/p/blockly/wiki/Variables variable] representing a [https://code.google.com/p/blockly/wiki/Text piece of text].  This should be a single word, preferably short.\n{{Identical|Text}}",
     "Code.badXml": "alert - Message shown when the user tries switching from the XML tab after entering XML text that could not be parsed.  This asks whether they wish to abandon the XML they added.  If they select 'OK' (or the translated equivalent), the XML is cleared, and the other tab is shown.  If they select 'Cancel', they remain on the XML tab with the bad XML.\n\nUsed in JavaScript \u003Ccode\u003Ewindow.confirm()\u003C/code\u003E.",
     "Code.badCode": "alert - Message shown if an error occurs while interpreting the user program.  The error description follows.",
     "Code.timeout": "alert - Message shown if the program has run for more than the permitted number of steps.  This exists so that programs with infinite loops do not run forever.",
     "Code.discard": "alert - Message shown after the user clicks on the 'discard all' icon.  Selecting 'OK' (or the translated equivalent) causes all of the blocks to be discarded.  Selecting 'Cancel' prevents blocks from being deleted.\n\nParameters:\n* %1 - number of blocks to be deleted. It is always an integer greater than or equal to 2.",
-    "Code.title": "title - Title of this application, indicating that it is for writing arbitrary programs.{{Identical|Code}}",
+    "Code.title": "title - Title of this application, indicating that it is for writing arbitrary programs.\n{{Identical|Code}}",
     "Code.blocks": "tab text - Displays and allows editing of the user's program as blocks.",
     "Code.trashTooltip": "tooltip - Clicking on this causes the user program to be discarded.",
     "Graph.title": "title - Brief title for this graphic calculator application.",
     "Apps.indexTitle": "page text - The word \u0026quot;Apps\u0026quot; is short for \u0026quot;Applications\u0026quot;.  We chose it because it is more informal.  This and the following messages currently appear at [http://blockly-demo.appspot.com/static/apps/index.html].",
-    "Apps.indexFooter": "page text - Text appearing at the end of the page.  %1 will be replaced with the Blockly URL.",
+    "Apps.indexFooter": "page text - Text appearing at the end of the page. Parameters:\n* %1 - the Blockly URL",
     "Apps.choiceIntro": "page text - This appears before a list of Blockly apps.  Please surround the name of Blockly with brackets so we can make it a hyperlink.  Please use the same term for \u0026quot;Blockly\u0026quot; as in {{msg-blockly|Apps.blocklyMessage}}.",
     "Puzzle.title": "A brief title for page, not including the word for Blockly.  Use the word for a jigsaw puzzle.",
     "Apps.puzzleSubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/puzzle/index.html Puzzle application].",
@@ -43,7 +51,7 @@
     "Apps.codeSubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/code/index.html Code application].",
     "Plane.plane": "title - Specifies that this is Blockly's '''Plane''' (airplane) tutorial.  The word \u0026quot;plane\u0026quot; was chosen over \u0026quot;airplane\u0026quot; in English because it is shorter and less formal.",
     "Apps.planeSubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/plane/index.html Plane application].",
-    "Apps.blockFactory": "title - The name of a factory or toolthat produces blocks.",
+    "Apps.blockFactory": "title - The name of a factory or tool that produces blocks.",
     "Apps.blockfactorySubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/blockfactory/index.html Block Factory application].",
     "Maze.moveForward": "block text - Imperative or infinitive of a verb for a person moving (walking) in the direction he/she is facing.",
     "Maze.turnLeft": "[[Translating:Blockly#Drop-Down_Menus dropdown]] - Imperative or infinitive of a verb for a person turning his head and body one quarter rotation counter-clockwise.  Prefer a translation that has text in common with the translation of 'turn right'.  See [[Translating:Blockly#Drop-Down_Menus]].",

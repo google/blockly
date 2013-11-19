@@ -26,7 +26,8 @@
 var BlocklyAppsIndex = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = ['de', 'el', 'en', 'fr', 'it', 'nl', 'ru', 'uk'];
+BlocklyApps.LANGUAGES = ['da', 'de', 'el', 'en', 'es', 'fr', 'hu', 'it', 'nl',
+                         'pms', 'ru', 'uk', 'vi'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 // Relative directory "index/" needed because index.html is in parent directory.

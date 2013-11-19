@@ -117,6 +117,7 @@ BlocklyApps.LANGUAGE_PACK = {
   'lb': 'msg/js/de.js',
   'nl': 'msg/js/nl.js',
   'no': 'msg/js/no.js',
+  'pms': 'msg/js/it.js',
   'pt': 'msg/js/pt_br.js',
   'pt-br': 'msg/js/pt_br.js',
   'ro': 'msg/js/ro.js',

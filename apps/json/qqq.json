@@ -1,4 +1,12 @@
 {
+    "@metadata": {
+        "authors": [
+            "Beta16",
+            "Espertus",
+            "McDutchie",
+            "Shirayuki"
+        ]
+    },
     "Apps.subtitle": "A short description of Blockly.",
     "Apps.blocklyMessage": "The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (\u0411\u043bo\u043a\u043b\u0438)'.",
     "Apps.codeTooltip": "tooltip - Pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user.",

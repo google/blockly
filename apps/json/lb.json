@@ -26,7 +26,7 @@
     "Code.title": "Code",
     "Code.blocks": "Bl\u00e9ck",
     "Puzzle.title": "Puzzle",
-    "Plane.plane": "Fliger",
+    "Plane.plane": "Rechemaschinne fir d'S\u00ebtzer am Fliger",
     "Maze.moveForward": "viru goen",
     "Maze.turnLeft": "no l\u00e9nks ofb\u00e9ien",
     "Maze.turnRight": "no riets ofb\u00e9ien",
@@ -89,6 +89,7 @@
     "Turtle.font": "Schr\u00ebftart",
     "Turtle.fontNormal": "normal",
     "Turtle.fontBold": "fett",
+    "Turtle.fontItalic": "Kursiv",
     "Turtle.unloadWarning": "Wann Dir vun d\u00ebser S\u00e4it erof gitt verl\u00e9iert Dir \u00c4r Aarbecht.",
     "Turtle.captureTooltip": "Zeechnung sp\u00e4icheren.",
     "Turtle.catTurtle": "Deckelsmouk"

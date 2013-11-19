@@ -103,7 +103,7 @@
     "Puzzle.tryAgain": "Zv\u00fdrazn\u011bn\u00fd blok nen\u00ed spr\u00e1vn\u011b.\nZkou\u0161ej to d\u00e1l.",
     "Puzzle.help": "Pomoc",
     "Puzzle.checkAnswers": "Zkontrolovat odpov\u011bdi",
-    "Puzzle.helpText": "Pro ka\u017ed\u00fd st\u00e1t (zelen\u011b) p\u0159ipoj jeho vlajku, zvol jazyk a p\u0159i\u0159a\u010f m\u011bsta.",
+    "Puzzle.helpText": "Ke ka\u017ed\u00e9 zemi (zelen\u011b) p\u0159i\u0159a\u010f vlajku, jazyk a m\u011bsta",
     "Turtle.moveForward": "P\u0159esunout vp\u0159ed",
     "Turtle.moveBackward": "p\u0159esunout zp\u011bt",
     "Turtle.turnRight": "oto\u010dit doprava o",

@@ -1,6 +1,7 @@
 {
     "@metadata": {
         "authors": [
+            "Baonguyen21022003",
             "Qneutron"
         ]
     },
@@ -35,10 +36,21 @@
     "Code.blocks": "C\u00e1c m\u1ea3nh",
     "Code.trashTooltip": "X\u00f3a t\u1ea5t c\u1ea3 m\u1ecdi m\u1ea3nh.",
     "Graph.title": "\u0110\u1ed3 Th\u1ecb",
+    "Apps.indexTitle": "\u1ee8ng d\u1ee5ng Blockly",
+    "Apps.indexFooter": "Blockly l\u00e0 m\u00e3 ngu\u1ed3n m\u1edf v\u00e0 mi\u1ec5n ph\u00ed.  \u0110\u00f3ng g\u00f3p m\u00e3 ho\u1eb7c b\u1ea3n d\u1ecbch \u0111\u1ec3 Blockly, ho\u1eb7c s\u1eed d\u1ee5ng Blockly trong \u1ee9ng d\u1ee5ng c\u1ee7a ri\u00eang b\u1ea1n, truy c\u1eadp v\u00e0o %1.",
+    "Apps.choiceIntro": "Blockly l\u00e0 m\u1ed9t m\u00f4i tr\u01b0\u1eddng l\u1eadp tr\u00ecnh \u0111\u1ed3 h\u1ecda.  D\u01b0\u1edbi \u0111\u00e2y l\u00e0 m\u1ed9t s\u1ed1 \u1ee9ng d\u1ee5ng m\u1eabu s\u1eed d\u1ee5ng Blockly.",
     "Puzzle.title": "\u0110\u1ed1 vui",
+    "Apps.puzzleSubtitle": "H\u1ecdc c\u00e1ch s\u1eed d\u1ee5ng giao di\u1ec7n c\u1ee7a Blockly.",
     "Maze.maze": "Ma tr\u1eadn",
+    "Apps.mazeSubtitle": "S\u1eed d\u1ee5ng Blockly \u0111\u1ec3 gi\u1ea3i quy\u1ebft m\u1ed9t m\u00ea cung.",
     "Turtle.title": "\u0110\u1ed3 H\u1ecda Con R\u00f9a",
-    "Plane.plane": "M\u00e1y Bay",
+    "Apps.turtleSubtitle": "S\u1eed d\u1ee5ng Blockly \u0111\u1ec3 v\u1ebd.",
+    "Apps.graphSubtitle": "L\u00f4 ch\u1ee9c n\u0103ng v\u1edbi Blockly.",
+    "Apps.codeSubtitle": "Xu\u1ea5t kh\u1ea9u m\u1ed9t ch\u01b0\u01a1ng tr\u00ecnh Blockly v\u00e0o JavaScript, Python ho\u1eb7c XML.",
+    "Plane.plane": "M\u00e1y bay gh\u1ebf m\u00e1y t\u00ednh",
+    "Apps.planeSubtitle": "Gi\u1ea3i quy\u1ebft m\u1ed9t v\u1ea5n \u0111\u1ec1 to\u00e1n h\u1ecdc v\u1edbi m\u1ed9t ho\u1eb7c hai bi\u1ebfn.",
+    "Apps.blockFactory": "Kh\u1ed1i nh\u00e0 m\u00e1y",
+    "Apps.blockfactorySubtitle": "X\u00e2y d\u1ef1ng t\u00f9y ch\u1ec9nh kh\u1ed1i b\u1eb1ng c\u00e1ch s\u1eed d\u1ee5ng Blockly.",
     "Maze.moveForward": "\u0111i t\u1edbi",
     "Maze.turnLeft": "quay qua tr\u00e1i",
     "Maze.turnRight": "quay qua ph\u1ea3i",

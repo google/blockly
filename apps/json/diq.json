@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Gorizon"
+            "Gorizon",
+            "Marmase"
         ]
     },
     "Apps.blocklyMessage": "Blockly",
@@ -12,7 +13,7 @@
     "Apps.catLogic": "Mant\u0131\u011f",
     "Apps.catLoops": "Dingeki",
     "Apps.catMath": "Matematik",
-    "Apps.catText": "Nu\u015fte",
+    "Apps.catText": "Metin",
     "Apps.catLists": "Listey",
     "Apps.catColour": "Reng",
     "Apps.catVariables": "V\u0131rneyeni",

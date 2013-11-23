@@ -118,8 +118,10 @@ BlocklyApps.LANGUAGE_PACK = {
   'nl': 'msg/js/nl.js',
   'no': 'msg/js/no.js',
   'pms': 'msg/js/it.js',
-  'pt': 'msg/js/pt_br.js',
-  'pt-br': 'msg/js/pt_br.js',
+  'pt': 'msg/js/pt-br.js',
+  'pt-br': 'msg/js/pt-br.js',
+  // We used to use pt_br for pt-br.  Users may still have URLs.
+  'pt_br': 'msg/js/pt-br.js',
   'ro': 'msg/js/ro.js',
   'ru': 'msg/js/ru.js',
   'sv': 'msg/js/sv.js',

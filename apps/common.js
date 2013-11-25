@@ -31,6 +31,7 @@ var BlocklyApps = {};
 BlocklyApps.LANGUAGE_NAME = {
   'af': 'Afrikaans',
   'ar': 'العربية',
+  'az-latn': 'Azərbaycanca',
   'be-tarask': 'Taraškievica',
   'br': 'Brezhoneg',
   'ca': 'Català',

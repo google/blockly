@@ -41,7 +41,7 @@ planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
 
 
 planepage.start = function(opt_data, opt_ignored, opt_ijData) {
-  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html">Blockly</a> : 飞机</span> &nbsp; ';
+  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html">Blockly</a> : 飞机座位计算器</span> &nbsp; ';
   for (var i128 = 1; i128 < 4; i128++) {
     output += ' ' + ((i128 == opt_ijData.level) ? '<span class="tab" id="selected">' + soy.$$escapeHtml(i128) + '</span>' : (i128 < opt_ijData.level) ? '<a class="tab previous" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i128) + '">' + soy.$$escapeHtml(i128) + '</a>' : '<a class="tab" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i128) + '">' + soy.$$escapeHtml(i128) + '</a>');
   }

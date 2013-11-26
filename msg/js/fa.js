@@ -16,7 +16,7 @@ Blockly.Msg.COLOUR_BLEND_HELPURL = "http://meyerweb.com/eric/tools/color-blend/"
 Blockly.Msg.COLOUR_BLEND_RATIO = "نسبت";
 Blockly.Msg.COLOUR_BLEND_TITLE = "مخلوط";
 Blockly.Msg.COLOUR_BLEND_TOOLTIP = "دو رنگ را با نسبت مشخص‌شده مخلوط می‌کند (۰٫۰ - ۱٫۰)";
-Blockly.Msg.COLOUR_PICKER_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B1%D9%86%DA%AF";
+Blockly.Msg.COLOUR_PICKER_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%86%DA%AF";
 Blockly.Msg.COLOUR_PICKER_TOOLTIP = "انتخاب یک رنگ از تخته‌رنگ.";
 Blockly.Msg.COLOUR_RANDOM_HELPURL = "http://randomcolour.com";  // untranslated
 Blockly.Msg.COLOUR_RANDOM_TITLE = "رنگ تصادفی";
@@ -53,7 +53,7 @@ Blockly.Msg.CONTROLS_IF_TOOLTIP_1 = "اگر یک مقدار صحیح است، س
 Blockly.Msg.CONTROLS_IF_TOOLTIP_2 = "اگر یک مقدار صحیح است، اول بلوک اول عبارات را انجام بده.  در غیر این صورت بلوک دوم عبارات انجام بده.";
 Blockly.Msg.CONTROLS_IF_TOOLTIP_3 = "اگر مقدار اول صحیح بود، از آن بلوک اول عبارات را انجام بده.  در غیر این صورت، اگر مقدار دوم صحیح است، بلوک دوم عبارات را انجام بده.";
 Blockly.Msg.CONTROLS_IF_TOOLTIP_4 = "اگر مقدار اول درست است، بلوک اول عبارات را انجام بده.  در غیر این صورت، اگر مقدار دوم درست باشد بلوک دوم عبارات را انجام بده.  اگر هیچ از مقادیر درست نبود، آخرین بلوک عبارات را انجام بده.";
-Blockly.Msg.CONTROLS_REPEAT_HELPURL = "http://fa.wikipedia.org/wiki/%D8%AD%D9%84%D9%82%D9%87_%D9%81%D9%88%D8%B1";
+Blockly.Msg.CONTROLS_REPEAT_HELPURL = "https://fa.wikipedia.org/wiki/%D8%AD%D9%84%D9%82%D9%87_%D9%81%D9%88%D8%B1";
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = "انحام";
 Blockly.Msg.CONTROLS_REPEAT_TITLE = "%1 بار تکرار";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = "تکرار";
@@ -74,7 +74,7 @@ Blockly.Msg.EXPAND_BLOCK = "گسترش بلوک";
 Blockly.Msg.EXTERNAL_INPUTS = "ورودی‌های خارجی";
 Blockly.Msg.HELP = "راهنما";
 Blockly.Msg.INLINE_INPUTS = "ورودی‌های درون خطی";
-Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "http://en.wikipedia.org/wiki/Linked_list#Empty_lists";  // untranslated
+Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = "https://en.wikipedia.org/wiki/Linked_list#Empty_lists";  // untranslated
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = "ایجاد فهرست خالی";
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = "فهرستی با طول صفر شامل هیچ رکورد داده‌ای بر می‌گرداند.";
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = "فهرست";
@@ -147,7 +147,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ناصحیح";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "http://code.google.com/p/blockly/wiki/True_False";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "بازگرداندن یکی از صحیح یا ناصحیح.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "صحیح";
-Blockly.Msg.LOGIC_COMPARE_HELPURL = "http://fa.wikipedia.org/wiki/%D9%86%D8%A7%D8%A8%D8%B1%D8%A7%D8%A8%D8%B1%DB%8C";
+Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://fa.wikipedia.org/wiki/%D9%86%D8%A7%D8%A8%D8%B1%D8%A7%D8%A8%D8%B1%DB%8C";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "بازگشت صحیح اگر هر دو ورودی با یکدیگر برابر باشد.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "بازگرداندن صحیح اگر ورودی اول بزرگتر از ورودی دوم باشد.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = "بازگرداندن صحیح اگر ورودی اول بزرگتر یا مساوی یا ورودی دوم باشد.";
@@ -158,7 +158,7 @@ Blockly.Msg.LOGIC_NEGATE_HELPURL = "http://code.google.com/p/blockly/wiki/Not"; 
 Blockly.Msg.LOGIC_NEGATE_TITLE = "نه %1";
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = "صجیج باز می‌گرداند اگر ورودی نا صحیح باشند. ناصحیح بازمی‌گرداند اگر ورودی صحیح باشد.";
 Blockly.Msg.LOGIC_NULL = "تهی";
-Blockly.Msg.LOGIC_NULL_HELPURL = "http://en.wikipedia.org/wiki/Nullable_type";  // untranslated
+Blockly.Msg.LOGIC_NULL_HELPURL = "https://en.wikipedia.org/wiki/Nullable_type";  // untranslated
 Blockly.Msg.LOGIC_NULL_TOOLTIP = "تهی بازمی‌گرداند.";
 Blockly.Msg.LOGIC_OPERATION_AND = "و";
 Blockly.Msg.LOGIC_OPERATION_HELPURL = "http://code.google.com/p/blockly/wiki/And_Or";  // untranslated
@@ -166,24 +166,24 @@ Blockly.Msg.LOGIC_OPERATION_OR = "یا";
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND = "بازگرداندن صحیح اگر هر دو ورودی صحیح باشد.";
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR = "بازگرداندن صحیح اگر یکی از دو ورودی صحیح باشد.";
 Blockly.Msg.LOGIC_TERNARY_CONDITION = "آزمایش";
-Blockly.Msg.LOGIC_TERNARY_HELPURL = "http://en.wikipedia.org/wiki/%3F:";  // untranslated
+Blockly.Msg.LOGIC_TERNARY_HELPURL = "https://en.wikipedia.org/wiki/%3F:";  // untranslated
 Blockly.Msg.LOGIC_TERNARY_IF_FALSE = "اگر ناصحیح";
 Blockly.Msg.LOGIC_TERNARY_IF_TRUE = "اگر صحیح";
 Blockly.Msg.LOGIC_TERNARY_TOOLTIP = "بررسی وضعیت در «آزمایش». اگر وضعیت صحیح باشد، مقدار «اگر صحیح» را بر می‌گرداند در غیر اینصورت مقدار «اگر ناصحیح» را.";
 Blockly.Msg.MATH_ADDITION_SYMBOL = "+";  // untranslated
-Blockly.Msg.MATH_ARITHMETIC_HELPURL = "http://fa.wikipedia.org/wiki/%D8%AD%D8%B3%D8%A7%D8%A8";
+Blockly.Msg.MATH_ARITHMETIC_HELPURL = "https://fa.wikipedia.org/wiki/%D8%AD%D8%B3%D8%A7%D8%A8";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD = "بازگرداندن مقدار جمع دو عدد.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE = "بازگرداندن باقی‌ماندهٔ دو عدد.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS = "بازگرداندن تفاوت دو عدد.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MULTIPLY = "بازگرداندن حاصلضرب دو عدد.";
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_POWER = "بازگرداندن اولین عددی که از توان عدد دوم حاصل شده باشد.";
-Blockly.Msg.MATH_CHANGE_HELPURL = "http://fa.wikipedia.org/wiki/%D8%A7%D8%B5%D8%B7%D9%84%D8%A7%D8%AD_%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87%E2%80%8C%D9%86%D9%88%DB%8C%D8%B3%DB%8C#.D8.A7.D9.81.D8.B2.D8.A7.DB.8C.D8.B4_.D8.B4.D9.85.D8.A7.D8.B1.D9.86.D8.AF.D9.87";
+Blockly.Msg.MATH_CHANGE_HELPURL = "https://fa.wikipedia.org/wiki/%D8%A7%D8%B5%D8%B7%D9%84%D8%A7%D8%AD_%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87%E2%80%8C%D9%86%D9%88%DB%8C%D8%B3%DB%8C#.D8.A7.D9.81.D8.B2.D8.A7.DB.8C.D8.B4_.D8.B4.D9.85.D8.A7.D8.B1.D9.86.D8.AF.D9.87";
 Blockly.Msg.MATH_CHANGE_INPUT_BY = "با";
 Blockly.Msg.MATH_CHANGE_TITLE_CHANGE = "تغییر";
 Blockly.Msg.MATH_CHANGE_TOOLTIP = "افزودن یک عدد به متغیر '%1'.";
-Blockly.Msg.MATH_CONSTANT_HELPURL = "http://fa.wikipedia.org/wiki/%D8%AB%D8%A7%D8%A8%D8%AA_%D8%B1%DB%8C%D8%A7%D8%B6%DB%8C";
+Blockly.Msg.MATH_CONSTANT_HELPURL = "https://fa.wikipedia.org/wiki/%D8%AB%D8%A7%D8%A8%D8%AA_%D8%B1%DB%8C%D8%A7%D8%B6%DB%8C";
 Blockly.Msg.MATH_CONSTANT_TOOLTIP = "یکی از مقادیر مشترک را برمی‌گرداند: π (۳٫۱۴۱…)، e (۲٫۷۱۸...)، φ (۱٫۶۱۸)، sqrt(۲) (۱٫۴۱۴)، sqrt(۱/۲) (۰٫۷۰۷...) و یا ∞ (بی‌نهایت).";
-Blockly.Msg.MATH_CONSTRAIN_HELPURL = "http://en.wikipedia.org/wiki/Clamping_%28graphics%29";  // untranslated
+Blockly.Msg.MATH_CONSTRAIN_HELPURL = "https://en.wikipedia.org/wiki/Clamping_%28graphics%29";  // untranslated
 Blockly.Msg.MATH_CONSTRAIN_TITLE = "محدودکردن %1 پایین %2 بالا %3";
 Blockly.Msg.MATH_CONSTRAIN_TOOLTIP = "محدودکردن یک عدد بین محدودیت‌های مشخص‌شده (بسته).";
 Blockly.Msg.MATH_DIVISION_SYMBOL = "÷";  // untranslated
@@ -195,11 +195,11 @@ Blockly.Msg.MATH_IS_POSITIVE = "مثبت است";
 Blockly.Msg.MATH_IS_PRIME = "عدد اول است";
 Blockly.Msg.MATH_IS_TOOLTIP = "بررسی می‌کند که آیا یک عدد زوج، فرد، اول، کامل، مثبت، منفی یا بخش‌پذیر عدد خاصی باشد را بررسی می‌کند. درست یا نادرست باز می‌گرداند.";
 Blockly.Msg.MATH_IS_WHOLE = "کامل است";
-Blockly.Msg.MATH_MODULO_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA_%D9%BE%DB%8C%D9%85%D8%A7%D9%86%D9%87";
+Blockly.Msg.MATH_MODULO_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA_%D9%BE%DB%8C%D9%85%D8%A7%D9%86%D9%87";
 Blockly.Msg.MATH_MODULO_TITLE = "باقی‌ماندهٔ %1 + %2";
 Blockly.Msg.MATH_MODULO_TOOLTIP = "باقی‌ماندهٔ تقسیم دو عدد را بر می‌گرداند.";
 Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = "×";  // untranslated
-Blockly.Msg.MATH_NUMBER_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B9%D8%AF%D8%AF";
+Blockly.Msg.MATH_NUMBER_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B9%D8%AF%D8%AF";
 Blockly.Msg.MATH_NUMBER_TOOLTIP = "یک عدد.";
 Blockly.Msg.MATH_ONLIST_HELPURL = "";  // untranslated
 Blockly.Msg.MATH_ONLIST_OPERATOR_AVERAGE = "میانگین فهرست";
@@ -219,18 +219,18 @@ Blockly.Msg.MATH_ONLIST_TOOLTIP_RANDOM = "موردی تصادفی از فهرس�
 Blockly.Msg.MATH_ONLIST_TOOLTIP_STD_DEV = "انحراف معیار فهرست را بر می‌گرداند.";
 Blockly.Msg.MATH_ONLIST_TOOLTIP_SUM = "جمع همهٔ عددهای فهرست را باز می‌گرداند.";
 Blockly.Msg.MATH_POWER_SYMBOL = "^";  // untranslated
-Blockly.Msg.MATH_RANDOM_FLOAT_HELPURL = "http://fa.wikipedia.org/wiki/%D8%AA%D9%88%D9%84%DB%8C%D8%AF_%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF_%D8%AA%D8%B5%D8%A7%D8%AF%D9%81%DB%8C";
+Blockly.Msg.MATH_RANDOM_FLOAT_HELPURL = "https://fa.wikipedia.org/wiki/%D8%AA%D9%88%D9%84%DB%8C%D8%AF_%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF_%D8%AA%D8%B5%D8%A7%D8%AF%D9%81%DB%8C";
 Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM = "کسر تصادفی";
 Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP = "بازگرداندن کسری تصادفی بین ۰٫۰ (بسته) تا ۱٫۰ (باز).";
-Blockly.Msg.MATH_RANDOM_INT_HELPURL = "http://fa.wikipedia.org/wiki/%D8%AA%D9%88%D9%84%DB%8C%D8%AF_%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF_%D8%AA%D8%B5%D8%A7%D8%AF%D9%81%DB%8C";
+Blockly.Msg.MATH_RANDOM_INT_HELPURL = "https://fa.wikipedia.org/wiki/%D8%AA%D9%88%D9%84%DB%8C%D8%AF_%D8%A7%D8%B9%D8%AF%D8%A7%D8%AF_%D8%AA%D8%B5%D8%A7%D8%AF%D9%81%DB%8C";
 Blockly.Msg.MATH_RANDOM_INT_TITLE = "عدد صحیح تصادفی بین %1 تا %2";
 Blockly.Msg.MATH_RANDOM_INT_TOOLTIP = "یک عدد تصادفی بین دو مقدار مشخص‌شده به صورت بسته باز می‌گرداند.";
-Blockly.Msg.MATH_ROUND_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
+Blockly.Msg.MATH_ROUND_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUND = "گردکردن";
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDDOWN = "گرد به پایین";
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDUP = "گرد به بالا";
 Blockly.Msg.MATH_ROUND_TOOLTIP = "گردکردن یک عدد به بالا یا پایین.";
-Blockly.Msg.MATH_SINGLE_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B1%DB%8C%D8%B4%D9%87_%D8%AF%D9%88%D9%85";
+Blockly.Msg.MATH_SINGLE_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%DB%8C%D8%B4%D9%87_%D8%AF%D9%88%D9%85";
 Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = "مطلق";
 Blockly.Msg.MATH_SINGLE_OP_ROOT = "ریشهٔ دوم";
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = "قدر مطلق یک عدد را بازمی‌گرداند.";
@@ -245,7 +245,7 @@ Blockly.Msg.MATH_TRIG_ACOS = "acos";  // untranslated
 Blockly.Msg.MATH_TRIG_ASIN = "asin";  // untranslated
 Blockly.Msg.MATH_TRIG_ATAN = "atan";  // untranslated
 Blockly.Msg.MATH_TRIG_COS = "cos";  // untranslated
-Blockly.Msg.MATH_TRIG_HELPURL = "http://fa.wikipedia.org/wiki/%D8%AA%D8%A7%D8%A8%D8%B9%E2%80%8C%D9%87%D8%A7%DB%8C_%D9%85%D8%AB%D9%84%D8%AB%D8%A7%D8%AA%DB%8C";
+Blockly.Msg.MATH_TRIG_HELPURL = "https://fa.wikipedia.org/wiki/%D8%AA%D8%A7%D8%A8%D8%B9%E2%80%8C%D9%87%D8%A7%DB%8C_%D9%85%D8%AB%D9%84%D8%AB%D8%A7%D8%AA%DB%8C";
 Blockly.Msg.MATH_TRIG_SIN = "sin";  // untranslated
 Blockly.Msg.MATH_TRIG_TAN = "tan";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_ACOS = "بازگرداندن آرک‌کسینوس درجه (نه رادیان).";
@@ -259,17 +259,17 @@ Blockly.Msg.NEW_VARIABLE_TITLE = "نام متغیر جدید:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "با:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "";  // untranslated
-Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
+Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "اجرای تابع تعریف‌شده توسط کاربر «%1».";
-Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
+Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "اجرای تابع تعریف‌شده توسط کاربر «%1» و استفاده از خروجی آن.";
 Blockly.Msg.PROCEDURES_CREATE_DO = "ساختن «%1»";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
-Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
+Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "انجام چیزی";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "به";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = "تابعی می‌سازد بدون هیچ خروجی.";
-Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
+Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
 Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = "بازگشت";
 Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = "تابعی با یک خروجی می‌سازد.";
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = "اخطار: این تابعی پارامتر تکراری دارد.";
@@ -335,7 +335,7 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER = "اعلان برای کاربر با ی
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = "اعلان برای کاربر برای یک متن.";
 Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER = "اعلان برای عدد با پیام";
 Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "اعلان برای متن با پیام";
-Blockly.Msg.TEXT_TEXT_HELPURL = "http://fa.wikipedia.org/wiki/%D8%B1%D8%B4%D8%AA%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
+Blockly.Msg.TEXT_TEXT_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D8%B4%D8%AA%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
 Blockly.Msg.TEXT_TEXT_TOOLTIP = "یک حرف، کلمه یا خطی از متن.";
 Blockly.Msg.TEXT_TRIM_HELPURL = "https://code.google.com/p/blockly/wiki/Text#Trimming_%28removing%29_spaces";  // untranslated
 Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "تراشیدن فاصله‌ها از هر دو طرف";

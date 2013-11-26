@@ -171,6 +171,36 @@ def output_as_text(messages, apps, verbose):
               app.upper(), lang, (', '.join(missing) if missing else 'none')))
 
 
+def output_as_csv(messages, apps):
+  """Outputs the given prefix counts and percentages as CSV.
+
+  Args:
+      messages: A dictionary of dictionaries, where the outer keys are language
+          codes used by translatewiki (generally, ISO 639 language codes) or
+          the string TOTAL, used to indicate the total set of messages.  The
+          inner dictionary makes message keys to values in that language.
+      apps: Apps to consider.
+  """
+  # Header row.
+  print('Language, ' + ', ,'.join(apps))
+
+  # Total row.
+  # Put at top, rather than bottom, so it can be frozen.
+  print('TOTAL, ' + ', '.join(
+      [str(get_prefix_count(app, messages[TOTAL])) + ', '
+       for app in apps]))
+
+  # One line per language.
+  for lang in messages:
+    if lang != TOTAL:
+      print(lang + ', ' + ', '.join(
+          [str(get_prefix_count(app, messages[lang]))
+           + ', '
+           + str((get_prefix_count(app, messages[lang]) * 1.0 /
+                  get_prefix_count(app, messages[TOTAL])))
+           for app in apps]))
+
+
 def main():
   """Processes input files and outputs results in specified format.
   """
@@ -179,10 +209,12 @@ def main():
       description='Display translation status by app and language.')
   parser.add_argument('--key_file', default='json' + os.path.sep + 'keys.json',
                       help='file with complete list of keys.')
-  parser.add_argument('--output', default='text', choices=['text', 'html'],
+  parser.add_argument('--output', default='text',
+                      choices=['text', 'html', 'csv'],
                       help='output format')
   parser.add_argument('--verbose', action='store_true', default=False,
-                      help='whether to indicate which messages were translated')
+                      help='whether to indicate which messages were translated '
+                      '(only used in text and html output modes)')
   parser.add_argument('--app', default=None, choices=APPS,
                       help='if set, only consider the specified app (prefix).')
   parser.add_argument('lang_files', nargs='+',
@@ -205,6 +237,8 @@ def main():
     output_as_text(messages, apps, args.verbose)
   elif args.output == 'html':
     output_as_html(messages, apps, args.verbose)
+  elif args.output == 'csv':
+    output_as_csv(messages, apps)
   else:
     print('No output?!')
 

@@ -96,7 +96,7 @@ Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
 
 // Colour Blocks.
 /// url - Information about colour.
-Blockly.Msg.COLOUR_PICKER_HELPURL = 'http://en.wikipedia.org/wiki/Color';
+Blockly.Msg.COLOUR_PICKER_HELPURL = 'https://en.wikipedia.org/wiki/Color';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Colour#Picking_a_colour_from_a_palette https://code.google.com/p/blockly/wiki/Colour#Picking_a_colour_from_a_palette].
 Blockly.Msg.COLOUR_PICKER_TOOLTIP = 'Choose a colour from the palette.';
 /// url - A link that displays a random colour each time you visit it.
@@ -131,8 +131,8 @@ Blockly.Msg.COLOUR_BLEND_RATIO = 'ratio';
 Blockly.Msg.COLOUR_BLEND_TOOLTIP = 'Blends two colours together with a given ratio (0.0 - 1.0).';
 
 // Loop Blocks.
-/// url - Describes 'repeat loops' in computer programs; consider using the translation of the page [http://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow].
-Blockly.Msg.CONTROLS_REPEAT_HELPURL = 'http://en.wikipedia.org/wiki/For_loop';
+/// url - Describes 'repeat loops' in computer programs; consider using the translation of the page [https://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow].
+Blockly.Msg.CONTROLS_REPEAT_HELPURL = 'https://en.wikipedia.org/wiki/For_loop';
 /// block input text - Title of [https://code.google.com/p/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.
 Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
 /// block text - Text preceding the number of repetitions in a [https://code.google.com/p/blockly/wiki/Loops#repeat repeat block].
@@ -145,7 +145,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = 'times';
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#repeat https://code.google.com/p/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
-/// url - Describes 'while loops' in computer programs; consider using the translation of [http://en.wikipedia.org/wiki/While_loop http://en.wikipedia.org/wiki/While_loop], if present, or [http://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow].
+/// url - Describes 'while loops' in computer programs; consider using the translation of [https://en.wikipedia.org/wiki/While_loop http://en.wikipedia.org/wiki/While_loop], if present, or [http://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow].
 Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'http://code.google.com/p/blockly/wiki/Repeat';
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /// dropdown - Specifies that a loop should [https://code.google.com/p/blockly/wiki/Loops#Repeat_while repeat while] the following condition is true.
@@ -157,7 +157,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = 'While a value is true, then do 
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#repeat_until https://code.google.com/p/blockly/wiki/Loops#repeat_until].
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = 'While a value is false, then do some statements.';
 
-/// url - Describes 'for loops' in computer programs.  Consider using your language's translation of [http://en.wikipedia.org/wiki/For_loop http://en.wikipedia.org/wiki/For_loop], if present.
+/// url - Describes 'for loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/For_loop http://en.wikipedia.org/wiki/For_loop], if present.
 Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#count_with';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#count_with https://code.google.com/p/blockly/wiki/Loops#count_with].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable %1 take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
@@ -173,7 +173,7 @@ Blockly.Msg.CONTROLS_FOR_INPUT_WITH = 'count with';
 Blockly.Msg.CONTROLS_FOR_INPUT_FROM_TO_BY = 'from %1 to %2 by %3';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 
-/// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [http://en.wikipedia.org/wiki/Foreach http://en.wikipedia.org/wiki/Foreach] if present.
+/// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach http://en.wikipedia.org/wiki/Foreach] if present.
 Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#for_each for each block';
 /// block text - Title of [https://code.google.com/p/blockly/wiki/Loops#for_each for each block].
 Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM = 'for each item';
@@ -185,7 +185,7 @@ Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /// block text - Description of [https://code.google.com/p/blockly/wiki/Loops#for_each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variable "%1" to the item, and then do some statements.';
 
-/// url - Describes control flow in computer programs.  Consider using your language's translation of [http://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow], if it exists.
+/// url - Describes control flow in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow], if it exists.
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#Loop_Termination_Blocks';
 /// dropdown - The current loop should be exited.  See [https://code.google.com/p/blockly/wiki/Loops#break https://code.google.com/p/blockly/wiki/Loops#break].
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK = 'break out of loop';
@@ -199,15 +199,15 @@ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE = 'Skip the rest of this l
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING = 'Warning: This block may only be used within a loop.';
 
 // Logic Blocks.
-/// url - Describes conditional statements (if-then-else) in computer programs.  Consider using your language's translation of [http://en.wikipedia.org/wiki/If_else http://en.wikipedia.org/wiki/If_else], if present.
+/// url - Describes conditional statements (if-then-else) in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_else http://en.wikipedia.org/wiki/If_else], if present.
 Blockly.Msg.CONTROLS_IF_HELPURL = 'http://code.google.com/p/blockly/wiki/If_Then';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If_blocks 'if' blocks].  Consider using your language's translation of [http://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
+/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If_blocks 'if' blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
 Blockly.Msg.CONTROLS_IF_TOOLTIP_1 = 'If a value is true, then do some statements.';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else_blocks if-else blocks].  Consider using your language's translation of [http://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
+/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else_blocks if-else blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
 Blockly.Msg.CONTROLS_IF_TOOLTIP_2 = 'If a value is true, then do the first block of statements.  Otherwise, do the second block of statements.';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else-If_blocks if-else-if blocks].  Consider using your language's translation of [http://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
+/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else-If_blocks if-else-if blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
 Blockly.Msg.CONTROLS_IF_TOOLTIP_3 = 'If the first value is true, then do the first block of statements.  Otherwise, if the second value is true, do the second block of statements.';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else-If-Else_blocks if-else-if-else blocks].  Consider using your language's translation of [http://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
+/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else-If-Else_blocks if-else-if-else blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement http://en.wikipedia.org/wiki/If_statement], if present.
 Blockly.Msg.CONTROLS_IF_TOOLTIP_4 = 'If the first value is true, then do the first block of statements.  Otherwise, if the second value is true, do the second block of statements.  If none of the values are true, do the last block of statements.';
 /// block text - See [https://code.google.com/p/blockly/wiki/IfElse https://code.google.com/p/blockly/wiki/IfElse].
 /// It is recommended, but not essential, that this have text in common with the translation of 'else if'
@@ -228,7 +228,7 @@ Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
 
 /// url - Information about comparisons.
-Blockly.Msg.LOGIC_COMPARE_HELPURL = 'http://en.wikipedia.org/wiki/Inequality_(mathematics)';
+Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';
 /// tooltip - Describes the equals (=) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = 'Return true if both inputs equal each other.';
 /// tooltip - Describes the equals (\u0026ne;) block.
@@ -242,55 +242,55 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = 'Return true if the first input is greate
 /// tooltip - Describes the equals (\u0026ge;) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = 'Return true if the first input is greater than or equal to the second input.';
 
-/// url - Information about the Boolean conjunction ("and") and disjunction ("or") operators.  Consider using the translation of [http://en.wikipedia.org/wiki/Boolean_logic http://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.
+/// url - Information about the Boolean conjunction ("and") and disjunction ("or") operators.  Consider using the translation of [https://en.wikipedia.org/wiki/Boolean_logic http://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.
 Blockly.Msg.LOGIC_OPERATION_HELPURL = 'http://code.google.com/p/blockly/wiki/And_Or';
-/// tooltip - See [http://en.wikipedia.org/wiki/Logical_conjunction http://en.wikipedia.org/wiki/Logical_conjunction].
+/// tooltip - See [https://en.wikipedia.org/wiki/Logical_conjunction http://en.wikipedia.org/wiki/Logical_conjunction].
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND = 'Return true if both inputs are true.';
-/// block text - See [http://en.wikipedia.org/wiki/Logical_conjunction http://en.wikipedia.org/wiki/Logical_conjunction].
+/// block text - See [https://en.wikipedia.org/wiki/Logical_conjunction http://en.wikipedia.org/wiki/Logical_conjunction].
 Blockly.Msg.LOGIC_OPERATION_AND = 'and';
-/// block text - See [http://en.wikipedia.org/wiki/Disjunction http://en.wikipedia.org/wiki/Disjunction].
+/// block text - See [https://en.wikipedia.org/wiki/Disjunction http://en.wikipedia.org/wiki/Disjunction].
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR = 'Return true if at least one of the inputs is true.';
-/// block text - See [http://en.wikipedia.org/wiki/Disjunction http://en.wikipedia.org/wiki/Disjunction].
+/// block text - See [https://en.wikipedia.org/wiki/Disjunction http://en.wikipedia.org/wiki/Disjunction].
 Blockly.Msg.LOGIC_OPERATION_OR = 'or';
 
-/// url - Information about logical negation.  The translation of [http://en.wikipedia.org/wiki/Logical_negation http://en.wikipedia.org/wiki/Logical_negation] is recommended if it exists in the target language.
+/// url - Information about logical negation.  The translation of [https://en.wikipedia.org/wiki/Logical_negation http://en.wikipedia.org/wiki/Logical_negation] is recommended if it exists in the target language.
 Blockly.Msg.LOGIC_NEGATE_HELPURL = 'http://code.google.com/p/blockly/wiki/Not';
 /// block text - This is a unary operator that returns ''false'' when the input is ''true'', and ''true'' when the input is ''false''.
 /// \n\nParameters:\n* %1 - the input (which should be either the value "true" or "false")
 Blockly.Msg.LOGIC_NEGATE_TITLE = 'not %1';
-/// tooltip - See [http://en.wikipedia.org/wiki/Logical_negation http://en.wikipedia.org/wiki/Logical_negation].
+/// tooltip - See [https://en.wikipedia.org/wiki/Logical_negation http://en.wikipedia.org/wiki/Logical_negation].
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false.  Returns false if the input is true.';
 
-/// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [http://en.wikipedia.org/wiki/Truth_value http://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
+/// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value http://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'http://code.google.com/p/blockly/wiki/True_False';
-/// block text - The word for the [http://en.wikipedia.org/wiki/Truth_value logical value] ''true''.
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
-/// block text - The word for the [http://en.wikipedia.org/wiki/Truth_value logical value] ''false''.
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = 'false';
-/// tooltip - Indicates that the block returns either of the two possible [http://en.wikipedia.org/wiki/Truth_value logical values].
+/// tooltip - Indicates that the block returns either of the two possible [https://en.wikipedia.org/wiki/Truth_value logical values].
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = 'Returns either true or false.';
 
-/// url - Provide a link to the translation of [http://en.wikipedia.org/wiki/Nullable_type http://en.wikipedia.org/wiki/Nullable_type], if it exists in your language; otherwise, do not worry about translating this advanced concept.
-Blockly.Msg.LOGIC_NULL_HELPURL = 'http://en.wikipedia.org/wiki/Nullable_type';
+/// url - Provide a link to the translation of [https://en.wikipedia.org/wiki/Nullable_type http://en.wikipedia.org/wiki/Nullable_type], if it exists in your language; otherwise, do not worry about translating this advanced concept.
+Blockly.Msg.LOGIC_NULL_HELPURL = 'https://en.wikipedia.org/wiki/Nullable_type';
 /// block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for "nothing" or "invalid".
 Blockly.Msg.LOGIC_NULL = 'null';
 /// tooltip - This should use the word from the previous message.
 Blockly.Msg.LOGIC_NULL_TOOLTIP = 'Returns null.';
 
-/// url - Describes the programming language operator known as the ''ternary'' or ''conditional'' operator.  It is recommended that you use the translation of [http://en.wikipedia.org/wiki/%3F: http://en.wikipedia.org/wiki/%3F:] if it exists.
-Blockly.Msg.LOGIC_TERNARY_HELPURL = 'http://en.wikipedia.org/wiki/%3F:';
+/// url - Describes the programming language operator known as the ''ternary'' or ''conditional'' operator.  It is recommended that you use the translation of [https://en.wikipedia.org/wiki/%3F: http://en.wikipedia.org/wiki/%3F:] if it exists.
+Blockly.Msg.LOGIC_TERNARY_HELPURL = 'https://en.wikipedia.org/wiki/%3F:';
 /// block input text - Label for the input whose value determines which of the other two inputs is returned.  In some programming languages, this is called a ''''predicate''''.
 Blockly.Msg.LOGIC_TERNARY_CONDITION = 'test';
 /// block input text - Indicates that the following input should be returned (used as output) if the test input is true.  Remember to try to keep block text terse (short).
 Blockly.Msg.LOGIC_TERNARY_IF_TRUE = 'if true';
 /// block input text - Indicates that the following input should be returned (used as output) if the test input is false.
 Blockly.Msg.LOGIC_TERNARY_IF_FALSE = 'if false';
-/// tooltip - See [http://en.wikipedia.org/wiki/%3F: http://en.wikipedia.org/wiki/%3F:].
+/// tooltip - See [https://en.wikipedia.org/wiki/%3F: http://en.wikipedia.org/wiki/%3F:].
 Blockly.Msg.LOGIC_TERNARY_TOOLTIP = 'Check the condition in "test". If the condition is true, returns the "if true" value; otherwise returns the "if false" value.';
 
 // Math Blocks.
 /// url - Information about (real) numbers.
-Blockly.Msg.MATH_NUMBER_HELPURL = 'http://en.wikipedia.org/wiki/Number';
+Blockly.Msg.MATH_NUMBER_HELPURL = 'https://en.wikipedia.org/wiki/Number';
 /// tooltip - Any positive or negative number, not necessarily an integer.
 Blockly.Msg.MATH_NUMBER_TOOLTIP = 'A number.';
 
@@ -310,85 +310,85 @@ Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = '\u00D7';
 Blockly.Msg.MATH_POWER_SYMBOL = '^';
 
 /// math - The short name of the trigonometric function
-/// [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine].
+/// [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine].
 Blockly.Msg.MATH_TRIG_SIN = 'sin';
 /// math - The short name of the trigonometric function
-/// [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine].
+/// [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine].
 Blockly.Msg.MATH_TRIG_COS = 'cos';
 /// math - The short name of the trigonometric function
-/// [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent].
+/// [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent].
 Blockly.Msg.MATH_TRIG_TAN = 'tan';
 /// math - The short name of the ''inverse of'' the trigonometric function
-/// [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine].
+/// [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine].
 Blockly.Msg.MATH_TRIG_ASIN = 'asin';
 /// math - The short name of the ''inverse of'' the trigonometric function
-/// [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine].
+/// [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine].
 Blockly.Msg.MATH_TRIG_ACOS = 'acos';
 /// math - The short name of the ''inverse of'' the trigonometric function
-/// [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent].
+/// [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent].
 Blockly.Msg.MATH_TRIG_ATAN = 'atan';
 
 /// url - Information about addition, subtraction, multiplication, division, and exponentiation.
-Blockly.Msg.MATH_ARITHMETIC_HELPURL = 'http://en.wikipedia.org/wiki/Arithmetic';
-/// tooltip - See [http://en.wikipedia.org/wiki/Addition http://en.wikipedia.org/wiki/Addition].
+Blockly.Msg.MATH_ARITHMETIC_HELPURL = 'https://en.wikipedia.org/wiki/Arithmetic';
+/// tooltip - See [https://en.wikipedia.org/wiki/Addition http://en.wikipedia.org/wiki/Addition].
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_ADD = 'Return the sum of the two numbers.';
-/// tooltip - See [http://en.wikipedia.org/wiki/Subtraction http://en.wikipedia.org/wiki/Subtraction].
+/// tooltip - See [https://en.wikipedia.org/wiki/Subtraction http://en.wikipedia.org/wiki/Subtraction].
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MINUS = 'Return the difference of the two numbers.';
-/// tooltip - See [http://en.wikipedia.org/wiki/Multiplication http://en.wikipedia.org/wiki/Multiplication].
+/// tooltip - See [https://en.wikipedia.org/wiki/Multiplication http://en.wikipedia.org/wiki/Multiplication].
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MULTIPLY = 'Return the product of the two numbers.';
-/// tooltip - See [http://en.wikipedia.org/wiki/Division_(mathematics) http://en.wikipedia.org/wiki/Division_(mathematics)].
+/// tooltip - See [https://en.wikipedia.org/wiki/Division_(mathematics) http://en.wikipedia.org/wiki/Division_(mathematics)].
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE = 'Return the quotient of the two numbers.';
-/// tooltip - See [http://en.wikipedia.org/wiki/Exponentiation http://en.wikipedia.org/wiki/Exponentiation].
+/// tooltip - See [https://en.wikipedia.org/wiki/Exponentiation http://en.wikipedia.org/wiki/Exponentiation].
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_POWER = 'Return the first number raised to the power of the second number.';
 
 /// url - Information about the square root operation.
-Blockly.Msg.MATH_SINGLE_HELPURL = 'http://en.wikipedia.org/wiki/Square_root';
-/// dropdown - This computes the positive [http://en.wikipedia.org/wiki/Square_root square root] of its input.  For example, the square root of 16 is 4.
+Blockly.Msg.MATH_SINGLE_HELPURL = 'https://en.wikipedia.org/wiki/Square_root';
+/// dropdown - This computes the positive [https://en.wikipedia.org/wiki/Square_root square root] of its input.  For example, the square root of 16 is 4.
 Blockly.Msg.MATH_SINGLE_OP_ROOT = 'square root';
 /// tooltip - Please use the same term as in the previous message.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = 'Return the square root of a number.';
-/// dropdown - This leaves positive numeric inputs changed and inverts negative inputs.  For example, the absolute value of 5 is 5; the absolute value of -5 is also 5.  For more information, see [http://en.wikipedia.org/wiki/Absolute_value http://en.wikipedia.org/wiki/Absolute_value].
+/// dropdown - This leaves positive numeric inputs changed and inverts negative inputs.  For example, the absolute value of 5 is 5; the absolute value of -5 is also 5.  For more information, see [https://en.wikipedia.org/wiki/Absolute_value http://en.wikipedia.org/wiki/Absolute_value].
 Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = 'absolute';
 /// tooltip - Please use the same term as in the previous message.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = 'Return the absolute value of a number.';
 
 /// tooltip - Calculates '''0-n''', where '''n''' is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = 'Return the negation of a number.';
-/// tooltip - Calculates the [http://en.wikipedia.org/wiki/Natural_logarithm|natural logarithm] of its single numeric input.
+/// tooltip - Calculates the [https://en.wikipedia.org/wiki/Natural_logarithm|natural logarithm] of its single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LN = 'Return the natural logarithm of a number.';
-/// tooltip - Calculates the [http://en.wikipedia.org/wiki/Common_logarithm common logarithm] of its single numeric input.
+/// tooltip - Calculates the [https://en.wikipedia.org/wiki/Common_logarithm common logarithm] of its single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_LOG10 = 'Return the base 10 logarithm of a number.';
-/// tooltip - Multiplies [http://en.wikipedia.org/wiki/E_%28mathematical_constant%29 e] by itself n times, where n is the single numeric input.
+/// tooltip - Multiplies [https://en.wikipedia.org/wiki/E_%28mathematical_constant%29 e] by itself n times, where n is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_EXP = 'Return e to the power of a number.';
 /// tooltip - Multiplies 10 by itself n times, where n is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = 'Return 10 to the power of a number.';
 
 /// url - Information about the trigonometric functions sine, cosine, tangent, and their inverses (ideally using degrees, not radians).
-Blockly.Msg.MATH_TRIG_HELPURL = 'http://en.wikipedia.org/wiki/Trigonometric_functions';
-/// tooltip - Return the [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine] of an [http://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
+Blockly.Msg.MATH_TRIG_HELPURL = 'https://en.wikipedia.org/wiki/Trigonometric_functions';
+/// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine] of an [http://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = 'Return the sine of a degree (not radian).';
-/// tooltip - Return the [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine] of an [http://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
+/// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine] of an [http://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = 'Return the cosine of a degree (not radian).';
-/// tooltip - Return the [http://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent] of an [http://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
+/// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent] of an [http://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = 'Return the tangent of a degree (not radian).';
-/// tooltip - The [http://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [http://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent sine function], using [http://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
+/// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [http://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent sine function], using [http://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ASIN = 'Return the arcsine of a number.';
-/// tooltip - The [http://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [http://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent cosine] function, using [http://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
+/// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [http://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent cosine] function, using [http://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ACOS = 'Return the arccosine of a number.';
-/// tooltip - The [http://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [http://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent tangent] function, using [http://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
+/// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [http://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent tangent] function, using [http://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = 'Return the arctangent of a number.';
 
 /// url - Information about the mathematical constants \u0026pi;, e, the golden ratio (\u0026phi;), \u0026radic; 2, \u0026radic; 1/2, and infinity (\u0026infin;).
-Blockly.Msg.MATH_CONSTANT_HELPURL = 'http://en.wikipedia.org/wiki/Mathematical_constant';
-/// tooltip - Provides the specified [http://en.wikipedia.org/wiki/Mathematical_constant mathematical constant].
+Blockly.Msg.MATH_CONSTANT_HELPURL = 'https://en.wikipedia.org/wiki/Mathematical_constant';
+/// tooltip - Provides the specified [https://en.wikipedia.org/wiki/Mathematical_constant mathematical constant].
 Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: \u03c0 (3.141\u2026), e (2.718\u2026), \u03c6 (1.618\u2026), sqrt(2) (1.414\u2026), sqrt(\u00bd) (0.707\u2026), or \u221e (infinity).';
 /// dropdown - A number is '''even''' if it is a multiple of 2.  For example, 4 is even (yielding true), but 3 is not (false).
 Blockly.Msg.MATH_IS_EVEN = 'is even';
 /// dropdown - A number is '''odd''' if it is not a multiple of 2.  For example, 3 is odd (yielding true), but 4 is not (false).  The opposite of "odd" is "even".
 Blockly.Msg.MATH_IS_ODD = 'is odd';
-/// dropdown - A number is [http://en.wikipedia.org/wiki/Prime prime] if it cannot be evenly divided by any positive integers except for 1 and itself.  For example, 5 is prime, but 6 is not because 2 \u0026times; 3 = 6.
+/// dropdown - A number is [https://en.wikipedia.org/wiki/Prime prime] if it cannot be evenly divided by any positive integers except for 1 and itself.  For example, 5 is prime, but 6 is not because 2 \u0026times; 3 = 6.
 Blockly.Msg.MATH_IS_PRIME = 'is prime';
-/// dropdown - A number is '''whole''' if it is an [http://en.wikipedia.org/wiki/Integer integer].  For example, 5 is whole, but 5.1 is not.
+/// dropdown - A number is '''whole''' if it is an [https://en.wikipedia.org/wiki/Integer integer].  For example, 5 is whole, but 5.1 is not.
 Blockly.Msg.MATH_IS_WHOLE = 'is whole';
 /// dropdown - A number is '''positive''' if it is greater than 0.  (0 is neither negative nor positive.)
 Blockly.Msg.MATH_IS_POSITIVE = 'is positive';
@@ -400,7 +400,7 @@ Blockly.Msg.MATH_IS_DIVISIBLE_BY = 'is divisible by';
 Blockly.Msg.MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, positive, negative, or if it is divisible by certain number.  Returns true or false.';
 
 /// url - Information about incrementing (increasing the value of) a variable.
-Blockly.Msg.MATH_CHANGE_HELPURL = 'http://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter';
+Blockly.Msg.MATH_CHANGE_HELPURL = 'https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter';
 /// - As in: '''change''' [the value of variable] ''item by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
 Blockly.Msg.MATH_CHANGE_TITLE_CHANGE = 'change';
 Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
@@ -410,8 +410,8 @@ Blockly.Msg.MATH_CHANGE_INPUT_BY = 'by';
 Blockly.Msg.MATH_CHANGE_TOOLTIP = 'Add a number to variable "%1".';
 
 /// url - Information about how numbers are rounded to the nearest integer
-Blockly.Msg.MATH_ROUND_HELPURL = 'http://en.wikipedia.org/wiki/Rounding';
-/// tooltip - See [http://en.wikipedia.org/wiki/Rounding http://en.wikipedia.org/wiki/Rounding].
+Blockly.Msg.MATH_ROUND_HELPURL = 'https://en.wikipedia.org/wiki/Rounding';
+/// tooltip - See [https://en.wikipedia.org/wiki/Rounding http://en.wikipedia.org/wiki/Rounding].
 Blockly.Msg.MATH_ROUND_TOOLTIP = 'Round a number up or down.';
 /// dropdown - This rounds its input to the nearest whole number.  For example, 3.4 is rounded to 3.
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUND = 'round';
@@ -434,21 +434,21 @@ Blockly.Msg.MATH_ONLIST_TOOLTIP_MIN = 'Return the smallest number in the list.';
 Blockly.Msg.MATH_ONLIST_OPERATOR_MAX = 'max of list';
 /// tooltip
 Blockly.Msg.MATH_ONLIST_TOOLTIP_MAX = 'Return the largest number in the list.';
-/// dropdown - This adds up all of the numbers in a list and divides the sum by the number of elements in the list.  For example, the [http://en.wikipedia.org/wiki/Arithmetic_mean average] of the list [1, 2, 3, 4] is 2.5 (10/4).
+/// dropdown - This adds up all of the numbers in a list and divides the sum by the number of elements in the list.  For example, the [https://en.wikipedia.org/wiki/Arithmetic_mean average] of the list [1, 2, 3, 4] is 2.5 (10/4).
 Blockly.Msg.MATH_ONLIST_OPERATOR_AVERAGE = 'average of list';
-/// tooltip - See [http://en.wikipedia.org/wiki/Arithmetic_mean http://en.wikipedia.org/wiki/Arithmetic_mean] for more informatin.
+/// tooltip - See [https://en.wikipedia.org/wiki/Arithmetic_mean http://en.wikipedia.org/wiki/Arithmetic_mean] for more informatin.
 Blockly.Msg.MATH_ONLIST_TOOLTIP_AVERAGE = 'Return the average (arithmetic mean) of the numeric values in the list.';
-/// dropdown - This finds the [http://en.wikipedia.org/wiki/Median median] of the numeric values in a list.  For example, the median of the list {1, 2, 7, 12, 13} is 7.
+/// dropdown - This finds the [https://en.wikipedia.org/wiki/Median median] of the numeric values in a list.  For example, the median of the list {1, 2, 7, 12, 13} is 7.
 Blockly.Msg.MATH_ONLIST_OPERATOR_MEDIAN = 'median of list';
-/// tooltip - See [http://en.wikipedia.org/wiki/Median median http://en.wikipedia.org/wiki/Median median] for more information.
+/// tooltip - See [https://en.wikipedia.org/wiki/Median median http://en.wikipedia.org/wiki/Median median] for more information.
 Blockly.Msg.MATH_ONLIST_TOOLTIP_MEDIAN = 'Return the median number in the list.';
-/// dropdown - This finds the most common numbers ([http://en.wikipedia.org/wiki/Mode_(statistics) modes]) in a list.  For example, the modes of the list {1, 3, 9, 3, 9}  are {3, 9}.
+/// dropdown - This finds the most common numbers ([https://en.wikipedia.org/wiki/Mode_(statistics) modes]) in a list.  For example, the modes of the list {1, 3, 9, 3, 9}  are {3, 9}.
 Blockly.Msg.MATH_ONLIST_OPERATOR_MODE = 'modes of list';
-/// tooltip - See [http://en.wikipedia.org/wiki/Mode_(statistics) http://en.wikipedia.org/wiki/Mode_(statistics)] for more information.
+/// tooltip - See [https://en.wikipedia.org/wiki/Mode_(statistics) http://en.wikipedia.org/wiki/Mode_(statistics)] for more information.
 Blockly.Msg.MATH_ONLIST_TOOLTIP_MODE = 'Return a list of the most common item(s) in the list.';
-/// dropdown - This finds the [http://en.wikipedia.org/wiki/Standard_deviation standard deviation] of the numeric values in a list.
+/// dropdown - This finds the [https://en.wikipedia.org/wiki/Standard_deviation standard deviation] of the numeric values in a list.
 Blockly.Msg.MATH_ONLIST_OPERATOR_STD_DEV = 'standard deviation of list';
-/// tooltip - See [http://en.wikipedia.org/wiki/Standard_deviation http://en.wikipedia.org/wiki/Standard_deviation] for more information.
+/// tooltip - See [https://en.wikipedia.org/wiki/Standard_deviation http://en.wikipedia.org/wiki/Standard_deviation] for more information.
 Blockly.Msg.MATH_ONLIST_TOOLTIP_STD_DEV = 'Return the standard deviation of the list.';
 /// dropdown - This choose an element at random from a list.  Each element is chosen with equal probability.
 Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM = 'random item of list';
@@ -456,14 +456,14 @@ Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM = 'random item of list';
 Blockly.Msg.MATH_ONLIST_TOOLTIP_RANDOM = 'Return a random element from the list.';
 
 /// url - information about the modulo (remainder) operation.
-Blockly.Msg.MATH_MODULO_HELPURL = 'http://en.wikipedia.org/wiki/Modulo_operation';
+Blockly.Msg.MATH_MODULO_HELPURL = 'https://en.wikipedia.org/wiki/Modulo_operation';
 /// block text - Title of block providing the remainder when dividing the first numerical input by the second.  For example, the remainder of 10 divided by 3 is 1.\n\nParameters:\n* %1 - the dividend (10, in our example)\n* %2 - the divisor (3 in our example).
 Blockly.Msg.MATH_MODULO_TITLE = 'remainder of %1 ÷ %2';
 /// tooltip - For example, the remainder of 10 divided by 3 is 1.
 Blockly.Msg.MATH_MODULO_TOOLTIP = 'Return the remainder from dividing the two numbers.';
 
 /// url - Information about constraining a numeric value to be in a specific range.  (The English URL is not ideal.  Recall that translating URLs is the lowest priority.)
-Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'http://en.wikipedia.org/wiki/Clamping_%28graphics%29';
+Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'https://en.wikipedia.org/wiki/Clamping_%28graphics%29';
 /// block text - The title of the block that '''constrain'''s (forces) a number to be in a given range.
 ///For example, if the number 150 is constrained to be between 5 and 100, the result will be 100.
 ///\n\nParameters:\n* %1 - the value to constrain (e.g., 150)\n* %2 - the minimum value (e.g., 5)\n* %3 - the maximum value (e.g., 100).
@@ -472,14 +472,14 @@ Blockly.Msg.MATH_CONSTRAIN_TITLE = 'constrain %1 low %2 high %3';
 Blockly.Msg.MATH_CONSTRAIN_TOOLTIP = 'Constrain a number to be between the specified limits (inclusive).';
 
 /// url - Information about how computers generate random numbers.
-Blockly.Msg.MATH_RANDOM_INT_HELPURL = 'http://en.wikipedia.org/wiki/Random_number_generation';
+Blockly.Msg.MATH_RANDOM_INT_HELPURL = 'https://en.wikipedia.org/wiki/Random_number_generation';
 /// block text - The title of the block that generates a random integer (whole number) in the specified range.  For example, if the range is from 5 to 7, this returns 5, 6, or 7 with equal likelihood. %1 is a placeholder for the lower number, %2 is the placeholder for the larger number.
 Blockly.Msg.MATH_RANDOM_INT_TITLE = 'random integer from %1 to %2';
 /// tooltip - Return a random integer between two values specified as inputs.  For example, if one input was 7 and another 9, any of the numbers 7, 8, or 9 could be produced.
 Blockly.Msg.MATH_RANDOM_INT_TOOLTIP = 'Return a random integer between the two specified limits, inclusive.';
 
 /// url - Information about how computers generate random numbers (specifically, numbers in the range from 0 to just below 1).
-Blockly.Msg.MATH_RANDOM_FLOAT_HELPURL = 'http://en.wikipedia.org/wiki/Random_number_generation';
+Blockly.Msg.MATH_RANDOM_FLOAT_HELPURL = 'https://en.wikipedia.org/wiki/Random_number_generation';
 /// block text - The title of the block that generates a random number greater than or equal to 0 and less than 1.
 Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM = 'random fraction';
 /// tooltip - Return a random fraction between 0 and 1.  The value may be equal to 0 but must be less than 1.
@@ -487,7 +487,7 @@ Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP = 'Return a random fraction between 0.0 (i
 
 // Text Blocks.
 /// url - Information about how computers represent text (sometimes referred to as ''string''s).
-Blockly.Msg.TEXT_TEXT_HELPURL = 'http://en.wikipedia.org/wiki/String_(computer_science)';
+Blockly.Msg.TEXT_TEXT_HELPURL = 'https://en.wikipedia.org/wiki/String_(computer_science)';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Introduction https://code.google.com/p/blockly/wiki/Text#Introduction].
 Blockly.Msg.TEXT_TEXT_TOOLTIP = 'A letter, word, or line of text.';
 
@@ -506,7 +506,7 @@ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAM
 /// block text - See [https://code.google.com/p/blockly/wiki/Text#Text_creation https://code.google.com/p/blockly/wiki/Text#Text_creation], specifically the last picture in the 'Text creation' section.
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = 'Add an item to the text.';
 
-/// url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [http://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).
+/// url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).
 Blockly.Msg.TEXT_APPEND_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Text_modification';
 /// block input text - Message preceding the name of a variable to which text should be appended.
 /// [[File:blockly-append-text.png]]
@@ -737,7 +737,7 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 
 // Lists Blocks.
 /// url - Information on empty lists.
-Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'http://en.wikipedia.org/wiki/Linked_list#Empty_lists';
+Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://en.wikipedia.org/wiki/Linked_list#Empty_lists';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'create empty list';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
@@ -970,7 +970,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 
 // Variables Blocks.
-/// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [http://en.wikipedia.org/wiki/Variable_(computer_science) http://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
+/// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) http://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_GET_HELPURL = 'http://code.google.com/p/blockly/wiki/Variables#Get';
 /// block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before "x" in the expression "x + 1".
 Blockly.Msg.VARIABLES_GET_TITLE = '';
@@ -983,7 +983,7 @@ Blockly.Msg.VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 /// \n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_GET_CREATE_SET = 'Create "set %1"';
 
-/// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [http://en.wikipedia.org/wiki/Variable_(computer_science) http://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
+/// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) http://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_SET_HELPURL = 'http://code.google.com/p/blockly/wiki/Variables#Set';
 /// block text - The imperative or infinitive form of the verb "set", as in: '''set''' [the value of] x to 7.
 Blockly.Msg.VARIABLES_SET_TITLE = 'set';
@@ -998,8 +998,8 @@ Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 
 // Procedures Blocks.
-/// url - Information about defining [http://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
-Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'http://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
+Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
 /// block text - This precedes the name of the procedure when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
 /// procedure definition].
@@ -1022,8 +1022,8 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_DO = '';
 /// tooltip
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = 'Creates a function with no output.';
 
-/// url - Information about defining [http://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that have return values.
-Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'http://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that have return values.
+Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
@@ -1039,8 +1039,8 @@ Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = 'Creates a function with an output.';
 /// alert - The user has created a function with two parameters that have the same name.  Every parameter must have a different name.
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = 'Warning: This function has duplicate parameters.';
 
-/// url - Information about calling [http://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not return values.
-Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = 'http://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not return values.
+Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
 /// block text - In most (if not all) languages, this will be the empty string.
 /// It precedes the name of the function that should be run.  See, for example,
 /// the "draw square" block in [https://blockly-demo.appspot.com/static/apps/turtle/index.html#ztz96g].
@@ -1048,8 +1048,8 @@ Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = '';
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = 'Run the user-defined function "%1".';
 
-/// url - Information about calling [http://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that return values.
-Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = 'http://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
+/// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that return values.
+Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
 Blockly.Msg.PROCEDURES_CALLRETURN_CALL = Blockly.Msg.PROCEDURES_CALLNORETURN_CALL;
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.\n\nParameters:\n* %1 - the name of the function.
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" and use its output.';

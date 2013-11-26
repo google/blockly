@@ -130,7 +130,8 @@ BlocklyApps.LANGUAGE_PACK = {
   'vi': 'msg/js/vi.js',
   'zh-hans': 'msg/js/zh-hans.js',
   'zh-hant': 'msg/js/zh-hans.js',
-  'zh-tw': 'msg/js/zh_tw.js',
+  // We used to use zh-tw for zh-hant.  Users may still have URLs.
+  'zh-tw': 'msg/js/zh-hant.js',
   'default': 'msg/js/en.js'
 };
 

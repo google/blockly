@@ -24,7 +24,8 @@ if (loc.match('/apps/code/code.html')) {
   loc = loc.replace('/code.html', '/index.html');
 } else if (loc.match('/apps/code/zh_tw.html')) {
   // Code became language-agnostic on 20 Jul 2013.
-  loc = loc.replace('/zh_tw.html', '/index.html?lang=zh-tw');
+  // zh-tw was changed to zh-hans on 25 Nov 2013.
+  loc = loc.replace('/zh_tw.html', '/index.html?lang=zh-hans');
 } else if (loc.match('/apps/code/index.html')) {
   // NOP.
 } else if (loc.match(/\/apps\/code\/[-a-z]+\.html/)) {

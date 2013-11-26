@@ -5,7 +5,7 @@ if (typeof apps == 'undefined') { var apps = {}; }
 
 
 apps.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div style="display: none"><span id="subtitle">視覺化程式設計環境</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">查看產生的JavaScript程式碼。</span><span id="linkTooltip">儲存模組並提供連結。</span><span id="runTooltip">於工作區中運行模組所定義的程式。</span><span id="runProgram">運行程式</span><span id="resetProgram">重設</span><span id="dialogOk">確定</span><span id="dialogCancel">Cancel</span><span id="catLogic">邏輯</span><span id="catLoops">迴圈</span><span id="catMath">數學公式</span><span id="catText">文字</span><span id="catLists">列表</span><span id="catColour">顏色</span><span id="catVariables">變數</span><span id="catProcedures">程序</span><span id="httpRequestError">請求存在問題。</span><span id="linkAlert">以此連結分享您的模組：\n\n%1</span><span id="hashError">對不起，「%1」並未對應任何已保存的程式。</span><span id="xmlError">未能載入您保存的檔案。或許它是由其他版本的Blockly創建？</span><span id="listVariable">列表</span><span id="textVariable">文字</span></div>';
+  return '<div style="display: none"><span id="subtitle">視覺化程式設計環境</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">查看產生的JavaScript程式碼。</span><span id="linkTooltip">儲存積木組並提供連結。</span><span id="runTooltip">於工作區中執行積木組所定義的程式。</span><span id="runProgram">執行程式</span><span id="resetProgram">重設</span><span id="dialogOk">確定</span><span id="dialogCancel">取消</span><span id="catLogic">邏輯</span><span id="catLoops">迴圈</span><span id="catMath">數學式</span><span id="catText">文字</span><span id="catLists">列表</span><span id="catColour">顏色</span><span id="catVariables">變量</span><span id="catProcedures">流程</span><span id="httpRequestError">請求存在問題。</span><span id="linkAlert">以此連結分享您的模組：\n\n%1</span><span id="hashError">對不起，「%1」並未對應任何已保存的程式。</span><span id="xmlError">未能載入您保存的檔案。或許它是由其他版本的Blockly創建？</span><span id="listVariable">列表</span><span id="textVariable">文字</span></div>';
 };
 
 
@@ -41,7 +41,7 @@ planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
 
 
 planepage.start = function(opt_data, opt_ignored, opt_ijData) {
-  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html">Blockly</a> : 飛機</span> &nbsp; ';
+  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html">Blockly</a> : 飛機座位計算器</span> &nbsp; ';
   for (var i128 = 1; i128 < 4; i128++) {
     output += ' ' + ((i128 == opt_ijData.level) ? '<span class="tab" id="selected">' + soy.$$escapeHtml(i128) + '</span>' : (i128 < opt_ijData.level) ? '<a class="tab previous" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i128) + '">' + soy.$$escapeHtml(i128) + '</a>' : '<a class="tab" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i128) + '">' + soy.$$escapeHtml(i128) + '</a>');
   }

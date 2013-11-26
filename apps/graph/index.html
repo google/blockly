@@ -7,7 +7,11 @@
   <title>Blockly : Graphing Calculator</title>
   <link rel="stylesheet" type="text/css" href="../common.css">
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    document.write('<scr' + 'ipt type="text/javascript" src="' +
+        ('https:' == document.location.protocol ? 'https:' : 'http:') +
+        '//www.google.com/jsapi"></sc' + 'ript>');
+  </script>
   <script type="text/javascript" src="../_soy/soyutils.js"></script>
   <script type="text/javascript" src="../common.js"></script>
   <script type="text/javascript" src="graph.js"></script>

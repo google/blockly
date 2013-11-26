@@ -189,6 +189,10 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
  */
 Blockly.Flyout.prototype.setMetrics_ = function(yRatio) {
   var metrics = this.getMetrics_();
+  // This is a fix to an apparent race condition.
+  if (!metrics) {
+    return;
+  }
   if (goog.isNumber(yRatio.y)) {
     this.workspace_.scrollY =
         -metrics.contentHeight * yRatio.y - metrics.contentTop;

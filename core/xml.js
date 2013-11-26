@@ -223,8 +223,11 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
 };
 
 /**
- * Decode an XML block tag and create a block (and possibly sub blocks) on the
+ * Decode an XML block tag and create a block (and possibly sub-blocks) on the
  * workspace.
+ * Throws an error if the block cannot be created, for example, if the block
+ * type is not specified, that type has not been defined, or an non-existent
+ * input is provided.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
  * @return {!Blockly.Block} The root block created.
@@ -232,6 +235,9 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
  */
 Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
   var prototypeName = xmlBlock.getAttribute('type');
+  if (!prototypeName) {
+    throw 'Block type unspecified: \n' + xmlBlock.outerHTML;
+  }
   var block = new Blockly.Block(workspace, prototypeName);
   block.initSvg();
 
@@ -304,7 +310,7 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
       case 'statement':
         input = block.getInput(name);
         if (!input) {
-          throw 'Input does not exist: ' + name;
+          throw 'Input ' + name + ' does not exist in block ' + prototypeName;
         }
         if (firstRealGrandchild &&
             firstRealGrandchild.nodeName.toLowerCase() == 'block') {

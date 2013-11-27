@@ -71,29 +71,36 @@ handlers:
 # Storage API.
 - url: /storage
   script: storage.py
+  secure: always
 - url: /storage\.js
   static_files: storage.js
   upload: storage\.js
+  secure: always
 
 # Blockly files.
 - url: /static
   static_dir: static
+  secure: always
 
 # Closure library for uncompiled Blockly.
 - url: /closure-library-read-only
   static_dir: closure-library-read-only
+  secure: always
 
 # Redirect for root directory.
 - url: /
   script: index_redirect.py
+  secure: always
 
 # Favicon.
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
+  secure: always
 
 # robot.txt
 - url: /robots\.txt
   static_files: robots.txt
   upload: robots\.txt
+  secure: always
 

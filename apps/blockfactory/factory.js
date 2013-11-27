@@ -345,11 +345,11 @@ function updateGenerator() {
         break;
     }
   }
-  code.push("  // TODO: Assemble ' + language + ' into code variable.");
+  code.push("  // TODO: Assemble " + language + " into code variable.");
   code.push("  var code = \'...\';");
   if (rootBlock.getTitleValue('CONNECTIONS') == 'LEFT') {
     code.push("  // TODO: Change ORDER_NONE to the correct strength.");
-    code.push("  return [code, Blockly.' + language + '.ORDER_NONE];");
+    code.push("  return [code, Blockly." + language + ".ORDER_NONE];");
   } else {
     code.push("  return code;");
   }

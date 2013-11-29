@@ -89,8 +89,8 @@ BlocklyApps.LANGUAGE_NAME = {
   'tr': 'Türkçe',
   'uk': 'Українська',
   'vi': 'Tiếng Việt',
-  'zh-hans': '简体字',
-  'zh-hant': '中文',
+  'zh-hans': '簡體中文',
+  'zh-hant': '正體中文',
   'zh-tw': '國語'
 };
 
@@ -129,7 +129,7 @@ BlocklyApps.LANGUAGE_PACK = {
   'uk': 'msg/js/uk.js',
   'vi': 'msg/js/vi.js',
   'zh-hans': 'msg/js/zh-hans.js',
-  'zh-hant': 'msg/js/zh-hans.js',
+  'zh-hant': 'msg/js/zh-hant.js',
   // We used to use zh-tw for zh-hant.  Users may still have URLs.
   'zh-tw': 'msg/js/zh-hant.js',
   'default': 'msg/js/en.js'

@@ -32,8 +32,9 @@ if (typeof google == 'object') {
 }
 
 // Supported languages.
-BlocklyApps.LANGUAGES = ['en', 'de', 'el', 'es', 'fa', 'fr', 'hu', 'it', 'nl',
-                         'pt-br', 'ro', 'ru', 'sv', 'uk', 'vi', 'zh-hans'];
+BlocklyApps.LANGUAGES = [
+  'de', 'el', 'en', 'es', 'fa', 'fr', 'hu', 'is', 'it', 'ko', 'nl', 'pms',
+  'pt-br', 'ro', 'ru', 'sv', 'uk', 'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +

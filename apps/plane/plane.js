@@ -29,8 +29,10 @@
 var Plane = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = ['en', 'de', 'el', 'es', 'fa', 'fr', 'hu', 'it', 'nl',
-                         'pt-br', 'ru', 'sv', 'uk', 'vi', 'zh-hans'];
+BlocklyApps.LANGUAGES = [
+  'br', 'ca', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'gl', 'hu', 'ia', 'is',
+  'it', 'ja', 'ko', 'lv', 'mk', 'ms', 'nl', 'pms', 'pt-br', 'ro', 'ru', 'sk',
+  'sv', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +

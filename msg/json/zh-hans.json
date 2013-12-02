@@ -1,12 +1,12 @@
 {
     "@metadata": {
-        "authors": [
-            "Espertus",
-            "Liuxinyu970226",
-            "Luotiancheng",
-            "Qiyue2001",
-            "Xiaomingyan"
-        ]
+        "authors": {
+            "0": "Espertus",
+            "1": "Liuxinyu970226",
+            "2": "Luotiancheng",
+            "3": "Qiyue2001",
+            "5": "Xiaomingyan"
+        }
     },
     "VARIABLES_DEFAULT_NAME": "项",
     "DUPLICATE_BLOCK": "复制",
@@ -131,7 +131,7 @@
     "MATH_IS_NEGATIVE": "为负",
     "MATH_IS_DIVISIBLE_BY": "可被整除",
     "MATH_IS_TOOLTIP": "如果数字是偶数、奇数、非负整数、正数、负数或如果它可被某数字整除，则返回真或假。",
-    "MATH_CHANGE_HELPURL": "http://zh.wikipedia.org/wiki/%E5%8A%A0%E6%B3%95",
+    "MATH_CHANGE_HELPURL": "https://zh.wikipedia.org/wiki/%E5%8A%A0%E6%B3%95",
     "MATH_CHANGE_TITLE_CHANGE": "更改",
     "MATH_CHANGE_INPUT_BY": "由",
     "MATH_CHANGE_TOOLTIP": "添加一个数到变量“%1”。",
@@ -156,7 +156,7 @@
     "MATH_ONLIST_TOOLTIP_STD_DEV": "返回列表的标准偏差。",
     "MATH_ONLIST_OPERATOR_RANDOM": "列表的随机项",
     "MATH_ONLIST_TOOLTIP_RANDOM": "从列表中返回一个随机的元素。",
-    "MATH_MODULO_HELPURL": "http://zh.wikipedia.org/wiki/%E6%A8%A1%E9%99%A4",
+    "MATH_MODULO_HELPURL": "https://zh.wikipedia.org/wiki/%E6%A8%A1%E9%99%A4",
     "MATH_MODULO_TITLE": "取余数自 %1 ÷ %2",
     "MATH_MODULO_TOOLTIP": "返回这两个数字相除后的余数。",
     "MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
@@ -165,7 +165,7 @@
     "MATH_RANDOM_INT_HELPURL": "https://zh.wikipedia.org/wiki/随机数发生器",
     "MATH_RANDOM_INT_TITLE": "从 %1 到 %2 之间的随机整数",
     "MATH_RANDOM_INT_TOOLTIP": "返回两个指定的范围（含）之间的随机整数。",
-    "MATH_RANDOM_FLOAT_HELPURL": "http://zh.wikipedia.org/wiki/随机数发生器",
+    "MATH_RANDOM_FLOAT_HELPURL": "https://zh.wikipedia.org/wiki/随机数发生器",
     "MATH_RANDOM_FLOAT_TITLE_RANDOM": "随机分数",
     "MATH_RANDOM_FLOAT_TOOLTIP": "返回介于（包含）0.0到1.0之间的随机数。",
     "TEXT_TEXT_HELPURL": "https://zh.wikipedia.org/wiki/字符串",

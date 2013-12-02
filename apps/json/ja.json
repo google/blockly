@@ -4,6 +4,7 @@
             "Shirayuki"
         ]
     },
+    "Apps.subtitle": "視覚的なプログラミング環境",
     "Apps.blocklyMessage": "ブロックリー",
     "Apps.codeTooltip": "生成された JavaScript コードを表示します。",
     "Apps.linkTooltip": "ブロックの状態を保存してリンクを取得します。",
@@ -132,6 +133,8 @@
     "Turtle.penUp": "ペンを上げる",
     "Turtle.penDown": "ペンを下ろす",
     "Turtle.turtleVisibilityTooltip": "タートル (円と矢印) の表示/非表示を切り替えます。",
+    "Turtle.hideTurtle": "タートルを隠す",
+    "Turtle.showTurtle": "タートルを表示する",
     "Turtle.printHelpUrl": "https://ja.wikipedia.org/wiki/印刷",
     "Turtle.printTooltip": "タートルの方向と場所を文字として表示します。",
     "Turtle.print": "表示",

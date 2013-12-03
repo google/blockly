@@ -400,6 +400,8 @@ Blockly.Msg.MATH_IS_DIVISIBLE_BY = 'is divisible by';
 Blockly.Msg.MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, positive, negative, or if it is divisible by certain number.  Returns true or false.';
 
 /// url - Information about incrementing (increasing the value of) a variable.
+/// For other languages, just use the translation of the Wikipedia page about
+/// addition ([https://en.wikipedia.org/wiki/Addition https://en.wikipedia.org/wiki/Addition]).
 Blockly.Msg.MATH_CHANGE_HELPURL = 'https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter';
 /// - As in: '''change''' [the value of variable] ''item by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
 Blockly.Msg.MATH_CHANGE_TITLE_CHANGE = 'change';

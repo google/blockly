@@ -26,8 +26,8 @@
 var BlocklyAppsIndex = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = ['da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hu', 'is',
-                         'it', 'nl', 'pt-br', 'ro', 'ru', 'sv', 'uk',
+BlocklyApps.LANGUAGES = ['ar', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hu',
+                         'is', 'it', 'nl', 'pt-br', 'ro', 'ru', 'sv', 'uk',
                          'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 

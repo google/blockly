@@ -29,7 +29,7 @@
 var Maze = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = ['br', 'ca', 'cs', 'da', 'de', 'el', 'en',
+BlocklyApps.LANGUAGES = ['ar', 'br', 'ca', 'cs', 'da', 'de', 'el', 'en',
                          'es', 'eu', 'fa', 'fr', 'gl', 'hu', 'ia', 'is', 'it',
                          'ja', 'ko', 'lv', 'mk', 'ms', 'nl', 'pl', 'pms',
                          'pt-br', 'ro', 'ru', 'sk', 'sr', 'sv', 'sw', 'th',

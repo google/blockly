@@ -36,7 +36,7 @@ if (typeof codepage == 'undefined') { var codepage = {}; }
 
 
 codepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Code_badXml">Error d\'anàlisi XML:\n %1\n\nAbandonar els canvis?</span><span id="Code_badCode">Error de programa:\n %1</span><span id="Code_timeout">S\'ha superat el nombre màxim d\'iteracions d\'execució.</span><span id="Code_discard">Esborrar els %1 blocs?</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Code_badXml">Error d\'anàlisi XML:\n%1\n\nSeleccioneu \'Acceptar\' per abandonar els vostres canvis, o \'Cancel·lar\' per continuar editant l\'XML.</span><span id="Code_badCode">Error de programa:\n %1</span><span id="Code_timeout">S\'ha superat el nombre màxim d\'iteracions d\'execució.</span><span id="Code_discard">Esborrar els %1 blocs?</span></div>';
 };
 
 

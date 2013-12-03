@@ -5,7 +5,7 @@ if (typeof apps == 'undefined') { var apps = {}; }
 
 
 apps.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div style="display: none"><span id="subtitle">بيئة برمجة مرئية</span><span id="blocklyMessage">بلوكلي</span><span id="codeTooltip">راجع إنشاء تعليمات برمجية JavaScript.</span><span id="linkTooltip">احفظ ووصلة إلى البلوكات.</span><span id="runTooltip">شغل البرنامج المعرف بواسطة البلوكات في مساحة العمل.</span><span id="runProgram">شغِّل البرنامج</span><span id="resetProgram">إعادة ضبط</span><span id="dialogOk">حسن</span><span id="dialogCancel">إلغاء الأمر</span><span id="catLogic">منطق</span><span id="catLoops">الحلقات</span><span id="catMath">رياضيات</span><span id="catText">نص</span><span id="catLists">قوائم</span><span id="catColour">لون</span><span id="catVariables">متغيرات</span><span id="catProcedures">إجراءات</span><span id="httpRequestError">كانت هناك مشكلة مع هذا الطلب.</span><span id="linkAlert">Share your blocks with this link:\\n\\n%1</span><span id="hashError">عذراً،ال \'1%\' لا تتوافق مع أي برنامج تم حفظه.</span><span id="xmlError">تعذر تحميل الملف المحفوظة الخاصة بك.  ربما تم إنشاؤه باستخدام إصدار مختلف من بلوكلي؟</span><span id="listVariable">قائمة</span><span id="textVariable">نص</span></div>';
+  return '<div style="display: none"><span id="subtitle">بيئة برمجة مرئية</span><span id="blocklyMessage">بلوكلي</span><span id="codeTooltip">راجع إنشاء تعليمات برمجية JavaScript.</span><span id="linkTooltip">احفظ ووصلة إلى البلوكات.</span><span id="runTooltip">شغل البرنامج المعرف بواسطة البلوكات في مساحة العمل.</span><span id="runProgram">شغِّل البرنامج</span><span id="resetProgram">إعادة ضبط</span><span id="dialogOk">حسن</span><span id="dialogCancel">إلغاء الأمر</span><span id="catLogic">منطق</span><span id="catLoops">الحلقات</span><span id="catMath">رياضيات</span><span id="catText">نص</span><span id="catLists">قوائم</span><span id="catColour">لون</span><span id="catVariables">متغيرات</span><span id="catProcedures">إجراءات</span><span id="httpRequestError">كانت هناك مشكلة مع هذا الطلب.</span><span id="linkAlert">مشاركة كود بلوكلي الخاص بك مع هذا الرابط:\n 1%</span><span id="hashError">عذراً،ال \'1%\' لا تتوافق مع أي برنامج تم حفظه.</span><span id="xmlError">تعذر تحميل الملف المحفوظة الخاصة بك.  ربما تم إنشاؤه باستخدام إصدار مختلف من بلوكلي؟</span><span id="listVariable">قائمة</span><span id="textVariable">نص</span></div>';
 };
 
 
@@ -51,13 +51,13 @@ planepage.start = function(opt_data, opt_ignored, opt_ijData) {
       output += 'هنالك طائرة تحتوي على عدد من صفوف مقاعد الركاب. كل صف يحتوي على أربعة مقاعد.';
       break;
     case 2:
-      output += 'An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of passenger seats.  Each row contains four seats.';
+      output += 'طائرة بمقعدين في مقطورة الطيّار (للطيار ومساعده) وعدد من الصفوف يحتوي كل صف على أربعة مقاعد.';
       break;
     case 3:
-      output += 'An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of 1st class and 2nd class passenger seats.  Each 1st class row contains four seats. Each 2nd class row contains five seats.';
+      output += 'طائرة بمقعدين في مقطورة الطيّار (للطيار ومساعده) وعدد من المقاعد في صفوف الدرجة الأولى والثانية. كل صف من صفوف الدرجة الأولى يحتوي على أربعة مقاعد. ويحتوي كل صف في الدرجة الثانية على خمسة مقاعد.';
       break;
   }
-  output += '</p><p>Build a formula (below) that calculates the total number of seats on the airplane as the rows are changed (above).</p><script type="text/javascript" src="../../blockly_compressed.js"><\/script><script type="text/javascript" src="../../blocks_compressed.js"><\/script><script type="text/javascript" src="../../javascript_compressed.js"><\/script><script type="text/javascript" src="../../' + soy.$$escapeHtml(opt_ijData.langSrc) + '"><\/script><script type="text/javascript" src="blocks.js"><\/script>' + planepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div>';
+  output += '</p><p>لبناء صيغة (أدناه) تقوم بحساب إجمالي عدد المقاعد في الطائرة عند تغيير الصفوف (أعلاه).</p><script type="text/javascript" src="../../blockly_compressed.js"><\/script><script type="text/javascript" src="../../blocks_compressed.js"><\/script><script type="text/javascript" src="../../javascript_compressed.js"><\/script><script type="text/javascript" src="../../' + soy.$$escapeHtml(opt_ijData.langSrc) + '"><\/script><script type="text/javascript" src="blocks.js"><\/script>' + planepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div>';
   return output;
 };
 

@@ -1390,10 +1390,16 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  *     tuples (though the number of tuples must match the symbols in msg).
  */
 Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
-  // Remove the msg from the start and the dummy alignment from the end of args.
+  // Validate the msg at the start and the dummy alignment at the end,
+  // and remove the latter.
   goog.asserts.assertString(msg);
-  var dummyAlign = arguments.length - 1;
-  goog.asserts.assertNumber(dummyAlign);
+  var dummyAlign = arguments[arguments.length - 1];
+  goog.asserts.assert(
+      dummyAlign === Blockly.ALIGN_LEFT ||
+      dummyAlign === Blockly.ALIGN_CENTRE ||
+      dummyAlign === Blockly.ALIGN_RIGHT,
+      'Illegal final argument "%d" is not an alignment.', dummyAlign);
+  arguments.length = arguments.length - 1;
 
   var tokens = msg.split(/(%\d)/);
   for (var i = 0; i < tokens.length; i += 2) {
@@ -1453,13 +1459,15 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
 };
 
 /**
- * Move an input to a different location on this block.
+ * Move a named input to a different location on this block.
  * @param {string} name The name of the input to move.
- * @param {string} refName Name of input that should be after the moved input,
+ * @param {?string} refName Name of input that should be after the moved input,
  *   or null to be the input at the end.
  */
 Blockly.Block.prototype.moveInputBefore = function(name, refName) {
-  goog.asserts.assert(name != refName, 'Can\'t move "%s" to itself.', name);
+  if (name == refName) {
+    return;
+  }
   // Find both inputs.
   var inputIndex = -1;
   var refIndex = refName ? -1 : this.inputList.length;
@@ -1477,9 +1485,26 @@ Blockly.Block.prototype.moveInputBefore = function(name, refName) {
     }
   }
   goog.asserts.assert(inputIndex != -1, 'Named input "%s" not found.', name);
-  goog.asserts.assert(refIndex && refIndex != -1,
-                      'Reference input "%s" not found.', refName);
+  goog.asserts.assert(refIndex != -1, 'Reference input "%s" not found.',
+                      refName);
+  this.moveNumberedInputBefore(inputIndex, refIndex);
+};
+
+/**
+ * Move a numbered input to a different location on this block.
+ * @param {number} inputIndex Index of the input to move.
+ * @param {number} refIndex Index of input that should be after the moved input.
+ */
+Blockly.Block.prototype.moveNumberedInputBefore = function(
+  inputIndex, refIndex) {
+  // Validate arguments.
+  goog.asserts.assert(inputIndex != refIndex, 'Can\'t move input to itself.');
+  goog.asserts.assert(inputIndex < this.inputList.length,
+                      'Input index ' + inputIndex + ' out of bounds.')
+  goog.asserts.assert(refIndex < this.inputList.length,
+                      'Reference input ' + refIndex + ' out of bounds.')
   // Remove input.
+  var input = this.inputList[inputIndex];
   this.inputList.splice(inputIndex, 1);
   if (inputIndex < refIndex) {
     refIndex--;

@@ -1,6 +1,14 @@
 {
+    "@metadata": {
+        "authors": [
+            "Beta16",
+            "Espertus",
+            "McDutchie",
+            "Shirayuki"
+        ]
+    },
     "Apps.subtitle": "A short description of Blockly.",
-    "Apps.blocklyMessage": "The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (\u0411\u043bo\u043a\u043b\u0438)'.",
+    "Apps.blocklyMessage": "The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (Блoкли)'.",
     "Apps.codeTooltip": "tooltip - Pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user.",
     "Apps.linkTooltip": "tooltip - Clicking on this button will cause the current program to be saved and for a URL to be shown to later retrieve it.",
     "Apps.runTooltip": "tooltip - Pressing this button runs the computer program the user has written.",
@@ -99,7 +107,7 @@
     "Puzzle.country2": "The country Germany.\n{{Identical|Germany}}",
     "Puzzle.country2Language": "The German language.\n{{Identical|German}}",
     "Puzzle.country2City1": "The city Berlin in Germany.",
-    "Puzzle.country2City2": "The city Munich (M\u00fcnchen) in Germany.",
+    "Puzzle.country2City2": "The city Munich (München) in Germany.",
     "Puzzle.country2HelpUrl": "The URL of a page with basic information about Germany.",
     "Puzzle.country3": "The People's Republic of China.",
     "Puzzle.country3Language": "The Chinese language.\n{{Identical|Chinese}}",
@@ -109,7 +117,7 @@
     "Puzzle.country4": "The name of the country Brazil.",
     "Puzzle.country4Language": "The Portuguese language.\n{{Identical|Portuguese}}",
     "Puzzle.country4City1": "The city Rio de Janeiro in Brazil.",
-    "Puzzle.country4City2": "The city S\u00e3o Paulo in Brazil.",
+    "Puzzle.country4City2": "The city São Paulo in Brazil.",
     "Puzzle.country4HelpUrl": "The URL of a page with basic information about Brazil.",
     "Puzzle.flag": "[[File:Config-language.png|left||32px]]\nnoun the official flag representing a country (the national flag).\n{{Identical|Flag}}",
     "Puzzle.language": "Prompt for the user to provide the official language of a country.\n{{Identical|Language}}",

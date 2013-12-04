@@ -30,6 +30,9 @@ cd /var/tmp
 rm /usr/local/google/home/spertus/src-mirror/blockly/blockly.zip
 zip -r /usr/local/google/home/spertus/src-mirror/blockly/blockly.zip blockly-zip -x "**/.svn**"
 
+echo 'Please upload to Google drive.'
+
+
 
 
 

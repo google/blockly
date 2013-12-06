@@ -36,7 +36,7 @@ if (typeof planepage == 'undefined') { var planepage = {}; }
 
 
 planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Raðir: %1</span><span id="Plane_getRows">raðir (%1)</span><span id="Plane_rows1">Raðir 1. farrými: %1</span><span id="Plane_getRows1">Raðir 1. farrými (%1)</span><span id="Plane_rows2">Raðir 2. farrými: %1</span><span id="Plane_getRows2">Raðir 2. farrými (%1)</span><span id="Plane_seats">Sæti: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">sæti =</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Raðir: %1</span><span id="Plane_getRows">raðir (%1)</span><span id="Plane_rows1">Raðir 1. farrými: %1</span><span id="Plane_getRows1">raðir 1. farrými (%1)</span><span id="Plane_rows2">Raðir 2. farrými: %1</span><span id="Plane_getRows2">raðir 2. farrými (%1)</span><span id="Plane_seats">Sæti: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">sæti =</span></div>';
 };
 
 

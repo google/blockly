@@ -1,9 +1,9 @@
 {
     "@metadata": {
-        "author": "Ellen Spertus <ellen.spertus@gmail.com>",
-        "lastupdated": "2013-12-03 11:20:45.568466",
+        "author": "Ellen Spertus \u003Cellen.spertus@gmail.com\u003E",
+        "lastupdated": "2013-12-05 16:56:16.290264",
         "locale": "en",
-        "messagedocumentation" : "qqq"
+        "messagedocumentation": "qqq"
     },
     "Apps.subtitle": "a visual programming environment",
     "Apps.blocklyMessage": "Blockly",

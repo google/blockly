@@ -1,9 +1,9 @@
 {
     "@metadata": {
-        "author": "Ellen Spertus <ellen.spertus@gmail.com>",
+        "author": "Ellen Spertus \u003Cellen.spertus@gmail.com\u003E",
         "lastupdated": "2013-12-02 10:12:35.305038",
         "locale": "en",
-        "messagedocumentation" : "qqq"
+        "messagedocumentation": "qqq"
     },
     "VARIABLES_DEFAULT_NAME": "item",
     "DUPLICATE_BLOCK": "Duplicate",
@@ -110,8 +110,8 @@
     "MATH_NUMBER_TOOLTIP": "A number.",
     "MATH_ADDITION_SYMBOL": "+",
     "MATH_SUBTRACTION_SYMBOL": "-",
-    "MATH_DIVISION_SYMBOL": "\u00F7",
-    "MATH_MULTIPLICATION_SYMBOL": "\u00D7",
+    "MATH_DIVISION_SYMBOL": "÷",
+    "MATH_MULTIPLICATION_SYMBOL": "×",
     "MATH_POWER_SYMBOL": "^",
     "MATH_TRIG_SIN": "sin",
     "MATH_TRIG_COS": "cos",
@@ -143,7 +143,7 @@
     "MATH_TRIG_TOOLTIP_ACOS": "Return the arccosine of a number.",
     "MATH_TRIG_TOOLTIP_ATAN": "Return the arctangent of a number.",
     "MATH_CONSTANT_HELPURL": "https://en.wikipedia.org/wiki/Mathematical_constant",
-    "MATH_CONSTANT_TOOLTIP": "Return one of the common constants: \u03c0 (3.141\u2026), e (2.718\u2026), \u03c6 (1.618\u2026), sqrt(2) (1.414\u2026), sqrt(\u00bd) (0.707\u2026), or \u221e (infinity).",
+    "MATH_CONSTANT_TOOLTIP": "Return one of the common constants: π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).",
     "MATH_IS_EVEN": "is even",
     "MATH_IS_ODD": "is odd",
     "MATH_IS_PRIME": "is prime",

@@ -118,5 +118,11 @@
     "MATH_TRIG_TOOLTIP_ATAN": "A smon l'arch-tangenta d'un nùmer.",
     "MATH_CONSTANT_HELPURL": "https://en.wikipedia.org/wiki/Mathematical_constant",
     "MATH_CONSTANT_TOOLTIP": "A smon un-a dle costante comun-e π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…) o ∞ (infinì).",
-    "MATH_IS_EVEN": "a l'é cobi"
+    "MATH_IS_EVEN": "a l'é cobi",
+    "MATH_IS_ODD": "a l'é dëscobi",
+    "MATH_IS_PRIME": "a l'é prim",
+    "MATH_IS_WHOLE": "a l'é antregh",
+    "MATH_IS_POSITIVE": "a l'é positiv",
+    "MATH_IS_NEGATIVE": "a l'é negativ",
+    "MATH_IS_DIVISIBLE_BY": "a l'é divisìbil për"
 }

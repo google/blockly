@@ -1,12 +1,13 @@
 {
     "@metadata": {
         "authors": [
-            "Alvaro Vidal-Abarca"
+            "Alvaro Vidal-Abarca",
+            "Fitoschido"
         ]
     },
     "Apps.subtitle": "un entorn visual de programació",
     "Apps.blocklyMessage": "Blockly",
-    "Apps.codeTooltip": "Veure el codi JavaScript generat.",
+    "Apps.codeTooltip": "Vegeu el codi JavaScript generat.",
     "Apps.linkTooltip": "Desa i enllaça als blocs.",
     "Apps.runTooltip": "Executa el programa definit pels blocs de l'àrea de treball.",
     "Apps.runProgram": "Executa el programa",

@@ -40,28 +40,37 @@ goog.require('goog.userAgent');
 Blockly.FieldImage = function(src, width, height) {
   this.sourceBlock_ = null;
   // Ensure height and width are numbers.  Strings are bad at math.
-  height = Number(height);
-  width = Number(width);
-  this.size_ = {height: height + 10, width: width};
+  this.height_ = Number(height);
+  this.width_ = Number(width);
+  this.size_ = {height: this.height_ + 10, width: this.width_};
   // Build the DOM.
   var offsetY = 6 - Blockly.BlockSvg.TITLE_HEIGHT;
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   this.imageElement_ = Blockly.createSvgElement('image',
-      {'height': height + 'px',
-       'width': width + 'px',
+      {'height': this.height_ + 'px',
+       'width': this.width_ + 'px',
        'y': offsetY}, this.fieldGroup_);
   this.setText(src);
   if (goog.userAgent.GECKO) {
     // Due to a Firefox bug which eats mouse events on image elements,
     // a transparent rectangle needs to be placed on top of the image.
     this.rectElement_ = Blockly.createSvgElement('rect',
-        {'height': height + 'px',
-         'width': width + 'px',
+        {'height': this.height_ + 'px',
+         'width': this.width_ + 'px',
          'y': offsetY,
          'fill-opacity': 0}, this.fieldGroup_);
   }
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
+
+/**
+ * Clone this FieldImage.
+ * @return {!Blockly.FieldImage} The result of calling the constructor again
+ *   with the current values of the arguments used during construction.
+ */
+Blockly.FieldImage.prototype.clone = function() {
+  return new Blockly.FieldImage(this.getText(), this.width_, this.height_);
+};
 
 /**
  * Rectangular mask used by Firefox.

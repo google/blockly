@@ -6,7 +6,7 @@
  * To regenerate just en.js, run this command:
  * java -jar ../_soy/SoyToJsSrcCompiler.jar --outputPathFormat generated/en.js --srcs ../common.soy,template.soy
  *
- * To regenerate all files, see: trunk/apps/template.soy.
+ * To regenerate all files, see: trunk/apps/common.soy
  */
 
 /**
@@ -57,7 +57,7 @@
             {/msg}
           </span>
           {sp}&nbsp;{sp}
-          {for $i in range(1, 11)}
+          {for $i in range(1, $ij.maxLevel + 1)}
             {sp}
             {if $i == $ij.level}
               <span class="tab" id="selected">{$i}</span>

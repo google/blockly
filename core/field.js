@@ -30,6 +30,7 @@ goog.provide('Blockly.Field');
 // TODO(scr): Fix circular dependencies
 // goog.require('Blockly.Block');
 goog.require('Blockly.BlockSvg');
+goog.require('goog.asserts');
 
 
 /**
@@ -52,6 +53,17 @@ Blockly.Field = function(text) {
   this.size_ = {height: 25, width: 0};
   this.setText(text);
   this.visible_ = true;
+};
+
+/**
+ * Clone this Field.  This must be implemented by all classes derived from
+ * Field.  Since this class should not be instantiated, calling this method
+ * throws an exception.
+ * @throws {goog.assert.AssertionError}
+ */
+Blockly.Field.prototype.clone = function() {
+  goog.asserts.fail('There should never be an instance of Field, ' +
+      'only its derived classes.');
 };
 
 /**

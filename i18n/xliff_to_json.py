@@ -200,8 +200,8 @@ def main():
                         help='relative directory for output files')
     parser.add_argument('--xlf', help='file containing xlf definitions')
     parser.add_argument('--templates', default=['template.soy'], nargs='+',
-                        help='relative path to Soy templates '
-                        '(used for ordering messages)')
+                        help='relative path to Soy templates, comma or space '
+                        'separated (used for ordering messages)')
     global args
     args = parser.parse_args()
 
@@ -212,9 +212,12 @@ def main():
     # Process the input file, and sort the entries.
     units = _process_file(args.xlf)
     files = []
-    for filename in args.templates:
-      with open(filename) as myfile:
-        files.append(' '.join(line.strip() for line in myfile))
+    for arg in args.templates:
+      for filename in arg.split(','):
+        filename = filename.strip();
+        if filename:
+          with open(filename) as myfile:
+            files.append(' '.join(line.strip() for line in myfile))
     sorted_units = sort_units(units, ' '.join(files))
 
     # Write the output files.

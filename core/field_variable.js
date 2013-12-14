@@ -35,7 +35,8 @@ goog.require('Blockly.Variables');
  * @param {!string} varname The default name for the variable.  If null,
  *     a unique variable name will be generated.
  * @param {Function} opt_changeHandler A function that is executed when a new
- *     option is selected.
+ *     option is selected.  Its sole argument is the new option value.  Its
+ *     return value is ignored.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
@@ -72,6 +73,14 @@ Blockly.FieldVariable = function(varname, opt_changeHandler) {
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
 
+/**
+ * Clone this FieldVariable.
+ * @return {!Blockly.FieldVariable} The result of calling the constructor again
+ *   with the current values of the arguments used during construction.
+ */
+Blockly.FieldVariable.prototype.clone = function() {
+  return new Blockly.FieldVariable(this.getValue(), this.changeHandler_);
+};
 
 /**
  * Get the variable's name (use a variableDB to convert into a real name).

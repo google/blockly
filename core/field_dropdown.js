@@ -35,7 +35,10 @@ goog.require('Blockly.Field');
  * @param {(!Array.<string>|!Function)} menuGenerator An array of options
  *     for a dropdown list, or a function which generates these options.
  * @param {Function} opt_changeHandler A function that is executed when a new
- *     option is selected.
+ *     option is selected, with the newly selected value as its sole argument.
+ *     If it returns a value, that value (which must be one of the options) will
+ *     become selected in place of the newly selected option, unless the return
+ *     value is null, in which case the change is aborted.
  * @extends {Blockly.Field}
  * @constructor
  */
@@ -55,6 +58,15 @@ Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
 };
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
+
+/**
+ * Clone this FieldDropdown.
+ * @return {!Blockly.FieldDropdown} The result of calling the constructor again
+ *   with the current values of the arguments used during construction.
+ */
+Blockly.FieldDropdown.prototype.clone = function() {
+  return new Blockly.FieldDropdown(this.menuGenerator_, this.changeHandler_);
+};
 
 /**
  * Create the dropdown field's elements.  Only needs to be called once.

@@ -1,12 +1,12 @@
 {
     "@metadata": {
-        "authors": {
-            "0": "Espertus",
-            "1": "Liuxinyu970226",
-            "2": "Luotiancheng",
-            "3": "Qiyue2001",
-            "5": "Xiaomingyan"
-        }
+        "authors": [
+            "Espertus",
+            "Liuxinyu970226",
+            "Luotiancheng",
+            "Qiyue2001",
+            "Xiaomingyan"
+        ]
     },
     "VARIABLES_DEFAULT_NAME": "项",
     "DUPLICATE_BLOCK": "复制",

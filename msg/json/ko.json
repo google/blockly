@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Hym411"
+            "Hym411",
+            "아라"
         ]
     },
     "VARIABLES_DEFAULT_NAME": "항목",
@@ -44,7 +45,7 @@
     "CONTROLS_REPEAT_TITLE": "%1회 반복",
     "CONTROLS_REPEAT_TITLE_REPEAT": "반복",
     "CONTROLS_REPEAT_TITLE_TIMES": "회",
-    "CONTROLS_REPEAT_INPUT_DO": "실행",
+    "CONTROLS_REPEAT_INPUT_DO": "하기",
     "CONTROLS_REPEAT_TOOLTIP": "여러 번 반복해 명령들을 실행합니다.",
     "CONTROLS_WHILEUNTIL_HELPURL": "http://code.google.com/p/blockly/wiki/Repeat",
     "CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "동안 반복",

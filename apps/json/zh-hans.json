@@ -59,7 +59,7 @@
     "Maze.turnRight": "向右转",
     "Maze.doCode": "执行",
     "Maze.elseCode": "其他",
-    "Maze.helpIfElse": "If-else模块将做至少一件事。",
+    "Maze.helpIfElse": "if-else模块会一句条件执行某事，若不符合则执行其他事。",
     "Maze.pathAhead": "如前方有路",
     "Maze.pathLeft": "如果路径向左",
     "Maze.pathRight": "如果路径向右",

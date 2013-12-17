@@ -44,6 +44,11 @@ Maze.LEVEL = BlocklyApps.getNumberParamFromUrl('level', 1, Maze.MAX_LEVEL);
 Maze.MAX_BLOCKS = [undefined, // Level 0.
     Infinity, Infinity, 2, 5, 5, 5, 5, 10, 7, 10][Maze.LEVEL];
 
+// Crash type constants.
+Maze.CRASH_STOP = 1;
+Maze.CRASH_SPIN = 2;
+Maze.CRASH_FALL = 3;
+
 Maze.SKINS = [
   // sprite: A 1029x51 set of 21 avatar images.
   // tiles: A 250x200 set of 20 map images.
@@ -51,13 +56,19 @@ Maze.SKINS = [
   // background: An optional 400x450 background image, or false.
   // graph: Colour of optional grid lines, or false.
   // look: Colour of sonar-like look icon.
+  // winSound: List of sounds (in various formats) to play when the player wins.
+  // crashSound: List of sounds (in various formats) for player crashes.
+  // crashType: Behaviour when player crashes (stop, spin, or fall).
   {
     sprite: 'pegman.png',
     tiles: 'tiles_pegman.png',
     marker: 'marker.png',
     background: false,
     graph: false,
-    look: '#000'
+    look: '#000',
+    winSound: ['apps/maze/win.mp3', 'apps/maze/win.ogg'],
+    crashSound: ['apps/maze/fail_pegman.mp3', 'apps/maze/fail_pegman.ogg'],
+    crashType: Maze.CRASH_STOP
   },
   {
     sprite: 'astro.png',
@@ -66,7 +77,10 @@ Maze.SKINS = [
     background: 'bg_astro.jpg',
     // Coma star cluster, photo by George Hatfield, used with permission.
     graph: false,
-    look: '#fff'
+    look: '#fff',
+    winSound: ['apps/maze/win.mp3', 'apps/maze/win.ogg'],
+    crashSound: ['apps/maze/fail_astro.mp3', 'apps/maze/fail_astro.ogg'],
+    crashType: Maze.CRASH_SPIN
   },
   {
     sprite: 'panda.png',
@@ -75,7 +89,10 @@ Maze.SKINS = [
     background: 'bg_panda.jpg',
     // Spring canopy, photo by Rupert Fleetingly, CC licensed for reuse.
     graph: false,
-    look: '#000'
+    look: '#000',
+    winSound: ['apps/maze/win.mp3', 'apps/maze/win.ogg'],
+    crashSound: ['apps/maze/fail_panda.mp3', 'apps/maze/fail_panda.ogg'],
+    crashType: Maze.CRASH_FALL
   }
 ];
 Maze.SKIN_ID = BlocklyApps.getNumberParamFromUrl('skin', 0, Maze.SKINS.length);
@@ -474,8 +491,8 @@ Maze.init = function() {
        rtl: rtl,
        toolbox: toolbox,
        trashcan: true});
-  Blockly.loadAudio_(['apps/maze/win.mp3', 'apps/maze/win.ogg'], 'win');
-  Blockly.loadAudio_(['apps/maze/whack.mp3', 'apps/maze/whack.ogg'], 'whack');
+  Blockly.loadAudio_(Maze.SKIN.winSound, 'win');
+  Blockly.loadAudio_(Maze.SKIN.crashSound, 'fail');
 
   Blockly.JavaScript.INFINITE_LOOP_TRAP = '  BlocklyApps.checkTimeout(%1);\n';
   Maze.drawMap();
@@ -942,9 +959,6 @@ Maze.execute = function() {
  * Iterate through the recorded path and animate pegman's actions.
  */
 Maze.animate = function() {
-  // All tasks should be complete now.  Clean up the PID list.
-  Maze.pidList = [];
-
   var action = BlocklyApps.log.shift();
   if (!action) {
     BlocklyApps.highlight(null);
@@ -1166,41 +1180,77 @@ Maze.scheduleFail = function(forward) {
   var deltaY = 0;
   switch (Maze.pegmanD) {
     case Maze.DirectionType.NORTH:
-      deltaY = -0.25;
+      deltaY = -1;
       break;
     case Maze.DirectionType.EAST:
-      deltaX = 0.25;
+      deltaX = 1;
       break;
     case Maze.DirectionType.SOUTH:
-      deltaY = 0.25;
+      deltaY = 1;
       break;
     case Maze.DirectionType.WEST:
-      deltaX = -0.25;
+      deltaX = -1;
       break;
   }
   if (!forward) {
     deltaX = -deltaX;
     deltaY = -deltaY;
   }
-  var direction16 = Maze.constrainDirection16(Maze.pegmanD * 4);
-  Maze.displayPegman(Maze.pegmanX + deltaX,
-                     Maze.pegmanY + deltaY,
-                     direction16);
-  Blockly.playAudio('whack', .5);
-  Maze.pidList.push(window.setTimeout(function() {
-    Maze.displayPegman(Maze.pegmanX,
-                       Maze.pegmanY,
-                       direction16);
-    }, Maze.stepSpeed));
-  Maze.pidList.push(window.setTimeout(function() {
+  if (Maze.SKIN.crashType == Maze.CRASH_STOP) {
+    // Bounce bounce.
+    deltaX /= 4;
+    deltaY /= 4;
+    var direction16 = Maze.constrainDirection16(Maze.pegmanD * 4);
     Maze.displayPegman(Maze.pegmanX + deltaX,
                        Maze.pegmanY + deltaY,
                        direction16);
-    Blockly.playAudio('whack', .5);
-  }, Maze.stepSpeed * 2));
-  Maze.pidList.push(window.setTimeout(function() {
-      Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, direction16);
-    }, Maze.stepSpeed * 3));
+    Blockly.playAudio('fail', 0.5);
+    Maze.pidList.push(window.setTimeout(function() {
+      Maze.displayPegman(Maze.pegmanX,
+                         Maze.pegmanY,
+                         direction16);
+      }, Maze.stepSpeed));
+    Maze.pidList.push(window.setTimeout(function() {
+      Maze.displayPegman(Maze.pegmanX + deltaX,
+                         Maze.pegmanY + deltaY,
+                         direction16);
+      Blockly.playAudio('fail', 0.5);
+    }, Maze.stepSpeed * 2));
+    Maze.pidList.push(window.setTimeout(function() {
+        Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, direction16);
+      }, Maze.stepSpeed * 3));
+  } else {
+    // Add a small random delta away from the grid.
+    var deltaZ = (Math.random() - 0.5) * 10;
+    var deltaD = (Math.random() - 0.5) / 2;
+    deltaX += (Math.random() - 0.5) / 4;
+    deltaY += (Math.random() - 0.5) / 4;
+    deltaX /= 8;
+    deltaY /= 8;
+    var acceleration = 0;
+    if (Maze.SKIN.crashType == Maze.CRASH_FALL) {
+      acceleration = 0.01;
+    }
+    Maze.pidList.push(window.setTimeout(function() {
+      Blockly.playAudio('fail', 0.5);
+    }, Maze.stepSpeed * 2));
+    var setPosition = function(n) {
+      return function() {
+        var direction16 = Maze.constrainDirection16(Maze.pegmanD * 4 +
+                                                    deltaD * n);
+        Maze.displayPegman(Maze.pegmanX + deltaX * n,
+                           Maze.pegmanY + deltaY * n,
+                           direction16,
+                           deltaZ * n);
+        deltaY += acceleration;
+      };
+    };
+    // 100 frames should get Pegman offscreen.
+    for (var i = 1; i < 100; i++) {
+      Maze.pidList.push(window.setTimeout(setPosition(i),
+          Maze.stepSpeed * i / 2));
+    }
+  }
 };
 
 /**
@@ -1211,7 +1261,7 @@ Maze.scheduleFinish = function(sound) {
   var direction16 = Maze.constrainDirection16(Maze.pegmanD * 4);
   Maze.displayPegman(Maze.pegmanX, Maze.pegmanY, 16);
   if (sound) {
-    Blockly.playAudio('win', .5);
+    Blockly.playAudio('win', 0.5);
   }
   Maze.stepSpeed = 150;  // Slow down victory animation a bit.
   Maze.pidList.push(window.setTimeout(function() {
@@ -1230,13 +1280,21 @@ Maze.scheduleFinish = function(sound) {
  * @param {number} x Horizontal grid (or fraction thereof).
  * @param {number} y Vertical grid (or fraction thereof).
  * @param {number} d Direction (0 - 15) or dance (16 - 17).
+ * @param {number} opt_angle Optional angle (in degrees) to rotate Pegman.
  */
-Maze.displayPegman = function(x, y, d) {
+Maze.displayPegman = function(x, y, d, opt_angle) {
   var pegmanIcon = document.getElementById('pegman');
   pegmanIcon.setAttribute('x',
       x * Maze.SQUARE_SIZE - d * Maze.PEGMAN_WIDTH + 1);
   pegmanIcon.setAttribute('y',
       Maze.SQUARE_SIZE * (y + 0.5) - Maze.PEGMAN_HEIGHT / 2 - 8);
+  if (opt_angle) {
+    pegmanIcon.setAttribute('transform', 'rotate(' + opt_angle + ', ' +
+        (x * Maze.SQUARE_SIZE + Maze.SQUARE_SIZE / 2) + ', ' +
+        (y * Maze.SQUARE_SIZE + Maze.SQUARE_SIZE / 2) + ')');
+  } else {
+    pegmanIcon.setAttribute('transform', 'rotate(0, 0, 0)');
+  }
 
   var clipRect = document.getElementById('clipRect');
   clipRect.setAttribute('x', x * Maze.SQUARE_SIZE + 1);
@@ -1302,10 +1360,9 @@ Maze.scheduleLookStep = function(path, delay) {
  * @return {number} Legal direction value.
  */
 Maze.constrainDirection4 = function(d) {
+  d = Math.round(d) % 4;
   if (d < 0) {
     d += 4;
-  } else if (d > 3) {
-    d -= 4;
   }
   return d;
 };
@@ -1316,10 +1373,9 @@ Maze.constrainDirection4 = function(d) {
  * @return {number} Legal direction value.
  */
 Maze.constrainDirection16 = function(d) {
+  d = Math.round(d) % 16;
   if (d < 0) {
     d += 16;
-  } else if (d > 15) {
-    d -= 16;
   }
   return d;
 };

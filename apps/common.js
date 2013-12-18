@@ -105,7 +105,8 @@ BlocklyApps.LANGUAGE_RTL = ['ar', 'fa', 'he', 'mzn', 'ps'];
  */
 BlocklyApps.LANGUAGE_PACK = {
   'ar': 'msg/js/ar.js',
-  'ca': 'msg/js/zh_tw.js',
+  'az': 'msg/js/az.js',
+  'ca': 'msg/js/ca.js',
   'cdo': 'msg/js/zh_hant.js',
   'da': 'msg/js/da.js',
   'de': 'msg/js/de.js',
@@ -114,6 +115,7 @@ BlocklyApps.LANGUAGE_PACK = {
   'fa': 'msg/js/fa.js',
   'fr': 'msg/js/fr.js',
   'frr': 'msg/js/de.js',
+  'he': 'msg/js/he.js',
   'hu': 'msg/js/hu.js',
   'id': 'msg/js/id.js',
   'is': 'msg/js/is.js',
@@ -131,6 +133,7 @@ BlocklyApps.LANGUAGE_PACK = {
   'ro': 'msg/js/ro.js',
   'ru': 'msg/js/ru.js',
   'sv': 'msg/js/sv.js',
+  'th': 'msg/js/th.js',
   'tr': 'msg/js/tr.js',
   'uk': 'msg/js/uk.js',
   'vi': 'msg/js/vi.js',

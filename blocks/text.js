@@ -460,9 +460,9 @@ Blockly.Blocks['text_prompt'] = {
     this.setColour(160);
     var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
       if (newOp == 'NUMBER') {
-        thisBlock.outputConnection.setCheck('Number');
+        thisBlock.changeOutput('Number');
       } else {
-        thisBlock.outputConnection.setCheck('String');
+        thisBlock.changeOutput('String');
       }
     });
     this.appendDummyInput()

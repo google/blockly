@@ -34,7 +34,7 @@ BlocklyApps.LANGUAGES = [
   'es', 'eu', 'fa', 'fi', 'fo', 'fr', 'frr', 'gl', 'hak', 'he', 'hu', 'ia',
   'is', 'it', 'ja', 'ka', 'km', 'ko', 'ksh', 'ky', 'la', 'lb', 'lt', 'lv', 'mk',
   'ml', 'mr', 'ms', 'mzn', 'nb', 'nl', 'oc', 'pa', 'pl', 'pms', 'ps', 'pt-br',
-  'ro', 'ru', 'sk', 'sv', 'sw', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
+  'ro', 'ru', 'sk', 'sv', 'sw', 'th', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +

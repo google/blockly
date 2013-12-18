@@ -29,6 +29,7 @@ goog.provide('Blockly.Input');
 // goog.require('Blockly.Block');
 goog.require('Blockly.Connection');
 goog.require('Blockly.FieldLabel');
+goog.require('goog.asserts');
 
 
 /**
@@ -89,6 +90,27 @@ Blockly.Input.prototype.appendTitle = function(title, opt_name) {
     this.sourceBlock_.bumpNeighbours_();
   }
   return this;
+};
+
+/**
+ * Remove a title from this input.
+ * @param {string} name The name of the title.
+ * @throws {goog.asserts.AssertionError} if the title is not present.
+ */
+Blockly.Input.prototype.removeTitle = function(name) {
+  for (var i = 0, title; title = this.titleRow[i]; i++) {
+    if (title.name === name) {
+      title.dispose();
+      this.titleRow.splice(i, 1);
+      if (this.sourceBlock_.rendered) {
+        this.sourceBlock_.render();
+        // Removing a title will cause the block to change shape.
+        this.sourceBlock_.bumpNeighbours_();
+      }
+      return;
+    }
+  }
+  goog.asserts.fail('Title "%s" not found.', name);
 };
 
 /**

@@ -155,5 +155,14 @@
     "MATH_MODULO_TITLE": "resta ëd %1:%2",
     "MATH_MODULO_TOOLTIP": "A smon la resta ëd la division dij doi nùmer.",
     "MATH_CONSTRAIN_TITLE": "limité %1 antra %2 e %3",
-    "MATH_CONSTRAIN_TOOLTIP": "Limité un nùmer a esse antra le limitassion ëspessificà (comprèise)."
+    "MATH_CONSTRAIN_TOOLTIP": "Limité un nùmer a esse antra le limitassion ëspessificà (comprèise).",
+    "MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
+    "MATH_RANDOM_INT_TITLE": "antregh aleatòri antra %1 e %2",
+    "MATH_RANDOM_INT_TOOLTIP": "A smon n'antregh aleatòri antra ij doi lìmit ëspessificà, comprèis.",
+    "MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
+    "MATH_RANDOM_FLOAT_TITLE_RANDOM": "frassion aleatòria",
+    "MATH_RANDOM_FLOAT_TOOLTIP": "A smon na frassion aleatòria antra 0,0 (comprèis) e 1,0 (esclus).",
+    "TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
+    "TEXT_TEXT_TOOLTIP": "Na litra, na paròla o na linia ëd test.",
+    "TEXT_JOIN_TITLE_CREATEWITH": "creé ël test con"
 }

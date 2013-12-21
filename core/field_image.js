@@ -44,7 +44,7 @@ Blockly.FieldImage = function(src, width, height) {
   this.width_ = Number(width);
   this.size_ = {height: this.height_ + 10, width: this.width_};
   // Build the DOM.
-  var offsetY = 6 - Blockly.BlockSvg.TITLE_HEIGHT;
+  var offsetY = 6 - Blockly.BlockSvg.FIELD_HEIGHT;
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   this.imageElement_ = Blockly.createSvgElement('image',
       {'height': this.height_ + 'px',

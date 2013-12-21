@@ -30,7 +30,7 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getTitleValue('NUM'));
+  var code = parseFloat(block.getFieldValue('NUM'));
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -43,7 +43,7 @@ Blockly.JavaScript['math_arithmetic'] = function(block) {
     DIVIDE: [' / ', Blockly.JavaScript.ORDER_DIVISION],
     POWER: [null, Blockly.JavaScript.ORDER_COMMA]  // Handle power separately.
   };
-  var tuple = OPERATORS[block.getTitleValue('OP')];
+  var tuple = OPERATORS[block.getFieldValue('OP')];
   var operator = tuple[0];
   var order = tuple[1];
   var argument0 = Blockly.JavaScript.valueToCode(block, 'A', order) || '0';
@@ -60,7 +60,7 @@ Blockly.JavaScript['math_arithmetic'] = function(block) {
 
 Blockly.JavaScript['math_single'] = function(block) {
   // Math operators with single operand.
-  var operator = block.getTitleValue('OP');
+  var operator = block.getFieldValue('OP');
   var code;
   var arg;
   if (operator == 'NEG') {
@@ -152,7 +152,7 @@ Blockly.JavaScript['math_constant'] = function(block) {
     SQRT1_2: ['Math.SQRT1_2', Blockly.JavaScript.ORDER_MEMBER],
     INFINITY: ['Infinity', Blockly.JavaScript.ORDER_ATOMIC]
   };
-  return CONSTANTS[block.getTitleValue('CONSTANT')];
+  return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
 
 Blockly.JavaScript['math_number_property'] = function(block) {
@@ -160,7 +160,7 @@ Blockly.JavaScript['math_number_property'] = function(block) {
   // or if it is divisible by certain number. Returns true or false.
   var number_to_check = Blockly.JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
       Blockly.JavaScript.ORDER_MODULUS) || '0';
-  var dropdown_property = block.getTitleValue('PROPERTY');
+  var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
   if (dropdown_property == 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
@@ -223,7 +223,7 @@ Blockly.JavaScript['math_change'] = function(block) {
   var argument0 = Blockly.JavaScript.valueToCode(block, 'DELTA',
       Blockly.JavaScript.ORDER_ADDITION) || '0';
   var varName = Blockly.JavaScript.variableDB_.getName(
-      block.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return varName + ' = (typeof ' + varName + ' == \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';
 };
@@ -235,7 +235,7 @@ Blockly.JavaScript['math_trig'] = Blockly.JavaScript['math_single'];
 
 Blockly.JavaScript['math_on_list'] = function(block) {
   // Math functions for lists.
-  var func = block.getTitleValue('OP');
+  var func = block.getFieldValue('OP');
   var list, code;
   switch (func) {
     case 'SUM':

@@ -240,8 +240,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
  * @private
  */
 Blockly.FieldDropdown.prototype.trimOptions_ = function() {
-  this.prefixTitle = null;
-  this.suffixTitle = null;
+  this.prefixField = null;
+  this.suffixField = null;
   var options = this.menuGenerator_;
   if (!goog.isArray(options) || options.length < 2) {
     return;
@@ -258,10 +258,10 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
     return;
   }
   if (prefixLength) {
-    this.prefixTitle = strings[0].substring(0, prefixLength - 1);
+    this.prefixField = strings[0].substring(0, prefixLength - 1);
   }
   if (suffixLength) {
-    this.suffixTitle = strings[0].substr(1 - suffixLength);
+    this.suffixField = strings[0].substr(1 - suffixLength);
   }
   // Remove the prefix and suffix from the options.
   var newOptions = [];

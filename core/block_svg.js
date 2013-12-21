@@ -134,10 +134,10 @@ Blockly.BlockSvg.NOTCH_WIDTH = 30;
  */
 Blockly.BlockSvg.CORNER_RADIUS = 8;
 /**
- * Minimum height of title rows.
+ * Minimum height of field rows.
  * @const
  */
-Blockly.BlockSvg.TITLE_HEIGHT = 18;
+Blockly.BlockSvg.FIELD_HEIGHT = 18;
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
  * Applies to highlighting on around the inside of a curve.
@@ -496,35 +496,35 @@ Blockly.BlockSvg.prototype.render = function() {
 };
 
 /**
- * Render a list of titles starting at the specified location.
- * @param {!Array.<!Blockly.Field>} titleList List of titles.
- * @param {number} cursorX X-coordinate to start the titles.
- * @param {number} cursorY Y-coordinate to start the titles.
- * @return {number} X-coordinate of the end of the title row (plus a gap).
+ * Render a list of fields starting at the specified location.
+ * @param {!Array.<!Blockly.Field>} fieldList List of fields.
+ * @param {number} cursorX X-coordinate to start the fields.
+ * @param {number} cursorY Y-coordinate to start the fields.
+ * @return {number} X-coordinate of the end of the field row (plus a gap).
  * @private
  */
-Blockly.BlockSvg.prototype.renderTitles_ = function(titleList,
+Blockly.BlockSvg.prototype.renderFields_ = function(fieldList,
                                                     cursorX, cursorY) {
   if (Blockly.RTL) {
     cursorX = -cursorX;
   }
-  for (var t = 0, title; title = titleList[t]; t++) {
-    // Get the dimensions of the title.
-    var titleSize = title.getSize();
-    var titleWidth = titleSize.width;
+  for (var t = 0, field; field = fieldList[t]; t++) {
+    // Get the dimensions of the field.
+    var fieldSize = field.getSize();
+    var fieldWidth = fieldSize.width;
 
     if (Blockly.RTL) {
-      cursorX -= titleWidth;
-      title.getRootElement().setAttribute('transform',
+      cursorX -= fieldWidth;
+      field.getRootElement().setAttribute('transform',
           'translate(' + cursorX + ', ' + cursorY + ')');
-      if (titleWidth) {
+      if (fieldWidth) {
         cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
       }
     } else {
-      title.getRootElement().setAttribute('transform',
+      field.getRootElement().setAttribute('transform',
           'translate(' + cursorX + ', ' + cursorY + ')');
-      if (titleWidth) {
-        cursorX += titleWidth + Blockly.BlockSvg.SEP_SPACE_X;
+      if (fieldWidth) {
+        cursorX += fieldWidth + Blockly.BlockSvg.SEP_SPACE_X;
       }
     }
   }
@@ -532,7 +532,7 @@ Blockly.BlockSvg.prototype.renderTitles_ = function(titleList,
 };
 
 /**
- * Computes the height and widths for each row and title.
+ * Computes the height and widths for each row and field.
  * @param {number} iconWidth Offset of first row due to icons.
  * @return {!Array.<!Array.<!Object>>} 2D array of objects, each containing
  *     position information.
@@ -546,8 +546,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     inputRows.rightEdge = Math.max(inputRows.rightEdge,
         Blockly.BlockSvg.NOTCH_WIDTH + Blockly.BlockSvg.SEP_SPACE_X);
   }
-  var titleValueWidth = 0;  // Width of longest external value title.
-  var titleStatementWidth = 0;  // Width of longest statement title.
+  var fieldValueWidth = 0;  // Width of longest external value field.
+  var fieldStatementWidth = 0;  // Width of longest statement field.
   var hasValue = false;
   var hasStatement = false;
   var hasDummy = false;
@@ -594,32 +594,32 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     }
 
     row.height = Math.max(row.height, input.renderHeight);
-    input.titleWidth = 0;
+    input.fieldWidth = 0;
     if (inputRows.length == 1) {
       // The first row gets shifted to accommodate any icons.
-      input.titleWidth += Blockly.RTL ? -iconWidth : iconWidth;
+      input.fieldWidth += Blockly.RTL ? -iconWidth : iconWidth;
     }
-    for (var j = 0, title; title = input.titleRow[j]; j++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (j != 0) {
-        input.titleWidth += Blockly.BlockSvg.SEP_SPACE_X;
+        input.fieldWidth += Blockly.BlockSvg.SEP_SPACE_X;
       }
-      // Get the dimensions of the title.
-      var titleSize = title.getSize();
-      input.titleWidth += titleSize.width;
-      row.height = Math.max(row.height, titleSize.height);
+      // Get the dimensions of the field.
+      var fieldSize = field.getSize();
+      input.fieldWidth += fieldSize.width;
+      row.height = Math.max(row.height, fieldSize.height);
     }
 
     if (row.type != Blockly.BlockSvg.INLINE) {
       if (row.type == Blockly.NEXT_STATEMENT) {
         hasStatement = true;
-        titleStatementWidth = Math.max(titleStatementWidth, input.titleWidth);
+        fieldStatementWidth = Math.max(fieldStatementWidth, input.fieldWidth);
       } else {
         if (row.type == Blockly.INPUT_VALUE) {
           hasValue = true;
         } else if (row.type == Blockly.DUMMY_INPUT) {
           hasDummy = true;
         }
-        titleValueWidth = Math.max(titleValueWidth, input.titleWidth);
+        fieldValueWidth = Math.max(fieldValueWidth, input.fieldWidth);
       }
     }
   }
@@ -641,7 +641,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   // Compute the statement edge.
   // This is the width of a block where statements are nested.
   inputRows.statementEdge = 2 * Blockly.BlockSvg.SEP_SPACE_X +
-      titleStatementWidth;
+      fieldStatementWidth;
   // Compute the preferred right edge.  Inline blocks may extend beyond.
   // This is the width of the block where external inputs connect.
   if (hasStatement) {
@@ -649,10 +649,10 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         inputRows.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH);
   }
   if (hasValue) {
-    inputRows.rightEdge = Math.max(inputRows.rightEdge, titleValueWidth +
+    inputRows.rightEdge = Math.max(inputRows.rightEdge, fieldValueWidth +
         Blockly.BlockSvg.SEP_SPACE_X * 2 + Blockly.BlockSvg.TAB_WIDTH);
   } else if (hasDummy) {
-    inputRows.rightEdge = Math.max(inputRows.rightEdge, titleValueWidth +
+    inputRows.rightEdge = Math.max(inputRows.rightEdge, fieldValueWidth +
         Blockly.BlockSvg.SEP_SPACE_X * 2);
   }
 
@@ -665,7 +665,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
 
 /**
  * Draw the path of the block.
- * Move the titles to the correct locations.
+ * Move the fields to the correct locations.
  * @param {number} iconWidth Offset of first row due to icons.
  * @param {!Array.<!Array.<!Object>>} inputRows 2D array of objects, each
  *     containing position information.
@@ -806,9 +806,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     if (this.block_.isCollapsed()) {
       // Jagged right edge.
       var input = row[0];
-      var titleX = cursorX;
-      var titleY = cursorY + Blockly.BlockSvg.TITLE_HEIGHT;
-      this.renderTitles_(input.titleRow, titleX, titleY);
+      var fieldX = cursorX;
+      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push(Blockly.BlockSvg.JAGGED_TEETH);
       if (Blockly.RTL) {
         highlightSteps.push('l 8,0 0,3.8 7,3.2 m -14.5,9 l 8,4');
@@ -823,14 +823,14 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     } else if (row.type == Blockly.BlockSvg.INLINE) {
       // Inline inputs.
       for (var x = 0, input; input = row[x]; x++) {
-        var titleX = cursorX;
-        var titleY = cursorY + Blockly.BlockSvg.TITLE_HEIGHT;
+        var fieldX = cursorX;
+        var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
         if (row.thicker) {
-          // Lower the title slightly.
-          titleY += Blockly.BlockSvg.INLINE_PADDING_Y;
+          // Lower the field slightly.
+          fieldY += Blockly.BlockSvg.INLINE_PADDING_Y;
         }
-        // TODO: Align inline title rows (left/right/centre).
-        cursorX = this.renderTitles_(input.titleRow, titleX, titleY);
+        // TODO: Align inline field rows (left/right/centre).
+        cursorX = this.renderFields_(input.fieldRow, fieldX, fieldY);
         if (input.type != Blockly.DUMMY_INPUT) {
           cursorX += input.renderWidth + Blockly.BlockSvg.SEP_SPACE_X;
         }
@@ -899,18 +899,18 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     } else if (row.type == Blockly.INPUT_VALUE) {
       // External input.
       var input = row[0];
-      var titleX = cursorX;
-      var titleY = cursorY + Blockly.BlockSvg.TITLE_HEIGHT;
+      var fieldX = cursorX;
+      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
       if (input.align != Blockly.ALIGN_LEFT) {
-        var titleRightX = inputRows.rightEdge - input.titleWidth -
+        var fieldRightX = inputRows.rightEdge - input.fieldWidth -
             Blockly.BlockSvg.TAB_WIDTH - 2 * Blockly.BlockSvg.SEP_SPACE_X;
         if (input.align == Blockly.ALIGN_RIGHT) {
-          titleX += titleRightX;
+          fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          titleX += (titleRightX + titleX) / 2;
+          fieldX += (fieldRightX + fieldX) / 2;
         }
       }
-      this.renderTitles_(input.titleRow, titleX, titleY);
+      this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
       steps.push('v', row.height - Blockly.BlockSvg.TAB_HEIGHT);
       if (Blockly.RTL) {
@@ -933,23 +933,23 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         input.connection.tighten_();
       }
     } else if (row.type == Blockly.DUMMY_INPUT) {
-      // External naked title.
+      // External naked field.
       var input = row[0];
-      var titleX = cursorX;
-      var titleY = cursorY + Blockly.BlockSvg.TITLE_HEIGHT;
+      var fieldX = cursorX;
+      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
       if (input.align != Blockly.ALIGN_LEFT) {
-        var titleRightX = inputRows.rightEdge - input.titleWidth -
+        var fieldRightX = inputRows.rightEdge - input.fieldWidth -
             2 * Blockly.BlockSvg.SEP_SPACE_X;
         if (inputRows.hasValue) {
-          titleRightX -= Blockly.BlockSvg.TAB_WIDTH;
+          fieldRightX -= Blockly.BlockSvg.TAB_WIDTH;
         }
         if (input.align == Blockly.ALIGN_RIGHT) {
-          titleX += titleRightX;
+          fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          titleX += (titleRightX + titleX) / 2;
+          fieldX += (fieldRightX + fieldX) / 2;
         }
       }
-      this.renderTitles_(input.titleRow, titleX, titleY);
+      this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push('v', row.height);
       if (Blockly.RTL) {
         highlightSteps.push('v', row.height - 2);
@@ -965,18 +965,18 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         }
         cursorY += Blockly.BlockSvg.SEP_SPACE_Y;
       }
-      var titleX = cursorX;
-      var titleY = cursorY + Blockly.BlockSvg.TITLE_HEIGHT;
+      var fieldX = cursorX;
+      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
       if (input.align != Blockly.ALIGN_LEFT) {
-        var titleRightX = inputRows.statementEdge - input.titleWidth -
+        var fieldRightX = inputRows.statementEdge - input.fieldWidth -
             2 * Blockly.BlockSvg.SEP_SPACE_X;
         if (input.align == Blockly.ALIGN_RIGHT) {
-          titleX += titleRightX;
+          fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          titleX += (titleRightX + titleX) / 2;
+          fieldX += (fieldRightX + fieldX) / 2;
         }
       }
-      this.renderTitles_(input.titleRow, titleX, titleY);
+      this.renderFields_(input.fieldRow, fieldX, fieldY);
       cursorX = inputRows.statementEdge + Blockly.BlockSvg.NOTCH_WIDTH;
       steps.push('H', cursorX);
       steps.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);

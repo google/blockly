@@ -42,26 +42,26 @@
         <block type="controls_repeat_ext">
           <value name="TIMES">
             <block type="math_number">
-              <title name="NUM">10</title>
+              <field name="NUM">10</field>
             </block>
           </value>
         </block>
         <block type="controls_whileUntil"></block>
         <block type="controls_for">
-          <title name="VAR">i</title>
+          <field name="VAR">i</field>
           <value name="FROM">
             <block type="math_number">
-              <title name="NUM">1</title>
+              <field name="NUM">1</field>
             </block>
           </value>
           <value name="TO">
             <block type="math_number">
-              <title name="NUM">10</title>
+              <field name="NUM">10</field>
             </block>
           </value>
           <value name="BY">
             <block type="math_number">
-              <title name="NUM">1</title>
+              <field name="NUM">1</field>
             </block>
           </value>
         </block>
@@ -87,7 +87,7 @@
       <block type="math_change">
         <value name="DELTA">
           <block type="math_number">
-            <title name="NUM">1</title>
+            <field name="NUM">1</field>
           </block>
         </value>
       </block>
@@ -97,24 +97,24 @@
       <block type="math_constrain">
         <value name="LOW">
           <block type="math_number">
-            <title name="NUM">1</title>
+            <field name="NUM">1</field>
           </block>
         </value>
         <value name="HIGH">
           <block type="math_number">
-            <title name="NUM">100</title>
+            <field name="NUM">100</field>
           </block>
         </value>
       </block>
       <block type="math_random_int">
         <value name="FROM">
           <block type="math_number">
-            <title name="NUM">1</title>
+            <field name="NUM">1</field>
           </block>
         </value>
         <value name="TO">
           <block type="math_number">
-            <title name="NUM">100</title>
+            <field name="NUM">100</field>
           </block>
         </value>
       </block>
@@ -126,7 +126,7 @@
       <block type="lists_repeat">
         <value name="NUM">
           <block type="math_number">
-            <title name="NUM">5</title>
+            <field name="NUM">5</field>
           </block>
         </value>
       </block>
@@ -144,44 +144,44 @@
           <mutation>
             <arg name="list"></arg>
           </mutation>
-          <title name="NAME">randomize</title>
+          <field name="NAME">randomize</field>
           <statement name="STACK">
             <block type="controls_for" inline="true">
-              <title name="VAR">x</title>
+              <field name="VAR">x</field>
               <value name="FROM">
                 <block type="math_number">
-                  <title name="NUM">1</title>
+                  <field name="NUM">1</field>
                 </block>
               </value>
               <value name="TO">
                 <block type="lists_length" inline="false">
                   <value name="VALUE">
                     <block type="variables_get">
-                      <title name="VAR">list</title>
+                      <field name="VAR">list</field>
                     </block>
                   </value>
                 </block>
               </value>
               <value name="BY">
                 <block type="math_number">
-                  <title name="NUM">1</title>
+                  <field name="NUM">1</field>
                 </block>
               </value>
               <statement name="DO">
                 <block type="variables_set" inline="false">
-                  <title name="VAR">y</title>
+                  <field name="VAR">y</field>
                   <value name="VALUE">
                     <block type="math_random_int" inline="true">
                       <value name="FROM">
                         <block type="math_number">
-                          <title name="NUM">1</title>
+                          <field name="NUM">1</field>
                         </block>
                       </value>
                       <value name="TO">
                         <block type="lists_length" inline="false">
                           <value name="VALUE">
                             <block type="variables_get">
-                              <title name="VAR">list</title>
+                              <field name="VAR">list</field>
                             </block>
                           </value>
                         </block>
@@ -190,20 +190,20 @@
                   </value>
                   <next>
                     <block type="variables_set" inline="false">
-                      <title name="VAR">temp</title>
+                      <field name="VAR">temp</field>
                       <value name="VALUE">
                         <block type="lists_getIndex" inline="true">
                           <mutation statement="false" at="true"></mutation>
-                          <title name="MODE">GET</title>
-                          <title name="WHERE">FROM_START</title>
+                          <field name="MODE">GET</field>
+                          <field name="WHERE">FROM_START</field>
                           <value name="AT">
                             <block type="variables_get">
-                              <title name="VAR">y</title>
+                              <field name="VAR">y</field>
                             </block>
                           </value>
                           <value name="VALUE">
                             <block type="variables_get">
-                              <title name="VAR">list</title>
+                              <field name="VAR">list</field>
                             </block>
                           </value>
                         </block>
@@ -212,27 +212,27 @@
                         <block type="lists_setIndex" inline="false">
                           <value name="AT">
                             <block type="variables_get">
-                              <title name="VAR">y</title>
+                              <field name="VAR">y</field>
                             </block>
                           </value>
                           <value name="LIST">
                             <block type="variables_get">
-                              <title name="VAR">list</title>
+                              <field name="VAR">list</field>
                             </block>
                           </value>
                           <value name="TO">
                             <block type="lists_getIndex" inline="true">
                               <mutation statement="false" at="true"></mutation>
-                              <title name="MODE">GET</title>
-                              <title name="WHERE">FROM_START</title>
+                              <field name="MODE">GET</field>
+                              <field name="WHERE">FROM_START</field>
                               <value name="AT">
                                 <block type="variables_get">
-                                  <title name="VAR">x</title>
+                                  <field name="VAR">x</field>
                                 </block>
                               </value>
                               <value name="VALUE">
                                 <block type="variables_get">
-                                  <title name="VAR">list</title>
+                                  <field name="VAR">list</field>
                                 </block>
                               </value>
                             </block>
@@ -241,17 +241,17 @@
                             <block type="lists_setIndex" inline="false">
                               <value name="AT">
                                 <block type="variables_get">
-                                  <title name="VAR">x</title>
+                                  <field name="VAR">x</field>
                                 </block>
                               </value>
                               <value name="LIST">
                                 <block type="variables_get">
-                                  <title name="VAR">list</title>
+                                  <field name="VAR">list</field>
                                 </block>
                               </value>
                               <value name="TO">
                                 <block type="variables_get">
-                                  <title name="VAR">temp</title>
+                                  <field name="VAR">temp</field>
                                 </block>
                               </value>
                             </block>
@@ -270,28 +270,28 @@
         <block type="text_print">
           <value name="TEXT">
             <block type="text">
-              <title name="TEXT">'Twas brillig, and the slithy toves</title>
+              <field name="TEXT">'Twas brillig, and the slithy toves</field>
             </block>
           </value>
           <next>
             <block type="text_print">
               <value name="TEXT">
                 <block type="text">
-                  <title name="TEXT">  Did gyre and gimble in the wabe:</title>
+                  <field name="TEXT">  Did gyre and gimble in the wabe:</field>
                 </block>
               </value>
               <next>
                 <block type="text_print">
                   <value name="TEXT">
                     <block type="text">
-                      <title name="TEXT">All mimsy were the borogroves,</title>
+                      <field name="TEXT">All mimsy were the borogroves,</field>
                     </block>
                   </value>
                   <next>
                     <block type="text_print">
                       <value name="TEXT">
                         <block type="text">
-                          <title name="TEXT">  And the mome raths outgrabe.</title>
+                          <field name="TEXT">  And the mome raths outgrabe.</field>
                         </block>
                       </value>
                     </block>
@@ -304,28 +304,28 @@
         <block type="text_print">
           <value name="TEXT">
             <block type="text">
-              <title name="TEXT">"Beware the Jabberwock, my son!</title>
+              <field name="TEXT">"Beware the Jabberwock, my son!</field>
             </block>
           </value>
           <next>
             <block type="text_print">
               <value name="TEXT">
                 <block type="text">
-                  <title name="TEXT">  The jaws that bite, the claws that catch!</title>
+                  <field name="TEXT">  The jaws that bite, the claws that catch!</field>
                 </block>
               </value>
               <next>
                 <block type="text_print">
                   <value name="TEXT">
                     <block type="text">
-                      <title name="TEXT">Beware the Jubjub bird, and shun</title>
+                      <field name="TEXT">Beware the Jubjub bird, and shun</field>
                     </block>
                   </value>
                   <next>
                     <block type="text_print">
                       <value name="TEXT">
                         <block type="text">
-                          <title name="TEXT">  The frumious Bandersnatch!"</title>
+                          <field name="TEXT">  The frumious Bandersnatch!"</field>
                         </block>
                       </value>
                     </block>

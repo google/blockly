@@ -34,7 +34,7 @@ Blockly.Blocks['colour_picker'] = {
     this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
     this.setColour(20);
     this.appendDummyInput()
-        .appendTitle(new Blockly.FieldColour('#ff0000'), 'COLOUR');
+        .appendField(new Blockly.FieldColour('#ff0000'), 'COLOUR');
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_PICKER_TOOLTIP);
   }
@@ -46,7 +46,7 @@ Blockly.Blocks['colour_random'] = {
     this.setHelpUrl(Blockly.Msg.COLOUR_RANDOM_HELPURL);
     this.setColour(20);
     this.appendDummyInput()
-        .appendTitle(Blockly.Msg.COLOUR_RANDOM_TITLE);
+        .appendField(Blockly.Msg.COLOUR_RANDOM_TITLE);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_RANDOM_TOOLTIP);
   }
@@ -60,16 +60,16 @@ Blockly.Blocks['colour_rgb'] = {
     this.appendValueInput('RED')
         .setCheck('Number')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.Msg.COLOUR_RGB_TITLE)
-        .appendTitle(Blockly.Msg.COLOUR_RGB_RED);
+        .appendField(Blockly.Msg.COLOUR_RGB_TITLE)
+        .appendField(Blockly.Msg.COLOUR_RGB_RED);
     this.appendValueInput('GREEN')
         .setCheck('Number')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.Msg.COLOUR_RGB_GREEN);
+        .appendField(Blockly.Msg.COLOUR_RGB_GREEN);
     this.appendValueInput('BLUE')
         .setCheck('Number')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.Msg.COLOUR_RGB_BLUE);
+        .appendField(Blockly.Msg.COLOUR_RGB_BLUE);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_RGB_TOOLTIP);
   }
@@ -83,16 +83,16 @@ Blockly.Blocks['colour_blend'] = {
     this.appendValueInput('COLOUR1')
         .setCheck('Colour')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.Msg.COLOUR_BLEND_TITLE)
-        .appendTitle(Blockly.Msg.COLOUR_BLEND_COLOUR1);
+        .appendField(Blockly.Msg.COLOUR_BLEND_TITLE)
+        .appendField(Blockly.Msg.COLOUR_BLEND_COLOUR1);
     this.appendValueInput('COLOUR2')
         .setCheck('Colour')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.Msg.COLOUR_BLEND_COLOUR2);
+        .appendField(Blockly.Msg.COLOUR_BLEND_COLOUR2);
     this.appendValueInput('RATIO')
         .setCheck('Number')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(Blockly.Msg.COLOUR_BLEND_RATIO);
+        .appendField(Blockly.Msg.COLOUR_BLEND_RATIO);
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_BLEND_TOOLTIP);
   }

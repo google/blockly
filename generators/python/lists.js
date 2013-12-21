@@ -76,7 +76,7 @@ Blockly.Python['lists_indexOf'] = function(block) {
   var argument1 = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
   var code;
-  if (block.getTitleValue('END') == 'FIRST') {
+  if (block.getFieldValue('END') == 'FIRST') {
     var functionName = Blockly.Python.provideFunction_(
         'first_index',
         ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(myList, elem):',
@@ -100,8 +100,8 @@ Blockly.Python['lists_indexOf'] = function(block) {
 Blockly.Python['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
-  var mode = block.getTitleValue('MODE') || 'GET';
-  var where = block.getTitleValue('WHERE') || 'FROM_START';
+  var mode = block.getFieldValue('MODE') || 'GET';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Python.valueToCode(block, 'AT',
       Blockly.Python.ORDER_UNARY_SIGN) || '1';
   var list = Blockly.Python.valueToCode(block, 'VALUE',
@@ -190,8 +190,8 @@ Blockly.Python['lists_setIndex'] = function(block) {
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   var list = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_MEMBER) || '[]';
-  var mode = block.getTitleValue('MODE') || 'GET';
-  var where = block.getTitleValue('WHERE') || 'FROM_START';
+  var mode = block.getFieldValue('MODE') || 'GET';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Python.valueToCode(block, 'AT',
       Blockly.Python.ORDER_NONE) || '1';
   var value = Blockly.Python.valueToCode(block, 'TO',
@@ -261,8 +261,8 @@ Blockly.Python['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_MEMBER) || '[]';
-  var where1 = block.getTitleValue('WHERE1');
-  var where2 = block.getTitleValue('WHERE2');
+  var where1 = block.getFieldValue('WHERE1');
+  var where2 = block.getFieldValue('WHERE2');
   var at1 = Blockly.Python.valueToCode(block, 'AT1',
       Blockly.Python.ORDER_ADDITIVE) || '1';
   var at2 = Blockly.Python.valueToCode(block, 'AT2',

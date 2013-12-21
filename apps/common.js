@@ -108,6 +108,7 @@ BlocklyApps.LANGUAGE_PACK = {
   'az': 'msg/js/az.js',
   'ca': 'msg/js/ca.js',
   'cdo': 'msg/js/zh_hant.js',
+  'cs': 'msg/js/cs.js',
   'da': 'msg/js/da.js',
   'de': 'msg/js/de.js',
   'el': 'msg/js/el.js',
@@ -117,29 +118,38 @@ BlocklyApps.LANGUAGE_PACK = {
   'frr': 'msg/js/de.js',
   'he': 'msg/js/he.js',
   'hu': 'msg/js/hu.js',
+  'ia': 'msg/js/ia.js',
   'id': 'msg/js/id.js',
   'is': 'msg/js/is.js',
   'it': 'msg/js/it.js',
+  'ja': 'msg/js/ja.js',
   'ko': 'msg/js/ko.js',
   'ksh': 'msg/js/de.js',
   'lb': 'msg/js/de.js',
+  'ms': 'msg/js/ms.js',
   'nl': 'msg/js/nl.js',
   'no': 'msg/js/no.js',
+  'pl': 'msg/js/pl.js',
   'pms': 'msg/js/it.js',
-  'pt': 'msg/js/pt-br.js',
+  'pt': 'msg/js/pt.js',
   'pt-br': 'msg/js/pt-br.js',
-  // We used to use pt_br for pt-br.  Users may still have URLs.
+  // We used to use pt_br for pt-br (until November 2013).
+  // Users may still have URLs.
   'pt_br': 'msg/js/pt-br.js',
   'ro': 'msg/js/ro.js',
   'ru': 'msg/js/ru.js',
+  'sq': 'msg/js/sq.js',
+  'sr': 'msg/js/sr.js',
   'sv': 'msg/js/sv.js',
   'th': 'msg/js/th.js',
+  'tl': 'msg/js/tl.js',
   'tr': 'msg/js/tr.js',
   'uk': 'msg/js/uk.js',
   'vi': 'msg/js/vi.js',
   'zh-hans': 'msg/js/zh-hans.js',
   'zh-hant': 'msg/js/zh-hant.js',
-  // We used to use zh-tw for zh-hant.  Users may still have URLs.
+  // We used to use zh-tw for zh-hant (until November 2013).
+  // Users may still have URLs.
   'zh-tw': 'msg/js/zh-hant.js',
   'default': 'msg/js/en.js'
 };

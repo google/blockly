@@ -28,16 +28,16 @@ Blockly.Blocks['country'] = {
   init: function() {
     this.setColour(120);
     this.appendDummyInput()
-        .appendTitle('', 'NAME');
+        .appendField('', 'NAME');
     this.appendValueInput('FLAG')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(BlocklyApps.getMsg('Puzzle_flag'));
+        .appendField(BlocklyApps.getMsg('Puzzle_flag'));
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle(BlocklyApps.getMsg('Puzzle_language'))
-        .appendTitle(new Blockly.FieldDropdown(Puzzle.languages), 'LANG');
+        .appendField(BlocklyApps.getMsg('Puzzle_language'))
+        .appendField(new Blockly.FieldDropdown(Puzzle.languages), 'LANG');
     this.appendStatementInput('CITIES')
-        .appendTitle(BlocklyApps.getMsg('Puzzle_cities'));
+        .appendField(BlocklyApps.getMsg('Puzzle_cities'));
   },
   mutationToDom: function() {
     // Save the country number.
@@ -53,11 +53,11 @@ Blockly.Blocks['country'] = {
   populate: function(n) {
     this.country = n;
     // Set the country name.
-    this.setTitleValue(BlocklyApps.getMsg('Puzzle_country' + n), 'NAME');
+    this.setFieldValue(BlocklyApps.getMsg('Puzzle_country' + n), 'NAME');
     this.helpUrl = BlocklyApps.getMsg('Puzzle_country' + n + 'HelpUrl');
   },
   isCorrect: function() {
-    return this.getTitleValue('LANG') == this.country;
+    return this.getFieldValue('LANG') == this.country;
   }
 };
 
@@ -78,7 +78,7 @@ Blockly.Blocks['flag'] = {
     var flagHeight = BlocklyApps.getMsg('Puzzle_country' + n + 'FlagHeight');
     var flagWidth = BlocklyApps.getMsg('Puzzle_country' + n + 'FlagWidth');
     this.getInput('IMG')
-        .appendTitle(new Blockly.FieldImage(flag, flagWidth, flagHeight));
+        .appendField(new Blockly.FieldImage(flag, flagWidth, flagHeight));
   },
   isCorrect: function() {
     var parent = this.getParent();
@@ -89,7 +89,7 @@ Blockly.Blocks['flag'] = {
 Blockly.Blocks['city'] = {
   init: function() {
     this.setColour(290);
-    this.appendDummyInput().appendTitle('', 'NAME');
+    this.appendDummyInput().appendField('', 'NAME');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
   },
@@ -111,7 +111,7 @@ Blockly.Blocks['city'] = {
     this.country = n;
     this.city = m;
     // Set the city name.
-    this.setTitleValue(BlocklyApps.getMsg(
+    this.setFieldValue(BlocklyApps.getMsg(
         'Puzzle_country' + n + 'City' + m), 'NAME');
   },
   isCorrect: function() {

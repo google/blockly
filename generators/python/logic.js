@@ -58,7 +58,7 @@ Blockly.Python['logic_compare'] = function(block) {
     GT: '>',
     GTE: '>='
   };
-  var operator = OPERATORS[block.getTitleValue('OP')];
+  var operator = OPERATORS[block.getFieldValue('OP')];
   var order = Blockly.Python.ORDER_RELATIONAL;
   var argument0 = Blockly.Python.valueToCode(block, 'A', order) || '0';
   var argument1 = Blockly.Python.valueToCode(block, 'B', order) || '0';
@@ -68,7 +68,7 @@ Blockly.Python['logic_compare'] = function(block) {
 
 Blockly.Python['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (block.getTitleValue('OP') == 'AND') ? 'and' : 'or';
+  var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
   var order = (operator == 'and') ? Blockly.Python.ORDER_LOGICAL_AND :
       Blockly.Python.ORDER_LOGICAL_OR;
   var argument0 = Blockly.Python.valueToCode(block, 'A', order);
@@ -101,7 +101,7 @@ Blockly.Python['logic_negate'] = function(block) {
 
 Blockly.Python['logic_boolean'] = function(block) {
   // Boolean values true and false.
-  var code = (block.getTitleValue('BOOL') == 'TRUE') ? 'True' : 'False';
+  var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'True' : 'False';
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 

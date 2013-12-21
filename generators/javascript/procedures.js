@@ -31,7 +31,7 @@ goog.require('Blockly.JavaScript');
 Blockly.JavaScript['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.JavaScript.variableDB_.getName(
-      block.getTitleValue('NAME'), Blockly.Procedures.NAME_TYPE);
+      block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.JavaScript.statementToCode(block, 'STACK');
   if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
     branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
@@ -62,7 +62,7 @@ Blockly.JavaScript['procedures_defnoreturn'] =
 Blockly.JavaScript['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
   var funcName = Blockly.JavaScript.variableDB_.getName(
-      block.getTitleValue('NAME'), Blockly.Procedures.NAME_TYPE);
+      block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
     args[x] = Blockly.JavaScript.valueToCode(block, 'ARG' + x,
@@ -75,7 +75,7 @@ Blockly.JavaScript['procedures_callreturn'] = function(block) {
 Blockly.JavaScript['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   var funcName = Blockly.JavaScript.variableDB_.getName(
-      block.getTitleValue('NAME'), Blockly.Procedures.NAME_TYPE);
+      block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
     args[x] = Blockly.JavaScript.valueToCode(block, 'ARG' + x,

@@ -248,12 +248,12 @@
 {template .toolbox}
   <xml id="toolbox" style="display: none;">
     <block type="maze_moveForward"></block>
-    <block type="maze_turn"><title name="DIR">turnLeft</title></block>
-    <block type="maze_turn"><title name="DIR">turnRight</title></block>
+    <block type="maze_turn"><field name="DIR">turnLeft</field></block>
+    <block type="maze_turn"><field name="DIR">turnRight</field></block>
     {if $ij.level > 2}
       <block type="maze_forever"></block>
       {if $ij.level == 6}
-        <block type="maze_if"><title name="DIR">isPathLeft</title></block>
+        <block type="maze_if"><field name="DIR">isPathLeft</field></block>
       {elseif $ij.level > 6}
         <block type="maze_if"></block>
         {if $ij.level > 8}

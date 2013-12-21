@@ -28,7 +28,7 @@ Blockly.Blocks['unittest_main'] = {
   init: function() {
     this.setColour(65);
     this.appendDummyInput()
-        .appendTitle('run tests');
+        .appendField('run tests');
     this.appendStatementInput('DO');
     this.setTooltip('Executes the enclosed unit tests,\n' +
                     'then prints a summary.');
@@ -45,11 +45,11 @@ Blockly.Blocks['unittest_assertequals'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendDummyInput()
-        .appendTitle(new Blockly.FieldTextInput('test name'), 'MESSAGE');
+        .appendField(new Blockly.FieldTextInput('test name'), 'MESSAGE');
     this.appendValueInput('ACTUAL', null)
-        .appendTitle('actual');
+        .appendField('actual');
     this.appendValueInput('EXPECTED', null)
-        .appendTitle('expected');
+        .appendField('expected');
     this.setTooltip('Tests that "actual == expected".');
   },
   getVars: function() {
@@ -64,10 +64,10 @@ Blockly.Blocks['unittest_assertvalue'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendDummyInput()
-        .appendTitle(new Blockly.FieldTextInput('test name'), 'MESSAGE');
+        .appendField(new Blockly.FieldTextInput('test name'), 'MESSAGE');
     this.appendValueInput('ACTUAL', Boolean)
-        .appendTitle('assert')
-        .appendTitle(new Blockly.FieldDropdown(
+        .appendField('assert')
+        .appendField(new Blockly.FieldDropdown(
         [['true', 'TRUE'], ['false', 'FALSE'], ['null', 'NULL']]), 'EXPECTED');
     this.setTooltip('Tests that the value is true, false, or null.');
   },
@@ -83,8 +83,8 @@ Blockly.Blocks['unittest_fail'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendDummyInput()
-        .appendTitle(new Blockly.FieldTextInput('test name'), 'MESSAGE')
-        .appendTitle('fail');
+        .appendField(new Blockly.FieldTextInput('test name'), 'MESSAGE')
+        .appendField('fail');
     this.setTooltip('Records an error.');
   },
   getVars: function() {

@@ -5,7 +5,7 @@ if (typeof apps == 'undefined') { var apps = {}; }
 
 
 apps.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div style="display: none"><span id="subtitle">graficzne środowisko programistyczne</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">Zobacz wygenerowany kod JavaScript.</span><span id="linkTooltip">Zapisz i podlinkuj do bloków</span><span id="runTooltip">Uruchom program zdefinowany przez bloki w \\nobszarze roboczym </span><span id="runProgram">Uruchom Program</span><span id="resetProgram">Zresetuj</span><span id="dialogOk">OK</span><span id="dialogCancel">Anuluj</span><span id="catLogic">Logika</span><span id="catLoops">Pętle</span><span id="catMath">Matematyka</span><span id="catText">Tekst</span><span id="catLists">Listy</span><span id="catColour">Kolor</span><span id="catVariables">Zmienne</span><span id="catProcedures">Procedury</span><span id="httpRequestError">Wystąpił problem z zażądaniem.</span><span id="linkAlert">Udpostępnij swoje bloki korzystając z poniższego linku : \n\n\n%1</span><span id="hashError">Przepraszamy, \'%1\' nie odpowiada z jakimkolwiek zapisanym programem.</span><span id="xmlError">Nie można załadować zapisanego pliku. Być może został utworzony za pomocą innej wersji Blockly?</span><span id="listVariable">lista</span><span id="textVariable">tekst</span></div>';
+  return '<div style="display: none"><span id="subtitle">graficzne środowisko programistyczne</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">Zobacz wygenerowany kod JavaScript.</span><span id="linkTooltip">Zapisz i podlinkuj do bloków</span><span id="runTooltip">Uruchom program zdefinowany przez bloki w \\nobszarze roboczym </span><span id="runProgram">Uruchom Program</span><span id="resetProgram">Zresetuj</span><span id="dialogOk">OK</span><span id="dialogCancel">Anuluj</span><span id="catLogic">Logika</span><span id="catLoops">Pętle</span><span id="catMath">Matematyka</span><span id="catText">Tekst</span><span id="catLists">Listy</span><span id="catColour">Kolor</span><span id="catVariables">Zmienne</span><span id="catProcedures">Procedury</span><span id="httpRequestError">Wystąpił problem z żądaniem.</span><span id="linkAlert">Udpostępnij swoje bloki korzystając z poniższego linku : \n\n\n%1</span><span id="hashError">Przepraszamy, "%1" nie odpowiada żadnemu zapisanemu programowi.</span><span id="xmlError">Nie można załadować zapisanego pliku. Być może został utworzony za pomocą innej wersji Blockly?</span><span id="listVariable">lista</span><span id="textVariable">tekst</span></div>';
 };
 
 
@@ -36,12 +36,12 @@ if (typeof planepage == 'undefined') { var planepage = {}; }
 
 
 planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Wiersze: %1</span><span id="Plane_getRows">wiersze (%1)</span><span id="Plane_rows1">1st class rows: %1</span><span id="Plane_getRows1">1st class rows (%1)</span><span id="Plane_rows2">2nd class rows: %1</span><span id="Plane_getRows2">2nd class rows (%1)</span><span id="Plane_seats">Seats: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">miejsc =</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Rzędów: %1</span><span id="Plane_getRows">rzędów (%1)</span><span id="Plane_rows1">Rzędów w pierwszej klasie: %1</span><span id="Plane_getRows1">Rzędów w pierwszej klasie (%1)</span><span id="Plane_rows2">Rzędów w drugiej klasie: %1</span><span id="Plane_getRows2">Rzędów w drugiej klasie (%1)</span><span id="Plane_seats">Siedzeń: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">siedzeń =</span></div>';
 };
 
 
 planepage.start = function(opt_data, opt_ignored, opt_ijData) {
-  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly</a> : Samolot</span> &nbsp; ';
+  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly</a> : Kalkulator miejsc w samolocie.</span> &nbsp; ';
   var iLimit130 = opt_ijData.maxLevel + 1;
   for (var i130 = 1; i130 < iLimit130; i130++) {
     output += ' ' + ((i130 == opt_ijData.level) ? '<span class="tab" id="selected">' + soy.$$escapeHtml(i130) + '</span>' : (i130 < opt_ijData.level) ? '<a class="tab previous" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>' : '<a class="tab" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>');
@@ -52,17 +52,17 @@ planepage.start = function(opt_data, opt_ignored, opt_ijData) {
       output += 'Samolot ma kilka rzędów siedzeń pasażerów. Każdy rząd zawiera cztery miejsca.';
       break;
     case 2:
-      output += 'An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of passenger seats.  Each row contains four seats.';
+      output += 'Samolot ma dwa miejsca w kabinie pilotów (dla pierwszego i drugiego pilota) oraz rzędy siedzeń dla pasażerów. Każdy taki rząd składa się z czterech siedzeń.';
       break;
     case 3:
-      output += 'An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of 1st class and 2nd class passenger seats.  Each 1st class row contains four seats. Each 2nd class row contains five seats.';
+      output += 'Samolot ma dwa miejsca w kabinie pilotów (dla pierwszego i drugiego pilota) oraz rzędy siedzeń dla pasażerów pierwszej i drugiej klasy. Każdy rząd pierwszej klasy składa się z czterech siedzeń. Każdy rząd drugiej klasy składa się z pięciu siedzeń.';
       break;
   }
-  output += '</p><p>Build a formula (below) that calculates the total number of seats on the airplane as the rows are changed (above).</p><script type="text/javascript" src="../../blockly_compressed.js"><\/script><script type="text/javascript" src="../../blocks_compressed.js"><\/script><script type="text/javascript" src="../../javascript_compressed.js"><\/script><script type="text/javascript" src="../../' + soy.$$escapeHtml(opt_ijData.langSrc) + '"><\/script><script type="text/javascript" src="blocks.js"><\/script>' + planepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div>';
+  output += '</p><p>Zbuduj wzór (poniżej), który pozwala obliczyć łączną liczbę siedzeń w samolocie w funkcji zmieniającej się liczby rzędów (powyżej).</p><script type="text/javascript" src="../../blockly_compressed.js"><\/script><script type="text/javascript" src="../../blocks_compressed.js"><\/script><script type="text/javascript" src="../../javascript_compressed.js"><\/script><script type="text/javascript" src="../../' + soy.$$escapeHtml(opt_ijData.langSrc) + '"><\/script><script type="text/javascript" src="blocks.js"><\/script>' + planepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div>';
   return output;
 };
 
 
 planepage.toolbox = function(opt_data, opt_ignored, opt_ijData) {
-  return '<xml id="toolbox" style="display: none"><block type="math_number"></block><block type="math_arithmetic"></block><block type="math_arithmetic"><title name="OP">MULTIPLY</title></block>' + ((opt_ijData.level <= 2) ? '<block type="plane_get_rows"></block>' : '<block type="plane_get_rows1st"></block><block type="plane_get_rows2nd"></block>') + '</xml>';
+  return '<xml id="toolbox" style="display: none"><block type="math_number"></block><block type="math_arithmetic"></block><block type="math_arithmetic"><field name="OP">MULTIPLY</field></block>' + ((opt_ijData.level <= 2) ? '<block type="plane_get_rows"></block>' : '<block type="plane_get_rows1st"></block><block type="plane_get_rows2nd"></block>') + '</xml>';
 };

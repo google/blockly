@@ -30,7 +30,7 @@ goog.require('Blockly.Python');
 
 Blockly.Python['controls_repeat'] = function(block) {
   // Repeat n times (internal number).
-  var repeats = parseInt(block.getTitleValue('TIMES'), 10);
+  var repeats = parseInt(block.getFieldValue('TIMES'), 10);
   var branch = Blockly.Python.statementToCode(block, 'DO') || '  pass\n';
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
     branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
@@ -64,7 +64,7 @@ Blockly.Python['controls_repeat_ext'] = function(block) {
 
 Blockly.Python['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getTitleValue('MODE') == 'UNTIL';
+  var until = block.getFieldValue('MODE') == 'UNTIL';
   var argument0 = Blockly.Python.valueToCode(block, 'BOOL',
       until ? Blockly.Python.ORDER_LOGICAL_NOT :
       Blockly.Python.ORDER_NONE) || 'False';
@@ -73,7 +73,7 @@ Blockly.Python['controls_whileUntil'] = function(block) {
     branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
         '"' + block.id + '"') + branch;
   }
-  if (block.getTitleValue('MODE') == 'UNTIL') {
+  if (block.getFieldValue('MODE') == 'UNTIL') {
     if (!argument0.match(/^\w+$/)) {
       argument0 = '(' + argument0 + ')';
     }
@@ -85,7 +85,7 @@ Blockly.Python['controls_whileUntil'] = function(block) {
 Blockly.Python['controls_for'] = function(block) {
   // For loop.
   var variable0 = Blockly.Python.variableDB_.getName(
-      block.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.Python.valueToCode(block, 'FROM',
       Blockly.Python.ORDER_NONE) || '0';
   var argument1 = Blockly.Python.valueToCode(block, 'TO',
@@ -203,7 +203,7 @@ Blockly.Python['controls_for'] = function(block) {
 Blockly.Python['controls_forEach'] = function(block) {
   // For each loop.
   var variable0 = Blockly.Python.variableDB_.getName(
-      block.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_RELATIONAL) || '[]';
   var branch = Blockly.Python.statementToCode(block, 'DO') || '  pass\n';
@@ -217,7 +217,7 @@ Blockly.Python['controls_forEach'] = function(block) {
 
 Blockly.Python['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  switch (block.getTitleValue('FLOW')) {
+  switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
       return 'break\n';
     case 'CONTINUE':

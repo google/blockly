@@ -34,30 +34,30 @@ Blockly.Blocks['variables_get'] = {
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setColour(330);
     this.appendDummyInput()
-        .appendTitle(Blockly.Msg.VARIABLES_GET_TITLE)
-        .appendTitle(new Blockly.FieldVariable(
+        .appendField(Blockly.Msg.VARIABLES_GET_TITLE)
+        .appendField(new Blockly.FieldVariable(
         Blockly.Msg.VARIABLES_GET_ITEM), 'VAR')
-        .appendTitle(Blockly.Msg.VARIABLES_GET_TAIL);
+        .appendField(Blockly.Msg.VARIABLES_GET_TAIL);
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
     this.contextMenuType_ = 'variables_set';
   },
   getVars: function() {
-    return [this.getTitleValue('VAR')];
+    return [this.getFieldValue('VAR')];
   },
   renameVar: function(oldName, newName) {
-    if (Blockly.Names.equals(oldName, this.getTitleValue('VAR'))) {
-      this.setTitleValue(newName, 'VAR');
+    if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
+      this.setFieldValue(newName, 'VAR');
     }
   },
   customContextMenu: function(options) {
     var option = {enabled: true};
-    var name = this.getTitleValue('VAR');
+    var name = this.getFieldValue('VAR');
     option.text = this.contextMenuMsg_.replace('%1', name);
-    var xmlTitle = goog.dom.createDom('title', null, name);
-    xmlTitle.setAttribute('name', 'VAR');
-    var xmlBlock = goog.dom.createDom('block', null, xmlTitle);
+    var xmlField = goog.dom.createDom('field', null, name);
+    xmlField.setAttribute('name', 'VAR');
+    var xmlBlock = goog.dom.createDom('block', null, xmlField);
     xmlBlock.setAttribute('type', this.contextMenuType_);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
@@ -70,10 +70,10 @@ Blockly.Blocks['variables_set'] = {
     this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
     this.setColour(330);
     this.appendValueInput('VALUE')
-        .appendTitle(Blockly.Msg.VARIABLES_SET_TITLE)
-        .appendTitle(new Blockly.FieldVariable(
+        .appendField(Blockly.Msg.VARIABLES_SET_TITLE)
+        .appendField(new Blockly.FieldVariable(
         Blockly.Msg.VARIABLES_SET_ITEM), 'VAR')
-        .appendTitle(Blockly.Msg.VARIABLES_SET_TAIL);
+        .appendField(Blockly.Msg.VARIABLES_SET_TAIL);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
@@ -81,11 +81,11 @@ Blockly.Blocks['variables_set'] = {
     this.contextMenuType_ = 'variables_get';
   },
   getVars: function() {
-    return [this.getTitleValue('VAR')];
+    return [this.getFieldValue('VAR')];
   },
   renameVar: function(oldName, newName) {
-    if (Blockly.Names.equals(oldName, this.getTitleValue('VAR'))) {
-      this.setTitleValue(newName, 'VAR');
+    if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
+      this.setFieldValue(newName, 'VAR');
     }
   },
   customContextMenu: Blockly.Blocks['variables_get'].customContextMenu

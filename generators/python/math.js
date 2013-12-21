@@ -33,7 +33,7 @@ Blockly.Python.addReservedWords('math,random');
 
 Blockly.Python['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getTitleValue('NUM'));
+  var code = parseFloat(block.getFieldValue('NUM'));
   var order = code < 0 ? Blockly.Python.ORDER_UNARY_SIGN :
               Blockly.Python.ORDER_ATOMIC;
   return [code, order];
@@ -48,7 +48,7 @@ Blockly.Python['math_arithmetic'] = function(block) {
     DIVIDE: [' / ', Blockly.Python.ORDER_MULTIPLICATIVE],
     POWER: [' ** ', Blockly.Python.ORDER_EXPONENTIATION]
   };
-  var tuple = OPERATORS[block.getTitleValue('OP')];
+  var tuple = OPERATORS[block.getFieldValue('OP')];
   var operator = tuple[0];
   var order = tuple[1];
   var argument0 = Blockly.Python.valueToCode(block, 'A', order) || '0';
@@ -65,7 +65,7 @@ Blockly.Python['math_arithmetic'] = function(block) {
 
 Blockly.Python['math_single'] = function(block) {
   // Math operators with single operand.
-  var operator = block.getTitleValue('OP');
+  var operator = block.getFieldValue('OP');
   var code;
   var arg;
   if (operator == 'NEG') {
@@ -153,7 +153,7 @@ Blockly.Python['math_constant'] = function(block) {
     SQRT1_2: ['math.sqrt(1.0 / 2)', Blockly.Python.ORDER_MEMBER],
     INFINITY: ['float(\'inf\')', Blockly.Python.ORDER_ATOMIC]
   };
-  var constant = block.getTitleValue('CONSTANT');
+  var constant = block.getFieldValue('CONSTANT');
   if (constant != 'INFINITY') {
     Blockly.Python.definitions_['import_math'] = 'import math';
   }
@@ -165,7 +165,7 @@ Blockly.Python['math_number_property'] = function(block) {
   // or if it is divisible by certain number. Returns true or false.
   var number_to_check = Blockly.Python.valueToCode(block, 'NUMBER_TO_CHECK',
       Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
-  var dropdown_property = block.getTitleValue('PROPERTY');
+  var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
   if (dropdown_property == 'PRIME') {
     Blockly.Python.definitions_['import_math'] = 'import math';
@@ -226,7 +226,7 @@ Blockly.Python['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.Python.valueToCode(block, 'DELTA',
       Blockly.Python.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Python.variableDB_.getName(block.getTitleValue('VAR'),
+  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   return varName + ' = (' + varName + ' if type(' + varName +
       ') in (int, float, long) else 0) + ' + argument0 + '\n';
@@ -239,7 +239,7 @@ Blockly.Python['math_trig'] = Blockly.Python['math_single'];
 
 Blockly.Python['math_on_list'] = function(block) {
   // Math functions for lists.
-  var func = block.getTitleValue('OP');
+  var func = block.getFieldValue('OP');
   var list = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_NONE) || '[]';
   var code;

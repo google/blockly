@@ -30,7 +30,7 @@ goog.require('Blockly.Python');
 
 Blockly.Python['text'] = function(block) {
   // Text value.
-  var code = Blockly.Python.quote_(block.getTitleValue('TEXT'));
+  var code = Blockly.Python.quote_(block.getFieldValue('TEXT'));
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
 
@@ -68,7 +68,7 @@ Blockly.Python['text_join'] = function(block) {
 
 Blockly.Python['text_append'] = function(block) {
   // Append to a variable in place.
-  var varName = Blockly.Python.variableDB_.getName(block.getTitleValue('VAR'),
+  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
@@ -93,7 +93,7 @@ Blockly.Python['text_isEmpty'] = function(block) {
 Blockly.Python['text_indexOf'] = function(block) {
   // Search the text for a substring.
   // Should we allow for non-case sensitive???
-  var operator = block.getTitleValue('END') == 'FIRST' ? 'find' : 'rfind';
+  var operator = block.getFieldValue('END') == 'FIRST' ? 'find' : 'rfind';
   var argument0 = Blockly.Python.valueToCode(block, 'FIND',
       Blockly.Python.ORDER_NONE) || '\'\'';
   var argument1 = Blockly.Python.valueToCode(block, 'VALUE',
@@ -105,7 +105,7 @@ Blockly.Python['text_indexOf'] = function(block) {
 Blockly.Python['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
-  var where = block.getTitleValue('WHERE') || 'FROM_START';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Python.valueToCode(block, 'AT',
       Blockly.Python.ORDER_UNARY_SIGN) || '1';
   var text = Blockly.Python.valueToCode(block, 'VALUE',
@@ -148,8 +148,8 @@ Blockly.Python['text_getSubstring'] = function(block) {
   // Get substring.
   var text = Blockly.Python.valueToCode(block, 'STRING',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
-  var where1 = block.getTitleValue('WHERE1');
-  var where2 = block.getTitleValue('WHERE2');
+  var where1 = block.getFieldValue('WHERE1');
+  var where2 = block.getFieldValue('WHERE2');
   var at1 = Blockly.Python.valueToCode(block, 'AT1',
       Blockly.Python.ORDER_ADDITIVE) || '1';
   var at2 = Blockly.Python.valueToCode(block, 'AT2',
@@ -205,7 +205,7 @@ Blockly.Python['text_changeCase'] = function(block) {
     LOWERCASE: '.lower()',
     TITLECASE: '.title()'
   };
-  var operator = OPERATORS[block.getTitleValue('CASE')];
+  var operator = OPERATORS[block.getFieldValue('CASE')];
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
   var code = argument0 + operator;
@@ -219,7 +219,7 @@ Blockly.Python['text_trim'] = function(block) {
     RIGHT: '.rstrip()',
     BOTH: '.strip()'
   };
-  var operator = OPERATORS[block.getTitleValue('MODE')];
+  var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
   var code = argument0 + operator;
@@ -242,9 +242,9 @@ Blockly.Python['text_prompt'] = function(block) {
        '    return raw_input(msg)',
        '  except NameError:',
        '    return input(msg)']);
-  var msg = Blockly.Python.quote_(block.getTitleValue('TEXT'));
+  var msg = Blockly.Python.quote_(block.getFieldValue('TEXT'));
   var code = functionName + '(' + msg + ')';
-  var toNumber = block.getTitleValue('TYPE') == 'NUMBER';
+  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
     code = 'float(' + code + ')';
   }

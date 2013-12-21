@@ -194,7 +194,7 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
   function populateProcedures(procedureList, templateName) {
     for (var x = 0; x < procedureList.length; x++) {
       var block = new Blockly.Block(workspace, templateName);
-      block.setTitleValue(procedureList[x][0], 'NAME');
+      block.setFieldValue(procedureList[x][0], 'NAME');
       var tempIds = [];
       for (var t = 0; t < procedureList[x][1].length; t++) {
         tempIds[t] = 'ARG' + t;

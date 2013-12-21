@@ -30,8 +30,8 @@ var Turtle = {};
 
 // Supported languages.
 BlocklyApps.LANGUAGES =
-    ['ar', 'ca', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hu', 'is', 'it',
-     'ko', 'nl', 'pt-br', 'ro', 'ru', 'sv', 'tr', 'uk', 'vi',
+    ['ar', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hu', 'is',
+     'it', 'ko', 'ms', 'nl', 'pl', 'pt-br', 'ro', 'ru', 'sv', 'tr', 'uk', 'vi',
      'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
@@ -112,7 +112,7 @@ Turtle.init = function() {
       '  <block type="draw_move" x="70" y="70">' +
       '    <value name="VALUE">' +
       '      <block type="math_number">' +
-      '        <title name="NUM">100</title>' +
+      '        <field name="NUM">100</field>' +
       '      </block>' +
       '    </value>' +
       '  </block>' +

@@ -171,7 +171,7 @@ Blockly.Field.prototype.render_ = function() {
 };
 
 /**
- * Returns the height and width of the title.
+ * Returns the height and width of the field.
  * @return {!Object} Height and width.
  */
 Blockly.Field.prototype.getSize = function() {

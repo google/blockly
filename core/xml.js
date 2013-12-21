@@ -64,16 +64,16 @@ Blockly.Xml.blockToDom_ = function(block) {
       element.appendChild(mutation);
     }
   }
-  function titleToDom(title) {
-    if (title.name && title.EDITABLE) {
-      var container = goog.dom.createDom('title', null, title.getValue());
-      container.setAttribute('name', title.name);
+  function fieldToDom(field) {
+    if (field.name && field.EDITABLE) {
+      var container = goog.dom.createDom('field', null, field.getValue());
+      container.setAttribute('name', field.name);
       element.appendChild(container);
     }
   }
   for (var x = 0, input; input = block.inputList[x]; x++) {
-    for (var y = 0, title; title = input.titleRow[y]; y++) {
-      titleToDom(title);
+    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+      fieldToDom(field);
     }
   }
 
@@ -304,7 +304,10 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
         }
         break;
       case 'title':
-        block.setTitleValue(xmlChild.textContent, name);
+        // Titles were renamed to field in December 2013.
+        // Fall through.
+      case 'field':
+        block.setFieldValue(xmlChild.textContent, name);
         break;
       case 'value':
       case 'statement':

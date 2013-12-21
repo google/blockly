@@ -30,7 +30,7 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['text'] = function(block) {
   // Text value.
-  var code = Blockly.JavaScript.quote_(block.getTitleValue('TEXT'));
+  var code = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
@@ -65,7 +65,7 @@ Blockly.JavaScript['text_join'] = function(block) {
 Blockly.JavaScript['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.JavaScript.variableDB_.getName(
-      block.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   return varName + ' = String(' + varName + ') + String(' + argument0 + ');\n';
@@ -87,7 +87,7 @@ Blockly.JavaScript['text_isEmpty'] = function(block) {
 
 Blockly.JavaScript['text_indexOf'] = function(block) {
   // Search the text for a substring.
-  var operator = block.getTitleValue('END') == 'FIRST' ?
+  var operator = block.getFieldValue('END') == 'FIRST' ?
       'indexOf' : 'lastIndexOf';
   var argument0 = Blockly.JavaScript.valueToCode(block, 'FIND',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
@@ -100,7 +100,7 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
 Blockly.JavaScript['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
-  var where = block.getTitleValue('WHERE') || 'FROM_START';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.JavaScript.valueToCode(block, 'AT',
       Blockly.JavaScript.ORDER_UNARY_NEGATION) || '1';
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
@@ -149,8 +149,8 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   // Get substring.
   var text = Blockly.JavaScript.valueToCode(block, 'STRING',
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
-  var where1 = block.getTitleValue('WHERE1');
-  var where2 = block.getTitleValue('WHERE2');
+  var where1 = block.getFieldValue('WHERE1');
+  var where2 = block.getFieldValue('WHERE2');
   var at1 = Blockly.JavaScript.valueToCode(block, 'AT1',
       Blockly.JavaScript.ORDER_NONE) || '1';
   var at2 = Blockly.JavaScript.valueToCode(block, 'AT2',
@@ -199,7 +199,7 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
     LOWERCASE: '.toLowerCase()',
     TITLECASE: null
   };
-  var operator = OPERATORS[block.getTitleValue('CASE')];
+  var operator = OPERATORS[block.getFieldValue('CASE')];
   var code;
   if (operator) {
     // Upper and lower case are functions built into JavaScript.
@@ -235,7 +235,7 @@ Blockly.JavaScript['text_trim'] = function(block) {
     RIGHT: '.trimRight()',
     BOTH: '.trim()'
   };
-  var operator = OPERATORS[block.getTitleValue('MODE')];
+  var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   return [argument0 + operator, Blockly.JavaScript.ORDER_FUNCTION_CALL];
@@ -250,9 +250,9 @@ Blockly.JavaScript['text_print'] = function(block) {
 
 Blockly.JavaScript['text_prompt'] = function(block) {
   // Prompt function.
-  var msg = Blockly.JavaScript.quote_(block.getTitleValue('TEXT'));
+  var msg = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
   var code = 'window.prompt(' + msg + ')';
-  var toNumber = block.getTitleValue('TYPE') == 'NUMBER';
+  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
     code = 'parseFloat(' + code + ')';
   }

@@ -114,7 +114,7 @@ Blockly.NEXT_STATEMENT = 3;
  */
 Blockly.PREVIOUS_STATEMENT = 4;
 /**
- * ENUM for an dummy input.  Used to add title(s) with no input.
+ * ENUM for an dummy input.  Used to add field(s) with no input.
  * @const
  */
 Blockly.DUMMY_INPUT = 5;

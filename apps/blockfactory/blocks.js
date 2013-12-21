@@ -28,16 +28,16 @@ Blockly.Blocks['factory_base'] = {
   init: function() {
     this.setColour(120);
     this.appendDummyInput()
-        .appendTitle('name')
-        .appendTitle(new Blockly.FieldTextInput('math_foo'), 'NAME');
+        .appendField('name')
+        .appendField(new Blockly.FieldTextInput('math_foo'), 'NAME');
     this.appendStatementInput('INPUTS')
         .setCheck('Input')
-        .appendTitle('inputs');
+        .appendField('inputs');
     var dropdown = new Blockly.FieldDropdown([
         ['external inputs', 'EXT'],
         ['inline inputs', 'INT']]);
     this.appendDummyInput()
-        .appendTitle(dropdown, 'INLINE');
+        .appendField(dropdown, 'INLINE');
     dropdown = new Blockly.FieldDropdown([
         ['no connections', 'NONE'],
         ['left output', 'LEFT'],
@@ -53,7 +53,7 @@ Blockly.Blocks['factory_base'] = {
             if (!outputExists) {
               block.appendValueInput('OUTPUTTYPE')
                   .setCheck('Type')
-                  .appendTitle('output type');
+                  .appendField('output type');
               block.moveInputBefore('OUTPUTTYPE', 'COLOUR');
             }
           } else if (outputExists) {
@@ -63,7 +63,7 @@ Blockly.Blocks['factory_base'] = {
             if (!topExists) {
               block.appendValueInput('TOPTYPE')
                   .setCheck('Type')
-                  .appendTitle('top type');
+                  .appendField('top type');
               block.moveInputBefore('TOPTYPE', 'COLOUR');
             }
           } else if (topExists) {
@@ -73,7 +73,7 @@ Blockly.Blocks['factory_base'] = {
             if (!bottomExists) {
               block.appendValueInput('BOTTOMTYPE')
                   .setCheck('Type')
-                  .appendTitle('bottom type');
+                  .appendField('bottom type');
               block.moveInputBefore('BOTTOMTYPE', 'COLOUR');
             }
           } else if (bottomExists) {
@@ -81,20 +81,20 @@ Blockly.Blocks['factory_base'] = {
           }
         });
     this.appendDummyInput()
-        .appendTitle(dropdown, 'CONNECTIONS');
+        .appendField(dropdown, 'CONNECTIONS');
     this.appendValueInput('COLOUR')
         .setCheck('Colour')
-        .appendTitle('colour');
+        .appendField('colour');
     /*
     this.appendValueInput('TOOLTIP')
         .setCheck('String')
-        .appendTitle('tooltip');
+        .appendField('tooltip');
     this.appendValueInput('HELP')
         .setCheck('String')
-        .appendTitle('help url');
+        .appendField('help url');
     */
     this.setTooltip('Build a custom block by plugging\n' +
-                    'titles, inputs and other blocks here.');
+                    'fields, inputs and other blocks here.');
   }
 };
 
@@ -106,16 +106,16 @@ Blockly.Blocks['input_value'] = {
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
-        .appendTitle('value input')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
-    this.appendStatementInput('TITLES')
-        .setCheck('Title')
-        .appendTitle('titles')
-        .appendTitle(new Blockly.FieldDropdown(ALIGNMENT_OPTIONS), 'ALIGN');
+        .appendField('value input')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
+    this.appendStatementInput('FIELDS')
+        .setCheck('Field')
+        .appendField('fields')
+        .appendField(new Blockly.FieldDropdown(ALIGNMENT_OPTIONS), 'ALIGN');
     this.appendValueInput('TYPE')
         .setCheck('Type')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle('type');
+        .appendField('type');
     this.setPreviousStatement(true, 'Input');
     this.setNextStatement(true, 'Input');
     this.setTooltip('A value socket for horizontal connections.');
@@ -134,16 +134,16 @@ Blockly.Blocks['input_statement'] = {
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
-        .appendTitle('statement input')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
-    this.appendStatementInput('TITLES')
-        .setCheck('Title')
-        .appendTitle('titles')
-        .appendTitle(new Blockly.FieldDropdown(ALIGNMENT_OPTIONS), 'ALIGN');
+        .appendField('statement input')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
+    this.appendStatementInput('FIELDS')
+        .setCheck('Field')
+        .appendField('fields')
+        .appendField(new Blockly.FieldDropdown(ALIGNMENT_OPTIONS), 'ALIGN');
     this.appendValueInput('TYPE')
         .setCheck('Type')
         .setAlign(Blockly.ALIGN_RIGHT)
-        .appendTitle('type');
+        .appendField('type');
     this.setPreviousStatement(true, 'Input');
     this.setNextStatement(true, 'Input');
     this.setTooltip('A statement socket for enclosed vertical stacks.');
@@ -162,44 +162,44 @@ Blockly.Blocks['input_dummy'] = {
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
-        .appendTitle('dummy input');
-    this.appendStatementInput('TITLES')
-        .setCheck('Title')
-        .appendTitle('titles')
-        .appendTitle(new Blockly.FieldDropdown(ALIGNMENT_OPTIONS), 'ALIGN');
+        .appendField('dummy input');
+    this.appendStatementInput('FIELDS')
+        .setCheck('Field')
+        .appendField('fields')
+        .appendField(new Blockly.FieldDropdown(ALIGNMENT_OPTIONS), 'ALIGN');
     this.setPreviousStatement(true, 'Input');
     this.setNextStatement(true, 'Input');
-    this.setTooltip('For adding titles on a separate\n' +
+    this.setTooltip('For adding fields on a separate\n' +
                     'row with no connections.\n' +
                     'Alignment options (left, right, centre)\n' +
-                    'apply only to multi-line titles.');
+                    'apply only to multi-line fields.');
   }
 };
 
-Blockly.Blocks['title_static'] = {
+Blockly.Blocks['field_static'] = {
   // Text value.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('text')
-        .appendTitle(new Blockly.FieldTextInput(''), 'TEXT');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
+        .appendField('text')
+        .appendField(new Blockly.FieldTextInput(''), 'TEXT');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
     this.setTooltip('Static text that serves as a label.');
   }
 };
 
-Blockly.Blocks['title_input'] = {
+Blockly.Blocks['field_input'] = {
   // Text input.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('text input')
-        .appendTitle(new Blockly.FieldTextInput('default'), 'TEXT')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'TITLENAME');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
+        .appendField('text input')
+        .appendField(new Blockly.FieldTextInput('default'), 'TEXT')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
     this.setTooltip('An input field for the user to enter text.');
   },
   onchange: function() {
@@ -207,21 +207,21 @@ Blockly.Blocks['title_input'] = {
       // Block has been deleted.
       return;
     }
-    titleNameCheck(this);
+    fieldNameCheck(this);
   }
 };
 
-Blockly.Blocks['title_angle'] = {
+Blockly.Blocks['field_angle'] = {
   // Angle input.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('angle input')
-        .appendTitle(new Blockly.FieldAngle('90'), 'ANGLE')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'TITLENAME');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
+        .appendField('angle input')
+        .appendField(new Blockly.FieldAngle('90'), 'ANGLE')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
     this.setTooltip('An input field for the user to enter an angle.');
   },
   onchange: function() {
@@ -229,32 +229,32 @@ Blockly.Blocks['title_angle'] = {
       // Block has been deleted.
       return;
     }
-    titleNameCheck(this);
+    fieldNameCheck(this);
   }
 };
 
-Blockly.Blocks['title_dropdown'] = {
+Blockly.Blocks['field_dropdown'] = {
   // Dropdown menu.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('dropdown')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'TITLENAME');
+        .appendField('dropdown')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
     this.appendDummyInput('OPTION0')
-        .appendTitle(new Blockly.FieldTextInput('option'), 'USER0')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU0');
+        .appendField(new Blockly.FieldTextInput('option'), 'USER0')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU0');
     this.appendDummyInput('OPTION1')
-        .appendTitle(new Blockly.FieldTextInput('option'), 'USER1')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU1');
+        .appendField(new Blockly.FieldTextInput('option'), 'USER1')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU1');
     this.appendDummyInput('OPTION2')
-        .appendTitle(new Blockly.FieldTextInput('option'), 'USER2')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU2');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
-    this.setMutator(new Blockly.Mutator(['title_dropdown_option']));
+        .appendField(new Blockly.FieldTextInput('option'), 'USER2')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU2');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setMutator(new Blockly.Mutator(['field_dropdown_option']));
     this.setTooltip('Dropdown menu with a list of options.');
     this.optionCount_ = 3;
   },
@@ -270,18 +270,18 @@ Blockly.Blocks['title_dropdown'] = {
     this.optionCount_ = parseInt(container.getAttribute('options'), 10);
     for (var x = 0; x < this.optionCount_; x++) {
       var input = this.appendDummyInput('OPTION' + x);
-      input.appendTitle(new Blockly.FieldTextInput('option'), 'USER' + x);
-      input.appendTitle(',');
-      input.appendTitle(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU' + x);
+      input.appendField(new Blockly.FieldTextInput('option'), 'USER' + x);
+      input.appendField(',');
+      input.appendField(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU' + x);
     }
   },
   decompose: function(workspace) {
     var containerBlock = new Blockly.Block(workspace,
-                                           'title_dropdown_container');
+                                           'field_dropdown_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var x = 0; x < this.optionCount_; x++) {
-      var optionBlock = new Blockly.Block(workspace, 'title_dropdown_option');
+      var optionBlock = new Blockly.Block(workspace, 'field_dropdown_option');
       optionBlock.initSvg();
       connection.connect(optionBlock.previousConnection);
       connection = optionBlock.nextConnection;
@@ -298,10 +298,10 @@ Blockly.Blocks['title_dropdown'] = {
     var optionBlock = containerBlock.getInputTargetBlock('STACK');
     while (optionBlock) {
       this.appendDummyInput('OPTION' + this.optionCount_)
-          .appendTitle(new Blockly.FieldTextInput(
+          .appendField(new Blockly.FieldTextInput(
               optionBlock.userData_ || 'option'), 'USER' + this.optionCount_)
-          .appendTitle(',')
-          .appendTitle(new Blockly.FieldTextInput(
+          .appendField(',')
+          .appendField(new Blockly.FieldTextInput(
               optionBlock.cpuData_ || 'OPTIONNAME'), 'CPU' + this.optionCount_);
       this.optionCount_++;
       optionBlock = optionBlock.nextConnection &&
@@ -313,8 +313,8 @@ Blockly.Blocks['title_dropdown'] = {
     var optionBlock = containerBlock.getInputTargetBlock('STACK');
     var x = 0;
     while (optionBlock) {
-      optionBlock.userData_ = this.getTitleValue('USER' + x);
-      optionBlock.cpuData_ = this.getTitleValue('CPU' + x);
+      optionBlock.userData_ = this.getFieldValue('USER' + x);
+      optionBlock.cpuData_ = this.getFieldValue('CPU' + x);
       x++;
       optionBlock = optionBlock.nextConnection &&
           optionBlock.nextConnection.targetBlock();
@@ -328,17 +328,17 @@ Blockly.Blocks['title_dropdown'] = {
     if (this.optionCount_ < 1) {
       this.setWarningText('Drop down menu must\nhave at least one option.');
     } else {
-      titleNameCheck(this);
+      fieldNameCheck(this);
     }
   }
 };
 
-Blockly.Blocks['title_dropdown_container'] = {
+Blockly.Blocks['field_dropdown_container'] = {
   // Container.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('add options');
+        .appendField('add options');
     this.appendStatementInput('STACK');
     this.setTooltip('Add, remove, or reorder options\n' +
                     'to reconfigure this dropdown menu.');
@@ -346,12 +346,12 @@ Blockly.Blocks['title_dropdown_container'] = {
   }
 };
 
-Blockly.Blocks['title_dropdown_option'] = {
+Blockly.Blocks['field_dropdown_option'] = {
   // Add option.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('option');
+        .appendField('option');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Add a new option to the dropdown menu.');
@@ -359,17 +359,17 @@ Blockly.Blocks['title_dropdown_option'] = {
   }
 };
 
-Blockly.Blocks['title_checkbox'] = {
+Blockly.Blocks['field_checkbox'] = {
   // Checkbox.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('checkbox')
-        .appendTitle(new Blockly.FieldCheckbox('TRUE'), 'CHECKED')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'TITLENAME');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
+        .appendField('checkbox')
+        .appendField(new Blockly.FieldCheckbox('TRUE'), 'CHECKED')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
     this.setTooltip('Checkbox field.');
   },
   onchange: function() {
@@ -377,21 +377,21 @@ Blockly.Blocks['title_checkbox'] = {
       // Block has been deleted.
       return;
     }
-    titleNameCheck(this);
+    fieldNameCheck(this);
   }
 };
 
-Blockly.Blocks['title_colour'] = {
+Blockly.Blocks['field_colour'] = {
   // Colour input.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('colour')
-        .appendTitle(new Blockly.FieldColour('#ff0000'), 'COLOUR')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'TITLENAME');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
+        .appendField('colour')
+        .appendField(new Blockly.FieldColour('#ff0000'), 'COLOUR')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
     this.setTooltip('Colour input field.');
   },
   onchange: function() {
@@ -399,21 +399,21 @@ Blockly.Blocks['title_colour'] = {
       // Block has been deleted.
       return;
     }
-    titleNameCheck(this);
+    fieldNameCheck(this);
   }
 };
 
-Blockly.Blocks['title_variable'] = {
+Blockly.Blocks['field_variable'] = {
   // Dropdown for variables.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendTitle('variable')
-        .appendTitle(new Blockly.FieldTextInput('item'), 'TEXT')
-        .appendTitle(',')
-        .appendTitle(new Blockly.FieldTextInput('NAME'), 'TITLENAME');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
+        .appendField('variable')
+        .appendField(new Blockly.FieldTextInput('item'), 'TEXT')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
     this.setTooltip('Dropdown menu for variable names.');
   },
   onchange: function() {
@@ -421,25 +421,25 @@ Blockly.Blocks['title_variable'] = {
       // Block has been deleted.
       return;
     }
-    titleNameCheck(this);
+    fieldNameCheck(this);
   }
 };
 
-Blockly.Blocks['title_image'] = {
+Blockly.Blocks['field_image'] = {
   // Image.
   init: function() {
     this.setColour(160);
     var src = 'http://www.gstatic.com/codesite/ph/images/star_on.gif';
     this.appendDummyInput()
-        .appendTitle('image')
-        .appendTitle(new Blockly.FieldTextInput(src), 'SRC');
+        .appendField('image')
+        .appendField(new Blockly.FieldTextInput(src), 'SRC');
     this.appendDummyInput()
-        .appendTitle('width')
-        .appendTitle(new Blockly.FieldTextInput('15'), 'WIDTH')
-        .appendTitle('height')
-        .appendTitle(new Blockly.FieldTextInput('15'), 'HEIGHT');
-    this.setPreviousStatement(true, 'Title');
-    this.setNextStatement(true, 'Title');
+        .appendField('width')
+        .appendField(new Blockly.FieldTextInput('15'), 'WIDTH')
+        .appendField('height')
+        .appendField(new Blockly.FieldTextInput('15'), 'HEIGHT');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
     this.setTooltip('Static image (JPEG, PNG, GIF, SVG, BMP).\n' +
                     'Retains aspect ratio regardless of height and width.');
   }
@@ -451,7 +451,7 @@ Blockly.Blocks['type_group'] = {
     this.setColour(230);
     this.appendValueInput('TYPE0')
         .setCheck('Type')
-        .appendTitle('any of');
+        .appendField('any of');
     this.appendValueInput('TYPE1')
         .setCheck('Type');
     this.setOutput(true, 'Type');
@@ -473,7 +473,7 @@ Blockly.Blocks['type_group'] = {
       var input = this.appendValueInput('TYPE' + x)
                       .setCheck('Type');
       if (x == 0) {
-        input.appendTitle('any of');
+        input.appendField('any of');
       }
     }
   },
@@ -502,7 +502,7 @@ Blockly.Blocks['type_group'] = {
       var input = this.appendValueInput('TYPE' + this.typeCount_)
                       .setCheck('Type');
       if (this.typeCount_ == 0) {
-        input.appendTitle('any of');
+        input.appendField('any of');
       }
       // Reconnect any child blocks.
       if (typeBlock.valueConnection_) {
@@ -532,7 +532,7 @@ Blockly.Blocks['type_group_container'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('add types');
+        .appendField('add types');
     this.appendStatementInput('STACK');
     this.setTooltip('Add, or remove allowed type.');
     this.contextMenu = false;
@@ -544,7 +544,7 @@ Blockly.Blocks['type_group_item'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('type');
+        .appendField('type');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip('Add a new allowed type.');
@@ -558,7 +558,7 @@ Blockly.Blocks['type_null'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('any');
+        .appendField('any');
     this.setOutput(true, 'Type');
     this.setTooltip('Any type is allowed.');
   }
@@ -570,7 +570,7 @@ Blockly.Blocks['type_boolean'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('boolean');
+        .appendField('boolean');
     this.setOutput(true, 'Type');
     this.setTooltip('Booleans (true/false) are allowed.');
   }
@@ -582,7 +582,7 @@ Blockly.Blocks['type_number'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('number');
+        .appendField('number');
     this.setOutput(true, 'Type');
     this.setTooltip('Numbers (int/float) are allowed.');
   }
@@ -594,7 +594,7 @@ Blockly.Blocks['type_string'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('string');
+        .appendField('string');
     this.setOutput(true, 'Type');
     this.setTooltip('Strings (text) are allowed.');
   }
@@ -606,7 +606,7 @@ Blockly.Blocks['type_list'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('list');
+        .appendField('list');
     this.setOutput(true, 'Type');
     this.setTooltip('Arrays (lists) are allowed.');
   }
@@ -617,8 +617,8 @@ Blockly.Blocks['type_other'] = {
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
-        .appendTitle('other')
-        .appendTitle(new Blockly.FieldTextInput(''), 'TYPE');
+        .appendField('other')
+        .appendField(new Blockly.FieldTextInput(''), 'TYPE');
     this.setOutput(true, 'Type');
     this.setTooltip('Custom type to allow.');
   }
@@ -628,8 +628,8 @@ Blockly.Blocks['colour_hue'] = {
   // Set the colour of the block.
   init: function() {
     this.appendDummyInput()
-        .appendTitle('hue:')
-        .appendTitle(new Blockly.FieldAngle('0', this.validator), 'HUE');
+        .appendField('hue:')
+        .appendField(new Blockly.FieldAngle('0', this.validator), 'HUE');
     this.setOutput(true, 'Colour');
     this.setTooltip('Paint the block with this colour.');
   },
@@ -640,16 +640,16 @@ Blockly.Blocks['colour_hue'] = {
 };
 
 /**
- * Check to see if more than one title has this name.
+ * Check to see if more than one field has this name.
  * Highly inefficient (On^2), but n is small.
  * @param {!Blockly.Block} referenceBlock Block to check.
  */
-function titleNameCheck(referenceBlock) {
-  var name = referenceBlock.getTitleValue('TITLENAME').toLowerCase();
+function fieldNameCheck(referenceBlock) {
+  var name = referenceBlock.getFieldValue('FIELDNAME').toLowerCase();
   var count = 0;
   var blocks = referenceBlock.workspace.getAllBlocks();
   for (var x = 0, block; block = blocks[x]; x++) {
-    var otherName = block.getTitleValue('TITLENAME');
+    var otherName = block.getFieldValue('FIELDNAME');
     if (otherName) {
       if (otherName.toLowerCase() == name) {
         count++;
@@ -657,7 +657,7 @@ function titleNameCheck(referenceBlock) {
     }
   }
   var msg = (count > 1) ?
-      'There are ' + count + ' title blocks\n with this name.' : null;
+      'There are ' + count + ' field blocks\n with this name.' : null;
   referenceBlock.setWarningText(msg);
 }
 
@@ -667,11 +667,11 @@ function titleNameCheck(referenceBlock) {
  * @param {!Blockly.Block} referenceBlock Block to check.
  */
 function inputNameCheck(referenceBlock) {
-  var name = referenceBlock.getTitleValue('INPUTNAME').toLowerCase();
+  var name = referenceBlock.getFieldValue('INPUTNAME').toLowerCase();
   var count = 0;
   var blocks = referenceBlock.workspace.getAllBlocks();
   for (var x = 0, block; block = blocks[x]; x++) {
-    var otherName = block.getTitleValue('INPUTNAME');
+    var otherName = block.getFieldValue('INPUTNAME');
     if (otherName) {
       if (otherName.toLowerCase() == name) {
         count++;

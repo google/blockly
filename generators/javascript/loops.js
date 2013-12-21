@@ -30,7 +30,7 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['controls_repeat'] = function(block) {
   // Repeat n times (internal number).
-  var repeats = Number(block.getTitleValue('TIMES'));
+  var repeats = Number(block.getFieldValue('TIMES'));
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
   if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
     branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
@@ -72,7 +72,7 @@ Blockly.JavaScript['controls_repeat_ext'] = function(block) {
 
 Blockly.JavaScript['controls_whileUntil'] = function(block) {
   // Do while/until loop.
-  var until = block.getTitleValue('MODE') == 'UNTIL';
+  var until = block.getFieldValue('MODE') == 'UNTIL';
   var argument0 = Blockly.JavaScript.valueToCode(block, 'BOOL',
       until ? Blockly.JavaScript.ORDER_LOGICAL_NOT :
       Blockly.JavaScript.ORDER_NONE) || 'false';
@@ -90,7 +90,7 @@ Blockly.JavaScript['controls_whileUntil'] = function(block) {
 Blockly.JavaScript['controls_for'] = function(block) {
   // For loop.
   var variable0 = Blockly.JavaScript.variableDB_.getName(
-      block.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.JavaScript.valueToCode(block, 'FROM',
       Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
   var argument1 = Blockly.JavaScript.valueToCode(block, 'TO',
@@ -158,7 +158,7 @@ Blockly.JavaScript['controls_for'] = function(block) {
 Blockly.JavaScript['controls_forEach'] = function(block) {
   // For each loop.
   var variable0 = Blockly.JavaScript.variableDB_.getName(
-      block.getTitleValue('VAR'), Blockly.Variables.NAME_TYPE);
+      block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.JavaScript.valueToCode(block, 'LIST',
       Blockly.JavaScript.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
@@ -190,7 +190,7 @@ Blockly.JavaScript['controls_forEach'] = function(block) {
 
 Blockly.JavaScript['controls_flow_statements'] = function(block) {
   // Flow statements: continue, break.
-  switch (block.getTitleValue('FLOW')) {
+  switch (block.getFieldValue('FLOW')) {
     case 'BREAK':
       return 'break;\n';
     case 'CONTINUE':

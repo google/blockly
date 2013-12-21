@@ -29,7 +29,7 @@ Blockly.Blocks['graph_get_x'] = {
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
     this.setColour(330);
     this.appendDummyInput()
-        .appendTitle('x');
+        .appendField('x');
     this.setOutput(true, 'Number');
     this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
   }
@@ -46,7 +46,7 @@ Blockly.Blocks['graph_set_y'] = {
     this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
     this.setColour(330);
     this.appendValueInput('VALUE')
-        .appendTitle('y =');
+        .appendField('y =');
     this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
   }
 };

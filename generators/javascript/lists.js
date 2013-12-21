@@ -86,7 +86,7 @@ Blockly.JavaScript['lists_isEmpty'] = function(block) {
 
 Blockly.JavaScript['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  var operator = block.getTitleValue('END') == 'FIRST' ?
+  var operator = block.getFieldValue('END') == 'FIRST' ?
       'indexOf' : 'lastIndexOf';
   var argument0 = Blockly.JavaScript.valueToCode(block, 'FIND',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
@@ -99,8 +99,8 @@ Blockly.JavaScript['lists_indexOf'] = function(block) {
 Blockly.JavaScript['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
-  var mode = block.getTitleValue('MODE') || 'GET';
-  var where = block.getTitleValue('WHERE') || 'FROM_START';
+  var mode = block.getFieldValue('MODE') || 'GET';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.JavaScript.valueToCode(block, 'AT',
       Blockly.JavaScript.ORDER_UNARY_NEGATION) || '1';
   var list = Blockly.JavaScript.valueToCode(block, 'VALUE',
@@ -202,8 +202,8 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   var list = Blockly.JavaScript.valueToCode(block, 'LIST',
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
-  var mode = block.getTitleValue('MODE') || 'GET';
-  var where = block.getTitleValue('WHERE') || 'FROM_START';
+  var mode = block.getFieldValue('MODE') || 'GET';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.JavaScript.valueToCode(block, 'AT',
       Blockly.JavaScript.ORDER_NONE) || '1';
   var value = Blockly.JavaScript.valueToCode(block, 'TO',
@@ -279,8 +279,8 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.JavaScript.valueToCode(block, 'LIST',
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
-  var where1 = block.getTitleValue('WHERE1');
-  var where2 = block.getTitleValue('WHERE2');
+  var where1 = block.getFieldValue('WHERE1');
+  var where2 = block.getFieldValue('WHERE2');
   var at1 = Blockly.JavaScript.valueToCode(block, 'AT1',
       Blockly.JavaScript.ORDER_NONE) || '1';
   var at2 = Blockly.JavaScript.valueToCode(block, 'AT2',

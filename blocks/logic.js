@@ -35,9 +35,9 @@ Blockly.Blocks['controls_if'] = {
     this.setColour(210);
     this.appendValueInput('IF0')
         .setCheck('Boolean')
-        .appendTitle(Blockly.Msg.CONTROLS_IF_MSG_IF);
+        .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF);
     this.appendStatementInput('DO0')
-        .appendTitle(Blockly.Msg.CONTROLS_IF_MSG_THEN);
+        .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setMutator(new Blockly.Mutator(['controls_if_elseif',
@@ -78,13 +78,13 @@ Blockly.Blocks['controls_if'] = {
     for (var x = 1; x <= this.elseifCount_; x++) {
       this.appendValueInput('IF' + x)
           .setCheck('Boolean')
-          .appendTitle(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
       this.appendStatementInput('DO' + x)
-          .appendTitle(Blockly.Msg.CONTROLS_IF_MSG_THEN);
+          .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     }
     if (this.elseCount_) {
       this.appendStatementInput('ELSE')
-          .appendTitle(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
+          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
     }
   },
   decompose: function(workspace) {
@@ -124,9 +124,9 @@ Blockly.Blocks['controls_if'] = {
           this.elseifCount_++;
           var ifInput = this.appendValueInput('IF' + this.elseifCount_)
               .setCheck('Boolean')
-              .appendTitle(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+              .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
           var doInput = this.appendStatementInput('DO' + this.elseifCount_);
-          doInput.appendTitle(Blockly.Msg.CONTROLS_IF_MSG_THEN);
+          doInput.appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
           // Reconnect any child blocks.
           if (clauseBlock.valueConnection_) {
             ifInput.connection.connect(clauseBlock.valueConnection_);
@@ -138,7 +138,7 @@ Blockly.Blocks['controls_if'] = {
         case 'controls_if_else':
           this.elseCount_++;
           var elseInput = this.appendStatementInput('ELSE');
-          elseInput.appendTitle(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
+          elseInput.appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
           // Reconnect any child blocks.
           if (clauseBlock.statementConnection_) {
             elseInput.connection.connect(clauseBlock.statementConnection_);
@@ -185,7 +185,7 @@ Blockly.Blocks['controls_if_if'] = {
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
-        .appendTitle(Blockly.Msg.CONTROLS_IF_IF_TITLE_IF);
+        .appendField(Blockly.Msg.CONTROLS_IF_IF_TITLE_IF);
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg.CONTROLS_IF_IF_TOOLTIP);
     this.contextMenu = false;
@@ -197,7 +197,7 @@ Blockly.Blocks['controls_if_elseif'] = {
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
-        .appendTitle(Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF);
+        .appendField(Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP);
@@ -210,7 +210,7 @@ Blockly.Blocks['controls_if_else'] = {
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
-        .appendTitle(Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE);
+        .appendField(Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE);
     this.setPreviousStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP);
     this.contextMenu = false;
@@ -244,12 +244,12 @@ Blockly.Blocks['logic_compare'] = {
     this.setOutput(true, 'Boolean');
     this.appendValueInput('A');
     this.appendValueInput('B')
-        .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'OP');
+        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
-      var op = thisBlock.getTitleValue('OP');
+      var op = thisBlock.getFieldValue('OP');
       var TOOLTIPS = {
         EQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
         NEQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
@@ -276,12 +276,12 @@ Blockly.Blocks['logic_operation'] = {
         .setCheck('Boolean');
     this.appendValueInput('B')
         .setCheck('Boolean')
-        .appendTitle(new Blockly.FieldDropdown(OPERATORS), 'OP');
+        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
     this.setInputsInline(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
-      var op = thisBlock.getTitleValue('OP');
+      var op = thisBlock.getFieldValue('OP');
       var TOOLTIPS = {
         AND: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND,
         OR: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR
@@ -315,7 +315,7 @@ Blockly.Blocks['logic_boolean'] = {
     this.setColour(210);
     this.setOutput(true, 'Boolean');
     this.appendDummyInput()
-        .appendTitle(new Blockly.FieldDropdown(BOOLEANS), 'BOOL');
+        .appendField(new Blockly.FieldDropdown(BOOLEANS), 'BOOL');
     this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
   }
 };
@@ -327,7 +327,7 @@ Blockly.Blocks['logic_null'] = {
     this.setColour(210);
     this.setOutput(true);
     this.appendDummyInput()
-        .appendTitle(Blockly.Msg.LOGIC_NULL);
+        .appendField(Blockly.Msg.LOGIC_NULL);
     this.setTooltip(Blockly.Msg.LOGIC_NULL_TOOLTIP);
   }
 };
@@ -339,11 +339,11 @@ Blockly.Blocks['logic_ternary'] = {
     this.setColour(210);
     this.appendValueInput('IF')
         .setCheck('Boolean')
-        .appendTitle(Blockly.Msg.LOGIC_TERNARY_CONDITION);
+        .appendField(Blockly.Msg.LOGIC_TERNARY_CONDITION);
     this.appendValueInput('THEN')
-        .appendTitle(Blockly.Msg.LOGIC_TERNARY_IF_TRUE);
+        .appendField(Blockly.Msg.LOGIC_TERNARY_IF_TRUE);
     this.appendValueInput('ELSE')
-        .appendTitle(Blockly.Msg.LOGIC_TERNARY_IF_FALSE);
+        .appendField(Blockly.Msg.LOGIC_TERNARY_IF_FALSE);
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.LOGIC_TERNARY_TOOLTIP);
   }

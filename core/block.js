@@ -285,7 +285,7 @@ Blockly.Block.prototype.dispose = function(healStack, animate) {
   for (var x = 0; x < icons.length; x++) {
     icons[x].dispose();
   }
-  // Dispose of all inputs and their titles.
+  // Dispose of all inputs and their fields.
   for (var x = 0, input; input = this.inputList[x]; x++) {
     input.dispose();
   }
@@ -1041,8 +1041,8 @@ Blockly.Block.prototype.isEditable = function() {
 Blockly.Block.prototype.setEditable = function(editable) {
   this.editable_ = editable;
   for (var x = 0, input; input = this.inputList[x]; x++) {
-    for (var y = 0, title; title = input.titleRow[y]; y++) {
-      title.updateEditable();
+    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+      field.updateEditable();
     }
   }
   var icons = this.getIcons();
@@ -1084,8 +1084,8 @@ Blockly.Block.prototype.setColour = function(colourHue) {
   if (this.rendered) {
     // Bump every dropdown to change its colour.
     for (var x = 0, input; input = this.inputList[x]; x++) {
-      for (var y = 0, title; title = input.titleRow[y]; y++) {
-        title.setText(null);
+      for (var y = 0, field; field = input.fieldRow[y]; y++) {
+        field.setText(null);
       }
     }
     this.render();
@@ -1093,16 +1093,16 @@ Blockly.Block.prototype.setColour = function(colourHue) {
 };
 
 /**
- * Returns the named title from a block.
- * @param {string} name The name of the title.
- * @return {Blockly.Field} Named title, or null if title does not exist.
+ * Returns the named field from a block.
+ * @param {string} name The name of the field.
+ * @return {Blockly.Field} Named field, or null if field does not exist.
  * @private
  */
-Blockly.Block.prototype.getTitle_ = function(name) {
+Blockly.Block.prototype.getField_ = function(name) {
   for (var x = 0, input; input = this.inputList[x]; x++) {
-    for (var y = 0, title; title = input.titleRow[y]; y++) {
-      if (title.name === name) {
-        return title;
+    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+      if (field.name === name) {
+        return field;
       }
     }
   }
@@ -1110,27 +1110,49 @@ Blockly.Block.prototype.getTitle_ = function(name) {
 };
 
 /**
- * Returns the language-neutral value from the title of a block.
- * @param {string} name The name of the title.
- * @return {?string} Value from the title or null if title does not exist.
+ * Returns the language-neutral value from the field of a block.
+ * @param {string} name The name of the field.
+ * @return {?string} Value from the field or null if field does not exist.
  */
-Blockly.Block.prototype.getTitleValue = function(name) {
-  var title = this.getTitle_(name);
-  if (title) {
-    return title.getValue();
+Blockly.Block.prototype.getFieldValue = function(name) {
+  var field = this.getField_(name);
+  if (field) {
+    return field.getValue();
   }
   return null;
 };
 
 /**
- * Change the title value for a block (e.g. 'CHOOSE' or 'REMOVE').
- * @param {string} newValue Value to be the new title.
- * @param {string} name The name of the title.
+ * Returns the language-neutral value from the field of a block.
+ * @param {string} name The name of the field.
+ * @return {?string} Value from the field or null if field does not exist.
+ * @deprecated December 2013
+ */
+Blockly.Block.prototype.getTitleValue = function(name) {
+  console.log('Deprecated call to getTitleValue, use getFieldValue instead.');
+  return this.getFieldValue(name);
+};
+
+/**
+ * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
+ * @param {string} newValue Value to be the new field.
+ * @param {string} name The name of the field.
+ */
+Blockly.Block.prototype.setFieldValue = function(newValue, name) {
+  var field = this.getField_(name);
+  goog.asserts.assertObject(field, 'Field "%s" not found.', name);
+  field.setValue(newValue);
+};
+
+/**
+ * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
+ * @param {string} newValue Value to be the new field.
+ * @param {string} name The name of the field.
+ * @deprecated December 2013
  */
 Blockly.Block.prototype.setTitleValue = function(newValue, name) {
-  var title = this.getTitle_(name);
-  goog.asserts.assertObject(title, 'Title "%s" not found.', name);
-  title.setValue(newValue);
+  console.log('Deprecated call to setTitleValue, use setFieldValue instead.');
+  this.setFieldValue(newValue, name);
 };
 
 /**
@@ -1316,7 +1338,7 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
       icons[x].setVisible(false);
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
-    this.appendDummyInput(COLLAPSED_INPUT_NAME).appendTitle(text);
+    this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text);
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME)
   }
@@ -1341,8 +1363,8 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 Blockly.Block.prototype.toString = function(opt_maxLength) {
   var text = [];
   for (var x = 0, input; input = this.inputList[x]; x++) {
-    for (var y = 0, title; title = input.titleRow[y]; y++) {
-      text.push(title.getText());
+    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+      text.push(field.getText());
     }
     if (input.connection) {
       var child = input.connection.targetBlock();
@@ -1393,12 +1415,12 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
 };
 
 /**
- * Interpolate a message string, creating titles and inputs.
+ * Interpolate a message string, creating fields and inputs.
  * @param {string} msg The message string to parse.  %1, %2, etc. are symbols
  *     for value inputs.
  * @param {!Array.<string|number>|number} var_args A series of tuples that
  *     each specify the value inputs to create.  Each tuple has three values:
- *     the input name, its check type, and its title's alignment.  The last
+ *     the input name, its check type, and its field's alignment.  The last
  *     parameter is not a tuple, but just an alignment for any trailing dummy
  *     input.  This last parameter is mandatory; there may be any number of
  *     tuples (though the number of tuples must match the symbols in msg).
@@ -1428,13 +1450,13 @@ Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
       this.appendValueInput(tuple[0])
           .setCheck(tuple[1])
           .setAlign(tuple[2])
-          .appendTitle(text);
+          .appendField(text);
       arguments[digit] = null;  // Inputs may not be reused.
     } else if (text) {
       // Trailing dummy input.
       this.appendDummyInput()
           .setAlign(dummyAlign)
-          .appendTitle(text);
+          .appendField(text);
     }
   }
   // Verify that all inputs were used.

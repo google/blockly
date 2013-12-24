@@ -3,7 +3,8 @@
         "authors": [
             "Dorongol",
             "Orsa",
-            "YaronSh"
+            "YaronSh",
+            "Inkbug"
         ]
     },
     "Apps.subtitle": "סביבת תיכנות חזותי",
@@ -45,7 +46,7 @@
     "Maze.maze": "מבוך",
     "Apps.mazeSubtitle": "השתמש בבלוקלי בכדי לפתור מבוך",
     "Turtle.title": "גרפיקת צב",
-    "Apps.turtleSubtitle": "השתמש בבלוקלי בכדי לצייר",
+    "Apps.turtleSubtitle": "השתמש בבלוקלי כדי לצייר",
     "Apps.graphSubtitle": "הצג פונקציות עם בלוקלי",
     "Apps.codeSubtitle": "ייצא תוכנית בלוקלי לג'אווה סקריפט, פייתון או XML.",
     "Plane.plane": "מחשבון מושב במטוס",

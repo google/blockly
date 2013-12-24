@@ -164,5 +164,14 @@
     "MATH_RANDOM_FLOAT_TOOLTIP": "A smon na frassion aleatòria antra 0,0 (comprèis) e 1,0 (esclus).",
     "TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",
     "TEXT_TEXT_TOOLTIP": "Na litra, na paròla o na linia ëd test.",
-    "TEXT_JOIN_TITLE_CREATEWITH": "creé ël test con"
+    "TEXT_JOIN_TITLE_CREATEWITH": "creé ël test con",
+    "TEXT_JOIN_TOOLTIP": "Creé un tòch ëd test an gionzend un nùmer qualsëssìa d'element.",
+    "TEXT_CREATE_JOIN_TITLE_JOIN": "gionze",
+    "TEXT_CREATE_JOIN_TOOLTIP": "Gionté, gavé o riordiné le session për configuré torna ës blòch ëd test.",
+    "TEXT_CREATE_JOIN_ITEM_TOOLTIP": "Gionté n'element al test.",
+    "TEXT_APPEND_TO": "a",
+    "TEXT_APPEND_APPENDTEXT": "taché ël test",
+    "TEXT_APPEND_TOOLTIP": "Taché dël test a la variàbil '%1'.",
+    "TEXT_LENGTH_TITLE": "longheur ëd %1",
+    "TEXT_LENGTH_TOOLTIP": "A smon ël nùmer ëd litre (spassi comprèis) ant ël test fornì."
 }

@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Shirayuki"
+            "Shirayuki",
+            "Oda"
         ]
     },
     "VARIABLES_DEFAULT_NAME": "項目",
@@ -238,9 +239,9 @@
     "TEXT_CHANGECASE_OPERATOR_TITLECASE": "タイトル ケースに",
     "TEXT_TRIM_HELPURL": "https://code.google.com/p/blockly/wiki/Text#Trimming_%28removing%29_spaces",
     "TEXT_TRIM_TOOLTIP": "スペースを 1 つまたは両方の端から削除したのち、テキストのコピーを返します。",
-    "TEXT_TRIM_OPERATOR_BOTH": "両側からのスペースをトリミングします。",
-    "TEXT_TRIM_OPERATOR_LEFT": "左側からスペースをトリミングします。",
-    "TEXT_TRIM_OPERATOR_RIGHT": "右側からスペースをトリミングします。",
+    "TEXT_TRIM_OPERATOR_BOTH": "両端のスペースを取り除く",
+    "TEXT_TRIM_OPERATOR_LEFT": "左端のスペースを取り除く",
+    "TEXT_TRIM_OPERATOR_RIGHT": "右端のスペースを取り除く",
     "TEXT_PRINT_HELPURL": "https://code.google.com/p/blockly/wiki/Text#Printing_text",
     "TEXT_PRINT_TITLE": "%1 を印刷します。",
     "TEXT_PRINT_TOOLTIP": "指定したテキスト、番号または他の値を印刷します。",

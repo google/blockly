@@ -3,7 +3,8 @@
         "authors": [
             "Anakmalaysia",
             "Aurora",
-            "Kurniasan"
+            "Kurniasan",
+            "Espertus"
         ]
     },
     "Apps.subtitle": "persekitaran pengaturcaraan visual",
@@ -148,6 +149,7 @@
     "Turtle.printHelpUrl": "https://ms.wikipedia.org/wiki/Pencetakan",
     "Turtle.printTooltip": "Melukis teks di arah kekura pada kedudukannya.",
     "Turtle.print": "cetak",
+    "Turtle.fontHelpUrl": "https://ms.wikipedia.org/wiki/Tipografi",
     "Turtle.fontTooltip": "Menetapkan fon (rupa huruf) yang digunakan oleh blok cetak.",
     "Turtle.font": "fon",
     "Turtle.fontSize": "saiz fon",

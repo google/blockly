@@ -173,5 +173,8 @@
     "TEXT_APPEND_APPENDTEXT": "taché ël test",
     "TEXT_APPEND_TOOLTIP": "Taché dël test a la variàbil '%1'.",
     "TEXT_LENGTH_TITLE": "longheur ëd %1",
-    "TEXT_LENGTH_TOOLTIP": "A smon ël nùmer ëd litre (spassi comprèis) ant ël test fornì."
+    "TEXT_LENGTH_TOOLTIP": "A smon ël nùmer ëd litre (spassi comprèis) ant ël test fornì.",
+    "TEXT_ISEMPTY_TITLE": "%1 a l'é veuid",
+    "TEXT_ISEMPTY_TOOLTIP": "A smon ver se ël test fornì a l'é veuid.",
+    "TEXT_INDEXOF_TOOLTIP": "A smon l'ìndes dla prima/ùltima ocorensa dël prim test ant ël second test. A smon 0 se ël test a l'é nen trovà."
 }

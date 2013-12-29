@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Shirayuki"
+            "Shirayuki",
+            "Oda"
         ]
     },
     "Apps.subtitle": "視覚的なプログラミング環境",
@@ -20,17 +21,21 @@
     "Apps.catLists": "リスト",
     "Apps.catColour": "色",
     "Apps.catVariables": "変数",
+    "Apps.catProcedures": "手続き",
     "Apps.httpRequestError": "ネットワーク接続のエラーです。",
     "Apps.linkAlert": "ブロックの状態をこのリンクで共有できます:\n\n%1",
     "Apps.hashError": "すみません。「%1」という名前のプログラムは保存されていません。",
     "Apps.xmlError": "保存されたファイルを読み込めませんでした。別のバージョンのブロックリーで作成された可能性があります。",
+    "Apps.listVariable": "リスト",
     "Apps.textVariable": "テキスト",
     "Code.badXml": "XML のエラーです:\n%1\n\nXML の変更をやめるには「OK」、編集を続けるには「キャンセル」を選んでください。",
     "Code.badCode": "プログラムのエラー:\n%1",
+    "Code.timeout": "命令の実行回数が制限値を超えました。",
     "Code.discard": "%1 個すべてのブロックを消しますか?",
     "Code.title": "コード",
     "Code.blocks": "ブロック",
     "Code.trashTooltip": "すべてのブロックを消します。",
+    "Graph.title": "グラフ電卓",
     "Apps.indexTitle": "ブロックリーのアプリ",
     "Apps.indexFooter": "ブロックリーはフリーでありオープンソースです。ブロックリーのコードや翻訳に貢献、またはブロックリーを自分のアプリに使用するには、%1 を参照してください。",
     "Apps.choiceIntro": "ブロックリーはグラフィカルなプログラミング環境です。以下に列挙したサンプル アプリケーションはブロックリーを使用しています。",
@@ -45,6 +50,7 @@
     "Plane.plane": "飛行機座席計算機",
     "Apps.planeSubtitle": "1変数または2変数の数学の問題を解きましょう。",
     "Apps.blockFactory": "ブロック工場",
+    "Apps.blockfactorySubtitle": "ブロックリーで特製ブロックを作る。",
     "Maze.moveForward": "まっすぐ進む",
     "Maze.turnLeft": "左を向く",
     "Maze.turnRight": "右を向く",
@@ -54,6 +60,7 @@
     "Maze.pathAhead": "もしまっすぐ進めるなら",
     "Maze.pathLeft": "もし左に進めるなら",
     "Maze.pathRight": "もし右に進めるなら",
+    "Maze.repeatUntil": "「まで繰り返す」",
     "Maze.moveForwardTooltip": "プレーヤーがまっすぐ 1 マス進みます。",
     "Maze.turnTooltip": "プレーヤーが左または右に 90 度向きを変えます。",
     "Maze.ifTooltip": "選んだ方向に進める場合は、何か動作をします。",
@@ -63,9 +70,11 @@
     "Maze.capacity1": "残り %1 ブロックです。",
     "Maze.capacity2": "残り %2 ブロックです。",
     "Maze.nextLevel": "おめでとう! 次のレベル %1 に進みますか?",
+    "Maze.finalLevel": "おめでとうございます！最後の面を解きました。",
     "Maze.runTooltip": "並べたブロックの動作をプレーヤーに実行させます。",
     "Maze.resetTooltip": "プレーヤーを迷路の最初の場所に戻します。",
     "Maze.helpStack": "「まっすぐ進む」のブロックをいくつか縦につないで、ゴールに連れて行ってください。",
+    "Maze.helpOneTopBlock": "この面では、何もないワークスペースに、すべてのブロックを配置する必要があります。",
     "Maze.helpRun": "動作を見るには、プログラムを実行してください。",
     "Maze.helpReset": "あなたのプログラムでは迷路を解けませんでした。「リセット」を押してやり直してください。",
     "Maze.helpRepeat": "2 個のブロックだけでゴールしてください。ブロックを繰り返し実行する「繰り返し」を使ってください。",
@@ -146,6 +155,7 @@
     "Turtle.fontBold": "太字",
     "Turtle.fontItalic": "斜体",
     "Turtle.unloadWarning": "このページから離れると、作った作品が失われます。",
+    "Turtle.runTooltip": "ブロックに書かれた通りの動きをタートルにさせてください。",
     "Turtle.captureTooltip": "絵を保存します。",
     "Turtle.imgFilename": "お絵描き.png",
     "Turtle.catTurtle": "タートル"

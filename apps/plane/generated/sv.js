@@ -36,7 +36,7 @@ if (typeof planepage == 'undefined') { var planepage = {}; }
 
 
 planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Rader: %1</span><span id="Plane_getRows">rader (%1)</span><span id="Plane_rows1">1:a klassens rader: %1</span><span id="Plane_getRows1">1:a klassens rader (%1)</span><span id="Plane_rows2">2:a klassens rader: %1</span><span id="Plane_getRows2">1:a klassens rader (%1)</span><span id="Plane_seats">Säten: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">sittplatser =</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Rader: %1</span><span id="Plane_getRows">rader (%1)</span><span id="Plane_rows1">Rader i första klass: %1</span><span id="Plane_getRows1">Rader i första klass (%1)</span><span id="Plane_rows2">Rader i andra klass: %1</span><span id="Plane_getRows2">Rader i andra klass (%1)</span><span id="Plane_seats">Säten: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">säten =</span></div>';
 };
 
 

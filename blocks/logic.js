@@ -286,7 +286,7 @@ Blockly.Blocks['logic_operation'] = {
         AND: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND,
         OR: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR
       };
-      return thisBlock.TOOLTIPS[op];
+      return TOOLTIPS[op];
     });
   }
 };
@@ -300,7 +300,7 @@ Blockly.Blocks['logic_negate'] = {
     this.setOutput(true, 'Boolean');
     this.interpolateMsg(Blockly.Msg.LOGIC_NEGATE_TITLE,
                         ['BOOL', 'Boolean', Blockly.ALIGN_RIGHT],
-                        Blockly.ALIGN_RIGHT)
+                        Blockly.ALIGN_RIGHT);
     this.setTooltip(Blockly.Msg.LOGIC_NEGATE_TOOLTIP);
   }
 };

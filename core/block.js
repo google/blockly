@@ -1532,12 +1532,12 @@ Blockly.Block.prototype.moveInputBefore = function(name, refName) {
  * @param {number} refIndex Index of input that should be after the moved input.
  */
 Blockly.Block.prototype.moveNumberedInputBefore = function(
-  inputIndex, refIndex) {
+    inputIndex, refIndex) {
   // Validate arguments.
   goog.asserts.assert(inputIndex != refIndex, 'Can\'t move input to itself.');
   goog.asserts.assert(inputIndex < this.inputList.length,
                       'Input index ' + inputIndex + ' out of bounds.')
-  goog.asserts.assert(refIndex < this.inputList.length,
+  goog.asserts.assert(refIndex <= this.inputList.length,
                       'Reference input ' + refIndex + ' out of bounds.')
   // Remove input.
   var input = this.inputList[inputIndex];

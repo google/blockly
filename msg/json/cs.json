@@ -141,6 +141,7 @@
     "MATH_IS_NEGATIVE": "je záporné",
     "MATH_IS_DIVISIBLE_BY": "je dělitelné",
     "MATH_IS_TOOLTIP": "Kontrola, zda je číslo sudé, liché, prvočíslo, celé, kladné, záporné nebo zda je dělitelné daným číslem. Vrací pravdu nebo nepravdu.",
+    "MATH_CHANGE_HELPURL": "https://pt.wikipedia.org/wiki/Adi%C3%A7%C3%A3o",
     "MATH_CHANGE_TITLE_CHANGE": "změnit",
     "MATH_CHANGE_INPUT_BY": "od",
     "MATH_CHANGE_TOOLTIP": "Přičti číslo k proměnné '%1'.",

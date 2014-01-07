@@ -2,7 +2,8 @@
     "@metadata": {
         "authors": [
             "Fitoschido",
-            "VegaDark"
+            "VegaDark",
+            "WeSiToS"
         ]
     },
     "VARIABLES_DEFAULT_NAME": "elemento",
@@ -201,9 +202,9 @@
     "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "a minúsculas",
     "TEXT_CHANGECASE_OPERATOR_TITLECASE": "a mayúsculas cada palabra",
     "TEXT_TRIM_TOOLTIP": "Devuelve una copia del texto con espacios retirados de uno o ambos extremos.",
-    "TEXT_TRIM_OPERATOR_BOTH": "recortar espacios de ambos lados",
-    "TEXT_TRIM_OPERATOR_LEFT": "recortar espacios del lado izquierdo",
-    "TEXT_TRIM_OPERATOR_RIGHT": "recortar espacios del lado derecho",
+    "TEXT_TRIM_OPERATOR_BOTH": "quitar espacios de ambos lados de",
+    "TEXT_TRIM_OPERATOR_LEFT": "quitar espacios al inicio de",
+    "TEXT_TRIM_OPERATOR_RIGHT": "quitar espacios al final de",
     "TEXT_PRINT_TITLE": "imprimir %1",
     "TEXT_PRINT_TOOLTIP": "Imprimir el texto especificado, número u otro valor.",
     "TEXT_PROMPT_TYPE_TEXT": "solicitar el texto con el mensaje",

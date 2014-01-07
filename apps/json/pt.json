@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Luckas"
+            "Luckas",
+            "Espertus"
         ]
     },
     "Apps.blocklyMessage": "Blockly",
@@ -56,6 +57,7 @@
     "Puzzle.country1Language": "Inglês",
     "Puzzle.country1City1": "Melbourne",
     "Puzzle.country1City2": "Sydney",
+    "Puzzle.country1HelpUrl": "http://pt.wikipedia.org/wiki/Austr%C3%A1lia",
     "Puzzle.country2": "Alemanha",
     "Puzzle.country2Language": "Alemão",
     "Puzzle.country2City1": "Berlim",
@@ -65,6 +67,7 @@
     "Puzzle.country3Language": "Chinês",
     "Puzzle.country3City1": "Pequim",
     "Puzzle.country3City2": "Xangai",
+    "Puzzle.country3HelpUrl": "https://pt.wikipedia.org/wiki/Rep%C3%BAblica_Popular_da_China",
     "Puzzle.country4": "Brasil",
     "Puzzle.country4Language": "Português",
     "Puzzle.country4City1": "Rio de Janeiro",
@@ -76,6 +79,8 @@
     "Puzzle.cities": "cidades:",
     "Puzzle.help": "Ajuda",
     "Puzzle.checkAnswers": "Verificar respostas",
+    "Turtle.printHelpUrl": "https://pt.wikipedia.org/wiki/Impress%C3%A3o",
+    "Turtle.fontHelpUrl": "https://pt.wikipedia.org/wiki/Fonte_tipogr%C3%A1fica",
     "Turtle.font": "fonte",
     "Turtle.fontSize": "tamanho da fonte",
     "Turtle.fontNormal": "normal",

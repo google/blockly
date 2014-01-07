@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Ebraminio"
+            "Ebraminio",
+            "Reza1615"
         ]
     },
     "VARIABLES_DEFAULT_NAME": "مورد",
@@ -200,9 +201,9 @@
     "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "به حروف کوچک",
     "TEXT_CHANGECASE_OPERATOR_TITLECASE": "به حروف بزرگ عنوان",
     "TEXT_TRIM_TOOLTIP": "کپی از متن با فاصله‌های حذف‌شده از یک یا هر دو پایان باز می‌گرداند.",
-    "TEXT_TRIM_OPERATOR_BOTH": "تراشیدن فاصله‌ها از هر دو طرف",
-    "TEXT_TRIM_OPERATOR_LEFT": "تراشیدن فاصله‌ها از طرف چپ",
-    "TEXT_TRIM_OPERATOR_RIGHT": "تراشیدن فاصله‌ها از طرف چپ",
+    "TEXT_TRIM_OPERATOR_BOTH": "تراشیدن فاصله‌ها از  هر دو طرف",
+    "TEXT_TRIM_OPERATOR_LEFT": "تراشیدن فاصله‌ها از  طرف چپ",
+    "TEXT_TRIM_OPERATOR_RIGHT": "تراشیدن فاصله‌ها از  طرف چپ",
     "TEXT_PRINT_TITLE": "چاپ %1",
     "TEXT_PRINT_TOOLTIP": "چاپ متن، عدد یا هر مقدار دیگر مشخص‌شده.",
     "TEXT_PROMPT_TYPE_TEXT": "اعلان برای متن با پیام",
@@ -290,5 +291,5 @@
     "PROCEDURES_HIGHLIGHT_DEF": "برجسته‌سازی تعریف تابع",
     "PROCEDURES_CREATE_DO": "ساختن «%1»",
     "PROCEDURES_IFRETURN_TOOLTIP": "اگر یک مقدار صحیح است، مقدار دوم را برگردان.",
-    "PROCEDURES_IFRETURN_WARNING": "اخطار: این بلوگ احتمالاً فقط داخل یک تابع استفاده می‌شود."
+    "PROCEDURES_IFRETURN_WARNING": "اخطار: این بلوک احتمالاً فقط داخل یک تابع استفاده می‌شود."
 }

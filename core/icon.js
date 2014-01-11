@@ -88,7 +88,7 @@ Blockly.Icon.prototype.dispose = function() {
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
 Blockly.Icon.prototype.updateEditable = function() {
-  if (this.block_.isEditable() && !this.block_.isInFlyout) {
+  if (!this.block_.isInFlyout) {
     Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
                       'blocklyIconGroup');
   } else {
@@ -111,7 +111,7 @@ Blockly.Icon.prototype.isVisible = function() {
  * @private
  */
 Blockly.Icon.prototype.iconClick_ = function(e) {
-  if (this.block_.isEditable() && !this.block_.isInFlyout) {
+  if (!this.block_.isInFlyout) {
     this.setVisible(!this.isVisible());
   }
 };

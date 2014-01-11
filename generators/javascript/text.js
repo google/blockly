@@ -127,19 +127,14 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       var code = text + '.slice(-' + at + ').charAt(0)';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 'RANDOM':
-      if (!Blockly.JavaScript.definitions_['text_random_letter']) {
-        var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-            'text_random_letter', Blockly.Generator.NAME_TYPE);
-        Blockly.JavaScript.text_charAt.text_random_letter = functionName;
-        var func = [];
-        func.push('function ' + functionName + '(text) {');
-        func.push('  var x = Math.floor(Math.random() * text.length);');
-        func.push('  return text[x];');
-        func.push('}');
-        Blockly.JavaScript.definitions_['text_random_letter'] = func.join('\n');
-      }
-      code = Blockly.JavaScript.text_charAt.text_random_letter +
-          '(' + text + ')';
+      var functionName = Blockly.JavaScript.provideFunction_(
+          'text_random_letter',
+          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+              '(text) {',
+            '  var x = Math.floor(Math.random() * text.length);',
+            '  return text[x];',
+            '}']);
+      code = functionName + '(' + text + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
   throw 'Unhandled option (text_charAt).';
@@ -158,35 +153,29 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
   } else {
-    if (!Blockly.JavaScript.definitions_['text_get_substring']) {
-      var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-          'text_get_substring', Blockly.Generator.NAME_TYPE);
-      Blockly.JavaScript.text_getSubstring.func = functionName;
-      var func = [];
-      func.push('function ' + functionName +
-          '(text, where1, at1, where2, at2) {');
-      func.push('  function getAt(where, at) {');
-      func.push('    if (where == \'FROM_START\') {');
-      func.push('      at--;');
-      func.push('    } else if (where == \'FROM_END\') {');
-      func.push('      at = text.length - at;');
-      func.push('    } else if (where == \'FIRST\') {');
-      func.push('      at = 0;');
-      func.push('    } else if (where == \'LAST\') {');
-      func.push('      at = text.length - 1;');
-      func.push('    } else {');
-      func.push('      throw \'Unhandled option (text_getSubstring).\';');
-      func.push('    }');
-      func.push('    return at;');
-      func.push('  }');
-      func.push('  at1 = getAt(where1, at1);');
-      func.push('  at2 = getAt(where2, at2) + 1;');
-      func.push('  return text.slice(at1, at2);');
-      func.push('}');
-      Blockly.JavaScript.definitions_['text_get_substring'] =
-          func.join('\n');
-    }
-    var code = Blockly.JavaScript.text_getSubstring.func + '(' + text + ', \'' +
+    var functionName = Blockly.JavaScript.provideFunction_(
+        'text_get_substring',
+        [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+            '(text, where1, at1, where2, at2) {',
+          '  function getAt(where, at) {',
+          '    if (where == \'FROM_START\') {',
+          '      at--;',
+          '    } else if (where == \'FROM_END\') {',
+          '      at = text.length - at;',
+          '    } else if (where == \'FIRST\') {',
+          '      at = 0;',
+          '    } else if (where == \'LAST\') {',
+          '      at = text.length - 1;',
+          '    } else {',
+          '      throw \'Unhandled option (text_getSubstring).\';',
+          '    }',
+          '    return at;',
+          '  }',
+          '  at1 = getAt(where1, at1);',
+          '  at2 = getAt(where2, at2) + 1;',
+          '  return text.slice(at1, at2);',
+          '}']);
+    var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
@@ -207,23 +196,17 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
         Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
     code = argument0 + operator;
   } else {
-    if (!Blockly.JavaScript.definitions_['text_toTitleCase']) {
-      // Title case is not a native JavaScript function.  Define one.
-      var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-          'text_toTitleCase', Blockly.Generator.NAME_TYPE);
-      Blockly.JavaScript.text_changeCase.toTitleCase = functionName;
-      var func = [];
-      func.push('function ' + functionName + '(str) {');
-      func.push('  return str.replace(/\\S+/g,');
-      func.push('      function(txt) {return txt[0].toUpperCase() + ' +
-                'txt.substring(1).toLowerCase();});');
-      func.push('}');
-      Blockly.JavaScript.definitions_['text_toTitleCase'] = func.join('\n');
-    }
+    // Title case is not a native JavaScript function.  Define one.
+    var functionName = Blockly.JavaScript.provideFunction_(
+        'text_toTitleCase',
+        [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(str) {',
+          '  return str.replace(/\\S+/g,',
+          '      function(txt) {return txt[0].toUpperCase() + ' +
+              'txt.substring(1).toLowerCase();});',
+          '}']);
     var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = Blockly.JavaScript.text_changeCase.toTitleCase +
-        '(' + argument0 + ')';
+    code = functionName + '(' + argument0 + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

@@ -568,7 +568,7 @@ Blockly.Block.prototype.showContextMenu_ = function(xy) {
     }
     options.push(duplicateOption);
 
-    if (Blockly.Comment && !this.collapsed_) {
+    if (this.isEditable() && !this.collapsed_) {
       // Option to add/remove a comment.
       var commentOption = {enabled: true};
       if (this.comment) {
@@ -1417,15 +1417,50 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
 /**
  * Interpolate a message string, creating fields and inputs.
  * @param {string} msg The message string to parse.  %1, %2, etc. are symbols
- *     for value inputs.
- * @param {!Array.<string|number>|number} var_args A series of tuples that
- *     each specify the value inputs to create.  Each tuple has three values:
- *     the input name, its check type, and its field's alignment.  The last
- *     parameter is not a tuple, but just an alignment for any trailing dummy
- *     input.  This last parameter is mandatory; there may be any number of
- *     tuples (though the number of tuples must match the symbols in msg).
+ *     for value inputs or for Fields, such as an instance of
+ *     Blockly.FieldDropdown, which would be placed as a field in either the
+ *     following value input or a dummy input.  The newline character forces
+ *     the creation of an unnamed dummy input if any fields need placement.
+ *     Note that '%10' would be interpreted as a reference to the tenth
+ *     argument.  To show the first argument followed by a zero, use '%1 0'.
+ *     (Spaces around tokens are stripped.)  To display a percentage sign
+ *     followed by a number (e.g., "%123"), put that text in a
+ *     Blockly.FieldLabel (as described below).
+ * @param {!Array.<?string|number|Array.<string>|Blockly.Field>|number} var_args
+ *     A series of tuples that each specify the value inputs to create.  Each
+ *     tuple has at least two elements.  The first is its name; the second is
+ *     its type, which can be any of:
+ *     - A string (such as 'Number'), denoting the one type allowed in the
+ *       corresponding socket.
+ *     - An array of strings (such as ['Number', 'List']), denoting the
+ *       different types allowed in the corresponding socket.
+ *     - null, denoting that any type is allowed in the corresponding socket.
+ *     - Blockly.Field, in which case that field instance, such as an
+ *       instance of Blockly.FieldDropdown, appears (instead of a socket).
+ *     If the type is any of the first three options (which are legal arguments
+ *     to setCheck()), there should be a third element in the tuple, giving its
+ *     alignment.
+ *     The final parameter is not a tuple, but just an alignment for any
+ *     trailing dummy inputs.  This last parameter is mandatory; there may be
+ *     any number of tuples (though the number of tuples must match the symbols
+ *     in msg).
  */
 Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
+  /**
+   * Add a field to this input.
+   * @this !Blockly.input
+   * @param {Blockly.Field|Array.<string|Blockly.Field>} field
+   *     This is either a Field or a tuple of a name and a Field.
+   */
+  function addFieldToInput(field) {
+    if (field instanceof Blockly.Field) {
+      this.appendField(field);
+    } else {
+      goog.asserts.assert(field instanceof Array);
+      this.appendField(field[1], field[0]);
+    }
+  }
+
   // Validate the msg at the start and the dummy alignment at the end,
   // and remove the latter.
   goog.asserts.assertString(msg);
@@ -1437,28 +1472,48 @@ Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
       'Illegal final argument "%d" is not an alignment.', dummyAlign);
   arguments.length = arguments.length - 1;
 
-  var tokens = msg.split(/(%\d)/);
+  var tokens = msg.split(this.interpolateMsg.SPLIT_REGEX_);
+  var fields = [];
   for (var i = 0; i < tokens.length; i += 2) {
     var text = goog.string.trim(tokens[i]);
+    var input = undefined;
+    if (text) {
+      fields.push(new Blockly.FieldLabel(text));
+    }
     var symbol = tokens[i + 1];
-    if (symbol) {
-      // Value input.
-      var digit = parseInt(symbol.charAt(1), 10);
-      var tuple = arguments[digit];
+    if (symbol && symbol.charAt(0) == '%') {
+      // Numeric field.
+      var number = parseInt(symbol.substring(1), 10);
+      var tuple = arguments[number];
       goog.asserts.assertArray(tuple,
           'Message symbol "%s" is out of range.', symbol);
-      this.appendValueInput(tuple[0])
-          .setCheck(tuple[1])
-          .setAlign(tuple[2])
-          .appendField(text);
-      arguments[digit] = null;  // Inputs may not be reused.
-    } else if (text) {
-      // Trailing dummy input.
-      this.appendDummyInput()
-          .setAlign(dummyAlign)
-          .appendField(text);
+      goog.asserts.assertArray(tuple,
+          'Argument "%s" is not a tuple.', symbol);
+      if (tuple[1] instanceof Blockly.Field) {
+        fields.push([tuple[0], tuple[1]]);
+      } else {
+        input = this.appendValueInput(tuple[0])
+            .setCheck(tuple[1])
+            .setAlign(tuple[2]);
+      }
+      arguments[number] = null;  // Inputs may not be reused.
+    } else if (symbol == '\n' && fields.length) {
+      // Create a dummy input.
+      input = this.appendDummyInput();
+    }
+    // If we just added an input, hang any pending fields on it.
+    if (input && fields.length) {
+      fields.forEach(addFieldToInput, input);
+      fields = [];
     }
   }
+  // If any fields remain, create a trailing dummy input.
+  if (fields.length) {
+    var input = this.appendDummyInput()
+        .setAlign(dummyAlign);
+    fields.forEach(addFieldToInput, input);
+  }
+
   // Verify that all inputs were used.
   for (var i = 1; i < arguments.length - 1; i++) {
     goog.asserts.assert(arguments[i] === null,
@@ -1466,8 +1521,12 @@ Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
   }
   // Make the inputs inline unless there is only one input and
   // no text follows it.
-  this.setInputsInline(!msg.match(/%1\s*$/))
+  this.setInputsInline(!msg.match(this.interpolateMsg.INLINE_REGEX_));
 };
+
+Blockly.Block.prototype.interpolateMsg.SPLIT_REGEX_ = /(%\d+|\n)/;
+Blockly.Block.prototype.interpolateMsg.INLINE_REGEX_ = /%1\s*$/;
+
 
 /**
  * Add a value input, statement input or local variable to this block.

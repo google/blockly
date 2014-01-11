@@ -69,11 +69,13 @@ Blockly.Blocks['variables_set'] = {
   init: function() {
     this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
     this.setColour(330);
-    this.appendValueInput('VALUE')
-        .appendField(Blockly.Msg.VARIABLES_SET_TITLE)
-        .appendField(new Blockly.FieldVariable(
-        Blockly.Msg.VARIABLES_SET_ITEM), 'VAR')
-        .appendField(Blockly.Msg.VARIABLES_SET_TAIL);
+    this.interpolateMsg(
+        // TODO: Combine these messages instead of using concatenation.
+        Blockly.Msg.VARIABLES_SET_TITLE + ' %1 ' +
+        Blockly.Msg.VARIABLES_SET_TAIL + ' %2',
+        ['VAR', new Blockly.FieldVariable(Blockly.Msg.VARIABLES_SET_ITEM)],
+        ['VALUE', null, Blockly.ALIGN_RIGHT],
+        Blockly.ALIGN_RIGHT);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);

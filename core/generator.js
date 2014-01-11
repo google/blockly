@@ -223,3 +223,41 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
 Blockly.Generator.prototype.addReservedWords = function(words) {
   this.RESERVED_WORDS_ += words + ',';
 };
+
+/**
+ * This is used as a placeholder in functions defined using
+ * Blockly.Generator.provideFunction_.  It must not be legal code that could
+ * legitimately appear in a function definition (or comment), and it must
+ * not confuse the regular expression parser.
+ */
+Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
+Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
+    new RegExp(Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_, 'g');
+
+/**
+ * Define a function to be included in the generated code.
+ * The first time this is called with a given desiredName, the code is
+ * saved and an actual name is generated.  Subsequent calls with the
+ * same desiredName have no effect but have the same return value.
+ *
+ * It is up to the caller to make sure the same desiredName is not
+ * used for different code values.
+ *
+ * The code gets output when Blockly.Generator.finish() is called.
+ *
+ * @param {string} desiredName The desired name of the function (e.g., isPrime).
+ * @param {string} code A list of Python statements.
+ * @return {string} The actual name of the new function.  This may differ
+ *     from desiredName if the former has already been taken by the user.
+ * @private
+ */
+Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
+  if (!this.definitions_[desiredName]) {
+    var functionName =
+        this.variableDB_.getDistinctName(desiredName, this.NAME_TYPE);
+    this.functionNames_[desiredName] = functionName;
+    this.definitions_[desiredName] = code.join('\n').replace(
+        this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
+  }
+  return this.functionNames_[desiredName];
+};

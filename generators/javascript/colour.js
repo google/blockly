@@ -36,18 +36,13 @@ Blockly.JavaScript['colour_picker'] = function(block) {
 
 Blockly.JavaScript['colour_random'] = function(block) {
   // Generate a random colour.
-  if (!Blockly.JavaScript.definitions_['colour_random']) {
-    var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-        'colour_random', Blockly.Generator.NAME_TYPE);
-    Blockly.JavaScript.colour_random.functionName = functionName;
-    var func = [];
-    func.push('function ' + functionName + '() {');
-    func.push('  var num = Math.floor(Math.random() * Math.pow(2, 24));');
-    func.push('  return \'#\' + (\'00000\' + num.toString(16)).substr(-6);');
-    func.push('}');
-    Blockly.JavaScript.definitions_['colour_random'] = func.join('\n');
-  }
-  var code = Blockly.JavaScript.colour_random.functionName + '()';
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'colour_random',
+      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+        '  var num = Math.floor(Math.random() * Math.pow(2, 24));',
+        '  return \'#\' + (\'00000\' + num.toString(16)).substr(-6);',
+        '}']);
+  var code = functionName + '()';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
@@ -59,25 +54,19 @@ Blockly.JavaScript['colour_rgb'] = function(block) {
       Blockly.JavaScript.ORDER_COMMA) || 0;
   var blue = Blockly.JavaScript.valueToCode(block, 'BLUE',
       Blockly.JavaScript.ORDER_COMMA) || 0;
-
-  if (!Blockly.JavaScript.definitions_['colour_rgb']) {
-    var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-        'colour_rgb', Blockly.Generator.NAME_TYPE);
-    Blockly.JavaScript.colour_rgb.functionName = functionName;
-    var func = [];
-    func.push('function ' + functionName + '(r, g, b) {');
-    func.push('  r = Math.max(Math.min(Number(r), 100), 0) * 2.55;');
-    func.push('  g = Math.max(Math.min(Number(g), 100), 0) * 2.55;');
-    func.push('  b = Math.max(Math.min(Number(b), 100), 0) * 2.55;');
-    func.push('  r = (\'0\' + (Math.round(r) || 0).toString(16)).slice(-2);');
-    func.push('  g = (\'0\' + (Math.round(g) || 0).toString(16)).slice(-2);');
-    func.push('  b = (\'0\' + (Math.round(b) || 0).toString(16)).slice(-2);');
-    func.push('  return \'#\' + r + g + b;');
-    func.push('}');
-    Blockly.JavaScript.definitions_['colour_rgb'] = func.join('\n');
-  }
-  var code = Blockly.JavaScript.colour_rgb.functionName +
-      '(' + red + ', ' + green + ', ' + blue + ')';
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'colour_rgb',
+      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(r, g, b) {',
+        '  r = Math.max(Math.min(Number(r), 100), 0) * 2.55;',
+        '  g = Math.max(Math.min(Number(g), 100), 0) * 2.55;',
+        '  b = Math.max(Math.min(Number(b), 100), 0) * 2.55;',
+        '  r = (\'0\' + (Math.round(r) || 0).toString(16)).slice(-2);',
+        '  g = (\'0\' + (Math.round(g) || 0).toString(16)).slice(-2);',
+        '  b = (\'0\' + (Math.round(b) || 0).toString(16)).slice(-2);',
+        '  return \'#\' + r + g + b;',
+        '}']);
+  var code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
@@ -89,31 +78,25 @@ Blockly.JavaScript['colour_blend'] = function(block) {
       Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
   var ratio = Blockly.JavaScript.valueToCode(block, 'RATIO',
       Blockly.JavaScript.ORDER_COMMA) || 0.5;
-
-  if (!Blockly.JavaScript.definitions_['colour_blend']) {
-    var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-        'colour_blend', Blockly.Generator.NAME_TYPE);
-    Blockly.JavaScript.colour_blend.functionName = functionName;
-    var func = [];
-    func.push('function ' + functionName + '(c1, c2, ratio) {');
-    func.push('  ratio = Math.max(Math.min(Number(ratio), 1), 0);');
-    func.push('  var r1 = parseInt(c1.substring(1, 3), 16);');
-    func.push('  var g1 = parseInt(c1.substring(3, 5), 16);');
-    func.push('  var b1 = parseInt(c1.substring(5, 7), 16);');
-    func.push('  var r2 = parseInt(c2.substring(1, 3), 16);');
-    func.push('  var g2 = parseInt(c2.substring(3, 5), 16);');
-    func.push('  var b2 = parseInt(c2.substring(5, 7), 16);');
-    func.push('  var r = Math.round(r1 * (1 - ratio) + r2 * ratio);');
-    func.push('  var g = Math.round(g1 * (1 - ratio) + g2 * ratio);');
-    func.push('  var b = Math.round(b1 * (1 - ratio) + b2 * ratio);');
-    func.push('  r = (\'0\' + (r || 0).toString(16)).slice(-2);');
-    func.push('  g = (\'0\' + (g || 0).toString(16)).slice(-2);');
-    func.push('  b = (\'0\' + (b || 0).toString(16)).slice(-2);');
-    func.push('  return \'#\' + r + g + b;');
-    func.push('}');
-    Blockly.JavaScript.definitions_['colour_blend'] = func.join('\n');
-  }
-  var code = Blockly.JavaScript.colour_blend.functionName +
-      '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'colour_blend',
+      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(c1, c2, ratio) {',
+        '  ratio = Math.max(Math.min(Number(ratio), 1), 0);',
+        '  var r1 = parseInt(c1.substring(1, 3), 16);',
+        '  var g1 = parseInt(c1.substring(3, 5), 16);',
+        '  var b1 = parseInt(c1.substring(5, 7), 16);',
+        '  var r2 = parseInt(c2.substring(1, 3), 16);',
+        '  var g2 = parseInt(c2.substring(3, 5), 16);',
+        '  var b2 = parseInt(c2.substring(5, 7), 16);',
+        '  var r = Math.round(r1 * (1 - ratio) + r2 * ratio);',
+        '  var g = Math.round(g1 * (1 - ratio) + g2 * ratio);',
+        '  var b = Math.round(b1 * (1 - ratio) + b2 * ratio);',
+        '  r = (\'0\' + (r || 0).toString(16)).slice(-2);',
+        '  g = (\'0\' + (g || 0).toString(16)).slice(-2);',
+        '  b = (\'0\' + (b || 0).toString(16)).slice(-2);',
+        '  return \'#\' + r + g + b;',
+        '}']);
+  var code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

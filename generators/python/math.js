@@ -170,9 +170,9 @@ Blockly.Python['math_number_property'] = function(block) {
   if (dropdown_property == 'PRIME') {
     Blockly.Python.definitions_['import_math'] = 'import math';
     var functionName = Blockly.Python.provideFunction_(
-        'isPrime',
+        'math_isPrime',
         ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(n):',
-         '  # http://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+         '  # https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
          '  # If n is not a number but a string, try parsing it.',
          '  if type(n) not in (int, float, long):',
          '    try:',

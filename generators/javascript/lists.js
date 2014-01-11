@@ -46,27 +46,21 @@ Blockly.JavaScript['lists_create_with'] = function(block) {
 
 Blockly.JavaScript['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
-  if (!Blockly.JavaScript.definitions_['lists_repeat']) {
-    // Function copied from Closure's goog.array.repeat.
-    var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-        'lists_repeat', Blockly.Generator.NAME_TYPE);
-    Blockly.JavaScript.lists_repeat.repeat = functionName;
-    var func = [];
-    func.push('function ' + functionName + '(value, n) {');
-    func.push('  var array = [];');
-    func.push('  for (var i = 0; i < n; i++) {');
-    func.push('    array[i] = value;');
-    func.push('  }');
-    func.push('  return array;');
-    func.push('}');
-    Blockly.JavaScript.definitions_['lists_repeat'] = func.join('\n');
-  }
+  var functionName = Blockly.JavaScript.provideFunction_(
+      'lists_repeat',
+      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(value, n) {',
+        '  var array = [];',
+        '  for (var i = 0; i < n; i++) {',
+        '    array[i] = value;',
+        '  }',
+        '  return array;',
+        '}']);
   var argument0 = Blockly.JavaScript.valueToCode(block, 'ITEM',
       Blockly.JavaScript.ORDER_COMMA) || 'null';
   var argument1 = Blockly.JavaScript.valueToCode(block, 'NUM',
       Blockly.JavaScript.ORDER_COMMA) || '0';
-  var code = Blockly.JavaScript.lists_repeat.repeat +
-      '(' + argument0 + ', ' + argument1 + ')';
+  var code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
@@ -149,20 +143,14 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
       var code = list + '.slice(-' + at + ')[0]';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     } else if (mode == 'GET_REMOVE' || mode == 'REMOVE') {
-      if (!Blockly.JavaScript.definitions_['lists_remove_from_end']) {
-        var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-            'lists_remove_from_end', Blockly.Generator.NAME_TYPE);
-        Blockly.JavaScript.lists_getIndex.lists_remove_from_end = functionName;
-        var func = [];
-        func.push('function ' + functionName + '(list, x) {');
-        func.push('  x = list.length - x;');
-        func.push('  return list.splice(x, 1)[0];');
-        func.push('}');
-        Blockly.JavaScript.definitions_['lists_remove_from_end'] =
-            func.join('\n');
-      }
-      code = Blockly.JavaScript.lists_getIndex.lists_remove_from_end +
-          '(' + list + ', ' + at + ')';
+      var functionName = Blockly.JavaScript.provideFunction_(
+          'lists_remove_from_end',
+          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+              '(list, x) {',
+            '  x = list.length - x;',
+            '  return list.splice(x, 1)[0];',
+            '}']);
+      code = functionName + '(' + list + ', ' + at + ')';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
@@ -170,24 +158,18 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
       }
     }
   } else if (where == 'RANDOM') {
-    if (!Blockly.JavaScript.definitions_['lists_get_random_item']) {
-      var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-          'lists_get_random_item', Blockly.Generator.NAME_TYPE);
-      Blockly.JavaScript.lists_getIndex.random = functionName;
-      var func = [];
-      func.push('function ' + functionName + '(list, remove) {');
-      func.push('  var x = Math.floor(Math.random() * list.length);');
-      func.push('  if (remove) {');
-      func.push('    return list.splice(x, 1)[0];');
-      func.push('  } else {');
-      func.push('    return list[x];');
-      func.push('  }');
-      func.push('}');
-      Blockly.JavaScript.definitions_['lists_get_random_item'] =
-          func.join('\n');
-    }
-    code = Blockly.JavaScript.lists_getIndex.random +
-        '(' + list + ', ' + (mode != 'GET') + ')';
+    var functionName = Blockly.JavaScript.provideFunction_(
+        'lists_get_random_item',
+        [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+            '(list, remove) {',
+          '  var x = Math.floor(Math.random() * list.length);',
+          '  if (remove) {',
+          '    return list.splice(x, 1)[0];',
+          '  } else {',
+          '    return list[x];',
+          '  }',
+          '}']);
+    code = functionName + '(' + list + ', ' + (mode != 'GET') + ')';
     if (mode == 'GET' || mode == 'GET_REMOVE') {
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     } else if (mode == 'REMOVE') {
@@ -288,35 +270,29 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = list + '.concat()';
   } else {
-    if (!Blockly.JavaScript.definitions_['lists_get_sublist']) {
-      var functionName = Blockly.JavaScript.variableDB_.getDistinctName(
-          'lists_get_sublist', Blockly.Generator.NAME_TYPE);
-      Blockly.JavaScript.lists_getSublist.func = functionName;
-      var func = [];
-      func.push('function ' + functionName +
-          '(list, where1, at1, where2, at2) {');
-      func.push('  function getAt(where, at) {');
-      func.push('    if (where == \'FROM_START\') {');
-      func.push('      at--;');
-      func.push('    } else if (where == \'FROM_END\') {');
-      func.push('      at = list.length - at;');
-      func.push('    } else if (where == \'FIRST\') {');
-      func.push('      at = 0;');
-      func.push('    } else if (where == \'LAST\') {');
-      func.push('      at = list.length - 1;');
-      func.push('    } else {');
-      func.push('      throw \'Unhandled option (lists_getSublist).\';');
-      func.push('    }');
-      func.push('    return at;');
-      func.push('  }');
-      func.push('  at1 = getAt(where1, at1);');
-      func.push('  at2 = getAt(where2, at2) + 1;');
-      func.push('  return list.slice(at1, at2);');
-      func.push('}');
-      Blockly.JavaScript.definitions_['lists_get_sublist'] =
-          func.join('\n');
-    }
-    var code = Blockly.JavaScript.lists_getSublist.func + '(' + list + ', \'' +
+    var functionName = Blockly.JavaScript.provideFunction_(
+        'lists_get_sublist',
+        [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+            '(list, where1, at1, where2, at2) {',
+          '  function getAt(where, at) {',
+          '    if (where == \'FROM_START\') {',
+          '      at--;',
+          '    } else if (where == \'FROM_END\') {',
+          '      at = list.length - at;',
+          '    } else if (where == \'FIRST\') {',
+          '      at = 0;',
+          '    } else if (where == \'LAST\') {',
+          '      at = list.length - 1;',
+          '    } else {',
+          '      throw \'Unhandled option (lists_getSublist).\';',
+          '    }',
+          '    return at;',
+          '  }',
+          '  at1 = getAt(where1, at1);',
+          '  at2 = getAt(where2, at2) + 1;',
+          '  return list.slice(at1, at2);',
+          '}']);
+    var code = functionName + '(' + list + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];

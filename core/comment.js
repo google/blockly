@@ -105,10 +105,29 @@ Blockly.Comment.prototype.createEditor_ = function() {
   this.textarea_ = document.createElementNS(Blockly.HTML_NS, 'textarea');
   this.textarea_.className = 'blocklyCommentTextarea';
   this.textarea_.setAttribute('dir', Blockly.RTL ? 'RTL' : 'LTR');
+  this.updateEditable();
   body.appendChild(this.textarea_);
   this.foreignObject_.appendChild(body);
   Blockly.bindEvent_(this.textarea_, 'mouseup', this, this.textareaFocus_);
   return this.foreignObject_;
+};
+
+/**
+ * Add or remove editability of the textarea.
+ * @override
+ */
+Blockly.Comment.prototype.updateEditable = function() {
+  if (this.textarea_) {
+    if (!this.block_.isEditable()) {
+      this.textarea_.setAttribute('disabled', 'disabled');
+      this.textarea_.setAttribute('readonly', 'readonly');
+    } else {
+      this.textarea_.removeAttribute('disabled');
+      this.textarea_.removeAttribute('readonly');
+    }
+  }
+  // Allow the icon to update.
+  Blockly.Icon.prototype.updateEditable.call(this);
 };
 
 /**
@@ -227,4 +246,3 @@ Blockly.Comment.prototype.dispose = function() {
   this.block_.comment = null;
   Blockly.Icon.prototype.dispose.call(this);
 };
-

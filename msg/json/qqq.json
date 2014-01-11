@@ -1,10 +1,4 @@
 {
-    "@metadata": {
-        "authors": [
-            "Espertus",
-            "Shirayuki"
-        ]
-    },
     "VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].",
     "DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).",
     "ADD_COMMENT": "context menu - Add a descriptive comment to the selected block.",

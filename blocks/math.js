@@ -89,9 +89,10 @@ Blockly.Blocks['math_single'] = {
     this.setHelpUrl(Blockly.Msg.MATH_SINGLE_HELPURL);
     this.setColour(230);
     this.setOutput(true, 'Number');
-    this.appendValueInput('NUM')
-        .setCheck('Number')
-        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+    this.interpolateMsg('%1 %2',
+        ['OP', new Blockly.FieldDropdown(OPERATORS)],
+        ['NUM', 'Number', Blockly.ALIGN_RIGHT],
+        Blockly.ALIGN_RIGHT);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -218,12 +219,13 @@ Blockly.Blocks['math_change'] = {
   init: function() {
     this.setHelpUrl(Blockly.Msg.MATH_CHANGE_HELPURL);
     this.setColour(230);
-    this.appendValueInput('DELTA')
-        .setCheck('Number')
-        .appendField(Blockly.Msg.MATH_CHANGE_TITLE_CHANGE)
-        .appendField(new Blockly.FieldVariable(
-        Blockly.Msg.MATH_CHANGE_TITLE_ITEM), 'VAR')
-        .appendField(Blockly.Msg.MATH_CHANGE_INPUT_BY);
+    this.interpolateMsg(
+        // TODO: Combine these messages instead of using concatenation.
+        Blockly.Msg.MATH_CHANGE_TITLE_CHANGE + ' %1 ' +
+        Blockly.Msg.MATH_CHANGE_INPUT_BY + ' %2',
+        ['VAR', new Blockly.FieldVariable(Blockly.Msg.MATH_CHANGE_TITLE_ITEM)],
+        ['DELTA', 'Number', Blockly.ALIGN_RIGHT],
+        Blockly.ALIGN_RIGHT);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     // Assign 'this' to a variable for use in the tooltip closure below.

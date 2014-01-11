@@ -124,7 +124,7 @@ Blockly.Python['unittest_fail'] = function(block) {
       ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(message):',
        '  # Always assert an error.',
        '  if ' + resultsVar + ' == None:',
-       '    raise Exception("Orphaned assert equals: ' + message + '")',
+       '    raise Exception("Orphaned assert equals: " + message)',
        '  ' + resultsVar + '.append((False, "Fail.", message))']);
   return functionName + '(' + message + ')\n';
 };

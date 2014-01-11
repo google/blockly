@@ -83,6 +83,19 @@ Blockly.Mutator.prototype.createIcon = function() {
 };
 
 /**
+ * Clicking on the icon toggles if the mutator bubble is visible.
+ * Disable if block is uneditable.
+ * @param {!Event} e Mouse click event.
+ * @private
+ * @override
+ */
+Blockly.Mutator.prototype.iconClick_ = function(e) {
+  if (this.block_.isEditable()) {
+    Blockly.Icon.prototype.iconClick_.call(this, e);
+  }
+};
+
+/**
  * Create the editor for the mutator's bubble.
  * @return {!Element} The top-level node of the editor.
  * @private
@@ -110,6 +123,21 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   this.svgDialog_.appendChild(this.flyout_.createDom());
   this.svgDialog_.appendChild(this.workspace_.createDom());
   return this.svgDialog_;
+};
+
+/**
+ * Add or remove the UI indicating if this icon may be clicked or not.
+ */
+Blockly.Mutator.prototype.updateEditable = function() {
+  if (this.block_.isEditable()) {
+    // Default behaviour for an icon.
+    Blockly.Icon.prototype.updateEditable.call(this);
+  } else {
+    // Close any mutator bubble.  Icon is not clickable.
+    this.setVisible(false);
+    Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
+                         'blocklyIconGroup');
+  }
 };
 
 /**

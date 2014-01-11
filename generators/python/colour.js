@@ -42,7 +42,7 @@ Blockly.Python['colour_random'] = function(block) {
 };
 
 Blockly.Python['colour_rgb'] = function(block) {
-  // Compose a colour from RGB components.
+  // Compose a colour from RGB components expressed as percentages.
   var functionName = Blockly.Python.provideFunction_(
       'colour_rgb',
       [ 'def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b):',

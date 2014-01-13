@@ -435,13 +435,18 @@ Blockly.Blocks['field_image'] = {
         .appendField(new Blockly.FieldTextInput(src), 'SRC');
     this.appendDummyInput()
         .appendField('width')
-        .appendField(new Blockly.FieldTextInput('15'), 'WIDTH')
+        .appendField(new Blockly.FieldTextInput('15',
+            Blockly.FieldTextInput.numberValidator), 'WIDTH')
         .appendField('height')
-        .appendField(new Blockly.FieldTextInput('15'), 'HEIGHT');
+        .appendField(new Blockly.FieldTextInput('15',
+            Blockly.FieldTextInput.numberValidator), 'HEIGHT')
+        .appendField('alt text')
+        .appendField(new Blockly.FieldTextInput('*'), 'ALT');
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
     this.setTooltip('Static image (JPEG, PNG, GIF, SVG, BMP).\n' +
-                    'Retains aspect ratio regardless of height and width.');
+                    'Retains aspect ratio regardless of height and width.\n' +
+                    'Alt text is for when collapsed.');
   }
 };
 

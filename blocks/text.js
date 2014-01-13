@@ -35,10 +35,10 @@ Blockly.Blocks['text'] = {
     this.setColour(160);
     this.appendDummyInput()
         .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-        'media/quote0.png', 12, 12))
+        'media/quote0.png', 12, 12, '"'))
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
         .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-        'media/quote1.png', 12, 12));
+        'media/quote1.png', 12, 12, '"'));
     this.setOutput(true, 'String');
     this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
   }
@@ -76,9 +76,9 @@ Blockly.Blocks['text_join'] = {
     if (this.itemCount_ == 0) {
       this.appendDummyInput('EMPTY')
           .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-          'media/quote0.png', 12, 12))
+          'media/quote0.png', 12, 12, '"'))
           .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-          'media/quote1.png', 12, 12));
+          'media/quote1.png', 12, 12, '"'));
     }
   },
   decompose: function(workspace) {
@@ -122,9 +122,9 @@ Blockly.Blocks['text_join'] = {
     if (this.itemCount_ == 0) {
       this.appendDummyInput('EMPTY')
           .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-          'media/quote0.png', 12, 12))
+          'media/quote0.png', 12, 12, '"'))
           .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-          'media/quote1.png', 12, 12));
+          'media/quote1.png', 12, 12, '"'));
     }
   },
   saveConnections: function(containerBlock) {
@@ -468,10 +468,10 @@ Blockly.Blocks['text_prompt'] = {
     this.appendDummyInput()
         .appendField(dropdown, 'TYPE')
         .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-        'media/quote0.png', 12, 12))
+        'media/quote0.png', 12, 12, '"'))
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
         .appendField(new Blockly.FieldImage(Blockly.pathToBlockly +
-        'media/quote1.png', 12, 12));
+        'media/quote1.png', 12, 12, '"'));
     this.setOutput(true, 'String');
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;

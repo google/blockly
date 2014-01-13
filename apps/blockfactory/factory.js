@@ -209,8 +209,9 @@ function getFields(block) {
         var src = escapeString(block.getFieldValue('SRC'));
         var width = Number(block.getFieldValue('WIDTH'));
         var height = Number(block.getFieldValue('HEIGHT'));
+        var alt = escapeString(block.getFieldValue('ALT'));
         fields.push('new Blockly.FieldImage(' +
-            src + ', ' + width + ', ' + height + ')');
+            src + ', ' + width + ', ' + height + ', ' + alt + ')');
         break;
     }
     block = block.nextConnection && block.nextConnection.targetBlock();

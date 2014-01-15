@@ -73,10 +73,7 @@ Blockly.Python['controls_whileUntil'] = function(block) {
     branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
         '"' + block.id + '"') + branch;
   }
-  if (block.getFieldValue('MODE') == 'UNTIL') {
-    if (!argument0.match(/^\w+$/)) {
-      argument0 = '(' + argument0 + ')';
-    }
+  if (until) {
     argument0 = 'not ' + argument0;
   }
   return 'while ' + argument0 + ':\n' + branch;

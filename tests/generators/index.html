@@ -24,6 +24,16 @@
 <script type="text/javascript" src="../../generators/python/colour.js"></script>
 <script type="text/javascript" src="../../generators/python/variables.js"></script>
 <script type="text/javascript" src="../../generators/python/procedures.js"></script>
+<script type="text/javascript" src="../../generators/dart.js"></script>
+<script type="text/javascript" src="unittest_dart.js"></script>
+<script type="text/javascript" src="../../generators/dart/logic.js"></script>
+<script type="text/javascript" src="../../generators/dart/loops.js"></script>
+<script type="text/javascript" src="../../generators/dart/math.js"></script>
+<script type="text/javascript" src="../../generators/dart/text.js"></script>
+<script type="text/javascript" src="../../generators/dart/lists.js"></script>
+<script type="text/javascript" src="../../generators/dart/colour.js"></script>
+<script type="text/javascript" src="../../generators/dart/variables.js"></script>
+<script type="text/javascript" src="../../generators/dart/procedures.js"></script>
 <script type="text/javascript" src="unittest.js"></script>
 <script type="text/javascript" src="../../msg/messages.js"></script>
 <script type="text/javascript" src="../../blocks/logic.js"></script>
@@ -112,6 +122,11 @@ function toJavaScript() {
 
 function toPython() {
   var code = Blockly.Python.workspaceToCode();
+  setOutput(code);
+}
+
+function toDart() {
+  var code = Blockly.Dart.workspaceToCode();
   setOutput(code);
 }
 </script>
@@ -349,6 +364,7 @@ h1 {
       <input type="button" value="XML" onclick="toXml()">
       <input type="button" value="JavaScript" onclick="toJavaScript()">
       <input type="button" value="Python" onclick="toPython()">
+      <input type="button" value="Dart" onclick="toDart()">
     </p>
   </td></tr><tr><td height="99%">
     <textarea id="importExport" readonly="readonly" wrap="off"></textarea>

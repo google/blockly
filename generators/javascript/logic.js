@@ -43,7 +43,7 @@ Blockly.JavaScript['controls_if'] = function(block) {
   }
   if (block.elseCount_) {
     branch = Blockly.JavaScript.statementToCode(block, 'ELSE');
-    code += ' else {\n' + branch + '}\n';
+    code += ' else {\n' + branch + '}';
   }
   return code + '\n';
 };

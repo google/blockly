@@ -1,7 +1,7 @@
 /**
  * Visual Blocks Language
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2014 Google Inc.
  * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
  */
 
 /**
- * @fileoverview Generating Dart for variable blocks.
+ * @fileoverview Generating Dart for procedure blocks.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -27,70 +27,71 @@ goog.provide('Blockly.Dart.procedures');
 
 goog.require('Blockly.Dart');
 
-Blockly.Dart.procedures_defreturn = function() {
+
+Blockly.Dart['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  var funcName = Blockly.Dart.variableDB_.getName(this.getTitleValue('NAME'),
+  var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
-  var branch = Blockly.Dart.statementToCode(this, 'STACK');
+  var branch = Blockly.Dart.statementToCode(block, 'STACK');
   if (Blockly.Dart.INFINITE_LOOP_TRAP) {
     branch = Blockly.Dart.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + this.id + '\'') + branch;
+        '\'' + block.id + '\'') + branch;
   }
-  var returnValue = Blockly.Dart.valueToCode(this, 'RETURN',
+  var returnValue = Blockly.Dart.valueToCode(block, 'RETURN',
       Blockly.Dart.ORDER_NONE) || '';
   if (returnValue) {
     returnValue = '  return ' + returnValue + ';\n';
   }
   var returnType = returnValue ? 'dynamic' : 'void';
   var args = [];
-  for (var x = 0; x < this.arguments_.length; x++) {
-    args[x] = Blockly.Dart.variableDB_.getName(this.arguments_[x],
+  for (var x = 0; x < block.arguments_.length; x++) {
+    args[x] = Blockly.Dart.variableDB_.getName(block.arguments_[x],
         Blockly.Variables.NAME_TYPE);
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
       branch + returnValue + '}';
-  code = Blockly.Dart.scrub_(this, code);
+  code = Blockly.Dart.scrub_(block, code);
   Blockly.Dart.definitions_[funcName] = code;
   return null;
 };
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Blockly.Dart.procedures_defnoreturn = Blockly.Dart.procedures_defreturn;
+Blockly.Dart['procedures_defnoreturn'] = Blockly.Dart['procedures_defreturn'];
 
-Blockly.Dart.procedures_callreturn = function() {
+Blockly.Dart['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  var funcName = Blockly.Dart.variableDB_.getName(this.getTitleValue('NAME'),
+  var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var args = [];
-  for (var x = 0; x < this.arguments_.length; x++) {
-    args[x] = Blockly.Dart.valueToCode(this, 'ARG' + x,
+  for (var x = 0; x < block.arguments_.length; x++) {
+    args[x] = Blockly.Dart.valueToCode(block, 'ARG' + x,
         Blockly.Dart.ORDER_NONE) || 'null';
   }
   var code = funcName + '(' + args.join(', ') + ')';
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
-Blockly.Dart.procedures_callnoreturn = function() {
+Blockly.Dart['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var funcName = Blockly.Dart.variableDB_.getName(this.getTitleValue('NAME'),
+  var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var args = [];
-  for (var x = 0; x < this.arguments_.length; x++) {
-    args[x] = Blockly.Dart.valueToCode(this, 'ARG' + x,
+  for (var x = 0; x < block.arguments_.length; x++) {
+    args[x] = Blockly.Dart.valueToCode(block, 'ARG' + x,
         Blockly.Dart.ORDER_NONE) || 'null';
   }
   var code = funcName + '(' + args.join(', ') + ');\n';
   return code;
 };
 
-Blockly.Dart.procedures_ifreturn = function() {
+Blockly.Dart['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
-  var condition = Blockly.Dart.valueToCode(this, 'CONDITION',
+  var condition = Blockly.Dart.valueToCode(block, 'CONDITION',
       Blockly.Dart.ORDER_NONE) || 'false';
   var code = 'if (' + condition + ') {\n';
-  if (this.hasReturnValue_) {
-    var value = Blockly.Dart.valueToCode(this, 'VALUE',
+  if (block.hasReturnValue_) {
+    var value = Blockly.Dart.valueToCode(block, 'VALUE',
         Blockly.Dart.ORDER_NONE) || 'null';
     code += '  return ' + value + ';\n';
   } else {

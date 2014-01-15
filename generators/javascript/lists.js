@@ -67,7 +67,7 @@ Blockly.JavaScript['lists_repeat'] = function(block) {
 Blockly.JavaScript['lists_length'] = function(block) {
   // List length.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
   return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 

@@ -479,8 +479,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
       Blockly.removeAllRanges();
       Blockly.setCursorHand_(true);
       // Record the current mouse position.
-      Blockly.Flyout.startDragMouseX_ = e.clientX;
-      Blockly.Flyout.startDragMouseY_ = e.clientY;
+      Blockly.Flyout.startDownEvent_ = e;
       Blockly.Flyout.startBlock_ = block;
       Blockly.Flyout.startFlyout_ = flyout;
       Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEvent_(document,
@@ -512,13 +511,14 @@ Blockly.Flyout.prototype.onMouseMove_ = function(e) {
     return;
   }
   Blockly.removeAllRanges();
-  var dx = e.clientX - Blockly.Flyout.startDragMouseX_;
-  var dy = e.clientY - Blockly.Flyout.startDragMouseY_;
+  var dx = e.clientX - Blockly.Flyout.startDownEvent_.clientX;
+  var dy = e.clientY - Blockly.Flyout.startDownEvent_.clientY;
   // Still dragging within the sticky DRAG_RADIUS.
   var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
   if (dr > Blockly.DRAG_RADIUS) {
     // Create the block.
-    Blockly.Flyout.startFlyout_.createBlockFunc_(Blockly.Flyout.startBlock_)(e);
+    Blockly.Flyout.startFlyout_.createBlockFunc_(Blockly.Flyout.startBlock_)
+        (Blockly.Flyout.startDownEvent_);
   }
 };
 
@@ -592,8 +592,7 @@ Blockly.Flyout.terminateDrag_ = function() {
     Blockly.unbindEvent_(Blockly.Flyout.onMouseMoveWrapper_);
     Blockly.Flyout.onMouseMoveWrapper_ = null;
   }
-  Blockly.Flyout.startDragMouseX_ = 0;
-  Blockly.Flyout.startDragMouseY_ = 0;
+  Blockly.Flyout.startDownEvent_ = null;
   Blockly.Flyout.startBlock_ = null;
   Blockly.Flyout.startFlyout_ = null;
 };

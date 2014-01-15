@@ -22,6 +22,15 @@
 <script type="text/javascript" src="../generators/python/colour.js"></script>
 <script type="text/javascript" src="../generators/python/variables.js"></script>
 <script type="text/javascript" src="../generators/python/procedures.js"></script>
+<script type="text/javascript" src="../generators/dart.js"></script>
+<script type="text/javascript" src="../generators/dart/logic.js"></script>
+<script type="text/javascript" src="../generators/dart/loops.js"></script>
+<script type="text/javascript" src="../generators/dart/math.js"></script>
+<script type="text/javascript" src="../generators/dart/text.js"></script>
+<script type="text/javascript" src="../generators/dart/lists.js"></script>
+<script type="text/javascript" src="../generators/dart/colour.js"></script>
+<script type="text/javascript" src="../generators/dart/variables.js"></script>
+<script type="text/javascript" src="../generators/dart/procedures.js"></script>
 <script type="text/javascript" src="../msg/messages.js"></script>
 <script type="text/javascript" src="../blocks/logic.js"></script>
 <script type="text/javascript" src="../blocks/loops.js"></script>
@@ -46,7 +55,7 @@ function start() {
 function toXml() {
   var output = document.getElementById('importExport');
   var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  output.value = Blockly.Xml.domToText(xml);
+  output.value = Blockly.Xml.domToPrettyText(xml);
   output.focus();
   output.select();
 }
@@ -292,9 +301,11 @@ h1 {
     &nbsp;
     <input type="button" value="Import from XML" onclick="fromXml()">
     <br>
-    <input type="button" value="Generate JavaScript" onclick="toCode('JavaScript')">
+    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
     &nbsp;
-    <input type="button" value="Generate Python" onclick="toCode('Python')">
+    <input type="button" value="To Python" onclick="toCode('Python')">
+    &nbsp;
+    <input type="button" value="To Dart" onclick="toCode('Dart')">
     <br>
     <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
   </p>

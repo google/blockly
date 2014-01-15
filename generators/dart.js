@@ -1,7 +1,7 @@
 /**
  * Visual Blocks Language
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2014 Google Inc.
  * http://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +25,10 @@
 
 goog.provide('Blockly.Dart');
 
-goog.require('Blockly.CodeGenerator');
+goog.require('Blockly.Generator');
 
-Blockly.Dart = Blockly.Generator.get('Dart');
+
+Blockly.Dart = new Blockly.Generator('Dart');
 
 /**
  * List of illegal variable names.
@@ -37,14 +38,15 @@ Blockly.Dart = Blockly.Generator.get('Dart');
  * @private
  */
 Blockly.Dart.addReservedWords(
-    // http://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
+    // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
     // Section 16.1.1
-    'assert,break,case,catch,class,const,continue,default,do,else,extends,false,final,finally,for,if,in,is,new,null,return,super,switch,this,throw,true,try,var,void,while,with,' +
-    // http://api.dartlang.org/dart_core.html
-    'Collection,Comparable,Completer,Date,double,Function,Future,Hashable,HashMap,HashSet,int,InvocationMirror,Iterable,Iterator,LinkedHashMap,List,Map,Match,num,Options,Pattern,Queue,RegExp,Sequence,SequenceCollection,Set,Stopwatch,String,StringBuffer,Strings,Type,bool,DoubleLinkedQueue,DoubleLinkedQueueEntry,Duration,Expando,Expect,Futures,Object,SequenceIterator,SequenceList,Comparator,AbstractClassInstantiationError,ArgumentError,AssertionError,CastError,Error,Exception,ExpectException,FallThroughError,FormatException,FutureAlreadyCompleteException,FutureNotCompleteException,FutureUnhandledException,IllegalJSRegExpException,IntegerDivisionByZeroException,NoSuchMethodError,NullThrownError,OutOfMemoryError,RangeError,RuntimeError,StackOverflowError,StateError,TypeError,UnimplementedError,UnsupportedError');
+    'assert,break,case,catch,class,const,continue,default,do,else,enum,extends,false,final,finally,for,if,in,is,new,null,rethrow,return,super,switch,this,throw,true,try,var,void,while,with,' +
+    // https://api.dartlang.org/dart_core.html
+    'print,identityHashCode,identical,BidirectionalIterator,Comparable,double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,ArgumentError,AssertionError,CastError,ConcurrentModificationError,CyclicInitializationError,Error,Exception,FallThroughError,FormatException,IntegerDivisionByZeroException,NoSuchMethodError,NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,StateError,TypeError,UnimplementedError,UnsupportedError');
+
 /**
  * Order of operation ENUMs.
- * http://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
+ * https://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
  */
 Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
 Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] .
@@ -52,15 +54,16 @@ Blockly.Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
 Blockly.Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
 Blockly.Dart.ORDER_ADDITIVE = 4;       // + -
 Blockly.Dart.ORDER_SHIFT = 5;          // << >>
-Blockly.Dart.ORDER_RELATIONAL = 6;     // is is! >= > <= <
-Blockly.Dart.ORDER_EQUALITY = 7;       // == != === !==
-Blockly.Dart.ORDER_BITWISE_AND = 8;    // &
-Blockly.Dart.ORDER_BITWISE_XOR = 9;    // ^
-Blockly.Dart.ORDER_BITWISE_OR = 10;    // |
+Blockly.Dart.ORDER_BITWISE_AND = 6;    // &
+Blockly.Dart.ORDER_BITWISE_XOR = 7;    // ^
+Blockly.Dart.ORDER_BITWISE_OR = 8;     // |
+Blockly.Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
+Blockly.Dart.ORDER_EQUALITY = 10;      // == !=
 Blockly.Dart.ORDER_LOGICAL_AND = 11;   // &&
 Blockly.Dart.ORDER_LOGICAL_OR = 12;    // ||
 Blockly.Dart.ORDER_CONDITIONAL = 13;   // expr ? expr : expr
-Blockly.Dart.ORDER_ASSIGNMENT = 14;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+Blockly.Dart.ORDER_CASCADE = 14;       // ..
+Blockly.Dart.ORDER_ASSIGNMENT = 15;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
 
 /**
@@ -76,7 +79,10 @@ Blockly.Dart.INFINITE_LOOP_TRAP = null;
  */
 Blockly.Dart.init = function() {
   // Create a dictionary of definitions to be printed before the code.
-  Blockly.Dart.definitions_ = {};
+  Blockly.Dart.definitions_ = Object.create(null);
+  // Create a dictionary mapping desired function names in definitions_
+  // to actual function names (to avoid collisions with user functions).
+  Blockly.Dart.functionNames_ = Object.create(null);
 
   if (Blockly.Variables) {
     if (!Blockly.Dart.variableDB_) {
@@ -169,7 +175,7 @@ Blockly.Dart.scrub_ = function(block, code) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += Blockly.Generator.prefixLines(comment, '// ') + '\n';
+      commentCode += this.prefixLines(comment, '// ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -177,9 +183,9 @@ Blockly.Dart.scrub_ = function(block, code) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.Generator.allNestedComments(childBlock);
+          var comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.Generator.prefixLines(comment, '// ');
+            commentCode += this.prefixLines(comment, '// ');
           }
         }
       }

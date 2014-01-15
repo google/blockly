@@ -41,7 +41,7 @@ var Code = {};
  * List of tab names.
  * @private
  */
-Code.TABS_ = ['blocks', 'javascript', 'python', 'xml'];
+Code.TABS_ = ['blocks', 'javascript', 'python', 'dart', 'xml'];
 
 Code.selected = 'blocks';
 
@@ -114,6 +114,14 @@ Code.renderContent = function() {
     if (typeof prettyPrintOne == 'function') {
       code = content.innerHTML;
       code = prettyPrintOne(code, 'py');
+      content.innerHTML = code;
+    }
+  } else if (content.id == 'content_dart') {
+    code = Blockly.Dart.workspaceToCode();
+    content.textContent = code;
+    if (typeof prettyPrintOne == 'function') {
+      code = content.innerHTML;
+      code = prettyPrintOne(code, 'dart');
       content.innerHTML = code;
     }
   }

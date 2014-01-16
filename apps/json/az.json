@@ -25,7 +25,7 @@
     "Maze.maze": "Labirint",
     "Apps.mazeSubtitle": "Blockly-dən istifadə edərək labirintdən keçməyi öyrənin.",
     "Apps.turtleSubtitle": "Blockly-dən rəsm çəkmək üçün istifadə edin.",
-    "Apps.codeSubtitle": "Blockly proqramını JavaScript, Python və ya XML formatına çevirin.",
+    "Apps.codeSubtitle": "Blockly proqramını JavaScript, Python, Dart və ya XML formatına çevirin.",
     "Maze.turnLeft": "sola dönün",
     "Maze.turnRight": "sağa dönün",
     "Plane.placeholder": "?",

@@ -46,7 +46,7 @@
     "Turtle.title": "Schildpadtekeningen",
     "Apps.turtleSubtitle": "Gebruik Blockly om te tekenen.",
     "Apps.graphSubtitle": "Plotfuncties met Blockly.",
-    "Apps.codeSubtitle": "Een Blocklyprogramma exporteren naar JavaScript, Python of XML.",
+    "Apps.codeSubtitle": "Een Blocklyprogramma exporteren naar JavaScript, Python, Dart of XML.",
     "Plane.plane": "Vliegtuigstoelencalculator",
     "Apps.planeSubtitle": "Een wiskundige probleem met een of twee variabelen oplossen.",
     "Apps.blockFactory": "Blokkenfabriek",

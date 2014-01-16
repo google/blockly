@@ -46,7 +46,7 @@
     "Turtle.title": "Teknőc Grafika",
     "Apps.turtleSubtitle": "Rajzolásához használja a Blocklyt.",
     "Apps.graphSubtitle": "Függvényábrázolás Blocklyval.",
-    "Apps.codeSubtitle": "Blocklyval megírt programját exportálhatja JavaScript, Python vagy XML nyelven.",
+    "Apps.codeSubtitle": "Blocklyval megírt programját exportálhatja JavaScript, Python, Dart vagy XML nyelven.",
     "Plane.plane": "Repülőgép alkalmazás",
     "Apps.planeSubtitle": "Oldjon meg matematikai problémát, egy vagy két változóval.",
     "Apps.blockFactory": "Blokk készítés",

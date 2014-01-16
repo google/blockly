@@ -1,7 +1,7 @@
 {
     "@metadata": {
         "author": "Ellen Spertus <ellen.spertus@gmail.com>",
-        "lastupdated": "2013-12-17 09:30:03.023915",
+        "lastupdated": "2014-01-14 21:44:24.240651",
         "locale": "en",
         "messagedocumentation" : "qqq"
     },
@@ -46,7 +46,7 @@
     "Turtle.title": "Turtle Graphics",
     "Apps.turtleSubtitle": "Use Blockly to draw.",
     "Apps.graphSubtitle": "Plot functions with Blockly.",
-    "Apps.codeSubtitle": "Export a Blockly program into JavaScript, Python or XML.",
+    "Apps.codeSubtitle": "Export a Blockly program into JavaScript, Python, Dart or XML.",
     "Plane.plane": "Plane Seat Calculator",
     "Apps.planeSubtitle": "Solve a math problem with one or two variables.",
     "Apps.blockFactory": "Block Factory",

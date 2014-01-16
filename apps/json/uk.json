@@ -45,7 +45,7 @@
     "Turtle.title": "Графіка Черепахи",
     "Apps.turtleSubtitle": "Використовуйте Blockly, щоб малювати.",
     "Apps.graphSubtitle": "Побудуйте графік функції з Блоклі.",
-    "Apps.codeSubtitle": "Експортувати Blockly програму на JavaScript, Python або XML.",
+    "Apps.codeSubtitle": "Експортувати Blockly програму на JavaScript, Python, Dart або XML.",
     "Plane.plane": "Калькулятор місць у літаку",
     "Apps.planeSubtitle": "Розв'язуйте математичну задачу з однією або двома змінними.",
     "Apps.blockFactory": "Фабрика блоків",

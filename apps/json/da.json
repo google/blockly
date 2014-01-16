@@ -48,7 +48,7 @@
     "Turtle.title": "Skildpaddegrafik",
     "Apps.turtleSubtitle": "Brug Blockly til at tegne.",
     "Apps.graphSubtitle": "Tegn funktioner med Blockly.",
-    "Apps.codeSubtitle": "Eksporter et Blockly program til JavaScript, Python eller XML.",
+    "Apps.codeSubtitle": "Eksporter et Blockly program til JavaScript, Python, Dart eller XML.",
     "Plane.plane": "Flysædelommeregner",
     "Apps.planeSubtitle": "Løs et matematisk problem med en eller to variabler.",
     "Apps.blockFactory": "Blokfabrik",

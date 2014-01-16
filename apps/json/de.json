@@ -46,7 +46,7 @@
     "Turtle.title": "Turtle-Grafiken",
     "Apps.turtleSubtitle": "Blockly zum Zeichnen verwenden.",
     "Apps.graphSubtitle": "Plotfunktionen mit Blockly.",
-    "Apps.codeSubtitle": "Ein Blockly-Programm als JavaScript, Python oder XML exportieren.",
+    "Apps.codeSubtitle": "Ein Blockly-Programm als JavaScript, Python, Dart oder XML exportieren.",
     "Plane.plane": "Flugzeugsitzrechner",
     "Apps.planeSubtitle": "Ein mathematisches Problem mit einer oder zwei Variablen lösen.",
     "Apps.blockFactory": "Block-Fabrik",

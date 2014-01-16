@@ -45,7 +45,7 @@
     "Turtle.title": "Tortue dessinatrice",
     "Apps.turtleSubtitle": "Utiliser Blockly pour dessiner.",
     "Apps.graphSubtitle": "Préparer des fonctions avec Blockly.",
-    "Apps.codeSubtitle": "Exporter un programme Blockly en JavaScript, Python ou XML.",
+    "Apps.codeSubtitle": "Exporter un programme Blockly en JavaScript, Python, Dart ou XML.",
     "Plane.plane": "Calculateur de sièges d’avion",
     "Apps.planeSubtitle": "Résoudre un problème de math avec une ou deux variables.",
     "Apps.blockFactory": "Usine de blocs",

@@ -46,7 +46,7 @@
     "Turtle.title": "Đồ Họa Con Rùa",
     "Apps.turtleSubtitle": "Sử dụng Blockly để vẽ.",
     "Apps.graphSubtitle": "Lô chức năng với Blockly.",
-    "Apps.codeSubtitle": "Xuất khẩu một chương trình Blockly vào JavaScript, Python hoặc XML.",
+    "Apps.codeSubtitle": "Xuất khẩu một chương trình Blockly vào JavaScript, Python, Dart hoặc XML.",
     "Plane.plane": "Máy bay ghế máy tính",
     "Apps.planeSubtitle": "Giải quyết một vấn đề toán học với một hoặc hai biến.",
     "Apps.blockFactory": "Khối nhà máy",

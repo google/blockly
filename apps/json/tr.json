@@ -49,7 +49,7 @@
     "Turtle.title": "Kaplumbağa Grafikler",
     "Apps.turtleSubtitle": "Çizmek için Blockly'yi kullanın.",
     "Apps.graphSubtitle": "Fonksiyonları Blockly ile çizin.",
-    "Apps.codeSubtitle": "Bir Blockly programını JavaScript, Python ya da XML'e aktarın.",
+    "Apps.codeSubtitle": "Bir Blockly programını JavaScript, Python, Dart ya da XML'e aktarın.",
     "Plane.plane": "Uçak Koltuğu Hesaplayıcı",
     "Apps.planeSubtitle": "Bir veya iki değişkenle bir matematik problemini çöz.",
     "Apps.blockFactory": "Blok Fabrikası",

@@ -45,7 +45,7 @@
     "Turtle.title": "Teiknandi skjaldbaka",
     "Apps.turtleSubtitle": "Nota Blockly til að teikna.",
     "Apps.graphSubtitle": "Teikna gröf með Blockly.",
-    "Apps.codeSubtitle": "Þýða Blockly forrit yfir í JavaScript, Python eða XML.",
+    "Apps.codeSubtitle": "Þýða Blockly forrit yfir í JavaScript, Python, Dart eða XML.",
     "Plane.plane": "Flugsætareiknir",
     "Apps.planeSubtitle": "Leysa reikningsdæmi með einni eða tveimur breytum.",
     "Apps.blockFactory": "Kubbasmiðja",

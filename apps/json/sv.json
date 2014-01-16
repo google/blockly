@@ -46,7 +46,7 @@
     "Turtle.title": "Sköldpaddsgrafik",
     "Apps.turtleSubtitle": "Använd Blockly för att rita.",
     "Apps.graphSubtitle": "Rita funktioner med Blockly.",
-    "Apps.codeSubtitle": "Exportera ett Blockly-program till JavaScript, Python eller XML.",
+    "Apps.codeSubtitle": "Exportera ett Blockly-program till JavaScript, Python, Dart eller XML.",
     "Plane.plane": "Plansäteskalkylator",
     "Apps.planeSubtitle": "Lös ett matematiskt problem med en eller två variabler.",
     "Apps.blockFactory": "Blockfabrik",

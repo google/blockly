@@ -48,7 +48,7 @@
     "Turtle.title": "Черепашка",
     "Apps.turtleSubtitle": "Используйте Блокли для рисования.",
     "Apps.graphSubtitle": "Постройте график функции с Блокли.",
-    "Apps.codeSubtitle": "Переведите программу Блокли на JavaScript, Python или XML.",
+    "Apps.codeSubtitle": "Переведите программу Блокли на JavaScript, Python, Dart или XML.",
     "Plane.plane": "Калькулятор посадочных мест в самолёте",
     "Apps.planeSubtitle": "Решите математическую задачу с одной или двумя переменными.",
     "Apps.blockFactory": "Фабрика блоков",

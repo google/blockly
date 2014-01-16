@@ -254,6 +254,7 @@ Blockly.svgResize = function() {
  * @private
  */
 Blockly.onMouseDown_ = function(e) {
+  Blockly.svgResize();
   Blockly.terminateDrag_(); // In case mouse-up event was lost.
   Blockly.hideChaff();
   var isTargetSvg = e.target && e.target.nodeName &&
@@ -608,6 +609,7 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   }
   if (Blockly.mainWorkspace.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
+    // Ensure border is wide enough that blocks can scroll over entire screen.
     var leftEdge = Math.min(blockBox.x - viewWidth / 2,
                             blockBox.x + blockBox.width - viewWidth);
     var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
@@ -623,7 +625,7 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var bottomEdge = topEdge + blockBox.height;
   }
   var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
-  return {
+  var metrics = {
     viewHeight: svgSize.height,
     viewWidth: svgSize.width,
     contentHeight: bottomEdge - topEdge,
@@ -635,6 +637,7 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     absoluteTop: 0,
     absoluteLeft: absoluteLeft
   };
+  return metrics;
 };
 
 /**

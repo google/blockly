@@ -48,7 +48,7 @@
     "Turtle.title": "Grafică Turtles",
     "Apps.turtleSubtitle": "Folosește Blockly pentru a desena.",
     "Apps.graphSubtitle": "Trasează graficul unei funcții cu Blockly.",
-    "Apps.codeSubtitle": "Exportă un program Blockly în JavaScript, Python sau XML.",
+    "Apps.codeSubtitle": "Exportă un program Blockly în JavaScript, Python, Dart sau XML.",
     "Plane.plane": "Calculator pentru locurile dintr-un avion",
     "Apps.planeSubtitle": "Rezolvă o problemă de matematică cu una sau două variabile.",
     "Apps.blockFactory": "Fabrica de blocuri.",

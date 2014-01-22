@@ -89,12 +89,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.updateParams_();
   },
   decompose: function(workspace) {
-    var containerBlock = new Blockly.Block(workspace,
+    var containerBlock = Blockly.Block.obtain(workspace,
                                            'procedures_mutatorcontainer');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var x = 0; x < this.arguments_.length; x++) {
-      var paramBlock = new Blockly.Block(workspace, 'procedures_mutatorarg');
+      var paramBlock = Blockly.Block.obtain(workspace, 'procedures_mutatorarg');
       paramBlock.initSvg();
       paramBlock.setFieldValue(this.arguments_[x], 'NAME');
       // Store the old location.

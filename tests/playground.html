@@ -40,6 +40,12 @@
 <script type="text/javascript" src="../blocks/colour.js"></script>
 <script type="text/javascript" src="../blocks/variables.js"></script>
 <script type="text/javascript" src="../blocks/procedures.js"></script>
+<!-- Load the Google Drive SDK Realtime libraries. -->
+<script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
+<!-- Load the generic Realtime utility library. -->
+<script type="text/javascript" src="../realtime/realtime-client-utils.js"></script>
+<!-- Load the Blockly apps realtime library. -->
+<!--<script type="text/javascript" src="../realtime/realtime.js"></script>-->
 <script type="text/javascript">
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
@@ -47,9 +53,24 @@ var rtl = (document.location.search == '?rtl');
 var block = null;
 
 function start() {
-  var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('blocklyDiv'),
-                 {'rtl': rtl, path: '../', toolbox: toolbox});
+  var startUi = function () {
+    var toolbox = document.getElementById('toolbox');
+    Blockly.inject(document.getElementById('blocklyDiv'),
+            {rtl: rtl, path: '../', toolbox: toolbox});
+  };
+
+  // Set up realtime collaboration.
+  // If you want to use the realtime collaboration features then uncomment out
+  // the next 2 lines and comment out the call to startUi() below.
+//  document.getElementById("realtime").style.display = "block";
+//  Blockly.Realtime.startRealtime(startUi);
+
+  // If you don't want to use the realtime collaboration features then uncomment
+  // out the next line and comment out the call to
+  // Blockly.Realtime.startRealtime() above it.  You can also comment out
+  // (or delete) the loading of the realtime related libraries up above in this
+  // case, if you want.
+  startUi();
 }
 
 function toXml() {
@@ -80,7 +101,7 @@ function airstrike(n) {
   }
   for (var x = 0; x < n; x++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
-    var block = new Blockly.Block(Blockly.mainWorkspace, prototype);
+    var block = Blockly.Block.obtain(Blockly.mainWorkspace, prototype);
     block.initSvg();
     block.getSvgRoot().setAttribute('transform', 'translate(' +
         Math.round(Math.random() * 450 + 40) + ', ' +
@@ -315,7 +336,30 @@ h1 {
     Stress test with an <input type="button" value="Airstrike!" onclick="airstrike(100)">
   </p>
 
-  </form>
+  <!-- Realtime setup buttons. -->
 
+  <div id="realtime" style="display: none">
+
+    <p>Test realtime collaboration by opening
+      <a target="_blank" href="#" onmouseover="this.href = window.location.href">this link in a separate
+        browser window or tab</a> and they will be synchronized.  If this is the first time you've used
+      realtime collaboration with Blockly you'll need to authorize using the following button if it is enabled.</p>
+
+    <button id="authorizeButton">You must authorize</button>
+
+    <br>
+    <br>
+
+    <!-- Undo and redo buttons. -->
+    <!--
+      <button id="undoButton" disabled>Undo</button>
+      <button id="redoButton" disabled>Redo</button>
+      <br />
+    -->
+
+    <!-- Text area that will be used for our collaborative chat box. -->
+    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
+
+  </div>
 </body>
 </html>

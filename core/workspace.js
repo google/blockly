@@ -172,6 +172,9 @@ Blockly.Workspace.prototype.getBubbleCanvas = function() {
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
   this.topBlocks_.push(block);
+  if (Blockly.isRealtimeEnabled() && this == Blockly.mainWorkspace) {
+    Blockly.Realtime.addTopBlock(block);
+  }
   this.fireChangeEvent();
 };
 
@@ -190,6 +193,9 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
   }
   if (!found) {
     throw 'Block not present in workspace\'s list of top-most blocks.';
+  }
+  if (Blockly.isRealtimeEnabled() && this == Blockly.mainWorkspace) {
+    Blockly.Realtime.removeTopBlock(block);
   }
   this.fireChangeEvent();
 };
@@ -339,7 +345,7 @@ Blockly.Workspace.prototype.paste = function(xmlBlock) {
       this.remainingCapacity()) {
     return;
   }
-  var block = Blockly.Xml.domToBlock_(this, xmlBlock);
+  var block = Blockly.Xml.domToBlock(this, xmlBlock);
   // Move the duplicate to original position.
   var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
   var blockY = parseInt(xmlBlock.getAttribute('y'), 10);

@@ -109,10 +109,10 @@ Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
       continue;
     }
     var getBlock = Blockly.Blocks['variables_get'] ?
-        new Blockly.Block(workspace, 'variables_get') : null;
+        Blockly.Block.obtain(workspace, 'variables_get') : null;
     getBlock && getBlock.initSvg();
     var setBlock = Blockly.Blocks['variables_set'] ?
-        new Blockly.Block(workspace, 'variables_set') : null;
+        Blockly.Block.obtain(workspace, 'variables_set') : null;
     setBlock && setBlock.initSvg();
     if (variableList[i] === null) {
       defaultVariable = (getBlock || setBlock).getVars()[0];

@@ -39,6 +39,7 @@ goog.require('Blockly.Xml');
 goog.require('goog.asserts');
 goog.require('goog.string');
 goog.require('goog.Timer');
+goog.require('goog.array');
 
 
 /**
@@ -48,14 +49,81 @@ goog.require('goog.Timer');
 Blockly.uidCounter_ = 0;
 
 /**
- * Class for one block.
+ * Get the Blockly.uidCounter_
+ * @returns {number}
+ */
+Blockly.getUidCounter = function() {
+  return Blockly.uidCounter_;
+}
+
+/**
+ * Set the Blockly.uidCounter_
+ * @param {number} val The value to set the counter to.
+ */
+Blockly.setUidCounter = function(val) {
+  Blockly.uidCounter_ = val;
+}
+
+/**
+ * Check is realtime collaboration is enabled for this Blockly app.
+ * @returns {Blockly.Realtime|*|boolean}
+ */
+Blockly.isRealtimeEnabled = function() {
+  return (typeof Blockly.Realtime != 'undefined') &&
+      Blockly.Realtime && Blockly.Realtime.isEnabled();
+};
+
+/**
+* Class for one block.
+* @constructor
+*/
+Blockly.Block = function() {
+  // We assert this here because there may be users of the previous form of
+  // this constructor, which took arguments.
+  goog.asserts.assert(arguments.length == 0,
+      'Please use Blockly.Block.obtain.');
+};
+
+/**
+ * Obtain a newly created block.
+ * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
+ * @return {!Blockly.Block} The created block
+ */
+Blockly.Block.obtain = function(workspace, prototypeName) {
+  if (Blockly.isRealtimeEnabled()) {
+    return Blockly.Realtime.obtainBlock(workspace, prototypeName);
+  } else {
+    var newBlock = new Blockly.Block();
+    newBlock.initialize(workspace, prototypeName);
+    return newBlock;
+  }
+};
+
+/**
+ * Initialization for one block.
  * @param {!Blockly.Workspace} workspace The new block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
- * @constructor
  */
-Blockly.Block = function(workspace, prototypeName) {
+Blockly.Block.prototype.initialize = function(workspace, prototypeName) {
   this.id = ++Blockly.uidCounter_;
+  workspace.addTopBlock(this);
+  this.fill(workspace, prototypeName);
+  // Bind an onchange function, if it exists.
+  if (goog.isFunction(this.onchange)) {
+    Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
+        this.onchange);
+  }
+};
+
+/**
+ * Fill a block with initial values.
+ * @param {!Blockly.Workspace} workspace The workspace to use.
+ * @param {string} prototypeName The typename of the block.
+ */
+Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   this.outputConnection = null;
   this.nextConnection = null;
   this.previousConnection = null;
@@ -76,8 +144,6 @@ Blockly.Block = function(workspace, prototypeName) {
   this.workspace = workspace;
   this.isInFlyout = workspace.isFlyout;
 
-  workspace.addTopBlock(this);
-
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     this.type = prototypeName;
@@ -90,10 +156,19 @@ Blockly.Block = function(workspace, prototypeName) {
   if (goog.isFunction(this.init)) {
     this.init();
   }
-  // Bind an onchange function, if it exists.
-  if (goog.isFunction(this.onchange)) {
-    Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
-                       this.onchange);
+};
+
+/**
+ * Get an existing block.
+ * @param {string} id The block's id.
+ * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @return {Blockly.Block} The found block, or null if not found.
+ */
+Blockly.Block.getById = function(id, workspace) {
+  if (Blockly.isRealtimeEnabled()) {
+    return Blockly.Realtime.getBlockById(id);
+  } else {
+    return workspace.getBlockById(id);
   }
 };
 
@@ -251,8 +326,11 @@ Blockly.Block.prototype.unselect = function() {
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
  * @param {boolean} animate If true, show a disposal animation and sound.
+ * @param {boolean} dontRemoveFromWorkspace If true, don't remove this block
+ *     from the workspace's list of top blocks.
  */
-Blockly.Block.prototype.dispose = function(healStack, animate) {
+Blockly.Block.prototype.dispose = function(healStack, animate,
+                                           dontRemoveFromWorkspace) {
   // Switch off rerendering.
   this.rendered = false;
   this.unplug(healStack);
@@ -261,10 +339,12 @@ Blockly.Block.prototype.dispose = function(healStack, animate) {
     this.svg_.disposeUiEffect();
   }
 
-  //This block is now at the top of the workspace.
+  // This block is now at the top of the workspace.
   // Remove this block from the workspace's list of top-most blocks.
-  this.workspace.removeTopBlock(this);
-  this.workspace = null;
+  if (this.workspace && !dontRemoveFromWorkspace) {
+    this.workspace.removeTopBlock(this);
+    this.workspace = null;
+  }
 
   // Just deleting this block from the DOM would result in a memory leak as
   // well as corruption of the connection database.  Therefore we must
@@ -303,6 +383,10 @@ Blockly.Block.prototype.dispose = function(healStack, animate) {
   if (this.svg_) {
     this.svg_.dispose();
     this.svg_ = null;
+  }
+  // Remove from Realtime set of blocks.
+  if (Blockly.isRealtimeEnabled() && !Blockly.Realtime.withinSync) {
+    Blockly.Realtime.removeBlock(this);
   }
 };
 
@@ -378,6 +462,9 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.svg_.getRootElement().setAttribute('transform',
       'translate(' + (xy.x + dx) + ', ' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
+  if (Blockly.isRealtimeEnabled() && !Blockly.Realtime.withinSync) {
+    Blockly.Realtime.blockChanged(this);
+  }
 };
 
 /**
@@ -527,7 +614,7 @@ Blockly.Block.prototype.duplicate_ = function() {
   // Create a duplicate via XML.
   var xmlBlock = Blockly.Xml.blockToDom_(this);
   Blockly.Xml.deleteNext(xmlBlock);
-  var newBlock = Blockly.Xml.domToBlock_(
+  var newBlock = Blockly.Xml.domToBlock(
       /** @type {!Blockly.Workspace} */ (this.workspace), xmlBlock);
   // Move the duplicate next to the old block.
   var xy = this.getRelativeToSurfaceXY();
@@ -958,7 +1045,11 @@ Blockly.Block.prototype.setParent = function(newParent) {
     // its connection locations.
   } else {
     // Remove this block from the workspace's list of top-most blocks.
-    this.workspace.removeTopBlock(this);
+    // Note that during realtime sync we sometimes create child blocks that are
+    // not top level so we check first before removing.
+    if (goog.array.contains(this.workspace.getTopBlocks(false), this)) {
+      this.workspace.removeTopBlock(this);
+    }
   }
 
   this.parentBlock_ = newParent;
@@ -1761,4 +1852,7 @@ Blockly.Block.prototype.render = function() {
   goog.asserts.assertObject(this.svg_,
       'Uninitialized block cannot be rendered.  Call block.initSvg()');
   this.svg_.render();
+  if (Blockly.isRealtimeEnabled() && !Blockly.Realtime.withinSync) {
+    Blockly.Realtime.blockChanged(this);
+  }
 };

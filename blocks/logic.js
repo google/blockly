@@ -88,17 +88,17 @@ Blockly.Blocks['controls_if'] = {
     }
   },
   decompose: function(workspace) {
-    var containerBlock = new Blockly.Block(workspace, 'controls_if_if');
+    var containerBlock = Blockly.Block.obtain(workspace, 'controls_if_if');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var x = 1; x <= this.elseifCount_; x++) {
-      var elseifBlock = new Blockly.Block(workspace, 'controls_if_elseif');
+      var elseifBlock = Blockly.Block.obtain(workspace, 'controls_if_elseif');
       elseifBlock.initSvg();
       connection.connect(elseifBlock.previousConnection);
       connection = elseifBlock.nextConnection;
     }
     if (this.elseCount_) {
-      var elseBlock = new Blockly.Block(workspace, 'controls_if_else');
+      var elseBlock = Blockly.Block.obtain(workspace, 'controls_if_else');
       elseBlock.initSvg();
       connection.connect(elseBlock.previousConnection);
     }

@@ -76,15 +76,15 @@ Puzzle.init = function() {
     var blocksCities = [];
     var i = 1;
     while (BlocklyApps.getMsgOrNull('Puzzle_country' + i)) {
-      var block = new Blockly.Block(Blockly.mainWorkspace, 'country');
+      var block = Blockly.Block.obtain(Blockly.mainWorkspace, 'country');
       block.populate(i);
       blocksCountries.push(block);
-      var block = new Blockly.Block(Blockly.mainWorkspace, 'flag');
+      var block = Blockly.Block.obtain(Blockly.mainWorkspace, 'flag');
       block.populate(i);
       blocksFlags.push(block);
       var j = 1;
       while (BlocklyApps.getMsgOrNull('Puzzle_country' + i + 'City' + j)) {
-        var block = new Blockly.Block(Blockly.mainWorkspace, 'city');
+        var block = Blockly.Block.obtain(Blockly.mainWorkspace, 'city');
         block.populate(i, j);
         blocksCities.push(block);
         j++;

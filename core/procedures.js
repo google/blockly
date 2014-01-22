@@ -169,19 +169,19 @@ Blockly.Procedures.rename = function(text) {
  */
 Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
   if (Blockly.Blocks['procedures_defnoreturn']) {
-    var block = new Blockly.Block(workspace, 'procedures_defnoreturn');
+    var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
     block.initSvg();
     blocks.push(block);
     gaps.push(margin * 2);
   }
   if (Blockly.Blocks['procedures_defreturn']) {
-    var block = new Blockly.Block(workspace, 'procedures_defreturn');
+    var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
     block.initSvg();
     blocks.push(block);
     gaps.push(margin * 2);
   }
   if (Blockly.Blocks['procedures_ifreturn']) {
-    var block = new Blockly.Block(workspace, 'procedures_ifreturn');
+    var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
     block.initSvg();
     blocks.push(block);
     gaps.push(margin * 2);
@@ -193,7 +193,7 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
 
   function populateProcedures(procedureList, templateName) {
     for (var x = 0; x < procedureList.length; x++) {
-      var block = new Blockly.Block(workspace, templateName);
+      var block = Blockly.Block.obtain(workspace, templateName);
       block.setFieldValue(procedureList[x][0], 'NAME');
       var tempIds = [];
       for (var t = 0; t < procedureList[x][1].length; t++) {

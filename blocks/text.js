@@ -82,12 +82,12 @@ Blockly.Blocks['text_join'] = {
     }
   },
   decompose: function(workspace) {
-    var containerBlock = new Blockly.Block(workspace,
+    var containerBlock = Blockly.Block.obtain(workspace,
                                            'text_create_join_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var x = 0; x < this.itemCount_; x++) {
-      var itemBlock = new Blockly.Block(workspace, 'text_create_join_item');
+      var itemBlock = Blockly.Block.obtain(workspace, 'text_create_join_item');
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
       connection = itemBlock.nextConnection;

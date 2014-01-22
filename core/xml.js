@@ -57,6 +57,7 @@ Blockly.Xml.workspaceToDom = function(workspace) {
 Blockly.Xml.blockToDom_ = function(block) {
   var element = goog.dom.createDom('block');
   element.setAttribute('type', block.type);
+  element.setAttribute('id', block.id);
   if (block.mutationToDom) {
     // Custom data for an advanced block.
     var mutation = block.mutationToDom();
@@ -212,7 +213,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   var width = Blockly.svgSize().width;
   for (var x = 0, xmlChild; xmlChild = xml.childNodes[x]; x++) {
     if (xmlChild.nodeName.toLowerCase() == 'block') {
-      var block = Blockly.Xml.domToBlock_(workspace, xmlChild);
+      var block = Blockly.Xml.domToBlock(workspace, xmlChild);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
@@ -223,23 +224,45 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
 };
 
 /**
- * Decode an XML block tag and create a block (and possibly sub-blocks) on the
+ * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * Throws an error if the block cannot be created, for example, if the block
- * type is not specified, that type has not been defined, or an non-existent
- * input is provided.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
+ * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
+ *     reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
+Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
+  var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
     throw 'Block type unspecified: \n' + xmlBlock.outerHTML;
   }
-  var block = new Blockly.Block(workspace, prototypeName);
-  block.initSvg();
+  var id = xmlBlock.getAttribute('id');
+  if (opt_reuseBlock && id) {
+    block = Blockly.Block.getById(id, workspace);
+    // TODO: The following is for debugging.  It should never actually happen.
+    if (!block) {
+      throw 'Couldn\'t get Block with id: ' + id;
+    }
+    var parentBlock = block.getParent();
+    // If we've already filled this block then we will dispose of it and then
+    // re-fill it.
+    if (block.workspace) {
+      block.dispose(true, false, true);
+    }
+    block.fill(workspace, prototypeName);
+    block.parent_ = parentBlock;
+  } else {
+    block = Blockly.Block.obtain(workspace, prototypeName);
+//    if (id) {
+//      block.id = parseInt(id, 10);
+//    }
+  }
+  if (!block.svg_) {
+    block.initSvg();
+  }
 
   var inline = xmlBlock.getAttribute('inline');
   if (inline) {
@@ -313,7 +336,8 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
         }
         if (firstRealGrandchild &&
             firstRealGrandchild.nodeName.toLowerCase() == 'block') {
-          blockChild = Blockly.Xml.domToBlock_(workspace, firstRealGrandchild);
+          blockChild = Blockly.Xml.domToBlock(workspace, firstRealGrandchild,
+              opt_reuseBlock);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
@@ -332,7 +356,8 @@ Blockly.Xml.domToBlock_ = function(workspace, xmlBlock) {
             // This could happen if there is more than one XML 'next' tag.
             throw 'Next statement is already connected.';
           }
-          blockChild = Blockly.Xml.domToBlock_(workspace, firstRealGrandchild);
+          blockChild = Blockly.Xml.domToBlock(workspace, firstRealGrandchild,
+              opt_reuseBlock);
           if (!blockChild.previousConnection) {
             throw 'Next block does not have previous statement.';
           }

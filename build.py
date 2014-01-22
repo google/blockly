@@ -108,6 +108,9 @@ var dir = window.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
     m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
     add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
         '([\\/]core[\\/])', '\\1" + dir + "\\2', add_dependency)
+    m = re.search('[\\/]([^\\/]+)[\\/]realtime[\\/]realtime.js', add_dependency)
+    add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
+        '([\\/]realtime[\\/])', '\\1" + dir + "\\2', add_dependency)
     f.write(add_dependency + '\n')
 
     provides = []
@@ -386,7 +389,7 @@ if __name__ == '__main__':
 http://code.google.com/p/blockly/wiki/Closure""")
     sys.exit(1)
   search_paths = calcdeps.ExpandDirectories(
-      ['core', os.path.join(os.path.pardir, 'closure-library-read-only')])
+      ['core', 'realtime', os.path.join(os.path.pardir, 'closure-library-read-only')])
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.

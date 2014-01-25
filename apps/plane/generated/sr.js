@@ -5,7 +5,7 @@ if (typeof apps == 'undefined') { var apps = {}; }
 
 
 apps.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div style="display: none"><span id="subtitle">a visual programming environment</span><span id="blocklyMessage">Blockly (Блоклијев)</span><span id="codeTooltip">Погледај генерисани JavaScript код.</span><span id="linkTooltip">Сачувај и повежи са блоковима. </span><span id="runTooltip">Run the program defined by the blocks in the workspace.</span><span id="runProgram">Покрени програм</span><span id="resetProgram">Поново постави</span><span id="dialogOk">У реду</span><span id="dialogCancel">Cancel</span><span id="catLogic">Logic</span><span id="catLoops">Loops</span><span id="catMath">Math</span><span id="catText">Text</span><span id="catLists">Lists</span><span id="catColour">Colour</span><span id="catVariables">Variables</span><span id="catProcedures">Procedures</span><span id="httpRequestError">Настао је проблем при извршењу траженог.</span><span id="linkAlert">Делите своје блокове употребом ове везе:\n\n%1</span><span id="hashError">Жао нам је, \'%1\' не одговара ни једној сачуваној Блокли датотеци.</span><span id="xmlError">Не могу да учитам датотеку коју сте сачували.  Можда је направљена другом верзијом Блоклија?</span><span id="listVariable">list</span><span id="textVariable">text</span></div>';
+  return '<div style="display: none"><span id="subtitle">визуелно окружење за програмирање</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">Погледајте генерисани JavaScript кôд.</span><span id="linkTooltip">Сачувајте и повежите са блоковима.</span><span id="runTooltip">Покрените програм заснован на блоковима у радном \\nпростору. </span><span id="runProgram">Покрени програм</span><span id="resetProgram">Поново постави</span><span id="dialogOk">У реду</span><span id="dialogCancel">Откажи</span><span id="catLogic">Логика</span><span id="catLoops">Петље</span><span id="catMath">Математика</span><span id="catText">Текст</span><span id="catLists">Спискови</span><span id="catColour">Боја</span><span id="catVariables">Променљиве</span><span id="catProcedures">Процедуре</span><span id="httpRequestError">Дошло је до проблема у захтеву.</span><span id="linkAlert">Делите своје блокове овом везом:\n\n%1</span><span id="hashError">„%1“ не одговара ниједном сачуваном програму.</span><span id="xmlError">Не могу да учитам сачувану датотеку. Можда је направљена другом верзијом Blockly-ја.</span><span id="listVariable">списак</span><span id="textVariable">текст</span></div>';
 };
 
 
@@ -36,12 +36,12 @@ if (typeof planepage == 'undefined') { var planepage = {}; }
 
 
 planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Rows: %1</span><span id="Plane_getRows">rows (%1)</span><span id="Plane_rows1">1st class rows: %1</span><span id="Plane_getRows1">1st class rows (%1)</span><span id="Plane_rows2">2nd class rows: %1</span><span id="Plane_getRows2">2nd class rows (%1)</span><span id="Plane_seats">Seats: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">seats =</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Rows: %1</span><span id="Plane_getRows">rows (%1)</span><span id="Plane_rows1">Редови 1. класе: %1</span><span id="Plane_getRows1">Редови 1. класе (%1)</span><span id="Plane_rows2">Редови 2. класе: %1</span><span id="Plane_getRows2">Редови 2. класе (%1)</span><span id="Plane_seats">Седишта: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">места =</span></div>';
 };
 
 
 planepage.start = function(opt_data, opt_ignored, opt_ijData) {
-  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly (Блоклијев)</a> : Plane Seat Calculator</span> &nbsp; ';
+  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly</a> : Калкулатор места у авиону</span> &nbsp; ';
   var iLimit130 = opt_ijData.maxLevel + 1;
   for (var i130 = 1; i130 < iLimit130; i130++) {
     output += ' ' + ((i130 == opt_ijData.level) ? '<span class="tab" id="selected">' + soy.$$escapeHtml(i130) + '</span>' : (i130 < opt_ijData.level) ? '<a class="tab previous" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>' : '<a class="tab" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>');

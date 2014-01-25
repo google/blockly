@@ -36,12 +36,12 @@ if (typeof planepage == 'undefined') { var planepage = {}; }
 
 
 planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Fileiras: %1</span><span id="Plane_getRows">filas (%1)</span><span id="Plane_rows1">filas na primeira classe: %1</span><span id="Plane_getRows1">filas na primeira classe: (%1)</span><span id="Plane_rows2">filas na segunda classe: %1</span><span id="Plane_getRows2">filas na segunda classe (%1)</span><span id="Plane_seats">Assentos: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">assentos =</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Filas: %1</span><span id="Plane_getRows">filas (%1)</span><span id="Plane_rows1">filas na primeira classe: %1</span><span id="Plane_getRows1">filas na primeira classe (%1)</span><span id="Plane_rows2">filas na segunda classe: %1</span><span id="Plane_getRows2">filas na segunda classe (%1)</span><span id="Plane_seats">Assentos: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">assentos =</span></div>';
 };
 
 
 planepage.start = function(opt_data, opt_ignored, opt_ijData) {
-  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly</a> : Calculadora de Assentas em Avião</span> &nbsp; ';
+  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly</a> : Calculadora de Assentos em Avião</span> &nbsp; ';
   var iLimit130 = opt_ijData.maxLevel + 1;
   for (var i130 = 1; i130 < iLimit130; i130++) {
     output += ' ' + ((i130 == opt_ijData.level) ? '<span class="tab" id="selected">' + soy.$$escapeHtml(i130) + '</span>' : (i130 < opt_ijData.level) ? '<a class="tab previous" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>' : '<a class="tab" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>');

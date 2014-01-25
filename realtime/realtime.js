@@ -415,6 +415,41 @@ Blockly.Realtime.afterAuth_ = function() {
 };
 
 /**
+ * Add "Anyone with the link" permissions to the file.
+ * @param fileId the file id
+ */
+Blockly.Realtime.afterCreate_ = function(fileId) {
+  var resource = {
+    'type': 'anyone',
+    'role': 'writer',
+    'value': 'default',
+    'withLink': true
+  };
+  var request = gapi.client.drive.permissions.insert({
+    'fileId': fileId,
+    'resource': resource
+  });
+  request.execute(function(resp) {
+    // If we have an error try to just set the permission for all users
+    // of the domain.
+    if (resp.error) {
+      var resource = {
+        'type': 'domain',
+        'role': 'writer',
+        'value': item.domain,
+        'withLink': true
+      };
+      request = gapi.client.drive.permissions.insert({
+        'fileId': fileId,
+        'resource': resource
+      });
+      request.execute(function(resp) { });
+    }
+  });
+}
+
+
+/**
  * Options for the Realtime loader.
  */
 Blockly.Realtime.realtimeOptions_ = {
@@ -463,7 +498,12 @@ Blockly.Realtime.realtimeOptions_ = {
   /**
    * Function to be called after authorization and before loading files.
    */
-  afterAuth: Blockly.Realtime.afterAuth_
+  afterAuth: Blockly.Realtime.afterAuth_,
+
+  /**
+   * Function to be called after file creation, if autoCreate is true.
+   */
+  afterCreate: Blockly.Realtime.afterCreate_
 };
 
 /**

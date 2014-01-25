@@ -229,7 +229,7 @@
     "TEXT_TRIM_TOOLTIP": "Entfernt Leerzeichen vom Anfang und / oder Ende eines Textes.",
     "TEXT_TRIM_OPERATOR_BOTH": "entferne Leerzeichen von Anfang und Ende Seiten",
     "TEXT_TRIM_OPERATOR_LEFT": "entferne Leerzeichen von Anfang Seite",
-    "TEXT_TRIM_OPERATOR_RIGHT": "entferne Leerzeichen von Ende Seite",
+    "TEXT_TRIM_OPERATOR_RIGHT": "entferne Leerzeichen von Ende Seite von",
     "TEXT_PRINT_HELPURL": "http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html",
     "TEXT_PRINT_TITLE": "Ausgabe %1",
     "TEXT_PRINT_TOOLTIP": "Gib den Inhalt einer Variable aus.",

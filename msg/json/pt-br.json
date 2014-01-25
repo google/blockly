@@ -2,7 +2,8 @@
     "@metadata": {
         "authors": [
             "Espertus",
-            "Prilopes"
+            "Prilopes",
+            "Mordecaista"
         ]
     },
     "VARIABLES_DEFAULT_NAME": "item",
@@ -201,9 +202,9 @@
     "TEXT_CHANGECASE_OPERATOR_LOWERCASE": "para minúsculas",
     "TEXT_CHANGECASE_OPERATOR_TITLECASE": "para Nomes Próprios",
     "TEXT_TRIM_TOOLTIP": "Retorna uma cópia do texto com os espaços removidos de uma ou ambas extremidades.",
-    "TEXT_TRIM_OPERATOR_BOTH": "remover espaços de ambos os lados",
-    "TEXT_TRIM_OPERATOR_LEFT": "remover espaços à esquerda",
-    "TEXT_TRIM_OPERATOR_RIGHT": "remover espaços à direita",
+    "TEXT_TRIM_OPERATOR_BOTH": "remover espaços de ambos os lados de",
+    "TEXT_TRIM_OPERATOR_LEFT": "remover espaços à esquerda de",
+    "TEXT_TRIM_OPERATOR_RIGHT": "remover espaços à direita de",
     "TEXT_PRINT_TITLE": "imprime %1",
     "TEXT_PRINT_TOOLTIP": "Imprime o texto, número ou valor especificado.",
     "TEXT_PROMPT_TYPE_TEXT": "Pede um texto com uma mensagem",

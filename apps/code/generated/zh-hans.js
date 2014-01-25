@@ -36,7 +36,7 @@ if (typeof codepage == 'undefined') { var codepage = {}; }
 
 
 codepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Code_badXml">XML解析错误：\n%1\n\n选择“确定”以取消您对XML的修改或“取消”以继续编辑。</span><span id="Code_badCode">程序错误：\n%1</span><span id="Code_timeout">超过最大执行行数。</span><span id="Code_discard">删除所有%1块吗？</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Code_badXml">XML解析错误：\n%1\n\n选择“确定”以取消您对XML的修改，或选择“取消”以继续编辑XML。</span><span id="Code_badCode">程序错误：\n%1</span><span id="Code_timeout">超过最大执行行数。</span><span id="Code_discard">删除所有%1块吗？</span></div>';
 };
 
 

@@ -273,6 +273,7 @@ rtclient.RealtimeLoader = function(options) {
   this.autoCreate = rtclient.getOption(options, 'autoCreate', false);
   this.defaultTitle = rtclient.getOption(options, 'defaultTitle',
       'New Realtime File');
+  this.afterCreate = rtclient.getOption(options, 'afterCreate', function() {});
   this.authorizer = new rtclient.Authorizer(options);
 };
 
@@ -391,6 +392,9 @@ rtclient.RealtimeLoader.prototype.createNewFileAndRedirect = function() {
   rtclient.createRealtimeFile(this.defaultTitle, this.newFileMimeType,
       function(file) {
         if (file.id) {
+          if (_this.afterCreate) {
+            _this.afterCreate(file.id);
+          }
           _this.redirectTo([file.id], _this.authorizer.userId);
         } else {
           // File failed to be created, log why and do not attempt to redirect.

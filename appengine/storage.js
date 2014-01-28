@@ -1,8 +1,9 @@
 /**
- * Blockly Demo: Storage
+ * @license
+ * Visual Blocks Editor
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://blockly.googlecode.com/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

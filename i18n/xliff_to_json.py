@@ -3,7 +3,7 @@
 # Converts .xlf files into .json files for use at http://translatewiki.net.
 #
 # Copyright 2013 Google Inc.
-# http://blockly.googlecode.com/
+# https://blockly.googlecode.com/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

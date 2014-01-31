@@ -113,6 +113,8 @@ rtclient.getOption = function(options, key, defaultValue) {
  *     these are:
  *
  *    1. "clientId", the Client ID from the console
+ *    2. "authButtonElementId", the is of the dom element to use for
+ *       authorizing.
  */
 rtclient.Authorizer = function(options) {
   this.clientId = rtclient.getOption(options, 'clientId');
@@ -161,7 +163,6 @@ rtclient.Authorizer.prototype.authorize = function(onAuthComplete) {
       user_id: userId,
       immediate: false
     }, handleAuthResult);
-    console.log(clientId);
   };
   // Try with no popups first.
   gapi.auth.authorize({

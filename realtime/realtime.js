@@ -436,7 +436,7 @@ Blockly.Realtime.afterAuth_ = function() {
 
 /**
  * Add "Anyone with the link" permissions to the file.
- * @param fileId the file id
+ * @param {string} fileId the file id
  */
 Blockly.Realtime.afterCreate_ = function(fileId) {
   var resource = {
@@ -453,21 +453,49 @@ Blockly.Realtime.afterCreate_ = function(fileId) {
     // If we have an error try to just set the permission for all users
     // of the domain.
     if (resp.error) {
-      var resource = {
-        'type': 'domain',
-        'role': 'writer',
-        'value': item.domain,
-        'withLink': true
-      };
-      request = gapi.client.drive.permissions.insert({
-        'fileId': fileId,
-        'resource': resource
+      Blockly.Realtime.getUserDomain(fileId, function(domain) {
+        var resource = {
+          'type': 'domain',
+          'role': 'writer',
+          'value': domain,
+          'withLink': true
+        };
+        request = gapi.client.drive.permissions.insert({
+          'fileId': fileId,
+          'resource': resource
+        });
+        request.execute(function(resp) { });
       });
-      request.execute(function(resp) { });
     }
   });
-}
+};
 
+/**
+ * Get the domain (if it exists) associated with a realtime file.  The callback
+ * will be called with the domain, if it exists.
+ * @param fileId {string} the id of the file
+ * @param callback {function(string)} a function to call back with the domain
+ */
+Blockly.Realtime.getUserDomain = function (fileId, callback) {
+  /**
+   * Note that there may be a more direct way to get the domain by, for example,
+   * using the Google profile API but this way we don't need any additional
+   * APIs or scopes.  But if it turns out that the permissions API stops
+   * providing the domain this might have to change.
+   */
+  var request = gapi.client.drive.permissions.list({
+    'fileId': fileId
+  });
+  request.execute(function(resp) {
+    for (var i = 0; i < resp.items.length; i++) {
+      var item = resp.items[i];
+      if (item.role == 'owner') {
+        callback(item.domain);
+        return;
+      }
+    }
+  });
+};
 
 /**
  * Options for the Realtime loader.
@@ -476,7 +504,8 @@ Blockly.Realtime.realtimeOptions_ = {
   /**
    * Client ID from the console.
    */
-  clientId: 'INSERT YOUR CLIENT ID HERE',
+//  clientId: 'INSERT YOUR CLIENT ID HERE',
+  clientId: '922110111899.apps.googleusercontent.com',
 
   /**
    * The ID of the button to click to authorize. Must be a DOM element ID.

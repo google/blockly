@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Adaugă un comentariu";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Schimbaţi valoarea:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Restrange blocurile";
 Blockly.Msg.COLLAPSE_BLOCK = "Restrange blocul";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "culoare 1";

@@ -220,7 +220,7 @@ Blockly.clipboard_ = null;
 
 /**
  * Returns the dimensions of the current SVG image.
- * @return {!Object} Contains width, height, top and left properties.
+ * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function() {
   return {width: Blockly.svg.cachedWidth_,

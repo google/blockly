@@ -83,6 +83,10 @@ Blockly.Msg.ENABLE_BLOCK = 'Enable Block';
 /// context menu - Provide helpful information about the selected block.\n{{Identical|Help}}
 Blockly.Msg.HELP = 'Help';
 
+// Realtime collaboration.
+/// collaboration instruction - Tell the user that they can talk with other users.
+Blockly.Msg.CHAT = 'Chat with your collaborator by typing in this box!';
+
 // Variable renaming.
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.
 Blockly.Msg.CHANGE_VALUE_TITLE = 'Change value:';

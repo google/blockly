@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "ใส่คำอธิบาย";
 Blockly.Msg.CHANGE_VALUE_TITLE = "เปลี่ยนค่า:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ย่อบล็อก";
 Blockly.Msg.COLLAPSE_BLOCK = "ย่อบล็อก";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "สีที่ 1";

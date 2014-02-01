@@ -320,7 +320,7 @@ Blockly.mouseToSvg = function(e) {
 
 /**
  * Given an array of strings, return the length of the shortest one.
- * @param {!Array<string>} array Array of strings.
+ * @param {!Array.<string>} array Array of strings.
  * @return {number} Length of shortest string.
  */
 Blockly.shortestStringLength = function(array) {
@@ -337,7 +337,7 @@ Blockly.shortestStringLength = function(array) {
 /**
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
- * @param {!Array<string>} array Array of strings.
+ * @param {!Array.<string>} array Array of strings.
  * @param {?number} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
@@ -372,7 +372,7 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
 /**
  * Given an array of strings, return the length of the common suffix.
  * Words may not be split.  Any space after a word is included in the length.
- * @param {!Array<string>} array Array of strings.
+ * @param {!Array.<string>} array Array of strings.
  * @param {?number} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */

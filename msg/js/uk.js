@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Додати коментар";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Змінити значення:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Згорнути блоки";
 Blockly.Msg.COLLAPSE_BLOCK = "Згорнути блок";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "колір 1";

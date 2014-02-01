@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Afegeix un comentari";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Canvia valor:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Contraure blocs";
 Blockly.Msg.COLLAPSE_BLOCK = "Contraure bloc";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "color 1";

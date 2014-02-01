@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Dagdag komento";
 Blockly.Msg.CHANGE_VALUE_TITLE = "pagbago ng value:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "bloke";
 Blockly.Msg.COLLAPSE_BLOCK = "bloke";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "kulay 1";

@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Přidat komentář";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Změna hodnoty:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Skrýt bloky";
 Blockly.Msg.COLLAPSE_BLOCK = "Skrýt blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "barva 1";

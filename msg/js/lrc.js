@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "نظرتونه اضاف بکید";
 Blockly.Msg.CHANGE_VALUE_TITLE = "ارزشت آلشت کو:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_BLOCK = "Collapse Block";  // untranslated
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "رن 1";

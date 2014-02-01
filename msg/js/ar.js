@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "اضافة تعليق";
 Blockly.Msg.CHANGE_VALUE_TITLE = "تغيير قيمة:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "إخفاء القطع";
 Blockly.Msg.COLLAPSE_BLOCK = "إخفاء القطعة";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "اللون 1";

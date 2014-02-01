@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Dodaj komentarz";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Zmień wartość:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Zwiń bloki";
 Blockly.Msg.COLLAPSE_BLOCK = "Zwiń blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "kolor 1";

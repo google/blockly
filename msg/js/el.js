@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Πρόσθεσε Σχόλιο";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Άλλαξε την τιμή:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Σύμπτυξτε Όλα Τα Μπλοκ";
 Blockly.Msg.COLLAPSE_BLOCK = "Σύμπτυξε Το Μπλοκ";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "χρώμα 1";

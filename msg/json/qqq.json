@@ -1,10 +1,4 @@
 {
-    "@metadata": {
-        "authors": [
-            "Espertus",
-            "Shirayuki"
-        ]
-    },
     "VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].",
     "DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).",
     "ADD_COMMENT": "context menu - Add a descriptive comment to the selected block.",
@@ -20,6 +14,7 @@
     "DISABLE_BLOCK": "context menu - Make the selected block have no effect (unless reenabled).",
     "ENABLE_BLOCK": "context menu - Make the selected block have effect (after having been disabled earlier).",
     "HELP": "context menu - Provide helpful information about the selected block.\n{{Identical|Help}}",
+    "CHAT": "collaboration instruction - Tell the user that they can talk with other users.",
     "CHANGE_VALUE_TITLE": "prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.",
     "NEW_VARIABLE": "dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to define a new variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].",
     "NEW_VARIABLE_TITLE": "prompt - Prompts the user to enter the name for a new variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].",

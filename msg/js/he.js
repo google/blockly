@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "הוסף תגובה";
 Blockly.Msg.CHANGE_VALUE_TITLE = "שנה ערך:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "צמצם קטעי קוד";
 Blockly.Msg.COLLAPSE_BLOCK = "צמצם קטע קוד";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "צבע 1";

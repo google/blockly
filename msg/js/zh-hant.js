@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "加入註解";
 Blockly.Msg.CHANGE_VALUE_TITLE = "修改值:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "收合積木";
 Blockly.Msg.COLLAPSE_BLOCK = "收合積木";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "顏色 1";

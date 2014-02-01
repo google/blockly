@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Yorum Ekle";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Değeri değiştir:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokları Daralt";
 Blockly.Msg.COLLAPSE_BLOCK = "Blok'u Daralt";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "renk 1";

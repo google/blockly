@@ -66,15 +66,6 @@ Blockly.setUidCounter = function(val) {
 }
 
 /**
- * Check is realtime collaboration is enabled for this Blockly app.
- * @returns {Blockly.Realtime|*|boolean}
- */
-Blockly.isRealtimeEnabled = function() {
-  return (typeof Blockly.Realtime != 'undefined') &&
-      Blockly.Realtime && Blockly.Realtime.isEnabled();
-};
-
-/**
 * Class for one block.
 * @constructor
 */
@@ -93,7 +84,7 @@ Blockly.Block = function() {
  * @return {!Blockly.Block} The created block
  */
 Blockly.Block.obtain = function(workspace, prototypeName) {
-  if (Blockly.isRealtimeEnabled()) {
+  if (Blockly.Realtime.isEnabled()) {
     return Blockly.Realtime.obtainBlock(workspace, prototypeName);
   } else {
     var newBlock = new Blockly.Block();
@@ -166,7 +157,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
  * @return {Blockly.Block} The found block, or null if not found.
  */
 Blockly.Block.getById = function(id, workspace) {
-  if (Blockly.isRealtimeEnabled()) {
+  if (Blockly.Realtime.isEnabled()) {
     return Blockly.Realtime.getBlockById(id);
   } else {
     return workspace.getBlockById(id);
@@ -386,7 +377,7 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
     this.svg_ = null;
   }
   // Remove from Realtime set of blocks.
-  if (Blockly.isRealtimeEnabled() && !Blockly.Realtime.withinSync) {
+  if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
     Blockly.Realtime.removeBlock(this);
   }
 };
@@ -463,7 +454,7 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.svg_.getRootElement().setAttribute('transform',
       'translate(' + (xy.x + dx) + ', ' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
-  if (Blockly.isRealtimeEnabled() && !Blockly.Realtime.withinSync) {
+  if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
     Blockly.Realtime.blockChanged(this);
   }
 };
@@ -1853,7 +1844,7 @@ Blockly.Block.prototype.render = function() {
   goog.asserts.assertObject(this.svg_,
       'Uninitialized block cannot be rendered.  Call block.initSvg()');
   this.svg_.render();
-  if (Blockly.isRealtimeEnabled() && !Blockly.Realtime.withinSync) {
+  if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
     Blockly.Realtime.blockChanged(this);
   }
 };

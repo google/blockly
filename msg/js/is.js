@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Skrifa skýringu";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Breyta gildi:";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Loka kubbum";
 Blockly.Msg.COLLAPSE_BLOCK = "Loka kubbi";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "litur 1";

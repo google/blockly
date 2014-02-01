@@ -8,6 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "コメントを追加";
 Blockly.Msg.CHANGE_VALUE_TITLE = "値を変更します。";
+Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ブロックを折りたたむ";
 Blockly.Msg.COLLAPSE_BLOCK = "ブロックを折りたたむ";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "色 1";

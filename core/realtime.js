@@ -105,8 +105,7 @@ Blockly.Realtime.initializeModel_ = function(model) {
   model.getRoot().set('blocks', blocksMap);
   var topBlocks = model.createList();
   model.getRoot().set('topBlocks', topBlocks);
-  var string =
-      model.createString('Chat with your collaborator by typing in this box!');
+  var string = model.createString(Blockly.Msg.CHAT);
   model.getRoot().set('text', string);
 };
 

@@ -46,7 +46,7 @@
     "Turtle.title": "タートル グラフィックス",
     "Apps.turtleSubtitle": "ブロックリーで描きましょう。",
     "Apps.graphSubtitle": "ブロックリーで関数をプロットしましょう。",
-    "Apps.codeSubtitle": "ブロックリーのプログラムを JavaScript、Python、XML にエクスポートしましょう。",
+    "Apps.codeSubtitle": "ブロックリーのプログラムを JavaScript、Python、Dart、XML にエクスポートしましょう。",
     "Plane.plane": "飛行機座席計算機",
     "Apps.planeSubtitle": "1変数または2変数の数学の問題を解きましょう。",
     "Apps.blockFactory": "ブロック工場",

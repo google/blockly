@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Metalhead64"
+            "Metalhead64",
+            "M165437"
         ]
     },
     "VARIABLES_DEFAULT_NAME": "Element",
@@ -19,6 +20,7 @@
     "DISABLE_BLOCK": "Block deaktivieren",
     "ENABLE_BLOCK": "Block aktivieren",
     "HELP": "Hilfe",
+    "CHAT": "Chatte mit unserem Mitarbeiter durch Eingeben von Text in diesen Kasten!",
     "CHANGE_VALUE_TITLE": "Wert ändern:",
     "NEW_VARIABLE": "Neue Variable...",
     "NEW_VARIABLE_TITLE": "Name der neuen Variable:",
@@ -26,8 +28,8 @@
     "RENAME_VARIABLE_TITLE": "Alle \"%1\" Variablen umbenennen in:",
     "COLOUR_PICKER_HELPURL": "https://de.wikipedia.org/wiki/Farbe",
     "COLOUR_PICKER_TOOLTIP": "Wählen eine Farbe von der Palette.",
-    "COLOUR_RANDOM_TITLE": "random colour",
-    "COLOUR_RANDOM_TOOLTIP": "Choose a colour at random.",
+    "COLOUR_RANDOM_TITLE": "zufällige Farbe",
+    "COLOUR_RANDOM_TOOLTIP": "Wählen Sie eine Farbe nach dem Zufallsprinzip.",
     "COLOUR_RGB_HELPURL": "https://de.wikipedia.org/wiki/RGB-Farbraum",
     "COLOUR_RGB_TITLE": "Farbe mit",
     "COLOUR_RGB_RED": "rot",

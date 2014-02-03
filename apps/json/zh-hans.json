@@ -5,7 +5,8 @@
             "Hzy980512",
             "Liuxinyu970226",
             "Luotiancheng",
-            "Qiyue2001"
+            "Qiyue2001",
+            "Yfdyh000"
         ]
     },
     "Apps.subtitle": "一个可视化编程环境",
@@ -49,7 +50,7 @@
     "Turtle.title": "乌龟图形",
     "Apps.turtleSubtitle": "使用Blockly来绘图。",
     "Apps.graphSubtitle": "使用Blockly绘制函数图形。",
-    "Apps.codeSubtitle": "将Blockly程序导出为JavaScript、Python或XML。",
+    "Apps.codeSubtitle": "将Blockly程序导出为JavaScript、Python、Dart或XML。",
     "Plane.plane": "飞机座位计算器",
     "Apps.planeSubtitle": "解决与一个或两个变量的数学问题。",
     "Apps.blockFactory": "Blockly工厂",

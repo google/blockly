@@ -36,7 +36,7 @@ if (typeof codepage == 'undefined') { var codepage = {}; }
 
 
 codepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Code_badXml">תקלה בניתוח XML:\n\n%;\n\nבחר \'המשך\' בכדי לנטוש את השינויים שלך או \'בטל\' בכדי להמשיך ולערוך את ה XML.</span><span id="Code_badCode">שגיאה בתכנית: %1</span><span id="Code_timeout">חריגה ממספר פעולות חוזרות אפשריות.</span><span id="Code_discard">האם למחוק את כל %1 קטעי הקוד?</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Code_badXml">תקלה בפענוח XML:\n\n%1\n\nנא לבחור \'אישור\' כדי לנטוש את השינויים שלך או \'ביטול\' כדי להמשיך ולערוך את ה־XML.</span><span id="Code_badCode">שגיאה בתכנית: %1</span><span id="Code_timeout">חריגה ממספר פעולות חוזרות אפשריות.</span><span id="Code_discard">האם למחוק את כל %1 קטעי הקוד?</span></div>';
 };
 
 

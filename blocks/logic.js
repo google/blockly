@@ -221,25 +221,21 @@ Blockly.Blocks['controls_if_else'] = {
 Blockly.Blocks['logic_compare'] = {
   // Comparison operator.
   init: function() {
-    if (Blockly.RTL) {
-      var OPERATORS = [
-        ['=', 'EQ'],
-        ['\u2260', 'NEQ'],
-        ['>', 'LT'],
-        ['\u2265', 'LTE'],
-        ['<', 'GT'],
-        ['\u2264', 'GTE']
-      ];
-    } else {
-      var OPERATORS = [
-        ['=', 'EQ'],
-        ['\u2260', 'NEQ'],
-        ['<', 'LT'],
-        ['\u2264', 'LTE'],
-        ['>', 'GT'],
-        ['\u2265', 'GTE']
-      ];
-    }
+    var OPERATORS = Blockly.RTL ? [
+          ['=', 'EQ'],
+          ['\u2260', 'NEQ'],
+          ['>', 'LT'],
+          ['\u2265', 'LTE'],
+          ['<', 'GT'],
+          ['\u2264', 'GTE']
+        ] : [
+          ['=', 'EQ'],
+          ['\u2260', 'NEQ'],
+          ['<', 'LT'],
+          ['\u2264', 'LTE'],
+          ['>', 'GT'],
+          ['\u2265', 'GTE']
+        ];
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
     this.setColour(210);
     this.setOutput(true, 'Boolean');

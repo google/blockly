@@ -8,7 +8,7 @@ goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Kommentar hinzufügen";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Wert ändern:";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CHAT = "Chatte mit unserem Mitarbeiter durch Eingeben von Text in diesen Kasten!";
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";
 Blockly.Msg.COLLAPSE_BLOCK = "Block zusammenfalten";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Farbe 1";
@@ -20,8 +20,8 @@ Blockly.Msg.COLOUR_BLEND_TOOLTIP = "Vermische 2 Farbe mit konfigurierbaren Farbv
 Blockly.Msg.COLOUR_PICKER_HELPURL = "https://de.wikipedia.org/wiki/Farbe";
 Blockly.Msg.COLOUR_PICKER_TOOLTIP = "Wählen eine Farbe von der Palette.";
 Blockly.Msg.COLOUR_RANDOM_HELPURL = "http://randomcolour.com";  // untranslated
-Blockly.Msg.COLOUR_RANDOM_TITLE = "random colour";
-Blockly.Msg.COLOUR_RANDOM_TOOLTIP = "Choose a colour at random.";
+Blockly.Msg.COLOUR_RANDOM_TITLE = "zufällige Farbe";
+Blockly.Msg.COLOUR_RANDOM_TOOLTIP = "Wählen Sie eine Farbe nach dem Zufallsprinzip.";
 Blockly.Msg.COLOUR_RGB_BLUE = "blau";
 Blockly.Msg.COLOUR_RGB_GREEN = "grün";
 Blockly.Msg.COLOUR_RGB_HELPURL = "https://de.wikipedia.org/wiki/RGB-Farbraum";

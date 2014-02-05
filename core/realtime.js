@@ -59,7 +59,7 @@ Blockly.Realtime.model_ = null;
 
 /**
  * The function used to initialize the UI after realtime is initialized.
- * @type {Function()}
+ * @type {Function}
  * @private
  */
 Blockly.Realtime.initUi_ = null;
@@ -214,7 +214,7 @@ Blockly.Realtime.onBlocksMapChange_ = function(evt) {
 /**
  * A convenient wrapper around code that synchronizes the local model being
  * edited with changes from another non-local model.
- * @param {!Function()} thunk A thunk of code to call.
+ * @param {!Function} thunk A thunk of code to call.
  * @private
  */
 Blockly.Realtime.doWithinSync_ = function(thunk) {

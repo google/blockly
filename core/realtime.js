@@ -503,8 +503,7 @@ Blockly.Realtime.realtimeOptions_ = {
   /**
    * Client ID from the console.
    */
-//  clientId: 'INSERT YOUR CLIENT ID HERE',
-  clientId: '922110111899.apps.googleusercontent.com',
+  clientId: 'INSERT YOUR CLIENT ID HERE',
 
   /**
    * The ID of the button to click to authorize. Must be a DOM element ID.

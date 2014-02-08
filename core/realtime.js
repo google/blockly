@@ -42,6 +42,8 @@
 goog.provide('Blockly.Realtime');
 
 goog.require('goog.array');
+goog.require('goog.style');
+goog.require('rtclient');
 
 /**
  * Is realtime collaboration enabled?
@@ -59,7 +61,7 @@ Blockly.Realtime.model_ = null;
 
 /**
  * The function used to initialize the UI after realtime is initialized.
- * @type {Function}
+ * @type {function()}
  * @private
  */
 Blockly.Realtime.initUi_ = null;
@@ -85,8 +87,22 @@ Blockly.Realtime.withinSync = false;
 Blockly.Realtime.realtimeLoader_ = null;
 
 /**
+ * The id of a text area to be used as a realtime chat box.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.chatBoxElementId_ = null;
+
+/**
+ * The initial text to be placed in the realtime chat box.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.chatBoxInitialText_ = null;
+
+/**
  * Returns whether realtime collaboration is enabled.
- * @returns {boolean}
+ * @return {boolean}
  */
 Blockly.Realtime.isEnabled = function() {
   return Blockly.Realtime.enabled_;
@@ -96,8 +112,9 @@ Blockly.Realtime.isEnabled = function() {
  * This function is called the first time that the Realtime model is created
  * for a file. This function should be used to initialize any values of the
  * model.
- * @param model {gapi.drive.realtime.Model} model The Realtime root model
+ * @param {gapi.drive.realtime.Model} model The Realtime root model
  *     object.
+ * @private
  */
 Blockly.Realtime.initializeModel_ = function(model) {
   Blockly.Realtime.model_ = model;
@@ -105,8 +122,10 @@ Blockly.Realtime.initializeModel_ = function(model) {
   model.getRoot().set('blocks', blocksMap);
   var topBlocks = model.createList();
   model.getRoot().set('topBlocks', topBlocks);
-  var string = model.createString(Blockly.Msg.CHAT);
-  model.getRoot().set('text', string);
+  if (Blockly.Realtime.chatBoxElementId_) {
+    model.getRoot().set(Blockly.Realtime.chatBoxElementId_,
+        model.createString(Blockly.Realtime.chatBoxInitialText_));
+  }
 };
 
 /**
@@ -170,14 +189,14 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
       if (event.type == 'value_changed') {
         if (event.property == 'xmlDom') {
           var block = event.target;
-          Blockly.Realtime.doWithinSync_(function(){
+          Blockly.Realtime.doWithinSync_(function() {
             Blockly.Realtime.placeBlockOnWorkspace_(block, false);
             Blockly.Realtime.moveBlock_(block);
           });
         } else if (event.property == 'relativeX' ||
                    event.property == 'relativeY') {
           var block2 = event.target;
-          Blockly.Realtime.doWithinSync_(function () {
+          Blockly.Realtime.doWithinSync_(function() {
             if (!block2.svg_) {
               // If this is a move of a newly disconnected (i.e newly top level)
               // block it will not have any svg (because it has been disposed of
@@ -214,7 +233,7 @@ Blockly.Realtime.onBlocksMapChange_ = function(evt) {
 /**
  * A convenient wrapper around code that synchronizes the local model being
  * edited with changes from another non-local model.
- * @param {!Function} thunk A thunk of code to call.
+ * @param {!function()} thunk A thunk of code to call.
  * @private
  */
 Blockly.Realtime.doWithinSync_ = function(thunk) {
@@ -277,7 +296,6 @@ Blockly.Realtime.moveBlock_ = function(block) {
 /**
  * Delete a block.
  * @param {!Blockly.Block} block The block to delete.
- * @private
  */
 Blockly.Realtime.deleteBlock = function(block) {
   Blockly.Realtime.doWithinSync_(function() {
@@ -327,7 +345,7 @@ Blockly.Realtime.blockChanged = function(block) {
       changed = true;
       rootBlock.xmlDom = newXml;
     }
-    if (rootBlock.relativeX != xy.x || rootBlock.relativeY != xy.y){
+    if (rootBlock.relativeX != xy.x || rootBlock.relativeY != xy.y) {
       rootBlock.relativeX = xy.x;
       rootBlock.relativeY = xy.y;
       changed = true;
@@ -361,14 +379,6 @@ Blockly.Realtime.onFileLoaded_ = function(doc) {
       gapi.drive.realtime.EventType.VALUE_CHANGED,
       Blockly.Realtime.onBlocksMapChange_);
 
-  var string = Blockly.Realtime.model_.getRoot().get('text');
-
-  // Keeping one box updated with a String binder.
-  var textArea1 = document.getElementById('chatbox');
-  gapi.drive.realtime.databinding.bindString(string, textArea1);
-
-  // Enabling UI Elements.
-  textArea1.disabled = false;
   Blockly.Realtime.initUi_();
 
   Blockly.Realtime.loadBlocks_();
@@ -415,6 +425,11 @@ Blockly.Realtime.registerTypes_ = function() {
   custom.setInitializer(Blockly.Block, Blockly.Block.prototype.initialize);
 };
 
+/**
+ * Time period for realtime re-authorization
+ * @type {number}
+ * @private
+ */
 Blockly.Realtime.REAUTH_INTERVAL_IN_MILLISECONDS_ = 30 * 60 * 1000;
 
 /**
@@ -436,6 +451,7 @@ Blockly.Realtime.afterAuth_ = function() {
 /**
  * Add "Anyone with the link" permissions to the file.
  * @param {string} fileId the file id
+ * @private
  */
 Blockly.Realtime.afterCreate_ = function(fileId) {
   var resource = {
@@ -472,10 +488,10 @@ Blockly.Realtime.afterCreate_ = function(fileId) {
 /**
  * Get the domain (if it exists) associated with a realtime file.  The callback
  * will be called with the domain, if it exists.
- * @param fileId {string} the id of the file
- * @param callback {function(string)} a function to call back with the domain
+ * @param {string} fileId the id of the file
+ * @param {function(string)} callback a function to call back with the domain
  */
-Blockly.Realtime.getUserDomain = function (fileId, callback) {
+Blockly.Realtime.getUserDomain = function(fileId, callback) {
   /**
    * Note that there may be a more direct way to get the domain by, for example,
    * using the Google profile API but this way we don't need any additional
@@ -498,6 +514,7 @@ Blockly.Realtime.getUserDomain = function (fileId, callback) {
 
 /**
  * Options for the Realtime loader.
+ * @private
  */
 Blockly.Realtime.realtimeOptions_ = {
   /**
@@ -509,6 +526,11 @@ Blockly.Realtime.realtimeOptions_ = {
    * The ID of the button to click to authorize. Must be a DOM element ID.
    */
   authButtonElementId: 'authorizeButton',
+
+  /**
+   * The ID of the container of the authorize button.
+   */
+  authDivElementId: 'authButtonDiv',
 
   /**
    * Function to be called when a Realtime model is first created.
@@ -554,12 +576,80 @@ Blockly.Realtime.realtimeOptions_ = {
 };
 
 /**
- * Start the Realtime loader with the options.
+ * Parse options to startRealtime().
+ * @param {Object} options object containing the options.
+ * @private
  */
-Blockly.Realtime.startRealtime = function (uiInitialize) {
+Blockly.Realtime.parseOptions_ = function(options) {
+  var chatBoxOptions = rtclient.getOption(options, 'chatbox');
+  if (chatBoxOptions) {
+    Blockly.Realtime.chatBoxElementId_ =
+        rtclient.getOption(chatBoxOptions, 'elementId');
+    Blockly.Realtime.chatBoxInitialText_ =
+        rtclient.getOption(chatBoxOptions, 'initText', Blockly.Msg.CHAT);
+  }
+};
+
+/**
+ * Setup the Blockly container for realtime authorization and start the
+ * Realtime loader.
+ * @param {function()} uiInitialize function to initialize the Blockly UI.
+ * @param {Element} uiContainer container element for the Blockly UI.
+ * @param {Object} options the realtime options.
+ */
+Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
+  Blockly.Realtime.parseOptions_(options);
   Blockly.Realtime.enabled_ = true;
-  Blockly.Realtime.initUi_ = uiInitialize;
+  // Note that we need to setup the UI for realtime authorization before
+  // loading the realtime code (which, in turn, will handle initializing the
+  // rest of the Blockly UI.
+  var authDiv = Blockly.Realtime.addAuthUi_(uiContainer);
+  Blockly.Realtime.initUi_ = function() {
+    uiInitialize();
+    if (Blockly.Realtime.chatBoxElementId_) {
+      var chatText = Blockly.Realtime.model_.getRoot().get(
+          Blockly.Realtime.chatBoxElementId_);
+      var chatBox = document.getElementById(Blockly.Realtime.chatBoxElementId_);
+      gapi.drive.realtime.databinding.bindString(chatText, chatBox);
+      chatBox.disabled = false;
+    }
+  };
   Blockly.Realtime.realtimeLoader_ =
       new rtclient.RealtimeLoader(Blockly.Realtime.realtimeOptions_);
   Blockly.Realtime.realtimeLoader_.start();
+};
+
+/**
+ * Setup the Blockly container for realtime authorization.
+ * @param {Element} uiContainer a DOM container element for the Blockly UI.
+ * @return {Element} the DOM element for the authorization UI.
+ * @private
+ */
+Blockly.Realtime.addAuthUi_ = function(uiContainer) {
+  var blocklyDivBounds = goog.style.getBounds(uiContainer);
+  var authButtonDiv = goog.dom.createDom('div');
+  authButtonDiv.id = 'authButtonDiv';
+  var authText = goog.dom.createDom('p', null, Blockly.Msg.AUTH);
+  authButtonDiv.appendChild(authText);
+  var authButton = goog.dom.createDom('button', null, 'Authorize');
+  authButton.id = Blockly.Realtime.realtimeOptions_.authButtonElementId;
+  authButtonDiv.appendChild(authButton);
+  uiContainer.appendChild(authButtonDiv);
+
+  // TODO: I would have liked to set the style for the authButtonDiv in css.js
+  // but that CSS doesn't get injected until after this code gets run.
+  authButtonDiv.style.display = 'none';
+  authButtonDiv.style.position = 'relative';
+  authButtonDiv.style.textAlign = 'center';
+  authButtonDiv.style.border = '1px solid';
+  authButtonDiv.style.backgroundColor = '#f6f9ff';
+  authButtonDiv.style.borderRadius = '15px';
+  authButtonDiv.style.boxShadow = '10px 10px 5px #888';
+  authButtonDiv.style.width = (blocklyDivBounds.width / 3) + 'px';
+  var authButtonDivBounds = goog.style.getBounds(authButtonDiv);
+  authButtonDiv.style.left =
+      (blocklyDivBounds.width - authButtonDivBounds.width) / 3 + 'px';
+  authButtonDiv.style.top =
+      (blocklyDivBounds.height - authButtonDivBounds.height) / 4 + 'px';
+  return authButtonDiv;
 };

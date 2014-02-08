@@ -30,7 +30,8 @@
 /**
  * Realtime client utilities namespace.
  */
-var rtclient = rtclient || {};
+// var rtclient = rtclient || {};
+goog.provide('rtclient');
 
 /**
  * OAuth 2.0 scope for installing Drive Apps.
@@ -75,9 +76,9 @@ rtclient.getParams = function() {
   var searchFragment = window.location.search;
   if (searchFragment) {
     // split up the query string and store in an object
-    var paramStrs2 = searchFragment.slice(1).split("&");
+    var paramStrs2 = searchFragment.slice(1).split('&');
     for (var j = 0; j < paramStrs2.length; j++) {
-      var paramStr2 = paramStrs2[j].split("=");
+      var paramStr2 = paramStrs2[j].split('=');
       params[paramStr2[0]] = unescape(paramStr2[1]);
     }
   }
@@ -95,15 +96,17 @@ rtclient.params = rtclient.getParams();
  *     neither is available.
  * @param {!Object} options Containing options.
  * @param {string} key Option key.
- * @param {*} defaultValue Default option value (optional).
+ * @param {*=} opt_defaultValue Default option value (optional).
  * @return {*} Option value.
  */
-rtclient.getOption = function(options, key, defaultValue) {
+rtclient.getOption = function(options, key, opt_defaultValue) {
   if (options.hasOwnProperty(key)) {
     return options[key];
   }
-  console.error(key + ' should be present in the options.');
-  return defaultValue;
+  if (opt_defaultValue === undefined) {
+    console.error(key + ' should be present in the options.');
+  }
+  return opt_defaultValue;
 };
 
 /**
@@ -122,6 +125,8 @@ rtclient.Authorizer = function(options) {
   this.userId = rtclient.params['userId'];
   this.authButton = document.getElementById(rtclient.getOption(options,
       'authButtonElementId'));
+  this.authDiv = document.getElementById(rtclient.getOption(options,
+      'authDivElementId'));
 };
 
 /**
@@ -147,9 +152,11 @@ rtclient.Authorizer.prototype.authorize = function(onAuthComplete) {
     if (authResult && !authResult.error) {
       _this.authButton.disabled = true;
       _this.fetchUserId(onAuthComplete);
+      _this.authDiv.style.display = 'none';
     } else {
       _this.authButton.disabled = false;
       _this.authButton.onclick = authorizeWithPopup;
+      _this.authDiv.style.display = 'block';
     }
   };
   var authorizeWithPopup = function() {
@@ -293,9 +300,9 @@ rtclient.RealtimeLoader.prototype.redirectTo = function(fileIds, userId) {
     params.push('userId=' + userId);
   }
   // Naive URL construction.
-  var newUrl = params.length == 0
-      ? window.location.pathname
-      : (window.location.pathname + '#' + params.join('&'));
+  var newUrl = params.length == 0 ?
+      window.location.pathname :
+      (window.location.pathname + '#' + params.join('&'));
   // Using HTML URL re-write if available.
   if (window.history && window.history.replaceState) {
     window.history.replaceState('Google Drive Realtime API Playground',

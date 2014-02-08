@@ -86,6 +86,8 @@ Blockly.Msg.HELP = 'Help';
 // Realtime collaboration.
 /// collaboration instruction - Tell the user that they can talk with other users.
 Blockly.Msg.CHAT = 'Chat with your collaborator by typing in this box!';
+/// authorization instruction - Ask the user to authorize this app so it can be saved and shared by them.
+Blockly.Msg.AUTH = 'Please authorize this app to enable your work to be saved and to allow it to be shared by you.';
 
 // Variable renaming.
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.

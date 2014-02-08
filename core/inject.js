@@ -44,8 +44,19 @@ Blockly.inject = function(container, opt_options) {
     // TODO(scr): don't mix this in to global variables.
     goog.mixin(Blockly, Blockly.parseOptions_(opt_options));
   }
-  Blockly.createDom_(container);
-  Blockly.init_();
+  var startUi = function() {
+    Blockly.createDom_(container);
+    Blockly.init_();
+  };
+  if (Blockly.enableRealtime) {
+    var realtimeElement = document.getElementById('realtime');
+    if (realtimeElement) {
+      realtimeElement.style.display = 'block';
+    }
+    Blockly.Realtime.startRealtime(startUi, container, Blockly.realtimeOptions);
+  } else {
+    startUi();
+  }
 };
 
 /**
@@ -97,6 +108,8 @@ Blockly.parseOptions_ = function(options) {
       hasScrollbars = true;
     }
   }
+  var enableRealtime = !!options['realtime'];
+  var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
   return {
     RTL: !!options['rtl'],
     collapse: hasCollapse,
@@ -106,7 +119,9 @@ Blockly.parseOptions_ = function(options) {
     hasCategories: hasCategories,
     hasScrollbars: hasScrollbars,
     hasTrashcan: hasTrashcan,
-    languageTree: tree
+    languageTree: tree,
+    enableRealtime: enableRealtime,
+    realtimeOptions: realtimeOptions
   };
 };
 

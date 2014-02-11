@@ -4,7 +4,8 @@
             "Dorongol",
             "YaronSh",
             "Amire80",
-            "Inkbug"
+            "Inkbug",
+            "Yona b"
         ]
     },
     "VARIABLES_DEFAULT_NAME": "פריט",
@@ -22,6 +23,7 @@
     "DISABLE_BLOCK": "נטרל קטע קוד",
     "ENABLE_BLOCK": "הפעל קטע קוד",
     "HELP": "עזרה",
+    "CHAT": "שוחח עם משתף פעולה שלך על-ידי הקלדה בתיבה זו!",
     "CHANGE_VALUE_TITLE": "שנה ערך:",
     "NEW_VARIABLE": "משתנה חדש...",
     "NEW_VARIABLE_TITLE": "שם המשתנה החדש:",

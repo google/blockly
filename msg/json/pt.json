@@ -1,5 +1,9 @@
 {
-    "@metadata": [],
+    "@metadata": {
+        "authors": [
+            "Imperadeiro98"
+        ]
+    },
     "VARIABLES_DEFAULT_NAME": "item",
     "DUPLICATE_BLOCK": "Duplicar",
     "ADD_COMMENT": "Adicionar Comentário",
@@ -15,6 +19,7 @@
     "DISABLE_BLOCK": "Desabilitar Bloco",
     "ENABLE_BLOCK": "Habilitar Bloco",
     "HELP": "Ajuda",
+    "CHAT": "Converse com o seu colaborador, ao digitar nesta caixa!",
     "CHANGE_VALUE_TITLE": "Alterar valor:",
     "NEW_VARIABLE": "Nova variável...",
     "NEW_VARIABLE_TITLE": "Nome da nova variável:",

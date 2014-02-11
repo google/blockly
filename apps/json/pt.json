@@ -2,7 +2,8 @@
     "@metadata": {
         "authors": [
             "Luckas",
-            "Espertus"
+            "Espertus",
+            "Imperadeiro98"
         ]
     },
     "Apps.blocklyMessage": "Blockly",
@@ -11,6 +12,8 @@
     "Apps.runProgram": "Executar programa",
     "Apps.resetProgram": "Reiniciar",
     "Apps.dialogOk": "OK",
+    "Apps.dialogCancel": "Cancelar",
+    "Apps.catLogic": "Lógica",
     "Apps.catMath": "Matemática",
     "Apps.catText": "Texto",
     "Apps.catLists": "Listas",
@@ -23,6 +26,9 @@
     "Apps.xmlError": "Não foi possível ler o seu arquivo salvo.  Talvez ele tenha sido gerado por uma versão antiga do Blockly?",
     "Apps.listVariable": "lista",
     "Apps.textVariable": "texto",
+    "Code.badXml": "Erro de análise do XML:\n%1\n\nSeleccionar 'OK' para abandonar as suas alterações ou 'Cancelar' para editar o XML.",
+    "Code.badCode": "Erro do programa:\n%1",
+    "Code.discard": "Eliminar todos os blocos (%1)?",
     "Code.title": "Código",
     "Code.blocks": "Bloqueios",
     "Maze.maze": "Quebra-cabeça",

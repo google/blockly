@@ -1,7 +1,8 @@
 {
     "@metadata": {
         "authors": [
-            "Xabier Armendaritz"
+            "Xabier Armendaritz",
+            "Subi"
         ]
     },
     "Apps.blocklyMessage": "Blockly",
@@ -10,10 +11,24 @@
     "Apps.runProgram": "Programa exekutatu",
     "Apps.resetProgram": "Berriz hasi",
     "Apps.dialogOk": "Ados",
+    "Apps.dialogCancel": "Utzi",
+    "Apps.catLogic": "Logika",
+    "Apps.catLoops": "Begiztak",
+    "Apps.catMath": "Matematika",
+    "Apps.catText": "Testua",
+    "Apps.catLists": "Zerrendak",
+    "Apps.catColour": "Kolorea",
+    "Apps.catVariables": "Aldagaiak",
+    "Apps.catProcedures": "Prozedurak",
     "Apps.httpRequestError": "Eskaerarekin arazo bat egon da.",
     "Apps.linkAlert": "Elkarbanatu blokeak lotura honekin:\n\n%1",
     "Apps.hashError": "Barkatu, «%1» ez dator bat gordetako ezein programarekin.",
     "Apps.xmlError": "Ezin izan da zure fitxategia kargatu. Agian Blockly-ren beste bertsio batekin sortua izan zen?",
+    "Apps.listVariable": "zerrenda",
+    "Apps.textVariable": "testua",
+    "Code.title": "Kodea",
+    "Code.blocks": "Blokeak",
+    "Code.trashTooltip": "Bloke guztiak baztertu.",
     "Puzzle.title": "Puzzle",
     "Maze.maze": "Labirintoa",
     "Maze.moveForward": "mugi aurrera",
@@ -42,6 +57,9 @@
     "Maze.helpRepeatMany": "Iritsi helmugara soilik bost bloke erabiliz.",
     "Maze.helpIf": "'if' bloke batek zeozer egingo du bakarrik baldintza betetzen bada. Saiatu ezkerrera biratzen ezkerrera bidea baldin badago.",
     "Maze.helpWallFollow": "Labirinto zail honi irtenbidea aurkitu diezaiokezu? Saia zaitez ezker-pareta jarraitzen.",
+    "Plane.seats": "Eserlekuak: %1",
+    "Plane.placeholder": "?",
+    "Plane.setSeats": "eserlekuak =",
     "Puzzle.country1": "Australia",
     "Puzzle.country1Language": "Ingelesa",
     "Puzzle.country1City1": "Melbourne",

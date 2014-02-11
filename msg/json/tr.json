@@ -1,5 +1,9 @@
 {
-    "@metadata": [],
+    "@metadata": {
+        "authors": [
+            "Meelo"
+        ]
+    },
     "VARIABLES_DEFAULT_NAME": "öge",
     "DUPLICATE_BLOCK": "çoğalt",
     "ADD_COMMENT": "Yorum Ekle",
@@ -15,6 +19,7 @@
     "DISABLE_BLOCK": "Bloğu Devre Dışı Bırak",
     "ENABLE_BLOCK": "Bloğu Etkinleştir",
     "HELP": "Yardım",
+    "CHAT": "Bu kutuya yazarak iş birlikçin ile sohbet et!",
     "CHANGE_VALUE_TITLE": "Değeri değiştir:",
     "NEW_VARIABLE": "Yeni değişken...",
     "NEW_VARIABLE_TITLE": "Yeni değişken ismi :",
@@ -234,9 +239,9 @@
     "TEXT_CHANGECASE_OPERATOR_TITLECASE": "Baş Harfler Büyük",
     "TEXT_TRIM_HELPURL": "https://code.google.com/p/blockly/wiki/Text#Trimming_%28removing%29_spaces",
     "TEXT_TRIM_TOOLTIP": "Metnin bir veya her iki sondan da boşlukları silinmiş şekilde kopyasını verir.",
-    "TEXT_TRIM_OPERATOR_BOTH": "İki tarafdan da boşlukları düzenle",
-    "TEXT_TRIM_OPERATOR_LEFT": "Soldan boşlukları düzenle",
-    "TEXT_TRIM_OPERATOR_RIGHT": "Sağdan boşlukları düzenle",
+    "TEXT_TRIM_OPERATOR_BOTH": "iki tarafından da boşlukları temizle",
+    "TEXT_TRIM_OPERATOR_LEFT": "solundan boşlukları temizle",
+    "TEXT_TRIM_OPERATOR_RIGHT": "sağından boşlukları temizle",
     "TEXT_PRINT_HELPURL": "https://code.google.com/p/blockly/wiki/Text#Printing_text  Yazıyı yazdırmak",
     "TEXT_PRINT_TITLE": "%1 ' i Yaz",
     "TEXT_PRINT_TOOLTIP": "Belirli bir metni,sayıyı veya başka bir değeri yaz.",

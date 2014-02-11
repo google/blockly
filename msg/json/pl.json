@@ -1,5 +1,9 @@
 {
-    "@metadata": [],
+    "@metadata": {
+        "authors": [
+            "Cotidianis"
+        ]
+    },
     "VARIABLES_DEFAULT_NAME": "element",
     "DUPLICATE_BLOCK": "Powiel",
     "ADD_COMMENT": "Dodaj komentarz",
@@ -15,6 +19,7 @@
     "DISABLE_BLOCK": "Wyłącz blok",
     "ENABLE_BLOCK": "Włącz blok",
     "HELP": "Pomoc",
+    "CHAT": "Rozmawiaj z swoim współpracownikiem, pisząc w tym polu!",
     "CHANGE_VALUE_TITLE": "Zmień wartość:",
     "NEW_VARIABLE": "Nowa zmienna...",
     "NEW_VARIABLE_TITLE": "Nowa nazwa zmiennej:",
@@ -234,9 +239,9 @@
     "TEXT_CHANGECASE_OPERATOR_TITLECASE": "zmień na od Wielkich Liter",
     "TEXT_TRIM_HELPURL": "https://code.google.com/p/blockly/wiki/Text#Trimming_%28removing%29_spaces",
     "TEXT_TRIM_TOOLTIP": "Zwróć kopię tekstu z usuniętymi spacjami z jednego lub z obu końców tekstu.",
-    "TEXT_TRIM_OPERATOR_BOTH": "usuń spacje po obu stronach tekstu",
-    "TEXT_TRIM_OPERATOR_LEFT": "usuń spacje z lewej strony tekstu",
-    "TEXT_TRIM_OPERATOR_RIGHT": "usuń spacje z prawej strony tekstu",
+    "TEXT_TRIM_OPERATOR_BOTH": "usuń spacje po obu stronach",
+    "TEXT_TRIM_OPERATOR_LEFT": "usuń spacje z lewej strony",
+    "TEXT_TRIM_OPERATOR_RIGHT": "usuń spacje z prawej strony",
     "TEXT_PRINT_HELPURL": "https://code.google.com/p/blockly/wiki/Text#Printing_text",
     "TEXT_PRINT_TITLE": "wydrukuj %1",
     "TEXT_PRINT_TOOLTIP": "Drukuj określony tekst, liczbę lub coś innego.",

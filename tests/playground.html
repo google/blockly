@@ -57,7 +57,9 @@ function start() {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blocklyDiv'),
           {rtl: rtl, path: '../', toolbox: toolbox, realtime: false,
-            realtimeOptions: {chatbox: {elementId: 'chatbox'}}});
+           realtimeOptions:
+             {clientId: 'YOUR CLIENT ID GOES HERE',
+              chatbox: {elementId: 'chatbox'}}});
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }
@@ -339,6 +341,7 @@ h1 {
     <br>
 
     <!-- Undo and redo buttons. -->
+    <!-- TODO: Uncomment this when undo/redo are fixed. -->
     <!--
       <button id="undoButton" disabled>Undo</button>
       <button id="redoButton" disabled>Redo</button>

@@ -48,8 +48,8 @@ goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 
 // Closure dependencies.
-goog.require('goog.dom');
 goog.require('goog.color');
+goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.string');
 goog.require('goog.ui.ColorPicker');
@@ -667,6 +667,22 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
   Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
                                                        translation);
+};
+
+/**
+ * Execute a command.  Generally, a command is the result of a user action
+ * e.g., a click, drag or context menu selection.  Calling the cmdThunk function
+ * through doCommand() allows us to capture information that can be used for
+ * capabilities like undo (which is supported by the realtime collaboration
+ * feature).
+ * @param {function()} cmdThunk A function representing the command execution.
+ */
+Blockly.doCommand = function(cmdThunk) {
+  if (Blockly.Realtime.isEnabled) {
+    Blockly.Realtime.doCommand(cmdThunk);
+  } else {
+    cmdThunk();
+  }
 };
 
 /**

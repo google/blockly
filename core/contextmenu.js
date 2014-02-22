@@ -109,7 +109,11 @@ Blockly.ContextMenu.show = function(xy, options) {
     resizeList.push(rectElement);
     Blockly.bindEvent_(gElement, 'mousedown', null, Blockly.noEvent);
     if (option.enabled) {
-      Blockly.bindEvent_(gElement, 'mouseup', null, option.callback);
+      var evtHandlerCapturer = function(callback) {
+        return function() { Blockly.doCommand(callback); };
+      };
+      var evtHandler = evtHandlerCapturer(option.callback);
+      Blockly.bindEvent_(gElement, 'mouseup', null, evtHandler);
       Blockly.bindEvent_(gElement, 'mouseup', null, Blockly.ContextMenu.hide);
     } else {
       gElement.setAttribute('class', 'blocklyMenuDivDisabled');

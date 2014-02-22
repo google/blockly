@@ -21,10 +21,6 @@
 /**
  * This file contains functions used by any Blockly app that wants to provide
  * realtime collaboration functionality.
- *
- * Note that it depends on the existence of particularly named UI elements.
- *
- * TODO: Inject the UI element names
  */
 
 /**
@@ -34,7 +30,7 @@
  * Console. Instructions on how to do that can be found in the Blockly wiki page
  * at https://code.google.com/p/blockly/wiki/RealtimeCollaboration
  * Once you do that you can set the clientId in
- * Blockly.Realtime.realtimeOptions_
+ * Blockly.Realtime.rtclientOptions_
  * @author markf@google.com (Mark Friedman)
  */
 'use strict';
@@ -53,11 +49,25 @@ goog.require('rtclient');
 Blockly.Realtime.enabled_ = false;
 
 /**
+ * The Realtime document being collaborated on.
+ * @type {gapi.drive.realtime.Document}
+ * @private
+ */
+Blockly.Realtime.document_ = null;
+
+/**
  * The Realtime model of this doc.
  * @type {gapi.drive.realtime.Model}
  * @private
  */
 Blockly.Realtime.model_ = null;
+
+/**
+ * The unique id associated with this editing session.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.sessionId_ = null;
 
 /**
  * The function used to initialize the UI after realtime is initialized.
@@ -101,12 +111,33 @@ Blockly.Realtime.chatBoxElementId_ = null;
 Blockly.Realtime.chatBoxInitialText_ = null;
 
 /**
+ * Indicator of whether we are in the context of an undo or redo operation.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Realtime.withinUndo_ = false;
+
+/**
  * Returns whether realtime collaboration is enabled.
  * @return {boolean}
  */
 Blockly.Realtime.isEnabled = function() {
   return Blockly.Realtime.enabled_;
 };
+
+/**
+ * The id of the button to use for undo.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.undoElementId_ = null;
+
+/**
+ * The id of the button to use for redo.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.redoElementId_ = null;
 
 /**
  * This function is called the first time that the Realtime model is created
@@ -176,36 +207,57 @@ Blockly.Realtime.getBlockById = function(id) {
 };
 
 /**
+ * Log the event for debugging purposses.
+ * @param {gapi.drive.realtime.BaseModelEvent} evt The event that occurred.
+ * @private
+ */
+Blockly.Realtime.logEvent_ = function (evt) {
+  console.log("Object event:");
+  console.log("  id: " + evt.target.id);
+  console.log("  type: " + evt.type);
+  var events = evt.events;
+  if (events) {
+    var eventCount = events.length;
+    for (var i = 0; i < eventCount; i++) {
+      var event = events[i];
+      console.log("  child event:");
+      console.log("    id: " + event.target.id);
+      console.log("    type: " + event.type);
+    }
+  }
+};
+
+/**
  * Event handler to call when a block is changed.
  * @param {gapi.drive.realtime.ObjectChangedEvent} evt The event that occurred.
  * @private
  */
 Blockly.Realtime.onObjectChange_ = function(evt) {
+  Blockly.Realtime.logEvent_(evt);
   var events = evt.events;
   var eventCount = evt.events.length;
   for (var i = 0; i < eventCount; i++) {
     var event = events[i];
-    if (!event.isLocal) {
+    if (!event.isLocal || Blockly.Realtime.withinUndo_) {
+      var block = event.target;
       if (event.type == 'value_changed') {
         if (event.property == 'xmlDom') {
-          var block = event.target;
           Blockly.Realtime.doWithinSync_(function() {
             Blockly.Realtime.placeBlockOnWorkspace_(block, false);
             Blockly.Realtime.moveBlock_(block);
           });
         } else if (event.property == 'relativeX' ||
-                   event.property == 'relativeY') {
-          var block2 = event.target;
+            event.property == 'relativeY') {
           Blockly.Realtime.doWithinSync_(function() {
-            if (!block2.svg_) {
-              // If this is a move of a newly disconnected (i.e newly top level)
-              // block it will not have any svg (because it has been disposed of
-              // by it's parent), so we need to handle that here.
-              Blockly.Realtime.placeBlockOnWorkspace_(block2, false);
+            if (!block.svg_) {
+              // If this is a move of a newly disconnected (i.e newly top
+              // level) block it will not have any svg (because it has been
+              // disposed of by it's parent), so we need to handle that here.
+              Blockly.Realtime.placeBlockOnWorkspace_(block, false);
             }
-            Blockly.Realtime.moveBlock_(block2);
+            Blockly.Realtime.moveBlock_(block);
           });
-         }
+        }
       }
     }
   }
@@ -217,9 +269,10 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
  * @private
  */
 Blockly.Realtime.onBlocksMapChange_ = function(evt) {
-  console.log('Blocks Map event:');
-  console.log('  id: ' + evt.property);
-  if (!evt.isLocal) {
+  Blockly.Realtime.logEvent_(evt);
+//  console.log('Blocks Map event:');
+//  console.log('  id: ' + evt.property);
+  if (!evt.isLocal || Blockly.Realtime.withinUndo_) {
     var block = evt.newValue;
     if (block) {
       Blockly.Realtime.placeBlockOnWorkspace_(block, !(evt.oldValue));
@@ -259,6 +312,9 @@ Blockly.Realtime.doWithinSync_ = function(thunk) {
  */
 Blockly.Realtime.placeBlockOnWorkspace_ = function(block, addToTop) {
   Blockly.Realtime.doWithinSync_(function() {
+//    if (!Blockly.Realtime.blocksMap_.has(block.id)) {
+//      Blockly.Realtime.blocksMap_.set(block.id, block);
+//    }
     var blockDom = Blockly.Xml.textToDom(block.xmlDom).firstChild;
     var newBlock =
         Blockly.Xml.domToBlock(Blockly.mainWorkspace, blockDom, true);
@@ -309,16 +365,6 @@ Blockly.Realtime.deleteBlock = function(block) {
  * @private
  */
 Blockly.Realtime.loadBlocks_ = function() {
-  var blocks = Blockly.Realtime.blocksMap_.values();
-  for (var i = 0; i < blocks.length; i++) {
-    var block = blocks[i];
-    // Since we now have blocks with already existing ids, we have to make sure
-    // that new blocks don't get any of the existing ids.
-    var blockIdNum = parseInt(block.id, 10);
-    if (blockIdNum > Blockly.getUidCounter()) {
-      Blockly.setUidCounter(blockIdNum + 1);
-    }
-  }
   var topBlocks = Blockly.Realtime.topBlocks_;
   for (var j = 0; j < topBlocks.length; j++) {
     var topBlock = topBlocks.get(j);
@@ -366,6 +412,8 @@ Blockly.Realtime.blockChanged = function(block) {
  * @private
  */
 Blockly.Realtime.onFileLoaded_ = function(doc) {
+  Blockly.Realtime.document_ = doc;
+  Blockly.Realtime.sessionId_ = Blockly.Realtime.getSessionId_(doc);
   Blockly.Realtime.model_ = doc.getModel();
   Blockly.Realtime.blocksMap_ =
       Blockly.Realtime.model_.getRoot().get('blocks');
@@ -385,26 +433,57 @@ Blockly.Realtime.onFileLoaded_ = function(doc) {
 
   // Add logic for undo button.
   // TODO: Uncomment this when undo/redo are fixed.
-/*
-  var undoButton = document.getElementById('undoButton');
-  var redoButton = document.getElementById('redoButton');
+//
+//  var undoButton = document.getElementById(Blockly.Realtime.undoElementId_);
+//  var redoButton = document.getElementById(Blockly.Realtime.redoElementId_);
+//
+//  if (undoButton) {
+//    undoButton.onclick = function (e) {
+//      try {
+//        Blockly.Realtime.withinUndo_ = true;
+//        Blockly.Realtime.model_.undo();
+//      } finally {
+//        Blockly.Realtime.withinUndo_ = false;
+//      }
+//    };
+//  }
+//  if (redoButton) {
+//    redoButton.onclick = function (e) {
+//      try {
+//        Blockly.Realtime.withinUndo_ = true;
+//        Blockly.Realtime.model_.redo();
+//      } finally {
+//        Blockly.Realtime.withinUndo_ = false;
+//      }
+//    };
+//  }
+//
+//  // Add event handler for UndoRedoStateChanged events.
+//  var onUndoRedoStateChanged = function(e) {
+//    undoButton.disabled = !e.canUndo;
+//    redoButton.disabled = !e.canRedo;
+//  };
+//  Blockly.Realtime.model_.addEventListener(
+//      gapi.drive.realtime.EventType.UNDO_REDO_STATE_CHANGED,
+//      onUndoRedoStateChanged);
 
-  undoButton.onclick = function(e) {
-    Blockly.Realtime.model_.undo();
-  };
-  redoButton.onclick = function(e) {
-    Blockly.Realtime.model_.redo();
-  };
+};
 
-  // Add event handler for UndoRedoStateChanged events.
-  var onUndoRedoStateChanged = function(e) {
-    undoButton.disabled = !e.canUndo;
-    redoButton.disabled = !e.canRedo;
-  };
-  Blockly.Realtime.model_.addEventListener(
-      gapi.drive.realtime.EventType.UNDO_REDO_STATE_CHANGED,
-      onUndoRedoStateChanged);
+/**
+ * Get the sessionId associated with this editing session.  Note that it is
+ * unique to the current browser window/tab.
+ * @param {gapi.drive.realtime.Document} doc
+ * @return {*}
+ * @private
  */
+Blockly.Realtime.getSessionId_ = function(doc) {
+  var collaborators = doc.getCollaborators();
+  for (var i = 0; i < collaborators.length; i++) {
+    var collaborator = collaborators[i];
+    if (collaborator.isMe) {
+      return collaborator.sessionId;
+    }
+  }
 };
 
 /**
@@ -417,7 +496,6 @@ Blockly.Realtime.registerTypes_ = function() {
 
   custom.registerType(Blockly.Block, 'Block');
   Blockly.Block.prototype.id = custom.collaborativeField('id');
-  Blockly.Block.prototype.type = custom.collaborativeField('type');
   Blockly.Block.prototype.xmlDom = custom.collaborativeField('xmlDom');
   Blockly.Block.prototype.relativeX = custom.collaborativeField('relativeX');
   Blockly.Block.prototype.relativeY = custom.collaborativeField('relativeY');
@@ -516,11 +594,12 @@ Blockly.Realtime.getUserDomain = function(fileId, callback) {
  * Options for the Realtime loader.
  * @private
  */
-Blockly.Realtime.realtimeOptions_ = {
+Blockly.Realtime.rtclientOptions_ = {
   /**
    * Client ID from the console.
+   * This will be set from the options passed into Blockly.Realtime.start()
    */
-  clientId: 'INSERT YOUR CLIENT ID HERE',
+  clientId: null,
 
   /**
    * The ID of the button to click to authorize. Must be a DOM element ID.
@@ -588,6 +667,13 @@ Blockly.Realtime.parseOptions_ = function(options) {
     Blockly.Realtime.chatBoxInitialText_ =
         rtclient.getOption(chatBoxOptions, 'initText', Blockly.Msg.CHAT);
   }
+    Blockly.Realtime.rtclientOptions_.clientId =
+        rtclient.getOption(options, 'clientId');
+  // TODO: Uncomment this when undo/redo are fixed.
+//  Blockly.Realtime.undoElementId_ =
+//      rtclient.getOption(options, 'undoElementId', 'undoButton');
+//  Blockly.Realtime.redoElementId_ =
+//      rtclient.getOption(options, 'redoElementId', 'redoButton');
 };
 
 /**
@@ -615,7 +701,7 @@ Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
     }
   };
   Blockly.Realtime.realtimeLoader_ =
-      new rtclient.RealtimeLoader(Blockly.Realtime.realtimeOptions_);
+      new rtclient.RealtimeLoader(Blockly.Realtime.rtclientOptions_);
   Blockly.Realtime.realtimeLoader_.start();
 };
 
@@ -632,7 +718,7 @@ Blockly.Realtime.addAuthUi_ = function(uiContainer) {
   var authText = goog.dom.createDom('p', null, Blockly.Msg.AUTH);
   authButtonDiv.appendChild(authText);
   var authButton = goog.dom.createDom('button', null, 'Authorize');
-  authButton.id = Blockly.Realtime.realtimeOptions_.authButtonElementId;
+  authButton.id = Blockly.Realtime.rtclientOptions_.authButtonElementId;
   authButtonDiv.appendChild(authButton);
   uiContainer.appendChild(authButtonDiv);
 
@@ -652,4 +738,58 @@ Blockly.Realtime.addAuthUi_ = function(uiContainer) {
   authButtonDiv.style.top =
       (blocklyDivBounds.height - authButtonDivBounds.height) / 4 + 'px';
   return authButtonDiv;
+};
+
+/**
+ * Execute a command.  Generally, a command is the result of a user action
+ * e.g., a click, drag or context menu selection.
+ * @param {function()} cmdThunk A function representing the command execution.
+ */
+Blockly.Realtime.doCommand = function(cmdThunk) {
+  // TODO(): We'd like to use the realtime API compound operations as in the
+  // commented out code below.  However, it appears that the realtime API is
+  // re-ordering events when they're within compound operations in a way which
+  // breaks us.  We might need to implement our own compound operations as a
+  // workaround.  Doing so might give us some other advantages since we could
+  // then allow compound operations that span synchronous blocks of code (e.g.,
+  // span multiple Blockly events).  It would also allow us to deal with the
+  // fact that the current realtime API puts some operations into the undo stack
+  // that we would prefer weren't there; namely local changes that occur as a
+  // result of remote realtime events.
+//  try {
+//    Blockly.Realtime.model_.beginCompoundOperation();
+//    cmdThunk();
+//  } finally {
+//    Blockly.Realtime.model_.endCompoundOperation();
+//  }
+  cmdThunk();
+};
+
+/**
+ * Generate an id that is unique among the all the sessions that ever
+ * collaborated on this document.
+ * @param {string} extra A string id which is unique within this particular
+ * session.
+ * @return {string}
+ */
+Blockly.Realtime.genUid = function(extra) {
+  /* The idea here is that we use the extra string to ensure uniqueness within
+     this session and the current sessionId to ensure uniqueness across
+     all the current sessions.  There's still the (remote) chance that the
+     current sessionId is the same as some old (non-current) one, so we still
+     need to check that our uid hasn't been previously used.
+
+     Note that you could potentially use a random number to generate the id but
+     there remains the small chance of regenerating the same number that's been
+     used before and I'm paranoid.  It's not enough to just check that the
+     random uid hasn't been previously used because other concurrent sessions
+     might generate the same uid at the same time.  Like I said, I'm paranoid.
+
+   */
+  var potentialUid = Blockly.Realtime.sessionId_ + '-' + extra;
+  if (!Blockly.Realtime.blocksMap_.has(potentialUid)) {
+    return potentialUid;
+  } else {
+    return (Blockly.Realtime.genUid('-' + extra));
+  }
 };

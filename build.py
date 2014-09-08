@@ -2,7 +2,7 @@
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google Inc.
-# https://blockly.googlecode.com/
+# https://github.com/google/blockly
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -290,7 +290,7 @@ class Gen_compressed(threading.Thread):
  [\w ]+
 
  (Copyright \\d+ Google Inc.)
- https://blockly.googlecode.com/
+ https://github.com/google/blockly
 
  Licensed under the Apache License, Version 2.0 \(the "License"\);
  you may not use this file except in compliance with the License.

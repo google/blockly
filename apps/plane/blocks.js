@@ -2,7 +2,7 @@
  * Blockly Apps: Plane Seat Calculator Blocks
  *
  * Copyright 2013 Google Inc.
- * https://blockly.googlecode.com/
+ * https://github.com/google/blockly
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

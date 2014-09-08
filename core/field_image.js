@@ -102,7 +102,7 @@ Blockly.FieldImage.prototype.init = function(block) {
   // Configure the field to be transparent with respect to tooltips.
   var topElement = this.rectElement_ || this.imageElement_;
   topElement.tooltip = this.sourceBlock_;
-  Blockly.Tooltip && Blockly.Tooltip.bindMouseEvents(topElement);
+  Blockly.Tooltip.bindMouseEvents(topElement);
 };
 
 /**

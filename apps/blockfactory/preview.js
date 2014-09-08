@@ -41,7 +41,7 @@ function updateFunc(type, code) {
   }
   eval(code);
   // Create the preview block.
-  previewBlock = new Blockly.Block(Blockly.mainWorkspace, type);
+  previewBlock = Blockly.Block.obtain(Blockly.mainWorkspace, type);
   previewBlock.initSvg();
   previewBlock.render();
   previewBlock.setMovable(false);

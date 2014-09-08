@@ -30,7 +30,10 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks['lists_create_empty'] = {
-  // Create an empty list.
+  /**
+   * Block for creating an empty list.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL);
     this.setColour(260);
@@ -42,7 +45,10 @@ Blockly.Blocks['lists_create_empty'] = {
 };
 
 Blockly.Blocks['lists_create_with'] = {
-  // Create a list with any number of elements of any type.
+  /**
+   * Block for creating a list with any number of elements of any type.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setColour(260);
     this.appendValueInput('ADD0')
@@ -54,16 +60,26 @@ Blockly.Blocks['lists_create_with'] = {
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
     this.itemCount_ = 3;
   },
-  mutationToDom: function(workspace) {
+  /**
+   * Create XML to represent list inputs.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
     var container = document.createElement('mutation');
     container.setAttribute('items', this.itemCount_);
     return container;
   },
-  domToMutation: function(container) {
+  /**
+   * Parse XML to restore the list inputs.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
     for (var x = 0; x < this.itemCount_; x++) {
       this.removeInput('ADD' + x);
     }
-    this.itemCount_ = parseInt(container.getAttribute('items'), 10);
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
     for (var x = 0; x < this.itemCount_; x++) {
       var input = this.appendValueInput('ADD' + x);
       if (x == 0) {
@@ -75,6 +91,12 @@ Blockly.Blocks['lists_create_with'] = {
           .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
     }
   },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this Blockly.Block
+   */
   decompose: function(workspace) {
     var containerBlock =
         Blockly.Block.obtain(workspace, 'lists_create_with_container');
@@ -88,6 +110,11 @@ Blockly.Blocks['lists_create_with'] = {
     }
     return containerBlock;
   },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
   compose: function(containerBlock) {
     // Disconnect all input blocks and remove all inputs.
     if (this.itemCount_ == 0) {
@@ -118,8 +145,12 @@ Blockly.Blocks['lists_create_with'] = {
           .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
     }
   },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
   saveConnections: function(containerBlock) {
-    // Store a pointer to any connected child blocks.
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
     var x = 0;
     while (itemBlock) {
@@ -133,7 +164,10 @@ Blockly.Blocks['lists_create_with'] = {
 };
 
 Blockly.Blocks['lists_create_with_container'] = {
-  // Container.
+  /**
+   * Mutator block for list container.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setColour(260);
     this.appendDummyInput()
@@ -145,7 +179,10 @@ Blockly.Blocks['lists_create_with_container'] = {
 };
 
 Blockly.Blocks['lists_create_with_item'] = {
-  // Add items.
+  /**
+   * Mutator bolck for adding items.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setColour(260);
     this.appendDummyInput()
@@ -158,7 +195,10 @@ Blockly.Blocks['lists_create_with_item'] = {
 };
 
 Blockly.Blocks['lists_repeat'] = {
-  // Create a list with one element repeated.
+  /**
+   * Block for creating a list with one element repeated.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_REPEAT_HELPURL);
     this.setColour(260);
@@ -172,7 +212,10 @@ Blockly.Blocks['lists_repeat'] = {
 };
 
 Blockly.Blocks['lists_length'] = {
-  // List length.
+  /**
+   * Block for list length.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_LENGTH_HELPURL);
     this.setColour(260);
@@ -185,13 +228,16 @@ Blockly.Blocks['lists_length'] = {
 };
 
 Blockly.Blocks['lists_isEmpty'] = {
-  // Is the list empty?
+  /**
+   * Block for is the list empty?
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_IS_EMPTY_HELPURL);
     this.setColour(260);
     this.interpolateMsg(Blockly.Msg.LISTS_IS_EMPTY_TITLE,
                         ['VALUE', ['Array', 'String'], Blockly.ALIGN_RIGHT],
-                        Blockly.ALIGN_RIGHT)
+                        Blockly.ALIGN_RIGHT);
     this.setInputsInline(true);
     this.setOutput(true, 'Boolean');
     this.setTooltip(Blockly.Msg.LISTS_TOOLTIP);
@@ -199,7 +245,10 @@ Blockly.Blocks['lists_isEmpty'] = {
 };
 
 Blockly.Blocks['lists_indexOf'] = {
-  // Find an item in the list.
+  /**
+   * Block for finding an item in the list.
+   * @this Blockly.Block
+   */
   init: function() {
     var OPERATORS =
         [[Blockly.Msg.LISTS_INDEX_OF_FIRST, 'FIRST'],
@@ -218,7 +267,10 @@ Blockly.Blocks['lists_indexOf'] = {
 };
 
 Blockly.Blocks['lists_getIndex'] = {
-  // Get element at index.
+  /**
+   * Block for getting element at index.
+   * @this Blockly.Block
+   */
   init: function() {
     var MODE =
         [[Blockly.Msg.LISTS_GET_INDEX_GET, 'GET'],
@@ -234,7 +286,7 @@ Blockly.Blocks['lists_getIndex'] = {
     this.setColour(260);
     var modeMenu = new Blockly.FieldDropdown(MODE, function(value) {
       var isStatement = (value == 'REMOVE');
-      this.sourceBlock_.updateStatement(isStatement);
+      this.sourceBlock_.updateStatement_(isStatement);
     });
     this.appendValueInput('VALUE')
         .setCheck('Array')
@@ -249,7 +301,7 @@ Blockly.Blocks['lists_getIndex'] = {
     }
     this.setInputsInline(true);
     this.setOutput(true);
-    this.updateAt(true);
+    this.updateAt_(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -258,9 +310,13 @@ Blockly.Blocks['lists_getIndex'] = {
       return Blockly.Msg['LISTS_GET_INDEX_TOOLTIP_' + combo];
     });
   },
+  /**
+   * Create XML to represent whether the block is a statement or a value.
+   * Also represent whether there is an 'AT' input.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
   mutationToDom: function() {
-    // Save whether the block is a statement or a value.
-    // Save whether there is an 'AT' input.
     var container = document.createElement('mutation');
     var isStatement = !this.outputConnection;
     container.setAttribute('statement', isStatement);
@@ -268,17 +324,27 @@ Blockly.Blocks['lists_getIndex'] = {
     container.setAttribute('at', isAt);
     return container;
   },
+  /**
+   * Parse XML to restore the 'AT' input.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
   domToMutation: function(xmlElement) {
-    // Restore the block shape.
     // Note: Until January 2013 this block did not have mutations,
     // so 'statement' defaults to false and 'at' defaults to true.
     var isStatement = (xmlElement.getAttribute('statement') == 'true');
-    this.updateStatement(isStatement);
+    this.updateStatement_(isStatement);
     var isAt = (xmlElement.getAttribute('at') != 'false');
-    this.updateAt(isAt);
+    this.updateAt_(isAt);
   },
-  updateStatement: function(newStatement) {
-    // Switch between a value block and a statement block.
+  /**
+   * Switch between a value block and a statement block.
+   * @param {boolean} newStatement True if the block should be a statement.
+   *     False if the block should be a value.
+   * @private
+   * @this Blockly.Block
+   */
+  updateStatement_: function(newStatement) {
     var oldStatement = !this.outputConnection;
     if (newStatement != oldStatement) {
       this.unplug(true, true);
@@ -293,8 +359,13 @@ Blockly.Blocks['lists_getIndex'] = {
       }
     }
   },
-  updateAt: function(isAt) {
-    // Create or delete an input for the numeric index.
+  /**
+   * Create or delete an input for the numeric index.
+   * @param {boolean} isAt True if the input should exist.
+   * @private
+   * @this Blockly.Block
+   */
+  updateAt_: function(isAt) {
     // Destroy old 'AT' and 'ORDINAL' inputs.
     this.removeInput('AT');
     this.removeInput('ORDINAL', true);
@@ -313,7 +384,7 @@ Blockly.Blocks['lists_getIndex'] = {
       // The 'isAt' variable is available due to this function being a closure.
       if (newAt != isAt) {
         var block = this.sourceBlock_;
-        block.updateAt(newAt);
+        block.updateAt_(newAt);
         // This menu has been destroyed and replaced.  Update the replacement.
         block.setFieldValue(value, 'WHERE');
         return null;
@@ -328,7 +399,10 @@ Blockly.Blocks['lists_getIndex'] = {
 };
 
 Blockly.Blocks['lists_setIndex'] = {
-  // Set element at index.
+  /**
+   * Block for setting the element at index.
+   * @this Blockly.Block
+   */
   init: function() {
     var MODE =
         [[Blockly.Msg.LISTS_SET_INDEX_SET, 'SET'],
@@ -354,7 +428,7 @@ Blockly.Blocks['lists_setIndex'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setTooltip(Blockly.Msg.LISTS_SET_INDEX_TOOLTIP);
-    this.updateAt(true);
+    this.updateAt_(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -363,22 +437,35 @@ Blockly.Blocks['lists_setIndex'] = {
       return Blockly.Msg['LISTS_SET_INDEX_TOOLTIP_' + combo];
     });
   },
+  /**
+   * Create XML to represent whether there is an 'AT' input.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
   mutationToDom: function() {
-    // Save whether there is an 'AT' input.
     var container = document.createElement('mutation');
     var isAt = this.getInput('AT').type == Blockly.INPUT_VALUE;
     container.setAttribute('at', isAt);
     return container;
   },
+  /**
+   * Parse XML to restore the 'AT' input.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
   domToMutation: function(xmlElement) {
-    // Restore the block shape.
     // Note: Until January 2013 this block did not have mutations,
     // so 'at' defaults to true.
     var isAt = (xmlElement.getAttribute('at') != 'false');
-    this.updateAt(isAt);
+    this.updateAt_(isAt);
   },
-  updateAt: function(isAt) {
-    // Create or delete an input for the numeric index.
+  /**
+   * Create or delete an input for the numeric index.
+   * @param {boolean} isAt True if the input should exist.
+   * @private
+   * @this Blockly.Block
+   */
+  updateAt_: function(isAt) {
     // Destroy old 'AT' and 'ORDINAL' input.
     this.removeInput('AT');
     this.removeInput('ORDINAL', true);
@@ -397,7 +484,7 @@ Blockly.Blocks['lists_setIndex'] = {
       // The 'isAt' variable is available due to this function being a closure.
       if (newAt != isAt) {
         var block = this.sourceBlock_;
-        block.updateAt(newAt);
+        block.updateAt_(newAt);
         // This menu has been destroyed and replaced.  Update the replacement.
         block.setFieldValue(value, 'WHERE');
         return null;
@@ -414,7 +501,10 @@ Blockly.Blocks['lists_setIndex'] = {
 };
 
 Blockly.Blocks['lists_getSublist'] = {
-  // Get sublist.
+  /**
+   * Block for getting sublist.
+   * @this Blockly.Block
+   */
   init: function() {
     this.WHERE_OPTIONS_1 =
         [[Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START, 'FROM_START'],
@@ -437,12 +527,16 @@ Blockly.Blocks['lists_getSublist'] = {
     }
     this.setInputsInline(true);
     this.setOutput(true, 'Array');
-    this.updateAt(1, true);
-    this.updateAt(2, true);
+    this.updateAt_(1, true);
+    this.updateAt_(2, true);
     this.setTooltip(Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP);
   },
+  /**
+   * Create XML to represent whether there are 'AT' inputs.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
   mutationToDom: function() {
-    // Save whether there are 'AT' inputs.
     var container = document.createElement('mutation');
     var isAt1 = this.getInput('AT1').type == Blockly.INPUT_VALUE;
     container.setAttribute('at1', isAt1);
@@ -450,14 +544,26 @@ Blockly.Blocks['lists_getSublist'] = {
     container.setAttribute('at2', isAt2);
     return container;
   },
+  /**
+   * Parse XML to restore the 'AT' inputs.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
   domToMutation: function(xmlElement) {
-    // Restore the block shape.
     var isAt1 = (xmlElement.getAttribute('at1') == 'true');
     var isAt2 = (xmlElement.getAttribute('at2') == 'true');
-    this.updateAt(1, isAt1);
-    this.updateAt(2, isAt2);
+    this.updateAt_(1, isAt1);
+    this.updateAt_(2, isAt2);
   },
-  updateAt: function(n, isAt) {
+  /**
+   * Create or delete an input for a numeric index.
+   * This block has two such inputs, independant of each other.
+   * @param {number} n Specify first or second input (1 or 2).
+   * @param {boolean} isAt True if the input should exist.
+   * @private
+   * @this Blockly.Block
+   */
+  updateAt_: function(n, isAt) {
     // Create or delete an input for the numeric index.
     // Destroy old 'AT' and 'ORDINAL' inputs.
     this.removeInput('AT' + n);
@@ -478,7 +584,7 @@ Blockly.Blocks['lists_getSublist'] = {
       // The 'isAt' variable is available due to this function being a closure.
       if (newAt != isAt) {
         var block = this.sourceBlock_;
-        block.updateAt(n, newAt);
+        block.updateAt_(n, newAt);
         // This menu has been destroyed and replaced.  Update the replacement.
         block.setFieldValue(value, 'WHERE' + n);
         return null;

@@ -286,7 +286,11 @@ h1 {
       <block type="text_changeCase"></block>
       <block type="text_trim"></block>
       <block type="text_print"></block>
-      <block type="text_prompt"></block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
     </category>
     <category name="Lists">
       <block type="lists_create_empty"></block>
@@ -332,8 +336,40 @@ h1 {
     <category name="Colour">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
-      <block type="colour_rgb"></block>
-      <block type="colour_blend"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+        <value name="GREEN">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <value name="BLUE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <block type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </block>
+        </value>
+        <value name="COLOUR2">
+          <block type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </block>
+        </value>
+        <value name="RATIO">
+          <block type="math_number">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>

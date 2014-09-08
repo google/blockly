@@ -19,7 +19,7 @@
     <span id="Maze_turnLeft">{msg meaning="Maze.turnLeft" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Imperative or infinitive of a verb for a person turning his head and body one quarter rotation counter-clockwise.  Prefer a translation that has text in common with the translation of 'turn right'.  See [[Translating:Blockly#Drop-Down_Menus]]."}turn left{/msg}</span>
     <span id="Maze_turnRight">{msg meaning="Maze.turnRight" desc="[[Translating:Blockly#Drop-Down_Menus dropdown]] - Imperative or infinitive of a verb for a person turning his head and body one quarter rotation clockwise.  Prefer a translation that has text in common with the translation of 'turn left'.  See [[Translating:Blockly#Drop-Down_Menus]]."}turn right{/msg}</span>
     <span id="Maze_doCode">{msg meaning="Maze.doCode" desc="block text - Imperative or infinitive of a verb preceding one or more commands to a person.  This is part of [https://code.google.com/p/blockly/wiki/Loops#repeat repeat] and [https://code.google.com/p/blockly/wiki/IfElse#If_blocks if] blocks."}do{/msg}</span>
-    <span id="Maze_elseCode">{msg meaning="Maze.elseCode" desc="block text - Conjunction meaning 'otherwise', introducing commands to be performed if a previous condition was not true, as in 'if x\u003E3, do this, else do that'.  See [https://code.google.com/p/blockly/wiki/IfElse#If-Else_blocks]."}else{/msg}</span>
+    <span id="Maze_elseCode">{msg meaning="Maze.elseCode" desc="block text - Conjunction meaning 'otherwise', introducing commands to be performed if a previous condition was not true, as in 'if x>3, do this, else do that'.  See [https://code.google.com/p/blockly/wiki/IfElse#If-Else_blocks]."}else{/msg}</span>
     // This definition was copied up here ahead of when it is needed so that it is adjacent
     // to the previous definition.
     <span id="Maze_helpIfElse">{msg meaning="Maze.helpIfElse" desc="callout - This is shown when the 'if-else' block is introduced.  For 'if-else' concatenate the words for 'if' and 'else/otherwise'."}If-else blocks will do one thing or the other.{/msg}</span>
@@ -122,9 +122,6 @@
   <script type="text/javascript" src="blocks.js"></script>
   {call .toolbox /}
   <div id="blockly"></div>
-  <svg version="1.1" height="1px" width="1px">
-    <text id="arrowTest" style="font-family: sans-serif; font-size: 11pt;">⟲⟳</text>
-  </svg>
 
   <div id="pegmanMenu"></div>
 
@@ -150,7 +147,7 @@
       <img src="help.png">
     </td><td>&nbsp;</td><td>
       {msg meaning="Maze.helpOneTopBlock" desc="callout - This is displayed if a user attempts to run a program composed of multiple stacks of blocks, letting them know they need to create a single stack."}On this level, you need to stack together all of the blocks in the white workspace.{/msg}
-      <iframe id="iframeOneTopBlock" src=""></iframe>
+      <iframe id="iframeOneTopBlock" style="height: 80px; width: 100%; border: none;" src=""></iframe>
     </td></tr></table>
   </div>
   <div id="dialogHelpRun" class="dialogHiddenContent">

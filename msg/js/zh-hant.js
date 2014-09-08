@@ -2,13 +2,14 @@
 
 'use strict';
 
-goog.provide('Blockly.Msg.zh-hant');
+goog.provide('Blockly.Msg.zh.hant');
 
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "加入註解";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "修改值:";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CHAT = "與您的合作者洽談藉由在此框輸入！";
 Blockly.Msg.COLLAPSE_ALL = "收合積木";
 Blockly.Msg.COLLAPSE_BLOCK = "收合積木";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "顏色 1";
@@ -60,7 +61,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = "重複 %1 次";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = "重複";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = "次數";
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "多次執行一些語句";
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Repeat";  // untranslated
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Loops#repeat";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "重複 直到";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "重複 當";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "當值為否時，執行一些語句";
@@ -155,7 +156,7 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = "如果第一個輸入大於或等於第
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = "如果第一個輸入小於第二個輸入，返回 真。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = "如果第一個輸入是小於或等於第二個輸入，返回 真。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = "如果這兩個輸入區塊內容不相等，返回 真。";
-Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://code.google.com/p/blockly/wiki/Not";  // untranslated
+Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://en.wikipedia.org/wiki/Negation";  // untranslated
 Blockly.Msg.LOGIC_NEGATE_TITLE = "非 %1";
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = "如果輸入的值是 否，則返回 真。如果輸入的值是 真 返回 否。";
 Blockly.Msg.LOGIC_NULL = "空";
@@ -255,15 +256,18 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "返回指定角度的反正切值。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "返回指定角度的餘弦值(非弧度）。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "返回指定角度的正弦值(非弧度）。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "返回指定角度的正切值(非弧度）。";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "新變量...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "新變量名稱:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "與：";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "呼叫";
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "執行使用者定義的函數 '%1'。";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "執行使用者定義的函數 '%1' 並使用它的回傳值";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "與：";
 Blockly.Msg.PROCEDURES_CREATE_DO = "建立 '%1'";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
@@ -278,7 +282,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "高亮顯示函式定義";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "如果值為 真，則返回第二個值。";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "警告: 此積木僅可在定義函式時使用。";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "變量:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "參數";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "移除註解";
 Blockly.Msg.RENAME_VARIABLE = "重新命名變量...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "將所有 \"%1\" 變量重新命名為:";
@@ -339,9 +345,9 @@ Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = "輸入 文字 並顯示提示訊息";
 Blockly.Msg.TEXT_TEXT_HELPURL = "https://en.wikipedia.org/wiki/String_(computer_science)";
 Blockly.Msg.TEXT_TEXT_TOOLTIP = "字元、 單詞或一行文字。";
 Blockly.Msg.TEXT_TRIM_HELPURL = "https://code.google.com/p/blockly/wiki/Text#Trimming_%28removing%29_spaces";  // untranslated
-Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "從 兩側 消除空格";
-Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "從 左側 消除空格";
-Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "從 右側 消除空格";
+Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "消除兩側空格";
+Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "消除左側空格";
+Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "消除右側空格";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "複製這段文字的同時刪除兩端多餘的空格。";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "變量";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "創立 '設定 %1'";

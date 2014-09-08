@@ -33,7 +33,7 @@ goog.require('Blockly.Variables');
 
 /**
  * Class for a variable's dropdown field.
- * @param {!string} varname The default name for the variable.  If null,
+ * @param {?string} varname The default name for the variable.  If null,
  *     a unique variable name will be generated.
  * @param {Function} opt_changeHandler A function that is executed when a new
  *     option is selected.  Its sole argument is the new option value.  Its

@@ -32,6 +32,7 @@ goog.provide('Blockly.Field');
 // goog.require('Blockly.Block');
 goog.require('Blockly.BlockSvg');
 goog.require('goog.asserts');
+goog.require('goog.userAgent');
 
 
 /**
@@ -146,6 +147,7 @@ Blockly.Field.prototype.isVisible = function() {
 Blockly.Field.prototype.setVisible = function(visible) {
   this.visible_ = visible;
   this.getRootElement().style.display = visible ? 'block' : 'none';
+  this.render_();
 };
 
 /**
@@ -163,7 +165,13 @@ Blockly.Field.prototype.getRootElement = function() {
  * @private
  */
 Blockly.Field.prototype.render_ = function() {
-  var width = this.textElement_.getComputedTextLength();
+  try {
+    var width = this.textElement_.getComputedTextLength();
+  } catch(e) {
+    // MSIE 11 is known to throw "Unexpected call to method or property access."
+    // if Blockly is hidden.
+    var width = this.textElement_.childNodes[0].length * 8;
+  }
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
         width + Blockly.BlockSvg.SEP_SPACE_X);
@@ -200,10 +208,29 @@ Blockly.Field.prototype.setText = function(text) {
     return;
   }
   this.text_ = text;
+  this.updateTextNode_();
+
+  if (this.sourceBlock_ && this.sourceBlock_.rendered) {
+    this.sourceBlock_.render();
+    this.sourceBlock_.bumpNeighbours_();
+    this.sourceBlock_.workspace.fireChangeEvent();
+  }
+};
+
+/**
+ * Update the text node of this field to display the current text.
+ * @private
+ */
+Blockly.Field.prototype.updateTextNode_ = function() {
+  var text = this.text_;
   // Empty the text element.
   goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   text = text.replace(/\s/g, Blockly.Field.NBSP);
+  if (Blockly.RTL && text) {
+    // The SVG is LTR, force text to be RTL.
+    text += '\u200F';
+  }
   if (!text) {
     // Prevent the field from disappearing if empty.
     text = Blockly.Field.NBSP;
@@ -213,12 +240,6 @@ Blockly.Field.prototype.setText = function(text) {
 
   // Cached width is obsolete.  Clear it.
   this.size_.width = 0;
-
-  if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-    this.sourceBlock_.render();
-    this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
-  }
 };
 
 /**
@@ -245,7 +266,12 @@ Blockly.Field.prototype.setValue = function(text) {
  * @private
  */
 Blockly.Field.prototype.onMouseUp_ = function(e) {
-  if (Blockly.isRightButton(e)) {
+  if ((goog.userAgent.IPHONE || goog.userAgent.IPAD) &&
+      e.layerX !== 0 && e.layerY !== 0) {
+    // iOS spawns a bogus event on the next touch after a 'prompt()' edit.
+    // Unlike the real events, these have a layerX and layerY set.
+    return;
+  } else if (Blockly.isRightButton(e)) {
     // Right-click.
     return;
   } else if (Blockly.Block.dragMode_ == 2) {

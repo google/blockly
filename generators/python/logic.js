@@ -52,12 +52,12 @@ Blockly.Python['controls_if'] = function(block) {
 Blockly.Python['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {
-    EQ: '==',
-    NEQ: '!=',
-    LT: '<',
-    LTE: '<=',
-    GT: '>',
-    GTE: '>='
+    'EQ': '==',
+    'NEQ': '!=',
+    'LT': '<',
+    'LTE': '<=',
+    'GT': '>',
+    'GTE': '>='
   };
   var operator = OPERATORS[block.getFieldValue('OP')];
   var order = Blockly.Python.ORDER_RELATIONAL;
@@ -119,6 +119,6 @@ Blockly.Python['logic_ternary'] = function(block) {
       Blockly.Python.ORDER_CONDITIONAL) || 'None';
   var value_else = Blockly.Python.valueToCode(block, 'ELSE',
       Blockly.Python.ORDER_CONDITIONAL) || 'None';
-  var code = value_then + ' if ' + value_if + ' else ' + value_else
+  var code = value_then + ' if ' + value_if + ' else ' + value_else;
   return [code, Blockly.Python.ORDER_CONDITIONAL];
 };

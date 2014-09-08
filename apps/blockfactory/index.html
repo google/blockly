@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly : Block Factory</title>
+  <script type="text/javascript" src="/storage.js"></script>
   <script type="text/javascript" src="factory.js"></script>
   <script type="text/javascript" src="../../blockly_compressed.js"></script>
   <script type="text/javascript" src="../../msg/messages.js"></script>
@@ -52,6 +53,25 @@
       border: #ddd 1px solid;
       overflow: scroll;
     }
+
+    #linkButton {
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background-color: #eee;
+      color: #000;
+      padding: 1px 10px;
+      margin: 1px 5px;
+      display: none;
+    }
+    #linkButton:hover {
+      box-shadow: 2px 2px 5px #888;
+    }
+    #linkButton>img {
+      opacity: 0.6;
+    }
+    #linkButton:hover>img {
+      opacity: 1;
+    }
   </style>
   <link rel="stylesheet" type="text/css" href="../prettify.css">
   <script type="text/javascript" src="../prettify.js"></script>
@@ -62,13 +82,24 @@
       <td width="50%" height="5%">
         <h1><a href="../index.html">Blockly</a> : Block Factory</h1>
       </td>
-      <td width="50%" height="5%" style="vertical-align: bottom;">
-        <h3>Preview:
-          <select id="direction">
-            <option value="ltr">LTR</option>
-            <option value="rtl">RTL</option>
-          </select>
-        </h3>
+      <td width="50%" height="5%">
+        <table>
+          <tr>
+            <td style="vertical-align: bottom;">
+              <h3>Preview:
+                <select id="direction">
+                  <option value="ltr">LTR</option>
+                  <option value="rtl">RTL</option>
+                </select>
+              </h3>
+            </td>
+            <td style="vertical-align: middle; text-align: right;">
+              <button id="linkButton" title="Save and link to blocks.">
+                <img src="link.png" height="21" width="21">
+              </button>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
     <tr>

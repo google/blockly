@@ -23,10 +23,11 @@
  */
 
 // Supported languages.
-BlocklyApps.LANGUAGES = [
-  'ar', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'he', 'hu', 'is',
-  'it', 'ko', 'ms', 'nl', 'pl', 'pms', 'pt-br', 'ro', 'ru', 'sr', 'sv', 'th',
-  'tl', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
+BlocklyApps.LANGUAGES =
+    ['ace', 'ar', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'he',
+     'hrx', 'hu', 'is', 'it', 'ko', 'mg', 'ms', 'nl', 'pl', 'pms', 'pt-br',
+     'ro', 'ru', 'sco', 'sr', 'sv', 'th', 'tlh', 'tr', 'uk', 'vi', 'zh-hans',
+     'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -134,16 +135,6 @@ Code.init = function() {
   BlocklyApps.init();
 
   var rtl = BlocklyApps.isRtl();
-  var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('content_blocks'),
-      {path: '../../',
-       rtl: rtl,
-       toolbox: toolbox});
-
-  // Add to reserved word list: Local variables in execution evironment (runJS)
-  // and the infinite loop detection function.
-  Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
-
   var container = document.getElementById('content_area');
   var onresize = function(e) {
     var bBox = BlocklyApps.getBBox_(container);
@@ -166,6 +157,16 @@ Code.init = function() {
     }
   };
   window.addEventListener('resize', onresize, false);
+
+  var toolbox = document.getElementById('toolbox');
+  Blockly.inject(document.getElementById('content_blocks'),
+      {path: '../../',
+       rtl: rtl,
+       toolbox: toolbox});
+
+  // Add to reserved word list: Local variables in execution evironment (runJS)
+  // and the infinite loop detection function.
+  Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
 
   BlocklyApps.loadBlocks('');
 
@@ -191,11 +192,7 @@ Code.init = function() {
   window.setTimeout(BlocklyApps.importPrettify, 1);
 };
 
-if (window.location.pathname.match(/readonly.html$/)) {
-  window.addEventListener('load', BlocklyApps.initReadonly);
-} else {
-  window.addEventListener('load', Code.init);
-}
+window.addEventListener('load', Code.init);
 
 /**
  * Execute the user's code.

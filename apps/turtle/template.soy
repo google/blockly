@@ -96,17 +96,25 @@
            width="150"
            height="50">
           <!-- Slow icon. -->
-          <clipPath id="slowClipPath">
-            <rect width=26 height=12 x=5 y=14 />
-          </clipPath>
-          <image xlink:href="icons.png" height=42 width=84 x=-21 y=-10
-              clip-path="url(#slowClipPath)" />
+          <!-- Extra SVG is temporary hack to fix bug #349701 in Chrome 34. -->
+          <!-- Harmless for other browsers. -->
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <clipPath id="slowClipPath">
+              <rect width=26 height=12 x=5 y=14 />
+            </clipPath>
+            <image xlink:href="icons.png" height=42 width=84 x=-21 y=-10
+                clip-path="url(#slowClipPath)" />
+          </svg>
           <!-- Fast icon. -->
-          <clipPath id="fastClipPath">
-            <rect width=26 height=16 x=120 y=10 />
-          </clipPath>
-          <image xlink:href="icons.png" height=42 width=84 x=120 y=-11
-              clip-path="url(#fastClipPath)" />
+          <!-- Extra SVG is temporary hack to fix bug #349701 in Chrome 34. -->
+          <!-- Harmless for other browsers. -->
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+            <clipPath id="fastClipPath">
+              <rect width=26 height=16 x=120 y=10 />
+            </clipPath>
+            <image xlink:href="icons.png" height=42 width=84 x=120 y=-11
+                clip-path="url(#fastClipPath)" />
+          </svg>
         </svg>
       </td>
       <td style="width: 15px;">
@@ -193,8 +201,40 @@
       </block>
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
-      <block type="colour_rgb"></block>
-      <block type="colour_blend"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+        <value name="GREEN">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <value name="BLUE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <block type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </block>
+        </value>
+        <value name="COLOUR2">
+          <block type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </block>
+        </value>
+        <value name="RATIO">
+          <block type="math_number">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="{msg meaning="Apps.catLogic" desc="IBID"}Logic{/msg}">
       <block type="controls_if"></block>
@@ -318,6 +358,6 @@
       </block>
     </category>
     <category name="{msg meaning="Apps.catVariables" desc="IBID"}Variables{/msg}" custom="VARIABLE"></category>
-    <category name="{msg meaning="Apps.catProcedures" desc="IBID"}Procedures{/msg}" custom="PROCEDURE"></category>
+    <category name="{msg meaning="Apps.catProcedures" desc="IBID"}Functions{/msg}" custom="PROCEDURE"></category>
   </xml>
 {/template}

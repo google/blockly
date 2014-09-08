@@ -7,8 +7,9 @@ goog.provide('Blockly.Msg.fa');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "افزودن نظر";
+Blockly.Msg.AUTH = "لطفا این اپلیکیشن را ثبت کنید و آثارتان را فعال کنید تا ذخیره شود و اجازهٔ اشتراک‌گذاری توسط شما داده شود.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "تغییر مقدار:";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CHAT = "با همکارتان با نوشتن در این کادر چت کنید!";
 Blockly.Msg.COLLAPSE_ALL = "فروپاشی بلوک‌ها";
 Blockly.Msg.COLLAPSE_BLOCK = "فروپاشی بلوک";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "رنگ ۱";
@@ -60,7 +61,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = "%1 بار تکرار";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = "تکرار";
 Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = "بار";
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = "انجام چند عبارت چندین بار.";
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Repeat";  // untranslated
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = "https://code.google.com/p/blockly/wiki/Loops#repeat";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "تکرار تا زمانی که";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "تکرار در حالی که";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "تا زمانی که یک مقدار ناصحیح است، چند عبارت را انجام بده.";
@@ -155,7 +156,7 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = "بازگرداندن صحیح اگر و
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = "بازگرداندن صحیح اگر ورودی اول کوچکتر از ورودی دوم باشد.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = "بازگرداندن صحیح اگر ورودی اول کوچکتر یا مساوی با ورودی دوم باشد.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = "برگرداندن صحیح اگر هر دو ورودی با یکدیگر برابر نباشند.";
-Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://code.google.com/p/blockly/wiki/Not";  // untranslated
+Blockly.Msg.LOGIC_NEGATE_HELPURL = "https://en.wikipedia.org/wiki/Negation";  // untranslated
 Blockly.Msg.LOGIC_NEGATE_TITLE = "نه %1";
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = "صجیج باز می‌گرداند اگر ورودی نا صحیح باشند. ناصحیح بازمی‌گرداند اگر ورودی صحیح باشد.";
 Blockly.Msg.LOGIC_NULL = "تهی";
@@ -255,15 +256,18 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "بازگرداندن آرک‌تانژان
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "بازگرداندن کسینوس درجه (نه رادیان).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "بازگرداندن سینوس درجه (نه رادیان).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "بازگرداندن تانژانت یک درجه (نه رادیان).";
+Blockly.Msg.ME = "من";
 Blockly.Msg.NEW_VARIABLE = "متغیر جدید...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "نام متغیر جدید:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "با:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "";  // untranslated
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "اجرای تابع تعریف‌شده توسط کاربر «%1».";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "اجرای تابع تعریف‌شده توسط کاربر «%1» و استفاده از خروجی آن.";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "با:";
 Blockly.Msg.PROCEDURES_CREATE_DO = "ساختن «%1»";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
@@ -278,7 +282,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "برجسته‌سازی تعریف تا�
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "اگر یک مقدار صحیح است، مقدار دوم را برگردان.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "اخطار: این بلوک احتمالاً فقط داخل یک تابع استفاده می‌شود.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "نام ورودی:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "اضافه کردن ورودی به تابع.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ورودی‌ها";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "افزودن، حذف یا دوباره مرتب‌کردن ورودی این تابع.";
 Blockly.Msg.REMOVE_COMMENT = "حذف نظر";
 Blockly.Msg.RENAME_VARIABLE = "تغییر نام متغیر...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "تغییر نام همهٔ متغیرهای «%1» به:";

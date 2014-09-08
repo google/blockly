@@ -18,6 +18,9 @@
 }
 
 /* SVG Plane. */
+#plane {
+  overflow: hidden;
+}
 #fuselage {
   fill: #fff;
   stroke: #000;

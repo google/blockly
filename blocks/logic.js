@@ -30,7 +30,10 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks['controls_if'] = {
-  // If/elseif/else condition.
+  /**
+   * Block for if/elseif/else condition.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.CONTROLS_IF_HELPURL);
     this.setColour(210);
@@ -60,6 +63,11 @@ Blockly.Blocks['controls_if'] = {
     this.elseifCount_ = 0;
     this.elseCount_ = 0;
   },
+  /**
+   * Create XML to represent the number of else-if and else inputs.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
   mutationToDom: function() {
     if (!this.elseifCount_ && !this.elseCount_) {
       return null;
@@ -73,6 +81,11 @@ Blockly.Blocks['controls_if'] = {
     }
     return container;
   },
+  /**
+   * Parse XML to restore the else-if and else inputs.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
   domToMutation: function(xmlElement) {
     this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
     this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10);
@@ -88,6 +101,12 @@ Blockly.Blocks['controls_if'] = {
           .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
     }
   },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this Blockly.Block
+   */
   decompose: function(workspace) {
     var containerBlock = Blockly.Block.obtain(workspace, 'controls_if_if');
     containerBlock.initSvg();
@@ -105,6 +124,11 @@ Blockly.Blocks['controls_if'] = {
     }
     return containerBlock;
   },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
   compose: function(containerBlock) {
     // Disconnect the else input blocks and remove the inputs.
     if (this.elseCount_) {
@@ -152,8 +176,12 @@ Blockly.Blocks['controls_if'] = {
           clauseBlock.nextConnection.targetBlock();
     }
   },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
   saveConnections: function(containerBlock) {
-    // Store a pointer to any connected child blocks.
     var clauseBlock = containerBlock.getInputTargetBlock('STACK');
     var x = 1;
     while (clauseBlock) {
@@ -182,7 +210,10 @@ Blockly.Blocks['controls_if'] = {
 };
 
 Blockly.Blocks['controls_if_if'] = {
-  // If condition.
+  /**
+   * Mutator block for if container.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
@@ -194,7 +225,10 @@ Blockly.Blocks['controls_if_if'] = {
 };
 
 Blockly.Blocks['controls_if_elseif'] = {
-  // Else-If condition.
+  /**
+   * Mutator bolck for else-if condition.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
@@ -207,7 +241,10 @@ Blockly.Blocks['controls_if_elseif'] = {
 };
 
 Blockly.Blocks['controls_if_else'] = {
-  // Else condition.
+  /**
+   * Mutator block for else condition.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setColour(210);
     this.appendDummyInput()
@@ -219,7 +256,10 @@ Blockly.Blocks['controls_if_else'] = {
 };
 
 Blockly.Blocks['logic_compare'] = {
-  // Comparison operator.
+  /**
+   * Block for comparison operator.
+   * @this Blockly.Block
+   */
   init: function() {
     var OPERATORS = Blockly.RTL ? [
           ['=', 'EQ'],
@@ -248,12 +288,12 @@ Blockly.Blocks['logic_compare'] = {
     this.setTooltip(function() {
       var op = thisBlock.getFieldValue('OP');
       var TOOLTIPS = {
-        EQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
-        NEQ: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
-        LT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
-        LTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
-        GT: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
-        GTE: Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
+        'EQ': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ,
+        'NEQ': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ,
+        'LT': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT,
+        'LTE': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE,
+        'GT': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT,
+        'GTE': Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE
       };
       return TOOLTIPS[op];
     });
@@ -261,7 +301,10 @@ Blockly.Blocks['logic_compare'] = {
 };
 
 Blockly.Blocks['logic_operation'] = {
-  // Logical operations: 'and', 'or'.
+  /**
+   * Block for logical operations: 'and', 'or'.
+   * @this Blockly.Block
+   */
   init: function() {
     var OPERATORS =
         [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
@@ -280,17 +323,19 @@ Blockly.Blocks['logic_operation'] = {
     this.setTooltip(function() {
       var op = thisBlock.getFieldValue('OP');
       var TOOLTIPS = {
-        AND: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND,
-        OR: Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR
+        'AND': Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND,
+        'OR': Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR
       };
       return TOOLTIPS[op];
     });
   }
 };
 
-
 Blockly.Blocks['logic_negate'] = {
-  // Negation.
+  /**
+   * Block for negation.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_NEGATE_HELPURL);
     this.setColour(210);
@@ -303,7 +348,10 @@ Blockly.Blocks['logic_negate'] = {
 };
 
 Blockly.Blocks['logic_boolean'] = {
-  // Boolean data type: true and false.
+  /**
+   * Block for boolean data type: true and false.
+   * @this Blockly.Block
+   */
   init: function() {
     var BOOLEANS =
         [[Blockly.Msg.LOGIC_BOOLEAN_TRUE, 'TRUE'],
@@ -318,7 +366,10 @@ Blockly.Blocks['logic_boolean'] = {
 };
 
 Blockly.Blocks['logic_null'] = {
-  // Null data type.
+  /**
+   * Block for null data type.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_NULL_HELPURL);
     this.setColour(210);
@@ -330,7 +381,10 @@ Blockly.Blocks['logic_null'] = {
 };
 
 Blockly.Blocks['logic_ternary'] = {
-  // Ternary operator.
+  /**
+   * Block for ternary operator.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_TERNARY_HELPURL);
     this.setColour(210);

@@ -5,7 +5,7 @@ if (typeof apps == 'undefined') { var apps = {}; }
 
 
 apps.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div style="display: none"><span id="subtitle">en visuell programmeringsmiljö</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">Se genererad JavaScript-kod.</span><span id="linkTooltip">Spara och länka till block.</span><span id="runTooltip">Kör programmet definierat av blocken i arbetsytan.</span><span id="runProgram">Kör program</span><span id="resetProgram">Återställ</span><span id="dialogOk">OK</span><span id="dialogCancel">Avbryt</span><span id="catLogic">Logisk</span><span id="catLoops">Loopar</span><span id="catMath">Matematik</span><span id="catText">Text</span><span id="catLists">Listor</span><span id="catColour">Färg</span><span id="catVariables">Variabler</span><span id="catProcedures">Procedurer</span><span id="httpRequestError">Det uppstod ett problem med begäran.</span><span id="linkAlert">Dela dina block med denna länk: \n\n%1</span><span id="hashError">Tyvärr, \'%1\' överensstämmer inte med något sparat program.</span><span id="xmlError">Kunde inte läsa din sparade fil. Den skapades kanske med en annan version av Blockly?</span><span id="listVariable">lista</span><span id="textVariable">text</span></div>';
+  return '<div style="display: none"><span id="subtitle">en visuell programmeringsmiljö</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">Se genererad JavaScript-kod.</span><span id="linkTooltip">Spara och länka till block.</span><span id="runTooltip">Kör programmet som definierats av blocken i arbetsytan.</span><span id="runProgram">Kör program</span><span id="resetProgram">Återställ</span><span id="dialogOk">OK</span><span id="dialogCancel">Avbryt</span><span id="catLogic">Logik</span><span id="catLoops">Loopar</span><span id="catMath">Matematik</span><span id="catText">Text</span><span id="catLists">Listor</span><span id="catColour">Färg</span><span id="catVariables">Variabler</span><span id="catProcedures">Funktioner</span><span id="httpRequestError">Det uppstod ett problem med begäran.</span><span id="linkAlert">Dela dina block med denna länk: \n\n%1</span><span id="hashError">Tyvärr, \'%1\' överensstämmer inte med något sparat program.</span><span id="xmlError">Kunde inte läsa din sparade fil. Den skapades kanske med en annan version av Blockly?</span><span id="listVariable">lista</span><span id="textVariable">text</span></div>';
 };
 
 
@@ -52,10 +52,10 @@ planepage.start = function(opt_data, opt_ignored, opt_ijData) {
       output += 'Ett flygplan har ett antal rader med passagerarsäten. Varje rad innehåller fyra säten.';
       break;
     case 2:
-      output += 'Ett flygplan har två säten i cockpiten (för piloten och andrepiloten) och ett antal rader med passagerarsäten. Varje rad innehåller fyra säten.';
+      output += 'Ett flygplan har två säten i cockpiten (ett för piloten och ett för andrepiloten) och ett antal rader med passagerarsäten. Varje rad innehåller fyra säten.';
       break;
     case 3:
-      output += 'Ett flygplan har två säten i cockpiten (för piloten och andrepiloten) och ett antal rader med första och andra klassens passagerarsäten. Varje rad i första klass innehåller fyra säten. Varje rad i andra klass innehåller fem säten.';
+      output += 'Ett flygplan har två säten i cockpiten (ett för piloten och ett för andrepiloten) och ett antal rader med passagerarsäten i första och andra klass. Varje rad i första klass innehåller fyra säten. Varje rad i andra klass innehåller fem säten.';
       break;
   }
   output += '</p><p>Bygg en formel (nedan) som beräknar det totala antalet säten på flygplanet när raderna ändras (ovan).</p><script type="text/javascript" src="../../blockly_compressed.js"><\/script><script type="text/javascript" src="../../blocks_compressed.js"><\/script><script type="text/javascript" src="../../javascript_compressed.js"><\/script><script type="text/javascript" src="../../' + soy.$$escapeHtml(opt_ijData.langSrc) + '"><\/script><script type="text/javascript" src="blocks.js"><\/script>' + planepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div>';

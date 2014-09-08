@@ -112,10 +112,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   this.svgDialog_ = Blockly.createSvgElement('svg',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
-  this.svgBackground_ = Blockly.createSvgElement('rect',
+  Blockly.createSvgElement('rect',
       {'class': 'blocklyMutatorBackground',
        'height': '100%', 'width': '100%'}, this.svgDialog_);
-
   var mutator = this;
   this.workspace_ = new Blockly.Workspace(
       function() {return mutator.getFlyoutMetrics_();}, null);
@@ -191,10 +190,10 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(this.block_.workspace,
-        this.createEditor_(), this.block_.svg_.svgGroup_,
+        this.createEditor_(), this.block_.svg_.svgPath_,
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
-    this.flyout_.init(this.workspace_, false);
+    this.flyout_.init(this.workspace_);
     this.flyout_.show(this.quarkXml_);
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
@@ -227,7 +226,6 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
   } else {
     // Dispose of the bubble.
     this.svgDialog_ = null;
-    this.svgBackground_ = null;
     this.flyout_.dispose();
     this.flyout_ = null;
     this.workspace_.dispose();
@@ -257,8 +255,9 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     for (var b = 0, block; block = blocks[b]; b++) {
       var blockXY = block.getRelativeToSurfaceXY();
       var blockHW = block.getHeightWidth();
-      if (Blockly.RTL ? blockXY.x > -this.flyout_.width_ + MARGIN :
-           blockXY.x < this.flyout_.width_ - MARGIN) {
+      if (block.isDeletable() && (Blockly.RTL ?
+            blockXY.x > -this.flyout_.width_ + MARGIN :
+            blockXY.x < this.flyout_.width_ - MARGIN)) {
         // Delete any block that's sitting on top of the flyout.
         block.dispose(false, true);
       } else if (blockXY.y + blockHW.height < MARGIN) {

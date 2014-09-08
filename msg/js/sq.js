@@ -7,6 +7,7 @@ goog.provide('Blockly.Msg.sq');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Vendos nje Koment";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ndrysho Vlerat:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Mbyll blloqet";
@@ -255,15 +256,18 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kthe tg-1 e nje numeri.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kthe kosinusin e nje grade (jo ne radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kthe kosinusin e nje kendi (jo ne radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kthe tangentin e nje kendi (jo radiant).";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Identifikatorë i ri...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Emri i identifikatorit të ri:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "me:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "";  // untranslated
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Lësho funksionin e definuar nga përdoruesi '%1'.";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Lëho funksionin e definuar nga përdoruesi '%1' dhe përdor daljen e tij.";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "me:";
 Blockly.Msg.PROCEDURES_CREATE_DO = "Krijo '%1'";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
@@ -278,7 +282,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Thekso definicionin e funksionit";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Nëse një vlerë është e saktë, atëherë kthe një vlerë të dytë.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Paralajmërim: Ky bllok mund të përdoret vetëm brenda definicionit të funksionit.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "Fut emrin:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Informacioni i futur";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Fshij komentin";
 Blockly.Msg.RENAME_VARIABLE = "Ndrysho emrin variables...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Ndrysho emrin e te gjitha '%1' variablave ne :";

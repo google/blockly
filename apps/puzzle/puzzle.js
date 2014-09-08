@@ -29,12 +29,13 @@
 var Puzzle = {};
 
 // Supported languages.
-BlocklyApps.LANGUAGES = [
-  'af', 'ar', 'be-tarask', 'br', 'ca', 'cdo', 'cs', 'da', 'de', 'el', 'en',
-  'es', 'eu', 'fa', 'fi', 'fo', 'fr', 'frr', 'gl', 'hak', 'he', 'hu', 'ia',
-  'is', 'it', 'ja', 'ka', 'km', 'ko', 'ksh', 'ky', 'la', 'lb', 'lt', 'lv', 'mk',
-  'ml', 'mr', 'ms', 'mzn', 'nb', 'nl', 'oc', 'pa', 'pl', 'pms', 'ps', 'pt-br',
-  'ro', 'ru', 'sk', 'sv', 'sw', 'th', 'tr', 'uk', 'vi', 'zh-hans', 'zh-hant'];
+BlocklyApps.LANGUAGES =
+    ['ace', 'af', 'ar', 'be-tarask', 'br', 'ca', 'cdo', 'cs', 'da', 'de', 'el',
+     'en', 'es', 'eu', 'fa', 'fi', 'fo', 'fr', 'frr', 'gl', 'hak', 'he', 'hi',
+     'hu', 'ia', 'is', 'it', 'ja', 'ka', 'km', 'ko', 'ksh', 'ky', 'la', 'lb',
+     'lt', 'lv', 'mk', 'ml', 'mr', 'ms', 'mzn', 'nb', 'nl', 'oc', 'pa', 'pl',
+     'pms', 'ps', 'pt-br', 'ro', 'ru', 'si', 'sk', 'sv', 'sw', 'th', 'tr', 'uk',
+     'vi', 'zh-hans', 'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -47,12 +48,6 @@ Puzzle.init = function() {
   BlocklyApps.init();
 
   var rtl = BlocklyApps.isRtl();
-  Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
-       rtl: rtl,
-       scrollbars: false,
-       trashcan: false});
-
   var blocklyDiv = document.getElementById('blockly');
   var onresize = function(e) {
     blocklyDiv.style.width = (window.innerWidth - 20) + 'px';
@@ -61,13 +56,24 @@ Puzzle.init = function() {
   };
   onresize();
   window.addEventListener('resize', onresize);
-  Blockly.fireUiEvent(window, 'resize');
+
+  Blockly.inject(document.getElementById('blockly'),
+      {path: '../../',
+       rtl: rtl,
+       scrollbars: false,
+       trashcan: false});
 
   // Add the blocks.
-  if (window.sessionStorage.loadOnceBlocks) {
-    var text = window.sessionStorage.loadOnceBlocks;
+  try {
+    var loadOnce = window.sessionStorage.loadOnceBlocks;
+  } catch (e) {
+    // Firefox sometimes throws a SecurityError when accessing sessionStorage.
+    // Restarting Firefox fixes this, so it looks like a bug.
+    var loadOnce = null;
+  }
+  if (loadOnce) {
     delete window.sessionStorage.loadOnceBlocks;
-    var xml = Blockly.Xml.textToDom(text);
+    var xml = Blockly.Xml.textToDom(loadOnce);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   } else {
     // Create one of every block.
@@ -137,23 +143,23 @@ Puzzle.init = function() {
       block.moveBy(dx, dy);
       countedArea += block.cached_area_;
     }
+  }
 
-    BlocklyApps.bindClick('checkButton', Puzzle.checkAnswers);
-    BlocklyApps.bindClick('helpButton', function(){Puzzle.showHelp(true);});
+  BlocklyApps.bindClick('checkButton', Puzzle.checkAnswers);
+  BlocklyApps.bindClick('helpButton', function(){Puzzle.showHelp(true);});
 
-    Puzzle.showHelp(false);
-    /**
-     * HACK:
-     * Chrome (v28) displays a broken image tag on any image that is also
-     * shown in the help dialog.  Selecting the block fixes the problem.
-     * If Chrome stops corrupting the Australian flag, delete this entire hack.
-     */
-    if (goog.userAgent.WEBKIT) {
-      var blocks = Blockly.mainWorkspace.getAllBlocks();
-      for (var i = 0, block; block = blocks[i]; i++) {
-        block.select();
-      }
-      Blockly.selected.unselect();
+  Puzzle.showHelp(false);
+  /**
+   * HACK:
+   * Chrome (v34) displays a broken image tag on any image that is also
+   * shown in the help dialog.  Resetting the image fixes the problem.
+   * If Chrome stops corrupting the Australian flag, delete this entire hack.
+   */
+  if (goog.userAgent.WEBKIT) {
+    for (var i = 0, block; block = blocksFlags[i]; i++) {
+      var img = block.getInput('IMG').fieldRow[0];
+      var src = img.getValue();
+      img.setValue(src);
     }
   }
 };

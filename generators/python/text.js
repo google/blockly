@@ -202,9 +202,9 @@ Blockly.Python['text_getSubstring'] = function(block) {
 Blockly.Python['text_changeCase'] = function(block) {
   // Change capitalization.
   var OPERATORS = {
-    UPPERCASE: '.upper()',
-    LOWERCASE: '.lower()',
-    TITLECASE: '.title()'
+    'UPPERCASE': '.upper()',
+    'LOWERCASE': '.lower()',
+    'TITLECASE': '.title()'
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
@@ -216,9 +216,9 @@ Blockly.Python['text_changeCase'] = function(block) {
 Blockly.Python['text_trim'] = function(block) {
   // Trim spaces.
   var OPERATORS = {
-    LEFT: '.lstrip()',
-    RIGHT: '.rstrip()',
-    BOTH: '.strip()'
+    'LEFT': '.lstrip()',
+    'RIGHT': '.rstrip()',
+    'BOTH': '.strip()'
   };
   var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
@@ -235,7 +235,7 @@ Blockly.Python['text_print'] = function(block) {
 };
 
 Blockly.Python['text_prompt'] = function(block) {
-  // Prompt function.
+  // Prompt function (internal message).
   var functionName = Blockly.Python.provideFunction_(
       'text_prompt',
       ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(msg):',
@@ -244,6 +244,25 @@ Blockly.Python['text_prompt'] = function(block) {
        '  except NameError:',
        '    return input(msg)']);
   var msg = Blockly.Python.quote_(block.getFieldValue('TEXT'));
+  var code = functionName + '(' + msg + ')';
+  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
+  if (toNumber) {
+    code = 'float(' + code + ')';
+  }
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+};
+
+Blockly.Python['text_prompt_ext'] = function(block) {
+  // Prompt function (external message).
+  var functionName = Blockly.Python.provideFunction_(
+      'text_prompt',
+      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(msg):',
+       '  try:',
+       '    return raw_input(msg)',
+       '  except NameError:',
+       '    return input(msg)']);
+  var msg = Blockly.Python.valueToCode(block, 'TEXT',
+      Blockly.Python.ORDER_NONE) || '\'\'';
   var code = functionName + '(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {

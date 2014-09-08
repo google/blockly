@@ -26,55 +26,25 @@
 
 goog.provide('Blockly.ContextMenu');
 
+goog.require('goog.dom');
+goog.require('goog.style');
+goog.require('goog.ui.Menu');
+goog.require('goog.ui.MenuItem');
+
 
 /**
- * Horizontal padding on either side of each option.
+ * Which block is the context menu attached to?
+ * @type {Blockly.Block}
  */
-Blockly.ContextMenu.X_PADDING = 20;
-
-/**
- * Vertical height of each option.
- */
-Blockly.ContextMenu.Y_HEIGHT = 20;
-
-/**
- * Is a context menu currently showing?
- */
-Blockly.ContextMenu.visible = false;
-
-/**
- * Creates the context menu's DOM.  Only needs to be called once.
- * @return {!SVGGElement} The context menu's SVG group.
- */
-Blockly.ContextMenu.createDom = function() {
-  /*
-  <g class="blocklyHidden">
-    <rect class="blocklyContextMenuShadow" x="2" y="-2" rx="4" ry="4"/>
-    <rect class="blocklyContextMenuBackground" y="-4" rx="4" ry="4"/>
-    <g class="blocklyContextMenuOptions">
-    </g>
-  </g>
-  */
-  var svgGroup = /** @type {!SVGGElement} */ (
-      Blockly.createSvgElement('g', {'class': 'blocklyHidden'}, null));
-  Blockly.ContextMenu.svgGroup = svgGroup;
-  Blockly.ContextMenu.svgShadow = Blockly.createSvgElement('rect',
-      {'class': 'blocklyContextMenuShadow',
-      'x': 2, 'y': -2, 'rx': 4, 'ry': 4}, svgGroup);
-  Blockly.ContextMenu.svgBackground = Blockly.createSvgElement('rect',
-      {'class': 'blocklyContextMenuBackground',
-      'y': -4, 'rx': 4, 'ry': 4}, svgGroup);
-  Blockly.ContextMenu.svgOptions = Blockly.createSvgElement('g',
-      {'class': 'blocklyContextMenuOptions'}, svgGroup);
-  return svgGroup;
-};
+Blockly.ContextMenu.currentBlock = null;
 
 /**
  * Construct the menu based on the list of options and show the menu.
- * @param {!Object} xy Coordinates of anchor point, contains x and y properties.
- * @param {!Array.<Object>} options Array of menu options.
+ * @param {!Event} e Mouse event.
+ * @param {!Array.<!Object>} options Array of menu options.
  */
-Blockly.ContextMenu.show = function(xy, options) {
+Blockly.ContextMenu.show = function(e, options) {
+  Blockly.WidgetDiv.show(Blockly.ContextMenu, null);
   if (!options.length) {
     Blockly.ContextMenu.hide();
     return;
@@ -84,126 +54,63 @@ Blockly.ContextMenu.show = function(xy, options) {
      enabled: true,
      callback: Blockly.MakeItSo}
   */
-  // Erase all existing options.
-  goog.dom.removeChildren(Blockly.ContextMenu.svgOptions);
-  /* Here's the SVG we want for each option:
-    <g class="blocklyMenuDiv" transform="translate(0, 0)">
-      <rect width="100" height="20"/>
-      <text class="blocklyMenuText" x="20" y="15">Make It So</text>
-    </g>
-  */
-  // The menu must be made visible early since otherwise BBox and
-  // getComputedTextLength will return 0.
-  Blockly.ContextMenu.svgGroup.style.display = 'block';
-  var maxWidth = 0;
-  var resizeList = [Blockly.ContextMenu.svgBackground,
-                    Blockly.ContextMenu.svgShadow];
+  var menu = new goog.ui.Menu();
   for (var x = 0, option; option = options[x]; x++) {
-    var gElement = Blockly.ContextMenu.optionToDom(option.text);
-    var rectElement = /** @type {SVGRectElement} */ (gElement.firstChild);
-    var textElement = /** @type {SVGTextElement} */ (gElement.lastChild);
-    Blockly.ContextMenu.svgOptions.appendChild(gElement);
-
-    gElement.setAttribute('transform',
-        'translate(0, ' + (x * Blockly.ContextMenu.Y_HEIGHT) + ')');
-    resizeList.push(rectElement);
-    Blockly.bindEvent_(gElement, 'mousedown', null, Blockly.noEvent);
+    var menuItem = new goog.ui.MenuItem(option.text);
+    menu.addChild(menuItem, true);
+    menuItem.setEnabled(option.enabled);
     if (option.enabled) {
       var evtHandlerCapturer = function(callback) {
         return function() { Blockly.doCommand(callback); };
       };
-      var evtHandler = evtHandlerCapturer(option.callback);
-      Blockly.bindEvent_(gElement, 'mouseup', null, evtHandler);
-      Blockly.bindEvent_(gElement, 'mouseup', null, Blockly.ContextMenu.hide);
-    } else {
-      gElement.setAttribute('class', 'blocklyMenuDivDisabled');
-    }
-    // Compute the length of the longest text length.
-    maxWidth = Math.max(maxWidth, textElement.getComputedTextLength());
-  }
-  // Run a second pass to resize all options to the required width.
-  maxWidth += Blockly.ContextMenu.X_PADDING * 2;
-  for (var x = 0; x < resizeList.length; x++) {
-    resizeList[x].setAttribute('width', maxWidth);
-  }
-  if (Blockly.RTL) {
-    // Right-align the text.
-    for (var x = 0, gElement;
-         gElement = Blockly.ContextMenu.svgOptions.childNodes[x]; x++) {
-      var textElement = gElement.lastChild;
-      textElement.setAttribute('text-anchor', 'end');
-      textElement.setAttribute('x', maxWidth - Blockly.ContextMenu.X_PADDING);
+      goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION,
+                         evtHandlerCapturer(option.callback));
     }
   }
-  Blockly.ContextMenu.svgBackground.setAttribute('height',
-      options.length * Blockly.ContextMenu.Y_HEIGHT + 8);
-  Blockly.ContextMenu.svgShadow.setAttribute('height',
-      options.length * Blockly.ContextMenu.Y_HEIGHT + 10);
+  goog.events.listen(menu, goog.ui.Component.EventType.ACTION,
+                     Blockly.ContextMenu.hide);
+  // Record windowSize and scrollOffset before adding menu.
+  var windowSize = goog.dom.getViewportSize();
+  var scrollOffset = goog.style.getViewportPageOffset(document);
+  var div = Blockly.WidgetDiv.DIV;
+  menu.render(div);
+  var menuDom = menu.getElement();
+  Blockly.addClass_(menuDom, 'blocklyContextMenu');
+  // Record menuSize after adding menu.
+  var menuSize = goog.style.getSize(menuDom);
 
-  // Convert the mouse coordinates into SVG coordinates.
-  var anchorX = xy.x;
-  var anchorY = xy.y;
-
-  // Measure the menu's size and position it so that it does not go off-screen.
-  var bBox = Blockly.ContextMenu.svgGroup.getBBox();
-  var svgSize = Blockly.svgSize();
-  if (anchorY + bBox.height > svgSize.height) {
-    // Falling off the bottom of the screen; flip the menu up.
-    anchorY -= bBox.height - 10;
+  // Position the menu.
+  var x = e.clientX + scrollOffset.x;
+  var y = e.clientY + scrollOffset.y;
+  // Flip menu vertically if off the bottom.
+  if (e.clientY + menuSize.height >= windowSize.height) {
+    y -= menuSize.height;
   }
+  // Flip menu horizontally if off the edge.
   if (Blockly.RTL) {
-    if (anchorX - bBox.width <= 0) {
-      anchorX++;
-    } else {
-      // Falling off the left edge in RTL mode; flip menu to right.
-      anchorX -= bBox.width;
+    if (menuSize.width >= e.clientX) {
+      x += menuSize.width;
     }
   } else {
-    if (anchorX + bBox.width > svgSize.width) {
-      // Falling off the right edge in LTR mode; flip the menu to left.
-      anchorX -= bBox.width;
-    } else {
-      anchorX++;
+    if (e.clientX + menuSize.width >= windowSize.width) {
+      x -= menuSize.width;
     }
   }
-  Blockly.ContextMenu.svgGroup.setAttribute('transform',
-      'translate(' + anchorX + ', ' + anchorY + ')');
-  Blockly.ContextMenu.visible = true;
-};
+  Blockly.WidgetDiv.position(x, y, windowSize, scrollOffset);
 
-/**
- * Create the DOM nodes for a menu option.
- * @param {string} text The option's text.
- * @return {!Element} <g> node containing the menu option.
- */
-Blockly.ContextMenu.optionToDom = function(text) {
-  /* Here's the SVG we create:
-    <g class="blocklyMenuDiv">
-      <rect height="20"/>
-      <text class="blocklyMenuText" x="20" y="15">Make It So</text>
-    </g>
-  */
-  var gElement = Blockly.createSvgElement('g', {'class': 'blocklyMenuDiv'},
-                                          null);
-  var rectElement = Blockly.createSvgElement('rect',
-      {'height': Blockly.ContextMenu.Y_HEIGHT}, gElement);
-  var textElement = Blockly.createSvgElement('text',
-      {'class': 'blocklyMenuText',
-      'x': Blockly.ContextMenu.X_PADDING,
-      'y': 15}, gElement);
-  var textNode = document.createTextNode(text);
-  textElement.appendChild(textNode);
-  return gElement;
+  menu.setAllowAutoFocus(true);
+  // 1ms delay is required for focusing on context menus because some other
+  // mouse event is still waiting in the queue and clears focus.
+  setTimeout(function() {menuDom.focus();}, 1);
+  Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
 };
 
 /**
  * Hide the context menu.
  */
 Blockly.ContextMenu.hide = function() {
-  if (Blockly.ContextMenu.visible) {
-    Blockly.ContextMenu.svgGroup.style.display = 'none';
-    Blockly.ContextMenu.visible = false;
-  }
+  Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
+  Blockly.ContextMenu.currentBlock = null;
 };
 
 /**

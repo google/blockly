@@ -56,10 +56,17 @@ function enableRealtimeSpecificUi() {
 function start() {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blocklyDiv'),
-          {rtl: rtl, path: '../', toolbox: toolbox, realtime: false,
+          {rtl: rtl,
+           path: '../',
+           toolbox: toolbox,
+           comments: true,
+           disable: true,
+           collapse: true,
+           realtime: false,
            realtimeOptions:
              {clientId: 'YOUR CLIENT ID GOES HERE',
-              chatbox: {elementId: 'chatbox'}}});
+              chatbox: {elementId: 'chatbox'},
+              collabElementId: 'collaborators'}});
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }
@@ -121,9 +128,26 @@ h1 {
   height: 95%;
   width: 70%;
 }
+#collaborators {
+  float: right;
+  width: 30px;
+  margin-left: 10px;
+}
+#collaborators > img {
+  margin-right: 5px;
+  height: 30px;
+  padding-bottom: 5px;
+  width: 30px;
+  border-radius: 3px;
+}
+#importExport {
+  font-family: monospace;
+};
 </style>
 </head>
 <body onload="start()">
+
+  <div id="collaborators"></div>
 
   <div id="blocklyDiv"></div>
 
@@ -243,7 +267,11 @@ h1 {
       <block type="text_changeCase"></block>
       <block type="text_trim"></block>
       <block type="text_print"></block>
-      <block type="text_prompt"></block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
     </category>
     <category name="Lists">
       <block type="lists_create_empty"></block>
@@ -289,8 +317,40 @@ h1 {
     <category name="Colour">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
-      <block type="colour_rgb"></block>
-      <block type="colour_blend"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+        <value name="GREEN">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <value name="BLUE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <block type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </block>
+        </value>
+        <value name="COLOUR2">
+          <block type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </block>
+        </value>
+        <value name="RATIO">
+          <block type="math_number">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>

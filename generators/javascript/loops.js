@@ -33,10 +33,7 @@ Blockly.JavaScript['controls_repeat'] = function(block) {
   // Repeat n times (internal number).
   var repeats = Number(block.getFieldValue('TIMES'));
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
-  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
-  }
+  branch = Blockly.JavaScript.addLoopTrap(branch, block.id);
   var loopVar = Blockly.JavaScript.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
   var code = 'for (var ' + loopVar + ' = 0; ' +
@@ -51,10 +48,7 @@ Blockly.JavaScript['controls_repeat_ext'] = function(block) {
   var repeats = Blockly.JavaScript.valueToCode(block, 'TIMES',
       Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
-  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
-  }
+  branch = Blockly.JavaScript.addLoopTrap(branch, block.id);
   var code = '';
   var loopVar = Blockly.JavaScript.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
@@ -78,10 +72,7 @@ Blockly.JavaScript['controls_whileUntil'] = function(block) {
       until ? Blockly.JavaScript.ORDER_LOGICAL_NOT :
       Blockly.JavaScript.ORDER_NONE) || 'false';
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
-  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
-  }
+  branch = Blockly.JavaScript.addLoopTrap(branch, block.id);
   if (until) {
     argument0 = '!' + argument0;
   }
@@ -99,10 +90,7 @@ Blockly.JavaScript['controls_for'] = function(block) {
   var increment = Blockly.JavaScript.valueToCode(block, 'BY',
       Blockly.JavaScript.ORDER_ASSIGNMENT) || '1';
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
-  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
-  }
+  branch = Blockly.JavaScript.addLoopTrap(branch, block.id);
   var code;
   if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
       Blockly.isNumber(increment)) {
@@ -144,10 +132,10 @@ Blockly.JavaScript['controls_for'] = function(block) {
       code += 'Math.abs(' + increment + ');\n';
     }
     code += 'if (' + startVar + ' > ' + endVar + ') {\n';
-    code += '  ' + incVar + ' = -' + incVar +';\n';
+    code += Blockly.JavaScript.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
     code += 'for (' + variable0 + ' = ' + startVar + ';\n' +
-        '     '  + incVar + ' >= 0 ? ' +
+        '     ' + incVar + ' >= 0 ? ' +
         variable0 + ' <= ' + endVar + ' : ' +
         variable0 + ' >= ' + endVar + ';\n' +
         '     ' + variable0 + ' += ' + incVar + ') {\n' +
@@ -163,14 +151,11 @@ Blockly.JavaScript['controls_forEach'] = function(block) {
   var argument0 = Blockly.JavaScript.valueToCode(block, 'LIST',
       Blockly.JavaScript.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
-  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-    branch = Blockly.JavaScript.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '\'' + block.id + '\'') + branch;
-  }
+  branch = Blockly.JavaScript.addLoopTrap(branch, block.id);
   var indexVar = Blockly.JavaScript.variableDB_.getDistinctName(
       variable0 + '_index', Blockly.Variables.NAME_TYPE);
-  branch = '  ' + variable0 + ' = ' + argument0 + '[' + indexVar + '];\n' +
-      branch;
+  branch = Blockly.JavaScript.INDENT + variable0 + ' = ' +
+      argument0 + '[' + indexVar + '];\n' + branch;
   var code = 'for (var ' + indexVar + ' in  ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;

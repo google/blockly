@@ -110,3 +110,18 @@ handlers:
   upload: robots\.txt
   secure: always
 
+
+skip_files:
+# App Engine default patterns.
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\..*$
+# Custom skip patterns.
+- ^static/appengine/.*$
+- ^static/apps/json/.*$
+- ^static/apps/_soy/.+\.jar$
+- ^static/i18n/.*$
+- ^static/msg/json/.*$
+- ^.+\.soy$

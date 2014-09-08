@@ -41,8 +41,7 @@ Blockly.inject = function(container, opt_options) {
     throw 'Error: container is not in current document.';
   }
   if (opt_options) {
-    // TODO(scr): don't mix this in to global variables.
-    goog.mixin(Blockly, Blockly.parseOptions_(opt_options));
+    Blockly.parseOptions_(opt_options);
   }
   var startUi = function() {
     Blockly.createDom_(container);
@@ -60,9 +59,32 @@ Blockly.inject = function(container, opt_options) {
 };
 
 /**
+ * Parse the provided toolbox tree into a consistent DOM format.
+ * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ * @return {Node} DOM tree of blocks or null.
+ * @private
+ */
+Blockly.parseToolboxTree_ = function(tree) {
+  if (tree) {
+    if (typeof tree != 'string' && typeof XSLTProcessor == 'undefined') {
+      // In this case the tree will not have been properly built by the
+      // browser. The HTML will be contained in the element, but it will
+      // not have the proper DOM structure since the browser doesn't support
+      // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
+      tree = tree.outerHTML;
+    }
+    if (typeof tree == 'string') {
+      tree = Blockly.Xml.textToDom(tree);
+    }
+  } else {
+    tree = null;
+  }
+  return tree;
+};
+
+/**
  * Configure Blockly to behave according to a set of options.
  * @param {!Object} options Dictionary of options.
- * @return {Object} Parsed options.
  * @private
  */
 Blockly.parseOptions_ = function(options) {
@@ -71,25 +93,13 @@ Blockly.parseOptions_ = function(options) {
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
+    var hasComments = false;
+    var hasDisable = false;
     var tree = null;
   } else {
-    var tree = options['toolbox'];
-    if (tree) {
-      if (typeof tree != 'string' && typeof XSLTProcessor == 'undefined') {
-        // In this case the tree will not have been properly built by the
-        // browser. The HTML will be contained in the element, but it will
-        // not have the proper DOM structure since the browser doesn't support
-        // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
-        tree = tree.outerHTML;
-      }
-      if (typeof tree == 'string') {
-        tree = Blockly.Xml.textToDom(tree);
-      }
-      var hasCategories = !!tree.getElementsByTagName('category').length;
-    } else {
-      tree = null;
-      var hasCategories = false;
-    }
+    var tree = Blockly.parseToolboxTree_(options['toolbox']);
+    var hasCategories = Boolean(tree &&
+        tree.getElementsByTagName('category').length);
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
@@ -97,6 +107,14 @@ Blockly.parseOptions_ = function(options) {
     var hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
+    }
+    var hasComments = options['comments'];
+    if (hasComments === undefined) {
+      hasComments = hasCategories;
+    }
+    var hasDisable = options['disable'];
+    if (hasDisable === undefined) {
+      hasDisable = hasCategories;
     }
   }
   if (tree && !hasCategories) {
@@ -108,21 +126,27 @@ Blockly.parseOptions_ = function(options) {
       hasScrollbars = true;
     }
   }
+  var hasSounds = options['sounds'];
+  if (hasSounds === undefined) {
+    hasSounds = true;
+  }
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
-  return {
-    RTL: !!options['rtl'],
-    collapse: hasCollapse,
-    readOnly: readOnly,
-    maxBlocks: options['maxBlocks'] || Infinity,
-    pathToBlockly: options['path'] || './',
-    hasCategories: hasCategories,
-    hasScrollbars: hasScrollbars,
-    hasTrashcan: hasTrashcan,
-    languageTree: tree,
-    enableRealtime: enableRealtime,
-    realtimeOptions: realtimeOptions
-  };
+
+  Blockly.RTL = !!options['rtl'];
+  Blockly.collapse = hasCollapse;
+  Blockly.comments = hasComments;
+  Blockly.disable = hasDisable;
+  Blockly.readOnly = readOnly;
+  Blockly.maxBlocks = options['maxBlocks'] || Infinity;
+  Blockly.pathToBlockly = options['path'] || './';
+  Blockly.hasCategories = hasCategories;
+  Blockly.hasScrollbars = hasScrollbars;
+  Blockly.hasTrashcan = hasTrashcan;
+  Blockly.hasSounds = hasSounds;
+  Blockly.languageTree = tree;
+  Blockly.enableRealtime = enableRealtime;
+  Blockly.realtimeOptions = realtimeOptions;
 };
 
 /**
@@ -255,7 +279,6 @@ Blockly.createDom_ = function(container) {
       Blockly.mainWorkspace.flyout_ = new Blockly.Flyout();
       var flyout = Blockly.mainWorkspace.flyout_;
       var flyoutSvg = flyout.createDom();
-      flyout.init(Blockly.mainWorkspace, true);
       flyout.autoClose = false;
       // Insert the flyout behind the workspace so that blocks appear on top.
       goog.dom.insertSiblingBefore(flyoutSvg, Blockly.mainWorkspace.svgGroup_);
@@ -266,8 +289,9 @@ Blockly.createDom_ = function(container) {
               metrics.contentTop + metrics.contentHeight >
               metrics.viewHeight + metrics.viewTop ||
               metrics.contentLeft < (Blockly.RTL ? metrics.viewLeft : 0) ||
-              metrics.contentLeft + metrics.contentWidth >
-              metrics.viewWidth + (Blockly.RTL ? 2 : 1) * metrics.viewLeft) {
+              metrics.contentLeft + metrics.contentWidth > (Blockly.RTL ?
+                  metrics.viewWidth :
+                  metrics.viewWidth + metrics.viewLeft)) {
             // One or more blocks is out of bounds.  Bump them back in.
             var MARGIN = 25;
             var blocks = Blockly.mainWorkspace.getTopBlocks(false);
@@ -300,8 +324,7 @@ Blockly.createDom_ = function(container) {
               }
               // Delete any block that's sitting on top of the flyout.
               if (block.isDeletable() && (Blockly.RTL ?
-                  blockXY.x - 2 * metrics.viewLeft - metrics.viewWidth :
-                  -blockXY.x) > MARGIN * 2) {
+                  blockXY.x - metrics.viewWidth : -blockXY.x) > MARGIN * 2) {
                 block.dispose(false, true);
               }
             }
@@ -312,14 +335,7 @@ Blockly.createDom_ = function(container) {
     }
   }
 
-  Blockly.Tooltip && svg.appendChild(Blockly.Tooltip.createDom());
-  if (!Blockly.readOnly && Blockly.FieldDropdown) {
-    svg.appendChild(Blockly.FieldDropdown.createDom());
-  }
-
-  if (Blockly.ContextMenu && Blockly.ContextMenu) {
-    svg.appendChild(Blockly.ContextMenu.createDom());
-  }
+  svg.appendChild(Blockly.Tooltip.createDom());
 
   // The SVG is now fully assembled.  Add it to the container.
   container.appendChild(svg);
@@ -328,6 +344,7 @@ Blockly.createDom_ = function(container) {
 
   // Create an HTML container for popup overlays (e.g. editor widgets).
   Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
+  Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
   document.body.appendChild(Blockly.WidgetDiv.DIV);
 };
 
@@ -337,23 +354,6 @@ Blockly.createDom_ = function(container) {
  * @private
  */
 Blockly.init_ = function() {
-  if (goog.userAgent.WEBKIT) {
-    /* HACK:
-     WebKit bug 67298 causes control points to be included in the reported
-     bounding box.  Detect if this browser suffers from this bug by drawing a
-     shape that is 50px high, and has a control point that sticks up by 5px.
-     If the getBBox function returns a height of 55px instead of 50px, then
-     this browser has broken control points.
-    */
-    var path = Blockly.createSvgElement('path',
-        {'d': 'm 0,0 c 0,-5 0,-5 0,0 H 50 V 50 z'}, Blockly.svg);
-    if (path.getBBox().height > 50) {
-      // Chrome (v28) and Opera (v15) report 55, Safari (v6.0.5) reports 53.75.
-      Blockly.BROKEN_CONTROL_POINTS = true;
-    }
-    Blockly.svg.removeChild(path);
-  }
-
   // Bind events for scrolling the workspace.
   // Most of these events should be bound to the SVG's surface.
   // However, 'mouseup' has to be on the whole document so that a block dragged
@@ -361,20 +361,24 @@ Blockly.init_ = function() {
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
   Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
-  Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMove_);
   Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
+  Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
+                     Blockly.onContextMenu_);
 
   if (!Blockly.documentEventsBound_) {
     // Only bind the window/document events once.
     // Destroying and reinjecting Blockly should not bind again.
     Blockly.bindEvent_(window, 'resize', document, Blockly.svgResize);
-    Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
     Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
+    // Don't use bindEvent_ for document's mouseup since that would create a
+    // corresponding touch handler that would squeltch the ability to interact
+    // with non-Blockly elements.
+    document.addEventListener('mouseup', Blockly.onMouseUp_, false);
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (goog.userAgent.IPAD) {
       Blockly.bindEvent_(window, 'orientationchange', document, function() {
         Blockly.fireUiEvent(window, 'resize');
-      }, false);
+      });
     }
     Blockly.documentEventsBound_ = true;
   }
@@ -384,10 +388,13 @@ Blockly.init_ = function() {
       Blockly.Toolbox.init();
     } else {
       // Build a fixed flyout with the root blocks.
-      Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace, true);
+      Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace);
       Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
       // Translate the workspace sideways to avoid the fixed flyout.
       Blockly.mainWorkspace.scrollX = Blockly.mainWorkspace.flyout_.width_;
+      if (Blockly.RTL) {
+        Blockly.mainWorkspace.scrollX *= -1;
+      }
       var translation = 'translate(' + Blockly.mainWorkspace.scrollX + ', 0)';
       Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
       Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
@@ -395,16 +402,64 @@ Blockly.init_ = function() {
     }
   }
   if (Blockly.hasScrollbars) {
-    Blockly.mainWorkspace.scrollbar = new Blockly.ScrollbarPair(
-        Blockly.mainWorkspace);
+    Blockly.mainWorkspace.scrollbar =
+        new Blockly.ScrollbarPair(Blockly.mainWorkspace);
     Blockly.mainWorkspace.scrollbar.resize();
   }
 
   Blockly.mainWorkspace.addTrashcan();
 
   // Load the sounds.
-  Blockly.loadAudio_(
-      ['media/click.mp3', 'media/click.wav', 'media/click.ogg'], 'click');
-  Blockly.loadAudio_(
-      ['media/delete.mp3', 'media/delete.ogg', 'media/delete.wav'], 'delete');
+  if (Blockly.hasSounds) {
+    Blockly.loadAudio_(
+        ['media/click.mp3', 'media/click.wav', 'media/click.ogg'], 'click');
+    Blockly.loadAudio_(
+        ['media/delete.mp3', 'media/delete.ogg', 'media/delete.wav'], 'delete');
+
+    // Bind temporary hooks that preload the sounds.
+    var soundBinds = [];
+    var unbindSounds = function() {
+      while (soundBinds.length) {
+        Blockly.unbindEvent_(soundBinds.pop());
+      }
+      Blockly.preloadAudio_();
+    };
+    // Android ignores any sound not loaded as a result of a user action.
+    soundBinds.push(
+        Blockly.bindEvent_(document, 'mousemove', null, unbindSounds));
+    soundBinds.push(
+        Blockly.bindEvent_(document, 'touchstart', null, unbindSounds));
+  }
+};
+
+/**
+ * Modify the block tree on the existing toolbox.
+ * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ */
+Blockly.updateToolbox = function(tree) {
+  tree = Blockly.parseToolboxTree_(tree);
+  if (!tree) {
+    if (Blockly.languageTree) {
+      throw 'Can\'t nullify an existing toolbox.';
+    }
+    // No change (null to null).
+    return;
+  }
+  if (!Blockly.languageTree) {
+    throw 'Existing toolbox is null.  Can\'t create new toolbox.';
+  }
+  var hasCategories = !!tree.getElementsByTagName('category').length;
+  if (hasCategories) {
+    if (!Blockly.hasCategories) {
+      throw 'Existing toolbox has no categories.  Can\'t change mode.';
+    }
+    Blockly.languageTree = tree;
+    Blockly.Toolbox.populate_();
+  } else {
+    if (Blockly.hasCategories) {
+      throw 'Existing toolbox has categories.  Can\'t change mode.';
+    }
+    Blockly.languageTree = tree;
+    Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
+  }
 };

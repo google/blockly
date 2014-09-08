@@ -40,10 +40,10 @@ Blockly.Blocks['factory_base'] = {
         .appendField(dropdown, 'INLINE');
     dropdown = new Blockly.FieldDropdown([
         ['no connections', 'NONE'],
-        ['left output', 'LEFT'],
-        ['top+bottom connections', 'BOTH'],
-        ['top connection', 'TOP'],
-        ['bottom connection', 'BOTTOM']],
+        ['← left output', 'LEFT'],
+        ['↕ top+bottom connections', 'BOTH'],
+        ['↑ top connection', 'TOP'],
+        ['↓ bottom connection', 'BOTTOM']],
         function(option) {
           var block = this.sourceBlock_;
           var outputExists = block.getInput('OUTPUTTYPE');
@@ -276,12 +276,13 @@ Blockly.Blocks['field_dropdown'] = {
     }
   },
   decompose: function(workspace) {
-    var containerBlock = new Blockly.Block(workspace,
-                                           'field_dropdown_container');
+    var containerBlock =
+        Blockly.Block.obtain(workspace, 'field_dropdown_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var x = 0; x < this.optionCount_; x++) {
-      var optionBlock = new Blockly.Block(workspace, 'field_dropdown_option');
+      var optionBlock =
+          Blockly.Block.obtain(workspace, 'field_dropdown_option');
       optionBlock.initSvg();
       connection.connect(optionBlock.previousConnection);
       connection = optionBlock.nextConnection;
@@ -483,12 +484,12 @@ Blockly.Blocks['type_group'] = {
     }
   },
   decompose: function(workspace) {
-    var containerBlock = new Blockly.Block(workspace,
-                                           'type_group_container');
+    var containerBlock =
+        Blockly.Block.obtain(workspace, 'type_group_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
     for (var x = 0; x < this.typeCount_; x++) {
-      var typeBlock = new Blockly.Block(workspace, 'type_group_item');
+      var typeBlock = Blockly.Block.obtain(workspace, 'type_group_item');
       typeBlock.initSvg();
       connection.connect(typeBlock.previousConnection);
       connection = typeBlock.nextConnection;
@@ -655,10 +656,9 @@ function fieldNameCheck(referenceBlock) {
   var blocks = referenceBlock.workspace.getAllBlocks();
   for (var x = 0, block; block = blocks[x]; x++) {
     var otherName = block.getFieldValue('FIELDNAME');
-    if (otherName) {
-      if (otherName.toLowerCase() == name) {
-        count++;
-      }
+    if (!block.disabled && !block.getInheritedDisabled() &&
+        otherName && otherName.toLowerCase() == name) {
+      count++;
     }
   }
   var msg = (count > 1) ?
@@ -677,10 +677,9 @@ function inputNameCheck(referenceBlock) {
   var blocks = referenceBlock.workspace.getAllBlocks();
   for (var x = 0, block; block = blocks[x]; x++) {
     var otherName = block.getFieldValue('INPUTNAME');
-    if (otherName) {
-      if (otherName.toLowerCase() == name) {
-        count++;
-      }
+    if (!block.disabled && !block.getInheritedDisabled() &&
+        otherName && otherName.toLowerCase() == name) {
+      count++;
     }
   }
   var msg = (count > 1) ?

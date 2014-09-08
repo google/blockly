@@ -5,7 +5,7 @@ if (typeof apps == 'undefined') { var apps = {}; }
 
 
 apps.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return '<div style="display: none"><span id="subtitle">a visual programming environment</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">See generated JavaScript code.</span><span id="linkTooltip">Save and link to blocks.</span><span id="runTooltip">Run the program defined by the blocks in the workspace.</span><span id="runProgram">Programi Akar fi</span><span id="resetProgram">Reset kerê</span><span id="dialogOk">TEMAM</span><span id="dialogCancel">Bıterkne</span><span id="catLogic">Mantığ</span><span id="catLoops">Dingeki</span><span id="catMath">Matematik</span><span id="catText">Metin</span><span id="catLists">Listey</span><span id="catColour">Reng</span><span id="catVariables">Vırneyeni</span><span id="catProcedures">Proseduri</span><span id="httpRequestError">waştışi deyne zew problem esto</span><span id="linkAlert">Blokan na linkera bıhesrne\n\n%1</span><span id="hashError">Sorry, \'%1\' doesn\'t correspond with any saved program.</span><span id="xmlError">Could not load your saved file.  Perhaps it was created with a different version of Blockly?</span><span id="listVariable">liste</span><span id="textVariable">nuşte</span></div>';
+  return '<div style="display: none"><span id="subtitle">yew grafikê programkerdışê dormey</span><span id="blocklyMessage">Blockly</span><span id="codeTooltip">Kodê JavaScriptê vıraştey bımocne.</span><span id="linkTooltip">Qeyd ke û be blokan ra gıre de.</span><span id="runTooltip">Cayê kari de programo ke terefê blokan ra name biyo, ey bıgurene.</span><span id="runProgram">Programi Akar fi</span><span id="resetProgram">Reset kerê</span><span id="dialogOk">TEMAM</span><span id="dialogCancel">Bıtexelne</span><span id="catLogic">Mantığ</span><span id="catLoops">Dingeki</span><span id="catMath">Matematik</span><span id="catText">Metin</span><span id="catLists">Listey</span><span id="catColour">Reng</span><span id="catVariables">Vırneyeni</span><span id="catProcedures">Fonksiyoni</span><span id="httpRequestError">waştışi deyne zew problem esto</span><span id="linkAlert">Blokan na linkera bıhesrne\n\n%1</span><span id="hashError">Melûlime, \'%1\' be qet yew programi ra yewbini nêgêno.</span><span id="xmlError">Could not load your saved file.  Perhaps it was created with a different version of Blockly?</span><span id="listVariable">liste</span><span id="textVariable">nuşte</span></div>';
 };
 
 
@@ -36,12 +36,12 @@ if (typeof planepage == 'undefined') { var planepage = {}; }
 
 
 planepage.messages = function(opt_data, opt_ignored, opt_ijData) {
-  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Rows: %1</span><span id="Plane_getRows">rows (%1)</span><span id="Plane_rows1">1st class rows: %1</span><span id="Plane_getRows1">1st class rows (%1)</span><span id="Plane_rows2">2nd class rows: %1</span><span id="Plane_getRows2">2nd class rows (%1)</span><span id="Plane_seats">Seats: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">iskemey =</span></div>';
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Plane_rows">Rêzi: %1</span><span id="Plane_getRows">rêzi(%1)</span><span id="Plane_rows1">Rêzê sınıfa verêne: %1</span><span id="Plane_getRows1">Rêzê sınıfa verêne (%1)</span><span id="Plane_rows2">Rêzê sınıfa dıyıne: %1</span><span id="Plane_getRows2">Rêzê sınıfa dıyıne (%1)</span><span id="Plane_seats">Paldangi: %1</span><span id="Plane_placeholder">?</span><span id="Plane_setSeats">iskemey =</span></div>';
 };
 
 
 planepage.start = function(opt_data, opt_ignored, opt_ijData) {
-  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly</a> : Teyera</span> &nbsp; ';
+  var output = planepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly</a> : Hesabkerdoğê Cayê Tiyarey</span> &nbsp; ';
   var iLimit130 = opt_ijData.maxLevel + 1;
   for (var i130 = 1; i130 < iLimit130; i130++) {
     output += ' ' + ((i130 == opt_ijData.level) ? '<span class="tab" id="selected">' + soy.$$escapeHtml(i130) + '</span>' : (i130 < opt_ijData.level) ? '<a class="tab previous" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>' : '<a class="tab" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i130) + '">' + soy.$$escapeHtml(i130) + '</a>');

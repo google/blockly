@@ -7,6 +7,7 @@ goog.provide('Blockly.Msg.tl');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Dagdag komento";
+Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "pagbago ng value:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "bloke";
@@ -255,15 +256,18 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "New variable...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "New variable name:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "with:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "";  // untranslated
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Run the user-defined function '%1'.";
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Run the user-defined function '%1' and use its output.";
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "with:";
 Blockly.Msg.PROCEDURES_CREATE_DO = "Create '%1'";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
@@ -278,7 +282,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Highlight function definition";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "If a value is true, then return a second value.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Warning: This block may be used only within a function definition.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "input name:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Remove Comment";
 Blockly.Msg.RENAME_VARIABLE = "Rename variable...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";

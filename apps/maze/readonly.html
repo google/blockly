@@ -15,19 +15,18 @@
       overflow: hidden;
       height: 100%;
     }
-    #blockly>svg {
-      border: none;
-    }
     #blockly {
       position: absolute;
       top: 0;
       left: 0;
-      height: 100%;
       width: 100%;
+    }
+    #blockly>svg {
+      border: none;
     }
   </style>
 </head>
-<body>
+<body onload="document.getElementById('blockly').style.height = window.innerHeight + 'px';">
   <script type="text/javascript">
     document.write(mazepage.readonly({}, null,
         {langSrc: BlocklyApps.languagePack()}));

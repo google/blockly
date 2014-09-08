@@ -19,8 +19,8 @@
  */
 
 /**
- * @fileoverview Core JavaScript library for Blockly.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview Flexible templating system for defining blocks.
+ * @author spertus@google.com (Ellen Spertus)
  */
 'use strict';
 goog.require('goog.asserts');
@@ -107,8 +107,11 @@ Blockly.Blocks.addTemplate = function(details) {
         'details.nextStatement must not be true.');
   }
 
-  // Build up template.
   var block = {};
+  /**
+   * Build up template.
+   * @this Blockly.Block
+   */
   block.init = function() {
     var thisBlock = this;
     // Set basic properties of block.
@@ -142,8 +145,8 @@ Blockly.Blocks.addTemplate = function(details) {
         if (arg.type == 'undefined' || arg.type == Blockly.INPUT_VALUE) {
           interpArgs.push([arg.name,
                            arg.check,
-                           typeof arg.align == 'undefined' ? Blockly.ALIGN_RIGHT
-                               : arg.align]);
+                           typeof arg.align == 'undefined' ?
+                               Blockly.ALIGN_RIGHT : arg.align]);
         } else {
           // TODO: Write code for other input types.
           goog.asserts.fail('addTemplate() can only handle value inputs.');
@@ -159,11 +162,14 @@ Blockly.Blocks.addTemplate = function(details) {
     Blockly.Block.prototype.interpolateMsg.apply(this, interpArgs);
   };
 
-  // Create mutationToDom if needed.
   if (details.switchable) {
+    /**
+     * Create mutationToDom if needed.
+     * @this Blockly.Block
+     */
     block.mutationToDom = function() {
-      var container = details.mutationToDomFunc ? details.mutatationToDomFunc()
-          : document.createElement('mutation');
+      var container = details.mutationToDomFunc ?
+          details.mutatationToDomFunc() : document.createElement('mutation');
       container.setAttribute('is_statement', this['isStatement'] || false);
       return container;
     };

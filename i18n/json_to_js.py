@@ -19,11 +19,11 @@
 
 import argparse
 import codecs      # for codecs.open(..., 'utf-8')
+import glob
 import json        # for json.load()
 import os          # for os.path()
 import subprocess  # for subprocess.check_call()
 from common import InputError
-from common import insert_breaks
 from common import read_json_file
 
 
@@ -105,10 +105,6 @@ def _process_file(path_to_json, target_lang, key_dict):
                       (key, keyfile, args.key_file))
                 raise e
             target = j.get(key)
-            # Only insert line breaks for tooltips.
-            if key.lower().find('tooltip') != -1:
-                target = insert_breaks(
-                    j.get(key), args.min_length, args.max_length)
             out_file.write(u"""
       <trans-unit id="{0}" datatype="html">
         <target>{1}</target>
@@ -128,10 +124,6 @@ def main():
     parser.add_argument('--key_file', default='json' + os.path.sep + 'keys.json',
                         help='relative path to input keys file')
     parser.add_argument('--template', default='template.soy')
-    parser.add_argument('--min_length', default=30,
-                        help='minimum line length (not counting last line)')
-    parser.add_argument('--max_length', default=50,
-                        help='maximum line length (not guaranteed)')
     parser.add_argument('--path_to_jar',
                         default='..' + os.path.sep + 'apps' + os.path.sep
                         + '_soy',
@@ -156,6 +148,9 @@ def main():
     # Process each input file.
     print('Creating .xlf files...')
     processed_langs = []
+    if len(args.files) == 1:
+      # Windows does not expand globs automatically.
+      args.files = glob.glob(args.files[0])
     for arg_file in args.files:
       (path_to_json, filename) = os.path.split(arg_file)
       if not filename.endswith('.json'):
@@ -180,10 +175,9 @@ def main():
         print('Created ' + processed_lang_list + '.js in ' + args.output_dir)
       else:
         print('Created {' + processed_lang_list + '}.js in ' + args.output_dir)
-      command = ['rm']
-      command.extend(map(lambda s: args.output_dir + s + '.xlf',
-                         processed_langs))
-      subprocess.check_call(command)
+
+      for lang in processed_langs:
+        os.remove(args.output_dir + lang + '.xlf')
       print('Removed .xlf files.')
 
 

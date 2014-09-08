@@ -42,6 +42,29 @@ Blockly.Warning = function(block) {
 };
 goog.inherits(Blockly.Warning, Blockly.Icon);
 
+
+/**
+ * Create the text for the warning's bubble.
+ * @param {string} text The text to display.
+ * @return {!SVGTextElement} The top-level node of the text.
+ * @private
+ */
+Blockly.Warning.textToDom_ = function(text) {
+  var paragraph = /** @type {!SVGTextElement} */ (
+      Blockly.createSvgElement('text',
+          {'class': 'blocklyText blocklyBubbleText',
+           'y': Blockly.Bubble.BORDER_WIDTH},
+          null));
+  var lines = text.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    var tspanElement = Blockly.createSvgElement('tspan',
+        {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
+    var textNode = document.createTextNode(lines[i]);
+    tspanElement.appendChild(textNode);
+  }
+  return paragraph;
+};
+
 /**
  * Warning text (if bubble is not visible).
  * @private
@@ -71,27 +94,6 @@ Blockly.Warning.prototype.createIcon_ = function() {
 };
 
 /**
- * Create the text for the warning's bubble.
- * @param {string} text The text to display.
- * @return {!SVGTextElement} The top-level node of the text.
- * @private
- */
-Blockly.Warning.prototype.textToDom_ = function(text) {
-  var paragraph = /** @type {!SVGTextElement} */ (
-      Blockly.createSvgElement(
-          'text', {'class': 'blocklyText', 'y': Blockly.Bubble.BORDER_WIDTH},
-          null));
-  var lines = text.split('\n');
-  for (var i = 0; i < lines.length; i++) {
-    var tspanElement = Blockly.createSvgElement('tspan',
-        {'dy': '1em', 'x': Blockly.Bubble.BORDER_WIDTH}, paragraph);
-    var textNode = document.createTextNode(lines[i]);
-    tspanElement.appendChild(textNode);
-  }
-  return paragraph;
-};
-
-/**
  * Show or hide the warning bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
@@ -102,10 +104,10 @@ Blockly.Warning.prototype.setVisible = function(visible) {
   }
   if (visible) {
     // Create the bubble.
-    var paragraph = this.textToDom_(this.text_);
+    var paragraph = Blockly.Warning.textToDom_(this.text_);
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.Workspace} */ (this.block_.workspace),
-        paragraph, this.block_.svg_.svgGroup_,
+        paragraph, this.block_.svg_.svgPath_,
         this.iconX_, this.iconY_, null, null);
     if (Blockly.RTL) {
       // Right-align the paragraph.
@@ -125,7 +127,6 @@ Blockly.Warning.prototype.setVisible = function(visible) {
     this.bubble_.dispose();
     this.bubble_ = null;
     this.body_ = null;
-    this.foreignObject_ = null;
   }
 };
 
@@ -143,6 +144,9 @@ Blockly.Warning.prototype.bodyFocus_ = function(e) {
  * @param {string} text Warning text.
  */
 Blockly.Warning.prototype.setText = function(text) {
+  if (this.text_ == text) {
+    return;
+  }
   this.text_ = text;
   if (this.isVisible()) {
     this.setVisible(false);

@@ -188,9 +188,9 @@ Blockly.Dart['text_getSubstring'] = function(block) {
 Blockly.Dart['text_changeCase'] = function(block) {
   // Change capitalization.
   var OPERATORS = {
-    UPPERCASE: '.toUpperCase()',
-    LOWERCASE: '.toLowerCase()',
-    TITLECASE: null
+    'UPPERCASE': '.toUpperCase()',
+    'LOWERCASE': '.toLowerCase()',
+    'TITLECASE': null
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
   var code;
@@ -228,9 +228,9 @@ Blockly.Dart['text_changeCase'] = function(block) {
 Blockly.Dart['text_trim'] = function(block) {
   // Trim spaces.
   var OPERATORS = {
-    LEFT: '.replaceFirst(new RegExp(r\'^\\s+\'), \'\')',
-    RIGHT: '.replaceFirst(new RegExp(r\'\\s+$\'), \'\')',
-    BOTH: '.trim()'
+    'LEFT': '.replaceFirst(new RegExp(r\'^\\s+\'), \'\')',
+    'RIGHT': '.replaceFirst(new RegExp(r\'\\s+$\'), \'\')',
+    'BOTH': '.trim()'
   };
   var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.Dart.valueToCode(block, 'TEXT',
@@ -246,10 +246,26 @@ Blockly.Dart['text_print'] = function(block) {
 };
 
 Blockly.Dart['text_prompt'] = function(block) {
-  // Prompt function.
+  // Prompt function (internal message).
   Blockly.Dart.definitions_['import_dart_html'] =
       'import \'dart:html\' as Html;';
   var msg = Blockly.Dart.quote_(block.getFieldValue('TEXT'));
+  var code = 'Html.window.prompt(' + msg + ', \'\')';
+  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
+  if (toNumber) {
+    Blockly.Dart.definitions_['import_dart_math'] =
+        'import \'dart:math\' as Math;';
+    code = 'Math.parseDouble(' + code + ')';
+  }
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};
+
+Blockly.Dart['text_prompt_ext'] = function(block) {
+  // Prompt function (external message).
+  Blockly.Dart.definitions_['import_dart_html'] =
+      'import \'dart:html\' as Html;';
+  var msg = Blockly.Dart.valueToCode(block, 'TEXT',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
   var code = 'Html.window.prompt(' + msg + ', \'\')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {

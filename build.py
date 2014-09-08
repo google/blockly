@@ -91,7 +91,7 @@ window.BLOCKLY_BOOT = function() {
 // Execute after Closure has loaded.
 if (!window.goog) {
   alert('Error: Closure not found.  Read this:\\n' +
-        'http://code.google.com/p/blockly/wiki/Closure\\n');
+        'https://code.google.com/p/blockly/wiki/Closure\\n');
 }
 
 // Build map of all dependencies (used and unused).
@@ -193,7 +193,7 @@ class Gen_compressed(threading.Thread):
 
     # Read in all the source files.
     # Add Blockly.Blocks to be compatible with the compiler.
-    params.append(('js_code', "goog.provide('Blockly.Blocks');"))
+    params.append(('js_code', 'goog.provide(\'Blockly.Blocks\');'))
     filenames = glob.glob(os.path.join('blocks', '*.js'))
     for filename in filenames:
       f = open(filename)
@@ -201,7 +201,7 @@ class Gen_compressed(threading.Thread):
       f.close()
 
     # Remove Blockly.Blocks to be compatible with Blockly.
-    remove = "var Blockly={Blocks:{}};"
+    remove = 'var Blockly={Blocks:{}};'
     self.do_compile(params, target_filename, filenames, remove)
 
   def gen_generator(self, language):
@@ -218,7 +218,7 @@ class Gen_compressed(threading.Thread):
 
     # Read in all the source files.
     # Add Blockly.Generator to be compatible with the compiler.
-    params.append(('js_code', "goog.provide('Blockly.Generator');"))
+    params.append(('js_code', 'goog.provide(\'Blockly.Generator\');'))
     filenames = glob.glob(
         os.path.join('generators', language, '*.js'))
     filenames.insert(0, os.path.join('generators', language + '.js'))
@@ -229,12 +229,12 @@ class Gen_compressed(threading.Thread):
     filenames.insert(0, '[goog.provide]')
 
     # Remove Blockly.Generator to be compatible with Blockly.
-    remove = "var Blockly={Generator:{}};"
+    remove = 'var Blockly={Generator:{}};'
     self.do_compile(params, target_filename, filenames, remove)
 
   def do_compile(self, params, target_filename, filenames, remove):
     # Send the request to Google.
-    headers = { "Content-type": "application/x-www-form-urlencoded" }
+    headers = {'Content-type': 'application/x-www-form-urlencoded'}
     conn = httplib.HTTPConnection('closure-compiler.appspot.com')
     conn.request('POST', '/compile', urllib.urlencode(params), headers)
     response = conn.getresponse()
@@ -304,7 +304,7 @@ class Gen_compressed(threading.Thread):
  See the License for the specific language governing permissions and
  limitations under the License.
 \\*/""")
-      code = re.sub(LICENSE, r"\n// \1  Apache License 2.0", code)
+      code = re.sub(LICENSE, r'\n// \1  Apache License 2.0', code)
 
       stats = json_data['statistics']
       original_b = stats['originalSize']
@@ -358,6 +358,7 @@ class Gen_langfiles(threading.Thread):
                       ['en.json', 'qqq.json', 'synonyms.json']]):
       try:
         subprocess.check_call([
+            'python',
             os.path.join('i18n', 'js_to_json.py'),
             '--input_file', 'msg/messages.js',
             '--output_dir', 'msg/json/',
@@ -374,6 +375,7 @@ class Gen_langfiles(threading.Thread):
     try:
       # Use create_messages.py to create .js files from .json files.
       cmd = [
+          'python',
           os.path.join('i18n', 'create_messages.py'),
           '--source_lang_file', os.path.join('msg', 'json', 'en.json'),
           '--source_synonym_file', os.path.join('msg', 'json', 'synonyms.json'),

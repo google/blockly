@@ -30,7 +30,10 @@ goog.require('Blockly.Blocks');
 
 
 Blockly.Blocks['colour_picker'] = {
-  // Colour picker.
+  /**
+   * Block for colour picker.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
     this.setColour(20);
@@ -42,7 +45,10 @@ Blockly.Blocks['colour_picker'] = {
 };
 
 Blockly.Blocks['colour_random'] = {
-  // Random colour.
+  /**
+   * Block for random colour.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_RANDOM_HELPURL);
     this.setColour(20);
@@ -54,7 +60,10 @@ Blockly.Blocks['colour_random'] = {
 };
 
 Blockly.Blocks['colour_rgb'] = {
-  // Compose a colour from RGB components.
+  /**
+   * Block for composing a colour from RGB components.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_RGB_HELPURL);
     this.setColour(20);
@@ -77,7 +86,10 @@ Blockly.Blocks['colour_rgb'] = {
 };
 
 Blockly.Blocks['colour_blend'] = {
-  // Blend two colours together.
+  /**
+   * Block for blending two colours together.
+   * @this Blockly.Block
+   */
   init: function() {
     this.setHelpUrl(Blockly.Msg.COLOUR_BLEND_HELPURL);
     this.setColour(20);

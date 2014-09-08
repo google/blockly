@@ -32,10 +32,11 @@ if (typeof google == 'object') {
 }
 
 // Supported languages.
-BlocklyApps.LANGUAGES = [
-  'ar', 'az', 'ca', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hu', 'is', 'it',
-  'ko', 'ms', 'nl', 'pl', 'pms', 'pt-br', 'ro', 'ru', 'sr', 'sv', 'th', 'tr',
-  'uk', 'vi', 'zh-hans', 'zh-hant'];
+BlocklyApps.LANGUAGES =
+    ['ace', 'ar', 'az', 'ca', 'da', 'de', 'el', 'en', 'es', 'fa', 'fr', 'hi',
+     'hrx', 'hu', 'is', 'it', 'ko', 'mg', 'ms', 'nl', 'pl', 'pms', 'pt-br',
+     'ro', 'ru', 'sco', 'si', 'sr', 'sv', 'th', 'tr', 'uk', 'vi', 'zh-hans',
+     'zh-hant'];
 BlocklyApps.LANG = BlocklyApps.getLang();
 
 document.write('<script type="text/javascript" src="generated/' +
@@ -53,17 +54,11 @@ Graph.init = function() {
   BlocklyApps.init();
 
   var rtl = BlocklyApps.isRtl();
-  var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
-       rtl: rtl,
-       toolbox: toolbox});
-
   var blocklyDiv = document.getElementById('blockly');
   var visualization = document.getElementById('visualization');
   var onresize = function(e) {
     var top = visualization.offsetTop;
-    blocklyDiv.style.top = Math.max(10, top - window.scrollY) + 'px';
+    blocklyDiv.style.top = Math.max(10, top - window.pageYOffset) + 'px';
     blocklyDiv.style.left = rtl ? '10px' : '420px';
     blocklyDiv.style.width = (window.innerWidth - 440) + 'px';
   };
@@ -73,7 +68,12 @@ Graph.init = function() {
     });
   window.addEventListener('resize', onresize);
   onresize();
-  Blockly.fireUiEvent(window, 'resize');
+
+  var toolbox = document.getElementById('toolbox');
+  Blockly.inject(document.getElementById('blockly'),
+      {path: '../../',
+       rtl: rtl,
+       toolbox: toolbox});
 
   var defaultXml =
       '<xml>' +

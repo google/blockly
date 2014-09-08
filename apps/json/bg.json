@@ -1,33 +1,33 @@
 {
-    "@metadata": {
-        "authors": [
-            "DCLXVI"
-        ]
-    },
-    "Apps.dialogCancel": "Отказване",
-    "Apps.catVariables": "Променливи",
-    "Puzzle.country1": "Австралия",
-    "Puzzle.country1Language": "Английски",
-    "Puzzle.country1City1": "Мелбърн",
-    "Puzzle.country1City2": "Сидни",
-    "Puzzle.country1HelpUrl": "https://bg.wikipedia.org/wiki/Австралия",
-    "Puzzle.country2": "Германия",
-    "Puzzle.country2Language": "Немски",
-    "Puzzle.country2City1": "Берлин",
-    "Puzzle.country2City2": "Мюнхен",
-    "Puzzle.country2HelpUrl": "https://bg.wikipedia.org/wiki/Германия",
-    "Puzzle.country3": "Китай",
-    "Puzzle.country3Language": "Китайски",
-    "Puzzle.country3City1": "Пекин",
-    "Puzzle.country3City2": "Шанхай",
-    "Puzzle.country3HelpUrl": "https://bg.wikipedia.org/wiki/Китай",
-    "Puzzle.country4": "Бразилия",
-    "Puzzle.country4Language": "Португалски",
-    "Puzzle.country4City1": "Рио де Жанейро",
-    "Puzzle.country4City2": "Сао Пауло",
-    "Puzzle.country4HelpUrl": "https://bg.wikipedia.org/wiki/Бразилия",
-    "Puzzle.flag": "флаг:",
-    "Puzzle.language": "език:",
-    "Puzzle.languageChoose": "избиране...",
-    "Puzzle.cities": "градове:"
+	"@metadata": {
+		"authors": [
+			"DCLXVI"
+		]
+	},
+	"Apps.dialogCancel": "Отказване",
+	"Apps.catVariables": "Променливи",
+	"Puzzle.country1": "Австралия",
+	"Puzzle.country1Language": "Английски",
+	"Puzzle.country1City1": "Мелбърн",
+	"Puzzle.country1City2": "Сидни",
+	"Puzzle.country1HelpUrl": "https://bg.wikipedia.org/wiki/Австралия",
+	"Puzzle.country2": "Германия",
+	"Puzzle.country2Language": "Немски",
+	"Puzzle.country2City1": "Берлин",
+	"Puzzle.country2City2": "Мюнхен",
+	"Puzzle.country2HelpUrl": "https://bg.wikipedia.org/wiki/Германия",
+	"Puzzle.country3": "Китай",
+	"Puzzle.country3Language": "Китайски",
+	"Puzzle.country3City1": "Пекин",
+	"Puzzle.country3City2": "Шанхай",
+	"Puzzle.country3HelpUrl": "https://bg.wikipedia.org/wiki/Китай",
+	"Puzzle.country4": "Бразилия",
+	"Puzzle.country4Language": "Португалски",
+	"Puzzle.country4City1": "Рио де Жанейро",
+	"Puzzle.country4City2": "Сао Пауло",
+	"Puzzle.country4HelpUrl": "https://bg.wikipedia.org/wiki/Бразилия",
+	"Puzzle.flag": "флаг:",
+	"Puzzle.language": "език:",
+	"Puzzle.languageChoose": "избиране...",
+	"Puzzle.cities": "градове:"
 }

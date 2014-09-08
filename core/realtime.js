@@ -38,8 +38,16 @@
 goog.provide('Blockly.Realtime');
 
 goog.require('goog.array');
+goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('rtclient');
+
+/**
+ * URL for progress indicator.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.PROGRESS_URL_ = 'media/progress.gif';
 
 /**
  * Is realtime collaboration enabled?
@@ -140,11 +148,24 @@ Blockly.Realtime.undoElementId_ = null;
 Blockly.Realtime.redoElementId_ = null;
 
 /**
+ * URL of the animated progress indicator.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.PROGRESS_URL_ = 'media/progress.gif';
+
+/**
+ * URL of the anonymous user image.
+ * @type {string}
+ * @private
+ */
+Blockly.Realtime.ANONYMOUS_URL_ = 'media/anon.jpeg';
+
+/**
  * This function is called the first time that the Realtime model is created
  * for a file. This function should be used to initialize any values of the
  * model.
- * @param {gapi.drive.realtime.Model} model The Realtime root model
- *     object.
+ * @param {!gapi.drive.realtime.Model} model The Realtime root model object.
  * @private
  */
 Blockly.Realtime.initializeModel_ = function(model) {
@@ -164,7 +185,7 @@ Blockly.Realtime.initializeModel_ = function(model) {
  * @param {!Blockly.Block} block The block to remove.
  */
 Blockly.Realtime.removeBlock = function(block) {
-  Blockly.Realtime.blocksMap_.delete(block.id.toString());
+  Blockly.Realtime.blocksMap_['delete'](block.id.toString());
 };
 
 /**
@@ -188,7 +209,7 @@ Blockly.Realtime.removeTopBlock = function(block) {
 /**
  * Obtain a newly created block known by the Realtime API.
  * @param {!Blockly.Workspace} workspace The workspace to put the block in.
- * @param {string} prototypeName The name of the prototype for the block
+ * @param {string} prototypeName The name of the prototype for the block.
  * @return {!Blockly.Block}
  */
 Blockly.Realtime.obtainBlock = function(workspace, prototypeName) {
@@ -211,29 +232,28 @@ Blockly.Realtime.getBlockById = function(id) {
  * @param {gapi.drive.realtime.BaseModelEvent} evt The event that occurred.
  * @private
  */
-Blockly.Realtime.logEvent_ = function (evt) {
-  console.log("Object event:");
-  console.log("  id: " + evt.target.id);
-  console.log("  type: " + evt.type);
+Blockly.Realtime.logEvent_ = function(evt) {
+  console.log('Object event:');
+  console.log('  id: ' + evt.target.id);
+  console.log('  type: ' + evt.type);
   var events = evt.events;
   if (events) {
     var eventCount = events.length;
     for (var i = 0; i < eventCount; i++) {
       var event = events[i];
-      console.log("  child event:");
-      console.log("    id: " + event.target.id);
-      console.log("    type: " + event.type);
+      console.log('  child event:');
+      console.log('    id: ' + event.target.id);
+      console.log('    type: ' + event.type);
     }
   }
 };
 
 /**
  * Event handler to call when a block is changed.
- * @param {gapi.drive.realtime.ObjectChangedEvent} evt The event that occurred.
+ * @param {!gapi.drive.realtime.ObjectChangedEvent} evt The event that occurred.
  * @private
  */
 Blockly.Realtime.onObjectChange_ = function(evt) {
-  Blockly.Realtime.logEvent_(evt);
   var events = evt.events;
   var eventCount = evt.events.length;
   for (var i = 0; i < eventCount; i++) {
@@ -265,13 +285,10 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
 
 /**
  * Event handler to call when there is a change to the realtime blocks map.
- * @param {gapi.drive.realtime.ValueChangedEvent} evt The event that occurred.
+ * @param {!gapi.drive.realtime.ValueChangedEvent} evt The event that occurred.
  * @private
  */
 Blockly.Realtime.onBlocksMapChange_ = function(evt) {
-  Blockly.Realtime.logEvent_(evt);
-//  console.log('Blocks Map event:');
-//  console.log('  id: ' + evt.property);
   if (!evt.isLocal || Blockly.Realtime.withinUndo_) {
     var block = evt.newValue;
     if (block) {
@@ -335,8 +352,8 @@ Blockly.Realtime.placeBlockOnWorkspace_ = function(block, addToTop) {
 };
 
 /**
- * Move a block
- * @param {Blockly.Block} block The block to move.
+ * Move a block.
+ * @param {!Blockly.Block} block The block to move.
  * @private
  */
 Blockly.Realtime.moveBlock_ = function(block) {
@@ -378,7 +395,9 @@ Blockly.Realtime.loadBlocks_ = function() {
  * @param {!Blockly.Block} block The block that changed.
  */
 Blockly.Realtime.blockChanged = function(block) {
-  if (block.workspace == Blockly.mainWorkspace) {
+  if (block.workspace == Blockly.mainWorkspace &&
+      Blockly.Realtime.isEnabled() &&
+      !Blockly.Realtime.withinSync) {
     var rootBlock = block.getRootBlock();
     var xy = rootBlock.getRelativeToSurfaceXY();
     var changed = false;
@@ -428,6 +447,13 @@ Blockly.Realtime.onFileLoaded_ = function(doc) {
       Blockly.Realtime.onBlocksMapChange_);
 
   Blockly.Realtime.initUi_();
+
+  //Adding Listeners for Collaborator events.
+  doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_JOINED,
+      Blockly.Realtime.onCollaboratorJoined_);
+  doc.addEventListener(gapi.drive.realtime.EventType.COLLABORATOR_LEFT,
+      Blockly.Realtime.onCollaboratorLeft_);
+  Blockly.Realtime.updateCollabUi_();
 
   Blockly.Realtime.loadBlocks_();
 
@@ -484,6 +510,7 @@ Blockly.Realtime.getSessionId_ = function(doc) {
       return collaborator.sessionId;
     }
   }
+  return undefined;
 };
 
 /**
@@ -599,64 +626,69 @@ Blockly.Realtime.rtclientOptions_ = {
    * Client ID from the console.
    * This will be set from the options passed into Blockly.Realtime.start()
    */
-  clientId: null,
+  'clientId': null,
 
   /**
    * The ID of the button to click to authorize. Must be a DOM element ID.
    */
-  authButtonElementId: 'authorizeButton',
+  'authButtonElementId': 'authorizeButton',
 
   /**
    * The ID of the container of the authorize button.
    */
-  authDivElementId: 'authButtonDiv',
+  'authDivElementId': 'authButtonDiv',
 
   /**
    * Function to be called when a Realtime model is first created.
    */
-  initializeModel: Blockly.Realtime.initializeModel_,
+  'initializeModel': Blockly.Realtime.initializeModel_,
 
   /**
    * Autocreate files right after auth automatically.
    */
-  autoCreate: true,
+  'autoCreate': true,
 
   /**
    * The name of newly created Drive files.
    */
-  defaultTitle: 'New Realtime Blockly File',
+  'defaultTitle': 'Realtime Blockly File',
+
+  /**
+   * The name of the folder to place newly created Drive files in.
+   */
+  'defaultFolderTitle': 'Realtime Blockly Folder',
 
   /**
    * The MIME type of newly created Drive Files. By default the application
    * specific MIME type will be used:
    *     application/vnd.google-apps.drive-sdk.
    */
-  newFileMimeType: null, // Using default.
+  'newFileMimeType': null, // Using default.
 
   /**
    * Function to be called every time a Realtime file is loaded.
    */
-  onFileLoaded: Blockly.Realtime.onFileLoaded_,
+  'onFileLoaded': Blockly.Realtime.onFileLoaded_,
 
   /**
    * Function to be called to initialize custom Collaborative Objects types.
    */
-  registerTypes: Blockly.Realtime.registerTypes_,
+  'registerTypes': Blockly.Realtime.registerTypes_,
 
   /**
    * Function to be called after authorization and before loading files.
    */
-  afterAuth: Blockly.Realtime.afterAuth_,
+  'afterAuth': Blockly.Realtime.afterAuth_,
 
   /**
    * Function to be called after file creation, if autoCreate is true.
    */
-  afterCreate: Blockly.Realtime.afterCreate_
+  'afterCreate': Blockly.Realtime.afterCreate_
 };
 
 /**
  * Parse options to startRealtime().
- * @param {Object} options object containing the options.
+ * @param {!Object} options Object containing the options.
  * @private
  */
 Blockly.Realtime.parseOptions_ = function(options) {
@@ -667,8 +699,10 @@ Blockly.Realtime.parseOptions_ = function(options) {
     Blockly.Realtime.chatBoxInitialText_ =
         rtclient.getOption(chatBoxOptions, 'initText', Blockly.Msg.CHAT);
   }
-    Blockly.Realtime.rtclientOptions_.clientId =
-        rtclient.getOption(options, 'clientId');
+  Blockly.Realtime.rtclientOptions_.clientId =
+      rtclient.getOption(options, 'clientId');
+  Blockly.Realtime.collabElementId =
+      rtclient.getOption(options, 'collabElementId');
   // TODO: Uncomment this when undo/redo are fixed.
 //  Blockly.Realtime.undoElementId_ =
 //      rtclient.getOption(options, 'undoElementId', 'undoButton');
@@ -679,9 +713,9 @@ Blockly.Realtime.parseOptions_ = function(options) {
 /**
  * Setup the Blockly container for realtime authorization and start the
  * Realtime loader.
- * @param {function()} uiInitialize function to initialize the Blockly UI.
- * @param {Element} uiContainer container element for the Blockly UI.
- * @param {Object} options the realtime options.
+ * @param {function()} uiInitialize Function to initialize the Blockly UI.
+ * @param {!Element} uiContainer Container element for the Blockly UI.
+ * @param {!Object} options The realtime options.
  */
 Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
   Blockly.Realtime.parseOptions_(options);
@@ -707,14 +741,18 @@ Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
 
 /**
  * Setup the Blockly container for realtime authorization.
- * @param {Element} uiContainer a DOM container element for the Blockly UI.
- * @return {Element} the DOM element for the authorization UI.
+ * @param {!Element} uiContainer A DOM container element for the Blockly UI.
+ * @return {!Element} The DOM element for the authorization UI.
  * @private
  */
 Blockly.Realtime.addAuthUi_ = function(uiContainer) {
+  // Add progess indicator to the UI container.
+  uiContainer.style.background = 'url(' + Blockly.pathToBlockly +
+      Blockly.Realtime.PROGRESS_URL_ + ') no-repeat center center';
+  // Setup authorization button
   var blocklyDivBounds = goog.style.getBounds(uiContainer);
   var authButtonDiv = goog.dom.createDom('div');
-  authButtonDiv.id = 'authButtonDiv';
+  authButtonDiv.id = Blockly.Realtime.rtclientOptions_['authDivElementId'];
   var authText = goog.dom.createDom('p', null, Blockly.Msg.AUTH);
   authButtonDiv.appendChild(authText);
   var authButton = goog.dom.createDom('button', null, 'Authorize');
@@ -738,6 +776,50 @@ Blockly.Realtime.addAuthUi_ = function(uiContainer) {
   authButtonDiv.style.top =
       (blocklyDivBounds.height - authButtonDivBounds.height) / 4 + 'px';
   return authButtonDiv;
+};
+
+/**
+ * Update the collaborators UI to include the latest set of users.
+ * @private
+ */
+Blockly.Realtime.updateCollabUi_ = function() {
+  if (!Blockly.Realtime.collabElementId) {
+    return;
+  }
+  var collabElement = goog.dom.getElement(Blockly.Realtime.collabElementId);
+  goog.dom.removeChildren(collabElement);
+  var collaboratorsList = Blockly.Realtime.document_.getCollaborators();
+  for (var i = 0; i < collaboratorsList.length; i++) {
+    var collaborator = collaboratorsList[i];
+    var imgSrc = collaborator.photoUrl ||
+        Blockly.pathToBlockly + Blockly.Realtime.ANONYMOUS_URL_;
+    var img = goog.dom.createDom('img',
+        {
+          'src': imgSrc,
+          'alt': collaborator.displayName,
+          'title': collaborator.displayName +
+              (collaborator.isMe ? ' (' + Blockly.Msg.ME + ')' : '')});
+    img.style.backgroundColor = collaborator.color;
+    goog.dom.appendChild(collabElement, img);
+  }
+};
+
+/**
+ * Event handler for when collaborators join.
+ * @param {gapi.drive.realtime.CollaboratorJoinedEvent} event The event.
+ * @private
+ */
+Blockly.Realtime.onCollaboratorJoined_ = function(event) {
+  Blockly.Realtime.updateCollabUi_();
+};
+
+/**
+ * Event handler for when collaborators leave.
+ * @param {gapi.drive.realtime.CollaboratorLeftEvent} event The event.
+ * @private
+ */
+Blockly.Realtime.onCollaboratorLeft_ = function(event) {
+  Blockly.Realtime.updateCollabUi_();
 };
 
 /**
@@ -784,7 +866,6 @@ Blockly.Realtime.genUid = function(extra) {
      used before and I'm paranoid.  It's not enough to just check that the
      random uid hasn't been previously used because other concurrent sessions
      might generate the same uid at the same time.  Like I said, I'm paranoid.
-
    */
   var potentialUid = Blockly.Realtime.sessionId_ + '-' + extra;
   if (!Blockly.Realtime.blocksMap_.has(potentialUid)) {

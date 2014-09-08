@@ -156,7 +156,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
     if (visible) {
       renderList = this.connection.unhideAll();
     } else {
-      renderList = this.connection.hideAll();
+      this.connection.hideAll();
     }
     var child = this.connection.targetBlock();
     if (child) {

@@ -36,7 +36,10 @@ goog.provide('Blockly.Xml');
  * @return {!Element} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace) {
-  var width = Blockly.svgSize().width;
+  var width;  // Not used in LTR.
+  if (Blockly.RTL) {
+    width = workspace.getMetrics().viewWidth;
+  }
   var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -132,13 +135,11 @@ Blockly.Xml.blockToDom_ = function(block) {
     element.setAttribute('editable', false);
   }
 
-  if (block.nextConnection) {
-    var nextBlock = block.nextConnection.targetBlock();
-    if (nextBlock) {
-      var container = goog.dom.createDom('next', null,
-          Blockly.Xml.blockToDom_(nextBlock));
-      element.appendChild(container);
-    }
+  var nextBlock = block.getNextBlock();
+  if (nextBlock) {
+    var container = goog.dom.createDom('next', null,
+        Blockly.Xml.blockToDom_(nextBlock));
+    element.appendChild(container);
   }
 
   return element;
@@ -211,7 +212,9 @@ Blockly.Xml.textToDom = function(text) {
  * @param {!Element} xml XML DOM.
  */
 Blockly.Xml.domToWorkspace = function(workspace, xml) {
-  var width = Blockly.svgSize().width;
+  if (Blockly.RTL) {
+    var width = workspace.getMetrics().viewWidth;
+  }
   for (var x = 0, xmlChild; xmlChild = xml.childNodes[x]; x++) {
     if (xmlChild.nodeName.toLowerCase() == 'block') {
       var block = Blockly.Xml.domToBlock(workspace, xmlChild);
@@ -232,7 +235,6 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
  * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
  *     reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
- * @private
  */
 Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
   var block = null;
@@ -257,9 +259,6 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
     block.parent_ = parentBlock;
   } else {
     block = Blockly.Block.obtain(workspace, prototypeName);
-//    if (id) {
-//      block.id = parseInt(id, 10);
-//    }
   }
   if (!block.svg_) {
     block.initSvg();
@@ -315,7 +314,11 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
         block.setCommentText(xmlChild.textContent);
         var visible = xmlChild.getAttribute('pinned');
         if (visible) {
-          block.comment.setVisible(visible == 'true');
+          // Give the renderer a millisecond to render and position the block
+          // before positioning the comment bubble.
+          setTimeout(function() {
+            block.comment.setVisible(visible == 'true');
+          }, 1);
         }
         var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
         var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
@@ -370,17 +373,17 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
     }
   }
 
-  var next = block.nextConnection && block.nextConnection.targetBlock();
+  var collapsed = xmlBlock.getAttribute('collapsed');
+  if (collapsed) {
+    block.setCollapsed(collapsed == 'true');
+  }
+  var next = block.getNextBlock();
   if (next) {
     // Next block in a stack needs to square off its corners.
     // Rendering a child will render its parent.
     next.render();
   } else {
     block.render();
-  }
-  var collapsed = xmlBlock.getAttribute('collapsed');
-  if (collapsed) {
-    block.setCollapsed(collapsed == 'true');
   }
   return block;
 };
@@ -399,8 +402,13 @@ Blockly.Xml.deleteNext = function(xmlBlock) {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-Blockly['Xml'] = Blockly.Xml;
-Blockly.Xml['domToText'] = Blockly.Xml.domToText;
-Blockly.Xml['domToWorkspace'] = Blockly.Xml.domToWorkspace;
-Blockly.Xml['textToDom'] = Blockly.Xml.textToDom;
-Blockly.Xml['workspaceToDom'] = Blockly.Xml.workspaceToDom;
+if (!window['Blockly']) {
+  window['Blockly'] = {};
+}
+if (!window['Blockly']['Xml']) {
+  window['Blockly']['Xml'] = {};
+}
+window['Blockly']['Xml']['domToText'] = Blockly.Xml.domToText;
+window['Blockly']['Xml']['domToWorkspace'] = Blockly.Xml.domToWorkspace;
+window['Blockly']['Xml']['textToDom'] = Blockly.Xml.textToDom;
+window['Blockly']['Xml']['workspaceToDom'] = Blockly.Xml.workspaceToDom;

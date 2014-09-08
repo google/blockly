@@ -15,7 +15,7 @@
 {template .messages}
   {call apps.messages /}
   <div style="display: none">
-    <span id="Code_badXml">{msg meaning="Code.badXml" desc="alert - Message shown when the user tries switching from the XML tab after entering XML text that could not be parsed.  This asks whether they wish to abandon the XML they added.  If they select 'OK' (or the translated equivalent), the XML is cleared, and the other tab is shown.  If they select 'Cancel', they remain on the XML tab with the bad XML.\n\nUsed in JavaScript \u003Ccode\u003Ewindow.confirm()\u003C/code\u003E."}Error parsing XML:\n%1\n\nSelect 'OK' to abandon your changes or 'Cancel' to further edit the XML.{/msg}</span>
+    <span id="Code_badXml">{msg meaning="Code.badXml" desc="alert - Message shown when the user tries switching from the XML tab after entering XML text that could not be parsed.  This asks whether they wish to abandon the XML they added.  If they select 'OK' (or the translated equivalent), the XML is cleared, and the other tab is shown.  If they select 'Cancel', they remain on the XML tab with the bad XML.\n\nUsed in JavaScript <code>window.confirm()</code>."}Error parsing XML:\n%1\n\nSelect 'OK' to abandon your changes or 'Cancel' to further edit the XML.{/msg}</span>
     <span id="Code_badCode">{msg meaning="Code.badCode" desc="alert - Message shown if an error occurs while interpreting the user program.  The error description follows."}Program error:\n%1{/msg}</span>
     <span id="Code_timeout">{msg meaning="Code.timeout" desc="alert - Message shown if the program has run for more than the permitted number of steps.  This exists so that programs with infinite loops do not run forever."}Maximum execution iterations exceeded.{/msg}</span>
     <span id="Code_discard">{msg meaning="Code.discard" desc="alert - Message shown after the user clicks on the 'discard all' icon.  Selecting 'OK' (or the translated equivalent) causes all of the blocks to be discarded.  Selecting 'Cancel' prevents blocks from being deleted.\n\nParameters:\n* %1 - number of blocks to be deleted. It is always an integer greater than or equal to 2."}Delete all %1 blocks?{/msg}</span>
@@ -54,7 +54,7 @@
       <td colspan=2>
         <table width="100%">
           <tr id="tabRow" height="1em">
-            <td id="tab_blocks" class="tabon">{msg meaning="Code.blocks" desc="tab text - Displays and allows editing of the user's program as blocks."}Blocks{/msg}</td>
+            <td id="tab_blocks" class="tabon">{{msg meaning="Code.blocks" desc="tab text - Displays and allows editing of the user's program as blocks.\n{lb}{lb}Identical|Blocks{rb}{rb}"}}Blocks{{/msg}}</td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_javascript" class="taboff">JavaScript</td>
             <td class="tabmin">&nbsp;</td>
@@ -213,7 +213,11 @@
       <block type="text_changeCase"></block>
       <block type="text_trim"></block>
       <block type="text_print"></block>
-      <block type="text_prompt"></block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
     </category>
     <category name="{msg meaning="Apps.catLists" desc="IBID"}Lists{/msg}">
       <block type="lists_create_empty"></block>
@@ -259,22 +263,42 @@
     <category name="{msg meaning="Apps.catColour" desc="IBID"}Colour{/msg}">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
-      <block type="colour_rgb"></block>
-      <block type="colour_blend"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+        <value name="GREEN">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <value name="BLUE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <block type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </block>
+        </value>
+        <value name="COLOUR2">
+          <block type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </block>
+        </value>
+        <value name="RATIO">
+          <block type="math_number">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+      </block>
     </category>
     <category name="{msg meaning="Apps.catVariables" desc="IBID"}Variables{/msg}" custom="VARIABLE"></category>
-    <category name="{msg meaning="Apps.catProcedures" desc="IBID"}Procedures{/msg}" custom="PROCEDURE"></category>
+    <category name="{msg meaning="Apps.catProcedures" desc="IBID"}Functions{/msg}" custom="PROCEDURE"></category>
   </xml>
-{/template}
-
-/**
- * Readonly Blockly in an iframe.
- */
-{template .readonly}
-  {call .messages /}
-
-  <script type="text/javascript" src="../../blockly_compressed.js"></script>
-  <script type="text/javascript" src="../../blocks_compressed.js"></script>
-  <script type="text/javascript" src="../../{$ij.langSrc}"></script>
-  <div id="blockly"></div>
 {/template}

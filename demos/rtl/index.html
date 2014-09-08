@@ -39,8 +39,16 @@
   <div id="svgDiv"></div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Control">
+    <category name="Logic">
       <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <block type="math_number">
@@ -68,14 +76,6 @@
       </block>
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
-    </category>
-    <category name="Logic">
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean"></block>
-      <block type="logic_null"></block>
-      <block type="logic_ternary"></block>
     </category>
     <category name="Math">
       <block type="math_number"></block>
@@ -136,7 +136,11 @@
       <block type="text_changeCase"></block>
       <block type="text_trim"></block>
       <block type="text_print"></block>
-      <block type="text_prompt"></block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
     </category>
     <category name="Lists">
       <block type="lists_create_empty"></block>

@@ -38,11 +38,11 @@ Blockly.JavaScript['math_number'] = function(block) {
 Blockly.JavaScript['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   var OPERATORS = {
-    ADD: [' + ', Blockly.JavaScript.ORDER_ADDITION],
-    MINUS: [' - ', Blockly.JavaScript.ORDER_SUBTRACTION],
-    MULTIPLY: [' * ', Blockly.JavaScript.ORDER_MULTIPLICATION],
-    DIVIDE: [' / ', Blockly.JavaScript.ORDER_DIVISION],
-    POWER: [null, Blockly.JavaScript.ORDER_COMMA]  // Handle power separately.
+    'ADD': [' + ', Blockly.JavaScript.ORDER_ADDITION],
+    'MINUS': [' - ', Blockly.JavaScript.ORDER_SUBTRACTION],
+    'MULTIPLY': [' * ', Blockly.JavaScript.ORDER_MULTIPLICATION],
+    'DIVIDE': [' / ', Blockly.JavaScript.ORDER_DIVISION],
+    'POWER': [null, Blockly.JavaScript.ORDER_COMMA]  // Handle power separately.
   };
   var tuple = OPERATORS[block.getFieldValue('OP')];
   var operator = tuple[0];
@@ -146,12 +146,13 @@ Blockly.JavaScript['math_single'] = function(block) {
 Blockly.JavaScript['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   var CONSTANTS = {
-    PI: ['Math.PI', Blockly.JavaScript.ORDER_MEMBER],
-    E: ['Math.E', Blockly.JavaScript.ORDER_MEMBER],
-    GOLDEN_RATIO: ['(1 + Math.sqrt(5)) / 2', Blockly.JavaScript.ORDER_DIVISION],
-    SQRT2: ['Math.SQRT2', Blockly.JavaScript.ORDER_MEMBER],
-    SQRT1_2: ['Math.SQRT1_2', Blockly.JavaScript.ORDER_MEMBER],
-    INFINITY: ['Infinity', Blockly.JavaScript.ORDER_ATOMIC]
+    'PI': ['Math.PI', Blockly.JavaScript.ORDER_MEMBER],
+    'E': ['Math.E', Blockly.JavaScript.ORDER_MEMBER],
+    'GOLDEN_RATIO':
+        ['(1 + Math.sqrt(5)) / 2', Blockly.JavaScript.ORDER_DIVISION],
+    'SQRT2': ['Math.SQRT2', Blockly.JavaScript.ORDER_MEMBER],
+    'SQRT1_2': ['Math.SQRT1_2', Blockly.JavaScript.ORDER_MEMBER],
+    'INFINITY': ['Infinity', Blockly.JavaScript.ORDER_ATOMIC]
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };

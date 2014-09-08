@@ -21,7 +21,7 @@
 /**
  * @fileoverview A div that floats on top of Blockly.  This singleton contains
  *     temporary HTML UI widgets that the user is currently interacting with.
- *     E.g. text input areas, colour pickers.
+ *     E.g. text input areas, colour pickers, context menus.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -39,14 +39,14 @@ goog.require('goog.dom');
 Blockly.WidgetDiv.DIV = null;
 
 /**
- * The field currently using this container.
+ * The object currently using this container.
  * @private
- * @type Blockly.Field
+ * @type Object
  */
-Blockly.WidgetDiv.field_ = null;
+Blockly.WidgetDiv.owner_ = null;
 
 /**
- * Optional cleanup function set by whichever field uses the widget.
+ * Optional cleanup function set by whichever object uses the widget.
  * @private
  * @type Function
  */
@@ -54,13 +54,13 @@ Blockly.WidgetDiv.dispose_ = null;
 
 /**
  * Initialize and display the widget div.  Close the old one if needed.
- * @param {!Blockly.Field} newField The field that will be using this container.
+ * @param {!Object} newOwner The object that will be using this container.
  * @param {Function} dispose Optional cleanup function to be run when the widget
  *   is closed.
  */
-Blockly.WidgetDiv.show = function(newField, dispose) {
+Blockly.WidgetDiv.show = function(newOwner, dispose) {
   Blockly.WidgetDiv.hide();
-  Blockly.WidgetDiv.field_ = newField;
+  Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
   Blockly.WidgetDiv.DIV.style.display = 'block';
 };
@@ -69,22 +69,59 @@ Blockly.WidgetDiv.show = function(newField, dispose) {
  * Destroy the widget and hide the div.
  */
 Blockly.WidgetDiv.hide = function() {
-  if (Blockly.WidgetDiv.field_) {
+  if (Blockly.WidgetDiv.owner_) {
     Blockly.WidgetDiv.DIV.style.display = 'none';
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.field_ = null;
+    Blockly.WidgetDiv.owner_ = null;
     Blockly.WidgetDiv.dispose_ = null;
     goog.dom.removeChildren(Blockly.WidgetDiv.DIV);
   }
 };
 
 /**
- * Destroy the widget and hide the div if it is being used by the specified
- *   field.
- * @param {!Blockly.Field} oldField The field that was using this container.
+ * Is the container visible?
+ * @return {boolean} True if visible.
  */
-Blockly.WidgetDiv.hideIfField = function(oldField) {
-  if (Blockly.WidgetDiv.field_ == oldField) {
+Blockly.WidgetDiv.isVisible = function() {
+  return !!Blockly.WidgetDiv.owner_;
+};
+
+/**
+ * Destroy the widget and hide the div if it is being used by the specified
+ *   object.
+ * @param {!Object} oldOwner The object that was using this container.
+ */
+Blockly.WidgetDiv.hideIfOwner = function(oldOwner) {
+  if (Blockly.WidgetDiv.owner_ == oldOwner) {
     Blockly.WidgetDiv.hide();
   }
+};
+
+/**
+ * Position the widget at a given location.  Prevent the widget from going
+ * offscreen top or left (right in RTL).
+ * @param {number} anchorX Horizontal location (window coorditates, not body).
+ * @param {number} anchorY Vertical location (window coorditates, not body).
+ * @param {!goog.math.Size} windowSize Height/width of window.
+ * @param {!goog.math.Coordinate} scrollOffset X/y of window scrollbars.
+ */
+Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
+                                      scrollOffset) {
+  // Don't let the widget go above the top edge of the window.
+  if (anchorY < scrollOffset.y) {
+    anchorY = scrollOffset.y;
+  }
+  if (Blockly.RTL) {
+    // Don't let the menu go right of the right edge of the window.
+    if (anchorX > windowSize.width + scrollOffset.x) {
+      anchorX = windowSize.width + scrollOffset.x;
+    }
+  } else {
+    // Don't let the widget go left of the left edge of the window.
+    if (anchorX < scrollOffset.x) {
+      anchorX = scrollOffset.x;
+    }
+  }
+  Blockly.WidgetDiv.DIV.style.left = anchorX + 'px';
+  Blockly.WidgetDiv.DIV.style.top = anchorY + 'px';
 };

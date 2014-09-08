@@ -248,7 +248,8 @@ Blockly.Dart['lists_setIndex'] = function(block) {
     var code = cacheList();
     var xVar = Blockly.Dart.variableDB_.getDistinctName(
         'tmp_x', Blockly.Variables.NAME_TYPE);
-    code += 'int ' + xVar + ' = new Math.Random().nextInt(' + list + '.length);';
+    code += 'int ' + xVar +
+        ' = new Math.Random().nextInt(' + list + '.length);';
     if (mode == 'SET') {
       code += list + '[' + xVar + '] = ' + value + ';\n';
       return code;

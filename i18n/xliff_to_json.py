@@ -27,7 +27,7 @@ from common import InputError
 from common import write_files
 
 # Global variables
-args = None      # parsed command-line arguments
+args = None  # Parsed command-line arguments.
 
 
 def _parse_trans_unit(trans_unit):
@@ -224,8 +224,7 @@ def main():
     write_files(args.author, args.lang, args.output_dir, sorted_units, True)
 
     # Delete the input .xlf file.
-    command = ['rm', args.xlf]
-    subprocess.check_call(command)
+    os.remove(args.xlf)
     print('Removed ' + args.xlf)
 
 

@@ -88,6 +88,10 @@ img[src$="help_down.png"] {
   width: 23px;
 }
 
+#svgMaze {
+  overflow: hidden;
+}
+
 /* 'Look' icon */
 #look>path {
   display: none;

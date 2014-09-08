@@ -59,6 +59,7 @@ td {
   margin: 0;
   padding: 1ex;
   position: absolute;
+  direction: ltr;
 }
 pre.content {
   overflow: scroll;

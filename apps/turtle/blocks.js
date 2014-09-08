@@ -56,6 +56,9 @@ Blockly.Blocks['draw_turn'] = {
     var DIRECTIONS =
         [[BlocklyApps.getMsg('Turtle_turnRight'), 'turnRight'],
          [BlocklyApps.getMsg('Turtle_turnLeft'), 'turnLeft']];
+    // Append arrows to direction messages.
+    DIRECTIONS[0][0] += ' \u21BB';
+    DIRECTIONS[1][0] += ' \u21BA';
     this.setColour(160);
     this.appendValueInput('VALUE')
         .setCheck('Number')

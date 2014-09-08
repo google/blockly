@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"author": "De'vID <De.vID.jonpIn@gmail.com>",
+		"lastupdated": "2014-03-24 23:00:00.000000",
+		"locale": "tlh",
+		"messagedocumentation" : "qqq"
+	},
+	"Apps.subtitle": "ngoq DaleghlaHbogh, ngogh DaghunlaHbogh",
+	"Apps.blocklyMessage": "ghunmeH ngogh",
+	"Apps.dialogOk": "ruch",
+	"Apps.dialogCancel": "qIl",
+	"Apps.catLogic": "meq",
+	"Apps.catLoops": "vIHtaHbogh ghomey",
+	"Apps.catMath": "mI'QeD",
+	"Apps.catText": "ghItlhHommey",
+	"Apps.catLists": "tetlhmey",
+	"Apps.catColour": "rItlh",
+	"Apps.catVariables": "lIwmey",
+	"Apps.catProcedures": "mIwmey",
+	"Apps.httpRequestError": "Qapbe' tlhobmeH QIn.",
+	"Apps.linkAlert": "latlhvaD ngoghmeylIj DangeHmeH Quvvam yIlo':\n\n%1",
+	"Apps.hashError": "Do'Ha', ngogh nab pollu'pu'bogh 'oHbe'law' \"%1\"'e'.",
+	"Apps.xmlError": "ngogh nablIj pollu'pu'bogh chu'qa'laHbe' vay'.  chaq pollu'pu'DI' ghunmeH ngogh pIm lo'lu'pu'.",
+	"Apps.listVariable": "tetlh",
+	"Apps.textVariable": "ghItlhHom",
+	"Code.badXml": "XML yajchu'laHbe' vay':\n%1\n\nchoHmeylIj DalonmeH \"ruch\" yIwIv pagh XML DachoHqa'meH \"qIl\" yIwIv.",
+	"Code.badCode": "Qagh:\n%1",
+	"Code.timeout": "tlhoy nI'qu' poH.",
+	"Code.discard": "Hoch %1 ngoghmey Qaw'?",
+	"Code.title": "ngoq",
+	"Code.blocks": "ngoghmey"
+}

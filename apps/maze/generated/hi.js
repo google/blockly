@@ -1,0 +1,61 @@
+// This file was automatically generated from common.soy.
+// Please don't edit this file by hand.
+
+if (typeof apps == 'undefined') { var apps = {}; }
+
+
+apps.messages = function(opt_data, opt_ignored, opt_ijData) {
+  return '<div style="display: none"><span id="subtitle">एक विषुयल प्रोग्रामिंग वातावरण</span><span id="blocklyMessage">Blockly (ब्लॉकली)</span><span id="codeTooltip">बना हुआ जावास्क्रिप्ट कोड देखें।</span><span id="linkTooltip">सेव करें और ब्लॉक से लिंक करें।</span><span id="runTooltip">कार्यस्थान में ब्लॉक द्वारा वर्णन किया गया प्रोग्राम चलाएँ।</span><span id="runProgram">प्रोग्राम चलाएँ</span><span id="resetProgram">रीसेट करें</span><span id="dialogOk">ओके</span><span id="dialogCancel">रद्द करें</span><span id="catLogic">तर्क</span><span id="catLoops">लूप</span><span id="catMath">गणित</span><span id="catText">टेक्स्ट</span><span id="catLists">सूचियाँ</span><span id="catColour">रंग</span><span id="catVariables">चर</span><span id="catProcedures">प्रोसीजर</span><span id="httpRequestError">अनुरोध के साथ समस्या हुई।</span><span id="linkAlert">इस लिंक के साथ का अपने ब्लॉक का साझा करें:\n\n %1</span><span id="hashError">खेद है, \'%1\' किसी सेव किए गए प्रोग्राम से संबंधित नहीं है।</span><span id="xmlError">आपकी सेव की गई फ़ाइल लोड नहीं हो सकी।  शायद यह ब्लॉकली के किसी भिन्न संस्करण के साथ बनाई गयी थी?</span><span id="listVariable">सूची</span><span id="textVariable">टेक्स्ट</span></div>';
+};
+
+
+apps.dialog = function(opt_data, opt_ignored, opt_ijData) {
+  return '<div id="dialogShadow" class="dialogAnimate"></div><div id="dialogBorder"></div><div id="dialog"></div>';
+};
+
+
+apps.codeDialog = function(opt_data, opt_ignored, opt_ijData) {
+  return '<div id="dialogCode" class="dialogHiddenContent"><pre id="containerCode"></pre>' + apps.ok(null, null, opt_ijData) + '</div>';
+};
+
+
+apps.storageDialog = function(opt_data, opt_ignored, opt_ijData) {
+  return '<div id="dialogStorage" class="dialogHiddenContent"><div id="containerStorage"></div>' + apps.ok(null, null, opt_ijData) + '</div>';
+};
+
+
+apps.ok = function(opt_data, opt_ignored, opt_ijData) {
+  return '<div class="farSide" style="padding: 1ex 3ex 0"><button class="secondary" onclick="BlocklyApps.hideDialog(true)">ओके</button></div>';
+};
+
+;
+// This file was automatically generated from template.soy.
+// Please don't edit this file by hand.
+
+if (typeof mazepage == 'undefined') { var mazepage = {}; }
+
+
+mazepage.messages = function(opt_data, opt_ignored, opt_ijData) {
+  return apps.messages(null, null, opt_ijData) + '<div style="display: none"><span id="Maze_moveForward">आगे बढ़ें</span><span id="Maze_turnLeft">बाएँ मुड़ें</span><span id="Maze_turnRight">दाएँ मुड़ें</span><span id="Maze_doCode">डू</span><span id="Maze_elseCode">एल्स</span><span id="Maze_helpIfElse">इफ-एल्स ब्लाक एक काम या अन्य काम करेगा।</span><span id="Maze_pathAhead">यदि पथ आगे है तो</span><span id="Maze_pathLeft">यदि पथ बाएं है तो</span><span id="Maze_pathRight">यदि पथ दाएँ है तो</span><span id="Maze_repeatUntil">जब तक दोहराएँ</span><span id="Maze_moveForwardTooltip">खिलाड़ी को एक स्थान आगे ले जाता है।</span><span id="Maze_turnTooltip">खिलाड़ी को 90 डिग्री बाईं या दाईं तरफ घुमाता है।</span><span id="Maze_ifTooltip">If there is a path in the specified direction, then do some actions.</span><span id="Maze_ifelseTooltip">If there is a path in the specified direction, then do the first block of actions.  Otherwise, do the second block of actions.</span><span id="Maze_whileTooltip">Repeat the enclosed actions until finish point is reached.</span><span id="Maze_capacity0">आपके पास %0 ब्लॉक बचें हैं।</span><span id="Maze_capacity1">आपके पास %1 ब्लॉक बचें हैं।</span><span id="Maze_capacity2">आपके पास %2 ब्लॉक बचें हैं।</span><span id="Maze_nextLevel">बधाइयाँ! क्या आप स्तर %1 को जाने के लिए तैयार हैं?</span><span id="Maze_finalLevel">बधाइयाँ! आप अंतिम स्तर को हल कर चुके हैं।</span></div>';
+};
+
+
+mazepage.start = function(opt_data, opt_ignored, opt_ijData) {
+  var output = mazepage.messages(null, null, opt_ijData) + '<table width="100%"><tr><td><h1><span id="title"><a href="../index.html?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '">Blockly (ब्लॉकली)</a> : भूलभुलैया</span> &nbsp; ';
+  var iLimit163 = opt_ijData.maxLevel + 1;
+  for (var i163 = 1; i163 < iLimit163; i163++) {
+    output += ' ' + ((i163 == opt_ijData.level) ? '<span class="tab" id="selected">' + soy.$$escapeHtml(i163) + '</span>' : (i163 < opt_ijData.level) ? '<a class="tab previous" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i163) + '&skin=' + soy.$$escapeHtml(opt_ijData.skin) + '">' + soy.$$escapeHtml(i163) + '</a>' : '<a class="tab" href="?lang=' + soy.$$escapeHtml(opt_ijData.lang) + '&level=' + soy.$$escapeHtml(i163) + '&skin=' + soy.$$escapeHtml(opt_ijData.skin) + '">' + soy.$$escapeHtml(i163) + '</a>');
+  }
+  output += '</h1></td><td class="farSide"><select id="languageMenu"></select> &nbsp; <button id="pegmanButton"><img src="../../media/1x1.gif"><span>&#x25BE;</span></button></td></tr></table><div id="visualization"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="svgMaze" width="400px" height="400px"><g id="look"><path d="M 0,-15 a 15 15 0 0 1 15 15" /><path d="M 0,-35 a 35 35 0 0 1 35 35" /><path d="M 0,-55 a 55 55 0 0 1 55 55" /></g></svg><div id="capacityBubble"><div id="capacity"></div></div></div><table width="400"><tr><td style="width: 190px; text-align: center; vertical-align: top;"><button id="codeButton" class="notext" title="बना हुआ जावास्क्रिप्ट कोड देखें।"><img src="../../media/1x1.gif" class="code icon21"></button><button id="linkButton" class="notext" title="सेव करें और ब्लॉक से लिंक करें।"><img src="../../media/1x1.gif" class="link icon21"></button></td><td><button id="runButton" class="primary" title="ब्लॉक जो बतातें हैं उसे खिलाड़ी से करवाता है।"><img src="../../media/1x1.gif" class="run icon21"> प्रोग्राम चलाएँ</button><button id="resetButton" class="primary" style="display: none" title="खिलाड़ी को भूलभुलैया के शुरू में वापस रखें।"><img src="../../media/1x1.gif" class="stop icon21"> रीसेट करें</button></td></tr></table><script type="text/javascript" src="../../blockly_compressed.js"><\/script><script type="text/javascript" src="../../javascript_compressed.js"><\/script><script type="text/javascript" src="../../' + soy.$$escapeHtml(opt_ijData.langSrc) + '"><\/script><script type="text/javascript" src="blocks.js"><\/script>' + mazepage.toolbox(null, null, opt_ijData) + '<div id="blockly"></div><div id="pegmanMenu"></div>' + apps.dialog(null, null, opt_ijData) + apps.codeDialog(null, null, opt_ijData) + apps.storageDialog(null, null, opt_ijData) + '<div id="dialogDone" class="dialogHiddenContent"><div id="dialogDoneText" style="font-size: large; margin: 1em;"></div><img src="../../media/1x1.gif" id="pegSpin"><div id="dialogDoneButtons" class="farSide" style="padding: 1ex 3ex 0"></div></div><div id="dialogHelpStack" class="dialogHiddenContent"><table><tr><td><img src="help.png"></td><td>&nbsp;</td><td>Stack a couple of \'move forward\' blocks together to help me reach the goal.</td><td valign="top"><img src="help_stack.png" class="mirrorImg" height=63 width=136></td></tr></table></div><div id="dialogHelpOneTopBlock" class="dialogHiddenContent"><table><tr><td><img src="help.png"></td><td>&nbsp;</td><td>On this level, you need to stack together all of the blocks in the white workspace.<iframe id="iframeOneTopBlock" style="height: 80px; width: 100%; border: none;" src=""></iframe></td></tr></table></div><div id="dialogHelpRun" class="dialogHiddenContent"><table><tr><td>क्या होगा देखने के लिए अपने प्रोग्राम को चलाएँ।</td><td rowspan=2><img src="help.png"></td></tr><tr><td><div><img src="help_run.png" class="mirrorImg" height=27 width=141></div></td></tr></table></div><div id="dialogHelpReset" class="dialogHiddenContent"><table><tr><td>Your program didn\'t solve the maze.  Press \'Reset\' and try again.</td><td rowspan=2><img src="help.png"></td></tr><tr><td><div><img src="help_run.png" class="mirrorImg" height=27 width=141></div></td></tr></table></div><div id="dialogHelpRepeat" class="dialogHiddenContent"><table><tr><td><img src="help_up.png"></td><td>Reach the end of this path using only two blocks.  Use \'repeat\' to run a block more than once.</td><td><img src="help.png"></td></tr></table></div><div id="dialogHelpCapacity" class="dialogHiddenContent"><table><tr><td><img src="help.png"></td><td>&nbsp;</td><td>You have used up all the blocks for this level.  To create a new block, you first need to delete an existing block.</td></tr></table></div><div id="dialogHelpRepeatMany" class="dialogHiddenContent"><table><tr><td><img src="help_up.png"></td><td>You can fit more than one block inside a \'repeat\' block.</td><td><img src="help.png"></td></tr></table></div><div id="dialogHelpSkins" class="dialogHiddenContent"><table><tr><td><img src="help.png"></td><td>इस मेन्यू से अपना पसंदीदा खिलाड़ी चुनें।</td><td><img src="help_up.png"></td></tr></table></div><div id="dialogHelpIf" class="dialogHiddenContent"><table><tr><td><img src="help_up.png"></td><td>An \'if\' block will do something only if the condition is true.  Try turning left if there is a path to the left.</td><td><img src="help.png"></td></tr></table></div><div id="dialogHelpMenu" class="dialogHiddenContent"><table><tr><td><img src="help_up.png"></td><td id="helpMenuText">Click on %1 in the \'if\' block to change its condition.</td><td><img src="help.png"></td></tr></table></div><div id="dialogHelpIfElse" class="dialogHiddenContent"><table><tr><td><img src="help_down.png"></td><td>इफ-एल्स ब्लाक एक काम या अन्य काम करेगा।</td><td><img src="help.png"></td></tr></table></div><div id="dialogHelpWallFollow" class="dialogHiddenContent"><table><tr><td><img src="help.png"></td><td>&nbsp;</td><td>Can you solve this complicated maze?  Try following the left-hand wall.  Advanced programmers only!' + apps.ok(null, null, opt_ijData) + '</td></tr></table></div>';
+  return output;
+};
+
+
+mazepage.toolbox = function(opt_data, opt_ignored, opt_ijData) {
+  return '<xml id="toolbox" style="display: none;"><block type="maze_moveForward"></block><block type="maze_turn"><field name="DIR">turnLeft</field></block><block type="maze_turn"><field name="DIR">turnRight</field></block>' + ((opt_ijData.level > 2) ? '<block type="maze_forever"></block>' + ((opt_ijData.level == 6) ? '<block type="maze_if"><field name="DIR">isPathLeft</field></block>' : (opt_ijData.level > 6) ? '<block type="maze_if"></block>' + ((opt_ijData.level > 8) ? '<block type="maze_ifElse"></block>' : '') : '') : '') + '</xml>';
+};
+
+
+mazepage.readonly = function(opt_data, opt_ignored, opt_ijData) {
+  return mazepage.messages(null, null, opt_ijData) + '<script type="text/javascript" src="../../blockly_compressed.js"><\/script><script type="text/javascript">Blockly.JavaScript = {};<\/script><script type="text/javascript" src="../../' + soy.$$escapeHtml(opt_ijData.langSrc) + '"><\/script><script type="text/javascript" src="blocks.js"><\/script><div id="blockly"></div>';
+};

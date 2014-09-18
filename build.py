@@ -91,7 +91,7 @@ window.BLOCKLY_BOOT = function() {
 // Execute after Closure has loaded.
 if (!window.goog) {
   alert('Error: Closure not found.  Read this:\\n' +
-        'https://code.google.com/p/blockly/wiki/Closure\\n');
+        'https://github.com/google/blockly/wiki/Closure\\n');
 }
 
 // Build map of all dependencies (used and unused).

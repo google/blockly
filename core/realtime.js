@@ -28,7 +28,7 @@
  * collaboration.
  * Note that to use this you must set up a project via the Google Developers
  * Console. Instructions on how to do that can be found in the Blockly wiki page
- * at https://code.google.com/p/blockly/wiki/RealtimeCollaboration
+ * at https://github.com/google/blockly/wiki/RealtimeCollaboration
  * Once you do that you can set the clientId in
  * Blockly.Realtime.rtclientOptions_
  * @author markf@google.com (Mark Friedman)

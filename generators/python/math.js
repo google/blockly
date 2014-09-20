@@ -61,7 +61,7 @@ Blockly.Python['math_arithmetic'] = function(block) {
   // guarantee identical results in all languages.  To do otherwise would
   // require every operator to be wrapped in a function call.  This would kill
   // legibility of the generated code.  See:
-  // http://code.google.com/p/blockly/wiki/Language
+  // https://github.com/google/blockly/wiki/Language
 };
 
 Blockly.Python['math_single'] = function(block) {

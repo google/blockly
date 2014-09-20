@@ -252,7 +252,7 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = 'Return true if the first input is greate
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = 'Return true if the first input is greater than or equal to the second input.';
 
 /// url - Information about the Boolean conjunction ("and") and disjunction ("or") operators.  Consider using the translation of [https://en.wikipedia.org/wiki/Boolean_logic https://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.
-Blockly.Msg.LOGIC_OPERATION_HELPURL = 'https://github.com/google/blockly/wiki/And_Or';
+Blockly.Msg.LOGIC_OPERATION_HELPURL = 'https://github.com/google/blockly/wiki/Logic#logical-operations';
 /// tooltip - See [https://en.wikipedia.org/wiki/Logical_conjunction https://en.wikipedia.org/wiki/Logical_conjunction].
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND = 'Return true if both inputs are true.';
 /// block text - See [https://en.wikipedia.org/wiki/Logical_conjunction https://en.wikipedia.org/wiki/Logical_conjunction].
@@ -263,7 +263,7 @@ Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR = 'Return true if at least one of the inp
 Blockly.Msg.LOGIC_OPERATION_OR = 'or';
 
 /// url - Information about logical negation.  The translation of [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation] is recommended if it exists in the target language.
-Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://en.wikipedia.org/wiki/Negation';
+Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://github.com/google/blockly/wiki/Logic#not';
 /// block text - This is a unary operator that returns ''false'' when the input is ''true'', and ''true'' when the input is ''false''.
 /// \n\nParameters:\n* %1 - the input (which should be either the value "true" or "false")
 Blockly.Msg.LOGIC_NEGATE_TITLE = 'not %1';
@@ -271,7 +271,7 @@ Blockly.Msg.LOGIC_NEGATE_TITLE = 'not %1';
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false.  Returns false if the input is true.';
 
 /// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value https://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
-Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/True_False';
+Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/Logic#values';
 /// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
 /// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.

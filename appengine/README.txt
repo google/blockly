@@ -16,19 +16,25 @@ blockly/
  |- README.txt
  |- storage.js
  |- storage.py
- |- closure-library-read-only/
+ |- closure-library-read-only/  (Optional)
  `- static/
      |- apps/
+     |- blocks/
      |- core/
      |- demos/
      |- generators/
-     |- language/
      |- media/
+     |- msg/
      |- tests/
-     `- blockly_compressed.js
+     |- blockly_compressed.js
+     |- blockly_uncompressed.js  (Optional)
+     |- blocks_compressed.js
+     |- dart_compressed.js
+     |- javascript_compressed.js
+     `- python_compressed.js
 
 Instructions for fetching Closure may be found here:
-  http://code.google.com/p/blockly/wiki/Closure
+  https://github.com/google/blockly/wiki/Closure
 
 Finally, upload this directory structure to your App Engine account,
 wait a minute, then go to http://YOURNAME.appspot.com/

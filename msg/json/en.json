@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-09-18 16:48:14.812973",
+		"lastupdated": "2014-09-19 22:12:39.489059",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -89,15 +89,15 @@
 	"LOGIC_COMPARE_TOOLTIP_LTE": "Return true if the first input is smaller than or equal to the second input.",
 	"LOGIC_COMPARE_TOOLTIP_GT": "Return true if the first input is greater than the second input.",
 	"LOGIC_COMPARE_TOOLTIP_GTE": "Return true if the first input is greater than or equal to the second input.",
-	"LOGIC_OPERATION_HELPURL": "https://github.com/google/blockly/wiki/And_Or",
+	"LOGIC_OPERATION_HELPURL": "https://github.com/google/blockly/wiki/Logic#logical-operations",
 	"LOGIC_OPERATION_TOOLTIP_AND": "Return true if both inputs are true.",
 	"LOGIC_OPERATION_AND": "and",
 	"LOGIC_OPERATION_TOOLTIP_OR": "Return true if at least one of the inputs is true.",
 	"LOGIC_OPERATION_OR": "or",
-	"LOGIC_NEGATE_HELPURL": "https://en.wikipedia.org/wiki/Negation",
+	"LOGIC_NEGATE_HELPURL": "https://github.com/google/blockly/wiki/Logic#not",
 	"LOGIC_NEGATE_TITLE": "not %1",
 	"LOGIC_NEGATE_TOOLTIP": "Returns true if the input is false.  Returns false if the input is true.",
-	"LOGIC_BOOLEAN_HELPURL": "https://github.com/google/blockly/wiki/True_False",
+	"LOGIC_BOOLEAN_HELPURL": "https://github.com/google/blockly/wiki/Logic#values",
 	"LOGIC_BOOLEAN_TRUE": "true",
 	"LOGIC_BOOLEAN_FALSE": "false",
 	"LOGIC_BOOLEAN_TOOLTIP": "Returns either true or false.",

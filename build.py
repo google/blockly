@@ -407,7 +407,7 @@ if __name__ == '__main__':
           'closure-library-read-only', 'closure', 'bin', 'calcdeps.py'))
   except ImportError:
     print("""Error: Closure not found.  Read this:
-http://code.google.com/p/blockly/wiki/Closure""")
+https://github.com/google/blockly/wiki/Closure""")
     sys.exit(1)
   search_paths = calcdeps.ExpandDirectories(
       ['core', os.path.join(os.path.pardir, 'closure-library-read-only')])

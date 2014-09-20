@@ -86,7 +86,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = 'times';
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
 
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'http://code.google.com/p/blockly/wiki/Repeat';
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://github.com/google/blockly/wiki/Repeat';
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = 'do';
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = 'repeat while';
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = 'repeat until';
@@ -123,7 +123,7 @@ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING = 'Warning:\n' +
     'be used within a loop.';
 
 // Logic Blocks.
-Blockly.Msg.CONTROLS_IF_HELPURL = 'http://code.google.com/p/blockly/wiki/If_Then';
+Blockly.Msg.CONTROLS_IF_HELPURL = 'https://github.com/google/blockly/wiki/If_Then';
 Blockly.Msg.CONTROLS_IF_TOOLTIP_1 = 'If a value is true, then do some statements.';
 Blockly.Msg.CONTROLS_IF_TOOLTIP_2 = 'If a value is true, then do the first block of statements.\n' +
     'Otherwise, do the second block of statements.';
@@ -156,18 +156,18 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = 'Return true if the first input is greate
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = 'Return true if the first input is greater\n' +
     'than or equal to the second input.';
 
-Blockly.Msg.LOGIC_OPERATION_HELPURL = 'http://code.google.com/p/blockly/wiki/And_Or';
+Blockly.Msg.LOGIC_OPERATION_HELPURL = 'https://github.com/google/blockly/wiki/Logic#logical-operations';
 Blockly.Msg.LOGIC_OPERATION_AND = 'and';
 Blockly.Msg.LOGIC_OPERATION_OR = 'or';
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND = 'Return true if both inputs are true.';
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR = 'Return true if either inputs are true.';
 
-Blockly.Msg.LOGIC_NEGATE_HELPURL = 'http://code.google.com/p/blockly/wiki/Not';
+Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://github.com/google/blockly/wiki/Logic#not';
 Blockly.Msg.LOGIC_NEGATE_INPUT_NOT = 'not';
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false.\n' +
     'Returns false if the input is true.';
 
-Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'http://code.google.com/p/blockly/wiki/True_False';
+Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/Logic#values';
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = 'false';
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = 'Returns either true or false.';

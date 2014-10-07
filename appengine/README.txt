@@ -34,7 +34,7 @@ blockly/
      `- python_compressed.js
 
 Instructions for fetching Closure may be found here:
-  https://github.com/google/blockly/wiki/Closure
+  https://developers.google.com/blockly/hacking/closure
 
 Finally, upload this directory structure to your App Engine account,
 wait a minute, then go to http://YOURNAME.appspot.com/

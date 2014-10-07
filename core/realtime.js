@@ -3,7 +3,7 @@
  * Visual Blocks Editor
  *
  * Copyright 2014 Google Inc.
- * https://github.com/google/blockly
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@
  * @fileoverview Common support code for Blockly apps using realtime
  * collaboration.
  * Note that to use this you must set up a project via the Google Developers
- * Console. Instructions on how to do that can be found in the Blockly wiki page
- * at https://github.com/google/blockly/wiki/RealtimeCollaboration
+ * Console. Instructions on how to do that can be found at
+ * https://developers.google.com/blockly/realtime-collaboration
  * Once you do that you can set the clientId in
  * Blockly.Realtime.rtclientOptions_
  * @author markf@google.com (Mark Friedman)

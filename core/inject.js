@@ -3,7 +3,7 @@
  * Visual Blocks Editor
  *
  * Copyright 2011 Google Inc.
- * https://github.com/google/blockly
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

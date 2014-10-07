@@ -2,7 +2,7 @@
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google Inc.
-# https://github.com/google/blockly
+# https://developers.google.com/blockly/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ window.BLOCKLY_BOOT = function() {
 // Execute after Closure has loaded.
 if (!window.goog) {
   alert('Error: Closure not found.  Read this:\\n' +
-        'https://github.com/google/blockly/wiki/Closure\\n');
+        'developers.google.com/blockly/hacking/closure');
 }
 
 // Build map of all dependencies (used and unused).
@@ -290,7 +290,7 @@ class Gen_compressed(threading.Thread):
  [\w ]+
 
  (Copyright \\d+ Google Inc.)
- https://github.com/google/blockly
+ https://developers.google.com/blockly/
 
  Licensed under the Apache License, Version 2.0 \(the "License"\);
  you may not use this file except in compliance with the License.
@@ -407,7 +407,7 @@ if __name__ == '__main__':
           'closure-library-read-only', 'closure', 'bin', 'calcdeps.py'))
   except ImportError:
     print("""Error: Closure not found.  Read this:
-https://github.com/google/blockly/wiki/Closure""")
+https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
   search_paths = calcdeps.ExpandDirectories(
       ['core', os.path.join(os.path.pardir, 'closure-library-read-only')])

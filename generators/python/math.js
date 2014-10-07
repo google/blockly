@@ -3,7 +3,7 @@
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * https://github.com/google/blockly
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,8 +60,7 @@ Blockly.Python['math_arithmetic'] = function(block) {
   // in Python 2 and 3. However, is not an issue since Blockly does not
   // guarantee identical results in all languages.  To do otherwise would
   // require every operator to be wrapped in a function call.  This would kill
-  // legibility of the generated code.  See:
-  // https://github.com/google/blockly/wiki/Language
+  // legibility of the generated code.
 };
 
 Blockly.Python['math_single'] = function(block) {

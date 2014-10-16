@@ -123,7 +123,7 @@ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING = 'Warning:\n' +
     'be used within a loop.';
 
 // Logic Blocks.
-Blockly.Msg.CONTROLS_IF_HELPURL = 'https://github.com/google/blockly/wiki/If_Then';
+Blockly.Msg.CONTROLS_IF_HELPURL = 'https://github.com/google/blockly/wiki/IfElse';
 Blockly.Msg.CONTROLS_IF_TOOLTIP_1 = 'If a value is true, then do some statements.';
 Blockly.Msg.CONTROLS_IF_TOOLTIP_2 = 'If a value is true, then do the first block of statements.\n' +
     'Otherwise, do the second block of statements.';

@@ -61,7 +61,7 @@ def read_json_file(filename):
     return defs
   except ValueError, e:
     print('Error reading ' + filename)
-    raise InputError(file, str(e))
+    raise InputError(filename, str(e))
 
 
 def _create_qqq_file(output_dir):

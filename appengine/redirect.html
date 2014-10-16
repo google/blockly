@@ -72,14 +72,9 @@ if (loc.match('/apps/plane/plane.html')) {
   }
 }
 
-if (loc.match('/apps/puzzle/puzzle.html')) {
-  // Puzzle moved to index.html on 30 Jul 2013.
-  loc = loc.replace('/puzzle.html', '/index.html');
-} else if (loc.match('/apps/puzzle/index.html')) {
-  // NOP.
-} else if (loc.match(/\/apps\/puzzle\/[-a-z]+\.html/)) {
-  // Puzzle became language-agnostic on 20 Jul 2013.
-  loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
+if (loc.match('/apps/puzzle/')) {
+  // Puzzle moved to Blockly Games on 15 Oct 2014.
+  loc = 'https://blockly-games.appspot.com/puzzle';
 }
 
 if (loc.match('/apps/turtle/turtle.html')) {

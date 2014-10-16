@@ -49,8 +49,6 @@
 	"Apps.codeSubtitle": "Eksportér et Blockly program til JavaScript, Python, Dart eller XML.",
 	"Plane.plane": "Flysædelommeregner",
 	"Apps.planeSubtitle": "Løs et matematisk problem med en eller to variabler.",
-	"Apps.blockFactory": "Blokfabrik",
-	"Apps.blockfactorySubtitle": "Byg brugerdefinerede blokke ved hjælp af Blockly.",
 	"Maze.moveForward": "flyt fremad",
 	"Maze.turnLeft": "drej til venstre",
 	"Maze.turnRight": "drej til højre",

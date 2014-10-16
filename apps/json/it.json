@@ -48,8 +48,6 @@
 	"Apps.codeSubtitle": "Esporta un programma Blockly in JavaScript, Python, Dart o XML.",
 	"Plane.plane": "Calcolo posti aereo",
 	"Apps.planeSubtitle": "Risolvi un problema di matematica con una o due variabili.",
-	"Apps.blockFactory": "Fabbrica di blocchi",
-	"Apps.blockfactorySubtitle": "Costruisci blocchi personalizzati utilizzando Blockly.",
 	"Maze.moveForward": "sposta in avanti",
 	"Maze.turnLeft": "svolta a sinistra",
 	"Maze.turnRight": "svolta a destra",

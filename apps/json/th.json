@@ -47,8 +47,6 @@
 	"Apps.codeSubtitle": "เขียนโปรแกรมทั่วไป และสามารถแปลง Blockly ให้เป็นภาษา JavaScript, Python, Dart และ XML ได้",
 	"Plane.plane": "ระบบคำนวณที่นั่งบนเครื่องบิน",
 	"Apps.planeSubtitle": "แก้ปัญหาทางคณิตศาสตร์ด้วยการสร้างสูตรคำนวณที่มีหนึ่งหรือสองตัวแปร",
-	"Apps.blockFactory": "โรงงานผลิตบล็อก",
-	"Apps.blockfactorySubtitle": "สร้างบล็อกของคุณเองด้วย Blockly",
 	"Maze.moveForward": "เดินหน้า",
 	"Maze.turnLeft": "หัน ซ้าย",
 	"Maze.turnRight": "หัน ขวา",

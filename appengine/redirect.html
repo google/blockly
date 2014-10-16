@@ -77,6 +77,11 @@ if (loc.match('/apps/puzzle/')) {
   loc = 'https://blockly-games.appspot.com/puzzle';
 }
 
+if (loc.match('/apps/blockfactory/')) {
+  // Block Factory moved from apps to demos on 16 Oct 2014.
+  loc = loc.replace('/apps/', '/demos/');
+}
+
 if (loc.match('/apps/turtle/turtle.html')) {
   // Turtle moved to index.html on 7 Aug 2013.
   loc = loc.replace('/turtle.html', '/index.html');

@@ -47,8 +47,6 @@
 	"Apps.codeSubtitle": "ブロックリーのプログラムを JavaScript、Python、Dart、XML にエクスポートしましょう。",
 	"Plane.plane": "飛行機座席計算機",
 	"Apps.planeSubtitle": "1変数または2変数の数学の問題を解きましょう。",
-	"Apps.blockFactory": "ブロック工場",
-	"Apps.blockfactorySubtitle": "ブロックリーで特製ブロックを作る。",
 	"Maze.moveForward": "まっすぐ進む",
 	"Maze.turnLeft": "左を向く",
 	"Maze.turnRight": "右を向く",

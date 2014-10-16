@@ -51,8 +51,6 @@
 	"Apps.codeSubtitle": "ייצא תוכנית בלוקלי לג'אווה סקריפט, פייתון או XML.",
 	"Plane.plane": "מחשבון מושב במטוס",
 	"Apps.planeSubtitle": "פתור בעייה חשבונית עם משתנה אחד או שניים",
-	"Apps.blockFactory": "מפעל קטע קוד",
-	"Apps.blockfactorySubtitle": "בנה קטע קוד מותאם אישית על ידי שימוש בבלוקלי",
 	"Maze.moveForward": "נוע קדימה",
 	"Maze.turnLeft": "פנה שמאלה",
 	"Maze.turnRight": "פנה ימינה",

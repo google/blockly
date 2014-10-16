@@ -41,8 +41,6 @@
 	"Apps.codeSubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/code/index.html Code application].",
 	"Plane.plane": "title - Specifies that this is Blockly's '''Plane''' (airplane) tutorial.  The word 'plane' was chosen over 'airplane' in English because it is shorter and less formal.",
 	"Apps.planeSubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/plane/index.html Plane application].",
-	"Apps.blockFactory": "title - The name of a factory or tool that produces blocks.",
-	"Apps.blockfactorySubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/blockfactory/index.html Block Factory application].",
 	"Maze.moveForward": "block text - Imperative or infinitive of a verb for a person moving (walking) in the direction he/she is facing.",
 	"Maze.turnLeft": "[[Translating:Blockly#Drop-Down_Menus dropdown]] - Imperative or infinitive of a verb for a person turning his head and body one quarter rotation counter-clockwise.  Prefer a translation that has text in common with the translation of 'turn right'.  See [[Translating:Blockly#Drop-Down_Menus]].",
 	"Maze.turnRight": "[[Translating:Blockly#Drop-Down_Menus dropdown]] - Imperative or infinitive of a verb for a person turning his head and body one quarter rotation clockwise.  Prefer a translation that has text in common with the translation of 'turn left'.  See [[Translating:Blockly#Drop-Down_Menus]].",

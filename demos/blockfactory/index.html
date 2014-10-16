@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Blockly Demo: Block Factory</title>
+  <script type="text/javascript" src="/storage.js"></script>
+  <script type="text/javascript" src="factory.js"></script>
+  <script type="text/javascript" src="../../blockly_compressed.js"></script>
+  <script type="text/javascript" src="../../msg/messages.js"></script>
+  <script type="text/javascript" src="blocks.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      margin: 0 5px;
+      overflow: hidden
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    h3 {
+      margin-top: 5px;
+      margin-bottom: 0;
+    }
+    a:hover {
+      color: #f00;
+    }
+    table {
+      height: 100%;
+      width: 100%;
+    }
+    td {
+      vertical-align: top;
+      padding: 0;
+    }
+    #blockly {
+      position: fixed;
+    }
+    #previewFrame {
+      border-style: solid;
+      border-color: #ddd;
+      border-width: 0 1px 1px 0;
+      position: absolute;
+    }
+    pre {
+      margin-top: 0;
+      position: absolute;
+      border: #ddd 1px solid;
+      overflow: scroll;
+    }
+
+    #linkButton {
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background-color: #eee;
+      color: #000;
+      padding: 1px 10px;
+      margin: 1px 5px;
+      display: none;
+    }
+    #linkButton:hover {
+      box-shadow: 2px 2px 5px #888;
+    }
+    #linkButton>img {
+      opacity: 0.6;
+    }
+    #linkButton:hover>img {
+      opacity: 1;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="../prettify.css">
+  <script type="text/javascript" src="../prettify.js"></script>
+</head>
+<body>
+  <table>
+    <tr>
+      <td width="50%" height="5%">
+        <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+          <a href="../index.html">Demos</a> &gt; Block Factory</h1>
+      </td>
+      <td width="50%" height="5%">
+        <table>
+          <tr>
+            <td style="vertical-align: bottom;">
+              <h3>Preview:
+                <select id="direction">
+                  <option value="ltr">LTR</option>
+                  <option value="rtl">RTL</option>
+                </select>
+              </h3>
+            </td>
+            <td style="vertical-align: middle; text-align: right;">
+              <button id="linkButton" title="Save and link to blocks.">
+                <img src="link.png" height="21" width="21">
+              </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td width="50%" height="95%" style="padding: 2px;">
+        <div id="blockly"></div>
+      </td>
+      <td width="50%" height="95%">
+        <table>
+          <tr>
+            <td height="30%">
+              <iframe id="previewFrame" src="preview.html?ltr"></iframe>
+            </td>
+          </tr>
+          <tr>
+            <td height="5%">
+              <h3>Language code:</h3>
+            </td>
+          </tr>
+          <tr>
+            <td height="30%">
+              <pre id="languagePre"></pre>
+            </td>
+          </tr>
+          <tr>
+            <td height="5%">
+              <h3>Generator stub:
+                <select id="language">
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Python">Python</option>
+                  <option value="Dart">Dart</option>
+                </select>
+              </h3>
+            </td>
+          </tr>
+          <tr>
+            <td height="30%">
+              <pre id="generatorPre"></pre>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <xml id="toolbox" style="display: none">
+    <category name="Input">
+      <block type="input_value"></block>
+      <block type="input_statement"></block>
+      <block type="input_dummy"></block>
+    </category>
+    <category name="Field">
+      <block type="field_static"></block>
+      <block type="field_input"></block>
+      <block type="field_angle"></block>
+      <block type="field_dropdown"></block>
+      <block type="field_checkbox"></block>
+      <block type="field_colour"></block>
+      <block type="field_variable"></block>
+      <block type="field_image"></block>
+    </category>
+    <category name="Type">
+      <block type="type_group"></block>
+      <block type="type_null"></block>
+      <block type="type_boolean"></block>
+      <block type="type_number"></block>
+      <block type="type_string"></block>
+      <block type="type_list"></block>
+      <block type="type_other"></block>
+    </category>
+    <category name="Colour" id="colourCategory">
+      <block type="colour_hue"><field name="HUE">20</field></block>
+      <block type="colour_hue"><field name="HUE">65</field></block>
+      <block type="colour_hue"><field name="HUE">120</field></block>
+      <block type="colour_hue"><field name="HUE">160</field></block>
+      <block type="colour_hue"><field name="HUE">210</field></block>
+      <block type="colour_hue"><field name="HUE">230</field></block>
+      <block type="colour_hue"><field name="HUE">260</field></block>
+      <block type="colour_hue"><field name="HUE">290</field></block>
+      <block type="colour_hue"><field name="HUE">330</field></block>
+    </category>
+  </xml>
+</body>
+</html>

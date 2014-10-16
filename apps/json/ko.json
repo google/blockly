@@ -48,8 +48,6 @@
 	"Apps.codeSubtitle": "블록리 프로그램을 자바스크립트, 파이썬, 다트 또는 XML로 내보냅니다.",
 	"Plane.plane": "비행기 좌석 계산기",
 	"Apps.planeSubtitle": "하나 또는 두개의 변수를 가진 수학 문제를 풉니다.",
-	"Apps.blockFactory": "블록 공장",
-	"Apps.blockfactorySubtitle": "Blockly를 이용해 나만의 블록을 만듭니다.",
 	"Maze.moveForward": "앞으로 가기",
 	"Maze.turnLeft": "왼쪽으로 돌기",
 	"Maze.turnRight": "오른쪽으로 돌기",

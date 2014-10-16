@@ -46,8 +46,6 @@
 	"Apps.codeSubtitle": "Export ae Blockly program intae JavaScript, Python, Dart or XML.",
 	"Plane.plane": "Airplane Seat Calculater",
 	"Apps.planeSubtitle": "Solve ae maths problem wi yin or twa vareeables.",
-	"Apps.blockFactory": "Block Facterie",
-	"Apps.blockfactorySubtitle": "Big custom blocks uisin Blockly.",
 	"Maze.moveForward": "muiv forewaird",
 	"Maze.turnLeft": "turn cair",
 	"Maze.turnRight": "turn richt",

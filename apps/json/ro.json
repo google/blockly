@@ -49,8 +49,6 @@
 	"Apps.codeSubtitle": "Exportă un program Blockly în JavaScript, Python, Dart sau XML.",
 	"Plane.plane": "Calculator pentru locurile dintr-un avion",
 	"Apps.planeSubtitle": "Rezolvă o problemă de matematică cu una sau două variabile.",
-	"Apps.blockFactory": "Fabrica de blocuri.",
-	"Apps.blockfactorySubtitle": "Construiește blocuri personalizate folosind Blockly.",
 	"Maze.moveForward": "merge înainte",
 	"Maze.turnLeft": "întoarce la stânga",
 	"Maze.turnRight": "întoarce la dreapta",

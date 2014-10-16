@@ -47,8 +47,6 @@
 	"Apps.codeSubtitle": "Blocklyval megírt programját exportálhatja JavaScript, Python, Dart vagy XML nyelven.",
 	"Plane.plane": "Repülőgép alkalmazás",
 	"Apps.planeSubtitle": "Oldjon meg matematikai problémát, egy vagy két változóval.",
-	"Apps.blockFactory": "Blokk készítés",
-	"Apps.blockfactorySubtitle": "Készítsen saját blokkokat a Blockly segítségével.",
 	"Maze.moveForward": "Menj előre",
 	"Maze.turnLeft": "Fordulj balra",
 	"Maze.turnRight": "Fordulj jobbra",

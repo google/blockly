@@ -46,8 +46,6 @@
 	"Apps.codeSubtitle": "Извезите програм Blockly-ја у JavaScript, Python, Dart или XML.",
 	"Plane.plane": "Калкулатор места у авиону",
 	"Apps.planeSubtitle": "Решите математички проблем помоћу једне или две променљиве.",
-	"Apps.blockFactory": "Фабрика блокова",
-	"Apps.blockfactorySubtitle": "Изградите прилагођене блокове помоћу Blockly-ја.",
 	"Maze.moveForward": "иди напред",
 	"Maze.turnLeft": "окрени се лево",
 	"Maze.turnRight": "окрени се удесно",

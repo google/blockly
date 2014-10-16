@@ -46,8 +46,6 @@
 	"Apps.codeSubtitle": "Експортувати Blockly програму на JavaScript, Python, Dart або XML.",
 	"Plane.plane": "Калькулятор місць у літаку",
 	"Apps.planeSubtitle": "Розв'язуйте математичну задачу з однією або двома змінними.",
-	"Apps.blockFactory": "Фабрика блоків",
-	"Apps.blockfactorySubtitle": "Створіть свої блоки, використовуючи Блоклі.",
 	"Maze.moveForward": "рух вперед",
 	"Maze.turnLeft": "поворот вліво",
 	"Maze.turnRight": "поворот вправо",

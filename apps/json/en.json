@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-10-15 15:47:52.573409",
+		"lastupdated": "2014-10-16 16:49:33.038080",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -47,8 +47,6 @@
 	"Apps.codeSubtitle": "Export a Blockly program into JavaScript, Python, Dart or XML.",
 	"Plane.plane": "Plane Seat Calculator",
 	"Apps.planeSubtitle": "Solve a math problem with one or two variables.",
-	"Apps.blockFactory": "Block Factory",
-	"Apps.blockfactorySubtitle": "Build custom blocks using Blockly.",
 	"Maze.moveForward": "move forward",
 	"Maze.turnLeft": "turn left",
 	"Maze.turnRight": "turn right",

@@ -51,8 +51,6 @@
 	"Apps.codeSubtitle": "将Blockly程序导出为JavaScript、Python、Dart或XML。",
 	"Plane.plane": "飞机座位计算器",
 	"Apps.planeSubtitle": "解决与一个或两个变量的数学问题。",
-	"Apps.blockFactory": "Blockly工厂",
-	"Apps.blockfactorySubtitle": "使用 Blockly 建立自定义块。",
 	"Maze.moveForward": "向前移动",
 	"Maze.turnLeft": "向左转",
 	"Maze.turnRight": "向右转",

@@ -51,8 +51,6 @@
 	"Apps.codeSubtitle": "Για να εξάγεις πρόγραμμα γραμμένο σε Μπλόκλι στις γλώσσες JavaScript, Python, Dart ή XML.",
 	"Plane.plane": "Υπολογισμός Θέσεων Σε Αεροπλάνο",
 	"Apps.planeSubtitle": "Λύσε μαθηματικό πρόβλημα με μία ή δύο μεταβλητές.",
-	"Apps.blockFactory": "Κατασκευή Μπλόκ",
-	"Apps.blockfactorySubtitle": "Δημιούργησε προσαρμοσμένα μπλοκ με το Μπλόκλι.",
 	"Maze.moveForward": "προχώρησε ευθεία",
 	"Maze.turnLeft": "στρίψε αριστερά",
 	"Maze.turnRight": "στρίψε δεξιά",

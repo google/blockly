@@ -44,8 +44,6 @@
 	"Apps.codeSubtitle": "Exportujte Blockly program do JavaScriptu, Pythonu, Dartu nebo XML.",
 	"Plane.plane": "Kalkulačka míst v sedadle",
 	"Apps.planeSubtitle": "Vyřešte matematický problém s jednou nebo dvěma proměnnými.",
-	"Apps.blockFactory": "Továrna na bloky",
-	"Apps.blockfactorySubtitle": "Vytvoř vlastní bloky pomocí Blockly",
 	"Maze.moveForward": "pohyb vpřed",
 	"Maze.turnLeft": "otočit levá",
 	"Maze.turnRight": "otočit pravá",

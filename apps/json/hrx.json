@@ -46,8 +46,6 @@
 	"Apps.codeSubtitle": "En Blockly-Programm als JavaScript, Python, Dart orrer XML exportiere.",
 	"Plane.plane": "Fluchzeichsitzrechner",
 	"Apps.planeSubtitle": "En mathematisches Problem mit ener orrer zwooi Variable löse.",
-	"Apps.blockFactory": "Block-Fabrik",
-	"Apps.blockfactorySubtitle": "Benutzerdefinierte Blöcke mit Blockly baue.",
 	"Maze.moveForward": "vorwäärts loofe",
 	"Maze.turnLeft": "links abbieche",
 	"Maze.turnRight": "rechts abbieche",

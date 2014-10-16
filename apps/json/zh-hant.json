@@ -47,8 +47,6 @@
 	"Apps.codeSubtitle": "將 Blockly 程式匯出成 JavaScript、 Python 或 XML。",
 	"Plane.plane": "飛機座位計算器",
 	"Apps.planeSubtitle": "解決一個或兩個變數的數學問題。",
-	"Apps.blockFactory": "Blockly 積木編輯器",
-	"Apps.blockfactorySubtitle": "使用 Blockly 建立自訂積木方塊。",
 	"Maze.moveForward": "向前移動",
 	"Maze.turnLeft": "左轉",
 	"Maze.turnRight": "右轉",

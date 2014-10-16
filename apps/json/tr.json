@@ -50,8 +50,6 @@
 	"Apps.codeSubtitle": "Bir Blockly programını JavaScript, Python, Dart ya da XML'e aktarın.",
 	"Plane.plane": "Uçak Koltuğu Hesaplayıcı",
 	"Apps.planeSubtitle": "Bir veya iki değişkenle bir matematik problemini çöz.",
-	"Apps.blockFactory": "Blok Fabrikası",
-	"Apps.blockfactorySubtitle": "Blockly kullanarak özel bloklar inşa et.",
 	"Maze.moveForward": "ileri git",
 	"Maze.turnLeft": "sola dön",
 	"Maze.turnRight": "sağa dön",

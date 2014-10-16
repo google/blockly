@@ -48,8 +48,6 @@
 	"Apps.codeSubtitle": "Exportera ett Blockly-program till JavaScript, Python, Dart eller XML.",
 	"Plane.plane": "Plansäteskalkylator",
 	"Apps.planeSubtitle": "Lös ett matematiskt problem med en eller två variabler.",
-	"Apps.blockFactory": "Blockfabrik",
-	"Apps.blockfactorySubtitle": "Bygg anpassade block med Blockly.",
 	"Maze.moveForward": "gå framåt",
 	"Maze.turnLeft": "sväng vänster",
 	"Maze.turnRight": "sväng höger",

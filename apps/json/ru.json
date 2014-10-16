@@ -49,8 +49,6 @@
 	"Apps.codeSubtitle": "Переведите программу Блокли на JavaScript, Python, Dart или XML.",
 	"Plane.plane": "Калькулятор посадочных мест в самолёте",
 	"Apps.planeSubtitle": "Решите математическую задачу с одной или двумя переменными.",
-	"Apps.blockFactory": "Фабрика блоков",
-	"Apps.blockfactorySubtitle": "Создайте свои блоки, используя Блокли.",
 	"Maze.moveForward": "шагнуть вперед",
 	"Maze.turnLeft": "повернуть налево",
 	"Maze.turnRight": "повернуть направо",

@@ -49,8 +49,6 @@
 	"Apps.codeSubtitle": "صدر برنامج بلوكلي إلى جافاسكريبت، بايثون، دارت أو XML.",
 	"Plane.plane": "آلة حاسبة لمقعد الطائرة",
 	"Apps.planeSubtitle": "حل مشكلة رياضيات في متغير واحد أو متغيرين.",
-	"Apps.blockFactory": "مصنع البلوكات",
-	"Apps.blockfactorySubtitle": "ابن بلوكات مخصصة باستخدام بلوكلي.",
 	"Maze.moveForward": "تحرّك إلى الأمام",
 	"Maze.turnLeft": "استدر إلى اليسار",
 	"Maze.turnRight": "استدر الى اليمين",

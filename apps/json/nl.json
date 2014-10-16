@@ -47,8 +47,6 @@
 	"Apps.codeSubtitle": "Een Blocklyprogramma exporteren naar JavaScript, Python, Dart of XML.",
 	"Plane.plane": "Vliegtuigstoelencalculator",
 	"Apps.planeSubtitle": "Een wiskundige probleem met een of twee variabelen oplossen.",
-	"Apps.blockFactory": "Blokkenfabriek",
-	"Apps.blockfactorySubtitle": "Aangepaste blokken maken met Blockly.",
 	"Maze.moveForward": "vooruit",
 	"Maze.turnLeft": "linksaf",
 	"Maze.turnRight": "rechtsaf",

@@ -49,8 +49,6 @@
 	"Apps.codeSubtitle": "Eksport suatu atur cara Blockly ke dalam JavaScript, Python, Dart atau XML.",
 	"Plane.plane": "Pengira Tempat Duduk Kapal Terbang",
 	"Apps.planeSubtitle": "Selesaikan masalah matematik dengan satu dua pemboleh ubah.",
-	"Apps.blockFactory": "Kilang Blok",
-	"Apps.blockfactorySubtitle": "Bina blok-blok bentukan sendiri dengan Blockly.",
 	"Maze.moveForward": "mara ke hadapan",
 	"Maze.turnLeft": "belok kiri",
 	"Maze.turnRight": "belok kanan",

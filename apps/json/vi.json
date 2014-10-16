@@ -49,8 +49,6 @@
 	"Apps.codeSubtitle": "Xuất khẩu một chương trình Blockly vào JavaScript, Python, Dart hoặc XML.",
 	"Plane.plane": "Máy bay ghế máy tính",
 	"Apps.planeSubtitle": "Giải quyết một vấn đề toán học với một hoặc hai biến.",
-	"Apps.blockFactory": "Khối nhà máy",
-	"Apps.blockfactorySubtitle": "Xây dựng tùy chỉnh khối bằng cách sử dụng Blockly.",
 	"Maze.moveForward": "đi tới",
 	"Maze.turnLeft": "quay qua trái",
 	"Maze.turnRight": "quay qua phải",

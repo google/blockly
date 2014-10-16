@@ -46,8 +46,6 @@
 	"Apps.codeSubtitle": "Þýða Blockly forrit yfir í JavaScript, Python, Dart eða XML.",
 	"Plane.plane": "Flugsætareiknir",
 	"Apps.planeSubtitle": "Leysa reikningsdæmi með einni eða tveimur breytum.",
-	"Apps.blockFactory": "Kubbasmiðja",
-	"Apps.blockfactorySubtitle": "Sérhanna kubba með Blockly.",
 	"Maze.moveForward": "færa áfram",
 	"Maze.turnLeft": "snúa til vinstri",
 	"Maze.turnRight": "snúa til hægri",

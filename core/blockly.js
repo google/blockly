@@ -268,6 +268,10 @@ Blockly.svgResize = function() {
  * @private
  */
 Blockly.onMouseDown_ = function(e) {
+  // two finger drag events on mobile safari don't contain a clientX or clientY. Ignore these.
+  if (!e.clientX || !e.clientY) {
+    return;
+  }
   Blockly.svgResize();
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
   Blockly.hideChaff();
@@ -332,6 +336,10 @@ Blockly.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
+  // two finger drag events on mobile safari don't contain a clientX or clientY. Ignore these.
+  if (!e.clientX || !e.clientY) {
+    return;
+  }
   if (Blockly.mainWorkspace.dragMode) {
     Blockly.removeAllRanges();
     var dx = e.clientX - Blockly.mainWorkspace.startDragMouseX;

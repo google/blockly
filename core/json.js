@@ -1,8 +1,9 @@
 /**
+ * @license
  * Visual Blocks Editor
  *
  * Copyright 2012 Google Inc.
- * http://blockly.googlecode.com/
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -324,6 +325,13 @@ Blockly.JSON.objectToBlock_ = function(workspace, jsonBlock) {
 			  }
 			}
 	   }  
+  }
+  
+  //If a block has mutation that create new outputs or affect inputs
+  //Then you cannot set these input or outputs restriction until both
+  //mutationTodata/dom is done and the title/inputList is done.
+  if(block.afterRender) {
+      block.afterRender();
   }
   
   if (jsonBlock[Blockly.JSON.fieldLabels.nextBlock]){

@@ -16,6 +16,7 @@
   {call apps.messages /}
   <div style="display: none">
     <span id="Code_badXml">{msg meaning="Code.badXml" desc="alert - Message shown when the user tries switching from the XML tab after entering XML text that could not be parsed.  This asks whether they wish to abandon the XML they added.  If they select 'OK' (or the translated equivalent), the XML is cleared, and the other tab is shown.  If they select 'Cancel', they remain on the XML tab with the bad XML.\n\nUsed in JavaScript <code>window.confirm()</code>."}Error parsing XML:\n%1\n\nSelect 'OK' to abandon your changes or 'Cancel' to further edit the XML.{/msg}</span>
+    <span id="Code_badJSON">{msg meaning="Code.badJSON" desc="alert - Message shown when the user tries switching from the JSON tab after entering JSON text that could not be parsed.  This asks whether they wish to abandon the JSON they added.  If they select 'OK' (or the translated equivalent), the JSON is cleared, and the other tab is shown.  If they select 'Cancel', they remain on the JSON tab with the bad JSON.\n\nUsed in JavaScript <code>window.confirm()</code>."}Error parsing JSON:\n%1\n\nSelect 'OK' to abandon your changes or 'Cancel' to further edit the JSON.{/msg}</span>
     <span id="Code_badCode">{msg meaning="Code.badCode" desc="alert - Message shown if an error occurs while interpreting the user program.  The error description follows."}Program error:\n%1{/msg}</span>
     <span id="Code_timeout">{msg meaning="Code.timeout" desc="alert - Message shown if the program has run for more than the permitted number of steps.  This exists so that programs with infinite loops do not run forever."}Maximum execution iterations exceeded.{/msg}</span>
     <span id="Code_discard">{msg meaning="Code.discard" desc="alert - Message shown after the user clicks on the 'discard all' icon.  Selecting 'OK' (or the translated equivalent) causes all of the blocks to be discarded.  Selecting 'Cancel' prevents blocks from being deleted.\n\nParameters:\n* %1 - number of blocks to be deleted. It is always an integer greater than or equal to 2."}Delete all %1 blocks?{/msg}</span>
@@ -62,6 +63,8 @@
             <td class="tabmin">&nbsp;</td>
             <td id="tab_dart" class="taboff">Dart</td>
             <td class="tabmin">&nbsp;</td>
+            <td id="tab_json" class="taboff">JSON</td>
+            <td class="tabmin">&nbsp;</td>
             <td id="tab_xml" class="taboff">XML</td>
             <td class="tabmax">
               <button id="trashButton" class="notext" title="{msg meaning="Code.trashTooltip" desc="tooltip - Clicking on this causes the user program to be discarded."}Discard all blocks.{/msg}">
@@ -88,6 +91,7 @@
   <pre id="content_javascript" class="content"></pre>
   <pre id="content_python" class="content"></pre>
   <pre id="content_dart" class="content"></pre>
+  <textarea id="content_json" class="content" wrap="off"></textarea>
   <textarea id="content_xml" class="content" wrap="off"></textarea>
   {call apps.dialog /}
   {call apps.storageDialog /}

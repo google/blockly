@@ -64,9 +64,10 @@ class Gen_uncompressed(threading.Thread):
   """Generate a JavaScript file that loads Blockly's raw files.
   Runs in a separate thread.
   """
-  def __init__(self, search_paths):
+  def __init__(self, search_paths, closure_folder):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
+    self.closure_folder = closure_folder
 
   def run(self):
     target_filename = 'blockly_uncompressed.js'
@@ -129,7 +130,7 @@ delete window.BLOCKLY_BOOT;
 document.write('<script type="text/javascript">var goog = undefined;</script>');
 // Load fresh Closure Library.
 document.write('<script type="text/javascript" src="' + window.BLOCKLY_DIR +
-    '/../closure-library-read-only/closure/goog/base.js"></script>');
+    '/../""" + self.closure_folder + """/closure/goog/base.js"></script>');
 document.write('<script type="text/javascript">window.BLOCKLY_BOOT()</script>');
 """)
     f.close()
@@ -402,20 +403,23 @@ class Gen_langfiles(threading.Thread):
 
 
 if __name__ == '__main__':
+  closure_folder = 'closure-library-read-only'
   try:
+    closure_folder = closure_folder if os.path.exists(
+      os.path.join(os.path.pardir, 'closure-library-read-only')) else 'closure-library';
     calcdeps = import_path(os.path.join(os.path.pardir,
-          'closure-library-read-only', 'closure', 'bin', 'calcdeps.py'))
+          closure_folder, 'closure', 'bin', 'calcdeps.py'))
   except ImportError:
     print("""Error: Closure not found.  Read this:
 https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
   search_paths = calcdeps.ExpandDirectories(
-      ['core', os.path.join(os.path.pardir, 'closure-library-read-only')])
+      ['core', os.path.join(os.path.pardir, closure_folder)])
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.
   # Compressed is limited by network and server speed.
-  Gen_uncompressed(search_paths).start()
+  Gen_uncompressed(search_paths, closure_folder).start()
   Gen_compressed(search_paths).start()
 
   # This is run locally in a separate thread.

@@ -54,23 +54,27 @@
       overflow: scroll;
     }
 
-    #linkButton {
+    button {
       border-radius: 4px;
       border: 1px solid #ddd;
       background-color: #eee;
       color: #000;
-      padding: 1px 10px;
-      margin: 1px 5px;
-      display: none;
+      padding: 10px;
+      margin: 0 5px;
+      font-size: large;
     }
-    #linkButton:hover {
+    button:hover {
       box-shadow: 2px 2px 5px #888;
     }
-    #linkButton>img {
+    button>* {
       opacity: 0.6;
+      vertical-align: text-bottom;
     }
-    #linkButton:hover>img {
+    button:hover>* {
       opacity: 1;
+    }
+    #linkButton {
+      display: none;
     }
   </style>
   <link rel="stylesheet" type="text/css" href="../prettify.css">
@@ -97,6 +101,12 @@
             <td style="vertical-align: middle; text-align: right;">
               <button id="linkButton" title="Save and link to blocks.">
                 <img src="link.png" height="21" width="21">
+              </button>
+              <button id="linkButton" title="Save and link to blocks.">
+                <img src="link.png" height="21" width="21">
+              </button>
+              <button id="helpButton" title="View documentation in new window.">
+                <span>Help</span>
               </button>
             </td>
           </tr>

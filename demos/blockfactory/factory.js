@@ -433,6 +433,11 @@ function init() {
     linkButton.addEventListener('click', BlocklyStorage.link);
   }
 
+  document.getElementById('helpButton').addEventListener('click', function() {
+      open('https://developers.google.com/blockly/custom-blocks/block-factory',
+           'BlockFactoryHelp');
+    });
+
   var expandList = [
     document.getElementById('blockly'),
     document.getElementById('previewFrame'),

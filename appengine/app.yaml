@@ -62,6 +62,10 @@ handlers:
 - url: /static/apps/turtle/(de|en|hu|vi)\.html
   static_files: redirect.html
   upload: redirect.html
+# Block Factory moved from apps to demos on 16 Oct 2014.
+- url: /static/apps/blockfactory/.*
+  static_files: redirect.html
+  upload: redirect.html
 
 
 # Storage API.
@@ -79,8 +83,8 @@ handlers:
   secure: always
 
 # Closure library for uncompiled Blockly.
-- url: /closure-library-read-only
-  static_dir: closure-library-read-only
+- url: /closure-library
+  static_dir: closure-library
   secure: always
 
 # Redirect for root directory.

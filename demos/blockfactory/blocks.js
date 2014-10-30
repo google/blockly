@@ -430,7 +430,7 @@ Blockly.Blocks['field_image'] = {
   // Image.
   init: function() {
     this.setColour(160);
-    var src = 'http://www.gstatic.com/codesite/ph/images/star_on.gif';
+    var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif';
     this.appendDummyInput()
         .appendField('image')
         .appendField(new Blockly.FieldTextInput(src), 'SRC');

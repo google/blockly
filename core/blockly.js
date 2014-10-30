@@ -631,7 +631,7 @@ Blockly.setCursorHand_ = function(closed) {
   }
   /* Hotspot coordinates are baked into the CUR file, but they are still
      required due to a Chrome bug.
-     http://code.google.com/p/chromium/issues/detail?id=1446 */
+     https://code.google.com/p/chromium/issues/detail?id=1446 */
   var cursor = '';
   if (closed) {
     cursor = 'url(' + Blockly.pathToBlockly + 'media/handclosed.cur) 7 3, auto';

@@ -55,10 +55,10 @@ function init() {
   var rtl = (document.location.search == '?rtl');
   Blockly.inject(document.body, {path: '../../', rtl: rtl});
 
-  if (window.parent.initPreview) {
+  try {
     // Let the top-level application know that Blockly is ready.
     window.parent.initPreview(updateFunc);
-  } else {
+  } catch (e) {
     // Attempt to diagnose the problem.
     var msg = 'Error: Unable to communicate between frames.\n' +
         'The preview frame will not be functional.\n\n';
@@ -66,8 +66,9 @@ function init() {
       msg += 'Try loading index.html instead of preview.html';
     } else if (window.location.protocol == 'file:') {
       msg += 'This may be due to a security restriction preventing\n' +
-          'access when using the file:// protocol.\n' +
-          'http://code.google.com/p/chromium/issues/detail?id=47416';
+          'access when using the file:// protocol.\n\n' +
+          'Try using a different browser, or use the Block Factory online at:\n' +
+          'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html';
     }
     alert(msg);
   }

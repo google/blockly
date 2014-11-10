@@ -23,7 +23,7 @@
   <script>
     function init() {
       Blockly.inject(document.getElementById('svgDiv'),
-          {path: '../../', rtl: true, toolbox: document.getElementById('toolbox')});
+          {rtl: true, toolbox: document.getElementById('toolbox')});
       Blockly.Xml.domToWorkspace(Blockly.mainWorkspace,
           document.getElementById('startBlocks'));
       //window.onbeforeunload = function() {
@@ -130,7 +130,6 @@
       </block>
       <block type="text_length"></block>
       <block type="text_isEmpty"></block>
-      <block type="text_endString"></block>
       <block type="text_indexOf"></block>
       <block type="text_charAt"></block>
       <block type="text_changeCase"></block>

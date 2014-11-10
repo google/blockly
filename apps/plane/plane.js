@@ -93,7 +93,7 @@ Plane.init = function() {
   var rtl = BlocklyApps.isRtl();
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
+      {media: '../../media/',
        rtl: rtl,
        toolbox: toolbox});
 

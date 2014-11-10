@@ -43,13 +43,6 @@ goog.require('goog.style');
 goog.require('rtclient');
 
 /**
- * URL for progress indicator.
- * @type {string}
- * @private
- */
-Blockly.Realtime.PROGRESS_URL_ = 'media/progress.gif';
-
-/**
  * Is realtime collaboration enabled?
  * @type {boolean}
  * @private
@@ -152,14 +145,14 @@ Blockly.Realtime.redoElementId_ = null;
  * @type {string}
  * @private
  */
-Blockly.Realtime.PROGRESS_URL_ = 'media/progress.gif';
+Blockly.Realtime.PROGRESS_URL_ = 'progress.gif';
 
 /**
  * URL of the anonymous user image.
  * @type {string}
  * @private
  */
-Blockly.Realtime.ANONYMOUS_URL_ = 'media/anon.jpeg';
+Blockly.Realtime.ANONYMOUS_URL_ = 'anon.jpeg';
 
 /**
  * This function is called the first time that the Realtime model is created
@@ -747,7 +740,7 @@ Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
  */
 Blockly.Realtime.addAuthUi_ = function(uiContainer) {
   // Add progess indicator to the UI container.
-  uiContainer.style.background = 'url(' + Blockly.pathToBlockly +
+  uiContainer.style.background = 'url(' + Blockly.pathToMedia +
       Blockly.Realtime.PROGRESS_URL_ + ') no-repeat center center';
   // Setup authorization button
   var blocklyDivBounds = goog.style.getBounds(uiContainer);
@@ -792,7 +785,7 @@ Blockly.Realtime.updateCollabUi_ = function() {
   for (var i = 0; i < collaboratorsList.length; i++) {
     var collaborator = collaboratorsList[i];
     var imgSrc = collaborator.photoUrl ||
-        Blockly.pathToBlockly + Blockly.Realtime.ANONYMOUS_URL_;
+        Blockly.pathToMedia + Blockly.Realtime.ANONYMOUS_URL_;
     var img = goog.dom.createDom('img',
         {
           'src': imgSrc,

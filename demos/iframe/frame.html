@@ -21,7 +21,7 @@
     <script>
       function init() {
         Blockly.inject(document.body,
-            {path: '../../', toolbox: document.getElementById('toolbox')});
+            {toolbox: document.getElementById('toolbox')});
         // Let the top-level application know that Blockly is ready.
         window.parent.blocklyLoaded(Blockly);
       }

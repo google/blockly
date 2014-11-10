@@ -160,7 +160,7 @@ Code.init = function() {
 
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('content_blocks'),
-      {path: '../../',
+      {media: '../../media/',
        rtl: rtl,
        toolbox: toolbox});
 

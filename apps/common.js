@@ -349,7 +349,7 @@ BlocklyApps.init = function() {
  */
 BlocklyApps.initReadonly = function() {
   Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
+      {media: '../../media/',
        readOnly: true,
        rtl: BlocklyApps.isRtl(),
        scrollbars: false});

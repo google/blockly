@@ -53,6 +53,9 @@ Maze.CRASH_STOP = 1;
 Maze.CRASH_SPIN = 2;
 Maze.CRASH_FALL = 3;
 
+// Relative path from Blockly's media directory to Maze's directory.
+Maze.MEDIA_TO_MAZE_PATH = '../apps/maze/';
+
 Maze.SKINS = [
   // sprite: A 1029x51 set of 21 avatar images.
   // tiles: A 250x200 set of 20 map images.
@@ -70,8 +73,10 @@ Maze.SKINS = [
     background: false,
     graph: false,
     look: '#000',
-    winSound: ['apps/maze/win.mp3', 'apps/maze/win.ogg'],
-    crashSound: ['apps/maze/fail_pegman.mp3', 'apps/maze/fail_pegman.ogg'],
+    winSound: [Maze.MEDIA_TO_MAZE_PATH + 'win.mp3',
+               Maze.MEDIA_TO_MAZE_PATH + 'win.ogg'],
+    crashSound: [Maze.MEDIA_TO_MAZE_PATH + 'fail_pegman.mp3',
+                 Maze.MEDIA_TO_MAZE_PATH + 'fail_pegman.ogg'],
     crashType: Maze.CRASH_STOP
   },
   {
@@ -82,8 +87,10 @@ Maze.SKINS = [
     // Coma star cluster, photo by George Hatfield, used with permission.
     graph: false,
     look: '#fff',
-    winSound: ['apps/maze/win.mp3', 'apps/maze/win.ogg'],
-    crashSound: ['apps/maze/fail_astro.mp3', 'apps/maze/fail_astro.ogg'],
+    winSound: [Maze.MEDIA_TO_MAZE_PATH + 'win.mp3',
+               Maze.MEDIA_TO_MAZE_PATH + 'win.ogg'],
+    crashSound: [Maze.MEDIA_TO_MAZE_PATH + 'fail_astro.mp3',
+                 Maze.MEDIA_TO_MAZE_PATH + 'fail_astro.ogg'],
     crashType: Maze.CRASH_SPIN
   },
   {
@@ -94,8 +101,10 @@ Maze.SKINS = [
     // Spring canopy, photo by Rupert Fleetingly, CC licensed for reuse.
     graph: false,
     look: '#000',
-    winSound: ['apps/maze/win.mp3', 'apps/maze/win.ogg'],
-    crashSound: ['apps/maze/fail_panda.mp3', 'apps/maze/fail_panda.ogg'],
+    winSound: [Maze.MEDIA_TO_MAZE_PATH + 'win.mp3',
+               Maze.MEDIA_TO_MAZE_PATH + 'win.ogg'],
+    crashSound: [Maze.MEDIA_TO_MAZE_PATH + 'fail_panda.mp3',
+                 Maze.MEDIA_TO_MAZE_PATH + 'fail_panda.ogg'],
     crashType: Maze.CRASH_FALL
   }
 ];
@@ -517,7 +526,7 @@ Maze.init = function() {
 
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
+      {media: '../../media/',
        maxBlocks: Maze.MAX_BLOCKS,
        rtl: rtl,
        toolbox: toolbox,

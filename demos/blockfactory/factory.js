@@ -454,8 +454,7 @@ function init() {
   window.addEventListener('resize', onresize);
 
   var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('blockly'),
-                 {path: '../../', toolbox: toolbox});
+  Blockly.inject(document.getElementById('blockly'), {toolbox: toolbox});
 
   // Create the root block.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

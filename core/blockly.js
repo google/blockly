@@ -58,10 +58,10 @@ goog.require('goog.userAgent');
 
 
 /**
- * Path to Blockly's directory.  Can be relative, absolute, or remote.
- * Used for loading additional resources.
+ * Path to Blockly's media directory.  Can be relative, absolute, or remote.
+ * Used for loading sounds and sprites.  Defaults to demo server.
  */
-Blockly.pathToBlockly = './';
+Blockly.pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
 
 /**
  * Required name space for SVG elements.
@@ -91,7 +91,7 @@ Blockly.HSV_VALUE = 0.65;
 Blockly.SPRITE = {
   width: 64,
   height: 92,
-  url: 'media/sprites.png'
+  url: 'sprites.png'
 };
 
 /**
@@ -568,7 +568,7 @@ Blockly.loadAudio_ = function(filenames, name) {
     var ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new window['Audio'](Blockly.pathToBlockly + filename);
+      sound = new window['Audio'](Blockly.pathToMedia + filename);
       break;
     }
   }
@@ -634,7 +634,7 @@ Blockly.setCursorHand_ = function(closed) {
      https://code.google.com/p/chromium/issues/detail?id=1446 */
   var cursor = '';
   if (closed) {
-    cursor = 'url(' + Blockly.pathToBlockly + 'media/handclosed.cur) 7 3, auto';
+    cursor = 'url(' + Blockly.pathToMedia + 'handclosed.cur) 7 3, auto';
   }
   if (Blockly.selected) {
     Blockly.selected.getSvgRoot().style.cursor = cursor;

@@ -75,7 +75,7 @@ Turtle.init = function() {
 
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blockly'),
-      {path: '../../',
+      {media: '../../media/',
        rtl: rtl,
        toolbox: toolbox,
        trashcan: true});

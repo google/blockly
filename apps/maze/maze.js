@@ -73,10 +73,8 @@ Maze.SKINS = [
     background: false,
     graph: false,
     look: '#000',
-    winSound: [Maze.MEDIA_TO_MAZE_PATH + 'win.mp3',
-               Maze.MEDIA_TO_MAZE_PATH + 'win.ogg'],
-    crashSound: [Maze.MEDIA_TO_MAZE_PATH + 'fail_pegman.mp3',
-                 Maze.MEDIA_TO_MAZE_PATH + 'fail_pegman.ogg'],
+    winSound: ['win.mp3', 'win.ogg'],
+    crashSound: ['fail_pegman.mp3', 'fail_pegman.ogg'],
     crashType: Maze.CRASH_STOP
   },
   {
@@ -87,10 +85,8 @@ Maze.SKINS = [
     // Coma star cluster, photo by George Hatfield, used with permission.
     graph: false,
     look: '#fff',
-    winSound: [Maze.MEDIA_TO_MAZE_PATH + 'win.mp3',
-               Maze.MEDIA_TO_MAZE_PATH + 'win.ogg'],
-    crashSound: [Maze.MEDIA_TO_MAZE_PATH + 'fail_astro.mp3',
-                 Maze.MEDIA_TO_MAZE_PATH + 'fail_astro.ogg'],
+    winSound: ['win.mp3', 'win.ogg'],
+    crashSound: ['fail_astro.mp3', 'fail_astro.ogg'],
     crashType: Maze.CRASH_SPIN
   },
   {
@@ -101,10 +97,8 @@ Maze.SKINS = [
     // Spring canopy, photo by Rupert Fleetingly, CC licensed for reuse.
     graph: false,
     look: '#000',
-    winSound: [Maze.MEDIA_TO_MAZE_PATH + 'win.mp3',
-               Maze.MEDIA_TO_MAZE_PATH + 'win.ogg'],
-    crashSound: [Maze.MEDIA_TO_MAZE_PATH + 'fail_panda.mp3',
-                 Maze.MEDIA_TO_MAZE_PATH + 'fail_panda.ogg'],
+    winSound: ['win.mp3', 'win.ogg'],
+    crashSound: ['fail_panda.mp3', 'fail_panda.ogg'],
     crashType: Maze.CRASH_FALL
   }
 ];

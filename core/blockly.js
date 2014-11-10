@@ -568,7 +568,7 @@ Blockly.loadAudio_ = function(filenames, name) {
     var ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new window['Audio'](Blockly.pathToMedia + filename);
+      sound = new window['Audio'](filename);
       break;
     }
   }

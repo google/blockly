@@ -2,10 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="google" value="notranslate">
   <title>Blockly Demo: RTL</title>
   <script type="text/javascript" src="../../blockly_compressed.js"></script>
   <script type="text/javascript" src="../../blocks_compressed.js"></script>
-  <script type="text/javascript" src="../../msg/js/en.js"></script>
+  <script type="text/javascript" src="../../msg/js/ar.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -39,7 +40,7 @@
   <div id="svgDiv"></div>
 
   <xml id="toolbox" style="display: none">
-    <category name="Logic">
+    <category name="منطق">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -48,7 +49,7 @@
       <block type="logic_null"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category name="Loops">
+    <category name="الحلقات">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <block type="math_number">
@@ -77,7 +78,7 @@
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category name="Math">
+    <category name="رياضيات">
       <block type="math_number"></block>
       <block type="math_arithmetic"></block>
       <block type="math_single"></block>
@@ -120,7 +121,7 @@
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category name="Text">
+    <category name="نص">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -141,7 +142,7 @@
         </value>
       </block>
     </category>
-    <category name="Lists">
+    <category name="قوائم">
       <block type="lists_create_empty"></block>
       <block type="lists_create_with"></block>
       <block type="lists_repeat">
@@ -157,13 +158,13 @@
       <block type="lists_getIndex"></block>
       <block type="lists_setIndex"></block>
     </category>
-    <category name="Colour">
+    <category name="لون">
       <block type="colour_picker"></block>
       <block type="colour_rgb"></block>
       <block type="colour_blend"></block>
     </category>
-    <category name="Variables" custom="VARIABLE"></category>
-    <category name="Functions" custom="PROCEDURE"></category>
+    <category name="متغيرات" custom="VARIABLE"></category>
+    <category name="إجراءات" custom="PROCEDURE"></category>
   </xml>
 
   <xml id="startBlocks" style="display: none">
@@ -173,7 +174,7 @@
           <field name="OP">LT</field>
           <value name="A">
             <block type="variables_get">
-              <field name="VAR">item</field>
+              <field name="VAR">x</field>
             </block>
           </value>
           <value name="B">
@@ -185,7 +186,7 @@
       </value>
       <statement name="DO0">
         <block type="variables_set" inline="false">
-          <field name="VAR">item</field>
+          <field name="VAR">x</field>
           <value name="VALUE">
             <block type="math_number">
               <field name="NUM">0</field>
@@ -195,7 +196,7 @@
             <block type="text_print" inline="false">
               <value name="TEXT">
                 <block type="text">
-                  <field name="TEXT">Game Over</field>
+                  <field name="TEXT">أكثر من لعبة</field>
                 </block>
               </value>
             </block>

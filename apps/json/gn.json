@@ -23,22 +23,5 @@
 	"Apps.linkAlert": "Temboja'o nde vorekuéra ko joaju ndie:\n\n%1",
 	"Apps.listVariable": "tysýi",
 	"Apps.textVariable": "jehaipy",
-	"Turtle.title": "Karumbe Ha'angava",
-	"Maze.doCode": "pejapo",
-	"Maze.elseCode": "térã",
-	"Plane.placeholder": "?",
-	"Turtle.penUp": "ejupi haiha",
-	"Turtle.penDown": "eguejy haiha",
-	"Turtle.printHelpUrl": "https://en.wikipedia.org/wiki/Printing",
-	"Turtle.fontHelpUrl": "https://en.wikipedia.org/wiki/Font",
-	"Turtle.font": "tai ysaja",
-	"Turtle.fontSize": "tai tuichakue",
-	"Turtle.fontNormal": "tai tee",
-	"Turtle.fontBold": "bold",
-	"Turtle.fontItalic": "italic",
-	"Turtle.unloadWarning": "Resẽvo nde rekañyta opa nde rembiapo.",
-	"Turtle.runTooltip": "Ejapouka karumbe vore he'iva.",
-	"Turtle.captureTooltip": "Ñongatu ta'anga.",
-	"Turtle.imgFilename": "ta'anga.png",
-	"Turtle.catTurtle": "Karumbe"
+	"Plane.placeholder": "?"
 }

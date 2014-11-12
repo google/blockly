@@ -22,20 +22,5 @@
 	"Apps.textVariable": "पाठ",
 	"Code.title": "कोड",
 	"Code.blocks": "ब्लकहरू",
-	"Maze.moveForward": "अघि बढ्ने",
-	"Maze.turnLeft": "बायाँ मोड्ने",
-	"Maze.turnRight": "दायाँ मोड्ने",
-	"Maze.doCode": "गर्ने",
-	"Maze.elseCode": "नत्र",
-	"Maze.helpIfElse": "यदि-नत्र ब्लकले पहिलो या दोस्रो कृयाकलाप छान्न सकिन्छ ।",
-	"Maze.pathAhead": "यदि सिधा बाटो छ भने",
-	"Maze.pathLeft": "यदि बायाँ तिर बाटो छ भने",
-	"Maze.pathRight": "यदि दाहिने तिर बाटो छ भने",
-	"Maze.repeatUntil": "यस सम्म दोहोर्‌याउने",
-	"Plane.placeholder": "?",
-	"Turtle.print": "छाप्नुहोस्",
-	"Turtle.fontSize": "फन्ट आकार",
-	"Turtle.fontNormal": "सामान्य",
-	"Turtle.fontBold": "मोटो",
-	"Turtle.fontItalic": "छड्के"
+	"Plane.placeholder": "?"
 }

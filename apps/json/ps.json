@@ -13,14 +13,5 @@
 	"Apps.httpRequestError": "د دې غوښتنې سره يوه ستونزه رامېنځ ته شوه",
 	"Apps.listVariable": "لړليک",
 	"Apps.textVariable": "متن",
-	"Code.title": "کوډ",
-	"Maze.turnLeft": "کيڼ تاوول",
-	"Maze.turnRight": "ښي تاوول",
-	"Maze.doCode": "کول",
-	"Turtle.print": "چاپول",
-	"Turtle.font": "ليکبڼه",
-	"Turtle.fontSize": "د ليکبڼې کچه",
-	"Turtle.fontNormal": "نورمال",
-	"Turtle.fontBold": "زغرد",
-	"Turtle.fontItalic": "رېوند"
+	"Code.title": "کوډ"
 }

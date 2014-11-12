@@ -17,10 +17,5 @@
 	"Apps.catColour": "Väri",
 	"Apps.catVariables": "Muuttujat",
 	"Apps.textVariable": "teksti",
-	"Code.title": "Koodi",
-	"Maze.helpRun": "Suorita ohjelmasi nähdäksesi, mitä tapahtuu.",
-	"Maze.helpReset": "Ohjelmasi ei ratkaise sokkeloa. Paina \"Nollaa\" ja yritä uudelleen.",
-	"Turtle.fontNormal": "normaali",
-	"Turtle.fontBold": "lihavoitu",
-	"Turtle.fontItalic": "kursivoitu"
+	"Code.title": "Koodi"
 }

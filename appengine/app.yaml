@@ -26,22 +26,6 @@ handlers:
 - url: /static/apps/code/(de|en|hu|vi|zh_tw)\.html
   static_files: redirect.html
   upload: redirect.html
-# Graph moved to index.html on 7 Aug 2013.
-- url: /static/apps/graph/graph\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Graph became language-agnostic on 20 Jul 2013.
-- url: /static/apps/graph/(de|en|hu|vi)\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Maze moved to index.html on 7 Aug 2013.
-- url: /static/apps/maze/maze\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Maze became language-agnostic on 20 Jul 2013.
-- url: /static/apps/maze/(ca|cs|da|el|en|es|eu|fr|hu|it|lv|nl|pl|pt|ru|sr|sw|th|tr|vi)\.html
-  static_files: redirect.html
-  upload: redirect.html
 # Plane moved to index.html on 7 Aug 2013.
 - url: /static/apps/plane/plane\.html
   static_files: redirect.html
@@ -54,12 +38,16 @@ handlers:
 - url: /static/apps/puzzle/.*
   static_files: redirect.html
   upload: redirect.html
-# Turtle moved to index.html on 7 Aug 2013.
-- url: /static/apps/turtle/turtle\.html
+# Maze moved to Blockly Games on 10 Nov 2014.
+- url: /static/apps/maze/.*
   static_files: redirect.html
   upload: redirect.html
-# Turtle became language-agnostic on 20 Jul 2013.
-- url: /static/apps/turtle/(de|en|hu|vi)\.html
+# Turtle moved to Blockly Games on 10 Nov 2014.
+- url: /static/apps/turtle/.*
+  static_files: redirect.html
+  upload: redirect.html
+# Graph moved from apps to demos on 10 Nov 2014.
+- url: /static/apps/graph/.*
   static_files: redirect.html
   upload: redirect.html
 # Block Factory moved from apps to demos on 16 Oct 2014.

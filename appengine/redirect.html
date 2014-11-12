@@ -33,30 +33,6 @@ if (loc.match('/apps/code/code.html')) {
   loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
 }
 
-if (loc.match('/apps/graph/graph.html')) {
-  // Graph moved to index.html on 7 Aug 2013.
-  loc = loc.replace('/graph.html', '/index.html');
-} else if (loc.match('/apps/graph/index.html')) {
-  // NOP.
-} else if (loc.match(/\/apps\/graph\/[-a-z]+\.html/)) {
-  // Graph became language-agnostic on 20 Jul 2013.
-  loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
-}
-
-if (loc.match('/apps/maze/maze.html')) {
-  // Maze moved to index.html on 7 Aug 2013.
-  loc = loc.replace('/maze.html', '/index.html');
-} else if (loc.match('/apps/maze/index.html')) {
-  // NOP.
-} else if (loc.match(/\/apps\/maze\/[-a-z]+\.html/)) {
-  // Maze became language-agnostic on 20 Jul 2013.
-  if (location.search) {
-    loc = loc.replace(/\/([-a-z]+)\.html\?/, '/index.html?lang=$1&');
-  } else {
-    loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
-  }
-}
-
 if (loc.match('/apps/plane/plane.html')) {
   // Plane moved to index.html on 7 Aug 2013.
   loc = loc.replace('/plane.html', '/index.html');
@@ -75,21 +51,20 @@ if (loc.match('/apps/plane/plane.html')) {
 if (loc.match('/apps/puzzle/')) {
   // Puzzle moved to Blockly Games on 15 Oct 2014.
   loc = 'https://blockly-games.appspot.com/puzzle';
+} else if (loc.match('/apps/maze/')) {
+  // Maze moved to Blockly Games on 10 Nov 2014.
+  loc = 'https://blockly-games.appspot.com/maze';
+} else if (loc.match('/apps/turtle/')) {
+  // Turtle moved to Blockly Games on 10 Nov 2014.
+  loc = 'https://blockly-games.appspot.com/turtle';
 }
 
-if (loc.match('/apps/blockfactory/')) {
+if (loc.match('/apps/graph/')) {
+  // Graph moved from apps to demos on 10 Nov 2014.
+  loc = loc.replace('/apps/', '/demos/');
+} else if (loc.match('/apps/blockfactory/')) {
   // Block Factory moved from apps to demos on 16 Oct 2014.
   loc = loc.replace('/apps/', '/demos/');
-}
-
-if (loc.match('/apps/turtle/turtle.html')) {
-  // Turtle moved to index.html on 7 Aug 2013.
-  loc = loc.replace('/turtle.html', '/index.html');
-} else if (loc.match('/apps/turtle/index.html')) {
-  // NOP.
-} else if (loc.match(/\/apps\/turtle\/[-a-z]+\.html/)) {
-  // Turtle became language-agnostic on 20 Jul 2013.
-  loc = loc.replace(/\/([-a-z]+)\.html/, '/index.html?lang=$1');
 }
 
 location = loc;

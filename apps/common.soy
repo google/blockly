@@ -7,17 +7,17 @@
  * included apps subdirectories.  If building on Windows, you may need to
  * substitute '\' for '/'.
  *
- * java -jar _soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf --srcs common.soy,code/template.soy,graph/template.soy,maze/template.soy,plane/template.soy,turtle/template.soy,index/template.soy
+ * java -jar _soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf --srcs common.soy,code/template.soy,plane/template.soy,index/template.soy
  *
  * Create en.json, keys.json, and qqq.json.
- * ../i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy {code,graph,index,maze,plane,turtle}/template.soy
+ * ../i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy {code,index,plane}/template.soy
  * or in Windows:
- * python ..\i18n\xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy code\template.soy graph\template.soy index\template.soy maze\template.soy plane\template.soy turtle\template.soy
+ * python ..\i18n\xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy code\template.soy index\template.soy plane\template.soy
  *
  * Generate .js files for each project and the index:
- * for i in code graph index maze plane turtle; do ../i18n/json_to_js.py --output_dir=$i/generated --template common.soy,$i/template.soy json/*.json; done
+ * for i in code index plane; do ../i18n/json_to_js.py --output_dir=$i/generated --template common.soy,$i/template.soy json/*.json; done
  * or in Windows:
- * FOR %i IN (code graph index maze plane turtle) DO python ..\i18n\json_to_js.py --output_dir=%i\generated --template common.soy,%i\template.soy json\*.json
+ * FOR %i IN (code index plane) DO python ..\i18n\json_to_js.py --output_dir=%i\generated --template common.soy,%i\template.soy json\*.json
  */
 
 /**

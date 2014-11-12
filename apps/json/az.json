@@ -21,17 +21,7 @@
 	"Code.title": "Kod",
 	"Code.blocks": "Bloklar",
 	"Code.trashTooltip": "Bütün bloklardan imtina et.",
-	"Graph.title": "Qrafika kalkulyatoru",
 	"Apps.choiceIntro": "Blockly-qrafik proqram təminatıdır. Aşağıda Blockly-dən istifadə edən əlavələrin nümunələri göstərilmişdir.",
-	"Maze.maze": "Labirint",
-	"Apps.mazeSubtitle": "Blockly-dən istifadə edərək labirintdən keçməyi öyrənin.",
-	"Apps.turtleSubtitle": "Blockly-dən rəsm çəkmək üçün istifadə edin.",
 	"Apps.codeSubtitle": "Blockly proqramını JavaScript, Python, Dart və ya XML formatına çevirin.",
-	"Maze.turnLeft": "sola dönün",
-	"Maze.turnRight": "sağa dönün",
-	"Plane.placeholder": "?",
-	"Turtle.font": "şrift",
-	"Turtle.fontSize": "şriftin ölçüsü",
-	"Turtle.fontNormal": "normal",
-	"Turtle.imgFilename": "drawing.png"
+	"Plane.placeholder": "?"
 }

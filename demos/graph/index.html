@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Blockly Demo: Graphing Calculator</title>
+  <title>Blockly Demo: Graph</title>
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript" src="../../blockly_compressed.js"></script>
   <script type="text/javascript" src="../../blocks_compressed.js"></script>
@@ -49,7 +49,7 @@
   <div id="blocklyDiv"></div>
 
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
-    <a href="../index.html">Demos</a> &gt; Graphing Calculator</h1>
+    <a href="../index.html">Demos</a> &gt; Graph</h1>
 
   <p>This is a demo of giving instant feedback as blocks are changed.</p>
 
@@ -161,7 +161,8 @@ Blockly.Blocks['graph_set_y'] = {
     this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
     this.setColour(330);
     this.appendValueInput('VALUE')
-        .appendField('y =');
+        .appendField('y =')
+        .setCheck('Number');
     this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
   }
 };
@@ -170,7 +171,7 @@ Blockly.JavaScript['graph_set_y'] = function(block) {
   // y variable setter.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_ASSIGNMENT) || '';
-  return argument0 + ';';
+  return 'y = ' + argument0 + ';';
 };
 
 /**
@@ -202,9 +203,7 @@ Graph.options_ = {
  * https://developers.google.com/chart/interactive/docs/gallery/linechart
  */
 Graph.drawVisualization = function() {
-  var tuple = Graph.getFunction();
-  var defs = tuple[0];
-  var formula = tuple[1];
+  var formula = Blockly.JavaScript.workspaceToCode();
   if (formula === Graph.oldFormula_) {
     // No change in the formula, don't recompute.
     return;
@@ -212,16 +211,16 @@ Graph.drawVisualization = function() {
   Graph.oldFormula_ = formula;
 
   // Create and populate the data table.
-  var data = google.visualization.arrayToDataTable(Graph.plot(defs + formula));
+  var data = google.visualization.arrayToDataTable(Graph.plot(formula));
   // Create and draw the visualization, passing in the data and options.
   new google.visualization.LineChart(document.getElementById('visualization')).
       draw(data, Graph.options_);
 
-  // Remove the ";" generally ending the JavaScript statement y = {code};.
-  formula = formula.replace(/;$/, '');
+  // Create the "y = ..." label.  Find the relevant part of the code.
+  formula = formula.substring(formula.indexOf('y = '));
+  formula = formula.substring(0, formula.indexOf(';'));
   var funcText = document.getElementById('funcText');
-  funcText.replaceChild(document.createTextNode('y = ' + formula),
-                        funcText.lastChild);
+  funcText.replaceChild(document.createTextNode(formula), funcText.lastChild);
 };
 
 /**
@@ -236,7 +235,7 @@ Graph.plot = function(code) {
   // TODO: Improve range and scale of graph.
   for (var x = -10; x <= 10; x = Math.round((x + 0.1) * 10) / 10) {
     try {
-      y = eval(code);
+      eval(code);
     } catch (e) {
       y = NaN;
     }
@@ -255,29 +254,6 @@ Graph.plot = function(code) {
     table.unshift(['x', 'y'], [0, 0]);
   }
   return table;
-};
-
-/**
- * Get from blocks the right hand side content of the function y = f(x).
- * @return {!Array.<string>} Tuple of any function definitions and the formula
- *     in JavaScipt for f(x).
- */
-Graph.getFunction = function() {
-  var topBlocks = Blockly.mainWorkspace.getTopBlocks(false);
-  var yBlock;
-  // Set yBlock to only the code plugged into 'graph_set_y'.
-  for (var j = 0; j < topBlocks.length; j++) {
-    if (topBlocks[j].type == 'graph_set_y') {
-      yBlock = topBlocks[j];
-    }
-  }
-  if (!yBlock) {
-    return NaN;
-  }
-  Blockly.JavaScript.init();
-  var code = Blockly.JavaScript.blockToCode(yBlock);
-  var defs = Blockly.JavaScript.finish('');
-  return [defs, code];
 };
 
 /**

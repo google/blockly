@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Alvaro Vidal-Abarca",
-			"Espertus"
+			"Espertus",
+			"Hiperpobla"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -21,6 +22,7 @@
 	"ENABLE_BLOCK": "Activa bloc",
 	"HELP": "Ajuda",
 	"CHAT": "Xateja amb el teu col·laborador escrivint en aquest quadre!",
+	"ME": "Jo",
 	"CHANGE_VALUE_TITLE": "Canvia valor:",
 	"NEW_VARIABLE": "Nova variable...",
 	"NEW_VARIABLE_TITLE": "Nou nom de variable:",
@@ -283,13 +285,16 @@
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Crea una funció sense sortida.",
 	"PROCEDURES_DEFRETURN_RETURN": "retorna",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Crea una funció amb una sortida.",
+	"PROCEDURES_ALLOW_STATEMENTS": "permetre declaracions",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Advertència: Aquesta funció té paràmetres duplicats.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://ca.wikipedia.org/wiki/Procediment_%28Programació%29",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Executa la funció definida per usuari '%1'.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://ca.wikipedia.org/wiki/Procediment_%28Programació%29",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Executa la funció definida per l'usuari '%1' i utilitza la seva sortida.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "entrades",
+	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Afegir, eliminar o canviar l'ordre de les entrades per aquesta funció.",
 	"PROCEDURES_MUTATORARG_TITLE": "nom d'entrada:",
+	"PROCEDURES_MUTATORARG_TOOLTIP": "Afegir una entrada per la funció.",
 	"PROCEDURES_HIGHLIGHT_DEF": "Iluminar la definició de la funció",
 	"PROCEDURES_CREATE_DO": "Crear '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si el valor és cert, llavors retorna un segon valor.",

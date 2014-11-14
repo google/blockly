@@ -1,10 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).",
 	"ADD_COMMENT": "context menu - Add a descriptive comment to the selected block.",
@@ -232,7 +226,7 @@
 	"TEXT_GET_SUBSTRING_START_FROM_START": "dropdown - Indicates that the following number specifies the position (relative to the start position) of the beginning of the region of text that should be obtained from the preceding piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text]. [[File:Blockly-get-substring.png]]",
 	"TEXT_GET_SUBSTRING_START_FROM_END": "dropdown - Indicates that the following number specifies the position (relative to the end position) of the beginning of the region of text that should be obtained from the preceding piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text]. Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will automatically appear ''after'' this and any other [https://translatewiki.net/wiki/Translating:Blockly#Ordinal_numbers ordinal numbers] on this block. [[File:Blockly-get-substring.png]]",
 	"TEXT_GET_SUBSTRING_START_FIRST": "block text - Indicates that a region starting with the first letter of the preceding piece of text should be extracted.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text]. [[File:Blockly-get-substring.png]]",
-	"TEXT_GET_SUBSTRING_END_FROM_START": "dropdown - Indicates that the following number specifies the position (relative to the start position) of the end of the region of text that should be obtained from the preceding piece of text.  See [ https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text]. [[File:Blockly-get-substring.png]]",
+	"TEXT_GET_SUBSTRING_END_FROM_START": "dropdown - Indicates that the following number specifies the position (relative to the start position) of the end of the region of text that should be obtained from the preceding piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text]. [[File:Blockly-get-substring.png]]",
 	"TEXT_GET_SUBSTRING_END_FROM_END": "dropdown - Indicates that the following number specifies the position (relative to the end position) of the end of the region of text that should be obtained from the preceding piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text]. [[File:Blockly-get-substring.png]]",
 	"TEXT_GET_SUBSTRING_END_LAST": "block text - Indicates that a region ending with the last letter of the preceding piece of text should be extracted.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text]. [[File:Blockly-get-substring.png]]",
 	"TEXT_GET_SUBSTRING_TAIL": "block text - Text that should go after the rightmost block/dropdown when [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text extracting a region of text].  In most languages, this will be the empty string. [[File:Blockly-get-substring.png]]",
@@ -356,7 +350,7 @@
 	"PROCEDURES_MUTATORARG_TITLE": "block text - This text appears on a block in a window that appears when the user clicks on the plus sign or star on a function definition block].  It appears on the block for adding an individual parameter (referred to by the simpler term 'inputs') to the function. See [[Translating:Blockly#function_definitions]].",
 	"PROCEDURES_MUTATORARG_TOOLTIP": "tooltip",
 	"PROCEDURES_HIGHLIGHT_DEF": "context menu - This appears on the context menu for function calls.  Selecting it causes the corresponding function definition to be highlighted (as shown at [[Translating:Blockly#context_menus]].",
-	"PROCEDURES_CREATE_DO": "context menu - This appears on the context menu for function definitions. Selecting it creates a block to call the function.  \n\nParameters:\n* %1 - the name of the function.",
+	"PROCEDURES_CREATE_DO": "context menu - This appears on the context menu for function definitions. Selecting it creates a block to call the function.\n\nParameters:\n* %1 - the name of the function.",
 	"PROCEDURES_IFRETURN_TOOLTIP": "tooltip - If the first value is true, this causes the second value to be returned immediately from the enclosing function.",
 	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition."
 }

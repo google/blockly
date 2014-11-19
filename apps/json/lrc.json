@@ -5,7 +5,7 @@
 		]
 	},
 	"Apps.subtitle": "یه راساگه برنامه نیسی قاول دیئن",
-	"Apps.blocklyMessage": "قلف بیه",
+	"Blockly": "قلف بیه",
 	"Apps.codeTooltip": "سیل کد جاوا اسکریپت راس بیه بکید",
 	"Apps.linkTooltip": "بخشیانه ذخیره و هوم پیوند بکید",
 	"Apps.runProgram": "برنامه نه اجرا بکیت",
@@ -27,10 +27,5 @@
 	"Code.badCode": "خطا برنامه:%1",
 	"Code.discard": " %1 د همه برشتیا نه پاکسا کو?",
 	"Code.title": "کد",
-	"Code.blocks": "بخشیا",
-	"Plane.plane": "زمی",
-	"Plane.getRows": "ردیفیا (%1)",
-	"Plane.seats": "صندلیا:%1",
-	"Plane.placeholder": "؟",
-	"Plane.setSeats": "صنه لیا="
+	"Code.blocks": "بخشیا"
 }

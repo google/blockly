@@ -1,12 +1,12 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-11-12 14:45:51.736026",
+		"lastupdated": "2014-11-14 14:57:01.750962",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
 	"Apps.subtitle": "a visual programming environment",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "See generated JavaScript code.",
 	"Apps.linkTooltip": "Save and link to blocks.",
 	"Apps.runTooltip": "Run the program defined by the blocks in the workspace.",
@@ -34,24 +34,5 @@
 	"Code.discard": "Delete all %1 blocks?",
 	"Code.title": "Code",
 	"Code.blocks": "Blocks",
-	"Code.trashTooltip": "Discard all blocks.",
-	"Apps.indexTitle": "Blockly Apps",
-	"Apps.indexFooter": "Blockly is free and open source.  To contribute code or translations to Blockly, or to use Blockly in your own app, visit %1.",
-	"Apps.choiceIntro": "Blockly is a graphical programming environment.  Below are some sample applications that use Blockly.",
-	"Apps.codeSubtitle": "Export a Blockly program into JavaScript, Python, Dart or XML.",
-	"Plane.plane": "Plane Seat Calculator",
-	"Apps.planeSubtitle": "Solve a math problem with one or two variables.",
-	"Plane.rows": "Rows: %1",
-	"Plane.getRows": "rows (%1)",
-	"Plane.rows1": "1st class rows: %1",
-	"Plane.getRows1": "1st class rows (%1)",
-	"Plane.rows2": "2nd class rows: %1",
-	"Plane.getRows2": "2nd class rows (%1)",
-	"Plane.seats": "Seats: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "seats =",
-	"Plane.description1": "An airplane has a number of rows of passenger seats.  Each row contains four seats.",
-	"Plane.description2": "An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of passenger seats.  Each row contains four seats.",
-	"Plane.description3": "An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of 1st class and 2nd class passenger seats.  Each 1st class row contains four seats. Each 2nd class row contains five seats.",
-	"Plane.instructions": "Build a formula (below) that calculates the total number of seats on the airplane as the rows are changed (above)."
+	"Code.trashTooltip": "Discard all blocks."
 }

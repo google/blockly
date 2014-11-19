@@ -7,7 +7,7 @@
 		]
 	},
 	"Apps.subtitle": "vizuálne programovacie prostredie",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Prezrieť vygenerovaný javascriptový kód.",
 	"Apps.linkTooltip": "Uložiť a zdieľať odkaz na tento program.",
 	"Apps.runTooltip": "Spustiť program, zložený z dielcov na pracovnej ploche.",
@@ -35,19 +35,5 @@
 	"Code.discard": "Zmazať všetkých %1 dielcov?",
 	"Code.title": "Kód",
 	"Code.blocks": "Bloky",
-	"Code.trashTooltip": "Zahodiť všetky dielce.",
-	"Plane.plane": "Lietadlo",
-	"Plane.rows": "Rady: %1",
-	"Plane.getRows": "rady (%1)",
-	"Plane.rows1": "rady 1. trieda: %1",
-	"Plane.getRows1": "rady 1. trieda (%1)",
-	"Plane.rows2": "rady 2. trieda: %1",
-	"Plane.getRows2": "rady 2. trieda (%1)",
-	"Plane.seats": "Sedadiel: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "sedadlá =",
-	"Plane.description1": "Lietadlo má niekoľko radov sedadiel.  Každý rad obsahuje štyri sedadlá.",
-	"Plane.description2": "Lietadlo má dve sedadlá v kabíne pilota (pre kapitána a kopilota), a veľa radov sedadiel pre cestujúcich. Každý rad obsahuje štyri sedadlá.",
-	"Plane.description3": "Lietadlo má dve sedadlá v kabíne pilota (pre kapitána a kopilota), a veľa radov sedadiel pre cestujúcich v 1. a 2. triede. Každý rad 1. triedy má štyri sedadlá. Každý rad 2. triedy má päť sedadiel.",
-	"Plane.instructions": "Napíš vzorec (dole), ktorý vypočíta celkový počet sedadiel v lietadle po zmene radov (hore)."
+	"Code.trashTooltip": "Zahodiť všetky dielce."
 }

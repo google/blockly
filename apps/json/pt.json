@@ -7,7 +7,7 @@
 		]
 	},
 	"Apps.subtitle": "um ambiente de programação visual",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Veja o código JavaScript gerado.",
 	"Apps.linkTooltip": "Salva conexão com o blockly.",
 	"Apps.runProgram": "Executar programa",
@@ -31,6 +31,5 @@
 	"Code.badCode": "Erro do programa:\n%1",
 	"Code.discard": "Eliminar todos os blocos (%1)?",
 	"Code.title": "Código",
-	"Code.blocks": "Bloqueios",
-	"Plane.plane": "Calculador dos Bancos do Avião"
+	"Code.blocks": "Bloqueios"
 }

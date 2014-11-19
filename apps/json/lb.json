@@ -4,7 +4,7 @@
 			"Robby"
 		]
 	},
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Generéierte JavaScript Code kucken.",
 	"Apps.linkTooltip": "Späicheren a mat de Bléck verlinken",
 	"Apps.runProgram": "Programm ausféieren",
@@ -26,18 +26,5 @@
 	"Code.badCode": "Programmfeeler:\n%1",
 	"Code.discard": "All %1 Bléck läschen?",
 	"Code.title": "Code",
-	"Code.blocks": "Bléck",
-	"Plane.plane": "Rechemaschinne fir d'Sëtzer am Fliger",
-	"Apps.planeSubtitle": "E mathematesche Problem mat enger oder zwou Variabele léisen.",
-	"Plane.rows": "Reien: %1",
-	"Plane.getRows": "Reien (%1)",
-	"Plane.rows1": "1. Klass Reien: %1",
-	"Plane.getRows1": "1. Klass Reien (%1)",
-	"Plane.rows2": "2. Klass Reien: %1",
-	"Plane.getRows2": "2. Klass Reien (%1)",
-	"Plane.seats": "Sëtzer: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "Sëtzer =",
-	"Plane.description1": "E Fliger huet en gewëss Zuel vu Reie mat Sëtzer fir d'Passagéier. All Rei huet véier Sëtzer.",
-	"Plane.description2": "E Fliger huet zwee Sëtzer am Cockpit (fir de Pilot an de Co-Pilot), an eng gewëss Zuel vu Reie mat Sëtzer fir d'Passagéier. An all Rei si véier Sëtzer."
+	"Code.blocks": "Bléck"
 }

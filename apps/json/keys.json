@@ -1,6 +1,6 @@
 {
 "Apps.subtitle": "9151382257658567281",
-"Apps.blocklyMessage": "6650354588969822092",
+"Blockly": "213423414108596757",
 "Apps.codeTooltip": "5838195295317713027",
 "Apps.linkTooltip": "5391382062551588177",
 "Apps.runTooltip": "6316320629891574281",
@@ -28,24 +28,5 @@
 "Code.discard": "1020451542663054555",
 "Code.title": "339365101010834276",
 "Code.blocks": "586801704101593425",
-"Code.trashTooltip": "1406728939680691839",
-"Apps.indexTitle": "7974005368401638032",
-"Apps.indexFooter": "6787275955604631342",
-"Apps.choiceIntro": "5293485729310732301",
-"Apps.codeSubtitle": "5453010276194242854",
-"Plane.plane": "6646116297668869388",
-"Apps.planeSubtitle": "6523129415371026229",
-"Plane.rows": "286555642257111053",
-"Plane.getRows": "7030918043298347994",
-"Plane.rows1": "7091637686507441682",
-"Plane.getRows1": "5622822520334788359",
-"Plane.rows2": "6523489254328705062",
-"Plane.getRows2": "8347578891541780742",
-"Plane.seats": "6636919311618748816",
-"Plane.placeholder": "1649099567159388799",
-"Plane.setSeats": "990695256953568910",
-"Plane.description1": "7784699858027886282",
-"Plane.description2": "4755413400587385256",
-"Plane.description3": "1327005465775917626",
-"Plane.instructions": "3872872459414039837"
+"Code.trashTooltip": "1406728939680691839"
 }

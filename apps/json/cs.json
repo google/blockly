@@ -6,7 +6,7 @@
 		]
 	},
 	"Apps.subtitle": "grafické programovací prostředí",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Zobrazit generovaný JavaScriptový kód.",
 	"Apps.linkTooltip": "Ulož a spoj bloky..",
 	"Apps.runProgram": "Spusť program",
@@ -32,20 +32,5 @@
 	"Code.discard": "Odstranit všechny bloky %1?",
 	"Code.title": "Kód",
 	"Code.blocks": "Bloky",
-	"Code.trashTooltip": "Zahodit všechny bloky.",
-	"Apps.indexTitle": "Aplikace Blockly",
-	"Apps.choiceIntro": "Blockly je grafické programovací prostředí. Níže jsou uvedeny některé ukázkové aplikace, které používají Blockly.",
-	"Apps.codeSubtitle": "Exportujte Blockly program do JavaScriptu, Pythonu, Dartu nebo XML.",
-	"Plane.plane": "Kalkulačka míst v sedadle",
-	"Apps.planeSubtitle": "Vyřešte matematický problém s jednou nebo dvěma proměnnými.",
-	"Plane.rows": "Řádků: %1",
-	"Plane.getRows": "řádky (% 1)",
-	"Plane.rows1": "1. třída řádků: %1",
-	"Plane.getRows1": "1. třída řádků (%1)",
-	"Plane.rows2": "2. třída řádků: %1",
-	"Plane.getRows2": "2. třída řádků (%1)",
-	"Plane.seats": "Sedadla: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "sedadla =",
-	"Plane.description1": "Letadlo má určitý počet řad sedadel pro cestující. Každá řada obsahuje 4 sedadla."
+	"Code.trashTooltip": "Zahodit všechny bloky."
 }

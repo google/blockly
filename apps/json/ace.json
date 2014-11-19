@@ -5,7 +5,7 @@
 		]
 	},
 	"Apps.subtitle": "Ruweuëng meuprogram ban leumah",
-	"Apps.blocklyMessage": "Teutheun",
+	"Blockly": "Teutheun",
 	"Apps.codeTooltip": "Eu kode JavaScript yang geupeuhasé",
 	"Apps.linkTooltip": "Keubah ngon neupawôt keu theun",
 	"Apps.runTooltip": "Neupeujak program nyang geupeuteutap le seuneutheun lam ruweuëng keurija",
@@ -33,11 +33,5 @@
 	"Code.discard": "Sampôh mandum %1 seuneutheun",
 	"Code.title": "Kode",
 	"Code.blocks": "Seuneutheun",
-	"Code.trashTooltip": "Boh mandum seuneutheun",
-	"Apps.indexTitle": "Aplikasi seuneutheun",
-	"Apps.indexFooter": "Blockly nakeuh bibeuëh ngon meunè nyang teuhah.\nSoë mantong nyang meuripèe kode atawa teujeumah keu Blockly, atawa geungui Blockly lam aplikasi droëneuh, neukunjông %1.",
-	"Apps.choiceIntro": "Blockly nakeuh ruweuëng meuprogram grafis. Dimeuyub nyoë nakeuh meupadum boh conto aplikasi nyang geunguy Blockly.",
-	"Apps.codeSubtitle": "Neu eksport program Blockly u dalam JavaScript, Phyton atawa XMK.",
-	"Plane.plane": "Peukakah Bileuëng Kurusi Kapai Teureubang.",
-	"Apps.planeSubtitle": "Neupeuglah masalah matematik ngon saboh atawa dua kri neuubah."
+	"Code.trashTooltip": "Boh mandum seuneutheun"
 }

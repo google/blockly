@@ -1,5 +1,5 @@
 /**
- * Blockly Apps: Block Factory Blocks
+ * Blockly Demos: Block Factory Blocks
  *
  * Copyright 2012 Google Inc.
  * https://developers.google.com/blockly/

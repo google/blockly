@@ -1,7 +1,7 @@
 {
 	"@metadata": [],
 	"Apps.subtitle": "mazingira ya programu ya kuona",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Tazama mwandiko wa JavaScript inayotokana.",
 	"Apps.linkTooltip": "Hifadhi na kiungo cha vishiku.",
 	"Apps.runProgram": "Endesha Programu",

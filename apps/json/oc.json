@@ -5,7 +5,7 @@
 		]
 	},
 	"Apps.subtitle": "un environament de programacion visual",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Veire lo còde JavaScript generat.",
 	"Apps.linkTooltip": "Salva e liga als blòts.",
 	"Apps.runTooltip": "Aviar lo programa definit pels blòts dins l’espaci de trabalh.",
@@ -33,16 +33,5 @@
 	"Code.discard": "Suprimir totes los %1 blòts ?",
 	"Code.title": "Còde",
 	"Code.blocks": "Blòts",
-	"Code.trashTooltip": "Getar totes los blòts.",
-	"Apps.indexTitle": "Aplicacions Blockly",
-	"Plane.plane": "Calculador de sètis d’avion",
-	"Plane.rows": "Linhas : %1",
-	"Plane.getRows": "linhas (%1)",
-	"Plane.rows1": "linhas de primièra classa : %1",
-	"Plane.getRows1": "linhas de primièra classa (%1)",
-	"Plane.rows2": "linhas de segonda classa : %1",
-	"Plane.getRows2": "linhas de segonda classa (%1)",
-	"Plane.seats": "Sètis : %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "sètis ="
+	"Code.trashTooltip": "Getar totes los blòts."
 }

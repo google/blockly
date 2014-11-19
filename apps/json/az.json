@@ -20,8 +20,5 @@
 	"Code.badCode": "Proqram xətası:\n%1",
 	"Code.title": "Kod",
 	"Code.blocks": "Bloklar",
-	"Code.trashTooltip": "Bütün bloklardan imtina et.",
-	"Apps.choiceIntro": "Blockly-qrafik proqram təminatıdır. Aşağıda Blockly-dən istifadə edən əlavələrin nümunələri göstərilmişdir.",
-	"Apps.codeSubtitle": "Blockly proqramını JavaScript, Python, Dart və ya XML formatına çevirin.",
-	"Plane.placeholder": "?"
+	"Code.trashTooltip": "Bütün bloklardan imtina et."
 }

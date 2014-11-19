@@ -6,7 +6,7 @@
 		]
 	},
 	"Apps.subtitle": "vizuāla programmēšanas vide",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Apskatīt ģenerēto JavaScript pirmkodu.",
 	"Apps.linkTooltip": "Saglabāt un piesaistīt blokiem.",
 	"Apps.runTooltip": "Palaidiet programmu, ko definē bloki darbvietā.",
@@ -34,19 +34,5 @@
 	"Code.discard": "Vai izdzēst visus %1 blokus?",
 	"Code.title": "Pirmkods",
 	"Code.blocks": "Bloki",
-	"Code.trashTooltip": "Izmest visus blokus.",
-	"Plane.plane": "Lidmašīna",
-	"Plane.rows": "Rindas: %1",
-	"Plane.getRows": "rindas (%1)",
-	"Plane.rows1": "Pirmās klases rindas: %1",
-	"Plane.getRows1": "Pirmās klases rindas (%1)",
-	"Plane.rows2": "Otrās klases rindas: %1",
-	"Plane.getRows2": "Otrās klases rindas (%1)",
-	"Plane.seats": "Sēdvietas: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "sēdvietas =",
-	"Plane.description1": "Lidmašīnā ir noteikts rindu skaits pasažieru sēdvietām. Katra rinda satur četras sēdvietas.",
-	"Plane.description2": "Lidmašīnā ir divas vietas pilotu kabīnē (pilots un otrais pilots) un vairākas rindas  ar pasažieru sēdvietām. Katra rinda satur četras sēdvietas.",
-	"Plane.description3": "Lidmašīnā ir divas vietas pilotu kabīnē (pilots un otrais pilots) un vairākas rindas ar pirmās un otrās klases pasažieru sēdvietām. Katra pirmās klases pasažieru rinda satur četras sēdvietas. Katra otrās klases pasažieru rinda satur piecas sēdvietas.",
-	"Plane.instructions": "Izveidojiet formulu (zemāk), kas aprēķina kopējo sēdvietu skaitu lidmašīnā, ja rindas tiek mainītas (augšējā attēlā)."
+	"Code.trashTooltip": "Izmest visus blokus."
 }

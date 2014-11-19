@@ -7,17 +7,17 @@
  * included apps subdirectories.  If building on Windows, you may need to
  * substitute '\' for '/'.
  *
- * java -jar _soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf --srcs common.soy,code/template.soy,plane/template.soy,index/template.soy
+ * java -jar _soy/SoyMsgExtractor.jar --outputFile extracted_msgs.xlf --srcs common.soy,code/template.soy
  *
  * Create en.json, keys.json, and qqq.json.
- * ../i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy {code,index,plane}/template.soy
+ * ../i18n/xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy code/template.soy
  * or in Windows:
- * python ..\i18n\xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy code\template.soy index\template.soy plane\template.soy
+ * python ..\i18n\xliff_to_json.py --xlf extracted_msgs.xlf --templates common.soy code\template.soy
  *
- * Generate .js files for each project and the index:
- * for i in code index plane; do ../i18n/json_to_js.py --output_dir=$i/generated --template common.soy,$i/template.soy json/*.json; done
+ * Generate .js files for code app:
+ * ../i18n/json_to_js.py --output_dir=code/generated --template common.soy,code/template.soy json/*.json
  * or in Windows:
- * FOR %i IN (code index plane) DO python ..\i18n\json_to_js.py --output_dir=%i\generated --template common.soy,%i\template.soy json\*.json
+ * python ..\i18n\json_to_js.py --output_dir=code\generated --template common.soy,code\template.soy json\*.json
  */
 
 /**
@@ -34,7 +34,7 @@
     // (case-insensitive) or identical to the one in this file (not
     // recommended), or an error will be raised during generation of qqq.json.
     // The source-language text in the applications' definitions is ignored.
-    <span id="blocklyMessage">{msg meaning="Apps.blocklyMessage" desc="The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (Блoкли)'."}Blockly{/msg}</span>
+    <span id="blocklyMessage">{msg meaning="Blockly" desc="The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (Блoкли)'."}Blockly{/msg}</span>
 
     // Buttons and tooltips.
     <span id="codeTooltip">{msg meaning="Apps.codeTooltip" desc="tooltip - Pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user."}See generated JavaScript code.{/msg}</span>

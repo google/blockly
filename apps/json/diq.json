@@ -7,7 +7,7 @@
 		]
 	},
 	"Apps.subtitle": "yew grafikê programkerdışê dormey",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Kodê JavaScriptê vıraştey bımocne.",
 	"Apps.linkTooltip": "Qeyd ke û be blokan ra gıre de.",
 	"Apps.runTooltip": "Cayê kari de programo ke terefê blokan ra name biyo, ey bıgurene.",
@@ -31,15 +31,5 @@
 	"Code.badCode": "Xeta programi:%1",
 	"Code.title": "Kod",
 	"Code.blocks": "Bloki",
-	"Code.trashTooltip": "Blokan hemın çek",
-	"Plane.plane": "Hesabkerdoğê Cayê Tiyarey",
-	"Plane.rows": "Rêzi: %1",
-	"Plane.getRows": "rêzi(%1)",
-	"Plane.rows1": "Rêzê sınıfa verêne: %1",
-	"Plane.getRows1": "Rêzê sınıfa verêne (%1)",
-	"Plane.rows2": "Rêzê sınıfa dıyıne: %1",
-	"Plane.getRows2": "Rêzê sınıfa dıyıne (%1)",
-	"Plane.seats": "Paldangi: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "iskemey ="
+	"Code.trashTooltip": "Blokan hemın çek"
 }

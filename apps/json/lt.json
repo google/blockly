@@ -8,7 +8,7 @@
 		]
 	},
 	"Apps.subtitle": "vizualus programavimas",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Peržiūrėti atitinkantį JavaScript kodą.",
 	"Apps.linkTooltip": "Išsaugoti (sugeneruoti URL nuorodą).",
 	"Apps.runTooltip": "Vykdyti programą.",
@@ -35,16 +35,5 @@
 	"Code.discard": "Ar ištrinti visus %1 blokus?",
 	"Code.title": "Kodas",
 	"Code.blocks": "Blokai",
-	"Code.trashTooltip": "Pašalinti visus blokus.",
-	"Apps.indexTitle": "Blocky programėlės",
-	"Apps.indexFooter": "Blocky yra atviro kodo sistema. Norintys prisidėti ar naudoti, žr. %1.",
-	"Apps.choiceIntro": "Blocky yra vizuali programavimo aplinka. Žemiau yra keli pritaikymo pavyzdžiai.",
-	"Apps.codeSubtitle": "Eksportuokite Blocky programą į JavaScript, Python, Dart arba XML.",
-	"Plane.plane": "Lėktuvo sėdimų vietų skaičiuoklė",
-	"Apps.planeSubtitle": "Išspręskite lygtį - užrašykite atsakymo formulę pagal turimus duomenis.",
-	"Plane.rows": "Eilutės: %1",
-	"Plane.getRows": "eilutės (%1)",
-	"Plane.seats": "Vietos: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "Vietos ="
+	"Code.trashTooltip": "Pašalinti visus blokus."
 }

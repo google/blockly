@@ -1,6 +1,6 @@
 {
 	"Apps.subtitle": "A short description of Blockly.",
-	"Apps.blocklyMessage": "The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (Блoкли)'.",
+	"Blockly": "The project name.  If readers of your language would know approximately how to pronounce 'Blockly', leave unchanged.  Otherwise, include a transliteration in parentheses, such as the Russian: 'Blockly (Блoкли)'.",
 	"Apps.codeTooltip": "tooltip - Pressing the button causes a program in the JavaScript computer language to be displayed, based on the program created by the user.",
 	"Apps.linkTooltip": "tooltip - Clicking on this button will cause the current program to be saved and for a URL to be shown to later retrieve it.",
 	"Apps.runTooltip": "tooltip - Pressing this button runs the computer program the user has written.",
@@ -28,24 +28,5 @@
 	"Code.discard": "alert - Message shown after the user clicks on the 'discard all' icon.  Selecting 'OK' (or the translated equivalent) causes all of the blocks to be discarded.  Selecting 'Cancel' prevents blocks from being deleted.\n\nParameters:\n* %1 - number of blocks to be deleted. It is always an integer greater than or equal to 2.",
 	"Code.title": "title - Title of this application, indicating that it is for writing arbitrary programs.\n{{Identical|Code}}",
 	"Code.blocks": "tab text - Displays and allows editing of the user's program as blocks.\n{{Identical|Blocks}}",
-	"Code.trashTooltip": "tooltip - Clicking on this causes the user program to be discarded.",
-	"Apps.indexTitle": "page text - The word 'Apps' is short for 'Applications'.  We chose it because it is more informal.  This and the following messages currently appear at [http://blockly-demo.appspot.com/static/apps/index.html].",
-	"Apps.indexFooter": "page text - Text appearing at the end of the page. Parameters:\n* %1 - the Blockly URL",
-	"Apps.choiceIntro": "page text - This appears before a list of Blockly apps. Please use the same term for 'Blockly' as in {{msg-blockly|Apps.blocklyMessage}}.",
-	"Apps.codeSubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/code/index.html Code application].",
-	"Plane.plane": "title - Specifies that this is Blockly's '''Plane''' (airplane) tutorial.  The word 'plane' was chosen over 'airplane' in English because it is shorter and less formal.",
-	"Apps.planeSubtitle": "page text - A subtitle describing Blockly's [https://blockly-demo.appspot.com/static/apps/plane/index.html Plane application].",
-	"Plane.rows": "page text - Total number of rows of seats on an airplane.\n\nParameters:\n* %1 - number of rows of seats on an airplane.  It is always an integer greater than or equal to zero.",
-	"Plane.getRows": "block text - The number of rows on the airplane, to be used in a mathematical equation, such as: 'seats = 4 x '''rows (5)''''.\n\nParameters:\n* %1 - number of rows of seats on an airplane.  It is always an integer greater than or equal to zero.",
-	"Plane.rows1": "page text - The number of rows of first-class seats on the airplane.  You can see the block at [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&level=3].\n\nParameters:\n* %1 - number of rows of first-class seats on an airplane.  It is always an integer greater than or equal to zero.",
-	"Plane.getRows1": "block text - The number of rows of first-class seats on the, to be used in a mathematical equation.  See [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&level=3].\n\nParameters:\n* %1 - number of rows of first-class seats on an airplane.  It is always an integer greater than or equal to zero.",
-	"Plane.rows2": "page text - The number of rows of second-class seats on the airplane.  %1 is an integer greater or equal to zero.  See [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&level=3].\n\nParameters:\n* %1 - number of rows of second-class seats on an airplane.  It is always an integer greater than or equal to zero.",
-	"Plane.getRows2": "block text - The number of rows of second-class (also called 'economy class') seats on the airplane, to be used in a mathematical expression.\n\nParameters:\n* %1 - number of rows of second-class seats on an airplane.  It is always an integer greater than or equal to zero.",
-	"Plane.seats": "page text - The total number of seats on the airplane.\n\nParameters:\n* %1 - number of seats on an airplane.  It is always either the next message or an integer greater than or equal to zero.",
-	"Plane.placeholder": "page text - A word or symbol indicating that this numeric value has not yet been determined.",
-	"Plane.setSeats": "block text - The first half of a mathematical equation determining the number of seats in an airplane, such as: ''''seats =''' 4 x rows'.",
-	"Plane.description1": "instructions - Note that in [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&level=1 this level], there is only one type of seat on the plane.",
-	"Plane.description2": "instructions - Note that in [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&level=2 this level], there are two types of seats on this plane.",
-	"Plane.description3": "instructions - Note that in [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&level=3 this level], there are three types of seats on this plane.  Be sure to use the same terms for '1st class' and '2nd class' as you did for the earlier messages.",
-	"Plane.instructions": "page text - This text appears below the airplane graphic and above the space for the user to create the formula.  The number of rows an the graphic may be changed by the user with a slider.  See [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&level=1] for a picture."
+	"Code.trashTooltip": "tooltip - Clicking on this causes the user program to be discarded."
 }

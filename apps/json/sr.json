@@ -5,7 +5,7 @@
 		]
 	},
 	"Apps.subtitle": "визуелно окружење за програмирање",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Погледајте генерисани JavaScript кôд.",
 	"Apps.linkTooltip": "Сачувајте и повежите са блоковима.",
 	"Apps.runTooltip": "Покрените програм заснован на блоковима у радном простору.",
@@ -33,18 +33,5 @@
 	"Code.discard": "Обрисати %1 блокова?",
 	"Code.title": "Кôд",
 	"Code.blocks": "Блокови",
-	"Code.trashTooltip": "Одбаците све блокове.",
-	"Apps.indexTitle": "Апликације Blockly-ја",
-	"Apps.indexFooter": "Blockly је слободан програм отвореног кода. Да бисте допринели његовом коду или преводу или користили га у својој апликацији, посетите %1.",
-	"Apps.choiceIntro": "Blockly је графичко окружење за програмирање. Испод су као пример дате неке апликације које користе Blockly.",
-	"Apps.codeSubtitle": "Извезите програм Blockly-ја у JavaScript, Python, Dart или XML.",
-	"Plane.plane": "Калкулатор места у авиону",
-	"Apps.planeSubtitle": "Решите математички проблем помоћу једне или две променљиве.",
-	"Plane.rows1": "Редови 1. класе: %1",
-	"Plane.getRows1": "Редови 1. класе (%1)",
-	"Plane.rows2": "Редови 2. класе: %1",
-	"Plane.getRows2": "Редови 2. класе (%1)",
-	"Plane.seats": "Седишта: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "места ="
+	"Code.trashTooltip": "Одбаците све блокове."
 }

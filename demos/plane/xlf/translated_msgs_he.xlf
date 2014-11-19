@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="SoyMsgBundle" datatype="x-soy-msg-bundle" source-language="en" target-language="he">
+    <body>
+      <trans-unit id="286555642257111053" datatype="html">
+        <source>Rows: %1</source>
+        <target>שורות: %1</target>
+      </trans-unit>
+      <trans-unit id="990695256953568910" datatype="html">
+        <source>seats =</source>
+        <target>מושבים =</target>
+      </trans-unit>
+      <trans-unit id="1327005465775917626" datatype="html">
+        <source>An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of 1st class and 2nd class passenger seats.  Each 1st class row contains four seats. Each 2nd class row contains five seats.</source>
+        <target>במטוס יש שני מושבים עבור הצוות (בשביל הטייס וטייס המשנה), ומספר שורות מושבים במחלקת הנוסעים הראשונה ובמחלקת הנוסעים השנייה. כל שורה במחלקה הראשונה מכילה ארבעה מושבים. כל שורה במחלקה השנייה מכילה חמישה מושבים.</target>
+      </trans-unit>
+      <trans-unit id="1649099567159388799" datatype="html">
+        <source>?</source>
+        <target>?</target>
+      </trans-unit>
+      <trans-unit id="3872872459414039837" datatype="html">
+        <source>Build a formula (below) that calculates the total number of seats on the airplane as the rows are changed (above).</source>
+        <target>בנה נוסחה (למטה) אשר תחשב את סך כל המושבים במטוס בהתאם לשינוי מספר השורות (למעלה).</target>
+      </trans-unit>
+      <trans-unit id="4755413400587385256" datatype="html">
+        <source>An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of passenger seats.  Each row contains four seats.</source>
+        <target>במטוס יש שני מושבים עבור הצוות (בשביל הטייס וטייס המשנה), ומספר שורות עם מושבי נוסעים. בכל שורה יש ארבעה מושבים.</target>
+      </trans-unit>
+      <trans-unit id="5622822520334788359" datatype="html">
+        <source>1st class rows (%1)</source>
+        <target>שורות במחלקה ראשונה (%1)</target>
+      </trans-unit>
+      <trans-unit id="6523489254328705062" datatype="html">
+        <source>2nd class rows: %1</source>
+        <target>שורות במחלקה שנייה: %1</target>
+      </trans-unit>
+      <trans-unit id="6636919311618748816" datatype="html">
+        <source>Seats: %1</source>
+        <target>מושבים: %1</target>
+      </trans-unit>
+      <trans-unit id="6646116297668869388" datatype="html">
+        <source>Plane Seat Calculator</source>
+        <target>מחשבון מושב במטוס</target>
+      </trans-unit>
+      <trans-unit id="7030918043298347994" datatype="html">
+        <source>rows (%1)</source>
+        <target>שורות (%1)</target>
+      </trans-unit>
+      <trans-unit id="7091637686507441682" datatype="html">
+        <source>1st class rows: %1</source>
+        <target>שורות במחלקה ראשונה: %1</target>
+      </trans-unit>
+      <trans-unit id="7784699858027886282" datatype="html">
+        <source>An airplane has a number of rows of passenger seats.  Each row contains four seats.</source>
+        <target>במטוס יש מספר שורות עם מושבי נוסעים. בכל שורה יש ארבעה מושבים.</target>
+      </trans-unit>
+      <trans-unit id="8347578891541780742" datatype="html">
+        <source>2nd class rows (%1)</source>
+        <target>שורות במחלקה שנייה: (%1)</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

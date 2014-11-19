@@ -5,7 +5,7 @@
 		]
 	},
 	"Apps.subtitle": "Tontolo fanoratam-pandaharana ara-pijery",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Hijery ny kaody JavaScript namboarina.",
 	"Apps.linkTooltip": "Hitahiry ary hampirohy amin'ny bolongana.",
 	"Apps.runTooltip": "Handefa ny fandaharana voafaritry ny bolongana ao amin'ny erana iasana.",
@@ -33,12 +33,5 @@
 	"Code.discard": "Hamafa ny bolongana %1?",
 	"Code.title": "Kaody",
 	"Code.blocks": "Bolongana",
-	"Code.trashTooltip": "Hanary ny bolongana rehetra.",
-	"Apps.indexTitle": "Fandaharana Blockly",
-	"Apps.indexFooter": "Malalaka ary open-souce i Blockly. Vangio %1 raha tia handray anjara amin'ny renifango na amin'ny dikan-teny.",
-	"Apps.choiceIntro": "Tontolo fanoratana fandaharana ara-tsary i Blockly. Eo ambany ireo santiônam-pandaharana mampiasa an'i Blockly.",
-	"Apps.codeSubtitle": "Hamoaka ny fandaharana Blockly amin'ny JavaScript, Python na XML.",
-	"Plane.plane": "Mpikajy sezam-piaramanidina",
-	"Apps.planeSubtitle": "Hamaha olana matematika mampiasa ova iray na roa.",
-	"Plane.setSeats": "seza ="
+	"Code.trashTooltip": "Hanary ny bolongana rehetra."
 }

@@ -5,7 +5,7 @@
 			"Subi"
 		]
 	},
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Ikusi sorturiko JavaScript kodea.",
 	"Apps.linkTooltip": "Gorde eta lotura sortu.",
 	"Apps.runProgram": "Programa exekutatu",
@@ -28,8 +28,5 @@
 	"Apps.textVariable": "testua",
 	"Code.title": "Kodea",
 	"Code.blocks": "Blokeak",
-	"Code.trashTooltip": "Bloke guztiak baztertu.",
-	"Plane.seats": "Eserlekuak: %1",
-	"Plane.placeholder": "?",
-	"Plane.setSeats": "eserlekuak ="
+	"Code.trashTooltip": "Bloke guztiak baztertu."
 }

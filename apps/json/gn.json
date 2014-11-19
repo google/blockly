@@ -5,7 +5,7 @@
 		]
 	},
 	"Apps.subtitle": "peteĩ techa myatyrõ hekoha",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Ehecha JavaScript mba'e apopyre.",
 	"Apps.linkTooltip": "Oñongatu ha ombojoaju vorekuéra.",
 	"Apps.runTooltip": "Pejapo pe jejaporã vorekuéra ohechauka akue tembiapo rendápe.",
@@ -22,6 +22,5 @@
 	"Apps.httpRequestError": "Peteĩ tekojepe'y ohechauka.",
 	"Apps.linkAlert": "Temboja'o nde vorekuéra ko joaju ndie:\n\n%1",
 	"Apps.listVariable": "tysýi",
-	"Apps.textVariable": "jehaipy",
-	"Plane.placeholder": "?"
+	"Apps.textVariable": "jehaipy"
 }

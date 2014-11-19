@@ -3,10 +3,18 @@
 <head>
   <meta charset="utf-8">
   <title>Blockly Apps</title>
-  <link rel="stylesheet" type="text/css" href="common.css">
   <style>
     body {
+      background-color: #fff;
+      font-family: sans-serif;
       margin: 0 10%;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    a:hover {
+      color: #f00;
     }
     td {
       padding: 1ex;
@@ -15,20 +23,30 @@
       border: none;
     }
   </style>
-  <script type="text/javascript" src="_soy/soyutils.js"></script>
-  <script type="text/javascript" src="common.js"></script>
-  <script type="text/javascript" src="index/index.js"></script>
 </head>
 <body>
-  <script type="text/javascript">
-    document.write(appsIndex.start({}, null,
-        {lang: BlocklyApps.LANG, langSrc: BlocklyApps.languagePack()}));
-    document.title = BlocklyApps.getMsg('indexTitle');
-    var match = /(.*)%1(.*)/.exec(BlocklyApps.getMsg('indexFooter'));
-    if (match && match.length == 3) {
-      document.getElementById('footer_prefix').textContent = match[1];
-      document.getElementById('footer_suffix').textContent = match[2];
-    }
-  </script>
+  <h1>Blockly Apps</h1>
+
+  <p>Blockly is a graphical programming environment. Below are some sample
+  applications that use Blockly.</p>
+
+  <table>
+    <tr>
+      <td>
+        <a href="code/index.html">
+          <img src="code/icon.png" height=80 width=100>
+        </a>
+      </td>
+      <td>
+        <div><a href="code/index.html">Code</a></div>
+        <div>Export a Blockly program into JavaScript, Python, Dart or XML.</div>
+      </td>
+    </tr>
+  </table>
+
+  <p>Blockly is free and open source. To contribute code or translations to
+  Blockly, or to use Blockly in your own app, visit
+  <a href="https://developers.google.com/blockly/">developers.google.com/blockly</a>.</p>
+
 </body>
 </html>

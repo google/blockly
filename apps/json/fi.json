@@ -6,7 +6,7 @@
 		]
 	},
 	"Apps.subtitle": "visuaalinen ohjelmointiympäristö",
-	"Apps.blocklyMessage": "Blockly",
+	"Blockly": "Blockly",
 	"Apps.codeTooltip": "Katso luotua JavaScript-koodia.",
 	"Apps.runProgram": "Suorita ohjelma",
 	"Apps.resetProgram": "Nollaa",

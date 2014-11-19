@@ -26,14 +26,6 @@ handlers:
 - url: /static/apps/code/(de|en|hu|vi|zh_tw)\.html
   static_files: redirect.html
   upload: redirect.html
-# Plane moved to index.html on 7 Aug 2013.
-- url: /static/apps/plane/plane\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Plane became language-agnostic on 20 Jul 2013.
-- url: /static/apps/plane/(1_|2_)?(en|hu|vi|vn)\.html
-  static_files: redirect.html
-  upload: redirect.html
 # Puzzle moved to Blockly Games on 15 Oct 2014.
 - url: /static/apps/puzzle/.*
   static_files: redirect.html
@@ -48,6 +40,10 @@ handlers:
   upload: redirect.html
 # Graph moved from apps to demos on 10 Nov 2014.
 - url: /static/apps/graph/.*
+  static_files: redirect.html
+  upload: redirect.html
+# Plane moved from apps to demos on 13 Nov 2014.
+- url: /static/apps/plane/.*
   static_files: redirect.html
   upload: redirect.html
 # Block Factory moved from apps to demos on 16 Oct 2014.

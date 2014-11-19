@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="SoyMsgBundle" datatype="x-soy-msg-bundle" xml:space="preserve" source-language="en">
+    <body>
+      <trans-unit id="286555642257111053" datatype="html">
+        <source>Rows: %1</source>
+        <note priority="1" from="description">page text - Total number of rows of seats on an airplane.\n\nParameters:\n* %1 - number of rows of seats on an airplane.  It is always an integer greater than or equal to zero.</note>
+        <note priority="1" from="meaning">Plane.rows</note>
+      </trans-unit>
+      <trans-unit id="990695256953568910" datatype="html">
+        <source>seats =</source>
+        <note priority="1" from="description">block text - The first half of a mathematical equation determining the number of seats in an airplane, such as: ''''seats =''' 4 x rows'.</note>
+        <note priority="1" from="meaning">Plane.setSeats</note>
+      </trans-unit>
+      <trans-unit id="1327005465775917626" datatype="html">
+        <source>An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of 1st class and 2nd class passenger seats.  Each 1st class row contains four seats. Each 2nd class row contains five seats.</source>
+        <note priority="1" from="description">instructions - Note that in [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&amp;level=3 this level], there are three types of seats on this plane.  Be sure to use the same terms for '1st class' and '2nd class' as you did for the earlier messages.</note>
+        <note priority="1" from="meaning">Plane.description3</note>
+      </trans-unit>
+      <trans-unit id="1649099567159388799" datatype="html">
+        <source>?</source>
+        <note priority="1" from="description">page text - A word or symbol indicating that this numeric value has not yet been determined.</note>
+        <note priority="1" from="meaning">Plane.placeholder</note>
+      </trans-unit>
+      <trans-unit id="3872872459414039837" datatype="html">
+        <source>Build a formula (below) that calculates the total number of seats on the airplane as the rows are changed (above).</source>
+        <note priority="1" from="description">page text - This text appears below the airplane graphic and above the space for the user to create the formula.  The number of rows an the graphic may be changed by the user with a slider.  See [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&amp;level=1] for a picture.</note>
+        <note priority="1" from="meaning">Plane.instructions</note>
+      </trans-unit>
+      <trans-unit id="4755413400587385256" datatype="html">
+        <source>An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of passenger seats.  Each row contains four seats.</source>
+        <note priority="1" from="description">instructions - Note that in [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&amp;level=2 this level], there are two types of seats on this plane.</note>
+        <note priority="1" from="meaning">Plane.description2</note>
+      </trans-unit>
+      <trans-unit id="5622822520334788359" datatype="html">
+        <source>1st class rows (%1)</source>
+        <note priority="1" from="description">block text - The number of rows of first-class seats on the, to be used in a mathematical equation.  See [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&amp;level=3].\n\nParameters:\n* %1 - number of rows of first-class seats on an airplane.  It is always an integer greater than or equal to zero.</note>
+        <note priority="1" from="meaning">Plane.getRows1</note>
+      </trans-unit>
+      <trans-unit id="6523489254328705062" datatype="html">
+        <source>2nd class rows: %1</source>
+        <note priority="1" from="description">page text - The number of rows of second-class seats on the airplane.  %1 is an integer greater or equal to zero.  See [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&amp;level=3].\n\nParameters:\n* %1 - number of rows of second-class seats on an airplane.  It is always an integer greater than or equal to zero.</note>
+        <note priority="1" from="meaning">Plane.rows2</note>
+      </trans-unit>
+      <trans-unit id="6636919311618748816" datatype="html">
+        <source>Seats: %1</source>
+        <note priority="1" from="description">page text - The total number of seats on the airplane.\n\nParameters:\n* %1 - number of seats on an airplane.  It is always either the next message or an integer greater than or equal to zero.</note>
+        <note priority="1" from="meaning">Plane.seats</note>
+      </trans-unit>
+      <trans-unit id="6646116297668869388" datatype="html">
+        <source>Plane Seat Calculator</source>
+        <note priority="1" from="description">title - Specifies that this is Blockly's '''Plane''' (airplane) tutorial.  The word 'plane' was chosen over 'airplane' in English because it is shorter and less formal.</note>
+        <note priority="1" from="meaning">Plane.plane</note>
+      </trans-unit>
+      <trans-unit id="7030918043298347994" datatype="html">
+        <source>rows (%1)</source>
+        <note priority="1" from="description">block text - The number of rows on the airplane, to be used in a mathematical equation, such as: 'seats = 4 x '''rows (5)''''.\n\nParameters:\n* %1 - number of rows of seats on an airplane.  It is always an integer greater than or equal to zero.</note>
+        <note priority="1" from="meaning">Plane.getRows</note>
+      </trans-unit>
+      <trans-unit id="7091637686507441682" datatype="html">
+        <source>1st class rows: %1</source>
+        <note priority="1" from="description">page text - The number of rows of first-class seats on the airplane.  You can see the block at [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&amp;level=3].\n\nParameters:\n* %1 - number of rows of first-class seats on an airplane.  It is always an integer greater than or equal to zero.</note>
+        <note priority="1" from="meaning">Plane.rows1</note>
+      </trans-unit>
+      <trans-unit id="7784699858027886282" datatype="html">
+        <source>An airplane has a number of rows of passenger seats.  Each row contains four seats.</source>
+        <note priority="1" from="description">instructions - Note that in [http://blockly-share.appspot.com/static/apps/plane/plane.html?lang=en&amp;level=1 this level], there is only one type of seat on the plane.</note>
+        <note priority="1" from="meaning">Plane.description1</note>
+      </trans-unit>
+      <trans-unit id="8347578891541780742" datatype="html">
+        <source>2nd class rows (%1)</source>
+        <note priority="1" from="description">block text - The number of rows of second-class (also called 'economy class') seats on the airplane, to be used in a mathematical expression.\n\nParameters:\n* %1 - number of rows of second-class seats on an airplane.  It is always an integer greater than or equal to zero.</note>
+        <note priority="1" from="meaning">Plane.getRows2</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

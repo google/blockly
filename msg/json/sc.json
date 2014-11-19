@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Via maxima"
+			"Via maxima",
+			"Taxandru"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -210,8 +211,8 @@
 	"TEXT_PRINT_TOOLTIP": "Scri su testu, numeru o àteru valori.",
 	"TEXT_PROMPT_TYPE_TEXT": "pregonta po su testu",
 	"TEXT_PROMPT_TYPE_NUMBER": "pregonta po unu numeru",
-	"TEXT_PROMPT_TOOLTIP_NUMBER": "Pregonta unu numeru a s'usuariu.",
-	"TEXT_PROMPT_TOOLTIP_TEXT": "Pregonta testu a s'usuariu.",
+	"TEXT_PROMPT_TOOLTIP_NUMBER": "Pregonta unu nùmeru a s'impitadore.",
+	"TEXT_PROMPT_TOOLTIP_TEXT": "Pregonta testu a s'impitadore.",
 	"LISTS_CREATE_EMPTY_TITLE": "fait una lista buida",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Torrat una lista, de longària 0, chena records de datus.",
 	"LISTS_CREATE_WITH_TOOLTIP": "Fait una lista cun calisiollat numeru de items.",
@@ -285,9 +286,9 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Fait una funtzioni cun output.",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Amonestu: Custa funtzioni tenit parametrus duplicaus.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
-	"PROCEDURES_CALLNORETURN_TOOLTIP": "Arròllia sa funtzioni '%1' cuncordada de s'usuariu.",
+	"PROCEDURES_CALLNORETURN_TOOLTIP": "Arròllia sa funtzione '%1' cuncordada dae s'impitadore.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
-	"PROCEDURES_CALLRETURN_TOOLTIP": "Arròllia sa funtzioni '%1' cuncordada de s'usuariu e imperandi s'output.",
+	"PROCEDURES_CALLRETURN_TOOLTIP": "Arròllia sa funtzione '%1' cuncordada dae s'impitadore e imprea s'output suu.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "inputs",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Aciungi, fùlia, o assenta is inputs a custa funtzioni.",
 	"PROCEDURES_MUTATORARG_TITLE": "nomini input:",

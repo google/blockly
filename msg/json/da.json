@@ -285,6 +285,7 @@
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Opretter en funktion der ikke har output.",
 	"PROCEDURES_DEFRETURN_RETURN": "returnér",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Opretter en funktion der har output.",
+	"PROCEDURES_ALLOW_STATEMENTS": "tillad erklæringer",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Advarsel: Denne funktion har dublerede parametre.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://da.wikipedia.org/wiki/Funktion_%28programmering%29",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Kør den brugerdefinerede funktion '%1'.",

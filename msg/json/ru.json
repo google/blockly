@@ -288,6 +288,7 @@
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Создаёт процедуру, не возвращающую значение.",
 	"PROCEDURES_DEFRETURN_RETURN": "вернуть",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Создаёт процедуру, возвращающую значение.",
+	"PROCEDURES_ALLOW_STATEMENTS": "разрешить операторы",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Предупреждение: эта функция имеет повторяющиеся параметры.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://ru.wikipedia.org/wiki/Функция_%28программирование%29",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Исполняет определённую пользователем процедуру '%1'.",

@@ -3,7 +3,8 @@
 		"authors": [
 			"Hym411",
 			"아라",
-			"Priviet"
+			"Priviet",
+			"Revi"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
@@ -317,6 +318,7 @@
 	"PROCEDURES_DEFRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFRETURN_RETURN": "다음을 돌려줌",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "실행 후, 결과 값을 돌려주는 함수를 만듭니다.",
+	"PROCEDURES_ALLOW_STATEMENTS": "서술 허가",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "경고: 이 함수에는, 같은 이름을 사용하는 매개 변수들이 있습니다.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_CALLNORETURN_CALL": "",

@@ -7,7 +7,8 @@
 			"Amgauna",
 			"TheGabrielZaum",
 			"Cainamarques",
-			"Tuliouel"
+			"Tuliouel",
+			"Rodrigo codignoli"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -187,11 +188,11 @@
 	"TEXT_ISEMPTY_TOOLTIP": "Retorna verdadeiro se o texto fornecido for vazio.",
 	"TEXT_INDEXOF_TOOLTIP": "Retorna a posição da primeira/última ocorrência do primeiro texto no segundo texto.  Retorna 0 se o texto não for encontrado.",
 	"TEXT_INDEXOF_INPUT_INTEXT": "no texto",
-	"TEXT_INDEXOF_OPERATOR_FIRST": "primeira ocorrência do texto",
-	"TEXT_INDEXOF_OPERATOR_LAST": "última ocorrência do texto",
+	"TEXT_INDEXOF_OPERATOR_FIRST": "encontre a primeira ocorrência do item",
+	"TEXT_INDEXOF_OPERATOR_LAST": "encontre a última ocorrência do texto",
 	"TEXT_CHARAT_INPUT_INTEXT": "no texto",
 	"TEXT_CHARAT_FROM_START": "obter letra nº",
-	"TEXT_CHARAT_FROM_END": "obter letra nº a partir do final",
+	"TEXT_CHARAT_FROM_END": "obter letra # a partir do final",
 	"TEXT_CHARAT_FIRST": "obter primeira letra",
 	"TEXT_CHARAT_LAST": "obter última letra",
 	"TEXT_CHARAT_RANDOM": "obter letra aleatória",
@@ -291,6 +292,7 @@
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Cria uma função que não tem retorno.",
 	"PROCEDURES_DEFRETURN_RETURN": "retorna",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Cria uma função que possui um valor de retorno.",
+	"PROCEDURES_ALLOW_STATEMENTS": "permitir declarações",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Atenção: Esta função tem parâmetros duplicados.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://pt.wikipedia.org/wiki/Sub-rotina",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Executa a função definida pelo usuário \"%1\".",

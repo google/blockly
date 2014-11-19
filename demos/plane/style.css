@@ -24,6 +24,25 @@ html[dir="RTL"] .farSide {
   border-radius: 20px;
 }
 
+/* Pulse the language menu once to draw attention to it. */
+#languageBorder {
+  border-radius: 4px;
+  animation: pulse 2s ease-in-out forwards;
+  -webkit-animation: pulse 2s ease-in-out forwards;
+  animation-delay: 2s;
+  -webkit-animation-delay: 2s;
+}
+@keyframes pulse {
+    0% { background-color: #fff }
+    50% { background-color: #f00 }
+    100% { background-color: #fff }
+}
+@-webkit-keyframes pulse {
+    0% { background-color: #fff }
+    50% { background-color: #f00 }
+    100% { background-color: #fff }
+}
+
 #blockly {
   height: 300px;
   width: 100%;

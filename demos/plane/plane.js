@@ -18,7 +18,7 @@
  */
 
 /**
- * @fileoverview JavaScript for Blockly's Plane Seat Calculator application.
+ * @fileoverview JavaScript for Blockly's Plane Seat Calculator demo.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';

@@ -10,44 +10,12 @@ handlers:
 - url: /blockly/.*
   static_files: redirect.html
   upload: redirect.html
-# Code, Maze and Turtle moved from demos to apps on 29 Dec 2012.
+# Code, Maze and Turtle moved from demos on 29 Dec 2012.
 - url: /static/demos/(code|maze|turtle)/.*
   static_files: redirect.html
   upload: redirect.html
-# Vietnamese apps moved from vn to vi on 9 Jun 2012.
-- url: /static/apps/.+/vn\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Code moved to index.html on 7 Aug 2013.
-- url: /static/apps/code/code\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Code became language-agnostic on 20 Jul 2013.
-- url: /static/apps/code/(de|en|hu|vi|zh_tw)\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Puzzle moved to Blockly Games on 15 Oct 2014.
-- url: /static/apps/puzzle/.*
-  static_files: redirect.html
-  upload: redirect.html
-# Maze moved to Blockly Games on 10 Nov 2014.
-- url: /static/apps/maze/.*
-  static_files: redirect.html
-  upload: redirect.html
-# Turtle moved to Blockly Games on 10 Nov 2014.
-- url: /static/apps/turtle/.*
-  static_files: redirect.html
-  upload: redirect.html
-# Graph moved from apps to demos on 10 Nov 2014.
-- url: /static/apps/graph/.*
-  static_files: redirect.html
-  upload: redirect.html
-# Plane moved from apps to demos on 13 Nov 2014.
-- url: /static/apps/plane/.*
-  static_files: redirect.html
-  upload: redirect.html
-# Block Factory moved from apps to demos on 16 Oct 2014.
-- url: /static/apps/blockfactory/.*
+# Apps was disbanded on 20 Nov 2014.
+- url: /static/apps/.*
   static_files: redirect.html
   upload: redirect.html
 

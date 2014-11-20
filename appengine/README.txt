@@ -18,7 +18,6 @@ blockly/
  |- storage.py
  |- closure-library/  (Optional)
  `- static/
-     |- apps/
      |- blocks/
      |- core/
      |- demos/

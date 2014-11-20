@@ -23,7 +23,6 @@ if (loc.match('/apps/code/code.html')) {
   // Code moved to index.html on 7 Aug 2013.
   loc = loc.replace('/code.html', '/index.html');
 } else if (loc.match('/apps/code/zh_tw.html')) {
-  // Code became language-agnostic on 20 Jul 2013.
   // zh-tw was changed to zh-hans on 25 Nov 2013.
   loc = loc.replace('/zh_tw.html', '/index.html?lang=zh-hans');
 } else if (loc.match('/apps/code/index.html')) {
@@ -57,16 +56,8 @@ if (loc.match('/apps/puzzle/')) {
 } else if (loc.match('/apps/turtle/')) {
   // Turtle moved to Blockly Games on 10 Nov 2014.
   loc = 'https://blockly-games.appspot.com/turtle';
-}
-
-if (loc.match('/apps/graph/')) {
-  // Graph moved from apps to demos on 10 Nov 2014.
-  loc = loc.replace('/apps/', '/demos/');
-} else if (loc.match('/apps/plane/')) {
-  // Graph moved from apps to demos on 10 Nov 2014.
-  loc = loc.replace('/apps/', '/demos/');
-} else if (loc.match('/apps/blockfactory/')) {
-  // Block Factory moved from apps to demos on 16 Oct 2014.
+} else if (loc.match('/apps/')) {
+  // Remaining apps moved to demos on 20 Nov 2014.
   loc = loc.replace('/apps/', '/demos/');
 }
 

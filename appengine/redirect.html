@@ -9,8 +9,8 @@ if (loc.match('/blockly/')) {
   loc = loc.replace('/blockly/', '/static/');
 }
 
-// Code, Maze and Turtle moved from demos to apps on 29 Dec 2012.
-if (loc.match(/\/demos\/(code|maze|turtle)\//)) {
+// Maze and Turtle moved from demos to apps on 29 Dec 2012.
+if (loc.match(/\/demos\/(maze|turtle)\//)) {
   loc = loc.replace('/demos/', '/apps/');
 }
 
@@ -19,7 +19,7 @@ if (loc.match('/vn.html')) {
   loc = loc.replace('/vn.html', '/vi.html');
 }
 
-if (loc.match('/apps/code/code.html')) {
+if (loc.match('/code/code.html')) {
   // Code moved to index.html on 7 Aug 2013.
   loc = loc.replace('/code.html', '/index.html');
 } else if (loc.match('/apps/code/zh_tw.html')) {

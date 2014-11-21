@@ -11,7 +11,7 @@ handlers:
   static_files: redirect.html
   upload: redirect.html
 # Code, Maze and Turtle moved from demos on 29 Dec 2012.
-- url: /static/demos/(code|maze|turtle)/.*
+- url: /static/demos/(maze|turtle)/.*
   static_files: redirect.html
   upload: redirect.html
 # Apps was disbanded on 20 Nov 2014.

@@ -338,7 +338,7 @@ Code.init = function() {
     BlocklyStorage['LINK_ALERT'] = MSG['linkAlert'];
     BlocklyStorage['HASH_ERROR'] = MSG['hashError'];
     BlocklyStorage['XML_ERROR'] = MSG['xmlError'];
-    BlocklyApps.bindClick(linkButton, BlocklyStorage.link);
+    Code.bindClick(linkButton, BlocklyStorage.link);
   } else if (linkButton) {
     linkButton.className = 'disabled';
   }

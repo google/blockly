@@ -32,7 +32,6 @@ var Code = {};
  * Lookup for names of supported languages.  Keys should be in ISO 639 format.
  */
 Code.LANGUAGE_NAME = {
-  'ace': 'بهسا اچيه',
   'ar': 'العربية',
   'be-tarask': 'Taraškievica',
   'br': 'Brezhoneg',
@@ -45,7 +44,6 @@ Code.LANGUAGE_NAME = {
   'es': 'Español',
   'fa': 'فارسی',
   'fr': 'Français',
-  'gl': 'Galego',
   'he': 'עברית',
   'hrx': 'Hunsrik',
   'hu': 'Magyar',
@@ -54,8 +52,6 @@ Code.LANGUAGE_NAME = {
   'it': 'Italiano',
   'ja': '日本語',
   'ko': '한국어',
-  'lv': 'Latviešu',
-  'mg': 'Malagasy',
   'mk': 'Македонски',
   'ms': 'Bahasa Melayu',
   'nb': 'Norsk Bokmål',
@@ -67,7 +63,6 @@ Code.LANGUAGE_NAME = {
   'ro': 'Română',
   'ru': 'Русский',
   'sc': 'Sardu',
-  'sco': 'Scots',
   'sk': 'Slovenčina',
   'sr': 'Српски',
   'sv': 'Svenska',
@@ -83,7 +78,7 @@ Code.LANGUAGE_NAME = {
 /**
  * List of RTL languages.
  */
-Code.LANGUAGE_RTL = ['ace', 'ar', 'fa', 'he'];
+Code.LANGUAGE_RTL = ['ar', 'fa', 'he'];
 
 /**
  * Extracts a parameter from the URL.

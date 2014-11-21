@@ -9,25 +9,13 @@
   <script type="text/javascript" src="../../javascript_compressed.js"></script>
   <script type="text/javascript" src="../../msg/js/en.js"></script>
   <style>
-    html, body {
-      height: 100%;
-    }
     body {
       background-color: #fff;
       font-family: sans-serif;
-      overflow: hidden;
     }
     h1 {
       font-weight: normal;
       font-size: 140%;
-    }
-    #blocklyDiv {
-      float: right;
-      height: 95%;
-      width: 70%;
-    }
-    #visualization {
-      width: 400px;
     }
     #funcText {
       margin-top: 1em;
@@ -46,8 +34,6 @@
   </style>
 </head>
 <body>
-  <div id="blocklyDiv"></div>
-
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Graph</h1>
 
@@ -55,7 +41,16 @@
 
   <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/code-generators#realtime_generation">Realtime generation</a>...</p>
 
-  <div id="visualization"></div>
+  <table>
+    <tr>
+      <td>
+        <div id="visualization" style="width: 400px"></div>
+      </td>
+      <td>
+        <div id="blocklyDiv" style="height: 400px"></div>
+      </td>
+    </tr>
+  </table>
 
   <div id="funcText">
     <img id="y1" src="../../media/1x1.gif">
@@ -257,6 +252,14 @@ Graph.plot = function(code) {
 };
 
 /**
+ * Force Blockly to resize into the available width.
+ */
+Graph.resize = function() {
+  var width = Math.max(window.innerWidth - 440, 250);
+  document.getElementById('blocklyDiv').style.width = width + 'px';
+};
+
+/**
  * Initialize Blockly and the graph.  Called on page load.
  */
 Graph.init = function() {
@@ -270,6 +273,7 @@ Graph.init = function() {
 }
 
 window.addEventListener('load', Graph.init);
+window.addEventListener('resize', Graph.resize);
   </script>
 
 </body>

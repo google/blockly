@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('goog.math');
 goog.require('goog.Timer');
 
 
@@ -122,11 +123,11 @@ Blockly.Trashcan.prototype.svgLid_ = null;
 Blockly.Trashcan.prototype.lidTask_ = 0;
 
 /**
- * Current angle of the lid.
+ * Current state of lid opening (0.0 = closed, 1.0 = open).
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.lidAngle_ = 0;
+Blockly.Trashcan.prototype.lidOpen_ = 0;
 
 /**
  * Left coordinate of the trash can.
@@ -186,6 +187,7 @@ Blockly.Trashcan.prototype.createDom = function() {
   this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       Blockly.pathToMedia + Blockly.SPRITE.url);
 
+  this.animateLid_();
   return this.svgGroup_;
 };
 
@@ -283,14 +285,17 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
  * @private
  */
 Blockly.Trashcan.prototype.animateLid_ = function() {
-  this.lidAngle_ += this.isOpen ? 10 : -10;
-  this.lidAngle_ = Math.max(0, this.lidAngle_);
+  this.lidOpen_ += this.isOpen ? 0.2 : -0.2;
+  this.lidOpen_ = goog.math.clamp(this.lidOpen_, 0, 1);
+  var lidAngle = this.lidOpen_ * 45;
   this.svgLid_.setAttribute('transform', 'rotate(' +
-      (Blockly.RTL ? -this.lidAngle_ : this.lidAngle_) + ', ' +
+      (Blockly.RTL ? -lidAngle : lidAngle) + ', ' +
       (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
       (this.LID_HEIGHT_ - 2) + ')');
-  if (this.isOpen ? (this.lidAngle_ < 45) : (this.lidAngle_ > 0)) {
-    this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 5, this);
+  var opacity  = goog.math.lerp(0.2, 0.4, this.lidOpen_);
+  this.svgGroup_.style.opacity = opacity;
+  if (this.lidOpen_ > 0 || this.lidOpen_ < 1) {
+    this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 20, this);
   }
 };
 

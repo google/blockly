@@ -31,6 +31,7 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Xml');
+goog.require('goog.math');
 
 
 /**
@@ -211,7 +212,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
-    var offset = Math.sin(Blockly.Workspace.SCAN_ANGLE / 180 * Math.PI);
+    var offset = Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (Blockly.RTL) {
       offset *= -1;
     }

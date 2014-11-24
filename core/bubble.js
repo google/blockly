@@ -27,6 +27,7 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.Workspace');
+goog.require('goog.math');
 
 
 /**
@@ -48,7 +49,7 @@ Blockly.Bubble = function(workspace, content, shape,
   if (Blockly.RTL) {
     angle = -angle;
   }
-  this.arrow_radians_ = angle / 360 * Math.PI * 2;
+  this.arrow_radians_ = goog.math.toRadians(angle);
 
   this.workspace_ = workspace;
   this.content_ = content;

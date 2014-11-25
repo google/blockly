@@ -346,6 +346,12 @@ Blockly.Css.CONTENT = [
   '  background-color: #e4e4e4;',
   '}',
 
+  '.blocklyTreeSeparator {',
+  '  height: 0px;',
+  '  border-bottom: solid #e5e5e5 1px;',
+  '  margin: 5px 0;',
+  '}',
+
   '.blocklyTreeIcon {',
   '  height: 16px;',
   '  width: 16px;',

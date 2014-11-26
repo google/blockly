@@ -278,6 +278,8 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
   goog.Timer.clear(this.lidTask_);
   this.isOpen = state;
   this.animateLid_();
+  Blockly.Css.setCursor(state ? Blockly.Css.Cursor.DELETE :
+                        Blockly.Css.Cursor.CLOSED);
 };
 
 /**

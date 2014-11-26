@@ -28,6 +28,29 @@ goog.provide('Blockly.Css');
 
 goog.require('goog.cssom');
 
+/**
+ * List of cursors.
+ * @enum {string}
+ */
+Blockly.Css.Cursor = {
+  OPEN: 'handopen',
+  CLOSED: 'handclosed',
+  DELETE: 'handdelete'
+};
+
+/**
+ * Large stylesheet added by Blockly.Css.inject.
+ * @type Element
+ * @private
+ */
+Blockly.Css.styleSheet_ = null;
+
+/**
+ * Path to media directory, with any trailing slash removed.
+ * @type string
+ * @private
+ */
+Blockly.Css.mediaPath_ = '';
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
@@ -39,15 +62,46 @@ goog.require('goog.cssom');
 Blockly.Css.inject = function() {
   var text = Blockly.Css.CONTENT.join('\n');
   // Strip off any trailing slash (either Unix or Windows).
-  var path = Blockly.pathToMedia.replace(/[\\\/]$/, '');
-  text = text.replace(/<<<PATH>>>/g, path);
+  Blockly.Css.mediaPath_ = Blockly.pathToMedia.replace(/[\\\/]$/, '');
+  text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
   goog.cssom.addCssText(text);
+  var sheets = goog.cssom.getAllCssStyleSheets();
+  Blockly.Css.styleSheet_ = sheets[sheets.length - 1];
+  Blockly.Css.setCursor('handopen');
+};
+
+/**
+ * Set the cursor to be displayed when over something draggable.
+ * @param {Blockly.Cursor} cursor Enum.
+ */
+Blockly.Css.setCursor = function(cursor) {
+  if (Blockly.readOnly) {
+    return;
+  }
+  /*
+    Hotspot coordinates are baked into the CUR file, but they are still
+    required in the CSS due to a Chrome bug.
+    https://code.google.com/p/chromium/issues/detail?id=1446
+  */
+  if (cursor == Blockly.Css.Cursor.OPEN) {
+    var xy = '8 5';
+  } else {
+    var xy = '7 3';
+  }
+  var rule = '.blocklyDraggable {\n' +
+      '  cursor: url(' + Blockly.Css.mediaPath_ + '/' + cursor + '.cur)' +
+      ' ' + xy + ', auto;\n}\n';
+  goog.cssom.replaceCssRule('', rule, Blockly.Css.styleSheet_, 0);
 };
 
 /**
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
+  '.blocklyDraggable {',
+    // Placeholder for cursor rule.  Must be first rule (index 0).
+  '}',
+
   '.blocklySvg {',
   '  background-color: #fff;',
   '  border: 1px solid #ddd;',
@@ -58,15 +112,6 @@ Blockly.Css.CONTENT = [
   '  position: absolute;',
   '  display: none;',
   '  z-index: 999;',
-  '}',
-
-  '.blocklyDraggable {',
-    /*
-      Hotspot coordinates are baked into the CUR file, but they are still
-      required in the CSS due to a Chrome bug.
-      https://code.google.com/p/chromium/issues/detail?id=1446
-    */
-  '  cursor: url(<<<PATH>>>/handopen.cur) 8 5, auto;',
   '}',
 
   '.blocklyResizeSE {',

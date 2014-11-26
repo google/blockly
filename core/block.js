@@ -518,7 +518,7 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
   } else {
     // Left-click (or middle click)
     Blockly.removeAllRanges();
-    Blockly.setCursorHand_(true);
+    Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
     // Look up the current translation and record it.
     var xy = this.getRelativeToSurfaceXY();
     this.startDragX = xy.x;

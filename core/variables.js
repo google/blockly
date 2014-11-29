@@ -30,7 +30,6 @@ goog.provide('Blockly.Variables');
 
 // TODO(scr): Fix circular dependencies
 // goog.require('Blockly.Block');
-goog.require('Blockly.Toolbox');
 goog.require('Blockly.Workspace');
 
 

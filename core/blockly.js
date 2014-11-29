@@ -512,8 +512,10 @@ Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   if (!opt_allowToolbox &&
-      Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
-    Blockly.Toolbox.clearSelection();
+      Blockly.mainWorkspace.toolbox_ &&
+      Blockly.mainWorkspace.toolbox_.flyout_ &&
+      Blockly.mainWorkspace.toolbox_.flyout_.autoClose) {
+    Blockly.mainWorkspace.toolbox_.clearSelection();
   }
 };
 
@@ -638,7 +640,9 @@ Blockly.playAudio = function(name, opt_volume) {
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize();
-  svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
+  if (Blockly.mainWorkspace.toolbox_) {
+    svgSize.width -= Blockly.mainWorkspace.toolbox_.width;
+  }
   var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
   var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
   try {
@@ -664,7 +668,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var topEdge = blockBox.y;
     var bottomEdge = topEdge + blockBox.height;
   }
-  var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
+  var absoluteLeft = 0;
+  if (!Blockly.RTL && Blockly.mainWorkspace.toolbox_) {
+    absoluteLeft = Blockly.mainWorkspace.toolbox_.width;
+  }
   var metrics = {
     viewHeight: svgSize.height,
     viewWidth: svgSize.width,

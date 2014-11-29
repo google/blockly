@@ -27,6 +27,7 @@
 goog.provide('Blockly.Trashcan');
 
 goog.require('goog.math');
+goog.require('goog.math.Rect');
 goog.require('goog.Timer');
 
 
@@ -238,32 +239,16 @@ Blockly.Trashcan.prototype.position_ = function() {
 };
 
 /**
- * Determines if the mouse is currently over the trash can.
- * Opens/closes the lid and sets the isOpen flag.
- * @param {!Event} e Mouse move event.
+ * Return the deletion rectangle for this trashcan.
+ * @return {goog.math.Rect} Rectangle in which to delete.
  */
-Blockly.Trashcan.prototype.onMouseMove = function(e) {
-  /*
-  An alternative approach would be to use onMouseOver and onMouseOut events.
-  However the selected block will be between the mouse and the trash can,
-  thus these events won't fire.
-  Another approach is to use HTML5's drag & drop API, but it's widely hated.
-  Instead, we'll just have the block's drag_ function call us.
-  */
-  if (!this.svgGroup_) {
-    return;
-  }
-  var mouseXY = Blockly.mouseToSvg(e);
+Blockly.Trashcan.prototype.getRect = function() {
   var trashXY = Blockly.getSvgXY_(this.svgGroup_);
-  var over = (mouseXY.x > trashXY.x - this.MARGIN_HOTSPOT_) &&
-             (mouseXY.x < trashXY.x + this.WIDTH_ + this.MARGIN_HOTSPOT_) &&
-             (mouseXY.y > trashXY.y - this.MARGIN_HOTSPOT_) &&
-             (mouseXY.y < trashXY.y + this.BODY_HEIGHT_ + this.LID_HEIGHT_ +
-              this.MARGIN_HOTSPOT_);
-  // For bonus points we might want to match the trapezoidal outline.
-  if (this.isOpen != over) {
-    this.setOpen_(over);
-  }
+  return new goog.math.Rect(
+      trashXY.x - this.MARGIN_HOTSPOT_,
+      trashXY.y - this.MARGIN_HOTSPOT_,
+      this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_,
+      this.BODY_HEIGHT_ + this.LID_HEIGHT_ + 2 * this.MARGIN_HOTSPOT_);
 };
 
 /**
@@ -278,8 +263,6 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
   goog.Timer.clear(this.lidTask_);
   this.isOpen = state;
   this.animateLid_();
-  Blockly.Css.setCursor(state ? Blockly.Css.Cursor.DELETE :
-                        Blockly.Css.Cursor.CLOSED);
 };
 
 /**

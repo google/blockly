@@ -300,6 +300,7 @@ Blockly.Block.terminateDrag_ = function() {
     selected.workspace.fireChangeEvent();
   }
   Blockly.Block.dragMode_ = 0;
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
 
 /**
@@ -557,7 +558,6 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
 Blockly.Block.prototype.onMouseUp_ = function(e) {
   var this_ = this;
   Blockly.doCommand(function() {
-    Blockly.terminateDrag_();
     if (Blockly.selected && Blockly.highlightedConnection_) {
       // Connect two blocks together.
       Blockly.localConnection_.connect(Blockly.highlightedConnection_);
@@ -572,13 +572,15 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
         }
         inferiorConnection.sourceBlock_.svg_.connectionUiEffect();
       }
-      if (this_.workspace.trashcan && this_.workspace.trashcan.isOpen) {
+      if (this_.workspace.trashcan) {
         // Don't throw an object in the trash can if it just got connected.
         this_.workspace.trashcan.close();
       }
-    } else if (this_.workspace.trashcan && this_.workspace.trashcan.isOpen) {
+    } else if (this_.workspace.isDeleteArea(e)) {
       var trashcan = this_.workspace.trashcan;
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+      if (trashcan) {
+        goog.Timer.callOnce(trashcan.close, 100, trashcan);
+      }
       Blockly.selected.dispose(false, true);
       // Dropping a block on the trash can will usually cause the workspace to
       // resize to contain the newly positioned block.  Force a second resize
@@ -589,6 +591,7 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
       Blockly.highlightedConnection_.unhighlight();
       Blockly.highlightedConnection_ = null;
     }
+    Blockly.terminateDrag_();
   });
 };
 
@@ -862,6 +865,7 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         // Push this block to the very top of the stack.
         this_.setParent(null);
         this_.setDragging_(true);
+        this_.workspace.recordDeleteAreas();
       }
     }
     if (Blockly.Block.dragMode_ == 2) {
@@ -907,9 +911,10 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         Blockly.highlightedConnection_ = closestConnection;
         Blockly.localConnection_ = localConnection;
       }
-      // Flip the trash can lid if needed.
-      if (this_.workspace.trashcan && this_.isDeletable()) {
-        this_.workspace.trashcan.onMouseMove(e);
+      // Provide visual indication of whether the block will be deleted if
+      // dropped here.
+      if (this_.isDeletable()) {
+        this_.workspace.isDeleteArea(e);
       }
     }
     // This event has been handled.  No need to bubble up to the document.

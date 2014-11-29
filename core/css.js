@@ -28,6 +28,7 @@ goog.provide('Blockly.Css');
 
 goog.require('goog.cssom');
 
+
 /**
  * List of cursors.
  * @enum {string}
@@ -37,6 +38,12 @@ Blockly.Css.Cursor = {
   CLOSED: 'handclosed',
   DELETE: 'handdelete'
 };
+
+/**
+ * Current cursor (cached value).
+ * @type string
+ */
+Blockly.Css.currentCursor_ = '';
 
 /**
  * Large stylesheet added by Blockly.Css.inject.
@@ -75,9 +82,10 @@ Blockly.Css.inject = function() {
  * @param {Blockly.Cursor} cursor Enum.
  */
 Blockly.Css.setCursor = function(cursor) {
-  if (Blockly.readOnly) {
+  if (Blockly.readOnly || Blockly.Css.currentCursor_ == cursor) {
     return;
   }
+  Blockly.Css.currentCursor_ = cursor;
   /*
     Hotspot coordinates are baked into the CUR file, but they are still
     required in the CSS due to a Chrome bug.
@@ -88,10 +96,19 @@ Blockly.Css.setCursor = function(cursor) {
   } else {
     var xy = '7 3';
   }
-  var rule = '.blocklyDraggable {\n' +
-      '  cursor: url(' + Blockly.Css.mediaPath_ + '/' + cursor + '.cur)' +
-      ' ' + xy + ', auto;\n}\n';
+  var url = 'url(' + Blockly.Css.mediaPath_ + '/' + cursor +
+      '.cur) ' + xy + ', auto';
+  var rule = '.blocklyDraggable {\n  cursor: ' + url + ';\n}\n';
   goog.cssom.replaceCssRule('', rule, Blockly.Css.styleSheet_, 0);
+  if (Blockly.svg) {
+    // Set cursor on the SVG surface as well, so that rapid movements
+    // don't result in cursor changing to an arrow momentarily.
+    if (cursor == Blockly.Css.Cursor.OPEN) {
+      Blockly.svg.style.cursor = '';
+    } else {
+      Blockly.svg.style.cursor = url;
+    }
+  }
 };
 
 /**

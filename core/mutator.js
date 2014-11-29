@@ -118,9 +118,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   var mutator = this;
   this.workspace_ = new Blockly.Workspace(
       function() {return mutator.getFlyoutMetrics_();}, null);
-  this.flyout_ = new Blockly.Flyout();
-  this.flyout_.autoClose = false;
-  this.svgDialog_.appendChild(this.flyout_.createDom());
+  this.workspace_.flyout_ = new Blockly.Flyout();
+  this.workspace_.flyout_.autoClose = false;
+  this.svgDialog_.appendChild(this.workspace_.flyout_.createDom());
   this.svgDialog_.appendChild(this.workspace_.createDom());
   return this.svgDialog_;
 };
@@ -148,7 +148,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
 Blockly.Mutator.prototype.resizeBubble_ = function() {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
   var workspaceSize = this.workspace_.getCanvas().getBBox();
-  var flyoutMetrics = this.flyout_.getMetrics_();
+  var flyoutMetrics = this.workspace_.flyout_.getMetrics_();
   var width;
   if (Blockly.RTL) {
     width = -workspaceSize.x;
@@ -193,8 +193,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         this.createEditor_(), this.block_.svg_.svgPath_,
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
-    this.flyout_.init(this.workspace_);
-    this.flyout_.show(this.quarkXml_);
+    this.workspace_.flyout_.init(this.workspace_);
+    this.workspace_.flyout_.show(this.quarkXml_);
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
     var blocks = this.rootBlock_.getDescendants();
@@ -204,8 +204,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // The root block should not be dragable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
-    var margin = this.flyout_.CORNER_RADIUS * 2;
-    var x = this.flyout_.width_ + margin;
+    var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
+    var x = this.workspace_.flyout_.width_ + margin;
     if (Blockly.RTL) {
       x = -x;
     }
@@ -226,8 +226,6 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
   } else {
     // Dispose of the bubble.
     this.svgDialog_ = null;
-    this.flyout_.dispose();
-    this.flyout_ = null;
     this.workspace_.dispose();
     this.workspace_ = null;
     this.rootBlock_ = null;
@@ -244,7 +242,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
 
 /**
  * Update the source block when the mutator's blocks are changed.
- * Delete or bump any block that's out of bounds.
+ * Bump down any block that's too high.
  * Fired whenever a change is made to the mutator's workspace.
  * @private
  */
@@ -255,12 +253,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     for (var b = 0, block; block = blocks[b]; b++) {
       var blockXY = block.getRelativeToSurfaceXY();
       var blockHW = block.getHeightWidth();
-      if (block.isDeletable() && (Blockly.RTL ?
-            blockXY.x > -this.flyout_.width_ + MARGIN :
-            blockXY.x < this.flyout_.width_ - MARGIN)) {
-        // Delete any block that's sitting on top of the flyout.
-        block.dispose(false, true);
-      } else if (blockXY.y + blockHW.height < MARGIN) {
+      if (blockXY.y + blockHW.height < MARGIN) {
         // Bump any block that's above the top back inside.
         block.moveBy(0, MARGIN - blockHW.height - blockXY.y);
       }

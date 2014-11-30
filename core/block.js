@@ -558,6 +558,7 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
 Blockly.Block.prototype.onMouseUp_ = function(e) {
   var this_ = this;
   Blockly.doCommand(function() {
+    Blockly.terminateDrag_();
     if (Blockly.selected && Blockly.highlightedConnection_) {
       // Connect two blocks together.
       Blockly.localConnection_.connect(Blockly.highlightedConnection_);
@@ -591,7 +592,6 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
       Blockly.highlightedConnection_.unhighlight();
       Blockly.highlightedConnection_ = null;
     }
-    Blockly.terminateDrag_();
   });
 };
 

@@ -28,6 +28,7 @@ goog.provide('Blockly.Connection');
 goog.provide('Blockly.ConnectionDB');
 
 goog.require('Blockly.Workspace');
+goog.require('Blockly.BlockSvg');
 
 
 /**
@@ -348,9 +349,9 @@ Blockly.Connection.prototype.highlight = function() {
             tabWidth + ',-2.5 ' + tabWidth + ',7.5 v 5';
   } else {
     if (Blockly.RTL) {
-      steps = 'm 20,0 h -5 l -6,4 -3,0 -6,-4 h -5';
+      steps = 'm 20,0 h -5 ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -5';
     } else {
-      steps = 'm -20,0 h 5 l 6,4 3,0 6,-4 h 5';
+      steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
     }
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();

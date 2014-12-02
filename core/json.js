@@ -113,6 +113,10 @@ Blockly.JSON.blockToObject_ = function(block) {
       titleToObject(title);
     }
   }
+  
+  if(element[Blockly.JSON.fieldLabels.title] && !element[Blockly.JSON.fieldLabels.title].length){
+	  delete element[Blockly.JSON.fieldLabels.title];
+  }
 
   if (block.comment) {
 	var hw = block.comment.getBubbleSize();
@@ -217,8 +221,8 @@ Blockly.JSON.objectToWorkspace = function(workspace, json) {
     //if (JSONChild['eType'] == 'block') {
       var block = Blockly.JSON.objectToBlock_(workspace, jsonChild);
 	  if(!block)continue;
-      var blockX = jsonChild[Blockly.JSON.fieldLabels.positionX];
-      var blockY = jsonChild[Blockly.JSON.fieldLabels.positionY];
+      var blockX = parseInt(jsonChild[Blockly.JSON.fieldLabels.positionX]||0,10);
+      var blockY = parseInt(jsonChild[Blockly.JSON.fieldLabels.positionY]||0,10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
         block.moveBy(Blockly.RTL ? width - blockX : blockX, blockY);
       }
@@ -300,7 +304,7 @@ Blockly.JSON.objectToBlock_ = function(workspace, jsonBlock) {
 					, jsonTitle[Blockly.JSON.fieldLabels.titleName]
 					);
 			}catch(e){
-			  //Just ignor the error 
+			  //Just ignore the error 
 		   }
 	   }  
   }

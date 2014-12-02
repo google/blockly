@@ -58,10 +58,10 @@ goog.require('goog.userAgent');
 
 
 /**
- * Path to Blockly's directory.  Can be relative, absolute, or remote.
- * Used for loading additional resources.
+ * Path to Blockly's media directory.  Can be relative, absolute, or remote.
+ * Used for loading sounds and sprites.  Defaults to demo server.
  */
-Blockly.pathToBlockly = './';
+Blockly.pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
 
 /**
  * Required name space for SVG elements.
@@ -91,7 +91,7 @@ Blockly.HSV_VALUE = 0.65;
 Blockly.SPRITE = {
   width: 64,
   height: 92,
-  url: 'media/sprites.png'
+  url: 'sprites.png'
 };
 
 /**
@@ -312,7 +312,7 @@ Blockly.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.onMouseUp_ = function(e) {
-  Blockly.setCursorHand_(false);
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   Blockly.mainWorkspace.dragMode = false;
 
   // Unbind the touch event if it exists.
@@ -512,8 +512,10 @@ Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   if (!opt_allowToolbox &&
-      Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
-    Blockly.Toolbox.clearSelection();
+      Blockly.mainWorkspace.toolbox_ &&
+      Blockly.mainWorkspace.toolbox_.flyout_ &&
+      Blockly.mainWorkspace.toolbox_.flyout_.autoClose) {
+    Blockly.mainWorkspace.toolbox_.clearSelection();
   }
 };
 
@@ -568,7 +570,7 @@ Blockly.loadAudio_ = function(filenames, name) {
     var ext = filename.match(/\.(\w+)$/);
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
-      sound = new window['Audio'](Blockly.pathToBlockly + filename);
+      sound = new window['Audio'](filename);
       break;
     }
   }
@@ -621,30 +623,6 @@ Blockly.playAudio = function(name, opt_volume) {
 };
 
 /**
- * Set the mouse cursor to be either a closed hand or the default.
- * @param {boolean} closed True for closed hand.
- * @private
- */
-Blockly.setCursorHand_ = function(closed) {
-  if (Blockly.readOnly) {
-    return;
-  }
-  /* Hotspot coordinates are baked into the CUR file, but they are still
-     required due to a Chrome bug.
-     http://code.google.com/p/chromium/issues/detail?id=1446 */
-  var cursor = '';
-  if (closed) {
-    cursor = 'url(' + Blockly.pathToBlockly + 'media/handclosed.cur) 7 3, auto';
-  }
-  if (Blockly.selected) {
-    Blockly.selected.getSvgRoot().style.cursor = cursor;
-  }
-  // Set cursor on the SVG surface as well as block so that rapid movements
-  // don't result in cursor changing to an arrow momentarily.
-  Blockly.svg.style.cursor = cursor;
-};
-
-/**
  * Return an object with all the metrics required to size scrollbars for the
  * main workspace.  The following properties are computed:
  * .viewHeight: Height of the visible rectangle,
@@ -662,7 +640,9 @@ Blockly.setCursorHand_ = function(closed) {
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize();
-  svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
+  if (Blockly.mainWorkspace.toolbox_) {
+    svgSize.width -= Blockly.mainWorkspace.toolbox_.width;
+  }
   var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
   var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
   try {
@@ -688,7 +668,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var topEdge = blockBox.y;
     var bottomEdge = topEdge + blockBox.height;
   }
-  var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
+  var absoluteLeft = 0;
+  if (!Blockly.RTL && Blockly.mainWorkspace.toolbox_) {
+    absoluteLeft = Blockly.mainWorkspace.toolbox_.width;
+  }
   var metrics = {
     viewHeight: svgSize.height,
     viewWidth: svgSize.width,

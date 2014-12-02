@@ -156,7 +156,7 @@ Blockly.JavaScript['controls_forEach'] = function(block) {
       variable0 + '_index', Blockly.Variables.NAME_TYPE);
   branch = Blockly.JavaScript.INDENT + variable0 + ' = ' +
       argument0 + '[' + indexVar + '];\n' + branch;
-  var code = 'for (var ' + indexVar + ' in  ' + argument0 + ') {\n' +
+  var code = 'for (var ' + indexVar + ' in ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;
 };

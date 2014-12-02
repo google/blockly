@@ -27,6 +27,7 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.Workspace');
+goog.require('goog.math');
 
 
 /**
@@ -48,7 +49,7 @@ Blockly.Bubble = function(workspace, content, shape,
   if (Blockly.RTL) {
     angle = -angle;
   }
-  this.arrow_radians_ = angle / 360 * Math.PI * 2;
+  this.arrow_radians_ = goog.math.toRadians(angle);
 
   this.workspace_ = workspace;
   this.content_ = content;
@@ -252,7 +253,7 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
     return;
   }
   // Left-click (or middle click)
-  Blockly.setCursorHand_(true);
+  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   // Record the starting offset between the current location and the mouse.
   if (Blockly.RTL) {
     this.dragDeltaX = this.relativeLeft_ + e.clientX;
@@ -300,7 +301,7 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
     return;
   }
   // Left-click (or middle click)
-  Blockly.setCursorHand_(true);
+  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   // Record the starting offset between the current location and the mouse.
   if (Blockly.RTL) {
     this.resizeDeltaWidth = this.width_ + e.clientX;

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Minisarm"
+			"Minisarm",
+			"Ely en"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -20,6 +21,7 @@
 	"ENABLE_BLOCK": "Permite bloc",
 	"HELP": "Ajutor",
 	"CHAT": "Discută cu colaboratorul tău tastând în cadrul acestei zone!",
+	"AUTH": "Va rugăm să autorizați această aplicație să permită salvarea activității dumneavoastră și să permită distribuirea acesteia de către dumneavoastră.",
 	"ME": "Eu",
 	"CHANGE_VALUE_TITLE": "Schimbaţi valoarea:",
 	"NEW_VARIABLE": "Variabilă nouă...",
@@ -218,9 +220,9 @@
 	"TEXT_CHANGECASE_OPERATOR_LOWERCASE": "la litere mici",
 	"TEXT_CHANGECASE_OPERATOR_TITLECASE": "către Titlul de caz",
 	"TEXT_TRIM_TOOLTIP": "Returnează o copie a textului fără spațiile de la unul sau ambele capete.",
-	"TEXT_TRIM_OPERATOR_BOTH": "taie spațiile de pe ambele părți",
-	"TEXT_TRIM_OPERATOR_LEFT": "tăiaţi spațiile din partea stângă",
-	"TEXT_TRIM_OPERATOR_RIGHT": "taie spațiile din partea dreaptă",
+	"TEXT_TRIM_OPERATOR_BOTH": "taie spațiile de pe ambele părți ale",
+	"TEXT_TRIM_OPERATOR_LEFT": "tăiaţi spațiile din partea stângă a",
+	"TEXT_TRIM_OPERATOR_RIGHT": "taie spațiile din partea dreaptă a",
 	"TEXT_PRINT_TITLE": "imprimare %1",
 	"TEXT_PRINT_TOOLTIP": "Afișează textul specificat, numărul sau altă valoare.",
 	"TEXT_PROMPT_TYPE_TEXT": "solicită pentru text cu mesaj",
@@ -303,13 +305,16 @@
 	"PROCEDURES_DEFRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFRETURN_RETURN": "returnează",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Creează o funcţie cu o ieşire.",
+	"PROCEDURES_ALLOW_STATEMENTS": "permite declarațiile",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Atenţie: Această funcţie are parametri duplicaţi.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Executați funcția '%1 'definită de utilizator.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Executați funcția '%1 'definită de utilizator şi folosiţi producţia sa.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "intrări",
+	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Adăugă, șterge sau reordonează parametrii de intrare ai acestei funcții.",
 	"PROCEDURES_MUTATORARG_TITLE": "nume de intrare:",
+	"PROCEDURES_MUTATORARG_TOOLTIP": "Adaugă un parametru de intrare pentru funcție.",
 	"PROCEDURES_HIGHLIGHT_DEF": "Evidenţiază definiţia funcţiei",
 	"PROCEDURES_CREATE_DO": "Creaţi '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Dacă o valoare este adevărată, atunci returnează valoarea a doua.",

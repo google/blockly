@@ -1,5 +1,5 @@
 /**
- * Blockly Apps: Block Factory Blocks
+ * Blockly Demos: Block Factory Blocks
  *
  * Copyright 2012 Google Inc.
  * https://developers.google.com/blockly/
@@ -45,40 +45,7 @@ Blockly.Blocks['factory_base'] = {
         ['↑ top connection', 'TOP'],
         ['↓ bottom connection', 'BOTTOM']],
         function(option) {
-          var block = this.sourceBlock_;
-          var outputExists = block.getInput('OUTPUTTYPE');
-          var topExists = block.getInput('TOPTYPE');
-          var bottomExists = block.getInput('BOTTOMTYPE');
-          if (option == 'LEFT') {
-            if (!outputExists) {
-              block.appendValueInput('OUTPUTTYPE')
-                  .setCheck('Type')
-                  .appendField('output type');
-              block.moveInputBefore('OUTPUTTYPE', 'COLOUR');
-            }
-          } else if (outputExists) {
-            block.removeInput('OUTPUTTYPE');
-          }
-          if (option == 'TOP' || option == 'BOTH') {
-            if (!topExists) {
-              block.appendValueInput('TOPTYPE')
-                  .setCheck('Type')
-                  .appendField('top type');
-              block.moveInputBefore('TOPTYPE', 'COLOUR');
-            }
-          } else if (topExists) {
-            block.removeInput('TOPTYPE');
-          }
-          if (option == 'BOTTOM' || option == 'BOTH') {
-            if (!bottomExists) {
-              block.appendValueInput('BOTTOMTYPE')
-                  .setCheck('Type')
-                  .appendField('bottom type');
-              block.moveInputBefore('BOTTOMTYPE', 'COLOUR');
-            }
-          } else if (bottomExists) {
-            block.removeInput('BOTTOMTYPE');
-          }
+          this.sourceBlock_.updateShape_(option);
         });
     this.appendDummyInput()
         .appendField(dropdown, 'CONNECTIONS');
@@ -95,6 +62,50 @@ Blockly.Blocks['factory_base'] = {
     */
     this.setTooltip('Build a custom block by plugging\n' +
                     'fields, inputs and other blocks here.');
+  },
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('connections', this.getFieldValue('CONNECTIONS'));
+    return container;
+  },
+  domToMutation: function(xmlElement) {
+    var connections = xmlElement.getAttribute('connections');
+    this.updateShape_(connections);
+  },
+  updateShape_: function(option) {
+    var outputExists = this.getInput('OUTPUTTYPE');
+    var topExists = this.getInput('TOPTYPE');
+    var bottomExists = this.getInput('BOTTOMTYPE');
+    if (option == 'LEFT') {
+      if (!outputExists) {
+        this.appendValueInput('OUTPUTTYPE')
+            .setCheck('Type')
+            .appendField('output type');
+        this.moveInputBefore('OUTPUTTYPE', 'COLOUR');
+      }
+    } else if (outputExists) {
+      this.removeInput('OUTPUTTYPE');
+    }
+    if (option == 'TOP' || option == 'BOTH') {
+      if (!topExists) {
+        this.appendValueInput('TOPTYPE')
+            .setCheck('Type')
+            .appendField('top type');
+        this.moveInputBefore('TOPTYPE', 'COLOUR');
+      }
+    } else if (topExists) {
+      this.removeInput('TOPTYPE');
+    }
+    if (option == 'BOTTOM' || option == 'BOTH') {
+      if (!bottomExists) {
+        this.appendValueInput('BOTTOMTYPE')
+            .setCheck('Type')
+            .appendField('bottom type');
+        this.moveInputBefore('BOTTOMTYPE', 'COLOUR');
+      }
+    } else if (bottomExists) {
+      this.removeInput('BOTTOMTYPE');
+    }
   }
 };
 
@@ -430,7 +441,7 @@ Blockly.Blocks['field_image'] = {
   // Image.
   init: function() {
     this.setColour(160);
-    var src = 'http://www.gstatic.com/codesite/ph/images/star_on.gif';
+    var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif';
     this.appendDummyInput()
         .appendField('image')
         .appendField(new Blockly.FieldTextInput(src), 'SRC');

@@ -10,56 +10,12 @@ handlers:
 - url: /blockly/.*
   static_files: redirect.html
   upload: redirect.html
-# Code, Maze and Turtle moved from demos to apps on 29 Dec 2012.
-- url: /static/demos/(code|maze|turtle)/.*
+# Code, Maze and Turtle moved from demos on 29 Dec 2012.
+- url: /static/demos/(maze|turtle)/.*
   static_files: redirect.html
   upload: redirect.html
-# Vietnamese apps moved from vn to vi on 9 Jun 2012.
-- url: /static/apps/.+/vn\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Code moved to index.html on 7 Aug 2013.
-- url: /static/apps/code/code\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Code became language-agnostic on 20 Jul 2013.
-- url: /static/apps/code/(de|en|hu|vi|zh_tw)\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Graph moved to index.html on 7 Aug 2013.
-- url: /static/apps/graph/graph\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Graph became language-agnostic on 20 Jul 2013.
-- url: /static/apps/graph/(de|en|hu|vi)\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Maze moved to index.html on 7 Aug 2013.
-- url: /static/apps/maze/maze\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Maze became language-agnostic on 20 Jul 2013.
-- url: /static/apps/maze/(ca|cs|da|el|en|es|eu|fr|hu|it|lv|nl|pl|pt|ru|sr|sw|th|tr|vi)\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Plane moved to index.html on 7 Aug 2013.
-- url: /static/apps/plane/plane\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Plane became language-agnostic on 20 Jul 2013.
-- url: /static/apps/plane/(1_|2_)?(en|hu|vi|vn)\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Puzzle moved to Blockly Games on 15 Oct 2014.
-- url: /static/apps/puzzle/.*
-  static_files: redirect.html
-  upload: redirect.html
-# Turtle moved to index.html on 7 Aug 2013.
-- url: /static/apps/turtle/turtle\.html
-  static_files: redirect.html
-  upload: redirect.html
-# Turtle became language-agnostic on 20 Jul 2013.
-- url: /static/apps/turtle/(de|en|hu|vi)\.html
+# Apps was disbanded on 20 Nov 2014.
+- url: /static/apps/.*
   static_files: redirect.html
   upload: redirect.html
 
@@ -79,8 +35,8 @@ handlers:
   secure: always
 
 # Closure library for uncompiled Blockly.
-- url: /closure-library-read-only
-  static_dir: closure-library-read-only
+- url: /closure-library
+  static_dir: closure-library
   secure: always
 
 # Redirect for root directory.

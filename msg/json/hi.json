@@ -240,6 +240,7 @@
 	"PROCEDURES_CALLRETURN_TOOLTIP": "यूज़र द्वारा वर्णन किया गया फ़ंक्शन '%1' चलाएँ और उसका आउटपुट इस्तेमाल करें।",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "इनपुट",
 	"PROCEDURES_MUTATORARG_TITLE": "इनपुट का नाम:",
+	"PROCEDURES_MUTATORARG_TOOLTIP": "फंगक्शन को इनपुट प्रदान करें।",
 	"PROCEDURES_HIGHLIGHT_DEF": "फ़ंक्शन परिभाषा को हाइलाइट करें",
 	"PROCEDURES_CREATE_DO": "'%1' बनाएँ",
 	"PROCEDURES_IFRETURN_TOOLTIP": "यदि एक मान ट्रू है तो, दूसरा मान रिटर्न करें।",

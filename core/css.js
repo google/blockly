@@ -30,6 +30,36 @@ goog.require('goog.cssom');
 
 
 /**
+ * List of cursors.
+ * @enum {string}
+ */
+Blockly.Css.Cursor = {
+  OPEN: 'handopen',
+  CLOSED: 'handclosed',
+  DELETE: 'handdelete'
+};
+
+/**
+ * Current cursor (cached value).
+ * @type string
+ */
+Blockly.Css.currentCursor_ = '';
+
+/**
+ * Large stylesheet added by Blockly.Css.inject.
+ * @type Element
+ * @private
+ */
+Blockly.Css.styleSheet_ = null;
+
+/**
+ * Path to media directory, with any trailing slash removed.
+ * @type string
+ * @private
+ */
+Blockly.Css.mediaPath_ = '';
+
+/**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
  * file since:
  * a) It loads synchronously and doesn't force a redraw later.
@@ -39,15 +69,56 @@ goog.require('goog.cssom');
 Blockly.Css.inject = function() {
   var text = Blockly.Css.CONTENT.join('\n');
   // Strip off any trailing slash (either Unix or Windows).
-  var path = Blockly.pathToBlockly.replace(/[\\\/]$/, '');
-  text = text.replace(/<<<PATH>>>/g, path);
+  Blockly.Css.mediaPath_ = Blockly.pathToMedia.replace(/[\\\/]$/, '');
+  text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
   goog.cssom.addCssText(text);
+  var sheets = goog.cssom.getAllCssStyleSheets();
+  Blockly.Css.styleSheet_ = sheets[sheets.length - 1];
+  Blockly.Css.setCursor('handopen');
+};
+
+/**
+ * Set the cursor to be displayed when over something draggable.
+ * @param {Blockly.Cursor} cursor Enum.
+ */
+Blockly.Css.setCursor = function(cursor) {
+  if (Blockly.readOnly || Blockly.Css.currentCursor_ == cursor) {
+    return;
+  }
+  Blockly.Css.currentCursor_ = cursor;
+  /*
+    Hotspot coordinates are baked into the CUR file, but they are still
+    required in the CSS due to a Chrome bug.
+    https://code.google.com/p/chromium/issues/detail?id=1446
+  */
+  if (cursor == Blockly.Css.Cursor.OPEN) {
+    var xy = '8 5';
+  } else {
+    var xy = '7 3';
+  }
+  var url = 'url(' + Blockly.Css.mediaPath_ + '/' + cursor +
+      '.cur) ' + xy + ', auto';
+  var rule = '.blocklyDraggable {\n  cursor: ' + url + ';\n}\n';
+  goog.cssom.replaceCssRule('', rule, Blockly.Css.styleSheet_, 0);
+  if (Blockly.svg) {
+    // Set cursor on the SVG surface as well, so that rapid movements
+    // don't result in cursor changing to an arrow momentarily.
+    if (cursor == Blockly.Css.Cursor.OPEN) {
+      Blockly.svg.style.cursor = '';
+    } else {
+      Blockly.svg.style.cursor = url;
+    }
+  }
 };
 
 /**
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
+  '.blocklyDraggable {',
+    // Placeholder for cursor rule.  Must be first rule (index 0).
+  '}',
+
   '.blocklySvg {',
   '  background-color: #fff;',
   '  border: 1px solid #ddd;',
@@ -58,15 +129,6 @@ Blockly.Css.CONTENT = [
   '  position: absolute;',
   '  display: none;',
   '  z-index: 999;',
-  '}',
-
-  '.blocklyDraggable {',
-    /*
-      Hotspot coordinates are baked into the CUR file, but they are still
-      required in the CSS due to a Chrome bug.
-      http://code.google.com/p/chromium/issues/detail?id=1446
-    */
-  '  cursor: url(<<<PATH>>>/media/handopen.cur) 8 5, auto;',
   '}',
 
   '.blocklyResizeSE {',
@@ -310,7 +372,7 @@ Blockly.Css.CONTENT = [
   /* Override the default Closure URL. */
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,',
   '.blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {',
-  '  background: url(<<<PATH>>>/media/sprites.png) no-repeat -48px -16px !important;',
+  '  background: url(<<<PATH>>>/sprites.png) no-repeat -48px -16px !important;',
   '}',
 
   /* Category tree in Toolbox. */
@@ -346,11 +408,17 @@ Blockly.Css.CONTENT = [
   '  background-color: #e4e4e4;',
   '}',
 
+  '.blocklyTreeSeparator {',
+  '  height: 0px;',
+  '  border-bottom: solid #e5e5e5 1px;',
+  '  margin: 5px 0;',
+  '}',
+
   '.blocklyTreeIcon {',
   '  height: 16px;',
   '  width: 16px;',
   '  vertical-align: middle;',
-  '  background-image: url(<<<PATH>>>/media/sprites.png);',
+  '  background-image: url(<<<PATH>>>/sprites.png);',
   '}',
 
   '.blocklyTreeIconClosedLtr {',

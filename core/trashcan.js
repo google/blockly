@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('goog.math');
+goog.require('goog.math.Rect');
 goog.require('goog.Timer');
 
 
@@ -122,11 +124,11 @@ Blockly.Trashcan.prototype.svgLid_ = null;
 Blockly.Trashcan.prototype.lidTask_ = 0;
 
 /**
- * Current angle of the lid.
+ * Current state of lid opening (0.0 = closed, 1.0 = open).
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.lidAngle_ = 0;
+Blockly.Trashcan.prototype.lidOpen_ = 0;
 
 /**
  * Left coordinate of the trash can.
@@ -172,7 +174,7 @@ Blockly.Trashcan.prototype.createDom = function() {
        'clip-path': 'url(#blocklyTrashBodyClipPath)'},
       this.svgGroup_);
   body.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToBlockly + Blockly.SPRITE.url);
+      Blockly.pathToMedia + Blockly.SPRITE.url);
 
   var clip = Blockly.createSvgElement('clipPath',
       {'id': 'blocklyTrashLidClipPath'},
@@ -184,8 +186,9 @@ Blockly.Trashcan.prototype.createDom = function() {
        'clip-path': 'url(#blocklyTrashLidClipPath)'},
       this.svgGroup_);
   this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToBlockly + Blockly.SPRITE.url);
+      Blockly.pathToMedia + Blockly.SPRITE.url);
 
+  this.animateLid_();
   return this.svgGroup_;
 };
 
@@ -236,32 +239,16 @@ Blockly.Trashcan.prototype.position_ = function() {
 };
 
 /**
- * Determines if the mouse is currently over the trash can.
- * Opens/closes the lid and sets the isOpen flag.
- * @param {!Event} e Mouse move event.
+ * Return the deletion rectangle for this trashcan.
+ * @return {goog.math.Rect} Rectangle in which to delete.
  */
-Blockly.Trashcan.prototype.onMouseMove = function(e) {
-  /*
-  An alternative approach would be to use onMouseOver and onMouseOut events.
-  However the selected block will be between the mouse and the trash can,
-  thus these events won't fire.
-  Another approach is to use HTML5's drag & drop API, but it's widely hated.
-  Instead, we'll just have the block's drag_ function call us.
-  */
-  if (!this.svgGroup_) {
-    return;
-  }
-  var mouseXY = Blockly.mouseToSvg(e);
+Blockly.Trashcan.prototype.getRect = function() {
   var trashXY = Blockly.getSvgXY_(this.svgGroup_);
-  var over = (mouseXY.x > trashXY.x - this.MARGIN_HOTSPOT_) &&
-             (mouseXY.x < trashXY.x + this.WIDTH_ + this.MARGIN_HOTSPOT_) &&
-             (mouseXY.y > trashXY.y - this.MARGIN_HOTSPOT_) &&
-             (mouseXY.y < trashXY.y + this.BODY_HEIGHT_ + this.LID_HEIGHT_ +
-              this.MARGIN_HOTSPOT_);
-  // For bonus points we might want to match the trapezoidal outline.
-  if (this.isOpen != over) {
-    this.setOpen_(over);
-  }
+  return new goog.math.Rect(
+      trashXY.x - this.MARGIN_HOTSPOT_,
+      trashXY.y - this.MARGIN_HOTSPOT_,
+      this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_,
+      this.BODY_HEIGHT_ + this.LID_HEIGHT_ + 2 * this.MARGIN_HOTSPOT_);
 };
 
 /**
@@ -283,14 +270,17 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
  * @private
  */
 Blockly.Trashcan.prototype.animateLid_ = function() {
-  this.lidAngle_ += this.isOpen ? 10 : -10;
-  this.lidAngle_ = Math.max(0, this.lidAngle_);
+  this.lidOpen_ += this.isOpen ? 0.2 : -0.2;
+  this.lidOpen_ = goog.math.clamp(this.lidOpen_, 0, 1);
+  var lidAngle = this.lidOpen_ * 45;
   this.svgLid_.setAttribute('transform', 'rotate(' +
-      (Blockly.RTL ? -this.lidAngle_ : this.lidAngle_) + ', ' +
+      (Blockly.RTL ? -lidAngle : lidAngle) + ', ' +
       (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
       (this.LID_HEIGHT_ - 2) + ')');
-  if (this.isOpen ? (this.lidAngle_ < 45) : (this.lidAngle_ > 0)) {
-    this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 5, this);
+  var opacity  = goog.math.lerp(0.2, 0.4, this.lidOpen_);
+  this.svgGroup_.style.opacity = opacity;
+  if (this.lidOpen_ > 0 || this.lidOpen_ < 1) {
+    this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 20, this);
   }
 };
 

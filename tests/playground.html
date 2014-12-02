@@ -57,7 +57,7 @@ function start() {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blocklyDiv'),
           {rtl: rtl,
-           path: '../',
+           media: '../media/',
            toolbox: toolbox,
            comments: true,
            disable: true,
@@ -142,7 +142,7 @@ h1 {
 }
 #importExport {
   font-family: monospace;
-};
+}
 </style>
 </head>
 <body onload="start()">
@@ -352,6 +352,7 @@ h1 {
         </value>
       </block>
     </category>
+    <hr>
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>
   </xml>

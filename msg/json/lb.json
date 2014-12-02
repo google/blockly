@@ -114,5 +114,6 @@
 	"LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM": "Setzt d'Element op eng zoufälleg Plaz an d'Lëscht derbäi.",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "eppes maachen",
 	"PROCEDURES_BEFORE_PARAMS": "mat:",
+	"PROCEDURES_CALL_BEFORE_PARAMS": "mat:",
 	"PROCEDURES_DEFRETURN_RETURN": "zréck"
 }

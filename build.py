@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 # Compresses the core Blockly files into a single JavaScript file.
 #
 # Copyright 2012 Google Inc.
@@ -37,6 +37,7 @@
 
 import errno, glob, httplib, json, os, re, subprocess, sys, threading, urllib
 
+
 def import_path(fullpath):
   """Import a file with full path specification.
   Allows one to import from any directory, something __import__ does not do.
@@ -51,7 +52,7 @@ def import_path(fullpath):
   filename, ext = os.path.splitext(filename)
   sys.path.append(path)
   module = __import__(filename)
-  reload(module) # Might be out of date
+  reload(module)  # Might be out of date.
   del sys.path[-1]
   return module
 
@@ -129,7 +130,7 @@ delete window.BLOCKLY_BOOT;
 document.write('<script type="text/javascript">var goog = undefined;</script>');
 // Load fresh Closure Library.
 document.write('<script type="text/javascript" src="' + window.BLOCKLY_DIR +
-    '/../closure-library-read-only/closure/goog/base.js"></script>');
+    '/../closure-library/closure/goog/base.js"></script>');
 document.write('<script type="text/javascript">window.BLOCKLY_BOOT()</script>');
 """)
     f.close()
@@ -253,8 +254,8 @@ class Gen_compressed(threading.Thread):
     if json_data.has_key('serverErrors'):
       errors = json_data['serverErrors']
       for error in errors:
-        print 'SERVER ERROR: %s' % target_filename
-        print error['error']
+        print('SERVER ERROR: %s' % target_filename)
+        print(error['error'])
     elif json_data.has_key('errors'):
       errors = json_data['errors']
       for error in errors:
@@ -321,7 +322,7 @@ class Gen_compressed(threading.Thread):
         print('Size changed from %d KB to %d KB (%d%%).' % (
             original_kb, compressed_kb, ratio))
       else:
-        print 'UNKNOWN ERROR'
+        print('UNKNOWN ERROR')
 
 
 class Gen_langfiles(threading.Thread):
@@ -338,7 +339,7 @@ class Gen_langfiles(threading.Thread):
     try:
       return (max(os.path.getmtime(src) for src in srcs) >
               min(os.path.getmtime(dest) for dest in dests))
-    except OSError, e:
+    except OSError as e:
       # Was a file not found?
       if e.errno == errno.ENOENT:
         # If it was a source file, we can't proceed.
@@ -363,7 +364,7 @@ class Gen_langfiles(threading.Thread):
             '--input_file', 'msg/messages.js',
             '--output_dir', 'msg/json/',
             '--quiet'])
-      except (subprocess.CalledProcessError, OSError), e:
+      except (subprocess.CalledProcessError, OSError) as e:
         # Documentation for subprocess.check_call says that CalledProcessError
         # will be raised on failure, but I found that OSError is also possible.
         print('Error running i18n/js_to_json.py: ', e)
@@ -387,7 +388,7 @@ class Gen_langfiles(threading.Thread):
                     (file.endswith(('keys.json', 'synonyms.json', 'qqq.json')))]
       cmd.extend(json_files)
       subprocess.check_call(cmd)
-    except (subprocess.CalledProcessError, OSError), e:
+    except (subprocess.CalledProcessError, OSError) as e:
       print('Error running i18n/create_messages.py: ', e)
       sys.exit(1)
 
@@ -404,13 +405,19 @@ class Gen_langfiles(threading.Thread):
 if __name__ == '__main__':
   try:
     calcdeps = import_path(os.path.join(os.path.pardir,
-          'closure-library-read-only', 'closure', 'bin', 'calcdeps.py'))
+          'closure-library', 'closure', 'bin', 'calcdeps.py'))
   except ImportError:
-    print("""Error: Closure not found.  Read this:
+    if os.path.isdir(os.path.join(os.path.pardir, 'closure-library-read-only')):
+      # Dir got renamed when Closure moved from Google Code to GitHub in 2014.
+      print("Error: Closure directory needs to be renamed from"
+            "'closure-library-read-only' to 'closure-library'.\n"
+            "Please rename this directory.")
+    else:
+      print("""Error: Closure not found.  Read this:
 https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
   search_paths = calcdeps.ExpandDirectories(
-      ['core', os.path.join(os.path.pardir, 'closure-library-read-only')])
+      ['core', os.path.join(os.path.pardir, 'closure-library')])
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.

@@ -32,6 +32,9 @@ goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Xml');
 goog.require('Blockly.JSON');
+goog.require('goog.math');
+goog.require('goog.math.Coordinate');
+
 
 /**
  * Class for a workspace.
@@ -133,6 +136,10 @@ Blockly.Workspace.prototype.dispose = function() {
   }
   this.svgBlockCanvas_ = null;
   this.svgBubbleCanvas_ = null;
+  if (this.flyout_) {
+    this.flyout_.dispose();
+    this.flyout_ = null;
+  }
   if (this.trashcan) {
     this.trashcan.dispose();
     this.trashcan = null;
@@ -211,7 +218,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
-    var offset = Math.sin(Blockly.Workspace.SCAN_ANGLE / 180 * Math.PI);
+    var offset = Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
     if (Blockly.RTL) {
       offset *= -1;
     }
@@ -393,6 +400,50 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
   return this.maxBlocks - this.getAllBlocks().length;
+};
+
+/**
+ * Make a list of all the delete areas for this workspace.
+ */
+Blockly.Workspace.prototype.recordDeleteAreas = function() {
+  if (this.trashcan) {
+    this.deleteAreaTrash_ = this.trashcan.getRect();
+  } else {
+    this.deleteAreaTrash_ = null;
+  }
+  if (this.flyout_) {
+    this.deleteAreaToolbox_ = this.flyout_.getRect();
+  } else {
+    this.deleteAreaToolbox_ = null;
+  }
+};
+
+/**
+ * Is the mouse event over a delete area (toolbar or non-closing flyout)?
+ * Opens or closes the trashcan and sets the cursor as a side effect.
+ * @param {!Event} e Mouse move event.
+ * @return {boolean} True if event is in a delete area.
+ */
+Blockly.Workspace.prototype.isDeleteArea = function(e) {
+  var isDelete = false;
+  var mouseXY = Blockly.mouseToSvg(e);
+  var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
+  if (this.deleteAreaTrash_) {
+    if (this.deleteAreaTrash_.contains(xy)) {
+      this.trashcan.setOpen_(true);
+      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+      return true;
+    }
+    this.trashcan.setOpen_(false);
+  }
+  if (this.deleteAreaToolbox_) {
+    if (this.deleteAreaToolbox_.contains(xy)) {
+      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+      return true;
+    }
+  }
+  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+  return false;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

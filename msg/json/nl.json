@@ -76,7 +76,7 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Voeg stukken toe, verwijder of verander de volgorde om dit \"als\"-blok te wijzigen.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Voeg een voorwaarde toe aan het als-blok.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Voeg een laatste, vang-alles conditie toe aan het als-statement.",
-	"LOGIC_COMPARE_HELPURL": "https://nl.wikipedia.org/wiki/Ongelijkheid",
+	"LOGIC_COMPARE_HELPURL": "https://nl.wikipedia.org/wiki/Ongelijkheid_(wiskunde)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Geeft \"waar\", als beide waarden gelijk aan elkaar zijn.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Geeft \"waar\" terug als de waarden niet gelijk zijn aan elkaar.",
 	"LOGIC_COMPARE_TOOLTIP_LT": "Geeft \"waar\" als de eerste invoer kleiner is dan de tweede invoer.",

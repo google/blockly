@@ -139,7 +139,12 @@ Blockly.parseOptions_ = function(options) {
   Blockly.disable = hasDisable;
   Blockly.readOnly = readOnly;
   Blockly.maxBlocks = options['maxBlocks'] || Infinity;
-  Blockly.pathToBlockly = options['path'] || './';
+  if (options['media']) {
+    Blockly.pathToMedia = options['media'];
+  } else if (options['path']) {
+    // 'path' is a deprecated option which has been replaced by 'media'.
+    Blockly.pathToMedia = options['path'] + 'media/';
+  }
   Blockly.hasCategories = hasCategories;
   Blockly.hasScrollbars = hasScrollbars;
   Blockly.hasTrashcan = hasTrashcan;
@@ -270,7 +275,7 @@ Blockly.createDom_ = function(container) {
     // Determine if there needs to be a category tree, or a simple list of
     // blocks.  This cannot be changed later, since the UI is very different.
     if (Blockly.hasCategories) {
-      Blockly.Toolbox.createDom(svg, container);
+      Blockly.mainWorkspace.toolbox_ = new Blockly.Toolbox(svg, container);
     } else {
       /**
        * @type {!Blockly.Flyout}
@@ -321,11 +326,6 @@ Blockly.createDom_ = function(container) {
                   blockXY.x + (Blockly.RTL ? blockHW.width : 0);
               if (overflow < 0) {
                 block.moveBy(overflow, 0);
-              }
-              // Delete any block that's sitting on top of the flyout.
-              if (block.isDeletable() && (Blockly.RTL ?
-                  blockXY.x - metrics.viewWidth : -blockXY.x) > MARGIN * 2) {
-                block.dispose(false, true);
               }
             }
           }
@@ -384,9 +384,9 @@ Blockly.init_ = function() {
   }
 
   if (Blockly.languageTree) {
-    if (Blockly.hasCategories) {
-      Blockly.Toolbox.init();
-    } else {
+    if (Blockly.mainWorkspace.toolbox_) {
+      Blockly.mainWorkspace.toolbox_.init();
+    } else if (Blockly.mainWorkspace.flyout_) {
       // Build a fixed flyout with the root blocks.
       Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace);
       Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
@@ -412,9 +412,13 @@ Blockly.init_ = function() {
   // Load the sounds.
   if (Blockly.hasSounds) {
     Blockly.loadAudio_(
-        ['media/click.mp3', 'media/click.wav', 'media/click.ogg'], 'click');
+        [Blockly.pathToMedia + 'click.mp3',
+         Blockly.pathToMedia + 'click.wav',
+         Blockly.pathToMedia + 'click.ogg'], 'click');
     Blockly.loadAudio_(
-        ['media/delete.mp3', 'media/delete.ogg', 'media/delete.wav'], 'delete');
+        [Blockly.pathToMedia + 'delete.mp3',
+         Blockly.pathToMedia + 'delete.ogg',
+         Blockly.pathToMedia + 'delete.wav'], 'delete');
 
     // Bind temporary hooks that preload the sounds.
     var soundBinds = [];
@@ -454,7 +458,7 @@ Blockly.updateToolbox = function(tree) {
       throw 'Existing toolbox has no categories.  Can\'t change mode.';
     }
     Blockly.languageTree = tree;
-    Blockly.Toolbox.populate_();
+    Blockly.mainWorkspace.toolbox_.populate_();
   } else {
     if (Blockly.hasCategories) {
       throw 'Existing toolbox has categories.  Can\'t change mode.';

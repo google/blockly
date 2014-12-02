@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Ebraminio",
-			"Reza1615"
+			"Reza1615",
+			"Alirezaaa"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
@@ -24,8 +25,8 @@
 	"AUTH": "لطفا این اپلیکیشن را ثبت کنید و آثارتان را فعال کنید تا ذخیره شود و اجازهٔ اشتراک‌گذاری توسط شما داده شود.",
 	"ME": "من",
 	"CHANGE_VALUE_TITLE": "تغییر مقدار:",
-	"NEW_VARIABLE": "متغیر جدید...",
-	"NEW_VARIABLE_TITLE": "نام متغیر جدید:",
+	"NEW_VARIABLE": "متغیر تازه...",
+	"NEW_VARIABLE_TITLE": "نام متغیر تازه:",
 	"RENAME_VARIABLE": "تغییر نام متغیر...",
 	"RENAME_VARIABLE_TITLE": "تغییر نام همهٔ متغیرهای «%1» به:",
 	"COLOUR_PICKER_HELPURL": "https://fa.wikipedia.org/wiki/%D8%B1%D9%86%DA%AF",
@@ -285,6 +286,7 @@
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "تابعی می‌سازد بدون هیچ خروجی.",
 	"PROCEDURES_DEFRETURN_RETURN": "بازگشت",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "تابعی با یک خروجی می‌سازد.",
+	"PROCEDURES_ALLOW_STATEMENTS": "اجازه اظهارات",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "اخطار: این تابعی پارامتر تکراری دارد.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "اجرای تابع تعریف‌شده توسط کاربر «%1».",

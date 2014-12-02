@@ -412,6 +412,8 @@ Blockly.Workspace.prototype.recordDeleteAreas = function() {
   }
   if (this.flyout_) {
     this.deleteAreaToolbox_ = this.flyout_.getRect();
+  } else if (this.toolbox_) {
+    this.deleteAreaToolbox_ = this.toolbox_.getRect();
   } else {
     this.deleteAreaToolbox_ = null;
   }

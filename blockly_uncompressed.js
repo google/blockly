@@ -54,7 +54,7 @@ goog.addDependency("../../../" + dir + "/core/procedures.js", ['Blockly.Procedur
 goog.addDependency("../../../" + dir + "/core/realtime-client-utils.js", ['rtclient'], []);
 goog.addDependency("../../../" + dir + "/core/realtime.js", ['Blockly.Realtime'], ['goog.array', 'goog.dom', 'goog.style', 'rtclient']);
 goog.addDependency("../../../" + dir + "/core/scrollbar.js", ['Blockly.Scrollbar', 'Blockly.ScrollbarPair'], ['goog.userAgent']);
-goog.addDependency("../../../" + dir + "/core/toolbox.js", ['Blockly.Toolbox'], ['Blockly.Flyout', 'goog.events.BrowserFeature', 'goog.html.SafeHtml', 'goog.style', 'goog.ui.tree.TreeControl', 'goog.ui.tree.TreeNode']);
+goog.addDependency("../../../" + dir + "/core/toolbox.js", ['Blockly.Toolbox'], ['Blockly.Flyout', 'goog.events.BrowserFeature', 'goog.html.SafeHtml', 'goog.style', 'goog.ui.tree.TreeControl', 'goog.ui.tree.TreeNode', 'goog.math.Rect']);
 goog.addDependency("../../../" + dir + "/core/tooltip.js", ['Blockly.Tooltip'], []);
 goog.addDependency("../../../" + dir + "/core/trashcan.js", ['Blockly.Trashcan'], ['goog.math', 'goog.math.Rect', 'goog.Timer']);
 goog.addDependency("../../../" + dir + "/core/utils.js", ['Blockly.utils'], []);

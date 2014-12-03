@@ -173,7 +173,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       xy.x = scrollOffset.x + menuSize.width;
     }
   } else {
-    xy.x -= Blockly.FieldDropdown.CHECKMARK_OVERHANG;
     // Don't go offscreen right.
     if (xy.x > windowSize.width + scrollOffset.x - menuSize.width) {
       xy.x = windowSize.width + scrollOffset.x - menuSize.width;

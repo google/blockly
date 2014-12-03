@@ -71,9 +71,7 @@ Blockly.Css.inject = function() {
   // Strip off any trailing slash (either Unix or Windows).
   Blockly.Css.mediaPath_ = Blockly.pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
-  goog.cssom.addCssText(text);
-  var sheets = goog.cssom.getAllCssStyleSheets();
-  Blockly.Css.styleSheet_ = sheets[sheets.length - 1];
+  Blockly.Css.styleSheet_ = goog.cssom.addCssText(text).sheet;
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
 

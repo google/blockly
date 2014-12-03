@@ -528,6 +528,8 @@ goog.addDependency("history/history.js", ['goog.History', 'goog.History.Event', 
 goog.addDependency("history/history_test.js", ['goog.HistoryTest'], ['goog.History', 'goog.dispose', 'goog.dom', 'goog.testing.jsunit', 'goog.userAgent']);
 goog.addDependency("history/html5history.js", ['goog.history.Html5History', 'goog.history.Html5History.TokenTransformer'], ['goog.asserts', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.history.Event']);
 goog.addDependency("history/html5history_test.js", ['goog.history.Html5HistoryTest'], ['goog.history.Html5History', 'goog.testing.MockControl', 'goog.testing.jsunit', 'goog.testing.mockmatchers']);
+goog.addDependency("html/flash.js", ['goog.html.flash'], ['goog.asserts', 'goog.html.SafeHtml']);
+goog.addDependency("html/flash_test.js", ['goog.html.flashTest'], ['goog.html.SafeHtml', 'goog.html.TrustedResourceUrl', 'goog.html.flash', 'goog.string.Const', 'goog.testing.jsunit']);
 goog.addDependency("html/legacyconversions.js", ['goog.html.legacyconversions'], ['goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl']);
 goog.addDependency("html/legacyconversions_test.js", ['goog.html.legacyconversionsTest'], ['goog.html.SafeHtml', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.html.legacyconversions', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit']);
 goog.addDependency("html/safehtml.js", ['goog.html.SafeHtml'], ['goog.array', 'goog.asserts', 'goog.dom.tags', 'goog.html.SafeStyle', 'goog.html.SafeUrl', 'goog.html.TrustedResourceUrl', 'goog.i18n.bidi.Dir', 'goog.i18n.bidi.DirectionalString', 'goog.object', 'goog.string', 'goog.string.Const', 'goog.string.TypedString']);
@@ -1091,8 +1093,8 @@ goog.addDependency("testing/stacktrace.js", ['goog.testing.stacktrace', 'goog.te
 goog.addDependency("testing/stacktrace_test.js", ['goog.testing.stacktraceTest'], ['goog.functions', 'goog.string', 'goog.testing.ExpectedFailures', 'goog.testing.PropertyReplacer', 'goog.testing.StrictMock', 'goog.testing.asserts', 'goog.testing.jsunit', 'goog.testing.stacktrace', 'goog.testing.stacktrace.Frame', 'goog.userAgent']);
 goog.addDependency("testing/strictmock.js", ['goog.testing.StrictMock'], ['goog.array', 'goog.testing.Mock']);
 goog.addDependency("testing/strictmock_test.js", ['goog.testing.StrictMockTest'], ['goog.testing.StrictMock', 'goog.testing.jsunit']);
-goog.addDependency("testing/testcase.js", ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.object', 'goog.testing.asserts', 'goog.testing.stacktrace']);
-goog.addDependency("testing/testcase_test.js", ['goog.testing.TestCaseTest'], ['goog.testing.TestCase', 'goog.testing.jsunit']);
+goog.addDependency("testing/testcase.js", ['goog.testing.TestCase', 'goog.testing.TestCase.Error', 'goog.testing.TestCase.Order', 'goog.testing.TestCase.Result', 'goog.testing.TestCase.Test'], ['goog.Promise', 'goog.Thenable', 'goog.object', 'goog.testing.asserts', 'goog.testing.stacktrace']);
+goog.addDependency("testing/testcase_test.js", ['goog.testing.TestCaseTest'], ['goog.Promise', 'goog.testing.TestCase', 'goog.testing.jsunit']);
 goog.addDependency("testing/testqueue.js", ['goog.testing.TestQueue'], []);
 goog.addDependency("testing/testrunner.js", ['goog.testing.TestRunner'], ['goog.testing.TestCase']);
 goog.addDependency("testing/watchers.js", ['goog.testing.watchers'], []);
@@ -1475,7 +1477,7 @@ goog.addDependency("useragent/product_isversion.js", ['goog.userAgent.product.is
 goog.addDependency("useragent/product_test.js", ['goog.userAgent.productTest'], ['goog.array', 'goog.labs.userAgent.util', 'goog.testing.MockUserAgent', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion', 'goog.userAgentTestUtil']);
 goog.addDependency("useragent/useragent.js", ['goog.userAgent'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.labs.userAgent.platform', 'goog.labs.userAgent.util', 'goog.string']);
 goog.addDependency("useragent/useragent_quirks_test.js", ['goog.userAgentQuirksTest'], ['goog.testing.jsunit', 'goog.userAgent']);
-goog.addDependency("useragent/useragent_test.js", ['goog.userAgentTest'], ['goog.array', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgentTestUtil']);
+goog.addDependency("useragent/useragent_test.js", ['goog.userAgentTest'], ['goog.array', 'goog.labs.userAgent.platform', 'goog.labs.userAgent.testAgents', 'goog.labs.userAgent.util', 'goog.testing.PropertyReplacer', 'goog.testing.jsunit', 'goog.userAgent', 'goog.userAgentTestUtil']);
 goog.addDependency("useragent/useragenttestutil.js", ['goog.userAgentTestUtil', 'goog.userAgentTestUtil.UserAgents'], ['goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.labs.userAgent.platform', 'goog.userAgent', 'goog.userAgent.keyboard', 'goog.userAgent.platform', 'goog.userAgent.product', 'goog.userAgent.product.isVersion']);
 goog.addDependency("vec/float32array.js", ['goog.vec.Float32Array'], []);
 goog.addDependency("vec/float64array.js", ['goog.vec.Float64Array'], []);
@@ -1563,8 +1565,8 @@ delete window.BLOCKLY_BOOT;
 };
 
 // Delete any existing Closure (e.g. Soy's nogoog_shim).
-document.write('<script type="text/javascript">var goog = undefined;</script>');
+document.write('<script>var goog = undefined;</script>');
 // Load fresh Closure Library.
-document.write('<script type="text/javascript" src="' + window.BLOCKLY_DIR +
+document.write('<script src="' + window.BLOCKLY_DIR +
     '/../closure-library/closure/goog/base.js"></script>');
-document.write('<script type="text/javascript">window.BLOCKLY_BOOT()</script>');
+document.write('<script>window.BLOCKLY_BOOT()</script>');

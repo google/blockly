@@ -192,15 +192,13 @@ Code.bindClick = function(el, func) {
  * Load the Prettify CSS and JavaScript.
  */
 Code.importPrettify = function() {
-  //<link rel="stylesheet" type="text/css" href="../prettify.css">
-  //<script type="text/javascript" src="../prettify.js"></script>
+  //<link rel="stylesheet" href="../prettify.css">
+  //<script src="../prettify.js"></script>
   var link = document.createElement('link');
   link.setAttribute('rel', 'stylesheet');
-  link.setAttribute('type', 'text/css');
   link.setAttribute('href', '../prettify.css');
   document.head.appendChild(link);
   var script = document.createElement('script');
-  script.setAttribute('type', 'text/javascript');
   script.setAttribute('src', '../prettify.js');
   document.head.appendChild(script);
 };
@@ -496,10 +494,8 @@ Code.discard = function() {
 };
 
 // Load the Code demo's language strings.
-document.write('<script type="text/javascript" src="msg/' +
-               Code.LANG + '.js"></script>\n');
+document.write('<script src="msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
-document.write('<script type="text/javascript" src="../../msg/js/' +
-               Code.LANG + '.js"></script>\n');
+document.write('<script src="../../msg/js/' + Code.LANG + '.js"></script>\n');
 
 window.addEventListener('load', Code.init);

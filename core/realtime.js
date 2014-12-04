@@ -221,7 +221,7 @@ Blockly.Realtime.getBlockById = function(id) {
 };
 
 /**
- * Log the event for debugging purposses.
+ * Log the event for debugging purposes.
  * @param {gapi.drive.realtime.BaseModelEvent} evt The event that occurred.
  * @private
  */
@@ -263,7 +263,7 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
             event.property == 'relativeY') {
           Blockly.Realtime.doWithinSync_(function() {
             if (!block.svg_) {
-              // If this is a move of a newly disconnected (i.e newly top
+              // If this is a move of a newly disconnected (i.e. newly top
               // level) block it will not have any svg (because it has been
               // disposed of by its parent), so we need to handle that here.
               Blockly.Realtime.placeBlockOnWorkspace_(block, false);
@@ -715,7 +715,7 @@ Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
   Blockly.Realtime.enabled_ = true;
   // Note that we need to setup the UI for realtime authorization before
   // loading the realtime code (which, in turn, will handle initializing the
-  // rest of the Blockly UI.
+  // rest of the Blockly UI).
   var authDiv = Blockly.Realtime.addAuthUi_(uiContainer);
   Blockly.Realtime.initUi_ = function() {
     uiInitialize();
@@ -739,7 +739,7 @@ Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
  * @private
  */
 Blockly.Realtime.addAuthUi_ = function(uiContainer) {
-  // Add progess indicator to the UI container.
+  // Add progress indicator to the UI container.
   uiContainer.style.background = 'url(' + Blockly.pathToMedia +
       Blockly.Realtime.PROGRESS_URL_ + ') no-repeat center center';
   // Setup authorization button
@@ -817,7 +817,7 @@ Blockly.Realtime.onCollaboratorLeft_ = function(event) {
 
 /**
  * Execute a command.  Generally, a command is the result of a user action
- * e.g., a click, drag or context menu selection.
+ * e.g. a click, drag or context menu selection.
  * @param {function()} cmdThunk A function representing the command execution.
  */
 Blockly.Realtime.doCommand = function(cmdThunk) {

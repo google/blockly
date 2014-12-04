@@ -265,7 +265,7 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
             if (!block.svg_) {
               // If this is a move of a newly disconnected (i.e newly top
               // level) block it will not have any svg (because it has been
-              // disposed of by it's parent), so we need to handle that here.
+              // disposed of by its parent), so we need to handle that here.
               Blockly.Realtime.placeBlockOnWorkspace_(block, false);
             }
             Blockly.Realtime.moveBlock_(block);

@@ -101,7 +101,7 @@ Blockly.SPRITE = {
  */
 Blockly.makeColour = function(hue) {
   return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 256);
+      Blockly.HSV_VALUE * 255);
 };
 
 /**

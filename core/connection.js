@@ -339,16 +339,20 @@ Blockly.Connection.prototype.moveBy = function(dx, dy) {
  */
 Blockly.Connection.prototype.highlight = function() {
   var steps;
+  var maybeFlip = '';
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     var tabWidth = Blockly.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
                                  Blockly.BlockSvg.TAB_WIDTH;
     steps = 'm 0,0 v 5 c 0,10 ' + -tabWidth + ',-8 ' + -tabWidth + ',7.5 s ' +
             tabWidth + ',-2.5 ' + tabWidth + ',7.5 v 5';
   } else {
+    steps = 'm '+Blockly.BlockSvg.NOTCH_HIGHLIGHT_FLANKING_WIDTH
+          + ',0 h -'+Blockly.BlockSvg.NOTCH_HIGHLIGHT_FLANKING_WIDTH
+          + ' ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT
+          + ' h -'+Blockly.BlockSvg.NOTCH_HIGHLIGHT_FLANKING_WIDTH;
+
     if (Blockly.RTL) {
-      steps = 'm 20,0 h -5 ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -5';
-    } else {
-      steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
+      maybeFlip = ' scale(-1 1)';
     }
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
@@ -357,7 +361,7 @@ Blockly.Connection.prototype.highlight = function() {
   Blockly.Connection.highlightedPath_ = Blockly.createSvgElement('path',
       {'class': 'blocklyHighlightedConnectionPath',
        'd': steps,
-       transform: 'translate(' + x + ', ' + y + ')'},
+       transform: 'translate(' + x + ', ' + y + ')'+maybeFlip},
       this.sourceBlock_.getSvgRoot());
 };
 

@@ -755,6 +755,16 @@ Blockly.BlockSvg.TAB_WIDTH = 8;
  */
 Blockly.BlockSvg.NOTCH_WIDTH = 30;
 /**
+ * Width of the notch itself.
+ * @const
+ */
+Blockly.BlockSvg.NOTCH_OWN_WIDTH = 15;
+/**
+ * Width of the horizontal flanking region on both sides of the highlighted notch.
+ * @const
+ */
+Blockly.BlockSvg.NOTCH_HIGHLIGHT_FLANKING_WIDTH = 5;
+/**
  * Rounded corner radius.
  * @const
  */
@@ -784,16 +794,17 @@ Blockly.BlockSvg.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
  */
 Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
 /**
- * SVG path for drawing next/previous notch from left to right with
- * highlighting.
- * @const
- */
-Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6.5,4 2,0 6.5,-4';
-/**
  * SVG path for drawing next/previous notch from right to left.
  * @const
  */
 Blockly.BlockSvg.NOTCH_PATH_RIGHT = 'l -6,4 -3,0 -6,-4';
+/**
+ * SVG path for drawing next/previous notch from left to right with 3D effect.
+ * Beware!!! This effect has nothing to do with the "selective" highlighting
+ * as used throughout the rest of the project. It's a dangerous collision of terms.
+ * @const
+ */
+Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6.5,4 2,0 6.5,-4';
 /**
  * SVG path for drawing jagged teeth at the end of collapsed blocks.
  * @const
@@ -869,7 +880,7 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT =
  */
 Blockly.BlockSvg.INNER_TOP_LEFT_CORNER =
     Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -' +
-    (Blockly.BlockSvg.NOTCH_WIDTH - 15 - Blockly.BlockSvg.CORNER_RADIUS) +
+    (Blockly.BlockSvg.NOTCH_WIDTH - Blockly.BlockSvg.NOTCH_OWN_WIDTH - Blockly.BlockSvg.CORNER_RADIUS) +
     ' a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,0 -' +
     Blockly.BlockSvg.CORNER_RADIUS + ',' +
@@ -1534,8 +1545,8 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
 
   // Top edge.
   if (this.previousConnection) {
-    steps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - 15);
-    highlightSteps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - 15);
+    steps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - Blockly.BlockSvg.NOTCH_OWN_WIDTH);
+    highlightSteps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - Blockly.BlockSvg.NOTCH_OWN_WIDTH);
     steps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT);
     highlightSteps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT);
     // Create previous block connection.

@@ -387,8 +387,7 @@ Plane.redraw = function(newRows) {
     }
     while (newRows > rows1st) {
       rows1st++;
-      var row = document.createElementNS('http://www.w3.org/2000/svg',
-                                                  'use');
+      var row = document.createElementNS('http://www.w3.org/2000/svg', 'use');
       row.setAttribute('id', 'row1st' + rows1st);
       // Row of 4 seats.
       row.setAttribute('x', (rows1st - 1) * 20);
@@ -435,5 +434,4 @@ Plane.redraw = function(newRows) {
 window.addEventListener('load', Plane.init);
 
 // Load the user's language pack.
-document.write('<script type="text/javascript" src="generated/' +
-               Plane.LANG + '.js"></script>\n');
+document.write('<script src="generated/' + Plane.LANG + '.js"></script>\n');

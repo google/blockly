@@ -868,19 +868,20 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
             highlightInlineSteps.push('h',
                 input.renderWidth - Blockly.BlockSvg.TAB_WIDTH + 1);
           } else {
-            // Highlight right edge, bottom, and glint at bottom of tab.
+            // Highlight right edge, bottom.
             highlightInlineSteps.push('M',
                 (cursorX - Blockly.BlockSvg.SEP_SPACE_X + 1) + ',' +
                 (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y + 1));
             highlightInlineSteps.push('v', input.renderHeight + 1);
             highlightInlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
                                            input.renderWidth);
+            // Short highlight glint at bottom of tab.
             highlightInlineSteps.push('M',
                 (cursorX - input.renderWidth - Blockly.BlockSvg.SEP_SPACE_X +
-                 0.8) + ',' + (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y +
+                 1.8) + ',' + (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y +
                  Blockly.BlockSvg.TAB_HEIGHT - 0.4));
             highlightInlineSteps.push('l',
-                (Blockly.BlockSvg.TAB_WIDTH * 0.42) + ',-1.8');
+                (Blockly.BlockSvg.TAB_WIDTH * 0.38) + ',-1.8');
           }
           // Create inline input connection.
           if (Blockly.RTL) {
@@ -935,7 +936,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         // Short highlight glint at bottom of tab.
         highlightSteps.push('M', (inputRows.rightEdge - 4.2) + ',' +
             (cursorY + Blockly.BlockSvg.TAB_HEIGHT - 0.4));
-        highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.42) +
+        highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.38) +
             ',-1.8');
       }
       // Create external input connection.

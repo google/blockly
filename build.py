@@ -127,11 +127,11 @@ delete window.BLOCKLY_BOOT;
 };
 
 // Delete any existing Closure (e.g. Soy's nogoog_shim).
-document.write('<script type="text/javascript">var goog = undefined;</script>');
+document.write('<script>var goog = undefined;</script>');
 // Load fresh Closure Library.
-document.write('<script type="text/javascript" src="' + window.BLOCKLY_DIR +
+document.write('<script src="' + window.BLOCKLY_DIR +
     '/../closure-library/closure/goog/base.js"></script>');
-document.write('<script type="text/javascript">window.BLOCKLY_BOOT()</script>');
+document.write('<script>window.BLOCKLY_BOOT()</script>');
 """)
     f.close()
     print('SUCCESS: ' + target_filename)

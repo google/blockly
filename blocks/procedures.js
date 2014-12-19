@@ -232,7 +232,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var name = this.getFieldValue('NAME');
     Blockly.Procedures.disposeCallers(name, this.workspace);
     // Call parent's destructor.
-    Blockly.Block.prototype.dispose.apply(this, arguments);
+    this.constructor.prototype.dispose.apply(this, arguments);
   },
   /**
    * Return the signature of this procedure definition.

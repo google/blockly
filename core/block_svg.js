@@ -356,7 +356,7 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone) {
     var closure = function() {
       Blockly.BlockSvg.disposeUiStep_(clone);
     };
-    window.setTimeout(closure, 10);
+    window.requestAnimationFrame(closure);
   }
 };
 
@@ -401,7 +401,7 @@ Blockly.BlockSvg.connectionUiStep_ = function(ripple) {
     var closure = function() {
       Blockly.BlockSvg.connectionUiStep_(ripple);
     };
-    window.setTimeout(closure, 10);
+    window.requestAnimationFrame(closure);
   }
 };
 

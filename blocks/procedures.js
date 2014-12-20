@@ -80,12 +80,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // Check for duplicated arguments.
     var badArg = false;
     var hash = {};
-    for (var x = 0; x < this.arguments_.length; x++) {
-      if (hash['arg_' + this.arguments_[x].toLowerCase()]) {
+    for (var i = 0; i < this.arguments_.length; i++) {
+      if (hash['arg_' + this.arguments_[i].toLowerCase()]) {
         badArg = true;
         break;
       }
-      hash['arg_' + this.arguments_[x].toLowerCase()] = true;
+      hash['arg_' + this.arguments_[i].toLowerCase()] = true;
     }
     if (badArg) {
       this.setWarningText(Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING);
@@ -107,9 +107,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   mutationToDom: function() {
     var container = document.createElement('mutation');
-    for (var x = 0; x < this.arguments_.length; x++) {
+    for (var i = 0; i < this.arguments_.length; i++) {
       var parameter = document.createElement('arg');
-      parameter.setAttribute('name', this.arguments_[x]);
+      parameter.setAttribute('name', this.arguments_[i]);
       container.appendChild(parameter);
     }
 
@@ -126,7 +126,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   domToMutation: function(xmlElement) {
     this.arguments_ = [];
-    for (var x = 0, childNode; childNode = xmlElement.childNodes[x]; x++) {
+    for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
         this.arguments_.push(childNode.getAttribute('name'));
       }
@@ -157,12 +157,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     // Parameter list.
     var connection = containerBlock.getInput('STACK').connection;
-    for (var x = 0; x < this.arguments_.length; x++) {
+    for (var i = 0; i < this.arguments_.length; i++) {
       var paramBlock = Blockly.Block.obtain(workspace, 'procedures_mutatorarg');
       paramBlock.initSvg();
-      paramBlock.setFieldValue(this.arguments_[x], 'NAME');
+      paramBlock.setFieldValue(this.arguments_[i], 'NAME');
       // Store the old location.
-      paramBlock.oldLocation = x;
+      paramBlock.oldLocation = i;
       connection.connect(paramBlock.previousConnection);
       connection = paramBlock.nextConnection;
     }
@@ -262,9 +262,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   renameVar: function(oldName, newName) {
     var change = false;
-    for (var x = 0; x < this.arguments_.length; x++) {
-      if (Blockly.Names.equals(oldName, this.arguments_[x])) {
-        this.arguments_[x] = newName;
+    for (var i = 0; i < this.arguments_.length; i++) {
+      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
+        this.arguments_[i] = newName;
         change = true;
       }
     }
@@ -273,7 +273,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       // Update the mutator's variables if the mutator is open.
       if (this.mutator.isVisible_()) {
         var blocks = this.mutator.workspace_.getAllBlocks();
-        for (var x = 0, block; block = blocks[x]; x++) {
+        for (var i = 0, block; block = blocks[i]; i++) {
           if (block.type == 'procedures_mutatorarg' &&
               Blockly.Names.equals(oldName, block.getFieldValue('NAME'))) {
             block.setFieldValue(newName, 'NAME');
@@ -294,9 +294,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     option.text = Blockly.Msg.PROCEDURES_CREATE_DO.replace('%1', name);
     var xmlMutation = goog.dom.createDom('mutation');
     xmlMutation.setAttribute('name', name);
-    for (var x = 0; x < this.arguments_.length; x++) {
+    for (var i = 0; i < this.arguments_.length; i++) {
       var xmlArg = goog.dom.createDom('arg');
-      xmlArg.setAttribute('name', this.arguments_[x]);
+      xmlArg.setAttribute('name', this.arguments_[i]);
       xmlMutation.appendChild(xmlArg);
     }
     var xmlBlock = goog.dom.createDom('block', null, xmlMutation);
@@ -306,9 +306,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     // Add options to create getters for each parameter.
     if (!this.isCollapsed()) {
-      for (var x = 0; x < this.arguments_.length; x++) {
+      for (var i = 0; i < this.arguments_.length; i++) {
         var option = {enabled: true};
-        var name = this.arguments_[x];
+        var name = this.arguments_[i];
         option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
         var xmlField = goog.dom.createDom('field', null, name);
         xmlField.setAttribute('name', 'VAR');
@@ -504,25 +504,25 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     var savedRendered = this.rendered;
     this.rendered = false;
     // Update the quarkConnections_ with existing connections.
-    for (var x = this.arguments_.length - 1; x >= 0; x--) {
-      var input = this.getInput('ARG' + x);
+    for (var i = this.arguments_.length - 1; i >= 0; i--) {
+      var input = this.getInput('ARG' + i);
       if (input) {
         var connection = input.connection.targetConnection;
-        this.quarkConnections_[this.quarkArguments_[x]] = connection;
+        this.quarkConnections_[this.quarkArguments_[i]] = connection;
         // Disconnect all argument blocks and remove all inputs.
-        this.removeInput('ARG' + x);
+        this.removeInput('ARG' + i);
       }
     }
     // Rebuild the block's arguments.
     this.arguments_ = [].concat(paramNames);
     this.quarkArguments_ = paramIds;
-    for (var x = 0; x < this.arguments_.length; x++) {
-      var input = this.appendValueInput('ARG' + x)
+    for (var i = 0; i < this.arguments_.length; i++) {
+      var input = this.appendValueInput('ARG' + i)
           .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField(this.arguments_[x]);
+          .appendField(this.arguments_[i]);
       if (this.quarkArguments_) {
         // Reconnect any child blocks.
-        var quarkName = this.quarkArguments_[x];
+        var quarkName = this.quarkArguments_[i];
         if (quarkName in this.quarkConnections_) {
           var connection = this.quarkConnections_[quarkName];
           if (!connection || connection.targetConnection ||
@@ -551,9 +551,9 @@ Blockly.Blocks['procedures_callnoreturn'] = {
   mutationToDom: function() {
     var container = document.createElement('mutation');
     container.setAttribute('name', this.getProcedureCall());
-    for (var x = 0; x < this.arguments_.length; x++) {
+    for (var i = 0; i < this.arguments_.length; i++) {
       var parameter = document.createElement('arg');
-      parameter.setAttribute('name', this.arguments_[x]);
+      parameter.setAttribute('name', this.arguments_[i]);
       container.appendChild(parameter);
     }
     return container;
@@ -575,7 +575,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       this.setProcedureParameters(def.arguments_, def.paramIds_);
     } else {
       this.arguments_ = [];
-      for (var x = 0, childNode; childNode = xmlElement.childNodes[x]; x++) {
+      for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
         if (childNode.nodeName.toLowerCase() == 'arg') {
           this.arguments_.push(childNode.getAttribute('name'));
         }
@@ -593,10 +593,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
    * @this Blockly.Block
    */
   renameVar: function(oldName, newName) {
-    for (var x = 0; x < this.arguments_.length; x++) {
-      if (Blockly.Names.equals(oldName, this.arguments_[x])) {
-        this.arguments_[x] = newName;
-        this.getInput('ARG' + x).fieldRow[0].setText(newName);
+    for (var i = 0; i < this.arguments_.length; i++) {
+      if (Blockly.Names.equals(oldName, this.arguments_[i])) {
+        this.arguments_[i] = newName;
+        this.getInput('ARG' + i).fieldRow[0].setText(newName);
       }
     }
   },

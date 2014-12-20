@@ -89,11 +89,11 @@ Blockly.Blocks['controls_if'] = {
   domToMutation: function(xmlElement) {
     this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
     this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10);
-    for (var x = 1; x <= this.elseifCount_; x++) {
-      this.appendValueInput('IF' + x)
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      this.appendValueInput('IF' + i)
           .setCheck('Boolean')
           .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
-      this.appendStatementInput('DO' + x)
+      this.appendStatementInput('DO' + i)
           .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     }
     if (this.elseCount_) {
@@ -111,7 +111,7 @@ Blockly.Blocks['controls_if'] = {
     var containerBlock = Blockly.Block.obtain(workspace, 'controls_if_if');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
-    for (var x = 1; x <= this.elseifCount_; x++) {
+    for (var i = 1; i <= this.elseifCount_; i++) {
       var elseifBlock = Blockly.Block.obtain(workspace, 'controls_if_elseif');
       elseifBlock.initSvg();
       connection.connect(elseifBlock.previousConnection);
@@ -136,9 +136,9 @@ Blockly.Blocks['controls_if'] = {
     }
     this.elseCount_ = 0;
     // Disconnect all the elseif input blocks and remove the inputs.
-    for (var x = this.elseifCount_; x > 0; x--) {
-      this.removeInput('IF' + x);
-      this.removeInput('DO' + x);
+    for (var i = this.elseifCount_; i > 0; i--) {
+      this.removeInput('IF' + i);
+      this.removeInput('DO' + i);
     }
     this.elseifCount_ = 0;
     // Rebuild the block's optional inputs.
@@ -183,17 +183,17 @@ Blockly.Blocks['controls_if'] = {
    */
   saveConnections: function(containerBlock) {
     var clauseBlock = containerBlock.getInputTargetBlock('STACK');
-    var x = 1;
+    var i = 1;
     while (clauseBlock) {
       switch (clauseBlock.type) {
         case 'controls_if_elseif':
-          var inputIf = this.getInput('IF' + x);
-          var inputDo = this.getInput('DO' + x);
+          var inputIf = this.getInput('IF' + i);
+          var inputDo = this.getInput('DO' + i);
           clauseBlock.valueConnection_ =
               inputIf && inputIf.connection.targetConnection;
           clauseBlock.statementConnection_ =
               inputDo && inputDo.connection.targetConnection;
-          x++;
+          i++;
           break;
         case 'controls_if_else':
           var inputDo = this.getInput('ELSE');

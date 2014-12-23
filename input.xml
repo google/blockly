@@ -1,48 +1,5 @@
-<xml id="startBlocks" style="display: none">
-  <block type="controls_if" inline="false" x="20" y="20">
-    <mutation else="1"></mutation>
-    <value name="IF0">
-      <block type="logic_compare" inline="true">
-        <field name="OP">EQ</field>
-        <value name="A">
-          <block type="math_arithmetic" inline="true">
-            <field name="OP">MULTIPLY</field>
-            <value name="A">
-              <block type="math_number">
-                <field name="NUM">6</field>
-              </block>
-            </value>
-            <value name="B">
-              <block type="math_number">
-                <field name="NUM">7</field>
-              </block>
-            </value>
-          </block>
-        </value>
-        <value name="B">
-          <block type="math_number">
-            <field name="NUM">42</field>
-          </block>
-        </value>
-      </block>
-    </value>
-    <statement name="DO0">
-      <block type="text_print" inline="false">
-        <value name="TEXT">
-          <block type="text">
-            <field name="TEXT">Don't panic</field>
-          </block>
-        </value>
-      </block>
-    </statement>
-    <statement name="ELSE">
-      <block type="text_print" inline="false">
-        <value name="TEXT">
-          <block type="text">
-            <field name="TEXT">Panic</field>
-          </block>
-        </value>
-      </block>
-    </statement>
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="colour_picker" id="11" x="93" y="12">
+    <field name="COLOUR">#ff0000</field>
   </block>
 </xml>

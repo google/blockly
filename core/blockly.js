@@ -363,6 +363,28 @@ Blockly.onMouseMove_ = function(e) {
 };
 
 /**
+ * Handle a mouse-move on SVG drawing surface all time for tracking mouse position.
+ * @param {!Event} e Mouse move event.
+ * @private
+ */
+Blockly.onMouseMoveTracking_ = function(e) {
+  //mouse position tracking (for zooming)
+  Blockly.mainWorkspace.mousePosition = Blockly.mouseToSvg(e);
+};
+
+/**
+ * Handle a mouse-wheel on SVG drawing surface.
+ * @param {!Event} e Mouse wheel event.
+ * @private
+ */
+Blockly.onMouseWheel_ = function(e) {
+    Blockly.hideChaff();
+    // cross-browser wheel delta
+    var e = window.event || e; // old IE support
+    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+};
+
+/**
  * Handle a key-down on SVG drawing surface.
  * @param {!Event} e Key down event.
  * @private

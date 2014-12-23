@@ -359,6 +359,12 @@ Blockly.init_ = function() {
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
   Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
+  //mouse-wheel for firefox
+  Blockly.bindEvent_(Blockly.svg, 'DOMMouseScroll', null, Blockly.onMouseWheel_);
+  //mouse-wheel for other browsers
+  Blockly.bindEvent_(Blockly.svg, 'mousewheel', null, Blockly.onMouseWheel_);
+  //mouse-move for tracking mouse position
+  Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMoveTracking_);
   Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
   Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
                      Blockly.onContextMenu_);

@@ -84,6 +84,12 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Current position of mouse.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.mousePosition = null;
+
+/**
  * The workspace's trashcan (if any).
  * @type {Blockly.Trashcan}
  */

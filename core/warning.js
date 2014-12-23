@@ -107,7 +107,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
     var paragraph = Blockly.Warning.textToDom_(this.text_);
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.Workspace} */ (this.block_.workspace),
-        paragraph, this.block_.svg_.svgPath_,
+        paragraph, this.block_.svgPath_,
         this.iconX_, this.iconY_, null, null);
     if (Blockly.RTL) {
       // Right-align the paragraph.

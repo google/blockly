@@ -66,7 +66,8 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
  */
 Blockly.FieldLabel.prototype.init = function(block) {
   if (this.sourceBlock_) {
-    throw 'Text has already been initialized once.';
+    // Text has already been initialized once.
+    return;
   }
   this.sourceBlock_ = block;
   block.getSvgRoot().appendChild(this.textElement_);
@@ -89,7 +90,7 @@ Blockly.FieldLabel.prototype.dispose = function() {
  * Used for measuring the size and for positioning.
  * @return {!Element} The group element.
  */
-Blockly.FieldLabel.prototype.getRootElement = function() {
+Blockly.FieldLabel.prototype.getSvgRoot = function() {
   return /** @type {!Element} */ (this.textElement_);
 };
 

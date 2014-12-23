@@ -97,6 +97,19 @@ Blockly.FieldColour.prototype.setValue = function(colour) {
 };
 
 /**
+ * Get the text from this field.  Used when the block is collapsed.
+ * @return {string} Current text.
+ */
+Blockly.FieldColour.prototype.getText = function() {
+  var colour = this.colour_;
+  var m = colour.match(/^#(.)\1(.)\2(.)\3$/);
+  if (m) {
+    colour = '#' + m[1] + m[2] + m[3];
+  }
+  return colour;
+};
+
+/**
  * An array of colour strings for the palette.
  * See bottom of this page for the default:
  * http://docs.closure-library.googlecode.com/git/closure_goog_ui_colorpicker.js.source.html
@@ -155,21 +168,21 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
 
   // Configure event handler.
-  var thisObj = this;
+  var thisField = this;
   Blockly.FieldColour.changeEventKey_ = goog.events.listen(picker,
       goog.ui.ColorPicker.EventType.CHANGE,
       function(event) {
         var colour = event.target.getSelectedColor() || '#000000';
         Blockly.WidgetDiv.hide();
-        if (thisObj.changeHandler_) {
+        if (thisField.sourceBlock_ && thisField.changeHandler_) {
           // Call any change handler, and allow it to override.
-          var override = thisObj.changeHandler_(colour);
+          var override = thisField.changeHandler_(colour);
           if (override !== undefined) {
             colour = override;
           }
         }
         if (colour !== null) {
-          thisObj.setValue(colour);
+          thisField.setValue(colour);
         }
       });
 };

@@ -27,6 +27,7 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.Css');
+goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
 
 
@@ -260,7 +261,7 @@ Blockly.createDom_ = function(container) {
       {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
   Blockly.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
-  Blockly.mainWorkspace = new Blockly.Workspace(
+  Blockly.mainWorkspace = new Blockly.WorkspaceSvg(
       Blockly.getMainWorkspaceMetrics_,
       Blockly.setMainWorkspaceMetrics_);
   svg.appendChild(Blockly.mainWorkspace.createDom());
@@ -285,7 +286,7 @@ Blockly.createDom_ = function(container) {
     }
     if (!Blockly.hasScrollbars) {
       var workspaceChanged = function() {
-        if (Blockly.Block.dragMode_ == 0) {
+        if (Blockly.dragMode_ == 0) {
           var metrics = Blockly.mainWorkspace.getMetrics();
           var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
           var edgeTop = metrics.viewTop + metrics.absoluteTop;

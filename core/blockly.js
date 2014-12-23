@@ -28,7 +28,7 @@
 goog.provide('Blockly');
 
 // Blockly core dependencies.
-goog.require('Blockly.Block');
+goog.require('Blockly.BlockSvg');
 goog.require('Blockly.Connection');
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');
@@ -43,7 +43,7 @@ goog.require('Blockly.Procedures');
 goog.require('Blockly.Realtime');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.WidgetDiv');
-goog.require('Blockly.Workspace');
+goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 
@@ -222,6 +222,15 @@ Blockly.mainWorkspace = null;
  * @private
  */
 Blockly.clipboard_ = null;
+
+/**
+ * Is the mouse dragging a block?
+ * 0 - No drag operation.
+ * 1 - Still inside the sticky DRAG_RADIUS.
+ * 2 - Freely draggable.
+ * @private
+ */
+Blockly.dragMode_ = 0;
 
 /**
  * Wrapper function called when a touch mouseUp occurs during a drag operation.
@@ -408,7 +417,7 @@ Blockly.onKeyDown_ = function(e) {
  * @private
  */
 Blockly.terminateDrag_ = function() {
-  Blockly.Block.terminateDrag_();
+  Blockly.BlockSvg.terminateDrag_();
   Blockly.Flyout.terminateDrag_();
 };
 
@@ -758,9 +767,9 @@ Blockly.getMainWorkspace = function() {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!window['Blockly']) {
-  window['Blockly'] = {};
+if (!this['Blockly']) {
+  this['Blockly'] = {};
 }
-window['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
-window['Blockly']['addChangeListener'] = Blockly.addChangeListener;
-window['Blockly']['removeChangeListener'] = Blockly.removeChangeListener;
+this['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
+this['Blockly']['addChangeListener'] = Blockly.addChangeListener;
+this['Blockly']['removeChangeListener'] = Blockly.removeChangeListener;

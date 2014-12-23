@@ -65,12 +65,15 @@ Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 
 /**
  * Generate code for all blocks in the workspace to the specified language.
+ * @param {Blockly.Workspace=} opt_workspace Workspace to generate code from.
+ *     Defaults to main workspace.
  * @return {string} Generated code.
  */
-Blockly.Generator.prototype.workspaceToCode = function() {
+Blockly.Generator.prototype.workspaceToCode = function(opt_workspace) {
+  var workspace = opt_workspace || Blockly.mainWorkspace;
   var code = [];
-  this.init();
-  var blocks = Blockly.mainWorkspace.getTopBlocks(true);
+  this.init(workspace);
+  var blocks = workspace.getTopBlocks(true);
   for (var x = 0, block; block = blocks[x]; x++) {
     var line = this.blockToCode(block);
     if (goog.isArray(line)) {

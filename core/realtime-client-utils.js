@@ -88,12 +88,12 @@ rtclient.getParams = function() {
       params[decodeURIComponent(paramStr[0])] = decodeURIComponent(paramStr[1]);
     }
   }
-  var hashFragment = window.location.hash;
+  var hashFragment = this.location && this.location.hash;
   if (hashFragment) {
     parseParams(hashFragment);
   }
   // Opening from Drive will encode the state in a query search parameter.
-  var searchFragment = window.location.search;
+  var searchFragment = this.location && this.location.search;
   if (searchFragment) {
     parseParams(searchFragment);
   }

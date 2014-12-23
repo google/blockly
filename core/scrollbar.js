@@ -176,9 +176,12 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
 /**
  * Width of vertical scrollbar or height of horizontal scrollbar.
  * Increase the size of scrollbars on touch devices.
+ * Don't define if there is no document object (e.g. node.js).
  */
-Blockly.Scrollbar.scrollbarThickness =
-    ('ontouchstart' in document.documentElement) ? 25 : 15;
+if (this.document) {
+  Blockly.Scrollbar.scrollbarThickness =
+      ('ontouchstart' in this.document.documentElement) ? 25 : 15;
+}
 
 /**
  * Dispose of this scrollbar.

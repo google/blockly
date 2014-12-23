@@ -81,8 +81,10 @@ Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
  * Initialise the database of variable names.
+ * @param {Blockly.Workspace=} opt_workspace Workspace to generate code from.
+ *     Defaults to main workspace.
  */
-Blockly.Python.init = function() {
+Blockly.Python.init = function(opt_workspace) {
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Python.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
@@ -97,7 +99,7 @@ Blockly.Python.init = function() {
   }
 
   var defvars = [];
-  var variables = Blockly.Variables.allVariables();
+  var variables = Blockly.Variables.allVariables(opt_workspace);
   for (var x = 0; x < variables.length; x++) {
     defvars[x] = Blockly.Python.variableDB_.getName(variables[x],
         Blockly.Variables.NAME_TYPE) + ' = None';

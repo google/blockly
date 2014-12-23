@@ -38,15 +38,21 @@ Blockly.Variables.NAME_TYPE = 'VARIABLE';
 
 /**
  * Find all user-created variables.
- * @param {Blockly.Block=} opt_block Optional root block.
+ * @param {Blockly.Block|Blockly.Workspace|undefined} opt_root Optional root
+ *     block or workspace.  Defaults to main workspace.
  * @return {!Array.<string>} Array of variable names.
  */
-Blockly.Variables.allVariables = function(opt_block) {
+Blockly.Variables.allVariables = function(opt_root) {
+  var root = opt_root || Blockly.mainWorkspace;
   var blocks;
-  if (opt_block) {
-    blocks = opt_block.getDescendants();
+  if (root.getDescendants) {
+    // Root is Block.
+    blocks = root.getDescendants();
+  } else if (root.getAllBlocks) {
+    // Root is Workspace.
+    blocks = root.getAllBlocks();
   } else {
-    blocks = Blockly.mainWorkspace.getAllBlocks();
+    throw 'Not Block or Workspace: ' + root;
   }
   var variableHash = Object.create(null);
   // Iterate through every block and add each variable to the hash.
@@ -75,9 +81,12 @@ Blockly.Variables.allVariables = function(opt_block) {
  * Find all instances of the specified variable and rename them.
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
+ * @param {Blockly.Workspace=} opt_workspace Workspace rename variables in.
+ *     Defaults to main workspace.
  */
-Blockly.Variables.renameVariable = function(oldName, newName) {
-  var blocks = Blockly.mainWorkspace.getAllBlocks();
+Blockly.Variables.renameVariable = function(oldName, newName, opt_workspace) {
+  var workspace = opt_workspace || Blockly.mainWorkspace;
+  var blocks = workspace.getAllBlocks();
   // Iterate through every block.
   for (var x = 0; x < blocks.length; x++) {
     var func = blocks[x].renameVar;

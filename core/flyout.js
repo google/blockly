@@ -28,6 +28,7 @@ goog.provide('Blockly.Flyout');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
+goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.userAgent');
 goog.require('goog.math.Rect');
 
@@ -42,7 +43,7 @@ Blockly.Flyout = function() {
    * @type {!Blockly.Workspace}
    * @private
    */
-  this.workspace_ = new Blockly.Workspace(
+  this.workspace_ = new Blockly.WorkspaceSvg(
       function() {return flyout.getMetrics_();},
       function(ratio) {return flyout.setMetrics_(ratio);});
   this.workspace_.isFlyout = true;
@@ -404,16 +405,16 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
           this.blockMouseDown_(block)));
     }
-    this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block.svg_,
-        block.svg_.addSelect));
-    this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block.svg_,
-        block.svg_.removeSelect));
+    this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
+        block.addSelect));
+    this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
+        block.removeSelect));
     this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
         this.createBlockFunc_(block)));
-    this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block.svg_,
-        block.svg_.addSelect));
-    this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block.svg_,
-        block.svg_.removeSelect));
+    this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
+        block.addSelect));
+    this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
+        block.removeSelect));
   }
 
   // IE 11 is an incompetant browser that fails to fire mouseout events.
@@ -421,7 +422,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   var deselectAll = function(e) {
     var blocks = this.workspace_.getTopBlocks(false);
     for (var i = 0, block; block = blocks[i]; i++) {
-      block.svg_.removeSelect();
+      block.removeSelect();
     }
   };
   this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
@@ -477,18 +478,6 @@ Blockly.Flyout.prototype.reflow = function() {
     // Fire a resize event to update the flyout's scrollbar.
     Blockly.fireUiEvent(window, 'resize');
   }
-};
-
-/**
- * Move a block to a specific location on the drawing surface.
- * @param {number} x Horizontal location.
- * @param {number} y Vertical location.
- */
-Blockly.Block.prototype.moveTo = function(x, y) {
-  var oldXY = this.getRelativeToSurfaceXY();
-  this.svg_.getRootElement().setAttribute('transform',
-      'translate(' + x + ', ' + y + ')');
-  this.moveConnections_(x - oldXY.x, y - oldXY.y);
 };
 
 /**

@@ -94,7 +94,8 @@ Blockly.FieldImage.prototype.EDITABLE = false;
  */
 Blockly.FieldImage.prototype.init = function(block) {
   if (this.sourceBlock_) {
-    throw 'Image has already been initialized once.';
+    // Image has already been initialized once.
+    return;
   }
   this.sourceBlock_ = block;
   block.getSvgRoot().appendChild(this.fieldGroup_);
@@ -160,4 +161,12 @@ Blockly.FieldImage.prototype.setText = function(alt) {
     return;
   }
   this.text_ = alt;
+};
+
+/**
+ * Images are fixed width, no need to render.
+ * @private
+ */
+Blockly.FieldImage.prototype.render_ = function() {
+  // NOP
 };

@@ -51,14 +51,11 @@ Blockly.Blocks['lists_create_with'] = {
    */
   init: function() {
     this.setColour(260);
-    this.appendValueInput('ADD0')
-        .appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
-    this.appendValueInput('ADD1');
-    this.appendValueInput('ADD2');
+    this.itemCount_ = 3;
+    this.updateShape_();
     this.setOutput(true, 'Array');
     this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
-    this.itemCount_ = 3;
   },
   /**
    * Create XML to represent list inputs.
@@ -76,20 +73,8 @@ Blockly.Blocks['lists_create_with'] = {
    * @this Blockly.Block
    */
   domToMutation: function(xmlElement) {
-    for (var x = 0; x < this.itemCount_; x++) {
-      this.removeInput('ADD' + x);
-    }
     this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
-    for (var x = 0; x < this.itemCount_; x++) {
-      var input = this.appendValueInput('ADD' + x);
-      if (x == 0) {
-        input.appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
-      }
-    }
-    if (this.itemCount_ == 0) {
-      this.appendDummyInput('EMPTY')
-          .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
-    }
+    this.updateShape_();
   },
   /**
    * Populate the mutator's dialog with this block's components.
@@ -102,7 +87,7 @@ Blockly.Blocks['lists_create_with'] = {
         Blockly.Block.obtain(workspace, 'lists_create_with_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
-    for (var x = 0; x < this.itemCount_; x++) {
+    for (var i = 0; i < this.itemCount_; i++) {
       var itemBlock = Blockly.Block.obtain(workspace, 'lists_create_with_item');
       itemBlock.initSvg();
       connection.connect(itemBlock.previousConnection);
@@ -116,33 +101,23 @@ Blockly.Blocks['lists_create_with'] = {
    * @this Blockly.Block
    */
   compose: function(containerBlock) {
-    // Disconnect all input blocks and remove all inputs.
-    if (this.itemCount_ == 0) {
-      this.removeInput('EMPTY');
-    } else {
-      for (var x = this.itemCount_ - 1; x >= 0; x--) {
-        this.removeInput('ADD' + x);
-      }
-    }
-    this.itemCount_ = 0;
-    // Rebuild the block's inputs.
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    // Count number of inputs.
+    var connections = [];
+    var i = 0;
     while (itemBlock) {
-      var input = this.appendValueInput('ADD' + this.itemCount_);
-      if (this.itemCount_ == 0) {
-        input.appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
-      }
-      // Reconnect any child blocks.
-      if (itemBlock.valueConnection_) {
-        input.connection.connect(itemBlock.valueConnection_);
-      }
-      this.itemCount_++;
+      connections[i] = itemBlock.valueConnection_;
       itemBlock = itemBlock.nextConnection &&
           itemBlock.nextConnection.targetBlock();
+      i++;
     }
-    if (this.itemCount_ == 0) {
-      this.appendDummyInput('EMPTY')
-          .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+    this.itemCount_ = i;
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (var i = 0; i < this.itemCount_; i++) {
+      if (connections[i]) {
+        this.getInput('ADD' + i).connection.connect(connections[i]);
+      }
     }
   },
   /**
@@ -152,13 +127,42 @@ Blockly.Blocks['lists_create_with'] = {
    */
   saveConnections: function(containerBlock) {
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
-    var x = 0;
+    var i = 0;
     while (itemBlock) {
-      var input = this.getInput('ADD' + x);
+      var input = this.getInput('ADD' + i);
       itemBlock.valueConnection_ = input && input.connection.targetConnection;
-      x++;
+      i++;
       itemBlock = itemBlock.nextConnection &&
           itemBlock.nextConnection.targetBlock();
+    }
+  },
+  /**
+   * Modify this block to have the correct number of inputs.
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function() {
+    // Delete everything.
+    if (this.getInput('EMPTY')) {
+      this.removeInput('EMPTY');
+    } else {
+      var i = 0;
+      while (this.getInput('ADD' + i)) {
+        this.removeInput('ADD' + i);
+        i++;
+      }
+    }
+    // Rebuild block.
+    if (this.itemCount_ == 0) {
+      this.appendDummyInput('EMPTY')
+          .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+    } else {
+      for (var i = 0; i < this.itemCount_; i++) {
+        var input = this.appendValueInput('ADD' + i);
+        if (i == 0) {
+          input.appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
+        }
+      }
     }
   }
 };

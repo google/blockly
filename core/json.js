@@ -193,6 +193,21 @@ Blockly.JSON.blockToObject_ = function(block) {
   return element;
 };
 
+/**
+ * Converts JS Object into a JSON string.
+ * Throws an error if JSON doesn't parse.
+ * @param {object} jsonObject Object representation.
+ * @return {string} A string of JSON.
+ */
+Blockly.JSON.ObjectToText = function(jsonObject) {
+  var jsonText = JSON.stringify(jsonObject, undefined, 2);
+  // The DOM should have one and only one top-level node, an JSON tag.
+  if (!jsonText) {
+    // Whatever we got back from the stringify is not JSON string.
+    throw 'Blockly.JSON.ObjectToText did not obtain a valid JSON string.';
+  }
+  return jsonText;
+};
 
 /**
  * Converts plain text into a DOM structure.

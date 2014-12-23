@@ -28,7 +28,7 @@ goog.provide('Blockly.Procedures');
 
 // TODO(scr): Fix circular dependencies
 // goog.require('Blockly.Block');
-goog.require('Blockly.FieldVariable');
+goog.require('Blockly.Field');
 goog.require('Blockly.Names');
 goog.require('Blockly.Workspace');
 
@@ -142,7 +142,7 @@ Blockly.Procedures.isLegalName = function(name, workspace, opt_exclude) {
  * Rename a procedure.  Called by the editable field.
  * @param {string} text The proposed new name.
  * @return {string} The accepted name.
- * @this {!Blockly.FieldVariable}
+ * @this {!Blockly.Field}
  */
 Blockly.Procedures.rename = function(text) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.

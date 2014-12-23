@@ -69,7 +69,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
   if (goog.isString(field)) {
     field = new Blockly.FieldLabel(/** @type {string} */ (field));
   }
-  if (this.sourceBlock_.svg_) {
+  if (this.sourceBlock_.rendered) {
     field.init(this.sourceBlock_);
   }
   field.name = opt_name;
@@ -160,7 +160,7 @@ Blockly.Input.prototype.setVisible = function(visible) {
     }
     var child = this.connection.targetBlock();
     if (child) {
-      child.svg_.getRootElement().style.display = display;
+      child.getSvgRoot().style.display = display;
       if (!visible) {
         child.rendered = false;
       }

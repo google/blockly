@@ -115,7 +115,8 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
  * @type {Object}
  */
 Blockly.bindEvent_.TOUCH_MAP = {};
-if ('ontouchstart' in document.documentElement) {
+if (this.document && this.document.documentElement &&
+    'ontouchstart' in document.documentElement) {
   Blockly.bindEvent_.TOUCH_MAP = {
     'mousedown': ['touchstart'],
     'mousemove': ['touchmove'],

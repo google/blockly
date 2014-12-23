@@ -320,7 +320,7 @@ Code.renderContent = function() {
   } else if (content.id == 'content_json') {
     var jsonTextarea = document.getElementById('content_json');
     var jsonObject = Blockly.JSON.workspaceToObject(Blockly.mainWorkspace);
-    var jsonText = JSON.stringify(jsonObject, undefined, 2);
+    var jsonText = Blockly.JSON.ObjectToText(jsonObject);
     jsonTextarea.value = jsonText;
     jsonTextarea.focus();
   } else if (content.id == 'content_javascript') {
@@ -384,9 +384,9 @@ Code.init = function() {
       el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
     }
     // Make the 'Blocks' tab line up with the toolbox.
-    if (Blockly.Toolbox.width) {
+    if (Blockly.mainWorkspace.toolbox_.width) {
       document.getElementById('tab_blocks').style.minWidth =
-          (Blockly.Toolbox.width - 38) + 'px';
+          (Blockly.mainWorkspace.toolbox_.width - 38) + 'px';
           // Account for the 19 pixel margin and on each side.
     }
   };

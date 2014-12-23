@@ -261,10 +261,11 @@ class Gen_compressed(threading.Thread):
       for error in errors:
         print('FATAL ERROR')
         print(error['error'])
-        print('%s at line %d:' % (
-            file_lookup(error['file']), error['lineno']))
-        print(error['line'])
-        print((' ' * error['charno']) + '^')
+        if error['file']:
+          print('%s at line %d:' % (
+              file_lookup(error['file']), error['lineno']))
+          print(error['line'])
+          print((' ' * error['charno']) + '^')
         sys.exit(1)
     else:
       if json_data.has_key('warnings'):
@@ -272,10 +273,11 @@ class Gen_compressed(threading.Thread):
         for warning in warnings:
           print('WARNING')
           print(warning['warning'])
-          print('%s at line %d:' % (
-              file_lookup(warning['file']), warning['lineno']))
-          print(warning['line'])
-          print((' ' * warning['charno']) + '^')
+          if warning['file']:
+            print('%s at line %d:' % (
+                file_lookup(warning['file']), warning['lineno']))
+            print(warning['line'])
+            print((' ' * warning['charno']) + '^')
         print()
 
       if not json_data.has_key('compiledCode'):

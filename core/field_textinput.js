@@ -81,7 +81,7 @@ Blockly.FieldTextInput.prototype.setText = function(text) {
     // No change if null.
     return;
   }
-  if (this.changeHandler_) {
+  if (this.sourceBlock_ && this.changeHandler_) {
     var validated = this.changeHandler_(text);
     // If the new text is invalid, validation returns null.
     // In this case we still want to display the illegal result.
@@ -104,7 +104,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
                       goog.userAgent.IPAD)) {
     // Mobile browsers have issues with in-line textareas (focus & keyboards).
     var newValue = window.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_);
-    if (this.changeHandler_) {
+    if (this.sourceBlock_ && this.changeHandler_) {
       var override = this.changeHandler_(newValue);
       if (override !== undefined) {
         newValue = override;
@@ -182,7 +182,7 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
   var valid = true;
   goog.asserts.assertObject(Blockly.FieldTextInput.htmlInput_);
   var htmlInput = /** @type {!Element} */ (Blockly.FieldTextInput.htmlInput_);
-  if (this.changeHandler_) {
+  if (this.sourceBlock_ && this.changeHandler_) {
     valid = this.changeHandler_(htmlInput.value);
   }
   if (valid === null) {
@@ -229,7 +229,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     var htmlInput = Blockly.FieldTextInput.htmlInput_;
     // Save the edit (if it validates).
     var text = htmlInput.value;
-    if (thisField.changeHandler_) {
+    if (thisField.sourceBlock_ && thisField.changeHandler_) {
       text = thisField.changeHandler_(text);
       if (text === null) {
         // Invalid edit.

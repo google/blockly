@@ -64,6 +64,10 @@ Blockly.Icon.prototype.iconY_ = 0;
  * @private
  */
 Blockly.Icon.prototype.createIcon_ = function() {
+  if (this.iconGroup_) {
+    // Icon already exists.
+    return;
+  }
   /* Here's the markup that will be generated:
   <g class="blocklyIconGroup"></g>
   */

@@ -97,7 +97,7 @@ Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
  */
 Blockly.FieldCheckbox.prototype.showEditor_ = function() {
   var newState = !this.state_;
-  if (this.changeHandler_) {
+  if (this.sourceBlock_ && this.changeHandler_) {
     // Call any change handler, and allow it to override.
     var override = this.changeHandler_(newState);
     if (override !== undefined) {

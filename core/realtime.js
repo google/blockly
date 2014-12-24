@@ -538,7 +538,7 @@ Blockly.Realtime.afterAuth_ = function() {
   // This is a workaround for the fact that the code in realtime-client-utils.js
   // doesn't deal with auth timeouts correctly.  So we explicitly reauthorize at
   // regular intervals.
-  window.setTimeout(
+  setTimeout(
       function() {
         Blockly.Realtime.realtimeLoader_.authorizer.authorize(
             Blockly.Realtime.afterAuth_);

@@ -538,7 +538,7 @@ Blockly.removeAllRanges = function() {
     var sel = window.getSelection();
     if (sel && sel.removeAllRanges) {
       sel.removeAllRanges();
-      window.setTimeout(function() {
+      setTimeout(function() {
           try {
             window.getSelection().removeAllRanges();
           } catch (e) {
@@ -767,9 +767,9 @@ Blockly.getMainWorkspace = function() {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-if (!this['Blockly']) {
-  this['Blockly'] = {};
+if (!goog.global['Blockly']) {
+  goog.global['Blockly'] = {};
 }
-this['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
-this['Blockly']['addChangeListener'] = Blockly.addChangeListener;
-this['Blockly']['removeChangeListener'] = Blockly.removeChangeListener;
+goog.global['Blockly']['getMainWorkspace'] = Blockly.getMainWorkspace;
+goog.global['Blockly']['addChangeListener'] = Blockly.addChangeListener;
+goog.global['Blockly']['removeChangeListener'] = Blockly.removeChangeListener;

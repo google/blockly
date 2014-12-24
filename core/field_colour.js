@@ -45,11 +45,20 @@ Blockly.FieldColour = function(colour, opt_changeHandler) {
   Blockly.FieldColour.superClass_.constructor.call(this, '\u00A0\u00A0\u00A0');
 
   this.changeHandler_ = opt_changeHandler;
-  this.borderRect_.style['fillOpacity'] = 1;
   // Set the initial state.
   this.setValue(colour);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
+
+/**
+ * Install this field on a block.
+ * @param {!Blockly.Block} block The block containing this field.
+ */
+Blockly.FieldColour.prototype.init = function(block) {
+  Blockly.FieldColour.superClass_.init.call(this, block);
+  this.borderRect_.style['fillOpacity'] = 1;
+  this.setValue(this.getValue());
+};
 
 /**
  * Clone this FieldColour.
@@ -87,7 +96,9 @@ Blockly.FieldColour.prototype.getValue = function() {
  */
 Blockly.FieldColour.prototype.setValue = function(colour) {
   this.colour_ = colour;
-  this.borderRect_.style.fill = colour;
+  if (this.borderRect_) {
+    this.borderRect_.style.fill = colour;
+  }
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     // Since we're not re-rendering we need to explicitly call
     // Blockly.Realtime.blockChanged()

@@ -79,6 +79,8 @@ rtclient.FOLDER_KEY = 'folderId';
  * @return {!Object} Parameter object.
  */
 rtclient.getParams = function() {
+  // Be careful with regards to node.js which has no window or location.
+  var location = goog.global['location'] || {};
   var params = {};
   function parseParams(fragment) {
     // Split up the query string and store in an object.
@@ -88,12 +90,12 @@ rtclient.getParams = function() {
       params[decodeURIComponent(paramStr[0])] = decodeURIComponent(paramStr[1]);
     }
   }
-  var hashFragment = this.location && this.location.hash;
+  var hashFragment = location.hash;
   if (hashFragment) {
     parseParams(hashFragment);
   }
   // Opening from Drive will encode the state in a query search parameter.
-  var searchFragment = this.location && this.location.search;
+  var searchFragment = location.search;
   if (searchFragment) {
     parseParams(searchFragment);
   }

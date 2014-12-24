@@ -29,6 +29,7 @@
 goog.provide('Blockly.Field');
 
 goog.require('goog.asserts');
+goog.require('goog.math.Size');
 goog.require('goog.userAgent');
 
 
@@ -38,20 +39,15 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Field = function(text) {
-  this.sourceBlock_ = null;
-  // Build the DOM.
-  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
-  this.borderRect_ = Blockly.createSvgElement('rect',
-      {'rx': 4,
-       'ry': 4,
-       'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
-       'y': -12,
-       'height': 16}, this.fieldGroup_);
-  this.textElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText'}, this.fieldGroup_);
-  this.size_ = {height: 25, width: 0};
+  this.size_ = new goog.math.Size(0, 25);
   this.setText(text);
 };
+
+/**
+ * Block this field is attached to.  Starts as null, then in set in init.
+ * @private
+ */
+Blockly.Field.prototype.sourceBlock_ = null;
 
 /**
  * Is the field visible, or hidden due to the block being collapsed?
@@ -90,12 +86,23 @@ Blockly.Field.prototype.init = function(block) {
     return;
   }
   this.sourceBlock_ = block;
+  // Build the DOM.
+  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
+  this.borderRect_ = Blockly.createSvgElement('rect',
+      {'rx': 4,
+       'ry': 4,
+       'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
+       'y': -12,
+       'height': 16}, this.fieldGroup_);
+  this.textElement_ = Blockly.createSvgElement('text',
+      {'class': 'blocklyText'}, this.fieldGroup_);
+
   this.updateEditable();
   block.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseUpWrapper_ =
       Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
-  // Bump to set the colours for dropdown arrows.
-  this.setText(null);
+  // Force a render.
+  this.updateTextNode_();
 };
 
 /**
@@ -152,8 +159,11 @@ Blockly.Field.prototype.setVisible = function(visible) {
     return;
   }
   this.visible_ = visible;
-  this.getSvgRoot().style.display = visible ? 'block' : 'none';
-  this.render_();
+  var root = this.getSvgRoot();
+  if (root) {
+    root.style.display = visible ? 'block' : 'none';
+    this.render_();
+  }
 };
 
 /**
@@ -191,7 +201,7 @@ Blockly.Field.prototype.render_ = function() {
 
 /**
  * Returns the height and width of the field.
- * @return {!Object} Height and width.
+ * @return {!goog.math.Size} Height and width.
  */
 Blockly.Field.prototype.getSize = function() {
   if (!this.size_.width) {
@@ -232,6 +242,10 @@ Blockly.Field.prototype.setText = function(text) {
  * @private
  */
 Blockly.Field.prototype.updateTextNode_ = function() {
+  if (!this.textElement_) {
+    // Not rendered yet.
+    return;
+  }
   var text = this.text_;
   // Empty the text element.
   goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));

@@ -288,11 +288,11 @@ Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
     return;
   }
   if (this.fireChangeEventPid_) {
-    window.clearTimeout(this.fireChangeEventPid_);
+    clearTimeout(this.fireChangeEventPid_);
   }
   var canvas = this.svgBlockCanvas_;
   if (canvas) {
-    this.fireChangeEventPid_ = window.setTimeout(function() {
+    this.fireChangeEventPid_ = setTimeout(function() {
         Blockly.fireUiEvent(canvas, 'blocklyWorkspaceChange');
       }, 0);
   }

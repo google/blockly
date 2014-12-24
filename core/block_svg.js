@@ -89,8 +89,8 @@ Blockly.BlockSvg.prototype.initSvg = function() {
 
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange)) {
-    Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
-        this.onchange);
+    Blockly.bindEvent_(this.workspace.getCanvas(), 'blocklyWorkspaceChange',
+        this, this.onchange);
   }
 };
 
@@ -995,7 +995,7 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone) {
     var closure = function() {
       Blockly.BlockSvg.disposeUiStep_(clone);
     };
-    window.setTimeout(closure, 10);
+    setTimeout(closure, 10);
   }
 };
 
@@ -1040,7 +1040,7 @@ Blockly.BlockSvg.connectionUiStep_ = function(ripple) {
     var closure = function() {
       Blockly.BlockSvg.connectionUiStep_(ripple);
     };
-    window.setTimeout(closure, 10);
+    setTimeout(closure, 10);
   }
 };
 

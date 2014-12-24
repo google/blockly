@@ -102,7 +102,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     var menuItem = e.target;
     if (menuItem) {
       var value = menuItem.getValue();
-      if (this.sourceBlock_ && thisField.changeHandler_) {
+      if (thisField.sourceBlock_ && thisField.changeHandler_) {
         // Call any change handler, and allow it to override.
         var override = thisField.changeHandler_(value);
         if (override !== undefined) {
@@ -281,11 +281,13 @@ Blockly.FieldDropdown.prototype.setText = function(text) {
   this.text_ = text;
   this.updateTextNode_();
 
-  // Insert dropdown arrow.
-  if (Blockly.RTL) {
-    this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
-  } else {
-    this.textElement_.appendChild(this.arrow_);
+  if (this.textElement_) {
+    // Insert dropdown arrow.
+    if (Blockly.RTL) {
+      this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
+    } else {
+      this.textElement_.appendChild(this.arrow_);
+    }
   }
 
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {

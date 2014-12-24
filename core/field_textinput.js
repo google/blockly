@@ -44,7 +44,6 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldTextInput = function(text, opt_changeHandler) {
   Blockly.FieldTextInput.superClass_.constructor.call(this, text);
-
   this.changeHandler_ = opt_changeHandler;
 };
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);

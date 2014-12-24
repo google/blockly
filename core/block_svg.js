@@ -631,6 +631,9 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     Blockly.removeAllRanges();
     var dx = e.clientX - this_.startDragMouseX;
     var dy = e.clientY - this_.startDragMouseY;
+    //fix scale
+    dx /= Blockly.mainWorkspace.scale;
+    dy /= Blockly.mainWorkspace.scale;
     if (Blockly.dragMode_ == 1) {
       // Still dragging within the sticky DRAG_RADIUS.
       var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));

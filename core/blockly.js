@@ -766,14 +766,13 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
     Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  var translation = 'matrix(' +
-      Blockly.mainWorkspace.scale + ', 0, 0,' + Blockly.mainWorkspace.scale + ',' +
+var translation = 'translate(' +
       (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
-      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) +')';
-  
+      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')' +
+      'scale(' + Blockly.mainWorkspace.scale + ')';
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
   Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
-                                                       translation);
+                                              translation);
 };
 
 /**

@@ -1,4 +1,4 @@
-var Blockly = require('./blockly_compressed.js');
+var Blockly = require('./blockly_uncompressed.js');
 // var blocks = require('./blocks_compressed.js');
 // var python = require('./python_compressed.js');
 // var en = require('./msg/js/en.js');

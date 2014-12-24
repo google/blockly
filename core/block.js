@@ -524,6 +524,15 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
 };
 
 /**
+ * Change the tooltip text for a block.
+ * @param {string|!Function} newTip Text for tooltip or a parent element to
+ *     link to for its tooltip.  May be a function that returns a string.
+ */
+Blockly.Block.prototype.setTooltip = function(newTip) {
+  this.tooltip = newTip;
+};
+
+/**
  * Get the colour of a block.
  * @return {number} HSV hue value.
  */
@@ -603,15 +612,6 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
 Blockly.Block.prototype.setTitleValue = function(newValue, name) {
   console.log('Deprecated call to setTitleValue, use setFieldValue instead.');
   this.setFieldValue(newValue, name);
-};
-
-/**
- * Change the tooltip text for a block.
- * @param {string|!Function} newTip Text for tooltip or a parent element to
- *     link to for its tooltip.  May be a function that returns a string.
- */
-Blockly.Block.prototype.setTooltip = function(newTip) {
-  this.tooltip = newTip;
 };
 
 /**

@@ -115,7 +115,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
       }
       if (orphanBlock) {
         // Unable to reattach orphan.  Bump it off to the side.
-        window.setTimeout(function() {
+        setTimeout(function() {
               orphanBlock.outputConnection.bumpAwayFrom_(otherConnection);
             }, Blockly.BUMP_DELAY);
       }
@@ -151,7 +151,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
       }
       if (orphanBlock) {
         // Unable to reattach orphan.  Bump it off to the side.
-        window.setTimeout(function() {
+        setTimeout(function() {
               orphanBlock.previousConnection.bumpAwayFrom_(otherConnection);
             }, Blockly.BUMP_DELAY);
       }

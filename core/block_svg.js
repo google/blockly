@@ -89,8 +89,8 @@ Blockly.BlockSvg.prototype.initSvg = function() {
 
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange)) {
-    Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
-        this.onchange);
+    Blockly.bindEvent_(this.workspace.getCanvas(), 'blocklyWorkspaceChange',
+        this, this.onchange);
   }
 };
 

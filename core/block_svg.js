@@ -74,13 +74,13 @@ Blockly.BlockSvg.INLINE = -1;
  */
 Blockly.BlockSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
-  this.updateColour();
   for (var x = 0, input; input = this.inputList[x]; x++) {
     input.init();
   }
   if (this.mutator) {
     this.mutator.createIcon();
   }
+  this.updateColour();
   if (!Blockly.readOnly) {
     Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);

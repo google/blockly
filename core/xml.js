@@ -196,6 +196,10 @@ Blockly.Xml.domToPrettyText = function(dom) {
  * @return {!Element} A tree of XML elements.
  */
 Blockly.Xml.textToDom = function(text) {
+  var isNodeJS = (typeof window === 'undefined');
+  if (isNodeJS) {
+    var DOMParser = require('xmldom').DOMParser;
+  }
   var oParser = new DOMParser();
   var dom = oParser.parseFromString(text, 'text/xml');
   // The DOM should have one and only one top-level node, an XML tag.

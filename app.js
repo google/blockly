@@ -18,7 +18,7 @@ fs.readFile('./input.xml', function (err, data) {
 	var workspace = new Blockly.Workspace();
 	Blockly.Xml.domToWorkspace(workspace, xml);
 	var code = Blockly.Python.workspaceToCode(workspace);
-	document.getElementById('code_output').value = code;
+	console.log(code);
 });
 
 // var xmlText = document.getElementById('xml_input').value;

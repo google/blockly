@@ -434,3 +434,13 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
 Blockly.isNumber = function(str) {
   return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
 };
+
+/**
+ * Set the current transform matrix to an element.
+ * @param {!Element} element Element.
+ * @param {!SVGMatrix} m Matrix.
+ */
+Blockly.setCTM  = function(element ,m) {
+  return element.transform.baseVal.initialize(
+    element.ownerSVGElement.createSVGTransformFromMatrix(m));
+}

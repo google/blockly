@@ -84,6 +84,30 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Current scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.scale = 1;
+
+/**
+ * Current scale speed.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.scaleSpeed = 1.2;
+
+/**
+ * Current minimum scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.minScale = 0.2;
+
+/**
+ * Current maximum scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.maxScale = 10;
+
+/**
  * Current position of mouse.
  * @type {number}
  */

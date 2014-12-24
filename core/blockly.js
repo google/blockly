@@ -382,7 +382,36 @@ Blockly.onMouseWheel_ = function(e) {
     // cross-browser wheel delta
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    var x = Blockly.mainWorkspace.mousePosition.x;
+    var y = Blockly.mainWorkspace.mousePosition.y;
+    Blockly.zoom (x , y, delta);
 };
+
+/**
+ * Zooming the blocks centered in (x,y) coordinate with zooming in or out.
+ * @param {!Element} x X coordinate of center.
+ * @param {!SVGMatrix} Y coordinate of center.
+ * @param {!SVGMatrix} type Type of zomming (-1 zooming out and 1 zooming in).
+ */
+Blockly.zoom  = function (x ,y , type) {
+  var speed = Blockly.Workspace.prototype.scaleSpeed;
+  var metrics = Blockly.getMainWorkspaceMetrics_();
+  var newp = Blockly.svg.createSVGPoint();
+  var g=Blockly.getMainWorkspace().getCanvas();
+  newp.x = x;
+  newp.y = y;
+  newp = newp.matrixTransform(Blockly.getMainWorkspace().getCanvas().getCTM().inverse());
+  var oldx = newp.x;
+  var oldy = newp.y;
+  var canvas = Blockly.getMainWorkspace().getCanvas();
+  var bubbleCanvas = Blockly.getMainWorkspace().getBubbleCanvas();
+  var scale = (type == 1)?speed:1/speed;
+  var matrix = canvas.getCTM().translate(-(oldx*(scale-1)),-(oldy*(scale-1))).scale(scale);
+  Blockly.mainWorkspace.scale = matrix.a;
+  Blockly.mainWorkspace.scrollX = matrix.e - metrics.absoluteLeft
+  Blockly.mainWorkspace.scrollY = matrix.f - metrics.absoluteTop;
+  Blockly.mainWorkspace.scrollbar.resize();
+}
 
 /**
  * Handle a key-down on SVG drawing surface.
@@ -737,9 +766,11 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
     Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  var translation = 'translate(' +
+  var translation = 'matrix(' +
+      Blockly.mainWorkspace.scale + ', 0, 0,' + Blockly.mainWorkspace.scale + ',' +
       (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
-      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
+      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) +')';
+  
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
   Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
                                                        translation);

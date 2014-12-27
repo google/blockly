@@ -61,6 +61,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Faz com que a variável %1 assuma os valores do número inicial ao número final, contando de acordo com o intervalo especificado, e executa os blocos especificados.",
 	"CONTROLS_FOR_INPUT_WITH": "contar com",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "de %1 até %2 por %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each para cada bloco",
 	"CONTROLS_FOREACH_INPUT_ITEM": "para cada item",
 	"CONTROLS_FOREACH_INPUT_INLIST": "na lista",
 	"CONTROLS_FOREACH_TOOLTIP": "Para cada item em uma lista, atribui o item à variável \"%1\", e então realiza algumas instruções.",

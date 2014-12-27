@@ -58,6 +58,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Låt variabeln %1 ta värden från starttalet till sluttalet, beräknat med det angivna intervallet, och utför de angivna blocken.",
 	"CONTROLS_FOR_INPUT_WITH": "räkna med",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "från %1 till %2 med %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each för varje-block",
 	"CONTROLS_FOREACH_INPUT_ITEM": "för varje föremål",
 	"CONTROLS_FOREACH_INPUT_INLIST": "i listan",
 	"CONTROLS_FOREACH_TOOLTIP": "För varje objekt i en lista, ange variabeln '%1' till objektet, och utför sedan några kommandon.",

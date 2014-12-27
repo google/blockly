@@ -3,7 +3,8 @@
 		"authors": [
 			"Nike",
 			"Silvonen",
-			"Espertus"
+			"Espertus",
+			"Pettevi"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -21,6 +22,9 @@
 	"DISABLE_BLOCK": "Passivoi lohko",
 	"ENABLE_BLOCK": "Aktivoi lohko",
 	"HELP": "Apua",
+	"CHAT": "Keskustele yhteistyökumppanisi kanssa tässä laatikossa!",
+	"AUTH": "Valtuuta tämä ohjelma jotta voit tallettaa työsi ja jakaa sen.",
+	"ME": "Minä",
 	"CHANGE_VALUE_TITLE": "Muuta arvoa:",
 	"NEW_VARIABLE": "Uusi muuttuja...",
 	"NEW_VARIABLE_TITLE": "Uuden muuttujan nimi:",
@@ -296,13 +300,16 @@
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Luo funktio, jolla ei ole tuotosta.",
 	"PROCEDURES_DEFRETURN_RETURN": "palauta",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Luo funktio, jolla ei ole tuotosta.",
+	"PROCEDURES_ALLOW_STATEMENTS": "salli kommentit",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Varoitus: tällä funktiolla on sama parametri useamman kerran.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://fi.wikipedia.org/wiki/Aliohjelma",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Suorittaa käyttäjän määrittelemä funktio '%1'.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://fi.wikipedia.org/wiki/Aliohjelma",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Suorittaa käyttäjän määrittelemän funktion '%1' ja käyttää sen tuotosta.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "syötteet",
+	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Lisää, poista tai järjestele uudelleen tämän toiminnon tulot.",
 	"PROCEDURES_MUTATORARG_TITLE": "syötteen nimi:",
+	"PROCEDURES_MUTATORARG_TOOLTIP": "Lisää sisääntulon funktioon.",
 	"PROCEDURES_HIGHLIGHT_DEF": "Korosta funktion määritelmä",
 	"PROCEDURES_CREATE_DO": "Luo '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jos arvo on tosi, palauta toinen arvo.",

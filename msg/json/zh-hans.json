@@ -59,6 +59,7 @@
 	"CONTROLS_FOR_TOOLTIP": "从起始数到结尾数中取出变量“%1”的值，按指定的时间间隔，执行指定的块。",
 	"CONTROLS_FOR_INPUT_WITH": "使用",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "从范围 %1 到 %2 每隔 %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each用于每个块",
 	"CONTROLS_FOREACH_INPUT_ITEM": "为每个项目",
 	"CONTROLS_FOREACH_INPUT_INLIST": "在列表中",
 	"CONTROLS_FOREACH_TOOLTIP": "遍历每个列表中的项目，将变量“%1”设定到该项中，然后执行某些语句。",

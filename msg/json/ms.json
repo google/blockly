@@ -55,6 +55,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Gunakan pembolehubah %1 pada nilai-nilai dari nombor pangkal hingga nombor hujung, mengira mengikut selang yang ditentukan, dan lakukan blok-blok yang tertentu.",
 	"CONTROLS_FOR_INPUT_WITH": "kira dengan",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "dari %1 hingga %2 selang %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each untuk setiap blok",
 	"CONTROLS_FOREACH_INPUT_ITEM": "untuk setiap perkara",
 	"CONTROLS_FOREACH_INPUT_INLIST": "dalam senarai",
 	"CONTROLS_FOREACH_TOOLTIP": "Untuk setiap perkara dalam senarai, tetapkan pembolehubah '%1' pada perkara, kemudian lakukan beberapa perintah.",

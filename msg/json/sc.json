@@ -55,6 +55,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Fait pigai a sa variàbili %1 i valoris de su primu numeru a s'urtimu, a su passu impostau e fait su brocu.",
 	"CONTROLS_FOR_INPUT_WITH": "po",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "de %1 fintzas %2 a passus de %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each for each block",
 	"CONTROLS_FOREACH_INPUT_ITEM": "po dònnia item",
 	"CONTROLS_FOREACH_INPUT_INLIST": "in lista",
 	"CONTROLS_FOREACH_TOOLTIP": "Po dònnia item in sa lista, ponit sa variàbili '%1' pari a s'item, e tandu fait pariga de cumandus.",

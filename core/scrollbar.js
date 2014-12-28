@@ -476,7 +476,7 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
 };
 
 /**
- * Validates the knob's length within maximum
+ * Validates the knob's length within maximum, given the scale
  * (length of scrollbar) values allowed for the scrollbar.
  * @return {boolean} Is valid or not valid.
  * @private

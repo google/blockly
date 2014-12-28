@@ -233,8 +233,26 @@ Blockly.getRelativeXY_ = function(element) {
 };
 
 /**
+ * Return true if child is descendant of parent element.
+ * @param {!Element} child Reference element.
+ * @param {!Element} parent Element to search in the parents of child.
+ * @return {!Boolean} Is descendant or not.
+ * @private
+ */
+Blockly.isDescendant_ = function(child, parent) {
+     var node = child.parentNode;
+     while (node != null) {
+         if (node == parent) {
+             return true;
+         }
+         node = node.parentNode;
+     }
+     return false;
+}
+
+/**
  * Return the absolute coordinates of the top-left corner of this element,
- * scales that after canvas svg element.
+ * scales that after canvas svg element, if it's a descentant.
  * The origin (0,0) is the top-left corner of the Blockly svg.
  * @param {!Element} element Element to find the coordinates of.
  * @return {!Object} Object with .x and .y properties.
@@ -243,15 +261,17 @@ Blockly.getRelativeXY_ = function(element) {
 Blockly.getSvgXY_ = function(element) {
   var x = 0;
   var y = 0;
-  var canvasFlag = 0;
+  var canvasFlag;
+  //evaluate if element isn't child of a canvas
+  canvasFlag = !Blockly.isDescendant_(element, Blockly.mainWorkspace.getCanvas());
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
     if (element === Blockly.mainWorkspace.getCanvas()) {
-      canvasFlag = 1;
+      canvasFlag = true;
     }
-    //after the svg canvas scale the coordinates
-    if(canvasFlag == 1) {
+    //before the svg canvas scale the coordinates
+    if(canvasFlag) {
       x += xy.x;
       y += xy.y;
     } else {

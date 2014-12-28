@@ -99,13 +99,13 @@ Blockly.Workspace.prototype.scaleSpeed = 1.2;
  * Current minimum scale.
  * @type {number}
  */
-Blockly.Workspace.prototype.minScale = 0.2;
+Blockly.Workspace.prototype.minScale = 0.3;
 
 /**
  * Current maximum scale.
  * @type {number}
  */
-Blockly.Workspace.prototype.maxScale = 10;
+Blockly.Workspace.prototype.maxScale = 3;
 
 /**
  * Current position of mouse.
@@ -404,7 +404,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   }
   if (this.deleteAreaTrash_) {
     //fix scale only for trash
-    xy.scale(Blockly.mainWorkspace.scale);
+    //xy.scale(Blockly.mainWorkspace.scale);
     if (this.deleteAreaTrash_.contains(xy)) {
       this.trashcan.setOpen_(true);
       Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);

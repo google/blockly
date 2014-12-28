@@ -393,7 +393,7 @@ Blockly.onMouseWheel_ = function(e) {
  * @param {!SVGMatrix} Y coordinate of center.
  * @param {!SVGMatrix} type Type of zomming (-1 zooming out and 1 zooming in).
  */
-Blockly.zoom  = function (x ,y , type) {
+Blockly.zoom  = function(x ,y , type) {
   var speed = Blockly.Workspace.prototype.scaleSpeed;
   var metrics = Blockly.getMainWorkspaceMetrics_();
   var center = Blockly.svg.createSVGPoint();
@@ -720,27 +720,32 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     // Firefox has trouble with hidden elements (Bug 528969).
     return null;
   }
+  //fix scale
+  var contentWidth = blockBox.width * Blockly.mainWorkspace.scale;
+  var contentHeight = blockBox.height * Blockly.mainWorkspace.scale;
+  var contentX = blockBox.x * Blockly.mainWorkspace.scale;
+  var contentY = blockBox.y * Blockly.mainWorkspace.scale;
   if (Blockly.mainWorkspace.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
-    var leftEdge = Math.min(blockBox.x - viewWidth / 2,
-                            blockBox.x + blockBox.width - viewWidth);
-    var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
-                             blockBox.x + viewWidth);
-    var topEdge = Math.min(blockBox.y - viewHeight / 2,
-                           blockBox.y + blockBox.height - viewHeight);
-    var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
-                              blockBox.y + viewHeight);
+    var leftEdge = Math.min(contentX - viewWidth / 2,
+                            contentX + contentWidth - viewWidth);
+    var rightEdge = Math.max(contentX + contentWidth + viewWidth / 2,
+                             contentX + viewWidth);
+    var topEdge = Math.min(contentY - viewHeight / 2,
+                           contentY + contentHeight - viewHeight);
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight / 2,
+                              contentY + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;
     var topEdge = blockBox.y;
     var bottomEdge = topEdge + blockBox.height;
-  }
+  }/*
   leftEdge *= Blockly.mainWorkspace.scale;
   rightEdge *= Blockly.mainWorkspace.scale;
   topEdge *= Blockly.mainWorkspace.scale;
-  bottomEdge *= Blockly.mainWorkspace.scale;
+  bottomEdge *= Blockly.mainWorkspace.scale;*/
   var absoluteLeft = 0;
   if (!Blockly.RTL && Blockly.mainWorkspace.toolbox_) {
     absoluteLeft = Blockly.mainWorkspace.toolbox_.width;
@@ -755,7 +760,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     contentTop: topEdge,
     contentLeft: leftEdge,
     absoluteTop: 0,
-    absoluteLeft: absoluteLeft
+    absoluteLeft: absoluteLeft,
+    scale: Blockly.mainWorkspace.scale
   };
   return metrics;
 };

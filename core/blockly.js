@@ -378,6 +378,7 @@ Blockly.onMouseMoveTracking_ = function(e) {
  * @private
  */
 Blockly.onMouseWheel_ = function(e) {
+  if (Blockly.mainWorkspace.scrollbar) {
     Blockly.hideChaff();
     // cross-browser wheel delta
     var e = window.event || e; // old IE support
@@ -385,6 +386,7 @@ Blockly.onMouseWheel_ = function(e) {
     var x = Blockly.mainWorkspace.mousePosition.x;
     var y = Blockly.mainWorkspace.mousePosition.y;
     Blockly.zoom (x , y, delta);
+  }
 };
 
 /**

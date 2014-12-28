@@ -126,6 +126,14 @@ Blockly.ScrollbarPair.prototype.resize = function() {
 };
 
 /**
+ * Validates the knob's length in both of the scrollbars.
+ * @return {boolean} Are valid or not valid.
+ */
+Blockly.ScrollbarPair.prototype.isValidKnobLength = function() {
+  return this.hScroll.isValidKnobLength_() && this.vScroll.isValidKnobLength_();
+};
+
+/**
  * Set the sliders of both scrollbars to be at a certain position.
  * @param {number} x Horizontal scroll value.
  * @param {number} y Vertical scroll value.
@@ -465,6 +473,49 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
     value = Math.min(value, barLength - knobLength);
   }
   return value;
+};
+
+/**
+ * Validates the knob's length within maximum
+ * (length of scrollbar) values allowed for the scrollbar.
+ * @return {boolean} Is valid or not valid.
+ * @private
+ */
+Blockly.Scrollbar.prototype.isValidKnobLength_ = function() {
+  // Determine the location, height and width of the host element.
+  var hostMetrics = this.workspace_.getMetrics();
+  if (!hostMetrics) {
+    // Host element is likely not visible.
+    return;
+  }
+  if (this.horizontal_) {
+    var outerLength = hostMetrics.viewWidth;
+    if (this.pair_) {
+      // Shorten the scrollbar to make room for the corner square.
+      outerLength -= Blockly.Scrollbar.scrollbarThickness;
+    }
+    this.ratio_ = outerLength / hostMetrics.contentWidth;
+    if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+        isNaN(this.ratio_)) {
+      this.ratio_ = 0;
+    }
+    var innerLength = hostMetrics.viewWidth * this.ratio_;
+    var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
+        this.ratio_;
+  } else {
+    var outerLength = hostMetrics.viewHeight;
+    if (this.pair_) {
+      // Shorten the scrollbar to make room for the corner square.
+      outerLength -= Blockly.Scrollbar.scrollbarThickness;
+    }
+    this.ratio_ = outerLength / hostMetrics.contentHeight;
+    if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+        isNaN(this.ratio_)) {
+      this.ratio_ = 0;
+    }
+    var innerLength = hostMetrics.viewHeight * this.ratio_;
+  }
+  return innerLength <= outerLength;
 };
 
 /**

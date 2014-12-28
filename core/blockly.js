@@ -396,21 +396,30 @@ Blockly.onMouseWheel_ = function(e) {
 Blockly.zoom  = function (x ,y , type) {
   var speed = Blockly.Workspace.prototype.scaleSpeed;
   var metrics = Blockly.getMainWorkspaceMetrics_();
-  var newp = Blockly.svg.createSVGPoint();
-  var g=Blockly.getMainWorkspace().getCanvas();
-  newp.x = x;
-  newp.y = y;
-  newp = newp.matrixTransform(Blockly.getMainWorkspace().getCanvas().getCTM().inverse());
-  var oldx = newp.x;
-  var oldy = newp.y;
+  var center = Blockly.svg.createSVGPoint();
+  var g = Blockly.getMainWorkspace().getCanvas();
+  center.x = x;
+  center.y = y;
+  center = center.matrixTransform(Blockly.getMainWorkspace().getCanvas().getCTM().inverse());
+  var oldx = center.x;
+  var oldy = center.y;
   var canvas = Blockly.getMainWorkspace().getCanvas();
-  var bubbleCanvas = Blockly.getMainWorkspace().getBubbleCanvas();
+  // scale factor
   var scale = (type == 1)?speed:1/speed;
   var matrix = canvas.getCTM().translate(-(oldx*(scale-1)),-(oldy*(scale-1))).scale(scale);
-  Blockly.mainWorkspace.scale = matrix.a;
-  Blockly.mainWorkspace.scrollX = matrix.e - metrics.absoluteLeft
-  Blockly.mainWorkspace.scrollY = matrix.f - metrics.absoluteTop;
-  Blockly.mainWorkspace.scrollbar.resize();
+  // validate if scale is in a valid range
+  if (matrix.a >= Blockly.mainWorkspace.minScale && matrix.a <= Blockly.mainWorkspace.maxScale) {
+    var oldScale = Blockly.mainWorkspace.scale;
+    Blockly.mainWorkspace.scale = matrix.a;
+    // validate scale before scaling (for knoblength)
+    if (Blockly.mainWorkspace.scrollbar.isValidKnobLength()) {
+      Blockly.mainWorkspace.scrollX = matrix.e - metrics.absoluteLeft;
+      Blockly.mainWorkspace.scrollY = matrix.f - metrics.absoluteTop;
+      Blockly.mainWorkspace.scrollbar.resize();
+    } else {
+      Blockly.mainWorkspace.scale = oldScale;
+    }
+  }
 }
 
 /**
@@ -728,6 +737,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var topEdge = blockBox.y;
     var bottomEdge = topEdge + blockBox.height;
   }
+  leftEdge *= Blockly.mainWorkspace.scale;
+  rightEdge *= Blockly.mainWorkspace.scale;
+  topEdge *= Blockly.mainWorkspace.scale;
+  bottomEdge *= Blockly.mainWorkspace.scale;
   var absoluteLeft = 0;
   if (!Blockly.RTL && Blockly.mainWorkspace.toolbox_) {
     absoluteLeft = Blockly.mainWorkspace.toolbox_.width;

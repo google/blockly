@@ -396,19 +396,21 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
   var mouseXY = Blockly.mouseToSvg(e);
   var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
+  if (this.deleteAreaToolbox_) {
+    if (this.deleteAreaToolbox_.contains(xy)) {
+      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+      return true;
+    }
+  }
   if (this.deleteAreaTrash_) {
+    //fix scale only for trash
+    xy.scale(Blockly.mainWorkspace.scale);
     if (this.deleteAreaTrash_.contains(xy)) {
       this.trashcan.setOpen_(true);
       Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
       return true;
     }
     this.trashcan.setOpen_(false);
-  }
-  if (this.deleteAreaToolbox_) {
-    if (this.deleteAreaToolbox_.contains(xy)) {
-      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
-      return true;
-    }
   }
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   return false;

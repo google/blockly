@@ -605,12 +605,27 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       throw 'originBlock is not rendered.';
     }
     var xyOld = Blockly.getSvgXY_(svgRootOld);
+    var mouseXY = Blockly.mainWorkspace.mousePosition;
+    //relative mouse position to the block
+    var rMouseX = mouseXY.x - xyOld.x;
+    var rMouseY = mouseXY.y - xyOld.y;
+    //fix scale
+    xyOld.x /= Blockly.mainWorkspace.scale;
+    xyOld.y /= Blockly.mainWorkspace.scale;
     var svgRootNew = block.getSvgRoot();
     if (!svgRootNew) {
       throw 'block is not rendered.';
     }
-    var xyNew = Blockly.getSvgXY_(svgRootNew);
-    block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
+    //Calculate the position to create the block, fixing scale
+    var xyCanvastoSvg = Blockly.getRelativeXY_(Blockly.mainWorkspace.getCanvas());
+    var xyNewtoCanvas = Blockly.getRelativeXY_(svgRootNew);
+    var newX = xyCanvastoSvg.x / Blockly.mainWorkspace.scale + xyNewtoCanvas.x;
+    var newY = xyCanvastoSvg.y / Blockly.mainWorkspace.scale + xyNewtoCanvas.y;
+    var placePositionX = xyOld.x - newX;
+    var placePositionY = xyOld.y - newY;
+    var dx = rMouseX - rMouseX / Blockly.mainWorkspace.scale;
+    var dy = rMouseY - rMouseY / Blockly.mainWorkspace.scale;
+    block.moveBy(placePositionX - dx, placePositionY - dy);
     if (flyout.autoClose) {
       flyout.hide();
     } else {

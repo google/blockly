@@ -386,6 +386,8 @@ Blockly.onMouseWheel_ = function(e) {
     var x = Blockly.mainWorkspace.mousePosition.x;
     var y = Blockly.mainWorkspace.mousePosition.y;
     Blockly.zoom (x , y, delta);
+    e.preventDefault();
+    e.stopPropagation();
   }
 };
 

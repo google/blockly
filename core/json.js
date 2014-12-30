@@ -199,7 +199,7 @@ Blockly.JSON.blockToObject_ = function(block) {
  * @param {object} jsonObject Object representation.
  * @return {string} A string of JSON.
  */
-Blockly.JSON.ObjectToText = function(jsonObject) {
+Blockly.JSON.objectToText = function(jsonObject) {
   var jsonText = JSON.stringify(jsonObject, undefined, 2);
   // The DOM should have one and only one top-level node, an JSON tag.
   if (!jsonText) {

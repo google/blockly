@@ -181,7 +181,7 @@ Blockly.Field.prototype.getSvgRoot = function() {
  * @private
  */
 Blockly.Field.prototype.render_ = function() {
-  if (this.visible_) {
+  if (this.visible_ && this.textElement_) {
     try {
       var width = this.textElement_.getComputedTextLength();
     } catch(e) {

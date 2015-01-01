@@ -40,12 +40,7 @@ goog.require('Blockly.WorkspaceSvg');
  */
 Blockly.Mutator = function(quarkNames) {
   Blockly.Mutator.superClass_.constructor.call(this, null);
-  this.quarkXml_ = [];
-  // Convert the list of names into a list of XML objects for the flyout.
-  for (var x = 0; x < quarkNames.length; x++) {
-    var element = goog.dom.createDom('block', {'type': quarkNames[x]});
-    this.quarkXml_[x] = element;
-  }
+  this.quarkNames_ = quarkNames;
 };
 goog.inherits(Blockly.Mutator, Blockly.Icon);
 
@@ -199,7 +194,12 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
     this.workspace_.flyout_.init(this.workspace_);
-    this.workspace_.flyout_.show(this.quarkXml_);
+    // Convert the list of names into a list of XML objects for the flyout.
+    var quarkXml = [];
+    for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
+      quarkXml[i] = goog.dom.createDom('block', {'type': quarkName});
+    }
+    this.workspace_.flyout_.show(quarkXml);
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
     var blocks = this.rootBlock_.getDescendants();

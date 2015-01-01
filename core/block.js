@@ -172,23 +172,23 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
   }
 
   // First, dispose of all my children.
-  for (var x = this.childBlocks_.length - 1; x >= 0; x--) {
-    this.childBlocks_[x].dispose(false);
+  for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
+    this.childBlocks_[i].dispose(false);
   }
   // Then dispose of myself.
   // Dispose of all inputs and their fields.
-  for (var x = 0, input; input = this.inputList[x]; x++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
     input.dispose();
   }
   this.inputList.length = 0;
   // Dispose of any remaining connections (next/previous/output).
   var connections = this.getConnections_(true);
-  for (var x = 0; x < connections.length; x++) {
-    var connection = connections[x];
+  for (var i = 0; i < connections.length; i++) {
+    var connection = connections[i];
     if (connection.targetConnection) {
       connection.disconnect();
     }
-    connections[x].dispose();
+    connections[i].dispose();
   }
   // Remove from Realtime set of blocks.
   if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
@@ -280,7 +280,7 @@ Blockly.Block.prototype.getConnections_ = function(all) {
       myConnections.push(this.previousConnection);
     }
     if (all || !this.collapsed_) {
-      for (var x = 0, input; input = this.inputList[x]; x++) {
+      for (var i = 0, input; input = this.inputList[i]; i++) {
         if (input.connection) {
           myConnections.push(input.connection);
         }
@@ -307,16 +307,14 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
   }
   // Loop though every connection on this block.
   var myConnections = this.getConnections_(false);
-  for (var x = 0; x < myConnections.length; x++) {
-    var connection = myConnections[x];
+  for (var i = 0, connection; connection = myConnections[i]; i++) {
     // Spider down from this block bumping all sub-blocks.
     if (connection.targetConnection && connection.isSuperior()) {
       connection.targetBlock().bumpNeighbours_();
     }
 
     var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
-    for (var y = 0; y < neighbours.length; y++) {
-      var otherConnection = neighbours[y];
+    for (var j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
       // If both connections are connected, that's probably fine.  But if
       // either one of them is unconnected, then there could be confusion.
       if (!connection.targetConnection || !otherConnection.targetConnection) {
@@ -503,14 +501,14 @@ Blockly.Block.prototype.isEditable = function() {
  */
 Blockly.Block.prototype.setEditable = function(editable) {
   this.editable_ = editable;
-  for (var x = 0, input; input = this.inputList[x]; x++) {
-    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
       field.updateEditable();
     }
   }
   var icons = this.getIcons();
-  for (var x = 0; x < icons.length; x++) {
-    icons[x].updateEditable();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].updateEditable();
   }
 };
 
@@ -558,8 +556,8 @@ Blockly.Block.prototype.setColour = function(colourHue) {
  * @private
  */
 Blockly.Block.prototype.getField_ = function(name) {
-  for (var x = 0, input; input = this.inputList[x]; x++) {
-    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field.name === name) {
         return field;
       }
@@ -776,8 +774,8 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
  */
 Blockly.Block.prototype.toString = function(opt_maxLength) {
   var text = [];
-  for (var x = 0, input; input = this.inputList[x]; x++) {
-    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
       text.push(field.getText());
     }
     if (input.connection) {
@@ -980,14 +978,14 @@ Blockly.Block.prototype.moveInputBefore = function(name, refName) {
   // Find both inputs.
   var inputIndex = -1;
   var refIndex = refName ? -1 : this.inputList.length;
-  for (var x = 0, input; input = this.inputList[x]; x++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
-      inputIndex = x;
+      inputIndex = i;
       if (refIndex != -1) {
         break;
       }
     } else if (refName && input.name == refName) {
-      refIndex = x;
+      refIndex = i;
       if (inputIndex != -1) {
         break;
       }
@@ -1035,14 +1033,14 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
  *     opt_quiet is not true.
  */
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
-  for (var x = 0, input; input = this.inputList[x]; x++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
       if (input.connection && input.connection.targetConnection) {
         // Disconnect any attached block.
         input.connection.targetBlock().setParent(null);
       }
       input.dispose();
-      this.inputList.splice(x, 1);
+      this.inputList.splice(i, 1);
       if (this.rendered) {
         this.render();
         // Removing an input will cause the block to change shape.
@@ -1062,7 +1060,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
  * @return {Object} The input object, or null of the input does not exist.
  */
 Blockly.Block.prototype.getInput = function(name) {
-  for (var x = 0, input; input = this.inputList[x]; x++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
       return input;
     }

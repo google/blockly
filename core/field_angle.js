@@ -209,6 +209,10 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
  */
 Blockly.FieldAngle.prototype.setText = function(text) {
   Blockly.FieldAngle.superClass_.setText.call(this, text);
+  if (!this.textElement_) {
+    // Not rendered yet.
+    return;
+  }
   this.updateGraph_();
   // Insert degree symbol.
   if (Blockly.RTL) {

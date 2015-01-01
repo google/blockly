@@ -54,6 +54,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Fé an manera che la variàbil %1 a pija ij valor dal nùmer inissial fin-a al nùmer final, an contand për l'antërval ëspessificà, e eseguì ij bloch ëspessificà.",
 	"CONTROLS_FOR_INPUT_WITH": "conté con",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "da %1 a %2 për %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each blòch për tuti",
 	"CONTROLS_FOREACH_INPUT_ITEM": "për minca element",
 	"CONTROLS_FOREACH_INPUT_INLIST": "ant la lista",
 	"CONTROLS_FOREACH_TOOLTIP": "Për minca element an na lista, dé ël valor ëd l'element a la variàbil '%1', peui eseguì chèiche anstrussion.",

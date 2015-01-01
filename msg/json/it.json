@@ -3,7 +3,8 @@
 		"authors": [
 			"Beta16",
 			"Espertus",
-			"Nerimic"
+			"Nerimic",
+			"Gbonanome"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -56,6 +57,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Fa sì che la variabile %1 prenda tutti i valori a partire dal numero di partenza fino a quello di arrivo, con passo pari all'intervallo specificato, ed esegue il blocco indicato.",
 	"CONTROLS_FOR_INPUT_WITH": "conta con",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "da %1 a %2 per %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each for each block",
 	"CONTROLS_FOREACH_INPUT_ITEM": "per ogni elemento",
 	"CONTROLS_FOREACH_INPUT_INLIST": "nella lista",
 	"CONTROLS_FOREACH_TOOLTIP": "Per ogni elemento in una lista, imposta la variabile '%1'  pari all'elemento e quindi esegue alcune istruzioni.",

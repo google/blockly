@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.mk');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Додај коментар:";
-Blockly.Msg.AUTH = "Овластете го прилогов за да можете да ја зачувате вашата работа и да можете да ја споделувате.";
+Blockly.Msg.AUTH = "Овластете го извршников за да можете да ја зачувате вашата работа и да можете да ја споделувате.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Смена на вредност:";
 Blockly.Msg.CHAT = "Разговарајте со вашиот соработник во ова поле!";
 Blockly.Msg.COLLAPSE_ALL = "Собери блокови";

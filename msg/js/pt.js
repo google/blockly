@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.pt');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Adicionar Comentário";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "Por favor autorize esta aplicação para permitir que o seu trabalho seja gravado e que o possa partilhar.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Alterar valor:";
 Blockly.Msg.CHAT = "Converse com o seu colaborador, ao digitar nesta caixa!";
 Blockly.Msg.COLLAPSE_ALL = "Recolher Blocos";
@@ -256,11 +256,11 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Retorna o arco tangente de um número.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Retorna o cosseno de um grau (não radiano).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Retorna o seno de um grau (não radiano).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Retorna a tangente de um grau (não radiano).";
-Blockly.Msg.ME = "Me";  // untranslated
+Blockly.Msg.ME = "Eu";
 Blockly.Msg.NEW_VARIABLE = "Nova variável...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nome da nova variável:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
-Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "permitir declarações";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "com:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = "";  // untranslated
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "http://pt.wikipedia.org/wiki/Sub-rotina";
@@ -282,9 +282,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Destacar definição da função";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "se o valor é verdadeiro, então retorna um segundo valor.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nome da entrada:";
-Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";  // untranslated
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Adicionar uma entrada para a função.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "entradas";
-Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";  // untranslated
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Adicionar, remover ou reordenar as entradas para esta função.";
 Blockly.Msg.REMOVE_COMMENT = "Remover Comentário";
 Blockly.Msg.RENAME_VARIABLE = "Renomear variável...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Renomear todas as variáveis '%1' para:";

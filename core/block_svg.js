@@ -71,6 +71,7 @@ Blockly.BlockSvg.INLINE = -1;
 
 /**
  * Create and initialize the SVG representation of the block.
+ * May be called more than once.
  */
 Blockly.BlockSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
@@ -85,16 +86,16 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
   }
-  if (!this.getSvgRoot().parentNode) {
-    this.workspace.getCanvas().appendChild(this.getSvgRoot());
-  }
-
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange) && !this.eventsInit_) {
     Blockly.bindEvent_(this.workspace.getCanvas(), 'blocklyWorkspaceChange',
         this, this.onchange);
   }
   this.eventsInit_ = true;
+
+  if (!this.getSvgRoot().parentNode) {
+    this.workspace.getCanvas().appendChild(this.getSvgRoot());
+  }
 };
 
 /**

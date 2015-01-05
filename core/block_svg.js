@@ -81,17 +81,20 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     this.mutator.createIcon();
   }
   this.updateColour();
-  if (!Blockly.readOnly) {
+  if (!Blockly.readOnly && !this.eventsInit_) {
     Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
   }
-  this.workspace.getCanvas().appendChild(this.getSvgRoot());
+  if (!this.getSvgRoot().parentNode) {
+    this.workspace.getCanvas().appendChild(this.getSvgRoot());
+  }
 
   // Bind an onchange function, if it exists.
-  if (goog.isFunction(this.onchange)) {
+  if (goog.isFunction(this.onchange) && !this.eventsInit_) {
     Blockly.bindEvent_(this.workspace.getCanvas(), 'blocklyWorkspaceChange',
         this, this.onchange);
   }
+  this.eventsInit_ = true;
 };
 
 /**

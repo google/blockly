@@ -254,13 +254,16 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   }
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-  // Record the starting offset between the current location and the mouse.
+  var point = Blockly.mouseToSvg(e);
+  //fix scale of mouse event
+  point.x /= Blockly.mainWorkspace.scale;
+  point.y /= Blockly.mainWorkspace.scale;
   if (Blockly.RTL) {
-    this.dragDeltaX = this.relativeLeft_ + e.clientX;
+    this.dragDeltaX = this.relativeLeft_ + point.x;
   } else {
-    this.dragDeltaX = this.relativeLeft_ - e.clientX;
+    this.dragDeltaX = this.relativeLeft_ - point.x;
   }
-  this.dragDeltaY = this.relativeTop_ - e.clientY;
+  this.dragDeltaY = this.relativeTop_ - point.y;
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -278,12 +281,17 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
  */
 Blockly.Bubble.prototype.bubbleMouseMove_ = function(e) {
   this.autoLayout_ = false;
+  var point = Blockly.mouseToSvg(e);
+  //fix scale of mouse event
+  point.x /= Blockly.mainWorkspace.scale;
+  point.y /= Blockly.mainWorkspace.scale;
   if (Blockly.RTL) {
-    this.relativeLeft_ = this.dragDeltaX - e.clientX;
+    this.relativeLeft_ = this.dragDeltaX - point.x;
   } else {
-    this.relativeLeft_ = this.dragDeltaX + e.clientX;
+    this.relativeLeft_ = this.dragDeltaX + point.x;
   }
-  this.relativeTop_ = this.dragDeltaY + e.clientY;
+  this.relativeTop_ = this.dragDeltaY + point.y;
+
   this.positionBubble_();
   this.renderArrow_();
 };

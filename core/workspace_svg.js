@@ -84,6 +84,12 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Is zooming enabled?.
+ * @type {boolean}
+ */
+Blockly.Workspace.prototype.zooming = true;
+
+/**
  * Current scale.
  * @type {number}
  */

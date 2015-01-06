@@ -609,7 +609,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     if (!svgRootNew) {
       throw 'block is not rendered.';
     }
-    //if flyout is out of canvas, fix scale
+    //if flyout is inside of canvas, fix scale
     if (flyout.targetWorkspace_ === Blockly.mainWorkspace) {
       var xyOld = Blockly.getSvgXY_(svgRootOld);
       var mouseXY = Blockly.mainWorkspace.mousePosition;

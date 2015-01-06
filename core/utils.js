@@ -264,10 +264,14 @@ Blockly.getSvgXY_ = function(element) {
   var canvasFlag;
   //evaluate if element isn't child of a canvas
   canvasFlag = !Blockly.isDescendant_(element, Blockly.mainWorkspace.getCanvas());
+  //add condition to bubblecanvas
+  canvasFlag = canvasFlag && 
+               !Blockly.isDescendant_(element, Blockly.mainWorkspace.getBubbleCanvas());
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
-    if (element === Blockly.mainWorkspace.getCanvas()) {
+    if (element === Blockly.mainWorkspace.getCanvas() || 
+        element === Blockly.mainWorkspace.getBubbleCanvas()) {
       canvasFlag = true;
     }
     //before the svg canvas scale the coordinates

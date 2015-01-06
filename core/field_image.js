@@ -46,23 +46,7 @@ Blockly.FieldImage = function(src, width, height, opt_alt) {
   this.width_ = Number(width);
   this.size_ = {height: this.height_ + 10, width: this.width_};
   this.text_ = opt_alt || '';
-  // Build the DOM.
-  var offsetY = 6 - Blockly.BlockSvg.FIELD_HEIGHT;
-  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
-  this.imageElement_ = Blockly.createSvgElement('image',
-      {'height': this.height_ + 'px',
-       'width': this.width_ + 'px',
-       'y': offsetY}, this.fieldGroup_);
   this.setValue(src);
-  if (goog.userAgent.GECKO) {
-    // Due to a Firefox bug which eats mouse events on image elements,
-    // a transparent rectangle needs to be placed on top of the image.
-    this.rectElement_ = Blockly.createSvgElement('rect',
-        {'height': this.height_ + 'px',
-         'width': this.width_ + 'px',
-         'y': offsetY,
-         'fill-opacity': 0}, this.fieldGroup_);
-  }
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -89,7 +73,7 @@ Blockly.FieldImage.prototype.rectElement_ = null;
 Blockly.FieldImage.prototype.EDITABLE = false;
 
 /**
- * Install this text on a block.
+ * Install this image on a block.
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldImage.prototype.init = function(block) {
@@ -98,6 +82,23 @@ Blockly.FieldImage.prototype.init = function(block) {
     return;
   }
   this.sourceBlock_ = block;
+  // Build the DOM.
+  var offsetY = 6 - Blockly.BlockSvg.FIELD_HEIGHT;
+  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
+  this.imageElement_ = Blockly.createSvgElement('image',
+      {'height': this.height_ + 'px',
+       'width': this.width_ + 'px',
+       'y': offsetY}, this.fieldGroup_);
+  this.setValue(this.src_);
+  if (goog.userAgent.GECKO) {
+    // Due to a Firefox bug which eats mouse events on image elements,
+    // a transparent rectangle needs to be placed on top of the image.
+    this.rectElement_ = Blockly.createSvgElement('rect',
+        {'height': this.height_ + 'px',
+         'width': this.width_ + 'px',
+         'y': offsetY,
+         'fill-opacity': 0}, this.fieldGroup_);
+  }
   block.getSvgRoot().appendChild(this.fieldGroup_);
 
   // Configure the field to be transparent with respect to tooltips.
@@ -146,8 +147,10 @@ Blockly.FieldImage.prototype.setValue = function(src) {
     return;
   }
   this.src_ = src;
-  this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-      'xlink:href', goog.isString(src) ? src : '');
+  if (this.imageElement_) {
+    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+        'xlink:href', goog.isString(src) ? src : '');
+  }
 };
 
 /**

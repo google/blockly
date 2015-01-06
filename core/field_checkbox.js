@@ -43,12 +43,6 @@ Blockly.FieldCheckbox = function(state, opt_changeHandler) {
   Blockly.FieldCheckbox.superClass_.constructor.call(this, '');
 
   this.changeHandler_ = opt_changeHandler;
-  // The checkbox doesn't use the inherited text element.
-  // Instead it uses a custom checkmark element that is either visible or not.
-  this.checkElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText', 'x': -3}, this.fieldGroup_);
-  var textNode = document.createTextNode('\u2713');
-  this.checkElement_.appendChild(textNode);
   // Set the initial state.
   this.setValue(state);
 };
@@ -69,6 +63,25 @@ Blockly.FieldCheckbox.prototype.clone = function() {
 Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 
 /**
+ * Install this checkbox on a block.
+ * @param {!Blockly.Block} block The block containing this text.
+ */
+Blockly.FieldCheckbox.prototype.init = function(block) {
+  if (this.sourceBlock_) {
+    // Checkbox has already been initialized once.
+    return;
+  }
+  Blockly.FieldCheckbox.superClass_.init.call(this, block);
+  // The checkbox doesn't use the inherited text element.
+  // Instead it uses a custom checkmark element that is either visible or not.
+  this.checkElement_ = Blockly.createSvgElement('text',
+      {'class': 'blocklyText', 'x': -3}, this.fieldGroup_);
+  var textNode = document.createTextNode('\u2713');
+  this.checkElement_.appendChild(textNode);
+  this.checkElement_.style.display = this.state_ ? 'block' : 'none';
+};
+
+/**
  * Return 'TRUE' if the checkbox is checked, 'FALSE' otherwise.
  * @return {string} Current state.
  */
@@ -84,7 +97,9 @@ Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
   var newState = (strBool == 'TRUE');
   if (this.state_ !== newState) {
     this.state_ = newState;
-    this.checkElement_.style.display = newState ? 'block' : 'none';
+    if (this.checkElement_) {
+      this.checkElement_.style.display = newState ? 'block' : 'none';
+    }
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
       this.sourceBlock_.workspace.fireChangeEvent();
     }

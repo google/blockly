@@ -55,12 +55,6 @@ Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
   var firstTuple = this.getOptions_()[0];
   this.value_ = firstTuple[1];
 
-  // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
-  this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
-  this.arrow_.appendChild(document.createTextNode(
-      Blockly.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
-                    ' ' + Blockly.FieldDropdown.ARROW_CHAR));
-
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
 };
@@ -89,6 +83,29 @@ Blockly.FieldDropdown.prototype.clone = function() {
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDropdown.prototype.CURSOR = 'default';
+
+/**
+ * Install this dropdown on a block.
+ * @param {!Blockly.Block} block The block containing this text.
+ */
+Blockly.FieldDropdown.prototype.init = function(block) {
+  if (this.sourceBlock_) {
+    // Dropdown has already been initialized once.
+    return;
+  }
+
+  // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
+  this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
+  this.arrow_.appendChild(document.createTextNode(
+      Blockly.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
+                    ' ' + Blockly.FieldDropdown.ARROW_CHAR));
+
+  Blockly.FieldDropdown.superClass_.init.call(this, block);
+  // Force a reset of the text to add the arrow.
+  var text = this.text_;
+  this.text_ = null;
+  this.setText(text);
+};
 
 /**
  * Create a dropdown menu under the text.
@@ -270,7 +287,7 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
  * @param {?string} text New text.
  */
 Blockly.FieldDropdown.prototype.setText = function(text) {
-  if (this.sourceBlock_) {
+  if (this.sourceBlock_ && this.arrow_) {
     // Update arrow's colour.
     this.arrow_.style.fill = Blockly.makeColour(this.sourceBlock_.getColour());
   }

@@ -536,7 +536,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       }
     }
     // Add 'with:' if there are parameters.
-    this.getField_('WITH').setVisible(!!this.arguments_.length);
+    var withField = this.getField_('WITH');
+    if (withField) {
+      withField.setVisible(!!this.arguments_.length);
+    }
     // Restore rendering and show the changes.
     this.rendered = savedRendered;
     if (this.rendered) {

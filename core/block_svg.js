@@ -1084,14 +1084,20 @@ Blockly.BlockSvg.prototype.updateColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
+  var hasClass = Blockly.hasClass_(/** @type {!Element} */ (this.svgGroup_),
+                                   'blocklyDisabled');
   if (this.disabled || this.getInheritedDisabled()) {
-    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
-                      'blocklyDisabled');
-    this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
+    if (!hasClass) {
+      Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+                        'blocklyDisabled');
+      this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
+    }
   } else {
-    Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
-                         'blocklyDisabled');
-    this.updateColour();
+    if (hasClass) {
+      Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+                           'blocklyDisabled');
+      this.updateColour();
+    }
   }
   var children = this.getChildren();
   for (var x = 0, child; child = children[x]; x++) {

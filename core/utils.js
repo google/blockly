@@ -72,6 +72,19 @@ Blockly.removeClass_ = function(element, className) {
 };
 
 /**
+ * Checks if an element has the specified CSS class.
+ * Similar to Closure's goog.dom.classes.has, except it handles SVG elements.
+ * @param {!Element} element DOM element to check.
+ * @param {string} className Name of class to check.
+ * @return {boolean} True if class exists, false otherwise.
+ * @private
+ */
+Blockly.hasClass_ = function(element, className) {
+  var classes = element.getAttribute('class');
+  return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;
+};
+
+/**
  * Bind an event to a function call.
  * @param {!Node} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').

@@ -1075,9 +1075,6 @@ Blockly.BlockSvg.prototype.updateColour = function() {
       field.setText(null);
     }
   }
-  if (this.rendered) {
-    this.render();
-  }
 };
 
 /**

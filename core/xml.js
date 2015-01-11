@@ -38,7 +38,7 @@ goog.provide('Blockly.Xml');
 Blockly.Xml.workspaceToDom = function(workspace) {
   var width;  // Not used in LTR.
   if (Blockly.RTL) {
-    width = workarea.getWidth();
+    width = workspace.getWidth();
   }
   var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);

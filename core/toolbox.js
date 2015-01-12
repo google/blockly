@@ -102,8 +102,10 @@ Blockly.Toolbox.prototype.CONFIG_ = {
 
 /**
  * Initializes the toolbox.
+ * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ *     blocks.
  */
-Blockly.Toolbox.prototype.init = function() {
+Blockly.Toolbox.prototype.init = function(workspace) {
   this.CONFIG_['cleardotPath'] = Blockly.pathToMedia + '1x1.gif';
   this.CONFIG_['cssCollapsedFolderIcon'] =
       'blocklyTreeIconClosed' + (Blockly.RTL ? 'Rtl' : 'Ltr');
@@ -115,7 +117,7 @@ Blockly.Toolbox.prototype.init = function() {
   tree.setSelectedItem(null);
 
   this.HtmlDiv.style.display = 'block';
-  this.flyout_.init(Blockly.mainWorkspace);
+  this.flyout_.init(workspace);
   this.populate_();
   tree.render(this.HtmlDiv);
 

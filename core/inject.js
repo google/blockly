@@ -383,7 +383,7 @@ Blockly.init_ = function() {
 
   if (Blockly.languageTree) {
     if (Blockly.mainWorkspace.toolbox_) {
-      Blockly.mainWorkspace.toolbox_.init();
+      Blockly.mainWorkspace.toolbox_.init(Blockly.mainWorkspace);
     } else if (Blockly.mainWorkspace.flyout_) {
       // Build a fixed flyout with the root blocks.
       Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace);

@@ -39,14 +39,15 @@ goog.require('Blockly.Workspace');
 Blockly.Procedures.NAME_TYPE = 'PROCEDURE';
 
 /**
- * Find all user-created procedure definitions.
+ * Find all user-created procedure definitions in a workspace.
+ * @param {!Blockly.Workspace} root Root workspace.
  * @return {!Array.<!Array.<!Array>>} Pair of arrays, the
  *     first contains procedures without return variables, the second with.
  *     Each procedure is defined by a three-element list of name, parameter
  *     list, and return value boolean.
  */
-Blockly.Procedures.allProcedures = function() {
-  var blocks = Blockly.mainWorkspace.getAllBlocks();
+Blockly.Procedures.allProcedures = function(root) {
+  var blocks = root.getAllBlocks();
   var proceduresReturn = [];
   var proceduresNoReturn = [];
   for (var x = 0; x < blocks.length; x++) {
@@ -207,7 +208,7 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
     }
   }
 
-  var tuple = Blockly.Procedures.allProcedures();
+  var tuple = Blockly.Procedures.allProcedures(workspace.targetWorkspace);
   populateProcedures(tuple[0], 'procedures_callnoreturn');
   populateProcedures(tuple[1], 'procedures_callreturn');
 };

@@ -38,12 +38,10 @@ Blockly.Variables.NAME_TYPE = 'VARIABLE';
 
 /**
  * Find all user-created variables.
- * @param {Blockly.Block|Blockly.Workspace|undefined} opt_root Optional root
- *     block or workspace.  Defaults to main workspace.
+ * @param {!Blockly.Block|!Blockly.Workspace} root Root block or workspace.
  * @return {!Array.<string>} Array of variable names.
  */
-Blockly.Variables.allVariables = function(opt_root) {
-  var root = opt_root || Blockly.mainWorkspace;
+Blockly.Variables.allVariables = function(root) {
   var blocks;
   if (root.getDescendants) {
     // Root is Block.
@@ -81,11 +79,9 @@ Blockly.Variables.allVariables = function(opt_root) {
  * Find all instances of the specified variable and rename them.
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
- * @param {Blockly.Workspace=} opt_workspace Workspace rename variables in.
- *     Defaults to main workspace.
+ * @param {!Blockly.Workspace} workspace Workspace rename variables in.
  */
-Blockly.Variables.renameVariable = function(oldName, newName, opt_workspace) {
-  var workspace = opt_workspace || Blockly.mainWorkspace;
+Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
   var blocks = workspace.getAllBlocks();
   // Iterate through every block.
   for (var x = 0; x < blocks.length; x++) {
@@ -104,7 +100,7 @@ Blockly.Variables.renameVariable = function(oldName, newName, opt_workspace) {
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
  */
 Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
-  var variableList = Blockly.Variables.allVariables();
+  var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
   variableList.sort(goog.string.caseInsensitiveCompare);
   // In addition to the user's variables, we also want to display the default
   // variable name at the top.  We also don't want this duplicated if the
@@ -140,40 +136,39 @@ Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
 /**
 * Return a new variable name that is not yet being used. This will try to
 * generate single letter variable names in the range 'i' to 'z' to start with.
-* If no unique name is located it will try 'i1' to 'z1', then 'i2' to 'z2' etc.
+* If no unique name is located it will try 'i' to 'z', 'a' to 'h',
+* then 'i2' to 'z2' etc.  Skip 'l'.
+ * @param {!Blockly.Workspace} workspace The workspace to be unique in.
 * @return {string} New variable name.
 */
-Blockly.Variables.generateUniqueName = function() {
-  var variableList = Blockly.Variables.allVariables();
+Blockly.Variables.generateUniqueName = function(workspace) {
+  var variableList = Blockly.Variables.allVariables(workspace);
   var newName = '';
   if (variableList.length) {
-    variableList.sort(goog.string.caseInsensitiveCompare);
-    var nameSuffix = 0, potName = 'i', i = 0, inUse = false;
+    var nameSuffix = 1;
+    var letters = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
+    var letterIndex = 0;
+    var potName = letters.charAt(letterIndex);
     while (!newName) {
-      i = 0;
-      inUse = false;
-      while (i < variableList.length && !inUse) {
+      var inUse = false;
+      for (var i = 0; i < variableList.length; i++) {
         if (variableList[i].toLowerCase() == potName) {
           // This potential name is already used.
           inUse = true;
+          break;
         }
-        i++;
       }
       if (inUse) {
         // Try the next potential name.
-        if (potName[0] === 'z') {
-          // Reached the end of the character sequence so back to 'a' but with
+        letterIndex++;
+        if (letterIndex == letters.length) {
+          // Reached the end of the character sequence so back to 'i'.
           // a new suffix.
+          letterIndex = 0;
           nameSuffix++;
-          potName = 'a';
-        } else {
-          potName = String.fromCharCode(potName.charCodeAt(0) + 1);
-          if (potName[0] == 'l') {
-            // Avoid using variable 'l' because of ambiguity with '1'.
-            potName = String.fromCharCode(potName.charCodeAt(0) + 1);
-          }
         }
-        if (nameSuffix > 0) {
+        potName = letters.charAt(letterIndex);
+        if (nameSuffix > 1) {
           potName += nameSuffix;
         }
       } else {

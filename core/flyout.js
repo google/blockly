@@ -201,6 +201,7 @@ Blockly.Flyout.prototype.setMetrics_ = function(yRatio) {
  */
 Blockly.Flyout.prototype.init = function(workspace) {
   this.targetWorkspace_ = workspace;
+  this.workspace_.targetWorkspace = workspace;
   // Add scrollbar.
   this.scrollbar_ = new Blockly.Scrollbar(this.workspace_, false, false);
 

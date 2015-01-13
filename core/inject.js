@@ -272,7 +272,7 @@ Blockly.createDom_ = function(container) {
     // blocks.  This cannot be changed later, since the UI is very different.
     if (Blockly.hasCategories) {
       Blockly.mainWorkspace.toolbox_ = new Blockly.Toolbox(svg, container);
-    } else {
+    } else if (Blockly.languageTree) {
       /**
        * @type {!Blockly.Flyout}
        * @private

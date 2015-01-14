@@ -409,8 +409,6 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
     }
   }
   if (this.deleteAreaTrash_) {
-    //fix scale only for trash
-    //xy.scale(Blockly.mainWorkspace.scale);
     if (this.deleteAreaTrash_.contains(xy)) {
       this.trashcan.setOpen_(true);
       Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);

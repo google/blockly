@@ -699,6 +699,12 @@ Blockly.Flyout.prototype.getRect = function() {
   if (!Blockly.RTL) {
     x -= BIG_NUM;
   }
-  return new goog.math.Rect(x, -BIG_NUM,
-      BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);
+  //fix scale if is descendant of buublecanvas
+  if (Blockly.isDescendant_(this.svgGroup_, Blockly.mainWorkspace.getBubbleCanvas())) {
+      return new goog.math.Rect(x, -BIG_NUM,
+        BIG_NUM + this.width_ * Blockly.mainWorkspace.scale, this.height_ * Blockly.mainWorkspace.scale + 2 * BIG_NUM);
+  } else {
+    return new goog.math.Rect(x, -BIG_NUM,
+        BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);
+  }
 };

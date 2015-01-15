@@ -294,8 +294,9 @@ Blockly.Field.prototype.setValue = function(text) {
  */
 Blockly.Field.prototype.onMouseUp_ = function(e) {
   if ((goog.userAgent.IPHONE || goog.userAgent.IPAD) &&
-      e.layerX !== 0 && e.layerY !== 0) {
-    // iOS spawns a bogus event on the next touch after a 'prompt()' edit.
+      e.layerX !== 0 && e.layerY !== 0 &&
+      !goog.userAgent.isVersionOrHigher('537.51.2')) {
+    // Old iOS spawns a bogus event on the next touch after a 'prompt()' edit.
     // Unlike the real events, these have a layerX and layerY set.
     return;
   } else if (Blockly.isRightButton(e)) {

@@ -76,8 +76,8 @@ Blockly.Xml.blockToDom_ = function(block) {
       element.appendChild(container);
     }
   }
-  for (var x = 0, input; input = block.inputList[x]; x++) {
-    for (var y = 0, field; field = input.fieldRow[y]; y++) {
+  for (var i = 0, input; input = block.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
       fieldToDom(field);
     }
   }
@@ -171,12 +171,12 @@ Blockly.Xml.domToPrettyText = function(dom) {
   var lines = blob.split('<');
   // Indent every line.
   var indent = '';
-  for (var x = 1; x < lines.length; x++) {
-    var line = lines[x];
+  for (var i = 1; i < lines.length; i++) {
+    var line = lines[i];
     if (line[0] == '/') {
       indent = indent.substring(2);
     }
-    lines[x] = indent + '<' + line;
+    lines[i] = indent + '<' + line;
     if (line[0] != '/' && line.slice(-2) != '/>') {
       indent += '  ';
     }
@@ -218,7 +218,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   if (Blockly.RTL) {
     width = workspace.getWidth();
   }
-  for (var x = 0, xmlChild; xmlChild = xml.childNodes[x]; x++) {
+  for (var i = 0, xmlChild; xmlChild = xml.childNodes[i]; i++) {
     if (xmlChild.nodeName.toLowerCase() == 'block') {
       var block = Blockly.Xml.domToBlock(workspace, xmlChild);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
@@ -290,7 +290,7 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
   }
 
   var blockChild = null;
-  for (var x = 0, xmlChild; xmlChild = xmlBlock.childNodes[x]; x++) {
+  for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
     if (xmlChild.nodeType == 3 && xmlChild.data.match(/^\s*$/)) {
       // Extra whitespace between tags does not concern us.
       continue;
@@ -299,8 +299,8 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
 
     // Find the first 'real' grandchild node (that isn't whitespace).
     var firstRealGrandchild = null;
-    for (var y = 0, grandchildNode; grandchildNode = xmlChild.childNodes[y];
-         y++) {
+    for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
+         j++) {
       if (grandchildNode.nodeType != 3 || !grandchildNode.data.match(/^\s*$/)) {
         firstRealGrandchild = grandchildNode;
       }
@@ -407,7 +407,7 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
  * @param {!Element} xmlBlock XML block element.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
-  for (var x = 0, child; child = xmlBlock.childNodes[x]; x++) {
+  for (var i = 0, child; child = xmlBlock.childNodes[i]; i++) {
     if (child.nodeName.toLowerCase() == 'next') {
       xmlBlock.removeChild(child);
       break;

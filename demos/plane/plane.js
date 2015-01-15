@@ -334,7 +334,7 @@ Plane.recalculate = function() {
     }
   }
   var seats = NaN;
-  Blockly.JavaScript.init();
+  Blockly.JavaScript.init(Blockly.mainWorkspace);
   var code = Blockly.JavaScript.blockToCode(rootBlock);
   try {
     seats = eval(code);

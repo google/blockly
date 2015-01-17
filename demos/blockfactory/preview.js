@@ -46,6 +46,7 @@ function updateFunc(type, code) {
   previewBlock.render();
   previewBlock.setMovable(false);
   previewBlock.setDeletable(false);
+  previewBlock.moveBy(15, 10);
 }
 
 /**

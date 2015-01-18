@@ -131,6 +131,12 @@ Blockly.PREVIOUS_STATEMENT = 4;
 Blockly.DUMMY_INPUT = 5;
 
 /**
+ * ENUM for an arra-valued input. Automatically adds/removes slots as necessary.
+ * @const
+ */
+Blockly.INPUT_ARRAYVALUE = 6;
+
+/**
  * ENUM for left alignment.
  * @const
  */

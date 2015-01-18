@@ -46,9 +46,14 @@ Blockly.Input = function(type, name, block, connection) {
   this.type = type;
   this.name = name;
   this.sourceBlock_ = block;
-  this.connection = connection;
   this.fieldRow = [];
   this.align = Blockly.ALIGN_LEFT;
+
+  if (type === Blockly.INPUT_ARRAYVALUE) {
+    this.connection = [connection];
+  } else {
+    this.connection = connection;
+  }
 
   this.visible_ = true;
 };
@@ -214,7 +219,40 @@ Blockly.Input.prototype.dispose = function() {
     field.dispose();
   }
   if (this.connection) {
-    this.connection.dispose();
+    if (this.connection.length) {
+      for (var j = 0, conn; conn = this.connection[j]; j++) {
+        conn.dispose();
+      }
+    } else {
+        this.connection.dispose();
+    }
   }
   this.sourceBlock_ = null;
+};
+
+/**
+ * Add an additional connection to this input
+ */
+Blockly.Input.prototype.appendConnection = function () {
+  if (!this.connection.length) {
+    throw 'This input does not support multiple connections.';
+  }
+  this.connection.push(new Blockly.Connection(this.sourceBlock_,
+    Blockly.INPUT_VALUE));
+};
+
+/**
+ * Remove connection from this input
+ * @param {!Blockly.Connection} connection The connection to remove
+ */
+Blockly.Input.prototype.removeConnection = function (connection) {
+  if (!this.connection.length) {
+    throw 'This input does not support multiple connections.';
+  }
+  for (var i = 0, conn; conn = this.connection[i]; i++) {
+    if (conn === connection) {
+      this.connection.splice(i, 1);
+      break;
+    }
+  }
 };

@@ -282,7 +282,7 @@ Blockly.Block.prototype.getConnections_ = function(all) {
     if (all || !this.collapsed_) {
       for (var i = 0, input; input = this.inputList[i]; i++) {
         if (input.connection) {
-          myConnections.push(input.connection);
+          myConnections = myConnections.concat(input.connection);
         }
       }
     }
@@ -827,6 +827,16 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
 };
 
 /**
+ * Shortcut for appending an array value input row.
+ * @param {string} name Language-neutral identifier which may be used to find
+ *    this input again. Should be unique to this block.
+ * @return {!Blockly.Input} The input object created
+ */
+Blockly.Block.prototype.appendArrayValueInput = function (name) {
+  return this.appendInput_(Blockly.INPUT_ARRAYVALUE, name);
+};
+
+/**
  * Interpolate a message string, creating fields and inputs.
  * @param {string} msg The message string to parse.  %1, %2, etc. are symbols
  *     for value inputs or for Fields, such as an instance of
@@ -943,7 +953,7 @@ Blockly.Block.prototype.interpolateMsg.INLINE_REGEX_ = /%1\s*$/;
 /**
  * Add a value input, statement input or local variable to this block.
  * @param {number} type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
- *     Blockly.DUMMY_INPUT.
+ *     Blockly.DUMMY_INPUT or Blockly.INPUT_ARRAYVALUE.
  * @param {string} name Language-neutral identifier which may used to find this
  *     input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
@@ -953,6 +963,8 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
     connection = new Blockly.Connection(this, type);
+  } else if (type == Blockly.INPUT_ARRAYVALUE) {
+    connection = new Blockly.Connection(this, Blockly.INPUT_VALUE);
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.

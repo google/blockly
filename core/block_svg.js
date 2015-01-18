@@ -1334,11 +1334,14 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     var row;
     if (!isInline || !lastType ||
         lastType == Blockly.NEXT_STATEMENT ||
-        input.type == Blockly.NEXT_STATEMENT) {
+        lastType == Blockly.INPUT_ARRAYVALUE ||
+        input.type == Blockly.NEXT_STATEMENT ||
+        input.type == Blockly.INPUT_ARRAYVALUE) {
       // Create new row.
       lastType = input.type;
       row = [];
-      if (isInline && input.type != Blockly.NEXT_STATEMENT) {
+      if (isInline && input.type != Blockly.NEXT_STATEMENT &&
+          input.type != Blockly.INPUT_ARRAYVALUE) {
         row.type = Blockly.BlockSvg.INLINE;
       } else {
         row.type = input.type;
@@ -1351,20 +1354,34 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     row.push(input);
 
     // Compute minimum input size.
-    input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
     // The width is currently only needed for inline value inputs.
+    input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
     if (isInline && input.type == Blockly.INPUT_VALUE) {
       input.renderWidth = Blockly.BlockSvg.TAB_WIDTH +
           Blockly.BlockSvg.SEP_SPACE_X * 1.25;
     } else {
       input.renderWidth = 0;
     }
-    // Expand input size if there is a connection.
-    if (input.connection && input.connection.targetConnection) {
-      var linkedBlock = input.connection.targetBlock();
-      var bBox = linkedBlock.getHeightWidth();
-      input.renderHeight = Math.max(input.renderHeight, bBox.height);
-      input.renderWidth = Math.max(input.renderWidth, bBox.width);
+    // Expand input size if there are connections.
+    if (input.connection) {
+      if (input.connection.length) {
+        input.renderHeight = 0;
+        for (var j = 0, conn; conn = input.connection[j]; j++) {
+          if (conn.targetConnection) {
+            var linkedBlock = conn.targetBlock();
+            var bBox = linkedBlock.getHeightWidth();
+            input.renderHeight += bBox.height;
+            input.renderWidth = Math.max(input.renderWidth, bBox.width);
+          } else {
+            input.renderHeight += Blockly.BlockSvg.MIN_BLOCK_Y;
+          }
+        }
+      } else if (input.connection.targetConnection) {
+        linkedBlock = input.connection.targetBlock();
+        bBox = linkedBlock.getHeightWidth();
+        input.renderHeight = Math.max(input.renderHeight, bBox.height);
+        input.renderWidth = Math.max(input.renderWidth, bBox.width);
+      }
     }
 
     if (i == inputList.length - 1) {
@@ -1397,7 +1414,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         hasStatement = true;
         fieldStatementWidth = Math.max(fieldStatementWidth, input.fieldWidth);
       } else {
-        if (row.type == Blockly.INPUT_VALUE) {
+        if (row.type == Blockly.INPUT_VALUE ||
+            row.type == Blockly.INPUT_ARRAYVALUE) {
           hasValue = true;
         } else if (row.type == Blockly.DUMMY_INPUT) {
           hasDummy = true;
@@ -1442,6 +1460,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   inputRows.hasValue = hasValue;
   inputRows.hasStatement = hasStatement;
   inputRows.hasDummy = hasDummy;
+  console.log('IR', this.type, inputRows);
   return inputRows;
 };
 

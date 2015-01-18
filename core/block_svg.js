@@ -1384,7 +1384,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
             if (conn.targetConnection) {
               linkedBlock = conn.targetBlock();
               bBox = linkedBlock.getHeightWidth();
-              row.height = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, bBox.height);
+              subRow.height = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, bBox.height);
               input.renderWidth = Math.max(input.renderWidth, bBox.width);
             }
             inputRows.push(subRow);
@@ -1398,6 +1398,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       }
     }
 
+    // FIXME: Need to make this work with array values
     if (i == inputList.length - 1) {
       // Last element should overhang slightly due to shadow.
       input.renderHeight--;
@@ -1474,6 +1475,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   inputRows.hasValue = hasValue;
   inputRows.hasStatement = hasStatement;
   inputRows.hasDummy = hasDummy;
+  console.log('IR', inputRows);
   return inputRows;
 };
 

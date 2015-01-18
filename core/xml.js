@@ -101,14 +101,27 @@ Blockly.Xml.blockToDom_ = function(block) {
     if (input.type == Blockly.DUMMY_INPUT) {
       continue;
     } else {
-      var childBlock = input.connection.targetBlock();
-      if (input.type == Blockly.INPUT_VALUE) {
+      //var childBlock = input.connection.targetBlock();
+      if (input.type == Blockly.INPUT_VALUE ||
+          input.type == Blockly.INPUT_ARRAYVALUE) {
         container = goog.dom.createDom('value');
         hasValues = true;
       } else if (input.type == Blockly.NEXT_STATEMENT) {
         container = goog.dom.createDom('statement');
       }
-      if (childBlock) {
+      //if (childBlock) {
+      //  container.appendChild(Blockly.Xml.blockToDom_(childBlock));
+      //  empty = false;
+      //}
+      if (input.connection.length) {
+        for (var j = 0, conn; conn = input.connection[j]; j++) {
+          var childBlock = conn.targetBlock();
+          if (childBlock) {
+            container.appendChild(Blockly.Xml.blockToDom_(childBlock));
+            empty = false;
+          }
+        }
+      } else if (childBlock = input.connection.targetBlock()) {
         container.appendChild(Blockly.Xml.blockToDom_(childBlock));
         empty = false;
       }

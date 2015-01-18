@@ -232,6 +232,7 @@ Blockly.Input.prototype.dispose = function() {
 
 /**
  * Add an additional connection to this input
+ * @return {Blockly.Input} This input, for chaining
  */
 Blockly.Input.prototype.appendConnection = function () {
   if (!this.connection.length) {
@@ -239,11 +240,13 @@ Blockly.Input.prototype.appendConnection = function () {
   }
   this.connection.push(new Blockly.Connection(this.sourceBlock_,
     Blockly.INPUT_VALUE));
+  return this;
 };
 
 /**
  * Remove connection from this input
  * @param {!Blockly.Connection} connection The connection to remove
+ * @return {Blockly.Input} This input, for chaining
  */
 Blockly.Input.prototype.removeConnection = function (connection) {
   if (!this.connection.length) {
@@ -255,4 +258,5 @@ Blockly.Input.prototype.removeConnection = function (connection) {
       break;
     }
   }
+  return this;
 };

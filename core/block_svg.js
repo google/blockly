@@ -1365,15 +1365,29 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     // Expand input size if there are connections.
     if (input.connection) {
       if (input.connection.length) {
-        input.renderHeight = 0;
-        for (var j = 0, conn; conn = input.connection[j]; j++) {
-          if (conn.targetConnection) {
-            var linkedBlock = conn.targetBlock();
-            var bBox = linkedBlock.getHeightWidth();
-            input.renderHeight += bBox.height;
-            input.renderWidth = Math.max(input.renderWidth, bBox.width);
-          } else {
-            input.renderHeight += Blockly.BlockSvg.MIN_BLOCK_Y;
+        row.index = 0;
+        if (input.connection[0].targetConnection) {
+          var linkedBlock = input.connection[0].targetBlock();
+          var bBox = linkedBlock.getHeightWidth();
+          input.renderHeight = Math.max(input.renderHeight, bBox.height);
+          input.renderWidth = Math.max(input.renderWidth, bBox.width);
+        }
+
+        // Add additional rows for multi-connection inputs
+        if (input.connection.length) {
+          for (var j = 1, conn; conn = input.connection[j]; j++) {
+            var subRow = [input];
+            subRow.height = Blockly.BlockSvg.MIN_BLOCK_Y;
+            subRow.thicker = false;
+            subRow.type = input.type;
+            subRow.index = j;
+            if (conn.targetConnection) {
+              linkedBlock = conn.targetBlock();
+              bBox = linkedBlock.getHeightWidth();
+              row.height = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, bBox.height);
+              input.renderWidth = Math.max(input.renderWidth, bBox.width);
+            }
+            inputRows.push(subRow);
           }
         }
       } else if (input.connection.targetConnection) {
@@ -1460,7 +1474,6 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   inputRows.hasValue = hasValue;
   inputRows.hasStatement = hasStatement;
   inputRows.hasDummy = hasDummy;
-  console.log('IR', this.type, inputRows);
   return inputRows;
 };
 
@@ -1691,21 +1704,27 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       if (Blockly.RTL) {
         highlightSteps.push('v', row.height - 2);
       }
-    } else if (row.type == Blockly.INPUT_VALUE) {
+    } else if (row.type == Blockly.INPUT_VALUE ||
+        row.type == Blockly.INPUT_ARRAYVALUE) {
       // External input.
       var input = row[0];
-      var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
-      if (input.align != Blockly.ALIGN_LEFT) {
-        var fieldRightX = inputRows.rightEdge - input.fieldWidth -
-            Blockly.BlockSvg.TAB_WIDTH - 2 * Blockly.BlockSvg.SEP_SPACE_X;
-        if (input.align == Blockly.ALIGN_RIGHT) {
-          fieldX += fieldRightX;
-        } else if (input.align == Blockly.ALIGN_CENTRE) {
-          fieldX += (fieldRightX + fieldX) / 2;
+
+      // Single connection/first line of multi => render fields
+      if (row.type == Blockly.INPUT_VALUE || row.index == 0) {
+        var fieldX = cursorX;
+        var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+        if (input.align != Blockly.ALIGN_LEFT) {
+          var fieldRightX = inputRows.rightEdge - input.fieldWidth -
+              Blockly.BlockSvg.TAB_WIDTH - 2 * Blockly.BlockSvg.SEP_SPACE_X;
+          if (input.align == Blockly.ALIGN_RIGHT) {
+            fieldX += fieldRightX;
+          } else if (input.align == Blockly.ALIGN_CENTRE) {
+            fieldX += (fieldRightX + fieldX) / 2;
+          }
         }
+        this.renderFields_(input.fieldRow, fieldX, fieldY);
       }
-      this.renderFields_(input.fieldRow, fieldX, fieldY);
+
       steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
       var v = row.height - Blockly.BlockSvg.TAB_HEIGHT;
       steps.push('v', v);
@@ -1716,20 +1735,25 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       } else {
         // Short highlight glint at bottom of tab.
         highlightSteps.push('M', (inputRows.rightEdge - 4.2) + ',' +
-            (cursorY + Blockly.BlockSvg.TAB_HEIGHT - 0.4));
+        (cursorY + Blockly.BlockSvg.TAB_HEIGHT - 0.4));
         highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.38) +
-            ',-1.8');
+        ',-1.8');
       }
       // Create external input connection.
+      if (typeof row.index != 'undefined') {
+        var conn = input.connection[row.index];
+      } else {
+        conn = input.connection;
+      }
       connectionX = connectionsXY.x +
-          (Blockly.RTL ? -inputRows.rightEdge - 1 : inputRows.rightEdge + 1);
+      (Blockly.RTL ? -inputRows.rightEdge - 1 : inputRows.rightEdge + 1);
       connectionY = connectionsXY.y + cursorY;
-      input.connection.moveTo(connectionX, connectionY);
-      if (input.connection.targetConnection) {
-        input.connection.tighten_();
+      conn.moveTo(connectionX, connectionY);
+      if (conn.targetConnection) {
+        conn.tighten_();
         this.width = Math.max(this.width, inputRows.rightEdge +
-            input.connection.targetBlock().getHeightWidth().width -
-            Blockly.BlockSvg.TAB_WIDTH + 1);
+        conn.targetBlock().getHeightWidth().width -
+        Blockly.BlockSvg.TAB_WIDTH + 1);
       }
     } else if (row.type == Blockly.DUMMY_INPUT) {
       // External naked field.

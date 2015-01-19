@@ -101,7 +101,6 @@ Blockly.Xml.blockToDom_ = function(block) {
     if (input.type == Blockly.DUMMY_INPUT) {
       continue;
     } else {
-      //var childBlock = input.connection.targetBlock();
       if (input.type == Blockly.INPUT_VALUE ||
           input.type == Blockly.INPUT_ARRAYVALUE) {
         container = goog.dom.createDom('value');
@@ -109,10 +108,6 @@ Blockly.Xml.blockToDom_ = function(block) {
       } else if (input.type == Blockly.NEXT_STATEMENT) {
         container = goog.dom.createDom('statement');
       }
-      //if (childBlock) {
-      //  container.appendChild(Blockly.Xml.blockToDom_(childBlock));
-      //  empty = false;
-      //}
       if (input.connectionList) {
         for (var j = 0, conn; conn = input.connectionList[j]; j++) {
           var childBlock = conn.targetBlock();

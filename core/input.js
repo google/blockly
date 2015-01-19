@@ -170,6 +170,21 @@ Blockly.Input.prototype.setVisible = function(visible) {
         child.rendered = false;
       }
     }
+  } else if (this.connectionList) {
+    for (var i = 0, conn; conn = this.connectionList[i]; i++) {
+      if (visible) {
+        renderList.push.apply(renderList, conn.unhideAll());
+      } else {
+        conn.hideAll();
+      }
+      child = conn.targetBlock();
+      if (child) {
+        child.getSvgRoot().style.display = display;
+        if (!visible) {
+          child.rendered = false;
+        }
+      }
+    }
   }
   return renderList;
 };

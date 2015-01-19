@@ -282,7 +282,9 @@ Blockly.Block.prototype.getConnections_ = function(all) {
     if (all || !this.collapsed_) {
       for (var i = 0, input; input = this.inputList[i]; i++) {
         if (input.connection) {
-          myConnections = myConnections.concat(input.connection);
+          myConnections.push(input.connection);
+        } else if (input.connectionList) {
+          myConnections.push.apply(myConnections, input.connectionList);
         }
       }
     }
@@ -784,6 +786,15 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
         text.push(child.toString());
       } else {
         text.push('?');
+      }
+    } else if (input.connectionList) {
+      for (var k = 0, conn; conn = input.connectionList[k]; k++) {
+        child = input.connection.targetBlock();
+        if (child) {
+          text.push(child.toString());
+        } else {
+          text.push('?');
+        }
       }
     }
   }

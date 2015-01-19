@@ -389,6 +389,8 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     Blockly.terminateDrag_();
     if (Blockly.selected && Blockly.highlightedConnection_) {
       // Connect two blocks together.
+      console.log('MU');
+      console.log('L', Blockly.localConnection_.sourceBlock_.type, 'H', Blockly.highlightedConnection_.sourceBlock_.type);
       Blockly.localConnection_.connect(Blockly.highlightedConnection_);
       if (this_.rendered) {
         // Trigger a connection animation.
@@ -1363,38 +1365,32 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderWidth = 0;
     }
     // Expand input size if there are connections.
-    if (input.connection) {
-      if (input.connection.length) {
-        row.index = 0;
-        if (input.connection[0].targetConnection) {
-          var linkedBlock = input.connection[0].targetBlock();
-          var bBox = linkedBlock.getHeightWidth();
-          input.renderHeight = Math.max(input.renderHeight, bBox.height);
-          input.renderWidth = Math.max(input.renderWidth, bBox.width);
-        }
-
-        // Add additional rows for multi-connection inputs
-        if (input.connection.length) {
-          for (var j = 1, conn; conn = input.connection[j]; j++) {
-            var subRow = [input];
-            subRow.height = Blockly.BlockSvg.MIN_BLOCK_Y;
-            subRow.thicker = false;
-            subRow.type = input.type;
-            subRow.index = j;
-            if (conn.targetConnection) {
-              linkedBlock = conn.targetBlock();
-              bBox = linkedBlock.getHeightWidth();
-              subRow.height = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, bBox.height);
-              input.renderWidth = Math.max(input.renderWidth, bBox.width);
-            }
-            inputRows.push(subRow);
-          }
-        }
-      } else if (input.connection.targetConnection) {
-        linkedBlock = input.connection.targetBlock();
-        bBox = linkedBlock.getHeightWidth();
+    if (input.connection && input.connection.targetConnection) {
+      linkedBlock = input.connection.targetBlock();
+      bBox = linkedBlock.getHeightWidth();
+      input.renderHeight = Math.max(input.renderHeight, bBox.height);
+      input.renderWidth = Math.max(input.renderWidth, bBox.width);
+    } else if (input.connectionList) {
+      row.index = 0;
+      if (input.connectionList[0].targetConnection) {
+        var linkedBlock = input.connectionList[0].targetBlock();
+        var bBox = linkedBlock.getHeightWidth();
         input.renderHeight = Math.max(input.renderHeight, bBox.height);
         input.renderWidth = Math.max(input.renderWidth, bBox.width);
+      }
+      for (var j = 1, conn; conn = input.connectionList[j]; j++) {
+        var subRow = [input];
+        subRow.height = Blockly.BlockSvg.MIN_BLOCK_Y;
+        subRow.thicker = false;
+        subRow.type = input.type;
+        subRow.index = j;
+        if (conn.targetConnection) {
+          linkedBlock = conn.targetBlock();
+          bBox = linkedBlock.getHeightWidth();
+          subRow.height = Math.max(Blockly.BlockSvg.MIN_BLOCK_Y, bBox.height);
+          input.renderWidth = Math.max(input.renderWidth, bBox.width);
+        }
+        inputRows.push(subRow);
       }
     }
 
@@ -1475,7 +1471,6 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   inputRows.hasValue = hasValue;
   inputRows.hasStatement = hasStatement;
   inputRows.hasDummy = hasDummy;
-  console.log('IR', inputRows);
   return inputRows;
 };
 
@@ -1743,7 +1738,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       }
       // Create external input connection.
       if (typeof row.index != 'undefined') {
-        var conn = input.connection[row.index];
+        var conn = input.connectionList[row.index];
       } else {
         conn = input.connection;
       }

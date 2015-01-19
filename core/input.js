@@ -50,7 +50,7 @@ Blockly.Input = function(type, name, block, connection) {
   this.align = Blockly.ALIGN_LEFT;
 
   if (type === Blockly.INPUT_ARRAYVALUE) {
-    this.connection = [connection];
+    this.connectionList = [connection];
   } else {
     this.connection = connection;
   }
@@ -219,8 +219,8 @@ Blockly.Input.prototype.dispose = function() {
     field.dispose();
   }
   if (this.connection) {
-    if (this.connection.length) {
-      for (var j = 0, conn; conn = this.connection[j]; j++) {
+    if (this.connectionList) {
+      for (var j = 0, conn; conn = this.connectionList[j]; j++) {
         conn.dispose();
       }
     } else {
@@ -232,31 +232,39 @@ Blockly.Input.prototype.dispose = function() {
 
 /**
  * Add an additional connection to this input
- * @return {Blockly.Input} This input, for chaining
+ * @param {number} [pos] Position in connection stack to insert. Append if
+ *  omitted
+ * @return {Blockly.Connection} The new connection
  */
-Blockly.Input.prototype.appendConnection = function () {
-  if (!this.connection.length) {
+Blockly.Input.prototype.insertConnection = function (pos) {
+  if (!this.connectionList) {
     throw 'This input does not support multiple connections.';
   }
-  this.connection.push(new Blockly.Connection(this.sourceBlock_,
-    Blockly.INPUT_VALUE));
-  return this;
+  if (typeof pos == 'undefined') {
+    pos = this.connectionList.length;
+  }
+  var conn = new Blockly.Connection(this.sourceBlock_, Blockly.INPUT_VALUE);
+  this.connectionList.splice(pos, 0, conn);
+  return conn;
 };
 
 /**
  * Remove connection from this input
- * @param {!Blockly.Connection} connection The connection to remove
- * @return {Blockly.Input} This input, for chaining
+ * @param {(number|Blockly.Connection)} connection The connection to remove
+ *  or its index
  */
 Blockly.Input.prototype.removeConnection = function (connection) {
-  if (!this.connection.length) {
+  if (!this.connectionList) {
     throw 'This input does not support multiple connections.';
   }
-  for (var i = 0, conn; conn = this.connection[i]; i++) {
-    if (conn === connection) {
-      this.connection.splice(i, 1);
-      break;
+  if (typeof connection == 'object') {
+    for (var i = 0, conn; conn = this.connectionList[i]; i++) {
+      if (conn === connection) {
+        this.connectionList.splice(i, 1);
+        break;
+      }
     }
+  } else {
+    this.connectionList.splice(connection, 1);
   }
-  return this;
 };

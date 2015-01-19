@@ -113,8 +113,8 @@ Blockly.Xml.blockToDom_ = function(block) {
       //  container.appendChild(Blockly.Xml.blockToDom_(childBlock));
       //  empty = false;
       //}
-      if (input.connection.length) {
-        for (var j = 0, conn; conn = input.connection[j]; j++) {
+      if (input.connectionList) {
+        for (var j = 0, conn; conn = input.connectionList[j]; j++) {
           var childBlock = conn.targetBlock();
           if (childBlock) {
             container.appendChild(Blockly.Xml.blockToDom_(childBlock));

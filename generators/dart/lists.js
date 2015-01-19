@@ -309,3 +309,27 @@ Blockly.Dart['lists_getSublist'] = function(block) {
   }
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
+
+Blockly.Dart['lists_split'] = function(block) {
+  // Block for splitting text into a list, or joining a list into text.
+  var value_input = Blockly.Dart.valueToCode(block, 'INPUT',
+      Blockly.Dart.ORDER_UNARY_POSTFIX);
+  var value_delim = Blockly.Dart.valueToCode(block, 'DELIM',
+      Blockly.Dart.ORDER_NONE) || '\'\'';
+  var mode = block.getFieldValue('MODE');
+  if (mode == 'SPLIT') {
+    if (!value_input) {
+      value_input = '\'\'';
+    }
+    var functionName = 'split';
+  } else if (mode == 'JOIN') {
+    if (!value_input) {
+      value_input = '[]';
+    }
+    var functionName = 'join';
+  } else {
+    throw 'Unknown mode: ' + mode;
+  }
+  var code = value_input + '.' + functionName + '(' + value_delim + ')';
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};

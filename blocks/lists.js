@@ -50,6 +50,7 @@ Blockly.Blocks['lists_create_with'] = {
    * @this Blockly.Block
    */
   init: function() {
+    this.setHelpUrl(Blockly.Msg.LISTS_CREATE_WITH_HELPURL);
     this.setColour(260);
     this.itemCount_ = 3;
     this.updateShape_();
@@ -510,11 +511,11 @@ Blockly.Blocks['lists_getSublist'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.WHERE_OPTIONS_1 =
+    this['WHERE_OPTIONS_1'] =
         [[Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START, 'FROM_START'],
          [Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END, 'FROM_END'],
          [Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST, 'FIRST']];
-    this.WHERE_OPTIONS_2 =
+    this['WHERE_OPTIONS_2'] =
         [[Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START, 'FROM_START'],
          [Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END, 'FROM_END'],
          [Blockly.Msg.LISTS_GET_SUBLIST_END_LAST, 'LAST']];
@@ -606,5 +607,47 @@ Blockly.Blocks['lists_getSublist'] = {
     if (Blockly.Msg.LISTS_GET_SUBLIST_TAIL) {
       this.moveInputBefore('TAIL', null);
     }
+  }
+};
+
+Blockly.Blocks['lists_split'] = {
+  /**
+   * Block for splitting text into a list, or joining a list into text.
+   * @this Blockly.Block
+   */
+  init: function() {
+    // Assign 'this' to a variable for use in the closures below.
+    var thisBlock = this;
+    var dropdown = new Blockly.FieldDropdown(
+        [[Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT, 'SPLIT'],
+         [Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST, 'JOIN']],
+        function(newOp) {
+          if (newOp == 'SPLIT') {
+            thisBlock.outputConnection.setCheck('Array');
+            thisBlock.getInput('INPUT').setCheck('String');
+          } else {
+            thisBlock.outputConnection.setCheck('String');
+            thisBlock.getInput('INPUT').setCheck('Array');
+          }
+        });
+    this.setHelpUrl(Blockly.Msg.LISTS_SPLIT_HELPURL);
+    this.setColour(260);
+    this.appendValueInput('INPUT')
+        .setCheck('String')
+        .appendField(dropdown, 'MODE');
+    this.appendValueInput('DELIM')
+        .setCheck('String')
+        .appendField(Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER);
+    this.setInputsInline(true);
+    this.setOutput(true, 'Array');
+    this.setTooltip(function() {
+      var mode = thisBlock.getFieldValue('MODE');
+      if (mode == 'SPLIT') {
+        return Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT;
+      } else if (mode == 'JOIN') {
+        return Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN;
+      }
+      throw 'Unknown mode: ' + mode;
+    });
   }
 };

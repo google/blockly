@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-11-20 15:37:54.063549",
+		"lastupdated": "2015-01-18 16:51:52.594084",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -254,9 +254,10 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "prompt for number with message",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Prompt for user for a number.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Prompt for user for some text.",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "create empty list",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Returns a list, of length 0, containing no data records",
+	"LISTS_CREATE_WITH_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-list-with",
 	"LISTS_CREATE_WITH_TOOLTIP": "Create a list with any number of items.",
 	"LISTS_CREATE_WITH_INPUT_WITH": "create list with",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "list",
@@ -323,6 +324,12 @@
 	"LISTS_GET_SUBLIST_END_LAST": "to last",
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Creates a copy of the specified portion of a list.",
+	"LISTS_SPLIT_HELPURL": "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "make list from text",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "make text from list",
+	"LISTS_SPLIT_WITH_DELIMITER": "with delimiter",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Split text into a list of texts, breaking at each delimiter.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Join a list of texts into one text, separated by a delimiter.",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_HELPURL": "https://github.com/google/blockly/wiki/Variables#get",
 	"VARIABLES_GET_TITLE": "",

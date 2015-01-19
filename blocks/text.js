@@ -412,11 +412,11 @@ Blockly.Blocks['text_getSubstring'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.WHERE_OPTIONS_1 =
+    this['WHERE_OPTIONS_1'] =
         [[Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START, 'FROM_START'],
          [Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_END, 'FROM_END'],
          [Blockly.Msg.TEXT_GET_SUBSTRING_START_FIRST, 'FIRST']];
-    this.WHERE_OPTIONS_2 =
+    this['WHERE_OPTIONS_2'] =
         [[Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_START, 'FROM_START'],
          [Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END, 'FROM_END'],
          [Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST, 'LAST']];

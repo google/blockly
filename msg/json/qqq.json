@@ -1,10 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).",
 	"ADD_COMMENT": "context menu - Add a descriptive comment to the selected block.",
@@ -257,6 +251,7 @@
 	"LISTS_CREATE_EMPTY_HELPURL": "url - Information on empty lists.",
 	"LISTS_CREATE_EMPTY_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#create-empty-list https://github.com/google/blockly/wiki/Lists#create-empty-list].",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "block text - See [https://github.com/google/blockly/wiki/Lists#create-empty-list https://github.com/google/blockly/wiki/Lists#create-empty-list].",
+	"LISTS_CREATE_WITH_HELPURL": "url - Information on building lists.",
 	"LISTS_CREATE_WITH_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with].",
 	"LISTS_CREATE_WITH_INPUT_WITH": "block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with].",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "block text - This appears in a sub-block when [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs changing the number of inputs in a ''''create list with'''' block].",
@@ -323,6 +318,12 @@
 	"LISTS_GET_SUBLIST_END_LAST": "dropdown - Indicates that the '''last''' item in the given list should be [https://github.com/google/blockly/wiki/Lists#getting-a-sublist the end of the selected sublist]. [[File:Blockly-get-sublist.png]]",
 	"LISTS_GET_SUBLIST_TAIL": "block text - This appears in the rightmost position ('tail') of the sublist block, as described at [https://github.com/google/blockly/wiki/Lists#getting-a-sublist https://github.com/google/blockly/wiki/Lists#getting-a-sublist]. In English and most other languages, this is the empty string. [[File:Blockly-get-sublist.png]]",
 	"LISTS_GET_SUBLIST_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-sublist https://github.com/google/blockly/wiki/Lists#getting-a-sublist] for more information. [[File:Blockly-get-sublist.png]]",
+	"LISTS_SPLIT_HELPURL": "url - Information describing splitting text into a list, or joining a list into text.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "dropdown - Indicates that text will be split up into a list (e.g. 'a-b-c' -> ['a', 'b', 'c']).",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "dropdown - Indicates that a list will be joined together to form text (e.g. ['a', 'b', 'c'] -> 'a-b-c').",
+	"LISTS_SPLIT_WITH_DELIMITER": "block text - Prompts for a letter to be used as a separator when splitting or joining text.",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "tooltip - See [https://github.com/google/blockly/wiki/Lists#make-list-from-text https://github.com/google/blockly/wiki/Lists#make-list-from-text] for more information.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "tooltip - See [https://github.com/google/blockly/wiki/Lists#make-text-from-list https://github.com/google/blockly/wiki/Lists#make-text-from-list] for more information.",
 	"ORDINAL_NUMBER_SUFFIX": "grammar - Text that follows an ordinal number (a number that indicates position relative to other numbers).  In most languages, such text appears before the number, so this should be blank.  An exception is Hungarian. See [[Translating:Blockly#Ordinal_numbers]] for more information.",
 	"VARIABLES_GET_HELPURL": "url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.",
 	"VARIABLES_GET_TITLE": "block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before 'x' in the expression 'x + 1'.",

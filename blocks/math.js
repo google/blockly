@@ -329,7 +329,7 @@ Blockly.Blocks['math_on_list'] = {
          [Blockly.Msg.MATH_ONLIST_OPERATOR_MODE, 'MODE'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_STD_DEV, 'STD_DEV'],
          [Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM, 'RANDOM']];
-    // Assign 'this' to a variable for use in the closure below.
+    // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.MATH_ONLIST_HELPURL);
     this.setColour(230);

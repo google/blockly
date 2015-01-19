@@ -1,4 +1,11 @@
 {
+	"@metadata": {
+		"authors": [
+			"Espertus",
+			"Liuxinyu970226",
+			"Shirayuki"
+		]
+	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).",
 	"ADD_COMMENT": "context menu - Add a descriptive comment to the selected block.",
@@ -106,9 +113,9 @@
 	"MATH_NUMBER_HELPURL": "url - Information about (real) numbers.",
 	"MATH_NUMBER_TOOLTIP": "tooltip - Any positive or negative number, not necessarily an integer.",
 	"MATH_ADDITION_SYMBOL": "math - The symbol for the binary operation addition.",
-	"MATH_SUBTRACTION_SYMBOL": "math - The symbol for the binary operation indicating that the right operand should be subtracted from the left operand.",
+	"MATH_SUBTRACTION_SYMBOL": "{{optional}}\nmath - The symbol for the binary operation indicating that the right operand should be subtracted from the left operand.",
 	"MATH_DIVISION_SYMBOL": "math - The binary operation indicating that the left operand should be divided by the right operand.",
-	"MATH_MULTIPLICATION_SYMBOL": "math - The symbol for the binary operation multiplication.",
+	"MATH_MULTIPLICATION_SYMBOL": "{{optional}}\nmath - The symbol for the binary operation multiplication.",
 	"MATH_POWER_SYMBOL": "math - The symbol for the binary operation exponentiation.  Specifically, if the value of the left operand is L and the value of the right operand (the exponent) is R, multiply L by itself R times.  (Fractional and negative exponents are also legal.)",
 	"MATH_TRIG_SIN": "math - The short name of the trigonometric function [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine].",
 	"MATH_TRIG_COS": "math - The short name of the trigonometric function [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine].",

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Bl707"
+			"Bl707",
+			"संजीव कुमार"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "आइटम",
@@ -19,6 +20,9 @@
 	"DISABLE_BLOCK": "ब्लॉक को अक्षम करें",
 	"ENABLE_BLOCK": "ब्लॉक को सक्षम करें",
 	"HELP": "सहायता",
+	"CHAT": "इस सन्दूक में लिखकर हमारे सहयोगी के साथ बातचीत करें!",
+	"AUTH": "अपने कार्य को सहेजना सक्षम करने और अपने साथ इसे साझा करने हेतु कृपया इस एप्प को अधिकृत करें।",
+	"ME": "मैं",
 	"CHANGE_VALUE_TITLE": "मान परिवर्तित करें:",
 	"NEW_VARIABLE": "नया चर...",
 	"NEW_VARIABLE_TITLE": "नए चर का नाम:",
@@ -32,6 +36,7 @@
 	"COLOUR_RGB_RED": "लाल",
 	"COLOUR_RGB_GREEN": "हरा",
 	"COLOUR_RGB_BLUE": "नीला",
+	"COLOUR_RGB_TOOLTIP": "लाल, हरा और नीले की निर्दिष्ट मात्रा के साथ एक रंग बनायें। सभी मान ० से १०० के बीच होने चाहिए।",
 	"COLOUR_BLEND_TITLE": "मिश्रण करें",
 	"COLOUR_BLEND_COLOUR1": "रंग 1",
 	"COLOUR_BLEND_COLOUR2": "रंग 2",
@@ -48,14 +53,17 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "जब तक मान ट्रू है, तब तक कुछ स्टेट्मेंट्स चलाएँ।",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "जब तक मान फॉल्स है, तब तक कुछ स्टेट्मेंट्स चलाएँ।",
 	"CONTROLS_FOR_INPUT_WITH": "काउंट करें",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each प्रत्येक खण्ड के लिए",
 	"CONTROLS_FOREACH_INPUT_ITEM": "प्रत्येक आइटम के लिए",
 	"CONTROLS_FOREACH_INPUT_INLIST": "सूची में",
+	"CONTROLS_FOREACH_TOOLTIP": "सूची के प्रत्येक आयटम के लिए, आयटम में चर का मान '%1' रखें और बाद में कुछ कथन लिखें।",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "लूप से बाहर निकलें",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "लूप का अगला आईटरेशन जारी रखें",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "भीतरी लूप से बाहर निकलें।",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE": "बाकी बचे लूप को छोड़ें, और अगला आईटरेशन जारी रखें।",
 	"CONTROLS_FLOW_STATEMENTS_WARNING": "सावधान: ये ब्लॉक केवल लूप के अंदर इस्तेमाल किया जा सकता है।",
 	"CONTROLS_IF_TOOLTIP_1": "यदी मान ट्रू है, तो कुछ स्टेट्मेंट्स चलाएँ।",
+	"CONTROLS_IF_TOOLTIP_2": "यदि एक मान सत्य है तो कथनों का प्रथम खण्ड बनायें। अन्यथा कथनों का दूसरा भाग निर्मित करें।",
 	"CONTROLS_IF_MSG_IF": "इफ",
 	"CONTROLS_IF_MSG_ELSEIF": "एल्स इफ",
 	"CONTROLS_IF_MSG_ELSE": "एल्स",

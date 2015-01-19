@@ -8,7 +8,8 @@
 			"TheGabrielZaum",
 			"Cainamarques",
 			"Tuliouel",
-			"Rodrigo codignoli"
+			"Rodrigo codignoli",
+			"Webysther"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -16,7 +17,7 @@
 	"ADD_COMMENT": "Adicionar Comentário",
 	"REMOVE_COMMENT": "Remover Comentário",
 	"EXTERNAL_INPUTS": "Entrada externa",
-	"INLINE_INPUTS": "Entradas Internas",
+	"INLINE_INPUTS": "Entradas Incorporadas",
 	"DELETE_BLOCK": "Remover Bloco",
 	"DELETE_X_BLOCKS": "Remover %1 Blocos",
 	"COLLAPSE_BLOCK": "Recolher Bloco",

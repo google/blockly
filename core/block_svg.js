@@ -389,8 +389,6 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     Blockly.terminateDrag_();
     if (Blockly.selected && Blockly.highlightedConnection_) {
       // Connect two blocks together.
-      console.log('MU');
-      console.log('L', Blockly.localConnection_.sourceBlock_.type, 'H', Blockly.highlightedConnection_.sourceBlock_.type);
       Blockly.localConnection_.connect(Blockly.highlightedConnection_);
       if (this_.rendered) {
         // Trigger a connection animation.

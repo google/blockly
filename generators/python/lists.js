@@ -36,14 +36,22 @@ Blockly.Python['lists_create_empty'] = function(block) {
 
 Blockly.Python['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  var code = new Array(block.itemCount_);
-  for (var n = 0; n < block.itemCount_; n++) {
-    code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
-        Blockly.Python.ORDER_NONE) || 'None';
-  }
+  var code = Blockly.Python.valueToCodeArray(block, 'ITEMS',
+      Blockly.Python.ORDER_NONE);
   code = '[' + code.join(', ') + ']';
   return [code, Blockly.Python.ORDER_ATOMIC];
 };
+
+//Blockly.Python['lists_create_with'] = function(block) {
+//  // Create a list with any number of elements of any type.
+//  var code = new Array(block.itemCount_);
+//  for (var n = 0; n < block.itemCount_; n++) {
+//    code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
+//        Blockly.Python.ORDER_NONE) || 'None';
+//  }
+//  code = '[' + code.join(', ') + ']';
+//  return [code, Blockly.Python.ORDER_ATOMIC];
+//};
 
 Blockly.Python['lists_repeat'] = function(block) {
   // Create a list with one element repeated.

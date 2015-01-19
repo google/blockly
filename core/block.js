@@ -1081,15 +1081,36 @@ Blockly.Block.prototype.getInput = function(name) {
   return null;
 };
 
+
 /**
  * Fetches the block attached to the named input.
  * @param {string} name The name of the input.
  * @return {Blockly.Block} The attached value block, or null if the input is
- *     either disconnected or if the input does not exist.
+ * either disconnected or if the input does not exist.
  */
 Blockly.Block.prototype.getInputTargetBlock = function(name) {
   var input = this.getInput(name);
   return input && input.connection && input.connection.targetBlock();
+};
+
+/** Fetches all the blocks attached to an array input.
+ * @param {string} name The name of the input.
+ * @return {Array<Blockly.Block> Array of attached value blocks, or empty list
+ *  if no blocks are attached or the input does not exist.
+ */
+Blockly.Block.prototype.getInputTargetBlockList = function (name) {
+  var input = this.getInput(name);
+  if (!input || !input.connectionList) {
+    return [];
+  }
+  var blocks = [];
+  for (var i = 0, conn; conn = input.connectionList[i]; i++) {
+    var block = conn.targetBlock();
+    if (block) {
+      blocks.push(block);
+    }
+  }
+  return blocks;
 };
 
 /**

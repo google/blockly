@@ -283,8 +283,10 @@ Blockly.Connection.prototype.disconnect = function() {
   }
   // Remove connection if connection is part of an array
   if (av = parentConnection.arrayValue_()) {
-    av.input.removeConnection(av.index);
-    parentConnection.dispose();
+    if (av.input.connectionList.length > 1) {
+      av.input.removeConnection(av.index);
+      parentConnection.dispose();
+    }
   }
   if (parentBlock.rendered) {
     parentBlock.render();

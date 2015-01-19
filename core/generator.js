@@ -226,6 +226,59 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
 };
 
 /**
+ * Generate array of code strings representing the contents of the specified
+ *  array value input.
+ * @param {!Blockly.Block} block The block containing the array input.
+ * @param {string} name The name of the input.
+ * @param {number} order The maximum binding strength (minimum order value)
+ *     of any operators adjacent to "block".
+ * @return {Array<string>} Array of generated code or empty array if no blocks
+ *  are connected or the specified input doesn't exist
+ */
+Blockly.Generator.prototype.valueToCodeArray = function(block, name, order) {
+  if (isNaN(order)) {
+    throw 'Expecting valid order from block "' + block.type + '".';
+  }
+  var targetBlocks = block.getInputTargetBlockList(name);
+  var codeArray = [];
+  for (var i = 0, block; block = targetBlocks[i]; i++) {
+    var tuple = this.blockToCode(block);
+    if (tuple === '') {
+      // Disabled block.
+      continue;
+    }
+    if (!goog.isArray(tuple)) {
+      // Value blocks must return code and order of operations info.
+      // Statement blocks must only return code.
+      throw 'Expecting tuple from value block "' + block.type + '".';
+    }
+    var code = tuple[0];
+    var innerOrder = tuple[1];
+    if (isNaN(innerOrder)) {
+      throw 'Expecting valid order from value block "' + targetBlock.type + '".';
+    }
+    if (code && order <= innerOrder) {
+      if (order == innerOrder || (order == 0 || order == 99)) {
+        // 0 is the atomic order, 99 is the none order.  No parentheses needed.
+        // In all known languages multiple such code blocks are not order
+        // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
+      } else {
+        // The operators outside this code are stonger than the operators
+        // inside this code.  To prevent the code from being pulled apart,
+        // wrap the code in parentheses.
+        // Technically, this should be handled on a language-by-language basis.
+        // However all known (sane) languages use parentheses for grouping.
+        code = '(' + code + ')';
+      }
+    }
+    if (code) {
+      codeArray.push(code);
+    }
+  }
+  return codeArray;
+};
+
+/**
  * Generate code representing the statement.  Indent the code.
  * @param {!Blockly.Block} block The block containing the input.
  * @param {string} name The name of the input.

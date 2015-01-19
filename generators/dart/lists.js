@@ -38,14 +38,22 @@ Blockly.Dart['lists_create_empty'] = function(block) {
 
 Blockly.Dart['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  var code = new Array(block.itemCount_);
-  for (var n = 0; n < block.itemCount_; n++) {
-    code[n] = Blockly.Dart.valueToCode(block, 'ADD' + n,
-        Blockly.Dart.ORDER_NONE) || 'null';
-  }
+  var code = Blockly.Dart.valueToCodeArray(block, 'ITEMS',
+      Blockly.Dart.ORDER_NONE);
   code = '[' + code.join(', ') + ']';
   return [code, Blockly.Dart.ORDER_ATOMIC];
 };
+
+//Blockly.Dart['lists_create_with'] = function(block) {
+//  // Create a list with any number of elements of any type.
+//  var code = new Array(block.itemCount_);
+//  for (var n = 0; n < block.itemCount_; n++) {
+//    code[n] = Blockly.Dart.valueToCode(block, 'ADD' + n,
+//        Blockly.Dart.ORDER_NONE) || 'null';
+//  }
+//  code = '[' + code.join(', ') + ']';
+//  return [code, Blockly.Dart.ORDER_ATOMIC];
+//};
 
 Blockly.Dart['lists_repeat'] = function(block) {
   // Create a list with one element repeated.

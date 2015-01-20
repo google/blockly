@@ -36,36 +36,58 @@ Blockly.Python['text'] = function(block) {
 };
 
 Blockly.Python['text_join'] = function(block) {
-  // Create a string made up of any number of elements of any type.
-  //Should we allow joining by '-' or ',' or any other characters?
-  var code;
-  if (block.itemCount_ == 0) {
-    return ['\'\'', Blockly.Python.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
-    var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
-        Blockly.Python.ORDER_NONE) || '\'\'';
-    code = 'str(' + argument0 + ')';
-    return [code, Blockly.Python.ORDER_FUNCTION_CALL];
-  } else if (block.itemCount_ == 2) {
-    var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
-        Blockly.Python.ORDER_NONE) || '\'\'';
-    var argument1 = Blockly.Python.valueToCode(block, 'ADD1',
-        Blockly.Python.ORDER_NONE) || '\'\'';
-    var code = 'str(' + argument0 + ') + str(' + argument1 + ')';
-    return [code, Blockly.Python.ORDER_UNARY_SIGN];
-  } else {
-    var code = [];
-    for (var n = 0; n < block.itemCount_; n++) {
-      code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
-          Blockly.Python.ORDER_NONE) || '\'\'';
+    // Create a string made up of any number of elements of any type.
+    //Should we allow joining by '-' or ',' or any other characters?
+    var codeArray = Blockly.Python.valueToCodeArray(block, 'TEXTS',
+        Blockly.Python.ORDER_NONE);
+    if (codeArray.length == 0) {
+        return ['\'\'', Blockly.Python.ORDER_ATOMIC];
+    } else if (codeArray.length == 1) {
+        return ['str(' + codeArray[0] + ')',
+            Blockly.Python.ORDER_FUNCTION_CALL];
+    } else if (codeArray.length == 2) {
+        return ['str(' + codeArray[0] + ') + str(' + codeArray[1] + ')',
+            Blockly.Python.ORDER_UNARY_SIGN];
+    } else {
+        var tempVar = Blockly.Python.variableDB_.getDistinctName('temp_value',
+            Blockly.Variables.NAME_TYPE);
+        var code = '\'\'.join([str(' + tempVar + ') for ' + tempVar +
+                ' in [' + codeArray.join(', ') + ']])';
+        return [code, Blockly.Python.ORDER_FUNCTION_CALL];
     }
-    var tempVar = Blockly.Python.variableDB_.getDistinctName('temp_value',
-        Blockly.Variables.NAME_TYPE);
-    code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
-        code.join(', ') + ']])';
-    return [code, Blockly.Python.ORDER_FUNCTION_CALL];
-  }
 };
+
+//Blockly.Python['text_join'] = function(block) {
+//  // Create a string made up of any number of elements of any type.
+//  //Should we allow joining by '-' or ',' or any other characters?
+//  var code;
+//  if (block.itemCount_ == 0) {
+//    return ['\'\'', Blockly.Python.ORDER_ATOMIC];
+//  } else if (block.itemCount_ == 1) {
+//    var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
+//        Blockly.Python.ORDER_NONE) || '\'\'';
+//    code = 'str(' + argument0 + ')';
+//    return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+//  } else if (block.itemCount_ == 2) {
+//    var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
+//        Blockly.Python.ORDER_NONE) || '\'\'';
+//    var argument1 = Blockly.Python.valueToCode(block, 'ADD1',
+//        Blockly.Python.ORDER_NONE) || '\'\'';
+//    var code = 'str(' + argument0 + ') + str(' + argument1 + ')';
+//    return [code, Blockly.Python.ORDER_UNARY_SIGN];
+//  } else {
+//    var code = [];
+//    for (var n = 0; n < block.itemCount_; n++) {
+//      code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
+//          Blockly.Python.ORDER_NONE) || '\'\'';
+//    }
+//    var tempVar = Blockly.Python.variableDB_.getDistinctName('temp_value',
+//        Blockly.Variables.NAME_TYPE);
+//    code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
+//        code.join(', ') + ']])';
+//    return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+//  }
+//};
 
 Blockly.Python['text_append'] = function(block) {
   // Append to a variable in place.

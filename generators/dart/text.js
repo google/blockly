@@ -39,24 +39,41 @@ Blockly.Dart['text'] = function(block) {
 
 Blockly.Dart['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
-  var code;
-  if (block.itemCount_ == 0) {
+  var codeArray = Blockly.Dart.valueToCodeArray(block, 'TEXTS',
+      Blockly.Dart.ORDER_UNARY_POSTFIX);
+  if (codeArray.length == 0) {
     return ['\'\'', Blockly.Dart.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
-    var argument0 = Blockly.Dart.valueToCode(block, 'ADD0',
-        Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
-    code = argument0 + '.toString()';
-    return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+  } else if (codeArray.length == 1) {
+    return [codeArray[0] + '.tostring()', Blockly.Dart.ORDER_UNARY_POSTFIX];
   } else {
-    code = new Array(block.itemCount_);
-    for (var n = 0; n < block.itemCount_; n++) {
-      code[n] = Blockly.Dart.valueToCode(block, 'ADD' + n,
-          Blockly.Dart.ORDER_NONE) || '\'\'';
-    }
-    code = '[' + code.join(',') + '].join()';
-    return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+    // Need to regen array subject to the correct precedence
+    codeArray = Blockly.Dart.valueToCodeArray(block, 'TEXTS',
+        Blockly.Dart.ORDER_NONE);
+    return ['[' + codeArray.join(',') + '].join()',
+      Blockly.Dart.ORDER_UNARY_POSTFIX];
   }
-};
+}
+
+//Blockly.Dart['text_join'] = function(block) {
+//  // Create a string made up of any number of elements of any type.
+//  var code;
+//  if (block.itemCount_ == 0) {
+//    return ['\'\'', Blockly.Dart.ORDER_ATOMIC];
+//  } else if (block.itemCount_ == 1) {
+//    var argument0 = Blockly.Dart.valueToCode(block, 'ADD0',
+//        Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
+//    code = argument0 + '.toString()';
+//    return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+//  } else {
+//    code = new Array(block.itemCount_);
+//    for (var n = 0; n < block.itemCount_; n++) {
+//      code[n] = Blockly.Dart.valueToCode(block, 'ADD' + n,
+//          Blockly.Dart.ORDER_NONE) || '\'\'';
+//    }
+//    code = '[' + code.join(',') + '].join()';
+//    return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+//  }
+//};
 
 Blockly.Dart['text_append'] = function(block) {
   // Append to a variable in place.

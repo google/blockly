@@ -37,31 +37,52 @@ Blockly.JavaScript['text'] = function(block) {
 
 Blockly.JavaScript['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
-  var code;
-  if (block.itemCount_ == 0) {
+  var codeArray = Blockly.JavaScript.valueToCodeArray(block, 'TEXTS',
+      Blockly.JavaScript.ORDER_NONE);
+  if (codeArray.length == 0) {
     return ['\'\'', Blockly.JavaScript.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = 'String(' + argument0 + ')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-  } else if (block.itemCount_ == 2) {
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    var argument1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = 'String(' + argument0 + ') + String(' + argument1 + ')';
-    return [code, Blockly.JavaScript.ORDER_ADDITION];
+  } else if (codeArray.length == 1) {
+    return ['String(' + codeArray[0] + ')',
+      Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  } else if (codeArray.length == 2) {
+    return ['String(' + codeArray[0] + ') + String(' + codeArray[1] + ')',
+      Blockly.JavaScript.ORDER_ADDITION];
   } else {
-    code = new Array(block.itemCount_);
-    for (var n = 0; n < block.itemCount_; n++) {
-      code[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
-          Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-    }
-    code = '[' + code.join(',') + '].join(\'\')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    // Need to regen array subject to the correct precedence
+    codeArray = Blockly.JavaScript.valueToCodeArray(block, 'TEXTS',
+        Blockly.JavaScript.ORDER_COMMA);
+    return ['[' + codeArray.join(',') + '].join(\'\')',
+      Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
 };
+
+//Blockly.JavaScript['text_join'] = function(block) {
+//  // Create a string made up of any number of elements of any type.
+//  var code;
+//  if (block.itemCount_ == 0) {
+//    return ['\'\'', Blockly.JavaScript.ORDER_ATOMIC];
+//  } else if (block.itemCount_ == 1) {
+//    var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
+//        Blockly.JavaScript.ORDER_NONE) || '\'\'';
+//    code = 'String(' + argument0 + ')';
+//    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+//  } else if (block.itemCount_ == 2) {
+//    var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
+//        Blockly.JavaScript.ORDER_NONE) || '\'\'';
+//    var argument1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
+//        Blockly.JavaScript.ORDER_NONE) || '\'\'';
+//    code = 'String(' + argument0 + ') + String(' + argument1 + ')';
+//    return [code, Blockly.JavaScript.ORDER_ADDITION];
+//  } else {
+//    code = new Array(block.itemCount_);
+//    for (var n = 0; n < block.itemCount_; n++) {
+//      code[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
+//          Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+//    }
+//    code = '[' + code.join(',') + '].join(\'\')';
+//    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+//  }
+//};
 
 Blockly.JavaScript['text_append'] = function(block) {
   // Append to a variable in place.

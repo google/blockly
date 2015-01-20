@@ -53,8 +53,6 @@ Blockly.Blocks['lists_create_with'] = {
     this.setColour(260);
     this.appendArrayValueInput('ITEMS')
         .appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
-        //.appendConnection()
-        //.appendConnection();
     this.setOutput(true, 'Array');
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
   }

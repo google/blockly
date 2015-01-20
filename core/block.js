@@ -789,7 +789,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
       }
     } else if (input.connectionList) {
       for (var k = 0, conn; conn = input.connectionList[k]; k++) {
-        child = input.connection.targetBlock();
+        child = conn.targetBlock();
         if (child) {
           text.push(child.toString());
         } else {
@@ -1061,6 +1061,12 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
       if (input.connection && input.connection.targetConnection) {
         // Disconnect any attached block.
         input.connection.targetBlock().setParent(null);
+      } else if (input.connectionList) {
+        for (var j = 0, conn; conn = input.connectionList[j]; j++) {
+          if (conn.targetConnection) {
+            conn.targetBlock().setParent(null);
+          }
+        }
       }
       input.dispose();
       this.inputList.splice(i, 1);

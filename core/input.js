@@ -56,6 +56,7 @@ Blockly.Input = function(type, name, block, connection) {
   }
 
   this.visible_ = true;
+  this.check_ = null;
 };
 
 /**
@@ -196,10 +197,17 @@ Blockly.Input.prototype.setVisible = function(visible) {
  * @return {!Blockly.Input} The input being modified (to allow chaining).
  */
 Blockly.Input.prototype.setCheck = function(check) {
-  if (!this.connection) {
-    throw 'This input does not have a connection.';
+  if (!this.connection && !this.connectionList) {
+    throw 'This input does not have connections.';
   }
-  this.connection.setCheck(check);
+  this.check_ = check;
+  if (this.connection) {
+    this.connection.setCheck(check);
+  } else {
+    for (var i = 0, conn; conn = this.connectionList[i]; i++) {
+      conn.setCheck(check);
+    }
+  }
   return this;
 };
 
@@ -234,12 +242,10 @@ Blockly.Input.prototype.dispose = function() {
     field.dispose();
   }
   if (this.connection) {
-    if (this.connectionList) {
-      for (var j = 0, conn; conn = this.connectionList[j]; j++) {
-        conn.dispose();
-      }
-    } else {
-        this.connection.dispose();
+    this.connection.dispose();
+  } else if (this.connectionList) {
+    for (var j = 0, conn; conn = this.connectionList[j]; j++) {
+      conn.dispose();
     }
   }
   this.sourceBlock_ = null;
@@ -259,6 +265,7 @@ Blockly.Input.prototype.insertConnection = function (pos) {
     pos = this.connectionList.length;
   }
   var conn = new Blockly.Connection(this.sourceBlock_, Blockly.INPUT_VALUE);
+  conn.setCheck(this.check_);
   this.connectionList.splice(pos, 0, conn);
   return conn;
 };

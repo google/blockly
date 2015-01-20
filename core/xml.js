@@ -306,11 +306,11 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
     var input;
 
     // Find the first 'real' grandchild node (that isn't whitespace).
-    var firstRealGrandchild = null;
+    var realGrandchildren = [];
     for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
          j++) {
       if (grandchildNode.nodeType != 3 || !grandchildNode.data.match(/^\s*$/)) {
-        firstRealGrandchild = grandchildNode;
+        realGrandchildren.push(grandchildNode);
       }
     }
 
@@ -357,29 +357,44 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
         if (!input) {
           throw 'Input ' + name + ' does not exist in block ' + prototypeName;
         }
-        if (firstRealGrandchild &&
-            firstRealGrandchild.nodeName.toLowerCase() == 'block') {
-          blockChild = Blockly.Xml.domToBlock(workspace, firstRealGrandchild,
-              opt_reuseBlock);
-          if (blockChild.outputConnection) {
-            input.connection.connect(blockChild.outputConnection);
-          } else if (blockChild.previousConnection) {
-            input.connection.connect(blockChild.previousConnection);
+        if (realGrandchildren.length > 0 &&
+            realGrandchildren[0].nodeName.toLowerCase() == 'block') {
+          if (input.connectionList) {
+            // Array value connection; connect all child blocks
+            for (var k = 0, grandChild;
+                 grandChild = realGrandchildren[k]; k++) {
+              blockChild = Blockly.Xml.domToBlock(workspace, grandChild,
+                  opt_reuseBlock);
+              if (!blockChild.outputConnection) {
+                throw 'Child block does not have output.';
+              }
+              input.connectionList[input.connectionList.length - 1]
+                  .connect(blockChild.outputConnection);
+            }
           } else {
-            throw 'Child block does not have output or previous statement.';
+            // Single connection - either single value input or statement input
+            blockChild = Blockly.Xml.domToBlock(workspace,
+                realGrandchildren[0], opt_reuseBlock);
+            if (blockChild.outputConnection) {
+              input.connection.connect(blockChild.outputConnection);
+            } else if (blockChild.previousConnection) {
+              input.connection.connect(blockChild.previousConnection);
+            } else {
+              throw 'Child block does not have output or previous statement.';
+            }
           }
         }
         break;
       case 'next':
-        if (firstRealGrandchild &&
-            firstRealGrandchild.nodeName.toLowerCase() == 'block') {
+        if (realGrandchildren.length > 0 &&
+            realGrandchildren[0].nodeName.toLowerCase() == 'block') {
           if (!block.nextConnection) {
             throw 'Next statement does not exist.';
           } else if (block.nextConnection.targetConnection) {
             // This could happen if there is more than one XML 'next' tag.
             throw 'Next statement is already connected.';
           }
-          blockChild = Blockly.Xml.domToBlock(workspace, firstRealGrandchild,
+          blockChild = Blockly.Xml.domToBlock(workspace, realGrandchildren[0],
               opt_reuseBlock);
           if (!blockChild.previousConnection) {
             throw 'Next block does not have previous statement.';

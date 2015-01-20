@@ -1353,6 +1353,11 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
     }
     row.push(input);
 
+    input.fieldWidth = 0;
+    if (inputRows.length == 1) {
+      // The first row gets shifted to accommodate any icons.
+      input.fieldWidth += Blockly.RTL ? -iconWidth : iconWidth;
+    }
     // Compute minimum input size.
     // The width is currently only needed for inline value inputs.
     input.renderHeight = Blockly.BlockSvg.MIN_BLOCK_Y;
@@ -1376,8 +1381,9 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         input.renderHeight = Math.max(input.renderHeight, bBox.height);
         input.renderWidth = Math.max(input.renderWidth, bBox.width);
       }
+      var subRow = null;
       for (var j = 1, conn; conn = input.connectionList[j]; j++) {
-        var subRow = [input];
+        subRow = [input];
         subRow.height = Blockly.BlockSvg.MIN_BLOCK_Y;
         subRow.thicker = false;
         subRow.type = input.type;
@@ -1392,17 +1398,20 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       }
     }
 
-    // FIXME: Need to make this work with array values
     if (i == inputList.length - 1) {
       // Last element should overhang slightly due to shadow.
-      input.renderHeight--;
+      if (input.connectionList && subRow) {
+        subRow.height--;
+      } else {
+        input.renderHeight--;
+      }
     }
     row.height = Math.max(row.height, input.renderHeight);
-    input.fieldWidth = 0;
-    if (inputRows.length == 1) {
-      // The first row gets shifted to accommodate any icons.
-      input.fieldWidth += Blockly.RTL ? -iconWidth : iconWidth;
-    }
+    //input.fieldWidth = 0;
+    //if (inputRows.length == 1) {
+    //  // The first row gets shifted to accommodate any icons.
+    //  input.fieldWidth += Blockly.RTL ? -iconWidth : iconWidth;
+    //}
     var previousFieldEditable = false;
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (j != 0) {

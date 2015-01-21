@@ -50,9 +50,27 @@ Blockly.Blocks['lists_create_with'] = {
    * @this Blockly.Block
    */
   init: function () {
+    /**
+     * Flag used in closure below
+     * @type {boolean}
+     * @private
+     */
+    var empty_ = true;
     this.setColour(260);
     this.appendArrayValueInput('ITEMS')
-        .appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
+        .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, 'LABEL')
+        .setConnectionCallback(function () {
+          // this refers to input
+          if (this.connectionList.length == 1 && !empty_) {
+            this.removeField('LABEL')
+                .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, 'LABEL');
+            empty_ = true;
+          } else if (this.connectionList.length > 1 && empty_) {
+            this.removeField('LABEL')
+                .appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, 'LABEL');
+            empty_ = false;
+          }
+        });
     this.setOutput(true, 'Array');
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
   }
@@ -181,36 +199,36 @@ Blockly.Blocks['lists_create_with'] = {
 //  }
 //};
 
-Blockly.Blocks['lists_create_with_container'] = {
-  /**
-   * Mutator block for list container.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.setColour(260);
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD);
-    this.appendStatementInput('STACK');
-    this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP);
-    this.contextMenu = false;
-  }
-};
-
-Blockly.Blocks['lists_create_with_item'] = {
-  /**
-   * Mutator bolck for adding items.
-   * @this Blockly.Block
-   */
-  init: function() {
-    this.setColour(260);
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP);
-    this.contextMenu = false;
-  }
-};
+//Blockly.Blocks['lists_create_with_container'] = {
+//  /**
+//   * Mutator block for list container.
+//   * @this Blockly.Block
+//   */
+//  init: function() {
+//    this.setColour(260);
+//    this.appendDummyInput()
+//        .appendField(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD);
+//    this.appendStatementInput('STACK');
+//    this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP);
+//    this.contextMenu = false;
+//  }
+//};
+//
+//Blockly.Blocks['lists_create_with_item'] = {
+//  /**
+//   * Mutator bolck for adding items.
+//   * @this Blockly.Block
+//   */
+//  init: function() {
+//    this.setColour(260);
+//    this.appendDummyInput()
+//        .appendField(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE);
+//    this.setPreviousStatement(true);
+//    this.setNextStatement(true);
+//    this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP);
+//    this.contextMenu = false;
+//  }
+//};
 
 Blockly.Blocks['lists_repeat'] = {
   /**

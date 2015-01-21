@@ -57,6 +57,7 @@ Blockly.Input = function(type, name, block, connection) {
 
   this.visible_ = true;
   this.check_ = null;
+  this.connectionCallback_ = null;
 };
 
 /**
@@ -127,7 +128,7 @@ Blockly.Input.prototype.removeField = function(name) {
         // Removing a field will cause the block to change shape.
         this.sourceBlock_.bumpNeighbours_();
       }
-      return;
+      return this;
     }
   }
   goog.asserts.fail('Field "%s" not found.', name);
@@ -267,6 +268,9 @@ Blockly.Input.prototype.insertConnection = function (pos) {
   var conn = new Blockly.Connection(this.sourceBlock_, Blockly.INPUT_VALUE);
   conn.setCheck(this.check_);
   this.connectionList.splice(pos, 0, conn);
+  if (this.connectionCallback_) {
+    this.connectionCallback_.call(this);
+  }
   return conn;
 };
 
@@ -289,4 +293,22 @@ Blockly.Input.prototype.removeConnection = function (connection) {
   } else {
     this.connectionList.splice(connection, 1);
   }
+  if (this.connectionCallback_) {
+    this.connectionCallback_.call(this);
+  }
+};
+
+
+/**
+ * Set a callback to be called when connections are added or dropped from this
+ *   input
+ * @param {function} callback Function to be called on connection add/drop
+ * @return {Blockly.Input} For chaining
+ */
+Blockly.Input.prototype.setConnectionCallback = function (callback) {
+  if (!this.connectionList) {
+    throw 'This input does not support multiple connections.';
+  }
+  this.connectionCallback_ = callback;
+  return this;
 };

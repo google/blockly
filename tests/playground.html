@@ -95,10 +95,10 @@ function airstrike(n) {
   var prototypes = [];
   var toolbox = document.getElementById('toolbox');
   var blocks = toolbox.getElementsByTagName('block');
-  for (var x = 0, block; block = blocks[x]; x++) {
+  for (var i = 0, block; block = blocks[i]; i++) {
     prototypes.push(block.getAttribute('type'));
   }
-  for (var x = 0; x < n; x++) {
+  for (var i = 0; i < n; i++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
     var block = Blockly.Block.obtain(Blockly.mainWorkspace, prototype);
     block.initSvg();
@@ -108,6 +108,50 @@ function airstrike(n) {
     block.render();
   }
 }
+
+function spaghetti(n) {
+  var xml = spaghettiXml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + spaghettiXml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('Spaghetti domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Spaghetti domToWorkspace');
+}
+var spaghettiXml = [
+  '  <block type="controls_if" inline="false" x="30" y="30">' +
+  '    <value name="IF0">' +
+  '      <block type="logic_compare" inline="true">' +
+  '        <field name="OP">EQ</field>' +
+  '        <value name="A">' +
+  '          <block type="math_arithmetic" inline="true">' +
+  '            <field name="OP">MULTIPLY</field>' +
+  '            <value name="A">' +
+  '              <block type="math_number">' +
+  '                <field name="NUM">6</field>' +
+  '              </block>' +
+  '            </value>' +
+  '            <value name="B">' +
+  '              <block type="math_number">' +
+  '                <field name="NUM">7</field>' +
+  '              </block>' +
+  '            </value>' +
+  '          </block>' +
+  '        </value>' +
+  '        <value name="B">' +
+  '          <block type="math_number">' +
+  '            <field name="NUM">42</field>' +
+  '          </block>' +
+  '        </value>' +
+  '      </block>' +
+  '    </value>' +
+  '    <statement name="DO0"></statement>' +
+  '    <next></next>' +
+  '  </block>'].join('\n');
+
 </script>
 
 <style>
@@ -393,7 +437,9 @@ h1 {
   <hr>
 
   <p>
-    Stress test with an <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    Stress test:
+    <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    <input type="button" value="Spaghetti!" onclick="spaghetti(6)">
   </p>
 
   <!-- Realtime setup buttons. -->

@@ -363,6 +363,86 @@ Blockly.onMouseMove_ = function(e) {
 };
 
 /**
+ * Handle a mouse-move on SVG drawing surface all time for tracking mouse position.
+ * @param {!Event} e Mouse move event.
+ * @private
+ */
+Blockly.onMouseMoveTracking_ = function(e) {
+  //mouse position tracking (for zooming)
+  Blockly.mainWorkspace.mousePosition = Blockly.mouseToSvg(e);
+};
+
+/**
+ * Handle a mouse-wheel on SVG drawing surface.
+ * @param {!Event} e Mouse wheel event.
+ * @private
+ */
+Blockly.onMouseWheel_ = function(e) {
+  if (Blockly.mainWorkspace.scrollbar && Blockly.mainWorkspace.zooming) {
+    Blockly.hideChaff();
+    // cross-browser wheel delta
+    var e = window.event || e; // old IE support
+    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    var x = Blockly.mainWorkspace.mousePosition.x;
+    var y = Blockly.mainWorkspace.mousePosition.y;
+    Blockly.zoom (x , y, delta);
+    e.preventDefault();
+  }
+};
+
+/**
+ * Zooming the blocks centered in (x,y) coordinate with zooming in or out.
+ * @param {!number} x X coordinate of center.
+ * @param {!number} Y coordinate of center.
+ * @param {!number} type Type of zomming (-1 zooming out and 1 zooming in).
+ */
+Blockly.zoom  = function(x ,y , type) {
+  var speed = Blockly.mainWorkspace.scaleSpeed;
+  var metrics = Blockly.getMainWorkspaceMetrics_();
+  var center = Blockly.svg.createSVGPoint();
+  var g = Blockly.getMainWorkspace().getCanvas();
+  center.x = x;
+  center.y = y;
+  center = center.matrixTransform(Blockly.getMainWorkspace().getCanvas().getCTM().inverse());
+  var x = center.x;
+  var y = center.y;
+  var canvas = Blockly.getMainWorkspace().getCanvas();
+  // scale factor
+  var scale = (type == 1)?speed:1/speed;
+  var matrix = canvas.getCTM().translate(-(x*(scale-1)),-(y*(scale-1))).scale(scale);
+  // validate if scale is in a valid range
+  if (matrix.a >= Blockly.mainWorkspace.minScale && matrix.a <= Blockly.mainWorkspace.maxScale) {
+    Blockly.mainWorkspace.scale = matrix.a;
+    Blockly.mainWorkspace.scrollX = matrix.e - metrics.absoluteLeft;
+    Blockly.mainWorkspace.scrollY = matrix.f - metrics.absoluteTop;
+    Blockly.mainWorkspace.scrollbar.resize();
+  }
+}
+
+//TODO: make svg buttons for zooming in, out and reset
+/**
+ * Zooming the blocks centered in the center of view with zooming in or out.
+ * @param {!number} type Type of zomming (-1 zooming out and 1 zooming in).
+ */
+Blockly.zoomCenter  = function(type) {
+  var metrics = Blockly.getMainWorkspaceMetrics_();
+  var x = metrics.viewWidth/2;
+  var y = metrics.viewHeight/2;
+  Blockly.zoom(x ,y , type);
+}
+
+/**
+ * Reset zooming and dragging.
+ */
+Blockly.zoomReset  = function() {
+  var metrics = Blockly.getMainWorkspaceMetrics_();
+  Blockly.mainWorkspace.scale = 1;
+  Blockly.mainWorkspace.scrollX = -metrics.absoluteLeft;
+  Blockly.mainWorkspace.scrollY = -metrics.absoluteTop;
+  Blockly.mainWorkspace.scrollbar.resize();
+}
+
+/**
  * Handle a key-down on SVG drawing surface.
  * @param {!Event} e Key down event.
  * @private
@@ -660,17 +740,22 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     // Firefox has trouble with hidden elements (Bug 528969).
     return null;
   }
+  //fix scale
+  var contentWidth = blockBox.width * Blockly.mainWorkspace.scale;
+  var contentHeight = blockBox.height * Blockly.mainWorkspace.scale;
+  var contentX = blockBox.x * Blockly.mainWorkspace.scale;
+  var contentY = blockBox.y * Blockly.mainWorkspace.scale;
   if (Blockly.mainWorkspace.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
-    var leftEdge = Math.min(blockBox.x - viewWidth / 2,
-                            blockBox.x + blockBox.width - viewWidth);
-    var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
-                             blockBox.x + viewWidth);
-    var topEdge = Math.min(blockBox.y - viewHeight / 2,
-                           blockBox.y + blockBox.height - viewHeight);
-    var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
-                              blockBox.y + viewHeight);
+    var leftEdge = Math.min(contentX - viewWidth / 2,
+                            contentX + contentWidth - viewWidth);
+    var rightEdge = Math.max(contentX + contentWidth + viewWidth / 2,
+                             contentX + viewWidth);
+    var topEdge = Math.min(contentY - viewHeight / 2,
+                           contentY + contentHeight - viewHeight);
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight / 2,
+                              contentY + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;
@@ -691,7 +776,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     contentTop: topEdge,
     contentLeft: leftEdge,
     absoluteTop: 0,
-    absoluteLeft: absoluteLeft
+    absoluteLeft: absoluteLeft,
+    scale: Blockly.mainWorkspace.scale
   };
   return metrics;
 };
@@ -715,12 +801,13 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
     Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  var translation = 'translate(' +
+var translation = 'translate(' +
       (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
-      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
+      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')' +
+      'scale(' + Blockly.mainWorkspace.scale + ')';
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
   Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
-                                                       translation);
+                                              translation);
 };
 
 /**

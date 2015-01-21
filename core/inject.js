@@ -129,6 +129,9 @@ Blockly.parseOptions_ = function(options) {
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
 
+  Blockly.enableZoom = options['zoom'];
+  Blockly.zoomOptions = options['zoomOptions'];
+
   Blockly.RTL = !!options['rtl'];
   Blockly.collapse = hasCollapse;
   Blockly.comments = hasComments;
@@ -359,6 +362,12 @@ Blockly.init_ = function() {
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
   Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
+  //mouse-wheel for firefox
+  Blockly.bindEvent_(Blockly.svg, 'DOMMouseScroll', null, Blockly.onMouseWheel_);
+  //mouse-wheel for other browsers
+  Blockly.bindEvent_(Blockly.svg, 'mousewheel', null, Blockly.onMouseWheel_);
+  //mouse-move for tracking mouse position
+  Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMoveTracking_);
   Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
   Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
                      Blockly.onContextMenu_);
@@ -403,6 +412,20 @@ Blockly.init_ = function() {
     Blockly.mainWorkspace.scrollbar =
         new Blockly.ScrollbarPair(Blockly.mainWorkspace);
     Blockly.mainWorkspace.scrollbar.resize();
+  }
+  if (Blockly.enableZoom != undefined) {
+    Blockly.mainWorkspace.zooming = Blockly.enableZoom;
+  }
+  if (Blockly.zoomOptions) {
+    if (Blockly.zoomOptions.maxScale) {
+      Blockly.mainWorkspace.maxScale = Blockly.zoomOptions.maxScale;
+    }
+    if (Blockly.zoomOptions.minScale) {
+      Blockly.mainWorkspace.minScale = Blockly.zoomOptions.minScale;
+    }
+    if (Blockly.zoomOptions.scaleSpeed) {
+      Blockly.mainWorkspace.scaleSpeed = Blockly.zoomOptions.scaleSpeed;
+    }
   }
 
   Blockly.mainWorkspace.addTrashcan();

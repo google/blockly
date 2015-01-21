@@ -84,6 +84,42 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Is zooming enabled?.
+ * @type {boolean}
+ */
+Blockly.Workspace.prototype.zooming = true;
+
+/**
+ * Current scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.scale = 1;
+
+/**
+ * Current scale speed.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.scaleSpeed = 1.2;
+
+/**
+ * Current minimum scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.minScale = 0.3;
+
+/**
+ * Current maximum scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.maxScale = 3;
+
+/**
+ * Current position of mouse.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.mousePosition = null;
+
+/**
  * The workspace's trashcan (if any).
  * @type {Blockly.Trashcan}
  */
@@ -366,6 +402,12 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
   var mouseXY = Blockly.mouseToSvg(e);
   var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
+  if (this.deleteAreaToolbox_) {
+    if (this.deleteAreaToolbox_.contains(xy)) {
+      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
+      return true;
+    }
+  }
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {
       this.trashcan.setOpen_(true);
@@ -373,12 +415,6 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
       return true;
     }
     this.trashcan.setOpen_(false);
-  }
-  if (this.deleteAreaToolbox_) {
-    if (this.deleteAreaToolbox_.contains(xy)) {
-      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
-      return true;
-    }
   }
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   return false;

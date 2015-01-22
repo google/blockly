@@ -67,7 +67,11 @@ Blockly.Css.mediaPath_ = '';
  * c) The CSS content may be made dynamic depending on init options.
  */
 Blockly.Css.inject = function() {
-  var text = Blockly.Css.CONTENT.join('\n');
+  // Placeholder for cursor rule.  Must be first rule (index 0).
+  var text = '.blocklyDraggable {}\n';
+  if (Blockly.hasCss) {
+    text += Blockly.Css.CONTENT.join('\n');
+  }
   // Strip off any trailing slash (either Unix or Windows).
   Blockly.Css.mediaPath_ = Blockly.pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
@@ -124,10 +128,6 @@ Blockly.Css.setCursor = function(cursor) {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
-  '.blocklyDraggable {',
-    // Placeholder for cursor rule.  Must be first rule (index 0).
-  '}',
-
   '.blocklySvg {',
   '  background-color: #fff;',
   '  border: 1px solid #ddd;',

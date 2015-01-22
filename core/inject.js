@@ -169,9 +169,7 @@ Blockly.createDom_ = function(container) {
   goog.ui.Component.setDefaultRightToLeft(Blockly.RTL);
 
   // Load CSS.
-  if (Blockly.hasCss) {
-    Blockly.Css.inject();
-  }
+  Blockly.Css.inject();
 
   // Build the SVG DOM.
   /*

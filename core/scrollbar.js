@@ -178,9 +178,9 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
  * Increase the size of scrollbars on touch devices.
  * Don't define if there is no document object (e.g. node.js).
  */
-Blockly.Scrollbar.scrollbarThickness = 15
+Blockly.Scrollbar.scrollbarThickness = 15;
 if (goog.getObjectByName('document.documentElement.ontouchstart')) {
-  Blockly.Scrollbar.scrollbarThickness = 25
+  Blockly.Scrollbar.scrollbarThickness = 25;
 }
 
 /**

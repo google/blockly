@@ -187,7 +187,7 @@ Blockly.Field.prototype.render_ = function() {
   if (this.visible_ && this.textElement_) {
     try {
       var width = this.textElement_.getComputedTextLength();
-    } catch(e) {
+    } catch (e) {
       // MSIE 11 is known to throw "Unexpected call to method or property
       // access." if Blockly is hidden.
       var width = this.textElement_.textContent.length * 8;

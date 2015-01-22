@@ -1,4 +1,5 @@
 /**
+ * @license
  * Blockly Tests
  *
  * Copyright 2014 Google Inc.
@@ -64,6 +65,3 @@ function test_domToPrettyText() {
   assertEquals('Round trip', XML_TEXT.replace(/\s+/g, ''),
       text.replace(/\s+/g, ''));
 }
-
-
-

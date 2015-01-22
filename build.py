@@ -407,7 +407,7 @@ class Gen_langfiles(threading.Thread):
 if __name__ == '__main__':
   try:
     calcdeps = import_path(os.path.join(os.path.pardir,
-          'closure-library', 'closure', 'bin', 'calcdeps.py'))
+        'closure-library', 'closure', 'bin', 'calcdeps.py'))
   except ImportError:
     if os.path.isdir(os.path.join(os.path.pardir, 'closure-library-read-only')):
       # Dir got renamed when Closure moved from Google Code to GitHub in 2014.

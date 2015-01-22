@@ -42,6 +42,7 @@ Blockly.Css.Cursor = {
 /**
  * Current cursor (cached value).
  * @type string
+ * @private
  */
 Blockly.Css.currentCursor_ = '';
 

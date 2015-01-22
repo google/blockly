@@ -29,8 +29,8 @@ goog.provide('Blockly.Flyout');
 goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
 goog.require('Blockly.WorkspaceSvg');
-goog.require('goog.userAgent');
 goog.require('goog.math.Rect');
+goog.require('goog.userAgent');
 
 
 /**

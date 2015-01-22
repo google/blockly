@@ -80,6 +80,11 @@ Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
+ * Empty loops or conditionals are not allowed in Python.
+ */
+Blockly.Python.PASS = '  pass\n';
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */

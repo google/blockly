@@ -26,9 +26,9 @@
 
 goog.provide('Blockly.Trashcan');
 
+goog.require('goog.Timer');
 goog.require('goog.math');
 goog.require('goog.math.Rect');
-goog.require('goog.Timer');
 
 
 /**
@@ -277,7 +277,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
       (Blockly.RTL ? -lidAngle : lidAngle) + ', ' +
       (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
       (this.LID_HEIGHT_ - 2) + ')');
-  var opacity  = goog.math.lerp(0.2, 0.4, this.lidOpen_);
+  var opacity = goog.math.lerp(0.2, 0.4, this.lidOpen_);
   this.svgGroup_.style.opacity = opacity;
   if (this.lidOpen_ > 0 || this.lidOpen_ < 1) {
     this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 20, this);

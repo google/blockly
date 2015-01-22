@@ -247,10 +247,10 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
     // Generate list of all blocks.
     var blocks = topBlock.getDescendants();
     // Render each block.
-    for (var i = blocks.length -1; i >= 0; i--) {
+    for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].initSvg();
     }
-    for (var i = blocks.length -1; i >= 0; i--) {
+    for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].render(false);
     }
     topBlock.updateDisabled();

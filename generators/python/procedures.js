@@ -62,7 +62,7 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   if (returnValue) {
     returnValue = '  return ' + returnValue + '\n';
   } else if (!branch) {
-    branch = '  pass';
+    branch = Blockly.Python.PASS;
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {

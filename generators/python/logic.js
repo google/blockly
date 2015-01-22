@@ -34,16 +34,19 @@ Blockly.Python['controls_if'] = function(block) {
   var n = 0;
   var argument = Blockly.Python.valueToCode(block, 'IF' + n,
       Blockly.Python.ORDER_NONE) || 'False';
-  var branch = Blockly.Python.statementToCode(block, 'DO' + n) || '  pass\n';
+  var branch = Blockly.Python.statementToCode(block, 'DO' + n) ||
+      Blockly.Python.PASS;
   var code = 'if ' + argument + ':\n' + branch;
   for (n = 1; n <= block.elseifCount_; n++) {
     argument = Blockly.Python.valueToCode(block, 'IF' + n,
         Blockly.Python.ORDER_NONE) || 'False';
-    branch = Blockly.Python.statementToCode(block, 'DO' + n) || '  pass\n';
+    branch = Blockly.Python.statementToCode(block, 'DO' + n) ||
+        Blockly.Python.PASS;
     code += 'elif ' + argument + ':\n' + branch;
   }
   if (block.elseCount_) {
-    branch = Blockly.Python.statementToCode(block, 'ELSE') || '  pass\n';
+    branch = Blockly.Python.statementToCode(block, 'ELSE') ||
+        Blockly.Python.PASS;
     code += 'else:\n' + branch;
   }
   return code;

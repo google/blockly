@@ -29,10 +29,10 @@ goog.provide('Blockly.Toolbox');
 goog.require('Blockly.Flyout');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.html.SafeHtml');
+goog.require('goog.math.Rect');
 goog.require('goog.style');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
-goog.require('goog.math.Rect');
 
 
 /**

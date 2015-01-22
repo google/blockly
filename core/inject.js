@@ -35,8 +35,10 @@ goog.require('goog.dom');
  * Initialize the SVG document with various handlers.
  * @param {!Element} container Containing element.
  * @param {Object} opt_options Optional dictionary of options.
+ * @param {boolean=} opt_external_css Optional whether a custom css is used and
+ *   Blockly should not inject any css style.
  */
-Blockly.inject = function(container, opt_options) {
+Blockly.inject = function(container, opt_options, opt_external_css) {
   // Verify that the container is in document.
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
@@ -45,7 +47,7 @@ Blockly.inject = function(container, opt_options) {
     Blockly.parseOptions_(opt_options);
   }
   var startUi = function() {
-    Blockly.createDom_(container);
+    Blockly.createDom_(container, opt_external_css);
     Blockly.init_();
   };
   if (Blockly.enableRealtime) {
@@ -153,9 +155,11 @@ Blockly.parseOptions_ = function(options) {
 /**
  * Create the SVG image.
  * @param {!Element} container Containing element.
+ * @param {boolean=} opt_external_css Optional whether a custom css is used and
+ *   Blockly should not inject any css style.
  * @private
  */
-Blockly.createDom_ = function(container) {
+Blockly.createDom_ = function(container, opt_external_css) {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -164,7 +168,9 @@ Blockly.createDom_ = function(container) {
   goog.ui.Component.setDefaultRightToLeft(Blockly.RTL);
 
   // Load CSS.
-  Blockly.Css.inject();
+  if (!opt_external_css) {
+    Blockly.Css.inject();
+  }
 
   // Build the SVG DOM.
   /*

@@ -1097,7 +1097,7 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
     }
   }
   var children = this.getChildren();
-  for (var x = 0, child; child = children[x]; x++) {
+  for (var i = 0, child; child = children[i]; i++) {
     child.updateDisabled();
   }
 };
@@ -1194,7 +1194,9 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
     return;
   }
   Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
-  this.updateDisabled();
+  if (this.rendered) {
+    this.updateDisabled();
+  }
   this.workspace.fireChangeEvent();
 };
 
@@ -1236,8 +1238,10 @@ Blockly.BlockSvg.prototype.removeDragging = function() {
 /**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
+ * @param {boolean} opt_bubble If false, just render this block.
+ *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
-Blockly.BlockSvg.prototype.render = function() {
+Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   this.rendered = true;
 
   var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
@@ -1257,13 +1261,15 @@ Blockly.BlockSvg.prototype.render = function() {
   var inputRows = this.renderCompute_(cursorX);
   this.renderDraw_(cursorX, inputRows);
 
-  // Render all blocks above this one (propagate a reflow).
-  var parentBlock = this.getParent();
-  if (parentBlock) {
-    parentBlock.render();
-  } else {
-    // Top-most block.  Fire an event to allow scrollbars to resize.
-    Blockly.fireUiEvent(window, 'resize');
+  if (opt_bubble !== false) {
+    // Render all blocks above this one (propagate a reflow).
+    var parentBlock = this.getParent();
+    if (parentBlock) {
+      parentBlock.render(true);
+    } else {
+      // Top-most block.  Fire an event to allow scrollbars to resize.
+      Blockly.fireUiEvent(window, 'resize');
+    }
   }
   Blockly.Realtime.blockChanged(this);
 };

@@ -136,41 +136,41 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyWidgetDiv {',
-  '  position: absolute;',
   '  display: none;',
+  '  position: absolute;',
   '  z-index: 999;',
   '}',
 
   '.blocklyResizeSE {',
-  '  fill: #aaa;',
   '  cursor: se-resize;',
+  '  fill: #aaa;',
   '}',
 
   '.blocklyResizeSW {',
-  '  fill: #aaa;',
   '  cursor: sw-resize;',
+  '  fill: #aaa;',
   '}',
 
   '.blocklyResizeLine {',
-  '  stroke-width: 1;',
   '  stroke: #888;',
+  '  stroke-width: 1;',
   '}',
 
   '.blocklyHighlightedConnectionPath {',
-  '  stroke-width: 4px;',
-  '  stroke: #fc3;',
   '  fill: none;',
+  '  stroke: #fc3;',
+  '  stroke-width: 4px;',
   '}',
 
   '.blocklyPathLight {',
   '  fill: none;',
-  '  stroke-width: 2;',
   '  stroke-linecap: round;',
+  '  stroke-width: 2;',
   '}',
 
   '.blocklySelected>.blocklyPath {',
-  '  stroke-width: 3px;',
   '  stroke: #fc3;',
+  '  stroke-width: 3px;',
   '}',
 
   '.blocklySelected>.blocklyPathLight {',
@@ -199,9 +199,9 @@ Blockly.Css.CONTENT = [
 
   '.blocklyText {',
   '  cursor: default;',
+  '  fill: #fff;',
   '  font-family: sans-serif;',
   '  font-size: 11pt;',
-  '  fill: #fff;',
   '}',
 
   '.blocklyNonEditableText>text {',
@@ -220,8 +220,8 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyEditableText:hover>rect {',
-  '  stroke-width: 2;',
   '  stroke: #fff;',
+  '  stroke-width: 2;',
   '}',
 
   '.blocklyBubbleText {',
@@ -233,9 +233,9 @@ Blockly.Css.CONTENT = [
     drag a block and selected text moves instead.
   */
   '.blocklySvg text {',
+  '  user-select: none;',
   '  -moz-user-select: none;',
   '  -webkit-user-select: none;',
-  '  user-select: none;',
   '  cursor: inherit;',
   '}',
 
@@ -249,8 +249,8 @@ Blockly.Css.CONTENT = [
 
   '.blocklyTooltipBackground {',
   '  fill: #ffffc7;',
-  '  stroke-width: 1px;',
   '  stroke: #d8d8d8;',
+  '  stroke-width: 1px;',
   '}',
 
   '.blocklyTooltipShadow,',
@@ -260,16 +260,16 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTooltipText {',
+  '  fill: #000;',
   '  font-family: sans-serif;',
   '  font-size: 9pt;',
-  '  fill: #000;',
   '}',
 
   '.blocklyIconShield {',
   '  cursor: default;',
   '  fill: #00c;',
-  '  stroke-width: 1px;',
   '  stroke: #ccc;',
+  '  stroke-width: 1px;',
   '}',
 
   '.blocklyIconGroup:hover>.blocklyIconShield {',
@@ -283,10 +283,10 @@ Blockly.Css.CONTENT = [
 
   '.blocklyIconMark {',
   '  cursor: default !important;',
+  '  fill: #ccc;',
   '  font-family: sans-serif;',
   '  font-size: 9pt;',
   '  font-weight: bold;',
-  '  fill: #ccc;',
   '  text-anchor: middle;',
   '}',
 
@@ -299,25 +299,25 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyCommentTextarea {',
+  '  background-color: #ffc;',
+  '  border: 0;',
   '  margin: 0;',
   '  padding: 2px;',
-  '  border: 0;',
   '  resize: none;',
-  '  background-color: #ffc;',
   '}',
 
   '.blocklyHtmlInput {',
+  '  border: none;',
   '  font-family: sans-serif;',
   '  font-size: 11pt;',
-  '  border: none;',
   '  outline: none;',
   '  width: 100%',
   '}',
 
   '.blocklyMutatorBackground {',
   '  fill: #fff;',
-  '  stroke-width: 1;',
   '  stroke: #ddd;',
+  '  stroke-width: 1;',
   '}',
 
   '.blocklyFlyoutBackground {',
@@ -331,8 +331,8 @@ Blockly.Css.CONTENT = [
 
   '.blocklyScrollbarBackground {',
   '  fill: #fff;',
-  '  stroke-width: 1;',
   '  stroke: #e4e4e4;',
+  '  stroke-width: 1;',
   '}',
 
   '.blocklyScrollbarKnob {',
@@ -419,16 +419,16 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeSeparator {',
-  '  height: 0px;',
   '  border-bottom: solid #e5e5e5 1px;',
+  '  height: 0px;',
   '  margin: 5px 0;',
   '}',
 
   '.blocklyTreeIcon {',
-  '  height: 16px;',
-  '  width: 16px;',
-  '  vertical-align: middle;',
   '  background-image: url(<<<PATH>>>/sprites.png);',
+  '  height: 16px;',
+  '  vertical-align: middle;',
+  '  width: 16px;',
   '}',
 
   '.blocklyTreeIconClosedLtr {',

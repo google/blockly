@@ -177,6 +177,11 @@ Blockly.Toolbox.prototype.populate_ = function() {
           syncTrees(childIn, childOut);
         }
       } else if (name == 'HR') {
+        // <hr> tag is deprecated, use <sep></sep> instead.
+        // https://github.com/google/blockly/issues/50
+        console.warn('The <hr> separator tag in the toolbox XML needs to be ' +
+                     'changed to <sep></sep> (due to a bug in IE).');
+      } else if (name == 'SEP') {
         treeOut.add(new Blockly.Toolbox.TreeSeparator());
       } else if (name == 'BLOCK') {
         treeOut.blocks.push(childIn);

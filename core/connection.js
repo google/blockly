@@ -54,8 +54,8 @@ Blockly.Connection.prototype.dispose = function() {
   }
   if (this.inDB_) {
     this.dbList_[this.type].removeConnection_(this);
+    this.inDB_ = false;
   }
-  this.inDB_ = false;
   if (Blockly.highlightedConnection_ == this) {
     Blockly.highlightedConnection_ = null;
   }
@@ -322,7 +322,9 @@ Blockly.Connection.prototype.moveTo = function(x, y) {
   this.x_ = x;
   this.y_ = y;
   // Insert it into its new location in the database.
-  this.dbList_[this.type].addConnection_(this);
+  if (this.dbList_) {
+    this.dbList_[this.type].addConnection_(this);
+  }
 };
 
 /**

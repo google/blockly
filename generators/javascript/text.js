@@ -24,7 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.text');
+goog.provide('Blockly.JavaScript.texts');
 
 goog.require('Blockly.JavaScript');
 

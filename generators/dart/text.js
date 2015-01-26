@@ -24,7 +24,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Dart.text');
+goog.provide('Blockly.Dart.texts');
 
 goog.require('Blockly.Dart');
 

@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Meno25"
+			"Meno25",
+			"Test Create account"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "البند",
@@ -287,6 +288,8 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "إلى # من نهاية",
 	"LISTS_GET_SUBLIST_END_LAST": "إلى الأخير",
 	"LISTS_GET_SUBLIST_TOOLTIP": "يقوم بإنشاء نسخة من الجزء المحدد من قائمة ما.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "إعداد قائمة من النصوص",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "إعداد نص من القائمة",
 	"VARIABLES_GET_TOOLTIP": "يرجع قيمة هذا المتغير.",
 	"VARIABLES_GET_CREATE_SET": "انشئ 'التعيين %1'",
 	"VARIABLES_SET_TITLE": "تعيين",

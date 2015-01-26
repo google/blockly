@@ -513,6 +513,17 @@ Blockly.Block.prototype.setEditable = function(editable) {
 };
 
 /**
+ * Set whether the connections are hidden (not tracked in a database) or not.
+ * @param {boolean} hidden True if connections are hidden.
+ */
+Blockly.Block.prototype.setConnectionsHidden = function(hidden) {
+  var myConnections = this.getConnections_(true);
+  for (var i = 0, connection; connection = myConnections[i]; i++) {
+    connection.setHidden(hidden);
+  }
+};
+
+/**
  * Set the URL of this block's help page.
  * @param {string|Function} url URL string for block help, or function that
  *     returns a URL.  Null for no help.

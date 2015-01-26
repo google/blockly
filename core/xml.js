@@ -254,9 +254,13 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
     for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].render(false);
     }
-    for (var i = blocks.length - 1; i >= 0; i--) {
-      blocks[i].setConnectionsHidden(false);
-    }
+    // Populating the connection database may be defered until after the blocks
+    // have renderend.
+    window.setTimeout(function() {
+      for (var i = blocks.length - 1; i >= 0; i--) {
+        blocks[i].setConnectionsHidden(false);
+      }
+    }, 1);
     topBlock.updateDisabled();
     // Fire an event to allow scrollbars to resize.
     Blockly.fireUiEvent(window, 'resize');

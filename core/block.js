@@ -514,12 +514,23 @@ Blockly.Block.prototype.setEditable = function(editable) {
 
 /**
  * Set whether the connections are hidden (not tracked in a database) or not.
+ * Recursively walk down all child blocks (except collapsed blocks).
  * @param {boolean} hidden True if connections are hidden.
  */
 Blockly.Block.prototype.setConnectionsHidden = function(hidden) {
   var myConnections = this.getConnections_(true);
   for (var i = 0, connection; connection = myConnections[i]; i++) {
-    connection.setHidden(hidden);
+    if (connection.isSuperior()) {
+      if (!this.isCollapsed()) {
+        connection.setHidden(hidden);
+        var child = connection.targetBlock();
+        if (child) {
+          child.setConnectionsHidden(hidden);
+        }
+      }
+    } else {
+      connection.setHidden(hidden);
+    }
   }
 };
 

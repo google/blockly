@@ -160,15 +160,23 @@ Blockly.unbindEvent_ = function(bindData) {
  * @param {string} eventName Name of event (e.g. 'click').
  */
 Blockly.fireUiEventNow = function(node, eventName) {
-  var doc = document;
-  if (doc.createEvent) {
+  // Remove the event from the anti-duplicate database.
+  var list = Blockly.fireUiEvent.DB_[eventName];
+  if (list) {
+    var i = list.indexOf(node);
+    if (i != -1) {
+      list.splice(i, 1);
+    }
+  }
+  // Fire the event in a browser-compatible way.
+  if (document.createEvent) {
     // W3
-    var evt = doc.createEvent('UIEvents');
+    var evt = document.createEvent('UIEvents');
     evt.initEvent(eventName, true, true);  // event type, bubbling, cancelable
     node.dispatchEvent(evt);
-  } else if (doc.createEventObject) {
+  } else if (document.createEventObject) {
     // MSIE
-    var evt = doc.createEventObject();
+    var evt = document.createEventObject();
     node.fireEvent('on' + eventName, evt);
   } else {
     throw 'FireEvent: No event creation mechanism.';
@@ -176,16 +184,35 @@ Blockly.fireUiEventNow = function(node, eventName) {
 };
 
 /**
- * Fire a synthetic event asynchronously.
+ * Fire a synthetic event asynchronously.  Groups of simultaneous events (e.g.
+ * a tree of blocks being deleted) are merged into one event.
  * @param {!EventTarget} node The event's target node.
  * @param {string} eventName Name of event (e.g. 'click').
  */
 Blockly.fireUiEvent = function(node, eventName) {
+  var list = Blockly.fireUiEvent.DB_[eventName];
+  if (list) {
+    if (list.indexOf(node) != -1) {
+      // This event is already scheduled to fire.
+      return;
+    }
+    list.push(node);
+  } else {
+    Blockly.fireUiEvent.DB_[eventName] = [node];
+  }
   var fire = function() {
     Blockly.fireUiEventNow(node, eventName);
   };
   setTimeout(fire, 0);
 };
+
+/**
+ * Database of upcoming firing event types.
+ * Used to fire only one event after multiple changes.
+ * @type {!Object}
+ * @private
+ */
+Blockly.fireUiEvent.DB_ = {};
 
 /**
  * Don't do anything for this event, just halt propagation.

@@ -666,9 +666,8 @@ Blockly.Connection.prototype.hideAll = function() {
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
  */
 Blockly.Connection.prototype.unhideAll = function() {
-  if (!this.hidden_) {
-    this.dbList_[this.type].addConnection_(this);
-  }
+  this.dbList_[this.type].addConnection_(this);
+  this.hidden_ = false;
   // All blocks that need unhiding must be unhidden before any rendering takes
   // place, since rendering requires knowing the dimensions of lower blocks.
   // Also, since rendering a block renders all its parents, we only need to

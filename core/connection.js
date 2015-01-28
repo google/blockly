@@ -535,6 +535,23 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
       return true;
     }
   }
+  // Find any promiscuous array matches in the check lists.
+  for (var x = 0; x < this.check_.length; x++) {
+    if (this.check_[x] == 'Array') {
+      for (var y = 0; y < otherConnection.check_.length; y++) {
+        if (otherConnection.check_[y].indexOf('Array<') == 0) {
+          return true;
+        }
+      }
+    }
+    if (this.check_[x].indexOf('Array<') == 0) {
+      for (var y = 0; y < otherConnection.check_.length; y++) {
+        if (otherConnection.check_[y].indexOf('Array') == 0) {
+          return true;
+        }
+      }
+    }
+  }
   // No intersection.
   return false;
 };

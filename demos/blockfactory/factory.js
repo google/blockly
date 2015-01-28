@@ -255,11 +255,11 @@ function getOptTypesFrom(block, name) {
   if (types.length == 0) {
     return '';
   } else if (types.length == 1) {
-    return types[0];
+    return escapeString(types[0]);
   } else if (types.indexOf('null') != -1) {
-    return 'null';
+    return escapeString('null');
   } else {
-    return '[' + types.join(', ') + ']';
+    return '[' + types.map(function(e){return escapeString(e)}).join(', ') + ']';
   }
 }
 
@@ -276,7 +276,7 @@ function getTypesFrom_(block, name) {
   if (!typeBlock || typeBlock.disabled) {
     types = [];
   } else if (typeBlock.type == 'type_other') {
-    types = [escapeString(typeBlock.getFieldValue('TYPE'))];
+    types = [typeBlock.getFieldValue('TYPE')];
   } else if (typeBlock.type == 'type_group') {
     types = [];
     for (var n = 0; n < typeBlock.typeCount_; n++) {
@@ -290,8 +290,16 @@ function getTypesFrom_(block, name) {
       }
       hash[types[n]] = true;
     }
+  } else if (typeBlock.type == 'type_list_of') {
+    var target = typeBlock.getInputTargetBlock('TYPE');
+    var subtypes = getTypesFrom_(typeBlock, 'TYPE');
+    if (target && subtypes.indexOf('null')==-1) {
+      types = [typeBlock.valueType + '<' + subtypes + '>'];
+    } else {
+      types = [typeBlock.valueType];
+    }
   } else {
-    types = [escapeString(typeBlock.valueType)];
+    types = [typeBlock.valueType];
   }
   return types;
 }

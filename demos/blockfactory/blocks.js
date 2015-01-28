@@ -673,6 +673,18 @@ Blockly.Blocks['type_list'] = {
   }
 };
 
+Blockly.Blocks['type_list_of'] = {
+  // List of type.
+  valueType: 'Array',
+  init: function() {
+    this.setColour(230);
+    this.appendValueInput("TYPE")
+        .appendField("list of");
+    this.setOutput(true, 'Type');
+    this.setTooltip('Arrays (lists) of a given type are allowed.');
+  }
+};
+
 Blockly.Blocks['type_other'] = {
   // Other type.
   init: function() {

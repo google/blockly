@@ -31,6 +31,7 @@ Blockly.Blocks['plane_set_seats'] = {
     this.appendValueInput('VALUE')
         .appendField(Plane.getMsg('Plane_setSeats'));
     this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
+    this.setDeletable(false);
   }
 };
 

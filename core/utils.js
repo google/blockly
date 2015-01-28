@@ -95,7 +95,7 @@ Blockly.hasClass_ = function(element, className) {
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
   var wrapFunc = function(e) {
-    func.apply(thisObject, arguments);
+    func.call(thisObject, e);
   };
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];

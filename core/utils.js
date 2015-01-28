@@ -109,8 +109,8 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
         e.clientX = touchPoint.clientX;
         e.clientY = touchPoint.clientY;
       }
-      func.apply(thisObject, arguments);
-      // Stop the browser from scrolling/zooming the page
+      func.call(thisObject, e);
+      // Stop the browser from scrolling/zooming the page.
       e.preventDefault();
     };
     for (var i = 0, eventName;

@@ -299,6 +299,36 @@ Blockly.Blocks['logic_compare'] = {
       };
       return TOOLTIPS[op];
     });
+    var myid = this.id;
+    var bindid = Blockly.addChangeListener(function() {
+      var me = Blockly.mainWorkspace.getBlockById(myid);
+      if(null == me) {
+        Blockly.removeChangeListener(bindid);
+      } else {
+        if (me.getInputTargetBlock('A') && !me.getInputTargetBlock('B')) {
+          if (me.getInputTargetBlock('A').outputConnection.check_) {
+            me.getInput('B').setCheck(me.getInputTargetBlock('A').outputConnection.check_[0]);
+          } else {
+            me.getInput('B').setCheck(null);
+          }
+        } else if (me.getInputTargetBlock('B') && !me.getInputTargetBlock('A')) {
+          if (me.getInputTargetBlock('B').outputConnection.check_) {
+            me.getInputTargetBlock('A').setCheck(me.getInputTargetBlock('B').outputConnection.check_[0]);
+          } else {
+            me.getInput('A').setCheck(null);
+          }
+        } else if (me.getInputTargetBlock('A') && me.getInputTargetBlock('B')) {
+          if (me.getInputTargetBlock('A').outputConnection.check_) {
+            me.getInput('B').setCheck(me.getInputTargetBlock('A').outputConnection.check_[0]);
+          } else if (me.getInput('B').outputConnection.check_) {
+            me.getInput('A').setCheck(me.getInputTargetBlock('B').outputConnection.check_[0]);
+          }
+        } else {
+          me.getInput('A').setCheck(null);
+          me.getInput('B').setCheck(null);
+        }
+      }
+    });
   }
 };
 

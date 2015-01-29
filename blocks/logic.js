@@ -299,36 +299,29 @@ Blockly.Blocks['logic_compare'] = {
       };
       return TOOLTIPS[op];
     });
-    var myid = this.id;
-    var bindid = Blockly.addChangeListener(function() {
-      var me = Blockly.mainWorkspace.getBlockById(myid);
-      if(null == me) {
-        Blockly.removeChangeListener(bindid);
-      } else {
-        if (me.getInputTargetBlock('A') && !me.getInputTargetBlock('B')) {
-          if (me.getInputTargetBlock('A').outputConnection.check_) {
-            me.getInput('B').setCheck(me.getInputTargetBlock('A').outputConnection.check_[0]);
-          } else {
-            me.getInput('B').setCheck(null);
-          }
-        } else if (me.getInputTargetBlock('B') && !me.getInputTargetBlock('A')) {
-          if (me.getInputTargetBlock('B').outputConnection.check_) {
-            me.getInputTargetBlock('A').setCheck(me.getInputTargetBlock('B').outputConnection.check_[0]);
-          } else {
-            me.getInput('A').setCheck(null);
-          }
-        } else if (me.getInputTargetBlock('A') && me.getInputTargetBlock('B')) {
-          if (me.getInputTargetBlock('A').outputConnection.check_) {
-            me.getInput('B').setCheck(me.getInputTargetBlock('A').outputConnection.check_[0]);
-          } else if (me.getInput('B').outputConnection.check_) {
-            me.getInput('A').setCheck(me.getInputTargetBlock('B').outputConnection.check_[0]);
-          }
-        } else {
-          me.getInput('A').setCheck(null);
-          me.getInput('B').setCheck(null);
-        }
-      }
-    });
+  },
+  /**
+   * Called whenever anything on the workspace changes.
+   * Prevent mismatched types from being compared.
+   * @this Blockly.Block
+   */
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    var blockA = this.getInputTargetBlock('A');
+    var blockB = this.getInputTargetBlock('B');
+    if (blockA) {
+      this.getInput('B').setCheck(blockA.outputConnection.check_);
+    }
+    if (blockB) {
+      this.getInput('A').setCheck(blockB.outputConnection.check_);
+    }
+    if (!blockA && !blockB) {
+      this.getInput('A').setCheck(null);
+      this.getInput('B').setCheck(null);
+    }
   }
 };
 

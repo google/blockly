@@ -313,20 +313,35 @@ Blockly.Blocks['logic_compare'] = {
     }
     var blockA = this.getInputTargetBlock('A');
     var blockB = this.getInputTargetBlock('B');
-    // Kick blocks that existed prior to this change if they don't match.
-    if (blockA && blockB &&
-        !blockA.outputConnection.checkType_(blockB.outputConnection)) {
-      // Mismatch between two inputs.  Disconnect previous and bump it away.
-      for (var i = 0; i < this.prevBlocks_.length; i++) {
-        var block = this.prevBlocks_[i];
-        if (block === blockA || block === blockB) {
-          block.setParent(null);
-          block.bumpNeighbours_();
+    if (Blockly.ejectMismatch) {
+      // Kick blocks that existed prior to this change if they don't match.
+      if (blockA && blockB &&
+          !blockA.outputConnection.checkType_(blockB.outputConnection)) {
+        // Mismatch between two inputs.  Disconnect previous and bump it away.
+        for (var i = 0; i < this.prevBlocks_.length; i++) {
+          var block = this.prevBlocks_[i];
+          if (block === blockA || block === blockB) {
+            block.setParent(null);
+            block.bumpNeighbours_();
+          }
         }
       }
+      this.prevBlocks_[0] = blockA;
+      this.prevBlocks_[1] = blockB;
+    } else {
+      // call setCheck so the block being dropped will be rejected if not
+      // a match.
+      if (blockA) {
+        this.getInput('B').setCheck(blockA.outputConnection.check_);
+      }
+      if (blockB) {
+        this.getInput('A').setCheck(blockB.outputConnection.check_);
+      }
+      if (!blockA && !blockB) {
+        this.getInput('A').setCheck(null);
+        this.getInput('B').setCheck(null);
+      }
     }
-    this.prevBlocks_[0] = blockA;
-    this.prevBlocks_[1] = blockB;
   }
 };
 

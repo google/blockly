@@ -132,6 +132,10 @@ Blockly.parseOptions_ = function(options) {
   if (hasCss === undefined) {
     hasCss = true;
   }
+  var ejectMismatch = options['ejectMismatch'];
+  if (ejectMismatch === undefined) {
+    ejectMismatch = true;
+  }
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
 
@@ -152,6 +156,7 @@ Blockly.parseOptions_ = function(options) {
   Blockly.hasTrashcan = hasTrashcan;
   Blockly.hasSounds = hasSounds;
   Blockly.hasCss = hasCss;
+  Blockly.ejectMismatch = ejectMismatch;
   Blockly.languageTree = tree;
   Blockly.enableRealtime = enableRealtime;
   Blockly.realtimeOptions = realtimeOptions;

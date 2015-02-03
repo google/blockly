@@ -299,6 +299,7 @@ Blockly.Blocks['logic_compare'] = {
       };
       return TOOLTIPS[op];
     });
+    this.prevBlocks_ = [null, null];
   },
   /**
    * Called whenever anything on the workspace changes.
@@ -312,18 +313,20 @@ Blockly.Blocks['logic_compare'] = {
     }
     var blockA = this.getInputTargetBlock('A');
     var blockB = this.getInputTargetBlock('B');
-    // Kick blocks that existed prior to this change if they don't match
-    if (this.blocks_ && blockA && blockB &&
-            !blockA.outputConnection.checkType_(blockB.outputConnection)) {
+    // Kick blocks that existed prior to this change if they don't match.
+    if (blockA && blockB &&
+        !blockA.outputConnection.checkType_(blockB.outputConnection)) {
       // Mismatch between two inputs.  Disconnect previous and bump it away.
-      goog.array.forEach(this.blocks_, function(e) {
-        if (e === blockA || e === blockB) {
-          e.setParent(null);
-          e.bumpNeighbours_();
+      for (var i = 0; i < this.prevBlocks_.length; i++) {
+        var block = this.prevBlocks_[i];
+        if (block === blockA || block === blockB) {
+          block.setParent(null);
+          block.bumpNeighbours_();
         }
-      });
+      }
     }
-    this.blocks_ = [blockA, blockB];
+    this.prevBlocks_[0] = blockA;
+    this.prevBlocks_[1] = blockB;
   }
 };
 

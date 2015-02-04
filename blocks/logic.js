@@ -299,6 +299,7 @@ Blockly.Blocks['logic_compare'] = {
       };
       return TOOLTIPS[op];
     });
+    this.prevBlocks_ = [null, null];
   },
   /**
    * Called whenever anything on the workspace changes.
@@ -312,19 +313,20 @@ Blockly.Blocks['logic_compare'] = {
     }
     var blockA = this.getInputTargetBlock('A');
     var blockB = this.getInputTargetBlock('B');
-    // Keep track of which block was added second
-    // (so the first block may be ejected upon mismatch).
-    if (blockA && !blockB) {
-      this.blockAPriority_ = false;
-    } else if (!blockA && blockB) {
-      this.blockAPriority_ = true;
-    } else if (blockA && blockB &&
+    // Kick blocks that existed prior to this change if they don't match.
+    if (blockA && blockB &&
         !blockA.outputConnection.checkType_(blockB.outputConnection)) {
-      // Mismatch between two inputs.  Disconnect one and bump it away.
-      var child = this.blockAPriority_ ? blockB : blockA;
-      child.setParent(null);
-      child.bumpNeighbours_();
+      // Mismatch between two inputs.  Disconnect previous and bump it away.
+      for (var i = 0; i < this.prevBlocks_.length; i++) {
+        var block = this.prevBlocks_[i];
+        if (block === blockA || block === blockB) {
+          block.setParent(null);
+          block.bumpNeighbours_();
+        }
+      }
     }
+    this.prevBlocks_[0] = blockA;
+    this.prevBlocks_[1] = blockB;
   }
 };
 

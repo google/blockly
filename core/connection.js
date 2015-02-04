@@ -727,6 +727,10 @@ Blockly.ConnectionDB.prototype.addConnection_ = function(connection) {
   if (connection.inDB_) {
     throw 'Connection already in database.';
   }
+  if (connection.sourceBlock_.isInFlyout) {
+    // Don't bother maintaining a database of connections in a flyout.
+    return;
+  }
   // Insert connection using binary search.
   var pointerMin = 0;
   var pointerMax = this.length;

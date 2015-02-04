@@ -300,6 +300,7 @@ Blockly.Blocks['logic_compare'] = {
       return TOOLTIPS[op];
     });
     this.prevBlocks_ = [null, null];
+    this.types_ = [null, null];
   },
   /**
    * Called whenever anything on the workspace changes.
@@ -332,15 +333,46 @@ Blockly.Blocks['logic_compare'] = {
       // call setCheck so the block being dropped will be rejected if not
       // a match.
       if (blockA) {
+        this.types_[1] = blockA.outputConnection.check_;
         this.getInput('B').setCheck(blockA.outputConnection.check_);
       }
       if (blockB) {
+        this.types_[0] = blockB.outputConnection.check_;
         this.getInput('A').setCheck(blockB.outputConnection.check_);
       }
       if (!blockA && !blockB) {
+        this.types_[0] = null;
         this.getInput('A').setCheck(null);
+        this.types_[1] = null;
         this.getInput('B').setCheck(null);
       }
+    }
+  },
+
+  mutationToDom: function() {
+    if (this.types_[0] || this.types_[1]) {
+      var container = document.createElement('mutation');
+      if (this.types_[0]) {
+        container.setAttribute('datatypeA', this.types_[0].join(';'));
+      }
+      if (this.types_[1]) {
+        container.setAttribute('datatypeB', this.types_[1].join(';'));
+      }
+      return container;
+    }
+    return null;
+  },
+
+  domToMutation: function(xmlElement) {
+    var type = xmlElement.getAttribute('datatypeA');
+    if (type) {
+      this.types_[0] = type.split(';');
+      this.getInput('A').setCheck(this.types_[0]);
+    }
+    type = xmlElement.getAttribute('datatypeB');
+    if (type) {
+      this.types_[1] = type.split(';');
+      this.getInput('B').setCheck(this.types_[1]);
     }
   }
 };

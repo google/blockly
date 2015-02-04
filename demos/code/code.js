@@ -237,7 +237,7 @@ Code.LANG = Code.getLang();
  * List of tab names.
  * @private
  */
-Code.TABS_ = ['blocks', 'javascript', 'python', 'dart', 'xml'];
+Code.TABS_ = ['blocks', 'javascript', 'python', 'dart', 'json', 'xml'];
 
 Code.selected = 'blocks';
 
@@ -264,6 +264,27 @@ Code.tabClick = function(clickedName) {
     if (xmlDom) {
       Blockly.mainWorkspace.clear();
       Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+    }
+  }
+  
+   if (document.getElementById('tab_json').className == 'tabon') {
+    var jsonTextarea = document.getElementById('content_json');
+    var jsonText = jsonTextarea.value;
+    var jsonObject = null;
+    try {
+      jsonObject = Blockly.JSON.textToObject(jsonText);
+    } catch (e) {
+      var q =
+		window.confirm(MSG['badXml'].replace('XML', 'JSON').replace('%1', e));
+         // window.confirm(MSG['badJSON'].replace('%1', e));
+      if (!q) {
+        // Leave the user on the XML tab.
+        return;
+      }
+    }
+    if (jsonObject) {
+      Blockly.mainWorkspace.clear();
+      Blockly.JSON.objectToWorkspace(Blockly.mainWorkspace, jsonObject);
     }
   }
 
@@ -296,6 +317,12 @@ Code.renderContent = function() {
     var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
     xmlTextarea.value = xmlText;
     xmlTextarea.focus();
+  } else if (content.id == 'content_json') {
+    var jsonTextarea = document.getElementById('content_json');
+    var jsonObject = Blockly.JSON.workspaceToObject(Blockly.mainWorkspace);
+    var jsonText = Blockly.JSON.ObjectToText(jsonObject);
+    jsonTextarea.value = jsonText;
+    jsonTextarea.focus();
   } else if (content.id == 'content_javascript') {
     var code = Blockly.JavaScript.workspaceToCode();
     content.textContent = code;

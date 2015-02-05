@@ -427,6 +427,28 @@ Blockly.Blocks['field_colour'] = {
   }
 };
 
+Blockly.Blocks['field_date'] = {
+  // Date input.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput()
+        .appendField('date')
+        .appendField(new Blockly.FieldDate(), 'DATE')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('Date input field.');
+  },
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    fieldNameCheck(this);
+  }
+};
+
 Blockly.Blocks['field_variable'] = {
   // Dropdown for variables.
   init: function() {

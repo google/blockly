@@ -186,6 +186,12 @@ function getFields(block) {
               escapeString(block.getFieldValue('COLOUR')) + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
+        case 'field_date':
+          // Result: new Blockly.FieldColour('2015-02-04'), 'DATE'
+          fields.push('new Blockly.FieldDate(' +
+              escapeString(block.getFieldValue('DATE')) + '), ' +
+              escapeString(block.getFieldValue('FIELDNAME')));
+          break;
         case 'field_variable':
           // Result:
           // new Blockly.FieldVariable('item'), 'VAR'
@@ -334,6 +340,11 @@ function updateGenerator() {
         case 'field_colour':
           var name = block.getFieldValue('FIELDNAME');
           code.push(makeVar('colour', name) +
+                    " = block.getFieldValue('" + name + "');");
+          break;
+        case 'field_date':
+          var name = block.getFieldValue('FIELDNAME');
+          code.push(makeVar('date', name) +
                     " = block.getFieldValue('" + name + "');");
           break;
         case 'field_variable':

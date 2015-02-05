@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2015 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,12 @@
 goog.provide('Blockly.FieldDate');
 
 goog.require('Blockly.Field');
+goog.require('goog.date');
+goog.require('goog.dom');
 goog.require('goog.ui.DatePicker');
+goog.require('goog.style');
+goog.require('goog.i18n.DateTimeSymbols');
+goog.require('goog.i18n.DateTimeSymbols_he');
 
 
 /**
@@ -105,7 +110,10 @@ Blockly.FieldDate.prototype.setValue = function(date) {
 Blockly.FieldDate.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, Blockly.FieldDate.widgetDispose_);
   // Create the date picker using Closure.
+  Blockly.FieldDate.loadLanguage_();
   var picker = new goog.ui.DatePicker();
+  picker.setAllowNone(false);
+  picker.setShowWeekNum(false);
 
   // Position the picker to line up with the field.
   // Record windowSize and scrollOffset before adding the picker.
@@ -166,5 +174,23 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
 Blockly.FieldDate.widgetDispose_ = function() {
   if (Blockly.FieldDate.changeEventKey_) {
     goog.events.unlistenByKey(Blockly.FieldDate.changeEventKey_);
+  }
+};
+
+/**
+ * Load the best language pack by scanning the Blockly.Msg object for a
+ * language that maches the available languages in Closure.
+ * @private
+ */
+Blockly.FieldDate.loadLanguage_ = function() {
+  var reg = /^DateTimeSymbols_(.+)$/;
+  for (var prop in goog.i18n) {
+    var m = prop.match(reg);
+    if (m) {
+      var lang = m[1].toLowerCase().replace('_', '.');  // E.g. 'pt.br'
+      if (goog.getObjectByName(lang, Blockly.Msg)) {
+        goog.i18n.DateTimeSymbols = goog.i18n[prop];
+      }
+    }
   }
 };

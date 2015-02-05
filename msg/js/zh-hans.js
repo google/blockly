@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "消除两侧空格";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "消除左侧空格";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "消除右侧空格";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "复制这段文字的同时删除两端多余的空格。";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "项";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "创建“设定%1”";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

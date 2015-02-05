@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "prit hapesirat nga te dyja anet";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "prit hapesirat nga ana e majte";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "prit hapesirat nga ana e djathte";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Pergjigju me nje kopje te tekstit me hapesira te fshira nga njera ane ose te dyja anet.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "send";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Krijo 'vendos %1";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

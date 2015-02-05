@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "скратити простор са об
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "скратити простор са леве стране";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "скратити простор са десне стране";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Враћа копију текста са уклонјеним простором са једног од два краја.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "ставка";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Направи „постави %1“";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

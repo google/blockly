@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "išvalyk tarpus šonuose";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "išvalyk tarpus pradžioje";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "išvalyk tarpus pabaigoje";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "elementas";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Sukurk \"priskirk %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

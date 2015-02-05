@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "bogat spàtzius de ambus càbudus de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "bogat spàtzius de su càbudu de manca de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "bogat spàtzius de su càbudu de dereta de";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Torrat una copia de su testu bogaus is spàtzius de unu o de ambus is càbudus.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Fait 'imposta %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

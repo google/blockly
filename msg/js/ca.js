@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "retalla espais de tots dos extrems de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "retalla espais de l'esquerra de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "retalla espais de la dreta de";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Retorna una còpia del text on s'han esborrat els espais d'un o dels dos extrems.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Crea 'modifica %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

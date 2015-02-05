@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "supprimer les espaces des deux côtés";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "supprimer les espaces du côté gauche";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "supprimer les espaces du côté droit";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Renvoyer une copie du texte avec les espaces supprimés d’un bout ou des deux.";
+Blockly.Msg.TODAY = "Aujourd'hui";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "élément";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Créer 'fixer %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

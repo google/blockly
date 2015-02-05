@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "ลบช่องว่างทั้�
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "ลบช่องว่างด้านหน้าของ";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "ลบช่องว่างข้างท้ายของ";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "คืนค่าสำเนาของข้อความที่ลบเอาช่องว่างหน้าและหลังข้อความออกแล้ว";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "รายการ";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "สร้าง \"กำหนด %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

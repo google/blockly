@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "Lemel an esaouennoù en daou du";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "Lemel an esaouennoù eus an tu kleiz";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "Lemel an esaouennoù eus an tu dehou";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Distreiñ un eilenn eus an destenn gant an esaouennoù lamet eus un tu pe eus an daou du";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "elfenn";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Krouiñ 'termenañ %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

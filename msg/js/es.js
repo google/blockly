@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "quitar espacios de ambos lados de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "quitar espacios iniciales de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "quitar espacios finales de";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Devuelve una copia del texto sin los espacios de uno o ambos extremos.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "elemento";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Crear 'establecer %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

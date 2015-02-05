@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "spaties van beide kanten afhalen van";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "spaties van de linkerkant verwijderen van";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "spaties van de rechterkant verwijderen van";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Geeft een kopie van de tekst met verwijderde spaties van één of beide kanten.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Maak \"verander %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";

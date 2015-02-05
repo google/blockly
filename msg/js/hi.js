@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "रिक्त स्थान को �
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "रिक्त स्थान को इस टेक्स्ट के बायें तरफ से निकालें";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "रिक्त स्थान को इस टेक्स्ट के दाईं तरफ से निकालें";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "आइटम";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "सेट '%1' बनाएँ";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

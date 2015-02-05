@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "περίκοψε τα κενά και α�
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "περίκοψε τα κενά από την αριστερή πλευρά του";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "περίκοψε τα κενά από την δεξιά πλευρά του";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Επιστρέφει ένα αντίγραφο του κειμένου με αφαιρεμένα τα κενά από το ένα ή και τα δύο άκρα.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "αντικείμενο";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Δημιούργησε «όρισε %1»";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

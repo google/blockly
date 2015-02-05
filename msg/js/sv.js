@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "ta bort mellanrum från båda sidorna av"
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "ta bort mellanrum från vänstra sidan av";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "ta bort mellanrum från högra sidan av";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Returnerar en kopia av texten med borttagna mellanrum från en eller båda ändar.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "föremål";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Skapa \"välj %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

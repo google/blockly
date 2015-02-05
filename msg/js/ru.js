@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "обрезать пробелы с дву
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "обрезать пробелы слева";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "обрезать пробелы справа";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Возвращает копию текста с пробелами, удалеными с одного или обоих концов.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "элемент";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Создать блок \"присвоить\" для %1";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "taie spațiile de pe ambele părți ale";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "tăiaţi spațiile din partea stângă a";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "taie spațiile din partea dreaptă a";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Returnează o copie a textului fără spațiile de la unul sau ambele capete.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Crează 'set %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

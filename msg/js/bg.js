@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "премахни интервалите �
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "премахни интервалите отляво";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "премахни интервалите отдясно";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Върни копие на текста с пемахнати интервали от диния или двата края.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "елемент";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Създай \"промени стойността на %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

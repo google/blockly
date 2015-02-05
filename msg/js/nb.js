@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "fjern mellomrom fra begge sider av";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "fjern mellomrom fra venstre side av";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "fjern mellomrom fra høyre side av";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Returner en kopi av teksten med mellomrom fjernet fra en eller begge sidene.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Opprett 'sett %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "gavé jë spassi da le doe bande ëd";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "gavé jë spassi da la banda snistra ëd";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "gavé jë spassi da la banda drita ëd";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "A smon na còpia dël test con jë spassi gavà da n'estremità o da tute doe.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Creé 'fissé %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

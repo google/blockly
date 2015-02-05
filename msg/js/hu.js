@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "szóközök levágása mindkét végérő
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "szóközök levágása az elejéről";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "szóközök levágása a végéről";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Levágja a megadott szöveg végeiről a szóközöket.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "változó";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Create \"set %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

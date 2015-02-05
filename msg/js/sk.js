@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "odstráň medzery z oboch strán";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "odstráň medzery z ľavej strany";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "odstráň medzery z pravej strany";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Vráť kópiu textu bez medzier na jednom alebo oboch koncoch.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "položka";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Create 'set %1'";  // untranslated
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

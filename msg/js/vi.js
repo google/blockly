@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "cắt các không gian từ cả hai mặ
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "cắt các không gian từ bên trái của";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "cắt các không gian từ bên phải của";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Hoàn trả bản sao của văn bản sau khi xóa khoảng trắng từ một hoặc hai bên.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "vật";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Tạo mảnh \"đặt vào %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

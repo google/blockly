@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "entferne Leerzeichen von Anfang und Ende 
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "entferne Leerzeichen von Anfang Seite";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "entferne Leerzeichen von Ende Seite von";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Entfernt Leerzeichen vom Anfang und / oder Ende eines Textes.";
+Blockly.Msg.TODAY = "Heute";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "Element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Erzeuge \"Schreibe %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";

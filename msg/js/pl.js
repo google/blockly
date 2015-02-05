@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "usuń spacje po obu stronach";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "usuń spacje z lewej strony";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "usuń spacje z prawej strony";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Zwraca kopię tekstu z usuniętymi spacjami z jednego lub z obu końców tekstu.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Utwórz blok 'ustaw %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

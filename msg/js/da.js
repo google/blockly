@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "fjern mellemrum fra begge sider af";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "fjern mellemrum fra venstre side af";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "fjern mellemrum fra højre side af";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Returner en kopi af teksten med mellemrum fjernet fra den ene eller begge sider.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Opret 'sæt %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

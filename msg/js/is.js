@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "eyða bilum báðum megin við";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "eyða bilum vinstra megin við";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "eyða bilum hægra megin við";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Skila afriti af textanum þar sem möguleg bil við báða enda hafa verið fjarlægð.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "atriði";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Búa til 'stilla %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";

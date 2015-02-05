@@ -179,7 +179,7 @@ Blockly.FieldDate.widgetDispose_ = function() {
 
 /**
  * Load the best language pack by scanning the Blockly.Msg object for a
- * language that maches the available languages in Closure.
+ * language that matches the available languages in Closure.
  * @private
  */
 Blockly.FieldDate.loadLanguage_ = function() {

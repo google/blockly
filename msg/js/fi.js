@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "poistaa välilyönnit kummaltakin puolelt
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "poistaa välilyönnit vasemmalta puolelta";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "poistaa välilyönnit oikealta puolelta";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Palauttaa kopion tekstistä siten, että välilyönnit on poistettu yhdestä tai molemmista päistä.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "kohde";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Luo 'aseta %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

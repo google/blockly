@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "entfern Leerzeiche von Oonfang und End Se
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "entferne Leerzeiche von Oonfang Seite";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "entferne Leerzeiche von End Seite von";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Entfernt Leerzeiche vom Oonfang und / orrer End von en Text.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "Element";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Generier/erzeiche \"Schreibe %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

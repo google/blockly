@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "remover spatios de ambe lateres de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "remover spatios del sinistre latere de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "remover spatios del dextre latere de";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Retornar un copia del texto con spatios eliminate de un extremitate o ambes.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "cosa";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Crea 'mitter %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

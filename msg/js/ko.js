@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "양쪽의 공백 문자 제거";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "왼쪽의 공백 문자 제거";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "오른쪽의 공백 문자 제거";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "문장의 왼쪽/오른쪽/양쪽에서 스페이스 문자를 제거해 돌려줍니다.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "항목";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "'집합 %1' 생성";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -52,6 +52,8 @@ goog.require('Blockly.Msg');
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].
 Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
+/// button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}
+Blockly.Msg.TODAY = 'Today';
 
 // Context menus.
 /// context menu - Make a copy of the selected block (and any blocks it contains).
@@ -303,17 +305,17 @@ Blockly.Msg.MATH_NUMBER_HELPURL = 'https://en.wikipedia.org/wiki/Number';
 /// tooltip - Any positive or negative number, not necessarily an integer.
 Blockly.Msg.MATH_NUMBER_TOOLTIP = 'A number.';
 
-/// math - The symbol for the binary operation addition.
+/// {{optional}}\nmath - The symbol for the binary operation addition.
 Blockly.Msg.MATH_ADDITION_SYMBOL = '+';
-/// math - The symbol for the binary operation indicating that the right operand should be
+/// {{optional}}\nmath - The symbol for the binary operation indicating that the right operand should be
 /// subtracted from the left operand.
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = '-';
-/// math - The binary operation indicating that the left operand should be divided by
+/// {{optional}}\nmath - The binary operation indicating that the left operand should be divided by
 /// the right operand.
 Blockly.Msg.MATH_DIVISION_SYMBOL = '÷';
-/// math - The symbol for the binary operation multiplication.
+/// {{optional}}\nmath - The symbol for the binary operation multiplication.
 Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = '×';
-/// math - The symbol for the binary operation exponentiation.  Specifically, if the
+/// {{optional}}\nmath - The symbol for the binary operation exponentiation.  Specifically, if the
 /// value of the left operand is L and the value of the right operand (the exponent) is
 /// R, multiply L by itself R times.  (Fractional and negative exponents are also legal.)
 Blockly.Msg.MATH_POWER_SYMBOL = '^';

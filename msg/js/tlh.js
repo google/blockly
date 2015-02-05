@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "poSnIHlogh pei";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "poSlogh pei";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "nIHlogh pei";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Return a copy of the text with spaces removed from one or both ends.";  // untranslated
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "Doch";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "chel 'choH %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

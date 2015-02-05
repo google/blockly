@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "למחוק רווחים משני הקצו
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "למחוק רווחים מימין";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "למחוק רווחים משמאל";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "להחזיר עותק של הטקסט לאחר מחיקת רווחים מאחד או משני הקצוות.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "פריט";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "ליצור 'הגדר %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

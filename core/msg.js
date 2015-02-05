@@ -29,3 +29,29 @@
  * Msg gets populated in the message files.
  */
 goog.provide('Blockly.Msg');
+
+// Back up original getMsg function.
+goog.getMsgOrig = goog.getMsg;
+
+/**
+ * Gets a localized message.
+ * Overrides the default Closure function to check for a Blockly.Msg first.
+ * Used infrequently, only known case is TODAY button in date picker.
+ * @param {string} str Translatable string, places holders in the form {$foo}.
+ * @param {Object<string, string>=} opt_values Maps place holder name to value.
+ * @return {string} message with placeholders filled.
+ */
+goog.getMsg = function(str, opt_values) {
+  var key = goog.getMsg.blocklyMsgMap[str];
+  if (key) {
+    str = Blockly.Msg[key];
+  }
+  return goog.getMsgOrig(str, opt_values);
+};
+
+/**
+ * Mapping of Closure messages to Blockly.Msg names.
+ */
+goog.getMsg.blocklyMsgMap = {
+  'Today': 'TODAY'
+};

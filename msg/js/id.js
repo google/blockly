@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "pangkas ruang dari kedua belah sisi";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "pangkas ruang dari sisi kiri";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "pangkas ruang dari sisi kanan";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Kembali salinan teks dengan spasi dihapus dari satu atau kedua ujungnya.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Membuat 'tetapkan %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

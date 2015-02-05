@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "両端のスペースを取り除く";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "左端のスペースを取り除く";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "右端のスペースを取り除く";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "スペースを 1 つまたは両方の端から削除したのち、テキストのコピーを返します。";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "項目";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "'セット%1を作成します。";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

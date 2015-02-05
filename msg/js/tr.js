@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "iki tarafından da boşlukları temizle";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "solundan boşlukları temizle";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "sağından boşlukları temizle";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Metnin bir veya her iki sondan da boşlukları silinmiş şekilde kopyasını verir.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "öge";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "'set %1' oluştur";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

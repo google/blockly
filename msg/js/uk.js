@@ -356,6 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "викидайте крайні проб�
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "вилучати пробіли з лівого боку";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "вилучати пробіли з правого боку";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Повертає копію тексту з пробілами вилученими від одного або обох кінців.";
+Blockly.Msg.TODAY = "Today";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "елемент";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Створити 'set %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

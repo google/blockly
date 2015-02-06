@@ -26,6 +26,9 @@
 
 goog.provide('Blockly.Icon');
 
+goog.require('goog.dom');
+
+
 /**
  * Class for an icon.
  * @param {Blockly.Block} block The block associated with this icon.

@@ -29,6 +29,7 @@
 goog.provide('Blockly.Field');
 
 goog.require('goog.asserts');
+goog.require('goog.dom');
 goog.require('goog.math.Size');
 goog.require('goog.userAgent');
 

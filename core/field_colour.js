@@ -28,6 +28,7 @@ goog.provide('Blockly.FieldColour');
 
 goog.require('Blockly.Field');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.ui.ColorPicker');
 goog.require('goog.style');
 

@@ -28,6 +28,7 @@ goog.provide('Blockly.FieldAngle');
 
 goog.require('Blockly.FieldTextInput');
 goog.require('goog.math');
+goog.require('goog.userAgent');
 
 
 /**

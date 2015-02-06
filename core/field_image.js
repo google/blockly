@@ -27,6 +27,7 @@
 goog.provide('Blockly.FieldImage');
 
 goog.require('Blockly.Field');
+goog.require('goog.dom');
 goog.require('goog.userAgent');
 
 

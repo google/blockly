@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldDate');
 goog.require('Blockly.Field');
 goog.require('goog.date');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.ui.DatePicker');
 goog.require('goog.style');
 goog.require('goog.i18n.DateTimeSymbols');

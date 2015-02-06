@@ -31,6 +31,8 @@
 
 goog.provide('Blockly.Tooltip');
 
+goog.require('goog.dom');
+
 
 /**
  * Is a tooltip currently showing?

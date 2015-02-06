@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldTextInput');
 goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('goog.asserts');
+goog.require('goog.dom');
 goog.require('goog.userAgent');
 
 

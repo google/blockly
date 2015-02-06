@@ -29,6 +29,8 @@ goog.provide('Blockly.inject');
 goog.require('Blockly.Css');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
+goog.require('goog.ui.Component');
+goog.require('goog.userAgent');
 
 
 /**

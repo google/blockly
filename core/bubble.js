@@ -27,6 +27,7 @@
 goog.provide('Blockly.Bubble');
 
 goog.require('Blockly.Workspace');
+goog.require('goog.dom');
 goog.require('goog.math');
 
 

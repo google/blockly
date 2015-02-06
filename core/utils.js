@@ -28,6 +28,8 @@
 
 goog.provide('Blockly.utils');
 
+goog.require('goog.events.BrowserFeature');
+
 
 /**
  * Add a CSS class to a element.

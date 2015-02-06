@@ -28,6 +28,7 @@ goog.provide('Blockly.FieldLabel');
 
 goog.require('Blockly.Field');
 goog.require('Blockly.Tooltip');
+goog.require('goog.dom');
 goog.require('goog.math.Size');
 
 

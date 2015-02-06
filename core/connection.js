@@ -27,6 +27,8 @@
 goog.provide('Blockly.Connection');
 goog.provide('Blockly.ConnectionDB');
 
+goog.require('goog.dom');
+
 
 /**
  * Class for a connection between blocks.

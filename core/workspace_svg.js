@@ -32,7 +32,7 @@ goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
-goog.require('goog.math');
+goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
 

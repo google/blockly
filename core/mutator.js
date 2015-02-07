@@ -136,8 +136,10 @@ Blockly.Mutator.prototype.updateEditable = function() {
   } else {
     // Close any mutator bubble.  Icon is not clickable.
     this.setVisible(false);
-    Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
-                         'blocklyIconGroup');
+    if (this.iconGroup_) {
+      Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
+                           'blocklyIconGroup');
+    }
   }
 };
 

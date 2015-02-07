@@ -209,7 +209,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // The root block should not be dragable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
-    var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
+    var margin = this.workspace_.flyout_.GAP * 2;
     var x = this.workspace_.flyout_.width_ + margin;
     if (Blockly.RTL) {
       x = -x;

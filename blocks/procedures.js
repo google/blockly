@@ -536,6 +536,9 @@ Blockly.Blocks['procedures_callnoreturn'] = {
           }
         }
       }
+      if (savedRendered) {
+        input.init();
+      }
     }
     // Add 'with:' if there are parameters.
     var withField = this.getField_('WITH');

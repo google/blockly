@@ -769,7 +769,7 @@ Blockly.BlockSvg.MIN_FIELD_HEIGHT = 18;
  * The gap between the field text and the bottom of the block
  * @const
  */
-Blockly.BlockSvg.FIELD_TEXT_GAP = 3;
+Blockly.BlockSvg.FIELD_TEXT_GAP = 0;
 /**
  * The amount to adjust the font height by to allow for the descent from
  * from the text baseline. This should be determined by the font used.
@@ -1304,7 +1304,7 @@ Blockly.BlockSvg.prototype.renderFields_ =
       continue;
     }
     var fieldSize = field.getSize();
-    var adjustedCursorY = cursorY + fieldSize.height;
+    var adjustedCursorY = cursorY + fieldSize.height + Blockly.BlockSvg.FIELD_TEXT_GAP;
     if (Blockly.RTL) {
       cursorX -= field.renderSep + field.renderWidth;
       root.setAttribute('transform',
@@ -1409,7 +1409,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.fieldWidth += field.renderWidth + field.renderSep;
       var fieldHeight = fieldSize.height;
       fieldHeight *= Blockly.BlockSvg.FIELD_TEXT_BASELINE_DESCENT_ADJUST;
-      fieldHeight += Blockly.BlockSvg.FIELD_TEXT_GAP;
+      fieldHeight += Blockly.BlockSvg.FIELD_TEXT_GAP*2;
       row.height = Math.max(row.height, fieldHeight);
       previousFieldEditable = field.EDITABLE;
     }

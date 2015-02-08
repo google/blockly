@@ -112,8 +112,11 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
         e.clientY = touchPoint.clientY;
       }
       func.call(thisObject, e);
-      // Stop the browser from scrolling/zooming the page.
-      e.preventDefault();
+      // No stop when touchstart for show contextmenu
+      if (e.type != 'touchstart') {
+        // Stop the browser from scrolling/zooming the page.
+        e.preventDefault();
+      }
     };
     for (var i = 0, eventName;
          eventName = Blockly.bindEvent_.TOUCH_MAP[name][i]; i++) {

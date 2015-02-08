@@ -39,7 +39,7 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Field = function(text) {
-  this.size_ = new goog.math.Size(0, 25);
+  this.size_ = new goog.math.Size(0, 0); // new goog.math.Size(0, 25);
   this.setText(text);
 };
 
@@ -192,14 +192,20 @@ Blockly.Field.prototype.render_ = function() {
       // access." if Blockly is hidden.
       var width = this.textElement_.textContent.length * 8;
     }
+    var fontSize = window.getComputedStyle(this.textElement_, null)
+      .getPropertyValue('font-size');
+    var height = parseFloat(fontSize);
+    height = Math.max(height,Blockly.BlockSvg.MIN_FIELD_HEIGHT);
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width',
           width + Blockly.BlockSvg.SEP_SPACE_X);
     }
   } else {
     var width = 0;
+    var height = 0;
   }
   this.size_.width = width;
+  this.size_.height = height;
 };
 
 /**
@@ -207,7 +213,7 @@ Blockly.Field.prototype.render_ = function() {
  * @return {!goog.math.Size} Height and width.
  */
 Blockly.Field.prototype.getSize = function() {
-  if (!this.size_.width) {
+  if (!this.size_.width || !this.size_.height) {
     this.render_();
   }
   return this.size_;

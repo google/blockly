@@ -179,8 +179,8 @@ Blockly.Field.prototype.getSvgRoot = function() {
 };
 
 /**
- * Draws the border with the correct width.
- * Saves the computed width in a property.
+ * Draws the border with the correct width and height.
+ * Saves the computed size in a property.
  * @private
  */
 Blockly.Field.prototype.render_ = function() {
@@ -199,6 +199,10 @@ Blockly.Field.prototype.render_ = function() {
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width',
           width + Blockly.BlockSvg.SEP_SPACE_X);
+      this.borderRect_.setAttribute('height',height-1);
+      // Unsure of what to actually measure this off
+      var bump = 2 + height/6;
+      this.borderRect_.setAttribute('y', bump-height);
     }
   } else {
     var width = 0;

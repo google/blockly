@@ -270,6 +270,58 @@ Blockly.Blocks['lists_indexOf'] = {
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'END');
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.LISTS_INDEX_OF_TOOLTIP);
+    this.types_ = [null, null];
+  },
+
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    var valueBlock = this.getInputTargetBlock('VALUE');
+    var findBlock = this.getInputTargetBlock('FIND');
+    if (valueBlock) {
+      var type = valueBlock.outputConnection.check_[0];
+      if (type == 'Array') {
+        this.types_[1] = null;
+        this.getInput('FIND').setCheck(this.types_[1]);
+      } else if (type.indexOf('Array<') == 0) {
+        this.types_[1] = type.replace(/.*<(.*)>/, '$1').split(',');
+        this.getInput('FIND').setCheck(this.types_[1]);
+      }
+    } else if (!valueBlock && !findBlock) {
+      this.types_[0] = 'Array';
+      this.getInput('VALUE').setCheck(this.types_[0]);
+      this.types_[1] = null;
+      this.getInput('FIND').setCheck(this.types_[1]);
+    }
+  },
+
+  mutationToDom: function() {
+    if (this.types_[0] || this.types_[1]) {
+      var container = document.createElement('mutation');
+      if (this.types_[0]) {
+        container.setAttribute('valueType', this.types_[0].join(';'));
+      }
+      if (this.types_[1]) {
+        container.setAttribute('findType', this.types_[1].join(';'));
+      }
+      return container;
+    }
+    return null;
+  },
+
+  domToMutation: function(xmlElement) {
+  	var type = xmlElement.getAttribute('valueType');
+  	if (type) {
+      this.types_[0] = type.split(';');
+      this.getInput('VALUE').setCheck(this.types_[0]);
+	}
+  	type = xmlElement.getAttribute('findType');
+  	if (type) {
+      this.types_[1] = type.split(';');
+      this.getInput('FIND').setCheck(this.types_[1]);
+	}
   }
 };
 

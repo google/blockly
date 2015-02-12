@@ -95,8 +95,10 @@ Blockly.FieldTextArea.prototype.setText = function(text) {
   }
   this.text_ = text;
   
-  // Empty the text element.
-  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+  if (this.textElement_) {
+    // Empty the text element.
+    goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+  }
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   
   if (Blockly.RTL && text) {

@@ -443,6 +443,15 @@ function init() {
     linkButton.style.display = 'inline-block';
     linkButton.addEventListener('click', BlocklyStorage.link);
   }
+  else {
+    var linkButton = document.getElementById('linkButton');
+    linkButton.style.display = 'inline-block';
+    linkButton.addEventListener('click', function() {
+      var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      var xml_text = Blockly.Xml.domToPrettyText(xml);
+      window.open("data:text/plain;base64,"+btoa(xml_text), "xml");
+    });
+  }
 
   document.getElementById('helpButton').addEventListener('click', function() {
       open('https://developers.google.com/blockly/custom-blocks/block-factory',
@@ -476,6 +485,31 @@ function init() {
     rootBlock.render();
     rootBlock.setMovable(false);
     rootBlock.setDeletable(false);
+
+    var cancel = function(e) {
+      e.preventDefault();
+      return false;
+    }
+    document.body.addEventListener('dragover', cancel);
+    document.body.addEventListener('dragend', cancel);
+    document.body.addEventListener('drop', function(e) {
+      if(e.dataTransfer.files.length === 0) { return; }
+      e.preventDefault();
+
+      var file = e.dataTransfer.files[0];
+      var reader = new FileReader();
+      reader.addEventListener('load', function(e) {
+        var topBlocks = Blockly.mainWorkspace.getTopBlocks();
+        for(var i = 0; i < topBlocks.length; ++i) {
+          topBlocks[i].dispose();
+        }
+        var xml = Blockly.Xml.textToDom(e.target.result);
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+      });
+      reader.readAsText(file);
+
+      return false;
+    });
   }
 
   Blockly.addChangeListener(onchange);

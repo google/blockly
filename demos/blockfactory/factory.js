@@ -499,10 +499,7 @@ function init() {
       var file = e.dataTransfer.files[0];
       var reader = new FileReader();
       reader.addEventListener('load', function(e) {
-        var topBlocks = Blockly.mainWorkspace.getTopBlocks();
-        for(var i = 0; i < topBlocks.length; ++i) {
-          topBlocks[i].dispose();
-        }
+        Blockly.mainWorkspace.clear();
         var xml = Blockly.Xml.textToDom(e.target.result);
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
       });

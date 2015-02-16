@@ -448,6 +448,10 @@ function init() {
     linkButton.style.display = 'inline-block';
     linkButton.addEventListener('click', function() {
       var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      var nodes = xml.querySelectorAll('[id]');
+      for(var i = 0; i < nodes.length; ++i) {
+        nodes[i].removeAttribute('id');
+      }
       var xml_text = Blockly.Xml.domToPrettyText(xml);
       window.open("data:text/plain;base64,"+btoa(xml_text), "xml");
     });

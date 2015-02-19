@@ -4,7 +4,8 @@
 			"Beta16",
 			"Espertus",
 			"Nerimic",
-			"Gbonanome"
+			"Gbonanome",
+			"Gianfranco"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -275,6 +276,11 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "da # dalla fine",
 	"LISTS_GET_SUBLIST_END_LAST": "dagli ultimi",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Crea una copia della porzione specificata di una lista.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "crea lista da testo",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "crea testo da lista",
+	"LISTS_SPLIT_WITH_DELIMITER": "con delimitatore",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Dividi il testo in un elenco di testi, interrompendo ad ogni delimitatore.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Unisci una lista di testi in un unico testo, separato da un delimitatore.",
 	"VARIABLES_GET_TOOLTIP": "Restituisce il valore di una variabile.",
 	"VARIABLES_GET_CREATE_SET": "Crea 'imposta %1'",
 	"VARIABLES_SET_TITLE": "imposta",

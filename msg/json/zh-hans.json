@@ -9,7 +9,7 @@
 			"Yfdyh000"
 		]
 	},
-	"VARIABLES_DEFAULT_NAME": "项",
+	"VARIABLES_DEFAULT_NAME": "项目",
 	"DUPLICATE_BLOCK": "复制",
 	"ADD_COMMENT": "添加注释",
 	"REMOVE_COMMENT": "删除注释",
@@ -46,7 +46,7 @@
 	"COLOUR_BLEND_COLOUR2": "颜色2",
 	"COLOUR_BLEND_RATIO": "比例",
 	"COLOUR_BLEND_TOOLTIP": "用一个给定的比率(0.0-1.0)混合两种颜色。",
-	"CONTROLS_REPEAT_HELPURL": "https://zh.wikipedia.org/wiki/For回圈",
+	"CONTROLS_REPEAT_HELPURL": "https://zh.wikipedia.org/wiki/For循环",
 	"CONTROLS_REPEAT_TITLE": "重复 %1 次",
 	"CONTROLS_REPEAT_TITLE_REPEAT": "重复",
 	"CONTROLS_REPEAT_TITLE_TIMES": "次",
@@ -293,6 +293,7 @@
 	"LISTS_SPLIT_TEXT_FROM_LIST": "从列表拆出文本",
 	"LISTS_SPLIT_WITH_DELIMITER": "用分隔符",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "拆分文本到文本列表，按每个分隔符拆分。",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "加入文本列表至一个文本，由分隔符分隔。",
 	"ORDINAL_NUMBER_SUFFIX": "空白",
 	"VARIABLES_GET_TITLE": "",
 	"VARIABLES_GET_TAIL": "",

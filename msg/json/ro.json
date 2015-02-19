@@ -2,15 +2,16 @@
 	"@metadata": {
 		"authors": [
 			"Minisarm",
-			"Ely en"
+			"Ely en",
+			"Hugbear"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
 	"DUPLICATE_BLOCK": "Duplicati",
 	"ADD_COMMENT": "Adaugă un comentariu",
 	"REMOVE_COMMENT": "Elimină comentariu",
-	"EXTERNAL_INPUTS": "Intrări Externe",
-	"INLINE_INPUTS": "Intrari de Linie",
+	"EXTERNAL_INPUTS": "Intrări externe",
+	"INLINE_INPUTS": "Intrări în linie",
 	"DELETE_BLOCK": "Șterge Bloc",
 	"DELETE_X_BLOCKS": "Ștergeți %1 Blocuri",
 	"COLLAPSE_BLOCK": "Restrange blocul",
@@ -57,6 +58,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Cu variablia %1 ia o valoare din numărul început la numărul final, numara in intervalul specificat, apoi face blocurile specificate.",
 	"CONTROLS_FOR_INPUT_WITH": "numără cu",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "de la %1 la %2 prin %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each pentru fiecare bloc",
 	"CONTROLS_FOREACH_INPUT_ITEM": "pentru fiecare element",
 	"CONTROLS_FOREACH_INPUT_INLIST": "în listă",
 	"CONTROLS_FOREACH_TOOLTIP": "Pentru fiecare element din listă, setaţi variabila '%1' ca valoarea elementului, şi apoi faceţi unele declaraţii.",
@@ -290,6 +292,11 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "la # de la sfarsit",
 	"LISTS_GET_SUBLIST_END_LAST": "la ultima",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Creează o copie a porţiunii specificate dintr-o listă.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "convertește textul în listă",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "convertește lista în text",
+	"LISTS_SPLIT_WITH_DELIMITER": "cu separatorul",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Împarte textul într-o listă de texte, despărțite prin fiecare separator",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Concatenează o listă de texte (alternate cu separatorul) într-un text unic",
 	"VARIABLES_GET_TOOLTIP": "Returnează valoarea acestei variabile.",
 	"VARIABLES_GET_CREATE_SET": "Crează 'set %1'",
 	"VARIABLES_SET_TITLE": "seteaza",

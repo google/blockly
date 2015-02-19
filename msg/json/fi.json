@@ -4,7 +4,8 @@
 			"Nike",
 			"Silvonen",
 			"Espertus",
-			"Pettevi"
+			"Pettevi",
+			"McSalama"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -287,6 +288,9 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "päättyen kohtaan (lopusta laskien)",
 	"LISTS_GET_SUBLIST_END_LAST": "viimeinen",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Luo kopio määrätystä kohden listaa.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "tee listasta tekstiä",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "tee tekstistä lista",
+	"LISTS_SPLIT_WITH_DELIMITER": "erottimen kanssa",
 	"VARIABLES_GET_TOOLTIP": "Palauttaa muuttujan arvon.",
 	"VARIABLES_GET_CREATE_SET": "Luo 'aseta %1'",
 	"VARIABLES_SET_TITLE": "aseta",

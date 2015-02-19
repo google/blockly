@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Gasolin",
-			"Wehwei"
+			"Wehwei",
+			"Liuxinyu970226"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "變量",
@@ -26,7 +27,7 @@
 	"NEW_VARIABLE_TITLE": "新變量名稱:",
 	"RENAME_VARIABLE": "重新命名變量...",
 	"RENAME_VARIABLE_TITLE": "將所有 \"%1\" 變量重新命名為:",
-	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
+	"COLOUR_PICKER_HELPURL": "https://zh.wikipedia.org/wiki/顏色",
 	"COLOUR_PICKER_TOOLTIP": "從調色板中選擇一種顏色。",
 	"COLOUR_RANDOM_TITLE": "隨機顏色",
 	"COLOUR_RANDOM_TOOLTIP": "隨機選擇一種顏色。",
@@ -40,7 +41,7 @@
 	"COLOUR_BLEND_COLOUR2": "顏色 2",
 	"COLOUR_BLEND_RATIO": "比例",
 	"COLOUR_BLEND_TOOLTIP": "透過一個比率 (0.0-1.0)來混合兩種顏色。",
-	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
+	"CONTROLS_REPEAT_HELPURL": "https://zh.wikipedia.org/wiki/For迴圈",
 	"CONTROLS_REPEAT_TITLE": "重複 %1 次",
 	"CONTROLS_REPEAT_TITLE_REPEAT": "重複",
 	"CONTROLS_REPEAT_TITLE_TIMES": "次數",

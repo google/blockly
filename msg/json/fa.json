@@ -256,7 +256,7 @@
 	"LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM": "یک مورد تصادفی را یک فهرست حذف می‌کند.",
 	"LISTS_SET_INDEX_SET": "مجموعه",
 	"LISTS_SET_INDEX_INSERT": "درج در",
-	"LISTS_SET_INDEX_INPUT_TO": "به‌عنوان",
+	"LISTS_SET_INDEX_INPUT_TO": "به عنوان",
 	"LISTS_SET_INDEX_TOOLTIP_SET_FROM_START": "مورد مشخص‌شده در یک فهرست را قرار می‌دهد.  #1 اولین مورد است.",
 	"LISTS_SET_INDEX_TOOLTIP_SET_FROM_END": "مورد مشخص‌شده در یک فهرست را قرار می‌دهد.  #1 آخرین مورد است.",
 	"LISTS_SET_INDEX_TOOLTIP_SET_FIRST": "اولین مورد در یک فهرست را تعیین می‌کند.",

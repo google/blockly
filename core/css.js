@@ -881,5 +881,41 @@ Blockly.Css.CONTENT = [
   '  padding: 0;',
   '}',
 
+  /* LightUp fields */
+  '.blocklyArduinoSelector {',
+  '  stroke: #CF0000;',
+  '  stroke-width: 2;',
+  '  fill: #F0F0F0;',
+  '  fill-opacity: .8;',
+  '}',
+
+  '.blocklyArduinoRect {',
+  '  stroke: #CF0000;',
+  '  stroke-width: 2;',
+  '  fill: #F0F0F0;',
+  '  fill-opacity: .8;',
+  '}',
+
+  '.blocklyArduinoSelector:hover {',
+  '  stroke: #ff9900;',
+  '  stroke-width: 2;',
+  '  fill: #F0F0F0;',
+  '  fill-opacity: 1.0;',
+  '}',
+
+  '.blocklyArduinoText {',
+  'font-size: 40px;',
+  '}',
+
+  '.blocklyArduinoIO {',
+  'font-size: 20px;',
+  '}',
+
+  '.blocklyLight {',
+  '  cursor: default;',
+  '  font-family: sans-serif;',
+  '  font-size: 11pt;',
+  '  fill: #FFFF00;',
+  '}',
   ''
 ];

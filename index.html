@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script type="text/javascript" src="blockly_uncompressed.js"></script>
+        <script type="text/javascript" src="blocks_compressed.js"></script>
+        <script type="text/javascript" src="arduino_compressed.js"></script>
+        <script type="text/javascript" src="instructions_compressed.js"></script>
+        <script type="text/javascript" src="msg/js/en.js"></script>
+    </head>
+
+    <style>
+        html, body, #blocklyDiv {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <body>
+        <div id="blocklyDiv" style="height: 100vh; width: 100vw;">
+        <xml id="toolbox" style="display: none">
+            <block type="arduino_digital_write"></block>
+            <block type="arduino_digital_read"></block>
+            <block type="arduino_analog_write"></block>
+            <block type="arduino_analog_read"></block>
+            <block type="arduino_tone"></block>
+            <block type="arduino_delay"></block> 
+            <block type="procedures_defreturn"></block>
+         	<block type="procedures_defnoreturn"></block>
+            <block type="variables_get"></block>
+            <block type="variables_set"></block>
+            <block type="controls_if"></block>
+            <block type="controls_repeat_ext"></block>
+            <block type="logic_compare"></block>
+            <block type="math_number"></block>
+            <block type="math_arithmetic"></block>
+            <block type="text"></block>
+            <block type="text_print"></block>
+        </xml>
+    </body>
+ 
+  <script type="text/javascript">
+    // Override Blockly HSV generation to use LightUp Palette.
+    Blockly.HSV_SATURATION = 0.60;
+    Blockly.HSV_VALUE = 0.84;
+
+    var fallbackMakeColour = Blockly.makeColour;
+    Blockly.makeColour = function(saturation) {
+        var map = {
+            30: '#FFCE5D', // Orange
+            345: '#A05EB5', // Purple
+            135: '#8EDD65', // Green
+            210: '#55C7D6', // Blue
+            290: '#E56A54' // Red
+        }
+
+        if (map[saturation]) {
+            return map[saturation];
+        } else {
+            return fallbackMakeColour(saturation);
+        }
+    };
+
+    // Override Blockly Shadow styles
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyPathLight {') + 1, 0, 'display: none;');
+    Blockly.Css.CONTENT.push('.blocklyPathDark { display: none; }');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: white;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyFlyoutBackground {') + 2, 1, 'fill: darkgray;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyHighlightedConnectionPath {') + 2, 1, 'stroke: #E56A54;');
+
+    Blockly.inject(document.getElementById('blocklyDiv'),
+        {path: './', toolbox: document.getElementById('toolbox')});
+  </script>
+</html>

@@ -219,7 +219,12 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   if (Blockly.RTL) {
     width = workspace.getWidth();
   }
-  for (var i = 0, xmlChild; xmlChild = xml.childNodes[i]; i++) {
+  // Safari 7.1.3 is known to provide node lists with extra references to
+  // children beyond the lists' length.  Trust the length, do not use the
+  // looping pattern of checking the index for an object.
+  var childCount = xml.childNodes.length;
+  for (var i = 0; i < childCount; i++) {
+    var xmlChild = xml.childNodes[i];
     if (xmlChild.nodeName.toLowerCase() == 'block') {
       var block = Blockly.Xml.domToBlock(workspace, xmlChild);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);

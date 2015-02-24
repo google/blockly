@@ -1484,19 +1484,70 @@ goog.cssom.getCssRuleIndexInParentStyleSheet=function(a,b){if(a.style&&a.style["
 goog.cssom.replaceCssRule=function(a,b,c,d){if(c=c||goog.cssom.getParentStyleSheet(a))if(a=0<=d?d:goog.cssom.getCssRuleIndexInParentStyleSheet(a,c),0<=a)goog.cssom.removeCssRule(c,a),goog.cssom.addCssRule(c,b,a);else throw Error("Cannot proceed without the index of the cssRule.");else throw Error("Cannot proceed without the parentStyleSheet.");};
 goog.cssom.addCssRule=function(a,b,c){if(0>c||void 0==c)c=goog.cssom.getCssRulesFromStyleSheet(a).length;if(a.insertRule)a.insertRule(b,c);else if(b=/^([^\{]+)\{([^\{]+)\}/.exec(b),3==b.length)a.addRule(b[1],b[2],c);else throw Error("Your CSSRule appears to be ill-formatted.");};goog.cssom.removeCssRule=function(a,b){a.deleteRule?a.deleteRule(b):a.removeRule(b)};
 goog.cssom.addCssText=function(a,b){var c=b?b.getDocument():goog.dom.getDocument(),d=c.createElement("style");d.type="text/css";c.getElementsByTagName("head")[0].appendChild(d);d.styleSheet?d.styleSheet.cssText=a:(c=c.createTextNode(a),d.appendChild(c));return d};goog.cssom.getFileNameFromStyleSheet=function(a){return(a=a.href)?/([^\/\?]+)[^\/]*$/.exec(a)[1]:null};
-goog.cssom.getAllCss_=function(a,b){for(var c=[],d=goog.cssom.getAllCssStyleSheets(a),e=0;a=d[e];e++){var f=goog.cssom.getCssRulesFromStyleSheet(a);if(f&&f.length){if(!b)var g=0;for(var h=0,k=f.length,l;h<k;h++)l=f[h],b&&!l.href?(l=goog.cssom.getCssTextFromCssRule(l),c.push(l)):l.href||(l.style&&(l.parentStyleSheet||(l.style["-closure-parent-stylesheet"]=a),l.style["-closure-rule-index"]=g),c.push(l)),b||g++}}return b?c.join(" "):c};
-// Copyright 2013 Google Inc.  Apache License 2.0
+goog.cssom.getAllCss_=function(a,b){for(var c=[],d=goog.cssom.getAllCssStyleSheets(a),e=0;a=d[e];e++){var f=goog.cssom.getCssRulesFromStyleSheet(a);if(f&&f.length){if(!b)var g=0;for(var h=0,k=f.length,l;h<k;h++)l=f[h],b&&!l.href?(l=goog.cssom.getCssTextFromCssRule(l),c.push(l)):l.href||(l.style&&(l.parentStyleSheet||(l.style["-closure-parent-stylesheet"]=a),l.style["-closure-rule-index"]=g),c.push(l)),b||g++}}return b?c.join(" "):c};/*
+
+ Visual Blocks Editor
+
+ Copyright 2013 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 var Blockly={Blocks:{}};Blockly.Blocks.uidCounter_=0;Blockly.Blocks.genUid=function(){var a=(++Blockly.Blocks.uidCounter_).toString();return Blockly.Realtime.isEnabled()?Blockly.Realtime.genUid(a):a};
 Blockly.Blocks.addTemplate=function(a){goog.asserts.assert(a.blockName);goog.asserts.assert(Blockly.Blocks[a.blockName],"Blockly.Blocks already has a field named ",a.blockName);goog.asserts.assert(a.message);goog.asserts.assert(a.colour&&"number"==typeof a.colour&&0<=a.colour&&360>a.colour,"details.colour must be a number from 0 to 360 (exclusive)");"undefined"!=a.output&&(goog.asserts.assert(!a.previousStatement,"When details.output is defined, details.previousStatement must not be true."),goog.asserts.assert(!a.nextStatement,
 "When details.output is defined, details.nextStatement must not be true."));var b={init:function(){var b=this;this.setColour(a.colour);this.setHelpUrl(a.helpUrl);"string"==typeof a.tooltip?this.setTooltip(a.tooltip):"function"==typeof a.tooltip&&this.setTooltip(function(){return a.tooltip(b)});"undefined"!=a.output?this.setOutput(!0,a.output):(this.setPreviousStatement("undefined"==typeof a.previousStatement?!0:a.previousStatement),this.setNextStatement("undefined"==typeof a.nextStatement?!0:a.nextStatement));
 var d=[];d.push(a.text);a.args&&a.args.forEach(function(a){goog.asserts.assert(a.name);goog.asserts.assert("undefined"!=a.check);"undefined"==a.type||a.type==Blockly.INPUT_VALUE?d.push([a.name,a.check,"undefined"==typeof a.align?Blockly.ALIGN_RIGHT:a.align]):goog.asserts.fail("addTemplate() can only handle value inputs.")});d.push(Blockly.ALIGN_RIGHT);a.inline&&this.setInlineInputs(a.inline);Blockly.Block.prototype.interpolateMsg.apply(this,d)}};b.mutationToDom=a.switchable?function(){var b=a.mutationToDomFunc?
-a.mutatationToDomFunc():document.createElement("mutation");b.setAttribute("is_statement",this.isStatement||!1);return b}:a.mutationToDomFunc;Blockly.Blocks[a.blockName]=b};
-// Copyright 2012 Google Inc.  Apache License 2.0
+a.mutatationToDomFunc():document.createElement("mutation");b.setAttribute("is_statement",this.isStatement||!1);return b}:a.mutationToDomFunc;Blockly.Blocks[a.blockName]=b};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Workspace=function(){this.topBlocks_=[]};Blockly.Workspace.prototype.rendered=!1;Blockly.Workspace.prototype.maxBlocks=Infinity;Blockly.Workspace.prototype.dispose=function(){this.clear()};Blockly.Workspace.SCAN_ANGLE=3;Blockly.Workspace.prototype.addTopBlock=function(a){this.topBlocks_.push(a);this.fireChangeEvent()};
 Blockly.Workspace.prototype.removeTopBlock=function(a){for(var b=!1,c,d=0;c=this.topBlocks_[d];d++)if(c==a){this.topBlocks_.splice(d,1);b=!0;break}if(!b)throw"Block not present in workspace's list of top-most blocks.";this.fireChangeEvent()};
 Blockly.Workspace.prototype.getTopBlocks=function(a){var b=[].concat(this.topBlocks_);if(a&&1<b.length){var c=Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));Blockly.RTL&&(c*=-1);b.sort(function(a,b){var f=a.getRelativeToSurfaceXY(),g=b.getRelativeToSurfaceXY();return f.y+c*f.x-(g.y+c*g.x)})}return b};Blockly.Workspace.prototype.getAllBlocks=function(){for(var a=this.getTopBlocks(!1),b=0;b<a.length;b++)a.push.apply(a,a[b].getChildren());return a};Blockly.Workspace.prototype.clear=function(){for(;this.topBlocks_.length;)this.topBlocks_[0].dispose()};
-Blockly.Workspace.prototype.getWidth=function(){return 0};Blockly.Workspace.prototype.getBlockById=function(a){for(var b=this.getAllBlocks(),c=0,d;d=b[c];c++)if(d.id==a)return d;return null};Blockly.Workspace.prototype.remainingCapacity=function(){return Infinity==this.maxBlocks?Infinity:this.maxBlocks-this.getAllBlocks().length};Blockly.Workspace.prototype.fireChangeEvent=function(){};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.Workspace.prototype.getWidth=function(){return 0};Blockly.Workspace.prototype.getBlockById=function(a){for(var b=this.getAllBlocks(),c=0,d;d=b[c];c++)if(d.id==a)return d;return null};Blockly.Workspace.prototype.remainingCapacity=function(){return Infinity==this.maxBlocks?Infinity:this.maxBlocks-this.getAllBlocks().length};Blockly.Workspace.prototype.fireChangeEvent=function(){};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Bubble=function(a,b,c,d,e,f,g){var h=Blockly.Bubble.ARROW_ANGLE;Blockly.RTL&&(h=-h);this.arrow_radians_=goog.math.toRadians(h);this.workspace_=a;this.content_=b;this.shape_=c;a.getBubbleCanvas().appendChild(this.createDom_(b,!(!f||!g)));this.setAnchorLocation(d,e);f&&g||(a=this.content_.getBBox(),f=a.width+2*Blockly.Bubble.BORDER_WIDTH,g=a.height+2*Blockly.Bubble.BORDER_WIDTH);this.setBubbleSize(f,g);this.positionBubble_();this.renderArrow_();this.rendered_=!0;Blockly.readOnly||(Blockly.bindEvent_(this.bubbleBack_,
 "mousedown",this,this.bubbleMouseDown_),this.resizeGroup_&&Blockly.bindEvent_(this.resizeGroup_,"mousedown",this,this.resizeMouseDown_))};Blockly.Bubble.BORDER_WIDTH=6;Blockly.Bubble.ARROW_THICKNESS=10;Blockly.Bubble.ARROW_ANGLE=20;Blockly.Bubble.ARROW_BEND=4;Blockly.Bubble.ANCHOR_RADIUS=8;Blockly.Bubble.onMouseUpWrapper_=null;Blockly.Bubble.onMouseMoveWrapper_=null;
 Blockly.Bubble.unbindDragEvents_=function(){Blockly.Bubble.onMouseUpWrapper_&&(Blockly.unbindEvent_(Blockly.Bubble.onMouseUpWrapper_),Blockly.Bubble.onMouseUpWrapper_=null);Blockly.Bubble.onMouseMoveWrapper_&&(Blockly.unbindEvent_(Blockly.Bubble.onMouseMoveWrapper_),Blockly.Bubble.onMouseMoveWrapper_=null)};Blockly.Bubble.prototype.rendered_=!1;Blockly.Bubble.prototype.anchorX_=0;Blockly.Bubble.prototype.anchorY_=0;Blockly.Bubble.prototype.relativeLeft_=0;Blockly.Bubble.prototype.relativeTop_=0;
@@ -1515,14 +1566,48 @@ Blockly.Bubble.prototype.setBubbleSize=function(a,b){var c=2*Blockly.Bubble.BORD
 (this.autoLayout_&&this.layoutBubble_(),this.positionBubble_(),this.renderArrow_());Blockly.fireUiEvent(this.bubbleGroup_,"resize")};
 Blockly.Bubble.prototype.renderArrow_=function(){var a=[],b=this.width_/2,c=this.height_/2,d=-this.relativeLeft_,e=-this.relativeTop_;if(b==d&&c==e)a.push("M "+b+","+c);else{e-=c;d-=b;Blockly.RTL&&(d*=-1);var f=Math.sqrt(e*e+d*d),g=Math.acos(d/f);0>e&&(g=2*Math.PI-g);var h=g+Math.PI/2;h>2*Math.PI&&(h-=2*Math.PI);var k=Math.sin(h),l=Math.cos(h),p=this.getBubbleSize(),h=(p.width+p.height)/Blockly.Bubble.ARROW_THICKNESS,h=Math.min(h,p.width,p.height)/2,p=1-Blockly.Bubble.ANCHOR_RADIUS/f,d=b+p*d,e=c+
 p*e,p=b+h*l,n=c+h*k,b=b-h*l,c=c-h*k,k=g+this.arrow_radians_;k>2*Math.PI&&(k-=2*Math.PI);g=Math.sin(k)*f/Blockly.Bubble.ARROW_BEND;f=Math.cos(k)*f/Blockly.Bubble.ARROW_BEND;a.push("M"+p+","+n);a.push("C"+(p+f)+","+(n+g)+" "+d+","+e+" "+d+","+e);a.push("C"+d+","+e+" "+(b+f)+","+(c+g)+" "+b+","+c)}a.push("z");this.bubbleArrow_.setAttribute("d",a.join(" "))};Blockly.Bubble.prototype.setColour=function(a){this.bubbleBack_.setAttribute("fill",a);this.bubbleArrow_.setAttribute("fill",a)};
-Blockly.Bubble.prototype.dispose=function(){Blockly.Bubble.unbindDragEvents_();goog.dom.removeNode(this.bubbleGroup_);this.shape_=this.content_=this.workspace_=this.bubbleGroup_=null};
-// Copyright 2013 Google Inc.  Apache License 2.0
+Blockly.Bubble.prototype.dispose=function(){Blockly.Bubble.unbindDragEvents_();goog.dom.removeNode(this.bubbleGroup_);this.shape_=this.content_=this.workspace_=this.bubbleGroup_=null};/*
+
+ Visual Blocks Editor
+
+ Copyright 2013 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Icon=function(a){this.block_=a};Blockly.Icon.RADIUS=8;Blockly.Icon.prototype.bubble_=null;Blockly.Icon.prototype.iconX_=0;Blockly.Icon.prototype.iconY_=0;Blockly.Icon.prototype.createIcon_=function(){this.iconGroup_||(this.iconGroup_=Blockly.createSvgElement("g",{},null),this.block_.getSvgRoot().appendChild(this.iconGroup_),Blockly.bindEvent_(this.iconGroup_,"mouseup",this,this.iconClick_),this.updateEditable())};
 Blockly.Icon.prototype.dispose=function(){goog.dom.removeNode(this.iconGroup_);this.iconGroup_=null;this.setVisible(!1);this.block_=null};Blockly.Icon.prototype.updateEditable=function(){this.block_.isInFlyout?Blockly.removeClass_(this.iconGroup_,"blocklyIconGroup"):Blockly.addClass_(this.iconGroup_,"blocklyIconGroup")};Blockly.Icon.prototype.isVisible=function(){return!!this.bubble_};Blockly.Icon.prototype.iconClick_=function(a){this.block_.isInFlyout||this.setVisible(!this.isVisible())};
 Blockly.Icon.prototype.updateColour=function(){if(this.isVisible()){var a=Blockly.makeColour(this.block_.getColour());this.bubble_.setColour(a)}};
 Blockly.Icon.prototype.renderIcon=function(a){if(this.block_.isCollapsed())return this.iconGroup_.setAttribute("display","none"),a;this.iconGroup_.setAttribute("display","block");var b=2*Blockly.Icon.RADIUS;Blockly.RTL&&(a-=b);this.iconGroup_.setAttribute("transform","translate("+a+", 5)");this.computeIconLocation();return a=Blockly.RTL?a-Blockly.BlockSvg.SEP_SPACE_X:a+(b+Blockly.BlockSvg.SEP_SPACE_X)};
-Blockly.Icon.prototype.setIconLocation=function(a,b){this.iconX_=a;this.iconY_=b;this.isVisible()&&this.bubble_.setAnchorLocation(a,b)};Blockly.Icon.prototype.computeIconLocation=function(){var a=this.block_.getRelativeToSurfaceXY(),b=Blockly.getRelativeXY_(this.iconGroup_),c=a.x+b.x+Blockly.Icon.RADIUS,a=a.y+b.y+Blockly.Icon.RADIUS;c===this.iconX_&&a===this.iconY_||this.setIconLocation(c,a)};Blockly.Icon.prototype.getIconLocation=function(){return{x:this.iconX_,y:this.iconY_}};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Icon.prototype.setIconLocation=function(a,b){this.iconX_=a;this.iconY_=b;this.isVisible()&&this.bubble_.setAnchorLocation(a,b)};Blockly.Icon.prototype.computeIconLocation=function(){var a=this.block_.getRelativeToSurfaceXY(),b=Blockly.getRelativeXY_(this.iconGroup_),c=a.x+b.x+Blockly.Icon.RADIUS,a=a.y+b.y+Blockly.Icon.RADIUS;c===this.iconX_&&a===this.iconY_||this.setIconLocation(c,a)};Blockly.Icon.prototype.getIconLocation=function(){return{x:this.iconX_,y:this.iconY_}};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Comment=function(a){Blockly.Comment.superClass_.constructor.call(this,a);this.createIcon_()};goog.inherits(Blockly.Comment,Blockly.Icon);Blockly.Comment.prototype.text_="";Blockly.Comment.prototype.width_=160;Blockly.Comment.prototype.height_=80;
 Blockly.Comment.prototype.createIcon_=function(){Blockly.Icon.prototype.createIcon_.call(this);Blockly.createSvgElement("circle",{"class":"blocklyIconShield",r:Blockly.Icon.RADIUS,cx:Blockly.Icon.RADIUS,cy:Blockly.Icon.RADIUS},this.iconGroup_);this.iconMark_=Blockly.createSvgElement("text",{"class":"blocklyIconMark",x:Blockly.Icon.RADIUS,y:2*Blockly.Icon.RADIUS-3},this.iconGroup_);this.iconMark_.appendChild(document.createTextNode("?"))};
 Blockly.Comment.prototype.createEditor_=function(){this.foreignObject_=Blockly.createSvgElement("foreignObject",{x:Blockly.Bubble.BORDER_WIDTH,y:Blockly.Bubble.BORDER_WIDTH},null);var a=document.createElementNS(Blockly.HTML_NS,"body");a.setAttribute("xmlns",Blockly.HTML_NS);a.className="blocklyMinimalBody";this.textarea_=document.createElementNS(Blockly.HTML_NS,"textarea");this.textarea_.className="blocklyCommentTextarea";this.textarea_.setAttribute("dir",Blockly.RTL?"RTL":"LTR");a.appendChild(this.textarea_);
@@ -1530,8 +1615,25 @@ this.foreignObject_.appendChild(a);Blockly.bindEvent_(this.textarea_,"mouseup",t
 Blockly.Comment.prototype.resizeBubble_=function(){var a=this.bubble_.getBubbleSize(),b=2*Blockly.Bubble.BORDER_WIDTH;this.foreignObject_.setAttribute("width",a.width-b);this.foreignObject_.setAttribute("height",a.height-b);this.textarea_.style.width=a.width-b-4+"px";this.textarea_.style.height=a.height-b-4+"px"};
 Blockly.Comment.prototype.setVisible=function(a){if(a!=this.isVisible())if(!this.block_.isEditable()&&!this.textarea_||goog.userAgent.IE)Blockly.Warning.prototype.setVisible.call(this,a);else{var b=this.getText(),c=this.getBubbleSize();a?(this.bubble_=new Blockly.Bubble(this.block_.workspace,this.createEditor_(),this.block_.svgPath_,this.iconX_,this.iconY_,this.width_,this.height_),this.bubble_.registerResizeEvent(this,this.resizeBubble_),this.updateColour(),this.text_=null):(this.bubble_.dispose(),
 this.foreignObject_=this.textarea_=this.bubble_=null);this.setText(b);this.setBubbleSize(c.width,c.height)}};Blockly.Comment.prototype.textareaFocus_=function(a){this.bubble_.promote_();this.textarea_.focus()};Blockly.Comment.prototype.getBubbleSize=function(){return this.isVisible()?this.bubble_.getBubbleSize():{width:this.width_,height:this.height_}};Blockly.Comment.prototype.setBubbleSize=function(a,b){this.textarea_?this.bubble_.setBubbleSize(a,b):(this.width_=a,this.height_=b)};
-Blockly.Comment.prototype.getText=function(){return this.textarea_?this.textarea_.value:this.text_};Blockly.Comment.prototype.setText=function(a){this.textarea_?this.textarea_.value=a:this.text_=a};Blockly.Comment.prototype.dispose=function(){this.block_.comment=null;Blockly.Icon.prototype.dispose.call(this)};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Comment.prototype.getText=function(){return this.textarea_?this.textarea_.value:this.text_};Blockly.Comment.prototype.setText=function(a){this.textarea_?this.textarea_.value=a:this.text_=a};Blockly.Comment.prototype.dispose=function(){this.block_.comment=null;Blockly.Icon.prototype.dispose.call(this)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Connection=function(a,b){this.sourceBlock_=a;this.targetConnection=null;this.type=b;this.y_=this.x_=0;this.dbList_=a.workspace.connectionDBList;this.hidden_=!this.dbList_;this.inDB_=!1};
 Blockly.Connection.prototype.dispose=function(){if(this.targetConnection)throw"Disconnect connection before disposing of it.";this.inDB_&&this.dbList_[this.type].removeConnection_(this);Blockly.highlightedConnection_==this&&(Blockly.highlightedConnection_=null);Blockly.localConnection_==this&&(Blockly.localConnection_=null)};Blockly.Connection.prototype.isSuperior=function(){return this.type==Blockly.INPUT_VALUE||this.type==Blockly.NEXT_STATEMENT};
 Blockly.Connection.prototype.connect=function(a){if(this.sourceBlock_==a.sourceBlock_)throw"Attempted to connect a block to itself.";if(this.sourceBlock_.workspace!==a.sourceBlock_.workspace)throw"Blocks are on different workspaces.";if(Blockly.OPPOSITE_TYPE[this.type]!=a.type)throw"Attempt to connect incompatible types.";if(this.type==Blockly.INPUT_VALUE||this.type==Blockly.OUTPUT_VALUE){if(this.targetConnection)throw"Source connection already connected (value).";if(a.targetConnection){var b=a.targetBlock();
@@ -1553,8 +1655,25 @@ Blockly.Connection.prototype.hideAll=function(){this.inDB_&&this.dbList_[this.ty
 Blockly.Connection.prototype.unhideAll=function(){this.dbList_[this.type].addConnection_(this);this.hidden_=!1;var a=[];if(this.type!=Blockly.INPUT_VALUE&&this.type!=Blockly.NEXT_STATEMENT)return a;var b=this.targetBlock();if(b){var c;b.isCollapsed()?(c=[],b.outputConnection&&c.push(b.outputConnection),b.nextConnection&&c.push(b.nextConnection),b.previousConnection&&c.push(b.previousConnection)):c=b.getConnections_(!0);for(var d=0;d<c.length;d++)a.push.apply(a,c[d].unhideAll());0==a.length&&(a[0]=
 b)}return a};Blockly.ConnectionDB=function(){};Blockly.ConnectionDB.prototype=[];Blockly.ConnectionDB.constructor=Blockly.ConnectionDB;Blockly.ConnectionDB.prototype.addConnection_=function(a){if(a.inDB_)throw"Connection already in database.";if(!a.sourceBlock_.isInFlyout){for(var b=0,c=this.length;b<c;){var d=Math.floor((b+c)/2);if(this[d].y_<a.y_)b=d+1;else if(this[d].y_>a.y_)c=d;else{b=d;break}}this.splice(b,0,a);a.inDB_=!0}};
 Blockly.ConnectionDB.prototype.removeConnection_=function(a){if(!a.inDB_)throw"Connection not in database.";a.inDB_=!1;for(var b=0,c=this.length-2,d=c;b<d;)this[d].y_<a.y_?b=d:c=d,d=Math.floor((b+c)/2);for(c=b=d;0<=b&&this[b].y_==a.y_;){if(this[b]==a){this.splice(b,1);return}b--}do{if(this[c]==a){this.splice(c,1);return}c++}while(c<this.length&&this[c].y_==a.y_);throw"Unable to find connection in connectionDB.";};
-Blockly.ConnectionDB.init=function(a){var b=[];b[Blockly.INPUT_VALUE]=new Blockly.ConnectionDB;b[Blockly.OUTPUT_VALUE]=new Blockly.ConnectionDB;b[Blockly.NEXT_STATEMENT]=new Blockly.ConnectionDB;b[Blockly.PREVIOUS_STATEMENT]=new Blockly.ConnectionDB;a.connectionDBList=b};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.ConnectionDB.init=function(a){var b=[];b[Blockly.INPUT_VALUE]=new Blockly.ConnectionDB;b[Blockly.OUTPUT_VALUE]=new Blockly.ConnectionDB;b[Blockly.NEXT_STATEMENT]=new Blockly.ConnectionDB;b[Blockly.PREVIOUS_STATEMENT]=new Blockly.ConnectionDB;a.connectionDBList=b};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Field=function(a){this.size_=new goog.math.Size(0,25);this.setText(a)};Blockly.Field.prototype.sourceBlock_=null;Blockly.Field.prototype.visible_=!0;Blockly.Field.prototype.clone=function(){goog.asserts.fail("There should never be an instance of Field, only its derived classes.")};Blockly.Field.NBSP="\u00a0";Blockly.Field.prototype.EDITABLE=!0;
 Blockly.Field.prototype.init=function(a){this.sourceBlock_||(this.sourceBlock_=a,this.fieldGroup_=Blockly.createSvgElement("g",{},null),this.visible_||(this.fieldGroup_.style.display="none"),this.borderRect_=Blockly.createSvgElement("rect",{rx:4,ry:4,x:-Blockly.BlockSvg.SEP_SPACE_X/2,y:-12,height:16},this.fieldGroup_),this.textElement_=Blockly.createSvgElement("text",{"class":"blocklyText"},this.fieldGroup_),this.updateEditable(),a.getSvgRoot().appendChild(this.fieldGroup_),this.mouseUpWrapper_=Blockly.bindEvent_(this.fieldGroup_,
 "mouseup",this,this.onMouseUp_),this.updateTextNode_())};Blockly.Field.prototype.dispose=function(){this.mouseUpWrapper_&&(Blockly.unbindEvent_(this.mouseUpWrapper_),this.mouseUpWrapper_=null);this.sourceBlock_=null;goog.dom.removeNode(this.fieldGroup_);this.borderRect_=this.textElement_=this.fieldGroup_=null};
@@ -1563,8 +1682,25 @@ Blockly.Field.prototype.setVisible=function(a){if(this.visible_!=a){this.visible
 Blockly.Field.prototype.render_=function(){if(this.visible_&&this.textElement_){try{var a=this.textElement_.getComputedTextLength()}catch(b){a=8*this.textElement_.textContent.length}this.borderRect_&&this.borderRect_.setAttribute("width",a+Blockly.BlockSvg.SEP_SPACE_X)}else a=0;this.size_.width=a};Blockly.Field.prototype.getSize=function(){this.size_.width||this.render_();return this.size_};Blockly.Field.prototype.getText=function(){return this.text_};
 Blockly.Field.prototype.setText=function(a){null!==a&&a!==this.text_&&(this.text_=a,this.updateTextNode_(),this.sourceBlock_&&this.sourceBlock_.rendered&&(this.sourceBlock_.render(),this.sourceBlock_.bumpNeighbours_(),this.sourceBlock_.workspace.fireChangeEvent()))};
 Blockly.Field.prototype.updateTextNode_=function(){if(this.textElement_){var a=this.text_;goog.dom.removeChildren(this.textElement_);a=a.replace(/\s/g,Blockly.Field.NBSP);Blockly.RTL&&a&&(a+="\u200f");a||(a=Blockly.Field.NBSP);a=document.createTextNode(a);this.textElement_.appendChild(a);this.size_.width=0}};Blockly.Field.prototype.getValue=function(){return this.getText()};Blockly.Field.prototype.setValue=function(a){this.setText(a)};
-Blockly.Field.prototype.onMouseUp_=function(a){if(!goog.userAgent.IPHONE&&!goog.userAgent.IPAD||goog.userAgent.isVersionOrHigher("537.51.2")||0===a.layerX||0===a.layerY)Blockly.isRightButton(a)||2!=Blockly.dragMode_&&this.sourceBlock_.isEditable()&&this.showEditor_()};Blockly.Field.prototype.setTooltip=function(a){};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Field.prototype.onMouseUp_=function(a){if(!goog.userAgent.IPHONE&&!goog.userAgent.IPAD||goog.userAgent.isVersionOrHigher("537.51.2")||0===a.layerX||0===a.layerY)Blockly.isRightButton(a)||2!=Blockly.dragMode_&&this.sourceBlock_.isEditable()&&this.showEditor_()};Blockly.Field.prototype.setTooltip=function(a){};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Tooltip={};Blockly.Tooltip.visible=!1;Blockly.Tooltip.LIMIT=50;Blockly.Tooltip.mouseOutPid_=0;Blockly.Tooltip.showPid_=0;Blockly.Tooltip.lastXY_={x:0,y:0};Blockly.Tooltip.element_=null;Blockly.Tooltip.poisonedElement_=null;Blockly.Tooltip.svgGroup_=null;Blockly.Tooltip.svgText_=null;Blockly.Tooltip.svgBackground_=null;Blockly.Tooltip.svgShadow_=null;Blockly.Tooltip.OFFSET_X=0;Blockly.Tooltip.OFFSET_Y=10;Blockly.Tooltip.RADIUS_OK=10;Blockly.Tooltip.HOVER_MS=1E3;Blockly.Tooltip.MARGINS=5;
 Blockly.Tooltip.createDom=function(){var a=Blockly.createSvgElement("g",{"class":"blocklyHidden"},null);Blockly.Tooltip.svgGroup_=a;Blockly.Tooltip.svgShadow_=Blockly.createSvgElement("rect",{"class":"blocklyTooltipShadow",x:2,y:2},a);Blockly.Tooltip.svgBackground_=Blockly.createSvgElement("rect",{"class":"blocklyTooltipBackground"},a);Blockly.Tooltip.svgText_=Blockly.createSvgElement("text",{"class":"blocklyTooltipText"},a);return a};
 Blockly.Tooltip.bindMouseEvents=function(a){Blockly.bindEvent_(a,"mouseover",null,Blockly.Tooltip.onMouseOver_);Blockly.bindEvent_(a,"mouseout",null,Blockly.Tooltip.onMouseOut_);Blockly.bindEvent_(a,"mousemove",null,Blockly.Tooltip.onMouseMove_)};Blockly.Tooltip.onMouseOver_=function(a){for(a=a.target;!goog.isString(a.tooltip)&&!goog.isFunction(a.tooltip);)a=a.tooltip;Blockly.Tooltip.element_!=a&&(Blockly.Tooltip.hide(),Blockly.Tooltip.poisonedElement_=null,Blockly.Tooltip.element_=a);clearTimeout(Blockly.Tooltip.mouseOutPid_)};
@@ -1576,18 +1712,69 @@ Blockly.Tooltip.show_=function(){Blockly.Tooltip.poisonedElement_=Blockly.Toolti
 c=Blockly.Tooltip.lastXY_.x;c=Blockly.RTL?c-(Blockly.Tooltip.OFFSET_X+b):c+Blockly.Tooltip.OFFSET_X;b=Blockly.Tooltip.lastXY_.y+Blockly.Tooltip.OFFSET_Y;d=Blockly.svgSize();b+a.height>d.height&&(b-=a.height+2*Blockly.Tooltip.OFFSET_Y);Blockly.RTL?c=Math.max(Blockly.Tooltip.MARGINS,c):c+a.width>d.width-2*Blockly.Tooltip.MARGINS&&(c=d.width-a.width-2*Blockly.Tooltip.MARGINS);Blockly.Tooltip.svgGroup_.setAttribute("transform","translate("+c+","+b+")")}};
 Blockly.Tooltip.wrap_=function(a,b){if(a.length<=b)return a;for(var c=a.trim().split(/\s+/),d=0;d<c.length;d++)c[d].length>b&&(b=c[d].length);var e,d=-Infinity,f,g=1;do{e=d;f=a;for(var h=[],k=c.length/g,l=1,d=0;d<c.length-1;d++)l<(d+1.5)/k?(l++,h[d]=!0):h[d]=!1;h=Blockly.Tooltip.wrapMutate_(c,h,b);d=Blockly.Tooltip.wrapScore_(c,h,b);a=Blockly.Tooltip.wrapToText_(c,h);g++}while(d>e);return f};
 Blockly.Tooltip.wrapScore_=function(a,b,c){for(var d=[0],e=[],f=0;f<a.length;f++)d[d.length-1]+=a[f].length,!0===b[f]?(d.push(0),e.push(a[f].charAt(a[f].length-1))):!1===b[f]&&d[d.length-1]++;a=Math.max.apply(Math,d);for(f=b=0;f<d.length;f++)b-=2*Math.pow(Math.abs(c-d[f]),1.5),b-=Math.pow(a-d[f],1.5),-1!=".?!".indexOf(e[f])?b+=c/3:-1!=",;)]}".indexOf(e[f])&&(b+=c/4);1<d.length&&d[d.length-1]<=d[d.length-2]&&(b+=.5);return b};
-Blockly.Tooltip.wrapMutate_=function(a,b,c){for(var d=Blockly.Tooltip.wrapScore_(a,b,c),e,f=0;f<b.length-1;f++)if(b[f]!=b[f+1]){var g=[].concat(b);g[f]=!g[f];g[f+1]=!g[f+1];var h=Blockly.Tooltip.wrapScore_(a,g,c);h>d&&(d=h,e=g)}return e?Blockly.Tooltip.wrapMutate_(a,e,c):b};Blockly.Tooltip.wrapToText_=function(a,b){for(var c=[],d=0;d<a.length;d++)c.push(a[d]),void 0!==b[d]&&c.push(b[d]?"\n":" ");return c.join("")};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.Tooltip.wrapMutate_=function(a,b,c){for(var d=Blockly.Tooltip.wrapScore_(a,b,c),e,f=0;f<b.length-1;f++)if(b[f]!=b[f+1]){var g=[].concat(b);g[f]=!g[f];g[f+1]=!g[f+1];var h=Blockly.Tooltip.wrapScore_(a,g,c);h>d&&(d=h,e=g)}return e?Blockly.Tooltip.wrapMutate_(a,e,c):b};Blockly.Tooltip.wrapToText_=function(a,b){for(var c=[],d=0;d<a.length;d++)c.push(a[d]),void 0!==b[d]&&c.push(b[d]?"\n":" ");return c.join("")};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldLabel=function(a){this.sourceBlock_=null;this.size_=new goog.math.Size(0,25);this.setText(a)};goog.inherits(Blockly.FieldLabel,Blockly.Field);Blockly.FieldLabel.prototype.clone=function(){return new Blockly.FieldLabel(this.getText())};Blockly.FieldLabel.prototype.EDITABLE=!1;
 Blockly.FieldLabel.prototype.init=function(a){this.sourceBlock_||(this.sourceBlock_=a,this.textElement_=Blockly.createSvgElement("text",{"class":"blocklyText"},null),this.visible_||(this.textElement_.style.display="none"),a.getSvgRoot().appendChild(this.textElement_),this.textElement_.tooltip=this.sourceBlock_,Blockly.Tooltip.bindMouseEvents(this.textElement_),this.updateTextNode_())};Blockly.FieldLabel.prototype.dispose=function(){goog.dom.removeNode(this.textElement_);this.textElement_=null};
-Blockly.FieldLabel.prototype.getSvgRoot=function(){return this.textElement_};Blockly.FieldLabel.prototype.setTooltip=function(a){this.textElement_.tooltip=a};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.FieldLabel.prototype.getSvgRoot=function(){return this.textElement_};Blockly.FieldLabel.prototype.setTooltip=function(a){this.textElement_.tooltip=a};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Input=function(a,b,c,d){this.type=a;this.name=b;this.sourceBlock_=c;this.connection=d;this.fieldRow=[];this.align=Blockly.ALIGN_LEFT;this.visible_=!0};
 Blockly.Input.prototype.appendField=function(a,b){if(!a&&!b)return this;goog.isString(a)&&(a=new Blockly.FieldLabel(a));this.sourceBlock_.rendered&&a.init(this.sourceBlock_);a.name=b;a.prefixField&&this.appendField(a.prefixField);this.fieldRow.push(a);a.suffixField&&this.appendField(a.suffixField);this.sourceBlock_.rendered&&(this.sourceBlock_.render(),this.sourceBlock_.bumpNeighbours_());return this};
 Blockly.Input.prototype.appendTitle=function(a,b){console.log("Deprecated call to appendTitle, use appendField instead.");return this.appendField(a,b)};Blockly.Input.prototype.removeField=function(a){for(var b=0,c;c=this.fieldRow[b];b++)if(c.name===a){c.dispose();this.fieldRow.splice(b,1);this.sourceBlock_.rendered&&(this.sourceBlock_.render(),this.sourceBlock_.bumpNeighbours_());return}goog.asserts.fail('Field "%s" not found.',a)};Blockly.Input.prototype.isVisible=function(){return this.visible_};
 Blockly.Input.prototype.setVisible=function(a){var b=[];if(this.visible_==a)return b;for(var c=(this.visible_=a)?"block":"none",d=0,e;e=this.fieldRow[d];d++)e.setVisible(a);this.connection&&(a?b=this.connection.unhideAll():this.connection.hideAll(),d=this.connection.targetBlock())&&(d.getSvgRoot().style.display=c,a||(d.rendered=!1));return b};Blockly.Input.prototype.setCheck=function(a){if(!this.connection)throw"This input does not have a connection.";this.connection.setCheck(a);return this};
-Blockly.Input.prototype.setAlign=function(a){this.align=a;this.sourceBlock_.rendered&&this.sourceBlock_.render();return this};Blockly.Input.prototype.init=function(){for(var a=0;a<this.fieldRow.length;a++)this.fieldRow[a].init(this.sourceBlock_)};Blockly.Input.prototype.dispose=function(){for(var a=0,b;b=this.fieldRow[a];a++)b.dispose();this.connection&&this.connection.dispose();this.sourceBlock_=null};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Input.prototype.setAlign=function(a){this.align=a;this.sourceBlock_.rendered&&this.sourceBlock_.render();return this};Blockly.Input.prototype.init=function(){for(var a=0;a<this.fieldRow.length;a++)this.fieldRow[a].init(this.sourceBlock_)};Blockly.Input.prototype.dispose=function(){for(var a=0,b;b=this.fieldRow[a];a++)b.dispose();this.connection&&this.connection.dispose();this.sourceBlock_=null};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.ScrollbarPair=function(a){this.workspace_=a;this.oldHostMetrics_=null;this.hScroll=new Blockly.Scrollbar(a,!0,!0);this.vScroll=new Blockly.Scrollbar(a,!1,!0);this.corner_=Blockly.createSvgElement("rect",{height:Blockly.Scrollbar.scrollbarThickness,width:Blockly.Scrollbar.scrollbarThickness,style:"fill: #fff"},null);Blockly.Scrollbar.insertAfter_(this.corner_,a.getBubbleCanvas())};
 Blockly.ScrollbarPair.prototype.dispose=function(){Blockly.unbindEvent_(this.onResizeWrapper_);this.onResizeWrapper_=null;goog.dom.removeNode(this.corner_);this.oldHostMetrics_=this.workspace_=this.corner_=null;this.hScroll.dispose();this.hScroll=null;this.vScroll.dispose();this.vScroll=null};
 Blockly.ScrollbarPair.prototype.resize=function(){var a=this.workspace_.getMetrics();if(a){var b=!1,c=!1;this.oldHostMetrics_&&this.oldHostMetrics_.viewWidth==a.viewWidth&&this.oldHostMetrics_.viewHeight==a.viewHeight&&this.oldHostMetrics_.absoluteTop==a.absoluteTop&&this.oldHostMetrics_.absoluteLeft==a.absoluteLeft?(this.oldHostMetrics_&&this.oldHostMetrics_.contentWidth==a.contentWidth&&this.oldHostMetrics_.viewLeft==a.viewLeft&&this.oldHostMetrics_.contentLeft==a.contentLeft||(b=!0),this.oldHostMetrics_&&
@@ -1607,8 +1794,25 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_=function(a){this.svgKnob_.setAttrib
 Blockly.Scrollbar.prototype.onMouseUpKnob_=function(){Blockly.removeAllRanges();Blockly.hideChaff(!0);Blockly.Scrollbar.onMouseUpWrapper_&&(Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_),Blockly.Scrollbar.onMouseUpWrapper_=null);Blockly.Scrollbar.onMouseMoveWrapper_&&(Blockly.unbindEvent_(Blockly.Scrollbar.onMouseMoveWrapper_),Blockly.Scrollbar.onMouseMoveWrapper_=null)};
 Blockly.Scrollbar.prototype.constrainKnob_=function(a){if(0>=a||isNaN(a))a=0;else{var b=this.horizontal_?"width":"height",c=parseFloat(this.svgBackground_.getAttribute(b)),b=parseFloat(this.svgKnob_.getAttribute(b));a=Math.min(a,c-b)}return a};
 Blockly.Scrollbar.prototype.onScroll_=function(){var a=parseFloat(this.svgKnob_.getAttribute(this.horizontal_?"x":"y")),b=parseFloat(this.svgBackground_.getAttribute(this.horizontal_?"width":"height")),a=a/b;isNaN(a)&&(a=0);b={};this.horizontal_?b.x=a:b.y=a;this.workspace_.setMetrics(b)};Blockly.Scrollbar.prototype.set=function(a){this.svgKnob_.setAttribute(this.horizontal_?"x":"y",a*this.ratio_);this.onScroll_()};
-Blockly.Scrollbar.insertAfter_=function(a,b){var c=b.nextSibling,d=b.parentNode;if(!d)throw"Reference node has no parent.";c?d.insertBefore(a,c):d.appendChild(a)};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Scrollbar.insertAfter_=function(a,b){var c=b.nextSibling,d=b.parentNode;if(!d)throw"Reference node has no parent.";c?d.insertBefore(a,c):d.appendChild(a)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Trashcan=function(a){this.workspace_=a};Blockly.Trashcan.prototype.SPRITE_URL_="media/sprites.png";Blockly.Trashcan.prototype.LID_URL_="media/trashlid.png";Blockly.Trashcan.prototype.WIDTH_=47;Blockly.Trashcan.prototype.BODY_HEIGHT_=45;Blockly.Trashcan.prototype.LID_HEIGHT_=15;Blockly.Trashcan.prototype.MARGIN_BOTTOM_=35;Blockly.Trashcan.prototype.MARGIN_SIDE_=35;Blockly.Trashcan.prototype.MARGIN_HOTSPOT_=25;Blockly.Trashcan.prototype.isOpen=!1;Blockly.Trashcan.prototype.svgGroup_=null;
 Blockly.Trashcan.prototype.svgLid_=null;Blockly.Trashcan.prototype.lidTask_=0;Blockly.Trashcan.prototype.lidOpen_=0;Blockly.Trashcan.prototype.left_=0;Blockly.Trashcan.prototype.top_=0;
 Blockly.Trashcan.prototype.createDom=function(){this.svgGroup_=Blockly.createSvgElement("g",{filter:"url(#blocklyTrashcanShadowFilter)"},null);var a=Blockly.createSvgElement("clipPath",{id:"blocklyTrashBodyClipPath"},this.svgGroup_);Blockly.createSvgElement("rect",{width:this.WIDTH_,height:this.BODY_HEIGHT_,y:this.LID_HEIGHT_},a);Blockly.createSvgElement("image",{width:Blockly.SPRITE.width,height:Blockly.SPRITE.height,y:-32,"clip-path":"url(#blocklyTrashBodyClipPath)"},this.svgGroup_).setAttributeNS("http://www.w3.org/1999/xlink",
@@ -1616,8 +1820,25 @@ Blockly.Trashcan.prototype.createDom=function(){this.svgGroup_=Blockly.createSvg
 return this.svgGroup_};Blockly.Trashcan.prototype.init=function(){this.setOpen_(!1);this.position_();Blockly.bindEvent_(window,"resize",this,this.position_)};Blockly.Trashcan.prototype.dispose=function(){this.svgGroup_&&(goog.dom.removeNode(this.svgGroup_),this.svgGroup_=null);this.workspace_=this.svgLid_=null;goog.Timer.clear(this.lidTask_)};
 Blockly.Trashcan.prototype.position_=function(){var a=this.workspace_.getMetrics();a&&(this.left_=Blockly.RTL?this.MARGIN_SIDE_:a.viewWidth+a.absoluteLeft-this.WIDTH_-this.MARGIN_SIDE_,this.top_=a.viewHeight+a.absoluteTop-(this.BODY_HEIGHT_+this.LID_HEIGHT_)-this.MARGIN_BOTTOM_,this.svgGroup_.setAttribute("transform","translate("+this.left_+","+this.top_+")"))};
 Blockly.Trashcan.prototype.getRect=function(){var a=Blockly.getSvgXY_(this.svgGroup_);return new goog.math.Rect(a.x-this.MARGIN_HOTSPOT_,a.y-this.MARGIN_HOTSPOT_,this.WIDTH_+2*this.MARGIN_HOTSPOT_,this.BODY_HEIGHT_+this.LID_HEIGHT_+2*this.MARGIN_HOTSPOT_)};Blockly.Trashcan.prototype.setOpen_=function(a){this.isOpen!=a&&(goog.Timer.clear(this.lidTask_),this.isOpen=a,this.animateLid_())};
-Blockly.Trashcan.prototype.animateLid_=function(){this.lidOpen_+=this.isOpen?.2:-.2;this.lidOpen_=goog.math.clamp(this.lidOpen_,0,1);var a=45*this.lidOpen_;this.svgLid_.setAttribute("transform","rotate("+(Blockly.RTL?-a:a)+", "+(Blockly.RTL?4:this.WIDTH_-4)+", "+(this.LID_HEIGHT_-2)+")");a=goog.math.lerp(.2,.4,this.lidOpen_);this.svgGroup_.style.opacity=a;0<this.lidOpen_&&1>this.lidOpen_&&(this.lidTask_=goog.Timer.callOnce(this.animateLid_,20,this))};Blockly.Trashcan.prototype.close=function(){this.setOpen_(!1)};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.Trashcan.prototype.animateLid_=function(){this.lidOpen_+=this.isOpen?.2:-.2;this.lidOpen_=goog.math.clamp(this.lidOpen_,0,1);var a=45*this.lidOpen_;this.svgLid_.setAttribute("transform","rotate("+(Blockly.RTL?-a:a)+", "+(Blockly.RTL?4:this.WIDTH_-4)+", "+(this.LID_HEIGHT_-2)+")");a=goog.math.lerp(.2,.4,this.lidOpen_);this.svgGroup_.style.opacity=a;0<this.lidOpen_&&1>this.lidOpen_&&(this.lidTask_=goog.Timer.callOnce(this.animateLid_,20,this))};Blockly.Trashcan.prototype.close=function(){this.setOpen_(!1)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Xml={};Blockly.Xml.workspaceToDom=function(a){var b;Blockly.RTL&&(b=a.getWidth());var c=goog.dom.createDom("xml");a=a.getTopBlocks(!0);for(var d=0,e;e=a[d];d++){var f=Blockly.Xml.blockToDom_(e);e=e.getRelativeToSurfaceXY();f.setAttribute("x",Blockly.RTL?b-e.x:e.x);f.setAttribute("y",e.y);c.appendChild(f)}return c};
 Blockly.Xml.blockToDom_=function(a){var b=goog.dom.createDom("block");b.setAttribute("type",a.type);b.setAttribute("id",a.id);if(a.mutationToDom){var c=a.mutationToDom();c&&b.appendChild(c)}for(var c=0,d;d=a.inputList[c];c++)for(var e=0,f;f=d.fieldRow[e];e++)if(f.name&&f.EDITABLE){var g=goog.dom.createDom("field",null,f.getValue());g.setAttribute("name",f.name);b.appendChild(g)}if(c=a.getCommentText())c=goog.dom.createDom("comment",null,c),"object"==typeof a.comment&&(c.setAttribute("pinned",a.comment.isVisible()),
 d=a.comment.getBubbleSize(),c.setAttribute("h",d.height),c.setAttribute("w",d.width)),b.appendChild(c);e=!1;for(c=0;d=a.inputList[c];c++){var h;f=!0;d.type!=Blockly.DUMMY_INPUT&&(g=d.connection.targetBlock(),d.type==Blockly.INPUT_VALUE?(h=goog.dom.createDom("value"),e=!0):d.type==Blockly.NEXT_STATEMENT&&(h=goog.dom.createDom("statement")),g&&(h.appendChild(Blockly.Xml.blockToDom_(g)),f=!1),h.setAttribute("name",d.name),f||b.appendChild(h))}e&&b.setAttribute("inline",a.inputsInline);a.isCollapsed()&&
@@ -1631,8 +1852,25 @@ Blockly.Xml.domToBlockHeadless_=function(a,b,c){var d=null,e=b.getAttribute("typ
 k);break;case "value":case "statement":h=d.getInput(k);if(!h)throw"Input "+k+" does not exist in block "+e;if(g&&"block"==g.nodeName.toLowerCase())if(g=Blockly.Xml.domToBlockHeadless_(a,g,c),g.outputConnection)h.connection.connect(g.outputConnection);else if(g.previousConnection)h.connection.connect(g.previousConnection);else throw"Child block does not have output or previous statement.";break;case "next":if(g&&"block"==g.nodeName.toLowerCase()){if(!d.nextConnection)throw"Next statement does not exist.";
 if(d.nextConnection.targetConnection)throw"Next statement is already connected.";g=Blockly.Xml.domToBlockHeadless_(a,g,c);if(!g.previousConnection)throw"Next block does not have previous statement.";d.nextConnection.connect(g.previousConnection)}break;default:console.log("Ignoring unknown tag: "+h.nodeName)}}(a=b.getAttribute("inline"))&&d.setInputsInline("true"==a);(a=b.getAttribute("disabled"))&&d.setDisabled("true"==a);(a=b.getAttribute("deletable"))&&d.setDeletable("true"==a);(a=b.getAttribute("movable"))&&
 d.setMovable("true"==a);(a=b.getAttribute("editable"))&&d.setEditable("true"==a);(b=b.getAttribute("collapsed"))&&d.setCollapsed("true"==b);return d};Blockly.Xml.deleteNext=function(a){for(var b=0,c;c=a.childNodes[b];b++)if("next"==c.nodeName.toLowerCase()){a.removeChild(c);break}};goog.global.Blockly||(goog.global.Blockly={});goog.global.Blockly.Xml||(goog.global.Blockly.Xml={});goog.global.Blockly.Xml.domToText=Blockly.Xml.domToText;goog.global.Blockly.Xml.domToWorkspace=Blockly.Xml.domToWorkspace;
-goog.global.Blockly.Xml.textToDom=Blockly.Xml.textToDom;goog.global.Blockly.Xml.workspaceToDom=Blockly.Xml.workspaceToDom;
-// Copyright 2014 Google Inc.  Apache License 2.0
+goog.global.Blockly.Xml.textToDom=Blockly.Xml.textToDom;goog.global.Blockly.Xml.workspaceToDom=Blockly.Xml.workspaceToDom;/*
+
+ Visual Blocks Editor
+
+ Copyright 2014 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.WorkspaceSvg=function(a,b){Blockly.WorkspaceSvg.superClass_.constructor.call(this);this.getMetrics=a;this.setMetrics=b;Blockly.ConnectionDB.init(this)};goog.inherits(Blockly.WorkspaceSvg,Blockly.Workspace);Blockly.WorkspaceSvg.prototype.rendered=!0;Blockly.WorkspaceSvg.prototype.isFlyout=!1;Blockly.WorkspaceSvg.prototype.dragMode=!1;Blockly.WorkspaceSvg.prototype.scrollX=0;Blockly.WorkspaceSvg.prototype.scrollY=0;Blockly.WorkspaceSvg.prototype.trashcan=null;
 Blockly.WorkspaceSvg.prototype.scrollbar=null;Blockly.WorkspaceSvg.prototype.createDom=function(){this.svgGroup_=Blockly.createSvgElement("g",{},null);this.svgBlockCanvas_=Blockly.createSvgElement("g",{},this.svgGroup_);this.svgBubbleCanvas_=Blockly.createSvgElement("g",{},this.svgGroup_);this.fireChangeEvent();return this.svgGroup_};
 Blockly.WorkspaceSvg.prototype.dispose=function(){this.rendered=!1;Blockly.WorkspaceSvg.superClass_.dispose.call(this);this.svgGroup_&&(goog.dom.removeNode(this.svgGroup_),this.svgGroup_=null);this.svgBubbleCanvas_=this.svgBlockCanvas_=null;this.flyout_&&(this.flyout_.dispose(),this.flyout_=null);this.trashcan&&(this.trashcan.dispose(),this.trashcan=null)};
@@ -1643,8 +1881,25 @@ Blockly.WorkspaceSvg.prototype.highlightBlock=function(a){this.traceOn_&&0!=Bloc
 Blockly.WorkspaceSvg.prototype.paste=function(a){if(!(a.getElementsByTagName("block").length>=this.remainingCapacity())){var b=Blockly.Xml.domToBlock(this,a),c=parseInt(a.getAttribute("x"),10);a=parseInt(a.getAttribute("y"),10);if(!isNaN(c)&&!isNaN(a)){Blockly.RTL&&(c=-c);do for(var d=!1,e=this.getAllBlocks(),f=0,g;g=e[f];f++)g=g.getRelativeToSurfaceXY(),1>=Math.abs(c-g.x)&&1>=Math.abs(a-g.y)&&(c=Blockly.RTL?c-Blockly.SNAP_RADIUS:c+Blockly.SNAP_RADIUS,a+=2*Blockly.SNAP_RADIUS,d=!0);while(d);b.moveBy(c,
 a)}b.select()}};Blockly.WorkspaceSvg.prototype.recordDeleteAreas=function(){this.deleteAreaTrash_=this.trashcan?this.trashcan.getRect():null;this.deleteAreaToolbox_=this.flyout_?this.flyout_.getRect():this.toolbox_?this.toolbox_.getRect():null};
 Blockly.WorkspaceSvg.prototype.isDeleteArea=function(a){a=Blockly.mouseToSvg(a);a=new goog.math.Coordinate(a.x,a.y);if(this.deleteAreaTrash_){if(this.deleteAreaTrash_.contains(a))return this.trashcan.setOpen_(!0),Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE),!0;this.trashcan.setOpen_(!1)}if(this.deleteAreaToolbox_&&this.deleteAreaToolbox_.contains(a))return Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE),!0;Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);return!1};
-Blockly.WorkspaceSvg.prototype.clear=Blockly.WorkspaceSvg.prototype.clear;
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.WorkspaceSvg.prototype.clear=Blockly.WorkspaceSvg.prototype.clear;/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Mutator=function(a){Blockly.Mutator.superClass_.constructor.call(this,null);this.quarkNames_=a};goog.inherits(Blockly.Mutator,Blockly.Icon);Blockly.Mutator.prototype.workspaceWidth_=0;Blockly.Mutator.prototype.workspaceHeight_=0;
 Blockly.Mutator.prototype.createIcon=function(){if(!this.iconMark_){Blockly.Icon.prototype.createIcon_.call(this);var a=Blockly.Icon.RADIUS/2;Blockly.createSvgElement("rect",{"class":"blocklyIconShield",width:4*a,height:4*a,rx:a,ry:a},this.iconGroup_);this.iconMark_=Blockly.createSvgElement("text",{"class":"blocklyIconMark",x:Blockly.Icon.RADIUS,y:2*Blockly.Icon.RADIUS-4},this.iconGroup_);this.iconMark_.appendChild(document.createTextNode("\u2605"))}};
 Blockly.Mutator.prototype.iconClick_=function(a){this.block_.isEditable()&&Blockly.Icon.prototype.iconClick_.call(this,a)};
@@ -1656,13 +1911,47 @@ Blockly.Mutator.prototype.setVisible=function(a){if(a!=this.isVisible())if(a){th
 this.rootBlock_.setMovable(!1);this.rootBlock_.setDeletable(!1);a=2*this.workspace_.flyout_.CORNER_RADIUS;c=this.workspace_.flyout_.width_+a;Blockly.RTL&&(c=-c);this.rootBlock_.moveBy(c,a);this.block_.saveConnections&&(this.block_.saveConnections(this.rootBlock_),this.sourceListener_=Blockly.bindEvent_(this.block_.workspace.getCanvas(),"blocklyWorkspaceChange",this.block_,function(){b.block_.saveConnections(b.rootBlock_)}));this.resizeBubble_();Blockly.bindEvent_(this.workspace_.getCanvas(),"blocklyWorkspaceChange",
 this.block_,function(){b.workspaceChanged_()});this.updateColour()}else this.svgDialog_=null,this.workspace_.dispose(),this.rootBlock_=this.workspace_=null,this.bubble_.dispose(),this.bubble_=null,this.workspaceHeight_=this.workspaceWidth_=0,this.sourceListener_&&(Blockly.unbindEvent_(this.sourceListener_),this.sourceListener_=null)};
 Blockly.Mutator.prototype.workspaceChanged_=function(){if(0==Blockly.dragMode_)for(var a=this.workspace_.getTopBlocks(!1),b=0,c;c=a[b];b++){var d=c.getRelativeToSurfaceXY(),e=c.getHeightWidth();20>d.y+e.height&&c.moveBy(0,20-e.height-d.y)}this.rootBlock_.workspace==this.workspace_&&(a=this.block_.rendered,this.block_.rendered=!1,this.block_.compose(this.rootBlock_),this.block_.rendered=a,this.block_.initSvg(),this.block_.rendered&&this.block_.render(),this.resizeBubble_(),this.block_.workspace.fireChangeEvent())};
-Blockly.Mutator.prototype.getFlyoutMetrics_=function(){var a=0;Blockly.RTL&&(a+=this.workspaceWidth_);return{viewHeight:this.workspaceHeight_,viewWidth:0,absoluteTop:0,absoluteLeft:a}};Blockly.Mutator.prototype.dispose=function(){this.block_.mutator=null;Blockly.Icon.prototype.dispose.call(this)};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.Mutator.prototype.getFlyoutMetrics_=function(){var a=0;Blockly.RTL&&(a+=this.workspaceWidth_);return{viewHeight:this.workspaceHeight_,viewWidth:0,absoluteTop:0,absoluteLeft:a}};Blockly.Mutator.prototype.dispose=function(){this.block_.mutator=null;Blockly.Icon.prototype.dispose.call(this)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Warning=function(a){Blockly.Warning.superClass_.constructor.call(this,a);this.createIcon_()};goog.inherits(Blockly.Warning,Blockly.Icon);Blockly.Warning.textToDom_=function(a){var b=Blockly.createSvgElement("text",{"class":"blocklyText blocklyBubbleText",y:Blockly.Bubble.BORDER_WIDTH},null);a=a.split("\n");for(var c=0;c<a.length;c++){var d=Blockly.createSvgElement("tspan",{dy:"1em",x:Blockly.Bubble.BORDER_WIDTH},b),e=document.createTextNode(a[c]);d.appendChild(e)}return b};
 Blockly.Warning.prototype.text_="";Blockly.Warning.prototype.createIcon_=function(){Blockly.Icon.prototype.createIcon_.call(this);Blockly.createSvgElement("path",{"class":"blocklyIconShield",d:"M 2,15 Q -1,15 0.5,12 L 6.5,1.7 Q 8,-1 9.5,1.7 L 15.5,12 Q 17,15 14,15 z"},this.iconGroup_);this.iconMark_=Blockly.createSvgElement("text",{"class":"blocklyIconMark",x:Blockly.Icon.RADIUS,y:2*Blockly.Icon.RADIUS-3},this.iconGroup_);this.iconMark_.appendChild(document.createTextNode("!"))};
 Blockly.Warning.prototype.setVisible=function(a){if(a!=this.isVisible())if(a){a=Blockly.Warning.textToDom_(this.text_);this.bubble_=new Blockly.Bubble(this.block_.workspace,a,this.block_.svgPath_,this.iconX_,this.iconY_,null,null);if(Blockly.RTL)for(var b=a.getBBox().width,c=0,d;d=a.childNodes[c];c++)d.setAttribute("text-anchor","end"),d.setAttribute("x",b+Blockly.Bubble.BORDER_WIDTH);this.updateColour();a=this.bubble_.getBubbleSize();this.bubble_.setBubbleSize(a.width,a.height)}else this.bubble_.dispose(),
-this.body_=this.bubble_=null};Blockly.Warning.prototype.bodyFocus_=function(a){this.bubble_.promote_()};Blockly.Warning.prototype.setText=function(a){this.text_!=a&&(this.text_=a,this.isVisible()&&(this.setVisible(!1),this.setVisible(!0)))};Blockly.Warning.prototype.dispose=function(){this.block_.warning=null;Blockly.Icon.prototype.dispose.call(this)};
-// Copyright 2011 Google Inc.  Apache License 2.0
+this.body_=this.bubble_=null};Blockly.Warning.prototype.bodyFocus_=function(a){this.bubble_.promote_()};Blockly.Warning.prototype.setText=function(a){this.text_!=a&&(this.text_=a,this.isVisible()&&(this.setVisible(!1),this.setVisible(!0)))};Blockly.Warning.prototype.dispose=function(){this.block_.warning=null;Blockly.Icon.prototype.dispose.call(this)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Block=function(){goog.asserts.assert(0==arguments.length,"Please use Blockly.Block.obtain.")};Blockly.Block.obtain=function(a,b){if(Blockly.Realtime.isEnabled())return Blockly.Realtime.obtainBlock(a,b);var c=a.rendered?new Blockly.BlockSvg:new Blockly.Block;c.initialize(a,b);return c};Blockly.Block.prototype.initialize=function(a,b){this.id=Blockly.Blocks.genUid();a.addTopBlock(this);this.fill(a,b)};
 Blockly.Block.prototype.fill=function(a,b){this.previousConnection=this.nextConnection=this.outputConnection=null;this.inputList=[];this.disabled=this.rendered=this.inputsInline=!1;this.tooltip="";this.contextMenu=!0;this.parentBlock_=null;this.childBlocks_=[];this.editable_=this.movable_=this.deletable_=!0;this.collapsed_=!1;this.comment=null;this.xy_=new goog.math.Coordinate(0,0);this.workspace=a;this.isInFlyout=a.isFlyout;if(b){this.type=b;var c=Blockly.Blocks[b];goog.asserts.assertObject(c,'Error: "%s" is an unknown language block.',
 b);goog.mixin(this,c)}goog.isFunction(this.init)&&this.init()};Blockly.Block.getById=function(a,b){return Blockly.Realtime.isEnabled()?Blockly.Realtime.getBlockById(a):b.getBlockById(a)};
@@ -1695,13 +1984,47 @@ Blockly.Block.prototype.moveInputBefore=function(a,b){if(a!=b){for(var c=-1,d=b?
 Blockly.Block.prototype.moveNumberedInputBefore=function(a,b){goog.asserts.assert(a!=b,"Can't move input to itself.");goog.asserts.assert(a<this.inputList.length,"Input index "+a+" out of bounds.");goog.asserts.assert(b<=this.inputList.length,"Reference input "+b+" out of bounds.");var c=this.inputList[a];this.inputList.splice(a,1);a<b&&b--;this.inputList.splice(b,0,c);this.rendered&&(this.render(),this.bumpNeighbours_())};
 Blockly.Block.prototype.removeInput=function(a,b){for(var c=0,d;d=this.inputList[c];c++)if(d.name==a){d.connection&&d.connection.targetConnection&&d.connection.targetBlock().setParent(null);d.dispose();this.inputList.splice(c,1);this.rendered&&(this.render(),this.bumpNeighbours_());return}b||goog.asserts.fail('Input "%s" not found.',a)};Blockly.Block.prototype.getInput=function(a){for(var b=0,c;c=this.inputList[b];b++)if(c.name==a)return c;return null};
 Blockly.Block.prototype.getInputTargetBlock=function(a){return(a=this.getInput(a))&&a.connection&&a.connection.targetBlock()};Blockly.Block.prototype.getCommentText=function(){return this.comment||""};Blockly.Block.prototype.setCommentText=function(a){this.comment=a};Blockly.Block.prototype.setWarningText=function(a){};Blockly.Block.prototype.setMutator=function(a){};Blockly.Block.prototype.getRelativeToSurfaceXY=function(){return this.xy_};
-Blockly.Block.prototype.moveBy=function(a,b){this.xy_.translate(a,b)};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Block.prototype.moveBy=function(a,b){this.xy_.translate(a,b)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.ContextMenu={};Blockly.ContextMenu.currentBlock=null;
 Blockly.ContextMenu.show=function(a,b){Blockly.WidgetDiv.show(Blockly.ContextMenu,null);if(b.length){for(var c=new goog.ui.Menu,d=0,e;e=b[d];d++){var f=new goog.ui.MenuItem(e.text);c.addChild(f,!0);f.setEnabled(e.enabled);e.enabled&&goog.events.listen(f,goog.ui.Component.EventType.ACTION,function(a){return function(){Blockly.doCommand(a)}}(e.callback))}goog.events.listen(c,goog.ui.Component.EventType.ACTION,Blockly.ContextMenu.hide);e=goog.dom.getViewportSize();f=goog.style.getViewportPageOffset(document);
 c.render(Blockly.WidgetDiv.DIV);var g=c.getElement();Blockly.addClass_(g,"blocklyContextMenu");var h=goog.style.getSize(g),d=a.clientX+f.x,k=a.clientY+f.y;a.clientY+h.height>=e.height&&(k-=h.height);Blockly.RTL?h.width>=a.clientX&&(d+=h.width):a.clientX+h.width>=e.width&&(d-=h.width);Blockly.WidgetDiv.position(d,k,e,f);c.setAllowAutoFocus(!0);setTimeout(function(){g.focus()},1);Blockly.ContextMenu.currentBlock=null}else Blockly.ContextMenu.hide()};
-Blockly.ContextMenu.hide=function(){Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);Blockly.ContextMenu.currentBlock=null};Blockly.ContextMenu.callbackFactory=function(a,b){return function(){var c=Blockly.Xml.domToBlock(a.workspace,b),d=a.getRelativeToSurfaceXY();d.x=Blockly.RTL?d.x-Blockly.SNAP_RADIUS:d.x+Blockly.SNAP_RADIUS;d.y+=2*Blockly.SNAP_RADIUS;c.moveBy(d.x,d.y);c.select()}};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.ContextMenu.hide=function(){Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);Blockly.ContextMenu.currentBlock=null};Blockly.ContextMenu.callbackFactory=function(a,b){return function(){var c=Blockly.Xml.domToBlock(a.workspace,b),d=a.getRelativeToSurfaceXY();d.x=Blockly.RTL?d.x-Blockly.SNAP_RADIUS:d.x+Blockly.SNAP_RADIUS;d.y+=2*Blockly.SNAP_RADIUS;c.moveBy(d.x,d.y);c.select()}};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.BlockSvg=function(){this.svgGroup_=Blockly.createSvgElement("g",{},null);this.svgPathDark_=Blockly.createSvgElement("path",{"class":"blocklyPathDark",transform:"translate(1, 1)"},this.svgGroup_);this.svgPath_=Blockly.createSvgElement("path",{"class":"blocklyPath"},this.svgGroup_);this.svgPathLight_=Blockly.createSvgElement("path",{"class":"blocklyPathLight"},this.svgGroup_);this.svgPath_.tooltip=this;Blockly.Tooltip.bindMouseEvents(this.svgPath_);this.updateMovable()};
 goog.inherits(Blockly.BlockSvg,Blockly.Block);Blockly.BlockSvg.prototype.height=0;Blockly.BlockSvg.prototype.width=0;Blockly.BlockSvg.INLINE=-1;
 Blockly.BlockSvg.prototype.initSvg=function(){goog.asserts.assert(this.workspace.rendered,"Workspace is headless.");for(var a=0,b;b=this.inputList[a];a++)b.init();this.mutator&&this.mutator.createIcon();this.updateColour();Blockly.readOnly||this.eventsInit_||Blockly.bindEvent_(this.getSvgRoot(),"mousedown",this,this.onMouseDown_);goog.isFunction(this.onchange)&&!this.eventsInit_&&Blockly.bindEvent_(this.workspace.getCanvas(),"blocklyWorkspaceChange",this,this.onchange);this.eventsInit_=!0;this.getSvgRoot().parentNode||
@@ -1768,10 +2091,44 @@ b.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR),b.push("H",f.rig
 Blockly.BlockSvg.prototype.renderDrawBottom_=function(a,b,c,d){this.height=d+1;this.nextConnection&&(a.push("H",Blockly.BlockSvg.NOTCH_WIDTH+" "+Blockly.BlockSvg.NOTCH_PATH_RIGHT),this.nextConnection.moveTo(Blockly.RTL?c.x-Blockly.BlockSvg.NOTCH_WIDTH:c.x+Blockly.BlockSvg.NOTCH_WIDTH,c.y+d+1),this.nextConnection.targetConnection&&this.nextConnection.tighten_(),this.height+=4);this.squareBottomLeftCorner_?(a.push("H 0"),Blockly.RTL||b.push("M","1,"+d)):(a.push("H",Blockly.BlockSvg.CORNER_RADIUS),a.push("a",
 Blockly.BlockSvg.CORNER_RADIUS+","+Blockly.BlockSvg.CORNER_RADIUS+" 0 0,1 -"+Blockly.BlockSvg.CORNER_RADIUS+",-"+Blockly.BlockSvg.CORNER_RADIUS),Blockly.RTL||(b.push("M",Blockly.BlockSvg.DISTANCE_45_INSIDE+","+(d-Blockly.BlockSvg.DISTANCE_45_INSIDE)),b.push("A",Blockly.BlockSvg.CORNER_RADIUS-1+","+(Blockly.BlockSvg.CORNER_RADIUS-1)+" 0 0,1 1,"+(d-Blockly.BlockSvg.CORNER_RADIUS))))};
 Blockly.BlockSvg.prototype.renderDrawLeft_=function(a,b,c,d){this.outputConnection?(this.outputConnection.moveTo(c.x,c.y),a.push("V",Blockly.BlockSvg.TAB_HEIGHT),a.push("c 0,-10 -"+Blockly.BlockSvg.TAB_WIDTH+",8 -"+Blockly.BlockSvg.TAB_WIDTH+",-7.5 s "+Blockly.BlockSvg.TAB_WIDTH+",2.5 "+Blockly.BlockSvg.TAB_WIDTH+",-7.5"),Blockly.RTL?(b.push("M",-.3*Blockly.BlockSvg.TAB_WIDTH+",8.9"),b.push("l",-.45*Blockly.BlockSvg.TAB_WIDTH+",-2.1")):(b.push("V",Blockly.BlockSvg.TAB_HEIGHT-1),b.push("m",-.92*Blockly.BlockSvg.TAB_WIDTH+
-",-1 q "+-.19*Blockly.BlockSvg.TAB_WIDTH+",-5.5 0,-11"),b.push("m",.92*Blockly.BlockSvg.TAB_WIDTH+",1 V 1 H 2")),this.width+=Blockly.BlockSvg.TAB_WIDTH):Blockly.RTL||(this.squareTopLeftCorner_?b.push("V",1):b.push("V",Blockly.BlockSvg.CORNER_RADIUS));a.push("z")};
-// Copyright 2013 Google Inc.  Apache License 2.0
-Blockly.Msg={};goog.getMsgOrig=goog.getMsg;goog.getMsg=function(a,b){var c=goog.getMsg.blocklyMsgMap[a];c&&(a=Blockly.Msg[c]);return goog.getMsgOrig(a,b)};goog.getMsg.blocklyMsgMap={Today:"TODAY"};
-// Copyright 2012 Google Inc.  Apache License 2.0
+",-1 q "+-.19*Blockly.BlockSvg.TAB_WIDTH+",-5.5 0,-11"),b.push("m",.92*Blockly.BlockSvg.TAB_WIDTH+",1 V 1 H 2")),this.width+=Blockly.BlockSvg.TAB_WIDTH):Blockly.RTL||(this.squareTopLeftCorner_?b.push("V",1):b.push("V",Blockly.BlockSvg.CORNER_RADIUS));a.push("z")};/*
+
+ Visual Blocks Editor
+
+ Copyright 2013 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+Blockly.Msg={};goog.getMsgOrig=goog.getMsg;goog.getMsg=function(a,b){var c=goog.getMsg.blocklyMsgMap[a];c&&(a=Blockly.Msg[c]);return goog.getMsgOrig(a,b)};goog.getMsg.blocklyMsgMap={Today:"TODAY"};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldTextInput=function(a,b){Blockly.FieldTextInput.superClass_.constructor.call(this,a);this.changeHandler_=b};goog.inherits(Blockly.FieldTextInput,Blockly.Field);Blockly.FieldTextInput.prototype.clone=function(){return new Blockly.FieldTextInput(this.getText(),this.changeHandler_)};Blockly.FieldTextInput.prototype.CURSOR="text";Blockly.FieldTextInput.prototype.dispose=function(){Blockly.WidgetDiv.hideIfOwner(this);Blockly.FieldTextInput.superClass_.dispose.call(this)};
 Blockly.FieldTextInput.prototype.setText=function(a){if(null!==a){if(this.sourceBlock_&&this.changeHandler_){var b=this.changeHandler_(a);null!==b&&void 0!==b&&(a=b)}Blockly.Field.prototype.setText.call(this,a)}};
 Blockly.FieldTextInput.prototype.showEditor_=function(a){var b=a||!1;if(!b&&(goog.userAgent.MOBILE||goog.userAgent.ANDROID||goog.userAgent.IPAD))a=window.prompt(Blockly.Msg.CHANGE_VALUE_TITLE,this.text_),this.sourceBlock_&&this.changeHandler_&&(b=this.changeHandler_(a),void 0!==b&&(a=b)),null!==a&&this.setText(a);else{Blockly.WidgetDiv.show(this,this.widgetDispose_());var c=Blockly.WidgetDiv.DIV;a=goog.dom.createDom("input","blocklyHtmlInput");Blockly.FieldTextInput.htmlInput_=a;c.appendChild(a);
@@ -1780,8 +2137,25 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_=function(a){var b=Blockly.F
 Blockly.FieldTextInput.prototype.validate_=function(){var a=!0;goog.asserts.assertObject(Blockly.FieldTextInput.htmlInput_);var b=Blockly.FieldTextInput.htmlInput_;this.sourceBlock_&&this.changeHandler_&&(a=this.changeHandler_(b.value));null===a?Blockly.addClass_(b,"blocklyInvalidInput"):Blockly.removeClass_(b,"blocklyInvalidInput")};
 Blockly.FieldTextInput.prototype.resizeEditor_=function(){var a=Blockly.WidgetDiv.DIV,b=this.fieldGroup_.getBBox();a.style.width=b.width+"px";b=Blockly.getAbsoluteXY_(this.borderRect_);if(Blockly.RTL){var c=this.borderRect_.getBBox();b.x+=c.width;b.x-=a.offsetWidth}b.y+=1;goog.userAgent.WEBKIT&&(b.y-=3);a.style.left=b.x+"px";a.style.top=b.y+"px"};
 Blockly.FieldTextInput.prototype.widgetDispose_=function(){var a=this;return function(){var b=Blockly.FieldTextInput.htmlInput_,c=b.value;a.sourceBlock_&&a.changeHandler_&&(c=a.changeHandler_(c),null===c&&(c=b.defaultValue));a.setText(c);a.sourceBlock_.rendered&&a.sourceBlock_.render();Blockly.unbindEvent_(b.onKeyDownWrapper_);Blockly.unbindEvent_(b.onKeyUpWrapper_);Blockly.unbindEvent_(b.onKeyPressWrapper_);Blockly.unbindEvent_(b.onWorkspaceChangeWrapper_);Blockly.FieldTextInput.htmlInput_=null;
-Blockly.WidgetDiv.DIV.style.width="auto"}};Blockly.FieldTextInput.numberValidator=function(a){if(null===a)return null;a=a.replace(/O/ig,"0");a=a.replace(/,/g,"");a=parseFloat(a||0);return isNaN(a)?null:String(a)};Blockly.FieldTextInput.nonnegativeIntegerValidator=function(a){(a=Blockly.FieldTextInput.numberValidator(a))&&(a=String(Math.max(0,Math.floor(a))));return a};
-// Copyright 2013 Google Inc.  Apache License 2.0
+Blockly.WidgetDiv.DIV.style.width="auto"}};Blockly.FieldTextInput.numberValidator=function(a){if(null===a)return null;a=a.replace(/O/ig,"0");a=a.replace(/,/g,"");a=parseFloat(a||0);return isNaN(a)?null:String(a)};Blockly.FieldTextInput.nonnegativeIntegerValidator=function(a){(a=Blockly.FieldTextInput.numberValidator(a))&&(a=String(Math.max(0,Math.floor(a))));return a};/*
+
+ Visual Blocks Editor
+
+ Copyright 2013 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldAngle=function(a,b){var c;if(b){var d=this;c=function(a){a=Blockly.FieldAngle.angleValidator.call(d,a);null!==a&&b.call(d,a);return a}}else c=Blockly.FieldAngle.angleValidator;this.symbol_=Blockly.createSvgElement("tspan",{},null);this.symbol_.appendChild(document.createTextNode("\u00b0"));Blockly.FieldAngle.superClass_.constructor.call(this,a,c)};goog.inherits(Blockly.FieldAngle,Blockly.FieldTextInput);
 Blockly.FieldAngle.prototype.clone=function(){return new Blockly.FieldAngle(this.getText(),this.changeHandler_)};Blockly.FieldAngle.ROUND=15;Blockly.FieldAngle.HALF=50;Blockly.FieldAngle.RADIUS=Blockly.FieldAngle.HALF-1;Blockly.FieldAngle.prototype.dispose_=function(){var a=this;return function(){Blockly.FieldAngle.superClass_.dispose_.call(a)();a.gauge_=null;a.clickWrapper_&&Blockly.unbindEvent_(a.clickWrapper_);a.moveWrapper1_&&Blockly.unbindEvent_(a.moveWrapper1_);a.moveWrapper2_&&Blockly.unbindEvent_(a.moveWrapper2_)}};
 Blockly.FieldAngle.prototype.showEditor_=function(){Blockly.FieldAngle.superClass_.showEditor_.call(this,goog.userAgent.MOBILE||goog.userAgent.ANDROID||goog.userAgent.IPAD);var a=Blockly.WidgetDiv.DIV;if(a.firstChild){var a=Blockly.createSvgElement("svg",{xmlns:"http://www.w3.org/2000/svg","xmlns:html":"http://www.w3.org/1999/xhtml","xmlns:xlink":"http://www.w3.org/1999/xlink",version:"1.1",height:2*Blockly.FieldAngle.HALF+"px",width:2*Blockly.FieldAngle.HALF+"px"},a),b=Blockly.createSvgElement("circle",
@@ -1790,25 +2164,93 @@ Blockly.FieldAngle.prototype.showEditor_=function(){Blockly.FieldAngle.superClas
 Blockly.FieldAngle.prototype.onMouseMove=function(a){var b=this.gauge_.ownerSVGElement.getBoundingClientRect(),c=a.clientX-b.left-Blockly.FieldAngle.HALF;a=a.clientY-b.top-Blockly.FieldAngle.HALF;b=Math.atan(-a/c);isNaN(b)||(b=goog.math.toDegrees(b),0>c?b+=180:0<a&&(b+=360),Blockly.FieldAngle.ROUND&&(b=Math.round(b/Blockly.FieldAngle.ROUND)*Blockly.FieldAngle.ROUND),360<=b&&(b-=360),b=String(b),Blockly.FieldTextInput.htmlInput_.value=b,this.setText(b))};
 Blockly.FieldAngle.prototype.setText=function(a){Blockly.FieldAngle.superClass_.setText.call(this,a);this.textElement_&&(this.updateGraph_(),Blockly.RTL?this.textElement_.insertBefore(this.symbol_,this.textElement_.firstChild):this.textElement_.appendChild(this.symbol_),this.size_.width=0)};
 Blockly.FieldAngle.prototype.updateGraph_=function(){if(this.gauge_){var a=goog.math.toRadians(Number(this.getText()));if(isNaN(a))this.gauge_.setAttribute("d","M "+Blockly.FieldAngle.HALF+", "+Blockly.FieldAngle.HALF),this.line_.setAttribute("x2",Blockly.FieldAngle.HALF),this.line_.setAttribute("y2",Blockly.FieldAngle.HALF);else{var b=Blockly.FieldAngle.HALF+Math.cos(a)*Blockly.FieldAngle.RADIUS,c=Blockly.FieldAngle.HALF+Math.sin(a)*-Blockly.FieldAngle.RADIUS;this.gauge_.setAttribute("d","M "+Blockly.FieldAngle.HALF+
-", "+Blockly.FieldAngle.HALF+" h "+Blockly.FieldAngle.RADIUS+" A "+Blockly.FieldAngle.RADIUS+","+Blockly.FieldAngle.RADIUS+" 0 "+(a>Math.PI?1:0)+" 0 "+b+","+c+" z");this.line_.setAttribute("x2",b);this.line_.setAttribute("y2",c)}}};Blockly.FieldAngle.angleValidator=function(a){a=Blockly.FieldTextInput.numberValidator(a);null!==a&&(a%=360,0>a&&(a+=360),a=String(a));return a};
-// Copyright 2012 Google Inc.  Apache License 2.0
+", "+Blockly.FieldAngle.HALF+" h "+Blockly.FieldAngle.RADIUS+" A "+Blockly.FieldAngle.RADIUS+","+Blockly.FieldAngle.RADIUS+" 0 "+(a>Math.PI?1:0)+" 0 "+b+","+c+" z");this.line_.setAttribute("x2",b);this.line_.setAttribute("y2",c)}}};Blockly.FieldAngle.angleValidator=function(a){a=Blockly.FieldTextInput.numberValidator(a);null!==a&&(a%=360,0>a&&(a+=360),a=String(a));return a};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldCheckbox=function(a,b){Blockly.FieldCheckbox.superClass_.constructor.call(this,"");this.changeHandler_=b;this.setValue(a)};goog.inherits(Blockly.FieldCheckbox,Blockly.Field);Blockly.FieldCheckbox.prototype.clone=function(){return new Blockly.FieldCheckbox(this.getValue(),this.changeHandler_)};Blockly.FieldCheckbox.prototype.CURSOR="default";
 Blockly.FieldCheckbox.prototype.init=function(a){this.sourceBlock_||(Blockly.FieldCheckbox.superClass_.init.call(this,a),this.checkElement_=Blockly.createSvgElement("text",{"class":"blocklyText",x:-3},this.fieldGroup_),a=document.createTextNode("\u2713"),this.checkElement_.appendChild(a),this.checkElement_.style.display=this.state_?"block":"none")};Blockly.FieldCheckbox.prototype.getValue=function(){return String(this.state_).toUpperCase()};
-Blockly.FieldCheckbox.prototype.setValue=function(a){a="TRUE"==a;this.state_!==a&&(this.state_=a,this.checkElement_&&(this.checkElement_.style.display=a?"block":"none"),this.sourceBlock_&&this.sourceBlock_.rendered&&this.sourceBlock_.workspace.fireChangeEvent())};Blockly.FieldCheckbox.prototype.showEditor_=function(){var a=!this.state_;if(this.sourceBlock_&&this.changeHandler_){var b=this.changeHandler_(a);void 0!==b&&(a=b)}null!==a&&this.setValue(String(a).toUpperCase())};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.FieldCheckbox.prototype.setValue=function(a){a="TRUE"==a;this.state_!==a&&(this.state_=a,this.checkElement_&&(this.checkElement_.style.display=a?"block":"none"),this.sourceBlock_&&this.sourceBlock_.rendered&&this.sourceBlock_.workspace.fireChangeEvent())};Blockly.FieldCheckbox.prototype.showEditor_=function(){var a=!this.state_;if(this.sourceBlock_&&this.changeHandler_){var b=this.changeHandler_(a);void 0!==b&&(a=b)}null!==a&&this.setValue(String(a).toUpperCase())};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldColour=function(a,b){Blockly.FieldColour.superClass_.constructor.call(this,"\u00a0\u00a0\u00a0");this.changeHandler_=b;this.setValue(a)};goog.inherits(Blockly.FieldColour,Blockly.Field);Blockly.FieldColour.prototype.init=function(a){Blockly.FieldColour.superClass_.init.call(this,a);this.borderRect_.style.fillOpacity=1;this.setValue(this.getValue())};Blockly.FieldColour.prototype.clone=function(){return new Blockly.FieldColour(this.getValue(),this.changeHandler_)};
 Blockly.FieldColour.prototype.CURSOR="default";Blockly.FieldColour.prototype.dispose=function(){Blockly.WidgetDiv.hideIfOwner(this);Blockly.FieldColour.superClass_.dispose.call(this)};Blockly.FieldColour.prototype.getValue=function(){return this.colour_};Blockly.FieldColour.prototype.setValue=function(a){this.colour_=a;this.borderRect_&&(this.borderRect_.style.fill=a);this.sourceBlock_&&this.sourceBlock_.rendered&&(Blockly.Realtime.blockChanged(this.sourceBlock_),this.sourceBlock_.workspace.fireChangeEvent())};
 Blockly.FieldColour.prototype.getText=function(){var a=this.colour_,b=a.match(/^#(.)\1(.)\2(.)\3$/);b&&(a="#"+b[1]+b[2]+b[3]);return a};Blockly.FieldColour.COLOURS=goog.ui.ColorPicker.SIMPLE_GRID_COLORS;Blockly.FieldColour.COLUMNS=7;
 Blockly.FieldColour.prototype.showEditor_=function(){Blockly.WidgetDiv.show(this,Blockly.FieldColour.widgetDispose_);var a=new goog.ui.ColorPicker;a.setSize(Blockly.FieldColour.COLUMNS);a.setColors(Blockly.FieldColour.COLOURS);var b=goog.dom.getViewportSize(),c=goog.style.getViewportPageOffset(document),d=Blockly.getAbsoluteXY_(this.borderRect_),e=this.borderRect_.getBBox();a.render(Blockly.WidgetDiv.DIV);a.setSelectedColor(this.getValue());var f=goog.style.getSize(a.getElement());d.y=d.y+f.height+
 e.height>=b.height+c.y?d.y-(f.height-1):d.y+(e.height-1);Blockly.RTL?(d.x+=e.width,d.x-=f.width,d.x<c.x&&(d.x=c.x)):d.x>b.width+c.x-f.width&&(d.x=b.width+c.x-f.width);Blockly.WidgetDiv.position(d.x,d.y,b,c);var g=this;Blockly.FieldColour.changeEventKey_=goog.events.listen(a,goog.ui.ColorPicker.EventType.CHANGE,function(a){a=a.target.getSelectedColor()||"#000000";Blockly.WidgetDiv.hide();if(g.sourceBlock_&&g.changeHandler_){var b=g.changeHandler_(a);void 0!==b&&(a=b)}null!==a&&g.setValue(a)})};
-Blockly.FieldColour.widgetDispose_=function(){Blockly.FieldColour.changeEventKey_&&goog.events.unlistenByKey(Blockly.FieldColour.changeEventKey_)};
-// Copyright 2015 Google Inc.  Apache License 2.0
+Blockly.FieldColour.widgetDispose_=function(){Blockly.FieldColour.changeEventKey_&&goog.events.unlistenByKey(Blockly.FieldColour.changeEventKey_)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2015 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldDate=function(a,b){a||(a=(new goog.date.Date).toIsoString(!0));Blockly.FieldDate.superClass_.constructor.call(this,a);this.setValue(a);this.changeHandler_=b};goog.inherits(Blockly.FieldDate,Blockly.Field);Blockly.FieldDate.prototype.clone=function(){return new Blockly.FieldDate(this.getValue(),this.changeHandler_)};Blockly.FieldDate.prototype.CURSOR="text";Blockly.FieldDate.prototype.dispose=function(){Blockly.WidgetDiv.hideIfOwner(this);Blockly.FieldDate.superClass_.dispose.call(this)};
 Blockly.FieldDate.prototype.getValue=function(){return this.date_};Blockly.FieldDate.prototype.setValue=function(a){if(this.sourceBlock_&&this.changeHandler_){var b=this.changeHandler_(a);null!==b&&void 0!==b&&(a=b)}this.date_=a;Blockly.Field.prototype.setText.call(this,a)};
 Blockly.FieldDate.prototype.showEditor_=function(){Blockly.WidgetDiv.show(this,Blockly.FieldDate.widgetDispose_);Blockly.FieldDate.loadLanguage_();var a=new goog.ui.DatePicker;a.setAllowNone(!1);a.setShowWeekNum(!1);var b=goog.dom.getViewportSize(),c=goog.style.getViewportPageOffset(document),d=Blockly.getAbsoluteXY_(this.borderRect_),e=this.borderRect_.getBBox();a.render(Blockly.WidgetDiv.DIV);a.setDate(goog.date.fromIsoString(this.getValue()));var f=goog.style.getSize(a.getElement());d.y=d.y+f.height+
 e.height>=b.height+c.y?d.y-(f.height-1):d.y+(e.height-1);Blockly.RTL?(d.x+=e.width,d.x-=f.width,d.x<c.x&&(d.x=c.x)):d.x>b.width+c.x-f.width&&(d.x=b.width+c.x-f.width);Blockly.WidgetDiv.position(d.x,d.y,b,c);var g=this;Blockly.FieldDate.changeEventKey_=goog.events.listen(a,goog.ui.DatePicker.Events.CHANGE,function(a){a=a.date?a.date.toIsoString(!0):"";Blockly.WidgetDiv.hide();if(g.sourceBlock_&&g.changeHandler_){var b=g.changeHandler_(a);void 0!==b&&(a=b)}g.setValue(a)})};
-Blockly.FieldDate.widgetDispose_=function(){Blockly.FieldDate.changeEventKey_&&goog.events.unlistenByKey(Blockly.FieldDate.changeEventKey_)};Blockly.FieldDate.loadLanguage_=function(){var a=/^DateTimeSymbols_(.+)$/,b;for(b in goog.i18n){var c=b.match(a);c&&(c=c[1].toLowerCase().replace("_","."),goog.getObjectByName(c,Blockly.Msg)&&(goog.i18n.DateTimeSymbols=goog.i18n[b]))}};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.FieldDate.widgetDispose_=function(){Blockly.FieldDate.changeEventKey_&&goog.events.unlistenByKey(Blockly.FieldDate.changeEventKey_)};Blockly.FieldDate.loadLanguage_=function(){var a=/^DateTimeSymbols_(.+)$/,b;for(b in goog.i18n){var c=b.match(a);c&&(c=c[1].toLowerCase().replace("_","."),goog.getObjectByName(c,Blockly.Msg)&&(goog.i18n.DateTimeSymbols=goog.i18n[b]))}};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldDropdown=function(a,b){this.menuGenerator_=a;this.changeHandler_=b;this.trimOptions_();var c=this.getOptions_()[0];this.value_=c[1];Blockly.FieldDropdown.superClass_.constructor.call(this,c[0])};goog.inherits(Blockly.FieldDropdown,Blockly.Field);Blockly.FieldDropdown.CHECKMARK_OVERHANG=25;Blockly.FieldDropdown.ARROW_CHAR=goog.userAgent.ANDROID?"\u25bc":"\u25be";Blockly.FieldDropdown.prototype.clone=function(){return new Blockly.FieldDropdown(this.menuGenerator_,this.changeHandler_)};
 Blockly.FieldDropdown.prototype.CURSOR="default";Blockly.FieldDropdown.prototype.init=function(a){this.sourceBlock_||(this.arrow_=Blockly.createSvgElement("tspan",{},null),this.arrow_.appendChild(document.createTextNode(Blockly.RTL?Blockly.FieldDropdown.ARROW_CHAR+" ":" "+Blockly.FieldDropdown.ARROW_CHAR)),Blockly.FieldDropdown.superClass_.init.call(this,a),a=this.text_,this.text_=null,this.setText(a))};
 Blockly.FieldDropdown.prototype.showEditor_=function(){Blockly.WidgetDiv.show(this,null);for(var a=this,b=new goog.ui.Menu,c=this.getOptions_(),d=0;d<c.length;d++){var e=c[d][1],f=new goog.ui.MenuItem(c[d][0]);f.setValue(e);f.setCheckable(!0);b.addChild(f,!0);f.setChecked(e==this.value_)}goog.events.listen(b,goog.ui.Component.EventType.ACTION,function(b){if(b=b.target){b=b.getValue();if(a.sourceBlock_&&a.changeHandler_){var c=a.changeHandler_(b);void 0!==c&&(b=c)}null!==b&&a.setValue(b)}Blockly.WidgetDiv.hideIfOwner(a)});
@@ -1817,42 +2259,161 @@ var h=goog.style.getSize(g);e.y=e.y+h.height+f.height>=c.height+d.y?e.y-h.height
 Blockly.FieldDropdown.prototype.trimOptions_=function(){this.suffixField=this.prefixField=null;var a=this.menuGenerator_;if(goog.isArray(a)&&!(2>a.length)){var b=a.map(function(a){return a[0]}),c=Blockly.shortestStringLength(b),d=Blockly.commonWordPrefix(b,c),e=Blockly.commonWordSuffix(b,c);if((d||e)&&!(c<=d+e)){d&&(this.prefixField=b[0].substring(0,d-1));e&&(this.suffixField=b[0].substr(1-e));b=[];for(c=0;c<a.length;c++){var f=a[c][0],g=a[c][1],f=f.substring(d,f.length-e);b[c]=[f,g]}this.menuGenerator_=
 b}}};Blockly.FieldDropdown.prototype.getOptions_=function(){return goog.isFunction(this.menuGenerator_)?this.menuGenerator_.call(this):this.menuGenerator_};Blockly.FieldDropdown.prototype.getValue=function(){return this.value_};Blockly.FieldDropdown.prototype.setValue=function(a){this.value_=a;for(var b=this.getOptions_(),c=0;c<b.length;c++)if(b[c][1]==a){this.setText(b[c][0]);return}this.setText(a)};
 Blockly.FieldDropdown.prototype.setText=function(a){this.sourceBlock_&&this.arrow_&&(this.arrow_.style.fill=Blockly.makeColour(this.sourceBlock_.getColour()));null!==a&&a!==this.text_&&(this.text_=a,this.updateTextNode_(),this.textElement_&&(Blockly.RTL?this.textElement_.insertBefore(this.arrow_,this.textElement_.firstChild):this.textElement_.appendChild(this.arrow_)),this.sourceBlock_&&this.sourceBlock_.rendered&&(this.sourceBlock_.render(),this.sourceBlock_.bumpNeighbours_(),this.sourceBlock_.workspace.fireChangeEvent()))};
-Blockly.FieldDropdown.prototype.dispose=function(){Blockly.WidgetDiv.hideIfOwner(this);Blockly.FieldDropdown.superClass_.dispose.call(this)};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.FieldDropdown.prototype.dispose=function(){Blockly.WidgetDiv.hideIfOwner(this);Blockly.FieldDropdown.superClass_.dispose.call(this)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldImage=function(a,b,c,d){this.sourceBlock_=null;this.height_=Number(c);this.width_=Number(b);this.size_={height:this.height_+10,width:this.width_};this.text_=d||"";this.setValue(a)};goog.inherits(Blockly.FieldImage,Blockly.Field);Blockly.FieldImage.prototype.clone=function(){return new Blockly.FieldImage(this.getSrc(),this.width_,this.height_,this.getText())};Blockly.FieldImage.prototype.rectElement_=null;Blockly.FieldImage.prototype.EDITABLE=!1;
 Blockly.FieldImage.prototype.init=function(a){if(!this.sourceBlock_){this.sourceBlock_=a;var b=6-Blockly.BlockSvg.FIELD_HEIGHT;this.fieldGroup_=Blockly.createSvgElement("g",{},null);this.imageElement_=Blockly.createSvgElement("image",{height:this.height_+"px",width:this.width_+"px",y:b},this.fieldGroup_);this.setValue(this.src_);goog.userAgent.GECKO&&(this.rectElement_=Blockly.createSvgElement("rect",{height:this.height_+"px",width:this.width_+"px",y:b,"fill-opacity":0},this.fieldGroup_));a.getSvgRoot().appendChild(this.fieldGroup_);
 a=this.rectElement_||this.imageElement_;a.tooltip=this.sourceBlock_;Blockly.Tooltip.bindMouseEvents(a)}};Blockly.FieldImage.prototype.dispose=function(){goog.dom.removeNode(this.fieldGroup_);this.rectElement_=this.imageElement_=this.fieldGroup_=null};Blockly.FieldImage.prototype.setTooltip=function(a){(this.rectElement_||this.imageElement_).tooltip=a};Blockly.FieldImage.prototype.getValue=function(){return this.src_};
-Blockly.FieldImage.prototype.setValue=function(a){null!==a&&(this.src_=a,this.imageElement_&&this.imageElement_.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href",goog.isString(a)?a:""))};Blockly.FieldImage.prototype.setText=function(a){null!==a&&(this.text_=a)};Blockly.FieldImage.prototype.render_=function(){};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.FieldImage.prototype.setValue=function(a){null!==a&&(this.src_=a,this.imageElement_&&this.imageElement_.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href",goog.isString(a)?a:""))};Blockly.FieldImage.prototype.setText=function(a){null!==a&&(this.text_=a)};Blockly.FieldImage.prototype.render_=function(){};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Variables={};Blockly.Variables.NAME_TYPE="VARIABLE";Blockly.Variables.allVariables=function(a){var b;if(a.getDescendants)b=a.getDescendants();else if(a.getAllBlocks)b=a.getAllBlocks();else throw"Not Block or Workspace: "+a;a=Object.create(null);for(var c=0;c<b.length;c++){var d=b[c].getVars;if(d)for(var d=d.call(b[c]),e=0;e<d.length;e++){var f=d[e];f&&(a[f.toLowerCase()]=f)}}b=[];for(var g in a)b.push(a[g]);return b};
 Blockly.Variables.renameVariable=function(a,b,c){c=c.getAllBlocks();for(var d=0;d<c.length;d++){var e=c[d].renameVar;e&&e.call(c[d],a,b)}};
 Blockly.Variables.flyoutCategory=function(a,b,c,d){var e=Blockly.Variables.allVariables(d.targetWorkspace);e.sort(goog.string.caseInsensitiveCompare);e.unshift(null);for(var f=void 0,g=0;g<e.length;g++)if(e[g]!==f){var h=Blockly.Blocks.variables_get?Blockly.Block.obtain(d,"variables_get"):null;h&&h.initSvg();var k=Blockly.Blocks.variables_set?Blockly.Block.obtain(d,"variables_set"):null;k&&k.initSvg();null===e[g]?f=(h||k).getVars()[0]:(h&&h.setFieldValue(e[g],"VAR"),k&&k.setFieldValue(e[g],"VAR"));
-k&&a.push(k);h&&a.push(h);h&&k?b.push(c,3*c):b.push(2*c)}};Blockly.Variables.generateUniqueName=function(a){a=Blockly.Variables.allVariables(a);var b="";if(a.length)for(var c=1,d=0,e="ijkmnopqrstuvwxyzabcdefgh".charAt(d);!b;){for(var f=!1,g=0;g<a.length;g++)if(a[g].toLowerCase()==e){f=!0;break}f?(d++,25==d&&(d=0,c++),e="ijkmnopqrstuvwxyzabcdefgh".charAt(d),1<c&&(e+=c)):b=e}else b="i";return b};
-// Copyright 2012 Google Inc.  Apache License 2.0
+k&&a.push(k);h&&a.push(h);h&&k?b.push(c,3*c):b.push(2*c)}};Blockly.Variables.generateUniqueName=function(a){a=Blockly.Variables.allVariables(a);var b="";if(a.length)for(var c=1,d=0,e="ijkmnopqrstuvwxyzabcdefgh".charAt(d);!b;){for(var f=!1,g=0;g<a.length;g++)if(a[g].toLowerCase()==e){f=!0;break}f?(d++,25==d&&(d=0,c++),e="ijkmnopqrstuvwxyzabcdefgh".charAt(d),1<c&&(e+=c)):b=e}else b="i";return b};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.FieldVariable=function(a,b){var c;if(b){var d=this;c=function(a){var c=Blockly.FieldVariable.dropdownChange.call(d,a);a=void 0===c?a:null===c?d.getValue():c;b.call(d,a);return c}}else c=Blockly.FieldVariable.dropdownChange;Blockly.FieldVariable.superClass_.constructor.call(this,Blockly.FieldVariable.dropdownCreate,c);this.setValue(a||"")};goog.inherits(Blockly.FieldVariable,Blockly.FieldDropdown);
 Blockly.FieldVariable.prototype.init=function(a){this.sourceBlock_||(this.getValue()||this.setValue(Blockly.Variables.generateUniqueName(a.isInFlyout?a.workspace.targetWorkspace:a.workspace)),Blockly.FieldVariable.superClass_.init.call(this,a))};Blockly.FieldVariable.prototype.clone=function(){return new Blockly.FieldVariable(this.getValue(),this.changeHandler_)};Blockly.FieldVariable.prototype.getValue=function(){return this.getText()};
 Blockly.FieldVariable.prototype.setValue=function(a){this.value_=a;this.setText(a)};Blockly.FieldVariable.dropdownCreate=function(){var a=this.sourceBlock_&&this.sourceBlock_.workspace?Blockly.Variables.allVariables(this.sourceBlock_.workspace):[],b=this.getText();b&&-1==a.indexOf(b)&&a.push(b);a.sort(goog.string.caseInsensitiveCompare);a.push(Blockly.Msg.RENAME_VARIABLE);a.push(Blockly.Msg.NEW_VARIABLE);for(var b=[],c=0;c<a.length;c++)b[c]=[a[c],a[c]];return b};
 Blockly.FieldVariable.dropdownChange=function(a){function b(a,b){Blockly.hideChaff();var c=window.prompt(a,b);c&&(c=c.replace(/[\s\xa0]+/g," ").replace(/^ | $/g,""),c==Blockly.Msg.RENAME_VARIABLE||c==Blockly.Msg.NEW_VARIABLE)&&(c=null);return c}var c=this.sourceBlock_.workspace;if(a==Blockly.Msg.RENAME_VARIABLE){var d=this.getText();(a=b(Blockly.Msg.RENAME_VARIABLE_TITLE.replace("%1",d),d))&&Blockly.Variables.renameVariable(d,a,c);return null}if(a==Blockly.Msg.NEW_VARIABLE)return(a=b(Blockly.Msg.NEW_VARIABLE_TITLE,
-""))?(Blockly.Variables.renameVariable(a,a,c),a):null};
-// Copyright 2012 Google Inc.  Apache License 2.0
+""))?(Blockly.Variables.renameVariable(a,a,c),a):null};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Generator=function(a){this.name_=a;this.RESERVED_WORDS_="";this.FUNCTION_NAME_PLACEHOLDER_REGEXP_=new RegExp(this.FUNCTION_NAME_PLACEHOLDER_,"g")};Blockly.Generator.NAME_TYPE="generated_function";Blockly.Generator.prototype.INFINITE_LOOP_TRAP=null;Blockly.Generator.prototype.STATEMENT_PREFIX=null;
 Blockly.Generator.prototype.workspaceToCode=function(a){var b=a||Blockly.mainWorkspace;a=[];this.init(b);for(var b=b.getTopBlocks(!0),c=0,d;d=b[c];c++){var e=this.blockToCode(d);goog.isArray(e)&&(e=e[0]);e&&(d.outputConnection&&this.scrubNakedValue&&(e=this.scrubNakedValue(e)),a.push(e))}a=a.join("\n");a=this.finish(a);a=a.replace(/^\s+\n/,"");a=a.replace(/\n\s+$/,"\n");return a=a.replace(/[ \t]+\n/g,"\n")};Blockly.Generator.prototype.prefixLines=function(a,b){return b+a.replace(/\n(.)/g,"\n"+b+"$1")};
 Blockly.Generator.prototype.allNestedComments=function(a){var b=[];a=a.getDescendants();for(var c=0;c<a.length;c++){var d=a[c].getCommentText();d&&b.push(d)}b.length&&b.push("");return b.join("\n")};
 Blockly.Generator.prototype.blockToCode=function(a){if(!a)return"";if(a.disabled)return this.blockToCode(a.getNextBlock());var b=this[a.type];if(!b)throw'Language "'+this.name_+'" does not know how to generate code for block type "'+a.type+'".';b=b.call(a,a);if(goog.isArray(b))return[this.scrub_(a,b[0]),b[1]];if(goog.isString(b))return this.STATEMENT_PREFIX&&(b=this.STATEMENT_PREFIX.replace(/%1/g,"'"+a.id+"'")+b),this.scrub_(a,b);if(null===b)return"";throw"Invalid code generated: "+b;};
 Blockly.Generator.prototype.valueToCode=function(a,b,c){if(isNaN(c))throw'Expecting valid order from block "'+a.type+'".';a=a.getInputTargetBlock(b);if(!a)return"";var d=this.blockToCode(a);if(""===d)return"";if(!goog.isArray(d))throw'Expecting tuple from value block "'+a.type+'".';b=d[0];d=d[1];if(isNaN(d))throw'Expecting valid order from value block "'+a.type+'".';b&&c<=d&&c!=d&&0!=c&&99!=c&&(b="("+b+")");return b};
 Blockly.Generator.prototype.statementToCode=function(a,b){var c=a.getInputTargetBlock(b),d=this.blockToCode(c);if(!goog.isString(d))throw'Expecting code from statement block "'+c.type+'".';d&&(d=this.prefixLines(d,this.INDENT));return d};Blockly.Generator.prototype.addLoopTrap=function(a,b){this.INFINITE_LOOP_TRAP&&(a=this.INFINITE_LOOP_TRAP.replace(/%1/g,"'"+b+"'")+a);this.STATEMENT_PREFIX&&(a+=this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g,"'"+b+"'"),this.INDENT));return a};
-Blockly.Generator.prototype.INDENT="  ";Blockly.Generator.prototype.addReservedWords=function(a){this.RESERVED_WORDS_+=a+","};Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_="{leCUI8hutHZI4480Dc}";Blockly.Generator.prototype.provideFunction_=function(a,b){if(!this.definitions_[a]){var c=this.variableDB_.getDistinctName(a,this.NAME_TYPE);this.functionNames_[a]=c;this.definitions_[a]=b.join("\n").replace(this.FUNCTION_NAME_PLACEHOLDER_REGEXP_,c)}return this.functionNames_[a]};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.Generator.prototype.INDENT="  ";Blockly.Generator.prototype.addReservedWords=function(a){this.RESERVED_WORDS_+=a+","};Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_="{leCUI8hutHZI4480Dc}";Blockly.Generator.prototype.provideFunction_=function(a,b){if(!this.definitions_[a]){var c=this.variableDB_.getDistinctName(a,this.NAME_TYPE);this.functionNames_[a]=c;this.definitions_[a]=b.join("\n").replace(this.FUNCTION_NAME_PLACEHOLDER_REGEXP_,c)}return this.functionNames_[a]};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Names=function(a){this.reservedDict_=Object.create(null);if(a){a=a.split(",");for(var b=0;b<a.length;b++)this.reservedDict_[a[b]]=!0}this.reset()};Blockly.Names.prototype.reset=function(){this.db_=Object.create(null);this.dbReverse_=Object.create(null)};Blockly.Names.prototype.getName=function(a,b){var c=a.toLowerCase()+"_"+b;if(c in this.db_)return this.db_[c];var d=this.getDistinctName(a,b);return this.db_[c]=d};
-Blockly.Names.prototype.getDistinctName=function(a,b){for(var c=this.safeName_(a),d="";this.dbReverse_[c+d]||c+d in this.reservedDict_;)d=d?d+1:2;c+=d;this.dbReverse_[c]=!0;return c};Blockly.Names.prototype.safeName_=function(a){a?(a=encodeURI(a.replace(/ /g,"_")).replace(/[^\w]/g,"_"),-1!="0123456789".indexOf(a[0])&&(a="my_"+a)):a="unnamed";return a};Blockly.Names.equals=function(a,b){return a.toLowerCase()==b.toLowerCase()};
-// Copyright 2012 Google Inc.  Apache License 2.0
+Blockly.Names.prototype.getDistinctName=function(a,b){for(var c=this.safeName_(a),d="";this.dbReverse_[c+d]||c+d in this.reservedDict_;)d=d?d+1:2;c+=d;this.dbReverse_[c]=!0;return c};Blockly.Names.prototype.safeName_=function(a){a?(a=encodeURI(a.replace(/ /g,"_")).replace(/[^\w]/g,"_"),-1!="0123456789".indexOf(a[0])&&(a="my_"+a)):a="unnamed";return a};Blockly.Names.equals=function(a,b){return a.toLowerCase()==b.toLowerCase()};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Procedures={};Blockly.Procedures.NAME_TYPE="PROCEDURE";Blockly.Procedures.allProcedures=function(a){a=a.getAllBlocks();for(var b=[],c=[],d=0;d<a.length;d++){var e=a[d].getProcedureDef;e&&(e=e.call(a[d]))&&(e[2]?b.push(e):c.push(e))}c.sort(Blockly.Procedures.procTupleComparator_);b.sort(Blockly.Procedures.procTupleComparator_);return[c,b]};Blockly.Procedures.procTupleComparator_=function(a,b){var c=a[0].toLowerCase(),d=b[0].toLowerCase();return c>d?1:c<d?-1:0};
 Blockly.Procedures.findLegalName=function(a,b){if(b.isInFlyout)return a;for(;!Blockly.Procedures.isLegalName(a,b.workspace,b);){var c=a.match(/^(.*?)(\d+)$/);a=c?c[1]+(parseInt(c[2],10)+1):a+"2"}return a};Blockly.Procedures.isLegalName=function(a,b,c){b=b.getAllBlocks();for(var d=0;d<b.length;d++)if(b[d]!=c){var e=b[d].getProcedureDef;if(e&&(e=e.call(b[d]),Blockly.Names.equals(e[0],a)))return!1}return!0};
 Blockly.Procedures.rename=function(a){a=a.replace(/^[\s\xa0]+|[\s\xa0]+$/g,"");a=Blockly.Procedures.findLegalName(a,this.sourceBlock_);for(var b=this.sourceBlock_.workspace.getAllBlocks(),c=0;c<b.length;c++){var d=b[c].renameProcedure;d&&d.call(b[c],this.text_,a)}return a};
 Blockly.Procedures.flyoutCategory=function(a,b,c,d){function e(e,f){for(var k=0;k<e.length;k++){var l=Blockly.Block.obtain(d,f);l.setFieldValue(e[k][0],"NAME");for(var p=[],n=0;n<e[k][1].length;n++)p[n]="ARG"+n;l.setProcedureParameters(e[k][1],p);l.initSvg();a.push(l);b.push(2*c)}}if(Blockly.Blocks.procedures_defnoreturn){var f=Blockly.Block.obtain(d,"procedures_defnoreturn");f.initSvg();a.push(f);b.push(2*c)}Blockly.Blocks.procedures_defreturn&&(f=Blockly.Block.obtain(d,"procedures_defreturn"),f.initSvg(),
 a.push(f),b.push(2*c));Blockly.Blocks.procedures_ifreturn&&(f=Blockly.Block.obtain(d,"procedures_ifreturn"),f.initSvg(),a.push(f),b.push(2*c));b.length&&(b[b.length-1]=3*c);f=Blockly.Procedures.allProcedures(d.targetWorkspace);e(f[0],"procedures_callnoreturn");e(f[1],"procedures_callreturn")};Blockly.Procedures.getCallers=function(a,b){for(var c=[],d=b.getAllBlocks(),e=0;e<d.length;e++){var f=d[e].getProcedureCall;f&&(f=f.call(d[e]))&&Blockly.Names.equals(f,a)&&c.push(d[e])}return c};
-Blockly.Procedures.disposeCallers=function(a,b){for(var c=Blockly.Procedures.getCallers(a,b),d=0;d<c.length;d++)c[d].dispose(!0,!1)};Blockly.Procedures.mutateCallers=function(a,b,c,d){a=Blockly.Procedures.getCallers(a,b);for(b=0;b<a.length;b++)a[b].setProcedureParameters(c,d)};Blockly.Procedures.getDefinition=function(a,b){for(var c=b.getAllBlocks(),d=0;d<c.length;d++){var e=c[d].getProcedureDef;if(e&&(e=e.call(c[d]))&&Blockly.Names.equals(e[0],a))return c[d]}return null};
-// Copyright 2013 Google Inc.  Apache License 2.0
+Blockly.Procedures.disposeCallers=function(a,b){for(var c=Blockly.Procedures.getCallers(a,b),d=0;d<c.length;d++)c[d].dispose(!0,!1)};Blockly.Procedures.mutateCallers=function(a,b,c,d){a=Blockly.Procedures.getCallers(a,b);for(b=0;b<a.length;b++)a[b].setProcedureParameters(c,d)};Blockly.Procedures.getDefinition=function(a,b){for(var c=b.getAllBlocks(),d=0;d<c.length;d++){var e=c[d].getProcedureDef;if(e&&(e=e.call(c[d]))&&Blockly.Names.equals(e[0],a))return c[d]}return null};/*
+
+ Visual Blocks Editor
+
+ Copyright 2013 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 var rtclient={INSTALL_SCOPE:"https://www.googleapis.com/auth/drive.install",FILE_SCOPE:"https://www.googleapis.com/auth/drive.file",APPDATA_SCOPE:"https://www.googleapis.com/auth/drive.appdata",OPENID_SCOPE:"openid",REALTIME_MIMETYPE:"application/vnd.google-apps.drive-sdk",FOLDER_KEY:"folderId",getParams:function(){function a(a){a=a.slice(1).split("&");for(var b=0;b<a.length;b++){var d=a[b].split("=");c[decodeURIComponent(d[0])]=decodeURIComponent(d[1])}}var b=goog.global.location||{},c={},d=b.hash;
 d&&a(d);(b=b.search)&&a(b);return c}};rtclient.params=rtclient.getParams();rtclient.getOption=function(a,b,c){if(a.hasOwnProperty(b))return a[b];void 0===c&&console.error(b+" should be present in the options.");return c};rtclient.Authorizer=function(a){this.clientId=rtclient.getOption(a,"clientId");this.userId=rtclient.params.userId;this.authButton=document.getElementById(rtclient.getOption(a,"authButtonElementId"));this.authDiv=document.getElementById(rtclient.getOption(a,"authDivElementId"))};
 rtclient.Authorizer.prototype.start=function(a){var b=this;gapi.load("auth:client,drive-realtime,drive-share",function(){b.authorize(a)})};
@@ -1866,8 +2427,25 @@ rtclient.RealtimeLoader.prototype.redirectTo=function(a,b){var c=[];a&&c.push("f
 this.handleErrors)};rtclient.RealtimeLoader.prototype.start=function(){var a=this;this.authorizer.start(function(){a.registerTypes&&a.registerTypes();a.afterAuth&&a.afterAuth();a.load()})};
 rtclient.RealtimeLoader.prototype.handleErrors=function(a){a.type==gapi.drive.realtime.ErrorType.TOKEN_REFRESH_REQUIRED?this.authorizer.authorize():a.type==gapi.drive.realtime.ErrorType.CLIENT_ERROR?(alert("An Error happened: "+a.message),window.location.href="/"):a.type==gapi.drive.realtime.ErrorType.NOT_FOUND&&(alert("The file was not found. It does not exist or you do not have read access to the file."),window.location.href="/")};
 rtclient.RealtimeLoader.prototype.load=function(){var a=rtclient.params.fileIds;a&&(a=a.split(","));var b=this.authorizer.userId,b=rtclient.params.state;if(a)for(var c in a)gapi.drive.realtime.load(a[c],this.onFileLoaded,this.initializeModel,this.handleErrors);else{if(b&&(c=rtclient.parseState(b),"open"==c.action)){a=c.ids;b=c.userId;this.redirectTo(a,b);return}this.autoCreate&&this.createNewFileAndRedirect()}};
-rtclient.RealtimeLoader.prototype.createNewFileAndRedirect=function(){var a=this;rtclient.createRealtimeFile(this.defaultTitle,this.newFileMimeType,this.defaultFolderTitle,function(b){b.id?(a.afterCreate&&a.afterCreate(b.id),a.redirectTo([b.id],a.authorizer.userId)):(console.error("Error creating file."),console.error(b))})};
-// Copyright 2014 Google Inc.  Apache License 2.0
+rtclient.RealtimeLoader.prototype.createNewFileAndRedirect=function(){var a=this;rtclient.createRealtimeFile(this.defaultTitle,this.newFileMimeType,this.defaultFolderTitle,function(b){b.id?(a.afterCreate&&a.afterCreate(b.id),a.redirectTo([b.id],a.authorizer.userId)):(console.error("Error creating file."),console.error(b))})};/*
+
+ Visual Blocks Editor
+
+ Copyright 2014 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Realtime={};Blockly.Realtime.enabled_=!1;Blockly.Realtime.document_=null;Blockly.Realtime.model_=null;Blockly.Realtime.sessionId_=null;Blockly.Realtime.initUi_=null;Blockly.Realtime.blocksMap_=null;Blockly.Realtime.withinSync=!1;Blockly.Realtime.realtimeLoader_=null;Blockly.Realtime.chatBoxElementId_=null;Blockly.Realtime.chatBoxInitialText_=null;Blockly.Realtime.withinUndo_=!1;Blockly.Realtime.isEnabled=function(){return Blockly.Realtime.enabled_};Blockly.Realtime.undoElementId_=null;
 Blockly.Realtime.redoElementId_=null;Blockly.Realtime.PROGRESS_URL_="progress.gif";Blockly.Realtime.ANONYMOUS_URL_="anon.jpeg";Blockly.Realtime.initializeModel_=function(a){Blockly.Realtime.model_=a;var b=a.createMap();a.getRoot().set("blocks",b);b=a.createList();a.getRoot().set("topBlocks",b);Blockly.Realtime.chatBoxElementId_&&a.getRoot().set(Blockly.Realtime.chatBoxElementId_,a.createString(Blockly.Realtime.chatBoxInitialText_))};Blockly.Realtime.removeBlock=function(a){Blockly.Realtime.blocksMap_["delete"](a.id.toString())};
 Blockly.Realtime.addTopBlock=function(a){-1==Blockly.Realtime.topBlocks_.indexOf(a)&&Blockly.Realtime.topBlocks_.push(a)};Blockly.Realtime.removeTopBlock=function(a){Blockly.Realtime.topBlocks_.removeValue(a)};Blockly.Realtime.obtainBlock=function(a,b){return Blockly.Realtime.model_.create(Blockly.Block,a,b)};Blockly.Realtime.getBlockById=function(a){return Blockly.Realtime.blocksMap_.get(a)};
@@ -1890,8 +2468,25 @@ Blockly.Realtime.realtimeLoader_.start()};
 Blockly.Realtime.addAuthUi_=function(a){a.style.background="url("+Blockly.pathToMedia+Blockly.Realtime.PROGRESS_URL_+") no-repeat center center";var b=goog.style.getBounds(a),c=goog.dom.createDom("div");c.id=Blockly.Realtime.rtclientOptions_.authDivElementId;var d=goog.dom.createDom("p",null,Blockly.Msg.AUTH);c.appendChild(d);d=goog.dom.createDom("button",null,"Authorize");d.id=Blockly.Realtime.rtclientOptions_.authButtonElementId;c.appendChild(d);a.appendChild(c);c.style.display="none";c.style.position=
 "relative";c.style.textAlign="center";c.style.border="1px solid";c.style.backgroundColor="#f6f9ff";c.style.borderRadius="15px";c.style.boxShadow="10px 10px 5px #888";c.style.width=b.width/3+"px";a=goog.style.getBounds(c);c.style.left=(b.width-a.width)/3+"px";c.style.top=(b.height-a.height)/4+"px";return c};
 Blockly.Realtime.updateCollabUi_=function(){if(Blockly.Realtime.collabElementId){var a=goog.dom.getElement(Blockly.Realtime.collabElementId);goog.dom.removeChildren(a);for(var b=Blockly.Realtime.document_.getCollaborators(),c=0;c<b.length;c++){var d=b[c],e=goog.dom.createDom("img",{src:d.photoUrl||Blockly.pathToMedia+Blockly.Realtime.ANONYMOUS_URL_,alt:d.displayName,title:d.displayName+(d.isMe?" ("+Blockly.Msg.ME+")":"")});e.style.backgroundColor=d.color;goog.dom.appendChild(a,e)}}};
-Blockly.Realtime.onCollaboratorJoined_=function(a){Blockly.Realtime.updateCollabUi_()};Blockly.Realtime.onCollaboratorLeft_=function(a){Blockly.Realtime.updateCollabUi_()};Blockly.Realtime.doCommand=function(a){a()};Blockly.Realtime.genUid=function(a){var b=Blockly.Realtime.sessionId_+"-"+a;return Blockly.Realtime.blocksMap_.has(b)?Blockly.Realtime.genUid("-"+a):b};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Realtime.onCollaboratorJoined_=function(a){Blockly.Realtime.updateCollabUi_()};Blockly.Realtime.onCollaboratorLeft_=function(a){Blockly.Realtime.updateCollabUi_()};Blockly.Realtime.doCommand=function(a){a()};Blockly.Realtime.genUid=function(a){var b=Blockly.Realtime.sessionId_+"-"+a;return Blockly.Realtime.blocksMap_.has(b)?Blockly.Realtime.genUid("-"+a):b};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Flyout=function(){var a=this;this.workspace_=new Blockly.WorkspaceSvg(function(){return a.getMetrics_()},function(b){return a.setMetrics_(b)});this.workspace_.isFlyout=!0;this.eventWrappers_=[];this.height_=this.width_=0;this.buttons_=[];this.listeners_=[]};Blockly.Flyout.prototype.autoClose=!0;Blockly.Flyout.prototype.CORNER_RADIUS=8;
 Blockly.Flyout.prototype.createDom=function(){this.svgGroup_=Blockly.createSvgElement("g",{},null);this.svgBackground_=Blockly.createSvgElement("path",{"class":"blocklyFlyoutBackground"},this.svgGroup_);this.svgGroup_.appendChild(this.workspace_.createDom());return this.svgGroup_};
 Blockly.Flyout.prototype.dispose=function(){this.hide();Blockly.unbindEvent_(this.eventWrappers_);this.eventWrappers_.length=0;this.scrollbar_&&(this.scrollbar_.dispose(),this.scrollbar_=null);this.workspace_=null;this.svgGroup_&&(goog.dom.removeNode(this.svgGroup_),this.svgGroup_=null);this.targetWorkspace_=this.svgBackground_=null};
@@ -1916,8 +2511,25 @@ Blockly.Flyout.prototype.onMouseMoveBlock_=function(a){if("mousemove"==a.type&&1
 Blockly.Flyout.prototype.createBlockFunc_=function(a){var b=this;return function(c){if(!Blockly.isRightButton(c)&&!a.disabled){var d=Blockly.Xml.blockToDom_(a),d=Blockly.Xml.domToBlock(b.targetWorkspace_,d),e=a.getSvgRoot();if(!e)throw"originBlock is not rendered.";var e=Blockly.getSvgXY_(e),f=d.getSvgRoot();if(!f)throw"block is not rendered.";f=Blockly.getSvgXY_(f);d.moveBy(e.x-f.x,e.y-f.y);b.autoClose?b.hide():b.filterForCapacity_();d.onMouseDown_(c)}}};
 Blockly.Flyout.prototype.filterForCapacity_=function(){for(var a=this.targetWorkspace_.remainingCapacity(),b=this.workspace_.getTopBlocks(!1),c=0,d;d=b[c];c++){var e=d.getDescendants().length>a;d.setDisabled(e)}};
 Blockly.Flyout.terminateDrag_=function(){Blockly.Flyout.onMouseUpWrapper_&&(Blockly.unbindEvent_(Blockly.Flyout.onMouseUpWrapper_),Blockly.Flyout.onMouseUpWrapper_=null);Blockly.Flyout.onMouseMoveBlockWrapper_&&(Blockly.unbindEvent_(Blockly.Flyout.onMouseMoveBlockWrapper_),Blockly.Flyout.onMouseMoveBlockWrapper_=null);Blockly.Flyout.onMouseMoveWrapper_&&(Blockly.unbindEvent_(Blockly.Flyout.onMouseMoveWrapper_),Blockly.Flyout.onMouseMoveWrapper_=null);Blockly.Flyout.onMouseUpWrapper_&&(Blockly.unbindEvent_(Blockly.Flyout.onMouseUpWrapper_),
-Blockly.Flyout.onMouseUpWrapper_=null);Blockly.Flyout.startDownEvent_=null;Blockly.Flyout.startBlock_=null;Blockly.Flyout.startFlyout_=null};Blockly.Flyout.prototype.getRect=function(){var a=Blockly.getSvgXY_(this.svgGroup_).x;Blockly.RTL||(a-=1E7);return new goog.math.Rect(a,-1E7,1E7+this.width_,this.height_+2E7)};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.Flyout.onMouseUpWrapper_=null);Blockly.Flyout.startDownEvent_=null;Blockly.Flyout.startBlock_=null;Blockly.Flyout.startFlyout_=null};Blockly.Flyout.prototype.getRect=function(){var a=Blockly.getSvgXY_(this.svgGroup_).x;Blockly.RTL||(a-=1E7);return new goog.math.Rect(a,-1E7,1E7+this.width_,this.height_+2E7)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Toolbox=function(a,b){this.HtmlDiv=goog.dom.createDom("div","blocklyToolboxDiv");this.HtmlDiv.setAttribute("dir",Blockly.RTL?"RTL":"LTR");b.appendChild(this.HtmlDiv);this.flyout_=new Blockly.Flyout;a.appendChild(this.flyout_.createDom());Blockly.bindEvent_(this.HtmlDiv,"mousedown",this,function(a){Blockly.isRightButton(a)||a.target==this.HtmlDiv?Blockly.hideChaff(!1):Blockly.hideChaff(!0)})};Blockly.Toolbox.prototype.width=0;Blockly.Toolbox.prototype.selectedOption_=null;
 Blockly.Toolbox.prototype.CONFIG_={indentWidth:19,cssRoot:"blocklyTreeRoot",cssHideRoot:"blocklyHidden",cssItem:"",cssTreeRow:"blocklyTreeRow",cssItemLabel:"blocklyTreeLabel",cssTreeIcon:"blocklyTreeIcon",cssExpandedFolderIcon:"blocklyTreeIconOpen",cssFileIcon:"blocklyTreeIconNone",cssSelectedRow:"blocklyTreeSelected"};
 Blockly.Toolbox.prototype.init=function(a){this.CONFIG_.cleardotPath=Blockly.pathToMedia+"1x1.gif";this.CONFIG_.cssCollapsedFolderIcon="blocklyTreeIconClosed"+(Blockly.RTL?"Rtl":"Ltr");var b=new Blockly.Toolbox.TreeControl(this,this.CONFIG_);this.tree_=b;b.setShowRootNode(!1);b.setShowLines(!1);b.setShowExpandIcons(!1);b.setSelectedItem(null);this.HtmlDiv.style.display="block";this.flyout_.init(a);this.populate_();b.render(this.HtmlDiv);var c=this;goog.events.listen(window,goog.events.EventType.RESIZE,
@@ -1929,8 +2541,25 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_=function(a){a.preventDef
 Blockly.Toolbox.TreeControl.prototype.setSelectedItem=function(a){this.selectedItem_!=a&&(goog.ui.tree.TreeControl.prototype.setSelectedItem.call(this,a),a&&a.blocks&&a.blocks.length?this.toolbox_.flyout_.show(a.blocks):this.toolbox_.flyout_.hide())};
 Blockly.Toolbox.TreeNode=function(a,b,c,d){goog.ui.tree.TreeNode.call(this,b,c,d);a&&(b=function(){Blockly.fireUiEvent(window,"resize")},goog.events.listen(a.tree_,goog.ui.tree.BaseNode.EventType.EXPAND,b),goog.events.listen(a.tree_,goog.ui.tree.BaseNode.EventType.COLLAPSE,b))};goog.inherits(Blockly.Toolbox.TreeNode,goog.ui.tree.TreeNode);goog.ui.tree.BaseNode.prototype.getExpandIconSafeHtml=function(){return goog.html.SafeHtml.create("span")};
 Blockly.Toolbox.TreeNode.prototype.onMouseDown=function(a){this.hasChildren()&&this.isUserCollapsible_?(this.toggle(),this.select()):this.isSelected()?this.getTree().setSelectedItem(null):this.select();this.updateRow()};Blockly.Toolbox.TreeNode.prototype.onDoubleClick_=function(a){};Blockly.Toolbox.TreeSeparator=function(){Blockly.Toolbox.TreeNode.call(this,null,"",Blockly.Toolbox.TreeSeparator.CONFIG_)};goog.inherits(Blockly.Toolbox.TreeSeparator,Blockly.Toolbox.TreeNode);
-Blockly.Toolbox.TreeSeparator.CONFIG_={cssTreeRow:"blocklyTreeSeparator"};
-// Copyright 2013 Google Inc.  Apache License 2.0
+Blockly.Toolbox.TreeSeparator.CONFIG_={cssTreeRow:"blocklyTreeSeparator"};/*
+
+ Visual Blocks Editor
+
+ Copyright 2013 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.Css={};Blockly.Css.Cursor={OPEN:"handopen",CLOSED:"handclosed",DELETE:"handdelete"};Blockly.Css.currentCursor_="";Blockly.Css.styleSheet_=null;Blockly.Css.mediaPath_="";Blockly.Css.inject=function(){var a=".blocklyDraggable {}\n";Blockly.hasCss&&(a+=Blockly.Css.CONTENT.join("\n"));Blockly.Css.mediaPath_=Blockly.pathToMedia.replace(/[\\\/]$/,"");a=a.replace(/<<<PATH>>>/g,Blockly.Css.mediaPath_);Blockly.Css.styleSheet_=goog.cssom.addCssText(a).sheet;Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN)};
 Blockly.Css.setCursor=function(a){if(!Blockly.readOnly&&Blockly.Css.currentCursor_!=a){Blockly.Css.currentCursor_=a;var b="url("+Blockly.Css.mediaPath_+"/"+a+".cur) "+(a==Blockly.Css.Cursor.OPEN?"8 5":"7 3")+", auto";goog.cssom.replaceCssRule("",".blocklyDraggable {\n  cursor: "+b+";\n}\n",Blockly.Css.styleSheet_,0);for(var c=document.getElementsByClassName("blocklyToolboxDiv"),d=0,e;e=c[d];d++)e.style.cursor=a==Blockly.Css.Cursor.OPEN?"":b;Blockly.svg&&(Blockly.svg.style.cursor=a==Blockly.Css.Cursor.OPEN?
 "":b)}};
@@ -1957,11 +2586,46 @@ Blockly.Css.CONTENT=[".blocklySvg {","  background-color: #fff;","  border: 1px 
 "  color: #ccc !important;","}",".blocklyWidgetDiv .goog-menuitem-disabled .goog-menuitem-icon {","  opacity: 0.3;","  -moz-opacity: 0.3;","  filter: alpha(opacity=30);","}",".blocklyWidgetDiv .goog-menuitem-highlight,",".blocklyWidgetDiv .goog-menuitem-hover {","  background-color: #d6e9f8;","  border-color: #d6e9f8;","  border-style: dotted;","  border-width: 1px 0;","  padding-bottom: 3px;","  padding-top: 3px;","}",".blocklyWidgetDiv .goog-menuitem-checkbox,",".blocklyWidgetDiv .goog-menuitem-icon {",
 "  background-repeat: no-repeat;","  height: 16px;","  left: 6px;","  position: absolute;","  right: auto;","  vertical-align: middle;","  width: 16px;","}",".blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-checkbox,",".blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-icon {","  left: auto;","  right: 6px;","}",".blocklyWidgetDiv .goog-option-selected .goog-menuitem-checkbox,",".blocklyWidgetDiv .goog-option-selected .goog-menuitem-icon {","  background: url(//ssl.gstatic.com/editor/editortoolbar.png) no-repeat -512px 0;",
 "}",".blocklyWidgetDiv .goog-menuitem-accel {","  color: #999;","  direction: ltr;","  left: auto;","  padding: 0 6px;","  position: absolute;","  right: 0;","  text-align: right;","}",".blocklyWidgetDiv .goog-menuitem-rtl .goog-menuitem-accel {","  left: 0;","  right: auto;","  text-align: left;","}",".blocklyWidgetDiv .goog-menuitem-mnemonic-hint {","  text-decoration: underline;","}",".blocklyWidgetDiv .goog-menuitem-mnemonic-separator {","  color: #999;","  font-size: 12px;","  padding-left: 4px;",
-"}",".blocklyWidgetDiv .goog-menuseparator {","  border-top: 1px solid #ccc;","  margin: 4px 0;","  padding: 0;","}",""];
-// Copyright 2013 Google Inc.  Apache License 2.0
+"}",".blocklyWidgetDiv .goog-menuseparator {","  border-top: 1px solid #ccc;","  margin: 4px 0;","  padding: 0;","}",".blocklyArduinoSelector {","  stroke: #CF0000;","  stroke-width: 2;","  fill: #F0F0F0;","  fill-opacity: .8;","}",".blocklyArduinoRect {","  stroke: #CF0000;","  stroke-width: 2;","  fill: #F0F0F0;","  fill-opacity: .8;","}",".blocklyArduinoSelector:hover {","  stroke: #ff9900;","  stroke-width: 2;","  fill: #F0F0F0;","  fill-opacity: 1.0;","}",".blocklyArduinoText {","font-size: 40px;",
+"}",".blocklyArduinoIO {","font-size: 20px;","}",".blocklyLight {","  cursor: default;","  font-family: sans-serif;","  font-size: 11pt;","  fill: #FFFF00;","}",""];/*
+
+ Visual Blocks Editor
+
+ Copyright 2013 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.WidgetDiv={};Blockly.WidgetDiv.DIV=null;Blockly.WidgetDiv.owner_=null;Blockly.WidgetDiv.dispose_=null;Blockly.WidgetDiv.show=function(a,b){Blockly.WidgetDiv.hide();Blockly.WidgetDiv.owner_=a;Blockly.WidgetDiv.dispose_=b;Blockly.WidgetDiv.DIV.style.display="block"};Blockly.WidgetDiv.hide=function(){Blockly.WidgetDiv.owner_&&(Blockly.WidgetDiv.DIV.style.display="none",Blockly.WidgetDiv.dispose_&&Blockly.WidgetDiv.dispose_(),Blockly.WidgetDiv.owner_=null,Blockly.WidgetDiv.dispose_=null,goog.dom.removeChildren(Blockly.WidgetDiv.DIV))};
-Blockly.WidgetDiv.isVisible=function(){return!!Blockly.WidgetDiv.owner_};Blockly.WidgetDiv.hideIfOwner=function(a){Blockly.WidgetDiv.owner_==a&&Blockly.WidgetDiv.hide()};Blockly.WidgetDiv.position=function(a,b,c,d){b<d.y&&(b=d.y);Blockly.RTL?a>c.width+d.x&&(a=c.width+d.x):a<d.x&&(a=d.x);Blockly.WidgetDiv.DIV.style.left=a+"px";Blockly.WidgetDiv.DIV.style.top=b+"px"};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.WidgetDiv.isVisible=function(){return!!Blockly.WidgetDiv.owner_};Blockly.WidgetDiv.hideIfOwner=function(a){Blockly.WidgetDiv.owner_==a&&Blockly.WidgetDiv.hide()};Blockly.WidgetDiv.position=function(a,b,c,d){b<d.y&&(b=d.y);Blockly.RTL?a>c.width+d.x&&(a=c.width+d.x):a<d.x&&(a=d.x);Blockly.WidgetDiv.DIV.style.left=a+"px";Blockly.WidgetDiv.DIV.style.top=b+"px"};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.inject=function(a,b){if(!goog.dom.contains(document,a))throw"Error: container is not in current document.";b&&Blockly.parseOptions_(b);var c=function(){Blockly.createDom_(a);Blockly.init_()};if(Blockly.enableRealtime){var d=document.getElementById("realtime");d&&(d.style.display="block");Blockly.Realtime.startRealtime(c,a,Blockly.realtimeOptions)}else c()};
 Blockly.parseToolboxTree_=function(a){a?("string"!=typeof a&&"undefined"==typeof XSLTProcessor&&(a=a.outerHTML),"string"==typeof a&&(a=Blockly.Xml.textToDom(a))):a=null;return a};
 Blockly.parseOptions_=function(a){var b=!!a.readOnly;if(b)var c=!1,d=!1,e=!1,f=!1,g=!1,h=null;else h=Blockly.parseToolboxTree_(a.toolbox),c=Boolean(h&&h.getElementsByTagName("category").length),d=a.trashcan,void 0===d&&(d=c),e=a.collapse,void 0===e&&(e=c),f=a.comments,void 0===f&&(f=c),g=a.disable,void 0===g&&(g=c);var k=a.scrollbars;void 0===k&&(k=c);var l=a.sounds;void 0===l&&(l=!0);var p=a.css;void 0===p&&(p=!0);var n=!!a.realtime,q=n?a.realtimeOptions:void 0;Blockly.RTL=!!a.rtl;Blockly.collapse=
@@ -1978,8 +2642,25 @@ Blockly.init_=function(){Blockly.bindEvent_(Blockly.svg,"mousedown",null,Blockly
 -1);var a="translate("+Blockly.mainWorkspace.scrollX+", 0)";Blockly.mainWorkspace.getCanvas().setAttribute("transform",a);Blockly.mainWorkspace.getBubbleCanvas().setAttribute("transform",a)}Blockly.hasScrollbars&&(Blockly.mainWorkspace.scrollbar=new Blockly.ScrollbarPair(Blockly.mainWorkspace),Blockly.mainWorkspace.scrollbar.resize());Blockly.mainWorkspace.addTrashcan();if(Blockly.hasSounds){Blockly.loadAudio_([Blockly.pathToMedia+"click.mp3",Blockly.pathToMedia+"click.wav",Blockly.pathToMedia+"click.ogg"],
 "click");Blockly.loadAudio_([Blockly.pathToMedia+"delete.mp3",Blockly.pathToMedia+"delete.ogg",Blockly.pathToMedia+"delete.wav"],"delete");var b=[],a=function(){for(;b.length;)Blockly.unbindEvent_(b.pop());Blockly.preloadAudio_()};b.push(Blockly.bindEvent_(document,"mousemove",null,a));b.push(Blockly.bindEvent_(document,"touchstart",null,a))}};
 Blockly.updateToolbox=function(a){if(a=Blockly.parseToolboxTree_(a)){if(!Blockly.languageTree)throw"Existing toolbox is null.  Can't create new toolbox.";if(a.getElementsByTagName("category").length){if(!Blockly.hasCategories)throw"Existing toolbox has no categories.  Can't change mode.";Blockly.languageTree=a;Blockly.mainWorkspace.toolbox_.populate_()}else{if(Blockly.hasCategories)throw"Existing toolbox has categories.  Can't change mode.";Blockly.languageTree=a;Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes)}}else if(Blockly.languageTree)throw"Can't nullify an existing toolbox.";
-};
-// Copyright 2012 Google Inc.  Apache License 2.0
+};/*
+
+ Visual Blocks Editor
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.utils={};Blockly.addClass_=function(a,b){var c=a.getAttribute("class")||"";-1==(" "+c+" ").indexOf(" "+b+" ")&&(c&&(c+=" "),a.setAttribute("class",c+b))};Blockly.removeClass_=function(a,b){var c=a.getAttribute("class");if(-1!=(" "+c+" ").indexOf(" "+b+" ")){for(var c=c.split(/\s+/),d=0;d<c.length;d++)c[d]&&c[d]!=b||(c.splice(d,1),d--);c.length?a.setAttribute("class",c.join(" ")):a.removeAttribute("class")}};
 Blockly.hasClass_=function(a,b){return-1!=(" "+a.getAttribute("class")+" ").indexOf(" "+b+" ")};Blockly.bindEvent_=function(a,b,c,d){var e=function(a){d.call(c,a)};a.addEventListener(b,e,!1);var f=[[a,b,e]];if(b in Blockly.bindEvent_.TOUCH_MAP)for(var e=function(a){if(1==a.changedTouches.length){var b=a.changedTouches[0];a.clientX=b.clientX;a.clientY=b.clientY}d.call(c,a);a.preventDefault()},g=0,h;h=Blockly.bindEvent_.TOUCH_MAP[b][g];g++)a.addEventListener(h,e,!1),f.push([a,h,e]);return f};
 Blockly.bindEvent_.TOUCH_MAP={};goog.events.BrowserFeature.TOUCH_ENABLED&&(Blockly.bindEvent_.TOUCH_MAP={mousedown:["touchstart"],mousemove:["touchmove"],mouseup:["touchend","touchcancel"]});Blockly.unbindEvent_=function(a){for(;a.length;){var b=a.pop(),c=b[2];b[0].removeEventListener(b[1],c,!1)}return c};
@@ -1989,8 +2670,25 @@ Blockly.getRelativeXY_=function(a){var b={x:0,y:0},c=a.getAttribute("x");c&&(b.x
 Blockly.getAbsoluteXY_=function(a){a=Blockly.getSvgXY_(a);return Blockly.convertCoordinates(a.x,a.y,!1)};Blockly.createSvgElement=function(a,b,c){a=document.createElementNS(Blockly.SVG_NS,a);for(var d in b)a.setAttribute(d,b[d]);document.body.runtimeStyle&&(a.runtimeStyle=a.currentStyle=a.style);c&&c.appendChild(a);return a};Blockly.isRightButton=function(a){return a.ctrlKey&&goog.userAgent.MAC?!0:2==a.button};
 Blockly.convertCoordinates=function(a,b,c){c&&(a-=window.scrollX||window.pageXOffset,b-=window.scrollY||window.pageYOffset);var d=Blockly.svg.createSVGPoint();d.x=a;d.y=b;a=Blockly.svg.getScreenCTM();c&&(a=a.inverse());d=d.matrixTransform(a);c||(d.x+=window.scrollX||window.pageXOffset,d.y+=window.scrollY||window.pageYOffset);return d};Blockly.mouseToSvg=function(a){return Blockly.convertCoordinates(a.clientX+(window.scrollX||window.pageXOffset),a.clientY+(window.scrollY||window.pageYOffset),!0)};
 Blockly.shortestStringLength=function(a){if(!a.length)return 0;for(var b=a[0].length,c=1;c<a.length;c++)b=Math.min(b,a[c].length);return b};Blockly.commonWordPrefix=function(a,b){if(!a.length)return 0;if(1==a.length)return a[0].length;for(var c=0,d=b||Blockly.shortestStringLength(a),e=0;e<d;e++){for(var f=a[0][e],g=1;g<a.length;g++)if(f!=a[g][e])return c;" "==f&&(c=e+1)}for(g=1;g<a.length;g++)if((f=a[g][e])&&" "!=f)return c;return d};
-Blockly.commonWordSuffix=function(a,b){if(!a.length)return 0;if(1==a.length)return a[0].length;for(var c=0,d=b||Blockly.shortestStringLength(a),e=0;e<d;e++){for(var f=a[0].substr(-e-1,1),g=1;g<a.length;g++)if(f!=a[g].substr(-e-1,1))return c;" "==f&&(c=e+1)}for(g=1;g<a.length;g++)if((f=a[g].charAt(a[g].length-e-1))&&" "!=f)return c;return d};Blockly.isNumber=function(a){return!!a.match(/^\s*-?\d+(\.\d+)?\s*$/)};
-// Copyright 2011 Google Inc.  Apache License 2.0
+Blockly.commonWordSuffix=function(a,b){if(!a.length)return 0;if(1==a.length)return a[0].length;for(var c=0,d=b||Blockly.shortestStringLength(a),e=0;e<d;e++){for(var f=a[0].substr(-e-1,1),g=1;g<a.length;g++)if(f!=a[g].substr(-e-1,1))return c;" "==f&&(c=e+1)}for(g=1;g<a.length;g++)if((f=a[g].charAt(a[g].length-e-1))&&" "!=f)return c;return d};Blockly.isNumber=function(a){return!!a.match(/^\s*-?\d+(\.\d+)?\s*$/)};/*
+
+ Visual Blocks Editor
+
+ Copyright 2011 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.pathToMedia="https://blockly-demo.appspot.com/static/media/";Blockly.SVG_NS="http://www.w3.org/2000/svg";Blockly.HTML_NS="http://www.w3.org/1999/xhtml";Blockly.HSV_SATURATION=.45;Blockly.HSV_VALUE=.65;Blockly.SPRITE={width:64,height:92,url:"sprites.png"};Blockly.makeColour=function(a){return goog.color.hsvToHex(a,Blockly.HSV_SATURATION,255*Blockly.HSV_VALUE)};Blockly.INPUT_VALUE=1;Blockly.OUTPUT_VALUE=2;Blockly.NEXT_STATEMENT=3;Blockly.PREVIOUS_STATEMENT=4;Blockly.DUMMY_INPUT=5;
 Blockly.ALIGN_LEFT=-1;Blockly.ALIGN_CENTRE=0;Blockly.ALIGN_RIGHT=1;Blockly.OPPOSITE_TYPE=[];Blockly.OPPOSITE_TYPE[Blockly.INPUT_VALUE]=Blockly.OUTPUT_VALUE;Blockly.OPPOSITE_TYPE[Blockly.OUTPUT_VALUE]=Blockly.INPUT_VALUE;Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT]=Blockly.PREVIOUS_STATEMENT;Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT]=Blockly.NEXT_STATEMENT;Blockly.SOUNDS_=Object.create(null);Blockly.selected=null;Blockly.readOnly=!1;Blockly.highlightedConnection_=null;
 Blockly.localConnection_=null;Blockly.DRAG_RADIUS=5;Blockly.SNAP_RADIUS=20;Blockly.BUMP_DELAY=250;Blockly.COLLAPSE_CHARS=30;Blockly.mainWorkspace=null;Blockly.clipboard_=null;Blockly.dragMode_=0;Blockly.onTouchUpWrapper_=null;Blockly.svgSize=function(){return{width:Blockly.svg.cachedWidth_,height:Blockly.svg.cachedHeight_}};

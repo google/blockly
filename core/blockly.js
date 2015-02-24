@@ -551,10 +551,10 @@ Blockly.removeAllRanges = function() {
  * @private
  */
 Blockly.isTargetInput_ = function(e) {
-  return e.target.type == 'textarea' || e.target.type == 'text' 
-      || e.target.type == 'number' || e.target.type == 'email'
-      || e.target.type == 'password' || e.target.type == 'search'
-      || e.target.type == 'tel' || e.target.type == 'url';
+  return e.target.type == 'textarea' || e.target.type == 'text' ||
+         e.target.type == 'number' || e.target.type == 'email' ||
+         e.target.type == 'password' || e.target.type == 'search' ||
+         e.target.type == 'tel' || e.target.type == 'url';
 };
 
 /**

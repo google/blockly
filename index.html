@@ -54,7 +54,6 @@
     </body>
  
   <script type="text/javascript">
-    // Override Blockly HSV generation to use LightUp Palette.
     Blockly.HSV_SATURATION = 0.60;
     Blockly.HSV_VALUE = 0.84;
 
@@ -72,7 +71,7 @@
             135: GREEN,
             210: BLUE,
             290: RED
-        }
+        };
 
         if (map[saturation]) {
             return map[saturation];
@@ -81,25 +80,57 @@
         }
     };
 
-    // Override Blockly Shadow styles
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySvg {') + 1, 1, '');
+    var colorForId = function(id) {
+        var map = {
+            1: ORANGE,
+            2: PURPLE,
+            3: GREEN,
+            4: BLUE,
+            5: RED,
+            6: ORANGE,
+            7: PURPLE
+        };
+
+        return map[id];
+    }
+
+    var setSelectedItem = Blockly.Toolbox.TreeControl.prototype.setSelectedItem;
+
+
+    Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
+      setSelectedItem.call(this, node);
+
+      if (!node || !node.id_) {
+        return;
+      }
+      this.toolbox_.flyout_.svgBackground_.style.stroke = colorForId(node.id_.substring(1));
+    };
+
+    var FONT = 'font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
+
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySvg {') + 1, 1, 'background-color: #ddddff;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRow {') + 1, 4, 'border-radius: 10px; padding-top: 12px; padding-bottom: 12px; margin-left: 10px; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; text-align: center; color: white; padding-right: 3px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyPathLight {') + 1, 0, 'display: none;');
     Blockly.Css.CONTENT.push('.blocklyPathDark { display: none; }');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: white;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyFlyoutBackground {') + 2, 1, 'fill: darkgray;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: #E56A54; stroke-width: 3px;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyFlyoutBackground {') + 2, 1, 'fill: white; stroke-width: 3px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyHighlightedConnectionPath {') + 2, 1, 'stroke: #E56A54;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRow {') + 2, 1, 'height: 44px; padding-top: 22px; text-align: center; color: white;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeSelected  {') + 1, 1, 'border: 3px solid white !important;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeSelected  {') + 1, 1, 'border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0; padding-right: 0');
+    // Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyText {') + 3, 1, FONT);
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 2, 1, FONT);
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 4, 1, 'font-size: 20px;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyToolboxDiv {') + 1, 1, '');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeIcon {') + 1, 4, '');
 
-    Blockly.Css.CONTENT.push('#\\:1 .blocklyTreeRow {background-color: ' + ORANGE + '; border: 3px solid ' + ORANGE + '}');
-    Blockly.Css.CONTENT.push('#\\:2 .blocklyTreeRow {background-color: ' + PURPLE + '; border: 3px solid ' + PURPLE + '}');
-    Blockly.Css.CONTENT.push('#\\:3 .blocklyTreeRow {background-color: ' + GREEN + '; border: 3px solid ' + GREEN + '}');
-    Blockly.Css.CONTENT.push('#\\:4 .blocklyTreeRow {background-color: ' + BLUE + '; border: 3px solid ' + BLUE + '}');
-    Blockly.Css.CONTENT.push('#\\:5 .blocklyTreeRow {background-color: ' + RED + '; border: 3px solid ' + RED + '}');
-    Blockly.Css.CONTENT.push('#\\:6 .blocklyTreeRow {background-color: ' + ORANGE + '; border: 3px solid ' + ORANGE + '}');
-    Blockly.Css.CONTENT.push('#\\:7 .blocklyTreeRow {background-color: ' + PURPLE + '; border: 3px solid ' + PURPLE + '}');
+    Blockly.Css.CONTENT.push('#\\:1 .blocklyTreeRow {background-color: ' + colorForId(1) + '; border: 3px solid ' + colorForId(1) + '}');
+    Blockly.Css.CONTENT.push('#\\:2 .blocklyTreeRow {background-color: ' + colorForId(2) + '; border: 3px solid ' + colorForId(2) + '}');
+    Blockly.Css.CONTENT.push('#\\:3 .blocklyTreeRow {background-color: ' + colorForId(3) + '; border: 3px solid ' + colorForId(3) + '}');
+    Blockly.Css.CONTENT.push('#\\:4 .blocklyTreeRow {background-color: ' + colorForId(4) + '; border: 3px solid ' + colorForId(4) + '}');
+    Blockly.Css.CONTENT.push('#\\:5 .blocklyTreeRow {background-color: ' + colorForId(5) + '; border: 3px solid ' + colorForId(5) + '}');
+    Blockly.Css.CONTENT.push('#\\:6 .blocklyTreeRow {background-color: ' + colorForId(6) + '; border: 3px solid ' + colorForId(6) + '}');
+    Blockly.Css.CONTENT.push('#\\:7 .blocklyTreeRow {background-color: ' + colorForId(7) + '; border: 3px solid ' + colorForId(7) + '}');
 
     Blockly.inject(document.getElementById('blocklyDiv'),
-        {path: './', toolbox: document.getElementById('toolbox')});
+        {path: './', toolbox: document.getElementById('toolbox'), scrollbars: false});
   </script>
 </html>

@@ -911,11 +911,5 @@ Blockly.Css.CONTENT = [
   'font-size: 20px;',
   '}',
 
-  '.blocklyLight {',
-  '  cursor: default;',
-  '  font-family: sans-serif;',
-  '  font-size: 11pt;',
-  '  fill: #FFFF00;',
-  '}',
   ''
 ];

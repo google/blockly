@@ -18,24 +18,38 @@
 
     <body>
         <div id="blocklyDiv" style="height: 100vh; width: 100vw;">
-        <xml id="toolbox" style="display: none">
+        <xml id="toolbox">
+        <category name="Arduino">
             <block type="arduino_digital_write"></block>
             <block type="arduino_digital_read"></block>
             <block type="arduino_analog_write"></block>
             <block type="arduino_analog_read"></block>
             <block type="arduino_tone"></block>
             <block type="arduino_delay"></block> 
-            <block type="procedures_defreturn"></block>
-         	<block type="procedures_defnoreturn"></block>
-            <block type="variables_get"></block>
-            <block type="variables_set"></block>
+        </category>
+        <category name="Logic">
+            <block type="logic_compare"></block>
+        </category>
+        <category name="Math">
+            <block type="external_number"></block>
+            <block type="math_arithmetic"></block>
+        </category>
+        <category name="Controls">
             <block type="controls_if"></block>
             <block type="controls_repeat_ext"></block>
-            <block type="logic_compare"></block>
-            <block type="math_number"></block>
-            <block type="math_arithmetic"></block>
+        </category>
+        <category name="Procedures">
+            <block type="procedures_defreturn"></block>
+            <block type="procedures_defnoreturn"></block>
+        </category>
+        <category name="Variables">
+            <block type="variables_get"></block>
+            <block type="variables_set"></block>
+        </category>
+        <category name="Text">
             <block type="text"></block>
             <block type="text_print"></block>
+        </category>
         </xml>
     </body>
  
@@ -44,14 +58,20 @@
     Blockly.HSV_SATURATION = 0.60;
     Blockly.HSV_VALUE = 0.84;
 
+    var ORANGE = '#FFCE5D';
+    var PURPLE = '#A05EB5';
+    var GREEN = '#8EDD65';
+    var BLUE = '#55C7D6';
+    var RED = '#E56A54';
+
     var fallbackMakeColour = Blockly.makeColour;
     Blockly.makeColour = function(saturation) {
         var map = {
-            30: '#FFCE5D', // Orange
-            345: '#A05EB5', // Purple
-            135: '#8EDD65', // Green
-            210: '#55C7D6', // Blue
-            290: '#E56A54' // Red
+            30: ORANGE,
+            345: PURPLE,
+            135: GREEN,
+            210: BLUE,
+            290: RED
         }
 
         if (map[saturation]) {
@@ -67,6 +87,16 @@
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: white;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyFlyoutBackground {') + 2, 1, 'fill: darkgray;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyHighlightedConnectionPath {') + 2, 1, 'stroke: #E56A54;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRow {') + 2, 1, 'height: 44px; padding-top: 22px; text-align: center; color: white;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeSelected  {') + 1, 1, 'border: 3px solid white !important;');
+
+    Blockly.Css.CONTENT.push('#\\:1 .blocklyTreeRow {background-color: ' + ORANGE + '; border: 3px solid ' + ORANGE + '}');
+    Blockly.Css.CONTENT.push('#\\:2 .blocklyTreeRow {background-color: ' + PURPLE + '; border: 3px solid ' + PURPLE + '}');
+    Blockly.Css.CONTENT.push('#\\:3 .blocklyTreeRow {background-color: ' + GREEN + '; border: 3px solid ' + GREEN + '}');
+    Blockly.Css.CONTENT.push('#\\:4 .blocklyTreeRow {background-color: ' + BLUE + '; border: 3px solid ' + BLUE + '}');
+    Blockly.Css.CONTENT.push('#\\:5 .blocklyTreeRow {background-color: ' + RED + '; border: 3px solid ' + RED + '}');
+    Blockly.Css.CONTENT.push('#\\:6 .blocklyTreeRow {background-color: ' + ORANGE + '; border: 3px solid ' + ORANGE + '}');
+    Blockly.Css.CONTENT.push('#\\:7 .blocklyTreeRow {background-color: ' + PURPLE + '; border: 3px solid ' + PURPLE + '}');
 
     Blockly.inject(document.getElementById('blocklyDiv'),
         {path: './', toolbox: document.getElementById('toolbox')});

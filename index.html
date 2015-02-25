@@ -31,7 +31,7 @@
             <block type="logic_compare"></block>
         </category>
         <category name="Math">
-            <block type="external_number"></block>
+            <block type="math_number"></block>
             <block type="math_arithmetic"></block>
         </category>
         <category name="Controls">
@@ -82,6 +82,7 @@
     };
 
     // Override Blockly Shadow styles
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySvg {') + 1, 1, '');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyPathLight {') + 1, 0, 'display: none;');
     Blockly.Css.CONTENT.push('.blocklyPathDark { display: none; }');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: white;');

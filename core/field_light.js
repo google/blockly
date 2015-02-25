@@ -3,7 +3,7 @@
  * Visual Blocks Editor
  *
  * Copyright 2012 Google Inc.
- * https://blockly.googlecode.com/
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Checkbox field.  Checked or not checked.
+ * @fileoverview Light field.  Checked or not checked.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -30,31 +30,21 @@ goog.require('Blockly.Field');
 
 
 /**
- * Class for a checkbox field.
+ * Class for a Light field.
  * @param {string} state The initial state of the field ('TRUE' or 'FALSE').
  * @param {Function} opt_changeHandler A function that is executed when a new
- *     option is selected.  Its sole argument is the new checkbox state.  If
- *     it returns a value, this becomes the new checkbox state, unless the
+ *     option is selected.  Its sole argument is the new Light state.  If
+ *     it returns a value, this becomes the new Light state, unless the
  *     value is null, in which case the change is aborted.
  * @extends {Blockly.Field}
  * @constructor
  */
 Blockly.FieldLight = function(state, opt_changeHandler) {
-	Blockly.FieldLight.superClass_.constructor.call(this, '');
+  Blockly.FieldLight.superClass_.constructor.call(this, '');
 
-	this.changeHandler_ = opt_changeHandler;
-	// The checkbox doesn't use the inherited text element.
-	// Instead it uses a custom checkmark element that is either visible or not.
-	this.checkElement_ = Blockly.createSvgElement('circle', {
-		'class': 'blocklyLight',
-		'cx': +2,
-		'cy': -4,
-		'r': 12
-	}, this.fieldGroup_);
-	var textNode = document.createTextNode('x');
-	this.checkElement_.appendChild(textNode);
-	// Set the initial state.
-	this.setValue(state);
+  this.changeHandler_ = opt_changeHandler;
+  // Set the initial state.
+  this.setValue(state);
 };
 goog.inherits(Blockly.FieldLight, Blockly.Field);
 
@@ -64,7 +54,7 @@ goog.inherits(Blockly.FieldLight, Blockly.Field);
  *   with the current values of the arguments used during construction.
  */
 Blockly.FieldLight.prototype.clone = function() {
-	return new Blockly.FieldLight(this.getValue(), this.changeHandler_);
+  return new Blockly.FieldLight(this.getValue(), this.changeHandler_);
 };
 
 /**
@@ -73,42 +63,57 @@ Blockly.FieldLight.prototype.clone = function() {
 Blockly.FieldLight.prototype.CURSOR = 'default';
 
 /**
- * Return 'TRUE' if the checkbox is checked, 'FALSE' otherwise.
+ * Install this Light on a block.
+ * @param {!Blockly.Block} block The block containing this text.
+ */
+Blockly.FieldLight.prototype.init = function(block) {
+  if (this.sourceBlock_) {
+    // Light has already been initialized once.
+    return;
+  }
+  Blockly.FieldLight.superClass_.init.call(this, block);
+  // The Light doesn't use the inherited text element.
+  // Instead it uses a custom checkmark element that is either visible or not.
+};
+
+/**
+ * Return 'TRUE' if the Light is checked, 'FALSE' otherwise.
  * @return {string} Current state.
  */
 Blockly.FieldLight.prototype.getValue = function() {
-	return String(this.state_).toUpperCase();
+  return String(this.state_).toUpperCase();
 };
 
 /**
- * Set the checkbox to be checked if strBool is 'TRUE', unchecks otherwise.
+ * Set the Light to be checked if strBool is 'TRUE', unchecks otherwise.
  * @param {string} strBool New state.
  */
 Blockly.FieldLight.prototype.setValue = function(strBool) {
-	var newState = (strBool == 'TRUE');
-	if (this.state_ !== newState) {
-		this.state_ = newState;
-		this.checkElement_.style.display = newState ? 'block' : 'none';
-		if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-			this.sourceBlock_.workspace.fireChangeEvent();
-		}
-	}
+  var newState = (strBool == 'TRUE');
+  if (this.state_ !== newState) {
+    this.state_ = newState;
+    Blockly.FieldLight.superClass_.setText.call(this, newState ? 'ON' : 'OFF');
+
+    if (this.sourceBlock_ && this.sourceBlock_.rendered) {
+      this.sourceBlock_.workspace.fireChangeEvent();
+    }
+  }
 };
 
 /**
- * Toggle the state of the checkbox.
+ * Toggle the state of the Light.
  * @private
  */
 Blockly.FieldLight.prototype.showEditor_ = function() {
-	var newState = !this.state_;
-	if (this.changeHandler_) {
-		// Call any change handler, and allow it to override.
-		var override = this.changeHandler_(newState);
-		if (override !== undefined) {
-			newState = override;
-		}
-	}
-	if (newState !== null) {
-		this.setValue(String(newState).toUpperCase());
-	}
+  var newState = !this.state_;
+  if (this.sourceBlock_ && this.changeHandler_) {
+    // Call any change handler, and allow it to override.
+    var override = this.changeHandler_(newState);
+    if (override !== undefined) {
+      newState = override;
+    }
+  }
+  if (newState !== null) {
+    this.setValue(String(newState).toUpperCase());
+  }
 };

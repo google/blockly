@@ -64,6 +64,12 @@ Blockly.FieldTextInput.prototype.clone = function() {
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
 /**
+ * Allow browser to spellcheck this field.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.spellcheck_ = true;
+
+/**
  * Close the input widget if this input is being deleted.
  */
 Blockly.FieldTextInput.prototype.dispose = function() {
@@ -90,6 +96,14 @@ Blockly.FieldTextInput.prototype.setText = function(text) {
     }
   }
   Blockly.Field.prototype.setText.call(this, text);
+};
+
+/**
+ * Set whether this field is spellchecked by the browser.
+ * @param {boolean} check True if checked.
+ */
+Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
+  this.spellcheck_ = check;
 };
 
 /**
@@ -120,6 +134,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
   var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
+  htmlInput.setAttribute('spellcheck', this.spellcheck_);
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
   div.appendChild(htmlInput);
 

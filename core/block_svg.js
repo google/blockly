@@ -1147,6 +1147,21 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.BlockSvg.prototype.setWarningText = function(text) {
+  if (this.setWarningText.pid_) {
+    // Only queue up the latest change.  Kill any earlier pending process.
+    clearTimeout(this.setWarningText.pid_);
+    this.setWarningText.pid_ = 0;
+  }
+  if (Blockly.dragMode_ == 2) {
+    // Don't change the warning text during a drag.
+    // Wait until the drag finishes.
+    var thisBlock = this;
+    this.setWarningText.pid_ = setTimeout(function() {
+      thisBlock.setWarningText.pid_ = 0;
+      thisBlock.setWarningText(text);
+    }, 100);
+    return;
+  }
   if (this.isInFlyout) {
     text = null;
   }

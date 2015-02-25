@@ -249,7 +249,7 @@ Blockly.Flyout.prototype.position_ = function() {
       Blockly.RTL ? 0 : 1,
       Blockly.RTL ? -this.CORNER_RADIUS : this.CORNER_RADIUS,
       this.CORNER_RADIUS);
-  path.push('v', Math.max(0, metrics.viewHeight - 100 - this.CORNER_RADIUS * 2));
+  path.push('v', Math.max(0, metrics.viewHeight - 20 - this.CORNER_RADIUS * 2));
   path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
       Blockly.RTL ? 0 : 1,
       Blockly.RTL ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
@@ -267,7 +267,7 @@ Blockly.Flyout.prototype.position_ = function() {
       'translate(' + x + ',' + metrics.absoluteTop + ')');
 
   // Record the height for Blockly.Flyout.getMetrics_.
-  this.height_ = metrics.viewHeight - 100;
+  this.height_ = metrics.viewHeight - 20;
 
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {

@@ -52,7 +52,7 @@
         </category>
         </xml>
 
-        <a href="#" onclick="console.log(Blockly.Arduino.workspaceToCode());">Generate Arduino</a>
+        <!-- a href="#" onclick="console.log(Blockly.Arduino.workspaceToCode());">Generate Arduino</a -->
     </body>
  
   <script type="text/javascript">
@@ -111,18 +111,19 @@
     var FONT = 'font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
 
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySvg {') + 1, 1, 'background-color: #ddddff;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRow {') + 1, 4, 'border-radius: 10px; padding-top: 12px; padding-bottom: 12px; margin-left: 10px; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; text-align: center; color: white; padding-right: 3px;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRow {') + 1, 4, 'border-radius: 10px; padding-top: 12px; padding-bottom: 12px; margin-left: 10px; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; text-align: center; color: white;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyPathLight {') + 1, 0, 'display: none;');
     Blockly.Css.CONTENT.push('.blocklyPathDark { display: none; }');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: #E56A54; stroke-width: 3px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyFlyoutBackground {') + 2, 1, 'fill: white; stroke-width: 3px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyHighlightedConnectionPath {') + 2, 1, 'stroke: #E56A54;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeSelected  {') + 1, 1, 'border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0; padding-right: 0');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeSelected  {') + 1, 1, 'border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0;');
     // Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyText {') + 3, 1, FONT);
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 2, 1, FONT);
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 4, 1, 'font-size: 20px;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyToolboxDiv {') + 1, 1, '');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 4, 1, 'font-size: 16px;');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyToolboxDiv {') + 1, 1, 'position: relative; width: 120px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeIcon {') + 1, 4, '');
+    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRoot {') + 1, 0, 'position: absolute; bottom: 0px; width: 100%;');
 
     Blockly.Css.CONTENT.push('#\\:1 .blocklyTreeRow {background-color: ' + colorForId(1) + '; border: 3px solid ' + colorForId(1) + '}');
     Blockly.Css.CONTENT.push('#\\:2 .blocklyTreeRow {background-color: ' + colorForId(2) + '; border: 3px solid ' + colorForId(2) + '}');

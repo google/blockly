@@ -95,6 +95,13 @@ Blockly.Xml.blockToDom_ = function(block) {
     element.appendChild(commentElement);
   }
 
+  if (block.data) {
+    // Optional text data that round-trips beween blocks and XML.
+    // Has no effect.  May be used by 3rd parties for meta information.
+    var dataElement = goog.dom.createDom('data', null, block.data);
+    element.appendChild(dataElement);
+  }
+
   var hasValues = false;
   for (var i = 0, input; input = block.inputList[i]; i++) {
     var container;
@@ -356,6 +363,11 @@ Blockly.Xml.domToBlockHeadless_ =
             block.comment && block.comment.setVisible) {
           block.comment.setBubbleSize(bubbleW, bubbleH);
         }
+        break;
+      case 'data':
+        // Optional text data that round-trips beween blocks and XML.
+        // Has no effect.  May be used by 3rd parties for meta information.
+        block.data = xmlChild.textContent;
         break;
       case 'title':
         // Titles were renamed to field in December 2013.

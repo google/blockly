@@ -29,7 +29,7 @@ goog.provide('Blockly.Blocks.math');
 goog.require('Blockly.Blocks');
 
 
-Blockly.Blocks.math.HUE = 230;
+Blockly.Blocks.math.HUE = 135;
 
 Blockly.Blocks['math_number'] = {
   /**

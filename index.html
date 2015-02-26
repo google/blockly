@@ -27,16 +27,14 @@
             <block type="arduino_tone"></block>
             <block type="arduino_delay"></block> 
         </category>
-        <category name="Logic">
+        <category name="Flow">
             <block type="logic_compare"></block>
+            <block type="controls_if"></block>
+            <block type="controls_repeat_ext"></block>
         </category>
         <category name="Math">
             <block type="math_number"></block>
             <block type="math_arithmetic"></block>
-        </category>
-        <category name="Controls">
-            <block type="controls_if"></block>
-            <block type="controls_repeat_ext"></block>
         </category>
         <category name="Procedures">
             <block type="procedures_defreturn"></block>
@@ -46,13 +44,9 @@
             <block type="variables_get"></block>
             <block type="variables_set"></block>
         </category>
-        <category name="Text">
-            <block type="text"></block>
-            <block type="text_print"></block>
-        </category>
         </xml>
 
-        <!-- a href="#" onclick="console.log(Blockly.Arduino.workspaceToCode());">Generate Arduino</a -->
+        <a style="position: absolute; right: 10px; top: 10px;" href="#" onclick="console.log(Blockly.Arduino.workspaceToCode());">Generate Arduino</a>
     </body>
  
   <script type="text/javascript">

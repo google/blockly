@@ -29,7 +29,7 @@ goog.provide('Blockly.Blocks.logic');
 goog.require('Blockly.Blocks');
 
 
-Blockly.Blocks.logic.HUE = 210;
+Blockly.Blocks.logic.HUE = 345;
 
 Blockly.Blocks['controls_if'] = {
   /**

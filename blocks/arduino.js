@@ -4,12 +4,12 @@ goog.provide('Blockly.Blocks.arduino');
 
 goog.require('Blockly.Blocks');
 
-
+Blockly.Blocks.arduino.HUE = 30;
 
 Blockly.Blocks['arduino_digital_write'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
-        this.setColour(30);
+        this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput()
             .appendField("digital write")
             .appendField(new Blockly.FieldArduino('A'), 'PIN')
@@ -25,7 +25,7 @@ Blockly.Blocks['arduino_digital_write'] = {
 Blockly.Blocks['arduino_digital_read'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
-        this.setColour(30);
+        this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput()
             .appendField("digital read")
             .appendField(new Blockly.FieldArduino('1'), 'PIN')
@@ -41,7 +41,7 @@ Blockly.Blocks['arduino_digital_read'] = {
 Blockly.Blocks['arduino_analog_write'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
-        this.setColour(30);
+        this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput()
             .appendField("analog write")
             .appendField(new Blockly.FieldArduino('A'), 'PIN')
@@ -58,7 +58,7 @@ Blockly.Blocks['arduino_analog_write'] = {
 Blockly.Blocks['arduino_analog_read'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
-        this.setColour(30);
+        this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput()
             .appendField("analog read")
             .appendField(new Blockly.FieldArduino('1'), 'PIN')
@@ -72,7 +72,7 @@ Blockly.Blocks['arduino_analog_read'] = {
 Blockly.Blocks['arduino_tone'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
-        this.setColour(30);
+        this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendValueInput("tone")
             .setCheck("Number")
             .appendField("tone")
@@ -88,7 +88,7 @@ Blockly.Blocks['arduino_tone'] = {
 Blockly.Blocks['arduino_delay'] = {
     init: function() {
         this.setHelpUrl('http://www.example.com/');
-        this.setColour(135);
+        this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput()
             .appendField("delay");
         this.appendValueInput("delay")

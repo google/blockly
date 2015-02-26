@@ -71,11 +71,10 @@ Blockly.Arduino['arduino_analog_write'] = function(block) {
   } else if (valueBlock.type == 'variables_get') {
     var varName = Blockly.Arduino.variableDB_.getName(valueBlock.getFieldValue('VAR'),
           Blockly.Variables.NAME_TYPE);
-    value = Blockly.Arduino.mapping_[varName];
+    value = varName;
   } else {
-    argument = Blockly.Arduino.valueToCode(block, 'Val',
-      Blockly.Arduino.ORDER_ASSIGNMENT) + '\n';
-    value = Blockly.Arduino.mapping_[valueBlock.id];
+    value = Blockly.Arduino.valueToCode(block, 'Val',
+      Blockly.Arduino.ORDER_ASSIGNMENT);
   }
 
   var code = 'analogWrite(' + PINTOVAR[pin] + ', ' + value + ');\n';
@@ -102,11 +101,10 @@ Blockly.Arduino['arduino_tone'] = function(block) {
   } else if (toneBlock.type == 'variables_get') {
     var varName = Blockly.Arduino.variableDB_.getName(toneBlock.getFieldValue('VAR'),
           Blockly.Variables.NAME_TYPE);
-    freq = Blockly.Arduino.mapping_[varName];
+    freq = varName;
   } else {
-    argument = Blockly.Arduino.valueToCode(block, 'tone',
-        Blockly.Arduino.ORDER_NONE) + '\n';
-    freq = Blockly.Arduino.mapping_[toneBlock.id];
+    freq = Blockly.Arduino.valueToCode(block, 'tone',
+        Blockly.Arduino.ORDER_NONE);
   }
 
   if (freq == '0')
@@ -127,11 +125,10 @@ Blockly.Arduino['arduino_delay'] = function(block) {
   } else if (timeBlock.type == 'variables_get') {
     var varName = Blockly.Arduino.variableDB_.getName(timeBlock.getFieldValue('VAR'),
           Blockly.Variables.NAME_TYPE);
-    time = Blockly.Arduino.mapping_[varName];
+    time = varName;
   } else {
-    argument = Blockly.Arduino.valueToCode(block, 'delay',
+    time = Blockly.Arduino.valueToCode(block, 'delay',
         Blockly.Arduino.ORDER_NONE) + '\n';
-    time = Blockly.Arduino.mapping_[timeBlock.id];
   }
 
   var code = 'delay(' + time + ');\n';

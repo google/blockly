@@ -29,7 +29,7 @@ goog.provide('Blockly.Blocks.procedures');
 goog.require('Blockly.Blocks');
 
 
-Blockly.Blocks.procedures.HUE = 290;
+Blockly.Blocks.procedures.HUE = 210;
 
 Blockly.Blocks['procedures_defnoreturn'] = {
   /**

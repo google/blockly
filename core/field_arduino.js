@@ -128,6 +128,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     return;
   }
 
+  Blockly.WidgetDiv.show(this, null);
+
   //define scaling vars
   var scale = 1;
   var pad = 15 * scale;
@@ -296,13 +298,14 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'ry': '5',
     'class': 'blocklyArduinoSelector'
   }, svg);
+ 
   ///////////////text labels////////////////////
   //center labels
   var textIn = Blockly.createSvgElement('text', {
     'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift-5,
     'y': pad+200,
     'font-family': font,
-    'fill': '#009900',
+    'fill': '#8EDD65',
     'class': 'blocklyArduinoIO'
   }, svg);
   textIn.appendChild(document.createTextNode("Inputs"));
@@ -311,7 +314,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift-10,
     'y': pad+230,
     'font-family': font,
-    'fill': '#003399',
+    'fill': '#4DC4D9',
     'class': 'blocklyArduinoIO'
   }, svg);
   textOut.appendChild(document.createTextNode("Outputs"));
@@ -321,7 +324,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': xbase + xshift+10,
     'y': pad+90,
     'font-family': font,
-    'fill': '#003399',
+    'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
   }, svg);
   texta.appendChild(document.createTextNode("A"));
@@ -330,7 +333,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift+10,
     'y': pad+90,
     'font-family': font,
-    'fill': '#003399',
+    'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
   }, svg);
   textb.appendChild(document.createTextNode("B"));
@@ -340,7 +343,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift+10,
     'y': pad+90,
     'font-family': font,
-    'fill': '#003399',
+    'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
   }, svg);
   textc.appendChild(document.createTextNode("C"));
@@ -350,7 +353,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': xbase + xshift+10,
     'y': squareHeight + downshift + pad-10,
     'font-family': font,
-    'fill': '#003399',
+    'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
   }, svg);
   textd.appendChild(document.createTextNode("D"));
@@ -359,7 +362,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': xbase + (leftpad + rightpad + squareWidth) * (1) + xshift+10,
     'y': squareHeight + downshift + pad-10,
     'font-family': font,
-    'fill': '#003399',
+    'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
   }, svg);
   texte.appendChild(document.createTextNode("E"));
@@ -368,7 +371,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift+10,
     'y': squareHeight + downshift + pad-10,
     'font-family': font,
-    'fill': '#003399',
+    'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
   }, svg);
   textf.appendChild(document.createTextNode("F"));
@@ -378,7 +381,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': xbase + yshift + pad+40,
     'x': pad+65,
     'font-family': font,
-    'fill': '#009900',
+    'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
   }, svg);
   text1.appendChild(document.createTextNode("1"));
@@ -387,7 +390,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+40,
     'x': pad+65,
     'font-family': font,
-    'fill': '#009900',
+    'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
   }, svg);
   text2.appendChild(document.createTextNode("2"));
@@ -396,7 +399,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+40,
     'x': pad+65,
     'font-family': font,
-    'fill': '#009900',
+    'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
   }, svg);
   text3.appendChild(document.createTextNode("3"));
@@ -405,7 +408,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': xbase + yshift + pad+40,
     'x': squareHeight + rightshift + pad-40,
     'font-family': font,
-    'fill': '#009900',
+    'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
   }, svg);
   text4.appendChild(document.createTextNode("4"));
@@ -414,7 +417,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+40,
     'x': squareHeight + rightshift + pad-40,
     'font-family': font,
-    'fill': '#009900',
+    'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
   }, svg);
   text5.appendChild(document.createTextNode("5"));
@@ -423,49 +426,48 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+40,
     'x': squareHeight + rightshift + pad-40,
     'font-family': font,
-    'fill': '#009900',
+    'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
   }, svg);
   text6.appendChild(document.createTextNode("6"));
 
-
-
+ 
   this.clickWrapper_ =
-    Blockly.bindEvent_(svg, 'click', this, Blockly.WidgetDiv.hide);
+    Blockly.bindEvent_(svg, 'mousedown', this, Blockly.WidgetDiv.hide);
   this.clickWrapper_ =
-    Blockly.bindEvent_(rectangle, 'click', this, this.createBlockFunc_(rectangle));
+    Blockly.bindEvent_(rectangle, 'mousedown', this, this.createBlockFunc_(rectangle));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squarea, 'click', this, this.createBlockFunc_(squarea));
+    Blockly.bindEvent_(squarea, 'mousedown', this, this.createBlockFunc_(squarea));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squareb, 'click', this, this.createBlockFunc_(squareb));
+    Blockly.bindEvent_(squareb, 'mousedown', this, this.createBlockFunc_(squareb));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squarec, 'click', this, this.createBlockFunc_(squarec));
+    Blockly.bindEvent_(squarec, 'mousedown', this, this.createBlockFunc_(squarec));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squared, 'click', this, this.createBlockFunc_(squared));
+    Blockly.bindEvent_(squared, 'mousedown', this, this.createBlockFunc_(squared));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squaree, 'click', this, this.createBlockFunc_(squaree));
+    Blockly.bindEvent_(squaree, 'mousedown', this, this.createBlockFunc_(squaree));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squaref, 'click', this, this.createBlockFunc_(squaref));
+    Blockly.bindEvent_(squaref, 'mousedown', this, this.createBlockFunc_(squaref));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square1, 'click', this, this.createBlockFunc_(square1));
+    Blockly.bindEvent_(square1, 'mousedown', this, this.createBlockFunc_(square1));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square2, 'click', this, this.createBlockFunc_(square2));
+    Blockly.bindEvent_(square2, 'mousedown', this, this.createBlockFunc_(square2));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square3, 'click', this, this.createBlockFunc_(square3));
+    Blockly.bindEvent_(square3, 'mousedown', this, this.createBlockFunc_(square3));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square4, 'click', this, this.createBlockFunc_(square4));
+    Blockly.bindEvent_(square4, 'mousedown', this, this.createBlockFunc_(square4));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square5, 'click', this, this.createBlockFunc_(square5));
+    Blockly.bindEvent_(square5, 'mousedown', this, this.createBlockFunc_(square5));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square6, 'click', this, this.createBlockFunc_(square6));
+    Blockly.bindEvent_(square6, 'mousedown', this, this.createBlockFunc_(square6));
 };
 
 Blockly.FieldArduino.prototype.createBlockFunc_ = function(originBlock) {
   var FieldArduino = this;
   return function(e) {
     if (originBlock.id.length == 1) {
-      console.log(originBlock.id + " was clicked");
-      //FieldArduino.setText(originBlock.id);
+      // console.log(originBlock.id + " was clicked");
+      FieldArduino.setText(originBlock.id);
       Blockly.FieldTextInput.htmlInput_.value = originBlock.id;
     }
   };

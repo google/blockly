@@ -50,6 +50,7 @@ goog.require('Blockly.utils');
 // LightUp Fields
 goog.require('Blockly.FieldArduino');
 goog.require('Blockly.FieldLight');
+goog.require('Blockly.FieldNumberpad');
 
 // Closure dependencies.
 goog.require('goog.color');

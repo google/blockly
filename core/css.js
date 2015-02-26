@@ -882,29 +882,52 @@ Blockly.Css.CONTENT = [
   '}',
 
   /* LightUp fields */
+
   '.blocklyArduinoSelector {',
-  '  stroke: #CF0000;',
+  '  stroke: #75A2F0;',
   '  stroke-width: 2;',
   '  fill: #F0F0F0;',
   '  fill-opacity: .8;',
   '}',
 
-  '.blocklyArduinoRect {',
-  '  stroke: #CF0000;',
+  '.blocklyArduinoSelectorTransparent {',
+  '  stroke: #75A2F0;',
   '  stroke-width: 2;',
   '  fill: #F0F0F0;',
+  '  fill-opacity: .0;',
+  '}',
+
+  '.blocklyArduinoRect {',
+  '  stroke: #75A2F0;',
+  '  stroke-width: 2;',
+  '  fill: white;',
   '  fill-opacity: .8;',
   '}',
 
   '.blocklyArduinoSelector:hover {',
-  '  stroke: #ff9900;',
+  '  stroke: #FF9900;',
   '  stroke-width: 2;',
   '  fill: #F0F0F0;',
-  '  fill-opacity: 1.0;',
+  '  fill-opacity: .8;',
+  '}',
+
+  '.blocklyArduinoSelectorTransparent:hover {',
+  '  stroke: #FF9900;',
+  '  stroke-width: 2;',
+  '  fill: #F0F0F0;',
+  '  fill-opacity: .0;',
   '}',
 
   '.blocklyArduinoText {',
   'font-size: 40px;',
+  '}',
+
+  '.blocklyArduinoNum {',
+  'font-size: 40px;',
+  '}',
+
+  '.blocklyArduinoNumText {',
+  'font-size: 20px;',
   '}',
 
   '.blocklyArduinoIO {',

@@ -525,6 +525,17 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
  * @private
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
+  // Don't split a connection where both sides are immovable.
+  var thisTargetBlock = this.targetBlock();
+  if (thisTargetBlock && !thisTargetBlock.isMovable() &&
+      !this.sourceBlock_.isMovable()) {
+    return false;
+  }
+  var otherTargetBlock = otherConnection.targetBlock();
+  if (otherTargetBlock && !otherTargetBlock.isMovable() &&
+      !otherConnection.sourceBlock_.isMovable()) {
+    return false;
+  }
   if (!this.check_ || !otherConnection.check_) {
     // One or both sides are promiscuous enough that anything will fit.
     return true;

@@ -243,13 +243,17 @@ Blockly.Flyout.prototype.position_ = function() {
   if (Blockly.RTL) {
     edgeWidth *= -1;
   }
-  var path = ['M ' + (Blockly.RTL ? this.width_ : 1.5) + ',120'];
+
+  var yoff = metrics.absoluteLeft != 0 ? 120 : 0;
+  var bmar = metrics.absoluteLeft != 0 ? 15 : 0;
+
+  var path = ['M ' + (Blockly.RTL ? this.width_ : 1.5) + ',' + yoff];
   path.push('h', edgeWidth);
   path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
       Blockly.RTL ? 0 : 1,
       Blockly.RTL ? -this.CORNER_RADIUS : this.CORNER_RADIUS,
       this.CORNER_RADIUS);
-  path.push('v', Math.max(0, metrics.viewHeight - 135 - this.CORNER_RADIUS * 2));
+  path.push('v', Math.max(0, metrics.viewHeight - yoff - bmar - this.CORNER_RADIUS * 2));
   path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
       Blockly.RTL ? 0 : 1,
       Blockly.RTL ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
@@ -267,7 +271,7 @@ Blockly.Flyout.prototype.position_ = function() {
       'translate(' + x + ',' + metrics.absoluteTop + ')');
 
   // Record the height for Blockly.Flyout.getMetrics_.
-  this.height_ = metrics.viewHeight - 135;
+  this.height_ = metrics.viewHeight - yoff - bmar;
 
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
@@ -372,8 +376,15 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     }
   }
 
+  var metrics = this.targetWorkspace_.getMetrics();
+  if (!metrics) {
+    // Hidden components will return null.
+    return;
+  }
+  var yoff = metrics.absoluteLeft != 0 ? 120 : 0;
+
   // Lay out the blocks vertically.
-  var cursorY = margin + 120;
+  var cursorY = margin + yoff;
   for (var i = 0, block; block = blocks[i]; i++) {
     var allBlocks = block.getDescendants();
     for (var j = 0, child; child = allBlocks[j]; j++) {

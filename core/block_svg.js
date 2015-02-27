@@ -31,6 +31,7 @@ goog.require('Blockly.ContextMenu');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
+goog.require('goog.Timer');
 
 
 /**

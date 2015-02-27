@@ -31,6 +31,7 @@ goog.require('Blockly.Bubble');
 goog.require('Blockly.Icon');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
+goog.require('goog.Timer');
 
 
 /**
@@ -285,6 +286,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     this.resizeBubble_();
     // The source block may have changed, notify its workspace.
     this.block_.workspace.fireChangeEvent();
+    goog.Timer.callOnce(
+        this.block_.bumpNeighbours_, Blockly.BUMP_DELAY, this.block_);
   }
 };
 

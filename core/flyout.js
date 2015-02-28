@@ -276,6 +276,13 @@ Blockly.Flyout.prototype.position_ = function() {
 };
 
 /**
+ * Scroll the flyout to the top.
+ */
+Blockly.Flyout.prototype.scrollToTop = function() {
+  this.scrollbar_.set(0);
+};
+
+/**
  * Scroll the flyout up or down.
  * @param {!Event} e Mouse wheel scroll event.
  * @private

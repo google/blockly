@@ -339,19 +339,6 @@ Blockly.Connection.prototype.moveBy = function(dx, dy) {
 };
 
 /**
- * Set whether this connections is hidden (not tracked in a database) or not.
- * @param {boolean} hidden True if connection is hidden.
- */
-Blockly.Connection.prototype.setHidden = function(hidden) {
-  this.hidden_ = hidden;
-  if (hidden && this.inDB_) {
-    this.dbList_[this.type].removeConnection_(this);
-  } else if (!hidden && !this.inDB_) {
-    this.dbList_[this.type].addConnection_(this);
-  }
-};
-
-/**
  * Add highlighting around this connection.
  */
 Blockly.Connection.prototype.highlight = function() {
@@ -643,14 +630,25 @@ Blockly.Connection.prototype.neighbours_ = function(maxLimit) {
 };
 
 /**
+ * Set whether this connections is hidden (not tracked in a database) or not.
+ * @param {boolean} hidden True if connection is hidden.
+ */
+Blockly.Connection.prototype.setHidden = function(hidden) {
+  this.hidden_ = hidden;
+  if (hidden && this.inDB_) {
+    this.dbList_[this.type].removeConnection_(this);
+  } else if (!hidden && !this.inDB_) {
+    this.dbList_[this.type].addConnection_(this);
+  }
+};
+
+/**
  * Hide this connection, as well as all down-stream connections on any block
  * attached to this connection.  This happens when a block is collapsed.
  * Also hides down-stream comments.
  */
 Blockly.Connection.prototype.hideAll = function() {
-  if (this.inDB_) {
-    this.dbList_[this.type].removeConnection_(this);
-  }
+  this.setHidden(true);
   if (this.targetConnection) {
     var blocks = this.targetBlock().getDescendants();
     for (var b = 0; b < blocks.length; b++) {
@@ -658,10 +656,7 @@ Blockly.Connection.prototype.hideAll = function() {
       // Hide all connections of all children.
       var connections = block.getConnections_(true);
       for (var c = 0; c < connections.length; c++) {
-        var connection = connections[c];
-        if (connection.inDB_) {
-          this.dbList_[connection.type].removeConnection_(connection);
-        }
+        connections[c].setHidden(true);
       }
       // Close all bubbles of all children.
       var icons = block.getIcons();
@@ -679,8 +674,7 @@ Blockly.Connection.prototype.hideAll = function() {
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
  */
 Blockly.Connection.prototype.unhideAll = function() {
-  this.dbList_[this.type].addConnection_(this);
-  this.hidden_ = false;
+  this.setHidden(false);
   // All blocks that need unhiding must be unhidden before any rendering takes
   // place, since rendering requires knowing the dimensions of lower blocks.
   // Also, since rendering a block renders all its parents, we only need to

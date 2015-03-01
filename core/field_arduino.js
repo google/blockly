@@ -154,7 +154,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, div);
   //center rectangle
   var rectangle = Blockly.createSvgElement('rect', {
-    'id': 'rectangle',
     'width': 250 * scale,
     'height': 350 * scale,
     'x': xshift,
@@ -165,7 +164,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
   //top squares
   var squarea = Blockly.createSvgElement('rect', {
-    'id': 'A',
     'width': squareWidth,
     'height': squareHeight,
     'x': xbase + xshift,
@@ -176,7 +174,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var squareb = Blockly.createSvgElement('rect', {
-    'id': 'B',
     'width': squareWidth,
     'height': squareHeight,
     'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift,
@@ -187,7 +184,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var squarec = Blockly.createSvgElement('rect', {
-    'id': 'C',
     'width': squareWidth,
     'height': squareHeight,
     'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift,
@@ -199,7 +195,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
 
   ///bottom squares
   var squared = Blockly.createSvgElement('rect', {
-    'id': 'D',
     'width': squareWidth,
     'height': squareHeight,
     'x': xbase + xshift,
@@ -210,7 +205,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var squaree = Blockly.createSvgElement('rect', {
-    'id': 'E',
     'width': squareWidth,
     'height': squareHeight,
     'x': xbase + (leftpad + rightpad + squareWidth) * (1) + xshift,
@@ -221,7 +215,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var squaref = Blockly.createSvgElement('rect', {
-    'id': 'F',
     'width': squareWidth,
     'height': squareHeight,
     'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift,
@@ -234,7 +227,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   //side blocks
   //left squares
   var square1 = Blockly.createSvgElement('rect', {
-    'id': '1',
     'width': squareWidth,
     'height': squareHeight,
     'y': xbase + yshift + pad,
@@ -245,7 +237,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var square2 = Blockly.createSvgElement('rect', {
-    'id': '2',
     'width': squareWidth,
     'height': squareHeight,
     'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad,
@@ -256,7 +247,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var square3 = Blockly.createSvgElement('rect', {
-    'id': '3',
     'width': squareWidth,
     'height': squareHeight,
     'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad,
@@ -267,7 +257,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
   //right squares
   var square4 = Blockly.createSvgElement('rect', {
-    'id': '4',
     'width': squareWidth,
     'height': squareHeight,
     'y': xbase + yshift + pad,
@@ -278,7 +267,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var square5 = Blockly.createSvgElement('rect', {
-    'id': '5',
     'width': squareWidth,
     'height': squareHeight,
     'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad,
@@ -289,7 +277,6 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   }, svg);
 
   var square6 = Blockly.createSvgElement('rect', {
-    'id': '6',
     'width': squareWidth,
     'height': squareHeight,
     'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad,
@@ -437,39 +424,35 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   this.clickWrapper_ =
     Blockly.bindEvent_(rectangle, 'mousedown', this, this.createBlockFunc_(rectangle));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squarea, 'mousedown', this, this.createBlockFunc_(squarea));
+    Blockly.bindEvent_(squarea, 'mousedown', this, this.createBlockFunc_("Output A"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squareb, 'mousedown', this, this.createBlockFunc_(squareb));
+    Blockly.bindEvent_(squareb, 'mousedown', this, this.createBlockFunc_("Output B"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squarec, 'mousedown', this, this.createBlockFunc_(squarec));
+    Blockly.bindEvent_(squarec, 'mousedown', this, this.createBlockFunc_("Output C"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squared, 'mousedown', this, this.createBlockFunc_(squared));
+    Blockly.bindEvent_(squared, 'mousedown', this, this.createBlockFunc_("Output D"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squaree, 'mousedown', this, this.createBlockFunc_(squaree));
+    Blockly.bindEvent_(squaree, 'mousedown', this, this.createBlockFunc_("Output E"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squaref, 'mousedown', this, this.createBlockFunc_(squaref));
+    Blockly.bindEvent_(squaref, 'mousedown', this, this.createBlockFunc_("Output F"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square1, 'mousedown', this, this.createBlockFunc_(square1));
+    Blockly.bindEvent_(square1, 'mousedown', this, this.createBlockFunc_("Input 1"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square2, 'mousedown', this, this.createBlockFunc_(square2));
+    Blockly.bindEvent_(square2, 'mousedown', this, this.createBlockFunc_("Input 3"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square3, 'mousedown', this, this.createBlockFunc_(square3));
+    Blockly.bindEvent_(square3, 'mousedown', this, this.createBlockFunc_("Input 3"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square4, 'mousedown', this, this.createBlockFunc_(square4));
+    Blockly.bindEvent_(square4, 'mousedown', this, this.createBlockFunc_("Input 4"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square5, 'mousedown', this, this.createBlockFunc_(square5));
+    Blockly.bindEvent_(square5, 'mousedown', this, this.createBlockFunc_("Input 5"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square6, 'mousedown', this, this.createBlockFunc_(square6));
+    Blockly.bindEvent_(square6, 'mousedown', this, this.createBlockFunc_("Input 6"));
 };
 
-Blockly.FieldArduino.prototype.createBlockFunc_ = function(originBlock) {
+Blockly.FieldArduino.prototype.createBlockFunc_ = function(value) {
   var FieldArduino = this;
   return function(e) {
-    if (originBlock.id.length == 1) {
-      // console.log(originBlock.id + " was clicked");
-      FieldArduino.setText(originBlock.id);
-      Blockly.FieldTextInput.htmlInput_.value = originBlock.id;
-    }
+    FieldArduino.setText(value);
   };
 };
 
@@ -479,37 +462,6 @@ Blockly.FieldArduino.prototype.createBlockFunc_ = function(originBlock) {
  */
 Blockly.FieldArduino.prototype.setText = function(text) {
   Blockly.FieldArduino.superClass_.setText.call(this, text);
-  this.updateGraph_();
   // Cached width is obsolete.  Clear it.
   this.size_.width = 0;
-};
-
-/**
- * Redraw the graph with the current angle.
- * @private
- */
-Blockly.FieldArduino.prototype.updateGraph_ = function() {
-  if (!this.gauge_) {
-    return;
-  }
-  var angleRadians = Number(this.getText()) / 180 * Math.PI;
-  if (isNaN(angleRadians)) {
-    this.gauge_.setAttribute('d',
-      'M ' + Blockly.FieldArduino.HALF + ', ' + Blockly.FieldArduino.HALF);
-    this.line_.setAttribute('x2', Blockly.FieldArduino.HALF);
-    this.line_.setAttribute('y2', Blockly.FieldArduino.HALF);
-  } else {
-    var x = Blockly.FieldArduino.HALF + Math.cos(angleRadians) *
-      Blockly.FieldArduino.RADIUS;
-    var y = Blockly.FieldArduino.HALF + Math.sin(angleRadians) *
-      -Blockly.FieldArduino.RADIUS;
-    var largeFlag = (angleRadians > Math.PI) ? 1 : 0;
-    this.gauge_.setAttribute('d',
-      'M ' + Blockly.FieldArduino.HALF + ', ' + Blockly.FieldArduino.HALF +
-      ' h ' + Blockly.FieldArduino.RADIUS +
-      ' A ' + Blockly.FieldArduino.RADIUS + ',' + Blockly.FieldArduino.RADIUS +
-      ' 0 ' + largeFlag + ' 0 ' + x + ',' + y + ' z');
-    this.line_.setAttribute('x2', x);
-    this.line_.setAttribute('y2', y);
-  }
 };

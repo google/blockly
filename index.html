@@ -1,36 +1,102 @@
 <!DOCTYPE html>
 <html>
-
     <head>
         <script type="text/javascript" src="blockly_uncompressed.js"></script>
         <script type="text/javascript" src="blocks_compressed.js"></script>
         <script type="text/javascript" src="arduino_compressed.js"></script>
         <script type="text/javascript" src="instructions_compressed.js"></script>
         <script type="text/javascript" src="msg/js/en.js"></script>
-    </head>
 
-    <style>
-        html, body, #blocklyDiv {
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+        <style>
+            html, body, #blocklyDiv {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
 
     <body>
         <div id="blocklyDiv" style="height: 100vh; width: 100vw;">
-        <xml id="toolbox">
+        <xml id="toolbox" style="display: none;">
         <category name="Arduino">
-            <block type="arduino_digital_write"></block>
-            <block type="arduino_digital_read"></block>
-            <block type="arduino_analog_write"></block>
-            <block type="arduino_analog_read"></block>
-            <block type="arduino_tone"></block>
-            <block type="arduino_delay"></block> 
+
+            <block type="arduino_digital_write">
+              <value name="pin">
+                <block type="arduino_pin">
+                  <field name="PIN">Output A</field>
+                </block>
+              </value>
+              <value name="value">
+                <block type="arduino_digital">
+                  <field name="DIGITAL">HIGH</field>
+                </block>
+              </value>
+            </block>
+
+            <block type="arduino_digital_read">
+              <value name="pin">
+                <block type="arduino_pin">
+                  <field name="PIN">Input 1</field>
+                </block>
+              </value>
+            </block>
+
+            <block type="arduino_analog_write">
+              <value name="pin">
+                <block type="arduino_pin">
+                  <field name="PIN">Output A</field>
+                </block>
+              </value>
+              <value name="value">
+                <block type="math_number">
+                  <field name="NUM">512</field>
+                </block>
+              </value>
+            </block>
+
+            <block type="arduino_analog_read">
+              <value name="pin">
+                <block type="arduino_pin">
+                  <field name="PIN">Input 1</field>
+                </block>
+              </value>
+            </block>
+
+            <block type="arduino_tone">
+              <value name="frequency">
+                <block type="arduino_frequency">
+                  <field name="NUM">Note C4</field>
+                </block>
+              </value>
+              <value name="pin">
+                <block type="arduino_pin">
+                  <field name="PIN">Output A</field>
+                </block>
+              </value>
+            </block>
+
+            <block type="arduino_notone">
+              <value name="pin">
+                <block type="arduino_pin">
+                  <field name="PIN">Output A</field>
+                </block>
+              </value>
+            </block>
+
+            <block type="arduino_delay">
+              <value name="time">
+                <block type="math_number">
+                  <field name="NUM">1000</field>
+                </block>
+              </value>
+            </block>
+
         </category>
         <category name="Flow">
             <block type="logic_compare"></block>
             <block type="controls_if"></block>
             <block type="controls_repeat_ext"></block>
+            <block type="arduino_repeat_forever"></block>
         </category>
         <category name="Math">
             <block type="math_number"></block>
@@ -43,6 +109,13 @@
         <category name="Variables" custom="VARIABLE">
             <block type="variables_get"></block>
             <block type="variables_set"></block>
+        </category>
+        </category>
+        <category name="Values">
+            <block type="arduino_pin"></block>
+            <block type="arduino_digital"></block>
+            <block type="arduino_frequency"></block>
+            <block type="arduino_switchstate"></block>
         </category>
         </xml>
 

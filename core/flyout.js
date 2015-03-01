@@ -164,6 +164,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     // Firefox has trouble with hidden elements (Bug 528969).
     var optionBox = {height: 0, y: 0};
   }
+
   return {
     viewHeight: viewHeight,
     viewWidth: viewWidth,
@@ -205,7 +206,7 @@ Blockly.Flyout.prototype.init = function(workspace) {
   this.targetWorkspace_ = workspace;
   this.workspace_.targetWorkspace = workspace;
   // Add scrollbar.
-  this.scrollbar_ = new Blockly.Scrollbar(this.workspace_, false, false);
+  // this.scrollbar_ = new Blockly.Scrollbar(this.workspace_, false, false);
 
   this.hide();
 

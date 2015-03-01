@@ -50,10 +50,10 @@ Blockly.Arduino['procedures_defreturn'] = function(block) {
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.Arduino.variableDB_.getName(block.arguments_[x],
+    args[x] = 'int ' + Blockly.Arduino.variableDB_.getName(block.arguments_[x],
         Blockly.Variables.NAME_TYPE);
   }
-  var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
+  var code = 'int ' + funcName + '(' + args.join(', ') + ') {\n' +
       branch + returnValue + '}';
   code = Blockly.Arduino.scrub_(block, code);
   Blockly.Arduino.definitions_[funcName] = code;

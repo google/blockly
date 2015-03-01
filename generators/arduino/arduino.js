@@ -28,109 +28,90 @@ goog.provide('Blockly.Arduino.arduino');
 
 goog.require('Blockly.Arduino');
 
-var PINTOVAR = {
-  '1' : 'INPUT_1',
-  '2' : 'INPUT_2',
-  '3' : 'INPUT_3',
-  '4' : 'INPUT_4',
-  '5' : 'INPUT_5',
-  '6' : 'INPUT_6',
-  'A' : 'OUTPUT_A',
-  'B' : 'OUTPUT_B',
-  'C' : 'OUTPUT_C',
-  'D' : 'OUTPUT_D',
-  'E' : 'OUTPUT_E',
-  'F' : 'OUTPUT_F'
-}
+Blockly.Arduino['arduino_digital'] = function(block) {
+  var code = block.getFieldValue('DIGITAL');
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino['arduino_switchstate'] = function(block) {
+  var code = block.getFieldValue('DIGITAL');
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino['arduino_frequency'] = function(block) {
+  var code = block.getFieldValue('NUM');
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+Blockly.Arduino['arduino_pin'] = function(block) {
+  var PINTOVAR = {
+    'Input 1' : 'INPUT_1',
+    'Input 2' : 'INPUT_2',
+    'Input 3' : 'INPUT_3',
+    'Input 4' : 'INPUT_4',
+    'Input 5' : 'INPUT_5',
+    'Input 6' : 'INPUT_6',
+    'Output A' : 'OUTPUT_A',
+    'Output B' : 'OUTPUT_B',
+    'Output C' : 'OUTPUT_C',
+    'Output D' : 'OUTPUT_D',
+    'Output E' : 'OUTPUT_E',
+    'Output F' : 'OUTPUT_F'
+  }
+  
+  var code = PINTOVAR[block.getFieldValue('PIN')];
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
 
 Blockly.Arduino['arduino_digital_write'] = function(block) {
-  var toggle = block.getFieldValue('TOGGLE') == 'TRUE' ? 'on' : 'off';
-  var pin = block.getFieldValue('PIN');
-  var code = toggle + '(' + PINTOVAR[pin] + ');\n';
+  var value = Blockly.Arduino.valueToCode(block, 'value', Blockly.Arduino.ORDER_NONE) || '0';
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
+  var code = 'digitalWrite(' + pin + ', ' + value + ');\n';
   return code;
 };
 
 Blockly.Arduino['arduino_digital_read'] = function(block) {
-  var pin = block.getFieldValue('PIN');
-
-  var code = 'digitalRead(' + PINTOVAR[pin] + ')\n'; 
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
+  var code = 'digitalRead(' + pin + ')'; 
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino['arduino_analog_write'] = function(block) {
-  var pin = block.getFieldValue('PIN');
-
-  var argument = '';
-  var valueBlock = block.getInputTargetBlock('Val') || '0';
-  var value;
-  if (valueBlock == '0') {
-    value = '0';
-  } else if (valueBlock.type == 'math_number') {
-    value = Blockly.Arduino.valueToCode(block, 'Val',
-      Blockly.Arduino.ORDER_ASSIGNMENT);
-  } else if (valueBlock.type == 'variables_get') {
-    var varName = Blockly.Arduino.variableDB_.getName(valueBlock.getFieldValue('VAR'),
-          Blockly.Variables.NAME_TYPE);
-    value = varName;
-  } else {
-    value = Blockly.Arduino.valueToCode(block, 'Val',
-      Blockly.Arduino.ORDER_ASSIGNMENT);
-  }
-
-  var code = 'analogWrite(' + PINTOVAR[pin] + ', ' + value + ');\n';
+  var value = Blockly.Arduino.valueToCode(block, 'value', Blockly.Arduino.ORDER_NONE) || '0';
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
+  var code = 'analogWrite(' + pin + ', ' + value + ');\n';
   return code;
 };
 
 Blockly.Arduino['arduino_analog_read'] = function(block) {
-  var pin = block.getFieldValue('PIN');
-  var code = 'analogRead(' + PINTOVAR[pin] + ')'; 
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
+  var code = 'analogRead(' + pin + ')'; 
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino['arduino_tone'] = function(block) {
-  var pin = block.getFieldValue('PIN');
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
+  var frequency = Blockly.Arduino.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
 
-  var argument = '';
-  var toneBlock = block.getInputTargetBlock('tone') || '0';
-  var freq;
-  if (toneBlock == '0') {
-    freq = 0;
-  } else if (toneBlock.type == 'math_number') {
-    freq = Blockly.Arduino.valueToCode(block, 'tone',
-        Blockly.Arduino.ORDER_NONE);
-  } else if (toneBlock.type == 'variables_get') {
-    var varName = Blockly.Arduino.variableDB_.getName(toneBlock.getFieldValue('VAR'),
-          Blockly.Variables.NAME_TYPE);
-    freq = varName;
-  } else {
-    freq = Blockly.Arduino.valueToCode(block, 'tone',
-        Blockly.Arduino.ORDER_NONE);
-  }
-
-  if (freq == '0')
-    return 'noTone(' + pin + ');\n';
-  else
-    return 'tone(' + pin + ', ' + freq + ');\n';
+  return 'tone(' + pin + ', ' + frequency + ');\n';
 };
 
-Blockly.Arduino['arduino_delay'] = function(block) {
-  var argument = '';
-  var timeBlock = block.getInputTargetBlock('delay') || '0';
-  var time;
-  if (timeBlock == '0') {
-    time = 0;
-  } else if (timeBlock.type == 'math_number') {
-    time = Blockly.Arduino.valueToCode(block, 'delay',
-        Blockly.Arduino.ORDER_NONE);
-  } else if (timeBlock.type == 'variables_get') {
-    var varName = Blockly.Arduino.variableDB_.getName(timeBlock.getFieldValue('VAR'),
-          Blockly.Variables.NAME_TYPE);
-    time = varName;
-  } else {
-    time = Blockly.Arduino.valueToCode(block, 'delay',
-        Blockly.Arduino.ORDER_NONE) + '\n';
-  }
+Blockly.Arduino['arduino_notone'] = function(block) {
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
 
+  return 'noTone(' + pin + ');\n';
+};
+
+
+Blockly.Arduino['arduino_delay'] = function(block) {
+  var time = Blockly.Arduino.valueToCode(block, 'time', Blockly.Arduino.ORDER_NONE) || '0';
   var code = 'delay(' + time + ');\n';
+  return code;
+};
+
+Blockly.Arduino['arduino_repeat_forever'] = function(block) {
+  var branch = Blockly.Arduino.statementToCode(block, 'DO');
+  branch = Blockly.Arduino.addLoopTrap(branch, block.id);
+  var code = 'while(1) {\n' + branch + '}\n';
   return code;
 };

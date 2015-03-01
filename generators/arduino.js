@@ -106,7 +106,7 @@ Blockly.Arduino.init = function(workspace) {
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
   for (var x = 0; x < variables.length; x++) {
-    defvars[x] = 'var ' +
+    defvars[x] = 'int ' +
         Blockly.Arduino.variableDB_.getName(variables[x],
         Blockly.Variables.NAME_TYPE) + ';';
   }
@@ -124,8 +124,13 @@ Blockly.Arduino.finish = function(code) {
   for (var name in Blockly.Arduino.definitions_) {
     definitions.push(Blockly.Arduino.definitions_[name]);
   }
+
+  if (code) {
+    code = Blockly.Arduino.prefixLines(code, "  ");
+  }
+
   // return definitions.join('\n\n') + '\n\n\n' + code;
-  return '#include "LightUp.h"\n\nvoid setup(){}\n\nvoid loop(){\n' + code + '\n}\n\n';
+  return '#include "LightUp.h"\n\n' + definitions.join('\n') + '\n' + 'void setup(){\n' + code + '}\n\n' + 'void loop(){}\n\n';
 };
 
 /**

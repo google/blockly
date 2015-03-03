@@ -208,19 +208,16 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
   if (isNaN(innerOrder)) {
     throw 'Expecting valid order from value block "' + targetBlock.type + '".';
   }
-  if (code && order <= innerOrder) {
-    if (order == innerOrder || (order == 0 || order == 99)) {
-      // 0 is the atomic order, 99 is the none order.  No parentheses needed.
-      // In all known languages multiple such code blocks are not order
-      // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
-    } else {
-      // The operators outside this code are stonger than the operators
-      // inside this code.  To prevent the code from being pulled apart,
-      // wrap the code in parentheses.
-      // Technically, this should be handled on a language-by-language basis.
-      // However all known (sane) languages use parentheses for grouping.
-      code = '(' + code + ')';
-    }
+  // 0 is the atomic order, 99 is the none order.  No parentheses needed.
+  // In all known languages multiple such code blocks are not order
+  // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
+  if (code && order <= innerOrder && order != 0 && order != 99) {
+    // The operators outside this code are stonger than the operators
+    // inside this code.  To prevent the code from being pulled apart,
+    // wrap the code in parentheses.
+    // Technically, this should be handled on a language-by-language basis.
+    // However all known (sane) languages use parentheses for grouping.
+    code = '(' + code + ')';
   }
   return code;
 };

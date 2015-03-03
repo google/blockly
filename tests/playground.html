@@ -53,6 +53,13 @@ function enableRealtimeSpecificUi() {
   realtimeDiv.display = 'block';
 }
 
+function addEventHandler(elem, eventType, handler) {
+    if (elem.addEventListener)
+        elem.addEventListener (eventType, handler, false);
+    else if (elem.attachEvent)
+        elem.attachEvent ('on' + eventType, handler); 
+}
+
 function start() {
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('blocklyDiv'),
@@ -70,7 +77,22 @@ function start() {
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }
+  
+  //initialize Validation module
+  Blockly.Validation.init();
+
+  //when maxTopBlock changes, set values
+  addEventHandler(document.getElementById('maxTopBlocksCombo'), 'change', function() {
+    console.log("Set " + this.value + " maxTopBlocks");
+	
+	if(this.value == 'Infinity')
+		Blockly.Validation.setMaxTopBlocks(Number.MAX_VALUE);
+	else
+		Blockly.Validation.setMaxTopBlocks(Number(this.value));
+  });
 }
+  
+
 
 function toXml() {
   var output = document.getElementById('importExport');
@@ -89,6 +111,15 @@ function fromXml() {
 function toCode(lang) {
   var output = document.getElementById('importExport');
   output.value = Blockly[lang].workspaceToCode();
+}
+
+function validateBlockly() {
+	Blockly.Validation.validateMainWorkspace (function(result, msg) {
+		var output = document.getElementById('validationResult');
+		output.value = msg;
+		output.focus();
+		output.select();
+	});
 }
 
 function airstrike(n) {
@@ -440,6 +471,26 @@ h1 {
     Stress test:
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+  </p>
+
+    <hr>
+
+  <p>
+    Validation
+    <br>
+	
+	Max top blocks : 
+	<select id="maxTopBlocksCombo" >
+		<option value="1">1</option>
+		<option value="2">2</option>
+		<option value="3">3</option>
+		<option value="Infinity">infinite</option>
+	</select>
+	
+	<br>
+    <input type="button" value="Validate" onclick="validateBlockly()">
+    <br>
+    <textarea id="validationResult"></textarea>
   </p>
 
   <!-- Realtime setup buttons. -->

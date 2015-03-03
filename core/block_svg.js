@@ -1237,6 +1237,25 @@ Blockly.BlockSvg.prototype.removeSelect = function() {
 };
 
 /**
+ * Add the error shpae to the block
+ */
+Blockly.BlockSvg.prototype.addError = function() {
+    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+        'blocklySelectedError');
+    // Move the selected block to the top of the stack.
+    if(this.svgGroup_ != null && this.svgGroup_ != undefined && this.svgGroup_.parentNode != null && this.svgGroup_.parentNode != undefined)
+        this.svgGroup_.parentNode.appendChild(this.svgGroup_);
+};
+
+/**
+ * Remove the error shape of a block
+ */
+Blockly.BlockSvg.prototype.removeError = function() {
+    Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+        'blocklySelectedError');
+};
+
+/**
  * Adds the dragging class to this block.
  * Also disables the highlights/shadows to improve performance.
  */

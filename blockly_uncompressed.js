@@ -60,6 +60,7 @@ goog.addDependency("../../../" + dir + "/core/tooltip.js", ['Blockly.Tooltip'], 
 goog.addDependency("../../../" + dir + "/core/trashcan.js", ['Blockly.Trashcan'], ['goog.Timer', 'goog.dom', 'goog.math', 'goog.math.Rect']);
 goog.addDependency("../../../" + dir + "/core/utils.js", ['Blockly.utils'], ['goog.events.BrowserFeature', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/variables.js", ['Blockly.Variables'], ['Blockly.Workspace', 'goog.string']);
+goog.addDependency("../../../" + dir + "/core/validation.js", ['Blockly.Validation'], ['Blockly.Workspace']);
 goog.addDependency("../../../" + dir + "/core/warning.js", ['Blockly.Warning'], ['Blockly.Bubble', 'Blockly.Icon']);
 goog.addDependency("../../../" + dir + "/core/widgetdiv.js", ['Blockly.WidgetDiv'], ['Blockly.Css', 'goog.dom']);
 goog.addDependency("../../../" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['goog.math']);
@@ -1559,6 +1560,7 @@ goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.Tooltip');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.Validation');
 goog.require('Blockly.Variables');
 goog.require('Blockly.Warning');
 goog.require('Blockly.WidgetDiv');

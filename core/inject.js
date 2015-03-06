@@ -268,6 +268,7 @@ Blockly.createDom_ = function(container) {
       {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
   Blockly.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
+
   Blockly.mainWorkspace = new Blockly.WorkspaceSvg(
       Blockly.getMainWorkspaceMetrics_,
       Blockly.setMainWorkspaceMetrics_);
@@ -280,16 +281,7 @@ Blockly.createDom_ = function(container) {
     if (Blockly.hasCategories) {
       Blockly.mainWorkspace.toolbox_ = new Blockly.Toolbox(svg, container);
     } else if (Blockly.languageTree) {
-      /**
-       * @type {!Blockly.Flyout}
-       * @private
-       */
-      Blockly.mainWorkspace.flyout_ = new Blockly.Flyout();
-      var flyout = Blockly.mainWorkspace.flyout_;
-      var flyoutSvg = flyout.createDom();
-      flyout.autoClose = false;
-      // Insert the flyout behind the workspace so that blocks appear on top.
-      goog.dom.insertSiblingBefore(flyoutSvg, Blockly.mainWorkspace.svgGroup_);
+      Blockly.mainWorkspace.addFlyout();
     }
     if (!Blockly.hasScrollbars) {
       var workspaceChanged = function() {

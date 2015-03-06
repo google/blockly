@@ -102,7 +102,7 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 Blockly.WorkspaceSvg.prototype.createDom = function() {
   /*
   <g>
-    [Trashcan may go here]
+    [Trashcan and/or flyout may go here]
     <g></g>  // Block canvas
     <g></g>  // Bubble canvas
     [Scrollbars may go here]
@@ -152,6 +152,16 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
 };
 
 /**
+ * Add a flyout.
+ */
+Blockly.WorkspaceSvg.prototype.addFlyout = function() {
+    this.flyout_ = new Blockly.Flyout();
+    this.flyout_.autoClose = false;
+    var svgFlyout = this.flyout_.createDom();
+    this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
+};
+
+/**
  * Get the SVG element that forms the drawing surface.
  * @return {!Element} SVG element.
  */
@@ -165,6 +175,17 @@ Blockly.WorkspaceSvg.prototype.getCanvas = function() {
  */
 Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
   return this.svgBubbleCanvas_;
+};
+
+/**
+ * Translate this workspace to new coordinates.
+ * @param {number} x Horizontal translation.
+ * @param {number} y Vertical translation.
+ */
+Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
+  var translation = 'translate(' + x + ',' + y + ')';
+  this.svgBlockCanvas_.setAttribute('transform', translation);
+  this.svgBubbleCanvas_.setAttribute('transform', translation);
 };
 
 /**

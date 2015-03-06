@@ -191,9 +191,7 @@ Blockly.Flyout.prototype.setMetrics_ = function(yRatio) {
     this.workspace_.scrollY =
         -metrics.contentHeight * yRatio.y - metrics.contentTop;
   }
-  var y = this.workspace_.scrollY + metrics.absoluteTop;
-  this.workspace_.getCanvas().setAttribute('transform',
-                                           'translate(0,' + y + ')');
+  this.workspace_.translate(0, this.workspace_.scrollY + metrics.absoluteTop);
 };
 
 /**

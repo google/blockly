@@ -107,7 +107,6 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   /* Create the editor.  Here's the markup that will be generated:
   <svg>
     <rect class="blocklyMutatorBackground" />
-    [Flyout]
     [Workspace]
   </svg>
   */
@@ -120,10 +119,8 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   var mutator = this;
   this.workspace_ = new Blockly.WorkspaceSvg(
       function() {return mutator.getFlyoutMetrics_();}, null);
-  this.workspace_.flyout_ = new Blockly.Flyout();
-  this.workspace_.flyout_.autoClose = false;
-  this.svgDialog_.appendChild(this.workspace_.flyout_.createDom());
   this.svgDialog_.appendChild(this.workspace_.createDom());
+  this.workspace_.addFlyout();
   return this.svgDialog_;
 };
 

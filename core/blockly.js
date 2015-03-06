@@ -715,12 +715,9 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
     Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  var translation = 'translate(' +
-      (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
-      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
-  Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
-  Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
-                                                       translation);
+  Blockly.mainWorkspace.translate(
+      Blockly.mainWorkspace.scrollX + metrics.absoluteLeft,
+      Blockly.mainWorkspace.scrollY + metrics.absoluteTop);
 };
 
 /**

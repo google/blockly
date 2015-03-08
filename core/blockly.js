@@ -278,13 +278,16 @@ Blockly.onMouseDown_ = function(e) {
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
   Blockly.hideChaff();
   var isTargetSvg = e.target && e.target.nodeName &&
-      e.target.nodeName.toLowerCase() == 'svg';
+      (e.target.nodeName.toLowerCase() == 'svg' ||
+       e.target == Blockly.mainWorkspace.svgBackground_);
   if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
   }
-  if (e.target == Blockly.svg && Blockly.isRightButton(e)) {
-    // Right-click.
+  if ((e.target == Blockly.svg ||
+       e.target == Blockly.mainWorkspace.svgGridRect_) &&
+      Blockly.isRightButton(e)) {
+    // Right-click on main workspace (not in a mutator).
     Blockly.showContextMenu_(e);
   } else if ((Blockly.readOnly || isTargetSvg) &&
              Blockly.mainWorkspace.scrollbar) {
@@ -715,9 +718,11 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
     Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  Blockly.mainWorkspace.translate(
-      Blockly.mainWorkspace.scrollX + metrics.absoluteLeft,
-      Blockly.mainWorkspace.scrollY + metrics.absoluteTop);
+  var x = Blockly.mainWorkspace.scrollX + metrics.absoluteLeft;
+  var y = Blockly.mainWorkspace.scrollY + metrics.absoluteTop;
+  Blockly.mainWorkspace.translate(x, y);
+  Blockly.mainWorkspacePattern_.setAttribute('x', x);
+  Blockly.mainWorkspacePattern_.setAttribute('y', y);
 };
 
 /**

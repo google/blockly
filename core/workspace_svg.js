@@ -97,11 +97,14 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 
 /**
  * Create the trash can elements.
+ * @param {?string} backgroundClass Either 'blocklyMainBackground' or
+ *     'blocklyMutatorBackground'.
  * @return {!Element} The workspace's SVG group.
  */
-Blockly.WorkspaceSvg.prototype.createDom = function() {
+Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   /*
   <g>
+    <rect class="blocklyMainBackground" height="100%" width="100%"></rect>
     [Trashcan and/or flyout may go here]
     <g></g>  // Block canvas
     <g></g>  // Bubble canvas
@@ -109,6 +112,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function() {
   </g>
   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+  if (opt_backgroundClass) {
+    this.svgBackground_ = Blockly.createSvgElement('rect',
+        {'height': '100%', 'width': '100%',
+         'class': opt_backgroundClass}, this.svgGroup_);
+  }
   this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.fireChangeEvent();
@@ -155,10 +163,10 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
  * Add a flyout.
  */
 Blockly.WorkspaceSvg.prototype.addFlyout = function() {
-    this.flyout_ = new Blockly.Flyout();
-    this.flyout_.autoClose = false;
-    var svgFlyout = this.flyout_.createDom();
-    this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
+  this.flyout_ = new Blockly.Flyout();
+  this.flyout_.autoClose = false;
+  var svgFlyout = this.flyout_.createDom();
+  this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
 };
 
 /**

@@ -132,6 +132,22 @@ Blockly.parseOptions_ = function(options) {
   if (hasCss === undefined) {
     hasCss = true;
   }
+  var grid = options['grid'] || {};
+  if (!grid['spacing']) {
+    grid['spacing'] = 0;
+  } else {
+    grid['spacing'] = parseFloat(grid['spacing']);
+  }
+  if (!grid['colour']) {
+    grid['colour'] = '#888';
+  }
+  if (!grid['length']) {
+    grid['length'] = 1;
+  } else {
+    grid['length'] = parseFloat(grid['length']);
+  }
+  grid['length'] = Math.min(grid['length'], grid['spacing']);
+  grid['snap'] = !!grid['snap'];
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
 
@@ -153,6 +169,7 @@ Blockly.parseOptions_ = function(options) {
   Blockly.hasSounds = hasSounds;
   Blockly.hasCss = hasCss;
   Blockly.languageTree = tree;
+  Blockly.gridOptions = grid;
   Blockly.enableRealtime = enableRealtime;
   Blockly.realtimeOptions = realtimeOptions;
 };
@@ -268,11 +285,45 @@ Blockly.createDom_ = function(container) {
       {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
   Blockly.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
+  /*
+    <pattern id="blocklyGridPattern" patternUnits="userSpaceOnUse"
+             width="10" height="10">
+      <rect width="1" height="1" stroke="#888" />
+      <rect width="1" height="1" stroke="#888" />
+    </pattern>
+  */
+  pattern = Blockly.createSvgElement('pattern',
+      {'id': 'blocklyGridPattern',
+       'patternUnits': 'userSpaceOnUse',
+       'width': Blockly.gridOptions['spacing'],
+       'height': Blockly.gridOptions['spacing']}, defs);
+  if (Blockly.gridOptions['length'] > 0) {
+    var half = Math.floor(Blockly.gridOptions['spacing'] / 2) + .5;
+    var start = half - Blockly.gridOptions['length'] / 2;
+    var end = half + Blockly.gridOptions['length'] / 2;
+    Blockly.createSvgElement('line',
+        {'x1': start,
+         'y1': half,
+         'x2': end,
+         'y2': half,
+         'stroke': Blockly.gridOptions['colour']},
+        pattern);
+    if (Blockly.gridOptions['length'] > 1) {
+      Blockly.createSvgElement('line',
+          {'x1': half,
+           'y1': start,
+           'x2': half,
+           'y2': end,
+           'stroke': Blockly.gridOptions['colour']},
+          pattern);
+    }
+    Blockly.mainWorkspacePattern_ = pattern;
+  }
 
   Blockly.mainWorkspace = new Blockly.WorkspaceSvg(
       Blockly.getMainWorkspaceMetrics_,
       Blockly.setMainWorkspaceMetrics_);
-  svg.appendChild(Blockly.mainWorkspace.createDom());
+  svg.appendChild(Blockly.mainWorkspace.createDom('blocklyMainBackground'));
   Blockly.mainWorkspace.maxBlocks = Blockly.maxBlocks;
 
   if (!Blockly.readOnly) {

@@ -197,6 +197,11 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
+      if (Blockly.gridOptions['snap'] &&
+          selected.workspace == Blockly.mainWorkspace) {
+        goog.Timer.callOnce(
+            selected.snapToGrid_, Blockly.BUMP_DELAY / 2, selected);
+      }
       goog.Timer.callOnce(
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
@@ -265,6 +270,24 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
       'translate(' + (xy.x + dx) + ', ' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
   Blockly.Realtime.blockChanged(this);
+};
+
+/**
+ * Snap this block to the nearest grid point.
+ * @private
+ */
+Blockly.BlockSvg.prototype.snapToGrid_ = function() {
+  if (this.getParent()) {
+    return;  // Only snap top-level blocks.
+  }
+  var spacing = Blockly.gridOptions['spacing'];
+  var half = spacing / 2;
+  var xy = this.getRelativeToSurfaceXY();
+  var dx = Math.round((xy.x - half) / spacing) * spacing + half - xy.x;
+  var dy = Math.round((xy.y - half) / spacing) * spacing + half - xy.y;
+  if (dx != 0 || dy != 0) {
+    this.moveBy(dx, dy);
+  }
 };
 
 /**

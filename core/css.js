@@ -176,6 +176,15 @@ Blockly.Css.CONTENT = [
   '.blocklySelected>.blocklyPathLight {',
   '  display: none;',
   '}',
+  
+  '.blocklySelectedError>.blocklyPathLight {',
+  '    display: none;',
+  '}',
+
+  '.blocklySelectedError>.blocklyPath {',
+  '    stroke: #f00;',
+  '    stroke-width: 3px;',
+  '}',
 
   '.blocklyDragging>.blocklyPath,',
   '.blocklyDragging>.blocklyPathLight {',

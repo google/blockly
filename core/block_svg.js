@@ -325,7 +325,6 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ == collapsed) {
     return;
   }
-  Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
   var renderList = [];
   // Show/hide the inputs.
   for (var x = 0, input; input = this.inputList[x]; x++) {
@@ -343,6 +342,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME);
   }
+  Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
 
   if (!renderList.length) {
     // No child blocks, just render this block.

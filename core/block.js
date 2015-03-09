@@ -295,14 +295,15 @@ Blockly.Block.prototype.getConnections_ = function(all) {
  * @private
  */
 Blockly.Block.prototype.bumpNeighbours_ = function() {
+  if (!this.workspace) {
+    return;  // Deleted block.
+  }
   if (Blockly.dragMode_ != 0) {
-    // Don't bump blocks during a drag.
-    return;
+    return;  // Don't bump blocks during a drag.
   }
   var rootBlock = this.getRootBlock();
   if (rootBlock.isInFlyout) {
-    // Don't move blocks around in a flyout.
-    return;
+    return;  // Don't move blocks around in a flyout.
   }
   // Loop though every connection on this block.
   var myConnections = this.getConnections_(false);

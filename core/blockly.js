@@ -285,7 +285,7 @@ Blockly.onMouseDown_ = function(e) {
     Blockly.selected.unselect();
   }
   if ((e.target == Blockly.svg ||
-       e.target == Blockly.mainWorkspace.svgGridRect_) &&
+       e.target == Blockly.mainWorkspace.svgBackground_) &&
       Blockly.isRightButton(e)) {
     // Right-click on main workspace (not in a mutator).
     Blockly.showContextMenu_(e);

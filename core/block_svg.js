@@ -277,8 +277,17 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
  * @private
  */
 Blockly.BlockSvg.prototype.snapToGrid_ = function() {
+  if (!this.workspace) {
+    return;  // Deleted block.
+  }
+  if (Blockly.dragMode_ != 0) {
+    return;  // Don't bump blocks during a drag.
+  }
   if (this.getParent()) {
     return;  // Only snap top-level blocks.
+  }
+  if (this.isInFlyout) {
+    return;  // Don't move blocks around in a flyout.
   }
   var spacing = Blockly.gridOptions['spacing'];
   var half = spacing / 2;

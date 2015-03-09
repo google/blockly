@@ -146,7 +146,6 @@ Blockly.parseOptions_ = function(options) {
   } else {
     grid['length'] = parseFloat(grid['length']);
   }
-  grid['length'] = Math.min(grid['length'], grid['spacing']);
   grid['snap'] = !!grid['snap'];
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;

@@ -252,7 +252,7 @@ Blockly.Blocks['arduino_repeat_forever'] = {
         .appendField("repeat forever");
     this.appendStatementInput('DO')
         .appendField('do');
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
+    this.setPreviousStatement(false);
+    this.setNextStatement(false);
   }
 };

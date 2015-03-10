@@ -147,7 +147,7 @@ class Gen_compressed(threading.Thread):
     self.search_paths = search_paths
     
   def run(self):
-    self.gen_core()
+    #self.gen_core()
     self.gen_blocks()
     self.gen_generator('javascript')
     self.gen_generator('instructions')

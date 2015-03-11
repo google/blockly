@@ -352,7 +352,10 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     for (var x = 0, block; block = renderList[x]; x++) {
       block.render();
     }
-    this.bumpNeighbours_();
+    // Don't bump neighbours.
+    // Although bumping neighbours would make sense, users often collapse
+    // all their functions and store them next to each other.  Expanding and
+    // bumping causes all their definitions to go out of alignment.
   }
 };
 

@@ -294,6 +294,8 @@ Blockly.BlockSvg.prototype.snapToGrid_ = function() {
   var xy = this.getRelativeToSurfaceXY();
   var dx = Math.round((xy.x - half) / spacing) * spacing + half - xy.x;
   var dy = Math.round((xy.y - half) / spacing) * spacing + half - xy.y;
+  dx = Math.round(dx);
+  dy = Math.round(dy);
   if (dx != 0 || dy != 0) {
     this.moveBy(dx, dy);
   }

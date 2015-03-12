@@ -508,6 +508,7 @@ Blockly.showContextMenu_ = function(e) {
  */
 Blockly.onContextMenu_ = function(e) {
   if (!Blockly.isTargetInput_(e)) {
+    Blockly.showContextMenu_(e);
     // When focused on an HTML text input widget, don't cancel the context menu.
     e.preventDefault();
   }

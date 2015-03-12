@@ -87,6 +87,8 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   if (!Blockly.readOnly && !this.eventsInit_) {
     Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
+    Blockly.bindEvent_(this.getSvgRoot(), 'contextmenu', this,
+                       this.onContextMenu_);
   }
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange) && !this.eventsInit_) {
@@ -462,6 +464,17 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     }
     Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   });
+};
+
+/**
+ * Handle context menu.
+ * @param {!Event} e Contextmenu event.
+ * @private
+ */
+Blockly.BlockSvg.prototype.onContextMenu_ = function(e) {
+  this.showContextMenu_(e);
+  e.stopPropagation();
+  e.preventDefault();
 };
 
 /**

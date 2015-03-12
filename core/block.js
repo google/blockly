@@ -506,9 +506,11 @@ Blockly.Block.prototype.setEditable = function(editable) {
       field.updateEditable();
     }
   }
-  var icons = this.getIcons();
-  for (var i = 0; i < icons.length; i++) {
-    icons[i].updateEditable();
+  if (this.rendered) {
+    var icons = this.getIcons();
+    for (var i = 0; i < icons.length; i++) {
+      icons[i].updateEditable();
+    }
   }
 };
 

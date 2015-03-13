@@ -36,7 +36,7 @@ Blockly.Arduino['controls_repeat'] = function(block) {
   branch = Blockly.Arduino.addLoopTrap(branch, block.id);
   var loopVar = Blockly.Arduino.variableDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
-  var code = 'for (var ' + loopVar + ' = 0; ' +
+  var code = 'for (int ' + loopVar + ' = 0; ' +
       loopVar + ' < ' + repeats + '; ' +
       loopVar + '++) {\n' +
       branch + '}\n';
@@ -58,7 +58,7 @@ Blockly.Arduino['controls_repeat_ext'] = function(block) {
         'repeat_end', Blockly.Variables.NAME_TYPE);
     code += 'var ' + endVar + ' = ' + repeats + ';\n';
   }
-  code += 'for (var ' + loopVar + ' = 0; ' +
+  code += 'for (int ' + loopVar + ' = 0; ' +
       loopVar + ' < ' + endVar + '; ' +
       loopVar + '++) {\n' +
       branch + '}\n';
@@ -113,19 +113,19 @@ Blockly.Arduino['controls_for'] = function(block) {
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
       var startVar = Blockly.Arduino.variableDB_.getDistinctName(
           variable0 + '_start', Blockly.Variables.NAME_TYPE);
-      code += 'var ' + startVar + ' = ' + argument0 + ';\n';
+      code += 'int ' + startVar + ' = ' + argument0 + ';\n';
     }
     var endVar = argument1;
     if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
       var endVar = Blockly.Arduino.variableDB_.getDistinctName(
           variable0 + '_end', Blockly.Variables.NAME_TYPE);
-      code += 'var ' + endVar + ' = ' + argument1 + ';\n';
+      code += 'int ' + endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
     var incVar = Blockly.Arduino.variableDB_.getDistinctName(
         variable0 + '_inc', Blockly.Variables.NAME_TYPE);
-    code += 'var ' + incVar + ' = ';
+    code += 'int ' + incVar + ' = ';
     if (Blockly.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
     } else {
@@ -156,7 +156,7 @@ Blockly.Arduino['controls_forEach'] = function(block) {
       variable0 + '_index', Blockly.Variables.NAME_TYPE);
   branch = Blockly.Arduino.INDENT + variable0 + ' = ' +
       argument0 + '[' + indexVar + '];\n' + branch;
-  var code = 'for (var ' + indexVar + ' in  ' + argument0 + ') {\n' +
+  var code = 'for (int ' + indexVar + ' in  ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;
 };

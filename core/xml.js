@@ -238,6 +238,9 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
         block.moveBy(Blockly.RTL ? width - blockX : blockX, blockY);
+        if (Blockly.gridOptions['snap']) {
+          block.snapToGrid();
+        }
       }
     }
   }

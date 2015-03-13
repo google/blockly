@@ -228,10 +228,22 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
     }
   }
   if (bump) {
-    // Bump the block sideways.
-    var dx = Blockly.SNAP_RADIUS * (Blockly.RTL ? -1 : 1);
-    var dy = Blockly.SNAP_RADIUS * 2;
+    // Calculate the bump based on snap radius or grid snap.
+    if (Blockly.gridOptions['snap'] &&
+        Blockly.gridOptions['spacing'] > Blockly.SNAP_RADIUS) {
+      var xOffset = Blockly.gridOptions['spacing'];
+      var yOffset = Blockly.gridOptions['spacing'] * 2;
+    } else {
+      var xOffset = Blockly.SNAP_RADIUS;
+      var yOffset = Blockly.SNAP_RADIUS * 2;
+    }
+    // Bump the block sideways and snap to grid if enabled.
+    var dx = xOffset * (Blockly.RTL ? -1 : 1);
+    var dy = yOffset;
     this.moveBy(dx, dy);
+    if (Blockly.gridOptions['snap']) {
+      block.snapToGrid();
+    }
   }
 };
 
@@ -248,13 +260,22 @@ Blockly.Block.prototype.duplicate_ = function() {
       /** @type {!Blockly.Workspace} */ (this.workspace), xmlBlock);
   // Move the duplicate next to the old block.
   var xy = this.getRelativeToSurfaceXY();
-  if (Blockly.RTL) {
-    xy.x -= Blockly.SNAP_RADIUS;
+  // Calculate the offset based on snap radius or grid snap.
+  if (Blockly.gridOptions['snap'] &&
+      Blockly.gridOptions['spacing'] > Blockly.SNAP_RADIUS) {
+    var xOffset = Blockly.gridOptions['spacing'];
+    var yOffset = Blockly.gridOptions['spacing'] * 2;
   } else {
-    xy.x += Blockly.SNAP_RADIUS;
+    var xOffset = Blockly.SNAP_RADIUS;
+    var yOffset = Blockly.SNAP_RADIUS * 2;
   }
-  xy.y += Blockly.SNAP_RADIUS * 2;
+  // Apply and snap to grid if enabled.
+  xy.x += xOffset * (Blockly.RTL ? -1 : 1);
+  xy.y += yOffset;
   newBlock.moveBy(xy.x, xy.y);
+  if (Blockly.gridOptions['snap']) {
+    newBlock.snapToGrid();
+  }
   newBlock.select();
   return newBlock;
 };

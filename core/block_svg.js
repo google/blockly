@@ -200,7 +200,7 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       if (Blockly.gridOptions['snap'] &&
           selected.workspace == Blockly.mainWorkspace) {
         goog.Timer.callOnce(
-            selected.snapToGrid_, Blockly.BUMP_DELAY / 2, selected);
+            selected.snapToGrid, Blockly.BUMP_DELAY / 2, selected);
       }
       goog.Timer.callOnce(
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
@@ -274,9 +274,8 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
 
 /**
  * Snap this block to the nearest grid point.
- * @private
  */
-Blockly.BlockSvg.prototype.snapToGrid_ = function() {
+Blockly.BlockSvg.prototype.snapToGrid = function() {
   if (!this.workspace) {
     return;  // Deleted block.
   }

@@ -299,8 +299,14 @@ Blockly.Connection.prototype.bumpAwayFrom_ = function(staticConnection) {
   }
   // Raise it to the top for extra visibility.
   rootBlock.getSvgRoot().parentNode.appendChild(rootBlock.getSvgRoot());
-  var dx = (staticConnection.x_ + Blockly.SNAP_RADIUS) - this.x_;
-  var dy = (staticConnection.y_ + Blockly.SNAP_RADIUS) - this.y_;
+  if (Blockly.gridOptions['snap'] &&
+      Blockly.gridOptions['spacing'] > Blockly.SNAP_RADIUS) {
+    var offset = Blockly.gridOptions['spacing'];
+  } else {
+    var offset = Blockly.SNAP_RADIUS;
+  }
+  var dx = (staticConnection.x_ + offset) - this.x_;
+  var dy = (staticConnection.y_ + offset) - this.y_;
   if (reverse) {
     // When reversing a bump due to an uneditable block, bump up.
     dy = -dy;
@@ -309,6 +315,9 @@ Blockly.Connection.prototype.bumpAwayFrom_ = function(staticConnection) {
     dx = -dx;
   }
   rootBlock.moveBy(dx, dy);
+  if (Blockly.gridOptions['snap']) {
+    rootBlock.snapToGrid();
+  }
 };
 
 /**

@@ -911,6 +911,13 @@ Blockly.Css.CONTENT = [
   '  fill-opacity: .8;',
   '}',
 
+  '.active-square {',
+  '  stroke: #FF9900;',
+  '  stroke-width: 2;',
+  '  fill: #F0F0F0;',
+  '  fill-opacity: .8;',
+  '}',
+
   '.blocklyArduinoSelectorTransparent:hover {',
   '  stroke: #FF9900;',
   '  stroke-width: 2;',

@@ -170,7 +170,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-A'
   }, svg);
 
   var squareb = Blockly.createSvgElement('rect', {
@@ -180,7 +181,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-B'
   }, svg);
 
   var squarec = Blockly.createSvgElement('rect', {
@@ -190,7 +192,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-C'
   }, svg);
 
   ///bottom squares
@@ -201,7 +204,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': squareHeight + downshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-D'
   }, svg);
 
   var squaree = Blockly.createSvgElement('rect', {
@@ -211,7 +215,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': squareHeight + downshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-E'
   }, svg);
 
   var squaref = Blockly.createSvgElement('rect', {
@@ -221,7 +226,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': squareHeight + downshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-F'
   }, svg);
 
   //side blocks
@@ -233,7 +239,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-1'
   }, svg);
 
   var square2 = Blockly.createSvgElement('rect', {
@@ -243,7 +250,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-2'
   }, svg);
 
   var square3 = Blockly.createSvgElement('rect', {
@@ -253,7 +261,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-3'
   }, svg);
   //right squares
   var square4 = Blockly.createSvgElement('rect', {
@@ -263,7 +272,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': squareHeight + rightshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-4'
   }, svg);
 
   var square5 = Blockly.createSvgElement('rect', {
@@ -273,7 +283,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': squareHeight + rightshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-5'
   }, svg);
 
   var square6 = Blockly.createSvgElement('rect', {
@@ -283,7 +294,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': squareHeight + rightshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-6'
   }, svg);
  
   ///////////////text labels////////////////////

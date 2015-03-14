@@ -63,6 +63,11 @@ Blockly.Arduino['arduino_pin'] = function(block) {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino['arduino_uno_pin'] = function(block) {
+  var code = block.getFieldValue('PIN');
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
 Blockly.Arduino['arduino_digital_write'] = function(block) {
   var value = Blockly.Arduino.valueToCode(block, 'value', Blockly.Arduino.ORDER_NONE) || '0';
   var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';

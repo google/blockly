@@ -34,6 +34,36 @@ Blockly.Blocks['arduino_pin'] = {
   }
 };
 
+Blockly.Blocks['arduino_uno_pin'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.arduino.HUE);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(
+           [["Pin 1", "1"],
+            ["Pin 2", "2"],
+            ["Pin 3", "3"],
+            ["Pin 4", "4"],
+            ["Pin 5", "5"],
+            ["Pin 6", "6"],
+            ["Pin 7", "7"],
+            ["Pin 8", "8"],
+            ["Pin 9", "9"],
+            ["Pin 10", "10"],
+            ["Pin 11", "11"],
+            ["Pin 12", "12"],
+            ["Pin 13", "13"],
+            ["Pin A0", "A0"],
+            ["Pin A1", "A1"],
+            ["Pin A2", "A2"],
+            ["Pin A3", "A3"],
+            ["Pin A4", "A4"],
+            ["Pin A5", "A5"]]
+        ), 'PIN');
+    this.setOutput(true, 'Pin');
+    this.setTooltip('');
+  }
+};
+
 Blockly.Blocks['arduino_digital'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino.HUE);

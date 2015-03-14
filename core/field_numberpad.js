@@ -60,8 +60,7 @@ Blockly.FieldNumberpad = function(text, opt_changeHandler) {
   //this.symbol_ = Blockly.createSvgElement('tspan', {}, null);
   /*this.symbol_.appendChild(document.createTextNode('\u00B0'));
    */
-  Blockly.FieldNumberpad.superClass_.constructor.call(this,
-    text, changeHandler);
+  Blockly.FieldNumberpad.superClass_.constructor.call(this, text, changeHandler);
 };
 goog.inherits(Blockly.FieldNumberpad, Blockly.FieldTextInput);
 
@@ -128,6 +127,10 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
     return;
   }
 
+  if(!noFocus) {
+    return;
+  } 
+
   //define scaling vars
   var scale = 1;
   var pad = 15 * scale;
@@ -166,7 +169,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
   ///////////////number labels////////////////////
   var text1 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (-1) + yshift + pad+30 + (yshift /2), 
-    'x': -40 + 12 + pad+65,
+    'x': -40 + 13 + pad+65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -175,7 +178,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text2 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (-1) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
+    'x': -40 + 13 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -184,7 +187,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text3 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (-1) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + squareHeight + rightshift + pad-65,
+    'x': -40 + 13 + squareHeight + rightshift + pad-65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -193,7 +196,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text4 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (0) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + pad+65,
+    'x': -40 + 13 + pad+65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -202,7 +205,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text5 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (0) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
+    'x': -40 + 13 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -211,7 +214,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text6 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (0) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + squareHeight + rightshift + pad-65,
+    'x': -40 + 13 + squareHeight + rightshift + pad-65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -220,7 +223,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text7 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + pad+65,
+    'x': -40 + 13 + pad+65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -229,7 +232,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text8 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
+    'x': -40 + 13 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -238,7 +241,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text9 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+30 + (yshift /2),
-    'x': -40 + 12 + squareHeight + rightshift + pad-65,
+    'x': -40 + 13 + squareHeight + rightshift + pad-65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -247,7 +250,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var text0 = Blockly.createSvgElement('text', {
     'y': -40 + xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+30 + (yshift /2), 
-    'x': -40 + 12 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
+    'x': -40 + 13 + (pad+65 + squareHeight + rightshift + pad-65) / 2,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNum'
@@ -265,7 +268,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var textPOM = Blockly.createSvgElement('text', {
     'y': -50 + 2 + xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+30 + (yshift /2), 
-    'x': -50 + 14 + pad+65,
+    'x': -50 + 15 + pad+65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNumText'
@@ -274,7 +277,7 @@ Blockly.FieldNumberpad.prototype.showEditor_ = function() {
 
   var textCLR = Blockly.createSvgElement('text', {
     'y': -50 + 2 + xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+30 + (yshift /2), 
-    'x': -50 + 14 + squareHeight + rightshift + pad-65,
+    'x': -50 + 15 + squareHeight + rightshift + pad-65,
     'font-family': font,
     'fill': '#75A2F0',
     'class': 'blocklyArduinoNumText'
@@ -490,7 +493,6 @@ Blockly.FieldNumberpad.prototype.createBlockFunc_ = function(originBlock) {
   var FieldNumberpad = this;
   return function(e) {
     if (originBlock.id.length == 1) {
-      console.log(originBlock.id + " was clicked");
       //FieldArduino.setText(originBlock.id);
       if(originBlock.id == 'E') {
         //does nothing

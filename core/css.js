@@ -311,7 +311,8 @@ Blockly.Css.CONTENT = [
   '  font-family: sans-serif;',
   '  font-size: 11pt;',
   '  outline: none;',
-  '  width: 100%',
+  '  width: 100%;',
+  '  top: -0.5px;',
   '}',
 
   '.blocklyMutatorBackground {',

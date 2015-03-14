@@ -131,7 +131,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   Blockly.WidgetDiv.show(this, null);
 
   //define scaling vars
-  var scale = 1;
+  var scale = 0.75;
   var pad = 15 * scale;
   var squareWidth = 50 * scale;
   var squareHeight = 50 * scale;
@@ -170,7 +170,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-A'
   }, svg);
 
   var squareb = Blockly.createSvgElement('rect', {
@@ -180,7 +181,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-B'
   }, svg);
 
   var squarec = Blockly.createSvgElement('rect', {
@@ -190,7 +192,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-C'
   }, svg);
 
   ///bottom squares
@@ -201,7 +204,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': squareHeight + downshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-D'
   }, svg);
 
   var squaree = Blockly.createSvgElement('rect', {
@@ -211,7 +215,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': squareHeight + downshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-E'
   }, svg);
 
   var squaref = Blockly.createSvgElement('rect', {
@@ -221,7 +226,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'y': squareHeight + downshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-F'
   }, svg);
 
   //side blocks
@@ -233,7 +239,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-1'
   }, svg);
 
   var square2 = Blockly.createSvgElement('rect', {
@@ -243,7 +250,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-2'
   }, svg);
 
   var square3 = Blockly.createSvgElement('rect', {
@@ -253,7 +261,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-3'
   }, svg);
   //right squares
   var square4 = Blockly.createSvgElement('rect', {
@@ -263,7 +272,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': squareHeight + rightshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-4'
   }, svg);
 
   var square5 = Blockly.createSvgElement('rect', {
@@ -273,7 +283,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': squareHeight + rightshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-5'
   }, svg);
 
   var square6 = Blockly.createSvgElement('rect', {
@@ -283,33 +294,34 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
     'x': squareHeight + rightshift + pad,
     'rx': '5',
     'ry': '5',
-    'class': 'blocklyArduinoSelector'
+    'class': 'blocklyArduinoSelector',
+    'id': 'square-6'
   }, svg);
  
   ///////////////text labels////////////////////
   //center labels
-  var textIn = Blockly.createSvgElement('text', {
-    'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift-5,
-    'y': pad+200,
-    'font-family': font,
-    'fill': '#8EDD65',
-    'class': 'blocklyArduinoIO'
-  }, svg);
-  textIn.appendChild(document.createTextNode("Inputs"));
+  // var textIn = Blockly.createSvgElement('text', {
+  //   'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift-5,
+  //   'y': pad+200,
+  //   'font-family': font,
+  //   'fill': '#8EDD65',
+  //   'class': 'blocklyArduinoIO'
+  // }, svg);
+  // textIn.appendChild(document.createTextNode("Inputs"));
 
-  var textOut = Blockly.createSvgElement('text', {
-    'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift-10,
-    'y': pad+230,
-    'font-family': font,
-    'fill': '#4DC4D9',
-    'class': 'blocklyArduinoIO'
-  }, svg);
-  textOut.appendChild(document.createTextNode("Outputs"));
+  // var textOut = Blockly.createSvgElement('text', {
+  //   'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift-10,
+  //   'y': pad+230,
+  //   'font-family': font,
+  //   'fill': '#4DC4D9',
+  //   'class': 'blocklyArduinoIO'
+  // }, svg);
+  // textOut.appendChild(document.createTextNode("Outputs"));
 
   //top label
   var texta = Blockly.createSvgElement('text', {
-    'x': xbase + xshift+10,
-    'y': pad+90,
+    'x': xbase + xshift +5,
+    'y': pad+80,
     'font-family': font,
     'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
@@ -317,8 +329,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   texta.appendChild(document.createTextNode("A"));
 
   var textb = Blockly.createSvgElement('text', {
-    'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift+10,
-    'y': pad+90,
+    'x': xbase + leftpad + rightpad + squareWidth * (1) + xshift +5,
+    'y': pad+80,
     'font-family': font,
     'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
@@ -327,8 +339,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
 
 
   var textc = Blockly.createSvgElement('text', {
-    'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift+10,
-    'y': pad+90,
+    'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift +5,
+    'y': pad+80,
     'font-family': font,
     'fill': '#4DC4D9',
     'class': 'blocklyArduinoText'
@@ -337,7 +349,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
 
   ///bottom labels
   var textd = Blockly.createSvgElement('text', {
-    'x': xbase + xshift+10,
+    'x': xbase + xshift +5,
     'y': squareHeight + downshift + pad-10,
     'font-family': font,
     'fill': '#4DC4D9',
@@ -346,7 +358,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   textd.appendChild(document.createTextNode("D"));
 
   var texte = Blockly.createSvgElement('text', {
-    'x': xbase + (leftpad + rightpad + squareWidth) * (1) + xshift+10,
+    'x': xbase + (leftpad + rightpad + squareWidth) * (1) + xshift +5,
     'y': squareHeight + downshift + pad-10,
     'font-family': font,
     'fill': '#4DC4D9',
@@ -355,7 +367,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   texte.appendChild(document.createTextNode("E"));
 
   var textf = Blockly.createSvgElement('text', {
-    'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift+10,
+    'x': xbase + (leftpad + rightpad + squareWidth) * (2) + xshift +5,
     'y': squareHeight + downshift + pad-10,
     'font-family': font,
     'fill': '#4DC4D9',
@@ -365,8 +377,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
 
   //left labels
   var text1 = Blockly.createSvgElement('text', {
-    'y': xbase + yshift + pad+40,
-    'x': pad+65,
+    'y': xbase + yshift + pad+35,
+    'x': pad+50,
     'font-family': font,
     'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
@@ -374,8 +386,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   text1.appendChild(document.createTextNode("1"));
 
   var text2 = Blockly.createSvgElement('text', {
-    'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+40,
-    'x': pad+65,
+    'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+35,
+    'x': pad+50,
     'font-family': font,
     'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
@@ -383,8 +395,8 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   text2.appendChild(document.createTextNode("2"));
 
   var text3 = Blockly.createSvgElement('text', {
-    'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+40,
-    'x': pad+65,
+    'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+35,
+    'x': pad+50,
     'font-family': font,
     'fill': '#8EDD65',
     'class': 'blocklyArduinoText'
@@ -392,7 +404,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   text3.appendChild(document.createTextNode("3"));
   //right labels
   var text4 = Blockly.createSvgElement('text', {
-    'y': xbase + yshift + pad+40,
+    'y': xbase + yshift + pad+35,
     'x': squareHeight + rightshift + pad-40,
     'font-family': font,
     'fill': '#8EDD65',
@@ -401,7 +413,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   text4.appendChild(document.createTextNode("4"));
 
   var text5 = Blockly.createSvgElement('text', {
-    'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+40,
+    'y': xbase + (leftpad + rightpad + squareWidth) * (1) + yshift + pad+35,
     'x': squareHeight + rightshift + pad-40,
     'font-family': font,
     'fill': '#8EDD65',
@@ -410,7 +422,7 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   text5.appendChild(document.createTextNode("5"));
 
   var text6 = Blockly.createSvgElement('text', {
-    'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+40,
+    'y': xbase + (leftpad + rightpad + squareWidth) * (2) + yshift + pad+35,
     'x': squareHeight + rightshift + pad-40,
     'font-family': font,
     'fill': '#8EDD65',

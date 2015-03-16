@@ -32,7 +32,9 @@ goog.require('Blockly.BlockSvg');
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldColour');
-goog.require('Blockly.FieldDate');
+// Date picker commented out since it increases footprint by 60%.
+// Add it only if you need it.
+//goog.require('Blockly.FieldDate');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
@@ -276,13 +278,16 @@ Blockly.onMouseDown_ = function(e) {
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
   Blockly.hideChaff();
   var isTargetSvg = e.target && e.target.nodeName &&
-      e.target.nodeName.toLowerCase() == 'svg';
+      (e.target.nodeName.toLowerCase() == 'svg' ||
+       e.target == Blockly.mainWorkspace.svgBackground_);
   if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
   }
-  if (e.target == Blockly.svg && Blockly.isRightButton(e)) {
-    // Right-click.
+  if ((e.target == Blockly.svg ||
+       e.target == Blockly.mainWorkspace.svgBackground_) &&
+      Blockly.isRightButton(e)) {
+    // Right-click on main workspace (not in a mutator).
     Blockly.showContextMenu_(e);
   } else if ((Blockly.readOnly || isTargetSvg) &&
              Blockly.mainWorkspace.scrollbar) {
@@ -551,10 +556,10 @@ Blockly.removeAllRanges = function() {
  * @private
  */
 Blockly.isTargetInput_ = function(e) {
-  return e.target.type == 'textarea' || e.target.type == 'text' 
-      || e.target.type == 'number' || e.target.type == 'email'
-      || e.target.type == 'password' || e.target.type == 'search'
-      || e.target.type == 'tel' || e.target.type == 'url';
+  return e.target.type == 'textarea' || e.target.type == 'text' ||
+         e.target.type == 'number' || e.target.type == 'email' ||
+         e.target.type == 'password' || e.target.type == 'search' ||
+         e.target.type == 'tel' || e.target.type == 'url';
 };
 
 /**
@@ -713,12 +718,11 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
     Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  var translation = 'translate(' +
-      (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
-      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
-  Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
-  Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
-                                                       translation);
+  var x = Blockly.mainWorkspace.scrollX + metrics.absoluteLeft;
+  var y = Blockly.mainWorkspace.scrollY + metrics.absoluteTop;
+  Blockly.mainWorkspace.translate(x, y);
+  Blockly.mainWorkspacePattern_.setAttribute('x', x);
+  Blockly.mainWorkspacePattern_.setAttribute('y', y);
 };
 
 /**

@@ -367,7 +367,12 @@ Code.init = function() {
 
   var toolbox = document.getElementById('toolbox');
   Blockly.inject(document.getElementById('content_blocks'),
-      {media: '../../media/',
+      {grid:
+          {spacing: 25,
+           length: 3,
+           colour: '#ccc',
+           snap: true},
+       media: '../../media/',
        rtl: rtl,
        toolbox: toolbox});
 

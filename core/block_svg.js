@@ -31,6 +31,7 @@ goog.require('Blockly.ContextMenu');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
+goog.require('goog.Timer');
 
 
 /**
@@ -196,6 +197,11 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
+      if (Blockly.gridOptions['snap'] &&
+          selected.workspace == Blockly.mainWorkspace) {
+        goog.Timer.callOnce(
+            selected.snapToGrid_, Blockly.BUMP_DELAY / 2, selected);
+      }
       goog.Timer.callOnce(
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
@@ -267,6 +273,35 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
 };
 
 /**
+ * Snap this block to the nearest grid point.
+ * @private
+ */
+Blockly.BlockSvg.prototype.snapToGrid_ = function() {
+  if (!this.workspace) {
+    return;  // Deleted block.
+  }
+  if (Blockly.dragMode_ != 0) {
+    return;  // Don't bump blocks during a drag.
+  }
+  if (this.getParent()) {
+    return;  // Only snap top-level blocks.
+  }
+  if (this.isInFlyout) {
+    return;  // Don't move blocks around in a flyout.
+  }
+  var spacing = Blockly.gridOptions['spacing'];
+  var half = spacing / 2;
+  var xy = this.getRelativeToSurfaceXY();
+  var dx = Math.round((xy.x - half) / spacing) * spacing + half - xy.x;
+  var dy = Math.round((xy.y - half) / spacing) * spacing + half - xy.y;
+  dx = Math.round(dx);
+  dy = Math.round(dy);
+  if (dx != 0 || dy != 0) {
+    this.moveBy(dx, dy);
+  }
+};
+
+/**
  * Returns a bounding box describing the dimensions of this block
  * and any blocks stacked below it.
  * @return {!Object} Object with height and width properties.
@@ -292,7 +327,6 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ == collapsed) {
     return;
   }
-  Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
   var renderList = [];
   // Show/hide the inputs.
   for (var x = 0, input; input = this.inputList[x]; x++) {
@@ -310,6 +344,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME);
   }
+  Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
 
   if (!renderList.length) {
     // No child blocks, just render this block.
@@ -319,7 +354,10 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     for (var x = 0, block; block = renderList[x]; x++) {
       block.render();
     }
-    this.bumpNeighbours_();
+    // Don't bump neighbours.
+    // Although bumping neighbours would make sense, users often collapse
+    // all their functions and store them next to each other.  Expanding and
+    // bumping causes all their definitions to go out of alignment.
   }
 };
 
@@ -1147,6 +1185,21 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.BlockSvg.prototype.setWarningText = function(text) {
+  if (this.setWarningText.pid_) {
+    // Only queue up the latest change.  Kill any earlier pending process.
+    clearTimeout(this.setWarningText.pid_);
+    this.setWarningText.pid_ = 0;
+  }
+  if (Blockly.dragMode_ == 2) {
+    // Don't change the warning text during a drag.
+    // Wait until the drag finishes.
+    var thisBlock = this;
+    this.setWarningText.pid_ = setTimeout(function() {
+      thisBlock.setWarningText.pid_ = 0;
+      thisBlock.setWarningText(text);
+    }, 100);
+    return;
+  }
   if (this.isInFlyout) {
     text = null;
   }

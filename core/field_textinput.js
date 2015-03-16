@@ -64,6 +64,12 @@ Blockly.FieldTextInput.prototype.clone = function() {
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
 
 /**
+ * Allow browser to spellcheck this field.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.spellcheck_ = true;
+
+/**
  * Close the input widget if this input is being deleted.
  */
 Blockly.FieldTextInput.prototype.dispose = function() {
@@ -90,6 +96,14 @@ Blockly.FieldTextInput.prototype.setText = function(text) {
     }
   }
   Blockly.Field.prototype.setText.call(this, text);
+};
+
+/**
+ * Set whether this field is spellchecked by the browser.
+ * @param {boolean} check True if checked.
+ */
+Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
+  this.spellcheck_ = check;
 };
 
 /**
@@ -120,6 +134,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
   var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
+  htmlInput.setAttribute('spellcheck', this.spellcheck_);
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
   div.appendChild(htmlInput);
 
@@ -132,7 +147,10 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
     htmlInput.select();
   }
 
-  // Bind to keyup -- trap Enter and Esc; resize after every keystroke.
+  // Bind to keydown -- trap Enter without IME and Esc to hide.
+  htmlInput.onKeyDownWrapper_ =
+      Blockly.bindEvent_(htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
+  // Bind to keyup -- trap Enter; resize after every keystroke.
   htmlInput.onKeyUpWrapper_ =
       Blockly.bindEvent_(htmlInput, 'keyup', this, this.onHtmlInputChange_);
   // Bind to keyPress -- repeatedly resize when holding down a key.
@@ -145,20 +163,30 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
 };
 
 /**
+ * Handle key down to the editor.
+ * @param {!Event} e Keyboard event.
+ * @private
+ */
+Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
+  var htmlInput = Blockly.FieldTextInput.htmlInput_;
+  var enterKey = 13, escKey = 27;
+  if (e.keyCode == enterKey) {
+    Blockly.WidgetDiv.hide();
+  } else if (e.keyCode == escKey) {
+    this.setText(htmlInput.defaultValue);
+    Blockly.WidgetDiv.hide();
+  }
+};
+
+/**
  * Handle a change to the editor.
  * @param {!Event} e Keyboard event.
  * @private
  */
 Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  if (e.keyCode == 13) {
-    // Enter
-    Blockly.WidgetDiv.hide();
-  } else if (e.keyCode == 27) {
-    // Esc
-    this.setText(htmlInput.defaultValue);
-    Blockly.WidgetDiv.hide();
-  } else {
+  var escKey = 27;
+  if (e.keyCode != escKey) {
     // Update source block.
     var text = htmlInput.value;
     if (text !== htmlInput.oldValue_) {
@@ -238,6 +266,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     }
     thisField.setText(text);
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
+    Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
     Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
     Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
     Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);

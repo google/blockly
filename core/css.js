@@ -314,6 +314,10 @@ Blockly.Css.CONTENT = [
   '  width: 100%',
   '}',
 
+  '.blocklyMainBackground {',
+  '  fill: url(#blocklyGridPattern);',
+  '}',
+
   '.blocklyMutatorBackground {',
   '  fill: #fff;',
   '  stroke: #ddd;',

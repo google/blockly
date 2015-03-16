@@ -137,6 +137,7 @@ Blockly.Input.prototype.isVisible = function() {
 
 /**
  * Sets whether this input is visible or not.
+ * Used to collapse/uncollapse a block.
  * @param {boolean} visible True if visible.
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
  */
@@ -201,6 +202,9 @@ Blockly.Input.prototype.setAlign = function(align) {
  * Initialize the fields on this input.
  */
 Blockly.Input.prototype.init = function() {
+  if (!this.sourceBlock_.workspace.rendered) {
+    return;  // Headless blocks don't need fields initialized.
+  }
   for (var x = 0; x < this.fieldRow.length; x++) {
     this.fieldRow[x].init(this.sourceBlock_);
   }

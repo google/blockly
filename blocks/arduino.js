@@ -276,13 +276,24 @@ Blockly.Blocks['arduino_delay'] = {
 };
 
 Blockly.Blocks['arduino_repeat_forever'] = {
-  init: function() {
-    this.setColour(Blockly.Blocks.loops.HUE);
-    this.appendDummyInput()
+    init: function() {
+        this.setColour(Blockly.Blocks.loops.HUE);
+        this.appendDummyInput()
         .appendField("repeat forever");
-    this.appendStatementInput('DO')
+        this.appendStatementInput('DO')
         .appendField('do');
-    this.setPreviousStatement(false);
-    this.setNextStatement(false);
-  }
+        this.setPreviousStatement(false);
+        this.setNextStatement(false);
+    }
+};
+
+Blockly.Blocks['arduino_disable_input_lights'] = {
+    init: function() {
+        this.setColour(Blockly.Blocks.loops.HUE);
+        this.appendDummyInput()
+        .appendField("disable input lights");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip('');
+    }
 };

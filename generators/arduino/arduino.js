@@ -120,3 +120,8 @@ Blockly.Arduino['arduino_repeat_forever'] = function(block) {
   var code = 'while(1) {\n' + branch + '}\n';
   return code;
 };
+
+Blockly.Arduino['arduino_disable_input_lights'] = function(block) {
+  var code = 'disableInputLights();\n';
+  return code;
+};

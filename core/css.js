@@ -169,15 +169,10 @@ Blockly.Css.CONTENT = [
   '.blocklyPathLight {',
   '  fill: none;',
   '  stroke-linecap: round;',
-  '  stroke-width: 2;',
+  '  stroke-width: 0;',
   '}',
 
-  '.blocklySelected>.blocklyPath {',
-  '  stroke: #fc3;',
-  '  stroke-width: 3px;',
-  '}',
-
-  '.blocklySelected>.blocklyPathLight {',
+  'blocklyPathDark {',
   '  display: none;',
   '}',
 
@@ -185,10 +180,6 @@ Blockly.Css.CONTENT = [
   '.blocklyDragging>.blocklyPathLight {',
   '  fill-opacity: .8;',
   '  stroke-opacity: .8;',
-  '}',
-
-  '.blocklyDragging>.blocklyPathDark {',
-  '  display: none;',
   '}',
 
   '.blocklyDisabled>.blocklyPath {',
@@ -312,11 +303,11 @@ Blockly.Css.CONTENT = [
 
   '.blocklyHtmlInput {',
   '  border: none;',
-  '  font-family: sans-serif;',
-  '  font-size: 11pt;',
+  '  ' + Blockly.Css.font_,
+  '  padding-top: 7px; padding-bottom: 7px;',
+  '  text-align: center;',
   '  outline: none;',
   '  width: 100%;',
-  '  top: -0.5px;',
   '}',
 
   '.blocklyMutatorBackground {',

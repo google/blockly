@@ -750,7 +750,7 @@ Blockly.BlockSvg.TAB_HEIGHT = 20;
  * Width of horizontal puzzle tab.
  * @const
  */
-Blockly.BlockSvg.TAB_WIDTH = 8;
+Blockly.BlockSvg.TAB_WIDTH = 0;
 /**
  * Width of vertical tab (inc left margin).
  * @const
@@ -760,7 +760,7 @@ Blockly.BlockSvg.NOTCH_WIDTH = 30;
  * Rounded corner radius.
  * @const
  */
-Blockly.BlockSvg.CORNER_RADIUS = 8;
+Blockly.BlockSvg.CORNER_RADIUS = 2;
 /**
  * Minimum height of field rows.
  * @const
@@ -1062,8 +1062,10 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   var rgb = goog.color.hexToRgb(hexColour);
   var rgbLight = goog.color.lighten(rgb, 0.3);
   var rgbDark = goog.color.darken(rgb, 0.4);
-  this.svgPathLight_.setAttribute('stroke', goog.color.rgbArrayToHex(rgbLight));
-  this.svgPathDark_.setAttribute('fill', goog.color.rgbArrayToHex(rgbDark));
+  this.svgPathLight_.setAttribute('fill', 'blue');
+  this.svgPathLight_.setAttribute('stroke', 'red');
+  this.svgPathDark_.setAttribute('opacity', '0');
+  this.svgPath_.setAttribute('stroke', 'none');
   this.svgPath_.setAttribute('fill', hexColour);
 
   var icons = this.getIcons();
@@ -1286,6 +1288,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
  */
 Blockly.BlockSvg.prototype.renderFields_ =
     function(fieldList, cursorX, cursorY) {
+
   if (Blockly.RTL) {
     cursorX = -cursorX;
   }
@@ -1375,10 +1378,12 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderWidth = Math.max(input.renderWidth, bBox.width);
     }
 
+/*
     if (i == inputList.length - 1) {
       // Last element should overhang slightly due to shadow.
       input.renderHeight--;
     }
+*/
     row.height = Math.max(row.height, input.renderHeight);
     input.fieldWidth = 0;
     if (inputRows.length == 1) {
@@ -1615,16 +1620,17 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
           cursorX += input.renderWidth + Blockly.BlockSvg.SEP_SPACE_X;
         }
         if (input.type == Blockly.INPUT_VALUE) {
-          inlineSteps.push('M', (cursorX - Blockly.BlockSvg.SEP_SPACE_X) +
-                           ',' + (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y));
+          inlineSteps.push('M', (cursorX - Blockly.BlockSvg.SEP_SPACE_X + 1 - 2) +
+                           ',' + (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y + 1)); // Move to (?)
           inlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
-                           input.renderWidth);
+                           input.renderWidth + 2); // horizontal line to (negative so drawing left)
           inlineSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
           inlineSteps.push('v', input.renderHeight + 1 -
-                                Blockly.BlockSvg.TAB_HEIGHT);
+                                Blockly.BlockSvg.TAB_HEIGHT - 2); // vertical line to (positive so drawing down)
           inlineSteps.push('h', input.renderWidth + 2 -
-                           Blockly.BlockSvg.TAB_WIDTH);
-          inlineSteps.push('z');
+                           Blockly.BlockSvg.TAB_WIDTH - 2); // horizontal line to (postitive so drawing right)
+          inlineSteps.push('z'); // close path
+          /*
           if (Blockly.RTL) {
             // Highlight right edge, around back of tab, and bottom.
             highlightInlineSteps.push('M',
@@ -1652,7 +1658,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
                  Blockly.BlockSvg.TAB_HEIGHT - 0.4));
             highlightInlineSteps.push('l',
                 (Blockly.BlockSvg.TAB_WIDTH * 0.38) + ',-1.8');
-          }
+          }*/
           // Create inline input connection.
           if (Blockly.RTL) {
             connectionX = connectionsXY.x - cursorX -

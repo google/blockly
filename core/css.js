@@ -60,6 +60,8 @@ Blockly.Css.styleSheet_ = null;
  */
 Blockly.Css.mediaPath_ = '';
 
+Blockly.Css.font_ = 'text-transform: uppercase; font-weight: 400; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
+
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
  * file since:
@@ -125,6 +127,8 @@ Blockly.Css.setCursor = function(cursor) {
   }
 };
 
+
+
 /**
  * Array making up the CSS content for Blockly.
  */
@@ -165,15 +169,10 @@ Blockly.Css.CONTENT = [
   '.blocklyPathLight {',
   '  fill: none;',
   '  stroke-linecap: round;',
-  '  stroke-width: 2;',
+  '  stroke-width: 0;',
   '}',
 
-  '.blocklySelected>.blocklyPath {',
-  '  stroke: #fc3;',
-  '  stroke-width: 3px;',
-  '}',
-
-  '.blocklySelected>.blocklyPathLight {',
+  'blocklyPathDark {',
   '  display: none;',
   '}',
 
@@ -181,10 +180,6 @@ Blockly.Css.CONTENT = [
   '.blocklyDragging>.blocklyPathLight {',
   '  fill-opacity: .8;',
   '  stroke-opacity: .8;',
-  '}',
-
-  '.blocklyDragging>.blocklyPathDark {',
-  '  display: none;',
   '}',
 
   '.blocklyDisabled>.blocklyPath {',
@@ -200,8 +195,8 @@ Blockly.Css.CONTENT = [
   '.blocklyText {',
   '  cursor: default;',
   '  fill: #fff;',
-  '  font-family: sans-serif;',
-  '  font-size: 11pt;',
+  '  ' + Blockly.Css.font_,
+  '  font-size: 10px;',
   '}',
 
   '.blocklyNonEditableText>text {',
@@ -308,11 +303,11 @@ Blockly.Css.CONTENT = [
 
   '.blocklyHtmlInput {',
   '  border: none;',
-  '  font-family: sans-serif;',
-  '  font-size: 11pt;',
+  '  ' + Blockly.Css.font_,
+  '  padding-top: 7px; padding-bottom: 7px;',
+  '  text-align: center;',
   '  outline: none;',
   '  width: 100%;',
-  '  top: -0.5px;',
   '}',
 
   '.blocklyMutatorBackground {',

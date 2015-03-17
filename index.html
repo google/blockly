@@ -12,31 +12,6 @@
                 margin: 0;
                 padding: 0;
             }
-
-            .mask {
-              background: red;
-              opacity: 0.5;
-              position: absolute;
-            }
-
-            #msg {
-              background-color: white;
-              font-size: 25px;
-              text-align: center;
-              font-family: 'HelveticaNeue-Light', 'HelveticaNeue', 'Helvetica';
-
-              padding: 10px 10px 10px 10px;
-              margin: 0;
-
-              position: absolute;
-              left: 200px;
-              right: 100px;
-              top: 50px;
-              height: 50px;
-
-              z-index: 1000;
-            }
-
         </style>
     </head>
 
@@ -151,159 +126,9 @@
 
       <a style="position: absolute; right: 10px; top: 10px;" href="#" onclick="console.log(Blockly.Arduino.workspaceToCode());">Generate Arduino</a>
 
-      <div class="msg" id="msg"> Foo bar foo</div>
-
-      <div class="mask" id="mask1"></div>
-      <div class="mask" id="mask2"></div>
-      <div class="mask" id="mask3"></div>
-      <div class="mask" id="mask4"></div>
     </body>
  
   <script type="text/javascript">
-
-    function mask(obj, msg) {
-      var rect = obj.getBoundingClientRect();
-
-      document.getElementById('mask1').style.left = 0;
-      document.getElementById('mask1').style.top = 0;
-      document.getElementById('mask1').style.right = 0;
-      document.getElementById('mask1').style.height = rect.top + 'px';
-
-      document.getElementById('mask2').style.left = 0;
-      document.getElementById('mask2').style.top = rect.bottom + 'px';
-      document.getElementById('mask2').style.right = 0;
-      document.getElementById('mask2').style.bottom = 0;
-
-      document.getElementById('mask3').style.left = 0;
-      document.getElementById('mask3').style.top = rect.top + 'px';
-      document.getElementById('mask3').style.width = rect.left + 'px';
-      document.getElementById('mask3').style.height = (rect.bottom - rect.top) + 'px';
-
-      document.getElementById('mask4').style.left = rect.right + 'px';
-      document.getElementById('mask4').style.top = rect.top + 'px';
-      document.getElementById('mask4').style.right = 0;
-      document.getElementById('mask4').style.height = (rect.bottom - rect.top) + 'px';
-
-      document.getElementById('mask1').style.display = 'block';
-      document.getElementById('mask2').style.display = 'block';
-      document.getElementById('mask3').style.display = 'block';
-      document.getElementById('mask4').style.display = 'block';
-
-      if (msg) {
-        console.log(msg);
-        document.getElementById('msg').innerHTML = msg;
-        document.getElementById('msg').style.display = 'block';
-      }
-    }
-
-    function unmask() {
-      document.getElementById('mask1').style.display = 'none';
-      document.getElementById('mask2').style.display = 'none';
-      document.getElementById('mask3').style.display = 'none';
-      document.getElementById('mask4').style.display = 'none';
-
-      document.getElementById('msg').style.display = 'none';
-    }
-
-    var qq = 0;
-
-    function maskChain(fnAr) {
-      console.log(fnAr);
-      console.log('zz' + qq++);
-      if (fnAr.length == 0){
-        return;
-      }
-
-      var el = fnAr[0].target();
-      mask(el, fnAr[0].msg);
-
-      if (fnAr[0].contcond) {
-        console.log('i am contcond');
-        var tmrFn = function() {
-          console.log('checking contcond ...' + fnAr[0].contcond());
-          if (fnAr[0].contcond()) {
-            unmask();
-            el.onmousedown = null;
-            document.onmouseup = null;
-            maskChain(fnAr.slice(1));
-          } else {
-            setTimeout(tmrFn, 1000);
-          }
-        }
-
-        tmrFn();
-      } else {
-        var g = false;
-        el.addEventListener("mousedown", function(me) {
-          if (g) return;
-          g = true;
-          console.log('mousedown');
-          unmask();
-
-          var f = false;
-          document.addEventListener("mouseup", function() {
-            if (f) return;
-            f = true;
-            console.log('mouseup');
-            console.log(!fnAr[0].cond || fnAr[0].cond());
-
-            if (fnAr[0].cond) {
-              if (fnAr[0].cond()) {
-                el.onmousedown = null;
-                document.onmouseup = null;
-                maskChain(fnAr.slice(1));
-              } else {
-                maskChain([{
-                  target: fnAr[0].retarget,
-                  retarget: fnAr[0].retarget,
-                  cond: fnAr[0].cond,
-                  msg: fnAr[0].msg
-                }].concat(fnAr.slice(1)));
-              }
-            } else {
-              el.onmousedown = null;
-              document.onmouseup = null;
-              maskChain(fnAr.slice(1));
-            }
-
-          });
-        });
-      }
-    }
-
-    function findElementFirst(cls, name) {
-      var labels = document.getElementsByClassName(cls);
-      for (var i = 0; i < labels.length; i++) {
-        if (labels[i].innerHTML == name) {
-          return labels[i];
-        }
-      }
-
-      return null;
-    }
-
-    function findElementLast(cls, name) {
-      var labels = document.getElementsByClassName(cls);
-      for (var i = labels.length - 1; i >= 0; i--) {
-        if (labels[i].innerHTML == name) {
-          return labels[i];
-        }
-      }
-
-      return null;
-    }
-
-    function findCategory(name) {
-      return findElementFirst('blocklyTreeLabel', name).parentNode;
-    }
-
-    function findBlock(name) {
-      return findElementLast('blocklyText', name).parentNode;
-    }
-
-    function findWorkspaceBlock() {
-      return document.getElementsByClassName('blocklySelected')[0];
-    }
 
     Blockly.HSV_SATURATION = 0.60;
     Blockly.HSV_VALUE = 0.84;
@@ -357,18 +182,12 @@
       this.toolbox_.flyout_.svgBackground_.style.stroke = colorForId(node.id_.substring(1));
     };
 
-    var FONT = 'font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
-
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySvg {') + 1, 1, 'background-color: #ddddff;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRow {') + 1, 4, 'border-radius: 10px; padding-top: 12px; padding-bottom: 12px; margin-left: 10px; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; text-align: center; color: white;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyPathLight {') + 3, 1, 'stroke: white; stroke-width: 1;');
-    Blockly.Css.CONTENT.push('.blocklyPathDark { stroke: white; stroke-width: 1px; }');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: #E56A54; stroke-width: 3px;');
+
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyFlyoutBackground {') + 2, 1, 'fill: white; stroke-width: 3px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyHighlightedConnectionPath {') + 2, 1, 'stroke: #E56A54;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeSelected  {') + 1, 1, 'border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0;');
-    // Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyText {') + 3, 1, FONT);
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 2, 1, FONT);
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 4, 1, 'font-size: 16px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyToolboxDiv {') + 1, 1, 'position: relative; width: 120px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeIcon {') + 1, 4, '');
@@ -385,52 +204,5 @@
     Blockly.inject(document.getElementById('blocklyDiv'),
         {path: './', toolbox: document.getElementById('toolbox'), scrollbars: false});
 
-    console.log(Blockly.mainWorkspace.toolbox_.tree_);
-
-    // setTimeout(function() {
-    //  Blockly.mainWorkspace.toolbox_.tree_.setSelectedItem(1);
-    //}, 500);
-
-    // var el = document.getElementById(':1');
-    // el.click.apply(el);
-
-/*
-    maskChain([{
-        target: function() { return findCategory('Arduino'); },
-        msg: "Click on the toolbox to find blocks."
-      }, {
-        target: function() { return findBlock('turn'); },
-        msg: "Drag the turn block onto your pad."
-      }, {
-        target: function() { return findCategory('Arduino'); },
-        msg: "Click on the toolbox to find your next block."
-      }, {
-        target: function() { return findBlock('wait') },
-        retarget: function() { return findWorkspaceBlock() },
-        cond: function() { return Blockly.Arduino.workspaceToCode().indexOf("  digitalWrite(OUTPUT_A, HIGH);\n  delay(1000);") != -1; },
-        msg: "Drag the wait block onto your pad and connect it below the turn block."
-      }, {
-        target: function() { return findCategory('Arduino'); },
-        msg: "Click on the toolbox to find your next block."
-      }, {
-        target: function() { return findBlock('turn') },
-        retarget: function() { return findWorkspaceBlock() },
-        cond: function() { return Blockly.Arduino.workspaceToCode().indexOf("  digitalWrite(OUTPUT_A, HIGH);\n  delay(1000);\n  digitalWrite(OUTPUT_A, HIGH);") != -1; },
-        msg: "Drag another turn block onto your pad and connect it below the wait block."
-      }, {
-        target: function() { return document.getElementsByClassName('blocklyPath')[7].parentNode; },
-        contcond: function() { return Blockly.Arduino.workspaceToCode().indexOf("  digitalWrite(OUTPUT_A, HIGH);\n  delay(1000);\n  digitalWrite(OUTPUT_A, LOW);") != -1; },
-        msg: "Change the state so this time the output turns off.",
-      }, {
-        target: function() { return findCategory('Arduino'); },
-        msg: "Click on the toolbox to find your next block."
-      }, {
-        target: function() { return findBlock('wait') },
-        retarget: function() { return findWorkspaceBlock(); },
-        cond: function() { return Blockly.Arduino.workspaceToCode().indexOf("  digitalWrite(OUTPUT_A, HIGH);\n  delay(1000);\n  digitalWrite(OUTPUT_A, LOW);\n  delay(1000);") != -1; },
-        msg: "Drag another wait block onto your pad and connect it below the turn block."
-      }
-    ]);
-*/
   </script>
 </html>

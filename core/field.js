@@ -93,11 +93,11 @@ Blockly.Field.prototype.init = function(block) {
     this.fieldGroup_.style.display = 'none';
   }
   this.borderRect_ = Blockly.createSvgElement('rect',
-      {'rx': 4,
-       'ry': 4,
-       'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
-       'y': -12,
-       'height': 16}, this.fieldGroup_);
+      {'rx': 0,
+       'ry': 0,
+       'x': -Blockly.BlockSvg.SEP_SPACE_X,
+       'y': -18,
+       'height': 25}, this.fieldGroup_);
   this.textElement_ = Blockly.createSvgElement('text',
       {'class': 'blocklyText'}, this.fieldGroup_);
 
@@ -195,7 +195,7 @@ Blockly.Field.prototype.render_ = function() {
     }
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width',
-          width + Blockly.BlockSvg.SEP_SPACE_X);
+          width + Blockly.BlockSvg.SEP_SPACE_X + 10);
     }
   } else {
     var width = 0;

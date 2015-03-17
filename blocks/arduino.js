@@ -4,7 +4,9 @@ goog.provide('Blockly.Blocks.arduino');
 
 goog.require('Blockly.Blocks');
 
-Blockly.Blocks.arduino.HUE = 30;
+Blockly.Blocks.arduino.HUE = 210;
+Blockly.Blocks.arduino.HUE_INNER_1 = 30;
+Blockly.Blocks.arduino.HUE_INNER_2 = 290;
 
 /*
 var DIGITAL_WRITE = 'digitalWrite';
@@ -23,10 +25,13 @@ var ANALOG_READ = 'analog value of';
 var DELAY = 'wait';
 var TONE = 'play';
 var NO_TONE = 'stop playing on';
+var REPEAT_FOREVER = 'start loop';
+var DO = '';
+
 
 Blockly.Blocks['arduino_pin'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.arduino.HUE);
+    this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
     this.appendDummyInput()
         .appendField(new Blockly.FieldArduino('Output A'), 'PIN');
     this.setOutput(true, 'Pin');
@@ -36,28 +41,28 @@ Blockly.Blocks['arduino_pin'] = {
 
 Blockly.Blocks['arduino_uno_pin'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.arduino.HUE);
+    this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
-           [["Pin 1", "1"],
-            ["Pin 2", "2"],
-            ["Pin 3", "3"],
-            ["Pin 4", "4"],
-            ["Pin 5", "5"],
-            ["Pin 6", "6"],
-            ["Pin 7", "7"],
-            ["Pin 8", "8"],
-            ["Pin 9", "9"],
-            ["Pin 10", "10"],
-            ["Pin 11", "11"],
-            ["Pin 12", "12"],
-            ["Pin 13", "13"],
-            ["Pin A0", "A0"],
-            ["Pin A1", "A1"],
-            ["Pin A2", "A2"],
-            ["Pin A3", "A3"],
-            ["Pin A4", "A4"],
-            ["Pin A5", "A5"]]
+           [["Pin\u00A01", "1"],
+            ["Pin\u00A02", "2"],
+            ["Pin\u00A03", "3"],
+            ["Pin\u00A04", "4"],
+            ["Pin\u00A05", "5"],
+            ["Pin\u00A06", "6"],
+            ["Pin\u00A07", "7"],
+            ["Pin\u00A08", "8"],
+            ["Pin\u00A09", "9"],
+            ["Pin\u00A010", "10"],
+            ["Pin\u00A011", "11"],
+            ["Pin\u00A012", "12"],
+            ["Pin\u00A013", "13"],
+            ["Pin\u00A0A0", "A0"],
+            ["Pin\u00A0A1", "A1"],
+            ["Pin\u00A0A2", "A2"],
+            ["Pin\u00A0A3", "A3"],
+            ["Pin\u00A0A4", "A4"],
+            ["Pin\u00A0A5", "A5"]]
         ), 'PIN');
     this.setOutput(true, 'Pin');
     this.setTooltip('');
@@ -66,7 +71,7 @@ Blockly.Blocks['arduino_uno_pin'] = {
 
 Blockly.Blocks['arduino_digital'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.arduino.HUE);
+    this.setColour(Blockly.Blocks.arduino.HUE_INNER_2);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["On", "HIGH"], ["Off", "LOW"]]), 'DIGITAL');
     this.setOutput(true, 'Digital');
@@ -76,7 +81,7 @@ Blockly.Blocks['arduino_digital'] = {
 
 Blockly.Blocks['arduino_switchstate'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.arduino.HUE);
+    this.setColour(Blockly.Blocks.arduino.HUE_INNER_2);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([["Unpressed", "HIGH"], ["Pressed", "LOW"]]), 'DIGITAL');
     this.setOutput(true, 'Digital');
@@ -86,7 +91,7 @@ Blockly.Blocks['arduino_switchstate'] = {
 
 Blockly.Blocks['arduino_frequency'] = {
   init: function() {
-    this.setColour(Blockly.Blocks.arduino.HUE);
+    this.setColour(Blockly.Blocks.math.HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
             // [["Note B0", "NOTE_B0"],
@@ -126,18 +131,18 @@ Blockly.Blocks['arduino_frequency'] = {
             // ["Note A3", "NOTE_A3"],
             // ["Note AS3", "NOTE_AS3"],
             // ["Note B3", "NOTE_B3"],
-            [["Note C4", "NOTE_C4"],
-            ["Note CS4", "NOTE_CS4"],
-            ["Note D4", "NOTE_D4"],
-            ["Note DS4", "NOTE_DS4"],
-            ["Note E4", "NOTE_E4"],
-            ["Note F4", "NOTE_F4"],
-            ["Note FS4", "NOTE_FS4"],
-            ["Note G4", "NOTE_G4"],
-            ["Note GS4", "NOTE_GS4"],
-            ["Note A4", "NOTE_A4"],
-            ["Note AS4", "NOTE_AS4"],
-            ["Note B4", "NOTE_B4"]]
+            [["Note\u00A0C4", "NOTE_C4"],
+            ["Note\u00A0CS4", "NOTE_CS4"],
+            ["Note\u00A0D4", "NOTE_D4"],
+            ["Note\u00A0DS4", "NOTE_DS4"],
+            ["Note\u00A0E4", "NOTE_E4"],
+            ["Note\u00A0F4", "NOTE_F4"],
+            ["Note\u00A0FS4", "NOTE_FS4"],
+            ["Note\u00A0G4", "NOTE_G4"],
+            ["Note\u00A0GS4", "NOTE_GS4"],
+            ["Note\u00A0A4", "NOTE_A4"],
+            ["Note\u00A0AS4", "NOTE_AS4"],
+            ["Note\u00A0B4", "NOTE_B4"]]
             // ["Note C5", "NOTE_C5"],
             // ["Note CS5", "NOTE_CS5"],
             // ["Note D5", "NOTE_D5"],
@@ -276,15 +281,15 @@ Blockly.Blocks['arduino_delay'] = {
 };
 
 Blockly.Blocks['arduino_repeat_forever'] = {
-    init: function() {
-        this.setColour(Blockly.Blocks.loops.HUE);
-        this.appendDummyInput()
-        .appendField("repeat forever");
-        this.appendStatementInput('DO')
-        .appendField('do');
-        this.setPreviousStatement(false);
-        this.setNextStatement(false);
-    }
+  init: function() {
+    this.setColour(Blockly.Blocks.loops.HUE);
+    this.appendDummyInput()
+        .appendField(REPEAT_FOREVER);
+    this.appendStatementInput('DO')
+        .appendField(DO);
+    this.setPreviousStatement(false);
+    this.setNextStatement(false);
+  }
 };
 
 Blockly.Blocks['arduino_disable_input_lights'] = {

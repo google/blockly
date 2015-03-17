@@ -291,6 +291,7 @@ Blockly.onMouseDown_ = function(e) {
     Blockly.showContextMenu_(e);
   } else if ((Blockly.readOnly || isTargetSvg) &&
              Blockly.mainWorkspace.scrollbar) {
+    Blockly.removeAllRanges();
     // If the workspace is editable, only allow dragging when gripping empty
     // space.  Otherwise, allow dragging when gripping anywhere.
     Blockly.mainWorkspace.dragMode = true;
@@ -534,17 +535,14 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * Deselect this text, so that it doesn't mess up any subsequent drag.
  */
 Blockly.removeAllRanges = function() {
-  if (window.getSelection) {  // W3
-    var sel = window.getSelection();
-    if (sel && sel.removeAllRanges) {
-      setTimeout(function() {
-          try {
-            window.getSelection().removeAllRanges();
-          } catch (e) {
-            // MSIE throws 'error 800a025e' here.
-          }
-        }, 0);
-    }
+  if (getSelection()) {
+    setTimeout(function() {
+        try {
+          getSelection().removeAllRanges();
+        } catch (e) {
+          // MSIE throws 'error 800a025e' here.
+        }
+      }, 0);
   }
 };
 

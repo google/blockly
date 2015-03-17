@@ -537,7 +537,6 @@ Blockly.removeAllRanges = function() {
   if (window.getSelection) {  // W3
     var sel = window.getSelection();
     if (sel && sel.removeAllRanges) {
-      sel.removeAllRanges();
       setTimeout(function() {
           try {
             window.getSelection().removeAllRanges();

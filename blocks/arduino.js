@@ -291,3 +291,14 @@ Blockly.Blocks['arduino_repeat_forever'] = {
     this.setNextStatement(false);
   }
 };
+
+Blockly.Blocks['arduino_disable_input_lights'] = {
+    init: function() {
+        this.setColour(Blockly.Blocks.loops.HUE);
+        this.appendDummyInput()
+        .appendField("disable input lights");
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip('');
+    }
+};

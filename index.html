@@ -179,18 +179,12 @@
       this.toolbox_.flyout_.svgBackground_.style.stroke = colorForId(node.id_.substring(1));
     };
 
-    var FONT = 'font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
-
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySvg {') + 1, 1, 'background-color: #ddddff;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeRow {') + 1, 4, 'border-radius: 10px; padding-top: 12px; padding-bottom: 12px; margin-left: 10px; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; text-align: center; color: white;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyPathLight {') + 3, 1, 'stroke: white; stroke-width: 1;');
-    Blockly.Css.CONTENT.push('.blocklyPathDark { stroke: white; stroke-width: 1px; }');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklySelected>.blocklyPath {') + 2, 1, 'stroke: #E56A54; stroke-width: 3px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyFlyoutBackground {') + 2, 1, 'fill: white; stroke-width: 3px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyHighlightedConnectionPath {') + 2, 1, 'stroke: #E56A54;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeSelected  {') + 1, 1, 'border-top-right-radius: 0; border-bottom-right-radius: 0; margin-right: 0;');
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyText {') + 3, 1, FONT);
-    Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 2, 1, FONT);
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeLabel {') + 4, 1, 'font-size: 16px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyToolboxDiv {') + 1, 1, 'position: relative; width: 120px;');
     Blockly.Css.CONTENT.splice(Blockly.Css.CONTENT.indexOf('.blocklyTreeIcon {') + 1, 4, '');

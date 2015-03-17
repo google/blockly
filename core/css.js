@@ -60,6 +60,8 @@ Blockly.Css.styleSheet_ = null;
  */
 Blockly.Css.mediaPath_ = '';
 
+Blockly.Css.font_ = 'text-transform: uppercase; font-weight: 400; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
+
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
  * file since:
@@ -124,6 +126,8 @@ Blockly.Css.setCursor = function(cursor) {
     }
   }
 };
+
+
 
 /**
  * Array making up the CSS content for Blockly.
@@ -200,8 +204,8 @@ Blockly.Css.CONTENT = [
   '.blocklyText {',
   '  cursor: default;',
   '  fill: #fff;',
-  '  font-family: sans-serif;',
-  '  font-size: 11pt;',
+  '  ' + Blockly.Css.font_,
+  '  font-size: 10px;',
   '}',
 
   '.blocklyNonEditableText>text {',

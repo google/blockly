@@ -96,7 +96,7 @@ Blockly.Flyout.prototype.autoClose = true;
  * @type {number}
  * @const
  */
-Blockly.Flyout.prototype.CORNER_RADIUS = 8;
+Blockly.Flyout.prototype.CORNER_RADIUS = 0;
 
 
 /**

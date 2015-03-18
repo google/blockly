@@ -60,7 +60,7 @@ Blockly.Css.styleSheet_ = null;
  */
 Blockly.Css.mediaPath_ = '';
 
-Blockly.Css.font_ = 'text-transform: uppercase; font-weight: 400; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
+Blockly.Css.font_ = 'text-transform: uppercase; font-size: 10px; font-weight: 400; font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;';
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS

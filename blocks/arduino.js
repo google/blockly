@@ -289,6 +289,7 @@ Blockly.Blocks['arduino_repeat_forever'] = {
         .appendField(DO);
     this.setPreviousStatement(false);
     this.setNextStatement(false);
+    this.setMovable(false);
   }
 };
 

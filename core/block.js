@@ -503,6 +503,7 @@ Blockly.Block.prototype.setEditable = function(editable) {
   this.editable_ = editable;
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      field.init(this);
       field.updateEditable();
     }
   }

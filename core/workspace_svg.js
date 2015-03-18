@@ -330,6 +330,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
   } else {
     this.deleteAreaTrash_ = null;
   }
+  /*
   if (this.flyout_) {
     this.deleteAreaToolbox_ = this.flyout_.getRect();
   } else if (this.toolbox_) {
@@ -337,6 +338,9 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
   } else {
     this.deleteAreaToolbox_ = null;
   }
+  */
+
+  this.deleteAreaToolbox_ = null;
 };
 
 /**

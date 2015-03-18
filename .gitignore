@@ -1,3 +1,5 @@
 .DS_Store
 *.pyc
 *.komodoproject
+*_compressed
+*_uncompressed

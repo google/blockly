@@ -87,6 +87,9 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   if (!Blockly.readOnly && !this.eventsInit_) {
     Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
+    var thisBlock = this;
+    Blockly.bindEvent_(this.getSvgRoot(), 'touchstart', null,
+                       function(e) {Blockly.longStart_(e, thisBlock);});
   }
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange) && !this.eventsInit_) {
@@ -677,6 +680,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       if (dr > Blockly.DRAG_RADIUS) {
         // Switch to unrestricted dragging.
         Blockly.dragMode_ = 2;
+        Blockly.longStop_();
         // Push this block to the very top of the stack.
         this_.setParent(null);
         this_.setDragging_(true);

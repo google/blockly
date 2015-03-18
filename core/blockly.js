@@ -208,6 +208,11 @@ Blockly.BUMP_DELAY = 250;
 Blockly.COLLAPSE_CHARS = 30;
 
 /**
+ * Length in ms for a touch to become a long press.
+ */
+Blockly.LONGPRESS = 750;
+
+/**
  * The main workspace (defined by inject.js).
  * @type {Blockly.Workspace}
  */
@@ -291,6 +296,7 @@ Blockly.onMouseDown_ = function(e) {
     Blockly.showContextMenu_(e);
   } else if ((Blockly.readOnly || isTargetSvg) &&
              Blockly.mainWorkspace.scrollbar) {
+    Blockly.removeAllRanges();
     // If the workspace is editable, only allow dragging when gripping empty
     // space.  Otherwise, allow dragging when gripping anywhere.
     Blockly.mainWorkspace.dragMode = true;
@@ -358,6 +364,11 @@ Blockly.onMouseMove_ = function(e) {
     // Move the scrollbars and the page will scroll automatically.
     Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft,
                                         -y - metrics.contentTop);
+    // Cancel the long-press if the drag has moved too far.
+    var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    if (dr > Blockly.DRAG_RADIUS) {
+      Blockly.longStop_();
+    }
     e.stopPropagation();
   }
 };
@@ -419,6 +430,47 @@ Blockly.onKeyDown_ = function(e) {
 Blockly.terminateDrag_ = function() {
   Blockly.BlockSvg.terminateDrag_();
   Blockly.Flyout.terminateDrag_();
+};
+
+/**
+ * PID of queued long-press task.
+ * @private
+ */
+Blockly.longPid_ = 0;
+
+/**
+ * Context menus on touch devices are activated using a long-press.
+ * Unfortunately the contextmenu touch event is currently (2015) only suported
+ * by Chrome.  This function is fired on any touchstart event, queues a task,
+ * which after about a second opens the context menu.  The tasks is killed
+ * if the touch event terminates early.
+ * @param {!Event} e Touch start event.
+ * @param {Blockly.Block} block The block under the touchstart event, or null
+ *   if the event was on the workspace.
+ * @private
+ */
+Blockly.longStart_ = function(e, block) {
+  Blockly.longStop_();
+  Blockly.longPid_ = setTimeout(function() {
+      e.button = 2;  // Simulate a right button click.
+      if (block) {
+        block.onMouseDown_(e);
+      } else {
+        Blockly.onMouseDown_(e);
+      }
+    }, Blockly.LONGPRESS);
+};
+
+/**
+ * Nope, that's not a long-press.  Either touchend or touchcancel was fired,
+ * or a drag hath begun.  Kill the queued long-press task.
+ * @private
+ */
+Blockly.longStop_ = function() {
+  if (Blockly.longPid_) {
+    clearTimeout(Blockly.longPid_);
+    Blockly.longPid_ = 0;
+  }
 };
 
 /**
@@ -534,18 +586,14 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * Deselect this text, so that it doesn't mess up any subsequent drag.
  */
 Blockly.removeAllRanges = function() {
-  if (window.getSelection) {  // W3
-    var sel = window.getSelection();
-    if (sel && sel.removeAllRanges) {
-      sel.removeAllRanges();
-      setTimeout(function() {
-          try {
-            window.getSelection().removeAllRanges();
-          } catch (e) {
-            // MSIE throws 'error 800a025e' here.
-          }
-        }, 0);
-    }
+  if (getSelection()) {
+    setTimeout(function() {
+        try {
+          getSelection().removeAllRanges();
+        } catch (e) {
+          // MSIE throws 'error 800a025e' here.
+        }
+      }, 0);
   }
 };
 
@@ -666,14 +714,18 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   if (Blockly.mainWorkspace.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
+    var MARGIN = 5;
+    var leftScroll = Blockly.RTL ? Blockly.Scrollbar.scrollbarThickness : 0;
+    var rightScroll = Blockly.RTL ? 0 : Blockly.Scrollbar.scrollbarThickness;
     var leftEdge = Math.min(blockBox.x - viewWidth / 2,
-                            blockBox.x + blockBox.width - viewWidth);
+        blockBox.x + blockBox.width - viewWidth - leftScroll + MARGIN);
     var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
-                             blockBox.x + viewWidth);
+        blockBox.x + viewWidth + rightScroll - MARGIN);
     var topEdge = Math.min(blockBox.y - viewHeight / 2,
-                           blockBox.y + blockBox.height - viewHeight);
+        blockBox.y + blockBox.height - viewHeight + MARGIN);
     var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
-                              blockBox.y + viewHeight);
+        blockBox.y + viewHeight + Blockly.Scrollbar.scrollbarThickness -
+        MARGIN);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;

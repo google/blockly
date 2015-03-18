@@ -395,7 +395,6 @@ Blockly.createDom_ = function(container) {
   document.body.appendChild(Blockly.WidgetDiv.DIV);
 };
 
-
 /**
  * Initialize Blockly with various handlers.
  * @private
@@ -412,11 +411,16 @@ Blockly.init_ = function() {
   Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
                      Blockly.onContextMenu_);
 
+  Blockly.bindEvent_(Blockly.svg, 'touchstart', null,
+                     function(e) {Blockly.longStart_(e, null);});
+
   if (!Blockly.documentEventsBound_) {
     // Only bind the window/document events once.
     // Destroying and reinjecting Blockly should not bind again.
     Blockly.bindEvent_(window, 'resize', document, Blockly.svgResize);
     Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
+    Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);
+    Blockly.bindEvent_(document, 'touchcancel', null, Blockly.longStop_);
     // Don't use bindEvent_ for document's mouseup since that would create a
     // corresponding touch handler that would squeltch the ability to interact
     // with non-Blockly elements.

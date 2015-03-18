@@ -299,6 +299,7 @@ Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
  * @override
  */
 Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
+  Blockly.removeAllRanges();
   if (this.selectedItem_ == node) {
     return;
   }

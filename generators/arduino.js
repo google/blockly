@@ -125,12 +125,21 @@ Blockly.Arduino.finish = function(code) {
     definitions.push(Blockly.Arduino.definitions_[name]);
   }
 
-  if (code) {
-    code = Blockly.Arduino.prefixLines(code, "  ");
+  var extraCodeStart = code.substring(0, code.indexOf("while(1) {\n"));
+  var realCode = code.substring(code.indexOf("while(1) {\n"), code.indexOf("}\n") + 2);
+  var extraCodeEnd = code.substring(code.indexOf("}\n") + 2);
+
+  if (extraCodeStart) {
+    extraCodeStart = Blockly.Arduino.prefixLines(extraCodeStart, "  //");
+  }
+  if (realCode) {
+    realCode = Blockly.Arduino.prefixLines(realCode, "  ");
+  }
+  if (extraCodeEnd) {
+    extraCodeEnd = Blockly.Arduino.prefixLines(extraCodeEnd, "  //");
   }
 
-  // return definitions.join('\n\n') + '\n\n\n' + code;
-  return '#include "LightUp.h"\n\n' + definitions.join('\n') + '\n' + 'void setup(){\n' + code + '}\n\n' + 'void loop(){}\n\n';
+  return '#include "LightUp.h"\n\n' + definitions.join('\n') + '\n' + 'void setup(){\n' + extraCodeStart + '\n' + realCode + '\n' + extraCodeEnd + '}\n\n' + 'void loop(){}\n\n';
 };
 
 /**

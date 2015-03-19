@@ -56,6 +56,8 @@ Blockly.FieldArduino = function(text, opt_changeHandler) {
     //changeHandler = Blockly.FieldArduino.angleValidator;
   }
 
+  this.value_ = "OUTPUT_A";
+
   // Add degree symbol: "360°" (LTR) or "°360" (RTL)
   //this.symbol_ = Blockly.createSvgElement('tspan', {}, null);
   /*this.symbol_.appendChild(document.createTextNode('\u00B0'));
@@ -436,37 +438,81 @@ Blockly.FieldArduino.prototype.showEditor_ = function() {
   this.clickWrapper_ =
     Blockly.bindEvent_(rectangle, 'mousedown', this, this.createBlockFunc_(rectangle));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squarea, 'mousedown', this, this.createBlockFunc_("Output A"));
+    Blockly.bindEvent_(squarea, 'mousedown', this, this.createBlockFunc_("OUTPUT_A"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squareb, 'mousedown', this, this.createBlockFunc_("Output B"));
+    Blockly.bindEvent_(squareb, 'mousedown', this, this.createBlockFunc_("OUTPUT_B"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squarec, 'mousedown', this, this.createBlockFunc_("Output C"));
+    Blockly.bindEvent_(squarec, 'mousedown', this, this.createBlockFunc_("OUTPUT_C"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squared, 'mousedown', this, this.createBlockFunc_("Output D"));
+    Blockly.bindEvent_(squared, 'mousedown', this, this.createBlockFunc_("OUTPUT_D"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squaree, 'mousedown', this, this.createBlockFunc_("Output E"));
+    Blockly.bindEvent_(squaree, 'mousedown', this, this.createBlockFunc_("OUTPUT_E"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(squaref, 'mousedown', this, this.createBlockFunc_("Output F"));
+    Blockly.bindEvent_(squaref, 'mousedown', this, this.createBlockFunc_("OUTPUT_F"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square1, 'mousedown', this, this.createBlockFunc_("Input 1"));
+    Blockly.bindEvent_(square1, 'mousedown', this, this.createBlockFunc_("INPUT_1"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square2, 'mousedown', this, this.createBlockFunc_("Input 3"));
+    Blockly.bindEvent_(square2, 'mousedown', this, this.createBlockFunc_("INPUT_2"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square3, 'mousedown', this, this.createBlockFunc_("Input 3"));
+    Blockly.bindEvent_(square3, 'mousedown', this, this.createBlockFunc_("INPUT_3"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square4, 'mousedown', this, this.createBlockFunc_("Input 4"));
+    Blockly.bindEvent_(square4, 'mousedown', this, this.createBlockFunc_("INPUT_4"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square5, 'mousedown', this, this.createBlockFunc_("Input 5"));
+    Blockly.bindEvent_(square5, 'mousedown', this, this.createBlockFunc_("INPUT_5"));
   this.clickWrapper_ =
-    Blockly.bindEvent_(square6, 'mousedown', this, this.createBlockFunc_("Input 6"));
+    Blockly.bindEvent_(square6, 'mousedown', this, this.createBlockFunc_("INPUT_6"));
 };
 
 Blockly.FieldArduino.prototype.createBlockFunc_ = function(value) {
   var FieldArduino = this;
   return function(e) {
-    FieldArduino.setText(value);
+    FieldArduino.setValue(value);
   };
 };
+
+/**
+ * Get the language-neutral value from this dropdown menu.
+ * @return {string} Current text.
+ */
+Blockly.FieldArduino.prototype.getValue = function() {
+  console.log("gv " + this.value_);
+  return this.value_;
+};
+
+/**
+ * Set the language-neutral value for this dropdown menu.
+ * @param {string} newValue New value to set.
+ */
+Blockly.FieldArduino.prototype.setValue = function(newValue) {
+  this.value_ = newValue;
+  // Look up and display the human-readable text.
+  var options = [
+    ["Output A", "OUTPUT_A"],
+    ["Output B", "OUTPUT_B"],
+    ["Output C", "OUTPUT_C"],
+    ["Output D", "OUTPUT_D"],
+    ["Output E", "OUTPUT_E"],
+    ["Output F", "OUTPUT_F"],
+    ["Input 1", "INPUT_1"],
+    ["Input 2", "INPUT_2"],
+    ["Input 3", "INPUT_3"],
+    ["Input 4", "INPUT_4"],
+    ["Input 5", "INPUT_5"],
+    ["Input 6", "INPUT_6"]
+  ];
+
+  for (var x = 0; x < options.length; x++) {
+    // Options are tuples of human-readable text and language-neutral values.
+    if (options[x][1] == newValue) {
+      this.setText(options[x][0]);
+      return;
+    }
+  }
+  // Value not found.  Add it, maybe it will become valid once set
+  // (like variable names).
+  this.setText(newValue);
+};
+
 
 /**
  * Insert a degree symbol.

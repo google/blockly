@@ -44,22 +44,7 @@ Blockly.Arduino['arduino_frequency'] = function(block) {
 };
 
 Blockly.Arduino['arduino_pin'] = function(block) {
-  var PINTOVAR = {
-    'Input 1' : 'INPUT_1',
-    'Input 2' : 'INPUT_2',
-    'Input 3' : 'INPUT_3',
-    'Input 4' : 'INPUT_4',
-    'Input 5' : 'INPUT_5',
-    'Input 6' : 'INPUT_6',
-    'Output A' : 'OUTPUT_A',
-    'Output B' : 'OUTPUT_B',
-    'Output C' : 'OUTPUT_C',
-    'Output D' : 'OUTPUT_D',
-    'Output E' : 'OUTPUT_E',
-    'Output F' : 'OUTPUT_F'
-  }
-  
-  var code = PINTOVAR[block.getFieldValue('PIN')];
+  var code = block.getFieldValue('PIN');
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 

@@ -44,7 +44,8 @@ Blockly.Blocks['arduino_uno_pin'] = {
     this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
-           [["Pin\u00A01", "1"],
+           [["Light", "13 "],
+            ["Pin\u00A01", "1"],
             ["Pin\u00A02", "2"],
             ["Pin\u00A03", "3"],
             ["Pin\u00A04", "4"],

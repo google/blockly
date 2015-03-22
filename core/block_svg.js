@@ -919,6 +919,8 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
     Blockly.BlockSvg.DISTANCE_45_OUTSIDE) + ',' +
     (Blockly.BlockSvg.DISTANCE_45_OUTSIDE + 1);
 
+Blockly.BlockSvg.INNER_GAP = 20;
+
 /**
  * Dispose of this block.
  * @param {boolean} healStack If true, then try to heal any gap by connecting
@@ -1775,7 +1777,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       steps.push('H', cursorX);
       steps.push(Blockly.BlockSvg.INNER_TOP_LEFT_CORNER);
       steps.push('v', row.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
-      steps.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER);
+      steps.push(Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER + Blockly.BlockSvg.INNER_GAP);
       steps.push('H', inputRows.rightEdge);
       if (Blockly.RTL) {
         highlightSteps.push('M',

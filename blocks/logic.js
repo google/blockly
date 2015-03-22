@@ -427,5 +427,36 @@ Blockly.Blocks['logic_ternary'] = {
         .appendField(Blockly.Msg.LOGIC_TERNARY_IF_FALSE);
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.LOGIC_TERNARY_TOOLTIP);
+    this.prevParentConnection_ = null;
+  },
+  /**
+   * Called whenever anything on the workspace changes.
+   * Prevent mismatched types.
+   * @this Blockly.Block
+   */
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    var blockA = this.getInputTargetBlock('THEN');
+    var blockB = this.getInputTargetBlock('ELSE');
+    var parentConnection = this.outputConnection.targetConnection;
+    // Kick blocks that existed prior to this change if they don't match.
+    if ((blockA || blockB) && parentConnection) {
+      for (var i = 0; i < 2; i++) {
+        var block = (i == 1) ? blockA : blockB;
+        if (block && !block.outputConnection.checkType_(parentConnection)) {
+          if (parentConnection === this.prevParentConnection_) {
+            this.setParent(null);
+            parentConnection.sourceBlock_.bumpNeighbours_();
+          } else {
+            block.setParent(null);
+            block.bumpNeighbours_();
+          }
+        }
+      }
+    }
+    this.prevParentConnection_ = parentConnection;
   }
 };

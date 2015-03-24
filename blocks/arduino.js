@@ -39,6 +39,16 @@ Blockly.Blocks['arduino_pin'] = {
   }
 };
 
+Blockly.Blocks['arduino_tutorial_pin'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["Light", "OUTPUT_A"]]), 'PIN');
+    this.setOutput(true, 'Pin');
+    this.setTooltip('');
+  }
+};
+
 Blockly.Blocks['arduino_uno_pin'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);

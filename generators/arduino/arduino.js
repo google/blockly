@@ -48,6 +48,11 @@ Blockly.Arduino['arduino_pin'] = function(block) {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino['arduino_tutorial_pin'] = function(block) {
+  var code = block.getFieldValue('PIN');
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
 Blockly.Arduino['arduino_uno_pin'] = function(block) {
   var code = block.getFieldValue('PIN');
   return [code, Blockly.Arduino.ORDER_ATOMIC];

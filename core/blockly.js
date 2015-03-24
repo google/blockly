@@ -86,7 +86,7 @@ Blockly.HSV_VALUE = 0.65;
  * Sprited icons and images.
  */
 Blockly.SPRITE = {
-  width: 64,
+  width: 84,
   height: 92,
   url: 'sprites.png'
 };

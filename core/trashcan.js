@@ -151,7 +151,7 @@ Blockly.Trashcan.prototype.top_ = 0;
  */
 Blockly.Trashcan.prototype.createDom = function() {
   /*
-  <g filter="url(#blocklyTrashcanShadowFilter)">
+  <g>
     <clippath id="blocklyTrashBodyClipPath">
       <rect width="47" height="45" y="15"></rect>
     </clippath>
@@ -160,8 +160,7 @@ Blockly.Trashcan.prototype.createDom = function() {
     <image width="47" height="15" href="media/trashlid.png"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g',
-      {'filter': 'url(#blocklyTrashcanShadowFilter)'}, null);
+  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
 
   var clip = Blockly.createSvgElement('clipPath',
       {'id': 'blocklyTrashBodyClipPath'},
@@ -278,7 +277,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
       (Blockly.RTL ? -lidAngle : lidAngle) + ', ' +
       (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
       (this.LID_HEIGHT_ - 2) + ')');
-  var opacity = goog.math.lerp(0.2, 0.4, this.lidOpen_);
+  var opacity = goog.math.lerp(0.4, 0.8, this.lidOpen_);
   this.svgGroup_.style.opacity = opacity;
   if (this.lidOpen_ > 0 && this.lidOpen_ < 1) {
     this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 20, this);

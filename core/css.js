@@ -27,6 +27,7 @@
 goog.provide('Blockly.Css');
 
 goog.require('goog.cssom');
+goog.require('goog.userAgent');
 
 
 /**
@@ -286,7 +287,8 @@ Blockly.Css.CONTENT = [
   '  fill: #ccc;',
   '  font-family: sans-serif;',
   '  font-size: 9pt;',
-  '  font-weight: bold;',
+  //fix bug with mutator icon in android 4.4.2 webkit
+  (/Android 4.4.2/.test(goog.userAgent.getUserAgentString()) && goog.userAgent.WEBKIT)?'font-weight: normal;':'font-weight: bold;',
   '  text-anchor: middle;',
   '}',
 

@@ -30,18 +30,24 @@ goog.require('Blockly.JavaScript');
 
 
 Blockly.JavaScript['arduino_tone'] = function(block) {
-  //var frequency = Blockly.Javascript.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
-  //var duration = Blockly.Javascript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
-  var frequency = 500;
-  var duration = 1000;
+  var frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
+  var duration = Blockly.JavaScript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
 
   var code = 'context = new AudioContext;\n';
   code += 'oscillator = context.createOscillator();\n';
-  code += 'oscillator.frequency.value =' + frequency + ';\n';
+  code += 'oscillator.frequency.value = ' + frequency + ';\n';
   code += 'oscillator.connect(context.destination);\n';
   code += 'oscillator.start(0);\n';
-  code += 'setTimeout(function() { oscillator.stop(0); },' + duration + ');\n';
-  code += 'console.log("0");';
+  code += 'setTimeout(function() {oscillator.stop(0);}, ' + duration + ');\n';
 
   return code;
 };
+
+Blockly.JavaScript['arduino_run_once'] = function(block) {
+  var branch = Blockly.JavaScript.statementToCode(block, 'DO');
+  branch = Blockly.JavaScript.addLoopTrap(branch, block.id);
+  var code = 'for(var i = 0; i < 1; i++) {\n' + branch + '\n}\n';
+  return code;
+};
+
+

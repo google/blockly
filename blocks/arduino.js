@@ -27,7 +27,7 @@ var TONE = 'play';
 var NO_TONE = 'stop playing on';
 var REPEAT_FOREVER = 'start loop';
 var DO = '';
-
+var RUN_ONCE = 'run once';
 
 Blockly.Blocks['arduino_pin'] = {
   init: function() {
@@ -257,8 +257,11 @@ Blockly.Blocks['arduino_tone'] = {
         this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput().appendField(TONE);
         this.appendValueInput("frequency").setCheck("Number");
+        this.appendDummyInput().appendField("Hz");
         this.appendDummyInput().appendField("on");
         this.appendValueInput("pin").setCheck("pin");
+        this.appendDummyInput().appendField("for");
+        this.appendValueInput("duration").setCheck("Number");
         this.setInputsInline(true);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
@@ -296,6 +299,19 @@ Blockly.Blocks['arduino_repeat_forever'] = {
     this.setColour(Blockly.Blocks.loops.HUE);
     this.appendDummyInput()
         .appendField(REPEAT_FOREVER);
+    this.appendStatementInput('DO')
+        .appendField(DO);
+    this.setPreviousStatement(false);
+    this.setNextStatement(false);
+    this.setMovable(false);
+  }
+};
+
+Blockly.Blocks['arduino_run_once'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.loops.HUE);
+    this.appendDummyInput()
+        .appendField(RUN_ONCE);
     this.appendStatementInput('DO')
         .appendField(DO);
     this.setPreviousStatement(false);

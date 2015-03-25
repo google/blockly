@@ -46,7 +46,8 @@ e};/*
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-Blockly.JavaScript.arduino={};Blockly.JavaScript.arduino_tone=function(a){a="context = new AudioContext;\noscillator = context.createOscillator();\noscillator.frequency.value =500;\n";a+="oscillator.connect(context.destination);\n";a+="oscillator.start(0);\n";a+="setTimeout(function() { oscillator.stop(0); },1000);\n";return a+='console.log("0");'};/*
+Blockly.JavaScript.arduino={};Blockly.JavaScript.arduino_tone=function(a){var b=Blockly.JavaScript.valueToCode(a,"frequency",Blockly.Arduino.ORDER_NONE)||"0";a=Blockly.JavaScript.valueToCode(a,"duration",Blockly.Arduino.ORDER_NONE)||"0";b="context = new AudioContext;\noscillator = context.createOscillator();\n"+("oscillator.frequency.value = "+b+";\n");b+="oscillator.connect(context.destination);\n";b+="oscillator.start(0);\n";return b+="setTimeout(function() {oscillator.stop(0);}, "+a+");\n"};
+Blockly.JavaScript.arduino_run_once=function(a){var b=Blockly.JavaScript.statementToCode(a,"DO"),b=Blockly.JavaScript.addLoopTrap(b,a.id);return"for(var i = 0; i < 1; i++) {\n"+b+"\n}\n"};/*
 
  Visual Blocks Language
 

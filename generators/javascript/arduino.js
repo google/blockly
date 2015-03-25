@@ -34,7 +34,8 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
   var duration = Blockly.JavaScript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
 
   if(frequency == "None") {
-    var code = 'if(!context) {context = new AudioContext;}\n';
+    var code = 'var context = null;\n';
+    code += 'if(!context) {context = new AudioContext;}\n';
     code += 'oscillator = context.createOscillator();\n';
     code += 'oscillator.frequency.value = ' + 0 + ';\n';
     code += 'oscillator.connect(context.destination);\n';
@@ -58,7 +59,8 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
       default: frequency = 0;
     }
 
-    var code = 'context = new AudioContext;\n';
+    var code = 'var context = null;\n';
+    code += 'if(!context) {context = new AudioContext;}\n';
     code += 'oscillator = context.createOscillator();\n';
     code += 'oscillator.frequency.value = ' + frequency + ';\n';
     code += 'oscillator.connect(context.destination);\n';

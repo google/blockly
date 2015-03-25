@@ -46,8 +46,10 @@ e};/*
  See the License for the specific language governing permissions and
  limitations under the License.
 */
-Blockly.JavaScript.arduino={};Blockly.JavaScript.arduino_tone=function(a){var b=Blockly.JavaScript.valueToCode(a,"frequency",Blockly.Arduino.ORDER_NONE)||"0";a=Blockly.JavaScript.valueToCode(a,"duration",Blockly.Arduino.ORDER_NONE)||"0";b="context = new AudioContext;\noscillator = context.createOscillator();\n"+("oscillator.frequency.value = "+b+";\n");b+="oscillator.connect(context.destination);\n";b+="oscillator.start(0);\n";return b+="setTimeout(function() {oscillator.stop(0);}, "+a+");\n"};
-Blockly.JavaScript.arduino_run_once=function(a){var b=Blockly.JavaScript.statementToCode(a,"DO"),b=Blockly.JavaScript.addLoopTrap(b,a.id);return"for(var i = 0; i < 1; i++) {\n"+b+"\n}\n"};/*
+Blockly.JavaScript.arduino={};
+Blockly.JavaScript.arduino_tone=function(a){var b=Blockly.JavaScript.valueToCode(a,"frequency",Blockly.Arduino.ORDER_NONE)||"0";a=Blockly.JavaScript.valueToCode(a,"duration",Blockly.Arduino.ORDER_NONE)||"0";if("None"==b){var c;c="if(!context) {context = new AudioContext;}\noscillator = context.createOscillator();\noscillator.frequency.value = 0;\n"}else{switch(b){case "NOTE_C4":b=262;break;case "NOTE_CS4":b=277;break;case "NOTE_D4":b=294;break;case "NOTE_DS4":b=311;break;case "NOTE_E4":b=330;break;
+case "NOTE_F4":b=349;break;case "NOTE_FS4":b=370;break;case "NOTE_G4":b=392;break;case "NOTE_GS4":b=415;break;case "NOTE_A4":b=440;break;case "NOTE_AS4":b=466;break;case "NOTE_B4":b=494;break;default:b=0}c="context = new AudioContext;\noscillator = context.createOscillator();\n";c+="oscillator.frequency.value = "+b+";\n"}c+="oscillator.connect(context.destination);\n";c+="oscillator.start(0);\n";return c+="setTimeout(function() {oscillator.stop(0);}, "+a+");\n"};
+Blockly.JavaScript.arduino_run_once=function(a){var b=Blockly.JavaScript.statementToCode(a,"DO"),b=Blockly.JavaScript.addLoopTrap(b,a.id);return"for(var i = 0; i < 1; i++) {\n"+b+"\n}\n"};Blockly.JavaScript.arduino_frequency=function(a){a=a.getFieldValue("NUM");console.log(a);return[a,Blockly.JavaScript.ORDER_ATOMIC]};/*
 
  Visual Blocks Language
 

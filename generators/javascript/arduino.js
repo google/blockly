@@ -29,9 +29,11 @@ goog.provide('Blockly.JavaScript.arduino');
 goog.require('Blockly.JavaScript');
 
 
-Blockly.Javascript['arduino_tone'] = function(block) {
-  var frequency = Blockly.Javascript.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
-  var duration = Blockly.Javascript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
+Blockly.JavaScript['arduino_tone'] = function(block) {
+  //var frequency = Blockly.Javascript.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
+  //var duration = Blockly.Javascript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
+  var frequency = 500;
+  var duration = 1000;
 
   var code = 'context = new AudioContext;\n';
   code += 'oscillator = context.createOscillator();\n';
@@ -39,8 +41,7 @@ Blockly.Javascript['arduino_tone'] = function(block) {
   code += 'oscillator.connect(context.destination);\n';
   code += 'oscillator.start(0);\n';
   code += 'setTimeout(function() { oscillator.stop(0); },' + duration + ');\n';
-
-  console.log(code);
+  code += 'console.log("0");';
 
   return code;
 };

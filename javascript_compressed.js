@@ -46,6 +46,25 @@ e};/*
  See the License for the specific language governing permissions and
  limitations under the License.
 */
+Blockly.JavaScript.arduino={};Blockly.JavaScript.arduino_tone=function(a){a="context = new AudioContext;\noscillator = context.createOscillator();\noscillator.frequency.value =500;\n";a+="oscillator.connect(context.destination);\n";a+="oscillator.start(0);\n";a+="setTimeout(function() { oscillator.stop(0); },1000);\n";return a+='console.log("0");'};/*
+
+ Visual Blocks Language
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
 Blockly.JavaScript.colour={};Blockly.JavaScript.colour_picker=function(a){return["'"+a.getFieldValue("COLOUR")+"'",Blockly.JavaScript.ORDER_ATOMIC]};Blockly.JavaScript.colour_random=function(a){return[Blockly.JavaScript.provideFunction_("colour_random",["function "+Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_+"() {","  var num = Math.floor(Math.random() * Math.pow(2, 24));","  return '#' + ('00000' + num.toString(16)).substr(-6);","}"])+"()",Blockly.JavaScript.ORDER_FUNCTION_CALL]};
 Blockly.JavaScript.colour_rgb=function(a){var b=Blockly.JavaScript.valueToCode(a,"RED",Blockly.JavaScript.ORDER_COMMA)||0,c=Blockly.JavaScript.valueToCode(a,"GREEN",Blockly.JavaScript.ORDER_COMMA)||0;a=Blockly.JavaScript.valueToCode(a,"BLUE",Blockly.JavaScript.ORDER_COMMA)||0;return[Blockly.JavaScript.provideFunction_("colour_rgb",["function "+Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_+"(r, g, b) {","  r = Math.max(Math.min(Number(r), 100), 0) * 2.55;","  g = Math.max(Math.min(Number(g), 100), 0) * 2.55;",
 "  b = Math.max(Math.min(Number(b), 100), 0) * 2.55;","  r = ('0' + (Math.round(r) || 0).toString(16)).slice(-2);","  g = ('0' + (Math.round(g) || 0).toString(16)).slice(-2);","  b = ('0' + (Math.round(b) || 0).toString(16)).slice(-2);","  return '#' + r + g + b;","}"])+"("+b+", "+c+", "+a+")",Blockly.JavaScript.ORDER_FUNCTION_CALL]};

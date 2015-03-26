@@ -96,8 +96,11 @@ Blockly.Flyout.prototype.autoClose = true;
  * @type {number}
  * @const
  */
-Blockly.Flyout.prototype.CORNER_RADIUS = 0;
+Blockly.Flyout.prototype.CORNER_RADIUS = 10;
 
+Blockly.Flyout.prototype.Y_OFFSET = 70;
+
+Blockly.Flyout.prototype.B_MARGIN = 10;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.
@@ -245,8 +248,8 @@ Blockly.Flyout.prototype.position_ = function() {
     edgeWidth *= -1;
   }
 
-  var yoff = metrics.absoluteLeft != 0 ? 120 : 0;
-  var bmar = metrics.absoluteLeft != 0 ? 15 : 0;
+  var yoff = metrics.absoluteLeft != 0 ? this.Y_OFFSET : 0;
+  var bmar = metrics.absoluteLeft != 0 ? this.B_MARGIN : 0;
 
   var path = ['M ' + (Blockly.RTL ? this.width_ : 1.5) + ',' + yoff];
   path.push('h', edgeWidth);
@@ -382,7 +385,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     // Hidden components will return null.
     return;
   }
-  var yoff = metrics.absoluteLeft != 0 ? 120 : 0;
+  var yoff = metrics.absoluteLeft != 0 ? this.Y_OFFSET : 0;
 
   // Lay out the blocks vertically.
   var cursorY = margin + yoff;

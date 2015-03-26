@@ -76,11 +76,17 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['arduino_delay'] = function(block) {
+  var duration = Blockly.Arduino.valueToCode(block, 'time', Blockly.Arduino.ORDER_NONE) || '0';
+  var code = 'duration = duration + ' + duration + ';\n';
+  return code;
+};
+
 Blockly.JavaScript['arduino_run_once'] = function(block) {
   var branch = Blockly.JavaScript.statementToCode(block, 'DO');
   branch = Blockly.JavaScript.addLoopTrap(branch, block.id);
   var code = '//startRealCode\n';
-  code += 'if (!window.context) {context = new AudioContext();}\n';
+  code += 'if (!window.context) {context = new (window.AudioContext || window.webkitAudioContext)();}\n';
   code += 'for(var i = 0; i < 1; i++) {\n';
   code += 'var duration = 0;\n' + branch + '\n}\n';
   code += '//endRealCode\n';

@@ -47,6 +47,12 @@ Blockly.Mutator = function(quarkNames) {
 goog.inherits(Blockly.Mutator, Blockly.Icon);
 
 /**
+ * Icon in base64 format.
+ * @private
+ */
+Blockly.Mutator.prototype.png_ = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAANyAAADcgBffIlqAAAAAd0SU1FB98DGgUkCK5AYg4AAAGlSURBVDjLnZS9SiRBFIVLunt+9gUU1EmFaSfQ0GCeRcTAwEDERHYTQUZ8l6F9Ad9gMzcVfwaxdzpxuHRVZNVncHfAnt5ply0oqjj33FP3FqfKGGMM8K0suRZhGgKehhECXoSpc1wBXTMXEOHXeIzr9yGKwJjlM4ogTSHLcCLcAV1TllyPx7imxGUzy3DWMjIiTPv9OiGOYXVV92tr0GrVOWkKIuQmBPxiC1EEz8/w8ADn53B/D6+vkCR1Xgh4A9XAygrs7IBfuF7vYW9PK/zMB6iIJIlW8P4O1sLZmSaenkJZqlCeQ7vdILKxAS8vGjg5qZ54fKz4ZAKbmw0ixsDFhQZ2d6v4YKD45eUX7ayvw+OjBo6OquTDQ8WfnrTipSLtNhQFhACzGRwcwNYW7O/D25viRQGdzhfttFowHGrCgt0ZDut+AfirT5JET5xMYDTStSjqPonjPz4RYZqmdTd2OtDr6b7Xq7bw+bJFyI1zXGXZ/72d21tKa/lugK4Idzc3uO3tf3vFg4EKzGb8BOL5d9C1lpEIv70nNP0n3hNEyK3lx1zgA46lEkSYoMBCAAAAAElFTkSuQmCC';
+
+/**
  * Width of workspace.
  * @private
  */
@@ -57,33 +63,6 @@ Blockly.Mutator.prototype.workspaceWidth_ = 0;
  * @private
  */
 Blockly.Mutator.prototype.workspaceHeight_ = 0;
-
-/**
- * Create the icon on the block.
- */
-Blockly.Mutator.prototype.createIcon = function() {
-  if (this.iconMark_) {
-    // Icon already exists.
-    return;
-  }
-  Blockly.Icon.prototype.createIcon_.call(this);
-  /* Here's the markup that will be generated:
-  <rect class="blocklyIconShield" width="16" height="16" rx="4" ry="4"/>
-  <text class="blocklyIconMark" x="8" y="12">★</text>
-  */
-  var quantum = Blockly.Icon.RADIUS / 2;
-  var iconShield = Blockly.createSvgElement('rect',
-      {'class': 'blocklyIconShield',
-       'width': 4 * quantum,
-       'height': 4 * quantum,
-       'rx': quantum,
-       'ry': quantum}, this.iconGroup_);
-  this.iconMark_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyIconMark',
-       'x': Blockly.Icon.RADIUS,
-       'y': 2 * Blockly.Icon.RADIUS - 4}, this.iconGroup_);
-  this.iconMark_.appendChild(document.createTextNode('\u2605'));
-};
 
 /**
  * Clicking on the icon toggles if the mutator bubble is visible.
@@ -136,8 +115,8 @@ Blockly.Mutator.prototype.updateEditable = function() {
     // Close any mutator bubble.  Icon is not clickable.
     this.setVisible(false);
     if (this.iconGroup_) {
-      Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
-                           'blocklyIconGroup');
+      Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+                           'blocklyIconGroupReadonly');
     }
   }
 };

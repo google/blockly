@@ -150,14 +150,18 @@ Blockly.Trashcan.prototype.top_ = 0;
  * @return {!Element} The trash can's SVG group.
  */
 Blockly.Trashcan.prototype.createDom = function() {
-  /*
+  /* Here's the markup that will be generated:
   <g>
     <clippath id="blocklyTrashBodyClipPath">
       <rect width="47" height="45" y="15"></rect>
     </clippath>
-    <image width="64" height="92" y="15" href="media/trashbody.png"
+    <image width="64" height="92" y="-32" xlink:href="media/sprites.png"
         clip-path="url(#blocklyTrashBodyClipPath)"></image>
-    <image width="47" height="15" href="media/trashlid.png"></image>
+    <clippath id="blocklyTrashLidClipPath">
+      <rect width="47" height="15"></rect>
+    </clippath>
+    <image width="84" height="92" y="-32" xlink:href="media/sprites.png"
+        clip-path="url(#blocklyTrashLidClipPath)"></image>
   </g>
   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);

@@ -34,18 +34,18 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
   var duration = Blockly.JavaScript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
 
   switch(frequency) {
-    case "NOTE_C": frequency = 262; break;
-    case "NOTE_C#": frequency = 277; break;
-    case "NOTE_D": frequency = 294; break;
-    case "NOTE_D#": frequency = 311; break;
-    case "NOTE_E": frequency = 330; break;
-    case "NOTE_F": frequency = 349; break;
-    case "NOTE_F#": frequency = 370; break;
-    case "NOTE_G": frequency = 392; break;
-    case "NOTE_G#": frequency = 415; break;
-    case "NOTE_A": frequency = 440; break;
-    case "NOTE_A#": frequency = 466; break;
-    case "NOTE_B": frequency = 494; break;
+    case "NOTE_C4": frequency = 262; break;
+    case "NOTE_CS4": frequency = 277; break;
+    case "NOTE_D4": frequency = 294; break;
+    case "NOTE_DS4": frequency = 311; break;
+    case "NOTE_E4": frequency = 330; break;
+    case "NOTE_F4": frequency = 349; break;
+    case "NOTE_FS4": frequency = 370; break;
+    case "NOTE_G4": frequency = 392; break;
+    case "NOTE_GS4": frequency = 415; break;
+    case "NOTE_A4": frequency = 440; break;
+    case "NOTE_AS4": frequency = 466; break;
+    case "NOTE_B4": frequency = 494; break;
     default: frequency = 0;
   }
 

@@ -43,7 +43,7 @@ Blockly.Blocks['arduino_tutorial_pin'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([["Light", "OUTPUT_A"]]), 'PIN');
+        .appendField(new Blockly.FieldDropdown([["Light", "OUTPUT_A"], ["Buzzer", "OUTPUT_F"]]), 'PIN');
     this.setOutput(true, 'Pin');
     this.setTooltip('');
   }
@@ -142,18 +142,18 @@ Blockly.Blocks['arduino_frequency'] = {
             // ["Note A3", "NOTE_A3"],
             // ["Note AS3", "NOTE_AS3"],
             // ["Note B3", "NOTE_B3"],
-            [["Note\u00A0C4", "NOTE_C4"],
-            ["Note\u00A0CS4", "NOTE_CS4"],
-            ["Note\u00A0D4", "NOTE_D4"],
-            ["Note\u00A0DS4", "NOTE_DS4"],
-            ["Note\u00A0E4", "NOTE_E4"],
-            ["Note\u00A0F4", "NOTE_F4"],
-            ["Note\u00A0FS4", "NOTE_FS4"],
-            ["Note\u00A0G4", "NOTE_G4"],
-            ["Note\u00A0GS4", "NOTE_GS4"],
-            ["Note\u00A0A4", "NOTE_A4"],
-            ["Note\u00A0AS4", "NOTE_AS4"],
-            ["Note\u00A0B4", "NOTE_B4"]]
+            [["Note\u00A0C", "NOTE_C"],
+            ["Note\u00A0C#", "NOTE_C#"],
+            ["Note\u00A0D", "NOTE_D"],
+            ["Note\u00A0D#", "NOTE_D#"],
+            ["Note\u00A0E", "NOTE_E"],
+            ["Note\u00A0F", "NOTE_F"],
+            ["Note\u00A0F#", "NOTE_F#"],
+            ["Note\u00A0G", "NOTE_G"],
+            ["Note\u00A0G#", "NOTE_G#"],
+            ["Note\u00A0A", "NOTE_A"],
+            ["Note\u00A0A#", "NOTE_A#"],
+            ["Note\u00A0B", "NOTE_B"]]
             // ["Note C5", "NOTE_C5"],
             // ["Note CS5", "NOTE_CS5"],
             // ["Note D5", "NOTE_D5"],
@@ -257,11 +257,11 @@ Blockly.Blocks['arduino_tone'] = {
         this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput().appendField(TONE);
         this.appendValueInput("frequency").setCheck("Number");
-        this.appendDummyInput().appendField("Hz");
         this.appendDummyInput().appendField("on");
         this.appendValueInput("pin").setCheck("pin");
         this.appendDummyInput().appendField("for");
         this.appendValueInput("duration").setCheck("Number");
+        this.appendDummyInput().appendField("milliseconds");
         this.setInputsInline(true);
         this.setPreviousStatement(true);
         this.setNextStatement(true);

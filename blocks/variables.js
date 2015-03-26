@@ -97,9 +97,11 @@ Blockly.Blocks['variables_set'] = {
     this.setColour(Blockly.Blocks.variables.HUE);
     this.interpolateMsg(
         // TODO: Combine these messages instead of using concatenation.
-        Blockly.Msg.VARIABLES_SET_TITLE + ' %1 ' +
-        Blockly.Msg.VARIABLES_SET_TAIL + ' %2',
+        Blockly.Msg.VARIABLES_SET_TITLE + ' %1%2%3' +
+        Blockly.Msg.VARIABLES_SET_TAIL + ' %4',
+        ['', new Blockly.FieldLabel(" ")],
         ['VAR', new Blockly.FieldVariable(Blockly.Msg.VARIABLES_SET_ITEM)],
+        ['', new Blockly.FieldLabel(" ")],
         ['VALUE', null, Blockly.ALIGN_RIGHT],
         Blockly.ALIGN_RIGHT);
     this.setPreviousStatement(true);

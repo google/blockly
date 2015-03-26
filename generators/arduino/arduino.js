@@ -87,8 +87,9 @@ Blockly.Arduino['arduino_analog_read'] = function(block) {
 Blockly.Arduino['arduino_tone'] = function(block) {
   var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
   var frequency = Blockly.Arduino.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
+  var duration = Blockly.Arduino.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
 
-  return 'tone(' + pin + ', ' + frequency + ');\n';
+  return 'tone(' + pin + ', ' + frequency + ', ' + duration + ');\n';
 };
 
 Blockly.Arduino['arduino_notone'] = function(block) {
@@ -108,6 +109,13 @@ Blockly.Arduino['arduino_repeat_forever'] = function(block) {
   var branch = Blockly.Arduino.statementToCode(block, 'DO');
   branch = Blockly.Arduino.addLoopTrap(branch, block.id);
   var code = 'while(1) {\n' + branch + '}\n';
+  return code;
+};
+
+Blockly.Arduino['arduino_run_once'] = function(block) {
+  var branch = Blockly.Arduino.statementToCode(block, 'DO');
+  branch = Blockly.Arduino.addLoopTrap(branch, block.id);
+  var code = 'for(int i = 0; i < 1; i++) {\n' + branch + '}\n';
   return code;
 };
 

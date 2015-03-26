@@ -142,6 +142,17 @@ Blockly.JavaScript.finish = function(code) {
   for (var name in Blockly.JavaScript.definitions_) {
     definitions.push(Blockly.JavaScript.definitions_[name]);
   }
+
+  var startOfFn = code.indexOf("//startRealCode");
+  var endOfFn = code.indexOf("//endRealCode");
+  var realFn = "";
+  
+  for(var i = startOfFn; i < endOfFn; i++) {
+    realFn += code[i];
+  }
+
+  code = realFn;
+
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 

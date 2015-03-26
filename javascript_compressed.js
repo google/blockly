@@ -25,9 +25,31 @@ Blockly.JavaScript.ORDER_ATOMIC=0;Blockly.JavaScript.ORDER_MEMBER=1;Blockly.Java
 Blockly.JavaScript.ORDER_MULTIPLICATION=5;Blockly.JavaScript.ORDER_DIVISION=5;Blockly.JavaScript.ORDER_MODULUS=5;Blockly.JavaScript.ORDER_ADDITION=6;Blockly.JavaScript.ORDER_SUBTRACTION=6;Blockly.JavaScript.ORDER_BITWISE_SHIFT=7;Blockly.JavaScript.ORDER_RELATIONAL=8;Blockly.JavaScript.ORDER_IN=8;Blockly.JavaScript.ORDER_INSTANCEOF=8;Blockly.JavaScript.ORDER_EQUALITY=9;Blockly.JavaScript.ORDER_BITWISE_AND=10;Blockly.JavaScript.ORDER_BITWISE_XOR=11;Blockly.JavaScript.ORDER_BITWISE_OR=12;
 Blockly.JavaScript.ORDER_LOGICAL_AND=13;Blockly.JavaScript.ORDER_LOGICAL_OR=14;Blockly.JavaScript.ORDER_CONDITIONAL=15;Blockly.JavaScript.ORDER_ASSIGNMENT=16;Blockly.JavaScript.ORDER_COMMA=17;Blockly.JavaScript.ORDER_NONE=99;
 Blockly.JavaScript.init=function(a){Blockly.JavaScript.definitions_=Object.create(null);Blockly.JavaScript.functionNames_=Object.create(null);Blockly.JavaScript.variableDB_?Blockly.JavaScript.variableDB_.reset():Blockly.JavaScript.variableDB_=new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_);var b=[];a=Blockly.Variables.allVariables(a);for(var c=0;c<a.length;c++)b[c]="var "+Blockly.JavaScript.variableDB_.getName(a[c],Blockly.Variables.NAME_TYPE)+";";Blockly.JavaScript.definitions_.variables=b.join("\n")};
-Blockly.JavaScript.finish=function(a){var b=[],c;for(c in Blockly.JavaScript.definitions_)b.push(Blockly.JavaScript.definitions_[c]);return b.join("\n\n")+"\n\n\n"+a};Blockly.JavaScript.scrubNakedValue=function(a){return a+";\n"};Blockly.JavaScript.quote_=function(a){a=a.replace(/\\/g,"\\\\").replace(/\n/g,"\\\n").replace(/'/g,"\\'");return"'"+a+"'"};
+Blockly.JavaScript.finish=function(a){var b=[],c;for(c in Blockly.JavaScript.definitions_)b.push(Blockly.JavaScript.definitions_[c]);var d=a.indexOf("//startRealCode");c=a.indexOf("//endRealCode");for(var e="";d<c;d++)e+=a[d];a=e;return b.join("\n\n")+"\n\n\n"+a};Blockly.JavaScript.scrubNakedValue=function(a){return a+";\n"};Blockly.JavaScript.quote_=function(a){a=a.replace(/\\/g,"\\\\").replace(/\n/g,"\\\n").replace(/'/g,"\\'");return"'"+a+"'"};
 Blockly.JavaScript.scrub_=function(a,b){var c="";if(!a.outputConnection||!a.outputConnection.targetConnection){var d=a.getCommentText();d&&(c+=Blockly.JavaScript.prefixLines(d,"// ")+"\n");for(var e=0;e<a.inputList.length;e++)a.inputList[e].type==Blockly.INPUT_VALUE&&(d=a.inputList[e].connection.targetBlock())&&(d=Blockly.JavaScript.allNestedComments(d))&&(c+=Blockly.JavaScript.prefixLines(d,"// "))}e=a.nextConnection&&a.nextConnection.targetBlock();e=Blockly.JavaScript.blockToCode(e);return c+b+
 e};/*
+
+ Visual Blocks Language
+
+ Copyright 2012 Google Inc.
+ https://developers.google.com/blockly/
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/
+Blockly.JavaScript.arduino={};
+Blockly.JavaScript.arduino_tone=function(a){var b=Blockly.JavaScript.valueToCode(a,"frequency",Blockly.Arduino.ORDER_NONE)||"0";a=Blockly.JavaScript.valueToCode(a,"duration",Blockly.Arduino.ORDER_NONE)||"0";switch(b){case "NOTE_C":b=262;break;case "NOTE_C#":b=277;break;case "NOTE_D":b=294;break;case "NOTE_D#":b=311;break;case "NOTE_E":b=330;break;case "NOTE_F":b=349;break;case "NOTE_F#":b=370;break;case "NOTE_G":b=392;break;case "NOTE_G#":b=415;break;case "NOTE_A":b=440;break;case "NOTE_A#":b=466;
+break;case "NOTE_B":b=494;break;default:b=0}b="setTimeout(function() {\nvar oscillator = context.createOscillator();\n"+("oscillator.frequency.value = "+b+";\n");b+="oscillator.connect(context.destination);\n";b+="oscillator.start(0);\n";b+="setTimeout(function() { oscillator.stop(0); }, "+(1*a-50)+");\n";b+="}, duration);\n";return b+="duration = duration + "+a+";\n"};
+Blockly.JavaScript.arduino_run_once=function(a){var b=Blockly.JavaScript.statementToCode(a,"DO"),b=Blockly.JavaScript.addLoopTrap(b,a.id);a="//startRealCode\nif (!window.context) {context = new AudioContext();}\nfor(var i = 0; i < 1; i++) {\n";a+="var duration = 0;\n"+b+"\n}\n";return a+="//endRealCode\n"};Blockly.JavaScript.arduino_frequency=function(a){a=a.getFieldValue("NUM");console.log(a);return[a,Blockly.JavaScript.ORDER_ATOMIC]};/*
 
  Visual Blocks Language
 

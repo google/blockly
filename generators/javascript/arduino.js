@@ -33,19 +33,6 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
   var frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
   var duration = Blockly.JavaScript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
 
-  // if(frequency == "None") {
-
-  //   var code = 'setTimeout(function() {\n';
-  //   code += 'var oscillator = context.createOscillator();\n';
-  //   code += 'oscillator.frequency.value = ' + 0 + ';\n';
-  //   code += 'oscillator.connect(context.destination);\n';
-  //   code += 'oscillator.start(0);\n'; 
-  //   code += 'setTimeout(function() { oscillator.stop(0); }, ' + (duration * 1 - 50) + ');\n';
-  //   code += '}, duration);\n';
-  //   code += 'duration = duration + ' + duration + ';\n';
-
-  // } else {
-
   switch(frequency) {
     case "NOTE_C": frequency = 262; break;
     case "NOTE_C#": frequency = 277; break;
@@ -67,9 +54,9 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
   code += 'oscillator.frequency.value = ' + frequency + ';\n';
   code += 'oscillator.connect(context.destination);\n';
   code += 'oscillator.start(0);\n'; 
-  code += 'setTimeout(function() { oscillator.stop(0); }, ' + (duration * 1 - 100) + ');\n';
+  code += 'setTimeout(function() { oscillator.stop(0); }, ' + duration + ');\n';
   code += '}, duration);\n';
-  code += 'duration = duration + ' + duration + ';\n';
+  code += 'duration = duration + ' + duration + ' + 100;\n';
 
   //}
 

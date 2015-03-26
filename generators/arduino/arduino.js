@@ -89,7 +89,8 @@ Blockly.Arduino['arduino_tone'] = function(block) {
   var frequency = Blockly.Arduino.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
   var duration = Blockly.Arduino.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
 
-  return 'tone(' + pin + ', ' + frequency + ', ' + duration + ');\n';
+  // TODO: REMOVE THIS HACK that delays with tone.
+  return 'tone(' + pin + ', ' + frequency + '); delay(' + duration + '); noTone(' + pin + '); delay(100);\n';
 };
 
 Blockly.Arduino['arduino_notone'] = function(block) {

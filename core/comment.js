@@ -39,10 +39,15 @@ goog.require('goog.userAgent');
  */
 Blockly.Comment = function(block) {
   Blockly.Comment.superClass_.constructor.call(this, block);
-  this.createIcon_();
+  this.createIcon();
 };
 goog.inherits(Blockly.Comment, Blockly.Icon);
 
+/**
+ * Icon in base64 format.
+ * @private
+ */
+Blockly.Comment.prototype.png_ = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAANyAAADcgBffIlqAAAAAd0SU1FB98DGgAnBf0Xj5sAAAIBSURBVDjLjZO9SxxRFMXPrFkWl2UFYSOIRtF210YtAiH/gGATRNZFgo19IBaB9Ipgk3SiEoKQgI19JIVgGaOIgpWJEAV1kZk3b1ad0V+KRYIzk5ALh1ecc88978tRSgHPg0Bjvq/BbFalMNR5oaBv+bzWHMfZjOudWPOg6+pDva6elRXlt7fVcnYmPX4sDQ3pdmpKQXu7frS16aXjON8T06OIMWOwtRp3jgNSEpkMTE5y5/v4UcSLePxnroutVNKb4xgYANfFAk/vDbLG8Gtk5P8M7jE6CsZwDDwSMLm5iYmLlpbg4ABOTmBjA4aHk0ZbWxigposLvlarScH5OSwvw9oaABwdJTW1GtTrfJHnUe/uTgqKxeZaKEAUgTEQP/CeHvA8LhRFhLlc+r6zWVhfbyaZn0/yuRxEEaGCAK9USjdZWGgarK5CS0uS7+gAa3EzjYaOy2WlludJi4vSzIx0e5vky2Xp6ko/M4WCPleruk4zsVa6vJSur9OHTEzoqljUJwEdQYDf25uMe3jY3E5fX5Lr7wdr8YGSJCkIeL23h9/a+lA4Pg7T039u6h75POzv4wcBrx5Ec11Wd3bwOzv//VK7umB3F991+Zj2/R1reWstdnaWm3L5YXOlAnNz3FiLbTR4Azj6WwFPjOG953EahoT1On4YEnoep8bwDuiO9/wG1sM4kG8A4fUAAAAASUVORK5CYII=';
 
 /**
  * Comment text (if bubble is not visible).
@@ -61,28 +66,6 @@ Blockly.Comment.prototype.width_ = 160;
  * @private
  */
 Blockly.Comment.prototype.height_ = 80;
-
-/**
- * Create the icon on the block.
- * @private
- */
-Blockly.Comment.prototype.createIcon_ = function() {
-  Blockly.Icon.prototype.createIcon_.call(this);
-  /* Here's the markup that will be generated:
-  <circle class="blocklyIconShield" r="8" cx="8" cy="8"/>
-  <text class="blocklyIconMark" x="8" y="13">?</text>
-  */
-  var iconShield = Blockly.createSvgElement('circle',
-      {'class': 'blocklyIconShield',
-       'r': Blockly.Icon.RADIUS,
-       'cx': Blockly.Icon.RADIUS,
-       'cy': Blockly.Icon.RADIUS}, this.iconGroup_);
-  this.iconMark_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyIconMark',
-       'x': Blockly.Icon.RADIUS,
-       'y': 2 * Blockly.Icon.RADIUS - 3}, this.iconGroup_);
-  this.iconMark_.appendChild(document.createTextNode('?'));
-};
 
 /**
  * Create the editor for the comment's bubble.

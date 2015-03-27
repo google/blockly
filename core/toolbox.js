@@ -283,7 +283,7 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
 
 /**
  * Creates a new tree node using a custom tree node.
- * @param {string=} html The HTML content of the node label.
+ * @param {string=} opt_html The HTML content of the node label.
  * @return {!goog.ui.tree.TreeNode} The new item.
  * @override
  */
@@ -349,7 +349,7 @@ goog.inherits(Blockly.Toolbox.TreeNode, goog.ui.tree.TreeNode);
  * @return {!goog.html.SafeHtml} The source for the icon.
  * @override
  */
-goog.ui.tree.BaseNode.prototype.getExpandIconSafeHtml = function() {
+Blockly.Toolbox.TreeNode.prototype.getExpandIconSafeHtml = function() {
   return goog.html.SafeHtml.create('span');
 };
 

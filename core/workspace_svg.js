@@ -97,7 +97,7 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 
 /**
  * Create the trash can elements.
- * @param {?string} backgroundClass Either 'blocklyMainBackground' or
+ * @param {string=} opt_backgroundClass Either 'blocklyMainBackground' or
  *     'blocklyMutatorBackground'.
  * @return {!Element} The workspace's SVG group.
  */

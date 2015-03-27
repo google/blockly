@@ -589,7 +589,10 @@ Blockly.removeAllRanges = function() {
   if (getSelection()) {
     setTimeout(function() {
         try {
-          getSelection().removeAllRanges();
+          var selection = getSelection();
+          if (!selection.isCollapsed) {
+            selection.removeAllRanges();
+          }
         } catch (e) {
           // MSIE throws 'error 800a025e' here.
         }

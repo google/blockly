@@ -150,18 +150,21 @@ Blockly.Trashcan.prototype.top_ = 0;
  * @return {!Element} The trash can's SVG group.
  */
 Blockly.Trashcan.prototype.createDom = function() {
-  /*
-  <g filter="url(#blocklyTrashcanShadowFilter)">
+  /* Here's the markup that will be generated:
+  <g>
     <clippath id="blocklyTrashBodyClipPath">
       <rect width="47" height="45" y="15"></rect>
     </clippath>
-    <image width="64" height="92" y="15" href="media/trashbody.png"
+    <image width="64" height="92" y="-32" xlink:href="media/sprites.png"
         clip-path="url(#blocklyTrashBodyClipPath)"></image>
-    <image width="47" height="15" href="media/trashlid.png"></image>
+    <clippath id="blocklyTrashLidClipPath">
+      <rect width="47" height="15"></rect>
+    </clippath>
+    <image width="84" height="92" y="-32" xlink:href="media/sprites.png"
+        clip-path="url(#blocklyTrashLidClipPath)"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g',
-      {'filter': 'url(#blocklyTrashcanShadowFilter)'}, null);
+  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
 
   var clip = Blockly.createSvgElement('clipPath',
       {'id': 'blocklyTrashBodyClipPath'},
@@ -278,7 +281,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
       (Blockly.RTL ? -lidAngle : lidAngle) + ', ' +
       (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
       (this.LID_HEIGHT_ - 2) + ')');
-  var opacity = goog.math.lerp(0.2, 0.4, this.lidOpen_);
+  var opacity = goog.math.lerp(0.4, 0.8, this.lidOpen_);
   this.svgGroup_.style.opacity = opacity;
   if (this.lidOpen_ > 0 && this.lidOpen_ < 1) {
     this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 20, this);

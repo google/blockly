@@ -82,7 +82,6 @@ Blockly.JavaScript['arduino_run_once'] = function(block) {
 
 Blockly.JavaScript['arduino_frequency'] = function(block) {
   var code = block.getFieldValue('NUM');
-  console.log(code);
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

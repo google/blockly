@@ -199,6 +199,10 @@ Blockly.Css.CONTENT = [
   '  font-size: 10px;',
   '}',
 
+  '.blocklyNonEditableText>text>tspan {',
+  '  display: none;',
+  '}',
+
   '.blocklyNonEditableText>text {',
   '  pointer-events: none;',
   '}',

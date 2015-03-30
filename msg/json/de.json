@@ -60,7 +60,7 @@
 	"CONTROLS_FOR_HELPURL": "https://de.wikipedia.org/wiki/For-Schleif",
 	"CONTROLS_FOR_TOOLTIP": "Zähle die Variable \"%1\" von einem Startwert bis zu einem Zielwert und führe für jeden Wert eine Anweisung aus.",
 	"CONTROLS_FOR_INPUT_WITH": "Zähle",
-	"CONTROLS_FOR_INPUT_FROM_TO_BY": "von %1 bis %2 mit Schrittweite %3",
+	"CONTROLS_FOR_INPUT_FROM_TO_BY": "von %1 bis %2 mit %3",
 	"CONTROLS_FOREACH_HELPURL": "https://de.wikipedia.org/wiki/For-Schleife",
 	"CONTROLS_FOREACH_INPUT_ITEM": "Für Wert",
 	"CONTROLS_FOREACH_INPUT_INLIST": "aus der Liste",

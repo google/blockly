@@ -29,11 +29,11 @@ var REPEAT_FOREVER = 'start loop';
 var DO = '';
 var RUN_ONCE = 'run once';
 
-Blockly.Blocks['arduino_pin'] = {
+Blockly.Blocks['arduino_tutorial_pin'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldArduino('Output A'), 'PIN');
+        .appendField(new Blockly.FieldDropdown([["Light", "13"], ["Buzzer", "4"]]), 'PIN');
     this.setOutput(true, 'Pin');
     this.setTooltip('');
   }
@@ -49,13 +49,22 @@ Blockly.Blocks['lightup_tutorial_pin'] = {
   }
 };
 
-Blockly.Blocks['lightup_tutorial_pin'] = {
+Blockly.Blocks['lightup_pin'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldArduino(), 'PIN');
+    this.setOutput(true, 'Pin');
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['arduino_pin'] = {
   init: function() {
     this.setColour(Blockly.Blocks.arduino.HUE_INNER_1);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(
-           [["Light", "13 "],
-            ["Pin\u00A01", "1"],
+            [["Pin\u00A01", "1"],
             ["Pin\u00A02", "2"],
             ["Pin\u00A03", "3"],
             ["Pin\u00A04", "4"],

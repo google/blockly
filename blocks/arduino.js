@@ -269,6 +269,23 @@ Blockly.Blocks['arduino_tone'] = {
     }
 };
 
+Blockly.Blocks['arduino_tutorial_tone'] = {
+    init: function() {
+        this.setColour(Blockly.Blocks.arduino.HUE);
+        this.appendDummyInput().appendField(TONE);
+        this.appendValueInput("frequency").setCheck("Number");
+        this.appendDummyInput().appendField("on");
+        this.appendValueInput("pin").setCheck("pin");
+        this.appendDummyInput().appendField("for");
+        this.appendValueInput("duration").setCheck("Number");
+        this.appendDummyInput().appendField("Seconds");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip('');
+    }
+};
+
 Blockly.Blocks['arduino_notone'] = {
     init: function() {
         this.setColour(Blockly.Blocks.arduino.HUE);
@@ -287,6 +304,19 @@ Blockly.Blocks['arduino_delay'] = {
         this.appendDummyInput().appendField(DELAY);
         this.appendValueInput("time").setCheck("Number");
         this.appendDummyInput().appendField("milliseconds");
+        this.setInputsInline(true);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip('');
+    }
+};
+
+Blockly.Blocks['arduino_tutorial_delay'] = {
+    init: function() {
+        this.setColour(Blockly.Blocks.arduino.HUE);
+        this.appendDummyInput().appendField(DELAY);
+        this.appendValueInput("time").setCheck("Number");
+        this.appendDummyInput().appendField("Seconds");
         this.setInputsInline(true);
         this.setPreviousStatement(true);
         this.setNextStatement(true);

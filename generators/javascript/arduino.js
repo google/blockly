@@ -58,7 +58,37 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
   code += '}, duration);\n';
   code += 'duration = duration + ' + duration + ' + 100;\n';
 
-  //}
+  return code;
+};
+
+Blockly.JavaScript['arduino_tutorial_tone'] = function(block) {
+  var frequency = Blockly.JavaScript.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
+  var duration = Blockly.JavaScript.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
+
+  switch(frequency) {
+    case "NOTE_C4": frequency = 262; break;
+    case "NOTE_CS4": frequency = 277; break;
+    case "NOTE_D4": frequency = 294; break;
+    case "NOTE_DS4": frequency = 311; break;
+    case "NOTE_E4": frequency = 330; break;
+    case "NOTE_F4": frequency = 349; break;
+    case "NOTE_FS4": frequency = 370; break;
+    case "NOTE_G4": frequency = 392; break;
+    case "NOTE_GS4": frequency = 415; break;
+    case "NOTE_A4": frequency = 440; break;
+    case "NOTE_AS4": frequency = 466; break;
+    case "NOTE_B4": frequency = 494; break;
+    default: frequency = 0;
+  }
+
+  var code = 'setTimeout(function() {\n';
+  code += 'var oscillator = context.createOscillator();\n';
+  code += 'oscillator.frequency.value = ' + frequency + ';\n';
+  code += 'oscillator.connect(context.destination);\n';
+  code += 'oscillator.start(0);\n'; 
+  code += 'setTimeout(function() { oscillator.stop(0); }, (' + duration + '* 1000));\n';
+  code += '}, duration);\n';
+  code += 'duration = duration + (' + duration + ' * 1000)  + 100;\n';
 
   return code;
 };
@@ -66,6 +96,12 @@ Blockly.JavaScript['arduino_tone'] = function(block) {
 Blockly.JavaScript['arduino_delay'] = function(block) {
   var duration = Blockly.Arduino.valueToCode(block, 'time', Blockly.Arduino.ORDER_NONE) || '0';
   var code = 'duration = duration + ' + duration + ';\n';
+  return code;
+};
+
+Blockly.JavaScript['arduino_tutorial_delay'] = function(block) {
+  var duration = Blockly.Arduino.valueToCode(block, 'time', Blockly.Arduino.ORDER_NONE) || '0';
+  var code = 'duration = duration + (' + duration + '* 1000);\n';
   return code;
 };
 

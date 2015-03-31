@@ -93,16 +93,30 @@ Blockly.Arduino['arduino_tone'] = function(block) {
   return 'tone(' + pin + ', ' + frequency + '); delay(' + duration + '); noTone(' + pin + '); delay(100);\n';
 };
 
+Blockly.Arduino['arduino_tutorial_tone'] = function(block) {
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
+  var frequency = Blockly.Arduino.valueToCode(block, 'frequency', Blockly.Arduino.ORDER_NONE) || '0';
+  var duration = Blockly.Arduino.valueToCode(block, 'duration', Blockly.Arduino.ORDER_NONE) || '0';
+
+  // TODO: REMOVE THIS HACK that delays with tone.
+  return 'tone(' + pin + ', ' + frequency + '); delay(' + duration + ' * 1000); noTone(' + pin + '); delay(100);\n';
+};
+
 Blockly.Arduino['arduino_notone'] = function(block) {
   var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
 
   return 'noTone(' + pin + ');\n';
 };
 
-
 Blockly.Arduino['arduino_delay'] = function(block) {
   var time = Blockly.Arduino.valueToCode(block, 'time', Blockly.Arduino.ORDER_NONE) || '0';
   var code = 'delay(' + time + ');\n';
+  return code;
+};
+
+Blockly.Arduino['arduino_tutorial_delay'] = function(block) {
+  var time = Blockly.Arduino.valueToCode(block, 'time', Blockly.Arduino.ORDER_NONE) || '0';
+  var code = 'delay(' + time + ' * 1000);\n';
   return code;
 };
 

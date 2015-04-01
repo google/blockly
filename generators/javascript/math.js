@@ -35,7 +35,7 @@ Blockly.JavaScript['math_number'] = function(block) {
 
   if(isNaN(code)) {
     console.log(code + "is not a number");
-    return false;
+    return false; // Right Now, it returns false.
   }
 
   return [code, Blockly.JavaScript.ORDER_ATOMIC];

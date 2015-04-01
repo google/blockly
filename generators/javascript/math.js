@@ -32,6 +32,9 @@ goog.require('Blockly.JavaScript');
 Blockly.JavaScript['math_number'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
+
+  console.log(code);
+
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

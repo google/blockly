@@ -31,9 +31,12 @@ goog.require('Blockly.JavaScript');
 
 Blockly.JavaScript['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = block.getFieldValue('NUM');
 
-  console.log(code);
+  if(isNaN(code)) {
+    console.log(code + "is not a number");
+    return false;
+  }
 
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };

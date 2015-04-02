@@ -49,12 +49,14 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
   secure: always
+  expiration: "30d"
 
 # Apple icon.
 - url: /apple-touch-icon\.png
   static_files: apple-touch-icon.png
   upload: apple-touch-icon\.png
   secure: always
+  expiration: "30d"
 
 # robot.txt
 - url: /robots\.txt

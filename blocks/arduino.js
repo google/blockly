@@ -287,7 +287,7 @@ Blockly.Blocks['arduino_tutorial_tone'] = {
         this.appendValueInput("pin").setCheck("pin");
         this.appendDummyInput().appendField("for");
         this.appendValueInput("duration").setCheck("Number");
-        this.appendDummyInput().appendField("Seconds");
+        this.appendDummyInput().appendField("Second");
         this.setInputsInline(true);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
@@ -325,7 +325,7 @@ Blockly.Blocks['arduino_tutorial_delay'] = {
         this.setColour(Blockly.Blocks.arduino.HUE);
         this.appendDummyInput().appendField(DELAY);
         this.appendValueInput("time").setCheck("Number");
-        this.appendDummyInput().appendField("Seconds");
+        this.appendDummyInput().appendField("Second");
         this.setInputsInline(true);
         this.setPreviousStatement(true);
         this.setNextStatement(true);

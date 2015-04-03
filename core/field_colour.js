@@ -153,7 +153,7 @@ Blockly.FieldColour.prototype.setColours = function(colours) {
 
 /**
  * Set a custom grid size for this field.
- * @param {number} colours Number of columns for this block,
+ * @param {number} columns Number of columns for this block,
  *     or 0 to use default (Blockly.FieldColour.COLUMNS).
  * @return {!Blockly.FieldColour} Returns itself (for method chaining).
  */

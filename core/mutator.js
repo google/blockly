@@ -116,7 +116,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
     this.setVisible(false);
     if (this.iconGroup_) {
       Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
-                           'blocklyIconGroupReadonly');
+                        'blocklyIconGroupReadonly');
     }
   }
 };

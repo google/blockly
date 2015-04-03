@@ -72,7 +72,6 @@ BlocklyStorage.link = function() {
  * @param {string} key Key to XML, obtained from href.
  */
 BlocklyStorage.retrieveXml = function(key) {
-  var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
   BlocklyStorage.makeRequest_('/storage', 'key', key);
 };
 

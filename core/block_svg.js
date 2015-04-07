@@ -484,7 +484,7 @@ Blockly.BlockSvg.prototype.showHelp_ = function() {
  * @private
  */
 Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
-  if (Blockly.readOnly || !this.contextMenu) {
+  if (this.workspace.options.readOnly || !this.contextMenu) {
     return;
   }
   // Save the current block in a variable for use in closures.
@@ -505,7 +505,8 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     }
     options.push(duplicateOption);
 
-    if (this.isEditable() && !this.collapsed_ && Blockly.comments) {
+    if (this.isEditable() && !this.collapsed_ &&
+        this.workspace.options.comments) {
       // Option to add/remove a comment.
       var commentOption = {enabled: true};
       if (this.comment) {
@@ -539,7 +540,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       }
     }
 
-    if (Blockly.collapse) {
+    if (this.workspace.options.collapse) {
       // Option to collapse/expand block.
       if (this.collapsed_) {
         var expandOption = {enabled: true};
@@ -558,7 +559,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       }
     }
 
-    if (Blockly.disable) {
+    if (this.workspace.options.disable) {
       // Option to disable/enable block.
       var disableOption = {
         text: this.disabled ?

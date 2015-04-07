@@ -186,3 +186,35 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
 Blockly.Workspace.prototype.fireChangeEvent = function() {
   // NOP.
 };
+
+/**
+ * Modify the block tree on the existing toolbox.
+ * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ */
+Blockly.Workspace.prototype.updateToolbox = function(tree) {
+  tree = Blockly.parseToolboxTree_(tree);
+  if (!tree) {
+    if (Blockly.languageTree) {
+      throw 'Can\'t nullify an existing toolbox.';
+    }
+    // No change (null to null).
+    return;
+  }
+  if (!Blockly.languageTree) {
+    throw 'Existing toolbox is null.  Can\'t create new toolbox.';
+  }
+  var hasCategories = !!tree.getElementsByTagName('category').length;
+  if (hasCategories) {
+    if (!this.toolbox_) {
+      throw 'Existing toolbox has no categories.  Can\'t change mode.';
+    }
+    Blockly.languageTree = tree;
+    this.toolbox_.populate_();
+  } else {
+    if (!this.flyout_) {
+      throw 'Existing toolbox has categories.  Can\'t change mode.';
+    }
+    Blockly.languageTree = tree;
+    this.flyout_.show(Blockly.languageTree.childNodes);
+  }
+};

@@ -55,12 +55,6 @@ goog.require('goog.userAgent');
 
 
 /**
- * Path to Blockly's media directory.  Can be relative, absolute, or remote.
- * Used for loading sounds and sprites.  Defaults to demo server.
- */
-Blockly.pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
-
-/**
  * Required name space for SVG elements.
  * @const
  */
@@ -383,7 +377,6 @@ Blockly.onKeyDown_ = function(e) {
     // When focused on an HTML text input widget, don't trap any keys.
     return;
   }
-  // TODO: Add keyboard support for cursoring around the context menu.
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
@@ -494,17 +487,18 @@ Blockly.copy_ = function(block) {
  * @private
  */
 Blockly.showContextMenu_ = function(e) {
-  if (Blockly.readOnly) {
+  var workspace = Blockly.mainWorkspace;
+  if (workspace.options.readOnly) {
     return;
   }
   var options = [];
   // Add a little animation to collapsing and expanding.
   var COLLAPSE_DELAY = 10;
 
-  if (Blockly.collapse) {
+  if (workspace.options.collapse) {
     var hasCollapsedBlocks = false;
     var hasExpandedBlocks = false;
-    var topBlocks = Blockly.mainWorkspace.getTopBlocks(false);
+    var topBlocks = workspace.getTopBlocks(false);
     for (var i = 0; i < topBlocks.length; i++) {
       var block = topBlocks[i];
       while (block) {
@@ -702,19 +696,20 @@ Blockly.playAudio = function(name, opt_volume) {
  * @private
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
+  var mainWorkspace = Blockly.mainWorkspace;
   var svgSize = Blockly.svgSize();
-  if (Blockly.mainWorkspace.toolbox_) {
-    svgSize.width -= Blockly.mainWorkspace.toolbox_.width;
+  if (mainWorkspace.toolbox_) {
+    svgSize.width -= mainWorkspace.toolbox_.width;
   }
   var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
   var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
   try {
-    var blockBox = Blockly.mainWorkspace.getCanvas().getBBox();
+    var blockBox = mainWorkspace.getCanvas().getBBox();
   } catch (e) {
     // Firefox has trouble with hidden elements (Bug 528969).
     return null;
   }
-  if (Blockly.mainWorkspace.scrollbar) {
+  if (mainWorkspace.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
     var MARGIN = 5;
@@ -736,16 +731,16 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var bottomEdge = topEdge + blockBox.height;
   }
   var absoluteLeft = 0;
-  if (!Blockly.RTL && Blockly.mainWorkspace.toolbox_) {
-    absoluteLeft = Blockly.mainWorkspace.toolbox_.width;
+  if (!Blockly.RTL && mainWorkspace.toolbox_) {
+    absoluteLeft = mainWorkspace.toolbox_.width;
   }
   var metrics = {
     viewHeight: svgSize.height,
     viewWidth: svgSize.width,
     contentHeight: bottomEdge - topEdge,
     contentWidth: rightEdge - leftEdge,
-    viewTop: -Blockly.mainWorkspace.scrollY,
-    viewLeft: -Blockly.mainWorkspace.scrollX,
+    viewTop: -mainWorkspace.scrollY,
+    viewLeft: -mainWorkspace.scrollX,
     contentTop: topEdge,
     contentLeft: leftEdge,
     absoluteTop: 0,
@@ -761,23 +756,24 @@ Blockly.getMainWorkspaceMetrics_ = function() {
  * @private
  */
 Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
-  if (!Blockly.mainWorkspace.scrollbar) {
+  var mainWorkspace = Blockly.mainWorkspace;
+  if (!mainWorkspace.scrollbar) {
     throw 'Attempt to set main workspace scroll without scrollbars.';
   }
   var metrics = Blockly.getMainWorkspaceMetrics_();
   if (goog.isNumber(xyRatio.x)) {
-    Blockly.mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x -
+    mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x -
         metrics.contentLeft;
   }
   if (goog.isNumber(xyRatio.y)) {
-    Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
+    mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
         metrics.contentTop;
   }
-  var x = Blockly.mainWorkspace.scrollX + metrics.absoluteLeft;
-  var y = Blockly.mainWorkspace.scrollY + metrics.absoluteTop;
-  Blockly.mainWorkspace.translate(x, y);
-  Blockly.mainWorkspacePattern_.setAttribute('x', x);
-  Blockly.mainWorkspacePattern_.setAttribute('y', y);
+  var x = mainWorkspace.scrollX + metrics.absoluteLeft;
+  var y = mainWorkspace.scrollY + metrics.absoluteTop;
+  mainWorkspace.translate(x, y);
+  mainWorkspace.gridPattern_.setAttribute('x', x);
+  mainWorkspace.gridPattern_.setAttribute('y', y);
 };
 
 /**

@@ -66,15 +66,18 @@ Blockly.Css.mediaPath_ = '';
  * a) It loads synchronously and doesn't force a redraw later.
  * b) It speeds up loading by not blocking on a separate HTTP transfer.
  * c) The CSS content may be made dynamic depending on init options.
+ * @param {boolean} hasCss If false, don't inject CSS
+ *     (providing CSS becomes the document's responsibility).
+ * @param {string} pathToMedia Path from page to the Blockly media directory.
  */
-Blockly.Css.inject = function() {
+Blockly.Css.inject = function(hasCss, pathToMedia) {
   // Placeholder for cursor rule.  Must be first rule (index 0).
   var text = '.blocklyDraggable {}\n';
-  if (Blockly.hasCss) {
+  if (hasCss) {
     text += Blockly.Css.CONTENT.join('\n');
   }
   // Strip off any trailing slash (either Unix or Windows).
-  Blockly.Css.mediaPath_ = Blockly.pathToMedia.replace(/[\\\/]$/, '');
+  Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
   Blockly.Css.styleSheet_ = goog.cssom.addCssText(text).sheet;
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);

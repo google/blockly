@@ -34,32 +34,31 @@ goog.require('goog.userAgent');
 
 
 /**
- * Inject a Blockly editor into the specified container DIV.
+ * Initialize the SVG document with various handlers.
  * @param {!Element} container Containing element.
  * @param {Object} opt_options Optional dictionary of options.
- * @return {!Blockly.Workspace} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
   // Verify that the container is in document.
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
   }
-  var options = Blockly.parseOptions_(opt_options || {});
-  var workspace;
+  if (opt_options) {
+    Blockly.parseOptions_(opt_options);
+  }
   var startUi = function() {
-    workspace = Blockly.createDom_(container, options);
-    Blockly.init_(workspace);
+    Blockly.createDom_(container);
+    Blockly.init_();
   };
-  if (options.enableRealtime) {
+  if (Blockly.enableRealtime) {
     var realtimeElement = document.getElementById('realtime');
     if (realtimeElement) {
       realtimeElement.style.display = 'block';
     }
-    Blockly.Realtime.startRealtime(startUi, container, options.realtimeOptions);
+    Blockly.Realtime.startRealtime(startUi, container, Blockly.realtimeOptions);
   } else {
     startUi();
   }
-  return workspace;
 };
 
 /**
@@ -88,9 +87,7 @@ Blockly.parseToolboxTree_ = function(tree) {
 
 /**
  * Configure Blockly to behave according to a set of options.
- * @param {!Object} options Dictionary of options.  Specification:
- *   https://developers.google.com/blockly/installation/overview#configuration
- * @return {!Object} Dictionary of normalized options.
+ * @param {!Object} options Dictionary of options.
  * @private
  */
 Blockly.parseOptions_ = function(options) {
@@ -150,44 +147,38 @@ Blockly.parseOptions_ = function(options) {
     grid['length'] = parseFloat(grid['length']);
   }
   grid['snap'] = !!grid['snap'];
-  var pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
-  if (options['media']) {
-    pathToMedia = options['media'];
-  } else if (options['path']) {
-    // 'path' is a deprecated option which has been replaced by 'media'.
-    pathToMedia = options['path'] + 'media/';
-  }
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
 
-  return {
-    RTL: !!options['rtl'],
-    collapse: hasCollapse,
-    comments: hasComments,
-    disable: hasDisable,
-    readOnly: readOnly,
-    maxBlocks: options['maxBlocks'] || Infinity,
-    pathToMedia: pathToMedia,
-    hasCategories: hasCategories,
-    hasScrollbars: hasScrollbars,
-    hasTrashcan: hasTrashcan,
-    hasSounds: hasSounds,
-    hasCss: hasCss,
-    languageTree: tree,
-    gridOptions: grid,
-    enableRealtime: enableRealtime,
-    realtimeOptions: realtimeOptions
-  };
+  Blockly.RTL = !!options['rtl'];
+  Blockly.collapse = hasCollapse;
+  Blockly.comments = hasComments;
+  Blockly.disable = hasDisable;
+  Blockly.readOnly = readOnly;
+  Blockly.maxBlocks = options['maxBlocks'] || Infinity;
+  if (options['media']) {
+    Blockly.pathToMedia = options['media'];
+  } else if (options['path']) {
+    // 'path' is a deprecated option which has been replaced by 'media'.
+    Blockly.pathToMedia = options['path'] + 'media/';
+  }
+  Blockly.hasCategories = hasCategories;
+  Blockly.hasScrollbars = hasScrollbars;
+  Blockly.hasTrashcan = hasTrashcan;
+  Blockly.hasSounds = hasSounds;
+  Blockly.hasCss = hasCss;
+  Blockly.languageTree = tree;
+  Blockly.gridOptions = grid;
+  Blockly.enableRealtime = enableRealtime;
+  Blockly.realtimeOptions = realtimeOptions;
 };
 
 /**
  * Create the SVG image.
  * @param {!Element} container Containing element.
- * @param {Object} options Dictionary of options.
- * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */
-Blockly.createDom_ = function(container, options) {
+Blockly.createDom_ = function(container) {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -196,7 +187,7 @@ Blockly.createDom_ = function(container, options) {
   goog.ui.Component.setDefaultRightToLeft(Blockly.RTL);
 
   // Load CSS.
-  Blockly.Css.inject(options.hasCss, options.pathToMedia);
+  Blockly.Css.inject();
 
   // Build the SVG DOM.
   /*
@@ -222,7 +213,7 @@ Blockly.createDom_ = function(container, options) {
   </defs>
   */
   var defs = Blockly.createSvgElement('defs', {}, svg);
-  var filter, feSpecularLighting, feMerge;
+  var filter, feSpecularLighting, feMerge, pattern;
   /*
     <filter id="blocklyEmboss">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"/>
@@ -267,13 +258,13 @@ Blockly.createDom_ = function(container, options) {
       <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
     </pattern>
   */
-  var disabledPattern = Blockly.createSvgElement('pattern',
+  pattern = Blockly.createSvgElement('pattern',
       {'id': 'blocklyDisabledPattern', 'patternUnits': 'userSpaceOnUse',
        'width': 10, 'height': 10}, defs);
   Blockly.createSvgElement('rect',
-      {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
+      {'width': 10, 'height': 10, 'fill': '#aaa'}, pattern);
   Blockly.createSvgElement('path',
-      {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
+      {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, pattern);
   /*
     <pattern id="blocklyGridPattern" patternUnits="userSpaceOnUse"
              width="10" height="10">
@@ -281,55 +272,52 @@ Blockly.createDom_ = function(container, options) {
       <rect width="1" height="1" stroke="#888" />
     </pattern>
   */
-  var gridPattern = Blockly.createSvgElement('pattern',
+  pattern = Blockly.createSvgElement('pattern',
       {'id': 'blocklyGridPattern',
        'patternUnits': 'userSpaceOnUse',
-       'width': options.gridOptions['spacing'],
-       'height': options.gridOptions['spacing']}, defs);
-  if (options.gridOptions['length'] > 0 && options.gridOptions['spacing'] > 0) {
-    var half = Math.floor(options.gridOptions['spacing'] / 2) + .5;
-    var start = half - options.gridOptions['length'] / 2;
-    var end = half + options.gridOptions['length'] / 2;
+       'width': Blockly.gridOptions['spacing'],
+       'height': Blockly.gridOptions['spacing']}, defs);
+  if (Blockly.gridOptions['length'] > 0) {
+    var half = Math.floor(Blockly.gridOptions['spacing'] / 2) + .5;
+    var start = half - Blockly.gridOptions['length'] / 2;
+    var end = half + Blockly.gridOptions['length'] / 2;
     Blockly.createSvgElement('line',
         {'x1': start,
          'y1': half,
          'x2': end,
          'y2': half,
-         'stroke': options.gridOptions['colour']},
-        gridPattern);
-    if (options.gridOptions['length'] > 1) {
+         'stroke': Blockly.gridOptions['colour']},
+        pattern);
+    if (Blockly.gridOptions['length'] > 1) {
       Blockly.createSvgElement('line',
           {'x1': half,
            'y1': start,
            'x2': half,
            'y2': end,
-           'stroke': options.gridOptions['colour']},
-          gridPattern);
+           'stroke': Blockly.gridOptions['colour']},
+          pattern);
     }
+    Blockly.mainWorkspacePattern_ = pattern;
   }
 
-  var mainWorkspace = new Blockly.WorkspaceSvg(
+  Blockly.mainWorkspace = new Blockly.WorkspaceSvg(
       Blockly.getMainWorkspaceMetrics_,
       Blockly.setMainWorkspaceMetrics_);
-  mainWorkspace.options = options;
-  goog.mixin(Blockly, options);  // TODO: Delete this (#singletonHunt).
-  Blockly.mainWorkspace = mainWorkspace;  // TODO: Delete this (#singletonHunt).
-  svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
-  mainWorkspace.maxBlocks = options.maxBlocks;
-  mainWorkspace.gridPattern_ = gridPattern;
+  svg.appendChild(Blockly.mainWorkspace.createDom('blocklyMainBackground'));
+  Blockly.mainWorkspace.maxBlocks = Blockly.maxBlocks;
 
-  if (!options.readOnly) {
+  if (!Blockly.readOnly) {
     // Determine if there needs to be a category tree, or a simple list of
     // blocks.  This cannot be changed later, since the UI is very different.
-    if (options.hasCategories) {
-      mainWorkspace.toolbox_ = new Blockly.Toolbox(svg, container);
-    } else if (options.languageTree) {
-      mainWorkspace.addFlyout();
+    if (Blockly.hasCategories) {
+      Blockly.mainWorkspace.toolbox_ = new Blockly.Toolbox(svg, container);
+    } else if (Blockly.languageTree) {
+      Blockly.mainWorkspace.addFlyout();
     }
-    if (!options.hasScrollbars) {
+    if (!Blockly.hasScrollbars) {
       var workspaceChanged = function() {
         if (Blockly.dragMode_ == 0) {
-          var metrics = mainWorkspace.getMetrics();
+          var metrics = Blockly.mainWorkspace.getMetrics();
           var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
           var edgeTop = metrics.viewTop + metrics.absoluteTop;
           if (metrics.contentTop < edgeTop ||
@@ -341,7 +329,7 @@ Blockly.createDom_ = function(container, options) {
                   metrics.viewWidth : metrics.viewWidth + edgeLeft)) {
             // One or more blocks may be out of bounds.  Bump them back in.
             var MARGIN = 25;
-            var blocks = mainWorkspace.getTopBlocks(false);
+            var blocks = Blockly.mainWorkspace.getTopBlocks(false);
             for (var b = 0, block; block = blocks[b]; b++) {
               var blockXY = block.getRelativeToSurfaceXY();
               var blockHW = block.getHeightWidth();
@@ -386,16 +374,13 @@ Blockly.createDom_ = function(container, options) {
   Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
   Blockly.WidgetDiv.DIV.style.direction = Blockly.RTL ? 'rtl' : 'ltr';
   document.body.appendChild(Blockly.WidgetDiv.DIV);
-  return mainWorkspace;
 };
 
 /**
  * Initialize Blockly with various handlers.
- * @param {!Blockly.Workspace} mainWorkspace Newly created main workspace.
  * @private
  */
-Blockly.init_ = function(mainWorkspace) {
-  var options = mainWorkspace.options;
+Blockly.init_ = function() {
   // Bind events for scrolling the workspace.
   // Most of these events should be bound to the SVG's surface.
   // However, 'mouseup' has to be on the whole document so that a block dragged
@@ -430,32 +415,34 @@ Blockly.init_ = function(mainWorkspace) {
     Blockly.documentEventsBound_ = true;
   }
 
-  if (options.languageTree) {
-    if (mainWorkspace.toolbox_) {
-      mainWorkspace.toolbox_.init(mainWorkspace);
-    } else if (mainWorkspace.flyout_) {
+  if (Blockly.languageTree) {
+    if (Blockly.mainWorkspace.toolbox_) {
+      Blockly.mainWorkspace.toolbox_.init(Blockly.mainWorkspace);
+    } else if (Blockly.mainWorkspace.flyout_) {
       // Build a fixed flyout with the root blocks.
-      mainWorkspace.flyout_.init(mainWorkspace);
-      mainWorkspace.flyout_.show(options.languageTree.childNodes);
+      Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace);
+      Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
       // Translate the workspace sideways to avoid the fixed flyout.
-      mainWorkspace.scrollX = mainWorkspace.flyout_.width_;
-      if (options.RTL) {
-        mainWorkspace.scrollX *= -1;
+      Blockly.mainWorkspace.scrollX = Blockly.mainWorkspace.flyout_.width_;
+      if (Blockly.RTL) {
+        Blockly.mainWorkspace.scrollX *= -1;
       }
-      var translation = 'translate(' + mainWorkspace.scrollX + ', 0)';
-      mainWorkspace.getCanvas().setAttribute('transform', translation);
-      mainWorkspace.getBubbleCanvas().setAttribute('transform', translation);
+      var translation = 'translate(' + Blockly.mainWorkspace.scrollX + ', 0)';
+      Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
+      Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
+                                                           translation);
     }
   }
-  if (options.hasScrollbars) {
-    mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
-    mainWorkspace.scrollbar.resize();
+  if (Blockly.hasScrollbars) {
+    Blockly.mainWorkspace.scrollbar =
+        new Blockly.ScrollbarPair(Blockly.mainWorkspace);
+    Blockly.mainWorkspace.scrollbar.resize();
   }
 
-  mainWorkspace.addTrashcan();
+  Blockly.mainWorkspace.addTrashcan();
 
   // Load the sounds.
-  if (options.hasSounds) {
+  if (Blockly.hasSounds) {
     Blockly.loadAudio_(
         [Blockly.pathToMedia + 'click.mp3',
          Blockly.pathToMedia + 'click.wav',
@@ -485,8 +472,30 @@ Blockly.init_ = function(mainWorkspace) {
  * Modify the block tree on the existing toolbox.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  */
-Blockly.updateToolbox = function(tree, workspace) {
-  console.warn('Deprecated call to Blockly.updateToolbox, ' +
-               'use workspace.updateToolbox instead.');
-  Blockly.getMainWorkspace().updateToolbox(tree);
+Blockly.updateToolbox = function(tree) {
+  tree = Blockly.parseToolboxTree_(tree);
+  if (!tree) {
+    if (Blockly.languageTree) {
+      throw 'Can\'t nullify an existing toolbox.';
+    }
+    // No change (null to null).
+    return;
+  }
+  if (!Blockly.languageTree) {
+    throw 'Existing toolbox is null.  Can\'t create new toolbox.';
+  }
+  var hasCategories = !!tree.getElementsByTagName('category').length;
+  if (hasCategories) {
+    if (!Blockly.hasCategories) {
+      throw 'Existing toolbox has no categories.  Can\'t change mode.';
+    }
+    Blockly.languageTree = tree;
+    Blockly.mainWorkspace.toolbox_.populate_();
+  } else {
+    if (Blockly.hasCategories) {
+      throw 'Existing toolbox has categories.  Can\'t change mode.';
+    }
+    Blockly.languageTree = tree;
+    Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
+  }
 };

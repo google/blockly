@@ -622,7 +622,7 @@ Blockly.Block.prototype.getFieldValue = function(name) {
  * @deprecated December 2013
  */
 Blockly.Block.prototype.getTitleValue = function(name) {
-  console.warn('Deprecated call to getTitleValue, use getFieldValue instead.');
+  console.log('Deprecated call to getTitleValue, use getFieldValue instead.');
   return this.getFieldValue(name);
 };
 
@@ -644,7 +644,7 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
  * @deprecated December 2013
  */
 Blockly.Block.prototype.setTitleValue = function(newValue, name) {
-  console.warn('Deprecated call to setTitleValue, use setFieldValue instead.');
+  console.log('Deprecated call to setTitleValue, use setFieldValue instead.');
   this.setFieldValue(newValue, name);
 };
 

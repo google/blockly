@@ -102,7 +102,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
  * @deprecated December 2013
  */
 Blockly.Input.prototype.appendTitle = function(field, opt_name) {
-  console.warn('Deprecated call to appendTitle, use appendField instead.');
+  console.log('Deprecated call to appendTitle, use appendField instead.');
   return this.appendField(field, opt_name);
 };
 

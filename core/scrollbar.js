@@ -44,7 +44,7 @@ Blockly.ScrollbarPair = function(workspace) {
   this.corner_ = Blockly.createSvgElement('rect',
       {'height': Blockly.Scrollbar.scrollbarThickness,
       'width': Blockly.Scrollbar.scrollbarThickness,
-      'style': 'fill: #fff'}, null);
+      'class': 'blocklyScrollbarBackground'}, null);
   Blockly.Scrollbar.insertAfter_(this.corner_, workspace.getBubbleCanvas());
 };
 
@@ -158,14 +158,14 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
     this.svgBackground_.setAttribute('height',
         Blockly.Scrollbar.scrollbarThickness);
     this.svgKnob_.setAttribute('height',
-        Blockly.Scrollbar.scrollbarThickness - 6);
-    this.svgKnob_.setAttribute('y', 3);
+        Blockly.Scrollbar.scrollbarThickness - 5);
+    this.svgKnob_.setAttribute('y', 2.5);
   } else {
     this.svgBackground_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness);
     this.svgKnob_.setAttribute('width',
-        Blockly.Scrollbar.scrollbarThickness - 6);
-    this.svgKnob_.setAttribute('x', 3);
+        Blockly.Scrollbar.scrollbarThickness - 5);
+    this.svgKnob_.setAttribute('x', 2.5);
   }
   var scrollbar = this;
   this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
@@ -235,7 +235,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
    * .absoluteLeft: Left-edge of view.
    */
   if (this.horizontal_) {
-    var outerLength = hostMetrics.viewWidth;
+    var outerLength = hostMetrics.viewWidth - 1;
     if (this.pair_) {
       // Shorten the scrollbar to make room for the corner square.
       outerLength -= Blockly.Scrollbar.scrollbarThickness;
@@ -254,19 +254,19 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
         this.ratio_;
     this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
-    this.xCoordinate = hostMetrics.absoluteLeft;
+    this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
     if (this.pair_ && Blockly.RTL) {
       this.xCoordinate += hostMetrics.absoluteLeft +
           Blockly.Scrollbar.scrollbarThickness;
     }
     this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
-        Blockly.Scrollbar.scrollbarThickness;
+        Blockly.Scrollbar.scrollbarThickness - 0.5;
     this.svgGroup_.setAttribute('transform',
         'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
     this.svgBackground_.setAttribute('width', Math.max(0, outerLength));
     this.svgKnob_.setAttribute('x', this.constrainKnob_(innerOffset));
   } else {
-    var outerLength = hostMetrics.viewHeight;
+    var outerLength = hostMetrics.viewHeight - 1;
     if (this.pair_) {
       // Shorten the scrollbar to make room for the corner square.
       outerLength -= Blockly.Scrollbar.scrollbarThickness;
@@ -283,12 +283,12 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) *
         this.ratio_;
     this.svgKnob_.setAttribute('height', Math.max(0, innerLength));
-    this.xCoordinate = hostMetrics.absoluteLeft;
+    this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
     if (!Blockly.RTL) {
       this.xCoordinate += hostMetrics.viewWidth -
-          Blockly.Scrollbar.scrollbarThickness;
+          Blockly.Scrollbar.scrollbarThickness - 1;
     }
-    this.yCoordinate = hostMetrics.absoluteTop;
+    this.yCoordinate = hostMetrics.absoluteTop + 0.5;
     this.svgGroup_.setAttribute('transform',
         'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
     this.svgBackground_.setAttribute('height', Math.max(0, outerLength));
@@ -307,13 +307,13 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   /* Create the following DOM:
   <g>
     <rect class="blocklyScrollbarBackground" />
-    <rect class="blocklyScrollbarKnob" rx="7" ry="7" />
+    <rect class="blocklyScrollbarKnob" rx="8" ry="8" />
   </g>
   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgBackground_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
-  var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 6) / 2);
+  var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
   this.svgKnob_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarKnob', 'rx': radius, 'ry': radius},
       this.svgGroup_);

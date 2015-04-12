@@ -32,6 +32,8 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 goog.require('goog.Timer');
+goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
 
 
 /**
@@ -42,6 +44,8 @@ goog.require('goog.Timer');
 Blockly.BlockSvg = function() {
   // Create core elements for the block.
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+  goog.a11y.aria.setRole(this.svgGroup_, goog.a11y.aria.Role.GROUP)
+  this.svgGroup_.setAttribute('tabindex', 0);
   this.svgPathDark_ = Blockly.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1, 1)'},
       this.svgGroup_);
@@ -51,6 +55,7 @@ Blockly.BlockSvg = function() {
       {'class': 'blocklyPathLight'}, this.svgGroup_);
   this.svgPath_.tooltip = this;
   Blockly.Tooltip.bindMouseEvents(this.svgPath_);
+  
   this.updateMovable();
 };
 goog.inherits(Blockly.BlockSvg, Blockly.Block);
@@ -96,6 +101,15 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     Blockly.bindEvent_(this.workspace.getCanvas(), 'blocklyWorkspaceChange',
         this, this.onchange);
   }
+  Blockly.bindEvent_(this.getSvgRoot(), 'focusin', this, function(e) {    
+    if (Blockly.selected !== null && Blockly.selected !== this) {
+      Blockly.removeClass_(/** @type {!Element} */ (Blockly.selected.getSvgRoot()),
+                              'blocklySelected');   
+    }
+    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+                        'blocklySelected');
+    Blockly.selected = this;
+  });
   this.eventsInit_ = true;
 
   if (!this.getSvgRoot().parentNode) {

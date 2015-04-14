@@ -44,8 +44,7 @@ goog.require('goog.a11y.aria.Role');
 Blockly.BlockSvg = function() {
   // Create core elements for the block.
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-  goog.a11y.aria.setRole(this.svgGroup_, goog.a11y.aria.Role.GROUP)
-  this.svgGroup_.setAttribute('tabindex', 0);
+  goog.a11y.aria.setRole(this.svgGroup_, goog.a11y.aria.Role.GROUP);
   this.svgPathDark_ = Blockly.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1, 1)'},
       this.svgGroup_);
@@ -101,20 +100,30 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     Blockly.bindEvent_(this.workspace.getCanvas(), 'blocklyWorkspaceChange',
         this, this.onchange);
   }
-  Blockly.bindEvent_(this.getSvgRoot(), 'focusin', this, function(e) {    
-    if (Blockly.selected !== null && Blockly.selected !== this) {
-      Blockly.removeClass_(/** @type {!Element} */ (Blockly.selected.getSvgRoot()),
-                              'blocklySelected');   
-    }
-    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
-                        'blocklySelected');
-    Blockly.selected = this;
-  });
+  if (!this.eventsInit_) {
+    var bindFocus = (function() {
+      this.focusEvent_ = Blockly.bindEvent_(this.getSvgRoot(), 'focusin', this, function(e) {    
+        Blockly.unbindEvent_(this.focusEvent_);
+        console.log('focused', this);
+        this.focusEvent_ = Blockly.bindEvent_(this.getSvgRoot(), 'focusout', this, function(e) {    
+          Blockly.unbindEvent_(this.focusEvent_);
+          this.unselect();
+          e.cancelBubble = true;
+          bindFocus();
+        });
+        this.select();
+        e.cancelBubble = true;
+      });
+    }).bind(this);
+    bindFocus();  
+  }
   this.eventsInit_ = true;
 
   if (!this.getSvgRoot().parentNode) {
     this.workspace.getCanvas().appendChild(this.getSvgRoot());
   }
+  this.getSvgRoot().setAttribute('tabindex', 0);
+  this.getSvgRoot().setAttribute('focusable', true);
 };
 
 /**
@@ -1279,8 +1288,6 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
 Blockly.BlockSvg.prototype.addSelect = function() {
   Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
                     'blocklySelected');
-  // Move the selected block to the top of the stack.
-  this.svgGroup_.parentNode.appendChild(this.svgGroup_);
 };
 
 /**

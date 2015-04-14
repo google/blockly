@@ -34,6 +34,7 @@ goog.require('goog.math.Coordinate');
 goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
 goog.require('goog.a11y.aria.Role');
+goog.require('goog.events');
 
 
 /**
@@ -104,7 +105,6 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     var bindFocus = (function() {
       this.focusEvent_ = Blockly.bindEvent_(this.getSvgRoot(), 'focusin', this, function(e) {    
         Blockly.unbindEvent_(this.focusEvent_);
-        console.log('focused', this);
         this.focusEvent_ = Blockly.bindEvent_(this.getSvgRoot(), 'focusout', this, function(e) {    
           Blockly.unbindEvent_(this.focusEvent_);
           this.unselect();
@@ -115,7 +115,19 @@ Blockly.BlockSvg.prototype.initSvg = function() {
         e.cancelBubble = true;
       });
     }).bind(this);
-    bindFocus();  
+    bindFocus();
+    
+    this.eventHandler_ = new goog.events.EventHandler(this);
+    this.keyHandler_ = new goog.events.KeyHandler(this.getSvgRoot());
+    this.eventHandler_.listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY, function(e) {
+      if (e.keyCode == goog.events.KeyCodes.ENTER) {
+        if (e.altKey) {
+          this.showContextMenu_(e);
+        } else {
+          //TODO: Movement pane
+        }
+      }
+    });
   }
   this.eventsInit_ = true;
 

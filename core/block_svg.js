@@ -121,11 +121,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     this.keyHandler_ = new goog.events.KeyHandler(this.getSvgRoot());
     this.eventHandler_.listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY, function(e) {
       if (e.keyCode == goog.events.KeyCodes.ENTER) {
-        if (e.altKey) {
-          this.showContextMenu_(e);
-        } else {
-          //TODO: Movement pane
-        }
+        this.showContextMenu_(e);
       }
     });
   }
@@ -136,6 +132,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   }
   this.getSvgRoot().setAttribute('tabindex', 0);
   this.getSvgRoot().setAttribute('focusable', true);
+  goog.a11y.aria.setLabel(this.getSvgRoot(), this.toString());
 };
 
 /**

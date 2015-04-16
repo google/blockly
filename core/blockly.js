@@ -383,7 +383,6 @@ Blockly.onKeyDown_ = function(e) {
     // When focused on an HTML text input widget, don't trap any keys.
     return;
   }
-  // TODO: Add keyboard support for cursoring around the context menu.
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
@@ -404,7 +403,9 @@ Blockly.onKeyDown_ = function(e) {
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable() &&
         Blockly.selected.workspace == Blockly.mainWorkspace) {
-      Blockly.hideChaff();
+      if (e.keyCode != goog.events.KeyCodes.ENTER) {
+        Blockly.hideChaff();
+      }
       if (e.keyCode == 67) {
         // 'c' for copy.
         Blockly.copy_(Blockly.selected);

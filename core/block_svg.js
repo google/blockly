@@ -121,7 +121,10 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     this.keyHandler_ = new goog.events.KeyHandler(this.getSvgRoot());
     this.eventHandler_.listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY, function(e) {
       if (e.keyCode == goog.events.KeyCodes.ENTER) {
-        this.showContextMenu_(e);
+        if (e.altKey || e.ctrlKey || e.metaKey) {
+          this.onMouseDown_({button: 2, stopPropagation: function(){} }); //simulate rightclick
+          e.cancelBubble = true;
+        }
       }
     });
   }

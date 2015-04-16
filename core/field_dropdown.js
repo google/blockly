@@ -144,6 +144,14 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     menuItem.setCheckable(true);
     menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);
+    menuItem.getContentElement().setAttribute('tabindex', 0);
+    menuItem.setMnemonic(goog.events.KeyCodes[text[0]]); //TODO: Fix for symbols
+    goog.a11y.aria.setLabel(menuItem.getContentElement(), text);
+    Blockly.bindEvent_(menuItem.getContentElement(), 'keydown', menuItem, function(e) {
+      if (e.keyCode == goog.events.KeyCodes.ENTER) {
+        this.handleMouseDown({button: 1, preventDefault: function() {} });
+      }
+    });
   }
   // Listen for mouse/keyboard events.
   goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);

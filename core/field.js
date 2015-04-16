@@ -30,6 +30,7 @@ goog.provide('Blockly.Field');
 
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.events');
 goog.require('goog.math.Size');
 goog.require('goog.userAgent');
 
@@ -92,6 +93,16 @@ Blockly.Field.prototype.init = function(block) {
   if (!this.visible_) {
     this.fieldGroup_.style.display = 'none';
   }
+  this.fieldGroup_.setAttribute('tabindex', 0);
+  this.fieldGroup_.setAttribute('focusable', true);
+  Blockly.bindEvent_(this.fieldGroup_, 'keydown', this, function(e) {
+    if (e.keyCode == goog.events.KeyCodes.ENTER && this.sourceBlock_.isEditable()) {
+      // Non-abstract sub-classes must define a showEditor_ method.
+      this.showEditor_();
+    }   
+  });
+  
+  
   this.borderRect_ = Blockly.createSvgElement('rect',
       {'rx': 4,
        'ry': 4,

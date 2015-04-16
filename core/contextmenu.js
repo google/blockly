@@ -56,10 +56,24 @@ Blockly.ContextMenu.show = function(e, options) {
      callback: Blockly.MakeItSo}
   */
   var menu = new goog.ui.Menu();
-  for (var x = 0, option; option = options[x]; x++) {
-    var menuItem = new goog.ui.MenuItem(option.text);
+  var usedMnemonics = [];
+  for (var x = 0, option; option = options[x]; x++) {    
+    var possibleMnemonics = option.text.split('').filter(function(elem) { return usedMnemonics.indexOf(elem.toUpperCase()) === -1; });
+    var text = option.text;
+    var mne;
+    if (possibleMnemonics[0]) {
+      mne = possibleMnemonics[0].toUpperCase();
+      text = text.replace(new RegExp(mne, 'i'), function(capture) {
+        return '('+capture+')';
+      });
+      usedMnemonics.push(mne);
+    }
+    var menuItem = new goog.ui.MenuItem(text);
     menu.addChild(menuItem, true);
     menuItem.setEnabled(option.enabled);
+    if (mne) {
+      menuItem.setMnemonic(goog.events.KeyCodes[mne]);
+    }
     if (option.enabled) {
       var evtHandlerCapturer = function(callback) {
         return function() { Blockly.doCommand(callback); };

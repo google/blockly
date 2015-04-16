@@ -68,13 +68,22 @@ Blockly.ContextMenu.show = function(e, options) {
       });
       usedMnemonics.push(mne);
     }
+    
+    var keypressHandlerCapturer = function(callback) {
+      return function(e) { if (e.keyCode == goog.events.KeyCodes.ENTER) { Blockly.doCommand(callback); Blockly.ContextMenu.hide(); } };
+    };
+    
     var menuItem = new goog.ui.MenuItem(text);
     menu.addChild(menuItem, true);
     menuItem.setEnabled(option.enabled);
+    goog.a11y.aria.setLabel(menuItem.getContentElement(), text);
+    menuItem.getContentElement().setAttribute('tabIndex', 0);
+    goog.events.listen(menuItem.getContentElement(), goog.events.EventType.KEYDOWN, 
+                       keypressHandlerCapturer(option.callback));
     if (mne) {
       menuItem.setMnemonic(goog.events.KeyCodes[mne]);
     }
-    if (option.enabled) {
+    if (option.enabled) {      
       var evtHandlerCapturer = function(callback) {
         return function() { Blockly.doCommand(callback); };
       };

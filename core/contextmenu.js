@@ -76,7 +76,7 @@ Blockly.ContextMenu.show = function(e, options) {
     var menuItem = new goog.ui.MenuItem(text);
     menu.addChild(menuItem, true);
     menuItem.setEnabled(option.enabled);
-    goog.a11y.aria.setLabel(menuItem.getContentElement(), text);
+    goog.a11y.aria.setLabel(menuItem.getContentElement(), option.text);
     menuItem.getContentElement().setAttribute('tabIndex', 0);
     goog.events.listen(menuItem.getContentElement(), goog.events.EventType.KEYDOWN, 
                        keypressHandlerCapturer(option.callback));

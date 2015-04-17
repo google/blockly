@@ -125,6 +125,13 @@ Blockly.BlockSvg.prototype.initSvg = function() {
           this.onMouseDown_(new goog.events.BrowserEvent({type: 'click', button: 2})); //simulate rightclick
           e.cancelBubble = true;
         }
+        var connections = [];
+        if (this.previousConnection) {
+          connections = this.previousConnection.allValid();
+        } else if (this.outputConnection) {
+          connections = this.outputConnection.allValid();
+        }
+        //TODO: Menu with connections as targets to move blocks to
       }
     });
   }

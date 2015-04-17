@@ -149,7 +149,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     goog.a11y.aria.setLabel(menuItem.getContentElement(), text);
     Blockly.bindEvent_(menuItem.getContentElement(), 'keydown', menuItem, function(e) {
       if (e.keyCode == goog.events.KeyCodes.ENTER) {
-        this.handleMouseDown({button: 1, preventDefault: function() {} });
+        this.handleMouseDown(new goog.events.BrowserEvent({type: 'click', button: 1})); //simulate leftclick
       }
     });
   }

@@ -122,7 +122,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     this.eventHandler_.listen(this.keyHandler_, goog.events.KeyHandler.EventType.KEY, function(e) {
       if (e.keyCode == goog.events.KeyCodes.ENTER) {
         if (e.altKey || e.ctrlKey || e.metaKey) {
-          this.onMouseDown_({button: 2, stopPropagation: function(){} }); //simulate rightclick
+          this.onMouseDown_(new goog.events.BrowserEvent({type: 'click', button: 2})); //simulate rightclick
           e.cancelBubble = true;
         }
       }

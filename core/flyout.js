@@ -446,6 +446,10 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
       'blocklyWorkspaceChange', this, this.reflow);
   this.workspace_.fireChangeEvent();
+  
+  if (blocks[0]) {
+    blocks[0].getSvgRoot().focus();
+  }
 };
 
 /**

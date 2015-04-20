@@ -442,6 +442,22 @@ function init() {
     var linkButton = document.getElementById('linkButton');
     linkButton.style.display = 'inline-block';
     linkButton.addEventListener('click', BlocklyStorage.link);
+  } else if ('localStorage' in window) {
+    var linkButton = document.getElementById('linkButton');
+    linkButton.style.display = 'inline-block';
+    linkButton.addEventListener('click', function() {
+      if(window.location.hash.length <= 1) {
+        var numBlocks = localStorage.getItem('numBlocks') || 0;
+        ++numBlocks;
+        window.location.hash = '#' + numBlocks;
+        localStorage.setItem('numBlocks', numBlocks);
+      }
+      var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      localStorage.setItem(window.location.hash, Blockly.Xml.domToText(xml));
+      var l = location;
+      var link = l.protocol + "://" + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "") + l.pathname + window.location.hash;
+      alert("Your block is saved to this link\n" + link);
+    });
   }
 
   document.getElementById('helpButton').addEventListener('click', function() {
@@ -470,6 +486,9 @@ function init() {
   // Create the root block.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+  } else if ('localStorage' in window && window.location.hash.length > 1) {
+    var xml = Blockly.Xml.textToDom(localStorage.getItem(window.location.hash));
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   } else {
     var rootBlock = Blockly.Block.obtain(Blockly.mainWorkspace, 'factory_base');
     rootBlock.initSvg();

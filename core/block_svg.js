@@ -107,7 +107,10 @@ Blockly.BlockSvg.prototype.initSvg = function() {
         Blockly.unbindEvent_(this.focusEvent_);
         this.focusEvent_ = Blockly.bindEvent_(this.getSvgRoot(), 'focusout', this, function(e) {    
           Blockly.unbindEvent_(this.focusEvent_);
-          this.unselect();
+          //don't unselect if dragging, the drag handler will take care of that
+          if (Blockly.dragMode_ != 2) {
+            this.unselect();
+          }
           e.cancelBubble = true;
           bindFocus();
         });
@@ -124,14 +127,36 @@ Blockly.BlockSvg.prototype.initSvg = function() {
         if (e.altKey || e.ctrlKey || e.metaKey) {
           this.onMouseDown_(new goog.events.BrowserEvent({type: 'click', button: 2})); //simulate rightclick
           e.cancelBubble = true;
+          return;
         }
-        var connections = [];
+        var placementConnection;
         if (this.previousConnection) {
-          connections = this.previousConnection.allValid();
+          placementConnection = this.previousConnection;
         } else if (this.outputConnection) {
-          connections = this.outputConnection.allValid();
+          placementConnection = this.outputConnection;
         }
-        //TODO: Menu with connections as targets to move blocks to
+        if (placementConnection) {
+          var connections = placementConnection.allValid();
+          console.log(connections);
+          var options = connections.map(function(elem){
+            var target = elem.targetBlock();
+            if (target) {
+              var before = true;
+            } else {
+              var after = true;
+            }
+            var name = before ? target.toString(20) : '???';
+            return {
+              text: name,
+              enabled: true, 
+              callback: function() {
+                placementConnection.connect(elem);
+              }
+            };
+          });
+          Blockly.ContextMenu.show(e, options);
+          return;
+        }
       }
     });
   }

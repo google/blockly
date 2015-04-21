@@ -31,6 +31,7 @@ goog.require('goog.events');
 goog.require('goog.style');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
+goog.require('goog.string');
 
 
 /**
@@ -63,7 +64,7 @@ Blockly.ContextMenu.show = function(e, options) {
     var mne;
     if (possibleMnemonics[0]) {
       mne = possibleMnemonics[0].toUpperCase();
-      text = text.replace(new RegExp(mne, 'i'), function(capture) {
+      text = text.replace(new RegExp(goog.string.regExpEscape(mne), 'i'), function(capture) {
         return '('+capture+')';
       });
       usedMnemonics.push(mne);

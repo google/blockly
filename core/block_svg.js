@@ -126,7 +126,8 @@ Blockly.BlockSvg.prototype.initSvg = function() {
       if (e.keyCode == goog.events.KeyCodes.ENTER) {
         if (e.altKey || e.ctrlKey || e.metaKey) {
           this.onMouseDown_(new goog.events.BrowserEvent({type: 'click', button: 2})); //simulate rightclick
-          e.cancelBubble = true;
+          e.stopPropagation();
+          e.preventDefault();
           return;
         }
         var placementConnection;
@@ -137,15 +138,9 @@ Blockly.BlockSvg.prototype.initSvg = function() {
         }
         if (placementConnection) {
           var connections = placementConnection.allValid();
-          console.log(connections);
           var options = connections.map(function(elem){
             var target = elem.targetBlock();
-            if (target) {
-              var before = true;
-            } else {
-              var after = true;
-            }
-            var name = before ? target.toString(20) : '???';
+            var name = target ? 'Before '+target.toString(20) : 'After '+elem.sourceBlock_.toString(20); //TODO: Translate
             return {
               text: name,
               enabled: true, 
@@ -154,7 +149,13 @@ Blockly.BlockSvg.prototype.initSvg = function() {
               }
             };
           });
+          var this_ = this;
+          options.push({text: 'No attachment', enabled: true, callback: function() { //TODO: Translate
+            this_.unplug(null, true);
+          }}); 
           Blockly.ContextMenu.show(e, options);
+          e.stopPropagation();
+          e.preventDefault();
           return;
         }
       }

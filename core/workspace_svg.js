@@ -333,19 +333,29 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
       var allBlocks = this.getAllBlocks();
       for (var x = 0, otherBlock; otherBlock = allBlocks[x]; x++) {
         var otherXY = otherBlock.getRelativeToSurfaceXY();
-        if (Math.abs(blockX - otherXY.x) <= 1 &&
-            Math.abs(blockY - otherXY.y) <= 1) {
-          if (Blockly.RTL) {
-            blockX -= Blockly.SNAP_RADIUS;
-          } else {
-            blockX += Blockly.SNAP_RADIUS;
+        // Calculate the relative distance based on snap radius or grid snap.
+        var relativeDistance = Blockly.SNAP_RADIUS;
+        var offsetX = Blockly.SNAP_RADIUS + 1;
+        var offsetY = Blockly.SNAP_RADIUS * 2;
+        if (Blockly.gridOptions['snap']) {
+          if (Blockly.gridOptions['spacing'] > Blockly.SNAP_RADIUS) {
+            relativeDistance = Blockly.gridOptions['spacing'];
+            offsetX = Blockly.gridOptions['spacing'] + 1;
+            offsetY = Blockly.gridOptions['spacing'] * 2;
           }
-          blockY += Blockly.SNAP_RADIUS * 2;
+        }
+        if (Math.abs(blockX - otherXY.x) <= relativeDistance &&
+            Math.abs(blockY - otherXY.y) <= relativeDistance) {
+          blockX += offsetX * (Blockly.RTL ? -1 : 1);
+          blockY += offsetY;
           collide = true;
         }
       }
     } while (collide);
     block.moveBy(blockX, blockY);
+    if (Blockly.gridOptions['snap']) {
+      block.snapToGrid();
+    }
   }
   block.select();
 };

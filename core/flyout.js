@@ -49,6 +49,7 @@ Blockly.Flyout = function() {
       function() {return flyout.getMetrics_();},
       function(ratio) {return flyout.setMetrics_(ratio);});
   this.workspace_.isFlyout = true;
+  this.workspace_.flyout = flyout;
 
   /**
    * Opaque data that can be passed to removeChangeListener.

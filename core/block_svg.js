@@ -138,6 +138,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
         }
         if (placementConnection) {
           var connections = placementConnection.allValid();
+          var this_ = this;
           var options = connections.map(function(elem){
             var target = elem.targetBlock();
             var name = target ? 'Before '+target.toString(20) : 'After '+elem.sourceBlock_.toString(20); //TODO: Translate
@@ -145,12 +146,17 @@ Blockly.BlockSvg.prototype.initSvg = function() {
               text: name,
               enabled: true, 
               callback: function() {
+                if (this_.isInFlyout) {
+                  this_.workspace.flyout.createBlockFunc_(this_)(new goog.events.BrowserEvent({type: 'click', button: 1}));
+                }
                 placementConnection.connect(elem);
-              }
-            };
+                }
+              };
           });
-          var this_ = this;
           options.push({text: 'No attachment', enabled: true, callback: function() { //TODO: Translate
+            if (this_.isInFlyout) {
+                  this_.workspace.flyout.createBlockFunc_(this_)(new goog.events.BrowserEvent({type: 'click', button: 1}));
+            }
             this_.unplug(null, true);
           }}); 
           Blockly.ContextMenu.show(e, options);
@@ -445,6 +451,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   Blockly.svgResize();
   Blockly.terminateDrag_();
   this.select();
+  this.getSvgRoot().focus();
   Blockly.hideChaff();
   if (Blockly.isRightButton(e)) {
     // Right-click.

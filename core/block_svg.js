@@ -807,7 +807,17 @@ Blockly.BlockSvg.CORNER_RADIUS = 8;
  * Minimum height of field rows.
  * @const
  */
-Blockly.BlockSvg.FIELD_HEIGHT = 18;
+Blockly.BlockSvg.MIN_FIELD_HEIGHT = 18;
+/**
+ * The gap between the field text and the bottom of the block
+ * @const
+ */
+Blockly.BlockSvg.FIELD_TEXT_GAP = 0;
+/**
+ * The amount to adjust the font height by to allow for the descent from
+ * from the text baseline. This should be determined by the font used.
+ */
+Blockly.BlockSvg.FIELD_TEXT_BASELINE_DESCENT_ADJUST = 1.3;
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
  * Applies to highlighting on around the inside of a curve.
@@ -1351,16 +1361,18 @@ Blockly.BlockSvg.prototype.renderFields_ =
     if (!root) {
       continue;
     }
+    var fieldSize = field.getSize();
+    var adjustedCursorY = cursorY + fieldSize.height + Blockly.BlockSvg.FIELD_TEXT_GAP;
     if (Blockly.RTL) {
       cursorX -= field.renderSep + field.renderWidth;
       root.setAttribute('transform',
-          'translate(' + cursorX + ', ' + cursorY + ')');
+          'translate(' + cursorX + ', ' + adjustedCursorY + ')');
       if (field.renderWidth) {
         cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
       }
     } else {
       root.setAttribute('transform',
-          'translate(' + (cursorX + field.renderSep) + ', ' + cursorY + ')');
+          'translate(' + (cursorX + field.renderSep) + ', ' + adjustedCursorY + ')');
       if (field.renderWidth) {
         cursorX += field.renderSep + field.renderWidth +
             Blockly.BlockSvg.SEP_SPACE_X;
@@ -1453,7 +1465,10 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       field.renderSep = (previousFieldEditable && field.EDITABLE) ?
           Blockly.BlockSvg.SEP_SPACE_X : 0;
       input.fieldWidth += field.renderWidth + field.renderSep;
-      row.height = Math.max(row.height, fieldSize.height);
+      var fieldHeight = fieldSize.height;
+      fieldHeight *= Blockly.BlockSvg.FIELD_TEXT_BASELINE_DESCENT_ADJUST;
+      fieldHeight += Blockly.BlockSvg.FIELD_TEXT_GAP*2;
+      row.height = Math.max(row.height, fieldHeight);
       previousFieldEditable = field.EDITABLE;
     }
 
@@ -1643,7 +1658,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // Jagged right edge.
       var input = row[0];
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push(Blockly.BlockSvg.JAGGED_TEETH);
       if (Blockly.RTL) {
@@ -1661,7 +1676,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // Inline inputs.
       for (var x = 0, input; input = row[x]; x++) {
         var fieldX = cursorX;
-        var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+        var fieldY = cursorY;
         if (row.thicker) {
           // Lower the field slightly.
           fieldY += Blockly.BlockSvg.INLINE_PADDING_Y;
@@ -1741,7 +1756,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // External input.
       var input = row[0];
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       if (input.align != Blockly.ALIGN_LEFT) {
         var fieldRightX = inputRows.rightEdge - input.fieldWidth -
             Blockly.BlockSvg.TAB_WIDTH - 2 * Blockly.BlockSvg.SEP_SPACE_X;
@@ -1781,7 +1796,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // External naked field.
       var input = row[0];
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       if (input.align != Blockly.ALIGN_LEFT) {
         var fieldRightX = inputRows.rightEdge - input.fieldWidth -
             2 * Blockly.BlockSvg.SEP_SPACE_X;
@@ -1811,7 +1826,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         cursorY += Blockly.BlockSvg.SEP_SPACE_Y;
       }
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       if (input.align != Blockly.ALIGN_LEFT) {
         var fieldRightX = inputRows.statementEdge - input.fieldWidth -
             2 * Blockly.BlockSvg.SEP_SPACE_X;

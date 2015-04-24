@@ -40,6 +40,12 @@ Blockly.Css.Cursor = {
 };
 
 /**
+ * The size of the font used in blockly blocks
+ * Must be a valid value for css property font-size
+ */
+Blockly.Css.FONT_SIZE = '11pt';
+
+/**
  * Current cursor (cached value).
  * @type string
  * @private
@@ -200,7 +206,7 @@ Blockly.Css.CONTENT = [
   '  cursor: default;',
   '  fill: #fff;',
   '  font-family: sans-serif;',
-  '  font-size: 11pt;',
+  '  font-size: '+Blockly.Css.FONT_SIZE+';',
   '}',
 
   '.blocklyNonEditableText>text {',
@@ -304,7 +310,7 @@ Blockly.Css.CONTENT = [
   '.blocklyHtmlInput {',
   '  border: none;',
   '  font-family: sans-serif;',
-  '  font-size: 11pt;',
+  '  font-size: '+Blockly.Css.FONT_SIZE+';',
   '  outline: none;',
   '  width: 100%',
   '}',
@@ -703,7 +709,8 @@ Blockly.Css.CONTENT = [
   '  border-style: solid;',
   '  border-width: 1px;',
   '  cursor: default;',
-  '  font: normal 13px Arial, sans-serif;',
+  '  font: normal Arial, sans-serif;',
+  '  font-size: '+Blockly.Css.FONT_SIZE+';',
   '  margin: 0;',
   '  outline: none;',
   '  padding: 4px 0;',
@@ -742,7 +749,8 @@ Blockly.Css.CONTENT = [
    */
   '.blocklyWidgetDiv .goog-menuitem {',
   '  color: #000;',
-  '  font: normal 13px Arial, sans-serif;',
+  '  font: normal Arial, sans-serif;',
+  '  font-size: '+Blockly.Css.FONT_SIZE+';',
   '  list-style: none;',
   '  margin: 0;',
      /* 28px on the left for icon or checkbox; 7em on the right for shortcut. */
@@ -774,7 +782,8 @@ Blockly.Css.CONTENT = [
 
   '.blocklyWidgetDiv .goog-menuitem-content {',
   '  color: #000;',
-  '  font: normal 13px Arial, sans-serif;',
+  '  font: normal Arial, sans-serif;',
+  '  font-size: '+Blockly.Css.FONT_SIZE+';',
   '}',
 
   /* State: disabled. */

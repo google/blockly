@@ -175,6 +175,12 @@ Blockly.JavaScript['graph_set_y'] = function(block) {
 var Graph = {};
 
 /**
+ * Main Blockly workspace.
+ * @type Blockly.WorkspaceSvg
+ */
+Graph.workspace = null;
+
+/**
  * Cached copy of the function string.
  * @type ?string
  * @private
@@ -198,7 +204,7 @@ Graph.options_ = {
  * https://developers.google.com/chart/interactive/docs/gallery/linechart
  */
 Graph.drawVisualization = function() {
-  var formula = Blockly.JavaScript.workspaceToCode();
+  var formula = Blockly.JavaScript.workspaceToCode(Graph.workspace);
   if (formula === Graph.oldFormula_) {
     // No change in the formula, don't recompute.
     return;
@@ -263,14 +269,14 @@ Graph.resize = function() {
  * Initialize Blockly and the graph.  Called on page load.
  */
 Graph.init = function() {
-  Blockly.inject(document.getElementById('blocklyDiv'),
+  Graph.workspace = Blockly.inject(document.getElementById('blocklyDiv'),
       {toolbox: document.getElementById('toolbox')});
-  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace,
+  Blockly.Xml.domToWorkspace(Graph.workspace,
       document.getElementById('startBlocks'));
 
   // When Blockly changes, update the graph.
-  Blockly.addChangeListener(Graph.drawVisualization);
-}
+  Graph.workspace.addChangeListener(Graph.drawVisualization);
+};
 
 window.addEventListener('load', Graph.init);
 window.addEventListener('resize', Graph.resize);

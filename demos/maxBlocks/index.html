@@ -79,15 +79,14 @@
   </xml>
 
   <script>
-    Blockly.inject(document.getElementById('blocklyDiv'),
+    var workspace = Blockly.inject(document.getElementById('blocklyDiv'),
         {maxBlocks: 5, toolbox: document.getElementById('toolbox')});
 
     function onchange() {
-      document.getElementById('capacity').innerHTML = Blockly.mainWorkspace.remainingCapacity();
+      document.getElementById('capacity').innerHTML = workspace.remainingCapacity();
     }
 
-    Blockly.addChangeListener(onchange);
-
+    workspace.addChangeListener(onchange);
   </script>
 
 </body>

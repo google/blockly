@@ -483,7 +483,7 @@ Code.runJS = function() {
       throw MSG['timeout'];
     }
   };
-  var code = Blockly.JavaScript.workspaceToCode();
+  var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
   try {
     eval(code);

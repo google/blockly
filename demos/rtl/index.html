@@ -23,9 +23,9 @@
   </style>
   <script>
     function init() {
-      Blockly.inject(document.getElementById('svgDiv'),
+      var workspace = Blockly.inject(document.getElementById('svgDiv'),
           {rtl: true, toolbox: document.getElementById('toolbox')});
-      Blockly.Xml.domToWorkspace(Blockly.mainWorkspace,
+      Blockly.Xml.domToWorkspace(workspace,
           document.getElementById('startBlocks'));
       //window.onbeforeunload = function() {
       //  return 'Leaving this page will result in the loss of your work.';

@@ -32,24 +32,31 @@ goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
+
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
+goog.require('goog.userAgent');
 
 
 /**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
- * @param {Function} getMetrics A function that returns size/scrolling metrics.
- * @param {Function} setMetrics A function that sets size/scrolling metrics.
+ * @param {!Object} options Dictionary of options.
  * @extends {Blockly.Workspace}
  * @constructor
  */
-Blockly.WorkspaceSvg = function(getMetrics, setMetrics) {
-  Blockly.WorkspaceSvg.superClass_.constructor.call(this);
-  this.getMetrics = getMetrics;
-  this.setMetrics = setMetrics;
+Blockly.WorkspaceSvg = function(options) {
+  Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
+  this.getMetrics = options.getMetrics;
+  this.setMetrics = options.setMetrics;
 
   Blockly.ConnectionDB.init(this);
+  /**
+   * Database of pre-loaded sounds.
+   * @private
+   * @const
+   */
+  this.SOUNDS_ = Object.create(null);
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -66,10 +73,10 @@ Blockly.WorkspaceSvg.prototype.rendered = true;
 Blockly.WorkspaceSvg.prototype.isFlyout = false;
 
 /**
- * Can this workspace be dragged around (true) or is it fixed (false)?
+ * Is this workspace currently being dragged around?
  * @type {boolean}
  */
-Blockly.WorkspaceSvg.prototype.dragMode = false;
+Blockly.WorkspaceSvg.prototype.isScrolling = false;
 
 /**
  * Current horizontal scrolling offset.
@@ -116,9 +123,27 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.svgBackground_ = Blockly.createSvgElement('rect',
         {'height': '100%', 'width': '100%',
          'class': opt_backgroundClass}, this.svgGroup_);
+    if (opt_backgroundClass == 'blocklyMainBackground') {
+      this.svgBackground_.style.fill =
+          'url(#' + this.options.gridPattern.id + ')';
+    }
   }
   this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
+  if (this.options.hasTrashcan) {
+    this.addTrashcan_();
+  }
+
+  Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
+
+  // Determine if there needs to be a category tree, or a simple list of
+  // blocks.  This cannot be changed later, since the UI is very different.
+  if (this.options.hasCategories) {
+    this.toolbox_ = new Blockly.Toolbox(this);
+  } else if (this.options.languageTree) {
+    this.addFlyout_();
+  }
+
   this.fireChangeEvent();
   return this.svgGroup_;
 };
@@ -149,21 +174,25 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
 /**
  * Add a trashcan.
+ * @private
  */
-Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
-  if (Blockly.hasTrashcan && !Blockly.readOnly) {
-    this.trashcan = new Blockly.Trashcan(this);
-    var svgTrashcan = this.trashcan.createDom();
-    this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
-    this.trashcan.init();
-  }
+Blockly.WorkspaceSvg.prototype.addTrashcan_ = function() {
+  this.trashcan = new Blockly.Trashcan(this);
+  var svgTrashcan = this.trashcan.createDom();
+  this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+  this.trashcan.init();
 };
 
 /**
  * Add a flyout.
+ * @private
  */
-Blockly.WorkspaceSvg.prototype.addFlyout = function() {
-  this.flyout_ = new Blockly.Flyout();
+Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
+  var workspaceOptions = {
+    parentWorkspace: this,
+    RTL: this.RTL
+  };
+  this.flyout_ = new Blockly.Flyout(workspaceOptions);
   this.flyout_.autoClose = false;
   var svgFlyout = this.flyout_.createDom();
   this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
@@ -202,7 +231,7 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
  */
 Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
   Blockly.WorkspaceSvg.superClass_.addTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
     Blockly.Realtime.addTopBlock(block);
   }
 };
@@ -213,17 +242,9 @@ Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
  */
 Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
   Blockly.WorkspaceSvg.superClass_.removeTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
     Blockly.Realtime.removeTopBlock(block);
   }
-};
-
-/**
- * Dispose of all blocks in workspace.
- */
-Blockly.WorkspaceSvg.prototype.clear = function() {
-  Blockly.hideChaff();
-  Blockly.WorkspaceSvg.superClass_.clear.call(this);
 };
 
 /**
@@ -302,7 +323,7 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
  * edits, mutations, connections, etc.  Groups of simultaneous changes (e.g.
  * a tree of blocks being deleted) are merged into one event.
  * Applications may hook workspace changes by listening for
- * 'blocklyWorkspaceChange' on Blockly.mainWorkspace.getCanvas().
+ * 'blocklyWorkspaceChange' on workspace.getCanvas().
  */
 Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
   if (this.rendered && this.svgBlockCanvas_) {
@@ -315,16 +336,17 @@ Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
  * @param {!Element} xmlBlock XML block element.
  */
 Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
-  if (xmlBlock.getElementsByTagName('block').length >=
+  if (!this.rendered || xmlBlock.getElementsByTagName('block').length >=
       this.remainingCapacity()) {
     return;
   }
+  Blockly.terminateDrag_();  // Dragging while pasting?  No.
   var block = Blockly.Xml.domToBlock(this, xmlBlock);
   // Move the duplicate to original position.
   var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
   var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
   if (!isNaN(blockX) && !isNaN(blockY)) {
-    if (Blockly.RTL) {
+    if (this.RTL) {
       blockX = -blockX;
     }
     // Offset block until not clobbering another block.
@@ -335,7 +357,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
         var otherXY = otherBlock.getRelativeToSurfaceXY();
         if (Math.abs(blockX - otherXY.x) <= 1 &&
             Math.abs(blockY - otherXY.y) <= 1) {
-          if (Blockly.RTL) {
+          if (this.RTL) {
             blockX -= Blockly.SNAP_RADIUS;
           } else {
             blockX += Blockly.SNAP_RADIUS;
@@ -376,7 +398,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
-  var mouseXY = Blockly.mouseToSvg(e);
+  var mouseXY = Blockly.mouseToSvg(e, this.options.svg);
   var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {
@@ -396,5 +418,225 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   return false;
 };
 
+/**
+ * Handle a mouse-down on SVG drawing surface.
+ * @param {!Event} e Mouse down event.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
+  this.markFocused();
+  if (Blockly.isTargetInput_(e)) {
+    return;
+  }
+  Blockly.svgResize(this);
+  Blockly.terminateDrag_();  // In case mouse-up event was lost.
+  Blockly.hideChaff();
+  var isTargetWorkspace = e.target && e.target.nodeName &&
+      (e.target.nodeName.toLowerCase() == 'svg' ||
+       e.target == this.svgBackground_);
+  if (isTargetWorkspace && Blockly.selected && !this.options.readOnly) {
+    // Clicking on the document clears the selection.
+    Blockly.selected.unselect();
+  }
+  if (Blockly.isRightButton(e)) {
+    // Right-click.
+    this.showContextMenu_(e);
+  } else if (this.scrollbar) {
+    Blockly.removeAllRanges();
+    // If the workspace is editable, only allow scrolling when gripping empty
+    // space.  Otherwise, allow scrolling when gripping anywhere.
+    this.isScrolling = true;
+    // Record the current mouse position.
+    this.startDragMouseX = e.clientX;
+    this.startDragMouseY = e.clientY;
+    this.startDragMetrics = this.getMetrics();
+    this.startScrollX = this.scrollX;
+    this.startScrollY = this.scrollY;
+
+    // If this is a touch event then bind to the mouseup so workspace drag mode
+    // is turned off and double move events are not performed on a block.
+    // See comment in inject.js Blockly.init_ as to why mouseup events are
+    // bound to the document instead of the SVG's surface.
+    if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
+      Blockly.onTouchUpWrapper_ =
+          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
+    }
+    Blockly.onMouseMoveWrapper_ =
+        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_);
+  }
+  // This event has been handled.  No need to bubble up to the document.
+  e.stopPropagation();
+};
+
+/**
+ * Show the context menu for the workspace.
+ * @param {!Event} e Mouse event.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
+  if (this.options.readOnly) {
+    return;
+  }
+  var menuOptions = [];
+  // Add a little animation to collapsing and expanding.
+  var COLLAPSE_DELAY = 10;
+
+  if (this.options.collapse) {
+    var hasCollapsedBlocks = false;
+    var hasExpandedBlocks = false;
+    var topBlocks = this.getTopBlocks(false);
+    for (var i = 0; i < topBlocks.length; i++) {
+      var block = topBlocks[i];
+      while (block) {
+        if (block.isCollapsed()) {
+          hasCollapsedBlocks = true;
+        } else {
+          hasExpandedBlocks = true;
+        }
+        block = block.getNextBlock();
+      }
+    }
+
+    // Option to collapse top blocks.
+    var collapseOption = {enabled: hasExpandedBlocks};
+    collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
+    collapseOption.callback = function() {
+      var ms = 0;
+      for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        while (block) {
+          setTimeout(block.setCollapsed.bind(block, true), ms);
+          block = block.getNextBlock();
+          ms += COLLAPSE_DELAY;
+        }
+      }
+    };
+    menuOptions.push(collapseOption);
+
+    // Option to expand top blocks.
+    var expandOption = {enabled: hasCollapsedBlocks};
+    expandOption.text = Blockly.Msg.EXPAND_ALL;
+    expandOption.callback = function() {
+      var ms = 0;
+      for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        while (block) {
+          setTimeout(block.setCollapsed.bind(block, false), ms);
+          block = block.getNextBlock();
+          ms += COLLAPSE_DELAY;
+        }
+      }
+    };
+    menuOptions.push(expandOption);
+  }
+
+  Blockly.ContextMenu.show(e, menuOptions, this.RTL);
+};
+
+/**
+ * Load an audio file.  Cache it, ready for instantaneous playing.
+ * @param {!Array.<string>} filenames List of file types in decreasing order of
+ *   preference (i.e. increasing size).  E.g. ['media/go.mp3', 'media/go.wav']
+ *   Filenames include path from Blockly's root.  File extensions matter.
+ * @param {string} name Name of sound.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.loadAudio_ = function(filenames, name) {
+  if (!window['Audio'] || !filenames.length) {
+    // No browser support for Audio.
+    return;
+  }
+  var sound;
+  var audioTest = new window['Audio']();
+  for (var i = 0; i < filenames.length; i++) {
+    var filename = filenames[i];
+    var ext = filename.match(/\.(\w+)$/);
+    if (ext && audioTest.canPlayType('audio/' + ext[1])) {
+      // Found an audio format we can play.
+      sound = new window['Audio'](filename);
+      break;
+    }
+  }
+  if (sound && sound.play) {
+    this.SOUNDS_[name] = sound;
+  }
+};
+
+/**
+ * Preload all the audio files so that they play quickly when asked for.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.preloadAudio_ = function() {
+  for (var name in this.SOUNDS_) {
+    var sound = this.SOUNDS_[name];
+    sound.volume = .01;
+    sound.play();
+    sound.pause();
+    // iOS can only process one sound at a time.  Trying to load more than one
+    // corrupts the earlier ones.  Just load one and leave the others uncached.
+    if (goog.userAgent.IPAD || goog.userAgent.IPHONE) {
+      break;
+    }
+  }
+};
+
+/**
+ * Play an audio file at specified value.  If volume is not specified,
+ * use full volume (1).
+ * @param {string} name Name of sound.
+ * @param {?number} opt_volume Volume of sound (0-1).
+ */
+Blockly.WorkspaceSvg.prototype.playAudio = function(name, opt_volume) {
+  var sound = this.SOUNDS_[name];
+  if (sound) {
+    var mySound;
+    var ie9 = goog.userAgent.DOCUMENT_MODE &&
+              goog.userAgent.DOCUMENT_MODE === 9;
+    if (ie9 || goog.userAgent.IPAD || goog.userAgent.ANDROID) {
+      // Creating a new audio node causes lag in IE9, Android and iPad. Android
+      // and IE9 refetch the file from the server, iPad uses a singleton audio
+      // node which must be deleted and recreated for each new audio tag.
+      mySound = sound;
+    } else {
+      mySound = sound.cloneNode();
+    }
+    mySound.volume = (opt_volume === undefined ? 1 : opt_volume);
+    mySound.play();
+  } else if (this.options.parentWorkspace) {
+    // Maybe a workspace on a lower level knows about this sound.
+    this.options.parentWorkspace.playAudio(name, opt_volume);
+  }
+};
+
+/**
+ * When something in this workspace changes, call a function.
+ * @param {!Function} func Function to call.
+ * @return {!Array.<!Array>} Opaque data that can be passed to
+ *     removeChangeListener.
+ */
+Blockly.WorkspaceSvg.prototype.addChangeListener = function(func) {
+  return Blockly.bindEvent_(this.getCanvas(),
+                            'blocklyWorkspaceChange', null, func);
+};
+
+/**
+ * Stop listening for this workspace's changes.
+ * @param {!Array.<!Array>} bindData Opaque data from addChangeListener.
+ */
+Blockly.WorkspaceSvg.prototype.removeChangeListener = function(bindData) {
+  Blockly.unbindEvent_(bindData);
+};
+
+/**
+ * Mark this workspace as the currently focused main workspace.
+ */
+Blockly.WorkspaceSvg.prototype.markFocused = function() {
+  Blockly.mainWorkspace = this;
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['clear'] = Blockly.WorkspaceSvg.prototype.clear;
+Blockly.WorkspaceSvg.prototype['addChangeListener'] =
+    Blockly.WorkspaceSvg.prototype.addChangeListener;
+Blockly.WorkspaceSvg.prototype['removeChangeListener'] =
+    Blockly.WorkspaceSvg.prototype.removeChangeListener;

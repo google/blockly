@@ -20,8 +20,8 @@
 
 /**
  * @fileoverview Utility methods.
- * These methods are not specific to Blockly, and could be factored out if
- * a JavaScript framework such as Closure were used.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -97,9 +97,13 @@ Blockly.hasClass_ = function(element, className) {
  * @private
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
-    func.call(thisObject, e);
-  };
+  if (thisObject) {
+    var wrapFunc = function(e) {
+      func.call(thisObject, e);
+    };
+  } else {
+    var wrapFunc = func;
+  }
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];
   // Add equivalent touch event.
@@ -228,9 +232,22 @@ Blockly.noEvent = function(e) {
 };
 
 /**
+ * Is this event targeting a text input widget?
+ * @param {!Event} e An event.
+ * @return {boolean} True if text input.
+ * @private
+ */
+Blockly.isTargetInput_ = function(e) {
+  return e.target.type == 'textarea' || e.target.type == 'text' ||
+         e.target.type == 'number' || e.target.type == 'email' ||
+         e.target.type == 'password' || e.target.type == 'search' ||
+         e.target.type == 'tel' || e.target.type == 'url';
+};
+
+/**
  * Return the coordinates of the top-left corner of this element relative to
- * its parent.
- * @param {!Element} element Element to find the coordinates of.
+ * its parent.  Only for SVG elements and children (e.g. rect, g, path).
+ * @param {!Element} element SVG element to find the coordinates of.
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
@@ -264,7 +281,7 @@ Blockly.getRelativeXY_ = function(element) {
 
 /**
  * Return the absolute coordinates of the top-left corner of this element.
- * The origin (0,0) is the top-left corner of the Blockly svg.
+ * The origin (0,0) is the top-left corner of the nearest SVG.
  * @param {!Element} element Element to find the coordinates of.
  * @return {!Object} Object with .x and .y properties.
  * @private
@@ -278,20 +295,8 @@ Blockly.getSvgXY_ = function(element) {
     x += xy.x;
     y += xy.y;
     element = element.parentNode;
-  } while (element && element != Blockly.svg);
+  } while (element && element.nodeName.toLowerCase() != 'svg');
   return {x: x, y: y};
-};
-
-/**
- * Return the absolute coordinates of the top-left corner of this element.
- * The origin (0,0) is the top-left corner of the page body.
- * @param {!Element} element Element to find the coordinates of.
- * @return {!Object} Object with .x and .y properties.
- * @private
- */
-Blockly.getAbsoluteXY_ = function(element) {
-  var xy = Blockly.getSvgXY_(element);
-  return Blockly.convertCoordinates(xy.x, xy.y, false);
 };
 
 /**
@@ -339,17 +344,18 @@ Blockly.isRightButton = function(e) {
  * @param {number} y Y input coordinate.
  * @param {boolean} toSvg True to convert to SVG coordinates.
  *     False to convert to mouse/HTML coordinates.
+ * @param {!Element} svg SVG element.
  * @return {!Object} Object with x and y properties in output coordinates.
  */
-Blockly.convertCoordinates = function(x, y, toSvg) {
+Blockly.convertCoordinates = function(x, y, toSvg, svg) {
   if (toSvg) {
     x -= window.scrollX || window.pageXOffset;
     y -= window.scrollY || window.pageYOffset;
   }
-  var svgPoint = Blockly.svg.createSVGPoint();
+  var svgPoint = svg.createSVGPoint();
   svgPoint.x = x;
   svgPoint.y = y;
-  var matrix = Blockly.svg.getScreenCTM();
+  var matrix = svg.getScreenCTM();
   if (toSvg) {
     matrix = matrix.inverse();
   }
@@ -365,13 +371,14 @@ Blockly.convertCoordinates = function(x, y, toSvg) {
  * Return the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly svg.
  * @param {!Event} e Mouse event.
+ * @param {!Element} svg SVG element.
  * @return {!Object} Object with .x and .y properties.
  */
-Blockly.mouseToSvg = function(e) {
+Blockly.mouseToSvg = function(e, svg) {
   var scrollX = window.scrollX || window.pageXOffset;
   var scrollY = window.scrollY || window.pageYOffset;
   return Blockly.convertCoordinates(e.clientX + scrollX,
-                                    e.clientY + scrollY, true);
+                                    e.clientY + scrollY, true, svg);
 };
 
 /**

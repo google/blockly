@@ -29,13 +29,16 @@
 var blockType = '';
 
 /**
- * Initialize Blockly.  Called on page load.
- * @param {!Function} updateFunc Function to update the preview.
+ * Workspace for user to build block.
+ * @type Blockly.Workspace
  */
-function initPreview(updateFunc) {
-  updatePreview.updateFunc = updateFunc;
-  updatePreview();
-}
+var mainWorkspace = null;
+
+/**
+ * Workspace for preview of block.
+ * @type Blockly.Workspace
+ */
+var previewWorkspace = null;
 
 /**
  * When the workspace changes, update the three other displays.
@@ -382,7 +385,10 @@ function updateGenerator() {
   injectCode(code, 'generatorPre');
 }
 
-var oldDir = 'ltr';
+/**
+ * Existing direction ('ltr' vs 'rtl') of preview.
+ */
+var oldDir = null;
 
 /**
  * Update the preview display.
@@ -390,12 +396,22 @@ var oldDir = 'ltr';
 function updatePreview() {
   var newDir = document.getElementById('direction').value;
   if (oldDir != newDir) {
-    document.getElementById('previewFrame').src = 'preview.html?' + newDir;
+    var previewDiv = document.getElementById('preview');
+    previewDiv.innerHTML = '';
+    var rtl = newDir == 'rtl';
+    previewWorkspace = Blockly.inject(previewDiv, {rtl: rtl});
     oldDir = newDir;
-  } else if (updatePreview.updateFunc) {
-    var code = document.getElementById('languagePre').textContent;
-    updatePreview.updateFunc(blockType, code);
   }
+  var code = document.getElementById('languagePre').textContent;
+  previewWorkspace.clear();
+  eval(code);
+  // Create the preview block.
+  var previewBlock = Blockly.Block.obtain(previewWorkspace, blockType);
+  previewBlock.initSvg();
+  previewBlock.render();
+  previewBlock.setMovable(false);
+  previewBlock.setDeletable(false);
+  previewBlock.moveBy(15, 10);
 }
 
 /**
@@ -417,7 +433,7 @@ function injectCode(code, id) {
  * @return {Blockly.Block}
  */
 function getRootBlock() {
-  var blocks = Blockly.mainWorkspace.getTopBlocks(false);
+  var blocks = mainWorkspace.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     if (block.type == 'factory_base') {
       return block;
@@ -451,7 +467,7 @@ function init() {
 
   var expandList = [
     document.getElementById('blockly'),
-    document.getElementById('previewFrame'),
+    document.getElementById('preview'),
     document.getElementById('languagePre'),
     document.getElementById('generatorPre')
   ];
@@ -465,20 +481,21 @@ function init() {
   window.addEventListener('resize', onresize);
 
   var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('blockly'), {toolbox: toolbox});
+  mainWorkspace =
+      Blockly.inject(document.getElementById('blockly'), {toolbox: toolbox});
 
   // Create the root block.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1));
   } else {
-    var rootBlock = Blockly.Block.obtain(Blockly.mainWorkspace, 'factory_base');
+    var rootBlock = Blockly.Block.obtain(mainWorkspace, 'factory_base');
     rootBlock.initSvg();
     rootBlock.render();
     rootBlock.setMovable(false);
     rootBlock.setDeletable(false);
   }
 
-  Blockly.addChangeListener(onchange);
+  mainWorkspace.addChangeListener(onchange);
   document.getElementById('direction')
       .addEventListener('change', updatePreview);
   document.getElementById('language')

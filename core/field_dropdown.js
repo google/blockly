@@ -98,8 +98,8 @@ Blockly.FieldDropdown.prototype.init = function(block) {
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
   this.arrow_.appendChild(document.createTextNode(
-      Blockly.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
-                    ' ' + Blockly.FieldDropdown.ARROW_CHAR));
+      block.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
+          ' ' + Blockly.FieldDropdown.ARROW_CHAR));
 
   Blockly.FieldDropdown.superClass_.init.call(this, block);
   // Force a reset of the text to add the arrow.
@@ -113,7 +113,7 @@ Blockly.FieldDropdown.prototype.init = function(block) {
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, null);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
   var thisField = this;
 
   function callback(e) {
@@ -166,7 +166,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   // Record windowSize and scrollOffset before adding menu.
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
-  var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
+  var xy = this.getAbsoluteXY_();
   var borderBBox = this.borderRect_.getBBox();
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
@@ -183,7 +183,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   } else {
     xy.y += borderBBox.height;
   }
-  if (Blockly.RTL) {
+  if (this.sourceBlock_.RTL) {
     xy.x += borderBBox.width;
     xy.x += Blockly.FieldDropdown.CHECKMARK_OVERHANG;
     // Don't go offscreen left.
@@ -197,7 +197,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - menuSize.width;
     }
   }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
+  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
+                             this.sourceBlock_.RTL);
   menu.setAllowAutoFocus(true);
   menuDom.focus();
 };
@@ -301,7 +302,7 @@ Blockly.FieldDropdown.prototype.setText = function(text) {
 
   if (this.textElement_) {
     // Insert dropdown arrow.
-    if (Blockly.RTL) {
+    if (this.sourceBlock_.RTL) {
       this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
     } else {
       this.textElement_.appendChild(this.arrow_);

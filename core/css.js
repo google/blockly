@@ -66,15 +66,22 @@ Blockly.Css.mediaPath_ = '';
  * a) It loads synchronously and doesn't force a redraw later.
  * b) It speeds up loading by not blocking on a separate HTTP transfer.
  * c) The CSS content may be made dynamic depending on init options.
+ * @param {boolean} hasCss If false, don't inject CSS
+ *     (providing CSS becomes the document's responsibility).
+ * @param {string} pathToMedia Path from page to the Blockly media directory.
  */
-Blockly.Css.inject = function() {
+Blockly.Css.inject = function(hasCss, pathToMedia) {
+  // Only inject the CSS once.
+  if (Blockly.Css.styleSheet_) {
+    return;
+  }
   // Placeholder for cursor rule.  Must be first rule (index 0).
   var text = '.blocklyDraggable {}\n';
-  if (Blockly.hasCss) {
+  if (hasCss) {
     text += Blockly.Css.CONTENT.join('\n');
   }
   // Strip off any trailing slash (either Unix or Windows).
-  Blockly.Css.mediaPath_ = Blockly.pathToMedia.replace(/[\\\/]$/, '');
+  Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
   Blockly.Css.styleSheet_ = goog.cssom.addCssText(text).sheet;
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
@@ -85,7 +92,7 @@ Blockly.Css.inject = function() {
  * @param {Blockly.Cursor} cursor Enum.
  */
 Blockly.Css.setCursor = function(cursor) {
-  if (Blockly.readOnly || Blockly.Css.currentCursor_ == cursor) {
+  if (Blockly.Css.currentCursor_ == cursor) {
     return;
   }
   Blockly.Css.currentCursor_ = cursor;
@@ -114,14 +121,13 @@ Blockly.Css.setCursor = function(cursor) {
       toolbox.style.cursor = url;
     }
   }
-  // Set cursor on the SVG surface as well, so that rapid movements
+  // Set cursor on the whole document, so that rapid movements
   // don't result in cursor changing to an arrow momentarily.
-  if (Blockly.svg) {
-    if (cursor == Blockly.Css.Cursor.OPEN) {
-      Blockly.svg.style.cursor = '';
-    } else {
-      Blockly.svg.style.cursor = url;
-    }
+  var html = document.body.parentNode;
+  if (cursor == Blockly.Css.Cursor.OPEN) {
+    html.style.cursor = '';
+  } else {
+    html.style.cursor = url;
   }
 };
 
@@ -131,6 +137,7 @@ Blockly.Css.setCursor = function(cursor) {
 Blockly.Css.CONTENT = [
   '.blocklySvg {',
   '  background-color: #fff;',
+  '  outline: none;',
   '  overflow: hidden;',  /* IE overflows by default. */
   '}',
 
@@ -138,6 +145,20 @@ Blockly.Css.CONTENT = [
   '  display: none;',
   '  position: absolute;',
   '  z-index: 999;',
+  '}',
+
+  '.blocklyTooltipDiv {',
+  '  background-color: #ffffc7;',
+  '  border: 1px solid #ddc;',
+  '  box-shadow: 4px 4px 20px 1px rgba(0,0,0,.15);',
+  '  colour: #000;',
+  '  display: none;',
+  '  font-family: sans-serif;',
+  '  font-size: 9pt;',
+  '  opacity: 0.9;',
+  '  padding: 2px;',
+  '  position: absolute;',
+  '  z-index: 1000;',
   '}',
 
   '.blocklyResizeSE {',
@@ -246,46 +267,13 @@ Blockly.Css.CONTENT = [
   '  display: block;',
   '}',
 
-  '.blocklyTooltipBackground {',
-  '  fill: #ffffc7;',
-  '  stroke: #d8d8d8;',
-  '  stroke-width: 1px;',
-  '}',
-
-  '.blocklyTooltipShadow,',
-  '.blocklyDropdownMenuShadow {',
-  '  fill: #bbb;',
-  '  filter: url(#blocklyShadowFilter);',
-  '}',
-
-  '.blocklyTooltipText {',
-  '  fill: #000;',
-  '  font-family: sans-serif;',
-  '  font-size: 9pt;',
-  '}',
-
-  '.blocklyIconShield {',
+  '.blocklyIconGroup {',
   '  cursor: default;',
-  '  fill: #00c;',
-  '  stroke: #ccc;',
-  '  stroke-width: 1px;',
   '}',
 
   '.blocklyIconGroup:not(:hover),',
   '.blocklyIconGroupReadonly {',
   '  opacity: .6;',
-  '}',
-
-  '.blocklyIconMark {',
-  '  cursor: default !important;',
-  '  fill: #ccc;',
-  '  font-family: sans-serif;',
-  '  font-size: 9pt;',
-  '  font-weight: bold;',
-  '  text-anchor: middle;',
-  '}',
-
-  '.blocklyWarningBody {',
   '}',
 
   '.blocklyMinimalBody {',
@@ -310,7 +298,6 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyMainBackground {',
-  '  fill: url(#blocklyGridPattern);',
   '  stroke-width: 1;',
   '  stroke: #c6c6c6;',  /* Equates to #ddd due to border being off-pixel. */
   '}',

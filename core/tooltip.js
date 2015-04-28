@@ -57,10 +57,16 @@ Blockly.Tooltip.mouseOutPid_ = 0;
 Blockly.Tooltip.showPid_ = 0;
 
 /**
- * Last observed location of the mouse pointer (freezes when tooltip appears).
+ * Last observed X location of the mouse pointer (freezes when tooltip appears).
  * @private
  */
-Blockly.Tooltip.lastXY_ = {x: 0, y: 0};
+Blockly.Tooltip.lastX_ = 0;
+
+/**
+ * Last observed Y location of the mouse pointer (freezes when tooltip appears).
+ * @private
+ */
+Blockly.Tooltip.lastY_ = 0;
 
 /**
  * Current element being pointed at.
@@ -74,34 +80,6 @@ Blockly.Tooltip.element_ = null;
  * @private
  */
 Blockly.Tooltip.poisonedElement_ = null;
-
-/**
- * Tooltip's SVG group element.
- * @type {Element}
- * @private
- */
-Blockly.Tooltip.svgGroup_ = null;
-
-/**
- * Tooltip's SVG text element.
- * @type {SVGTextElement}
- * @private
- */
-Blockly.Tooltip.svgText_ = null;
-
-/**
- * Tooltip's SVG background rectangle.
- * @type {Element}
- * @private
- */
-Blockly.Tooltip.svgBackground_ = null;
-
-/**
- * Tooltip's SVG shadow rectangle.
- * @type {Element}
- * @private
- */
-Blockly.Tooltip.svgShadow_ = null;
 
 /**
  * Horizontal offset between mouse cursor and tooltip.
@@ -124,35 +102,26 @@ Blockly.Tooltip.RADIUS_OK = 10;
 Blockly.Tooltip.HOVER_MS = 1000;
 
 /**
- * Horizontal padding between text and background.
+ * Horizontal padding between tooltip and screen edge.
  */
 Blockly.Tooltip.MARGINS = 5;
 
 /**
- * Create the tooltip elements.  Only needs to be called once.
- * @return {!SVGGElement} The tooltip's SVG group.
+ * The HTML container.  Set once by Blockly.Tooltip.createDom.
+ * @type Element
+ */
+Blockly.Tooltip.DIV = null;
+
+/**
+ * Create the tooltip div and inject it onto the page.
  */
 Blockly.Tooltip.createDom = function() {
-  /*
-  <g class="blocklyHidden">
-    <rect class="blocklyTooltipShadow" x="2" y="2"/>
-    <rect class="blocklyTooltipBackground"/>
-    <text class="blocklyTooltipText"></text>
-  </g>
-  */
-  var svgGroup = /** @type {!SVGGElement} */ (
-      Blockly.createSvgElement('g', {'class': 'blocklyHidden'}, null));
-  Blockly.Tooltip.svgGroup_ = svgGroup;
-  Blockly.Tooltip.svgShadow_ = /** @type {!SVGRectElement} */ (
-      Blockly.createSvgElement(
-          'rect', {'class': 'blocklyTooltipShadow', 'x': 2, 'y': 2}, svgGroup));
-  Blockly.Tooltip.svgBackground_ = /** @type {!SVGRectElement} */ (
-      Blockly.createSvgElement(
-          'rect', {'class': 'blocklyTooltipBackground'}, svgGroup));
-  Blockly.Tooltip.svgText_ = /** @type {!SVGTextElement} */ (
-      Blockly.createSvgElement(
-          'text', {'class': 'blocklyTooltipText'}, svgGroup));
-  return svgGroup;
+  if (Blockly.Tooltip.DIV) {
+    return;  // Already created.
+  }
+  // Create an HTML container for popup overlays (e.g. editor widgets).
+  Blockly.Tooltip.DIV = goog.dom.createDom('div', 'blocklyTooltipDiv');
+  document.body.appendChild(Blockly.Tooltip.DIV);
 };
 
 /**
@@ -225,9 +194,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
   if (Blockly.Tooltip.visible) {
     // Compute the distance between the mouse position when the tooltip was
     // shown and the current mouse position.  Pythagorean theorem.
-    var mouseXY = Blockly.mouseToSvg(e);
-    var dx = Blockly.Tooltip.lastXY_.x - mouseXY.x;
-    var dy = Blockly.Tooltip.lastXY_.y - mouseXY.y;
+    var dx = Blockly.Tooltip.lastX_ - e.clientX;
+    var dy = Blockly.Tooltip.lastY_ - e.clientY;
     var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     if (dr > Blockly.Tooltip.RADIUS_OK) {
       Blockly.Tooltip.hide();
@@ -236,7 +204,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
     // The mouse moved, clear any previously scheduled tooltip.
     clearTimeout(Blockly.Tooltip.showPid_);
     // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
-    Blockly.Tooltip.lastXY_ = Blockly.mouseToSvg(e);
+    Blockly.Tooltip.lastX_ = e.clientX;
+    Blockly.Tooltip.lastY_ = e.clientY;
     Blockly.Tooltip.showPid_ =
         setTimeout(Blockly.Tooltip.show_, Blockly.Tooltip.HOVER_MS);
   }
@@ -248,8 +217,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
 Blockly.Tooltip.hide = function() {
   if (Blockly.Tooltip.visible) {
     Blockly.Tooltip.visible = false;
-    if (Blockly.Tooltip.svgGroup_) {
-      Blockly.Tooltip.svgGroup_.style.display = 'none';
+    if (Blockly.Tooltip.DIV) {
+      Blockly.Tooltip.DIV.style.display = 'none';
     }
   }
   clearTimeout(Blockly.Tooltip.showPid_);
@@ -261,12 +230,11 @@ Blockly.Tooltip.hide = function() {
  */
 Blockly.Tooltip.show_ = function() {
   Blockly.Tooltip.poisonedElement_ = Blockly.Tooltip.element_;
-  if (!Blockly.Tooltip.svgGroup_) {
+  if (!Blockly.Tooltip.DIV) {
     return;
   }
   // Erase all existing text.
-  goog.dom.removeChildren(
-      /** @type {!Element} */ (Blockly.Tooltip.svgText_));
+  goog.dom.removeChildren(/** @type {!Element} */ (Blockly.Tooltip.DIV));
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
   if (goog.isFunction(tip)) {
@@ -276,58 +244,43 @@ Blockly.Tooltip.show_ = function() {
   // Create new text, line by line.
   var lines = tip.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    var tspanElement = Blockly.createSvgElement('tspan',
-        {'dy': '1em', 'x': Blockly.Tooltip.MARGINS}, Blockly.Tooltip.svgText_);
-    var textNode = document.createTextNode(lines[i]);
-    tspanElement.appendChild(textNode);
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(lines[i]));
+    Blockly.Tooltip.DIV.appendChild(div);
   }
+  var rtl = Blockly.Tooltip.element_.RTL;
+  var windowSize = goog.dom.getViewportSize();
   // Display the tooltip.
+  Blockly.Tooltip.DIV.style.direction = rtl ? 'rtl' : 'ltr';
+  Blockly.Tooltip.DIV.style.display = 'block';
   Blockly.Tooltip.visible = true;
-  Blockly.Tooltip.svgGroup_.style.display = 'block';
-  // Resize the background and shadow to fit.
-  var bBox = Blockly.Tooltip.svgText_.getBBox();
-  var width = 2 * Blockly.Tooltip.MARGINS + bBox.width;
-  var height = bBox.height;
-  Blockly.Tooltip.svgBackground_.setAttribute('width', width);
-  Blockly.Tooltip.svgBackground_.setAttribute('height', height);
-  Blockly.Tooltip.svgShadow_.setAttribute('width', width);
-  Blockly.Tooltip.svgShadow_.setAttribute('height', height);
-  if (Blockly.RTL) {
-    // Right-align the paragraph.
-    // This cannot be done until the tooltip is rendered on screen.
-    var maxWidth = bBox.width;
-    for (var x = 0, textElement;
-         textElement = Blockly.Tooltip.svgText_.childNodes[x]; x++) {
-      textElement.setAttribute('text-anchor', 'end');
-      textElement.setAttribute('x', maxWidth + Blockly.Tooltip.MARGINS);
-    }
-  }
   // Move the tooltip to just below the cursor.
-  var anchorX = Blockly.Tooltip.lastXY_.x;
-  if (Blockly.RTL) {
+  var anchorX = Blockly.Tooltip.lastX_;
+  if (rtl) {
     anchorX -= Blockly.Tooltip.OFFSET_X + width;
   } else {
     anchorX += Blockly.Tooltip.OFFSET_X;
   }
-  var anchorY = Blockly.Tooltip.lastXY_.y + Blockly.Tooltip.OFFSET_Y;
+  var anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
 
-  var svgSize = Blockly.svgSize();
-  if (anchorY + bBox.height > svgSize.height) {
+  if (anchorY + Blockly.Tooltip.DIV.offsetHeight > windowSize.height) {
     // Falling off the bottom of the screen; shift the tooltip up.
-    anchorY -= bBox.height + 2 * Blockly.Tooltip.OFFSET_Y;
+    anchorY -= Blockly.Tooltip.DIV.offsetHeight + 2 * Blockly.Tooltip.OFFSET_Y;
   }
-  if (Blockly.RTL) {
+  if (rtl) {
     // Prevent falling off left edge in RTL mode.
     anchorX = Math.max(Blockly.Tooltip.MARGINS, anchorX);
   } else {
-    if (anchorX + bBox.width > svgSize.width - 2 * Blockly.Tooltip.MARGINS) {
+    if (anchorX + Blockly.Tooltip.DIV.offsetWidth >
+        windowSize.width - 2 * Blockly.Tooltip.MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
-      anchorX = svgSize.width - bBox.width - 2 * Blockly.Tooltip.MARGINS;
+      anchorX = windowSize.width - Blockly.Tooltip.DIV.offsetWidth -
+          2 * Blockly.Tooltip.MARGINS;
     }
   }
-  Blockly.Tooltip.svgGroup_.setAttribute('transform',
-      'translate(' + anchorX + ',' + anchorY + ')');
+  Blockly.Tooltip.DIV.style.top = anchorY + 'px';
+  Blockly.Tooltip.DIV.style.left = anchorX + 'px';
 };
 
 /**

@@ -31,6 +31,7 @@ goog.provide('Blockly.Field');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Size');
+goog.require('goog.style');
 goog.require('goog.userAgent');
 
 
@@ -255,7 +256,7 @@ Blockly.Field.prototype.updateTextNode_ = function() {
   goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   text = text.replace(/\s/g, Blockly.Field.NBSP);
-  if (Blockly.RTL && text) {
+  if (this.sourceBlock_.RTL && text) {
     // The SVG is LTR, force text to be RTL.
     text += '\u200F';
   }
@@ -319,4 +320,14 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {
   // Non-abstract sub-classes may wish to implement this.  See FieldLabel.
+};
+
+/**
+ * Return the absolute coordinates of the top-left corner of this field.
+ * The origin (0,0) is the top-left corner of the page body.
+ * @return {{!goog.math.Coordinate}} Object with .x and .y properties.
+ * @private
+ */
+Blockly.Field.prototype.getAbsoluteXY_ = function() {
+  return goog.style.getPageOffset(this.borderRect_);
 };

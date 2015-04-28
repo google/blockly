@@ -92,7 +92,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
         /** @type {!Blockly.Workspace} */ (this.block_.workspace),
         paragraph, this.block_.svgPath_,
         this.iconX_, this.iconY_, null, null);
-    if (Blockly.RTL) {
+    if (this.block_.RTL) {
       // Right-align the paragraph.
       // This cannot be done until the bubble is rendered on screen.
       var maxWidth = paragraph.getBBox().width;

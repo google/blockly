@@ -32,14 +32,17 @@ goog.require('goog.math');
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
+ * @param {Object} opt_options Dictionary of options.
  * @constructor
  */
-Blockly.Workspace = function() {
+Blockly.Workspace = function(opt_options) {
   /**
    * @type {!Array.<!Blockly.Block>}
    * @private
    */
   this.topBlocks_ = [];
+  this.options = opt_options || {};
+  this.RTL = !!this.options.RTL;
 };
 
 /**
@@ -47,12 +50,6 @@ Blockly.Workspace = function() {
  * @type {boolean} True if visible.  False if headless.
  */
 Blockly.Workspace.prototype.rendered = false;
-
-/**
- * Maximum number of blocks allowed in this workspace.
- * @type number
- */
-Blockly.Workspace.prototype.maxBlocks = Infinity;
 
 /**
  * Dispose of this workspace.
@@ -109,7 +106,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
     var offset = Math.sin(goog.math.toRadians(Blockly.Workspace.SCAN_ANGLE));
-    if (Blockly.RTL) {
+    if (this.RTL) {
       offset *= -1;
     }
     blocks.sort(function(a, b) {
@@ -174,10 +171,10 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
  * @return {number} Number of blocks left.
  */
 Blockly.Workspace.prototype.remainingCapacity = function() {
-  if (this.maxBlocks == Infinity) {
+  if (isNaN(this.options.maxBlocks)) {
     return Infinity;
   }
-  return this.maxBlocks - this.getAllBlocks().length;
+  return this.options.maxBlocks - this.getAllBlocks().length;
 };
 
 /**
@@ -185,4 +182,35 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
  */
 Blockly.Workspace.prototype.fireChangeEvent = function() {
   // NOP.
+};
+
+/**
+ * Modify the block tree on the existing toolbox.
+ * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ */
+Blockly.Workspace.prototype.updateToolbox = function(tree) {
+  tree = Blockly.parseToolboxTree_(tree);
+  if (!tree) {
+    if (this.options.languageTree) {
+      throw 'Can\'t nullify an existing toolbox.';
+    }
+    // No change (null to null).
+    return;
+  }
+  if (!this.options.languageTree) {
+    throw 'Existing toolbox is null.  Can\'t create new toolbox.';
+  }
+  if (this.options.hasCategories) {
+    if (!this.toolbox_) {
+      throw 'Existing toolbox has no categories.  Can\'t change mode.';
+    }
+    this.options.languageTree = tree;
+    this.toolbox_.populate_(tree);
+  } else {
+    if (!this.flyout_) {
+      throw 'Existing toolbox has categories.  Can\'t change mode.';
+    }
+    this.options.languageTree = tree;
+    this.flyout_.show(tree.childNodes);
+  }
 };

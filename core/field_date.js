@@ -109,7 +109,8 @@ Blockly.FieldDate.prototype.setValue = function(date) {
  * @private
  */
 Blockly.FieldDate.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, Blockly.FieldDate.widgetDispose_);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
+      Blockly.FieldDate.widgetDispose_);
   // Create the date picker using Closure.
   Blockly.FieldDate.loadLanguage_();
   var picker = new goog.ui.DatePicker();
@@ -120,7 +121,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
   // Record windowSize and scrollOffset before adding the picker.
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
-  var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
+  var xy = this.getAbsoluteXY_();
   var borderBBox = this.borderRect_.getBBox();
   var div = Blockly.WidgetDiv.DIV;
   picker.render(div);
@@ -135,7 +136,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
   } else {
     xy.y += borderBBox.height - 1;
   }
-  if (Blockly.RTL) {
+  if (this.sourceBlock_.RTL) {
     xy.x += borderBBox.width;
     xy.x -= pickerSize.width;
     // Don't go offscreen left.
@@ -148,7 +149,8 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - pickerSize.width;
     }
   }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
+  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
+                             this.sourceBlock_.RTL);
 
   // Configure event handler.
   var thisField = this;

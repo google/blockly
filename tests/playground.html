@@ -67,11 +67,14 @@ function start() {
               length: 3,
               colour: '#ccc',
               snap: true},
+           readOnly: false,
            realtime: false,
            realtimeOptions:
              {clientId: 'YOUR CLIENT ID GOES HERE',
               chatbox: {elementId: 'chatbox'},
-              collabElementId: 'collaborators'}});
+              collabElementId: 'collaborators'},
+           scrollbars: true
+          });
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }

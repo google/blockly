@@ -288,8 +288,8 @@ Blockly.createDom_ = function(container, options) {
   var gridPattern = Blockly.createSvgElement('pattern',
       {'id': 'blocklyGridPattern' + String(Math.random()).substring(2),
        'patternUnits': 'userSpaceOnUse',
-       'width': options.gridOptions['spacing'],
-       'height': options.gridOptions['spacing']}, defs);
+       'width': options.gridOptions['spacing'] || 100,
+       'height': options.gridOptions['spacing'] || 100}, defs);
   if (options.gridOptions['length'] > 0 && options.gridOptions['spacing'] > 0) {
     var half = Math.floor(options.gridOptions['spacing'] / 2) + .5;
     var start = half - options.gridOptions['length'] / 2;

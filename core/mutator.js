@@ -101,6 +101,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   var workspaceOptions = {
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
+    pathToMedia: this.block_.workspace.options.pathToMedia,
     RTL: this.block_.RTL,
     getMetrics: function() {return mutator.getFlyoutMetrics_();},
     setMetrics: null,
@@ -165,6 +166,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
     var translation = 'translate(' + this.workspaceWidth_ + ',0)';
     this.workspace_.getCanvas().setAttribute('transform', translation);
   }
+  this.workspace_.resize();
 };
 
 /**
@@ -275,6 +277,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
  * Return an object with all the metrics required to size scrollbars for the
  * mutator flyout.  The following properties are computed:
  * .viewHeight: Height of the visible rectangle,
+ * .viewWidth: Width of the visible rectangle,
  * .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
  * @return {!Object} Contains size and position metrics of mutator dialog's
@@ -282,15 +285,11 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
  * @private
  */
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
-  var left = 0;
-  if (this.block_.RTL) {
-    left += this.workspaceWidth_;
-  }
   return {
     viewHeight: this.workspaceHeight_,
-    viewWidth: 0,  // This seem wrong, but results in correct RTL layout.
+    viewWidth: this.workspaceWidth_,
     absoluteTop: 0,
-    absoluteLeft: left
+    absoluteLeft: 0
   };
 };
 

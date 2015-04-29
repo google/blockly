@@ -138,10 +138,6 @@ Blockly.Flyout.prototype.init = function(workspace) {
 
   this.hide();
 
-  // If the document resizes, reposition the flyout.
-  this.eventWrappers_.concat(Blockly.bindEvent_(window,
-      goog.events.EventType.RESIZE, this, this.position_));
-  this.position_();
   this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
       'wheel', this, this.wheel_));
   // Safari needs mousewheel.
@@ -234,9 +230,8 @@ Blockly.Flyout.prototype.setMetrics_ = function(yRatio) {
 
 /**
  * Move the toolbox to the edge of the workspace.
- * @private
  */
-Blockly.Flyout.prototype.position_ = function() {
+Blockly.Flyout.prototype.position = function() {
   if (!this.isVisible()) {
     return;
   }
@@ -489,7 +484,7 @@ Blockly.Flyout.prototype.reflow = function() {
         block.flyoutRect_.setAttribute('y', blockXY.y);
       }
     }
-    // Record the width for .getMetrics_ and .position_.
+    // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
     // Fire a resize event to update the flyout's scrollbar.
     Blockly.fireUiEvent(window, 'resize');

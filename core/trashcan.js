@@ -201,8 +201,6 @@ Blockly.Trashcan.prototype.createDom = function() {
  */
 Blockly.Trashcan.prototype.init = function() {
   this.setOpen_(false);
-  // If the document resizes, reposition the trash can.
-  Blockly.bindEvent_(window, 'resize', this, this.position_);
 };
 
 /**
@@ -221,9 +219,8 @@ Blockly.Trashcan.prototype.dispose = function() {
 
 /**
  * Move the trash can to the bottom-right corner.
- * @private
  */
-Blockly.Trashcan.prototype.position_ = function() {
+Blockly.Trashcan.prototype.position = function() {
   var metrics = this.workspace_.getMetrics();
   if (!metrics) {
     // There are no metrics available (workspace is probably not visible).
@@ -242,7 +239,7 @@ Blockly.Trashcan.prototype.position_ = function() {
 };
 
 /**
- * Return the deletion rectangle for this trashcan.
+ * Return the deletion rectangle for this trash can.
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
 Blockly.Trashcan.prototype.getRect = function() {

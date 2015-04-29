@@ -138,21 +138,19 @@ Blockly.Toolbox.prototype.init = function() {
   this.HtmlDiv.style.display = 'block';
   this.populate_(workspace.options.languageTree);
   tree.render(this.HtmlDiv);
-
-  // If the document resizes, reposition the toolbox.
-  var thisToolbox = this;
-  goog.events.listen(window, goog.events.EventType.RESIZE,
-      function() {thisToolbox.position_();});
-  this.position_();
+  this.position();
 };
 
 /**
  * Move the toolbox to the edge.
- * @private
  */
-Blockly.Toolbox.prototype.position_ = function() {
-  var svg = this.workspace_.options.svg;
+Blockly.Toolbox.prototype.position = function() {
   var treeDiv = this.HtmlDiv;
+  if (!treeDiv) {
+    // Not initialized yet.
+    return;
+  }
+  var svg = this.workspace_.options.svg;
   var svgBox = goog.style.getBorderBox(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.workspace_.RTL) {
@@ -167,6 +165,7 @@ Blockly.Toolbox.prototype.position_ = function() {
     // For some reason the LTR toolbox now reports as 1px too wide.
     this.width -= 1;
   }
+  this.flyout_.position();
 };
 
 /**

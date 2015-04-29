@@ -199,6 +199,24 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
 };
 
 /**
+ * Resize this workspace and its containing objects.
+ */
+Blockly.WorkspaceSvg.prototype.resize = function() {
+  if (this.toolbox_) {
+    this.toolbox_.position();
+  }
+  if (this.flyout_) {
+    this.flyout_.position();
+  }
+  if (this.trashcan) {
+    this.trashcan.position();
+  }
+  if (this.scrollbar) {
+    this.scrollbar.resize();
+  }
+};
+
+/**
  * Get the SVG element that forms the drawing surface.
  * @return {!Element} SVG element.
  */

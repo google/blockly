@@ -264,10 +264,7 @@ Blockly.svgResize = function(workspace) {
     svg.setAttribute('height', height + 'px');
     svg.cachedHeight_ = height;
   }
-  // Update the scrollbars (if they exist).
-  if (mainWorkspace.scrollbar) {
-    mainWorkspace.scrollbar.resize();
-  }
+  mainWorkspace.resize();
 };
 
 /**

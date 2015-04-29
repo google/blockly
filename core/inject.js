@@ -285,11 +285,13 @@ Blockly.createDom_ = function(container, options) {
       <rect width="1" height="1" stroke="#888" />
     </pattern>
   */
+  // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
+  var safeSpacing = options.gridOptions['spacing'] || 100;
   var gridPattern = Blockly.createSvgElement('pattern',
       {'id': 'blocklyGridPattern' + String(Math.random()).substring(2),
        'patternUnits': 'userSpaceOnUse',
-       'width': options.gridOptions['spacing'] || 100,
-       'height': options.gridOptions['spacing'] || 100}, defs);
+       'width': safeSpacing,
+       'height': safeSpacing}, defs);
   if (options.gridOptions['length'] > 0 && options.gridOptions['spacing'] > 0) {
     var half = Math.floor(options.gridOptions['spacing'] / 2) + .5;
     var start = half - options.gridOptions['length'] / 2;

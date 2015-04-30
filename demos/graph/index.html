@@ -269,7 +269,7 @@ Graph.resize = function() {
  * Initialize Blockly and the graph.  Called on page load.
  */
 Graph.init = function() {
-  Graph.workspace = Blockly.inject(document.getElementById('blocklyDiv'),
+  Graph.workspace = Blockly.inject('blocklyDiv',
       {toolbox: document.getElementById('toolbox')});
   Blockly.Xml.domToWorkspace(Graph.workspace,
       document.getElementById('startBlocks'));

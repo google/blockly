@@ -372,7 +372,7 @@ Code.init = function() {
   window.addEventListener('resize', onresize, false);
 
   var toolbox = document.getElementById('toolbox');
-  Code.workspace = Blockly.inject(document.getElementById('content_blocks'),
+  Code.workspace = Blockly.inject('content_blocks',
       {grid:
           {spacing: 25,
            length: 3,

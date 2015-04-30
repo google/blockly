@@ -262,7 +262,7 @@ Plane.init = function() {
         'width=725, initial-scale=.35, user-scalable=no');
   }
 
-  Plane.workspace = Blockly.inject(document.getElementById('blockly'),
+  Plane.workspace = Blockly.inject('blockly',
       {media: '../../media/',
        rtl: Plane.isRtl(),
        toolbox: document.getElementById('toolbox')});

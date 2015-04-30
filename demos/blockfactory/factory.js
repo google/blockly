@@ -396,10 +396,8 @@ var oldDir = null;
 function updatePreview() {
   var newDir = document.getElementById('direction').value;
   if (oldDir != newDir) {
-    var previewDiv = document.getElementById('preview');
-    previewDiv.innerHTML = '';
     var rtl = newDir == 'rtl';
-    previewWorkspace = Blockly.inject(previewDiv, {rtl: rtl});
+    previewWorkspace = Blockly.inject('preview', {rtl: rtl});
     oldDir = newDir;
   }
   var code = document.getElementById('languagePre').textContent;
@@ -481,8 +479,7 @@ function init() {
   window.addEventListener('resize', onresize);
 
   var toolbox = document.getElementById('toolbox');
-  mainWorkspace =
-      Blockly.inject(document.getElementById('blockly'), {toolbox: toolbox});
+  mainWorkspace = Blockly.inject('blockly', {toolbox: toolbox});
 
   // Create the root block.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

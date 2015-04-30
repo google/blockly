@@ -121,7 +121,7 @@
   </xml>
 
   <script>
-    var workspace = Blockly.inject(document.getElementById('blocklyDiv'),
+    var workspace = Blockly.inject('blocklyDiv',
         {toolbox: document.getElementById('toolbox')});
     Blockly.Xml.domToWorkspace(workspace,
         document.getElementById('startBlocks'));

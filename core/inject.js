@@ -34,12 +34,15 @@ goog.require('goog.userAgent');
 
 
 /**
- * Inject a Blockly editor into the specified container DIV.
- * @param {!Element} container Containing element.
+ * Inject a Blockly editor into the specified container element (usually a div).
+ * @param {!Element|string} container Containing element or its ID.
  * @param {Object} opt_options Optional dictionary of options.
  * @return {!Blockly.Workspace} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
+  if (goog.isString(container)) {
+    container = document.getElementById(container);
+  }
   // Verify that the container is in document.
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
@@ -47,6 +50,7 @@ Blockly.inject = function(container, opt_options) {
   var options = Blockly.parseOptions_(opt_options || {});
   var workspace;
   var startUi = function() {
+    goog.dom.removeChildren(container);
     var svg = Blockly.createDom_(container, options);
     workspace = Blockly.createMainWorkspace_(svg, options);
     Blockly.init_(workspace);

@@ -46,7 +46,7 @@
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
-var block = null;
+var workspace = null;
 
 function enableRealtimeSpecificUi() {
   var realtimeDiv = document.getElementById('realtime');
@@ -55,7 +55,7 @@ function enableRealtimeSpecificUi() {
 
 function start() {
   var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('blocklyDiv'),
+  workspace = Blockly.inject('blocklyDiv',
           {rtl: rtl,
            media: '../media/',
            toolbox: toolbox,
@@ -82,7 +82,7 @@ function start() {
 
 function toXml() {
   var output = document.getElementById('importExport');
-  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  var xml = Blockly.Xml.workspaceToDom(workspace);
   output.value = Blockly.Xml.domToPrettyText(xml);
   output.focus();
   output.select();
@@ -91,12 +91,12 @@ function toXml() {
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  Blockly.Xml.domToWorkspace(workspace, xml);
 }
 
 function toCode(lang) {
   var output = document.getElementById('importExport');
-  output.value = Blockly[lang].workspaceToCode();
+  output.value = Blockly[lang].workspaceToCode(workspace);
 }
 
 function airstrike(n) {
@@ -108,7 +108,7 @@ function airstrike(n) {
   }
   for (var i = 0; i < n; i++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
-    var block = Blockly.Block.obtain(Blockly.mainWorkspace, prototype);
+    var block = Blockly.Block.obtain(workspace, prototype);
     block.initSvg();
     block.getSvgRoot().setAttribute('transform', 'translate(' +
         Math.round(Math.random() * 450 + 40) + ', ' +
@@ -126,7 +126,7 @@ function spaghetti(n) {
   xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  Blockly.Xml.domToWorkspace(workspace, dom);
   console.timeEnd('Spaghetti domToWorkspace');
 }
 var spaghettiXml = [
@@ -418,7 +418,7 @@ h1 {
 
   <h1>Blockly Playground</h1>
 
-  <p><a href="javascript:void([document.getElementById('blocklyDiv').style.display = 'block', Blockly.mainWorkspace.render()])">Show</a>
+  <p><a href="javascript:void([document.getElementById('blocklyDiv').style.display = 'block', workspace.render()])">Show</a>
    - <a href="javascript:void(document.getElementById('blocklyDiv').style.display = 'none')">Hide</a></p>
 
   <script>

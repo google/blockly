@@ -185,7 +185,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
     this.workspace_.flyout_.init(this.workspace_);
-    this.workspace_.flyout_.show(this.workspace_.options.languageTree.childNodes);
+    this.workspace_.flyout_.show(
+        this.workspace_.options.languageTree.childNodes);
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
     var blocks = this.rootBlock_.getDescendants();

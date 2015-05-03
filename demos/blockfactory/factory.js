@@ -396,6 +396,9 @@ var oldDir = null;
 function updatePreview() {
   var newDir = document.getElementById('direction').value;
   if (oldDir != newDir) {
+    if (previewWorkspace) {
+      previewWorkspace.dispose();
+    }
     var rtl = newDir == 'rtl';
     previewWorkspace = Blockly.inject('preview', {rtl: rtl});
     oldDir = newDir;

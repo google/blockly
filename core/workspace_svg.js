@@ -170,6 +170,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.trashcan.dispose();
     this.trashcan = null;
   }
+  if (!this.options.parentWorkspace) {
+    // Top-most workspace.  Dispose of the SVG too.
+    goog.dom.removeNode(this.options.svg);
+  }
 };
 
 /**

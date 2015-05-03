@@ -50,7 +50,6 @@ Blockly.inject = function(container, opt_options) {
   var options = Blockly.parseOptions_(opt_options || {});
   var workspace;
   var startUi = function() {
-    goog.dom.removeChildren(container);
     var svg = Blockly.createDom_(container, options);
     workspace = Blockly.createMainWorkspace_(svg, options);
     Blockly.init_(workspace);

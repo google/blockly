@@ -400,7 +400,8 @@ function updatePreview() {
       previewWorkspace.dispose();
     }
     var rtl = newDir == 'rtl';
-    previewWorkspace = Blockly.inject('preview', {rtl: rtl});
+    previewWorkspace = Blockly.inject('preview',
+        {rtl: rtl, media: '../../media/'});
     oldDir = newDir;
   }
   var code = document.getElementById('languagePre').textContent;
@@ -458,7 +459,8 @@ function init() {
         'Perhaps it was created with a different version of Blockly?';
     var linkButton = document.getElementById('linkButton');
     linkButton.style.display = 'inline-block';
-    linkButton.addEventListener('click', BlocklyStorage.link);
+    linkButton.addEventListener('click',
+        function() {BlocklyStorage.link(mainWorkspace);});
   }
 
   document.getElementById('helpButton').addEventListener('click', function() {
@@ -482,11 +484,13 @@ function init() {
   window.addEventListener('resize', onresize);
 
   var toolbox = document.getElementById('toolbox');
-  mainWorkspace = Blockly.inject('blockly', {toolbox: toolbox});
+  mainWorkspace = Blockly.inject('blockly',
+      {toolbox: toolbox, media: '../../media/'});
 
   // Create the root block.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
-    BlocklyStorage.retrieveXml(window.location.hash.substring(1));
+    BlocklyStorage.retrieveXml(window.location.hash.substring(1),
+                               mainWorkspace);
   } else {
     var rootBlock = Blockly.Block.obtain(mainWorkspace, 'factory_base');
     rootBlock.initSvg();

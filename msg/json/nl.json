@@ -3,10 +3,13 @@
 		"authors": [
 			"Siebrand",
 			"McDutchie",
-			"Ribert"
+			"Ribert",
+			"MedShot",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
+	"TODAY": "Vandaag",
 	"DUPLICATE_BLOCK": "Duplicaat",
 	"ADD_COMMENT": "Reactie toevoegen",
 	"REMOVE_COMMENT": "Opmerking verwijderen",
@@ -249,7 +252,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "vraagt de gebruiker om een getal met de tekst",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Vraagt de gebruiker om een getal in te voeren.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Vraagt de gebruiker om invoer.",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "maak een lege lijst",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Geeft een lijst terug met lengte 0, zonder items",
 	"LISTS_CREATE_WITH_TOOLTIP": "Maak een lijst met een willekeurig aantal items.",

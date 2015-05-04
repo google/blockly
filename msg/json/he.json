@@ -7,10 +7,13 @@
 			"Inkbug",
 			"Yona b",
 			"Noamrotem",
-			"Dvb"
+			"Dvb",
+			"LaG roiL",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "פריט",
+	"TODAY": "היום",
 	"DUPLICATE_BLOCK": "שכפל",
 	"ADD_COMMENT": "הוסף תגובה",
 	"REMOVE_COMMENT": "הסר הערה",
@@ -234,7 +237,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "בקשה למספר עם הודעה",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "בקש מהמשתמש מספר.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "בקשה למשתמש להזין טקסט כלשהו.",
-	"LISTS_CREATE_EMPTY_HELPURL": "http://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "צור רשימה ריקה",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "החזר רשימה,באורך 0, המכילה רשומות נתונים",
 	"LISTS_CREATE_WITH_TOOLTIP": "צור רשימה עם כל מספר של פריטים.",
@@ -295,6 +298,8 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "ל # מהסוף",
 	"LISTS_GET_SUBLIST_END_LAST": "לאחרון",
 	"LISTS_GET_SUBLIST_TOOLTIP": "יוצרת עותק של חלק מסוים מהרשימה.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "יצירת רשימה מטקסט",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "יצירת טקסט מרשימה",
 	"VARIABLES_GET_TOOLTIP": "להחזיר את הערך של משתנה זה.",
 	"VARIABLES_GET_CREATE_SET": "ליצור 'הגדר %1'",
 	"VARIABLES_SET_TITLE": "הגדר",

@@ -1,4 +1,11 @@
 {
+	"@metadata": {
+		"authors": [
+			"Espertus",
+			"Liuxinyu970226",
+			"Shirayuki"
+		]
+	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -274,7 +281,7 @@
 	"LISTS_INDEX_OF_TOOLTIP": "dropdown - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list]. [[File:Blockly-list-find.png]]",
 	"LISTS_GET_INDEX_GET": "dropdown - Indicates that the user wishes to [https://github.com/google/blockly/wiki/Lists#getting-a-single-item get an item from a list] without removing it from the list.",
 	"LISTS_GET_INDEX_GET_REMOVE": "dropdown - Indicates that the user wishes to [https://github.com/google/blockly/wiki/Lists#getting-a-single-item get and remove an item from a list], as opposed to merely getting it without modifying the list.",
-	"LISTS_GET_INDEX_REMOVE": "dropdown - Indicates that the user wishes to [https://github.com/google/blockly/wiki/Lists#removing-an-item remove an item from a list].",
+	"LISTS_GET_INDEX_REMOVE": "dropdown - Indicates that the user wishes to [https://github.com/google/blockly/wiki/Lists#removing-an-item remove an item from a list].\n{{Identical|Remove}}",
 	"LISTS_GET_INDEX_FROM_START": "dropdown - Indicates that an index relative to the front of the list should be used to [https://github.com/google/blockly/wiki/Lists#getting-a-single-item get and/or remove an item from a list].  Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will automatically appear ''after'' this number (and any other ordinal numbers on this block). See [[Translating:Blockly#Ordinal_numbers]] for more information on ordinal numbers in Blockly. [[File:Blockly-list-get-item.png]]",
 	"LISTS_GET_INDEX_FROM_END": "dropdown - Indicates that an index relative to the end of the list should be used to [https://github.com/google/blockly/wiki/Lists#getting-a-single-item access an item in a list]. [[File:Blockly-list-get-item.png]]",
 	"LISTS_GET_INDEX_FIRST": "dropdown - Indicates that the '''first''' item should be [https://github.com/google/blockly/wiki/Lists#getting-a-single-item accessed in a list]. [[File:Blockly-list-get-item.png]]",

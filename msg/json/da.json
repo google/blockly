@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Christian List",
-			"RickiRunge"
+			"RickiRunge",
+			"MGA73"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"TODAY": "I dag",
 	"DUPLICATE_BLOCK": "Duplikér",
 	"ADD_COMMENT": "Tilføj kommentar",
 	"REMOVE_COMMENT": "Fjern kommentar",
@@ -274,6 +276,11 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "til # fra slutningen",
 	"LISTS_GET_SUBLIST_END_LAST": "til sidste",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Opretter en kopi af den angivne del af en liste.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "lav tekst til liste",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "lav liste til tekst",
+	"LISTS_SPLIT_WITH_DELIMITER": "med skilletegn",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Bryd tekst op i en liste af tekster med brud ved hvert skilletegn.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Saml en liste af tekster til én tekst, der er adskilt af et skilletegn.",
 	"VARIABLES_GET_TOOLTIP": "Returnerer værdien af denne variabel.",
 	"VARIABLES_GET_CREATE_SET": "Opret 'sæt %1'",
 	"VARIABLES_SET_TITLE": "sæt",

@@ -8,6 +8,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
+	"TODAY": "Hoy",
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Añadir comentario",
 	"REMOVE_COMMENT": "Eliminar comentario",
@@ -23,7 +24,7 @@
 	"ENABLE_BLOCK": "Activar bloque",
 	"HELP": "Ayuda",
 	"CHAT": "¡Chatea con tu colaborador escribiendo en este cuadro!",
-	"AUTH": "Autoriza esta aplicación a guardar tu trabajo se pueda guardar y compartir por tí.",
+	"AUTH": "Autoriza a esta aplicación para guardar tu trabajo y permitir que lo compartas.",
 	"ME": "Yo",
 	"CHANGE_VALUE_TITLE": "Cambiar el valor:",
 	"NEW_VARIABLE": "Variable nueva…",

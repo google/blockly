@@ -1,5 +1,9 @@
 {
-	"@metadata": [],
+	"@metadata": {
+		"authors": [
+			"아라"
+		]
+	},
 	"VARIABLES_DEFAULT_NAME": "item",
 	"DUPLICATE_BLOCK": "Kaparehas",
 	"ADD_COMMENT": "Dagdag komento",
@@ -221,7 +225,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "prompt for number with message",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Prompt for user for a number.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Prompt for user for some text.",
-	"LISTS_CREATE_EMPTY_HELPURL": "http://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "Gumawa ng walang laman na list",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Ibabalik ang list, na may haba na 0, nag lalaman ng walang data records",
 	"LISTS_CREATE_WITH_TOOLTIP": "Gumawa ng list na may kahit anong number ng items.",

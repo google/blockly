@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Rancher"
+			"Rancher",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ставка",
@@ -230,7 +231,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "питај за број са поруком",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Питајте корисника за број.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Питајте корисника за унос текста.",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "направи празан списак",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "враћа листу, дужине 0, не садржавајући  евиденцију података",
 	"LISTS_CREATE_WITH_TOOLTIP": "Креирај листу са било којим бројем ставки.",

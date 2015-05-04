@@ -3,7 +3,8 @@
 		"authors": [
 			"Metalhead64",
 			"M165437",
-			"Dan-yell"
+			"Dan-yell",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "Element",
@@ -240,7 +241,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "Fragt nach Zahl mit Hinweis",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Fragt den Benutzer nach einer Zahl.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Fragt den Benutzer nach einem Text.",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "Erzeuge eine leere Liste",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Erzeugt eine leere Liste ohne Inhalt.",
 	"LISTS_CREATE_WITH_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-list-with",

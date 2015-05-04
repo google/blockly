@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Shirayuki",
-			"Oda"
+			"Oda",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
@@ -232,7 +233,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "メッセージを送って番号の入力を求める",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "ユーザーにプロンプトして数字のインプットを求めます",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "いくつかのテキストを、ユーザーに入力するようにプロンプト。",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "空のリストを作成します。",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "長さゼロ、データ レコード空のリストを返します",
 	"LISTS_CREATE_WITH_TOOLTIP": "アイテム数かぎりないのリストを作成します。",

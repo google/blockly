@@ -3,10 +3,13 @@
 		"authors": [
 			"Jopparn",
 			"WikiPhoenix",
-			"Abbedabb"
+			"Abbedabb",
+			"Aaoo",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "föremål",
+	"TODAY": "Idag",
 	"DUPLICATE_BLOCK": "Duplicera",
 	"ADD_COMMENT": "Lägg till kommentar",
 	"REMOVE_COMMENT": "Radera kommentar",
@@ -231,7 +234,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "fråga efter ett tal med meddelande",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Fråga användaren efter ett tal.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Fråga användaren efter lite text.",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "skapa tom lista",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Ger tillbaka en lista utan någon data, alltså med längden 0",
 	"LISTS_CREATE_WITH_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-list-with",

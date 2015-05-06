@@ -135,6 +135,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
 
   Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
+  var thisWorkspace = this;
+  Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
+                      function(e) {Blockly.longStart_(e, thisWorkspace);});
 
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.

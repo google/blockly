@@ -401,7 +401,9 @@ function updatePreview() {
     }
     var rtl = newDir == 'rtl';
     previewWorkspace = Blockly.inject('preview',
-        {rtl: rtl, media: '../../media/'});
+        {rtl: rtl,
+         media: '../../media/',
+         scrollbars: true});
     oldDir = newDir;
   }
   var code = document.getElementById('languagePre').textContent;

@@ -34,10 +34,10 @@ Blockly.PHP['controls_repeat'] = function(block) {
   var repeats = Number(block.getFieldValue('TIMES'));
   var branch = Blockly.PHP.statementToCode(block, 'DO');
   branch = Blockly.PHP.addLoopTrap(branch, block.id);
-  var loopVar = Blockly.PHP.variableDB_.getDistinctName(
+  var loopVar = Blockly.PHP.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
-  var code = 'for ($' + loopVar + ' = 0; $' +
-      loopVar + ' < ' + repeats + '; $' +
+  var code = 'for (' + loopVar + ' = 0; ' +
+      loopVar + ' < ' + repeats + '; ' +
       loopVar + '++) {\n' +
       branch + '}\n';
   return code;
@@ -50,16 +50,16 @@ Blockly.PHP['controls_repeat_ext'] = function(block) {
   var branch = Blockly.PHP.statementToCode(block, 'DO');
   branch = Blockly.PHP.addLoopTrap(branch, block.id);
   var code = '';
-  var loopVar = Blockly.PHP.variableDB_.getDistinctName(
+  var loopVar = Blockly.PHP.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
   var endVar = repeats;
   if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
-    var endVar = Blockly.PHP.variableDB_.getDistinctName(
+    var endVar = Blockly.PHP.getDistinctName(
         'repeat_end', Blockly.Variables.NAME_TYPE);
-    code += 'var ' + endVar + ' = ' + repeats + ';\n';
+    code += endVar + ' = ' + repeats + ';\n';
   }
-  code += 'for ($' + loopVar + ' = 0; $' +
-      loopVar + ' < $' + endVar + '; $' +
+  code += 'for (' + loopVar + ' = 0; ' +
+      loopVar + ' < ' + endVar + '; ' +
       loopVar + '++) {\n' +
       branch + '}\n';
   return code;
@@ -96,8 +96,8 @@ Blockly.PHP['controls_for'] = function(block) {
       Blockly.isNumber(increment)) {
     // All arguments are simple numbers.
     var up = parseFloat(argument0) <= parseFloat(argument1);
-    code = 'for ($' + variable0 + ' = ' + argument0 + '; $' +
-        variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; $' +
+    code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
+        variable0 + (up ? ' <= ' : ' >= ') + argument1 + '; ' +
         variable0;
     var step = Math.abs(parseFloat(increment));
     if (step == 1) {
@@ -111,34 +111,34 @@ Blockly.PHP['controls_for'] = function(block) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     var startVar = argument0;
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
-      startVar = Blockly.PHP.variableDB_.getDistinctName(
+      startVar = Blockly.PHP.getDistinctName(
           variable0 + '_start', Blockly.Variables.NAME_TYPE);
-      code += '$' + startVar + ' = ' + argument0 + ';\n';
+      code += startVar + ' = ' + argument0 + ';\n';
     }
     var endVar = argument1;
     if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
-      var endVar = Blockly.PHP.variableDB_.getDistinctName(
+      var endVar = Blockly.PHP.getDistinctName(
           variable0 + '_end', Blockly.Variables.NAME_TYPE);
-      code += '$' + endVar + ' = ' + argument1 + ';\n';
+      code += endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    var incVar = Blockly.PHP.variableDB_.getDistinctName(
+    var incVar = Blockly.PHP.getDistinctName(
         variable0 + '_inc', Blockly.Variables.NAME_TYPE);
-    code += '$' + incVar + ' = ';
+    code += incVar + ' = ';
     if (Blockly.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
     } else {
       code += 'abs(' + increment + ');\n';
     }
-    code += 'if ($' + startVar + ' > $' + endVar + ') {\n';
-    code += Blockly.PHP.INDENT + '$' + incVar + ' = -$' + incVar + ';\n';
+    code += 'if (' + startVar + ' > ' + endVar + ') {\n';
+    code += Blockly.PHP.INDENT + incVar + ' = -' + incVar + ';\n';
     code += '}\n';
-    code += 'for (' + variable0 + ' = $' + startVar + ';\n' +
-        '     ' + incVar + ' >= 0 ? $' +
-        variable0 + ' <= ' + endVar + ' : $' +
+    code += 'for (' + variable0 + ' = ' + startVar + ';\n' +
+        '     ' + incVar + ' >= 0 ? ' +
+        variable0 + ' <= ' + endVar + ' : ' +
         variable0 + ' >= ' + endVar + ';\n' +
-        '     ' + variable0 + ' += $' + incVar + ') {\n' +
+        '     ' + variable0 + ' += ' + incVar + ') {\n' +
         branch + '}\n';
   }
   return code;
@@ -156,15 +156,15 @@ Blockly.PHP['controls_forEach'] = function(block) {
   // Cache non-trivial values to variables to prevent repeated look-ups.
   var listVar = argument0;
   if (!argument0.match(/^\w+$/)) {
-    listVar = Blockly.PHP.variableDB_.getDistinctName(
+    listVar = Blockly.PHP.getDistinctName(
         variable0 + '_list', Blockly.Variables.NAME_TYPE);
-    code += '$' + listVar + ' = ' + argument0 + ';\n';
+    code += listVar + ' = ' + argument0 + ';\n';
   }
-  var indexVar = Blockly.PHP.variableDB_.getDistinctName(
+  var indexVar = Blockly.PHP.getDistinctName(
       variable0 + '_index', Blockly.Variables.NAME_TYPE);
   branch = Blockly.PHP.INDENT + variable0 + ' = ' +
       listVar + '[' + indexVar + '];\n' + branch;
-  code += 'foreach ($' + listVar + ' as $' + indexVar + ') {\n' + branch + '}\n';
+  code += 'foreach (' + listVar + ' as ' + indexVar + ') {\n' + branch + '}\n';
   return code;
 };
 

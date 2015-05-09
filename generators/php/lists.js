@@ -61,7 +61,7 @@ Blockly.PHP['lists_repeat'] = function(block) {
       Blockly.PHP.ORDER_COMMA) || 'null';
   var argument1 = Blockly.PHP.valueToCode(block, 'NUM',
       Blockly.PHP.ORDER_COMMA) || '0';
-  var code = functionName + '($' + argument0 + ', $' + argument1 + ')';
+  var code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
@@ -197,7 +197,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     if (list.match(/^\w+$/)) {
       return '';
     }
-    var listVar = Blockly.PHP.variableDB_.getDistinctName(
+    var listVar = Blockly.PHP.getDistinctName(
         'tmp_list', Blockly.Variables.NAME_TYPE);
     var code = 'var ' + listVar + ' = ' + list + ';\n';
     list = listVar;
@@ -243,7 +243,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     }
   } else if (where == 'RANDOM') {
     var code = cacheList();
-    var xVar = Blockly.PHP.variableDB_.getDistinctName(
+    var xVar = Blockly.PHP.getDistinctName(
         'tmp_x', Blockly.Variables.NAME_TYPE);
     code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
         '.length);\n';

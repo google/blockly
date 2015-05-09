@@ -31,8 +31,7 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['variables_get'] = function(block) {
   // Variable getter.
-  var code = Blockly.PHP.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
+  var code = '$' + block.getFieldValue('VAR');
   return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 

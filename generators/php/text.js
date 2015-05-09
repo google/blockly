@@ -76,14 +76,14 @@ Blockly.PHP['text_length'] = function(block) {
   // String length.
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
-  return ['strlen(' + argument0 + ')', Blockly.PHP.ORDER_MEMBER];
+  return ['strlen(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_isEmpty'] = function(block) {
   // Is the string null?
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_MEMBER) || '\'\'';
-  return ['empty(' + argument0 + ')', Blockly.PHP.ORDER_LOGICAL_NOT];
+  return ['empty(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_indexOf'] = function(block) {

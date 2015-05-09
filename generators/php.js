@@ -105,16 +105,21 @@ Blockly.PHP.init = function(workspace) {
   } else {
     Blockly.PHP.variableDB_.reset();
   }
-
-  var defvars = [];
-  var variables = Blockly.Variables.allVariables(workspace);
-  for (var x = 0; x < variables.length; x++) {
-    defvars[x] = 'var ' +
-        Blockly.PHP.variableDB_.getName(variables[x],
-        Blockly.Variables.NAME_TYPE) + ';';
-  }
-  Blockly.PHP.definitions_['variables'] = defvars.join('\n');
 };
+
+Blockly.PHP.getDistinctName = function(name, type) {
+  var safeName = this.variableDB_.safeName_(name);
+  var i = '';
+  while (this.variableDB_.dbReverse_[safeName + i] ||
+  (safeName + i) in this.variableDB_.reservedDict_) {
+    // Collision with existing name.  Create a unique name.
+    i = i ? i + 1 : 2;
+  }
+  safeName += i;
+  this.variableDB_.dbReverse_[safeName] = true;
+  return '$' + safeName;
+};
+
 
 /**
  * Prepend the generated code with the variable definitions.

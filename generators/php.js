@@ -120,6 +120,15 @@ Blockly.PHP.getDistinctName = function(name, type) {
   return '$' + safeName;
 };
 
+Blockly.PHP.getName = function(name, type) {
+  var normalized = name.toLowerCase() + '_' + type;
+  if (normalized in this.variableDB_.db_) {
+    return this.variableDB_.db_[normalized];
+  }
+  var safeName = this.getDistinctName(name, type);
+  this.variableDB_[normalized] = safeName;
+  return safeName;
+};
 
 /**
  * Prepend the generated code with the variable definitions.

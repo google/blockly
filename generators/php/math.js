@@ -146,13 +146,13 @@ Blockly.PHP['math_single'] = function(block) {
 Blockly.PHP['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   var CONSTANTS = {
-    'PI': ['pi()', Blockly.PHP.ORDER_MEMBER],
-    'E': ['exp', Blockly.PHP.ORDER_FUNCTION_CALL],
+    'PI': ['pi()', Blockly.PHP.ORDER_FUNCTION_CALL],
+    'E': ['exp()', Blockly.PHP.ORDER_FUNCTION_CALL],
     'GOLDEN_RATIO':
         ['(1 + sqrt(5)) / 2', Blockly.PHP.ORDER_DIVISION],
-    'SQRT2': ['sqrt', Blockly.PHP.ORDER_MEMBER],
-    'SQRT1_2': ['sqrt', Blockly.PHP.ORDER_MEMBER],
-    'INFINITY': ['Infinity', Blockly.PHP.ORDER_ATOMIC]
+    'SQRT2': ['M_SQRT2', Blockly.PHP.ORDER_ATOMIC],
+    'SQRT1_2': ['M_SQRT1_2', Blockly.PHP.ORDER_ATOMIC],
+    'INFINITY': ['INF', Blockly.PHP.ORDER_ATOMIC]
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
@@ -197,7 +197,7 @@ Blockly.PHP['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.PHP.valueToCode(block, 'DELTA',
       Blockly.PHP.ORDER_ADDITION) || '0';
-  var varName = Blockly.PHP.variableDB_.getName(
+  var varName = Blockly.PHP.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return varName + ' = (typeof ' + varName + ' == \'number\' ? ' + varName +
       ' : 0) + ' + argument0 + ';\n';

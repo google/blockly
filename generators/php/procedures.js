@@ -31,7 +31,7 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  var funcName = Blockly.PHP.variableDB_.getName(
+  var funcName = Blockly.PHP.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.PHP.statementToCode(block, 'STACK');
   if (Blockly.PHP.STATEMENT_PREFIX) {
@@ -50,7 +50,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.PHP.variableDB_.getName(block.arguments_[x],
+    args[x] = Blockly.PHP.getName(block.arguments_[x],
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
@@ -67,7 +67,7 @@ Blockly.PHP['procedures_defnoreturn'] =
 
 Blockly.PHP['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  var funcName = Blockly.PHP.variableDB_.getName(
+  var funcName = Blockly.PHP.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
@@ -80,7 +80,7 @@ Blockly.PHP['procedures_callreturn'] = function(block) {
 
 Blockly.PHP['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var funcName = Blockly.PHP.variableDB_.getName(
+  var funcName = Blockly.PHP.getName(
       block.getFieldValue('NAME'), Blockly.Procedures.NAME_TYPE);
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {

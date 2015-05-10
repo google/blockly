@@ -81,7 +81,7 @@ Blockly.PHP['controls_whileUntil'] = function(block) {
 
 Blockly.PHP['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.PHP.variableDB_.getName(
+  var variable0 = Blockly.PHP.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.PHP.valueToCode(block, 'FROM',
       Blockly.PHP.ORDER_ASSIGNMENT) || '0';
@@ -146,25 +146,14 @@ Blockly.PHP['controls_for'] = function(block) {
 
 Blockly.PHP['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.PHP.variableDB_.getName(
+  var variable0 = Blockly.PHP.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.PHP.valueToCode(block, 'LIST',
       Blockly.PHP.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.PHP.statementToCode(block, 'DO');
   branch = Blockly.PHP.addLoopTrap(branch, block.id);
   var code = '';
-  // Cache non-trivial values to variables to prevent repeated look-ups.
-  var listVar = argument0;
-  if (!argument0.match(/^\w+$/)) {
-    listVar = Blockly.PHP.getDistinctName(
-        variable0 + '_list', Blockly.Variables.NAME_TYPE);
-    code += listVar + ' = ' + argument0 + ';\n';
-  }
-  var indexVar = Blockly.PHP.getDistinctName(
-      variable0 + '_index', Blockly.Variables.NAME_TYPE);
-  branch = Blockly.PHP.INDENT + variable0 + ' = ' +
-      listVar + '[' + indexVar + '];\n' + branch;
-  code += 'foreach (' + listVar + ' as ' + indexVar + ') {\n' + branch + '}\n';
+  code += 'foreach (' + argument0 + ' as ' + variable0 + ') {\n' + branch + '}\n';
   return code;
 };
 

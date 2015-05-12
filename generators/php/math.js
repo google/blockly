@@ -199,8 +199,7 @@ Blockly.PHP['math_change'] = function(block) {
       Blockly.PHP.ORDER_ADDITION) || '0';
   var varName = Blockly.PHP.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
-  return varName + ' = (typeof ' + varName + ' == \'number\' ? ' + varName +
-      ' : 0) + ' + argument0 + ';\n';
+  return varName + ' += ' + argument0 + ';\n';
 };
 
 // Rounding functions have a single operand.
@@ -215,17 +214,17 @@ Blockly.PHP['math_on_list'] = function(block) {
   switch (func) {
     case 'SUM':
       list = Blockly.PHP.valueToCode(block, 'LIST',
-          Blockly.PHP.ORDER_MEMBER) || 'array()';
+          Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
       code = 'array_sum(' + list + ')';
       break;
     case 'MIN':
       list = Blockly.PHP.valueToCode(block, 'LIST',
-          Blockly.PHP.ORDER_COMMA) || 'array()';
+          Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
       code = 'min(' + list + ')';
       break;
     case 'MAX':
       list = Blockly.PHP.valueToCode(block, 'LIST',
-          Blockly.PHP.ORDER_COMMA) || 'array()';
+          Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
       code = 'max(' + list + ')';
       break;
     case 'AVERAGE':
@@ -328,10 +327,7 @@ Blockly.PHP['math_random_int'] = function(block) {
       [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
           '($a, $b) {',
         '  if ($a > $b) {',
-        '    // Swap a and b to ensure a is smaller.',
-        '    $c = $a;',
-        '    $a = $b;',
-        '    $b = $c;',
+        '    return rand($b, $a);',
         '  }',
         '  return rand($a, $b);',
         '}']);

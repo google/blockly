@@ -48,8 +48,6 @@ Blockly.PHP.addReservedWords(
     '__halt_compiler,abstract,and,array,as,break,callable,case,catch,class,clone,const,continue,declare,default,die,do,echo,else,elseif,empty,enddeclare,endfor,endforeach,endif,endswitch,endwhile,eval,exit,extends,final,for,foreach,function,global,goto,if,implements,include,include_once,instanceof,insteadof,interface,isset,list,namespace,new,or,print,private,protected,public,require,require_once,return,static,switch,throw,trait,try,unset,use,var,while,xor,' +
         // http://php.net/manual/en/reserved.constants.php
     'PHP_VERSION,PHP_MAJOR_VERSION,PHP_MINOR_VERSION,PHP_RELEASE_VERSION,PHP_VERSION_ID,PHP_EXTRA_VERSION,PHP_ZTS,PHP_DEBUG,PHP_MAXPATHLEN,PHP_OS,PHP_SAPI,PHP_EOL,PHP_INT_MAX,PHP_INT_SIZE,DEFAULT_INCLUDE_PATH,PEAR_INSTALL_DIR,PEAR_EXTENSION_DIR,PHP_EXTENSION_DIR,PHP_PREFIX,PHP_BINDIR,PHP_BINARY,PHP_MANDIR,PHP_LIBDIR,PHP_DATADIR,PHP_SYSCONFDIR,PHP_LOCALSTATEDIR,PHP_CONFIG_FILE_PATH,PHP_CONFIG_FILE_SCAN_DIR,PHP_SHLIB_SUFFIX,E_ERROR,E_WARNING,E_PARSE,E_NOTICE,E_CORE_ERROR,E_CORE_WARNING,E_COMPILE_ERROR,E_COMPILE_WARNING,E_USER_ERROR,E_USER_WARNING,E_USER_NOTICE,E_DEPRECATED,E_USER_DEPRECATED,E_ALL,E_STRICT,__COMPILER_HALT_OFFSET__,TRUE,FALSE,NULL,__CLASS__,__DIR__,__FILE__,__FUNCTION__,__LINE__,__METHOD__,__NAMESPACE__,__TRAIT__');
-        // there are more than 9,000 internal functions in http://php.net/manual/en/indexes.functions.php
-        // do we really need to list them here?
 
 /**
  * Order of operation ENUMs.
@@ -58,6 +56,7 @@ Blockly.PHP.addReservedWords(
 Blockly.PHP.ORDER_ATOMIC = 0;         // 0 "" ...
 Blockly.PHP.ORDER_CLONE = 1;          // clone
 Blockly.PHP.ORDER_NEW = 1;            // new
+Blockly.PHP.ORDER_MEMBER = 2;         // ()
 Blockly.PHP.ORDER_FUNCTION_CALL = 2;  // ()
 Blockly.PHP.ORDER_INCREMENT = 3;      // ++
 Blockly.PHP.ORDER_DECREMENT = 3;      // --
@@ -110,13 +109,14 @@ Blockly.PHP.init = function(workspace) {
 Blockly.PHP.getDistinctName = function(name, type) {
   var safeName = this.variableDB_.safeName_(name);
   var i = '';
-  while (this.variableDB_.dbReverse_[safeName + i] ||
-  (safeName + i) in this.variableDB_.reservedDict_) {
+  while ((type == Blockly.Procedures.NAME_TYPE && (safeName + i) in this.variableDB_.reservedDict_)
+  || this.variableDB_.dbReverse_[safeName + i]) {
     // Collision with existing name.  Create a unique name.
     i = i ? i + 1 : 2;
   }
   safeName += i;
   this.variableDB_.dbReverse_[safeName] = true;
+  if (type === Blockly.Procedures.NAME_TYPE) return safeName;
   return '$' + safeName;
 };
 

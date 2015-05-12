@@ -28,7 +28,6 @@ goog.provide('Blockly.PHP.procedures');
 
 goog.require('Blockly.PHP');
 
-
 Blockly.PHP['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.PHP.getName(

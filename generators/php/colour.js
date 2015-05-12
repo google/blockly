@@ -64,7 +64,7 @@ Blockly.PHP['colour_rgb'] = function(block) {
         '  $hex .= str_pad(dechex($b), 2, "0", STR_PAD_LEFT);',
         '  return $hex;',
         '}']);
-  var code = functionName + '($' + red + ', $' + green + ', $' + blue + ')';
+  var code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
@@ -96,6 +96,6 @@ Blockly.PHP['colour_blend'] = function(block) {
         '  $hex .= str_pad(dechex($b), 2, "0", STR_PAD_LEFT);',
         '  return $hex;',
         '}']);
-  var code = functionName + '($' + c1 + ', $' + c2 + ', $' + ratio + ')';
+  var code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

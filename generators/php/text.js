@@ -69,7 +69,7 @@ Blockly.PHP['text_append'] = function(block) {
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
       Blockly.PHP.ORDER_NONE) || '\'\'';
-  return varName + ' = ' + varName + ' . ' + argument0 + ';\n';
+  return varName + ' .= ' + argument0 + ';\n';
 };
 
 Blockly.PHP['text_length'] = function(block) {
@@ -82,7 +82,7 @@ Blockly.PHP['text_length'] = function(block) {
 Blockly.PHP['text_isEmpty'] = function(block) {
   // Is the string null?
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   return ['empty(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
@@ -91,20 +91,20 @@ Blockly.PHP['text_indexOf'] = function(block) {
   var operator = block.getFieldValue('END') == 'FIRST' ?
       'strpos' : 'strrpos';
   var argument0 = Blockly.PHP.valueToCode(block, 'FIND',
-      Blockly.PHP.ORDER_NONE) || '\'\'';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   var argument1 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   var code = operator + '(' + argument0 + ', ' + argument1 + ') + 1';
-  return [code, Blockly.PHP.ORDER_MEMBER];
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_charAt'] = function(block) {
   // Get letter at index.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.PHP.valueToCode(block, 'AT',
-      Blockly.PHP.ORDER_UNARY_NEGATION) || '1';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '0';
   var text = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   switch (where) {
     case 'FIRST':
       var code = text + '[0]';
@@ -142,13 +142,13 @@ Blockly.PHP['text_charAt'] = function(block) {
 Blockly.PHP['text_getSubstring'] = function(block) {
   // Get substring.
   var text = Blockly.PHP.valueToCode(block, 'STRING',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   var at1 = Blockly.PHP.valueToCode(block, 'AT1',
-      Blockly.PHP.ORDER_NONE) || '1';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '0';
   var at2 = Blockly.PHP.valueToCode(block, 'AT2',
-      Blockly.PHP.ORDER_NONE) || '1';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '0';
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
   } else {
@@ -159,23 +159,20 @@ Blockly.PHP['text_getSubstring'] = function(block) {
           '    if ($where1 == \'FROM_START\') {',
           '      $at1--;',
           '    } else if ($where1 == \'FROM_END\') {',
-          '      $at1 = strlen($text) - $at;',
+          '      $at1 = strlen($text) - $at1;',
           '    } else if ($where1 == \'FIRST\') {',
           '      $at1 = 0;',
-          '    } else if (where1 == \'LAST\') {',
+          '    } else if ($where1 == \'LAST\') {',
           '      $at1 = strlen($text) - 1;',
           '    } else { $at1 = 0; }',
           '    if ($where2 == \'FROM_START\') {',
-          '      $at2--;',
           '    } else if ($where2 == \'FROM_END\') {',
-          '      $at2 = strlen($text) - $at;',
+          '      $at2 = strlen($text) - $at2;',
           '    } else if ($where2 == \'FIRST\') {',
           '      $at2 = 0;',
-          '    } else if (where2 == \'LAST\') {',
-          '      $at2 = strlen($text) - 1;',
+          '    } else if ($where2 == \'LAST\') {',
+          '      $at2 = strlen($text);',
           '    } else { $at2 = 0; }',
-          '  $at1 = getAt($where1, $at1);',
-          '  $at2 = getAt($where2, $at2) + 1;',
           '  return substr($text, $at1, $at2);',
           '}']);
     var code = functionName + '(' + text + ', \'' +
@@ -189,15 +186,15 @@ Blockly.PHP['text_changeCase'] = function(block) {
   var code;
   if (block.getFieldValue('CASE')=='UPPERCASE') {
     var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
-            Blockly.PHP.ORDER_MEMBER) || '\'\'';
+            Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
     code = 'strtoupper(' + argument0 + ')';
   } else if (block.getFieldValue('CASE')=='LOWERCASE') {
     var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
-            Blockly.PHP.ORDER_MEMBER) || '\'\'';
+            Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
     code = 'strtolower(' + argument0 + ')';
   } else if (block.getFieldValue('CASE')=='TITLECASE') {
     var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
-            Blockly.PHP.ORDER_MEMBER) || '\'\'';
+            Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
     code = 'ucwords(' + argument0 + ')';
   }
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
@@ -212,14 +209,14 @@ Blockly.PHP['text_trim'] = function(block) {
   };
   var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_MEMBER) || '\'\'';
-  return [ operator + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
+      Blockly.PHP.ORDER_ATOMIC) || '\'\'';
+  return [ operator + '(' + argument0 + ')', Blockly.PHP.ORDER_ATOMIC];
 };
 
 Blockly.PHP['text_print'] = function(block) {
   // Print statement.
   var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_NONE) || '\'\'';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   return 'print(' + argument0 + ');\n';
 };
 
@@ -231,17 +228,17 @@ Blockly.PHP['text_prompt'] = function(block) {
   if (toNumber) {
     code = 'floatval(' + code + ')';
   }
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [code, Blockly.PHP.ORDER_ATOMIC];
 };
 
 Blockly.PHP['text_prompt_ext'] = function(block) {
   // Prompt function (external message).
   var msg = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_NONE) || '\'\'';
+      Blockly.PHP.ORDER_ATOMIC) || '\'\'';
   var code = 'readline(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
     code = 'floatval(' + code + ')';
   }
-  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [code, Blockly.PHP.ORDER_ATOMIC];
 };

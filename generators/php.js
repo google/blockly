@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Language
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2015 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +43,6 @@ Blockly.PHP = new Blockly.Generator('PHP');
  * @private
  */
 Blockly.PHP.addReservedWords(
-    'Blockly,' +  // In case JS is evaled in the current window.
         // http://php.net/manual/en/reserved.keywords.php
     '__halt_compiler,abstract,and,array,as,break,callable,case,catch,class,clone,const,continue,declare,default,die,do,echo,else,elseif,empty,enddeclare,endfor,endforeach,endif,endswitch,endwhile,eval,exit,extends,final,for,foreach,function,global,goto,if,implements,include,include_once,instanceof,insteadof,interface,isset,list,namespace,new,or,print,private,protected,public,require,require_once,return,static,switch,throw,trait,try,unset,use,var,while,xor,' +
         // http://php.net/manual/en/reserved.constants.php
@@ -51,7 +50,7 @@ Blockly.PHP.addReservedWords(
 
 /**
  * Order of operation ENUMs.
- * https://developer.mozilla.org/en/PHP/Reference/Operators/Operator_Precedence
+ * http://php.net/manual/en/language.operators.precedence.php
  */
 Blockly.PHP.ORDER_ATOMIC = 0;         // 0 "" ...
 Blockly.PHP.ORDER_CLONE = 1;          // clone
@@ -64,9 +63,6 @@ Blockly.PHP.ORDER_LOGICAL_NOT = 4;    // !
 Blockly.PHP.ORDER_BITWISE_NOT = 4;    // ~
 Blockly.PHP.ORDER_UNARY_PLUS = 4;     // +
 Blockly.PHP.ORDER_UNARY_NEGATION = 4; // -
-Blockly.PHP.ORDER_TYPEOF = 4;         // typeof
-Blockly.PHP.ORDER_VOID = 4;           // void
-Blockly.PHP.ORDER_DELETE = 4;         // delete
 Blockly.PHP.ORDER_MULTIPLICATION = 5; // *
 Blockly.PHP.ORDER_DIVISION = 5;       // /
 Blockly.PHP.ORDER_MODULUS = 5;        // %
@@ -116,8 +112,10 @@ Blockly.PHP.getDistinctName = function(name, type) {
   }
   safeName += i;
   this.variableDB_.dbReverse_[safeName] = true;
-  if (type === Blockly.Procedures.NAME_TYPE) return safeName;
-  return '$' + safeName;
+  if (type == Blockly.Variables.NAME_TYPE) {
+    safeName = '$' + safeName;
+  }
+  return safeName;
 };
 
 Blockly.PHP.getName = function(name, type) {

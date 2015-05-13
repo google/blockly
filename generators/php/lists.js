@@ -81,38 +81,39 @@ Blockly.PHP['lists_isEmpty'] = function(block) {
 
 Blockly.PHP['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  var operator = block.getFieldValue('END');
+  var operator = block.getFieldValue('END') == 'FIRST' ?
+      'indexOf' : 'lastIndexOf';
   var argument0 = Blockly.PHP.valueToCode(block, 'FIND',
-          Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   var argument1 = Blockly.PHP.valueToCode(block, 'VALUE',
-          Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
-
-  var code;
-  if (operator == 'FIRST'){
-      var functionName = Blockly.PHP.provideFunction_(
-          'indexOf',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-          '($list, $item) {',
-              '  for($i=0; $i < count($list); $i++){',
-              '  if ($list[$i] == $item) { return $i + 1; }',
-              '  }',
-              '  return 0;',
-              '}']);
-      code = functionName + '(' + argument1 + ', ' + argument0 + ')';
+      Blockly.PHP.ORDER_MEMBER) || '[]';
+  var functionName;
+  if (block.getFieldValue('END') == 'FIRST'){
+    // indexOf
+    functionName = Blockly.PHP.provideFunction_(
+        'indexOf',
+        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+        '($haystack, $needle) {',
+          '  for ($index = 0; $index < count($haystack); $index++) {',
+          '    if ($haystack[$index] == $needle) return $index+1;',
+          '  }',
+          '  return 0;',
+          '}']);
   } else {
-      var functionName = Blockly.PHP.provideFunction_(
-          'lastIndexOf',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-          '($list, $item) {',
-              '  $last = -1;',
-              '  for($i=0; $i < count($list); $i++){',
-              '  if ($list[$i] == $item) { $last = $i; }',
-              '  }',
-              '  return $last;',
-              '}']);
-      code = functionName + '(' + argument1 + ', ' + argument0 + ') + 1';
+    // lastIndexOf
+    functionName = Blockly.PHP.provideFunction_(
+        'lastIndexOf',
+        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+        '($haystack, $needle) {',
+          '  $last = 0;',
+          '  for ($index = 0; $index < count($haystack); $index++) {',
+          '    if ($haystack[$index] == $needle) $last = $index+1;',
+          '  }',
+          '  return $last;',
+          '}']);
   }
 
+  var code = functionName + '(' + argument1 + ', ' + argument0 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
@@ -133,8 +134,7 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       var code = 'array_shift(' + list + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'REMOVE') {
-      var code = 'array_shift(' + list + ');\n';
-      return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+      return 'array_shift(' + list + ');\n';
     }
   } else if (where == 'LAST') {
     if (mode == 'GET') {
@@ -169,13 +169,7 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       var code = 'array_slice(' + list + ', -' + at + ', 1)[0]';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'GET_REMOVE' || mode == 'REMOVE') {
-      var functionName = Blockly.PHP.provideFunction_(
-          'lists_remove_from_end',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-              '($list, $position) {',
-            '  return array_splice($list, count($list) - $position, 1)[0];',
-            '}']);
-      code = functionName + '(' + list + ', ' + at + ')';
+      code = 'array_splice(' + list + ', count(' + list + ') - ' + at + ', 1)[0]';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
@@ -183,17 +177,23 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       }
     }
   } else if (where == 'RANDOM') {
-    var functionName = Blockly.PHP.provideFunction_(
-        'lists_get_random_item',
-        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-            '($list, $remove) {',
-          '  $x = rand(0,count($list)-1);',
-          '  return $remove ? array_splice($list, $x, 1)[0] : $list[$x];',
-          '}']);
-    code = functionName + '(' + list + ', ' + (mode != 'GET') + ')';
-    if (mode == 'GET' || mode == 'GET_REMOVE') {
+    if (mode == 'GET'){
+      code = list + '[rand(0,count(' + list + ')-1)]';
+      return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
+    } else if (mode == 'GET_REMOVE'){
+      var functionName = Blockly.PHP.provideFunction_(
+          'lists_get_remove_random_item',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '() {',
+            '  global ' + list + ';',
+            '  $x = rand(0,count($list)-1);',
+            '  unset($list[$x]);',
+            '  return array_values($list);',
+            '}']);
+      code = functionName + '(' + list + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'REMOVE') {
+      code = 'unset(' + list + '[rand(0,count(' + list + ')-1)])';
       return code + ';\n';
     }
   }
@@ -219,7 +219,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     }
     var listVar = Blockly.PHP.variableDB_.getDistinctName(
         'tmp_list', Blockly.Variables.NAME_TYPE);
-    var code = listVar + ' = ' + list + ';\n';
+    var code = listVar + ' = &' + list + ';\n';
     list = listVar;
     return code;
   }
@@ -293,6 +293,17 @@ Blockly.PHP['lists_getSublist'] = function(block) {
         'lists_get_sublist',
         [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
             '($list, $where1, $at1, $where2, $at2) {',
+            '  if ($where2 == \'FROM_START\') {',
+            '    $at2--;',
+            '  } else if ($where2 == \'FROM_END\') {',
+            '    $at2 = $at2 - $at1;',
+            '  } else if ($where2 == \'FIRST\') {',
+            '    $at2 = 0;',
+            '  } else if ($where2 == \'LAST\') {',
+            '    $at2 = count($list);',
+            '  } else {',
+            '    throw \'Unhandled option (lists_getSublist).\';',
+            '  }',
             '  if ($where1 == \'FROM_START\') {',
             '    $at1--;',
             '  } else if ($where1 == \'FROM_END\') {',
@@ -304,17 +315,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
             '  } else {',
             '    throw \'Unhandled option (lists_getSublist).\';',
             '  }',
-            '  if ($where2 == \'FROM_START\') {',
-            '  } else if ($where2 == \'FROM_END\') {',
-            '    $at2 = count($list) - $at2;',
-            '  } else if ($where2 == \'FIRST\') {',
-            '    $at2 = 0;',
-            '  } else if ($where2 == \'LAST\') {',
-            '    $at2 = count($list);',
-            '  } else {',
-            '    throw \'Unhandled option (lists_getSublist).\';',
-            '  }',
-            '  return array_slice($list, $at1, $at2)[0];',
+            '  return array_slice($list, $at1, $at2);',
           '}']);
     var code = functionName + '(' + list + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';

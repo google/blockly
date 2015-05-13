@@ -58,14 +58,14 @@ Blockly.PHP['text_join'] = function(block) {
       code[n] = Blockly.PHP.valueToCode(block, 'ADD' + n,
           Blockly.PHP.ORDER_COMMA) || '\'\'';
     }
-    code = 'implode(\',\'' + code.join(',') + ')';
+    code = 'implode(\'\', array(' + code.join(',') + '))';
     return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
 };
 
 Blockly.PHP['text_append'] = function(block) {
   // Append to a variable in place.
-  var varName = Blockly.PHP.getName(
+  var varName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
       Blockly.PHP.ORDER_NONE) || '\'\'';
@@ -94,7 +94,16 @@ Blockly.PHP['text_indexOf'] = function(block) {
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   var argument1 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
-  var code = operator + '(' + argument0 + ', ' + argument1 + ') + 1';
+  var code = operator + '(' + argument1 + ', ' + argument0 + ') + 1';
+
+  var functionName = Blockly.PHP.provideFunction_(
+      block.getFieldValue('END')=='FIRST'?'text_indexOf':'text_lastIndexOf',
+      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      '($text, $search) {',
+        '  $pos = ' + operator + '($text, $search);',
+        '  return $pos===false?0:$pos+1;',
+        '}']);
+  code = functionName + '(' + argument1 + ', ' + argument0 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
@@ -156,6 +165,15 @@ Blockly.PHP['text_getSubstring'] = function(block) {
         'text_get_substring',
         [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
             '($text, $where1, $at1, $where2, $at2) {',
+          '    if ($where2 == \'FROM_START\') {',
+          '      $at2--;',
+          '    } else if ($where2 == \'FROM_END\') {',
+          '      $at2 = $at2 - $at1;',
+          '    } else if ($where2 == \'FIRST\') {',
+          '      $at2 = 0;',
+          '    } else if ($where2 == \'LAST\') {',
+          '      $at2 = strlen($text);',
+          '    } else { $at2 = 0; }',
           '    if ($where1 == \'FROM_START\') {',
           '      $at1--;',
           '    } else if ($where1 == \'FROM_END\') {',
@@ -165,14 +183,6 @@ Blockly.PHP['text_getSubstring'] = function(block) {
           '    } else if ($where1 == \'LAST\') {',
           '      $at1 = strlen($text) - 1;',
           '    } else { $at1 = 0; }',
-          '    if ($where2 == \'FROM_START\') {',
-          '    } else if ($where2 == \'FROM_END\') {',
-          '      $at2 = strlen($text) - $at2;',
-          '    } else if ($where2 == \'FIRST\') {',
-          '      $at2 = 0;',
-          '    } else if ($where2 == \'LAST\') {',
-          '      $at2 = strlen($text);',
-          '    } else { $at2 = 0; }',
           '  return substr($text, $at1, $at2);',
           '}']);
     var code = functionName + '(' + text + ', \'' +
@@ -195,7 +205,7 @@ Blockly.PHP['text_changeCase'] = function(block) {
   } else if (block.getFieldValue('CASE')=='TITLECASE') {
     var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
             Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
-    code = 'ucwords(' + argument0 + ')';
+    code = 'ucwords(strtolower(' + argument0 + '))';
   }
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

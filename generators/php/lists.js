@@ -68,48 +68,73 @@ Blockly.PHP['lists_repeat'] = function(block) {
 Blockly.PHP['lists_length'] = function(block) {
   // List length.
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || '[]';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
   return ['count(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['lists_isEmpty'] = function(block) {
   // Is the list empty?
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || '[]';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
   return ['empty(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  var operator = block.getFieldValue('END') == 'FIRST' ?
-      'indexOf' : 'lastIndexOf';
+  var operator = block.getFieldValue('END');
   var argument0 = Blockly.PHP.valueToCode(block, 'FIND',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
+          Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   var argument1 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || '[]';
-  var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
+          Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
+
+  var code;
+  if (operator == 'FIRST'){
+      var functionName = Blockly.PHP.provideFunction_(
+          'indexOf',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '($list, $item) {',
+              '  for($i=0; $i < count($list); $i++){',
+              '  if ($list[$i] == $item) { return $i + 1; }',
+              '  }',
+              '  return 0;',
+              '}']);
+      code = functionName + '(' + argument1 + ', ' + argument0 + ')';
+  } else {
+      var functionName = Blockly.PHP.provideFunction_(
+          'lastIndexOf',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '($list, $item) {',
+              '  $last = -1;',
+              '  for($i=0; $i < count($list); $i++){',
+              '  if ($list[$i] == $item) { $last = $i; }',
+              '  }',
+              '  return $last;',
+              '}']);
+      code = functionName + '(' + argument1 + ', ' + argument0 + ') + 1';
+  }
+
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['lists_getIndex'] = function(block) {
   // Get element at index.
-  // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.PHP.valueToCode(block, 'AT',
       Blockly.PHP.ORDER_UNARY_NEGATION) || '1';
   var list = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || '[]';
+      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
 
   if (where == 'FIRST') {
     if (mode == 'GET') {
       var code = list + '[0]';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'GET_REMOVE') {
-      var code = 'array_shift(' + list + ', 1)';
+      var code = 'array_shift(' + list + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'REMOVE') {
-      var code = 'array_shift(' + list + ', 1)';
+      var code = 'array_shift(' + list + ');\n';
+      return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     }
   } else if (where == 'LAST') {
     if (mode == 'GET') {
@@ -179,7 +204,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
   // Set element at index.
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   var list = Blockly.PHP.valueToCode(block, 'LIST',
-      Blockly.PHP.ORDER_MEMBER) || '[]';
+      Blockly.PHP.ORDER_MEMBER) || 'array()';
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.PHP.valueToCode(block, 'AT',
@@ -192,7 +217,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     if (list.match(/^\w+$/)) {
       return '';
     }
-    var listVar = Blockly.PHP.getDistinctName(
+    var listVar = Blockly.PHP.variableDB_.getDistinctName(
         'tmp_list', Blockly.Variables.NAME_TYPE);
     var code = listVar + ' = ' + list + ';\n';
     list = listVar;
@@ -210,7 +235,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
       code += list + '[count(' + list + ') - 1] = ' + value + ';\n';
       return code;
     } else if (mode == 'INSERT') {
-      return list + 'array_push(' + list + ', ' + value + ');\n';
+      return 'array_push(' + list + ', ' + value + ');\n';
     }
   } else if (where == 'FROM_START') {
     // Blockly uses one-based indicies.
@@ -237,7 +262,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     }
   } else if (where == 'RANDOM') {
     var code = cacheList();
-    var xVar = Blockly.PHP.getDistinctName(
+    var xVar = Blockly.PHP.variableDB_.getDistinctName(
         'tmp_x', Blockly.Variables.NAME_TYPE);
     code += xVar + ' = rand(0, count(' + list + ')-1);\n';
     if (mode == 'SET') {
@@ -254,7 +279,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
 Blockly.PHP['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.PHP.valueToCode(block, 'LIST',
-      Blockly.PHP.ORDER_MEMBER) || '[]';
+      Blockly.PHP.ORDER_MEMBER) || 'array()';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   var at1 = Blockly.PHP.valueToCode(block, 'AT1',
@@ -262,7 +287,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
   var at2 = Blockly.PHP.valueToCode(block, 'AT2',
       Blockly.PHP.ORDER_NONE) || '1';
   if (where1 == 'FIRST' && where2 == 'LAST') {
-    var code = list + '.concat()';
+    var code = list;
   } else {
     var functionName = Blockly.PHP.provideFunction_(
         'lists_get_sublist',
@@ -311,7 +336,7 @@ Blockly.PHP['lists_split'] = function(block) {
     var functionName = 'explode';
   } else if (mode == 'JOIN') {
     if (!value_input) {
-      value_input = '[]';
+      value_input = 'array()';
     }
     var functionName = 'implode';
   } else {

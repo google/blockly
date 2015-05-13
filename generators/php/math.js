@@ -52,7 +52,7 @@ Blockly.PHP['math_arithmetic'] = function(block) {
   var code;
   // Power in PHP requires a special case since it has no operator.
   if (!operator) {
-    code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
+    code = 'pow(' + argument0 + ', ' + argument1 + ')';
     return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
   code = argument0 + operator + argument1;
@@ -146,8 +146,8 @@ Blockly.PHP['math_single'] = function(block) {
 Blockly.PHP['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   var CONSTANTS = {
-    'PI': ['pi()', Blockly.PHP.ORDER_FUNCTION_CALL],
-    'E': ['exp()', Blockly.PHP.ORDER_FUNCTION_CALL],
+    'PI': ['M_PI', Blockly.PHP.ORDER_ATOMIC],
+    'E': ['M_E', Blockly.PHP.ORDER_ATOMIC],
     'GOLDEN_RATIO':
         ['(1 + sqrt(5)) / 2', Blockly.PHP.ORDER_DIVISION],
     'SQRT2': ['M_SQRT2', Blockly.PHP.ORDER_ATOMIC],
@@ -164,7 +164,32 @@ Blockly.PHP['math_number_property'] = function(block) {
       Blockly.PHP.ORDER_MODULUS) || '0';
   var dropdown_property = block.getFieldValue('PROPERTY');
   var code;
-
+  if (dropdown_property == 'PRIME') {
+    // Prime is a special case as it is not a one-liner test.
+    var functionName = Blockly.PHP.provideFunction_(
+        'math_isPrime',
+        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($n) {',
+          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+          '  if ($n == 2 || $n == 3) {',
+          '    return true;',
+          '  }',
+          '  // False if n is NaN, negative, is 1, or not whole.',
+          '  // And false if n is divisible by 2 or 3.',
+          '  if (!is_numeric($n) || $n <= 1 || $n % 1 != 0 || $n % 2 == 0 ||' +
+          ' $n % 3 == 0) {',
+          '    return false;',
+          '  }',
+          '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+          '  for ($x = 6; $x <= sqrt($n) + 1; $x += 6) {',
+          '    if ($n % ($x - 1) == 0 || $n % ($x + 1) == 0) {',
+          '      return false;',
+          '    }',
+          '  }',
+          '  return true;',
+          '}']);
+    code = functionName + '(' + number_to_check + ')';
+    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  }
   switch (dropdown_property) {
     case 'EVEN':
       code = number_to_check + ' % 2 == 0';
@@ -172,11 +197,8 @@ Blockly.PHP['math_number_property'] = function(block) {
     case 'ODD':
       code = number_to_check + ' % 2 == 1';
       break;
-    case 'PRIME':
-      code = 'mp_prob_prime('+number_to_check + ')';
-      break;
     case 'WHOLE':
-      code = number_to_check + ' % 1 == 0';
+      code = 'is_int(' + number_to_check + ')';
       break;
     case 'POSITIVE':
       code = number_to_check + ' > 0';
@@ -197,7 +219,7 @@ Blockly.PHP['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.PHP.valueToCode(block, 'DELTA',
       Blockly.PHP.ORDER_ADDITION) || '0';
-  var varName = Blockly.PHP.getName(
+  var varName = Blockly.PHP.variableDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return varName + ' += ' + argument0 + ';\n';
 };
@@ -228,7 +250,6 @@ Blockly.PHP['math_on_list'] = function(block) {
       code = 'max(' + list + ')';
       break;
     case 'AVERAGE':
-      // math_median([null,null,1,3]) == 2.0.
       var functionName = Blockly.PHP.provideFunction_(
           'math_mean',
           [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
@@ -240,14 +261,13 @@ Blockly.PHP['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     case 'MEDIAN':
-      // math_median([null,null,1,3]) == 2.0.
       var functionName = Blockly.PHP.provideFunction_(
           'math_median',
           [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-              '($myList) {',
-            '  rsort($myList);',
-            '  $middle = round(count($myList) / 2);',
-            '  return $myList[$middle-1]; ',
+              '($arr) {',
+            '  sort($arr,SORT_NUMERIC);',
+            '  return (count($arr) % 2) ? $arr[floor(count($arr)/2)] : ',
+            '      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2) - 1]) / 2;',
             '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || '[]';
@@ -264,23 +284,33 @@ Blockly.PHP['math_on_list'] = function(block) {
             '  $v = array_count_values($values);',
             '  arsort($v);',
             '  foreach($v as $k => $v){$total = $k; break;}',
-            '  return $total;',
+            '  return array($total);',
             '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     case 'STD_DEV':
+      var functionName = Blockly.PHP.provideFunction_(
+          'math_standard_deviation',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '($numbers) {',
+            '  $n = count($numbers);',
+            '  if (!$n) return null;',
+            '  $mean = array_sum($numbers) / count($numbers);',
+            '  foreach($numbers as $key => $num) $devs[$key] = pow($num - $mean, 2);',
+            '  return sqrt(array_sum($devs) / (count($devs) - 1));',
+            '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
-              Blockly.PHP.ORDER_MEMBER) || 'array()';
-      code = 'stats_standard_deviation(' + list + ')';
+              Blockly.PHP.ORDER_NONE) || '[]';
+      code = functionName + '(' + list + ')';
       break;
     case 'RANDOM':
       var functionName = Blockly.PHP.provideFunction_(
           'math_random_list',
           [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($list) {',
-            '  $x = floor(rand() * count($list));',
+            '  $x = rand(0, count($list)-1);',
             '  return $list[$x];',
             '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',

@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Language
  *
- * Copyright 2015 Google Inc.
+ * Copyright 2012 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
 
 /**
  * @fileoverview Helper functions for generating PHP for blocks.
- * @author daarond@gmail.com (Daaron Dwyer)
+ * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -43,19 +43,36 @@ Blockly.PHP = new Blockly.Generator('PHP');
  * @private
  */
 Blockly.PHP.addReservedWords(
-        // http://php.net/manual/en/reserved.keywords.php
-    '__halt_compiler,abstract,and,array,as,break,callable,case,catch,class,clone,const,continue,declare,default,die,do,echo,else,elseif,empty,enddeclare,endfor,endforeach,endif,endswitch,endwhile,eval,exit,extends,final,for,foreach,function,global,goto,if,implements,include,include_once,instanceof,insteadof,interface,isset,list,namespace,new,or,print,private,protected,public,require,require_once,return,static,switch,throw,trait,try,unset,use,var,while,xor,' +
-        // http://php.net/manual/en/reserved.constants.php
-    'PHP_VERSION,PHP_MAJOR_VERSION,PHP_MINOR_VERSION,PHP_RELEASE_VERSION,PHP_VERSION_ID,PHP_EXTRA_VERSION,PHP_ZTS,PHP_DEBUG,PHP_MAXPATHLEN,PHP_OS,PHP_SAPI,PHP_EOL,PHP_INT_MAX,PHP_INT_SIZE,DEFAULT_INCLUDE_PATH,PEAR_INSTALL_DIR,PEAR_EXTENSION_DIR,PHP_EXTENSION_DIR,PHP_PREFIX,PHP_BINDIR,PHP_BINARY,PHP_MANDIR,PHP_LIBDIR,PHP_DATADIR,PHP_SYSCONFDIR,PHP_LOCALSTATEDIR,PHP_CONFIG_FILE_PATH,PHP_CONFIG_FILE_SCAN_DIR,PHP_SHLIB_SUFFIX,E_ERROR,E_WARNING,E_PARSE,E_NOTICE,E_CORE_ERROR,E_CORE_WARNING,E_COMPILE_ERROR,E_COMPILE_WARNING,E_USER_ERROR,E_USER_WARNING,E_USER_NOTICE,E_DEPRECATED,E_USER_DEPRECATED,E_ALL,E_STRICT,__COMPILER_HALT_OFFSET__,TRUE,FALSE,NULL,__CLASS__,__DIR__,__FILE__,__FUNCTION__,__LINE__,__METHOD__,__NAMESPACE__,__TRAIT__');
+    'Blockly,' +  // In case JS is evaled in the current window.
+    // https://developer.mozilla.org/en/PHP/Reference/Reserved_Words
+    'break,case,catch,continue,debugger,default,delete,do,else,finally,for,function,if,in,instanceof,new,return,switch,this,throw,try,typeof,var,void,while,with,' +
+    'class,enum,export,extends,import,super,implements,interface,let,package,private,protected,public,static,yield,' +
+    'const,null,true,false,' +
+    // https://developer.mozilla.org/en/PHP/Reference/Global_Objects
+    'Array,ArrayBuffer,Boolean,Date,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,Error,eval,EvalError,Float32Array,Float64Array,Function,Infinity,Int16Array,Int32Array,Int8Array,isFinite,isNaN,Iterator,JSON,Math,NaN,Number,Object,parseFloat,parseInt,RangeError,ReferenceError,RegExp,StopIteration,String,SyntaxError,TypeError,Uint16Array,Uint32Array,Uint8Array,Uint8ClampedArray,undefined,uneval,URIError,' +
+    // https://developer.mozilla.org/en/DOM/window
+    'applicationCache,closed,Components,content,_content,controllers,crypto,defaultStatus,dialogArguments,directories,document,frameElement,frames,fullScreen,globalStorage,history,innerHeight,innerWidth,length,location,locationbar,localStorage,menubar,messageManager,mozAnimationStartTime,mozInnerScreenX,mozInnerScreenY,mozPaintCount,name,navigator,opener,outerHeight,outerWidth,pageXOffset,pageYOffset,parent,performance,personalbar,pkcs11,returnValue,screen,screenX,screenY,scrollbars,scrollMaxX,scrollMaxY,scrollX,scrollY,self,sessionStorage,sidebar,status,statusbar,toolbar,top,URL,window,' +
+    'addEventListener,alert,atob,back,blur,btoa,captureEvents,clearImmediate,clearInterval,clearTimeout,close,confirm,disableExternalCapture,dispatchEvent,dump,enableExternalCapture,escape,find,focus,forward,GeckoActiveXObject,getAttention,getAttentionWithCycleCount,getComputedStyle,getSelection,home,matchMedia,maximize,minimize,moveBy,moveTo,mozRequestAnimationFrame,open,openDialog,postMessage,print,prompt,QueryInterface,releaseEvents,removeEventListener,resizeBy,resizeTo,restore,routeEvent,scroll,scrollBy,scrollByLines,scrollByPages,scrollTo,setCursor,setImmediate,setInterval,setResizable,setTimeout,showModalDialog,sizeToContent,stop,unescape,updateCommands,XPCNativeWrapper,XPCSafeJSObjectWrapper,' +
+    'onabort,onbeforeunload,onblur,onchange,onclick,onclose,oncontextmenu,ondevicemotion,ondeviceorientation,ondragdrop,onerror,onfocus,onhashchange,onkeydown,onkeypress,onkeyup,onload,onmousedown,onmousemove,onmouseout,onmouseover,onmouseup,onmozbeforepaint,onpaint,onpopstate,onreset,onresize,onscroll,onselect,onsubmit,onunload,onpageshow,onpagehide,' +
+    'Image,Option,Worker,' +
+    // https://developer.mozilla.org/en/Gecko_DOM_Reference
+    'Event,Range,File,FileReader,Blob,BlobBuilder,' +
+    'Attr,CDATASection,CharacterData,Comment,console,DocumentFragment,DocumentType,DomConfiguration,DOMError,DOMErrorHandler,DOMException,DOMImplementation,DOMImplementationList,DOMImplementationRegistry,DOMImplementationSource,DOMLocator,DOMObject,DOMString,DOMStringList,DOMTimeStamp,DOMUserData,Entity,EntityReference,MediaQueryList,MediaQueryListListener,NameList,NamedNodeMap,Node,NodeFilter,NodeIterator,NodeList,Notation,Plugin,PluginArray,ProcessingInstruction,SharedWorker,Text,TimeRanges,Treewalker,TypeInfo,UserDataHandler,Worker,WorkerGlobalScope,' +
+    'HTMLDocument,HTMLElement,HTMLAnchorElement,HTMLAppletElement,HTMLAudioElement,HTMLAreaElement,HTMLBaseElement,HTMLBaseFontElement,HTMLBodyElement,HTMLBRElement,HTMLButtonElement,HTMLCanvasElement,HTMLDirectoryElement,HTMLDivElement,HTMLDListElement,HTMLEmbedElement,HTMLFieldSetElement,HTMLFontElement,HTMLFormElement,HTMLFrameElement,HTMLFrameSetElement,HTMLHeadElement,HTMLHeadingElement,HTMLHtmlElement,HTMLHRElement,HTMLIFrameElement,HTMLImageElement,HTMLInputElement,HTMLKeygenElement,HTMLLabelElement,HTMLLIElement,HTMLLinkElement,HTMLMapElement,HTMLMenuElement,HTMLMetaElement,HTMLModElement,HTMLObjectElement,HTMLOListElement,HTMLOptGroupElement,HTMLOptionElement,HTMLOutputElement,HTMLParagraphElement,HTMLParamElement,HTMLPreElement,HTMLQuoteElement,HTMLScriptElement,HTMLSelectElement,HTMLSourceElement,HTMLSpanElement,HTMLStyleElement,HTMLTableElement,HTMLTableCaptionElement,HTMLTableCellElement,HTMLTableDataCellElement,HTMLTableHeaderCellElement,HTMLTableColElement,HTMLTableRowElement,HTMLTableSectionElement,HTMLTextAreaElement,HTMLTimeElement,HTMLTitleElement,HTMLTrackElement,HTMLUListElement,HTMLUnknownElement,HTMLVideoElement,' +
+    'HTMLCanvasElement,CanvasRenderingContext2D,CanvasGradient,CanvasPattern,TextMetrics,ImageData,CanvasPixelArray,HTMLAudioElement,HTMLVideoElement,NotifyAudioAvailableEvent,HTMLCollection,HTMLAllCollection,HTMLFormControlsCollection,HTMLOptionsCollection,HTMLPropertiesCollection,DOMTokenList,DOMSettableTokenList,DOMStringMap,RadioNodeList,' +
+    'SVGDocument,SVGElement,SVGAElement,SVGAltGlyphElement,SVGAltGlyphDefElement,SVGAltGlyphItemElement,SVGAnimationElement,SVGAnimateElement,SVGAnimateColorElement,SVGAnimateMotionElement,SVGAnimateTransformElement,SVGSetElement,SVGCircleElement,SVGClipPathElement,SVGColorProfileElement,SVGCursorElement,SVGDefsElement,SVGDescElement,SVGEllipseElement,SVGFilterElement,SVGFilterPrimitiveStandardAttributes,SVGFEBlendElement,SVGFEColorMatrixElement,SVGFEComponentTransferElement,SVGFECompositeElement,SVGFEConvolveMatrixElement,SVGFEDiffuseLightingElement,SVGFEDisplacementMapElement,SVGFEDistantLightElement,SVGFEFloodElement,SVGFEGaussianBlurElement,SVGFEImageElement,SVGFEMergeElement,SVGFEMergeNodeElement,SVGFEMorphologyElement,SVGFEOffsetElement,SVGFEPointLightElement,SVGFESpecularLightingElement,SVGFESpotLightElement,SVGFETileElement,SVGFETurbulenceElement,SVGComponentTransferFunctionElement,SVGFEFuncRElement,SVGFEFuncGElement,SVGFEFuncBElement,SVGFEFuncAElement,SVGFontElement,SVGFontFaceElement,SVGFontFaceFormatElement,SVGFontFaceNameElement,SVGFontFaceSrcElement,SVGFontFaceUriElement,SVGForeignObjectElement,SVGGElement,SVGGlyphElement,SVGGlyphRefElement,SVGGradientElement,SVGLinearGradientElement,SVGRadialGradientElement,SVGHKernElement,SVGImageElement,SVGLineElement,SVGMarkerElement,SVGMaskElement,SVGMetadataElement,SVGMissingGlyphElement,SVGMPathElement,SVGPathElement,SVGPatternElement,SVGPolylineElement,SVGPolygonElement,SVGRectElement,SVGScriptElement,SVGStopElement,SVGStyleElement,SVGSVGElement,SVGSwitchElement,SVGSymbolElement,SVGTextElement,SVGTextPathElement,SVGTitleElement,SVGTRefElement,SVGTSpanElement,SVGUseElement,SVGViewElement,SVGVKernElement,' +
+    'SVGAngle,SVGColor,SVGICCColor,SVGElementInstance,SVGElementInstanceList,SVGLength,SVGLengthList,SVGMatrix,SVGNumber,SVGNumberList,SVGPaint,SVGPoint,SVGPointList,SVGPreserveAspectRatio,SVGRect,SVGStringList,SVGTransform,SVGTransformList,' +
+    'SVGAnimatedAngle,SVGAnimatedBoolean,SVGAnimatedEnumeration,SVGAnimatedInteger,SVGAnimatedLength,SVGAnimatedLengthList,SVGAnimatedNumber,SVGAnimatedNumberList,SVGAnimatedPreserveAspectRatio,SVGAnimatedRect,SVGAnimatedString,SVGAnimatedTransformList,' +
+    'SVGPathSegList,SVGPathSeg,SVGPathSegArcAbs,SVGPathSegArcRel,SVGPathSegClosePath,SVGPathSegCurvetoCubicAbs,SVGPathSegCurvetoCubicRel,SVGPathSegCurvetoCubicSmoothAbs,SVGPathSegCurvetoCubicSmoothRel,SVGPathSegCurvetoQuadraticAbs,SVGPathSegCurvetoQuadraticRel,SVGPathSegCurvetoQuadraticSmoothAbs,SVGPathSegCurvetoQuadraticSmoothRel,SVGPathSegLinetoAbs,SVGPathSegLinetoHorizontalAbs,SVGPathSegLinetoHorizontalRel,SVGPathSegLinetoRel,SVGPathSegLinetoVerticalAbs,SVGPathSegLinetoVerticalRel,SVGPathSegMovetoAbs,SVGPathSegMovetoRel,ElementTimeControl,TimeEvent,SVGAnimatedPathData,' +
+    'SVGAnimatedPoints,SVGColorProfileRule,SVGCSSRule,SVGExternalResourcesRequired,SVGFitToViewBox,SVGLangSpace,SVGLocatable,SVGRenderingIntent,SVGStylable,SVGTests,SVGTextContentElement,SVGTextPositioningElement,SVGTransformable,SVGUnitTypes,SVGURIReference,SVGViewSpec,SVGZoomAndPan');
 
 /**
  * Order of operation ENUMs.
- * http://php.net/manual/en/language.operators.precedence.php
+ * https://developer.mozilla.org/en/PHP/Reference/Operators/Operator_Precedence
  */
 Blockly.PHP.ORDER_ATOMIC = 0;         // 0 "" ...
-Blockly.PHP.ORDER_CLONE = 1;          // clone
+Blockly.PHP.ORDER_MEMBER = 1;         // . []
 Blockly.PHP.ORDER_NEW = 1;            // new
-Blockly.PHP.ORDER_MEMBER = 2;         // ()
 Blockly.PHP.ORDER_FUNCTION_CALL = 2;  // ()
 Blockly.PHP.ORDER_INCREMENT = 3;      // ++
 Blockly.PHP.ORDER_DECREMENT = 3;      // --
@@ -63,6 +80,9 @@ Blockly.PHP.ORDER_LOGICAL_NOT = 4;    // !
 Blockly.PHP.ORDER_BITWISE_NOT = 4;    // ~
 Blockly.PHP.ORDER_UNARY_PLUS = 4;     // +
 Blockly.PHP.ORDER_UNARY_NEGATION = 4; // -
+Blockly.PHP.ORDER_TYPEOF = 4;         // typeof
+Blockly.PHP.ORDER_VOID = 4;           // void
+Blockly.PHP.ORDER_DELETE = 4;         // delete
 Blockly.PHP.ORDER_MULTIPLICATION = 5; // *
 Blockly.PHP.ORDER_DIVISION = 5;       // /
 Blockly.PHP.ORDER_MODULUS = 5;        // %
@@ -76,10 +96,10 @@ Blockly.PHP.ORDER_EQUALITY = 9;       // == != === !==
 Blockly.PHP.ORDER_BITWISE_AND = 10;   // &
 Blockly.PHP.ORDER_BITWISE_XOR = 11;   // ^
 Blockly.PHP.ORDER_BITWISE_OR = 12;    // |
-Blockly.PHP.ORDER_CONDITIONAL = 13;   // ?:
-Blockly.PHP.ORDER_ASSIGNMENT = 14;    // = += -= *= /= %= <<= >>= ...
-Blockly.PHP.ORDER_LOGICAL_AND = 15;   // &&
-Blockly.PHP.ORDER_LOGICAL_OR = 16;    // ||
+Blockly.PHP.ORDER_LOGICAL_AND = 13;   // &&
+Blockly.PHP.ORDER_LOGICAL_OR = 14;    // ||
+Blockly.PHP.ORDER_CONDITIONAL = 15;   // ?:
+Blockly.PHP.ORDER_ASSIGNMENT = 16;    // = += -= *= /= %= <<= >>= ...
 Blockly.PHP.ORDER_COMMA = 17;         // ,
 Blockly.PHP.ORDER_NONE = 99;          // (...)
 
@@ -96,36 +116,18 @@ Blockly.PHP.init = function(workspace) {
 
   if (!Blockly.PHP.variableDB_) {
     Blockly.PHP.variableDB_ =
-        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_);
+        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, true);
   } else {
     Blockly.PHP.variableDB_.reset();
   }
-};
 
-Blockly.PHP.getDistinctName = function(name, type) {
-  var safeName = this.variableDB_.safeName_(name);
-  var i = '';
-  while ((type == Blockly.Procedures.NAME_TYPE && (safeName + i) in this.variableDB_.reservedDict_)
-  || this.variableDB_.dbReverse_[safeName + i]) {
-    // Collision with existing name.  Create a unique name.
-    i = i ? i + 1 : 2;
+  var defvars = [];
+  var variables = Blockly.Variables.allVariables(workspace);
+  for (var x = 0; x < variables.length; x++) {
+    defvars[x] = Blockly.PHP.variableDB_.getName(variables[x],
+        Blockly.Variables.NAME_TYPE) + ';';
   }
-  safeName += i;
-  this.variableDB_.dbReverse_[safeName] = true;
-  if (type == Blockly.Variables.NAME_TYPE) {
-    safeName = '$' + safeName;
-  }
-  return safeName;
-};
-
-Blockly.PHP.getName = function(name, type) {
-  var normalized = name.toLowerCase() + '_' + type;
-  if (normalized in this.variableDB_.db_) {
-    return this.variableDB_.db_[normalized];
-  }
-  var safeName = this.getDistinctName(name, type);
-  this.variableDB_[normalized] = safeName;
-  return safeName;
+  Blockly.PHP.definitions_['variables'] = defvars.join('\n');
 };
 
 /**

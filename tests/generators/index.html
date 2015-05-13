@@ -24,6 +24,18 @@
 <script src="../../generators/python/colour.js"></script>
 <script src="../../generators/python/variables.js"></script>
 <script src="../../generators/python/procedures.js"></script>
+
+  <script src="../../generators/php.js"></script>
+  <script src="unittest_php.js"></script>
+  <script src="../../generators/php/logic.js"></script>
+  <script src="../../generators/php/loops.js"></script>
+  <script src="../../generators/php/math.js"></script>
+  <script src="../../generators/php/text.js"></script>
+  <script src="../../generators/php/lists.js"></script>
+  <script src="../../generators/php/colour.js"></script>
+  <script src="../../generators/php/variables.js"></script>
+  <script src="../../generators/php/procedures.js"></script>
+
 <script src="../../generators/dart.js"></script>
 <script src="unittest_dart.js"></script>
 <script src="../../generators/dart/logic.js"></script>
@@ -123,6 +135,11 @@ function toJavaScript() {
 
 function toPython() {
   var code = Blockly.Python.workspaceToCode(workspace);
+  setOutput(code);
+}
+
+function toPhp() {
+  var code = Blockly.PHP.workspaceToCode(workspace);
   setOutput(code);
 }
 
@@ -406,6 +423,7 @@ h1 {
       <input type="button" value="XML" onclick="toXml()">
       <input type="button" value="JavaScript" onclick="toJavaScript()">
       <input type="button" value="Python" onclick="toPython()">
+      <input type="button" value="PHP" onclick="toPhp()">
       <input type="button" value="Dart" onclick="toDart()">
     </p>
   </td></tr><tr><td height="99%">

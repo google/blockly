@@ -29,6 +29,7 @@ goog.provide('Blockly.Bubble');
 goog.require('Blockly.Workspace');
 goog.require('goog.dom');
 goog.require('goog.math');
+goog.require('goog.userAgent');
 
 
 /**
@@ -209,8 +210,16 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   </g>
   */
   this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
+  var filter = {'filter': 'url(#blocklyEmboss)'};
+  if (goog.userAgent.getUserAgentString().indexOf('JavaFX') != -1) {
+    // Multiple reports that JavaFX can't handle filters.  UserAgent:
+    // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
+    //     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
+    // https://github.com/google/blockly/issues/99
+    filter = {};
+  }
   var bubbleEmboss = Blockly.createSvgElement('g',
-      {'filter': 'url(#blocklyEmboss)'}, this.bubbleGroup_);
+      filter, this.bubbleGroup_);
   this.bubbleArrow_ = Blockly.createSvgElement('path', {}, bubbleEmboss);
   this.bubbleBack_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyDraggable', 'x': 0, 'y': 0,

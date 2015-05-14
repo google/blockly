@@ -29,13 +29,12 @@ var BlocklyStorage = {};
 
 /**
  * Backup code blocks to localStorage.
- * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.backupBlocks_ = function(opt_workspace) {
+BlocklyStorage.backupBlocks_ = function(workspace) {
   if ('localStorage' in window) {
-    var workspace = opt_workspace || Blockly.getMainWorkspace();
-    var xml = Blockly.Xml.workspaceToDom(Blockly.workspace);
+    var xml = Blockly.Xml.workspaceToDom(workspace);
     // Gets the current URL, not including the hash.
     var url = window.location.href.split('#')[0];
     window.localStorage.setItem(url, Blockly.Xml.domToText(xml));
@@ -44,9 +43,12 @@ BlocklyStorage.backupBlocks_ = function(opt_workspace) {
 
 /**
  * Bind the localStorage backup function to the unload event.
+ * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
  */
-BlocklyStorage.backupOnUnload = function() {
-  window.addEventListener('unload', BlocklyStorage.backupBlocks_, false);
+BlocklyStorage.backupOnUnload = function(opt_workspace) {
+  var workspace = opt_workspace || Blockly.getMainWorkspace();
+  window.addEventListener('unload',
+      function() {BlocklyStorage.backupBlocks_(workspace);}, false);
 };
 
 /**
@@ -70,7 +72,7 @@ BlocklyStorage.link = function(opt_workspace) {
   var workspace = opt_workspace || Blockly.getMainWorkspace();
   var xml = Blockly.Xml.workspaceToDom(workspace);
   var data = Blockly.Xml.domToText(xml);
-  BlocklyStorage.makeRequest_('/storage', 'xml', data);
+  BlocklyStorage.makeRequest_('/storage', 'xml', data, workspace);
 };
 
 /**

@@ -335,18 +335,6 @@ Code.renderContent = function() {
 Code.init = function() {
   Code.initLanguage();
 
-  // Disable the link button if page isn't backed by App Engine storage.
-  var linkButton = document.getElementById('linkButton');
-  if ('BlocklyStorage' in window) {
-    BlocklyStorage['HTTPREQUEST_ERROR'] = MSG['httpRequestError'];
-    BlocklyStorage['LINK_ALERT'] = MSG['linkAlert'];
-    BlocklyStorage['HASH_ERROR'] = MSG['hashError'];
-    BlocklyStorage['XML_ERROR'] = MSG['xmlError'];
-    Code.bindClick(linkButton, BlocklyStorage.link);
-  } else if (linkButton) {
-    linkButton.className = 'disabled';
-  }
-
   var rtl = Code.isRtl();
   var container = document.getElementById('content_area');
   var onresize = function(e) {
@@ -390,7 +378,7 @@ Code.init = function() {
 
   if ('BlocklyStorage' in window) {
     // Hook a save function onto unload.
-    BlocklyStorage.backupOnUnload();
+    BlocklyStorage.backupOnUnload(Code.workspace);
   }
 
   Code.tabClick(Code.selected);
@@ -399,6 +387,18 @@ Code.init = function() {
   Code.bindClick('trashButton',
       function() {Code.discard(); Code.renderContent();});
   Code.bindClick('runButton', Code.runJS);
+  // Disable the link button if page isn't backed by App Engine storage.
+  var linkButton = document.getElementById('linkButton');
+  if ('BlocklyStorage' in window) {
+    BlocklyStorage['HTTPREQUEST_ERROR'] = MSG['httpRequestError'];
+    BlocklyStorage['LINK_ALERT'] = MSG['linkAlert'];
+    BlocklyStorage['HASH_ERROR'] = MSG['hashError'];
+    BlocklyStorage['XML_ERROR'] = MSG['xmlError'];
+    Code.bindClick(linkButton,
+        function() {BlocklyStorage.link(Code.workspace);});
+  } else if (linkButton) {
+    linkButton.className = 'disabled';
+  }
 
   for (var i = 0; i < Code.TABS_.length; i++) {
     var name = Code.TABS_[i];

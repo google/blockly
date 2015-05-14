@@ -30,6 +30,7 @@ blockly/
      |- blocks_compressed.js
      |- dart_compressed.js
      |- javascript_compressed.js
+     |- php_compressed.js
      `- python_compressed.js
 
 Instructions for fetching the optional Closure library may be found here:

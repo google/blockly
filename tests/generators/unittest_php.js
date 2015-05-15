@@ -20,7 +20,7 @@
 
 /**
  * @fileoverview Generating PHP for unit test blocks.
- * @author daarond@gmail.com (Neil Fraser)
+ * @author daarond@gmail.com (Daaron Dwyer)
  */
 'use strict';
 

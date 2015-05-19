@@ -96,7 +96,7 @@ Blockly.PHP.init = function(workspace) {
 
   if (!Blockly.PHP.variableDB_) {
     Blockly.PHP.variableDB_ =
-        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_);
+        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, true);
   } else {
     Blockly.PHP.variableDB_.reset();
   }

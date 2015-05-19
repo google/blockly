@@ -270,7 +270,8 @@ Graph.resize = function() {
  */
 Graph.init = function() {
   Graph.workspace = Blockly.inject('blocklyDiv',
-      {toolbox: document.getElementById('toolbox')});
+      {media: '../../media/',
+       toolbox: document.getElementById('toolbox')});
   Blockly.Xml.domToWorkspace(Graph.workspace,
       document.getElementById('startBlocks'));
 

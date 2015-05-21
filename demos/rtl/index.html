@@ -24,7 +24,9 @@
   <script>
     function init() {
       var workspace = Blockly.inject('blocklyDiv',
-          {rtl: true, toolbox: document.getElementById('toolbox')});
+          {media: '../../media/',
+           rtl: true,
+           toolbox: document.getElementById('toolbox')});
       Blockly.Xml.domToWorkspace(workspace,
           document.getElementById('startBlocks'));
       //window.onbeforeunload = function() {

@@ -178,14 +178,19 @@ Blockly.PHP['lists_getIndex'] = function(block) {
     }
   } else if (where == 'RANDOM') {
     if (mode == 'GET'){
-      code = list + '[rand(0,count(' + list + ')-1)]';
+      var functionName = Blockly.PHP.provideFunction_(
+          'lists_get_random_item',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '($list) {',
+              '  return $list[rand(0,count($list)-1)];',
+              '}']);
+      code = functionName + '(' + list + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'GET_REMOVE'){
       var functionName = Blockly.PHP.provideFunction_(
           'lists_get_remove_random_item',
           [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-          '() {',
-            '  global ' + list + ';',
+          '(&$list) {',
             '  $x = rand(0,count($list)-1);',
             '  unset($list[$x]);',
             '  return array_values($list);',
@@ -193,8 +198,13 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       code = functionName + '(' + list + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'REMOVE') {
-      code = 'unset(' + list + '[rand(0,count(' + list + ')-1)])';
-      return code + ';\n';
+      var functionName = Blockly.PHP.provideFunction_(
+          'lists_remove_random_item',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '(&$list) {',
+              '  unset($list[rand(0,count($list)-1)]);',
+              '}']);
+      return functionName + '(' + list + ');\n';
     }
   }
   throw 'Unhandled combination (lists_getIndex).';
@@ -231,9 +241,13 @@ Blockly.PHP['lists_setIndex'] = function(block) {
     }
   } else if (where == 'LAST') {
     if (mode == 'SET') {
-      var code = cacheList();
-      code += list + '[count(' + list + ') - 1] = ' + value + ';\n';
-      return code;
+      var functionName = Blockly.PHP.provideFunction_(
+          'lists_set_last_item',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '(&$list, $value) {',
+              '  $list[count($list) - 1] = $value;',
+              '}']);
+      return functionName + '(' + list + ', ' + value + ');\n';
     } else if (mode == 'INSERT') {
       return 'array_push(' + list + ', ' + value + ');\n';
     }
@@ -252,13 +266,22 @@ Blockly.PHP['lists_setIndex'] = function(block) {
       return 'array_splice(' + list + ', ' + at + ', 0, ' + value + ');\n';
     }
   } else if (where == 'FROM_END') {
-    var code = cacheList();
     if (mode == 'SET') {
-      code += list + '[count(' + list + ') - ' + at + '] = ' + value + ';\n';
-      return code;
+      var functionName = Blockly.PHP.provideFunction_(
+          'lists_set_from_end',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '(&$list, $at, $value) {',
+              '  $list[count($list) - $at] = $value;',
+              '}']);
+      return functionName + '(' + list + ', ' + at + ', ' + value + ');\n';
     } else if (mode == 'INSERT') {
-      code += 'array_splice(' + list + ', count(' + list + ') - ' + at + ', 0, ' + value + ');\n';
-      return code;
+      var functionName = Blockly.PHP.provideFunction_(
+          'lists_insert_from_end',
+          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          '(&$list, $at, $value) {',
+              '  return array_splice($list, count($list) - $at, 0, $value);',
+              '}']);
+      return functionName + '(' + list + ', ' + at + ', ' + value + ');\n';
     }
   } else if (where == 'RANDOM') {
     var code = cacheList();

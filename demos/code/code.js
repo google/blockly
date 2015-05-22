@@ -416,8 +416,6 @@ Code.init = function() {
  */
 Code.initLanguage = function() {
   // Set the HTML's language and direction.
-  // document.dir fails in Mozilla, use document.body.parentNode.dir instead.
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=151407
   var rtl = Code.isRtl();
   document.head.parentElement.setAttribute('dir', rtl ? 'rtl' : 'ltr');
   document.head.parentElement.setAttribute('lang', Code.LANG);

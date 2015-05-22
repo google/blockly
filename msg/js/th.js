@@ -9,7 +9,7 @@ goog.require('Blockly.Msg');
 Blockly.Msg.ADD_COMMENT = "ใส่คำอธิบาย";
 Blockly.Msg.AUTH = "กรุณาอนุญาตแอปนี้เพื่อเปิดใช้งาน การบันทึกงานของคุณ และยินยอมให้คุณแบ่งปันงานของคุณได้";
 Blockly.Msg.CHANGE_VALUE_TITLE = "เปลี่ยนค่า:";
-Blockly.Msg.CHAT = "คุยกับ	ผู้ร่วมงานของคุณโดยพิมพ์ลงในกล่องนี้!";
+Blockly.Msg.CHAT = "คุยกับ ผู้ร่วมงานของคุณโดยพิมพ์ลงในกล่องนี้!";
 Blockly.Msg.COLLAPSE_ALL = "ย่อบล็อก";
 Blockly.Msg.COLLAPSE_BLOCK = "ย่อบล็อก";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "สีที่ 1";

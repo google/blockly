@@ -569,12 +569,10 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
   }
   var metrics = this.getMetrics();
   if (goog.isNumber(xyRatio.x)) {
-    this.scrollX = -metrics.contentWidth * xyRatio.x -
-        metrics.contentLeft;
+    this.scrollX = -metrics.contentWidth * xyRatio.x - metrics.contentLeft;
   }
   if (goog.isNumber(xyRatio.y)) {
-    this.scrollY = -metrics.contentHeight * xyRatio.y -
-        metrics.contentTop;
+    this.scrollY = -metrics.contentHeight * xyRatio.y - metrics.contentTop;
   }
   var x = this.scrollX + metrics.absoluteLeft;
   var y = this.scrollY + metrics.absoluteTop;

@@ -184,6 +184,9 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
       if (name == 'CATEGORY') {
         var childOut = rootOut.createNode(childIn.getAttribute('name'));
         childOut.blocks = [];
+        if (childIn.getAttribute('expanded') == 'true') {
+          childOut.setExpanded(true);
+        }
         treeOut.add(childOut);
         var custom = childIn.getAttribute('custom');
         if (custom) {

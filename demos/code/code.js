@@ -273,6 +273,9 @@ Code.tabClick = function(clickedName) {
     }
   }
 
+  if (document.getElementById('tab_blocks').className == 'tabon') {
+    Code.workspace.setVisible(false);
+  }
   // Deselect all tabs and hide all panes.
   for (var i = 0; i < Code.TABS_.length; i++) {
     var name = Code.TABS_[i];
@@ -287,6 +290,9 @@ Code.tabClick = function(clickedName) {
   document.getElementById('content_' + clickedName).style.visibility =
       'visible';
   Code.renderContent();
+  if (clickedName == 'blocks') {
+    Code.workspace.setVisible(true);
+  }
   Blockly.fireUiEvent(window, 'resize');
 };
 
@@ -417,7 +423,7 @@ Code.init = function() {
 Code.initLanguage = function() {
   // Set the HTML's language and direction.
   var rtl = Code.isRtl();
-  document.head.parentElement.setAttribute('dir', rtl ? 'rtl' : 'ltr');
+  document.dir = rtl ? 'rtl' : 'ltr';
   document.head.parentElement.setAttribute('lang', Code.LANG);
 
   // Sort languages alphabetically.

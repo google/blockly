@@ -214,3 +214,6 @@ Blockly.Workspace.prototype.updateToolbox = function(tree) {
     this.flyout_.show(tree.childNodes);
   }
 };
+
+// Export symbols that would otherwise be renamed by Closure compiler.
+Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;

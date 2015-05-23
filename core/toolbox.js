@@ -180,30 +180,28 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
         // Skip over text.
         continue;
       }
-      var name = childIn.tagName.toUpperCase();
-      if (name == 'CATEGORY') {
-        var childOut = rootOut.createNode(childIn.getAttribute('name'));
-        childOut.blocks = [];
-        if (childIn.getAttribute('expanded') == 'true') {
-          childOut.setExpanded(true);
-        }
-        treeOut.add(childOut);
-        var custom = childIn.getAttribute('custom');
-        if (custom) {
-          // Variables and procedures have special categories that are dynamic.
-          childOut.blocks = custom;
-        } else {
-          syncTrees(childIn, childOut);
-        }
-      } else if (name == 'HR') {
-        // <hr> tag is deprecated, use <sep></sep> instead.
-        // https://github.com/google/blockly/issues/50
-        console.warn('The <hr> separator tag in the toolbox XML needs to be ' +
-                     'changed to <sep></sep> (due to a bug in IE).');
-      } else if (name == 'SEP') {
-        treeOut.add(new Blockly.Toolbox.TreeSeparator());
-      } else if (name == 'BLOCK') {
-        treeOut.blocks.push(childIn);
+      switch (childIn.tagName.toUpperCase()) {
+        case 'CATEGORY':
+          var childOut = rootOut.createNode(childIn.getAttribute('name'));
+          childOut.blocks = [];
+          if (childIn.getAttribute('expanded') == 'true') {
+            childOut.setExpanded(true);
+          }
+          treeOut.add(childOut);
+          var custom = childIn.getAttribute('custom');
+          if (custom) {
+            // Variables and procedures are special dynamic categories.
+            childOut.blocks = custom;
+          } else {
+            syncTrees(childIn, childOut);
+          }
+          break;
+        case 'SEP':
+          treeOut.add(new Blockly.Toolbox.TreeSeparator());
+          break;
+        case 'BLOCK':
+          treeOut.blocks.push(childIn);
+          break;
       }
     }
   }

@@ -279,6 +279,27 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
 };
 
 /**
+ * Toggles the visibility of the workspace.
+ * Currently only intended for main workspace.
+ * @param {boolean} isVisible True if workspace should be visible.
+ */
+Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
+  this.options.svg.style.display = isVisible ? 'block' : 'none';
+  if (this.toolbox_) {
+    // Currently does not support toolboxes in mutators.
+    this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+  }
+  if (isVisible) {
+    this.render();
+    if (this.toolbox_) {
+      this.toolbox_.position();
+    }
+  } else {
+    Blockly.hideChaff(true);
+  }
+};
+
+/**
  * Render all blocks in workspace.
  */
 Blockly.WorkspaceSvg.prototype.render = function() {
@@ -657,7 +678,8 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-Blockly.WorkspaceSvg.prototype['clear'] = Blockly.WorkspaceSvg.prototype.clear;
+Blockly.WorkspaceSvg.prototype['setVisible'] =
+    Blockly.WorkspaceSvg.prototype.setVisible;
 Blockly.WorkspaceSvg.prototype['addChangeListener'] =
     Blockly.WorkspaceSvg.prototype.addChangeListener;
 Blockly.WorkspaceSvg.prototype['removeChangeListener'] =

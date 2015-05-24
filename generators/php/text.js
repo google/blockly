@@ -226,7 +226,7 @@ Blockly.PHP['text_trim'] = function(block) {
 Blockly.PHP['text_print'] = function(block) {
   // Print statement.
   var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
+      Blockly.PHP.ORDER_NONE) || '\'\'';
   return 'print(' + argument0 + ');\n';
 };
 

@@ -104,7 +104,7 @@
 	"LOGIC_TERNARY_IF_TRUE": "如果为真",
 	"LOGIC_TERNARY_IF_FALSE": "如果为假",
 	"LOGIC_TERNARY_TOOLTIP": "检查“test”中的条件。如果条件为真，则返回“if true”的值，否则，则返回“if false”的值。",
-	"MATH_NUMBER_HELPURL": "https://zh.wikipedia.org/wiki/数字",
+	"MATH_NUMBER_HELPURL": "https://zh.wikipedia.org/wiki/数",
 	"MATH_NUMBER_TOOLTIP": "一个数字。",
 	"MATH_ARITHMETIC_HELPURL": "https://zh.wikipedia.org/wiki/算术",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "返回两个数字的和。",

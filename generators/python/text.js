@@ -270,3 +270,13 @@ Blockly.Python['text_prompt_ext'] = function(block) {
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
+
+
+Blockly.Python['text_comment'] = function(block) {
+ // Display comment
+  
+  var comment = block.getFieldValue('COMMENT') || '';
+  var code = '/*\n' + comment + '\n*/\n';
+  
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+};

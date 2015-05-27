@@ -639,3 +639,25 @@ Blockly.Blocks['text_prompt_ext'] = {
     });
   }
 };
+
+
+Blockly.Blocks['text_comment'] = {
+   /**
+   * Block for adding in comments.
+   * @this Blockly.Block
+   */
+  init: function() {
+  
+    this.setColour(160);
+    //this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
+    this.appendDummyInput()
+		.appendField('Comment:');
+    this.appendDummyInput()    
+        .appendField(new Blockly.FieldTextArea(''), 'COMMENT')
+        ;
+	this.setPreviousStatement(true);
+    this.setNextStatement(true);
+   // this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
+  }
+};
+

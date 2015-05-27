@@ -1446,7 +1446,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderWidth = Math.max(input.renderWidth, bBox.width);
     }
 
-    if (i == inputList.length - 1) {
+    if (!isInline && i == inputList.length - 1) {
       // Last element should overhang slightly due to shadow.
       input.renderHeight--;
     }

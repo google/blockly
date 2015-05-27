@@ -1445,11 +1445,16 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderHeight = Math.max(input.renderHeight, bBox.height);
       input.renderWidth = Math.max(input.renderWidth, bBox.width);
     }
-
+    // Blocks have a one pixel shadow that should sometimes overhang.
     if (!isInline && i == inputList.length - 1) {
-      // Last element should overhang slightly due to shadow.
+      // Last value input should overhang.
+      input.renderHeight--;
+    } else if (!isInline && input.type == Blockly.INPUT_VALUE &&
+        inputList[i + 1] && inputList[i + 1].type == Blockly.NEXT_STATEMENT) {
+      // Value input above statment input should overhang.
       input.renderHeight--;
     }
+
     row.height = Math.max(row.height, input.renderHeight);
     input.fieldWidth = 0;
     if (inputRows.length == 1) {
@@ -1864,7 +1869,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         highlightSteps.push('H', inputRows.rightEdge);
       }
       // Create statement connection.
-      connectionX = connectionsXY.x + (this.RTL ? -cursorX : cursorX);
+      connectionX = connectionsXY.x + (this.RTL ? -cursorX : cursorX + 1);
       connectionY = connectionsXY.y + cursorY + 1;
       input.connection.moveTo(connectionX, connectionY);
       if (input.connection.targetConnection) {

@@ -271,9 +271,9 @@ Blockly.getRelativeXY_ = function(element) {
   var r = transform &&
           transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
   if (r) {
-    xy.x += parseInt(r[1], 10);
+    xy.x += parseFloat(r[1]);
     if (r[3]) {
-      xy.y += parseInt(r[3], 10);
+      xy.y += parseFloat(r[3]);
     }
   }
   return xy;

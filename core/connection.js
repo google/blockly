@@ -659,7 +659,7 @@ Blockly.Connection.prototype.hideAll = function() {
         connections[c].setHidden(true);
       }
       // Close all bubbles of all children.
-      var icons = block.getIcons();
+      var icons = block.getIcons(true);
       for (var x = 0; x < icons.length; x++) {
         icons[x].setVisible(false);
       }

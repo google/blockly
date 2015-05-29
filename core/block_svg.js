@@ -145,9 +145,10 @@ Blockly.BlockSvg.prototype.warning = null;
 
 /**
  * Returns a list of mutator, comment, and warning icons.
+ * @param {boolean} getAll True if requesting block private icons
  * @return {!Array} List of icons.
  */
-Blockly.BlockSvg.prototype.getIcons = function() {
+Blockly.BlockSvg.prototype.getIcons = function(getAll) {
   var icons = [];
   if (this.mutator) {
     icons.push(this.mutator);
@@ -339,7 +340,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
 
   var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
   if (collapsed) {
-    var icons = this.getIcons();
+    var icons = this.getIcons(true);
     for (var x = 0; x < icons.length; x++) {
       icons[x].setVisible(false);
     }
@@ -407,7 +408,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     this.draggedBubbles_ = [];
     var descendants = this.getDescendants();
     for (var x = 0, descendant; descendant = descendants[x]; x++) {
-      var icons = descendant.getIcons();
+      var icons = descendant.getIcons(true);
       for (var y = 0; y < icons.length; y++) {
         var data = icons[y].getIconLocation();
         data.bubble = icons[y];
@@ -627,7 +628,7 @@ Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
   for (var x = 0; x < myConnections.length; x++) {
     myConnections[x].moveBy(dx, dy);
   }
-  var icons = this.getIcons();
+  var icons = this.getIcons(true);
   for (var x = 0; x < icons.length; x++) {
     icons[x].computeIconLocation();
   }
@@ -1000,7 +1001,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   // Stop rerendering.
   this.rendered = false;
 
-  var icons = this.getIcons();
+  var icons = this.getIcons(false);
   for (var x = 0; x < icons.length; x++) {
     icons[x].dispose();
   }
@@ -1122,7 +1123,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   this.svgPathDark_.setAttribute('fill', goog.color.rgbArrayToHex(rgbDark));
   this.svgPath_.setAttribute('fill', hexColour);
 
-  var icons = this.getIcons();
+  var icons = this.getIcons(true);
   for (var x = 0; x < icons.length; x++) {
     icons[x].updateColour();
   }
@@ -1322,7 +1323,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     cursorX = -cursorX;
   }
   // Move the icons into position.
-  var icons = this.getIcons();
+  var icons = this.getIcons(false);
   for (var x = 0; x < icons.length; x++) {
     cursorX = icons[x].renderIcon(cursorX);
   }
@@ -1445,16 +1446,11 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderHeight = Math.max(input.renderHeight, bBox.height);
       input.renderWidth = Math.max(input.renderWidth, bBox.width);
     }
-    // Blocks have a one pixel shadow that should sometimes overhang.
-    if (!isInline && i == inputList.length - 1) {
-      // Last value input should overhang.
-      input.renderHeight--;
-    } else if (!isInline && input.type == Blockly.INPUT_VALUE &&
-        inputList[i + 1] && inputList[i + 1].type == Blockly.NEXT_STATEMENT) {
-      // Value input above statment input should overhang.
+
+    if (i == inputList.length - 1) {
+      // Last element should overhang slightly due to shadow.
       input.renderHeight--;
     }
-
     row.height = Math.max(row.height, input.renderHeight);
     input.fieldWidth = 0;
     if (inputRows.length == 1) {
@@ -1869,7 +1865,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         highlightSteps.push('H', inputRows.rightEdge);
       }
       // Create statement connection.
-      connectionX = connectionsXY.x + (this.RTL ? -cursorX : cursorX + 1);
+      connectionX = connectionsXY.x + (this.RTL ? -cursorX : cursorX);
       connectionY = connectionsXY.y + cursorY + 1;
       input.connection.moveTo(connectionX, connectionY);
       if (input.connection.targetConnection) {

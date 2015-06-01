@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+ <!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <!--
+
+  @author nicksantos@google.com (Nick Santos)
+-->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.ui.Menu
+  </title>
+  <style type="text/css">
+   .goog-menu {
+  position: absolute;
+  color: #aaa;
+}
+
+.goog-scrollable-menu {
+  max-height:30px;
+  overflow-y:auto;
+}
+  </style>
+  <script src="../base.js">
+  </script>
+  <script>
+   goog.require('goog.ui.MenuTest');
+  </script>
+ </head>
+ <body>
+  <p>
+   Here's a menu defined in markup:
+  </p>
+  <div id="demoMenu" class="goog-menu">
+   <div id="menuItem1" class="goog-menuitem">
+    Annual Report.pdf
+   </div>
+   <div id="menuItem2" class="goog-menuitem">
+    Quarterly Update.pdf
+   </div>
+   <div id="menuItem3" class="goog-menuitem">
+    Enemies List.txt
+   </div>
+  </div>
+  <p>
+   Here's a menu which has been rendered with an explicit content node:
+  </p>
+  <div id="complexMenu" class="goog-menu">
+   <div style="border:1px solid black;">
+    <div class="goog-menu-content">
+     <div id="complexItem1" class="goog-menuitem">
+      Drizzle
+     </div>
+     <div id="complexItem2" class="goog-menuitem">
+      Rain
+     </div>
+     <div id="complexItem3" class="goog-menuitem">
+      Deluge
+     </div>
+    </div>
+   </div>
+  </div>
+  <p>
+   Here's a scrollable menu:
+  </p>
+  <div id="scrollableMenu" class="goog-menu goog-scrollable-menu">
+   <div id="scrollableMenuItem1" class="goog-menuitem">
+    Auk
+   </div>
+   <div id="scrollableMenuItem2" class="goog-menuitem">
+    Bird
+   </div>
+   <div id="scrollableMenuItem3" class="goog-menuitem">
+    Crow
+   </div>
+   <div id="scrollableMenuItem4" class="goog-menuitem">
+    Duck
+   </div>
+   <div id="scrollableMenuItem5" class="goog-menuitem">
+    Emu
+   </div>
+  </div>
+ </body>
+</html>

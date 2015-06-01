@@ -1,0 +1,21 @@
+{
+  "name": "google-closure-library",
+  "description": "Google's common JavaScript library",
+  "version": "20150315.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/google/closure-library.git"
+  },
+  "keywords": [
+    "javascript",
+    "library",
+    "goog",
+    "closure"
+  ],
+  "author": "The Closure Library Authors",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/google/closure-library/issues"
+  },
+  "homepage": "https://developers.google.com/closure/library/"
+}

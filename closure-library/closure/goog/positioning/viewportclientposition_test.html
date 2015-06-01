@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<!--
+
+  Author: eae@google.com (Emil A Eklund)
+-->
+<html>
+<!--
+Copyright 2009 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.positioning.ViewportClientPosition
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+    goog.require('goog.positioning.ViewportClientPositionTest');
+  </script>
+ </head>
+ <body>
+  <!--
+    Uses an iframe to avoid window size problems when running under Selenium.
+  -->
+  <iframe id="frame1" style="width: 200px; height: 200px;" src="anchoredviewportposition_test_iframe.html">
+  </iframe>
+ </body>
+</html>

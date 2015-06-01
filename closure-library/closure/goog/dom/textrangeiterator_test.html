@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>goog.dom.TextRangeIterator Tests</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.dom.TextRangeIteratorTest');
+</script>
+</head>
+<body>
+
+<!--
+  The next line goes past 80 characters to avoid ambiguity with
+  newlines as text nodes
+-->
+<div id="test"><a href="#" id="a1">T<b id="b1">e</b>xt</a><span id="span1"></span><p id="p1">Text</p></div>
+<ul id="test2">foo<br>bar</ul>
+
+</body>
+</html>

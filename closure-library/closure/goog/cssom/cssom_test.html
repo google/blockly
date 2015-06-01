@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+ <!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <!--
+  -->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>
+   Closure Unit Tests - CSS Object Model helper
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+    goog.require('goog.cssomTest');
+  </script>
+ </head>
+ <link rel="stylesheet" type="text/css" href="cssom_test_link_1.css">
+ <style>
+  /* This will import css_test_import_1 and css_test_import_2 */
+    @import "cssom_test_import_1.css?cachebust=1";
+
+    .css-style-1 {
+      display: block;
+    }
+    .css-style-2 {
+      display: block;
+    }
+    .css-style-3 {
+      display: block;
+    }
+ </style>
+ <body>
+ </body>
+</html>

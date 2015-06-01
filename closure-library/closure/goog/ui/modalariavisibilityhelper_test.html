@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+ <!--
+Copyright 2015 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+   Closure Unit Tests - goog.ui.ModalAriaVisibilityHelper
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+   goog.require('goog.ui.ModalAriaVisibilityHelperTest');
+  </script>
+ </head>
+ <body>
+  <div id="div-1">
+    Red
+  </div>
+  <div id="div-2">
+    <div id="div-2-1">
+      Blue
+    </div>
+  </div>
+  <div id="div-3" aria-hidden="false">
+   Indigo
+  </div>
+  <div id="div-4">
+   Yellow
+  </div>
+  <div id="div-5" aria-hidden="true">
+   Orange
+  </div>
+ </body>
+</html>

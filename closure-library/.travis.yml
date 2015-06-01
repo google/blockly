@@ -1,0 +1,14 @@
+# Copyright 2014 The Closure Library Authors. All Rights Reserved.
+#
+# Use of this source code is governed by the Apache License, Version 2.0.
+# See the LICENSE file for details.
+
+install:
+  - cd ..
+  - git clone https://github.com/google/closure-compiler.git
+  - cd closure-compiler
+  - ant jar
+  - cd ../closure-library
+
+script:
+  - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js_output_file=$(mktemp)

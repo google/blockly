@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2006 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Closure Unit Tests - goog.*</title>
+<script>
+  var CLOSURE_DEFINES = {
+    'SOME_DEFINE': 456,
+    'ns.SOME_DEFINE': 456
+  };
+</script>
+<script src="base.js"></script>
+</head>
+<body>
+<div id="elem">
+  <span>One</span>
+  <span id="text">Two</span>
+  <span>Three</span>
+</div>
+
+<iframe name="f1" id="f1" src=""></iframe>
+<iframe name="f2" id="f2" src=""></iframe>
+<script>
+goog.require('goog.baseTest');
+</script>
+</body>
+</html>

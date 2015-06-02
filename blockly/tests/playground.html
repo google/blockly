@@ -53,6 +53,9 @@
 var rtl = (document.location.search == '?rtl');
 var block = null;
 
+//Contains the code after exporting to javascript
+var code;
+
 function enableRealtimeSpecificUi() {
   var realtimeDiv = document.getElementById('realtime');
   realtimeDiv.display = 'block';
@@ -99,6 +102,7 @@ function fromXml() {
 function toCode(lang) {
   var output = document.getElementById('importExport');
   output.value = Blockly[lang].workspaceToCode();
+  
 }
 
 function airstrike(n) {
@@ -131,6 +135,12 @@ function spaghetti(n) {
   Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
   console.timeEnd('Spaghetti domToWorkspace');
 }
+
+function runCode(){
+	code = Blockly['JavaScript'].workspaceToCode();
+	eval(code);
+}
+
 var spaghettiXml = [
   '  <block type="controls_if" inline="false" x="30" y="30">' +
   '    <value name="IF0">' +
@@ -444,6 +454,8 @@ h1 {
     <input type="button" value="To Python" onclick="toCode('Python')">
     &nbsp;
     <input type="button" value="To Dart" onclick="toCode('Dart')">
+	&nbsp;
+    <input type="button" value="Run in Javascript" onclick="runCode()">
     <br>
     <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
   </p>
@@ -466,6 +478,7 @@ h1 {
 
     <br>
     <br>
+	
 
     <!-- Undo and redo buttons. -->
     <!-- TODO: Uncomment this when undo/redo are fixed. -->

@@ -38,7 +38,7 @@ Blockly.JavaScript['beep'] = function(block) {
       'beepIt',
       [ '//if you have another AudioContext class use that one, as some browsers have a limit',
 		'var audioCtx = new (window.AudioContext || window.webkitAudioContext || window.audioContext);',
-		'var frequency = 440;',
+		'var frequency;',
 		'',
 		'//All arguments are optional:',
 		'',
@@ -64,10 +64,8 @@ Blockly.JavaScript['beep'] = function(block) {
 		'	setTimeout(function(){oscillator.stop()}, (duration ? duration : 500));',
         '}']);
 		
-	console.log('catch');
 	// TODO: Assemble JavaScript into code variable.
-	var code = '(function(freq){setTimeout(function(){ beepIt(' + value_duration + ', 0.05, \'sine\'); frequency = freq;}, ' + value_timeout + ');})(' + value_frequency + ');';
+	var code = '(function(freq){setTimeout(function(){ frequency = freq; beepIt(' + value_duration + ', 0.1, \'sine\');}, ' + value_timeout + ');})(' + value_frequency + ');';
 			 
-	console.log(code);
 	return code;
 };

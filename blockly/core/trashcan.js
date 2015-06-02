@@ -198,13 +198,13 @@ Blockly.Trashcan.prototype.createDom = function() {
 
 /**
  * Initialize the trash can.
- */
+ *
 Blockly.Trashcan.prototype.init = function() {
   this.setOpen_(false);
   this.position_();
   // If the document resizes, reposition the trash can.
   Blockly.bindEvent_(window, 'resize', this, this.position_);
-};
+};*/
 
 /**
  * Dispose of this trash can.

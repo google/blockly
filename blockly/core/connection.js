@@ -305,7 +305,7 @@ Blockly.Connection.prototype.bumpAwayFrom_ = function(staticConnection) {
     // When reversing a bump due to an uneditable block, bump up.
     dy = -dy;
   }
-  if (Blockly.RTL) {
+  if (rootBlock.RTL) {
     dx = -dx;
   }
   rootBlock.moveBy(dx, dy);
@@ -344,12 +344,12 @@ Blockly.Connection.prototype.moveBy = function(dx, dy) {
 Blockly.Connection.prototype.highlight = function() {
   var steps;
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    var tabWidth = Blockly.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
-                                 Blockly.BlockSvg.TAB_WIDTH;
+    var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
+        Blockly.BlockSvg.TAB_WIDTH;
     steps = 'm 0,0 v 5 c 0,10 ' + -tabWidth + ',-8 ' + -tabWidth + ',7.5 s ' +
             tabWidth + ',-2.5 ' + tabWidth + ',7.5 v 5';
   } else {
-    if (Blockly.RTL) {
+    if (this.sourceBlock_.RTL) {
       steps = 'm 20,0 h -5 ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -5';
     } else {
       steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
@@ -378,8 +378,8 @@ Blockly.Connection.prototype.unhighlight = function() {
  * @private
  */
 Blockly.Connection.prototype.tighten_ = function() {
-  var dx = Math.round(this.targetConnection.x_ - this.x_);
-  var dy = Math.round(this.targetConnection.y_ - this.y_);
+  var dx = this.targetConnection.x_ - this.x_;
+  var dy = this.targetConnection.y_ - this.y_;
   if (dx != 0 || dy != 0) {
     var block = this.targetBlock();
     var svgRoot = block.getSvgRoot();
@@ -503,77 +503,6 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
   }
   return {connection: closestConnection, radius: maxLimit};
 };
-
-
-/**
- * Find the all compatible connections to this connection.
- * @return {Array<!Object>} Contains two properties: 'connection' which is either
- *     another connection or null, and 'radius' which is the distance.
- */
-Blockly.Connection.prototype.allValid = function() {
-  if (this.targetConnection) {
-    // Don't offer to connect to a connection that's already connected.
-    return [];
-  }
-  // Determine the opposite type of connection.
-  var oppositeType = Blockly.OPPOSITE_TYPE[this.type];
-  var db = this.dbList_[oppositeType];
-  
-  var validConnections = [];
-  var thisConnection = this;
-
-  /**
-   * Computes if the current connection is within the allowed radius of another
-   * connection.
-   * This function is a closure and has access to outside variables.
-   * @param {Connection} connection the connection to look at
-   * @private
-   */
-  var checkConnection_ = function(connection) {
-    if (connection.type == Blockly.OUTPUT_VALUE ||
-        connection.type == Blockly.PREVIOUS_STATEMENT) {
-      // Don't offer to connect an already connected left (male) value plug to
-      // an available right (female) value plug.  Don't offer to connect the
-      // bottom of a statement block to one that's already connected.
-      if (connection.targetConnection) {
-        return;
-      }
-    }
-    // Offering to connect the top of a statement block to an already connected
-    // connection is ok, we'll just insert it into the stack.
-
-    // Offering to connect the left (male) of a value block to an already
-    // connected value pair is ok, we'll splice it in.
-    // However, don't offer to splice into an unmovable block.
-    if (connection.type == Blockly.INPUT_VALUE &&
-        connection.targetConnection &&
-        !connection.targetBlock().isMovable()) {
-      return;
-    }
-
-    // Do type checking.
-    if (!thisConnection.checkType_(connection)) {
-      return;
-    }
-
-    // Don't let blocks try to connect to themselves or ones they nest.
-    var targetSourceBlock = connection.sourceBlock_;
-    do {
-      if (thisConnection.sourceBlock_ == targetSourceBlock) {
-        return;
-      }
-      targetSourceBlock = targetSourceBlock.getParent();
-    } while (targetSourceBlock);
-
-    validConnections.push(connection);
-  };
-  
-  for (var i=0; i<db.length; i++) {
-    checkConnection_(db[i]);
-  }
-  return validConnections;
-};
-
 
 /**
  * Is this connection compatible with another connection with respect to the

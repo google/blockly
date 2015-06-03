@@ -38,7 +38,7 @@ goog.require('goog.dom');
  */
 Blockly.Xml.workspaceToDom = function(workspace) {
   var width;  // Not used in LTR.
-  if (Blockly.RTL) {
+  if (workspace.RTL) {
     width = workspace.getWidth();
   }
   var xml = goog.dom.createDom('xml');
@@ -46,7 +46,7 @@ Blockly.Xml.workspaceToDom = function(workspace) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var element = Blockly.Xml.blockToDom_(block);
     var xy = block.getRelativeToSurfaceXY();
-    element.setAttribute('x', Blockly.RTL ? width - xy.x : xy.x);
+    element.setAttribute('x', workspace.RTL ? width - xy.x : xy.x);
     element.setAttribute('y', xy.y);
     xml.appendChild(element);
   }
@@ -223,7 +223,7 @@ Blockly.Xml.textToDom = function(text) {
  */
 Blockly.Xml.domToWorkspace = function(workspace, xml) {
   var width;  // Not used in LTR.
-  if (Blockly.RTL) {
+  if (workspace.RTL) {
     width = workspace.getWidth();
   }
   // Safari 7.1.3 is known to provide node lists with extra references to
@@ -237,7 +237,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
-        block.moveBy(Blockly.RTL ? width - blockX : blockX, blockY);
+        block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
       }
     }
   }

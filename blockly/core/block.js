@@ -113,6 +113,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
 
   this.workspace = workspace;
   this.isInFlyout = workspace.isFlyout;
+  this.RTL = workspace.RTL;
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
@@ -229,7 +230,7 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
   }
   if (bump) {
     // Bump the block sideways.
-    var dx = Blockly.SNAP_RADIUS * (Blockly.RTL ? -1 : 1);
+    var dx = Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
     var dy = Blockly.SNAP_RADIUS * 2;
     this.moveBy(dx, dy);
   }
@@ -248,7 +249,7 @@ Blockly.Block.prototype.duplicate_ = function() {
       /** @type {!Blockly.Workspace} */ (this.workspace), xmlBlock);
   // Move the duplicate next to the old block.
   var xy = this.getRelativeToSurfaceXY();
-  if (Blockly.RTL) {
+  if (this.RTL) {
     xy.x -= Blockly.SNAP_RADIUS;
   } else {
     xy.x += Blockly.SNAP_RADIUS;
@@ -459,7 +460,8 @@ Blockly.Block.prototype.getDescendants = function() {
  * @return {boolean} True if deletable.
  */
 Blockly.Block.prototype.isDeletable = function() {
-  return this.deletable_ && !Blockly.readOnly;
+  return this.deletable_ &&
+      !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -468,7 +470,6 @@ Blockly.Block.prototype.isDeletable = function() {
  */
 Blockly.Block.prototype.setDeletable = function(deletable) {
   this.deletable_ = deletable;
-  this.svg_ && this.svg_.updateMovable();
 };
 
 /**
@@ -476,7 +477,7 @@ Blockly.Block.prototype.setDeletable = function(deletable) {
  * @return {boolean} True if movable.
  */
 Blockly.Block.prototype.isMovable = function() {
-  return this.movable_ && !Blockly.readOnly;
+  return this.movable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -492,7 +493,7 @@ Blockly.Block.prototype.setMovable = function(movable) {
  * @return {boolean} True if editable.
  */
 Blockly.Block.prototype.isEditable = function() {
-  return this.editable_ && !Blockly.readOnly;
+  return this.editable_ && !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -622,7 +623,7 @@ Blockly.Block.prototype.getFieldValue = function(name) {
  * @deprecated December 2013
  */
 Blockly.Block.prototype.getTitleValue = function(name) {
-  console.log('Deprecated call to getTitleValue, use getFieldValue instead.');
+  console.warn('Deprecated call to getTitleValue, use getFieldValue instead.');
   return this.getFieldValue(name);
 };
 
@@ -644,7 +645,7 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
  * @deprecated December 2013
  */
 Blockly.Block.prototype.setTitleValue = function(newValue, name) {
-  console.log('Deprecated call to setTitleValue, use setFieldValue instead.');
+  console.warn('Deprecated call to setTitleValue, use setFieldValue instead.');
   this.setFieldValue(newValue, name);
 };
 

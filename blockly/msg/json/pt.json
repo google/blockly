@@ -2,10 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Imperadeiro98",
-			"Waldir"
+			"Waldir",
+			"Vitorvicentevalente",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
+	"TODAY": "Hoje",
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Adicionar Comentário",
 	"REMOVE_COMMENT": "Remover Comentário",
@@ -229,7 +232,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "pede um número com a mensagem",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Pede ao utilizador um número.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Pede ao utilizador um texto.",
-	"LISTS_CREATE_EMPTY_HELPURL": "http://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "criar lista vazia",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Retorna uma lista, de tamanho 0, contendo nenhum registo",
 	"LISTS_CREATE_WITH_TOOLTIP": "Cria uma lista com qualquer número de itens.",

@@ -1,5 +1,9 @@
 {
-	"@metadata": [],
+	"@metadata": {
+		"authors": [
+			"아라"
+		]
+	},
 	"VARIABLES_DEFAULT_NAME": "send",
 	"DUPLICATE_BLOCK": "Kopjo",
 	"ADD_COMMENT": "Vendos nje Koment",
@@ -221,7 +225,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "kerko nje numer me njoftim",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Kerkoji perdoruesit nje numer.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Kerkoji perdoruesit ca tekst.",
-	"LISTS_CREATE_EMPTY_HELPURL": "http://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "krijo një listë të zbrazët",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Kthen një listë, te gjatësisë 0, duke mos përmbajtur asnjë regjistrim të të dhënave",
 	"LISTS_CREATE_WITH_TOOLTIP": "Krijo një listë me ndonjë numbër të sendeve.",

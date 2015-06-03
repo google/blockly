@@ -3,10 +3,13 @@
 		"authors": [
 			"Ebraminio",
 			"Reza1615",
-			"Alirezaaa"
+			"Alirezaaa",
+			"Mehran",
+			"MohandesWiki"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
+	"TODAY": "امروز",
 	"DUPLICATE_BLOCK": "تکراری",
 	"ADD_COMMENT": "افزودن نظر",
 	"REMOVE_COMMENT": "حذف نظر",
@@ -274,6 +277,9 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "به # از انتها",
 	"LISTS_GET_SUBLIST_END_LAST": "به آخرین",
 	"LISTS_GET_SUBLIST_TOOLTIP": "کپی از قسمت مشخص‌شدهٔ لیست درست می‌کند.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "ایجاد فهرست از متن",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "ایجاد متن از فهرست",
+	"LISTS_SPLIT_WITH_DELIMITER": "همراه جداساز",
 	"VARIABLES_GET_TOOLTIP": "مقدار این متغیر را بر می‌گرداند.",
 	"VARIABLES_GET_CREATE_SET": "درست‌کردن «تنظیم %1»",
 	"VARIABLES_SET_TITLE": "مجموعه",

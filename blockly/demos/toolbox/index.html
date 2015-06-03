@@ -139,7 +139,7 @@
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>
     <sep></sep>
-    <category name="Library">
+    <category name="Library" expanded="true">
       <category name="Randomize">
         <block type="procedures_defnoreturn">
           <mutation>
@@ -341,8 +341,9 @@
   </xml>
 
   <script>
-    Blockly.inject(document.getElementById('blocklyDiv'),
-        {toolbox: document.getElementById('toolbox')});
+    var workspace = Blockly.inject('blocklyDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
   </script>
 
 </body>

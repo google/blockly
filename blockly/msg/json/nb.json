@@ -1,10 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Cocu"
+			"Cocu",
+			"Kingu",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"TODAY": "I dag",
 	"DUPLICATE_BLOCK": "duplikat",
 	"ADD_COMMENT": "Legg til kommentar",
 	"REMOVE_COMMENT": "Fjern kommentar",
@@ -56,6 +59,7 @@
 	"CONTROLS_FOR_TOOLTIP": "Ha variabel %1 ta verdiene fra start nummer til slutt nummer, telle med spesifisert intervall og lag de spesifiserte blokkene.",
 	"CONTROLS_FOR_INPUT_WITH": "tell med",
 	"CONTROLS_FOR_INPUT_FROM_TO_BY": "fra %1 til %2 med %3",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each for hver blokk",
 	"CONTROLS_FOREACH_INPUT_ITEM": "for hvert element",
 	"CONTROLS_FOREACH_INPUT_INLIST": "i listen",
 	"CONTROLS_FOREACH_INPUT_INLIST_TAIL": "",
@@ -233,7 +237,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "spør om et tall med en melding",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Be brukeren om et tall.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Spør brukeren om tekst.",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "opprett en tom liste",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Returnerer en tom liste, altså med lengde 0",
 	"LISTS_CREATE_WITH_TOOLTIP": "Lag en liste med et vilkårlig antall elementer.",

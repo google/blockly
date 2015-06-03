@@ -50,15 +50,16 @@ Blockly.Blocks['text'] = {
    * Create an image of an open or closed quote.
    * @param {boolean} open True if open quote, false if closed.
    * @return {!Blockly.FieldImage} The field image of the quote.
+   * @this Blockly.Block
    * @private
    */
   newQuote_: function(open) {
-    if (open == Blockly.RTL) {
-      var file = 'quote1.png';
+    if (open == this.RTL) {
+      var file = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAqUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhggONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvBO3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5AoslLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==';
     } else {
-      var file = 'quote0.png';
+      var file = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAn0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMfz9AylsaRRgGzvZAAAAAElFTkSuQmCC';
     }
-    return new Blockly.FieldImage(Blockly.pathToMedia + file, 12, 12, '"');
+    return new Blockly.FieldImage(file, 12, 12, '"');
   }
 };
 
@@ -174,10 +175,8 @@ Blockly.Blocks['text_join'] = {
     // Rebuild block.
     if (this.itemCount_ == 0) {
       this.appendDummyInput('EMPTY')
-          .appendField(new Blockly.FieldImage(Blockly.pathToMedia +
-          'quote0.png', 12, 12, '"'))
-          .appendField(new Blockly.FieldImage(Blockly.pathToMedia +
-          'quote1.png', 12, 12, '"'));
+          .appendField(this.newQuote_(true))
+          .appendField(this.newQuote_(false));
     } else {
       for (var i = 0; i < this.itemCount_; i++) {
         var input = this.appendValueInput('ADD' + i);
@@ -186,7 +185,8 @@ Blockly.Blocks['text_join'] = {
         }
       }
     }
-  }
+  },
+  newQuote_: Blockly.Blocks['text'].newQuote_
 };
 
 Blockly.Blocks['text_create_join_container'] = {

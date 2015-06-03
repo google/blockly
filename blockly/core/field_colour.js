@@ -167,7 +167,8 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, Blockly.FieldColour.widgetDispose_);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
+      Blockly.FieldColour.widgetDispose_);
   // Create the palette using Closure.
   var picker = new goog.ui.ColorPicker();
   picker.setSize(this.columns_ || Blockly.FieldColour.COLUMNS);
@@ -177,7 +178,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   // Record windowSize and scrollOffset before adding the palette.
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
-  var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
+  var xy = this.getAbsoluteXY_();
   var borderBBox = this.borderRect_.getBBox();
   var div = Blockly.WidgetDiv.DIV;
   picker.render(div);
@@ -192,7 +193,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   } else {
     xy.y += borderBBox.height - 1;
   }
-  if (Blockly.RTL) {
+  if (this.sourceBlock_.RTL) {
     xy.x += borderBBox.width;
     xy.x -= paletteSize.width;
     // Don't go offscreen left.
@@ -205,7 +206,8 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - paletteSize.width;
     }
   }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset);
+  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
+                             this.sourceBlock_.RTL);
 
   // Configure event handler.
   var thisField = this;

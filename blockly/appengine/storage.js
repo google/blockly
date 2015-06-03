@@ -29,11 +29,12 @@ var BlocklyStorage = {};
 
 /**
  * Backup code blocks to localStorage.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.backupBlocks_ = function() {
+BlocklyStorage.backupBlocks_ = function(workspace) {
   if ('localStorage' in window) {
-    var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
+    var xml = Blockly.Xml.workspaceToDom(workspace);
     // Gets the current URL, not including the hash.
     var url = window.location.href.split('#')[0];
     window.localStorage.setItem(url, Blockly.Xml.domToText(xml));
@@ -42,37 +43,46 @@ BlocklyStorage.backupBlocks_ = function() {
 
 /**
  * Bind the localStorage backup function to the unload event.
+ * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
  */
-BlocklyStorage.backupOnUnload = function() {
-  window.addEventListener('unload', BlocklyStorage.backupBlocks_, false);
+BlocklyStorage.backupOnUnload = function(opt_workspace) {
+  var workspace = opt_workspace || Blockly.getMainWorkspace();
+  window.addEventListener('unload',
+      function() {BlocklyStorage.backupBlocks_(workspace);}, false);
 };
 
 /**
  * Restore code blocks from localStorage.
+ * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
  */
-BlocklyStorage.restoreBlocks = function() {
+BlocklyStorage.restoreBlocks = function(opt_workspace) {
   var url = window.location.href.split('#')[0];
   if ('localStorage' in window && window.localStorage[url]) {
+    var workspace = opt_workspace || Blockly.getMainWorkspace();
     var xml = Blockly.Xml.textToDom(window.localStorage[url]);
-    Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
+    Blockly.Xml.domToWorkspace(workspace, xml);
   }
 };
 
 /**
  * Save blocks to database and return a link containing key to XML.
+ * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
  */
-BlocklyStorage.link = function() {
-  var xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
+BlocklyStorage.link = function(opt_workspace) {
+  var workspace = opt_workspace || Blockly.getMainWorkspace();
+  var xml = Blockly.Xml.workspaceToDom(workspace);
   var data = Blockly.Xml.domToText(xml);
-  BlocklyStorage.makeRequest_('/storage', 'xml', data);
+  BlocklyStorage.makeRequest_('/storage', 'xml', data, workspace);
 };
 
 /**
  * Retrieve XML text from database using given key.
  * @param {string} key Key to XML, obtained from href.
+ * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
  */
-BlocklyStorage.retrieveXml = function(key) {
-  BlocklyStorage.makeRequest_('/storage', 'key', key);
+BlocklyStorage.retrieveXml = function(key, opt_workspace) {
+  var workspace = opt_workspace || Blockly.getMainWorkspace();
+  BlocklyStorage.makeRequest_('/storage', 'key', key, workspace);
 };
 
 /**
@@ -87,9 +97,10 @@ BlocklyStorage.httpRequest_ = null;
  * @param {string} url URL to fetch.
  * @param {string} name Name of parameter.
  * @param {string} content Content of parameter.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.makeRequest_ = function(url, name, content) {
+BlocklyStorage.makeRequest_ = function(url, name, content, workspace) {
   if (BlocklyStorage.httpRequest_) {
     // AJAX call is in-flight.
     BlocklyStorage.httpRequest_.abort();
@@ -102,6 +113,7 @@ BlocklyStorage.makeRequest_ = function(url, name, content) {
   BlocklyStorage.httpRequest_.setRequestHeader('Content-Type',
       'application/x-www-form-urlencoded');
   BlocklyStorage.httpRequest_.send(name + '=' + encodeURIComponent(content));
+  BlocklyStorage.httpRequest_.workspace = workspace;
 };
 
 /**
@@ -124,10 +136,10 @@ BlocklyStorage.handleRequest_ = function() {
           BlocklyStorage.alert(BlocklyStorage.HASH_ERROR.replace('%1',
               window.location.hash));
         } else {
-          BlocklyStorage.loadXml_(data);
+          BlocklyStorage.loadXml_(data, BlocklyStorage.httpRequest_.workspace);
         }
       }
-      BlocklyStorage.monitorChanges_();
+      BlocklyStorage.monitorChanges_(BlocklyStorage.httpRequest_.workspace);
     }
     BlocklyStorage.httpRequest_ = null;
   }
@@ -137,28 +149,30 @@ BlocklyStorage.handleRequest_ = function() {
  * Start monitoring the workspace.  If a change is made that changes the XML,
  * clear the key from the URL.  Stop monitoring the workspace once such a
  * change is detected.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.monitorChanges_ = function() {
-  var startXmlDom = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
+BlocklyStorage.monitorChanges_ = function(workspace) {
+  var startXmlDom = Blockly.Xml.workspaceToDom(workspace);
   var startXmlText = Blockly.Xml.domToText(startXmlDom);
   function change() {
-    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
+    var xmlDom = Blockly.Xml.workspaceToDom(workspace);
     var xmlText = Blockly.Xml.domToText(xmlDom);
     if (startXmlText != xmlText) {
       window.location.hash = '';
-      Blockly.removeChangeListener(bindData);
+      workspace.removeChangeListener(bindData);
     }
   }
-  var bindData = Blockly.addChangeListener(change);
+  var bindData = workspace.addChangeListener(change);
 };
 
 /**
  * Load blocks from XML.
  * @param {string} xml Text representation of XML.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.loadXml_ = function(xml) {
+BlocklyStorage.loadXml_ = function(xml, workspace) {
   try {
     xml = Blockly.Xml.textToDom(xml);
   } catch (e) {
@@ -166,8 +180,8 @@ BlocklyStorage.loadXml_ = function(xml) {
     return;
   }
   // Clear the workspace to avoid merge.
-  Blockly.getMainWorkspace().clear();
-  Blockly.Xml.domToWorkspace(Blockly.getMainWorkspace(), xml);
+  workspace.clear();
+  Blockly.Xml.domToWorkspace(workspace, xml);
 };
 
 /**

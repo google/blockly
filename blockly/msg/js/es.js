@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.es');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Añadir comentario";
-Blockly.Msg.AUTH = "Autoriza esta aplicación a guardar tu trabajo se pueda guardar y compartir por tí.";
+Blockly.Msg.AUTH = "Autoriza a esta aplicación para guardar tu trabajo y permitir que lo compartas.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Cambiar el valor:";
 Blockly.Msg.CHAT = "¡Chatea con tu colaborador escribiendo en este cuadro!";
 Blockly.Msg.COLLAPSE_ALL = "Contraer bloques";
@@ -356,7 +356,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "quitar espacios de ambos lados de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "quitar espacios iniciales de";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "quitar espacios finales de";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Devuelve una copia del texto sin los espacios de uno o ambos extremos.";
-Blockly.Msg.TODAY = "Today";  // untranslated
+Blockly.Msg.TODAY = "Hoy";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "elemento";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Crear 'establecer %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

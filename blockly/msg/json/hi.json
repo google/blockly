@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Bl707",
-			"संजीव कुमार"
+			"संजीव कुमार",
+			"Phoenix303"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "आइटम",
+	"TODAY": "आज",
 	"DUPLICATE_BLOCK": "कॉपी करें",
 	"ADD_COMMENT": "टिप्पणी छोड़ें",
 	"REMOVE_COMMENT": "टिप्पणी हटायें",
@@ -204,6 +206,8 @@
 	"LISTS_INLIST": "सूची में",
 	"LISTS_INDEX_OF_FIRST": "आइटम पहली बार जहाँ आया है उसे ढूढ़े",
 	"LISTS_INDEX_OF_LAST": "आइटम आखरी बार जहाँ आया है उसे ढूढ़े",
+	"LISTS_GET_INDEX_GET": "प्राप्त",
+	"LISTS_GET_INDEX_GET_REMOVE": "प्राप्त करे और हटाए",
 	"LISTS_GET_INDEX_REMOVE": "निकालें",
 	"LISTS_GET_INDEX_FROM_END": "अंत से #",
 	"LISTS_GET_INDEX_FIRST": "पहला",

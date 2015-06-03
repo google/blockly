@@ -74,8 +74,9 @@ skip_files:
 - ^(.*/)?\..*$
 # Custom skip patterns.
 - ^static/appengine/.*$
-- ^static/apps/json/.*$
-- ^static/apps/_soy/.+\.jar$
+- ^static/demos/plane/soy/.+\.jar$
+- ^static/demos/plane/template.soy$
+- ^static/demos/plane/xlf/.*$
 - ^static/i18n/.*$
 - ^static/msg/json/.*$
 - ^.+\.soy$

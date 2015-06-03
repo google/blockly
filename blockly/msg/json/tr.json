@@ -4,7 +4,8 @@
 			"Meelo",
 			"Joseph",
 			"WikiBronze",
-			"Mavrikant"
+			"Mavrikant",
+			"아라"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "öge",
@@ -236,7 +237,7 @@
 	"TEXT_PROMPT_TYPE_NUMBER": "Kullanıcıdan sayı al , istek mesajı göstererek",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Kullanıcıdan sayı al .",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Kullanıcıdan Yazım al .",
-	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists Boş Listeler",
+	"LISTS_CREATE_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#create-empty-list",
 	"LISTS_CREATE_EMPTY_TITLE": "Boş liste oluştur",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Veri kaydı içermeyen uzunluğu 0 olan bir listeyi verir",
 	"LISTS_CREATE_WITH_TOOLTIP": "Herhangi sayıda nesne içeren bir liste oluştur.",

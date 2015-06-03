@@ -216,7 +216,7 @@ Blockly.FieldAngle.prototype.setText = function(text) {
   }
   this.updateGraph_();
   // Insert degree symbol.
-  if (Blockly.RTL) {
+  if (this.sourceBlock_.RTL) {
     this.textElement_.insertBefore(this.symbol_, this.textElement_.firstChild);
   } else {
     this.textElement_.appendChild(this.symbol_);

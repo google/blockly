@@ -6,7 +6,6 @@
 <script>
 
 </script>
-<script src="../interpreter/acorn_interpreter.js"></script>
 <script src="../blockly_uncompressed.js"></script>
 <script src="../generators/javascript.js"></script>
 <script src="../generators/javascript/logic.js"></script>
@@ -139,28 +138,14 @@ function spaghetti(n) {
 }
 
 function runCode(){
+	window.LoopTrap = 1000;
+	Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
 	code = Blockly['JavaScript'].workspaceToCode();
-	var myInterpreter = new Interpreter(code, initApi);
-	myInterpreter.run()
-}
-
-// Used for interpreting code that communicates with the outside world
-function initApi(interpreter, scope) {
-  // Add an API function for the alert() block.
-  var wrapper = function(text) {
-    text = text ? text.toString() : '';
-    return interpreter.createPrimitive(alert(text));
-  };
-  interpreter.setProperty(scope, 'alert',
-      interpreter.createNativeFunction(wrapper));
-
-  // Add an API function for the prompt() block.
-  wrapper = function(text) {
-    text = text ? text.toString() : '';
-    return interpreter.createPrimitive(prompt(text));
-  };
-  interpreter.setProperty(scope, 'prompt',
-      interpreter.createNativeFunction(wrapper));
+	try {
+		eval(code);
+	} catch (e) {
+		alert(e);
+	}
 }
 
 var spaghettiXml = [

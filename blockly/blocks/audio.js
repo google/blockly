@@ -19,8 +19,8 @@
  */
 
 /**
- * @fileoverview Logic blocks for Blockly.
- * @author q.neutron@gmail.com (Quynh Neutron)
+ * @fileoverview Audio blocks for Blockly.
+ * @author lunalovecraft@gmail.com (Luna Meier)
  */
 'use strict';
 

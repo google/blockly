@@ -19,8 +19,8 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for logic blocks.
- * @author q.neutron@gmail.com (Quynh Neutron)
+ * @fileoverview Generating JavaScript for audio blocks.
+ * @author lunalovecraft@gmail.com (Luna Meier)
  */
 'use strict';
 
@@ -64,7 +64,7 @@ Blockly.JavaScript['beep'] = function(block) {
 		'	setTimeout(function(){oscillator.stop()}, (duration ? duration : 500));',
         '}']);
 		
-	// TODO: Assemble JavaScript into code variable.
+	
 	var code = '(function(freq){setTimeout(function(){ frequency = freq; beepIt(' + value_duration + ', 0.1, \'sine\');}, ' + value_timeout + ');})(' + value_frequency + ');';
 			 
 	return code;

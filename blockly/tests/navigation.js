@@ -1,10 +1,10 @@
+"use strict";
+
 // Test variable for use 
 var xmlDoc = loadXMLDoc("test.xml");
 var currentNode = xmlDoc.getElementsByTagName("block")[0];
 
-// If doCycle is true, then when you at the bottom of a series of blocks you go to the top upon pressing down, and vice versa.
-var doCycle = true;
-
+//#region TRAVERSAL_FUNCTIONS
 
 // Goes out of a block
 function traverseOut() {
@@ -18,7 +18,29 @@ function traverseIn(){
 
 // Goes from one block to the next above it.
 function traverseUp(){
-	console.log("traverseUp called.");
+    console.log("traverseUp called.");
+    console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+
+    // If your parent is a next, then its parent must be a block.  So move to it. 
+    if (currentNode.parentNode.nodeName == "next") {
+        currentNode = currentNode.parentNode.parentNode;
+        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+        return;
+    }
+
+    // If it's not you're at the top, so then...
+
+    // If cycle is enabled go to the bottom
+    if (doCycle)
+    {
+        currentNode = findBottom(currentNode);
+        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+        return;
+    }
+
+    // Otherwise just end.
+    //  Otherwise just report that you've hit the bottom.
+    console.log("Cannot traverse up, top of list");
 }
 
 // Goes from one block to the next below it.
@@ -45,11 +67,16 @@ function traverseDown(){
     {
         currentNode = findTop(currentNode);
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+        return;
     }
 
     //  Otherwise just report that you've hit the bottom.
     console.log("Cannot traverse down, end of list");
 }
+
+//#endregion
+
+//#region HELPER_FUNCTIONS
 
 // Navigates up to the top of a current section of blocks.
 function findTop(myNode) {
@@ -64,3 +91,22 @@ function findTop(myNode) {
     // If it's not the child of a next node, then it's the top node.
     return myNode;
 }
+
+// Navigates to the bottom of a section of blocks.
+function findBottom(myNode) {
+
+    // Grab the children nodes of the current node, and see if any of them are a next.
+    var children = myNode.childNodes;
+    for (var i = 0; i < children.length; i++) {
+        // If you do find a next, then we're moving straight to the block under.
+        if (children[i].nodeName == 'next') {
+            myNode = children[i].getElementsByTagName("block")[0];
+            return findBottom(myNode);
+        }
+    }
+    // If you can't find a next, you're at the bottom.
+    return myNode;
+
+}
+
+//#endregion

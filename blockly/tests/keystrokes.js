@@ -1,5 +1,6 @@
 var map = [];
 
+// Function for simultaneous keypresses
 document.onkeydown = document.onkeyup = function(e){
 	
 	e = e || event;
@@ -28,7 +29,15 @@ document.onkeydown = document.onkeyup = function(e){
 		e.preventDefault();
 	}
 	
-	else switch(e.keyCode){
+
+};
+
+// Function for single keypresses
+document.onkeydown = function(e){
+	
+	e = e || event;
+
+	switch(e.keyCode){
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
 		
 		case 37: //left
@@ -105,7 +114,7 @@ document.onkeydown = document.onkeyup = function(e){
 			//Get out of the current menu
 			e.preventDefault();
 			break;
-	
+
 	}
 	
 

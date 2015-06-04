@@ -140,6 +140,15 @@ Blockly.Toolbox.prototype.init = function() {
 };
 
 /**
+ * Dispose of this toolbox.
+ */
+Blockly.Toolbox.prototype.dispose = function() {
+  this.flyout_.dispose();
+  this.tree_.dispose();
+  goog.dom.removeNode(this.HtmlDiv);
+};
+
+/**
  * Move the toolbox to the edge.
  */
 Blockly.Toolbox.prototype.position = function() {

@@ -64,7 +64,6 @@ document.onkeydown = document.onkeyup = function(e){
 		case 69: //E
 			console.log("E key pressed.");
 			//Edit block of code or edit comment
-			alert('YO');
 			break;
 			
 		case 188: //comma

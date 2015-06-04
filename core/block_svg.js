@@ -825,14 +825,14 @@ Blockly.BlockSvg.FIELD_HEIGHT = 18;
  * @const
  */
 Blockly.BlockSvg.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
-      (Blockly.BlockSvg.CORNER_RADIUS - 1) + 1;
+      (Blockly.BlockSvg.CORNER_RADIUS - 0.5) + 0.5;
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
  * Applies to highlighting on around the outside of a curve.
  * @const
  */
 Blockly.BlockSvg.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
-      (Blockly.BlockSvg.CORNER_RADIUS + 1) - 1;
+      (Blockly.BlockSvg.CORNER_RADIUS + 0.5) - 0.5;
 /**
  * SVG path for drawing next/previous notch from left to right.
  * @const
@@ -843,7 +843,7 @@ Blockly.BlockSvg.NOTCH_PATH_LEFT = 'l 6,4 3,0 6,-4';
  * highlighting.
  * @const
  */
-Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6.5,4 2,0 6.5,-4';
+Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT = 'l 6,4 3,0 6,-4';
 /**
  * SVG path for drawing next/previous notch from right to left.
  * @const
@@ -877,10 +877,10 @@ Blockly.BlockSvg.TAB_PATH_DOWN = 'v 5 c 0,10 -' + Blockly.BlockSvg.TAB_WIDTH +
  * @const
  */
 Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL = 'v 6.5 m -' +
-    (Blockly.BlockSvg.TAB_WIDTH * 0.98) + ',2.5 q -' +
-    (Blockly.BlockSvg.TAB_WIDTH * .05) + ',10 ' +
-    (Blockly.BlockSvg.TAB_WIDTH * .27) + ',10 m ' +
-    (Blockly.BlockSvg.TAB_WIDTH * .71) + ',-2.5 v 1.5';
+    (Blockly.BlockSvg.TAB_WIDTH * 0.97) + ',3 q -' +
+    (Blockly.BlockSvg.TAB_WIDTH * 0.05) + ',10 ' +
+    (Blockly.BlockSvg.TAB_WIDTH * 0.3) + ',9.5 m ' +
+    (Blockly.BlockSvg.TAB_WIDTH * 0.67) + ',-1.9 v 1.4';
 
 /**
  * SVG start point for drawing the top-left corner.
@@ -900,7 +900,7 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_RTL =
  * @const
  */
 Blockly.BlockSvg.TOP_LEFT_CORNER_START_HIGHLIGHT_LTR =
-    'm 1,' + (Blockly.BlockSvg.CORNER_RADIUS - 1);
+    'm 0.5,' + (Blockly.BlockSvg.CORNER_RADIUS - 0.5);
 /**
  * SVG path for drawing the rounded top-left corner.
  * @const
@@ -914,9 +914,9 @@ Blockly.BlockSvg.TOP_LEFT_CORNER =
  * @const
  */
 Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT =
-    'A ' + (Blockly.BlockSvg.CORNER_RADIUS - 1) + ',' +
-    (Blockly.BlockSvg.CORNER_RADIUS - 1) + ' 0 0,1 ' +
-    Blockly.BlockSvg.CORNER_RADIUS + ',1';
+    'A ' + (Blockly.BlockSvg.CORNER_RADIUS - 0.5) + ',' +
+    (Blockly.BlockSvg.CORNER_RADIUS - 0.5) + ' 0 0,1 ' +
+    Blockly.BlockSvg.CORNER_RADIUS + ',0.5';
 /**
  * SVG path for drawing the top-left corner of a statement input.
  * Includes the top notch, a horizontal space, and the rounded inside corner.
@@ -945,9 +945,9 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER =
  * @const
  */
 Blockly.BlockSvg.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
-    'a ' + (Blockly.BlockSvg.CORNER_RADIUS + 1) + ',' +
-    (Blockly.BlockSvg.CORNER_RADIUS + 1) + ' 0 0,0 ' +
-    (-Blockly.BlockSvg.DISTANCE_45_OUTSIDE - 1) + ',' +
+    'a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
+    Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,0 ' +
+    (-Blockly.BlockSvg.DISTANCE_45_OUTSIDE - 0.5) + ',' +
     (Blockly.BlockSvg.CORNER_RADIUS -
     Blockly.BlockSvg.DISTANCE_45_OUTSIDE);
 /**
@@ -956,21 +956,21 @@ Blockly.BlockSvg.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL =
  * @const
  */
 Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL =
-    'a ' + (Blockly.BlockSvg.CORNER_RADIUS + 1) + ',' +
-    (Blockly.BlockSvg.CORNER_RADIUS + 1) + ' 0 0,0 ' +
-    (Blockly.BlockSvg.CORNER_RADIUS + 1) + ',' +
-    (Blockly.BlockSvg.CORNER_RADIUS + 1);
+    'a ' + (Blockly.BlockSvg.CORNER_RADIUS + 0.5) + ',' +
+    (Blockly.BlockSvg.CORNER_RADIUS + 0.5) + ' 0 0,0 ' +
+    (Blockly.BlockSvg.CORNER_RADIUS + 0.5) + ',' +
+    (Blockly.BlockSvg.CORNER_RADIUS + 0.5);
 /**
  * SVG path for drawing highlight on the bottom-left corner of a statement
  * input in LTR.
  * @const
  */
 Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
-    'a ' + (Blockly.BlockSvg.CORNER_RADIUS + 1) + ',' +
-    (Blockly.BlockSvg.CORNER_RADIUS + 1) + ' 0 0,0 ' +
+    'a ' + (Blockly.BlockSvg.CORNER_RADIUS + 0.5) + ',' +
+    (Blockly.BlockSvg.CORNER_RADIUS + 0.5) + ' 0 0,0 ' +
     (Blockly.BlockSvg.CORNER_RADIUS -
     Blockly.BlockSvg.DISTANCE_45_OUTSIDE) + ',' +
-    (Blockly.BlockSvg.DISTANCE_45_OUTSIDE + 1);
+    (Blockly.BlockSvg.DISTANCE_45_OUTSIDE + 0.5);
 
 /**
  * Dispose of this block.
@@ -1451,7 +1451,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderHeight--;
     } else if (!isInline && input.type == Blockly.INPUT_VALUE &&
         inputList[i + 1] && inputList[i + 1].type == Blockly.NEXT_STATEMENT) {
-      // Value input above statment input should overhang.
+      // Value input above statement input should overhang.
       input.renderHeight--;
     }
 
@@ -1605,7 +1605,7 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
   // Position the cursor at the top-left starting point.
   if (this.squareTopLeftCorner_) {
     steps.push('m 0,0');
-    highlightSteps.push('m 1,1');
+    highlightSteps.push('m 0.5,0.5');
   } else {
     steps.push(Blockly.BlockSvg.TOP_LEFT_CORNER_START);
     highlightSteps.push(this.RTL ?
@@ -1630,7 +1630,7 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
     // This connection will be tightened when the parent renders.
   }
   steps.push('H', rightEdge);
-  highlightSteps.push('H', rightEdge + (this.RTL ? -1 : 0));
+  highlightSteps.push('H', rightEdge - 0.5);
   this.width = rightEdge;
 };
 
@@ -1657,7 +1657,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     if (y == 0) {
       cursorX += this.RTL ? -iconWidth : iconWidth;
     }
-    highlightSteps.push('M', (inputRows.rightEdge - 1) + ',' + (cursorY + 1));
+    highlightSteps.push('M', (inputRows.rightEdge - 0.5) + ',' +
+        (cursorY + 0.5));
     if (this.isCollapsed()) {
       // Jagged right edge.
       var input = row[0];
@@ -1665,15 +1666,12 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
       this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push(Blockly.BlockSvg.JAGGED_TEETH);
-      if (this.RTL) {
-        highlightSteps.push('l 8,0 0,3.8 7,3.2 m -14.5,9 l 8,4');
-      } else {
-        highlightSteps.push('h 8');
-      }
+      highlightSteps.push('h 8');
       var remainder = row.height - Blockly.BlockSvg.JAGGED_TEETH_HEIGHT;
       steps.push('v', remainder);
       if (this.RTL) {
-        highlightSteps.push('v', remainder - 2);
+        highlightSteps.push('v 3.9 l 7.2,3.4 m -14.5,8.9 l 7.3,3.5');
+        highlightSteps.push('v', remainder - 0.7);
       }
       this.width += Blockly.BlockSvg.JAGGED_TEETH_WIDTH;
     } else if (row.type == Blockly.BlockSvg.INLINE) {
@@ -1704,30 +1702,30 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
           if (this.RTL) {
             // Highlight right edge, around back of tab, and bottom.
             highlightInlineSteps.push('M',
-                (cursorX - Blockly.BlockSvg.SEP_SPACE_X - 3 +
+                (cursorX - Blockly.BlockSvg.SEP_SPACE_X - 2.5 +
                  Blockly.BlockSvg.TAB_WIDTH - input.renderWidth) + ',' +
-                (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y + 1));
+                (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y + 0.5));
             highlightInlineSteps.push(
                 Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
             highlightInlineSteps.push('v',
-                input.renderHeight - Blockly.BlockSvg.TAB_HEIGHT + 3);
+                input.renderHeight - Blockly.BlockSvg.TAB_HEIGHT + 2.5);
             highlightInlineSteps.push('h',
-                input.renderWidth - Blockly.BlockSvg.TAB_WIDTH + 1);
+                input.renderWidth - Blockly.BlockSvg.TAB_WIDTH + 2);
           } else {
             // Highlight right edge, bottom.
             highlightInlineSteps.push('M',
-                (cursorX - Blockly.BlockSvg.SEP_SPACE_X + 1) + ',' +
-                (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y + 1));
+                (cursorX - Blockly.BlockSvg.SEP_SPACE_X + 0.5) + ',' +
+                (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y + 0.5));
             highlightInlineSteps.push('v', input.renderHeight + 1);
             highlightInlineSteps.push('h', Blockly.BlockSvg.TAB_WIDTH - 2 -
                                            input.renderWidth);
             // Short highlight glint at bottom of tab.
             highlightInlineSteps.push('M',
                 (cursorX - input.renderWidth - Blockly.BlockSvg.SEP_SPACE_X +
-                 1.8) + ',' + (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y +
-                 Blockly.BlockSvg.TAB_HEIGHT - 0.4));
+                 0.9) + ',' + (cursorY + Blockly.BlockSvg.INLINE_PADDING_Y +
+                 Blockly.BlockSvg.TAB_HEIGHT - 0.7));
             highlightInlineSteps.push('l',
-                (Blockly.BlockSvg.TAB_WIDTH * 0.38) + ',-1.8');
+                (Blockly.BlockSvg.TAB_WIDTH * 0.46) + ',-2.1');
           }
           // Create inline input connection.
           if (this.RTL) {
@@ -1751,10 +1749,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       cursorX = Math.max(cursorX, inputRows.rightEdge);
       this.width = Math.max(this.width, cursorX);
       steps.push('H', cursorX);
-      highlightSteps.push('H', cursorX + (this.RTL ? -1 : 0));
+      highlightSteps.push('H', cursorX - 0.5);
       steps.push('v', row.height);
       if (this.RTL) {
-        highlightSteps.push('v', row.height - 2);
+        highlightSteps.push('v', row.height - 1);
       }
     } else if (row.type == Blockly.INPUT_VALUE) {
       // External input.
@@ -1777,13 +1775,13 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       if (this.RTL) {
         // Highlight around back of tab.
         highlightSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
-        highlightSteps.push('v', v);
+        highlightSteps.push('v', v + 0.5);
       } else {
         // Short highlight glint at bottom of tab.
-        highlightSteps.push('M', (inputRows.rightEdge - 4.2) + ',' +
-            (cursorY + Blockly.BlockSvg.TAB_HEIGHT - 0.4));
-        highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.38) +
-            ',-1.8');
+        highlightSteps.push('M', (inputRows.rightEdge - 5) + ',' +
+            (cursorY + Blockly.BlockSvg.TAB_HEIGHT - 0.7));
+        highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * 0.46) +
+            ',-2.1');
       }
       // Create external input connection.
       connectionX = connectionsXY.x +
@@ -1816,7 +1814,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push('v', row.height);
       if (this.RTL) {
-        highlightSteps.push('v', row.height - 2);
+        highlightSteps.push('v', row.height - 1);
       }
     } else if (row.type == Blockly.NEXT_STATEMENT) {
       // Nested statement.
@@ -1858,7 +1856,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
             row.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
         highlightSteps.push(
             Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL);
-        highlightSteps.push('H', inputRows.rightEdge - 1);
+        highlightSteps.push('H', inputRows.rightEdge - 0.5);
       } else {
         highlightSteps.push('M',
             (cursorX - Blockly.BlockSvg.NOTCH_WIDTH +
@@ -1866,7 +1864,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
             (cursorY + row.height - Blockly.BlockSvg.DISTANCE_45_OUTSIDE));
         highlightSteps.push(
             Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR);
-        highlightSteps.push('H', inputRows.rightEdge);
+        highlightSteps.push('H', inputRows.rightEdge - 0.5);
       }
       // Create statement connection.
       connectionX = connectionsXY.x + (this.RTL ? -cursorX : cursorX + 1);
@@ -1933,7 +1931,7 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
   if (this.squareBottomLeftCorner_) {
     steps.push('H 0');
     if (!this.RTL) {
-      highlightSteps.push('M', '1,' + cursorY);
+      highlightSteps.push('M', '0.5,' + (cursorY - 0.5));
     }
   } else {
     steps.push('H', Blockly.BlockSvg.CORNER_RADIUS);
@@ -1944,9 +1942,9 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
     if (!this.RTL) {
       highlightSteps.push('M', Blockly.BlockSvg.DISTANCE_45_INSIDE + ',' +
           (cursorY - Blockly.BlockSvg.DISTANCE_45_INSIDE));
-      highlightSteps.push('A', (Blockly.BlockSvg.CORNER_RADIUS - 1) + ',' +
-          (Blockly.BlockSvg.CORNER_RADIUS - 1) + ' 0 0,1 ' +
-          '1,' + (cursorY - Blockly.BlockSvg.CORNER_RADIUS));
+      highlightSteps.push('A', (Blockly.BlockSvg.CORNER_RADIUS - 0.5) + ',' +
+          (Blockly.BlockSvg.CORNER_RADIUS - 0.5) + ' 0 0,1 ' +
+          '0.5,' + (cursorY - Blockly.BlockSvg.CORNER_RADIUS));
     }
   }
 };
@@ -1970,20 +1968,21 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ =
         Blockly.BlockSvg.TAB_WIDTH + ',-7.5 s ' + Blockly.BlockSvg.TAB_WIDTH +
         ',2.5 ' + Blockly.BlockSvg.TAB_WIDTH + ',-7.5');
     if (this.RTL) {
-      highlightSteps.push('M', (Blockly.BlockSvg.TAB_WIDTH * -0.3) + ',8.9');
+      highlightSteps.push('M', (Blockly.BlockSvg.TAB_WIDTH * -0.25) + ',8.4');
       highlightSteps.push('l', (Blockly.BlockSvg.TAB_WIDTH * -0.45) + ',-2.1');
     } else {
-      highlightSteps.push('V', Blockly.BlockSvg.TAB_HEIGHT - 1);
+      highlightSteps.push('V', Blockly.BlockSvg.TAB_HEIGHT - 1.5);
       highlightSteps.push('m', (Blockly.BlockSvg.TAB_WIDTH * -0.92) +
-                          ',-1 q ' + (Blockly.BlockSvg.TAB_WIDTH * -0.19) +
+                          ',-0.5 q ' + (Blockly.BlockSvg.TAB_WIDTH * -0.19) +
                           ',-5.5 0,-11');
       highlightSteps.push('m', (Blockly.BlockSvg.TAB_WIDTH * 0.92) +
-                          ',1 V 1 H 2');
+                          ',1 V 0.5 H 1');
     }
     this.width += Blockly.BlockSvg.TAB_WIDTH;
   } else if (!this.RTL) {
     if (this.squareTopLeftCorner_) {
-      highlightSteps.push('V', 1);
+      // Statement block in a stack.
+      highlightSteps.push('V', 0.5);
     } else {
       highlightSteps.push('V', Blockly.BlockSvg.CORNER_RADIUS);
     }

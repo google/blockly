@@ -4,16 +4,63 @@
 var xmlDoc = loadXMLDoc("test.xml");
 var currentNode = xmlDoc.getElementsByTagName("block")[0];
 
+//#region JUMP_FUNCITONS
+
+// Sets the current node to the one at the top of this section of blocks
+function jumpToTopOfSection() {
+    Console.log("Jumping to top of section.");
+    currentNode = findTop(currentNode);
+    console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+}
+
+// Sets the current node to the one at the bottom of this section of blocks
+function jumpToBottompOfSection() {
+    Console.log("Jumping to bottom of section.");
+    currentNode = findTop(currentNode);
+    console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+}
+
+// Jumps between containers.
+function jumpToContainer(containerNumber) {
+    // TODO: Code jump.  Requires blockly inclusion for testing.
+}
+//#endregion
+
 //#region TRAVERSAL_FUNCTIONS
 
 // Goes out of a block
 function traverseOut() {
-	console.log("traverseOut called.");
+    console.log("traverseOut called.");
+    console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+
+    // If this is within other blocks, then its parent will be a statement.
+    if (findTop(currentNode).parentNode.nodeName == "statement")
+    {
+        currentNode = findTop(currentNode).parentNode.parentNode;
+        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+        return;
+    }
+    // If it's not, then do nothing, you cannot go in.
+    console.log("Cannot traverse outwards from here.");
 }
 
 // Goes inside of one block.
 function traverseIn(){
-	console.log("traverseIn called.");
+    console.log("traverseIn called.");
+    console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+
+    // Grab the children nodes of the current node, and see if any of them are a statement.
+    var children = currentNode.childNodes;
+    for (var i = 0; i < children.length; i++) {
+        // If you do find a statement, then we're moving straight to that node's child, which is a block.
+        if (children[i].nodeName == 'statement') {
+            currentNode = children[i].getElementsByTagName("block")[0];
+            console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+            return;
+        } 
+    }
+    // If you don't, then do nothing, you cannot go in.
+    console.log("Cannot traverse inwards from here.");
 }
 
 // Goes from one block to the next above it.

@@ -40,11 +40,49 @@ document.onkeydown = document.onkeyup = function(e){
 		e.preventDefault();
 		//Go through the same level of code
 	}
+		
+	else if(map[188]){ //Comma
+		console.log("Comma key pressed.");
+		//Traverse farther into the block layers
+	}
+	
+	else if(map[190]){ //Period
+		console.log("Period key pressed.");
+		//Traverse up out of block layers
+	}
+	
+	else if(map[46]){ //Delete
+		console.log("Delete key pressed.");
+		//Delete the currently selected item
+		e.preventDefault();
+	}
+	
+	else if(map[69]){ //Escape
+		console.log("Escape key pressed.");
+		//Get out of the current menu
+		e.preventDefault();
+	}
 	
 	else if(map[65]){ //A
 		console.log("A key pressed.");
 		//This should initiate a menu to add a block using hotkeys
 		//Hotkey functionality in the menu needs to be determined
+	}
+	
+	else if(map[67]){ //C
+		console.log("C key pressed.");
+		//Write a comment on the most recently selected block
+	}
+	
+	else if(map[69]){ //E
+		console.log("E key pressed.");
+		//Edit block of code or edit comment
+	}
+	
+	else if(map[71]){ //G
+		console.log("G key pressed.");
+		//Goto the block the comment that is currently selected is from
+		//Alternatively goto the comment that is connected to the currently selected block
 	}
 	
 	else if(map[78]){ //N
@@ -57,42 +95,9 @@ document.onkeydown = document.onkeyup = function(e){
 		//Option to initiate open navigation (this might be thrown out)
 	}
 	
-	else if(map[67]){ //C
-		console.log("C key pressed.");
-		//Write a comment on the most recently selected block
-	}
-	
-	else if(map[71]){ //G
-		console.log("G key pressed.");
-		//Goto the block the comment that is currently selected is from
-		//Alternatively goto the comment that is connected to the currently selected block
-	}
-	
-	else if(map[69]){ //E
-		console.log("E key pressed.");
-		//Edit block of code or edit comment
-	}
-	
-	else if(map[188]){ //comma
-		console.log("Comma key pressed.");
-		//Traverse farther into the block layers
-	}
-	
-	else if(map[190]){ //period
-		console.log("Period key pressed.");
-		//Traverse up out of block layers
-	}
-	
-	else if(map[46]){ //delete
-		console.log("Delete key pressed.");
-		//Delete the currently selected item
-		e.preventDefault();
-	}
-	
-	else if(map[69]){ //escape
-		console.log("Escape key pressed.");
-		//Get out of the current menu
-		e.preventDefault();
+	else if(map[82]){ //R
+		console.log("R key pressed.");
+		//Return to top of the code
 	}
 	
 	//Arrow keys for development purposes.  Switch as needed for proper usage.

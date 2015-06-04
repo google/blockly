@@ -1586,6 +1586,11 @@ delete this.BLOCKLY_DIR;
 delete this.BLOCKLY_BOOT;
 };
 
+if (typeof DOMParser == 'undefined' && typeof require == 'function') {
+  // Node.js needs DOMParser loaded separately.
+  var DOMParser = require('xmldom').DOMParser;
+}
+
 // Delete any existing Closure (e.g. Soy's nogoog_shim).
 document.write('<script>var goog = undefined;</script>');
 // Load fresh Closure Library.

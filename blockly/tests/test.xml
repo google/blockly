@@ -1,0 +1,85 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="controls_for" id="1" inline="true" x="338" y="313">
+    <field name="VAR">i</field>
+    <value name="FROM">
+      <block type="math_arithmetic" id="2" inline="true">
+        <field name="OP">MULTIPLY</field>
+        <value name="A">
+          <block type="math_arithmetic" id="3" inline="true">
+            <field name="OP">MINUS</field>
+            <value name="A">
+              <block type="math_number" id="4">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="5">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="B">
+          <block type="math_arithmetic" id="6" inline="true">
+            <field name="OP">MINUS</field>
+            <value name="A">
+              <block type="math_number" id="7">
+                <field name="NUM">4</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="8">
+                <field name="NUM">3</field>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </value>
+    <value name="TO">
+      <block type="math_number" id="9">
+        <field name="NUM">10</field>
+      </block>
+    </value>
+    <value name="BY">
+      <block type="math_number" id="10">
+        <field name="NUM">1</field>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="variables_set" id="11" inline="true">
+        <field name="VAR">item</field>
+        <comment pinned="false" h="80" w="160">Test</comment>
+        <value name="VALUE">
+          <block type="logic_boolean" id="12">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+        <next>
+          <block type="controls_if" id="13" inline="false">
+            <value name="IF0">
+              <block type="variables_get" id="14">
+                <field name="VAR">item</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="text_print" id="15" inline="false">
+                <value name="TEXT">
+                  <block type="text" id="16">
+                    <field name="TEXT">Hello.</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="text_print" id="17" inline="false"></block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="text_print" id="18" inline="false"></block>
+    </next>
+  </block>
+</xml>

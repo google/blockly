@@ -1,16 +1,24 @@
 <html>
 <head>
 <title>Interface</title>
-<script>
 
+<script src="loadxmldoc.js"></script>
+
+
+<script>
 //Initialize events inside of startup
+window.onload = startup;
 function startup(){
 	console.log("Startup Called");
 }
-
 </script>
+
+
+<script src="navigation.js"></script>
 </head>
 <body>
 </body>
+
+<!--Scripts to be run only after page loads-->
 <script type="text/javascript" src="keystrokes.js"></script>
 </html>

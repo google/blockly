@@ -1,5 +1,5 @@
 var map = [];
-window.onload = startup;
+
 document.onkeydown = document.onkeyup = function(e){
 	
 	e = e || event;
@@ -29,6 +29,24 @@ document.onkeydown = document.onkeyup = function(e){
 	}
 	
 	else switch(e.keyCode){
+		//Arrow keys for development purposes.  Switch as needed for proper usage.
+		
+		case 37: //left
+			traverseOut();
+			break;
+		case 38: //up
+			traverseUp();
+			break;
+		case 39: //right
+			traverseIn();
+			break;
+		case 40: //down
+			traverseDown();
+			break;
+		
+		//end of development block
+		
+		
 		case 9: //Tab
 			console.log("Tab key pressed.");
 			e.preventDefault();

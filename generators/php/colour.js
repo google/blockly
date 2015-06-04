@@ -58,6 +58,9 @@ Blockly.PHP['colour_rgb'] = function(block) {
       'colour_rgb',
       [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
           '($r, $g, $b) {',
+        '  $r = round(max(min($r, 100), 0) * 2.55);',
+        '  $g = round(max(min($g, 100), 0) * 2.55);',
+        '  $b = round(max(min($b, 100), 0) * 2.55);',
         '  $hex = "#";',
         '  $hex .= str_pad(dechex($r), 2, "0", STR_PAD_LEFT);',
         '  $hex .= str_pad(dechex($g), 2, "0", STR_PAD_LEFT);',

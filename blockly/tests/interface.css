@@ -1,0 +1,8 @@
+@import url('http://getbootstrap.com/dist/css/bootstrap.css');
+.dropdown-menu > li{
+  display: inline-block;
+    float:left;
+ }
+.open> ul {
+    display: inline-flex !important;
+}

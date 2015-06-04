@@ -1,18 +1,8 @@
 <html>
-<head>
+<head> 
+<link rel = "stylesheet" type="text/css" href="interface.css">
 <title>Interface</title>
-<h1>Blockly Playground</h1>
 <script src="loadxmldoc.js"></script>
-<div>
-
-
-</div>
-
-<div>
-
-
-</div>
-
 <script>
 //Initialize events inside of startup
 window.onload = startup;
@@ -20,11 +10,27 @@ function startup(){
 	console.log("Startup Called");
 }
 </script>
-
-
 <script src="navigation.js"></script>
+
 </head>
 <body>
+<h1>Blockly Playground</h1>
+
+<div id="categoryList"> 
+<button type="button" class="btn btn-default dropdown-toggle"
+              data-toggle="Logic">
+        1 Logic
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li>Block 1</li>
+      </ul>
+</div>
+
+<div id="comments"> </div>
+
+<div id="playground"> </div>
+
+<div id="codeTranslation"> </div>
 </body>
 
 <!--Scripts to be run only after page loads-->

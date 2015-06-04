@@ -13,6 +13,15 @@
 <script src="../generators/javascript/colour.js"></script>
 <script src="../generators/javascript/variables.js"></script>
 <script src="../generators/javascript/procedures.js"></script>
+<script src="../generators/php.js"></script>
+<script src="../generators/php/logic.js"></script>
+<script src="../generators/php/loops.js"></script>
+<script src="../generators/php/math.js"></script>
+<script src="../generators/php/text.js"></script>
+<script src="../generators/php/lists.js"></script>
+<script src="../generators/php/colour.js"></script>
+<script src="../generators/php/variables.js"></script>
+<script src="../generators/php/procedures.js"></script>
 <script src="../generators/python.js"></script>
 <script src="../generators/python/logic.js"></script>
 <script src="../generators/python/loops.js"></script>
@@ -40,6 +49,7 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
+<script src="../blocks/mosio.js"></script>
 <!-- Load the Google Drive SDK Realtime libraries. -->
 <script src="https://apis.google.com/js/api.js"></script>
 <script>
@@ -414,6 +424,16 @@ h1 {
     <sep></sep>
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>
+    <category name="Mosio">
+      <block type="phone_tts"></block>
+      <block type="phone_playfile"></block>
+      <block type="email_send"></block>
+      <block type="sms_send"></block>
+      <block type="sms_ask">
+        <field name="expected_type">String</field>
+        <field name="failure_count">3</field>
+      </block>
+    </category>
   </xml>
 
   <h1>Blockly Playground</h1>
@@ -437,6 +457,8 @@ h1 {
     <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
     &nbsp;
     <input type="button" value="To Python" onclick="toCode('Python')">
+    &nbsp;
+    <input type="button" value="To PHP" onclick="toCode('PHP')">
     &nbsp;
     <input type="button" value="To Dart" onclick="toCode('Dart')">
     <br>

@@ -79,7 +79,8 @@ class Gen_uncompressed(threading.Thread):
     f = open(target_filename, 'w')
     f.write(HEADER)
     f.write("""
-window.BLOCKLY_DIR = (function() {
+// 'this' is 'window' in a browser, or 'global' in node.js.
+this.BLOCKLY_DIR = (function() {
   // Find name of current directory.
   var scripts = document.getElementsByTagName('script');
   var re = new RegExp('(.+)[\/]blockly_uncompressed\.js$');
@@ -93,15 +94,15 @@ window.BLOCKLY_DIR = (function() {
   return '';
 })();
 
-window.BLOCKLY_BOOT = function() {
+this.BLOCKLY_BOOT = function() {
 // Execute after Closure has loaded.
-if (!window.goog) {
+if (!this.goog) {
   alert('Error: Closure not found.  Read this:\\n' +
         'developers.google.com/blockly/hacking/closure');
 }
 
 // Build map of all dependencies (used and unused).
-var dir = window.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
+var dir = this.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
 """)
     add_dependency = []
     base_path = calcdeps.FindClosureBasePath(self.search_paths)
@@ -127,16 +128,16 @@ var dir = window.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
       f.write('goog.require(\'%s\');\n' % provide)
 
     f.write("""
-delete window.BLOCKLY_DIR;
-delete window.BLOCKLY_BOOT;
+delete this.BLOCKLY_DIR;
+delete this.BLOCKLY_BOOT;
 };
 
 // Delete any existing Closure (e.g. Soy's nogoog_shim).
 document.write('<script>var goog = undefined;</script>');
 // Load fresh Closure Library.
-document.write('<script src="' + window.BLOCKLY_DIR +
+document.write('<script src="' + this.BLOCKLY_DIR +
     '/../closure-library/closure/goog/base.js"></script>');
-document.write('<script>window.BLOCKLY_BOOT()</script>');
+document.write('<script>this.BLOCKLY_BOOT()</script>');
 """)
     f.close()
     print('SUCCESS: ' + target_filename)

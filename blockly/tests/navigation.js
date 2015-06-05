@@ -5,9 +5,12 @@ var currentNode = null;
 
 // Loads the xmldoc based on the current blockly setting.
 function updateXMLSelection() {
+	
+	console.log("Updating XML.");
     // If you currently have a node, make sure that if all block id's change you are still selecting the same block.
     if (currentNode){
-        var pastId = parseInt(currentNode.getAttribute('id'));
+		console.log("Maintaining Position");
+		var pastId = parseInt(currentNode.getAttribute('id'));
         var idDifference = parseInt(findContainers()[0].getAttribute('id'));
 
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -17,9 +20,10 @@ function updateXMLSelection() {
     }
     // Otherwise this is a non-issue
     else {
+		console.log("Finding block.");
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        if (!xmlDoc.getElementsByTagName("block")) {
-            currentNode = xmlDoc.getElementsByTagName("block")[0];
+        if (!xmlDoc.getElementsByTagName('BLOCK')) {
+            currentNode = xmlDoc.getElementsByTagName('BLOCK')[0];
         }
     }
 };
@@ -35,7 +39,14 @@ function updateBlockSelection() {
 
 // Sets the current node to the one at the top of this section of blocks
 function jumpToTopOfSection() {
-    Console.log("Jumping to top of section.");
+	
+	if(!currentNode)
+	{
+		console.log("Nothing Selected.")
+		return;
+	}
+	
+    console.log("Jumping to top of section.");
     currentNode = findTop(currentNode);
     console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
     updateSelection();
@@ -43,7 +54,14 @@ function jumpToTopOfSection() {
 
 // Sets the current node to the one at the bottom of this section of blocks
 function jumpToBottompOfSection() {
-    Console.log("Jumping to bottom of section.");
+	
+	if(!currentNode)
+	{
+		console.log("Nothing Selected.")
+		return;
+	}
+	
+    console.log("Jumping to bottom of section.");
     currentNode = findTop(currentNode);
     console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
     updateSelection();
@@ -52,7 +70,7 @@ function jumpToBottompOfSection() {
 // Jumps between containers.
 function jumpToContainer(containerNumber) {
     
-    Console.log("Jumping to container " + containerNumber);
+    console.log("Jumping to container " + containerNumber);
     var containers = findContainers();
 
     // Jump to the appropriate section.
@@ -68,7 +86,7 @@ function jumpToContainer(containerNumber) {
 
 // Jump to a specific id.
 function jumpToID(id) {
-    Console.log("Jumping to block with id " + id);
+    console.log("Jumping to block with id " + id);
     var jumpTo = getBlockNodeById(id);
     if (jumpTo)
     {
@@ -87,11 +105,18 @@ function jumpToID(id) {
 
 // Goes out of a block
 function traverseOut() {
+	
+	if(!currentNode)
+	{
+		console.log("Nothing Selected.")
+		return;
+	}
+	
     console.log("traverseOut called.");
     console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
 
     // If this is within other blocks, then its parent will be a statement.
-    if (findTop(currentNode).parentNode.nodeName == "statement")
+    if (findTop(currentNode).parentNode.nodeName.toUpperCase() == "STATEMENT")
     {
         currentNode = findTop(currentNode).parentNode.parentNode;
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
@@ -104,6 +129,13 @@ function traverseOut() {
 
 // Goes inside of one block.
 function traverseIn(){
+	
+	if(!currentNode)
+	{
+		console.log("Nothing Selected.")
+		return;
+	}
+	
     console.log("traverseIn called.");
     console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
 
@@ -111,8 +143,8 @@ function traverseIn(){
     var children = currentNode.childNodes;
     for (var i = 0; i < children.length; i++) {
         // If you do find a statement, then we're moving straight to that node's child, which is a block.
-        if (children[i].nodeName == 'statement') {
-            currentNode = children[i].getElementsByTagName("block")[0];
+        if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
+            currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
             updateSelection();
             return;
@@ -124,11 +156,18 @@ function traverseIn(){
 
 // Goes from one block to the next above it.
 function traverseUp(){
+	
+	if(!currentNode)
+	{
+		console.log("Nothing Selected.")
+		return;
+	}
+	
     console.log("traverseUp called.");
     console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
 
     // If your parent is a next, then its parent must be a block.  So move to it. 
-    if (currentNode.parentNode.nodeName == "next") {
+    if (currentNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
         currentNode = currentNode.parentNode.parentNode;
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
         updateSelection();
@@ -153,6 +192,13 @@ function traverseUp(){
 
 // Goes from one block to the next below it.
 function traverseDown(){
+	
+	if(!currentNode)
+	{
+		console.log("Nothing Selected.")
+		return;
+	}
+	
     console.log("traverseDown called.");
     console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
 
@@ -161,9 +207,9 @@ function traverseDown(){
     for (var i = 0; i < children.length; i++)
     {
         // If you do find a next, then we're moving straight to that node.
-        if(children[i].nodeName == 'next')
+        if (children[i].nodeName.toUpperCase() == 'NEXT')
         {
-            currentNode = children[i].getElementsByTagName("block")[0];
+            currentNode = children[i].getElementsByTagName('BLOCK')[0];
             console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
             updateSelection();
             return;
@@ -192,7 +238,7 @@ function traverseDown(){
 function findTop(myNode) {
 
     // If the block's parent is a next node, that means it's below another.  Recursively go up.
-    if (myNode.parentNode.nodeName == "next")
+    if (myNode.parentNode.nodeName.toUpperCase() == 'NEXT')
     {
         myNode = myNode.parentNode.parentNode;
         return findTop(myNode);
@@ -209,8 +255,8 @@ function findBottom(myNode) {
     var children = myNode.childNodes;
     for (var i = 0; i < children.length; i++) {
         // If you do find a next, then we're moving straight to the block under.
-        if (children[i].nodeName == 'next') {
-            myNode = children[i].getElementsByTagName("block")[0];
+        if (children[i].nodeName.toUpperCase() == 'NEXT') {
+            myNode = children[i].getElementsByTagName('BLOCK')[0];
             return findBottom(myNode);
         }
     }
@@ -221,13 +267,17 @@ function findBottom(myNode) {
 
 // Finds all of the containers in the current xmlstring and returns them.
 function findContainers() {
+  
 
-    // Grab all possible containers
-    var containers = xmlDoc.documentElement.childNodes;
+    // There is something weird going on with the xml parent child relationship.  For some reason I can't directly 
+    // grab the XML node, but this seems to work.  Further investigation needed.
+    // I know that the first block is always going to be a region, so this should work
+    // until a more clean solution is found.
+    var containers = xmlDoc.getElementsByTagName('BLOCK')[0].parentNode.childNodes;
 
     // Need to remove parts that aren't blocks in case of #text's appearing for some reason.  we only want to deal with blocks.
     for (var i = containers.length - 1; i >= 0; i--) {
-        if (containers[i].nodeName != 'block') {
+        if (containers[i].nodeName.toUpperCase() != 'BLOCK') {
             containers.splice(i, 1);
         }
     }
@@ -237,13 +287,20 @@ function findContainers() {
 
 // Selects the current selected blockly block.
 function updateSelection() {
+	
+	if(!currentNode)
+	{
+		console.log("Nothing Selected.")
+		return;
+	}
+	
     Blockly.Block.getById(parseInt(currentNode.getAttribute('id')),workspace).select()
 }
 
 // Gets a specific node based on the block id.
 function getBlockNodeById(id) {
     // Go through every block until you find the one with the right id
-    var myBlocks = xmlDoc.getElementsByTagName('block');
+    var myBlocks = xmlDoc.getElementsByTagName('BLOCK');
     for (var i = 0; i < myBlocks.length; i++) {
         if (parseInt(myBlocks[i].getAttribute('id')) == id) {
             return myBlocks[i];

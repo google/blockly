@@ -610,7 +610,7 @@ Blockly.Blocks['type_group_item'] = {
 
 Blockly.Blocks['type_null'] = {
   // Null type.
-  valueType: 'null',
+  valueType: null,
   init: function() {
     this.setColour(230);
     this.appendDummyInput()

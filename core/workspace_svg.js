@@ -162,6 +162,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   }
   this.svgBlockCanvas_ = null;
   this.svgBubbleCanvas_ = null;
+  if (this.toolbox_) {
+    this.toolbox_.dispose();
+    this.toolbox_ = null;
+  }
   if (this.flyout_) {
     this.flyout_.dispose();
     this.flyout_ = null;

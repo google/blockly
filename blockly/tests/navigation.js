@@ -1,10 +1,38 @@
-"use strict";
+'use strict';
 
 // Test variable for use 
 var xmlDoc = loadXMLDoc("test.xml");
 var currentNode = xmlDoc.getElementsByTagName("block")[0];
 
-//#region JUMP_FUNCITONS
+// Loads the xmldoc based on the current blockly setting.
+function updateXMLSelection() {
+    // If you currently have a node, make sure that if all block id's change you are still selecting the same block.
+    if (currentNode){
+        var pastId = parseInt(currentNode.getAttribute('id'));
+        var idDifference = parseInt(findContainers()[0].getAttribute('id'));
+
+        xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+
+        idDifference = parseInt(findContainers()[0].getAttribute('id')) - idDifference;
+        jumpToID(pastId + idDifference);
+    }
+    // Otherwise this is a non-issue
+    else {
+        xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        if (!xmlDoc.getElementsByTagName("block")) {
+            currentNode = xmlDoc.getElementsByTagName("block")[0];
+        }
+    }
+};
+
+// Import the xml into the file, and update the xml in case of id changes.
+function updateBlockSelection() {
+    Blockly.Workspace.prototype.clear();
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
+    updateXMLSelection();
+}
+
+//#container JUMP_FUNCTIONS
 
 // Sets the current node to the one at the top of this section of blocks
 function jumpToTopOfSection() {
@@ -25,18 +53,18 @@ function jumpToBottompOfSection() {
 // Jumps between containers.
 function jumpToContainer(containerNumber) {
     
-    Console.log("Jumping to region " + containerNumber);
-    var regions = findRegions();
+    Console.log("Jumping to container " + containerNumber);
+    var containers = findContainers();
 
     // Jump to the appropriate section.
-    if (regions[containerNumber]) {
-        currentNode = regions[containerNumber];
+    if (containers[containerNumber]) {
+        currentNode = containers[containerNumber];
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
         updateSelection();
         return;
     }
 
-    console.log("Region does not exist.");
+    console.log("Container does not exist.");
 }
 
 // Jump to a specific id.
@@ -54,9 +82,9 @@ function jumpToID(id) {
     console.log("Block with id " + id + " not found.");
 }
 
-//#endregion
+//#endcontainer
 
-//#region TRAVERSAL_FUNCTIONS
+//#container TRAVERSAL_FUNCTIONS
 
 // Goes out of a block
 function traverseOut() {
@@ -157,9 +185,9 @@ function traverseDown(){
     console.log("Cannot traverse down, end of list");
 }
 
-//#endregion
+//#endcontainer
 
-//#region HELPER_FUNCTIONS
+//#container HELPER_FUNCTIONS
 
 // Navigates up to the top of a current section of blocks.
 function findTop(myNode) {
@@ -192,25 +220,25 @@ function findBottom(myNode) {
 
 }
 
-// Finds all of the regions in the current xmlstring and returns them.
-function findRegions() {
+// Finds all of the containers in the current xmlstring and returns them.
+function findContainers() {
 
-    // Grab all possible regions
-    var regions = xmlDoc.documentElement.childNodes;
+    // Grab all possible containers
+    var containers = xmlDoc.documentElement.childNodes;
 
     // Need to remove parts that aren't blocks in case of #text's appearing for some reason.  we only want to deal with blocks.
-    for (var i = regions.length - 1; i >= 0; i--) {
-        if (regions[i].nodeName != 'block') {
-            regions.splice(i, 1);
+    for (var i = containers.length - 1; i >= 0; i--) {
+        if (containers[i].nodeName != 'block') {
+            containers.splice(i, 1);
         }
     }
 
-    return regions;
+    return containers;
 }
 
 // Selects the current selected blockly block.
 function updateSelection() {
-    Blockly.Block.getById(currentNode.getAttribute('id'),workspace).select()
+    Blockly.Block.getById(parseInt(currentNode.getAttribute('id')),workspace).select()
 }
 
 // Gets a specific node based on the block id.
@@ -218,7 +246,7 @@ function getBlockNodeById(id) {
     // Go through every block until you find the one with the right id
     var myBlocks = xmlDoc.getElementsByTagName('block');
     for (var i = 0; i < myBlocks.length; i++) {
-        if (myBlocks[i].getAttribute('id') == id) {
+        if (parseInt(myBlocks[i].getAttribute('id')) == id) {
             return myBlocks[i];
         }
     }
@@ -226,4 +254,4 @@ function getBlockNodeById(id) {
     return null;
 }
 
-//#endregion
+//#endcontainer

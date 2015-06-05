@@ -1,8 +1,7 @@
 'use strict';
 
-// Test variable for use 
-var xmlDoc = loadXMLDoc("test.xml");
-var currentNode = xmlDoc.getElementsByTagName("block")[0];
+var xmlDoc = null;
+var currentNode = null;
 
 // Loads the xmldoc based on the current blockly setting.
 function updateXMLSelection() {
@@ -32,7 +31,7 @@ function updateBlockSelection() {
     updateXMLSelection();
 }
 
-//#container JUMP_FUNCTIONS
+//#region JUMP_FUNCTIONS
 
 // Sets the current node to the one at the top of this section of blocks
 function jumpToTopOfSection() {
@@ -82,9 +81,9 @@ function jumpToID(id) {
     console.log("Block with id " + id + " not found.");
 }
 
-//#endcontainer
+//#endregion
 
-//#container TRAVERSAL_FUNCTIONS
+//#region TRAVERSAL_FUNCTIONS
 
 // Goes out of a block
 function traverseOut() {
@@ -185,9 +184,9 @@ function traverseDown(){
     console.log("Cannot traverse down, end of list");
 }
 
-//#endcontainer
+//#endregion
 
-//#container HELPER_FUNCTIONS
+//#region HELPER_FUNCTIONS
 
 // Navigates up to the top of a current section of blocks.
 function findTop(myNode) {
@@ -254,4 +253,4 @@ function getBlockNodeById(id) {
     return null;
 }
 
-//#endcontainer
+//#endregion

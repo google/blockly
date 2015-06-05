@@ -257,10 +257,10 @@ function getOptTypesFrom(block, name) {
   var types = getTypesFrom_(block, name);
   if (types.length == 0) {
     return '';
-  } else if (types.length == 1) {
-    return types[0];
   } else if (types.indexOf('null') != -1) {
     return 'null';
+  } else if (types.length == 1) {
+    return types[0];
   } else {
     return '[' + types.join(', ') + ']';
   }

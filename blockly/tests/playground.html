@@ -103,6 +103,7 @@ function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  updateXMLSelection();
 }
 
 function toCode(lang) {

@@ -299,6 +299,11 @@ function updateSelection() {
 
 // Gets a specific node based on the block id.
 function getBlockNodeById(id) {
+
+    if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')){
+        return null;
+    }
+
     // Go through every block until you find the one with the right id
     var myBlocks = xmlDoc.getElementsByTagName('BLOCK');
     for (var i = 0; i < myBlocks.length; i++) {

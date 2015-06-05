@@ -115,6 +115,7 @@ Blockly.BlockSvg.prototype.select = function() {
   
 //#region NNB_SELECT
   
+  console.log(getBlockNodeById(this.id));
   if (getBlockNodeById(this.id)){
 	currentNode = getBlockNodeById(this.id);
 	console.log(this.id);

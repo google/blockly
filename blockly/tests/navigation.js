@@ -11,6 +11,7 @@ function jumpToTopOfSection() {
     Console.log("Jumping to top of section.");
     currentNode = findTop(currentNode);
     console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+    updateSelection();
 }
 
 // Sets the current node to the one at the bottom of this section of blocks
@@ -18,12 +19,41 @@ function jumpToBottompOfSection() {
     Console.log("Jumping to bottom of section.");
     currentNode = findTop(currentNode);
     console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+    updateSelection();
 }
 
 // Jumps between containers.
 function jumpToContainer(containerNumber) {
-    // TODO: Code jump.  Requires blockly inclusion for testing.
+    
+    Console.log("Jumping to region " + containerNumber);
+    var regions = findRegions();
+
+    // Jump to the appropriate section.
+    if (regions[containerNumber]) {
+        currentNode = regions[containerNumber];
+        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+        updateSelection();
+        return;
+    }
+
+    console.log("Region does not exist.");
 }
+
+// Jump to a specific id.
+function jumpToID(id) {
+    Console.log("Jumping to block with id " + id);
+    var jumpTo = getBlockNodeById(id);
+    if (jumpTo)
+    {
+        currentNode = jumpTo;
+        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+        updateSelection();
+        return;
+    }
+
+    console.log("Block with id " + id + " not found.");
+}
+
 //#endregion
 
 //#region TRAVERSAL_FUNCTIONS
@@ -38,6 +68,7 @@ function traverseOut() {
     {
         currentNode = findTop(currentNode).parentNode.parentNode;
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+        updateSelection();
         return;
     }
     // If it's not, then do nothing, you cannot go in.
@@ -56,6 +87,7 @@ function traverseIn(){
         if (children[i].nodeName == 'statement') {
             currentNode = children[i].getElementsByTagName("block")[0];
             console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+            updateSelection();
             return;
         } 
     }
@@ -72,6 +104,7 @@ function traverseUp(){
     if (currentNode.parentNode.nodeName == "next") {
         currentNode = currentNode.parentNode.parentNode;
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+        updateSelection();
         return;
     }
 
@@ -82,6 +115,7 @@ function traverseUp(){
     {
         currentNode = findBottom(currentNode);
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+        updateSelection();
         return;
     }
 
@@ -104,6 +138,7 @@ function traverseDown(){
         {
             currentNode = children[i].getElementsByTagName("block")[0];
             console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
+            updateSelection();
             return;
         }
     }
@@ -114,6 +149,7 @@ function traverseDown(){
     {
         currentNode = findTop(currentNode);
         console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
+        updateSelection();
         return;
     }
 
@@ -154,6 +190,40 @@ function findBottom(myNode) {
     // If you can't find a next, you're at the bottom.
     return myNode;
 
+}
+
+// Finds all of the regions in the current xmlstring and returns them.
+function findRegions() {
+
+    // Grab all possible regions
+    var regions = xmlDoc.documentElement.childNodes;
+
+    // Need to remove parts that aren't blocks in case of #text's appearing for some reason.  we only want to deal with blocks.
+    for (var i = regions.length - 1; i >= 0; i--) {
+        if (regions[i].nodeName != 'block') {
+            regions.splice(i, 1);
+        }
+    }
+
+    return regions;
+}
+
+// Selects the current selected blockly block.
+function updateSelection() {
+    Blockly.Block.getById(currentNode.getAttribute('id'),workspace).select()
+}
+
+// Gets a specific node based on the block id.
+function getBlockNodeById(id) {
+    // Go through every block until you find the one with the right id
+    var myBlocks = xmlDoc.getElementsByTagName('block');
+    for (var i = 0; i < myBlocks.length; i++) {
+        if (myBlocks[i].getAttribute('id') == id) {
+            return myBlocks[i];
+        }
+    }
+    // If you don't hit it return null.
+    return null;
 }
 
 //#endregion

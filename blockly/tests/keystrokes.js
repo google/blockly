@@ -67,6 +67,27 @@ document.onkeydown = document.onkeyup = function(e){
 		console.log("A key pressed.");
 		//This should initiate a menu to add a block using hotkeys
 		//Hotkey functionality in the menu needs to be determined
+		if(map[91]){ //1 key THIS NEEDS TO BE CHECKED
+			//Enter the first list
+		}
+		if(map[92]){ //2
+			//Eneter the second list
+		}
+		if(map[93]){ //3
+			//Enter the third list
+		}
+		if(map[94]){ //4
+			//Enter the fourth list
+		}
+		if(map[95]){ //5
+			//Enter the fifth list
+		}
+		if(map[96]{ //6
+			//Enter the sixth list
+		}
+		if(map[97]{ //7
+			//Enter the seventh list
+		}
 	}
 	
 	else if(map[67]){ //C
@@ -118,4 +139,11 @@ document.onkeydown = document.onkeyup = function(e){
 		traverseDown();
 	}
 	//End of development block
+};
+
+document.onkeydown = function(e){ //helper function to call items within dropdown menus
+	//This should have a loop 
+	//For each item in a menu, add another letter
+	//items in menus should be visible through a hashtable
+	//Call # of items in hashtable = hashtable.length
 };

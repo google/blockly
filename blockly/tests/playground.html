@@ -6,6 +6,10 @@
 <script>
 
 </script>
+<script src="loadxml.js"></script>
+<script src="debug.js"></script>
+<script src="navigation-block-info.js"></script>
+<script src="navigation.js"></script>
 <script src="../blockly_uncompressed.js"></script>
 <script src="../generators/javascript.js"></script>
 <script src="../generators/javascript/logic.js"></script>
@@ -52,6 +56,7 @@
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var block = null;
+var workspace = null;
 
 //Contains the code after exporting to javascript
 var code;
@@ -63,7 +68,7 @@ function enableRealtimeSpecificUi() {
 
 function start() {
   var toolbox = document.getElementById('toolbox');
-  Blockly.inject(document.getElementById('blocklyDiv'),
+  workspace = Blockly.inject(document.getElementById('blocklyDiv'),
           {rtl: rtl,
            media: '../media/',
            toolbox: toolbox,
@@ -98,6 +103,7 @@ function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  updateXMLSelection();
 }
 
 function toCode(lang) {
@@ -500,4 +506,5 @@ h1 {
 
   </div>
 </body>
+<script type="text/javascript" src="keystrokes.js"></script>
 </html>

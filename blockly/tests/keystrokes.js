@@ -122,7 +122,11 @@ document.onkeydown = document.onkeyup = function(e){
 	}
 	
 	//Arrow keys for development purposes.  Switch as needed for proper usage.
-	
+	else if(map[83]){ // s
+		console.log("S key pressed.");
+		// loads current blockly setup
+		updateXMLSelection();
+	}
 	else if(map[37]){ //left arrow
 		traverseOut();
 	}

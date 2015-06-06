@@ -1,159 +1,40 @@
-"use strict";
+var blockInfo={}; //create a hashtable
 
-// Test variable for use 
-var xmlDoc = loadXMLDoc("test.xml");
-var currentNode = xmlDoc.getElementsByTagName("block")[0];
+//LOGIC BLOCKS
+blockInfo['logic_compare']=['value,A', 'value,B']; //each value has its name separated by a comma
+blockInfo['logic_operation']=['value,A', 'value,B']; //each name of a block is entered as the key for the table
+blockInfo['logic_negate']=['value,BOOL'];
+blockInfo['logic_boolean']=['field,BOOL'];
+blockInfo['logic_null'] = [];
+blockInfo['logic_ternary']=['value,IF','value,THEN','value,ELSE'];
 
-//#region JUMP_FUNCITONS
+//MATH BLOCKS
+blockInfo['math_number']=['field,NUM'];
+blockInfo['math_arithmetic']=['field,OP','value,A','value,B'];
+blockInfo['math_single']=['field,OP','value,NUM'];
+blockInfo['math_trig']=['field,OP','value,NUM'];
+blockInfo['math_constant']=['field,CONSTANT'];
+blockInfo['math_change']=['field,VAR','value,DELTA'];
+blockInfo['math_round']=['field,OP','value,NUM'];
+blockInfo['math_on_list']=['field,OP','value,LIST'];
+blockInfo['math_modulo']=['value,DIVIDEND','value,DIVISOR'];
+blockInfo['math_constrain']=['value,VALUE','value,LOW','value,HIGH'];
+blockInfo['math_random_int']=['value,FROM','value,TO'];
+blockInfo['math_random_float']=[];
 
-// Sets the current node to the one at the top of this section of blocks
-function jumpToTopOfSection() {
-    Console.log("Jumping to top of section.");
-    currentNode = findTop(currentNode);
-    console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
-}
+//LIST BLOCKS NEEDS TO BE DONE
 
-// Sets the current node to the one at the bottom of this section of blocks
-function jumpToBottompOfSection() {
-    Console.log("Jumping to bottom of section.");
-    currentNode = findTop(currentNode);
-    console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
-}
+//LOOP BLOCKS
+blockInfo['controls_repeat_ext']=['value,TIMES','statement,DO'];
+blockInfo['controls_whileUntil']=['field,MODE','value,BOOL','statement,DO'];
+blockInfo['controls_for']=['field,VAR','value,FROM','value,TO','value,BY','statement,DO']
+blockInfo['controls_forEach']=['field,VAR','value,LIST','statement,DO'];
+blockInfo['controls_flow_statements']=['field,FLOW'];
 
-// Jumps between containers.
-function jumpToContainer(containerNumber) {
-    // TODO: Code jump.  Requires blockly inclusion for testing.
-}
-//#endregion
+//COLOR BLOCKS
+blockInfo['colour_picker']=['field,COLOUR'];
+blockInfo['colour_random']=[];
+blockInfo['colour_rgb']=['value,RED','value,GREEN','value,BLUE'];
+blockInfo['colour_blend']=['value,COLOUR1','value,COLOUR2','value,RATIO'];
 
-//#region TRAVERSAL_FUNCTIONS
 
-// Goes out of a block
-function traverseOut() {
-    console.log("traverseOut called.");
-    console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-
-    // If this is within other blocks, then its parent will be a statement.
-    if (findTop(currentNode).parentNode.nodeName == "statement")
-    {
-        currentNode = findTop(currentNode).parentNode.parentNode;
-        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-        return;
-    }
-    // If it's not, then do nothing, you cannot go in.
-    console.log("Cannot traverse outwards from here.");
-}
-
-// Goes inside of one block.
-function traverseIn(){
-    console.log("traverseIn called.");
-    console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-
-    // Grab the children nodes of the current node, and see if any of them are a statement.
-    var children = currentNode.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        // If you do find a statement, then we're moving straight to that node's child, which is a block.
-        if (children[i].nodeName == 'statement') {
-            currentNode = children[i].getElementsByTagName("block")[0];
-            console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-            return;
-        } 
-    }
-    // If you don't, then do nothing, you cannot go in.
-    console.log("Cannot traverse inwards from here.");
-}
-
-// Goes from one block to the next above it.
-function traverseUp(){
-    console.log("traverseUp called.");
-    console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-
-    // If your parent is a next, then its parent must be a block.  So move to it. 
-    if (currentNode.parentNode.nodeName == "next") {
-        currentNode = currentNode.parentNode.parentNode;
-        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-        return;
-    }
-
-    // If it's not you're at the top, so then...
-
-    // If cycle is enabled go to the bottom
-    if (doCycle)
-    {
-        currentNode = findBottom(currentNode);
-        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
-        return;
-    }
-
-    // Otherwise just end.
-    //  Otherwise just report that you've hit the bottom.
-    console.log("Cannot traverse up, top of list");
-}
-
-// Goes from one block to the next below it.
-function traverseDown(){
-    console.log("traverseDown called.");
-    console.log("Attempting to leave " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-
-    // Grab the children nodes of the current node, and see if any of them are a next.
-    var children = currentNode.childNodes;
-    for (var i = 0; i < children.length; i++)
-    {
-        // If you do find a next, then we're moving straight to that node.
-        if(children[i].nodeName == 'next')
-        {
-            currentNode = children[i].getElementsByTagName("block")[0];
-            console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id'));
-            return;
-        }
-    }
-    // If you don't find a next then...
-
-    // Cycle back to the top node if cycle is enabled
-    if (doCycle)
-    {
-        currentNode = findTop(currentNode);
-        console.log("Going to " + currentNode.nodeName + " with id " + currentNode.getAttribute('id') + " via cycle.");
-        return;
-    }
-
-    //  Otherwise just report that you've hit the bottom.
-    console.log("Cannot traverse down, end of list");
-}
-
-//#endregion
-
-//#region HELPER_FUNCTIONS
-
-// Navigates up to the top of a current section of blocks.
-function findTop(myNode) {
-
-    // If the block's parent is a next node, that means it's below another.  Recursively go up.
-    if (myNode.parentNode.nodeName == "next")
-    {
-        myNode = myNode.parentNode.parentNode;
-        return findTop(myNode);
-    }
-
-    // If it's not the child of a next node, then it's the top node.
-    return myNode;
-}
-
-// Navigates to the bottom of a section of blocks.
-function findBottom(myNode) {
-
-    // Grab the children nodes of the current node, and see if any of them are a next.
-    var children = myNode.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        // If you do find a next, then we're moving straight to the block under.
-        if (children[i].nodeName == 'next') {
-            myNode = children[i].getElementsByTagName("block")[0];
-            return findBottom(myNode);
-        }
-    }
-    // If you can't find a next, you're at the bottom.
-    return myNode;
-
-}
-
-//#endregion

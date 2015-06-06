@@ -112,6 +112,16 @@ Blockly.BlockSvg.prototype.select = function() {
     Blockly.selected.unselect();
   }
   Blockly.selected = this;
+  
+//#region NNB_SELECT
+  
+  console.log(getBlockNodeById(this.id));
+  if (getBlockNodeById(this.id)){
+	currentNode = getBlockNodeById(this.id);
+	console.log(this.id);
+  }
+//#endregion
+  
   this.addSelect();
   Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
 };

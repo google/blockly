@@ -1,36 +1,294 @@
 <html>
+
 <head> 
-<link rel = "stylesheet" type="text/css" href="interface.css">
 <title>Interface</title>
-<script src="loadxmldoc.js"></script>
+
+<script src="loadxml.js"></script>
 <script src="debug.js"></script>
 <script src="navigation-block-info"></script>
+<script src="navigation.js"></script>
+<script src="../blockly_uncompressed.js"></script>
+<script src="../generators/javascript.js"></script>
+<script src="../generators/javascript/logic.js"></script>
+<script src="../generators/javascript/loops.js"></script>
+<script src="../generators/javascript/math.js"></script>
+<script src="../generators/javascript/text.js"></script>
+<script src="../generators/javascript/lists.js"></script>
+<script src="../generators/javascript/colour.js"></script>
+<script src="../generators/javascript/variables.js"></script>
+<script src="../generators/javascript/procedures.js"></script>
+<script src="../generators/javascript/audio.js"></script>
+<script src="../generators/python.js"></script>
+<script src="../generators/python/logic.js"></script>
+<script src="../generators/python/loops.js"></script>
+<script src="../generators/python/math.js"></script>
+<script src="../generators/python/text.js"></script>
+<script src="../generators/python/lists.js"></script>
+<script src="../generators/python/colour.js"></script>
+<script src="../generators/python/variables.js"></script>
+<script src="../generators/python/procedures.js"></script>
+<script src="../generators/dart.js"></script>
+<script src="../generators/dart/logic.js"></script>
+<script src="../generators/dart/loops.js"></script>
+<script src="../generators/dart/math.js"></script>
+<script src="../generators/dart/text.js"></script>
+<script src="../generators/dart/lists.js"></script>
+<script src="../generators/dart/colour.js"></script>
+<script src="../generators/dart/variables.js"></script>
+<script src="../generators/dart/procedures.js"></script>
+<script src="../msg/messages.js"></script>
+<script src="../blocks/logic.js"></script>
+<script src="../blocks/loops.js"></script>
+<script src="../blocks/math.js"></script>
+<script src="../blocks/text.js"></script>
+<script src="../blocks/lists.js"></script>
+<script src="../blocks/colour.js"></script>
+<script src="../blocks/variables.js"></script>
+<script src="../blocks/procedures.js"></script>
+<script src="../blocks/audio.js"></script>
 <script>
 //Initialize events inside of startup
 window.onload = startup;
-function startup(){
+function start(){
 	console.log("Startup Called");
+    var workspace = Blockly.inject('blocklyDiv', 'null');
+      //{toolbox: document.getElementById('toolbox')});
+    var categoryList = Blockly.inject('categories', 
+        {toolbox: document.getElementById('toolbox')});
 }
 </script>
-<script src="navigation.js"></script>
-
 </head>
-<body>
+
+<body onload="start()">
 <h1>Blockly Playground</h1>
 
 <div id="categoryList"> 
-<button type="button" class="btn btn-default dropdown-toggle"
-              data-toggle="Logic">
-        1 Logic
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li>Block 1</li>
-      </ul>
+
 </div>
+
+<xml id="toolbox" style="display: none">
+    <category name="Audio">
+      <block type="beep"></block>
+    </category>
+	<category name="Logic">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math">
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+      <block type="math_trig"></block>
+      <block type="math_constant"></block>
+      <block type="math_number_property"></block>
+      <block type="math_change">
+        <value name="DELTA">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_round"></block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo"></block>
+      <block type="math_constrain">
+        <value name="LOW">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="HIGH">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+      <block type="text_length"></block>
+      <block type="text_isEmpty"></block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase"></block>
+      <block type="text_trim"></block>
+      <block type="text_print"></block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+    </category>
+    <category name="Lists">
+      <block type="lists_create_empty"></block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">5</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_split">
+        <value name="DELIM">
+          <block type="text">
+            <field name="TEXT">,</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Colour">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+        <value name="GREEN">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <value name="BLUE">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <block type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </block>
+        </value>
+        <value name="COLOUR2">
+          <block type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </block>
+        </value>
+        <value name="RATIO">
+          <block type="math_number">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" custom="VARIABLE"></category>
+    <category name="Functions" custom="PROCEDURE"></category>
+  </xml>
+<p><a href="javascript:void([document.getElementById('blocklyDiv').style.display = 'block', Blockly.mainWorkspace.render()])">Show</a>
+   - <a href="javascript:void(document.getElementById('blocklyDiv').style.display = 'none')">Hide</a></p>
 
 <div id="comments"> </div>
 
-<div id="playground"> </div>
+<div id="categories" style="height: 100px; width: 200px"></div>
+
+<div id="blocklyDiv" style="height: 480px; width: 600px"> </div>
 
 <div id="codeTranslation"> </div>
 </body>

@@ -18,7 +18,9 @@
 
 var map = [];
 
-// Function for simultaneous keypresses
+/**
+ * Take care of keypresses for accessibility
+ */
 document.onkeydown = document.onkeyup = function(e){
 	
 	e = e || event;

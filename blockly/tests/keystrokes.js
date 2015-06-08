@@ -143,7 +143,7 @@ document.onkeydown = document.onkeyup = function(e){
 	else if(map[83]){ // s
 		console.log("S key pressed.");
 		// loads current blockly setup
-		updateXMLSelection();
+		updateXmlSelection();
 	}
 	else if(map[37]){ //left arrow
 		traverseOut();

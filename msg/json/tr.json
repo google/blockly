@@ -5,13 +5,15 @@
 			"Joseph",
 			"WikiBronze",
 			"Mavrikant",
-			"아라"
+			"아라",
+			"Watermelon juice"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "öge",
+	"TODAY": "Bugün",
 	"DUPLICATE_BLOCK": "Çoğalt",
 	"ADD_COMMENT": "Yorum Ekle",
-	"REMOVE_COMMENT": "Yorumu sil",
+	"REMOVE_COMMENT": "Yorumu Sil",
 	"EXTERNAL_INPUTS": "Harici Girişler",
 	"INLINE_INPUTS": "Satır içi girdiler",
 	"DELETE_BLOCK": "Bloğu Sil",

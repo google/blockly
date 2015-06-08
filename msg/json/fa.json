@@ -5,7 +5,8 @@
 			"Reza1615",
 			"Alirezaaa",
 			"Mehran",
-			"MohandesWiki"
+			"MohandesWiki",
+			"Dalba"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
@@ -75,7 +76,7 @@
 	"CONTROLS_IF_MSG_IF": "اگر",
 	"CONTROLS_IF_MSG_ELSEIF": "اگر آنگاه",
 	"CONTROLS_IF_MSG_ELSE": "آنگاه",
-	"CONTROLS_IF_IF_TOOLTIP": "اضافه، حذف یا ترتیب‌سازی قسمت‌ها برای تنظیم مجدد این بلوک اگر مسدود است.",
+	"CONTROLS_IF_IF_TOOLTIP": "افزودن، حذف یا بازمرتب‌سازی قسمت‌ها برای پیکربندی دوبارهٔ این بلوک اگر.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "افزودن یک شرط به بلوک اگر.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "اضافه‌کردن نهایی، گرفتن همهٔ شرایط به بلوک اگر.",
 	"LOGIC_COMPARE_HELPURL": "https://fa.wikipedia.org/wiki/%D9%86%D8%A7%D8%A8%D8%B1%D8%A7%D8%A8%D8%B1%DB%8C",

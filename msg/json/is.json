@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jonbg",
-			"아라"
+			"아라",
+			"Gaddi00"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "atriði",
@@ -35,7 +36,7 @@
 	"COLOUR_RANDOM_TOOLTIP": "Velja einhvern lit af handahófi.",
 	"COLOUR_RGB_HELPURL": "http://www.december.com/html/spec/colorper.html",
 	"COLOUR_RGB_TITLE": "litur",
-	"COLOUR_RGB_RED": "rautt",
+	"COLOUR_RGB_RED": "rauður",
 	"COLOUR_RGB_GREEN": "grænt",
 	"COLOUR_RGB_BLUE": "blátt",
 	"COLOUR_RGB_TOOLTIP": "Búa til lit úr tilteknu magni af rauðu, grænu og bláu. Allar tölurnar verða að vera á bilinu 0 til 100.",

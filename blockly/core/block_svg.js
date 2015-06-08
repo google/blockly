@@ -24,7 +24,7 @@
  */
 'use strict';
 
-//goog.provide('Blockly.BlockSvg');
+goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
@@ -115,6 +115,27 @@ Blockly.BlockSvg.prototype.select = function() {
   this.addSelect();
   Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
 };
+
+//#region NNB_SELECT
+
+Blockly.BlockSvg.prototype.select = function () {
+
+    if (Blockly.selected) {
+        // Unselect any previously selected block.
+        Blockly.selected.unselect();
+    }
+    Blockly.selected = this;
+    this.addSelect();
+    Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
+
+    console.log(getBlockNodeById(this.id));
+    if (getBlockNodeById(this.id)) {
+        currentNode = getBlockNodeById(this.id);
+        console.log(this.id);
+    }
+}
+
+//#endregion
 
 /**
  * Unselect this block.  Remove its highlighting.

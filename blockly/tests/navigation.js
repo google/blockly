@@ -1,5 +1,7 @@
+'use strict';
+
 /**
-*Copyright 2015 Luna Meier
+*Copyright [2015] [Luna Meier]
 *
 *Licensed under the Apache License, Version 2.0 (the "License");
 *you may not use this file except in compliance with the License.
@@ -13,28 +15,6 @@
 *See the License for the specific language governing permissions and
 *limitations under the License.
 */
-'use strict';
-
-//goog.provide('Accessibility.Navigation');
-
-goog.require('Blockly.BlockSvg');
-
-Blockly.BlockSvg.prototype.select = function () {
-
-    if (Blockly.selected) {
-        // Unselect any previously selected block.
-        Blockly.selected.unselect();
-    }
-    Blockly.selected = this;
-    this.addSelect();
-    Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
-
-    console.log(getBlockNodeById(this.id));
-    if (getBlockNodeById(this.id)) {
-        currentNode = getBlockNodeById(this.id);
-        console.log(this.id);
-    }
-}
 
 var xmlDoc = null;
 var currentNode = null;

@@ -58,6 +58,12 @@ Blockly.Field.prototype.sourceBlock_ = null;
 Blockly.Field.prototype.visible_ = true;
 
 /**
+ * Change handler called when user edits an editable field.
+ * @private
+ */
+Blockly.Field.prototype.changeHandler_ = null;
+
+/**
  * Clone this Field.  This must be implemented by all classes derived from
  * Field.  Since this class should not be instantiated, calling this method
  * throws an exception.
@@ -123,6 +129,7 @@ Blockly.Field.prototype.dispose = function() {
   this.fieldGroup_ = null;
   this.textElement_ = null;
   this.borderRect_ = null;
+  this.changeHandler_ = null;
 };
 
 /**
@@ -169,6 +176,14 @@ Blockly.Field.prototype.setVisible = function(visible) {
     root.style.display = visible ? 'block' : 'none';
     this.render_();
   }
+};
+
+/**
+ * Sets a new change handler for editable fields.
+ * @param {Function} handler New change handler, or null.
+ */
+Blockly.Field.prototype.setChangeHandler = function(handler) {
+  this.changeHandler_ = handler;
 };
 
 /**
@@ -225,11 +240,16 @@ Blockly.Field.prototype.getText = function() {
 
 /**
  * Set the text in this field.  Trigger a rerender of the source block.
- * @param {?string} text New text.
+ * @param {*} text New text.
  */
 Blockly.Field.prototype.setText = function(text) {
-  if (text === null || text === this.text_) {
+  if (text === null) {
     // No change if null.
+    return;
+  }
+  text = String(text);
+  if (text === this.text_) {
+    // No change.
     return;
   }
   this.text_ = text;

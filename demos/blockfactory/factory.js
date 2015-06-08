@@ -62,78 +62,175 @@ function onchange() {
  * Update the language code.
  */
 function updateLanguage() {
-  // Generate name.
   var code = [];
-  code.push("Blockly.Blocks['" + blockType + "'] = {");
   var rootBlock = getRootBlock();
   if (rootBlock) {
-    code.push("  init: function() {");
-    code.push("    this.setHelpUrl('http://www.example.com/');");
-    // Generate colour.
-    var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
-    if (colourBlock && !colourBlock.disabled) {
-      var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
-      code.push('    this.setColour(' + hue + ');');
-    }
-    // Generate inputs.
-    var TYPES = {'input_value': 'appendValueInput',
-                 'input_statement': 'appendStatementInput',
-                 'input_dummy': 'appendDummyInput'};
-    var inputVarDefined = false;
-    var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
-    while (contentsBlock) {
-      if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
-        var align = contentsBlock.getFieldValue('ALIGN');
-        var fields = getFields(contentsBlock.getInputTargetBlock('FIELDS'));
-        var name = '';
-        // Dummy inputs don't have names.  Other inputs do.
-        if (contentsBlock.type != 'input_dummy') {
-          name = escapeString(contentsBlock.getFieldValue('INPUTNAME'));
-        }
-        var check = getOptTypesFrom(contentsBlock, 'TYPE');
-        code.push('    this.' + TYPES[contentsBlock.type] +
-            '(' + name + ')');
-        if (check && check != 'null') {
-          code.push('        .setCheck(' + check + ')');
-        }
-        if (align != 'LEFT') {
-          code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
-        }
-        for (var x = 0; x < fields.length; x++) {
-          code.push('        .appendField(' + fields[x] + ')');
-        }
-        // Add semicolon to last line to finish the statement.
-        code[code.length - 1] += ';';
-      }
-      contentsBlock = contentsBlock.nextConnection &&
-          contentsBlock.nextConnection.targetBlock();
-    }
-    // Generate inline/external switch.
-    if (rootBlock.getFieldValue('INLINE') == 'INT') {
-      code.push('    this.setInputsInline(true);');
-    }
-    // Generate output, or next/previous connections.
-    switch (rootBlock.getFieldValue('CONNECTIONS')) {
-      case 'LEFT':
-        code.push(connectionLine_('setOutput', 'OUTPUTTYPE'));
+    switch (document.getElementById('format').value) {
+      case 'JSON':
+        formatJson(code, rootBlock);
         break;
-      case 'BOTH':
-        code.push(connectionLine_('setPreviousStatement', 'TOPTYPE'));
-        code.push(connectionLine_('setNextStatement', 'BOTTOMTYPE'));
-        break;
-      case 'TOP':
-        code.push(connectionLine_('setPreviousStatement', 'TOPTYPE'));
-        break;
-      case 'BOTTOM':
-        code.push(connectionLine_('setNextStatement', 'BOTTOMTYPE'));
+      case 'JavaScript':
+        formatJavaScript(code, rootBlock);
         break;
     }
-    code.push("    this.setTooltip('');");
-    code.push("  }");
   }
-  code.push("};");
-
   injectCode(code, 'languagePre');
+}
+
+/**
+ * Update the language code as JSON.
+ */
+function formatJson(code, rootBlock) {
+  var JS = {};
+  // Generate inputs.
+  var message = [];
+  var args = [];
+  var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
+  while (contentsBlock) {
+    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+      var fields = getFieldsJson_(contentsBlock.getInputTargetBlock('FIELDS'));
+      for (var i = 0; i < fields.length; i++) {
+        if (typeof fields[i] == 'string') {
+          message.push(fields[i].replace(/%/g, '%%'));
+        } else {
+          args.push(fields[i]);
+          message.push('%' + args.length);
+        }
+      }
+
+      var input = {type: contentsBlock.type};
+      // Dummy inputs don't have names.  Other inputs do.
+      if (contentsBlock.type != 'input_dummy') {
+        input.name = contentsBlock.getFieldValue('INPUTNAME');
+      }
+      var check = JSON.parse(getOptTypesFrom(contentsBlock, 'TYPE') || 'null');
+      if (check) {
+        input.check = check;
+      }
+      var align = contentsBlock.getFieldValue('ALIGN');
+      if (align != 'LEFT') {
+        input.align = align;
+      }
+      args.push(input);
+      message.push('%' + args.length);
+    }
+    contentsBlock = contentsBlock.nextConnection &&
+        contentsBlock.nextConnection.targetBlock();
+  }
+  // Remove last input if dummy.
+  var lastInput = args[args.length - 1];
+  if (lastInput && lastInput.type == 'input_dummy') {
+    if (lastInput.align) {
+      JS.lastDummyAlign = lastInput.align;
+    }
+    args.pop();
+    message.pop();
+  }
+  JS.message = message.join(' ');
+  JS.args = args;
+  // Generate inline/external switch.
+  if (rootBlock.getFieldValue('INLINE') == 'INT') {
+    JS.inputsInline = true;
+  }
+  // Generate output, or next/previous connections.
+  switch (rootBlock.getFieldValue('CONNECTIONS')) {
+    case 'LEFT':
+      JS.output =
+          JSON.parse(getOptTypesFrom(rootBlock, 'OUTPUTTYPE') || 'null');
+      break;
+    case 'BOTH':
+      JS.previousStatement =
+          JSON.parse(getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
+      JS.nextStatement =
+          JSON.parse(getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
+      break;
+    case 'TOP':
+      JS.previousStatement =
+          JSON.parse(getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
+      break;
+    case 'BOTTOM':
+      JS.nextStatement =
+          JSON.parse(getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
+      break;
+  }
+  // Generate colour.
+  var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
+  if (colourBlock && !colourBlock.disabled) {
+    var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
+    JS.colour = hue;
+  }
+  JS.tooltip = '';
+  JS.helpUrl = 'http://www.example.com/';
+  code.push(JSON.stringify(JS, null, '  '));
+}
+
+/**
+ * Update the language code as JavaScript.
+ */
+function formatJavaScript(code, rootBlock) {
+  code.push("Blockly.Blocks['" + blockType + "'] = {");
+  code.push("  init: function() {");
+  // Generate inputs.
+  var TYPES = {'input_value': 'appendValueInput',
+               'input_statement': 'appendStatementInput',
+               'input_dummy': 'appendDummyInput'};
+  var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
+  while (contentsBlock) {
+    if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
+      var name = '';
+      // Dummy inputs don't have names.  Other inputs do.
+      if (contentsBlock.type != 'input_dummy') {
+        name = escapeString(contentsBlock.getFieldValue('INPUTNAME'));
+      }
+      code.push('    this.' + TYPES[contentsBlock.type] + '(' + name + ')');
+      var check = getOptTypesFrom(contentsBlock, 'TYPE');
+      if (check) {
+        code.push('        .setCheck(' + check + ')');
+      }
+      var align = contentsBlock.getFieldValue('ALIGN');
+      if (align != 'LEFT') {
+        code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
+      }
+      var fields = getFieldsJs_(contentsBlock.getInputTargetBlock('FIELDS'));
+      for (var i = 0; i < fields.length; i++) {
+        code.push('        .appendField(' + fields[i] + ')');
+      }
+      // Add semicolon to last line to finish the statement.
+      code[code.length - 1] += ';';
+    }
+    contentsBlock = contentsBlock.nextConnection &&
+        contentsBlock.nextConnection.targetBlock();
+  }
+  // Generate inline/external switch.
+  if (rootBlock.getFieldValue('INLINE') == 'INT') {
+    code.push('    this.setInputsInline(true);');
+  }
+  // Generate output, or next/previous connections.
+  switch (rootBlock.getFieldValue('CONNECTIONS')) {
+    case 'LEFT':
+      code.push(connectionLineJs_('setOutput', 'OUTPUTTYPE'));
+      break;
+    case 'BOTH':
+      code.push(connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
+      code.push(connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+      break;
+    case 'TOP':
+      code.push(connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
+      break;
+    case 'BOTTOM':
+      code.push(connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+      break;
+  }
+  // Generate colour.
+  var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
+  if (colourBlock && !colourBlock.disabled) {
+    var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
+    code.push('    this.setColour(' + hue + ');');
+  }
+  code.push("    this.setTooltip('');");
+  code.push("    this.setHelpUrl('http://www.example.com/');");
+  code.push("  }");
+  code.push("};");
 }
 
 /**
@@ -143,20 +240,23 @@ function updateLanguage() {
  * @return {string} Line of JavaScript code to create connection.
  * @private
  */
-function connectionLine_(functionName, typeName) {
+function connectionLineJs_(functionName, typeName) {
   var type = getOptTypesFrom(getRootBlock(), typeName);
   if (type) {
     type = ', ' + type;
+  } else {
+    type = '';
   }
   return '    this.' + functionName + '(true' + type + ');';
 }
 
 /**
- * Returns a field string and any config.
- * @param {!Blockly.Block} block Field block.
- * @return {string} Field string.
+ * Returns field strings and any config.
+ * @param {!Blockly.Block} block Input block.
+ * @return {!Array.<string>} Field strings.
+ * @private
  */
-function getFields(block) {
+function getFieldsJs_(block) {
   var fields = [];
   while (block) {
     if (!block.disabled && !block.getInheritedDisabled()) {
@@ -190,16 +290,14 @@ function getFields(block) {
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_date':
-          // Result: new Blockly.FieldColour('2015-02-04'), 'DATE'
+          // Result: new Blockly.FieldDate('2015-02-04'), 'DATE'
           fields.push('new Blockly.FieldDate(' +
               escapeString(block.getFieldValue('DATE')) + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_variable':
-          // Result:
-          // new Blockly.FieldVariable('item'), 'VAR'
-          var varname = block.getFieldValue('TEXT');
-          varname = varname ? escapeString(varname) : 'null';
+          // Result: new Blockly.FieldVariable('item'), 'VAR'
+          var varname = escapeString(block.getFieldValue('TEXT') || null);
           fields.push('new Blockly.FieldVariable(' + varname + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
@@ -207,9 +305,9 @@ function getFields(block) {
           // Result:
           // new Blockly.FieldDropdown([['yes', '1'], ['no', '0']]), 'TOGGLE'
           var options = [];
-          for (var x = 0; x < block.optionCount_; x++) {
-            options[x] = '[' + escapeString(block.getFieldValue('USER' + x)) +
-                ', ' + escapeString(block.getFieldValue('CPU' + x)) + ']';
+          for (var i = 0; i < block.optionCount_; i++) {
+            options[i] = '[' + escapeString(block.getFieldValue('USER' + i)) +
+                ', ' + escapeString(block.getFieldValue('CPU' + i)) + ']';
           }
           if (options.length) {
             fields.push('new Blockly.FieldDropdown([' +
@@ -234,16 +332,100 @@ function getFields(block) {
 }
 
 /**
+ * Returns field strings and any config.
+ * @param {!Blockly.Block} block Input block.
+ * @return {!Array.<string|!Object>} Array of static text and field configs.
+ * @private
+ */
+function getFieldsJson_(block) {
+  var fields = [];
+  while (block) {
+    if (!block.disabled && !block.getInheritedDisabled()) {
+      switch (block.type) {
+        case 'field_static':
+          // Result: 'hello'
+          fields.push(block.getFieldValue('TEXT'));
+          break;
+        case 'field_input':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            text: block.getFieldValue('TEXT')
+          });
+          break;
+        case 'field_angle':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            angle: block.getFieldValue('ANGLE')
+          });
+          break;
+        case 'field_checkbox':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            checked: block.getFieldValue('CHECKED')
+          });
+          break;
+        case 'field_colour':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            colour: block.getFieldValue('COLOUR')
+          });
+          break;
+        case 'field_date':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            date: block.getFieldValue('DATE')
+          });
+          break;
+        case 'field_variable':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            variable: block.getFieldValue('TEXT') || null
+          });
+          break;
+        case 'field_dropdown':
+          var options = [];
+          for (var i = 0; i < block.optionCount_; i++) {
+            options[i] = [block.getFieldValue('USER' + i),
+                block.getFieldValue('CPU' + i)];
+          }
+          if (options.length) {
+            fields.push({
+              type: block.type,
+              name: block.getFieldValue('FIELDNAME'),
+              options: options
+            });
+          }
+          break;
+        case 'field_image':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            src: block.getFieldValue('SRC'),
+            width: Number(block.getFieldValue('WIDTH')),
+            height: Number(block.getFieldValue('HEIGHT')),
+            alt: block.getFieldValue('ALT')
+          });
+          break;
+      }
+    }
+    block = block.nextConnection && block.nextConnection.targetBlock();
+  }
+  return fields;
+}
+
+/**
  * Escape a string.
  * @param {string} string String to escape.
  * @return {string} Escaped string surrouned by quotes.
  */
 function escapeString(string) {
-  if (JSON && JSON.stringify) {
-    return JSON.stringify(string);
-  }
-  // Hello MSIE 8.
-  return '"' + string.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+  return JSON.stringify(string);
 }
 
 /**
@@ -251,12 +433,12 @@ function escapeString(string) {
  * Format as a string for appending to the generated code.
  * @param {!Blockly.Block} block Block with input.
  * @param {string} name Name of the input.
- * @return {string} String defining the types.
+ * @return {?string} String defining the types.
  */
 function getOptTypesFrom(block, name) {
   var types = getTypesFrom_(block, name);
   if (types.length == 0) {
-    return '';
+    return undefined;
   } else if (types.indexOf('null') != -1) {
     return 'null';
   } else if (types.length == 1) {
@@ -406,11 +588,26 @@ function updatePreview() {
          scrollbars: true});
     oldDir = newDir;
   }
-  var code = document.getElementById('languagePre').textContent;
   previewWorkspace.clear();
-  eval(code);
+  if (Blockly.Blocks[blockType]) {
+    throw 'Block name collides with existing property: ' + blockType;
+  }
+  var code = document.getElementById('languagePre').textContent;
+  var format = document.getElementById('format').value;
+  if (format == 'JSON') {
+    Blockly.Blocks[blockType] = {
+      init: function() {
+        this.jsonInit(JSON.parse(code));
+      }
+    };;
+  } else if (format == 'JavaScript') {
+    eval(code);
+  } else {
+    throw 'Unknown format: ' + format;
+  }
   // Create the preview block.
   var previewBlock = Blockly.Block.obtain(previewWorkspace, blockType);
+  delete Blockly.Blocks[blockType];
   previewBlock.initSvg();
   previewBlock.render();
   previewBlock.setMovable(false);
@@ -504,6 +701,8 @@ function init() {
   mainWorkspace.addChangeListener(onchange);
   document.getElementById('direction')
       .addEventListener('change', updatePreview);
+  document.getElementById('format').addEventListener('change',
+      function() {updateLanguage(); updatePreview();});
   document.getElementById('language')
       .addEventListener('change', updateGenerator);
 }

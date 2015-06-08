@@ -255,17 +255,27 @@ Blockly.Blocks['math_change'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.MATH_CHANGE_HELPURL);
-    this.setColour(Blockly.Blocks.math.HUE);
-    this.interpolateMsg(
-        // TODO: Combine these messages instead of using concatenation.
-        Blockly.Msg.MATH_CHANGE_TITLE_CHANGE + ' %1 ' +
-        Blockly.Msg.MATH_CHANGE_INPUT_BY + ' %2',
-        ['VAR', new Blockly.FieldVariable(Blockly.Msg.MATH_CHANGE_TITLE_ITEM)],
-        ['DELTA', 'Number', Blockly.ALIGN_RIGHT],
-        Blockly.ALIGN_RIGHT);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
+    this.jsonInit({
+      "message": Blockly.Msg.MATH_CHANGE_TITLE,
+      "args": [
+        {
+          "type": "field_variable",
+          "name": "VAR",
+          "variable": Blockly.Msg.MATH_CHANGE_TITLE_ITEM
+        },
+        {
+          "type": "input_value",
+          "name": "DELTA",
+          "check": "Number",
+          "align": "RIGHT"
+        }
+      ],
+      "inputsInline": true,
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.math.HUE,
+      "helpUrl": Blockly.Msg.MATH_CHANGE_HELPURL
+    });
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {

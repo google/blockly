@@ -146,12 +146,6 @@ Blockly.Msg.COLOUR_BLEND_TOOLTIP = 'Blends two colours together with a given rat
 Blockly.Msg.CONTROLS_REPEAT_HELPURL = 'https://en.wikipedia.org/wiki/For_loop';
 /// block input text - Title of [https://github.com/google/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.
 Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
-/// block text - Text preceding the number of repetitions in a [https://github.com/google/blockly/wiki/Loops#repeat repeat block].
-/// (This is redundant with the previous message but is needed to support older code.)
-Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = 'repeat';
-/// block text - Text following the number of times a [https://github.com/google/blockly/wiki/Loops#repeat repeat loop] should be repeated.
-/// (This is redundant but is needed to support older code.)
-Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = 'times';
 /// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].
@@ -172,16 +166,14 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = 'While a value is false, then do
 Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://github.com/google/blockly/wiki/Loops#count-with';
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#count-with https://github.com/google/blockly/wiki/Loops#count-with].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable %1 take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
-/// block title - Title of [https://github.com/google/blockly/wiki/Loops#count-with count with] blocks.
-/// [[File:Blockly-count-with.png]]
-Blockly.Msg.CONTROLS_FOR_INPUT_WITH = 'count with';
-/// block text - Starting with a (usually lower) number in a range (%1),
-/// ending with a (usually higher) number in a range (%2), and counting the
-/// iterations by a number of steps (%3).  As in
+/// block text - Repeatedly counts a variable (%1)
+/// starting with a (usually lower) number in a range (%2),
+/// ending with a (usually higher) number in a range (%3), and counting the
+/// iterations by a number of steps (%4).  As in
 /// [https://github.com/google/blockly/wiki/Loops#count-with
 /// https://github.com/google/blockly/wiki/Loops#count-with].
 /// [[File:Blockly-count-with.png]]
-Blockly.Msg.CONTROLS_FOR_INPUT_FROM_TO_BY = 'from %1 to %2 by %3';
+Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 
 /// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
@@ -414,11 +406,11 @@ Blockly.Msg.MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, 
 /// For other languages, just use the translation of the Wikipedia page about
 /// addition ([https://en.wikipedia.org/wiki/Addition https://en.wikipedia.org/wiki/Addition]).
 Blockly.Msg.MATH_CHANGE_HELPURL = 'https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter';
-/// - As in: '''change''' [the value of variable] ''item by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
-Blockly.Msg.MATH_CHANGE_TITLE_CHANGE = 'change';
+/// - As in: ''change'' [the value of variable] ''item'' ''by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
+/// %1 is a variable name.
+/// %2 is the amount of change.
+Blockly.Msg.MATH_CHANGE_TITLE = 'change %1 by %2';
 Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// - As in: ''change'' [the value of variable] ''item'' '''by''' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
-Blockly.Msg.MATH_CHANGE_INPUT_BY = 'by';
 /// tooltip - This updates the value of the variable by adding to it the following numeric input.\n\nParameters:\n* %1 - the name of the variable whose value should be increased.
 Blockly.Msg.MATH_CHANGE_TOOLTIP = 'Add a number to variable "%1".';
 
@@ -829,7 +821,7 @@ Blockly.Msg.LISTS_GET_INDEX_GET = 'get';
 Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE = 'get and remove';
 /// dropdown - Indicates that the user wishes to
 /// [https://github.com/google/blockly/wiki/Lists#removing-an-item
-/// remove an item from a list].
+/// remove an item from a list].\n{{Identical|Remove}}
 Blockly.Msg.LISTS_GET_INDEX_REMOVE = 'remove';
 /// dropdown - Indicates that an index relative to the front of the list should be used to
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item get and/or remove
@@ -1002,11 +994,6 @@ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 // Variables Blocks.
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_GET_HELPURL = 'https://github.com/google/blockly/wiki/Variables#get';
-/// block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TITLE = '';
-Blockly.Msg.VARIABLES_GET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - This follows the name of a variable.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go after "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TAIL = '';
 /// tooltip - This gets the value of the named variable without modifying it.
 Blockly.Msg.VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 /// context menu - Selecting this creates a block to set (change) the value of this variable.
@@ -1015,12 +1002,8 @@ Blockly.Msg.VARIABLES_GET_CREATE_SET = 'Create "set %1"';
 
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_SET_HELPURL = 'https://github.com/google/blockly/wiki/Variables#set';
-/// block text - The imperative or infinitive form of the verb "set", as in: '''set''' [the value of] x to 7.
-Blockly.Msg.VARIABLES_SET_TITLE = 'set';
-Blockly.Msg.VARIABLES_SET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - The word that goes after the name of the variable and before its new
-/// value in: set [the value of] x '''to''' 7.
-Blockly.Msg.VARIABLES_SET_TAIL = 'to';
+/// block text - Change the value of a mathematical variable: '''set [the value of] x to 7'''.\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the value to be assigned.
+Blockly.Msg.VARIABLES_SET = 'set %1 to %2';
 /// tooltip - This initializes or changes the value of the named variable.
 Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
 /// context menu - Selecting this creates a block to get (change) the value of

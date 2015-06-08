@@ -47,7 +47,7 @@ goog.require('goog.style');
 Blockly.FieldColour = function(colour, opt_changeHandler) {
   Blockly.FieldColour.superClass_.constructor.call(this, '\u00A0\u00A0\u00A0');
 
-  this.changeHandler_ = opt_changeHandler;
+  this.setChangeHandler(opt_changeHandler);
   // Set the initial state.
   this.setValue(colour);
 

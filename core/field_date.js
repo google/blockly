@@ -53,7 +53,7 @@ Blockly.FieldDate = function(date, opt_changeHandler) {
   }
   Blockly.FieldDate.superClass_.constructor.call(this, date);
   this.setValue(date);
-  this.changeHandler_ = opt_changeHandler;
+  this.setChangeHandler(opt_changeHandler);
 };
 goog.inherits(Blockly.FieldDate, Blockly.Field);
 

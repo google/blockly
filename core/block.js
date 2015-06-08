@@ -980,6 +980,142 @@ Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
 Blockly.Block.prototype.interpolateMsg.SPLIT_REGEX_ = /(%\d+|\n)/;
 Blockly.Block.prototype.interpolateMsg.INLINE_REGEX_ = /%1\s*$/;
 
+/**
+ * Initialize this block using a cross-platform, internationalization-friendly
+ * JSON description.
+ * @param {!Object} json Structured data describing the block.
+ */
+Blockly.Block.prototype.jsonInit = function(json) {
+  // Validate inputs.
+  goog.asserts.assertString(json['message'], 'No message.');
+  goog.asserts.assertArray(json['args'], 'No args.');
+  goog.asserts.assert(json['output'] == undefined ||
+      json['previousStatement'] == undefined,
+      'Must not have both an output and a previousStatement.');
+
+  // Set basic properties of block.
+  this.setColour(json['colour']);
+
+  // Parse the message and interpolate the arguments.
+  // Build a list of elements.
+  var tokens = json['message'].split(/(%\d+)/);
+  var indexDup = [];
+  var indexCount = 0;
+  var elements = [];
+  for (var i = 0; i < tokens.length; i++) {
+    var token = tokens[i];
+    if (token.match(/^%\d+$/)) {
+      var index = parseInt(token.substring(1), 10);
+      goog.asserts.assert(index > 0 && index <= json['args'].length,
+          'Message index "%s" out of range.', token);
+      goog.asserts.assert(!indexDup[index],
+          'Message index "%s" duplicated.', token);
+      indexDup[index] = true;
+      indexCount++;
+      elements.push(json['args'][index - 1]);
+    } else {
+      token = token.replace(/%%/g, '%').trim();
+      if (token) {
+        elements.push(token);
+      }
+    }
+  }
+  goog.asserts.assert(indexCount == json['args'].length,
+      'Message does not reference all %s arg(s).', json['args'].length);
+  // Add last dummy input if needed.
+  if (elements.length && typeof elements[elements.length - 1] == 'string') {
+    var input = {type: 'input_dummy'};
+    if (json['lastDummyAlign']) {
+      input['align'] = json['lastDummyAlign'];
+    }
+    elements.push(input);
+  }
+  // Lookup of alignment constants.
+  var alignmentLookup = {
+    'LEFT': Blockly.ALIGN_LEFT,
+    'RIGHT': Blockly.ALIGN_RIGHT,
+    'CENTRE': Blockly.ALIGN_CENTRE
+  };
+  // Populate block with inputs and fields.
+  var fieldStack = [];
+  for (var i = 0; i < elements.length; i++) {
+    var element = elements[i];
+    if (typeof element == 'string') {
+      fieldStack.push([element, undefined]);
+    } else {
+      var field = null;
+      var input = null;
+      switch (element['type']) {
+        case 'field_input':
+          field = new Blockly.FieldTextInput(element['text']);
+          break;
+        case 'field_angle':
+          field = new Blockly.FieldAngle(element['angle']);
+          break;
+        case 'field_checkbox':
+          field = new Blockly.FieldCheckbox(element['checked']);
+          break;
+        case 'field_colour':
+          field = new Blockly.FieldColour(element['colour']);
+          break;
+        case 'field_date':
+          field = new Blockly.FieldDate(element['date']);
+          break;
+        case 'field_variable':
+          field = new Blockly.FieldVariable(element['variable']);
+          break;
+        case 'field_dropdown':
+          field = new Blockly.FieldDropdown(element['options']);
+          break;
+        case 'field_image':
+          field = new Blockly.FieldImage(element['src'],
+              element['width'], element['height'], element['alt']);
+          break;
+        case 'input_value':
+          input = this.appendValueInput(element['name']);
+          break;
+        case 'input_statement':
+          input = this.appendStatementInput(element['name']);
+          break;
+        case 'input_dummy':
+          input = this.appendDummyInput(element['name']);
+          break;
+        default:
+          throw 'Unknown element type: ' + element['type'];
+      }
+      if (field) {
+        fieldStack.push([field, element['name']]);
+      } else if (input) {
+        if (element['check']) {
+          input.setCheck(element['check']);
+        }
+        if (element['align']) {
+          input.setAlign(alignmentLookup[element['align']]);
+        }
+        for (var j = 0; j < fieldStack.length; j++) {
+          input.appendField(fieldStack[j][0], fieldStack[j][1]);
+        }
+        fieldStack.length = 0;
+      }
+    }
+  }
+
+  if (json['inputsInline']) {
+    this.setInputsInline(true);
+  }
+  // Set output and previous/next connections.
+  if (json['output'] !== undefined) {
+    this.setOutput(true, json['output']);
+  }
+  if (json['previousStatement'] !== undefined) {
+    this.setPreviousStatement(true, json['previousStatement']);
+  }
+  if (json['nextStatement'] !== undefined) {
+    this.setNextStatement(true, json['nextStatement']);
+  }
+  this.setTooltip(json['tooltip']);
+  this.setHelpUrl(json['helpUrl']);
+};
 
 /**
  * Add a value input, statement input or local variable to this block.

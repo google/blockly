@@ -112,19 +112,30 @@ Blockly.BlockSvg.prototype.select = function() {
     Blockly.selected.unselect();
   }
   Blockly.selected = this;
-  
-//#region NNB_SELECT
-  
-  console.log(getBlockNodeById(this.id));
-  if (getBlockNodeById(this.id)){
-	currentNode = getBlockNodeById(this.id);
-	console.log(this.id);
-  }
-//#endregion
-  
   this.addSelect();
   Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
 };
+
+//#region NNB_SELECT
+
+Blockly.BlockSvg.prototype.select = function () {
+
+    if (Blockly.selected) {
+        // Unselect any previously selected block.
+        Blockly.selected.unselect();
+    }
+    Blockly.selected = this;
+    this.addSelect();
+    Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
+
+    console.log(getBlockNodeById(this.id));
+    if (getBlockNodeById(this.id)) {
+        currentNode = getBlockNodeById(this.id);
+        console.log(this.id);
+    }
+}
+
+//#endregion
 
 /**
  * Unselect this block.  Remove its highlighting.

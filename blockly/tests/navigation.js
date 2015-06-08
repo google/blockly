@@ -20,6 +20,9 @@
 
 goog.require('Blockly.BlockSvg');
 
+var xmlDoc = null;
+var currentNode = null;
+
 Blockly.BlockSvg.prototype.select = function () {
 
     if (Blockly.selected) {

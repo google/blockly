@@ -1536,6 +1536,7 @@ goog.addDependency("../../third_party/closure/goog/mochikit/async/deferred.js", 
 goog.addDependency("../../third_party/closure/goog/mochikit/async/deferredlist.js", ['goog.async.DeferredList'], ['goog.async.Deferred']);
 goog.addDependency("../../third_party/closure/goog/osapi/osapi.js", ['goog.osapi'], []);
 goog.addDependency("../../third_party/closure/goog/svgpan/svgpan.js", ['svgpan.SvgPan'], ['goog.Disposable', 'goog.events', 'goog.events.EventType', 'goog.events.MouseWheelHandler']);
+goog.addDependency("../../../" + dir + "/tests/navigation.js", ['Accessibility.Navigation'], ['Blockly.BlockSvg']);
 
 // Load Blockly.
 goog.require('Blockly');
@@ -1581,6 +1582,7 @@ goog.require('Blockly.Xml');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('rtclient');
+goog.require('Accessibility.Navigation');
 
 delete window.BLOCKLY_DIR;
 delete window.BLOCKLY_BOOT;

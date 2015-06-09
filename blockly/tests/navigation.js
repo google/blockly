@@ -16,18 +16,23 @@
 *limitations under the License.
 */
 
-//goog.provide('Accessibility.Navigation');
+goog.provide('Accessibility.Navigation');
 
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.Block');
-goog.require('Blockly');
+goog.require('Blockly.Connection');
 
 var xmlDoc = null;
 var currentNode = null;
 
+//#region XML_UPDATING
+
+// Default functions for our hooks.
 Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
 Blockly.Block.prototype.defaultInitialize = Blockly.Block.prototype.initialize;
-Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose
+Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
+Blockly.Connection.prototype.defaultConnect = Blockly.Connection.prototype.connect;
+Blockly.Connection.prototype.defaultDisconnect = Blockly.Connection.prototype.disconnect;
 
 /**
  * Select this block.  Highlight it visually.
@@ -71,9 +76,32 @@ Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
     updateXmlSelection(true);
 };
 
+/**
+ * Connect this connection to another connection.
+ * @param {!Blockly.Connection} otherConnection Connection to connect to.
+ */
+Blockly.Connection.prototype.connect = function (otherConnection) {
+    this.defaultConnect(otherConnection);
+
+    updateXmlSelection();
+}
+
+/**
+ * Disconnect this connection.
+ */
+Blockly.Connection.prototype.disconnect = function () {
+    this.defaultDisconnect();
+
+    //updateXmlSelection();
+
+}
+
+//#endregion
+
 
 /**
  * Loads the xmldoc based on the current blockly setting.
+ * @param {boolean} Optional paramater.  If true, then don't select a block after updating the xml.
  */
 function updateXmlSelection(noSelect) {
 

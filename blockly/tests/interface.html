@@ -1,11 +1,12 @@
+<!DOCTYPE html>
 <html>
-
-<head> 
-<title>Interface</title>
+<head>
+<meta charset="utf-8">
+<title>Blockly Playground</title>
 
 <script src="loadxml.js"></script>
 <script src="debug.js"></script>
-<script src="navigation-block-info"></script>
+<script src="navigation-block-info.js"></script>
 <script src="navigation.js"></script>
 <script src="../blockly_uncompressed.js"></script>
 <script src="../generators/javascript.js"></script>
@@ -46,27 +47,205 @@
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="../blocks/audio.js"></script>
+<!-- Load the Google Drive SDK Realtime libraries. -->
+<script src="https://apis.google.com/js/api.js"></script>
 <script>
-//Initialize events inside of startup
-window.onload = startup;
-function start(){
-	console.log("Startup Called");
-    var workspace = Blockly.inject('blocklyDiv', 'null');
-      //{toolbox: document.getElementById('toolbox')});
-    var categoryList = Blockly.inject('categories', 
-        {toolbox: document.getElementById('toolbox')});
+'use strict';
+// Depending on the URL argument, render as LTR or RTL.
+var rtl = (document.location.search == '?rtl');
+var block = null;
+var workspace = null;
+
+//Contains the code after exporting to javascript
+var code;
+
+function enableRealtimeSpecificUi() {
+  var realtimeDiv = document.getElementById('realtime');
+  realtimeDiv.display = 'block';
 }
+
+function start() {
+  var toolbox = document.getElementById('toolbox');
+  workspace = Blockly.inject(document.getElementById('blocklyDiv'),
+          {rtl: rtl,
+           media: '../media/',
+           toolbox: toolbox,
+           comments: true,
+           disable: true,
+           collapse: true,
+		   trashcan: false,
+           grid:
+             {spacing: 25,
+              length: 3,
+              colour: '#ccc',
+              snap: true},
+           realtime: false,
+           realtimeOptions:
+             {clientId: 'YOUR CLIENT ID GOES HERE',
+              chatbox: {elementId: 'chatbox'},
+              collabElementId: 'collaborators'}});
+  if (Blockly.Realtime.isEnabled()) {
+    enableRealtimeSpecificUi();
+  }
+}
+
+function toXml() {
+  var output = document.getElementById('importExport');
+  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  output.value = Blockly.Xml.domToPrettyText(xml);
+  output.focus();
+  output.select();
+}
+
+function fromXml() {
+  var input = document.getElementById('importExport');
+  var xml = Blockly.Xml.textToDom(input.value);
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  updateXMLSelection();
+}
+
+function toCode(lang) {
+  var output = document.getElementById('importExport');
+  output.value = Blockly[lang].workspaceToCode();
+  
+}
+
+function airstrike(n) {
+  var prototypes = [];
+  var toolbox = document.getElementById('toolbox');
+  var blocks = toolbox.getElementsByTagName('block');
+  for (var i = 0, block; block = blocks[i]; i++) {
+    prototypes.push(block.getAttribute('type'));
+  }
+  for (var i = 0; i < n; i++) {
+    var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
+    var block = Blockly.Block.obtain(Blockly.mainWorkspace, prototype);
+    block.initSvg();
+    block.getSvgRoot().setAttribute('transform', 'translate(' +
+        Math.round(Math.random() * 450 + 40) + ', ' +
+        Math.round(Math.random() * 600 + 40) + ')');
+    block.render();
+  }
+}
+
+function spaghetti(n) {
+  var xml = spaghettiXml;
+  for(var i = 0; i < n; i++) {
+    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
+        '$1' + spaghettiXml + '</');
+  }
+  xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
+  var dom = Blockly.Xml.textToDom(xml);
+  console.time('Spaghetti domToWorkspace');
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, dom);
+  console.timeEnd('Spaghetti domToWorkspace');
+}
+
+function runCode(){
+	window.LoopTrap = 1000;
+	Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
+	code = Blockly['JavaScript'].workspaceToCode();
+	try {
+		eval(code);
+	} catch (e) {
+		alert(e);
+	}
+}
+
+var spaghettiXml = [
+  '  <block type="controls_if" inline="false" x="30" y="30">' +
+  '    <value name="IF0">' +
+  '      <block type="logic_compare" inline="true">' +
+  '        <field name="OP">EQ</field>' +
+  '        <value name="A">' +
+  '          <block type="math_arithmetic" inline="true">' +
+  '            <field name="OP">MULTIPLY</field>' +
+  '            <value name="A">' +
+  '              <block type="math_number">' +
+  '                <field name="NUM">6</field>' +
+  '              </block>' +
+  '            </value>' +
+  '            <value name="B">' +
+  '              <block type="math_number">' +
+  '                <field name="NUM">7</field>' +
+  '              </block>' +
+  '            </value>' +
+  '          </block>' +
+  '        </value>' +
+  '        <value name="B">' +
+  '          <block type="math_number">' +
+  '            <field name="NUM">42</field>' +
+  '          </block>' +
+  '        </value>' +
+  '      </block>' +
+  '    </value>' +
+  '    <statement name="DO0"></statement>' +
+  '    <next></next>' +
+  '  </block>'].join('\n');
+
 </script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: left;
+  height: 95%;
+  width: 70%;
+  margin-right: 1%;
+}
+#PrimaryContentDiv {
+    padding-left: 71%;
+    margin: 1%;
+}
+#commentDiv {
+    padding-left: 71%;
+    font-family: monospace;
+    margin: 1%;
+}
+#collaborators {
+  float: right;
+  width: 30px;
+  margin-left: 10px;
+}
+#collaborators > img {
+  margin-right: 5px;
+  height: 30px;
+  padding-bottom: 5px;
+  width: 30px;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+#importExport {
+  font-family: monospace;
+}
+#buttons { 
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+#buttons button { 
+  width: 100%;
+}
+</style>
 </head>
-
 <body onload="start()">
-<h1>Blockly Playground</h1>
 
-<div id="categoryList"> 
+  <div id="collaborators"></div>
 
-</div>
+  <div id="blocklyDiv"></div>
 
-<xml id="toolbox" style="display: none">
+  <xml id="toolbox" style="display: none">
     <category name="Audio">
       <block type="beep"></block>
     </category>
@@ -281,18 +460,88 @@ function start(){
     <category name="Variables" custom="VARIABLE"></category>
     <category name="Functions" custom="PROCEDURE"></category>
   </xml>
-<p><a href="javascript:void([document.getElementById('blocklyDiv').style.display = 'block', Blockly.mainWorkspace.render()])">Show</a>
+    
+    <div class="commentDiv">
+        <h1 align="center">Blockly Playground</h1>
+        <textarea id="commentBlock" style="width: 28%; height: 12em">Comments go here</textarea>
+    </div>
+    
+  <div id="primaryContentDiv">
+    <!--
+  <p><a href="javascript:void([document.getElementById('blocklyDiv').style.display = 'block', Blockly.mainWorkspace.render()])">Show</a>
    - <a href="javascript:void(document.getElementById('blocklyDiv').style.display = 'none')">Hide</a></p>
 
-<div id="comments"> </div>
+  
+  <script>
+    if (rtl) {
+      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
+    } else {
+      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
+    }
+  </script>
+  -->
 
-<div id="categories" style="height: 100px; width: 200px"></div>
+  <p>
+  <!--
+    <input type="button" value="Export to XML" onclick="toXml()">
+    &nbsp;
+    <input type="button" value="Import from XML" onclick="fromXml()">
+	&nbsp;
+    <input type="button" value="Run Javascript" onclick="runCode()">
+    <br>
+    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
+    &nbsp;
+    <input type="button" value="To Python" onclick="toCode('Python')">
+    &nbsp;
+    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <br>
+    -->
+    <table class=buttons>
+        <tr>
+            <td><button type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
+            <td><button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
+            <td><button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
+        </tr>
+        <tr>
+            <td><button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
+            <td><button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
+            <td><button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
+    </table>
+    <textarea id="importExport" style="width: 28%; height: 12em">Program Output is here</textarea>
+  </p>
+  <hr>
 
-<div id="blocklyDiv" style="height: 480px; width: 600px"> </div>
+  <p>
+    Stress test:
+    <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+  </p>
+  </div>
+  <!-- Realtime setup buttons. -->
 
-<div id="codeTranslation"> </div>
+  <div id="realtime" style="display: none">
+
+    <p>Test realtime collaboration by opening
+      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
+        this link</a> in a separate browser window or tab and they will be
+      synchronized.  You can even share the link with a friend!.</p>
+
+    <br>
+    <br>
+	
+
+    <!-- Undo and redo buttons. -->
+    <!-- TODO: Uncomment this when undo/redo are fixed. -->
+    <!--
+      <button id="undoButton" disabled>Undo</button>
+      <button id="redoButton" disabled>Redo</button>
+      <br />
+    -->
+
+    <!-- Text area that will be used for our collaborative chat box. -->
+    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
+
+  </div>
 </body>
-
-<!--Scripts to be run only after page loads-->
 <script type="text/javascript" src="keystrokes.js"></script>
 </html>

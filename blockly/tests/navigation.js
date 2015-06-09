@@ -21,6 +21,10 @@ goog.provide('Accessibility.Navigation');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.Block');
 goog.require('Blockly.Connection');
+goog.require('Blockly.FieldColour');
+goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldCheckbox');
 
 var xmlDoc = null;
 var currentNode = null;
@@ -33,6 +37,11 @@ Blockly.Block.prototype.defaultInitialize = Blockly.Block.prototype.initialize;
 Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose;
 Blockly.Connection.prototype.defaultConnect = Blockly.Connection.prototype.connect;
 Blockly.Connection.prototype.defaultDisconnect = Blockly.Connection.prototype.disconnect;
+
+Blockly.FieldColour.defaultWidgetDispose_ = Blockly.FieldColour.widgetDispose_;
+Blockly.FieldTextInput.prototype.defaultInputSetText = Blockly.FieldTextInput.prototype.setText;
+Blockly.FieldDropdown.prototype.defaultDropdownSetText = Blockly.FieldDropdown.prototype.setText;
+Blockly.FieldCheckbox.prototype.defaultSetValue = Blockly.FieldCheckbox.prototype.setValue;
 
 /**
  * Select this block.  Highlight it visually.
@@ -92,9 +101,47 @@ Blockly.Connection.prototype.connect = function (otherConnection) {
 Blockly.Connection.prototype.disconnect = function () {
     this.defaultDisconnect();
 
-    //updateXmlSelection();
+    updateXmlSelection();
 
-}
+};
+
+/**
+ * Hide the colour palette.
+ * @private
+ */
+Blockly.FieldColour.widgetDispose_ = function () {
+    this.defaultWidgetDispose_();
+    updateXmlSelection();
+};
+
+/**
+ * Set the text in this field.
+ * @param {?string} text New text.
+ * @override
+ */
+Blockly.FieldTextInput.prototype.setText = function (text) {
+    this.defaultInputSetText(text);
+    updateXmlSelection();
+};
+
+/**
+ * Set the text in this field.  Trigger a rerender of the source block.
+ * @param {?string} text New text.
+ */
+Blockly.FieldDropdown.prototype.setText = function (text) {
+    this.defaultDropdownSetText(text);
+    updateXmlSelection();
+
+};
+
+/**
+ * Set the checkbox to be checked if strBool is 'TRUE', unchecks otherwise.
+ * @param {string} strBool New state.
+ */
+Blockly.FieldCheckbox.prototype.setValue = function (strBool) {
+    this.defaultSetValue(strBool);
+    updateXmlSelection();
+};
 
 //#endregion
 

@@ -108,7 +108,7 @@
 	"TEXT_CHANGECASE_OPERATOR_LOWERCASE": "سی واج کؤچک",
 	"LISTS_CREATE_EMPTY_TITLE": "یه گل نوم گه حالی راس بکیت",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "نوم گه",
-	"LISTS_IS_EMPTY_TITLE": "%1 حالیه",
+	"LISTS_ISEMPTY_TITLE": "%1 حالیه",
 	"LISTS_INLIST": "د نوم گه",
 	"LISTS_GET_INDEX_GET": "گرتن",
 	"LISTS_GET_INDEX_GET_REMOVE": "گرتن و جاوه جا بیئن",

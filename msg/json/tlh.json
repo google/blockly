@@ -134,7 +134,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "tetlh",
 	"LISTS_REPEAT_TITLE": "tetlh ghom %2 Dochmey %1 pus",
 	"LISTS_LENGTH_TITLE": "chuq %1",
-	"LISTS_IS_EMPTY_TITLE": "%1 chIm'a'",
+	"LISTS_ISEMPTY_TITLE": "%1 chIm'a'",
 	"LISTS_INLIST": "tetlhDaq",
 	"LISTS_INDEX_OF_FIRST": "Doch sam wa'DIch",
 	"LISTS_INDEX_OF_LAST": "Doch sam Qav",

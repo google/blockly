@@ -94,7 +94,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "Lëscht",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "En Element op d'Lëscht derbäisetzen.",
 	"LISTS_LENGTH_TITLE": "Längt vu(n) %1",
-	"LISTS_IS_EMPTY_TITLE": "%1 ass eidel",
+	"LISTS_ISEMPTY_TITLE": "%1 ass eidel",
 	"LISTS_INLIST": "an der Lëscht",
 	"LISTS_GET_INDEX_REMOVE": "ewechhuelen",
 	"LISTS_GET_INDEX_FROM_START": "#",

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-06-08 15:29:17.672097",
+		"lastupdated": "2015-06-08 18:18:53.015261",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -266,9 +266,9 @@
 	"LISTS_LENGTH_HELPURL": "https://github.com/google/blockly/wiki/Lists#length-of",
 	"LISTS_LENGTH_TITLE": "length of %1",
 	"LISTS_LENGTH_TOOLTIP": "Returns the length of a list.",
-	"LISTS_IS_EMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#is-empty",
-	"LISTS_IS_EMPTY_TITLE": "%1 is empty",
-	"LISTS_TOOLTIP": "Returns true if the list is empty.",
+	"LISTS_ISEMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#is-empty",
+	"LISTS_ISEMPTY_TITLE": "%1 is empty",
+	"LISTS_ISEMPTY_TOOLTIP": "Returns true if the list is empty.",
 	"LISTS_INLIST": "in list",
 	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
 	"LISTS_INDEX_OF_FIRST": "find first occurrence of item",

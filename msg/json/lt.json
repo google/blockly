@@ -163,7 +163,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "sąrašas",
 	"LISTS_REPEAT_TITLE": "sukurk sąrašą, kuriame %1 bus %2 kartus",
 	"LISTS_LENGTH_TITLE": "ilgis %1",
-	"LISTS_IS_EMPTY_TITLE": "%1 yra tuščias",
+	"LISTS_ISEMPTY_TITLE": "%1 yra tuščias",
 	"LISTS_INLIST": "sąraše",
 	"LISTS_INDEX_OF_FIRST": "rask pirmą reikšmę",
 	"LISTS_INDEX_OF_LAST": "rask paskutinę reikšmę",

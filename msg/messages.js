@@ -780,14 +780,14 @@ Blockly.Msg.LISTS_LENGTH_TITLE = 'length of %1';
 Blockly.Msg.LISTS_LENGTH_TOOLTIP = 'Returns the length of a list.';
 
 /// url - See [https://github.com/google/blockly/wiki/Lists#is-empty https://github.com/google/blockly/wiki/Lists#is-empty].
-Blockly.Msg.LISTS_IS_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#is-empty';
+Blockly.Msg.LISTS_ISEMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#is-empty';
 /// block text - See [https://github.com/google/blockly/wiki/Lists#is-empty
 /// https://github.com/google/blockly/wiki/Lists#is-empty].
 /// \n\nParameters:\n* %1 - the list to test
-Blockly.Msg.LISTS_IS_EMPTY_TITLE = '%1 is empty';
+Blockly.Msg.LISTS_ISEMPTY_TITLE = '%1 is empty';
 /// block tooltip - See [https://github.com/google/blockly/wiki/Lists#is-empty
 /// https://github.com/google/blockly/wiki/Lists#is-empty].
-Blockly.Msg.LISTS_TOOLTIP = 'Returns true if the list is empty.';
+Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = 'Returns true if the list is empty.';
 
 /// block text - Title of blocks operating on [https://github.com/google/blockly/wiki/Lists lists].
 Blockly.Msg.LISTS_INLIST = 'in list';

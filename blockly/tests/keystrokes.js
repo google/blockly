@@ -17,12 +17,50 @@
 */
 
 var map = [];
+var keyboardState = 'hotkeyMode';
 
 /**
  * Take care of keypresses for accessibility
  */
+
 document.onkeydown = document.onkeyup = function(e){
 	
+if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
+	return;
+}	
+
+if(keyboardState=='menuMode'){ //within the category select menu
+	if(map[49]){ //1 
+		//Enter the first list
+		keyboardState='menuKeyOne';
+	}
+	if(map[50]){ //2
+		//Enter the second list
+		keyboardState='menuKeyTwo';
+	}
+	if(map[51]){ //3
+		//Enter the third list
+		keyboardState='menuKeyThree';
+	}
+	if(map[52]){ //4
+		//Enter the fourth list
+		keyboardState='menuKeyFour';
+	}
+	if(map[53]){ //5
+		//Enter the fifth list
+		keyboardState='menuKeyFive';
+	}
+	if(map[54]){ //6
+		//Enter the sixth list
+		keyboardState='menuKeySix';
+	}
+	if(map[55]){ //7
+		//Enter the seventh list
+		keyboardState='menuKeySeven';
+	}
+	//If another block category is added, add it down here
+}
+
 	e = e || event;
 	map[e.keyCode] = e.type == 'keydown';
 	if (map[17] && map[90]){ //Ctrl Z
@@ -85,29 +123,9 @@ document.onkeydown = document.onkeyup = function(e){
 	
 	else if(map[65]){ //A
 		console.log("A key pressed.");
+		//This should initiate menu mode
 		//This should initiate a menu to add a block using hotkeys
-		//Hotkey functionality in the menu needs to be determined
-		if(map[49]){ //1 key THIS NEEDS TO BE CHECKED
-			//Enter the first list
-		}
-		if(map[50]){ //2
-			//Eneter the second list
-		}
-		if(map[51]){ //3
-			//Enter the third list
-		}
-		if(map[52]){ //4
-			//Enter the fourth list
-		}
-		if(map[53]){ //5
-			//Enter the fifth list
-		}
-		if(map[54]){ //6
-			//Enter the sixth list
-		}
-		if(map[55]){ //7
-			//Enter the seventh list
-		}
+		keyboardState=='menuMode';	
 	}
 	
 	else if(map[67]){ //C

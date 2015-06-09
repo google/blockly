@@ -19,31 +19,70 @@
 //goog.provide('Accessibility.Navigation');
 
 goog.require('Blockly.BlockSvg');
+goog.require('Blockly.Block');
+goog.require('Blockly');
 
 var xmlDoc = null;
 var currentNode = null;
 
+Blockly.BlockSvg.prototype.defaultSelect = Blockly.BlockSvg.prototype.select;
+Blockly.Block.prototype.defaultInitialize = Blockly.Block.prototype.initialize;
+Blockly.BlockSvg.prototype.defaultDispose = Blockly.BlockSvg.prototype.dispose
+
+/**
+ * Select this block.  Highlight it visually.
+ */
 Blockly.BlockSvg.prototype.select = function () {
 
-    if (Blockly.selected) {
-        // Unselect any previously selected block.
-        Blockly.selected.unselect();
-    }
-    Blockly.selected = this;
-    this.addSelect();
-    Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
+    this.defaultSelect();
 
     console.log(getBlockNodeById(this.id));
     if (getBlockNodeById(this.id)) {
         currentNode = getBlockNodeById(this.id);
         console.log(this.id);
     }
-}
+};
+
+/**
+ * Initialization for one block.
+ * @param {!Blockly.Workspace} workspace The new block's workspace.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
+ */
+Blockly.Block.prototype.initialize = function (workspace, prototypeName) {
+    this.defaultInitialize(workspace, prototypeName);
+
+    updateXmlSelection();
+};
+
+/**
+ * Dispose of this block.
+ * @param {boolean} healStack If true, then try to heal any gap by connecting
+ *     the next statement with the previous statement.  Otherwise, dispose of
+ *     all children of this block.
+ * @param {boolean} animate If true, show a disposal animation and sound.
+ * @param {boolean} opt_dontRemoveFromWorkspace If true, don't remove this
+ *     block from the workspace's list of top blocks.
+ */
+Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
+                                              opt_dontRemoveFromWorkspace) {
+    this.defaultDispose(healStack, animate, opt_dontRemoveFromWorkspace);
+
+    updateXmlSelection(true);
+};
+
 
 /**
  * Loads the xmldoc based on the current blockly setting.
  */
-function updateXmlSelection() {
+function updateXmlSelection(noSelect) {
+
+    if (noSelect)
+    {
+        xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        currentNode = null;
+    }
+
 
     console.log('Updating XML.');
     // If you currently have a node, make sure that if all block id's change you are still selecting the same block.

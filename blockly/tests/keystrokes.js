@@ -96,10 +96,6 @@ if(keyboardState=='menuMode'){ //within the category select menu
 	else if(map[9]){ //Tab
 		console.log("Tab key pressed.");
 		e.preventDefault();
-		//Go through the same level of code
-		//======================================GET ALL TAGS AND MAKE THEM TABBABLE==================
-		var all = document.getElementByTagName(*);
-		all[0].focus();
 	}
 		
 	else if(map[188]){ //Comma

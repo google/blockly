@@ -96,6 +96,7 @@ if(keyboardState=='menuMode'){ //within the category select menu
 	else if(map[9]){ //Tab
 		console.log("Tab key pressed.");
 		e.preventDefault();
+		//Go through the same level of code
 	}
 		
 	else if(map[188]){ //Comma

@@ -939,7 +939,8 @@ Blockly.Block.prototype.jsonInit = function(json) {
   goog.asserts.assert(indexCount == json['args'].length,
       'Message does not reference all %s arg(s).', json['args'].length);
   // Add last dummy input if needed.
-  if (elements.length && typeof elements[elements.length - 1] == 'string') {
+  if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
+      elements[elements.length - 1]['type'].indexOf('field_') == 0)) {
     var input = {type: 'input_dummy'};
     if (json['lastDummyAlign']) {
       input['align'] = json['lastDummyAlign'];
@@ -1016,8 +1017,8 @@ Blockly.Block.prototype.jsonInit = function(json) {
     }
   }
 
-  if (json['inputsInline']) {
-    this.setInputsInline(true);
+  if (json['inputsInline'] !== undefined) {
+    this.setInputsInline(json['inputsInline']);
   }
   // Set output and previous/next connections.
   if (json['output'] !== undefined) {

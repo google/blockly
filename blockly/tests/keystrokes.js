@@ -34,30 +34,37 @@ document.onkeydown = document.onkeyup = function(e){
 
 	if(keyboardState=='menuMode'){ //within the category select menu
 		if(map[49]){ //1 
+			console.log("Within A menu, 1 key pressed.");
 			//Enter the first list
 			keyboardState='menuKeyOne';
 		}
 		if(map[50]){ //2
+			console.log("Within A menu, 1 key pressed.");
 			//Enter the second list
 			keyboardState='menuKeyTwo';
 		}
 		if(map[51]){ //3
+			console.log("Within A menu, 1 key pressed.");
 			//Enter the third list
 			keyboardState='menuKeyThree';
 		}
 		if(map[52]){ //4
+			console.log("Within A menu, 1 key pressed.");
 			//Enter the fourth list
 			keyboardState='menuKeyFour';
 		}
 		if(map[53]){ //5
+			console.log("Within A menu, 1 key pressed.");
 			//Enter the fifth list
 			keyboardState='menuKeyFive';
 		}
 		if(map[54]){ //6
+			console.log("Within A menu, 1 key pressed.");
 			//Enter the sixth list
 			keyboardState='menuKeySix';
 		}
 		if(map[55]){ //7
+			console.log("Within A menu, 1 key pressed.");
 			//Enter the seventh list
 			keyboardState='menuKeySeven';
 		}
@@ -127,7 +134,7 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log("A key pressed.");
 			//This should initiate menu mode
 			//This should initiate a menu to add a block using hotkeys
-			keyboardState=='menuMode';	
+			keyboardState='menuMode';	
 		}
 		
 		else if(map[67]){ //C

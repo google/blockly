@@ -54,7 +54,6 @@ Blockly.Blocks['controls_repeat'] = {
           "name": "DO"
         }
       ],
-      "inputsInline": true,
       "previousStatement": null,
       "nextStatement": null,
       "colour": Blockly.Blocks.loops.HUE,
@@ -89,7 +88,6 @@ Blockly.Blocks['controls_repeat_ext'] = {
           "name": "DO"
         }
       ],
-      "inputsInline": true,
       "previousStatement": null,
       "nextStatement": null,
       "colour": Blockly.Blocks.loops.HUE,
@@ -170,6 +168,8 @@ Blockly.Blocks['controls_for'] = {
     });
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_FOR_INPUT_DO);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
     this.setTooltip(function() {
       return Blockly.Msg.CONTROLS_FOR_TOOLTIP.replace('%1',
           thisBlock.getFieldValue('VAR'));
@@ -221,22 +221,27 @@ Blockly.Blocks['controls_forEach'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.CONTROLS_FOREACH_HELPURL);
-    this.setColour(Blockly.Blocks.loops.HUE);
-    this.appendValueInput('LIST')
-        .setCheck('Array')
-        .appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM)
-        .appendField(new Blockly.FieldVariable(null), 'VAR')
-        .appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST);
-    if (Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL) {
-      this.appendDummyInput()
-          .appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL);
-      this.setInputsInline(true);
-    }
+    this.jsonInit({
+      "message": Blockly.Msg.CONTROLS_FOREACH_TITLE,
+      "args": [
+        {
+          "type": "field_variable",
+          "name": "VAR",
+          "variable": null
+        },
+        {
+          "type": "input_value",
+          "name": "LIST",
+          "check": "Array"
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.loops.HUE,
+      "helpUrl": Blockly.Msg.CONTROLS_FOREACH_HELPURL
+    });
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_DO);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {

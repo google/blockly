@@ -94,7 +94,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   this.nextConnection = null;
   this.previousConnection = null;
   this.inputList = [];
-  this.inputsInline = false;
+  this.inputsInline = undefined;
   this.rendered = false;
   this.disabled = false;
   this.tooltip = '';
@@ -127,6 +127,8 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   if (goog.isFunction(this.init)) {
     this.init();
   }
+  // Record initial inline state.
+  this.inputsInlineDefault = this.inputsInline;
 };
 
 /**
@@ -760,6 +762,33 @@ Blockly.Block.prototype.setInputsInline = function(newBoolean) {
     this.bumpNeighbours_();
     this.workspace.fireChangeEvent();
   }
+};
+
+/**
+ * Get whether value inputs are arranged horizontally or vertically.
+ * @return {boolean} True if inputs are horizontal.
+ */
+Blockly.Block.prototype.getInputsInline = function() {
+  if (this.inputsInline != undefined) {
+    // Set explicitly.
+    return this.inputsInline;
+  }
+  // Not defined explicitly.  Figure out what would look best.
+  for (var i = 1; i < this.inputList.length; i++) {
+    if (this.inputList[i - 1].type == Blockly.DUMMY_INPUT &&
+        this.inputList[i].type == Blockly.DUMMY_INPUT) {
+      // Two dummy inputs in a row.  Don't inline them.
+      return false;
+    }
+  }
+  for (var i = 1; i < this.inputList.length; i++) {
+    if (this.inputList[i - 1].type == Blockly.INPUT_VALUE &&
+        this.inputList[i].type == Blockly.DUMMY_INPUT) {
+      // Dummy input after a value input.  Inline them.
+      return true;
+    }
+  }
+  return false;
 };
 
 /**

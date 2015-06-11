@@ -165,7 +165,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = 'While a value is false, then do
 /// url - Describes 'for loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/For_loop https://en.wikipedia.org/wiki/For_loop], if present.
 Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://github.com/google/blockly/wiki/Loops#count-with';
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#count-with https://github.com/google/blockly/wiki/Loops#count-with].\n\nParameters:\n* %1 - the name of the loop variable.
-Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable %1 take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
+Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable "%1" take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
 /// block text - Repeatedly counts a variable (%1)
 /// starting with a (usually lower) number in a range (%2),
 /// ending with a (usually higher) number in a range (%3), and counting the
@@ -177,13 +177,10 @@ Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 
 /// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
-Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/Loops#for-each for each block';
+Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/Loops#for-each';
 /// block text - Title of [https://github.com/google/blockly/wiki/Loops#for-each for each block].
-Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM = 'for each item';
-/// block text - Preceding the list that should be iterated over in a [https://github.com/google/blockly/wiki/Loops#for-each for each loop].
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST = 'in list';
-/// block text - Following the list that should be iterated over in a [https://github.com/google/blockly/wiki/Loops#for-each for each loop].  This is empty in most, but not all, languages.
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL = '';
+/// Sequentially assigns every item in array %2 to the valiable %1.
+Blockly.Msg.CONTROLS_FOREACH_TITLE = 'for each item %1 in list %2';
 Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /// block text - Description of [https://github.com/google/blockly/wiki/Loops#for-each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variable "%1" to the item, and then do some statements.';

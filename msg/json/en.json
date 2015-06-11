@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-06-08 18:18:53.015261",
+		"lastupdated": "2015-06-10 18:37:24.926409",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -56,12 +56,10 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "While a value is true, then do some statements.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "While a value is false, then do some statements.",
 	"CONTROLS_FOR_HELPURL": "https://github.com/google/blockly/wiki/Loops#count-with",
-	"CONTROLS_FOR_TOOLTIP": "Have the variable %1 take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.",
+	"CONTROLS_FOR_TOOLTIP": "Have the variable '%1' take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.",
 	"CONTROLS_FOR_TITLE": "count with %1 from %2 to %3 by %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each for each block",
-	"CONTROLS_FOREACH_INPUT_ITEM": "for each item",
-	"CONTROLS_FOREACH_INPUT_INLIST": "in list",
-	"CONTROLS_FOREACH_INPUT_INLIST_TAIL": "",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each",
+	"CONTROLS_FOREACH_TITLE": "for each item %1 in list %2",
 	"CONTROLS_FOREACH_TOOLTIP": "For each item in a list, set the variable '%1' to the item, and then do some statements.",
 	"CONTROLS_FLOW_STATEMENTS_HELPURL": "https://github.com/google/blockly/wiki/Loops#loop-termination-blocks",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "break out of loop",

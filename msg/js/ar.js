@@ -35,10 +35,8 @@ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE = "استمر ابتدا�
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK = "اخرج من الحلقة الحالية.";
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE = "تخط ما تبقى من هذه الحلقة، واستمر ابتداءا من التكرار التالي.";
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING = "تحذير: يمكن استخدام هذه القطعة فقط داخل حلقة.";
-Blockly.Msg.CONTROLS_FOREACH_HELPURL = "https://github.com/google/blockly/wiki/Loops#for-each for each block";  // untranslated
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST = "في قائمة";
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL = "";  // untranslated
-Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM = "لكل عنصر";
+Blockly.Msg.CONTROLS_FOREACH_HELPURL = "https://github.com/google/blockly/wiki/Loops#for-each";  // untranslated
+Blockly.Msg.CONTROLS_FOREACH_TITLE = "لكل عنصر %1 في قائمة %2";
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "لكل عنصر في قائمة ما، عين المتغير '%1' لهذا الغنصر، ومن ثم نفذ بعض الأوامر.";
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "عد بـ %1 من %2 إلى %3 بمعدل %4";

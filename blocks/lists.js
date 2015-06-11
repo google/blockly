@@ -220,7 +220,6 @@ Blockly.Blocks['lists_repeat'] = {
           "check": "Number"
         }
       ],
-      "inputsInline": true,
       "output": "Array",
       "colour": Blockly.Blocks.lists.HUE,
       "tooltip": Blockly.Msg.LISTS_REPEAT_TOOLTIP,
@@ -267,7 +266,6 @@ Blockly.Blocks['lists_isEmpty'] = {
           "check": ['String', 'Array']
         }
       ],
-      "inputsInline": true,
       "output": 'Boolean',
       "colour": Blockly.Blocks.lists.HUE,
       "tooltip": Blockly.Msg.LISTS_ISEMPTY_TOOLTIP,

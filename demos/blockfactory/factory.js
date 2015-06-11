@@ -129,7 +129,9 @@ function formatJson(code, rootBlock) {
   JS.message = message.join(' ');
   JS.args = args;
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+    JS.inputsInline = false;
+  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
     JS.inputsInline = true;
   }
   // Generate output, or next/previous connections.
@@ -202,7 +204,9 @@ function formatJavaScript(code, rootBlock) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Generate inline/external switch.
-  if (rootBlock.getFieldValue('INLINE') == 'INT') {
+  if (rootBlock.getFieldValue('INLINE') == 'EXT') {
+    code.push('    this.setInputsInline(false);');
+  } else if (rootBlock.getFieldValue('INLINE') == 'INT') {
     code.push('    this.setInputsInline(true);');
   }
   // Generate output, or next/previous connections.

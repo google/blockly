@@ -269,7 +269,6 @@ Blockly.Blocks['math_change'] = {
           "align": "RIGHT"
         }
       ],
-      "inputsInline": true,
       "previousStatement": null,
       "nextStatement": null,
       "colour": Blockly.Blocks.math.HUE,

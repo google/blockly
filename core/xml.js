@@ -46,8 +46,8 @@ Blockly.Xml.workspaceToDom = function(workspace) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var element = Blockly.Xml.blockToDom_(block);
     var xy = block.getRelativeToSurfaceXY();
-    element.setAttribute('x', workspace.RTL ? width - xy.x : xy.x);
-    element.setAttribute('y', xy.y);
+    element.setAttribute('x', Math.round(workspace.RTL ? width - xy.x : xy.x));
+    element.setAttribute('y', Math.round(xy.y));
     xml.appendChild(element);
   }
   return xml;
@@ -102,7 +102,6 @@ Blockly.Xml.blockToDom_ = function(block) {
     element.appendChild(dataElement);
   }
 
-  var hasValues = false;
   for (var i = 0, input; input = block.inputList[i]; i++) {
     var container;
     var empty = true;
@@ -112,7 +111,6 @@ Blockly.Xml.blockToDom_ = function(block) {
       var childBlock = input.connection.targetBlock();
       if (input.type == Blockly.INPUT_VALUE) {
         container = goog.dom.createDom('value');
-        hasValues = true;
       } else if (input.type == Blockly.NEXT_STATEMENT) {
         container = goog.dom.createDom('statement');
       }
@@ -126,7 +124,7 @@ Blockly.Xml.blockToDom_ = function(block) {
       element.appendChild(container);
     }
   }
-  if (hasValues) {
+  if (block.inputsInlineDefault != block.inputsInline) {
     element.setAttribute('inline', block.inputsInline);
   }
   if (block.isCollapsed()) {

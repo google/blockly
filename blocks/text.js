@@ -302,7 +302,6 @@ Blockly.Blocks['text_isEmpty'] = {
           "check": ['String', 'Array']
         }
       ],
-      "inputsInline": true,
       "output": 'Boolean',
       "colour": Blockly.Blocks.texts.HUE,
       "tooltip": Blockly.Msg.TEXT_ISEMPTY_TOOLTIP,

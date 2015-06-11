@@ -925,10 +925,10 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT =
  * Includes the top notch, a horizontal space, and the rounded inside corner.
  * @const
  */
-Blockly.BlockSvg.INNER_TOP_LEFT_CORNER =
+Blockly.BlockSvg.INNER_TOP_LEFT_CORNER = 'h 0.5 ' +
     Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -' +
     (Blockly.BlockSvg.NOTCH_WIDTH - 15 - Blockly.BlockSvg.CORNER_RADIUS) +
-    ' a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
+    ' h -0.5 a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,0 -' +
     Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS;
@@ -1120,7 +1120,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   var hexColour = Blockly.makeColour(this.getColour());
   var rgb = goog.color.hexToRgb(hexColour);
   var rgbLight = goog.color.lighten(rgb, 0.3);
-  var rgbDark = goog.color.darken(rgb, 0.4);
+  var rgbDark = goog.color.darken(rgb, 0.2);
   this.svgPathLight_.setAttribute('stroke', goog.color.rgbArrayToHex(rgbLight));
   this.svgPathDark_.setAttribute('fill', goog.color.rgbArrayToHex(rgbDark));
   this.svgPath_.setAttribute('fill', hexColour);
@@ -1913,8 +1913,8 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
     function(steps, highlightSteps, connectionsXY, cursorY) {
   this.height = cursorY + 1;  // Add one for the shadow.
   if (this.nextConnection) {
-    steps.push('H', Blockly.BlockSvg.NOTCH_WIDTH + ' ' +
-        Blockly.BlockSvg.NOTCH_PATH_RIGHT);
+    steps.push('H', (Blockly.BlockSvg.NOTCH_WIDTH + (this.RTL ? 0.5 : - 0.5)) +
+        ' ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT);
     // Create next block connection.
     var connectionX;
     if (this.RTL) {

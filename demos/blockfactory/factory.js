@@ -120,13 +120,15 @@ function formatJson(code, rootBlock) {
         contentsBlock.nextConnection.targetBlock();
   }
   // Remove last input if dummy and not empty.
-  if (lastInput && lastInput.type == 'input_dummy' &&
-      lastInput.getInputTargetBlock('FIELDS')) {
-    if (lastInput.align) {
-      JS.lastDummyAlign = lastInput.align;
+  if (lastInput && lastInput.type == 'input_dummy') {
+    var fields = lastInput.getInputTargetBlock('FIELDS');
+    if (fields && getFieldsJson_(fields).join('').trim() != '') {
+      if (lastInput.align) {
+        JS.lastDummyAlign = lastInput.align;
+      }
+      args.pop();
+      message.pop();
     }
-    args.pop();
-    message.pop();
   }
   JS.message = message.join(' ');
   JS.args = args;

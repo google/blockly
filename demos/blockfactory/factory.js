@@ -86,6 +86,7 @@ function formatJson(code, rootBlock) {
   var message = [];
   var args = [];
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
+  var lastInput = null;
   while (contentsBlock) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
       var fields = getFieldsJson_(contentsBlock.getInputTargetBlock('FIELDS'));
@@ -113,13 +114,14 @@ function formatJson(code, rootBlock) {
       }
       args.push(input);
       message.push('%' + args.length);
+      lastInput = contentsBlock;
     }
     contentsBlock = contentsBlock.nextConnection &&
         contentsBlock.nextConnection.targetBlock();
   }
-  // Remove last input if dummy.
-  var lastInput = args[args.length - 1];
-  if (lastInput && lastInput.type == 'input_dummy') {
+  // Remove last input if dummy and not empty.
+  if (lastInput && lastInput.type == 'input_dummy' &&
+      lastInput.getInputTargetBlock('FIELDS')) {
     if (lastInput.align) {
       JS.lastDummyAlign = lastInput.align;
     }

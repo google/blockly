@@ -25,44 +25,46 @@ var keyboardState = 'hotkeyMode';
 
 document.onkeydown = document.onkeyup = function(e){
 	
-if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
-	return;
-}	
-
-if(keyboardState=='menuMode'){ //within the category select menu
-	if(map[49]){ //1 
-		//Enter the first list
-		keyboardState='menuKeyOne';
-	}
-	if(map[50]){ //2
-		//Enter the second list
-		keyboardState='menuKeyTwo';
-	}
-	if(map[51]){ //3
-		//Enter the third list
-		keyboardState='menuKeyThree';
-	}
-	if(map[52]){ //4
-		//Enter the fourth list
-		keyboardState='menuKeyFour';
-	}
-	if(map[53]){ //5
-		//Enter the fifth list
-		keyboardState='menuKeyFive';
-	}
-	if(map[54]){ //6
-		//Enter the sixth list
-		keyboardState='menuKeySix';
-	}
-	if(map[55]){ //7
-		//Enter the seventh list
-		keyboardState='menuKeySeven';
-	}
-	//If another block category is added, add it down here
-}
-
 	e = e || event;
-	map[e.keyCode] = e.type == 'keydown';
+	map[e.keyCode] = e.type == 'keydown';	
+	
+	if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
+		return;
+	}	
+
+	if(keyboardState=='menuMode'){ //within the category select menu
+		if(map[49]){ //1 
+			//Enter the first list
+			keyboardState='menuKeyOne';
+		}
+		if(map[50]){ //2
+			//Enter the second list
+			keyboardState='menuKeyTwo';
+		}
+		if(map[51]){ //3
+			//Enter the third list
+			keyboardState='menuKeyThree';
+		}
+		if(map[52]){ //4
+			//Enter the fourth list
+			keyboardState='menuKeyFour';
+		}
+		if(map[53]){ //5
+			//Enter the fifth list
+			keyboardState='menuKeyFive';
+		}
+		if(map[54]){ //6
+			//Enter the sixth list
+			keyboardState='menuKeySix';
+		}
+		if(map[55]){ //7
+			//Enter the seventh list
+			keyboardState='menuKeySeven';
+		}
+		//If another block category is added, add it down here
+	}
+
+		
 	if (map[17] && map[90]){ //Ctrl Z
 		console.log("Control Z pressed.");
 		//Need to implement Undo
@@ -115,7 +117,7 @@ if(keyboardState=='menuMode'){ //within the category select menu
 		e.preventDefault();
 	}
 	
-	else if(map[69]){ //Escape
+	else if(map[27]){ //Escape
 		console.log("Escape key pressed.");
 		//Get out of the current menu
 		e.preventDefault();
@@ -130,7 +132,10 @@ if(keyboardState=='menuMode'){ //within the category select menu
 	
 	else if(map[67]){ //C
 		console.log("C key pressed.");
+		keyboardState= 'typingMode';
+		e.preventDefault;
 		//Write a comment on the most recently selected block
+		keyboardState= 'hotkeyMode'; //This needs to be at the end of the comment function
 	}
 	
 	else if(map[69]){ //E
@@ -160,11 +165,7 @@ if(keyboardState=='menuMode'){ //within the category select menu
 	}
 	
 	//Arrow keys for development purposes.  Switch as needed for proper usage.
-	else if(map[83]){ // s
-		console.log("S key pressed.");
-		// loads current blockly setup
-		updateXmlSelection();
-	}
+	
 	else if(map[37]){ //left arrow
 		traverseOut();
 	}
@@ -181,4 +182,4 @@ if(keyboardState=='menuMode'){ //within the category select menu
 		traverseDown();
 	}
 	//End of development block
-};
+}

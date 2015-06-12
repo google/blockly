@@ -963,6 +963,9 @@ Blockly.Block.prototype.jsonInit = function(json) {
       var field = null;
       var input = null;
       switch (element['type']) {
+        case 'field_label':
+          field = new Blockly.FieldLabel(element['text']);
+          break;
         case 'field_input':
           field = new Blockly.FieldTextInput(element['text']);
           break;

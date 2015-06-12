@@ -741,8 +741,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     return null;
   }
   //fix scale
-  var contentWidth = blockBox.width * Blockly.mainWorkspace.scale;
-  var contentHeight = blockBox.height * Blockly.mainWorkspace.scale;
+  var contentWidth = blockBox.width;
+  var contentHeight = blockBox.height;
   var contentX = blockBox.x * Blockly.mainWorkspace.scale;
   var contentY = blockBox.y * Blockly.mainWorkspace.scale;
   if (Blockly.mainWorkspace.scrollbar) {
@@ -752,9 +752,9 @@ Blockly.getMainWorkspaceMetrics_ = function() {
                             contentX + contentWidth - viewWidth);
     var rightEdge = Math.max(contentX + contentWidth + viewWidth / 2,
                              contentX + viewWidth);
-    var topEdge = Math.min(contentY - viewHeight / 2,
+    var topEdge = Math.min(contentY - viewHeight * Blockly.mainWorkspace.scale / 2,
                            contentY + contentHeight - viewHeight);
-    var bottomEdge = Math.max(contentY + contentHeight + viewHeight / 2,
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight * Blockly.mainWorkspace.scale / 2,
                               contentY + viewHeight);
   } else {
     var leftEdge = blockBox.x;

@@ -400,18 +400,17 @@ function traverseDown() {
 //#region HELPER_FUNCTIONS
 
 /**
- * Navigates up to the top of a current section of blocks.
+ * Navigates up to the top of a current section of blocks. Gets
+ * to the top of the current indentation.
  * @param {myNode} Any node to be navigated from
  * @return {myNode} The top node in the level
  */
 function findTop(myNode) {
-
     // If the block's parent is a next node, that means it's below another.  Recursively go up.
     if (myNode.parentNode.nodeName.toUpperCase() == 'NEXT') {
         myNode = myNode.parentNode.parentNode;
         return findTop(myNode);
     }
-
     // If it's not the child of a next node, then it's the top node.
     return myNode;
 }
@@ -553,42 +552,75 @@ function getImportantBlocks(){
     //adding all blocks to the blockArr
     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 
+    var perfectArr = [];
+
     //looping through the blockArr
     for(var i=0; i < blockArr.length; i++){
 
 		var strType = blockArr[i].getAttribute('type');
 
 		if(strType.includes("controls")){
-			console.log("this is an important control");
+			perfectArr.push(blockArr[i]);
 		}
 		else if(strType.includes("procedures")){
-			console.log("this is an important control");
+			perfectArr.push(blockArr[i]);
 		}
 		else if(strType == "beep"){
-			console.log("this is a beep block");
+			perfectArr.push(blockArr[i]);
 		}
 		else if(strType == "math_change") {
-			console.log("this is a math change")
+			perfectArr.push(blockArr[i]);
 		}
 		else if(strType == "text_append") {
-			console.log("this is appending the text")
+			perfectArr.push(blockArr[i]);
 		}
 		else if(strType == "text_print") {
-			console.log("this is printing text")
+			perfectArr.push(blockArr[i]);
 		}
 		else if(strType == "list_setIndex") {
-			console.log("this is setting the index")
+			perfectArr.push(blockArr[i]);
 		}
 		else if(strType == "variable_set") {
-			console.log("this is setting a variable")
+			perfectArr.push(blockArr[i]);
 		}
 		else{
-			console.log("NO");
+
 		}
 
     }//end of for
+    console.log(perfectArr);
+    getIndent(perfectArr);
 
-}//end og getImportantBlocks
+}//end of getImportantBlocks
 
+function getIndent(perfectArr){
+	var nestedBlockDepth = [];
+
+	//console.log(getBlockNodeById('12').parentNode.parentNode);
+	for (var i = 0; i < perfectArr.length; i++) {
+		
+		//if this is true it has a parent
+		if(findTop(perfectArr[i]).parentNode.nodeName.toUpperCase() == 'STATEMENT') {
+			var parents = findHowManyParents(perfectArr[i].getAttribute('id').toString());
+			nestedBlockDepth.push(parents);
+		}
+		//means it is the top of the list
+		else{
+			console.log('No parents here');
+			nestedBlockDepth.push(0);
+		}
+	}
+	console.log(nestedBlockDepth);
+}
+
+//not yet started
+function findHowManyParents(id){
+	var parentCnt = 0;
+	
+
+
+	console.log("in here");
+	return parentCnt;
+}
 
 //#endregion

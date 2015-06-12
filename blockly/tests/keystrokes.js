@@ -161,11 +161,6 @@ document.onkeydown = document.onkeyup = function(e){
 			//Initiate a navigate search function
 		}
 		
-		else if(map[79]){ //O
-			console.log("O key pressed.");
-			//Option to initiate open navigation (this might be thrown out)
-		}
-		
 		else if(map[82]){ //R
 			console.log("R key pressed.");
 			//Return to top of the code

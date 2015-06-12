@@ -28,8 +28,6 @@ goog.require('Blockly.FieldCheckbox');
 
 var xmlDoc = null;
 var currentNode = null;
-var currentBlock = null;
-var visitedNodes = [];
 
 //#region XML_UPDATING
 
@@ -165,10 +163,10 @@ function updateXmlSelection(noSelect) {
     }
 
 
-    console.log('Updating XML.');
+   // console.log('Updating XML.');
     // If you currently have a node, make sure that if all block id's change you are still selecting the same block.
     if (currentNode) {
-        console.log('Maintaining Position');
+        //console.log('Maintaining Position');
         var pastId = parseInt(currentNode.getAttribute('id'));
         var idDifference = parseInt(findContainers()[0].getAttribute('id'));
 
@@ -179,7 +177,7 @@ function updateXmlSelection(noSelect) {
     }
         // Otherwise this is a non-issue
     else {
-        console.log('Finding block.');
+        //console.log('Finding block.');
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         if (!xmlDoc.getElementsByTagName('BLOCK')) {
             currentNode = xmlDoc.getElementsByTagName('BLOCK')[0];
@@ -546,206 +544,51 @@ function getAllComments() {
     return myComments;
 }
 
-
-//find the parents of each block and 
-//mynode = the current node you are searching for its parents
-function getParentOfNode(myNode){
-
-  var currentComment = myNode;
-  var i = 0;
-  //console.log(currentComment);
-
-  if(currentComment == undefined){
-    //console.log("this comment is the last parentNode");
-    //console.log(nestedCount);
-  }
-  else{
-    //console.log(currentComment.parentNode);
-    //check how many parent nodes this has
-    nestedCount ++;
-    //console.log(nestedCount);
-    getParentOfNode(currentComment.parentNode);
-    
-  }
-
-
-
-/*  if(currentComment[i].parentNode == null){
-    console.log("this block has a null parent node");
-    console.log(currentComment.parentNode);
-  }
-  else{
-    var parentComment = currentComment[i].parentNode;
-    
-    while(parentComment){
-      count++;
-      parentComment += parentComment + '.parentNode';
-      i++;
+function getImportantBlocks(){
+	//check if the workspace is empty
+	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
+		console.log("nothings here");
+        return null;
     }
-    console.log("This is the count for id = "+ id+ "count = " + count);
-  }*/
-}
+    //adding all blocks to the blockArr
+    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+
+    //looping through the blockArr
+    for(var i=0; i < blockArr.length; i++){
+
+		var strType = blockArr[i].getAttribute('type');
+
+		if(strType.includes("controls")){
+			console.log("this is an important control");
+		}
+		else if(strType.includes("procedures")){
+			console.log("this is an important control");
+		}
+		else if(strType == "beep"){
+			console.log("this is a beep block");
+		}
+		else if(strType == "math_change") {
+			console.log("this is a math change")
+		}
+		else if(strType == "text_append") {
+			console.log("this is appending the text")
+		}
+		else if(strType == "text_print") {
+			console.log("this is printing text")
+		}
+		else if(strType == "list_setIndex") {
+			console.log("this is setting the index")
+		}
+		else if(strType == "variable_set") {
+			console.log("this is setting a variable")
+		}
+		else{
+			console.log("NO");
+		}
+
+    }//end of for
+
+}//end og getImportantBlocks
 
 
-
-function steppingIn(currentNode){
-    console.log("in steppingIn");
-    var children = currentNode.childNodes;
-    for (var i = 0; i < children.length; i++) {
-        // If you do find a statement, then we're moving straight to that node's child, which is a block.
-        if (children[i].nodeName.toUpperCase() == 'STATEMENT') {
-            currentNode = children[i].getElementsByTagName('BLOCK')[0];
-            
-            return currentNode;
-        }
-    }
-}
-
-function callSteppingAll() {
-    //jumpToTopOfSection();
-    //console.log('called find top');
-    currentBlock = currentNode;
-    visitedNodes.push(currentBlock.getAttribute('id'));
-    steppingAll(currentBlock);
-}
-
-function steppingAll(currentBlock){
-    if (!currentBlock) {
-        console.log('Nothing Selected.');
-    }
-
-    var statementCount = 0;
-    var nextCount = 0;
-
-    if(!currentBlock.childNodes){
-        console.log("there are no child nodes");
-    }
-    else{
-        //console.log("we are in the first else");
-        var children = currentBlock.childNodes;
-
-        for (var i = children.length - 1; i >= 0; i--) {
-            // If you do find a statement, then we're moving straight to that node's child, which is a block.
-            //this goes in
-            //console.log("in the for loop " + i);
-
-            if(children[i].nodeName.toUpperCase() === "FIELD"){
-                console.log("its field!");
-            }
-            else if(children[i].nodeName.toUpperCase() === "VALUE"){
-                console.log("its value!!");
-            }
-            else if(children[i].nodeName.toUpperCase() === "STATEMENT"){
-                console.log("its statement");
-                statementCount++;
-            }
-            else if(children[i].nodeName.toUpperCase() === "NEXT"){
-                nextCount++;
-            }
-            else if(children[i].nodeName.toUpperCase() === "COMMENT"){
-                console.log("its a COMMENT");
-            }
-            else{
-                console.log("could be error");
-            }
-        }
-        //var children = currentNode.childNodes;
-        for (var i = 0; i <= children.length; i++) {
-            if("18".toString() == currentNode.getAttribute('id').toString()) {
-                console.log(visitedNodes);
-                console.log("YOU HIT THE BOTTOM!!!!!");
-                return;
-            }
-            else {
-            if(statementCount == 1) {
-                if(children[i].nodeName.toUpperCase() == "STATEMENT"){
-                    if(!visitedNodes.contains(children[i].getAttribute('id'))){
-                        //console.log(visitedNodes.contains(children[i].getAttribute('id')));
-                        traverseIn();
-                        currentBlock = children[i].getElementsByTagName('BLOCK')[0];
-                        //console.log(currentBlock);
-                        //console.log(children);
-                        visitedNodes.push(currentNode.getAttribute('id'));
-                        steppingAll(currentBlock);
-                    }
-                }
-            }
-            else if(nextCount == 1 && statementCount == 0) {
-                if(children[i].nodeName.toUpperCase() == "NEXT"){
-                    if(!visitedNodes.contains(children[i].getAttribute('id'))){
-                        traverseDown();
-                        currentBlock = children[i].getElementsByTagName('BLOCK')[0];
-                        //console.log(currentNode.getAttribute('id'));
-                        visitedNodes.push(currentNode.getAttribute('id'));
-                        steppingAll(currentBlock);
-                    }
-                }
-            }
-            else if(nextCount == 0){
-                if (children[i].parentNode.parentNode.nodeName.toUpperCase() == 'STATEMENT') {
-                    //if(visitedNodes.contains(children[i].getAttribute('id'))){
-                    traverseOut();
-                    traverseDown();
-                    //console.log(currentNode.getAttribute('id'));
-                    currentBlock = children[i].parentNode.parentNode.getElementsByTagName('BLOCK')[0];
-                    console.log(currentBlock);
-                    visitedNodes.push(currentNode.getAttribute('id'));
-                    console.log(visitedNodes);
-                    steppingAll(currentBlock);
-                    //}
-                }
-            }
-            else {
-                console.log(visitedNodes);
-                console.log(currentBlock.parentNode.parentNode);
-                console.log("we reached the end");
-            }
-        }
-        }
-
-    }
-}
-//step out then down
-function steppingOutDown(currentBlock) {
-    traverseOut();
-    visitedNodes.push(currentBlock.getAttribute('id'));
-    traverseDown();
-    visitedNodes.push(currentBlock.getAttribute('id'));
-    console.log(visitedNodes);
-
-    /*
-    console.log(currentNode.getAttribute('id'));
-    traverseOut();
-    //first go out
-    var blah = currentNode
-    var children = blah.childNodes;
-    var parents = blah.parentNode;
-
-    console.log(blah);
-    console.log(children);
-    console.log(parents);
-    for (var i = blah.length - 1; i >= 0; i--) {
-        console.log(currentNode.getAttribute('id'));
-        blah = children[i].getElementsByTagName('BLOCK')[0];
-        //check down
-        if(currentNode.nodeName.toUpperCase() == "NEXT"){
-            console.log("omg it works");
-            traverseDown();
-            currentNode = children[i].getElementsByTagName('BLOCK')[0];
-            steppingAll(currentNode);
-        }
-        else{
-            steppingOutDown(currentNode);
-        }
-
-    //if down is available 
-        //go in
-
-    //if down is not available 
-        //go out
-        //recurse right here
-
-    }
-    */
-}
 //#endregion

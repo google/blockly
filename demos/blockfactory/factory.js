@@ -368,14 +368,14 @@ function getFieldsJson_(block) {
           fields.push({
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            angle: block.getFieldValue('ANGLE')
+            angle: Number(block.getFieldValue('ANGLE'))
           });
           break;
         case 'field_checkbox':
           fields.push({
             type: block.type,
             name: block.getFieldValue('FIELDNAME'),
-            checked: block.getFieldValue('CHECKED')
+            checked: block.getFieldValue('CHECKED') == 'TRUE'
           });
           break;
         case 'field_colour':
@@ -416,7 +416,6 @@ function getFieldsJson_(block) {
         case 'field_image':
           fields.push({
             type: block.type,
-            name: block.getFieldValue('FIELDNAME'),
             src: block.getFieldValue('SRC'),
             width: Number(block.getFieldValue('WIDTH')),
             height: Number(block.getFieldValue('HEIGHT')),
@@ -603,14 +602,18 @@ function updatePreview() {
   if (Blockly.Blocks[blockType]) {
     throw 'Block name collides with existing property: ' + blockType;
   }
-  var code = document.getElementById('languagePre').textContent;
+  var code = document.getElementById('languagePre').textContent.trim();
+  if (!code) {
+    // Nothing to render.  Happens while cloud storage is loading.
+    return;
+  }
   var format = document.getElementById('format').value;
   if (format == 'JSON') {
     Blockly.Blocks[blockType] = {
       init: function() {
         this.jsonInit(JSON.parse(code));
       }
-    };;
+    };
   } else if (format == 'JavaScript') {
     eval(code);
   } else {

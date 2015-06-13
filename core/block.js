@@ -973,7 +973,8 @@ Blockly.Block.prototype.jsonInit = function(json) {
           field = new Blockly.FieldAngle(element['angle']);
           break;
         case 'field_checkbox':
-          field = new Blockly.FieldCheckbox(element['checked']);
+          field = new Blockly.FieldCheckbox(
+              element['checked'] ? 'TRUE' : 'FALSE');
           break;
         case 'field_colour':
           field = new Blockly.FieldColour(element['colour']);

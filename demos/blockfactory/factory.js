@@ -125,8 +125,9 @@ function formatJson(code, rootBlock) {
   if (lastInput && lastInput.type == 'input_dummy') {
     var fields = lastInput.getInputTargetBlock('FIELDS');
     if (fields && getFieldsJson_(fields).join('').trim() != '') {
-      if (lastInput.align) {
-        JS.lastDummyAlign = lastInput.align;
+      var align = lastInput.getFieldValue('ALIGN');
+      if (align != 'LEFT') {
+        JS.lastDummyAlign = align;
       }
       args.pop();
       message.pop();

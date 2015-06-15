@@ -543,18 +543,19 @@ function getAllComments() {
     return myComments;
 }
 
+
 function getImportantBlocks(){
 	//check if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
 		console.log("nothings here");
         return null;
     }
-    //adding all blocks to the blockArr
-    var blockArr = xmlDoc.getElementsByTagName('BLOCK');
+    //add all blocks to the blockArr
+     var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 
     var perfectArr = [];
 
-    //looping through the blockArr
+    //adding any blocks which can stand on their own to perfectArr
     for(var i=0; i < blockArr.length; i++){
 
 		var strType = blockArr[i].getAttribute('type');
@@ -580,47 +581,45 @@ function getImportantBlocks(){
 		else if(strType == "list_setIndex") {
 			perfectArr.push(blockArr[i]);
 		}
-		else if(strType == "variable_set") {
+		else if(strType == "variables_set") {
 			perfectArr.push(blockArr[i]);
 		}
 		else{
-
+			
 		}
 
     }//end of for
-    console.log(perfectArr);
+
     getIndent(perfectArr);
 
 }//end of getImportantBlocks
 
 function getIndent(perfectArr){
-	var nestedBlockDepth = [];
 
-	//console.log(getBlockNodeById('12').parentNode.parentNode);
-	for (var i = 0; i < perfectArr.length; i++) {
-		
-		//if this is true it has a parent
-		if(findTop(perfectArr[i]).parentNode.nodeName.toUpperCase() == 'STATEMENT') {
-			var parents = findHowManyParents(perfectArr[i].getAttribute('id').toString());
-			nestedBlockDepth.push(parents);
-		}
-		//means it is the top of the list
-		else{
-			console.log('No parents here');
-			nestedBlockDepth.push(0);
-		}
+	//the string format of the current XML Doc
+	var currentXml = toXml();
+
+	var openStatementCnt;
+	var closeStatementCnt;
+	var indexOfId;
+	var idOfBlock;
+	var miniXml;
+
+	var parentArr = [];
+
+	for(var i = 0; i < perfectArr.length-1; i++){
+
+		currentNode = perfectArr[i];
+		idOfBlock = currentNode.getAttribute('id');
+		indexOfId = currentXml.indexOf('id="'+idOfBlock+'"');
+		miniXml = currentXml.substring(0, indexOfId);
+		openStatementCnt = (miniXml.match(/<statement/g) || []).length;
+		closeStatementCnt = (miniXml.match(/statement>/g) || []).length;
+		parentArr[i] = openStatementCnt - closeStatementCnt;
+		parentArr.push(parentArr[i]);
+
 	}
-	console.log(nestedBlockDepth);
 }
 
-//not yet started
-function findHowManyParents(id){
-	var parentCnt = 0;
-	
-
-
-	console.log("in here");
-	return parentCnt;
-}
 
 //#endregion

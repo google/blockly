@@ -96,6 +96,7 @@ function toXml() {
   output.value = Blockly.Xml.domToPrettyText(xml);
   output.focus();
   output.select();
+  return output.value;
 }
 
 function fromXml() {

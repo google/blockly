@@ -622,7 +622,10 @@ function getIndent(perfectArr){
 	}
 	parentArr.splice(i);
 	console.log(parentArr);
+	createComments(perfectArr, parentArr);
+
 }
+
 
 
 //#endregion

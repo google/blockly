@@ -95,6 +95,7 @@ function toXml() {
   output.value = Blockly.Xml.domToPrettyText(xml);
   output.focus();
   output.select();
+  return output.value;
 }
 
 function fromXml() {
@@ -183,6 +184,23 @@ var spaghettiXml = [
   '    <next></next>' +
   '  </block>'].join('\n');
 
+
+function createComments(perfectArr, parentArr){
+
+  var pTag;
+  for(var i = 0; i < perfectArr.length; i++){
+    currentNode = perfectArr[i];
+    pTag = document.createElement("p");
+
+    var pWord =  currentNode.getAttribute('id');
+    var pTextNode = document.createTextNode(pWord);
+
+    pTag.appendChild(pTextNode);
+    document.getElementById("comment").appendChild(pTag);
+  }
+}
+
+
 </script>
 
 <style>
@@ -236,6 +254,17 @@ h1 {
 }
 #buttons button { 
   width: 100%;
+}
+#comment{
+  outline: 1px solid gray;
+  float: right;
+  width: 27%;
+  height: 200px;
+  padding-left: 9px;
+  margin-right: 11px;
+  overflow: scroll;
+  word-wrap: normal;
+
 }
 </style>
 </head>
@@ -463,7 +492,8 @@ h1 {
     
     <div class="commentDiv">
         <h1 align="center">Blockly Playground</h1>
-        <textarea id="commentBlock" style="width: 28%; height: 12em">Comments go here</textarea>
+        <div id="comment"></div>
+
     </div>
     
   <div id="primaryContentDiv">

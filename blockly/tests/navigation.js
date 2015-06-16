@@ -590,6 +590,7 @@ function getImportantBlocks(){
 
     }//end of for
 
+    console.log(perfectArr);
     getIndent(perfectArr);
 
 }//end of getImportantBlocks
@@ -604,10 +605,10 @@ function getIndent(perfectArr){
 	var indexOfId;
 	var idOfBlock;
 	var miniXml;
-
+	var i;
 	var parentArr = [];
 
-	for(var i = 0; i < perfectArr.length-1; i++){
+	for(i = 0; i < perfectArr.length; i++){
 
 		currentNode = perfectArr[i];
 		idOfBlock = currentNode.getAttribute('id');
@@ -617,8 +618,10 @@ function getIndent(perfectArr){
 		closeStatementCnt = (miniXml.match(/statement>/g) || []).length;
 		parentArr[i] = openStatementCnt - closeStatementCnt;
 		parentArr.push(parentArr[i]);
-
+		console.log(currentNode);
 	}
+	parentArr.splice(i);
+	console.log(parentArr);
 }
 
 

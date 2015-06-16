@@ -49,7 +49,7 @@
 <script src="loadxml.js"></script>
 <script src="debug.js"></script>
 <script src="navigation-block-info.js"></script>
-<script>
+<script type="text/javascript">
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
@@ -219,6 +219,19 @@ function createComments(perfectArr, parentArr){
   }
 }
 
+<<<<<<< Updated upstream
+=======
+//========change the comment box font size dynamically=========
+function changeFontDD(){
+  var e = document.getElementById("fontDD");
+  var selectedSize = e.options[e.selectedIndex].value;
+  var commentBox = document.getElementById("comment");
+  commentBox.style.fontSize =selectedSize + "px";
+  console.log(selectedSize);
+
+}
+
+>>>>>>> Stashed changes
 </script>
 
 <style>
@@ -228,7 +241,7 @@ html, body {
 body {
   background-color: #fff;
   font-family: sans-serif;
-  overflow: hidden;
+  overflow: auto;
 }
 h1 {
   font-weight: normal;
@@ -237,7 +250,7 @@ h1 {
 #blocklyDiv {
   float: left;
   height: 95%;
-  width: 70%;
+  width: 55%;
   margin-right: 1%;
 }
 #PrimaryContentDiv {
@@ -247,7 +260,6 @@ h1 {
 #commentDiv {
     padding-left: 71%;
     font-family: monospace;
-    margin: 1%;
 }
 #collaborators {
   float: right;
@@ -267,23 +279,41 @@ h1 {
 }
 #buttons { 
   width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
 }
 #buttons button { 
   width: 100%;
 }
 #comment{
   outline: 1px solid gray;
-  float: right;
-  width: 27%;
-  height: 200px;
+  height: 100%;
   padding-left: 9px;
-  margin-right: 11px;
-  overflow: scroll;
-  word-wrap: normal;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  overflow:scroll;
+  word-wrap:normal;
 
 }
+
+/*change font size drop down*/
+#fontDD{
+  margin: .7em;
+  display: block;
+}
+
+/*output buttons*/
+div button{
+  width:10em;
+  margin: .4em;
+}
+
+#newRow{
+  margin-left: 6em;
+}
+
+#firstRow{
+  margin-left: 6em;
+}
+
 </style>
 </head>
 <body onload="start()">
@@ -510,7 +540,19 @@ h1 {
     
     <div class="commentDiv">
         <h1 align="center">Blockly Playground</h1>
-        <div id="comment"></div>
+        <select onchange="changeFontDD()" id= "fontDD" role="menu" aria-haspopup="true" aria-hidden="true">
+            <option value='12'>12</option>
+            <option value='14'>14</option>
+            <option value='18'>18</option>
+            <option value='24'>24</option>
+            <option value='36'>36</option>
+            <option value='48'>48</option> 
+            <option value='72'>72</option>
+        </select>
+        <div id="comment"> 
+          Comments go here 
+       </div>
+
 
     </div>
     
@@ -544,6 +586,7 @@ h1 {
     <input type="button" value="To Dart" onclick="toCode('Dart')">
     <br>
     -->
+<<<<<<< Updated upstream
     <table class=buttons>
         <tr>
             <td><button type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
@@ -556,6 +599,17 @@ h1 {
             <td><button type="button" value="To Dart" onclick="toCode('Dart')">Export to Dart</button>
     </table>
     <textarea id="importExport" style="width: 28%; height: 12em">Program Output is here</textarea>
+=======
+    <div id="typeButtons">
+            <button type="button" value="Export to XML" onclick="toXml()" id="firstRow">Export to XML</button>
+            <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
+            <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
+            <button type="button" value="To JavaScript" onclick="toCode('JavaScript')" id="newRow">To JavaScript</button>
+            <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
+            <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
+    </div>
+    <textarea id="importExport" style="width: 42%; height: 12em; margin:.5em">Program Output is here</textarea>
+>>>>>>> Stashed changes
   </p>
   <hr>
 

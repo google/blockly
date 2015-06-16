@@ -576,6 +576,23 @@ function getIndent(perfectArr){
 
 }
 
+function commentPrefix(perfectArr, parentArr){
+	var zeroCount = 1;
+	var allCount = 1;
+	var prefixString;
+
+	for (var i = 0; i < parentArr.length; i++) {
+
+		if(parentArr[i].toString() == "0"){
+			parentArr[i] = zeroCount;
+			zeroCount++;
+			console.log(parentArr[i]);
+		}
+		else{
+
+		}
+	};
+}
 
 
 //#endregion

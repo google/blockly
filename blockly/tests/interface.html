@@ -190,11 +190,13 @@ function createComments(perfectArr, parentArr){
   document.getElementById("comment").innerHTML = "";
 
   var pTag;
+  var commentStr;
   for(var i = 0; i < perfectArr.length; i++){
     currentNode = perfectArr[i];
     pTag = document.createElement("p");
-
-    var commentStr =  currentNode.getAttribute('id');
+    //call function and set commentStr = to
+    commentPrefix(perfectArr, parentArr);
+    commentStr =  currentNode.getAttribute('id');
 
     if(perfectArr[i].getElementsByTagName("comment")[0] == undefined){
       commentStr += " No comment";

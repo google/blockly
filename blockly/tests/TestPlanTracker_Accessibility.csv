@@ -1,0 +1,129 @@
+Test Planner and Tracker,,,Accessible Blockly ,Keystrokes,,,
+"Test 
+No. ID",Item to be tested,Pre-conditions,"Test Description (steps) 
+",Expected Outcome,6/15/15 Outcome,,
+1,All hotkeys register,None,"1. Press each key to make sure it registers in console (each key has a console.log, when those are removed this test doesn’t apply)",Each key press is registered,,,
+2,Hotkeys disabled when typing,"1. Workspace is active
+2. A block with a text field is currently in the workspace","1. Enter a text field in a block
+2. Try to type, no hotkeys should register",No hotkeys activate when typing,Not Implemented,,
+3,Ctrl-z undos last action,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Select a block
+2. Delete the block
+3. Press Ctrl-Z",Block should reappear in the same place as before it was deleted,Not Implemented,,
+4,Ctrl-y redos the last undo,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Select a block
+2. Delete the block
+3. Press Ctrl-Z
+4. Press Ctrl-Y",Block should be deleted after reappearing,Not Implemented,,
+5,User knows where they are on the page,"1. Workspace is active
+2. Blocks are currently in the workspace",1. Blocks are labeled appropriately and it is easy to tell where you are by labels,Navigation through blocks is intuitive,,,
+6,You can navigate through code using hotkeys,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Select a block
+2. Use controls to go in and out layers as well as up and down containers in addition to accessing fields inside blocks",All blocks are accessible,,,
+7,Search function to navigate quickly through code,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Press key to activate search function
+2. Type block or comment id
+3. Press Enter",The block or comment you wanted to go to should be selected,Not Implemented,,
+8,Comments are displayed,"1. Workspace is active
+2. Blocks that have comments are currently in the workspace",1. There is a comments section visible,Comments are displayed on the screen in readable fashion and are accurately mappable,Not Implemented,,
+9,Can access menu to add blocks,"1. Workspace is active
+2. Toolbox is active","1. Click or press hotkey to open menu
+2. Select block that you want",Block is added and there are no issues with the menu,Not Implemented,,
+10,Hotkeys within menus work,"1. Workspace is active
+2. Toolbox is active","1. Open menu
+2. Press hotkeys to select category
+3. Press hotkey to select block",Block is added to the workspace,Not Implemented,,
+11,Blocks are added in right place,"1. Workspace is active
+2. Toolbox is active
+3. Blocks are in the workspace","1. Select space that you want the block to be placed
+2. Open menu
+3. Press hotkeys to select category
+4. Press hotkey to select block",Block is added to the workspace in the space that was selected,Not Implemented,,
+12,Hotkeys not applicable to menus are disabled within menu,"1. Workspace is active
+2. Toolbox is active","1. Enter menu
+2. Try hotkeys that are not applicable to menu",Hotkeys should not cause anything in the scene to happen if they are not applicable to menu,Not Implemented,,
+13,Can use hotkeys to add blocks within blocks,"1. Workspace is active
+2. Toolbox is active
+3. Blocks with block spaces inside them are held within the workspace","1. Select space within block that you want the block to be placed
+2. Open menu
+3. Press hotkeys to select category
+4. Press hotkey to select block",Block is added inside other block,Not Implemented,,
+14,Can select empty spaces,"1. Workspace is active
+2. Toolbox is active
+3. Blocks with block spaces inside them are held within the workspace",1. Press hotkeys to navigate to a white space inside block,White space is highlighted,Not Implemented,,
+15,Can jump to the top of a section ,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Click on a block in the middle of a section
+2. Press hotkey to jump to top of section",Block at top of section is highlighted,Not Implemented,,
+16,Can jump to the bottom of the section,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Click on a block in the middle of a section
+2. Press hotkey to jump to bottom of section",Block at bottom of section is highlighted,Not Implemented,,
+17,Can jump to the first block of a container,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Press button to open navigation 
+2. Type id of container
+3. Press Enter",Block at top of the container is highlighted,Not Implemented,,
+18,"Can traverse in, out, up, down","1. Workspace is active
+2. Blocks are currently in the workspace",1. Press hotkeys to navigate through blocks,It is possible to navigate through layers as well as up and down on the same layer,,,
+19,Shift Comma and Shift Period traverse within blocks,"1. Workspace is active
+2. Toolbox is active
+3. Blocks with fields inside them are held within the workspace","1. Press Shift Comma to go from selecting the block to first field, Shift period goes backwards",Can access all fields within blocks,Not Implemented,,
+20,Tab shift goes up a level,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Select a block in the middle of a section
+2. Press Tab Shift",Selection moves from block selected to the one above it in the same layer,Not Implemented,,
+21,Tab goes down a level,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Select a block in the middle of a section
+2. Press Tab",Selection moves from block selected to the one below it in the same layer,Not Implemented,,
+22,Comma and Period go within levels,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Select a block in the middle of a section
+2. Press Comma
+3. Press Period",Selection moves from block selected to one next to it down a layer and then back ,Not Implemented,,
+23,Escape leaves menus or editing fields,"1. Workspace is active
+2. Toolbox is active","1. Open menu
+2. Press Escape key",Menu is exited and previous selection (if applicable) is rehighlighted,Not Implemented,,
+24,A initiates menu mode,"1. Workspace is active
+2. Toolbox is active",1. Press A,Menu is opened,Not Implemented,,
+25,C makes a comment,"1. Workspace is active
+2. Toolbox is active
+3. There are blocks in the workspace","1. Select a block
+2. Press C
+3. Type comment
+4. Press enter",Comment should be added to the block,Not Implemented,,
+26,E enables editing of a field,"1. Workspace is active
+2. Toolbox is active
+3. There are blocks with fields in the workspace","1. Select a block
+2. Select a field within the block
+3. Press E
+4. Change field
+5. Press Enter",Field is changed properly,Not Implemented,,
+27,G goes between a block and its comment,"1. Workspace is active
+2. Toolbox is active
+3. There are comments in the system
+4. There are blocks in the workspace ","1. Select a block that has a comment
+2. Press G
+3. Press G again",Should switch to comment and then back to the block,Not Implemented,,
+28,N initiates search function,"1. Workspace is active
+2. Toolbox is active
+3. There are blocks in the workspace","1. Press N
+2. Type id of object you want to move to
+3. Press Enter",Object that you wanted to move to is selected,Not Implemented,,
+29,R goes to top of code,"1. Workspace is active
+2. Toolbox is active
+3. There are blocks in the workspace","1. Select a block in the middle of a section
+2. Press R",Block at the top of the section is selected,Not Implemented,,
+30,1-7 work to select category within A menu,"1. Workspace is active
+2. Toolbox is active
+3. Menu can be opened","1. Press A
+2. Press any number 1-7",Category that should be selected from 1-7 was selected,Not Implemented,,
+31,A-Z work to select block within A menu,"1. Workspace is active
+2. Toolbox is active
+3. Previous menu hotkeys work","1. Press A
+2. Press any number 1-7
+3. Press A-Z (up to # of blocks available)",Block that you want should be selected and added to the workspace appropriately,Not Implemented,,
+32,,,,,,,
+33,,,,,,,
+34,,,,,,,
+35,,,,,,,
+36,,,,,,,
+37,,,,,,,
+38,,,,,,,
+39,,,,,,,
+40,,,,,,,

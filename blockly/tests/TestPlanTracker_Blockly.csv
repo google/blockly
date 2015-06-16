@@ -1,0 +1,187 @@
+Test Planner and Tracker,,,Accessible Blockly ,Blockly,,,
+"Test 
+No. ID",Item to be tested,Pre-conditions,"Test Description (steps) 
+",Expected Outcome,6/12/15 Outcome,,
+1,Can open category lists,"1. Workspace is active
+2. Toolbox is active",1. Click on each category,Blocks should appear that can be selected,,,
+2,Can add blocks to the scene,"1. Workspace is active
+2. Toolbox is active","1. Click on a category
+2. Click on a block
+3. Drag a block to workspace",Block should appear on workspace,,,
+3,Variable blocks can be added to the scene,"1. Workspace is active
+2. Toolbox is active","1. Click on variable category
+2. Click on a block
+3. Drag the block to workspace",Block should appear on workspace,,,
+4,Function blocks can be added to the scene,"1. Workspace is active
+2. Toolbox is active","1. Click on function category
+2. Click on a block
+3. Drag the block to workspace",Block should appear on workspace,"Clicking on any function block within the function
+category causes the program to freeze and the console 
+to throw the following error: Uncaught TypeError: 
+Cannot read property 'length' of undefined",,
+5,Can connect blocks underneath other blocks,"1. Workspace is active
+2. Toolbox is active
+3. Blocks are currently in the workspace","1. Grab a new block
+2. Connect new block underneath one of the blocks in the workspace",Block should connect,,,
+6,Can connect blocks to other blocks,"1. Workspace is active
+2. Toolbox is active
+3. Blocks are currently in the workspace that have space to add blocks","1. Grab a new block
+2. Connect new block next to one of the blocks in the workspace",Blocks should connect,,,
+7,Can add blocks into value fields,"1. Workspace is active
+2. Toolbox is active
+3. Blocks are currently in the workspace that have space to add blocks inside","1. Grab a new block
+2. Connect new block inside one of the blocks in the workspace",Blocks should connect,,,
+8,Can delete blocks,"1. Workspace is active
+2. Blocks are currently in the workspace","1. Select a block in workspace
+2. Press delete key",Block should delete,,,
+9,Can select in drop-down menus,"1. Workspace is active
+2. Blocks are currently in the workspace that have drop-down menu options","1. Select a block that has a drop-down menu in workspace
+2. Click on drop-down menu
+3. Select new field",New field should be shown in block,,,
+10,Can use mutators,"1. Workspace is active
+2. Blocks are currently in the workspace that have mutator options","1. Select a block that has a mutator
+2. Click on settings button
+3. Drag mutator out of block
+4. Add more mutators to block",Block should change according to how many mutators are available.,,,
+11,Blocks snap into place,"1. Workspace is active
+2. Toolbox is active","1. Grab a new block
+2. Drag block to workspace",Block should snap into place on the workspace and other blocks should be able to connect to it,,,
+12,If a mutator is deleted the blocks within it aren't deleted,"1. Workspace is active
+2. Block with a mutator is currently in the workspace","1. Select a block that has a mutator
+2. Add a block within the mutator
+3. Take items out of the mutator
+","The block that was contained within the mutator should still be visible, just not connected to the block with the mutator anymore",,,
+13,"If an enclosing block is deleted, the blocks within it are deleted","1. Workspace is active
+2. Blocks that have blocks inside them are in the workspace","1. Select the outside block
+2. Press delete",All blocks inside the block that was deleted were deleted as well,,,
+14,"Hitting delete key does not delete blocks below it, but does delete blocks within","1. Workspace is active
+2. Blocks that have blocks inside them are in the workspace
+3. A sequence of blocks in the same layer exists","1. Select a block that which has blocks under or below it in the same layer
+2. Press delete
+",The block that was selected is deleted in addition to blocks it contained but no other blocks are deleted.,,,
+15,Remove inner fields from blocks,"1. Workspace is active
+2. A block with a block field inside it exists in the workspace","1. Select an inner field of a block
+2. Drag the field and drop it into the workspace",The field should be removed from the block and the field in the block should now be empty,,,
+16,Capable of changing text fields,"1. Workspace is active
+2. A block with a text field inside it exists in the workspace","1. Select the text field in the block
+2. Edit text 
+3. Click outside the field",The text should now be changed to the edited version,,,
+17,Can change color input on color selectors,"1. Workspace is active
+2. A block with a color field inside it exists in the workspace","1. Select the color field in the block
+2. Change color
+3. Click outside the field",The color should now be changed to the edited version,"Attempting to change the colour of the colour block
+causes the program to freeze up and throw the 
+following error: Uncaught TypeError: 
+this.defaultWidgetDispose_ is not a function",,
+18,Capable of creating new variables,"1. Workspace is active
+2. Toolbox is active","1. Add a new variable to the workspace
+2. Change drop-down menu to ""New Variable""
+3. Change name of variable
+3. Press Enter key
+4. Add a value to variable's field ",Variable should be able to be selected for use elsewhere in addition to being created,,,
+19,Capable of renaming variables,"1. Workspace is active
+2. Toolbox is active
+3. A variable exists in the workspace","1. Select a variable already in the workspace
+2. Change drop-down menu to ""New Variable""
+3. Change name of variable
+3. Press Enter key",Variable should be able to be selected for use elsewhere in addition to being renamed throughout all other blocks,,,
+20,Capable of renaming functions,"1. Workspace is active
+2. Toolbox is active
+3. A function exists in the workspace","1. Select a function already in the workspace
+2. Change drop-down menu to ""New Variable""
+3. Change name of function
+3. Press Enter key",Variable should be able to be added from the toolbox in addition to being renamed throughout all other blocks,"Can't be tested without creating a function block, see test 4",,
+21,Export to XML,"1. Workspace is active
+2. Blocks are in the workspace",1. Click Export to XML button,XML should be indicative of all blocks in the workspace and should not throw errors,,,
+22,Export to Python,"1. Workspace is active
+2. Blocks are in the workspace",1. Click Export to Python button,Python should be indicative of all blocks in the workspace and should not throw errors,Audio block code can't be created for python so if there are audio blocks it doesn't work.,,
+23,Export to Dart,"1. Workspace is active
+2. Blocks are in the workspace",1. Click Export to Dart button,Dart should be indicative of all blocks in the workspace and should not throw errors,Audio block code can't be created for python so if there are audio blocks it doesn't work.,,
+24,Export to PHP,"1. Workspace is active
+2. Blocks are in the workspace",1. Click Export to PHP button,PHP should be indicative of all blocks in the workspace and should not throw errors,"No export to PHP button on the scene, but there is a function for it",,
+25,Import from XML,"1. Workspace is active
+2. Some block code is in XML ","1. Click in text field for import area
+2. Paste XML code into text field
+3. Click Import from XML",Blocks should be imported with their proper connections,,,
+26,Show/Hide playground,1. Workspace is active,"1. Click Hide 
+2. Click Show","When you click hide, the playground should disappear, show should make it reappear",,,
+27,Can use duplicate to copy something,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Right click on the block
+3. Select duplicate ","When you right click on block, menu should appear, after clicking duplicate the same block should appear but be not connected to anything","Block does not duplicate, program freezes, throws
+error: Uncaught TypeError: Cannot read property  'appendChild' of null",,
+28,Can add comments,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Right click on the block
+3. Select comment
+4. Write comment
+5. Click on comment button to minimize comment",Comment should be visible and readable the text that was entered. Comment should be able to be minimized or maximized at will,,,
+29,Can delete comments,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Right click on the block
+3. Select delete comment",Comment should no longer exist,,,
+30,Can collapse blocks,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Right click on the block
+3. Select collapse",Any blocks contained within the block are hidden,,,
+31,Can expand collapsed blocks,"1. Workspace is active
+2. A collapsed block is in the workspace","1. Select a block that is collapsed
+2. Right click on the block
+3. Select expand",Any blocks contained within the block are revealed,,,
+32,Can disable blocks,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Right click on the block
+3. Select disable",The block that is disabled is essentially commented out of the blockly code,,,
+33,Can enable blocks,"1. Workspace is active
+2. Blocks that are disabled are in the workspace","1. Select a block that is disabled
+2. Right click on the block
+3. Select enable",The block that is enabled is added to the blockly code instead of being commented out,,,
+34,Can run help method,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Right click on the block
+3. Select help",Brings you to the wikipedia page for the block concept,,,
+35,Can drag blocks outside of screen to delete,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Drag block outside of workspace
+3. Drop block",Block is deleted,,,
+36,Can scroll through blockly interface,1. Workspace is active,"1. Drag vertical scrollbar
+2. Drag horizontal scrollbar",Both scrollbars can move and show different parts of the workspace,,,
+37,Can right click on empty space to collapse/expand all blocks,"1. Workspace is active
+2. Blocks are in the workspace","1. Right click in workspace, not on a block
+2. Select collapse
+3. Right click in workspace, not on a block
+4. Select expand",All blocks in workspace should be successfully collapsed or expanded ,,,
+38,Can right click on blocks to show menu,"1. Workspace is active
+2. Blocks are in the workspace","1. Select a block
+2. Right click on block",A menu of options will be shown,,,
+39,Can mouse over blocks to see descriptions,"1. Workspace is active
+2. Blocks are in the workspace
+3. Toolbox is active","1. Open a category in the toolbox and hold cursor over a block
+2. Hold cursor over a block in the workspace",Descriptions for both blocks are shown that are plain english,,,
+40,Mousing over a block puts the selection grid around it in the menu,"1. Workspace is active
+2. Toolbox is active","1. Open a category in the toolbox
+2. Hold mouse over a block",Yellow selection will be shown to indicate block can be moved,,,
+41,Can click on a block to select it,"1. Workspace is active
+2. Blocks are in the workspace",1. Click on a block,Block should have yellow selection,,,
+42,Can click on comment icon to see comment,"1. Workspace is active
+2. Blocks with comments are in the workspace",1. Click on comment icon,Comment should appear and be readable,,,
+43,Can click on settings icon to set mutator,"1. Workspace is active
+2. Blocks with settings are in the workspace","1. Click on settings icon
+2. Drag or drop blocks within mutator to determine its size",The block should indicate the number of mutators within it,,,
+44,Can export and import comments to XML,"1. Workspace is active
+2. Blocks with comments are in the workspace","1. Click Export to XML button
+2. Alternatively, paste XML with comments into the Import",The comments should be added appropriately to each block when imported and export should take care of comments and not cause errors,"Exporting works, importing fails and leads to the following error: Uncaught TypeError: Cannot read 
+property 'appendChild' of null",,
+45,Switch from LTR to RTL,"1.Workspace is active
+2. Toolbox is active","1. Click RTL
+2. Click LTR",The toolbox should be moved from the left side of the screen to the right and back to the left when this sequence is pressed,,,
+46,Toolbox appears,1. Workspace is active,1. Open playground,Toolbox with categories should be visible,,,
+47,Workspace appears,None,1. Open playground,Grid area where blocks can be placed as well as general interface should be visible,,,
+48,Injection code: comments,1. Comments Option in injection code inside of playground HTML is set to (true/false),"1. Right click a block
+","If true, option to add comment available; if false, option to add comment not available.",,,
+49,Injection code: disable,1. Disable Option in injection code inside of playground HTML is set to (true/false),1. Right click a block,"If true, option to disable block available; if false, option to disable block not available.",,,
+50,Injection code: collapse,1. Collapse Option in injection code inside of playground HTML is set to (true/false),1. Right click a block,"If true, option to collapse block available; if false, option to collapse block not available.",,,
+51,Injection code: grid,,,,,,
+52,,,,,,,
+53,,,,,,,
+54,,,,,,,

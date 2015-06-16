@@ -493,56 +493,6 @@ function getBlockNodeById(id) {
     return null;
 }
 
-/**
- *Gets all of the blocks that contain comments 
- * @return {Array of blocks} 
- */
-function hasComment() {
-	return xmlDoc.getElementsByTagName('COMMENT');	
-}
-
-/**
- * generates the display for the comments
- * @param {blockArray} the array of block objects to retrieve their inner comments 
- */
-function displayComments(comments) {
-	var totalComments = '';
-	for (var i = comments.length - 1; i >= 0; i--) {
-		totalComments += returnText(comments[i]) + " ";
-	}
-	console.log(totalComments);
-}
-
-/**
- * returns the innerHTML at the current index
- * @param {block object} the object to find the string 
- * @return {string} the comment
- */
-function returnText(commentString) {
-	console.log(commentString.innerHTML);
-	return commentString.innerHTML;
-}
-
-
-//returns an object of all blocks
-function getAllComments() {
-
-    if (!xmlDoc || !xmlDoc.getElementsByTagName('COMMENT')) {
-        return null;
-    }
-
-    // Go through every block
-    var myComments = xmlDoc.getElementsByTagName('COMMENT');
-
-    for (var i = 0; i <= myComments.length; i++) {
-      getParentOfNode(myComments[i]);
-      nestedCount = 0;
-      //console.log("reseting nestedCount");
-
-    };
-    return myComments;
-}
-
 
 function getImportantBlocks(){
 	//check if the workspace is empty

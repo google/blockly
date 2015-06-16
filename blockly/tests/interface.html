@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Blockly Playground</title>
+<title>Blocky Interface</title>
 
 
 <script src="../blockly_uncompressed.js"></script>
@@ -186,20 +186,36 @@ var spaghettiXml = [
 
 
 function createComments(perfectArr, parentArr){
+  //clears the comment div of old data
+  document.getElementById("comment").innerHTML = "";
 
   var pTag;
   for(var i = 0; i < perfectArr.length; i++){
     currentNode = perfectArr[i];
     pTag = document.createElement("p");
 
-    var pWord =  currentNode.getAttribute('id');
-    var pTextNode = document.createTextNode(pWord);
+    var commentStr =  currentNode.getAttribute('id');
 
+    if(perfectArr[i].getElementsByTagName("comment")[0] == undefined){
+      commentStr += " No comment";
+    } 
+
+    else{
+        var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
+        if(parentsId == currentNode.getAttribute('id')){
+          var htmlComment = currentNode.getElementsByTagName("comment")[0].innerHTML;
+          commentStr += " " + htmlComment;
+        }
+        else{
+          commentStr += " No comment";
+        }
+    }
+
+    var pTextNode = document.createTextNode(commentStr);
     pTag.appendChild(pTextNode);
     document.getElementById("comment").appendChild(pTag);
   }
 }
-
 
 </script>
 
@@ -534,8 +550,8 @@ h1 {
         </tr>
         <tr>
             <td><button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
-            <td><button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
-            <td><button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
+            <td><button type="button" value="To Python" onclick="toCode('Python')">Export to Python</button>
+            <td><button type="button" value="To Dart" onclick="toCode('Dart')">Export to Dart</button>
     </table>
     <textarea id="importExport" style="width: 28%; height: 12em">Program Output is here</textarea>
   </p>

@@ -560,10 +560,10 @@ function getImportantBlocks(){
 
 		var strType = blockArr[i].getAttribute('type');
 
-		if(strType.includes("controls")){
+		if(strType.match(/controls/g)){
 			perfectArr.push(blockArr[i]);
 		}
-		else if(strType.includes("procedures")){
+		else if(strType.match(/procedures/g)){
 			perfectArr.push(blockArr[i]);
 		}
 		else if(strType == "beep"){

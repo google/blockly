@@ -84,18 +84,6 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 		
-		else if(map[16] && map[188]){ //Shift Comma
-			console.log("Shift Comma pressed.");
-			//Might be used to traverse individual blocks
-			e.preventDefault();
-		}
-		
-		else if(map[16] && map[190]){ //Shift Period
-			console.log("Shift Period pressed.");
-			//Might be used to traverse individual blocks
-			e.preventDefault();
-		}
-		
 		else if(map[9] && map[16]){ //Tab Shift
 			console.log("Tab Shift pressed.");
 			e.preventDefault();
@@ -104,18 +92,18 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[9]){ //Tab
 			console.log("Tab key pressed.");
-			//e.preventDefault();
+			e.preventDefault();
 			//Go through the same level of code
 		}
 			
 		else if(map[188]){ //Comma
 			console.log("Comma key pressed.");
-			//Traverse farther into the block layers
+			//Traverse forward within a block with fields
 		}
 		
 		else if(map[190]){ //Period
 			console.log("Period key pressed.");
-			//Traverse up out of block layers
+			//Traverse backward within a block with fields
 		}
 		
 		else if(map[46]){ //Delete
@@ -130,8 +118,8 @@ document.onkeydown = document.onkeyup = function(e){
 			e.preventDefault();
 		}
 		
-		else if(map[65]){ //A
-			console.log("A key pressed.");
+		else if(map[77]){ //M
+			console.log("M key pressed.");
 			//This should initiate menu mode
 			//This should initiate a menu to add a block using hotkeys
 			keyboardState='menuMode';	
@@ -141,7 +129,6 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log("C key pressed.");
 			keyboardState= 'typingMode';
 			e.preventDefault;
-			//Write a comment on the most recently selected block
 			keyboardState= 'hotkeyMode'; //This needs to be at the end of the comment function
 		}
 		
@@ -169,22 +156,20 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		//Arrow keys for development purposes.  Switch as needed for proper usage.
 		
-		else if(map[37]){ //left arrow
+		else if(map[37] || map[65]){ //left arrow or A
 			traverseOut();
 		}
 		
-		else if(map[38]){ //up arrow
+		else if(map[38] || map[87]){ //up arrow or W
 			traverseUp();
 		}
 		
-		else if(map[39]){ //right arrow
+		else if(map[39] || map[68]){ //right arrow or D
 			traverseIn();
-			Blockly.Toolbox.TreeNode.prototype.openCategory();
 		}
 		
-		else if(map[40]){ //down arrow
+		else if(map[40] || map[83]){ //down arrow or S
 			traverseDown();
-			Blockly.Toolbox.TreeNode.prototype.closeCategory();
 		}
 		//End of development block
 	}

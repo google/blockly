@@ -225,7 +225,9 @@ function changeFontDD(){
   var selectedSize = e.options[e.selectedIndex].value;
   var commentBox = document.getElementById("comment");
   commentBox.style.fontSize =selectedSize + "px";
-  console.log(selectedSize);
+ 
+  var outputBox = document.getElementById("importExport");
+  outputBox.style.fontSize = selectedSize+"px";
 
 }
 
@@ -257,6 +259,7 @@ h1 {
 #commentDiv {
     padding-left: 71%;
     font-family: monospace;
+
 }
 #collaborators {
   float: right;
@@ -273,6 +276,12 @@ h1 {
 }
 #importExport {
   font-family: monospace;
+  height:110px;
+  min-width: 300px;
+  max-width: 435px;
+  margin: 5px;
+  overflow: scroll;
+  word-wrap:normal;
 }
 #buttons { 
   width: 100%;
@@ -282,12 +291,13 @@ h1 {
 }
 #comment{
   outline: 1px solid gray;
-  height: 100%;
+  margin-bottom: 5px;
+  height: 280px;
   padding-left: 9px;
-  padding-top: .5em;
-  padding-bottom: .5em;
-  overflow:scroll;
+  padding-top:  9px;
+  overflow: scroll;
   word-wrap:normal;
+
 
 }
 
@@ -300,15 +310,15 @@ h1 {
 /*output buttons*/
 div button{
   width:10em;
-  margin: .4em;
+  margin: 3px;
 }
 
 #newRow{
-  margin-left: 6em;
+  margin-left: 6%;
 }
 
 #firstRow{
-  margin-left: 6em;
+  margin-left: 6%;
 }
 
 </style>
@@ -547,7 +557,7 @@ div button{
             <option value='72'>72</option>
         </select>
         <div id="comment"> 
-          Comments go here 
+          Comments go here
        </div>
 
 
@@ -568,21 +578,7 @@ div button{
   </script>
   -->
 
-  <p>
-  <!--
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()">
-	&nbsp;
-    <input type="button" value="Run Javascript" onclick="runCode()">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    <br>
-    -->
+
         <div id="typeButtons">
             <button type="button" value="Export to XML" onclick="toXml()" id="firstRow">Export to XML</button>
             <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
@@ -591,8 +587,7 @@ div button{
             <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
             <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
     </div>
-    <textarea id="importExport" style="width: 42%; height: 12em; margin:.5em">Program Output is here</textarea>
-  </p>
+    <textarea id="importExport">Program Output is here</textarea>
   <hr>
 
   <p>

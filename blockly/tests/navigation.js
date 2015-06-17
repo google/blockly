@@ -616,7 +616,6 @@ function getImportantBlocks(){
 
     }//end of for
 
-    console.log(perfectArr);
     getIndent(perfectArr);
 
 }//end of getImportantBlocks
@@ -644,31 +643,74 @@ function getIndent(perfectArr){
 		closeStatementCnt = (miniXml.match(/statement>/g) || []).length;
 		parentArr[i] = openStatementCnt - closeStatementCnt;
 		parentArr.push(parentArr[i]);
-		console.log(currentNode);
 	}
 	parentArr.splice(i);
-	console.log(parentArr);
 	createComments(perfectArr, parentArr);
 
 }
 
 function commentPrefix(perfectArr, parentArr){
 	var zeroCount = 1;
-	var allCount = 1;
-	var prefixString;
+    var allCount = 0;
+    var prefixStringPrev;
+    var prefixArr = [];
 
-	for (var i = 0; i < parentArr.length; i++) {
+    for (var i = 0; i < parentArr.length; i++) {
 
-		if(parentArr[i].toString() == "0"){
-			parentArr[i] = zeroCount;
-			zeroCount++;
-			console.log(parentArr[i]);
-		}
-		else{
+        if(parentArr[i].toString() == "0"){
+            prefixArr[i] = zeroCount.toString();
+            zeroCount++;
+            //console.log("this is level 0");
+        }
+        else{
+            var currentIndent = parentArr[i];
+            var prevIndent = parentArr[i-1];
 
-		}
-	};
+            if(currentIndent == prevIndent){
+                //at the same indent level
+
+                var shortStr = prefixArr[i-1].length-1;
+                var prevCount = prefixArr[i-1].substring(shortStr);
+
+                var newCount = parseInt(prevCount);
+                newCount++;
+
+                var preString = prefixArr[i-1].substring(0, shortStr);
+
+                prefixArr[i] = preString + newCount;
+            }
+            else if(currentIndent > prevIndent){
+                //there is another indent
+                prefixArr[i] = prefixArr[i-1] + ".1";
+                prefixStringPrev = prefixArr[i];
+                console.log("current is larger than prev");
+            }
+            else if(currentIndent < prevIndent){
+                //there is one less indent here
+                var indentDiff = prevIndent - currentIndent;
+                var takeStr = indentDiff * 2;
+
+                var prevPrefixStr = prefixArr[i-1];
+                var prevPrefixStrLength = prevPrefixStr.length;
+                var subStrVal = prevPrefixStrLength - takeStr;
+
+                var thePrevPre = prevPrefixStr.substring(subStrVal);
+               //x is the prev prefix string name we need
+                var x = prevPrefixStr.substring(0, subStrVal-2);
+
+                //get the last char of the prev indent and up that value by 1 
+                //and append to the end of the prev string and set equal to the new prefix
+
+                var lastNum = prevPrefixStr.substring(subStrVal-1, subStrVal);
+                var num = parseInt(lastNum);
+                num++;
+                console.log(num);
+                prefixArr[i] = x + "." + num;
+            }
+
+        }
+    }
+    console.log(prefixArr);
 }
-
 
 //#endregion

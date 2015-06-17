@@ -191,11 +191,12 @@ function createComments(perfectArr, parentArr){
 
   var pTag;
   var commentStr;
+  
+    commentPrefix(perfectArr, parentArr);
   for(var i = 0; i < perfectArr.length; i++){
     currentNode = perfectArr[i];
     pTag = document.createElement("p");
     //call function and set commentStr = to
-    commentPrefix(perfectArr, parentArr);
     commentStr =  currentNode.getAttribute('id');
 
     if(perfectArr[i].getElementsByTagName("comment")[0] == undefined){

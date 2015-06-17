@@ -683,7 +683,6 @@ function commentPrefix(perfectArr, parentArr){
                 //there is another indent
                 prefixArr[i] = prefixArr[i-1] + ".1";
                 prefixStringPrev = prefixArr[i];
-                console.log("current is larger than prev");
             }
             else if(currentIndent < prevIndent){
                 //there is one less indent here
@@ -704,13 +703,10 @@ function commentPrefix(perfectArr, parentArr){
                 var lastNum = prevPrefixStr.substring(subStrVal-1, subStrVal);
                 var num = parseInt(lastNum);
                 num++;
-                console.log(num);
                 prefixArr[i] = x + "." + num;
             }
-
         }
     }
-    console.log(prefixArr);
     return prefixArr;
 }
 

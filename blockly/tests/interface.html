@@ -191,13 +191,19 @@ function createComments(perfectArr, parentArr){
 
   var pTag;
   var commentStr;
-  
   var prefixes = commentPrefix(perfectArr, parentArr);
+  var indent;
   for(var i = 0; i < perfectArr.length; i++){
+    commentStr = '';
     currentNode = perfectArr[i];
     pTag = document.createElement("p");
-    //call function and set commentStr = to
-    commentStr =  prefixes[i];
+    indent = parentArr[i];
+    //checks how many indents a comment is going to have
+    while(indent != 0) {
+      commentStr += "---";
+      indent--;
+    }
+    commentStr += " " + prefixes[i];
 
     if(perfectArr[i].getElementsByTagName("comment")[0] == undefined){
       commentStr += " No comment";

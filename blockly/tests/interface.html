@@ -283,15 +283,17 @@ h1 {
 }
 #importExport {
   font-family: monospace;
-  height:110px;
-  min-width: 300px;
-  max-width: 435px;
-  margin: 5px;
+  min-height: 200px;
+  max-height:95%;
+  width: 43%;
   overflow: scroll;
   word-wrap:normal;
+  display: inline-block;
+  resize: vertical;
+  margin-top: 5px;
 }
 #buttons { 
-  width: 100%;
+  width: 50%;
 }
 #buttons button { 
   width: 100%;
@@ -304,8 +306,7 @@ h1 {
   padding-top:  9px;
   overflow: scroll;
   word-wrap:normal;
-
-
+  resize:vertical;
 }
 
 /*change font size drop down*/
@@ -320,14 +321,9 @@ div button{
   margin: 3px;
 }
 
-#newRow{
-  margin-left: 6%;
+#typeButtons{
+  text-align: center;
 }
-
-#firstRow{
-  margin-left: 6%;
-}
-
 </style>
 </head>
 <body onload="start()">
@@ -589,10 +585,10 @@ div button{
         <div id="typeButtons">
             <button type="button" value="Export to XML" onclick="toXml()" id="firstRow">Export to XML</button>
             <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
-            <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
             <button type="button" value="To JavaScript" onclick="toCode('JavaScript')" id="newRow">To JavaScript</button>
             <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
             <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
+             <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
     </div>
     <textarea id="importExport">Program Output is here</textarea>
   <hr>

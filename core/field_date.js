@@ -30,10 +30,10 @@ goog.require('Blockly.Field');
 goog.require('goog.date');
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('goog.ui.DatePicker');
-goog.require('goog.style');
 goog.require('goog.i18n.DateTimeSymbols');
 goog.require('goog.i18n.DateTimeSymbols_he');
+goog.require('goog.style');
+goog.require('goog.ui.DatePicker');
 
 
 /**
@@ -198,6 +198,9 @@ Blockly.FieldDate.loadLanguage_ = function() {
   }
 };
 
+/**
+ * CSS for date picker.  See css.js for use.
+ */
 Blockly.FieldDate.CSS = [
   /* Copied from: goog/css/datepicker.css */
   /*

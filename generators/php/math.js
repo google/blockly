@@ -148,8 +148,7 @@ Blockly.PHP['math_constant'] = function(block) {
   var CONSTANTS = {
     'PI': ['M_PI', Blockly.PHP.ORDER_ATOMIC],
     'E': ['M_E', Blockly.PHP.ORDER_ATOMIC],
-    'GOLDEN_RATIO':
-        ['(1 + sqrt(5)) / 2', Blockly.PHP.ORDER_DIVISION],
+    'GOLDEN_RATIO': ['(1 + sqrt(5)) / 2', Blockly.PHP.ORDER_DIVISION],
     'SQRT2': ['M_SQRT2', Blockly.PHP.ORDER_ATOMIC],
     'SQRT1_2': ['M_SQRT1_2', Blockly.PHP.ORDER_ATOMIC],
     'INFINITY': ['INF', Blockly.PHP.ORDER_ATOMIC]

@@ -40,7 +40,8 @@ Blockly.PHP['colour_random'] = function(block) {
   var functionName = Blockly.PHP.provideFunction_(
       'colour_random',
       [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '() {',
-        '  return \'#\' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, \'0\', STR_PAD_LEFT);',
+        '  return \'#\' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), ' +
+            '6, \'0\', STR_PAD_LEFT);',
         '}']);
   var code = functionName + '()';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];

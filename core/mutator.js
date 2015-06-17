@@ -30,8 +30,8 @@ goog.provide('Blockly.Mutator');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Icon');
 goog.require('Blockly.WorkspaceSvg');
-goog.require('goog.dom');
 goog.require('goog.Timer');
+goog.require('goog.dom');
 
 
 /**

@@ -29,6 +29,9 @@ goog.provide('Blockly.Blocks.loops');
 goog.require('Blockly.Blocks');
 
 
+/**
+ * Common HSV hue for all blocks in this category.
+ */
 Blockly.Blocks.loops.HUE = 120;
 
 Blockly.Blocks['controls_repeat'] = {
@@ -38,20 +41,12 @@ Blockly.Blocks['controls_repeat'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE + " %2 " +
-          Blockly.Msg.CONTROLS_REPEAT_INPUT_DO + " %3",
+      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE,
       "args": [
         {
           "type": "field_input",
           "name": "TIMES",
           "text": "10"
-        },
-        {
-          "type": "input_dummy"
-        },
-        {
-          "type": "input_statement",
-          "name": "DO"
         }
       ],
       "previousStatement": null,
@@ -60,6 +55,8 @@ Blockly.Blocks['controls_repeat'] = {
       "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
     });
+    this.appendStatementInput('DO')
+        .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
     this.getField_('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
   }
@@ -72,20 +69,12 @@ Blockly.Blocks['controls_repeat_ext'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE + " %2 " +
-          Blockly.Msg.CONTROLS_REPEAT_INPUT_DO + " %3",
+      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE,
       "args": [
         {
           "type": "input_value",
           "name": "TIMES",
           "check": "Number"
-        },
-        {
-          "type": "input_dummy"
-        },
-        {
-          "type": "input_statement",
-          "name": "DO"
         }
       ],
       "previousStatement": null,
@@ -94,6 +83,8 @@ Blockly.Blocks['controls_repeat_ext'] = {
       "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
     });
+    this.appendStatementInput('DO')
+        .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
   }
 };
 

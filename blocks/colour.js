@@ -29,6 +29,9 @@ goog.provide('Blockly.Blocks.colour');
 goog.require('Blockly.Blocks');
 
 
+/**
+ * Common HSV hue for all blocks in this category.
+ */
 Blockly.Blocks.colour.HUE = 20;
 
 Blockly.Blocks['colour_picker'] = {

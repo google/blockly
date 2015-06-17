@@ -658,7 +658,7 @@ function commentPrefix(perfectArr, parentArr){
     for (var i = 0; i < parentArr.length; i++) {
 
         if(parentArr[i].toString() == "0"){
-            prefixArr[i] = zeroCount.toString();
+            prefixArr[i] = "C" + zeroCount.toString();
             zeroCount++;
             //console.log("this is level 0");
         }
@@ -711,6 +711,7 @@ function commentPrefix(perfectArr, parentArr){
         }
     }
     console.log(prefixArr);
+    return prefixArr;
 }
 
 //#endregion

@@ -38,6 +38,8 @@ goog.require('goog.style');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
 
+goog.require('Blockly.WidgetDiv');
+
 var xmlDoc = null;
 var currentNode = null;
 
@@ -51,7 +53,7 @@ Blockly.Connection.prototype.defaultConnect = Blockly.Connection.prototype.conne
 Blockly.Connection.prototype.defaultDisconnect = Blockly.Connection.prototype.disconnect;
 
 Blockly.FieldColour.defaultWidgetDispose_ = Blockly.FieldColour.widgetDispose_;
-Blockly.FieldTextInput.prototype.defaultInputSetText = Blockly.FieldTextInput.prototype.setText;
+Blockly.WidgetDiv.defaultHide = Blockly.WidgetDiv.hide;
 Blockly.FieldDropdown.prototype.defaultDropdownSetText = Blockly.FieldDropdown.prototype.setText;
 Blockly.FieldCheckbox.prototype.defaultSetValue = Blockly.FieldCheckbox.prototype.setValue;
 
@@ -127,13 +129,12 @@ Blockly.FieldColour.widgetDispose_ = function () {
 };
 
 /**
- * Set the text in this field.
- * @param {?string} text New text.
- * @override
+ * Destroy the widget and hide the div.
  */
-Blockly.FieldTextInput.prototype.setText = function (text) {
-    this.defaultInputSetText(text);
-    updateXmlSelection();
+Blockly.WidgetDiv.hide = function() {
+  this.defaultHide();
+  updateXmlSelection();
+  console.log('Hide');
 };
 
 /**
@@ -228,7 +229,9 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
  * @param {boolean} Optional paramater.  If true, then don't select a block after updating the xml.
  */
 function updateXmlSelection(noSelect) {
-
+	
+	console.log('UpdateXML');
+	
     if (noSelect)
     {
         xmlDoc = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);

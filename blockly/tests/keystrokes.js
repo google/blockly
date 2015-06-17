@@ -104,7 +104,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[9]){ //Tab
 			console.log("Tab key pressed.");
-			e.preventDefault();
+			//e.preventDefault();
 			//Go through the same level of code
 		}
 			
@@ -179,10 +179,12 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[39]){ //right arrow
 			traverseIn();
+			Blockly.Toolbox.TreeNode.prototype.openCategory();
 		}
 		
 		else if(map[40]){ //down arrow
 			traverseDown();
+			Blockly.Toolbox.TreeNode.prototype.closeCategory();
 		}
 		//End of development block
 	}

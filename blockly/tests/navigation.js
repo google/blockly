@@ -26,6 +26,18 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldCheckbox');
 
+goog.require('Blockly.Toolbox');
+
+goog.require('Blockly.Flyout');
+goog.require('goog.dom');
+goog.require('goog.events');
+goog.require('goog.events.BrowserFeature');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.math.Rect');
+goog.require('goog.style');
+goog.require('goog.ui.tree.TreeControl');
+goog.require('goog.ui.tree.TreeNode');
+
 var xmlDoc = null;
 var currentNode = null;
 
@@ -146,6 +158,67 @@ Blockly.FieldCheckbox.prototype.setValue = function (strBool) {
 Array.prototype.contains = function(element) {
     return this.indexOf(element) > -1;
 }
+
+ /**
+ * Initialize accessibility properties
+ * @override
+ */
+Blockly.Toolbox.TreeNode.prototype.initAccessibility = function() {
+  goog.ui.tree.BaseNode.prototype.initAccessibility.call(this);
+  
+  var el = this.getElement();
+  el.setAttribute('tabIndex', 0);
+  
+  //Register the onKeyDown handler because nothing else does
+  Blockly.bindEvent_(el, 'keydown', this, this.onKeyDown);
+};
+
+/**
+ * Handles a key down event.
+ * @param {!goog.events.BrowserEvent} e The browser event.
+ * @return {boolean} The handled value.
+ * @override
+ */
+Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
+  var handled = true;
+  switch (e.keyCode) {
+    case goog.events.KeyCodes.RIGHT:
+      if (e.altKey) {
+        break;
+      }
+      // Expand icon.
+      if (this.hasChildren() && this.isUserCollapsible_) {
+        this.setExpanded(true);
+        this.select();
+      } else {
+        this.select();
+      }
+      break;
+
+    case goog.events.KeyCodes.LEFT:
+      if (e.altKey) {
+        break;
+      }
+      this.setExpanded(false);
+      this.getTree().setSelectedItem(null);
+      break;
+
+    default:
+      handled = false;
+  }
+
+  if (handled) {
+    e.preventDefault();
+    var t = this.getTree();
+    if (t) {
+      // clear type ahead buffer as user navigates with arrow keys
+      t.clearTypeAhead();
+    }
+    this.updateRow();
+  }
+
+  return handled;
+};
 
 //#endregion
 

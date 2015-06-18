@@ -200,10 +200,7 @@ function changeFontDD(){
 }
 
 function commentInterval(){
-
-    setInterval(getImportantBlocks, 2500);
-  
-  
+    setInterval(getImportantBlocks, 2500); 
 }
 </script>
 
@@ -293,7 +290,7 @@ div button{
 }
 </style>
 </head>
-<body onload="start(); commentInterval();">
+<body onload="start()">
 
   <div id="collaborators"></div>
 
@@ -526,8 +523,8 @@ div button{
             <option value='48'>48</option> 
             <option value='72'>72</option>
         </select>
-        <div id="comment"> 
-          Comments go here
+        <div id="comment" tabindex="0"> 
+          <p tabindex="0">Comments go here</p>
        </div>
 
 

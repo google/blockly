@@ -199,6 +199,7 @@ function createComments(perfectArr, parentArr){
     commentStr = '';
     currentNode = perfectArr[i];
     pTag = document.createElement("p");
+    pTag.setAttribute("tabindex", i);
     indent = parentArr[i];
     //checks how many indents a comment is going to have
     while(indent != 0) {

@@ -150,7 +150,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[82]){ //R
 			console.log("R key pressed.");
-			//getImportantBlocks();
+			getImportantBlocks();
 			//Return to top of the code
 		}
 		

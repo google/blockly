@@ -225,6 +225,7 @@
 	"LISTS_REPEAT_TITLE": "создать список из элемента %1, повторяющегося %2 раз",
 	"LISTS_LENGTH_TITLE": "длина %1",
 	"LISTS_LENGTH_TOOLTIP": "Возвращает длину списка.",
+	"LISTS_ISEMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#is-empty",
 	"LISTS_ISEMPTY_TITLE": "%1 пуст",
 	"LISTS_ISEMPTY_TOOLTIP": "Возвращает значение истина, если список пуст.",
 	"LISTS_INLIST": "в списке",

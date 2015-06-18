@@ -234,6 +234,7 @@
 	"LISTS_REPEAT_TITLE": "建立列表使用项 %1 重复 %2 次",
 	"LISTS_LENGTH_TITLE": "%1的长度",
 	"LISTS_LENGTH_TOOLTIP": "返回列表的长度。",
+	"LISTS_ISEMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#is-empty",
 	"LISTS_ISEMPTY_TITLE": "%1是空的",
 	"LISTS_ISEMPTY_TOOLTIP": "如果改列表为空，则返回真。",
 	"LISTS_INLIST": "在列表中",

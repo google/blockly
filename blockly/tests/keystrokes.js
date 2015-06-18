@@ -19,6 +19,12 @@
 var map = [];
 var keyboardState = 'hotkeyMode';
 
+document.onmouseup = function(e){
+	e = e || event;
+	console.log('Mouse Up');
+	updateXmlSelection();
+};
+
 /**
  * Take care of keypresses for accessibility
  */
@@ -152,6 +158,11 @@ document.onkeydown = document.onkeyup = function(e){
 			console.log("R key pressed.");
 			getImportantBlocks();
 			//Return to top of the code
+		}
+		
+		else if(map[13]){ //Enter
+			console.log('Enter key pressed.');
+			updateXmlSelection();
 		}
 		
 		//Arrow keys for development purposes.  Switch as needed for proper usage.

@@ -50,8 +50,6 @@ Blockly.BlockSvg.prototype.select = function () {
  */
 Blockly.Block.prototype.initialize = function (workspace, prototypeName) {
     this.defaultInitialize(workspace, prototypeName);
-
-    updateXmlSelection();
 };
 
 /**
@@ -76,8 +74,6 @@ Blockly.BlockSvg.prototype.dispose = function (healStack, animate,
  */
 Blockly.Connection.prototype.connect = function (otherConnection) {
     this.defaultConnect(otherConnection);
-
-    updateXmlSelection();
 }
 
 /**
@@ -85,9 +81,6 @@ Blockly.Connection.prototype.connect = function (otherConnection) {
  */
 Blockly.Connection.prototype.disconnect = function () {
     this.defaultDisconnect();
-
-    updateXmlSelection();
-
 };
 
 Array.prototype.contains = function(element) {
@@ -201,7 +194,6 @@ function updateXmlSelection(noSelect) {
 function updateBlockSelection() {
     Blockly.Workspace.prototype.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
-    updateXmlSelection();
 }
 
 //#region JUMP_FUNCTIONS

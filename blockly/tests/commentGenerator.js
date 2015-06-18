@@ -22,10 +22,12 @@
 
 /**
  * @fileoverview object that retrieves an array of blocks in the workspace and generates comments.
- * @author Alex Bowen, Amber Libby
+ * @author Amber Libby, Alex Bowen, Mary Costa
  */
 
-
+/**
+ * gets all of the blocks that aren't conditionals and calls get indent on the array list it generates
+ */
 function getImportantBlocks(){
 	//check if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
@@ -76,6 +78,11 @@ function getImportantBlocks(){
 
 }//end of getImportantBlocks
 
+/**
+ * gets how deeply indented all the provided blocks are and passes that array into 
+ * the commentPrefix along with the perfectArr
+ * @param {perfectArr} array of blocks that we are checking their indentation
+ */
 function getIndent(perfectArr){
 
 	//the string format of the current XML Doc
@@ -105,6 +112,13 @@ function getIndent(perfectArr){
 
 }
 
+/**
+ * based on how the comments are placed this will generate their prefixes correctly to display them
+ * in the proper order based on their indentation depth.
+ * @param {perfectArr, parentArr} perfectArr is the array of blocks that potentially have comments
+ * while parentArr is an array that tracks how deeply nested the blocks are.
+ * @return {prefixArr} An array of the prefixes built for each block indent
+ */
 function commentPrefix(perfectArr, parentArr){
 	var zeroCount = 1;
     var allCount = 0;
@@ -166,6 +180,13 @@ function commentPrefix(perfectArr, parentArr){
     return prefixArr;
 }
 
+/**
+ * Generates the comments and places them into the div in the HTML to display the comments on the page
+ * with the right format of prefixes. It puts all the comment blocks into <p> tags so they properly
+ * display on the web.
+ * @param {perfectArr, parentArr} perfectArr is the array of blocks that potentially have comments
+ * while parentArr is an array that tracks how deeply nested the blocks are.
+ */
 function createComments(perfectArr, parentArr){
   //clears the comment div of old data
   document.getElementById("comment").innerHTML = "";
@@ -191,6 +212,7 @@ function createComments(perfectArr, parentArr){
     } 
 
     else{
+    	//if the block has a comment it will be shown otherwise it will print no comment
         var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
         if(parentsId == currentNode.getAttribute('id')){
           var htmlComment = currentNode.getElementsByTagName("comment")[0].innerHTML;

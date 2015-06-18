@@ -49,6 +49,7 @@
 <script src="loadxml.js"></script>
 <script src="debug.js"></script>
 <script src="navigation-block-info.js"></script>
+<script src="commentGenerator.js"></script>
 <script type="text/javascript">
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
@@ -185,46 +186,6 @@ var spaghettiXml = [
   '  </block>'].join('\n');
 
 
-function createComments(perfectArr, parentArr){
-  //clears the comment div of old data
-  document.getElementById("comment").innerHTML = "";
-
-  var pTag;
-  var commentStr;
-  var prefixes = commentPrefix(perfectArr, parentArr);
-  var indent;
-  for(var i = 0; i < perfectArr.length; i++){
-    commentStr = '';
-    currentNode = perfectArr[i];
-    pTag = document.createElement("p");
-    indent = parentArr[i];
-    //checks how many indents a comment is going to have
-    while(indent != 0) {
-      commentStr += "---";
-      indent--;
-    }
-    commentStr += " " + prefixes[i];
-
-    if(perfectArr[i].getElementsByTagName("comment")[0] == undefined){
-      commentStr += " No comment";
-    } 
-
-    else{
-        var parentsId = perfectArr[i].getElementsByTagName("comment")[0].parentNode.getAttribute('id');
-        if(parentsId == currentNode.getAttribute('id')){
-          var htmlComment = currentNode.getElementsByTagName("comment")[0].innerHTML;
-          commentStr += " " + htmlComment;
-        }
-        else{
-          commentStr += " No comment";
-        }
-    }
-
-    var pTextNode = document.createTextNode(commentStr);
-    pTag.appendChild(pTextNode);
-    document.getElementById("comment").appendChild(pTag);
-  }
-}
 
 //========change the comment box font size dynamically=========
 function changeFontDD(){
@@ -238,6 +199,12 @@ function changeFontDD(){
 
 }
 
+function commentInterval(){
+
+    setInterval(getImportantBlocks, 2500);
+  
+  
+}
 </script>
 
 <style>
@@ -326,7 +293,7 @@ div button{
 }
 </style>
 </head>
-<body onload="start()">
+<body onload="start(); commentInterval();">
 
   <div id="collaborators"></div>
 

@@ -152,11 +152,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     return this.blockToCode(block.getNextBlock());
   }
 
-  var func = this[block.type];
-  if (!func) {
-    throw 'Language "' + this.name_ + '" does not know how to generate code ' +
-        'for block type "' + block.type + '".';
-  }
+  var func = this.getBlock(block.type);
   // First argument to func.call is the value of 'this' in the generator.
   // Prior to 24 September 2013 'this' was the only way to access the block.
   // The current prefered method of accessing the block is through the second
@@ -178,6 +174,30 @@ Blockly.Generator.prototype.blockToCode = function(block) {
     throw 'Invalid code generated: ' + code;
   }
 };
+
+/**
+ * Recursively find block function
+ * @param {string} name The name of the block.
+ * @param {{}} [object] Blocks storage. Default 'this'
+ * @throws If function is not exists
+ * @returns {function} Returns function for code generation.
+ */
+Blockly.Generator.prototype.getBlock = function(name, object) {
+  var paths = name.split('.');
+
+  object = object || this;
+
+  if (paths.length > 1 && goog.isObject(object[paths[0]])) {
+    return this.getBlock(paths[1], object[paths[0]]);
+  }
+
+  if (!object[name]) {
+    throw 'Language "' + this.name_ + '" does not know how to generate code ' +
+    'for block type "' + block.type + '".';
+  }
+
+  return object[name];
+}
 
 /**
  * Generate code representing the specified value input.

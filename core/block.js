@@ -118,7 +118,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
     this.type = prototypeName;
-    var prototype = Blockly.Blocks[prototypeName];
+    var prototype = this.getPrototype(prototypeName);
     goog.asserts.assertObject(prototype,
         'Error: "%s" is an unknown language block.', prototypeName);
     goog.mixin(this, prototype);
@@ -130,6 +130,24 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   // Record initial inline state.
   this.inputsInlineDefault = this.inputsInline;
 };
+
+/**
+ * Recursively get block prototype
+ * @param {string} name The name of the block.
+ * @param {{}} [object] Blocks storage. Default Blockly.Blocks
+ * @returns {*} Returns block prototype if it exists. Otherwise undefined.
+ */
+Blockly.Block.prototype.getPrototype = function(name, object) {
+  var paths = name.split('.');
+
+  object = object || Blockly.Blocks;
+
+  if (paths.length > 1 && goog.isObject(object[paths[0]])) {
+    return this.getPrototype(paths[1], object[paths[0]]);
+  }
+
+  return object[name];
+}
 
 /**
  * Get an existing block.

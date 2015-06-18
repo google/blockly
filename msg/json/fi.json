@@ -58,6 +58,7 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Niin kauan kuin arvo on epätosi, suorita joukko lausekkeita.",
 	"CONTROLS_FOR_TOOLTIP": "Aseta muuttujaan \"%1\" arvot alkuarvosta loppuarvoon annetun askeleen välein ja suorita joka askeleella annettu koodilohko.",
 	"CONTROLS_FOR_TITLE": "laske %1 Väli %2-%3 %4:n välein",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#For-each-toistolauseke jokaiselle lohkolle",
 	"CONTROLS_FOREACH_TITLE": "kullekin kohteelle %1 listassa %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Aseta muuttujan %1 arvoksi kukin listan kohde vuorollaan ja suorita joukko lausekkeita.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "poistu silmukasta",

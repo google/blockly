@@ -39,7 +39,6 @@
 	"CONTROLS_REPEAT_TITLE": "%1 mol widderhuelen",
 	"CONTROLS_REPEAT_INPUT_DO": "maachen",
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "widderhuele bis",
-	"CONTROLS_FOR_INPUT_FROM_TO_BY": "vun %1 bis %2 mat %3",
 	"CONTROLS_FOREACH_TITLE": "fir all Element %1 an der Lëscht %2",
 	"CONTROLS_IF_MSG_IF": "wann",
 	"CONTROLS_IF_MSG_ELSE": "soss",

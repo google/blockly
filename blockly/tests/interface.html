@@ -88,6 +88,8 @@ function start() {
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();
   }
+
+  toolbox.setAttribute("tabindex", "0");
 }
 
 function toXml() {
@@ -284,6 +286,12 @@ div button{
   width:10em;
   margin: 3px;
 }
+/*when tabbing through highlight*/
+ button:focus,input:focus,textarea:focus,#commentDiv:focus{
+outline: solid;
+outline-width: 3px;
+color: black;
+}
 
 #typeButtons{
   text-align: center;
@@ -292,7 +300,7 @@ div button{
 </head>
 <body onload="start()">
 
-  <div id="collaborators"></div>
+  <div id="collaborators" tabindex="-1"></div>
 
   <div id="blocklyDiv"></div>
 
@@ -512,9 +520,9 @@ div button{
     <category name="Functions" custom="PROCEDURE"></category>
   </xml>
     
-    <div class="commentDiv">
-        <h1 align="center">Blockly Playground</h1>
-        <select onchange="changeFontDD()" id= "fontDD" role="menu" aria-haspopup="true" aria-hidden="true">
+    <div class="commentDiv" tabindex="-1">
+        <h1 tabindex="-1" align="center">Blockly Playground</h1>
+        <select onchange="changeFontDD()" id= "fontDD" role="menu" aria-haspopup="true" aria-hidden="true" tabindex="-1">
             <option value='12'>12</option>
             <option value='14'>14</option>
             <option value='18'>18</option>
@@ -552,7 +560,7 @@ div button{
             <button type="button" value="To JavaScript" onclick="toCode('JavaScript')" id="newRow">To JavaScript</button>
             <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
             <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
-             <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
+            <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
     </div>
     <textarea id="importExport">Program Output is here</textarea>
   <hr>

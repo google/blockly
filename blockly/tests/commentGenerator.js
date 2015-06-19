@@ -28,6 +28,8 @@
 /**
  * gets all of the blocks that aren't conditionals and calls get indent on the array list it generates
  */
+var perfectArr = [];
+
 function getImportantBlocks(){
 	//check if the workspace is empty
 	if (!xmlDoc || !xmlDoc.getElementsByTagName('BLOCK')) {
@@ -37,7 +39,7 @@ function getImportantBlocks(){
     //add all blocks to the blockArr
      var blockArr = xmlDoc.getElementsByTagName('BLOCK');
 
-    var perfectArr = [];
+    perfectArr = [];
 
     //adding any blocks which can stand on their own to perfectArr
     for(var i=0; i < blockArr.length; i++){
@@ -199,7 +201,8 @@ function createComments(perfectArr, parentArr){
     commentStr = '';
     currentNode = perfectArr[i];
     pTag = document.createElement("p");
-    pTag.setAttribute("tabindex", i);
+    pTag.setAttribute("tabindex", 0);
+    pTag.setAttribute("id", i);
     indent = parentArr[i];
     //checks how many indents a comment is going to have
     while(indent != 0) {
@@ -228,4 +231,16 @@ function createComments(perfectArr, parentArr){
     pTag.appendChild(pTextNode);
     document.getElementById("comment").appendChild(pTag);
   }
+  
+}
+/**
+* Uses the currently selected comment to jump to the
+* block with the corresponding id.
+*/
+function commentOrBlockJump(){
+    var eleId = document.activeElement.id;
+    console.log(eleId);
+    console.log(perfectArr[eleId]);
+    var blockId = perfectArr[eleId].getAttribute('id');
+    jumpToID(blockId);
 }

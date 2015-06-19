@@ -148,6 +148,7 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[71]){ //G
 			console.log("G key pressed.");
+			commentOrBlockJump();
 			//Goto the block the comment that is currently selected is from
 			//Alternatively goto the comment that is connected to the currently selected block
 		}

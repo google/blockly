@@ -19,6 +19,9 @@
 var xmlDoc = null;
 var currentNode = null;
 
+var undoStack = [];
+var redoStack = [];
+
 //#region XML_UPDATING
 
 // Default functions for our hooks.
@@ -157,6 +160,8 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
  */
 function updateXmlSelection(noSelect) {
 	
+    var prevXml = xmlDoc;
+
 	console.log('UpdateXML');
 	
     if (noSelect)
@@ -186,7 +191,45 @@ function updateXmlSelection(noSelect) {
             currentNode = xmlDoc.getElementsByTagName('BLOCK')[0];
         }
     }
+
+    // Check to see if we are adding this to the undo/redo stack
+    if(xmlDoc != prevXml)
+    {
+        // If we are, remember the previous xml selection, and clear the redo stack.
+        undoStack.push(prevXml);
+        redoStack = [];
+    }
 };
+
+/**
+ * Undo the previous action
+ */
+function undo() {
+    if(undoStack.length <= 1)
+    {
+        return;
+    }
+
+    // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
+    redoStack.push(xmlDoc);
+    xmlDoc = undoStack.pop();
+    updateBlockSelection();
+}
+
+/**
+ * Undo your undo.
+ */
+function redo() {
+    if (redoStack.length == 0) {
+        return;
+    }
+
+    // Go back to the previous, keep track of stuff in case you want to redo, and update the scene.
+    undoStack.push(xmlDoc);
+    xmlDoc = redoStack.pop();
+    updateBlockSelection();
+}
+
 
 /**
  * Import the xml into the file, and update the xml in case of id changes.
@@ -194,6 +237,7 @@ function updateXmlSelection(noSelect) {
 function updateBlockSelection() {
     Blockly.Workspace.prototype.clear();
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDoc);
+    updateXmlSelection();
 }
 
 //#region JUMP_FUNCTIONS

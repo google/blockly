@@ -81,13 +81,15 @@ document.onkeydown = document.onkeyup = function(e){
 	if(keyboardState=='hotkeyMode'){	
 		if (map[17] && map[90]){ //Ctrl Z
 			console.log("Control Z pressed.");
-			//Need to implement Undo
+		    //Need to implement Undo
+			undo();
 			e.preventDefault();
 		}
 		
 		else if(map[17] && map[89]){ //Ctrl Y
 			console.log("Control Y pressed.");
-			//Need to implement Redo
+		    //Need to implement Redo
+			redo();
 			e.preventDefault();
 		}
 		

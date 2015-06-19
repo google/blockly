@@ -19,8 +19,10 @@
 var map = [];
 var keyboardState = 'hotkeyMode';
 
+/**
+ * When a mouseup event happens, update the XML selection
+ */
 document.onmouseup = function(e){
-	e = e || event;
 	console.log('Mouse Up');
 	updateXmlSelection();
 };
@@ -28,7 +30,6 @@ document.onmouseup = function(e){
 /**
  * Take care of keypresses for accessibility
  */
-
 document.onkeydown = document.onkeyup = function(e){
 	
 	e = e || event;
@@ -98,7 +99,6 @@ document.onkeydown = document.onkeyup = function(e){
 		
 		else if(map[9]){ //Tab
 			console.log("Tab key pressed.");
-			e.preventDefault();
 			//Go through the same level of code
 		}
 			
@@ -115,6 +115,7 @@ document.onkeydown = document.onkeyup = function(e){
 		else if(map[46]){ //Delete
 			console.log("Delete key pressed.");
 			//Delete the currently selected item
+			updateXmlSelection();
 			e.preventDefault();
 		}
 		

@@ -238,9 +238,25 @@ function createComments(perfectArr, parentArr){
 * block with the corresponding id.
 */
 function commentOrBlockJump(){
-    var eleId = document.activeElement.id;
-    console.log(eleId);
-    console.log(perfectArr[eleId]);
-    var blockId = perfectArr[eleId].getAttribute('id');
-    jumpToID(blockId);
+	//checks if something is not selected which would throw errors
+    if(getCurrentNode() != null) {
+
+    	//jump from block to comment 
+    	if(document.activeElement.id) {
+    		var eleId = document.activeElement.id;
+    		var blockId = perfectArr[eleId].getAttribute('id');
+    		jumpToID(blockId);
+    	}
+    	else {
+    		var highlightedBlock = getCurrentNode();
+			for (var i = 0; i < perfectArr.length; i++) {
+	    		if(perfectArr[i].getAttribute('id') == highlightedBlock.getAttribute('id')) {
+	    			document.getElementById(i).focus();
+	    		}
+	    	}
+    	}
+	}
+    else {
+    	
+    }
 }

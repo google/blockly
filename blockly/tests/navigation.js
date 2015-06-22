@@ -539,4 +539,8 @@ function getBlockNodeById(id) {
     return null;
 }
 
+function getCurrentNode() {
+    return currentNode;
+}
+
 //#endregion

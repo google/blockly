@@ -105,7 +105,7 @@ function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-  updateXMLSelection();
+  updateXmlSelection();
 }
 
 function toCode(lang) {
@@ -533,18 +533,19 @@ color: black;
         </select>
     </div>
 
-    <p tabindex="0" id="comment">Comments go here</p>
+    <p tabindex="0" id="comment"></p>
 
   <div id="primaryContentDiv">
 
         <div id="typeButtons">
-            <button type="button" value="Export to XML" onclick="toXml()" id="firstRow">Export to XML</button>
+            <button type="button" value="Export to XML" onclick="toXml()">Export to XML</button>
             <button type="button" value="Import from XML" onclick="fromXml()">Import from XML</button>
-            <button type="button" value="To JavaScript" onclick="toCode('JavaScript')" id="newRow">To JavaScript</button>
+            <button type="button" value="To JavaScript" onclick="toCode('JavaScript')">To JavaScript</button>
             <button type="button" value="To Python" onclick="toCode('Python')">To Python</button>
             <button type="button" value="To Dart" onclick="toCode('Dart')">To Dart</button>
             <button type="button" value="Run JavaScript" onclick="runCode()">Run JavaScript</button>
     </div>
+    
     <textarea id="importExport">Program Output is here</textarea>
   <hr>
 

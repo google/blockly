@@ -36,6 +36,11 @@ document.onkeydown = document.onkeyup = function(e){
 	map[e.keyCode] = e.type == 'keydown';	
 	
 	if(keyboardState=='typingMode'){ //if you are typing, hotkeys disabled
+		if(map[13]){ //Enter
+			console.log('Enter key pressed.');
+			keyboardState = 'hotkeyMode';
+			updateXmlSelection();
+		}
 		return;
 	}	
 
@@ -46,34 +51,39 @@ document.onkeydown = document.onkeyup = function(e){
 			keyboardState='menuKeyOne';
 		}
 		if(map[50]){ //2
-			console.log("Within A menu, 1 key pressed.");
+			console.log("Within A menu, 2 key pressed.");
 			//Enter the second list
 			keyboardState='menuKeyTwo';
 		}
 		if(map[51]){ //3
-			console.log("Within A menu, 1 key pressed.");
+			console.log("Within A menu, 3 key pressed.");
 			//Enter the third list
 			keyboardState='menuKeyThree';
 		}
 		if(map[52]){ //4
-			console.log("Within A menu, 1 key pressed.");
+			console.log("Within A menu, 4 key pressed.");
 			//Enter the fourth list
 			keyboardState='menuKeyFour';
 		}
 		if(map[53]){ //5
-			console.log("Within A menu, 1 key pressed.");
+			console.log("Within A menu, 5 key pressed.");
 			//Enter the fifth list
 			keyboardState='menuKeyFive';
 		}
 		if(map[54]){ //6
-			console.log("Within A menu, 1 key pressed.");
+			console.log("Within A menu, 6 key pressed.");
 			//Enter the sixth list
 			keyboardState='menuKeySix';
 		}
 		if(map[55]){ //7
-			console.log("Within A menu, 1 key pressed.");
+			console.log("Within A menu, 7 key pressed.");
 			//Enter the seventh list
 			keyboardState='menuKeySeven';
+		}
+		if(map[56]){ //8
+			console.log("Within A menu, 8 key pressed.");
+			//Enter the eighth list
+			keyboardState='menuKeyEight';
 		}
 		//If another block category is added, add it down here
 	}

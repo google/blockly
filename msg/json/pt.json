@@ -171,7 +171,6 @@
 	"MATH_MODULO_HELPURL": "http://pt.wikipedia.org/wiki/Opera%C3%A7%C3%A3o_m%C3%B3dulo",
 	"MATH_MODULO_TITLE": "resto da divisão de %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Retorna o resto da divisão de dois números.",
-	"MATH_CONSTRAIN_HELPURL": "http://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "restringe %1 inferior %2 superior %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Restringe um número entre os limites especificados (inclusive).",
 	"MATH_RANDOM_INT_HELPURL": "http://pt.wikipedia.org/wiki/N%C3%BAmero_aleat%C3%B3rio",

@@ -164,7 +164,6 @@
 	"MATH_MODULO_HELPURL": "http://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "mbetësi i %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Kthen mbetësin nga pjestimi i dy numrave.",
-	"MATH_CONSTRAIN_HELPURL": "http://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "detyro %1 e ulët %2 e lartë %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Vëni një numër që të jetë në mes të kufive të specifikuara(përfshirëse).",
 	"MATH_RANDOM_INT_HELPURL": "http://en.wikipedia.org/wiki/Random_number_generation",

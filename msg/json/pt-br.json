@@ -61,7 +61,6 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Enquanto um valor é falso, então faça algumas instruções.",
 	"CONTROLS_FOR_TOOLTIP": "Faz com que a variável \"%1\" assuma os valores do número inicial ao número final, contando de acordo com o intervalo especificado, e executa os blocos especificados.",
 	"CONTROLS_FOR_TITLE": "contar com %1 de %2 até %3 por %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each para cada bloco",
 	"CONTROLS_FOREACH_TITLE": "para cada item %1 na lista %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Para cada item em uma lista, atribui o item à variável \"%1\", e então realiza algumas instruções.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "encerra o laço",

@@ -166,7 +166,6 @@
 	"MATH_MODULO_HELPURL": "https://sr.wikipedia.org/wiki/Конгруенција",
 	"MATH_MODULO_TITLE": "подсетник од %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Враћа подсетник од дељења два броја.",
-	"MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "ограничи %1 ниско %2 високо %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Ограничава број на доње и горње границе (укључиво).",
 	"MATH_RANDOM_INT_HELPURL": "https://sr.wikipedia.org/wiki/Генератор_случајних_бројева",

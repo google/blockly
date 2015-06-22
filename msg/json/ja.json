@@ -168,7 +168,6 @@
 	"MATH_MODULO_HELPURL": "https://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "残りの %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "2 つの数値を除算した残りを返します。",
-	"MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "制限%1下リミット%2上限リミット%3",
 	"MATH_CONSTRAIN_TOOLTIP": "値を、上限 x と下限 y のあいだに制限んする（上限と下限が、x と  y　とに同じ場合わ、上限の値は　x, 下限の値はy）。",
 	"MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",

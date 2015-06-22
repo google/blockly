@@ -167,7 +167,6 @@
 	"MATH_MODULO_HELPURL": "https://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "باقي %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "يرجع الباقي من قسمة الرقمين.",
-	"MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "تقيد %1 منخفض %2 مرتفع %3",
 	"MATH_CONSTRAIN_TOOLTIP": "تقييد العددليكون بين الحدود المحددة (ضمناً).",
 	"MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",

@@ -45,7 +45,6 @@
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "تا تکرار کو",
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "تا تکرار کو",
 	"CONTROLS_FOR_TITLE": "اشماردن وا %1 د %2 سی %3 وا %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each for each block",
 	"CONTROLS_FOREACH_TITLE": "سی هر قلم %1 د نوم گه %2",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "حلقه نه خراو کو",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "حلقه شومل بیه نه خراو کو",

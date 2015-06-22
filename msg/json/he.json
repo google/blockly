@@ -176,7 +176,6 @@
 	"MATH_MODULO_HELPURL": "http://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "שארית החילוק %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "החזרת השארית מחלוקת שני המספרים.",
-	"MATH_CONSTRAIN_HELPURL": "http://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "constrain %1 low %2 high %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Constrain a number to be between the specified limits (inclusive).",
 	"MATH_RANDOM_INT_HELPURL": "http://en.wikipedia.org/wiki/Random_number_generation",

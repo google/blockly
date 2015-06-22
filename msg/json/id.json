@@ -165,7 +165,6 @@
 	"MATH_MODULO_HELPURL": "https://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "sisa %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Kembalikan sisa dari pembagian ke dua angka.",
-	"MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "Batasi %1 rendah %2 tinggi %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Batasi angka antara batas yang ditentukan (inklusif).",
 	"MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",

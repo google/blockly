@@ -239,7 +239,8 @@ function createComments(perfectArr, parentArr){
 */
 function commentOrBlockJump(){
 	//checks if something is not selected which would throw errors
-    if(getCurrentNode() != null) {
+	console.log(document.activeElement);
+    if(getCurrentNode() != null && document.activeElement.id != "importExport") {
 
     	//jump from block to comment 
     	if(document.activeElement.id) {
@@ -257,6 +258,6 @@ function commentOrBlockJump(){
     	}
 	}
     else {
-    	
+
     }
 }

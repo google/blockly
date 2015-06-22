@@ -58,7 +58,7 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "只要值为假，执行一些语句。",
 	"CONTROLS_FOR_TOOLTIP": "从起始数到结尾数中取出变量“%1”的值，按指定的时间间隔，执行指定的块。",
 	"CONTROLS_FOR_TITLE": "使用 %1 从范围 %2 到 %3 每隔 %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each用于每个块",
+	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each",
 	"CONTROLS_FOREACH_TITLE": "为每个项目 %1 在列表中 %2",
 	"CONTROLS_FOREACH_TOOLTIP": "遍历每个列表中的项目，将变量“%1”设定到该项中，然后执行某些语句。",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "中断循环",

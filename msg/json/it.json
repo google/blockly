@@ -5,7 +5,8 @@
 			"Espertus",
 			"Nerimic",
 			"Gbonanome",
-			"Gianfranco"
+			"Gianfranco",
+			"Federico Mugnaini"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -54,7 +55,7 @@
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "ripeti fino a che",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Finché un valore è vero, esegue alcune istruzioni.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Finché un valore è falso, esegue alcune istruzioni.",
-	"CONTROLS_FOR_TOOLTIP": "Fa sì che la variabile \"%1\" prenda tutti i valori a partire dal numero di partenza fino a quello di arrivo, con passo pari all'intervallo specificato, ed esegue il blocco indicato.",
+	"CONTROLS_FOR_TOOLTIP": "Fa sì che la variabile '%1' prenda tutti i valori a partire dal numero di partenza fino a quello di arrivo, con passo pari all'intervallo specificato, ed esegue il blocco indicato.",
 	"CONTROLS_FOR_TITLE": "conta con %1 da %2 a %3 per %4",
 	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each for each block",
 	"CONTROLS_FOREACH_TITLE": "per ogni elemento %1 nella lista %2",

@@ -52,7 +52,7 @@
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "повторять, пока не",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Пока значение истинно, выполняет команды.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Пока значение ложно, выполняет команды",
-	"CONTROLS_FOR_TOOLTIP": "Присваивает переменной \"%1\" значения от начального до конечного с заданным шагом и выполняет указанные команды.",
+	"CONTROLS_FOR_TOOLTIP": "Присваивает переменной '%1' значения от начального до конечного с заданным шагом и выполняет указанные команды.",
 	"CONTROLS_FOR_TITLE": "цикл по %1 от %2 до %3 с шагом %4",
 	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each",
 	"CONTROLS_FOREACH_TITLE": "для каждого элемента %1 в списке %2",

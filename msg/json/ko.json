@@ -5,7 +5,8 @@
 			"아라",
 			"Priviet",
 			"Revi",
-			"SeoJeongHo"
+			"SeoJeongHo",
+			"Alex00728"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
@@ -244,6 +245,7 @@
 	"LISTS_REPEAT_TITLE": "%1 을 %2 번 넣어, 리스트 생성",
 	"LISTS_LENGTH_TITLE": "%1의 길이",
 	"LISTS_LENGTH_TOOLTIP": "리스트에 포함되어있는, 아이템 갯수를 돌려줍니다.",
+	"LISTS_ISEMPTY_HELPURL": "https://github.com/google/blockly/wiki/Lists#가 비었습니다.",
 	"LISTS_ISEMPTY_TITLE": "%1이 비어 있습니다",
 	"LISTS_ISEMPTY_TOOLTIP": "목록이 비었을 때 참을 반환합니다.",
 	"LISTS_INLIST": "리스트",

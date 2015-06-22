@@ -101,6 +101,7 @@
 	"MATH_DIVISION_SYMBOL": "÷",
 	"MATH_MULTIPLICATION_SYMBOL": "×",
 	"MATH_POWER_SYMBOL": "^",
+	"MATH_ARITHMETIC_HELPURL": "https://he.wikipedia.org/wiki/ארבע_פעולות_החשבון",
 	"MATH_TRIG_SIN": "sin",
 	"MATH_TRIG_COS": "cos",
 	"MATH_TRIG_TAN": "tan",

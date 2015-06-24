@@ -142,6 +142,7 @@ Blockly.Blocks['controls_for'] = {
         {
           "type": "input_value",
           "name": "TO",
+          "check": "Number",
           "align": "RIGHT"
         },
         {

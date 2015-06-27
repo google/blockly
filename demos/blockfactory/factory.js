@@ -127,14 +127,14 @@ function formatJson(code, rootBlock) {
     if (fields && getFieldsJson_(fields).join('').trim() != '') {
       var align = lastInput.getFieldValue('ALIGN');
       if (align != 'LEFT') {
-        JS.lastDummyAlign = align;
+        JS.lastDummyAlign0 = align;
       }
       args.pop();
       message.pop();
     }
   }
-  JS.message = message.join(' ');
-  JS.args = args;
+  JS.message0 = message.join(' ');
+  JS.args0 = args;
   // Generate inline/external switch.
   if (rootBlock.getFieldValue('INLINE') == 'EXT') {
     JS.inputsInline = false;

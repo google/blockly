@@ -211,8 +211,8 @@ Blockly.Blocks['lists_repeat'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.LISTS_REPEAT_TITLE,
-      "args": [
+      "message0": Blockly.Msg.LISTS_REPEAT_TITLE,
+      "args0": [
         {
           "type": "input_value",
           "name": "ITEM"
@@ -238,8 +238,8 @@ Blockly.Blocks['lists_length'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.LISTS_LENGTH_TITLE,
-      "args": [
+      "message0": Blockly.Msg.LISTS_LENGTH_TITLE,
+      "args0": [
         {
           "type": "input_value",
           "name": "VALUE",
@@ -261,8 +261,8 @@ Blockly.Blocks['lists_isEmpty'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.LISTS_ISEMPTY_TITLE,
-      "args": [
+      "message0": Blockly.Msg.LISTS_ISEMPTY_TITLE,
+      "args0": [
         {
           "type": "input_value",
           "name": "VALUE",

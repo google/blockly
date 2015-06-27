@@ -371,8 +371,8 @@ Blockly.Blocks['logic_negate'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.LOGIC_NEGATE_TITLE,
-      "args": [
+      "message0": Blockly.Msg.LOGIC_NEGATE_TITLE,
+      "args0": [
         {
           "type": "input_value",
           "name": "BOOL",

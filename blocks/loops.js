@@ -41,8 +41,8 @@ Blockly.Blocks['controls_repeat'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_REPEAT_TITLE,
+      "args0": [
         {
           "type": "field_input",
           "name": "TIMES",
@@ -69,8 +69,8 @@ Blockly.Blocks['controls_repeat_ext'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_REPEAT_TITLE,
+      "args0": [
         {
           "type": "input_value",
           "name": "TIMES",
@@ -126,8 +126,8 @@ Blockly.Blocks['controls_for'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_FOR_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_FOR_TITLE,
+      "args0": [
         {
           "type": "field_variable",
           "name": "VAR",
@@ -214,8 +214,8 @@ Blockly.Blocks['controls_forEach'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_FOREACH_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_FOREACH_TITLE,
+      "args0": [
         {
           "type": "field_variable",
           "name": "VAR",

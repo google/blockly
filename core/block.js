@@ -903,8 +903,8 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  */
 Blockly.Block.prototype.jsonInit = function(json) {
   // Validate inputs.
-  goog.asserts.assertString(json['message'], 'No message.');
-  goog.asserts.assertArray(json['args'], 'No args.');
+  goog.asserts.assertString(json['message0'], 'No message.');
+  goog.asserts.assertArray(json['args0'], 'No args.');
   goog.asserts.assert(json['output'] == undefined ||
       json['previousStatement'] == undefined,
       'Must not have both an output and a previousStatement.');
@@ -912,9 +912,48 @@ Blockly.Block.prototype.jsonInit = function(json) {
   // Set basic properties of block.
   this.setColour(json['colour']);
 
+  // Interpolate the message blocks.
+  var i = 0;
+  while (json['message' + i] && json['args' + i]) {
+    this.interpolate_(json['message' + i], json['args' + i],
+        json['lastDummyAlign' + i]);
+    i++;
+  }
+
+  if (json['inputsInline'] !== undefined) {
+    this.setInputsInline(json['inputsInline']);
+  }
+  // Set output and previous/next connections.
+  if (json['output'] !== undefined) {
+    this.setOutput(true, json['output']);
+  }
+  if (json['previousStatement'] !== undefined) {
+    this.setPreviousStatement(true, json['previousStatement']);
+  }
+  if (json['nextStatement'] !== undefined) {
+    this.setNextStatement(true, json['nextStatement']);
+  }
+  if (json['tooltip'] !== undefined) {
+    this.setTooltip(json['tooltip']);
+  }
+  if (json['helpUrl'] !== undefined) {
+    this.setHelpUrl(json['helpUrl']);
+  }
+};
+
+/**
+ * Interpolate a message description onto the block.
+ * @param {string} message Text Contains interpolation tokens (%1, %2, ...)
+ *     that match with fields or inputs defined in the args array.
+ * @param {!Array} args Array of arguments to be interpolated.
+ * @param {=string} lastDummyAlign If a dummy input is added at the end,
+ *     how should it be aligned?
+ * @private
+ */
+Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   // Parse the message and interpolate the arguments.
   // Build a list of elements.
-  var tokens = json['message'].split(/(%\d+)/);
+  var tokens = message.split(/(%\d+)/);
   var indexDup = [];
   var indexCount = 0;
   var elements = [];
@@ -922,13 +961,13 @@ Blockly.Block.prototype.jsonInit = function(json) {
     var token = tokens[i];
     if (token.match(/^%\d+$/)) {
       var index = parseInt(token.substring(1), 10);
-      goog.asserts.assert(index > 0 && index <= json['args'].length,
+      goog.asserts.assert(index > 0 && index <= args.length,
           'Message index "%s" out of range.', token);
       goog.asserts.assert(!indexDup[index],
           'Message index "%s" duplicated.', token);
       indexDup[index] = true;
       indexCount++;
-      elements.push(json['args'][index - 1]);
+      elements.push(args[index - 1]);
     } else {
       token = token.replace(/%%/g, '%').trim();
       if (token) {
@@ -936,14 +975,14 @@ Blockly.Block.prototype.jsonInit = function(json) {
       }
     }
   }
-  goog.asserts.assert(indexCount == json['args'].length,
-      'Message does not reference all %s arg(s).', json['args'].length);
+  goog.asserts.assert(indexCount == args.length,
+      'Message does not reference all %s arg(s).', args.length);
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
       elements[elements.length - 1]['type'].indexOf('field_') == 0)) {
     var input = {type: 'input_dummy'};
-    if (json['lastDummyAlign']) {
-      input['align'] = json['lastDummyAlign'];
+    if (lastDummyAlign) {
+      input['align'] = lastDummyAlign;
     }
     elements.push(input);
   }
@@ -1020,22 +1059,6 @@ Blockly.Block.prototype.jsonInit = function(json) {
       }
     }
   }
-
-  if (json['inputsInline'] !== undefined) {
-    this.setInputsInline(json['inputsInline']);
-  }
-  // Set output and previous/next connections.
-  if (json['output'] !== undefined) {
-    this.setOutput(true, json['output']);
-  }
-  if (json['previousStatement'] !== undefined) {
-    this.setPreviousStatement(true, json['previousStatement']);
-  }
-  if (json['nextStatement'] !== undefined) {
-    this.setNextStatement(true, json['nextStatement']);
-  }
-  this.setTooltip(json['tooltip']);
-  this.setHelpUrl(json['helpUrl']);
 };
 
 /**

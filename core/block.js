@@ -903,8 +903,6 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  */
 Blockly.Block.prototype.jsonInit = function(json) {
   // Validate inputs.
-  goog.asserts.assertString(json['message0'], 'No message.');
-  goog.asserts.assertArray(json['args0'], 'No args.');
   goog.asserts.assert(json['output'] == undefined ||
       json['previousStatement'] == undefined,
       'Must not have both an output and a previousStatement.');

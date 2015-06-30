@@ -326,6 +326,26 @@ Blockly.createSvgElement = function(name, attrs, opt_parent) {
 };
 
 /**
+ * Deselect any selections on the webpage.
+ * Chrome will select text outside the SVG when double-clicking.
+ * Deselect this text, so that it doesn't mess up any subsequent drag.
+ */
+Blockly.removeAllRanges = function() {
+  if (getSelection()) {
+    setTimeout(function() {
+        try {
+          var selection = getSelection();
+          if (!selection.isCollapsed) {
+            selection.removeAllRanges();
+          }
+        } catch (e) {
+          // MSIE throws 'error 800a025e' here.
+        }
+      }, 0);
+  }
+};
+
+/**
  * Is this event a right-click?
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.

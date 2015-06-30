@@ -62,6 +62,7 @@ function onchange() {
  * Update the language code.
  */
 function updateLanguage() {
+  Blockly.removeAllRanges();
   var code = [];
   var rootBlock = getRootBlock();
   if (rootBlock) {
@@ -495,6 +496,7 @@ function getTypesFrom_(block, name) {
  * Update the generator code.
  */
 function updateGenerator() {
+  Blockly.removeAllRanges();
   function makeVar(root, name) {
     name = name.toLowerCase().replace(/\W/g, '_');
     return '  var ' + root + '_' + name;

@@ -465,26 +465,6 @@ Blockly.hideChaff = function(opt_allowToolbox) {
 };
 
 /**
- * Deselect any selections on the webpage.
- * Chrome will select text outside the SVG when double-clicking.
- * Deselect this text, so that it doesn't mess up any subsequent drag.
- */
-Blockly.removeAllRanges = function() {
-  if (getSelection()) {
-    setTimeout(function() {
-        try {
-          var selection = getSelection();
-          if (!selection.isCollapsed) {
-            selection.removeAllRanges();
-          }
-        } catch (e) {
-          // MSIE throws 'error 800a025e' here.
-        }
-      }, 0);
-  }
-};
-
-/**
  * Return an object with all the metrics required to size scrollbars for the
  * main workspace.  The following properties are computed:
  * .viewHeight: Height of the visible rectangle,

@@ -44,3 +44,22 @@ Blockly.Python['variables_set'] = function(block) {
       Blockly.Variables.NAME_TYPE);
   return varName + ' = ' + argument0 + '\n';
 };
+
+Blockly.Python['hash_variables_get'] = function(block) {
+  // Variable getter.
+  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  var hashkey = Blockly.Python.quote_(block.getFieldValue('HASHKEY'));
+  var code = varName + '[' + hashkey + ']';
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};
+
+Blockly.Python['hash_variables_set'] = function(block) {
+  // Variable setter.
+  var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
+      Blockly.Python.ORDER_NONE) || '0';
+  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  var hashkey = Blockly.Python.quote_(block.getFieldValue('HASHKEY'));
+  return varName + '[' + hashkey + '] = ' + argument0 + '\n';
+};

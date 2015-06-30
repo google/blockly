@@ -24,18 +24,6 @@
 <script src="../../generators/python/colour.js"></script>
 <script src="../../generators/python/variables.js"></script>
 <script src="../../generators/python/procedures.js"></script>
-
-  <script src="../../generators/php.js"></script>
-  <script src="unittest_php.js"></script>
-  <script src="../../generators/php/logic.js"></script>
-  <script src="../../generators/php/loops.js"></script>
-  <script src="../../generators/php/math.js"></script>
-  <script src="../../generators/php/text.js"></script>
-  <script src="../../generators/php/lists.js"></script>
-  <script src="../../generators/php/colour.js"></script>
-  <script src="../../generators/php/variables.js"></script>
-  <script src="../../generators/php/procedures.js"></script>
-
 <script src="../../generators/dart.js"></script>
 <script src="unittest_dart.js"></script>
 <script src="../../generators/dart/logic.js"></script>
@@ -46,6 +34,16 @@
 <script src="../../generators/dart/colour.js"></script>
 <script src="../../generators/dart/variables.js"></script>
 <script src="../../generators/dart/procedures.js"></script>
+<script src="../../generators/java.js"></script>
+<script src="unittest_java.js"></script>
+<script src="../../generators/java/logic.js"></script>
+<script src="../../generators/java/loops.js"></script>
+<script src="../../generators/java/math.js"></script>
+<script src="../../generators/java/text.js"></script>
+<script src="../../generators/java/lists.js"></script>
+<script src="../../generators/java/colour.js"></script>
+<script src="../../generators/java/variables.js"></script>
+<script src="../../generators/java/procedures.js"></script>
 <script src="unittest.js"></script>
 <script src="../../msg/messages.js"></script>
 <script src="../../blocks/logic.js"></script>
@@ -138,13 +136,13 @@ function toPython() {
   setOutput(code);
 }
 
-function toPhp() {
-  var code = Blockly.PHP.workspaceToCode(workspace);
+function toDart() {
+  var code = Blockly.Dart.workspaceToCode(workspace);
   setOutput(code);
 }
 
-function toDart() {
-  var code = Blockly.Dart.workspaceToCode(workspace);
+function toJava() {
+  var code = Blockly.Java.workspaceToCode(workspace);
   setOutput(code);
 }
 </script>
@@ -423,8 +421,8 @@ h1 {
       <input type="button" value="XML" onclick="toXml()">
       <input type="button" value="JavaScript" onclick="toJavaScript()">
       <input type="button" value="Python" onclick="toPython()">
-      <input type="button" value="PHP" onclick="toPhp()">
       <input type="button" value="Dart" onclick="toDart()">
+      <input type="button" value="Java" onclick="toJava()">
     </p>
   </td></tr><tr><td height="99%">
     <textarea id="importExport" readonly="readonly" wrap="off"></textarea>

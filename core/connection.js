@@ -378,8 +378,8 @@ Blockly.Connection.prototype.unhighlight = function() {
  * @private
  */
 Blockly.Connection.prototype.tighten_ = function() {
-  var dx = this.targetConnection.x_ - this.x_;
-  var dy = this.targetConnection.y_ - this.y_;
+  var dx = Math.round(this.targetConnection.x_ - this.x_);
+  var dy = Math.round(this.targetConnection.y_ - this.y_);
   if (dx != 0 || dy != 0) {
     var block = this.targetBlock();
     var svgRoot = block.getSvgRoot();
@@ -659,7 +659,7 @@ Blockly.Connection.prototype.hideAll = function() {
         connections[c].setHidden(true);
       }
       // Close all bubbles of all children.
-      var icons = block.getIcons();
+      var icons = block.getIcons(true);
       for (var x = 0; x < icons.length; x++) {
         icons[x].setVisible(false);
       }

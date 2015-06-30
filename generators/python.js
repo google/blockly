@@ -85,6 +85,12 @@ Blockly.Python.ORDER_NONE = 99;             // (...)
 Blockly.Python.PASS = '  pass\n';
 
 /**
+ * Closure code for a section
+ */
+Blockly.Python.POSTFIX = '';
+Blockly.Python.EXTRAINDENT = '';
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -189,7 +195,14 @@ Blockly.Python.scrub_ = function(block, code) {
       }
     }
   }
+  var postFix = Blockly.Python.POSTFIX;
+  Blockly.Python.POSTFIX = '';
+  var extraIndent = Blockly.Python.EXTRAINDENT;
+  Blockly.Python.EXTRAINDENT = '';
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   var nextCode = Blockly.Python.blockToCode(nextBlock);
+  if (extraIndent != '') {
+    nextCode = Blockly.Python.prefixLines(nextCode, extraIndent);
+  }
   return commentCode + code + nextCode;
 };

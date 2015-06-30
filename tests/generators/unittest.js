@@ -36,7 +36,18 @@ Blockly.Blocks['unittest_main'] = {
   },
   getVars: function() {
     return ['unittestResults'];
-  }
+  },
+  /**
+   * Return all types of variables referenced by this block.
+   * @return {!Array.<Object>} List of variable names with their types.
+   * @this Blockly.Block
+   */
+  getVarsTypes: function() {
+    var vartypes = {};
+    vartypes['unittestResults'] = ['Array'];
+    return vartypes;
+  },
+
 };
 
 Blockly.Blocks['unittest_assertequals'] = {
@@ -53,9 +64,8 @@ Blockly.Blocks['unittest_assertequals'] = {
         .appendField('expected');
     this.setTooltip('Tests that "actual == expected".');
   },
-  getVars: function() {
-    return ['unittestResults'];
-  }
+  getVars: Blockly.Blocks['unittest_main'].getVars,
+  getVarsTypes: Blockly.Blocks['unittest_main'].getVarsTypes
 };
 
 Blockly.Blocks['unittest_assertvalue'] = {
@@ -72,9 +82,8 @@ Blockly.Blocks['unittest_assertvalue'] = {
         [['true', 'TRUE'], ['false', 'FALSE'], ['null', 'NULL']]), 'EXPECTED');
     this.setTooltip('Tests that the value is true, false, or null.');
   },
-  getVars: function() {
-    return ['unittestResults'];
-  }
+  getVars: Blockly.Blocks['unittest_main'].getVars,
+  getVarsTypes: Blockly.Blocks['unittest_main'].getVarsTypes
 };
 
 Blockly.Blocks['unittest_fail'] = {
@@ -88,7 +97,6 @@ Blockly.Blocks['unittest_fail'] = {
         .appendField('fail');
     this.setTooltip('Records an error.');
   },
-  getVars: function() {
-    return ['unittestResults'];
-  }
+  getVars: Blockly.Blocks['unittest_main'].getVars,
+  getVarsTypes: Blockly.Blocks['unittest_main'].getVarsTypes
 };

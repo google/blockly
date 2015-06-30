@@ -32,10 +32,8 @@ goog.provide('Blockly.Names');
  * @param {string} reservedWords A comma-separated string of words that are
  *     illegal for use as names in a language (e.g. 'new,if,this,...').
  * @constructor
- * @param namesPrependDollar boolean indicating whether the languages requires dollar signs ($) before a variable
  */
-Blockly.Names = function(reservedWords, namesPrependDollar) {
-  this.prependDollar = namesPrependDollar || false;
+Blockly.Names = function(reservedWords) {
   this.reservedDict_ = Object.create(null);
   if (reservedWords) {
     var splitWords = reservedWords.split(',');
@@ -72,12 +70,11 @@ Blockly.Names.prototype.reset = function() {
  */
 Blockly.Names.prototype.getName = function(name, type) {
   var normalized = name.toLowerCase() + '_' + type;
-  var prepend = type=='VARIABLE' && this.prependDollar ? '$' : '';
   if (normalized in this.db_) {
-    return prepend + this.db_[normalized];
+    return this.db_[normalized];
   }
   var safeName = this.getDistinctName(name, type);
-  this.db_[normalized] = type=='VARIABLE' && this.prependDollar ? safeName.substr(1) : safeName;
+  this.db_[normalized] = safeName;
   return safeName;
 };
 
@@ -101,8 +98,7 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var prepend = type=='VARIABLE' && this.prependDollar ? '$' : '';
-  return prepend + safeName;
+  return safeName;
 };
 
 /**

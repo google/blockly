@@ -32,7 +32,6 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.FieldLabel');
 goog.require('goog.asserts');
 
-
 /**
  * Class for an input with an optional field.
  * @param {number} type The type of the input.
@@ -221,4 +220,30 @@ Blockly.Input.prototype.dispose = function() {
     this.connection.dispose();
   }
   this.sourceBlock_ = null;
+};
+/**
+ * Remove a field from this input.
+ * @param {string} name The type of the input field.
+ */
+Blockly.Input.prototype.removeClickFields = function(names) {
+  for (var i = 0, field; field = this.fieldRow[i]; i++) {
+    if (names.indexOf(field.type_) != -1) {
+      field.dispose();
+      this.fieldRow.splice(i, 1);
+    }
+  }
+};
+
+/**
+ * Determine if an input has a particular type of field.
+ * @param {string} name The type of the input field.
+ * @return {boolean} Whether or not the field type is on the input.
+ */
+Blockly.Input.prototype.hasClickField = function(name) {
+  for (var i = 0, field; field = this.fieldRow[i]; i++) {
+    if (field.type_ === name) {
+      return true;
+    }
+  }
+  return false;
 };

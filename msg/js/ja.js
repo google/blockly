@@ -9,7 +9,7 @@ goog.require('Blockly.Msg');
 Blockly.Msg.ADD_COMMENT = "コメントを追加";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "値を変更します。";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CHAT = "このボックスに入力して共同編集者とチャットしよう！";
 Blockly.Msg.COLLAPSE_ALL = "ブロックを折りたたむ";
 Blockly.Msg.COLLAPSE_BLOCK = "ブロックを折りたたむ";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "色 1";
@@ -350,7 +350,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "両端のスペースを取り除く";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "左端のスペースを取り除く";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "右端のスペースを取り除く";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "スペースを 1 つまたは両方の端から削除したのち、テキストのコピーを返します。";
-Blockly.Msg.TODAY = "Today";  // untranslated
+Blockly.Msg.TODAY = "今日";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "項目";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "'セット%1を作成します。";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

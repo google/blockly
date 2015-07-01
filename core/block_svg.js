@@ -448,8 +448,8 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
         // Don't throw an object in the trash can if it just got connected.
         this_.workspace.trashcan.close();
       }
-    } else if (this_.workspace.isDeleteArea(e) &&
-        Blockly.selected.isDeletable()) {
+    } else if (Blockly.selected.isDeletable() &&
+        this_.workspace.isDeleteArea(e)) {
       var trashcan = this_.workspace.trashcan;
       if (trashcan) {
         goog.Timer.callOnce(trashcan.close, 100, trashcan);

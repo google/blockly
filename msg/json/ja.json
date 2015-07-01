@@ -3,10 +3,12 @@
 		"authors": [
 			"Shirayuki",
 			"Oda",
-			"아라"
+			"아라",
+			"Otokoume"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
+	"TODAY": "今日",
 	"DUPLICATE_BLOCK": "複製",
 	"ADD_COMMENT": "コメントを追加",
 	"REMOVE_COMMENT": "コメントを削除します。",
@@ -21,6 +23,7 @@
 	"DISABLE_BLOCK": "ブロックを無効にします。",
 	"ENABLE_BLOCK": "ブロックを有効にします。",
 	"HELP": "ヘルプ",
+	"CHAT": "このボックスに入力して共同編集者とチャットしよう！",
 	"CHANGE_VALUE_TITLE": "値を変更します。",
 	"NEW_VARIABLE": "新しい変数",
 	"NEW_VARIABLE_TITLE": "新しい変数の、名前",

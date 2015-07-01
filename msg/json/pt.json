@@ -4,7 +4,8 @@
 			"Imperadeiro98",
 			"Waldir",
 			"Vitorvicentevalente",
-			"아라"
+			"아라",
+			"Nicola Nascimento"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -287,6 +288,11 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "até #, a partir do final",
 	"LISTS_GET_SUBLIST_END_LAST": "para o último",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Cria uma cópia da porção especificada de uma lista.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "fazer lista a partir de texto",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "fazer texto a partir da lista",
+	"LISTS_SPLIT_WITH_DELIMITER": "com delimitador",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Dividir o texto numa lista de textos, separando-o em cada delimitador.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Juntar uma lista de textos num único texto, separado por um delimitador.",
 	"VARIABLES_GET_TOOLTIP": "Retorna o valor desta variável.",
 	"VARIABLES_GET_CREATE_SET": "Criar \"definir %1\"",
 	"VARIABLES_SET": "definir %1 para %2",

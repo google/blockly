@@ -570,12 +570,12 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     var input = this.getInput('TOPROW');
     if (input) {
       if (this.arguments_.length) {
-        if (!this.getField_('WITH')) {
+        if (!this.getField('WITH')) {
           input.appendField(Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS, 'WITH');
           input.init();
         }
       } else {
-        if (this.getField_('WITH')) {
+        if (this.getField('WITH')) {
           input.removeField('WITH');
         }
       }

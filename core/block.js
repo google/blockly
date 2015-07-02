@@ -592,9 +592,8 @@ Blockly.Block.prototype.setColour = function(colourHue) {
  * Returns the named field from a block.
  * @param {string} name The name of the field.
  * @return {Blockly.Field} Named field, or null if field does not exist.
- * @private
  */
-Blockly.Block.prototype.getField_ = function(name) {
+Blockly.Block.prototype.getField = function(name) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field.name === name) {
@@ -611,7 +610,7 @@ Blockly.Block.prototype.getField_ = function(name) {
  * @return {?string} Value from the field or null if field does not exist.
  */
 Blockly.Block.prototype.getFieldValue = function(name) {
-  var field = this.getField_(name);
+  var field = this.getField(name);
   if (field) {
     return field.getValue();
   }
@@ -635,7 +634,7 @@ Blockly.Block.prototype.getTitleValue = function(name) {
  * @param {string} name The name of the field.
  */
 Blockly.Block.prototype.setFieldValue = function(newValue, name) {
-  var field = this.getField_(name);
+  var field = this.getField(name);
   goog.asserts.assertObject(field, 'Field "%s" not found.', name);
   field.setValue(newValue);
 };

@@ -57,7 +57,7 @@ Blockly.Blocks['controls_repeat'] = {
     });
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-    this.getField_('TIMES').setChangeHandler(
+    this.getField('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
   }
 };

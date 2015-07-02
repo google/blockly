@@ -912,8 +912,8 @@ Blockly.Block.prototype.jsonInit = function(json) {
 
   // Interpolate the message blocks.
   var i = 0;
-  while (json['message' + i] && json['args' + i]) {
-    this.interpolate_(json['message' + i], json['args' + i],
+  while (json['message' + i] !== undefined) {
+    this.interpolate_(json['message' + i], json['args' + i] || [],
         json['lastDummyAlign' + i]);
     i++;
   }
@@ -941,7 +941,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
 
 /**
  * Interpolate a message description onto the block.
- * @param {string} message Text Contains interpolation tokens (%1, %2, ...)
+ * @param {string} message Text contains interpolation tokens (%1, %2, ...)
  *     that match with fields or inputs defined in the args array.
  * @param {!Array} args Array of arguments to be interpolated.
  * @param {=string} lastDummyAlign If a dummy input is added at the end,
@@ -999,48 +999,58 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
     } else {
       var field = null;
       var input = null;
-      switch (element['type']) {
-        case 'field_label':
-          field = new Blockly.FieldLabel(element['text']);
-          break;
-        case 'field_input':
-          field = new Blockly.FieldTextInput(element['text']);
-          break;
-        case 'field_angle':
-          field = new Blockly.FieldAngle(element['angle']);
-          break;
-        case 'field_checkbox':
-          field = new Blockly.FieldCheckbox(
-              element['checked'] ? 'TRUE' : 'FALSE');
-          break;
-        case 'field_colour':
-          field = new Blockly.FieldColour(element['colour']);
-          break;
-        case 'field_date':
-          field = new Blockly.FieldDate(element['date']);
-          break;
-        case 'field_variable':
-          field = new Blockly.FieldVariable(element['variable']);
-          break;
-        case 'field_dropdown':
-          field = new Blockly.FieldDropdown(element['options']);
-          break;
-        case 'field_image':
-          field = new Blockly.FieldImage(element['src'],
-              element['width'], element['height'], element['alt']);
-          break;
-        case 'input_value':
-          input = this.appendValueInput(element['name']);
-          break;
-        case 'input_statement':
-          input = this.appendStatementInput(element['name']);
-          break;
-        case 'input_dummy':
-          input = this.appendDummyInput(element['name']);
-          break;
-        default:
-          throw 'Unknown element type: ' + element['type'];
-      }
+      do {
+        var altRepeat = false;
+        switch (element['type']) {
+          case 'input_value':
+            input = this.appendValueInput(element['name']);
+            break;
+          case 'input_statement':
+            input = this.appendStatementInput(element['name']);
+            break;
+          case 'input_dummy':
+            input = this.appendDummyInput(element['name']);
+            break;
+          case 'field_label':
+            field = new Blockly.FieldLabel(element['text']);
+            break;
+          case 'field_input':
+            field = new Blockly.FieldTextInput(element['text']);
+            break;
+          case 'field_angle':
+            field = new Blockly.FieldAngle(element['angle']);
+            break;
+          case 'field_checkbox':
+            field = new Blockly.FieldCheckbox(
+                element['checked'] ? 'TRUE' : 'FALSE');
+            break;
+          case 'field_colour':
+            field = new Blockly.FieldColour(element['colour']);
+            break;
+          case 'field_variable':
+            field = new Blockly.FieldVariable(element['variable']);
+            break;
+          case 'field_dropdown':
+            field = new Blockly.FieldDropdown(element['options']);
+            break;
+          case 'field_image':
+            field = new Blockly.FieldImage(element['src'],
+                element['width'], element['height'], element['alt']);
+            break;
+          case 'field_date':
+            if (Blockly.FieldDate) {
+              field = new Blockly.FieldDate(element['date']);
+              break;
+            }
+            // Fall through if FieldDate is not compiled in.
+          default:
+            // Unknown field.
+            if (element['alt']) {
+              element = element['alt'];
+              altRepeat = true;
+            }
+        }
+      } while (altRepeat);
       if (field) {
         fieldStack.push([field, element['name']]);
       } else if (input) {

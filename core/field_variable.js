@@ -37,39 +37,47 @@ goog.require('goog.string');
  * @param {?string} varname The default name for the variable.  If null,
  *     a unique variable name will be generated.
  * @param {Function} opt_changeHandler A function that is executed when a new
- *     option is selected.  Its sole argument is the new option value.  Its
- *     return value is ignored.
+ *     option is selected.  Its sole argument is the new option value.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
 Blockly.FieldVariable = function(varname, opt_changeHandler) {
-  var changeHandler;
-  if (opt_changeHandler) {
-    // Wrap the user's change handler together with the variable rename handler.
-    var thisObj = this;
-    changeHandler = function(value) {
-      var retVal = Blockly.FieldVariable.dropdownChange.call(thisObj, value);
-      var newVal;
-      if (retVal === undefined) {
-        newVal = value;  // Existing variable selected.
-      } else if (retVal === null) {
-        newVal = thisObj.getValue();  // Abort, no change.
-      } else {
-        newVal = retVal;  // Variable name entered.
-      }
-      opt_changeHandler.call(thisObj, newVal);
-      return retVal;
-    };
-  } else {
-    changeHandler = Blockly.FieldVariable.dropdownChange;
-  }
-
   Blockly.FieldVariable.superClass_.constructor.call(this,
-      Blockly.FieldVariable.dropdownCreate, changeHandler);
-
+      Blockly.FieldVariable.dropdownCreate, null);
+  this.setChangeHandler(opt_changeHandler);
   this.setValue(varname || '');
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
+
+/**
+ * Sets a new change handler for angle field.
+ * @param {Function} handler New change handler, or null.
+ */
+Blockly.FieldVariable.prototype.setChangeHandler = function(handler) {
+  var wrappedHandler;
+  if (handler) {
+    // Wrap the user's change handler together with the variable rename handler.
+    var thisObj = this;
+    wrappedHandler = function(value) {
+      var v1 = handler.call(thisObj, value);
+      if (v1 === null) {
+        var v2 = v1;
+      } else {
+        if (v1 === undefined) {
+          v1 = value;
+        }
+        var v2 = Blockly.FieldVariable.dropdownChange.call(thisObj, v1);
+        if (v2 !== undefined) {
+          v2 = v1;
+        }
+      }
+      return v2 === value ? undefined : v2;
+    };
+  } else {
+    wrappedHandler = Blockly.FieldVariable.dropdownChange;
+  }
+  Blockly.FieldVariable.superClass_.setChangeHandler(wrappedHandler);
+};
 
 /**
  * Install this dropdown on a block.

@@ -31,6 +31,7 @@ goog.require('Blockly.Msg');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.userAgent');
+goog.require('goog.events.KeyCodes');
 
 
 /**
@@ -45,7 +46,7 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldTextInput = function(text, opt_changeHandler) {
   Blockly.FieldTextInput.superClass_.constructor.call(this, text);
-  this.changeHandler_ = opt_changeHandler;
+  this.setChangeHandler(opt_changeHandler);
 };
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -169,10 +170,9 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  var enterKey = 13, escKey = 27;
-  if (e.keyCode == enterKey) {
+  if (e.keyCode == goog.events.KeyCodes.ENTER) {
     Blockly.WidgetDiv.hide();
-  } else if (e.keyCode == escKey) {
+  } else if (e.keyCode == goog.events.KeyCodes.ESC) {
     this.setText(htmlInput.defaultValue);
     Blockly.WidgetDiv.hide();
   }
@@ -185,8 +185,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
  */
 Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  var escKey = 27;
-  if (e.keyCode != escKey) {
+  if (e.keyCode != goog.events.KeyCodes.ESC) {
     // Update source block.
     var text = htmlInput.value;
     if (text !== htmlInput.oldValue_) {
@@ -258,10 +257,13 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     // Save the edit (if it validates).
     var text = htmlInput.value;
     if (thisField.sourceBlock_ && thisField.changeHandler_) {
-      text = thisField.changeHandler_(text);
-      if (text === null) {
+      var text1 = thisField.changeHandler_(text);
+      if (text1 === null) {
         // Invalid edit.
         text = htmlInput.defaultValue;
+      } else if (text1 !== undefined) {
+        // Change handler has changed the text.
+        text = text1;
       }
     }
     thisField.setText(text);
@@ -285,6 +287,7 @@ Blockly.FieldTextInput.numberValidator = function(text) {
   if (text === null) {
     return null;
   }
+  text = String(text);
   // TODO: Handle cases like 'ten', '1.203,14', etc.
   // 'O' is sometimes mistaken for '0' by inexperienced users.
   text = text.replace(/O/ig, '0');

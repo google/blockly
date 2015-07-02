@@ -28,6 +28,14 @@ from common import read_json_file
 _NEWLINE_PATTERN = re.compile('[\n\r]')
 
 
+def string_is_ascii(s):
+  try:
+    s.decode('ascii')
+    return True
+  except UnicodeEncodeError:
+    return False
+  
+
 def main():
   """Generate .js files defining Blockly core and language messages."""
 
@@ -76,10 +84,17 @@ def main():
     target_lang = filename[:filename.index('.')]
     if target_lang not in ('qqq', 'keys', 'synonyms'):
       target_defs = read_json_file(os.path.join(os.curdir, arg_file))
+
+      # Verify that keys are 'ascii'
+      bad_keys = [key for key in target_defs if not string_is_ascii(key)]
+      if bad_keys:
+        print(u'These keys in {0} contain non ascii characters: {1}'.format(
+            filename, ', '.join(bad_keys)))
+
       # If there's a '\n' or '\r', remove it and print a warning.
       for key, value in target_defs.items():
         if _NEWLINE_PATTERN.search(value):
-          print('WARNING: definition of {0} in {1} contained '
+          print(u'WARNING: definition of {0} in {1} contained '
                 'a newline character.'.
                 format(key, arg_file))
           target_defs[key] = _NEWLINE_PATTERN.sub(' ', value)
@@ -118,10 +133,10 @@ goog.require('Blockly.Msg');
           synonym_keys = [key for key in target_defs if key in synonym_defs]
           if not args.quiet:
             if extra_keys:
-              print('These extra keys appeared in {0}: {1}'.format(
+              print(u'These extra keys appeared in {0}: {1}'.format(
                   filename, ', '.join(extra_keys)))
             if synonym_keys:
-              print('These synonym keys appeared in {0}: {1}'.format(
+              print(u'These synonym keys appeared in {0}: {1}'.format(
                   filename, ', '.join(synonym_keys)))
 
         outfile.write(synonym_text)

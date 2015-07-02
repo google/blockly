@@ -241,7 +241,8 @@ Blockly.isTargetInput_ = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
-         e.target.type == 'tel' || e.target.type == 'url';
+         e.target.type == 'tel' || e.target.type == 'url' ||
+         e.target.isContentEditable;
 };
 
 /**
@@ -322,6 +323,26 @@ Blockly.createSvgElement = function(name, attrs, opt_parent) {
     opt_parent.appendChild(e);
   }
   return e;
+};
+
+/**
+ * Deselect any selections on the webpage.
+ * Chrome will select text outside the SVG when double-clicking.
+ * Deselect this text, so that it doesn't mess up any subsequent drag.
+ */
+Blockly.removeAllRanges = function() {
+  if (getSelection()) {
+    setTimeout(function() {
+        try {
+          var selection = getSelection();
+          if (!selection.isCollapsed) {
+            selection.removeAllRanges();
+          }
+        } catch (e) {
+          // MSIE throws 'error 800a025e' here.
+        }
+      }, 0);
+  }
 };
 
 /**
@@ -447,4 +468,75 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
  */
 Blockly.isNumber = function(str) {
   return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
+};
+
+/**
+ * Lookup the language translation of a message.
+ * @param {string} str Input string.
+ * @return {string} the translated string.
+ */
+Blockly.getMsgString = function(id) {
+	var msgString = null;
+    if (typeof MSG  === 'object') {
+      msgString = MSG[id];
+    }
+    if (!msgString) {
+      msgString =  Blockly.Msg[id];
+    }
+	if (!msgString) {
+		console.log('Missing message for '+id);
+		msgString = '\u226A'+id+'\u226B';
+	}
+	return msgString;
+};
+
+/**
+ * Lookup the language translation of a tooltip.
+ * @param {string} str Input string.
+ * @return {string} the translated string.
+ */
+Blockly.getToolTipString = function(id) {
+	var tooltip = null;
+    if (typeof ToolTips === 'object') {
+      tooltip = ToolTips[id];
+    }
+	if (!tooltip) {
+		console.log('Missing tool tip for '+id);
+		tooltip = '\u226A'+id+'\u226B';
+	}
+	return tooltip;
+};
+
+/**
+ * Lookup the language translation of a url.
+ * @param {string} str Input string.
+ * @return {string} the translated string.
+ */
+Blockly.getUrlString = function(id) {
+	var url = null;
+    if (typeof Urls  === 'object') {
+      url = Urls[id];
+    }
+	if (!url) {
+		console.log('Missing URL for '+id);
+		url = '\u226A'+id+'\u226B';
+	}
+	return url;
+};
+
+/**
+ * Lookup the appropriate block color based on type.
+ * @param {string} str Input string (block type).
+ * @return {int} the color hue for that block type.
+ */
+Blockly.getBlockHue = function(id) {
+	var hueVal = null;
+    if (typeof HUES  === 'object') {
+      hueVal = HUES[id];
+    }
+	if (!hueVal) {
+		console.log('Missing hue for '+id);
+		hueVal = 260;
+	}
+	return hueVal;
 };

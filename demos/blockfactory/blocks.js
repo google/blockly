@@ -34,6 +34,7 @@ Blockly.Blocks['factory_base'] = {
         .setCheck('Input')
         .appendField('inputs');
     var dropdown = new Blockly.FieldDropdown([
+        ['automatic inputs', 'AUTO'],
         ['external inputs', 'EXT'],
         ['inline inputs', 'INT']]);
     this.appendDummyInput()

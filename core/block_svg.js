@@ -28,10 +28,10 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
+goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
-goog.require('goog.Timer');
 
 
 /**
@@ -147,7 +147,7 @@ Blockly.BlockSvg.prototype.warning = null;
  * Returns a list of mutator, comment, and warning icons.
  * @return {!Array} List of icons.
  */
-Blockly.BlockSvg.prototype.getIcons = function() {
+Blockly.BlockSvg.prototype.getIcons = function(getAll) {
   var icons = [];
   if (this.mutator) {
     icons.push(this.mutator);
@@ -407,7 +407,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     this.draggedBubbles_ = [];
     var descendants = this.getDescendants();
     for (var x = 0, descendant; descendant = descendants[x]; x++) {
-      var icons = descendant.getIcons();
+      var icons = descendant.getIcons(true);
       for (var y = 0; y < icons.length; y++) {
         var data = icons[y].getIconLocation();
         data.bubble = icons[y];
@@ -526,14 +526,17 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
 
     // Option to make block inline.
     if (!this.collapsed_) {
-      for (var i = 0; i < this.inputList.length; i++) {
-        if (this.inputList[i].type == Blockly.INPUT_VALUE) {
-          // Only display this option if there is a value input on the block.
+      for (var i = 1; i < this.inputList.length; i++) {
+        if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
+            this.inputList[i].type != Blockly.NEXT_STATEMENT) {
+          // Only display this option if there are two value or dummy inputs
+          // next to each other.
           var inlineOption = {enabled: true};
-          inlineOption.text = this.inputsInline ? Blockly.Msg.EXTERNAL_INPUTS :
-                                                  Blockly.Msg.INLINE_INPUTS;
+          var isInline = this.getInputsInline();
+          inlineOption.text = isInline ?
+              Blockly.Msg.EXTERNAL_INPUTS : Blockly.Msg.INLINE_INPUTS;
           inlineOption.callback = function() {
-            block.setInputsInline(!block.inputsInline);
+            block.setInputsInline(!isInline);
           };
           options.push(inlineOption);
           break;
@@ -627,7 +630,7 @@ Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
   for (var x = 0; x < myConnections.length; x++) {
     myConnections[x].moveBy(dx, dy);
   }
-  var icons = this.getIcons();
+  var icons = this.getIcons(true);
   for (var x = 0; x < icons.length; x++) {
     icons[x].computeIconLocation();
   }
@@ -922,10 +925,10 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT =
  * Includes the top notch, a horizontal space, and the rounded inside corner.
  * @const
  */
-Blockly.BlockSvg.INNER_TOP_LEFT_CORNER =
+Blockly.BlockSvg.INNER_TOP_LEFT_CORNER = 'h 0.5 ' +
     Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -' +
     (Blockly.BlockSvg.NOTCH_WIDTH - 15 - Blockly.BlockSvg.CORNER_RADIUS) +
-    ' a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
+    ' h -0.5 a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,0 -' +
     Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS;
@@ -1000,7 +1003,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   // Stop rerendering.
   this.rendered = false;
 
-  var icons = this.getIcons();
+  var icons = this.getIcons(false);
   for (var x = 0; x < icons.length; x++) {
     icons[x].dispose();
   }
@@ -1117,12 +1120,12 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   var hexColour = Blockly.makeColour(this.getColour());
   var rgb = goog.color.hexToRgb(hexColour);
   var rgbLight = goog.color.lighten(rgb, 0.3);
-  var rgbDark = goog.color.darken(rgb, 0.4);
+  var rgbDark = goog.color.darken(rgb, 0.2);
   this.svgPathLight_.setAttribute('stroke', goog.color.rgbArrayToHex(rgbLight));
   this.svgPathDark_.setAttribute('fill', goog.color.rgbArrayToHex(rgbDark));
   this.svgPath_.setAttribute('fill', hexColour);
 
-  var icons = this.getIcons();
+  var icons = this.getIcons(true);
   for (var x = 0; x < icons.length; x++) {
     icons[x].updateColour();
   }
@@ -1405,7 +1408,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   var hasStatement = false;
   var hasDummy = false;
   var lastType = undefined;
-  var isInline = this.inputsInline && !this.isCollapsed();
+  var isInline = this.getInputsInline() && !this.isCollapsed();
   for (var i = 0, input; input = inputList[i]; i++) {
     if (!input.isVisible()) {
       continue;
@@ -1910,8 +1913,8 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
     function(steps, highlightSteps, connectionsXY, cursorY) {
   this.height = cursorY + 1;  // Add one for the shadow.
   if (this.nextConnection) {
-    steps.push('H', Blockly.BlockSvg.NOTCH_WIDTH + ' ' +
-        Blockly.BlockSvg.NOTCH_PATH_RIGHT);
+    steps.push('H', (Blockly.BlockSvg.NOTCH_WIDTH + (this.RTL ? 0.5 : - 0.5)) +
+        ' ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT);
     // Create next block connection.
     var connectionX;
     if (this.RTL) {

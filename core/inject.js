@@ -386,7 +386,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
   Blockly.WidgetDiv.createDom();
-  Blockly.Tooltip.createDom()
+  Blockly.Tooltip.createDom();
   return mainWorkspace;
 };
 
@@ -489,7 +489,7 @@ Blockly.init_ = function(mainWorkspace) {
  * Modify the block tree on the existing toolbox.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  */
-Blockly.updateToolbox = function(tree, workspace) {
+Blockly.updateToolbox = function(tree) {
   console.warn('Deprecated call to Blockly.updateToolbox, ' +
                'use workspace.updateToolbox instead.');
   Blockly.getMainWorkspace().updateToolbox(tree);

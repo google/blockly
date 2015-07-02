@@ -51,7 +51,7 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
   this.menuGenerator_ = menuGenerator;
-  this.changeHandler_ = opt_changeHandler;
+  this.setChangeHandler(opt_changeHandler);
   this.trimOptions_();
   var firstTuple = this.getOptions_()[0];
   this.value_ = firstTuple[1];

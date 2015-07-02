@@ -45,6 +45,7 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Realtime');
 goog.require('Blockly.Toolbox');
+goog.require('Blockly.TypeBlock');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.inject');
@@ -52,6 +53,7 @@ goog.require('Blockly.utils');
 
 // Closure dependencies.
 goog.require('goog.color');
+goog.require('goog.events.KeyCodes');
 
 
 /**
@@ -230,6 +232,13 @@ Blockly.dragMode_ = 0;
 Blockly.onTouchUpWrapper_ = null;
 
 /**
+ * latest clicked position is used to open the type blocking suggestions window
+ * Initial position is 0,0
+ * @type {{x: number, y:number}}
+ */
+Blockly.latestClick = { x: 0, y: 0 };
+
+/**
  * Returns the dimensions of the specified SVG image.
  * @param {!Element} svg SVG image.
  * @return {!Object} Contains width and height properties.
@@ -332,10 +341,11 @@ Blockly.onKeyDown_ = function(e) {
     // When focused on an HTML text input widget, don't trap any keys.
     return;
   }
-  if (e.keyCode == 27) {
+  if (e.keyCode == goog.events.KeyCodes.ESC) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
-  } else if (e.keyCode == 8 || e.keyCode == 46) {
+  } else if (e.keyCode == goog.events.KeyCodes.BACKSPACE ||
+             e.keyCode == goog.events.KeyCodes.DELETE) {
     // Delete or backspace.
     try {
       if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -352,21 +362,23 @@ Blockly.onKeyDown_ = function(e) {
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
       Blockly.hideChaff();
-      if (e.keyCode == 67) {
+      if (e.keyCode == goog.events.KeyCodes.C) {
         // 'c' for copy.
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == 88) {
+      } else if (e.keyCode ==goog.events.KeyCodes.X) {
         // 'x' for cut.
         Blockly.copy_(Blockly.selected);
         Blockly.selected.dispose(true, true);
       }
     }
-    if (e.keyCode == 86) {
+    if (e.keyCode == goog.events.KeyCodes.V) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
       }
     }
+  } else {
+    Blockly.TypeBlock.onKeyDown_(e);
   }
 };
 
@@ -455,6 +467,7 @@ Blockly.onContextMenu_ = function(e) {
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
+  Blockly.TypeBlock.hide();
   if (!opt_allowToolbox) {
     var workspace = Blockly.getMainWorkspace();
     if (workspace.toolbox_ &&
@@ -462,26 +475,6 @@ Blockly.hideChaff = function(opt_allowToolbox) {
         workspace.toolbox_.flyout_.autoClose) {
       workspace.toolbox_.clearSelection();
     }
-  }
-};
-
-/**
- * Deselect any selections on the webpage.
- * Chrome will select text outside the SVG when double-clicking.
- * Deselect this text, so that it doesn't mess up any subsequent drag.
- */
-Blockly.removeAllRanges = function() {
-  if (getSelection()) {
-    setTimeout(function() {
-        try {
-          var selection = getSelection();
-          if (!selection.isCollapsed) {
-            selection.removeAllRanges();
-          }
-        } catch (e) {
-          // MSIE throws 'error 800a025e' here.
-        }
-      }, 0);
   }
 };
 

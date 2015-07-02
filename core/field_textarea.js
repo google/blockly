@@ -33,6 +33,7 @@ goog.require('Blockly.Msg');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.userAgent');
+goog.require('goog.events.KeyCodes');
 
 
 /**
@@ -99,7 +100,9 @@ Blockly.FieldTextArea.prototype.render_ = function() {
   this.size_.width = this.textElement_.getBBox().width + 5;
   this.size_.height = (this.text_.split(/\n/).length ||1)*20 +
                         (Blockly.BlockSvg.SEP_SPACE_Y+5) ;
-	
+  if (this.minWidth_ && this.size_.width < this.minWidth_) {
+	this.size_.width = this.minWidth_;
+  }
   if (this.borderRect_) {
     this.borderRect_.setAttribute('width',
          this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
@@ -174,8 +177,7 @@ Blockly.FieldTextArea.prototype.showEditor_ = function(opt_quietInput) {
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  var escKey = 27;
-  if (e.keyCode == escKey) {
+  if (e.keyCode == goog.events.KeyCodes.ESC) {
     this.setText(htmlInput.defaultValue);
     Blockly.WidgetDiv.hide();
   }
@@ -190,7 +192,7 @@ Blockly.FieldTextArea.prototype.onHtmlInputChange_ = function(e) {
   Blockly.FieldTextInput.prototype.onHtmlInputChange_.call(this, e);
 
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  if (e.keyCode == 27) {
+  if (e.keyCode == goog.events.KeyCodes.ESC) {
     // Esc
     this.setText(htmlInput.defaultValue);
     Blockly.WidgetDiv.hide();

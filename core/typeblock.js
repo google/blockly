@@ -17,7 +17,6 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.ui.ac');
 goog.require('goog.style');
-goog.require('Blockly.Drawer');
 
 goog.require('goog.ui.ac.ArrayMatcher');
 goog.require('goog.ui.ac.AutoComplete');
@@ -67,9 +66,7 @@ Blockly.TypeBlock.visible = false;
  * (name and value)
  *   - No dropdowns:   this.typeblock: [{ translatedName: Blockly.LANG_VAR }]
  *   - With dropdowns: this.typeblock: [{ translatedName: Blockly.LANG_VAR },
- *                                        dropdown: {
- *                                          titleName: 'TITLE', value: 'value'
- *                                        }]
+ *                                        fields: { TITLE: 'value'}]
  *   - Additional types can be used to mark a block as isProcedure or
  *     isGlobalVar. These are only used to manage the loading of options in the
  *     auto-complete matcher.
@@ -103,7 +100,8 @@ Blockly.TypeBlock.onKeyDown_ = function(e){
   if (!Blockly.TypeBlock.typeBlockDiv_) {
     return;
   }
-  if (e.altKey || e.ctrlKey || e.metaKey || e.keycode === 9) { // 9 is tab
+  if (e.altKey || e.ctrlKey || e.metaKey ||
+      e.keycode === goog.events.KeyCodes.TAB) {
     return;
   }
 
@@ -111,14 +109,15 @@ Blockly.TypeBlock.onKeyDown_ = function(e){
 //  if (e.target.id === '') return;
   if (goog.style.isElementShown(Blockly.TypeBlock.typeBlockDiv_)) {
     // Pressing esc closes the context menu.
-    if (e.keyCode == 27) {
+    if (e.keyCode == goog.events.KeyCodes.ESC) {
       Blockly.TypeBlock.hide();
     }
     // Enter in the panel makes it select an option
-    if (e.keyCode === 13) {
+    if (e.keyCode === goog.events.KeyCodes.ENTER) {
       Blockly.TypeBlock.hide();
     }
-  } else if (isCharacterKey(e.charCode)) {
+//  } else if (goog.events.KeyCodes.isTextModifyingKeyEvent(e)) {
+  } else if (goog.events.KeyCodes.isCharacterKey(e.keyCode)) {
     Blockly.TypeBlock.show();
     // Can't seem to make Firefox display first character, so keep all browsers
     // from automatically displaying the first character and add it manually.
@@ -230,24 +229,23 @@ Blockly.TypeBlock.generateOptions = function() {
     function createOption(tb, canonicName){
       if (tb){
         goog.array.forEach(tb, function(dd){
-          var dropDownValues = {};
+          var fields = {};
           var mutatorAttributes = {};
-          if (dd.dropDown){
-            if (dd.dropDown.titleName && dd.dropDown.value){
-              dropDownValues.titleName = dd.dropDown.titleName;
-              dropDownValues.value = dd.dropDown.value;
-            }
-            else {
-              throw new Error('TypeBlock not correctly set up for ' + canonicName);
-            }
+          var values = {};
+          if (dd.fields) {
+            fields = dd.fields;
+          }
+          if (dd.values) {
+            values = dd.values;
           }
           if(dd.mutatorAttributes) {
             mutatorAttributes = dd.mutatorAttributes;
           }
           listOfOptions[dd.translatedName] = {
             canonicName: canonicName,
-            dropDown: dropDownValues,
-            mutatorAttributes: mutatorAttributes
+            mutatorAttributes: mutatorAttributes,
+            fields: fields,
+            values: values
           };
         });
       }
@@ -270,8 +268,9 @@ Blockly.TypeBlock.generateOptions = function() {
  * one call of this function; and example of that is lazyLoadOfOptions_
  * @private
  */
-Blockly.TypeBlock.reloadOptionsAfterChanges_ = function () {
-  Blockly.TypeBlock.TBOptionsNames_ = goog.object.getKeys(Blockly.TypeBlock.TBOptions_);
+Blockly.TypeBlock.reloadOptionsAfterChanges_ = function() {
+  Blockly.TypeBlock.TBOptionsNames_ =
+                          goog.object.getKeys(Blockly.TypeBlock.TBOptions_);
   goog.array.sort(Blockly.TypeBlock.TBOptionsNames_);
   Blockly.TypeBlock.ac_.matcher_.setRows(Blockly.TypeBlock.TBOptionsNames_);
 };
@@ -283,59 +282,36 @@ Blockly.TypeBlock.reloadOptionsAfterChanges_ = function () {
  * lazyLoadOfOptions_ is an example of how to call this function.
  * @private
  */
-Blockly.TypeBlock.loadProcedures_ = function(){
-  // Clean up any previous procedures in the list.
-  Blockly.TypeBlock.TBOptions_ = goog.object.filter(Blockly.TypeBlock.TBOptions_,
-      function(opti){ return !opti.isProcedure;});
+Blockly.TypeBlock.loadProcedures_ = function() {
+  // Clean up any previous procedures in the list as we will repopulate them
+  Blockly.TypeBlock.TBOptions_ =
+      goog.object.filter(Blockly.TypeBlock.TBOptions_,
+                         function(opti){ return !opti.isProcedure;});
 
-  var procsNoReturn = createTypeBlockForProcedures_(false);
-  goog.array.forEach(procsNoReturn, function(pro){
-    Blockly.TypeBlock.TBOptions_[pro.translatedName] = {
+  // Get all the proceedures in the system
+  var procNamesArray = Blockly.Procedures.allProcedures(Blockly.mainWorkspace);
+
+  // Add blocks for the calls with no return
+  goog.array.forEach(procNamesArray[0], function(proc){
+    var translatedName = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
+                            ' ' + proc[0];
+    Blockly.TypeBlock.TBOptions_[translatedName] = {
       canonicName: 'procedures_callnoreturn',
-      dropDown: pro.dropDown,
+      fields: {PROCNAME: proc[0] },
       isProcedure: true // this attribute is used to clean up before reloading
     };
   });
 
-  var procsReturn = createTypeBlockForProcedures_(true);
-  goog.array.forEach(procsReturn, function(pro){
-    Blockly.TypeBlock.TBOptions_[pro.translatedName] = {
+  // Add blocks for the calls with a return
+  goog.array.forEach(procNamesArray[1], function(proc){
+    translatedName = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
+                            ' ' + proc[0];
+    Blockly.TypeBlock.TBOptions_[translatedName] = {
       canonicName: 'procedures_callreturn',
-      dropDown: pro.dropDown,
-      isProcedure: true
+      fields: {PROCNAME: proc[0] },
+      isProcedure: true // this attribute is used to clean up before reloading
     };
   });
-
-  /**
-   * Procedure names can be collected for both 'with return' and 'no return'
-   * varieties from getProcedureNames()
-   * @param {boolean} withReturn indicates if the query us for 'with':true
-   *                  or 'no':false return
-   * @returns {Array} array of the procedures requested
-   * @private
-   */
-  function createTypeBlockForProcedures_(withReturn) {
-    var options = [];
-    var procNamesArray = Blockly.Procedures.allProcedures(Blockly.mainWorkspace);
-    var procNames;
-    if (withReturn) {
-      procNames = procNamesArray[0];
-    } else {
-      procNames = procNamesArray[1];
-    }
-    goog.array.forEach(procNames, function(proc){
-      options.push(
-          {
-            translatedName: Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL + ' ' + proc[0],
-            dropDown: {
-              titleName: 'PROCNAME',
-              value: proc[0]
-            }
-          }
-      );
-    });
-    return options;
-  }
 };
 
 /**
@@ -346,55 +322,56 @@ Blockly.TypeBlock.loadProcedures_ = function(){
  */
 Blockly.TypeBlock.loadGlobalVariables_ = function () {
   //clean up any previous procedures in the list
-  Blockly.TypeBlock.TBOptions_ = goog.object.filter(Blockly.TypeBlock.TBOptions_,
-      function(opti){ return !opti.isGlobalvar;});
+  Blockly.TypeBlock.TBOptions_ =
+    goog.object.filter(Blockly.TypeBlock.TBOptions_,
+                       function(opti){ return !opti.isGlobalvar;});
 
-  var globalVarNames = createTypeBlockForVariables_();
-  goog.array.forEach(globalVarNames, function(varName){
-    var canonicalN;
-    if (varName.translatedName.substring(0,3) === 'get')
-      canonicalN = 'lexical_variable_get';
-    else
-      canonicalN = 'lexical_variable_set';
-    Blockly.TypeBlock.TBOptions_[varName.translatedName] = {
-      canonicName: canonicalN,
-      dropDown: varName.dropDown,
-      isGlobalvar: true
-    };
-  });
-
-  /**
-   * Create TypeBlock options for global variables (a setter and a getter for each).
-   * @returns {Array} array of global var options
-   */
-  function createTypeBlockForVariables_() {
-    var options = [];
-//    var varNames = Blockly.FieldLexicalVariable.getGlobalNames();
-    var varNames = Blockly.Variables.allVariables(Blockly.mainWorkspace);
-    // Make a setter and a getter for each of the names
-    goog.array.forEach(varNames, function(varName){
-      options.push(
-          {
-            translatedName: 'get global ' + varName,
-            dropDown: {
-              titleName: 'VAR',
-              value: 'global ' + varName
-            }
-          }
-      );
-      options.push(
-          {
-            translatedName: 'set global ' + varName,
-            dropDown: {
-              titleName: 'VAR',
-              value: 'global ' + varName
-            }
-          }
-      );
+  var varNames = Blockly.Variables.allVariables(Blockly.mainWorkspace);
+  // Make a setter and a getter for each of the names
+  goog.array.forEach(varNames,
+    function(varName) {
+      Blockly.TypeBlock.TBOptions_['get '+varName] = {
+        canonicName: 'variables_get',
+        fields: {VAR: varName},
+        isGlobalvar: true
+      };
+      Blockly.TypeBlock.TBOptions_['set '+varName] = {
+        canonicName: 'variables_set',
+        fields: {VAR: varName},
+        isGlobalvar: true
+      };
     });
-    return options;
-  }
 };
+
+Blockly.TypeBlock.mutatorToXMLString = function(attributes) {
+  var xmlString = '';
+  if (typeof attributes === 'object' && !goog.object.isEmpty(attributes)) {
+    var extra = '<mutation ';
+    for(var name in attributes) {
+      if (attributes.hasOwnProperty(name)) {
+        xmlString += extra + name + '="' + attributes[name] + '"';
+        extra = ' ';
+      }
+    }
+    xmlString += '></mutation>';
+  }
+  return xmlString;
+}
+
+Blockly.TypeBlock.sectionToXMLString = function(section,attributes) {
+  var xmlString = '';
+  if (typeof attributes === 'object') {
+    for (var key in attributes) {
+      if (attributes.hasOwnProperty(key)) {
+        xmlString += '<' + section +
+                     ' name="' + key + '">'+
+                     attributes[key] +
+                     '</' + section + '>';
+      }
+    }
+  }
+  return xmlString;
+}
 
 Blockly.TypeBlock.autoCompleteSelected = function() {
   var blockName = Blockly.TypeBlock.inputText_.value;
@@ -409,75 +386,32 @@ Blockly.TypeBlock.autoCompleteSelected = function() {
     if (numberMatch && numberMatch.length > 0){
       blockToCreate = {
         canonicName: 'math_number',
-        dropDown: {
-          titleName: 'NUM',
-          value: blockName
-        }
+        fields: { NUM: blockName }
       };
     }
     else if (textMatch && textMatch.length === 1){
       blockToCreate = {
         canonicName: 'text',
-        dropDown: {
-          titleName: 'TEXT',
-          value: blockName.substring(1)
-        }
+        fields: { TEXT: blockName.substring(1) }
       };
     }
     else
       return; // block does not exist: return
   }
 
-  var blockToCreateName = '';
-  var block;
-  if (blockToCreate.dropDown){
-    //All blocks should have a dropDown property, even if empty
-    blockToCreateName = blockToCreate.canonicName;
-    // components have mutator attributes we need to deal with.
-    // We can also add these for special blocks
-    //   e.g., this is done for create empty list
-    var xmlString = Blockly.Drawer.getDefaultXMLString(
-                                               blockToCreate.canonicName,
-                                               blockToCreate.mutatorAttributes);
-    var xml;
-    if (xmlString === null) {
-      var blockType = blockToCreate.canonicName;
-      if (blockType == 'procedures_callnoreturn' ||
-          blockType == 'procedures_callreturn') {
-        xmlString = Blockly.Drawer.procedureCallersXMLString(
-                                      blockType == 'procedures_callreturn');
-      } else {
-        xmlString = '<xml><block type="' + blockType + '">';
-        if(!goog.object.isEmpty(blockToCreate.mutatorAttributes)) {
-          xmlString += Blockly.Drawer.mutatorAttributesToXMLString(
-                                              blockToCreate.mutatorAttributes);
-        }
-        xmlString += '</block></xml>';
-      }
-    }
-    xml = Blockly.Xml.textToDom(xmlString);
-    var xmlBlock = xml.firstChild;
-    if (xml.childNodes.length > 1 &&
-        Blockly.TypeBlock.inputText_.value === 'make a list')
-      xmlBlock = xml.childNodes[1];
-    block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, xmlBlock);
+  // components have mutator attributes we need to deal with.
+  var blockType = blockToCreate.canonicName;
+  var xmlString =
+    '<xml><block type="' + blockType + '">'+
+        Blockly.TypeBlock.mutatorToXMLString(blockToCreate.mutatorAttributes) +
+        Blockly.TypeBlock.sectionToXMLString('field', blockToCreate.fields) +
+        Blockly.TypeBlock.sectionToXMLString('value', blockToCreate.values) +
+    '</block></xml>';
 
-    if (blockToCreate.dropDown.titleName && blockToCreate.dropDown.value){
-      block.setFieldValue(blockToCreate.dropDown.value,
-                          blockToCreate.dropDown.titleName);
-      // change type checking for split blocks
-      if(blockToCreate.dropDown.value == 'SPLITATFIRST' ||
-         blockToCreate.dropDown.value == 'SPLIT') {
-        block.getInput("AT").setCheck('String');
-      } else if(blockToCreate.dropDown.value == 'SPLITATFIRSTOFANY' ||
-                blockToCreate.dropDown.value == 'SPLITATANY') {
-        block.getInput("AT").setCheck('Array');
-      }
-    }
-  } else {
-    throw new Error('Type Block not correctly set up for: ' + blockToCreateName);
-  }
-  //   Blockly.WarningHandler.checkAllBlocksForWarningsAndErrors();
+  var xml = Blockly.Xml.textToDom(xmlString);
+  var xmlBlock = xml.firstChild;
+  var block = Blockly.Xml.domToBlock(Blockly.mainWorkspace, xmlBlock);
+
   block.render();
   var blockSelected = Blockly.selected;
   var selectedX, selectedY, selectedXY;
@@ -672,24 +606,4 @@ Blockly.TypeBlock.ac.AIArrayMatcher.prototype.requestMatchingRows = function(
   }
 
   matchHandler(token, matches);
-};
-
-var isCharacterKey = function(charCode) {
-  // NOTE: The following regex was generated from http://apps.timwhitlock.info/js/regex#
-  var regex = new RegExp("[\"\'$+0-9<->A-Za-z|~¢-¥ª¬±-³µ¹-º¼-¾À-ˁˆ-ˑˠ-ˤˬˮ\u0300-ʹͶ-ͷͺ-ͽΆΈ-ΊΌΎ-ΡΣ-ҁ\u0483-ԣԱ-Ֆՙա-և\u0591-\u05bd\u05bf\u05c1-\u05c2\u05c4-\u05c5\u05c7א-תװ-ײ؆-؈؋\u0610-\u061aء-\u065e٠-٩ٮ-ۓە-\u06dc\u06de-\u06e8\u06ea-ۼۿܐ-\u074aݍ-ޱ߀-ߵߺ\u0901-ह\u093c-\u094dॐ-\u0954क़-\u0963०-९ॱ-ॲॻ-ॿ\u0981-\u0983অ-ঌএ-ঐও-নপ-রলশ-হ\u09bc-\u09c4\u09c7-\u09c8\u09cb-ৎ\u09d7ড়-ঢ়য়-\u09e3০-৹\u0a01-\u0a03ਅ-ਊਏ-ਐਓ-ਨਪ-ਰਲ-ਲ਼ਵ-ਸ਼ਸ-ਹ\u0a3c\u0a3e-\u0a42\u0a47-\u0a48\u0a4b-\u0a4d\u0a51ਖ਼-ੜਫ਼੦-\u0a75\u0a81-\u0a83અ-ઍએ-ઑઓ-નપ-રલ-ળવ-હ\u0abc-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acdૐૠ-\u0ae3૦-૯૱\u0b01-\u0b03ଅ-ଌଏ-ଐଓ-ନପ-ରଲ-ଳଵ-ହ\u0b3c-\u0b44\u0b47-\u0b48\u0b4b-\u0b4d\u0b56-\u0b57ଡ଼-ଢ଼ୟ-\u0b63୦-୯ୱ\u0b82-ஃஅ-ஊஎ-ஐஒ-கங-சஜஞ-டண-தந-பம-ஹ\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcdௐ\u0bd7௦-௲௹\u0c01-\u0c03అ-ఌఎ-ఐఒ-నప-ళవ-హఽ-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55-\u0c56ౘ-ౙౠ-\u0c63౦-౯౸-౾\u0c82-\u0c83ಅ-ಌಎ-ಐಒ-ನಪ-ಳವ-ಹ\u0cbc-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5-\u0cd6ೞೠ-\u0ce3೦-೯\u0d02-\u0d03അ-ഌഎ-ഐഒ-നപ-ഹഽ-\u0d44\u0d46-\u0d48\u0d4a-\u0d4d\u0d57ൠ-\u0d63൦-൵ൺ-ൿ\u0d82-\u0d83අ-ඖක-නඳ-රලව-ෆ\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0df2-\u0df3ก-\u0e3a฿-\u0e4e๐-๙ກ-ຂຄງ-ຈຊຍດ-ທນ-ຟມ-ຣລວສ-ຫອ-\u0eb9\u0ebb-ຽເ-ໄໆ\u0ec8-\u0ecd໐-໙ໜ-ໝༀ\u0f18-\u0f19༠-༳\u0f35\u0f37\u0f39\u0f3e-ཇཉ-ཬ\u0f71-\u0f84\u0f86-ྋ\u0f90-\u0f97\u0f99-\u0fbc\u0fc6က-၉ၐ-႙Ⴀ-Ⴥა-ჺჼᄀ-ᅙᅟ-ᆢᆨ-ᇹሀ-ቈቊ-ቍቐ-ቖቘቚ-ቝበ-ኈኊ-ኍነ-ኰኲ-ኵኸ-ኾዀዂ-ዅወ-ዖዘ-ጐጒ-ጕጘ-ፚ\u135f፩-፼ᎀ-ᎏᎠ-Ᏼᐁ-ᙬᙯ-ᙶᚁ-ᚚᚠ-ᛪ\u16ee-\u16f0ᜀ-ᜌᜎ-\u1714ᜠ-\u1734ᝀ-\u1753ᝠ-ᝬᝮ-ᝰ\u1772-\u1773ក-ឳ\u17b6-\u17d3ៗ៛-\u17dd០-៩៰-៹\u180b-\u180d᠐-᠙ᠠ-ᡷᢀ-ᢪᤀ-ᤜ\u1920-\u192b\u1930-\u193b᥆-ᥭᥰ-ᥴᦀ-ᦩ\u19b0-\u19c9᧐-᧙ᨀ-\u1a1b\u1b00-ᭋ᭐-᭙\u1b6b-\u1b73\u1b80-\u1baaᮮ-᮹ᰀ-\u1c37᱀-᱉ᱍ-ᱽᴀ-\u1de6\u1dfe-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼιῂ-ῄῆ-ῌῐ-ΐῖ-Ίῠ-Ῥῲ-ῴῶ-ῼ\u2000-\u206e⁰-ⁱ⁴-⁼ⁿ-₌ₐ-ₔ₠-₵\u20d0-\u20f0ℂℇℊ-ℓℕℙ-ℝℤΩℨK-ℭℯ-ℹℼ-ⅉ⅋ⅎ⅓-\u2188←-↔↚-↛↠↣↦↮⇎-⇏⇒⇔⇴-⋿⌈-⌋⌠-⌡⍼⎛-⎳⏜-⏡①-⒛⓪-⓿▷◁◸-◿♯❶-➓⟀-⟄⟇-⟊⟌⟐-⟥⟰-⟿⤀-⦂⦙-⧗⧜-⧻⧾-⫿⬰-⭄⭇-⭌Ⰰ-Ⱞⰰ-ⱞⱠ-Ɐⱱ-ⱽⲀ-ⳤ⳽ⴀ-ⴥⴰ-ⵥⵯⶀ-ⶖⶠ-ⶦⶨ-ⶮⶰ-ⶶⶸ-ⶾⷀ-ⷆⷈ-ⷎⷐ-ⷖⷘ-ⷞ\u2de0-\u2dffⸯ々-\u3007\u3021-\u302f〱-〵\u3038-〼ぁ-ゖ\u3099-\u309aゝ-ゟァ-ヺー-ヿㄅ-ㄭㄱ-ㆎ㆒-㆕ㆠ-ㆷㇰ-ㇿ㈠-㈩㉑-㉟㊀-㊉㊱-㊿㐀-䶵一-鿃ꀀ-ꒌꔀ-ꘌꘐ-ꘫꙀ-ꙟꙢ-\ua672\ua67c-\ua67dꙿ-ꚗꜗ-ꜟꜢ-ꞈꞋ-ꞌꟻ-\ua827ꡀ-ꡳ\ua880-\ua8c4꣐-꣙꤀-\ua92dꤰ-\ua953ꨀ-\uaa36ꩀ-\uaa4d꩐-꩙가-힣豈-鶴侮-頻並-龎ﬀ-ﬆﬓ-ﬗיִ-זּטּ-לּמּנּ-סּףּ-פּצּ-ﮱﯓ-ﴽﵐ-ﶏﶒ-ﷇﷰ-﷼\ufe00-\ufe0f\ufe20-\ufe26﹢﹤-﹦﹩ﹰ-ﹴﹶ-ﻼ＄＋０-９＜-＞Ａ-Ｚａ-ｚ｜～ｦ-ﾾￂ-ￇￊ-ￏￒ-ￗￚ-ￜ￠-￢￥-￦￩-￬]|[\ud840-\ud868][\udc00-\udfff]|\ud800[\udc00-\udc0b\udc0d-\udc26\udc28-\udc3a\udc3c-\udc3d\udc3f-\udc4d\udc50-\udc5d\udc80-\udcfa\udd07-\udd33\udd40-\udd78\udd8a\uddfd\ude80-\ude9c\udea0-\uded0\udf00-\udf1e\udf20-\udf23\udf30-\udf4a\udf80-\udf9d\udfa0-\udfc3\udfc8-\udfcf\udfd1-\udfd5]|\ud801[\udc00-\udc9d\udca0-\udca9]|\ud802[\udc00-\udc05\udc08\udc0a-\udc35\udc37-\udc38\udc3c\udc3f\udd00-\udd19\udd20-\udd39\ude00-\ude03\ude05-\ude06\ude0c-\ude13\ude15-\ude17\ude19-\ude33\ude38-\ude3a\ude3f-\ude47]|\ud808[\udc00-\udf6e]|\ud809[\udc00-\udc62]|\ud834[\udd65-\udd69\udd6d-\udd72\udd7b-\udd82\udd85-\udd8b\uddaa-\uddad\ude42-\ude44\udf60-\udf71]|\ud835[\udc00-\udc54\udc56-\udc9c\udc9e-\udc9f\udca2\udca5-\udca6\udca9-\udcac\udcae-\udcb9\udcbb\udcbd-\udcc3\udcc5-\udd05\udd07-\udd0a\udd0d-\udd14\udd16-\udd1c\udd1e-\udd39\udd3b-\udd3e\udd40-\udd44\udd46\udd4a-\udd50\udd52-\udea5\udea8-\udfcb\udfce-\udfff]|\ud869[\udc00-\uded6]|\ud87e[\udc00-\ude1d]|\udb40[\udd00-\uddef]");
-
-  //var regex = new RegExp("
-
-//");
-
-
-
-  // NOTE: if the regex above ever gives trouble, we can use the simpler one.
-  //var regex = new RegExp("[0-9A-Za-z]");
-
-  if (regex.test(String.fromCharCode(charCode))) {
-      return true;
-  } else {
-      return false;
-  }
 };

@@ -42,7 +42,7 @@ goog.require('Blockly.Field');
 Blockly.FieldCheckbox = function(state, opt_changeHandler) {
   Blockly.FieldCheckbox.superClass_.constructor.call(this, '');
 
-  this.changeHandler_ = opt_changeHandler;
+  this.setChangeHandler(opt_changeHandler);
   // Set the initial state.
   this.setValue(state);
 };

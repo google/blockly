@@ -104,18 +104,31 @@ Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 Blockly.Msg.RENAME_VARIABLE = 'Rename variable...';
 /// prompt - Prompts the user to enter the new name for the selected variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
 Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
+// Same, but for scope variables
+/// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to define a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
+Blockly.Msg.NEW_SCOPE_VARIABLE = 'New Key...';
+/// prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
+Blockly.Msg.NEW_SCOPE_VARIABLE_TITLE = 'New Key name:';
+/// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to rename the current variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
+Blockly.Msg.RENAME_SCOPE_VARIABLE = 'Rename Key...';
+/// prompt - Prompts the user to enter the new name for the selected variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
+Blockly.Msg.RENAME_SCOPE_VARIABLE_TITLE = 'Rename all "%1" Keys to:';
 
 // Colour Blocks.
 /// url - Information about colour.
 Blockly.Msg.COLOUR_PICKER_HELPURL = 'https://en.wikipedia.org/wiki/Color';
 /// tooltip - See [https://github.com/google/blockly/wiki/Colour#picking-a-colour-from-a-palette https://github.com/google/blockly/wiki/Colour#picking-a-colour-from-a-palette].
 Blockly.Msg.COLOUR_PICKER_TOOLTIP = 'Choose a colour from the palette.';
+/// typeblock - Typing to add the block
+Blockly.Msg.COLOUR_PICKER_TYPEBLOCK = 'Choose Colour';
 /// url - A link that displays a random colour each time you visit it.
 Blockly.Msg.COLOUR_RANDOM_HELPURL = 'http://randomcolour.com';
 /// block text - Title of block that generates a colour at random.
 Blockly.Msg.COLOUR_RANDOM_TITLE = 'random colour';
 /// tooltip - See [https://github.com/google/blockly/wiki/Colour#generating-a-random-colour https://github.com/google/blockly/wiki/Colour#generating-a-random-colour].
 Blockly.Msg.COLOUR_RANDOM_TOOLTIP = 'Choose a colour at random.';
+/// typeblock - Typing to add the block
+Blockly.Msg.COLOUR_RANDOM_TYPEBLOCK = 'Random Colour';
 /// url - A link for color codes with percentages (0-100%) for each component, instead of the more common 0-255, which may be more difficult for beginners.
 Blockly.Msg.COLOUR_RGB_HELPURL = 'http://www.december.com/html/spec/colorper.html';
 /// block text - Title of block for [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].
@@ -128,6 +141,8 @@ Blockly.Msg.COLOUR_RGB_GREEN = 'green';
 Blockly.Msg.COLOUR_RGB_BLUE = 'blue';
 /// tooltip - See [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].
 Blockly.Msg.COLOUR_RGB_TOOLTIP = 'Create a colour with the specified amount of red, green, and blue. All values must be between 0 and 100.';
+/// typeblock - Typing to add the block
+Blockly.Msg.COLOUR_RGB_TYPEBLOCK = 'Colour with';
 /// url - A useful link that displays blending of two colors.
 Blockly.Msg.COLOUR_BLEND_HELPURL = 'http://meyerweb.com/eric/tools/color-blend/';
 /// block text - A verb for blending two shades of paint.
@@ -140,6 +155,8 @@ Blockly.Msg.COLOUR_BLEND_COLOUR2 = 'colour 2';
 Blockly.Msg.COLOUR_BLEND_RATIO = 'ratio';
 /// tooltip - See [https://github.com/google/blockly/wiki/Colour#blending-colours https://github.com/google/blockly/wiki/Colour#blending-colours].
 Blockly.Msg.COLOUR_BLEND_TOOLTIP = 'Blends two colours together with a given ratio (0.0 - 1.0).';
+/// typeblock - Typing to add the block
+Blockly.Msg.COLOUR_BLEND_TYPEBLOCK = 'Blend Colour';
 
 // Loop Blocks.
 /// url - Describes 'repeat loops' in computer programs; consider using the translation of the page [https://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow].
@@ -171,27 +188,22 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = 'While a value is false, then do
 /// url - Describes 'for loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/For_loop https://en.wikipedia.org/wiki/For_loop], if present.
 Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://github.com/google/blockly/wiki/Loops#count-with';
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#count-with https://github.com/google/blockly/wiki/Loops#count-with].\n\nParameters:\n* %1 - the name of the loop variable.
-Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable %1 take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
-/// block title - Title of [https://github.com/google/blockly/wiki/Loops#count-with count with] blocks.
-/// [[File:Blockly-count-with.png]]
-Blockly.Msg.CONTROLS_FOR_INPUT_WITH = 'count with';
-/// block text - Starting with a (usually lower) number in a range (%1),
-/// ending with a (usually higher) number in a range (%2), and counting the
-/// iterations by a number of steps (%3).  As in
+Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable "%1" take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
+/// block text - Repeatedly counts a variable (%1)
+/// starting with a (usually lower) number in a range (%2),
+/// ending with a (usually higher) number in a range (%3), and counting the
+/// iterations by a number of steps (%4).  As in
 /// [https://github.com/google/blockly/wiki/Loops#count-with
 /// https://github.com/google/blockly/wiki/Loops#count-with].
 /// [[File:Blockly-count-with.png]]
-Blockly.Msg.CONTROLS_FOR_INPUT_FROM_TO_BY = 'from %1 to %2 by %3';
+Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 
 /// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
-Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/Loops#for-each for each block';
+Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/Loops#for-each';
 /// block text - Title of [https://github.com/google/blockly/wiki/Loops#for-each for each block].
-Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM = 'for each item';
-/// block text - Preceding the list that should be iterated over in a [https://github.com/google/blockly/wiki/Loops#for-each for each loop].
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST = 'in list';
-/// block text - Following the list that should be iterated over in a [https://github.com/google/blockly/wiki/Loops#for-each for each loop].  This is empty in most, but not all, languages.
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL = '';
+/// Sequentially assigns every item in array %2 to the valiable %1.
+Blockly.Msg.CONTROLS_FOREACH_TITLE = 'for each item %1 in list %2';
 Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /// block text - Description of [https://github.com/google/blockly/wiki/Loops#for-each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variable "%1" to the item, and then do some statements.';
@@ -414,14 +426,23 @@ Blockly.Msg.MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, 
 /// For other languages, just use the translation of the Wikipedia page about
 /// addition ([https://en.wikipedia.org/wiki/Addition https://en.wikipedia.org/wiki/Addition]).
 Blockly.Msg.MATH_CHANGE_HELPURL = 'https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter';
-/// - As in: '''change''' [the value of variable] ''item by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
-Blockly.Msg.MATH_CHANGE_TITLE_CHANGE = 'change';
+/// - As in: ''change'' [the value of variable] ''item'' ''by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
+/// %1 is a variable name.
+/// %2 is the amount of change.
+Blockly.Msg.MATH_CHANGE_TITLE = 'change %1 by %2';
 Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// - As in: ''change'' [the value of variable] ''item'' '''by''' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
-Blockly.Msg.MATH_CHANGE_INPUT_BY = 'by';
 /// tooltip - This updates the value of the variable by adding to it the following numeric input.\n\nParameters:\n* %1 - the name of the variable whose value should be increased.
 Blockly.Msg.MATH_CHANGE_TOOLTIP = 'Add a number to variable "%1".';
 
+/// format as decimal
+Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TITLE = 'format as decimal  number %1 places %2';
+// Tooltip - this formats a number as decimal to a given number of places
+Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TOOLTIP = 'Format this number';
+// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TYPEBLOCK = 'format as decimal';
+
+/// url - Information about how numbers are rounded to the nearest integer
+Blockly.Msg.MATH_ONLIST_HELPURL = 'https://en.wikipedia.org/wiki/Rounding';
 /// url - Information about how numbers are rounded to the nearest integer
 Blockly.Msg.MATH_ROUND_HELPURL = 'https://en.wikipedia.org/wiki/Rounding';
 /// tooltip - See [https://en.wikipedia.org/wiki/Rounding https://en.wikipedia.org/wiki/Rounding].
@@ -680,6 +701,19 @@ Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST = 'to last letter';
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = '';
 
+/// url - Information about how the text contains block works
+Blockly.Msg.TEXT_CONTAINS_HELPURL = 'http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains';
+// Title for the Contains Text block.
+//   %1 corresponds to the Text input block which is of type "String"
+//   %2 corresponds for the Piece input block which is of type "String"
+// see [http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains
+// http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains]
+Blockly.Msg.TEXT_CONTAINS_INPUT = 'contains text %1 piece %2';
+/// tooltip - Describes a block to adjust the case of letters.  For more information on this block,
+// see [http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains
+// http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains]
+Blockly.Msg.TEXT_CONTAINS_TOOLTIP = 'Tests whether the piece is contained in the text.';
+
 /// url - Information about the case of letters (upper-case and lower-case).
 Blockly.Msg.TEXT_CHANGECASE_HELPURL = 'https://github.com/google/blockly/wiki/Text#adjusting-text-case'
 /// tooltip - Describes a block to adjust the case of letters.  For more information on this block,
@@ -755,6 +789,8 @@ Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki
 Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'create empty list';
 /// block text - See [https://github.com/google/blockly/wiki/Lists#create-empty-list https://github.com/google/blockly/wiki/Lists#create-empty-list].
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = 'Returns a list, of length 0, containing no data records';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK = 'Create Empty List';
 
 /// url - Information on building lists.
 Blockly.Msg.LISTS_CREATE_WITH_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-list-with';
@@ -762,6 +798,8 @@ Blockly.Msg.LISTS_CREATE_WITH_HELPURL = 'https://github.com/google/blockly/wiki/
 Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP = 'Create a list with any number of items.';
 /// block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with].
 Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'create list with';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_CREATE_WITH_TYPEBLOCK = 'Create List With';
 /// block text - This appears in a sub-block when [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs changing the number of inputs in a ''''create list with'''' block].
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = 'list';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].
@@ -778,6 +816,8 @@ Blockly.Msg.LISTS_REPEAT_TOOLTIP = 'Creates a list consisting of the given value
 /// https://github.com/google/blockly/wiki/Lists#create-list-with].
 ///\n\nParameters:\n* %1 - the item (text) to be repeated\n* %2 - the number of times to repeat it
 Blockly.Msg.LISTS_REPEAT_TITLE = 'create list with item %1 repeated %2 times';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_REPEAT_TYPEBLOCK = 'Create List With Repeated Item';
 
 /// url - Information about how the length of a list is computed (i.e., by the total number of elements, not the number of different elements).
 Blockly.Msg.LISTS_LENGTH_HELPURL = 'https://github.com/google/blockly/wiki/Lists#length-of';
@@ -786,16 +826,20 @@ Blockly.Msg.LISTS_LENGTH_HELPURL = 'https://github.com/google/blockly/wiki/Lists
 Blockly.Msg.LISTS_LENGTH_TITLE = 'length of %1';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#length-of https://github.com/google/blockly/wiki/Lists#length-of Blockly:Lists:length of].
 Blockly.Msg.LISTS_LENGTH_TOOLTIP = 'Returns the length of a list.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_LENGTH_TYPEBLOCK = 'Length Of List';
 
 /// url - See [https://github.com/google/blockly/wiki/Lists#is-empty https://github.com/google/blockly/wiki/Lists#is-empty].
-Blockly.Msg.LISTS_IS_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#is-empty';
+Blockly.Msg.LISTS_ISEMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#is-empty';
 /// block text - See [https://github.com/google/blockly/wiki/Lists#is-empty
 /// https://github.com/google/blockly/wiki/Lists#is-empty].
 /// \n\nParameters:\n* %1 - the list to test
-Blockly.Msg.LISTS_IS_EMPTY_TITLE = '%1 is empty';
+Blockly.Msg.LISTS_ISEMPTY_TITLE = '%1 is empty';
 /// block tooltip - See [https://github.com/google/blockly/wiki/Lists#is-empty
 /// https://github.com/google/blockly/wiki/Lists#is-empty].
-Blockly.Msg.LISTS_TOOLTIP = 'Returns true if the list is empty.';
+Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = 'Returns true if the list is empty.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_ISEMPTY_TYPEBLOCK = 'Is List Empty?';
 
 /// block text - Title of blocks operating on [https://github.com/google/blockly/wiki/Lists lists].
 Blockly.Msg.LISTS_INLIST = 'in list';
@@ -816,6 +860,10 @@ Blockly.Msg.LISTS_INDEX_OF_LAST = 'find last occurrence of item';
 /// https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list].
 /// [[File:Blockly-list-find.png]]
 Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the list. Returns 0 if text is not found.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_INDEX_OF_FIRST_TYPEBLOCK = 'Find First Occurrence Of Item';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_INDEX_OF_LAST_TYPEBLOCK = 'Find Last Occurrence Of Item';
 
 Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
 /// dropdown - Indicates that the user wishes to
@@ -829,7 +877,7 @@ Blockly.Msg.LISTS_GET_INDEX_GET = 'get';
 Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE = 'get and remove';
 /// dropdown - Indicates that the user wishes to
 /// [https://github.com/google/blockly/wiki/Lists#removing-an-item
-/// remove an item from a list].
+/// remove an item from a list].\n{{Identical|Remove}}
 Blockly.Msg.LISTS_GET_INDEX_REMOVE = 'remove';
 /// dropdown - Indicates that an index relative to the front of the list should be used to
 /// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item get and/or remove
@@ -897,6 +945,36 @@ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FIRST = 'Removes the first item in a 
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST = 'Removes the last item in a list.';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for 'random'.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM = 'Removes a random item in a list.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_FROM_START_TYPEBLOCK = 'Get Item From Start of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_FROM_END_TYPEBLOCK = 'Get Item From End of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_FIRST_TYPEBLOCK = 'Get First Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_LAST_TYPEBLOCK = 'Get Last Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_RANDOM_TYPEBLOCK = 'Get Random Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE_FROM_START_TYPEBLOCK = 'Get and Remove Item From Start of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE_FROM_END_TYPEBLOCK = 'Get and Remove Item From End of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE_FIRST_TYPEBLOCK = 'Get and Remove First Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE_LAST_TYPEBLOCK = 'Get and Remove Last Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE_RANDOM_TYPEBLOCK = 'Get and Remove Random Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_REMOVE_FROM_START_TYPEBLOCK = 'Remove Item From Start of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_REMOVE_FROM_END_TYPEBLOCK = 'Remove Item From End of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_REMOVE_FIRST_TYPEBLOCK = 'Remove First Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_REMOVE_LAST_TYPEBLOCK = 'Remove Last Item of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_INDEX_REMOVE_RANDOM_TYPEBLOCK = 'Remove Random Item of List';
 /// url - Information about putting items in lists.
 Blockly.Msg.LISTS_SET_INDEX_HELPURL = 'https://github.com/google/blockly/wiki/Lists#in-list--set';
 Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
@@ -931,6 +1009,26 @@ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST = 'Inserts the item at the star
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_LAST = 'Append the item to the end of a list.';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = 'Inserts the item randomly in a list.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_SET_FROM_START_TYPEBLOCK = 'Set Item at Position in List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_SET_FROM_END_TYPEBLOCK = 'Set Item at Position from End of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_SET_FIRST_TYPEBLOCK = 'Set First Item in List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_SET_LAST_TYPEBLOCK = 'Set Last Item in List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_SET_RANDOM_TYPEBLOCK = 'Set a Random Item in List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_INSERT_FROM_START_TYPEBLOCK = 'Inserts at Position in List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_INSERT_FROM_END_TYPEBLOCK = 'Insert at Position from End of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_INSERT_FIRST_TYPEBLOCK = 'Insert at Start of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_INSERT_LAST_TYPEBLOCK = 'Append to End of List';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SET_INDEX_INSERT_RANDOM_TYPEBLOCK = 'Insert At Random Location in List';
 
 /// url - Information describing extracting a sublist from an existing list.
 Blockly.Msg.LISTS_GET_SUBLIST_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-a-sublist';
@@ -977,6 +1075,8 @@ Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
 /// https://github.com/google/blockly/wiki/Lists#getting-a-sublist] for more information.
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_GET_SUBLIST_TYPEBLOCK = 'Get Sub-List';
 
 /// url - Information describing splitting text into a list, or joining a list into text.
 Blockly.Msg.LISTS_SPLIT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists';
@@ -992,6 +1092,10 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = 'Split text into a list of texts, breaki
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#make-text-from-list
 /// https://github.com/google/blockly/wiki/Lists#make-text-from-list] for more information.
 Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = 'Join a list of texts into one text, separated by a delimiter.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT_TYPEBLOCK = 'Make List From Text';
+/// typeblock - Typing to add the block
+Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST_TYPEBLOCK = 'Make Text From List';
 
 /// grammar - Text that follows an ordinal number (a number that indicates
 /// position relative to other numbers).  In most languages, such text appears
@@ -1002,11 +1106,6 @@ Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 // Variables Blocks.
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_GET_HELPURL = 'https://github.com/google/blockly/wiki/Variables#get';
-/// block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TITLE = '';
-Blockly.Msg.VARIABLES_GET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - This follows the name of a variable.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go after "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TAIL = '';
 /// tooltip - This gets the value of the named variable without modifying it.
 Blockly.Msg.VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 /// context menu - Selecting this creates a block to set (change) the value of this variable.
@@ -1015,17 +1114,15 @@ Blockly.Msg.VARIABLES_GET_CREATE_SET = 'Create "set %1"';
 
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_SET_HELPURL = 'https://github.com/google/blockly/wiki/Variables#set';
-/// block text - The imperative or infinitive form of the verb "set", as in: '''set''' [the value of] x to 7.
-Blockly.Msg.VARIABLES_SET_TITLE = 'set';
-Blockly.Msg.VARIABLES_SET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - The word that goes after the name of the variable and before its new
-/// value in: set [the value of] x '''to''' 7.
-Blockly.Msg.VARIABLES_SET_TAIL = 'to';
+/// block text - Change the value of a mathematical variable: '''set [the value of] x to 7'''.\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the value to be assigned.
+Blockly.Msg.VARIABLES_SET = 'set %1 to %2';
 /// tooltip - This initializes or changes the value of the named variable.
 Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
 /// context menu - Selecting this creates a block to get (change) the value of
 /// this variable.\n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
+/// block text - Change the value of a mathematical variable: '''set [the value of] x to 7'''.\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the value to be assigned.
+Blockly.Msg.SCOPE_VARIABLES_SET = 'set %1 : %2 to %3';
 
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
@@ -1102,6 +1199,19 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = 'Add, remove, or reorder input
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = 'input name:';
 /// tooltip
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = 'Add an input to the function.';
+// This text is the tooltop for the + icon on a mutator object
+Blockly.Msg.CLICK_ADD_TOOLTIP = 'Add an element';
+// This text is the tooltop for the - icon on a mutator object
+Blockly.Msg.CLICK_REMOVE_TOOLTIP = 'Remove this element';
+// This is the string for creating a parameter line on a function.
+//  %1 corresponds to the name of the parameter as a FieldTextInput
+//  %2 corresponds to the - icon for removing the field
+Blockly.Msg.PROCEDURES_PARAM_NOTYPE = '%1 with %2 %3';
+// This is the string for creating a parameter line on a function.
+//  %1 corresponds to the name of the parameter as a FieldTextInput
+//  %2 corresponds to the type of the parameter as a FieldScopeVariable
+//  %3 corresponds to the - icon for removing the field
+Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE = '%1 with %2 as %3%4';
 
 /// context menu - This appears on the context menu for function calls.  Selecting
 /// it causes the corresponding function definition to be highlighted (as shown at
@@ -1116,3 +1226,9 @@ Blockly.Msg.PROCEDURES_CREATE_DO = 'Create "%1"';
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a second value.';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
+
+
+Blockly.Msg.TEXT_TYPE_JAVA = 'insert java code';
+Blockly.Msg.TEXT_TYPE_PYTHON = 'insert python code';
+Blockly.Msg.TEXT_TOOLTIP_TYPE_JAVA = 'Insert arbitrary Java code';
+Blockly.Msg.TEXT_TOOLTIP_TYPE_PYTHON = 'Insert arbitrary Python code';

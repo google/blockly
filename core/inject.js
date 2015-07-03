@@ -71,7 +71,7 @@ Blockly.inject = function(container, opt_options) {
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
- * @return {Node} DOM tree of blocks or null.
+ * @return {Node} DOM tree of blocks, or null.
  * @private
  */
 Blockly.parseToolboxTree_ = function(tree) {

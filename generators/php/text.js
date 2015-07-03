@@ -97,9 +97,10 @@ Blockly.PHP['text_indexOf'] = function(block) {
   var code = operator + '(' + argument1 + ', ' + argument0 + ') + 1';
 
   var functionName = Blockly.PHP.provideFunction_(
-      block.getFieldValue('END') == 'FIRST'?'text_indexOf':'text_lastIndexOf',
+      block.getFieldValue('END') == 'FIRST' ?
+          'text_indexOf' : 'text_lastIndexOf',
       [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-      '($text, $search) {',
+          '($text, $search) {',
         '  $pos = ' + operator + '($text, $search);',
         '  return $pos === false ? 0 : $pos + 1;',
         '}']);

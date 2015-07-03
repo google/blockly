@@ -31,16 +31,17 @@ goog.provide('Blockly.Names');
  * Class for a database of entity names (variables, functions, etc).
  * @param {string} reservedWords A comma-separated string of words that are
  *     illegal for use as names in a language (e.g. 'new,if,this,...').
+ * @param {string=} opt_variablePrefix Some languages need a '$' or a namespace
+ *     before all variable names.
  * @constructor
- * @param namesPrependDollar boolean indicating whether the languages requires dollar signs ($) before a variable
  */
-Blockly.Names = function(reservedWords, namesPrependDollar) {
-  this.prependDollar = namesPrependDollar || false;
+Blockly.Names = function(reservedWords, opt_variablePrefix) {
+  this.variablePrefix_ = opt_variablePrefix || '';
   this.reservedDict_ = Object.create(null);
   if (reservedWords) {
     var splitWords = reservedWords.split(',');
-    for (var x = 0; x < splitWords.length; x++) {
-      this.reservedDict_[splitWords[x]] = true;
+    for (var i = 0; i < splitWords.length; i++) {
+      this.reservedDict_[splitWords[i]] = true;
     }
   }
   this.reset();
@@ -72,12 +73,13 @@ Blockly.Names.prototype.reset = function() {
  */
 Blockly.Names.prototype.getName = function(name, type) {
   var normalized = name.toLowerCase() + '_' + type;
-  var prepend = type=='VARIABLE' && this.prependDollar ? '$' : '';
+  var prefix = (type == Blockly.Variables.NAME_TYPE) ?
+      this.variablePrefix_ : '';
   if (normalized in this.db_) {
-    return prepend + this.db_[normalized];
+    return prefix + this.db_[normalized];
   }
   var safeName = this.getDistinctName(name, type);
-  this.db_[normalized] = type=='VARIABLE' && this.prependDollar ? safeName.substr(1) : safeName;
+  this.db_[normalized] = safeName.substr(prefix.length);
   return safeName;
 };
 
@@ -101,8 +103,9 @@ Blockly.Names.prototype.getDistinctName = function(name, type) {
   }
   safeName += i;
   this.dbReverse_[safeName] = true;
-  var prepend = type=='VARIABLE' && this.prependDollar ? '$' : '';
-  return prepend + safeName;
+  var prefix = (type == Blockly.Variables.NAME_TYPE) ?
+      this.variablePrefix_ : '';
+  return prefix + safeName;
 };
 
 /**

@@ -96,15 +96,15 @@ Blockly.PHP.init = function(workspace) {
 
   if (!Blockly.PHP.variableDB_) {
     Blockly.PHP.variableDB_ =
-        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, true);
+        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, '$');
   } else {
     Blockly.PHP.variableDB_.reset();
   }
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  for (var x = 0; x < variables.length; x++) {
-    defvars[x] = Blockly.PHP.variableDB_.getName(variables[x],
+  for (var i = 0; i < variables.length; i++) {
+    defvars[i] = Blockly.PHP.variableDB_.getName(variables[i],
         Blockly.Variables.NAME_TYPE) + ';';
   }
   Blockly.PHP.definitions_['variables'] = defvars.join('\n');

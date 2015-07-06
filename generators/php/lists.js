@@ -169,7 +169,8 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       var code = 'array_slice(' + list + ', -' + at + ', 1)[0]';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'GET_REMOVE' || mode == 'REMOVE') {
-      code = 'array_splice(' + list + ', count(' + list + ') - ' + at + ', 1)[0]';
+      code = 'array_splice(' + list +
+          ', count(' + list + ') - ' + at + ', 1)[0]';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
@@ -366,6 +367,6 @@ Blockly.PHP['lists_split'] = function(block) {
   } else {
     throw 'Unknown mode: ' + mode;
   }
-  var code = functionName + '('+ value_delim + ', ' + value_input + ')';
+  var code = functionName + '(' + value_delim + ', ' + value_input + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

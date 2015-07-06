@@ -40,13 +40,16 @@ Blockly.Blocks['controls_if'] = {
    * @this Blockly.Block
    */
   init: function() {
+    var addField = new Blockly.FieldClickImage(this.addPng, 17, 17,
+                                          Blockly.Msg.CONTROLS_IF_ADD_TOOLTIP);
+    addField.setChangeHandler(this.doAddField);
+
     this.setHelpUrl(Blockly.Msg.CONTROLS_IF_HELPURL);
     this.setColour(Blockly.Blocks.logic.HUE);
     this.appendValueInput('IF0')
         .setCheck('Boolean')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF)
-        .appendField(this.getClickField(this.doAddField, 'IF', 0, 'add',
-                                        Blockly.Msg.CONTROLS_IF_ADD_TOOLTIP));
+        .appendField(addField,'IF_ADD');
     this.appendStatementInput('DO0')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     this.setPreviousStatement(true);
@@ -100,71 +103,71 @@ Blockly.Blocks['controls_if'] = {
   /**
    * Add a section to the if
    * @param {!Blockly.FieldClickImage} field Field clicked on for the action
-   * @param {!Blockly.Block} rootRoot block to work on.
-   * @this {!Blockly.FieldClickImage}
    */
-  doAddField: function(field, rootBlock) {
-    if (rootBlock.elseCount_) {
+  doAddField: function(field) {
+    if (this.elseCount_) {
       // We already have an else so add another elseif
-      rootBlock.elseifCount_++;
+      this.elseifCount_++;
     } else {
       // No else, so add it
-      rootBlock.elseCount_ = 1;
+      this.elseCount_ = 1;
     }
-  rootBlock.updateAddSubShape();
+  this.updateAddSubShape();
   },
   /**
-   * remove a specific section from an if (either an else or elsif clause).
+   * remove a specific elseif section from an if
    * @param {!Blockly.FieldClickImage} field Field clicked on for the action
-   * @param {!Blockly.Block} rootRoot block to work on.
-   * @this {!Blockly.FieldClickImage}
    */
-  doRemoveField: function(field, rootBlock) {
+  doRemoveElseifField: function(field) {
     // Determine what they clicked on
-    var name = field.name_;
-    var pos = field.pos_;
-    if (name === 'ELSE') {
-      // Removing the else, this is easy.
-      rootBlock.elseCount_ = 0;
-    } else {
-      // Removing one of the ELSIF clauses.
-      var limit = rootBlock.elseifCount_+1;
-      if(rootBlock.elseifCount_ > 0) {
-        rootBlock.elseifCount_--;
-      }
-      // Disconnect anything plugged into the IF and DO part of this elseif
-      var ifInput = rootBlock.getInput('IF'+pos);
-      if (ifInput && ifInput.connection && ifInput.connection.targetConnection) {
-        ifInput.connection.targetConnection.sourceBlock_.unplug(true,true);
-      }
-      var doInput = rootBlock.getInput('DO'+pos);
-      if (doInput && doInput.connection && doInput.connection.targetConnection) {
-        doInput.connection.targetConnection.sourceBlock_.unplug(true,true);
-      }
-      // Now we need to go through and move up all the lower ones to the previous
-      // one.
-      for(var slot = pos+1; slot < limit; slot++) {
-        var nextIfInput = rootBlock.getInput('IF'+slot);
-        var nextDoInput = rootBlock.getInput('DO'+slot);
-        if (nextIfInput != null) {
-          if (nextIfInput.connection && nextIfInput.connection.targetConnection) {
-            var toMove = nextIfInput.connection.targetConnection;
-            toMove.sourceBlock_.unplug(false,false);
-            ifInput.connection.connect(toMove);
-          }
-        }
-        if (nextDoInput != null) {
-          if (nextDoInput.connection && nextDoInput.connection.targetConnection) {
-            var toMove = nextDoInput.connection.targetConnection;
-            toMove.sourceBlock_.unplug(false,false);
-            doInput.connection.connect(toMove);
-          }
-        }
-        ifInput = nextIfInput;
-        doInput = nextDoInput;
-      }
+    var privateData = field.getPrivate();
+    var pos = privateData.pos;
+    // Removing one of the ELSIF clauses.
+    var limit = this.elseifCount_+1;
+    if(this.elseifCount_ > 0) {
+      this.elseifCount_--;
     }
-    rootBlock.updateAddSubShape();
+    // Disconnect anything plugged into the IF and DO part of this elseif
+    var ifInput = this.getInput('IF'+pos);
+    if (ifInput && ifInput.connection && ifInput.connection.targetConnection) {
+      ifInput.connection.targetConnection.sourceBlock_.unplug(true,true);
+    }
+    var doInput = this.getInput('DO'+pos);
+    if (doInput && doInput.connection && doInput.connection.targetConnection) {
+      doInput.connection.targetConnection.sourceBlock_.unplug(true,true);
+    }
+    // Now we need to go through and move up all the lower ones to the previous
+    // one.
+    for(var slot = pos+1; slot < limit; slot++) {
+      var nextIfInput = this.getInput('IF'+slot);
+      var nextDoInput = this.getInput('DO'+slot);
+      if (nextIfInput != null) {
+        if (nextIfInput.connection && nextIfInput.connection.targetConnection) {
+          var toMove = nextIfInput.connection.targetConnection;
+          toMove.sourceBlock_.unplug(false,false);
+          ifInput.connection.connect(toMove);
+        }
+      }
+      if (nextDoInput != null) {
+        if (nextDoInput.connection && nextDoInput.connection.targetConnection) {
+          var toMove = nextDoInput.connection.targetConnection;
+          toMove.sourceBlock_.unplug(false,false);
+          doInput.connection.connect(toMove);
+        }
+      }
+      ifInput = nextIfInput;
+      doInput = nextDoInput;
+    }
+    this.updateAddSubShape();
+  },
+  /**
+   * remove the else section from an if
+   * @param {!Blockly.FieldClickImage} field Field clicked on for the action
+   */
+  doRemoveElseField: function(field) {
+    // Removing the else, this is easy.
+    this.elseCount_ = 0;
+    this.updateAddSubShape();
   },
   /**
    * Reconfigure this block based on the component values.
@@ -194,13 +197,16 @@ Blockly.Blocks['controls_if'] = {
       for(pos = 1; pos < this.elseifCount_+1;pos++,inputIndex+=2) {
         var inputItem = this.getInput('IF'+pos);
         if (inputItem == null) {
+          var subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
+                                Blockly.Msg.CONTROLS_IF_ELSEIF_REMOVE_TOOLTIP);
+          subField.setPrivate({name: 'IF', pos: pos});
+          subField.setChangeHandler(this.doRemoveElseifField);
+
           // We have to add an elseif clause
           var ifInput = this.appendValueInput('IF' + pos)
                             .setCheck('Boolean')
                             .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF)
-                            .appendField(this.getClickField(
-                                         this.doRemoveField, 'IF', pos, 'sub',
-                                Blockly.Msg.CONTROLS_IF_ELSEIF_REMOVE_TOOLTIP));
+                            .appendField(subField);
           var doInput = this.appendStatementInput('DO' + pos)
                             .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
           // Now see if we need to move them in front of the else
@@ -217,11 +223,13 @@ Blockly.Blocks['controls_if'] = {
       if (this.elseCount_) {
         var inputItem = this.getInput('ELSE');
         if (inputItem == null) {
+          var subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
+                                Blockly.Msg.CONTROLS_IF_ELSE_REMOVE_TOOLTIP);
+          subField.setChangeHandler(this.doRemoveElseField);
+
           this.appendStatementInput('ELSE')
               .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE)
-              .appendField(this.getClickField(
-                           this.doRemoveField, 'ELSE', 0, 'sub',
-                           Blockly.Msg.CONTROLS_IF_ELSE_REMOVE_TOOLTIP));
+              .appendField(subField);
         }
       }
     }

@@ -1024,9 +1024,6 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
           case 'input_dummy':
             input = this.appendDummyInput(element['name']);
             break;
-          case 'field':
-            field = element['field'];
-            break;
           case 'field_label':
             field = new Blockly.FieldLabel(element['text']);
             break;
@@ -1051,6 +1048,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             break;
           case 'field_dropdown':
             field = new Blockly.FieldDropdown(element['options']);
+            break;
+          case 'field_clickimage':
+            field = new Blockly.FieldClickImage(element['src'],
+                element['width'], element['height'], element['alt']);
             break;
           case 'field_image':
             field = new Blockly.FieldImage(element['src'],
@@ -1293,57 +1294,60 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
 };
+/**
+ * Images for adding/removing elements
+ */
+Blockly.Block.prototype.addPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAMAAAAMs7fIAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Mzg5MzA1MkQwMjc5MTFFNUEyMEJEOEM2QTBCNDI2RjciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Mzg5MzA1MkUwMjc5MTFFNUEyMEJEOEM2QTBCNDI2RjciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozODkzMDUyQjAyNzkxMUU1QTIwQkQ4QzZBMEI0MjZGNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozODkzMDUyQzAyNzkxMUU1QTIwQkQ4QzZBMEI0MjZGNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pptr84cAAACHUExURfPz/xoa/+/v//X1/xcX//v7//b2//Hx//z8/1NT//Dw/9jY/0RE/7u7/+np//T0/zs7/62t/wgI/yMj/w0N/x0d/y8v/19f/ykp//Ly/woK/93d/7S0/+zs/56e/xQU/+fn/9ra/yYm/6am//f3/xAQ/yAg/5qa//r6//7+/////wAA/////19oit8AAAAtdFJOU///////////////////////////////////////////////////////////AKXvC/0AAACcSURBVHjabNDZEoIwDAXQW8omyL65465N+P/vk1J06Iz3pcl56CTBoEOABGiqofso6SpRdUlERsJjyyZt6mmh9MHf1GcaJdjomoj0c90OoAMvhAuFYGXJ2kHWTK0Jc5MhLC0pQ0hhSX//8w8VltwUBjwX4vrjhGpf/2beXZTey4vdGdz4bXZX/ikXLPKXr+ZrjPdwpCcdmg70EWAAstQnpKfUzLwAAAAASUVORK5CYII=';
+Blockly.Block.prototype.subPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAMAAAAMs7fIAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MkU5MkMxMTAwMjc5MTFFNTgxRDJFMTA3OTA2NTkxNDEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MkU5MkMxMTEwMjc5MTFFNTgxRDJFMTA3OTA2NTkxNDEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyRTkyQzEwRTAyNzkxMUU1ODFEMkUxMDc5MDY1OTE0MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyRTkyQzEwRjAyNzkxMUU1ODFEMkUxMDc5MDY1OTE0MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PlxGqBwAAACHUExURfPz/xoa/+/v//X1/xcX//v7//b2//Hx//z8/1NT//Dw/9jY/0RE/7u7/+np//T0/zs7/62t/wgI/yMj/w0N/x0d/y8v/19f/ykp//Ly/woK/93d/7S0/+zs/56e/xQU/+fn/9ra/yYm/6am//f3/xAQ/yAg/5qa//r6//7+/////wAA/////19oit8AAAAtdFJOU///////////////////////////////////////////////////////////AKXvC/0AAACXSURBVHjabJDXDoMwDEVvCKtQ9ureKzb//31NoLRE6nmyjyzLvugNBEiAhhqmj5KuElWXRDSacN/ySJt6xlB654n6RNoEK/5xWfegHc8pFIKFZZYOsoaZJpibDGFpmTKEFJY53v7socIyV4Uej5lwfX2h2tZfsTkr85cXu9NE/Bp/V/4hFyzyp68+aeg8HOlJh4aA3gIMAL2WJ7aPWKm3AAAAAElFTkSuQmCC';
 
 /**
  * Adds a named field to a mutable block.
- * @param {string} name The name of the input type field.
- * @param {number} pos position of the field asking to add the input
- * @this {!Blockly.FieldClickImage}
+ * @param {!Blockly.FieldClickImage} field Field which was clicked on
  */
-Blockly.Block.prototype.doAddField = function(field, rootBlock) {
-  var name = field.name_;
-  var pos = field.pos_;
-  rootBlock.itemCount_[name]++;
-  if (rootBlock.itemCount_[name] == 1) {
+Blockly.Block.prototype.doAddField = function(field) {
+  var privateData = field.getPrivate();
+  var name = privateData.name;
+  var pos = privateData.pos;
+  this.itemCount_[name]++;
+  if (this.itemCount_[name] == 1) {
     //
     // If we went from 0 to 1 then we need to change the title back.
     // Just remove the input and let updateAddSubShape clean it up for us
-    rootBlock.removeInput(rootBlock.getAddSubName(name,0),true);
+    this.removeInput(this.getAddSubName(name,0),true);
   }
-  rootBlock.updateAddSubShape();
+  this.updateAddSubShape();
 }
 
 /**
  * Removes a named field from a mutable block.
- * @param {string} name The name of the input type field.
- * @param {number} pos position of the field to be removed
- * @this {!Blockly.FieldClickImage}
+ * @param {!Blockly.FieldClickImage} field Field which was clicked on
  */
-Blockly.Block.prototype.doRemoveField = function(field, rootBlock) {
-  var name = field.name_;
-  var pos = field.pos_;
-  var limit = rootBlock.itemCount_[name];
+Blockly.Block.prototype.doRemoveField = function(field) {
+  var privateData = field.getPrivate();
+  var name = privateData.name;
+  var pos = privateData.pos;
+  var limit = this.itemCount_[name];
   var minitems = 1;
-  if (rootBlock.titles_[name]) {
+  if (this.titles_[name]) {
     minitems = 0;
   }
-  if (rootBlock.itemCount_[name] > minitems) {
-    rootBlock.itemCount_[name]--;
+  if (this.itemCount_[name] > minitems) {
+    this.itemCount_[name]--;
   }
-  if (rootBlock.itemCount_[name] == 0) {
+  if (this.itemCount_[name] == 0) {
     // If we drop down to 0 then we remove the block and let redraw
     // give us back one with the right name on it
-    rootBlock.removeInput(rootBlock.getAddSubName(name,0),true);
+    this.removeInput(this.getAddSubName(name,0),true);
   }
 
-  var input = rootBlock.getInput(rootBlock.getAddSubName(name,pos));
+  var input = this.getInput(this.getAddSubName(name,pos));
   if (input && input.connection && input.connection.targetConnection) {
     input.connection.targetConnection.sourceBlock_.unplug(true,true);
   }
   // Now we need to go through and move up all the lower ones to the previous
   // one.
   for (var slot = pos+1; slot < limit; slot++) {
-    var nextInput = rootBlock.getInput(rootBlock.getAddSubName(name,slot));
+    var nextInput = this.getInput(this.getAddSubName(name,slot));
     if (nextInput != null) {
       if (nextInput.connection && nextInput.connection.targetConnection) {
         var toMove = nextInput.connection.targetConnection;
@@ -1353,30 +1357,21 @@ Blockly.Block.prototype.doRemoveField = function(field, rootBlock) {
     input = nextInput;
     }
   }
-  rootBlock.updateAddSubShape();
+  this.updateAddSubShape();
 }
 
-
-Blockly.Block.prototype.getClickField = function(handler, name, pos,
-                                                 type, tooltip) {
-  var src = '';
-  var alt = '';
-  if (type === 'add') {
-    src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAMAAAAMs7fIAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Mzg5MzA1MkQwMjc5MTFFNUEyMEJEOEM2QTBCNDI2RjciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Mzg5MzA1MkUwMjc5MTFFNUEyMEJEOEM2QTBCNDI2RjciPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDozODkzMDUyQjAyNzkxMUU1QTIwQkQ4QzZBMEI0MjZGNyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDozODkzMDUyQzAyNzkxMUU1QTIwQkQ4QzZBMEI0MjZGNyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pptr84cAAACHUExURfPz/xoa/+/v//X1/xcX//v7//b2//Hx//z8/1NT//Dw/9jY/0RE/7u7/+np//T0/zs7/62t/wgI/yMj/w0N/x0d/y8v/19f/ykp//Ly/woK/93d/7S0/+zs/56e/xQU/+fn/9ra/yYm/6am//f3/xAQ/yAg/5qa//r6//7+/////wAA/////19oit8AAAAtdFJOU///////////////////////////////////////////////////////////AKXvC/0AAACcSURBVHjabNDZEoIwDAXQW8omyL65465N+P/vk1J06Iz3pcl56CTBoEOABGiqofso6SpRdUlERsJjyyZt6mmh9MHf1GcaJdjomoj0c90OoAMvhAuFYGXJ2kHWTK0Jc5MhLC0pQ0hhSX//8w8VltwUBjwX4vrjhGpf/2beXZTey4vdGdz4bXZX/ikXLPKXr+ZrjPdwpCcdmg70EWAAstQnpKfUzLwAAAAASUVORK5CYII=';
-    alt = Blockly.Msg.CLICK_ADD_TOOLTIP;
-  } else if (type === 'sub') {
-    src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAMAAAAMs7fIAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MkU5MkMxMTAwMjc5MTFFNTgxRDJFMTA3OTA2NTkxNDEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MkU5MkMxMTEwMjc5MTFFNTgxRDJFMTA3OTA2NTkxNDEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyRTkyQzEwRTAyNzkxMUU1ODFEMkUxMDc5MDY1OTE0MSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyRTkyQzEwRjAyNzkxMUU1ODFEMkUxMDc5MDY1OTE0MSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PlxGqBwAAACHUExURfPz/xoa/+/v//X1/xcX//v7//b2//Hx//z8/1NT//Dw/9jY/0RE/7u7/+np//T0/zs7/62t/wgI/yMj/w0N/x0d/y8v/19f/ykp//Ly/woK/93d/7S0/+zs/56e/xQU/+fn/9ra/yYm/6am//f3/xAQ/yAg/5qa//r6//7+/////wAA/////19oit8AAAAtdFJOU///////////////////////////////////////////////////////////AKXvC/0AAACXSURBVHjabJDXDoMwDEVvCKtQ9ureKzb//31NoLRE6nmyjyzLvugNBEiAhhqmj5KuElWXRDSacN/ySJt6xlB654n6RNoEK/5xWfegHc8pFIKFZZYOsoaZJpibDGFpmTKEFJY53v7socIyV4Uej5lwfX2h2tZfsTkr85cXu9NE/Bp/V/4hFyzyp68+aeg8HOlJh4aA3gIMAL2WJ7aPWKm3AAAAAElFTkSuQmCC';
-    alt = Blockly.Msg.CLICK_REMOVE_TOOLTIP;
+/**
+ * Sets the information for an Add Sub field click item
+ * @param {string} fieldname Name of the click field to set info on
+ * @param {string} name Name of the field to pass to the callback function
+ * @param {number} pos Position of the field in the input
+ */
+Blockly.Block.prototype.setAddSubInfo = function(fieldName,handler,name,pos) {
+  var field = this.getField(fieldName);
+  if (field) {
+    field.setChangeHandler(handler);
+    field.setPrivate({name: name, pos: pos});
   }
-  if (tooltip) {
-    alt = tooltip;
-  }
-  var newField = new Blockly.FieldClickImage(src, 17, 17, alt, handler);
-  newField.pos_ = pos;
-  newField.name_ = name;
-  newField.type_ = type;
-
-  return newField;
 }
 
 /**
@@ -1410,7 +1405,9 @@ Blockly.Block.prototype.appendAddSubEmptyInput = function(name,title) {
  */
 Blockly.Block.prototype.appendAddSubInput = function(name,pos,title) {
   var newName = this.getAddSubName(name,pos);
-  var inputItem;
+  var inputItem = null;
+  var field = null;
+
   if (this.itemCount_[name]) {
     inputItem = this.appendValueInput(newName)
                     .setCheck(this.checks_[name])
@@ -1426,11 +1423,16 @@ Blockly.Block.prototype.appendAddSubInput = function(name,pos,title) {
     inputItem = this.appendAddSubEmptyInput(newName, title);
   }
   if (pos === 0) {
-    inputItem.appendField(this.getClickField(this.doAddField, name, 0, 'add'));
+    field = new Blockly.FieldClickImage(this.addPng, 17, 17,
+                                        Blockly.Msg.CLICK_ADD_TOOLTIP);
+    field.setChangeHandler(this.doAddField);
   } else {
-    inputItem.appendField(this.getClickField(this.doRemoveField,
-                                                            name, pos, 'sub'));
+    field = new Blockly.FieldClickImage(this.subPng, 17, 17,
+                                        Blockly.Msg.CLICK_REMOVE_TOOLTIP);
+    field.setChangeHandler(this.doRemoveField);
   }
+  field.setPrivate({name: name, pos: pos});
+  inputItem.appendField(field);
   return [inputItem];
 }
 
@@ -1492,15 +1494,21 @@ Blockly.Block.prototype.updateAddSubShape = function() {
         }
 
         inputItem = this.getInput(name0);
+        var subFieldName0 = name0+'_sub';
+        var hasSubField0 = this.getField(subFieldName0);
         // Now see what the main one has for fields
         if (this.itemCount_[name] === 1) {
           // Shouldn't have a sub field if this is the only entry
-          inputItem.removeClickFields(['sub']);
+          if (hasSubField0) {
+            inputItem.removeField(subFieldName0);
+          }
         } else {
-          var hasSubField = inputItem.hasClickField('sub');
-          if (!hasSubField) {
-            inputItem.appendField(this.getClickField(this.doRemoveField,
-                                                     name, 0, 'sub'));
+          if (!hasSubField0) {
+            var field = new Blockly.FieldClickImage(this.subPng, 17, 17,
+                                              Blockly.Msg.CLICK_REMOVE_TOOLTIP);
+            field.setPrivate({name: name, pos: 0});
+            field.setChangeHandler(this.doRemoveField);
+            inputItem.appendField(field, subFieldName0);
           }
         }
       } else {

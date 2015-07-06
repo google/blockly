@@ -40,6 +40,10 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   init: function() {
+    var addField = new Blockly.FieldClickImage(this.addPng, 17, 17);
+    addField.setPrivate({name: name, pos: 0});
+    addField.setChangeHandler(this.doAddField);
+
     this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
     this.setColour(Blockly.Blocks.procedures.HUE);
     var name = Blockly.Procedures.findLegalName(
@@ -50,7 +54,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE)
         .appendField(nameField, 'NAME')
-        .appendField(this.getClickField(this.doAddField, name, 0, 'add'));
+        .appendField(addField);
     this.setTooltip(Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP);
     this.setInputsInline(false);
     this.arguments_ = [];
@@ -62,17 +66,15 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   /**
    * Add a parameter to the function
    * @param {!Blockly.FieldClickImage} field Field clicked on for the action
-   * @param {!Blockly.Block} rootRoot block to work on.
-   * @this {!Blockly.FieldClickImage}
    */
-  doAddField: function(field, rootBlock) {
-    var paramNum = rootBlock.arguments_.length;
+  doAddField: function(field) {
+    var paramNum = this.arguments_.length;
     var paramName = 'param'+paramNum;
     var nameInUse = true;
     while (nameInUse) {
       nameInUse = false;
-      for (var i = 0; i < rootBlock.arguments_.length; i++) {
-        if (rootBlock.arguments_[i]['name'].toLowerCase() === paramName) {
+      for (var i = 0; i < this.arguments_.length; i++) {
+        if (this.arguments_[i]['name'].toLowerCase() === paramName) {
           nameInUse = true;
           paramNum++;
           paramName = 'param'+paramNum;
@@ -80,19 +82,19 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         }
       }
     }
-    rootBlock.arguments_.push({name: paramName,
-                               id: rootBlock.argid++});
-    rootBlock.updateParams_();
+    this.arguments_.push({name: paramName,
+                          id: this.argid++});
+    this.updateParams_();
   },
   /**
    * remove a specific parameter from a function
    * @param {!Blockly.FieldClickImage} field Field clicked on for the action
-   * @param {!Blockly.Block} rootRoot block to work on.
-   * @this {!Blockly.FieldClickImage}
    */
-  doRemoveField: function(field, rootBlock) {
-    rootBlock.arguments_.splice(field.pos_,1);
-    rootBlock.updateParams_();
+  doRemoveField: function(field) {
+    var privateData = field.getPrivate();
+    var pos = privateData.pos;
+    this.arguments_.splice(pos,1);
+    this.updateParams_();
   },
   /**
    * Update the display of parameters for this procedure definition block.
@@ -124,33 +126,29 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     for (var i = 0; i < this.arguments_.length; i++) {
       var nameFieldText = 'PARAM'+i+'_NAME';
       var typeFieldText = 'PARAM'+i+'_TYPE';
+      var subFieldText = 'PARAM'+i+'_SUB';
       if (!this.getInput('PARAM'+i)) {
-        var nameField = new Blockly.FieldTextInput(this.arguments_[i]['name'],
-                            this.updateParam);
-        nameField.setSpellcheck(false);
-        nameField.setSerializable(false);
-        nameField.argPos_ = i;
-//      var typeField = new Blockly.FieldScopeVariable('types');
-//      typeField.setSerializable(false);
-        var subField = this.getClickField(this.doRemoveField,
-                                          'param', i, 'sub');
         this.jsonInit({
           "message0": Blockly.Msg.PROCEDURES_PARAM_NOTYPE,
 //        "message0": Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE,
           "args0": [
             {
-              "type": "field",
-              "field": nameField,
+              "type": "field_input",
+              "text": this.arguments_[i]['name'],
               "name" : nameFieldText
             },
 //          {
-//            "type": "field",
-//            "field": typeField,
+//            "type": "field_scopevariable",
+//            "scope": 'types',
 //            "name": typeFieldText
 //          },
             {
-              "type": "field",
-              "field": subField
+              "type": "field_clickimage",
+              "src": this.subPng,
+              "width": 17,
+              "height": 17,
+              "alt": Blockly.Msg.CLICK_REMOVE_TOOLTIP,
+              "name" : subFieldText
             },
             {
               "type": "input_dummy",
@@ -160,6 +158,21 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           ],
           "colour": Blockly.Blocks.procedures.HUE
         });
+
+        var nameField = this.getField(nameFieldText);
+        nameField.setSpellcheck(false);
+        nameField.setSerializable(false);
+        nameField.argPos_ = i;
+        nameField.setChangeHandler(this.updateParam);
+
+        var subField = this.getField(subFieldText);
+        subField.setPrivate({name: 'param', pos: i});
+        subField.setSerializable(false);
+        subField.setChangeHandler(this.doRemoveField);
+
+//      var typeField = this.getField(typeFieldText);
+//      typeField.setSerializable(false);
+
         this.moveNumberedInputBefore(this.inputList.length-1, i+1);
         // Name the input since interpolateMsg doesn't name them
         this.inputList[i+1].name = 'PARAM'+i;
@@ -373,10 +386,14 @@ Blockly.Blocks['procedures_defreturn'] = {
     var nameField = new Blockly.FieldTextInput(name,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
+    var addField = new Blockly.FieldClickImage(this.addPng, 17, 17);
+    addField.setPrivate({name: name, pos: 0});
+    addField.setChangeHandler(this.doAddField);
+
     this.appendDummyInput()
         .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_TITLE)
         .appendField(nameField, 'NAME')
-        .appendField(this.getClickField(this.doAddField, name, 0, 'add'));
+        .appendField(addField);
     this.appendValueInput('RETURN')
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);

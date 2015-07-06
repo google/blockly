@@ -64,6 +64,13 @@ Blockly.Field.prototype.visible_ = true;
 Blockly.Field.prototype.changeHandler_ = null;
 
 /**
+ * Holder for private data used by the field for any reason.  The format of this
+ * data is opaque to the field
+ * @private
+ */
+Blockly.Field.prototype.privateData_ = null;
+
+/**
  * Clone this Field.  This must be implemented by all classes derived from
  * Field.  Since this class should not be instantiated, calling this method
  * throws an exception.
@@ -319,6 +326,22 @@ Blockly.Field.prototype.getValue = function() {
  */
 Blockly.Field.prototype.setValue = function(text) {
   this.setText(text);
+};
+
+/**
+ * Gets private data associated with this field
+ * @return {Object} Current private data.
+ */
+Blockly.Field.prototype.getPrivate = function() {
+  return this.privateData_;
+};
+
+/**
+ * Stores private data associated with this field.
+ * @param {Object} privateData Data to be stored for later retrieval.
+ */
+Blockly.Field.prototype.setPrivate = function(privateData) {
+  this.privateData_ = privateData;
 };
 
 /**

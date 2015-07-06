@@ -43,7 +43,7 @@ Blockly.FieldClickImage = function(src, width, height, opt_alt, handler) {
   Blockly.FieldClickImage.superClass_.constructor.call(this,
                                                    src, width, height, '');
 
-  this.handler_ = handler;
+  this.setChangeHandler(handler);
 };
 
 goog.inherits(Blockly.FieldClickImage, Blockly.FieldImage);
@@ -103,8 +103,8 @@ Blockly.FieldClickImage.prototype.init = function(block) {
  *   with the current values of the arguments used during construction.
  */
 Blockly.FieldClickImage.prototype.clone = function() {
-  return new Blockly.FieldClickImage(this.handler_,
-                                 this.rootBlock_, this.name_, this.pos_);
+  return new Blockly.FieldClickImage(this.getSrc(), this.width_, this.height_,
+                                     this.text_, this.changeHandler_);
 };
 
 /**
@@ -116,10 +116,10 @@ Blockly.FieldClickImage.prototype.clone = function() {
  * @private
  */
 Blockly.FieldClickImage.prototype.showEditor_ = function() {
-  if (this.handler_) {
+  if (this.changeHandler_) {
     var saveDragMode = Blockly.dragMode_;
     Blockly.dragMode_ = 0;
-    this.handler_(this, this.sourceBlock_);
+    this.changeHandler_.call(this.sourceBlock_,this);
     Blockly.dragMode_ = saveDragMode;
   }
 };

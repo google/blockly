@@ -87,6 +87,9 @@ Blockly.FieldClickImage.prototype.init = function(block) {
   // We want to use the styling of an Icon  to indicate clickability
   Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
                     'blocklyIconGroup');
+  // TODO akinard: Add another class called blocklyIconFading
+  Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
+                    'blocklyIconFading');
   //
   // Update the classes for this to appear editable
   this.updateEditable();

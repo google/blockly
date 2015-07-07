@@ -59,8 +59,11 @@ Blockly.Blocks['controls_repeat'] = {
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
     this.getField('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
-  },
-  typeblock: [{translatedName: Blockly.getMsgString('controls_repeat_typeblock')}]
+  }//,
+// No typeblock because this appears to be deprecated in
+//     favor of controls_repeat_ext
+//  typeblock: [{translatedName: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+//               fields: {'TIMES' : 10 }}]
 };
 
 Blockly.Blocks['controls_repeat_ext'] = {
@@ -87,7 +90,8 @@ Blockly.Blocks['controls_repeat_ext'] = {
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('controls_repeat_ext_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+               values: {'TIMES' : 10 }}]
 };
 
 Blockly.Blocks['controls_whileUntil'] = {
@@ -119,7 +123,10 @@ Blockly.Blocks['controls_whileUntil'] = {
       return TOOLTIPS[op];
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('controls_while_until_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.CONTROLS_WHILEUNTIL_WHILE_TYPEBLOCK,
+               fields: {'MODE' : 'WHILE' }},
+              {translatedName: Blockly.Msg.CONTROLS_WHILEUNTIL_UNTIL_TYPEBLOCK,
+               fields: {'MODE' : 'UNTIL' }}]
 };
 
 Blockly.Blocks['controls_for'] = {
@@ -199,7 +206,7 @@ Blockly.Blocks['controls_for'] = {
     if (!this.isCollapsed()) {
       var option = {enabled: true};
       var name = this.getFieldValue('VAR');
-      option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
+      option.text = Blockly.Msg.	VARIABLES_SET_CREATE_GET.replace('%1', name);
       var xmlField = goog.dom.createDom('field', null, name);
       xmlField.setAttribute('name', 'VAR');
       var xmlBlock = goog.dom.createDom('block', null, xmlField);
@@ -208,7 +215,8 @@ Blockly.Blocks['controls_for'] = {
       options.push(option);
     }
   },
-  typeblock: [{translatedName: Blockly.getMsgString('controls_for_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.CONTROLS_FOR_TYPEBLOCK,
+               values: {'FROM': 1, 'TO': 10, 'BY': 1}}]
 };
 
 Blockly.Blocks['controls_forEach'] = {
@@ -266,7 +274,7 @@ Blockly.Blocks['controls_forEach'] = {
     }
   },
   customContextMenu: Blockly.Blocks['controls_for'].customContextMenu,
-  typeblock: [{translatedName: Blockly.getMsgString('controls_for_each_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.CONTROLS_FOREACH_TYPEBLOCK}]
 };
 
 Blockly.Blocks['controls_flow_statements'] = {
@@ -324,5 +332,10 @@ Blockly.Blocks['controls_flow_statements'] = {
       this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
     }
   },
-  typeblock: [{translatedName: Blockly.getMsgString('controls_flow_statements_typeblock')}]
+  typeblock: [{translatedName:
+                          Blockly.Msg.CONTROLS_FLOW_STATEMENTS_BREAK_TYPEBLOCK,
+               fields: {'FLOW' : 'BREAK' }},
+              {translatedName:
+                        Blockly.Msg.CONTROLS_FLOW_STATEMENTS_CONTINUE_TYPEBLOCK,
+               fields: {'FLOW' : 'CONTINUE' }}]
 };

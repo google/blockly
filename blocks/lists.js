@@ -103,8 +103,7 @@ Blockly.Blocks['lists_repeat'] = {
     });
   },
   typeblock: [{translatedName: Blockly.Msg.LISTS_REPEAT_TYPEBLOCK,
-                 values: {NUM : '<block type="math_number">'+
-                                      '<field name="NUM">5</field></block>' }}]
+                "values": {'NUM': 5 }}]
 };
 
 Blockly.Blocks['lists_length'] = {

@@ -173,6 +173,8 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = 'times';
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK = 'Repeat Times';
 /// url - Describes 'while loops' in computer programs; consider using the translation of [https://en.wikipedia.org/wiki/While_loop https://en.wikipedia.org/wiki/While_loop], if present, or [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].
 Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://github.com/google/blockly/wiki/Loops#repeat';
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -184,6 +186,10 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = 'repeat until';
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = 'While a value is true, then do some statements.';
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat-until https://github.com/google/blockly/wiki/Loops#repeat-until].
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = 'While a value is false, then do some statements.';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_WHILEUNTIL_WHILE_TYPEBLOCK = 'Repeat While';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_WHILEUNTIL_UNTIL_TYPEBLOCK = 'Repeat Unitl';
 
 /// url - Describes 'for loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/For_loop https://en.wikipedia.org/wiki/For_loop], if present.
 Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://github.com/google/blockly/wiki/Loops#count-with';
@@ -198,6 +204,8 @@ Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable "%1" take on the values fr
 /// [[File:Blockly-count-with.png]]
 Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_FOR_TYPEBLOCK = 'Count With From To By';
 
 /// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
 Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/Loops#for-each';
@@ -207,6 +215,8 @@ Blockly.Msg.CONTROLS_FOREACH_TITLE = 'for each item %1 in list %2';
 Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /// block text - Description of [https://github.com/google/blockly/wiki/Loops#for-each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variable "%1" to the item, and then do some statements.';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_FOREACH_TYPEBLOCK = 'For Each Item In List';
 
 /// url - Describes control flow in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow], if it exists.
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = 'https://github.com/google/blockly/wiki/Loops#loop-termination-blocks';
@@ -220,6 +230,10 @@ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK = 'Break out of the containin
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE = 'Skip the rest of this loop, and continue with the next iteration.';
 /// warning - The user has tried placing a block outside of a loop (for each, while, repeat, etc.), but this type of block may only be used within a loop.  See [https://github.com/google/blockly/wiki/Loops#loop-termination-blocks https://github.com/google/blockly/wiki/Loops#loop-termination-blocks].
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING = 'Warning: This block may only be used within a loop.';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_FLOW_STATEMENTS_BREAK_TYPEBLOCK = 'Break Loop';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_FLOW_STATEMENTS_CONTINUE_TYPEBLOCK = 'Continue Loop';
 
 // Logic Blocks.
 /// url - Describes conditional statements (if-then-else) in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_else https://en.wikipedia.org/wiki/If_else], if present.
@@ -249,6 +263,14 @@ Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = 'Add a condition to the if block.';
 Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 /// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_IF_TYPEBLOCK = 'If';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_IF_ELSIF_TYPEBLOCK = 'If Else If';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_IF_ELSIF_ELSE_TYPEBLOCK = 'If Else If Else';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_IF_ELSE_TYPEBLOCK = 'If Else';
 
 /// url - Information about comparisons.
 Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';
@@ -264,6 +286,8 @@ Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = 'Return true if the first input is small
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = 'Return true if the first input is greater than the second input.';
 /// tooltip - Describes the greater than or equals (≥) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = 'Return true if the first input is greater than or equal to the second input.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_COMPARE_TYPEBLOCK = 'Logic Equal';
 
 /// url - Information about the Boolean conjunction ("and") and disjunction ("or") operators.  Consider using the translation of [https://en.wikipedia.org/wiki/Boolean_logic https://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.
 Blockly.Msg.LOGIC_OPERATION_HELPURL = 'https://github.com/google/blockly/wiki/Logic#logical-operations';
@@ -275,6 +299,11 @@ Blockly.Msg.LOGIC_OPERATION_AND = 'and';
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR = 'Return true if at least one of the inputs is true.';
 /// block text - See [https://en.wikipedia.org/wiki/Disjunction https://en.wikipedia.org/wiki/Disjunction].
 Blockly.Msg.LOGIC_OPERATION_OR = 'or';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_OPERATION_OR_TYPEBLOCK = 'or';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_OPERATION_AND_TYPEBLOCK = 'and';
+
 
 /// url - Information about logical negation.  The translation of [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation] is recommended if it exists in the target language.
 Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://github.com/google/blockly/wiki/Logic#not';
@@ -283,6 +312,8 @@ Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://github.com/google/blockly/wiki/Logic
 Blockly.Msg.LOGIC_NEGATE_TITLE = 'not %1';
 /// tooltip - See [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation].
 Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false. Returns false if the input is true.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_NEGATE_TYPEBLOCK = 'not';
 
 /// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value https://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/Logic#values';
@@ -292,6 +323,10 @@ Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = 'false';
 /// tooltip - Indicates that the block returns either of the two possible [https://en.wikipedia.org/wiki/Truth_value logical values].
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = 'Returns either true or false.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_BOOLEAN_TRUE_TYPEBLOCK = 'True';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_BOOLEAN_FALSE_TYPEBLOCK = 'False';
 
 /// url - Provide a link to the translation of [https://en.wikipedia.org/wiki/Nullable_type https://en.wikipedia.org/wiki/Nullable_type], if it exists in your language; otherwise, do not worry about translating this advanced concept.
 Blockly.Msg.LOGIC_NULL_HELPURL = 'https://en.wikipedia.org/wiki/Nullable_type';
@@ -299,6 +334,8 @@ Blockly.Msg.LOGIC_NULL_HELPURL = 'https://en.wikipedia.org/wiki/Nullable_type';
 Blockly.Msg.LOGIC_NULL = 'null';
 /// tooltip - This should use the word from the previous message.
 Blockly.Msg.LOGIC_NULL_TOOLTIP = 'Returns null.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_NULL_TYPEBLOCK = 'Null';
 
 /// url - Describes the programming language operator known as the ''ternary'' or ''conditional'' operator.  It is recommended that you use the translation of [https://en.wikipedia.org/wiki/%3F: https://en.wikipedia.org/wiki/%3F:] if it exists.
 Blockly.Msg.LOGIC_TERNARY_HELPURL = 'https://en.wikipedia.org/wiki/%3F:';
@@ -310,6 +347,8 @@ Blockly.Msg.LOGIC_TERNARY_IF_TRUE = 'if true';
 Blockly.Msg.LOGIC_TERNARY_IF_FALSE = 'if false';
 /// tooltip - See [https://en.wikipedia.org/wiki/%3F: https://en.wikipedia.org/wiki/%3F:].
 Blockly.Msg.LOGIC_TERNARY_TOOLTIP = 'Check the condition in "test". If the condition is true, returns the "if true" value; otherwise returns the "if false" value.';
+/// typeblock - Typing to add the block
+Blockly.Msg.LOGIC_TERNARY_TYPEBLOCK = 'Test';
 
 // Math Blocks.
 /// url - Information about (real) numbers.
@@ -363,6 +402,16 @@ Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_MULTIPLY = 'Return the product of the two nu
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_DIVIDE = 'Return the quotient of the two numbers.';
 /// tooltip - See [https://en.wikipedia.org/wiki/Exponentiation https://en.wikipedia.org/wiki/Exponentiation].
 Blockly.Msg.MATH_ARITHMETIC_TOOLTIP_POWER = 'Return the first number raised to the power of the second number.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ARITHMETIC_ADD_TYPEBLOCK = '+';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ARITHMETIC_MINUS_TYPEBLOCK = '-';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ARITHMETIC_MULTIPLY_TYPEBLOCK = '*';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ARITHMETIC_DIVIDE_TYPEBLOCK = '/';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ARITHMETIC_POWER_TYPEBLOCK = '^';
 
 /// url - Information about the square root operation.
 Blockly.Msg.MATH_SINGLE_HELPURL = 'https://en.wikipedia.org/wiki/Square_root';
@@ -374,6 +423,13 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_ROOT = 'Return the square root of a number.';
 Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = 'absolute';
 /// tooltip - Please use the same term as in the previous message.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = 'Return the absolute value of a number.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_SINGLE_OP_ROOT_TYPEBLOCK = 'Square Root';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE_TYPEBLOCK = 'Absolute Value';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_SINGLE_OP_NEG_TYPEBLOCK = 'Negation';
+
 
 /// tooltip - Calculates '''0-n''', where '''n''' is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = 'Return the negation of a number.';
@@ -400,11 +456,37 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ASIN = 'Return the arcsine of a number.';
 Blockly.Msg.MATH_TRIG_TOOLTIP_ACOS = 'Return the arccosine of a number.';
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent tangent] function, using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = 'Return the arctangent of a number.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_TRIG_SIN_TYPEBLOCK = 'SIN';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_TRIG_COS_TYPEBLOCK = 'COS';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_TRIG_TAN_TYPEBLOCK = 'TAN';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_TRIG_ASIN_TYPEBLOCK = 'ASIN';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_TRIG_ACOS_TYPEBLOCK = 'ACOS';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_TRIG_ATAN_TYPEBLOCK = 'ATAN';
+
 
 /// url - Information about the mathematical constants Pi (π), e, the golden ratio (φ), √ 2, √ 1/2, and infinity (∞).
 Blockly.Msg.MATH_CONSTANT_HELPURL = 'https://en.wikipedia.org/wiki/Mathematical_constant';
 /// tooltip - Provides the specified [https://en.wikipedia.org/wiki/Mathematical_constant mathematical constant].
 Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CONSTANT_PI_TYPEBLOCK = 'Constant PI';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CONSTANT_E_TYPEBLOCK = 'Constant E'
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CONSTANT_GOLDEN_RATIO_TYPEBLOCK = 'Constant Golden Ratio (φ)';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CONSTANT_SQRT2_TYPEBLOCK = 'Constant √ 2';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CONSTANT_SQRT1_2_TYPEBLOCK = 'Constant √ 1/2';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CONSTANT_INFINITY_TYPEBLOCK = 'Constant Infinity (∞)';
+
 /// dropdown - A number is '''even''' if it is a multiple of 2.  For example, 4 is even (yielding true), but 3 is not (false).
 Blockly.Msg.MATH_IS_EVEN = 'is even';
 /// dropdown - A number is '''odd''' if it is not a multiple of 2.  For example, 3 is odd (yielding true), but 4 is not (false).  The opposite of "odd" is "even".
@@ -421,6 +503,21 @@ Blockly.Msg.MATH_IS_NEGATIVE = 'is negative';
 Blockly.Msg.MATH_IS_DIVISIBLE_BY = 'is divisible by';
 /// tooltip - This block lets the user specify via a dropdown menu whether to check if the numeric input is even, odd, prime, whole, positive, negative, or divisible by a given value.
 Blockly.Msg.MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, positive, negative, or if it is divisible by certain number. Returns true or false.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_IS_EVEN_TYPEBLOCK = 'Number Is Even';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_IS_ODD_TYPEBLOCK = 'Number Is Odd';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_IS_PRIME_TYPEBLOCK = 'Number Is Prime';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_IS_WHOLE_TYPEBLOCK = 'Number Is Whole';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_IS_POSITIVE_TYPEBLOCK = 'Number Is Positive';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_IS_NEGATIVE_TYPEBLOCK = 'Number Is Negative';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_IS_DIVISIBLE_BY_TYPEBLOCK = 'Number Is Divisible By';
+
 
 /// url - Information about incrementing (increasing the value of) a variable.
 /// For other languages, just use the translation of the Wikipedia page about
@@ -433,13 +530,15 @@ Blockly.Msg.MATH_CHANGE_TITLE = 'change %1 by %2';
 Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - This updates the value of the variable by adding to it the following numeric input.\n\nParameters:\n* %1 - the name of the variable whose value should be increased.
 Blockly.Msg.MATH_CHANGE_TOOLTIP = 'Add a number to variable "%1".';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CHANGE_TYPEBLOCK = 'Change Variable By Amount';
 
 /// format as decimal
 Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TITLE = 'format as decimal  number %1 places %2';
-// Tooltip - this formats a number as decimal to a given number of places
+/// Tooltip - this formats a number as decimal to a given number of places
 Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TOOLTIP = 'Format this number';
-// Typeblock - Autocomplete for typeblocking
-Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TYPEBLOCK = 'format as decimal';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TYPEBLOCK = 'Format as Decimal';
 
 /// url - Information about how numbers are rounded to the nearest integer
 Blockly.Msg.MATH_ONLIST_HELPURL = 'https://en.wikipedia.org/wiki/Rounding';
@@ -453,6 +552,12 @@ Blockly.Msg.MATH_ROUND_OPERATOR_ROUND = 'round';
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDUP = 'round up';
 /// dropdown - This rounds its input down to the nearest whole number.  For example, if the input was 3.8, the result would be 3.
 Blockly.Msg.MATH_ROUND_OPERATOR_ROUNDDOWN = 'round down';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ROUND_ROUND_TYPEBLOCK = 'Round';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ROUND_ROUNDUP_TYPEBLOCK = 'Round Up';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ROUND_ROUNDDOWN_TYPEBLOCK = 'Round Down';
 
 /// url - Information about applying a function to a list of numbers.  (We were unable to find such information in English.  Feel free to skip this and any other URLs that are difficult.)
 Blockly.Msg.MATH_ONLIST_HELPURL = '';
@@ -488,6 +593,23 @@ Blockly.Msg.MATH_ONLIST_TOOLTIP_STD_DEV = 'Return the standard deviation of the 
 Blockly.Msg.MATH_ONLIST_OPERATOR_RANDOM = 'random item of list';
 /// tooltip - Please use same term for 'random' as in previous entry.
 Blockly.Msg.MATH_ONLIST_TOOLTIP_RANDOM = 'Return a random element from the list.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_SUM_TYPEBLOCK = 'Sum of List';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_MIN_TYPEBLOCK = 'Min of List';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_MAX_TYPEBLOCK = 'Max of List';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_AVERAGE_TYPEBLOCK = 'Average of List';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_MEDIAN_TYPEBLOCK = 'Median of List';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_MODE_TYPEBLOCK = 'Mode of List';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_STD_DEV_TYPEBLOCK = 'Standard Deviation of List';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_ONLIST_RANDOM_TYPEBLOCK = 'Random Item of List';
+
 
 /// url - information about the modulo (remainder) operation.
 Blockly.Msg.MATH_MODULO_HELPURL = 'https://en.wikipedia.org/wiki/Modulo_operation';
@@ -495,6 +617,8 @@ Blockly.Msg.MATH_MODULO_HELPURL = 'https://en.wikipedia.org/wiki/Modulo_operatio
 Blockly.Msg.MATH_MODULO_TITLE = 'remainder of %1 ÷ %2';
 /// tooltip - For example, the remainder of 10 divided by 3 is 1.
 Blockly.Msg.MATH_MODULO_TOOLTIP = 'Return the remainder from dividing the two numbers.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_MODULO_TYPEBLOCK = 'Remainder of';
 
 /// url - Information about constraining a numeric value to be in a specific range.  (The English URL is not ideal.  Recall that translating URLs is the lowest priority.)
 Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'https://en.wikipedia.org/wiki/Clamping_%28graphics%29';
@@ -504,6 +628,8 @@ Blockly.Msg.MATH_CONSTRAIN_HELPURL = 'https://en.wikipedia.org/wiki/Clamping_%28
 Blockly.Msg.MATH_CONSTRAIN_TITLE = 'constrain %1 low %2 high %3';
 /// tooltip - This compares a number ''x'' to a low value ''L'' and a high value ''H''.  If ''x'' is less then ''L'', the result is ''L''.  If ''x'' is greater than ''H'', the result is ''H''.  Otherwise, the result is ''x''.
 Blockly.Msg.MATH_CONSTRAIN_TOOLTIP = 'Constrain a number to be between the specified limits (inclusive).';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_CONSTRAIN_TYPEBLOCK = 'Constrain Number Low High';
 
 /// url - Information about how computers generate random numbers.
 Blockly.Msg.MATH_RANDOM_INT_HELPURL = 'https://en.wikipedia.org/wiki/Random_number_generation';
@@ -511,6 +637,8 @@ Blockly.Msg.MATH_RANDOM_INT_HELPURL = 'https://en.wikipedia.org/wiki/Random_numb
 Blockly.Msg.MATH_RANDOM_INT_TITLE = 'random integer from %1 to %2';
 /// tooltip - Return a random integer between two values specified as inputs.  For example, if one input was 7 and another 9, any of the numbers 7, 8, or 9 could be produced.
 Blockly.Msg.MATH_RANDOM_INT_TOOLTIP = 'Return a random integer between the two specified limits, inclusive.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_RANDOM_INT_TYPEBLOCK = 'Random Integer';
 
 /// url - Information about how computers generate random numbers (specifically, numbers in the range from 0 to just below 1).
 Blockly.Msg.MATH_RANDOM_FLOAT_HELPURL = 'https://en.wikipedia.org/wiki/Random_number_generation';
@@ -518,6 +646,8 @@ Blockly.Msg.MATH_RANDOM_FLOAT_HELPURL = 'https://en.wikipedia.org/wiki/Random_nu
 Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM = 'random fraction';
 /// tooltip - Return a random fraction between 0 and 1.  The value may be equal to 0 but must be less than 1.
 Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP = 'Return a random fraction between 0.0 (inclusive) and 1.0 (exclusive).';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.MATH_RANDOM_FLOAT_TYPEBLOCK = 'Random Fraction';
 
 // Text Blocks.
 /// url - Information about how computers represent text (sometimes referred to as ''string''s).
@@ -703,15 +833,15 @@ Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = '';
 
 /// url - Information about how the text contains block works
 Blockly.Msg.TEXT_CONTAINS_HELPURL = 'http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains';
-// Title for the Contains Text block.
-//   %1 corresponds to the Text input block which is of type "String"
-//   %2 corresponds for the Piece input block which is of type "String"
-// see [http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains
-// http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains]
+/// Title for the Contains Text block.
+///   %1 corresponds to the Text input block which is of type "String"
+///   %2 corresponds for the Piece input block which is of type "String"
+/// see [http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains
+/// http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains]
 Blockly.Msg.TEXT_CONTAINS_INPUT = 'contains text %1 piece %2';
 /// tooltip - Describes a block to adjust the case of letters.  For more information on this block,
-// see [http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains
-// http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains]
+/// see [http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains
+/// http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains]
 Blockly.Msg.TEXT_CONTAINS_TOOLTIP = 'Tests whether the piece is contained in the text.';
 
 /// url - Information about the case of letters (upper-case and lower-case).
@@ -1199,19 +1329,19 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = 'Add, remove, or reorder input
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = 'input name:';
 /// tooltip
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = 'Add an input to the function.';
-// This text is the tooltop for the + icon on a mutator object
+/// This text is the tooltip for the + icon on a mutator object
 Blockly.Msg.CLICK_ADD_TOOLTIP = 'Add an element';
-// This text is the tooltop for the - icon on a mutator object
+/// This text is the tooltip for the - icon on a mutator object
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = 'Remove this element';
-// This is the string for creating a parameter line on a function.
-//  %1 corresponds to the name of the parameter as a FieldTextInput
-//  %2 corresponds to the - icon for removing the field
-Blockly.Msg.PROCEDURES_PARAM_NOTYPE = '%1 with %2 %3';
-// This is the string for creating a parameter line on a function.
-//  %1 corresponds to the name of the parameter as a FieldTextInput
-//  %2 corresponds to the type of the parameter as a FieldScopeVariable
-//  %3 corresponds to the - icon for removing the field
-Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE = '%1 with %2 as %3%4';
+/// This is the string for creating a parameter line on a function.
+///  %1 corresponds to the name of the parameter as a FieldTextInput
+///  %2 corresponds to the - icon for removing the field
+Blockly.Msg.PROCEDURES_PARAM_NOTYPE = 'with %1 %2';
+/// This is the string for creating a parameter line on a function.
+///  %1 corresponds to the name of the parameter as a FieldTextInput
+///  %2 corresponds to the type of the parameter as a FieldScopeVariable
+///  %3 corresponds to the - icon for removing the field
+Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE = 'with %1 as %2%3';
 
 /// context menu - This appears on the context menu for function calls.  Selecting
 /// it causes the corresponding function definition to be highlighted (as shown at
@@ -1227,8 +1357,11 @@ Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a sec
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
 
-
+/// Block text
 Blockly.Msg.TEXT_TYPE_JAVA = 'insert java code';
+/// Block Text
 Blockly.Msg.TEXT_TYPE_PYTHON = 'insert python code';
+/// tooltip
 Blockly.Msg.TEXT_TOOLTIP_TYPE_JAVA = 'Insert arbitrary Java code';
+/// tooltip
 Blockly.Msg.TEXT_TOOLTIP_TYPE_PYTHON = 'Insert arbitrary Python code';

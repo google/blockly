@@ -243,7 +243,14 @@ Blockly.Blocks['controls_if'] = {
       this.workspace.fireChangeEvent();
     }
   },
-  typeblock: [{translatedName: Blockly.getMsgString('controls_if_typeblock')}]
+  typeblock: [
+      { translatedName: Blockly.Msg.CONTROLS_IF_TYPEBLOCK },
+      { translatedName: Blockly.Msg.CONTROLS_IF_ELSIF_TYPEBLOCK,
+         mutatorAttributes: { 'elseif': 1 } },
+      { translatedName: Blockly.Msg.CONTROLS_IF_ELSIF_ELSE_TYPEBLOCK,
+         mutatorAttributes: { 'elseif': 1, 'else': 1 } },
+      { translatedName: Blockly.Msg.CONTROLS_IF_ELSE_TYPEBLOCK,
+         mutatorAttributes: { 'else': 1 } } ]
 };
 
 Blockly.Blocks['logic_compare'] = {
@@ -317,7 +324,7 @@ Blockly.Blocks['logic_compare'] = {
     this.prevBlocks_[0] = blockA;
     this.prevBlocks_[1] = blockB;
   },
-  typeblock: [{translatedName: Blockly.getMsgString('logic_compare_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.LOGIC_COMPARE_TYPEBLOCK}]
 };
 
 Blockly.Blocks['logic_operation'] = {
@@ -349,7 +356,10 @@ Blockly.Blocks['logic_operation'] = {
       return TOOLTIPS[op];
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('logic_operation_typeblock')}]
+  typeblock: [{ translatedName: Blockly.Msg.LOGIC_OPERATION_OR_TYPEBLOCK,
+                fields: { 'OP': 'OR' }},
+              { translatedName: Blockly.Msg.LOGIC_OPERATION_AND_TYPEBLOCK,
+                fields: { 'OP': 'AND' }}]
 };
 
 Blockly.Blocks['logic_negate'] = {
@@ -373,7 +383,7 @@ Blockly.Blocks['logic_negate'] = {
       "helpUrl": Blockly.Msg.LOGIC_NEGATE_HELPURL
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('logic_negate_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.LOGIC_NEGATE_TYPEBLOCK}]
 };
 
 Blockly.Blocks['logic_boolean'] = {
@@ -392,7 +402,10 @@ Blockly.Blocks['logic_boolean'] = {
         .appendField(new Blockly.FieldDropdown(BOOLEANS), 'BOOL');
     this.setTooltip(Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('logic_boolean_typeblock')}]
+  typeblock: [{ translatedName: Blockly.Msg.LOGIC_BOOLEAN_TRUE_TYPEBLOCK,
+                fields: { 'BOOL': 'TRUE' }},
+              { translatedName: Blockly.Msg.LOGIC_BOOLEAN_FALSE_TYPEBLOCK,
+                fields: { 'BOOL': 'FALSE' }}]
 };
 
 Blockly.Blocks['logic_null'] = {
@@ -408,7 +421,7 @@ Blockly.Blocks['logic_null'] = {
         .appendField(Blockly.Msg.LOGIC_NULL);
     this.setTooltip(Blockly.Msg.LOGIC_NULL_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('logic_null_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.LOGIC_NULL_TYPEBLOCK}]
 };
 
 Blockly.Blocks['logic_ternary'] = {
@@ -460,5 +473,5 @@ Blockly.Blocks['logic_ternary'] = {
     }
     this.prevParentConnection_ = parentConnection;
   },
-  typeblock: [{translatedName: Blockly.getMsgString('logic_ternary_typeblock')}]
+  typeblock: [{translatedName: Blockly.Msg.LOGIC_TERNARY_TYPEBLOCK}]
 };

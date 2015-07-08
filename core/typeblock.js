@@ -64,8 +64,8 @@ Blockly.TypeBlock.visible = false;
  * internationalised word or sentence used in typeblocks. Certain blocks do not
  * only need the canonical block representation, but also values for dropdowns
  * (name and value)
- *   - No dropdowns:   this.typeblock: [{ translatedName: Blockly.LANG_VAR }]
- *   - With dropdowns: this.typeblock: [{ translatedName: Blockly.LANG_VAR },
+ *   - No dropdowns:   this.typeblock: [{ entry: Blockly.LANG_VAR }]
+ *   - With dropdowns: this.typeblock: [{ entry: Blockly.LANG_VAR },
  *                                        fields: { TITLE: 'value'}]
  *   - Additional types can be used to mark a block as isProcedure or
  *     isGlobalVar. These are only used to manage the loading of options in the
@@ -221,6 +221,10 @@ Blockly.TypeBlock.generateOptions = function() {
         typeblockArray = block.typeblock;
         if(typeof block.typeblock == "function") {
           typeblockArray = block.typeblock();
+        } else if (typeof block.typeblock === 'string') {
+          // If they just give us a string, build up the single level array
+          // from that string.  This is the most common case for blocks
+          typeblockArray = [{entry: block.typeblock}];
         }
         createOption(typeblockArray, name);
       }
@@ -241,7 +245,7 @@ Blockly.TypeBlock.generateOptions = function() {
           if(dd.mutatorAttributes) {
             mutatorAttributes = dd.mutatorAttributes;
           }
-          listOfOptions[dd.translatedName] = {
+          listOfOptions[dd.entry] = {
             canonicName: canonicName,
             mutatorAttributes: mutatorAttributes,
             fields: fields,
@@ -293,9 +297,9 @@ Blockly.TypeBlock.loadProcedures_ = function() {
 
   // Add blocks for the calls with no return
   goog.array.forEach(procNamesArray[0], function(proc){
-    var translatedName = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
+    var entry = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
                             ' ' + proc[0];
-    Blockly.TypeBlock.TBOptions_[translatedName] = {
+    Blockly.TypeBlock.TBOptions_[entry] = {
       canonicName: 'procedures_callnoreturn',
       fields: {PROCNAME: proc[0] },
       isProcedure: true // this attribute is used to clean up before reloading
@@ -304,9 +308,9 @@ Blockly.TypeBlock.loadProcedures_ = function() {
 
   // Add blocks for the calls with a return
   goog.array.forEach(procNamesArray[1], function(proc){
-    translatedName = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
+    entry = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
                             ' ' + proc[0];
-    Blockly.TypeBlock.TBOptions_[translatedName] = {
+    Blockly.TypeBlock.TBOptions_[entry] = {
       canonicName: 'procedures_callreturn',
       fields: {PROCNAME: proc[0] },
       isProcedure: true // this attribute is used to clean up before reloading

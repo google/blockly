@@ -283,6 +283,10 @@ Blockly.Css.CONTENT = [
   '  opacity: 0;',
   '}',
 
+  '.blocklyFlyout .blocklyDraggable:not(:hover) .blocklyIconFading {',
+  '  opacity: 1;',
+  '}',
+
   '.blocklyMinimalBody {',
   '  margin: 0;',
   '  padding: 0;',

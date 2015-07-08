@@ -102,7 +102,7 @@ Blockly.Blocks['variables_get'] = {
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('variables_get_typeblock')}]
+  typeblock: Blockly.getMsgString('variables_get_typeblock')
 };
 
 Blockly.Blocks['variables_set'] = {
@@ -153,7 +153,7 @@ Blockly.Blocks['variables_set'] = {
     }
     return vartypes;
   },
-  typeblock: [{translatedName: Blockly.getMsgString('variables_set_typeblock')}]
+  typeblock: Blockly.getMsgString('variables_set_typeblock')
 };
 
 Blockly.Blocks['hash_variables_get'] = {
@@ -237,7 +237,7 @@ Blockly.Blocks['hash_variables_get'] = {
   },
   helpUrl: Blockly.getUrlString('variables_hash_get_url'),
   tooltip: Blockly.getToolTipString('variables_hash_get_tooltip'),
-  typeblock: [{translatedName: Blockly.getMsgString('variables_hash_get_typeblock')}]
+  typeblock: Blockly.getMsgString('variables_hash_get_typeblock')
 };
 
 Blockly.Blocks['hash_parmvariables_get'] = {
@@ -264,7 +264,7 @@ Blockly.Blocks['hash_parmvariables_get'] = {
 //  customContextMenu: Blockly.Blocks['hash_variables_get'].customContextMenu
   helpUrl: Blockly.getUrlString('variables_hash_param_get_url'),
   tooltip: Blockly.getToolTipString('variables_hash_param_get_tooltip'),
-  typeblock: [{translatedName: Blockly.getMsgString('variables_hash_param_get_typeblock')}]
+  typeblock: Blockly.getMsgString('variables_hash_param_get_typeblock')
 };
 
 
@@ -308,6 +308,6 @@ Blockly.Blocks['hash_variables_set'] = {
   getVarsTypes: Blockly.Blocks['hash_variables_get'].getVarsTypes,
   renameScopeVar: Blockly.Blocks['hash_variables_get'].renameScopeVar,
   customContextMenu: Blockly.Blocks['hash_variables_get'].customContextMenu,
-  typeblock: [{translatedName: Blockly.getMsgString('variables_hash_param_set_typeblock')}]
+  typeblock: Blockly.getMsgString('variables_hash_param_set_typeblock')
 };
 

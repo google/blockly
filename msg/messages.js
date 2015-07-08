@@ -661,6 +661,8 @@ Blockly.Msg.TEXT_JOIN_HELPURL = 'https://github.com/google/blockly/wiki/Text#tex
 Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH = 'create text with';
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#text-creation create text with] for more information.
 Blockly.Msg.TEXT_JOIN_TOOLTIP = 'Create a piece of text by joining together any number of items.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_JOIN_TYPEBLOCK = 'Create Text With';
 
 /// block text - This is shown when the programmer wants to change the number of pieces of text being joined together.  See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = 'join';
@@ -682,6 +684,8 @@ Blockly.Msg.TEXT_APPEND_APPENDTEXT = 'append text';
 Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#text-modification https://github.com/google/blockly/wiki/Text#text-modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended
 Blockly.Msg.TEXT_APPEND_TOOLTIP = 'Append some text to variable "%1".';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_APPEND_TYPEBLOCK = 'Append Text';
 
 /// url - Information about text on computers (usually referred to as 'strings').
 Blockly.Msg.TEXT_LENGTH_HELPURL = 'https://github.com/google/blockly/wiki/Text#text-modification';
@@ -690,6 +694,8 @@ Blockly.Msg.TEXT_LENGTH_HELPURL = 'https://github.com/google/blockly/wiki/Text#t
 Blockly.Msg.TEXT_LENGTH_TITLE = 'length of %1';
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#text-length https://github.com/google/blockly/wiki/Text#text-length].
 Blockly.Msg.TEXT_LENGTH_TOOLTIP = 'Returns the number of letters (including spaces) in the provided text.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_LENGTH_TYPEBLOCK = 'Length of Text';
 
 /// url - Information about empty pieces of text on computers (usually referred to as 'empty strings').
 Blockly.Msg.TEXT_ISEMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Text#checking-for-empty-text';
@@ -698,6 +704,8 @@ Blockly.Msg.TEXT_ISEMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Text#
 Blockly.Msg.TEXT_ISEMPTY_TITLE = '%1 is empty';
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#checking-for-empty-text https://github.com/google/blockly/wiki/Text#checking-for-empty-text].
 Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = 'Returns true if the provided text is empty.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_ISEMPTY_TYPEBLOCK = 'Text is Empty';
 
 /// url - Information about finding a character in a piece of text.
 Blockly.Msg.TEXT_INDEXOF_HELPURL = 'https://github.com/google/blockly/wiki/Text#finding-text';
@@ -726,6 +734,10 @@ Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = 'find last occurrence of text';
 /// (after the "a" in the below picture).  This will be the empty string in most languages.
 /// [[File:Blockly-find-text.png]].
 Blockly.Msg.TEXT_INDEXOF_TAIL = '';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_INDEXOF_FIRST_TYPEBLOCK = 'Find First Occurrence of Text';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_INDEXOF_LAST_TYPEBLOCK = 'Find Last Occurrence of Text';
 
 /// url - Information about extracting characters (letters, number, symbols, etc.) from text.
 Blockly.Msg.TEXT_CHARAT_HELPURL = 'https://github.com/google/blockly/wiki/Text#extracting-text';
@@ -773,6 +785,16 @@ Blockly.Msg.TEXT_CHARAT_TAIL = '';
 /// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = 'Returns the letter at the specified position.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHARAT_FROM_START = 'In Text Get Letter #';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHARAT_FROM_END = 'In Text Get Letter # From End';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHARAT_FIRST = 'In Text Get First Letter';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHARAT_LAST = 'In Text Get Last Letter';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHARAT_RANDOM = 'In Text Get Random Letter';
 
 /// See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
 /// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
@@ -830,6 +852,18 @@ Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST = 'to last letter';
 /// extracting a region of text].  In most languages, this will be the empty string.
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = '';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START_TYPEBLOCK = 'Get Substring From Letter #';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_END_TYPEBLOCK = 'Get Substring From Letter # From End';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_GET_SUBSTRING_START_FIRST_TYPEBLOCK = 'Get Substring From First Letter';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_START_TYPEBLOCK = ' To Letter #';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END_TYPEBLOCK = ' To Letter # From End';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST_TYPEBLOCK = ' To Last Letter';
 
 /// url - Information about how the text contains block works
 Blockly.Msg.TEXT_CONTAINS_HELPURL = 'http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains';
@@ -843,6 +877,8 @@ Blockly.Msg.TEXT_CONTAINS_INPUT = 'contains text %1 piece %2';
 /// see [http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains
 /// http://appinventor.mit.edu/explore/ai2/support/blocks/text#contains]
 Blockly.Msg.TEXT_CONTAINS_TOOLTIP = 'Tests whether the piece is contained in the text.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CONTAINS_TYPEBLOCK = 'Text Contains';
 
 /// url - Information about the case of letters (upper-case and lower-case).
 Blockly.Msg.TEXT_CHANGECASE_HELPURL = 'https://github.com/google/blockly/wiki/Text#adjusting-text-case'
@@ -860,6 +896,12 @@ Blockly.Msg.TEXT_CHANGECASE_OPERATOR_UPPERCASE = 'to UPPER CASE';
 Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = 'to lower case';
 /// block text - Indicates that the first letter of each of the following words should be capitalized and the rest converted to lower-case.  If your language does not use case, you may indicate that this is not applicable to your language.  For more information on this block, see [https://github.com/google/blockly/wiki/Text#adjusting-text-case https://github.com/google/blockly/wiki/Text#adjusting-text-case].
 Blockly.Msg.TEXT_CHANGECASE_OPERATOR_TITLECASE = 'to Title Case';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHANGECASE_UPPERCASE_TYPBLOCK = 'Text to UPPER CASE';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHANGECASE_LOWERCASE_TYPBLOCK = 'Text to lower case';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_CHANGECASE_TITLECASE_TYPBLOCK = 'Text to Title Case';
 
 /// url - Information about trimming (removing) text off the beginning and ends of pieces of text.
 Blockly.Msg.TEXT_TRIM_HELPURL = 'https://github.com/google/blockly/wiki/Text#trimming-removing-spaces';
@@ -882,6 +924,12 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = 'trim spaces from left side of';
 /// https://github.com/google/blockly/wiki/Text#trimming-removing-spaces].
 /// Note that in right-to-left scripts, this will remove spaces from the left side.
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = 'trim spaces from right side of';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_TRIM_BOTH_TYPEBLOCK = 'Trim Spaces From Both Sides Of Text';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_TRIM_LEFT_TYPEBLOCK = 'Trim Spaces From Left Side Of Text';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_TRIM_RIGHT_TYPEBLOCK = 'Trim Spaces From Right Side Of Text';
 
 /// url - Information about displaying text on computers.
 Blockly.Msg.TEXT_PRINT_HELPURL = 'https://github.com/google/blockly/wiki/Text#printing-text';
@@ -893,6 +941,9 @@ Blockly.Msg.TEXT_PRINT_TITLE = 'print %1';
 /// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
 /// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PRINT_TOOLTIP = 'Print the specified text, number or other value.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_PRINT_TYPEBLOCK = 'Print Text';
+
 /// url - Information about getting text from users.
 Blockly.Msg.TEXT_PROMPT_HELPURL = 'https://github.com/google/blockly/wiki/Text#getting-input-from-the-user';
 /// dropdown - Specifies that a piece of text should be requested from the user with
@@ -911,6 +962,14 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER = 'Prompt for user for a number.';
 /// See [https://github.com/google/blockly/wiki/Text#printing-text
 /// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_PROMPT_TEXT_TYPEBLOCK = 'Prompt For Text With Message';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_PROMPT_NUMBER_TYPEBLOCK = 'Prompt For Number With Message';
+/// Title
+Blockly.Msg.TEXT_COMMENT_TEXT = 'Comment:';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_COMMENT_TYPEBLOCK = 'Comment';
 
 // Lists Blocks.
 /// url - Information on empty lists.
@@ -1365,3 +1424,7 @@ Blockly.Msg.TEXT_TYPE_PYTHON = 'insert python code';
 Blockly.Msg.TEXT_TOOLTIP_TYPE_JAVA = 'Insert arbitrary Java code';
 /// tooltip
 Blockly.Msg.TEXT_TOOLTIP_TYPE_PYTHON = 'Insert arbitrary Python code';
+/// typeblock - Typing to add the block
+Blockly.Msg.TEXT_TYPE_JAVA_TYPEBLOCK = 'insert java code';
+/// typeblock - Typing to add the block
+Blockly.Msg.TEXT_TYPE_PYTHON_TYPEBLOCK = 'insert python code';

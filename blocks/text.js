@@ -63,8 +63,7 @@ Blockly.Blocks['text'] = {
       var file = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAAn0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMfz9AylsaRRgGzvZAAAAAElFTkSuQmCC';
     }
     return new Blockly.FieldImage(file, 12, 12, '"');
-  },
-  typeblock: [{translatedName: Blockly.getMsgString('text_typeblock')}]
+  }
 };
 
 Blockly.Blocks['text_join'] = {
@@ -91,7 +90,13 @@ Blockly.Blocks['text_join'] = {
     return inputItem;
   },
   newQuote_: Blockly.Blocks['text'].newQuote_,
-  typeblock: [{translatedName: Blockly.getMsgString('text_join_typeblock')}]
+  typeblock: [
+      { entry: Blockly.Msg.TEXT_JOIN_WITH_TYPEBLOCK,
+        mutatorAttributes: { items: 2 } }
+//      ,{ entry: Blockly.Msg.TEXT_JOIN_EMPTY_TYPEBLOCK,
+//        mutatorAttributes: { items: 0 } }
+             ]
+
 };
 
 Blockly.Blocks['text_append'] = {
@@ -136,7 +141,7 @@ Blockly.Blocks['text_append'] = {
       this.setFieldValue(newName, 'VAR');
     }
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_append_typeblock')}]
+  typeblock: Blockly.Msg.TEXT_APPEND_TYPEBLOCK
 };
 
 Blockly.Blocks['text_length'] = {
@@ -160,7 +165,7 @@ Blockly.Blocks['text_length'] = {
       "helpUrl": Blockly.Msg.TEXT_LENGTH_HELPURL
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_length_typeblock')}]
+  typeblock: Blockly.Msg.TEXT_LENGTH_TYPEBLOCK
 };
 
 Blockly.Blocks['text_isEmpty'] = {
@@ -184,7 +189,7 @@ Blockly.Blocks['text_isEmpty'] = {
       "helpUrl": Blockly.Msg.TEXT_ISEMPTY_HELPURL
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_isEmpty_typeblock')}]
+  typeblock: Blockly.Msg.TEXT_ISEMPTY_TYPEBLOCK
 };
 
 Blockly.Blocks['text_contains'] = {
@@ -210,7 +215,7 @@ Blockly.Blocks['text_contains'] = {
       "helpUrl": Blockly.getUrlString('text_contains_url')
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_contains_typeblock')}]
+  typeblock: Blockly.Msg.TEXT_CONTAINS_TYPEBLOCK
 };
 
 Blockly.Blocks['text_indexOf'] = {
@@ -237,7 +242,14 @@ Blockly.Blocks['text_indexOf'] = {
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.TEXT_INDEXOF_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_indexof_typeblock')}]
+  typeblock: [{ entry: Blockly.Msg.TEXT_INDEXOF_FIRST_TYPEBLOCK,
+                values: { 'VALUE': '<block type="variables_get">'+
+                                   '<field name="VAR">list</field></block>' },
+                fields: { 'END': 'FIRST' }},
+              { entry: Blockly.Msg.TEXT_INDEXOF_LAST_TYPEBLOCK,
+                values: { 'VALUE': '<block type="variables_get">'+
+                                   '<field name="VAR">list</field></block>' },
+                fields: { 'END': 'LAST' }}]
 };
 
 Blockly.Blocks['text_charAt'] = {
@@ -324,7 +336,28 @@ Blockly.Blocks['text_charAt'] = {
     });
     this.getInput('AT').appendField(menu, 'WHERE');
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_charat_typeblock')}]
+  typeblock: [{ entry: Blockly.Msg.TEXT_CHARAT_FROM_START,
+                values: { 'VALUE': '<block type="variables_get">'+
+                                   '<field name="VAR">text</field></block>',
+                          'AT': 1   },
+                fields: { 'WHERE': 'FROM_START' }},
+              { entry: Blockly.Msg.TEXT_CHARAT_FROM_END,
+                values: { 'VALUE': '<block type="variables_get">'+
+                                   '<field name="VAR">text</field></block>',
+                          'AT': 1   },
+                fields: { 'WHERE': 'FROM_END' }},
+              { entry: Blockly.Msg.TEXT_CHARAT_FIRST,
+                values: { 'VALUE': '<block type="variables_get">'+
+                                   '<field name="VAR">text</field></block>' },
+                fields: { 'WHERE': 'FIRST' }},
+              { entry: Blockly.Msg.TEXT_CHARAT_LAST,
+                values: { 'VALUE': '<block type="variables_get">'+
+                                   '<field name="VAR">text</field></block>' },
+                fields: { 'WHERE': 'LAST' }},
+              { entry: Blockly.Msg.TEXT_CHARAT_RANDOM,
+                values: { 'VALUE': '<block type="variables_get">'+
+                                   '<field name="VAR">text</field></block>' },
+                fields: { 'WHERE': 'RANDOM' }}]
 };
 
 Blockly.Blocks['text_getSubstring'] = {
@@ -430,7 +463,28 @@ Blockly.Blocks['text_getSubstring'] = {
       this.moveInputBefore('AT1', 'AT2');
     }
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_getsubstring_typeblock')}]
+  typeblock: function() {
+    var result = [];
+    var whereOptions1 = ['FROM_START', 'FROM_END', 'FIRST'];
+    var whereOptions2 = ['FROM_START', 'FROM_END', 'LAST'];
+    for (var at1Slot = 0; at1Slot < whereOptions1.length; at1Slot++) {
+      var at1 = whereOptions1[at1Slot];
+      var at1var = (at1 !== 'FIRST');
+      for (var at2Slot = 0; at2Slot < whereOptions2.length; at2Slot++) {
+        var at2 = whereOptions2[at2Slot];
+        var at2var = (at2 !== 'LAST');
+        result.push({ entry: Blockly.Msg['TEXT_GET_SUBSTRING_START_'+
+                                                  at1 +'_TYPEBLOCK'] +
+                                      Blockly.Msg['TEXT_GET_SUBSTRING_END_'+
+                                                  at2 +'_TYPEBLOCK'],
+                      mutatorAttributes: { 'at1': at1var, 'at2': at2var },
+                      values: { 'STRING': '<block type="variables_get">'+
+                                     '<field name="VAR">text</field></block>' },
+                      fields: { 'WHERE1': at1, 'WHERE2': at2 }});
+      }
+    }
+    return result;
+  }
 };
 
 Blockly.Blocks['text_changeCase'] = {
@@ -451,7 +505,12 @@ Blockly.Blocks['text_changeCase'] = {
     this.setOutput(true, 'String');
     this.setTooltip(Blockly.Msg.TEXT_CHANGECASE_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_changecase_typeblock')}]
+  typeblock: [{ entry: Blockly.Msg.TEXT_CHANGECASE_UPPERCASE_TYPBLOCK,
+                fields: { 'CASE': 'UPPERCASE' }},
+              { entry: Blockly.Msg.TEXT_CHANGECASE_LOWERCASE_TYPBLOCK,
+                fields: { 'CASE': 'LOWERCASE' }},
+              { entry: Blockly.Msg.TEXT_CHANGECASE_TITLECASE_TYPBLOCK,
+                fields: { 'CASE': 'TITLECASE' }}]
 };
 
 Blockly.Blocks['text_trim'] = {
@@ -472,7 +531,12 @@ Blockly.Blocks['text_trim'] = {
     this.setOutput(true, 'String');
     this.setTooltip(Blockly.Msg.TEXT_TRIM_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_trim_typeblock')}]
+  typeblock: [{ entry: Blockly.Msg.TEXT_TRIM_BOTH_TYPEBLOCK,
+                fields: { 'MODE': 'BOTH' }},
+              { entry: Blockly.Msg.TEXT_TRIM_LEFT_TYPEBLOCK,
+                fields: { 'MODE': 'LEFT' }},
+              { entry: Blockly.Msg.TEXT_TRIM_RIGHT_TYPEBLOCK,
+                fields: { 'MODE': 'RIGHT' }}]
 };
 
 Blockly.Blocks['text_print'] = {
@@ -496,7 +560,7 @@ Blockly.Blocks['text_print'] = {
       "helpUrl": Blockly.Msg.TEXT_PRINT_HELPURL
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_print_typeblock')}]
+  typeblock: Blockly.Msg.TEXT_PRINT_TYPEBLOCK
 };
 
 Blockly.Blocks['text_prompt'] = {
@@ -533,8 +597,15 @@ Blockly.Blocks['text_prompt'] = {
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER;
     });
   },
-  newQuote_: Blockly.Blocks['text'].newQuote_,
-  typeblock: [{translatedName: Blockly.getMsgString('text_prompt_typeblock')}]
+  newQuote_: Blockly.Blocks['text'].newQuote_//,
+// No typeblock because this is deprecated in
+//     favor of text_prompt_ext
+//  typeblock: [{entry: Blockly.Msg.TEXT_PROMPT_TEXT_TYPEBLOCK,
+//               fields: {'TYPE' : 'TEXT' }
+//               },
+//              {entry: Blockly.Msg.TEXT_PROMPT_NUMBER_TYPEBLOCK,
+//               fields: {'TYPE' : 'NUMBER' }
+//               }]
 };
 
 Blockly.Blocks['text_prompt_ext'] = {
@@ -568,7 +639,16 @@ Blockly.Blocks['text_prompt_ext'] = {
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER;
     });
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_prompt_ext_typeblock')}]
+  typeblock: [{entry: Blockly.Msg.TEXT_PROMPT_TEXT_TYPEBLOCK,
+               fields: {'TYPE' : 'TEXT' },
+               values: { 'TEXT': '<block type="text">'+
+                                       '<field name="TEXT"></field></block>' }
+               },
+              {entry: Blockly.Msg.TEXT_PROMPT_NUMBER_TYPEBLOCK,
+               fields: {'TYPE' : 'NUMBER' },
+               values: { 'TEXT': '<block type="text">'+
+                                       '<field name="TEXT"></field></block>' }
+               }]
 };
 
 
@@ -582,7 +662,7 @@ Blockly.Blocks['text_comment'] = {
     this.setColour(160);
     //this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
     this.appendDummyInput()
-		.appendField('Comment:');
+		.appendField(Blockly.Msg.TEXT_COMMENT_TEXT);
     this.appendDummyInput()    
         .appendField(new Blockly.FieldTextArea(''), 'COMMENT')
         ;
@@ -590,7 +670,7 @@ Blockly.Blocks['text_comment'] = {
     this.setNextStatement(true);
    // this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.getMsgString('text_comment_typeblock')}]
+  typeblock: Blockly.Msg.TEXT_COMMENT_TYPEBLOCK
 };
 
 Blockly.Blocks['text_code_insert'] = {
@@ -623,7 +703,10 @@ Blockly.Blocks['text_code_insert'] = {
 		this.setPreviousStatement(true);
 	    this.setNextStatement(true);
 	  },
-	  helpUrl: Blockly.getUrlString('text_code_insert_url'),
-	  typeblock: [{translatedName: Blockly.getMsgString('text_code_insert_typeblock')}]
+  helpUrl: Blockly.getUrlString('text_code_insert_url'),
+  typeblock: [{entry: Blockly.Msg.TEXT_TYPE_JAVA_TYPEBLOCK,
+               fields: {'TYPE' : 'Java' }},
+              {entry: Blockly.Msg.TEXT_TYPE_PYTHON_TYPEBLOCK,
+               fields: {'TYPE' : 'Python' }}]
 };
 

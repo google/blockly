@@ -60,9 +60,9 @@ Blockly.Blocks['controls_repeat'] = {
     this.getField('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
   }//,
-// No typeblock because this appears to be deprecated in
+// No typeblock because this is deprecated in
 //     favor of controls_repeat_ext
-//  typeblock: [{translatedName: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+//  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
 //               fields: {'TIMES' : 10 }}]
 };
 
@@ -90,7 +90,7 @@ Blockly.Blocks['controls_repeat_ext'] = {
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
   },
-  typeblock: [{translatedName: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
                values: {'TIMES' : 10 }}]
 };
 
@@ -123,9 +123,9 @@ Blockly.Blocks['controls_whileUntil'] = {
       return TOOLTIPS[op];
     });
   },
-  typeblock: [{translatedName: Blockly.Msg.CONTROLS_WHILEUNTIL_WHILE_TYPEBLOCK,
+  typeblock: [{entry: Blockly.Msg.CONTROLS_WHILEUNTIL_WHILE_TYPEBLOCK,
                fields: {'MODE' : 'WHILE' }},
-              {translatedName: Blockly.Msg.CONTROLS_WHILEUNTIL_UNTIL_TYPEBLOCK,
+              {entry: Blockly.Msg.CONTROLS_WHILEUNTIL_UNTIL_TYPEBLOCK,
                fields: {'MODE' : 'UNTIL' }}]
 };
 
@@ -215,7 +215,7 @@ Blockly.Blocks['controls_for'] = {
       options.push(option);
     }
   },
-  typeblock: [{translatedName: Blockly.Msg.CONTROLS_FOR_TYPEBLOCK,
+  typeblock: [{entry: Blockly.Msg.CONTROLS_FOR_TYPEBLOCK,
                values: {'FROM': 1, 'TO': 10, 'BY': 1}}]
 };
 
@@ -274,7 +274,7 @@ Blockly.Blocks['controls_forEach'] = {
     }
   },
   customContextMenu: Blockly.Blocks['controls_for'].customContextMenu,
-  typeblock: [{translatedName: Blockly.Msg.CONTROLS_FOREACH_TYPEBLOCK}]
+  typeblock: Blockly.Msg.CONTROLS_FOREACH_TYPEBLOCK
 };
 
 Blockly.Blocks['controls_flow_statements'] = {
@@ -332,10 +332,8 @@ Blockly.Blocks['controls_flow_statements'] = {
       this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
     }
   },
-  typeblock: [{translatedName:
-                          Blockly.Msg.CONTROLS_FLOW_STATEMENTS_BREAK_TYPEBLOCK,
+  typeblock: [{entry: Blockly.Msg.CONTROLS_FLOW_STATEMENTS_BREAK_TYPEBLOCK,
                fields: {'FLOW' : 'BREAK' }},
-              {translatedName:
-                        Blockly.Msg.CONTROLS_FLOW_STATEMENTS_CONTINUE_TYPEBLOCK,
+              {entry: Blockly.Msg.CONTROLS_FLOW_STATEMENTS_CONTINUE_TYPEBLOCK,
                fields: {'FLOW' : 'CONTINUE' }}]
 };

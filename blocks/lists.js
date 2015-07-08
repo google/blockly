@@ -47,7 +47,7 @@ Blockly.Blocks['lists_create_empty'] = {
         .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
     this.setTooltip(Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK}]
+  typeblock: Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK
 };
 
 Blockly.Blocks['lists_create_with'] = {
@@ -70,9 +70,9 @@ Blockly.Blocks['lists_create_with'] = {
     return 'ADD'+pos;
   },
   typeblock: [
-      { translatedName: Blockly.Msg.LISTS_CREATE_WITH_TYPEBLOCK,
+      { entry: Blockly.Msg.LISTS_CREATE_WITH_TYPEBLOCK,
         mutatorAttributes: { items: 2 } }
-//      ,{ translatedName: Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK,
+//      ,{ entry: Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK,
 //        mutatorAttributes: { items: 0 } }
              ]
 };
@@ -102,7 +102,7 @@ Blockly.Blocks['lists_repeat'] = {
       "helpUrl": Blockly.Msg.LISTS_REPEAT_HELPURL
     });
   },
-  typeblock: [{translatedName: Blockly.Msg.LISTS_REPEAT_TYPEBLOCK,
+  typeblock: [{entry: Blockly.Msg.LISTS_REPEAT_TYPEBLOCK,
                 "values": {'NUM': 5 }}]
 };
 
@@ -127,7 +127,7 @@ Blockly.Blocks['lists_length'] = {
       "helpUrl": Blockly.Msg.LISTS_LENGTH_HELPURL
     });
   },
-  typeblock: [{translatedName: Blockly.Msg.LISTS_LENGTH_TYPEBLOCK }]
+  typeblock: Blockly.Msg.LISTS_LENGTH_TYPEBLOCK 
 };
 
 Blockly.Blocks['lists_isEmpty'] = {
@@ -151,7 +151,7 @@ Blockly.Blocks['lists_isEmpty'] = {
       "helpUrl": Blockly.Msg.LISTS_ISEMPTY_HELPURL
     });
   },
-  typeblock: [{translatedName: Blockly.Msg.LISTS_ISEMPTY_TYPEBLOCK}]
+  typeblock: Blockly.Msg.LISTS_ISEMPTY_TYPEBLOCK
 };
 
 Blockly.Blocks['lists_indexOf'] = {
@@ -174,9 +174,9 @@ Blockly.Blocks['lists_indexOf'] = {
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.LISTS_INDEX_OF_TOOLTIP);
   },
-  typeblock: [{ translatedName: Blockly.Msg.LISTS_INDEX_OF_FIRST_TYPEBLOCK,
+  typeblock: [{ entry: Blockly.Msg.LISTS_INDEX_OF_FIRST_TYPEBLOCK,
                 fields: { END: 'FIRST' } },
-              { translatedName: Blockly.Msg.LISTS_INDEX_OF_LAST_TYPEBLOCK,
+              { entry: Blockly.Msg.LISTS_INDEX_OF_LAST_TYPEBLOCK,
                 fields: { END: 'LAST' } } ]
 };
 
@@ -318,11 +318,11 @@ Blockly.Blocks['lists_getIndex'] = {
       var mode = modeOptions[modeSlot];
       for (var whereSlot = 0; whereSlot < whereOptions.length; whereSlot++) {
         var where = whereOptions[whereSlot];
-        result.push({ translatedName: Blockly.Msg['LISTS_GET_INDEX_'+ mode +
+        result.push({ entry: Blockly.Msg['LISTS_GET_INDEX_'+ mode +
                                                   '_' + where +'_TYPEBLOCK'],
-                      values: { VALUE: '<block type="variables_get">'+
+                      values: { 'VALUE': '<block type="variables_get">'+
                                      '<field name="VAR">list</field></block>' },
-                      fields: { MODE: mode, WHERE: where }});
+                      fields: { 'MODE': mode, 'WHERE': where }});
       }
     }
     return result;
@@ -437,11 +437,11 @@ Blockly.Blocks['lists_setIndex'] = {
       var mode = modeOptions[modeSlot];
       for (var whereSlot = 0; whereSlot < whereOptions.length; whereSlot++) {
         var where = whereOptions[whereSlot];
-        result.push({ translatedName: Blockly.Msg['LISTS_SET_INDEX_'+ mode +
+        result.push({ entry: Blockly.Msg['LISTS_SET_INDEX_'+ mode +
                                                   '_' + where +'_TYPEBLOCK'],
-                      values: { LIST: '<block type="variables_get">'+
+                      values: { 'LIST': '<block type="variables_get">'+
                                       '<field name="VAR">list</field></block>'},
-                      fields: { MODE: mode, WHERE: where }});
+                      fields: { 'MODE': mode, 'WHERE': where }});
       }
     }
     return result;
@@ -551,9 +551,8 @@ Blockly.Blocks['lists_getSublist'] = {
       this.moveInputBefore('TAIL', null);
     }
   },
-  typeblock: [{ translatedName:
-                    Blockly.Msg.LISTS_GET_SUBLIST_TYPEBLOCK,
-                values: { LIST: '<block type="variables_get">'+
+  typeblock: [{ entry: Blockly.Msg.LISTS_GET_SUBLIST_TYPEBLOCK,
+                values: { 'LIST': '<block type="variables_get">'+
                                 '<field name="VAR">list</field></block>' }}]
 };
 
@@ -597,14 +596,12 @@ Blockly.Blocks['lists_split'] = {
       throw 'Unknown mode: ' + mode;
     });
   },
-  typeblock: [{ translatedName:
-                    Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT_TYPEBLOCK,
-                values: { DELIM: '<block type="text">'+
+  typeblock: [{ entry: Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT_TYPEBLOCK,
+                values: { 'DELIM': '<block type="text">'+
                                        '<field name="TEXT">,</field></block>' },
-                fields: { MODE: 'SPLIT' }},
-              { translatedName:
-                    Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST_TYPEBLOCK,
-                values: { DELIM: '<block type="text">'+
+                fields: { 'MODE': 'SPLIT' }},
+              { entry: Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST_TYPEBLOCK,
+                values: { 'DELIM': '<block type="text">'+
                                       '<field name="TEXT">,</field></block>' },
-                fields: { MODE: 'SPLIT' }}]
+                fields: { 'MODE': 'SPLIT' }}]
 };

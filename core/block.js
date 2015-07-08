@@ -568,7 +568,7 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
  */
 Blockly.Block.prototype.setTypeblock = function(typeblock) {
   if (typeof typeblock === 'string') {
-    this.typeblock = { translatedName: typeblock };
+    this.typeblock = { entry: typeblock };
   } else {
     this.typeblock = typeblock;
   }

@@ -47,7 +47,7 @@ Blockly.Blocks['colour_picker'] = {
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_PICKER_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.Msg.COLOUR_PICKER_TYPEBLOCK}]
+  typeblock: Blockly.Msg.COLOUR_PICKER_TYPEBLOCK
 };
 
 Blockly.Blocks['colour_random'] = {
@@ -63,7 +63,7 @@ Blockly.Blocks['colour_random'] = {
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_RANDOM_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.Msg.COLOUR_RANDOM_TYPEBLOCK}]
+  typeblock: Blockly.Msg.COLOUR_RANDOM_TYPEBLOCK
 };
 
 Blockly.Blocks['colour_rgb'] = {
@@ -90,7 +90,7 @@ Blockly.Blocks['colour_rgb'] = {
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_RGB_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.Msg.COLOUR_RGB_TYPEBLOCK}]
+  typeblock: Blockly.Msg.COLOUR_RGB_TYPEBLOCK
 };
 
 Blockly.Blocks['colour_blend'] = {
@@ -117,5 +117,5 @@ Blockly.Blocks['colour_blend'] = {
     this.setOutput(true, 'Colour');
     this.setTooltip(Blockly.Msg.COLOUR_BLEND_TOOLTIP);
   },
-  typeblock: [{translatedName: Blockly.Msg.COLOUR_BLEND_TYPEBLOCK}]
+  typeblock: Blockly.Msg.COLOUR_BLEND_TYPEBLOCK
 };

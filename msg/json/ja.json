@@ -4,7 +4,8 @@
 			"Shirayuki",
 			"Oda",
 			"아라",
-			"Otokoume"
+			"Otokoume",
+			"Sujiniku"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
@@ -24,6 +25,7 @@
 	"ENABLE_BLOCK": "ブロックを有効にします。",
 	"HELP": "ヘルプ",
 	"CHAT": "このボックスに入力して共同編集者とチャットしよう！",
+	"ME": "私に",
 	"CHANGE_VALUE_TITLE": "値を変更します。",
 	"NEW_VARIABLE": "新しい変数",
 	"NEW_VARIABLE_TITLE": "新しい変数の、名前",
@@ -292,6 +294,8 @@
 	"LISTS_GET_SUBLIST_END_LAST": "最後へ",
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "リストの指定された部分のコピーを作成してくださ。",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "テキストからリストを作る",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "リストからテキストを作る",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_TOOLTIP": "この変数の値を返します。",
 	"VARIABLES_GET_CREATE_SET": "'セット%1を作成します。",

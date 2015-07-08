@@ -3,7 +3,8 @@
 		"authors": [
 			"Espertus",
 			"MS",
-			"Okras"
+			"Okras",
+			"RedFox"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
@@ -47,7 +48,7 @@
 	"CONTROLS_REPEAT_HELPURL": "https://ru.wikipedia.org/wiki/Цикл_(программирование)",
 	"CONTROLS_REPEAT_TITLE": "повторить %1 раз",
 	"CONTROLS_REPEAT_INPUT_DO": "выполнить",
-	"CONTROLS_REPEAT_TOOLTIP": "Выполняет команды несколько раз.",
+	"CONTROLS_REPEAT_TOOLTIP": "Выполняет некоторые команды несколько раз.",
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "повторять, пока",
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "повторять, пока не",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Пока значение истинно, выполняет команды.",

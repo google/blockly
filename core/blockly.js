@@ -322,6 +322,36 @@ Blockly.onMouseMove_ = function(e) {
 };
 
 /**
+ * Handle a mouse-move on SVG drawing surface all time for tracking mouse position.
+ * @param {!Event} e Mouse move event.
+ * @private
+ */
+Blockly.onMouseMoveTracking_ = function(e) {
+  var workspace = Blockly.getMainWorkspace();
+  //mouse position tracking (for zooming)
+  workspace.mousePosition = Blockly.mouseToSvg(e, workspace.options.svg);
+};
+
+/**
+ * Handle a mouse-wheel on SVG drawing surface.
+ * @param {!Event} e Mouse wheel event.
+ * @private
+ */
+Blockly.onMouseWheel_ = function(e) {
+  var workspace = Blockly.getMainWorkspace();
+  if (workspace.scrollbar && workspace.zooming) {
+    Blockly.hideChaff();
+    // cross-browser wheel delta
+    var e = window.event || e; // old IE support
+    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    var x = workspace.mousePosition.x;
+    var y = workspace.mousePosition.y;
+    workspace.zoom (x , y, delta);
+    e.preventDefault();
+  }
+};
+
+/**
  * Handle a key-down on SVG drawing surface.
  * @param {!Event} e Key down event.
  * @private
@@ -514,23 +544,22 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     // Firefox has trouble with hidden elements (Bug 528969).
     return null;
   }
+  //fix scale
+  var contentWidth = blockBox.width;
+  var contentHeight = blockBox.height;
+  var contentX = blockBox.x * this.scale;
+  var contentY = blockBox.y * this.scale;
   if (this.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
-    var MARGIN = 5;
-    var leftScroll = this.RTL ?
-        Blockly.Scrollbar.scrollbarThickness : 0;
-    var rightScroll = this.RTL ?
-        0 : Blockly.Scrollbar.scrollbarThickness;
-    var leftEdge = Math.min(blockBox.x - viewWidth / 2,
-        blockBox.x + blockBox.width - viewWidth - leftScroll + MARGIN);
-    var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
-        blockBox.x + viewWidth + rightScroll - MARGIN);
-    var topEdge = Math.min(blockBox.y - viewHeight / 2,
-        blockBox.y + blockBox.height - viewHeight + MARGIN);
-    var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
-        blockBox.y + viewHeight + Blockly.Scrollbar.scrollbarThickness -
-        MARGIN);
+    var leftEdge = Math.min(contentX - viewWidth / 2,
+                            contentX + contentWidth - viewWidth);
+    var rightEdge = Math.max(contentX + contentWidth + viewWidth / 2,
+                             contentX + viewWidth);
+    var topEdge = Math.min(contentY - viewHeight * this.scale / 2,
+                           contentY + contentHeight - viewHeight);
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight * this.scale / 2,
+                              contentY + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;

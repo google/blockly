@@ -66,6 +66,7 @@ goog.addDependency("../../../" + dir + "/core/widgetdiv.js", ['Blockly.WidgetDiv
 goog.addDependency("../../../" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['goog.math']);
 goog.addDependency("../../../" + dir + "/core/workspace_svg.js", ['Blockly.WorkspaceSvg'], ['Blockly.ScrollbarPair', 'Blockly.Trashcan', 'Blockly.Workspace', 'Blockly.Xml', 'goog.dom', 'goog.math.Coordinate', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/xml.js", ['Blockly.Xml'], ['goog.dom']);
+goog.addDependency("../../../" + dir + "/core/zoom-controls.js", ['Blockly.ZoomControls'], ['goog.dom']);
 goog.addDependency("../../alltests.js", [], []);
 goog.addDependency("base.js", [], []);
 goog.addDependency("base_module_test.js", [], []);
@@ -1580,6 +1581,7 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
+goog.require('Blockly.ZoomControls');
 goog.require('rtclient');
 
 delete this.BLOCKLY_DIR;

@@ -280,22 +280,58 @@ Blockly.getRelativeXY_ = function(element) {
 };
 
 /**
- * Return the absolute coordinates of the top-left corner of this element.
- * The origin (0,0) is the top-left corner of the nearest SVG.
+ * Return true if child is descendant of parent element.
+ * @param {!Element} child Reference element.
+ * @param {!Element} parent Element to search in the parents of child.
+ * @return {!Boolean} Is descendant or not.
+ * @private
+ */
+Blockly.isDescendant_ = function(child, parent) {
+     var node = child.parentNode;
+     while (node != null) {
+         if (node == parent) {
+             return true;
+         }
+         node = node.parentNode;
+     }
+     return false;
+};
+
+/**
+ * Return the absolute coordinates of the top-left corner of this element,
+ * scales that after canvas svg element, if it's a descentant.
+ * The origin (0,0) is the top-left corner of the Blockly svg.
  * @param {!Element} element Element to find the coordinates of.
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
 Blockly.getSvgXY_ = function(element) {
+  var workspace = Blockly.getMainWorkspace();
   var x = 0;
   var y = 0;
+  var canvasFlag;
+  //evaluate if element isn't child of a canvas
+  canvasFlag = !Blockly.isDescendant_(element, workspace.getCanvas());
+  //add condition to bubblecanvas
+  canvasFlag = canvasFlag && 
+               !Blockly.isDescendant_(element, workspace.getBubbleCanvas());
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
-    x += xy.x;
-    y += xy.y;
+    if (element === workspace.getCanvas() || 
+        element === workspace.getBubbleCanvas()) {
+      canvasFlag = true;
+    }
+    //before the svg canvas scale the coordinates
+    if(canvasFlag) {
+      x += xy.x;
+      y += xy.y;
+    } else {
+      x += xy.x * workspace.scale;
+      y += xy.y * workspace.scale;
+    }
     element = element.parentNode;
-  } while (element && element.nodeName.toLowerCase() != 'svg');
+  } while (element && element != workspace.options.svg);
   return {x: x, y: y};
 };
 
@@ -304,14 +340,42 @@ Blockly.getSvgXY_ = function(element) {
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
  * @param {Element=} opt_parent Optional parent on which to append the element.
+ * @param {Workspace=} workspace Optional workspace for access to context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.createSvgElement = function(name, attrs, opt_parent) {
+Blockly.createSvgElement = function(name, attrs, opt_parent, workspace) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
+  //fix the native getBBox for enable scaling
+  var getBBox = e.getBBox;
+  e.getBBox = function() {
+    //fix scale if the element is a svg canvas or a child
+    var BBox = getBBox.call(e);
+    if(workspace) {
+      var element = e;
+      do {
+        // Loop through this block and every parent.
+        var xy = Blockly.getRelativeXY_(element);
+        if (element === workspace.getCanvas()) {
+          BBox.width *= workspace.scale;
+          BBox.height *= workspace.scale;
+          break;
+        }
+        element = element.parentNode;
+      } while (element && element != workspace.options.svg);
+    } else {
+      //when mainworkspace has not create
+      var BBox = getBBox.call(e);
+      if(e.transform.baseVal.numberOfItems == 2) {
+        BBox.width *= e.transform.baseVal.getItem(1).matrix.a;
+        BBox.height *= e.transform.baseVal.getItem(1).matrix.d;
+      }
+    }
+    return BBox;
+  };
   // IE defines a unique attribute "runtimeStyle", it is NOT applied to
   // elements created with createElementNS. However, Closure checks for IE
   // and assumes the presence of the attribute and crashes.

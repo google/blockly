@@ -303,6 +303,8 @@ Blockly.Flyout.prototype.wheel_ = function(e) {
     this.scrollbar_.set(y);
     // Don't scroll the page.
     e.preventDefault();
+    // Don't propagate mousewheel event (zooming)
+    e.stopPropagation();
   }
 };
 
@@ -619,8 +621,32 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     if (!svgRootNew) {
       throw 'block is not rendered.';
     }
-    var xyNew = Blockly.getSvgXY_(svgRootNew);
-    block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
+    //if flyout is inside of canvas, fix scale
+    if (flyout.targetWorkspace_ === Blockly.mainWorkspace) {
+      var xyOld = Blockly.getSvgXY_(svgRootOld);
+      var mouseXY = Blockly.mainWorkspace.mousePosition;
+      //relative mouse position to the block
+      var rMouseX = mouseXY.x - xyOld.x;
+      var rMouseY = mouseXY.y - xyOld.y;
+      //fix scale
+      xyOld.x /= Blockly.mainWorkspace.scale;
+      xyOld.y /= Blockly.mainWorkspace.scale;
+      //Calculate the position to create the block, fixing scale
+      var xyCanvastoSvg = Blockly.getRelativeXY_(Blockly.mainWorkspace.getCanvas());
+      var xyNewtoCanvas = Blockly.getRelativeXY_(svgRootNew);
+      var newX = xyCanvastoSvg.x / Blockly.mainWorkspace.scale + xyNewtoCanvas.x;
+      var newY = xyCanvastoSvg.y / Blockly.mainWorkspace.scale + xyNewtoCanvas.y;
+      var placePositionX = xyOld.x - newX;
+      var placePositionY = xyOld.y - newY;
+      var dx = rMouseX - rMouseX / Blockly.mainWorkspace.scale;
+      var dy = rMouseY - rMouseY / Blockly.mainWorkspace.scale;
+      block.moveBy(placePositionX - dx, placePositionY - dy);
+    } else {
+      //flyout in canvas
+      var xyOld = Blockly.getSvgXY_(svgRootOld);
+      var xyNew = Blockly.getSvgXY_(svgRootNew);
+      block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
+    }
     if (flyout.autoClose) {
       flyout.hide();
     } else {
@@ -656,11 +682,17 @@ Blockly.Flyout.prototype.getRect = function() {
   // the largest screen size.
   var BIG_NUM = 10000000;
   var x = Blockly.getSvgXY_(this.svgGroup_).x;
-  if (!this.RTL) {
+  if (!Blockly.RTL) {
     x -= BIG_NUM;
   }
-  return new goog.math.Rect(x, -BIG_NUM,
-      BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);
+  //fix scale if is descendant of buublecanvas
+  if (Blockly.isDescendant_(this.svgGroup_, Blockly.mainWorkspace.getBubbleCanvas())) {
+      return new goog.math.Rect(x, -BIG_NUM,
+        BIG_NUM + this.width_ * Blockly.mainWorkspace.scale, this.height_ * Blockly.mainWorkspace.scale + 2 * BIG_NUM);
+  } else {
+    return new goog.math.Rect(x, -BIG_NUM,
+        BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);
+  }
 };
 
 /**

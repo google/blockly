@@ -195,9 +195,6 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
         case 'CATEGORY':
           var childOut = rootOut.createNode(childIn.getAttribute('name'));
           childOut.blocks = [];
-          if (childIn.getAttribute('expanded') == 'true') {
-            childOut.setExpanded(true);
-          }
           treeOut.add(childOut);
           var custom = childIn.getAttribute('custom');
           if (custom) {
@@ -205,6 +202,12 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
             childOut.blocks = custom;
           } else {
             syncTrees(childIn, childOut);
+          }
+          if (childIn.getAttribute('expanded') == 'true') {
+            if (childOut.blocks.length) {
+              rootOut.setSelectedItem(childOut);
+            }
+            childOut.setExpanded(true);
           }
           break;
         case 'SEP':

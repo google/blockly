@@ -469,3 +469,61 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
 Blockly.isNumber = function(str) {
   return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
 };
+
+/**
+ * Parse a string with any number of interpolation tokens (%1, %2, ...).
+ * '%' characters may be self-escaped (%%).
+ * @param {string} message Text containing interpolation tokens.
+ * @return {!Array.<string|number>} Array of strings and numbers.
+ */
+Blockly.tokenizeInterpolation = function(message) {
+  var tokens = [];
+  var chars = message.split('');
+  chars.push('');  // End marker.
+  // Parse the message with a finite state machine.
+  // 0 - Base case.
+  // 1 - % found.
+  // 2 - Digit found.
+  var state = 0;
+  var buffer = [];
+  var number = null;
+  for (var i = 0; i < chars.length; i++) {
+    var c = chars[i];
+    if (state == 0) {
+      if (c == '%') {
+        state = 1;  // Start escape.
+      } else {
+        buffer.push(c);  // Regular char.
+      }
+    } else if (state == 1) {
+      if (c == '%') {
+        buffer.push(c);  // Escaped %: %%
+        state = 0;
+      } else if ('0' <= c && c <= '9') {
+        state = 2;
+        number = c;
+        var text = buffer.join('');
+        if (text) {
+          tokens.push(text);
+        }
+        buffer.length = 0;
+      } else {
+        buffer.push('%', c);  // Not an escape: %a
+        state = 0;
+      }
+    } else if (state == 2) {
+      if ('0' <= c && c <= '9') {
+        number += c;  // Multi-digit number.
+      } else {
+        tokens.push(parseInt(number, 10));
+        i--;  // Parse this char again.
+        state = 0;
+      }
+    }
+  }
+  var text = buffer.join('');
+  if (text) {
+    tokens.push(text);
+  }
+  return tokens;
+};

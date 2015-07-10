@@ -948,25 +948,23 @@ Blockly.Block.prototype.jsonInit = function(json) {
  * @private
  */
 Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
-  // Parse the message and interpolate the arguments.
-  // Build a list of elements.
-  var tokens = message.split(/(%\d+)/);
+  var tokens = Blockly.tokenizeInterpolation(message);
+  // Interpolate the arguments.  Build a list of elements.
   var indexDup = [];
   var indexCount = 0;
   var elements = [];
   for (var i = 0; i < tokens.length; i++) {
     var token = tokens[i];
-    if (token.match(/^%\d+$/)) {
-      var index = parseInt(token.substring(1), 10);
-      goog.asserts.assert(index > 0 && index <= args.length,
+    if (typeof token == 'number') {
+      goog.asserts.assert(token > 0 && token <= args.length,
           'Message index "%s" out of range.', token);
-      goog.asserts.assert(!indexDup[index],
+      goog.asserts.assert(!indexDup[token],
           'Message index "%s" duplicated.', token);
-      indexDup[index] = true;
+      indexDup[token] = true;
       indexCount++;
-      elements.push(args[index - 1]);
+      elements.push(args[token - 1]);
     } else {
-      token = token.replace(/%%/g, '%').trim();
+      token = token.trim();
       if (token) {
         elements.push(token);
       }

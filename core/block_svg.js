@@ -680,8 +680,8 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     var dx = e.clientX - this_.startDragMouseX;
     var dy = e.clientY - this_.startDragMouseY;
     //fix scale
-    dx /= this_.workspace.scale;
-    dy /= this_.workspace.scale;
+    dx /= Blockly.mainWorkspace.scale;
+    dy /= Blockly.mainWorkspace.scale;
     if (Blockly.dragMode_ == 1) {
       // Still dragging within the sticky DRAG_RADIUS.
       var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
@@ -1089,7 +1089,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
       this.workspace.options.svg);
   // Start the animation.
   ripple.startDate_ = new Date();
-  Blockly.BlockSvg.connectionUiStep_(ripple);
+  this.connectionUiStep_(ripple);
 };
 
 /**
@@ -1097,7 +1097,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
  * @param {!Element} ripple Element to animate.
  * @private
  */
-Blockly.BlockSvg.connectionUiStep_ = function(ripple) {
+Blockly.BlockSvg.prototype.connectionUiStep_ = function(ripple) {
   var ms = (new Date()) - ripple.startDate_;
   var percent = ms / 150;
   if (percent > 1) {
@@ -1105,9 +1105,10 @@ Blockly.BlockSvg.connectionUiStep_ = function(ripple) {
   } else {
     ripple.setAttribute('r', percent * 25 * this.workspace.scale);
     ripple.style.opacity = 1 - percent;
+    var thisBlock_ = this;
     var closure = function() {
-      Blockly.BlockSvg.connectionUiStep_(ripple);
-    };
+      this.connectionUiStep_(ripple);
+    }.bind(this);
     setTimeout(closure, 10);
   }
 };

@@ -517,8 +517,6 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
   var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.options.svg);
-  console.log(mouseXY);
-  console.log(e);
   var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {
@@ -529,8 +527,6 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
     this.trashcan.setOpen_(false);
   }
   if (this.deleteAreaToolbox_) {
-  console.log(this.deleteAreaToolbox_.contains(xy));
-  console.log(this.deleteAreaToolbox_);
     if (this.deleteAreaToolbox_.contains(xy)) {
       Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
       return true;

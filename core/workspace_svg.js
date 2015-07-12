@@ -401,22 +401,23 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
     do {
       var collide = false;
       var allBlocks = this.getAllBlocks();
-      for (var x = 0, otherBlock; otherBlock = allBlocks[x]; x++) {
+      for (var i = 0, otherBlock; otherBlock = allBlocks[i]; i++) {
         var otherXY = otherBlock.getRelativeToSurfaceXY();
         if (Math.abs(blockX - otherXY.x) <= 1 &&
             Math.abs(blockY - otherXY.y) <= 1) {
           collide = true;
+          break;
         }
       }
       if (!collide) {
-        // Check for blocks in snap range to any of its connections
-        var blockConnections = block.getConnections_(false);
-        for (var i = 0; i < blockConnections.length; i++) {
-          var blockConnection = blockConnections[i];
+        // Check for blocks in snap range to any of its connections.
+        var connections = block.getConnections_(false);
+        for (var i = 0, connection; connection = connections[i]; i++) {
           var neighbour =
-              blockConnection.closest(Blockly.SNAP_RADIUS, blockX, blockY);
+              connection.closest(Blockly.SNAP_RADIUS, blockX, blockY);
           if (neighbour.connection) {
             collide = true;
+            break;
           }
         }
       }

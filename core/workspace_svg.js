@@ -396,7 +396,8 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
     if (this.RTL) {
       blockX = -blockX;
     }
-    // Offset block until not clobbering another block.
+    // Offset block until not clobbering another block and not in connection
+    // distance with neighbouring blocks.
     do {
       var collide = false;
       var allBlocks = this.getAllBlocks();
@@ -404,14 +405,28 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
         var otherXY = otherBlock.getRelativeToSurfaceXY();
         if (Math.abs(blockX - otherXY.x) <= 1 &&
             Math.abs(blockY - otherXY.y) <= 1) {
-          if (this.RTL) {
-            blockX -= Blockly.SNAP_RADIUS;
-          } else {
-            blockX += Blockly.SNAP_RADIUS;
-          }
-          blockY += Blockly.SNAP_RADIUS * 2;
           collide = true;
         }
+      }
+      if (!collide) {
+        // Check for blocks in snap range to any of its connections
+        var blockConnections = block.getConnections_(false);
+        for (var i = 0; i < blockConnections.length; i++) {
+          var blockConnection = blockConnections[i];
+          var neighbour =
+              blockConnection.closest(Blockly.SNAP_RADIUS, blockX, blockY);
+          if (neighbour.connection) {
+            collide = true;
+          }
+        }
+      }
+      if (collide) {
+        if (this.RTL) {
+          blockX -= Blockly.SNAP_RADIUS;
+        } else {
+          blockX += Blockly.SNAP_RADIUS;
+        }
+        blockY += Blockly.SNAP_RADIUS * 2;
       }
     } while (collide);
     block.moveBy(blockX, blockY);

@@ -43,11 +43,16 @@ goog.require('goog.asserts');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
+  /** @type {number} */
   this.type = type;
+  /** @type {string} */
   this.name = name;
   this.sourceBlock_ = block;
+  /** @type {Blockly.Connection} */
   this.connection = connection;
+  /** @type {Blockly.Field[]} */
   this.fieldRow = [];
+  /** @type {number} */
   this.align = Blockly.ALIGN_LEFT;
 
   this.visible_ = true;

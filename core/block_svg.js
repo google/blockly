@@ -925,7 +925,7 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT =
  * Includes the top notch, a horizontal space, and the rounded inside corner.
  * @const
  */
-Blockly.BlockSvg.INNER_TOP_LEFT_CORNER = 'h 0.5 ' +
+Blockly.BlockSvg.INNER_TOP_LEFT_CORNER =
     Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -' +
     (Blockly.BlockSvg.NOTCH_WIDTH - 15 - Blockly.BlockSvg.CORNER_RADIUS) +
     ' h -0.5 a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +

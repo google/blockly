@@ -90,38 +90,45 @@ Blockly.Block.prototype.initialize = function(workspace, prototypeName) {
  * @param {string} prototypeName The typename of the block.
  */
 Blockly.Block.prototype.fill = function(workspace, prototypeName) {
-  /** @type {?Blockly.Connection} */
+  /** @type {Blockly.Connection} */
   this.outputConnection = null;
-  /** @type {?Blockly.Connection} */
+  /** @type {Blockly.Connection} */
   this.nextConnection = null;
-  /** @type {?Blockly.Connection} */
+  /** @type {Blockly.Connection} */
   this.previousConnection = null;
-  /** @type {Blockly.Input[]} */
+  /** @type {!Array.<!Blockly.Input>} */
   this.inputList = [];
-  /** @type {?boolean} */
+  /** @type {boolean|undefined} */
   this.inputsInline = undefined;
   /** @type {boolean} */
   this.rendered = false;
   /** @type {boolean} */
   this.disabled = false;
-  /** @type {(string|Function|object)} */
+  /** @type {string|!Function} */
   this.tooltip = '';
   /** @type {boolean} */
   this.contextMenu = true;
 
+  /** @type {Blockly.Block} */
   this.parentBlock_ = null;
+  /** @type {!Array.<!Blockly.Block>} */
   this.childBlocks_ = [];
+  /** @type {boolean} */
   this.deletable_ = true;
+  /** @type {boolean} */
   this.movable_ = true;
+  /** @type {boolean} */
   this.editable_ = true;
+  /** @type {boolean} */
   this.collapsed_ = false;
 
-  /** @type {?(string|Blockly.Comment)} */
+  /** @type {string|Blockly.Comment} */
   this.comment = null;
 
+  /** @type {!goog.math.Coordinate} */
   this.xy_ = new goog.math.Coordinate(0, 0);
 
-  /** @type {Blockly.Workspace} */
+  /** @type {!Blockly.Workspace} */
   this.workspace = workspace;
   /** @type {boolean} */
   this.isInFlyout = workspace.isFlyout;
@@ -130,7 +137,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
-    /** @type {?string} */
+    /** @type {string} */
     this.type = prototypeName;
     var prototype = Blockly.Blocks[prototypeName];
     goog.asserts.assertObject(prototype,
@@ -142,6 +149,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
     this.init();
   }
   // Record initial inline state.
+  /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
 };
 
@@ -165,7 +173,7 @@ Blockly.Block.getById = function(id, workspace) {
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
  * @param {boolean} animate If true, show a disposal animation and sound.
- * @param {boolean} opt_dontRemoveFromWorkspace If true, don't remove this
+ * @param {boolean=} opt_dontRemoveFromWorkspace If true, don't remove this
  *     block from the workspace's list of top blocks.
  */
 Blockly.Block.prototype.dispose = function(healStack, animate,
@@ -667,8 +675,8 @@ Blockly.Block.prototype.setTitleValue = function(newValue, name) {
 /**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
- * @param {string|Array.<string>|null} opt_check Statement type or list of
- *     statement types.  Null or undefined if any type could be connected.
+ * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
   if (this.previousConnection) {
@@ -696,8 +704,8 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
 /**
  * Set whether another block can chain onto the bottom of this block.
  * @param {boolean} newBoolean True if there can be a next statement.
- * @param {string|Array.<string>|null} opt_check Statement type or list of
- *     statement types.  Null or undefined if any type could be connected.
+ * @param {string|Array.<string>|null|undefined} opt_check Statement type or
+ *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
   if (this.nextConnection) {
@@ -723,8 +731,8 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
 /**
  * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
- * @param {string|Array.<string>|null} opt_check Returned type or list of
- *     returned types.  Null or undefined if any type could be returned
+ * @param {string|Array.<string>|null|undefined} opt_check Returned type or list
+ *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */
 Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
@@ -848,7 +856,7 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 
 /**
  * Create a human-readable text representation of this block and any children.
- * @param {?number} opt_maxLength Truncate the string to this length.
+ * @param {number=} opt_maxLength Truncate the string to this length.
  * @return {string} Text of block.
  */
 Blockly.Block.prototype.toString = function(opt_maxLength) {
@@ -901,7 +909,7 @@ Blockly.Block.prototype.appendStatementInput = function(name) {
 
 /**
  * Shortcut for appending a dummy input row.
- * @param {string} opt_name Language-neutral identifier which may used to find
+ * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this input again.  Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  */
@@ -1171,7 +1179,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 /**
  * Remove an input from this block.
  * @param {string} name The name of the input.
- * @param {boolean} opt_quiet True to prevent error if input is not present.
+ * @param {boolean=} opt_quiet True to prevent error if input is not present.
  * @throws {goog.asserts.AssertionError} if the input is not present and
  *     opt_quiet is not true.
  */

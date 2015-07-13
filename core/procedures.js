@@ -117,7 +117,7 @@ Blockly.Procedures.findLegalName = function(name, block) {
  * procedures already defined.
  * @param {string} name The questionable name.
  * @param {!Blockly.Workspace} workspace The workspace to scan for collisions.
- * @param {Blockly.Block} opt_exclude Optional block to exclude from
+ * @param {Blockly.Block=} opt_exclude Optional block to exclude from
  *     comparisons (one doesn't want to collide with oneself).
  * @return {boolean} True if the name is legal.
  */

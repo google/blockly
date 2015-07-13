@@ -31,7 +31,7 @@ goog.require('Blockly.Generator');
 
 /**
  * Dart code generator.
- * @type !Blockly.Generator
+ * @type {!Blockly.Generator}
  */
 Blockly.Dart = new Blockly.Generator('Dart');
 

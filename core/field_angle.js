@@ -34,7 +34,7 @@ goog.require('goog.userAgent');
 /**
  * Class for an editable angle field.
  * @param {string} text The initial content of the field.
- * @param {Function} opt_changeHandler An optional function that is called
+ * @param {Function=} opt_changeHandler An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns the accepted text or null to abort
  *     the change.

@@ -39,7 +39,7 @@ goog.require('goog.ui.DatePicker');
 /**
  * Class for a date input field.
  * @param {string} date The initial date.
- * @param {Function} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_changeHandler A function that is executed when a new
  *     date is selected.  Its sole argument is the new date value.  Its
  *     return value becomes the selected date, unless it is undefined, in
  *     which case the new date stands, or it is null, in which case the change

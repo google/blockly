@@ -61,7 +61,7 @@ Blockly.Input = function(type, name, block, connection) {
 /**
  * Add an item to the end of the input's field row.
  * @param {string|!Blockly.Field} field Something to add as a field.
- * @param {string} opt_name Language-neutral identifier which may used to find
+ * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
  * @return {!Blockly.Input} The input being append to (to allow chaining).
  */
@@ -101,7 +101,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
 /**
  * Add an item to the end of the input's field row.
  * @param {*} field Something to add as a field.
- * @param {string} opt_name Language-neutral identifier which may used to find
+ * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
  * @return {!Blockly.Input} The input being append to (to allow chaining).
  * @deprecated December 2013

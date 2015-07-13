@@ -31,7 +31,7 @@ goog.require('Blockly.Generator');
 
 /**
  * PHP code generator.
- * @type !Blockly.Generator
+ * @type {!Blockly.Generator}
  */
 Blockly.PHP = new Blockly.Generator('PHP');
 

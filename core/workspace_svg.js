@@ -645,7 +645,7 @@ Blockly.WorkspaceSvg.prototype.preloadAudio_ = function() {
  * Play an audio file at specified value.  If volume is not specified,
  * use full volume (1).
  * @param {string} name Name of sound.
- * @param {?number} opt_volume Volume of sound (0-1).
+ * @param {number=} opt_volume Volume of sound (0-1).
  */
 Blockly.WorkspaceSvg.prototype.playAudio = function(name, opt_volume) {
   var sound = this.SOUNDS_[name];

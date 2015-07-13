@@ -108,7 +108,7 @@ Blockly.Tooltip.MARGINS = 5;
 
 /**
  * The HTML container.  Set once by Blockly.Tooltip.createDom.
- * @type Element
+ * @type {Element}
  */
 Blockly.Tooltip.DIV = null;
 

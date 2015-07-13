@@ -34,21 +34,21 @@ goog.require('goog.dom');
 
 /**
  * The HTML container.  Set once by Blockly.WidgetDiv.createDom.
- * @type Element
+ * @type {Element}
  */
 Blockly.WidgetDiv.DIV = null;
 
 /**
  * The object currently using this container.
  * @private
- * @type Object
+ * @type {Object}
  */
 Blockly.WidgetDiv.owner_ = null;
 
 /**
  * Optional cleanup function set by whichever object uses the widget.
  * @private
- * @type Function
+ * @type {Function}
  */
 Blockly.WidgetDiv.dispose_ = null;
 

@@ -395,7 +395,7 @@ Blockly.shortestStringLength = function(array) {
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
  * @param {!Array.<string>} array Array of strings.
- * @param {?number} opt_shortest Length of shortest string.
+ * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
 Blockly.commonWordPrefix = function(array, opt_shortest) {
@@ -430,7 +430,7 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
  * Given an array of strings, return the length of the common suffix.
  * Words may not be split.  Any space after a word is included in the length.
  * @param {!Array.<string>} array Array of strings.
- * @param {?number} opt_shortest Length of shortest string.
+ * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */
 Blockly.commonWordSuffix = function(array, opt_shortest) {

@@ -31,7 +31,7 @@ goog.require('Blockly.Generator');
 
 /**
  * Python code generator.
- * @type !Blockly.Generator
+ * @type {!Blockly.Generator}
  */
 Blockly.Python = new Blockly.Generator('Python');
 

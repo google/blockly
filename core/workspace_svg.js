@@ -143,8 +143,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   } else if (this.options.languageTree) {
     this.addFlyout_();
   }
-
-  this.fireChangeEvent();
   return this.svgGroup_;
 };
 

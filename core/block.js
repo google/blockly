@@ -90,14 +90,23 @@ Blockly.Block.prototype.initialize = function(workspace, prototypeName) {
  * @param {string} prototypeName The typename of the block.
  */
 Blockly.Block.prototype.fill = function(workspace, prototypeName) {
+  /** @type {?Blockly.Connection} */
   this.outputConnection = null;
+  /** @type {?Blockly.Connection} */
   this.nextConnection = null;
+  /** @type {?Blockly.Connection} */
   this.previousConnection = null;
+  /** @type {Blockly.Input[]} */
   this.inputList = [];
+  /** @type {?boolean} */
   this.inputsInline = undefined;
+  /** @type {boolean} */
   this.rendered = false;
+  /** @type {boolean} */
   this.disabled = false;
+  /** @type {(string|Function|object)} */
   this.tooltip = '';
+  /** @type {boolean} */
   this.contextMenu = true;
 
   this.parentBlock_ = null;
@@ -107,16 +116,21 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   this.editable_ = true;
   this.collapsed_ = false;
 
+  /** @type {?(string|Blockly.Comment)} */
   this.comment = null;
 
   this.xy_ = new goog.math.Coordinate(0, 0);
 
+  /** @type {Blockly.Workspace} */
   this.workspace = workspace;
+  /** @type {boolean} */
   this.isInFlyout = workspace.isFlyout;
+  /** @type {boolean} */
   this.RTL = workspace.RTL;
 
   // Copy the type-specific functions and data from the prototype.
   if (prototypeName) {
+    /** @type {?string} */
     this.type = prototypeName;
     var prototype = Blockly.Blocks[prototypeName];
     goog.asserts.assertObject(prototype,
@@ -1186,7 +1200,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
 /**
  * Fetches the named input object.
  * @param {string} name The name of the input.
- * @return {Object} The input object, or null of the input does not exist.
+ * @return {?Blockly.Input} The input object, or null of the input does not exist.
  */
 Blockly.Block.prototype.getInput = function(name) {
   for (var i = 0, input; input = this.inputList[i]; i++) {

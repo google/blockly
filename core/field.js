@@ -180,7 +180,7 @@ Blockly.Field.prototype.setVisible = function(visible) {
 
 /**
  * Sets a new change handler for editable fields.
- * @param {Function} handler New change handler, or null.
+ * @param {?Function} handler New change handler, or null.
  */
 Blockly.Field.prototype.setChangeHandler = function(handler) {
   this.changeHandler_ = handler;

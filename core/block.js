@@ -1044,6 +1044,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
           case 'input_dummy':
             input = this.appendDummyInput(element['name']);
             break;
+          case 'input_addsub':
+            this.appendAddSubGroup(element['title'],
+                                   element['name'],
+                                   element['checks']);
           case 'field_label':
             field = new Blockly.FieldLabel(element['text']);
             break;

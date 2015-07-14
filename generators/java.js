@@ -107,6 +107,14 @@ Blockly.Java.VariableTypes_ = {};
  */
 Blockly.Java.AppName_ = 'MyApp';
 /**
+ * Default Name of the application for use by all generated classes
+ */
+Blockly.Java.Package_ = '';
+/**
+ * Base class (if any) for the generated Java code
+ */
+Blockly.Java.Baseclass_ = 'demo';
+/**
  * List of libraries used globally by the generated java code. These are
  * Processed by Blockly.Java.addImport
  */
@@ -118,12 +126,17 @@ Blockly.Java.needImports_ = ['javax.json.Json',
                              'java.io.IOException',
                              'java.io.StringReader'
                             ];
+/**
+ * List of libraries used by the caller's generated java code.  These will
+ * be processed by Blockly.Java.addImport
+ */
+Blockly.Java.ExtraImports_ = null;
 
 /**
  * Set the application name for generated classes
  * @param {string} name Name for the application for any generated code
  */
-Blockly.Java.SetAppName = function(name) {
+Blockly.Java.setAppName = function(name) {
   if (!name || name === '') {
     name = 'MyApp';
   }
@@ -135,8 +148,43 @@ Blockly.Java.SetAppName = function(name) {
  * Get the application name for generated classes
  * @return {string} name Name for the application for any generated code
  */
-Blockly.Java.GetAppName = function() {
+Blockly.Java.getAppName = function() {
   return this.AppName_;
+}
+
+/**
+ * Set the package for this generated Java code
+ * @param {string} package Name of the package this is derived from
+ */
+Blockly.Java.setPackage = function(javaPackage) {
+  if (!javaPackage || javaPackage === '') {
+    javaPackage = 'demo';
+  }
+  this.Package_ = javaPackage;
+}
+
+/**
+ * Get the package for this generated Java code
+ * @return {string} package Name of the package this is derived from
+ */
+Blockly.Java.getPackage = function() {
+  return this.Package_;
+}
+
+/**
+ * Set the base class (if any) for the generated Java code
+ * @param {string} baseclass Name of a base class this workspace is derived from
+ */
+Blockly.Java.setBaseclass = function(baseclass) {
+  this.Baseclass_ = baseclass;
+}
+
+/**
+ * Get the base class (if any) for the generated Java code
+ * @return {string} baseclass Name of a base class this workspace is derived from
+ */
+Blockly.Java.getBaseclass = function() {
+  return this.Baseclass_;
 }
 
 /**
@@ -157,8 +205,8 @@ Blockly.Java.GetVariableType = function(variable) {
  * @param {string} importlib Name of the library to add to the import list
  */
 Blockly.Java.addImport = function(importlib) {
-  var importStr = 'import '+importlib+';';
-  Blockly.Java.imports_[importStr] = importStr;
+  var importStr = 'import ' + importlib + ';';
+  this.imports_[importStr] = importStr;
 };
 
 /**
@@ -166,19 +214,53 @@ Blockly.Java.addImport = function(importlib) {
  * @param {!Array<string>} imports Array of libraries to add to the list
  * @return {string} code Java code for importing all libraries referenced
  */
-Blockly.Java.getImports = function(imports) {
+Blockly.Java.getImports = function() {
   // Add any of the imports that the top level code needs
-  if (imports) {
-    for(var i = 0; i < imports.length; i++) {
-      Blockly.Java.addImport(imports[i]);
+  if (this.ExtraImports_) {
+    for(var i = 0; i < this.ExtraImports_.length; i++) {
+      this.addImport(this.ExtraImports_[i]);
     }
   }
 
-  var keys = goog.object.getValues(Blockly.Java.imports_);
+  var keys = goog.object.getValues(this.imports_);
   goog.array.sort(keys);
   return (keys.join("\n"));
 };
 
+/**
+ * Set the base class (if any) for the generated Java code
+ * @param {string} baseclass Name of a base class this workspace is derived from
+ */
+Blockly.Java.setExtraImports = function(extraImports) {
+  this.ExtraImports_ = extraImports;
+}
+
+
+/*
+ * Save away the base class implementation so we can call it but override it
+ * so that we get to modify the generated code.
+ */
+Blockly.Java.workspaceToCode_ = Blockly.Java.workspaceToCode;
+/**
+ * Generate code for all blocks in the workspace to the specified language.
+ * @param {Blockly.Workspace} workspace Workspace to generate code from.
+ * @param {string} parms Any extra parameters to pass to the lower level block
+ * @return {string} Generated code.
+ */
+Blockly.Java.workspaceToCode = function(workspace, parms) {
+  // Generate the code first to get all of the required imports calculated.
+  var code = this.workspaceToCode_(workspace,parms);
+  var finalcode = 'package ' + this.getPackage() + ';\n\n' +
+                  this.getImports() + '\n\n' +
+                  'public class ' + this.getAppName();
+  if (this.getBaseclass()) {
+    finalcode += ' extends ' + this.getBaseclass();
+  }
+  finalcode += ' {\n\n' +
+               code + '\n' +
+               '}\n';
+  return finalcode;
+}
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.

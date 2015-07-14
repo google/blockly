@@ -1209,8 +1209,10 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
 /**
  * Set this block's warning text.
  * @param {?string} text The text, or null to delete.
+ * @param {string=} opt_id An optional ID for the warning text to be able to
+ *     maintain multiple warnings.
  */
-Blockly.BlockSvg.prototype.setWarningText = function(text) {
+Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
   if (this.setWarningText.pid_) {
     // Only queue up the latest change.  Kill any earlier pending process.
     clearTimeout(this.setWarningText.pid_);
@@ -1222,7 +1224,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text) {
     var thisBlock = this;
     this.setWarningText.pid_ = setTimeout(function() {
       thisBlock.setWarningText.pid_ = 0;
-      thisBlock.setWarningText(text);
+      thisBlock.setWarningText(text, opt_id);
     }, 100);
     return;
   }
@@ -1235,10 +1237,14 @@ Blockly.BlockSvg.prototype.setWarningText = function(text) {
       this.warning = new Blockly.Warning(this);
       changedState = true;
     }
-    this.warning.setText(/** @type {string} */ (text));
+    this.warning.setText(/** @type {string} */ (text), opt_id);
   } else {
-    if (this.warning) {
+    // Dispose all warnings if no id is given
+    if (this.warning && opt_id === undefined) {
       this.warning.dispose();
+      changedState = true;
+    } else if (this.warning) {
+      this.warning.removeText(opt_id);
       changedState = true;
     }
   }

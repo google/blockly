@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Kenrick95",
-			"아라"
+			"아라",
+			"Mirws"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
+	"TODAY": "Hari ini",
 	"DUPLICATE_BLOCK": "Duplikat",
 	"ADD_COMMENT": "Tambahkan sebuah comment",
 	"REMOVE_COMMENT": "Hapus komentar",
@@ -20,6 +22,9 @@
 	"DISABLE_BLOCK": "Nonaktifkan blok",
 	"ENABLE_BLOCK": "Aktifkan blok",
 	"HELP": "Bantuan",
+	"CHAT": "Chatting dengan kolaborator Anda dengan mengetikkan di kotak ini!",
+	"AUTH": "Silakan mengotorisasi aplikasi ini untuk memungkinkan pekerjaan Anda dapat disimpan dan digunakan bersama.",
+	"ME": "Saya",
 	"CHANGE_VALUE_TITLE": "Ubah nilai:",
 	"NEW_VARIABLE": "Pembolehubah baru...",
 	"NEW_VARIABLE_TITLE": "Nama pembolehubah baru:",

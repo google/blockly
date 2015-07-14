@@ -7,9 +7,9 @@ goog.provide('Blockly.Msg.id');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Tambahkan sebuah comment";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "Silakan mengotorisasi aplikasi ini untuk memungkinkan pekerjaan Anda dapat disimpan dan digunakan bersama.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CHAT = "Chatting dengan kolaborator Anda dengan mengetikkan di kotak ini!";
 Blockly.Msg.COLLAPSE_ALL = "Tutup blok";
 Blockly.Msg.COLLAPSE_BLOCK = "Tutup blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Warna 1";
@@ -257,7 +257,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kembalikan atan dari angka.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kembalikan cos dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kembalikan sinus dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kembalikan tangen dari derajat (tidak radian).";
-Blockly.Msg.ME = "Me";  // untranslated
+Blockly.Msg.ME = "Saya";
 Blockly.Msg.NEW_VARIABLE = "Pembolehubah baru...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nama pembolehubah baru:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -350,7 +350,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "pangkas ruang dari kedua belah sisi";
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "pangkas ruang dari sisi kiri";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "pangkas ruang dari sisi kanan";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Kembali salinan teks dengan spasi dihapus dari satu atau kedua ujungnya.";
-Blockly.Msg.TODAY = "Today";  // untranslated
+Blockly.Msg.TODAY = "Hari ini";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Membuat 'tetapkan %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

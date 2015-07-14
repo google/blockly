@@ -326,6 +326,11 @@ Blockly.Css.CONTENT = [
   '  stroke-width: 1;',
   '}',
 
+  '.blocklyFlyout .blocklyScrollbarBackground {',
+  '  fill: none;',
+  '  stroke-width: 0;',
+  '}',
+
   '.blocklyScrollbarKnob {',
   '  fill: #ccc;',
   '}',

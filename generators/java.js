@@ -109,11 +109,11 @@ Blockly.Java.AppName_ = 'MyApp';
 /**
  * Default Name of the application for use by all generated classes
  */
-Blockly.Java.Package_ = '';
+Blockly.Java.Package_ = 'demo';
 /**
  * Base class (if any) for the generated Java code
  */
-Blockly.Java.Baseclass_ = 'demo';
+Blockly.Java.Baseclass_ = '';
 /**
  * List of libraries used globally by the generated java code. These are
  * Processed by Blockly.Java.addImport

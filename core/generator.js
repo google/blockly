@@ -51,7 +51,7 @@ Blockly.Generator.NAME_TYPE = 'generated_function';
  * Arbitrary code to inject into locations that risk causing infinite loops.
  * Any instances of '%1' will be replaced by the block ID that failed.
  * E.g. '  checkTimeout(%1);\n'
- * @type ?string
+ * @type {?string}
  */
 Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
 
@@ -59,7 +59,7 @@ Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
  * Arbitrary code to inject before every statement.
  * Any instances of '%1' will be replaced by the block ID of the statement.
  * E.g. 'highlight(%1);\n'
- * @type ?string
+ * @type {?string}
  */
 Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 

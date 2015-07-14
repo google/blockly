@@ -25,13 +25,13 @@
 
 /**
  * Workspace for user to build block.
- * @type Blockly.Workspace
+ * @type {Blockly.Workspace}
  */
 var mainWorkspace = null;
 
 /**
  * Workspace for preview of block.
- * @type Blockly.Workspace
+ * @type {Blockly.Workspace}
  */
 var previewWorkspace = null;
 

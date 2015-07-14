@@ -31,7 +31,7 @@ goog.require('Blockly.Generator');
 
 /**
  * JavaScript code generator.
- * @type !Blockly.Generator
+ * @type {!Blockly.Generator}
  */
 Blockly.JavaScript = new Blockly.Generator('JavaScript');
 

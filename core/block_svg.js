@@ -93,8 +93,8 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   }
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange) && !this.eventsInit_) {
-    Blockly.bindEvent_(this.workspace.getCanvas(), 'blocklyWorkspaceChange',
-        this, this.onchange);
+    this.onchangeWrapper_ = Blockly.bindEvent_(this.workspace.getCanvas(),
+        'blocklyWorkspaceChange', this, this.onchange);
   }
   this.eventsInit_ = true;
 
@@ -981,11 +981,16 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
  * @param {boolean} animate If true, show a disposal animation and sound.
- * @param {boolean} opt_dontRemoveFromWorkspace If true, don't remove this
+ * @param {boolean=} opt_dontRemoveFromWorkspace If true, don't remove this
  *     block from the workspace's list of top blocks.
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
                                               opt_dontRemoveFromWorkspace) {
+  // Terminate onchange event calls.
+  if (this.onchangeWrapper_) {
+    Blockly.unbindEvent_(this.onchangeWrapper_);
+    this.onchangeWrapper_ = null;
+  }
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
     Blockly.terminateDrag_();
@@ -1314,7 +1319,7 @@ Blockly.BlockSvg.prototype.removeDragging = function() {
 /**
  * Render the block.
  * Lays out and reflows a block based on its contents and settings.
- * @param {boolean} opt_bubble If false, just render this block.
+ * @param {boolean=} opt_bubble If false, just render this block.
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {

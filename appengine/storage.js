@@ -43,7 +43,7 @@ BlocklyStorage.backupBlocks_ = function(workspace) {
 
 /**
  * Bind the localStorage backup function to the unload event.
- * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
+ * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 BlocklyStorage.backupOnUnload = function(opt_workspace) {
   var workspace = opt_workspace || Blockly.getMainWorkspace();
@@ -53,7 +53,7 @@ BlocklyStorage.backupOnUnload = function(opt_workspace) {
 
 /**
  * Restore code blocks from localStorage.
- * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
+ * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 BlocklyStorage.restoreBlocks = function(opt_workspace) {
   var url = window.location.href.split('#')[0];
@@ -66,7 +66,7 @@ BlocklyStorage.restoreBlocks = function(opt_workspace) {
 
 /**
  * Save blocks to database and return a link containing key to XML.
- * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
+ * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 BlocklyStorage.link = function(opt_workspace) {
   var workspace = opt_workspace || Blockly.getMainWorkspace();
@@ -78,7 +78,7 @@ BlocklyStorage.link = function(opt_workspace) {
 /**
  * Retrieve XML text from database using given key.
  * @param {string} key Key to XML, obtained from href.
- * @param {Blockly.WorkspaceSvg} opt_workspace Workspace.
+ * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
 BlocklyStorage.retrieveXml = function(key, opt_workspace) {
   var workspace = opt_workspace || Blockly.getMainWorkspace();
@@ -87,7 +87,7 @@ BlocklyStorage.retrieveXml = function(key, opt_workspace) {
 
 /**
  * Global reference to current AJAX request.
- * @type XMLHttpRequest
+ * @type {XMLHttpRequest}
  * @private
  */
 BlocklyStorage.httpRequest_ = null;

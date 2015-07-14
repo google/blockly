@@ -41,21 +41,21 @@ Blockly.Css.Cursor = {
 
 /**
  * Current cursor (cached value).
- * @type string
+ * @type {string}
  * @private
  */
 Blockly.Css.currentCursor_ = '';
 
 /**
  * Large stylesheet added by Blockly.Css.inject.
- * @type Element
+ * @type {Element}
  * @private
  */
 Blockly.Css.styleSheet_ = null;
 
 /**
  * Path to media directory, with any trailing slash removed.
- * @type string
+ * @type {string}
  * @private
  */
 Blockly.Css.mediaPath_ = '';

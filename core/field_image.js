@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
  * @param {string} src The URL of the image.
  * @param {number} width Width of the image.
  * @param {number} height Height of the image.
- * @param {?string} opt_alt Optional alt text for when block is collapsed.
+ * @param {string=} opt_alt Optional alt text for when block is collapsed.
  * @extends {Blockly.Field}
  * @constructor
  */

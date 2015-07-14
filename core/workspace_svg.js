@@ -135,6 +135,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
 
   Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
+  var thisWorkspace = this;
+  Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
+                      function(e) {Blockly.longStart_(e, thisWorkspace);});
 
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
@@ -143,8 +146,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   } else if (this.options.languageTree) {
     this.addFlyout_();
   }
-
-  this.fireChangeEvent();
   return this.svgGroup_;
 };
 
@@ -644,7 +645,7 @@ Blockly.WorkspaceSvg.prototype.preloadAudio_ = function() {
  * Play an audio file at specified value.  If volume is not specified,
  * use full volume (1).
  * @param {string} name Name of sound.
- * @param {?number} opt_volume Volume of sound (0-1).
+ * @param {number=} opt_volume Volume of sound (0-1).
  */
 Blockly.WorkspaceSvg.prototype.playAudio = function(name, opt_volume) {
   var sound = this.SOUNDS_[name];

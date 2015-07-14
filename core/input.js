@@ -47,14 +47,15 @@ Blockly.Input = function(type, name, block, connection) {
   this.type = type;
   /** @type {string} */
   this.name = name;
+  /** @type {!Blockly.Block} */
   this.sourceBlock_ = block;
   /** @type {Blockly.Connection} */
   this.connection = connection;
-  /** @type {Blockly.Field[]} */
+  /** @type {!Array.<!Blockly.Field>} */
   this.fieldRow = [];
   /** @type {number} */
   this.align = Blockly.ALIGN_LEFT;
-
+  /** @type {boolean} */
   this.visible_ = true;
 };
 

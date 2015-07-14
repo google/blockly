@@ -412,8 +412,6 @@ Blockly.init_ = function(mainWorkspace) {
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
 
-  Blockly.bindEvent_(svg, 'touchstart', null,
-                     function(e) {Blockly.longStart_(e, null);});
   Blockly.bindEvent_(window, 'resize', null,
                      function() {Blockly.svgResize(mainWorkspace);});
 

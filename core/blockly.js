@@ -391,19 +391,15 @@ Blockly.longPid_ = 0;
  * which after about a second opens the context menu.  The tasks is killed
  * if the touch event terminates early.
  * @param {!Event} e Touch start event.
- * @param {Blockly.Block} block The block under the touchstart event, or null
- *   if the event was on the workspace.
+ * @param {!Blockly.Block|!Blockly.WorkspaceSvg} uiObject The block or workspace
+ *   under the touchstart event.
  * @private
  */
-Blockly.longStart_ = function(e, block) {
+Blockly.longStart_ = function(e, uiObject) {
   Blockly.longStop_();
   Blockly.longPid_ = setTimeout(function() {
       e.button = 2;  // Simulate a right button click.
-      if (block) {
-        block.onMouseDown_(e);
-      } else {
-        Blockly.onMouseDown_(e);
-      }
+      uiObject.onMouseDown_(e);
     }, Blockly.LONGPRESS);
 };
 

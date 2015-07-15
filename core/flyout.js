@@ -113,7 +113,7 @@ Blockly.Flyout.prototype.CORNER_RADIUS = 8;
  */
 Blockly.Flyout.prototype.createDom = function() {
   /*
-  <g>
+  <g class="blocklyFlyout">
     <path class="blocklyFlyoutBackground"/>
     <g class="blocklyFlyout"></g>
   </g>

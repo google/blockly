@@ -322,31 +322,19 @@ Blockly.onMouseMove_ = function(e) {
 };
 
 /**
- * Handle a mouse-move on SVG drawing surface all time for tracking mouse position.
- * @param {!Event} e Mouse move event.
- * @private
- */
-Blockly.onMouseMoveTracking_ = function(e) {
-  var workspace = Blockly.getMainWorkspace();
-  //mouse position tracking (for zooming)
-  workspace.mousePosition = Blockly.mouseToSvg(e, workspace.options.svg);
-};
-
-/**
  * Handle a mouse-wheel on SVG drawing surface.
  * @param {!Event} e Mouse wheel event.
  * @private
  */
 Blockly.onMouseWheel_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
-  if (workspace.scrollbar && workspace.zooming) {
+  if (workspace.options.scrollWheel && workspace.scrollbar && workspace.zooming) {
     Blockly.hideChaff();
     // cross-browser wheel delta
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-    var x = workspace.mousePosition.x;
-    var y = workspace.mousePosition.y;
-    workspace.zoom (x , y, delta);
+    var position = Blockly.mouseToSvg(e, workspace.options.svg);
+    workspace.zoom (position.x , position.y, delta);
     e.preventDefault();
   }
 };
@@ -558,8 +546,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
                              contentX + viewWidth);
     var topEdge = Math.min(contentY - viewHeight * this.scale / 2,
                            contentY + contentHeight - viewHeight);
-    var bottomEdge = Math.max(contentY + contentHeight + viewHeight * this.scale / 2,
-                              contentY + viewHeight);
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight *
+                              this.scale / 2, contentY + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;

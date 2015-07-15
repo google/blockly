@@ -323,7 +323,7 @@ Blockly.getSvgXY_ = function(element) {
       canvasFlag = true;
     }
     //before the svg canvas scale the coordinates
-    if(canvasFlag) {
+    if (canvasFlag) {
       x += xy.x;
       y += xy.y;
     } else {
@@ -354,7 +354,7 @@ Blockly.createSvgElement = function(name, attrs, opt_parent, workspace) {
   e.getBBox = function() {
     //fix scale if the element is a svg canvas or a child
     var BBox = getBBox.call(e);
-    if(workspace) {
+    if (workspace) {
       var element = e;
       do {
         // Loop through this block and every parent.
@@ -369,7 +369,7 @@ Blockly.createSvgElement = function(name, attrs, opt_parent, workspace) {
     } else {
       //when mainworkspace has not create
       var BBox = getBBox.call(e);
-      if(e.transform.baseVal.numberOfItems == 2) {
+      if (e.transform.baseVal.numberOfItems == 2) {
         BBox.width *= e.transform.baseVal.getItem(1).matrix.a;
         BBox.height *= e.transform.baseVal.getItem(1).matrix.d;
       }

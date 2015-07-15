@@ -624,7 +624,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     //if flyout is inside of canvas, fix scale
     if (flyout.targetWorkspace_ === Blockly.mainWorkspace) {
       var xyOld = Blockly.getSvgXY_(svgRootOld);
-      var mouseXY = Blockly.mainWorkspace.mousePosition;
+      var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.options.svg);
       //relative mouse position to the block
       var rMouseX = mouseXY.x - xyOld.x;
       var rMouseY = mouseXY.y - xyOld.y;
@@ -632,10 +632,13 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       xyOld.x /= Blockly.mainWorkspace.scale;
       xyOld.y /= Blockly.mainWorkspace.scale;
       //Calculate the position to create the block, fixing scale
-      var xyCanvastoSvg = Blockly.getRelativeXY_(Blockly.mainWorkspace.getCanvas());
+      var xyCanvastoSvg =
+          Blockly.getRelativeXY_(Blockly.mainWorkspace.getCanvas());
       var xyNewtoCanvas = Blockly.getRelativeXY_(svgRootNew);
-      var newX = xyCanvastoSvg.x / Blockly.mainWorkspace.scale + xyNewtoCanvas.x;
-      var newY = xyCanvastoSvg.y / Blockly.mainWorkspace.scale + xyNewtoCanvas.y;
+      var newX = xyCanvastoSvg.x / Blockly.mainWorkspace.scale +
+          xyNewtoCanvas.x;
+      var newY = xyCanvastoSvg.y / Blockly.mainWorkspace.scale +
+          xyNewtoCanvas.y;
       var placePositionX = xyOld.x - newX;
       var placePositionY = xyOld.y - newY;
       var dx = rMouseX - rMouseX / Blockly.mainWorkspace.scale;

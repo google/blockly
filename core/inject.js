@@ -171,6 +171,11 @@ Blockly.parseOptions_ = function(options) {
   if (enableZoom === undefined) {
     enableZoom = true;
   }
+  // Enable zooming with mouse scroll wheel.
+  var scrollWheel = options['scrollWheel'];
+  if (scrollWheel === undefined) {
+    scrollWheel = true;
+  }
   var hasZoomControls = options['zoomControls'];
   if (hasZoomControls === undefined) {
     hasZoomControls = true;
@@ -196,7 +201,8 @@ Blockly.parseOptions_ = function(options) {
     enableRealtime: enableRealtime,
     realtimeOptions: realtimeOptions,
     enableZoom: enableZoom,
-    zoomOptions: zoomOptions
+    zoomOptions: zoomOptions,
+    scrollWheel: scrollWheel
   };
 };
 

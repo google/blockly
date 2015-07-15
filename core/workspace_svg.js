@@ -753,12 +753,12 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
 };
 
 /**
- * Zooming the blocks centered in (x,y) coordinate with zooming in or out.
+ * Zooming the blocks centered in (x, y) coordinate with zooming in or out.
  * @param {!number} x X coordinate of center.
- * @param {!number} Y coordinate of center.
+ * @param {!number} y Y coordinate of center.
  * @param {!number} type Type of zomming (-1 zooming out and 1 zooming in).
  */
-Blockly.WorkspaceSvg.prototype.zoom  = function(x ,y , type) {
+Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   var speed = this.scaleSpeed;
   var metrics = this.getMetrics();
   var center = this.options.svg.createSVGPoint();

@@ -115,10 +115,11 @@ Blockly.Flyout.prototype.createDom = function() {
   /*
   <g>
     <path class="blocklyFlyoutBackground"/>
-    <g></g>
+    <g class="blocklyFlyout"></g>
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+  this.svgGroup_ = Blockly.createSvgElement('g',
+      {'class': 'blocklyFlyout'}, null);
   this.svgBackground_ = Blockly.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());

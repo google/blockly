@@ -110,15 +110,16 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
  */
 Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   /*
-  <g>
+  <g class="blocklyWorkspace">
     <rect class="blocklyMainBackground" height="100%" width="100%"></rect>
     [Trashcan and/or flyout may go here]
-    <g></g>  // Block canvas
-    <g></g>  // Bubble canvas
+    <g class="blocklyBlockCanvas"></g>
+    <g class="blocklyBubbleCanvas"></g>
     [Scrollbars may go here]
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+  this.svgGroup_ = Blockly.createSvgElement('g',
+    {'class': 'blocklyWorkspace'}, null);
   if (opt_backgroundClass) {
     this.svgBackground_ = Blockly.createSvgElement('rect',
         {'height': '100%', 'width': '100%',
@@ -128,8 +129,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
           'url(#' + this.options.gridPattern.id + ')';
     }
   }
-  this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
-  this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
+  this.svgBlockCanvas_ = Blockly.createSvgElement('g',
+      {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
+  this.svgBubbleCanvas_ = Blockly.createSvgElement('g',
+      {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
   if (this.options.hasTrashcan) {
     this.addTrashcan_();
   }

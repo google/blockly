@@ -305,12 +305,14 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
  */
 Blockly.Scrollbar.prototype.createDom_ = function() {
   /* Create the following DOM:
-  <g>
+  <g class="blocklyScrollbarHorizontal">
     <rect class="blocklyScrollbarBackground" />
     <rect class="blocklyScrollbarKnob" rx="8" ry="8" />
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+  var className = 'blocklyScrollbar' +
+      (this.horizontal_ ? 'Horizontal' : 'Vertical');
+  this.svgGroup_ = Blockly.createSvgElement('g', {'class': className}, null);
   this.svgBackground_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);

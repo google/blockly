@@ -12,7 +12,7 @@
 	"EXTERNAL_INPUTS": "داده یا وه دری",
 	"INLINE_INPUTS": "داده یا مئنجا",
 	"DELETE_BLOCK": "پاکسا کردن برشت",
-	"DELETE_X_BLOCKS": "پاکسا کردن1% د برشتیا",
+	"DELETE_X_BLOCKS": "پاکسا کردن%1 د برشتیا",
 	"COLLAPSE_BLOCK": "کوچک کردن برشت",
 	"COLLAPSE_ALL": "کوچک کردن برشتیا",
 	"EXPAND_BLOCK": "گپ کردن برشت",

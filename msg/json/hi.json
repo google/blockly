@@ -143,7 +143,7 @@
 	"MATH_MODULO_TITLE": "%1 ÷ %2 का शेषफल",
 	"MATH_MODULO_TOOLTIP": "दो संख्याओं के भाग का शेषफल रिटर्न करें।",
 	"MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
-	"MATH_RANDOM_INT_TITLE": "%1 से % 2 तक रैन्डम पूर्णांक",
+	"MATH_RANDOM_INT_TITLE": "%1 से %2 तक रैन्डम पूर्णांक",
 	"MATH_RANDOM_FLOAT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "रैन्डम अंश",
 	"TEXT_TEXT_HELPURL": "https://en.wikipedia.org/wiki/String_(computer_science)",

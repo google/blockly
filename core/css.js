@@ -321,9 +321,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyScrollbarBackground {',
-  '  fill: #fff;',
-  '  stroke: #e4e4e4;',
-  '  stroke-width: 1;',
+  '  opacity: 0;',
   '}',
 
   '.blocklyScrollbarKnob {',

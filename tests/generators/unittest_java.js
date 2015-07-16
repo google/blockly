@@ -28,89 +28,135 @@ Blockly.Java['unittest_main'] = function(block) {
   // Container for unit tests.
   var resultsVar = Blockly.Java.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
+
+  Blockly.Java.addImport('java.util.LinkedList');
+  Blockly.Java.addImport('java.util.List');
+  Blockly.Java.addImport('java.lang.StringBuilder');
+
   var functionName = Blockly.Java.provideFunction_(
       'unittest_report',
-      [ 'function ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      [ 'public String ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '() {',
         '  // Create test report.',
-        '  var report = [];',
-        '  var summary = [];',
-        '  var fails = 0;',
-        '  for (var x = 0; x < ' + resultsVar + '.length; x++) {',
-        '    if (' + resultsVar + '[x][0]) {',
-        '      summary.push(".");',
+        '  LinkedList<String> report = new LinkedList<>();',
+        '  LinkedList<String> summary = new LinkedList<>();',
+        '  StringBuilder result = new StringBuilder();',
+        '  int fails = 0;',
+        '  for (int x = 0; x < ' + resultsVar + '.size(); x++) {',
+        '    if ((boolean)(((LinkedList)' + resultsVar + '.get(x)).get(0))) {',
+        '      summary.add(".");',
         '    } else {',
-        '      summary.push("F");',
+        '      summary.add("F");',
         '      fails++;',
-        '      report.push("");',
-        '      report.push("FAIL: " + ' + resultsVar + '[x][2]);',
-        '      report.push(' + resultsVar + '[x][1]);',
+        '      report.add("");',
+        '      report.add("FAIL: " + (String)((LinkedList)' + resultsVar +
+                                                      '.get(x)).get(2));',
+        '      report.add((String)((LinkedList)' + resultsVar + '.get(x)).get(1));',
         '    }',
         '  }',
-        '  report.unshift(summary.join(""));',
-        '  report.push("");',
-        '  report.push("Number of tests run: " + ' + resultsVar +
-              '.length);',
-        '  report.push("");',
-        '  if (fails) {',
-        '    report.push("FAILED (failures=" + fails + ")");',
-        '  } else {',
-        '    report.push("OK");',
+        '  for(String x: summary) {',
+        '    result.append(x);',
+        '    result.append("\\n");',
         '  }',
-        '  return report.join("\\n");',
+        '  report.add("");',
+        '  report.add("Number of tests run: " + ' + resultsVar +
+              '.size());',
+        '  report.add("");',
+        '  if (fails > 0) {',
+        '    report.add("FAILED (failures=" + fails + ")");',
+        '  } else {',
+        '    report.add("OK");',
+        '  }',
+        '  for(String x: report) {',
+        '    result.append(x);',
+        '    result.append("\\n");',
+        '  }',
+        '  return result.toString();',
         '}']);
   // Setup global to hold test results.
-  var code = resultsVar + ' = [];\n';
+  var code = resultsVar + ' = new LinkedList();\n';
   // Run tests (unindented).
   code += Blockly.Java.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
+
   var reportVar = Blockly.Java.variableDB_.getDistinctName(
       'report', Blockly.Variables.NAME_TYPE);
-  code += 'var ' + reportVar + ' = ' + functionName + '();\n';
-  // Destroy results.
-  code += resultsVar + ' = null;\n';
+  code += 'String ' + reportVar + ' = this.' + functionName + '();\n';
   // Send the report to the console (that's where errors will go anyway).
-  code += 'console.log(' + reportVar + ');\n';
+  code += 'System.out.print(' + reportVar + ');\n';
+
+  code = 'public void myMain(String[] args) {\n' +
+         Blockly.Java.prefixLines(/** @type {string} */ (code),
+                                  Blockly.Java.INDENT) +
+         '}\n'+
+         'public static void main(String[] args) {\n'+
+         ' // Create the class\n' +
+         '  '+ Blockly.Java.getAppName() +
+                      ' app = new '+ Blockly.Java.getAppName() + '();\n' +
+         '  app.myMain(args);\n'+
+         '}\n';
   return code;
 };
 
-Blockly.Java['unittest_main'].defineAssert_ = function(block) {
+Blockly.Java['unittest_main'].defineAssert_ = function() {
   var resultsVar = Blockly.Java.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var functionName = Blockly.Java.provideFunction_(
-      'assertEquals',
-      [ 'function ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
-          '(actual, expected, message) {',
-        '  // Asserts that a value equals another value.',
-        '  if (!' + resultsVar + ') {',
-        '    throw "Orphaned assert: " + message;',
-        '  }',
-        '  function equals(a, b) {',
-        '    if (a === b) {',
-        '      return true;',
-        '    } else if ((typeof a == "number") && (typeof b == "number") &&',
-        '        (a.toPrecision(15) == b.toPrecision(15))) {',
-        '      return true;',
-        '    } else if (a instanceof Array && b instanceof Array) {',
-        '      if (a.length != b.length) {',
+  var functionEquals = Blockly.Java.provideFunction_(
+        'equals',
+      [ 'public static boolean ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
+              '(Object a, Object b) {',
+        '',
+        '  if (a.equals(b)) {',
+        '    return true;',
+        '  } else if (a == b) {',
+        '    return true;',
+        '  } else if (((a instanceof Double) || (a instanceof Integer)) &&',
+        '             ((b instanceof Double) || (b instanceof Integer))) {',
+        '    double v1,v2;',
+        '    if (a instanceof Double) {',
+        '      v1 = (Double)a;',
+        '    } else {',
+        '      v1 = (Integer)a;',
+        '    }',
+        '    if (b instanceof Double) {',
+        '      v2 = (Double)b;',
+        '    } else {',
+        '      v2 = (Integer)b;',
+        '    }',
+        '    return((v1 * 100000.0) == (v2 * 100000.0));',
+        '  } else if (a instanceof List && b instanceof List) {',
+        '    List aList = (List)a;',
+        '    List bList = (List)b;',
+        '',
+        '    if (aList.size() != bList.size()) {',
+        '      return false;',
+        '    }',
+        '    for (int i = 0; i < aList.size(); i++) {',
+        '      if (!equals(aList.get(i), bList.get(i))) {',
         '        return false;',
         '      }',
-        '      for (var i = 0; i < a.length; i++) {',
-        '        if (!equals(a[i], b[i])) {',
-        '          return false;',
-        '        }',
-        '      }',
-        '      return true;',
         '    }',
-        '    return false;',
+        '    return true;',
         '  }',
-        '  if (equals(actual, expected)) {',
-        '    ' + resultsVar + '.push([true, "OK", message]);',
-        '  } else {',
-        '    ' + resultsVar + '.push([false, ' +
-          '"Expected: " + expected + "\\nActual: " + actual, message]);',
-        '  }',
+        '  return false;',
         '}']);
-  return functionName;
+  var functionName = Blockly.Java.provideFunction_(
+      'assertEquals',
+      [ 'public void ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
+          '(Object actual, Object expected, String message) {',
+        '  LinkedList result = new LinkedList();',
+        '  // Asserts that a value equals another value.',
+        '  if (' + functionEquals + '(actual,expected)) {',
+        '    result.add(true);',
+        '    result.add("OK");',
+        '    result.add(message);',
+        '  } else {',
+        '    result.add(false);',
+        '    result.add("Expected: " + expected + "\\nActual: " + actual);',
+        '    result.add(message);',
+        '  }',
+        '  ' + resultsVar + '.add(result);',
+        '}']);
+  return 'this.' + functionName;
 };
 
 Blockly.Java['unittest_assertequals'] = function(block) {
@@ -148,13 +194,14 @@ Blockly.Java['unittest_fail'] = function(block) {
   var message = Blockly.Java.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Java.provideFunction_(
       'unittest_fail',
-      [ 'function ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
-          '(message) {',
+      [ 'public void ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
+          '(String message) {',
         '  // Always assert an error.',
-        '  if (!' + resultsVar + ') {',
-        '    throw "Orphaned assert fail: " + message;',
-        '  }',
-        '  ' + resultsVar + '.push([false, "Fail.", message]);',
+        '  LinkedList result = new LinkedList();',
+        '  result.add(false);',
+        '  result.add("Fail.");',
+        '  result.add(message);',
+        '  ' + resultsVar + '.add(result);',
         '}']);
   return functionName + '(' + message + ');\n';
 };

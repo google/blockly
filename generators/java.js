@@ -323,6 +323,8 @@ Blockly.Java.init = function(workspace, imports) {
       type = 'Boolean';
     } else if (type === 'String') {
       type = 'String';
+    } else if (type === 'Colour') {
+      type = 'String';
     } else if (type === 'Number') {
       type = 'double';
     } else if (type !== '') {

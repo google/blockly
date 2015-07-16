@@ -7,9 +7,9 @@ goog.provide('Blockly.Msg.id');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Tambahkan sebuah comment";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "Silakan mengotorisasi aplikasi ini untuk memungkinkan pekerjaan Anda dapat disimpan dan digunakan bersama.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CHAT = "Chatting dengan kolaborator Anda dengan mengetikkan di kotak ini!";
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Tutup blok";
@@ -365,7 +365,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kembalikan atan dari angka.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kembalikan cos dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kembalikan sinus dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kembalikan tangen dari derajat (tidak radian).";
-Blockly.Msg.ME = "Me";  // untranslated
+Blockly.Msg.ME = "Saya";
 Blockly.Msg.NEW_SCOPE_VARIABLE = "New Key...";  // untranslated
 Blockly.Msg.NEW_SCOPE_VARIABLE_TITLE = "New Key name:";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Pembolehubah baru...";
@@ -498,7 +498,7 @@ Blockly.Msg.TEXT_TYPE_JAVA = "insert java code";  // untranslated
 Blockly.Msg.TEXT_TYPE_JAVA_TYPEBLOCK = "insert java code";  // untranslated
 Blockly.Msg.TEXT_TYPE_PYTHON = "insert python code";  // untranslated
 Blockly.Msg.TEXT_TYPE_PYTHON_TYPEBLOCK = "insert python code";  // untranslated
-Blockly.Msg.TODAY = "Today";  // untranslated
+Blockly.Msg.TODAY = "Hari ini";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Membuat 'tetapkan %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

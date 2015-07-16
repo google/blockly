@@ -115,7 +115,8 @@ Blockly.Toolbox.prototype.init = function() {
       });
   var workspaceOptions = {
     parentWorkspace: workspace,
-    RTL: workspace.RTL
+    RTL: workspace.RTL,
+    svg: workspace.options.svg
   };
   /**
    * @type {!Blockly.Flyout}

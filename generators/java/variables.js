@@ -42,6 +42,20 @@ Blockly.Java['variables_set'] = function(block) {
       Blockly.Java.ORDER_NONE) || '0';
   var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
+  // See if we have to handle the case where the type of the variable doesn't
+  // match the type of what is being assigned.
+  var sourceType = Blockly.Java.getValueType(block, 'VALUE');
+  var destType = Blockly.Java.GetBlocklyType(block.getFieldValue('VAR'));
+  var compatible = false;
+  for (var i = 0; i < sourceType.length; i++) {
+    if (sourceType[i] === destType) {
+      compatible = true;
+      break;
+    }
+  }
+  if (destType === 'String' && !compatible) {
+    argument0 = Blockly.Java.toStringCode(argument0);
+  }
   return varName + ' = ' + argument0 + ';\n';
 };
 

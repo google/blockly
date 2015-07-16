@@ -175,13 +175,13 @@ Blockly.Python['text_getSubstring'] = function(block) {
   }
   if (where2 == 'LAST' || (where2 == 'FROM_END' && at2 == '1')) {
     at2 = '';
-  } else if (where1 == 'FROM_START') {
+  } else if (where2 == 'FROM_START') {
     if (Blockly.isNumber(at2)) {
       at2 = parseInt(at2, 10);
     } else {
       at2 = 'int(' + at2 + ')';
     }
-  } else if (where1 == 'FROM_END') {
+  } else if (where2 == 'FROM_END') {
     if (Blockly.isNumber(at2)) {
       // If the index is a naked number, increment it right now.
       at2 = 1 - parseInt(at2, 10);

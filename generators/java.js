@@ -99,9 +99,15 @@ Blockly.Java.POSTFIX = '';
  */
 Blockly.Java.EXTRAINDENT = '';
 /**
- * List of all known variable types.  Only set after a call to workspaceToCode
+ * List of all known Java variable types.
+ *  NOTE: Only valid after a call to workspaceToCode
  */
-Blockly.Java.VariableTypes_ = {};
+Blockly.Java.variableTypes_ = {};
+/**
+ * List of all known Blockly variable types. 
+ *  NOTE: Only valid after a call to workspaceToCode
+ */
+Blockly.Java.blocklyTypes_ = {}
 /**
  * Default Name of the application for use by all generated classes
  */
@@ -193,11 +199,20 @@ Blockly.Java.getBaseclass = function() {
  * @return {string} type Java type for the variablee
  */
 Blockly.Java.GetVariableType = function(variable) {
-  var type = Blockly.Java.VariableTypes_[variable];
+  var type = Blockly.Java.variableTypes_[variable];
   if (!type) {
     type = 'string/*UNKNOWN_TYPE*/';
   }
   return type;
+};
+
+/**
+ * Get the Java type of a variable by name
+ * @param {string} variable Name of the variable to get the type for
+ * @return {string} type Java type for the variablee
+ */
+Blockly.Java.GetBlocklyType = function(variable) {
+  return Blockly.Java.blocklyTypes_[variable];
 };
 
 /**
@@ -263,7 +278,7 @@ Blockly.Java.workspaceToCode = function(workspace, parms) {
 }
 
 Blockly.Java.getValueType = function(block, field) {
-  var targetBlock = block.getInputTargetBlock(name);
+  var targetBlock = block.getInputTargetBlock(field);
   if (!targetBlock) {
     return '';
   }
@@ -295,11 +310,11 @@ Blockly.Java.init = function(workspace, imports) {
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  var vartypes = Blockly.Variables.allVariablesTypes(workspace);
+  Blockly.Java.blocklyTypes_ = Blockly.Variables.allVariablesTypes(workspace);
 
   for (var x = 0; x < variables.length; x++) {
     var key = variables[x];
-    var type = vartypes[key];
+    var type = Blockly.Java.blocklyTypes_[key];
     if (type === 'JSON') {
       type = 'JsonObject';
     } else if (type === 'Array') {
@@ -314,7 +329,7 @@ Blockly.Java.init = function(workspace, imports) {
       if (Blockly.Blocks[type] && Blockly.Blocks[type].GBPClass ) {
         type = Blockly.Blocks[type].GBPClass;
       } else {
-        console.log('Unknown type for '+key+' using String for'+type);
+        console.log('Unknown type for '+key+' using Object for'+type);
         type = 'Object/*UNKNOWN_TYPE for '+type+'*/';
       }
     } else {
@@ -323,7 +338,7 @@ Blockly.Java.init = function(workspace, imports) {
       type = 'String/*UNKNOWN_TYPE*/';
     }
 
-    Blockly.Java.VariableTypes_[key] = type;
+    Blockly.Java.variableTypes_[key] = type;
 
     defvars.push('protected ' +
                  type + ' '+
@@ -378,6 +393,62 @@ Blockly.Java.quote_ = function(string) {
                  .replace(/\%/g, '\\%')
                  .replace(/"/g, '\\"');
   return '"' + string + '"';
+};
+
+/**
+ * Generate code to treat an item as a string.  If it is numeric, quote it
+ * if it is a string already, do nothing.  Otherwise use the blocklyToString
+ * function at runtime.
+ * @param {string} string Text to encode.
+ * @return {string} Java code for string.
+ */
+Blockly.Java.toStringCode = function(item) {
+  item = item.trim();
+  // Empty strings and quoted strings are perfectly fine as they are
+  if (item !== '' && item.charAt(0) !== '"') {
+    // Pure numbers get quoted
+    if (Blockly.isNumber(item)) {
+      item = '"' + item + '"';
+    } else {
+      // It is something else so we need to convert it on the fly
+      Blockly.Java.addImport('java.text.DecimalFormat');
+      Blockly.Java.addImport('java.text.NumberFormat');
+
+      var functionName = Blockly.Java.provideFunction_(
+          'blocklyToString',
+         [ 'public static String blocklyToString(Object object) {',
+           '  String result;',
+           '  if (object instanceof String) {',
+           '      result = (String) object;',
+           '  } else {',
+           '      // must be a number',
+           '      // might be a double',
+           '      try {',
+           '          Double d = (double) object;',
+           '          // it was a double, so keep going',
+           '          NumberFormat formatter = new DecimalFormat("#.#####");',
+           '          result = formatter.format(d);',
+           '',
+           '      } catch (Exception ex) {',
+           '          // not a double, see if it is an integer',
+           '          try {',
+           '              Integer i = (int) object;',
+           '              // format should be number with a decimal point',
+           '              result = i.toString();',
+           '          } catch (Exception ex2) {',
+           '              // not a double or integer',
+           '              result = "UNKNOWN";',
+           '          }',
+           '      }',
+           '  }',
+           '',
+           '  return result;',
+           '}'
+          ]);
+      item = functionName + '(' + item + ')';
+    }
+  }
+  return item;
 };
 
 /**

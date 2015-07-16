@@ -35,44 +35,6 @@ Blockly.Java['text'] = function(block) {
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 
-Blockly.Java['text'].defineToString_ = function() {
-  Blockly.Java.addImport('java.text.DecimalFormat');
-  Blockly.Java.addImport('java.text.NumberFormat');
-
-  var functionName = Blockly.Java.provideFunction_(
-      'blocklyToString',
-     [ 'public static String blocklyToString(Object object) {',
-       '  String result;',
-       '  if (object instanceof String) {',
-       '      result = (String) object;',
-       '  } else {',
-       '      // must be a number',
-       '      // might be a double',
-       '      try {',
-       '          Double d = (double) object;',
-       '          // it was a double, so keep going',
-       '          NumberFormat formatter = new DecimalFormat("#.#####");',
-       '          result = formatter.format(d);',
-       '',
-       '      } catch (Exception ex) {',
-       '          // not a double, see if it is an integer',
-       '          try {',
-       '              Integer i = (int) object;',
-       '              // format should be number with a decimal point',
-       '              result = i.toString();',
-       '          } catch (Exception ex2) {',
-       '              // not a double or integer',
-       '              result = "UNKNOWN";',
-       '          }',
-       '      }',
-       '  }',
-       '',
-       '  return result;',
-       '}'
- ]);
-  return functionName;
-};
-
 Blockly.Java['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
@@ -82,12 +44,11 @@ Blockly.Java['text_join'] = function(block) {
   } else {
     var code = '';
     var extra = '';
-    var functionName = Blockly.Java['text'].defineToString_();
     for (var n = 0; n < block.itemCount_['items']; n++) {
       var item = Blockly.Java.valueToCode(block, 'ADD' + n,
           Blockly.Java.ORDER_NONE);
       if (item) {
-        code += extra + functionName + '(' + item + ')';
+        code += extra + Blockly.Java.toStringCode(item);
         extra = ' + ';
       }
     }
@@ -103,11 +64,10 @@ Blockly.Java['text_append'] = function(block) {
       Blockly.Java.ORDER_NONE) || '""';
   // First we want to see if the input variable happens to be a non string type
   var argument0Type = Blockly.Java.getValueType(block, 'TEXT');
-  var functionName = Blockly.Java['text'].defineToString_();
 
   // See if we need to convert the non-string to a string
   return varName + ' = ' + varName + ' + ' +
-                   functionName + '(' + argument0 + ');\n';
+            Blockly.Java.toStringCode(argument0) + ';\n';
 };
 
 Blockly.Java['text_length'] = function(block) {
@@ -148,24 +108,36 @@ Blockly.Java['text_charAt'] = function(block) {
       Blockly.Java.ORDER_MEMBER) || '""';
   switch (where) {
     case 'FIRST':
-      var code = text + '.charAt(0)';
+      var code = text + '.substring(0,1)';
       return [code, Blockly.Java.ORDER_MEMBER];
     case 'LAST':
-      var code = text + '.charAt(' + text + '.length()-1)';
+      var code = text + '.substring(' + text + '.length()-1)';
       return [code, Blockly.Java.ORDER_MEMBER];
     case 'FROM_START':
       // Blockly uses one-based indicies.
+      var at2;
       if (Blockly.isNumber(at)) {
         // If the index is a naked number, decrement it right now.
-        at = parseInt(at, 10) - 1;
+        at2 = parseInt(at, 10);
+        at = at2 - 1;
       } else {
         // If the index is dynamic, decrement it in code.
-        at = 'int(' + at + ' - 1)';
+        at = '(int)' + at + ' - 1';
+        at2 = '(int)' + at;
       }
-      var code = text + '.charAt(' + at + ')';
+      var code = text + '.substring(' + at + ',' + at2 + ')';
       return [code, Blockly.Java.ORDER_MEMBER];
     case 'FROM_END':
-      var code = text + '.charAt(' + text + '.length()-' + at + ')';
+      var at2;
+      if (Blockly.isNumber(at)) {
+        at2 = parseInt(at, 10);
+        at = text + '.length()-' + at2;
+        at2 = text + '.length()-' + (at2-1);
+      } else {
+        at2 = text + '.length()-(int)' + at;
+        at = text + '.length()-((int)' + at + '-1)';
+      }
+      var code = text + '.substring(' + at + ',' + at2 + ')';
       return [code, Blockly.Java.ORDER_MEMBER];
     case 'RANDOM':
       Blockly.Java.addImport('java.lang.Math');
@@ -205,31 +177,32 @@ Blockly.Java['text_getSubstring'] = function(block) {
     }
   } else if (where1 == 'FROM_END') {
     if (Blockly.isNumber(at1)) {
-      at1 = -parseInt(at1, 10);
+      at1 = text + '.length() -' + parseInt(at1, 10);
     } else {
-      at1 = '-((int)' + at1 + ')';
+      at1 = text + '.length() - ((int)' + at1 + ')';
     }
   }
   if (where2 == 'LAST' || (where2 == 'FROM_END' && at2 == '1')) {
     at2 = '';
-  } else if (where1 == 'FROM_START') {
+  } else if (where2 == 'FROM_START') {
     if (Blockly.isNumber(at2)) {
       at2 = parseInt(at2, 10);
     } else {
       at2 = '((int)' + at2 + ')';
     }
-  } else if (where1 == 'FROM_END') {
+  } else if (where2 == 'FROM_END') {
     if (Blockly.isNumber(at2)) {
-      // If the index is a naked number, increment it right now.
-      at2 = 1 - parseInt(at2, 10);
+      at2 = parseInt(at2, 10) - 1;
       if (at2 == 0) {
         at2 = '';
+      } else {
+        at2 = text + '.length() -' + at2;
       }
     } else {
       // If the index is dynamic, increment it in code.
       // Add special case for -0.
 //      Blockly.Java.definitions_['import_sys'] = 'import sys';
-      at2 = '(1 - (int)' + at2 + ') or sys.maxsize';
+      at2 = text + '.length() - ((int)' + at2 + '-1)';
     }
   }
   if (at2 !== '') {
@@ -259,7 +232,7 @@ Blockly.Java['text_changeCase'] = function(block) {
           '  StringBuilder titleCase = new StringBuilder();',
           '  boolean nextTitleCase = true;',
           '',
-          '  for (char c : input.toCharArray()) {',
+          '  for (char c : input.toLowerCase().toCharArray()) {',
           '    if (Character.isSpaceChar(c)) {',
           '       nextTitleCase = true;',
           '     } else if (nextTitleCase) {',

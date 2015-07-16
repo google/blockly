@@ -76,6 +76,14 @@ Blockly.Java['controls_whileUntil'] = function(block) {
   var branch = Blockly.Java.statementToCode(block, 'DO');
   branch = Blockly.Java.addLoopTrap(branch, block.id) ||
       Blockly.Java.PASS;
+
+  if ((until && (argument0 === 'true')) || (!until && (argument0 === 'false'))){
+    var argvar = Blockly.Java.variableDB_.getDistinctName(
+      argument0, Blockly.Variables.NAME_TYPE);
+    Blockly.Java.stashStatement('boolean ' + argvar + ' = ' + argument0 + ';\n');
+    argument0 = argvar;
+  }
+      
   if (until) {
     argument0 = '!' + argument0;
   }

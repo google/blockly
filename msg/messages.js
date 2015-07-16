@@ -1395,12 +1395,12 @@ Blockly.Msg.CLICK_REMOVE_TOOLTIP = 'Remove this element';
 /// This is the string for creating a parameter line on a function.
 ///  %1 corresponds to the name of the parameter as a FieldTextInput
 ///  %2 corresponds to the - icon for removing the field
-Blockly.Msg.PROCEDURES_PARAM_NOTYPE = 'with %1 %2';
+Blockly.Msg.PROCEDURES_PARAM_NOTYPE = 'with %1 %2%3';
 /// This is the string for creating a parameter line on a function.
 ///  %1 corresponds to the name of the parameter as a FieldTextInput
 ///  %2 corresponds to the type of the parameter as a FieldScopeVariable
 ///  %3 corresponds to the - icon for removing the field
-Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE = 'with %1 as %2%3';
+Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE = 'with %1 as %2%3%4';
 
 /// context menu - This appears on the context menu for function calls.  Selecting
 /// it causes the corresponding function definition to be highlighted (as shown at

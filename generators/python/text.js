@@ -39,14 +39,14 @@ Blockly.Python['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
   var code;
-  if (block.itemCount_ == 0) {
+  if (block.itemCount_['items'] == 0) {
     return ['\'\'', Blockly.Python.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
+  } else if (block.itemCount_['items'] == 1) {
     var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
         Blockly.Python.ORDER_NONE) || '\'\'';
     code = 'str(' + argument0 + ')';
     return [code, Blockly.Python.ORDER_FUNCTION_CALL];
-  } else if (block.itemCount_ == 2) {
+  } else if (block.itemCount_['items'] == 2) {
     var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
         Blockly.Python.ORDER_NONE) || '\'\'';
     var argument1 = Blockly.Python.valueToCode(block, 'ADD1',
@@ -55,7 +55,7 @@ Blockly.Python['text_join'] = function(block) {
     return [code, Blockly.Python.ORDER_UNARY_SIGN];
   } else {
     var code = [];
-    for (var n = 0; n < block.itemCount_; n++) {
+    for (var n = 0; n < block.itemCount_['items']; n++) {
       code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
           Blockly.Python.ORDER_NONE) || '\'\'';
     }

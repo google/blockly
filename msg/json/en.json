@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-07-08 11:04:04.571519",
+		"lastupdated": "2015-07-15 21:07:52.106153",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -500,8 +500,8 @@
 	"PROCEDURES_MUTATORARG_TOOLTIP": "Add an input to the function.",
 	"CLICK_ADD_TOOLTIP": "Add an element",
 	"CLICK_REMOVE_TOOLTIP": "Remove this element",
-	"PROCEDURES_PARAM_NOTYPE": "with %1 %2",
-	"PROCEDURES_PARAM_WITH_TYPE": "with %1 as %2%3",
+	"PROCEDURES_PARAM_NOTYPE": "with %1 %2%3",
+	"PROCEDURES_PARAM_WITH_TYPE": "with %1 as %2%3%4",
 	"PROCEDURES_HIGHLIGHT_DEF": "Highlight function definition",
 	"PROCEDURES_CREATE_DO": "Create '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",

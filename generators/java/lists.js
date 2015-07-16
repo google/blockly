@@ -31,17 +31,19 @@ goog.require('Blockly.Java');
 
 Blockly.Java['lists_create_empty'] = function(block) {
   // Create an empty list.
-  return ['[]', Blockly.Java.ORDER_ATOMIC];
+  return ['new LinkedList()', Blockly.Java.ORDER_ATOMIC];
 };
 
 Blockly.Java['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  var code = new Array(block.itemCount_);
-  for (var n = 0; n < block.itemCount_; n++) {
+  var code = new Array(block.itemCount_['items']);
+  for (var n = 0; n < block.itemCount_['items']; n++) {
     code[n] = Blockly.Java.valueToCode(block, 'ADD' + n,
         Blockly.Java.ORDER_NONE) || 'None';
   }
-  code = '[' + code.join(', ') + ']';
+  Blockly.Java.addImport('java.util.Arrays');
+
+  code = 'Arrays.asList(' + code.join(', ') + ')';
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 
@@ -51,51 +53,45 @@ Blockly.Java['lists_repeat'] = function(block) {
       Blockly.Java.ORDER_NONE) || 'None';
   var argument1 = Blockly.Java.valueToCode(block, 'NUM',
       Blockly.Java.ORDER_MULTIPLICATIVE) || '0';
-  var code = '[' + argument0 + '] * ' + argument1;
-  return [code, Blockly.Java.ORDER_MULTIPLICATIVE];
+  var functionName = Blockly.Java.provideFunction_(
+       'lists_repeat',
+      ['public static LinkedList ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
+          '(Object item, int torepeat) {',
+           '  LinkedList<Object> result = new LinkedList<>();',
+           '  for(int x = 0; x < torepeat; x++) {',
+           '    result.add(item);',
+           '  }',
+           '  return result;',
+           '}']);
+  var code = functionName + '(' + argument0 + ',' + argument1 + ')';
+  return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['lists_length'] = function(block) {
   // List length.
   var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_NONE) || '[]';
-  return ['len(' + argument0 + ')', Blockly.Java.ORDER_FUNCTION_CALL];
+  return [argument0 + '.size()', Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['lists_isEmpty'] = function(block) {
   // Is the list empty?
   var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_NONE) || '[]';
-  var code = 'not len(' + argument0 + ')';
+  var code = argument0 + '.size() == 0';
   return [code, Blockly.Java.ORDER_LOGICAL_NOT];
 };
 
 Blockly.Java['lists_indexOf'] = function(block) {
   // Find an item in the list.
+  var operator = block.getFieldValue('END') == 'FIRST' ?
+      'indexOf' : 'lastIndexOf';
   var argument0 = Blockly.Java.valueToCode(block, 'FIND',
       Blockly.Java.ORDER_NONE) || '[]';
   var argument1 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_MEMBER) || '\'\'';
-  var code;
-  if (block.getFieldValue('END') == 'FIRST') {
-    var functionName = Blockly.Java.provideFunction_(
-        'first_index',
-        ['def ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '(myList, elem):',
-         '  try: theIndex = myList.index(elem) + 1',
-         '  except: theIndex = 0',
-         '  return theIndex']);
-    code = functionName + '(' + argument1 + ', ' + argument0 + ')';
-    return [code, Blockly.Java.ORDER_FUNCTION_CALL];
-  } else {
-    var functionName = Blockly.Java.provideFunction_(
-        'last_index',
-        ['def ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '(myList, elem):',
-         '  try: theIndex = len(myList) - myList[::-1].index(elem)',
-         '  except: theIndex = 0',
-         '  return theIndex']);
-    code = functionName + '(' + argument1 + ', ' + argument0 + ')';
-    return [code, Blockly.Java.ORDER_FUNCTION_CALL];
-  }
+  var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
+  return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['lists_getIndex'] = function(block) {
@@ -139,10 +135,10 @@ Blockly.Java['lists_getIndex'] = function(block) {
       at = parseInt(at, 10) - 1;
     } else {
       // If the index is dynamic, decrement it in code.
-      at = 'int(' + at + ' - 1)';
+      at = '(' + at + ' - 1)';
     }
     if (mode == 'GET') {
-      var code = list + '.getJsonElement(' + at + ')';
+      var code = list + '.get(' + at + ')';
       return [code, Blockly.Java.ORDER_MEMBER];
     } else {
       var code = list + '.pop(' + at + ')';
@@ -165,21 +161,23 @@ Blockly.Java['lists_getIndex'] = function(block) {
       }
     }
   } else if (where == 'RANDOM') {
-    Blockly.Java.definitions_['import_random'] = 'import random';
+    Blockly.Java.addImport('java.lang.Math');
     if (mode == 'GET') {
-      code = 'random.choice(' + list + ')';
+      code = list +'.get(Math.random() * ' + list + '.size())';
       return [code, Blockly.Java.ORDER_FUNCTION_CALL];
     } else {
       var functionName = Blockly.Java.provideFunction_(
           'lists_remove_random_item',
-          ['def ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '(myList):',
-           '  x = int(random.random() * len(myList))',
-           '  return myList.pop(x)']);
+          ['public static Object ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
+            '(LinkedList myList) {',
+           '  int x = (int)(Math.random() * myList.size());',
+           '  return myList.remove(x);',
+           '}']);
       code = functionName + '(' + list + ')';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.Java.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
-        return code + '\n';
+        return code + ';\n';
       }
     }
   }
@@ -219,7 +217,7 @@ Blockly.Java['lists_setIndex'] = function(block) {
     if (mode == 'SET') {
       return list + '[-1] = ' + value + '\n';
     } else if (mode == 'INSERT') {
-      return list + '.append(' + value + ')\n';
+      return list + '.add(' + value + ');\n';
     }
   } else if (where == 'FROM_START') {
     // Blockly uses one-based indicies.
@@ -242,11 +240,11 @@ Blockly.Java['lists_setIndex'] = function(block) {
       return list + '.insert(-' + at + ', ' + value + ')\n';
     }
   } else if (where == 'RANDOM') {
-    Blockly.Java.definitions_['import_random'] = 'import random';
+    Blockly.Java.addImport('java.util.Random');
     var code = cacheList();
     var xVar = Blockly.Java.variableDB_.getDistinctName(
         'tmp_x', Blockly.Variables.NAME_TYPE);
-    code += xVar + ' = int(random.random() * len(' + list + '))\n';
+    code += xVar + ' = int(random.random() * ' + list + '.size())\n';
     if (mode == 'SET') {
       code += list + '[' + xVar + '] = ' + value + '\n';
       return code;

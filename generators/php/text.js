@@ -38,14 +38,14 @@ Blockly.PHP['text'] = function(block) {
 Blockly.PHP['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   var code;
-  if (block.itemCount_ == 0) {
+  if (block.itemCount_['items'] == 0) {
     return ['\'\'', Blockly.PHP.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
+  } else if (block.itemCount_['items'] == 1) {
     var argument0 = Blockly.PHP.valueToCode(block, 'ADD0',
         Blockly.PHP.ORDER_NONE) || '\'\'';
     code = argument0;
     return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-  } else if (block.itemCount_ == 2) {
+  } else if (block.itemCount_['items'] == 2) {
     var argument0 = Blockly.PHP.valueToCode(block, 'ADD0',
         Blockly.PHP.ORDER_NONE) || '\'\'';
     var argument1 = Blockly.PHP.valueToCode(block, 'ADD1',
@@ -53,8 +53,8 @@ Blockly.PHP['text_join'] = function(block) {
     code = argument0 + ' . ' + argument1;
     return [code, Blockly.PHP.ORDER_ADDITION];
   } else {
-    code = new Array(block.itemCount_);
-    for (var n = 0; n < block.itemCount_; n++) {
+    code = new Array(block.itemCount_['items']);
+    for (var n = 0; n < block.itemCount_['items']; n++) {
       code[n] = Blockly.PHP.valueToCode(block, 'ADD' + n,
           Blockly.PHP.ORDER_COMMA) || '\'\'';
     }

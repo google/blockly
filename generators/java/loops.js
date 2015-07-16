@@ -126,10 +126,37 @@ Blockly.Java['controls_for'] = function(block) {
                       variable0 + direction + argument1 + '; ' +
                       variable0 + doincrement + ')';
   } else {
-    code += 'for (' + variable0 + ' = ' + argument0 + '; ' +
-                      variable0 + '<=' + argument1 + '; ' +
-                      variable0 + ' += ' + increment + ')';
-
+    // Cache non-trivial values to variables to prevent repeated look-ups.
+    var startVar = argument0;
+    if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
+      startVar = Blockly.Java.variableDB_.getDistinctName(
+          variable0 + '_start', Blockly.Variables.NAME_TYPE);
+      code += 'double ' + startVar + ' = ' + argument0 + ';\n';
+    }
+    var endVar = argument1;
+    if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
+      var endVar = Blockly.Java.variableDB_.getDistinctName(
+          variable0 + '_end', Blockly.Variables.NAME_TYPE);
+      code += 'double ' + endVar + ' = ' + argument1 + ';\n';
+    }
+    // Determine loop direction at start, in case one of the bounds
+    // changes during loop execution.
+    var incVar = Blockly.Java.variableDB_.getDistinctName(
+        variable0 + '_inc', Blockly.Variables.NAME_TYPE);
+    code += 'double ' + incVar + ' = ';
+    if (Blockly.isNumber(increment)) {
+      code += Math.abs(increment) + ';\n';
+    } else {
+      code += 'Math.abs(' + increment + ');\n';
+    }
+    code += 'if (' + startVar + ' > ' + endVar + ') {\n';
+    code += Blockly.Java.INDENT + incVar + ' = -' + incVar + ';\n';
+    code += '}\n';
+    code += 'for (' + variable0 + ' = ' + startVar + ';\n' +
+        '     ' + incVar + ' >= 0 ? ' +
+        variable0 + ' <= ' + endVar + ' : ' +
+        variable0 + ' >= ' + endVar + ';\n' +
+        '     ' + variable0 + ' += ' + incVar + ')';
   }
   code += ' {\n' +
               branch +

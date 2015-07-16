@@ -51,7 +51,7 @@ Blockly.Java.addReservedWords(
     //http://en.wikipedia.org/wiki/List_of_Java_keywords#Reserved_words_for_literal_values
     'false,null,true,' +
     // http://docs.Java.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern');
+    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern,equal');
 
 /**
  * Order of operation ENUMs.
@@ -105,7 +105,7 @@ Blockly.Java.VariableTypes_ = {};
 /**
  * Default Name of the application for use by all generated classes
  */
-Blockly.Java.AppName_ = 'MyApp';
+Blockly.Java.AppName_ = 'myApp';
 /**
  * Default Name of the application for use by all generated classes
  */
@@ -118,11 +118,11 @@ Blockly.Java.Baseclass_ = '';
  * List of libraries used globally by the generated java code. These are
  * Processed by Blockly.Java.addImport
  */
-Blockly.Java.needImports_ = ['javax.json.Json',
-                             'javax.json.JsonArray',
-                             'javax.json.JsonObject',
-                             'javax.json.JsonReader',
-                             'javax.json.stream.JsonParsingException',
+Blockly.Java.needImports_ = [//'javax.json.Json',
+                             //'javax.json.JsonArray',
+                             //'javax.json.JsonObject',
+                             //'javax.json.JsonReader',
+                             //'javax.json.stream.JsonParsingException',
                              'java.io.IOException',
                              'java.io.StringReader'
                             ];
@@ -261,6 +261,15 @@ Blockly.Java.workspaceToCode = function(workspace, parms) {
                '}\n';
   return finalcode;
 }
+
+Blockly.Java.getValueType = function(block, field) {
+  var targetBlock = block.getInputTargetBlock(name);
+  if (!targetBlock) {
+    return '';
+  }
+
+  return targetBlock.outputConnection.check_;
+}
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
@@ -294,13 +303,13 @@ Blockly.Java.init = function(workspace, imports) {
     if (type === 'JSON') {
       type = 'JsonObject';
     } else if (type === 'Array') {
-      type = 'JsonArray';
+      type = 'LinkedList';
     } else if (type === 'Boolean') {
       type = 'Boolean';
     } else if (type === 'String') {
       type = 'String';
     } else if (type === 'Number') {
-      type = 'int';
+      type = 'double';
     } else if (type !== '') {
       if (Blockly.Blocks[type] && Blockly.Blocks[type].GBPClass ) {
         type = Blockly.Blocks[type].GBPClass;

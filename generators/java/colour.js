@@ -37,7 +37,7 @@ Blockly.Java['colour_picker'] = function(block) {
 
 Blockly.Java['colour_random'] = function(block) {
   // Generate a random colour.
-  Blockly.Java.definitions_['import_random'] = 'import random';
+  Blockly.Java.addImport('java.util.Random');
   var code = '\'#%06x\' % random.randint(0, 2**24 - 1)';
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };

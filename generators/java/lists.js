@@ -43,7 +43,7 @@ Blockly.Java['lists_create_with'] = function(block) {
   }
   Blockly.Java.addImport('java.util.Arrays');
 
-  code = 'Arrays.asList(' + code.join(', ') + ')';
+  code = 'new LinkedList(Arrays.asList(' + code.join(', ') + '))';
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 
@@ -106,26 +106,26 @@ Blockly.Java['lists_getIndex'] = function(block) {
 
   if (where == 'FIRST') {
     if (mode == 'GET') {
-      var code = list + '.getJsonObject(0)';
+      var code = list + '.getFirst()';
       return [code, Blockly.Java.ORDER_MEMBER];
     } else {
-      var code = list + '.pop(0)';
+      var code = list + '.removeFirst()';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.Java.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
-        return code + '\n';
+        return code + ';\n';
       }
     }
   } else if (where == 'LAST') {
     if (mode == 'GET') {
-      var code = list + '[-1]';
+      var code = list + '.getLast()';
       return [code, Blockly.Java.ORDER_MEMBER];
     } else {
-      var code = list + '.pop()';
+      var code = list + '.removeLast()';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.Java.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
-        return code + '\n';
+        return code + ';\n';
       }
     }
   } else if (where == 'FROM_START') {
@@ -138,32 +138,32 @@ Blockly.Java['lists_getIndex'] = function(block) {
       at = '(' + at + ' - 1)';
     }
     if (mode == 'GET') {
-      var code = list + '.get(' + at + ')';
+      var code = list + '.get((int)' + at + ')';
       return [code, Blockly.Java.ORDER_MEMBER];
     } else {
-      var code = list + '.pop(' + at + ')';
+      var code = list + '.remove((int)' + at + ')';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.Java.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
-        return code + '\n';
+        return code + ';\n';
       }
     }
   } else if (where == 'FROM_END') {
     if (mode == 'GET') {
-      var code = list + '[-' + at + ']';
+      var code = list + '.get(' + list + '.size() - (int)' + at + ')';
       return [code, Blockly.Java.ORDER_MEMBER];
     } else {
-      var code = list + '.pop(-' + at + ')';
+      var code = list + '.remove(' + list + '.size() - (int)' + at + ')';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.Java.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
-        return code + '\n';
+        return code + ';\n';
       }
     }
   } else if (where == 'RANDOM') {
     Blockly.Java.addImport('java.lang.Math');
     if (mode == 'GET') {
-      code = list +'.get(Math.random() * ' + list + '.size())';
+      code = list +'.get((int)(Math.random() * ' + list + '.size()))';
       return [code, Blockly.Java.ORDER_FUNCTION_CALL];
     } else {
       var functionName = Blockly.Java.provideFunction_(
@@ -209,13 +209,13 @@ Blockly.Java['lists_setIndex'] = function(block) {
   }
   if (where == 'FIRST') {
     if (mode == 'SET') {
-      return list + '[0] = ' + value + '\n';
+      return list + '.set(0, ' + value + ');\n';
     } else if (mode == 'INSERT') {
-      return list + '.insert(0, ' + value + ')\n';
+      return list + '.addFirst(' + value + ');\n';
     }
   } else if (where == 'LAST') {
     if (mode == 'SET') {
-      return list + '[-1] = ' + value + '\n';
+      return list + '.set(' + list + '.size()-1, ' + value + ');\n';
     } else if (mode == 'INSERT') {
       return list + '.add(' + value + ');\n';
     }
@@ -226,30 +226,38 @@ Blockly.Java['lists_setIndex'] = function(block) {
       at = parseInt(at, 10) - 1;
     } else {
       // If the index is dynamic, decrement it in code.
-      at = 'int(' + at + ' - 1)';
+      at = '((int)' + at + ' - 1)';
     }
     if (mode == 'SET') {
-      return list + '[' + at + '] = ' + value + '\n';
+      return list + '.set(' + at + ', ' + value + ');\n';
     } else if (mode == 'INSERT') {
-      return list + '.insert(' + at + ', ' + value + ')\n';
+      return list + '.add(' + at + ', ' + value + ');\n';
     }
   } else if (where == 'FROM_END') {
+    // Blockly uses one-based indicies.
+    if (Blockly.isNumber(at)) {
+      // If the index is a naked number, decrement it right now.
+      at = parseInt(at, 10);
+    } else {
+      // If the index is dynamic, decrement it in code.
+      at = '((int)' + at + ')';
+    }
     if (mode == 'SET') {
-      return list + '[-' + at + '] = ' + value + '\n';
+      return list + '.set(' + list + '.size() -'+ at + ', ' + value + ');\n';
     } else if (mode == 'INSERT') {
-      return list + '.insert(-' + at + ', ' + value + ')\n';
+      return list + '.add(' + list + '.size() -'+ at + ', ' + value + ');\n';
     }
   } else if (where == 'RANDOM') {
     Blockly.Java.addImport('java.util.Random');
     var code = cacheList();
     var xVar = Blockly.Java.variableDB_.getDistinctName(
         'tmp_x', Blockly.Variables.NAME_TYPE);
-    code += xVar + ' = int(random.random() * ' + list + '.size())\n';
+    code += 'int ' + xVar + ' = (int)(Math.random() * ' + list + '.size());\n';
     if (mode == 'SET') {
-      code += list + '[' + xVar + '] = ' + value + '\n';
+      code += list + '.set(' + xVar + ', ' + value + ');\n';
       return code;
     } else if (mode == 'INSERT') {
-      code += list + '.insert(' + xVar + ', ' + value + ')\n';
+      code += list + '.add(' + xVar + ', ' + value + ');\n';
       return code;
     }
   }
@@ -267,7 +275,7 @@ Blockly.Java['lists_getSublist'] = function(block) {
   var at2 = Blockly.Java.valueToCode(block, 'AT2',
       Blockly.Java.ORDER_ADDITIVE) || '1';
   if (where1 == 'FIRST' || (where1 == 'FROM_START' && at1 == '1')) {
-    at1 = '';
+    at1 = '0';
   } else if (where1 == 'FROM_START') {
     // Blockly uses one-based indicies.
     if (Blockly.isNumber(at1)) {
@@ -275,38 +283,46 @@ Blockly.Java['lists_getSublist'] = function(block) {
       at1 = parseInt(at1, 10) - 1;
     } else {
       // If the index is dynamic, decrement it in code.
-      at1 = 'int(' + at1 + ' - 1)';
+      at1 = '((int)' + at1 + ' - 1)';
     }
   } else if (where1 == 'FROM_END') {
     if (Blockly.isNumber(at1)) {
-      at1 = -parseInt(at1, 10);
+      at1 = parseInt(at1, 10);
     } else {
-      at1 = '-int(' + at1 + ')';
+      at1 = '((int)' + at1 + ')';
     }
+    at1 = list + '.size() - ' + at1;
   }
   if (where2 == 'LAST' || (where2 == 'FROM_END' && at2 == '1')) {
-    at2 = '';
-  } else if (where1 == 'FROM_START') {
+    at2 = list + '.size()-1';
+  } else if (where2 == 'FROM_START') {
     if (Blockly.isNumber(at2)) {
-      at2 = parseInt(at2, 10);
+      at2 = parseInt(at2, 10) - 1;
     } else {
-      at2 = 'int(' + at2 + ')';
+      at2 = '((int)' + at2 + '-1)';
     }
-  } else if (where1 == 'FROM_END') {
+  } else if (where2 == 'FROM_END') {
     if (Blockly.isNumber(at2)) {
       // If the index is a naked number, increment it right now.
-      // Add special case for -0.
-      at2 = 1 - parseInt(at2, 10);
-      if (at2 == 0) {
-        at2 = '';
-      }
+      at2 = parseInt(at2, 10);
+      at2 = list + '.size() - ' + at2;
     } else {
       // If the index is dynamic, increment it in code.
-      Blockly.Java.definitions_['import_sys'] = 'import sys';
-      at2 = 'int(1 - ' + at2 + ') or sys.maxsize';
+      at2 = list + '.size() - ((int)' + at2 + '-1)';
     }
   }
-  var code = list + '[' + at1 + ' : ' + at2 + ']';
+  var functionName = Blockly.Java.provideFunction_(
+       'lists_sublist',
+      ['public static LinkedList ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
+          '(List list, int startIndex, int endIndex) {',
+           '  LinkedList<Object> result = new LinkedList<>();',
+           '  int sizeList = list.size();',
+           '  for(int x = startIndex; x <= endIndex && x < sizeList; x++) {',
+           '    result.add(list.get(x));',
+           '  }',
+           '  return result;',
+           '}']);
+  var code = functionName + '(' + list + ', ' + at1 + ', ' + at2 + ')';
   return [code, Blockly.Java.ORDER_MEMBER];
 };
 
@@ -318,13 +334,28 @@ Blockly.Java['lists_split'] = function(block) {
         Blockly.Java.ORDER_MEMBER) || '\'\'';
     var value_delim = Blockly.Java.valueToCode(block, 'DELIM',
         Blockly.Java.ORDER_NONE);
-    var code = value_input + '.split(' + value_delim + ')';
+    var code = 'new LinkedList(Arrays.asList(' + value_input +
+                  '.split(' + value_delim + ')))';
   } else if (mode == 'JOIN') {
     var value_input = Blockly.Java.valueToCode(block, 'INPUT',
         Blockly.Java.ORDER_NONE) || '[]';
     var value_delim = Blockly.Java.valueToCode(block, 'DELIM',
         Blockly.Java.ORDER_MEMBER) || '\'\'';
     var code = value_delim + '.join(' + value_input + ')';
+    var functionName = Blockly.Java.provideFunction_(
+         'lists_join',
+        ['public static String ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
+            '(List<String> list, String separator) {',
+            '  StringBuilder result = new StringBuilder();',
+            '  String extra = "";',
+            '  for (String elem : list) {',
+            '     result.append(extra);',
+            '     result.append(elem);',
+            '     extra = separator;',
+            '  }',
+            '  return result.toString();',
+            '}']);
+    var code = functionName + '(' + value_input + ', ' + value_delim + ')';
   } else {
     throw 'Unknown mode: ' + mode;
   }

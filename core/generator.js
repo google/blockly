@@ -70,7 +70,11 @@ Blockly.Generator.prototype.STATEMENT_PREFIX = null;
  * upper level block
  */
 Blockly.Generator.prototype.STATEMENT_STASH = '';
-
+/** 
+ * Pending stash of lines to output.  It will be output if anything else is
+ * output in the meantime
+ */
+Blockly.Generator.prototype.STATEMENT_STASH_PEND = '';
 /**
  * Generate code for all blocks in the workspace to the specified language.
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
@@ -356,9 +360,17 @@ Blockly.Generator.prototype.getStatementStash = function() {
 /**
  * Saves away lines of code to insert before the current statement
  * @param {string} code any lines of code to stash away
+ * @param {string} pending any lines of code to pend for stashing.
  */
-Blockly.Generator.prototype.stashStatement = function(code) {
+Blockly.Generator.prototype.stashStatement = function(code, pending) {
+  if (pending != null) {
+    this.STATEMENT_STASH_PEND = pending;
+  }
   if (code) {
+    if (this.STATEMENT_STASH_PEND != '') {
+      this.STATEMENT_STASH += this.STATEMENT_STASH_PEND;
+      this.STATEMENT_STASH_PEND = '';
+    }
     this.STATEMENT_STASH += code;
   }
 };

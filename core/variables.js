@@ -135,7 +135,7 @@ Blockly.Variables.allVariablesTypes = function(root) {
     else if (variableHash[key].length === 1) {
       variableList[key] = variableHash[key][0];
     }
-    else if (goog.array.indexOf(variableHash[key], 'JSON') !== -1) {
+    else if (goog.array.indexOf(variableHash[key], 'Object') !== -1) {
       variableList[key] = variableHash[key][0];
     } else {
       // Conflict of types and JSON isn't one of them. For now we will

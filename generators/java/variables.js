@@ -74,10 +74,10 @@ Blockly.Java['hash_variables_get'] = function(block) {
         if (varName) {
           var vartype = Blockly.Java.GetVariableType(varName);
 
-          if (vartype === 'JsonArray') {
-            getter = 'getJsonArray';
-          } else if (vartype === 'JsonObject') {
-            getter = 'getJsonObject';
+          if (vartype === 'Array') {
+            getter = 'get';
+          } else if (vartype === 'Object') {
+            getter = 'get';
           }
         }
       }
@@ -104,10 +104,10 @@ Blockly.Java['hash_parmvariables_get'] = function(block) {
         if (varName) {
           var vartype = Blockly.Java.GetVariableType(varName);
 
-          if (vartype === 'JsonArray') {
-            getter = 'getJsonArray';
-          } else if (vartype === 'JsonObject') {
-            getter = 'getJsonObject';
+          if (vartype === 'Array') {
+            getter = 'get';
+          } else if (vartype === 'Object') {
+            getter = 'get';
           }
         }
       }

@@ -183,7 +183,7 @@ Blockly.Blocks['hash_variables_get'] = {
    */
   getVarsTypes: function() {
     var vartypes = {};
-    vartypes[this.getFieldValue('VAR')] = ['JSON'];
+    vartypes[this.getFieldValue('VAR')] = ['Object'];
     return vartypes;
   },
 

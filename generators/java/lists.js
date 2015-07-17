@@ -342,6 +342,7 @@ Blockly.Java['lists_split'] = function(block) {
     var value_delim = Blockly.Java.valueToCode(block, 'DELIM',
         Blockly.Java.ORDER_MEMBER) || '\'\'';
     var code = value_delim + '.join(' + value_input + ')';
+    Blockly.Java.addImport('java.lang.StringBuilder');
     var functionName = Blockly.Java.provideFunction_(
          'lists_join',
         ['public static String ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +

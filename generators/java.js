@@ -124,14 +124,7 @@ Blockly.Java.Baseclass_ = '';
  * List of libraries used globally by the generated java code. These are
  * Processed by Blockly.Java.addImport
  */
-Blockly.Java.needImports_ = [//'javax.json.Json',
-                             //'javax.json.JsonArray',
-                             //'javax.json.JsonObject',
-                             //'javax.json.JsonReader',
-                             //'javax.json.stream.JsonParsingException',
-                             'java.io.IOException',
-                             'java.io.StringReader'
-                            ];
+Blockly.Java.needImports_ = [];
 /**
  * List of libraries used by the caller's generated java code.  These will
  * be processed by Blockly.Java.addImport
@@ -315,8 +308,8 @@ Blockly.Java.init = function(workspace, imports) {
   for (var x = 0; x < variables.length; x++) {
     var key = variables[x];
     var type = Blockly.Java.blocklyTypes_[key];
-    if (type === 'JSON') {
-      type = 'JsonObject';
+    if (type === 'Object') {
+      type = 'Object';
     } else if (type === 'Array') {
       type = 'LinkedList';
     } else if (type === 'Boolean') {

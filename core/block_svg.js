@@ -76,7 +76,7 @@ Blockly.BlockSvg.INLINE = -1;
  */
 Blockly.BlockSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
-  for (var x = 0, input; input = this.inputList[x]; x++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
     input.init();
   }
   if (this.mutator) {
@@ -319,6 +319,9 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
     var nextHeightWidth = nextBlock.getHeightWidth();
     height += nextHeightWidth.height - 4;  // Height of tab.
     width = Math.max(width, nextHeightWidth.width);
+  } else if (!this.nextConnection && !this.outputConnection) {
+    // Add a bit of margin under blocks with no bottom tab.
+    height += 2;
   }
   return {height: height, width: width};
 };
@@ -333,20 +336,22 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   }
   var renderList = [];
   // Show/hide the inputs.
-  for (var x = 0, input; input = this.inputList[x]; x++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
     renderList.push.apply(renderList, input.setVisible(!collapsed));
   }
 
   var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
   if (collapsed) {
     var icons = this.getIcons();
-    for (var x = 0; x < icons.length; x++) {
-      icons[x].setVisible(false);
+    for (var i = 0; i < icons.length; i++) {
+      icons[i].setVisible(false);
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
     this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text).init();
   } else {
     this.removeInput(COLLAPSED_INPUT_NAME);
+    // Clear any warnings inherited from enclosed blocks.
+    this.setWarningText(null);
   }
   Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
 
@@ -355,7 +360,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     renderList[0] = this;
   }
   if (this.rendered) {
-    for (var x = 0, block; block = renderList[x]; x++) {
+    for (var i = 0, block; block = renderList[i]; i++) {
       block.render();
     }
     // Don't bump neighbours.
@@ -363,6 +368,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     // all their functions and store them next to each other.  Expanding and
     // bumping causes all their definitions to go out of alignment.
   }
+  this.workspace.fireChangeEvent();
 };
 
 /**
@@ -406,11 +412,11 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     // Build a list of bubbles that need to be moved and where they started.
     this.draggedBubbles_ = [];
     var descendants = this.getDescendants();
-    for (var x = 0, descendant; descendant = descendants[x]; x++) {
+    for (var i = 0, descendant; descendant = descendants[i]; i++) {
       var icons = descendant.getIcons();
-      for (var y = 0; y < icons.length; y++) {
-        var data = icons[y].getIconLocation();
-        data.bubble = icons[y];
+      for (var j = 0; j < icons.length; j++) {
+        var data = icons[j].getIconLocation();
+        data.bubble = icons[j];
         this.draggedBubbles_.push(data);
       }
     }
@@ -627,17 +633,17 @@ Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
     return;
   }
   var myConnections = this.getConnections_(false);
-  for (var x = 0; x < myConnections.length; x++) {
-    myConnections[x].moveBy(dx, dy);
+  for (var i = 0; i < myConnections.length; i++) {
+    myConnections[i].moveBy(dx, dy);
   }
   var icons = this.getIcons();
-  for (var x = 0; x < icons.length; x++) {
-    icons[x].computeIconLocation();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].computeIconLocation();
   }
 
   // Recurse through all blocks attached under this one.
-  for (var x = 0; x < this.childBlocks_.length; x++) {
-    this.childBlocks_[x].moveConnections_(dx, dy);
+  for (var i = 0; i < this.childBlocks_.length; i++) {
+    this.childBlocks_[i].moveConnections_(dx, dy);
   }
 };
 
@@ -653,8 +659,8 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
     this.removeDragging();
   }
   // Recurse through all blocks attached under this one.
-  for (var x = 0; x < this.childBlocks_.length; x++) {
-    this.childBlocks_[x].setDragging_(adding);
+  for (var i = 0; i < this.childBlocks_.length; i++) {
+    this.childBlocks_[i].setDragging_(adding);
   }
 };
 
@@ -1009,8 +1015,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   this.rendered = false;
 
   var icons = this.getIcons();
-  for (var x = 0; x < icons.length; x++) {
-    icons[x].dispose();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].dispose();
   }
 
   Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
@@ -1131,8 +1137,8 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   this.svgPath_.setAttribute('fill', hexColour);
 
   var icons = this.getIcons();
-  for (var x = 0; x < icons.length; x++) {
-    icons[x].updateColour();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].updateColour();
   }
 
   // Bump every dropdown to change its colour.
@@ -1213,39 +1219,66 @@ Blockly.BlockSvg.prototype.setCommentText = function(text) {
  *     maintain multiple warnings.
  */
 Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
-  if (this.setWarningText.pid_) {
+  if (!this.setWarningText.pid_) {
+    // Create a database of warning PIDs.
+    // Only runs once per block (and only those with warnings).
+    this.setWarningText.pid_ = Object.create(null);
+  }
+  var id = opt_id || '';
+  if (!id) {
+    // Kill all previous pending processes, this edit supercedes them all.
+    for (var n in this.setWarningText.pid_) {
+      clearTimeout(this.setWarningText.pid_[n]);
+      delete this.setWarningText.pid_[n];
+    }
+  } else if (this.setWarningText.pid_[id]) {
     // Only queue up the latest change.  Kill any earlier pending process.
-    clearTimeout(this.setWarningText.pid_);
-    this.setWarningText.pid_ = 0;
+    clearTimeout(this.setWarningText.pid_[id]);
+    delete this.setWarningText.pid_[id];
   }
   if (Blockly.dragMode_ == 2) {
     // Don't change the warning text during a drag.
     // Wait until the drag finishes.
     var thisBlock = this;
-    this.setWarningText.pid_ = setTimeout(function() {
-      thisBlock.setWarningText.pid_ = 0;
-      thisBlock.setWarningText(text, opt_id);
+    this.setWarningText.pid_[id] = setTimeout(function() {
+      delete thisBlock.setWarningText.pid_[id];
+      thisBlock.setWarningText(text, id);
     }, 100);
     return;
   }
   if (this.isInFlyout) {
     text = null;
   }
+
+  // Bubble up through block's parents to add a warning on any collapsed block.
+  var parent = this.getParent();
+  while (parent) {
+    if (parent.isCollapsed()) {
+      parent.setWarningText(text, this.id);
+    }
+    parent = parent.getParent();
+  }
+
   var changedState = false;
   if (goog.isString(text)) {
     if (!this.warning) {
       this.warning = new Blockly.Warning(this);
       changedState = true;
     }
-    this.warning.setText(/** @type {string} */ (text), opt_id);
+    this.warning.setText(/** @type {string} */ (text), id);
   } else {
-    // Dispose all warnings if no id is given
-    if (this.warning && opt_id === undefined) {
+    // Dispose all warnings if no id is given.
+    if (this.warning && !id) {
       this.warning.dispose();
       changedState = true;
     } else if (this.warning) {
-      this.warning.removeText(opt_id);
-      changedState = true;
+      var oldText = this.warning.getAllText();
+      this.warning.setText('', id);
+      var newText = this.warning.getAllText();
+      if (!newText) {
+        this.warning.dispose();
+      }
+      changedState = oldText == newText;
     }
   }
   if (changedState && this.rendered) {
@@ -1337,8 +1370,8 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   }
   // Move the icons into position.
   var icons = this.getIcons();
-  for (var x = 0; x < icons.length; x++) {
-    cursorX = icons[x].renderIcon(cursorX);
+  for (var i = 0; i < icons.length; i++) {
+    cursorX = icons[i].renderIcon(cursorX);
   }
   cursorX += this.RTL ?
       Blockly.BlockSvg.SEP_SPACE_X : -Blockly.BlockSvg.SEP_SPACE_X;

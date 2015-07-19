@@ -312,7 +312,7 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
  */
 Blockly.WorkspaceSvg.prototype.render = function() {
   var renderList = this.getAllBlocks();
-  for (var x = 0, block; block = renderList[x]; x++) {
+  for (var i = 0, block; block = renderList[i]; i++) {
     if (!block.getChildren().length) {
       block.render();
     }

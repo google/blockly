@@ -1048,6 +1048,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             this.appendAddSubGroup(element['title'],
                                    element['name'],
                                    element['checks']);
+          case 'input_addsubmulti':
+            this.appendAddSubMulti(element['title'],
+                                   element['name'],
+                                   element['checks']);
           case 'field_label':
             field = new Blockly.FieldLabel(element['text']);
             break;
@@ -1335,8 +1339,11 @@ Blockly.Block.prototype.doAddField = function(field) {
   var privateData = field.getPrivate();
   var name = privateData.name;
   var pos = privateData.pos;
-  this.itemCount_[name]++;
-  if (this.itemCount_[name] == 1) {
+  var itemCount = this.getItemCount();
+  itemCount[name]++;
+
+  this.setItemCount(name, itemCount[name]);
+  if (itemCount[name] == 1) {
     //
     // If we went from 0 to 1 then we need to change the title back.
     // Just remove the input and let updateAddSubShape clean it up for us
@@ -1353,15 +1360,17 @@ Blockly.Block.prototype.doRemoveField = function(field) {
   var privateData = field.getPrivate();
   var name = privateData.name;
   var pos = privateData.pos;
-  var limit = this.itemCount_[name];
+  var itemCount = this.getItemCount();
+  var limit = itemCount[name];
   var minitems = 1;
   if (this.titles_[name]) {
     minitems = 0;
   }
-  if (this.itemCount_[name] > minitems) {
-    this.itemCount_[name]--;
+  if (itemCount[name] > minitems) {
+    itemCount[name]--;
+    this.setItemCount(name, itemCount[name]);
   }
-  if (this.itemCount_[name] == 0) {
+  if (itemCount[name] == 0) {
     // If we drop down to 0 then we remove the block and let redraw
     // give us back one with the right name on it
     this.removeInput(this.getAddSubName(name,0),true);
@@ -1412,6 +1421,25 @@ Blockly.Block.prototype.getAddSubName = function(name,pos) {
 }
 
 /**
+ * Gets the itemCount array for an AddSub item.
+ * @return {Object} Data for the items and itemcount.
+ */
+Blockly.Block.prototype.getItemCount = function() {
+  return {'items': this.itemCount_};
+}
+
+/**
+ * Sets the itemCount value for an AddSub item
+ * @param {string} name The name of the input type field.
+ * @param {number} val the new value for the field
+ */
+Blockly.Block.prototype.setItemCount = function(name, val) {
+  if (name === 'items') {
+    this.itemCount_ = val;
+  }
+}
+
+/**
  * Creates the empty item for an addsub block
  * @param {string} name The name of the input type field.
  * @return {array Element} array of added elements.
@@ -1434,8 +1462,9 @@ Blockly.Block.prototype.appendAddSubInput = function(name,pos,title) {
   var newName = this.getAddSubName(name,pos);
   var inputItem = null;
   var field = null;
+  var itemCount = this.getItemCount();
 
-  if (this.itemCount_[name]) {
+  if (itemCount[name]) {
     inputItem = this.appendValueInput(newName)
                     .setCheck(this.checks_[name])
                     .setAlign(Blockly.ALIGN_RIGHT);
@@ -1470,17 +1499,18 @@ Blockly.Block.prototype.appendAddSubInput = function(name,pos,title) {
  * @throws {goog.asserts.AssertionError} if the field is not present.
  */
 Blockly.Block.prototype.updateAddSubShape = function() {
-  for (var name in this.itemCount_) {
-    if (this.itemCount_.hasOwnProperty(name)) {
+  var itemCount = this.getItemCount();
+  for (var name in itemCount) {
+    if (itemCount.hasOwnProperty(name)) {
       // First get rid of anything which is beyond our count
-      var pos = this.itemCount_[name];
+      var pos = itemCount[name];
       var elemName = this.getAddSubName(name,pos);
       while(this.getInput(elemName) != null) {
         this.removeInput(elemName);
         pos++;
         elemName = this.getAddSubName(name,pos);
       }
-      if (this.itemCount_[name]) {
+      if (itemCount[name]) {
         // Now add in the ones which we are missing.  Note that
         // we need to make sure that they get put AFTER the one of
         // the same number
@@ -1500,7 +1530,7 @@ Blockly.Block.prototype.updateAddSubShape = function() {
         }
         if (inputIndex !== -1) {
           inputIndex++;
-          for (pos = 1; pos < this.itemCount_[name];pos++,inputIndex++) {
+          for (pos = 1; pos < itemCount[name];pos++,inputIndex++) {
             var newName = this.getAddSubName(name,pos);
             var inputItem = this.getInput(newName);
             if (inputItem == null) {
@@ -1524,7 +1554,7 @@ Blockly.Block.prototype.updateAddSubShape = function() {
         var subFieldName0 = name0+'_sub';
         var hasSubField0 = this.getField(subFieldName0);
         // Now see what the main one has for fields
-        if (this.itemCount_[name] === 1) {
+        if (itemCount[name] === 1) {
           // Shouldn't have a sub field if this is the only entry
           if (hasSubField0) {
             inputItem.removeField(subFieldName0);
@@ -1566,9 +1596,10 @@ Blockly.Block.prototype.updateAddSubShape = function() {
   * @this Blockly.Block
   */
 Blockly.Block.prototype.domToMutationAddSub = function(xmlElement) {
-  for (var name in this.itemCount_) {
-    if (this.itemCount_.hasOwnProperty(name)) {
-      this.itemCount_[name] = parseInt(xmlElement.getAttribute(name),10);
+  var itemCount = this.getItemCount();
+  for (var name in itemCount) {
+    if (itemCount.hasOwnProperty(name)) {
+      this.setItemCount(name, parseInt(xmlElement.getAttribute(name),10));
     }
   }
   this.updateAddSubShape();
@@ -1581,9 +1612,10 @@ Blockly.Block.prototype.domToMutationAddSub = function(xmlElement) {
  */
 Blockly.Block.prototype.mutationToDomAddSub = function() {
   var container = document.createElement('mutation');
-  for (var name in this.itemCount_) {
-    if (this.itemCount_.hasOwnProperty(name)) {
-      container.setAttribute(name, this.itemCount_[name]);
+  var itemCount = this.getItemCount();
+  for (var name in itemCount) {
+    if (itemCount.hasOwnProperty(name)) {
+      container.setAttribute(name, itemCount[name]);
     }
   }
   return container;
@@ -1606,8 +1638,7 @@ Blockly.Block.prototype.appendAddSubGroup = function(title,name,checks,
   this.updateShape_    = this.updateAddSubShape;
 
   var root = this;
-  if (typeof this.itemCount_ === 'undefined') {
-    this.itemCount_ = {};
+  if (typeof this.titles_ === 'undefined') {
     this.checks_ = {};
     this.titles_ = {};
   }
@@ -1615,7 +1646,38 @@ Blockly.Block.prototype.appendAddSubGroup = function(title,name,checks,
   if (emptytitle) {
     this.titles_[name] = {normal: title, empty: emptytitle};
   }
-  this.itemCount_[name] = 1;
+  this.setItemCount(name, 1);
   this.checks_[name] = checks;
   this.appendAddSubInput(name, 0, title);
+}
+
+/**
+ * Gets the itemCount array for an AddSub item with multiple elements
+ * @return {Object} Data for the items and itemcount.
+ */
+Blockly.Block.prototype.getMultiItemCount = function() {
+  return this.itemCount_;
+}
+/**
+ * Sets the itemCount value for an AddSub item with multiple elements
+ * @param {string} name The name of the input type field.
+ * @param {number} val the new value for the field
+ */
+Blockly.Block.prototype.setMultiItemCount = function(name, val) {
+  this.itemCount_[name] = val;
+}
+
+Blockly.Block.prototype.appendAddSubMulti = function(title,name,checks,
+                                                     emptytitle) {
+  if (typeof this.itemCount_ === 'undefined') {
+    this.itemCount_ = {};
+  }
+  //
+  // Because we have multiple items on our blocks, we override the method
+  // of storing the item count value
+  //
+  this.getItemCount = this.getMultiItemCount;
+  this.setItemCount = this.setMultiItemCount;
+
+  this.appendAddSubGroup(title,name,checks,emptytitle);
 }

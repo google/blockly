@@ -77,7 +77,7 @@ Blockly.Blocks['text_join'] = {
     this.setOutput(true, 'String');
     this.appendAddSubGroup(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH, 'items',null,
                             '-IGNORED-');
-    this.itemCount_['items'] = 2;
+    this.itemCount_ = 2;
     this.updateShape_();
   },
   getAddSubName: function(name,pos) {

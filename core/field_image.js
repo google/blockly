@@ -72,7 +72,7 @@ Blockly.FieldImage.prototype.rectElement_ = null;
  * Editable fields are saved by the XML renderer, non-editable fields are not.
  */
 Blockly.FieldImage.prototype.EDITABLE = false;
-Blockly.FieldLabel.prototype.SERIALIZABLE = false;
+Blockly.FieldImage.prototype.SERIALIZABLE = false;
 
 /**
  * Install this image on a block.

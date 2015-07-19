@@ -192,7 +192,7 @@ Blockly.Java.getBaseclass = function() {
  * @return {string} type Java type for the variablee
  */
 Blockly.Java.GetVariableType = function(variable) {
-  var type = Blockly.Java.variableTypes_[variable];
+  var type = this.variableTypes_[variable];
   if (!type) {
     type = 'string/*UNKNOWN_TYPE*/';
   }
@@ -205,7 +205,7 @@ Blockly.Java.GetVariableType = function(variable) {
  * @return {string} type Java type for the variablee
  */
 Blockly.Java.GetBlocklyType = function(variable) {
-  return Blockly.Java.blocklyTypes_[variable];
+  return this.blocklyTypes_[variable];
 };
 
 /**
@@ -284,30 +284,30 @@ Blockly.Java.getValueType = function(block, field) {
  */
 Blockly.Java.init = function(workspace, imports) {
   // Create a dictionary of definitions to be printed before the code.
-  Blockly.Java.definitions_ = Object.create(null);
+  this.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
   // to actual function names (to avoid collisions with user functions).
-  Blockly.Java.functionNames_ = Object.create(null);
+  this.functionNames_ = Object.create(null);
   // Create a dictionary of all the libraries which would be needed
-  Blockly.Java.imports_ = Object.create(null);
+  this.imports_ = Object.create(null);
   // Start with the defaults that all the code depends on
-  for(var i = 0; i < Blockly.Java.needImports_.length; i++) {
-    Blockly.Java.addImport(Blockly.Java.needImports_[i]);
+  for(var i = 0; i < this.needImports_.length; i++) {
+    this.addImport(this.needImports_[i]);
   }
-  if (!Blockly.Java.variableDB_) {
-    Blockly.Java.variableDB_ =
-        new Blockly.Names(Blockly.Java.RESERVED_WORDS_);
+  if (!this.variableDB_) {
+    this.variableDB_ =
+        new Blockly.Names(this.RESERVED_WORDS_);
   } else {
-    Blockly.Java.variableDB_.reset();
+    this.variableDB_.reset();
   }
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  Blockly.Java.blocklyTypes_ = Blockly.Variables.allVariablesTypes(workspace);
+  this.blocklyTypes_ = Blockly.Variables.allVariablesTypes(workspace);
 
   for (var x = 0; x < variables.length; x++) {
     var key = variables[x];
-    var type = Blockly.Java.blocklyTypes_[key];
+    var type = this.blocklyTypes_[key];
     if (type === 'Object') {
       type = 'Object';
     } else if (type === 'Array') {
@@ -333,15 +333,15 @@ Blockly.Java.init = function(workspace, imports) {
       type = 'String/*UNKNOWN_TYPE*/';
     }
 
-    Blockly.Java.variableTypes_[key] = type;
+    this.variableTypes_[key] = type;
 
     defvars.push('protected ' +
                  type + ' '+
-               Blockly.Java.variableDB_.getName(variables[x],
+               this.variableDB_.getName(variables[x],
                                                 Blockly.Variables.NAME_TYPE) +
                ';');
   }
-  Blockly.Java.definitions_['variables'] = defvars.join('\n');
+  this.definitions_['variables'] = defvars.join('\n');
 };
 
 /**
@@ -351,17 +351,15 @@ Blockly.Java.init = function(workspace, imports) {
  */
 Blockly.Java.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  var imports = [];
   var definitions = [];
-  for (var name in Blockly.Java.definitions_) {
-    var def = Blockly.Java.definitions_[name];
-    if (def.match(/^(from\s+\S+\s+)?import\s+\S+/)) {
-      imports.push(def);
-    } else {
-      definitions.push(def);
+  for (var name in this.definitions_) {
+    var def = this.definitions_[name];
+    if (typeof def === "function") {
+      def = def.call(this);
     }
+    definitions.push(def);
   }
-  var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
+  var allDefs = definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 
@@ -406,10 +404,10 @@ Blockly.Java.toStringCode = function(item) {
       item = '"' + item + '"';
     } else {
       // It is something else so we need to convert it on the fly
-      Blockly.Java.addImport('java.text.DecimalFormat');
-      Blockly.Java.addImport('java.text.NumberFormat');
+      this.addImport('java.text.DecimalFormat');
+      this.addImport('java.text.NumberFormat');
 
-      var functionName = Blockly.Java.provideFunction_(
+      var functionName = this.provideFunction_(
           'blocklyToString',
          [ 'public static String blocklyToString(Object object) {',
            '  String result;',
@@ -462,7 +460,7 @@ Blockly.Java.scrub_ = function(block, code, parms) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += Blockly.Java.prefixLines(comment, '// ') + '\n';
+      commentCode += this.prefixLines(comment, '// ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
@@ -470,22 +468,22 @@ Blockly.Java.scrub_ = function(block, code, parms) {
       if (block.inputList[x].type == Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
-          var comment = Blockly.Java.allNestedComments(childBlock);
+          var comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.Java.prefixLines(comment, '// ');
+            commentCode += this.prefixLines(comment, '// ');
           }
         }
       }
     }
   }
-  var postFix = Blockly.Java.POSTFIX;
-  Blockly.Java.POSTFIX = '';
-  var extraIndent = Blockly.Java.EXTRAINDENT;
-  Blockly.Java.EXTRAINDENT = '';
+  var postFix = this.POSTFIX;
+  this.POSTFIX = '';
+  var extraIndent = this.EXTRAINDENT;
+  this.EXTRAINDENT = '';
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = Blockly.Java.blockToCode(nextBlock, parms);
+  var nextCode = this.blockToCode(nextBlock, parms);
   if (extraIndent != '') {
-    nextCode = Blockly.Java.prefixLines(nextCode, extraIndent);
+    nextCode = this.prefixLines(nextCode, extraIndent);
   }
   return commentCode + code + nextCode + postFix;
 };

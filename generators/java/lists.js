@@ -36,8 +36,8 @@ Blockly.Java['lists_create_empty'] = function(block) {
 
 Blockly.Java['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  var code = new Array(block.itemCount_['items']);
-  for (var n = 0; n < block.itemCount_['items']; n++) {
+  var code = new Array(block.itemCount_);
+  for (var n = 0; n < block.itemCount_; n++) {
     code[n] = Blockly.Java.valueToCode(block, 'ADD' + n,
         Blockly.Java.ORDER_NONE) || 'None';
   }

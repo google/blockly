@@ -39,12 +39,12 @@ Blockly.Java['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
   var code;
-  if (block.itemCount_['items'] == 0) {
+  if (block.itemCount_ == 0) {
     return ['""', Blockly.Java.ORDER_ATOMIC];
   } else {
     var code = '';
     var extra = '';
-    for (var n = 0; n < block.itemCount_['items']; n++) {
+    for (var n = 0; n < block.itemCount_; n++) {
       var item = Blockly.Java.valueToCode(block, 'ADD' + n,
           Blockly.Java.ORDER_NONE);
       if (item) {

@@ -69,8 +69,8 @@ Blockly.Java['logic_compare'] = function(block) {
   var isString = false;
   var code = '';
   var order = Blockly.Java.ORDER_RELATIONAL;
-  if (goog.array.contains(argument0Type, 'String') ||
-      goog.array.contains(argument1Type, 'String')) {
+  if ((argument0Type && goog.array.contains(argument0Type, 'String')) ||
+      (argument1Type && goog.array.contains(argument1Type, 'String'))) {
     var argument0 = Blockly.Java.valueToCode(block, 'A', order) || '""';
     var argument1 = Blockly.Java.valueToCode(block, 'B', order) || '""';
     if (operator === '==') {

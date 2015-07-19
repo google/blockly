@@ -61,7 +61,7 @@ Blockly.Blocks['lists_create_with'] = {
     this.appendAddSubGroup(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, 'items',
                            null,
                            Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
-    this.itemCount_['items'] = 1;
+    this.itemCount_ = 1;
     this.updateShape_();
     this.setOutput(true, 'Array');
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);

@@ -64,17 +64,6 @@ Blockly.Field.prototype.visible_ = true;
 Blockly.Field.prototype.changeHandler_ = null;
 
 /**
- * Clone this Field.  This must be implemented by all classes derived from
- * Field.  Since this class should not be instantiated, calling this method
- * throws an exception.
- * @throws {goog.assert.AssertionError}
- */
-Blockly.Field.prototype.clone = function() {
-  goog.asserts.fail('There should never be an instance of Field, ' +
-      'only its derived classes.');
-};
-
-/**
  * Non-breaking space.
  */
 Blockly.Field.NBSP = '\u00A0';

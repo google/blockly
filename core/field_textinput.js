@@ -50,15 +50,6 @@ Blockly.FieldTextInput = function(text, opt_changeHandler) {
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
- * Clone this FieldTextInput.
- * @return {!Blockly.FieldTextInput} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldTextInput.prototype.clone = function() {
-  return new Blockly.FieldTextInput(this.getText(), this.changeHandler_);
-};
-
-/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldTextInput.prototype.CURSOR = 'text';

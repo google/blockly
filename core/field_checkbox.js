@@ -49,15 +49,6 @@ Blockly.FieldCheckbox = function(state, opt_changeHandler) {
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
 /**
- * Clone this FieldCheckbox.
- * @return {!Blockly.FieldCheckbox} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldCheckbox.prototype.clone = function() {
-  return new Blockly.FieldCheckbox(this.getValue(), this.changeHandler_);
-};
-
-/**
  * Mouse cursor style when over the hotspot that initiates editability.
  */
 Blockly.FieldCheckbox.prototype.CURSOR = 'default';

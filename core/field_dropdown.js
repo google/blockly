@@ -72,15 +72,6 @@ Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
 Blockly.FieldDropdown.ARROW_CHAR = goog.userAgent.ANDROID ? '\u25BC' : '\u25BE';
 
 /**
- * Clone this FieldDropdown.
- * @return {!Blockly.FieldDropdown} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldDropdown.prototype.clone = function() {
-  return new Blockly.FieldDropdown(this.menuGenerator_, this.changeHandler_);
-};
-
-/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDropdown.prototype.CURSOR = 'default';

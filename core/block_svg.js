@@ -1369,7 +1369,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     cursorX = -cursorX;
   }
   // Move the icons into position.
-  var icons = this.getIcons(true);
+  var icons = this.getIcons(false);
   for (var i = 0; i < icons.length; i++) {
     cursorX = icons[i].renderIcon(cursorX);
   }

@@ -58,15 +58,6 @@ Blockly.FieldDate = function(date, opt_changeHandler) {
 goog.inherits(Blockly.FieldDate, Blockly.Field);
 
 /**
- * Clone this FieldDate.
- * @return {!Blockly.FieldDate} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldDate.prototype.clone = function() {
-  return new Blockly.FieldDate(this.getValue(), this.changeHandler_);
-};
-
-/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldDate.prototype.CURSOR = 'text';

@@ -1250,13 +1250,17 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
     text = null;
   }
 
-  // Bubble up through block's parents to add a warning on any collapsed block.
+  // Bubble up to add a warning on top-most collapsed block.
   var parent = this.getSurroundParent();
+  var collapsedParent = null;
   while (parent) {
     if (parent.isCollapsed()) {
-      parent.setWarningText(text, 'collapsed ' + this.id + ' ' + id);
+      collapsedParent = parent;
     }
     parent = parent.getSurroundParent();
+  }
+  if (collapsedParent) {
+    collapsedParent.setWarningText(text, 'collapsed ' + this.id + ' ' + id);
   }
 
   var changedState = false;

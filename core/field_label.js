@@ -46,15 +46,6 @@ Blockly.FieldLabel = function(text) {
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
 
 /**
- * Clone this FieldLabel.
- * @return {!Blockly.FieldLabel} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldLabel.prototype.clone = function() {
-  return new Blockly.FieldLabel(this.getText());
-};
-
-/**
  * Editable fields are saved by the XML renderer, non-editable fields are not.
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;

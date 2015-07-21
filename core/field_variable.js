@@ -57,16 +57,15 @@ Blockly.FieldVariable.prototype.setChangeHandler = function(handler) {
   var wrappedHandler;
   if (handler) {
     // Wrap the user's change handler together with the variable rename handler.
-    var thisObj = this;
     wrappedHandler = function(value) {
-      var v1 = handler.call(thisObj, value);
+      var v1 = handler.call(this, value);
       if (v1 === null) {
         var v2 = v1;
       } else {
         if (v1 === undefined) {
           v1 = value;
         }
-        var v2 = Blockly.FieldVariable.dropdownChange.call(thisObj, v1);
+        var v2 = Blockly.FieldVariable.dropdownChange.call(this, v1);
         if (v2 !== undefined) {
           v2 = v1;
         }
@@ -99,15 +98,6 @@ Blockly.FieldVariable.prototype.init = function(block) {
     this.setValue(Blockly.Variables.generateUniqueName(workspace));
   }
   Blockly.FieldVariable.superClass_.init.call(this, block);
-};
-
-/**
- * Clone this FieldVariable.
- * @return {!Blockly.FieldVariable} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldVariable.prototype.clone = function() {
-  return new Blockly.FieldVariable(this.getValue(), this.changeHandler_);
 };
 
 /**

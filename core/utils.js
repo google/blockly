@@ -241,7 +241,8 @@ Blockly.isTargetInput_ = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
-         e.target.type == 'tel' || e.target.type == 'url';
+         e.target.type == 'tel' || e.target.type == 'url' ||
+         e.target.isContentEditable;
 };
 
 /**
@@ -389,6 +390,26 @@ Blockly.createSvgElement = function(name, attrs, opt_parent, workspace) {
 };
 
 /**
+ * Deselect any selections on the webpage.
+ * Chrome will select text outside the SVG when double-clicking.
+ * Deselect this text, so that it doesn't mess up any subsequent drag.
+ */
+Blockly.removeAllRanges = function() {
+  if (getSelection()) {
+    setTimeout(function() {
+        try {
+          var selection = getSelection();
+          if (!selection.isCollapsed) {
+            selection.removeAllRanges();
+          }
+        } catch (e) {
+          // MSIE throws 'error 800a025e' here.
+        }
+      }, 0);
+  }
+};
+
+/**
  * Is this event a right-click?
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
@@ -438,7 +459,7 @@ Blockly.shortestStringLength = function(array) {
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
  * @param {!Array.<string>} array Array of strings.
- * @param {?number} opt_shortest Length of shortest string.
+ * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
 Blockly.commonWordPrefix = function(array, opt_shortest) {
@@ -473,7 +494,7 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
  * Given an array of strings, return the length of the common suffix.
  * Words may not be split.  Any space after a word is included in the length.
  * @param {!Array.<string>} array Array of strings.
- * @param {?number} opt_shortest Length of shortest string.
+ * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */
 Blockly.commonWordSuffix = function(array, opt_shortest) {
@@ -511,4 +532,62 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
  */
 Blockly.isNumber = function(str) {
   return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
+};
+
+/**
+ * Parse a string with any number of interpolation tokens (%1, %2, ...).
+ * '%' characters may be self-escaped (%%).
+ * @param {string} message Text containing interpolation tokens.
+ * @return {!Array.<string|number>} Array of strings and numbers.
+ */
+Blockly.tokenizeInterpolation = function(message) {
+  var tokens = [];
+  var chars = message.split('');
+  chars.push('');  // End marker.
+  // Parse the message with a finite state machine.
+  // 0 - Base case.
+  // 1 - % found.
+  // 2 - Digit found.
+  var state = 0;
+  var buffer = [];
+  var number = null;
+  for (var i = 0; i < chars.length; i++) {
+    var c = chars[i];
+    if (state == 0) {
+      if (c == '%') {
+        state = 1;  // Start escape.
+      } else {
+        buffer.push(c);  // Regular char.
+      }
+    } else if (state == 1) {
+      if (c == '%') {
+        buffer.push(c);  // Escaped %: %%
+        state = 0;
+      } else if ('0' <= c && c <= '9') {
+        state = 2;
+        number = c;
+        var text = buffer.join('');
+        if (text) {
+          tokens.push(text);
+        }
+        buffer.length = 0;
+      } else {
+        buffer.push('%', c);  // Not an escape: %a
+        state = 0;
+      }
+    } else if (state == 2) {
+      if ('0' <= c && c <= '9') {
+        number += c;  // Multi-digit number.
+      } else {
+        tokens.push(parseInt(number, 10));
+        i--;  // Parse this char again.
+        state = 0;
+      }
+    }
+  }
+  var text = buffer.join('');
+  if (text) {
+    tokens.push(text);
+  }
+  return tokens;
 };

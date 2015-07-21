@@ -32,7 +32,7 @@ goog.require('goog.math');
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
- * @param {Object} opt_options Dictionary of options.
+ * @param {Object=} opt_options Dictionary of options.
  * @constructor
  */
 Blockly.Workspace = function(opt_options) {
@@ -182,37 +182,6 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
  */
 Blockly.Workspace.prototype.fireChangeEvent = function() {
   // NOP.
-};
-
-/**
- * Modify the block tree on the existing toolbox.
- * @param {Node|string} tree DOM tree of blocks, or text representation of same.
- */
-Blockly.Workspace.prototype.updateToolbox = function(tree) {
-  tree = Blockly.parseToolboxTree_(tree);
-  if (!tree) {
-    if (this.options.languageTree) {
-      throw 'Can\'t nullify an existing toolbox.';
-    }
-    // No change (null to null).
-    return;
-  }
-  if (!this.options.languageTree) {
-    throw 'Existing toolbox is null.  Can\'t create new toolbox.';
-  }
-  if (this.options.hasCategories) {
-    if (!this.toolbox_) {
-      throw 'Existing toolbox has no categories.  Can\'t change mode.';
-    }
-    this.options.languageTree = tree;
-    this.toolbox_.populate_(tree);
-  } else {
-    if (!this.flyout_) {
-      throw 'Existing toolbox has categories.  Can\'t change mode.';
-    }
-    this.options.languageTree = tree;
-    this.flyout_.show(tree.childNodes);
-  }
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

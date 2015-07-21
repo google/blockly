@@ -82,7 +82,7 @@ Code.LANGUAGE_RTL = ['ar', 'fa', 'he'];
 
 /**
  * Blockly's main workspace.
- * @type Blockly.WorkspaceSvg
+ * @type {Blockly.WorkspaceSvg}
  */
 Code.workspace = null;
 
@@ -235,7 +235,7 @@ Code.getBBox_ = function(element) {
 
 /**
  * User's language (e.g. "en").
- * @type string
+ * @type {string}
  */
 Code.LANG = Code.getLang();
 

@@ -39,9 +39,9 @@ goog.require('goog.userAgent');
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<string>|!Function)} menuGenerator An array of options
+ * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of options
  *     for a dropdown list, or a function which generates these options.
- * @param {Function} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_changeHandler A function that is executed when a new
  *     option is selected, with the newly selected value as its sole argument.
  *     If it returns a value, that value (which must be one of the options) will
  *     become selected in place of the newly selected option, unless the return
@@ -70,15 +70,6 @@ Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
 Blockly.FieldDropdown.ARROW_CHAR = goog.userAgent.ANDROID ? '\u25BC' : '\u25BE';
-
-/**
- * Clone this FieldDropdown.
- * @return {!Blockly.FieldDropdown} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldDropdown.prototype.clone = function() {
-  return new Blockly.FieldDropdown(this.menuGenerator_, this.changeHandler_);
-};
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.

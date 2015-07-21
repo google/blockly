@@ -41,21 +41,21 @@ Blockly.Css.Cursor = {
 
 /**
  * Current cursor (cached value).
- * @type string
+ * @type {string}
  * @private
  */
 Blockly.Css.currentCursor_ = '';
 
 /**
  * Large stylesheet added by Blockly.Css.inject.
- * @type Element
+ * @type {Element}
  * @private
  */
 Blockly.Css.styleSheet_ = null;
 
 /**
  * Path to media directory, with any trailing slash removed.
- * @type string
+ * @type {string}
  * @private
  */
 Blockly.Css.mediaPath_ = '';
@@ -316,14 +316,8 @@ Blockly.Css.CONTENT = [
   '  fill-opacity: .8;',
   '}',
 
-  '.blocklyColourBackground {',
-  '  fill: #666;',
-  '}',
-
   '.blocklyScrollbarBackground {',
-  '  fill: #fff;',
-  '  stroke: #e4e4e4;',
-  '  stroke-width: 1;',
+  '  opacity: 0;',
   '}',
 
   '.blocklyScrollbarKnob {',
@@ -333,6 +327,17 @@ Blockly.Css.CONTENT = [
   '.blocklyScrollbarBackground:hover+.blocklyScrollbarKnob,',
   '.blocklyScrollbarKnob:hover {',
   '  fill: #bbb;',
+  '}',
+
+  /* Darken flyout scrollbars due to being on a grey background. */
+  /* By contrast, workspace scrollbars are on a white background. */
+  '.blocklyFlyout .blocklyScrollbarKnob {',
+  '  fill: #bbb;',
+  '}',
+
+  '.blocklyFlyout .blocklyScrollbarBackground:hover+.blocklyScrollbarKnob,',
+  '.blocklyFlyout .blocklyScrollbarKnob:hover {',
+  '  fill: #aaa;',
   '}',
 
   '.blocklyInvalidInput {',

@@ -144,7 +144,7 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
  * look or behave like the system's scrollbars.
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
- * @param {boolean} opt_pair True if the scrollbar is part of a horiz/vert pair.
+ * @param {boolean=} opt_pair True if the scrollbar is part of a horiz/vert pair.
  * @constructor
  */
 Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
@@ -305,12 +305,14 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
  */
 Blockly.Scrollbar.prototype.createDom_ = function() {
   /* Create the following DOM:
-  <g>
+  <g class="blocklyScrollbarHorizontal">
     <rect class="blocklyScrollbarBackground" />
     <rect class="blocklyScrollbarKnob" rx="8" ry="8" />
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+  var className = 'blocklyScrollbar' +
+      (this.horizontal_ ? 'Horizontal' : 'Vertical');
+  this.svgGroup_ = Blockly.createSvgElement('g', {'class': className}, null);
   this.svgBackground_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);

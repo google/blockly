@@ -36,7 +36,7 @@ goog.require('goog.ui.ColorPicker');
 /**
  * Class for a colour input field.
  * @param {string} colour The initial colour in '#rrggbb' format.
- * @param {Function} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_changeHandler A function that is executed when a new
  *     colour is selected.  Its sole argument is the new colour value.  Its
  *     return value becomes the selected colour, unless it is undefined, in
  *     which case the new colour stands, or it is null, in which case the change
@@ -65,15 +65,6 @@ Blockly.FieldColour.prototype.init = function(block) {
   Blockly.FieldColour.superClass_.init.call(this, block);
   this.borderRect_.style['fillOpacity'] = 1;
   this.setValue(this.getValue());
-};
-
-/**
- * Clone this FieldColour.
- * @return {!Blockly.FieldColour} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldColour.prototype.clone = function() {
-  return new Blockly.FieldColour(this.getValue(), this.changeHandler_);
 };
 
 /**

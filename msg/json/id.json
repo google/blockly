@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Kenrick95",
-			"아라"
+			"아라",
+			"Mirws"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
+	"TODAY": "Hari ini",
 	"DUPLICATE_BLOCK": "Duplikat",
 	"ADD_COMMENT": "Tambahkan sebuah comment",
 	"REMOVE_COMMENT": "Hapus komentar",
@@ -19,7 +21,10 @@
 	"EXPAND_ALL": "Kembangkan blok-blok",
 	"DISABLE_BLOCK": "Nonaktifkan blok",
 	"ENABLE_BLOCK": "Aktifkan blok",
-	"HELP": "Tolong",
+	"HELP": "Bantuan",
+	"CHAT": "Chatting dengan kolaborator Anda dengan mengetikkan di kotak ini!",
+	"AUTH": "Silakan mengotorisasi aplikasi ini untuk memungkinkan pekerjaan Anda dapat disimpan dan digunakan bersama.",
+	"ME": "Saya",
 	"CHANGE_VALUE_TITLE": "Ubah nilai:",
 	"NEW_VARIABLE": "Pembolehubah baru...",
 	"NEW_VARIABLE_TITLE": "Nama pembolehubah baru:",
@@ -165,7 +170,6 @@
 	"MATH_MODULO_HELPURL": "https://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "sisa %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Kembalikan sisa dari pembagian ke dua angka.",
-	"MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "Batasi %1 rendah %2 tinggi %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Batasi angka antara batas yang ditentukan (inklusif).",
 	"MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",

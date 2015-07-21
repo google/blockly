@@ -34,7 +34,7 @@ goog.require('goog.userAgent');
 /**
  * Class for an editable angle field.
  * @param {string} text The initial content of the field.
- * @param {Function} opt_changeHandler An optional function that is called
+ * @param {Function=} opt_changeHandler An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns the accepted text or null to abort
  *     the change.
@@ -59,16 +59,15 @@ Blockly.FieldAngle.prototype.setChangeHandler = function(handler) {
   var wrappedHandler;
   if (handler) {
     // Wrap the user's change handler together with the angle validator.
-    var thisObj = this;
     wrappedHandler = function(value) {
-      var v1 = handler.call(thisObj, value);
+      var v1 = handler.call(this, value);
       if (v1 === null) {
         var v2 = v1;
       } else {
         if (v1 === undefined) {
           v1 = value;
         }
-        var v2 = Blockly.FieldAngle.angleValidator.call(thisObj, v1);
+        var v2 = Blockly.FieldAngle.angleValidator.call(this, v1);
         if (v2 !== undefined) {
           v2 = v1;
         }
@@ -79,15 +78,6 @@ Blockly.FieldAngle.prototype.setChangeHandler = function(handler) {
     wrappedHandler = Blockly.FieldAngle.angleValidator;
   }
   Blockly.FieldAngle.superClass_.setChangeHandler(wrappedHandler);
-};
-
-/**
- * Clone this FieldAngle.
- * @return {!Blockly.FieldAngle} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldAngle.prototype.clone = function() {
-  return new Blockly.FieldAngle(this.getText(), this.changeHandler_);
 };
 
 /**

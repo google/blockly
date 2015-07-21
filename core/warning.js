@@ -39,8 +39,15 @@ goog.require('Blockly.Icon');
 Blockly.Warning = function(block) {
   Blockly.Warning.superClass_.constructor.call(this, block);
   this.createIcon();
+  // The text_ object can contain multiple warnings.
+  this.text_ = {};
 };
 goog.inherits(Blockly.Warning, Blockly.Icon);
+
+/**
+ * Does this icon get hidden when the block is collapsed.
+ */
+Blockly.Warning.prototype.collapseHidden = false;
 
 /**
  * Icon in base64 format.
@@ -71,12 +78,6 @@ Blockly.Warning.textToDom_ = function(text) {
 };
 
 /**
- * Warning text (if bubble is not visible).
- * @private
- */
-Blockly.Warning.prototype.text_ = '';
-
-/**
  * Show or hide the warning bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
@@ -86,8 +87,8 @@ Blockly.Warning.prototype.setVisible = function(visible) {
     return;
   }
   if (visible) {
-    // Create the bubble.
-    var paragraph = Blockly.Warning.textToDom_(this.text_);
+    // Create the bubble to display all warnings.
+    var paragraph = Blockly.Warning.textToDom_(this.getAllText());
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.Workspace} */ (this.block_.workspace),
         paragraph, this.block_.svgPath_,
@@ -96,7 +97,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
       // Right-align the paragraph.
       // This cannot be done until the bubble is rendered on screen.
       var maxWidth = paragraph.getBBox().width;
-      for (var x = 0, textElement; textElement = paragraph.childNodes[x]; x++) {
+      for (var i = 0, textElement; textElement = paragraph.childNodes[i]; i++) {
         textElement.setAttribute('text-anchor', 'end');
         textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
       }
@@ -124,17 +125,35 @@ Blockly.Warning.prototype.bodyFocus_ = function(e) {
 
 /**
  * Set this warning's text.
- * @param {string} text Warning text.
+ * @param {string} text Warning text (or '' to delete).
+ * @param {string} id An ID for this text entry to be able to maintain
+ *     multiple warnings.
  */
-Blockly.Warning.prototype.setText = function(text) {
-  if (this.text_ == text) {
+Blockly.Warning.prototype.setText = function(text, id) {
+  if (this.text_[id] == text) {
     return;
   }
-  this.text_ = text;
+  if (text) {
+    this.text_[id] = text;
+  } else {
+    delete this.text_[id];
+  }
   if (this.isVisible()) {
     this.setVisible(false);
     this.setVisible(true);
   }
+};
+
+/**
+ * Get this warning's texts.
+ * @return {string} All texts concatenated into one string.
+ */
+Blockly.Warning.prototype.getAllText = function() {
+  var allWarnings = [];
+  for (var id in this.text_) {
+    allWarnings.push(this.text_[id]);
+  }
+  return allWarnings.join('\n');
 };
 
 /**

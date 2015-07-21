@@ -54,7 +54,6 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Udfør nogle kommandoer, sålænge en værdi er falsk.",
 	"CONTROLS_FOR_TOOLTIP": "Få variablen \"%1\" til at have værdierne fra startværdien til slutværdien, mens der tælles med det angivne interval, og udfør de angivne blokke.",
 	"CONTROLS_FOR_TITLE": "tæl med %1 fra %2 til %3 med %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each gentagelsesblok",
 	"CONTROLS_FOREACH_TITLE": "for hvert element %1 i listen %2",
 	"CONTROLS_FOREACH_TOOLTIP": "For hvert element i en liste, sæt variablen '%1' til elementet, og udfør derefter nogle kommandoer.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "bryd ud af løkken",

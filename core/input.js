@@ -43,20 +43,26 @@ goog.require('goog.asserts');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
+  /** @type {number} */
   this.type = type;
+  /** @type {string} */
   this.name = name;
+  /** @type {!Blockly.Block} */
   this.sourceBlock_ = block;
+  /** @type {Blockly.Connection} */
   this.connection = connection;
+  /** @type {!Array.<!Blockly.Field>} */
   this.fieldRow = [];
+  /** @type {number} */
   this.align = Blockly.ALIGN_LEFT;
-
+  /** @type {boolean} */
   this.visible_ = true;
 };
 
 /**
  * Add an item to the end of the input's field row.
  * @param {string|!Blockly.Field} field Something to add as a field.
- * @param {string} opt_name Language-neutral identifier which may used to find
+ * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
  * @return {!Blockly.Input} The input being append to (to allow chaining).
  */
@@ -96,7 +102,7 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
 /**
  * Add an item to the end of the input's field row.
  * @param {*} field Something to add as a field.
- * @param {string} opt_name Language-neutral identifier which may used to find
+ * @param {string=} opt_name Language-neutral identifier which may used to find
  *     this field again.  Should be unique to the host block.
  * @return {!Blockly.Input} The input being append to (to allow chaining).
  * @deprecated December 2013

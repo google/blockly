@@ -161,7 +161,6 @@
 	"MATH_MODULO_HELPURL": "https://cs.wikipedia.org/wiki/Modul%C3%A1rn%C3%AD_aritmetika",
 	"MATH_MODULO_TITLE": "zbytek po dělení %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Vrátí zbytek po dělení dvou čísel.",
-	"MATH_CONSTRAIN_HELPURL": "http://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "omez %1 na rozmezí od %2 do %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Omezí číslo tak, aby bylo ve stanovených mezích (včetně).",
 	"MATH_RANDOM_INT_HELPURL": "https://cs.wikipedia.org/wiki/Gener%C3%A1tor_n%C3%A1hodn%C3%BDch_%C4%8D%C3%ADsel",

@@ -60,7 +60,6 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Amíg a feltétel hamis, végrehajtja az utasításokat.",
 	"CONTROLS_FOR_TOOLTIP": "Véges lépésszámú ciklus.  A \"%1\" változó értékét számolja ki a kezdőérték és a végérték között.  Minden lépésben végrehajtódnak az utasítások.",
 	"CONTROLS_FOR_TITLE": "Számold ki %1 értékét %2 és %3 között, lépésköz: %4",
-	"CONTROLS_FOREACH_HELPURL": "https://hu.wikipedia.org/wiki/Ciklus_(programoz%C3%A1s)#Iter.C3.A1l.C3.B3_ciklus",
 	"CONTROLS_FOREACH_TITLE": "Minden %1 elemre a %2 listában",
 	"CONTROLS_FOREACH_TOOLTIP": "A lista elemszámának megfelelő lépésszámú ciklus.  A \"%1\" változó minden lépésben megkapja a lista adott elemének értékét.  Minden lépésben végrehajtódnak az utasítások.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "befejezi az ismétlést",

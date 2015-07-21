@@ -187,3 +187,20 @@ function test_commonWordSuffix() {
   len = Blockly.commonWordSuffix([]);
   assertEquals('Empty list', 0, len);
 }
+
+function test_tokenizeInterpolation() {
+  var tokens = Blockly.tokenizeInterpolation('');
+  assertArrayEquals('Null interpolation', [], tokens);
+  tokens = Blockly.tokenizeInterpolation('Hello');
+  assertArrayEquals('No interpolation', ['Hello'], tokens);
+  tokens = Blockly.tokenizeInterpolation('Hello%World');
+  assertArrayEquals('Unescaped %.', ['Hello%World'], tokens);
+  tokens = Blockly.tokenizeInterpolation('Hello%%World');
+  assertArrayEquals('Escaped %.', ['Hello%World'], tokens);
+  tokens = Blockly.tokenizeInterpolation('Hello %1 World');
+  assertArrayEquals('Interpolation.', ['Hello ', 1, ' World'], tokens);
+  tokens = Blockly.tokenizeInterpolation('%123Hello%456World%789');
+  assertArrayEquals('Interpolations.', [123, 'Hello', 456, 'World', 789], tokens);
+  tokens = Blockly.tokenizeInterpolation('%%%x%%0%00%01%');
+  assertArrayEquals('Torture interpolations.', ['%%x%0', 0, 1, '%'], tokens);
+}

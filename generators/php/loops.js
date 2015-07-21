@@ -153,7 +153,8 @@ Blockly.PHP['controls_forEach'] = function(block) {
   var branch = Blockly.PHP.statementToCode(block, 'DO');
   branch = Blockly.PHP.addLoopTrap(branch, block.id);
   var code = '';
-  code += 'foreach (' + argument0 + ' as ' + variable0 + ') {\n' + branch + '}\n';
+  code += 'foreach (' + argument0 + ' as ' + variable0 +
+      ') {\n' + branch + '}\n';
   return code;
 };
 

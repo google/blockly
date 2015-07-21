@@ -3,10 +3,13 @@
 		"authors": [
 			"Shirayuki",
 			"Oda",
-			"아라"
+			"아라",
+			"Otokoume",
+			"Sujiniku"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "項目",
+	"TODAY": "今日",
 	"DUPLICATE_BLOCK": "複製",
 	"ADD_COMMENT": "コメントを追加",
 	"REMOVE_COMMENT": "コメントを削除します。",
@@ -21,6 +24,8 @@
 	"DISABLE_BLOCK": "ブロックを無効にします。",
 	"ENABLE_BLOCK": "ブロックを有効にします。",
 	"HELP": "ヘルプ",
+	"CHAT": "このボックスに入力して共同編集者とチャットしよう！",
+	"ME": "私に",
 	"CHANGE_VALUE_TITLE": "値を変更します。",
 	"NEW_VARIABLE": "新しい変数",
 	"NEW_VARIABLE_TITLE": "新しい変数の、名前",
@@ -168,7 +173,6 @@
 	"MATH_MODULO_HELPURL": "https://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "残りの %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "2 つの数値を除算した残りを返します。",
-	"MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "制限%1下リミット%2上限リミット%3",
 	"MATH_CONSTRAIN_TOOLTIP": "値を、上限 x と下限 y のあいだに制限んする（上限と下限が、x と  y　とに同じ場合わ、上限の値は　x, 下限の値はy）。",
 	"MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",
@@ -290,6 +294,8 @@
 	"LISTS_GET_SUBLIST_END_LAST": "最後へ",
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "リストの指定された部分のコピーを作成してくださ。",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "テキストからリストを作る",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "リストからテキストを作る",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_TOOLTIP": "この変数の値を返します。",
 	"VARIABLES_GET_CREATE_SET": "'セット%1を作成します。",

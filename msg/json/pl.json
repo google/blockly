@@ -173,7 +173,6 @@
 	"MATH_MODULO_HELPURL": "https://en.wikipedia.org/wiki/Modulo_operation",
 	"MATH_MODULO_TITLE": "reszta z dzielenia %1 przez %2",
 	"MATH_MODULO_TOOLTIP": "Zwróć resztę z dzielenia dwóch liczb przez siebie.",
-	"MATH_CONSTRAIN_HELPURL": "https://en.wikipedia.org/wiki/Clamping_%28graphics%29",
 	"MATH_CONSTRAIN_TITLE": "ogranicz %1 z dołu %2 z góry %3",
 	"MATH_CONSTRAIN_TOOLTIP": "Ogranicz liczbę, aby była w określonych granicach (włącznie).",
 	"MATH_RANDOM_INT_HELPURL": "https://en.wikipedia.org/wiki/Random_number_generation",

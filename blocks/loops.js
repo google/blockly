@@ -41,8 +41,8 @@ Blockly.Blocks['controls_repeat'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_REPEAT_TITLE,
+      "args0": [
         {
           "type": "field_input",
           "name": "TIMES",
@@ -57,7 +57,7 @@ Blockly.Blocks['controls_repeat'] = {
     });
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-    this.getField_('TIMES').setChangeHandler(
+    this.getField('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
   }
 };
@@ -69,8 +69,8 @@ Blockly.Blocks['controls_repeat_ext'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_REPEAT_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_REPEAT_TITLE,
+      "args0": [
         {
           "type": "input_value",
           "name": "TIMES",
@@ -126,8 +126,8 @@ Blockly.Blocks['controls_for'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_FOR_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_FOR_TITLE,
+      "args0": [
         {
           "type": "field_variable",
           "name": "VAR",
@@ -142,6 +142,7 @@ Blockly.Blocks['controls_for'] = {
         {
           "type": "input_value",
           "name": "TO",
+          "check": "Number",
           "align": "RIGHT"
         },
         {
@@ -213,8 +214,8 @@ Blockly.Blocks['controls_forEach'] = {
    */
   init: function() {
     this.jsonInit({
-      "message": Blockly.Msg.CONTROLS_FOREACH_TITLE,
-      "args": [
+      "message0": Blockly.Msg.CONTROLS_FOREACH_TITLE,
+      "args0": [
         {
           "type": "field_variable",
           "name": "VAR",
@@ -294,12 +295,8 @@ Blockly.Blocks['controls_flow_statements'] = {
    * @this Blockly.Block
    */
   onchange: function() {
-    if (!this.workspace) {
-      // Block has been deleted.
-      return;
-    }
     var legal = false;
-    // Is the block nested in a control statement?
+    // Is the block nested in a loop?
     var block = this;
     do {
       if (block.type == 'controls_repeat' ||

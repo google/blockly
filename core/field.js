@@ -46,6 +46,11 @@ Blockly.Field = function(text) {
 };
 
 /**
+ * Maximum length of text to display before adding an ellipsis.
+ */
+Blockly.Field.prototype.maxDisplayLength = 50;
+
+/**
  * Block this field is attached to.  Starts as null, then in set in init.
  * @private
  */
@@ -261,6 +266,10 @@ Blockly.Field.prototype.updateTextNode_ = function() {
     return;
   }
   var text = this.text_;
+  if (text.length > this.maxDisplayLength) {
+    // Truncate displayed string and add an ellipsis ('...').
+    text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
+  }
   // Empty the text element.
   goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.

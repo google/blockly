@@ -185,6 +185,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // Initialize procedure's callers with blank IDs.
     Blockly.Procedures.mutateCallers(this.getFieldValue('NAME'),
                                      this.workspace, this.arguments_);
+    this.workspace.fireChangeEvent();
   },
   /**
    * Modify the string for a parameter
@@ -305,10 +306,19 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    */
   getVarsTypes: function() {
     var vartypes = {};
+    var funcName = this.getFieldValue('NAME')+'.';
     for (var i = 0; i < this.arguments_.length; i++) {
       if (this.arguments_[i]['type']) {
-        vartypes[this.arguments_[i]['name']] = this.arguments_[i]['type'];
+        vartypes[funcName + this.arguments_[i]['name']] =
+             this.arguments_[i]['type'];
       }
+    }
+    var retItem = this.getInput('RETURN');
+    if (retItem &&
+        retItem.connection &&
+        retItem.connection.targetConnection &&
+        retItem.connection.targetConnection.check_) {
+        vartypes[funcName] = retItem.connection.targetConnection.check_;
     }
     return vartypes;
   },
@@ -319,8 +329,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @param {string} newName Renamed variable.
    * @this Blockly.Block
    */
-  // TODO: In theory you shouldn't be able to rename parameters from outside the
-  //       scope of the function.
   renameVar: function(oldName, newName) {
     var change = false;
     for (var i = 0; i < this.arguments_.length; i++) {
@@ -627,6 +635,35 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     }
   },
   /**
+   * Return all types of variables referenced by this block.
+   * @return {!Array.<Object>} List of variable names with their types.
+   * @this Blockly.Block
+   */
+  getVarsTypes: function() {
+    var vartypes = {};
+    var funcName = this.getFieldValue('NAME')+'.';
+    for (var i = 0; i < this.arguments_.length; i++) {
+      var parmInput = this.getInput('ARG' + i);
+      // First we want to see if there is an old block with the same ID as
+      // this argument.
+      var parmName = this.arguments_[i]['name'];
+      if (parmInput &&
+          parmInput.connection &&
+          parmInput.connection.targetConnection &&
+          parmInput.connection.targetConnection.check_) {
+          vartypes[funcName+parmName] =
+                                  parmInput.connection.targetConnection.check_;
+      }
+    }
+    // If we return something, provide that information too
+    if (this.outputConnection &&
+        this.outputConnection.targetConnection &&
+        this.outputConnection.targetConnection.check_) {
+      vartypes[funcName] = this.outputConnection.targetConnection.check_;
+    }
+    return vartypes;
+  },
+  /**
    * Add menu option to find the definition block for this call.
    * @param {!Array} options List of menu options to add to.
    * @this Blockly.Block
@@ -663,6 +700,7 @@ Blockly.Blocks['procedures_callreturn'] = {
   },
   getProcedureCall: Blockly.Blocks['procedures_callnoreturn'].getProcedureCall,
   renameProcedure: Blockly.Blocks['procedures_callnoreturn'].renameProcedure,
+  getVarsTypes: Blockly.Blocks['procedures_callnoreturn'].getVarsTypes,
   setProcedureParameters:
       Blockly.Blocks['procedures_callnoreturn'].setProcedureParameters,
   renderArgs_: Blockly.Blocks['procedures_callnoreturn'].renderArgs_,

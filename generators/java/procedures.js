@@ -31,7 +31,8 @@ goog.require('Blockly.Java');
 
 Blockly.Java['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  var funcName = Blockly.Java.variableDB_.getName(block.getFieldValue('NAME'),
+  var funcPrefix = block.getFieldValue('NAME');
+  var funcName = Blockly.Java.variableDB_.getName(funcPrefix,
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Java.statementToCode(block, 'STACK');
   if (Blockly.Java.STATEMENT_PREFIX) {
@@ -43,21 +44,33 @@ Blockly.Java['procedures_defreturn'] = function(block) {
     branch = Blockly.Java.INFINITE_LOOP_TRAP.replace(/%1/g,
         '"' + block.id + '"') + branch;
   }
+  var retType = 'void';
+  if (this.hasReturnValue_) {
+    retType = Blockly.Java.GetVariableType(funcPrefix + '.');
+  }
+
   var returnValue = Blockly.Java.valueToCode(block, 'RETURN',
       Blockly.Java.ORDER_NONE) || '';
   if (returnValue) {
-    returnValue = '  return ' + returnValue + ';\n';
+    if (retType === 'Var') {
+      returnValue = '  return Var.valueOf(' + returnValue + ');\n';
+    } else {
+      returnValue = '  return ' + returnValue + ';\n';
+    }
   } else if (!branch) {
     branch = Blockly.Java.PASS;
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
-    var type = Blockly.Java.GetVariableType(block.arguments_[x]['name']);
+    var type = Blockly.Java.GetVariableType(funcPrefix + '.' +
+                                            block.arguments_[x]['name']);
     args[x] = type + ' ' +
               Blockly.Java.variableDB_.getName(block.arguments_[x]['name'],
                                                Blockly.Variables.NAME_TYPE);
   }
-  var code = 'public void ' + funcName + '(' + args.join(', ') + '){\n' +
+
+  var code = 'public ' + retType + ' ' +
+              funcName + '(' + args.join(', ') + '){\n' +
              branch + returnValue + "}";
   code = Blockly.Java.scrub_(block, code);
   Blockly.Java.definitions_[funcName] = code;

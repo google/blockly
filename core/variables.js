@@ -76,6 +76,12 @@ Blockly.Variables.allVariables = function(root) {
   return variableList;
 };
 
+Blockly.Variables.Intersection = function(arr1, arr2) {
+  var result = goog.array.filter(arr1, function(val, index, a1) {
+    return goog.array.contains(arr2, val);
+  });
+  return result;
+}
 /**
  * Find all user-created variables with their types.
  * @param {!Blockly.Block|!Blockly.Workspace} root Root block or workspace.
@@ -98,17 +104,26 @@ Blockly.Variables.allVariablesTypes = function(root) {
   for (var x = 0; x < blocks.length; x++) {
     var func = blocks[x].getVarsTypes;
     if (func) {
+        var temp = '';
+        for (var t in variableHash) {
+          temp += t + ':'+variableHash[t]+',';
+        }
+            console.log('check:'+temp);
       var blockVariablesTypes = func.call(blocks[x]);
       for (var key in blockVariablesTypes) {
         if (blockVariablesTypes.hasOwnProperty(key)) {
           if (typeof variableHash[key] === 'undefined') {
-            variableHash[key] = [];
-          }
-          for(var i = 0; i < blockVariablesTypes[key].length; i++) {
-            if (goog.array.indexOf(variableHash[key],
-                                   blockVariablesTypes[key][i]) === -1) {
-              variableHash[key].push(blockVariablesTypes[key][i]);
+            variableHash[key] = blockVariablesTypes[key];
+          } else {
+            var intersect = Blockly.Variables.Intersection(
+                      variableHash[key], blockVariablesTypes[key]);
+            if (goog.array.isEmpty(intersect)) {
+              intersect = ['Var'];
             }
+            console.log('Block:'+ blocks[x].type+
+            ' For: '+key+' was:'+variableHash[key]+' got:'+
+            blockVariablesTypes[key]+' result='+intersect);
+            variableHash[key] = intersect;
           }
         }
       }

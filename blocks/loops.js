@@ -186,6 +186,16 @@ Blockly.Blocks['controls_for'] = {
     return [this.getFieldValue('VAR')];
   },
   /**
+   * Return all types of variables referenced by this block.
+   * @return {!Array.<Object>} List of variable names with their types.
+   * @this Blockly.Block
+   */
+  getVarsTypes: function() {
+      var vartypes = {};
+      vartypes[this.getFieldValue('VAR')] = ['Number'];
+      return vartypes;
+  },
+  /**
    * Notification that a variable is renaming.
    * If the name matches one of this block's variables, rename it.
    * @param {string} oldName Previous name of variable.
@@ -260,6 +270,16 @@ Blockly.Blocks['controls_forEach'] = {
    */
   getVars: function() {
     return [this.getFieldValue('VAR')];
+  },
+  /**
+   * Return all types of variables referenced by this block.
+   * @return {!Array.<Object>} List of variable names with their types.
+   * @this Blockly.Block
+   */
+  getVarsTypes: function() {
+      var vartypes = {};
+      vartypes[this.getFieldValue('VAR')] = ['Object'];
+      return vartypes;
   },
   /**
    * Notification that a variable is renaming.

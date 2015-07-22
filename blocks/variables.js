@@ -48,6 +48,7 @@ Blockly.Blocks['variables_get'] = {
     this.setOutput(true);
     this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+    this.procedurePrefix_ = '';
   },
   /**
    * Return all variables referenced by this block.
@@ -68,7 +69,7 @@ Blockly.Blocks['variables_get'] = {
     if (this.outputConnection &&
         this.outputConnection.targetConnection &&
         this.outputConnection.targetConnection.check_) {
-      vartypes[this.getFieldValue('VAR')] =
+      vartypes[this.procedurePrefix_+this.getFieldValue('VAR')] =
           this.outputConnection.targetConnection.check_;
     }
     return vartypes;
@@ -83,6 +84,41 @@ Blockly.Blocks['variables_get'] = {
   renameVar: function(oldName, newName) {
     if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
       this.setFieldValue(newName, 'VAR');
+    }
+  },
+  /**
+   * Called whenever anything on the workspace changes.
+   * Add warning if this flow block is not nested inside a loop.
+   * @this Blockly.Block
+   */
+  onchange: function() {
+    var legal = false;
+    // Is the block nested in a procedure?
+    var block = this;
+    do {
+      if (block.getProcedureDef) {
+        break;
+      }
+      block = block.getSurroundParent();
+    } while (block);
+
+    var colour = Blockly.Blocks.variables.HUE;
+    // See if our variable name is any of the parameters of this function
+    if (block && block.getProcedureDef) {
+      var varName = this.getFieldValue('VAR');
+      var tuple = block.getProcedureDef.call(block);
+      var params = tuple[1];
+      for(var i = 0; i < params.length; i++) {
+        if (params[i]['name'] === varName) {
+          colour = Blockly.Blocks.procedures.HUE;
+          this.procedurePrefix_ = tuple[0]+'.';
+          break;
+        }
+      }
+    }
+
+    if (colour != this.getColour()) {
+      this.setColour(colour);
     }
   },
   contextMenuType_: 'variables_set',
@@ -130,8 +166,10 @@ Blockly.Blocks['variables_set'] = {
       "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
       "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
     });
+    this.procedurePrefix_ = '';
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
+  onchange: Blockly.Blocks['variables_get'].onchange,
   getVars: Blockly.Blocks['variables_get'].getVars,
   renameVar: Blockly.Blocks['variables_get'].renameVar,
   contextMenuType_: 'variables_get',
@@ -148,7 +186,7 @@ Blockly.Blocks['variables_set'] = {
         valField.connection &&
         valField.connection.targetConnection &&
         valField.connection.targetConnection.check_) {
-        vartypes[this.getFieldValue('VAR')] =
+        vartypes[this.procedurePrefix_+this.getFieldValue('VAR')] =
                                   valField.connection.targetConnection.check_;
     }
     return vartypes;
@@ -172,8 +210,10 @@ Blockly.Blocks['hash_variables_get'] = {
         .appendField(Blockly.Msg.VARIABLES_GET_TAIL);
     this.setOutput(true);
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
+    this.procedurePrefix_ = '';
     this.contextMenuType_ = 'hash_variables_set';
   },
+  onchange: Blockly.Blocks['variables_get'].onchange,
   getVars: Blockly.Blocks['variables_get'].getVars,
   renameVar: Blockly.Blocks['variables_get'].renameVar,
   /**
@@ -298,10 +338,12 @@ Blockly.Blocks['hash_variables_set'] = {
       "tooltip": Blockly.getToolTipString('variables_hash_param_set_tooltip'), //Blockly.Msg.VARIABLES_SET_TOOLTIP,
       "helpUrl": Blockly.getUrlString('variables_hash_param_set_url') //Blockly.Msg.VARIABLES_SET_HELPURL,
     });
+    this.procedurePrefix_ = '';
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
     this.contextMenuType_ = 'hash_variables_get';
   },
 
+  onchange: Blockly.Blocks['hash_variables_get'].onchange,
   getVars: Blockly.Blocks['hash_variables_get'].getVars,
   renameVar: Blockly.Blocks['hash_variables_get'].renameVar,
   getScopeVars: Blockly.Blocks['hash_variables_get'].getScopeVars,

@@ -33,6 +33,10 @@ Blockly.Java['variables_get'] = function(block) {
   // Variable getter.
   var code = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
+  if(Blockly.Java.GetVariableType(this.procedurePrefix_+block.getFieldValue('VAR')) === 'Var') {
+    code += '.cloneObject()';
+  }
+
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 
@@ -47,16 +51,20 @@ Blockly.Java['variables_set'] = function(block) {
   var sourceType = Blockly.Java.getValueType(block, 'VALUE');
   var destType = Blockly.Java.GetBlocklyType(block.getFieldValue('VAR'));
   var compatible = false;
-  for (var i = 0; i < sourceType.length; i++) {
-    if (sourceType[i] === destType) {
+
+  if (sourceType && goog.array.contains(sourceType, destType)) {
       compatible = true;
-      break;
-    }
   }
   if (destType === 'String' && !compatible) {
     argument0 = Blockly.Java.toStringCode(argument0);
   }
-  return varName + ' = ' + argument0 + ';\n';
+  var code = varName;
+  if(Blockly.Java.GetVariableType(this.procedurePrefix_+block.getFieldValue('VAR')) === 'Var') {
+    code += '.setObject(' + argument0 + ');\n';
+  } else {
+    code += ' = ' + argument0 + ';\n';
+  }
+  return code;
 };
 
 Blockly.Java['hash_variables_get'] = function(block) {
@@ -72,7 +80,7 @@ Blockly.Java['hash_variables_get'] = function(block) {
         var varName = blockVariables[y];
         // Variable name may be null if the block is only half-built.
         if (varName) {
-          var vartype = Blockly.Java.GetVariableType(varName);
+          var vartype = Blockly.Java.GetVariableType(this.procedurePrefix_+varName);
 
           if (vartype === 'Array') {
             getter = 'get';

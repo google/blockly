@@ -101,16 +101,6 @@ Blockly.FieldClickImage.prototype.init = function(block) {
 }
 
 /**
- * Clone this FieldClickImage.
- * @return {!Blockly.FieldClickImage} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldClickImage.prototype.clone = function() {
-  return new Blockly.FieldClickImage(this.getSrc(), this.width_, this.height_,
-                                     this.text_, this.changeHandler_);
-};
-
-/**
  * Take the action of the block
  * Note that this does swap out the dragMode_ variable because we know that
  * We only get invoked when we aren't actually dragging (otherwise the click

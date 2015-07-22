@@ -66,13 +66,31 @@ Blockly.Java['logic_compare'] = function(block) {
   var operator = OPERATORS[block.getFieldValue('OP')];
   var argument0Type = Blockly.Java.getValueType(block, 'A');
   var argument1Type = Blockly.Java.getValueType(block, 'B');
-  var isString = false;
+  var useFunctions = false;
   var code = '';
   var order = Blockly.Java.ORDER_RELATIONAL;
-  if ((argument0Type && goog.array.contains(argument0Type, 'String')) ||
-      (argument1Type && goog.array.contains(argument1Type, 'String'))) {
-    var argument0 = Blockly.Java.valueToCode(block, 'A', order) || '""';
-    var argument1 = Blockly.Java.valueToCode(block, 'B', order) || '""';
+  var argument0 = Blockly.Java.valueToCode(block, 'A', order);
+  var argument1 = Blockly.Java.valueToCode(block, 'B', order);
+  if (argument0.slice(-14) === '.cloneObject()' ) {
+    useFunctions = true;
+    argument0 = argument0.slice(0,-14);
+  } else if (argument1.slice(-14) === '.cloneObject()' ) {
+    useFunctions = true;
+    var temp = argument0;
+    argument0 = '!' + argument1.slice(0,-14);
+    argument1 = temp;
+  } else if ((argument0Type && goog.array.contains(argument0Type, 'String')) ||
+             (argument1Type && goog.array.contains(argument1Type, 'String'))) {
+    useFunctions = true;
+  }
+
+  if (useFunctions) {
+    if (!argument0) {
+      argument0 = '""';
+    }
+    if (!argument1) {
+      argument1 = '""';
+    }
     if (operator === '==') {
       code = argument0 + '.equals(' + argument1 + ')';
     } else if (operator === '!=') {
@@ -81,8 +99,12 @@ Blockly.Java['logic_compare'] = function(block) {
       code = argument0 + '.compareTo(' + argument1 + ') ' + operator + ' 0';
     }
   } else {
-    var argument0 = Blockly.Java.valueToCode(block, 'A', order) || '0';
-    var argument1 = Blockly.Java.valueToCode(block, 'B', order) || '0';
+    if (!argument0) {
+      argument0 = 0;
+    }
+    if (!argument1) {
+      argument1 = 0;
+    }
     code = argument0 + ' ' + operator + ' ' + argument1;
   }
   return [code, order];

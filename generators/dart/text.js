@@ -275,3 +275,12 @@ Blockly.Dart['text_prompt_ext'] = function(block) {
   }
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
+
+Blockly.Dart['text_comment'] = function(block) {
+  // Display comment
+  
+  var comment = block.getFieldValue('COMMENT') || '';
+  var code = '/*\n' + comment + '\n*/\n';
+  
+  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};

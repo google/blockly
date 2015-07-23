@@ -65,7 +65,7 @@ Blockly.Blocks['lists_create_with'] = {
   },
   /**
    * Create XML to represent list inputs.
-   * @return {Element} XML storage element.
+   * @return {!Element} XML storage element.
    * @this Blockly.Block
    */
   mutationToDom: function() {

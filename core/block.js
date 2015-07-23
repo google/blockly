@@ -759,20 +759,6 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
 };
 
 /**
- * Change the output type on a block.
- * @param {string|Array.<string>|null} check Returned type or list of
- *     returned types.  Null or undefined if any type could be returned
- *     (e.g. variable get).  It is fine if this is the same as the old type.
- * @throws {goog.asserts.AssertionError} if the block did not already have an
- *     output.
- */
-Blockly.Block.prototype.changeOutput = function(check) {
-  goog.asserts.assert(this.outputConnection,
-      'Only use changeOutput() on blocks that already have an output.');
-  this.outputConnection.setCheck(check);
-};
-
-/**
  * Set whether value inputs are arranged horizontally or vertically.
  * @param {boolean} newBoolean True if inputs are horizontal.
  */

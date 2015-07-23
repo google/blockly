@@ -4,7 +4,8 @@
 			"Metalhead64",
 			"M165437",
 			"Dan-yell",
-			"아라"
+			"아라",
+			"Octycs"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "Element",
@@ -32,7 +33,7 @@
 	"RENAME_VARIABLE": "Variable umbenennen...",
 	"RENAME_VARIABLE_TITLE": "Alle \"%1\" Variablen umbenennen in:",
 	"COLOUR_PICKER_HELPURL": "https://de.wikipedia.org/wiki/Farbe",
-	"COLOUR_PICKER_TOOLTIP": "Wählen eine Farbe von der Palette.",
+	"COLOUR_PICKER_TOOLTIP": "Wähle eine Farbe aus der Palette.",
 	"COLOUR_RANDOM_TITLE": "zufällige Farbe",
 	"COLOUR_RANDOM_TOOLTIP": "Wähle eine Farbe nach dem Zufallsprinzip.",
 	"COLOUR_RGB_HELPURL": "https://de.wikipedia.org/wiki/RGB-Farbraum",

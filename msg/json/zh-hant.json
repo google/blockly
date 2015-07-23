@@ -3,7 +3,8 @@
 		"authors": [
 			"Gasolin",
 			"Wehwei",
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"LNDDYL"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "變量",
@@ -290,7 +291,7 @@
 	"PROCEDURES_CALLRETURN_TOOLTIP": "執行使用者定義的函數 '%1' 並使用它的回傳值",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "參數",
 	"PROCEDURES_MUTATORARG_TITLE": "變量:",
-	"PROCEDURES_HIGHLIGHT_DEF": "高亮顯示函式定義",
+	"PROCEDURES_HIGHLIGHT_DEF": "反白顯示函式定義",
 	"PROCEDURES_CREATE_DO": "建立 '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "如果值為 真，則返回第二個值。",
 	"PROCEDURES_IFRETURN_WARNING": "警告: 此積木僅可在定義函式時使用。"

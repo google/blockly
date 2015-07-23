@@ -139,4 +139,5 @@ Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
   }
   Blockly.WidgetDiv.DIV.style.left = anchorX + 'px';
   Blockly.WidgetDiv.DIV.style.top = anchorY + 'px';
+  Blockly.WidgetDiv.DIV.style.height = windowSize.height - anchorY + 'px';
 };

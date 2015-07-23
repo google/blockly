@@ -29,24 +29,16 @@ goog.provide('Blockly.Dart.loops');
 goog.require('Blockly.Dart');
 
 
-Blockly.Dart['controls_repeat'] = function(block) {
-  // Repeat n times (internal number).
-  var repeats = Number(block.getFieldValue('TIMES'));
-  var branch = Blockly.Dart.statementToCode(block, 'DO');
-  branch = Blockly.Dart.addLoopTrap(branch, block.id);
-  var loopVar = Blockly.Dart.variableDB_.getDistinctName(
-      'count', Blockly.Variables.NAME_TYPE);
-  var code = 'for (int ' + loopVar + ' = 0; ' +
-      loopVar + ' < ' + repeats + '; ' +
-      loopVar + '++) {\n' +
-      branch + '}\n';
-  return code;
-};
-
 Blockly.Dart['controls_repeat_ext'] = function(block) {
-  // Repeat n times (external number).
-  var repeats = Blockly.Dart.valueToCode(block, 'TIMES',
-      Blockly.Dart.ORDER_ASSIGNMENT) || '0';
+  // Repeat n times.
+  if (block.getField('TIMES')) {
+    // Internal number.
+    var repeats = Number(block.getFieldValue('TIMES'));
+  } else {
+    // External number.
+    var repeats = Blockly.Dart.valueToCode(block, 'TIMES',
+        Blockly.Dart.ORDER_ASSIGNMENT) || '0';
+  }
   var branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block.id);
   var code = '';
@@ -64,6 +56,8 @@ Blockly.Dart['controls_repeat_ext'] = function(block) {
       branch + '}\n';
   return code;
 };
+
+Blockly.Dart['controls_repeat'] = Blockly.Dart['controls_repeat_ext'];
 
 Blockly.Dart['controls_whileUntil'] = function(block) {
   // Do while/until loop.

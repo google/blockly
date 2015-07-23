@@ -664,7 +664,9 @@ Blockly.Blocks['text_prompt'] = {
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
-    var dropdown = new Blockly.FieldDropdown(TYPES, this.updateType_);
+    var dropdown = new Blockly.FieldDropdown(TYPES, function(newOp) {
+      thisBlock.updateType_(newOp);
+    });
     this.appendDummyInput()
         .appendField(dropdown, 'TYPE')
         .appendField(this.newQuote_(true))

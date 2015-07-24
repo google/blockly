@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/google/blockly.git"
   },
+  "bugs": {
+    "url": "https://github.com/google/blockly/issues"
+  },
   "homepage": "https://developers.google.com/blockly/",
   "author": {
     "name": "Neil Fraser"

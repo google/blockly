@@ -5,7 +5,7 @@
   "keywords": ["blockly"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/google/blockly.git",
+    "url": "https://github.com/google/blockly.git"
   },
   "homepage": "https://developers.google.com/blockly/",
   "author": {

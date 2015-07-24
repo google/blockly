@@ -14,5 +14,6 @@
   "author": {
     "name": "Neil Fraser"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "private": true
 }

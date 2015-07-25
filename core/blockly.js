@@ -334,7 +334,7 @@ Blockly.onMouseWheel_ = function(e) {
     var e = window.event || e; // old IE support
     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
     var position = Blockly.mouseToSvg(e, workspace.options.svg);
-    workspace.zoom (position.x , position.y, delta);
+    workspace.zoom(position.x , position.y, delta);
     e.preventDefault();
   }
 };

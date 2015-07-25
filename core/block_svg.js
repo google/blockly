@@ -1049,7 +1049,7 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   clone.bBox_ = clone.getBBox();
   // Start the animation.
   clone.startDate_ = new Date();
-  Blockly.BlockSvg.disposeUiStep_.bind(this)(clone, this.RTL);
+  Blockly.BlockSvg.disposeUiStep_.call(this, clone, this.RTL);
 };
 
 /**
@@ -1118,8 +1118,8 @@ Blockly.BlockSvg.prototype.connectionUiStep_ = function(ripple) {
     ripple.style.opacity = 1 - percent;
     var thisBlock_ = this;
     var closure = function() {
-      this.connectionUiStep_(ripple);
-    }.bind(this);
+      thisBlock_.connectionUiStep_(ripple);
+    };
     setTimeout(closure, 10);
   }
 };

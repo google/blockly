@@ -104,7 +104,10 @@ Blockly.Workspace.prototype.zooming = true;
 Blockly.Workspace.prototype.scale = 1;
 
 /**
- * Current scale speed.
+ * Current scale speed, for each zooming in-out step the scale is multiplied
+ * or divided respectively by the scale speed, this means that:
+ * scale = scaleSpeed ^ steps , note that in this formula
+ * steps of zoom-out are subtracted and zoom-in steps are added.
  * @type {number}
  */
 Blockly.Workspace.prototype.scaleSpeed = 1.2;
@@ -120,12 +123,6 @@ Blockly.Workspace.prototype.minScale = 0.3;
  * @type {number}
  */
 Blockly.Workspace.prototype.maxScale = 3;
-
-/**
- * Current position of mouse.
- * @type {number}
- */
-Blockly.Workspace.prototype.mousePosition = null;
 
 /**
  * The workspace's trashcan (if any).
@@ -805,15 +802,14 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
 
 /**
  * Zooming the blocks centered in (x, y) coordinate with zooming in or out.
- * @param {!number} x X coordinate of center.
- * @param {!number} y Y coordinate of center.
- * @param {!number} type Type of zomming (-1 zooming out and 1 zooming in).
+ * @param {number} x X coordinate of center.
+ * @param {number} y Y coordinate of center.
+ * @param {number} type Type of zomming (-1 zooming out and 1 zooming in).
  */
 Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   var speed = this.scaleSpeed;
   var metrics = this.getMetrics();
   var center = this.options.svg.createSVGPoint();
-  var g = this.getCanvas();
   center.x = x;
   center.y = y;
   center = center.matrixTransform(workspace.getCanvas().getCTM().inverse());
@@ -821,8 +817,8 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   var y = center.y;
   var canvas = workspace.getCanvas();
   // scale factor
-  var scale = (type == 1)?speed:1/speed;
-  var matrix = canvas.getCTM().translate(-(x*(scale-1)),-(y*(scale-1))).scale(scale);
+  var scale = (type == 1) ? speed : 1 / speed;
+  var matrix = canvas.getCTM().translate(x * (1 - scale), y * (1 - scale)).scale(scale);
   // validate if scale is in a valid range
   if (matrix.a >= this.minScale && matrix.a <= this.maxScale) {
     this.scale = matrix.a;
@@ -839,8 +835,8 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
  */
 Blockly.WorkspaceSvg.prototype.zoomCenter  = function(type) {
   var metrics = this.getMetrics();
-  var x = metrics.viewWidth/2;
-  var y = metrics.viewHeight/2;
+  var x = metrics.viewWidth / 2;
+  var y = metrics.viewHeight / 2;
   this.zoom(x ,y , type);
 }
 
@@ -860,27 +856,29 @@ Blockly.WorkspaceSvg.prototype.zoomReset  = function() {
  * Updates the grid pattern.
  */
 Blockly.WorkspaceSvg.prototype.updateGridPattern_  = function() {
-  this.options.gridPattern.setAttribute('width', this.options.gridOptions.spacing * this.scale+'');
-  this.options.gridPattern.setAttribute('height', this.options.gridOptions.spacing * this.scale+'');
-  var half = Math.floor(this.options.gridOptions['spacing'] / 2) + .5;
+  this.options.gridPattern.setAttribute('width', this.options.gridOptions.spacing * this.scale);
+  this.options.gridPattern.setAttribute('height', this.options.gridOptions.spacing * this.scale);
+  var half = Math.floor(this.options.gridOptions['spacing'] / 2) + 0.5;
   var start = half - this.options.gridOptions['length'] / 2;
   var end = half + this.options.gridOptions['length'] / 2;
+  var line1 = this.options.gridPattern.children[0];
+  var line2 = this.options.gridPattern.children[1];
   half *= this.scale;
   start *= this.scale;
   end *= this.scale;
   if (this.options.gridPattern.children[0]) {
-    this.options.gridPattern.children[0].setAttribute('stroke-width', this.scale+'');
-    this.options.gridPattern.children[0].setAttribute('x1', start+'');
-    this.options.gridPattern.children[0].setAttribute('y1', half+'');
-    this.options.gridPattern.children[0].setAttribute('x2', end+'');
-    this.options.gridPattern.children[0].setAttribute('y2', half+'');
+    line1.setAttribute('stroke-width', this.scale);
+    line1.setAttribute('x1', start);
+    line1.setAttribute('y1', half);
+    line1.setAttribute('x2', end);
+    line1.setAttribute('y2', half);
   }
-  if (this.options.gridPattern.children[1]) {
-    this.options.gridPattern.children[1].setAttribute('stroke-width', this.scale+'');
-    this.options.gridPattern.children[1].setAttribute('x1', half+'');
-    this.options.gridPattern.children[1].setAttribute('y1', start+'');
-    this.options.gridPattern.children[1].setAttribute('x2', half+'');
-    this.options.gridPattern.children[1].setAttribute('y2', end+'');
+  if (line2) {
+    line2.setAttribute('stroke-width', this.scale);
+    line2.setAttribute('x1', half);
+    line2.setAttribute('y1', start);
+    line2.setAttribute('x2', half);
+    line2.setAttribute('y2', end);
   }
 }
 

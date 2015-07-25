@@ -623,7 +623,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       throw 'block is not rendered.';
     }
     //if flyout is inside of canvas, fix scale
-    if (flyout.targetWorkspace_ === Blockly.mainWorkspace) {
+    if (flyout.targetWorkspace_ == Blockly.mainWorkspace) {
       var xyOld = Blockly.getSvgXY_(svgRootOld);
       var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.options.svg);
       //relative mouse position to the block
@@ -686,12 +686,12 @@ Blockly.Flyout.prototype.getRect = function() {
   // the largest screen size.
   var BIG_NUM = 10000000;
   var x = Blockly.getSvgXY_(this.svgGroup_).x;
-  if (!Blockly.RTL) {
+  if (!this.RTL) {
     x -= BIG_NUM;
   }
   //fix scale if is descendant of bubble canvas
-  if (Blockly.isDescendant_(this.svgGroup_, Blockly.mainWorkspace.getBubbleCanvas())) {
-      return new goog.math.Rect(x, -BIG_NUM,
+  if (goog.dom.contains(Blockly.mainWorkspace.getBubbleCanvas(), this.svgGroup_)) {
+    return new goog.math.Rect(x, -BIG_NUM,
         BIG_NUM + this.width_ * Blockly.mainWorkspace.scale, this.height_ * Blockly.mainWorkspace.scale + 2 * BIG_NUM);
   } else {
     return new goog.math.Rect(x, -BIG_NUM,

@@ -433,12 +433,12 @@ Blockly.init_ = function(mainWorkspace) {
 
   Blockly.bindEvent_(window, 'resize', null,
                      function() {Blockly.svgResize(mainWorkspace);});
-  //mouse-wheel for firefox
-  Blockly.bindEvent_(svg, 'DOMMouseScroll', null, Blockly.onMouseWheel_);
-  //mouse-wheel for other browsers
-  Blockly.bindEvent_(svg, 'mousewheel', null, Blockly.onMouseWheel_);
-  //mouse-move for tracking mouse position
-  Blockly.bindEvent_(svg, 'mousemove', null, Blockly.onMouseMoveTracking_);
+  if (mainWorkspace.zooming) {
+    //mouse-wheel for firefox
+    Blockly.bindEvent_(svg, 'DOMMouseScroll', null, Blockly.onMouseWheel_);
+    //mouse-wheel for other browsers
+    Blockly.bindEvent_(svg, 'mousewheel', null, Blockly.onMouseWheel_);
+  }
 
   if (!Blockly.documentEventsBound_) {
     // Only bind the window/document events once.
@@ -480,7 +480,7 @@ Blockly.init_ = function(mainWorkspace) {
     mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
     mainWorkspace.scrollbar.resize();
   }
-  if (options.enableZoom != undefined) {
+  if (options.enableZoom !== undefined) {
     mainWorkspace.zooming = options.enableZoom;
   }
   if (options.zoomOptions) {

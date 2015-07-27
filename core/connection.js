@@ -37,6 +37,7 @@ goog.require('goog.dom');
  * @constructor
  */
 Blockly.Connection = function(source, type) {
+  /** @type {!Blockly.Block} */
   this.sourceBlock_ = source;
   /** @type {Blockly.Connection} */
   this.targetConnection = null;

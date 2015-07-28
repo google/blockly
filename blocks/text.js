@@ -620,6 +620,7 @@ Blockly.Blocks['text_prompt_ext'] = {
   },
   /**
    * Modify this block to have the correct output type.
+   * @param {string} newOp Either 'TEXT' or 'NUMBER'.
    * @private
    * @this Blockly.Block
    */

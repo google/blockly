@@ -649,14 +649,8 @@ Blockly.Blocks['lists_split'] = {
     var dropdown = new Blockly.FieldDropdown(
         [[Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT, 'SPLIT'],
          [Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST, 'JOIN']],
-        function(newOp) {
-          if (newOp == 'SPLIT') {
-            thisBlock.outputConnection.setCheck('Array');
-            thisBlock.getInput('INPUT').setCheck('String');
-          } else {
-            thisBlock.outputConnection.setCheck('String');
-            thisBlock.getInput('INPUT').setCheck('Array');
-          }
+        function(newMode) {
+          thisBlock.updateType_(newMode);
         });
     this.setHelpUrl(Blockly.Msg.LISTS_SPLIT_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
@@ -677,5 +671,38 @@ Blockly.Blocks['lists_split'] = {
       }
       throw 'Unknown mode: ' + mode;
     });
+  },
+  /**
+   * Modify this block to have the correct input and output types.
+   * @param {string} newMode Either 'SPLIT' or 'JOIN'.
+   * @private
+   * @this Blockly.Block
+   */
+  updateType_: function(newMode) {
+    if (newMode == 'SPLIT') {
+      this.outputConnection.setCheck('Array');
+      this.getInput('INPUT').setCheck('String');
+    } else {
+      this.outputConnection.setCheck('String');
+      this.getInput('INPUT').setCheck('Array');
+    }
+  },
+  /**
+   * Create XML to represent the input and output types.
+   * @return {!Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('mode', this.getFieldValue('MODE'));
+    return container;
+  },
+  /**
+   * Parse XML to restore the input and output types.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    this.updateType_(xmlElement.getAttribute('mode'));
   }
 };

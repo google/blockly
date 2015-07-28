@@ -369,6 +369,7 @@ Blockly.Blocks['math_on_list'] = {
   },
   /**
    * Modify this block to have the correct output type.
+   * @param {string} newOp Either 'MODE' or some op than returns a number.
    * @private
    * @this Blockly.Block
    */

@@ -120,7 +120,7 @@ Blockly.Variables.allVariablesTypes = function(root) {
             if (goog.array.isEmpty(intersect)) {
               intersect = ['Var'];
             }
-            console.log('Block:'+ blocks[x].type+
+            console.log('Block:'+ blocks[x].type + '.'+blocks[x].id+
             ' For: '+key+' was:'+variableHash[key]+' got:'+
             blockVariablesTypes[key]+' result='+intersect);
             variableHash[key] = intersect;

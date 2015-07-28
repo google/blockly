@@ -28,6 +28,7 @@
 goog.provide('Blockly.Generator');
 
 goog.require('Blockly.Block');
+goog.require('goog.asserts');
 
 
 /**
@@ -174,10 +175,9 @@ Blockly.Generator.prototype.blockToCode = function(block,parms,nostash) {
   }
 
   var func = this[block.type];
-  if (!func) {
-    throw 'Language "' + this.name_ + '" does not know how to generate code ' +
-        'for block type "' + block.type + '".';
-  }
+  goog.asserts.assertFunction(func,
+      'Language "%s" does not know how to generate code for block type "%s".',
+      this.name_, block.type);
   // First argument to func.call is the value of 'this' in the generator.
   // Prior to 24 September 2013 'this' was the only way to access the block.
   // The current prefered method of accessing the block is through the second
@@ -200,7 +200,7 @@ Blockly.Generator.prototype.blockToCode = function(block,parms,nostash) {
     // Block has handled code generation itself.
     return stash;
   } else {
-    throw 'Invalid code generated: ' + code;
+    goog.asserts.fail('Invalid code generated: %s', code);
   }
 };
 
@@ -216,7 +216,7 @@ Blockly.Generator.prototype.blockToCode = function(block,parms,nostash) {
  */
 Blockly.Generator.prototype.valueToCode = function(block, name, order, parms) {
   if (isNaN(order)) {
-    throw 'Expecting valid order from block "' + block.type + '".';
+    goog.asserts.fail('Expecting valid order from block "%s".', block.type);
   }
   var targetBlock = block.getInputTargetBlock(name);
   if (!targetBlock) {
@@ -227,15 +227,15 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order, parms) {
     // Disabled block.
     return '';
   }
-  if (!goog.isArray(tuple)) {
-    // Value blocks must return code and order of operations info.
-    // Statement blocks must only return code.
-    throw 'Expecting tuple from value block "' + targetBlock.type + '".';
-  }
+  // Value blocks must return code and order of operations info.
+  // Statement blocks must only return code.
+  goog.asserts.assertArray(tuple,
+      'Expecting tuple from value block "%s".', targetBlock.type);
   var code = tuple[0];
   var innerOrder = tuple[1];
   if (isNaN(innerOrder)) {
-    throw 'Expecting valid order from value block "' + targetBlock.type + '".';
+    goog.asserts.fail('Expecting valid order from value block "%s".',
+        targetBlock.type);
   }
   if (code && order <= innerOrder) {
     if (order == innerOrder && (order == 0 || order == 99)) {
@@ -265,11 +265,10 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order, parms) {
 Blockly.Generator.prototype.statementToCode = function(block, name, parms) {
   var targetBlock = block.getInputTargetBlock(name);
   var code = this.blockToCode(targetBlock, parms);
-  if (!goog.isString(code)) {
-    // Value blocks must return code and order of operations info.
-    // Statement blocks must only return code.
-    throw 'Expecting code from statement block "' + targetBlock.type + '".';
-  }
+  // Value blocks must return code and order of operations info.
+  // Statement blocks must only return code.
+  goog.asserts.assertString(code,
+      'Expecting code from statement block "%s".', targetBlock.type);
   if (code) {
     code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
   }

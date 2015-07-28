@@ -165,6 +165,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   Blockly.addClass_(menuDom, 'blocklyDropdownMenu');
   // Record menuSize after adding menu.
   var menuSize = goog.style.getSize(menuDom);
+  // Recalculate height for the total content, not only box height.
+  menuSize.height = menuDom.scrollHeight;
 
   // Position the menu.
   // Flip menu vertically if off the bottom.

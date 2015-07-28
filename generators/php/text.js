@@ -219,8 +219,8 @@ Blockly.PHP['text_trim'] = function(block) {
   };
   var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_ATOMIC) || '\'\'';
-  return [ operator + '(' + argument0 + ')', Blockly.PHP.ORDER_ATOMIC];
+      Blockly.PHP.ORDER_NONE) || '\'\'';
+  return [ operator + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_print'] = function(block) {
@@ -230,25 +230,22 @@ Blockly.PHP['text_print'] = function(block) {
   return 'print(' + argument0 + ');\n';
 };
 
-Blockly.PHP['text_prompt'] = function(block) {
-  // Prompt function (internal message).
-  var msg = Blockly.PHP.quote_(block.getFieldValue('TEXT'));
+Blockly.PHP['text_prompt_ext'] = function(block) {
+  // Prompt function.
+  if (block.getField('TEXT')) {
+    // Internal message.
+    var msg = Blockly.PHP.quote_(block.getFieldValue('TEXT'));
+  } else {
+    // External message.
+    var msg = Blockly.PHP.valueToCode(block, 'TEXT',
+        Blockly.PHP.ORDER_NONE) || '\'\'';
+  }
   var code = 'readline(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
     code = 'floatval(' + code + ')';
   }
-  return [code, Blockly.PHP.ORDER_ATOMIC];
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
-Blockly.PHP['text_prompt_ext'] = function(block) {
-  // Prompt function (external message).
-  var msg = Blockly.PHP.valueToCode(block, 'TEXT',
-      Blockly.PHP.ORDER_ATOMIC) || '\'\'';
-  var code = 'readline(' + msg + ')';
-  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
-  if (toNumber) {
-    code = 'floatval(' + code + ')';
-  }
-  return [code, Blockly.PHP.ORDER_ATOMIC];
-};
+Blockly.PHP['text_prompt'] = Blockly.PHP['text_prompt_ext'];

@@ -151,7 +151,7 @@ Blockly.Msg.COLOUR_BLEND_TITLE = 'blend';
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = 'colour 1';
 /// block input text - The second of two colours to [https://github.com/google/blockly/wiki/Colour#blending-colours blend].
 Blockly.Msg.COLOUR_BLEND_COLOUR2 = 'colour 2';
-/// block input text - The proportion of the [https://github.com/google/blockly/wiki/Colour#blending-colours blend] containing the first color; the remaining proportion is of the second colour.  For example, if the first colour is red and the second color blue, a ratio of 1 would yield pure red, a ratio of .5 would yield purple (equal amounts of red and blue), and a ratio of 0 would yield pure blue.
+/// block input text - The proportion of the [https://github.com/google/blockly/wiki/Colour#blending-colours blend] containing the first color; the remaining proportion is of the second colour.  For example, if the first colour is red and the second color blue, a ratio of 1 would yield pure red, a ratio of .5 would yield purple (equal amounts of red and blue), and a ratio of 0 would yield pure blue.\n{{Identical|Ratio}}
 Blockly.Msg.COLOUR_BLEND_RATIO = 'ratio';
 /// tooltip - See [https://github.com/google/blockly/wiki/Colour#blending-colours https://github.com/google/blockly/wiki/Colour#blending-colours].
 Blockly.Msg.COLOUR_BLEND_TOOLTIP = 'Blends two colours together with a given ratio (0.0 - 1.0).';
@@ -169,7 +169,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = 'repeat';
 /// block text - Text following the number of times a [https://github.com/google/blockly/wiki/Loops#repeat repeat loop] should be repeated.
 /// (This is redundant but is needed to support older code.)
 Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = 'times';
-/// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].
+/// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';

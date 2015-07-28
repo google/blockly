@@ -166,7 +166,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
           Blockly.FieldAngle.HALF + ', ' + Blockly.FieldAngle.HALF + ')'
     }, svg);
   }
-  svg.style.marginLeft = '-35px';
+  svg.style.marginLeft = (15 - Blockly.FieldAngle.RADIUS) + 'px';
   this.clickWrapper_ =
       Blockly.bindEvent_(svg, 'click', this, Blockly.WidgetDiv.hide);
   this.moveWrapper1_ =
@@ -207,6 +207,7 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   angle = String(angle);
   Blockly.FieldTextInput.htmlInput_.value = angle;
   this.setText(angle);
+  this.validate_();
 };
 
 /**

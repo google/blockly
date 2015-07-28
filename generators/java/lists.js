@@ -71,6 +71,9 @@ Blockly.Java['lists_length'] = function(block) {
   // List length.
   var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_NONE) || '[]';
+  if (argument0.slice(-14) === '.cloneObject()' ) {
+    argument0 = argument0.slice(0,-14) + '.getObjectAsList()';
+  }
   return [argument0 + '.size()', Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
@@ -90,6 +93,9 @@ Blockly.Java['lists_indexOf'] = function(block) {
       Blockly.Java.ORDER_NONE) || '[]';
   var argument1 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_MEMBER) || '\'\'';
+  if (argument1.slice(-14) === '.cloneObject()' ) {
+    argument1 = argument1.slice(0,-14) + '.getObjectAsList()';
+  }
   var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
@@ -103,6 +109,9 @@ Blockly.Java['lists_getIndex'] = function(block) {
       Blockly.Java.ORDER_UNARY_SIGN) || '1';
   var list = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_MEMBER) || '[]';
+  if (list.slice(-14) === '.cloneObject()' ) {
+    list = list.slice(0,-14) + '.getObjectAsList()';
+  }
 
   if (where == 'FIRST') {
     if (mode == 'GET') {
@@ -195,6 +204,9 @@ Blockly.Java['lists_setIndex'] = function(block) {
       Blockly.Java.ORDER_NONE) || '1';
   var value = Blockly.Java.valueToCode(block, 'TO',
       Blockly.Java.ORDER_NONE) || 'None';
+  if (list.slice(-14) === '.cloneObject()' ) {
+    list = list.slice(0,-14) + '.getObjectAsList()';
+  }
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
@@ -274,6 +286,9 @@ Blockly.Java['lists_getSublist'] = function(block) {
       Blockly.Java.ORDER_ADDITIVE) || '1';
   var at2 = Blockly.Java.valueToCode(block, 'AT2',
       Blockly.Java.ORDER_ADDITIVE) || '1';
+  if (list.slice(-14) === '.cloneObject()' ) {
+    list = list.slice(0,-14) + '.getObjectAsList()';
+  }
   if (where1 == 'FIRST' || (where1 == 'FROM_START' && at1 == '1')) {
     at1 = '0';
   } else if (where1 == 'FROM_START') {
@@ -341,17 +356,20 @@ Blockly.Java['lists_split'] = function(block) {
         Blockly.Java.ORDER_NONE) || '[]';
     var value_delim = Blockly.Java.valueToCode(block, 'DELIM',
         Blockly.Java.ORDER_MEMBER) || '\'\'';
-    var code = value_delim + '.join(' + value_input + ')';
+    if (value_input.slice(-14) === '.cloneObject()' ) {
+      value_input = value_input.slice(0,-14) + '.getObjectAsList()';
+    }
     Blockly.Java.addImport('java.lang.StringBuilder');
+    Blockly.Java.provideVarClass();
     var functionName = Blockly.Java.provideFunction_(
          'lists_join',
         ['public static String ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
-            '(List<String> list, String separator) {',
+            '(List list, String separator) {',
             '  StringBuilder result = new StringBuilder();',
             '  String extra = "";',
-            '  for (String elem : list) {',
+            '  for (Object elem : list) {',
             '     result.append(extra);',
-            '     result.append(elem);',
+            '     result.append(new Var(elem).getObjectAsString());',
             '     extra = separator;',
             '  }',
             '  return result.toString();',

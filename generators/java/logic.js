@@ -56,58 +56,57 @@ Blockly.Java['controls_if'] = function(block) {
 Blockly.Java['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {
-    'EQ': '==',   // a.equals(b)
-    'NEQ': '!=',  // !a.equals(b)
+    'EQ': '',   // a.equals(b)
+    'NEQ': '!',  // !a.equals(b)
     'LT': '<',    //  a.compareTo(b) < 0
     'LTE': '<=',  //  a.compareTo(b) <= 0
     'GT': '>',    //  a.compareTo(b) > 0
     'GTE': '>='   //  a.compareTo(b) >= 0
   };
+
+  var FLIPOPERATORS = {
+    '': '',
+    '!' : '!',
+    '<' : '>',
+    '<=' : '>=',
+    '>' : '<',
+    '>=' : '<='
+  };
   var operator = OPERATORS[block.getFieldValue('OP')];
   var argument0Type = Blockly.Java.getValueType(block, 'A');
   var argument1Type = Blockly.Java.getValueType(block, 'B');
-  var useFunctions = false;
   var code = '';
-  var order = Blockly.Java.ORDER_RELATIONAL;
-  var argument0 = Blockly.Java.valueToCode(block, 'A', order);
-  var argument1 = Blockly.Java.valueToCode(block, 'B', order);
+  var argument0 = Blockly.Java.valueToCode(block, 'A', Blockly.Java.ORDER_RELATIONAL);
+  var argument1 = Blockly.Java.valueToCode(block, 'B', Blockly.Java.ORDER_RELATIONAL);
   if (argument0.slice(-14) === '.cloneObject()' ) {
-    useFunctions = true;
     argument0 = argument0.slice(0,-14);
+    if (argument1.slice(-14) === '.cloneObject()' ) {
+      argument1 = argument1.slice(0,-14);
+    }
   } else if (argument1.slice(-14) === '.cloneObject()' ) {
-    useFunctions = true;
+    operator = FLIPOPERATORS[operator];
     var temp = argument0;
-    argument0 = '!' + argument1.slice(0,-14);
+    argument0 = argument1.slice(0,-14);
     argument1 = temp;
   } else if ((argument0Type && goog.array.contains(argument0Type, 'String')) ||
              (argument1Type && goog.array.contains(argument1Type, 'String'))) {
     useFunctions = true;
   }
 
-  if (useFunctions) {
-    if (!argument0) {
-      argument0 = '""';
-    }
-    if (!argument1) {
-      argument1 = '""';
-    }
-    if (operator === '==') {
-      code = argument0 + '.equals(' + argument1 + ')';
-    } else if (operator === '!=') {
-      code = '!' + argument0 + '.equals(' + argument1 + ')';
-    } else {
-      code = argument0 + '.compareTo(' + argument1 + ') ' + operator + ' 0';
-    }
+  if (!argument0) {
+    argument0 = '""';
   } else {
-    if (!argument0) {
-      argument0 = 0;
-    }
-    if (!argument1) {
-      argument1 = 0;
-    }
-    code = argument0 + ' ' + operator + ' ' + argument1;
+    argument0 = 'Var.valueOf(' + argument0 + ')';
   }
-  return [code, order];
+  if (!argument1) {
+    argument1 = '""';
+  }
+  if (operator === '' || operator === '!') {
+    code = operator + argument0 + '.equals(' + argument1 + ')';
+  } else {
+    code = argument0 + '.compareTo(' + argument1 + ') ' + operator + ' 0';
+  }
+  return [code, Blockly.Java.ORDER_RELATIONAL];
 };
 
 Blockly.Java['logic_operation'] = function(block) {

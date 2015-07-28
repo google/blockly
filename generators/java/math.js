@@ -262,96 +262,67 @@ Blockly.Java['math_on_list'] = function(block) {
   var code;
   switch (func) {
     case 'SUM':
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_sum',
           // This operation excludes null and values that aren't int or float:',
           // math_mean([null, null, "aString", 1, 9]) == 5.0.',
           ['public static double ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
            '(List myList) {',
-           '  int i;',
-           '  double sum = 0;',
-           '  for (i = 1; i < myList.size(); i++) {',
-           '    sum += (Double) myList.get(i);',
-           '  }',
-           '  return sum;',
+           '  return Var.math_sum(Var.valueOf(myList));',
            '}']);
       code = functionName + '(' + list + ')';
       break;
     case 'MIN':
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_min',
           // This operation excludes null and values that aren't int or float:',
           // math_mean([null, null, "aString", 1, 9]) == 5.0.',
           ['public static double ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
            '(List myList) {',
-           '  double min = Double.MAX_VALUE;',
-           '  double d;',
-           '  int i;',
-           '  for (i = 1; i < myList.size(); i++) {',
-           '    d = (Double) myList.get(i);',
-           '    if (d < min) {',
-           '      min = d;',
-           '    }',
-           '  }',
-           '  return min;',
+           '  return Var.math_min(Var.valueOf(myList));',
            '}']);
       code = functionName + '(' + list + ')';
       break;
     case 'MAX':
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_max',
           // This operation excludes null and values that aren't int or float:',
           // math_mean([null, null, "aString", 1, 9]) == 5.0.',
           ['public static double ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
             '(List myList) {',
-           '  double max = Double.MIN_VALUE;',
-           '  double d;',
-           '  int i;',
-           '  for (i = 1; i < myList.size(); i++) {',
-           '      d = (Double) myList.get(i);',
-           '      if (d > max) {',
-           '          max = d;',
-           '      }',
-           '  }',
-           '  return max;',
+           '  return Var.math_max(Var.valueOf(myList));',
            '}']);
       code = functionName + '(' + list + ')';
       break;
     case 'AVERAGE':
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_mean',
           // This operation excludes null and values that aren't int or float:',
           // math_mean([null, null, "aString", 1, 9]) == 5.0.',
           ['public static double ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
             '(List myList) {',
-           '  return math_sum(myList) / myList.size();',
+           '  return Var.math_mean(Var.valueOf(myList));',
            '}']);
       code = functionName + '(' + list + ')';
       break;
     case 'MEDIAN':
-      Blockly.Java.addImport('java.util.Collections');
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_median',
           // This operation excludes null values:
           // math_median([null, null, 1, 3]) == 2.0.
           ['public static double ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
             '(List myList) {',
-           '  Collections.sort(myList);',
-           '  double median;',
-           '  int size = myList.size();',
-           '  if (myList.size() % 2 == 0) {',
-           '    median = ((double) myList.get(size / 2) + (double) myList.get(size / 2 - 1)) / 2;',
-           '  } else {',
-           '    median = (double) myList.get(size / 2);',
-           '  }',
-           '  return median;',
+           '  return Var.math_median(Var.valueOf(myList));',
            '}']);
       code = functionName + '(' + list + ')';
       break;
     case 'MODE':
-      Blockly.Java.addImport('java.util.LinkedList');
-      Blockly.Java.addImport('java.util.Map');
-      Blockly.Java.addImport('java.util.HashMap');
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_modes',
           // As a list of numbers can contain more than one mode,
@@ -359,55 +330,22 @@ Blockly.Java['math_on_list'] = function(block) {
           // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
           ['public static LinkedList ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
             '(List myList) {',
-           '  final LinkedList<Double> modes = new LinkedList<Double>();',
-           '  final Map<Double, Double> countMap = new HashMap<Double, Double>();',
-           '  double max = -1;',
-           '  double d;',
-           '  int i;',
-           '  for (i = 1; i < myList.size(); i++) {',
-           '    d = (Double) myList.get(i);',
-           '    double count = 0;',
-           '    if (countMap.containsKey(d)) {',
-           '      count = countMap.get(d) + 1;',
-           '    } else {',
-           '      count = 1;',
-           '    }',
-           '    countMap.put(d, count);',
-           '    if (count > max) {',
-           '      max = count;',
-           '    }',
-           '  }',
-           '  for (final Map.Entry<Double, Double> tuple : countMap.entrySet()) {',
-           '    if (tuple.getValue() == max) {',
-           '      modes.add(tuple.getKey());',
-           '    }',
-           '  }',
-           '  return modes;',
+           '  return Var.math_modes(Var.valueOf(myList)).getObjectAsList();',
            '}']);
       code = functionName + '(' + list + ')';
       break;
     case 'STD_DEV':
-      Blockly.Java.addImport('java.lang.Math');
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_standard_deviation',
           ['public static double ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
             '(List myList) {',
-           '  double mean = math_mean(myList);',
-           '  double size = myList.size();',
-           '  double temp = 0;',
-           '  double d;',
-           '  int i;',
-           '  for (i = 1; i < myList.size(); i++) {',
-           '    d = (Double) myList.get(i);',
-           '    temp += (mean - d) * (mean - d);',
-           '  }',
-           '  double variance = temp / size;',
-           '  return Math.sqrt(variance);',
+           '  return Var.math_standard_deviation(Var.valueOf(myList));',
            '}']);
       code = functionName + '(' + list + ')';
       break;
     case 'RANDOM':
-      Blockly.Java.addImport('java.lang.Math');
+      Blockly.Java.provideVarClass();
       var functionName = Blockly.Java.provideFunction_(
           'math_random_list',
           [ 'public static Object ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +

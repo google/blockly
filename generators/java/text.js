@@ -65,9 +65,16 @@ Blockly.Java['text_append'] = function(block) {
   // First we want to see if the input variable happens to be a non string type
   var argument0Type = Blockly.Java.getValueType(block, 'TEXT');
 
+  var code = '';
+  if (Blockly.Java.GetVariableType(block.getFieldValue('VAR')) === 'Var') {
+    code = varName + ' = new Var(' + varName + '.getObjectAsString() + ' +
+            Blockly.Java.toStringCode(argument0) + ');\n';
+  } else {
   // See if we need to convert the non-string to a string
-  return varName + ' = ' + varName + ' + ' +
+    code = varName + ' = ' + varName + ' + ' +
             Blockly.Java.toStringCode(argument0) + ';\n';
+  }
+  return code;
 };
 
 Blockly.Java['text_length'] = function(block) {

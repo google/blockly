@@ -112,6 +112,13 @@ Blockly.Variables.allVariablesTypes = function(root) {
       var blockVariablesTypes = func.call(blocks[x]);
       for (var key in blockVariablesTypes) {
         if (blockVariablesTypes.hasOwnProperty(key)) {
+          // For purposes of types, Colours are strings.  We want to convert
+          // them all to strings
+          for (var slot = 0; slot < blockVariablesTypes[key].length; slot++) {
+            if (blockVariablesTypes[key][slot] === 'Colour') {
+              blockVariablesTypes[key][slot] = 'String';
+            }
+          }
           if (typeof variableHash[key] === 'undefined') {
             variableHash[key] = blockVariablesTypes[key];
           } else {

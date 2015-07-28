@@ -57,13 +57,9 @@ Blockly.Blocks['controls_repeat_ext'] = {
     });
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-    this.getField('TIMES').setChangeHandler(
-        Blockly.FieldTextInput.nonnegativeIntegerValidator);
-  }//,
-// No typeblock because this is deprecated in
-//     favor of controls_repeat_ext
-//  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
-//               fields: {'TIMES' : 10 }}]
+  },
+  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+               values: {'TIMES' : 10 }}]
 };
 
 Blockly.Blocks['controls_repeat'] = {
@@ -92,9 +88,11 @@ Blockly.Blocks['controls_repeat'] = {
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
     this.getField('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
-  },
-  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
-               values: {'TIMES' : 10 }}]
+  }//,
+// No typeblock because this is deprecated in
+//     favor of controls_repeat_ext
+//  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+//               fields: {'TIMES' : 10 }}]
 };
 
 Blockly.Blocks['controls_whileUntil'] = {

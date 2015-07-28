@@ -83,6 +83,9 @@ text {
   font-size: 20pt;
   fill: #444;
 }
+html[dir="RTL"] #plane text {
+  text-anchor: end;
+}
 
 /* Slider. */
 .sliderTrack {

@@ -30,6 +30,7 @@ goog.provide('Blockly.WorkspaceSvg');
 // goog.require('Blockly.Block');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.ZoomControls');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 
@@ -91,6 +92,39 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Is zooming enabled?.
+ * @type {boolean}
+ */
+Blockly.Workspace.prototype.zooming = true;
+
+/**
+ * Current scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.scale = 1;
+
+/**
+ * Current scale speed, for each zooming in-out step the scale is multiplied
+ * or divided respectively by the scale speed, this means that:
+ * scale = scaleSpeed ^ steps , note that in this formula
+ * steps of zoom-out are subtracted and zoom-in steps are added.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.scaleSpeed = 1.2;
+
+/**
+ * Current minimum scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.minScale = 0.3;
+
+/**
+ * Current maximum scale.
+ * @type {number}
+ */
+Blockly.Workspace.prototype.maxScale = 3;
+
+/**
  * The workspace's trashcan (if any).
  * @type {Blockly.Trashcan}
  */
@@ -130,13 +164,15 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     }
   }
   this.svgBlockCanvas_ = Blockly.createSvgElement('g',
-      {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
+      {'class': 'blocklyBlockCanvas'}, this.svgGroup_, this);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g',
-      {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
+      {'class': 'blocklyBubbleCanvas'}, this.svgGroup_, this);
   if (this.options.hasTrashcan) {
     this.addTrashcan_();
   }
-
+  if (this.options.hasZoomControls) {
+    this.addZoomControls_();
+  }
   Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
   var thisWorkspace = this;
   Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
@@ -178,6 +214,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.trashcan.dispose();
     this.trashcan = null;
   }
+  if (this.zoomControls) {
+    this.zoomControls.dispose();
+    this.zoomControls = null;
+  }
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the SVG too.
     goog.dom.removeNode(this.options.svg);
@@ -193,6 +233,17 @@ Blockly.WorkspaceSvg.prototype.addTrashcan_ = function() {
   var svgTrashcan = this.trashcan.createDom();
   this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
   this.trashcan.init();
+};
+
+/**
+ * Add zoom controls.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.addZoomControls_ = function() {
+  this.zoomControls = new Blockly.ZoomControls(this);
+  var svgZoomControls = this.zoomControls.createDom();
+  this.svgGroup_.appendChild(svgZoomControls);
+  this.zoomControls.init();
 };
 
 /**
@@ -223,6 +274,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.trashcan) {
     this.trashcan.position();
   }
+  if (this.zoomControls) {
+    this.zoomControls.position();
+  }
   if (this.scrollbar) {
     this.scrollbar.resize();
   }
@@ -250,7 +304,21 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  var translation = 'translate(' + x + ',' + y + ')';
+  var translation = 'translate(' + x + ',' + y + ')' + 
+      'scale(' + this.scale + ')';
+  this.svgBlockCanvas_.setAttribute('transform', translation);
+  this.svgBubbleCanvas_.setAttribute('transform', translation);
+};
+
+/**
+ * Update the scale based in 'this.scale'.
+ */
+Blockly.WorkspaceSvg.prototype.updateZoom = function() {
+  var x = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.e;
+  var y = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.f;
+
+  var translation = 'translate(' + x + ',' + y + ')' + 
+      'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
 };
@@ -465,7 +533,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
-  var mouseXY = Blockly.mouseToSvg(e, this.options.svg);
+  var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.options.svg);
   var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {
@@ -731,6 +799,88 @@ Blockly.WorkspaceSvg.prototype.removeChangeListener = function(bindData) {
 Blockly.WorkspaceSvg.prototype.markFocused = function() {
   Blockly.mainWorkspace = this;
 };
+
+/**
+ * Zooming the blocks centered in (x, y) coordinate with zooming in or out.
+ * @param {number} x X coordinate of center.
+ * @param {number} y Y coordinate of center.
+ * @param {number} type Type of zomming (-1 zooming out and 1 zooming in).
+ */
+Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
+  var speed = this.scaleSpeed;
+  var metrics = this.getMetrics();
+  var center = this.options.svg.createSVGPoint();
+  center.x = x;
+  center.y = y;
+  center = center.matrixTransform(workspace.getCanvas().getCTM().inverse());
+  var x = center.x;
+  var y = center.y;
+  var canvas = workspace.getCanvas();
+  // scale factor
+  var scale = (type == 1) ? speed : 1 / speed;
+  var matrix = canvas.getCTM().translate(x * (1 - scale), y * (1 - scale)).scale(scale);
+  // validate if scale is in a valid range
+  if (matrix.a >= this.minScale && matrix.a <= this.maxScale) {
+    this.scale = matrix.a;
+    this.scrollX = matrix.e - metrics.absoluteLeft;
+    this.scrollY = matrix.f - metrics.absoluteTop ;
+    this.updateGridPattern_();
+    this.scrollbar.resize();
+  }
+}
+
+/**
+ * Zooming the blocks centered in the center of view with zooming in or out.
+ * @param {!number} type Type of zomming (-1 zooming out and 1 zooming in).
+ */
+Blockly.WorkspaceSvg.prototype.zoomCenter  = function(type) {
+  var metrics = this.getMetrics();
+  var x = metrics.viewWidth / 2;
+  var y = metrics.viewHeight / 2;
+  this.zoom(x ,y , type);
+}
+
+/**
+ * Reset zooming and dragging.
+ */
+Blockly.WorkspaceSvg.prototype.zoomReset  = function() {
+  var metrics = this.getMetrics();
+  Blockly.hideChaff();
+  workspace.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
+  this.scale = 1;
+  this.updateZoom();
+  this.updateGridPattern_();
+}
+
+/**
+ * Updates the grid pattern.
+ */
+Blockly.WorkspaceSvg.prototype.updateGridPattern_  = function() {
+  this.options.gridPattern.setAttribute('width', this.options.gridOptions.spacing * this.scale);
+  this.options.gridPattern.setAttribute('height', this.options.gridOptions.spacing * this.scale);
+  var half = Math.floor(this.options.gridOptions['spacing'] / 2) + 0.5;
+  var start = half - this.options.gridOptions['length'] / 2;
+  var end = half + this.options.gridOptions['length'] / 2;
+  var line1 = this.options.gridPattern.children[0];
+  var line2 = this.options.gridPattern.children[1];
+  half *= this.scale;
+  start *= this.scale;
+  end *= this.scale;
+  if (this.options.gridPattern.children[0]) {
+    line1.setAttribute('stroke-width', this.scale);
+    line1.setAttribute('x1', start);
+    line1.setAttribute('y1', half);
+    line1.setAttribute('x2', end);
+    line1.setAttribute('y2', half);
+  }
+  if (line2) {
+    line2.setAttribute('stroke-width', this.scale);
+    line2.setAttribute('x1', half);
+    line2.setAttribute('y1', start);
+    line2.setAttribute('x2', half);
+    line2.setAttribute('y2', end);
+  }
+}
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['setVisible'] =

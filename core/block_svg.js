@@ -685,6 +685,9 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     Blockly.removeAllRanges();
     var dx = e.clientX - this_.startDragMouseX;
     var dy = e.clientY - this_.startDragMouseY;
+    //fix scale
+    dx /= Blockly.mainWorkspace.scale;
+    dy /= Blockly.mainWorkspace.scale;
     if (Blockly.dragMode_ == 1) {
       // Still dragging within the sticky DRAG_RADIUS.
       var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
@@ -1046,13 +1049,12 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   clone.bBox_ = clone.getBBox();
   // Start the animation.
   clone.startDate_ = new Date();
-  Blockly.BlockSvg.disposeUiStep_(clone, this.RTL);
+  Blockly.BlockSvg.disposeUiStep_.call(this, clone, this.RTL);
 };
 
 /**
  * Animate a cloned block and eventually dispose of it.
  * @param {!Element} clone SVG element to animate and dispose of.
- * @param {boolean} rtl True if RTL, false if LTR.
  * @private
  */
 Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {
@@ -1065,11 +1067,12 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {
         (rtl ? -1 : 1) * clone.bBox_.width / 2 * percent;
     var y = clone.translateY_ + clone.bBox_.height * percent;
     var translate = x + ', ' + y;
-    var scale = 1 - percent;
+    //fix scale
+    var scale = (1 - percent) * this.workspace.scale;
     clone.setAttribute('transform', 'translate(' + translate + ')' +
         ' scale(' + scale + ')');
     var closure = function() {
-      Blockly.BlockSvg.disposeUiStep_(clone, rtl);
+      Blockly.BlockSvg.disposeUiStep_.bind(this)(clone, rtl);
     };
     setTimeout(closure, 10);
   }
@@ -1083,13 +1086,13 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
 
   // Determine the absolute coordinates of the inferior block.
   var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
-  // Offset the coordinates based on the two connection types.
+  // Offset the coordinates based on the two connection types, fix scale
   if (this.outputConnection) {
-    xy.x += this.RTL ? 3 : -3;
-    xy.y += 13;
+    xy.x += (Blockly.RTL ? 3 : -3) * this.workspace.scale;
+    xy.y += 13 * this.workspace.scale;
   } else if (this.previousConnection) {
-    xy.x += this.RTL ? -23 : 23;
-    xy.y += 3;
+    xy.x += (Blockly.RTL ? -23 : 23) * this.workspace.scale;
+    xy.y += 3 * this.workspace.scale;
   }
   var ripple = Blockly.createSvgElement('circle',
       {'cx': xy.x, 'cy': xy.y, 'r': 0, 'fill': 'none',
@@ -1097,7 +1100,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
       this.workspace.options.svg);
   // Start the animation.
   ripple.startDate_ = new Date();
-  Blockly.BlockSvg.connectionUiStep_(ripple);
+  this.connectionUiStep_(ripple);
 };
 
 /**
@@ -1105,16 +1108,17 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
  * @param {!Element} ripple Element to animate.
  * @private
  */
-Blockly.BlockSvg.connectionUiStep_ = function(ripple) {
+Blockly.BlockSvg.prototype.connectionUiStep_ = function(ripple) {
   var ms = (new Date()) - ripple.startDate_;
   var percent = ms / 150;
   if (percent > 1) {
     goog.dom.removeNode(ripple);
   } else {
-    ripple.setAttribute('r', percent * 25);
+    ripple.setAttribute('r', percent * 25 * this.workspace.scale);
     ripple.style.opacity = 1 - percent;
+    var thisBlock_ = this;
     var closure = function() {
-      Blockly.BlockSvg.connectionUiStep_(ripple);
+      thisBlock_.connectionUiStep_(ripple);
     };
     setTimeout(closure, 10);
   }

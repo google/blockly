@@ -167,6 +167,21 @@ Blockly.parseOptions_ = function(options) {
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
 
+  var enableZoom = options['zoom'];
+  if (enableZoom === undefined) {
+    enableZoom = true;
+  }
+  // Enable zooming with mouse scroll wheel.
+  var scrollWheel = options['scrollWheel'];
+  if (scrollWheel === undefined) {
+    scrollWheel = true;
+  }
+  var hasZoomControls = options['zoomControls'];
+  if (hasZoomControls === undefined) {
+    hasZoomControls = true;
+  }
+  var zoomOptions = options['zoomOptions'];
+
   return {
     RTL: !!options['rtl'],
     collapse: hasCollapse,
@@ -178,12 +193,16 @@ Blockly.parseOptions_ = function(options) {
     hasCategories: hasCategories,
     hasScrollbars: hasScrollbars,
     hasTrashcan: hasTrashcan,
+    hasZoomControls: hasZoomControls,
     hasSounds: hasSounds,
     hasCss: hasCss,
     languageTree: languageTree,
     gridOptions: grid,
     enableRealtime: enableRealtime,
-    realtimeOptions: realtimeOptions
+    realtimeOptions: realtimeOptions,
+    enableZoom: enableZoom,
+    zoomOptions: zoomOptions,
+    scrollWheel: scrollWheel
   };
 };
 
@@ -414,6 +433,12 @@ Blockly.init_ = function(mainWorkspace) {
 
   Blockly.bindEvent_(window, 'resize', null,
                      function() {Blockly.svgResize(mainWorkspace);});
+  if (mainWorkspace.zooming) {
+    //mouse-wheel for firefox
+    Blockly.bindEvent_(svg, 'DOMMouseScroll', null, Blockly.onMouseWheel_);
+    //mouse-wheel for other browsers
+    Blockly.bindEvent_(svg, 'mousewheel', null, Blockly.onMouseWheel_);
+  }
 
   if (!Blockly.documentEventsBound_) {
     // Only bind the window/document events once.
@@ -454,6 +479,20 @@ Blockly.init_ = function(mainWorkspace) {
   if (options.hasScrollbars) {
     mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
     mainWorkspace.scrollbar.resize();
+  }
+  if (options.enableZoom !== undefined) {
+    mainWorkspace.zooming = options.enableZoom;
+  }
+  if (options.zoomOptions) {
+    if (options.zoomOptions.maxScale) {
+      mainWorkspace.maxScale = options.zoomOptions.maxScale;
+    }
+    if (options.zoomOptions.minScale) {
+      mainWorkspace.minScale = options.zoomOptions.minScale;
+    }
+    if (options.zoomOptions.scaleSpeed) {
+      mainWorkspace.scaleSpeed = options.zoomOptions.scaleSpeed;
+    }
   }
 
   // Load the sounds.

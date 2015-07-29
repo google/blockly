@@ -268,7 +268,7 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
   var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  //fix scale of mouse event
+  // Fix scale of mouse event.
   point.x /= Blockly.mainWorkspace.scale;
   point.y /= Blockly.mainWorkspace.scale;
 
@@ -297,7 +297,7 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
 Blockly.Bubble.prototype.bubbleMouseMove_ = function(e) {
   this.autoLayout_ = false;
   var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  //fix scale of mouse event
+  // Fix scale of mouse event.
   point.x /= Blockly.mainWorkspace.scale;
   point.y /= Blockly.mainWorkspace.scale;
 

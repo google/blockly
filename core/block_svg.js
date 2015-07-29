@@ -685,7 +685,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     Blockly.removeAllRanges();
     var dx = e.clientX - this_.startDragMouseX;
     var dy = e.clientY - this_.startDragMouseY;
-    //fix scale
+    // Fix scale.
     dx /= Blockly.mainWorkspace.scale;
     dy /= Blockly.mainWorkspace.scale;
     if (Blockly.dragMode_ == 1) {
@@ -1055,6 +1055,7 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
 /**
  * Animate a cloned block and eventually dispose of it.
  * @param {!Element} clone SVG element to animate and dispose of.
+ * @param {boolean} rtl True if RTL, false if LTR.
  * @private
  */
 Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {
@@ -1067,7 +1068,7 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {
         (rtl ? -1 : 1) * clone.bBox_.width / 2 * percent;
     var y = clone.translateY_ + clone.bBox_.height * percent;
     var translate = x + ', ' + y;
-    //fix scale
+    // Fix scale.
     var scale = (1 - percent) * this.workspace.scale;
     clone.setAttribute('transform', 'translate(' + translate + ')' +
         ' scale(' + scale + ')');
@@ -1086,7 +1087,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
 
   // Determine the absolute coordinates of the inferior block.
   var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
-  // Offset the coordinates based on the two connection types, fix scale
+  // Offset the coordinates based on the two connection types, fix scale.
   if (this.outputConnection) {
     xy.x += (Blockly.RTL ? 3 : -3) * this.workspace.scale;
     xy.y += 13 * this.workspace.scale;

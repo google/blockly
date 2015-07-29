@@ -304,7 +304,7 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  var translation = 'translate(' + x + ',' + y + ')' + 
+  var translation = 'translate(' + x + ',' + y + ')' +
       'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
@@ -317,7 +317,7 @@ Blockly.WorkspaceSvg.prototype.updateZoom = function() {
   var x = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.e;
   var y = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.f;
 
-  var translation = 'translate(' + x + ',' + y + ')' + 
+  var translation = 'translate(' + x + ',' + y + ')' +
       'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
@@ -804,7 +804,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
  * Zooming the blocks centered in (x, y) coordinate with zooming in or out.
  * @param {number} x X coordinate of center.
  * @param {number} y Y coordinate of center.
- * @param {number} type Type of zomming (-1 zooming out and 1 zooming in).
+ * @param {number} type Type of zooming (-1 zooming out and 1 zooming in).
  */
 Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   var speed = this.scaleSpeed;
@@ -813,13 +813,14 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   center.x = x;
   center.y = y;
   center = center.matrixTransform(workspace.getCanvas().getCTM().inverse());
-  var x = center.x;
-  var y = center.y;
+  x = center.x;
+  y = center.y;
   var canvas = workspace.getCanvas();
-  // scale factor
+  // Scale factor.
   var scale = (type == 1) ? speed : 1 / speed;
-  var matrix = canvas.getCTM().translate(x * (1 - scale), y * (1 - scale)).scale(scale);
-  // validate if scale is in a valid range
+  var matrix = canvas.getCTM().translate(x * (1 - scale),
+                                         y * (1 - scale)).scale(scale);
+  // Validate if scale is in a valid range.
   if (matrix.a >= this.minScale && matrix.a <= this.maxScale) {
     this.scale = matrix.a;
     this.scrollX = matrix.e - metrics.absoluteLeft;
@@ -831,13 +832,13 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
 
 /**
  * Zooming the blocks centered in the center of view with zooming in or out.
- * @param {!number} type Type of zomming (-1 zooming out and 1 zooming in).
+ * @param {number} type Type of zooming (-1 zooming out and 1 zooming in).
  */
 Blockly.WorkspaceSvg.prototype.zoomCenter  = function(type) {
   var metrics = this.getMetrics();
   var x = metrics.viewWidth / 2;
   var y = metrics.viewHeight / 2;
-  this.zoom(x ,y , type);
+  this.zoom(x, y, type);
 }
 
 /**
@@ -854,10 +855,13 @@ Blockly.WorkspaceSvg.prototype.zoomReset  = function() {
 
 /**
  * Updates the grid pattern.
+ * @private
  */
 Blockly.WorkspaceSvg.prototype.updateGridPattern_  = function() {
-  this.options.gridPattern.setAttribute('width', this.options.gridOptions.spacing * this.scale);
-  this.options.gridPattern.setAttribute('height', this.options.gridOptions.spacing * this.scale);
+  this.options.gridPattern.setAttribute('width',
+      this.options.gridOptions.spacing * this.scale);
+  this.options.gridPattern.setAttribute('height',
+      this.options.gridOptions.spacing * this.scale);
   var half = Math.floor(this.options.gridOptions['spacing'] / 2) + 0.5;
   var start = half - this.options.gridOptions['length'] / 2;
   var end = half + this.options.gridOptions['length'] / 2;

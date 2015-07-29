@@ -434,9 +434,9 @@ Blockly.init_ = function(mainWorkspace) {
   Blockly.bindEvent_(window, 'resize', null,
                      function() {Blockly.svgResize(mainWorkspace);});
   if (mainWorkspace.zooming) {
-    //mouse-wheel for firefox
+    // Mouse-wheel for Firefox.
     Blockly.bindEvent_(svg, 'DOMMouseScroll', null, Blockly.onMouseWheel_);
-    //mouse-wheel for other browsers
+    // Mouse-wheel for other browsers.
     Blockly.bindEvent_(svg, 'mousewheel', null, Blockly.onMouseWheel_);
   }
 

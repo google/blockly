@@ -304,7 +304,7 @@ Blockly.Flyout.prototype.wheel_ = function(e) {
     this.scrollbar_.set(y);
     // Don't scroll the page.
     e.preventDefault();
-    // Don't propagate mousewheel event (zooming)
+    // Don't propagate mousewheel event (zooming).
     e.stopPropagation();
   }
 };
@@ -622,17 +622,17 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     if (!svgRootNew) {
       throw 'block is not rendered.';
     }
-    //if flyout is inside of canvas, fix scale
+    // If flyout is inside of canvas, fix scale.
     if (flyout.targetWorkspace_ == Blockly.mainWorkspace) {
       var xyOld = Blockly.getSvgXY_(svgRootOld);
       var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.options.svg);
-      //relative mouse position to the block
+      // Relative mouse position to the block.
       var rMouseX = mouseXY.x - xyOld.x;
       var rMouseY = mouseXY.y - xyOld.y;
-      //fix scale
+      // Fix scale.
       xyOld.x /= Blockly.mainWorkspace.scale;
       xyOld.y /= Blockly.mainWorkspace.scale;
-      //Calculate the position to create the block, fixing scale
+      // Calculate the position to create the block, fixing scale.
       var xyCanvastoSvg =
           Blockly.getRelativeXY_(Blockly.mainWorkspace.getCanvas());
       var xyNewtoCanvas = Blockly.getRelativeXY_(svgRootNew);
@@ -646,7 +646,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       var dy = rMouseY - rMouseY / Blockly.mainWorkspace.scale;
       block.moveBy(placePositionX - dx, placePositionY - dy);
     } else {
-      //flyout in canvas
+      // Flyout in canvas.
       var xyOld = Blockly.getSvgXY_(svgRootOld);
       var xyNew = Blockly.getSvgXY_(svgRootNew);
       block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
@@ -689,10 +689,11 @@ Blockly.Flyout.prototype.getRect = function() {
   if (!this.RTL) {
     x -= BIG_NUM;
   }
-  //fix scale if is descendant of bubble canvas
+  // Fix scale if is descendant of bubble canvas.
   if (goog.dom.contains(Blockly.mainWorkspace.getBubbleCanvas(), this.svgGroup_)) {
     return new goog.math.Rect(x, -BIG_NUM,
-        BIG_NUM + this.width_ * Blockly.mainWorkspace.scale, this.height_ * Blockly.mainWorkspace.scale + 2 * BIG_NUM);
+        BIG_NUM + this.width_ * Blockly.mainWorkspace.scale,
+        this.height_ * Blockly.mainWorkspace.scale + 2 * BIG_NUM);
   } else {
     return new goog.math.Rect(x, -BIG_NUM,
         BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);

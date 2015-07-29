@@ -39,25 +39,11 @@ Blockly.ZoomControls = function(workspace) {
 };
 
 /**
- * URL of the zoom-in image.
+ * URL of the sprite image.
  * @type {string}
  * @private
  */
-Blockly.ZoomControls.prototype.ZOOMIN_URL_ = 'zoomin.svg';
-
-/**
- * URL of the zoom-out image.
- * @type {string}
- * @private
- */
-Blockly.ZoomControls.prototype.ZOOMOUT_URL_ = 'zoomout.svg';
-
-/**
- * URL of the zoom-center image.
- * @type {string}
- * @private
- */
-Blockly.ZoomControls.prototype.ZOOMRESET_URL_ = 'zoomreset.svg';
+Blockly.Trashcan.prototype.SPRITE_URL_ = 'media/sprites.png';
 
 /**
  * Width of both the zoom controls.
@@ -115,30 +101,63 @@ Blockly.ZoomControls.prototype.top_ = 0;
 Blockly.ZoomControls.prototype.createDom = function() {
   /* Here's the markup that will be generated:
   <g>
-    <image width="32" height="32" opacity="0.4" xlink:href="zoomreset.png"></image>
-    <image width="32" height="32" opacity="0.4" xlink:href="zoomin.png"></image>
-    <image width="32" height="32" opacity="0.4" xlink:href="zoomout.png"></image>
+    <clippath id="blocklyZoomresetClipPath837493">
+      <rect width="32" height="32"></rect>
+    </clippath>
+    <image width="96" height="124" opacity="0.4" y="-92" xlink:href="media/sprites.png">
+        clip-path="url(#blocklyZoomresetClipPath837493)"></image>
+    <clippath id="blocklyZoominClipPath837493">
+      <rect width="32" height="32" y="43"></rect>
+    </clippath>
+    <image width="96" height="124" opacity="0.4" x="-32" y="-49" xlink:href="media/sprites.png">
+        clip-path="url(#blocklyZoominClipPath837493)"></image>
+    <clippath id="blocklyZoomoutClipPath837493">
+      <rect width="32" height="32" y="77"></rect>
+    </clippath>
+    <image width="96" height="124" opacity="0.4" x="-64" y="-15" xlink:href="media/sprites.png">
+        clip-path="url(#blocklyZoomoutClipPath837493)"></image>
   </g>
   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-
+  var rnd = String(Math.random()).substring(2);
+  var clip = Blockly.createSvgElement('clipPath',
+      {'id': 'blocklyZoomresetClipPath' + rnd},
+      this.svgGroup_);
+  Blockly.createSvgElement('rect',
+      {'width': 32, 'height': 32},
+      clip);
   var zoomresetSvg = Blockly.createSvgElement('image',
-      {'width': 32, 'height': 32, opacity: 0.4},
+      {'width': Blockly.SPRITE.width, 'height': Blockly.SPRITE.height, 'y': -92,
+       'opacity': 0.4, 'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')'},
       this.svgGroup_);
   zoomresetSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      this.workspace_.options.pathToMedia + this.ZOOMRESET_URL_);
+      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
+  var clip = Blockly.createSvgElement('clipPath',
+      {'id': 'blocklyZoominClipPath' + rnd},
+      this.svgGroup_);
+  Blockly.createSvgElement('rect',
+      {'width': 32, 'height': 32, 'y': 43},
+      clip);
   var zoominSvg = Blockly.createSvgElement('image',
-      {'width': 32, 'height': 32, 'y': 43, opacity: 0.4},
+      {'width': Blockly.SPRITE.width, 'height': Blockly.SPRITE.height, 'x': -32,
+        'y': -49, 'opacity': 0.4, 'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')'},
       this.svgGroup_);
   zoominSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      this.workspace_.options.pathToMedia + this.ZOOMIN_URL_);
+      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
+  var clip = Blockly.createSvgElement('clipPath',
+      {'id': 'blocklyZoomoutClipPath' + rnd},
+      this.svgGroup_);
+  Blockly.createSvgElement('rect',
+      {'width': 32, 'height': 32, 'y': 77},
+      clip);
   var zoomoutSvg = Blockly.createSvgElement('image',
-      {'width': 32, 'height': 32, 'y': 77, opacity: 0.4},
+      {'width': Blockly.SPRITE.width, 'height': Blockly.SPRITE.height, 'x': -64,
+        'y': -15, 'opacity': 0.4, 'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')'},
       this.svgGroup_);
   zoomoutSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      this.workspace_.options.pathToMedia + this.ZOOMOUT_URL_);
+      this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
   
   // Attach event listeners
 

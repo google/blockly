@@ -2185,6 +2185,7 @@
             <field name="MESSAGE">join</field>
             <value name="ACTUAL">
               <block type="lists_split" id="462" inline="true">
+                <mutation mode="JOIN"></mutation>
                 <field name="MODE">JOIN</field>
                 <value name="INPUT">
                   <block type="variables_get" id="511">
@@ -2216,6 +2217,7 @@
         <field name="VAR">list</field>
         <value name="VALUE">
           <block type="lists_split" id="512" inline="true">
+            <mutation mode="SPLIT"></mutation>
             <field name="MODE">SPLIT</field>
             <value name="INPUT">
               <block type="text" id="515">

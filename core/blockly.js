@@ -328,7 +328,7 @@ Blockly.onMouseMove_ = function(e) {
  */
 Blockly.onMouseWheel_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
-  if (workspace.options.scrollWheel && workspace.scrollbar && workspace.zooming) {
+  if (workspace.options.zoomOptions.wheel) {
     Blockly.hideChaff();
     // Cross-browser wheel delta.
     e = window.event || e;  // Old IE support.

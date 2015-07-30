@@ -92,37 +92,10 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
- * Is zooming enabled?.
- * @type {boolean}
- */
-Blockly.Workspace.prototype.zooming = true;
-
-/**
  * Current scale.
  * @type {number}
  */
-Blockly.Workspace.prototype.scale = 1;
-
-/**
- * Current scale speed, for each zooming in-out step the scale is multiplied
- * or divided respectively by the scale speed, this means that:
- * scale = scaleSpeed ^ steps , note that in this formula
- * steps of zoom-out are subtracted and zoom-in steps are added.
- * @type {number}
- */
-Blockly.Workspace.prototype.scaleSpeed = 1.2;
-
-/**
- * Current minimum scale.
- * @type {number}
- */
-Blockly.Workspace.prototype.minScale = 0.3;
-
-/**
- * Current maximum scale.
- * @type {number}
- */
-Blockly.Workspace.prototype.maxScale = 3;
+Blockly.WorkspaceSvg.prototype.scale = 1;
 
 /**
  * The workspace's trashcan (if any).
@@ -170,7 +143,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (this.options.hasTrashcan) {
     this.addTrashcan_();
   }
-  if (this.options.hasZoomControls) {
+  if (this.options.zoomOptions && this.options.zoomOptions.controls) {
     this.addZoomControls_();
   }
   Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
@@ -807,7 +780,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
  * @param {number} type Type of zooming (-1 zooming out and 1 zooming in).
  */
 Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
-  var speed = this.scaleSpeed;
+  var speed = this.options.zoomOptions.scaleSpeed;
   var metrics = this.getMetrics();
   var center = this.options.svg.createSVGPoint();
   center.x = x;
@@ -821,7 +794,8 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   var matrix = canvas.getCTM().translate(x * (1 - scale),
                                          y * (1 - scale)).scale(scale);
   // Validate if scale is in a valid range.
-  if (matrix.a >= this.minScale && matrix.a <= this.maxScale) {
+  if (matrix.a >= this.options.zoomOptions.minScale &&
+      matrix.a <= this.options.zoomOptions.maxScale) {
     this.scale = matrix.a;
     this.scrollX = matrix.e - metrics.absoluteLeft;
     this.scrollY = matrix.f - metrics.absoluteTop ;

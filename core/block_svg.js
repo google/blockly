@@ -1049,31 +1049,32 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   clone.bBox_ = clone.getBBox();
   // Start the animation.
   clone.startDate_ = new Date();
-  Blockly.BlockSvg.disposeUiStep_.call(this, clone, this.RTL);
+  Blockly.BlockSvg.disposeUiStep_(clone, this.RTL, this.workspace.scale);
 };
 
 /**
  * Animate a cloned block and eventually dispose of it.
+ * This is a class method, not an instace method since the original block has
+ * been destroyed and is no longer accessible.
  * @param {!Element} clone SVG element to animate and dispose of.
  * @param {boolean} rtl True if RTL, false if LTR.
+ * @param {number} workspaceScale Scale of workspace.
  * @private
  */
-Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {
+Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl, workspaceScale) {
   var ms = (new Date()) - clone.startDate_;
   var percent = ms / 150;
   if (percent > 1) {
     goog.dom.removeNode(clone);
   } else {
     var x = clone.translateX_ +
-        (rtl ? -1 : 1) * clone.bBox_.width / 2 * percent;
-    var y = clone.translateY_ + clone.bBox_.height * percent;
-    var translate = x + ', ' + y;
-    // Fix scale.
-    var scale = (1 - percent) * this.workspace.scale;
-    clone.setAttribute('transform', 'translate(' + translate + ')' +
+        (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
+    var y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
+    var scale = (1 - percent) * workspaceScale;
+    clone.setAttribute('transform', 'translate(' + x + ', ' + y + ')' +
         ' scale(' + scale + ')');
     var closure = function() {
-      Blockly.BlockSvg.disposeUiStep_.bind(this)(clone, rtl);
+      Blockly.BlockSvg.disposeUiStep_(clone, rtl, workspaceScale);
     };
     setTimeout(closure, 10);
   }

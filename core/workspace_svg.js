@@ -821,7 +821,7 @@ Blockly.WorkspaceSvg.prototype.zoomCenter  = function(type) {
 Blockly.WorkspaceSvg.prototype.zoomReset  = function() {
   var metrics = this.getMetrics();
   Blockly.hideChaff();
-  workspace.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
+  this.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
   this.scale = 1;
   this.updateZoom();
   this.updateGridPattern_();

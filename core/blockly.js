@@ -331,7 +331,6 @@ Blockly.onMouseWheel_ = function(e) {
   if (workspace.options.zoomOptions.wheel) {
     Blockly.hideChaff();
     // Cross-browser wheel delta.
-    e = window.event || e;  // Old IE support.
     var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
     var position = Blockly.mouseToSvg(e, workspace.options.svg);
     workspace.zoom(position.x, position.y, delta);

@@ -293,17 +293,14 @@ Blockly.getSvgXY_ = function(element) {
   var workspace = Blockly.getMainWorkspace();
   var x = 0;
   var y = 0;
-  var canvasFlag;
   // Evaluate if element isn't child of a canvas.
-  canvasFlag = !goog.dom.contains(workspace.getCanvas(), element);
-  // Add condition to bubblecanvas.
-  canvasFlag = canvasFlag &&
-               !goog.dom.contains(workspace.getBubbleCanvas(), element);
+  var canvasFlag = !goog.dom.contains(workspace.getCanvas(), element) &&
+                   !goog.dom.contains(workspace.getBubbleCanvas(), element);
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
-    if (element === workspace.getCanvas() ||
-        element === workspace.getBubbleCanvas()) {
+    if (element == workspace.getCanvas() ||
+        element == workspace.getBubbleCanvas()) {
       canvasFlag = true;
     }
     // Before the SVG canvas scale the coordinates.

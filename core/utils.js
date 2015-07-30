@@ -283,8 +283,8 @@ Blockly.getRelativeXY_ = function(element) {
 
 /**
  * Return the absolute coordinates of the top-left corner of this element,
- * scales that after canvas svg element, if it's a descentant.
- * The origin (0,0) is the top-left corner of the Blockly svg.
+ * scales that after canvas SVG element, if it's a descendant.
+ * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Element} element Element to find the coordinates of.
  * @return {!Object} Object with .x and .y properties.
  * @private
@@ -294,19 +294,19 @@ Blockly.getSvgXY_ = function(element) {
   var x = 0;
   var y = 0;
   var canvasFlag;
-  //evaluate if element isn't child of a canvas
+  // Evaluate if element isn't child of a canvas.
   canvasFlag = !goog.dom.contains(workspace.getCanvas(), element);
-  //add condition to bubblecanvas
-  canvasFlag = canvasFlag && 
+  // Add condition to bubblecanvas.
+  canvasFlag = canvasFlag &&
                !goog.dom.contains(workspace.getBubbleCanvas(), element);
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
-    if (element === workspace.getCanvas() || 
+    if (element === workspace.getCanvas() ||
         element === workspace.getBubbleCanvas()) {
       canvasFlag = true;
     }
-    //before the svg canvas scale the coordinates
+    // Before the SVG canvas scale the coordinates.
     if (canvasFlag) {
       x += xy.x;
       y += xy.y;
@@ -324,7 +324,8 @@ Blockly.getSvgXY_ = function(element) {
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
  * @param {Element=} opt_parent Optional parent on which to append the element.
- * @param {Blockly.Workspace=} workspace Optional workspace for access to context (scale...).
+ * @param {Blockly.Workspace=} opt_workspace Optional workspace for access to
+ *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
 Blockly.createSvgElement = function(name, attrs, opt_parent, opt_workspace) {
@@ -333,10 +334,10 @@ Blockly.createSvgElement = function(name, attrs, opt_parent, opt_workspace) {
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
-  //fix the native getBBox for enable scaling
+  // Fix the native getBBox for enable scaling.
   var getBBox = e.getBBox;
   e.getBBox = function() {
-    //fix scale if the element is a svg canvas or a child
+    // Fix scale if the element is an SVG canvas or a child.
     var BBox = getBBox.call(e);
     if (opt_workspace) {
       var element = e;
@@ -351,7 +352,7 @@ Blockly.createSvgElement = function(name, attrs, opt_parent, opt_workspace) {
         element = element.parentNode;
       } while (element && element != opt_workspace.options.svg);
     } else {
-      // when mainWorkspace has not created
+      // When mainWorkspace has not created.
       var BBox = getBBox.call(e);
       if (e.transform.baseVal.numberOfItems == 2) {
         BBox.width *= e.transform.baseVal.getItem(1).matrix.a;

@@ -328,13 +328,13 @@ Blockly.onMouseMove_ = function(e) {
  */
 Blockly.onMouseWheel_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
-  if (workspace.options.scrollWheel && workspace.scrollbar && workspace.zooming) {
+  if (workspace.options.zoomOptions.wheel) {
     Blockly.hideChaff();
-    // cross-browser wheel delta
-    var e = window.event || e; // old IE support
-    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    // Cross-browser wheel delta.
+    e = window.event || e;  // Old IE support.
+    var delta = Math.max(-1, Math.min(1, e.wheelDelta || -e.detail));
     var position = Blockly.mouseToSvg(e, workspace.options.svg);
-    workspace.zoom(position.x , position.y, delta);
+    workspace.zoom(position.x, position.y, delta);
     e.preventDefault();
   }
 };
@@ -508,7 +508,7 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     // Firefox has trouble with hidden elements (Bug 528969).
     return null;
   }
-  //fix scale
+  // Fix scale.
   var contentWidth = blockBox.width;
   var contentHeight = blockBox.height;
   var contentX = blockBox.x * this.scale;

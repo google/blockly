@@ -142,21 +142,14 @@ Blockly.parseOptions_ = function(options) {
   if (hasCss === undefined) {
     hasCss = true;
   }
+  // See grid documentation at:
+  // https://developers.google.com/blockly/installation/grid
   var grid = options['grid'] || {};
-  if (!grid['spacing']) {
-    grid['spacing'] = 0;
-  } else {
-    grid['spacing'] = parseFloat(grid['spacing']);
-  }
-  if (!grid['colour']) {
-    grid['colour'] = '#888';
-  }
-  if (!grid['length']) {
-    grid['length'] = 1;
-  } else {
-    grid['length'] = parseFloat(grid['length']);
-  }
-  grid['snap'] = grid['spacing'] > 0 && !!grid['snap'];
+  var gridOptions = {};
+  gridOptions.spacing = parseFloat(grid['spacing']) || 0;
+  gridOptions.colour = grid['colour'] || '#888';
+  gridOptions.length = parseFloat(grid['length']) || 1;
+  gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
   var pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
   if (options['media']) {
     pathToMedia = options['media'];
@@ -164,23 +157,77 @@ Blockly.parseOptions_ = function(options) {
     // 'path' is a deprecated option which has been replaced by 'media'.
     pathToMedia = options['path'] + 'media/';
   }
+
+/* TODO (fraser): Add documentation page:
+ * https://developers.google.com/blockly/installation/zoom
+ *
+ * enabled
+ *
+ * Set to `true` to allow zooming of the main workspace.  Zooming is only
+ * possible if the workspace has scrollbars.  If `false`, then the options
+ * below have no effect.  Defaults to `false`.
+ *
+ * controls
+ *
+ * Set to `true` to show zoom-in and zoom-out buttons.  Defaults to `true`.
+ *
+ * wheel
+ *
+ * Set to `true` to allow the mouse wheel to zoom.  Defaults to `true`.
+ *
+ * maxScale
+ *
+ * Maximum multiplication factor for how far one can zoom in.  Defaults to `3`.
+ *
+ * minScale
+ *
+ * Minimum multiplication factor for how far one can zoom out.  Defaults to `0.3`.
+ *
+ * scaleSpeed
+ *
+ * For each zooming in-out step the scale is multiplied
+ * or divided respectively by the scale speed, this means that:
+ * `scale = scaleSpeed ^ steps`, note that in this formula
+ * steps of zoom-out are subtracted and zoom-in steps are added.
+ */
+  // See zoom documentation at:
+  // https://developers.google.com/blockly/installation/zoom
+  var zoom = options['zoom'] || {};
+  var zoomOptions = {};
+  zoomOptions.enabled = hasScrollbars && !!zoom['enabled'];
+  if (zoomOptions.enabled) {
+    if (zoom['controls'] === undefined) {
+      zoomOptions.controls = true;
+    } else {
+      zoomOptions.controls = !!zoom['controls'];
+    }
+    if (zoom['wheel'] === undefined) {
+      zoomOptions.wheel = true;
+    } else {
+      zoomOptions.wheel = !!zoom['wheel'];
+    }
+    if (zoom['maxScale'] === undefined) {
+      zoomOptions.maxScale = 3;
+    } else {
+      zoomOptions.maxScale = parseFloat(zoom['maxScale']);
+    }
+    if (zoom['minScale'] === undefined) {
+      zoomOptions.minScale = 0.3;
+    } else {
+      zoomOptions.minScale = parseFloat(zoom['minScale']);
+    }
+    if (zoom['scaleSpeed'] === undefined) {
+      zoomOptions.scaleSpeed = 1.2;
+    } else {
+      zoomOptions.scaleSpeed = parseFloat(zoom['scaleSpeed']);
+    }
+  } else {
+    zoomOptions.controls = false;
+    zoomOptions.wheel = false;
+  }
+
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
-
-  var enableZoom = options['zoom'];
-  if (enableZoom === undefined) {
-    enableZoom = true;
-  }
-  // Enable zooming with mouse scroll wheel.
-  var scrollWheel = options['scrollWheel'];
-  if (scrollWheel === undefined) {
-    scrollWheel = true;
-  }
-  var hasZoomControls = options['zoomControls'];
-  if (hasZoomControls === undefined) {
-    hasZoomControls = true;
-  }
-  var zoomOptions = options['zoomOptions'];
 
   return {
     RTL: !!options['rtl'],
@@ -193,16 +240,13 @@ Blockly.parseOptions_ = function(options) {
     hasCategories: hasCategories,
     hasScrollbars: hasScrollbars,
     hasTrashcan: hasTrashcan,
-    hasZoomControls: hasZoomControls,
     hasSounds: hasSounds,
     hasCss: hasCss,
     languageTree: languageTree,
-    gridOptions: grid,
-    enableRealtime: enableRealtime,
-    realtimeOptions: realtimeOptions,
-    enableZoom: enableZoom,
+    gridOptions: gridOptions,
     zoomOptions: zoomOptions,
-    scrollWheel: scrollWheel
+    enableRealtime: enableRealtime,
+    realtimeOptions: realtimeOptions
   };
 };
 
@@ -433,10 +477,10 @@ Blockly.init_ = function(mainWorkspace) {
 
   Blockly.bindEvent_(window, 'resize', null,
                      function() {Blockly.svgResize(mainWorkspace);});
-  if (mainWorkspace.zooming) {
-    //mouse-wheel for firefox
+  if (options.zoomOptions.wheel) {
+    // Mouse-wheel for Firefox.
     Blockly.bindEvent_(svg, 'DOMMouseScroll', null, Blockly.onMouseWheel_);
-    //mouse-wheel for other browsers
+    // Mouse-wheel for other browsers.
     Blockly.bindEvent_(svg, 'mousewheel', null, Blockly.onMouseWheel_);
   }
 
@@ -479,20 +523,6 @@ Blockly.init_ = function(mainWorkspace) {
   if (options.hasScrollbars) {
     mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
     mainWorkspace.scrollbar.resize();
-  }
-  if (options.enableZoom !== undefined) {
-    mainWorkspace.zooming = options.enableZoom;
-  }
-  if (options.zoomOptions) {
-    if (options.zoomOptions.maxScale) {
-      mainWorkspace.maxScale = options.zoomOptions.maxScale;
-    }
-    if (options.zoomOptions.minScale) {
-      mainWorkspace.minScale = options.zoomOptions.minScale;
-    }
-    if (options.zoomOptions.scaleSpeed) {
-      mainWorkspace.scaleSpeed = options.zoomOptions.scaleSpeed;
-    }
   }
 
   // Load the sounds.

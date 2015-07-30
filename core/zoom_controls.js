@@ -158,10 +158,10 @@ Blockly.ZoomControls.prototype.createDom = function() {
       this.svgGroup_);
   zoomoutSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
-  
-  // Attach event listeners
 
-  // zoom reset control events
+  // Attach event listeners.
+
+  // Zoom-reset control events.
 
   Blockly.bindEvent_(zoomresetSvg, 'mousedown', this, function(event) {
     this.workspace_.zoomReset();
@@ -182,7 +182,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
     zoomresetSvg.style.opacity = 0.4;
   });
 
-  // zoom-in control events
+  // Zoom-in control events.
 
   Blockly.bindEvent_(zoominSvg, 'mousedown', this, function() {
     this.workspace_.zoomCenter(1);
@@ -201,7 +201,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
     zoominSvg.style.opacity = 0.4;
   });
 
-  // zoom-out control events
+  // Zoom-out control events.
 
   Blockly.bindEvent_(zoomoutSvg, 'mousedown', this, function() {
     this.workspace_.zoomCenter(-1);
@@ -227,7 +227,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
  * Initialize the zoom controls.
  */
 Blockly.ZoomControls.prototype.init = function() {
-  // initialize some stuff... (animations?)
+  // Initialize some stuff... (animations?)
 };
 
 /**

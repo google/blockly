@@ -241,7 +241,8 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
   goog.asserts.assertString(code,
-      'Expecting code from statement block "%s".', targetBlock.type);
+      'Expecting code from statement block "%s".',
+      targetBlock && targetBlock.type);
   if (code) {
     code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
   }

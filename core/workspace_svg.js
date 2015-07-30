@@ -785,10 +785,10 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   var center = this.options.svg.createSVGPoint();
   center.x = x;
   center.y = y;
-  center = center.matrixTransform(workspace.getCanvas().getCTM().inverse());
+  center = center.matrixTransform(this.getCanvas().getCTM().inverse());
   x = center.x;
   y = center.y;
-  var canvas = workspace.getCanvas();
+  var canvas = this.getCanvas();
   // Scale factor.
   var scale = (type == 1) ? speed : 1 / speed;
   var matrix = canvas.getCTM().translate(x * (1 - scale),

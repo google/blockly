@@ -141,9 +141,6 @@ Blockly.Flyout.prototype.init = function(workspace) {
 
   this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
       'wheel', this, this.wheel_));
-  // Safari needs mousewheel.
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
-      'mousewheel', this, this.wheel_));
   this.eventWrappers_.concat(
       Blockly.bindEvent_(this.targetWorkspace_.getCanvas(),
       'blocklyWorkspaceChange', this, this.filterForCapacity_));
@@ -290,8 +287,7 @@ Blockly.Flyout.prototype.scrollToTop = function() {
  * @private
  */
 Blockly.Flyout.prototype.wheel_ = function(e) {
-  // Safari uses wheelDeltaY, everyone else uses deltaY.
-  var delta = e.deltaY || -e.wheelDeltaY;
+  var delta = e.deltaY;
   if (delta) {
     if (goog.userAgent.GECKO) {
       // Firefox's deltas are a tenth that of Chrome/Safari.

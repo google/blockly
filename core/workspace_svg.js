@@ -149,7 +149,11 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
   var thisWorkspace = this;
   Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
-                      function(e) {Blockly.longStart_(e, thisWorkspace);});
+                     function(e) {Blockly.longStart_(e, thisWorkspace);});
+  if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
+    // Mouse-wheel.
+    Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.onMouseWheel_);
+  }
 
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
@@ -577,6 +581,19 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
 };
 
 /**
+ * Handle a mouse-wheel on SVG drawing surface.
+ * @param {!Event} e Mouse wheel event.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
+  Blockly.hideChaff(true);
+  var delta = e.deltaY > 0 ? -1 : 1;
+  var position = Blockly.mouseToSvg(e, this.options.svg);
+  this.zoom(position.x, position.y, delta);
+  e.preventDefault();
+};
+
+/**
  * Show the context menu for the workspace.
  * @param {!Event} e Mouse event.
  * @private
@@ -785,10 +802,10 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
   var center = this.options.svg.createSVGPoint();
   center.x = x;
   center.y = y;
-  center = center.matrixTransform(workspace.getCanvas().getCTM().inverse());
+  center = center.matrixTransform(this.getCanvas().getCTM().inverse());
   x = center.x;
   y = center.y;
-  var canvas = workspace.getCanvas();
+  var canvas = this.getCanvas();
   // Scale factor.
   var scale = (type == 1) ? speed : 1 / speed;
   var matrix = canvas.getCTM().translate(x * (1 - scale),
@@ -821,7 +838,7 @@ Blockly.WorkspaceSvg.prototype.zoomCenter  = function(type) {
 Blockly.WorkspaceSvg.prototype.zoomReset  = function() {
   var metrics = this.getMetrics();
   Blockly.hideChaff();
-  workspace.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
+  this.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
   this.scale = 1;
   this.updateZoom();
   this.updateGridPattern_();

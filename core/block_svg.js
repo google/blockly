@@ -1048,32 +1048,34 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   this.workspace.options.svg.appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
-  clone.startDate_ = new Date();
-  Blockly.BlockSvg.disposeUiStep_.call(this, clone, this.RTL);
+  Blockly.BlockSvg.disposeUiStep_(clone, this.RTL, new Date(),
+      this.workspace.scale);
 };
 
 /**
  * Animate a cloned block and eventually dispose of it.
+ * This is a class method, not an instace method since the original block has
+ * been destroyed and is no longer accessible.
  * @param {!Element} clone SVG element to animate and dispose of.
  * @param {boolean} rtl True if RTL, false if LTR.
+ * @param {!Date} start Date of animation's start.
+ * @param {number} workspaceScale Scale of workspace.
  * @private
  */
-Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl) {
-  var ms = (new Date()) - clone.startDate_;
+Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl, start, workspaceScale) {
+  var ms = (new Date()) - start;
   var percent = ms / 150;
   if (percent > 1) {
     goog.dom.removeNode(clone);
   } else {
     var x = clone.translateX_ +
-        (rtl ? -1 : 1) * clone.bBox_.width / 2 * percent;
-    var y = clone.translateY_ + clone.bBox_.height * percent;
-    var translate = x + ', ' + y;
-    // Fix scale.
-    var scale = (1 - percent) * this.workspace.scale;
-    clone.setAttribute('transform', 'translate(' + translate + ')' +
+        (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
+    var y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
+    var scale = (1 - percent) * workspaceScale;
+    clone.setAttribute('transform', 'translate(' + x + ', ' + y + ')' +
         ' scale(' + scale + ')');
     var closure = function() {
-      Blockly.BlockSvg.disposeUiStep_.bind(this)(clone, rtl);
+      Blockly.BlockSvg.disposeUiStep_(clone, rtl, start, workspaceScale);
     };
     setTimeout(closure, 10);
   }
@@ -1089,10 +1091,10 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
   var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
   // Offset the coordinates based on the two connection types, fix scale.
   if (this.outputConnection) {
-    xy.x += (Blockly.RTL ? 3 : -3) * this.workspace.scale;
+    xy.x += (this.RTL ? 3 : -3) * this.workspace.scale;
     xy.y += 13 * this.workspace.scale;
   } else if (this.previousConnection) {
-    xy.x += (Blockly.RTL ? -23 : 23) * this.workspace.scale;
+    xy.x += (this.RTL ? -23 : 23) * this.workspace.scale;
     xy.y += 3 * this.workspace.scale;
   }
   var ripple = Blockly.createSvgElement('circle',
@@ -1100,26 +1102,26 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
        'stroke': '#888', 'stroke-width': 10},
       this.workspace.options.svg);
   // Start the animation.
-  ripple.startDate_ = new Date();
-  this.connectionUiStep_(ripple);
+  Blockly.BlockSvg.connectionUiStep_(ripple, new Date(), this.workspace.scale);
 };
 
 /**
  * Expand a ripple around a connection.
  * @param {!Element} ripple Element to animate.
+ * @param {!Date} start Date of animation's start.
+ * @param {number} workspaceScale Scale of workspace.
  * @private
  */
-Blockly.BlockSvg.prototype.connectionUiStep_ = function(ripple) {
-  var ms = (new Date()) - ripple.startDate_;
+Blockly.BlockSvg.connectionUiStep_ = function(ripple, start, workspaceScale) {
+  var ms = (new Date()) - start;
   var percent = ms / 150;
   if (percent > 1) {
     goog.dom.removeNode(ripple);
   } else {
-    ripple.setAttribute('r', percent * 25 * this.workspace.scale);
+    ripple.setAttribute('r', percent * 25 * workspaceScale);
     ripple.style.opacity = 1 - percent;
-    var thisBlock_ = this;
     var closure = function() {
-      thisBlock_.connectionUiStep_(ripple);
+      Blockly.BlockSvg.connectionUiStep_(ripple, start, workspaceScale);
     };
     setTimeout(closure, 10);
   }

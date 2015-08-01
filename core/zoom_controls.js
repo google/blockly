@@ -43,7 +43,7 @@ Blockly.ZoomControls = function(workspace) {
  * @type {string}
  * @private
  */
-Blockly.Trashcan.prototype.SPRITE_URL_ = 'media/sprites.png';
+Blockly.ZoomControls.prototype.SPRITE_URL_ = 'media/sprites.png';
 
 /**
  * Width of both the zoom controls.

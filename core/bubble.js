@@ -267,18 +267,18 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   }
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  // Fix scale of mouse event.
-  point.x /= Blockly.mainWorkspace.scale;
-  point.y /= Blockly.mainWorkspace.scale;
 
   // Record the starting offset between the current location and the mouse.
+  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
+  // Fix scale of mouse event.
+  point.x /= this.workspace_.scale;
+  point.y /= this.workspace_.scale;
   if (this.workspace_.RTL) {
-    this.dragDeltaX = this.relativeLeft_ + point.x;
+    this.dragDeltaX_ = this.relativeLeft_ + point.x;
   } else {
-    this.dragDeltaX = this.relativeLeft_ - point.x;
+    this.dragDeltaX_ = this.relativeLeft_ - point.x;
   }
-  this.dragDeltaY = this.relativeTop_ - point.y;
+  this.dragDeltaY_ = this.relativeTop_ - point.y;
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -298,15 +298,15 @@ Blockly.Bubble.prototype.bubbleMouseMove_ = function(e) {
   this.autoLayout_ = false;
   var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
   // Fix scale of mouse event.
-  point.x /= Blockly.mainWorkspace.scale;
-  point.y /= Blockly.mainWorkspace.scale;
+  point.x /= this.workspace_.scale;
+  point.y /= this.workspace_.scale;
 
   if (this.workspace_.RTL) {
-    this.relativeLeft_ = this.dragDeltaX - point.x;
+    this.relativeLeft_ = this.dragDeltaX_ - point.x;
   } else {
-    this.relativeLeft_ = this.dragDeltaX + point.x;
+    this.relativeLeft_ = this.dragDeltaX_ + point.x;
   }
-  this.relativeTop_ = this.dragDeltaY + point.y;
+  this.relativeTop_ = this.dragDeltaY_ + point.y;
   this.positionBubble_();
   this.renderArrow_();
 };
@@ -326,13 +326,18 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   }
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+
   // Record the starting offset between the current location and the mouse.
+  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
+  // Fix scale of mouse event.
+  point.x /= this.workspace_.scale;
+  point.y /= this.workspace_.scale;
   if (this.workspace_.RTL) {
-    this.resizeDeltaWidth = this.width_ + e.clientX;
+    this.dragDeltaX_ = this.width_ + point.x;
   } else {
-    this.resizeDeltaWidth = this.width_ - e.clientX;
+    this.dragDeltaX_ = this.width_ - point.x;
   }
-  this.resizeDeltaHeight = this.height_ - e.clientY;
+  this.dragDeltaY_ = this.height_ - point.y;
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -350,14 +355,19 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
  */
 Blockly.Bubble.prototype.resizeMouseMove_ = function(e) {
   this.autoLayout_ = false;
-  var w = this.resizeDeltaWidth;
-  var h = this.resizeDeltaHeight + e.clientY;
+  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
+  // Fix scale of mouse event.
+  point.x /= this.workspace_.scale;
+  point.y /= this.workspace_.scale;
+
+  var w = this.dragDeltaX_;
+  var h = this.dragDeltaY_ + point.y;
   if (this.workspace_.RTL) {
     // RTL drags the bottom-left corner.
-    w -= e.clientX;
+    w -= point.x;
   } else {
     // LTR drags the bottom-right corner.
-    w += e.clientX;
+    w += point.x;
   }
   this.setBubbleSize(w, h);
   if (this.workspace_.RTL) {
@@ -408,8 +418,8 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
   var relativeTop = -this.height_ - Blockly.BlockSvg.MIN_BLOCK_Y;
   // Prevent the bubble from being off-screen.
   var metrics = this.workspace_.getMetrics();
-  metrics.viewWidth /= Blockly.mainWorkspace.scale;
-  metrics.viewLeft /= Blockly.mainWorkspace.scale;
+  metrics.viewWidth /= this.workspace_.scale;
+  metrics.viewLeft /= this.workspace_.scale;
   if (this.workspace_.RTL) {
     if (this.anchorX_ - metrics.viewLeft - relativeLeft - this.width_ <
         Blockly.Scrollbar.scrollbarThickness) {

@@ -796,7 +796,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
  * @param {number} y Y coordinate of center.
  * @param {number} type Type of zooming (-1 zooming out and 1 zooming in).
  */
-Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
+Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   var speed = this.options.zoomOptions.scaleSpeed;
   var metrics = this.getMetrics();
   var center = this.options.svg.createSVGPoint();
@@ -819,36 +819,36 @@ Blockly.WorkspaceSvg.prototype.zoom  = function(x, y, type) {
     this.updateGridPattern_();
     this.scrollbar.resize();
   }
-}
+};
 
 /**
  * Zooming the blocks centered in the center of view with zooming in or out.
  * @param {number} type Type of zooming (-1 zooming out and 1 zooming in).
  */
-Blockly.WorkspaceSvg.prototype.zoomCenter  = function(type) {
+Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
   var metrics = this.getMetrics();
   var x = metrics.viewWidth / 2;
   var y = metrics.viewHeight / 2;
   this.zoom(x, y, type);
-}
+};
 
 /**
  * Reset zooming and dragging.
  */
-Blockly.WorkspaceSvg.prototype.zoomReset  = function() {
+Blockly.WorkspaceSvg.prototype.zoomReset = function() {
   var metrics = this.getMetrics();
   Blockly.hideChaff();
   this.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
   this.scale = 1;
   this.updateZoom();
   this.updateGridPattern_();
-}
+};
 
 /**
  * Updates the grid pattern.
  * @private
  */
-Blockly.WorkspaceSvg.prototype.updateGridPattern_  = function() {
+Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
   this.options.gridPattern.setAttribute('width',
       this.options.gridOptions.spacing * this.scale);
   this.options.gridPattern.setAttribute('height',
@@ -856,12 +856,12 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_  = function() {
   var half = Math.floor(this.options.gridOptions['spacing'] / 2) + 0.5;
   var start = half - this.options.gridOptions['length'] / 2;
   var end = half + this.options.gridOptions['length'] / 2;
-  var line1 = this.options.gridPattern.children[0];
-  var line2 = this.options.gridPattern.children[1];
+  var line1 = this.options.gridPattern.firstChild;
+  var line2 = line1 && line1.nextSibling;
   half *= this.scale;
   start *= this.scale;
   end *= this.scale;
-  if (this.options.gridPattern.children[0]) {
+  if (line1) {
     line1.setAttribute('stroke-width', this.scale);
     line1.setAttribute('x1', start);
     line1.setAttribute('y1', half);
@@ -875,7 +875,7 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_  = function() {
     line2.setAttribute('x2', half);
     line2.setAttribute('y2', end);
   }
-}
+};
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['setVisible'] =

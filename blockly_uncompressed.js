@@ -597,7 +597,7 @@ goog.addDependency("i18n/numberformatsymbolsext.js", ['goog.i18n.NumberFormatSym
 goog.addDependency("i18n/ordinalrules.js", ['goog.i18n.ordinalRules'], []);
 goog.addDependency("i18n/pluralrules.js", ['goog.i18n.pluralRules'], []);
 goog.addDependency("i18n/pluralrules_test.js", ['goog.i18n.pluralRulesTest'], ['goog.i18n.pluralRules', 'goog.testing.jsunit']);
-goog.addDependency("i18n/timezone.js", ['goog.i18n.TimeZone'], ['goog.array', 'goog.date.DateLike', 'goog.string']);
+goog.addDependency("i18n/timezone.js", ['goog.i18n.TimeZone'], ['goog.array', 'goog.date.DateLike', 'goog.object', 'goog.string']);
 goog.addDependency("i18n/timezone_test.js", ['goog.i18n.TimeZoneTest'], ['goog.i18n.TimeZone', 'goog.testing.jsunit']);
 goog.addDependency("i18n/uchar.js", ['goog.i18n.uChar'], []);
 goog.addDependency("i18n/uchar_test.js", ['goog.i18n.uCharTest'], ['goog.i18n.uChar', 'goog.testing.jsunit']);

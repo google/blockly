@@ -300,6 +300,8 @@ class Gen_compressed(threading.Thread):
       code = code.replace(remove, "")
 
       # Trim down Google's Apache licences.
+      # The Closure Compiler used to preserve these until August 2015.
+      # Delete this in a few months if the licences don't return.
       LICENSE = re.compile("""/\\*
 
  [\w ]+

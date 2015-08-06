@@ -360,15 +360,12 @@ Blockly.Bubble.prototype.resizeMouseMove_ = function(e) {
   point.x /= this.workspace_.scale;
   point.y /= this.workspace_.scale;
 
-  var w = this.dragDeltaX_;
-  var h = this.dragDeltaY_ + point.y;
   if (this.workspace_.RTL) {
-    // RTL drags the bottom-left corner.
-    w -= point.x;
+    var w = this.dragDeltaX_ - point.x;
   } else {
-    // LTR drags the bottom-right corner.
-    w += point.x;
+    var w = this.dragDeltaX_ + point.x;
   }
+  var h = this.dragDeltaY_ + point.y;
   this.setBubbleSize(w, h);
   if (this.workspace_.RTL) {
     // RTL requires the bubble to move its left edge.

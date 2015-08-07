@@ -807,12 +807,19 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   y = center.y;
   var canvas = this.getCanvas();
   // Scale factor.
-  var scale = (type == 1) ? speed : 1 / speed;
-  var matrix = canvas.getCTM().translate(x * (1 - scale),
-                                         y * (1 - scale)).scale(scale);
-  // Validate if scale is in a valid range.
-  if (matrix.a >= this.options.zoomOptions.minScale &&
-      matrix.a <= this.options.zoomOptions.maxScale) {
+  var scaleChange = (type == 1) ? speed : 1 / speed;
+  // Clamp scale within valid range.
+  var newScale = this.scale * scaleChange;
+  if (newScale > this.options.zoomOptions.maxScale) {
+    scaleChange = this.options.zoomOptions.maxScale / this.scale;
+  } else if (newScale < this.options.zoomOptions.minScale) {
+    scaleChange = this.options.zoomOptions.minScale / this.scale;
+  }
+  var matrix = canvas.getCTM()
+      .translate(x * (1 - scaleChange), y * (1 - scaleChange))
+      .scale(scaleChange);
+  // newScale and matrix.a should be identical (within a rounding error).
+  if (this.scale != matrix.a) {
     this.scale = matrix.a;
     this.scrollX = matrix.e - metrics.absoluteLeft;
     this.scrollY = matrix.f - metrics.absoluteTop ;

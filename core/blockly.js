@@ -502,10 +502,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
                             contentX + contentWidth - viewWidth);
     var rightEdge = Math.max(contentX + contentWidth + viewWidth / 2,
                              contentX + viewWidth);
-    var topEdge = Math.min(contentY - viewHeight * this.scale / 2,
+    var topEdge = Math.min(contentY - viewHeight / 2,
                            contentY + contentHeight - viewHeight);
-    var bottomEdge = Math.max(contentY + contentHeight + viewHeight *
-                              this.scale / 2, contentY + viewHeight);
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight / 2,
+                              contentY + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;

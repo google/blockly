@@ -66,7 +66,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   if (block.mutationToDom) {
     // Custom data for an advanced block.
     var mutation = block.mutationToDom();
-    if (mutation) {
+    if (mutation && (mutation.hasChildNodes() || mutation.hasAttributes())) {
       element.appendChild(mutation);
     }
   }

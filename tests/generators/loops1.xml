@@ -121,7 +121,7 @@
                   <block type="controls_whileUntil" inline="false">
                     <field name="MODE">WHILE</field>
                     <value name="BOOL">
-                      <block type="logic_compare" inline="true">
+                      <block type="logic_compare">
                         <field name="OP">NEQ</field>
                         <value name="A">
                           <block type="variables_get">
@@ -170,7 +170,7 @@
                               <block type="controls_whileUntil" inline="false">
                                 <field name="MODE">UNTIL</field>
                                 <value name="BOOL">
-                                  <block type="logic_compare" inline="true">
+                                  <block type="logic_compare">
                                     <field name="OP">EQ</field>
                                     <value name="A">
                                       <block type="variables_get">

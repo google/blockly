@@ -311,7 +311,7 @@ Blockly.onMouseMove_ = function(e) {
 
     // Move the scrollbars and the page will scroll automatically.
     workspace.scrollbar.set(-x - metrics.contentLeft,
-                                        -y - metrics.contentTop);
+                            -y - metrics.contentTop);
     // Cancel the long-press if the drag has moved too far.
     var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     if (dr > Blockly.DRAG_RADIUS) {
@@ -502,10 +502,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
                             contentX + contentWidth - viewWidth);
     var rightEdge = Math.max(contentX + contentWidth + viewWidth / 2,
                              contentX + viewWidth);
-    var topEdge = Math.min(contentY - viewHeight * this.scale / 2,
+    var topEdge = Math.min(contentY - viewHeight / 2,
                            contentY + contentHeight - viewHeight);
-    var bottomEdge = Math.max(contentY + contentHeight + viewHeight *
-                              this.scale / 2, contentY + viewHeight);
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight / 2,
+                              contentY + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;

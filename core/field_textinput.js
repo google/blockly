@@ -277,8 +277,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
     Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
     Blockly.FieldTextInput.htmlInput_ = null;
-    // Delete the width property.
-    Blockly.WidgetDiv.DIV.style.width = 'auto';
+    // Delete style properties.
+    var style = Blockly.WidgetDiv.DIV.style;
+    style.width = 'auto';
+    style.height = 'auto';
+    style.fontSize = '';
   };
 };
 

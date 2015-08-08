@@ -288,19 +288,6 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
 };
 
 /**
- * Update the scale based in 'this.scale'.
- */
-Blockly.WorkspaceSvg.prototype.updateZoom = function() {
-  var x = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.e;
-  var y = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.f;
-
-  var translation = 'translate(' + x + ',' + y + ')' +
-      'scale(' + this.scale + ')';
-  this.svgBlockCanvas_.setAttribute('transform', translation);
-  this.svgBubbleCanvas_.setAttribute('transform', translation);
-};
-
-/**
  * Add a block to the list of top blocks.
  * @param {!Blockly.Block} block Block to remove.
  */
@@ -807,12 +794,19 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   y = center.y;
   var canvas = this.getCanvas();
   // Scale factor.
-  var scale = (type == 1) ? speed : 1 / speed;
-  var matrix = canvas.getCTM().translate(x * (1 - scale),
-                                         y * (1 - scale)).scale(scale);
-  // Validate if scale is in a valid range.
-  if (matrix.a >= this.options.zoomOptions.minScale &&
-      matrix.a <= this.options.zoomOptions.maxScale) {
+  var scaleChange = (type == 1) ? speed : 1 / speed;
+  // Clamp scale within valid range.
+  var newScale = this.scale * scaleChange;
+  if (newScale > this.options.zoomOptions.maxScale) {
+    scaleChange = this.options.zoomOptions.maxScale / this.scale;
+  } else if (newScale < this.options.zoomOptions.minScale) {
+    scaleChange = this.options.zoomOptions.minScale / this.scale;
+  }
+  var matrix = canvas.getCTM()
+      .translate(x * (1 - scaleChange), y * (1 - scaleChange))
+      .scale(scaleChange);
+  // newScale and matrix.a should be identical (within a rounding error).
+  if (this.scale != matrix.a) {
     this.scale = matrix.a;
     this.scrollX = matrix.e - metrics.absoluteLeft;
     this.scrollY = matrix.f - metrics.absoluteTop ;
@@ -836,12 +830,11 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
  * Reset zooming and dragging.
  */
 Blockly.WorkspaceSvg.prototype.zoomReset = function() {
-  var metrics = this.getMetrics();
-  Blockly.hideChaff();
-  this.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
   this.scale = 1;
-  this.updateZoom();
   this.updateGridPattern_();
+  var metrics = this.getMetrics();
+  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+                     (metrics.contentHeight - metrics.viewHeight) / 2);
 };
 
 /**

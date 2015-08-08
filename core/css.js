@@ -332,6 +332,18 @@ Blockly.Css.CONTENT = [
   '  fill: #bbb;',
   '}',
 
+  '.blocklyZoom>image {',
+  '  opacity: .4;',
+  '}',
+
+  '.blocklyZoom>image:hover {',
+  '  opacity: .6;',
+  '}',
+
+  '.blocklyZoom>image:active {',
+  '  opacity: .8;',
+  '}',
+
   /* Darken flyout scrollbars due to being on a grey background. */
   /* By contrast, workspace scrollbars are on a white background. */
   '.blocklyFlyout .blocklyScrollbarKnob {',

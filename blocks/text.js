@@ -127,14 +127,12 @@ Blockly.Blocks['text_join'] = {
     var itemBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
     var connections = [];
-    var i = 0;
     while (itemBlock) {
-      connections[i] = itemBlock.valueConnection_;
+      connections.push(itemBlock.valueConnection_);
       itemBlock = itemBlock.nextConnection &&
           itemBlock.nextConnection.targetBlock();
-      i++;
     }
-    this.itemCount_ = i;
+    this.itemCount_ = connections.length;
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {

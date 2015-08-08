@@ -23,10 +23,10 @@
     "jshint": "latest"
   },
   "jshintConfig": {
-	"unused": true,
-	"undef": true,
-	"globalstrict": true,
-	"sub": true,
-	"predef": ["Blockly", "goog", "window", "document", "soy", "XMLHttpRequest"]
+    "globalstrict": true,
+    "predef": ["Blockly", "goog", "window", "document", "soy", "XMLHttpRequest"],
+    "sub": true,
+    "undef": true,
+    "unused": true
   }
 }

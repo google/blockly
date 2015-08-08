@@ -385,7 +385,7 @@ rtclient.RealtimeLoader.prototype.redirectTo = function(fileIds, userId) {
     params.push('userId=' + userId);
   }
   // Naive URL construction.
-  var newUrl = params.length == 0 ?
+  var newUrl = params.length === 0 ?
       window.location.pathname :
       (window.location.pathname + '#' + params.join('&'));
   // Using HTML URL re-write if available.

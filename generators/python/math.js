@@ -184,11 +184,11 @@ Blockly.Python['math_number_property'] = function(block) {
          '    return True',
          '  # False if n is negative, is 1, or not whole,' +
              ' or if n is divisible by 2 or 3.',
-         '  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:',
+         '  if n <= 1 or n % 1 != 0 or n % 2 === 0 or n % 3 == 0:',
          '    return False',
          '  # Check all the numbers of form 6k +/- 1, up to sqrt(n).',
          '  for x in range(6, int(math.sqrt(n)) + 2, 6):',
-         '    if n % (x - 1) == 0 or n % (x + 1) == 0:',
+         '    if n % (x - 1) === 0 or n % (x + 1) == 0:',
          '      return False',
          '  return True']);
     code = functionName + '(' + number_to_check + ')';

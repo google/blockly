@@ -175,13 +175,13 @@ Blockly.JavaScript['math_number_property'] = function(block) {
           '  }',
           '  // False if n is NaN, negative, is 1, or not whole.',
           '  // And false if n is divisible by 2 or 3.',
-          '  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
-            ' n % 3 == 0) {',
+          '  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 === 0 ||' +
+            ' n % 3 === 0) {',
           '    return false;',
           '  }',
           '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
           '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
-          '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
+          '    if (n % (x - 1) === 0 || n % (x + 1) === 0) {',
           '      return false;',
           '    }',
           '  }',
@@ -273,7 +273,7 @@ Blockly.JavaScript['math_on_list'] = function(block) {
               '{return typeof x == \'number\';});',
             '  if (!localList.length) return null;',
             '  localList.sort(function(a, b) {return b - a;});',
-            '  if (localList.length % 2 == 0) {',
+            '  if (localList.length % 2 === 0) {',
             '    return (localList[localList.length / 2 - 1] + ' +
               'localList[localList.length / 2]) / 2;',
             '  } else {',

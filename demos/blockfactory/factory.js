@@ -246,7 +246,7 @@ function escapeString(string) {
  */
 function getOptTypesFrom(block, name) {
   var types = getTypesFrom_(block, name);
-  if (types.length == 0) {
+  if (types.length === 0) {
     return '';
   } else if (types.length == 1) {
     return types[0];

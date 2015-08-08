@@ -286,7 +286,7 @@ Blockly.createDom_ = function(container) {
     }
     if (!Blockly.hasScrollbars) {
       var workspaceChanged = function() {
-        if (Blockly.dragMode_ == 0) {
+        if (Blockly.dragMode_ === 0) {
           var metrics = Blockly.mainWorkspace.getMetrics();
           var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
           var edgeTop = metrics.viewTop + metrics.absoluteTop;

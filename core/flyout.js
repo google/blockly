@@ -557,8 +557,8 @@ Blockly.Flyout.prototype.onMouseMove_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
-  if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
-      e.button == 0) {
+  if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY === 0 &&
+      e.button === 0) {
     /* HACK:
      Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
      on certain touch actions. Ignore events with these signatures.

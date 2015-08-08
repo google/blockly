@@ -198,13 +198,13 @@ Blockly.Dart['math_number_property'] = function(block) {
           '  }',
           '  // False if n is null, negative, is 1, or not whole.',
           '  // And false if n is divisible by 2 or 3.',
-          '  if (n == null || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
-            ' n % 3 == 0) {',
+          '  if (n == null || n <= 1 || n % 1 != 0 || n % 2 === 0 ||' +
+            ' n % 3 === 0) {',
           '    return false;',
           '  }',
           '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
           '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
-          '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
+          '    if (n % (x - 1) === 0 || n % (x + 1) === 0) {',
           '      return false;',
           '    }',
           '  }',

@@ -153,7 +153,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
       'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
       'y1': Blockly.FieldAngle.HALF,
       'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
-          (a % 45 == 0 ? 10 : 5),
+          (a % 45 === 0 ? 10 : 5),
       'y2': Blockly.FieldAngle.HALF,
       'class': 'blocklyAngleMarks',
       'transform': 'rotate(' + a + ', ' +

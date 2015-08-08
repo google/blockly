@@ -170,7 +170,7 @@ Blockly.Blocks['text_join'] = {
       }
     }
     // Rebuild block.
-    if (this.itemCount_ == 0) {
+    if (this.itemCount_ === 0) {
       this.appendDummyInput('EMPTY')
           .appendField(new Blockly.FieldImage(Blockly.pathToMedia +
           'quote0.png', 12, 12, '"'))
@@ -179,7 +179,7 @@ Blockly.Blocks['text_join'] = {
     } else {
       for (var i = 0; i < this.itemCount_; i++) {
         var input = this.appendValueInput('ADD' + i);
-        if (i == 0) {
+        if (i === 0) {
           input.appendField(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH);
         }
       }

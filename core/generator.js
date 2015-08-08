@@ -209,7 +209,7 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
     throw 'Expecting valid order from value block "' + targetBlock.type + '".';
   }
   if (code && order <= innerOrder) {
-    if (order == innerOrder || (order == 0 || order == 99)) {
+    if (order == innerOrder || (order === 0 || order == 99)) {
       // 0 is the atomic order, 99 is the none order.  No parentheses needed.
       // In all known languages multiple such code blocks are not order
       // sensitive.  In fact in Python ('a' 'b') 'c' would fail.

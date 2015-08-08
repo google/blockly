@@ -618,8 +618,8 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
 Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
   var this_ = this;
   Blockly.doCommand(function() {
-    if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
-        e.button == 0) {
+    if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY === 0 &&
+        e.button === 0) {
       /* HACK:
        Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove
        events on certain touch actions. Ignore events with these signatures.
@@ -1576,7 +1576,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
   var connectionX, connectionY;
   for (var y = 0, row; row = inputRows[y]; y++) {
     cursorX = Blockly.BlockSvg.SEP_SPACE_X;
-    if (y == 0) {
+    if (y === 0) {
       cursorX += Blockly.RTL ? -iconWidth : iconWidth;
     }
     highlightSteps.push('M', (inputRows.rightEdge - 1) + ',' + (cursorY + 1));
@@ -1743,7 +1743,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     } else if (row.type == Blockly.NEXT_STATEMENT) {
       // Nested statement.
       var input = row[0];
-      if (y == 0) {
+      if (y === 0) {
         // If the first input is a statement stack, add a small row on top.
         steps.push('v', Blockly.BlockSvg.SEP_SPACE_Y);
         if (Blockly.RTL) {

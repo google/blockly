@@ -40,7 +40,7 @@ Blockly.Dart['text'] = function(block) {
 Blockly.Dart['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   var code;
-  if (block.itemCount_ == 0) {
+  if (block.itemCount_ === 0) {
     return ['\'\'', Blockly.Dart.ORDER_ATOMIC];
   } else if (block.itemCount_ == 1) {
     var argument0 = Blockly.Dart.valueToCode(block, 'ADD0',

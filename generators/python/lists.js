@@ -299,7 +299,7 @@ Blockly.Python['lists_getSublist'] = function(block) {
       // If the index is a naked number, increment it right now.
       // Add special case for -0.
       at2 = 1 - parseInt(at2, 10);
-      if (at2 == 0) {
+      if (at2 === 0) {
         at2 = '';
       }
     } else {

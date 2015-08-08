@@ -489,7 +489,7 @@ Blockly.Blocks['type_group'] = {
     for (var x = 0; x < this.typeCount_; x++) {
       var input = this.appendValueInput('TYPE' + x)
                       .setCheck('Type');
-      if (x == 0) {
+      if (x === 0) {
         input.appendField('any of');
       }
     }
@@ -518,7 +518,7 @@ Blockly.Blocks['type_group'] = {
     while (typeBlock) {
       var input = this.appendValueInput('TYPE' + this.typeCount_)
                       .setCheck('Type');
-      if (this.typeCount_ == 0) {
+      if (this.typeCount_ === 0) {
         input.appendField('any of');
       }
       // Reconnect any child blocks.

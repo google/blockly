@@ -39,7 +39,7 @@ Blockly.Python['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   //Should we allow joining by '-' or ',' or any other characters?
   var code;
-  if (block.itemCount_ == 0) {
+  if (block.itemCount_ === 0) {
     return ['\'\'', Blockly.Python.ORDER_ATOMIC];
   } else if (block.itemCount_ == 1) {
     var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
@@ -185,7 +185,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
     if (Blockly.isNumber(at2)) {
       // If the index is a naked number, increment it right now.
       at2 = 1 - parseInt(at2, 10);
-      if (at2 == 0) {
+      if (at2 === 0) {
         at2 = '';
       }
     } else {

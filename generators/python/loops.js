@@ -129,7 +129,7 @@ Blockly.Python['controls_for'] = function(block) {
       if (argument0 <= argument1) {
         // Count up.
         argument1++;
-        if (argument0 == 0 && increment == 1) {
+        if (argument0 === 0 && increment == 1) {
           // If starting index is 0, omit it.
           range = argument1;
         } else {

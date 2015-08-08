@@ -938,7 +938,7 @@ soyshim.$$bidiRtlWordRatio_ = function(str) {
     }
   }
 
-  return totalCount == 0 ? 0 : rtlCount / totalCount;
+  return totalCount === 0 ? 0 : rtlCount / totalCount;
 };
 
 

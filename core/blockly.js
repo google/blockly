@@ -311,7 +311,7 @@ Blockly.onMouseMove_ = function(e) {
 
     // Move the scrollbars and the page will scroll automatically.
     workspace.scrollbar.set(-x - metrics.contentLeft,
-                                        -y - metrics.contentTop);
+                            -y - metrics.contentTop);
     // Cancel the long-press if the drag has moved too far.
     var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     if (dr > Blockly.DRAG_RADIUS) {

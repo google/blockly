@@ -288,19 +288,6 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
 };
 
 /**
- * Update the scale based in 'this.scale'.
- */
-Blockly.WorkspaceSvg.prototype.updateZoom = function() {
-  var x = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.e;
-  var y = Blockly.mainWorkspace.svgBlockCanvas_.transform.baseVal[0].matrix.f;
-
-  var translation = 'translate(' + x + ',' + y + ')' +
-      'scale(' + this.scale + ')';
-  this.svgBlockCanvas_.setAttribute('transform', translation);
-  this.svgBubbleCanvas_.setAttribute('transform', translation);
-};
-
-/**
  * Add a block to the list of top blocks.
  * @param {!Blockly.Block} block Block to remove.
  */
@@ -843,12 +830,11 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
  * Reset zooming and dragging.
  */
 Blockly.WorkspaceSvg.prototype.zoomReset = function() {
-  var metrics = this.getMetrics();
-  Blockly.hideChaff();
-  this.scrollbar.set(-metrics.contentLeft, -metrics.contentTop);
   this.scale = 1;
-  this.updateZoom();
   this.updateGridPattern_();
+  var metrics = this.getMetrics();
+  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+                     (metrics.contentHeight - metrics.viewHeight) / 2);
 };
 
 /**

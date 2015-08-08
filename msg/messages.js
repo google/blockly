@@ -670,7 +670,7 @@ Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST = 'to last letter';
 Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = '';
 
 /// url - Information about the case of letters (upper-case and lower-case).
-Blockly.Msg.TEXT_CHANGECASE_HELPURL = 'https://github.com/google/blockly/wiki/Text#adjusting-text-case'
+Blockly.Msg.TEXT_CHANGECASE_HELPURL = 'https://github.com/google/blockly/wiki/Text#adjusting-text-case';
 /// tooltip - Describes a block to adjust the case of letters.  For more information on this block,
 /// see [https://github.com/google/blockly/wiki/Text#adjusting-text-case
 /// https://github.com/google/blockly/wiki/Text#adjusting-text-case].
@@ -970,7 +970,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion
 /// url - Information describing splitting text into a list, or joining a list into text.
 Blockly.Msg.LISTS_SPLIT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists';
 /// dropdown - Indicates that text will be split up into a list (e.g. "a-b-c" -> ["a", "b", "c"]).
-Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = 'make list from text'
+Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = 'make list from text';
 /// dropdown - Indicates that a list will be joined together to form text (e.g. ["a", "b", "c"] -> "a-b-c").
 Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST = 'make text from list';
 /// block text - Prompts for a letter to be used as a separator when splitting or joining text.

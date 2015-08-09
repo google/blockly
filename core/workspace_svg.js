@@ -162,6 +162,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   } else if (this.options.languageTree) {
     this.addFlyout_();
   }
+  this.updateGridPattern_();
   return this.svgGroup_;
 };
 
@@ -842,10 +843,12 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
-  this.options.gridPattern.setAttribute('width',
-      this.options.gridOptions.spacing * this.scale);
-  this.options.gridPattern.setAttribute('height',
-      this.options.gridOptions.spacing * this.scale);
+  if (!this.options.gridPattern) {
+    return;  // No grid.
+  }
+  // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
+  this.options.gridPattern.setAttribute('width', safeSpacing);
+  this.options.gridPattern.setAttribute('height', safeSpacing);
   var half = Math.floor(this.options.gridOptions['spacing'] / 2) + 0.5;
   var start = half - this.options.gridOptions['length'] / 2;
   var end = half + this.options.gridOptions['length'] / 2;

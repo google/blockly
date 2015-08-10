@@ -407,7 +407,7 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
 /**
  * A blank separator node in the tree.
  * @constructor
- * @extends {Blockly.Toolbox.prototype.TreeNode}
+ * @extends {Blockly.Toolbox.TreeNode}
  */
 Blockly.Toolbox.TreeSeparator = function() {
   Blockly.Toolbox.TreeNode.call(this, null, '',

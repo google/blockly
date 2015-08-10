@@ -126,6 +126,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   // Create the input.
   var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
+  /** @type {!HTMLInputElement} */
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
   div.appendChild(htmlInput);
 
@@ -200,7 +201,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
 Blockly.FieldTextInput.prototype.validate_ = function() {
   var valid = true;
   goog.asserts.assertObject(Blockly.FieldTextInput.htmlInput_);
-  var htmlInput = /** @type {!Element} */ (Blockly.FieldTextInput.htmlInput_);
+  var htmlInput = Blockly.FieldTextInput.htmlInput_;
   if (this.sourceBlock_ && this.changeHandler_) {
     valid = this.changeHandler_(htmlInput.value);
   }

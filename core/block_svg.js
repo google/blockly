@@ -64,6 +64,13 @@ Blockly.BlockSvg.prototype.height = 0;
 Blockly.BlockSvg.prototype.width = 0;
 
 /**
+ * Original location of block being dragged.
+ * @type {goog.math.Coordinate}
+ * @private
+ */
+Blockly.BlockSvg.prototype.dragStartXY_ = null;
+
+/**
  * Constant for identifying rows that are to be rendered inline.
  * Don't collide with Blockly.INPUT_VALUE and friends.
  * @const
@@ -194,9 +201,8 @@ Blockly.BlockSvg.terminateDrag_ = function() {
     if (selected) {
       // Update the connection locations.
       var xy = selected.getRelativeToSurfaceXY();
-      var dx = xy.x - selected.startDragX;
-      var dy = xy.y - selected.startDragY;
-      selected.moveConnections_(dx, dy);
+      var dxy = goog.math.Coordinate.difference(xy, selected.dragStartXY_);
+      selected.moveConnections_(dxy.x, dxy.y);
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
@@ -397,13 +403,10 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     // Left-click (or middle click)
     Blockly.removeAllRanges();
     Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-    // Look up the current translation and record it.
-    var xy = this.getRelativeToSurfaceXY();
-    this.startDragX = xy.x;
-    this.startDragY = xy.y;
-    // Record the current mouse position.
-    this.startDragMouseX = e.clientX;
-    this.startDragMouseY = e.clientY;
+
+    this.dragStartXY_ = this.getRelativeToSurfaceXY();
+    this.workspace.startDrag(e, this.dragStartXY_.x, this.dragStartXY_.y);
+
     Blockly.dragMode_ = 1;
     Blockly.BlockSvg.onMouseUpWrapper_ = Blockly.bindEvent_(document,
         'mouseup', this, this.onMouseUp_);
@@ -671,6 +674,7 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
  */
 Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
   var this_ = this;
+  var workspace_ = this.workspace;
   Blockly.doCommand(function() {
     if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
         e.button == 0) {
@@ -683,14 +687,13 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       return;
     }
     Blockly.removeAllRanges();
-    var dx = e.clientX - this_.startDragMouseX;
-    var dy = e.clientY - this_.startDragMouseY;
-    // Fix scale.
-    dx /= Blockly.mainWorkspace.scale;
-    dy /= Blockly.mainWorkspace.scale;
+
+    var oldXY = this_.getRelativeToSurfaceXY();
+    var newXY = workspace_.moveDrag(e);
+
     if (Blockly.dragMode_ == 1) {
       // Still dragging within the sticky DRAG_RADIUS.
-      var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+      var dr = goog.math.Coordinate.distance(oldXY, newXY) * workspace_.scale;
       if (dr > Blockly.DRAG_RADIUS) {
         // Switch to unrestricted dragging.
         Blockly.dragMode_ = 2;
@@ -698,15 +701,15 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
         // Push this block to the very top of the stack.
         this_.setParent(null);
         this_.setDragging_(true);
-        this_.workspace.recordDeleteAreas();
+        workspace_.recordDeleteAreas();
       }
     }
     if (Blockly.dragMode_ == 2) {
       // Unrestricted dragging.
-      var x = this_.startDragX + dx;
-      var y = this_.startDragY + dy;
+      var dx = oldXY.x - this_.dragStartXY_.x;
+      var dy = oldXY.y - this_.dragStartXY_.y;
       this_.getSvgRoot().setAttribute('transform',
-          'translate(' + x + ', ' + y + ')');
+          'translate(' + newXY.x + ', ' + newXY.y + ')');
       // Drag all the nested bubbles.
       for (var i = 0; i < this_.draggedBubbles_.length; i++) {
         var commentData = this_.draggedBubbles_[i];
@@ -747,7 +750,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       // Provide visual indication of whether the block will be deleted if
       // dropped here.
       if (this_.isDeletable()) {
-        this_.workspace.isDeleteArea(e);
+        workspace_.isDeleteArea(e);
       }
     }
     // This event has been handled.  No need to bubble up to the document.

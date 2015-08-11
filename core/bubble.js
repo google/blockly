@@ -268,17 +268,7 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
 
-  // Record the starting offset between the current location and the mouse.
-  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  // Fix scale of mouse event.
-  point.x /= this.workspace_.scale;
-  point.y /= this.workspace_.scale;
-  if (this.workspace_.RTL) {
-    this.dragDeltaX_ = this.relativeLeft_ + point.x;
-  } else {
-    this.dragDeltaX_ = this.relativeLeft_ - point.x;
-  }
-  this.dragDeltaY_ = this.relativeTop_ - point.y;
+  this.workspace_.startDrag(e, this.relativeLeft_, this.relativeTop_);
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -296,17 +286,9 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
  */
 Blockly.Bubble.prototype.bubbleMouseMove_ = function(e) {
   this.autoLayout_ = false;
-  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  // Fix scale of mouse event.
-  point.x /= this.workspace_.scale;
-  point.y /= this.workspace_.scale;
-
-  if (this.workspace_.RTL) {
-    this.relativeLeft_ = this.dragDeltaX_ - point.x;
-  } else {
-    this.relativeLeft_ = this.dragDeltaX_ + point.x;
-  }
-  this.relativeTop_ = this.dragDeltaY_ + point.y;
+  var newXY = this.workspace_.moveDrag(e);
+  this.relativeLeft_ = newXY.x;
+  this.relativeTop_ = newXY.y;
   this.positionBubble_();
   this.renderArrow_();
 };
@@ -327,17 +309,7 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
 
-  // Record the starting offset between the current location and the mouse.
-  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  // Fix scale of mouse event.
-  point.x /= this.workspace_.scale;
-  point.y /= this.workspace_.scale;
-  if (this.workspace_.RTL) {
-    this.dragDeltaX_ = this.width_ + point.x;
-  } else {
-    this.dragDeltaX_ = this.width_ - point.x;
-  }
-  this.dragDeltaY_ = this.height_ - point.y;
+  this.workspace_.startDrag(e, this.width_, this.height_);
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -355,18 +327,8 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
  */
 Blockly.Bubble.prototype.resizeMouseMove_ = function(e) {
   this.autoLayout_ = false;
-  var point = Blockly.mouseToSvg(e, this.workspace_.options.svg);
-  // Fix scale of mouse event.
-  point.x /= this.workspace_.scale;
-  point.y /= this.workspace_.scale;
-
-  if (this.workspace_.RTL) {
-    var w = this.dragDeltaX_ - point.x;
-  } else {
-    var w = this.dragDeltaX_ + point.x;
-  }
-  var h = this.dragDeltaY_ + point.y;
-  this.setBubbleSize(w, h);
+  var newXY = this.workspace_.moveDrag(e);
+  this.setBubbleSize(newXY.x, newXY.y);
   if (this.workspace_.RTL) {
     // RTL requires the bubble to move its left edge.
     this.positionBubble_();

@@ -580,8 +580,7 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
   var dx = e.clientX - Blockly.Flyout.startDownEvent_.clientX;
   var dy = e.clientY - Blockly.Flyout.startDownEvent_.clientY;
   // Still dragging within the sticky DRAG_RADIUS.
-  var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-  if (dr > Blockly.DRAG_RADIUS) {
+  if (Math.sqrt(dx * dx + dy * dy) > Blockly.DRAG_RADIUS) {
     // Create the block.
     Blockly.Flyout.startFlyout_.createBlockFunc_(Blockly.Flyout.startBlock_)(
         Blockly.Flyout.startDownEvent_);

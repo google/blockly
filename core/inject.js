@@ -345,39 +345,24 @@ Blockly.createDom_ = function(container, options) {
   Blockly.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
   /*
-    <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse"
-             width="10" height="10">
-      <rect width="1" height="1" stroke="#888" />
-      <rect width="1" height="1" stroke="#888" />
+    <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
+      <rect stroke="#888" />
+      <rect stroke="#888" />
     </pattern>
   */
-  // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
-  var safeSpacing = options.gridOptions['spacing'] || 100;
   var gridPattern = Blockly.createSvgElement('pattern',
       {'id': 'blocklyGridPattern' + String(Math.random()).substring(2),
-       'patternUnits': 'userSpaceOnUse',
-       'width': safeSpacing,
-       'height': safeSpacing}, defs);
+       'patternUnits': 'userSpaceOnUse'}, defs);
   if (options.gridOptions['length'] > 0 && options.gridOptions['spacing'] > 0) {
-    var half = Math.floor(options.gridOptions['spacing'] / 2) + .5;
-    var start = half - options.gridOptions['length'] / 2;
-    var end = half + options.gridOptions['length'] / 2;
     Blockly.createSvgElement('line',
-        {'x1': start,
-         'y1': half,
-         'x2': end,
-         'y2': half,
-         'stroke': options.gridOptions['colour']},
+        {'stroke': options.gridOptions['colour']},
         gridPattern);
     if (options.gridOptions['length'] > 1) {
       Blockly.createSvgElement('line',
-          {'x1': half,
-           'y1': start,
-           'x2': half,
-           'y2': end,
-           'stroke': options.gridOptions['colour']},
+          {'stroke': options.gridOptions['colour']},
           gridPattern);
     }
+    // x1, y1, x1, x2 properties will be set later in updateGridPattern_.
   }
   options.gridPattern = gridPattern;
   options.svg = svg;

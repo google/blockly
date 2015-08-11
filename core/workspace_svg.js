@@ -92,6 +92,20 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Horizontal distance from mouse to object being dragged.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.dragDeltaX_ = 0;
+
+/**
+ * Vertical distance from mouse to object being dragged.
+ * @type {number}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.dragDeltaY_ = 0;
+
+/**
  * Current scale.
  * @type {number}
  */
@@ -162,6 +176,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   } else if (this.options.languageTree) {
     this.addFlyout_();
   }
+  this.updateGridPattern_();
   return this.svgGroup_;
 };
 
@@ -568,6 +583,45 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
 };
 
 /**
+ * Start tracking a drag of an object on this workspace.
+ * @param {!Event} e Mouse down event.
+ * @param {number} x Starting horizontal location of object.
+ * @param {number} y Starting vertical location of object.
+ */
+Blockly.WorkspaceSvg.prototype.startDrag = function(e, x, y) {
+  // Record the starting offset between the bubble's location and the mouse.
+  var point = Blockly.mouseToSvg(e, this.options.svg);
+  // Fix scale of mouse event.
+  point.x /= this.scale;
+  point.y /= this.scale;
+  if (this.RTL) {
+    this.dragDeltaX_ = x + point.x;
+  } else {
+    this.dragDeltaX_ = x - point.x;
+  }
+  this.dragDeltaY = y - point.y;
+};
+
+/**
+ * Track a drag of an object on this workspace.
+ * @param {!Event} e Mouse move event.
+ * @return {!goog.math.Coordinate} New location of object.
+ */
+Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
+  var point = Blockly.mouseToSvg(e, this.options.svg);
+  // Fix scale of mouse event.
+  point.x /= this.scale;
+  point.y /= this.scale;
+  if (this.RTL) {
+    var x = this.dragDeltaX_ - point.x;
+  } else {
+    var x = this.dragDeltaX_ + point.x;
+  }
+  var y = this.dragDeltaY + point.y;
+  return new goog.math.Coordinate(x, y);
+};
+
+/**
  * Handle a mouse-wheel on SVG drawing surface.
  * @param {!Event} e Mouse wheel event.
  * @private
@@ -809,7 +863,7 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   if (this.scale != matrix.a) {
     this.scale = matrix.a;
     this.scrollX = matrix.e - metrics.absoluteLeft;
-    this.scrollY = matrix.f - metrics.absoluteTop ;
+    this.scrollY = matrix.f - metrics.absoluteTop;
     this.updateGridPattern_();
     this.scrollbar.resize();
   }
@@ -842,10 +896,13 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
-  this.options.gridPattern.setAttribute('width',
-      this.options.gridOptions.spacing * this.scale);
-  this.options.gridPattern.setAttribute('height',
-      this.options.gridOptions.spacing * this.scale);
+  if (!this.options.gridPattern) {
+    return;  // No grid.
+  }
+  // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
+  var safeSpacing = (this.options.gridOptions['spacing'] * this.scale) || 100;
+  this.options.gridPattern.setAttribute('width', safeSpacing);
+  this.options.gridPattern.setAttribute('height', safeSpacing);
   var half = Math.floor(this.options.gridOptions['spacing'] / 2) + 0.5;
   var start = half - this.options.gridOptions['length'] / 2;
   var end = half + this.options.gridOptions['length'] / 2;

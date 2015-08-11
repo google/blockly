@@ -313,8 +313,7 @@ Blockly.onMouseMove_ = function(e) {
     workspace.scrollbar.set(-x - metrics.contentLeft,
                             -y - metrics.contentTop);
     // Cancel the long-press if the drag has moved too far.
-    var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    if (dr > Blockly.DRAG_RADIUS) {
+    if (Math.sqrt(dx * dx + dy * dy) > Blockly.DRAG_RADIUS) {
       Blockly.longStop_();
     }
     e.stopPropagation();

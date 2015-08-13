@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": ["blockly"],
+  "scripts": {
+    "lint": "jshint ."
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/google/blockly.git"
@@ -15,5 +18,15 @@
     "name": "Neil Fraser"
   },
   "license": "Apache-2.0",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "jshint": "latest"
+  },
+  "jshintConfig": {
+    "globalstrict": true,
+    "predef": ["Blockly", "goog", "window", "document", "soy", "XMLHttpRequest"],
+    "sub": true,
+    "undef": true,
+    "unused": true
+  }
 }

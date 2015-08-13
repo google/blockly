@@ -62,7 +62,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="395" y="125">
-    <mutation></mutation>
     <field name="NAME">test operations on single</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -206,7 +205,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="23" y="194">
-    <mutation></mutation>
     <field name="NAME">test arithmetic</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -335,7 +333,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="16" y="727">
-    <mutation></mutation>
     <field name="NAME">test trig</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -459,7 +456,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="311" y="733">
-    <mutation></mutation>
     <field name="NAME">test constant</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -634,7 +630,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="18" y="1279">
-    <mutation></mutation>
     <field name="NAME">test number properties</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
@@ -796,7 +791,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="387" y="1282">
-    <mutation></mutation>
     <field name="NAME">test round</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -860,7 +854,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="394" y="1819">
-    <mutation></mutation>
     <field name="NAME">test change</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -1064,7 +1057,6 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="24" y="2568">
-    <mutation></mutation>
     <field name="NAME">test operations on list</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -1406,7 +1398,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="15" y="3494">
-    <mutation></mutation>
     <field name="NAME">test mod</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -1434,7 +1425,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="373" y="3499">
-    <mutation></mutation>
     <field name="NAME">test constraint</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -1467,7 +1457,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="15" y="3664">
-    <mutation></mutation>
     <field name="NAME">test random integer</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -1548,7 +1537,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="15" y="3931">
-    <mutation></mutation>
     <field name="NAME">test random fraction</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">

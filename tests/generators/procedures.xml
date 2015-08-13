@@ -34,7 +34,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-3" y="249">
-    <mutation></mutation>
     <field name="NAME">test procedure</field>
     <statement name="STACK">
       <block type="procedures_callnoreturn" inline="false">
@@ -146,7 +145,7 @@
       <block type="variables_set" inline="false">
         <field name="VAR">proc z</field>
         <value name="VALUE">
-          <block type="math_arithmetic" inline="true">
+          <block type="math_arithmetic">
             <field name="OP">DIVIDE</field>
             <value name="A">
               <block type="variables_get">
@@ -169,7 +168,7 @@
     </mutation>
     <field name="NAME">procedure 2</field>
     <statement name="STACK">
-      <block type="procedures_ifreturn" inline="true">
+      <block type="procedures_ifreturn">
         <mutation value="0"></mutation>
         <value name="CONDITION">
           <block type="variables_get">
@@ -190,7 +189,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-2" y="731">
-    <mutation></mutation>
     <field name="NAME">test function</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -346,7 +344,7 @@
       </block>
     </statement>
     <value name="RETURN">
-      <block type="math_arithmetic" inline="true">
+      <block type="math_arithmetic">
         <field name="OP">MINUS</field>
         <value name="A">
           <block type="variables_get">
@@ -398,7 +396,7 @@
     </mutation>
     <field name="NAME">function 3</field>
     <statement name="STACK">
-      <block type="procedures_ifreturn" inline="true">
+      <block type="procedures_ifreturn">
         <mutation value="1"></mutation>
         <value name="CONDITION">
           <block type="variables_get">
@@ -427,7 +425,7 @@
       <block type="controls_if" inline="false">
         <mutation else="1"></mutation>
         <value name="IF0">
-          <block type="logic_compare" inline="true">
+          <block type="logic_compare">
             <field name="OP">GT</field>
             <value name="A">
               <block type="variables_get">
@@ -453,7 +451,7 @@
                       <arg name="n"></arg>
                     </mutation>
                     <value name="ARG0">
-                      <block type="math_arithmetic" inline="true">
+                      <block type="math_arithmetic">
                         <field name="OP">MINUS</field>
                         <value name="A">
                           <block type="variables_get">
@@ -480,7 +478,7 @@
                       <arg name="n"></arg>
                     </mutation>
                     <value name="ARG0">
-                      <block type="math_arithmetic" inline="true">
+                      <block type="math_arithmetic">
                         <field name="OP">MINUS</field>
                         <value name="A">
                           <block type="variables_get">

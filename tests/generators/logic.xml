@@ -79,7 +79,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="385" y="-3">
-    <mutation></mutation>
     <field name="NAME">test if</field>
     <statement name="STACK">
       <block type="controls_if" inline="false">
@@ -295,14 +294,13 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-7" y="384">
-    <mutation></mutation>
     <field name="NAME">test equalities</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
         <field name="MESSAGE">Equal yes</field>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
-          <block type="logic_compare" inline="true">
+          <block type="logic_compare">
             <field name="OP">EQ</field>
             <value name="A">
               <block type="math_number">
@@ -321,7 +319,7 @@
             <field name="MESSAGE">Equal no</field>
             <field name="EXPECTED">FALSE</field>
             <value name="ACTUAL">
-              <block type="logic_compare" inline="true">
+              <block type="logic_compare">
                 <field name="OP">EQ</field>
                 <value name="A">
                   <block type="math_number">
@@ -340,7 +338,7 @@
                 <field name="MESSAGE">Not equal yes</field>
                 <field name="EXPECTED">TRUE</field>
                 <value name="ACTUAL">
-                  <block type="logic_compare" inline="true">
+                  <block type="logic_compare">
                     <field name="OP">NEQ</field>
                     <value name="A">
                       <block type="math_number">
@@ -359,7 +357,7 @@
                     <field name="MESSAGE">Not equal no</field>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
-                      <block type="logic_compare" inline="true">
+                      <block type="logic_compare">
                         <field name="OP">EQ</field>
                         <value name="A">
                           <block type="math_number">
@@ -378,7 +376,7 @@
                         <field name="MESSAGE">Smaller yes</field>
                         <field name="EXPECTED">TRUE</field>
                         <value name="ACTUAL">
-                          <block type="logic_compare" inline="true">
+                          <block type="logic_compare">
                             <field name="OP">LT</field>
                             <value name="A">
                               <block type="math_number">
@@ -397,7 +395,7 @@
                             <field name="MESSAGE">Smaller no</field>
                             <field name="EXPECTED">FALSE</field>
                             <value name="ACTUAL">
-                              <block type="logic_compare" inline="true">
+                              <block type="logic_compare">
                                 <field name="OP">LT</field>
                                 <value name="A">
                                   <block type="math_number">
@@ -416,7 +414,7 @@
                                 <field name="MESSAGE">Greater yes</field>
                                 <field name="EXPECTED">TRUE</field>
                                 <value name="ACTUAL">
-                                  <block type="logic_compare" inline="true">
+                                  <block type="logic_compare">
                                     <field name="OP">GT</field>
                                     <value name="A">
                                       <block type="math_number">
@@ -435,7 +433,7 @@
                                     <field name="MESSAGE">Greater no</field>
                                     <field name="EXPECTED">FALSE</field>
                                     <value name="ACTUAL">
-                                      <block type="logic_compare" inline="true">
+                                      <block type="logic_compare">
                                         <field name="OP">GT</field>
                                         <value name="A">
                                           <block type="math_number">
@@ -454,7 +452,7 @@
                                         <field name="MESSAGE">Smaller-equal yes</field>
                                         <field name="EXPECTED">TRUE</field>
                                         <value name="ACTUAL">
-                                          <block type="logic_compare" inline="true">
+                                          <block type="logic_compare">
                                             <field name="OP">LTE</field>
                                             <value name="A">
                                               <block type="math_number">
@@ -473,7 +471,7 @@
                                             <field name="MESSAGE">Smaller-equal no</field>
                                             <field name="EXPECTED">FALSE</field>
                                             <value name="ACTUAL">
-                                              <block type="logic_compare" inline="true">
+                                              <block type="logic_compare">
                                                 <field name="OP">LTE</field>
                                                 <value name="A">
                                                   <block type="math_number">
@@ -492,7 +490,7 @@
                                                 <field name="MESSAGE">Greater-equal yes</field>
                                                 <field name="EXPECTED">TRUE</field>
                                                 <value name="ACTUAL">
-                                                  <block type="logic_compare" inline="true">
+                                                  <block type="logic_compare">
                                                     <field name="OP">GTE</field>
                                                     <value name="A">
                                                       <block type="math_number">
@@ -511,7 +509,7 @@
                                                     <field name="MESSAGE">Greater-equal no</field>
                                                     <field name="EXPECTED">FALSE</field>
                                                     <value name="ACTUAL">
-                                                      <block type="logic_compare" inline="true">
+                                                      <block type="logic_compare">
                                                         <field name="OP">GTE</field>
                                                         <value name="A">
                                                           <block type="math_number">
@@ -551,14 +549,13 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-5" y="1200">
-    <mutation></mutation>
     <field name="NAME">test or</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
         <field name="MESSAGE">Or true/true</field>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
-          <block type="logic_operation" inline="true">
+          <block type="logic_operation">
             <field name="OP">OR</field>
             <value name="A">
               <block type="logic_boolean">
@@ -577,7 +574,7 @@
             <field name="MESSAGE">Or false/true</field>
             <field name="EXPECTED">TRUE</field>
             <value name="ACTUAL">
-              <block type="logic_operation" inline="true">
+              <block type="logic_operation">
                 <field name="OP">OR</field>
                 <value name="A">
                   <block type="logic_boolean">
@@ -596,7 +593,7 @@
                 <field name="MESSAGE">Or true/false</field>
                 <field name="EXPECTED">TRUE</field>
                 <value name="ACTUAL">
-                  <block type="logic_operation" inline="true">
+                  <block type="logic_operation">
                     <field name="OP">OR</field>
                     <value name="A">
                       <block type="logic_boolean">
@@ -615,7 +612,7 @@
                     <field name="MESSAGE">Or false/false</field>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
-                      <block type="logic_operation" inline="true">
+                      <block type="logic_operation">
                         <field name="OP">OR</field>
                         <value name="A">
                           <block type="logic_boolean">
@@ -639,14 +636,13 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="385" y="1208">
-    <mutation></mutation>
     <field name="NAME">test and</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
         <field name="MESSAGE">And true/true</field>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
-          <block type="logic_operation" inline="true">
+          <block type="logic_operation">
             <field name="OP">AND</field>
             <value name="A">
               <block type="logic_boolean">
@@ -665,7 +661,7 @@
             <field name="MESSAGE">And false/true</field>
             <field name="EXPECTED">FALSE</field>
             <value name="ACTUAL">
-              <block type="logic_operation" inline="true">
+              <block type="logic_operation">
                 <field name="OP">AND</field>
                 <value name="A">
                   <block type="logic_boolean">
@@ -684,7 +680,7 @@
                 <field name="MESSAGE">And true/false</field>
                 <field name="EXPECTED">FALSE</field>
                 <value name="ACTUAL">
-                  <block type="logic_operation" inline="true">
+                  <block type="logic_operation">
                     <field name="OP">AND</field>
                     <value name="A">
                       <block type="logic_boolean">
@@ -703,7 +699,7 @@
                     <field name="MESSAGE">And false/false</field>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
-                      <block type="logic_operation" inline="true">
+                      <block type="logic_operation">
                         <field name="OP">AND</field>
                         <value name="A">
                           <block type="logic_boolean">
@@ -727,7 +723,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="3" y="1527">
-    <mutation></mutation>
     <field name="NAME">test ternary</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">

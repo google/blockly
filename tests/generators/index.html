@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Blockly Generator Tests</title>
 <script src="../../blockly_uncompressed.js"></script>
+
 <script src="../../generators/javascript.js"></script>
 <script src="unittest_javascript.js"></script>
 <script src="../../generators/javascript/logic.js"></script>
@@ -24,16 +25,6 @@
 <script src="../../generators/python/colour.js"></script>
 <script src="../../generators/python/variables.js"></script>
 <script src="../../generators/python/procedures.js"></script>
-<script src="../../generators/dart.js"></script>
-<script src="unittest_dart.js"></script>
-<script src="../../generators/dart/logic.js"></script>
-<script src="../../generators/dart/loops.js"></script>
-<script src="../../generators/dart/math.js"></script>
-<script src="../../generators/dart/text.js"></script>
-<script src="../../generators/dart/lists.js"></script>
-<script src="../../generators/dart/colour.js"></script>
-<script src="../../generators/dart/variables.js"></script>
-<script src="../../generators/dart/procedures.js"></script>
 <script src="../../generators/php.js"></script>
 <script src="unittest_php.js"></script>
 <script src="../../generators/php/logic.js"></script>
@@ -44,6 +35,16 @@
 <script src="../../generators/php/colour.js"></script>
 <script src="../../generators/php/variables.js"></script>
 <script src="../../generators/php/procedures.js"></script>
+<script src="../../generators/dart.js"></script>
+<script src="unittest_dart.js"></script>
+<script src="../../generators/dart/logic.js"></script>
+<script src="../../generators/dart/loops.js"></script>
+<script src="../../generators/dart/math.js"></script>
+<script src="../../generators/dart/text.js"></script>
+<script src="../../generators/dart/lists.js"></script>
+<script src="../../generators/dart/colour.js"></script>
+<script src="../../generators/dart/variables.js"></script>
+<script src="../../generators/dart/procedures.js"></script>
 <script src="../../generators/java.js"></script>
 <script src="unittest_java.js"></script>
 <script src="../../generators/java/logic.js"></script>
@@ -112,6 +113,8 @@ function fetchFile(xmlUrl) {
 function fromXml(xmlText) {
   var output = document.getElementById('importExport');
   output.value = xmlText;
+  output.scrollTop = 0;
+  output.scrollLeft = 0;
   workspace.clear();
   try {
     var xmlDoc = Blockly.Xml.textToDom(xmlText);
@@ -132,6 +135,7 @@ function setOutput(text) {
 function toXml() {
   var xmlDom = Blockly.Xml.workspaceToDom(workspace);
   var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+  xmlText = xmlText.replace(/ id="\d+"/g, '');
   setOutput(xmlText);
 }
 

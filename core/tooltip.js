@@ -194,8 +194,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
   if (Blockly.Tooltip.visible) {
     // Compute the distance between the mouse position when the tooltip was
     // shown and the current mouse position.  Pythagorean theorem.
-    var dx = Blockly.Tooltip.lastX_ - e.clientX;
-    var dy = Blockly.Tooltip.lastY_ - e.clientY;
+    var dx = Blockly.Tooltip.lastX_ - e.pageX;
+    var dy = Blockly.Tooltip.lastY_ - e.pageY;
     var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     if (dr > Blockly.Tooltip.RADIUS_OK) {
       Blockly.Tooltip.hide();
@@ -204,8 +204,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
     // The mouse moved, clear any previously scheduled tooltip.
     clearTimeout(Blockly.Tooltip.showPid_);
     // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
-    Blockly.Tooltip.lastX_ = e.clientX;
-    Blockly.Tooltip.lastY_ = e.clientY;
+    Blockly.Tooltip.lastX_ = e.pageX;
+    Blockly.Tooltip.lastY_ = e.pageY;
     Blockly.Tooltip.showPid_ =
         setTimeout(Blockly.Tooltip.show_, Blockly.Tooltip.HOVER_MS);
   }
@@ -263,16 +263,17 @@ Blockly.Tooltip.show_ = function() {
   }
   var anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
 
-  if (anchorY + Blockly.Tooltip.DIV.offsetHeight > windowSize.height) {
+  if (anchorY + Blockly.Tooltip.DIV.offsetHeight >
+      windowSize.height + window.scrollY) {
     // Falling off the bottom of the screen; shift the tooltip up.
     anchorY -= Blockly.Tooltip.DIV.offsetHeight + 2 * Blockly.Tooltip.OFFSET_Y;
   }
   if (rtl) {
     // Prevent falling off left edge in RTL mode.
-    anchorX = Math.max(Blockly.Tooltip.MARGINS, anchorX);
+    anchorX = Math.max(Blockly.Tooltip.MARGINS - window.scrollX, anchorX);
   } else {
     if (anchorX + Blockly.Tooltip.DIV.offsetWidth >
-        windowSize.width - 2 * Blockly.Tooltip.MARGINS) {
+        windowSize.width + window.scrollX - 2 * Blockly.Tooltip.MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
       anchorX = windowSize.width - Blockly.Tooltip.DIV.offsetWidth -

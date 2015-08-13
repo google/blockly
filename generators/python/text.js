@@ -234,6 +234,54 @@ Blockly.Python['text_print'] = function(block) {
   return 'print(' + argument0 + ')\n';
 };
 
+
+Blockly.Python['text_printf'] = function(block) {
+	  // Create a string made up of any number of elements of any type.
+	  // Should we allow joining by '-' or ',' or any other characters?
+  var code;
+  var argument0 = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_NONE) || '""';
+  if (block.itemCount_ == 0) {
+    return ['""', Blockly.Python.ORDER_ATOMIC];
+  } else {
+    var code = '';
+    var extra = '';
+    for (var n = 0; n < block.itemCount_; n++) {
+      var item = Blockly.Python.valueToCode(block, 'ADD' + n,
+          Blockly.Python.ORDER_NONE);
+      if (item) {
+        code += extra + 'str('+item+')';
+        extra = ', ';
+      }
+    }
+  code = 'print "".format( ' + argument0 + ' % ('+code+' ))';
+  return code;
+  }
+};
+
+Blockly.Python['text_sprintf'] = function(block) {
+	  // Create a string made up of any number of elements of any type.
+	  // Should we allow joining by '-' or ',' or any other characters?
+	var code;
+	var argument0 = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_NONE) || '""';
+    Blockly.Python.definitions_['import_StringIO'] = 'import StringIO';
+	if (block.itemCount_ == 0) {
+	  return ['""', Blockly.Python.ORDER_ATOMIC];
+	} else {
+	  var code = '';
+	  var extra = '';
+	  for (var n = 0; n < block.itemCount_; n++) {
+	    var item = Blockly.Python.valueToCode(block, 'ADD' + n,
+	        Blockly.Python.ORDER_NONE);
+	    if (item) {
+	        code += extra + 'str('+item+')';
+	      extra = ', ';
+	    }
+	  }
+	  code = '"".format( ' + argument0 + ' % ('+code+' ))';
+	  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+	}
+};
+
 Blockly.Python['text_prompt_ext'] = function(block) {
   // Prompt function.
   var functionName = Blockly.Python.provideFunction_(

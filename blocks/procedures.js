@@ -83,6 +83,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     }
     this.arguments_.push({name: paramName,
+                          type: '',
                           id: this.argid++});
     this.updateParams_();
   },
@@ -129,26 +130,26 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       var subFieldText = 'PARAM'+i+'_SUB';
       if (!this.getInput('PARAM'+i)) {
         this.jsonInit({
-          "message0": Blockly.Msg.PROCEDURES_PARAM_NOTYPE,
-//        "message0": Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE,
+//        "message0": Blockly.Msg.PROCEDURES_PARAM_NOTYPE,
+          "message0": Blockly.Msg.PROCEDURES_PARAM_WITH_TYPE,
           "args0": [
             {
               "type": "field_input",
               "text": this.arguments_[i]['name'],
               "name" : nameFieldText
             },
-//          {
-//            "type": "field_scopevariable",
-//            "scope": 'types',
-//            "name": typeFieldText
-//          },
+            {
+              "type": "field_scopevariable",
+              "scope": 'Types',
+              "name": typeFieldText
+            },
             {
               "type": "field_clickimage",
               "src": this.subPng,
               "width": 17,
               "height": 17,
               "alt": Blockly.Msg.CLICK_REMOVE_TOOLTIP,
-              "name" : subFieldText
+              "name": subFieldText
             },
             {
               "type": "input_dummy",
@@ -170,22 +171,46 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         subField.setSerializable(false);
         subField.setChangeHandler(this.doRemoveField);
 
-//      var typeField = this.getField(typeFieldText);
-//      typeField.setSerializable(false);
+        var typeField = this.getField(typeFieldText);
+        typeField.setSerializable(false);
+        typeField.setChangeHandler(this.updateType);
+        typeField.setMsgStrings(null,null,
+          Blockly.Msg.PROCEDURES_NEWTYPE,
+          Blockly.Msg.PROCEDURES_NEWTYPETITLE);
+        typeField.argPos_ = i;
+        typeField.setMsgEmpty('Any');
+        var type = this.arguments_[i]['type'];
+        if (!type) {
+          type = '';
+        }
+        typeField.setValue(type);
 
         this.moveNumberedInputBefore(this.inputList.length-1, i+1);
-        // Name the input since interpolateMsg doesn't name them
-        this.inputList[i+1].name = 'PARAM'+i;
       } else {
         // We need to update the field
         this.setFieldValue(this.arguments_[i]['name'], nameFieldText);
-//      this.setFieldValue(this.arguments_[i]['type'], typeFieldText);
+        this.setFieldValue(this.arguments_[i]['type'], typeFieldText);
       }
     }
     // Initialize procedure's callers with blank IDs.
     Blockly.Procedures.mutateCallers(this.getFieldValue('NAME'),
                                      this.workspace, this.arguments_);
     this.workspace.fireChangeEvent();
+  },
+  /**
+   * Modify the string for a parameter
+   * @param {!String} newval New value for the particular field
+   * @returns {!String} valid string or null for any error
+   * @this {!Blockly.FieldText}
+   */
+  updateType: function(newval) {
+    var pos = this.argPos_;
+    var sourceblock = this.sourceBlock_;
+    if (sourceblock.arguments_[pos]['type'] !== newval) {
+      sourceblock.arguments_[pos]['type'] = newval;
+      sourceblock.updateParams_();
+    }
+    return newval;
   },
   /**
    * Modify the string for a parameter
@@ -236,7 +261,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     for (var i = 0; i < this.arguments_.length; i++) {
       var parameter = document.createElement('arg');
       parameter.setAttribute('name', this.arguments_[i]['name']);
-//    parameter.setAttribute('type', this.arguments_[i]['type']);
+      var type = this.arguments_[i]['type'];
+      if (!type) {
+        type = '';
+      }
+      parameter.setAttribute('type', type);
       container.appendChild(parameter);
     }
 
@@ -256,7 +285,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
       if (childNode.nodeName.toLowerCase() == 'arg') {
         this.arguments_.push({name: childNode.getAttribute('name'),
-//                            type: childNode.getAttribute('type'),
+                              type: childNode.getAttribute('type'),
                               id:   this.argid++});
       }
     }
@@ -321,6 +350,28 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         vartypes[funcName] = retItem.connection.targetConnection.check_;
     }
     return vartypes;
+  },
+  /**
+   * Return all Scoped Variables referenced by this block.
+   * @param {string} varclass class of variable to get.
+   * @return {!Array.<string>} List of hashkey names.
+   * @this Blockly.Block
+   */
+  getScopeVars: function(varclass) {
+    var result = [];
+    if (varclass === 'Types') {
+      // Push out the default types that we want people to select
+      result.push('String');
+      result.push('Number');
+      result.push('Boolean');
+      result.push('Array');
+      for (var i = 0; i < this.arguments_.length; i++) {
+        if (this.arguments_[i]['type']) {
+          result.push(this.arguments_[i]['type']);
+        }
+      }
+    }
+    return result;
   },
   /**
    * Notification that a variable is renaming.
@@ -494,31 +545,97 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     // Switch off rendering while the block is rebuilt.
     var savedRendered = this.rendered;
     this.rendered = false;
-    // Update the quarkConnections_ with existing connections and remove them.
-    for (var i = this.arguments_.length - 1; i >= 0; i--) {
+    // Go through in four stages to update the block
+    //  1) Update all existing arguments with new names and types.  If the
+    //     name has changed, then we want to disconnect anything that
+    //     is connected to it.  If the type has changed, just update the
+    //     type and the element will automatically disconnect (possibly).
+    //     We want to figure out if it did get disconnected and if so remember
+    //     it.  Note that if an element has been deleted, we simply remove the
+    //     element and add the connection to the be remembered.
+    //  2) Add elements for the new arguments added to the end of the list
+    //  3) Fix up the "with:" to indicate whether we have any parameters
+    //  4) Reconnect any elements which have been disconnected
+
+    // --------------------------------------
+    // Step 1 - update all existing arguments
+    // --------------------------------------
+    for (var i = 0; i < this.arguments_.length; i++) {
       var input = this.getInput('ARG' + i);
       if (input) {
         var connection = input.connection.targetConnection;
-        if (connection) {
-          connection.sourceBlock_.unplug(true,true);
-          this.quarkConnections_[this.arguments_[i]['name']] = connection;
+        if (i > parameters.length) { // If it is no longer used
+          // Disconnect all argument blocks and remove all inputs.
+          this.removeInput('ARG' + i);
+        } else if (parameters[i]['name'] != this.arguments_[i]['name']) {
+           // if the name of the field has changed
+          this.setFieldValue(parameters[i]['name'], 'ARGn' + i);
+          if (connection) {
+            connection.sourceBlock_.unplug(true,true);
+          }
+          // Just in case the type has changed, update the type on the block
+          input.setCheck(parameters[i]['type']);
+        } else if (parameters[i]['type'] != this.arguments_[i]['type']) {
+          // The name is the same but the type has changed.  When we update the
+          // type, it may automatically disconnect the block.
+          input.setCheck(parameters[i]['type']);
+          // If the connection stayed after changing the type, we don't
+          // need to remember it
+          if (input.connection.targetConnection) {
+            connection = null;
+          }
+          if (connection) {
+            // If we disconnected the block for any reason, we need to remember
+            // it so that we can reconnect it later on if things get better
+            this.quarkConnections_[this.arguments_[i]['name']] = connection;
+          }
         }
-        // Disconnect all argument blocks and remove all inputs.
-        this.removeInput('ARG' + i);
       }
     }
     // Rebuild the block's arguments.
     var oldArguments = this.arguments_;
     this.arguments_ = [];
-    for ( var i = 0; i < parameters.length; i++) {
+    for (var i = 0; i < parameters.length; i++) {
       this.arguments_.push({name: parameters[i]['name'],
                             type: parameters[i]['type'],
                             id:   parameters[i]['id']});
     }
-    this.renderArgs_();
-    // Reconnect any child blocks.
+    // ------------------------------------------------------------------------
+    // Step 2 - Add elements for the new arguments added to the end of the list
+    // ------------------------------------------------------------------------
+    for (var i = oldArguments.length; i < this.arguments_.length; i++) {
+      // This parameter has been added, so we need to add an input for it
+      var input = this.appendValueInput('ARG' + i)
+                      .setAlign(Blockly.ALIGN_RIGHT)
+                      .appendField(this.arguments_[i]['name'],'ARGn' + i)
+                      .setCheck(this.arguments_[i]['type']);
+      input.init();
+    }
+    // --------------------------------------------
+    // Step 3 - Add 'with:' if there are parameters
+    // --------------------------------------------
+    var input = this.getInput('TOPROW');
+    if (input) {
+      if (this.arguments_.length) {
+        if (!this.getField('WITH')) {
+          input.appendField(Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS, 'WITH');
+          input.init();
+        }
+      } else {
+        if (this.getField('WITH')) {
+          input.removeField('WITH');
+        }
+      }
+    }
+    // -------------------------------------------------------
+    //  Step 4 - Reconnect any elements which have been disconnected
+    // -------------------------------------------------------
     for (var i = 0; i < this.arguments_.length; i++) {
       var input = this.getInput('ARG' + i);
+      // By default we want to reconnect to a block with the same name, BUT
+      // if there is no block with the same name and there is a block with the
+      // same ID, we want to use it instead.
+      //
       // First we want to see if there is an old block with the same ID as
       // this argument.
       var quarkName = this.arguments_[i]['name'];
@@ -536,14 +653,19 @@ Blockly.Blocks['procedures_callnoreturn'] = {
 
       if (quarkName && this.quarkConnections_[quarkName]) {
         var connection = this.quarkConnections_[quarkName];
-        if (connection &&
-            !connection.targetConnection &&
+        if (!connection.targetConnection &&
             connection.sourceBlock_.workspace == this.workspace) {
-          input.connection.connect(connection);
+          if (input.connection.checkType_(connection)) {
+            // If we can reconnect it, then do so and we no longer have to carry
+            // the old connection around.
+            input.connection.connect(connection);
+            delete this.quarkConnections_[quarkName];
+          }
+        } else {
+          // This connection is no good or it has already been used
+          // Either way we won't use it in the future
+          delete this.quarkConnections_[quarkName];
         }
-        // This connection is no good or it has already been used
-        // Either way we won't use it in the future
-        delete this.quarkConnections_[quarkName];
       }
     }
     // Restore rendering and show the changes.
@@ -551,33 +673,6 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     this.bumpNeighbours_();
     if (this.rendered) {
       this.render();
-    }
-  },
-  /**
-   * Render the arguments.
-   * @this Blockly.Block
-   * @private
-   */
-  renderArgs_: function() {
-    for (var i = 0; i < this.arguments_.length; i++) {
-      var input = this.appendValueInput('ARG' + i)
-                      .setAlign(Blockly.ALIGN_RIGHT)
-                      .appendField(this.arguments_[i]['name']);
-      input.init();
-    }
-    // Add 'with:' if there are parameters.
-    var input = this.getInput('TOPROW');
-    if (input) {
-      if (this.arguments_.length) {
-        if (!this.getField('WITH')) {
-          input.appendField(Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS, 'WITH');
-          input.init();
-        }
-      } else {
-        if (this.getField('WITH')) {
-          input.removeField('WITH');
-        }
-      }
     }
   },
   /**
@@ -703,7 +798,6 @@ Blockly.Blocks['procedures_callreturn'] = {
   getVarsTypes: Blockly.Blocks['procedures_callnoreturn'].getVarsTypes,
   setProcedureParameters:
       Blockly.Blocks['procedures_callnoreturn'].setProcedureParameters,
-  renderArgs_: Blockly.Blocks['procedures_callnoreturn'].renderArgs_,
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
   renameVar: Blockly.Blocks['procedures_callnoreturn'].renameVar,

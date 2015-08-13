@@ -629,6 +629,198 @@ Blockly.Blocks['text_print'] = {
   typeblock: Blockly.Msg.TEXT_PRINT_TYPEBLOCK
 };
 
+Blockly.Blocks['text_printf'] = {
+  /**
+   * Block for printf statement.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.TEXT_PRINTF_TITLE,
+      "args0": [
+                {
+                  "type": "input_value",
+                  "name": "TEXT",
+                  "check": 'String'
+                }
+       ],
+    //  "output": 'String',
+      "colour": Blockly.Blocks.texts.HUE,
+      "tooltip": Blockly.Msg.TEXT_PRINTF_TOOLTIP,
+      "helpUrl": Blockly.Msg.TEXT_PRINTF_HELPURL
+    });
+    this.itemCount_ = 1;
+	this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.appendAddSubGroup(Blockly.Msg.TEXT_PRINTF_CREATEWITH, 'items',null,
+    '-IGNORED-');
+  },  
+  /**
+   * Create XML to represent number of text inputs.
+   * @return {!Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('items', this.itemCount_);
+    return container;
+  },
+  /**
+   * Parse XML to restore the text inputs.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this Blockly.Block
+   */
+  decompose: function(workspace) {
+    var containerBlock = Blockly.Block.obtain(workspace,
+                                           'text_printf_container');
+    containerBlock.initSvg();
+    var connection = containerBlock.getInput('STACK').connection;
+    for (var i = 0; i < this.itemCount_; i++) {
+      var itemBlock = Blockly.Block.obtain(workspace, 'text_printf_item');
+      itemBlock.initSvg();
+      connection.connect(itemBlock.previousConnection);
+      connection = itemBlock.nextConnection;
+    }
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  compose: function(containerBlock) {
+    var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    // Count number of inputs.
+    var connections = [];
+    var i = 0;
+    while (itemBlock) {
+      connections[i] = itemBlock.valueConnection_;
+      itemBlock = itemBlock.nextConnection &&
+          itemBlock.nextConnection.targetBlock();
+      i++;
+    }
+    this.itemCount_ = i;
+    this.updateShape_();
+  },
+  getAddSubName: function(name,pos) {
+    return 'ADD'+pos;
+  },
+  appendAddSubEmptyInput: function(name,title) {
+    var inputItem = this.appendDummyInput(name)
+                        .appendField(this.newQuote_(true))
+                        .appendField(this.newQuote_(false));
+    return inputItem;
+  },
+  newQuote_: Blockly.Blocks['text'].newQuote_,
+  typeblock: Blockly.Msg.TEXT_PRINT_TYPEBLOCK
+};
+
+Blockly.Blocks['text_sprintf'] = {
+  /**
+   * Block for sprintf statement.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.TEXT_SPRINTF_TITLE,
+      "args0": [
+                {
+                  "type": "input_value",
+                  "name": "TEXT",
+                  "check": 'String'
+                }
+       ],
+      "output": 'String',
+      "colour": Blockly.Blocks.texts.HUE,
+      "tooltip": Blockly.Msg.TEXT_SPRINTF_TOOLTIP,
+      "helpUrl": Blockly.Msg.TEXT_SPRINTF_HELPURL
+    });
+  this.setPreviousStatement(false);
+    this.setNextStatement(false);
+    this.appendAddSubGroup(Blockly.Msg.TEXT_SPRINTF_CREATEWITH, 'items',null,
+    '-IGNORED-');
+    this.setOutput(true, 'String');
+  },  
+  /**
+   * Create XML to represent number of text inputs.
+   * @return {!Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('items', this.itemCount_);
+    return container;
+  },
+  /**
+   * Parse XML to restore the text inputs.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this Blockly.Block
+   */
+  decompose: function(workspace) {
+    var containerBlock = Blockly.Block.obtain(workspace,
+                                           'text_sprintf_container');
+    containerBlock.initSvg();
+    var connection = containerBlock.getInput('STACK').connection;
+    for (var i = 0; i < this.itemCount_; i++) {
+      var itemBlock = Blockly.Block.obtain(workspace, 'text_sprintf_item');
+      itemBlock.initSvg();
+      connection.connect(itemBlock.previousConnection);
+      connection = itemBlock.nextConnection;
+    }
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  compose: function(containerBlock) {
+    var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    // Count number of inputs.
+    var connections = [];
+    var i = 0;
+    while (itemBlock) {
+      connections[i] = itemBlock.valueConnection_;
+      itemBlock = itemBlock.nextConnection &&
+          itemBlock.nextConnection.targetBlock();
+      i++;
+    }
+    this.itemCount_ = i;
+    this.updateShape_();
+  },
+  getAddSubName: function(name,pos) {
+    return 'ADD'+pos;
+  },
+  appendAddSubEmptyInput: function(name,title) {
+    var inputItem = this.appendDummyInput(name)
+                        .appendField(this.newQuote_(true))
+                        .appendField(this.newQuote_(false));
+    return inputItem;
+  },
+  newQuote_: Blockly.Blocks['text'].newQuote_,
+  typeblock: Blockly.Msg.TEXT_PRINT_TYPEBLOCK
+};
+
 Blockly.Blocks['text_prompt_ext'] = {
   /**
    * Block for prompt function (external message).

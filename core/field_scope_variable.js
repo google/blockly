@@ -90,7 +90,7 @@ Blockly.FieldScopeVariable.prototype.init = function(block) {
     return;
   }
 
-  if (!this.getValue()) {
+  if (!this.getValue() && !this.msgEmpty_) {
     // Variables without names get uniquely named for this workspace.
     if (block.isInFlyout) {
       var workspace = block.workspace.targetWorkspace;
@@ -110,9 +110,9 @@ Blockly.FieldScopeVariable.prototype.init = function(block) {
  */
 Blockly.FieldScopeVariable.prototype.getValue = function() {
   var result = this.getText();
-  if (result === this.msgEmpty_) {
-    result = '';
-  }
+//  if (result === this.msgEmpty_) {
+//    result = '';
+//  }
   return result;
 };
 
@@ -179,7 +179,7 @@ Blockly.FieldScopeVariable.dropdownCreate = function() {
   }
   // Ensure that the currently selected variable is an option.
   var name = this.getText();
-  if (name && variableList.indexOf(name) == -1) {
+  if (name && name !== '' && variableList.indexOf(name) == -1) {
     variableList.push(name);
   }
   variableList.sort(goog.string.caseInsensitiveCompare);
@@ -195,7 +195,7 @@ Blockly.FieldScopeVariable.dropdownCreate = function() {
   }
 
   // Variables are not language-specific, use the name as both the user-facing
-  // text and the internal representation.
+  // text and the internal representation except for the empty string if any
   var options = [];
   if (this.msgEmpty_) {
     options.push([this.msgEmpty_, '']);

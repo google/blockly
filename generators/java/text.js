@@ -280,6 +280,60 @@ Blockly.Java['text_print'] = function(block) {
   return 'System.out.println(' + argument0 + '.toString());\n';
 };
 
+Blockly.Java['text_printf'] = function(block) {
+  // Print statement.
+  var argument0 = Blockly.Java.valueToCode(block, 'TEXT',
+      Blockly.Java.ORDER_NONE) || '""';
+  return 'System.out.println(' + argument0 + '.toString());\n';
+};
+
+Blockly.Java['text_printf'] = function(block) {
+	  // Create a string made up of any number of elements of any type.
+	  // Should we allow joining by '-' or ',' or any other characters?
+  var code;
+  var argument0 = Blockly.Java.valueToCode(block, 'TEXT', Blockly.Java.ORDER_NONE) || '""';
+  if (block.itemCount_ == 0) {
+    return ['""', Blockly.Java.ORDER_ATOMIC];
+  } else {
+    var code = '';
+    var extra = '';
+    for (var n = 0; n < block.itemCount_; n++) {
+      var item = Blockly.Java.valueToCode(block, 'ADD' + n,
+          Blockly.Java.ORDER_NONE);
+      if (item) {
+        code += extra + Blockly.Java.toStringCode(item);
+        extra = ', ';
+      }
+    }
+	  code = 'System.out.format(' + argument0 + ','+code+' );\n';
+	  return code;
+  }
+};
+
+Blockly.Java['text_sprintf'] = function(block) {
+	  // Create a string made up of any number of elements of any type.
+	  // Should we allow joining by '-' or ',' or any other characters?
+	var code;
+	var argument0 = Blockly.Java.valueToCode(block, 'TEXT', Blockly.Java.ORDER_NONE) || '""';
+	if (block.itemCount_ == 0) {
+	  return ['""', Blockly.Java.ORDER_ATOMIC];
+	} else {
+	  var code = '';
+	  var extra = '';
+	  for (var n = 0; n < block.itemCount_; n++) {
+	    var item = Blockly.Java.valueToCode(block, 'ADD' + n,
+	        Blockly.Java.ORDER_NONE);
+	    if (item) {
+	      code += extra + Blockly.Java.toStringCode(item);
+	      extra = ', ';
+	    }
+	  }
+	  code = 'String.format(' + argument0 + ','+code+' )';
+	  return [code, Blockly.Java.ORDER_FUNCTION_CALL];
+	}
+};
+
+
 Blockly.Java['text_prompt'] = function(block) {
   // Prompt function (internal message).
   var functionName = Blockly.Java.provideFunction_(

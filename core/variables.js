@@ -108,7 +108,6 @@ Blockly.Variables.allVariablesTypes = function(root) {
         for (var t in variableHash) {
           temp += t + ':'+variableHash[t]+',';
         }
-            console.log('check:'+temp);
       var blockVariablesTypes = func.call(blocks[x]);
       for (var key in blockVariablesTypes) {
         if (blockVariablesTypes.hasOwnProperty(key)) {

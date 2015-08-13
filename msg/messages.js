@@ -944,6 +944,35 @@ Blockly.Msg.TEXT_PRINT_TOOLTIP = 'Print the specified text, number or other valu
 /// Typeblock - Autocomplete for typeblocking
 Blockly.Msg.TEXT_PRINT_TYPEBLOCK = 'Print Text';
 
+/// url - Information about displaying text on computers.
+Blockly.Msg.TEXT_PRINTF_HELPURL = 'https://github.com/google/blockly/wiki/Text#printing-text';
+/// block text - Display the input on the screen.  See
+/// [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
+/// \n\nParameters:\n* %1 - the value to print
+Blockly.Msg.TEXT_PRINTF_TITLE = 'printf format %1';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
+Blockly.Msg.TEXT_PRINTF_TOOLTIP = 'Printf the specified text, number or other value.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_PRINTF_TYPEBLOCK = 'Printf Text';
+Blockly.Msg.TEXT_PRINTF_CREATEWITH ='create text with';
+
+
+/// url - Information about displaying text on computers.
+Blockly.Msg.TEXT_SPRINTF_HELPURL = 'https://github.com/google/blockly/wiki/Text#printing-text';
+/// block text - Display the input on the screen.  See
+/// [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
+/// \n\nParameters:\n* %1 - the value to print
+Blockly.Msg.TEXT_SPRINTF_TITLE = 'sprintf format %1';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
+Blockly.Msg.TEXT_SPRINTF_TOOLTIP = 'Sprintf the specified text, number or other value.';
+/// Typeblock - Autocomplete for typeblocking
+Blockly.Msg.TEXT_SPRINTF_TYPEBLOCK = 'Sprintf Text';
+Blockly.Msg.TEXT_SPRINTF_CREATEWITH ='create text with';
+
 /// url - Information about getting text from users.
 Blockly.Msg.TEXT_PROMPT_HELPURL = 'https://github.com/google/blockly/wiki/Text#getting-input-from-the-user';
 /// dropdown - Specifies that a piece of text should be requested from the user with
@@ -1349,10 +1378,13 @@ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /// (output) of this function.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#6ot5y5 this sample
 /// function that returns a value].
-
 Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = 'return';
 /// tooltip
 Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = 'Creates a function with an output.';
+/// dropdown choice - When the user clicks on a variable type block, this is one of the dropdown menu choices.  It is used to define a new variable type
+Blockly.Msg.PROCEDURES_NEWTYPE = 'New Type...';
+/// prompt - Prompts the user to enter the name for a new type.
+Blockly.Msg.PROCEDURES_NEWTYPETITLE = 'New Type name:';
 /// Label for a checkbox that controls if statements are allowed in a function.
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = 'allow statements';
 

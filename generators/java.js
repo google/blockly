@@ -135,6 +135,10 @@ Blockly.Java.needImports_ = [];
  */
 Blockly.Java.ExtraImports_ = null;
 /**
+ * Specifies that we want to have the Var Class inline instead of external
+ */
+Blockly.Java.INLINEVARCLASS = true;
+/**
  * List of additional classes used globally by the generated java code.
  */
 Blockly.Java.classes_ = [];
@@ -250,6 +254,14 @@ Blockly.Java.getImports = function() {
 Blockly.Java.setExtraImports = function(extraImports) {
   this.ExtraImports_ = extraImports;
 }
+/**
+ * Specify whether to inline the Var class or reference it externally
+ * @param {string} inlineclass Generate the Var class inline
+ */
+Blockly.Java.setVarClassInline = function(inlineclass) {
+  this.INLINEVARCLASS = inlineclass;
+}
+
 
 Blockly.Java.getClasses = function() {
   var code = '';
@@ -304,18 +316,19 @@ Blockly.Java.getValueType = function(block, field) {
 }
 
 Blockly.Java.provideVarClass = function() {
+  if (this.INLINEVARCLASS) {
+    Blockly.Java.addImport('java.text.DecimalFormat');
+    Blockly.Java.addImport('java.text.NumberFormat');
+    Blockly.Java.addImport('java.lang.Math');
+    Blockly.Java.addImport('java.util.Arrays');
+    Blockly.Java.addImport('java.util.Collections');
+    Blockly.Java.addImport('java.util.LinkedList');
+    Blockly.Java.addImport('java.util.List');
+    Blockly.Java.addImport('java.util.HashMap');
+    Blockly.Java.addImport('java.util.Map');
+    Blockly.Java.addImport('java.util.Objects');
 
-  Blockly.Java.addImport('java.text.DecimalFormat');
-  Blockly.Java.addImport('java.text.NumberFormat');
-  Blockly.Java.addImport('java.lang.Math');
-  Blockly.Java.addImport('java.util.Arrays');
-  Blockly.Java.addImport('java.util.Collections');
-  Blockly.Java.addImport('java.util.LinkedList');
-  Blockly.Java.addImport('java.util.HashMap');
-  Blockly.Java.addImport('java.util.Map');
-  Blockly.Java.addImport('java.util.Objects');
-
-  var VarCode = [
+    var VarCode = [
     '/**',
     ' *',
     ' * @author bmoon',
@@ -957,7 +970,10 @@ Blockly.Java.provideVarClass = function() {
     '',
     '}'
   ];
-  Blockly.Java.classes_['Var'] = VarCode.join('\n')+'\n';
+    this.classes_['Var'] = VarCode.join('\n')+'\n';
+  } else {
+    Blockly.Java.addImport('extreme.sdn.client.Var');
+  }
 }
 /**
  * Initialise the database of variable names.
@@ -1090,34 +1106,37 @@ Blockly.Java.finish = function(code) {
       }
 
       // Figure out the header to put on the function
-      var header = '/**\n' +
-                   ' * Description goes here\n';
-      var extra =  ' *\n';
+      var header = '';
       var res1 = def.split("(", 2);
-      var res = res1[0];  // Get everything before the (
-      var res2 = res.split(" ");
-      var rettype = res2[res2.length-2]; // The next to the last word
-      res = res1[1];  // Take the parameters after the (
-      res2 = res.split(")",1);
-      res = res2[0].trim();
-      if (res !== '') {
-        var args = res.split(",");
-        for (var arg = 0; arg < args.length; arg++) {
-          var argline = args[arg].split(" ");
-          header += extra + ' * @param ' + argline[argline.length-1] + '\n';
+      if (res1.length >= 2) {
+        // Figure out the header to put on the function
+        var header = '/**\n' +
+                     ' * Description goes here\n';
+        var extra =  ' *\n';
+        var res = res1[0];  // Get everything before the (
+        var res2 = res.split(" ");
+        var rettype = res2[res2.length-2]; // The next to the last word
+        res = res1[1];  // Take the parameters after the (
+        res2 = res.split(")",1);
+        res = res2[0].trim();
+        if (res !== '') {
+          var args = res.split(",");
+          for (var arg = 0; arg < args.length; arg++) {
+            var argline = args[arg].split(" ");
+            header += extra + ' * @param ' + argline[argline.length-1] + '\n';
+            extra = '';
+          }
+        }
+        if (rettype !== 'void') {
+          header += extra + ' * @return ' + rettype + '\n';
           extra = '';
         }
+        header += ' */\n';
       }
-      if (rettype !== 'void') {
-        header += extra + ' * @return ' + rettype + '\n';
-        extra = '';
-      }
-      header += ' */\n';
 
       allDefs += header + def + '\n\n';
     }
   }
-//  var allDefs = definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 
@@ -1128,7 +1147,7 @@ Blockly.Java.finish = function(code) {
  * @return {string} Legal line of code.
  */
 Blockly.Java.scrubNakedValue = function(line) {
-  return line + '\n';
+  return line + ';\n';
 };
 
 /**
@@ -1138,12 +1157,7 @@ Blockly.Java.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.Java.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
-  string = string.replace(/\\/g, '\\\\')
-                 .replace(/\n/g, '\\\n')
-                 .replace(/\%/g, '\\%')
-                 .replace(/"/g, '\\"');
-  return '"' + string + '"';
+  return goog.string.quote(string);
 };
 
 /**

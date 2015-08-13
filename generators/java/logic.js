@@ -88,9 +88,6 @@ Blockly.Java['logic_compare'] = function(block) {
     var temp = argument0;
     argument0 = argument1.slice(0,-14);
     argument1 = temp;
-  } else if ((argument0Type && goog.array.contains(argument0Type, 'String')) ||
-             (argument1Type && goog.array.contains(argument1Type, 'String'))) {
-    useFunctions = true;
   }
 
   if (!argument0) {

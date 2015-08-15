@@ -122,6 +122,10 @@ Blockly.Dart.finish = function(code) {
       definitions.push(def);
     }
   }
+  // Clean up temporary data.
+  delete Blockly.Dart.definitions_;
+  delete Blockly.Dart.functionNames_;
+  Blockly.Dart.variableDB_.reset();
   var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };

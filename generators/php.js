@@ -121,6 +121,10 @@ Blockly.PHP.finish = function(code) {
   for (var name in Blockly.PHP.definitions_) {
     definitions.push(Blockly.PHP.definitions_[name]);
   }
+  // Clean up temporary data.
+  delete Blockly.PHP.definitions_;
+  delete Blockly.PHP.functionNames_;
+  Blockly.PHP.variableDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 

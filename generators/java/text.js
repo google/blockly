@@ -208,7 +208,6 @@ Blockly.Java['text_getSubstring'] = function(block) {
     } else {
       // If the index is dynamic, increment it in code.
       // Add special case for -0.
-//      Blockly.Java.definitions_['import_sys'] = 'import sys';
       at2 = text + '.length() - ((int)' + at2 + '-1)';
     }
   }

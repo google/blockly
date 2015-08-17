@@ -339,7 +339,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     for (var i = 0; i < this.arguments_.length; i++) {
       if (this.arguments_[i]['type']) {
         vartypes[funcName + this.arguments_[i]['name']] =
-             this.arguments_[i]['type'];
+             [this.arguments_[i]['type']];
       }
     }
     var retItem = this.getInput('RETURN');
@@ -360,11 +360,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   getScopeVars: function(varclass) {
     var result = [];
     if (varclass === 'Types') {
-      // Push out the default types that we want people to select
-      result.push('String');
-      result.push('Number');
-      result.push('Boolean');
-      result.push('Array');
       for (var i = 0; i < this.arguments_.length; i++) {
         if (this.arguments_[i]['type']) {
           result.push(this.arguments_[i]['type']);
@@ -372,6 +367,28 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     }
     return result;
+  },
+  /**
+   * Notification that a Scoped Variable is renaming.
+   * If the name matches one of this block's Scoped Variables, rename it.
+   * @param {string} oldName Previous name of Scoped Variable.
+   * @param {string} newName Renamed Scoped Variable.
+   * @param {string} varclass class of variable to rename
+   * @this Blockly.Block
+   */
+  renameScopeVar: function(oldName, newName,varclass) {
+    var changed = false;
+    if (varclass === 'Types') {
+      for (var i = 0; i < this.arguments_.length; i++) {
+        if (Blockly.Names.equals(oldname,this.arguments_[i]['type'])) {
+          this.arguments_[i]['type'] = newName;
+          changed = true;
+        }
+      }
+    }
+    if (changed) {
+      this.updateParams_();
+    }
   },
   /**
    * Notification that a variable is renaming.
@@ -429,6 +446,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       }
     }
   },
+  isTopLevel: true,
   callType_: 'procedures_callnoreturn'
 };
 
@@ -464,6 +482,7 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.statementConnection_ = null;
     this.hasReturnValue_ = true;
   },
+  isTopLevel: true,
   doAddField: Blockly.Blocks['procedures_defnoreturn'].doAddField,
   doRemoveField: Blockly.Blocks['procedures_defnoreturn'].doRemoveField,
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
@@ -793,6 +812,7 @@ Blockly.Blocks['procedures_callreturn'] = {
     this.quarkConnections_ = {};
     this.quarkArguments_ = null;
   },
+  isTopLevel: true,
   getProcedureCall: Blockly.Blocks['procedures_callnoreturn'].getProcedureCall,
   renameProcedure: Blockly.Blocks['procedures_callnoreturn'].renameProcedure,
   getVarsTypes: Blockly.Blocks['procedures_callnoreturn'].getVarsTypes,

@@ -1341,6 +1341,12 @@ Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 /// block text - Change the value of a mathematical variable: '''set [the value of] x to 7'''.\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the value to be assigned.
 Blockly.Msg.SCOPE_VARIABLES_SET = 'set %1 : %2 to %3';
+/// Block text - Initialize a global/local variable.  The first part gets replaced with the next two values depending on whether it is global or local..\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the type of the variable.\n* %3 - the initializer value
+Blockly.Msg.INITIALIZE_VARIABLE = 'Initialize %1 as %2 with %3';
+/// Block text - Initialize a global variable
+Blockly.Msg.INITIALIZE_GLOBAL_VARIABLE = 'Initialize global';
+/// Block text - Initialize a local variable
+Blockly.Msg.INITIALIZE_LOCAL_VARIABLE = 'Initialize local';
 
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.

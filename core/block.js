@@ -828,10 +828,16 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
 Blockly.Block.prototype.getInheritedDisabled = function() {
   var block = this;
   while (true) {
+    var lastBlock = block;
     block = block.getSurroundParent();
     if (!block) {
       // Ran off the top.
-      return false;
+      // We need to check the block at the top of the stack
+      while(lastBlock.previousConnection != null &&
+            lastBlock.previousConnection.targetConnection != null) {
+        lastBlock = lastBlock.previousConnection.targetConnection.sourceBlock_;
+      }
+      return !(lastBlock.isTopLevel || lastBlock.isInFlyout);
     } else if (block.disabled) {
       return true;
     }

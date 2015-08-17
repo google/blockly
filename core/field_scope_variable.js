@@ -170,6 +170,7 @@ Blockly.FieldScopeVariable.prototype.setMsgEmpty = function(
  * @this {!Blockly.FieldScopeVariable}
  */
 Blockly.FieldScopeVariable.dropdownCreate = function() {
+  // Figure out all the names for this type used in the code.
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
     var variableList =
         Blockly.ScopeVariables.allVariables(this.sourceBlock_.workspace,
@@ -177,15 +178,34 @@ Blockly.FieldScopeVariable.dropdownCreate = function() {
   } else {
     var variableList = [];
   }
+  // Get any standing fixed names.  Note that the list might actually be
+  // a function to call to return the list
+  var fixedList = Blockly.scopeVariableList[this.getVarClass()];
+  if (typeof fixedList === 'function') {
+    fixedList = fixedList();
+  } else if (typeof fixedList === 'undefined') {
+    fixedList = [];
+  }
+
   // Ensure that the currently selected variable is an option.
   var name = this.getText();
   if (name && name !== '' && variableList.indexOf(name) == -1) {
     variableList.push(name);
   }
   variableList.sort(goog.string.caseInsensitiveCompare);
-  if (name && this.msgRename_) {
+
+  // Now add in the fixed elements if they aren't in the original list
+  for (var pos = 0; pos < fixedList.length; pos++) {
+    if (!goog.array.contains(variableList, fixedList[pos])) {
+      variableList.push(fixedList[pos]);
+    }
+  }
+  // Let them rename it as long as it isn't one of the fixed names
+  //
+  if (name && this.msgRename_ && !goog.array.contains(fixedList,name)) {
     variableList.push(this.msgRename_);
   }
+  // If they have a command to create a new one then add that in
   if (this.msgNew_) {
     variableList.push(this.msgNew_);
   }

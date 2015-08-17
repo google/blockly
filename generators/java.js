@@ -143,6 +143,11 @@ Blockly.Java.INLINEVARCLASS = true;
  */
 Blockly.Java.classes_ = [];
 /**
+ * List of global variables to be generated.
+ */
+Blockly.Java.globals_ = {};
+
+/**
  * Set the application name for generated classes
  * @param {string} name Name for the application for any generated code
  */
@@ -197,6 +202,19 @@ Blockly.Java.getBaseclass = function() {
 }
 
 /**
+ * Mark a variable as a global for the generated Java code
+ * @param {block} block Block that the variable is contained in
+ * @param {string} name Name of the global to initialize
+ * @param {string} val Initializer value for the gloabl
+ */
+Blockly.Java.setGlobalVar = function(block,name,val) {
+  if (Blockly.Variables.getLocalContext(block,name) == null &&
+      (typeof this.globals_[name] === 'undefined' ||
+        this.globals_[name] === null)) {
+    this.globals_[name] = val;
+  }
+}
+/**
  * Get the Java type of a variable by name
  * @param {string} variable Name of the variable to get the type for
  * @return {string} type Java type for the variable
@@ -206,7 +224,7 @@ Blockly.Java.GetVariableType = function(name) {
   if (!type) {
     type = 'String';
 //    type = 'Var';
-    Blockly.Java.provideVarClass();
+//    Blockly.Java.provideVarClass();
   }
   return type;
 };
@@ -989,6 +1007,8 @@ Blockly.Java.init = function(workspace, imports) {
   this.imports_ = Object.create(null);
   // Dictionary of any extra classes to output
   this.classes_ = Object.create(null);
+  // Dictionary of all the globals
+  this.globals_ = Object.create(null);
   // Start with the defaults that all the code depends on
   for(var i = 0; i < this.needImports_.length; i++) {
     this.addImport(this.needImports_[i]);
@@ -1002,7 +1022,6 @@ Blockly.Java.init = function(workspace, imports) {
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  var varsToOutput = variables.length;
   this.blocklyTypes_ = Blockly.Variables.allVariablesTypes(workspace);
   // Make sure all the type variables are pushed.  This is because we
   // Don't return the special function parameters in the allVariables list
@@ -1012,7 +1031,6 @@ Blockly.Java.init = function(workspace, imports) {
   var needVarClass = false;
   for (var x = 0; x < variables.length; x++) {
     var key = variables[x];
-    var initializer = '';
     var type = this.blocklyTypes_[key];
     if (type === 'Object') {
       type = 'Object';
@@ -1020,14 +1038,11 @@ Blockly.Java.init = function(workspace, imports) {
       type = 'LinkedList';
     } else if (type === 'Var') {
       type = 'Var';
-      initializer = ' = new Var(0)';
       needVarClass = true;
     } else if (type === 'Boolean') {
       type = 'Boolean';
-      initializer = ' = false';
     } else if (type === 'String') {
       type = 'String';
-      initializer = ' = ""';
     } else if (type === 'Colour') {
       type = 'String';
     } else if (type === 'Number') {
@@ -1038,7 +1053,6 @@ Blockly.Java.init = function(workspace, imports) {
       } else {
         console.log('Unknown type for '+key+' using Var for '+type);
         type = 'Var';
-        initializer = ' = new Var(0)';
         needVarClass = true;
       }
     } else {
@@ -1046,19 +1060,8 @@ Blockly.Java.init = function(workspace, imports) {
       console.log('Unknown type for '+key+' using Object');
       type = 'Object';
     }
-
     this.variableTypes_[key] = type;
-
-    if (x < varsToOutput) {
-      defvars.push('protected ' +
-                  type + ' '+
-               this.variableDB_.getName(variables[x],
-                                                Blockly.Variables.NAME_TYPE) +
-                  initializer +
-               ';');
-    }
   }
-  this.definitions_['variables'] = defvars.join('\n');
   if (needVarClass) {
     Blockly.Java.provideVarClass();
   }
@@ -1093,10 +1096,27 @@ Blockly.Java.finish = function(code) {
     funcs[slot].push(name);
   }
 
-
   // We have all the functions broken into two slots.  So go through in order
   // and get the statics and then the non-statics to output.
-  var allDefs = this.definitions_['variables'] + '\n\n';
+  var allDefs = '';
+
+  for(var def in this.globals_) {
+    var initializer = '';
+    var type = this.GetVariableType(def);
+    if (this.globals_[def] != null && this.globals_[def] !== '') {
+      initializer = ' = ' + this.globals_[def];
+    } else if (type === 'Var') {
+      initializer = ' = new Var(0)';
+    } else if (type === 'Boolean') {
+      initializer = ' = false';
+    } else if (type === 'String') {
+      initializer = ' = ""';
+    }
+    var varname = Blockly.Java.variableDB_.getName(def,
+        Blockly.Variables.NAME_TYPE);
+    allDefs += 'protected ' + type + ' ' + varname + initializer + ';\n';
+  }
+
   for(var slot = 0; slot < 2; slot++) {
     var names = funcs[slot].sort();
     for (var pos = 0; pos < names.length; pos++) {
@@ -1137,6 +1157,10 @@ Blockly.Java.finish = function(code) {
       allDefs += header + def + '\n\n';
     }
   }
+  // Clean up temporary data.
+  delete Blockly.Java.definitions_;
+  delete Blockly.Java.functionNames_;
+  Blockly.Java.variableDB_.reset();
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 

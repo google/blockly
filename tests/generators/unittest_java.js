@@ -26,6 +26,7 @@
 
 Blockly.Java['unittest_main'] = function(block) {
   // Container for unit tests.
+  Blockly.Java.setGlobalVar(block,'unittestResults', null);
   var resultsVar = Blockly.Java.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
 
@@ -96,7 +97,8 @@ Blockly.Java['unittest_main'] = function(block) {
   return code;
 };
 
-Blockly.Java['unittest_main'].defineAssert_ = function() {
+Blockly.Java['unittest_main'].defineAssert_ = function(block) {
+  Blockly.Java.setGlobalVar(block,'unittestResults', null);
   var resultsVar = Blockly.Java.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
   Blockly.Java.provideVarClass();
@@ -127,7 +129,7 @@ Blockly.Java['unittest_assertequals'] = function(block) {
       Blockly.Java.ORDER_NONE) || 'null';
   var expected = Blockly.Java.valueToCode(block, 'EXPECTED',
       Blockly.Java.ORDER_NONE) || 'null';
-  return Blockly.Java['unittest_main'].defineAssert_() +
+  return Blockly.Java['unittest_main'].defineAssert_(block) +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
@@ -144,11 +146,12 @@ Blockly.Java['unittest_assertvalue'] = function(block) {
   } else if (expected == 'NULL') {
     expected = 'null';
   }
-  return Blockly.Java['unittest_main'].defineAssert_() +
+  return Blockly.Java['unittest_main'].defineAssert_(block) +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
 Blockly.Java['unittest_fail'] = function(block) {
+  Blockly.Java.setGlobalVar(block,'unittestResults', null);
   // Always assert an error.
   var resultsVar = Blockly.Java.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);

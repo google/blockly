@@ -92,29 +92,15 @@ Blockly.Blocks['variables_get'] = {
    * @this Blockly.Block
    */
   onchange: function() {
-    var legal = false;
-    // Is the block nested in a procedure?
-    var block = this;
-    do {
-      if (block.getProcedureDef) {
-        break;
-      }
-      block = block.getSurroundParent();
-    } while (block);
+    // Is this variable actually a local or a proceedure variable?
+    var prefix = Blockly.Variables.getLocalContext(this,
+        this.getFieldValue('VAR'));
 
     var colour = Blockly.Blocks.variables.HUE;
-    // See if our variable name is any of the parameters of this function
-    if (block && block.getProcedureDef) {
-      var varName = this.getFieldValue('VAR');
-      var tuple = block.getProcedureDef.call(block);
-      var params = tuple[1];
-      for(var i = 0; i < params.length; i++) {
-        if (params[i]['name'] === varName) {
-          colour = Blockly.Blocks.procedures.HUE;
-          this.procedurePrefix_ = tuple[0]+'.';
-          break;
-        }
-      }
+    this.procedurePrefix_ = '';
+    if (prefix != null) {
+      colour = Blockly.Blocks.procedures.HUE;
+      this.procedurePrefix_ = prefix;
     }
 
     if (colour != this.getColour()) {
@@ -307,7 +293,6 @@ Blockly.Blocks['hash_parmvariables_get'] = {
   typeblock: Blockly.getMsgString('variables_hash_param_get_typeblock')
 };
 
-
 Blockly.Blocks['hash_variables_set'] = {
   /**
    * Block for variable setter.
@@ -350,6 +335,115 @@ Blockly.Blocks['hash_variables_set'] = {
   getVarsTypes: Blockly.Blocks['hash_variables_get'].getVarsTypes,
   renameScopeVar: Blockly.Blocks['hash_variables_get'].renameScopeVar,
   customContextMenu: Blockly.Blocks['hash_variables_get'].customContextMenu,
+  typeblock: Blockly.getMsgString('variables_hash_param_set_typeblock')
+};
+
+Blockly.Blocks['initialize_variable'] = {
+  /**
+   * Block for variable setter.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": Blockly.Msg.INITIALIZE_VARIABLE,
+      "args0": [
+        {
+          "type": "field_variable",
+          "name": "VAR",
+          "variable": "Variable"
+        },
+        {
+          "type": "field_scopevariable",
+          "scope": 'Types',
+          "name": "TYPE"
+        },
+        {
+          "type": "input_value",
+          "name": "VALUE",
+          "align": "RIGHT"
+        }
+      ],
+      "inputsInline": true,
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.variables.HUE,
+      "tooltip": "",
+      "helpUrl": "http://www.example.com/"
+    });
+    this.procedurePrefix_ = '';
+    var typeField = this.getField('TYPE');
+    typeField.setChangeHandler(this.changeType);
+    typeField.setMsgEmpty('Any');
+    typeField.setValue('');
+    this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
+  },
+  isTopLevel: true,
+  onchange: function() {
+    // Is the block nested in a procedure?
+    var prefix = Blockly.Variables.getLocalContext(this, null);
+
+    var title = Blockly.Msg.INITIALIZE_GLOBAL_VARIABLE
+    var colour = Blockly.Blocks.variables.HUE;
+    this.procedurePrefix_ = '';
+    // See if we are a local variable
+    if (prefix != null) {
+      this.procedurePrefix_ = prefix;
+      colour = Blockly.Blocks.procedures.HUE;
+      title = Blockly.Msg.INITIALIZE_LOCAL_VARIABLE
+    }
+    // Update the block with the right color and text
+    this.getInput('VALUE').fieldRow[0].setText(title);
+    if (colour != this.getColour()) {
+      this.setColour(colour);
+    }
+  },
+
+  getVars: Blockly.Blocks['variables_get'].getVars,
+  renameVar: Blockly.Blocks['variables_get'].renameVar,
+  changeType: function(newType) {
+    var block = this.sourceBlock_;
+    block.getInput('VALUE').setCheck(newType);
+  },
+  /**
+   * Return all Scoped Variables referenced by this block.
+   * @param {string} varclass class of variable to get.
+   * @return {!Array.<string>} List of hashkey names.
+   * @this Blockly.Block
+   */
+  getScopeVars: function(varclass) {
+    var result = [];
+    if (varclass === 'Types') {
+      result.push(this.getFieldValue('TYPE'));
+    }
+    return result;
+  },
+  /**
+   * Return all types of variables referenced by this block.
+   * @return {!Array.<Object>} List of variable names with their types.
+   * @this Blockly.Block
+   */
+  getVarsTypes: function() {
+    var vartypes = {};
+    vartypes[this.procedurePrefix_+this.getFieldValue('VAR')] =
+      [this.getFieldValue('TYPE')];
+    return vartypes;
+  },
+  /**
+   * Notification that a Scoped Variable is renaming.
+   * If the name matches one of this block's Scoped Variables, rename it.
+   * @param {string} oldName Previous name of Scoped Variable.
+   * @param {string} newName Renamed Scoped Variable.
+   * @param {string} varclass class of variable to rename
+   * @this Blockly.Block
+   */
+  renameScopeVar: function(oldName, newName,varclass) {
+    if (varclass === 'Types' &&
+        Blockly.Names.equals(oldName, this.getFieldValue('TYPE'))) {
+      this.setFieldValue(newName, 'TYPE');
+    }
+  },
+  contextMenuType_: 'variables_get',
+  customContextMenu: Blockly.Blocks['variables_get'].customContextMenu,
   typeblock: Blockly.getMsgString('variables_hash_param_set_typeblock')
 };
 

@@ -30,17 +30,21 @@ goog.require('Blockly.Java');
 
 
 Blockly.Java['variables_get'] = function(block) {
+  // Remember if this is a global variable to be initialized
+  Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), null);
   // Variable getter.
   var code = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
-  if(Blockly.Java.GetVariableType(this.procedurePrefix_+block.getFieldValue('VAR')) === 'Var') {
+  if(Blockly.Java.GetVariableType(this.procedurePrefix_+
+      block.getFieldValue('VAR')) === 'Var') {
     code += '.cloneObject()';
   }
-
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 
 Blockly.Java['variables_set'] = function(block) {
+  // Remember if this is a global variable to be initialized
+  Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), null);
   // Variable setter.
   var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_NONE) || '0';
@@ -59,7 +63,8 @@ Blockly.Java['variables_set'] = function(block) {
     argument0 = Blockly.Java.toStringCode(argument0);
   }
   var code = varName;
-  if(Blockly.Java.GetVariableType(this.procedurePrefix_+block.getFieldValue('VAR')) === 'Var') {
+  if(Blockly.Java.GetVariableType(this.procedurePrefix_+
+      block.getFieldValue('VAR')) === 'Var') {
     code += '.setObject(' + argument0 + ');\n';
   } else {
     code += ' = ' + argument0 + ';\n';
@@ -68,6 +73,8 @@ Blockly.Java['variables_set'] = function(block) {
 };
 
 Blockly.Java['hash_variables_get'] = function(block) {
+  // Remember if this is a global variable to be initialized
+  Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), null);
   // Variable getter.
   var getter = 'getString';
   var parent = block.getParent();
@@ -80,8 +87,8 @@ Blockly.Java['hash_variables_get'] = function(block) {
         var varName = blockVariables[y];
         // Variable name may be null if the block is only half-built.
         if (varName) {
-          var vartype = Blockly.Java.GetVariableType(this.procedurePrefix_+varName);
-
+          var vartype = Blockly.Java.GetVariableType(this.procedurePrefix_+
+            varName);
           if (vartype === 'Array') {
             getter = 'get';
           } else if (vartype === 'Object') {
@@ -98,6 +105,8 @@ Blockly.Java['hash_variables_get'] = function(block) {
 };
 
 Blockly.Java['hash_parmvariables_get'] = function(block) {
+  // Remember if this is a global variable to be initialized
+  Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), null);
   // Variable getter.
   var getter = 'getString';
   var parent = block.getParent();
@@ -131,6 +140,8 @@ Blockly.Java['hash_parmvariables_get'] = function(block) {
 
 
 Blockly.Java['hash_variables_set'] = function(block) {
+  // Remember if this is a global variable to be initialized
+  Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), null);
   // Variable setter.
   var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_NONE) || '0';
@@ -139,3 +150,20 @@ Blockly.Java['hash_variables_set'] = function(block) {
   return varName + '{' + block.getFieldValue('HASHKEY') + '}' +
                      ' = ' + argument0 + ';\n';
 };
+
+Blockly.Java['initialize_variable'] = function (block) {
+  var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
+      Blockly.Java.ORDER_NONE) || '0';
+  if(block.procedurePrefix_ != '') {
+    // Variable setter.
+    var vartype = Blockly.Java.GetVariableType(block.procedurePrefix_+
+        block.getFieldValue('VAR'));
+    var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
+        Blockly.Variables.NAME_TYPE);
+    return vartype + ' ' + varName + ' = ' + argument0 + ';\n';
+  } else {
+    // Remember if this is a global variable to be initialized
+    Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), argument0);
+    return '';
+  }
+}

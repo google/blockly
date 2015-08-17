@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-08-13 10:05:18.876513",
+		"lastupdated": "2015-08-16 14:10:36.300053",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -487,6 +487,9 @@
 	"VARIABLES_SET_TOOLTIP": "Sets this variable to be equal to the input.",
 	"VARIABLES_SET_CREATE_GET": "Create 'get %1'",
 	"SCOPE_VARIABLES_SET": "set %1 : %2 to %3",
+	"INITIALIZE_VARIABLE": "Initialize %1 as %2 with %3",
+	"INITIALIZE_GLOBAL_VARIABLE": "Initialize global",
+	"INITIALIZE_LOCAL_VARIABLE": "Initialize local",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFNORETURN_TITLE": "to",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "do something",

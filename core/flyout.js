@@ -166,7 +166,10 @@ Blockly.Flyout.prototype.dispose = function() {
     this.scrollbar_.dispose();
     this.scrollbar_ = null;
   }
-  this.workspace_ = null;
+  if (this.workspace_) {
+    this.workspace_.dispose();
+    this.workspace_ = null;
+  }
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;

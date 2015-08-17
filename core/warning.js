@@ -88,7 +88,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
   }
   if (visible) {
     // Create the bubble to display all warnings.
-    var paragraph = Blockly.Warning.textToDom_(this.getAllText());
+    var paragraph = Blockly.Warning.textToDom_(this.getText());
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.Workspace} */ (this.block_.workspace),
         paragraph, this.block_.svgPath_,
@@ -148,7 +148,7 @@ Blockly.Warning.prototype.setText = function(text, id) {
  * Get this warning's texts.
  * @return {string} All texts concatenated into one string.
  */
-Blockly.Warning.prototype.getAllText = function() {
+Blockly.Warning.prototype.getText = function() {
   var allWarnings = [];
   for (var id in this.text_) {
     allWarnings.push(this.text_[id]);

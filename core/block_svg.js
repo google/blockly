@@ -1276,9 +1276,9 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
       this.warning.dispose();
       changedState = true;
     } else if (this.warning) {
-      var oldText = this.warning.getAllText();
+      var oldText = this.warning.getText();
       this.warning.setText('', id);
-      var newText = this.warning.getAllText();
+      var newText = this.warning.getText();
       if (!newText) {
         this.warning.dispose();
       }

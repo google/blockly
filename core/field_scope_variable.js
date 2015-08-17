@@ -83,7 +83,7 @@ Blockly.FieldScopeVariable.prototype.setChangeHandler = function(handler) {
   } else {
     wrappedHandler = Blockly.FieldScopeVariable.dropdownChange;
   }
-  Blockly.FieldScopeVariable.superClass_.setChangeHandler(wrappedHandler);
+  Blockly.FieldScopeVariable.superClass_.setChangeHandler.call(this,wrappedHandler);
 };
 
 /**

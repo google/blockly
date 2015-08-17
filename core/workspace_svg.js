@@ -178,13 +178,18 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.trashcan.dispose();
     this.trashcan = null;
   }
-  if (!this.options.parentWorkspace) {
-    // Top-most workspace.  Dispose of the SVG too.
-    goog.dom.removeNode(this.options.svg);
+  this.traceOn(false)  // cleanup traceWrapper_
+  if (this.scrollbar) {
+    this.scrollbar.dispose();
+    this.scrollbar = null;
   }
   if (this.injectChangeListenerHandle_) {
     this.removeChangeListener(this.injectChangeListenerHandle_);
     this.injectChangeListenerHandle_ = null;
+  }
+  if (!this.options.parentWorkspace) {
+    // Top-most workspace.  Dispose of the SVG too.
+    goog.dom.removeNode(this.options.svg);
   }
 };
 

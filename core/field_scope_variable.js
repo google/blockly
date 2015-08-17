@@ -44,26 +44,6 @@ goog.require('goog.string');
  * @constructor
  */
 Blockly.FieldScopeVariable = function(varclass, opt_changeHandler) {
-  var changeHandler;
-  if (opt_changeHandler) {
-    // Wrap the user's change handler together with the variable rename handler.
-    var thisObj = this;
-    changeHandler = function(value) {
-      var retVal = Blockly.FieldScopeVariable.dropdownChange.call(thisObj, value);
-      var newVal;
-      if (retVal === undefined) {
-        newVal = value;  // Existing variable selected.
-      } else if (retVal === null) {
-        newVal = thisObj.getValue();  // Abort, no change.
-      } else {
-        newVal = retVal;  // Variable name entered.
-      }
-      opt_changeHandler.call(thisObj, newVal);
-      return retVal;
-    };
-  } else {
-    changeHandler = Blockly.FieldScopeVariable.dropdownChange;
-  }
   this.msgRename_ = Blockly.Msg.RENAME_SCOPE_VARIABLE;
   this.msgRenameTitle_ = Blockly.Msg.RENAME_SCOPE_VARIABLE_TITLE;
   this.msgNew_ = Blockly.Msg.NEW_SCOPE_VARIABLE;
@@ -74,12 +54,38 @@ Blockly.FieldScopeVariable = function(varclass, opt_changeHandler) {
   this.setValue(this.getVarClass()[0]);
 
   Blockly.FieldScopeVariable.superClass_.constructor.call(this,
-      Blockly.FieldScopeVariable.dropdownCreate, changeHandler);
+      Blockly.FieldScopeVariable.dropdownCreate, opt_changeHandler);
 
 };
 goog.inherits(Blockly.FieldScopeVariable, Blockly.FieldDropdown);
 
-Blockly.FieldScopeVariable.prototype.init
+/**
+ * Sets a new change handler for angle field.
+ * @param {Function} handler New change handler, or null.
+ */
+Blockly.FieldScopeVariable.prototype.setChangeHandler = function(handler) {
+  var wrappedHandler;
+  if (handler) {
+    // Wrap the user's change handler together with the variable rename handler.
+    wrappedHandler = function(value) {
+      var retVal = Blockly.FieldScopeVariable.dropdownChange.call(this, value);
+      var newVal;
+      if (retVal === undefined) {
+        newVal = value;  // Existing variable selected.
+      } else if (retVal === null) {
+        newVal = this.getValue();  // Abort, no change.
+      } else {
+        newVal = retVal;  // Variable name entered.
+      }
+      handler.call(this, newVal);
+      return retVal;
+    };
+  } else {
+    wrappedHandler = Blockly.FieldScopeVariable.dropdownChange;
+  }
+  Blockly.FieldScopeVariable.superClass_.setChangeHandler(wrappedHandler);
+};
+
 /**
  * Install this dropdown on a block.
  * @param {!Blockly.Block} block The block containing this text.

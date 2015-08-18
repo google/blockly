@@ -262,7 +262,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
         Blockly.Scrollbar.scrollbarThickness - 0.5;
     this.svgGroup_.setAttribute('transform',
-        'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
+        'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
     this.svgBackground_.setAttribute('width', Math.max(0, outerLength));
     this.svgKnob_.setAttribute('x', this.constrainKnob_(innerOffset));
   } else {
@@ -290,7 +290,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
     }
     this.yCoordinate = hostMetrics.absoluteTop + 0.5;
     this.svgGroup_.setAttribute('transform',
-        'translate(' + this.xCoordinate + ', ' + this.yCoordinate + ')');
+        'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
     this.svgBackground_.setAttribute('height', Math.max(0, outerLength));
     this.svgKnob_.setAttribute('y', this.constrainKnob_(innerOffset));
   }

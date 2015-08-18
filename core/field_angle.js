@@ -162,8 +162,8 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
           (a % 45 == 0 ? 10 : 5),
       'y2': Blockly.FieldAngle.HALF,
       'class': 'blocklyAngleMarks',
-      'transform': 'rotate(' + a + ', ' +
-          Blockly.FieldAngle.HALF + ', ' + Blockly.FieldAngle.HALF + ')'
+      'transform': 'rotate(' + a + ',' +
+          Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
     }, svg);
   }
   svg.style.marginLeft = (15 - Blockly.FieldAngle.RADIUS) + 'px';
@@ -242,7 +242,7 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
   var angleRadians = goog.math.toRadians(Number(this.getText()));
   if (isNaN(angleRadians)) {
     this.gauge_.setAttribute('d',
-        'M ' + Blockly.FieldAngle.HALF + ', ' + Blockly.FieldAngle.HALF);
+        'M ' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF);
     this.line_.setAttribute('x2', Blockly.FieldAngle.HALF);
     this.line_.setAttribute('y2', Blockly.FieldAngle.HALF);
   } else {
@@ -252,7 +252,7 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
         -Blockly.FieldAngle.RADIUS;
     var largeFlag = (angleRadians > Math.PI) ? 1 : 0;
     this.gauge_.setAttribute('d',
-        'M ' + Blockly.FieldAngle.HALF + ', ' + Blockly.FieldAngle.HALF +
+        'M ' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF +
         ' h ' + Blockly.FieldAngle.RADIUS +
         ' A ' + Blockly.FieldAngle.RADIUS + ',' + Blockly.FieldAngle.RADIUS +
         ' 0 ' + largeFlag + ' 0 ' + x + ',' + y + ' z');

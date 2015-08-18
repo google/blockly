@@ -167,6 +167,7 @@ Blockly.Flyout.prototype.dispose = function() {
     this.scrollbar_ = null;
   }
   if (this.workspace_) {
+    this.workspace_.targetWorkspace = null;
     this.workspace_.dispose();
     this.workspace_ = null;
   }

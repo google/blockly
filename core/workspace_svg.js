@@ -594,12 +594,8 @@ Blockly.WorkspaceSvg.prototype.startDrag = function(e, x, y) {
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  if (this.RTL) {
-    this.dragDeltaX_ = x + point.x;
-  } else {
-    this.dragDeltaX_ = x - point.x;
-  }
-  this.dragDeltaY = y - point.y;
+  this.dragDeltaX_ = x - point.x;
+  this.dragDeltaY_ = y - point.y;
 };
 
 /**
@@ -612,12 +608,8 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  if (this.RTL) {
-    var x = this.dragDeltaX_ - point.x;
-  } else {
-    var x = this.dragDeltaX_ + point.x;
-  }
-  var y = this.dragDeltaY + point.y;
+  var x = this.dragDeltaX_ + point.x;
+  var y = this.dragDeltaY_ + point.y;
   return new goog.math.Coordinate(x, y);
 };
 
@@ -650,7 +642,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   if (this.options.collapse) {
     var hasCollapsedBlocks = false;
     var hasExpandedBlocks = false;
-    var topBlocks = this.getTopBlocks(false);
+    var topBlocks = this.getTopBlocks(true);
     for (var i = 0; i < topBlocks.length; i++) {
       var block = topBlocks[i];
       while (block) {

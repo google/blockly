@@ -118,10 +118,10 @@ Blockly.Css.setCursor = function(cursor) {
   // There is probably only one toolbox, so just change its style property.
   var toolboxen = document.getElementsByClassName('blocklyToolboxDiv');
   for (var i = 0, toolbox; toolbox = toolboxen[i]; i++) {
-    if (cursor == Blockly.Css.Cursor.OPEN) {
-      toolbox.style.cursor = '';
-    } else {
+    if (cursor == Blockly.Css.Cursor.DELETE) {
       toolbox.style.cursor = url;
+    } else {
+      toolbox.style.cursor = '';
     }
   }
   // Set cursor on the whole document, so that rapid movements

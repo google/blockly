@@ -39,13 +39,6 @@ Blockly.ZoomControls = function(workspace) {
 };
 
 /**
- * URL of the sprite image.
- * @type {string}
- * @private
- */
-Blockly.ZoomControls.prototype.SPRITE_URL_ = 'media/sprites.png';
-
-/**
  * Width of the zoom controls.
  * @type {number}
  * @private

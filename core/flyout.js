@@ -595,6 +595,7 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
  */
 Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
   var flyout = this;
+  var workspace = this.targetWorkspace_;
   return function(e) {
     if (Blockly.isRightButton(e)) {
       // Right-click.  Don't create a block, let the context menu show.
@@ -606,7 +607,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     }
     // Create the new block by cloning the block in the flyout (via XML).
     var xml = Blockly.Xml.blockToDom_(originBlock);
-    var block = Blockly.Xml.domToBlock(flyout.targetWorkspace_, xml);
+    var block = Blockly.Xml.domToBlock(workspace, xml);
     // Place it in the same spot as the flyout copy.
     var svgRootOld = originBlock.getSvgRoot();
     if (!svgRootOld) {
@@ -618,31 +619,29 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       throw 'block is not rendered.';
     }
     // If flyout is inside of canvas, fix scale.
-    if (flyout.targetWorkspace_ == Blockly.mainWorkspace) {
-      var xyOld = Blockly.getSvgXY_(svgRootOld);
-      var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.options.svg);
+    if (workspace.scale != 1) {
+      var mouseXY = Blockly.mouseToSvg(e, workspace.options.svg);
       // Relative mouse position to the block.
       var rMouseX = mouseXY.x - xyOld.x;
       var rMouseY = mouseXY.y - xyOld.y;
       // Fix scale.
-      xyOld.x /= Blockly.mainWorkspace.scale;
-      xyOld.y /= Blockly.mainWorkspace.scale;
+      xyOld.x /= workspace.scale;
+      xyOld.y /= workspace.scale;
       // Calculate the position to create the block, fixing scale.
       var xyCanvastoSvg =
-          Blockly.getRelativeXY_(Blockly.mainWorkspace.getCanvas());
+          Blockly.getRelativeXY_(workspace.getCanvas());
       var xyNewtoCanvas = Blockly.getRelativeXY_(svgRootNew);
-      var newX = xyCanvastoSvg.x / Blockly.mainWorkspace.scale +
+      var newX = xyCanvastoSvg.x / workspace.scale +
           xyNewtoCanvas.x;
-      var newY = xyCanvastoSvg.y / Blockly.mainWorkspace.scale +
+      var newY = xyCanvastoSvg.y / workspace.scale +
           xyNewtoCanvas.y;
       var placePositionX = xyOld.x - newX;
       var placePositionY = xyOld.y - newY;
-      var dx = rMouseX - rMouseX / Blockly.mainWorkspace.scale;
-      var dy = rMouseY - rMouseY / Blockly.mainWorkspace.scale;
+      var dx = rMouseX - rMouseX / workspace.scale;
+      var dy = rMouseY - rMouseY / workspace.scale;
       block.moveBy(placePositionX - dx, placePositionY - dy);
     } else {
       // Flyout in canvas.
-      var xyOld = Blockly.getSvgXY_(svgRootOld);
       var xyNew = Blockly.getSvgXY_(svgRootNew);
       block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
     }

@@ -286,11 +286,11 @@ Blockly.getRelativeXY_ = function(element) {
  * scales that after canvas SVG element, if it's a descendant.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Element} element Element to find the coordinates of.
+ * @param {!Blockly.Workspace} workspace Element must be in this workspace.
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
-Blockly.getSvgXY_ = function(element) {
-  var workspace = Blockly.getMainWorkspace();
+Blockly.getSvgXY_ = function(element, workspace) {
   var x = 0;
   var y = 0;
   // Evaluate if element isn't child of a canvas.

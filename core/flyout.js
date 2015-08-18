@@ -613,13 +613,17 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     if (!svgRootOld) {
       throw 'originBlock is not rendered.';
     }
-    var xyOld = Blockly.getSvgXY_(svgRootOld);
+    var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
     var svgRootNew = block.getSvgRoot();
     if (!svgRootNew) {
       throw 'block is not rendered.';
     }
-    // If flyout is inside of canvas, fix scale.
-    if (workspace.scale != 1) {
+    if (workspace.scale == 1) {
+      // No scaling issues.
+      var xyNew = Blockly.getSvgXY_(svgRootNew, workspace);
+      block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
+    } else {
+      // Scale the block while keeping the mouse location constant.
       var mouseXY = Blockly.mouseToSvg(e, workspace.options.svg);
       // Relative mouse position to the block.
       var rMouseX = mouseXY.x - xyOld.x;
@@ -628,22 +632,15 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       xyOld.x /= workspace.scale;
       xyOld.y /= workspace.scale;
       // Calculate the position to create the block, fixing scale.
-      var xyCanvastoSvg =
-          Blockly.getRelativeXY_(workspace.getCanvas());
+      var xyCanvastoSvg = Blockly.getRelativeXY_(workspace.getCanvas());
       var xyNewtoCanvas = Blockly.getRelativeXY_(svgRootNew);
-      var newX = xyCanvastoSvg.x / workspace.scale +
-          xyNewtoCanvas.x;
-      var newY = xyCanvastoSvg.y / workspace.scale +
-          xyNewtoCanvas.y;
+      var newX = xyCanvastoSvg.x / workspace.scale + xyNewtoCanvas.x;
+      var newY = xyCanvastoSvg.y / workspace.scale + xyNewtoCanvas.y;
       var placePositionX = xyOld.x - newX;
       var placePositionY = xyOld.y - newY;
       var dx = rMouseX - rMouseX / workspace.scale;
       var dy = rMouseY - rMouseY / workspace.scale;
       block.moveBy(placePositionX - dx, placePositionY - dy);
-    } else {
-      // Flyout in canvas.
-      var xyNew = Blockly.getSvgXY_(svgRootNew);
-      block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
     }
     if (flyout.autoClose) {
       flyout.hide();
@@ -679,7 +676,7 @@ Blockly.Flyout.prototype.getRect = function() {
   // area are still deleted.  Must be smaller than Infinity, but larger than
   // the largest screen size.
   var BIG_NUM = 10000000;
-  var x = Blockly.getSvgXY_(this.svgGroup_).x;
+  var x = Blockly.getSvgXY_(this.svgGroup_, this.workspace_).x;
   if (!this.RTL) {
     x -= BIG_NUM;
   }

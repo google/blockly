@@ -77,7 +77,7 @@ Blockly.FieldAngle.prototype.setChangeHandler = function(handler) {
   } else {
     wrappedHandler = Blockly.FieldAngle.angleValidator;
   }
-  Blockly.FieldAngle.superClass_.setChangeHandler(wrappedHandler);
+  Blockly.FieldAngle.superClass_.setChangeHandler.call(this, wrappedHandler);
 };
 
 /**

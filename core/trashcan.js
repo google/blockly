@@ -42,20 +42,6 @@ Blockly.Trashcan = function(workspace) {
 };
 
 /**
- * URL of the sprite image.
- * @type {string}
- * @private
- */
-Blockly.Trashcan.prototype.SPRITE_URL_ = 'media/sprites.png';
-
-/**
- * URL of the lid image.
- * @type {string}
- * @private
- */
-Blockly.Trashcan.prototype.LID_URL_ = 'media/trashlid.png';
-
-/**
  * Width of both the trash can and lid images.
  * @type {number}
  * @private
@@ -275,8 +261,8 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
   this.lidOpen_ = goog.math.clamp(this.lidOpen_, 0, 1);
   var lidAngle = this.lidOpen_ * 45;
   this.svgLid_.setAttribute('transform', 'rotate(' +
-      (this.workspace_.RTL ? -lidAngle : lidAngle) + ', ' +
-      (this.workspace_.RTL ? 4 : this.WIDTH_ - 4) + ', ' +
+      (this.workspace_.RTL ? -lidAngle : lidAngle) + ',' +
+      (this.workspace_.RTL ? 4 : this.WIDTH_ - 4) + ',' +
       (this.LID_HEIGHT_ - 2) + ')');
   var opacity = goog.math.lerp(0.4, 0.8, this.lidOpen_);
   this.svgGroup_.style.opacity = opacity;

@@ -139,16 +139,16 @@ Blockly.Flyout.prototype.init = function(workspace) {
 
   this.hide();
 
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
+  this.eventWrappers_.push(Blockly.bindEvent_(this.svgGroup_,
       'wheel', this, this.wheel_));
   // Safari needs mousewheel.
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
+  this.eventWrappers_.push(Blockly.bindEvent_(this.svgGroup_,
       'mousewheel', this, this.wheel_));
-  this.eventWrappers_.concat(
+  this.eventWrappers_.push(
       Blockly.bindEvent_(this.targetWorkspace_.getCanvas(),
       'blocklyWorkspaceChange', this, this.filterForCapacity_));
   // Dragging the flyout up and down.
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
+  this.eventWrappers_.push(Blockly.bindEvent_(this.svgGroup_,
       'mousedown', this, this.onMouseDown_));
 };
 
@@ -158,13 +158,19 @@ Blockly.Flyout.prototype.init = function(workspace) {
  */
 Blockly.Flyout.prototype.dispose = function() {
   this.hide();
-  Blockly.unbindEvent_(this.eventWrappers_);
+  this.eventWrappers_.forEach(function(bindData){
+    Blockly.unbindEvent_(bindData);
+  });
   this.eventWrappers_.length = 0;
   if (this.scrollbar_) {
     this.scrollbar_.dispose();
     this.scrollbar_ = null;
   }
-  this.workspace_ = null;
+  if (this.workspace_) {
+    this.workspace_.targetWorkspace = null;
+    this.workspace_.dispose();
+    this.workspace_ = null;
+  }
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;

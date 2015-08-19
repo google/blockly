@@ -220,6 +220,18 @@ Blockly.Field.prototype.getSize = function() {
 };
 
 /**
+ * Returns the height and width of the field,
+ * accounting for the workspace scaling.
+ * @return {!Object} Height and width.
+ */
+Blockly.Field.prototype.getScaledBBox_ = function() {
+  var bBox = this.borderRect_.getBBox();
+  bBox.width *= this.sourceBlock_.workspace.scale;
+  bBox.height *= this.sourceBlock_.workspace.scale;
+  return bBox;
+};
+
+/**
  * Get the text from this field.
  * @return {string} Current text.
  */

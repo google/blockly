@@ -286,11 +286,11 @@ Blockly.getRelativeXY_ = function(element) {
  * scales that after canvas SVG element, if it's a descendant.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Element} element Element to find the coordinates of.
+ * @param {!Blockly.Workspace} workspace Element must be in this workspace.
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
-Blockly.getSvgXY_ = function(element) {
-  var workspace = Blockly.getMainWorkspace();
+Blockly.getSvgXY_ = function(element, workspace) {
   var x = 0;
   var y = 0;
   // Evaluate if element isn't child of a canvas.
@@ -320,52 +320,25 @@ Blockly.getSvgXY_ = function(element) {
  * Helper method for creating SVG elements.
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
- * @param {Element=} opt_parent Optional parent on which to append the element.
+ * @param {Element} parent Optional parent on which to append the element.
  * @param {Blockly.Workspace=} opt_workspace Optional workspace for access to
  *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.createSvgElement = function(name, attrs, opt_parent, opt_workspace) {
+Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
-  // Fix the native getBBox for enable scaling.
-  var getBBox = e.getBBox;
-  e.getBBox = function() {
-    // Fix scale if the element is an SVG canvas or a child.
-    var BBox = getBBox.call(e);
-    if (opt_workspace) {
-      var element = e;
-      do {
-        // Loop through this block and every parent.
-        var xy = Blockly.getRelativeXY_(element);
-        if (element == opt_workspace.getCanvas()) {
-          BBox.width *= opt_workspace.scale;
-          BBox.height *= opt_workspace.scale;
-          break;
-        }
-        element = element.parentNode;
-      } while (element && element != opt_workspace.options.svg);
-    } else {
-      // When mainWorkspace has not created.
-      var BBox = getBBox.call(e);
-      if (e.transform.baseVal.numberOfItems == 2) {
-        BBox.width *= e.transform.baseVal.getItem(1).matrix.a;
-        BBox.height *= e.transform.baseVal.getItem(1).matrix.d;
-      }
-    }
-    return BBox;
-  };
   // IE defines a unique attribute "runtimeStyle", it is NOT applied to
   // elements created with createElementNS. However, Closure checks for IE
   // and assumes the presence of the attribute and crashes.
   if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
     e.runtimeStyle = e.currentStyle = e.style;
   }
-  if (opt_parent) {
-    opt_parent.appendChild(e);
+  if (parent) {
+    parent.appendChild(e);
   }
   return e;
 };

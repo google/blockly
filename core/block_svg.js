@@ -43,7 +43,7 @@ Blockly.BlockSvg = function() {
   // Create core elements for the block.
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgPathDark_ = Blockly.createSvgElement('path',
-      {'class': 'blocklyPathDark', 'transform': 'translate(1, 1)'},
+      {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgGroup_);
   this.svgPath_ = Blockly.createSvgElement('path', {'class': 'blocklyPath'},
       this.svgGroup_);
@@ -233,8 +233,7 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     // Move this block up the DOM.  Keep track of x/y translations.
     var xy = this.getRelativeToSurfaceXY();
     this.workspace.getCanvas().appendChild(svgRoot);
-    svgRoot.setAttribute('transform',
-        'translate(' + xy.x + ', ' + xy.y + ')');
+    svgRoot.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   }
 
   Blockly.BlockSvg.superClass_.setParent.call(this, newParent);
@@ -277,7 +276,7 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   var xy = this.getRelativeToSurfaceXY();
   this.getSvgRoot().setAttribute('transform',
-      'translate(' + (xy.x + dx) + ', ' + (xy.y + dy) + ')');
+      'translate(' + (xy.x + dx) + ',' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
   Blockly.Realtime.blockChanged(this);
 };
@@ -709,7 +708,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       var dx = oldXY.x - this_.dragStartXY_.x;
       var dy = oldXY.y - this_.dragStartXY_.y;
       this_.getSvgRoot().setAttribute('transform',
-          'translate(' + newXY.x + ', ' + newXY.y + ')');
+          'translate(' + newXY.x + ',' + newXY.y + ')');
       // Drag all the nested bubbles.
       for (var i = 0; i < this_.draggedBubbles_.length; i++) {
         var commentData = this_.draggedBubbles_[i];
@@ -1041,7 +1040,8 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
 Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   this.workspace.playAudio('delete');
 
-  var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
+  var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_),
+                             this.workspace);
   // Deeply clone the current block.
   var clone = this.svgGroup_.cloneNode(true);
   clone.translateX_ = xy.x;
@@ -1075,7 +1075,7 @@ Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl, start, workspaceScale) {
         (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
     var y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
     var scale = (1 - percent) * workspaceScale;
-    clone.setAttribute('transform', 'translate(' + x + ', ' + y + ')' +
+    clone.setAttribute('transform', 'translate(' + x + ',' + y + ')' +
         ' scale(' + scale + ')');
     var closure = function() {
       Blockly.BlockSvg.disposeUiStep_(clone, rtl, start, workspaceScale);
@@ -1091,7 +1091,8 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
   this.workspace.playAudio('click');
 
   // Determine the absolute coordinates of the inferior block.
-  var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_));
+  var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_),
+                             this.workspace);
   // Offset the coordinates based on the two connection types, fix scale.
   if (this.outputConnection) {
     xy.x += (this.RTL ? 3 : -3) * this.workspace.scale;
@@ -1429,13 +1430,13 @@ Blockly.BlockSvg.prototype.renderFields_ =
     if (this.RTL) {
       cursorX -= field.renderSep + field.renderWidth;
       root.setAttribute('transform',
-          'translate(' + cursorX + ', ' + cursorY + ')');
+          'translate(' + cursorX + ',' + cursorY + ')');
       if (field.renderWidth) {
         cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
       }
     } else {
       root.setAttribute('transform',
-          'translate(' + (cursorX + field.renderSep) + ', ' + cursorY + ')');
+          'translate(' + (cursorX + field.renderSep) + ',' + cursorY + ')');
       if (field.renderWidth) {
         cursorX += field.renderSep + field.renderWidth +
             Blockly.BlockSvg.SEP_SPACE_X;

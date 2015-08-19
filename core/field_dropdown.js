@@ -126,11 +126,13 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   }
 
   var menu = new goog.ui.Menu();
+  menu.setRightToLeft(this.sourceBlock_.RTL);
   var options = this.getOptions_();
   for (var x = 0; x < options.length; x++) {
     var text = options[x][0];  // Human-readable text.
     var value = options[x][1]; // Language-neutral value.
     var menuItem = new goog.ui.MenuItem(text);
+    menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setValue(value);
     menuItem.setCheckable(true);
     menu.addChild(menuItem, true);

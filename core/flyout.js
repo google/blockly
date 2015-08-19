@@ -106,6 +106,12 @@ Blockly.Flyout.prototype.autoClose = true;
  */
 Blockly.Flyout.prototype.CORNER_RADIUS = 8;
 
+/**
+ * Top/bottom padding between scrollbar and edge of flyout background.
+ * @type {number}
+ * @const
+ */
+Blockly.Flyout.prototype.SCROLLBAR_PADDING = 2;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.
@@ -128,12 +134,12 @@ Blockly.Flyout.prototype.createDom = function() {
 
 /**
  * Initializes the flyout.
- * @param {!Blockly.Workspace} workspace The workspace in which to create new
- *     blocks.
+ * @param {!Blockly.Workspace} targetWorkspace The workspace in which to create
+ *     new blocks.
  */
-Blockly.Flyout.prototype.init = function(workspace) {
-  this.targetWorkspace_ = workspace;
-  this.workspace_.targetWorkspace = workspace;
+Blockly.Flyout.prototype.init = function(targetWorkspace) {
+  this.targetWorkspace_ = targetWorkspace;
+  this.workspace_.targetWorkspace = targetWorkspace;
   // Add scrollbar.
   this.scrollbar_ = new Blockly.Scrollbar(this.workspace_, false, false);
 
@@ -188,7 +194,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     // Flyout is hidden.
     return null;
   }
-  var viewHeight = this.height_ - 2 * this.CORNER_RADIUS;
+  var viewHeight = this.height_ - 2 * this.SCROLLBAR_PADDING;
   var viewWidth = this.width_;
   try {
     var optionBox = this.workspace_.getCanvas().getBBox();
@@ -202,7 +208,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     contentHeight: optionBox.height + optionBox.y,
     viewTop: -this.workspace_.scrollY,
     contentTop: 0,
-    absoluteTop: this.CORNER_RADIUS,
+    absoluteTop: this.SCROLLBAR_PADDING,
     absoluteLeft: 0
   };
 };

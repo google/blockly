@@ -673,22 +673,18 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
  */
 Blockly.Flyout.prototype.getRect = function() {
   // BIG_NUM is offscreen padding so that blocks dragged beyond the shown flyout
-  // area are still deleted.  Must be smaller than Infinity, but larger than
-  // the largest screen size.
-  var BIG_NUM = 10000000;
-  var x = Blockly.getSvgXY_(this.svgGroup_, this.workspace_).x;
+  // area are still deleted.  Must be larger than the largest screen size,
+  // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
+  var BIG_NUM = 1000000000;
+  var mainWorkspace = Blockly.mainWorkspace;
+  var x = Blockly.getSvgXY_(this.svgGroup_, mainWorkspace).x;
   if (!this.RTL) {
     x -= BIG_NUM;
   }
-  // Fix scale if is descendant of bubble canvas.
-  if (goog.dom.contains(Blockly.mainWorkspace.getBubbleCanvas(), this.svgGroup_)) {
+  // Fix scale if nested in zoomed workspace.
+  var scale = this.targetWorkspace_ == mainWorkspace ? 1 : mainWorkspace.scale;
     return new goog.math.Rect(x, -BIG_NUM,
-        BIG_NUM + this.width_ * Blockly.mainWorkspace.scale,
-        this.height_ * Blockly.mainWorkspace.scale + 2 * BIG_NUM);
-  } else {
-    return new goog.math.Rect(x, -BIG_NUM,
-        BIG_NUM + this.width_, this.height_ + 2 * BIG_NUM);
-  }
+        BIG_NUM + this.width_ * scale, BIG_NUM * 2);
 };
 
 /**

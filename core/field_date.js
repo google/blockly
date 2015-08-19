@@ -113,7 +113,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
-  var borderBBox = this.borderRect_.getBBox();
+  var borderBBox = this.getScaledBBox_();
   var div = Blockly.WidgetDiv.DIV;
   picker.render(div);
   picker.setDate(goog.date.fromIsoString(this.getValue()));

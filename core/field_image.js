@@ -28,6 +28,7 @@ goog.provide('Blockly.FieldImage');
 
 goog.require('Blockly.Field');
 goog.require('goog.dom');
+goog.require('goog.math.Size');
 goog.require('goog.userAgent');
 
 
@@ -45,7 +46,7 @@ Blockly.FieldImage = function(src, width, height, opt_alt) {
   // Ensure height and width are numbers.  Strings are bad at math.
   this.height_ = Number(height);
   this.width_ = Number(width);
-  this.size_ = {height: this.height_ + 10, width: this.width_};
+  this.size_ = new goog.math.Size(this.height_ + 10, this.width_);
   this.text_ = opt_alt || '';
   this.setValue(src);
 };

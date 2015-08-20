@@ -30,6 +30,7 @@ goog.provide('Blockly.utils');
 
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.userAgent');
+goog.require('goog.dom');
 
 
 /**
@@ -281,22 +282,37 @@ Blockly.getRelativeXY_ = function(element) {
 };
 
 /**
- * Return the absolute coordinates of the top-left corner of this element.
- * The origin (0,0) is the top-left corner of the nearest SVG.
+ * Return the absolute coordinates of the top-left corner of this element,
+ * scales that after canvas SVG element, if it's a descendant.
+ * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Element} element Element to find the coordinates of.
+ * @param {!Blockly.Workspace} workspace Element must be in this workspace.
  * @return {!Object} Object with .x and .y properties.
  * @private
  */
-Blockly.getSvgXY_ = function(element) {
+Blockly.getSvgXY_ = function(element, workspace) {
   var x = 0;
   var y = 0;
+  // Evaluate if element isn't child of a canvas.
+  var canvasFlag = !goog.dom.contains(workspace.getCanvas(), element) &&
+                   !goog.dom.contains(workspace.getBubbleCanvas(), element);
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
-    x += xy.x;
-    y += xy.y;
+    if (element == workspace.getCanvas() ||
+        element == workspace.getBubbleCanvas()) {
+      canvasFlag = true;
+    }
+    // Before the SVG canvas scale the coordinates.
+    if (canvasFlag) {
+      x += xy.x;
+      y += xy.y;
+    } else {
+      x += xy.x * workspace.scale;
+      y += xy.y * workspace.scale;
+    }
     element = element.parentNode;
-  } while (element && element.nodeName.toLowerCase() != 'svg');
+  } while (element && element != workspace.options.svg);
   return {x: x, y: y};
 };
 
@@ -304,10 +320,12 @@ Blockly.getSvgXY_ = function(element) {
  * Helper method for creating SVG elements.
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
- * @param {Element=} opt_parent Optional parent on which to append the element.
+ * @param {Element} parent Optional parent on which to append the element.
+ * @param {Blockly.Workspace=} opt_workspace Optional workspace for access to
+ *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.createSvgElement = function(name, attrs, opt_parent) {
+Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
@@ -319,8 +337,8 @@ Blockly.createSvgElement = function(name, attrs, opt_parent) {
   if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
     e.runtimeStyle = e.currentStyle = e.style;
   }
-  if (opt_parent) {
-    opt_parent.appendChild(e);
+  if (parent) {
+    parent.appendChild(e);
   }
   return e;
 };

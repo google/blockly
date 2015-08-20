@@ -230,7 +230,7 @@ Blockly.Trashcan.prototype.position = function() {
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
 Blockly.Trashcan.prototype.getRect = function() {
-  var trashXY = Blockly.getSvgXY_(this.svgGroup_);
+  var trashXY = Blockly.getSvgXY_(this.svgGroup_, this.workspace_);
   return new goog.math.Rect(
       trashXY.x - this.MARGIN_HOTSPOT_,
       trashXY.y - this.MARGIN_HOTSPOT_,

@@ -36,13 +36,12 @@ goog.require('goog.math');
  * @constructor
  */
 Blockly.Workspace = function(opt_options) {
-  /**
-   * @type {!Array.<!Blockly.Block>}
-   * @private
-   */
-  this.topBlocks_ = [];
+  /** @type {!Object} */
   this.options = opt_options || {};
+  /** @type {boolean} */
   this.RTL = !!this.options.RTL;
+  /** @type {!Array.<!Blockly.Block>} */
+  this.topBlocks_ = [];
 };
 
 /**

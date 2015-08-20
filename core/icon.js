@@ -138,6 +138,10 @@ Blockly.Icon.prototype.isVisible = function() {
  * @private
  */
 Blockly.Icon.prototype.iconClick_ = function(e) {
+  if (Blockly.dragMode_ == 2) {
+    // Drag operation is concluding.  Don't open the editor.
+    return;
+  }
   if (!this.block_.isInFlyout && !Blockly.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }

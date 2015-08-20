@@ -294,6 +294,9 @@ Blockly.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
+  if (event.touches && event.touches.length >= 2) {
+    return  // multi-touch gestures won't have e.clientX
+  }
   var workspace = Blockly.getMainWorkspace();
   if (workspace.isScrolling) {
     Blockly.removeAllRanges();

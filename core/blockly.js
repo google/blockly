@@ -490,8 +490,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     return null;
   }
   // Fix scale.
-  var contentWidth = blockBox.width;
-  var contentHeight = blockBox.height;
+  var contentWidth = blockBox.width * this.scale;
+  var contentHeight = blockBox.height * this.scale;
   var contentX = blockBox.x * this.scale;
   var contentY = blockBox.y * this.scale;
   if (this.scrollbar) {

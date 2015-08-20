@@ -65,10 +65,7 @@ function enableRealtimeSpecificUi() {
 function start() {
   var toolbox = document.getElementById('toolbox');
   workspace = Blockly.inject('blocklyDiv',
-          {rtl: rtl,
-           media: '../media/',
-           toolbox: toolbox,
-           comments: true,
+          {comments: true,
            disable: true,
            collapse: true,
            grid:
@@ -76,13 +73,24 @@ function start() {
               length: 3,
               colour: '#ccc',
               snap: true},
+           media: '../media/',
            readOnly: false,
            realtime: false,
            realtimeOptions:
              {clientId: 'YOUR CLIENT ID GOES HERE',
               chatbox: {elementId: 'chatbox'},
               collabElementId: 'collaborators'},
-           scrollbars: true
+           rtl: rtl,
+           scrollbars: true,
+           toolbox: toolbox,
+           zoom:
+             {enabled: true,
+              controls: true,
+              wheel: true,
+              maxScale: 2,
+              minScale: .1,
+              scaleSpeed: 1.1
+             },
           });
   if (Blockly.Realtime.isEnabled()) {
     enableRealtimeSpecificUi();

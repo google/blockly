@@ -196,8 +196,7 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
     // shown and the current mouse position.  Pythagorean theorem.
     var dx = Blockly.Tooltip.lastX_ - e.pageX;
     var dy = Blockly.Tooltip.lastY_ - e.pageY;
-    var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    if (dr > Blockly.Tooltip.RADIUS_OK) {
+    if (Math.sqrt(dx * dx + dy * dy) > Blockly.Tooltip.RADIUS_OK) {
       Blockly.Tooltip.hide();
     }
   } else if (Blockly.Tooltip.poisonedElement_ != Blockly.Tooltip.element_) {

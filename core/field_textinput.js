@@ -50,6 +50,11 @@ Blockly.FieldTextInput = function(text, opt_changeHandler) {
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 
 /**
+ * Point size of text.  Should match blocklyText's font-size in CSS.
+ */
+Blockly.FieldTextInput.FONTSIZE = 11;
+
+/**
  * Mouse cursor style when over the hotspot that initiates the editor.
  */
 Blockly.FieldTextInput.prototype.CURSOR = 'text';
@@ -126,6 +131,10 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   // Create the input.
   var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
+  var fontSize = (Blockly.FieldTextInput.FONTSIZE *
+                  this.sourceBlock_.workspace.scale) + 'pt';
+  div.style.fontSize = fontSize;
+  htmlInput.style.fontSize = fontSize;
   /** @type {!HTMLInputElement} */
   Blockly.FieldTextInput.htmlInput_ = htmlInput;
   div.appendChild(htmlInput);
@@ -219,12 +228,15 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
   var bBox = this.fieldGroup_.getBBox();
+  bBox.width *= this.sourceBlock_.workspace.scale;
+  bBox.height *= this.sourceBlock_.workspace.scale;
   div.style.width = bBox.width + 'px';
+  div.style.height = bBox.height + 'px';
   var xy = this.getAbsoluteXY_();
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
   if (this.sourceBlock_.RTL) {
-    var borderBBox = this.borderRect_.getBBox();
+    var borderBBox = this.getScaledBBox_();
     xy.x += borderBBox.width;
     xy.x -= div.offsetWidth;
   }
@@ -266,8 +278,11 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
     Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
     Blockly.FieldTextInput.htmlInput_ = null;
-    // Delete the width property.
-    Blockly.WidgetDiv.DIV.style.width = 'auto';
+    // Delete style properties.
+    var style = Blockly.WidgetDiv.DIV.style;
+    style.width = 'auto';
+    style.height = 'auto';
+    style.fontSize = '';
   };
 };
 

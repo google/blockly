@@ -382,7 +382,9 @@ Code.init = function() {
            snap: true},
        media: '../../media/',
        rtl: rtl,
-       toolbox: toolbox});
+       toolbox: toolbox,
+       zoom: {enabled: true}
+      });
 
   // Add to reserved word list: Local variables in execution evironment (runJS)
   // and the infinite loop detection function.

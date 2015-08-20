@@ -267,13 +267,10 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   }
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-  // Record the starting offset between the current location and the mouse.
-  if (this.workspace_.RTL) {
-    this.dragDeltaX = this.relativeLeft_ + e.clientX;
-  } else {
-    this.dragDeltaX = this.relativeLeft_ - e.clientX;
-  }
-  this.dragDeltaY = this.relativeTop_ - e.clientY;
+
+  this.workspace_.startDrag(e,
+      this.workspace_.RTL ? -this.relativeLeft_ : this.relativeLeft_,
+      this.relativeTop_);
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -291,12 +288,9 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
  */
 Blockly.Bubble.prototype.bubbleMouseMove_ = function(e) {
   this.autoLayout_ = false;
-  if (this.workspace_.RTL) {
-    this.relativeLeft_ = this.dragDeltaX - e.clientX;
-  } else {
-    this.relativeLeft_ = this.dragDeltaX + e.clientX;
-  }
-  this.relativeTop_ = this.dragDeltaY + e.clientY;
+  var newXY = this.workspace_.moveDrag(e);
+  this.relativeLeft_ = this.workspace_.RTL ? -newXY.x : newXY.x;
+  this.relativeTop_ = newXY.y;
   this.positionBubble_();
   this.renderArrow_();
 };
@@ -316,13 +310,9 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   }
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-  // Record the starting offset between the current location and the mouse.
-  if (this.workspace_.RTL) {
-    this.resizeDeltaWidth = this.width_ + e.clientX;
-  } else {
-    this.resizeDeltaWidth = this.width_ - e.clientX;
-  }
-  this.resizeDeltaHeight = this.height_ - e.clientY;
+
+  this.workspace_.startDrag(e,
+      this.workspace_.RTL ? -this.width_ : this.width_, this.height_);
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -340,16 +330,8 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
  */
 Blockly.Bubble.prototype.resizeMouseMove_ = function(e) {
   this.autoLayout_ = false;
-  var w = this.resizeDeltaWidth;
-  var h = this.resizeDeltaHeight + e.clientY;
-  if (this.workspace_.RTL) {
-    // RTL drags the bottom-left corner.
-    w -= e.clientX;
-  } else {
-    // LTR drags the bottom-right corner.
-    w += e.clientX;
-  }
-  this.setBubbleSize(w, h);
+  var newXY = this.workspace_.moveDrag(e);
+  this.setBubbleSize(this.workspace_.RTL ? -newXY.x : newXY.x, newXY.y);
   if (this.workspace_.RTL) {
     // RTL requires the bubble to move its left edge.
     this.positionBubble_();
@@ -398,6 +380,8 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
   var relativeTop = -this.height_ - Blockly.BlockSvg.MIN_BLOCK_Y;
   // Prevent the bubble from being off-screen.
   var metrics = this.workspace_.getMetrics();
+  metrics.viewWidth /= this.workspace_.scale;
+  metrics.viewLeft /= this.workspace_.scale;
   if (this.workspace_.RTL) {
     if (this.anchorX_ - metrics.viewLeft - relativeLeft - this.width_ <
         Blockly.Scrollbar.scrollbarThickness) {
@@ -444,7 +428,7 @@ Blockly.Bubble.prototype.positionBubble_ = function() {
   }
   var top = this.relativeTop_ + this.anchorY_;
   this.bubbleGroup_.setAttribute('transform',
-      'translate(' + left + ', ' + top + ')');
+      'translate(' + left + ',' + top + ')');
 };
 
 /**
@@ -474,11 +458,10 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
       // Mirror the resize group.
       var resizeSize = 2 * Blockly.Bubble.BORDER_WIDTH;
       this.resizeGroup_.setAttribute('transform', 'translate(' +
-          resizeSize + ', ' +
-          (height - doubleBorderWidth) + ') scale(-1 1)');
+          resizeSize + ',' + (height - doubleBorderWidth) + ') scale(-1 1)');
     } else {
       this.resizeGroup_.setAttribute('transform', 'translate(' +
-          (width - doubleBorderWidth) + ', ' +
+          (width - doubleBorderWidth) + ',' +
           (height - doubleBorderWidth) + ')');
     }
   }

@@ -1252,8 +1252,10 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
     // Wait until the drag finishes.
     var thisBlock = this;
     this.setWarningText.pid_[id] = setTimeout(function() {
-      delete thisBlock.setWarningText.pid_[id];
-      thisBlock.setWarningText(text, id);
+      if (thisBlock.workspace) {  // Check block wasn't deleted.
+        delete thisBlock.setWarningText.pid_[id];
+        thisBlock.setWarningText(text, id);
+      }
     }, 100);
     return;
   }

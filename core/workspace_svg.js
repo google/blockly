@@ -702,12 +702,17 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.loadAudio_ = function(filenames, name) {
-  if (!window['Audio'] || !filenames.length) {
+  if (!filenames.length) {
+    return;
+  }
+  try {
+    var audioTest = new window['Audio']();
+  } catch(e) {
     // No browser support for Audio.
+    // IE can throw an error even if the Audio object exists.
     return;
   }
   var sound;
-  var audioTest = new window['Audio']();
   for (var i = 0; i < filenames.length; i++) {
     var filename = filenames[i];
     var ext = filename.match(/\.(\w+)$/);

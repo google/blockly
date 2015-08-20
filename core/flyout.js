@@ -59,7 +59,7 @@ Blockly.Flyout = function(workspaceOptions) {
   this.RTL = !!workspaceOptions.RTL;
 
   /**
-   * Opaque data that can be passed to removeChangeListener.
+   * Opaque data that can be passed to Blockly.unbindEvent_.
    * @type {Array.<!Array>}
    * @private
    */
@@ -145,14 +145,14 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 
   this.hide();
 
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
-      'wheel', this, this.wheel_));
-  this.eventWrappers_.concat(
+  Array.prototype.push.apply(this.eventWrappers_,
+      Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.wheel_));
+  Array.prototype.push.apply(this.eventWrappers_,
       Blockly.bindEvent_(this.targetWorkspace_.getCanvas(),
       'blocklyWorkspaceChange', this, this.filterForCapacity_));
   // Dragging the flyout up and down.
-  this.eventWrappers_.concat(Blockly.bindEvent_(this.svgGroup_,
-      'mousedown', this, this.onMouseDown_));
+  Array.prototype.push.apply(this.eventWrappers_,
+      Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_));
 };
 
 /**
@@ -162,12 +162,15 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
 Blockly.Flyout.prototype.dispose = function() {
   this.hide();
   Blockly.unbindEvent_(this.eventWrappers_);
-  this.eventWrappers_.length = 0;
   if (this.scrollbar_) {
     this.scrollbar_.dispose();
     this.scrollbar_ = null;
   }
-  this.workspace_ = null;
+  if (this.workspace_) {
+    this.workspace_.targetWorkspace = null;
+    this.workspace_.dispose();
+    this.workspace_ = null;
+  }
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;

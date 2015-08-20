@@ -147,6 +147,7 @@ Blockly.Toolbox.prototype.dispose = function() {
   this.flyout_.dispose();
   this.tree_.dispose();
   goog.dom.removeNode(this.HtmlDiv);
+  this.workspace_ = null;
 };
 
 /**

@@ -7,6 +7,7 @@ var MSG = {
   timeout: "Maximum execution iterations exceeded.",
   discard: "Delete all %1 blocks?",
   trashTooltip: "Discard all blocks.",
+  catLinkitzBlocks: "Linkitz",
   catLogic: "Logic",
   catLoops: "Loops",
   catMath: "Math",

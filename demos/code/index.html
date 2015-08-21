@@ -5,6 +5,7 @@
   <meta name="google" value="notranslate">
   <title>Blockly Demo:</title>
   <link rel="stylesheet" href="style.css">
+  
   <script src="/storage.js"></script>
   <script src="../../blockly_compressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
@@ -13,6 +14,7 @@
   <script src="../../php_compressed.js"></script>
   <script src="../../dart_compressed.js"></script>
   <script src="code.js"></script>
+  <script src= "linkitzBlocks.js"></script>
 </head>
 <body>
   <table width="100%" height="100%">
@@ -70,6 +72,12 @@
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 
   <xml id="toolbox" style="display: none">
+    <category name="Linkitz" id="linkitzBlocks">
+      <block type="getmotiondata"></block>
+      <block type="getmicdata"></block>
+      <block type="onmotiontrigger"></block>
+      <block type="ledoutput"></block>
+    </category>
     <category id="catLogic">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>

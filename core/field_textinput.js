@@ -240,6 +240,12 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   }
   // Shift by a few pixels to line up exactly.
   xy.y += 1;
+  if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
+    // Firefox mis-reports the location of the border by a pixel
+    // once the WidgetDiv is moved into position.
+    xy.x -= 1;
+    xy.y -= 1;
+  }
   if (goog.userAgent.WEBKIT) {
     xy.y -= 3;
   }

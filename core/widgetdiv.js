@@ -85,6 +85,8 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
 Blockly.WidgetDiv.hide = function() {
   if (Blockly.WidgetDiv.owner_) {
     Blockly.WidgetDiv.DIV.style.display = 'none';
+    Blockly.WidgetDiv.DIV.style.left = '';
+    Blockly.WidgetDiv.DIV.style.top = '';
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.owner_ = null;
     Blockly.WidgetDiv.dispose_ = null;

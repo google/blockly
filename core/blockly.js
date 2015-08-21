@@ -255,6 +255,11 @@ Blockly.svgSize = function(svg) {
 Blockly.scopeVariableList = { Types: ['String','Number','Boolean','Array']};
 
 /**
+ * Defines whether to use mutators or +/- for objects
+ */
+Blockly.useMutators = false;
+
+/**
  * Size the SVG image to completely fill its container.
  * Record the height/width of the SVG image.
  * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.

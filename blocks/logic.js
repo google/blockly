@@ -40,21 +40,27 @@ Blockly.Blocks['controls_if'] = {
    * @this Blockly.Block
    */
   init: function() {
-    var addField = new Blockly.FieldClickImage(this.addPng, 17, 17,
+    if (!Blockly.useMutators) {
+      var addField = new Blockly.FieldClickImage(this.addPng, 17, 17,
                                           Blockly.Msg.CONTROLS_IF_ADD_TOOLTIP);
-    addField.setChangeHandler(this.doAddField);
-
+      addField.setChangeHandler(this.doAddField);
+    }
     this.setHelpUrl(Blockly.Msg.CONTROLS_IF_HELPURL);
     this.setColour(Blockly.Blocks.logic.HUE);
-    this.appendValueInput('IF0')
+    var valInput = this.appendValueInput('IF0')
         .setCheck('Boolean')
-        .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF)
-        .appendField(addField,'IF_ADD');
+        .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF);
+    if (!Blockly.useMutators) {
+        valInput.appendField(addField,'IF_ADD');
+    }
     this.appendStatementInput('DO0')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-
+    if (Blockly.useMutators) {
+      this.setMutator(new Blockly.Mutator(['controls_if_elseif',
+                                         'controls_if_else']));
+    }
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -197,16 +203,21 @@ Blockly.Blocks['controls_if'] = {
       for(pos = 1; pos < this.elseifCount_+1;pos++,inputIndex+=2) {
         var inputItem = this.getInput('IF'+pos);
         if (inputItem == null) {
-          var subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
+          var subField = null;
+          if (!Blockly.useMutators) {
+            subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
                                 Blockly.Msg.CONTROLS_IF_ELSEIF_REMOVE_TOOLTIP);
-          subField.setPrivate({name: 'IF', pos: pos});
-          subField.setChangeHandler(this.doRemoveElseifField);
+            subField.setPrivate({name: 'IF', pos: pos});
+            subField.setChangeHandler(this.doRemoveElseifField);
+          }
 
           // We have to add an elseif clause
           var ifInput = this.appendValueInput('IF' + pos)
                             .setCheck('Boolean')
-                            .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF)
-                            .appendField(subField);
+                            .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+          if (subField) {
+            ifInput.appendField(subField);
+          }
           var doInput = this.appendStatementInput('DO' + pos)
                             .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
           // Now see if we need to move them in front of the else
@@ -223,13 +234,18 @@ Blockly.Blocks['controls_if'] = {
       if (this.elseCount_) {
         var inputItem = this.getInput('ELSE');
         if (inputItem == null) {
-          var subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
+          var subField = null;
+          if (!Blockly.useMutators) {
+            subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
                                 Blockly.Msg.CONTROLS_IF_ELSE_REMOVE_TOOLTIP);
-          subField.setChangeHandler(this.doRemoveElseField);
+            subField.setChangeHandler(this.doRemoveElseField);
+          }
 
-          this.appendStatementInput('ELSE')
-              .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE)
-              .appendField(subField);
+          var doElse = this.appendStatementInput('ELSE')
+              .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
+          if (subField) {
+            doElse.appendField(subField);
+          }
         }
       }
     }
@@ -243,6 +259,112 @@ Blockly.Blocks['controls_if'] = {
       this.workspace.fireChangeEvent();
     }
   },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Blockly.Workspace} workspace Mutator's workspace.
+   * @return {!Blockly.Block} Root block in mutator.
+   * @this Blockly.Block
+   */
+  decompose: function(workspace) {
+    var containerBlock = Blockly.Block.obtain(workspace, 'controls_if_if');
+    containerBlock.initSvg();
+    var connection = containerBlock.getInput('STACK').connection;
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      var elseifBlock = Blockly.Block.obtain(workspace, 'controls_if_elseif');
+      elseifBlock.initSvg();
+      connection.connect(elseifBlock.previousConnection);
+      connection = elseifBlock.nextConnection;
+    }
+    if (this.elseCount_) {
+      var elseBlock = Blockly.Block.obtain(workspace, 'controls_if_else');
+      elseBlock.initSvg();
+      connection.connect(elseBlock.previousConnection);
+    }
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  compose: function(containerBlock) {
+    // Disconnect the else input blocks and remove the inputs.
+    if (this.elseCount_) {
+      this.removeInput('ELSE');
+    }
+    this.elseCount_ = 0;
+    // Disconnect all the elseif input blocks and remove the inputs.
+    for (var i = this.elseifCount_; i > 0; i--) {
+      this.removeInput('IF' + i);
+      this.removeInput('DO' + i);
+    }
+    this.elseifCount_ = 0;
+    // Rebuild the block's optional inputs.
+    var clauseBlock = containerBlock.getInputTargetBlock('STACK');
+    while (clauseBlock) {
+      switch (clauseBlock.type) {
+        case 'controls_if_elseif':
+          this.elseifCount_++;
+          var ifInput = this.appendValueInput('IF' + this.elseifCount_)
+              .setCheck('Boolean')
+              .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+          var doInput = this.appendStatementInput('DO' + this.elseifCount_);
+          doInput.appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
+          // Reconnect any child blocks.
+          if (clauseBlock.valueConnection_) {
+            ifInput.connection.connect(clauseBlock.valueConnection_);
+          }
+          if (clauseBlock.statementConnection_) {
+            doInput.connection.connect(clauseBlock.statementConnection_);
+          }
+          break;
+        case 'controls_if_else':
+          this.elseCount_++;
+          var elseInput = this.appendStatementInput('ELSE');
+          elseInput.appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
+          // Reconnect any child blocks.
+          if (clauseBlock.statementConnection_) {
+            elseInput.connection.connect(clauseBlock.statementConnection_);
+          }
+          break;
+        default:
+          throw 'Unknown block type.';
+      }
+      clauseBlock = clauseBlock.nextConnection &&
+          clauseBlock.nextConnection.targetBlock();
+    }
+  },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  saveConnections: function(containerBlock) {
+    var clauseBlock = containerBlock.getInputTargetBlock('STACK');
+    var i = 1;
+    while (clauseBlock) {
+      switch (clauseBlock.type) {
+        case 'controls_if_elseif':
+          var inputIf = this.getInput('IF' + i);
+          var inputDo = this.getInput('DO' + i);
+          clauseBlock.valueConnection_ =
+              inputIf && inputIf.connection.targetConnection;
+          clauseBlock.statementConnection_ =
+              inputDo && inputDo.connection.targetConnection;
+          i++;
+          break;
+        case 'controls_if_else':
+          var inputDo = this.getInput('ELSE');
+          clauseBlock.statementConnection_ =
+              inputDo && inputDo.connection.targetConnection;
+          break;
+        default:
+          throw 'Unknown block type.';
+      }
+      clauseBlock = clauseBlock.nextConnection &&
+          clauseBlock.nextConnection.targetBlock();
+    }
+  },
   typeblock: [
       { entry: Blockly.Msg.CONTROLS_IF_TYPEBLOCK },
       { entry: Blockly.Msg.CONTROLS_IF_ELSIF_TYPEBLOCK,
@@ -251,6 +373,53 @@ Blockly.Blocks['controls_if'] = {
          mutatorAttributes: { 'elseif': 1, 'else': 1 } },
       { entry: Blockly.Msg.CONTROLS_IF_ELSE_TYPEBLOCK,
          mutatorAttributes: { 'else': 1 } } ]
+};
+
+Blockly.Blocks['controls_if_if'] = {
+  /**
+   * Mutator block for if container.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.logic.HUE);
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.CONTROLS_IF_IF_TITLE_IF);
+    this.appendStatementInput('STACK');
+    this.setTooltip(Blockly.Msg.CONTROLS_IF_IF_TOOLTIP);
+    this.contextMenu = false;
+  },
+  isTopLevel: true
+};
+
+Blockly.Blocks['controls_if_elseif'] = {
+  /**
+   * Mutator bolck for else-if condition.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.logic.HUE);
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP);
+    this.contextMenu = false;
+  }
+};
+
+Blockly.Blocks['controls_if_else'] = {
+  /**
+   * Mutator block for else condition.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.logic.HUE);
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE);
+    this.setPreviousStatement(true);
+    this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP);
+    this.contextMenu = false;
+  }
 };
 
 Blockly.Blocks['logic_compare'] = {

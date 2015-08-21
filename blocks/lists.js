@@ -58,9 +58,13 @@ Blockly.Blocks['lists_create_with'] = {
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_CREATE_WITH_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
-    this.appendAddSubGroup(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, 'items',
+    if (Blockly.useMutators) {
+      this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
+    } else {
+      this.appendAddSubGroup(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, 'items',
                            null,
                            Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+    }
     this.itemCount_ = 1;
     this.updateShape_();
     this.setOutput(true, 'Array');
@@ -130,12 +134,89 @@ Blockly.Blocks['lists_create_with'] = {
       }
     }
   },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  saveConnections: function(containerBlock) {
+    var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    var i = 0;
+    while (itemBlock) {
+      var input = this.getInput('ADD' + i);
+      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      i++;
+      itemBlock = itemBlock.nextConnection &&
+          itemBlock.nextConnection.targetBlock();
+    }
+  },
+  /**
+   * Modify this block to have the correct number of inputs.
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function() {
+    // Delete everything.
+    if (this.getInput('EMPTY')) {
+      this.removeInput('EMPTY');
+    } else {
+      var i = 0;
+      while (this.getInput('ADD' + i)) {
+        this.removeInput('ADD' + i);
+        i++;
+      }
+    }
+    // Rebuild block.
+    if (this.itemCount_ == 0) {
+      this.appendDummyInput('EMPTY')
+          .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+    } else {
+      for (var i = 0; i < this.itemCount_; i++) {
+        var input = this.appendValueInput('ADD' + i);
+        if (i == 0) {
+          input.appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
+        }
+      }
+    }
+  },
   typeblock: [
       { entry: Blockly.Msg.LISTS_CREATE_WITH_TYPEBLOCK,
         mutatorAttributes: { items: 2 } }
 //      ,{ entry: Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK,
 //        mutatorAttributes: { items: 0 } }
              ]
+};
+
+Blockly.Blocks['lists_create_with_container'] = {
+  /**
+   * Mutator block for list container.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.lists.HUE);
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD);
+    this.appendStatementInput('STACK');
+    this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP);
+    this.contextMenu = false;
+  },
+  isTopLevel: true
+};
+
+Blockly.Blocks['lists_create_with_item'] = {
+  /**
+   * Mutator bolck for adding items.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.lists.HUE);
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP);
+    this.contextMenu = false;
+  }
 };
 
 Blockly.Blocks['lists_repeat'] = {

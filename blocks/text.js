@@ -75,10 +75,14 @@ Blockly.Blocks['text_join'] = {
     this.setHelpUrl(Blockly.Msg.TEXT_JOIN_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.setOutput(true, 'String');
-    this.appendAddSubGroup(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH, 'items',null,
+    if (Blockly.useMutators) {
+      this.setMutator(new Blockly.Mutator(['text_create_join_item']));
+    } else {
+      this.appendAddSubGroup(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH, 'items',null,
                             '-IGNORED-');
+    }
     this.itemCount_ = 2;
-//  this.setMutator(new Blockly.Mutator(['text_create_join_item']));
+    this.updateShape_();
     this.setTooltip(Blockly.Msg.TEXT_JOIN_TOOLTIP);
   },
   /**
@@ -135,6 +139,58 @@ Blockly.Blocks['text_join'] = {
     }
     this.itemCount_ = connections.length;
     this.updateShape_();
+    // Reconnect any child blocks.
+    for (var i = 0; i < this.itemCount_; i++) {
+      if (connections[i]) {
+        this.getInput('ADD' + i).connection.connect(connections[i]);
+      }
+    }
+  },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Blockly.Block} containerBlock Root block in mutator.
+   * @this Blockly.Block
+   */
+  saveConnections: function(containerBlock) {
+    var itemBlock = containerBlock.getInputTargetBlock('STACK');
+    var i = 0;
+    while (itemBlock) {
+      var input = this.getInput('ADD' + i);
+      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      i++;
+      itemBlock = itemBlock.nextConnection &&
+          itemBlock.nextConnection.targetBlock();
+    }
+  },
+  /**
+   * Modify this block to have the correct number of inputs.
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function() {
+    // Delete everything.
+    if (this.getInput('EMPTY')) {
+      this.removeInput('EMPTY');
+    } else {
+      var i = 0;
+      while (this.getInput('ADD' + i)) {
+        this.removeInput('ADD' + i);
+        i++;
+      }
+    }
+    // Rebuild block.
+    if (this.itemCount_ == 0) {
+      this.appendDummyInput('EMPTY')
+          .appendField(this.newQuote_(true))
+          .appendField(this.newQuote_(false));
+    } else {
+      for (var i = 0; i < this.itemCount_; i++) {
+        var input = this.appendValueInput('ADD' + i);
+        if (i == 0) {
+          input.appendField(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH);
+        }
+      }
+    }
   },
   getAddSubName: function(name,pos) {
     return 'ADD'+pos;
@@ -153,6 +209,38 @@ Blockly.Blocks['text_join'] = {
 //        mutatorAttributes: { items: 0 } }
              ]
 
+};
+
+Blockly.Blocks['text_create_join_container'] = {
+  /**
+   * Mutator block for container.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.texts.HUE);
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN);
+    this.appendStatementInput('STACK');
+    this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP);
+    this.contextMenu = false;
+  },
+  isTopLevel: true
+};
+
+Blockly.Blocks['text_create_join_item'] = {
+  /**
+   * Mutator block for add items.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.texts.HUE);
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP);
+    this.contextMenu = false;
+  }
 };
 
 Blockly.Blocks['text_append'] = {

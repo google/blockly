@@ -231,9 +231,9 @@ Blockly.Field.prototype.getSize = function() {
  */
 Blockly.Field.prototype.getScaledBBox_ = function() {
   var bBox = this.borderRect_.getBBox();
-  bBox.width *= this.sourceBlock_.workspace.scale;
-  bBox.height *= this.sourceBlock_.workspace.scale;
-  return bBox;
+  // Create new object, as getBBox can return an uneditable SVGRect.
+  return {width: bBox.width * this.sourceBlock_.workspace.scale,
+          height: bBox.height * this.sourceBlock_.workspace.scale};
 };
 
 /**

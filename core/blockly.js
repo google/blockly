@@ -294,7 +294,7 @@ Blockly.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
-  if (event.touches && event.touches.length >= 2) {
+  if (e.touches && e.touches.length >= 2) {
     return;  // Multi-touch gestures won't have e.clientX.
   }
   var workspace = Blockly.getMainWorkspace();

@@ -40,12 +40,13 @@ Blockly.Blocks['lists_create_empty'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL);
-    this.setColour(Blockly.Blocks.lists.HUE);
-    this.setOutput(true, 'Array');
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
-    this.setTooltip(Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP);
+    this.jsonInit({
+      "message0": Blockly.Msg.LISTS_CREATE_EMPTY_TITLE,
+      "output": "Array",
+      "colour": Blockly.Blocks.lists.HUE,
+      "tooltip": Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP,
+      "helpUrl": Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL
+    });
   }
 };
 

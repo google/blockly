@@ -583,7 +583,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       var input = this.getInput('ARG' + i);
       if (input) {
         var connection = input.connection.targetConnection;
-        if (i > parameters.length) { // If it is no longer used
+        if (i >= parameters.length) { // If it is no longer used
           // Disconnect all argument blocks and remove all inputs.
           this.removeInput('ARG' + i);
         } else if (parameters[i]['name'] != this.arguments_[i]['name']) {
@@ -603,11 +603,11 @@ Blockly.Blocks['procedures_callnoreturn'] = {
           if (input.connection.targetConnection) {
             connection = null;
           }
-          if (connection) {
-            // If we disconnected the block for any reason, we need to remember
-            // it so that we can reconnect it later on if things get better
-            this.quarkConnections_[this.arguments_[i]['name']] = connection;
-          }
+        }
+        if (connection) {
+          // If we disconnected the block for any reason, we need to remember
+          // it so that we can reconnect it later on if things get better
+          this.quarkConnections_[this.arguments_[i]['name']] = connection;
         }
       }
     }

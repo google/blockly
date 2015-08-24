@@ -17,6 +17,7 @@ goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.ui.ac');
 goog.require('goog.style');
+goog.require('goog.string');
 
 goog.require('goog.ui.ac.ArrayMatcher');
 goog.require('goog.ui.ac.AutoComplete');
@@ -297,22 +298,22 @@ Blockly.TypeBlock.loadProcedures_ = function() {
 
   // Add blocks for the calls with no return
   goog.array.forEach(procNamesArray[0], function(proc){
-    var entry = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
-                            ' ' + proc[0];
+    var entry = goog.string.trim(Blockly.Msg.PROCEDURES_CALLNORETURN_CALL + ' ')
+      + proc[0];
     Blockly.TypeBlock.TBOptions_[entry] = {
       canonicName: 'procedures_callnoreturn',
-      fields: {PROCNAME: proc[0] },
+      fields: {NAME: proc[0] },
       isProcedure: true // this attribute is used to clean up before reloading
     };
   });
 
   // Add blocks for the calls with a return
   goog.array.forEach(procNamesArray[1], function(proc){
-    entry = Blockly.Msg.LANG_PROCEDURES_CALLNORETURN_CALL +
-                            ' ' + proc[0];
+    var entry = goog.string.trim(Blockly.Msg.PROCEDURES_CALLRETURN_CALL + ' ')
+       + proc[0];
     Blockly.TypeBlock.TBOptions_[entry] = {
       canonicName: 'procedures_callreturn',
-      fields: {PROCNAME: proc[0] },
+      fields: {NAME: proc[0] },
       isProcedure: true // this attribute is used to clean up before reloading
     };
   });

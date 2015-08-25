@@ -349,10 +349,10 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
  * Deselect this text, so that it doesn't mess up any subsequent drag.
  */
 Blockly.removeAllRanges = function() {
-  if (getSelection()) {
+  if (window.getSelection) {
     setTimeout(function() {
         try {
-          var selection = getSelection();
+          var selection = window.getSelection();
           if (!selection.isCollapsed) {
             selection.removeAllRanges();
           }

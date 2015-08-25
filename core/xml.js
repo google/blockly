@@ -439,7 +439,7 @@ Blockly.Xml.domToBlockHeadless_ =
   if (collapsed) {
     block.setCollapsed(collapsed == 'true');
   }
-  // Give the block a chance to clean up any initial inputs
+  // Give the block a chance to clean up any initial inputs.
   if (block.validate) {
     block.validate.call(block);
   }

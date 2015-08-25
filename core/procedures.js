@@ -97,7 +97,7 @@ Blockly.Procedures.procTupleComparator_ = function(ta, tb) {
  */
 Blockly.Procedures.findLegalName = function(name, block) {
   if (block.isInFlyout) {
-    // Flyouts can have multiple procedures called 'procedure'.
+    // Flyouts can have multiple procedures called 'do something'.
     return name;
   }
   while (!Blockly.Procedures.isLegalName(name, block.workspace, block)) {

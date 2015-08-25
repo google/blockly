@@ -52,9 +52,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
 
     this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
     this.setColour(Blockly.Blocks.procedures.HUE);
-    var name = Blockly.Procedures.findLegalName(
-        Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE, this);
-    var nameField = new Blockly.FieldTextInput(name,
+    var nameField = new Blockly.FieldTextInput(
+        Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     this.appendDummyInput()
@@ -71,7 +70,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   },
   /**
    * Initialization of the block has completed, clean up anything that may be
-   * inconsistent as a result of the XML loading
+   * inconsistent as a result of the XML loading.
    * @this Blockly.Block
    */
   validate: function () {
@@ -576,9 +575,8 @@ Blockly.Blocks['procedures_defreturn'] = {
   init: function() {
     this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL);
     this.setColour(Blockly.Blocks.procedures.HUE);
-    var name = Blockly.Procedures.findLegalName(
-        Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE, this);
-    var nameField = new Blockly.FieldTextInput(name,
+    var nameField = new Blockly.FieldTextInput(
+        Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE,
         Blockly.Procedures.rename);
     nameField.setSpellcheck(false);
     var addField = '';
@@ -606,12 +604,12 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.hasReturnValue_ = true;
   },
   isTopLevel: true,
-  validate: Blockly.Blocks['procedures_defnoreturn'].validate,
   doAddField: Blockly.Blocks['procedures_defnoreturn'].doAddField,
   doRemoveField: Blockly.Blocks['procedures_defnoreturn'].doRemoveField,
-  updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
   updateParam: Blockly.Blocks['procedures_defnoreturn'].updateParam,
   setStatements_: Blockly.Blocks['procedures_defnoreturn'].setStatements_,
+  validate: Blockly.Blocks['procedures_defnoreturn'].validate,
+  updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
   mutationToDom: Blockly.Blocks['procedures_defnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_defnoreturn'].domToMutation,
   decompose: Blockly.Blocks['procedures_defnoreturn'].decompose,

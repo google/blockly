@@ -56,9 +56,8 @@ Blockly.Variables.allVariables = function(root) {
   var variableHash = Object.create(null);
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
-    var func = blocks[x].getVars;
-    if (func) {
-      var blockVariables = func.call(blocks[x]);
+    if (blocks[x].getVars) {
+      var blockVariables = blocks[x].getVars();
       for (var y = 0; y < blockVariables.length; y++) {
         var varName = blockVariables[y];
         // Variable name may be null if the block is only half-built.
@@ -85,10 +84,9 @@ Blockly.Variables.allVariables = function(root) {
 Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
   var blocks = workspace.getAllBlocks();
   // Iterate through every block.
-  for (var x = 0; x < blocks.length; x++) {
-    var func = blocks[x].renameVar;
-    if (func) {
-      func.call(blocks[x], oldName, newName);
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].renameVar) {
+      blocks[i].renameVar(oldName, newName);
     }
   }
 };

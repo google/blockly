@@ -50,10 +50,9 @@ Blockly.Procedures.allProcedures = function(root) {
   var blocks = root.getAllBlocks();
   var proceduresReturn = [];
   var proceduresNoReturn = [];
-  for (var x = 0; x < blocks.length; x++) {
-    var func = blocks[x].getProcedureDef;
-    if (func) {
-      var tuple = func.call(blocks[x]);
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].getProcedureDef) {
+      var tuple = blocks[i].getProcedureDef();
       if (tuple) {
         if (tuple[2]) {
           proceduresReturn.push(tuple);
@@ -63,7 +62,6 @@ Blockly.Procedures.allProcedures = function(root) {
       }
     }
   }
-
   proceduresNoReturn.sort(Blockly.Procedures.procTupleComparator_);
   proceduresReturn.sort(Blockly.Procedures.procTupleComparator_);
   return [proceduresNoReturn, proceduresReturn];
@@ -78,15 +76,7 @@ Blockly.Procedures.allProcedures = function(root) {
  * @private
  */
 Blockly.Procedures.procTupleComparator_ = function(ta, tb) {
-  var a = ta[0].toLowerCase();
-  var b = tb[0].toLowerCase();
-  if (a > b) {
-    return 1;
-  }
-  if (a < b) {
-    return -1;
-  }
-  return 0;
+  return ta[0].toLowerCase().localeCompare(tb[0].toLowerCase());
 };
 
 /**
@@ -124,13 +114,12 @@ Blockly.Procedures.findLegalName = function(name, block) {
 Blockly.Procedures.isLegalName = function(name, workspace, opt_exclude) {
   var blocks = workspace.getAllBlocks();
   // Iterate through every block and check the name.
-  for (var x = 0; x < blocks.length; x++) {
-    if (blocks[x] == opt_exclude) {
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i] == opt_exclude) {
       continue;
     }
-    var func = blocks[x].getProcedureDef;
-    if (func) {
-      var procName = func.call(blocks[x]);
+    if (blocks[i].getProcedureDef) {
+      var procName = blocks[i].getProcedureDef();
       if (Blockly.Names.equals(procName[0], name)) {
         return false;
       }
@@ -153,10 +142,9 @@ Blockly.Procedures.rename = function(text) {
   text = Blockly.Procedures.findLegalName(text, this.sourceBlock_);
   // Rename any callers.
   var blocks = this.sourceBlock_.workspace.getAllBlocks();
-  for (var x = 0; x < blocks.length; x++) {
-    var func = blocks[x].renameProcedure;
-    if (func) {
-      func.call(blocks[x], this.text_, text);
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].renameProcedure) {
+      blocks[i].renameProcedure(this.text_, text);
     }
   }
   return text;
@@ -223,13 +211,12 @@ Blockly.Procedures.getCallers = function(name, workspace) {
   var callers = [];
   var blocks = workspace.getAllBlocks();
   // Iterate through every block and check the name.
-  for (var x = 0; x < blocks.length; x++) {
-    var func = blocks[x].getProcedureCall;
-    if (func) {
-      var procName = func.call(blocks[x]);
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].getProcedureCall) {
+      var procName = blocks[i].getProcedureCall();
       // Procedure name may be null if the block is only half-built.
       if (procName && Blockly.Names.equals(procName, name)) {
-        callers.push(blocks[x]);
+        callers.push(blocks[i]);
       }
     }
   }
@@ -244,8 +231,8 @@ Blockly.Procedures.getCallers = function(name, workspace) {
  */
 Blockly.Procedures.disposeCallers = function(name, workspace) {
   var callers = Blockly.Procedures.getCallers(name, workspace);
-  for (var x = 0; x < callers.length; x++) {
-    callers[x].dispose(true, false);
+  for (var i = 0; i < callers.length; i++) {
+    callers[i].dispose(true, false);
   }
 };
 
@@ -260,8 +247,8 @@ Blockly.Procedures.disposeCallers = function(name, workspace) {
 Blockly.Procedures.mutateCallers = function(name, workspace,
                                             paramNames, paramIds) {
   var callers = Blockly.Procedures.getCallers(name, workspace);
-  for (var x = 0; x < callers.length; x++) {
-    callers[x].setProcedureParameters(paramNames, paramIds);
+  for (var i = 0; i < callers.length; i++) {
+    callers[i].setProcedureParameters(paramNames, paramIds);
   }
 };
 
@@ -273,12 +260,11 @@ Blockly.Procedures.mutateCallers = function(name, workspace,
  */
 Blockly.Procedures.getDefinition = function(name, workspace) {
   var blocks = workspace.getAllBlocks();
-  for (var x = 0; x < blocks.length; x++) {
-    var func = blocks[x].getProcedureDef;
-    if (func) {
-      var tuple = func.call(blocks[x]);
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i].getProcedureDef) {
+      var tuple = blocks[i].getProcedureDef();
       if (tuple && Blockly.Names.equals(tuple[0], name)) {
-        return blocks[x];
+        return blocks[i];
       }
     }
   }

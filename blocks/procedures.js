@@ -70,6 +70,16 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.argid = 0;
   },
   /**
+   * Initialization of the block has completed, clean up anything that may be
+   * inconsistent as a result of the XML loading
+   * @this Blockly.Block
+   */
+  validate: function () {
+    var name = Blockly.Procedures.findLegalName(
+        this.getFieldValue('NAME'), this);
+    this.setFieldValue(name, 'NAME');
+  },
+  /**
    * Add a parameter to the function
    * @param {!Blockly.FieldClickImage} field Field clicked on for the action
    */
@@ -596,6 +606,7 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.hasReturnValue_ = true;
   },
   isTopLevel: true,
+  validate: Blockly.Blocks['procedures_defnoreturn'].validate,
   doAddField: Blockly.Blocks['procedures_defnoreturn'].doAddField,
   doRemoveField: Blockly.Blocks['procedures_defnoreturn'].doRemoveField,
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,

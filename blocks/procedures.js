@@ -44,7 +44,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var addName = 'PARAMS';
     if (!Blockly.useMutators) {
       addField = new Blockly.FieldClickImage(this.addPng, 17, 17);
-      addField.setPrivate({name: name, pos: 0});
       addField.setChangeHandler(this.doAddField);
       addName = null;
     } else {
@@ -576,7 +575,6 @@ Blockly.Blocks['procedures_defreturn'] = {
     var addName = 'PARAMS';
     if (!Blockly.useMutators) {
       addField = new Blockly.FieldClickImage(this.addPng, 17, 17);
-      addField.setPrivate({name: name, pos: 0});
       addField.setChangeHandler(this.doAddField);
       addName = null;
     } else {

@@ -35,12 +35,14 @@ goog.require('goog.math.Size');
 /**
  * Class for a non-editable field.
  * @param {string} text The initial content of the field.
+ * @param {string=} opt_class Optional CSS class for the field's text.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldLabel = function(text) {
+Blockly.FieldLabel = function(text, opt_class) {
   this.sourceBlock_ = null;
   this.size_ = new goog.math.Size(0, 25);
+  this.class_ = opt_class;
   this.setText(text);
 };
 goog.inherits(Blockly.FieldLabel, Blockly.Field);
@@ -64,6 +66,9 @@ Blockly.FieldLabel.prototype.init = function(block) {
   // Build the DOM.
   this.textElement_ = Blockly.createSvgElement('text',
       {'class': 'blocklyText'}, null);
+  if (this.class_) {
+    Blockly.addClass_(this.textElement_, this.class_);
+  }
   if (!this.visible_) {
     this.textElement_.style.display = 'none';
   }

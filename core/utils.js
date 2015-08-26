@@ -266,12 +266,7 @@ Blockly.getRelativeXY_ = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  // Note that Firefox and IE (9,10) return 'translate(12)' instead of
-  // 'translate(12, 0)'.
-  // Note that IE (9,10) returns 'translate(16 8)' instead of
-  // 'translate(16, 8)'.
-  var r = transform &&
-          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
+  var r = transform && transform.match(Blockly.getRelativeXY_.XY_REGEXP_);
   if (r) {
     xy.x += parseFloat(r[1]);
     if (r[3]) {
@@ -280,6 +275,18 @@ Blockly.getRelativeXY_ = function(element) {
   }
   return xy;
 };
+
+/**
+ * Static regex to pull the x,y values out of an SVG translate() directive.
+ * Note that Firefox and IE (9,10) return 'translate(12)' instead of
+ * 'translate(12, 0)'.
+ * Note that IE (9,10) returns 'translate(16 8)' instead of 'translate(16, 8)'.
+ * Note that IE has been reported to return scientific notation (0.123456e-42).
+ * @type {!RegExp}
+ * @private
+ */
+Blockly.getRelativeXY_.XY_REGEXP_ =
+    /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
 
 /**
  * Return the absolute coordinates of the top-left corner of this element,

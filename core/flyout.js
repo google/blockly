@@ -468,9 +468,11 @@ Blockly.Flyout.prototype.reflow = function() {
   var margin = this.CORNER_RADIUS;
   var blocks = this.workspace_.getTopBlocks(false);
   for (var x = 0, block; block = blocks[x]; x++) {
-    var root = block.getSvgRoot();
-    var blockHW = block.getHeightWidth();
-    flyoutWidth = Math.max(flyoutWidth, blockHW.width);
+    var width = block.getHeightWidth().width;
+    if (block.outputConnection) {
+      width -= Blockly.BlockSvg.TAB_WIDTH;
+    }
+    flyoutWidth = Math.max(flyoutWidth, width);
   }
   flyoutWidth += margin + Blockly.BlockSvg.TAB_WIDTH + margin / 2 +
                  Blockly.Scrollbar.scrollbarThickness;
@@ -487,8 +489,10 @@ Blockly.Flyout.prototype.reflow = function() {
       if (block.flyoutRect_) {
         block.flyoutRect_.setAttribute('width', blockHW.width);
         block.flyoutRect_.setAttribute('height', blockHW.height);
+        // Blocks with output tabs are shifted a bit.
+        var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
         block.flyoutRect_.setAttribute('x',
-            this.RTL ? blockXY.x - blockHW.width : blockXY.x);
+            this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
         block.flyoutRect_.setAttribute('y', blockXY.y);
       }
     }

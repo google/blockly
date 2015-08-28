@@ -379,6 +379,10 @@ Blockly.Blocks['initialize_variable'] = {
   },
   isTopLevel: true,
   onchange: function() {
+    if (Blockly.dragMode_ != 0) {
+      // Don't update blocks around while the user is moving them.
+      return;
+    }
     // Is the block nested in a procedure?
     var prefix = Blockly.Variables.getLocalContext(this, null);
 
@@ -391,6 +395,7 @@ Blockly.Blocks['initialize_variable'] = {
       colour = Blockly.Blocks.procedures.HUE;
       title = Blockly.Msg.INITIALIZE_LOCAL_VARIABLE
     }
+
     // Update the block with the right color and text
     this.getInput('VALUE').fieldRow[0].setText(title);
     if (colour != this.getColour()) {

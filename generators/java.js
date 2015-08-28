@@ -163,7 +163,7 @@ Blockly.Java.setAppName = function(name) {
  * @return {string} name Name for the application for any generated code
  */
 Blockly.Java.getAppName = function() {
-  return this.AppName_;
+  return Blockly.Java.variableDB_.getName(this.AppName_,'CLASS');
 }
 
 /**
@@ -198,7 +198,7 @@ Blockly.Java.setBaseclass = function(baseclass) {
  * @return {string} baseclass Name of a base class this workspace is derived from
  */
 Blockly.Java.getBaseclass = function() {
-  return this.Baseclass_;
+  return Blockly.Java.variableDB_.getName(this.Baseclass_,'CLASS');
 }
 
 /**

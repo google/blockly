@@ -58,6 +58,7 @@ Blockly.Blocks['controls_repeat_ext'] = {
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
   },
+  isLoop: true,
   typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
                values: {'TIMES' : 10 }}]
 };
@@ -88,7 +89,8 @@ Blockly.Blocks['controls_repeat'] = {
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
     this.getField('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
-  }//,
+  },
+  isLoop: true//,
 // No typeblock because this is deprecated in
 //     favor of controls_repeat_ext
 //  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
@@ -124,6 +126,7 @@ Blockly.Blocks['controls_whileUntil'] = {
       return TOOLTIPS[op];
     });
   },
+  isLoop: true,
   typeblock: [{entry: Blockly.Msg.CONTROLS_WHILEUNTIL_WHILE_TYPEBLOCK,
                fields: {'MODE' : 'WHILE' }},
               {entry: Blockly.Msg.CONTROLS_WHILEUNTIL_UNTIL_TYPEBLOCK,
@@ -178,6 +181,7 @@ Blockly.Blocks['controls_for'] = {
           thisBlock.getFieldValue('VAR'));
     });
   },
+  isLoop: true,
   /**
    * Return all variables referenced by this block.
    * @return {!Array.<string>} List of variable names.
@@ -264,6 +268,7 @@ Blockly.Blocks['controls_forEach'] = {
           thisBlock.getFieldValue('VAR'));
     });
   },
+  isLoop: true,
   /**
    * Return all variables referenced by this block.
    * @return {!Array.<string>} List of variable names.
@@ -333,11 +338,7 @@ Blockly.Blocks['controls_flow_statements'] = {
     // Is the block nested in a loop?
     var block = this;
     do {
-      if (block.type == 'controls_repeat' ||
-          block.type == 'controls_repeat_ext' ||
-          block.type == 'controls_forEach' ||
-          block.type == 'controls_for' ||
-          block.type == 'controls_whileUntil') {
+      if (block.isLoop) {
         legal = true;
         break;
       }

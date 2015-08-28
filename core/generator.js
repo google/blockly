@@ -169,7 +169,7 @@ Blockly.Generator.prototype.blockToCode = function(block,parms,nostash) {
   if (!block) {
     return '';
   }
-  if (block.disabled) {
+  if (block.disabled || block.getInheritedDisabled()) {
     // Skip past this block if it is disabled.
     return this.blockToCode(block.getNextBlock(),parms,nostash);
   }

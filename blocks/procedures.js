@@ -1049,8 +1049,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
     // Is the block nested in a procedure?
     var block = this;
     do {
-      if (block.type == 'procedures_defnoreturn' ||
-          block.type == 'procedures_defreturn') {
+      if (block.getProcedureDef) {
         legal = true;
         break;
       }

@@ -1036,6 +1036,8 @@ Blockly.Java.init = function(workspace, imports) {
       type = 'Object';
     } else if (type === 'Array') {
       type = 'LinkedList';
+    } else if (type === 'Map') {
+      type = 'HashMap';
     } else if (type === 'Var') {
       type = 'Var';
       needVarClass = true;

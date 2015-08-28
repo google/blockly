@@ -1164,18 +1164,22 @@ Blockly.BlockSvg.prototype.updateColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  var hasClass = Blockly.hasClass_(/** @type {!Element} */ (this.svgGroup_),
-                                   'blocklyDisabled');
+  var hasClass = Blockly.hasClass_(/** @type {!Element} */ (this.svgGroup_),'blocklyDisabled');
   if (this.disabled || this.getInheritedDisabled()) {
     if (!hasClass) {
-      Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
-                        'blocklyDisabled');
-      this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
+      Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),'blocklyDisabled');
+      this.svgPath_.setAttribute('stroke', 'red');
+      this.svgPath_.setAttribute('stroke-width', '2');
+      this.svgPath_.setAttribute('stroke-opacity', 'stroke-opacity:1.0');
+      this.svgPath_.setAttribute('stroke-dasharray', '10, 5');
     }
   } else {
     if (hasClass) {
-      Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
-                           'blocklyDisabled');
+      Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),'blocklyDisabled');
+      this.svgPath_.removeAttribute('stroke', 'red');
+      this.svgPath_.removeAttribute('stroke-width', '2');
+      this.svgPath_.removeAttribute('stroke-opacity', 'stroke-opacity:1.0');
+      this.svgPath_.removeAttribute('stroke-dasharray', '10, 5');
       this.updateColour();
     }
   }

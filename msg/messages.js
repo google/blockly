@@ -218,6 +218,14 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variabl
 /// typeblock - Typing to add the block
 Blockly.Msg.CONTROLS_FOREACH_TYPEBLOCK = 'For Each Item In List';
 
+/// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
+Blockly.Msg.CONTROLS_FOREACH_KEY_HELPURL = 'https://github.com/google/blockly/wiki/Loops#for-each';
+/// block text - Title of [https://github.com/google/blockly/wiki/Loops#for-each for each block].
+/// Sequentially assigns every item in array %2 to the valiable %1.
+Blockly.Msg.CONTROLS_FOREACH_KEY_TITLE = 'for each key %1 in map %2';
+/// typeblock - Typing to add the block
+Blockly.Msg.CONTROLS_FOREACH_KEY_TYPEBLOCK = 'For Each Key In Map';
+
 /// url - Describes control flow in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow], if it exists.
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = 'https://github.com/google/blockly/wiki/Loops#loop-termination-blocks';
 /// dropdown - The current loop should be exited.  See [https://github.com/google/blockly/wiki/Loops#break https://github.com/google/blockly/wiki/Loops#break].
@@ -1314,6 +1322,169 @@ Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = 'Join a list of texts into one text, sepa
 Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT_TYPEBLOCK = 'Make List From Text';
 /// typeblock - Typing to add the block
 Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST_TYPEBLOCK = 'Make Text From List';
+
+
+// Maps Blocks.
+/// url - Information on empty Maps.
+Blockly.Msg.MAPS_CREATE_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Maps#create-empty-Map';
+/// block text - See [https://github.com/google/blockly/wiki/Maps#create-empty-Map https://github.com/google/blockly/wiki/Maps#create-empty-Map].
+Blockly.Msg.MAPS_CREATE_EMPTY_TITLE = 'create empty map';
+/// block text - See [https://github.com/google/blockly/wiki/Maps#create-empty-Map https://github.com/google/blockly/wiki/Maps#create-empty-Map].
+Blockly.Msg.MAPS_CREATE_EMPTY_TOOLTIP = 'Returns a Map, of length 0, containing no data records';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_CREATE_EMPTY_TYPEBLOCK = 'Create Empty Map';
+
+/// url - Information on building Maps.
+Blockly.Msg.MAPS_CREATE_WITH_HELPURL = 'https://github.com/google/blockly/wiki/Maps#create-Map-with';
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#create-Map-with https://github.com/google/blockly/wiki/Maps#create-Map-with].
+Blockly.Msg.MAPS_CREATE_WITH_TOOLTIP = 'Create a Map with any number of items.';
+/// block text - See [https://github.com/google/blockly/wiki/Maps#create-Map-with https://github.com/google/blockly/wiki/Maps#create-Map-with].
+Blockly.Msg.MAPS_CREATE_WITH_INPUT_WITH = 'create map with';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_CREATE_WITH_TYPEBLOCK = 'Create Map With';
+/// block text - This appears in a sub-block when [https://github.com/google/blockly/wiki/Maps#changing-number-of-inputs changing the number of inputs in a ''''create Map with'''' block].
+Blockly.Msg.MAPS_CREATE_WITH_CONTAINER_TITLE_ADD = 'Map';
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#changing-number-of-inputs https://github.com/google/blockly/wiki/Maps#changing-number-of-inputs].
+Blockly.Msg.MAPS_CREATE_WITH_CONTAINER_TOOLTIP = 'Add, remove, or reorder sections to reconfigure this Map block.';
+Blockly.Msg.MAPS_CREATE_WITH_ITEM_TITLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#changing-number-of-inputs https://github.com/google/blockly/wiki/Maps#changing-number-of-inputs].
+Blockly.Msg.MAPS_CREATE_WITH_ITEM_TOOLTIP = 'Add an item to the Map.';
+
+/// url - Information on empty Maps.
+Blockly.Msg.MAPS_CREATE_HELPURL = 'https://github.com/google/blockly/wiki/Maps#create-empty-Map';
+/// block text - See [https://github.com/google/blockly/wiki/Maps#create-empty-Map https://github.com/google/blockly/wiki/Maps#create-empty-Map].
+Blockly.Msg.MAPS_CREATE_TITLE = 'map key %1 as %2';
+/// block text - See [https://github.com/google/blockly/wiki/Maps#create-empty-Map https://github.com/google/blockly/wiki/Maps#create-empty-Map].
+Blockly.Msg.MAPS_CREATE_TOOLTIP = 'Returns a Map, of length 0, containing no data records';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_CREATE_TYPEBLOCK = 'Map Key';
+
+/// url - Information about how the length of a Map is computed (i.e., by the total number of elements, not the number of different elements).
+Blockly.Msg.MAPS_LENGTH_HELPURL = 'https://github.com/google/blockly/wiki/Maps#length-of';
+/// block text - See [https://github.com/google/blockly/wiki/Maps#length-of https://github.com/google/blockly/wiki/Maps#length-of].
+/// \n\nParameters:\n* %1 - the Map whose size is desired
+Blockly.Msg.MAPS_LENGTH_TITLE = 'size of %1';
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#length-of https://github.com/google/blockly/wiki/Maps#length-of Blockly:Maps:length of].
+Blockly.Msg.MAPS_LENGTH_TOOLTIP = 'Returns the number of entries in a Map.';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_LENGTH_TYPEBLOCK = 'Size Of Map';
+
+/// url - See [https://github.com/google/blockly/wiki/Maps#is-empty https://github.com/google/blockly/wiki/Maps#is-empty].
+Blockly.Msg.MAPS_ISEMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Maps#is-empty';
+/// block text - See [https://github.com/google/blockly/wiki/Maps#is-empty
+/// https://github.com/google/blockly/wiki/Maps#is-empty].
+/// \n\nParameters:\n* %1 - the Map to test
+Blockly.Msg.MAPS_ISEMPTY_TITLE = '%1 is empty';
+/// block tooltip - See [https://github.com/google/blockly/wiki/Maps#is-empty
+/// https://github.com/google/blockly/wiki/Maps#is-empty].
+Blockly.Msg.MAPS_ISEMPTY_TOOLTIP = 'Returns true if the Map is empty.';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_ISEMPTY_TYPEBLOCK = 'Is Map Empty?';
+
+/// block text - Title of blocks operating on [https://github.com/google/blockly/wiki/Maps Maps].
+Blockly.Msg.MAPS_INMAP = 'in map';
+
+/// url - See [https://github.com/google/blockly/wiki/Maps#getting-items-from-a-Map
+/// https://github.com/google/blockly/wiki/Maps#getting-items-from-a-Map].
+Blockly.Msg.MAPS_INDEX_OF_HELPURL = 'https://github.com/google/blockly/wiki/Maps#getting-items-from-a-Map';
+Blockly.Msg.MAPS_INDEX_OF_INPUT_IN_MAP = Blockly.Msg.MAPS_INMAP;
+/// dropdown - See [https://github.com/google/blockly/wiki/Maps#finding-items-in-a-Map
+/// Maps#finding-items-in-a-Map].
+/// [[File:Blockly-Map-find.png]]
+Blockly.Msg.MAPS_INDEX_OF_FIRST = 'find first occurrence of item';
+/// dropdown - See [https://github.com/google/blockly/wiki/Maps#finding-items-in-a-Map
+/// https://github.com/google/blockly/wiki/Maps#finding-items-in-a-Map].
+/// [[File:Blockly-Map-find.png]]
+Blockly.Msg.MAPS_INDEX_OF_LAST = 'find last occurrence of item';
+/// dropdown - See [https://github.com/google/blockly/wiki/Maps#finding-items-in-a-Map
+/// https://github.com/google/blockly/wiki/Maps#finding-items-in-a-Map].
+/// [[File:Blockly-Map-find.png]]
+Blockly.Msg.MAPS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the Map. Returns 0 if text is not found.';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_INDEX_OF_FIRST_TYPEBLOCK = 'Find First Occurrence Of Item';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_INDEX_OF_LAST_TYPEBLOCK = 'Find Last Occurrence Of Item';
+
+Blockly.Msg.MAPS_GET_INDEX_HELPURL = Blockly.Msg.MAPS_INDEX_OF_HELPURL;
+/// dropdown - Indicates that the user wishes to
+/// [https://github.com/google/blockly/wiki/Maps#getting-a-single-item
+/// get an item from a Map] without removing it from the Map.
+Blockly.Msg.MAPS_GET_INDEX_GET = 'get';
+/// dropdown - Indicates that the user wishes to
+/// [https://github.com/google/blockly/wiki/Maps#getting-a-single-item
+/// get and remove an item from a Map], as opposed to merely getting
+/// it without modifying the Map.
+Blockly.Msg.MAPS_GET_INDEX_GET_REMOVE = 'get and remove';
+/// dropdown - Indicates that the user wishes to
+/// [https://github.com/google/blockly/wiki/Maps#removing-an-item
+/// remove an item from a Map].\n{{Identical|Remove}}
+Blockly.Msg.MAPS_GET_INDEX_REMOVE = 'remove';
+/// dropdown - Indicates that an index relative to the front of the Map should be used to
+/// [https://github.com/google/blockly/wiki/Maps#getting-a-single-item get and/or remove
+/// an item from a Map].  Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
+/// automatically appear ''after'' this number (and any other ordinal numbers on this block).
+/// See [[Translating:Blockly#Ordinal_numbers]] for more information on ordinal numbers in Blockly.
+/// [[File:Blockly-Map-get-item.png]]
+Blockly.Msg.MAPS_GET_INDEX_FROM_START = '#';
+/// dropdown - Indicates that an index relative to the end of the Map should be used
+/// to [https://github.com/google/blockly/wiki/Maps#getting-a-single-item access an item in a Map].
+/// [[File:Blockly-Map-get-item.png]]
+Blockly.Msg.MAPS_GET_INDEX_FROM_END = '# from end';
+/// dropdown - Indicates that the '''first''' item should be
+/// [https://github.com/google/blockly/wiki/Maps#getting-a-single-item accessed in a Map].
+/// [[File:Blockly-Map-get-item.png]]
+Blockly.Msg.MAPS_GET_INDEX_FIRST = 'first';
+/// dropdown - Indicates that the '''last''' item should be
+/// [https://github.com/google/blockly/wiki/Maps#getting-a-single-item accessed in a Map].
+/// [[File:Blockly-Map-get-item.png]]
+Blockly.Msg.MAPS_GET_INDEX_LAST = 'last';
+/// block text - Text that should go after the rightmost block/dropdown when
+/// [https://github.com/google/blockly/wiki/Maps#getting-a-single-item
+/// accessing an item from a Map].  In most languages, this will be the empty string.
+/// [[File:Blockly-Map-get-item.png]]
+Blockly.Msg.MAPS_GET_INDEX_TAIL = '';
+Blockly.Msg.MAPS_GET_INDEX_INPUT_IN_MAP = Blockly.Msg.MAPS_INMAP;
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#getting-a-single-item
+/// https://github.com/google/blockly/wiki/Maps#getting-a-single-item] for more information.
+Blockly.Msg.MAPS_GET_INDEX_TOOLTIP_GET = 'Returns the item at the specified position in a Map.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#getting-and-removing-an-item]
+/// (for remove and return) and
+/// [https://github.com/google/blockly/wiki/Maps#getting-a-single-item] for '# from start'.
+Blockly.Msg.MAPS_GET_INDEX_TOOLTIP_GET_REMOVE = 'Removes and returns the item at the specified position in a Map.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Maps#getting-a-single-item] for '# from start'.
+Blockly.Msg.MAPS_GET_INDEX_TOOLTIP_REMOVE = 'Removes the item at the specified position in a Map.';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_GET_INDEX_GET_TYPEBLOCK = 'Get Item From a Map';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_GET_INDEX_GET_REMOVE_TYPEBLOCK = 'Get and Remove Item From a Map';
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_GET_INDEX_REMOVE_TYPEBLOCK = 'Remove Item From a Map';
+/// url - Information about putting items in Maps.
+Blockly.Msg.MAPS_SET_INDEX_HELPURL = 'https://github.com/google/blockly/wiki/Maps#in-Map--set';
+Blockly.Msg.MAPS_SET_INDEX_INPUT_IN_MAP = Blockly.Msg.MAPS_INMAP;
+/// block text - [https://github.com/google/blockly/wiki/Maps#in-Map--set
+/// Replaces an item in a Map].
+/// [[File:Blockly-in-Map-set-insert.png]]
+Blockly.Msg.MAPS_SET_INDEX_SET = 'set';
+/// block text - [https://github.com/google/blockly/wiki/Maps#in-Map--insert-at
+/// Inserts an item into a Map].
+/// [[File:Blockly-in-Map-set-insert.png]]
+Blockly.Msg.MAPS_SET_INDEX_INSERT = 'insert at';
+/// block text - The word(s) after the position in the Map and before the item to be set/inserted.
+/// [[File:Blockly-in-Map-set-insert.png]]
+Blockly.Msg.MAPS_SET_INDEX_INPUT_TO = 'as';
+/// tooltip - See [https://github.com/google/blockly/wiki/Maps#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "set" block).
+Blockly.Msg.MAPS_SET_INDEX_TOOLTIP = 'Sets the item at the specified position in a Map.';
+Blockly.Msg.MAPS_SET_INDEX_TYPEBLOCK = 'Set Item at Position in Map';
+
+/// block text - This lays out the text of the block.  %1 corresponds to a map
+Blockly.Msg.MAPS_KEYS_TITLE = 'get keys of %1';
+/// tooltip -
+Blockly.Msg.MAPS_KEYS_TOOLTIP
+/// url - Information about putting items in Maps.
+Blockly.Msg.MAPS_KEYS_HELPURL
+/// typeblock - Typing to add the block
+Blockly.Msg.MAPS_KEYS_TYPEBLOCK = 'Get Keys of Map';
 
 /// grammar - Text that follows an ordinal number (a number that indicates
 /// position relative to other numbers).  In most languages, such text appears

@@ -252,7 +252,9 @@ Blockly.svgSize = function(svg) {
  * Defines list of variables for varius scopes
  * @type {Array.<!Array>}
  */
-Blockly.scopeVariableList = { Types: ['String','Number','Boolean','Array']};
+Blockly.scopeVariableList = {
+  Types: ['String','Number','Boolean','Array','Map']
+};
 
 /**
  * Defines whether to use mutators or +/- for objects

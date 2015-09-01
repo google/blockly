@@ -363,7 +363,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   }
   this.buttons_.length = 0;
 
-  this.workspace_.scale = this.targetWorkspace_.scale;
   var margin = this.CORNER_RADIUS;
   this.svgGroup_.style.display = 'block';
 
@@ -466,6 +465,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
  * For RTL: Lay out the blocks right-aligned.
  */
 Blockly.Flyout.prototype.reflow = function() {
+  this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutWidth = 0;
   var margin = this.CORNER_RADIUS;
   var blocks = this.workspace_.getTopBlocks(false);
@@ -484,10 +484,11 @@ Blockly.Flyout.prototype.reflow = function() {
       var blockHW = block.getHeightWidth();
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
+        var oldX = block.getRelativeToSurfaceXY().x;
         var dx = flyoutWidth - margin;
         dx /= this.workspace_.scale;
         dx -= Blockly.BlockSvg.TAB_WIDTH;
-        block.moveBy(dx, 0);
+        block.moveBy(dx - oldX, 0);
       }
       if (block.flyoutRect_) {
         block.flyoutRect_.setAttribute('width', blockHW.width);
@@ -632,8 +633,13 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     }
     var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
     // Scale the scroll (getSvgXY_ did not do this).
-    xyOld.x += flyout.workspace_.scrollX / flyout.workspace_.scale -
-        flyout.workspace_.scrollX;
+    if (flyout.RTL) {
+      var width = workspace.getMetrics().viewWidth - flyout.width_;
+      xyOld.x += width / workspace.scale - width;
+    } else {
+      xyOld.x += flyout.workspace_.scrollX / flyout.workspace_.scale -
+          flyout.workspace_.scrollX;
+    }
     xyOld.y += flyout.workspace_.scrollY / flyout.workspace_.scale -
         flyout.workspace_.scrollY;
     var svgRootNew = block.getSvgRoot();

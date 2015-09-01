@@ -896,7 +896,6 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   Blockly.hideChaff(false);
   if (this.flyout_) {
     // No toolbox, resize flyout.
-    this.flyout_.workspace_.scale = this.scale;
     this.flyout_.reflow();
   }
 };
@@ -921,6 +920,11 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function() {
   var metrics = this.getMetrics();
   this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
                      (metrics.contentHeight - metrics.viewHeight) / 2);
+  Blockly.hideChaff(false);
+  if (this.flyout_) {
+    // No toolbox, resize flyout.
+    this.flyout_.reflow();
+  }
 };
 
 /**

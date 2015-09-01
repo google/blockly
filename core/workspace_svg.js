@@ -162,11 +162,12 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_, this);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g',
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_, this);
+  var bottom = Blockly.Scrollbar.scrollbarThickness;
   if (this.options.hasTrashcan) {
-    this.addTrashcan_();
+    bottom = this.addTrashcan_(bottom);
   }
   if (this.options.zoomOptions && this.options.zoomOptions.controls) {
-    this.addZoomControls_();
+    bottom = this.addZoomControls_(bottom);
   }
   Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
   var thisWorkspace = this;
@@ -231,26 +232,30 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 
 /**
  * Add a trashcan.
+ * @param {number} bottom Distance from workspace bottom to bottom of trashcan.
+ * @return {number} Distance from workspace bottom to the top of trashcan.
  * @private
  */
-Blockly.WorkspaceSvg.prototype.addTrashcan_ = function() {
+Blockly.WorkspaceSvg.prototype.addTrashcan_ = function(bottom) {
   /** @type {Blockly.Trashcan} */
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
   this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
-  this.trashcan.init();
+  return this.trashcan.init(bottom);
 };
 
 /**
  * Add zoom controls.
+ * @param {number} bottom Distance from workspace bottom to bottom of controls.
+ * @return {number} Distance from workspace bottom to the top of controls.
  * @private
  */
-Blockly.WorkspaceSvg.prototype.addZoomControls_ = function() {
+Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
   /** @type {Blockly.ZoomControls} */
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
-  this.zoomControls_.init();
+  return this.zoomControls_.init(bottom);
 };
 
 /**

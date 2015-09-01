@@ -363,6 +363,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   }
   this.buttons_.length = 0;
 
+  this.workspace_.scale = this.targetWorkspace_.scale;
   var margin = this.CORNER_RADIUS;
   this.svgGroup_.style.display = 'block';
 
@@ -630,34 +631,20 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       throw 'originBlock is not rendered.';
     }
     var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
+    // Scale the scroll (getSvgXY_ did not do this).
+    xyOld.x += flyout.workspace_.scrollX / flyout.workspace_.scale -
+        flyout.workspace_.scrollX;
+    xyOld.y += flyout.workspace_.scrollY / flyout.workspace_.scale -
+        flyout.workspace_.scrollY;
     var svgRootNew = block.getSvgRoot();
     if (!svgRootNew) {
       throw 'block is not rendered.';
     }
-    if (workspace.scale == 1) {
-      // No scaling issues.
-      var xyNew = Blockly.getSvgXY_(svgRootNew, workspace);
-      block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
-    } else {
-      // Scale the block while keeping the mouse location constant.
-      var mouseXY = Blockly.mouseToSvg(e, workspace.options.svg);
-      // Relative mouse position to the block.
-      var rMouseX = mouseXY.x - xyOld.x;
-      var rMouseY = mouseXY.y - xyOld.y;
-      // Fix scale.
-      xyOld.x /= workspace.scale;
-      xyOld.y /= workspace.scale;
-      // Calculate the position to create the block, fixing scale.
-      var xyCanvastoSvg = Blockly.getRelativeXY_(workspace.getCanvas());
-      var xyNewtoCanvas = Blockly.getRelativeXY_(svgRootNew);
-      var newX = xyCanvastoSvg.x / workspace.scale + xyNewtoCanvas.x;
-      var newY = xyCanvastoSvg.y / workspace.scale + xyNewtoCanvas.y;
-      var placePositionX = xyOld.x - newX;
-      var placePositionY = xyOld.y - newY;
-      var dx = rMouseX - rMouseX / workspace.scale;
-      var dy = rMouseY - rMouseY / workspace.scale;
-      block.moveBy(placePositionX - dx, placePositionY - dy);
-    }
+    var xyNew = Blockly.getSvgXY_(svgRootNew, workspace);
+    // Scale the scroll (getSvgXY_ did not do this).
+    xyNew.x += workspace.scrollX / workspace.scale - workspace.scrollX;
+    xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
+    block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
     if (flyout.autoClose) {
       flyout.hide();
     } else {

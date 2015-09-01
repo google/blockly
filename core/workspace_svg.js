@@ -635,7 +635,6 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
-  Blockly.hideChaff(true);
   // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
   Blockly.terminateDrag_();
   var delta = e.deltaY > 0 ? -1 : 1;
@@ -881,12 +880,19 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
       .translate(x * (1 - scaleChange), y * (1 - scaleChange))
       .scale(scaleChange);
   // newScale and matrix.a should be identical (within a rounding error).
-  if (this.scale != matrix.a) {
-    this.scale = matrix.a;
-    this.scrollX = matrix.e - metrics.absoluteLeft;
-    this.scrollY = matrix.f - metrics.absoluteTop;
-    this.updateGridPattern_();
-    this.scrollbar.resize();
+  if (this.scale == matrix.a) {
+    return;  // No change in zoom.
+  }
+  this.scale = matrix.a;
+  this.scrollX = matrix.e - metrics.absoluteLeft;
+  this.scrollY = matrix.f - metrics.absoluteTop;
+  this.updateGridPattern_();
+  this.scrollbar.resize();
+  Blockly.hideChaff(false);
+  if (this.flyout_) {
+    // No toolbox, resize flyout.
+    this.flyout_.workspace_.scale = this.scale;
+    this.flyout_.reflow();
   }
 };
 

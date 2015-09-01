@@ -171,16 +171,16 @@ Blockly.Java['controls_for'] = function(block) {
     code += '}\n';
     if (variable0Type === 'Var') {
       code += 'for (' + variable0 + '.setObject(' + startVar + ');\n' +
-          '     ' + incVar + ' >= 0 ? ' +
+          Blockly.Java.INDENT + incVar + ' >= 0 ? ' +
           variable0 + '.getObjectAsDouble() <= ' + endVar + ' : ' +
           variable0 + '.getObjectAsDouble()  >= ' + endVar + ';\n' +
                         variable0 + '.incrementObject(' + incVar + ')) ';
     } else {
       code += 'for (' + variable0 + ' = ' + startVar + ';\n' +
-          '     ' + incVar + ' >= 0 ? ' +
+          Blockly.Java.INDENT + incVar + ' >= 0 ? ' +
           variable0 + ' <= ' + endVar + ' : ' +
           variable0 + ' >= ' + endVar + ';\n' +
-          '     ' + variable0 + ' += ' + incVar + ')';
+          Blockly.Java.INDENT + variable0 + ' += ' + incVar + ')';
     }
   }
   code += ' {\n' +
@@ -212,7 +212,7 @@ Blockly.Java['controls_forEach'] = function(block) {
   Blockly.Java.addImport('java.util.Iterator');
   var code = 'for (Iterator ' + loopVar + ' = ' +
                   argument0 + '.iterator(); ' + loopVar + '.hasNext();) {\n'+
-             '  ' + setvar0 + ';\n'
+             Blockly.Java.INDENT + setvar0 + ';\n'
               + branch + '} // end for\n';
   return code;
 };

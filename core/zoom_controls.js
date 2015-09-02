@@ -57,14 +57,14 @@ Blockly.ZoomControls.prototype.HEIGHT_ = 110;
  * @type {number}
  * @private
  */
-Blockly.ZoomControls.prototype.MARGIN_BOTTOM_ = 100;
+Blockly.ZoomControls.prototype.MARGIN_BOTTOM_ = 20;
 
 /**
  * Distance between zoom controls and right edge of workspace.
  * @type {number}
  * @private
  */
-Blockly.ZoomControls.prototype.MARGIN_SIDE_ = 35;
+Blockly.ZoomControls.prototype.MARGIN_SIDE_ = 20;
 
 /**
  * The SVG group containing the zoom controls.
@@ -175,9 +175,12 @@ Blockly.ZoomControls.prototype.createDom = function() {
 
 /**
  * Initialize the zoom controls.
+ * @param {number} bottom Distance from workspace bottom to bottom of controls.
+ * @return {number} Distance from workspace bottom to the top of controls.
  */
-Blockly.ZoomControls.prototype.init = function() {
-  // Initialize some stuff... (animations?)
+Blockly.ZoomControls.prototype.init = function(bottom) {
+  this.bottom_ = this.MARGIN_BOTTOM_ + bottom;
+  return this.bottom_ + this.HEIGHT_;
 };
 
 /**
@@ -202,13 +205,13 @@ Blockly.ZoomControls.prototype.position = function() {
     return;
   }
   if (this.workspace_.RTL) {
-    this.left_ = this.MARGIN_SIDE_;
+    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
   } else {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_;
+        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
   }
   this.top_ = metrics.viewHeight + metrics.absoluteTop -
-      this.HEIGHT_ - this.MARGIN_BOTTOM_;
+      this.HEIGHT_ - this.bottom_;
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
 };

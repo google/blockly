@@ -90,7 +90,6 @@ Blockly.Dart['maps_length'] = function(block) {
   // List length.
   var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_NONE) || '[]';
-  }
   return [argument0 + '.length()', Blockly.Dart.ORDER_FUNCTION_CALL];
 };
 

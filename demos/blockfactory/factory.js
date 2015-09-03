@@ -204,21 +204,34 @@ function formatJavaScript_(blockType, rootBlock) {
   // Generate inputs.
   var TYPES = {'input_value': 'appendValueInput',
                'input_statement': 'appendStatementInput',
-               'input_dummy': 'appendDummyInput'};
+               'input_dummy': 'appendDummyInput',
+               'input_addsub': 'appendAddSubGroup',
+               'input_addsubmulti': 'appendAddSubMulti'};
+
   var contentsBlock = rootBlock.getInputTargetBlock('INPUTS');
   while (contentsBlock) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
       var name = '';
+      var check = getOptTypesFrom(contentsBlock, 'TYPE');
+      var align = contentsBlock.getFieldValue('ALIGN');
       // Dummy inputs don't have names.  Other inputs do.
       if (contentsBlock.type != 'input_dummy') {
         name = escapeString(contentsBlock.getFieldValue('INPUTNAME'));
+        if (contentsBlock.type == 'input_addsub' ||
+            contentsBlock.type == 'input_addsubmulti') {
+          name = escapeString(contentsBlock.getFieldValue('INPUTTITLE')) +
+                 ', ' + name;
+          align = 'LEFT';
+          if (check) {
+            name += ', ' + check;
+            check = null;
+          }
+        }
       }
       code.push('    this.' + TYPES[contentsBlock.type] + '(' + name + ')');
-      var check = getOptTypesFrom(contentsBlock, 'TYPE');
       if (check) {
         code.push('        .setCheck(' + check + ')');
       }
-      var align = contentsBlock.getFieldValue('ALIGN');
       if (align != 'LEFT') {
         code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
       }
@@ -335,6 +348,12 @@ function getFieldsJs_(block) {
           fields.push('new Blockly.FieldVariable(' + varname + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
+        case 'field_scopevariable':
+          // Result: new Blockly.FieldScopeVariable('scope'), 'VAR'
+          var varname = escapeString(block.getFieldValue('SCOPE') || null);
+          fields.push('new Blockly.FieldScopeVariable(' + varname + '), ' +
+              escapeString(block.getFieldValue('FIELDNAME')));
+          break;
         case 'field_dropdown':
           // Result:
           // new Blockly.FieldDropdown([['yes', '1'], ['no', '0']]), 'TOGGLE'
@@ -356,6 +375,15 @@ function getFieldsJs_(block) {
           var height = Number(block.getFieldValue('HEIGHT'));
           var alt = escapeString(block.getFieldValue('ALT'));
           fields.push('new Blockly.FieldImage(' +
+              src + ', ' + width + ', ' + height + ', ' + alt + ')');
+          break;
+        case 'field_clickimage':
+          // Result: new Blockly.FieldClickImage('http://...', 80, 60)
+          var src = escapeString(block.getFieldValue('SRC'));
+          var width = Number(block.getFieldValue('WIDTH'));
+          var height = Number(block.getFieldValue('HEIGHT'));
+          var alt = escapeString(block.getFieldValue('ALT'));
+          fields.push('new Blockly.FieldClickImage(' +
               src + ', ' + width + ', ' + height + ', ' + alt + ')');
           break;
       }
@@ -422,6 +450,13 @@ function getFieldsJson_(block) {
             variable: block.getFieldValue('TEXT') || null
           });
           break;
+        case 'field_scopevariable':
+          fields.push({
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            scope: block.getFieldValue('SCOPE') || null
+          });
+          break;
         case 'field_dropdown':
           var options = [];
           for (var i = 0; i < block.optionCount_; i++) {
@@ -437,6 +472,7 @@ function getFieldsJson_(block) {
           }
           break;
         case 'field_image':
+        case 'field_clickimage':
           fields.push({
             type: block.type,
             src: block.getFieldValue('SRC'),

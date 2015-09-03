@@ -29,15 +29,15 @@ goog.provide('Blockly.Python.maps');
 goog.require('Blockly.Python');
 
 Blockly.Python['maps_create_empty'] = function(block) {
-  // Create an empty list.
-  return ['new HashMap()', Blockly.Python.ORDER_ATOMIC];
+  // Create an empty map.
+  return ['{}', Blockly.Python.ORDER_ATOMIC];
 };
 
 Blockly.Python['maps_create_with'] = function(block) {
-  // Create a list with any number of elements of any type.
+  // Create a map with any number of elements of any type.
   var declVar = Blockly.Python.variableDB_.getDistinctName(
       'hashMap', Blockly.Variables.NAME_TYPE);
-  var declCode = 'HashMap ' + declVar + ' = new HashMap();\n';
+  var declCode = declVar + ' = {}\n';
   Blockly.Python.addImport('Python.util.HashMap');
   Blockly.Python.stashStatement(declCode);
   for (var n = 0; n < block.itemCount_; n++) {
@@ -49,13 +49,13 @@ Blockly.Python['maps_create_with'] = function(block) {
             Blockly.Python.ORDER_NONE) || 'null';
         var key = Blockly.Python.valueToCode(inputBlock, 'KEY',
             Blockly.Python.ORDER_NONE) || '""';
-        declCode = declVar + '.put(' + key + ', ' + val + ');\n';
+        declCode = declVar + "[" + key + "] = " + val + "\n";
         Blockly.Python.stashStatement(declCode);
       } else {
         var itemCode = Blockly.Python.valueToCode(block, inputName,
             Blockly.Python.ORDER_NONE);
         if (itemCode) {
-          declCode = declVar + '.putAll(' + itemCode + ');\n';
+          declCode = declVar + '.update(' + itemCode + ')\n';
           Blockly.Python.stashStatement(declCode);
         }
       }
@@ -67,11 +67,8 @@ Blockly.Python['maps_create_with'] = function(block) {
 Blockly.Python['maps_length'] = function(block) {
   // List length.
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
-      Blockly.Python.ORDER_NONE) || '[]';
-  if (argument0.slice(-14) === '.cloneObject()' ) {
-    argument0 = argument0.slice(0,-14) + '.getObjectAsList()';
-  }
-  return [argument0 + '.size()', Blockly.Python.ORDER_FUNCTION_CALL];
+      Blockly.Python.ORDER_NONE) || '{}';
+  return ['len(' + argument0 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 
@@ -79,7 +76,7 @@ Blockly.Python['maps_isempty'] = function(block) {
   // Is the list empty?
   var argument0 = Blockly.Python.valueToCode(block, 'MAP',
       Blockly.Python.ORDER_NONE) || '';
-  var code = argument0 + '.size() == 0';
+  var code = 'len(' + argument0 + ') == 0';
   if (argument0 === '') {
     code = 'true';
   }
@@ -94,8 +91,8 @@ Blockly.Python['maps_create'] = function(block) {
   var declVar = Blockly.Python.variableDB_.getDistinctName(
       'hashMap', Blockly.Variables.NAME_TYPE);
 
-  var declCode = 'HashMap ' + declVar + ' = new HashMap();\n' +
-      declVar + '.put(' + key + ', ' + val + ');\n';
+  var declCode = declVar + ' = {}\n' +
+      declVar + '[' + key + '] = ' + val + '\n';
   Blockly.Python.stashStatement(declCode);
   return [declVar, Blockly.Python.ORDER_LOGICAL_NOT];
 };
@@ -106,19 +103,18 @@ Blockly.Python['maps_getIndex'] = function(block) {
       Blockly.Python.ORDER_NONE) || '""';
   var map = Blockly.Python.valueToCode(block, 'MAP',
       Blockly.Python.ORDER_MEMBER) || '';
-  if (map.slice(-14) === '.cloneObject()' ) {
-    map = map.slice(0,-14) + '.getObjectAsMap()';
-  }
 
   if (mode == 'GET') {
-    var code = map + '.get(' + key + ')';
+    var code = map + '[' + key + ']';
     return [code, Blockly.Python.ORDER_MEMBER];
   } else {
-    var code = map + '.remove(' + key + ')';
     if (mode == 'GET_REMOVE') {
+      var code = map + '[' + key + ']\n';
+      code += 'del ' + map + '[' + key + ']';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
     } else if (mode == 'REMOVE') {
-      return code + ';\n';
+      var code = 'del ' + map + '[' + key + ']';
+      return code + '\n';
     }
   }
   throw 'Unhandled combination (maps_getIndex).';
@@ -127,20 +123,20 @@ Blockly.Python['maps_getIndex'] = function(block) {
 Blockly.Python['maps_setIndex'] = function(block) {
   // Is the list empty?
   var map = Blockly.Python.valueToCode(block, 'MAP',
-      Blockly.Python.ORDER_MEMBER) || '[]';
+      Blockly.Python.ORDER_MEMBER) || '{}';
   var val = Blockly.Python.valueToCode(block, 'VAL',
       Blockly.Python.ORDER_NONE) || 'null';
   var key = Blockly.Python.valueToCode(block, 'KEY',
       Blockly.Python.ORDER_NONE) || '""';
-  var code = map + '.put(' + key + ', '+ val + ');\n';
+  var code = map + '[' + key + '] = '+ val + '\n';
   return code;
 };
 
 Blockly.Python['maps_keys'] = function(block) {
   // Is the list empty?
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
-      Blockly.Python.ORDER_NONE) || '[]';
-  var code = argument0 + '.size() == 0';
+      Blockly.Python.ORDER_NONE) || '{}';
+  var code = 'len(' + argument0 + ') == 0';
   return [code, Blockly.Python.ORDER_LOGICAL_NOT];
 };
 

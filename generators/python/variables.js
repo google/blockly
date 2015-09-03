@@ -63,3 +63,18 @@ Blockly.Python['hash_variables_set'] = function(block) {
   var hashkey = Blockly.Python.quote_(block.getFieldValue('HASHKEY'));
   return varName + '[' + hashkey + '] = ' + argument0 + '\n';
 };
+
+Blockly.Python['initialize_variable'] = function (block) {
+    var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
+                                             Blockly.Python.ORDER_NONE) || '0';
+    if(block.procedurePrefix_ != '') {
+        // Variable setter.
+        var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+                                                       Blockly.Variables.NAME_TYPE);
+        return varName + ' = ' + argument0 + '\n';
+    } else {
+        // Remember if this is a global variable to be initialized
+        Blockly.Python.setGlobalVar(block,block.getFieldValue('VAR'), argument0);
+        return '';
+    }
+};

@@ -166,4 +166,4 @@ Blockly.Java['initialize_variable'] = function (block) {
     Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), argument0);
     return '';
   }
-}
+};

@@ -810,7 +810,7 @@ Blockly.Blocks['text_printf'] = {
     return inputItem;
   },
   newQuote_: Blockly.Blocks['text'].newQuote_,
-  typeblock: Blockly.Msg.TEXT_PRINT_TYPEBLOCK
+  typeblock: Blockly.Msg.TEXT_PRINTF_TYPEBLOCK
 };
 
 Blockly.Blocks['text_sprintf'] = {

@@ -213,7 +213,7 @@ Blockly.Java.setGlobalVar = function(block,name,val) {
         this.globals_[name] === null)) {
     this.globals_[name] = val;
   }
-}
+};
 /**
  * Get the Java type of a variable by name
  * @param {string} variable Name of the variable to get the type for

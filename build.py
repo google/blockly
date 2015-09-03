@@ -40,7 +40,7 @@ if sys.version_info[0] != 2:
   raise Exception("Blockly build only compatible with Python 2.x.\n"
                   "You are using: " + sys.version)
 
-import errno, glob, httplib, json, os, re, subprocess, threading, urllib
+import errno, glob, httplib, json, os, re, subprocess, threading, urllib, getopt
 
 
 def import_path(fullpath):
@@ -439,8 +439,18 @@ https://developers.google.com/blockly/hacking/closure""")
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.
   # Compressed is limited by network and server speed.
-  Gen_uncompressed(search_paths).start()
-  Gen_compressed(search_paths).start()
+  argv = sys.argv[1:]
+  try:
+    opts, args = getopt.getopt(argv,"u",["uncompressed-only"])
+  except getopt.GetoptError:
+    print 'build.py [--uncompressed-only]'
+    sys.exit(2)
+  for opt, arg in opts:
+    if opt in ("-u", "--uncompressed-only"):
+      Gen_uncompressed(search_paths).start()
+  if len(opts) == 0:
+      Gen_uncompressed(search_paths).start()
+      Gen_compressed(search_paths).start()
 
   # This is run locally in a separate thread.
   Gen_langfiles().start()

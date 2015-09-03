@@ -66,6 +66,7 @@ Blockly.Blocks['factory_base'] = {
     this.setHelpUrl(
         'https://developers.google.com/blockly/custom-blocks/block-factory');
   },
+  isTopLevel: true,
   mutationToDom: function() {
     var container = document.createElement('mutation');
     container.setAttribute('connections', this.getFieldValue('CONNECTIONS'));
@@ -189,6 +190,58 @@ Blockly.Blocks['input_dummy'] = {
                     'connections. Alignment options (left, right, centre) ' +
                     'apply only to multi-line fields.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=293');
+  }
+};
+
+Blockly.Blocks['input_addsub'] = {
+  // Statement input.
+  init: function() {
+    this.setColour(210);
+    this.appendDummyInput()
+        .appendField('input addsub')
+        .appendField(new Blockly.FieldTextInput('TITLE'), 'INPUTTITLE')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
+    this.appendValueInput('TYPE')
+        .setCheck('Type')
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField('type');
+    this.setPreviousStatement(true, 'Input');
+    this.setNextStatement(true, 'Input');
+    this.setTooltip('A statement socket for enclosed vertical stacks.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=246');
+  },
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    inputNameCheck(this);
+  }
+};
+
+Blockly.Blocks['input_addsubmulti'] = {
+  // Statement input.
+  init: function() {
+    this.setColour(210);
+    this.appendDummyInput()
+        .appendField('input addsub multi')
+        .appendField(new Blockly.FieldTextInput('TITLE'), 'INPUTTITLE')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
+    this.appendValueInput('TYPE')
+        .setCheck('Type')
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField('type');
+    this.setPreviousStatement(true, 'Input');
+    this.setNextStatement(true, 'Input');
+    this.setTooltip('A statement socket for enclosed vertical stacks.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=246');
+  },
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    inputNameCheck(this);
   }
 };
 
@@ -473,6 +526,29 @@ Blockly.Blocks['field_variable'] = {
   }
 };
 
+Blockly.Blocks['field_scopevariable'] = {
+  // Dropdown for variables.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput()
+        .appendField('scope variable')
+        .appendField(new Blockly.FieldTextInput('scope'), 'SCOPE')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('Dropdown menu for variable names.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=510');
+  },
+  onchange: function() {
+    if (!this.workspace) {
+      // Block has been deleted.
+      return;
+    }
+    fieldNameCheck(this);
+  }
+};
+
 Blockly.Blocks['field_image'] = {
   // Image.
   init: function() {
@@ -480,6 +556,32 @@ Blockly.Blocks['field_image'] = {
     var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif';
     this.appendDummyInput()
         .appendField('image')
+        .appendField(new Blockly.FieldTextInput(src), 'SRC');
+    this.appendDummyInput()
+        .appendField('width')
+        .appendField(new Blockly.FieldTextInput('15',
+            Blockly.FieldTextInput.numberValidator), 'WIDTH')
+        .appendField('height')
+        .appendField(new Blockly.FieldTextInput('15',
+            Blockly.FieldTextInput.numberValidator), 'HEIGHT')
+        .appendField('alt text')
+        .appendField(new Blockly.FieldTextInput('*'), 'ALT');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('Static image (JPEG, PNG, GIF, SVG, BMP).\n' +
+                    'Retains aspect ratio regardless of height and width.\n' +
+                    'Alt text is for when collapsed.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=567');
+  }
+};
+
+Blockly.Blocks['field_clickimage'] = {
+  // Image.
+  init: function() {
+    this.setColour(160);
+    var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif';
+    this.appendDummyInput()
+        .appendField('clickimage')
         .appendField(new Blockly.FieldTextInput(src), 'SRC');
     this.appendDummyInput()
         .appendField('width')
@@ -670,6 +772,19 @@ Blockly.Blocks['type_list'] = {
         .appendField('list');
     this.setOutput(true, 'Type');
     this.setTooltip('Arrays (lists) are allowed.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602');
+  }
+};
+
+Blockly.Blocks['type_map'] = {
+  // List type.
+  valueType: 'Map',
+  init: function() {
+    this.setColour(230);
+    this.appendDummyInput()
+        .appendField('map');
+    this.setOutput(true, 'Type');
+    this.setTooltip('Maps are allowed.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602');
   }
 };

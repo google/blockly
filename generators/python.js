@@ -210,3 +210,29 @@ Blockly.Python.scrub_ = function(block, code) {
   }
   return commentCode + code + nextCode;
 };
+
+
+/**
+ * Mark a variable as a global for the generated Java code
+ * @param {block} block Block that the variable is contained in
+ * @param {string} name Name of the global to initialize
+ * @param {string} val Initializer value for the gloabl
+ */
+Blockly.Python.setGlobalVar = function(block,name,val) {
+    if (Blockly.Variables.getLocalContext(block,name) == null &&
+        (typeof this.globals_[name] === 'undefined' ||
+         this.globals_[name] === null)) {
+            this.globals_[name] = val;
+        }
+};
+
+/**
+ * Add a reference to a library to import
+ * @param {string} importlib Name of the library to add to the import list
+ */
+Blockly.Python.addImport = function(importlib) {
+//    var importStr = 'import ' + importlib;
+//    this.imports_[importStr] = importStr;
+};
+
+

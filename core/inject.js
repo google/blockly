@@ -109,6 +109,7 @@ Blockly.parseOptions_ = function(options) {
     var hasComments = false;
     var hasDisable = false;
     var hasSounds = false;
+    var hasKeyboardShortcuts = false;
   } else {
     var languageTree = Blockly.parseToolboxTree_(options['toolbox']);
     var hasCategories = Boolean(languageTree &&
@@ -132,6 +133,10 @@ Blockly.parseOptions_ = function(options) {
     var hasSounds = options['sounds'];
     if (hasSounds === undefined) {
       hasSounds = true;
+    }
+    var hasKeyboardShortcuts = options['keyboardShortcuts'];
+    if (hasKeyboardShortcuts === undefined) {
+      hasKeyboardShortcuts = true;
     }
   }
   var hasScrollbars = options['scrollbars'];
@@ -241,6 +246,7 @@ Blockly.parseOptions_ = function(options) {
     hasScrollbars: hasScrollbars,
     hasTrashcan: hasTrashcan,
     hasSounds: hasSounds,
+    hasKeyboardShortcuts: hasKeyboardShortcuts,
     hasCss: hasCss,
     languageTree: languageTree,
     gridOptions: gridOptions,
@@ -466,7 +472,9 @@ Blockly.init_ = function(mainWorkspace) {
   if (!Blockly.documentEventsBound_) {
     // Only bind the window/document events once.
     // Destroying and reinjecting Blockly should not bind again.
-    Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
+    if (options.hasKeyboardShortcuts) {
+      Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
+    }
     Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);
     Blockly.bindEvent_(document, 'touchcancel', null, Blockly.longStop_);
     // Don't use bindEvent_ for document's mouseup since that would create a

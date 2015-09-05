@@ -27,3 +27,12 @@ function test_parseOptions_hasSounds() {
   options = Blockly.parseOptions_({sounds: true, readOnly: true});
   assertEquals('Setting sounds and read-only options', false, options.hasSounds);
 }
+
+function test_parseOptions_hasKeyboardShortcuts() {
+  var options = Blockly.parseOptions_({});
+  assertEquals('Default keyboard shortcuts option', true, options.hasKeyboardShortcuts);
+  options = Blockly.parseOptions_({keyboardShortcuts: false});
+  assertEquals('Setting keyboard shortcuts option', false, options.hasKeyboardShortcuts);
+  options = Blockly.parseOptions_({keyboardShortcuts: true, readOnly: true});
+  assertEquals('Setting keyboard shortcuts and read-only options', false, options.hasKeyboardShortcuts);
+}

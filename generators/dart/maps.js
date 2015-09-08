@@ -88,7 +88,7 @@ Blockly.Dart['maps_create_with'] = function(block) {
 
 Blockly.Dart['maps_length'] = function(block) {
   // List length.
-  var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
+  var argument0 = Blockly.Dart.valueToCode(block, 'MAP',
       Blockly.Dart.ORDER_NONE) || '[]';
   return [argument0 + '.length()', Blockly.Dart.ORDER_FUNCTION_CALL];
 };
@@ -149,7 +149,7 @@ Blockly.Dart['maps_setIndex'] = function(block) {
 
 Blockly.Dart['maps_keys'] = function(block) {
   // Is the list empty?
-  var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
+  var argument0 = Blockly.Dart.valueToCode(block, 'MAP',
       Blockly.Dart.ORDER_NONE) || '[]';
   var code = argument0 + '.keys()';
   return [code, Blockly.Dart.ORDER_LOGICAL_NOT];

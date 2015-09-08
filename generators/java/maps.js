@@ -66,8 +66,8 @@ Blockly.Java['maps_create_with'] = function(block) {
 
 Blockly.Java['maps_length'] = function(block) {
   // List length.
-  var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
-      Blockly.Java.ORDER_NONE) || '[]';
+  var argument0 = Blockly.Java.valueToCode(block, 'MAP',
+      Blockly.Java.ORDER_NONE) || 'new HashMap()';
   if (argument0.slice(-14) === '.cloneObject()' ) {
     argument0 = argument0.slice(0,-14) + '.getObjectAsList()';
   }
@@ -127,7 +127,7 @@ Blockly.Java['maps_getIndex'] = function(block) {
 Blockly.Java['maps_setIndex'] = function(block) {
   // Is the list empty?
   var map = Blockly.Java.valueToCode(block, 'MAP',
-      Blockly.Java.ORDER_MEMBER) || '[]';
+      Blockly.Java.ORDER_MEMBER) || 'new HashMap()';
   var val = Blockly.Java.valueToCode(block, 'VAL',
       Blockly.Java.ORDER_NONE) || 'null';
   var key = Blockly.Java.valueToCode(block, 'KEY',
@@ -138,9 +138,9 @@ Blockly.Java['maps_setIndex'] = function(block) {
 
 Blockly.Java['maps_keys'] = function(block) {
   // Is the list empty?
-  var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
-      Blockly.Java.ORDER_NONE) || '[]';
-  var code = argument0 + '.size() == 0';
+  var argument0 = Blockly.Java.valueToCode(block, 'MAP',
+      Blockly.Java.ORDER_NONE) || 'new HashMap()';
+  var code = argument0 + '.keySet()';
   return [code, Blockly.Java.ORDER_LOGICAL_NOT];
 };
 

@@ -10,6 +10,7 @@
 <script src="../../generators/javascript/logic.js"></script>
 <script src="../../generators/javascript/loops.js"></script>
 <script src="../../generators/javascript/math.js"></script>
+<script src="../../generators/javascript/maps.js"></script>
 <script src="../../generators/javascript/text.js"></script>
 <script src="../../generators/javascript/lists.js"></script>
 <script src="../../generators/javascript/colour.js"></script>
@@ -20,6 +21,7 @@
 <script src="../../generators/python/logic.js"></script>
 <script src="../../generators/python/loops.js"></script>
 <script src="../../generators/python/math.js"></script>
+<script src="../../generators/python/maps.js"></script>
 <script src="../../generators/python/text.js"></script>
 <script src="../../generators/python/lists.js"></script>
 <script src="../../generators/python/colour.js"></script>
@@ -30,6 +32,7 @@
 <script src="../../generators/php/logic.js"></script>
 <script src="../../generators/php/loops.js"></script>
 <script src="../../generators/php/math.js"></script>
+<script src="../../generators/php/maps.js"></script>
 <script src="../../generators/php/text.js"></script>
 <script src="../../generators/php/lists.js"></script>
 <script src="../../generators/php/colour.js"></script>
@@ -40,6 +43,7 @@
 <script src="../../generators/dart/logic.js"></script>
 <script src="../../generators/dart/loops.js"></script>
 <script src="../../generators/dart/math.js"></script>
+<script src="../../generators/dart/maps.js"></script>
 <script src="../../generators/dart/text.js"></script>
 <script src="../../generators/dart/lists.js"></script>
 <script src="../../generators/dart/colour.js"></script>
@@ -50,6 +54,7 @@
 <script src="../../generators/java/logic.js"></script>
 <script src="../../generators/java/loops.js"></script>
 <script src="../../generators/java/math.js"></script>
+<script src="../../generators/java/maps.js"></script>
 <script src="../../generators/java/text.js"></script>
 <script src="../../generators/java/lists.js"></script>
 <script src="../../generators/java/colour.js"></script>
@@ -60,6 +65,7 @@
 <script src="../../blocks/logic.js"></script>
 <script src="../../blocks/loops.js"></script>
 <script src="../../blocks/math.js"></script>
+<script src="../../blocks/maps.js"></script>
 <script src="../../blocks/text.js"></script>
 <script src="../../blocks/lists.js"></script>
 <script src="../../blocks/colour.js"></script>
@@ -239,6 +245,7 @@ h1 {
         </value>
       </block>
       <block type="controls_forEach"></block>
+      <block type="controls_forEachKey"></block>
       <block type="controls_flow_statements"></block>
     </category>
     <category name="Math">
@@ -372,6 +379,16 @@ h1 {
         </value>
       </block>
     </category>
+    <category name="Maps">
+      <block type="maps_create_empty"></block>
+      <block type="maps_create_with"></block>
+      <block type="maps_length"></block>
+      <block type="maps_isempty"></block>
+      <block type="maps_create"></block>
+      <block type="maps_getIndex"></block>
+      <block type="maps_setIndex"></block>
+      <block type="maps_keys"></block>
+    </category>
     <category name="Colour">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
@@ -427,6 +444,7 @@ h1 {
         <option value="math.xml">Math</option>
         <option value="text.xml">Text</option>
         <option value="lists.xml">Lists</option>
+        <option value="maps.xml">Maps</option>
         <option value="colour.xml">Colour</option>
         <option value="variables.xml">Variables</option>
         <option value="procedures.xml">Procedures</option>

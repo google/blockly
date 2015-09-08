@@ -1,0 +1,1674 @@
+<xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="unittest_main" x="14" y="-11">
+    <statement name="DO">
+      <block type="procedures_callnoreturn">
+        <mutation name="test empty"></mutation>
+        <next>
+          <block type="procedures_callnoreturn">
+            <mutation name="test length"></mutation>
+            <next>
+              <block type="procedures_callnoreturn">
+                <mutation name="test get"></mutation>
+                <next>
+                  <block type="procedures_callnoreturn">
+                    <mutation name="test get remove"></mutation>
+                    <next>
+                      <block type="procedures_callnoreturn">
+                        <mutation name="test remove"></mutation>
+                        <next>
+                          <block type="procedures_callnoreturn">
+                            <mutation name="test set"></mutation>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="13" y="258">
+    <field name="NAME">test create</field>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <field name="MESSAGE">test create empty</field>
+        <value name="ACTUAL">
+          <block type="maps_create_with">
+            <mutation items="0"></mutation>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="maps_create_empty"></block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <field name="MESSAGE">test create item</field>
+            <value name="ACTUAL">
+              <block type="maps_create_with">
+                <mutation items="1"></mutation>
+                <value name="ADD0">
+                  <block type="maps_create">
+                    <value name="KEY">
+                      <block type="text">
+                        <field name="TEXT">love</field>
+                      </block>
+                    </value>
+                    <value name="VAL">
+                      <block type="logic_boolean">
+                        <field name="BOOL">TRUE</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">love</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="logic_boolean">
+                    <field name="BOOL">TRUE</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <field name="MESSAGE">test create items</field>
+                <value name="ACTUAL">
+                  <block type="maps_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">love</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="logic_boolean">
+                            <field name="BOOL">TRUE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">hate</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="logic_boolean">
+                            <field name="BOOL">FALSE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="maps_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">love</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="logic_boolean">
+                            <field name="BOOL">TRUE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">hate</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="logic_boolean">
+                            <field name="BOOL">FALSE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <field name="MESSAGE">test create repeated</field>
+                    <value name="ACTUAL">
+                      <block type="maps_create_with">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Eject</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="logic_boolean">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Eject</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="logic_boolean">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Eject</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="logic_boolean">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Eject</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="logic_boolean">
+                            <field name="BOOL">TRUE</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="12" y="838">
+    <field name="NAME">test empty</field>
+    <statement name="STACK">
+      <block type="unittest_assertvalue" inline="false">
+        <field name="MESSAGE">not empty</field>
+        <field name="EXPECTED">FALSE</field>
+        <value name="ACTUAL">
+          <block type="maps_isempty">
+            <value name="MAP">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Eject</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="logic_boolean">
+                    <field name="BOOL">TRUE</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertvalue" inline="false">
+            <field name="MESSAGE">empty</field>
+            <field name="EXPECTED">TRUE</field>
+            <value name="ACTUAL">
+              <block type="maps_isempty">
+                <value name="MAP">
+                  <block type="maps_create_empty"></block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertvalue" inline="false">
+                <field name="MESSAGE">emptymap</field>
+                <field name="EXPECTED">TRUE</field>
+                <value name="ACTUAL">
+                  <block type="maps_isempty">
+                    <value name="MAP">
+                      <block type="maps_create_with">
+                        <mutation items="0"></mutation>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="17" y="1095">
+    <field name="NAME">test length</field>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <field name="MESSAGE">zero size</field>
+        <value name="ACTUAL">
+          <block type="maps_length">
+            <value name="MAP">
+              <block type="maps_create_empty"></block>
+            </value>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <field name="MESSAGE">one size</field>
+            <value name="ACTUAL">
+              <block type="maps_length">
+                <value name="MAP">
+                  <block type="maps_create">
+                    <value name="KEY">
+                      <block type="text">
+                        <field name="TEXT">cat</field>
+                      </block>
+                    </value>
+                    <value name="VAL">
+                      <block type="logic_boolean">
+                        <field name="BOOL">TRUE</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="math_number">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <field name="MESSAGE">one size of three</field>
+                <value name="ACTUAL">
+                  <block type="maps_length">
+                    <value name="MAP">
+                      <block type="maps_create_with">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Eject</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="logic_boolean">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Eject</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="logic_boolean">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Eject</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="logic_boolean">
+                                <field name="BOOL">TRUE</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="math_number">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <field name="MESSAGE">three size</field>
+                    <value name="ACTUAL">
+                      <block type="maps_length">
+                        <value name="MAP">
+                          <block type="maps_create_with">
+                            <mutation items="3"></mutation>
+                            <value name="ADD0">
+                              <block type="maps_create">
+                                <value name="KEY">
+                                  <block type="text">
+                                    <field name="TEXT">cat</field>
+                                  </block>
+                                </value>
+                                <value name="VAL">
+                                  <block type="logic_boolean">
+                                    <field name="BOOL">TRUE</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="ADD1">
+                              <block type="maps_create">
+                                <value name="KEY">
+                                  <block type="text">
+                                    <field name="TEXT">dog</field>
+                                  </block>
+                                </value>
+                                <value name="VAL">
+                                  <block type="logic_boolean">
+                                    <field name="BOOL">TRUE</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="ADD2">
+                              <block type="maps_create">
+                                <value name="KEY">
+                                  <block type="text">
+                                    <field name="TEXT">fish</field>
+                                  </block>
+                                </value>
+                                <value name="VAL">
+                                  <block type="logic_boolean">
+                                    <field name="BOOL">FALSE</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="math_number">
+                        <field name="NUM">3</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="17" y="1641">
+    <field name="NAME">test get</field>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <field name="VAR">map</field>
+        <value name="VALUE">
+          <block type="maps_create_with">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Captain</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Kirk</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Science Officer</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Spock</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Doctor</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">McCoy</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <field name="MESSAGE">get captain</field>
+            <value name="ACTUAL">
+              <block type="maps_getIndex">
+                <mutation statement="false"></mutation>
+                <field name="MODE">GET</field>
+                <value name="MAP">
+                  <block type="variables_get">
+                    <field name="VAR">map</field>
+                  </block>
+                </value>
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Captain</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="text">
+                <field name="TEXT">Kirk</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <field name="MESSAGE">get doctor</field>
+                <value name="ACTUAL">
+                  <block type="maps_getIndex">
+                    <mutation statement="false"></mutation>
+                    <field name="MODE">GET</field>
+                    <value name="MAP">
+                      <block type="variables_get">
+                        <field name="VAR">map</field>
+                      </block>
+                    </value>
+                    <value name="KEY">
+                      <block type="text">
+                        <field name="TEXT">Doctor</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="text">
+                    <field name="TEXT">McCoy</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <field name="MESSAGE">get noexist</field>
+                    <value name="ACTUAL">
+                      <block type="maps_getIndex">
+                        <mutation statement="false"></mutation>
+                        <field name="MODE">GET</field>
+                        <value name="MAP">
+                          <block type="variables_get">
+                            <field name="VAR">map</field>
+                          </block>
+                        </value>
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Klingon</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="logic_null"></block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="22" y="2071">
+    <field name="NAME">test get remove</field>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <field name="VAR">map</field>
+        <value name="VALUE">
+          <block type="maps_create_with">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Captain</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Kirk</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Science Officer</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Spock</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Doctor</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">McCoy</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="unittest_assertequals" inline="false">
+            <field name="MESSAGE">getremove first</field>
+            <value name="ACTUAL">
+              <block type="maps_getIndex">
+                <mutation statement="false"></mutation>
+                <field name="MODE">GET_REMOVE</field>
+                <value name="MAP">
+                  <block type="variables_get">
+                    <field name="VAR">map</field>
+                  </block>
+                </value>
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Captain</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="EXPECTED">
+              <block type="text">
+                <field name="TEXT">Kirk</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <field name="MESSAGE">getremove first list</field>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <field name="VAR">map</field>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="maps_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Science Officer</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">Spock</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Doctor</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">McCoy</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" inline="false">
+                    <field name="VAR">map</field>
+                    <value name="VALUE">
+                      <block type="maps_create_with">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Captain</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">Kirk</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Science Officer</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">Spock</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Doctor</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">McCoy</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="unittest_assertequals" inline="false">
+                        <field name="MESSAGE">getremove last</field>
+                        <value name="ACTUAL">
+                          <block type="maps_getIndex">
+                            <mutation statement="false"></mutation>
+                            <field name="MODE">GET_REMOVE</field>
+                            <value name="MAP">
+                              <block type="variables_get">
+                                <field name="VAR">map</field>
+                              </block>
+                            </value>
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Doctor</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="EXPECTED">
+                          <block type="text">
+                            <field name="TEXT">McCoy</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <field name="MESSAGE">getremove last list</field>
+                            <value name="ACTUAL">
+                              <block type="variables_get">
+                                <field name="VAR">map</field>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="maps_create_with">
+                                <mutation items="2"></mutation>
+                                <value name="ADD0">
+                                  <block type="maps_create">
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">Captain</field>
+                                      </block>
+                                    </value>
+                                    <value name="VAL">
+                                      <block type="text">
+                                        <field name="TEXT">Kirk</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="maps_create">
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">Science Officer</field>
+                                      </block>
+                                    </value>
+                                    <value name="VAL">
+                                      <block type="text">
+                                        <field name="TEXT">Spock</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" inline="false">
+                                <field name="VAR">map</field>
+                                <value name="VALUE">
+                                  <block type="maps_create_with">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="maps_create">
+                                        <value name="KEY">
+                                          <block type="text">
+                                            <field name="TEXT">Captain</field>
+                                          </block>
+                                        </value>
+                                        <value name="VAL">
+                                          <block type="text">
+                                            <field name="TEXT">Kirk</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="maps_create">
+                                        <value name="KEY">
+                                          <block type="text">
+                                            <field name="TEXT">Science Officer</field>
+                                          </block>
+                                        </value>
+                                        <value name="VAL">
+                                          <block type="text">
+                                            <field name="TEXT">Spock</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="maps_create">
+                                        <value name="KEY">
+                                          <block type="text">
+                                            <field name="TEXT">Doctor</field>
+                                          </block>
+                                        </value>
+                                        <value name="VAL">
+                                          <block type="text">
+                                            <field name="TEXT">McCoy</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="unittest_assertequals" inline="false">
+                                    <field name="MESSAGE">getremove missing</field>
+                                    <value name="ACTUAL">
+                                      <block type="maps_getIndex">
+                                        <mutation statement="false"></mutation>
+                                        <field name="MODE">GET_REMOVE</field>
+                                        <value name="MAP">
+                                          <block type="variables_get">
+                                            <field name="VAR">map</field>
+                                          </block>
+                                        </value>
+                                        <value name="KEY">
+                                          <block type="text">
+                                            <field name="TEXT">Klingon</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="EXPECTED">
+                                      <block type="logic_null"></block>
+                                    </value>
+                                    <next>
+                                      <block type="unittest_assertequals" inline="false">
+                                        <field name="MESSAGE">getremove # list</field>
+                                        <value name="ACTUAL">
+                                          <block type="variables_get">
+                                            <field name="VAR">map</field>
+                                          </block>
+                                        </value>
+                                        <value name="EXPECTED">
+                                          <block type="maps_create_with">
+                                            <mutation items="3"></mutation>
+                                            <value name="ADD0">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Captain</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">Kirk</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <value name="ADD1">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Science Officer</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">Spock</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <value name="ADD2">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Doctor</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">McCoy</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" inline="false">
+                                            <field name="VAR">map</field>
+                                            <value name="VALUE">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Captain</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">Kirk</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="unittest_assertequals" inline="false">
+                                                <field name="MESSAGE">getremove only</field>
+                                                <value name="ACTUAL">
+                                                  <block type="maps_getIndex">
+                                                    <mutation statement="false"></mutation>
+                                                    <field name="MODE">GET_REMOVE</field>
+                                                    <value name="MAP">
+                                                      <block type="variables_get">
+                                                        <field name="VAR">map</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="KEY">
+                                                      <block type="text">
+                                                        <field name="TEXT">Captain</field>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                                <value name="EXPECTED">
+                                                  <block type="text">
+                                                    <field name="TEXT">Kirk</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="unittest_assertequals" inline="false">
+                                                    <field name="MESSAGE">getremove only list</field>
+                                                    <value name="ACTUAL">
+                                                      <block type="variables_get">
+                                                        <field name="VAR">map</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="EXPECTED">
+                                                      <block type="maps_create_empty"></block>
+                                                    </value>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="25" y="3345">
+    <field name="NAME">test remove</field>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <field name="VAR">map</field>
+        <value name="VALUE">
+          <block type="maps_create_with">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Captain</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Kirk</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Science Officer</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Spock</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Doctor</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">McCoy</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="maps_getIndex">
+            <mutation statement="true"></mutation>
+            <field name="MODE">REMOVE</field>
+            <value name="MAP">
+              <block type="variables_get">
+                <field name="VAR">map</field>
+              </block>
+            </value>
+            <value name="KEY">
+              <block type="text">
+                <field name="TEXT">Captain</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <field name="MESSAGE">remove first list</field>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <field name="VAR">map</field>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="maps_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Science Officer</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">Spock</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Doctor</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">McCoy</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" inline="false">
+                    <field name="VAR">map</field>
+                    <value name="VALUE">
+                      <block type="maps_create_with">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Captain</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">Kirk</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Science Officer</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">Spock</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Doctor</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">McCoy</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="maps_getIndex">
+                        <mutation statement="true"></mutation>
+                        <field name="MODE">REMOVE</field>
+                        <value name="MAP">
+                          <block type="variables_get">
+                            <field name="VAR">map</field>
+                          </block>
+                        </value>
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Doctor</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <field name="MESSAGE">remove last list</field>
+                            <value name="ACTUAL">
+                              <block type="variables_get">
+                                <field name="VAR">map</field>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="maps_create_with">
+                                <mutation items="2"></mutation>
+                                <value name="ADD0">
+                                  <block type="maps_create">
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">Captain</field>
+                                      </block>
+                                    </value>
+                                    <value name="VAL">
+                                      <block type="text">
+                                        <field name="TEXT">Kirk</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="maps_create">
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">Science Officer</field>
+                                      </block>
+                                    </value>
+                                    <value name="VAL">
+                                      <block type="text">
+                                        <field name="TEXT">Spock</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="variables_set" inline="false">
+                                <field name="VAR">map</field>
+                                <value name="VALUE">
+                                  <block type="maps_create_with">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="maps_create">
+                                        <value name="KEY">
+                                          <block type="text">
+                                            <field name="TEXT">Captain</field>
+                                          </block>
+                                        </value>
+                                        <value name="VAL">
+                                          <block type="text">
+                                            <field name="TEXT">Kirk</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="maps_create">
+                                        <value name="KEY">
+                                          <block type="text">
+                                            <field name="TEXT">Science Officer</field>
+                                          </block>
+                                        </value>
+                                        <value name="VAL">
+                                          <block type="text">
+                                            <field name="TEXT">Spock</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="maps_create">
+                                        <value name="KEY">
+                                          <block type="text">
+                                            <field name="TEXT">Doctor</field>
+                                          </block>
+                                        </value>
+                                        <value name="VAL">
+                                          <block type="text">
+                                            <field name="TEXT">McCoy</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="maps_getIndex">
+                                    <mutation statement="true"></mutation>
+                                    <field name="MODE">REMOVE</field>
+                                    <value name="MAP">
+                                      <block type="variables_get">
+                                        <field name="VAR">map</field>
+                                      </block>
+                                    </value>
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">Klingon</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="unittest_assertequals" inline="false">
+                                        <field name="MESSAGE">remove nothing</field>
+                                        <value name="ACTUAL">
+                                          <block type="variables_get">
+                                            <field name="VAR">map</field>
+                                          </block>
+                                        </value>
+                                        <value name="EXPECTED">
+                                          <block type="maps_create_with">
+                                            <mutation items="3"></mutation>
+                                            <value name="ADD0">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Captain</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">Kirk</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <value name="ADD1">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Science Officer</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">Spock</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <value name="ADD2">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Doctor</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">McCoy</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="variables_set" inline="false">
+                                            <field name="VAR">map</field>
+                                            <value name="VALUE">
+                                              <block type="maps_create">
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Captain</field>
+                                                  </block>
+                                                </value>
+                                                <value name="VAL">
+                                                  <block type="text">
+                                                    <field name="TEXT">Kirk</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="maps_getIndex">
+                                                <mutation statement="true"></mutation>
+                                                <field name="MODE">REMOVE</field>
+                                                <value name="MAP">
+                                                  <block type="variables_get">
+                                                    <field name="VAR">map</field>
+                                                  </block>
+                                                </value>
+                                                <value name="KEY">
+                                                  <block type="text">
+                                                    <field name="TEXT">Captain</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="unittest_assertequals" inline="false">
+                                                    <field name="MESSAGE">remove only</field>
+                                                    <value name="ACTUAL">
+                                                      <block type="variables_get">
+                                                        <field name="VAR">map</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="EXPECTED">
+                                                      <block type="maps_create_empty"></block>
+                                                    </value>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="procedures_defnoreturn" x="27" y="4419">
+    <field name="NAME">test set</field>
+    <statement name="STACK">
+      <block type="variables_set" inline="false">
+        <field name="VAR">x</field>
+        <value name="VALUE">
+          <block type="maps_create_with">
+            <mutation items="3"></mutation>
+            <value name="ADD0">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Captain</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Picard</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">First Officer</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Riker</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="ADD2">
+              <block type="maps_create">
+                <value name="KEY">
+                  <block type="text">
+                    <field name="TEXT">Doctor</field>
+                  </block>
+                </value>
+                <value name="VAL">
+                  <block type="text">
+                    <field name="TEXT">Crusher</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="maps_setIndex">
+            <value name="MAP">
+              <block type="variables_get">
+                <field name="VAR">x</field>
+              </block>
+            </value>
+            <value name="KEY">
+              <block type="text">
+                <field name="TEXT">Captain</field>
+              </block>
+            </value>
+            <value name="VAL">
+              <block type="text">
+                <field name="TEXT">Jean-Luc</field>
+              </block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <field name="MESSAGE">set first list</field>
+                <value name="ACTUAL">
+                  <block type="variables_get">
+                    <field name="VAR">x</field>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="maps_create_with">
+                    <mutation items="3"></mutation>
+                    <value name="ADD0">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Captain</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">Jean-Luc</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">First Officer</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">Riker</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD2">
+                      <block type="maps_create">
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Doctor</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">Crusher</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set" inline="false">
+                    <field name="VAR">x</field>
+                    <value name="VALUE">
+                      <block type="maps_create_with">
+                        <mutation items="3"></mutation>
+                        <value name="ADD0">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Captain</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">Picard</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD1">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">First Officer</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">Riker</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="ADD2">
+                          <block type="maps_create">
+                            <value name="KEY">
+                              <block type="text">
+                                <field name="TEXT">Doctor</field>
+                              </block>
+                            </value>
+                            <value name="VAL">
+                              <block type="text">
+                                <field name="TEXT">Crusher</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="maps_setIndex">
+                        <value name="MAP">
+                          <block type="variables_get">
+                            <field name="VAR">x</field>
+                          </block>
+                        </value>
+                        <value name="KEY">
+                          <block type="text">
+                            <field name="TEXT">Doctor</field>
+                          </block>
+                        </value>
+                        <value name="VAL">
+                          <block type="text">
+                            <field name="TEXT">Beverly</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <field name="MESSAGE">set last list</field>
+                            <value name="ACTUAL">
+                              <block type="variables_get">
+                                <field name="VAR">x</field>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="maps_create_with">
+                                <mutation items="3"></mutation>
+                                <value name="ADD0">
+                                  <block type="maps_create">
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">Captain</field>
+                                      </block>
+                                    </value>
+                                    <value name="VAL">
+                                      <block type="text">
+                                        <field name="TEXT">Picard</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="maps_create">
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">First Officer</field>
+                                      </block>
+                                    </value>
+                                    <value name="VAL">
+                                      <block type="text">
+                                        <field name="TEXT">Riker</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="maps_create">
+                                    <value name="KEY">
+                                      <block type="text">
+                                        <field name="TEXT">Doctor</field>
+                                      </block>
+                                    </value>
+                                    <value name="VAL">
+                                      <block type="text">
+                                        <field name="TEXT">Beverly</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>

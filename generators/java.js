@@ -198,7 +198,11 @@ Blockly.Java.setBaseclass = function(baseclass) {
  * @return {string} baseclass Name of a base class this workspace is derived from
  */
 Blockly.Java.getBaseclass = function() {
-  return Blockly.Java.variableDB_.getName(this.Baseclass_,'CLASS');
+  var baseClass = this.Baseclass_;
+  if (baseClass != '') {
+    baseClass = Blockly.Java.variableDB_.getName(baseClass,'CLASS');
+  }
+  return baseClass;
 }
 
 /**
@@ -313,8 +317,9 @@ Blockly.Java.workspaceToCode = function(workspace, parms) {
   var finalcode = 'package ' + this.getPackage() + ';\n\n' +
                   this.getImports() + '\n\n' +
                   'public class ' + this.getAppName();
-  if (this.getBaseclass()) {
-    finalcode += ' extends ' + this.getBaseclass();
+  var baseClass = this.getBaseclass();
+  if (baseClass != '') {
+    finalcode += ' extends ' + baseClass;
   }
   finalcode += ' {\n\n' +
                code + '\n' +
@@ -355,7 +360,7 @@ Blockly.Java.provideVarClass = function() {
     '',
     '    public enum Type {',
     '',
-    '         STRING, INT, DOUBLE, LIST, UNKNOWN',
+    '         STRING, INT, DOUBLE, LIST, NULL, UNKNOWN',
     '    };',
     '',
     '    private Type _type;',
@@ -644,10 +649,10 @@ Blockly.Java.provideVarClass = function() {
     '     */',
     '    @Override',
     '    public boolean equals(Object obj) {',
-    '         if (obj == null) {',
-    '                return false;',
-    '         }',
     '         final Var other = Var.valueOf(obj);',
+    '         if (getType() == Var.Type.NULL || other.getType() == Var.Type.NULL) {',
+    '                return getType().equals(other.getType());',
+    '         }',
     '         return this.toString().equals(other.toString());',
     '    } // end equals',
     '',
@@ -851,6 +856,8 @@ Blockly.Java.provideVarClass = function() {
     '                     } // end for each Var',
     '                     sb.append("}");',
     '                     return sb.toString();',
+    '                case NULL:',
+    '                     return null;',
     '                default:',
     '                     return getObject().toString();',
     '         }// end switch',
@@ -862,7 +869,13 @@ Blockly.Java.provideVarClass = function() {
     '     * referenced later on when various method calls are made on this object.',
     '     */',
     '    private void inferType() {',
-    '         if (_object instanceof String) {',
+    '         if (_object == null) {',
+    '             _type = Type.NULL;',
+    '         } else if (_object instanceof Var) {',
+    '            Var oldObj = (Var)_object;',
+    '            _type = oldObj.getType();',
+    '            _object = oldObj.getObject();',
+    '         } else if (_object instanceof String) {',
     '                _type = Type.STRING;',
     '         } else {',
     '         // must be a number or a list',

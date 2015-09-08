@@ -66,7 +66,7 @@ Blockly.Python['maps_create_with'] = function(block) {
 
 Blockly.Python['maps_length'] = function(block) {
   // List length.
-  var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
+  var argument0 = Blockly.Python.valueToCode(block, 'MAP',
       Blockly.Python.ORDER_NONE) || '{}';
   return ['len(' + argument0 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
@@ -134,9 +134,9 @@ Blockly.Python['maps_setIndex'] = function(block) {
 
 Blockly.Python['maps_keys'] = function(block) {
   // Is the list empty?
-  var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
+  var argument0 = Blockly.Python.valueToCode(block, 'MAP',
       Blockly.Python.ORDER_NONE) || '{}';
-  var code = 'len(' + argument0 + ') == 0';
+  var code = ' list(' + argument0 + '.keys())';
   return [code, Blockly.Python.ORDER_LOGICAL_NOT];
 };
 

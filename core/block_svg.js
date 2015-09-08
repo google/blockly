@@ -1425,6 +1425,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
  */
 Blockly.BlockSvg.prototype.renderFields_ =
     function(fieldList, cursorX, cursorY) {
+  cursorY += Blockly.BlockSvg.INLINE_PADDING_Y;
   if (this.RTL) {
     cursorX = -cursorX;
   }
@@ -1731,7 +1732,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // Jagged right edge.
       var input = row[0];
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       this.renderFields_(input.fieldRow, fieldX, fieldY);
       steps.push(Blockly.BlockSvg.JAGGED_TEETH);
       highlightSteps.push('h 8');
@@ -1746,7 +1747,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // Inline inputs.
       for (var x = 0, input; input = row[x]; x++) {
         var fieldX = cursorX;
-        var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+        var fieldY = cursorY;
         if (row.thicker) {
           // Lower the field slightly.
           fieldY += Blockly.BlockSvg.INLINE_PADDING_Y;
@@ -1826,7 +1827,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // External input.
       var input = row[0];
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       if (input.align != Blockly.ALIGN_LEFT) {
         var fieldRightX = inputRows.rightEdge - input.fieldWidth -
             Blockly.BlockSvg.TAB_WIDTH - 2 * Blockly.BlockSvg.SEP_SPACE_X;
@@ -1866,7 +1867,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       // External naked field.
       var input = row[0];
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       if (input.align != Blockly.ALIGN_LEFT) {
         var fieldRightX = inputRows.rightEdge - input.fieldWidth -
             2 * Blockly.BlockSvg.SEP_SPACE_X;
@@ -1896,7 +1897,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         cursorY += Blockly.BlockSvg.SEP_SPACE_Y;
       }
       var fieldX = cursorX;
-      var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+      var fieldY = cursorY;
       if (input.align != Blockly.ALIGN_LEFT) {
         var fieldRightX = inputRows.statementEdge - input.fieldWidth -
             2 * Blockly.BlockSvg.SEP_SPACE_X;

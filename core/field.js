@@ -46,7 +46,7 @@ Blockly.Field = function(text) {
 };
 
 /**
- * Maximum length of text to display before adding an ellipsis.
+ * Maximum characters of text to display before adding an ellipsis.
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
 
@@ -97,10 +97,10 @@ Blockly.Field.prototype.init = function(block) {
       {'rx': 4,
        'ry': 4,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
-       'y': -12,
+       'y': 0,
        'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);
   this.textElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText'}, this.fieldGroup_);
+      {'class': 'blocklyText', 'y': this.size_.height - 12.5}, this.fieldGroup_);
 
   this.updateEditable();
   block.getSvgRoot().appendChild(this.fieldGroup_);

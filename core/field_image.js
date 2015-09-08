@@ -46,7 +46,8 @@ Blockly.FieldImage = function(src, width, height, opt_alt) {
   // Ensure height and width are numbers.  Strings are bad at math.
   this.height_ = Number(height);
   this.width_ = Number(width);
-  this.size_ = new goog.math.Size(this.height_, this.width_);
+  this.size_ = new goog.math.Size(this.width_,
+      this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
   this.text_ = opt_alt || '';
   this.setValue(src);
 };
@@ -75,12 +76,10 @@ Blockly.FieldImage.prototype.init = function(block) {
   }
   this.sourceBlock_ = block;
   // Build the DOM.
-  var offsetY = 6 - Blockly.BlockSvg.FIELD_HEIGHT;
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   this.imageElement_ = Blockly.createSvgElement('image',
       {'height': this.height_ + 'px',
-       'width': this.width_ + 'px',
-       'y': offsetY}, this.fieldGroup_);
+       'width': this.width_ + 'px'}, this.fieldGroup_);
   this.setValue(this.src_);
   if (goog.userAgent.GECKO) {
     // Due to a Firefox bug which eats mouse events on image elements,
@@ -88,7 +87,6 @@ Blockly.FieldImage.prototype.init = function(block) {
     this.rectElement_ = Blockly.createSvgElement('rect',
         {'height': this.height_ + 'px',
          'width': this.width_ + 'px',
-         'y': offsetY,
          'fill-opacity': 0}, this.fieldGroup_);
   }
   block.getSvgRoot().appendChild(this.fieldGroup_);

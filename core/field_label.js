@@ -41,7 +41,7 @@ goog.require('goog.math.Size');
  */
 Blockly.FieldLabel = function(text, opt_class) {
   this.sourceBlock_ = null;
-  this.size_ = new goog.math.Size(0, 25);
+  this.size_ = new goog.math.Size(0, 17.5);
   this.class_ = opt_class;
   this.setText(text);
 };
@@ -65,7 +65,7 @@ Blockly.FieldLabel.prototype.init = function(block) {
 
   // Build the DOM.
   this.textElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText'}, null);
+      {'class': 'blocklyText', 'y': this.size_.height - 5}, null);
   if (this.class_) {
     Blockly.addClass_(this.textElement_, this.class_);
   }

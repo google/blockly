@@ -81,7 +81,7 @@ Blockly.FieldImage.prototype.init = function(block) {
   this.imageElement_ = Blockly.createSvgElement('image',
       {'height': this.height_ + 'px',
        'width': this.width_ + 'px'}, this.fieldGroup_);
-  this.setValue(this.src_);
+  this.setSrc(this.src_);
   if (goog.userAgent.GECKO) {
     // Due to a Firefox bug which eats mouse events on image elements,
     // a transparent rectangle needs to be placed on top of the image.

@@ -717,6 +717,8 @@ Blockly.Java.provideVarClass = function() {
     '                            }',
     '                     }',
     '                     return true;',
+    '                case NULL:',
+    '                     return (var.getType() == Var.Type.NULL);',
     '                default:',
     '                     return false;',
     '         }// end switch',
@@ -729,30 +731,7 @@ Blockly.Java.provideVarClass = function() {
     '     * @return true if this object is grater than the given var',
     '     */',
     '    public boolean greaterThan(Var var) {',
-    '         switch (getType()) {',
-    '                case STRING:',
-    '                     return this.getObjectAsString().compareTo(var.getObjectAsString()) > 0;',
-    '                case INT:',
-    '                     return this.getObjectAsInt() > var.getObjectAsDouble();',
-    '                case DOUBLE:',
-    '                     return this.getObjectAsDouble() > var.getObjectAsDouble();',
-    '                case LIST:',
-    '                     if (size() != var.size()) {',
-    '                            return false;',
-    '                     }',
-    '                     if (!var.getType().equals(Var.Type.LIST)) {',
-    '                            return false;',
-    '                     }',
-    '                     int index = 0;',
-    '                     for (Var myVar : this.getObjectAsList()) {',
-    '                            if (!myVar.greaterThan(var.get(index))) {',
-    '                                 return false;',
-    '                            }',
-    '                     } // end myVar',
-    '                     return true;',
-    '                default:',
-    '                     return false;',
-    '         }// end switch',
+    '         return var.lessThan(this);',
     '    } // end greaterThan',
     '',
     '    /**',
@@ -762,30 +741,7 @@ Blockly.Java.provideVarClass = function() {
     '     * @return true if this var is greater than or equal to the given var',
     '     */',
     '    public boolean greaterThanOrEqual(Var var) {',
-    '         switch (getType()) {',
-    '                case STRING:',
-    '                     return this.getObjectAsString().compareTo(var.getObjectAsString()) >= 0;',
-    '                case INT:',
-    '                     return this.getObjectAsInt() >= var.getObjectAsDouble();',
-    '                case DOUBLE:',
-    '                     return this.getObjectAsDouble() >= var.getObjectAsDouble();',
-    '                case LIST:',
-    '                     if (size() != var.size()) {',
-    '                            return false;',
-    '                     }',
-    '                     if (!var.getType().equals(Var.Type.LIST)) {',
-    '                            return false;',
-    '                     }',
-    '                     int index = 0;',
-    '                     for (Var myVar : this.getObjectAsList()) {',
-    '                            if (!myVar.greaterThanOrEqual(var.get(index))) {',
-    '                                 return false;',
-    '                            }',
-    '                     } // end for myVar',
-    '                     return true;',
-    '                default:',
-    '                     return false;',
-    '         }// end switch',
+    '         return var.lessThanOrEqual(this);',
     '    } // end greaterThanOrEqual',
     '',
     '    /**',
@@ -1203,17 +1159,32 @@ Blockly.Java.quote_ = function(string) {
  * Generate code to treat an item as a string.  If it is numeric, quote it
  * if it is a string already, do nothing.  Otherwise use the blocklyToString
  * function at runtime.
- * @param {string} string Text to encode.
- * @return {string} Java code for string.
+ * @param {!Blockly.Block} block The block containing the input.
+ * @param {string} name The name of the input.
+ * @return {string} Generated Java code or '' if no blocks are connected or the
+ *     specified input does not exist.
  */
-Blockly.Java.toStringCode = function(item) {
+
+
+Blockly.Java.toStringCode = function(block,name) {
+  var targetBlock = block.getInputTargetBlock(name);
+  if (!targetBlock) {
+    return '';
+  }
+  var item = Blockly.Java.valueToCode(block,name,Blockly.Java.ORDER_NONE);
   item = item.trim();
+
   // Empty strings and quoted strings are perfectly fine as they are
   if (item !== '' && item.charAt(0) !== '"') {
-    // Pure numbers get quoted
-    if (Blockly.isNumber(item)) {
+    if ((targetBlock.type === 'variables_get') &&
+      (Blockly.Java.GetVariableType(targetBlock.procedurePrefix_+
+      targetBlock.getFieldValue('VAR')) === 'Var')) {
+      item += '.toString()';
+    } else if (Blockly.isNumber(item)) {
+      // Pure numbers get quoted
       item = '"' + item + '"';
-    } else if(Blockly.Java.GetVariableType(item) === 'Var') {
+    } else if(targetBlock.type !== 'variables_get' &&
+      Blockly.Java.GetVariableType(item) === 'Var') {
       item = item + '.toString()';
     } else {
       // It is something else so we need to convert it on the fly

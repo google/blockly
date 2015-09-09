@@ -38,30 +38,26 @@ Blockly.Java['text'] = function(block) {
 Blockly.Java['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   // Should we allow joining by '-' or ',' or any other characters?
-  var code;
-  if (block.itemCount_ == 0) {
-    return ['""', Blockly.Java.ORDER_ATOMIC];
-  } else {
-    var code = '';
-    var extra = '';
-    for (var n = 0; n < block.itemCount_; n++) {
-      var item = Blockly.Java.valueToCode(block, 'ADD' + n,
-          Blockly.Java.ORDER_NONE);
-      if (item) {
-        code += extra + Blockly.Java.toStringCode(item);
-        extra = ' + ';
-      }
+  var code = '';
+  var extra = '';
+  for (var n = 0; n < block.itemCount_; n++) {
+    var item = Blockly.Java.toStringCode(block, 'ADD' + n);
+    if (item) {
+      code += extra + (item);
+      extra = ' + ';
     }
-    return [code, Blockly.Java.ORDER_FUNCTION_CALL];
   }
+  if (code === '') {
+    code = '""';
+  }
+  return [code, Blockly.Java.ORDER_ADDITIVE];
 };
 
 Blockly.Java['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
-  var argument0 = Blockly.Java.valueToCode(block, 'TEXT',
-      Blockly.Java.ORDER_NONE) || '""';
+  var argument0 = Blockly.Java.toStringCode(block, 'TEXT')  || '""';
 
   var code = varName + ' = ';
   var extra = '';
@@ -69,8 +65,7 @@ Blockly.Java['text_append'] = function(block) {
     varName = 'new Var(' + varName + '.getObjectAsString()';
     extra = ')';
   }
-  code += varName + ' + ' +
-          Blockly.Java.toStringCode(argument0) + extra + ';\n';
+  code += varName + ' + ' + argument0 + extra + ';\n';
   return code;
 };
 
@@ -284,89 +279,60 @@ Blockly.Java['text_printf'] = function(block) {
 };
 
 Blockly.Java['text_printf'] = function(block) {
-	  // Create a string made up of any number of elements of any type.
-	  // Should we allow joining by '-' or ',' or any other characters?
-  var code;
-  var argument0 = Blockly.Java.valueToCode(block, 'TEXT', Blockly.Java.ORDER_NONE) || '""';
-  if (block.itemCount_ == 0) {
-    return ['""', Blockly.Java.ORDER_ATOMIC];
-  } else {
-    var code = '';
-    var extra = '';
-    for (var n = 0; n < block.itemCount_; n++) {
-      var item = Blockly.Java.valueToCode(block, 'ADD' + n,
-          Blockly.Java.ORDER_NONE);
-      if (item) {
-        code += extra + Blockly.Java.toStringCode(item);
-        extra = ', ';
-      }
+  // Create a string made up of any number of elements of any type.
+  // Should we allow joining by '-' or ',' or any other characters?
+  var argument0 = Blockly.Java.valueToCode(block, 'TEXT',
+    Blockly.Java.ORDER_NONE) || '""';
+  var code = 'System.out.format(' + argument0;
+  for (var n = 0; n < block.itemCount_; n++) {
+    var item = Blockly.Java.toStringCode(block, 'ADD' + n);
+    if (item) {
+      code += ', ' + item;
     }
-	  code = 'System.out.format(' + argument0 + ','+code+' );\n';
-	  return code;
   }
+  code += ');\n';
+  return code;
 };
 
 Blockly.Java['text_sprintf'] = function(block) {
-	  // Create a string made up of any number of elements of any type.
-	  // Should we allow joining by '-' or ',' or any other characters?
-	var code;
-	var argument0 = Blockly.Java.valueToCode(block, 'TEXT', Blockly.Java.ORDER_NONE) || '""';
-	if (block.itemCount_ == 0) {
-	  return ['""', Blockly.Java.ORDER_ATOMIC];
-	} else {
-	  var code = '';
-	  var extra = '';
-	  for (var n = 0; n < block.itemCount_; n++) {
-	    var item = Blockly.Java.valueToCode(block, 'ADD' + n,
-	        Blockly.Java.ORDER_NONE);
-	    if (item) {
-	      code += extra + Blockly.Java.toStringCode(item);
-	      extra = ', ';
-	    }
-	  }
-	  code = 'String.format(' + argument0 + ','+code+' )';
-	  return [code, Blockly.Java.ORDER_FUNCTION_CALL];
-	}
-};
-
-
-Blockly.Java['text_prompt'] = function(block) {
-  // Prompt function (internal message).
-  var functionName = Blockly.Java.provideFunction_(
-      'text_prompt',
-      ['def ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '(msg):',
-       '  try:',
-       '    return raw_input(msg)',
-       '  except NameError:',
-       '    return input(msg)']);
-  var msg = Blockly.Java.quote_(block.getFieldValue('TEXT'));
-  var code = functionName + '(' + msg + ')';
-  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
-  if (toNumber) {
-    code = 'float(' + code + ')';
+  // Create a string made up of any number of elements of any type.
+  // Should we allow joining by '-' or ',' or any other characters?
+  var argument0 = Blockly.Java.valueToCode(block, 'TEXT',
+    Blockly.Java.ORDER_NONE) || '""';
+  if (block.itemCount_ == 0) {
+    return [argument0, Blockly.Java.ORDER_ATOMIC];
+  } else {
+    var code = 'String.format(' + argument0;
+    for (var n = 0; n < block.itemCount_; n++) {
+      var item = Blockly.Java.toStringCode(block, 'ADD' + n);
+      if (item) {
+        code += ', ' + item;
+      }
+    }
+    code += ')';
+    return [code, Blockly.Java.ORDER_FUNCTION_CALL];
   }
-  return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Java['text_prompt_ext'] = function(block) {
-  // Prompt function (external message).
-  var functionName = Blockly.Java.provideFunction_(
-      'text_prompt',
-      ['def ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '(msg):',
-       '  try:',
-       '    return raw_input(msg)',
-       '  except NameError:',
-       '    return input(msg)']);
-  var msg = Blockly.Java.valueToCode(block, 'TEXT',
-      Blockly.Java.ORDER_NONE) || '""';
-  var code = functionName + '(' + msg + ')';
+  // Prompt function.
+  if (block.getField('TEXT')) {
+    // Internal message.
+    var msg = Blockly.Java.quote_(block.getFieldValue('TEXT'));
+  } else {
+    // External message.
+    var msg = Blockly.Java.valueToCode(block, 'TEXT',
+        Blockly.Java.ORDER_NONE) || '\'\'';
+  }
+  var code = 'window.prompt(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
-    code = 'float(' + code + ')';
+    code = 'parseFloat(' + code + ')';
   }
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
+Blockly.Java['text_prompt'] = Blockly.Java['text_prompt_ext'];
 
 Blockly.Java['text_comment'] = function(block) {
   // Display comment
@@ -384,17 +350,15 @@ Blockly.Java['text_code_insert'] = function(block) {
   var code = '';
   if (type == 'Java')
   {
- 	var comment = block.getFieldValue('CODE') || '';  	
- 	code = '//Arbitrary Java code insert block';
-  	if (comment != '')
-  	{	
-  		code += '\n';
-  		code += comment +'\n';
-  	}
-  	else
-  	{	
-  		code += ' is empty\n';
-	}
+    var comment = block.getFieldValue('CODE') || '';
+    code = '//Arbitrary Java code insert block';
+    if (comment != '')
+    {
+      code += '\n';
+      code += comment +'\n';
+    } else {
+      code += ' is empty\n';
+    }
   }
   return code;
 };

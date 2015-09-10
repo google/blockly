@@ -194,7 +194,7 @@
 	"TEXT_JOIN_HELPURL": "url - Information on concatenating/appending pieces of text.",
 	"TEXT_JOIN_TITLE_CREATEWITH": "block text - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation].",
 	"TEXT_JOIN_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#text-creation create text with] for more information.",
-	"TEXT_CREATE_JOIN_TITLE_JOIN": "block text - This is shown when the programmer wants to change the number of pieces of text being joined together.  See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.",
+	"TEXT_CREATE_JOIN_TITLE_JOIN": "block text - This is shown when the programmer wants to change the number of pieces of text being joined together.  See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.\n{{Identical|Join}}",
 	"TEXT_CREATE_JOIN_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.",
 	"TEXT_CREATE_JOIN_ITEM_TOOLTIP": "block text - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.",
 	"TEXT_APPEND_HELPURL": "url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).",
@@ -256,7 +256,7 @@
 	"LISTS_CREATE_WITH_HELPURL": "url - Information on building lists.",
 	"LISTS_CREATE_WITH_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with].",
 	"LISTS_CREATE_WITH_INPUT_WITH": "block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with].",
-	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "block text - This appears in a sub-block when [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs changing the number of inputs in a ''''create list with'''' block].",
+	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "block text - This appears in a sub-block when [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs changing the number of inputs in a ''''create list with'''' block].\n{{Identical|List}}",
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].",
 	"LISTS_REPEAT_HELPURL": "url - Information about [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].",
@@ -356,7 +356,7 @@
 	"PROCEDURES_MUTATORARG_TITLE": "block text - This text appears on a block in a window that appears when the user clicks on the plus sign or star on a function definition block].  It appears on the block for adding an individual parameter (referred to by the simpler term 'inputs') to the function. See [[Translating:Blockly#function_definitions]].",
 	"PROCEDURES_MUTATORARG_TOOLTIP": "tooltip",
 	"PROCEDURES_HIGHLIGHT_DEF": "context menu - This appears on the context menu for function calls.  Selecting it causes the corresponding function definition to be highlighted (as shown at [[Translating:Blockly#context_menus]].",
-	"PROCEDURES_CREATE_DO": "context menu - This appears on the context menu for function definitions. Selecting it creates a block to call the function.\n\nParameters:\n* %1 - the name of the function.",
+	"PROCEDURES_CREATE_DO": "context menu - This appears on the context menu for function definitions. Selecting it creates a block to call the function.\n\nParameters:\n* %1 - the name of the function.\n{{Identical|Create}}",
 	"PROCEDURES_IFRETURN_TOOLTIP": "tooltip - If the first value is true, this causes the second value to be returned immediately from the enclosing function.",
 	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition."
 }

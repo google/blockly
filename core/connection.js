@@ -553,6 +553,7 @@ Blockly.Connection.prototype.setCheck = function(check) {
     if (!goog.isArray(check)) {
       check = [check];
     }
+    /** @type {Array.<string>} */
     this.check_ = check;
     // The new value type may not be compatible with the existing connection.
     if (this.targetConnection && !this.checkType_(this.targetConnection)) {

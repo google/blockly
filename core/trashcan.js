@@ -53,14 +53,14 @@ Blockly.Trashcan.prototype.WIDTH_ = 47;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.BODY_HEIGHT_ = 45;
+Blockly.Trashcan.prototype.BODY_HEIGHT_ = 44;
 
 /**
  * Height of the lid image.
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.LID_HEIGHT_ = 15;
+Blockly.Trashcan.prototype.LID_HEIGHT_ = 16;
 
 /**
  * Distance between trashcan and bottom edge of workspace.

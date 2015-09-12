@@ -207,7 +207,7 @@ Blockly.clipboardXml_ = null;
 
 /**
  * Source of the local clipboard.
- * @type {Blockly.Workspace}
+ * @type {Blockly.WorkspaceSvg}
  * @private
  */
 Blockly.clipboardSource_ = null;

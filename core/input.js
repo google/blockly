@@ -53,11 +53,20 @@ Blockly.Input = function(type, name, block, connection) {
   this.connection = connection;
   /** @type {!Array.<!Blockly.Field>} */
   this.fieldRow = [];
-  /** @type {number} */
-  this.align = Blockly.ALIGN_LEFT;
-  /** @type {boolean} */
-  this.visible_ = true;
 };
+
+/**
+ * Alignment of input's fields (left, right or centre).
+ * @type {number}
+ */
+Blockly.Input.prototype.align = Blockly.ALIGN_LEFT;
+
+/**
+ * Is the input visible?
+ * @type {boolean}
+ * @private
+ */
+Blockly.Input.prototype.visible_ = true;
 
 /**
  * Add an item to the end of the input's field row.

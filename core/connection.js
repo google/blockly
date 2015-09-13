@@ -54,29 +54,29 @@ Blockly.Connection.prototype.targetConnection = null;
 
 /**
  * List of compatible value types.  Null if all types are compatible.
- * @private
  * @type {Array}
+ * @private
  */
 Blockly.Connection.prototype.check_ = null;
 
 /**
  * Horizontal location of this connection.
- * @private
  * @type {number}
+ * @private
  */
 Blockly.Connection.prototype.x_ = 0;
 
 /**
  * Vertical location of this connection.
- * @private
  * @type {number}
+ * @private
  */
 Blockly.Connection.prototype.y_ = 0;
 
 /**
  * Has this connection been added to the connection database?
- * @private
  * @type {boolean}
+ * @private
  */
 Blockly.Connection.prototype.inDB_ = false;
 

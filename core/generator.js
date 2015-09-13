@@ -38,7 +38,6 @@ goog.require('goog.asserts');
  */
 Blockly.Generator = function(name) {
   this.name_ = name;
-  this.RESERVED_WORDS_ = '';
   this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
       new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
 };
@@ -270,8 +269,16 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
 /**
  * The method of indenting.  Defaults to two spaces, but language generators
  * may override this to increase indent or change to tabs.
+ * @type {string}
  */
 Blockly.Generator.prototype.INDENT = '  ';
+
+/**
+ * Comma-separated list of reserved words.
+ * @type {string}
+ * @private
+ */
+Blockly.Generator.prototype.RESERVED_WORDS_ = '';
 
 /**
  * Add one or more words to the list of reserved words for this language.
@@ -287,6 +294,7 @@ Blockly.Generator.prototype.addReservedWords = function(words) {
  * Blockly.Generator.provideFunction_.  It must not be legal code that could
  * legitimately appear in a function definition (or comment), and it must
  * not confuse the regular expression parser.
+ * @type {string}
  * @private
  */
 Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';

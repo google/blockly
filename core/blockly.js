@@ -51,6 +51,7 @@ goog.require('Blockly.utils');
 
 // Closure dependencies.
 goog.require('goog.color');
+goog.require('goog.userAgent');
 
 
 /**
@@ -557,6 +558,10 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
   if (this.options.gridPattern) {
     this.options.gridPattern.setAttribute('x', x);
     this.options.gridPattern.setAttribute('y', y);
+    if (goog.userAgent.IE) {
+      // IE doesn't notice that the x/y offsets have changed.  Force an update.
+      this.updateGridPattern_();
+    }
   }
 };
 

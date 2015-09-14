@@ -62,7 +62,7 @@ Blockly.WorkspaceSvg = function(options) {
 
   /**
    * Opaque data that can be passed to Blockly.unbindEvent_.
-   * @type {Array.<!Array>}
+   * @type {!Array.<!Array>}
    * @private
    */
   this.eventWrappers_ = [];

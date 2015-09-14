@@ -38,7 +38,6 @@ goog.require('goog.events');
  */
 Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
-  this.oldHostMetrics_ = null;
   this.hScroll = new Blockly.Scrollbar(workspace, true, true);
   this.vScroll = new Blockly.Scrollbar(workspace, false, true);
   this.corner_ = Blockly.createSvgElement('rect',
@@ -47,6 +46,13 @@ Blockly.ScrollbarPair = function(workspace) {
       'class': 'blocklyScrollbarBackground'}, null);
   Blockly.Scrollbar.insertAfter_(this.corner_, workspace.getBubbleCanvas());
 };
+
+/**
+ * Previously recorded metrics from the workspace.
+ * @type {Object}
+ * @private
+ */
+Blockly.ScrollbarPair.prototype.oldHostMetrics_ = null;
 
 /**
  * Dispose of this pair of scrollbars.

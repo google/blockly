@@ -60,22 +60,10 @@ Blockly.Flyout = function(workspaceOptions) {
 
   /**
    * Opaque data that can be passed to Blockly.unbindEvent_.
-   * @type {Array.<!Array>}
+   * @type {!Array.<!Array>}
    * @private
    */
   this.eventWrappers_ = [];
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.width_ = 0;
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.height_ = 0;
 
   /**
    * List of background buttons that lurk behind each block to catch clicks
@@ -112,6 +100,20 @@ Blockly.Flyout.prototype.CORNER_RADIUS = 8;
  * @const
  */
 Blockly.Flyout.prototype.SCROLLBAR_PADDING = 2;
+
+/**
+ * Width of flyout.
+ * @type {number}
+ * @private
+ */
+Blockly.Flyout.prototype.width_ = 0;
+
+/**
+ * Height of flyout.
+ * @type {number}
+ * @private
+ */
+Blockly.Flyout.prototype.height_ = 0;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.

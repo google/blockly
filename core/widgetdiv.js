@@ -40,15 +40,15 @@ Blockly.WidgetDiv.DIV = null;
 
 /**
  * The object currently using this container.
- * @private
  * @type {Object}
+ * @private
  */
 Blockly.WidgetDiv.owner_ = null;
 
 /**
  * Optional cleanup function set by whichever object uses the widget.
- * @private
  * @type {Function}
+ * @private
  */
 Blockly.WidgetDiv.dispose_ = null;
 

@@ -50,12 +50,22 @@ Blockly.FieldColour = function(colour, opt_changeHandler) {
   this.setChangeHandler(opt_changeHandler);
   // Set the initial state.
   this.setValue(colour);
-
-  // By default use the global constants for colours and columns.
-  this.colours_ = null;
-  this.columns_ = 0;
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
+
+/**
+ * By default use the global constants for colours.
+ * @type {Array.<string>}
+ * @private
+ */
+Blockly.FieldColour.prototype.colours_ = null;
+
+/**
+ * By default use the global constants for columns.
+ * @type {number}
+ * @private
+ */
+Blockly.FieldColour.prototype.columns_ = 0;
 
 /**
  * Install this field on a block.

@@ -46,6 +46,20 @@ Blockly.Field = function(text) {
 };
 
 /**
+ * Temporary cache of text widths.
+ * @type {Object}
+ * @private
+ */
+Blockly.Field.cacheWidths_ = null;
+
+/**
+ * Number of current references to cache.
+ * @type {number}
+ * @private
+ */
+Blockly.Field.cacheReference_ = 0;
+
+/**
  * Maximum characters of text to display before adding an ellipsis.
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
@@ -196,12 +210,21 @@ Blockly.Field.prototype.getSvgRoot = function() {
  */
 Blockly.Field.prototype.render_ = function() {
   if (this.visible_ && this.textElement_) {
-    try {
-      var width = this.textElement_.getComputedTextLength();
-    } catch (e) {
-      // MSIE 11 is known to throw "Unexpected call to method or property
-      // access." if Blockly is hidden.
-      var width = this.textElement_.textContent.length * 8;
+    var key = this.textElement_.textContent + '\n' +
+        this.textElement_.className.baseVal;
+    if (Blockly.Field.cacheWidths_ && Blockly.Field.cacheWidths_[key]) {
+      var width = Blockly.Field.cacheWidths_[key];
+    } else {
+      try {
+        var width = this.textElement_.getComputedTextLength();
+      } catch (e) {
+        // MSIE 11 is known to throw "Unexpected call to method or property
+        // access." if Blockly is hidden.
+        var width = this.textElement_.textContent.length * 8;
+      }
+      if (Blockly.Field.cacheWidths_) {
+        Blockly.Field.cacheWidths_[key] = width;
+      }
     }
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width',
@@ -211,6 +234,32 @@ Blockly.Field.prototype.render_ = function() {
     var width = 0;
   }
   this.size_.width = width;
+};
+
+/**
+ * Start caching field widths.  Every call to this function MUST also call
+ * stopCache.  Caches must not survive between execution threads.
+ * @type {Object}
+ * @private
+ */
+Blockly.Field.startCache = function() {
+  Blockly.Field.cacheReference_++;
+  if (!Blockly.Field.cacheWidths_) {
+    Blockly.Field.cacheWidths_ = {};
+  }
+};
+
+/**
+ * Stop caching field widths.  Unless caching was already on when the
+ * corresponding call to startCache was made.
+ * @type {number}
+ * @private
+ */
+Blockly.Field.stopCache = function() {
+  Blockly.Field.cacheReference_--;
+  if (!Blockly.Field.cacheReference_) {
+    Blockly.Field.cacheWidths_ = null;
+  }
 };
 
 /**

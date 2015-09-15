@@ -236,7 +236,9 @@ Blockly.BlockSvg.prototype.setParent = function(newParent) {
     svgRoot.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   }
 
+  Blockly.Field.startCache();
   Blockly.BlockSvg.superClass_.setParent.call(this, newParent);
+  Blockly.Field.stopCache();
 
   if (newParent) {
     var oldXY = this.getRelativeToSurfaceXY();
@@ -997,6 +999,7 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
                                               opt_dontRemoveFromWorkspace) {
+  Blockly.Field.startCache();
   // Terminate onchange event calls.
   if (this.onchangeWrapper_) {
     Blockly.unbindEvent_(this.onchangeWrapper_);
@@ -1032,6 +1035,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   this.svgPath_ = null;
   this.svgPathLight_ = null;
   this.svgPathDark_ = null;
+  Blockly.Field.stopCache();
 };
 
 /**
@@ -1379,6 +1383,7 @@ Blockly.BlockSvg.prototype.removeDragging = function() {
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+  Blockly.Field.startCache();
   this.rendered = true;
 
   var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
@@ -1408,6 +1413,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
       Blockly.fireUiEvent(window, 'resize');
     }
   }
+  Blockly.Field.stopCache();
   Blockly.Realtime.blockChanged(this);
 };
 

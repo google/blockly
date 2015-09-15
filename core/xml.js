@@ -227,6 +227,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   if (workspace.RTL) {
     width = workspace.getWidth();
   }
+  Blockly.Field.startCache();
   // Safari 7.1.3 is known to provide node lists with extra references to
   // children beyond the lists' length.  Trust the length, do not use the
   // looping pattern of checking the index for an object.
@@ -242,6 +243,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
       }
     }
   }
+  Blockly.Field.stopCache();
 };
 
 /**

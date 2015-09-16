@@ -909,6 +909,56 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
 };
 
 /**
+ * Scroll the workspace to show the indicated block.
+ * @param {!Blockly.Block} block Block to be shown.
+ */
+Blockly.WorkspaceSvg.prototype.scrollToBlock = function(block) {
+  var metrics = this.getMetrics();
+  var xy = block.getRelativeToSurfaceXY();
+  var height = block.height;
+  var width = block.width;
+
+  // Clip the suze of the block to the size of the view.
+  if (height >= metrics.viewHeight) {
+    height = metrics.viewHeight-1;
+  }
+  if (width >= metrics.viewWidth) {
+    width = metrics.viewWidth-1;
+  }
+
+  // Figure out the boundary of the current block.
+  var top = xy.y;
+  var bottom = xy.y + height;
+  var left = xy.x;
+  var right = xy.x + width;
+
+  var deltaY = 0;
+  var deltaX = 0;
+
+  // Are we off the workspace in the vertical direction?
+  if (metrics.viewTop > top) {
+    deltaY = metrics.viewTop - top;
+  } else if (bottom > (metrics.viewTop + metrics.viewHeight)) {
+    deltaY = ((metrics.viewTop + metrics.viewHeight) - bottom);
+  }
+
+  // Are we off the workspace in the horizontal direction?
+  if (metrics.viewLeft > left) {
+    deltaX = metrics.viewLeft - left;
+  } else if (right > (metrics.viewLeft + metrics.viewWidth)) {
+    deltaX = ((metrics.viewLeft + metrics.viewWidth) - right);
+  }
+
+  // See if we have to actually scroll.
+  if (deltaX || deltaY) {
+	var currentScrollX = (metrics.viewLeft - metrics.contentLeft );
+	var currentScrollY = (metrics.viewTop - metrics.contentTop );
+
+	this.scrollbar.set(currentScrollX - deltaX, currentScrollY - deltaY);
+  }
+};
+
+/**
  * Reset zooming and dragging.
  */
 Blockly.WorkspaceSvg.prototype.zoomReset = function() {

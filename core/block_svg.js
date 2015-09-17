@@ -831,11 +831,6 @@ Blockly.BlockSvg.NOTCH_WIDTH = 30;
  */
 Blockly.BlockSvg.CORNER_RADIUS = 8;
 /**
- * Minimum height of field rows.
- * @const
- */
-Blockly.BlockSvg.FIELD_HEIGHT = 18;
-/**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
  * Applies to highlighting on around the inside of a curve.
  * @const

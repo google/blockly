@@ -448,7 +448,7 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
   // Minimum size of a bubble.
   width = Math.max(width, doubleBorderWidth + 45);
-  height = Math.max(height, doubleBorderWidth + Blockly.BlockSvg.FIELD_HEIGHT);
+  height = Math.max(height, doubleBorderWidth + 20);
   this.width_ = width;
   this.height_ = height;
   this.bubbleBack_.setAttribute('width', width);

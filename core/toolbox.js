@@ -164,14 +164,12 @@ Blockly.Toolbox.prototype.position = function() {
   var svg = this.workspace_.options.svg;
   var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
-  //if (this.workspace_.RTL) {
-  //  treeDiv.style.left =
-  //      (svgPosition.x + svgSize.width - treeDiv.offsetWidth) + 'px';
-  //} else {
-  //  treeDiv.style.left = svgPosition.x + 'px';
-  //}
+  
+  if (this.workspace_.RTL) {
+    treeDiv.style.left =
+        (svgPosition.x + svgSize.width - treeDiv.offsetWidth) + 'px';
+  }  
   treeDiv.style.height = svgSize.height + 'px';
-  //treeDiv.style.top = svgPosition.y + 'px';
   
   this.width = treeDiv.offsetWidth;
   if (!this.workspace_.RTL) {

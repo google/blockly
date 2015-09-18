@@ -715,6 +715,8 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     this.nextConnection = null;
   }
   if (newBoolean) {
+    goog.asserts.assert(!this.outputConnection,
+        'Remove output connection prior to adding previous connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
@@ -743,8 +745,8 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     this.outputConnection = null;
   }
   if (newBoolean) {
-    goog.asserts.assert(!this.previousConnection,
-        'Remove previous connection prior to adding output connection.');
+    goog.asserts.assert(!this.previousConnection && !this.nextConnection,
+        'Remove previous/next connection prior to adding output connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
@@ -911,8 +913,9 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
 Blockly.Block.prototype.jsonInit = function(json) {
   // Validate inputs.
   goog.asserts.assert(json['output'] == undefined ||
-      json['previousStatement'] == undefined,
-      'Must not have both an output and a previousStatement.');
+      (json['previousStatement'] == undefined &&
+      json['nextStatement'] == undefined),
+      'Must not have both an output and a previous/nextStatement.');
 
   // Set basic properties of block.
   this.setColour(json['colour']);

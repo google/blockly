@@ -433,7 +433,8 @@ Blockly.onKeyDown_ = function(e) {
         e.clientX = box.left + offset;
       }
       e.clientY = box.top + offset;
-      Blockly.selected.workspace.scrollToBlock(Blockly.selected);
+//      Blockly.selected.workspace.scrollToArea(Blockly.selected);
+      Blockly.selectBlock(Blockly.selected);
       Blockly.selected.showContextMenu_(e);
     }
   }
@@ -446,7 +447,21 @@ Blockly.onKeyDown_ = function(e) {
 Blockly.selectBlock = function(block) {
   if (block) {
     block.select();
-    block.workspace.scrollToBlock(block);
+    var xy = block.getRelativeToSurfaceXY();
+    var height = block.height;
+    var width = block.width;
+    var rect = {
+                top: xy.y,
+                bottom: xy.y + block.height
+               };
+    if (block.RTL) {
+      rect.left = xy.x-width;
+      rect.right = xy.x;
+    } else {
+      rect.left = xy.x;
+      rect.right = xy.x + width;
+    }
+    block.workspace.scrollToArea(rect, block.RTL);
   }
 };
 
@@ -457,31 +472,157 @@ Blockly.selectBlock = function(block) {
 Blockly.selectField = function(field) {
   Blockly.selectedField = field;
   if (field) {
-    Blockly.selectBlock(field.sourceBlock_);
+    var block = field.sourceBlock_;
+    // First we select the block and scroll so that it is visible in the view
+    // Generally this will also have the fields in view, but if the block is
+    // large enough and the field is far enough to the end of the block, it
+    // might be possible that the field is obscured, but we want to use the
+    // block as a basis to start with.
+    block.select();
+    var xy = block.getRelativeToSurfaceXY();
+    var height = block.height;
+    var width = block.width;
+    var rect = {
+                top: xy.y,
+                bottom: xy.y + block.height
+               };
+    if (block.RTL) {
+      rect.left = xy.x-width;
+      rect.right = xy.x;
+    } else {
+      rect.left = xy.x;
+      rect.right = xy.x + width;
+    }
+    block.workspace.scrollToArea(rect, block.RTL);
+
+    
+    var fieldElem = field.getSvgRoot();
+    if (fieldElem) {
+      var elemXy = Blockly.getRelativeXY_(fieldElem);
+      rect = {
+               top: xy.y + elemXy.y,
+               bottom: xy.y + block.height
+             };
+      if (block.RTL) {
+        rect.left = xy.x - width;
+        rect.right = xy.x - elemXy.x;
+      } else {
+        rect.left = xy.x + elemXy.x;
+        rect.right = xy.x + width;
+      }
+      block.workspace.scrollToArea(rect, block.RTL);
+    }
+
     // Now we need to active the field for editing
     field.showEditor_();
   }
 };
 
-// ↹ Tab:
-//     Activates the next editable following the logic of → Right arrow
-//      (→ Left arrow in RTL mode) to go past any fields
-//     which have no editable fields.
-//    Note that it does not ever leave the Blockly canvas to activate
-//    other UI elements of the browser.
+/**
+ * ↹ Tab:
+ *     Activates the next editable following the logic of → Right arrow
+ *      (→ Left arrow in RTL mode) to go past any fields
+ *     which have no editable fields.
+ *    Note that it does not ever leave the Blockly canvas to activate
+ *    other UI elements of the browser.
+ */
 Blockly.selectNextField = function() {
-  Blockly.selectField(null);
+  var lastField = Blockly.selectedField;
+  var curBlock = Blockly.selected;
+  var selField = null;
+  // Find us a field to select
+  while(selField === null) {
+    // If we started out with no block selected, go to the first block
+    if (!curBlock) {
+      curBlock = Blockly.findNextBlock(null);
+      lastField = null;
+    }
+    // If we found no block (or there are no blocks) then we can just quit
+    if (!curBlock) {
+      break;
+    }
+    // See if the current block has any editable fields on it
+    var fields = curBlock.getEditableFields();
+    if (fields.length) {
+      // It does have fields, see what field we should select in it
+      var spot = 0;
+      if (lastField) {
+        // if the currently selected field is one of them and look for any
+        // fields after it
+        spot = goog.array.indexOf(fields, lastField)+1;
+        if (spot >= fields.length) {
+          // it was the last field on the block so we want to skip to the next
+          spot = -1;
+        }
+      }
+      if (spot !== -1) {
+        selField = fields[spot];
+      }
+    }
+    if (selField === null) {
+      // No fields so go to the next block
+      curBlock = Blockly.findNextBlock(curBlock);
+      lastField = null;
+      if (curBlock == Blockly.selected) {
+        break;
+      }
+    }
+  }
+  Blockly.selectField(selField);
 };
 
-// ⇧↹ Shift Tab
-//    Activates the previous editable field following the logic of
-//      → Left arrow (→ Right arrow in RTL mode) to go past any fields
-//     which have no editable fields.
-//    Note that it does not ever leave the Blockly canvas to activate
-//    other UI elements of the browser.
+/**
+ * ⇧↹ Shift Tab
+ *    Activates the previous editable field following the logic of
+ *      → Left arrow (→ Right arrow in RTL mode) to go past any fields
+ *     which have no editable fields.
+ *    Note that it does not ever leave the Blockly canvas to activate
+ *    other UI elements of the browser.
+ */
 
 Blockly.selectPrevField = function() {
-  Blockly.selectField(null);
+  var lastField = Blockly.selectedField;
+  var curBlock = Blockly.selected;
+  var selField = null;
+  // Find us a field to select
+  while(selField === null) {
+    // If we started out with no block selected, go to the first block
+    if (!curBlock) {
+      curBlock = Blockly.findNextBlock(null);
+      lastField = null;
+    }
+    // If we found no block (or there are no blocks) then we can just quit
+    if (!curBlock) {
+      break;
+    }
+    // See if the current block has any editable fields on it
+    var fields = curBlock.getEditableFields();
+    if (fields.length) {
+      // It does have fields, see what field we should select in it
+      var spot = fields.length-1;
+      if (lastField) {
+        // if the currently selected field is one of them and look for any
+        // fields after it
+        spot = goog.array.indexOf(fields, lastField)-1;
+        if (spot < 0) {
+          // it was the last field on the block so we want to skip to the next
+          spot = -1;
+        }
+      }
+      if (spot !== -1) {
+        selField = fields[spot];
+      }
+    }
+    if (selField === null) {
+      // No fields so go to the next block
+      curBlock = Blockly.findPrevBlock(curBlock);
+      lastField = null;
+      if (curBlock == Blockly.selected) {
+        break;
+      }
+    }
+  }
+  Blockly.selectField(selField);
 };
 
 /**

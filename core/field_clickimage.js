@@ -53,7 +53,7 @@ goog.inherits(Blockly.FieldClickImage, Blockly.FieldImage);
  * However we don't want to serialize it even if it is present
  */
 Blockly.FieldClickImage.prototype.EDITABLE = true;
-Blockly.FieldLabel.prototype.SERIALIZABLE = false;
+Blockly.FieldClickImage.prototype.SERIALIZABLE = false;
 
 /**
  * Mouse cursor style when over the hotspot that initiates the editor.

@@ -909,44 +909,52 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
 };
 
 /**
- * Scroll the workspace to show the indicated block.
- * @param {!Blockly.Block} block Block to be shown.
+ * Scroll the workspace to show the area.
+ * Note that we include a 10 pixel margin
+ * @param {Object} rect Rectangle of area to be scrolled to.
+ * @param {boolean=} rtl Indicator if the block is a RTL block.
  */
-Blockly.WorkspaceSvg.prototype.scrollToBlock = function(block) {
+Blockly.WorkspaceSvg.prototype.scrollToArea = function(rect, rtl) {
   var metrics = this.getMetrics();
-  var xy = block.getRelativeToSurfaceXY();
-  var height = block.height;
-  var width = block.width;
+
+  var height = rect.bottom-rect.top;
+  var width = rect.right-rect.left;
+  var margin = 10;
 
   // Clip the suze of the block to the size of the view.
-  if (height >= metrics.viewHeight) {
-    height = metrics.viewHeight-1;
+  if (height >= (metrics.viewHeight - margin)) {
+    height = metrics.viewHeight - (margin+1);
   }
-  if (width >= metrics.viewWidth) {
-    width = metrics.viewWidth-1;
+  if (width >= (metrics.viewWidth - margin)) {
+    width = metrics.viewWidth - (margin+1);
   }
 
   // Figure out the boundary of the current block.
-  var top = xy.y;
-  var bottom = xy.y + height;
-  var left = xy.x;
-  var right = xy.x + width;
+  rect.top -= margin;
+  rect.bottom = rect.top + height;
+  if (rtl) {
+    rect.right += margin;
+    rect.left = rect.right-width;
+  } else {
+    rect.left -= margin;
+    rect.right = rect.left+width;
+  }
 
   var deltaY = 0;
   var deltaX = 0;
 
   // Are we off the workspace in the vertical direction?
-  if (metrics.viewTop > top) {
-    deltaY = metrics.viewTop - top;
-  } else if (bottom > (metrics.viewTop + metrics.viewHeight)) {
-    deltaY = ((metrics.viewTop + metrics.viewHeight) - bottom);
+  if (metrics.viewTop > rect.top) {
+    deltaY = metrics.viewTop - rect.top;
+  } else if (rect.bottom > (metrics.viewTop + metrics.viewHeight)) {
+    deltaY = ((metrics.viewTop + metrics.viewHeight) - rect.bottom);
   }
 
   // Are we off the workspace in the horizontal direction?
-  if (metrics.viewLeft > left) {
-    deltaX = metrics.viewLeft - left;
-  } else if (right > (metrics.viewLeft + metrics.viewWidth)) {
-    deltaX = ((metrics.viewLeft + metrics.viewWidth) - right);
+  if (metrics.viewLeft > rect.left) {
+    deltaX = metrics.viewLeft - rect.left;
+  } else if (rect.right > (metrics.viewLeft + metrics.viewWidth)) {
+    deltaX = ((metrics.viewLeft + metrics.viewWidth) - rect.right);
   }
 
   // See if we have to actually scroll.

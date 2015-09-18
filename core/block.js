@@ -642,6 +642,22 @@ Blockly.Block.prototype.getField = function(name) {
 };
 
 /**
+ * Returns an array of all editable fields in a block
+ * @return {Array<Blockly.Field>} Array of fields (which can be empty)
+ */
+ Blockly.Block.prototype.getEditableFields = function() {
+  var fields = [];
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field.EDITABLE && field.SERIALIZABLE) {
+        fields.push(field);
+      }
+    }
+  }
+  return fields;
+}
+
+/**
  * Returns the language-neutral value from the field of a block.
  * @param {string} name The name of the field.
  * @return {?string} Value from the field or null if field does not exist.

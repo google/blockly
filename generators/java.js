@@ -130,6 +130,10 @@ Blockly.Java.Baseclass_ = '';
  */
 Blockly.Java.needImports_ = [];
 /**
+ * List of interfaces that this class implements
+ **/
+Blockly.Java.Interfaces_ = [];
+/**
  * List of libraries used by the caller's generated java code.  These will
  * be processed by Blockly.Java.addImport
  */
@@ -203,6 +207,28 @@ Blockly.Java.getBaseclass = function() {
     baseClass = Blockly.Java.variableDB_.getName(baseClass,'CLASS');
   }
   return baseClass;
+}
+
+/**
+ * Add an implementaiton (if any) for the generated Java code
+ * @param {string} iface Name of a interface that this class provides
+ */
+Blockly.Java.addInterface = function(iface) {
+  if (!goog.array.contains(this.Interfaces_, iface)) {
+    this.Interfaces_.push(iface);
+  }
+}
+
+/**
+ * Get the interface list (if any) for the generated Java code
+ * @return {Array<string>} baseclass Array of all interfaces that 
+ *         this class implements or null if no interfaces
+ */
+Blockly.Java.getInterfaces = function() {
+  if (this.Interfaces_.length === 0) {
+    return null;
+  }
+  return this.Interfaces_;
 }
 
 /**
@@ -320,6 +346,14 @@ Blockly.Java.workspaceToCode = function(workspace, parms) {
   var baseClass = this.getBaseclass();
   if (baseClass != '') {
     finalcode += ' extends ' + baseClass;
+  }
+  var interfaces = this.getInterfaces();
+  if (interfaces) {
+    var extra = ' implements ';
+    for(var iface = 0; iface < interfaces.length; iface++) {
+      finalcode += extra + interfaces[iface];
+      extra = ', ';
+    }
   }
   finalcode += ' {\n\n' +
                code + '\n' +

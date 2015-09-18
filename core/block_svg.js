@@ -831,11 +831,6 @@ Blockly.BlockSvg.NOTCH_WIDTH = 30;
  */
 Blockly.BlockSvg.CORNER_RADIUS = 8;
 /**
- * Minimum height of field rows.
- * @const
- */
-Blockly.BlockSvg.FIELD_HEIGHT = 18;
-/**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
  * Applies to highlighting on around the inside of a curve.
  * @const
@@ -1840,7 +1835,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         if (input.align == Blockly.ALIGN_RIGHT) {
           fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          fieldX += (fieldRightX + fieldX) / 2;
+          fieldX += fieldRightX / 2;
         }
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);
@@ -1883,7 +1878,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         if (input.align == Blockly.ALIGN_RIGHT) {
           fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          fieldX += (fieldRightX + fieldX) / 2;
+          fieldX += fieldRightX / 2;
         }
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);
@@ -1910,7 +1905,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         if (input.align == Blockly.ALIGN_RIGHT) {
           fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          fieldX += (fieldRightX + fieldX) / 2;
+          fieldX += fieldRightX / 2;
         }
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);

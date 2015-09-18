@@ -1831,7 +1831,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         if (input.align == Blockly.ALIGN_RIGHT) {
           fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          fieldX += (fieldRightX + fieldX) / 2;
+          fieldX += fieldRightX / 2;
         }
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);
@@ -1874,7 +1874,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         if (input.align == Blockly.ALIGN_RIGHT) {
           fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          fieldX += (fieldRightX + fieldX) / 2;
+          fieldX += fieldRightX / 2;
         }
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);
@@ -1901,7 +1901,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         if (input.align == Blockly.ALIGN_RIGHT) {
           fieldX += fieldRightX;
         } else if (input.align == Blockly.ALIGN_CENTRE) {
-          fieldX += (fieldRightX + fieldX) / 2;
+          fieldX += fieldRightX / 2;
         }
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);

@@ -1133,7 +1133,7 @@ Blockly.Java.finish = function(code) {
       // Figure out the header to put on the function
       var header = '';
       var res1 = def.split("(", 2);
-      if (res1.length >= 2) {
+      if ((res1.length >= 2) && (res1[0].indexOf(";") ===-1)) {
         // Figure out the header to put on the function
         var header = '/**\n' +
                      ' * Description goes here\n';

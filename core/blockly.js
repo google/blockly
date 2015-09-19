@@ -435,6 +435,25 @@ Blockly.copy_ = function(block) {
 };
 
 /**
+ * Duplicate this block and its children.
+ * @param {!Blockly.Block} block Block to be copied.
+ * @private
+ */
+Blockly.duplicate_ = function(block) {
+  // Save the clipboard.
+  var clipboardXml = Blockly.clipboardXml_;
+  var clipboardSource = Blockly.clipboardSource_;
+
+  // Create a duplicate via a copy/paste operation.
+  Blockly.copy_(block);
+  block.workspace.paste(Blockly.clipboardXml_);
+
+  // Restore the clipboard.
+  Blockly.clipboardXml_ = clipboardXml;
+  Blockly.clipboardSource_ = clipboardSource;
+};
+
+/**
  * Cancel the native context menu, unless the focus is on an HTML input widget.
  * @param {!Event} e Mouse down event.
  * @private

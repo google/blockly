@@ -508,7 +508,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       text: Blockly.Msg.DUPLICATE_BLOCK,
       enabled: true,
       callback: function() {
-        block.duplicate_();
+        Blockly.duplicate_(block);
       }
     };
     if (this.getDescendants().length > this.workspace.remainingCapacity()) {

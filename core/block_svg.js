@@ -187,6 +187,7 @@ Blockly.BlockSvg.onMouseMoveWrapper_ = null;
  * @private
  */
 Blockly.BlockSvg.terminateDrag_ = function() {
+  Blockly.BlockSvg.disconnectUiStop_();
   if (Blockly.BlockSvg.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.BlockSvg.onMouseUpWrapper_);
     Blockly.BlockSvg.onMouseUpWrapper_ = null;
@@ -692,6 +693,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     var oldXY = this_.getRelativeToSurfaceXY();
     var newXY = workspace_.moveDrag(e);
 
+    var group = this_.getSvgRoot();
     if (Blockly.dragMode_ == 1) {
       // Still dragging within the sticky DRAG_RADIUS.
       var dr = goog.math.Coordinate.distance(oldXY, newXY) * workspace_.scale;
@@ -699,8 +701,15 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
         // Switch to unrestricted dragging.
         Blockly.dragMode_ = 2;
         Blockly.longStop_();
-        // Push this block to the very top of the stack.
-        this_.setParent(null);
+        group.translate_ = '';
+        group.skew_ = '';
+        if (this_.parentBlock_) {
+          // Push this block to the very top of the stack.
+          this_.setParent(null);
+          if (workspace_.scale >= 1) {
+            this_.disconnectUiEffect();
+          }
+        }
         this_.setDragging_(true);
         workspace_.recordDeleteAreas();
       }
@@ -709,8 +718,8 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       // Unrestricted dragging.
       var dx = oldXY.x - this_.dragStartXY_.x;
       var dy = oldXY.y - this_.dragStartXY_.y;
-      this_.getSvgRoot().setAttribute('transform',
-          'translate(' + newXY.x + ',' + newXY.y + ')');
+      group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
+      group.setAttribute('transform', group.translate_ + group.skew_);
       // Drag all the nested bubbles.
       for (var i = 0; i < this_.draggedBubbles_.length; i++) {
         var commentData = this_.draggedBubbles_[i];
@@ -1126,9 +1135,81 @@ Blockly.BlockSvg.connectionUiStep_ = function(ripple, start, workspaceScale) {
     var closure = function() {
       Blockly.BlockSvg.connectionUiStep_(ripple, start, workspaceScale);
     };
-    setTimeout(closure, 10);
+    Blockly.BlockSvg.disconnectUiStop_.pid_ = setTimeout(closure, 10);
   }
 };
+
+/**
+ * Play some UI effects (sound, animation) when disconnecting a block.
+ */
+Blockly.BlockSvg.prototype.disconnectUiEffect = function() {
+  this.workspace.playAudio('disconnect');
+  // Horizontal distance for bottom of block to wiggle.
+  var DISPLACEMENT = 10;
+  // Scale magnitude of skew to height of block.
+  var height = this.getHeightWidth().height;
+  var magnitude = Math.atan(DISPLACEMENT / height) / Math.PI * 180;
+  if (this.RTL) {
+    magnitude *= -1;
+  }
+  // Start the animation.
+  Blockly.BlockSvg.disconnectUiStep_(this.svgGroup_, magnitude, new Date());
+};
+
+/**
+ * Animate a brief wiggle of a disconnected block.
+ * @param {!Element} group SVG element to animate.
+ * @param {number} magnitude Maximum degrees skew (reversed for RTL).
+ * @param {!Date} start Date of animation's start.
+ * @private
+ */
+Blockly.BlockSvg.disconnectUiStep_ = function(group, magnitude, start) {
+  var DURATION = 200;  // Milliseconds.
+  var WIGGLES = 3;  // Half oscillations.
+
+  var ms = (new Date()) - start;
+  var percent = ms / DURATION;
+
+  if (percent > 1) {
+    group.skew_ = '';
+  } else {
+    var skew = Math.round(Math.sin(percent * Math.PI * WIGGLES) *
+        (1 - percent) * magnitude);
+    group.skew_ = 'skewX(' + skew + ')';
+    var closure = function() {
+      Blockly.BlockSvg.disconnectUiStep_(group, magnitude, start);
+    };
+    Blockly.BlockSvg.disconnectUiStop_.group = group;
+    Blockly.BlockSvg.disconnectUiStop_.pid = setTimeout(closure, 10);
+  }
+  group.setAttribute('transform', group.translate_ + group.skew_);
+};
+
+/**
+ * Stop the disconnect UI animation immediately.
+ * @private
+ */
+Blockly.BlockSvg.disconnectUiStop_ = function() {
+  if (Blockly.BlockSvg.disconnectUiStop_.group) {
+    clearTimeout(Blockly.BlockSvg.disconnectUiStop_.pid);
+    var group = Blockly.BlockSvg.disconnectUiStop_.group
+    group.skew_ = '';
+    group.setAttribute('transform', group.translate_);
+    Blockly.BlockSvg.disconnectUiStop_.group = null;
+  }
+};
+
+/**
+ * PID of disconnect UI animation.  There can only be one at a time.
+ * @type {number}
+ */
+Blockly.BlockSvg.disconnectUiStop_.pid = 0;
+
+/**
+ * SVG group of wobbling block.  There can only be one at a time.
+ * @type {Element}
+ */
+Blockly.BlockSvg.disconnectUiStop_.group = null;
 
 /**
  * Change the colour of a block.

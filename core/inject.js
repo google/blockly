@@ -511,6 +511,10 @@ Blockly.init_ = function(mainWorkspace) {
          options.pathToMedia + 'click.wav',
          options.pathToMedia + 'click.ogg'], 'click');
     mainWorkspace.loadAudio_(
+        [options.pathToMedia + 'disconnect.mp3',
+         options.pathToMedia + 'disconnect.ogg',
+         options.pathToMedia + 'disconnect.wav'], 'disconnect');
+    mainWorkspace.loadAudio_(
         [options.pathToMedia + 'delete.mp3',
          options.pathToMedia + 'delete.ogg',
          options.pathToMedia + 'delete.wav'], 'delete');

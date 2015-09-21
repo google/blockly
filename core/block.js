@@ -263,30 +263,6 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
 };
 
 /**
- * Duplicate this block and its children.
- * @return {!Blockly.Block} The duplicate.
- * @private
- */
-Blockly.Block.prototype.duplicate_ = function() {
-  // Create a duplicate via XML.
-  var xmlBlock = Blockly.Xml.blockToDom_(this);
-  Blockly.Xml.deleteNext(xmlBlock);
-  var newBlock = Blockly.Xml.domToBlock(
-      /** @type {!Blockly.Workspace} */ (this.workspace), xmlBlock);
-  // Move the duplicate next to the old block.
-  var xy = this.getRelativeToSurfaceXY();
-  if (this.RTL) {
-    xy.x -= Blockly.SNAP_RADIUS;
-  } else {
-    xy.x += Blockly.SNAP_RADIUS;
-  }
-  xy.y += Blockly.SNAP_RADIUS * 2;
-  newBlock.moveBy(xy.x, xy.y);
-  newBlock.select();
-  return newBlock;
-};
-
-/**
  * Returns all connections originating from this block.
  * @param {boolean} all If true, return all connections even hidden ones.
  *     Otherwise return those that are visible.
@@ -746,8 +722,6 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     this.nextConnection = null;
   }
   if (newBoolean) {
-    goog.asserts.assert(!this.outputConnection,
-        'Remove output connection prior to adding previous connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
@@ -776,8 +750,8 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     this.outputConnection = null;
   }
   if (newBoolean) {
-    goog.asserts.assert(!this.previousConnection && !this.nextConnection,
-        'Remove previous/next connection prior to adding output connection.');
+    goog.asserts.assert(!this.previousConnection,
+        'Remove previous connection prior to adding output connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
@@ -950,9 +924,8 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
 Blockly.Block.prototype.jsonInit = function(json) {
   // Validate inputs.
   goog.asserts.assert(json['output'] == undefined ||
-      (json['previousStatement'] == undefined &&
-      json['nextStatement'] == undefined),
-      'Must not have both an output and a previous/nextStatement.');
+      json['previousStatement'] == undefined,
+      'Must not have both an output and a previousStatement.');
 
   // Set basic properties of block.
   this.setColour(json['colour']);

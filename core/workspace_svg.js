@@ -832,7 +832,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
  */
 Blockly.WorkspaceSvg.prototype.addChangeListener = function(func) {
   var wrapper = Blockly.bindEvent_(this.getCanvas(),
-                            'blocklyWorkspaceChange', null, func);
+      'blocklyWorkspaceChange', null, func);
   Array.prototype.push.apply(this.eventWrappers_, wrapper);
   return wrapper;
 };

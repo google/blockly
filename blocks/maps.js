@@ -64,7 +64,7 @@ Blockly.Blocks['maps_create_with'] = {
   init: function() {
     this.setHelpUrl(Blockly.Msg.MAPS_CREATE_WITH_HELPURL);
     this.setColour(Blockly.Blocks.maps.HUE);
-    if (Blockly.useMutators) {
+    if (this.workspace.options.useMutators) {
       this.setMutator(new Blockly.Mutator(['maps_create_with_item']));
     } else {
       this.appendAddSubGroup(Blockly.Msg.MAPS_CREATE_WITH_INPUT_WITH, 'items',
@@ -205,8 +205,7 @@ Blockly.Blocks['maps_create_with_container'] = {
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg.MAPS_CREATE_WITH_CONTAINER_TOOLTIP);
     this.contextMenu = false;
-  },
-  isTopLevel: true
+  }
 };
 
 Blockly.Blocks['maps_create_with_item'] = {

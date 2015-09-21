@@ -75,7 +75,7 @@ Blockly.Blocks['text_join'] = {
     this.setHelpUrl(Blockly.Msg.TEXT_JOIN_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
     this.setOutput(true, 'String');
-    if (Blockly.useMutators) {
+    if (this.workspace.options.useMutators) {
       this.setMutator(new Blockly.Mutator(['text_create_join_item']));
     } else {
       this.appendAddSubGroup(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH, 'items',null,
@@ -223,8 +223,7 @@ Blockly.Blocks['text_create_join_container'] = {
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP);
     this.contextMenu = false;
-  },
-  isTopLevel: true
+  }
 };
 
 Blockly.Blocks['text_create_join_item'] = {

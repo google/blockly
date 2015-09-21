@@ -66,7 +66,6 @@ Blockly.Blocks['factory_base'] = {
     this.setHelpUrl(
         'https://developers.google.com/blockly/custom-blocks/block-factory');
   },
-  isTopLevel: true,
   mutationToDom: function() {
     var container = document.createElement('mutation');
     container.setAttribute('connections', this.getFieldValue('CONNECTIONS'));

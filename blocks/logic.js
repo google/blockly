@@ -40,7 +40,7 @@ Blockly.Blocks['controls_if'] = {
    * @this Blockly.Block
    */
   init: function() {
-    if (!Blockly.useMutators) {
+    if (!this.workspace.options.useMutators) {
       var addField = new Blockly.FieldClickImage(this.addPng, 17, 17,
                                           Blockly.Msg.CONTROLS_IF_ADD_TOOLTIP);
       addField.setChangeHandler(this.doAddField);
@@ -50,14 +50,14 @@ Blockly.Blocks['controls_if'] = {
     var valInput = this.appendValueInput('IF0')
         .setCheck('Boolean')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF);
-    if (!Blockly.useMutators) {
+    if (!this.workspace.options.useMutators) {
         valInput.appendField(addField,'IF_ADD');
     }
     this.appendStatementInput('DO0')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    if (Blockly.useMutators) {
+    if (this.workspace.options.useMutators) {
       this.setMutator(new Blockly.Mutator(['controls_if_elseif',
                                          'controls_if_else']));
     }
@@ -204,7 +204,7 @@ Blockly.Blocks['controls_if'] = {
         var inputItem = this.getInput('IF'+pos);
         if (inputItem == null) {
           var subField = null;
-          if (!Blockly.useMutators) {
+          if (!this.workspace.options.useMutators) {
             subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
                                 Blockly.Msg.CONTROLS_IF_ELSEIF_REMOVE_TOOLTIP);
             subField.setPrivate({name: 'IF', pos: pos});
@@ -235,7 +235,7 @@ Blockly.Blocks['controls_if'] = {
         var inputItem = this.getInput('ELSE');
         if (inputItem == null) {
           var subField = null;
-          if (!Blockly.useMutators) {
+          if (!this.workspace.options.useMutators) {
             subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
                                 Blockly.Msg.CONTROLS_IF_ELSE_REMOVE_TOOLTIP);
             subField.setChangeHandler(this.doRemoveElseField);
@@ -387,8 +387,7 @@ Blockly.Blocks['controls_if_if'] = {
     this.appendStatementInput('STACK');
     this.setTooltip(Blockly.Msg.CONTROLS_IF_IF_TOOLTIP);
     this.contextMenu = false;
-  },
-  isTopLevel: true
+  }
 };
 
 Blockly.Blocks['controls_if_elseif'] = {

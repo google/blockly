@@ -34,7 +34,6 @@ Blockly.Blocks['unittest_main'] = {
     this.setTooltip('Executes the enclosed unit tests,\n' +
                     'then prints a summary.');
   },
-  isTopLevel: true,
   getVars: function() {
     return ['unittestResults'];
   },

@@ -825,6 +825,9 @@ Blockly.Block.prototype.getInheritedDisabled = function() {
     block = block.getSurroundParent();
     if (!block) {
       // Ran off the top.
+      if (!this.workspace.options.disableDisconnected) {
+        return false;
+      }
       // We need to check the block at the top of the stack
       while(lastBlock.previousConnection != null &&
             lastBlock.previousConnection.targetConnection != null) {

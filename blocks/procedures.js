@@ -42,7 +42,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   init: function() {
     var addField = '';
     var addName = 'PARAMS';
-    if (!Blockly.useMutators) {
+    if (!this.workspace.options.useMutators) {
       addField = new Blockly.FieldClickImage(this.addPng, 17, 17);
       addField.setChangeHandler(this.doAddField);
       addName = null;
@@ -174,7 +174,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           "colour": Blockly.Blocks.procedures.HUE
         };
 
-      if (Blockly.useMutators) {
+      if (this.workspace.options.useMutators) {
         // If we are using mutators, then we need to eliminate the click image
         // for removing the field.
         var msg = jsonData["message0"];
@@ -581,7 +581,7 @@ Blockly.Blocks['procedures_defreturn'] = {
     nameField.setSpellcheck(false);
     var addField = '';
     var addName = 'PARAMS';
-    if (!Blockly.useMutators) {
+    if (!this.workspace.options.useMutators) {
       addField = new Blockly.FieldClickImage(this.addPng, 17, 17);
       addField.setChangeHandler(this.doAddField);
       addName = null;
@@ -934,8 +934,7 @@ Blockly.Blocks['procedures_mutatorcontainer'] = {
         .appendField(new Blockly.FieldCheckbox('TRUE'), 'STATEMENTS');
     this.setTooltip(Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP);
     this.contextMenu = false;
-  },
-  isTopLevel: true
+  }
 };
 
 Blockly.Blocks['procedures_mutatorarg'] = {

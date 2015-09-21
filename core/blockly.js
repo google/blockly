@@ -42,7 +42,13 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
-goog.require('Blockly.Realtime');
+// Realtime is currently badly broken.  Stub it out.
+//goog.require('Blockly.Realtime');
+Blockly.Realtime = {
+  isEnabled: function() {return false;},
+  blockChanged: function() {},
+  doCommand: function(cmdThunk) {cmdThunk()}
+};
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');

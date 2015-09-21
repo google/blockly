@@ -68,6 +68,7 @@ goog.addDependency("../../../" + dir + "/core/workspace_svg.js", ['Blockly.Works
 goog.addDependency("../../../" + dir + "/core/xml.js", ['Blockly.Xml'], ['goog.dom']);
 goog.addDependency("../../../" + dir + "/core/zoom_controls.js", ['Blockly.ZoomControls'], ['goog.dom']);
 goog.addDependency("../../alltests.js", [], []);
+goog.addDependency("../../browser_capabilities.js", [], []);
 goog.addDependency("../../protractor.conf.js", [], []);
 goog.addDependency("../../protractor_spec.js", [], []);
 goog.addDependency("base.js", [], []);

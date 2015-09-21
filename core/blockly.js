@@ -334,6 +334,7 @@ Blockly.onKeyDown_ = function(e) {
     // When focused on an HTML text input widget, don't trap any keys.
     return;
   }
+  var deleteBlock = false;
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
@@ -341,8 +342,7 @@ Blockly.onKeyDown_ = function(e) {
     // Delete or backspace.
     try {
       if (Blockly.selected && Blockly.selected.isDeletable()) {
-        Blockly.hideChaff();
-        Blockly.selected.dispose(true, true);
+        deleteBlock = true;
       }
     } finally {
       // Stop the browser from going back to the previous page.
@@ -353,14 +353,14 @@ Blockly.onKeyDown_ = function(e) {
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
-      Blockly.hideChaff();
       if (e.keyCode == 67) {
         // 'c' for copy.
+        Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
       } else if (e.keyCode == 88) {
         // 'x' for cut.
         Blockly.copy_(Blockly.selected);
-        Blockly.selected.dispose(true, true);
+        deleteBlock = true;
       }
     }
     if (e.keyCode == 86) {
@@ -368,6 +368,16 @@ Blockly.onKeyDown_ = function(e) {
       if (Blockly.clipboardXml_) {
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
       }
+    }
+  }
+  if (deleteBlock) {
+    // Common code for delete and cut.
+    Blockly.hideChaff();
+    var heal = Blockly.dragMode_ != 2;
+    Blockly.selected.dispose(heal, true);
+    if (Blockly.highlightedConnection_) {
+      Blockly.highlightedConnection_.unhighlight();
+      Blockly.highlightedConnection_ = null;
     }
   }
 };
@@ -425,7 +435,9 @@ Blockly.longStop_ = function() {
  */
 Blockly.copy_ = function(block) {
   var xmlBlock = Blockly.Xml.blockToDom_(block);
-  Blockly.Xml.deleteNext(xmlBlock);
+  if (Blockly.dragMode_ != 2) {
+    Blockly.Xml.deleteNext(xmlBlock);
+  }
   // Encode start position in XML.
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', block.RTL ? -xy.x : xy.x);

@@ -651,6 +651,29 @@ Blockly.selectNextBlock = function() {
  * @param {Blockly.Block} block Block to navigate from.
  * @return {Blockly.Block} block that is next in order from this block
  */
+Blockly.findNextTopBlock = function(block) {
+  var nextBlock = null;
+  // Get all the top blocks in physical sorted order to look through.
+  var blocks = Blockly.getMainWorkspace().getTopBlocks(true);
+  if (blocks.length > 0) {
+    var spot = goog.array.indexOf(blocks, block)+1;
+    // Did we actually find anything to match us in the array?
+    if (spot > 0) {
+      // When we get to the end of the array, wrap back to the first one
+      if (spot === blocks.length) {
+        spot = 0;
+      }
+      nextBlock = blocks[spot];
+    }
+  }
+  return nextBlock;
+};
+
+/**
+ * Determine the next block in order from this block.
+ * @param {Blockly.Block} block Block to navigate from.
+ * @return {Blockly.Block} block that is next in order from this block
+ */
 Blockly.findNextBlock = function(block) {
   /** @type {Blockly.Block} */
   var newSelect = null; // New block to be selected
@@ -682,19 +705,7 @@ Blockly.findNextBlock = function(block) {
   // at the top level.  Note that prevBlock will point to the top level block
   // in the current group.
   if (newSelect === null) {
-    // Get all the top blocks in physical sorted order to look through.
-    var blocks = Blockly.getMainWorkspace().getTopBlocks(true);
-    if (blocks.length > 0) {
-      var spot = goog.array.indexOf(blocks, prevBlock)+1;
-      // Did we actually find anything to match us in the array?
-      if (spot > 0) {
-        // When we get to the end of the array, wrap back to the first one
-        if (spot === blocks.length) {
-          spot = 0;
-        }
-        newSelect = blocks[spot];
-      }
-    }
+    newSelect = Blockly.findNextTopBlock(prevBlock);
   }
   return newSelect;
 };
@@ -717,7 +728,30 @@ Blockly.selectPrevBlock = function() {
 /**
  * Determine the previous block in order from this block.
  * @param {Blockly.Block} block Block to navigate from.
- * @return {Blockly.Block} block that is orevuiys in order from this block
+ * @return {Blockly.Block} block that is previous in order from this block
+ */
+Blockly.findPrevTopBlock = function(block) {
+  var prevBlock = null;
+  // Get all the top blocks in physical sorted order to look through.
+  var blocks = Blockly.getMainWorkspace().getTopBlocks(true);
+  if (blocks.length > 0) {
+    var spot = goog.array.indexOf(blocks, block);
+    // Did we actually find anything to match us in the array?
+    if (spot >= 0) {
+      // When we get to the start of the array, wrap back to the last one
+      if (spot === 0) {
+        spot = blocks.length;
+      }
+      prevBlock = blocks[spot-1];
+    }
+  }
+  return prevBlock;
+};
+
+/**
+ * Determine the previous block in order from this block.
+ * @param {Blockly.Block} block Block to navigate from.
+ * @return {Blockly.Block} block that is previous in order from this block
  */
 Blockly.findPrevBlock = function(block) {
   /** @type {Blockly.Block} */
@@ -732,19 +766,7 @@ Blockly.findPrevBlock = function(block) {
     // one at the top level.  Note that prevBlock will point to the top level
     // block in the current group.
     if (baseBlock === null) {
-      // Get all the top blocks in physical sorted order to look through.
-      var blocks = Blockly.getMainWorkspace().getTopBlocks(true);
-      if (blocks.length > 0) {
-        var spot = goog.array.indexOf(blocks, prevBlock);
-        // Did we actually find anything to match us in the array?
-        if (spot >= 0) {
-          // When we get to the start of the array, wrap back to the last one
-          if (spot === 0) {
-            spot = blocks.length;
-          }
-          baseBlock = blocks[spot-1];
-        }
-      }
+      baseBlock = Blockly.findPrevTopBlock(prevBlock);
     }
   }
   while ((baseBlock != null) && (newSelect === null)) {
@@ -786,26 +808,33 @@ Blockly.selectParentBlock = function() {
   /** @type {Blockly.Block} */
   var prevBlock = Blockly.selected;  // Last block we had selected
   if (prevBlock != null) {
-    baseBlock = prevBlock.getParent();
-    if (baseBlock != null) {
-      var children = [];
-      if (!baseBlock.isCollapsed()) {
-        children = baseBlock.getChildren();
-      }
-      if (children.length >= 0) {
-        var spot = goog.array.indexOf(children, prevBlock);
-        if (spot > 0) {
-          newSelect = children[spot-1];
+    if (prevBlock.previousConnection != null) {
+      newSelect = prevBlock.previousConnection.targetBlock();
+    }
+    if (newSelect === null) {
+      baseBlock = prevBlock.getSurroundParent();
+      if (baseBlock != null) {
+        var children = [];
+        if (!baseBlock.isCollapsed()) {
+          children = baseBlock.getChildren();
+        }
+        if (children.length >= 0) {
+          var spot = goog.array.indexOf(children, prevBlock);
+          if (spot > 0) {
+            newSelect = children[spot-1];
+          }
+        }
+        if (newSelect === null) {
+          newSelect = baseBlock;
         }
       }
     }
   }
   if (newSelect === null) {
-    Blockly.selectPrevBlock();
-  } else {
-    Blockly.selectField(null);
-    Blockly.selectBlock(newSelect);
+    newSelect = Blockly.findPrevTopBlock(prevBlock);
   }
+  Blockly.selectField(null);
+  Blockly.selectBlock(newSelect);
 };
 
 /*
@@ -822,25 +851,31 @@ Blockly.selectChildBlock = function() {
   /** @type {Blockly.Block} */
   var prevBlock = Blockly.selected;  // Last block we had selected
   if (prevBlock != null) {
-    baseBlock = prevBlock.getParent();
-    if (baseBlock != null) {
-      var children = [];
-      if (!baseBlock.isCollapsed()) {
-        children = baseBlock.getChildren();
-      }
-      if (children.length >= 0) {
-        var spot = goog.array.indexOf(children, prevBlock);
-        if (spot > 0 && spot < (children.length-1)) {
-          newSelect = children[spot+1];
+    newSelect = prevBlock.getNextBlock();
+    if (newSelect === null) {
+      baseBlock = prevBlock.getSurroundParent();
+      if (baseBlock != null) {
+        var children = [];
+        if (!baseBlock.isCollapsed()) {
+          children = baseBlock.getChildren();
+        }
+        if (children.length >= 0) {
+          var spot = goog.array.indexOf(children, prevBlock);
+          if (spot >= 0 && spot < (children.length-1)) {
+            newSelect = children[spot+1];
+          }
+        }
+        if (newSelect === null) {
+          newSelect = baseBlock;
         }
       }
     }
   }
   if (newSelect === null) {
-    Blockly.selectNextBlock();
-  } else {
-    Blockly.selectBlock(newSelect);
+    newSelect = Blockly.findNextTopBlock(prevBlock);
   }
+  Blockly.selectField(null);
+  Blockly.selectBlock(newSelect);
 };
 
 /**

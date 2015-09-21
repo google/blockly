@@ -917,6 +917,11 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
 Blockly.WorkspaceSvg.prototype.scrollToArea = function(rect, rtl) {
   var metrics = this.getMetrics();
 
+  // First scale the rectangle
+  rect.top *= this.scale;
+  rect.bottom *= this.scale;
+  rect.left *= this.scale;
+  rect.right *= this.scale;
   var height = rect.bottom-rect.top;
   var width = rect.right-rect.left;
   var margin = 10;

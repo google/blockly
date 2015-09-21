@@ -47,7 +47,7 @@ goog.require('Blockly.Procedures');
 Blockly.Realtime = {
   isEnabled: function() {return false;},
   blockChanged: function() {},
-  doCommand: function(cmdThunk) {cmdThunk()}
+  doCommand: function(cmdThunk) {cmdThunk();}
 };
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.WidgetDiv');
@@ -522,8 +522,11 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   if (this.toolbox_) {
     svgSize.width -= this.toolbox_.width;
   }
-  var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
-  var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
+  // Set the margin to match the flyout's margin so that the workspace does
+  // not jump as blocks are added.
+  var MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS - 1;
+  var viewWidth = svgSize.width - MARGIN;
+  var viewHeight = svgSize.height - MARGIN;
   try {
     var blockBox = this.getCanvas().getBBox();
   } catch (e) {

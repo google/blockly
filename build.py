@@ -75,6 +75,24 @@ class Gen_uncompressed(threading.Thread):
     self.search_paths = search_paths
 
   def run(self):
+    add_dependency = []
+    base_path = calcdeps.FindClosureBasePath(self.search_paths)
+    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
+      add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
+    add_dependency = "\n".join(add_dependency)
+    # Find the Blockly directory name and replace it with a JS variable.
+    # This allows blockly_uncompressed.js to be compiled on one computer and be
+    # used on another, even if the directory name differs.
+    m = re.search("[\\/]([^\\/]+)[\\/]core[\\/]blockly.js", add_dependency)
+    add_dependency = re.sub("([\\/])" + re.escape(m.group(1)) +
+        "([\\/]core[\\/])", '\\1" + dir + "\\2', add_dependency)
+
+    provides = []
+    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
+      if not dep.filename.startswith(os.pardir + os.sep):  # "../"
+        provides.extend(dep.provides)
+    provides.sort()
+
     target_filename = "blockly_uncompressed.js"
     f = open(target_filename, "w")
     f.write(HEADER)
@@ -104,24 +122,7 @@ if (!this.goog) {
 // Build map of all dependencies (used and unused).
 var dir = this.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
 """)
-    add_dependency = []
-    base_path = calcdeps.FindClosureBasePath(self.search_paths)
-    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
-    add_dependency = "\n".join(add_dependency)
-    # Find the Blockly directory name and replace it with a JS variable.
-    # This allows blockly_uncompressed.js to be compiled on one computer and be
-    # used on another, even if the directory name differs.
-    m = re.search("[\\/]([^\\/]+)[\\/]core[\\/]blockly.js", add_dependency)
-    add_dependency = re.sub("([\\/])" + re.escape(m.group(1)) +
-        "([\\/]core[\\/])", '\\1" + dir + "\\2', add_dependency)
     f.write(add_dependency + "\n")
-
-    provides = []
-    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith(os.pardir + os.sep):  # "../"
-        provides.extend(dep.provides)
-    provides.sort()
     f.write("\n")
     f.write("// Load Blockly.\n")
     for provide in provides:

@@ -499,10 +499,23 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   if (this.workspace.options.readOnly || !this.contextMenu) {
     return;
   }
+  var options = this.buildContextMenu_();
+  Blockly.ContextMenu.show(e, options, this.RTL);
+  Blockly.ContextMenu.currentBlock = this;
+}
+
+/**
+ * Build the context menu for this block.
+ * @private
+ */
+Blockly.BlockSvg.prototype.buildContextMenu_ = function() {
   // Save the current block in a variable for use in closures.
   var block = this;
   var options = [];
 
+  if (this.workspace.options.readOnly || !this.contextMenu) {
+    return options;
+  }
   if (this.isDeletable() && this.isMovable() && !block.isInFlyout) {
     // Option to duplicate this block.
     var duplicateOption = {
@@ -523,11 +536,13 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       var commentOption = {enabled: true};
       if (this.comment) {
         commentOption.text = Blockly.Msg.REMOVE_COMMENT;
+        commentOption.accel = goog.events.KeyCodes.SLASH;
         commentOption.callback = function() {
           block.setCommentText(null);
         };
       } else {
         commentOption.text = Blockly.Msg.ADD_COMMENT;
+        commentOption.accel = goog.events.KeyCodes.SLASH;
         commentOption.callback = function() {
           block.setCommentText('');
         };
@@ -619,9 +634,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   if (this.customContextMenu && !block.isInFlyout) {
     this.customContextMenu(options);
   }
-
-  Blockly.ContextMenu.show(e, options, this.RTL);
-  Blockly.ContextMenu.currentBlock = this;
+  return options;
 };
 
 /**

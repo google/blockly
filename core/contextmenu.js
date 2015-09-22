@@ -61,6 +61,9 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   for (var x = 0, option; option = options[x]; x++) {
     var menuItem = new goog.ui.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
+    if (option.accel) {
+      menuItem.setMnemonic(option.accel);
+    }
     menu.addChild(menuItem, true);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {

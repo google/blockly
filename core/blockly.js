@@ -385,22 +385,36 @@ Blockly.onKeyDown_ = function(e) {
       e.preventDefault();
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
+    var handled = false;
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
       Blockly.hideChaff();
       if (e.keyCode == goog.events.KeyCodes.C) {
         // 'c' for copy.
         Blockly.copy_(Blockly.selected);
+        handled = true;
       } else if (e.keyCode ==goog.events.KeyCodes.X) {
         // 'x' for cut.
         Blockly.copy_(Blockly.selected);
         Blockly.selected.dispose(true, true);
+        handled = true;
       }
     }
     if (e.keyCode == goog.events.KeyCodes.V) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
+        handled = true;
+      }
+    }
+    if (!handled && e.metaKey && e.keyCode &&
+        Blockly.selected && Blockly.selected.contextMenu) {
+      var options = Blockly.selected.buildContextMenu_();
+      for (var opt = 0; opt < options.length; opt++) {
+        if (options[opt].enabled && options[opt].accel == e.keyCode) {
+          Blockly.doCommand(options[opt].callback);
+          break;
+        }
       }
     }
   } else if (Blockly.WidgetDiv.isVisible()) {

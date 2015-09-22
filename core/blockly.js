@@ -60,6 +60,9 @@ goog.require('goog.color');
 goog.require('goog.userAgent');
 
 
+// Turn off debugging when compiled.
+var CLOSURE_DEFINES = {'goog.DEBUG': false};
+
 /**
  * Required name space for SVG elements.
  * @const

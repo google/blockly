@@ -923,15 +923,15 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
   }
-  // Center the workspace once the scaling has had a chance to take effect.
-  var thisWorkspace = this;
-  var scroll = function() {
-    var metrics = thisWorkspace.getMetrics();
-    thisWorkspace.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
-        (metrics.contentHeight - metrics.viewHeight) / 2);
-  };
-  setTimeout(scroll, 0);
-  // This event has been handled.  No need to bubble up to the document.
+  // Zoom level has changed, update the scrollbars.
+  if (this.scrollbar) {
+    this.scrollbar.resize();
+  }
+  // Center the workspace.
+  var metrics = this.getMetrics();
+  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+      (metrics.contentHeight - metrics.viewHeight) / 2);
+  // This event has been handled.  Don't start a workspace drag.
   e.stopPropagation();
 };
 

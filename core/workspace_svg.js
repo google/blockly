@@ -973,18 +973,26 @@ Blockly.WorkspaceSvg.prototype.scrollToArea = function(rect, rtl) {
 
 /**
  * Reset zooming and dragging.
+ * @param {!Event} e Mouse down event.
  */
-Blockly.WorkspaceSvg.prototype.zoomReset = function() {
+Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
   this.scale = 1;
   this.updateGridPattern_();
-  var metrics = this.getMetrics();
-  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
-                     (metrics.contentHeight - metrics.viewHeight) / 2);
   Blockly.hideChaff(false);
   if (this.flyout_) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
   }
+  // Zoom level has changed, update the scrollbars.
+  if (this.scrollbar) {
+    this.scrollbar.resize();
+  }
+  // Center the workspace.
+  var metrics = this.getMetrics();
+  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+      (metrics.contentHeight - metrics.viewHeight) / 2);
+  // This event has been handled.  Don't start a workspace drag.
+  e.stopPropagation();
 };
 
 /**

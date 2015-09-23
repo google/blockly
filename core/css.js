@@ -148,7 +148,7 @@ Blockly.Css.CONTENT = [
   '.blocklyWidgetDiv {',
   '  display: none;',
   '  position: absolute;',
-  '  z-index: 99999 !important;',
+  '  z-index: 99999;',
   '}',
 
   '.blocklyTooltipDiv {',
@@ -162,7 +162,7 @@ Blockly.Css.CONTENT = [
   '  opacity: 0.9;',
   '  padding: 2px;',
   '  position: absolute;',
-  '  z-index: 100000 !important;',
+  '  z-index: 100000;',
   '}',
 
   '.blocklyResizeSE {',

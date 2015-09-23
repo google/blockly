@@ -51,12 +51,6 @@
 <script src="../blocks/procedures.js"></script>
 <!-- Load the Google Drive SDK Realtime libraries. -->
 <script src="https://apis.google.com/js/api.js"></script>
-
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-  
 <script>
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
@@ -203,7 +197,6 @@ h1 {
   height: 95%;
   width: 70%;
 }
-
 #collaborators {
   float: right;
   width: 30px;
@@ -219,7 +212,6 @@ h1 {
 #importExport {
   font-family: monospace;
 }
-
 </style>
 </head>
 <body onload="start()">
@@ -501,93 +493,5 @@ h1 {
     <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
 
   </div>
-  
-		  
-  
-
-  <button type="button" id="buttonShowModal" class="btn btn-info btn-lg" >Open Bootstrap Modal</button>
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Modal Header</h4>
-        </div>
-        <div class="modal-body">
-		
-			<div id="blocklyArea" >
-			</div>
-		
-		</div>
-		
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-    
-		
-  
-  <script>
-
-function createBlockly() {
-
-	Blockly.inject('blocklyArea',
-            {
-                comments: true,
-                disable: true,
-                collapse: true,
-                grid: {
-                    spacing: 25,
-                    length: 3,
-                    colour: '#ccc',
-                    snap: true
-                },
-                readOnly: false,
-                realtime: false,
-                scrollbars: true,
-                toolbox: document.getElementById('toolbox'),
-                zoom:
-                {enabled: true,
-                    controls: true,
-                    wheel: true,
-                    maxScale: 2,
-                    minScale: .1,
-                    scaleSpeed: 1.1
-                }
-            });
-
-		
-}
-
-//when modal shown, inject blockly
-$('#myModal').on('shown.bs.modal', function () {
-  createBlockly();
-
-  
-});
-
-//before hidding the modal, hide blockly
-$('#myModal').on('hide.bs.modal', function () {
-  //$('#blocklyDivModal').hide();
-});
-
-//on button click, display modal
-$('#buttonShowModal').unbind('click').bind('click', function() {
-	$('#myModal').modal();
-	
-});
-
-  
-		
-</script>
-
-
-
-
 </body>
 </html>

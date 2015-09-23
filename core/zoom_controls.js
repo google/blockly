@@ -163,11 +163,13 @@ Blockly.ZoomControls.prototype.createDom = function() {
 
   // Attach event listeners.
   Blockly.bindEvent_(zoomresetSvg, 'mousedown', workspace, workspace.zoomReset);
-  Blockly.bindEvent_(zoominSvg, 'mousedown', null, function() {
+  Blockly.bindEvent_(zoominSvg, 'mousedown', null, function(e) {
     workspace.zoomCenter(1);
+    e.stopPropagation();  // Don't start a workspace scroll.
   });
-  Blockly.bindEvent_(zoomoutSvg, 'mousedown', null, function() {
+  Blockly.bindEvent_(zoomoutSvg, 'mousedown', null, function(e) {
     workspace.zoomCenter(-1);
+    e.stopPropagation();  // Don't start a workspace scroll.
   });
 
   return this.svgGroup_;

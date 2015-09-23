@@ -75,10 +75,16 @@ class Gen_uncompressed(threading.Thread):
     self.search_paths = search_paths
 
   def run(self):
+    target_filename = "blockly_uncompressed.js"
     add_dependency = []
     base_path = calcdeps.FindClosureBasePath(self.search_paths)
-    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
+    deps = calcdeps.BuildDependenciesFromFiles(self.search_paths)
+    filenames = calcdeps.CalculateDependencies(self.search_paths,
+        [os.path.join("core", "blockly.js")])
+
+    for dep in deps:
+      if dep.filename in filenames:
+        add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
     add_dependency = "\n".join(add_dependency)
     # Find the Blockly directory name and replace it with a JS variable.
     # This allows blockly_uncompressed.js to be compiled on one computer and be
@@ -88,12 +94,12 @@ class Gen_uncompressed(threading.Thread):
         "([\\/]core[\\/])", '\\1" + dir + "\\2', add_dependency)
 
     provides = []
-    for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith(os.pardir + os.sep):  # "../"
-        provides.extend(dep.provides)
+    for dep in deps:
+      if dep.filename in filenames:
+        if not dep.filename.startswith(os.pardir + os.sep):  # "../"
+          provides.extend(dep.provides)
     provides.sort()
 
-    target_filename = "blockly_uncompressed.js"
     f = open(target_filename, "w")
     f.write(HEADER)
     f.write("""

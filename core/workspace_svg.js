@@ -853,7 +853,11 @@ Blockly.WorkspaceSvg.prototype.removeChangeListener = function(bindData) {
  * Mark this workspace as the currently focused main workspace.
  */
 Blockly.WorkspaceSvg.prototype.markFocused = function() {
-  Blockly.mainWorkspace = this;
+  if (this.options.parentWorkspace) {
+    this.options.parentWorkspace.markFocused();
+  } else {
+    Blockly.mainWorkspace = this;
+  }
 };
 
 /**

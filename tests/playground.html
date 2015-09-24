@@ -147,34 +147,34 @@ function spaghetti(n) {
   console.timeEnd('Spaghetti domToWorkspace');
 }
 var spaghettiXml = [
-  '  <block type="controls_if" inline="false" x="30" y="30">' +
-  '    <value name="IF0">' +
-  '      <block type="logic_compare" inline="true">' +
-  '        <field name="OP">EQ</field>' +
-  '        <value name="A">' +
-  '          <block type="math_arithmetic" inline="true">' +
-  '            <field name="OP">MULTIPLY</field>' +
-  '            <value name="A">' +
-  '              <block type="math_number">' +
-  '                <field name="NUM">6</field>' +
-  '              </block>' +
-  '            </value>' +
-  '            <value name="B">' +
-  '              <block type="math_number">' +
-  '                <field name="NUM">7</field>' +
-  '              </block>' +
-  '            </value>' +
-  '          </block>' +
-  '        </value>' +
-  '        <value name="B">' +
-  '          <block type="math_number">' +
-  '            <field name="NUM">42</field>' +
-  '          </block>' +
-  '        </value>' +
-  '      </block>' +
-  '    </value>' +
-  '    <statement name="DO0"></statement>' +
-  '    <next></next>' +
+  '  <block type="controls_if">',
+  '    <value name="IF0">',
+  '      <block type="logic_compare">',
+  '        <field name="OP">EQ</field>',
+  '        <value name="A">',
+  '          <block type="math_arithmetic">',
+  '            <field name="OP">MULTIPLY</field>',
+  '            <value name="A">',
+  '              <block type="math_number">',
+  '                <field name="NUM">6</field>',
+  '              </block>',
+  '            </value>',
+  '            <value name="B">',
+  '              <block type="math_number">',
+  '                <field name="NUM">7</field>',
+  '              </block>',
+  '            </value>',
+  '          </block>',
+  '        </value>',
+  '        <value name="B">',
+  '          <block type="math_number">',
+  '            <field name="NUM">42</field>',
+  '          </block>',
+  '        </value>',
+  '      </block>',
+  '    </value>',
+  '    <statement name="DO0"></statement>',
+  '    <next></next>',
   '  </block>'].join('\n');
 
 </script>

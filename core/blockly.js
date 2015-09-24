@@ -428,21 +428,19 @@ Blockly.onKeyDown_ = function(e) {
     }
   } else if (Blockly.WidgetDiv.isVisible()) {
     Blockly.WidgetDiv.onKeyDown_(e);
-  } else if (!Blockly.selected) {
-    Blockly.TypeBlock.onKeyDown_(e);
   } else {
     var block = Blockly.selected;
-    if (e.keyCode === (block.RTL ? goog.events.KeyCodes.RIGHT
-                                 : goog.events.KeyCodes.LEFT)) {
+    if (block && e.keyCode === (block.RTL ? goog.events.KeyCodes.RIGHT
+                                          : goog.events.KeyCodes.LEFT)) {
       Blockly.selectPrevBlock();
-    } else if (e.keyCode === (block.RTL ? goog.events.KeyCodes.LEFT
-                                        : goog.events.KeyCodes.RIGHT)) {
+    } else if (block && e.keyCode === (block.RTL ? goog.events.KeyCodes.LEFT
+                                                 : goog.events.KeyCodes.RIGHT)) {
       Blockly.selectNextBlock();
-    } else if (e.keyCode === goog.events.KeyCodes.UP) {
+    } else if (block && e.keyCode === goog.events.KeyCodes.UP) {
       Blockly.selectParentBlock();
-    } else if (e.keyCode === goog.events.KeyCodes.DOWN) {
+    } else if (block && e.keyCode === goog.events.KeyCodes.DOWN) {
       Blockly.selectChildBlock();
-    } else if (e.keyCode === goog.events.KeyCodes.SPACE) {
+    } else if (block && e.keyCode === goog.events.KeyCodes.SPACE) {
       var box = goog.style.getBoundingClientRect_(block.svgGroup_);
       var offset = Blockly.SNAP_RADIUS * block.workspace.scale;
       if (block.RTL) {
@@ -454,6 +452,8 @@ Blockly.onKeyDown_ = function(e) {
 //      Blockly.selected.workspace.scrollToArea(Blockly.selected);
       Blockly.selectBlock(Blockly.selected);
       Blockly.selected.showContextMenu_(e);
+    } else {
+      Blockly.TypeBlock.onKeyDown_(e);
     }
   }
   if (deleteBlock) {

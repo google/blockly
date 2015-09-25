@@ -86,7 +86,6 @@ Blockly.FieldColour.prototype.CURSOR = 'default';
  * Close the colour picker if this input is being deleted.
  */
 Blockly.FieldColour.prototype.dispose = function() {
-  Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.FieldColour.superClass_.dispose.call(this);
 };
 
@@ -168,7 +167,7 @@ Blockly.FieldColour.prototype.setColumns = function(columns) {
  * @private
  */
 Blockly.FieldColour.prototype.showEditor_ = function() {
-  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
+  this.sourceBlock_.workspace.WidgetDiv_.show(this, this.sourceBlock_.RTL,
       Blockly.FieldColour.widgetDispose_);
   // Create the palette using Closure.
   var picker = new goog.ui.ColorPicker();
@@ -181,7 +180,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
   var borderBBox = this.getScaledBBox_();
-  var div = Blockly.WidgetDiv.DIV;
+  var div = this.sourceBlock_.workspace.WidgetDiv_.DIV;
   picker.render(div);
   picker.setSelectedColor(this.getValue());
   // Record paletteSize after adding the palette.
@@ -207,7 +206,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - paletteSize.width;
     }
   }
-  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
+  this.sourceBlock_.workspace.WidgetDiv_.position(xy.x, xy.y, windowSize, scrollOffset,
                              this.sourceBlock_.RTL);
 
   // Configure event handler.
@@ -216,7 +215,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       goog.ui.ColorPicker.EventType.CHANGE,
       function(event) {
         var colour = event.target.getSelectedColor() || '#000000';
-        Blockly.WidgetDiv.hide();
+        thisField.sourceBlock_.workspace.WidgetDiv_.hide();
         if (thisField.sourceBlock_ && thisField.changeHandler_) {
           // Call any change handler, and allow it to override.
           var override = thisField.changeHandler_(colour);

@@ -433,8 +433,13 @@ Blockly.createMainWorkspace_ = function(svg, options) {
   }
   // The SVG is now fully assembled.
   Blockly.svgResize(mainWorkspace);
-  Blockly.WidgetDiv.createDom();
-  Blockly.Tooltip.createDom();
+  
+  mainWorkspace.WidgetDiv_ = new Blockly.WidgetDiv(mainWorkspace);
+  mainWorkspace.WidgetDiv_.createDom();
+
+  mainWorkspace.TooltipDiv_ = new Blockly.Tooltip(mainWorkspace);
+  mainWorkspace.TooltipDiv_.createDom();
+  
   return mainWorkspace;
 };
 

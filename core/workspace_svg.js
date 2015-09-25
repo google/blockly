@@ -710,7 +710,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     menuOptions.push(expandOption);
   }
 
-  Blockly.ContextMenu.show(e, menuOptions, this.RTL);
+  Blockly.ContextMenu.show(e, this, menuOptions, this.RTL);
 };
 
 /**

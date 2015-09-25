@@ -35,103 +35,120 @@ goog.require('goog.dom');
 
 
 /**
+ * Class for a Tooltip.
+ * Creates the Tooltip's DOM.
+ * @param {!Blockly.Workspace} workspace The workspace in which to create new tooltip.
+ * @constructor
+ */
+Blockly.Tooltip = function(workspace) {
+  /**
+   * @type {!Blockly.Workspace}
+   * @private
+   */
+  this.workspace_ = workspace;
+};
+
+
+/**
  * Is a tooltip currently showing?
  */
-Blockly.Tooltip.visible = false;
+Blockly.Tooltip.prototype.visible = false;
 
 /**
  * Maximum width (in characters) of a tooltip.
  */
-Blockly.Tooltip.LIMIT = 50;
+Blockly.Tooltip.prototype.LIMIT = 50;
 
 /**
  * PID of suspended thread to clear tooltip on mouse out.
  * @private
  */
-Blockly.Tooltip.mouseOutPid_ = 0;
+Blockly.Tooltip.prototype.mouseOutPid_ = 0;
 
 /**
  * PID of suspended thread to show the tooltip.
  * @private
  */
-Blockly.Tooltip.showPid_ = 0;
+Blockly.Tooltip.prototype.showPid_ = 0;
 
 /**
  * Last observed X location of the mouse pointer (freezes when tooltip appears).
  * @private
  */
-Blockly.Tooltip.lastX_ = 0;
+Blockly.Tooltip.prototype.lastX_ = 0;
 
 /**
  * Last observed Y location of the mouse pointer (freezes when tooltip appears).
  * @private
  */
-Blockly.Tooltip.lastY_ = 0;
+Blockly.Tooltip.prototype.lastY_ = 0;
 
 /**
  * Current element being pointed at.
  * @private
  */
-Blockly.Tooltip.element_ = null;
+Blockly.Tooltip.prototype.element_ = null;
 
 /**
  * Once a tooltip has opened for an element, that element is 'poisoned' and
  * cannot respawn a tooltip until the pointer moves over a different element.
  * @private
  */
-Blockly.Tooltip.poisonedElement_ = null;
+Blockly.Tooltip.prototype.poisonedElement_ = null;
 
 /**
  * Horizontal offset between mouse cursor and tooltip.
  */
-Blockly.Tooltip.OFFSET_X = 0;
+Blockly.Tooltip.prototype.OFFSET_X = 0;
 
 /**
  * Vertical offset between mouse cursor and tooltip.
  */
-Blockly.Tooltip.OFFSET_Y = 10;
+Blockly.Tooltip.prototype.OFFSET_Y = 10;
 
 /**
  * Radius mouse can move before killing tooltip.
  */
-Blockly.Tooltip.RADIUS_OK = 10;
+Blockly.Tooltip.prototype.RADIUS_OK = 10;
 
 /**
  * Delay before tooltip appears.
  */
-Blockly.Tooltip.HOVER_MS = 1000;
+Blockly.Tooltip.prototype.HOVER_MS = 1000;
 
 /**
  * Horizontal padding between tooltip and screen edge.
  */
-Blockly.Tooltip.MARGINS = 5;
+Blockly.Tooltip.prototype.MARGINS = 5;
 
 /**
  * The HTML container.  Set once by Blockly.Tooltip.createDom.
  * @type {Element}
  */
-Blockly.Tooltip.DIV = null;
+Blockly.Tooltip.prototype.DIV = null;
 
 /**
  * Create the tooltip div and inject it onto the page.
  */
-Blockly.Tooltip.createDom = function() {
-  if (Blockly.Tooltip.DIV) {
+Blockly.Tooltip.prototype.createDom = function() {
+  if (this.DIV) {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.Tooltip.DIV = goog.dom.createDom('div', 'blocklyTooltipDiv');
-  document.body.appendChild(Blockly.Tooltip.DIV);
+  this.DIV = goog.dom.createDom('div', 'blocklyTooltipDiv');
+  
+  var svg = this.workspace_.options.svg;
+  svg.parentNode.insertBefore(this.DIV, svg);
 };
 
 /**
  * Binds the required mouse events onto an SVG element.
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
-Blockly.Tooltip.bindMouseEvents = function(element) {
-  Blockly.bindEvent_(element, 'mouseover', null, Blockly.Tooltip.onMouseOver_);
-  Blockly.bindEvent_(element, 'mouseout', null, Blockly.Tooltip.onMouseOut_);
-  Blockly.bindEvent_(element, 'mousemove', null, Blockly.Tooltip.onMouseMove_);
+Blockly.Tooltip.prototype.bindMouseEvents = function(element) {
+  Blockly.bindEvent_(element, 'mouseover', this, this.onMouseOver_);
+  Blockly.bindEvent_(element, 'mouseout', this, this.onMouseOut_);
+  Blockly.bindEvent_(element, 'mousemove', this, this.onMouseMove_);
 };
 
 /**
@@ -140,20 +157,20 @@ Blockly.Tooltip.bindMouseEvents = function(element) {
  * @param {!Event} e Mouse event.
  * @private
  */
-Blockly.Tooltip.onMouseOver_ = function(e) {
+Blockly.Tooltip.prototype.onMouseOver_ = function(e) {
   // If the tooltip is an object, treat it as a pointer to the next object in
   // the chain to look at.  Terminate when a string or function is found.
   var element = e.target;
   while (!goog.isString(element.tooltip) && !goog.isFunction(element.tooltip)) {
     element = element.tooltip;
   }
-  if (Blockly.Tooltip.element_ != element) {
-    Blockly.Tooltip.hide();
-    Blockly.Tooltip.poisonedElement_ = null;
-    Blockly.Tooltip.element_ = element;
+  if (this.element_ != element) {
+    this.hide();
+    this.poisonedElement_ = null;
+    this.element_ = element;
   }
   // Forget about any immediately preceeding mouseOut event.
-  clearTimeout(Blockly.Tooltip.mouseOutPid_);
+  clearTimeout(this.mouseOutPid_);
 };
 
 /**
@@ -161,17 +178,18 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
  * @param {!Event} e Mouse event.
  * @private
  */
-Blockly.Tooltip.onMouseOut_ = function(e) {
+Blockly.Tooltip.prototype.onMouseOut_ = function(e) {
   // Moving from one element to another (overlapping or with no gap) generates
   // a mouseOut followed instantly by a mouseOver.  Fork off the mouseOut
   // event and kill it if a mouseOver is received immediately.
   // This way the task only fully executes if mousing into the void.
-  Blockly.Tooltip.mouseOutPid_ = setTimeout(function() {
-        Blockly.Tooltip.element_ = null;
-        Blockly.Tooltip.poisonedElement_ = null;
-        Blockly.Tooltip.hide();
+  var self = this;
+  this.mouseOutPid_ = setTimeout(function() {
+        self.element_ = null;
+        self.poisonedElement_ = null;
+        self.hide();
       }, 1);
-  clearTimeout(Blockly.Tooltip.showPid_);
+  clearTimeout(this.showPid_);
 };
 
 /**
@@ -180,107 +198,108 @@ Blockly.Tooltip.onMouseOut_ = function(e) {
  * @param {!Event} e Mouse event.
  * @private
  */
-Blockly.Tooltip.onMouseMove_ = function(e) {
-  if (!Blockly.Tooltip.element_ || !Blockly.Tooltip.element_.tooltip) {
+Blockly.Tooltip.prototype.onMouseMove_ = function(e) {
+  if (!this.element_ || !this.element_.tooltip) {
     // No tooltip here to show.
     return;
   } else if (Blockly.dragMode_ != 0) {
     // Don't display a tooltip during a drag.
     return;
-  } else if (Blockly.WidgetDiv.isVisible()) {
+  } else if (this.workspace_ && this.workspace_.WidgetDiv_ && this.workspace_.WidgetDiv_.isVisible()) {
     // Don't display a tooltip if a widget is open (tooltip would be under it).
     return;
   }
-  if (Blockly.Tooltip.visible) {
+  if (this.visible) {
     // Compute the distance between the mouse position when the tooltip was
     // shown and the current mouse position.  Pythagorean theorem.
-    var dx = Blockly.Tooltip.lastX_ - e.pageX;
-    var dy = Blockly.Tooltip.lastY_ - e.pageY;
-    if (Math.sqrt(dx * dx + dy * dy) > Blockly.Tooltip.RADIUS_OK) {
-      Blockly.Tooltip.hide();
+    var dx = this.lastX_ - e.pageX;
+    var dy = this.lastY_ - e.pageY;
+    if (Math.sqrt(dx * dx + dy * dy) > this.RADIUS_OK) {
+      this.hide();
     }
-  } else if (Blockly.Tooltip.poisonedElement_ != Blockly.Tooltip.element_) {
+  } else if (this.poisonedElement_ != this.element_) {
     // The mouse moved, clear any previously scheduled tooltip.
-    clearTimeout(Blockly.Tooltip.showPid_);
+    clearTimeout(this.showPid_);
     // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
-    Blockly.Tooltip.lastX_ = e.pageX;
-    Blockly.Tooltip.lastY_ = e.pageY;
-    Blockly.Tooltip.showPid_ =
-        setTimeout(Blockly.Tooltip.show_, Blockly.Tooltip.HOVER_MS);
+    this.lastX_ = e.pageX;
+    this.lastY_ = e.pageY;
+    var self = this;
+    this.showPid_ = setTimeout(function() { self.show_(); }, this.HOVER_MS);
   }
 };
 
 /**
  * Hide the tooltip.
  */
-Blockly.Tooltip.hide = function() {
-  if (Blockly.Tooltip.visible) {
-    Blockly.Tooltip.visible = false;
-    if (Blockly.Tooltip.DIV) {
-      Blockly.Tooltip.DIV.style.display = 'none';
+Blockly.Tooltip.prototype.hide = function() {
+  if (this.visible) {
+    this.visible = false;
+    if (this.DIV) {
+      this.DIV.style.display = 'none';
     }
   }
-  clearTimeout(Blockly.Tooltip.showPid_);
+  clearTimeout(this.showPid_);
 };
 
 /**
  * Create the tooltip and show it.
  * @private
  */
-Blockly.Tooltip.show_ = function() {
-  Blockly.Tooltip.poisonedElement_ = Blockly.Tooltip.element_;
-  if (!Blockly.Tooltip.DIV) {
+Blockly.Tooltip.prototype.show_ = function() {
+  this.poisonedElement_ = this.element_;
+  if (!this.DIV) {
     return;
   }
   // Erase all existing text.
-  goog.dom.removeChildren(/** @type {!Element} */ (Blockly.Tooltip.DIV));
+  goog.dom.removeChildren(/** @type {!Element} */ (this.DIV));
   // Get the new text.
-  var tip = Blockly.Tooltip.element_.tooltip;
+  var tip = this.element_.tooltip;
   if (goog.isFunction(tip)) {
     tip = tip();
   }
-  tip = Blockly.Tooltip.wrap_(tip, Blockly.Tooltip.LIMIT);
+  tip = this.wrap_(tip, this.LIMIT);
   // Create new text, line by line.
   var lines = tip.split('\n');
+  var self = this;
   for (var i = 0; i < lines.length; i++) {
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(lines[i]));
-    Blockly.Tooltip.DIV.appendChild(div);
+    self.DIV.appendChild(div);
   }
-  var rtl = Blockly.Tooltip.element_.RTL;
+  var rtl = this.element_.RTL;
   var windowSize = goog.dom.getViewportSize();
   // Display the tooltip.
-  Blockly.Tooltip.DIV.style.direction = rtl ? 'rtl' : 'ltr';
-  Blockly.Tooltip.DIV.style.display = 'block';
-  Blockly.Tooltip.visible = true;
+  this.DIV.style.direction = rtl ? 'rtl' : 'ltr';
+  this.DIV.style.display = 'block';
+  this.visible = true;
   // Move the tooltip to just below the cursor.
-  var anchorX = Blockly.Tooltip.lastX_;
+  var anchorX = this.lastX_;
   if (rtl) {
-    anchorX -= Blockly.Tooltip.OFFSET_X + Blockly.Tooltip.DIV.offsetWidth;
+    anchorX -= this.OFFSET_X + this.DIV.offsetWidth;
   } else {
-    anchorX += Blockly.Tooltip.OFFSET_X;
+    anchorX += this.OFFSET_X;
   }
-  var anchorY = Blockly.Tooltip.lastY_ + Blockly.Tooltip.OFFSET_Y;
+  var anchorY = this.lastY_ + this.OFFSET_Y;
 
-  if (anchorY + Blockly.Tooltip.DIV.offsetHeight >
+  if (anchorY + this.DIV.offsetHeight >
       windowSize.height + window.scrollY) {
     // Falling off the bottom of the screen; shift the tooltip up.
-    anchorY -= Blockly.Tooltip.DIV.offsetHeight + 2 * Blockly.Tooltip.OFFSET_Y;
+    anchorY -= this.DIV.offsetHeight + 2 * this.OFFSET_Y;
   }
   if (rtl) {
     // Prevent falling off left edge in RTL mode.
-    anchorX = Math.max(Blockly.Tooltip.MARGINS - window.scrollX, anchorX);
+    anchorX = Math.max(this.MARGINS - window.scrollX, anchorX);
   } else {
-    if (anchorX + Blockly.Tooltip.DIV.offsetWidth >
-        windowSize.width + window.scrollX - 2 * Blockly.Tooltip.MARGINS) {
+    if (anchorX + this.DIV.offsetWidth >
+        windowSize.width + window.scrollX - 2 * this.MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
-      anchorX = windowSize.width - Blockly.Tooltip.DIV.offsetWidth -
-          2 * Blockly.Tooltip.MARGINS;
+      anchorX = windowSize.width - this.DIV.offsetWidth -
+          2 * this.MARGINS;
     }
   }
-  Blockly.Tooltip.DIV.style.top = anchorY + 'px';
-  Blockly.Tooltip.DIV.style.left = anchorX + 'px';
+  this.DIV.style.top = anchorY + 'px';
+  this.DIV.style.left = anchorX + 'px';
 };
 
 /**
@@ -290,7 +309,7 @@ Blockly.Tooltip.show_ = function() {
  * @return {string} Wrapped text.
  * @private
  */
-Blockly.Tooltip.wrap_ = function(text, limit) {
+Blockly.Tooltip.prototype.wrap_ = function(text, limit) {
   if (text.length <= limit) {
     // Short text, no need to wrap.
     return text;
@@ -308,6 +327,7 @@ Blockly.Tooltip.wrap_ = function(text, limit) {
   var score = -Infinity;
   var lastText;
   var lineCount = 1;
+  var self = this;
   do {
     lastScore = score;
     lastText = text;
@@ -325,9 +345,9 @@ Blockly.Tooltip.wrap_ = function(text, limit) {
         wordBreaks[i] = false;
       }
     }
-    wordBreaks = Blockly.Tooltip.wrapMutate_(words, wordBreaks, limit);
-    score = Blockly.Tooltip.wrapScore_(words, wordBreaks, limit);
-    text = Blockly.Tooltip.wrapToText_(words, wordBreaks);
+    wordBreaks = self.wrapMutate_(words, wordBreaks, limit);
+    score = self.wrapScore_(words, wordBreaks, limit);
+    text = self.wrapToText_(words, wordBreaks);
     lineCount++;
   } while (score > lastScore);
   return lastText;
@@ -341,7 +361,7 @@ Blockly.Tooltip.wrap_ = function(text, limit) {
  * @return {number} Larger the better.
  * @private
  */
-Blockly.Tooltip.wrapScore_ = function(words, wordBreaks, limit) {
+Blockly.Tooltip.prototype.wrapScore_ = function(words, wordBreaks, limit) {
   // If this function becomes a performance liability, add caching.
   // Compute the length of each line.
   var lineLengths = [0];
@@ -393,9 +413,10 @@ Blockly.Tooltip.wrapScore_ = function(words, wordBreaks, limit) {
  * @return {!Array.<boolean>} New array of optimal line breaks.
  * @private
  */
-Blockly.Tooltip.wrapMutate_ = function(words, wordBreaks, limit) {
-  var bestScore = Blockly.Tooltip.wrapScore_(words, wordBreaks, limit);
+Blockly.Tooltip.prototype.wrapMutate_ = function(words, wordBreaks, limit) {
+  var bestScore = this.wrapScore_(words, wordBreaks, limit);
   var bestBreaks;
+  var self=  this;
   // Try shifting every line break forward or backward.
   for (var i = 0; i < wordBreaks.length - 1; i++) {
     if (wordBreaks[i] == wordBreaks[i + 1]) {
@@ -405,7 +426,7 @@ Blockly.Tooltip.wrapMutate_ = function(words, wordBreaks, limit) {
     mutatedWordBreaks[i] = !mutatedWordBreaks[i];
     mutatedWordBreaks[i + 1] = !mutatedWordBreaks[i + 1];
     var mutatedScore =
-        Blockly.Tooltip.wrapScore_(words, mutatedWordBreaks, limit);
+        self.wrapScore_(words, mutatedWordBreaks, limit);
     if (mutatedScore > bestScore) {
       bestScore = mutatedScore;
       bestBreaks = mutatedWordBreaks;
@@ -413,7 +434,7 @@ Blockly.Tooltip.wrapMutate_ = function(words, wordBreaks, limit) {
   }
   if (bestBreaks) {
     // Found an improvement.  See if it may be improved further.
-    return Blockly.Tooltip.wrapMutate_(words, bestBreaks, limit);
+    return self.wrapMutate_(words, bestBreaks, limit);
   }
   // No improvements found.  Done.
   return wordBreaks;
@@ -426,7 +447,7 @@ Blockly.Tooltip.wrapMutate_ = function(words, wordBreaks, limit) {
  * @return {string} Plain text.
  * @private
  */
-Blockly.Tooltip.wrapToText_ = function(words, wordBreaks) {
+Blockly.Tooltip.prototype.wrapToText_ = function(words, wordBreaks) {
   var text = [];
   for (var i = 0; i < words.length; i++) {
     text.push(words[i]);

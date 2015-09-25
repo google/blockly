@@ -128,7 +128,8 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
       goog.userAgent.MOBILE || goog.userAgent.ANDROID || goog.userAgent.IPAD;
   // Mobile browsers have issues with in-line textareas (focus & keyboards).
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
-  var div = Blockly.WidgetDiv.DIV;
+  
+  var div = this.sourceBlock_.workspace.WidgetDiv_.DIV;
   if (!div.firstChild) {
     // Mobile interface uses window.prompt.
     return;
@@ -168,7 +169,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   }
   svg.style.marginLeft = (15 - Blockly.FieldAngle.RADIUS) + 'px';
   this.clickWrapper_ =
-      Blockly.bindEvent_(svg, 'click', this, Blockly.WidgetDiv.hide);
+      Blockly.bindEvent_(svg, 'click', this, this.sourceBlock_.workspace.WidgetDiv_.hide);
   this.moveWrapper1_ =
       Blockly.bindEvent_(circle, 'mousemove', this, this.onMouseMove);
   this.moveWrapper2_ =

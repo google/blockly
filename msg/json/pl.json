@@ -6,10 +6,12 @@
 			"Vengir",
 			"Pbz",
 			"Pio387",
-			"아라"
+			"아라",
+			"Mateon1"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"TODAY": "Dzisiaj",
 	"DUPLICATE_BLOCK": "Powiel",
 	"ADD_COMMENT": "Dodaj komentarz",
 	"REMOVE_COMMENT": "Usuń Komentarz",
@@ -294,6 +296,11 @@
 	"LISTS_GET_SUBLIST_END_LAST": "do ostatniego",
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Tworzy kopię z określoną część listy.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "stwórz listę z tekstu",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "stwórz tekst z listy",
+	"LISTS_SPLIT_WITH_DELIMITER": "z separatorem",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Rozdziela tekst na listę mniejszych tekstów, dzieląc na każdym separatorze.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Łączy listę tekstów w jeden tekst, rozdzielany separatorem.",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_TOOLTIP": "Zwraca wartość tej zmiennej.",
 	"VARIABLES_GET_CREATE_SET": "Utwórz blok 'ustaw %1'",

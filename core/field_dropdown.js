@@ -174,7 +174,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   // Flip menu vertically if off the bottom.
   if (xy.y + menuSize.height + borderBBox.height >=
       windowSize.height + scrollOffset.y) {
-    xy.y -= menuSize.height;
+    xy.y -= menuSize.height + 2;
   } else {
     xy.y += borderBBox.height;
   }

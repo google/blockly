@@ -197,7 +197,7 @@ Blockly.Bubble.prototype.autoLayout_ = true;
 Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   /* Create the bubble.  Here's the markup that will be generated:
   <g>
-    <g filter="url(#blocklyEmboss)">
+    <g filter="url(#blocklyEmbossFilter837493)">
       <path d="... Z" />
       <rect class="blocklyDraggable" rx="8" ry="8" width="180" height="180"/>
     </g>
@@ -210,7 +210,8 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   </g>
   */
   this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
-  var filter = {'filter': 'url(#blocklyEmboss)'};
+  var filter =
+      {'filter': 'url(#' + this.workspace_.options.embossFilterId + ')'};
   if (goog.userAgent.getUserAgentString().indexOf('JavaFX') != -1) {
     // Multiple reports that JavaFX can't handle filters.  UserAgent:
     // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
@@ -568,6 +569,9 @@ Blockly.Bubble.prototype.dispose = function() {
   // Dispose of and unlink the bubble.
   goog.dom.removeNode(this.bubbleGroup_);
   this.bubbleGroup_ = null;
+  this.bubbleArrow_ = null;
+  this.bubbleBack_ = null;
+  this.resizeGroup_ = null;
   this.workspace_ = null;
   this.content_ = null;
   this.shape_ = null;

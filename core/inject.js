@@ -292,9 +292,9 @@ Blockly.createDom_ = function(container, options) {
   </defs>
   */
   var defs = Blockly.createSvgElement('defs', {}, svg);
-  var filter, feSpecularLighting, feMerge;
+  var rnd = String(Math.random()).substring(2);
   /*
-    <filter id="blocklyEmboss">
+    <filter id="blocklyEmbossFilter837493">
       <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"/>
       <feSpecularLighting in="blur" surfaceScale="1" specularConstant="0.5"
                           specularExponent="10" lighting-color="white"
@@ -307,43 +307,39 @@ Blockly.createDom_ = function(container, options) {
                    k1="0" k2="1" k3="1" k4="0"/>
     </filter>
   */
-  filter = Blockly.createSvgElement('filter', {'id': 'blocklyEmboss'}, defs);
+  var embossFilter = Blockly.createSvgElement('filter',
+      {'id': 'blocklyEmbossFilter' + rnd}, defs);
   Blockly.createSvgElement('feGaussianBlur',
-      {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, filter);
-  feSpecularLighting = Blockly.createSvgElement('feSpecularLighting',
+      {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'}, embossFilter);
+  var feSpecularLighting = Blockly.createSvgElement('feSpecularLighting',
       {'in': 'blur', 'surfaceScale': 1, 'specularConstant': 0.5,
        'specularExponent': 10, 'lighting-color': 'white', 'result': 'specOut'},
-      filter);
+      embossFilter);
   Blockly.createSvgElement('fePointLight',
       {'x': -5000, 'y': -10000, 'z': 20000}, feSpecularLighting);
   Blockly.createSvgElement('feComposite',
       {'in': 'specOut', 'in2': 'SourceAlpha', 'operator': 'in',
-       'result': 'specOut'}, filter);
+       'result': 'specOut'}, embossFilter);
   Blockly.createSvgElement('feComposite',
       {'in': 'SourceGraphic', 'in2': 'specOut', 'operator': 'arithmetic',
-       'k1': 0, 'k2': 1, 'k3': 1, 'k4': 0}, filter);
+       'k1': 0, 'k2': 1, 'k3': 1, 'k4': 0}, embossFilter);
+  options.embossFilterId = embossFilter.id;
   /*
-    <filter id="blocklyShadowFilter">
-      <feGaussianBlur stdDeviation="2"/>
-    </filter>
-  */
-  filter = Blockly.createSvgElement('filter',
-      {'id': 'blocklyShadowFilter'}, defs);
-  Blockly.createSvgElement('feGaussianBlur', {'stdDeviation': 2}, filter);
-  /*
-    <pattern id="blocklyDisabledPattern" patternUnits="userSpaceOnUse"
+    <pattern id="blocklyDisabledPattern837493" patternUnits="userSpaceOnUse"
              width="10" height="10">
       <rect width="10" height="10" fill="#aaa" />
       <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
     </pattern>
   */
   var disabledPattern = Blockly.createSvgElement('pattern',
-      {'id': 'blocklyDisabledPattern', 'patternUnits': 'userSpaceOnUse',
+      {'id': 'blocklyDisabledPattern' + rnd,
+       'patternUnits': 'userSpaceOnUse',
        'width': 10, 'height': 10}, defs);
   Blockly.createSvgElement('rect',
       {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
   Blockly.createSvgElement('path',
       {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'}, disabledPattern);
+  options.disabledPatternId = disabledPattern.id;
   /*
     <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
       <rect stroke="#888" />
@@ -351,7 +347,7 @@ Blockly.createDom_ = function(container, options) {
     </pattern>
   */
   var gridPattern = Blockly.createSvgElement('pattern',
-      {'id': 'blocklyGridPattern' + String(Math.random()).substring(2),
+      {'id': 'blocklyGridPattern' + rnd,
        'patternUnits': 'userSpaceOnUse'}, defs);
   if (options.gridOptions['length'] > 0 && options.gridOptions['spacing'] > 0) {
     Blockly.createSvgElement('line',

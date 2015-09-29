@@ -23,7 +23,7 @@
  * @author spertus@google.com (Ellen Spertus)
  */
 'use strict';
-goog.require('goog.asserts');
+
 
 /**
  * Name space for the Blocks singleton.

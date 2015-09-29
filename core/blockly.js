@@ -265,12 +265,18 @@ Blockly.svgSize = function(svg) {
 };
 
 /**
- * Defines list of variables for varius scopes
- * @type {Array.<!Array>}
+ * Defines list of variables for various scopes.
+ * @type {Object.<!Array>}
  */
 Blockly.scopeVariableList = {
   Types: ['String','Number','Boolean','Array','Map']
 };
+/**
+ * Defines list of variable type equivalences.
+ * @type {Object.<!Array>}
+ */
+ Blockly.VariableTypeEquivalence = {
+ };
 
 /**
  * Size the SVG image to completely fill its container.

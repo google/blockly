@@ -209,7 +209,7 @@ Blockly.Blocks['hash_variables_get'] = {
    */
   getVarsTypes: function() {
     var vartypes = {};
-    vartypes[this.getFieldValue('VAR')] = ['Object'];
+    vartypes[this.procedurePrefix_+this.getFieldValue('VAR')] = ['Map','Object'];
     return vartypes;
   },
 

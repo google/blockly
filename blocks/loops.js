@@ -284,7 +284,7 @@ Blockly.Blocks['controls_forEach'] = {
    */
   getVarsTypes: function() {
       var vartypes = {};
-      vartypes[this.getFieldValue('VAR')] = ['Object'];
+      vartypes[this.getFieldValue('VAR')] = ['Array','Map','Object'];
       return vartypes;
   },
   /**

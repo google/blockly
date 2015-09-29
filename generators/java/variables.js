@@ -74,33 +74,33 @@ Blockly.Java['variables_set'] = function(block) {
 
 Blockly.Java['hash_variables_get'] = function(block) {
   // Remember if this is a global variable to be initialized
-  Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), null);
-  // Variable getter.
-  var getter = 'getString';
+  var varName = block.getFieldValue('VAR');
+  Blockly.Java.setGlobalVar(block,varName, null);
+  var vartype = Blockly.Java.GetVariableType(this.procedurePrefix_ + varName);
+  var code = Blockly.Java.variableDB_.getName(varName,
+      Blockly.Variables.NAME_TYPE);
+  if (Blockly.VariableTypeEquivalence[vartype]) {
+    code += '.' + block.getFieldValue('HASHKEY');
+  } else {
+    code += '.get(' + block.getFieldValue('HASHKEY') + ')';
+  }
+
+  // See if the parent has a type that it wants
   var parent = block.getParent();
   // Look at our parents to see if we know the type that we are assigning to
   if (parent) {
     var func = parent.getVars;
     if (func) {
       var blockVariables = func.call(parent);
-      for (var y = 0; y < blockVariables.length; y++) {
-        var varName = blockVariables[y];
-        // Variable name may be null if the block is only half-built.
-        if (varName) {
-          var vartype = Blockly.Java.GetVariableType(this.procedurePrefix_+
-            varName);
-          if (vartype === 'Array') {
-            getter = 'get';
-          } else if (vartype === 'Object') {
-            getter = 'get';
-          }
+      if (blockVariables && blockVariables.length) {
+        if (goog.array.contains(blockVariables, 'String')) {
+          code += '.getObjectAsString()';
+        } else if (goog.array.contains(blockVariables, 'List')) {
+          code += '.getObjectAsList()';
         }
       }
     }
   }
-  var code = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
-             Blockly.Variables.NAME_TYPE) + '.' + getter + '('+
-             Blockly.Java.quote_(block.getFieldValue('HASHKEY')) + ')' ;
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 

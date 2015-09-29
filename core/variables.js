@@ -123,7 +123,28 @@ Blockly.Variables.allVariablesTypes = function(root) {
             var intersect = Blockly.Variables.Intersection(
                       variableHash[key], blockVariablesTypes[key]);
             if (goog.array.isEmpty(intersect)) {
-              intersect = ['Var'];
+              var varkey = null;
+              if (variableHash[key].length === 1) {
+                varkey = variableHash[key][0];
+              }
+              if (Blockly.VariableTypeEquivalence[varkey]) {
+                var intersectTest = Blockly.Variables.Intersection(
+                Blockly.VariableTypeEquivalence[varkey],
+                  blockVariablesTypes[key]);
+                if (goog.array.isEmpty(intersectTest)) {
+                  console.log("No match");
+                }
+              }
+
+              if (variableHash[key].length === 1 &&
+                Blockly.VariableTypeEquivalence[variableHash[key][0]] &&
+                !goog.array.isEmpty(Blockly.Variables.Intersection(
+                 Blockly.VariableTypeEquivalence[variableHash[key][0]],
+                 blockVariablesTypes[key]))) {
+                intersect = variableHash[key];
+              } else {
+                intersect = ['Var'];
+              }
             }
             console.log('Block:'+ blocks[x].type + '.'+blocks[x].id+
             ' For: '+key+' was:'+variableHash[key]+' got:'+

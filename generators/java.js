@@ -209,13 +209,33 @@ Blockly.Java.setPackage = function(javaPackage) {
   this.Package_ = javaPackage;
 }
 
+
+Blockly.Java.forceUpdate = function(root) {
+  var blocks;
+  if (root.getDescendants) {
+    // Root is Block.
+    blocks = root.getDescendants();
+  } else if (root.getAllBlocks) {
+    // Root is Workspace.
+    blocks = root.getAllBlocks();
+  } else {
+    throw 'Not Block or Workspace: ' + root;
+  }
+  // Iterate through every block and call the onchange function.
+  for (var x = 0; x < blocks.length; x++) {
+    if (blocks[x].onchange) {
+      blocks[x].onchange();
+    }
+  }
+};
+
 /**
  * Get the package for this generated Java code
  * @return {string} package Name of the package this is derived from
  */
 Blockly.Java.getPackage = function() {
   return this.Package_;
-}
+};
 
 /**
  * Set the base class (if any) for the generated Java code
@@ -223,7 +243,7 @@ Blockly.Java.getPackage = function() {
  */
 Blockly.Java.setBaseclass = function(baseclass) {
   this.Baseclass_ = baseclass;
-}
+};
 
 /**
  * Get the base class (if any) for the generated Java code
@@ -367,6 +387,7 @@ Blockly.Java.workspaceToCode_ = Blockly.Java.workspaceToCode;
  */
 Blockly.Java.workspaceToCode = function(workspace, parms) {
   // Generate the code first to get all of the required imports calculated.
+  this.forceUpdate(workspace);
   var code = this.workspaceToCode_(workspace,parms);
   var finalcode = this.fileHeader +
                   'package ' + this.getPackage() + ';\n\n' +
@@ -1022,7 +1043,7 @@ Blockly.Java.provideVarClass = function() {
   ];
     this.classes_['Var'] = VarCode.join('\n')+'\n';
   } else {
-    Blockly.Java.addImport('extreme.sdn.client.Var');
+    Blockly.Java.addImport('com.extreme.platform.application.Var');
   }
 }
 /**
@@ -1084,6 +1105,8 @@ Blockly.Java.init = function(workspace, imports) {
     } else if (typeof type !== 'undefined' && type !== '') {
       if (Blockly.Blocks[type] && Blockly.Blocks[type].GBPClass ) {
         type = Blockly.Blocks[type].GBPClass;
+      } else if (Blockly.VariableTypeEquivalence[type]) {
+        // We can use the type as is.
       } else {
         console.log('Unknown type for '+key+' using Var for '+type);
         type = 'Var';

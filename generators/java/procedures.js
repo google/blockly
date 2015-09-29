@@ -91,7 +91,7 @@ Blockly.Java['procedures_callreturn'] = function(block) {
     args[x] = Blockly.Java.valueToCode(block, 'ARG' + x,
         Blockly.Java.ORDER_NONE) || 'null';
   }
-  var code = 'this.' + funcName + '(' + args.join(', ') + ')';
+  var code = funcName + '(' + args.join(', ') + ')';
   return [code, Blockly.Java.ORDER_FUNCTION_CALL];
 };
 
@@ -104,7 +104,7 @@ Blockly.Java['procedures_callnoreturn'] = function(block) {
     args[x] = Blockly.Java.valueToCode(block, 'ARG' + x,
         Blockly.Java.ORDER_NONE) || 'null';
   }
-  var code = 'this.' + funcName + '(' + args.join(', ') + ');\n';
+  var code = funcName + '(' + args.join(', ') + ');\n';
   return code;
 };
 

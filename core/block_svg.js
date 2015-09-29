@@ -37,10 +37,9 @@ goog.require('goog.math.Coordinate');
 /**
  * Class for a block's SVG representation.
  * @extends {Blockly.Block}
- * @param {!Blockly.Workspace} workspace The workspace in which to the toolbox
  * @constructor
  */
-Blockly.BlockSvg = function(workspace) {
+Blockly.BlockSvg = function() {
   // Create core elements for the block.
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgPathDark_ = Blockly.createSvgElement('path',
@@ -51,8 +50,7 @@ Blockly.BlockSvg = function(workspace) {
   this.svgPathLight_ = Blockly.createSvgElement('path',
       {'class': 'blocklyPathLight'}, this.svgGroup_);
   this.svgPath_.tooltip = this;
-  if(workspace.TooltipDiv_)
-    workspace.TooltipDiv_.bindMouseEvents(this.svgPath_);
+  Blockly.Tooltip.bindMouseEvents(this.svgPath_);
 };
 goog.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -623,7 +621,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     this.customContextMenu(options);
   }
 
-  Blockly.ContextMenu.show(e, this.workspace, options, this.RTL);
+  Blockly.ContextMenu.show(e, options, this.RTL);
   Blockly.ContextMenu.currentBlock = this;
 };
 

@@ -75,8 +75,7 @@ Blockly.FieldLabel.prototype.init = function(block) {
 
   // Configure the field to be transparent with respect to tooltips.
   this.textElement_.tooltip = this.sourceBlock_;
-  if(this.getTooltipDiv_())
-     this.getTooltipDiv_().bindMouseEvents(this.textElement_);
+  Blockly.Tooltip.bindMouseEvents(this.textElement_);
   // Force a render.
   this.updateTextNode_();
 };

@@ -130,10 +130,6 @@ Blockly.Field.prototype.init = function(block) {
  * Dispose of all DOM objects belonging to this editable field.
  */
 Blockly.Field.prototype.dispose = function() {
-  if(this.getWidgetDiv_()) {
-    this.getWidgetDiv_().hideIfOwner(this);
-  }
-   
   if (this.mouseUpWrapper_) {
     Blockly.unbindEvent_(this.mouseUpWrapper_);
     this.mouseUpWrapper_ = null;
@@ -416,28 +412,3 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
 Blockly.Field.prototype.getAbsoluteXY_ = function() {
   return goog.style.getPageOffset(this.borderRect_);
 };
-
-/**
- * Return the widgetdiv attached to this field
- * @return {{!WidgetDiv}} The widgetDiv or null
- * @private
- */
-Blockly.Field.prototype.getWidgetDiv_ = function() {
-   if(this.sourceBlock_ != null && this.sourceBlock_!=undefined && this.sourceBlock_.workspace != null && this.sourceBlock_.workspace != undefined)
-      return this.sourceBlock_.workspace.WidgetDiv_;
-   return null;
-};
-
-
-/**
- * Return the widgetdiv attached to this field
- * @return {{!WidgetDiv}} The widgetDiv or null
- * @private
- */
-Blockly.Field.prototype.getTooltipDiv_ = function() {
-   if(this.sourceBlock_ != null && this.sourceBlock_!=undefined && this.sourceBlock_.workspace != null && this.sourceBlock_.workspace != undefined)
-      return this.sourceBlock_.workspace.TooltipDiv_;
-   return null;
-};
-
-

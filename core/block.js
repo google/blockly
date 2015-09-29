@@ -63,7 +63,7 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
     return Blockly.Realtime.obtainBlock(workspace, prototypeName);
   } else {
     if (workspace.rendered) {
-      var newBlock = new Blockly.BlockSvg(workspace);
+      var newBlock = new Blockly.BlockSvg();
     } else {
       var newBlock = new Blockly.Block();
     }
@@ -185,6 +185,7 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
   // Remove this block from the workspace's list of top-most blocks.
   if (this.workspace && !opt_dontRemoveFromWorkspace) {
     this.workspace.removeTopBlock(this);
+    this.workspace = null;
   }
 
   // Just deleting this block from the DOM would result in a memory leak as
@@ -217,11 +218,6 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
   // Remove from Realtime set of blocks.
   if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
     Blockly.Realtime.removeBlock(this);
-  }
-  
-  //clear workspace
-  if (this.workspace && !opt_dontRemoveFromWorkspace) {
-    this.workspace = null;
   }
 };
 

@@ -104,7 +104,7 @@ Blockly.FieldDropdown.prototype.init = function(block) {
  * @private
  */
 Blockly.FieldDropdown.prototype.showEditor_ = function() {
-  this.sourceBlock_.workspace.WidgetDiv_.show(this, this.sourceBlock_.RTL, null);
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, null);
   var thisField = this;
 
   function callback(e) {
@@ -122,7 +122,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         thisField.setValue(value);
       }
     }
-    thisField.sourceBlock_.workspace.WidgetDiv_.hideIfOwner(thisField);
+    Blockly.WidgetDiv.hideIfOwner(thisField);
   }
 
   var menu = new goog.ui.Menu();
@@ -161,7 +161,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
   var borderBBox = this.getScaledBBox_();
-  var div = this.sourceBlock_.workspace.WidgetDiv_.DIV;
+  var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
   var menuDom = menu.getElement();
   Blockly.addClass_(menuDom, 'blocklyDropdownMenu');
@@ -192,7 +192,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - menuSize.width;
     }
   }
-  this.sourceBlock_.workspace.WidgetDiv_.position(xy.x, xy.y, windowSize, scrollOffset,
+  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
                              this.sourceBlock_.RTL);
   menu.setAllowAutoFocus(true);
   menuDom.focus();
@@ -315,5 +315,6 @@ Blockly.FieldDropdown.prototype.setText = function(text) {
  * Close the dropdown menu if this input is being deleted.
  */
 Blockly.FieldDropdown.prototype.dispose = function() {
+  Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.FieldDropdown.superClass_.dispose.call(this);
 };

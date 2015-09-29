@@ -66,6 +66,7 @@ Blockly.FieldDate.prototype.CURSOR = 'text';
  * Close the colour picker if this input is being deleted.
  */
 Blockly.FieldDate.prototype.dispose = function() {
+  Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.FieldDate.superClass_.dispose.call(this);
 };
 
@@ -99,7 +100,7 @@ Blockly.FieldDate.prototype.setValue = function(date) {
  * @private
  */
 Blockly.FieldDate.prototype.showEditor_ = function() {
-  this.sourceBlock_.workspace.WidgetDiv_.show(this, this.sourceBlock_.RTL,
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL,
       Blockly.FieldDate.widgetDispose_);
   // Create the date picker using Closure.
   Blockly.FieldDate.loadLanguage_();
@@ -113,7 +114,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
   var borderBBox = this.getScaledBBox_();
-  var div = this.sourceBlock_.workspace.WidgetDiv_.DIV;
+  var div = Blockly.WidgetDiv.DIV;
   picker.render(div);
   picker.setDate(goog.date.fromIsoString(this.getValue()));
   // Record pickerSize after adding the date picker.
@@ -139,7 +140,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
       xy.x = windowSize.width + scrollOffset.x - pickerSize.width;
     }
   }
-  this.sourceBlock_.workspace.WidgetDiv_.position(xy.x, xy.y, windowSize, scrollOffset,
+  Blockly.WidgetDiv.position(xy.x, xy.y, windowSize, scrollOffset,
                              this.sourceBlock_.RTL);
 
   // Configure event handler.
@@ -148,7 +149,7 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
       goog.ui.DatePicker.Events.CHANGE,
       function(event) {
         var date = event.date ? event.date.toIsoString(true) : '';
-        thisField.sourceBlock_.workspace.WidgetDiv_.hide();
+        Blockly.WidgetDiv.hide();
         if (thisField.sourceBlock_ && thisField.changeHandler_) {
           // Call any change handler, and allow it to override.
           var override = thisField.changeHandler_(date);

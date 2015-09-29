@@ -40,7 +40,8 @@ goog.require('goog.ui.tree.TreeNode');
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- * @param {!Blockly.Workspace} workspace The workspace in which to the toolbox
+ * @param {!Blockly.Workspace} workspace The workspace in which to create new
+ *     blocks.
  * @constructor
  */
 Blockly.Toolbox = function(workspace) {

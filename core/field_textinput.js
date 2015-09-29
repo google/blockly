@@ -69,6 +69,7 @@ Blockly.FieldTextInput.prototype.spellcheck_ = true;
  * Close the input widget if this input is being deleted.
  */
 Blockly.FieldTextInput.prototype.dispose = function() {
+  Blockly.WidgetDiv.hideIfOwner(this);
   Blockly.FieldTextInput.superClass_.dispose.call(this);
 };
 
@@ -125,8 +126,8 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
     return;
   }
 
-  this.sourceBlock_.workspace.WidgetDiv_.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
-  var div = this.sourceBlock_.workspace.WidgetDiv_.DIV;
+  Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
+  var div = Blockly.WidgetDiv.DIV;
   // Create the input.
   var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
@@ -171,10 +172,10 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
   var enterKey = 13, escKey = 27;
   if (e.keyCode == enterKey) {
-    this.sourceBlock_.workspace.WidgetDiv_.hide();
+    Blockly.WidgetDiv.hide();
   } else if (e.keyCode == escKey) {
     this.setText(htmlInput.defaultValue);
-    this.sourceBlock_.workspace.WidgetDiv_.hide();
+    Blockly.WidgetDiv.hide();
   }
 };
 
@@ -225,7 +226,7 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
  * @private
  */
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
-  var div = this.sourceBlock_.workspace.WidgetDiv_.DIV;
+  var div = Blockly.WidgetDiv.DIV;
   var bBox = this.fieldGroup_.getBBox();
   div.style.width = bBox.width * this.sourceBlock_.workspace.scale + 'px';
   div.style.height = bBox.height * this.sourceBlock_.workspace.scale + 'px';
@@ -239,7 +240,7 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   }
   // Shift by a few pixels to line up exactly.
   xy.y += 1;
-  if (goog.userAgent.GECKO && this.sourceBlock_.workspace.WidgetDiv_.DIV.style.top) {
+  if (goog.userAgent.GECKO && Blockly.WidgetDiv.DIV.style.top) {
     // Firefox mis-reports the location of the border by a pixel
     // once the WidgetDiv is moved into position.
     xy.x -= 1;
@@ -282,7 +283,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     Blockly.unbindEvent_(htmlInput.onWorkspaceChangeWrapper_);
     Blockly.FieldTextInput.htmlInput_ = null;
     // Delete style properties.
-    var style = thisField.sourceBlock_.workspace.WidgetDiv_.DIV.style;
+    var style = Blockly.WidgetDiv.DIV.style;
     style.width = 'auto';
     style.height = 'auto';
     style.fontSize = '';

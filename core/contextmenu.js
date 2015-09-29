@@ -45,8 +45,8 @@ Blockly.ContextMenu.currentBlock = null;
  * @param {!Array.<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
  */
-Blockly.ContextMenu.show = function(e, workspace, options, rtl) {
-  workspace.WidgetDiv_.show(Blockly.ContextMenu, rtl, null);
+Blockly.ContextMenu.show = function(e, options, rtl) {
+  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, null);
   if (!options.length) {
     Blockly.ContextMenu.hide();
     return;
@@ -100,7 +100,7 @@ Blockly.ContextMenu.show = function(e, workspace, options, rtl) {
       x -= menuSize.width;
     }
   }
-  workspace.WidgetDiv_.position(x, y, windowSize, scrollOffset, rtl);
+  Blockly.WidgetDiv.position(x, y, windowSize, scrollOffset, rtl);
 
   menu.setAllowAutoFocus(true);
   // 1ms delay is required for focusing on context menus because some other

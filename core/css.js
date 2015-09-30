@@ -26,8 +26,6 @@
 
 goog.provide('Blockly.Css');
 
-goog.require('goog.cssom');
-
 
 /**
  * List of cursors.
@@ -86,7 +84,12 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   // Strip off any trailing slash (either Unix or Windows).
   Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
-  Blockly.Css.styleSheet_ = goog.cssom.addCssText(text).sheet;
+  // Inject CSS tag.
+  var cssNode = document.createElement('style');
+  document.head.appendChild(cssNode);
+  var cssTextNode = document.createTextNode(text);
+  cssNode.appendChild(cssTextNode);
+  Blockly.Css.styleSheet_ = cssNode.sheet;
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
 
@@ -99,22 +102,12 @@ Blockly.Css.setCursor = function(cursor) {
     return;
   }
   Blockly.Css.currentCursor_ = cursor;
-  /*
-    Hotspot coordinates are baked into the CUR file, but they are still
-    required in the CSS due to a Chrome bug.
-    https://code.google.com/p/chromium/issues/detail?id=1446
-  */
-  if (cursor == Blockly.Css.Cursor.OPEN) {
-    var xy = '8 5';
-  } else {
-    var xy = '7 3';
-  }
-  var url = 'url(' + Blockly.Css.mediaPath_ + '/' + cursor +
-      '.cur) ' + xy + ', auto';
+  var url = 'url(' + Blockly.Css.mediaPath_ + '/' + cursor + '.cur), auto';
   // There are potentially hundreds of draggable objects.  Changing their style
   // properties individually is too slow, so change the CSS rule instead.
   var rule = '.blocklyDraggable {\n  cursor: ' + url + ';\n}\n';
-  goog.cssom.replaceCssRule('', rule, Blockly.Css.styleSheet_, 0);
+  Blockly.Css.styleSheet_.deleteRule(0);
+  Blockly.Css.styleSheet_.insertRule(rule, 0);
   // There is probably only one toolbox, so just change its style property.
   var toolboxen = document.getElementsByClassName('blocklyToolboxDiv');
   for (var i = 0, toolbox; toolbox = toolboxen[i]; i++) {

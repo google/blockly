@@ -1073,6 +1073,9 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             field = new Blockly.FieldClickImage(element['src'],
                 element['width'], element['height'], element['alt']);
             break;
+          case 'field_description':
+            field = new Blockly.FieldDescription();
+            break;
           case 'field_image':
             field = new Blockly.FieldImage(element['src'],
                 element['width'], element['height'], element['alt']);

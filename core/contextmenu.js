@@ -31,6 +31,8 @@ goog.require('goog.events');
 goog.require('goog.style');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
+goog.require('goog.events.KeyCodes');
+goog.require('goog.events.KeyNames');
 
 
 /**
@@ -59,7 +61,27 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   var menu = new goog.ui.Menu();
   menu.setRightToLeft(rtl);
   for (var x = 0, option; option = options[x]; x++) {
-    var menuItem = new goog.ui.MenuItem(option.text);
+    var menuItem;
+    if (option.accel) {
+      var text;
+      //make the numbers say num
+      if (option.accel >= goog.events.KeyCodes.ZERO && option.accel <= goog.events.KeyCodes.NINE )
+      {
+        text = goog.events.KeyNames[option.accel+ goog.events.KeyCodes.NUM_ZERO - goog.events.KeyCodes.ZERO];
+      } else {
+        text = goog.events.KeyNames[option.accel];          
+      }
+      var accelDom = goog.dom.createDom(goog.dom.TagName.SPAN,
+              goog.ui.MenuItem.ACCELERATOR_CLASS, text);
+//      goog.dom.setProperties(accelDom, {
+//          'style': 'text-decoration: underline; font-weight: bold;'
+//      });
+      menuItem = new goog.ui.MenuItem([goog.dom.createTextNode(option.text),accelDom]);
+    }
+    else
+    {
+      menuItem = new goog.ui.MenuItem(option.text);
+    }
     menuItem.setRightToLeft(rtl);
     if (option.accel) {
       menuItem.setMnemonic(option.accel);
@@ -142,3 +164,4 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     newBlock.select();
   };
 };
+

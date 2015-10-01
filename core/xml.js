@@ -274,7 +274,9 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
     // Populating the connection database may be defered until after the blocks
     // have renderend.
     setTimeout(function() {
-      topBlock.setConnectionsHidden(false);
+      if (topBlock.workspace) {  // Check that the block hasn't been deleted.
+        topBlock.setConnectionsHidden(false);
+      }
     }, 1);
     topBlock.updateDisabled();
     // Fire an event to allow scrollbars to resize.

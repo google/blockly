@@ -527,14 +527,14 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
     } while (targetSourceBlock);
 
     // Only connections within the maxLimit radius.
-    var dx = currentX - db[yIndex].x_;
-    var dy = currentY - db[yIndex].y_;
+    var dx = currentX - connection.x_;
+    var dy = currentY - connection.y_;
     var r = Math.sqrt(dx * dx + dy * dy);
     if (r <= maxLimit) {
-      closestConnection = db[yIndex];
+      closestConnection = connection;
       maxLimit = r;
     }
-    return dy < maxLimit;
+    return Math.abs(dy) < maxLimit;
   }
   return {connection: closestConnection, radius: maxLimit};
 };

@@ -698,6 +698,16 @@ Blockly.Flyout.prototype.getRect = function() {
         BIG_NUM + this.width_ * scale, BIG_NUM * 2);
 };
 
+Blockly.Flyout.prototype.getBlockByName = function(name) {
+
+  var blocks = this.workspace_.getTopBlocks(false);
+  for (var x = 0, block; block = blocks[x]; x++) {
+    if (block.workspace == this.workspace_) {
+      return block;
+    }
+  }
+};
+
 /**
  * Stop binding to the global mouseup and mousemove events.
  * @private

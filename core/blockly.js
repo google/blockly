@@ -717,7 +717,7 @@ Blockly.findNextBlock = function(block) {
     // If so, then we will take it.
     var children = [];
     if (!baseBlock.isCollapsed()) {
-      children = baseBlock.getChildren();
+      children = baseBlock.getOrderedChildren();
     }
     var spot = 0;
     if (children.length > 0) {
@@ -805,7 +805,7 @@ Blockly.findPrevBlock = function(block) {
     // otherwise we go to the parent
     var children = [];
     if (!baseBlock.isCollapsed()) {
-      children = baseBlock.getChildren();
+      children = baseBlock.getOrderedChildren();
     }
     if (children.length === 0) {
       newSelect = baseBlock;
@@ -846,8 +846,8 @@ Blockly.selectParentBlock = function() {
       baseBlock = prevBlock.getSurroundParent();
       if (baseBlock != null) {
         var children = [];
-        if (!baseBlock.isCollapsed()) {
-          children = baseBlock.getChildren();
+        if (!baseBlock.isCollapsed() && !baseBlock.getInputsInline()) {
+          children = baseBlock.getOrderedChildren();
         }
         if (children.length >= 0) {
           var spot = goog.array.indexOf(children, prevBlock);
@@ -887,8 +887,8 @@ Blockly.selectChildBlock = function() {
       baseBlock = prevBlock.getSurroundParent();
       if (baseBlock != null) {
         var children = [];
-        if (!baseBlock.isCollapsed()) {
-          children = baseBlock.getChildren();
+        if (!baseBlock.isCollapsed() && !baseBlock.getInputsInline()) {
+          children = baseBlock.getOrderedChildren();
         }
         if (children.length >= 0) {
           var spot = goog.array.indexOf(children, prevBlock);

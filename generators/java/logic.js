@@ -94,6 +94,7 @@ Blockly.Java['logic_compare'] = function(block) {
     argument0 = '""';
   } else {
     argument0 = 'Var.valueOf(' + argument0 + ')';
+    Blockly.Java.provideVarClass();
   }
   if (!argument1) {
     argument1 = '""';

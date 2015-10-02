@@ -401,6 +401,29 @@ Blockly.Block.prototype.getChildren = function() {
 };
 
 /**
+ * Find all the blocks that are directly nested inside this one in order.
+ * Includes value and block inputs, as well as any following statement.
+ * Excludes any connection on an output tab or any preceding statement.
+ * @return {!Array.<!Blockly.Block>} Array of blocks.
+ */
+Blockly.Block.prototype.getOrderedChildren = function() {
+  var children = this.getChildren();
+  var result = [];
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (input && input.connection) {
+      var block = input.connection.targetBlock();
+      if (block) {
+        var spot = goog.array.indexOf(children, block);
+        goog.asserts.assert(spot >= 0, 'Input not in children list.');
+        result.push(block);
+      }
+    }
+  }
+
+  return result;
+};
+
+/**
  * Set parent of this block to be a new block or null.
  * @param {Blockly.Block} newParent New parent block.
  */
@@ -624,10 +647,12 @@ Blockly.Block.prototype.getField = function(name) {
  */
  Blockly.Block.prototype.getEditableFields = function() {
   var fields = [];
-  for (var i = 0, input; input = this.inputList[i]; i++) {
-    for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      if (field.EDITABLE && field.SERIALIZABLE) {
-        fields.push(field);
+  if (!this.isCollapsed()) {
+    for (var i = 0, input; input = this.inputList[i]; i++) {
+      for (var j = 0, field; field = input.fieldRow[j]; j++) {
+        if (field.EDITABLE && field.SERIALIZABLE) {
+          fields.push(field);
+        }
       }
     }
   }

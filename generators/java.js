@@ -197,6 +197,13 @@ Blockly.Java.setAppName = function(name) {
 Blockly.Java.getAppName = function() {
   return Blockly.Java.variableDB_.getName(this.AppName_,'CLASS');
 }
+/**
+ * Get the application name for visual presentation
+ * @return {string} name Name for the application for visual usage
+ */
+Blockly.Java.getAppTitle = function() {
+  return this.AppName_;
+}
 
 /**
  * Set the package for this generated Java code

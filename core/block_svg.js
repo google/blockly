@@ -803,6 +803,20 @@ Blockly.BlockSvg.prototype.setMovable = function(movable) {
 };
 
 /**
+ * Set whether this block is editable or not.
+ * @param {boolean} movable True if editable.
+ */
+Blockly.BlockSvg.prototype.setEditable = function(editable) {
+  Blockly.BlockSvg.superClass_.setEditable.call(this, editable);
+  if (this.rendered) {
+    var icons = this.getIcons(true);
+    for (var i = 0; i < icons.length; i++) {
+      icons[i].updateEditable();
+    }
+  }
+};
+
+/**
  * Return the root node of the SVG or null if none exists.
  * @return {Element} The root SVG node (probably a group).
  */

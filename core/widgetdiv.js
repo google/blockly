@@ -30,6 +30,7 @@ goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.Css');
 goog.require('goog.dom');
+goog.require('goog.style');
 
 
 /**
@@ -75,6 +76,10 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.hide();
   Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
+  // Temporarily move the widget to the top of the screen so that it does not
+  // cause a scrollbar jump in Firefox when displayed.
+  var xy = goog.style.getViewportPageOffset(document);
+  Blockly.WidgetDiv.DIV.style.top = xy.y + 'px';
   Blockly.WidgetDiv.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.WidgetDiv.DIV.style.display = 'block';
 };

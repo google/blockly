@@ -73,17 +73,17 @@ Blockly.JavaScript['text_append'] = function(block) {
 };
 
 Blockly.JavaScript['text_length'] = function(block) {
-  // String length.
+  // String or array length.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
   return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 
 Blockly.JavaScript['text_isEmpty'] = function(block) {
-  // Is the string null?
+  // Is the string null or array empty?
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  return ['!' + argument0, Blockly.JavaScript.ORDER_LOGICAL_NOT];
+  return ['!' + argument0 + '.length', Blockly.JavaScript.ORDER_LOGICAL_NOT];
 };
 
 Blockly.JavaScript['text_indexOf'] = function(block) {

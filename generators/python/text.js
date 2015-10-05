@@ -77,14 +77,14 @@ Blockly.Python['text_append'] = function(block) {
 };
 
 Blockly.Python['text_length'] = function(block) {
-  // String length.
+  // Is the string null or array empty?
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '\'\'';
   return ['len(' + argument0 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['text_isEmpty'] = function(block) {
-  // Is the string null?
+  // Is the string null or array empty?
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '\'\'';
   var code = 'not len(' + argument0 + ')';

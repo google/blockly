@@ -73,14 +73,23 @@ Blockly.PHP['text_append'] = function(block) {
 };
 
 Blockly.PHP['text_length'] = function(block) {
-  // String length.
+  // String or array length.
+  var functionName = Blockly.PHP.provideFunction_(
+      'length',
+      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($value) {',
+        '  if (is_string($value)) {',
+        '    return strlen($value);',
+        '  } else {',
+        '    return count($value);',
+        '  }',
+        '}']);
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
-  return ['strlen(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [functionName  + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_isEmpty'] = function(block) {
-  // Is the string null?
+  // Is the string null or array empty?
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   return ['empty(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];

@@ -330,12 +330,14 @@ Blockly.Xml.domToBlockHeadless_ =
     }
     var input;
 
-    // Find the first 'real' grandchild node (that isn't whitespace).
-    var firstRealGrandchild = null;
+    // Find any enclosed blocks.
+    var childBlockNode = null;
     for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
          j++) {
-      if (grandchildNode.nodeType != 3 || !grandchildNode.data.match(/^\s*$/)) {
-        firstRealGrandchild = grandchildNode;
+      if (grandchildNode.nodeType == 1) {
+        if (grandchildNode.nodeName.toLowerCase() == 'block') {
+          childBlockNode = grandchildNode;
+        }
       }
     }
 
@@ -395,10 +397,9 @@ Blockly.Xml.domToBlockHeadless_ =
                        prototypeName);
           break;
         }
-        if (firstRealGrandchild &&
-            firstRealGrandchild.nodeName.toLowerCase() == 'block') {
+        if (childBlockNode) {
           blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              firstRealGrandchild, opt_reuseBlock);
+              childBlockNode, opt_reuseBlock);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
@@ -409,8 +410,7 @@ Blockly.Xml.domToBlockHeadless_ =
         }
         break;
       case 'next':
-        if (firstRealGrandchild &&
-            firstRealGrandchild.nodeName.toLowerCase() == 'block') {
+        if (childBlockNode) {
           if (!block.nextConnection) {
             throw 'Next statement does not exist.';
           } else if (block.nextConnection.targetConnection) {
@@ -418,7 +418,7 @@ Blockly.Xml.domToBlockHeadless_ =
             throw 'Next statement is already connected.';
           }
           blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              firstRealGrandchild, opt_reuseBlock);
+              childBlockNode, opt_reuseBlock);
           if (!blockChild.previousConnection) {
             throw 'Next block does not have previous statement.';
           }

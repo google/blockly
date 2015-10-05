@@ -58,14 +58,14 @@ Blockly.Dart['lists_repeat'] = function(block) {
 };
 
 Blockly.Dart['lists_length'] = function(block) {
-  // List length.
+  // String or array length.
   var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   return [argument0 + '.length', Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['lists_isEmpty'] = function(block) {
-  // Is the list empty?
+  // Is the string null or array empty?
   var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   return [argument0 + '.isEmpty', Blockly.Dart.ORDER_UNARY_POSTFIX];

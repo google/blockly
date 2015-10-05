@@ -37,6 +37,10 @@ Blockly.Blocks.lists.HUE = 260;
 Blockly.Blocks['lists_create_empty'] = {
   /**
    * Block for creating an empty list.
+   * The 'list_create_with' block is preferred as it is more flexible.
+   * <block type="lists_create_with">
+   *   <mutation items="0"></mutation>
+   * </block>
    * @this Blockly.Block
    */
   init: function() {

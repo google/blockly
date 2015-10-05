@@ -66,14 +66,23 @@ Blockly.PHP['lists_repeat'] = function(block) {
 };
 
 Blockly.PHP['lists_length'] = function(block) {
-  // List length.
+  // String or array length.
+  var functionName = Blockly.PHP.provideFunction_(
+      'length',
+      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($value) {',
+        '  if (is_string($value)) {',
+        '    return strlen($value);',
+        '  } else {',
+        '    return count($value);',
+        '  }',
+        '}']);
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
-  return ['count(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
+  return [functionName  + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['lists_isEmpty'] = function(block) {
-  // Is the list empty?
+  // Is the string null or array empty?
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
   return ['empty(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];

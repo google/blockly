@@ -66,14 +66,14 @@ Blockly.JavaScript['lists_repeat'] = function(block) {
 };
 
 Blockly.JavaScript['lists_length'] = function(block) {
-  // List length.
+  // String or array length.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
   return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 
 Blockly.JavaScript['lists_isEmpty'] = function(block) {
-  // Is the list empty?
+  // Is the string null or array empty?
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
   return ['!' + argument0 + '.length', Blockly.JavaScript.ORDER_LOGICAL_NOT];

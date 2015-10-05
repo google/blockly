@@ -660,6 +660,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     }
     // Start a dragging operation on the new block.
     block.onMouseDown_(e);
+    return block;
   };
 };
 
@@ -706,6 +707,31 @@ Blockly.Flyout.prototype.getBlockByName = function(name) {
       return block;
     }
   }
+};
+
+Blockly.Flyout.prototype.startDragWithBlock = function(block, args) {
+
+  // compensate for width of flyout; TBD: feels like a hack
+  args.offsetX -= this.workspace_.targetWorkspace.flyout_.width_;
+
+  var mouseDownEvent = new MouseEvent('click', {
+    'view': window,
+    'bubbles': true,
+    'cancelable': true,
+    'x': args.offsetX,
+    'y': args.offsetY,
+    'clientX': args.x,
+    'clientY': args.y
+  });
+  
+  this.blockMouseDown_(block)(mouseDownEvent);
+  var blockInstance = Blockly.Flyout.startFlyout_.createBlockFunc_(Blockly.Flyout.startBlock_)
+    (Blockly.Flyout.startDownEvent_);
+  
+  blockInstance.getSvgRoot().setAttribute('transform',
+      'translate(' + args.offsetX + ',' + args.offsetY + ')');
+  blockInstance.onMouseDown_(mouseDownEvent);
+
 };
 
 /**

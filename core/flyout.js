@@ -699,14 +699,15 @@ Blockly.Flyout.prototype.getRect = function() {
         BIG_NUM + this.width_ * scale, BIG_NUM * 2);
 };
 
-Blockly.Flyout.prototype.getBlockByName = function(name) {
+Blockly.Flyout.prototype.getBlockByType = function(type) {
 
   var blocks = this.workspace_.getTopBlocks(false);
   for (var x = 0, block; block = blocks[x]; x++) {
-    if (block.workspace == this.workspace_) {
+    if (block.type === type) {
       return block;
     }
   }
+  return null;
 };
 
 Blockly.Flyout.prototype.startDragWithBlock = function(block, args) {

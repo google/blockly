@@ -771,11 +771,8 @@ function init() {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                mainWorkspace);
   } else {
-    var rootBlock = Blockly.Block.obtain(mainWorkspace, 'factory_base');
-    rootBlock.initSvg();
-    rootBlock.render();
-    rootBlock.setMovable(false);
-    rootBlock.setDeletable(false);
+    var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
+    Blockly.Xml.domToWorkspace(mainWorkspace, Blockly.Xml.textToDom(xml));
   }
 
   mainWorkspace.addChangeListener(updateLanguage);

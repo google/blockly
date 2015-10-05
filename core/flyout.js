@@ -712,7 +712,11 @@ Blockly.Flyout.prototype.getBlockByName = function(name) {
 Blockly.Flyout.prototype.startDragWithBlock = function(block, args) {
 
   // compensate for width of flyout; TBD: feels like a hack
-  args.offsetX -= this.workspace_.targetWorkspace.flyout_.width_;
+  // TBD: and worse: need to use this only when scrollbars enabled/flyout has a non-NaN width
+
+  if (!isNaN(this.workspace_.targetWorkspace.flyout_.width_)) {
+    args.offsetX -= this.workspace_.targetWorkspace.flyout_.width_;
+  }
 
   var mouseDownEvent = new MouseEvent('click', {
     'view': window,
@@ -720,17 +724,37 @@ Blockly.Flyout.prototype.startDragWithBlock = function(block, args) {
     'cancelable': true,
     'x': args.offsetX,
     'y': args.offsetY,
-    'clientX': args.x,
-    'clientY': args.y
+    'clientX': args.clientX,
+    'clientY': args.clientY
   });
   
-  this.blockMouseDown_(block)(mouseDownEvent);
-  var blockInstance = Blockly.Flyout.startFlyout_.createBlockFunc_(Blockly.Flyout.startBlock_)
-    (Blockly.Flyout.startDownEvent_);
+  var blockInstance = this.createBlockFunc_(block)(mouseDownEvent);
   
   blockInstance.getSvgRoot().setAttribute('transform',
       'translate(' + args.offsetX + ',' + args.offsetY + ')');
   blockInstance.onMouseDown_(mouseDownEvent);
+
+// -- temporary archived code --
+
+// last good
+//  this.blockMouseDown_(block)(mouseDownEvent);
+  // var blockInstance = Blockly.Flyout.startFlyout_.createBlockFunc_(Blockly.Flyout.startBlock_)
+  //   (Blockly.Flyout.startDownEvent_);
+
+      // var flyout = this;
+      // Blockly.removeAllRanges();
+      // Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+      // // Record the current mouse position.
+      // Blockly.Flyout.startDownEvent_ = mouseDownEvent;
+      // Blockly.Flyout.startBlock_ = block;
+      // Blockly.Flyout.startFlyout_ = flyout;
+
+
+      // Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+      //     'mouseup', this, Blockly.terminateDrag_);
+      // Blockly.Flyout.onMouseMoveBlockWrapper_ = Blockly.bindEvent_(document,
+      //     'mousemove', this, flyout.onMouseMoveBlock_);
+
 
 };
 

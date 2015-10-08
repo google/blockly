@@ -5,3 +5,5 @@ npm-debug.log
 .project
 *.pyc
 *.komodoproject
+blockly_compressed_clean.js
+msg/json/*.json

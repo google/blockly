@@ -660,6 +660,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     }
     // Start a dragging operation on the new block.
     block.onMouseDown_(e);
+    return block;
   };
 };
 
@@ -696,6 +697,66 @@ Blockly.Flyout.prototype.getRect = function() {
   var scale = this.targetWorkspace_ == mainWorkspace ? 1 : mainWorkspace.scale;
     return new goog.math.Rect(x, -BIG_NUM,
         BIG_NUM + this.width_ * scale, BIG_NUM * 2);
+};
+
+Blockly.Flyout.prototype.getBlockByType = function(type) {
+
+  var blocks = this.workspace_.getTopBlocks(false);
+  for (var x = 0, block; block = blocks[x]; x++) {
+    if (block.type === type) {
+      return block;
+    }
+  }
+  return null;
+};
+
+Blockly.Flyout.prototype.startDragWithBlock = function(block, args) {
+
+  // compensate for width of flyout; TBD: feels like a hack
+  // TBD: and worse: need to use this only when scrollbars enabled/flyout has a non-NaN width
+
+  if (!isNaN(this.workspace_.targetWorkspace.flyout_.width_)) {
+    args.offsetX -= this.workspace_.targetWorkspace.flyout_.width_;
+  }
+
+  var mouseDownEvent = new MouseEvent('click', {
+    'view': window,
+    'bubbles': true,
+    'cancelable': true,
+    'x': args.offsetX,
+    'y': args.offsetY,
+    'clientX': args.clientX,
+    'clientY': args.clientY
+  });
+  
+  var blockInstance = this.createBlockFunc_(block)(mouseDownEvent);
+  
+  blockInstance.getSvgRoot().setAttribute('transform',
+      'translate(' + args.offsetX + ',' + args.offsetY + ')');
+  blockInstance.onMouseDown_(mouseDownEvent);
+
+// -- temporary archived code --
+
+// last good
+//  this.blockMouseDown_(block)(mouseDownEvent);
+  // var blockInstance = Blockly.Flyout.startFlyout_.createBlockFunc_(Blockly.Flyout.startBlock_)
+  //   (Blockly.Flyout.startDownEvent_);
+
+      // var flyout = this;
+      // Blockly.removeAllRanges();
+      // Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
+      // // Record the current mouse position.
+      // Blockly.Flyout.startDownEvent_ = mouseDownEvent;
+      // Blockly.Flyout.startBlock_ = block;
+      // Blockly.Flyout.startFlyout_ = flyout;
+
+
+      // Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+      //     'mouseup', this, Blockly.terminateDrag_);
+      // Blockly.Flyout.onMouseMoveBlockWrapper_ = Blockly.bindEvent_(document,
+      //     'mousemove', this, flyout.onMouseMoveBlock_);
+
+
 };
 
 /**

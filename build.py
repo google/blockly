@@ -175,6 +175,7 @@ class Gen_compressed(threading.Thread):
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"
+
     # Define the parameters for the POST request.
     params = [
         ("compilation_level", "SIMPLE_OPTIMIZATIONS"),

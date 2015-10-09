@@ -704,8 +704,10 @@ Blockly.Block.prototype.setTitleValue = function(newValue, name) {
  * @param {boolean} newBoolean True if there can be a previous statement.
  * @param {string|Array.<string>|null|undefined} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
+ * @param {boolean} requireType true if null blocks can't match.
  */
-Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
+Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check,
+ requireType) {
   if (this.previousConnection) {
     goog.asserts.assert(!this.previousConnection.targetConnection,
         'Must disconnect previous statement before removing connection.');
@@ -720,7 +722,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
     }
     this.previousConnection =
         new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
-    this.previousConnection.setCheck(opt_check);
+    this.previousConnection.setCheck(opt_check,requireType);
   }
   if (this.rendered) {
     this.render();
@@ -733,8 +735,10 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
  * @param {boolean} newBoolean True if there can be a next statement.
  * @param {string|Array.<string>|null|undefined} opt_check Statement type or
  *     list of statement types.  Null/undefined if any type could be connected.
+ * @param {boolean} requireType true if null blocks can't match.
  */
-Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
+Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check,
+  requireType) {
   if (this.nextConnection) {
     goog.asserts.assert(!this.nextConnection.targetConnection,
         'Must disconnect next statement before removing connection.');
@@ -747,7 +751,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
     }
     this.nextConnection =
         new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
-    this.nextConnection.setCheck(opt_check);
+    this.nextConnection.setCheck(opt_check,requireType);
   }
   if (this.rendered) {
     this.render();
@@ -761,8 +765,10 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
  * @param {string|Array.<string>|null|undefined} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
+ * @param {boolean} requireType true if null blocks can't match.
  */
-Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
+Blockly.Block.prototype.setOutput = function(newBoolean, opt_check,
+  requireType) {
   if (this.outputConnection) {
     goog.asserts.assert(!this.outputConnection.targetConnection,
         'Must disconnect output value before removing connection.');
@@ -777,7 +783,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     }
     this.outputConnection =
         new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
-    this.outputConnection.setCheck(opt_check);
+    this.outputConnection.setCheck(opt_check,requireType);
   }
   if (this.rendered) {
     this.render();
@@ -1117,7 +1123,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
         fieldStack.push([field, element['name']]);
       } else if (input) {
         if (element['check']) {
-          input.setCheck(element['check']);
+          input.setCheck(element['check'], element['requireType']);
         }
         if (element['align']) {
           input.setAlign(alignmentLookup[element['align']]);
@@ -1477,7 +1483,7 @@ Blockly.Block.prototype.appendAddSubInput = function(name,pos,title) {
 
   if (itemCount[name]) {
     inputItem = this.appendValueInput(newName)
-                    .setCheck(this.checks_[name])
+                    .setCheck(this.checks_[name],!!this.checks_[name])
                     .setAlign(Blockly.ALIGN_RIGHT);
     if (title) {
       inputItem.appendField(title);

@@ -558,9 +558,12 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
       !otherConnection.sourceBlock_.isMovable()) {
     return false;
   }
+
   if (!this.check_ || !otherConnection.check_) {
     // One or both sides are promiscuous enough that anything will fit.
-    return true;
+    // Make sure the other side allows that type of connection.
+    return ((!this.check_ && !otherConnection.requireType_) ||
+      (!otherConnection.check_ && !this.requireType_));
   }
   // Find any intersection in the check lists.
   for (var i = 0; i < this.check_.length; i++) {
@@ -576,16 +579,18 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
  * Change a connection's compatibility.
  * @param {*} check Compatible value type or list of value types.
  *     Null if all types are compatible.
+ * @param {boolean} requireType true if null blocks can't match.
  * @return {!Blockly.Connection} The connection being modified
  *     (to allow chaining).
  */
-Blockly.Connection.prototype.setCheck = function(check) {
+Blockly.Connection.prototype.setCheck = function(check,requireType) {
   if (check) {
     // Ensure that check is in an array.
     if (!goog.isArray(check)) {
       check = [check];
     }
     this.check_ = check;
+    this.requireType_ = !!requireType;
     // The new value type may not be compatible with the existing connection.
     if (this.targetConnection && !this.checkType_(this.targetConnection)) {
       if (this.isSuperior()) {

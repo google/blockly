@@ -679,10 +679,10 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
 
     /*
      * Option to collapse or expand top blocks
-     * @param {bool} shouldCollapse whether a block should collapse
+     * @param {boolean} shouldCollapse Whether a block should collapse.
      * @private
      */
-    function toggleOption(shouldCollapse) {
+    var toggleOption = function(shouldCollapse) {
       var ms = 0;
       for (var i = 0; i < topBlocks.length; i++) {
         var block = topBlocks[i];
@@ -692,7 +692,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
           ms += COLLAPSE_DELAY;
         }
       }
-    }
+    };
 
     // Option to collapse top blocks.
     var collapseOption = {enabled: hasExpandedBlocks};

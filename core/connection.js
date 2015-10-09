@@ -42,10 +42,12 @@ Blockly.Connection = function(source, type) {
   /** @type {number} */
   this.type = type;
   // Shortcut for the databases for this connection's workspace.
-  this.db_ = source.workspace.connectionDBList[type];
-  this.dbOpposite_ =
-      source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
-  this.hidden_ = !this.db_;
+  if (source.workspace.connectionDBList) {
+    this.db_ = source.workspace.connectionDBList[type];
+    this.dbOpposite_ =
+        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+    this.hidden_ = !this.db_;
+  }
 };
 
 /**
@@ -88,6 +90,28 @@ Blockly.Connection.prototype.y_ = 0;
  * @private
  */
 Blockly.Connection.prototype.inDB_ = false;
+
+/**
+ * Connection database for connections of this type on the current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.Connection.prototype.db_ = null;
+
+/**
+ * Connection database for connections compatible with this type on the
+ * current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.Connection.prototype.dbOpposite_ = null;
+
+/**
+ * Whether this connections is hidden (not tracked in a database) or not.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Connection.prototype.hidden_ = null;
 
 /**
  * Sever all links to this connection (not including from the source object).

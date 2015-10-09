@@ -123,6 +123,8 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   /** @type {boolean} */
   this.editable_ = true;
   /** @type {boolean} */
+  this.isShadow_ = false;
+  /** @type {boolean} */
   this.collapsed_ = false;
 
   /** @type {string|Blockly.Comment} */
@@ -503,7 +505,8 @@ Blockly.Block.prototype.setDeletable = function(deletable) {
  * @return {boolean} True if movable.
  */
 Blockly.Block.prototype.isMovable = function() {
-  return this.movable_ && !(this.workspace && this.workspace.options.readOnly);
+  return this.movable_ && !this.isShadow_ &&
+      !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -512,6 +515,22 @@ Blockly.Block.prototype.isMovable = function() {
  */
 Blockly.Block.prototype.setMovable = function(movable) {
   this.movable_ = movable;
+};
+
+/**
+ * Get whether this block is a shadow block or not.
+ * @return {boolean} True if a shadow.
+ */
+Blockly.Block.prototype.isShadow = function() {
+  return this.isShadow_;
+};
+
+/**
+ * Set whether this block is a shadow block or not.
+ * @param {boolean} shadow True if a shadow.
+ */
+Blockly.Block.prototype.setShadow = function(shadow) {
+  this.isShadow_ = shadow;
 };
 
 /**

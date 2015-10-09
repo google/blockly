@@ -77,6 +77,9 @@ Blockly.FieldImage.prototype.init = function(block) {
   this.sourceBlock_ = block;
   // Build the DOM.
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
+  if (!this.visible_) {
+    this.fieldGroup_.style.display = 'none';
+  }
   this.imageElement_ = Blockly.createSvgElement('image',
       {'height': this.height_ + 'px',
        'width': this.width_ + 'px'}, this.fieldGroup_);

@@ -466,8 +466,8 @@ Blockly.Blocks['lists_getIndex'] = {
         var where = whereOptions[whereSlot];
         result.push({ entry: Blockly.Msg['LISTS_GET_INDEX_'+ mode +
                                                   '_' + where +'_TYPEBLOCK'],
-                      values: { 'VALUE': '<block type="variables_get">'+
-                                     '<field name="VAR">list</field></block>' },
+                      values: { 'VALUE': '<shadow type="variables_get">'+
+                                     '<field name="VAR">list</field></shadow>' },
                       fields: { 'MODE': mode, 'WHERE': where }});
       }
     }
@@ -585,8 +585,8 @@ Blockly.Blocks['lists_setIndex'] = {
         var where = whereOptions[whereSlot];
         result.push({ entry: Blockly.Msg['LISTS_SET_INDEX_'+ mode +
                                                   '_' + where +'_TYPEBLOCK'],
-                      values: { 'LIST': '<block type="variables_get">'+
-                                      '<field name="VAR">list</field></block>'},
+                      values: { 'LIST': '<shadow type="variables_get">'+
+                                      '<field name="VAR">list</field></shadow>'},
                       fields: { 'MODE': mode, 'WHERE': where }});
       }
     }
@@ -698,8 +698,8 @@ Blockly.Blocks['lists_getSublist'] = {
     }
   },
   typeblock: [{ entry: Blockly.Msg.LISTS_GET_SUBLIST_TYPEBLOCK,
-                values: { 'LIST': '<block type="variables_get">'+
-                                '<field name="VAR">list</field></block>' }}]
+                values: { 'LIST': '<shadow type="variables_get">'+
+                                '<field name="VAR">list</field></shadow>' }}]
 };
 
 Blockly.Blocks['lists_split'] = {
@@ -770,11 +770,11 @@ Blockly.Blocks['lists_split'] = {
     this.updateType_(xmlElement.getAttribute('mode'));
   },
   typeblock: [{ entry: Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT_TYPEBLOCK,
-                values: { 'DELIM': '<block type="text">'+
-                                       '<field name="TEXT">,</field></block>' },
+                values: { 'DELIM': '<shadow type="text">'+
+                                       '<field name="TEXT">,</field></shadow>' },
                 fields: { 'MODE': 'SPLIT' }},
               { entry: Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST_TYPEBLOCK,
-                values: { 'DELIM': '<block type="text">'+
-                                      '<field name="TEXT">,</field></block>' },
+                values: { 'DELIM': '<shadow type="text">'+
+                                      '<field name="TEXT">,</field></shadow>' },
                 fields: { 'MODE': 'SPLIT' }}]
 };

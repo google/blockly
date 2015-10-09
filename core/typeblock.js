@@ -159,6 +159,16 @@ Blockly.TypeBlock.show = function(){
     var x = Blockly.latestClick.x - svgPosition.x;
     var y = Blockly.latestClick.y - svgPosition.y;
 
+    /*
+     * If there have not been any clicks yet, set (x,y) explicitly.
+     */
+    if (x <= 0) {
+        x = 300;
+    }
+    if (y <= 0) {
+        y = 150;
+    }
+
     goog.style.setPosition(Blockly.TypeBlock.typeBlockDiv_, x, y);
     goog.style.showElement(Blockly.TypeBlock.typeBlockDiv_, true);
     Blockly.TypeBlock.inputText_.value = '';

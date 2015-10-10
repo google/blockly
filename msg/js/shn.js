@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "သႂ်ႇၶေႃႈၵႂၢမ်း";
 Blockly.Msg.AUTH = "ၶွပ်ႈၸႂ် ပၼ်ၶႂၢင်ႉႁပ်ႉဢဝ် ဢႅပ်ႉၼႆႉ တီႈၼႂ်းၵၢၼ်ၸဝ်ႈၵဝ်ႇသေယဝ်ႉ ၸဝ်ႈၵဝ်ႇ ႁႂ်ႈလႆႈသိမ်း ႁႂ်ႈလႆႈပိုၼ်ပၼ်သေၵမ်း";
 Blockly.Msg.CHANGE_VALUE_TITLE = "လႅၵ်ႈလၢႆႈၼမ်ႉၵတ်ႉ";
 Blockly.Msg.CHAT = "​ပေႃႉလိၵ်ႈ ၼႂ်းလွၵ်းၼႆႉသေ ၶျၢတ်ႉၸူး ၵေႃႉႁူမ်ႈႁဵတ်းႁူမ်ႈသၢင်ႈ ၸဝ်ႈၵဝ်ႇ";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ပလွၵ်ႉတင်းၼမ် လႅဝ်";
 Blockly.Msg.COLLAPSE_BLOCK = "ပလွၵ်ႉလႅဝ်";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "သီ 1";

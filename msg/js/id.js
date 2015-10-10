@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Tambahkan sebuah comment";
 Blockly.Msg.AUTH = "Silakan mengotorisasi aplikasi ini untuk memungkinkan pekerjaan Anda dapat disimpan dan digunakan bersama.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
 Blockly.Msg.CHAT = "Chatting dengan kolaborator anda dengan mengetikkan di kotak ini!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Ciutkan Blok";
 Blockly.Msg.COLLAPSE_BLOCK = "Ciutkan Blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Warna 1";

@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Bemierkung derbäisetzen";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Wäert änneren:";
 Blockly.Msg.CHAT = "Mat ärem Mataarbechter chatten an deem Dir an dës Këscht tippt!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_BLOCK = "Block zesummeklappen";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Faarf 1";

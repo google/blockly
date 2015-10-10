@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "মন্তব্য যোগ করুন";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "মান পরিবর্তন করুন:";
 Blockly.Msg.CHAT = "এই বাক্সে লিখার মাধ্যমে আপনার সহযোগীর সাথে আলাপ করুন!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_BLOCK = "Collapse Block";  // untranslated
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "রং ১";

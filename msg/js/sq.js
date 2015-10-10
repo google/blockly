@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Vendos nje Koment";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ndrysho Vlerat:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Mbyll blloqet";
 Blockly.Msg.COLLAPSE_BLOCK = "Mbyll bllokun";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Ngjyra 1";

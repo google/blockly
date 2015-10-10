@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Додај коментар";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Промените вредност:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Скупи блокове";
 Blockly.Msg.COLLAPSE_BLOCK = "Скупи блок";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "боја 1";

@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Apondre un comentari";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modificar la valor :";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Redusir los blòts";
 Blockly.Msg.COLLAPSE_BLOCK = "Redusir lo blòt";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "color 1";

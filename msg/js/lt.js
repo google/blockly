@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Pridėti komentarą";
 Blockly.Msg.AUTH = "Norint išsaugoti (ir dalintis) savo sukurtas programas, reikia prisijungti (autorizuotis).";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Keisti reikšmę:";
 Blockly.Msg.CHAT = "Galite susirašinėti su projekto bendradarbiais.";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Suskleisti blokus";
 Blockly.Msg.COLLAPSE_BLOCK = "Suskleisti bloką";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "1 spalva";

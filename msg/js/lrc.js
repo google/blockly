@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "نظرتونه اضاف بکید";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "ارزشت آلشت کو:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "کوچک کردن برشتیا";
 Blockly.Msg.COLLAPSE_BLOCK = "کوچک کردن برشت";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "رن 1";

@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Gionté un coment";
 Blockly.Msg.AUTH = "Për piasì, ch'a autorisa costa aplicassion a përmëtte ëd salvé sò travaj e a autoriselo a esse partagià da chiel.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifiché ël valor:";
 Blockly.Msg.CHAT = "Ch'a ciaciara con sò colaborator an scrivend an costa casela!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Arduve ij blòch";
 Blockly.Msg.COLLAPSE_BLOCK = "Arduve ël blòch";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "color 1";

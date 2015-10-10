@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "댓글 추가";
 Blockly.Msg.AUTH = "당신의 작업을 저장하고 다른 사람과 공유할 수 있도록 이 애플리케이션을 인증해 주십시오.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "값 바꾸기:";
 Blockly.Msg.CHAT = "이 상자에 입력하여 당신의 동료와 채팅하세요!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "블록 축소";
 Blockly.Msg.COLLAPSE_BLOCK = "블록 축소";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "색 1";

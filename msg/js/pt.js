@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Adicionar Comentário";
 Blockly.Msg.AUTH = "Por favor autorize esta aplicação para permitir que o seu trabalho seja gravado e que o possa partilhar.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Alterar valor:";
 Blockly.Msg.CHAT = "Converse com o seu colaborador, ao digitar nesta caixa!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Recolher Blocos";
 Blockly.Msg.COLLAPSE_BLOCK = "Colapsar Bloco";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "cor 1";

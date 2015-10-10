@@ -70,13 +70,15 @@ Blockly.Msg.INLINE_INPUTS = 'Inline Inputs';
 Blockly.Msg.DELETE_BLOCK = 'Delete Block';
 /// context menu - Permanently delete the %1 selected blocks.\n\nParameters:\n* %1 - an integer greater than 1.
 Blockly.Msg.DELETE_X_BLOCKS = 'Delete %1 Blocks';
+/// context menu - Reposition all the blocks so that they form a neat line.
+Blockly.Msg.CLEAN_UP = 'Clean up Blocks';
 /// context menu - Make the appearance of the selected block smaller by hiding some information about it.
 Blockly.Msg.COLLAPSE_BLOCK = 'Collapse Block';
-/// context menu - Make the appearance of the selected blocks smaller by hiding some information about it.  Use the same terminology as in the previous message.
+/// context menu - Make the appearance of all blocks smaller by hiding some information about it.  Use the same terminology as in the previous message.
 Blockly.Msg.COLLAPSE_ALL = 'Collapse Blocks';
 /// context menu - Restore the appearance of the selected block by showing information about it that was hidden (collapsed) earlier.
 Blockly.Msg.EXPAND_BLOCK = 'Expand Block';
-/// context menu - Restore the appearance of the selected block by showing information about it that was hidden (collapsed) earlier.  Use the same terminology as in the previous message.
+/// context menu - Restore the appearance of all blocks by showing information about it that was hidden (collapsed) earlier.  Use the same terminology as in the previous message.
 Blockly.Msg.EXPAND_ALL = 'Expand Blocks';
 /// context menu - Make the selected block have no effect (unless reenabled).
 Blockly.Msg.DISABLE_BLOCK = 'Disable Block';

@@ -66,8 +66,8 @@ Blockly.Toolbox.prototype.width = 0;
 Blockly.Toolbox.prototype.selectedOption_ = null;
 
 /**
- * The SVG group currently selected.
- * @type {*}
+ * The tree node most recently selected.
+ * @type {goog.ui.tree.BaseNode}
  * @private
  */
 Blockly.Toolbox.prototype.lastCategory_ = null;
@@ -99,7 +99,7 @@ Blockly.Toolbox.prototype.init = function() {
 
   // Create an HTML container for the Toolbox menu.
   this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
-  this.HtmlDiv.setAttribute('dir', this.workspace_.RTL ? 'RTL' : 'LTR');
+  this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   document.body.appendChild(this.HtmlDiv);
 
   // Clicking on toolbar closes popups.
@@ -128,7 +128,7 @@ Blockly.Toolbox.prototype.init = function() {
 
   this.CONFIG_['cleardotPath'] = workspace.options.pathToMedia + '1x1.gif';
   this.CONFIG_['cssCollapsedFolderIcon'] =
-      'blocklyTreeIconClosed' + (this.workspace_.RTL ? 'Rtl' : 'Ltr');
+      'blocklyTreeIconClosed' + (workspace.RTL ? 'Rtl' : 'Ltr');
   var tree = new Blockly.Toolbox.TreeControl(this, this.CONFIG_);
   this.tree_ = tree;
   tree.setShowRootNode(false);
@@ -148,6 +148,7 @@ Blockly.Toolbox.prototype.dispose = function() {
   this.tree_.dispose();
   goog.dom.removeNode(this.HtmlDiv);
   this.workspace_ = null;
+  this.lastCategory_ = null;
 };
 
 /**
@@ -332,9 +333,9 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
   if (node && node.blocks && node.blocks.length) {
     toolbox.flyout_.show(node.blocks);
     // Scroll the flyout to the top if the category has changed.
-    if (toolbox.lastCategory_ != node.blocks) {
+    if (toolbox.lastCategory_ != node) {
       toolbox.flyout_.scrollToTop();
-      toolbox.lastCategory_ = node.blocks;
+      toolbox.lastCategory_ = node;
     }
   } else {
     // Hide the flyout.

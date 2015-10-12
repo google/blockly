@@ -111,7 +111,7 @@ Blockly.Java.variableTypes_ = {};
  * List of all known Blockly variable types. 
  *  NOTE: Only valid after a call to workspaceToCode
  */
-Blockly.Java.blocklyTypes_ = {}
+Blockly.Java.blocklyTypes_ = {};
 /**
  * Default Name of the application for use by all generated classes
  */
@@ -188,23 +188,14 @@ Blockly.Java.setAppName = function(name) {
     name = 'MyApp';
   }
   this.AppName_ = name;
-}
-
+};
 /**
  * Get the application name for generated classes
  * @return {string} name Name for the application for any generated code
  */
 Blockly.Java.getAppName = function() {
   return Blockly.Java.variableDB_.getName(this.AppName_,'CLASS');
-}
-/**
- * Get the application name for visual presentation
- * @return {string} name Name for the application for visual usage
- */
-Blockly.Java.getAppTitle = function() {
-  return this.AppName_;
-}
-
+};
 /**
  * Set the package for this generated Java code
  * @param {string} package Name of the package this is derived from
@@ -235,7 +226,6 @@ Blockly.Java.forceUpdate = function(root) {
     }
   }
 };
-
 /**
  * Get the package for this generated Java code
  * @return {string} package Name of the package this is derived from
@@ -243,7 +233,6 @@ Blockly.Java.forceUpdate = function(root) {
 Blockly.Java.getPackage = function() {
   return this.Package_;
 };
-
 /**
  * Set the base class (if any) for the generated Java code
  * @param {string} baseclass Name of a base class this workspace is derived from
@@ -262,8 +251,7 @@ Blockly.Java.getBaseclass = function() {
     baseClass = Blockly.Java.variableDB_.getName(baseClass,'CLASS');
   }
   return baseClass;
-}
-
+};
 /**
  * Add an implementaiton (if any) for the generated Java code
  * @param {string} iface Name of a interface that this class provides
@@ -272,8 +260,7 @@ Blockly.Java.addInterface = function(iface) {
   if (!goog.array.contains(this.Interfaces_, iface)) {
     this.Interfaces_.push(iface);
   }
-}
-
+};
 /**
  * Get the interface list (if any) for the generated Java code
  * @return {Array<string>} baseclass Array of all interfaces that 
@@ -284,8 +271,7 @@ Blockly.Java.getInterfaces = function() {
     return null;
   }
   return this.Interfaces_;
-}
-
+};
 /**
  * Mark a variable as a global for the generated Java code
  * @param {block} block Block that the variable is contained in
@@ -356,7 +342,7 @@ Blockly.Java.getImports = function() {
  */
 Blockly.Java.setExtraImports = function(extraImports) {
   this.ExtraImports_ = extraImports;
-}
+};
 /**
  * Specify whether to inline the Var class or reference it externally
  * @param {string} inlineclass Generate the Var class inline
@@ -393,6 +379,8 @@ Blockly.Java.workspaceToCode_ = Blockly.Java.workspaceToCode;
  * @return {string} Generated code.
  */
 Blockly.Java.workspaceToCode = function(workspace, parms) {
+  this.setAppName(workspace.options.appTitle);
+
   // Generate the code first to get all of the required imports calculated.
   this.forceUpdate(workspace);
   var code = this.workspaceToCode_(workspace,parms);
@@ -1052,7 +1040,7 @@ Blockly.Java.provideVarClass = function() {
   } else {
     Blockly.Java.addImport('com.extreme.platform.application.Var');
   }
-}
+};
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.

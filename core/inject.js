@@ -111,6 +111,7 @@ Blockly.parseOptions_ = function(options) {
     var hasSounds = false;
     var optionDisconnected = true;
     var useMutators = false;
+    var appTitle = '';
   } else {
     var languageTree = Blockly.parseToolboxTree_(options['toolbox']);
     var hasCategories = Boolean(languageTree &&
@@ -142,6 +143,10 @@ Blockly.parseOptions_ = function(options) {
     var optionDisconnected = options['disconnected'];
     if (optionDisconnected === undefined) {
       optionDisconnected = true;
+    }
+    var appTitle = options['appTitle'];
+    if (appTitle === undefined) {
+      appTitle = '';
     }
   }
   var hasScrollbars = options['scrollbars'];
@@ -254,6 +259,7 @@ Blockly.parseOptions_ = function(options) {
     hasCss: hasCss,
     disableDisconnected: !optionDisconnected,
     useMutators: useMutators,
+    appTitle: appTitle,
     languageTree: languageTree,
     gridOptions: gridOptions,
     zoomOptions: zoomOptions,

@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Add Comment";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Change value:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";

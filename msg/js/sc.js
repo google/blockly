@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Agiunghe unu cumentu";
 Blockly.Msg.AUTH = "Permiti a custa app de sarvare su traballu tuo e de ti lu fàghere cumpartzire.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muda valori:";
 Blockly.Msg.CHAT = "Faedda cun su cumpàngiu tuo iscriende inoghe!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Serra e astringhe Boocos";

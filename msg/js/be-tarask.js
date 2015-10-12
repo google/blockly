@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Дадаць камэнтар";
 Blockly.Msg.AUTH = "Калі ласка, аўтарызуйце гэтае прыкладаньне, каб можна было захоўваць Вашую працу і мець магчымасьць дзяліцца ёю.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Зьмяніць значэньне:";
 Blockly.Msg.CHAT = "Стасуйцеся са сваім калегам, набіраючы тэкст у гэтым полі!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Згарнуць блёкі";

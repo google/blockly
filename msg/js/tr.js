@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Yorum Ekle";
 Blockly.Msg.AUTH = "Çalışmanızın kaydedilmesi ve sizinle paylaşılmasına izin verilmesi için lütfen bu uygulamaya yetki verin.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Değeri değiştir:";
 Blockly.Msg.CHAT = "Bu kutuya yazarak iş birlikçin ile sohbet et!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokları Daralt";

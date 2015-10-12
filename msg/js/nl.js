@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Reactie toevoegen";
 Blockly.Msg.AUTH = "Sta deze app toe om uw werk op te slaan het uw werk te delen.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Waarde wijzigen:";
 Blockly.Msg.CHAT = "Chat met iemand die ook aan het werk is via dit venster!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokken inklappen";

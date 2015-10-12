@@ -42,10 +42,12 @@ Blockly.Connection = function(source, type) {
   /** @type {number} */
   this.type = type;
   // Shortcut for the databases for this connection's workspace.
-  this.db_ = source.workspace.connectionDBList[type];
-  this.dbOpposite_ =
-      source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
-  this.hidden_ = !this.db_;
+  if (source.workspace.connectionDBList) {
+    this.db_ = source.workspace.connectionDBList[type];
+    this.dbOpposite_ =
+        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+    this.hidden_ = !this.db_;
+  }
 };
 
 /**
@@ -88,6 +90,28 @@ Blockly.Connection.prototype.y_ = 0;
  * @private
  */
 Blockly.Connection.prototype.inDB_ = false;
+
+/**
+ * Connection database for connections of this type on the current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.Connection.prototype.db_ = null;
+
+/**
+ * Connection database for connections compatible with this type on the
+ * current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.Connection.prototype.dbOpposite_ = null;
+
+/**
+ * Whether this connections is hidden (not tracked in a database) or not.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Connection.prototype.hidden_ = null;
 
 /**
  * Sever all links to this connection (not including from the source object).
@@ -137,6 +161,9 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
       // Can't make a value connection if male block is already connected.
       throw 'Source connection already connected (value).';
     } else if (otherConnection.targetConnection) {
+      // Record and disable the shadow so that it does not respawn here.
+      var shadowDom = otherConnection.getShadowDom();
+      otherConnection.setShadowDom(null);
       // If female block is already connected, disconnect and bump the male.
       var orphanBlock = otherConnection.targetBlock();
       orphanBlock.setParent(null);
@@ -167,6 +194,8 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
                 orphanBlock.outputConnection.bumpAwayFrom_(otherConnection);
               }, Blockly.BUMP_DELAY);
         }
+        // Restore the shadow.
+        otherConnection.setShadowDom(shadowDom);
       }
     }
   } else {

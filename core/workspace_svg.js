@@ -646,6 +646,25 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 };
 
 /**
+ * Clean up the workspace by ordering all the blocks in a column.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.cleanUp_ = function() {
+  var topBlocks = this.getTopBlocks(true);
+  var cursorY = 0;
+  for (var i = 0, block; block = topBlocks[i]; i++) {
+    var xy = block.getRelativeToSurfaceXY();
+    block.moveBy(-xy.x, cursorY - xy.y);
+    cursorY += block.getHeightWidth().height;
+    cursorY += Blockly.BlockSvg.MIN_BLOCK_Y;
+    block.snapToGrid();
+  }
+  // Fire an event to allow scrollbars to resize.
+  Blockly.fireUiEvent(window, 'resize');
+  this.fireChangeEvent();
+};
+
+/**
  * Show the context menu for the workspace.
  * @param {!Event} e Mouse event.
  * @private
@@ -655,13 +674,19 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     return;
   }
   var menuOptions = [];
+  var topBlocks = this.getTopBlocks(true);
+  // Option to clean up blocks.
+  var cleanOption = {};
+  cleanOption.text = Blockly.Msg.CLEAN_UP;
+  cleanOption.enabled = topBlocks.length > 1;
+  cleanOption.callback = this.cleanUp_.bind(this);
+  menuOptions.push(cleanOption);
+
   // Add a little animation to collapsing and expanding.
   var COLLAPSE_DELAY = 10;
-
   if (this.options.collapse) {
     var hasCollapsedBlocks = false;
     var hasExpandedBlocks = false;
-    var topBlocks = this.getTopBlocks(true);
     for (var i = 0; i < topBlocks.length; i++) {
       var block = topBlocks[i];
       while (block) {
@@ -674,19 +699,28 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
       }
     }
 
-    // Option to collapse top blocks.
-    var collapseOption = {enabled: hasExpandedBlocks};
-    collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
-    collapseOption.callback = function() {
+    /*
+     * Option to collapse or expand top blocks
+     * @param {boolean} shouldCollapse Whether a block should collapse.
+     * @private
+     */
+    var toggleOption = function(shouldCollapse) {
       var ms = 0;
       for (var i = 0; i < topBlocks.length; i++) {
         var block = topBlocks[i];
         while (block) {
-          setTimeout(block.setCollapsed.bind(block, true), ms);
+          setTimeout(block.setCollapsed.bind(block, shouldCollapse), ms);
           block = block.getNextBlock();
           ms += COLLAPSE_DELAY;
         }
       }
+    };
+
+    // Option to collapse top blocks.
+    var collapseOption = {enabled: hasExpandedBlocks};
+    collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
+    collapseOption.callback = function() {
+      toggleOption(true);
     };
     menuOptions.push(collapseOption);
 
@@ -694,15 +728,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     var expandOption = {enabled: hasCollapsedBlocks};
     expandOption.text = Blockly.Msg.EXPAND_ALL;
     expandOption.callback = function() {
-      var ms = 0;
-      for (var i = 0; i < topBlocks.length; i++) {
-        var block = topBlocks[i];
-        while (block) {
-          setTimeout(block.setCollapsed.bind(block, false), ms);
-          block = block.getNextBlock();
-          ms += COLLAPSE_DELAY;
-        }
-      }
+      toggleOption(false);
     };
     menuOptions.push(expandOption);
   }

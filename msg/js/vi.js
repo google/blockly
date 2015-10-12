@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Thêm Chú Giải";
 Blockly.Msg.AUTH = "Vui lòng cho phép ứng dụng được lưu dữ liệu của bạn và tự động chia sẻ bằng tên của bạn";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Thay giá trị thành:";
 Blockly.Msg.CHAT = "Trò chuyện với cộng tác viên của bạn bằng cách gõ vào hộp này!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Thu Nhỏ Mọi Mảnh";

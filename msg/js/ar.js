@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "اضافة تعليق";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "تغيير قيمة:";
 Blockly.Msg.CHAT = "دردش مع زملائك بالكتابة في هذا الصندوق!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "إخفاء القطع";

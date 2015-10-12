@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Megjegyzés hozzáadása";
 Blockly.Msg.AUTH = "Kérjük, engedélyezd az alkalmazásnak munkád elmentését és megosztását.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Érték módosítása:";
 Blockly.Msg.CHAT = "Ebben a mezőben tudsz a közreműködőkkel beszélgetni!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokkok összecsukása";

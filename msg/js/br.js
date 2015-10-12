@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Ouzhpennañ un evezhiadenn";
 Blockly.Msg.AUTH = "Roit aotre, mar plij, d'an arload-mañ evit gallout saveteiñ ho labour ha reiñ aotre dezhañ da rannañ ho labour ganimp.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Kemmañ an dalvoudenn :";
 Blockly.Msg.CHAT = "Flapañ gant ho kenlabourer en ur skrivañ er voest-se !";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Bihanaat ar bloc'hoù";

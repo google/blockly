@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Legg til kommentar";
 Blockly.Msg.AUTH = "Vennligst godkjenn at denne appen gjør det mulig for deg å lagre arbeidet slik at du kan dele det.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Bytt verdi:";
 Blockly.Msg.CHAT = "Chat med din medarbeider ved å skrive i dette feltet!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Skjul blokker";

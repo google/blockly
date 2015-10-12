@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Afegeix un comentari";
 Blockly.Msg.AUTH = "Si us plau, autoritzeu que aquesta aplicació pugui desar la vostra feina i que la pugueu compartir.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Canvia valor:";
 Blockly.Msg.CHAT = "Xateja amb el teu col·laborador escrivint en aquest quadre!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Contraure blocs";

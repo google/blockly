@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Gionté un coment";
 Blockly.Msg.AUTH = "Për piasì, ch'a autorisa costa aplicassion a përmëtte ëd salvé sò travaj e a autoriselo a esse partagià da chiel.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifiché ël valor:";
 Blockly.Msg.CHAT = "Ch'a ciaciara con sò colaborator an scrivend an costa casela!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.CLICK_ADD_TOOLTIP = "Add an element";  // untranslated
 Blockly.Msg.CLICK_REMOVE_TOOLTIP = "Remove this element";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Arduve ij blòch";

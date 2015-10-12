@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "QInHom chel";
 Blockly.Msg.AUTH = "ngogh nablIj DapollaHmeH qoj latlhvaD DangeHlaHmeH chaw' yInob.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "choH:";
 Blockly.Msg.CHAT = "beqpu'lI'vaD bIjawmeH naDev yIrI'!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ngoghmey DejmoH";
 Blockly.Msg.COLLAPSE_BLOCK = "ngogh DejmoH";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "rItlh wa'";

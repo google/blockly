@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Skrifa skýringu";
 Blockly.Msg.AUTH = "Vinsamlegast heimilaðu þetta forrit svo að hægt sé að vista verk þitt og svo að þú megir deila því";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Breyta gildi:";
 Blockly.Msg.CHAT = "Spjallaðu við félaga með því að skrifa í þennan reit!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Loka kubbum";
 Blockly.Msg.COLLAPSE_BLOCK = "Loka kubbi";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "litur 1";

@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "添加注释";
 Blockly.Msg.AUTH = "请授权这个应用程序以保存您的作品并共享。";
 Blockly.Msg.CHANGE_VALUE_TITLE = "更改值：";
 Blockly.Msg.CHAT = "通过在此框输入与您的合作者沟通！";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "折叠块";
 Blockly.Msg.COLLAPSE_BLOCK = "折叠块";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "颜色1";

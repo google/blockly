@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Şərh əlavə et";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Qiyməti dəyiş:";
 Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blokları yığ";
 Blockly.Msg.COLLAPSE_BLOCK = "Bloku yığ";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "rəng 1";

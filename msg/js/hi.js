@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "टिप्पणी छोड़ें";
 Blockly.Msg.AUTH = "अपने कार्य को सहेजना सक्षम करने और अपने साथ इसे साझा करने हेतु कृपया इस एप्प को अधिकृत करें।";
 Blockly.Msg.CHANGE_VALUE_TITLE = "मान परिवर्तित करें:";
 Blockly.Msg.CHAT = "इस सन्दूक में लिखकर हमारे सहयोगी के साथ बातचीत करें!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ब्लॉक संक्षिप्त करें";
 Blockly.Msg.COLLAPSE_BLOCK = "ब्लॉक को संक्षिप्त करें";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "रंग 1";

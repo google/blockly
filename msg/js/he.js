@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "הוסף תגובה";
 Blockly.Msg.AUTH = "בבקשה נא לאשר את היישום הזה כדי לאפשר לעבודה שלך להישמר וכדי לאפשר את השיתוף על ידיך.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "שנה ערך:";
 Blockly.Msg.CHAT = "שוחח עם משתף פעולה שלך על-ידי הקלדה בתיבה זו!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "צמצם קטעי קוד";
 Blockly.Msg.COLLAPSE_BLOCK = "צמצם קטע קוד";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "צבע 1";

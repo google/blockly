@@ -207,12 +207,8 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
-      if (selected.workspace &&
-          selected.workspace.options.gridOptions &&
-          selected.workspace.options.gridOptions['snap']) {
-        goog.Timer.callOnce(
-            selected.snapToGrid_, Blockly.BUMP_DELAY / 2, selected);
-      }
+      goog.Timer.callOnce(
+          selected.snapToGrid, Blockly.BUMP_DELAY / 2, selected);
       goog.Timer.callOnce(
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
@@ -286,9 +282,8 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
 
 /**
  * Snap this block to the nearest grid point.
- * @private
  */
-Blockly.BlockSvg.prototype.snapToGrid_ = function() {
+Blockly.BlockSvg.prototype.snapToGrid = function() {
   if (!this.workspace) {
     return;  // Deleted block.
   }
@@ -300,6 +295,10 @@ Blockly.BlockSvg.prototype.snapToGrid_ = function() {
   }
   if (this.isInFlyout) {
     return;  // Don't move blocks around in a flyout.
+  }
+  if (!this.workspace.options.gridOptions ||
+      !this.workspace.options.gridOptions['snap']) {
+    return;  // Config says no snapping.
   }
   var spacing = this.workspace.options.gridOptions['spacing'];
   var half = spacing / 2;
@@ -1051,8 +1050,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   if (Blockly.ContextMenu.currentBlock == this) {
     Blockly.ContextMenu.hide();
   }
-  // Bring block to the top of the workspace.
-  this.unplug(healStack, false);
 
   if (animate && this.rendered) {
     this.disposeUiEffect();
@@ -1260,10 +1257,18 @@ Blockly.BlockSvg.prototype.updateColour = function() {
   }
   var hexColour = Blockly.makeColour(this.getColour());
   var rgb = goog.color.hexToRgb(hexColour);
-  var rgbLight = goog.color.lighten(rgb, 0.3);
-  var rgbDark = goog.color.darken(rgb, 0.2);
-  this.svgPathLight_.setAttribute('stroke', goog.color.rgbArrayToHex(rgbLight));
-  this.svgPathDark_.setAttribute('fill', goog.color.rgbArrayToHex(rgbDark));
+  if (this.isShadow()) {
+    rgb = goog.color.lighten(rgb, 0.6);
+    hexColour = goog.color.rgbArrayToHex(rgb);
+    this.svgPathLight_.style.display = 'none';
+    this.svgPathDark_.setAttribute('fill', hexColour);
+  } else {
+    this.svgPathLight_.style.display = '';
+    var hexLight = goog.color.rgbArrayToHex(goog.color.lighten(rgb, 0.3));
+    var hexDark = goog.color.rgbArrayToHex(goog.color.darken(rgb, 0.2));
+    this.svgPathLight_.setAttribute('stroke', hexLight);
+    this.svgPathDark_.setAttribute('fill', hexDark);
+  }
   this.svgPath_.setAttribute('fill', hexColour);
 
   var icons = this.getIcons();

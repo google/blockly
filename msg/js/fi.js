@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Lisää kommentti";
 Blockly.Msg.AUTH = "Valtuuta tämä ohjelma jotta voit tallettaa työsi ja jakaa sen.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muuta arvoa:";
 Blockly.Msg.CHAT = "Keskustele yhteistyökumppanisi kanssa tässä laatikossa!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Sulje lohkot";
 Blockly.Msg.COLLAPSE_BLOCK = "Sulje lohko";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "väri 1";

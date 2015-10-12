@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "コメントを追加";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "値を変更します。";
 Blockly.Msg.CHAT = "このボックスに入力して共同編集者とチャットしよう！";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ブロックを折りたたむ";
 Blockly.Msg.COLLAPSE_BLOCK = "ブロックを折りたたむ";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "色 1";

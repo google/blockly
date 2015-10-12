@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Pridať komentár";
 Blockly.Msg.AUTH = "Autorizujte prosím túto aplikáciu, aby ste mohli uložiť a zdieľať vašu prácu.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Zmeniť hodnotu:";
 Blockly.Msg.CHAT = "Písaním do tohto políčka komunikujte so spolupracovníkmi!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Zvinúť bloky";
 Blockly.Msg.COLLAPSE_BLOCK = "Zvinúť blok";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "farba 1";

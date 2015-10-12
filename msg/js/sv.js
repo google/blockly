@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Lägg till kommentar";
 Blockly.Msg.AUTH = "Var god godkänn denna app för att du ska kunna spara och dela den.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ändra värde:";
 Blockly.Msg.CHAT = "Chatta med din medarbetare genom att skriva i detta fält.";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Fäll ihop block";
 Blockly.Msg.COLLAPSE_BLOCK = "Fäll ihop block";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "färg 1";

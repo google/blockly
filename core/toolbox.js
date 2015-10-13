@@ -244,11 +244,14 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
 Blockly.Toolbox.prototype.addColour_ = function(tree) {
   var children = tree.getChildren();
   for (var i = 0, child; child = children[i]; i++) {
-    var border = '8px solid ' + (child.hexColour || '#ddd');
-    if (this.workspace_.RTL) {
-      child.getElement().style.borderLeft = border;
-    } else {
-      child.getElement().style.borderRight = border;
+    var element = child.getElement();
+    if (element) {
+      var border = '8px solid ' + (child.hexColour || '#ddd');
+      if (this.workspace_.RTL) {
+        element.style.borderLeft = border;
+      } else {
+        element.style.borderRight = border;
+      }
     }
     this.addColour_(child);
   }

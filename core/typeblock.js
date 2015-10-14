@@ -537,7 +537,9 @@ Blockly.TypeBlock.connectIfPossible = function(blockSelected, createdBlock) {
 
   // Are both blocks statement blocks?
   // If so, connect created block below the selected block
-  if (blockSelected.outputConnection == null &&
+  if (createdBlock.previousConnection &&
+      blockSelected.nextConnection &&
+      blockSelected.outputConnection == null &&
       createdBlock.outputConnection == null) {
     createdBlock.previousConnection.connect(blockSelected.nextConnection);
     return;

@@ -369,6 +369,9 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
   if (node) {
     var hexColour = node.hexColour || '#57e';
     node.getRowElement().style.backgroundColor = hexColour;
+    // Add colours to child nodes which may have been collapsed and thus
+    // not rendered.
+    toolbox.addColour_(node);
   }
   goog.ui.tree.TreeControl.prototype.setSelectedItem.call(this, node);
   if (node && node.blocks && node.blocks.length) {

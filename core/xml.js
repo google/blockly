@@ -119,7 +119,7 @@ Blockly.Xml.blockToDom_ = function(block) {
       }
       var shadow = input.connection.getShadowDom();
       if (shadow && (!childBlock || !childBlock.isShadow())) {
-        container.appendChild(shadow.cloneNode(true));
+        container.appendChild(Blockly.Xml.cloneShadow_(shadow));
       }
       if (childBlock) {
         container.appendChild(Blockly.Xml.blockToDom_(childBlock));
@@ -158,10 +158,47 @@ Blockly.Xml.blockToDom_ = function(block) {
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
   if (shadow && (!nextBlock || !nextBlock.isShadow())) {
-    container.appendChild(shadow.cloneNode(true));
+    container.appendChild(Blockly.Xml.cloneShadow_(shadow));
   }
 
   return element;
+};
+
+/**
+ * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
+ * @param {!Element} shadow A tree of XML elements.
+ * @return {!Element} A tree of XML elements.
+ * @private
+ */
+Blockly.Xml.cloneShadow_ = function(shadow) {
+  shadow = shadow.cloneNode(true);
+  // Walk the tree looking for whitespace.  Don't prune whitespace in a tag.
+  var node = shadow;
+  var textNode;
+  while (node) {
+    if (node.firstChild) {
+      node = node.firstChild;
+    } else {
+      while (node && !node.nextSibling) {
+        textNode = node;
+        node = node.parentNode;
+        if (textNode.nodeType == 3 && textNode.data.trim() == '' &&
+            node.firstChild != textNode) {
+          // Prune whitespace after a tag.
+          goog.dom.removeNode(textNode);
+        }
+      }
+      if (node) {
+        textNode = node;
+        node = node.nextSibling;
+        if (textNode.nodeType == 3 && textNode.data.trim() == '') {
+          // Prune whitespace before a tag.
+          goog.dom.removeNode(textNode);
+        }
+      }
+    }
+  }
+  return shadow;
 };
 
 /**

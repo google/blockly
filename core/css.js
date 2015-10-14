@@ -414,8 +414,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-    'padding-right: 0;',
-    'padding-left: 8px !important;',
+    'margin-left: 8px;',
   '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',

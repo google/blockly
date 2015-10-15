@@ -119,6 +119,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         }
       }
       if (value !== null) {
+        thisField.sourceBlock_.setShadow(false);
         thisField.setValue(value);
       }
     }

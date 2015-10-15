@@ -844,6 +844,15 @@ Blockly.BlockSvg.prototype.setEditable = function(editable) {
 };
 
 /**
+ * Set whether this block is a shadow block or not.
+ * @param {boolean} shadow True if a shadow.
+ */
+Blockly.BlockSvg.prototype.setShadow = function(shadow) {
+  Blockly.BlockSvg.superClass_.setShadow.call(this, shadow);
+  this.updateColour();
+};
+
+/**
  * Return the root node of the SVG or null if none exists.
  * @return {Element} The root SVG node (probably a group).
  */

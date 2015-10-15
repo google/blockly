@@ -379,6 +379,48 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
 };
 
 /**
+ * Open the next (or previous) FieldTextInput.
+ * @param {Blockly.Field|Blockly.Block} start Current location.
+ * @param {boolean} forward If true go forward, otherwise backward.
+ */
+Blockly.BlockSvg.prototype.tab = function(start, forward) {
+  // This function need not be efficient since it runs once on a keypress.
+  // Create an ordered list of all text fields and connected inputs.
+  var list = [];
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldTextInput) {
+        // TODO: Also support dropdown fields.
+        list.push(field);
+      }
+    }
+    if (input.connection) {
+      var block = input.connection.targetBlock();
+      if (block) {
+        list.push(block);
+      }
+    }
+  }
+  var i = list.indexOf(start);
+  if (i == -1) {
+    // No start location, start at the beginning or end.
+    i = forward ? -1 : list.length;
+  }
+  var target = list[forward ? i + 1 : i - 1];
+  if (!target) {
+    // Ran off of list.
+    var parent = this.getParent();
+    if (parent) {
+      parent.tab(this, forward);
+    }
+  } else if (target instanceof Blockly.Field) {
+    target.showEditor_();
+  } else {
+    target.tab(null, forward);
+  }
+};
+
+/**
  * Handle a mouse-down on an SVG block.
  * @param {!Event} e Mouse down event.
  * @private
@@ -816,6 +858,15 @@ Blockly.BlockSvg.prototype.setEditable = function(editable) {
 };
 
 /**
+ * Set whether this block is a shadow block or not.
+ * @param {boolean} shadow True if a shadow.
+ */
+Blockly.BlockSvg.prototype.setShadow = function(shadow) {
+  Blockly.BlockSvg.superClass_.setShadow.call(this, shadow);
+  this.updateColour();
+};
+
+/**
  * Return the root node of the SVG or null if none exists.
  * @return {Element} The root SVG node (probably a group).
  */
@@ -1066,6 +1117,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   }
 
   if (animate && this.rendered) {
+    this.unplug(healStack, false);
     this.disposeUiEffect();
   }
   // Stop rerendering.

@@ -1103,6 +1103,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   }
 
   if (animate && this.rendered) {
+    this.unplug(healStack, false);
     this.disposeUiEffect();
   }
   // Stop rerendering.

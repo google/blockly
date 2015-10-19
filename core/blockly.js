@@ -414,13 +414,13 @@ Blockly.onKeyDown_ = function(e) {
         Blockly.copy_(Blockly.selected);
         handled = true;
         deleteBlock = true;
-      } else if (e.keyCode === goog.events.KeyCodes.RIGHT) {
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.RIGHT) {
         Blockly.selected.moveByKey(dist,0);
-      } else if (e.keyCode === goog.events.KeyCodes.LEFT) {
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.LEFT) {
         Blockly.selected.moveByKey(-dist,0);
-      } else if (e.keyCode === goog.events.KeyCodes.DOWN) {
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.DOWN) {
         Blockly.selected.moveByKey(0,dist);
-      } else if (e.keyCode === goog.events.KeyCodes.UP) {
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.UP) {
         Blockly.selected.moveByKey(0,-dist);
       }
     }

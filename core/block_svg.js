@@ -33,7 +33,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
-var numberArgumentsForBlock = 2;
+//var numberArgumentsForBlock = 3;
 
 /**
  * Class for a block's SVG representation.
@@ -85,17 +85,17 @@ Blockly.BlockSvg.INLINE = -1;
 Blockly.BlockSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
   for (var i = 0, input; input = this.inputList[i]; i++) {
-	  /**
-       * Only show two parameters when in the toolbox (flyout)
-       */
-	  if (this.isInFlyout) {
-		 if (i == numberArgumentsForBlock) {
-			// input.
-			 input.fieldRow[0].text_ = "<More>...";
-		 } else if(i > numberArgumentsForBlock) {
-			  continue;
-		  }
-	  }
+//	  /**
+//       * Only show two parameters when in the toolbox (flyout)
+//       */
+//	  if (this.isInFlyout) {
+//		 if (i == numberArgumentsForBlock) {
+//			// input.
+//			 input.fieldRow[0].text_ = "<More>...";
+//		 } else if(i > numberArgumentsForBlock) {
+//			  continue;
+//		  }
+//	  }
     input.init();
   }
   if (this.mutator) {
@@ -356,14 +356,14 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   var renderList = [];
   // Show/hide the inputs.
   for (var i = 0, input; input = this.inputList[i]; i++) {
-	  /**
-       * Only show two parameters when in the toolbox (flyout)
-       */
-	  if (this.isInFlyout) {
-		  if(i > numberArgumentsForBlock) {
-			  continue;
-		  }
-	  }
+//	  /**
+//       * Only show two parameters when in the toolbox (flyout)
+//       */
+//	  if (this.isInFlyout) {
+//		  if(i > numberArgumentsForBlock) {
+//			  continue;
+//		  }
+//	  }
     renderList.push.apply(renderList, input.setVisible(!collapsed));
   }
 
@@ -408,14 +408,14 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   // Create an ordered list of all text fields and connected inputs.
   var list = [];
   for (var i = 0, input; input = this.inputList[i]; i++) {
-	  /**
-       * Only show two parameters when in the toolbox (flyout)
-       */
-	  if (this.isInFlyout) {
-		  if(i > numberArgumentsForBlock) {
-			  continue;
-		  }
-	  }
+//	  /**
+//       * Only show two parameters when in the toolbox (flyout)
+//       */
+//	  if (this.isInFlyout) {
+//		  if(i > numberArgumentsForBlock) {
+//			  continue;
+//		  }
+//	  }
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field instanceof Blockly.FieldTextInput) {
         // TODO: Also support dropdown fields.
@@ -623,14 +623,14 @@ Blockly.BlockSvg.prototype.buildContextMenu_ = function() {
     // Option to make block inline.
     if (!this.collapsed_) {
       for (var i = 1; i < this.inputList.length; i++) {
-    	  /**
-           * Only show two parameters when in the toolbox (flyout)
-           */
-    	  if (this.isInFlyout) {
-    		  if(i > numberArgumentsForBlock) {
-    			  continue;
-    		  }
-    	  }
+//    	  /**
+//           * Only show two parameters when in the toolbox (flyout)
+//           */
+//    	  if (this.isInFlyout) {
+//    		  if(i > numberArgumentsForBlock) {
+//    			  continue;
+//    		  }
+//    	  }
         if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
             this.inputList[i].type != Blockly.NEXT_STATEMENT) {
           // Only display this option if there are two value or dummy inputs
@@ -1409,14 +1409,14 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 
   // Bump every dropdown to change its colour.
   for (var x = 0, input; input = this.inputList[x]; x++) {
-	  /**
-       * Only show two parameters when in the toolbox (flyout)
-       */
-	  if (this.isInFlyout) {
-		  if(i > numberArgumentsForBlock) {
-			  continue;
-		  }
-	  }
+//	  /**
+//       * Only show two parameters when in the toolbox (flyout)
+//       */
+//	  if (this.isInFlyout) {
+//		  if(i > numberArgumentsForBlock) {
+//			  continue;
+//		  }
+//	  }
     for (var y = 0, field; field = input.fieldRow[y]; y++) {
       field.setText(null);
     }
@@ -1744,14 +1744,14 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   var lastType = undefined;
   var isInline = this.getInputsInline() && !this.isCollapsed();
   for (var i = 0, input; input = inputList[i]; i++) {
-	  /**
-       * Only show two parameters when in the toolbox (flyout)
-       */
-	  if (this.isInFlyout) {
-		  if(i > numberArgumentsForBlock) {
-			  continue;
-		  }
-	  }
+//	  /**
+//       * Only show two parameters when in the toolbox (flyout)
+//       */
+//	  if (this.isInFlyout) {
+//		  if(i > numberArgumentsForBlock) {
+//			  continue;
+//		  }
+//	  }
     if (!input.isVisible()) {
       continue;
     }

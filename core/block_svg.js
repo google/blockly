@@ -1679,6 +1679,15 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
       Blockly.fireUiEvent(window, 'resize');
     }
   }
+  // Go through and tell all the internal icons to compute their new location.
+  var newIcons = this.getIcons(true);
+  if (newIcons.length > icons.length) {
+    for (var i = 0; i < newIcons.length; i++) {
+      if (!goog.array.contains(icons,newIcons[i])) {
+        newIcons[i].computeIconLocation();
+      }
+    }
+  }
   Blockly.Field.stopCache();
   Blockly.Realtime.blockChanged(this);
 };

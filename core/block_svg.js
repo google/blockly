@@ -33,6 +33,7 @@ goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 
+var numberArgumentsForBlock = 2;
 
 /**
  * Class for a block's SVG representation.
@@ -84,6 +85,17 @@ Blockly.BlockSvg.INLINE = -1;
 Blockly.BlockSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
   for (var i = 0, input; input = this.inputList[i]; i++) {
+	  /**
+       * Only show two parameters when in the toolbox (flyout)
+       */
+	  if (this.isInFlyout) {
+		 if (i == numberArgumentsForBlock) {
+			// input.
+			 input.fieldRow[0].text_ = "<More>...";
+		 } else if(i > numberArgumentsForBlock) {
+			  continue;
+		  }
+	  }
     input.init();
   }
   if (this.mutator) {
@@ -344,6 +356,14 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   var renderList = [];
   // Show/hide the inputs.
   for (var i = 0, input; input = this.inputList[i]; i++) {
+	  /**
+       * Only show two parameters when in the toolbox (flyout)
+       */
+	  if (this.isInFlyout) {
+		  if(i > numberArgumentsForBlock) {
+			  continue;
+		  }
+	  }
     renderList.push.apply(renderList, input.setVisible(!collapsed));
   }
 
@@ -388,6 +408,14 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
   // Create an ordered list of all text fields and connected inputs.
   var list = [];
   for (var i = 0, input; input = this.inputList[i]; i++) {
+	  /**
+       * Only show two parameters when in the toolbox (flyout)
+       */
+	  if (this.isInFlyout) {
+		  if(i > numberArgumentsForBlock) {
+			  continue;
+		  }
+	  }
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       if (field instanceof Blockly.FieldTextInput) {
         // TODO: Also support dropdown fields.
@@ -595,6 +623,14 @@ Blockly.BlockSvg.prototype.buildContextMenu_ = function() {
     // Option to make block inline.
     if (!this.collapsed_) {
       for (var i = 1; i < this.inputList.length; i++) {
+    	  /**
+           * Only show two parameters when in the toolbox (flyout)
+           */
+    	  if (this.isInFlyout) {
+    		  if(i > numberArgumentsForBlock) {
+    			  continue;
+    		  }
+    	  }
         if (this.inputList[i - 1].type != Blockly.NEXT_STATEMENT &&
             this.inputList[i].type != Blockly.NEXT_STATEMENT) {
           // Only display this option if there are two value or dummy inputs
@@ -722,6 +758,35 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
   for (var i = 0; i < this.childBlocks_.length; i++) {
     this.childBlocks_[i].setDragging_(adding);
   }
+};
+
+/**
+ * Moves the current block by a delta amount based on a key stroke.
+ * @param {number} x Amount of delta x to move block by.
+ * @param {number} y Amount of delta y to move block by.
+ * @private
+ */
+Blockly.BlockSvg.prototype.moveByKey = function(x,y) {
+  var box = goog.style.getBoundingClientRect_(this.getSvgRoot());
+  var e = new MouseEvent("mousedown", {clientX: box.x, clientY: box.y});
+  this.onMouseDown_(e);
+  // Process two mouse move messages.  The first is necessary to prime the pump
+  // relative to the start position.  The second causes it to highlight the
+  // correct interfaces.
+  e = new MouseEvent("mousemove", {clientX: box.x+x, clientY: box.y+y});
+  this.onMouseMove_(e);
+  this.onMouseMove_(e);
+  // We have it in the right place, now do a mouse up so that it locks in place.
+  e = new MouseEvent("mouseup", {clientX: box.x+x, clientY: box.y+y});
+  // But we don't want the trash can to be a place where we can drop it.
+  this.workspace.deleteAreaTrash_ = null;
+  this.workspace.deleteAreaToolbox_ = null;
+  // Prevent bumpNeighbours_ from moving away from where we put it by
+  // temporarily replacing the functionality so that it does nothing.
+  var oldBump = this.bumpNeighbours_;
+  this.bumpNeighbours_ = function() {};
+  this.onMouseUp_(e);
+  this.bumpNeighbours_ = oldBump;
 };
 
 /**
@@ -1344,6 +1409,14 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 
   // Bump every dropdown to change its colour.
   for (var x = 0, input; input = this.inputList[x]; x++) {
+	  /**
+       * Only show two parameters when in the toolbox (flyout)
+       */
+	  if (this.isInFlyout) {
+		  if(i > numberArgumentsForBlock) {
+			  continue;
+		  }
+	  }
     for (var y = 0, field; field = input.fieldRow[y]; y++) {
       field.setText(null);
     }
@@ -1671,6 +1744,14 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
   var lastType = undefined;
   var isInline = this.getInputsInline() && !this.isCollapsed();
   for (var i = 0, input; input = inputList[i]; i++) {
+	  /**
+       * Only show two parameters when in the toolbox (flyout)
+       */
+	  if (this.isInFlyout) {
+		  if(i > numberArgumentsForBlock) {
+			  continue;
+		  }
+	  }
     if (!input.isVisible()) {
       continue;
     }

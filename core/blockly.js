@@ -400,16 +400,28 @@ Blockly.onKeyDown_ = function(e) {
     var handled = false;
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
-      if (e.keyCode == goog.events.KeyCodes.C) {
+      // Figure out how much to move the block by so that it unsnaps and
+      // stays unsnapped.
+      var dist = Math.round(.5+
+        (Blockly.selected.workspace.scale*Blockly.SNAP_RADIUS+1));
+      if (e.keyCode === goog.events.KeyCodes.C) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
         handled = true;
-      } else if (e.keyCode ==goog.events.KeyCodes.X) {
+      } else if (e.keyCode === goog.events.KeyCodes.X) {
         // 'x' for cut.
         Blockly.copy_(Blockly.selected);
         handled = true;
         deleteBlock = true;
+      } else if (e.keyCode === goog.events.KeyCodes.RIGHT) {
+        Blockly.selected.moveByKey(dist,0);
+      } else if (e.keyCode === goog.events.KeyCodes.LEFT) {
+        Blockly.selected.moveByKey(-dist,0);
+      } else if (e.keyCode === goog.events.KeyCodes.DOWN) {
+        Blockly.selected.moveByKey(0,dist);
+      } else if (e.keyCode === goog.events.KeyCodes.UP) {
+        Blockly.selected.moveByKey(0,-dist);
       }
     }
     if (e.keyCode == goog.events.KeyCodes.V) {

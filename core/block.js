@@ -1005,6 +1005,47 @@ Blockly.Block.prototype.jsonInit = function(json) {
   if (json['helpUrl'] !== undefined) {
     this.setHelpUrl(json['helpUrl']);
   }
+//  // Set basic properties of block.
+//  if (json['colour'] !== undefined) {
+//      this.setColour(json['colour']);
+//  } //else {default color}
+//  if (json['deletable'] !== undefined) {
+//      this.setDeletable(json['deletable']);
+//  }
+//  if (json['disabled'] !== undefined) {
+//      this.setDisabled(json['disabled']);
+//  }
+//  if (json['editable'] !== undefined) {
+//      this.setEditable(json['editable']);
+//  }
+//  if (json['helpUrl'] !== undefined) {
+//      this.setHelpUrl(json['helpUrl']);
+//  }
+//  if (json['inputsInline'] !== undefined) {
+//      this.setInputsInline(json['inputsInline']);
+//  }
+//  if (json['nextStatement'] !== undefined) {
+//      this.setNextStatement(true, json['nextStatement']);
+//  }
+//  // Set output and previous/next connections.
+//  if (json['output'] !== undefined) {
+//      this.setOutput(true, json['output']);
+//  }
+//  if (json['previousStatement'] !== undefined) {
+//    this.setPreviousStatement(true, json['previousStatement']);
+//  }
+//  if (json['title'] !== undefined) {
+//      this.setTitleValue(json['title']);
+//  }
+//  if (json['tooltip'] !== undefined) {
+//      this.setTooltip(json['tooltip']);
+//  }
+//  if (json['typeBlock'] !== undefined) {
+//      this.setTypeBlock(json['typeBlock']);
+//  }
+//  if (json['warningText'] !== undefined) {
+//      this.setWarningBlock(json['warningText']);
+//  }
 };
 
 /**
@@ -1115,7 +1156,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             break;
           case 'field_clickimage':
             field = new Blockly.FieldClickImage(element['src'],
-                element['width'], element['height'], element['alt']);
+                element['width'], element['height'], element['alt'], element['handler']);
             break;
           case 'field_description':
             field = new Blockly.FieldDescription();

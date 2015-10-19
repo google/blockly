@@ -1639,3 +1639,16 @@ Blockly.Msg.TEXT_TOOLTIP_TYPE_PYTHON = 'Insert arbitrary Python code';
 Blockly.Msg.TEXT_TYPE_JAVA_TYPEBLOCK = 'insert java code';
 /// typeblock - Typing to add the block
 Blockly.Msg.TEXT_TYPE_PYTHON_TYPEBLOCK = 'insert python code';
+
+
+/// typeblock - Typing to add the block
+Blockly.Msg.IMPORT_JAR_TYPEBLOCK = 'insert python code';
+/// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
+Blockly.Msg.IMPORT_JAR_HELPURL = 'https://github.com/google/blockly/wiki/Variables#set';
+/// block text - Change the value of a mathematical variable: '''set [the value of] x to 7'''.\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the value to be assigned.
+Blockly.Msg.IMPORT_JAR = 'import jar %1 %2 package %3 class %4 method %5 %6';
+/// tooltip - This initializes or changes the value of the named variable.
+Blockly.Msg.IMPORT_JAR_TOOLTIP = 'Sets this variable to be equal to the input.';
+/// context menu - Selecting this creates a block to get (change) the value of
+/// this variable.\n\nParameters:\n* %1 - the name of the variable.
+Blockly.Msg.IMPORT_JAR_GET = 'Create "get %1"';

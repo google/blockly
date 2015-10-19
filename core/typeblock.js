@@ -119,6 +119,11 @@ Blockly.TypeBlock.onKeyDown_ = function(e){
     }
 //  } else if (goog.events.KeyCodes.isTextModifyingKeyEvent(e)) {
   } else if (goog.events.KeyCodes.isCharacterKey(e.keyCode)) {
+      if (Blockly.latestClick.x == 0 && Blockly.latestClick.y == 0)
+      {
+          Blockly.latestClick.x = 300;
+          Blockly.latestClick.y = 250;
+      }
     Blockly.TypeBlock.show();
     // Can't seem to make Firefox display first character, so keep all browsers
     // from automatically displaying the first character and add it manually.

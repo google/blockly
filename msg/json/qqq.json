@@ -1,11 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Liuxinyu970226",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -583,5 +576,10 @@
 	"TEXT_TOOLTIP_TYPE_JAVA": "tooltip",
 	"TEXT_TOOLTIP_TYPE_PYTHON": "tooltip",
 	"TEXT_TYPE_JAVA_TYPEBLOCK": "typeblock - Typing to add the block",
-	"TEXT_TYPE_PYTHON_TYPEBLOCK": "typeblock - Typing to add the block"
+	"TEXT_TYPE_PYTHON_TYPEBLOCK": "typeblock - Typing to add the block",
+	"IMPORT_JAR_TYPEBLOCK": "typeblock - Typing to add the block",
+	"IMPORT_JAR_HELPURL": "url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.",
+	"IMPORT_JAR": "block text - Change the value of a mathematical variable: '''set [the value of] x to 7'''.\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the value to be assigned.",
+	"IMPORT_JAR_TOOLTIP": "tooltip - This initializes or changes the value of the named variable.",
+	"IMPORT_JAR_GET": "context menu - Selecting this creates a block to get (change) the value of this variable.\n\nParameters:\n* %1 - the name of the variable."
 }

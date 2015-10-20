@@ -445,7 +445,13 @@ Blockly.onKeyDown_ = function(e) {
     Blockly.WidgetDiv.onKeyDown_(e);
   } else {
     var block = Blockly.selected;
-    if (block && e.keyCode === (block.RTL ? goog.events.KeyCodes.RIGHT
+    if (block && e.shiftKey &&
+        (e.keyCode === goog.events.KeyCodes.RIGHT ||
+         e.keyCode === goog.events.KeyCodes.LEFT ||
+         e.keyCode === goog.events.KeyCodes.UP ||
+         e.keyCode === goog.events.KeyCodes.DOWN)) {
+      Blockly.selectNearestBlock(block,e.keyCode);
+    } else if (block && e.keyCode === (block.RTL ? goog.events.KeyCodes.RIGHT
                                           : goog.events.KeyCodes.LEFT)) {
       Blockly.selectPrevBlock();
     } else if (block && e.keyCode === (block.RTL ? goog.events.KeyCodes.LEFT
@@ -508,6 +514,62 @@ Blockly.selectBlock = function(block) {
   }
 };
 
+/**
+ * Make a field selected based on distance.
+ * @param {Blockly.Field} field New field to select.
+ * @param {key} key Key indicating direction to select.
+ */
+Blockly.selectNearestBlock = function(block,keyCode) {
+  var xfactor = 0;
+  var yfactor = 0;
+  var xdir = 0;
+  var ydir = 0;
+  if (keyCode == goog.events.KeyCodes.RIGHT) {
+    xdir = 1; // x must be larger
+    xfactor = 1;
+    yfactor = .5;
+  } else if (keyCode == goog.events.KeyCodes.LEFT) {
+    xdir = -1; // x must be lower
+    yfactor = .5;
+  } else if (keyCode == goog.events.KeyCodes.UP) {
+    ydir = -1; // y must be lower
+    xfactor = .5;
+  } else  if (keyCode == goog.events.KeyCodes.DOWN) {
+    ydir = 1; // y must be higher
+    xfactor = .5;
+    yfactor = 0;
+  }
+  // Remember that right to left blocks start from the upper right corner.
+  if (block.RTL) {
+    xfactor = -xfactor;
+  }
+  // Determine our initial comparison point
+  var xy = block.getRelativeToSurfaceXY();
+  xy.x += block.width * xfactor;
+  xy.y += block.height * yfactor;
+
+  var blocks = block.workspace.getAllBlocks();
+  var closest = null;
+  var distance = null;
+  for (var blk = 0; blk < blocks.length; blk++) {
+    var bxy = blocks[blk].getRelativeToSurfaceXY();
+    bxy.x += block.width * xfactor;
+    bxy.y += block.height * yfactor;
+    var dx = bxy.x - xy.x;
+    var dy = bxy.y - xy.y;
+    var dirtest = dx*xdir + dy*ydir;
+    if (dirtest > 0) {
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      if (distance == null || dist < distance) {
+        distance = dist;
+        closest = blocks[blk];
+      }
+    }
+  }
+  if (closest) {
+    Blockly.selectBlock(closest);
+  }
+};
 /**
  * Make a field selected.
  * @param {Blockly.Field} field New field to select.

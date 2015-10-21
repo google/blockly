@@ -123,6 +123,12 @@ function formatJson_(blockType, rootBlock) {
       if (contentsBlock.type != 'input_dummy') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
+      if (contentsBlock.getField('INPUTTITLE')) {
+        input.title = contentsBlock.getFieldValue('INPUTTITLE');
+      }
+      if (contentsBlock.getField('EMPTYTITLE')) {
+        input.emptytitle = contentsBlock.getFieldValue('INPUTTITLE');
+      }
       var check = JSON.parse(getOptTypesFrom(contentsBlock, 'TYPE') || 'null');
       if (check) {
         input.check = check;
@@ -221,10 +227,16 @@ function formatJavaScript_(blockType, rootBlock) {
             contentsBlock.type == 'input_addsubmulti') {
           name = escapeString(contentsBlock.getFieldValue('INPUTTITLE')) +
                  ', ' + name;
+          var emptytitle = contentsBlock.getFieldValue('EMPTYTITLE');
           align = 'LEFT';
           if (check) {
             name += ', ' + check;
             check = null;
+            if (emptytitle) {
+              name += ', ' + escapeString(emptytitle);
+            }
+          } else if (emptytitle) {
+            name += ', null, ' + escapeString(emptytitle);
           }
         }
       }

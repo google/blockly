@@ -595,7 +595,8 @@ Blockly.BlockSvg.prototype.buildContextMenu_ = function() {
         Blockly.duplicate_(block);
       }
     };
-    if (this.getDescendants().length > this.workspace.remainingCapacity()) {
+    if (this.getDescendants().length > this.workspace.remainingCapacity() ||
+        this.isUnique) {
       duplicateOption.enabled = false;
     }
     options.push(duplicateOption);

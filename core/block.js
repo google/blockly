@@ -1119,13 +1119,25 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             input = this.appendDummyInput(element['name']);
             break;
           case 'input_addsub':
+            // If there are any pending fields, make sure we put them on an
+            // input so that the AddSubGroup renders correctly
+            if (fieldStack.length) {
+              input = this.appendDummyInput();
+            }
             this.appendAddSubGroup(element['title'],
                                    element['name'],
                                    element['checks']);
+            break;
           case 'input_addsubmulti':
+            // If there are any pending fields, make sure we put them on an
+            // input so that the AddSubMulti renders correctly
+            if (fieldStack.length) {
+              input = this.appendDummyInput();
+            }
             this.appendAddSubMulti(element['title'],
                                    element['name'],
                                    element['checks']);
+            break;
           case 'field_label':
             field = new Blockly.FieldLabel(element['text']);
             break;

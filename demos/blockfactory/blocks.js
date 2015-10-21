@@ -199,21 +199,37 @@ Blockly.Blocks['input_addsub'] = {
     this.appendDummyInput()
         .appendField('input addsub')
         .appendField(new Blockly.FieldTextInput('TITLE'), 'INPUTTITLE')
-        .appendField(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
+        .appendField(new Blockly.FieldTextInput('items'), 'INPUTNAME')
+        .appendField(new Blockly.FieldTextInput(''), 'EMPTYTITLE');
     this.appendValueInput('TYPE')
         .setCheck('Type')
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField('type');
     this.setPreviousStatement(true, 'Input');
     this.setNextStatement(true, 'Input');
-    this.setTooltip('A statement socket for enclosed vertical stacks.');
+    this.setTooltip('For adding a single add/sub input item.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=246');
   },
+  isAddSub: 1,
   onchange: function() {
     if (!this.workspace) {
       // Block has been deleted.
       return;
     }
+    // Make sure that we are the only block of this type
+    var warning = null;
+    var blocks = this.workspace.getAllBlocks();
+    var count = 0;
+    for (var i = 0; i < blocks.length; i++) {
+      if (blocks[i].isAddSub) {
+        count ++;
+      }
+    }
+    var warning = null;
+    if (count > 1) {
+      warning = 'This block must not be used with any other addsub inputs';
+    }
+    this.setWarningText(warning, 'addsub');
     inputNameCheck(this);
   }
 };
@@ -225,16 +241,18 @@ Blockly.Blocks['input_addsubmulti'] = {
     this.appendDummyInput()
         .appendField('input addsub multi')
         .appendField(new Blockly.FieldTextInput('TITLE'), 'INPUTTITLE')
-        .appendField(new Blockly.FieldTextInput('NAME'), 'INPUTNAME');
+        .appendField(new Blockly.FieldTextInput('NAME'), 'INPUTNAME')
+        .appendField(new Blockly.FieldTextInput(''), 'EMPTYTITLE');
     this.appendValueInput('TYPE')
         .setCheck('Type')
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField('type');
     this.setPreviousStatement(true, 'Input');
     this.setNextStatement(true, 'Input');
-    this.setTooltip('A statement socket for enclosed vertical stacks.');
+    this.setTooltip('For adding a multiple add/sub input items.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=246');
   },
+  isAddSub: 1,
   onchange: function() {
     if (!this.workspace) {
       // Block has been deleted.
@@ -399,8 +417,10 @@ Blockly.Blocks['field_dropdown'] = {
       return;
     }
     if (this.optionCount_ < 1) {
-      this.setWarningText('Drop down menu must\nhave at least one option.');
+      this.setWarningText('Drop down menu must\nhave at least one option.',
+        'opt');
     } else {
+      this.setWarningText(null, 'opt');
       fieldNameCheck(this);
     }
   }
@@ -843,7 +863,7 @@ function fieldNameCheck(referenceBlock) {
   }
   var msg = (count > 1) ?
       'There are ' + count + ' field blocks\n with this name.' : null;
-  referenceBlock.setWarningText(msg);
+  referenceBlock.setWarningText(msg, 'dupfield');
 }
 
 /**
@@ -864,5 +884,5 @@ function inputNameCheck(referenceBlock) {
   }
   var msg = (count > 1) ?
       'There are ' + count + ' input blocks\n with this name.' : null;
-  referenceBlock.setWarningText(msg);
+  referenceBlock.setWarningText(msg, 'dupblock');
 }

@@ -53,7 +53,7 @@ Blockly.Procedures.allProcedures = function(root) {
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
       var tuple = blocks[i].getProcedureDef();
-      if (tuple) {
+      if (tuple && !tuple[3]) {
         if (tuple[2]) {
           proceduresReturn.push(tuple);
         } else {

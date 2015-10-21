@@ -1047,22 +1047,24 @@ Blockly.Blocks['procedures_ifreturn'] = {
     var legal = false;
     // Is the block nested in a procedure?
     var block = this;
+    var needsReturnValue_ = false;
     do {
       if (block.getProcedureDef) {
         legal = true;
+        var tuple = block.getProcedureDef.call(block);
+        needsReturnValue_ = tuple[2];
         break;
       }
       block = block.getSurroundParent();
     } while (block);
     if (legal) {
       // If needed, toggle whether this block has a return value.
-      if (block.type == 'procedures_defnoreturn' && this.hasReturnValue_) {
+      if (!needsReturnValue_ && this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendDummyInput('VALUE')
           .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
         this.hasReturnValue_ = false;
-      } else if (block.type == 'procedures_defreturn' &&
-                 !this.hasReturnValue_) {
+      } else if (needsReturnValue_ && !this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendValueInput('VALUE')
           .appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);

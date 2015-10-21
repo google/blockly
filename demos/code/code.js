@@ -384,7 +384,9 @@ Code.init = function() {
        media: '../../media/',
        rtl: rtl,
        toolbox: toolbox,
-       zoom: {enabled: true}
+       zoom:
+           {controls: true,
+            wheel: true}
       });
 
   // Add to reserved word list: Local variables in execution environment (runJS)

@@ -652,6 +652,9 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     // Scale the scroll (getSvgXY_ did not do this).
     xyNew.x += workspace.scrollX / workspace.scale - workspace.scrollX;
     xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
+    if (workspace.toolbox_ && !workspace.scrollbar) {
+      xyNew.x += workspace.toolbox_.width / workspace.scale;
+    }
     block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
     if (flyout.autoClose) {
       flyout.hide();

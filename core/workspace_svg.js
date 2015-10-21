@@ -317,7 +317,7 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  var translation = 'translate(' + x + ',' + y + ')' +
+  var translation = 'translate(' + x + ',' + y + ') ' +
       'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
@@ -922,7 +922,11 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   this.scrollX = matrix.e - metrics.absoluteLeft;
   this.scrollY = matrix.f - metrics.absoluteTop;
   this.updateGridPattern_();
-  this.scrollbar.resize();
+  if (this.scrollbar) {
+    this.scrollbar.resize();
+  } else {
+    this.translate(0, 0);
+  }
   Blockly.hideChaff(false);
   if (this.flyout_) {
     // No toolbox, resize flyout.
@@ -959,8 +963,12 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
   }
   // Center the workspace.
   var metrics = this.getMetrics();
-  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
-      (metrics.contentHeight - metrics.viewHeight) / 2);
+  if (this.scrollbar) {
+    this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+        (metrics.contentHeight - metrics.viewHeight) / 2);
+  } else {
+    this.translate(0, 0);
+  }
   // This event has been handled.  Don't start a workspace drag.
   e.stopPropagation();
 };

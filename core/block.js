@@ -463,7 +463,7 @@ Blockly.Block.prototype.getDescendants = function() {
  * @return {boolean} True if deletable.
  */
 Blockly.Block.prototype.isDeletable = function() {
-  return this.deletable_ &&
+  return this.deletable_ && !this.isShadow_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
 

@@ -19,6 +19,7 @@
 	"INLINE_INPUTS": "单行输入",
 	"DELETE_BLOCK": "删除块",
 	"DELETE_X_BLOCKS": "删除 %1 块",
+	"CLEAN_UP": "清理块",
 	"COLLAPSE_BLOCK": "折叠块",
 	"COLLAPSE_ALL": "折叠块",
 	"EXPAND_BLOCK": "展开块",

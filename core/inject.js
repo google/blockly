@@ -176,19 +176,17 @@ Blockly.parseOptions_ = function(options) {
 /* TODO (fraser): Add documentation page:
  * https://developers.google.com/blockly/installation/zoom
  *
- * enabled
- *
- * Set to `true` to allow zooming of the main workspace.  Zooming is only
- * possible if the workspace has scrollbars.  If `false`, then the options
- * below have no effect.  Defaults to `false`.
- *
  * controls
  *
- * Set to `true` to show zoom-in and zoom-out buttons.  Defaults to `true`.
+ * Set to `true` to show zoom-in and zoom-out buttons.  Defaults to `false`.
  *
  * wheel
  *
- * Set to `true` to allow the mouse wheel to zoom.  Defaults to `true`.
+ * Set to `true` to allow the mouse wheel to zoom.  Defaults to `false`.
+ *
+ * startScale
+ *
+ * Initial magnification factor.  Defaults to `1.0`.
  *
  * maxScale
  *
@@ -209,36 +207,35 @@ Blockly.parseOptions_ = function(options) {
   // https://developers.google.com/blockly/installation/zoom
   var zoom = options['zoom'] || {};
   var zoomOptions = {};
-  zoomOptions.enabled = hasScrollbars && !!zoom['enabled'];
-  if (zoomOptions.enabled) {
-    if (zoom['controls'] === undefined) {
-      zoomOptions.controls = true;
-    } else {
-      zoomOptions.controls = !!zoom['controls'];
-    }
-    if (zoom['wheel'] === undefined) {
-      zoomOptions.wheel = true;
-    } else {
-      zoomOptions.wheel = !!zoom['wheel'];
-    }
-    if (zoom['maxScale'] === undefined) {
-      zoomOptions.maxScale = 3;
-    } else {
-      zoomOptions.maxScale = parseFloat(zoom['maxScale']);
-    }
-    if (zoom['minScale'] === undefined) {
-      zoomOptions.minScale = 0.3;
-    } else {
-      zoomOptions.minScale = parseFloat(zoom['minScale']);
-    }
-    if (zoom['scaleSpeed'] === undefined) {
-      zoomOptions.scaleSpeed = 1.2;
-    } else {
-      zoomOptions.scaleSpeed = parseFloat(zoom['scaleSpeed']);
-    }
-  } else {
+  if (zoom['controls'] === undefined) {
     zoomOptions.controls = false;
+  } else {
+    zoomOptions.controls = !!zoom['controls'];
+  }
+  if (zoom['wheel'] === undefined) {
     zoomOptions.wheel = false;
+  } else {
+    zoomOptions.wheel = !!zoom['wheel'];
+  }
+  if (zoom['startScale'] === undefined) {
+    zoomOptions.startScale = 1;
+  } else {
+    zoomOptions.startScale = parseFloat(zoom['startScale']);
+  }
+  if (zoom['maxScale'] === undefined) {
+    zoomOptions.maxScale = 3;
+  } else {
+    zoomOptions.maxScale = parseFloat(zoom['maxScale']);
+  }
+  if (zoom['minScale'] === undefined) {
+    zoomOptions.minScale = 0.3;
+  } else {
+    zoomOptions.minScale = parseFloat(zoom['minScale']);
+  }
+  if (zoom['scaleSpeed'] === undefined) {
+    zoomOptions.scaleSpeed = 1.2;
+  } else {
+    zoomOptions.scaleSpeed = parseFloat(zoom['scaleSpeed']);
   }
 
   var enableRealtime = !!options['realtime'];
@@ -395,7 +392,10 @@ Blockly.createMainWorkspace_ = function(svg, options) {
   options.getMetrics = Blockly.getMainWorkspaceMetrics_;
   options.setMetrics = Blockly.setMainWorkspaceMetrics_;
   var mainWorkspace = new Blockly.WorkspaceSvg(options);
+  mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
+  // A null translation will also apply the correct initial scale.
+  mainWorkspace.translate(0, 0);
   mainWorkspace.markFocused();
 
   if (!options.readOnly && !options.hasScrollbars) {

@@ -73,6 +73,7 @@ function start() {
               length: 3,
               colour: '#ccc',
               snap: true},
+           maxBlocks: Infinity,
            media: '../media/',
            readOnly: false,
            realtime: false,
@@ -84,9 +85,9 @@ function start() {
            scrollbars: true,
            toolbox: toolbox,
            zoom:
-             {enabled: true,
-              controls: true,
+             {controls: true,
               wheel: true,
+              startScale: 1.0,
               maxScale: 4,
               minScale: .25,
               scaleSpeed: 1.1
@@ -238,6 +239,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="controls_repeat" disabled="true"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for">
         <value name="FROM">

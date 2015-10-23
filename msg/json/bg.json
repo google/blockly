@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Gkostov",
-			"Vodnokon4e"
+			"Vodnokon4e",
+			"Alpinistbg"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
+	"TODAY": "Днес",
 	"DUPLICATE_BLOCK": "Копирай",
 	"ADD_COMMENT": "Добави коментар",
 	"REMOVE_COMMENT": "Премахни коментар",
@@ -13,6 +15,7 @@
 	"INLINE_INPUTS": "Вътрешни входове",
 	"DELETE_BLOCK": "Изтрий блок",
 	"DELETE_X_BLOCKS": "Изтрий %1 блока",
+	"CLEAN_UP": "Премахни блокове",
 	"COLLAPSE_BLOCK": "Скрий блок",
 	"COLLAPSE_ALL": "Скрий блокове",
 	"EXPAND_BLOCK": "Покажи блок",
@@ -224,7 +227,7 @@
 	"LISTS_INLIST": "в списъка",
 	"LISTS_INDEX_OF_FIRST": "намери първата поява на елемента",
 	"LISTS_INDEX_OF_LAST": "намери последната поява на елемента",
-	"LISTS_INDEX_OF_TOOLTIP": "Връща индекса на първото/последното появяване на елемента в списъка. Връща 0, ако елементът не е намерен.",
+	"LISTS_INDEX_OF_TOOLTIP": "Връща индекса на първото/последното появяване на елемента в списъка. Връща 0 ако елементът не е намерен.",
 	"LISTS_GET_INDEX_GET": "вземи",
 	"LISTS_GET_INDEX_GET_REMOVE": "вземи и премахни",
 	"LISTS_GET_INDEX_REMOVE": "премахни",
@@ -267,6 +270,11 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "до № открая",
 	"LISTS_GET_SUBLIST_END_LAST": "до края",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Копира част от списък.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "Направи списък от текст",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "направи текст от списък",
+	"LISTS_SPLIT_WITH_DELIMITER": "с разделител",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Разделя текст в списък на текстове, по всеки разделител.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Събира списък от текстове в един текст, раделени с разделител.",
 	"VARIABLES_GET_TOOLTIP": "Връща стойността на тази променлива.",
 	"VARIABLES_GET_CREATE_SET": "Създай \"промени стойността на %1\"",
 	"VARIABLES_SET": "нека %1 бъде %2",

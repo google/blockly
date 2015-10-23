@@ -114,6 +114,7 @@ Blockly.Toolbox.prototype.init = function() {
         }
       });
   var workspaceOptions = {
+    disabledPatternId: workspace.options.disabledPatternId,
     parentWorkspace: workspace,
     RTL: workspace.RTL,
     svg: workspace.options.svg

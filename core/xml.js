@@ -140,7 +140,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   if (block.disabled) {
     element.setAttribute('disabled', true);
   }
-  if (!block.isDeletable()) {
+  if (!block.isDeletable() && !block.isShadow()) {
     element.setAttribute('deletable', false);
   }
   if (!block.isMovable() && !block.isShadow()) {

@@ -380,11 +380,11 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
  * Render all blocks in workspace.
  */
 Blockly.WorkspaceSvg.prototype.render = function() {
-  var renderList = this.getAllBlocks();
-  for (var i = 0, block; block = renderList[i]; i++) {
-    if (!block.getChildren().length) {
-      block.render();
-    }
+  // Generate list of all blocks.
+  var blocks = this.getAllBlocks();
+  // Render each block.
+  for (var i = blocks.length - 1; i >= 0; i--) {
+    blocks[i].render(false);
   }
 };
 

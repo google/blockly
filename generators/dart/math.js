@@ -33,11 +33,20 @@ Blockly.Dart.addReservedWords('Math');
 
 Blockly.Dart['math_number'] = function(block) {
   // Numeric value.
-  var code = window.parseFloat(block.getFieldValue('NUM'));
-  // -4.abs() returns -4 in Dart due to strange order of operation choices.
-  // -4 is actually an operator and a number.  Reflect this in the order.
-  var order = code < 0 ?
-      Blockly.Dart.ORDER_UNARY_PREFIX : Blockly.Dart.ORDER_ATOMIC;
+  var code = parseFloat(block.getFieldValue('NUM'));
+  var order;
+  if (code == Infinity) {
+    code = 'double.INFINITY';
+    order = Blockly.Dart.ORDER_UNARY_POSTFIX;
+  } else if (code == -Infinity) {
+    code = '-double.INFINITY';
+    order = Blockly.Dart.ORDER_UNARY_PREFIX;
+  } else {
+    // -4.abs() returns -4 in Dart due to strange order of operation choices.
+    // -4 is actually an operator and a number.  Reflect this in the order.
+    order = code < 0 ?
+        Blockly.Dart.ORDER_UNARY_PREFIX : Blockly.Dart.ORDER_ATOMIC;
+  }
   return [code, order];
 };
 

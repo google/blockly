@@ -356,39 +356,39 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.hide();
   // Delete any blocks from a previous showing.
   var blocks = this.workspace_.getTopBlocks(false);
-  for (var x = 0, block; block = blocks[x]; x++) {
+  for (var i = 0, block; block = blocks[i]; i++) {
     if (block.workspace == this.workspace_) {
       block.dispose(false, false);
     }
   }
   // Delete any background buttons from a previous showing.
-  for (var x = 0, rect; rect = this.buttons_[x]; x++) {
+  for (var i = 0, rect; rect = this.buttons_[i]; i++) {
     goog.dom.removeNode(rect);
   }
   this.buttons_.length = 0;
 
+  if (xmlList == Blockly.Variables.NAME_TYPE) {
+    // Special category for variables.
+    xmlList =
+        Blockly.Variables.flyoutCategory(this.workspace_.targetWorkspace);
+  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
+    // Special category for procedures.
+    xmlList =
+        Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
+  }
+
   var margin = this.CORNER_RADIUS;
   this.svgGroup_.style.display = 'block';
-
   // Create the blocks to be shown in this flyout.
   var blocks = [];
   var gaps = [];
-  if (xmlList == Blockly.Variables.NAME_TYPE) {
-    // Special category for variables.
-    Blockly.Variables.flyoutCategory(blocks, gaps, margin,
-        /** @type {!Blockly.Workspace} */ (this.workspace_));
-  } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
-    // Special category for procedures.
-    Blockly.Procedures.flyoutCategory(blocks, gaps, margin,
-        /** @type {!Blockly.Workspace} */ (this.workspace_));
-  } else {
-    for (var i = 0, xml; xml = xmlList[i]; i++) {
-      if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-        var block = Blockly.Xml.domToBlock(
-            /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
-        blocks.push(block);
-        gaps.push(margin * 3);
-      }
+  for (var i = 0, xml; xml = xmlList[i]; i++) {
+    if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
+      var block = Blockly.Xml.domToBlock(
+          /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
+      blocks.push(block);
+      var gap = parseInt(xml.getAttribute('gap'), 10);
+      gaps.push(gap || margin * 3);
     }
   }
 

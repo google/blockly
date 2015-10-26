@@ -100,6 +100,18 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Horizontal scroll value when scrolling started.
+ * @type {number}
+ */
+Blockly.WorkspaceSvg.prototype.startScrollX = 0;
+
+/**
+ * Vertical scroll value when scrolling started.
+ * @type {number}
+ */
+Blockly.WorkspaceSvg.prototype.startScrollY = 0;
+
+/**
  * Horizontal distance from mouse to object being dragged.
  * @type {number}
  * @private

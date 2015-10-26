@@ -97,8 +97,11 @@ Blockly.SPRITE = {
  * @return {string} RGB code, e.g. '#5ba65b'.
  */
 Blockly.makeColour = function(hue) {
-  return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
+  if(typeof hue == 'number'){
+    return goog.color.hsvToHex(hue,Blockly.HSV_SATURATION,255*Blockly.HSV_VALUE);
+  } else { 
+    return hue; 
+  }
 };
 
 /**

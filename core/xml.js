@@ -279,7 +279,8 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   var childCount = xml.childNodes.length;
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
-    if (xmlChild.nodeName.toLowerCase() == 'block') {
+    var name = xmlChild.nodeName.toLowerCase();
+    if (name == 'block' || name == 'shadow') {
       var block = Blockly.Xml.domToBlock(workspace, xmlChild);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);

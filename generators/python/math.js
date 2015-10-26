@@ -35,8 +35,17 @@ Blockly.Python.addReservedWords('math,random');
 Blockly.Python['math_number'] = function(block) {
   // Numeric value.
   var code = parseFloat(block.getFieldValue('NUM'));
-  var order = code < 0 ? Blockly.Python.ORDER_UNARY_SIGN :
-              Blockly.Python.ORDER_ATOMIC;
+  var order;
+  if (code == Infinity) {
+    code = 'float("inf")';
+    order = Blockly.Python.ORDER_FUNCTION_CALL;
+  } else if (code == -Infinity) {
+    code = '-float("inf")';
+    order = Blockly.Python.ORDER_UNARY_SIGN;
+  } else {
+    order = code < 0 ? Blockly.Python.ORDER_UNARY_SIGN :
+            Blockly.Python.ORDER_ATOMIC;
+  }
   return [code, order];
 };
 

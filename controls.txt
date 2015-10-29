@@ -1,0 +1,8 @@
+
+Keyboard controls
+
+Up and down arrow to traverse different categories and blocks.
+Left and right arrows to switch between selecting categories and selecting blocks.
+escape to exit the flyout.
+
+Link to RIT Accessibility Blockly: https://github.com/RITAccess/blockly

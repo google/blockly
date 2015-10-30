@@ -75,6 +75,13 @@ Blockly.Variables.allVariables = function(root) {
   return variableList;
 };
 
+/**
+ * Compute the intersection between two arrays of types
+ * @param {Array<string>} arr1
+ * @param {Array<string>} arr2
+ * @return {Array<string>}
+ * TODO: Need to make Array:Foo and Array match as Array:Foo
+ */
 Blockly.Variables.Intersection = function(arr1, arr2) {
   var result = goog.array.filter(arr1, function(val, index, a1) {
     return goog.array.contains(arr2, val);

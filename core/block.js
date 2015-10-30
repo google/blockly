@@ -780,6 +780,46 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check,
 
 /**
  * Set whether this block returns a value.
+ * @param {string} name Name of the input to get data for
+ * @param {type} type Type to prefix on all of the inputs
+ * @param {Array.<string>|null} List of returned types.
+ * @return {Array.<string>|null} List of returned types.
+ *     Null if no type was specified for the input or the corresponding 
+ *     block does not have an output.
+ */
+Blockly.Block.prototype.getInputCollectionOutput = function(name,type,result) {
+  if (!result) {
+    result = [];
+  }
+  var item = getInputTargetBlock(name);
+  if (item) {
+    var subitems = item.getOutput();
+    if (subitems) {
+      for(var item = 0; item < subitems.length; item++) {
+        if (!goog.array.contains(result,subitems[item])) {
+          result.push(type+':'+subitems[item]);
+        }
+      }
+    }
+  }
+  return result;
+}
+/**
+ * Set whether this block returns a value.
+ * @return {Object.<string>|null} List of returned types.
+ *     Null if no type was specified for the output or the block does not
+ *     have an output.
+ */
+Blockly.Block.prototype.getOutput = function() {
+  var result = [];
+  if (this.outputConnection) {
+    result = this.outputConnection.check_;
+  }
+  return result;
+}
+
+/**
+ * Set whether this block returns a value.
  * @param {boolean} newBoolean True if there is an output.
  * @param {string|Array.<string>|null|undefined} opt_check Returned type or list
  *     of returned types.  Null or undefined if any type could be returned

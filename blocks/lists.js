@@ -184,6 +184,13 @@ Blockly.Blocks['lists_create_with'] = {
       }
     }
   },
+  getOutput: function() {
+    var result = [];
+    for(var i = 0; i < this.itemCount_; i++) {
+      result = this.getInputCollectionOutput('ADD'+i, 'Array', result);
+    }
+    return result;
+  },
   typeblock: [
       { entry: Blockly.Msg.LISTS_CREATE_WITH_TYPEBLOCK,
         mutatorAttributes: { items: 2 } }
@@ -247,6 +254,9 @@ Blockly.Blocks['lists_repeat'] = {
       "tooltip": Blockly.Msg.LISTS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.LISTS_REPEAT_HELPURL
     });
+  },
+  getOutput: function() {
+    return this.getInputCollectionOutput('ITEM','Array');
   },
   typeblock: [{entry: Blockly.Msg.LISTS_REPEAT_TYPEBLOCK,
                 "values": {'NUM': 5 }}]

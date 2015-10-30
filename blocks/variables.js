@@ -386,14 +386,14 @@ Blockly.Blocks['initialize_variable'] = {
     // Is the block nested in a procedure?
     var prefix = Blockly.Variables.getLocalContext(this, null);
 
-    var title = Blockly.Msg.INITIALIZE_GLOBAL_VARIABLE
+    var title = Blockly.Msg.INITIALIZE_GLOBAL_VARIABLE;
     var colour = Blockly.Blocks.variables.HUE;
     this.procedurePrefix_ = '';
     // See if we are a local variable
     if (prefix != null) {
       this.procedurePrefix_ = prefix;
       colour = Blockly.Blocks.procedures.HUE;
-      title = Blockly.Msg.INITIALIZE_LOCAL_VARIABLE
+      title = Blockly.Msg.INITIALIZE_LOCAL_VARIABLE;
     }
 
     // Update the block with the right color and text
@@ -429,8 +429,16 @@ Blockly.Blocks['initialize_variable'] = {
    */
   getVarsTypes: function() {
     var vartypes = {};
-    vartypes[this.procedurePrefix_+this.getFieldValue('VAR')] =
-      [this.getFieldValue('TYPE')];
+    var type = this.getFieldValue('TYPE');
+    if (type) {
+      type = [type];
+    } else {
+      var item = this.getInputTargetBlock('VALUE');
+      if (item) {
+        type = item.getOutput();
+      }
+    }
+    vartypes[this.procedurePrefix_+this.getFieldValue('VAR')] = type;
     return vartypes;
   },
   /**

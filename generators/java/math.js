@@ -323,6 +323,7 @@ Blockly.Java['math_on_list'] = function(block) {
       break;
     case 'MODE':
       Blockly.Java.provideVarClass();
+      Blockly.Java.addImport('java.util.LinkedList');
       var functionName = Blockly.Java.provideFunction_(
           'math_modes',
           // As a list of numbers can contain more than one mode,

@@ -31,6 +31,7 @@ goog.require('Blockly.Java');
 
 Blockly.Java['lists_create_empty'] = function(block) {
   // Create an empty list.
+  Blockly.Java.addImport('java.util.LinkedList');
   return ['new LinkedList()', Blockly.Java.ORDER_ATOMIC];
 };
 
@@ -42,6 +43,7 @@ Blockly.Java['lists_create_with'] = function(block) {
         Blockly.Java.ORDER_NONE) || 'None';
   }
   Blockly.Java.addImport('java.util.Arrays');
+  Blockly.Java.addImport('java.util.LinkedList');
 
   code = 'new LinkedList(Arrays.asList(' + code.join(', ') + '))';
   return [code, Blockly.Java.ORDER_ATOMIC];
@@ -53,6 +55,7 @@ Blockly.Java['lists_repeat'] = function(block) {
       Blockly.Java.ORDER_NONE) || 'None';
   var argument1 = Blockly.Java.valueToCode(block, 'NUM',
       Blockly.Java.ORDER_MULTIPLICATIVE) || '0';
+  Blockly.Java.addImport('java.util.LinkedList');
   var functionName = Blockly.Java.provideFunction_(
        'lists_repeat',
       ['public static LinkedList ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
@@ -175,6 +178,7 @@ Blockly.Java['lists_getIndex'] = function(block) {
       code = list +'.get((int)(Math.random() * ' + list + '.size()))';
       return [code, Blockly.Java.ORDER_FUNCTION_CALL];
     } else {
+      Blockly.Java.addImport('java.util.LinkedList');
       var functionName = Blockly.Java.provideFunction_(
           'lists_remove_random_item',
           ['public static Object ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
@@ -326,6 +330,7 @@ Blockly.Java['lists_getSublist'] = function(block) {
       at2 = list + '.size() - ((int)' + at2 + '-1)';
     }
   }
+  Blockly.Java.addImport('java.util.LinkedList');
   var functionName = Blockly.Java.provideFunction_(
        'lists_sublist',
       ['public static LinkedList ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ +
@@ -349,6 +354,7 @@ Blockly.Java['lists_split'] = function(block) {
         Blockly.Java.ORDER_MEMBER) || '\'\'';
     var value_delim = Blockly.Java.valueToCode(block, 'DELIM',
         Blockly.Java.ORDER_NONE);
+    Blockly.Java.addImport('java.util.LinkedList');
     var code = 'new LinkedList(Arrays.asList(' + value_input +
                   '.split(' + value_delim + ')))';
   } else if (mode == 'JOIN') {

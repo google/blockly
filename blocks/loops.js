@@ -284,7 +284,18 @@ Blockly.Blocks['controls_forEach'] = {
    */
   getVarsTypes: function() {
       var vartypes = {};
-      vartypes[this.getFieldValue('VAR')] = ['Array','Map','Object'];
+      var foundtypes = {};
+      var listblock = this.getInputTargetBlock('LIST');
+      var looptypes = listblock.getOutput();
+      if (looptypes) {
+        for (var i = 0; i < looptypes.length; i++) {
+          var type = looptypes[i];
+          var x = type.split(':');
+          foundtypes[x[1]] = 1;
+        }
+      }
+
+      vartypes[this.getFieldValue('VAR')] = Object.keys(foundtypes);
       return vartypes;
   },
   /**

@@ -158,6 +158,9 @@ Blockly.Java['initialize_variable'] = function (block) {
     // Variable setter.
     var vartype = Blockly.Java.GetVariableType(block.procedurePrefix_+
         block.getFieldValue('VAR'));
+    if ('LinkedList' === vartype) {
+        Blockly.Java.addImport('java.util.LinkedList');
+    }
     var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
         Blockly.Variables.NAME_TYPE);
     return vartype + ' ' + varName + ' = ' + argument0 + ';\n';

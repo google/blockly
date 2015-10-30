@@ -1109,8 +1109,9 @@ Blockly.Java.init = function(workspace, imports) {
       }
     } else {
       // Unknown type
-      console.log('Unknown type for '+key+' using Object');
-      type = 'Object';
+      console.log('Unknown type for '+key+' using Var');
+      needVarClass = true;
+      type = 'Var';
     }
     this.variableTypes_[key] = type;
   }

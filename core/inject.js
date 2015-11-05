@@ -61,7 +61,8 @@ Blockly.inject = function(container, opt_options) {
     if (realtimeElement) {
       realtimeElement.style.display = 'block';
     }
-    Blockly.Realtime.startRealtime(startUi, container, options.realtimeOptions);
+    Blockly.Realtime.startRealtime(startUi, container, options.realtimeOptions,
+				   options.pathToMedia);
   } else {
     startUi();
   }

@@ -207,7 +207,8 @@ Blockly.Realtime.removeTopBlock = function(block) {
  */
 Blockly.Realtime.obtainBlock = function(workspace, prototypeName) {
   var newBlock =
-      Blockly.Realtime.model_.create(Blockly.Block, workspace, prototypeName);
+      Blockly.Realtime.model_.create(Blockly.BlockSvg, workspace, prototypeName);
+  Blockly.Block.call(this);
   return newBlock;
 };
 
@@ -262,7 +263,7 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
         } else if (event.property == 'relativeX' ||
             event.property == 'relativeY') {
           Blockly.Realtime.doWithinSync_(function() {
-            if (!block.svg_) {
+            if (!block.svgGroup_) {
               // If this is a move of a newly disconnected (i.e. newly top
               // level) block it will not have any svg (because it has been
               // disposed of by its parent), so we need to handle that here.
@@ -351,7 +352,7 @@ Blockly.Realtime.placeBlockOnWorkspace_ = function(block, addToTop) {
  */
 Blockly.Realtime.moveBlock_ = function(block) {
   if (!isNaN(block.relativeX) && !isNaN(block.relativeY)) {
-    var width = Blockly.svgSize().width;
+    var width = Blockly.svgSize(Blockly.mainWorkspace.options.svg).width;
     var curPos = block.getRelativeToSurfaceXY();
     var dx = block.relativeX - curPos.x;
     var dy = block.relativeY - curPos.y;
@@ -514,13 +515,13 @@ Blockly.Realtime.getSessionId_ = function(doc) {
 Blockly.Realtime.registerTypes_ = function() {
   var custom = gapi.drive.realtime.custom;
 
-  custom.registerType(Blockly.Block, 'Block');
-  Blockly.Block.prototype.id = custom.collaborativeField('id');
-  Blockly.Block.prototype.xmlDom = custom.collaborativeField('xmlDom');
-  Blockly.Block.prototype.relativeX = custom.collaborativeField('relativeX');
-  Blockly.Block.prototype.relativeY = custom.collaborativeField('relativeY');
+  custom.registerType(Blockly.BlockSvg, 'BlockSvg');
+  Blockly.BlockSvg.prototype.id = custom.collaborativeField('id');
+  Blockly.BlockSvg.prototype.xmlDom = custom.collaborativeField('xmlDom');
+  Blockly.BlockSvg.prototype.relativeX = custom.collaborativeField('relativeX');
+  Blockly.BlockSvg.prototype.relativeY = custom.collaborativeField('relativeY');
 
-  custom.setInitializer(Blockly.Block, Blockly.Block.prototype.initialize);
+  custom.setInitializer(Blockly.BlockSvg, Blockly.Block.prototype.initialize);
 };
 
 /**
@@ -709,14 +710,15 @@ Blockly.Realtime.parseOptions_ = function(options) {
  * @param {function()} uiInitialize Function to initialize the Blockly UI.
  * @param {!Element} uiContainer Container element for the Blockly UI.
  * @param {!Object} options The realtime options.
+ * @param {string} pathToMedia The path to the media directory
  */
-Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
+Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options, pathToMedia) {
   Blockly.Realtime.parseOptions_(options);
   Blockly.Realtime.enabled_ = true;
   // Note that we need to setup the UI for realtime authorization before
   // loading the realtime code (which, in turn, will handle initializing the
   // rest of the Blockly UI).
-  var authDiv = Blockly.Realtime.addAuthUi_(uiContainer);
+    var authDiv = Blockly.Realtime.addAuthUi_(uiContainer, pathToMedia);
   Blockly.Realtime.initUi_ = function() {
     uiInitialize();
     if (Blockly.Realtime.chatBoxElementId_) {
@@ -735,12 +737,13 @@ Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
 /**
  * Setup the Blockly container for realtime authorization.
  * @param {!Element} uiContainer A DOM container element for the Blockly UI.
+ * @param {string} pathToMedia The path to the media directory
  * @return {!Element} The DOM element for the authorization UI.
  * @private
  */
-Blockly.Realtime.addAuthUi_ = function(uiContainer) {
+Blockly.Realtime.addAuthUi_ = function(uiContainer, pathToMedia) {
   // Add progress indicator to the UI container.
-  uiContainer.style.background = 'url(' + Blockly.pathToMedia +
+  uiContainer.style.background = 'url(' + pathToMedia +
       Blockly.Realtime.PROGRESS_URL_ + ') no-repeat center center';
   // Setup authorization button
   var blocklyDivBounds = goog.style.getBounds(uiContainer);

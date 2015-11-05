@@ -38,14 +38,38 @@ Blockly.Java['lists_create_empty'] = function(block) {
 Blockly.Java['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   var code = new Array(block.itemCount_);
+
+  var types = block.getOutput();
+  if (!types.length) {
+    types = ['Array'];
+  }
+  var typeArray = Blockly.Variables.Intersection(types,types);
+  // Resolve the array of types down to a single type
+  var argType0 = Blockly.Variables.resolveTypes(typeArray);
+  var subType = null;
+  if (argType0 && argType0.indexOf(':') > 0) {
+    subType = argType0.substring(argType0.indexOf(':') + 1);
+    subType = Blockly.Java.mapType(subType);
+  }
+
+  if (subType === 'double') {
+    subType = 'Double';
+  }
+  var oldType = Blockly.Java.setTargetType(subType);
   for (var n = 0; n < block.itemCount_; n++) {
     code[n] = Blockly.Java.valueToCode(block, 'ADD' + n,
-        Blockly.Java.ORDER_NONE) || 'None';
+        Blockly.Java.ORDER_NONE) || 'null';
+    if (subType === 'Var') {
+      code[n] = 'Var.valueOf('+code[n]+')';
+    }
   }
+  Blockly.Java.setTargetType(oldType);
+
   Blockly.Java.addImport('java.util.Arrays');
   Blockly.Java.addImport('java.util.LinkedList');
 
-  code = 'new LinkedList(Arrays.asList(' + code.join(', ') + '))';
+  code = 'new LinkedList<>(Arrays.asList(' + code.join(', ') + '))';
+
   return [code, Blockly.Java.ORDER_ATOMIC];
 };
 

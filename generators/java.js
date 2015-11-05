@@ -151,6 +151,10 @@ Blockly.Java.classes_ = [];
  */
 Blockly.Java.globals_ = {};
 /**
+ * Target Blockly type to generate code for (if any) 
+ */
+Blockly.Java.targetType_ = null;
+/**
  *
  */
 Blockly.Java.fileHeader =
@@ -1041,6 +1045,103 @@ Blockly.Java.provideVarClass = function() {
     Blockly.Java.addImport('com.extreme.platform.application.Var');
   }
 };
+
+Blockly.Java.typeMapping = {
+  'Object' : 'Object',
+  'Array':   'LinkedList',
+  'Map':     'HashMap',
+  'Var':     'Var',
+  'Boolean': 'Boolean',
+  'String':  'String',
+  'Colour':  'String',
+  'Number':  'double'
+};
+
+Blockly.Java.subtypeMapping = {
+  'Object' : 'Object',
+  'Array':   'LinkedList',
+  'Map':     'HashMap',
+  'Var':     'Var',
+  'Boolean': 'Boolean',
+  'String':  'String',
+  'Colour':  'String',
+  'Number':  'Double'
+};
+
+/**
+ * Compute the Java declaration for an arbitrary type.
+ * @param {string} type Blockly extended Type to make to a Java declaration.
+ * @return {string} Java declaration best matching the type.
+ */
+Blockly.Java.mapType = function(type) {
+  var mapType_ = function(typeMapping, typeArray) {
+    // If they gave us nothing or somehow called us in error then we want to
+    // pretend that the type is a Var
+    if (!typeArray || typeArray.length === 0) {
+      console.log('Empty type. Using Var');
+      typeArray = ['Var'];
+    }
+    var key = typeArray.shift();
+    var type = key;
+    if (typeMapping[type]) {
+      type = typeMapping[type];
+    } else if (Blockly.Blocks[type] && Blockly.Blocks[type].GBPClass ) {
+      type = Blockly.Blocks[type].GBPClass;
+    } else if (Blockly.VariableTypeEquivalence[type]) {
+      // We can use the type as is.
+    } else {
+      console.log('Unknown type for '+key+' using Var for '+type);
+      type = 'Var';
+    }
+
+    if (type === 'Var') {
+      Blockly.Java.provideVarClass();
+    }
+
+    // See if we have any sub elements
+    if (typeArray.length > 0) {
+      var subType = mapType_(Blockly.Java.subtypeMapping, typeArray);
+      type += '<'+subType+">";
+    }
+    return type;
+  }
+
+  var typeArray = null;
+  if (type) {
+    typeArray = type.split(':');
+  }
+
+  return mapType_(this.typeMapping, typeArray);
+
+};
+
+Blockly.Java.setTargetType = function(type) {
+  var oldType = this.targetType_;
+  this.targetType_ = type;
+  return oldType;
+};
+
+Blockly.Java.getTargetType = function(type) {
+  return this.targetType_;
+};
+
+/**
+ * Compute the Java declaration for an arbitrary type.
+ * @param {!Array<String>} types Array of types to consolidate.
+ * @return {string} Java declaration best matching the types.
+ */
+Blockly.Java.computeJavaType = function(types) {
+  // Resolve down the types.  Note that we use Intersection because it also
+  // does the work of eliminating duplicates and takes lower level array types
+  // and uses the most specific type.  Additionally, any type equivalences
+  // are substituted for in this.
+  var typeArray = Blockly.Variables.Intersection(types,types);
+  // Resolve the array of types down to a single type
+  var argType0 = Blockly.Variables.resolveTypes(typeArray);
+  // Finally convert the type to a Java declaration.
+  return Blockly.Java.mapType(argType0);
+};
+
 /**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
@@ -1069,6 +1170,7 @@ Blockly.Java.init = function(workspace, imports) {
   }
 
   var defvars = [];
+  Blockly.VariableTypeEquivalence['Colour'] = ['String'];
   var variables = Blockly.Variables.allVariables(workspace);
   this.blocklyTypes_ = Blockly.Variables.allVariablesTypes(workspace);
   // Make sure all the type variables are pushed.  This is because we
@@ -1076,47 +1178,9 @@ Blockly.Java.init = function(workspace, imports) {
   for(var name in this.blocklyTypes_) {
       variables.push(name);
   }
-  var needVarClass = false;
   for (var x = 0; x < variables.length; x++) {
     var key = variables[x];
-    var type = this.blocklyTypes_[key];
-    if (type === 'Object') {
-      type = 'Object';
-    } else if (type === 'Array') {
-      type = 'LinkedList';
-    } else if (type === 'Map') {
-      type = 'HashMap';
-    } else if (type === 'Var') {
-      type = 'Var';
-      needVarClass = true;
-    } else if (type === 'Boolean') {
-      type = 'Boolean';
-    } else if (type === 'String') {
-      type = 'String';
-    } else if (type === 'Colour') {
-      type = 'String';
-    } else if (type === 'Number') {
-      type = 'double';
-    } else if (typeof type !== 'undefined' && type !== '') {
-      if (Blockly.Blocks[type] && Blockly.Blocks[type].GBPClass ) {
-        type = Blockly.Blocks[type].GBPClass;
-      } else if (Blockly.VariableTypeEquivalence[type]) {
-        // We can use the type as is.
-      } else {
-        console.log('Unknown type for '+key+' using Var for '+type);
-        type = 'Var';
-        needVarClass = true;
-      }
-    } else {
-      // Unknown type
-      console.log('Unknown type for '+key+' using Var');
-      needVarClass = true;
-      type = 'Var';
-    }
-    this.variableTypes_[key] = type;
-  }
-  if (needVarClass) {
-    Blockly.Java.provideVarClass();
+    this.variableTypes_[key] = this.mapType(this.blocklyTypes_[key]);
   }
 };
 

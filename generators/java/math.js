@@ -34,7 +34,12 @@ Blockly.Java.addReservedWords('math,random');
 
 Blockly.Java['math_number'] = function(block) {
   // Numeric value.
-  var code = parseFloat(block.getFieldValue('NUM'));
+  var code = ''+parseFloat(block.getFieldValue('NUM'));
+  if (Blockly.Java.getTargetType() === 'Double') {
+    if (code.indexOf('.') < 0) {
+      code += '.0';
+    }
+  }
   var order = code < 0 ? Blockly.Java.ORDER_UNARY_SIGN :
               Blockly.Java.ORDER_ATOMIC;
   return [code, order];

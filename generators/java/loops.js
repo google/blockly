@@ -194,20 +194,22 @@ Blockly.Java['controls_forEach'] = function(block) {
   var setvar0;
   branch = Blockly.Java.addLoopTrap(branch, block.id) ||
       Blockly.Java.PASS;
+  var code = '';
 
-  var loopVar = Blockly.Java.variableDB_.getDistinctName(
-      'it', Blockly.Variables.NAME_TYPE);
   if (vartype0 === 'Var') {
+    var loopVar = Blockly.Java.variableDB_.getDistinctName(
+      'it', Blockly.Variables.NAME_TYPE);
     setvar0 = variable0 + '.setObject(' + loopVar + '.next())';
-  } else {
-    setvar0 = variable0 + ' = ' + loopVar + '.next()';
-  }
 
-  Blockly.Java.addImport('java.util.Iterator');
-  var code = 'for (Iterator ' + loopVar + ' = ' +
+    Blockly.Java.addImport('java.util.Iterator');
+    code = 'for (Iterator ' + loopVar + ' = ' +
                   argument0 + '.iterator(); ' + loopVar + '.hasNext();) {\n'+
-             Blockly.Java.INDENT + setvar0 + ';\n'
-              + branch + '} // end for\n';
+             Blockly.Java.INDENT + setvar0 + ';\n';
+  } else {
+    code = 'for (' +vartype0 + ' ' + variable0 + ' :' + argument0 + ') {\n'
+  }
+  code += branch + '} // end for\n';
+
   return code;
 };
 

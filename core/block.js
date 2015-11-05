@@ -403,6 +403,24 @@ Blockly.Block.prototype.getChildren = function() {
 };
 
 /**
+ * Find all the blocks that are directly nested inside this one.
+ * Includes value and block inputs.
+ * Excludes any connection on an output tab,any following statement, or any preceding statement.
+ * @return {!Array.<!Blockly.Block>} Array of blocks.
+ */
+Blockly.Block.prototype.getDirectChildren = function() {
+    var children = this.getChildren();
+    var result = [];
+    for (var i = 0, block; block = children[i]; i++) {
+      if (block && block.getSurroundParent() == this)
+      {
+          result.push(block);
+      }
+    }
+    return result;
+};
+
+/**
  * Find all the blocks that are directly nested inside this one in order.
  * Includes value and block inputs, as well as any following statement.
  * Excludes any connection on an output tab or any preceding statement.
@@ -789,15 +807,21 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check,
  */
 Blockly.Block.prototype.getInputCollectionOutput = function(name,type,result) {
   if (!result) {
-    result = [];
+    result = [type];
   }
-  var item = getInputTargetBlock(name);
+  var item = this.getInputTargetBlock(name);
   if (item) {
     var subitems = item.getOutput();
     if (subitems) {
       for(var item = 0; item < subitems.length; item++) {
-        if (!goog.array.contains(result,subitems[item])) {
-          result.push(type+':'+subitems[item]);
+        subitems[item] = type+':'+subitems[item];
+      }
+      if (goog.array.isEmpty(result)) {
+        result = subitems;
+      } else {
+        result = Blockly.Variables.Intersection(result, subitems);
+        if (goog.array.isEmpty(result)) {
+          result = [type];
         }
       }
     }
@@ -813,7 +837,7 @@ Blockly.Block.prototype.getInputCollectionOutput = function(name,type,result) {
 Blockly.Block.prototype.getOutput = function() {
   var result = [];
   if (this.outputConnection) {
-    result = this.outputConnection.check_;
+    result = this.outputConnection.check_.slice();
   }
   return result;
 }

@@ -165,6 +165,23 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
 };
 
 /**
+ * Finds the block with the specified TYPE in this workspace.
+ * @param {string} id TYPE of block to find.
+ * @return {Blockly.Block[]} The matching blocks, or empty if not found.
+ */
+Blockly.Workspace.prototype.getBlocksByType = function(type) {
+  // If this O(n) function fails to scale well, maintain a hash table of IDs.
+  var retBlocks = [];
+  var blocks = this.getAllBlocks();
+  for (var i = 0, block; block = blocks[i]; i++) {
+    if (block.type == type) {
+        retBlocks.push(block);
+    }
+  }
+  return retBlocks;
+};
+
+/**
  * The number of blocks that may be added to the workspace before reaching
  *     the maxBlocks.
  * @return {number} Number of blocks left.

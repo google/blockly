@@ -84,25 +84,54 @@ Blockly.BlockSvg.INLINE = -1;
  */
 Blockly.BlockSvg.prototype.initSvg = function() {
   goog.asserts.assert(this.workspace.rendered, 'Workspace is headless.');
-  var counter = 0;
-  for (var i = 0, input; input = this.inputList[i]; i++) {
-    
-    /**
-     * Only show two parameters when in the toolbox (flyout)
-     */
-	  var isInline = this.getInputsInline() && !this.isCollapsed();
-	  if (this.isInFlyout) {
-		  if (this.inputList[i].type == Blockly.INPUT_VALUE && !isInline) {
-			 counter++;
-			  if (counter == numberArgumentsForBlock) {
-				  input.fieldRow[0].text_ = "<More>...";
-			 } else if(counter > numberArgumentsForBlock) {
-				  input.setVisible(false);
-			  }
-	  	  }
-	  } 
-	  input.init();
-  }
+  
+
+	  /**
+		 * Only show two parameters when in the toolbox (flyout)
+		 */
+
+	var counter = 0;
+	var isInline = this.getInputsInline() && !this.isCollapsed();
+	var hasValue;
+	var hasDummy;
+	var lastType = undefined;
+	var inputRows = [];
+	var row;
+	for (var i = 0, input; input = this.inputList[i]; i++) {
+		if (!isInline || !lastType || lastType == Blockly.NEXT_STATEMENT || input.type == Blockly.NEXT_STATEMENT) {
+			// Create new row.
+			lastType = input.type;
+			row = [];
+			if (isInline && input.type != Blockly.NEXT_STATEMENT) {
+				row.type = Blockly.BlockSvg.INLINE;
+			} else {
+				row.type = input.type;
+			}
+			row.height = 0;
+			inputRows.push(row);
+		} else {
+			row = inputRows[inputRows.length - 1];
+		}
+		row.push(input);
+
+		if (row.type == Blockly.INPUT_VALUE) {
+			hasValue = true;
+		} else if (row.type == Blockly.DUMMY_INPUT) {
+			hasDummy = true;
+		}
+
+		if (this.isInFlyout && hasDummy) {
+			if (this.inputList[i].type == Blockly.INPUT_VALUE && !isInline) {
+				counter++;
+				if (counter == numberArgumentsForBlock) {
+						input.fieldRow[0].text_ = "<More>...";
+				} else if (counter > numberArgumentsForBlock) {
+					input.setVisible(false);
+				}
+			}
+		} 
+		input.init();
+	}
   if (this.mutator) {
     this.mutator.createIcon();
   }

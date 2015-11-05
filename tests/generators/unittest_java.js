@@ -33,6 +33,11 @@ Blockly.Java['unittest_main'] = function(block) {
   Blockly.Java.addImport('java.util.LinkedList');
   Blockly.Java.addImport('java.lang.StringBuilder');
 
+  var x1 = Blockly.Java.variableDB_.getDistinctName(
+              'unittestResult', Blockly.Variables.NAME_TYPE);
+  var x2 = Blockly.Java.variableDB_.getDistinctName(
+              'x', Blockly.Variables.NAME_TYPE);
+
   var functionName = Blockly.Java.provideFunction_(
       'unittest_report',
       [ 'public String ' + Blockly.Java.FUNCTION_NAME_PLACEHOLDER_ + '() {',
@@ -41,20 +46,19 @@ Blockly.Java['unittest_main'] = function(block) {
         '    LinkedList<String> summary = new LinkedList<>();',
         '    StringBuilder result = new StringBuilder();',
         '    int fails = 0;',
-        '    for (int x = 0; x < ' + resultsVar + '.size(); x++) {',
-        '        if ((boolean)(((LinkedList)' + resultsVar + '.get(x)).get(0))) {',
+        '    for (Object '+x1+' : '+resultsVar+') {',
+        '        if ((boolean)(((LinkedList)' +x1+').get(0))) {',
         '            summary.add(".");',
         '        } else {',
         '            summary.add("F");',
         '            fails++;',
         '            report.add("");',
-        '            report.add("FAIL: " + (String)((LinkedList)' + resultsVar +
-                                                        '.get(x)).get(2));',
-        '            report.add((String)((LinkedList)' + resultsVar + '.get(x)).get(1));',
+        '            report.add("FAIL: " + (String)((LinkedList) ' +x1+').get(2));',
+        '            report.add((String)((LinkedList) ' +x1+').get(1));',
         '        }',
         '    }',
-        '    for(String x: summary) {',
-        '        result.append(x);',
+        '    for(String '+x2+': summary) {',
+        '        result.append('+x2+');',
         '        result.append("\\n");',
         '    }',
         '    report.add("");',
@@ -66,8 +70,8 @@ Blockly.Java['unittest_main'] = function(block) {
         '    } else {',
         '        report.add("OK");',
         '    }',
-        '    for(String x: report) {',
-        '        result.append(x);',
+        '    for(String '+x2+': report) {',
+        '        result.append('+x2+');',
         '        result.append("\\n");',
         '    }',
         '    return result.toString();',

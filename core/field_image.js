@@ -51,7 +51,9 @@ Blockly.FieldImage = function(src, width, height, opt_alt, onclick) {
       this.height_ + 2 * Blockly.BlockSvg.INLINE_PADDING_Y);
   this.text_ = opt_alt || '';
   this.setValue(src);
-  this.clickHandler_ = onclick || null;
+  if (typeof onclick === "function") {
+    this.clickHandler_ = onclick;
+  }
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -86,7 +88,7 @@ Blockly.FieldImage.prototype.init = function(block) {
       {'height': this.height_ + 'px',
        'width': this.width_ + 'px'}, this.fieldGroup_);
   this.imageElement_.onclick = this.clickHandler_;
-  if (this.clickHandler_ != null) {
+  if (this.clickHandler_ !== null) {
     this.imageElement_.style.cursor = 'pointer';
   }
   this.setValue(this.src_);

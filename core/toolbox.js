@@ -319,7 +319,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
 
   // Add touch handler.
   if (goog.events.BrowserFeature.TOUCH_ENABLED) {
-    var el = this.getRowElement();
+    var el = this.getElement();
     Blockly.bindEvent_(el, goog.events.EventType.TOUCHSTART, this,
         this.handleTouchEvent_);
   }

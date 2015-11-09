@@ -145,7 +145,7 @@ goog.addDependency("structs/map.js", ['goog.structs.Map'], ['goog.iter.Iterator'
 goog.addDependency("structs/set.js", ['goog.structs.Set'], ['goog.structs', 'goog.structs.Collection', 'goog.structs.Map']);
 goog.addDependency("structs/structs.js", ['goog.structs'], ['goog.array', 'goog.object']);
 goog.addDependency("structs/trie.js", ['goog.structs.Trie'], ['goog.object', 'goog.structs']);
-goog.addDependency("style/style.js", ['goog.style'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.vendor', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size', 'goog.object', 'goog.string', 'goog.userAgent']);
+goog.addDependency("style/style.js", ['goog.style'], ['goog.array', 'goog.asserts', 'goog.dom', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.vendor', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size', 'goog.object', 'goog.reflect', 'goog.string', 'goog.userAgent']);
 goog.addDependency("timer/timer.js", ['goog.Timer'], ['goog.Promise', 'goog.events.EventTarget']);
 goog.addDependency("ui/colorpalette.js", ['goog.ui.ColorPalette'], ['goog.array', 'goog.color', 'goog.dom.TagName', 'goog.style', 'goog.ui.Palette', 'goog.ui.PaletteRenderer']);
 goog.addDependency("ui/colorpicker.js", ['goog.ui.ColorPicker', 'goog.ui.ColorPicker.EventType'], ['goog.ui.ColorPalette', 'goog.ui.Component']);

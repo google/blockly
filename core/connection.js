@@ -493,7 +493,7 @@ Blockly.Connection.prototype.tighten_ = function() {
  *     in the database and the current location (as a result of dragging).
  * @param {number} dy Vertical offset between this connection's location
  *     in the database and the current location (as a result of dragging).
- * @return {!Object} Contains two properties: 'connection' which is either
+ * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two properties: 'connection' which is either
  *     another connection or null, and 'radius' which is the distance.
  */
 Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {

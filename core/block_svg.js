@@ -315,7 +315,7 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
 /**
  * Returns a bounding box describing the dimensions of this block
  * and any blocks stacked below it.
- * @return {!Object} Object with height and width properties.
+ * @return {!{height: number, width: number}} Object with height and width properties.
  */
 Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var height = this.height;

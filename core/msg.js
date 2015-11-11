@@ -30,6 +30,7 @@
  */
 goog.provide('Blockly.Msg');
 
+
 /**
  * Back up original getMsg function.
  * @type {!Function}

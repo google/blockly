@@ -227,7 +227,7 @@
 	"LISTS_INLIST": "i listen",
 	"LISTS_INDEX_OF_FIRST": "find første forekomst af elementet",
 	"LISTS_INDEX_OF_LAST": "find sidste forekomst af elementet",
-	"LISTS_INDEX_OF_TOOLTIP": "Returnerer indeks for første/sidste forekomst af elementet i listen. Returnerer 0, hvis teksten ikke er fundet.",
+	"LISTS_INDEX_OF_TOOLTIP": "Returnerer indeks for første/sidste forekomst af elementet i listen. Returnerer 0, hvis elementet ikke kan findes.",
 	"LISTS_GET_INDEX_GET": "hent",
 	"LISTS_GET_INDEX_GET_REMOVE": "hent og fjern",
 	"LISTS_GET_INDEX_REMOVE": "fjern",

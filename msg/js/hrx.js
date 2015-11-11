@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Kommentar hinzufüche";
 Blockly.Msg.AUTH = "Weart ännre:";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Neie Variable...";
 Blockly.Msg.CHAT = "Sprech mit unsrem Mitoorweiter doorrich renschreiwe von Text hier in den Kaste!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blocke zusammerfalte";
 Blockly.Msg.COLLAPSE_BLOCK = "Block zusammerfalte";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Farreb 1";

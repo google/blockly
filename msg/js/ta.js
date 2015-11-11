@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "கருத்தை சேர்";
 Blockly.Msg.AUTH = "தயவுச்செய்து இச்செயலியை அங்கீகரித்து உங்கள் வேலையைச் சேமித்து பகிரரும்படி அனுமதிக்கவும்.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "மதிப்பை மாற்றவும்:";
 Blockly.Msg.CHAT = "இந்தப் பெட்டியில் தட்டச்சு செய்வதன் மூலம் கூட்டுப்பணியாளருடன் உரையாடலாம்!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "உறுப்புகளை மரை";
 Blockly.Msg.COLLAPSE_BLOCK = "உறுப்பை மரை";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "நிறம் 1";

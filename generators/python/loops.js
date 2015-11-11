@@ -33,7 +33,7 @@ Blockly.Python['controls_repeat_ext'] = function(block) {
   // Repeat n times.
   if (block.getField('TIMES')) {
     // Internal number.
-    var repeats = parseInt(block.getFieldValue('TIMES'), 10);
+    var repeats = String(parseInt(block.getFieldValue('TIMES'), 10));
   } else {
     // External number.
     var repeats = Blockly.Python.valueToCode(block, 'TIMES',

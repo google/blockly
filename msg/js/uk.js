@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Додати коментар";
 Blockly.Msg.AUTH = "Будь ласка, авторизуйте цю програму, аби можна було зберігати вашу роботу і для надання можливості вам поширювати її.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Змінити значення:";
 Blockly.Msg.CHAT = "Спілкуйтеся з вашими співавторами, набираючи у цьому полі!";
+Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Згорнути блоки";
 Blockly.Msg.COLLAPSE_BLOCK = "Згорнути блок";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "колір 1";

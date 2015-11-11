@@ -27,7 +27,6 @@
 // Top level object for Blockly.
 goog.provide('Blockly');
 
-// Blockly core dependencies.
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');
@@ -42,16 +41,24 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
-goog.require('Blockly.Realtime');
+// Realtime is currently badly broken.  Stub it out.
+//goog.require('Blockly.Realtime');
+Blockly.Realtime = {
+  isEnabled: function() {return false;},
+  blockChanged: function() {},
+  doCommand: function(cmdThunk) {cmdThunk();}
+};
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
-
-// Closure dependencies.
 goog.require('goog.color');
+goog.require('goog.userAgent');
 
+
+// Turn off debugging when compiled.
+var CLOSURE_DEFINES = {'goog.DEBUG': false};
 
 /**
  * Required name space for SVG elements.
@@ -207,7 +214,7 @@ Blockly.clipboardXml_ = null;
 
 /**
  * Source of the local clipboard.
- * @type {Blockly.Workspace}
+ * @type {Blockly.WorkspaceSvg}
  * @private
  */
 Blockly.clipboardSource_ = null;
@@ -294,6 +301,9 @@ Blockly.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
+  if (e.touches && e.touches.length >= 2) {
+    return;  // Multi-touch gestures won't have e.clientX.
+  }
   var workspace = Blockly.getMainWorkspace();
   if (workspace.isScrolling) {
     Blockly.removeAllRanges();
@@ -330,6 +340,7 @@ Blockly.onKeyDown_ = function(e) {
     // When focused on an HTML text input widget, don't trap any keys.
     return;
   }
+  var deleteBlock = false;
   if (e.keyCode == 27) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
@@ -337,8 +348,7 @@ Blockly.onKeyDown_ = function(e) {
     // Delete or backspace.
     try {
       if (Blockly.selected && Blockly.selected.isDeletable()) {
-        Blockly.hideChaff();
-        Blockly.selected.dispose(true, true);
+        deleteBlock = true;
       }
     } finally {
       // Stop the browser from going back to the previous page.
@@ -349,14 +359,14 @@ Blockly.onKeyDown_ = function(e) {
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
-      Blockly.hideChaff();
       if (e.keyCode == 67) {
         // 'c' for copy.
+        Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
       } else if (e.keyCode == 88) {
         // 'x' for cut.
         Blockly.copy_(Blockly.selected);
-        Blockly.selected.dispose(true, true);
+        deleteBlock = true;
       }
     }
     if (e.keyCode == 86) {
@@ -364,6 +374,16 @@ Blockly.onKeyDown_ = function(e) {
       if (Blockly.clipboardXml_) {
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
       }
+    }
+  }
+  if (deleteBlock) {
+    // Common code for delete and cut.
+    Blockly.hideChaff();
+    var heal = Blockly.dragMode_ != 2;
+    Blockly.selected.dispose(heal, true);
+    if (Blockly.highlightedConnection_) {
+      Blockly.highlightedConnection_.unhighlight();
+      Blockly.highlightedConnection_ = null;
     }
   }
 };
@@ -421,13 +441,34 @@ Blockly.longStop_ = function() {
  */
 Blockly.copy_ = function(block) {
   var xmlBlock = Blockly.Xml.blockToDom_(block);
-  Blockly.Xml.deleteNext(xmlBlock);
+  if (Blockly.dragMode_ != 2) {
+    Blockly.Xml.deleteNext(xmlBlock);
+  }
   // Encode start position in XML.
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', block.RTL ? -xy.x : xy.x);
   xmlBlock.setAttribute('y', xy.y);
   Blockly.clipboardXml_ = xmlBlock;
   Blockly.clipboardSource_ = block.workspace;
+};
+
+/**
+ * Duplicate this block and its children.
+ * @param {!Blockly.Block} block Block to be copied.
+ * @private
+ */
+Blockly.duplicate_ = function(block) {
+  // Save the clipboard.
+  var clipboardXml = Blockly.clipboardXml_;
+  var clipboardSource = Blockly.clipboardSource_;
+
+  // Create a duplicate via a copy/paste operation.
+  Blockly.copy_(block);
+  block.workspace.paste(Blockly.clipboardXml_);
+
+  // Restore the clipboard.
+  Blockly.clipboardXml_ = clipboardXml;
+  Blockly.clipboardSource_ = clipboardSource;
 };
 
 /**
@@ -481,8 +522,11 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   if (this.toolbox_) {
     svgSize.width -= this.toolbox_.width;
   }
-  var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
-  var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
+  // Set the margin to match the flyout's margin so that the workspace does
+  // not jump as blocks are added.
+  var MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS - 1;
+  var viewWidth = svgSize.width - MARGIN;
+  var viewHeight = svgSize.height - MARGIN;
   try {
     var blockBox = this.getCanvas().getBBox();
   } catch (e) {
@@ -490,8 +534,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     return null;
   }
   // Fix scale.
-  var contentWidth = blockBox.width;
-  var contentHeight = blockBox.height;
+  var contentWidth = blockBox.width * this.scale;
+  var contentHeight = blockBox.height * this.scale;
   var contentX = blockBox.x * this.scale;
   var contentY = blockBox.y * this.scale;
   if (this.scrollbar) {
@@ -554,6 +598,10 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
   if (this.options.gridPattern) {
     this.options.gridPattern.setAttribute('x', x);
     this.options.gridPattern.setAttribute('y', y);
+    if (goog.userAgent.IE) {
+      // IE doesn't notice that the x/y offsets have changed.  Force an update.
+      this.updateGridPattern_();
+    }
   }
 };
 

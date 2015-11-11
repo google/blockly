@@ -38,7 +38,6 @@ goog.require('goog.events');
  */
 Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
-  this.oldHostMetrics_ = null;
   this.hScroll = new Blockly.Scrollbar(workspace, true, true);
   this.vScroll = new Blockly.Scrollbar(workspace, false, true);
   this.corner_ = Blockly.createSvgElement('rect',
@@ -49,12 +48,17 @@ Blockly.ScrollbarPair = function(workspace) {
 };
 
 /**
+ * Previously recorded metrics from the workspace.
+ * @type {Object}
+ * @private
+ */
+Blockly.ScrollbarPair.prototype.oldHostMetrics_ = null;
+
+/**
  * Dispose of this pair of scrollbars.
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.ScrollbarPair.prototype.dispose = function() {
-  Blockly.unbindEvent_(this.onResizeWrapper_);
-  this.onResizeWrapper_ = null;
   goog.dom.removeNode(this.corner_);
   this.corner_ = null;
   this.workspace_ = null;
@@ -190,10 +194,6 @@ if (goog.events.BrowserFeature.TOUCH_ENABLED) {
  */
 Blockly.Scrollbar.prototype.dispose = function() {
   this.onMouseUpKnob_();
-  if (this.onResizeWrapper_) {
-    Blockly.unbindEvent_(this.onResizeWrapper_);
-    this.onResizeWrapper_ = null;
-  }
   Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
   this.onMouseDownBarWrapper_ = null;
   Blockly.unbindEvent_(this.onMouseDownKnobWrapper_);

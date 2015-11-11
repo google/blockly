@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jaroslav.micek",
-			"Marian.stano"
+			"Marian.stano",
+			"Mark"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "prvok",
@@ -51,7 +52,7 @@
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "opakuj kým nebude",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Kým je hodnota pravdivá, vykonávaj príkazy.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Kým je hodnota nepravdivá, vykonávaj príkazy.",
-	"CONTROLS_FOR_TOOLTIP": "Nechá premennú \"%1\" nadobúdať hodnoty od začiatočného čísla po konečné s daným medzikrokom a vykoná zadané bloky.",
+	"CONTROLS_FOR_TOOLTIP": "Nechá premennú '%1' nadobúdať hodnoty od začiatočného čísla po konečné s daným medzikrokom a vykoná zadané bloky.",
 	"CONTROLS_FOR_TITLE": "počítať s %1 od %2 do %3 o %4",
 	"CONTROLS_FOREACH_TITLE": "pre každý prvok %1 v zozname %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Pre každý prvok v zozname priraď jeho hodnotu do premenej '%1' a vykonaj príkazy.",

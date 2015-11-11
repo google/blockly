@@ -46,7 +46,21 @@ Blockly.Field = function(text) {
 };
 
 /**
- * Maximum length of text to display before adding an ellipsis.
+ * Temporary cache of text widths.
+ * @type {Object}
+ * @private
+ */
+Blockly.Field.cacheWidths_ = null;
+
+/**
+ * Number of current references to cache.
+ * @type {number}
+ * @private
+ */
+Blockly.Field.cacheReference_ = 0;
+
+/**
+ * Maximum characters of text to display before adding an ellipsis.
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
 
@@ -97,10 +111,12 @@ Blockly.Field.prototype.init = function(block) {
       {'rx': 4,
        'ry': 4,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
-       'y': -12,
+       'y': 0,
        'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);
+  /** @type {!Element} */
   this.textElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText'}, this.fieldGroup_);
+      {'class': 'blocklyText', 'y': this.size_.height - 12.5},
+      this.fieldGroup_);
 
   this.updateEditable();
   block.getSvgRoot().appendChild(this.fieldGroup_);
@@ -196,12 +212,21 @@ Blockly.Field.prototype.getSvgRoot = function() {
  */
 Blockly.Field.prototype.render_ = function() {
   if (this.visible_ && this.textElement_) {
-    try {
-      var width = this.textElement_.getComputedTextLength();
-    } catch (e) {
-      // MSIE 11 is known to throw "Unexpected call to method or property
-      // access." if Blockly is hidden.
-      var width = this.textElement_.textContent.length * 8;
+    var key = this.textElement_.textContent + '\n' +
+        this.textElement_.className.baseVal;
+    if (Blockly.Field.cacheWidths_ && Blockly.Field.cacheWidths_[key]) {
+      var width = Blockly.Field.cacheWidths_[key];
+    } else {
+      try {
+        var width = this.textElement_.getComputedTextLength();
+      } catch (e) {
+        // MSIE 11 is known to throw "Unexpected call to method or property
+        // access." if Blockly is hidden.
+        var width = this.textElement_.textContent.length * 8;
+      }
+      if (Blockly.Field.cacheWidths_) {
+        Blockly.Field.cacheWidths_[key] = width;
+      }
     }
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width',
@@ -211,6 +236,32 @@ Blockly.Field.prototype.render_ = function() {
     var width = 0;
   }
   this.size_.width = width;
+};
+
+/**
+ * Start caching field widths.  Every call to this function MUST also call
+ * stopCache.  Caches must not survive between execution threads.
+ * @type {Object}
+ * @private
+ */
+Blockly.Field.startCache = function() {
+  Blockly.Field.cacheReference_++;
+  if (!Blockly.Field.cacheWidths_) {
+    Blockly.Field.cacheWidths_ = {};
+  }
+};
+
+/**
+ * Stop caching field widths.  Unless caching was already on when the
+ * corresponding call to startCache was made.
+ * @type {number}
+ * @private
+ */
+Blockly.Field.stopCache = function() {
+  Blockly.Field.cacheReference_--;
+  if (!Blockly.Field.cacheReference_) {
+    Blockly.Field.cacheWidths_ = null;
+  }
 };
 
 /**
@@ -227,13 +278,13 @@ Blockly.Field.prototype.getSize = function() {
 /**
  * Returns the height and width of the field,
  * accounting for the workspace scaling.
- * @return {!Object} Height and width.
+ * @return {!goog.math.Size} Height and width.
  */
 Blockly.Field.prototype.getScaledBBox_ = function() {
   var bBox = this.borderRect_.getBBox();
-  bBox.width *= this.sourceBlock_.workspace.scale;
-  bBox.height *= this.sourceBlock_.workspace.scale;
-  return bBox;
+  // Create new object, as getBBox can return an uneditable SVGRect in IE.
+  return new goog.math.Size(bBox.width * this.sourceBlock_.workspace.scale,
+                            bBox.height * this.sourceBlock_.workspace.scale);
 };
 
 /**

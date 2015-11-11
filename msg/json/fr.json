@@ -3,7 +3,8 @@
 		"authors": [
 			"Espertus",
 			"Gomoko",
-			"ProfGra"
+			"ProfGra",
+			"Wladek92"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "élément",
@@ -15,6 +16,7 @@
 	"INLINE_INPUTS": "Entrées en ligne",
 	"DELETE_BLOCK": "Supprimer le bloc",
 	"DELETE_X_BLOCKS": "Supprimer %1 blocs",
+	"CLEAN_UP": "Nettoyer les blocs",
 	"COLLAPSE_BLOCK": "Réduire le bloc",
 	"COLLAPSE_ALL": "Réduire les blocs",
 	"EXPAND_BLOCK": "Développer le bloc",
@@ -231,7 +233,7 @@
 	"LISTS_INLIST": "dans la liste",
 	"LISTS_INDEX_OF_FIRST": "trouver la première occurrence de l’élément",
 	"LISTS_INDEX_OF_LAST": "trouver la dernière occurrence de l’élément",
-	"LISTS_INDEX_OF_TOOLTIP": "Renvoie l’index de la première/dernière occurrence de l’élément dans la liste. Renvoie 0 si le texte n’est pas trouvé.",
+	"LISTS_INDEX_OF_TOOLTIP": "Renvoie l’index de la première/dernière occurrence de l’élément dans la liste. Renvoie 0 si l'élément n'est pas trouvé.",
 	"LISTS_GET_INDEX_GET": "obtenir",
 	"LISTS_GET_INDEX_GET_REMOVE": "obtenir et supprimer",
 	"LISTS_GET_INDEX_REMOVE": "supprimer",

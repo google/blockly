@@ -28,9 +28,10 @@
 
 goog.provide('Blockly.utils');
 
-goog.require('goog.events.BrowserFeature');
-goog.require('goog.userAgent');
 goog.require('goog.dom');
+goog.require('goog.events.BrowserFeature');
+goog.require('goog.math.Coordinate');
+goog.require('goog.userAgent');
 
 
 /**
@@ -250,11 +251,11 @@ Blockly.isTargetInput_ = function(e) {
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
- * @return {!Object} Object with .x and .y properties.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
  * @private
  */
 Blockly.getRelativeXY_ = function(element) {
-  var xy = {x: 0, y: 0};
+  var xy = new goog.math.Coordinate(0, 0);
   // First, check for x and y attributes.
   var x = element.getAttribute('x');
   if (x) {
@@ -266,12 +267,7 @@ Blockly.getRelativeXY_ = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  // Note that Firefox and IE (9,10) return 'translate(12)' instead of
-  // 'translate(12, 0)'.
-  // Note that IE (9,10) returns 'translate(16 8)' instead of
-  // 'translate(16, 8)'.
-  var r = transform &&
-          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
+  var r = transform && transform.match(Blockly.getRelativeXY_.XY_REGEXP_);
   if (r) {
     xy.x += parseFloat(r[1]);
     if (r[3]) {
@@ -282,38 +278,48 @@ Blockly.getRelativeXY_ = function(element) {
 };
 
 /**
+ * Static regex to pull the x,y values out of an SVG translate() directive.
+ * Note that Firefox and IE (9,10) return 'translate(12)' instead of
+ * 'translate(12, 0)'.
+ * Note that IE (9,10) returns 'translate(16 8)' instead of 'translate(16, 8)'.
+ * Note that IE has been reported to return scientific notation (0.123456e-42).
+ * @type {!RegExp}
+ * @private
+ */
+Blockly.getRelativeXY_.XY_REGEXP_ =
+    /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
+
+/**
  * Return the absolute coordinates of the top-left corner of this element,
  * scales that after canvas SVG element, if it's a descendant.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Element} element Element to find the coordinates of.
  * @param {!Blockly.Workspace} workspace Element must be in this workspace.
- * @return {!Object} Object with .x and .y properties.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
  * @private
  */
 Blockly.getSvgXY_ = function(element, workspace) {
   var x = 0;
   var y = 0;
-  // Evaluate if element isn't child of a canvas.
-  var canvasFlag = !goog.dom.contains(workspace.getCanvas(), element) &&
-                   !goog.dom.contains(workspace.getBubbleCanvas(), element);
+  var scale = 1;
+  if (goog.dom.contains(workspace.getCanvas(), element) ||
+      goog.dom.contains(workspace.getBubbleCanvas(), element)) {
+    // Before the SVG canvas, scale the coordinates.
+    scale = workspace.scale;
+  }
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
     if (element == workspace.getCanvas() ||
         element == workspace.getBubbleCanvas()) {
-      canvasFlag = true;
+      // After the SVG canvas, don't scale the coordinates.
+      scale = 1;
     }
-    // Before the SVG canvas scale the coordinates.
-    if (canvasFlag) {
-      x += xy.x;
-      y += xy.y;
-    } else {
-      x += xy.x * workspace.scale;
-      y += xy.y * workspace.scale;
-    }
+    x += xy.x * scale;
+    y += xy.y * scale;
     element = element.parentNode;
   } while (element && element != workspace.options.svg);
-  return {x: x, y: y};
+  return new goog.math.Coordinate(x, y);
 };
 
 /**
@@ -349,10 +355,10 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
  * Deselect this text, so that it doesn't mess up any subsequent drag.
  */
 Blockly.removeAllRanges = function() {
-  if (getSelection()) {
+  if (window.getSelection) {
     setTimeout(function() {
         try {
-          var selection = getSelection();
+          var selection = window.getSelection();
           if (!selection.isCollapsed) {
             selection.removeAllRanges();
           }

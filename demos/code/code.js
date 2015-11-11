@@ -365,12 +365,13 @@ Code.init = function() {
       el.style.width = (2 * bBox.width - el.offsetWidth) + 'px';
     }
     // Make the 'Blocks' tab line up with the toolbox.
-    if (Code.workspace.toolbox_.width) {
+    if (Code.workspace && Code.workspace.toolbox_.width) {
       document.getElementById('tab_blocks').style.minWidth =
           (Code.workspace.toolbox_.width - 38) + 'px';
           // Account for the 19 pixel margin and on each side.
     }
   };
+  onresize();
   window.addEventListener('resize', onresize, false);
 
   var toolbox = document.getElementById('toolbox');
@@ -383,10 +384,12 @@ Code.init = function() {
        media: '../../media/',
        rtl: rtl,
        toolbox: toolbox,
-       zoom: {enabled: true}
+       zoom:
+           {controls: true,
+            wheel: true}
       });
 
-  // Add to reserved word list: Local variables in execution evironment (runJS)
+  // Add to reserved word list: Local variables in execution environment (runJS)
   // and the infinite loop detection function.
   Blockly.JavaScript.addReservedWords('code,timeouts,checkTimeout');
 
@@ -398,7 +401,6 @@ Code.init = function() {
   }
 
   Code.tabClick(Code.selected);
-  Blockly.fireUiEvent(window, 'resize');
 
   Code.bindClick('trashButton',
       function() {Code.discard(); Code.renderContent();});
@@ -422,7 +424,6 @@ Code.init = function() {
         function(name_) {return function() {Code.tabClick(name_);};}(name));
   }
 
-  onresize();
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Code.importPrettify, 1);
 };

@@ -68,14 +68,14 @@ Blockly.Dart['text_append'] = function(block) {
 };
 
 Blockly.Dart['text_length'] = function(block) {
-  // String length.
+  // String or array length.
   var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   return [argument0 + '.length', Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['text_isEmpty'] = function(block) {
-  // Is the string null?
+  // Is the string null or array empty?
   var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   return [argument0 + '.isEmpty', Blockly.Dart.ORDER_UNARY_POSTFIX];

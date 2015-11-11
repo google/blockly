@@ -8,6 +8,7 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"TODAY": "Astăzi",
 	"DUPLICATE_BLOCK": "Duplicati",
 	"ADD_COMMENT": "Adaugă un comentariu",
 	"REMOVE_COMMENT": "Elimină comentariu",
@@ -242,7 +243,7 @@
 	"LISTS_INLIST": "în listă",
 	"LISTS_INDEX_OF_FIRST": "Găseşte prima apariţie a elementului",
 	"LISTS_INDEX_OF_LAST": "găseşte ultima apariţie a elementului",
-	"LISTS_INDEX_OF_TOOLTIP": "Returneaza indexul de la prima/ultima aparitie a elementuli din lista. Returneaza 0 daca textul nu este gasit.",
+	"LISTS_INDEX_OF_TOOLTIP": "Revine la indexul de la prima/ultima apariție a elementului din listă. Returnează 0 dacă elementul nu este găsit.",
 	"LISTS_GET_INDEX_GET": "obţine",
 	"LISTS_GET_INDEX_GET_REMOVE": "obţine şi elimină",
 	"LISTS_GET_INDEX_REMOVE": "elimină",

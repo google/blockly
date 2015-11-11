@@ -4,10 +4,12 @@
 			"Chmee2",
 			"Rosnicka.kacka",
 			"Matěj Grabovský",
-			"Espertus"
+			"Espertus",
+			"Utar"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "položka",
+	"TODAY": "Dnes",
 	"DUPLICATE_BLOCK": "zdvojit",
 	"ADD_COMMENT": "Přidat komentář",
 	"REMOVE_COMMENT": "Odstranit komentář",

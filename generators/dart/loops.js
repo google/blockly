@@ -33,7 +33,7 @@ Blockly.Dart['controls_repeat_ext'] = function(block) {
   // Repeat n times.
   if (block.getField('TIMES')) {
     // Internal number.
-    var repeats = Number(block.getFieldValue('TIMES'));
+    var repeats = String(Number(block.getFieldValue('TIMES')));
   } else {
     // External number.
     var repeats = Blockly.Dart.valueToCode(block, 'TIMES',
@@ -146,7 +146,7 @@ Blockly.Dart['controls_forEach'] = function(block) {
       Blockly.Dart.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block.id);
-  var code = 'for (var ' + variable0 + ' in  ' + argument0 + ') {\n' +
+  var code = 'for (var ' + variable0 + ' in ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;
 };

@@ -73,12 +73,20 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 };
 
 /**
+ * Optional text data that round-trips beween blocks and XML.
+ * Has no effect. May be used by 3rd parties for meta information.
+ * @type {?string}
+ */
+Blockly.Block.prototype.data = null;
+
+/**
  * Initialization for one block.
  * @param {!Blockly.Workspace} workspace The new block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  */
 Blockly.Block.prototype.initialize = function(workspace, prototypeName) {
+  /** @type {string} */
   this.id = Blockly.Blocks.genUid();
   workspace.addTopBlock(this);
   this.fill(workspace, prototypeName);
@@ -119,6 +127,8 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   this.movable_ = true;
   /** @type {boolean} */
   this.editable_ = true;
+  /** @type {boolean} */
+  this.isShadow_ = false;
   /** @type {boolean} */
   this.collapsed_ = false;
 
@@ -258,30 +268,6 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
     var dy = Blockly.SNAP_RADIUS * 2;
     this.moveBy(dx, dy);
   }
-};
-
-/**
- * Duplicate this block and its children.
- * @return {!Blockly.Block} The duplicate.
- * @private
- */
-Blockly.Block.prototype.duplicate_ = function() {
-  // Create a duplicate via XML.
-  var xmlBlock = Blockly.Xml.blockToDom_(this);
-  Blockly.Xml.deleteNext(xmlBlock);
-  var newBlock = Blockly.Xml.domToBlock(
-      /** @type {!Blockly.Workspace} */ (this.workspace), xmlBlock);
-  // Move the duplicate next to the old block.
-  var xy = this.getRelativeToSurfaceXY();
-  if (this.RTL) {
-    xy.x -= Blockly.SNAP_RADIUS;
-  } else {
-    xy.x += Blockly.SNAP_RADIUS;
-  }
-  xy.y += Blockly.SNAP_RADIUS * 2;
-  newBlock.moveBy(xy.x, xy.y);
-  newBlock.select();
-  return newBlock;
 };
 
 /**
@@ -484,7 +470,7 @@ Blockly.Block.prototype.getDescendants = function() {
  * @return {boolean} True if deletable.
  */
 Blockly.Block.prototype.isDeletable = function() {
-  return this.deletable_ &&
+  return this.deletable_ && !this.isShadow_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
 
@@ -501,7 +487,8 @@ Blockly.Block.prototype.setDeletable = function(deletable) {
  * @return {boolean} True if movable.
  */
 Blockly.Block.prototype.isMovable = function() {
-  return this.movable_ && !(this.workspace && this.workspace.options.readOnly);
+  return this.movable_ && !this.isShadow_ &&
+      !(this.workspace && this.workspace.options.readOnly);
 };
 
 /**
@@ -510,6 +497,22 @@ Blockly.Block.prototype.isMovable = function() {
  */
 Blockly.Block.prototype.setMovable = function(movable) {
   this.movable_ = movable;
+};
+
+/**
+ * Get whether this block is a shadow block or not.
+ * @return {boolean} True if a shadow.
+ */
+Blockly.Block.prototype.isShadow = function() {
+  return this.isShadow_;
+};
+
+/**
+ * Set whether this block is a shadow block or not.
+ * @param {boolean} shadow True if a shadow.
+ */
+Blockly.Block.prototype.setShadow = function(shadow) {
+  this.isShadow_ = shadow;
 };
 
 /**
@@ -529,12 +532,6 @@ Blockly.Block.prototype.setEditable = function(editable) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     for (var j = 0, field; field = input.fieldRow[j]; j++) {
       field.updateEditable();
-    }
-  }
-  if (this.rendered) {
-    var icons = this.getIcons();
-    for (var i = 0; i < icons.length; i++) {
-      icons[i].updateEditable();
     }
   }
 };

@@ -19,18 +19,13 @@
  */
 
 /**
- * @fileoverview Flexible templating system for defining blocks.
+ * @fileoverview Name space for the Blocks singleton.
  * @author spertus@google.com (Ellen Spertus)
  */
 'use strict';
-goog.require('goog.asserts');
 
-/**
- * Name space for the Blocks singleton.
- * Blocks gets populated in the blocks files, possibly through calls to
- * Blocks.addTemplate().
- */
 goog.provide('Blockly.Blocks');
+
 
 /**
  * Unique ID counter for created blocks.

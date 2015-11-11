@@ -10,6 +10,7 @@ Blockly.Msg.ADD_COMMENT = "Kommentar hinzufügen";
 Blockly.Msg.AUTH = "Bitte autorisiere diese App zum Aktivieren der Speicherung deiner Arbeit und zum Teilen.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Wert ändern:";
 Blockly.Msg.CHAT = "Chatte mit unserem Mitarbeiter durch Eingeben von Text in diesen Kasten!";
+Blockly.Msg.CLEAN_UP = "Blöcke aufräumen";
 Blockly.Msg.COLLAPSE_ALL = "Alle Blöcke zusammenfalten";
 Blockly.Msg.COLLAPSE_BLOCK = "Block zusammenfalten";
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = "Farbe 1";
@@ -116,7 +117,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = "Erstellt eine Kopie mit dem angegebenen
 Blockly.Msg.LISTS_INDEX_OF_FIRST = "suche erstes Auftreten von";
 Blockly.Msg.LISTS_INDEX_OF_HELPURL = "http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm";
 Blockly.Msg.LISTS_INDEX_OF_LAST = "suche letztes Auftreten von";
-Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Sucht die Position (index) eines Elementes in der Liste. Gibt 0 zurück wenn nichts gefunden wurde.";
+Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Sucht die Position (index) eines Elementes in der Liste. Gibt 0 zurück, falls kein Element gefunden wurde.";
 Blockly.Msg.LISTS_INLIST = "von der Liste";
 Blockly.Msg.LISTS_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#is-empty";  // untranslated
 Blockly.Msg.LISTS_ISEMPTY_TITLE = "%1 ist leer?";

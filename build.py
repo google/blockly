@@ -436,9 +436,20 @@ if __name__ == "__main__":
             "'closure-library-read-only' to 'closure-library'.\n"
             "Please rename this directory.")
     else:
-      print("""Error: Closure not found.  Read this:
+    	try:
+        calcdeps = import_path(os.path.join(
+        os.path.pardir, "google-closure-library", "closure", "bin", "calcdeps.py"))
+  		except ImportError:
+    		if os.path.isdir(os.path.join(os.path.pardir, "closure-library-read-only")):
+      		# Dir got renamed when Closure moved from Google Code to GitHub in 2014.
+      		print("Error: Closure directory needs to be renamed from"
+            "'google-closure-library-read-only' to 'google-closure-library'.\n"
+            "Please rename this directory.")
+            else:
+      			print("""Error: Closure not found.  Read this:
 https://developers.google.com/blockly/hacking/closure""")
-    sys.exit(1)
+    			sys.exit(1)
+
   search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
 

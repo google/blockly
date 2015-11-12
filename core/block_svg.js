@@ -1206,12 +1206,14 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
 
   Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
-  goog.dom.removeNode(this.svgGroup_);
-  // Sever JavaScript to DOM connections.
-  this.svgGroup_ = null;
-  this.svgPath_ = null;
-  this.svgPathLight_ = null;
-  this.svgPathDark_ = null;
+  if (!opt_dontRemoveFromWorkspace) {
+    goog.dom.removeNode(this.svgGroup_);
+    // Sever JavaScript to DOM connections.
+    this.svgGroup_ = null;
+    this.svgPath_ = null;
+    this.svgPathLight_ = null;
+    this.svgPathDark_ = null;
+  }
   Blockly.Field.stopCache();
 };
 

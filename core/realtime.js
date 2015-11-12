@@ -208,7 +208,6 @@ Blockly.Realtime.removeTopBlock = function(block) {
 Blockly.Realtime.obtainBlock = function(workspace, prototypeName) {
   var newBlock =
       Blockly.Realtime.model_.create(Blockly.BlockSvg, workspace, prototypeName);
-  Blockly.Block.call(this);
   return newBlock;
 };
 
@@ -218,7 +217,13 @@ Blockly.Realtime.obtainBlock = function(workspace, prototypeName) {
  * @return {Blockly.Block} The found block.
  */
 Blockly.Realtime.getBlockById = function(id) {
-  return Blockly.Realtime.blocksMap_.get(id);
+  var block = Blockly.Realtime.blocksMap_.get(id);
+  if (block) {
+    console.log('Realtime.getBlockById:'+block.id+' for id='+id);
+  } else {
+    console.log('Realtime.getBlockById: NULL for id='+id);
+  }
+  return block;
 };
 
 /**
@@ -226,8 +231,12 @@ Blockly.Realtime.getBlockById = function(id) {
  * @param {gapi.drive.realtime.BaseModelEvent} evt The event that occurred.
  * @private
  */
-Blockly.Realtime.logEvent_ = function(evt) {
-  console.log('Object event:');
+Blockly.Realtime.logEvent_ = function(evt,title) {
+  var local = '';
+  if (evt.isLocal) {
+    local = '<LOCAL>';
+  }
+  console.log('*** '+title+' Object event:'+local);
   console.log('  id: ' + evt.target.id);
   console.log('  type: ' + evt.type);
   var events = evt.events;
@@ -238,6 +247,9 @@ Blockly.Realtime.logEvent_ = function(evt) {
       console.log('  child event:');
       console.log('    id: ' + event.target.id);
       console.log('    type: ' + event.type);
+      console.log('  User ID: '     + event.userId);
+      console.log('  Session ID: '  + event.sessionId);
+      console.log(' Local event: ' + event.isLocal);
     }
   }
 };
@@ -249,6 +261,7 @@ Blockly.Realtime.logEvent_ = function(evt) {
  */
 Blockly.Realtime.onObjectChange_ = function(evt) {
   var events = evt.events;
+  Blockly.Realtime.logEvent_(evt,'onObjectChange_');
   var eventCount = evt.events.length;
   for (var i = 0; i < eventCount; i++) {
     var event = events[i];
@@ -283,6 +296,7 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
  * @private
  */
 Blockly.Realtime.onBlocksMapChange_ = function(evt) {
+  Blockly.Realtime.logEvent_(evt,'onBlocksMapChange_');
   if (!evt.isLocal || Blockly.Realtime.withinUndo_) {
     var block = evt.newValue;
     if (block) {

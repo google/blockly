@@ -5,4 +5,3 @@ npm-debug.log
 .project
 *.pyc
 *.komodoproject
-node_modules

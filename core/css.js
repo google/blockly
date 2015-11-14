@@ -366,7 +366,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyAngleGauge {',
     'fill: #f88;',
-    'fill-opacity: .8;  ',
+    'fill-opacity: .8;',
   '}',
 
   '.blocklyAngleLine {',

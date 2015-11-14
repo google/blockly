@@ -445,8 +445,13 @@ if __name__ == "__main__":
 https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
 
-  search_paths = calcdeps.ExpandDirectories(
+  try:
+    search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
+  except Exception as e:
+    search_paths = calcdeps.ExpandDirectories(
+      ["core", os.path.join(os.path.pardir, "google-closure-library")])
+  
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.

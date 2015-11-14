@@ -451,7 +451,7 @@ if __name__ == "__main__":
     elif os.path.isdir(os.path.join(os.path.pardir, "google-closure-library")):
       # When Closure is installed by npm, it is named "google-closure-library".
       calcdeps = import_path(os.path.join(
-        os.path.pardir, "closure-library", "closure", "bin", "calcdeps.py"))
+        os.path.pardir, "google-closure-library", "closure", "bin", "calcdeps.py"))
       # print("Error: Closure directory needs to be renamed from"
       #       "'google-closure-library' to 'closure-library'.\n"
       #       "Please rename this directory.")

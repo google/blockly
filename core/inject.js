@@ -158,36 +158,6 @@ Blockly.parseOptions_ = function(options) {
     pathToMedia = options['path'] + 'media/';
   }
 
-/* TODO (fraser): Add documentation page:
- * https://developers.google.com/blockly/installation/zoom
- *
- * controls
- *
- * Set to `true` to show zoom-in and zoom-out buttons.  Defaults to `false`.
- *
- * wheel
- *
- * Set to `true` to allow the mouse wheel to zoom.  Defaults to `false`.
- *
- * startScale
- *
- * Initial magnification factor.  Defaults to `1.0`.
- *
- * maxScale
- *
- * Maximum multiplication factor for how far one can zoom in.  Defaults to `3`.
- *
- * minScale
- *
- * Minimum multiplication factor for how far one can zoom out.  Defaults to `0.3`.
- *
- * scaleSpeed
- *
- * For each zooming in-out step the scale is multiplied
- * or divided respectively by the scale speed, this means that:
- * `scale = scaleSpeed ^ steps`, note that in this formula
- * steps of zoom-out are subtracted and zoom-in steps are added.
- */
   // See zoom documentation at:
   // https://developers.google.com/blockly/installation/zoom
   var zoom = options['zoom'] || {};

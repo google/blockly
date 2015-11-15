@@ -1,5 +1,5 @@
 {
-  "name": "blockly-src",
+  "name": "blockly",
   "version": "1.0.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": ["blockly"],

@@ -443,23 +443,18 @@ if __name__ == "__main__":
             "Please rename this directory.")
     elif os.path.isdir(os.path.join(os.path.pardir, "google-closure-library")):
       # When Closure is installed by npm, it is named "google-closure-library".
-      calcdeps = import_path(os.path.join(
-        os.path.pardir, "google-closure-library", "closure", "bin", "calcdeps.py"))
-      # print("Error: Closure directory needs to be renamed from"
-      #       "'google-closure-library' to 'closure-library'.\n"
-      #       "Please rename this directory.")
+      #calcdeps = import_path(os.path.join(
+      # os.path.pardir, "google-closure-library", "closure", "bin", "calcdeps.py"))
+      print("Error: Closure directory needs to be renamed from"
+           "'google-closure-library' to 'closure-library'.\n"
+           "Please rename this directory.")
     else:
       print("""Error: Closure not found.  Read this:
 https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
 
-  try:
-    search_paths = calcdeps.ExpandDirectories(
+  search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
-  except Exception as e:
-    search_paths = calcdeps.ExpandDirectories(
-      ["core", os.path.join(os.path.pardir, "google-closure-library")])
-  
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.

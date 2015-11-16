@@ -37,23 +37,20 @@ goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldTextArea');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
-// Realtime is currently badly broken.  Stub it out.
-//goog.require('Blockly.Realtime');
-Blockly.Realtime = {
-  isEnabled: function() {return false;},
-  blockChanged: function() {},
-  doCommand: function(cmdThunk) {cmdThunk();}
-};
+goog.require('Blockly.Realtime');
 goog.require('Blockly.Toolbox');
+goog.require('Blockly.TypeBlock');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.inject');
 goog.require('Blockly.utils');
 goog.require('goog.color');
+goog.require('goog.events.KeyCodes');
 goog.require('goog.userAgent');
 
 
@@ -160,6 +157,12 @@ Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
 Blockly.selected = null;
 
 /**
+ * Currently selected field.
+ * @type {Blockly.Field}
+ */
+Blockly.selectedField = null;
+
+/**
  * Currently highlighted connection (during a drag).
  * @type {Blockly.Connection}
  * @private
@@ -236,6 +239,13 @@ Blockly.dragMode_ = 0;
 Blockly.onTouchUpWrapper_ = null;
 
 /**
+ * latest clicked position is used to open the type blocking suggestions window
+ * Initial position is 0,0
+ * @type {{x: number, y:number}}
+ */
+Blockly.latestClick = { x: 0, y: 0 };
+
+/**
  * Returns the dimensions of the specified SVG image.
  * @param {!Element} svg SVG image.
  * @return {!Object} Contains width and height properties.
@@ -244,6 +254,20 @@ Blockly.svgSize = function(svg) {
   return {width: svg.cachedWidth_,
           height: svg.cachedHeight_};
 };
+
+/**
+ * Defines list of variables for various scopes.
+ * @type {Object.<!Array>}
+ */
+Blockly.scopeVariableList = {
+  'Types': ['String','Number','Boolean','Array','Map']
+};
+/**
+ * Defines list of variable type equivalences.
+ * @type {Object.<!Array>}
+ */
+ Blockly.VariableTypeEquivalence = {
+ };
 
 /**
  * Size the SVG image to completely fill its container.
@@ -336,15 +360,25 @@ Blockly.onMouseMove_ = function(e) {
  * @private
  */
 Blockly.onKeyDown_ = function(e) {
-  if (Blockly.isTargetInput_(e)) {
+  if (e.keyCode == goog.events.KeyCodes.TAB && Blockly.WidgetDiv.isVisible()) {
+    Blockly.WidgetDiv.hide();
+  } else if (Blockly.isTargetInput_(e)) {
     // When focused on an HTML text input widget, don't trap any keys.
     return;
   }
   var deleteBlock = false;
-  if (e.keyCode == 27) {
+  if (e.keyCode == goog.events.KeyCodes.ESC) {
     // Pressing esc closes the context menu.
     Blockly.hideChaff();
-  } else if (e.keyCode == 8 || e.keyCode == 46) {
+    Blockly.selectField(null);
+  } else if (e.keyCode == goog.events.KeyCodes.TAB) {
+    if (e.shiftKey) {
+      Blockly.selectPrevField();
+    } else {
+      Blockly.selectNextField();
+    }
+  } else if (e.keyCode == goog.events.KeyCodes.BACKSPACE ||
+             e.keyCode == goog.events.KeyCodes.DELETE) {
     // Delete or backspace.
     try {
       if (Blockly.selected && Blockly.selected.isDeletable()) {
@@ -357,23 +391,84 @@ Blockly.onKeyDown_ = function(e) {
       e.preventDefault();
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
+    var handled = false;
     if (Blockly.selected &&
         Blockly.selected.isDeletable() && Blockly.selected.isMovable()) {
-      if (e.keyCode == 67) {
+      // Figure out how much to move the block by so that it unsnaps and
+      // stays unsnapped.
+      var dist = Math.round(.5+
+        (Blockly.selected.workspace.scale*Blockly.SNAP_RADIUS+1));
+      if (e.keyCode === goog.events.KeyCodes.C) {
         // 'c' for copy.
         Blockly.hideChaff();
         Blockly.copy_(Blockly.selected);
-      } else if (e.keyCode == 88) {
+        handled = true;
+      } else if (e.keyCode === goog.events.KeyCodes.X) {
         // 'x' for cut.
         Blockly.copy_(Blockly.selected);
+        handled = true;
         deleteBlock = true;
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.RIGHT) {
+        Blockly.selected.moveByKey(dist,0);
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.LEFT) {
+        Blockly.selected.moveByKey(-dist,0);
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.DOWN) {
+        Blockly.selected.moveByKey(0,dist);
+      } else if (e.altKey && e.keyCode === goog.events.KeyCodes.UP) {
+        Blockly.selected.moveByKey(0,-dist);
       }
     }
-    if (e.keyCode == 86) {
+    if (e.keyCode == goog.events.KeyCodes.V) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
+        handled = true;
       }
+    }
+    if (!handled && e.metaKey && e.keyCode &&
+        Blockly.selected && Blockly.selected.contextMenu) {
+      var options = Blockly.selected.buildContextMenu_();
+      for (var opt = 0; opt < options.length; opt++) {
+        if (options[opt].enabled && options[opt].accel == e.keyCode) {
+          Blockly.doCommand(options[opt].callback);
+          break;
+        }
+      }
+    }
+  } else if (Blockly.WidgetDiv.isVisible()) {
+    Blockly.WidgetDiv.onKeyDown_(e);
+  } else {
+    var block = Blockly.selected;
+    if (block && e.shiftKey &&
+        (e.keyCode === goog.events.KeyCodes.RIGHT ||
+         e.keyCode === goog.events.KeyCodes.LEFT ||
+         e.keyCode === goog.events.KeyCodes.UP ||
+         e.keyCode === goog.events.KeyCodes.DOWN)) {
+      Blockly.selectNearestBlock(block,e.keyCode);
+    } else if (block && e.keyCode === (block.RTL ? goog.events.KeyCodes.RIGHT
+                                          : goog.events.KeyCodes.LEFT)) {
+      Blockly.selectPrevBlock();
+    } else if (block && e.keyCode === (block.RTL ? goog.events.KeyCodes.LEFT
+                                                 : goog.events.KeyCodes.RIGHT)) {
+      Blockly.selectNextBlock();
+    } else if (block && e.keyCode === goog.events.KeyCodes.UP) {
+      Blockly.selectParentBlock();
+    } else if (block && e.keyCode === goog.events.KeyCodes.DOWN) {
+      Blockly.selectChildBlock();
+    } else if (block && e.keyCode === goog.events.KeyCodes.SPACE) {
+      var box = goog.style.getBoundingClientRect_(block.svgGroup_);
+      var offset = Blockly.SNAP_RADIUS * block.workspace.scale;
+      if (block.RTL) {
+        e.clientX = box.right - offset;
+      } else {
+        e.clientX = box.left + offset;
+      }
+      e.clientY = box.top + offset;
+//      Blockly.selected.workspace.scrollToArea(Blockly.selected);
+      Blockly.selectBlock(Blockly.selected);
+      Blockly.selected.showContextMenu_(e);
+    } else {
+      Blockly.TypeBlock.onKeyDown_(e);
     }
   }
   if (deleteBlock) {
@@ -386,6 +481,500 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.highlightedConnection_ = null;
     }
   }
+};
+
+/**
+ * Make a block selected and focus on it.
+ * @param {!Blockly.Block} block Block to be shown.
+ */
+Blockly.selectBlock = function(block) {
+  if (block) {
+    block.select();
+    var xy = block.getRelativeToSurfaceXY();
+    var height = block.height;
+    var width = block.width;
+    var rect = {
+                top: xy.y,
+                bottom: xy.y + block.height
+               };
+    if (block.RTL) {
+      rect.left = xy.x-width;
+      rect.right = xy.x;
+    } else {
+      rect.left = xy.x;
+      rect.right = xy.x + width;
+    }
+    block.workspace.scrollToArea(rect, block.RTL);
+  }
+};
+
+/**
+ * Make a field selected based on distance.
+ * @param {Blockly.Field} field New field to select.
+ * @param {key} key Key indicating direction to select.
+ */
+Blockly.selectNearestBlock = function(block,keyCode) {
+  var xfactor = 0;
+  var yfactor = 0;
+  var xdir = 0;
+  var ydir = 0;
+  if (keyCode == goog.events.KeyCodes.RIGHT) {
+    xdir = 1; // x must be larger
+    xfactor = 1;
+    yfactor = .5;
+  } else if (keyCode == goog.events.KeyCodes.LEFT) {
+    xdir = -1; // x must be lower
+    yfactor = .5;
+  } else if (keyCode == goog.events.KeyCodes.UP) {
+    ydir = -1; // y must be lower
+    xfactor = .5;
+  } else  if (keyCode == goog.events.KeyCodes.DOWN) {
+    ydir = 1; // y must be higher
+    xfactor = .5;
+    yfactor = 0;
+  }
+  // Remember that right to left blocks start from the upper right corner.
+  if (block.RTL) {
+    xfactor = -xfactor;
+  }
+  // Determine our initial comparison point
+  var xy = block.getRelativeToSurfaceXY();
+  xy.x += block.width * xfactor;
+  xy.y += block.height * yfactor;
+
+  var blocks = block.workspace.getAllBlocks();
+  var closest = null;
+  var distance = null;
+  for (var blk = 0; blk < blocks.length; blk++) {
+    var bxy = blocks[blk].getRelativeToSurfaceXY();
+    bxy.x += block.width * xfactor;
+    bxy.y += block.height * yfactor;
+    var dx = bxy.x - xy.x;
+    var dy = bxy.y - xy.y;
+    var dirtest = dx*xdir + dy*ydir;
+    if (dirtest > 0) {
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      if (distance == null || dist < distance) {
+        distance = dist;
+        closest = blocks[blk];
+      }
+    }
+  }
+  if (closest) {
+    Blockly.selectBlock(closest);
+  }
+};
+/**
+ * Make a field selected.
+ * @param {Blockly.Field} field New field to select.
+ */
+Blockly.selectField = function(field) {
+  Blockly.selectedField = field;
+  if (field) {
+    var block = field.sourceBlock_;
+    // First we select the block and scroll so that it is visible in the view
+    // Generally this will also have the fields in view, but if the block is
+    // large enough and the field is far enough to the end of the block, it
+    // might be possible that the field is obscured, but we want to use the
+    // block as a basis to start with.
+    block.select();
+    var xy = block.getRelativeToSurfaceXY();
+    var height = block.height;
+    var width = block.width;
+    var rect = {
+                top: xy.y,
+                bottom: xy.y + block.height
+               };
+    if (block.RTL) {
+      rect.left = xy.x-width;
+      rect.right = xy.x;
+    } else {
+      rect.left = xy.x;
+      rect.right = xy.x + width;
+    }
+    block.workspace.scrollToArea(rect, block.RTL);
+
+    
+    var fieldElem = field.getSvgRoot();
+    if (fieldElem) {
+      var elemXy = Blockly.getRelativeXY_(fieldElem);
+      rect = {
+               top: xy.y + elemXy.y,
+               bottom: xy.y + block.height
+             };
+      if (block.RTL) {
+        rect.left = xy.x - width;
+        rect.right = xy.x - elemXy.x;
+      } else {
+        rect.left = xy.x + elemXy.x;
+        rect.right = xy.x + width;
+      }
+      block.workspace.scrollToArea(rect, block.RTL);
+    }
+
+    // Now we need to active the field for editing
+    field.showEditor_();
+  }
+};
+
+/**
+ * ↹ Tab:
+ *     Activates the next editable following the logic of → Right arrow
+ *      (→ Left arrow in RTL mode) to go past any fields
+ *     which have no editable fields.
+ *    Note that it does not ever leave the Blockly canvas to activate
+ *    other UI elements of the browser.
+ */
+Blockly.selectNextField = function() {
+  var lastField = Blockly.selectedField;
+  var curBlock = Blockly.selected;
+  var selField = null;
+  // Find us a field to select
+  while(selField === null) {
+    // If we started out with no block selected, go to the first block
+    if (!curBlock) {
+      curBlock = Blockly.findNextBlock(null);
+      lastField = null;
+    }
+    // If we found no block (or there are no blocks) then we can just quit
+    if (!curBlock) {
+      break;
+    }
+    // See if the current block has any editable fields on it
+    var fields = curBlock.getEditableFields();
+    if (fields.length) {
+      // It does have fields, see what field we should select in it
+      var spot = 0;
+      if (lastField) {
+        // if the currently selected field is one of them and look for any
+        // fields after it
+        spot = goog.array.indexOf(fields, lastField)+1;
+        if (spot >= fields.length) {
+          // it was the last field on the block so we want to skip to the next
+          spot = -1;
+        }
+      }
+      if (spot !== -1) {
+        selField = fields[spot];
+      }
+    }
+    if (selField === null) {
+      // No fields so go to the next block
+      curBlock = Blockly.findNextBlock(curBlock);
+      lastField = null;
+      if (curBlock == Blockly.selected) {
+        break;
+      }
+    }
+  }
+  Blockly.selectField(selField);
+};
+
+/**
+ * ⇧↹ Shift Tab
+ *    Activates the previous editable field following the logic of
+ *      → Left arrow (→ Right arrow in RTL mode) to go past any fields
+ *     which have no editable fields.
+ *    Note that it does not ever leave the Blockly canvas to activate
+ *    other UI elements of the browser.
+ */
+
+Blockly.selectPrevField = function() {
+  var lastField = Blockly.selectedField;
+  var curBlock = Blockly.selected;
+  var selField = null;
+  // Find us a field to select
+  while(selField === null) {
+    // If we started out with no block selected, go to the first block
+    if (!curBlock) {
+      curBlock = Blockly.findNextBlock(null);
+      lastField = null;
+    }
+    // If we found no block (or there are no blocks) then we can just quit
+    if (!curBlock) {
+      break;
+    }
+    // See if the current block has any editable fields on it
+    var fields = curBlock.getEditableFields();
+    if (fields.length) {
+      // It does have fields, see what field we should select in it
+      var spot = fields.length-1;
+      if (lastField) {
+        // if the currently selected field is one of them and look for any
+        // fields after it
+        spot = goog.array.indexOf(fields, lastField)-1;
+        if (spot < 0) {
+          // it was the last field on the block so we want to skip to the next
+          spot = -1;
+        }
+      }
+      if (spot !== -1) {
+        selField = fields[spot];
+      }
+    }
+    if (selField === null) {
+      // No fields so go to the next block
+      curBlock = Blockly.findPrevBlock(curBlock);
+      lastField = null;
+      if (curBlock == Blockly.selected) {
+        break;
+      }
+    }
+  }
+  Blockly.selectField(selField);
+};
+
+/**
+ * Make a field selected.
+ * → Right Arrow (← Left arrow in RTL mode)
+ *    First child of this block if any,
+ *    otherwise go to the next sibling of the closest ancestor
+ *    that has a next sibling.
+ *    This behavior allows the right arrow to traverse the tree in
+ *    pre-order traversal.
+ *    Note that this follows all the way to the top of disconnected blocks in
+ *    that it jumps to the next collection of disconnected blocks when you
+ *    attempt to go to the right arrow off the last block,
+ *    it will go to the next set of blocks in the workspace.
+ *    When you get to the last block in the entire workspace,
+ *    the first block in the workspace should be selected.
+ */
+Blockly.selectNextBlock = function() {
+  var newSelect = Blockly.findNextBlock(Blockly.selected);
+  Blockly.selectField(null);
+  Blockly.selectBlock(newSelect);
+}
+
+/**
+ * Determine the next block in order from this block.
+ * @param {Blockly.Block} block Block to navigate from.
+ * @return {Blockly.Block} block that is next in order from this block
+ */
+Blockly.findNextTopBlock = function(block) {
+  var nextBlock = null;
+  // Get all the top blocks in physical sorted order to look through.
+  var blocks = Blockly.getMainWorkspace().getTopBlocks(true);
+  if (blocks.length > 0) {
+    var spot = goog.array.indexOf(blocks, block)+1;
+    // Did we actually find anything to match us in the array?
+    if (spot > 0) {
+      // When we get to the end of the array, wrap back to the first one
+      if (spot === blocks.length) {
+        spot = 0;
+      }
+      nextBlock = blocks[spot];
+    }
+  }
+  return nextBlock;
+};
+
+/**
+ * Determine the next block in order from this block.
+ * @param {Blockly.Block} block Block to navigate from.
+ * @return {Blockly.Block} block that is next in order from this block
+ */
+Blockly.findNextBlock = function(block) {
+  /** @type {Blockly.Block} */
+  var newSelect = null; // New block to be selected
+  /** @type {Blockly.Block} */
+  var baseBlock = block;  // Block being evaluated
+  /** @type {Blockly.Block} */
+  var prevBlock = null;  // Last block we had selected
+  while ((baseBlock != null) && (newSelect === null)) {
+    // Look through the children to see if the previous block was one of them.
+    // If so, then we will take it.
+    var children = [];
+    if (!baseBlock.isCollapsed()) {
+      children = baseBlock.getOrderedChildren();
+    }
+    var spot = 0;
+    if (children.length > 0) {
+      spot = goog.array.indexOf(children, prevBlock)+1;
+    }
+    if (spot < children.length) {
+      newSelect = children[spot];
+    } else {
+      // Nothing more on this block, so let's try for our parent (remembering
+      // which child we were
+      prevBlock = baseBlock;
+      baseBlock = baseBlock.getParent();
+    }
+  }
+  // If we didn't get any blocks out of the current group, try for the next one
+  // at the top level.  Note that prevBlock will point to the top level block
+  // in the current group.
+  if (newSelect === null) {
+    newSelect = Blockly.findNextTopBlock(prevBlock);
+  }
+  return newSelect;
+};
+
+/*
+ * ← Left Arrow  (→ Right arrow in RTL mode)
+ *    If this block has a previous sibling,
+ *       follow that block to the last sibling of any children recursively,
+ *    otherwise select the parent block.
+ *    The intent is that the Left arrow selects the block in reverse of what
+ *    the right arrow did so that you traverse the blocks in the same
+ *    forward/backwards order.
+ */
+Blockly.selectPrevBlock = function() {
+  var newSelect = Blockly.findPrevBlock(Blockly.selected);
+  Blockly.selectField(null);
+  Blockly.selectBlock(newSelect);
+}
+
+/**
+ * Determine the previous block in order from this block.
+ * @param {Blockly.Block} block Block to navigate from.
+ * @return {Blockly.Block} block that is previous in order from this block
+ */
+Blockly.findPrevTopBlock = function(block) {
+  var prevBlock = null;
+  // Get all the top blocks in physical sorted order to look through.
+  var blocks = Blockly.getMainWorkspace().getTopBlocks(true);
+  if (blocks.length > 0) {
+    var spot = goog.array.indexOf(blocks, block);
+    // Did we actually find anything to match us in the array?
+    if (spot >= 0) {
+      // When we get to the start of the array, wrap back to the last one
+      if (spot === 0) {
+        spot = blocks.length;
+      }
+      prevBlock = blocks[spot-1];
+    }
+  }
+  return prevBlock;
+};
+
+/**
+ * Determine the previous block in order from this block.
+ * @param {Blockly.Block} block Block to navigate from.
+ * @return {Blockly.Block} block that is previous in order from this block
+ */
+Blockly.findPrevBlock = function(block) {
+  /** @type {Blockly.Block} */
+  var newSelect = null; // New block to be selected
+  /** @type {Blockly.Block} */
+  var baseBlock = null;  // Block being evaluated
+  /** @type {Blockly.Block} */
+  var prevBlock = block;  // Last block we had selected
+  if (prevBlock != null) {
+    baseBlock = prevBlock.getParent();
+    // If we didn't get any blocks out of the current group, try for the previous
+    // one at the top level.  Note that prevBlock will point to the top level
+    // block in the current group.
+    if (baseBlock === null) {
+      baseBlock = Blockly.findPrevTopBlock(prevBlock);
+    }
+  }
+  while ((baseBlock != null) && (newSelect === null)) {
+    // If this block has any children, we go to the last one of any children
+    // otherwise we go to the parent
+    var children = [];
+    if (!baseBlock.isCollapsed()) {
+      children = baseBlock.getOrderedChildren();
+    }
+    if (children.length === 0) {
+      newSelect = baseBlock;
+    } else {
+      var spot = goog.array.indexOf(children, prevBlock);
+      if (spot === 0) {
+        newSelect = baseBlock;
+      } else {
+        if (spot === -1) {
+          spot = children.length;
+        }
+        prevBlock = null;
+        baseBlock = children[spot-1];
+      }
+    }
+  }
+  return newSelect;
+};
+
+/*
+ * ↑ Up Arrow
+ *    Previous sibling of current block if there is one,
+ *    otherwise follow the logic for the left arrow key
+ *    (right arrow when in RTL mode)
+ */
+Blockly.selectParentBlock = function() {
+  /** @type {Blockly.Block} */
+  var newSelect = null; // New block to be selected
+  /** @type {Blockly.Block} */
+  var baseBlock = null;  // Block being evaluated
+  /** @type {Blockly.Block} */
+  var prevBlock = Blockly.selected;  // Last block we had selected
+  if (prevBlock != null) {
+    if (prevBlock.previousConnection != null) {
+      newSelect = prevBlock.previousConnection.targetBlock();
+    }
+    if (newSelect === null) {
+      baseBlock = prevBlock.getSurroundParent();
+      if (baseBlock != null) {
+        var children = [];
+        if (!baseBlock.isCollapsed() && !baseBlock.getInputsInline()) {
+          children = baseBlock.getOrderedChildren();
+        }
+        if (children.length >= 0) {
+          var spot = goog.array.indexOf(children, prevBlock);
+          if (spot > 0) {
+            newSelect = children[spot-1];
+          }
+        }
+        if (newSelect === null) {
+          newSelect = baseBlock;
+        }
+      }
+    }
+  }
+  if (newSelect === null) {
+    newSelect = Blockly.findPrevTopBlock(prevBlock);
+  }
+  Blockly.selectField(null);
+  Blockly.selectBlock(newSelect);
+};
+
+/*
+ * ↓ Down Arrow
+ *     Next Sibling of the current block if there is one,
+ *     otherwise follow the logic for the right arrow key
+ *     (left arrow when in RTL mode)
+ */
+Blockly.selectChildBlock = function() {
+  /** @type {Blockly.Block} */
+  var newSelect = null; // New block to be selected
+  /** @type {Blockly.Block} */
+  var baseBlock = null;  // Block being evaluated
+  /** @type {Blockly.Block} */
+  var prevBlock = Blockly.selected;  // Last block we had selected
+  if (prevBlock != null) {
+    newSelect = prevBlock.getNextBlock();
+    if (newSelect === null) {
+      baseBlock = prevBlock.getSurroundParent();
+      if (baseBlock != null) {
+        var children = [];
+        if (!baseBlock.isCollapsed() && !baseBlock.getInputsInline()) {
+          children = baseBlock.getOrderedChildren();
+        }
+        if (children.length >= 0) {
+          var spot = goog.array.indexOf(children, prevBlock);
+          if (spot >= 0 && spot < (children.length-1)) {
+            newSelect = children[spot+1];
+          }
+        }
+        if (newSelect === null) {
+          newSelect = baseBlock;
+        }
+      }
+    }
+  }
+  if (newSelect === null) {
+    newSelect = Blockly.findNextTopBlock(prevBlock);
+  }
+  Blockly.selectField(null);
+  Blockly.selectBlock(newSelect);
 };
 
 /**
@@ -490,6 +1079,7 @@ Blockly.onContextMenu_ = function(e) {
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
+  Blockly.TypeBlock.hide();
   if (!opt_allowToolbox) {
     var workspace = Blockly.getMainWorkspace();
     if (workspace.toolbox_ &&

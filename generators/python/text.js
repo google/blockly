@@ -175,13 +175,13 @@ Blockly.Python['text_getSubstring'] = function(block) {
   }
   if (where2 == 'LAST' || (where2 == 'FROM_END' && at2 == '1')) {
     at2 = '';
-  } else if (where1 == 'FROM_START') {
+  } else if (where2 == 'FROM_START') {
     if (Blockly.isNumber(at2)) {
       at2 = parseInt(at2, 10);
     } else {
       at2 = 'int(' + at2 + ')';
     }
-  } else if (where1 == 'FROM_END') {
+  } else if (where2 == 'FROM_END') {
     if (Blockly.isNumber(at2)) {
       // If the index is a naked number, increment it right now.
       at2 = 1 - parseInt(at2, 10);
@@ -234,6 +234,54 @@ Blockly.Python['text_print'] = function(block) {
   return 'print(' + argument0 + ')\n';
 };
 
+
+Blockly.Python['text_printf'] = function(block) {
+	  // Create a string made up of any number of elements of any type.
+	  // Should we allow joining by '-' or ',' or any other characters?
+  var code;
+  var argument0 = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_NONE) || '""';
+  if (block.itemCount_ == 0) {
+    return ['""', Blockly.Python.ORDER_ATOMIC];
+  } else {
+    var code = '';
+    var extra = '';
+    for (var n = 0; n < block.itemCount_; n++) {
+      var item = Blockly.Python.valueToCode(block, 'ADD' + n,
+          Blockly.Python.ORDER_NONE);
+      if (item) {
+        code += extra + 'str('+item+')';
+        extra = ', ';
+      }
+    }
+  code = 'print "".format( ' + argument0 + ' % ('+code+' ))';
+  return code;
+  }
+};
+
+Blockly.Python['text_sprintf'] = function(block) {
+	  // Create a string made up of any number of elements of any type.
+	  // Should we allow joining by '-' or ',' or any other characters?
+	var code;
+	var argument0 = Blockly.Python.valueToCode(block, 'TEXT', Blockly.Python.ORDER_NONE) || '""';
+    Blockly.Python.definitions_['import_StringIO'] = 'import StringIO';
+	if (block.itemCount_ == 0) {
+	  return ['""', Blockly.Python.ORDER_ATOMIC];
+	} else {
+	  var code = '';
+	  var extra = '';
+	  for (var n = 0; n < block.itemCount_; n++) {
+	    var item = Blockly.Python.valueToCode(block, 'ADD' + n,
+	        Blockly.Python.ORDER_NONE);
+	    if (item) {
+	        code += extra + 'str('+item+')';
+	      extra = ', ';
+	    }
+	  }
+	  code = '"".format( ' + argument0 + ' % ('+code+' ))';
+	  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+	}
+};
+
 Blockly.Python['text_prompt_ext'] = function(block) {
   // Prompt function.
   var functionName = Blockly.Python.provideFunction_(
@@ -260,3 +308,12 @@ Blockly.Python['text_prompt_ext'] = function(block) {
 };
 
 Blockly.Python['text_prompt'] = Blockly.Python['text_prompt_ext'];
+
+Blockly.Python['text_comment'] = function(block) {
+ // Display comment
+  
+  var comment = block.getFieldValue('COMMENT') || '';
+  var code = '/*\n' + comment + '\n*/\n';
+  
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+};

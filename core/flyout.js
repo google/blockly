@@ -126,8 +126,7 @@ Blockly.Flyout.prototype.createDom = function() {
     <g class="blocklyFlyout"></g>
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g',
-      {'class': 'blocklyFlyout'}, null);
+  this.svgGroup_ = Blockly.createSvgElement('g', {'class': 'blocklyFlyout'}, null);
   this.svgBackground_ = Blockly.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
@@ -670,15 +669,24 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
 
 /**
  * Filter the blocks on the flyout to disable the ones that are above the
- * capacity limit.
+ * capacity limit or are limited to only a single instance.
  * @private
  */
 Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var remainingCapacity = this.targetWorkspace_.remainingCapacity();
   var blocks = this.workspace_.getTopBlocks(false);
+  var targetBlocks = {};
+  if (this.workspace_.targetWorkspace) {
+    var checkBlocks = this.workspace_.targetWorkspace.getAllBlocks();
+    for(var i = 0; i < checkBlocks.length; i++) {
+      if (checkBlocks[i].isUnique) {
+        targetBlocks[checkBlocks[i].type] = 1;
+      }
+    }
+  }
   for (var i = 0, block; block = blocks[i]; i++) {
     var allBlocks = block.getDescendants();
-    if (allBlocks.length > remainingCapacity) {
+    if (targetBlocks[block.type] || allBlocks.length > remainingCapacity) {
       block.setDisabled(true);
     }
   }

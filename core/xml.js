@@ -74,7 +74,7 @@ Blockly.Xml.blockToDom_ = function(block) {
     }
   }
   function fieldToDom(field) {
-    if (field.name && field.EDITABLE) {
+    if (field.name && field.SERIALIZABLE) {
       var container = goog.dom.createDom('field', null, field.getValue());
       container.setAttribute('name', field.name);
       element.appendChild(container);

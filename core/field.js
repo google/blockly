@@ -83,6 +83,13 @@ Blockly.Field.prototype.visible_ = true;
 Blockly.Field.prototype.changeHandler_ = null;
 
 /**
+ * Holder for private data used by the field for any reason.  The format of this
+ * data is opaque to the field
+ * @private
+ */
+Blockly.Field.prototype.privateData_ = null;
+
+/**
  * Non-breaking space.
  */
 Blockly.Field.NBSP = '\u00A0';
@@ -91,6 +98,10 @@ Blockly.Field.NBSP = '\u00A0';
  * Editable fields are saved by the XML renderer, non-editable fields are not.
  */
 Blockly.Field.prototype.EDITABLE = true;
+/**
+ * Well we can save them with the XML renderer as long as they are serializable.
+ */
+Blockly.Field.prototype.SERIALIZABLE = true;
 
 /**
  * Install this field on a block.
@@ -194,6 +205,14 @@ Blockly.Field.prototype.setVisible = function(visible) {
  */
 Blockly.Field.prototype.setChangeHandler = function(handler) {
   this.changeHandler_ = handler;
+};
+
+/**
+ * Sets whether this editable field is serialized out by the XML renderer or not
+ * @param {boolean} serializable True if the block can be serialized
+ */
+Blockly.Field.prototype.setSerializable = function(serializable) {
+  this.SERIALIZABLE = serializable;
 };
 
 /**
@@ -368,6 +387,22 @@ Blockly.Field.prototype.getValue = function() {
  */
 Blockly.Field.prototype.setValue = function(text) {
   this.setText(text);
+};
+
+/**
+ * Gets private data associated with this field
+ * @return {Object} Current private data.
+ */
+Blockly.Field.prototype.getPrivate = function() {
+  return this.privateData_;
+};
+
+/**
+ * Stores private data associated with this field.
+ * @param {Object} privateData Data to be stored for later retrieval.
+ */
+Blockly.Field.prototype.setPrivate = function(privateData) {
+  this.privateData_ = privateData;
 };
 
 /**

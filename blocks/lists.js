@@ -51,7 +51,8 @@ Blockly.Blocks['lists_create_empty'] = {
       "tooltip": Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP,
       "helpUrl": Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL
     });
-  }
+  },
+  typeblock: Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK
 };
 
 Blockly.Blocks['lists_create_with'] = {
@@ -62,11 +63,20 @@ Blockly.Blocks['lists_create_with'] = {
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_CREATE_WITH_HELPURL);
     this.setColour(Blockly.Blocks.lists.HUE);
-    this.itemCount_ = 3;
+    if (this.workspace.options.useMutators) {
+      this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
+    } else {
+      this.appendAddSubGroup(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, 'items',
+                           null,
+                           Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
+    }
+    this.itemCount_ = 1;
     this.updateShape_();
     this.setOutput(true, 'Array');
-    this.setMutator(new Blockly.Mutator(['lists_create_with_item']));
     this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
+  },
+  getAddSubName: function(name,pos) {
+    return 'ADD'+pos;
   },
   /**
    * Create XML to represent list inputs.
@@ -173,7 +183,20 @@ Blockly.Blocks['lists_create_with'] = {
         }
       }
     }
-  }
+  },
+  getOutput: function() {
+    var result = [];
+    for(var i = 0; i < this.itemCount_; i++) {
+      result = this.getInputCollectionOutput('ADD'+i, 'Array', result);
+    }
+    return result;
+  },
+  typeblock: [
+      { entry: Blockly.Msg.LISTS_CREATE_WITH_TYPEBLOCK,
+        mutatorAttributes: { items: 2 } }
+//      ,{ entry: Blockly.Msg.LISTS_CREATE_EMPTY_TYPEBLOCK,
+//        mutatorAttributes: { items: 0 } }
+             ]
 };
 
 Blockly.Blocks['lists_create_with_container'] = {
@@ -231,7 +254,12 @@ Blockly.Blocks['lists_repeat'] = {
       "tooltip": Blockly.Msg.LISTS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.LISTS_REPEAT_HELPURL
     });
-  }
+  },
+  getOutput: function() {
+    return this.getInputCollectionOutput('ITEM','Array');
+  },
+  typeblock: [{entry: Blockly.Msg.LISTS_REPEAT_TYPEBLOCK,
+                "values": {'NUM': 5 }}]
 };
 
 Blockly.Blocks['lists_length'] = {
@@ -254,7 +282,8 @@ Blockly.Blocks['lists_length'] = {
       "tooltip": Blockly.Msg.LISTS_LENGTH_TOOLTIP,
       "helpUrl": Blockly.Msg.LISTS_LENGTH_HELPURL
     });
-  }
+  },
+  typeblock: Blockly.Msg.LISTS_LENGTH_TYPEBLOCK 
 };
 
 Blockly.Blocks['lists_isEmpty'] = {
@@ -277,7 +306,8 @@ Blockly.Blocks['lists_isEmpty'] = {
       "tooltip": Blockly.Msg.LISTS_ISEMPTY_TOOLTIP,
       "helpUrl": Blockly.Msg.LISTS_ISEMPTY_HELPURL
     });
-  }
+  },
+  typeblock: Blockly.Msg.LISTS_ISEMPTY_TYPEBLOCK
 };
 
 Blockly.Blocks['lists_indexOf'] = {
@@ -299,7 +329,11 @@ Blockly.Blocks['lists_indexOf'] = {
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'END');
     this.setInputsInline(true);
     this.setTooltip(Blockly.Msg.LISTS_INDEX_OF_TOOLTIP);
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.LISTS_INDEX_OF_FIRST_TYPEBLOCK,
+                fields: { END: 'FIRST' } },
+              { entry: Blockly.Msg.LISTS_INDEX_OF_LAST_TYPEBLOCK,
+                fields: { END: 'LAST' } } ]
 };
 
 Blockly.Blocks['lists_getIndex'] = {
@@ -431,6 +465,23 @@ Blockly.Blocks['lists_getIndex'] = {
     if (Blockly.Msg.LISTS_GET_INDEX_TAIL) {
       this.moveInputBefore('TAIL', null);
     }
+  },
+  typeblock: function() {
+    var result = [];
+    var modeOptions = ['GET', 'GET_REMOVE', 'REMOVE'];
+    var whereOptions = ['FROM_START', 'FROM_END', 'FIRST', 'LAST', 'RANDOM'];
+    for (var modeSlot = 0; modeSlot < modeOptions.length; modeSlot++) {
+      var mode = modeOptions[modeSlot];
+      for (var whereSlot = 0; whereSlot < whereOptions.length; whereSlot++) {
+        var where = whereOptions[whereSlot];
+        result.push({ entry: Blockly.Msg['LISTS_GET_INDEX_'+ mode +
+                                                  '_' + where +'_TYPEBLOCK'],
+                      values: { 'VALUE': '<shadow type="variables_get">'+
+                                     '<field name="VAR">list</field></shadow>' },
+                      fields: { 'MODE': mode, 'WHERE': where }});
+      }
+    }
+    return result;
   }
 };
 
@@ -533,6 +584,23 @@ Blockly.Blocks['lists_setIndex'] = {
     }
 
     this.getInput('AT').appendField(menu, 'WHERE');
+  },
+  typeblock: function() {
+    var result = [];
+    var modeOptions = ['SET', 'INSERT'];
+    var whereOptions = ['FROM_START', 'FROM_END', 'FIRST', 'LAST', 'RANDOM'];
+    for (var modeSlot = 0; modeSlot < modeOptions.length; modeSlot++) {
+      var mode = modeOptions[modeSlot];
+      for (var whereSlot = 0; whereSlot < whereOptions.length; whereSlot++) {
+        var where = whereOptions[whereSlot];
+        result.push({ entry: Blockly.Msg['LISTS_SET_INDEX_'+ mode +
+                                                  '_' + where +'_TYPEBLOCK'],
+                      values: { 'LIST': '<shadow type="variables_get">'+
+                                      '<field name="VAR">list</field></shadow>'},
+                      fields: { 'MODE': mode, 'WHERE': where }});
+      }
+    }
+    return result;
   }
 };
 
@@ -638,7 +706,10 @@ Blockly.Blocks['lists_getSublist'] = {
     if (Blockly.Msg.LISTS_GET_SUBLIST_TAIL) {
       this.moveInputBefore('TAIL', null);
     }
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.LISTS_GET_SUBLIST_TYPEBLOCK,
+                values: { 'LIST': '<shadow type="variables_get">'+
+                                '<field name="VAR">list</field></shadow>' }}]
 };
 
 Blockly.Blocks['lists_split'] = {
@@ -707,5 +778,13 @@ Blockly.Blocks['lists_split'] = {
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('mode'));
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT_TYPEBLOCK,
+                values: { 'DELIM': '<shadow type="text">'+
+                                       '<field name="TEXT">,</field></shadow>' },
+                fields: { 'MODE': 'SPLIT' }},
+              { entry: Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST_TYPEBLOCK,
+                values: { 'DELIM': '<shadow type="text">'+
+                                      '<field name="TEXT">,</field></shadow>' },
+                fields: { 'MODE': 'SPLIT' }}]
 };

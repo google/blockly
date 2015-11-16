@@ -61,7 +61,8 @@ Blockly.inject = function(container, opt_options) {
     if (realtimeElement) {
       realtimeElement.style.display = 'block';
     }
-    Blockly.Realtime.startRealtime(startUi, container, options.realtimeOptions);
+    Blockly.Realtime.startRealtime(startUi, container, options.realtimeOptions,
+				   options.pathToMedia);
   } else {
     startUi();
   }
@@ -109,6 +110,9 @@ Blockly.parseOptions_ = function(options) {
     var hasComments = false;
     var hasDisable = false;
     var hasSounds = false;
+    var optionDisconnected = true;
+    var useMutators = false;
+    var appTitle = '';
   } else {
     var languageTree = Blockly.parseToolboxTree_(options['toolbox']);
     var hasCategories = Boolean(languageTree &&
@@ -132,6 +136,18 @@ Blockly.parseOptions_ = function(options) {
     var hasSounds = options['sounds'];
     if (hasSounds === undefined) {
       hasSounds = true;
+    }
+    var useMutators = options['mutators'];
+    if (useMutators === undefined) {
+      useMutators = false;
+    }
+    var optionDisconnected = options['disconnected'];
+    if (optionDisconnected === undefined) {
+      optionDisconnected = true;
+    }
+    var appTitle = options['appTitle'];
+    if (appTitle === undefined) {
+      appTitle = '';
     }
   }
   var hasScrollbars = options['scrollbars'];
@@ -209,6 +225,9 @@ Blockly.parseOptions_ = function(options) {
     hasTrashcan: hasTrashcan,
     hasSounds: hasSounds,
     hasCss: hasCss,
+    disableDisconnected: !optionDisconnected,
+    useMutators: useMutators,
+    appTitle: appTitle,
     languageTree: languageTree,
     gridOptions: gridOptions,
     zoomOptions: zoomOptions,

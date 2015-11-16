@@ -32,7 +32,6 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.FieldLabel');
 goog.require('goog.asserts');
 
-
 /**
  * Class for an input with an optional field.
  * @param {number} type The type of the input.
@@ -189,13 +188,14 @@ Blockly.Input.prototype.setVisible = function(visible) {
  * Change a connection's compatibility.
  * @param {string|Array.<string>|null} check Compatible value type or
  *     list of value types.  Null if all types are compatible.
+ * @param {boolean} requireType true if null blocks can't match.
  * @return {!Blockly.Input} The input being modified (to allow chaining).
  */
-Blockly.Input.prototype.setCheck = function(check) {
+Blockly.Input.prototype.setCheck = function(check,requireType) {
   if (!this.connection) {
     throw 'This input does not have a connection.';
   }
-  this.connection.setCheck(check);
+  this.connection.setCheck(check,requireType);
   return this;
 };
 
@@ -237,3 +237,4 @@ Blockly.Input.prototype.dispose = function() {
   }
   this.sourceBlock_ = null;
 };
+

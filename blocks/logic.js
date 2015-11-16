@@ -40,17 +40,27 @@ Blockly.Blocks['controls_if'] = {
    * @this Blockly.Block
    */
   init: function() {
+    if (!this.workspace.options.useMutators) {
+      var addField = new Blockly.FieldClickImage(this.addPng, 17, 17,
+                                          Blockly.Msg.CONTROLS_IF_ADD_TOOLTIP);
+      addField.setChangeHandler(this.doAddField);
+    }
     this.setHelpUrl(Blockly.Msg.CONTROLS_IF_HELPURL);
     this.setColour(Blockly.Blocks.logic.HUE);
-    this.appendValueInput('IF0')
+    var valInput = this.appendValueInput('IF0')
         .setCheck('Boolean')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF);
+    if (!this.workspace.options.useMutators) {
+        valInput.appendField(addField,'IF_ADD');
+    }
     this.appendStatementInput('DO0')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setMutator(new Blockly.Mutator(['controls_if_elseif',
+    if (this.workspace.options.useMutators) {
+      this.setMutator(new Blockly.Mutator(['controls_if_elseif',
                                          'controls_if_else']));
+    }
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
@@ -92,18 +102,161 @@ Blockly.Blocks['controls_if'] = {
    * @this Blockly.Block
    */
   domToMutation: function(xmlElement) {
-    this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10) || 0;
-    this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10) || 0;
-    for (var i = 1; i <= this.elseifCount_; i++) {
-      this.appendValueInput('IF' + i)
-          .setCheck('Boolean')
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
-      this.appendStatementInput('DO' + i)
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-    }
+    this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
+    this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10);
+    this.updateAddSubShape();
+  },
+  /**
+   * Add a section to the if
+   * @param {!Blockly.FieldClickImage} field Field clicked on for the action
+   */
+  doAddField: function(field) {
     if (this.elseCount_) {
-      this.appendStatementInput('ELSE')
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
+      // We already have an else so add another elseif
+      this.elseifCount_++;
+    } else {
+      // No else, so add it
+      this.elseCount_ = 1;
+    }
+  this.updateAddSubShape();
+  },
+  /**
+   * remove a specific elseif section from an if
+   * @param {!Blockly.FieldClickImage} field Field clicked on for the action
+   */
+  doRemoveElseifField: function(field) {
+    // Determine what they clicked on
+    var privateData = field.getPrivate();
+    var pos = privateData.pos;
+    // Removing one of the ELSIF clauses.
+    var limit = this.elseifCount_+1;
+    if(this.elseifCount_ > 0) {
+      this.elseifCount_--;
+    }
+    // Disconnect anything plugged into the IF and DO part of this elseif
+    var ifInput = this.getInput('IF'+pos);
+    if (ifInput && ifInput.connection && ifInput.connection.targetConnection) {
+      ifInput.connection.targetConnection.sourceBlock_.unplug(true,true);
+    }
+    var doInput = this.getInput('DO'+pos);
+    if (doInput && doInput.connection && doInput.connection.targetConnection) {
+      doInput.connection.targetConnection.sourceBlock_.unplug(true,true);
+    }
+    // Now we need to go through and move up all the lower ones to the previous
+    // one.
+    for(var slot = pos+1; slot < limit; slot++) {
+      var nextIfInput = this.getInput('IF'+slot);
+      var nextDoInput = this.getInput('DO'+slot);
+      if (nextIfInput != null) {
+        if (nextIfInput.connection && nextIfInput.connection.targetConnection) {
+          var toMove = nextIfInput.connection.targetConnection;
+          toMove.sourceBlock_.unplug(false,false);
+          ifInput.connection.connect(toMove);
+        }
+      }
+      if (nextDoInput != null) {
+        if (nextDoInput.connection && nextDoInput.connection.targetConnection) {
+          var toMove = nextDoInput.connection.targetConnection;
+          toMove.sourceBlock_.unplug(false,false);
+          doInput.connection.connect(toMove);
+        }
+      }
+      ifInput = nextIfInput;
+      doInput = nextDoInput;
+    }
+    this.updateAddSubShape();
+  },
+  /**
+   * remove the else section from an if
+   * @param {!Blockly.FieldClickImage} field Field clicked on for the action
+   */
+  doRemoveElseField: function(field) {
+    // Removing the else, this is easy.
+    this.elseCount_ = 0;
+    this.updateAddSubShape();
+  },
+  /**
+   * Reconfigure this block based on the component values.
+   * @this Blockly.Block
+   */
+  updateAddSubShape: function() {
+    // First get rid of anything which is beyond our count
+    var pos = this.elseifCount_+1;
+    while(this.getInput('IF'+pos) != null) {
+      this.removeInput('IF'+pos);
+      this.removeInput('DO'+pos);
+      pos++;
+    }
+    if (!this.elseCount_) {
+      if(this.getInput('ELSE') != null) {
+        this.removeInput('ELSE');
+      }
+    }
+    // Now add in the ones which we are missing.  Note that
+    // we need to make sure that they get put AFTER the one of
+    // the same number
+    var inputIndex = this.getInputIndex('DO0');
+    goog.asserts.assert(inputIndex != -1,
+                        'Named input DO0 not found.');
+    if (inputIndex !== -1) {
+      inputIndex++;
+      for(pos = 1; pos < this.elseifCount_+1;pos++,inputIndex+=2) {
+        var inputItem = this.getInput('IF'+pos);
+        if (inputItem == null) {
+          var subField = null;
+          if (!this.workspace.options.useMutators) {
+            subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
+                                Blockly.Msg.CONTROLS_IF_ELSEIF_REMOVE_TOOLTIP);
+            subField.setPrivate({name: 'IF', pos: pos});
+            subField.setChangeHandler(this.doRemoveElseifField);
+          }
+
+          // We have to add an elseif clause
+          var ifInput = this.appendValueInput('IF' + pos)
+                            .setCheck('Boolean')
+                            .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+          if (subField) {
+            ifInput.appendField(subField);
+          }
+          var doInput = this.appendStatementInput('DO' + pos)
+                            .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
+          // Now see if we need to move them in front of the else
+          if(inputIndex < this.inputList.length-1) {
+            // We move them from the bottom to the top.  Because they start at
+            // the bottom, we move them to the same place and they will stay in
+            // the same order.
+            this.moveNumberedInputBefore(this.inputList.length-1, inputIndex);
+            this.moveNumberedInputBefore(this.inputList.length-1, inputIndex);
+          }
+        }
+      }
+      // See if we need to add an else clause
+      if (this.elseCount_) {
+        var inputItem = this.getInput('ELSE');
+        if (inputItem == null) {
+          var subField = null;
+          if (!this.workspace.options.useMutators) {
+            subField = new Blockly.FieldClickImage(this.subPng, 17, 17,
+                                Blockly.Msg.CONTROLS_IF_ELSE_REMOVE_TOOLTIP);
+            subField.setChangeHandler(this.doRemoveElseField);
+          }
+
+          var doElse = this.appendStatementInput('ELSE')
+              .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
+          if (subField) {
+            doElse.appendField(subField);
+          }
+        }
+      }
+    }
+    //
+    // Make sure that we don't have anything which might be showing up
+    // as a false connection
+    //
+    if (this.rendered) {
+      this.render();
+      this.bumpNeighbours_();
+      this.workspace.fireChangeEvent();
     }
   },
   /**
@@ -211,7 +364,15 @@ Blockly.Blocks['controls_if'] = {
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();
     }
-  }
+  },
+  typeblock: [
+      { entry: Blockly.Msg.CONTROLS_IF_TYPEBLOCK },
+      { entry: Blockly.Msg.CONTROLS_IF_ELSIF_TYPEBLOCK,
+         mutatorAttributes: { 'elseif': 1 } },
+      { entry: Blockly.Msg.CONTROLS_IF_ELSIF_ELSE_TYPEBLOCK,
+         mutatorAttributes: { 'elseif': 1, 'else': 1 } },
+      { entry: Blockly.Msg.CONTROLS_IF_ELSE_TYPEBLOCK,
+         mutatorAttributes: { 'else': 1 } } ]
 };
 
 Blockly.Blocks['controls_if_if'] = {
@@ -326,7 +487,8 @@ Blockly.Blocks['logic_compare'] = {
     }
     this.prevBlocks_[0] = blockA;
     this.prevBlocks_[1] = blockB;
-  }
+  },
+  typeblock: Blockly.Msg.LOGIC_COMPARE_TYPEBLOCK
 };
 
 Blockly.Blocks['logic_operation'] = {
@@ -357,7 +519,11 @@ Blockly.Blocks['logic_operation'] = {
       };
       return TOOLTIPS[op];
     });
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.LOGIC_OPERATION_OR_TYPEBLOCK,
+                fields: { 'OP': 'OR' }},
+              { entry: Blockly.Msg.LOGIC_OPERATION_AND_TYPEBLOCK,
+                fields: { 'OP': 'AND' }}]
 };
 
 Blockly.Blocks['logic_negate'] = {
@@ -380,7 +546,8 @@ Blockly.Blocks['logic_negate'] = {
       "tooltip": Blockly.Msg.LOGIC_NEGATE_TOOLTIP,
       "helpUrl": Blockly.Msg.LOGIC_NEGATE_HELPURL
     });
-  }
+  },
+  typeblock: Blockly.Msg.LOGIC_NEGATE_TYPEBLOCK
 };
 
 Blockly.Blocks['logic_boolean'] = {
@@ -406,7 +573,11 @@ Blockly.Blocks['logic_boolean'] = {
       "tooltip": Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP,
       "helpUrl": Blockly.Msg.LOGIC_BOOLEAN_HELPURL
     });
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.LOGIC_BOOLEAN_TRUE_TYPEBLOCK,
+                fields: { 'BOOL': 'TRUE' }},
+              { entry: Blockly.Msg.LOGIC_BOOLEAN_FALSE_TYPEBLOCK,
+                fields: { 'BOOL': 'FALSE' }}]
 };
 
 Blockly.Blocks['logic_null'] = {
@@ -422,7 +593,8 @@ Blockly.Blocks['logic_null'] = {
       "tooltip": Blockly.Msg.LOGIC_NULL_TOOLTIP,
       "helpUrl": Blockly.Msg.LOGIC_NULL_HELPURL
     });
-  }
+  },
+  typeblock: Blockly.Msg.LOGIC_NULL_TYPEBLOCK
 };
 
 Blockly.Blocks['logic_ternary'] = {
@@ -469,5 +641,6 @@ Blockly.Blocks['logic_ternary'] = {
       }
     }
     this.prevParentConnection_ = parentConnection;
-  }
+  },
+  typeblock: Blockly.Msg.LOGIC_TERNARY_TYPEBLOCK
 };

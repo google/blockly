@@ -57,7 +57,10 @@ Blockly.Blocks['controls_repeat_ext'] = {
     });
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-  }
+  },
+  isLoop: true,
+  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+               values: {'TIMES' : 10 }}]
 };
 
 Blockly.Blocks['controls_repeat'] = {
@@ -86,7 +89,12 @@ Blockly.Blocks['controls_repeat'] = {
         .appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
     this.getField('TIMES').setChangeHandler(
         Blockly.FieldTextInput.nonnegativeIntegerValidator);
-  }
+  },
+  isLoop: true//,
+// No typeblock because this is deprecated in
+//     favor of controls_repeat_ext
+//  typeblock: [{entry: Blockly.Msg.CONTROLS_REPEAT_TYPEBLOCK,
+//               fields: {'TIMES' : 10 }}]
 };
 
 Blockly.Blocks['controls_whileUntil'] = {
@@ -117,7 +125,12 @@ Blockly.Blocks['controls_whileUntil'] = {
       };
       return TOOLTIPS[op];
     });
-  }
+  },
+  isLoop: true,
+  typeblock: [{entry: Blockly.Msg.CONTROLS_WHILEUNTIL_WHILE_TYPEBLOCK,
+               fields: {'MODE' : 'WHILE' }},
+              {entry: Blockly.Msg.CONTROLS_WHILEUNTIL_UNTIL_TYPEBLOCK,
+               fields: {'MODE' : 'UNTIL' }}]
 };
 
 Blockly.Blocks['controls_for'] = {
@@ -168,6 +181,7 @@ Blockly.Blocks['controls_for'] = {
           thisBlock.getFieldValue('VAR'));
     });
   },
+  isLoop: true,
   /**
    * Return all variables referenced by this block.
    * @return {!Array.<string>} List of variable names.
@@ -175,6 +189,16 @@ Blockly.Blocks['controls_for'] = {
    */
   getVars: function() {
     return [this.getFieldValue('VAR')];
+  },
+  /**
+   * Return all types of variables referenced by this block.
+   * @return {!Array.<Object>} List of variable names with their types.
+   * @this Blockly.Block
+   */
+  getVarsTypes: function() {
+      var vartypes = {};
+      vartypes[this.getFieldValue('VAR')] = ['Number'];
+      return vartypes;
   },
   /**
    * Notification that a variable is renaming.
@@ -197,7 +221,7 @@ Blockly.Blocks['controls_for'] = {
     if (!this.isCollapsed()) {
       var option = {enabled: true};
       var name = this.getFieldValue('VAR');
-      option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
+      option.text = Blockly.Msg.	VARIABLES_SET_CREATE_GET.replace('%1', name);
       var xmlField = goog.dom.createDom('field', null, name);
       xmlField.setAttribute('name', 'VAR');
       var xmlBlock = goog.dom.createDom('block', null, xmlField);
@@ -205,7 +229,9 @@ Blockly.Blocks['controls_for'] = {
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     }
-  }
+  },
+  typeblock: [{entry: Blockly.Msg.CONTROLS_FOR_TYPEBLOCK,
+               values: {'FROM': 1, 'TO': 10, 'BY': 1}}]
 };
 
 Blockly.Blocks['controls_forEach'] = {
@@ -242,6 +268,7 @@ Blockly.Blocks['controls_forEach'] = {
           thisBlock.getFieldValue('VAR'));
     });
   },
+  isLoop: true,
   /**
    * Return all variables referenced by this block.
    * @return {!Array.<string>} List of variable names.
@@ -249,6 +276,27 @@ Blockly.Blocks['controls_forEach'] = {
    */
   getVars: function() {
     return [this.getFieldValue('VAR')];
+  },
+  /**
+   * Return all types of variables referenced by this block.
+   * @return {!Array.<Object>} List of variable names with their types.
+   * @this Blockly.Block
+   */
+  getVarsTypes: function() {
+      var vartypes = {};
+      var foundtypes = {};
+      var listblock = this.getInputTargetBlock('LIST');
+      var looptypes = listblock.getOutput();
+      if (looptypes) {
+        for (var i = 0; i < looptypes.length; i++) {
+          var type = looptypes[i];
+          var x = type.split(':');
+          foundtypes[x[1]] = 1;
+        }
+      }
+
+      vartypes[this.getFieldValue('VAR')] = Object.keys(foundtypes);
+      return vartypes;
   },
   /**
    * Notification that a variable is renaming.
@@ -262,7 +310,8 @@ Blockly.Blocks['controls_forEach'] = {
       this.setFieldValue(newName, 'VAR');
     }
   },
-  customContextMenu: Blockly.Blocks['controls_for'].customContextMenu
+  customContextMenu: Blockly.Blocks['controls_for'].customContextMenu,
+  typeblock: Blockly.Msg.CONTROLS_FOREACH_TYPEBLOCK
 };
 
 Blockly.Blocks['controls_flow_statements'] = {
@@ -300,11 +349,7 @@ Blockly.Blocks['controls_flow_statements'] = {
     // Is the block nested in a loop?
     var block = this;
     do {
-      if (block.type == 'controls_repeat' ||
-          block.type == 'controls_repeat_ext' ||
-          block.type == 'controls_forEach' ||
-          block.type == 'controls_for' ||
-          block.type == 'controls_whileUntil') {
+      if (block.isLoop) {
         legal = true;
         break;
       }
@@ -315,5 +360,9 @@ Blockly.Blocks['controls_flow_statements'] = {
     } else {
       this.setWarningText(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING);
     }
-  }
+  },
+  typeblock: [{entry: Blockly.Msg.CONTROLS_FLOW_STATEMENTS_BREAK_TYPEBLOCK,
+               fields: {'FLOW' : 'BREAK' }},
+              {entry: Blockly.Msg.CONTROLS_FLOW_STATEMENTS_CONTINUE_TYPEBLOCK,
+               fields: {'FLOW' : 'CONTINUE' }}]
 };

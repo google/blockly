@@ -10,50 +10,62 @@
 <script src="../../generators/javascript/logic.js"></script>
 <script src="../../generators/javascript/loops.js"></script>
 <script src="../../generators/javascript/math.js"></script>
+<script src="../../generators/javascript/maps.js"></script>
 <script src="../../generators/javascript/text.js"></script>
 <script src="../../generators/javascript/lists.js"></script>
 <script src="../../generators/javascript/colour.js"></script>
 <script src="../../generators/javascript/variables.js"></script>
 <script src="../../generators/javascript/procedures.js"></script>
-
 <script src="../../generators/python.js"></script>
 <script src="unittest_python.js"></script>
 <script src="../../generators/python/logic.js"></script>
 <script src="../../generators/python/loops.js"></script>
 <script src="../../generators/python/math.js"></script>
+<script src="../../generators/python/maps.js"></script>
 <script src="../../generators/python/text.js"></script>
 <script src="../../generators/python/lists.js"></script>
 <script src="../../generators/python/colour.js"></script>
 <script src="../../generators/python/variables.js"></script>
 <script src="../../generators/python/procedures.js"></script>
-
 <script src="../../generators/php.js"></script>
 <script src="unittest_php.js"></script>
 <script src="../../generators/php/logic.js"></script>
 <script src="../../generators/php/loops.js"></script>
 <script src="../../generators/php/math.js"></script>
+<script src="../../generators/php/maps.js"></script>
 <script src="../../generators/php/text.js"></script>
 <script src="../../generators/php/lists.js"></script>
 <script src="../../generators/php/colour.js"></script>
 <script src="../../generators/php/variables.js"></script>
 <script src="../../generators/php/procedures.js"></script>
-
 <script src="../../generators/dart.js"></script>
 <script src="unittest_dart.js"></script>
 <script src="../../generators/dart/logic.js"></script>
 <script src="../../generators/dart/loops.js"></script>
 <script src="../../generators/dart/math.js"></script>
+<script src="../../generators/dart/maps.js"></script>
 <script src="../../generators/dart/text.js"></script>
 <script src="../../generators/dart/lists.js"></script>
 <script src="../../generators/dart/colour.js"></script>
 <script src="../../generators/dart/variables.js"></script>
 <script src="../../generators/dart/procedures.js"></script>
-
+<script src="../../generators/java.js"></script>
+<script src="unittest_java.js"></script>
+<script src="../../generators/java/logic.js"></script>
+<script src="../../generators/java/loops.js"></script>
+<script src="../../generators/java/math.js"></script>
+<script src="../../generators/java/maps.js"></script>
+<script src="../../generators/java/text.js"></script>
+<script src="../../generators/java/lists.js"></script>
+<script src="../../generators/java/colour.js"></script>
+<script src="../../generators/java/variables.js"></script>
+<script src="../../generators/java/procedures.js"></script>
 <script src="unittest.js"></script>
 <script src="../../msg/messages.js"></script>
 <script src="../../blocks/logic.js"></script>
 <script src="../../blocks/loops.js"></script>
 <script src="../../blocks/math.js"></script>
+<script src="../../blocks/maps.js"></script>
 <script src="../../blocks/text.js"></script>
 <script src="../../blocks/lists.js"></script>
 <script src="../../blocks/colour.js"></script>
@@ -144,13 +156,18 @@ function toPython() {
   setOutput(code);
 }
 
-function toPhp() {
+function toDart() {
+  var code = Blockly.Dart.workspaceToCode(workspace);
+  setOutput(code);
+}
+
+function toPHP() {
   var code = Blockly.PHP.workspaceToCode(workspace);
   setOutput(code);
 }
 
-function toDart() {
-  var code = Blockly.Dart.workspaceToCode(workspace);
+function toJava() {
+  var code = Blockly.Java.workspaceToCode(workspace);
   setOutput(code);
 }
 </script>
@@ -228,6 +245,7 @@ h1 {
         </value>
       </block>
       <block type="controls_forEach"></block>
+      <block type="controls_forEachKey"></block>
       <block type="controls_flow_statements"></block>
     </category>
     <category name="Math">
@@ -361,6 +379,16 @@ h1 {
         </value>
       </block>
     </category>
+    <category name="Maps">
+      <block type="maps_create_empty"></block>
+      <block type="maps_create_with"></block>
+      <block type="maps_length"></block>
+      <block type="maps_isempty"></block>
+      <block type="maps_create"></block>
+      <block type="maps_getIndex"></block>
+      <block type="maps_setIndex"></block>
+      <block type="maps_keys"></block>
+    </category>
     <category name="Colour">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
@@ -416,6 +444,7 @@ h1 {
         <option value="math.xml">Math</option>
         <option value="text.xml">Text</option>
         <option value="lists.xml">Lists</option>
+        <option value="maps.xml">Maps</option>
         <option value="colour.xml">Colour</option>
         <option value="variables.xml">Variables</option>
         <option value="procedures.xml">Procedures</option>
@@ -429,8 +458,9 @@ h1 {
       <input type="button" value="XML" onclick="toXml()">
       <input type="button" value="JavaScript" onclick="toJavaScript()">
       <input type="button" value="Python" onclick="toPython()">
-      <input type="button" value="PHP" onclick="toPhp()">
       <input type="button" value="Dart" onclick="toDart()">
+      <input type="button" value="PHP" onclick="toPHP()">
+      <input type="button" value="Java" onclick="toJava()">
     </p>
   </td></tr><tr><td height="99%">
     <textarea id="importExport" readonly="readonly" wrap="off"></textarea>

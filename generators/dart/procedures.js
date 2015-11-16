@@ -51,7 +51,7 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   var returnType = returnValue ? 'dynamic' : 'void';
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.Dart.variableDB_.getName(block.arguments_[x],
+    args[x] = Blockly.Dart.variableDB_.getName(block.arguments_[x]['name'],
         Blockly.Variables.NAME_TYPE);
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +

@@ -551,3 +551,74 @@ Blockly.tokenizeInterpolation = function(message) {
   }
   return tokens;
 };
+
+/*
+ * Lookup the language translation of a message.
+ * @param {string} str Input string.
+ * @return {string} the translated string.
+ */
+Blockly.getMsgString = function(id) {
+	var msgString = null;
+    if (typeof MSG  === 'object') {
+      msgString = MSG[id];
+    }
+    if (!msgString) {
+      msgString =  Blockly.Msg[id];
+    }
+	if (!msgString) {
+		console.log('Missing message for '+id);
+		msgString = '\u226A'+id+'\u226B';
+	}
+	return msgString;
+};
+
+/**
+ * Lookup the language translation of a tooltip.
+ * @param {string} str Input string.
+ * @return {string} the translated string.
+ */
+Blockly.getToolTipString = function(id) {
+	var tooltip = null;
+    if (typeof ToolTips === 'object') {
+      tooltip = ToolTips[id];
+    }
+	if (!tooltip) {
+		console.log('Missing tool tip for '+id);
+		tooltip = '\u226A'+id+'\u226B';
+	}
+	return tooltip;
+};
+
+/**
+ * Lookup the language translation of a url.
+ * @param {string} str Input string.
+ * @return {string} the translated string.
+ */
+Blockly.getUrlString = function(id) {
+	var url = null;
+    if (typeof Urls  === 'object') {
+      url = Urls[id];
+    }
+	if (!url) {
+		console.log('Missing URL for '+id);
+		url = '\u226A'+id+'\u226B';
+	}
+	return url;
+};
+
+/**
+ * Lookup the appropriate block color based on type.
+ * @param {string} str Input string (block type).
+ * @return {int} the color hue for that block type.
+ */
+Blockly.getBlockHue = function(id) {
+	var hueVal = null;
+    if (typeof HUES  === 'object') {
+      hueVal = HUES[id];
+    }
+	if (!hueVal) {
+		console.log('Missing hue for '+id);
+		hueVal = 260;
+	}
+	return hueVal;
+};

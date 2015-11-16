@@ -216,10 +216,6 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   }
   this.svgBlockCanvas_ = null;
   this.svgBubbleCanvas_ = null;
-  if (this.toolbox_) {
-    this.toolbox_.dispose();
-    this.toolbox_ = null;
-  }
   if (this.flyout_) {
     this.flyout_.dispose();
     this.flyout_ = null;
@@ -572,6 +568,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
+  Blockly.latestClick = { x: e.clientX, y: e.clientY }; // Might be needed?
   this.markFocused();
   if (Blockly.isTargetInput_(e)) {
     return;
@@ -956,6 +953,69 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
   var x = metrics.viewWidth / 2;
   var y = metrics.viewHeight / 2;
   this.zoom(x, y, type);
+};
+
+/**
+ * Scroll the workspace to show the area.
+ * Note that we include a 10 pixel margin
+ * @param {Object} rect Rectangle of area to be scrolled to.
+ * @param {boolean=} rtl Indicator if the block is a RTL block.
+ */
+Blockly.WorkspaceSvg.prototype.scrollToArea = function(rect, rtl) {
+  var metrics = this.getMetrics();
+
+  // First scale the rectangle
+  rect.top *= this.scale;
+  rect.bottom *= this.scale;
+  rect.left *= this.scale;
+  rect.right *= this.scale;
+  var height = rect.bottom-rect.top;
+  var width = rect.right-rect.left;
+  var margin = 10;
+
+  // Clip the suze of the block to the size of the view.
+  if (height >= (metrics.viewHeight - margin)) {
+    height = metrics.viewHeight - (margin+1);
+  }
+  if (width >= (metrics.viewWidth - margin)) {
+    width = metrics.viewWidth - (margin+1);
+  }
+
+  // Figure out the boundary of the current block.
+  rect.top -= margin;
+  rect.bottom = rect.top + height;
+  if (rtl) {
+    rect.right += margin;
+    rect.left = rect.right-width;
+  } else {
+    rect.left -= margin;
+    rect.right = rect.left+width;
+  }
+
+  var deltaY = 0;
+  var deltaX = 0;
+
+  // Are we off the workspace in the vertical direction?
+  if (metrics.viewTop > rect.top) {
+    deltaY = metrics.viewTop - rect.top;
+  } else if (rect.bottom > (metrics.viewTop + metrics.viewHeight)) {
+    deltaY = ((metrics.viewTop + metrics.viewHeight) - rect.bottom);
+  }
+
+  // Are we off the workspace in the horizontal direction?
+  if (metrics.viewLeft > rect.left) {
+    deltaX = metrics.viewLeft - rect.left;
+  } else if (rect.right > (metrics.viewLeft + metrics.viewWidth)) {
+    deltaX = ((metrics.viewLeft + metrics.viewWidth) - rect.right);
+  }
+
+  // See if we have to actually scroll.
+  if (deltaX || deltaY) {
+	var currentScrollX = (metrics.viewLeft - metrics.contentLeft );
+	var currentScrollY = (metrics.viewTop - metrics.contentTop );
+
+	this.scrollbar.set(currentScrollX - deltaX, currentScrollY - deltaY);
+  }
 };
 
 /**

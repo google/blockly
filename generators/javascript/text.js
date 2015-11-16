@@ -252,3 +252,12 @@ Blockly.JavaScript['text_prompt_ext'] = function(block) {
 };
 
 Blockly.JavaScript['text_prompt'] = Blockly.JavaScript['text_prompt_ext'];
+
+Blockly.JavaScript['text_comment'] = function(block) {
+  // Display comment
+  
+  var comment = block.getFieldValue('COMMENT') || '';
+  var code = '/*\n' + comment + '\n*/\n';
+  
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};

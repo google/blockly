@@ -50,6 +50,7 @@ goog.inherits(Blockly.FieldLabel, Blockly.Field);
  * Editable fields are saved by the XML renderer, non-editable fields are not.
  */
 Blockly.FieldLabel.prototype.EDITABLE = false;
+Blockly.FieldLabel.prototype.SERIALIZABLE = false;
 
 /**
  * Install this text on a block.

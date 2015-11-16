@@ -891,7 +891,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" inline="false" x="30" y="2074">
+  <block type="procedures_defreturn" x="30" y="2074">
     <mutation>
       <arg name="a"></arg>
       <arg name="b"></arg>

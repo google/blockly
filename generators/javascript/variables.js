@@ -44,3 +44,22 @@ Blockly.JavaScript['variables_set'] = function(block) {
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return varName + ' = ' + argument0 + ';\n';
 };
+
+Blockly.JavaScript['hash_variables_get'] = function(block) {
+  // Variable getter.
+  var varName = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  var hashkey = Blockly.JavaScript.quote_(block.getFieldValue('HASHKEY'));
+  var code = varName + '[' + hashkey + ']';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['hash_variables_set'] = function(block) {
+  // Variable setter.
+  var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
+      Blockly.JavaScript.ORDER_NONE) || '0';
+  var varName = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  var hashkey = Blockly.JavaScript.quote_(block.getFieldValue('HASHKEY'));
+  return varName + '[' + hashkey + '] = ' + argument0 + '\n';
+};

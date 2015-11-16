@@ -44,3 +44,22 @@ Blockly.Dart['variables_set'] = function(block) {
       Blockly.Variables.NAME_TYPE);
   return varName + ' = ' + argument0 + ';\n';
 };
+
+Blockly.Dart['hash_variables_get'] = function(block) {
+  // Variable getter.
+  var varName = Blockly.Dart.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  var hashkey = Blockly.Dart.quote_(block.getFieldValue('HASHKEY'));
+  var code = varName + '[' + hashkey + ']';
+  return [code, Blockly.Dart.ORDER_ATOMIC];
+};
+
+Blockly.Dart['hash_variables_set'] = function(block) {
+  // Variable setter.
+  var argument0 = Blockly.Dart.valueToCode(block, 'VALUE',
+      Blockly.Dart.ORDER_NONE) || '0';
+  var varName = Blockly.Dart.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  var hashkey = Blockly.Dart.quote_(block.getFieldValue('HASHKEY'));
+  return varName + '[' + hashkey + '] = ' + argument0 + '\n';
+};

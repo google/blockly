@@ -64,7 +64,7 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   }
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.PHP.variableDB_.getName(block.arguments_[x],
+    args[x] = Blockly.PHP.variableDB_.getName(block.arguments_[x]['name'],
         Blockly.Variables.NAME_TYPE);
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +

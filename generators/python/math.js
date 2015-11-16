@@ -350,6 +350,16 @@ Blockly.Python['math_modulo'] = function(block) {
   return [code, Blockly.Python.ORDER_MULTIPLICATIVE];
 };
 
+Blockly.Python['math_format_as_decimal'] = function(block) {
+	  // Remainder computation.
+	  var argument0 = Blockly.Python.valueToCode(block, 'NUM',
+	      Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
+	  var argument1 = Blockly.Python.valueToCode(block, 'PLACES',
+	      Blockly.Python.ORDER_MULTIPLICATIVE) || '0';
+	  var code = '"{0:.'+argument1+'f}".format('+argument0+')';
+	  return [code, Blockly.Python.ORDER_MULTIPLICATIVE];
+	};
+
 Blockly.Python['math_constrain'] = function(block) {
   // Constrain a number between two limits.
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',

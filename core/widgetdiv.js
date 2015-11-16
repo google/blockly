@@ -150,3 +150,21 @@ Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
   Blockly.WidgetDiv.DIV.style.height =
       (windowSize.height - anchorY + scrollOffset.y) + 'px';
 };
+
+/**
+ * We keep a listener pointer in case of needing to unlisten to it. We only want
+ * one listener at a time, and a reload could create a second one, so we
+ * unlisten first and then listen back
+ * @private
+ */
+Blockly.WidgetDiv.onKeyDown_ = function(e){
+    if (!Blockly.WidgetDiv.DIV) {
+      return;
+    }
+    if (e.altKey || e.ctrlKey || e.metaKey ||
+        e.keycode === goog.events.KeyCodes.TAB) {
+      return;
+    }
+//arrows, up and down on the menus.
+//accelerators for other keys.
+  };

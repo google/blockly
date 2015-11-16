@@ -84,7 +84,17 @@ Blockly.Blocks['math_arithmetic'] = {
       };
       return TOOLTIPS[mode];
     });
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.MATH_ARITHMETIC_ADD_TYPEBLOCK,
+                fields: { 'OP': 'ADD' }},
+              { entry: Blockly.Msg.MATH_ARITHMETIC_MINUS_TYPEBLOCK,
+                fields: { 'OP': 'MINUS' }},
+              { entry: Blockly.Msg.MATH_ARITHMETIC_MULTIPLY_TYPEBLOCK,
+                fields: { 'OP': 'MULTIPLY' }},
+              { entry: Blockly.Msg.MATH_ARITHMETIC_DIVIDE_TYPEBLOCK,
+                fields: { 'OP': 'DIVIDE' }},
+              { entry: Blockly.Msg.MATH_ARITHMETIC_POWER_TYPEBLOCK,
+                fields: { 'OP': 'POWER' }}]
 };
 
 Blockly.Blocks['math_single'] = {
@@ -122,7 +132,21 @@ Blockly.Blocks['math_single'] = {
       };
       return TOOLTIPS[mode];
     });
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.MATH_SINGLE_OP_ROOT_TYPEBLOCK,
+                fields: { 'OP': 'ROOT' }},
+              { entry: Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE_TYPEBLOCK,
+                fields: { 'OP': 'ABS' }},
+              { entry: Blockly.Msg.MATH_SINGLE_OP_NEG_TYPEBLOCK,
+                fields: { 'OP': 'NEG' }},
+              { entry: 'ln',
+                fields: { 'OP': 'LN' }},
+              { entry: 'log10',
+                fields: { 'OP': 'LOG10' }},
+              { entry: 'e^',
+                fields: { 'OP': 'EXP' }},
+              { entry: '10^',
+                fields: { 'OP': 'POW10' }}]
 };
 
 Blockly.Blocks['math_trig'] = {
@@ -158,7 +182,19 @@ Blockly.Blocks['math_trig'] = {
       };
       return TOOLTIPS[mode];
     });
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.MATH_TRIG_SIN_TYPEBLOCK,
+                fields: { 'OP': 'SIN' }},
+              { entry: Blockly.Msg.MATH_TRIG_COS_TYPEBLOCK,
+                fields: { 'OP': 'COS' }},
+              { entry: Blockly.Msg.MATH_TRIG_TAN_TYPEBLOCK,
+                fields: { 'OP': 'TAN' }},
+              { entry: Blockly.Msg.MATH_TRIG_ASIN_TYPEBLOCK,
+                fields: { 'OP': 'ASIN' }},
+              { entry: Blockly.Msg.MATH_TRIG_ACOS_TYPEBLOCK,
+                fields: { 'OP': 'ACOS' }},
+              { entry: Blockly.Msg.MATH_TRIG_ATAN_TYPEBLOCK,
+                fields: { 'OP': 'ATAN' }}]
 };
 
 Blockly.Blocks['math_constant'] = {
@@ -180,7 +216,19 @@ Blockly.Blocks['math_constant'] = {
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(CONSTANTS), 'CONSTANT');
     this.setTooltip(Blockly.Msg.MATH_CONSTANT_TOOLTIP);
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.MATH_CONSTANT_PI_TYPEBLOCK,
+                fields: { 'CONSTANT': 'PI' }},
+              { entry: Blockly.Msg.MATH_CONSTANT_E_TYPEBLOCK,
+                fields: { 'CONSTANT': 'E' }},
+              { entry: Blockly.Msg.MATH_CONSTANT_GOLDEN_RATIO_TYPEBLOCK,
+                fields: { 'CONSTANT': 'GOLDEN_RATIO' }},
+              { entry: Blockly.Msg.MATH_CONSTANT_SQRT2_TYPEBLOCK,
+                fields: { 'CONSTANT': 'SQRT2' }},
+              { entry: Blockly.Msg.MATH_CONSTANT_SQRT1_2_TYPEBLOCK,
+                fields: { 'CONSTANT': 'SQRT1_2' }},
+              { entry: Blockly.Msg.MATH_CONSTANT_INFINITY_TYPEBLOCK,
+                fields: { 'CONSTANT': 'INFINITY' }}]
 };
 
 Blockly.Blocks['math_number_property'] = {
@@ -248,7 +296,21 @@ Blockly.Blocks['math_number_property'] = {
     } else if (inputExists) {
       this.removeInput('DIVISOR');
     }
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.MATH_IS_EVEN_TYPEBLOCK,
+                fields: { 'PROPERTY': 'EVEN' }},
+              { entry: Blockly.Msg.MATH_IS_ODD_TYPEBLOCK,
+                fields: { 'PROPERTY': 'ODD' }},
+              { entry: Blockly.Msg.MATH_IS_PRIME_TYPEBLOCK,
+                fields: { 'PROPERTY': 'PRIME' }},
+              { entry: Blockly.Msg.MATH_IS_WHOLE_TYPEBLOCK,
+                fields: { 'PROPERTY': 'WHOLE' }},
+              { entry: Blockly.Msg.MATH_IS_POSITIVE_TYPEBLOCK,
+                fields: { 'PROPERTY': 'POSITIVE' }},
+              { entry: Blockly.Msg.MATH_IS_NEGATIVE_TYPEBLOCK,
+                fields: { 'PROPERTY': 'NEGATIVE' }},
+              { entry: Blockly.Msg.MATH_IS_DIVISIBLE_BY_TYPEBLOCK,
+                fields: { 'PROPERTY': 'DIVISIBLE_BY' }}]
 };
 
 Blockly.Blocks['math_change'] = {
@@ -302,7 +364,9 @@ Blockly.Blocks['math_change'] = {
     if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
       this.setFieldValue(newName, 'VAR');
     }
-  }
+  },
+  typeblock: [{entry: Blockly.Msg.MATH_CHANGE_TYPEBLOCK,
+              values: {"DELTA": 1}}]
 };
 
 Blockly.Blocks['math_round'] = {
@@ -322,7 +386,39 @@ Blockly.Blocks['math_round'] = {
         .setCheck('Number')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
     this.setTooltip(Blockly.Msg.MATH_ROUND_TOOLTIP);
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.MATH_ROUND_ROUND_TYPEBLOCK,
+                fields: { 'OP': 'ROUND' }},
+              { entry: Blockly.Msg.MATH_ROUND_ROUNDUP_TYPEBLOCK,
+                fields: { 'OP': 'ROUNDUP' }},
+              { entry: Blockly.Msg.MATH_ROUND_ROUNDDOWN_TYPEBLOCK,
+                fields: { 'OP': 'ROUNDDOWN' }}]
+};
+
+Blockly.Blocks['math_format_as_decimal'] = {
+  init: function () {
+    this.jsonInit({
+      "message0": Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TITLE,
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "NUM",
+          "check": "Number"
+        },
+        {
+          "type": "input_value",
+          "name": "PLACES",
+          "check": "Number"
+        }
+      ],
+      "inputsInline": true,
+      "output": "Number",
+      "colour": Blockly.Blocks.math.HUE,
+      "tooltip": Blockly.getToolTipString('math_format_as_decimal_tooltip'),
+      "helpUrl": Blockly.getUrlString('math_format_as_decimal_url')
+    });
+  },
+  typeblock: Blockly.Msg.MATH_FORMAT_AS_DECIMAL_TYPEBLOCK
 };
 
 Blockly.Blocks['math_on_list'] = {
@@ -397,7 +493,23 @@ Blockly.Blocks['math_on_list'] = {
    */
   domToMutation: function(xmlElement) {
     this.updateType_(xmlElement.getAttribute('op'));
-  }
+  },
+  typeblock: [{ entry: Blockly.Msg.MATH_ONLIST_SUM_TYPEBLOCK,
+                fields: { 'OP': 'SUM' }},
+              { entry: Blockly.Msg.MATH_ONLIST_MIN_TYPEBLOCK,
+                fields: { 'OP': 'MIN' }},
+              { entry: Blockly.Msg.MATH_ONLIST_MAX_TYPEBLOCK,
+                fields: { 'OP': 'MAX' }},
+              { entry: Blockly.Msg.MATH_ONLIST_AVERAGE_TYPEBLOCK,
+                fields: { 'OP': 'AVERAGE' }},
+              { entry: Blockly.Msg.MATH_ONLIST_MEDIAN_TYPEBLOCK,
+                fields: { 'OP': 'MEDIAN' }},
+              { entry: Blockly.Msg.MATH_ONLIST_MODE_TYPEBLOCK,
+                fields: { 'OP': 'MODE' }},
+              { entry: Blockly.Msg.MATH_ONLIST_STD_DEV_TYPEBLOCK,
+                fields: { 'OP': 'STD_DEV' }},
+              { entry: Blockly.Msg.MATH_ONLIST_RANDOM_TYPEBLOCK,
+                fields: { 'OP': 'RANDOM' }}]
 };
 
 Blockly.Blocks['math_modulo'] = {
@@ -426,7 +538,8 @@ Blockly.Blocks['math_modulo'] = {
       "tooltip": Blockly.Msg.MATH_MODULO_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_MODULO_HELPURL
     });
-  }
+  },
+  typeblock: Blockly.Msg.MATH_MODULO_TYPEBLOCK
 };
 
 Blockly.Blocks['math_constrain'] = {
@@ -460,7 +573,9 @@ Blockly.Blocks['math_constrain'] = {
       "tooltip": Blockly.Msg.MATH_CONSTRAIN_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_CONSTRAIN_HELPURL
     });
-  }
+  },
+  typeblock: [{entry: Blockly.Msg.MATH_CONSTRAIN_TYPEBLOCK,
+              values: {"LOW": 1, "HIGH" : 100}}]
 };
 
 Blockly.Blocks['math_random_int'] = {
@@ -489,7 +604,9 @@ Blockly.Blocks['math_random_int'] = {
       "tooltip": Blockly.Msg.MATH_RANDOM_INT_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_RANDOM_INT_HELPURL
     });
-  }
+  },
+  typeblock: [{entry: Blockly.Msg.MATH_RANDOM_INT_TYPEBLOCK,
+              values: {"FROM": 1, "TO" : 100}}]
 };
 
 Blockly.Blocks['math_random_float'] = {
@@ -504,5 +621,6 @@ Blockly.Blocks['math_random_float'] = {
     this.appendDummyInput()
         .appendField(Blockly.Msg.MATH_RANDOM_FLOAT_TITLE_RANDOM);
     this.setTooltip(Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP);
-  }
+  },
+  typeblock: Blockly.Msg.MATH_RANDOM_FLOAT_TYPEBLOCK
 };

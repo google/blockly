@@ -85,6 +85,12 @@ Blockly.Python.ORDER_NONE = 99;             // (...)
 Blockly.Python.PASS = '  pass\n';
 
 /**
+ * Closure code for a section
+ */
+Blockly.Python.POSTFIX = '';
+Blockly.Python.EXTRAINDENT = '';
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -193,7 +199,40 @@ Blockly.Python.scrub_ = function(block, code) {
       }
     }
   }
+  var postFix = Blockly.Python.POSTFIX;
+  Blockly.Python.POSTFIX = '';
+  var extraIndent = Blockly.Python.EXTRAINDENT;
+  Blockly.Python.EXTRAINDENT = '';
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   var nextCode = Blockly.Python.blockToCode(nextBlock);
+  if (extraIndent != '') {
+    nextCode = Blockly.Python.prefixLines(nextCode, extraIndent);
+  }
   return commentCode + code + nextCode;
 };
+
+
+/**
+ * Mark a variable as a global for the generated Java code
+ * @param {block} block Block that the variable is contained in
+ * @param {string} name Name of the global to initialize
+ * @param {string} val Initializer value for the gloabl
+ */
+Blockly.Python.setGlobalVar = function(block,name,val) {
+    if (Blockly.Variables.getLocalContext(block,name) == null &&
+        (typeof this.globals_[name] === 'undefined' ||
+         this.globals_[name] === null)) {
+            this.globals_[name] = val;
+        }
+};
+
+/**
+ * Add a reference to a library to import
+ * @param {string} importlib Name of the library to add to the import list
+ */
+Blockly.Python.addImport = function(importlib) {
+//    var importStr = 'import ' + importlib;
+//    this.imports_[importStr] = importStr;
+};
+
+

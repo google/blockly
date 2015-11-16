@@ -53,7 +53,7 @@ Blockly.Procedures.allProcedures = function(root) {
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
       var tuple = blocks[i].getProcedureDef();
-      if (tuple) {
+      if (tuple && !tuple[3]) {
         if (tuple[2]) {
           proceduresReturn.push(tuple);
         } else {
@@ -253,14 +253,12 @@ Blockly.Procedures.disposeCallers = function(name, workspace) {
  * callers.
  * @param {string} name Name of edited procedure definition.
  * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
- * @param {!Array.<string>} paramNames Array of new parameter names.
- * @param {!Array.<string>} paramIds Array of unique parameter IDs.
+ * @param {!Array.<Object>} parameters Array of parameter names and their IDs
  */
-Blockly.Procedures.mutateCallers = function(name, workspace,
-                                            paramNames, paramIds) {
+Blockly.Procedures.mutateCallers = function(name, workspace, parameters) {
   var callers = Blockly.Procedures.getCallers(name, workspace);
   for (var i = 0; i < callers.length; i++) {
-    callers[i].setProcedureParameters(paramNames, paramIds);
+    callers[x].setProcedureParameters(parameters);
   }
 };
 

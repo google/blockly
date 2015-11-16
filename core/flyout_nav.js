@@ -1,3 +1,28 @@
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2011 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview The class handling keyboard navigation on the flyout.
+ * @author mc3630@rit.edu (Mary Spencer)
+ */
+
 'use strict';
 
 goog.provide('Blockly.FlyoutNav');
@@ -5,55 +30,146 @@ goog.provide('Blockly.FlyoutNav');
 
 
 /*
-*Licensed under the Apache License, Version 2.0 (the "License");
-*you may not use this file except in compliance with the License.
-*You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-*Unless required by applicable law or agreed to in writing, software
-*distributed under the License is distributed on an "AS IS" BASIS,
-*WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*See the License for the specific language governing permissions and
-*limitations under the License.
-*/
-
-/*
-* File overview: this file handles using the keyboard to navigate the flyout
-*/
-
-
-
-/*
  * class to handle menu navigation
  * @constructor
  */
-Blockly.FlyoutNav = function(){
+Blockly.FlyoutNav = function() {
 
 };
 
 /*
-*   Variables for flyout navigation
-*   flyoutArr: everytime the flyout opens the blocks in it are added to this array
-*   oldLengh : size of the array before a new tab opened 
-*   currIndex: index of currently selected block
-*   prevIndex: index of last selected block
-*   opened   : keep track of when the flyout opens and closes 
-*             (needed for selecting blocks when a new category opens)
-*   currentFlyoutArr: array containing all currently shown blocks
+*   -------Object holding variables and helper functions for flyout navigation-------
+*   arr flyoutArr: everytime the flyout opens the blocks in it are added to this array
+*   int oldLengh : size of the array before a new tab opened
+*   int currIndex: index of currently selected block
+*   int prevIndex: index of previously selected block
+*   bool opened  : keep track of when the flyout opens and closes
+*                  (needed for selecting blocks when a new category opens)
+*   arr currentFlyoutArr: array containing all currently shown blocks
 */
 var flyoutNav = {
-    flyoutArr: [],   
-    oldLength: 0,    
-    currIndex: 0,    
+
+    flyoutArr: [],
+    oldLength: 0,
+    currIndex: 0,
     prevIndex: 0,
-    opened: false, 
-    currentFlyoutArr: []
+    opened: false,
+    currentFlyoutArr: [],
+
+    /*
+    * Checks if flyout was opened for the first time or first block in newly opened flyout
+    * @return{bool}
+    */
+    isFirstBlock: function() {
+        if (flyoutNav.currIndex <= flyoutNav.oldLength) {
+            return true;
+        }
+
+        else if (flyoutNav.currIndex - 1 < 0) {
+            return true;
+        }
+
+        else return false;
+    },
+
+    /*
+    * Checks if second block in flyout selected
+    * important for deselecting correct block
+    * @return{bool}
+    */
+    isSecondBlock: function() {
+        if (flyoutNav.currIndex == flyoutNav.oldLength) {
+            return false;
+        }
+        else if (flyoutNav.prevIndex != flyoutNav.oldLength + 1) {
+            return false;
+        }
+        else return true;
+    },
+
+    /*
+    * Checks if flyout contains only 2 blocks
+    * normal looping does not work with only 2
+    * @return {bool}
+    */
+    hasTwoBlocks: function() {
+        return (flyoutNav.flyoutArr.length - flyoutNav.oldLength != 2) ? false : true;
+    },
+
+    /*
+    * Checks if flyout only contains 1 block
+    * @return{bool}
+    */
+    hasOneBlock: function() {
+        return (flyoutNav.flyoutArr.length - flyoutNav.oldLength == 1) ? true : false;
+    },
+
+    /*
+    * Checks if the user switched directions from up to down.
+    * @return {bool}
+    */
+    switchingDown: function() {
+        return (flyoutNav.prevIndex == flyoutNav.currIndex + 1) ? true : false;
+    },
+
+    /*
+    * Checks if the user switched directions from down to up.
+    * @return {bool}
+    */
+    switchingUp: function() {
+        return (flyoutNav.prevIndex == flyoutNav.currIndex - 1) ? true : false;
+    },
+
+     /*
+    * Checks if the user is at the top of the flyout
+    * @return {bool}
+    */
+    atTopOfFlyout: function() {
+
+        return (flyoutNav.currIndex >= flyoutNav.flyoutArr.length) ? true : false;
+    },
+
+    /*
+    * Checks if the user is at the bottom of the flyout
+    * @return {bool}
+    */
+    atBottomOfFlyout: function() {
+        return (flyoutNav.currIndex >= flyoutNav.flyoutArr.length - 1) ? true : false;
+    },
+
+    /*
+    * Checks if looping from top to bottom
+    * @return{bool}
+    */
+    loopingUp: function() {
+        if (flyoutNav.currIndex <= flyoutNav.oldLength - 1) {
+            return true;
+        }
+
+        else if (flyoutNav.currIndex - 2 < flyoutNav.oldLength) {
+           return (flyoutNav.prevIndex == flyoutNav.currIndex - 1) ? true : false;
+        }
+    },
+
+    /*
+    * Checks if looping from bottom to top
+    * @return{bool}
+    */
+    loopingDown: function() {
+        if (flyoutNav.currIndex >= flyoutNav.flyoutArr.length) {
+            return true;
+        }
+
+        else if (flyoutNav.prevIndex == flyoutNav.currIndex + 1) {
+
+             return (flyoutNav.currIndex + 2 >= flyoutNav.flyoutArr.length) ? true : false;
+        }
+    }
 };
- 
+
 /*
 * Handles Keyboard input in the toolbox/flyout
-* @param {event}
+* @param {KeyboardEvent}
 */
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
 
@@ -64,16 +180,16 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     case goog.events.KeyCodes.UP:
 
       //select previous block
-      if(this.getExpanded()){
+      if (this.getExpanded()) {
         Blockly.FlyoutNav.prototype.flyoutNavUp();
       }
 
       //select previous category
-      else{
+      else {
         var previousSibling = this.getPreviousSibling(this.selected);
 
         //if not the top category
-        if(previousSibling != null){
+        if (previousSibling != null) {
            previousSibling.select();
         }
 
@@ -83,26 +199,26 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     case goog.events.KeyCodes.DOWN:
 
       //select next block
-      if(this.getExpanded()){
+      if (this.getExpanded()) {
             Blockly.FlyoutNav.prototype.flyoutNavDown();
       }
 
       //select next category
-      else{
+      else {
         var nextSibling = this.getNextSibling(this.selected);
 
-        //if not the bottome category
-        if(nextSibling != null){
+        //if not the bottom category
+        if (nextSibling != null) {
              nextSibling.select();
         }
-       
+
       }
       break;
 
-    //exit flyout to select categories 
+    //exit flyout to select categories
     case goog.events.KeyCodes.LEFT:
 
-      if(this.getExpanded()){
+      if (this.getExpanded()) {
           this.setExpanded(false);
           flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
       }
@@ -113,6 +229,10 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
         this.select();
         this.setExpanded(true);
         Blockly.FlyoutNav.prototype.flyoutNavDown();
+
+        if (flyoutNav.hasTwoBlocks()) {
+            Blockly.FlyoutNav.prototype.flyoutNavUp();
+        }
     break;
 
     default:
@@ -161,40 +281,22 @@ flyoutNav.opened = false;
 
 
 /*
-*   Traverse to the next block in the flyout 
+*   Traverse to the next block in the flyout
 */
-Blockly.FlyoutNav.prototype.flyoutNavDown = function(){
-
-
+Blockly.FlyoutNav.prototype.flyoutNavDown = function() {
     //prevent this from being called when the flyout is closed
-    if(!flyoutNav.opened){
+    if (!flyoutNav.opened) {
         return;
     }
 
-    //remove last select if not the first and the new flyout has more than 2 blocks
-    if(flyoutNav.currIndex-1 >= 0 && !(flyoutNav.currIndex <= flyoutNav.oldLength) && flyoutNav.flyoutArr.length - flyoutNav.oldLength != 2 ){
-
-        flyoutNav.flyoutArr[flyoutNav.currIndex-1].removeSelect();
-    }
-
-    //handle looping through menu
-    // if on top block               ||  switching directions at the bottom of the menu                    && in variables menu 
-    if(flyoutNav.currIndex >= flyoutNav.flyoutArr.length ||  (flyoutNav.prevIndex == flyoutNav.currIndex + 1 && flyoutNav.currIndex + 2 >= flyoutNav.flyoutArr.length) && !(flyoutNav.flyoutArr.length - flyoutNav.oldLength == 2)){
-        
-        flyoutNav.currIndex = flyoutNav.oldLength;
-        flyoutNav.prevIndex = flyoutNav.flyoutArr.length-1; 
-
-        flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
-    }
-
     //handle flyouts with only 2 blocks
-    if(flyoutNav.flyoutArr.length - flyoutNav.oldLength == 2){
+    if (flyoutNav.hasTwoBlocks()) {
 
         //if bottom block is selected
-        if(flyoutNav.currIndex >= flyoutNav.flyoutArr.length-1){
+        if (flyoutNav.currIndex >= flyoutNav.flyoutArr.length - 1) {
 
             flyoutNav.currIndex = flyoutNav.oldLength;
-            flyoutNav.prevIndex = flyoutNav.flyoutArr.length-1;
+            flyoutNav.prevIndex = flyoutNav.flyoutArr.length - 1;
 
             flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect();
             flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
@@ -203,142 +305,153 @@ Blockly.FlyoutNav.prototype.flyoutNavDown = function(){
         }
 
         //if top block is selected
-        else if(flyoutNav.currIndex <= flyoutNav.oldLength){
+        else if (flyoutNav.currIndex <= flyoutNav.oldLength) {
 
-            flyoutNav.currIndex = flyoutNav.flyoutArr.length-1;
+            flyoutNav.currIndex = flyoutNav.flyoutArr.length - 1;
             flyoutNav.prevIndex = flyoutNav.oldLength;
 
             flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect();
             flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
 
-            flyoutNav.prevIndex = flyoutNav.flyoutArr.length-1;
+            flyoutNav.prevIndex = flyoutNav.flyoutArr.length - 1;
 
         }
+        return;
+    }
+    //if not the first time the flyout is opened
+    if (!flyoutNav.isFirstBlock()) {
+
+        flyoutNav.flyoutArr[flyoutNav.currIndex - 1].removeSelect();
     }
 
-   //handle switching directions && more than two blocks in flyout
-   if( flyoutNav.prevIndex == flyoutNav.currIndex+1  && flyoutNav.flyoutArr.length - flyoutNav.oldLength !=2){
+    //handle looping through flyout
+    if (flyoutNav.loopingDown()) {
+
+        flyoutNav.currIndex = flyoutNav.oldLength;
+        flyoutNav.prevIndex = flyoutNav.flyoutArr.length - 1;
 
         flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
-        flyoutNav.currIndex+=2;
     }
 
-    //Update count for flyouts with more than 2 blocks
-    //select next -> save last -> increase count 
-    if(flyoutNav.flyoutArr.length - flyoutNav.oldLength != 2){
 
-        flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect(); 
 
-        flyoutNav.prevIndex = flyoutNav.currIndex; 
-        flyoutNav.currIndex++;
+   //handle switching directions
+   if (flyoutNav.switchingDown()) {
+
+        flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
+        flyoutNav.currIndex += 2;
     }
+
+    //select next and update
+    flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect();
+
+    flyoutNav.prevIndex = flyoutNav.currIndex;
+    flyoutNav.currIndex++;
 };
 
 
 
 
 /*
-*   Traverse to the previous block in the flyout 
+*   Traverse to the previous block in the flyout
 */
-Blockly.FlyoutNav.prototype.flyoutNavUp = function(){
-    if(!flyoutNav.opened){
+Blockly.FlyoutNav.prototype.flyoutNavUp = function() {
+    if (!flyoutNav.opened) {
         return;
-    }
-    //flyout has more than 2 blocks    &&  not first selected   || not second item on list
-    if(flyoutNav.flyoutArr.length-flyoutNav.oldLength != 2 &&  flyoutNav.currIndex != flyoutNav.oldLength || flyoutNav.prevIndex == flyoutNav.oldLength+1)
-    {
-        flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
-    }
-
-    //handle loops 
-    //top block selected                          || In audio menu (only 1 block)                               || trying to switch directions at the top of the flyout && In flyout with only 2 blocks   
-    if(flyoutNav.currIndex <= flyoutNav.oldLength-1  || (flyoutNav.flyoutArr.length - flyoutNav.oldLength == 1) || (flyoutNav.prevIndex == flyoutNav.currIndex-1 && flyoutNav.currIndex-2 < flyoutNav.oldLength && (flyoutNav.flyoutArr.length - flyoutNav.oldLength != 2))){
-        
-        flyoutNav.prevIndex = flyoutNav.oldLength;
-        flyoutNav.currIndex = flyoutNav.flyoutArr.length-1;
-
-        flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
     }
 
     //if flyout has only 2 blocks
-    if(flyoutNav.flyoutArr.length - flyoutNav.oldLength == 2){
+    if (flyoutNav.hasTwoBlocks()) {
 
-        //Otherwise switch blocks
         //bottom block
-        if(flyoutNav.currIndex == flyoutNav.flyoutArr.length-1){
+        if (flyoutNav.currIndex == flyoutNav.flyoutArr.length - 1) {
 
             flyoutNav.currIndex = flyoutNav.oldLength;
             flyoutNav.prevIndex = flyoutNav.oldLength;
 
             flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect();
-            flyoutNav.flyoutArr[flyoutNav.flyoutArr.length-1].removeSelect();
+            flyoutNav.flyoutArr[flyoutNav.flyoutArr.length - 1].removeSelect();
         }
 
         //top block
-        else if(flyoutNav.currIndex == flyoutNav.oldLength){
+        else if (flyoutNav.currIndex == flyoutNav.oldLength) {
 
-            flyoutNav.currIndex = flyoutNav.flyoutArr.length-1;
-            flyoutNav.prevIndex = flyoutNav.flyoutArr.length-1;
+            flyoutNav.currIndex = flyoutNav.flyoutArr.length - 1;
+            flyoutNav.prevIndex = flyoutNav.flyoutArr.length - 1;
 
             flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect();
             flyoutNav.flyoutArr[flyoutNav.oldLength].removeSelect();
         }
-
+        return;
     }
 
-    //handle switching from down to up
-    //normal switch scenario     && not the first block   && flyout has more than 2 blocks
-    if(flyoutNav.prevIndex == flyoutNav.currIndex-1  && flyoutNav.currIndex!=flyoutNav.oldLength  && (flyoutNav.flyoutArr.length-flyoutNav.oldLength!=2)){
+    //remove select
+    //not first time opened || not second item on list
+    if (!flyoutNav.isSecondBlock()) {
+        flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
+    }
+
+    //handle loops
+    //top block selected || only 1 block in flyout|| trying to switch directions at the top of the flyout
+    if (flyoutNav.hasOneBlock() || flyoutNav.loopingUp()) {
+
+        flyoutNav.prevIndex = flyoutNav.oldLength;
+        flyoutNav.currIndex = flyoutNav.flyoutArr.length - 1;
 
         flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
-        flyoutNav.currIndex-=2;
     }
 
-    //flyout has more than 2 blocks
-    if(flyoutNav.flyoutArr.length - flyoutNav.oldLength != 2){
 
-        //select next -> save last -> decrease count 
-        flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect();
 
-        flyoutNav.prevIndex = flyoutNav.currIndex;
-        flyoutNav.currIndex--; 
+    //handle switching from down to up
+    //normal switch scenario && not the first block
+    if (flyoutNav.switchingUp() && !flyoutNav.isFirstBlock()) {
+
+        flyoutNav.flyoutArr[flyoutNav.prevIndex].removeSelect();
+        flyoutNav.currIndex -= 2;
     }
+
+
+    flyoutNav.flyoutArr[flyoutNav.currIndex].addSelect();
+
+    flyoutNav.prevIndex = flyoutNav.currIndex;
+    flyoutNav.currIndex--;
 };
 
 
-//============The following are minor overwrites of existing blockly functions to enable flyout navigation======================
+//============The following are minor overwrites of existing blockly functions to enable flyout navigation==============================
 
 
-/**
+/*
  * {OVERWRITE} adds blocks to separate array for traversing the flyout
  * Construct the blocks required by the flyout for the procedure category.
  * @param {!Array.<!Blockly.Block>} blocks List of blocks to show.
  * @param {!Array.<number>} gaps List of widths between blocks.
  * @param {number} margin Standard margin width for calculating gaps.
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
- */
-Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
-    flyoutNav.opened    = true;
+*/
+Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
+    flyoutNav.opened = true;
 
     if (Blockly.Blocks['procedures_defnoreturn']) {
         var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
         block.initSvg();
         blocks.push(block);
-        flyoutNav.flyoutArr.push(block);//added for blockly navigation.js
+        flyoutNav.flyoutArr.push(block);    
         gaps.push(margin * 2);
     }
     if (Blockly.Blocks['procedures_defreturn']) {
         var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
         block.initSvg();
         blocks.push(block);
-        flyoutNav.flyoutArr.push(block);//added for blockly navigation.js
+        flyoutNav.flyoutArr.push(block);    
         gaps.push(margin * 2);
     }
     if (Blockly.Blocks['procedures_ifreturn']) {
         var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
         block.initSvg();
         blocks.push(block);
-        flyoutNav.flyoutArr.push(block);//added for blockly navigation.js
+        flyoutNav.flyoutArr.push(block);    
         gaps.push(margin * 2);
     }
     if (gaps.length) {
@@ -357,7 +470,7 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
             block.setProcedureParameters(procedureList[x][1], tempIds);
             block.initSvg();
             blocks.push(block);
-            flyoutNav.flyoutArr.push(block);//added for blockly navigation.js
+            flyoutNav.flyoutArr.push(block);
 
             gaps.push(margin * 2);
         }
@@ -374,13 +487,13 @@ Blockly.Procedures.flyoutCategory = function (blocks, gaps, margin, workspace) {
  * @param {!Array|string} xmlList List of blocks to show.
  *     Variables and procedures have a custom set of blocks.
  */
-Blockly.Flyout.prototype.show = function(xmlList){
-    flyoutNav.opened    = true;
-    flyoutNav.oldLength = flyoutNav.flyoutArr.length; //update the length of the last array 
+Blockly.Flyout.prototype.show = function(xmlList) {
+    flyoutNav.opened = true;
+    flyoutNav.oldLength = flyoutNav.flyoutArr.length; //update the length of the last array
 
 
-    if(flyoutNav.oldLength > 0){ //ignore first time opening
-        flyoutNav.currIndex  = flyoutNav.oldLength;
+    if (flyoutNav.oldLength > 0) { //ignore first time opening
+        flyoutNav.currIndex = flyoutNav.oldLength;
     }
 
     // Delete any blocks from a previous showing.
@@ -473,7 +586,7 @@ Blockly.Flyout.prototype.show = function(xmlList){
 
     // IE 11 is an incompetant browser that fails to fire mouseout events.
     // When the mouse is over the background, deselect all blocks.
-    var deselectAll = function (e) {
+    var deselectAll = function(e) {
         var blocks = this.workspace_.getTopBlocks(false);
         for (var i = 0, block; block = blocks[i]; i++) {
             block.removeSelect();
@@ -503,8 +616,8 @@ Blockly.Flyout.prototype.show = function(xmlList){
  * @param {number} margin Standard margin width for calculating gaps.
  * @param {!Blockly.Workspace} workspace The flyout's workspace.
  */
-Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
-    flyoutNav.opened    = true;
+Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
+    flyoutNav.opened = true;
     var variableList = Blockly.Variables.allVariables(workspace.targetWorkspace);
     variableList.sort(goog.string.caseInsensitiveCompare);
     // In addition to the user's variables, we also want to display the default
@@ -529,9 +642,9 @@ Blockly.Variables.flyoutCategory = function (blocks, gaps, margin, workspace) {
             setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
         }
         setBlock && blocks.push(setBlock);
-        flyoutNav.flyoutArr.push(setBlock);//added for blockly navigation.js
+        flyoutNav.flyoutArr.push(setBlock);
         getBlock && blocks.push(getBlock);
-        flyoutNav.flyoutArr.push(getBlock);//added for blockly navigation.js
+        flyoutNav.flyoutArr.push(getBlock);
         if (getBlock && setBlock) {
             gaps.push(margin, margin * 3);
         } else {

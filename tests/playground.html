@@ -73,6 +73,7 @@ function start() {
               length: 3,
               colour: '#ccc',
               snap: true},
+           maxBlocks: Infinity,
            media: '../media/',
            readOnly: false,
            realtime: false,
@@ -84,9 +85,9 @@ function start() {
            scrollbars: true,
            toolbox: toolbox,
            zoom:
-             {enabled: true,
-              controls: true,
+             {controls: true,
               wheel: true,
+              startScale: 1.0,
               maxScale: 4,
               minScale: .25,
               scaleSpeed: 1.1
@@ -227,7 +228,7 @@ h1 {
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
-      <block type="logic_null"></block>
+      <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
     <category name="Loops" colour="120">
@@ -238,6 +239,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="controls_repeat" disabled="true"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for">
         <value name="FROM">
@@ -260,7 +262,7 @@ h1 {
       <block type="controls_flow_statements"></block>
     </category>
     <category name="Math" colour="230">
-      <block type="math_number"></block>
+      <block type="math_number" gap="32"></block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">

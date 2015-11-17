@@ -146,7 +146,7 @@ Blockly.Dart['controls_forEach'] = function(block) {
       Blockly.Dart.ORDER_ASSIGNMENT) || '[]';
   var branch = Blockly.Dart.statementToCode(block, 'DO');
   branch = Blockly.Dart.addLoopTrap(branch, block.id);
-  var code = 'for (var ' + variable0 + ' in  ' + argument0 + ') {\n' +
+  var code = 'for (var ' + variable0 + ' in ' + argument0 + ') {\n' +
       branch + '}\n';
   return code;
 };

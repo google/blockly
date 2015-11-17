@@ -73,6 +73,13 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 };
 
 /**
+ * Optional text data that round-trips beween blocks and XML.
+ * Has no effect. May be used by 3rd parties for meta information.
+ * @type {?string}
+ */
+Blockly.Block.prototype.data = null;
+
+/**
  * Initialization for one block.
  * @param {!Blockly.Workspace} workspace The new block's workspace.
  * @param {?string} prototypeName Name of the language object containing
@@ -463,7 +470,7 @@ Blockly.Block.prototype.getDescendants = function() {
  * @return {boolean} True if deletable.
  */
 Blockly.Block.prototype.isDeletable = function() {
-  return this.deletable_ &&
+  return this.deletable_ && !this.isShadow_ &&
       !(this.workspace && this.workspace.options.readOnly);
 };
 

@@ -308,7 +308,7 @@ function getFieldsJs_(block) {
         case 'field_angle':
           // Result: new Blockly.FieldAngle(90), 'ANGLE'
           fields.push('new Blockly.FieldAngle(' +
-              escapeString(block.getFieldValue('ANGLE')) + '), ' +
+              parseFloat(block.getFieldValue('ANGLE')) + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_checkbox':

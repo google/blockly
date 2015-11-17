@@ -435,10 +435,16 @@ if __name__ == "__main__":
       print("Error: Closure directory needs to be renamed from"
             "'closure-library-read-only' to 'closure-library'.\n"
             "Please rename this directory.")
+    elif os.path.isdir(os.path.join(os.path.pardir, "google-closure-library")):
+      # When Closure is installed by npm, it is named "google-closure-library".
+      print("Error: Closure directory needs to be renamed from"
+            "'google-closure-library' to 'closure-library'.\n"
+            "Please rename this directory.")
     else:
       print("""Error: Closure not found.  Read this:
 https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
+
   search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
 

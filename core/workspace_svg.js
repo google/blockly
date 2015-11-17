@@ -100,6 +100,18 @@ Blockly.WorkspaceSvg.prototype.scrollX = 0;
 Blockly.WorkspaceSvg.prototype.scrollY = 0;
 
 /**
+ * Horizontal scroll value when scrolling started.
+ * @type {number}
+ */
+Blockly.WorkspaceSvg.prototype.startScrollX = 0;
+
+/**
+ * Vertical scroll value when scrolling started.
+ * @type {number}
+ */
+Blockly.WorkspaceSvg.prototype.startScrollY = 0;
+
+/**
  * Horizontal distance from mouse to object being dragged.
  * @type {number}
  * @private
@@ -264,6 +276,7 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
  */
 Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   var workspaceOptions = {
+    disabledPatternId: this.options.disabledPatternId,
     parentWorkspace: this,
     RTL: this.RTL
   };
@@ -317,7 +330,7 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  var translation = 'translate(' + x + ',' + y + ')' +
+  var translation = 'translate(' + x + ',' + y + ') ' +
       'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
@@ -379,11 +392,11 @@ Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
  * Render all blocks in workspace.
  */
 Blockly.WorkspaceSvg.prototype.render = function() {
-  var renderList = this.getAllBlocks();
-  for (var i = 0, block; block = renderList[i]; i++) {
-    if (!block.getChildren().length) {
-      block.render();
-    }
+  // Generate list of all blocks.
+  var blocks = this.getAllBlocks();
+  // Render each block.
+  for (var i = blocks.length - 1; i >= 0; i--) {
+    blocks[i].render(false);
   }
 };
 
@@ -922,7 +935,11 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   this.scrollX = matrix.e - metrics.absoluteLeft;
   this.scrollY = matrix.f - metrics.absoluteTop;
   this.updateGridPattern_();
-  this.scrollbar.resize();
+  if (this.scrollbar) {
+    this.scrollbar.resize();
+  } else {
+    this.translate(0, 0);
+  }
   Blockly.hideChaff(false);
   if (this.flyout_) {
     // No toolbox, resize flyout.
@@ -959,8 +976,12 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
   }
   // Center the workspace.
   var metrics = this.getMetrics();
-  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
-      (metrics.contentHeight - metrics.viewHeight) / 2);
+  if (this.scrollbar) {
+    this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+        (metrics.contentHeight - metrics.viewHeight) / 2);
+  } else {
+    this.translate(0, 0);
+  }
   // This event has been handled.  Don't start a workspace drag.
   e.stopPropagation();
 };

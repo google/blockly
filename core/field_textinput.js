@@ -170,12 +170,16 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
  */
 Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  var enterKey = 13, escKey = 27;
+  var tabKey = 9, enterKey = 13, escKey = 27;
   if (e.keyCode == enterKey) {
     Blockly.WidgetDiv.hide();
   } else if (e.keyCode == escKey) {
     this.setText(htmlInput.defaultValue);
     Blockly.WidgetDiv.hide();
+  } else if (e.keyCode == tabKey) {
+    Blockly.WidgetDiv.hide();
+    this.sourceBlock_.tab(this, !e.shiftKey);
+    e.preventDefault();
   }
 };
 
@@ -191,6 +195,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
     // Update source block.
     var text = htmlInput.value;
     if (text !== htmlInput.oldValue_) {
+      this.sourceBlock_.setShadow(false);
       htmlInput.oldValue_ = text;
       this.setText(text);
       this.validate_();

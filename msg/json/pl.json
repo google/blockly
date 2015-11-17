@@ -7,7 +7,8 @@
 			"Pbz",
 			"Pio387",
 			"아라",
-			"Mateon1"
+			"Mateon1",
+			"Expert3222"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -250,7 +251,7 @@
 	"LISTS_INLIST": "na liście",
 	"LISTS_INDEX_OF_FIRST": "znaleźć pierwsze wystąpienie elementu",
 	"LISTS_INDEX_OF_LAST": "znajduje ostatanie wystąpienie elementu",
-	"LISTS_INDEX_OF_TOOLTIP": "Zwraca indeks pierwszego/ostatniego wystąpienia elementu na liście.  Zwraca wartość 0, jeśli tekst nie zostanie znaleziony.",
+	"LISTS_INDEX_OF_TOOLTIP": "Zwraca indeks pierwszego/ostatniego wystąpienia elementu na liście. Zwraca wartość 0, jeśli tekst nie zostanie znaleziony.",
 	"LISTS_GET_INDEX_GET": "pobierz",
 	"LISTS_GET_INDEX_GET_REMOVE": "Pobierz i usuń",
 	"LISTS_GET_INDEX_REMOVE": "usuń",

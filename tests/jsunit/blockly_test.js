@@ -20,9 +20,12 @@
 'use strict';
 
 function test_genUid() {
-  var a = Blockly.genUid();
-  var b = Blockly.genUid();
-  assertFalse('UUID different', a == b);
+  var uuids = {};
+  for (var i = 0; i < 1000; i++) {
+    var uuid = Blockly.genUid();
+    assertFalse('UUID different: ' + uuid, uuid in uuids);
+    uuids[uuid] = true;
+  }
 }
 
 function test_addClass() {

@@ -161,14 +161,10 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
       // Can't make a value connection if male block is already connected.
       throw 'Source connection already connected (value).';
     } else if (otherConnection.targetConnection) {
-      // Record and disable the shadow so that it does not respawn here.
-      var shadowDom = otherConnection.getShadowDom();
-      otherConnection.setShadowDom(null);
       // If female block is already connected, disconnect and bump the male.
       var orphanBlock = otherConnection.targetBlock();
       orphanBlock.setParent(null);
       if (orphanBlock.isShadow()) {
-        otherConnection.setShadowDom(Blockly.Xml.blockToDom_(orphanBlock));
         orphanBlock.dispose();
       } else {
         if (!orphanBlock.outputConnection) {
@@ -194,8 +190,6 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
                 orphanBlock.outputConnection.bumpAwayFrom_(otherConnection);
               }, Blockly.BUMP_DELAY);
         }
-        // Restore the shadow.
-        otherConnection.setShadowDom(shadowDom);
       }
     }
   } else {

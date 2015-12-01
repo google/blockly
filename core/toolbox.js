@@ -136,12 +136,9 @@ Blockly.Toolbox.prototype.init = function() {
   tree.setShowLines(false);
   tree.setShowExpandIcons(false);
   tree.setSelectedItem(null);
-  this.hasColours_ = false;
   this.populate_(workspace.options.languageTree);
   tree.render(this.HtmlDiv);
-  if (this.hasColours_) {
-    this.addColour_(tree);
-  }
+  this.addColour_();
   this.position();
 };
 
@@ -224,12 +221,15 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
               rootOut.setSelectedItem(childOut);
             }
             childOut.setExpanded(true);
+          } else {
+            childOut.setExpanded(false);
           }
           break;
         case 'SEP':
           treeOut.add(new Blockly.Toolbox.TreeSeparator());
           break;
         case 'BLOCK':
+        case 'SHADOW':
           treeOut.blocks.push(childIn);
           break;
       }
@@ -248,15 +248,21 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
 
 /**
  * Recursively add colours to this toolbox.
- * @param {!Blockly.Toolbox.TreeNode}
+ * @param {Blockly.Toolbox.TreeNode} opt_tree Starting point of tree.
+ *     Defaults to the root node.
  * @private
  */
-Blockly.Toolbox.prototype.addColour_ = function(tree) {
+Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
+  var tree = opt_tree || this.tree_;
   var children = tree.getChildren();
   for (var i = 0, child; child = children[i]; i++) {
     var element = child.getRowElement();
     if (element) {
-      var border = '8px solid ' + (child.hexColour || '#ddd');
+      if (this.hasColours_) {
+        var border = '8px solid ' + (child.hexColour || '#ddd');
+      } else {
+        var border = 'none';
+      }
       if (this.workspace_.RTL) {
         element.style.borderRight = border;
       } else {

@@ -76,17 +76,22 @@ Blockly.FieldImage.prototype.init = function(block) {
   }
   this.sourceBlock_ = block;
   // Build the DOM.
+  /** @type {SVGElement} */
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   if (!this.visible_) {
     this.fieldGroup_.style.display = 'none';
   }
+  /** @type {SVGElement} */
   this.imageElement_ = Blockly.createSvgElement('image',
       {'height': this.height_ + 'px',
        'width': this.width_ + 'px'}, this.fieldGroup_);
   this.setValue(this.src_);
   if (goog.userAgent.GECKO) {
-    // Due to a Firefox bug which eats mouse events on image elements,
-    // a transparent rectangle needs to be placed on top of the image.
+    /**
+     * Due to a Firefox bug which eats mouse events on image elements,
+     * a transparent rectangle needs to be placed on top of the image.
+     * @type {SVGElement}
+     */
     this.rectElement_ = Blockly.createSvgElement('rect',
         {'height': this.height_ + 'px',
          'width': this.width_ + 'px',

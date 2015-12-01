@@ -158,10 +158,12 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     <g class="blocklyBubbleCanvas"></g>
     [Scrollbars may go here]
   </g>
+  @type {SVGElement}
   */
   this.svgGroup_ = Blockly.createSvgElement('g',
       {'class': 'blocklyWorkspace'}, null);
   if (opt_backgroundClass) {
+    /** @type {SVGElement} */
     this.svgBackground_ = Blockly.createSvgElement('rect',
         {'height': '100%', 'width': '100%',
          'class': opt_backgroundClass}, this.svgGroup_);
@@ -170,8 +172,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
           'url(#' + this.options.gridPattern.id + ')';
     }
   }
+  /** @type {SVGElement} */
   this.svgBlockCanvas_ = Blockly.createSvgElement('g',
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_, this);
+  /** @type {SVGElement} */
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g',
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_, this);
   var bottom = Blockly.Scrollbar.scrollbarThickness;

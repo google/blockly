@@ -83,16 +83,15 @@ var isNodeJS = !!(typeof module !== 'undefined' && module.exports);
 
 if (isNodeJS) {
   var window = {};
-  require('../closure-library/closure/goog/bootstrap/nodejs')
+  require('../closure-library/closure/goog/bootstrap/nodejs');
 }
 
 window.BLOCKLY_DIR = (function() {
-  if (!isNodeJS)
-  {
+  if (!isNodeJS) {
     // Find name of current directory.
     var scripts = document.getElementsByTagName('script');
     var re = new RegExp('(.+)[\/]blockly_uncompressed\.js$');
-    for (var x = 0, script; script = scripts[x]; x++) {
+    for (var i = 0, script; script = scripts[i]; i++) {
       var match = re.exec(script.src);
       if (match) {
         return match[1];
@@ -106,7 +105,7 @@ window.BLOCKLY_DIR = (function() {
 window.BLOCKLY_BOOT = function() {
   var dir = '';
   if (isNodeJS) {
-    require('../closure-library/closure/goog/bootstrap/nodejs')
+    require('../closure-library/closure/goog/bootstrap/nodejs');
     dir = 'blockly';
   } else {
     // Execute after Closure has loaded.
@@ -154,7 +153,7 @@ if (isNodeJS) {
   // Load fresh Closure Library.
   document.write('<script src="' + window.BLOCKLY_DIR +
       '/../closure-library/closure/goog/base.js"></script>');
-  document.write('<script>window.BLOCKLY_BOOT()</script>');
+  document.write('<script>window.BLOCKLY_BOOT();</script>');
 }
 """)
     f.close()

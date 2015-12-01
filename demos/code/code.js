@@ -66,6 +66,7 @@ Code.LANGUAGE_NAME = {
   'sk': 'Slovenčina',
   'sr': 'Српски',
   'sv': 'Svenska',
+  'ta': 'தமிழ்',
   'th': 'ภาษาไทย',
   'tlh': 'tlhIngan Hol',
   'tr': 'Türkçe',

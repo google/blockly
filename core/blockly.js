@@ -614,7 +614,7 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
  * @param {function()} cmdThunk A function representing the command execution.
  */
 Blockly.doCommand = function(cmdThunk) {
-  if (Blockly.Realtime.isEnabled) {
+  if (Blockly.Realtime.isEnabled()) {
     Blockly.Realtime.doCommand(cmdThunk);
   } else {
     cmdThunk();

@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Executa el programa definit pels blocs de l'àrea de treball.",
   badCode: "Error de programa:\n %1",
   timeout: "S'ha superat el nombre màxim d'iteracions d'execució.",
-  discard: "Esborrar els %1 blocs?",
   trashTooltip: "Descarta tots els blocs.",
   catLogic: "Lògica",
   catLoops: "Bucles",

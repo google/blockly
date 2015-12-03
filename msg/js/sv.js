@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "upprepa tills";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "upprepa medan";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Medan ett värde är falskt, utför några kommandon.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Medan ett värde är sant, utför några kommandon.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Radera alla %1 block?";
 Blockly.Msg.DELETE_BLOCK = "Radera block";
 Blockly.Msg.DELETE_X_BLOCKS = "Radera %1 block";
 Blockly.Msg.DISABLE_BLOCK = "Inaktivera block";

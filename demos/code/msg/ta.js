@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "பணிமனை நினைவகத்தில் இயக்குக", //Run the program defined by the blocks in the workspace.
   badCode: "கணினி நிரல் கோளாறு:\n%1",
   timeout: "அதிகபட்ச அடுக்கின் அளவை மீரியது", //max iters reached/exceeded
-  discard: "அனைத்து %1 நிரல் துண்டுகளையும் அழிக்கவா??",
   trashTooltip: "நீக்கு",
   catLogic: "தர்க வகை",
   catLoops: "மடக்கு வாக்கியம்",

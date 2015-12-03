@@ -17,6 +17,7 @@
 	"INLINE_INPUTS": "interne Eingänge",
 	"DELETE_BLOCK": "Block löschen",
 	"DELETE_X_BLOCKS": "Block %1 löschen",
+	"DELETE_ALL_BLOCKS": "Alle %1 Bausteine löschen?",
 	"CLEAN_UP": "Blöcke aufräumen",
 	"COLLAPSE_BLOCK": "Block zusammenfalten",
 	"COLLAPSE_ALL": "Alle Blöcke zusammenfalten",

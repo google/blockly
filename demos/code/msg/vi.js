@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Chạy chương trình.",
   badCode: "'Lỗi chương trình:\n%1",
   timeout: "Đã vượt quá số lần lặp cho phép.",
-  discard: "Xóa hết %1 mảnh?",
   trashTooltip: "Xóa tất cả mọi mảnh.",
   catLogic: "Logic",
   catLoops: "Vòng lặp",

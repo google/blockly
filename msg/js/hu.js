@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "ismételd amíg nem";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "ismételd amíg";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Amíg a feltétel hamis, végrehajtja az utasításokat.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Amíg a feltétel igaz, végrehajtja az utasításokat.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Az összes %1 blokk törlése?";
 Blockly.Msg.DELETE_BLOCK = "Blokk törlése";
 Blockly.Msg.DELETE_X_BLOCKS = "%1 blokk törlése";
 Blockly.Msg.DISABLE_BLOCK = "Blokk letiltása";

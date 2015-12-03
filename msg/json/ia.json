@@ -12,6 +12,7 @@
 	"INLINE_INPUTS": "Entrata interne",
 	"DELETE_BLOCK": "Deler bloco",
 	"DELETE_X_BLOCKS": "Deler %1 blocos",
+	"DELETE_ALL_BLOCKS": "Deler tote le %1 blocos?",
 	"COLLAPSE_BLOCK": "Plicar bloco",
 	"COLLAPSE_ALL": "Plicar blocos",
 	"EXPAND_BLOCK": "Displicar bloco",

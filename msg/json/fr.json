@@ -16,6 +16,7 @@
 	"INLINE_INPUTS": "Entrées en ligne",
 	"DELETE_BLOCK": "Supprimer le bloc",
 	"DELETE_X_BLOCKS": "Supprimer %1 blocs",
+	"DELETE_ALL_BLOCKS": "Supprimer tous les %1 blocs ?",
 	"CLEAN_UP": "Nettoyer les blocs",
 	"COLLAPSE_BLOCK": "Réduire le bloc",
 	"COLLAPSE_ALL": "Réduire les blocs",

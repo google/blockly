@@ -21,6 +21,7 @@
 	"INLINE_INPUTS": "קלטים פנימיים",
 	"DELETE_BLOCK": "מחק קטע קוד",
 	"DELETE_X_BLOCKS": "מחק %1 קטעי קוד",
+	"DELETE_ALL_BLOCKS": "האם למחוק את כל %1 קטעי הקוד?",
 	"COLLAPSE_BLOCK": "צמצם קטע קוד",
 	"COLLAPSE_ALL": "צמצם קטעי קוד",
 	"EXPAND_BLOCK": "הרחב קטע קוד",

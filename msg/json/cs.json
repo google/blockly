@@ -17,6 +17,7 @@
 	"INLINE_INPUTS": "Vložené vstupy",
 	"DELETE_BLOCK": "Odstranit blok",
 	"DELETE_X_BLOCKS": "Odstranit %1 bloky",
+	"DELETE_ALL_BLOCKS": "Odstranit všechny bloky %1?",
 	"COLLAPSE_BLOCK": "Skrýt blok",
 	"COLLAPSE_ALL": "Skrýt bloky",
 	"EXPAND_BLOCK": "Rozbalení bloku",

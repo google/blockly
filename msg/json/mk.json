@@ -12,6 +12,7 @@
 	"INLINE_INPUTS": "Внатрешен внос",
 	"DELETE_BLOCK": "Избриши блок",
 	"DELETE_X_BLOCKS": "Избриши %1 блока",
+	"DELETE_ALL_BLOCKS": "Да ги избришам сите %1 блокчиња?",
 	"COLLAPSE_BLOCK": "Собери блок",
 	"COLLAPSE_ALL": "Собери блокови",
 	"EXPAND_BLOCK": "Рашири го блокови",

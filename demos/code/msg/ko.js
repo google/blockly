@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "작업 공간에서 블록으로 정의된 프로그램을 실행합니다.",
   badCode: "프로그램 오류:\n%1",
   timeout: "최대 실행 반복을 초과했습니다.",
-  discard: "모든 블록 %1개를 삭제하겠습니까?",
   trashTooltip: "모든 블록을 버립니다.",
   catLogic: "논리",
   catLoops: "반복",

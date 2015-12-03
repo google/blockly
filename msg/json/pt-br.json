@@ -23,6 +23,7 @@
 	"INLINE_INPUTS": "Entradas incorporadas",
 	"DELETE_BLOCK": "Remover bloco",
 	"DELETE_X_BLOCKS": "Remover %1 blocos",
+	"DELETE_ALL_BLOCKS": "Apagar todos os %1 blocos?",
 	"CLEAN_UP": "Limpar blocos",
 	"COLLAPSE_BLOCK": "Recolher bloco",
 	"COLLAPSE_ALL": "Recolher blocos",

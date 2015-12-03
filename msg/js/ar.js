@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "اكرّر حتى";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "اكرّر طالما";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "بما ان القيمة خاطئة, نفّذ بعض الأوامر.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "بما ان القيمة صحيحة, نفّذ بعض الأوامر.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "حذف كل بلوكات %1؟";
 Blockly.Msg.DELETE_BLOCK = "إحذف القطعة";
 Blockly.Msg.DELETE_X_BLOCKS = "إحذف قطع %1";
 Blockly.Msg.DISABLE_BLOCK = "عطّل القطعة";

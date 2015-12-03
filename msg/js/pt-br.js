@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "repita até";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "repita enquanto";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Enquanto um valor for falso, então faça algumas instruções.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Enquanto um valor for verdadeiro, então faça algumas instruções.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Apagar todos os %1 blocos?";
 Blockly.Msg.DELETE_BLOCK = "Remover bloco";
 Blockly.Msg.DELETE_X_BLOCKS = "Remover %1 blocos";
 Blockly.Msg.DISABLE_BLOCK = "Desabilitar bloco";

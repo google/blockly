@@ -18,6 +18,7 @@
 	"INLINE_INPUTS": "ورودی‌های درون خطی",
 	"DELETE_BLOCK": "حذف بلوک",
 	"DELETE_X_BLOCKS": "حذف بلوک‌های %1",
+	"DELETE_ALL_BLOCKS": "حذف همهٔ بلاک‌های %1؟",
 	"COLLAPSE_BLOCK": "فروپاشی بلوک",
 	"COLLAPSE_ALL": "فروپاشی بلوک‌ها",
 	"EXPAND_BLOCK": "گسترش بلوک",

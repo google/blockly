@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "kadar tekrarla";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "tekrar ederken";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Bir değer yanlış olduğunda bazı beyanlarda bulun.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Bir değer doğru olduğunda bazı beyanlarda bulun.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Tüm %1 blok silinsin mi?";
 Blockly.Msg.DELETE_BLOCK = "Bloğu Sil";
 Blockly.Msg.DELETE_X_BLOCKS = "%1 Blokları Sil";
 Blockly.Msg.DISABLE_BLOCK = "Bloğu Devre Dışı Bırak";

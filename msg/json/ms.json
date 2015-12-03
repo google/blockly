@@ -14,6 +14,7 @@
 	"INLINE_INPUTS": "Input Sebaris",
 	"DELETE_BLOCK": "Hapuskan Blok",
 	"DELETE_X_BLOCKS": "Hapuskan %1 Blok",
+	"DELETE_ALL_BLOCKS": "Hapuskan kesemua %1 blok?",
 	"COLLAPSE_BLOCK": "Lipat Blok",
 	"COLLAPSE_ALL": "Lipat Blok²",
 	"EXPAND_BLOCK": "Buka Blok",

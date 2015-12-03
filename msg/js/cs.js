@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "opakovat dokud";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "opakovat když";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Dokud je hodnota nepravdivá, prováděj určité příkazy.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Dokud je hodnota pravdivá, prováděj určité příkazy.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Odstranit všechny bloky %1?";
 Blockly.Msg.DELETE_BLOCK = "Odstranit blok";
 Blockly.Msg.DELETE_X_BLOCKS = "Odstranit %1 bloky";
 Blockly.Msg.DISABLE_BLOCK = "Zakázat blok";

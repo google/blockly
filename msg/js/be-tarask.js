@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "паўтараць, пакул
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "паўтараць, пакуль";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Пакуль значэньне хлусьня, выконваць пэўныя апэрацыі.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Пакуль значэньне ісьціна, выконваць пэўныя апэрацыі.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Выдаліць усе блёкі %1?";
 Blockly.Msg.DELETE_BLOCK = "Выдаліць блёк";
 Blockly.Msg.DELETE_X_BLOCKS = "Выдаліць %1 блёкі";
 Blockly.Msg.DISABLE_BLOCK = "Адключыць блёк";

@@ -18,6 +18,7 @@
 	"INLINE_INPUTS": "Ingressi in linea",
 	"DELETE_BLOCK": "Cancella blocco",
 	"DELETE_X_BLOCKS": "Cancella %1 blocchi",
+	"DELETE_ALL_BLOCKS": "Cancellare tutti i %1 blocchi?",
 	"CLEAN_UP": "Pulisci i blocchi",
 	"COLLAPSE_BLOCK": "Comprimi blocco",
 	"COLLAPSE_ALL": "Comprimi blocchi",

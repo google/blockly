@@ -15,6 +15,7 @@
 	"INLINE_INPUTS": "Innri inntök",
 	"DELETE_BLOCK": "Eyða kubbi",
 	"DELETE_X_BLOCKS": "Eyða %1 kubbum",
+	"DELETE_ALL_BLOCKS": "Eyða öllum %1 kubbunum?",
 	"COLLAPSE_BLOCK": "Loka kubbi",
 	"COLLAPSE_ALL": "Loka kubbum",
 	"EXPAND_BLOCK": "Opna kubb",

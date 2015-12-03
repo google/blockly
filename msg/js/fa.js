@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "تکرار تا زمانی ک�
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "تکرار در حالی که";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "تا زمانی که یک مقدار ناصحیح است، چند عبارت را انجام بده.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "تا زمانی که یک مقدار صحیح است، چند عبارت را انجام بده.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "حذف همهٔ بلاک‌های %1؟";
 Blockly.Msg.DELETE_BLOCK = "حذف بلوک";
 Blockly.Msg.DELETE_X_BLOCKS = "حذف بلوک‌های %1";
 Blockly.Msg.DISABLE_BLOCK = "غیرفعال‌سازی بلوک";

@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "adober betek";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "adober keit ha ma";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Keit ha ma vez faos un dalvoudenn,seveniñ urzhioù zo neuze.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Keit ha ma vez gwir un dalvoudenn, seveniñ urzhioù zo neuze.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Diverkañ an holl vloc'hoù %1 ?";
 Blockly.Msg.DELETE_BLOCK = "Dilemel ar bloc'h";
 Blockly.Msg.DELETE_X_BLOCKS = "Dilemel %1 bloc'h";
 Blockly.Msg.DISABLE_BLOCK = "Diweredekaat ar bloc'h";

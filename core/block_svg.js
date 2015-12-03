@@ -547,7 +547,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   }
   // Save the current block in a variable for use in closures.
   var block = this;
-  var options = [];
+  var menuOptions = [];
 
   if (this.isDeletable() && this.isMovable() && !block.isInFlyout) {
     // Option to duplicate this block.
@@ -561,7 +561,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     if (this.getDescendants().length > this.workspace.remainingCapacity()) {
       duplicateOption.enabled = false;
     }
-    options.push(duplicateOption);
+    menuOptions.push(duplicateOption);
 
     if (this.isEditable() && !this.collapsed_ &&
         this.workspace.options.comments) {
@@ -578,7 +578,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           block.setCommentText('');
         };
       }
-      options.push(commentOption);
+      menuOptions.push(commentOption);
     }
 
     // Option to make block inline.
@@ -595,7 +595,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           inlineOption.callback = function() {
             block.setInputsInline(!isInline);
           };
-          options.push(inlineOption);
+          menuOptions.push(inlineOption);
           break;
         }
       }
@@ -609,14 +609,14 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
         expandOption.callback = function() {
           block.setCollapsed(false);
         };
-        options.push(expandOption);
+        menuOptions.push(expandOption);
       } else {
         var collapseOption = {enabled: true};
         collapseOption.text = Blockly.Msg.COLLAPSE_BLOCK;
         collapseOption.callback = function() {
           block.setCollapsed(true);
         };
-        options.push(collapseOption);
+        menuOptions.push(collapseOption);
       }
     }
 
@@ -630,7 +630,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           block.setDisabled(!block.disabled);
         }
       };
-      options.push(disableOption);
+      menuOptions.push(disableOption);
     }
 
     // Option to delete this block.
@@ -649,7 +649,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
         block.dispose(true, true);
       }
     };
-    options.push(deleteOption);
+    menuOptions.push(deleteOption);
   }
 
   // Option to get help.
@@ -659,14 +659,14 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
   helpOption.callback = function() {
     block.showHelp_();
   };
-  options.push(helpOption);
+  menuOptions.push(helpOption);
 
-  // Allow the block to add or modify options.
+  // Allow the block to add or modify menuOptions.
   if (this.customContextMenu && !block.isInFlyout) {
-    this.customContextMenu(options);
+    this.customContextMenu(menuOptions);
   }
 
-  Blockly.ContextMenu.show(e, options, this.RTL);
+  Blockly.ContextMenu.show(e, menuOptions, this.RTL);
   Blockly.ContextMenu.currentBlock = this;
 };
 

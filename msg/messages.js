@@ -70,6 +70,8 @@ Blockly.Msg.INLINE_INPUTS = 'Inline Inputs';
 Blockly.Msg.DELETE_BLOCK = 'Delete Block';
 /// context menu - Permanently delete the %1 selected blocks.\n\nParameters:\n* %1 - an integer greater than 1.
 Blockly.Msg.DELETE_X_BLOCKS = 'Delete %1 Blocks';
+/// confirmation prompt - Question the user if they really wanted to permanently delete all %1 blocks.\n\nParameters:\n* %1 - an integer greater than 1.
+Blockly.Msg.DELETE_ALL_BLOCKS = 'Delete all %1 blocks?';
 /// context menu - Reposition all the blocks so that they form a neat line.
 Blockly.Msg.CLEAN_UP = 'Clean up Blocks';
 /// context menu - Make the appearance of the selected block smaller by hiding some information about it.

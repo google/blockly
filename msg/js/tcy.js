@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "ಬುಕ್ಕೊ ಮುಟ�
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "ಬುಕ್ಕೊ ಅಂಚನೇ";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "ಈ ತಿರ್ತ್‍ದ ತಪ್ಪಾದುಂಡು, ಬುಕ್ಕೊದ ಕೆಲವು ಹೇಳಿಕೆಲೆನ್ ಮಲ್ಪಪುಲ";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "ಈ ತಿರ್ತ್‌ದ ಸರಿ ಇತ್ತ್ಂಡಲಾ, ಬುಕ್ಕೊದ ಕೆಲವು ಹೇಳಿಕೆಲೆನ್ ಮಲ್ಪುಲ";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "ಮಾಜಯರ ತಡೆಯಾತ್ಂಡ್";
 Blockly.Msg.DELETE_X_BLOCKS = "ಮಾಜಯರ ಶೇಕಡಾ ೧ ತಡೆಯಾತ್ಂಡ್";
 Blockly.Msg.DISABLE_BLOCK = "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಾದ್ ತಡೆಪತ್ತುನೆ";

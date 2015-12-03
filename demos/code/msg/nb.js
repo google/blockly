@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Kjør programmet definert av blokken i arbeidsområdet.",
   badCode: "Programfeil:\n%1",
   timeout: "Det maksimale antallet utførte looper er oversteget.",
-  discard: "Slett alle %1 blokker?",
   trashTooltip: "Fjern alle blokker",
   catLogic: "Logikk",
   catLoops: "Looper",

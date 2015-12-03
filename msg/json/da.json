@@ -15,6 +15,7 @@
 	"INLINE_INPUTS": "Indlejrede inputs",
 	"DELETE_BLOCK": "Slet blok",
 	"DELETE_X_BLOCKS": "Slet %1 blokke",
+	"DELETE_ALL_BLOCKS": "Slet alle %1 blokke?",
 	"COLLAPSE_BLOCK": "Fold blokken sammen",
 	"COLLAPSE_ALL": "Fold blokkene sammen",
 	"EXPAND_BLOCK": "Fold blokken ud",

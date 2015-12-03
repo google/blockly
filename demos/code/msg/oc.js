@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Aviar lo programa definit pels blòts dins l’espaci de trabalh.",
   badCode: "Error del programa :\n%1",
   timeout: "Nombre maximum d’iteracions d’execucion depassat.",
-  discard: "Suprimir totes los %1 blòts ?",
   trashTooltip: "Getar totes los blòts.",
   catLogic: "Logic",
   catLoops: "Boclas",

@@ -17,6 +17,7 @@
 	"INLINE_INPUTS": "Radinmatning",
 	"DELETE_BLOCK": "Radera block",
 	"DELETE_X_BLOCKS": "Radera %1 block",
+	"DELETE_ALL_BLOCKS": "Radera alla %1 block?",
 	"CLEAN_UP": "Rada upp block",
 	"COLLAPSE_BLOCK": "Fäll ihop block",
 	"COLLAPSE_ALL": "Fäll ihop block",

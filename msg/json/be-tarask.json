@@ -15,6 +15,7 @@
 	"INLINE_INPUTS": "Унутраныя ўваходы",
 	"DELETE_BLOCK": "Выдаліць блёк",
 	"DELETE_X_BLOCKS": "Выдаліць %1 блёкі",
+	"DELETE_ALL_BLOCKS": "Выдаліць усе блёкі %1?",
 	"CLEAN_UP": "Ачысьціць блёкі",
 	"COLLAPSE_BLOCK": "Згарнуць блёк",
 	"COLLAPSE_ALL": "Згарнуць блёкі",

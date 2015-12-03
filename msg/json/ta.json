@@ -17,6 +17,7 @@
 	"INLINE_INPUTS": "சூழமைவில் உள்ளீடு",
 	"DELETE_BLOCK": "உறுப்பை நீக்கு",
 	"DELETE_X_BLOCKS": "%1 உறுப்பை நீக்கு",
+	"DELETE_ALL_BLOCKS": "அனைத்து %1 நிரல் துண்டுகளையும் அழிக்கவா??",
 	"COLLAPSE_BLOCK": "உறுப்பை மரை",
 	"COLLAPSE_ALL": "உறுப்புகளை மரை",
 	"EXPAND_BLOCK": "உறுப்பை காட்டு",

@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "kartok, kol pasieksi";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "kartok kol";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Kartoja veiksmus, kol bus pasiekta nurodyta sąlyga.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Kartoja veiksmus, kol sąlyga tenkinama.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Ištrinti bloką";
 Blockly.Msg.DELETE_X_BLOCKS = "Ištrinti %1 blokus";
 Blockly.Msg.DISABLE_BLOCK = "Išjungti bloką";

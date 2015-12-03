@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "までを繰り返します";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "つつその間、繰り返す4";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "値は false のあいだ、いくつかのステートメントを行います。";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "値は true のあいだ、いくつかのステートメントを行います。";
+Blockly.Msg.DELETE_ALL_BLOCKS = "%1 個すべてのブロックを消しますか?";
 Blockly.Msg.DELETE_BLOCK = "ブロックを消す";
 Blockly.Msg.DELETE_X_BLOCKS = "%1 個のブロックを消す";
 Blockly.Msg.DISABLE_BLOCK = "ブロックを無効にします。";

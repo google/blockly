@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "təkrar et, ta ki";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "təkrar et, hələ ki";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Hələ ki, qiymət \"yalan\"dır, bəzi əmrləri yerinə yetir.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Hələ ki, qiymət \"doğru\"dur, bəzi əmrləri yerinə yetir.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Bloku sil";
 Blockly.Msg.DELETE_X_BLOCKS = "%1 bloku sil";
 Blockly.Msg.DISABLE_BLOCK = "Bloku söndür";

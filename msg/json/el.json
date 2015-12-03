@@ -20,6 +20,7 @@
 	"INLINE_INPUTS": "Εσωτερικές Είσοδοι",
 	"DELETE_BLOCK": "Διέγραψε Το Μπλοκ",
 	"DELETE_X_BLOCKS": "Διέγραψε %1 Μπλοκ",
+	"DELETE_ALL_BLOCKS": "Να διαγραφούν και τα %1 μπλοκ?",
 	"COLLAPSE_BLOCK": "Σύμπτυξε Το Μπλοκ",
 	"COLLAPSE_ALL": "Σύμπτυξτε Όλα Τα Μπλοκ",
 	"EXPAND_BLOCK": "Επέκτεινε Το Μπλοκ",

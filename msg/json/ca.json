@@ -14,6 +14,7 @@
 	"INLINE_INPUTS": "Entrades en línia",
 	"DELETE_BLOCK": "Esborra bloc",
 	"DELETE_X_BLOCKS": "Esborra %1 blocs",
+	"DELETE_ALL_BLOCKS": "Esborrar els %1 blocs?",
 	"COLLAPSE_BLOCK": "Contraure bloc",
 	"COLLAPSE_ALL": "Contraure blocs",
 	"EXPAND_BLOCK": "Expandir bloc",

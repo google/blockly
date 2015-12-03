@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "ブロックで作成したプログラムを実行します。",
   badCode: "プログラムのエラー:\n%1",
   timeout: "命令の実行回数が制限値を超えました。",
-  discard: "%1 個すべてのブロックを消しますか?",
   trashTooltip: "すべてのブロックを消します。",
   catLogic: "論理",
   catLoops: "繰り返し",

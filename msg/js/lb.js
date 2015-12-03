@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "widderhuele bis";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "repeat while";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "While a value is false, then do some statements.";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "While a value is true, then do some statements.";  // untranslated
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Block läschen";
 Blockly.Msg.DELETE_X_BLOCKS = "%1 Bléck läschen";
 Blockly.Msg.DISABLE_BLOCK = "Block desaktivéieren";

@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "تا تکرار کو";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "تا تکرار کو";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "While a value is false, then do some statements.";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "While a value is true, then do some statements.";  // untranslated
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "پاکسا کردن برشت";
 Blockly.Msg.DELETE_X_BLOCKS = "پاکسا کردن%1 د برشتیا";
 Blockly.Msg.DISABLE_BLOCK = "ناکشتگر کردن برشت";

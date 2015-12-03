@@ -18,6 +18,7 @@
 	"INLINE_INPUTS": "Inline invoer",
 	"DELETE_BLOCK": "Blok verwijderen",
 	"DELETE_X_BLOCKS": "%1 blokken verwijderen",
+	"DELETE_ALL_BLOCKS": "Alle %1 blokken verwijderen?",
 	"CLEAN_UP": "Blokken opschonen",
 	"COLLAPSE_BLOCK": "Blok inklappen",
 	"COLLAPSE_ALL": "Blokken inklappen",

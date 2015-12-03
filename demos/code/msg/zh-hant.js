@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "於工作區中執行積木組所定義的程式。",
   badCode: "程式錯誤：\n%1",
   timeout: "超過最大執行數。",
-  discard: "刪除共%1個積木？",
   trashTooltip: "捨棄所有積木。",
   catLogic: "邏輯",
   catLoops: "迴圈",

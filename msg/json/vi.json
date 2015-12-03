@@ -16,6 +16,7 @@
 	"INLINE_INPUTS": "Chỗ Gắn Cùng Dòng",
 	"DELETE_BLOCK": "Xóa Mảnh Này",
 	"DELETE_X_BLOCKS": "Xóa %1 Mảnh",
+	"DELETE_ALL_BLOCKS": "Xóa hết %1 mảnh?",
 	"COLLAPSE_BLOCK": "Thu Nhỏ Mảnh",
 	"COLLAPSE_ALL": "Thu Nhỏ Mọi Mảnh",
 	"EXPAND_BLOCK": "Mở Lớn Mảnh",

@@ -150,18 +150,20 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
  * @return {!Element} The workspace's SVG group.
  */
 Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
-  /*
-  <g class="blocklyWorkspace">
-    <rect class="blocklyMainBackground" height="100%" width="100%"></rect>
-    [Trashcan and/or flyout may go here]
-    <g class="blocklyBlockCanvas"></g>
-    <g class="blocklyBubbleCanvas"></g>
-    [Scrollbars may go here]
-  </g>
-  */
+  /**
+   * <g class="blocklyWorkspace">
+   *   <rect class="blocklyMainBackground" height="100%" width="100%"></rect>
+   *   [Trashcan and/or flyout may go here]
+   *   <g class="blocklyBlockCanvas"></g>
+   *   <g class="blocklyBubbleCanvas"></g>
+   *   [Scrollbars may go here]
+   * </g>
+   * @type {SVGElement}
+   */
   this.svgGroup_ = Blockly.createSvgElement('g',
       {'class': 'blocklyWorkspace'}, null);
   if (opt_backgroundClass) {
+    /** @type {SVGElement} */
     this.svgBackground_ = Blockly.createSvgElement('rect',
         {'height': '100%', 'width': '100%',
          'class': opt_backgroundClass}, this.svgGroup_);
@@ -170,8 +172,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
           'url(#' + this.options.gridPattern.id + ')';
     }
   }
+  /** @type {SVGElement} */
   this.svgBlockCanvas_ = Blockly.createSvgElement('g',
       {'class': 'blocklyBlockCanvas'}, this.svgGroup_, this);
+  /** @type {SVGElement} */
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g',
       {'class': 'blocklyBubbleCanvas'}, this.svgGroup_, this);
   var bottom = Blockly.Scrollbar.scrollbarThickness;
@@ -699,7 +703,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   menuOptions.push(cleanOption);
 
   // Add a little animation to collapsing and expanding.
-  var COLLAPSE_DELAY = 10;
+  var DELAY = 10;
   if (this.options.collapse) {
     var hasCollapsedBlocks = false;
     var hasExpandedBlocks = false;
@@ -727,7 +731,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         while (block) {
           setTimeout(block.setCollapsed.bind(block, shouldCollapse), ms);
           block = block.getNextBlock();
-          ms += COLLAPSE_DELAY;
+          ms += DELAY;
         }
       }
     };
@@ -748,6 +752,47 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     };
     menuOptions.push(expandOption);
   }
+
+  // Option to delete all blocks.
+  // Count the number of blocks that are deletable.
+  var deleteList = [];
+  function addDeletableBlocks(block) {
+    if (block.isDeletable()) {
+      deleteList = deleteList.concat(block.getDescendants());
+    } else {
+      var children = block.getChildren();
+      for (var i = 0; i < children.length; i++) {
+        addDeletableBlocks(children[i]);
+      }
+    }
+  }
+  for (var i = 0; i < topBlocks.length; i++) {
+    addDeletableBlocks(topBlocks[i]);
+  }
+  var deleteOption = {
+    text: deleteList.length <= 1 ? Blockly.Msg.DELETE_BLOCK :
+        Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
+    enabled: deleteList.length > 0,
+    callback: function() {
+      if (deleteList.length < 2 ||
+          window.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1',
+          String(deleteList.length)))) {
+        deleteNext();
+      }
+    }
+  };
+  function deleteNext() {
+    var block = deleteList.shift();
+    if (block) {
+      if (block.workspace) {
+        block.dispose(false, true);
+        setTimeout(deleteNext, DELAY);
+      } else {
+        deleteNext();
+      }
+    }
+  }
+  menuOptions.push(deleteOption);
 
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
 };
@@ -854,6 +899,7 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
     }
     this.options.languageTree = tree;
     this.toolbox_.populate_(tree);
+    this.toolbox_.addColour_();
   } else {
     if (!this.flyout_) {
       throw 'Existing toolbox has categories.  Can\'t change mode.';

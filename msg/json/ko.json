@@ -19,6 +19,7 @@
 	"INLINE_INPUTS": "내부 입력",
 	"DELETE_BLOCK": "블록 삭제",
 	"DELETE_X_BLOCKS": "블록 %1 삭제",
+	"DELETE_ALL_BLOCKS": "모든 블록 %1개를 삭제하겠습니까?",
 	"COLLAPSE_BLOCK": "블록 축소",
 	"COLLAPSE_ALL": "블록 축소",
 	"EXPAND_BLOCK": "블록 확장",

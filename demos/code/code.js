@@ -66,6 +66,7 @@ Code.LANGUAGE_NAME = {
   'sk': 'Slovenčina',
   'sr': 'Српски',
   'sv': 'Svenska',
+  'ta': 'தமிழ்',
   'th': 'ภาษาไทย',
   'tlh': 'tlhIngan Hol',
   'tr': 'Türkçe',
@@ -514,7 +515,7 @@ Code.runJS = function() {
 Code.discard = function() {
   var count = Code.workspace.getAllBlocks().length;
   if (count < 2 ||
-      window.confirm(MSG['discard'].replace('%1', count))) {
+      window.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1', count))) {
     Code.workspace.clear();
     window.location.hash = '';
   }

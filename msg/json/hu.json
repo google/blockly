@@ -21,6 +21,7 @@
 	"INLINE_INPUTS": "Belső kapcsolatok",
 	"DELETE_BLOCK": "Blokk törlése",
 	"DELETE_X_BLOCKS": "%1 blokk törlése",
+	"DELETE_ALL_BLOCKS": "Az összes %1 blokk törlése?",
 	"COLLAPSE_BLOCK": "Blokk összecsukása",
 	"COLLAPSE_ALL": "Blokkok összecsukása",
 	"EXPAND_BLOCK": "Blokk kibontása",

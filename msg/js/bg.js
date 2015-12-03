@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "повтаряй докато"
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "повтаряй докато е вярно, че";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Докато стойността е лъжа, изпълнявай командите.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Докато стойността е истина, изпълнявай командите.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Изтрий блок";
 Blockly.Msg.DELETE_X_BLOCKS = "Изтрий %1 блока";
 Blockly.Msg.DISABLE_BLOCK = "Деактивирай блок";

@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "Wiederhole bis";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "Wiederhole solange";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Führe die Anweisung solange aus wie die Bedingung falsch (false) ist.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Führe die Anweisung solange aus wie die Bedingung wahr (true) ist.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Alle %1 Bausteine löschen?";
 Blockly.Msg.DELETE_BLOCK = "Block löschen";
 Blockly.Msg.DELETE_X_BLOCKS = "Block %1 löschen";
 Blockly.Msg.DISABLE_BLOCK = "Block deaktivieren";

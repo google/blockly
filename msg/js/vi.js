@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "lặp lại cho đến khi";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "lặp lại trong khi";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Miễn là điều kiện còn sai, thì thực hiện các lệnh.  Khi điều kiện đúng thì ngưng.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Miễn là điều kiện còn đúng, thì thực hiện các lệnh.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Xóa hết %1 mảnh?";
 Blockly.Msg.DELETE_BLOCK = "Xóa Mảnh Này";
 Blockly.Msg.DELETE_X_BLOCKS = "Xóa %1 Mảnh";
 Blockly.Msg.DISABLE_BLOCK = "Ngưng Tác Dụng";

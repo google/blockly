@@ -17,6 +17,7 @@
 	"INLINE_INPUTS": "Вбудовані входи",
 	"DELETE_BLOCK": "Видалити блок",
 	"DELETE_X_BLOCKS": "Видалити %1 блоків",
+	"DELETE_ALL_BLOCKS": "Вилучити всі блоки %1?",
 	"COLLAPSE_BLOCK": "Згорнути блок",
 	"COLLAPSE_ALL": "Згорнути блоки",
 	"EXPAND_BLOCK": "Розгорнути блок",

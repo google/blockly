@@ -13,6 +13,7 @@
 	"INLINE_INPUTS": "qoD rar",
 	"DELETE_BLOCK": "ngogh Qaw'",
 	"DELETE_X_BLOCKS": "%1 ngoghmey Qaw'",
+	"DELETE_ALL_BLOCKS": "Hoch %1 ngoghmey Qaw'?",
 	"COLLAPSE_BLOCK": "ngogh DejmoH",
 	"COLLAPSE_ALL": "ngoghmey DejmoH",
 	"EXPAND_BLOCK": "ngogh DejHa'moH",

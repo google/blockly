@@ -13,6 +13,7 @@
 	"INLINE_INPUTS": "Унутрашњи улази",
 	"DELETE_BLOCK": "Обриши блок",
 	"DELETE_X_BLOCKS": "Обриши %1 блокова",
+	"DELETE_ALL_BLOCKS": "Обрисати %1 блокова?",
 	"COLLAPSE_BLOCK": "Скупи блок",
 	"COLLAPSE_ALL": "Скупи блокове",
 	"EXPAND_BLOCK": "Прошири блок",

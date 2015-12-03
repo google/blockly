@@ -15,6 +15,7 @@
 	"INLINE_INPUTS": "Riadkové vstupy",
 	"DELETE_BLOCK": "Odstrániť blok",
 	"DELETE_X_BLOCKS": "Odstrániť %1 blokov",
+	"DELETE_ALL_BLOCKS": "Zmazať všetkých %1 dielcov?",
 	"COLLAPSE_BLOCK": "Zvinúť blok",
 	"COLLAPSE_ALL": "Zvinúť bloky",
 	"EXPAND_BLOCK": "Rozvinúť blok",

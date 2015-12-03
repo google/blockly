@@ -15,6 +15,7 @@
 	"INLINE_INPUTS": "Monedoù enlinenn",
 	"DELETE_BLOCK": "Dilemel ar bloc'h",
 	"DELETE_X_BLOCKS": "Dilemel %1 bloc'h",
+	"DELETE_ALL_BLOCKS": "Diverkañ an holl vloc'hoù %1 ?",
 	"COLLAPSE_BLOCK": "Bihanaat ar bloc'h",
 	"COLLAPSE_ALL": "Bihanaat ar bloc'hoù",
 	"EXPAND_BLOCK": "Astenn ar bloc'h",

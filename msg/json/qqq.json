@@ -1,11 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Liuxinyu970226",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -15,6 +8,7 @@
 	"INLINE_INPUTS": "context menu - Change from 'internal' to 'external' mode for displaying blocks used as inputs to the selected block.  See [[Translating:Blockly#context_menus]].",
 	"DELETE_BLOCK": "context menu - Permanently delete the selected block.",
 	"DELETE_X_BLOCKS": "context menu - Permanently delete the %1 selected blocks.\n\nParameters:\n* %1 - an integer greater than 1.",
+	"DELETE_ALL_BLOCKS": "confirmation prompt - Question the user if they really wanted to permanently delete all %1 blocks.\n\nParameters:\n* %1 - an integer greater than 1.",
 	"CLEAN_UP": "context menu - Reposition all the blocks so that they form a neat line.",
 	"COLLAPSE_BLOCK": "context menu - Make the appearance of the selected block smaller by hiding some information about it.",
 	"COLLAPSE_ALL": "context menu - Make the appearance of all blocks smaller by hiding some information about it.  Use the same terminology as in the previous message.",

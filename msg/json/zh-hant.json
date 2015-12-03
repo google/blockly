@@ -16,6 +16,7 @@
 	"INLINE_INPUTS": "單行輸入",
 	"DELETE_BLOCK": "刪除積木",
 	"DELETE_X_BLOCKS": "刪除 %1 塊積木",
+	"DELETE_ALL_BLOCKS": "刪除共%1個積木？",
 	"COLLAPSE_BLOCK": "收合積木",
 	"COLLAPSE_ALL": "收合積木",
 	"EXPAND_BLOCK": "展開積木",

@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "repetir fins que";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "repetir mentre";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Mentre un valor sigui fals, llavors executar unes sentències.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Mentre un valor sigui cert, llavors executar unes sentències.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Esborrar els %1 blocs?";
 Blockly.Msg.DELETE_BLOCK = "Esborra bloc";
 Blockly.Msg.DELETE_X_BLOCKS = "Esborra %1 blocs";
 Blockly.Msg.DISABLE_BLOCK = "Desactiva bloc";

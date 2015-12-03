@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "повторять, пока �
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "повторять, пока";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Пока значение ложно, выполняет команды";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Пока значение истинно, выполняет команды.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Удалить все блоки (%1)?";
 Blockly.Msg.DELETE_BLOCK = "Удалить блок";
 Blockly.Msg.DELETE_X_BLOCKS = "Удалить %1 блоков";
 Blockly.Msg.DISABLE_BLOCK = "Отключить блок";

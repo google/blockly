@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "repeat until";  // untranslate
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "repeat while";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "While a value is false, then do some statements.";  // untranslated
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "While a value is true, then do some statements.";  // untranslated
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "ব্লকটি মুছে ফেল";
 Blockly.Msg.DELETE_X_BLOCKS = "%1 ব্লক অপসারণ কর";
 Blockly.Msg.DISABLE_BLOCK = "ব্লকটি বিকল কর";

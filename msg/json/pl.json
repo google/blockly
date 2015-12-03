@@ -20,6 +20,7 @@
 	"INLINE_INPUTS": "Wbudowane wejscia",
 	"DELETE_BLOCK": "Usuń blok",
 	"DELETE_X_BLOCKS": "Usunąć %1 bloki(ów)",
+	"DELETE_ALL_BLOCKS": "Usunąć wszystkie %1 bloki?",
 	"COLLAPSE_BLOCK": "Zwiń blok",
 	"COLLAPSE_ALL": "Zwiń bloki",
 	"EXPAND_BLOCK": "Rozwiń blok",

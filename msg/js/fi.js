@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "toista kunnes";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "toista niin kauan kuin";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Niin kauan kuin arvo on epätosi, suorita joukko lausekkeita.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Niin kauan kuin arvo on tosi, suorita joukko lausekkeita.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Poista lohko";
 Blockly.Msg.DELETE_X_BLOCKS = "Poista %1 lohkoa";
 Blockly.Msg.DISABLE_BLOCK = "Passivoi lohko";

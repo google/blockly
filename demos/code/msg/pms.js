@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Fé andé ël programa definì dai blòch ant lë spassi ëd travaj.",
   badCode: "Eror dël programa:\n%1",
   timeout: "Nùmer màssim d'arpetission d'esecussion sorpassà.",
-  discard: "Scancelé tuti ij %1 blòch?",
   trashTooltip: "Scarté tuti ij blòch.",
   catLogic: "Lògica",
   catLoops: "Liasse",

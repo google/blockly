@@ -16,6 +16,7 @@
 	"INLINE_INPUTS": "Intrări în linie",
 	"DELETE_BLOCK": "Șterge Bloc",
 	"DELETE_X_BLOCKS": "Ștergeți %1 Blocuri",
+	"DELETE_ALL_BLOCKS": "Ștergi toate cele %1 (de) blocuri?",
 	"COLLAPSE_BLOCK": "Restrange blocul",
 	"COLLAPSE_ALL": "Restrange blocurile",
 	"EXPAND_BLOCK": "Extinde bloc",

@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "επανάλαβε μέχρι"
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "επανάλαβε ενώ";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Ενόσω μια τιμή είναι ψευδής, τότε εκτελεί κάποιες εντολές.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Ενόσω μια τιμή είναι αληθής, τότε εκτελεί κάποιες εντολές.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Να διαγραφούν και τα %1 μπλοκ?";
 Blockly.Msg.DELETE_BLOCK = "Διέγραψε Το Μπλοκ";
 Blockly.Msg.DELETE_X_BLOCKS = "Διέγραψε %1 Μπλοκ";
 Blockly.Msg.DISABLE_BLOCK = "Απενεργοποίησε Το Μπλοκ";

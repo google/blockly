@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "חזור עד ש...";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "חזור כל עוד";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "בזמן שהערך שווה לשגוי, תעשה מספר חישובים.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "כל עוד הערך הוא אמת, לעשות כמה פעולות.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "האם למחוק את כל %1 קטעי הקוד?";
 Blockly.Msg.DELETE_BLOCK = "מחק קטע קוד";
 Blockly.Msg.DELETE_X_BLOCKS = "מחק %1 קטעי קוד";
 Blockly.Msg.DISABLE_BLOCK = "נטרל קטע קוד";

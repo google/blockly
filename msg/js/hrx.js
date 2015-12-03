@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "Repetiere bis";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "Repetier solang";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Füahr die Oonweisung solang aus wie die Bedingung falsch (false) ist.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Füahr die Oonweisung solang aus wie die Bedingung woahr (true) ist.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "All %1 Bausten lösche?";
 Blockly.Msg.DELETE_BLOCK = "Block lösche";
 Blockly.Msg.DELETE_X_BLOCKS = "Block %1 lösche";
 Blockly.Msg.DISABLE_BLOCK = "Block deaktivieren";

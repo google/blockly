@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = "Ulangi sampai";
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = "Ulangi jika";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Jika sementara nilai tidak  benar (false), maka lakukan beberapa perintah.";
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Jika sementara nilai benar (true), maka lakukan beberapa perintah.";
+Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Hapus Blok";
 Blockly.Msg.DELETE_X_BLOCKS = "Hapus %1 Blok";
 Blockly.Msg.DISABLE_BLOCK = "Nonaktifkan Blok";

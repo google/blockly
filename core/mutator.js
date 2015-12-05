@@ -93,9 +93,13 @@ Blockly.Mutator.prototype.createEditor_ = function() {
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
   // Convert the list of names into a list of XML objects for the flyout.
-  var quarkXml = goog.dom.createDom('xml');
-  for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
-    quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
+  if (this.quarkNames_.length) {
+    var quarkXml = goog.dom.createDom('xml');
+    for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
+      quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
+    }
+  } else {
+    var quarkXml = null;
   }
   var mutator = this;
   var workspaceOptions = {
@@ -138,15 +142,17 @@ Blockly.Mutator.prototype.updateEditable = function() {
 Blockly.Mutator.prototype.resizeBubble_ = function() {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
   var workspaceSize = this.workspace_.getCanvas().getBBox();
-  var flyoutMetrics = this.workspace_.flyout_.getMetrics_();
   var width;
   if (this.block_.RTL) {
     width = -workspaceSize.x;
   } else {
     width = workspaceSize.width + workspaceSize.x;
   }
-  var height = Math.max(workspaceSize.height + doubleBorderWidth * 3,
-                        flyoutMetrics.contentHeight + 20);
+  var height = workspaceSize.height + doubleBorderWidth * 3;
+  if (this.workspace_.flyout_) {
+    var flyoutMetrics = this.workspace_.flyout_.getMetrics_();
+    height = Math.max(height, flyoutMetrics.contentHeight + 20);
+  }
   width += doubleBorderWidth * 3;
   // Only resize if the size difference is significant.  Eliminates shuddering.
   if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
@@ -184,9 +190,11 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
         this.createEditor_(), this.block_.svgPath_,
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
-    this.workspace_.flyout_.init(this.workspace_);
-    this.workspace_.flyout_.show(
-        this.workspace_.options.languageTree.childNodes);
+    var tree = this.workspace_.options.languageTree;
+    if (tree) {
+      this.workspace_.flyout_.init(this.workspace_);
+      this.workspace_.flyout_.show(tree.childNodes);
+    }
 
     this.rootBlock_ = this.block_.decompose(this.workspace_);
     var blocks = this.rootBlock_.getDescendants();
@@ -196,8 +204,13 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // The root block should not be dragable or deletable.
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
-    var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
-    var x = this.workspace_.flyout_.width_ + margin;
+    if (this.workspace_.flyout_) {
+      var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
+      var x = this.workspace_.flyout_.width_ + margin;
+    } else {
+      var margin = 16;
+      var x = margin;
+    }
     if (this.block_.RTL) {
       x = -x;
     }

@@ -41,63 +41,16 @@ goog.require('goog.string');
 
 
 /**
-* Class for one block.
-* @constructor
-*/
-Blockly.Block = function() {
-  // We assert this here because there may be users of the previous form of
-  // this constructor, which took arguments.
-  goog.asserts.assert(arguments.length == 0,
-      'Please use Blockly.Block.obtain.');
-};
-
-/**
- * Obtain a newly created block.
+ * Class for one block.
+ * Not normally called directly, workspace.newBlock() is preferred.
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
- * @return {!Blockly.Block} The created block
+ * @constructor
  */
-Blockly.Block.obtain = function(workspace, prototypeName) {
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.obtainBlock(workspace, prototypeName);
-  } else {
-    if (workspace.rendered) {
-      var newBlock = new Blockly.BlockSvg();
-    } else {
-      var newBlock = new Blockly.Block();
-    }
-    newBlock.initialize(workspace, prototypeName);
-    return newBlock;
-  }
-};
-
-/**
- * Optional text data that round-trips beween blocks and XML.
- * Has no effect. May be used by 3rd parties for meta information.
- * @type {?string}
- */
-Blockly.Block.prototype.data = null;
-
-/**
- * Initialization for one block.
- * @param {!Blockly.Workspace} workspace The new block's workspace.
- * @param {?string} prototypeName Name of the language object containing
- *     type-specific functions for this block.
- */
-Blockly.Block.prototype.initialize = function(workspace, prototypeName) {
+Blockly.Block = function(workspace, prototypeName) {
   /** @type {string} */
-  this.id = Blockly.Blocks.genUid();
-  workspace.addTopBlock(this);
-  this.fill(workspace, prototypeName);
-};
-
-/**
- * Fill a block with initial values.
- * @param {!Blockly.Workspace} workspace The workspace to use.
- * @param {string} prototypeName The typename of the block.
- */
-Blockly.Block.prototype.fill = function(workspace, prototypeName) {
+  this.id = Blockly.genUid();
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
   /** @type {Blockly.Connection} */
@@ -154,6 +107,9 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
         'Error: "%s" is an unknown language block.', prototypeName);
     goog.mixin(this, prototype);
   }
+
+  workspace.addTopBlock(this);
+
   // Call an initialization function, if it exists.
   if (goog.isFunction(this.init)) {
     this.init();
@@ -162,6 +118,27 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
 };
+
+/**
+ * Obtain a newly created block.
+ * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
+ * @return {!Blockly.Block} The created block.
+ * @deprecated December 2015
+ */
+Blockly.Block.obtain = function(workspace, prototypeName) {
+  console.warn('Deprecated call to Blockly.Block.obtain, ' +
+               'use workspace.newBlock instead.');
+  return workspace.newBlock(prototypeName);
+};
+
+/**
+ * Optional text data that round-trips beween blocks and XML.
+ * Has no effect. May be used by 3rd parties for meta information.
+ * @type {?string}
+ */
+Blockly.Block.prototype.data = null;
 
 /**
  * Get an existing block.

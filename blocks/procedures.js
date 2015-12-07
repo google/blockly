@@ -159,8 +159,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * @this Blockly.Block
    */
   decompose: function(workspace) {
-    var containerBlock = Blockly.Block.obtain(workspace,
-                                              'procedures_mutatorcontainer');
+    var containerBlock = workspace.newBlock('procedures_mutatorcontainer');
     containerBlock.initSvg();
 
     // Check/uncheck the allow statement box.
@@ -174,7 +173,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // Parameter list.
     var connection = containerBlock.getInput('STACK').connection;
     for (var i = 0; i < this.arguments_.length; i++) {
-      var paramBlock = Blockly.Block.obtain(workspace, 'procedures_mutatorarg');
+      var paramBlock = workspace.newBlock('procedures_mutatorarg');
       paramBlock.initSvg();
       paramBlock.setFieldValue(this.arguments_[i], 'NAME');
       // Store the old location.

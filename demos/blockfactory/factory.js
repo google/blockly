@@ -669,7 +669,7 @@ function updatePreview() {
     }
 
     // Create the preview block.
-    var previewBlock = Blockly.Block.obtain(previewWorkspace, blockType);
+    var previewBlock = previewWorkspace.newBlock(blockType);
     previewBlock.initSvg();
     previewBlock.render();
     previewBlock.setMovable(false);

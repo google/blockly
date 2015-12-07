@@ -32,11 +32,11 @@ function test_emptyWorkspace() {
 
 function test_flatWorkspace() {
   var workspace = new Blockly.Workspace();
-  var blockA = Blockly.Block.obtain(workspace, '');
+  var blockA = workspace.newBlock('');
   assertEquals('One block workspace (1).', 1, workspace.getTopBlocks(true).length);
   assertEquals('One block workspace (2).', 1, workspace.getTopBlocks(false).length);
   assertEquals('One block workspace (3).', 1, workspace.getAllBlocks().length);
-  var blockB = Blockly.Block.obtain(workspace, '');
+  var blockB = workspace.newBlock('');
   assertEquals('Two block workspace (1).', 2, workspace.getTopBlocks(true).length);
   assertEquals('Two block workspace (2).', 2, workspace.getTopBlocks(false).length);
   assertEquals('Two block workspace (3).', 2, workspace.getAllBlocks().length);
@@ -52,8 +52,8 @@ function test_flatWorkspace() {
 
 function test_maxBlocksWorkspace() {
   var workspace = new Blockly.Workspace();
-  var blockA = Blockly.Block.obtain(workspace, '');
-  var blockB = Blockly.Block.obtain(workspace, '');
+  var blockA = workspace.newBlock('');
+  var blockB = workspace.newBlock('');
   assertEquals('Infinite capacity.', Infinity, workspace.remainingCapacity());
   workspace.options.maxBlocks = 3;
   assertEquals('Three capacity.', 1, workspace.remainingCapacity());
@@ -69,8 +69,8 @@ function test_maxBlocksWorkspace() {
 
 function test_getByIdWorkspace() {
   var workspace = new Blockly.Workspace();
-  var blockA = Blockly.Block.obtain(workspace, '');
-  var blockB = Blockly.Block.obtain(workspace, '');
+  var blockA = workspace.newBlock('');
+  var blockB = workspace.newBlock('');
   assertEquals('Find blockA.', blockA, workspace.getBlockById(blockA.id));
   assertEquals('Find blockB.', blockB, workspace.getBlockById(blockB.id));
   assertEquals('No block found.', null, workspace.getBlockById('I do not exist.'));

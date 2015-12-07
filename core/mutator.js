@@ -189,7 +189,6 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.bubble_ = new Blockly.Bubble(this.block_.workspace,
         this.createEditor_(), this.block_.svgPath_,
         this.iconX_, this.iconY_, null, null);
-    var thisObj = this;
     var tree = this.workspace_.options.languageTree;
     if (tree) {
       this.workspace_.flyout_.init(this.workspace_);
@@ -217,16 +216,19 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.moveBy(x, margin);
     // Save the initial connections, then listen for further changes.
     if (this.block_.saveConnections) {
+      var thisMutator = this;
       this.block_.saveConnections(this.rootBlock_);
       this.sourceListener_ = Blockly.bindEvent_(
           this.block_.workspace.getCanvas(),
-          'blocklyWorkspaceChange', this.block_,
-          function() {thisObj.block_.saveConnections(thisObj.rootBlock_)});
+          'blocklyWorkspaceChange', null,
+          function() {
+            thisMutator.block_.saveConnections(thisMutator.rootBlock_)
+          });
     }
     this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
     Blockly.bindEvent_(this.workspace_.getCanvas(), 'blocklyWorkspaceChange',
-        this.block_, function() {thisObj.workspaceChanged_();});
+        this, this.workspaceChanged_);
     this.updateColour();
   } else {
     // Dispose of the bubble.

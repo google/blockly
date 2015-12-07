@@ -36,10 +36,15 @@ goog.require('goog.math.Coordinate');
 
 /**
  * Class for a block's SVG representation.
+ * Not normally called directly, workspace.newBlock() is preferred.
+ * @param {!Blockly.Workspace} workspace The block's workspace.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
  * @extends {Blockly.Block}
  * @constructor
  */
-Blockly.BlockSvg = function() {
+Blockly.BlockSvg = function(workspace, prototypeName) {
+  Blockly.BlockSvg.superClass_.constructor.call(this, workspace, prototypeName);
   // Create core elements for the block.
   /** @type {SVGElement} */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);

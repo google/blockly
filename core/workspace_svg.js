@@ -247,6 +247,16 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
 };
 
 /**
+ * Obtain a newly created block.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
+ * @return {!Blockly.BlockSvg} The created block.
+ */
+Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName) {
+  return new Blockly.BlockSvg(this, prototypeName);
+};
+
+/**
  * Add a trashcan.
  * @param {number} bottom Distance from workspace bottom to bottom of trashcan.
  * @return {number} Distance from workspace bottom to the top of trashcan.

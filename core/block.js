@@ -991,7 +991,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             input = this.appendDummyInput(element['name']);
             break;
           case 'field_label':
-            field = new Blockly.FieldLabel(element['text']);
+            field = new Blockly.FieldLabel(element['text'], element['class']);
             break;
           case 'field_input':
             field = new Blockly.FieldTextInput(element['text']);

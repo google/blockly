@@ -40,11 +40,14 @@ goog.require('goog.math.Coordinate');
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
+ * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new id.
  * @extends {Blockly.Block}
  * @constructor
  */
-Blockly.BlockSvg = function(workspace, prototypeName) {
-  Blockly.BlockSvg.superClass_.constructor.call(this, workspace, prototypeName);
+Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
+  Blockly.BlockSvg.superClass_.constructor.call(this,
+      workspace, prototypeName, opt_id);
   // Create core elements for the block.
   /** @type {SVGElement} */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);

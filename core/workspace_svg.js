@@ -250,10 +250,12 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
  * Obtain a newly created block.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
+ * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new id.
  * @return {!Blockly.BlockSvg} The created block.
  */
-Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName) {
-  return new Blockly.BlockSvg(this, prototypeName);
+Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
+  return new Blockly.BlockSvg(this, prototypeName, opt_id);
 };
 
 /**
@@ -445,7 +447,7 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
   }
   var block = null;
   if (id) {
-    block = this.getBlockById(id);
+    block = Blockly.Block.getById(id);
     if (!block) {
       return;
     }

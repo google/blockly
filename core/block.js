@@ -46,11 +46,16 @@ goog.require('goog.string');
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
+ * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new id.
  * @constructor
  */
-Blockly.Block = function(workspace, prototypeName) {
+Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
-  this.id = Blockly.genUid();
+  this.id = opt_id || Blockly.genUid();
+  goog.asserts.assert(!Blockly.Block.getById(this.id),
+      'Error: Block "%s" already exists.', this.id);
+  Blockly.Block.BlockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
   /** @type {Blockly.Connection} */
@@ -141,20 +146,6 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 Blockly.Block.prototype.data = null;
 
 /**
- * Get an existing block.
- * @param {string} id The block's id.
- * @param {!Blockly.Workspace} workspace The block's workspace.
- * @return {Blockly.Block} The found block, or null if not found.
- */
-Blockly.Block.getById = function(id, workspace) {
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.getBlockById(id);
-  } else {
-    return workspace.getBlockById(id);
-  }
-};
-
-/**
  * Dispose of this block.
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
@@ -201,10 +192,8 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
     }
     connections[i].dispose();
   }
-  // Remove from Realtime set of blocks.
-  if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
-    Blockly.Realtime.removeBlock(this);
-  }
+  // Remove from block database.
+  delete Blockly.Block.BlockDB_[this.id];
 };
 
 /**
@@ -1240,3 +1229,19 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
 };
+
+/**
+ * Database of all blocks.
+ * @private
+ */
+Blockly.Block.BlockDB_ = Object.create(null);
+
+/**
+ * Find the block with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Block.getById = function(id) {
+  return Blockly.Block.BlockDB_[id] || null;
+};
+

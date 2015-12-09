@@ -295,14 +295,11 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
  * workspace.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
- * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
- *     reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
  */
-Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
+Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
   // Create top-level block.
-  var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock,
-                                                 opt_reuseBlock);
+  var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock);
   if (workspace.rendered) {
     // Hide connections to speed up assembly.
     topBlock.setConnectionsHidden(true);
@@ -334,37 +331,17 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
  * workspace.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
- * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
- *     reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlockHeadless_ =
-    function(workspace, xmlBlock, opt_reuseBlock) {
+Blockly.Xml.domToBlockHeadless_ = function(workspace, xmlBlock) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
     throw 'Block type unspecified: \n' + xmlBlock.outerHTML;
   }
   var id = xmlBlock.getAttribute('id');
-  if (opt_reuseBlock && id) {
-    // Only used by realtime.
-    block = Blockly.Block.getById(id, workspace);
-    // TODO: The following is for debugging.  It should never actually happen.
-    if (!block) {
-      throw 'Couldn\'t get Block with id: ' + id;
-    }
-    var parentBlock = block.getParent();
-    // If we've already filled this block then we will dispose of it and then
-    // re-fill it.
-    if (block.workspace) {
-      block.dispose(true, false, true);
-    }
-    block.fill(workspace, prototypeName);
-    block.parent_ = parentBlock;
-  } else {
-    block = workspace.newBlock(prototypeName);
-  }
+  block = workspace.newBlock(prototypeName, id);
 
   var blockChild = null;
   for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
@@ -453,7 +430,7 @@ Blockly.Xml.domToBlockHeadless_ =
         }
         if (childBlockNode) {
           blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              childBlockNode, opt_reuseBlock);
+              childBlockNode);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
@@ -475,7 +452,7 @@ Blockly.Xml.domToBlockHeadless_ =
             throw 'Next statement is already connected.';
           }
           blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              childBlockNode, opt_reuseBlock);
+              childBlockNode);
           if (!blockChild.previousConnection) {
             throw 'Next block does not have previous statement.';
           }

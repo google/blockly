@@ -152,10 +152,12 @@ Blockly.Workspace.prototype.getWidth = function() {
  * Obtain a newly created block.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
+ * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new id.
  * @return {!Blockly.Block} The created block.
  */
-Blockly.Workspace.prototype.newBlock = function(prototypeName) {
-  return new Blockly.Block(this, prototypeName);
+Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
+  return new Blockly.Block(this, prototypeName, opt_id);
 };
 
 /**

@@ -66,3 +66,19 @@ function test_maxBlocksWorkspace() {
   workspace.clear();
   assertEquals('Cleared capacity.', 0, workspace.remainingCapacity());
 }
+
+function test_getWorkspaceById() {
+  var workspaceA = new Blockly.Workspace();
+  var workspaceB = new Blockly.Workspace();
+  assertEquals('Find workspaceA.', workspaceA,
+      Blockly.Workspace.getById(workspaceA.id));
+  assertEquals('Find workspaceB.', workspaceB,
+      Blockly.Workspace.getById(workspaceB.id));
+  assertEquals('No workspace found.', null,
+      Blockly.Workspace.getById('I do not exist.'));
+  workspaceA.dispose();
+  assertEquals('Can\'t find workspaceA.', null,
+      Blockly.Workspace.getById(workspaceA.id));
+  assertEquals('WorkspaceB exists.', workspaceB,
+      Blockly.Workspace.getById(workspaceB.id));
+}

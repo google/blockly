@@ -19,7 +19,7 @@
  */
 'use strict';
 
-function test_getById() {
+function test_getBlockById() {
   var workspace = new Blockly.Workspace();
   var blockA = workspace.newBlock('');
   var blockB = workspace.newBlock('');

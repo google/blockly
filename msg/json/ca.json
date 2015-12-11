@@ -3,7 +3,8 @@
 		"authors": [
 			"Alvaro Vidal-Abarca",
 			"Espertus",
-			"Hiperpobla"
+			"Hiperpobla",
+			"Jaumeortola"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -156,7 +157,7 @@
 	"MATH_MODULO_TITLE": "residu de %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Retorna el residu de dividir els dos nombres.",
 	"MATH_CONSTRAIN_TITLE": "limitar %1 entre %2 i %3",
-	"MATH_CONSTRAIN_TOOLTIP": "Limita un nombre per tal que estigui entre els límits especificats (inclosos).",
+	"MATH_CONSTRAIN_TOOLTIP": "Limita un nombre perquè estigui entre els límits especificats (inclosos).",
 	"MATH_RANDOM_INT_HELPURL": "https://ca.wikipedia.org/wiki/Generaci%C3%B3_de_nombres_aleatoris",
 	"MATH_RANDOM_INT_TITLE": "nombre aleatori entre %1 i %2",
 	"MATH_RANDOM_INT_TOOLTIP": "Retorna un nombre aleatori entre els dos límits especificats, inclosos.",

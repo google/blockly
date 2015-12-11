@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Vishwanatha Badikana"
+			"Vishwanatha Badikana",
+			"Bharathesha Alasandemajalu"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ವಸ್ತು",
@@ -88,11 +89,11 @@
 	"MATH_ROUND_OPERATOR_ROUND": "ಸುತ್ತು",
 	"MATH_ROUND_OPERATOR_ROUNDUP": "ಮುಗಿಪುನ ಸಮಯೊ",
 	"MATH_ROUND_OPERATOR_ROUNDDOWN": "ಸುತ್ತು ಕಡಮೆ",
-	"MATH_ONLIST_OPERATOR_SUM": "ಮೊತ್ತದ ಪಟ್ಟಿ",
-	"MATH_ONLIST_TOOLTIP_SUM": "ಗರಿಸ್ಟೊ ಪಟ್ಟಿ",
-	"MATH_ONLIST_OPERATOR_MIN": "ಕನಿಸ್ಟ ಪಟ್ಟಿ",
+	"MATH_ONLIST_OPERATOR_SUM": "ಒಟ್ಟು ಕೂಡಯಿನಾ ಪಟ್ಟಿ",
+	"MATH_ONLIST_TOOLTIP_SUM": "ಪಟ್ಟಿದಾ ಮಾಂತ ಸಂಕ್ಯೆಲೆನ್ ಪಿರಕೊರ್ಲೆ",
+	"MATH_ONLIST_OPERATOR_MIN": "ಕಿನ್ಯ ಪಟ್ಟಿ",
 	"MATH_ONLIST_OPERATOR_AVERAGE": "ಸರಾಸರಿ ಪಟ್ಟಿ",
-	"MATH_ONLIST_TOOLTIP_AVERAGE": "ಮದ್ಯಮೊ ಪಟ್ಟಿ",
+	"MATH_ONLIST_TOOLTIP_AVERAGE": "ಪಟ್ಟಿಡುಪ್ಪುನ ಸರ್ವಸಾಧಾರಣ ಬಿಲೆನ್ ಪಿರಕೋರ್ಲೆ",
 	"MATH_ONLIST_OPERATOR_MODE": "ಪಟ್ಟಿದ ಇದಾನೊಲು",
 	"MATH_ONLIST_OPERATOR_STD_DEV": "ಕಬರ್ ಪಟ್ಟಿದ ಪ್ರಮಾನೊ",
 	"MATH_ONLIST_OPERATOR_RANDOM": "ಗೊತ್ತುಗುರಿ ದಾಂತಿನ ಅಂಸೊದ ಪಟ್ಟಿ",

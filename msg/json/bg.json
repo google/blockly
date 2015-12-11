@@ -3,7 +3,8 @@
 		"authors": [
 			"Gkostov",
 			"Vodnokon4e",
-			"Alpinistbg"
+			"Alpinistbg",
+			"Miroslav35232"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -15,6 +16,7 @@
 	"INLINE_INPUTS": "Вътрешни входове",
 	"DELETE_BLOCK": "Изтрий блок",
 	"DELETE_X_BLOCKS": "Изтрий %1 блока",
+	"DELETE_ALL_BLOCKS": "Изтриване на всички 1% блокове?",
 	"CLEAN_UP": "Премахни блокове",
 	"COLLAPSE_BLOCK": "Скрий блок",
 	"COLLAPSE_ALL": "Скрий блокове",

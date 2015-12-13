@@ -47,12 +47,6 @@ Blockly.Mutator = function(quarkNames) {
 goog.inherits(Blockly.Mutator, Blockly.Icon);
 
 /**
- * Icon in base64 format.
- * @private
- */
-Blockly.Mutator.prototype.png_ = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAANyAAADcgBffIlqAAAAAd0SU1FB98DGhULOIajyb8AAAHMSURBVDjLnZS9SiRBFIXP/CQ9iIHgPoGBTo8vIAaivoKaKJr6DLuxYqKYKIqRgSCMrblmIxqsICgOmAriziIiRXWjYPdnUDvT2+PMsOyBoop7qk71vedWS5KAkrWsGUMjSYjpgSQhNoZGFLEKeGoKGMNttUpULkOhAFL3USiA70MQEBnDDeDJWtaqVaJeB7uNICAKQ1ZkDI1yufOm+XnY2YHl5c6874MxPClJiDulkMvBxYWrw/095POdU0sS4hxALqcWtreloSGpVJLGxtL49bX0+Ci9vUkzM2kcXGFbypUKxHHLBXZ3YW4ONjfh4yN1aGIiPQOQEenrg6MjR+zvZz99Y8PFT09hYCArktdfsFY6PHTr83NlUKu5+eREennJchmR/n5pYcGtJyezG6em3Dw7Kw0OZrlMOr6f1gTg4ACWlmBvz9WoifHxbDpf3Flfd+54njQ9ncYvL6WHB+n9XVpcbHOnW59IUKu5m+p11zftfLHo+qRorZ6Hh/Xt7k5fsLUl1evS1dWfG9swMiJZq9+KIlaD4P/eztkZNgz5LsAzhpvjY6JK5d9e8eioE3h95SdQbDrkhSErxvArjkl6/U/imMQYnsKQH02BT7vbZZfVOiWhAAAAAElFTkSuQmCC';
-
-/**
  * Width of workspace.
  * @private
  */
@@ -63,6 +57,29 @@ Blockly.Mutator.prototype.workspaceWidth_ = 0;
  * @private
  */
 Blockly.Mutator.prototype.workspaceHeight_ = 0;
+
+/**
+ * Draw the mutator icon.
+ * @param {!Element} group The icon group.
+ * @private
+ */
+Blockly.Mutator.prototype.drawIcon_ = function(group) {
+  // Square with rounded corners.
+  Blockly.createSvgElement('rect',
+      {'class': 'blocklyIconShape',
+       'rx': '4', 'ry': '4',
+       'height': '16', 'width': '16'},
+       group);
+  // Gear.
+  Blockly.createSvgElement('path',
+      {'class': 'blocklyIconSymbol',
+       'd': 'm4.203,7.296c-0.039,0.2226 -0.063,0.45 -0.063,0.684 0,0.234 0.024,0.462 0.063,0.684l-0.9204,0.6774 -0.1098,0.4098 0.9,1.5588 0.4104,0.1104 1.0428,-0.4572c0.3486,0.294 0.75,0.525 1.1874,0.6828l0.1266,1.134 0.3,0.3h1.8l0.3,-0.2994 0.1266,-1.1376c0.4362,-0.1584 0.8364,-0.3888 1.185,-0.6822l1.0464,0.4584 0.4092,-0.1104 0.9,-1.5588 -0.1104,-0.4104 -0.9204,-0.6774c0.0396,-0.2208 0.0636,-0.4488 0.0636,-0.6822 0,-0.2334 -0.024,-0.4614 -0.0636,-0.6834l0.9204,-0.6774 0.1104,-0.4104 -0.9,-1.5588 -0.4092,-0.1092 -1.0464,0.4584c-0.348,-0.2928 -0.7488,-0.5238 -1.185,-0.6822l-0.1266,-1.1376 -0.3,-0.2994h-1.8l-0.3,0.3 -0.126,1.1352c-0.4374,0.1572 -0.8388,0.3888 -1.1874,0.6822l-1.0434,-0.4566 -0.4098,0.1098 -0.8994,1.5588 0.108,0.4092z'},
+       group);
+  // Axel hole.
+  Blockly.createSvgElement('circle',
+      {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'},
+       group);
+};
 
 /**
  * Clicking on the icon toggles if the mutator bubble is visible.

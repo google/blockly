@@ -209,9 +209,13 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
           } else {
             syncTrees(childIn, childOut);
           }
-          var hue = childIn.getAttribute('colour');
-          if (goog.isString(hue)) {
-            childOut.hexColour = Blockly.makeColour(hue);
+          var colour = childIn.getAttribute('colour');
+          if (goog.isString(colour)) {
+            if (colour.match(/^#[0-9a-fA-F]{6}$/)) {
+              childOut.hexColour = colour;
+            } else {
+              childOut.hexColour = Blockly.hueToRgb(colour);
+            }
             hasColours = true;
           } else {
             childOut.hexColour = '';

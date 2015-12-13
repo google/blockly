@@ -95,7 +95,7 @@ Blockly.SPRITE = {
  * @param {number} hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
  */
-Blockly.makeColour = function(hue) {
+Blockly.hueToRgb = function(hue) {
   return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
       Blockly.HSV_VALUE * 255);
 };

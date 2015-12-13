@@ -146,6 +146,13 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
 Blockly.Block.prototype.data = null;
 
 /**
+ * Colour of the block in '#RRGGBB' format.
+ * @type {string}
+ * @private
+ */
+Blockly.Block.prototype.colour_ = '#000000';
+
+/**
  * Dispose of this block.
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
@@ -556,18 +563,24 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
 
 /**
  * Get the colour of a block.
- * @return {number} HSV hue value.
+ * @return {string} #RRGGBB string.
  */
 Blockly.Block.prototype.getColour = function() {
-  return this.colourHue_;
+  return this.colour_;
 };
 
 /**
  * Change the colour of a block.
- * @param {number} colourHue HSV hue value.
+ * @param {number|string} colour HSV hue value, or #RRGGBB string.
  */
-Blockly.Block.prototype.setColour = function(colourHue) {
-  this.colourHue_ = colourHue;
+Blockly.Block.prototype.setColour = function(colour) {
+  if (goog.isNumber(colour)) {
+    this.colour_ = Blockly.hueToRgb(colour);
+  } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {
+    this.colour_ = colour;
+  } else {
+    throw 'Invalid colour: ' + colour;
+  }
   if (this.rendered) {
     this.updateColour();
   }
@@ -1244,4 +1257,3 @@ Blockly.Block.BlockDB_ = Object.create(null);
 Blockly.Block.getById = function(id) {
   return Blockly.Block.BlockDB_[id] || null;
 };
-

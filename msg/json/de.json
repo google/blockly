@@ -5,7 +5,8 @@
 			"M165437",
 			"Dan-yell",
 			"아라",
-			"Octycs"
+			"Octycs",
+			"Cvanca"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "Element",
@@ -159,7 +160,7 @@
 	"MATH_ONLIST_TOOLTIP_AVERAGE": "Ist der Durchschnittswert aller Werte in einer Liste.",
 	"MATH_ONLIST_OPERATOR_MEDIAN": "Median einer Liste",
 	"MATH_ONLIST_TOOLTIP_MEDIAN": "Ist der Median aller Werte in einer Liste.",
-	"MATH_ONLIST_OPERATOR_MODE": "Modulo / Restwert einer Liste",
+	"MATH_ONLIST_OPERATOR_MODE": "am häufigsten in Liste",
 	"MATH_ONLIST_TOOLTIP_MODE": "Findet den am häufigsten vorkommenden Wert in einer Liste.  Falls kein Wert öfter vorkommt als alle anderen, wird die originale Liste zurückgeben",
 	"MATH_ONLIST_OPERATOR_STD_DEV": "Standardabweichung einer Liste",
 	"MATH_ONLIST_TOOLTIP_STD_DEV": "Ist die standardisierte Standardabweichung aller Werte in der Liste",

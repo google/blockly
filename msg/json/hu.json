@@ -9,7 +9,8 @@
 			"Csega",
 			"Fitoschido",
 			"Lajthabalazs",
-			"Tacsipacsi"
+			"Tacsipacsi",
+			"Rodrigo"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "változó",
@@ -22,6 +23,7 @@
 	"DELETE_BLOCK": "Blokk törlése",
 	"DELETE_X_BLOCKS": "%1 blokk törlése",
 	"DELETE_ALL_BLOCKS": "Az összes %1 blokk törlése?",
+	"CLEAN_UP": "Blokkok kiürítése",
 	"COLLAPSE_BLOCK": "Blokk összecsukása",
 	"COLLAPSE_ALL": "Blokkok összecsukása",
 	"EXPAND_BLOCK": "Blokk kibontása",
@@ -236,7 +238,7 @@
 	"LISTS_INLIST": "A(z)",
 	"LISTS_INDEX_OF_FIRST": "listában első előfordulásaː",
 	"LISTS_INDEX_OF_LAST": "listában utolsó előfordulásaː",
-	"LISTS_INDEX_OF_TOOLTIP": "A megadtott elem eslő vagy utolsó előfordulásával tér vissza.  0 esetén nincs ilyen eleme a listának.",
+	"LISTS_INDEX_OF_TOOLTIP": "A megadott elem első vagy utolsó előfordulásával tér vissza. 0-val tér vissza, ha nem talál ilyen elemet.",
 	"LISTS_GET_INDEX_GET": "listából értéke",
 	"LISTS_GET_INDEX_GET_REMOVE": "listából kivétele",
 	"LISTS_GET_INDEX_REMOVE": "listából törlése",

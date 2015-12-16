@@ -1,10 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"McDutchie"
+			"McDutchie",
+			"Karmwiki"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "cosa",
+	"TODAY": "Hodie",
 	"DUPLICATE_BLOCK": "Duplicar",
 	"ADD_COMMENT": "Adder commento",
 	"REMOVE_COMMENT": "Remover commento",
@@ -13,6 +15,7 @@
 	"DELETE_BLOCK": "Deler bloco",
 	"DELETE_X_BLOCKS": "Deler %1 blocos",
 	"DELETE_ALL_BLOCKS": "Deler tote le %1 blocos?",
+	"CLEAN_UP": "Clarar le blocos",
 	"COLLAPSE_BLOCK": "Plicar bloco",
 	"COLLAPSE_ALL": "Plicar blocos",
 	"EXPAND_BLOCK": "Displicar bloco",
@@ -259,6 +262,9 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "usque al № ab fin",
 	"LISTS_GET_SUBLIST_END_LAST": "usque al ultime",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Crea un copia del parte specificate de un lista.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "Crear un lista per un texto",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "crear un texto per un lista",
+	"LISTS_SPLIT_WITH_DELIMITER": "con delimitator",
 	"VARIABLES_GET_TOOLTIP": "Retorna le valor de iste variabile.",
 	"VARIABLES_GET_CREATE_SET": "Crea 'mitter %1'",
 	"VARIABLES_SET": "mitter %1 a %2",

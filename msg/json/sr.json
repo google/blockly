@@ -306,7 +306,6 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Прави функцију са излазом.",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Упозорење: Ова функција има дупликате параметара.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://sr.wikipedia.org/wiki/Функција_(програмирање)",
-	"PROCEDURES_CALLNORETURN_CALL": "",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Покрените прилагођену функцију „%1“.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://sr.wikipedia.org/wiki/Функција_(програмирање)",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Покрените прилагођену функцију „%1“ и користи њен излаз.",

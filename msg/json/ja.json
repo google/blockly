@@ -316,7 +316,6 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "出力を持つ関数を作成します。",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "警告: この関数は、重複するパラメーターがあります。",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://ja.wikipedia.org/wiki/サブルーチン",
-	"PROCEDURES_CALLNORETURN_CALL": "",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "ユーザー定義関数 '%1' を実行します。",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://ja.wikipedia.org/wiki/サブルーチン",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "ユーザー定義関数 '%1' を実行し、その出力を使用します。",

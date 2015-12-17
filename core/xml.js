@@ -386,7 +386,7 @@ Blockly.Xml.domToBlockHeadless_ = function(workspace, xmlBlock) {
       case 'comment':
         block.setCommentText(xmlChild.textContent);
         var visible = xmlChild.getAttribute('pinned');
-        if (visible) {
+        if (visible && !block.isInFlyout) {
           // Give the renderer a millisecond to render and position the block
           // before positioning the comment bubble.
           setTimeout(function() {

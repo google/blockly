@@ -702,7 +702,7 @@ Blockly.WorkspaceSvg.prototype.cleanUp_ = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
-  if (this.options.readOnly) {
+  if (this.options.readOnly || this.isFlyout) {
     return;
   }
   var menuOptions = [];

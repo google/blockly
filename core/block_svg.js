@@ -46,8 +46,6 @@ goog.require('goog.math.Coordinate');
  * @constructor
  */
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
-  Blockly.BlockSvg.superClass_.constructor.call(this,
-      workspace, prototypeName, opt_id);
   // Create core elements for the block.
   /** @type {SVGElement} */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
@@ -63,6 +61,8 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
       {'class': 'blocklyPathLight'}, this.svgGroup_);
   this.svgPath_.tooltip = this;
   Blockly.Tooltip.bindMouseEvents(this.svgPath_);
+  Blockly.BlockSvg.superClass_.constructor.call(this,
+      workspace, prototypeName, opt_id);
 };
 goog.inherits(Blockly.BlockSvg, Blockly.Block);
 
@@ -98,8 +98,9 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     input.init();
   }
-  if (this.mutator) {
-    this.mutator.createIcon();
+  var icons = this.getIcons();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].createIcon();
   }
   this.updateColour();
   this.updateMovable();
@@ -439,6 +440,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
  */
 Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   if (this.isInFlyout) {
+    e.stopPropagation();
     return;
   }
   this.workspace.markFocused();
@@ -1505,9 +1507,7 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
   if (mutator) {
     mutator.block_ = this;
     this.mutator = mutator;
-    if (this.rendered) {
-      mutator.createIcon();
-    }
+    mutator.createIcon();
   }
 };
 

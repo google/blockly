@@ -401,10 +401,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       // prevent the closure of the flyout if the user right-clicks on such a
       // block.
       child.isInFlyout = true;
-      // There is no good way to handle comment bubbles inside the flyout.
-      // Blocks shouldn't come with predefined comments, but someone will
-      // try this, I'm sure.  Kill the comment.
-      child.setCommentText(null);
     }
     block.render();
     var root = block.getSvgRoot();

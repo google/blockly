@@ -375,6 +375,9 @@ Blockly.onKeyDown_ = function(e) {
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
       }
     }
+    if (e.keyCode == 32) {
+      Blockly.getMainWorkspace().focusToolboxSearch();
+    }
   }
   if (deleteBlock) {
     // Common code for delete and cut.

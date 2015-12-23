@@ -910,6 +910,15 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
 };
 
 /**
+ * Set focus to the search field of the toolbox, if it exists.
+ */
+Blockly.WorkspaceSvg.prototype.focusToolboxSearch = function() {
+  if (this.toolbox_) {
+    this.toolbox_.focusSearchField();
+  }
+};
+
+/**
  * When something in this workspace changes, call a function.
  * @param {!Function} func Function to call.
  * @return {!Array.<!Array>} Opaque data that can be passed to

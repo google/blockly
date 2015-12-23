@@ -32,7 +32,10 @@ goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.html.SafeHtml');
 goog.require('goog.math.Rect');
+goog.require('goog.structs.Set');
+goog.require('goog.structs.Trie');
 goog.require('goog.style');
+goog.require('goog.ui.LabelInput');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
 
@@ -191,6 +194,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   rootOut.removeChildren();  // Delete any existing content.
   rootOut.blocks = [];
   var hasColours = false;
+  var toolbox = this;
   function syncTrees(treeIn, treeOut) {
     for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
       if (!childIn.tagName) {
@@ -228,6 +232,9 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
         case 'SEP':
           treeOut.add(new Blockly.Toolbox.TreeSeparator());
           break;
+        case 'SEARCH':
+          treeOut.add(new Blockly.Toolbox.TreeSearch(toolbox));
+          break;
         case 'BLOCK':
         case 'SHADOW':
           treeOut.blocks.push(childIn);
@@ -238,12 +245,154 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   syncTrees(newTree, this.tree_);
   this.hasColours_ = hasColours;
 
+  this.populateTrie_();
+
   if (rootOut.blocks.length) {
     throw 'Toolbox cannot have both blocks and categories in the root level.';
   }
 
   // Fire a resize event since the toolbox may have changed width and height.
   Blockly.fireUiEvent(window, 'resize');
+};
+
+/**
+ * Build the typeahead trie for this toolbox.
+ * @param {Blockly.Workspace} workspace The workspace for building blocks.
+ * @param {Blockly.Toolbox.TreeNode} opt_tree Starting point of tree.
+ *     Defaults to the root node.
+ * @private
+ */
+Blockly.Toolbox.prototype.populateTrie_ = function(opt_tree) {
+  var tree = opt_tree || this.tree_;
+  var workspace = this.workspace_;
+  var blockTrie = new goog.structs.Trie();
+
+  var getAllFieldTexts = function(block) {
+    var texts = [];
+
+    for (var i = 0; i < block.inputList.length; i++) {
+      var input = block.inputList[i];
+      for (var j = 0; j < input.fieldRow.length; j++) {
+        var field = input.fieldRow[j];
+        texts.push(field.getText());
+      }
+    }
+
+    return texts;
+  };
+
+  var getAllKeys = function(block) {
+    var keys = [block.type].concat(getAllFieldTexts(block));
+
+    var tooltip;
+    if (block.tooltip) {
+      if (typeof block.tooltip === 'function') {
+        tooltip = block.tooltip();
+      } else {
+        tooltip = block.tooltip;
+      }
+
+      keys.push(tooltip);
+    }
+
+    return goog.array.map(keys, function (key) {
+      return key.toLowerCase();
+    });
+  };
+
+  var addToTrie = function(key, value) {
+    if (!blockTrie.containsKey(key)) {
+      blockTrie.add(key, []);
+    }
+
+    blockTrie.set(key, blockTrie.get(key).concat(value));
+  };
+
+  var populateTrieFromBlocks = function(blocks) {
+    for (var i = 0; i < blocks.length; i++) {
+      var blockXml = blocks[i];
+      var block = Blockly.Xml.domToBlock(workspace, blockXml);
+
+      var keys = getAllKeys(block);
+      for (var j = 0; j < keys.length; j++) {
+        addToTrie(keys[j], blockXml);
+      }
+
+      block.dispose();
+    }
+  };
+
+  var populateTrieFromNode = function(node) {
+    var children = node.getChildren();
+
+    for (var i = 0; i < children.length; i++) {
+      var child = children[i];
+      if (child.blocks && (typeof child.blocks !== 'string')) {
+        populateTrieFromBlocks(child.blocks);
+      }
+
+      populateTrieFromNode(child);
+    }
+  };
+
+  populateTrieFromNode(tree);
+
+  this.blockTrie_ = blockTrie;
+};
+
+/**
+ * Set focus to the search field in the toolbox, if it exists.
+ */
+Blockly.Toolbox.prototype.focusSearchField = function() {
+  var children = this.tree_.getChildren();
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i];
+    if (child.focusSearchField) {
+      child.focusSearchField();
+      return;
+    }
+  }
+};
+
+/**
+ * Find all blocks matching a given search term.
+ * @param {String} term The term to search against.
+ * @return {Array} The blocks that match the given term.
+ */
+Blockly.Toolbox.prototype.blocksMatchingSearchTerm = function(term) {
+  var keys = this.blockTrie_.getKeys(term.toLowerCase());
+  var blocks = [];
+
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var blocksForKey = this.blockTrie_.get(key);
+
+    for (var j = 0; j < blocksForKey.length; j++) {
+      blocks.push(blocksForKey[j]);
+    }
+  }
+
+  return blocks;
+};
+
+/**
+ * Find all blocks matching ALL of the given search terms.
+ * @param {Array} terms The terms to search against.
+ * @return {Array} The blocks that match the given terms.
+ */
+Blockly.Toolbox.prototype.blocksMatchingSearchTerms = function(terms) {
+  var intersectingMatches = null;
+
+  for (var i = 0; i < terms.length; i++) {
+    var matchSet = new goog.structs.Set(this.blocksMatchingSearchTerm(terms[i]));
+    if (intersectingMatches) {
+      intersectingMatches = intersectingMatches.intersection(matchSet);
+    } else {
+      intersectingMatches = matchSet;
+    }
+  }
+
+  return intersectingMatches.getValues();
 };
 
 /**
@@ -478,4 +627,71 @@ goog.inherits(Blockly.Toolbox.TreeSeparator, Blockly.Toolbox.TreeNode);
  */
 Blockly.Toolbox.TreeSeparator.CONFIG_ = {
   cssTreeRow: 'blocklyTreeSeparator'
+};
+
+/**
+ * A typeahead search field in the tree.
+ * @constructor
+ * @extends {Blockly.Toolbox.TreeNode}
+ */
+Blockly.Toolbox.TreeSearch = function(toolbox) {
+  this.toolbox_ = toolbox;
+  var searchField = goog.html.SafeHtml.create('input', {type: "search", placeholder: "Search"});
+
+  Blockly.Toolbox.TreeNode.call(this, toolbox, searchField,
+      Blockly.Toolbox.TreeSearch.CONFIG_);
+};
+goog.inherits(Blockly.Toolbox.TreeSearch, Blockly.Toolbox.TreeNode);
+
+/**
+ * Configuration constants for tree typeahead search field.
+ * @type {Object.<string,*>}
+ * @const
+ * @private
+ */
+Blockly.Toolbox.TreeSearch.CONFIG_ = {
+  cssTreeRow: 'blocklyTreeSearch'
+};
+
+/**
+ * Set up the event listeners on the search field after the TreeSearch
+ * node is added to the document.
+ */
+Blockly.Toolbox.TreeSearch.prototype.enterDocument = function() {
+  Blockly.Toolbox.TreeNode.prototype.enterDocument.call(this);
+
+  var toolbox = this.toolbox_;
+
+  var searchField = this.getElement().getElementsByTagName('input')[0];
+  this.searchField_ = searchField;
+
+  goog.events.listen(searchField, ['click', 'keydown'], function (e) {
+    e.stopPropagation();
+  });
+  goog.events.listen(searchField, 'keyup', function (e) {
+    var searchTerms = e.target.value.trim().toLowerCase().split(/\s+/);
+    searchTerms = goog.array.filter(searchTerms, function (term) {
+      return term.length > 0;
+    });
+    var matchingBlocks = [];
+
+    if (searchTerms.length > 0) {
+      matchingBlocks = toolbox.blocksMatchingSearchTerms(searchTerms);
+    }
+
+    if (matchingBlocks.length > 0) {
+      toolbox.flyout_.show(matchingBlocks);
+      toolbox.flyout_.scrollToTop();
+    } else {
+      // Hide the flyout.
+      toolbox.flyout_.hide();
+    }
+  });
+};
+
+/**
+ * Set focus to the search input field.
+ */
+Blockly.Toolbox.TreeSearch.prototype.focusSearchField = function() {
+  this.searchField_.focus();
 };

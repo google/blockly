@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Ajouter, supprimer, ou réarr
 Blockly.Msg.REMOVE_COMMENT = "Supprimer un commentaire";
 Blockly.Msg.RENAME_VARIABLE = "Renommer la variable…";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Renommer toutes les variables '%1' en :";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "ajouter le texte";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "à";

@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "เอาคำอธิบายออก";
 Blockly.Msg.RENAME_VARIABLE = "เปลี่ยนชื่อตัวแปร...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "เปลี่ยนชื่อตัวแปร '%1' ทั้งหมดเป็น:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "ต่อด้วยข้อความ";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "นำเอา";

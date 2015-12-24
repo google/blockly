@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "ဢဝ်ဢွၵ်ႇ ၶေႃႈၵႂၢမ်း";
 Blockly.Msg.RENAME_VARIABLE = "လိုမ်ႉၶိုၼ်း ဢၼ်လၢႆႈမႂ်ႇ";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "လိုမ်ႉၶိုၼ်း ဢၼ်လၢႆႈမႂ်ႇၸိူဝ်းၼၼ်ႉ '%1' ထိုင်";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "append text";  // untranslated
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "to";  // untranslated

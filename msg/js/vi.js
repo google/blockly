@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Thêm, xóa hoặc sắp xế
 Blockly.Msg.REMOVE_COMMENT = "Xóa Chú Giải";
 Blockly.Msg.RENAME_VARIABLE = "Thay tên biến...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Thay tên tất cả \"%1\" biến này thành:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "thêm văn bản";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "ở cuối";

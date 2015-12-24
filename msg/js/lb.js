@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "Bemierkunge ewechhuelen";
 Blockly.Msg.RENAME_VARIABLE = "Variabel ëmbenennen...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "All '%1' Variabelen ëmbenennen op:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "Text drunhänken";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "to";  // untranslated

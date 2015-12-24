@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Lisää, poista tai järjeste
 Blockly.Msg.REMOVE_COMMENT = "Poista kommentti";
 Blockly.Msg.RENAME_VARIABLE = "Nimeä uudelleen muuttuja...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Nimeä uudelleen kaikki '%1' muuttujaa:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "lisää teksti";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "muuttujaan";

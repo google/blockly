@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Προσθέτει, αφαι�
 Blockly.Msg.REMOVE_COMMENT = "Αφαίρεσε Το Σχόλιο";
 Blockly.Msg.RENAME_VARIABLE = "Μετονόμασε τη μεταβλητή...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Μετονόμασε όλες τις μεταβλητές «%1» σε:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "ανάθεσε κείμενο";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "έως";

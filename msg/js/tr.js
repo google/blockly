@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bu işlevin girdilerini ekley
 Blockly.Msg.REMOVE_COMMENT = "Yorumu Sil";
 Blockly.Msg.RENAME_VARIABLE = "Değişkeni yeniden adlandır...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Tüm '%1' değişkenlerini yeniden isimlendir:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "Metin Ekle";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "e";

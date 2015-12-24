@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Lägg till, ta bort och ändr
 Blockly.Msg.REMOVE_COMMENT = "Radera kommentar";
 Blockly.Msg.RENAME_VARIABLE = "Byt namn på variabel...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Byt namn på alla'%1'-variabler till:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "lägg till text";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "till";

@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bæta við, fjarlægja eða u
 Blockly.Msg.REMOVE_COMMENT = "Fjarlægja skýringu";
 Blockly.Msg.RENAME_VARIABLE = "Endurnefna breytu...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Endurnefna allar '%1' breyturnar:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "bæta texta";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";
 Blockly.Msg.TEXT_APPEND_TO = "við";

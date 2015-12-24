@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Ouzhpennañ, lemel, pe adkemp
 Blockly.Msg.REMOVE_COMMENT = "Lemel an evezhiadenn kuit";
 Blockly.Msg.RENAME_VARIABLE = "Adenvel an argemmenn...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Adenvel an holl argemmennoù '%1' e :";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "ouzhpennañ an destenn";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "da";

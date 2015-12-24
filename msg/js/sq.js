@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "Fshij komentin";
 Blockly.Msg.RENAME_VARIABLE = "Ndrysho emrin variables...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Ndrysho emrin e te gjitha '%1' variablave ne :";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "shto tekst";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "ne";

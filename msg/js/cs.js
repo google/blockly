@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "Odstranit komentář";
 Blockly.Msg.RENAME_VARIABLE = "Přejmenovat proměnné...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Přejmenujte všechny proměnné '%1':";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "přidat text";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "do";

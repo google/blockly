@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "ಟಿಪ್ಪಣಿನ್ ದೆತ್ತ್‌ಪಾಡ್ಲೆ";
 Blockly.Msg.RENAME_VARIABLE = "ಬದಲಾವಣೆ ಆಯಿನ ಪುದರ್‍ನ್ ನಾನೊರೊ ಪನ್ಲೆ";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "ನಾನೊರೊ ಪುದರ್ ಬದಲಾವಣೆ ಆಯಿನ ಮಾಂತ '% 1':";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "ಪಟ್ಯೊನು ಸೇರವೆ";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "ಇಂದೆಕ್";

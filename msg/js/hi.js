@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "टिप्पणी हटायें";
 Blockly.Msg.RENAME_VARIABLE = "चर का नाम बदलें...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "सभी '%1' चरों के नाम बदलें:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "से जोड़ें ये टेक्स्ट";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "इस";

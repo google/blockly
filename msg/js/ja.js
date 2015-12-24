@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "コメントを削除します。";
 Blockly.Msg.RENAME_VARIABLE = "変数の名前を変更.";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "%1の変数すべてを名前変更します。";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "テキストを追加します。";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "宛先";

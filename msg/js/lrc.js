@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder input
 Blockly.Msg.REMOVE_COMMENT = "نظر جا وه جا کو";
 Blockly.Msg.RENAME_VARIABLE = "د نو نوم نیائن آلشتگر...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "د نو نوم نیائن %1 د تموم آلشتگریا د:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "append text";  // untranslated
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "سی";

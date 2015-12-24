@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Tvarkyti komandos gaunamus du
 Blockly.Msg.REMOVE_COMMENT = "Pašalinti komentarą";
 Blockly.Msg.RENAME_VARIABLE = "Pervardyti kintamajį...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Pervadinti visus '%1' kintamuosius į:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "pridėk tekstą";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "prie";

@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "செயல்கூறு�
 Blockly.Msg.REMOVE_COMMENT = "கருத்தை நீக்கு";
 Blockly.Msg.RENAME_VARIABLE = "மாறிலியை மறுபெயரிடுக...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "அனைத்து '%1' மாறிலிகளையும் பின்வருமாறு மறுபெயரிடுக:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "உரை சேர்க்க";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "இந்த மாறியிற்கு";

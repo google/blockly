@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Дадаць, выдаліц�
 Blockly.Msg.REMOVE_COMMENT = "Выдаліць камэнтар";
 Blockly.Msg.RENAME_VARIABLE = "Перайменаваць зьменную…";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Перайменаваць усе назвы зьменных '%1' на:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "дадаць тэкст";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "да";

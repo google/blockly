@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Invoer van deze functie toevo
 Blockly.Msg.REMOVE_COMMENT = "Opmerking verwijderen";
 Blockly.Msg.RENAME_VARIABLE = "Variabele hernoemen...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Alle variabelen \"%1\" hernoemen naar:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "tekst";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";
 Blockly.Msg.TEXT_APPEND_TO = "voeg toe aan";

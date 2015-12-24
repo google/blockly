@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Adăugă, șterge sau reordon
 Blockly.Msg.REMOVE_COMMENT = "Elimină comentariu";
 Blockly.Msg.RENAME_VARIABLE = "Redenumirea variabilei...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Redenumeşte toate variabilele '%1' în:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "Adăugaţi text";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "la";

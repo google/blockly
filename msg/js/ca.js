@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Afegir, eliminar o canviar l'
 Blockly.Msg.REMOVE_COMMENT = "Elimina el comentari";
 Blockly.Msg.RENAME_VARIABLE = "Reanomena variable...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Reanomena totes les variables '%1' a:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "afegir text";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "a";

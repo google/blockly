@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Aciungi, fùlia, o assenta is
 Blockly.Msg.REMOVE_COMMENT = "Fùlia unu cumentu";
 Blockly.Msg.RENAME_VARIABLE = "Muda nòmini a variabili...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "A is variabilis '%1' muda nòmini a:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "acciungi su testu";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "a";

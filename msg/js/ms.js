@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Tambah, alih keluar atau susu
 Blockly.Msg.REMOVE_COMMENT = "Padamkan Komen";
 Blockly.Msg.RENAME_VARIABLE = "Tukar nama pembolehubah...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Tukar nama semua pembolehubah '%1' kepada:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "append text";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "Untuk";

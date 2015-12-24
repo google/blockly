@@ -291,6 +291,7 @@ Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "הוסף, הסר או סדר 
 Blockly.Msg.REMOVE_COMMENT = "הסר הערה";
 Blockly.Msg.RENAME_VARIABLE = "שנה את שם המשתנה...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "שנה את שם כל '%1' המשתנים ל:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "הוספת טקסט";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "אל";

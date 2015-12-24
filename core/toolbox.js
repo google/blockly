@@ -636,7 +636,7 @@ Blockly.Toolbox.TreeSeparator.CONFIG_ = {
  */
 Blockly.Toolbox.TreeSearch = function(toolbox) {
   this.toolbox_ = toolbox;
-  var searchField = goog.html.SafeHtml.create('input', {type: "search", placeholder: "Search"});
+  var searchField = goog.html.SafeHtml.create('input', {type: "search", placeholder: Blockly.Msg.SEARCH});
 
   Blockly.Toolbox.TreeNode.call(this, toolbox, searchField,
       Blockly.Toolbox.TreeSearch.CONFIG_);

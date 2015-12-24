@@ -54,6 +54,8 @@ goog.require('Blockly.Msg');
 Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
 /// button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}
 Blockly.Msg.TODAY = 'Today';
+/// search input placeholder - The placeholder text on the toolbox typeahead search field.
+Blockly.Msg.SEARCH = 'Search';
 
 // Context menus.
 /// context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}

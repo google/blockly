@@ -494,7 +494,7 @@ Blockly.Xml.domToBlockHeadless_ =
   }
   var disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
-    block.setDisabled(disabled == 'true');
+    block.setDisabled(disabled == 'true' || disabled == 'disabled');
   }
   var deletable = xmlBlock.getAttribute('deletable');
   if (deletable) {

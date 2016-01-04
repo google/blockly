@@ -32,6 +32,7 @@ goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
+goog.require('goog.userAgent');
 
 
 /**
@@ -576,7 +577,7 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
     if (this.isEditable() && !this.collapsed_ &&
         this.workspace.options.comments) {
       // Option to add/remove a comment.
-      var commentOption = {enabled: true};
+      var commentOption = {enabled: !goog.userAgent.IE};
       if (this.comment) {
         commentOption.text = Blockly.Msg.REMOVE_COMMENT;
         commentOption.callback = function() {

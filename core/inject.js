@@ -76,12 +76,16 @@ Blockly.inject = function(container, opt_options) {
  */
 Blockly.parseToolboxTree_ = function(tree) {
   if (tree) {
-    if (typeof tree != 'string' && typeof XSLTProcessor == 'undefined') {
-      // In this case the tree will not have been properly built by the
-      // browser. The HTML will be contained in the element, but it will
-      // not have the proper DOM structure since the browser doesn't support
-      // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
-      tree = tree.outerHTML;
+    if (typeof tree != 'string') {
+      if (typeof XSLTProcessor == 'undefined' && tree.outerHTML) {
+        // In this case the tree will not have been properly built by the
+        // browser. The HTML will be contained in the element, but it will
+        // not have the proper DOM structure since the browser doesn't support
+        // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
+        tree = tree.outerHTML;
+      } else if (!(tree instanceof Element)) {
+        tree = null;
+      }
     }
     if (typeof tree == 'string') {
       tree = Blockly.Xml.textToDom(tree);

@@ -610,11 +610,13 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     // See comment in inject.js Blockly.init_ as to why mouseup events are
     // bound to the document instead of the SVG's surface.
     if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
-      Blockly.onTouchUpWrapper_ =
-          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
+      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_ || [];
+      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_.concat(
+          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_));
     }
-    Blockly.onMouseMoveWrapper_ =
-        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_);
+    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_ || [];
+    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_.concat(
+        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_));
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();

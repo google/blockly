@@ -49,12 +49,6 @@ Blockly.Icon.prototype.collapseHidden = true;
 Blockly.Icon.prototype.SIZE = 17;
 
 /**
- * Icon in base64 format.
- * @private
- */
-Blockly.Icon.prototype.png_ = '';
-
-/**
  * Bubble UI (if visible).
  * @type {Blockly.Bubble}
  * @private
@@ -83,16 +77,12 @@ Blockly.Icon.prototype.createIcon = function() {
   }
   /* Here's the markup that will be generated:
   <g class="blocklyIconGroup">
-    <image width="17" height="17"
-     xlink:href="data:image/png;base64,iVBOR..."></image>
+    ...
   </g>
   */
   this.iconGroup_ = Blockly.createSvgElement('g',
       {'class': 'blocklyIconGroup'}, null);
-  var img = Blockly.createSvgElement('image',
-      {'width': this.SIZE, 'height': this.SIZE},
-      this.iconGroup_);
-  img.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', this.png_);
+  this.drawIcon_(this.iconGroup_);
 
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
   Blockly.bindEvent_(this.iconGroup_, 'mouseup', this, this.iconClick_);
@@ -152,8 +142,7 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
  */
 Blockly.Icon.prototype.updateColour = function() {
   if (this.isVisible()) {
-    var hexColour = Blockly.makeColour(this.block_.getColour());
-    this.bubble_.setColour(hexColour);
+    this.bubble_.setColour(this.block_.getColour());
   }
 };
 

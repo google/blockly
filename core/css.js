@@ -272,6 +272,16 @@ Blockly.Css.CONTENT = [
     'opacity: .6;',
   '}',
 
+  '.blocklyIconShape {',
+    'fill: #00f;',
+    'stroke: #fff;',
+    'stroke-width: 1px;',
+  '}',
+
+  '.blocklyIconSymbol {',
+    'fill: #fff;',
+  '}',
+
   '.blocklyMinimalBody {',
     'margin: 0;',
     'padding: 0;',

@@ -326,7 +326,6 @@
 	"PROCEDURES_ALLOW_STATEMENTS": "Aussagen erlauben",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Warnung: dieser Funktionsblock hat zwei gleich benannte Parameter.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29",
-	"PROCEDURES_CALLNORETURN_CALL": "",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Rufe einen Funktionsblock ohne Rückgabewert auf.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Rufe einen Funktionsblock mit Rückgabewert auf.",

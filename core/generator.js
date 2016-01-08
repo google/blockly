@@ -202,8 +202,8 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
   }
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
-  goog.asserts.assertArray(tuple,
-      'Expecting tuple from value block "%s".', targetBlock.type);
+  goog.asserts.assertArray(tuple, 'Expecting tuple from value block "%s".',
+      targetBlock.type);
   var code = tuple[0];
   var innerOrder = tuple[1];
   if (isNaN(innerOrder)) {
@@ -239,8 +239,7 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
   var code = this.blockToCode(targetBlock);
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
-  goog.asserts.assertString(code,
-      'Expecting code from statement block "%s".',
+  goog.asserts.assertString(code, 'Expecting code from statement block "%s".',
       targetBlock && targetBlock.type);
   if (code) {
     code = this.prefixLines(/** @type {string} */ (code), this.INDENT);

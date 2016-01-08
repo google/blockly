@@ -311,7 +311,6 @@
 	"PROCEDURES_ALLOW_STATEMENTS": "дозволити дії",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Увага: ця функція має дубльовані параметри.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://uk.wikipedia.org/wiki/Підпрограма",
-	"PROCEDURES_CALLNORETURN_CALL": "блок тексту",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Запустити користувацьку функцію \"%1\".",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://uk.wikipedia.org/wiki/Підпрограма",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Запустити користувацьку функцію \"%1\" і використати її вивід.",

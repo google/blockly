@@ -36,6 +36,9 @@ goog.require('goog.math');
  * @constructor
  */
 Blockly.Workspace = function(opt_options) {
+  /** @type {string} */
+  this.id = Blockly.genUid();
+  Blockly.Workspace.WorkspaceDB_[this.id] = this;
   /** @type {!Object} */
   this.options = opt_options || {};
   /** @type {boolean} */
@@ -56,6 +59,8 @@ Blockly.Workspace.prototype.rendered = false;
  */
 Blockly.Workspace.prototype.dispose = function() {
   this.clear();
+  // Remove from workspace database.
+  delete Blockly.Workspace.WorkspaceDB_[this.id];
 };
 
 /**
@@ -149,6 +154,18 @@ Blockly.Workspace.prototype.getWidth = function() {
 };
 
 /**
+ * Obtain a newly created block.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
+ * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new id.
+ * @return {!Blockly.Block} The created block.
+ */
+Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
+  return new Blockly.Block(this, prototypeName, opt_id);
+};
+
+/**
  * Finds the block with the specified ID in this workspace.
  * @param {string} id ID of block to find.
  * @return {Blockly.Block} The matching block, or null if not found.
@@ -181,6 +198,21 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
  */
 Blockly.Workspace.prototype.fireChangeEvent = function() {
   // NOP.
+};
+
+/**
+ * Database of all workspaces.
+ * @private
+ */
+Blockly.Workspace.WorkspaceDB_ = Object.create(null);
+
+/**
+ * Find the workspace with the specified ID.
+ * @param {string} id ID of workspace to find.
+ * @return {Blockly.Workspace} The sought after workspace or null if not found.
+ */
+Blockly.Workspace.getById = function(id) {
+  return Blockly.Workspace.WorkspaceDB_[id] || null;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

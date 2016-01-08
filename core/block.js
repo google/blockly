@@ -41,63 +41,21 @@ goog.require('goog.string');
 
 
 /**
-* Class for one block.
-* @constructor
-*/
-Blockly.Block = function() {
-  // We assert this here because there may be users of the previous form of
-  // this constructor, which took arguments.
-  goog.asserts.assert(arguments.length == 0,
-      'Please use Blockly.Block.obtain.');
-};
-
-/**
- * Obtain a newly created block.
+ * Class for one block.
+ * Not normally called directly, workspace.newBlock() is preferred.
  * @param {!Blockly.Workspace} workspace The block's workspace.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
- * @return {!Blockly.Block} The created block
+ * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new id.
+ * @constructor
  */
-Blockly.Block.obtain = function(workspace, prototypeName) {
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.obtainBlock(workspace, prototypeName);
-  } else {
-    if (workspace.rendered) {
-      var newBlock = new Blockly.BlockSvg();
-    } else {
-      var newBlock = new Blockly.Block();
-    }
-    newBlock.initialize(workspace, prototypeName);
-    return newBlock;
-  }
-};
-
-/**
- * Optional text data that round-trips beween blocks and XML.
- * Has no effect. May be used by 3rd parties for meta information.
- * @type {?string}
- */
-Blockly.Block.prototype.data = null;
-
-/**
- * Initialization for one block.
- * @param {!Blockly.Workspace} workspace The new block's workspace.
- * @param {?string} prototypeName Name of the language object containing
- *     type-specific functions for this block.
- */
-Blockly.Block.prototype.initialize = function(workspace, prototypeName) {
+Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
-  this.id = Blockly.Blocks.genUid();
-  workspace.addTopBlock(this);
-  this.fill(workspace, prototypeName);
-};
-
-/**
- * Fill a block with initial values.
- * @param {!Blockly.Workspace} workspace The workspace to use.
- * @param {string} prototypeName The typename of the block.
- */
-Blockly.Block.prototype.fill = function(workspace, prototypeName) {
+  this.id = opt_id || Blockly.genUid();
+  goog.asserts.assert(!Blockly.Block.getById(this.id),
+      'Error: Block "%s" already exists.', this.id);
+  Blockly.Block.BlockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
   /** @type {Blockly.Connection} */
@@ -154,6 +112,9 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
         'Error: "%s" is an unknown language block.', prototypeName);
     goog.mixin(this, prototype);
   }
+
+  workspace.addTopBlock(this);
+
   // Call an initialization function, if it exists.
   if (goog.isFunction(this.init)) {
     this.init();
@@ -164,18 +125,32 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
 };
 
 /**
- * Get an existing block.
- * @param {string} id The block's id.
+ * Obtain a newly created block.
  * @param {!Blockly.Workspace} workspace The block's workspace.
- * @return {Blockly.Block} The found block, or null if not found.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
+ * @return {!Blockly.Block} The created block.
+ * @deprecated December 2015
  */
-Blockly.Block.getById = function(id, workspace) {
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.getBlockById(id);
-  } else {
-    return workspace.getBlockById(id);
-  }
+Blockly.Block.obtain = function(workspace, prototypeName) {
+  console.warn('Deprecated call to Blockly.Block.obtain, ' +
+               'use workspace.newBlock instead.');
+  return workspace.newBlock(prototypeName);
 };
+
+/**
+ * Optional text data that round-trips beween blocks and XML.
+ * Has no effect. May be used by 3rd parties for meta information.
+ * @type {?string}
+ */
+Blockly.Block.prototype.data = null;
+
+/**
+ * Colour of the block in '#RRGGBB' format.
+ * @type {string}
+ * @private
+ */
+Blockly.Block.prototype.colour_ = '#000000';
 
 /**
  * Dispose of this block.
@@ -224,10 +199,8 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
     }
     connections[i].dispose();
   }
-  // Remove from Realtime set of blocks.
-  if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
-    Blockly.Realtime.removeBlock(this);
-  }
+  // Remove from block database.
+  delete Blockly.Block.BlockDB_[this.id];
 };
 
 /**
@@ -590,18 +563,25 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
 
 /**
  * Get the colour of a block.
- * @return {number} HSV hue value.
+ * @return {string} #RRGGBB string.
  */
 Blockly.Block.prototype.getColour = function() {
-  return this.colourHue_;
+  return this.colour_;
 };
 
 /**
  * Change the colour of a block.
- * @param {number} colourHue HSV hue value.
+ * @param {number|string} colour HSV hue value, or #RRGGBB string.
  */
-Blockly.Block.prototype.setColour = function(colourHue) {
-  this.colourHue_ = colourHue;
+Blockly.Block.prototype.setColour = function(colour) {
+  var hue = parseFloat(colour);
+  if (!isNaN(hue)) {
+    this.colour_ = Blockly.hueToRgb(hue);
+  } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {
+    this.colour_ = colour;
+  } else {
+    throw 'Invalid colour: ' + colour;
+  }
   if (this.rendered) {
     this.updateColour();
   }
@@ -1014,7 +994,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             input = this.appendDummyInput(element['name']);
             break;
           case 'field_label':
-            field = new Blockly.FieldLabel(element['text']);
+            field = new Blockly.FieldLabel(element['text'], element['class']);
             break;
           case 'field_input':
             field = new Blockly.FieldTextInput(element['text']);
@@ -1262,4 +1242,19 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
  */
 Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
+};
+
+/**
+ * Database of all blocks.
+ * @private
+ */
+Blockly.Block.BlockDB_ = Object.create(null);
+
+/**
+ * Find the block with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Block.getById = function(id) {
+  return Blockly.Block.BlockDB_[id] || null;
 };

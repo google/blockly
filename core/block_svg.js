@@ -291,7 +291,6 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
   this.getSvgRoot().setAttribute('transform',
       'translate(' + (xy.x + dx) + ',' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
-  Blockly.Realtime.blockChanged(this);
 };
 
 /**
@@ -495,45 +494,42 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
-  var this_ = this;
-  Blockly.doCommand(function() {
-    Blockly.terminateDrag_();
-    if (Blockly.selected && Blockly.highlightedConnection_) {
-      // Connect two blocks together.
-      Blockly.localConnection_.connect(Blockly.highlightedConnection_);
-      if (this_.rendered) {
-        // Trigger a connection animation.
-        // Determine which connection is inferior (lower in the source stack).
-        var inferiorConnection;
-        if (Blockly.localConnection_.isSuperior()) {
-          inferiorConnection = Blockly.highlightedConnection_;
-        } else {
-          inferiorConnection = Blockly.localConnection_;
-        }
-        inferiorConnection.sourceBlock_.connectionUiEffect();
+  Blockly.terminateDrag_();
+  if (Blockly.selected && Blockly.highlightedConnection_) {
+    // Connect two blocks together.
+    Blockly.localConnection_.connect(Blockly.highlightedConnection_);
+    if (this.rendered) {
+      // Trigger a connection animation.
+      // Determine which connection is inferior (lower in the source stack).
+      var inferiorConnection;
+      if (Blockly.localConnection_.isSuperior()) {
+        inferiorConnection = Blockly.highlightedConnection_;
+      } else {
+        inferiorConnection = Blockly.localConnection_;
       }
-      if (this_.workspace.trashcan) {
-        // Don't throw an object in the trash can if it just got connected.
-        this_.workspace.trashcan.close();
-      }
-    } else if (!this_.getParent() && Blockly.selected.isDeletable() &&
-        this_.workspace.isDeleteArea(e)) {
-      var trashcan = this_.workspace.trashcan;
-      if (trashcan) {
-        goog.Timer.callOnce(trashcan.close, 100, trashcan);
-      }
-      Blockly.selected.dispose(false, true);
-      // Dropping a block on the trash can will usually cause the workspace to
-      // resize to contain the newly positioned block.  Force a second resize
-      // now that the block has been deleted.
-      Blockly.fireUiEvent(window, 'resize');
+      inferiorConnection.sourceBlock_.connectionUiEffect();
     }
-    if (Blockly.highlightedConnection_) {
-      Blockly.highlightedConnection_.unhighlight();
-      Blockly.highlightedConnection_ = null;
+    if (this.workspace.trashcan) {
+      // Don't throw an object in the trash can if it just got connected.
+      this.workspace.trashcan.close();
     }
-    Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  });
+  } else if (!this.getParent() && Blockly.selected.isDeletable() &&
+      this.workspace.isDeleteArea(e)) {
+    var trashcan = this.workspace.trashcan;
+    if (trashcan) {
+      goog.Timer.callOnce(trashcan.close, 100, trashcan);
+    }
+    Blockly.selected.dispose(false, true);
+    // Dropping a block on the trash can will usually cause the workspace to
+    // resize to contain the newly positioned block.  Force a second resize
+    // now that the block has been deleted.
+    Blockly.fireUiEvent(window, 'resize');
+  }
+  if (Blockly.highlightedConnection_) {
+    Blockly.highlightedConnection_.unhighlight();
+    Blockly.highlightedConnection_ = null;
+  }
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
 };
 
 /**
@@ -732,95 +728,91 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
-  var this_ = this;
-  var workspace_ = this.workspace;
-  Blockly.doCommand(function() {
-    if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
-        e.button == 0) {
-      /* HACK:
-       Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove
-       events on certain touch actions. Ignore events with these signatures.
-       This may result in a one-pixel blind spot in other browsers,
-       but this shouldn't be noticeable. */
-      e.stopPropagation();
-      return;
-    }
-    Blockly.removeAllRanges();
-
-    var oldXY = this_.getRelativeToSurfaceXY();
-    var newXY = workspace_.moveDrag(e);
-
-    var group = this_.getSvgRoot();
-    if (Blockly.dragMode_ == 1) {
-      // Still dragging within the sticky DRAG_RADIUS.
-      var dr = goog.math.Coordinate.distance(oldXY, newXY) * workspace_.scale;
-      if (dr > Blockly.DRAG_RADIUS) {
-        // Switch to unrestricted dragging.
-        Blockly.dragMode_ = 2;
-        Blockly.longStop_();
-        group.translate_ = '';
-        group.skew_ = '';
-        if (this_.parentBlock_) {
-          // Push this block to the very top of the stack.
-          this_.setParent(null);
-          this_.disconnectUiEffect();
-        }
-        this_.setDragging_(true);
-        workspace_.recordDeleteAreas();
-      }
-    }
-    if (Blockly.dragMode_ == 2) {
-      // Unrestricted dragging.
-      var dx = oldXY.x - this_.dragStartXY_.x;
-      var dy = oldXY.y - this_.dragStartXY_.y;
-      group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
-      group.setAttribute('transform', group.translate_ + group.skew_);
-      // Drag all the nested bubbles.
-      for (var i = 0; i < this_.draggedBubbles_.length; i++) {
-        var commentData = this_.draggedBubbles_[i];
-        commentData.bubble.setIconLocation(commentData.x + dx,
-            commentData.y + dy);
-      }
-
-      // Check to see if any of this block's connections are within range of
-      // another block's connection.
-      var myConnections = this_.getConnections_(false);
-      var closestConnection = null;
-      var localConnection = null;
-      var radiusConnection = Blockly.SNAP_RADIUS;
-      for (var i = 0; i < myConnections.length; i++) {
-        var myConnection = myConnections[i];
-        var neighbour = myConnection.closest(radiusConnection, dx, dy);
-        if (neighbour.connection) {
-          closestConnection = neighbour.connection;
-          localConnection = myConnection;
-          radiusConnection = neighbour.radius;
-        }
-      }
-
-      // Remove connection highlighting if needed.
-      if (Blockly.highlightedConnection_ &&
-          Blockly.highlightedConnection_ != closestConnection) {
-        Blockly.highlightedConnection_.unhighlight();
-        Blockly.highlightedConnection_ = null;
-        Blockly.localConnection_ = null;
-      }
-      // Add connection highlighting if needed.
-      if (closestConnection &&
-          closestConnection != Blockly.highlightedConnection_) {
-        closestConnection.highlight();
-        Blockly.highlightedConnection_ = closestConnection;
-        Blockly.localConnection_ = localConnection;
-      }
-      // Provide visual indication of whether the block will be deleted if
-      // dropped here.
-      if (this_.isDeletable()) {
-        workspace_.isDeleteArea(e);
-      }
-    }
-    // This event has been handled.  No need to bubble up to the document.
+  if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0 &&
+      e.button == 0) {
+    /* HACK:
+     Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove
+     events on certain touch actions. Ignore events with these signatures.
+     This may result in a one-pixel blind spot in other browsers,
+     but this shouldn't be noticeable. */
     e.stopPropagation();
-  });
+    return;
+  }
+  Blockly.removeAllRanges();
+
+  var oldXY = this.getRelativeToSurfaceXY();
+  var newXY = this.workspace.moveDrag(e);
+
+  var group = this.getSvgRoot();
+  if (Blockly.dragMode_ == 1) {
+    // Still dragging within the sticky DRAG_RADIUS.
+    var dr = goog.math.Coordinate.distance(oldXY, newXY) * this.workspace.scale;
+    if (dr > Blockly.DRAG_RADIUS) {
+      // Switch to unrestricted dragging.
+      Blockly.dragMode_ = 2;
+      Blockly.longStop_();
+      group.translate_ = '';
+      group.skew_ = '';
+      if (this.parentBlock_) {
+        // Push this block to the very top of the stack.
+        this.setParent(null);
+        this.disconnectUiEffect();
+      }
+      this.setDragging_(true);
+      this.workspace.recordDeleteAreas();
+    }
+  }
+  if (Blockly.dragMode_ == 2) {
+    // Unrestricted dragging.
+    var dx = oldXY.x - this.dragStartXY_.x;
+    var dy = oldXY.y - this.dragStartXY_.y;
+    group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
+    group.setAttribute('transform', group.translate_ + group.skew_);
+    // Drag all the nested bubbles.
+    for (var i = 0; i < this.draggedBubbles_.length; i++) {
+      var commentData = this.draggedBubbles_[i];
+      commentData.bubble.setIconLocation(commentData.x + dx,
+          commentData.y + dy);
+    }
+
+    // Check to see if any of this block's connections are within range of
+    // another block's connection.
+    var myConnections = this.getConnections_(false);
+    var closestConnection = null;
+    var localConnection = null;
+    var radiusConnection = Blockly.SNAP_RADIUS;
+    for (var i = 0; i < myConnections.length; i++) {
+      var myConnection = myConnections[i];
+      var neighbour = myConnection.closest(radiusConnection, dx, dy);
+      if (neighbour.connection) {
+        closestConnection = neighbour.connection;
+        localConnection = myConnection;
+        radiusConnection = neighbour.radius;
+      }
+    }
+
+    // Remove connection highlighting if needed.
+    if (Blockly.highlightedConnection_ &&
+        Blockly.highlightedConnection_ != closestConnection) {
+      Blockly.highlightedConnection_.unhighlight();
+      Blockly.highlightedConnection_ = null;
+      Blockly.localConnection_ = null;
+    }
+    // Add connection highlighting if needed.
+    if (closestConnection &&
+        closestConnection != Blockly.highlightedConnection_) {
+      closestConnection.highlight();
+      Blockly.highlightedConnection_ = closestConnection;
+      Blockly.localConnection_ = localConnection;
+    }
+    // Provide visual indication of whether the block will be deleted if
+    // dropped here.
+    if (this.isDeletable()) {
+      this.workspace.isDeleteArea(e);
+    }
+  }
+  // This event has been handled.  No need to bubble up to the document.
+  e.stopPropagation();
 };
 
 /**
@@ -1600,7 +1592,6 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
     }
   }
   Blockly.Field.stopCache();
-  Blockly.Realtime.blockChanged(this);
 };
 
 /**

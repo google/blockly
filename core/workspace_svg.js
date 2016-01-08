@@ -341,7 +341,7 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
 };
 
 /**
- * Get the SVG element that forms the bubble surface.
+ * Get the SVG element that contains this workspace.
  * @return {!Element} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
@@ -369,28 +369,6 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
       'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
-};
-
-/**
- * Add a block to the list of top blocks.
- * @param {!Blockly.Block} block Block to remove.
- */
-Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
-  Blockly.WorkspaceSvg.superClass_.addTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
-    Blockly.Realtime.addTopBlock(block);
-  }
-};
-
-/**
- * Remove a block from the list of top blocks.
- * @param {!Blockly.Block} block Block to remove.
- */
-Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
-  Blockly.WorkspaceSvg.superClass_.removeTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
-    Blockly.Realtime.removeTopBlock(block);
-  }
 };
 
 /**

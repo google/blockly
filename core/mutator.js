@@ -117,15 +117,13 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   } else {
     var quarkXml = null;
   }
-  var mutator = this;
   var workspaceOptions = {
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
     RTL: this.block_.RTL,
-    getMetrics: function() {return mutator.getFlyoutMetrics_();},
-    setMetrics: null,
-    svg: this.svgDialog_
+    getMetrics: this.getFlyoutMetrics_.bind(this),
+    setMetrics: null
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.svgDialog_.appendChild(

@@ -55,11 +55,6 @@
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
 
-function enableRealtimeSpecificUi() {
-  var realtimeDiv = document.getElementById('realtime');
-  realtimeDiv.display = 'block';
-}
-
 function start() {
   var toolbox = document.getElementById('toolbox');
   workspace = Blockly.inject('blocklyDiv',
@@ -74,11 +69,6 @@ function start() {
            maxBlocks: Infinity,
            media: '../media/',
            readOnly: false,
-           realtime: false,
-           realtimeOptions:
-             {clientId: 'YOUR CLIENT ID GOES HERE',
-              chatbox: {elementId: 'chatbox'},
-              collabElementId: 'collaborators'},
            rtl: rtl,
            scrollbars: true,
            toolbox: toolbox,
@@ -91,9 +81,6 @@ function start() {
               scaleSpeed: 1.1
              },
           });
-  if (Blockly.Realtime.isEnabled()) {
-    enableRealtimeSpecificUi();
-  }
 }
 
 function toXml() {
@@ -559,26 +546,5 @@ h1 {
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
 
-  <!-- Realtime setup buttons. -->
-
-  <div id="realtime" style="display: none">
-
-    <p>Test realtime collaboration by opening
-      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
-        this link</a> in a separate browser window or tab and they will be
-      synchronized.  You can even share the link with a friend!.</p>
-
-    <br>
-    <br>
-
-    <!-- Undo and redo buttons. -->
-    <!-- TODO: Uncomment this when undo/redo are fixed. -->
-    <!--
-      <button id="undoButton" disabled>Undo</button>
-      <button id="redoButton" disabled>Redo</button>
-      <br />
-    -->
-
-  </div>
 </body>
 </html>

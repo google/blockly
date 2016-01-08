@@ -48,23 +48,11 @@ Blockly.inject = function(container, opt_options) {
     throw 'Error: container is not in current document.';
   }
   var options = Blockly.parseOptions_(opt_options || {});
-  var workspace;
-  var startUi = function() {
-    var svg = Blockly.createDom_(container, options);
-    workspace = Blockly.createMainWorkspace_(svg, options);
-    Blockly.init_(workspace);
-    workspace.markFocused();
-    Blockly.bindEvent_(svg, 'focus', workspace, workspace.markFocused);
-  };
-  if (options.enableRealtime) {
-    var realtimeElement = document.getElementById('realtime');
-    if (realtimeElement) {
-      realtimeElement.style.display = 'block';
-    }
-    Blockly.Realtime.startRealtime(startUi, container, options.realtimeOptions);
-  } else {
-    startUi();
-  }
+  var svg = Blockly.createDom_(container, options);
+  var workspace = Blockly.createMainWorkspace_(svg, options);
+  Blockly.init_(workspace);
+  workspace.markFocused();
+  Blockly.bindEvent_(svg, 'focus', workspace, workspace.markFocused);
   return workspace;
 };
 

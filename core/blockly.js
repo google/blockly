@@ -41,12 +41,6 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
-// Realtime is currently badly broken.  Stub it out.
-Blockly.Realtime = {
-  isEnabled: function() {return false;},
-  blockChanged: function() {},
-  doCommand: function(cmdThunk) {cmdThunk();}
-};
 goog.require('Blockly.Toolbox');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
@@ -601,22 +595,6 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
       // IE doesn't notice that the x/y offsets have changed.  Force an update.
       this.updateGridPattern_();
     }
-  }
-};
-
-/**
- * Execute a command.  Generally, a command is the result of a user action
- * e.g., a click, drag or context menu selection.  Calling the cmdThunk function
- * through doCommand() allows us to capture information that can be used for
- * capabilities like undo (which is supported by the realtime collaboration
- * feature).
- * @param {function()} cmdThunk A function representing the command execution.
- */
-Blockly.doCommand = function(cmdThunk) {
-  if (Blockly.Realtime.isEnabled()) {
-    Blockly.Realtime.doCommand(cmdThunk);
-  } else {
-    cmdThunk();
   }
 };
 

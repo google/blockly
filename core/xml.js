@@ -62,7 +62,7 @@ Blockly.Xml.workspaceToDom = function(workspace) {
 Blockly.Xml.blockToDom_ = function(block) {
   var element = goog.dom.createDom(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
-  if (Blockly.Realtime.isEnabled()) {
+  if (false) {
     // Only used by realtime.
     element.setAttribute('id', block.id);
   }

@@ -41,10 +41,8 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Flyout = function(workspaceOptions) {
-  var flyout = this;
-  workspaceOptions.getMetrics = function() {return flyout.getMetrics_();};
-  workspaceOptions.setMetrics =
-      function(ratio) {return flyout.setMetrics_(ratio);};
+  workspaceOptions.getMetrics = this.getMetrics_.bind(this);
+  workspaceOptions.setMetrics = this.setMetrics_.bind(this);
   /**
    * @type {!Blockly.Workspace}
    * @private

@@ -345,13 +345,13 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
  * @return {!Element} SVG element.
  */
 Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
-  if (this.getParentSvg.cachedParentSvg_) {
-    return this.getParentSvg.cachedParentSvg_;
+  if (this.cachedParentSvg_) {
+    return this.cachedParentSvg_;
   }
   var element = this.svgGroup_;
   while (element) {
     if (element.tagName == 'svg') {
-      this.getParentSvg.cachedParentSvg_ = element;
+      this.cachedParentSvg_ = element;
       return element;
     }
     element = element.parentNode;

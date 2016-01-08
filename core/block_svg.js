@@ -1154,7 +1154,7 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   clone.translateY_ = xy.y;
   clone.setAttribute('transform',
       'translate(' + clone.translateX_ + ',' + clone.translateY_ + ')');
-  this.workspace.options.svg.appendChild(clone);
+  this.workspace.getParentSvg().appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
   Blockly.BlockSvg.disposeUiStep_(clone, this.RTL, new Date(),
@@ -1212,7 +1212,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
   var ripple = Blockly.createSvgElement('circle',
       {'cx': xy.x, 'cy': xy.y, 'r': 0, 'fill': 'none',
        'stroke': '#888', 'stroke-width': 10},
-      this.workspace.options.svg);
+      this.workspace.getParentSvg());
   // Start the animation.
   Blockly.BlockSvg.connectionUiStep_(ripple, new Date(), this.workspace.scale);
 };

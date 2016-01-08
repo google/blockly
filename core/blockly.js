@@ -254,7 +254,7 @@ Blockly.svgResize = function(workspace) {
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
-  var svg = mainWorkspace.options.svg;
+  var svg = mainWorkspace.getParentSvg();
   var div = svg.parentNode;
   if (!div) {
     // Workspace deteted, or something.
@@ -517,7 +517,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * @this Blockly.WorkspaceSvg
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
-  var svgSize = Blockly.svgSize(this.options.svg);
+  var svgSize = Blockly.svgSize(this.getParentSvg());
   if (this.toolbox_) {
     svgSize.width -= this.toolbox_.width;
   }

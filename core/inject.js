@@ -328,7 +328,6 @@ Blockly.createDom_ = function(container, options) {
     // x1, y1, x1, x2 properties will be set later in updateGridPattern_.
   }
   options.gridPattern = gridPattern;
-  options.svg = svg;
   return svg;
 };
 
@@ -411,7 +410,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
  */
 Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
-  var svg = mainWorkspace.options.svg;
+  var svg = mainWorkspace.getParentSvg();
   // Supress the browser's context menu.
   Blockly.bindEvent_(svg, 'contextmenu', null,
       function(e) {

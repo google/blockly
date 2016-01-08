@@ -102,7 +102,6 @@ Blockly.Mutator.prototype.iconClick_ = function(e) {
 Blockly.Mutator.prototype.createEditor_ = function() {
   /* Create the editor.  Here's the markup that will be generated:
   <svg>
-    <rect class="blocklyMutatorBackground" />
     [Workspace]
   </svg>
   */

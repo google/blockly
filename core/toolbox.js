@@ -116,8 +116,7 @@ Blockly.Toolbox.prototype.init = function() {
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
     parentWorkspace: workspace,
-    RTL: workspace.RTL,
-    svg: workspace.options.svg
+    RTL: workspace.RTL
   };
   /**
    * @type {!Blockly.Flyout}
@@ -162,7 +161,7 @@ Blockly.Toolbox.prototype.position = function() {
     // Not initialized yet.
     return;
   }
-  var svg = this.workspace_.options.svg;
+  var svg = this.workspace_.getParentSvg();
   var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.workspace_.RTL) {
@@ -296,7 +295,7 @@ Blockly.Toolbox.prototype.getRect = function() {
   // Assumes that the toolbox is on the SVG edge.  If this changes
   // (e.g. toolboxes in mutators) then this code will need to be more complex.
   if (this.workspace_.RTL) {
-    var svgSize = Blockly.svgSize(this.workspace_.options.svg);
+    var svgSize = Blockly.svgSize(this.workspace_.getParentSvg());
     var x = svgSize.width - this.width;
   } else {
     var x = -BIG_NUM;

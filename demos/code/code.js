@@ -72,7 +72,7 @@ Code.LANGUAGE_NAME = {
   'tr': 'Türkçe',
   'uk': 'Українська',
   'vi': 'Tiếng Việt',
-  'zh-hans': '簡體中文',
+  'zh-hans': '简体中文',
   'zh-hant': '正體中文'
 };
 

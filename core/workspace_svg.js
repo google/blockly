@@ -472,7 +472,8 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
  */
 Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
   if (this.rendered && this.svgBlockCanvas_) {
-    Blockly.fireUiEvent(this.svgBlockCanvas_, 'blocklyWorkspaceChange');
+    var details = {workspace: this.id};
+    Blockly.Events.fire(details);
   }
 };
 

@@ -109,6 +109,7 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
  * @private
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
+  var workspace = this.sourceBlock_.workspace;
   var quietInput = opt_quietInput || false;
   if (!quietInput && (goog.userAgent.MOBILE || goog.userAgent.ANDROID ||
                       goog.userAgent.IPAD)) {
@@ -131,8 +132,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   // Create the input.
   var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var fontSize = (Blockly.FieldTextInput.FONTSIZE *
-                  this.sourceBlock_.workspace.scale) + 'pt';
+  var fontSize = (Blockly.FieldTextInput.FONTSIZE * workspace.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   /** @type {!HTMLInputElement} */
@@ -157,9 +157,8 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   // Bind to keyPress -- repeatedly resize when holding down a key.
   htmlInput.onKeyPressWrapper_ =
       Blockly.bindEvent_(htmlInput, 'keypress', this, this.onHtmlInputChange_);
-  var workspaceSvg = this.sourceBlock_.workspace.getCanvas();
   htmlInput.onWorkspaceChangeWrapper_ =
-      Blockly.bindEvent_(workspaceSvg, 'blocklyWorkspaceChange', this,
+      Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
       this.resizeEditor_);
 };
 

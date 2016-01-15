@@ -118,6 +118,7 @@ Blockly.FieldColour.prototype.setValue = function(colour) {
  */
 Blockly.FieldColour.prototype.getText = function() {
   var colour = this.colour_;
+  // Try to use #rgb format if possible, rather than #rrggbb.
   var m = colour.match(/^#(.)\1(.)\2(.)\3$/);
   if (m) {
     colour = '#' + m[1] + m[2] + m[3];

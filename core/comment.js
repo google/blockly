@@ -176,7 +176,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
         this.width_, this.height_);
     this.bubble_.registerResizeEvent(this, this.resizeBubble_);
     this.updateColour();
-    this.text_ = null;
   } else {
     // Dispose of the bubble.
     this.bubble_.dispose();
@@ -243,10 +242,11 @@ Blockly.Comment.prototype.getText = function() {
  * @param {string} text Comment text.
  */
 Blockly.Comment.prototype.setText = function(text) {
+  if (this.text_ != text) {
+    this.text_ = text;
+  }
   if (this.textarea_) {
     this.textarea_.value = text;
-  } else {
-    this.text_ = text;
   }
 };
 

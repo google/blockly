@@ -90,11 +90,8 @@ Blockly.FieldVariable.prototype.init = function(block) {
 
   if (!this.getValue()) {
     // Variables without names get uniquely named for this workspace.
-    if (block.isInFlyout) {
-      var workspace = block.workspace.targetWorkspace;
-    } else {
-      var workspace = block.workspace;
-    }
+    var workspace =
+        block.isInFlyout ? block.workspace.targetWorkspace : block.workspace;
     this.setValue(Blockly.Variables.generateUniqueName(workspace));
   }
   Blockly.FieldVariable.superClass_.init.call(this, block);
@@ -111,11 +108,10 @@ Blockly.FieldVariable.prototype.getValue = function() {
 
 /**
  * Set the variable name.
- * @param {string} text New text.
+ * @param {string} newValue New text.
  */
-Blockly.FieldVariable.prototype.setValue = function(text) {
-  this.value_ = text;
-  this.setText(text);
+  this.value_ = newValue;
+  this.setText(newValue);
 };
 
 /**

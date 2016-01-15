@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Events');
 
+
 /**
  * Allow change events to be created and fired.
  * @type {boolean}

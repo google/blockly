@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Input field.  Used for editable titles, variables, etc.
+ * @fileoverview Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
  * instances would be Blockly.FieldTextInput, Blockly.FieldDropdown, etc.
  * @author fraser@google.com (Neil Fraser)
@@ -36,7 +36,7 @@ goog.require('goog.userAgent');
 
 
 /**
- * Class for an editable field.
+ * Abstract class for an editable field.
  * @param {string} text The initial content of the field.
  * @constructor
  */
@@ -59,10 +59,24 @@ Blockly.Field.cacheWidths_ = null;
  */
 Blockly.Field.cacheReference_ = 0;
 
+
+/**
+ * Name of field.  Unique within each block.
+ * Static labels are usually unnamed.
+ * @type {string=}
+ */
+Blockly.Field.prototype.name = undefined;
+
 /**
  * Maximum characters of text to display before adding an ellipsis.
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
+
+/**
+ * Visible text to display.
+ * @private
+ */
+Blockly.Field.prototype.text_ = '';
 
 /**
  * Block this field is attached to.  Starts as null, then in set in init.
@@ -84,6 +98,7 @@ Blockly.Field.prototype.changeHandler_ = null;
 
 /**
  * Non-breaking space.
+ * @const
  */
 Blockly.Field.NBSP = '\u00A0';
 
@@ -241,8 +256,6 @@ Blockly.Field.prototype.render_ = function() {
 /**
  * Start caching field widths.  Every call to this function MUST also call
  * stopCache.  Caches must not survive between execution threads.
- * @type {Object}
- * @private
  */
 Blockly.Field.startCache = function() {
   Blockly.Field.cacheReference_++;
@@ -254,8 +267,6 @@ Blockly.Field.startCache = function() {
 /**
  * Stop caching field widths.  Unless caching was already on when the
  * corresponding call to startCache was made.
- * @type {number}
- * @private
  */
 Blockly.Field.stopCache = function() {
   Blockly.Field.cacheReference_--;
@@ -364,10 +375,18 @@ Blockly.Field.prototype.getValue = function() {
 /**
  * By default there is no difference between the human-readable text and
  * the language-neutral values.  Subclasses (such as dropdown) may define this.
- * @param {string} text New text.
+ * @param {string} newText New text.
  */
-Blockly.Field.prototype.setValue = function(text) {
-  this.setText(text);
+Blockly.Field.prototype.setValue = function(newText) {
+  if (newText === null) {
+    // No change if null.
+    return;
+  }
+  var oldText = this.getValue();
+  if (oldText == newText) {
+    return;
+  }
+  this.setText(newText);
 };
 
 /**

@@ -80,8 +80,7 @@ Blockly.FieldTextInput.prototype.dispose = function() {
  */
 Blockly.FieldTextInput.prototype.setText = function(text) {
   if (text === null) {
-    // No change if null.
-    return;
+    return;  // No change if null.
   }
   if (this.sourceBlock_ && this.changeHandler_) {
     var validated = this.changeHandler_(text);
@@ -189,20 +188,17 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
  */
 Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  var escKey = 27;
-  if (e.keyCode != escKey) {
-    // Update source block.
-    var text = htmlInput.value;
-    if (text !== htmlInput.oldValue_) {
-      this.sourceBlock_.setShadow(false);
-      htmlInput.oldValue_ = text;
-      this.setText(text);
-      this.validate_();
-    } else if (goog.userAgent.WEBKIT) {
-      // Cursor key.  Render the source block to show the caret moving.
-      // Chrome only (version 26, OS X).
-      this.sourceBlock_.render();
-    }
+  // Update source block.
+  var text = htmlInput.value;
+  if (text !== htmlInput.oldValue_) {
+    this.sourceBlock_.setShadow(false);
+    htmlInput.oldValue_ = text;
+    this.setValue(text);
+    this.validate_();
+  } else if (goog.userAgent.WEBKIT) {
+    // Cursor key.  Render the source block to show the caret moving.
+    // Chrome only (version 26, OS X).
+    this.sourceBlock_.render();
   }
 };
 

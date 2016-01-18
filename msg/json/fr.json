@@ -288,7 +288,7 @@
 	"VARIABLES_SET": "fixer %1 à %2",
 	"VARIABLES_SET_TOOLTIP": "Fixe cette variable pour qu’elle soit égale à la valeur de l’entrée.",
 	"VARIABLES_SET_CREATE_GET": "Créer 'obtenir %1'",
-	"PROCEDURES_DEFNORETURN_TITLE": "à",
+	"PROCEDURES_DEFNORETURN_TITLE": "pour",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "faire quelque chose",
 	"PROCEDURES_BEFORE_PARAMS": "avec :",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "avec :",

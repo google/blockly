@@ -41,10 +41,8 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Flyout = function(workspaceOptions) {
-  var flyout = this;
-  workspaceOptions.getMetrics = function() {return flyout.getMetrics_();};
-  workspaceOptions.setMetrics =
-      function(ratio) {return flyout.setMetrics_(ratio);};
+  workspaceOptions.getMetrics = this.getMetrics_.bind(this);
+  workspaceOptions.setMetrics = this.setMetrics_.bind(this);
   /**
    * @type {!Blockly.Workspace}
    * @private
@@ -401,10 +399,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       // prevent the closure of the flyout if the user right-clicks on such a
       // block.
       child.isInFlyout = true;
-      // There is no good way to handle comment bubbles inside the flyout.
-      // Blocks shouldn't come with predefined comments, but someone will
-      // try this, I'm sure.  Kill the comment.
-      child.setCommentText(null);
     }
     block.render();
     var root = block.getSvgRoot();

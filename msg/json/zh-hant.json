@@ -286,7 +286,6 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "創建一個有回傳值的函數。",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "警告: 此函數中有重複的參數。",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://zh.wikipedia.org/wiki/子程式",
-	"PROCEDURES_CALLNORETURN_CALL": "呼叫",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "執行使用者定義的函數 '%1'。",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://zh.wikipedia.org/wiki/子程式",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "執行使用者定義的函數 '%1' 並使用它的回傳值",

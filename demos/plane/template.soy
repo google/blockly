@@ -190,9 +190,30 @@
 {template .toolbox}
   <xml id="toolbox" style="display: none">
     <block type="math_number"></block>
-    <block type="math_arithmetic"></block>
+    <block type="math_arithmetic">
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
     <block type="math_arithmetic">
       <field name="OP">MULTIPLY</field>
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
     </block>
     {if $ij.level <= 2}
       <block type="plane_get_rows"></block>

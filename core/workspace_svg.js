@@ -165,8 +165,8 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (opt_backgroundClass) {
     /** @type {SVGElement} */
     this.svgBackground_ = Blockly.createSvgElement('rect',
-        {'height': '100%', 'width': '100%',
-         'class': opt_backgroundClass}, this.svgGroup_);
+        {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
+        this.svgGroup_);
     if (opt_backgroundClass == 'blocklyMainBackground') {
       this.svgBackground_.style.fill =
           'url(#' + this.options.gridPattern.id + ')';
@@ -242,8 +242,20 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   }
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the SVG too.
-    goog.dom.removeNode(this.options.svg);
+    goog.dom.removeNode(this.getParentSvg());
   }
+};
+
+/**
+ * Obtain a newly created block.
+ * @param {?string} prototypeName Name of the language object containing
+ *     type-specific functions for this block.
+ * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ *     create a new id.
+ * @return {!Blockly.BlockSvg} The created block.
+ */
+Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {
+  return new Blockly.BlockSvg(this, prototypeName, opt_id);
 };
 
 /**
@@ -329,6 +341,25 @@ Blockly.WorkspaceSvg.prototype.getBubbleCanvas = function() {
 };
 
 /**
+ * Get the SVG element that contains this workspace.
+ * @return {!Element} SVG element.
+ */
+Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
+  if (this.cachedParentSvg_) {
+    return this.cachedParentSvg_;
+  }
+  var element = this.svgGroup_;
+  while (element) {
+    if (element.tagName == 'svg') {
+      this.cachedParentSvg_ = element;
+      return element;
+    }
+    element = element.parentNode;
+  }
+  return null;
+};
+
+/**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation.
  * @param {number} y Vertical translation.
@@ -338,28 +369,6 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
       'scale(' + this.scale + ')';
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
-};
-
-/**
- * Add a block to the list of top blocks.
- * @param {!Blockly.Block} block Block to remove.
- */
-Blockly.WorkspaceSvg.prototype.addTopBlock = function(block) {
-  Blockly.WorkspaceSvg.superClass_.addTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
-    Blockly.Realtime.addTopBlock(block);
-  }
-};
-
-/**
- * Remove a block from the list of top blocks.
- * @param {!Blockly.Block} block Block to remove.
- */
-Blockly.WorkspaceSvg.prototype.removeTopBlock = function(block) {
-  Blockly.WorkspaceSvg.superClass_.removeTopBlock.call(this, block);
-  if (Blockly.Realtime.isEnabled() && !this.options.parentWorkspace) {
-    Blockly.Realtime.removeTopBlock(block);
-  }
 };
 
 /**
@@ -377,7 +386,7 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  * @param {boolean} isVisible True if workspace should be visible.
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
-  this.options.svg.style.display = isVisible ? 'block' : 'none';
+  this.getParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';
@@ -435,7 +444,7 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
   }
   var block = null;
   if (id) {
-    block = this.getBlockById(id);
+    block = Blockly.Block.getById(id);
     if (!block) {
       return;
     }
@@ -550,7 +559,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
-  var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.options.svg);
+  var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.getParentSvg());
   var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {
@@ -628,7 +637,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
  */
 Blockly.WorkspaceSvg.prototype.startDrag = function(e, x, y) {
   // Record the starting offset between the bubble's location and the mouse.
-  var point = Blockly.mouseToSvg(e, this.options.svg);
+  var point = Blockly.mouseToSvg(e, this.getParentSvg());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -642,7 +651,7 @@ Blockly.WorkspaceSvg.prototype.startDrag = function(e, x, y) {
  * @return {!goog.math.Coordinate} New location of object.
  */
 Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
-  var point = Blockly.mouseToSvg(e, this.options.svg);
+  var point = Blockly.mouseToSvg(e, this.getParentSvg());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -660,7 +669,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
   Blockly.terminateDrag_();
   var delta = e.deltaY > 0 ? -1 : 1;
-  var position = Blockly.mouseToSvg(e, this.options.svg);
+  var position = Blockly.mouseToSvg(e, this.getParentSvg());
   this.zoom(position.x, position.y, delta);
   e.preventDefault();
 };
@@ -690,7 +699,7 @@ Blockly.WorkspaceSvg.prototype.cleanUp_ = function() {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
-  if (this.options.readOnly) {
+  if (this.options.readOnly || this.isFlyout) {
     return;
   }
   var menuOptions = [];
@@ -954,7 +963,7 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
 Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   var speed = this.options.zoomOptions.scaleSpeed;
   var metrics = this.getMetrics();
-  var center = this.options.svg.createSVGPoint();
+  var center = this.getParentSvg().createSVGPoint();
   center.x = x;
   center.y = y;
   center = center.matrixTransform(this.getCanvas().getCTM().inverse());

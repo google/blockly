@@ -318,7 +318,7 @@ Blockly.getSvgXY_ = function(element, workspace) {
     x += xy.x * scale;
     y += xy.y * scale;
     element = element.parentNode;
-  } while (element && element != workspace.options.svg);
+  } while (element && element != workspace.getParentSvg());
   return new goog.math.Coordinate(x, y);
 };
 
@@ -591,4 +591,3 @@ Blockly.genUid.crypto_ = this.crypto;
  */
 Blockly.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-

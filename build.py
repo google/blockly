@@ -220,6 +220,8 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     # Add Blockly.Blocks to be compatible with the compiler.
     params.append(("js_code", "goog.provide('Blockly.Blocks');"))
+    # Add Blockly.Variable to be compatible with the compiler.
+    params.append(("js_code", "goog.provide('Blockly.Variable');"))
     filenames = glob.glob(os.path.join("blocks", "*.js"))
     for filename in filenames:
       f = open(filename)

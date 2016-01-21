@@ -606,11 +606,25 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
     // One or both sides are promiscuous enough that anything will fit.
     return true;
   }
-  // Find any intersection in the check lists.
+    // Find any intersection in the check lists.
+    // TODO implement OO type check
   for (var i = 0; i < this.check_.length; i++) {
-    if (otherConnection.check_.indexOf(this.check_[i]) != -1) {
-      return true;
-    }
+      for (var j = 0; j < otherConnection.check_.length; j++) {
+          // get checks based on direction
+          var target, source;
+          if (otherConnection.type === Blockly.INPUT_VALUE) {
+              target = otherConnection.check_[j];
+              source = this.check_[i];
+          } else {
+              target = this.check_[i];
+              source = otherConnection.check_[j];
+          }
+
+          // check that target can receive source object
+          if (Blockly.Types.isAssignableFrom(target, source)) {
+              return true;
+          }
+      }
   }
   // No intersection.
   return false;
@@ -642,6 +656,10 @@ Blockly.Connection.prototype.setCheck = function(check) {
   }
   return this;
 };
+
+Blockly.Connection.prototype.getCheck = function() {
+    return this.check_;
+}
 
 /**
  * Change a connection's shadow block.

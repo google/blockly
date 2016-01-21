@@ -748,14 +748,15 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
  *     of returned types.  Null or undefined if any type could be returned
  *     (e.g. variable get).
  */
-Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
-  if (this.outputConnection) {
+Blockly.Block.prototype.setOutput = function (newBoolean, opt_check) {
+    // TODO my change introduced an offset issue when dragging blocks
+  if (this.outputConnection && !newBoolean) {
     goog.asserts.assert(!this.outputConnection.targetConnection,
         'Must disconnect output value before removing connection.');
     this.outputConnection.dispose();
     this.outputConnection = null;
   }
-  if (newBoolean) {
+  if (!this.outputConnection && newBoolean) {
     goog.asserts.assert(!this.previousConnection,
         'Remove previous connection prior to adding output connection.');
     if (opt_check === undefined) {
@@ -763,8 +764,9 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     }
     this.outputConnection =
         new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
-    this.outputConnection.setCheck(opt_check);
   }
+    if (this.outputConnection && this.outputConnection.getCheck() != opt_check)
+        this.outputConnection.setCheck(opt_check);
   if (this.rendered) {
     this.render();
     this.bumpNeighbours_();
@@ -1063,7 +1065,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             field = new Blockly.FieldColour(element['colour']);
             break;
           case 'field_variable':
-            field = new Blockly.FieldVariable(element['variable']);
+            field = new Blockly.FieldVariable(element['variable'], element['change']);
             break;
           case 'field_dropdown':
             field = new Blockly.FieldDropdown(element['options']);

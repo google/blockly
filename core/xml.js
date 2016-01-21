@@ -38,6 +38,17 @@ goog.require('goog.dom');
  */
 Blockly.Xml.workspaceToDom = function(workspace) {
   var xml = goog.dom.createDom('xml');
+
+  var variables = Blockly.Variables.allVariables(workspace);
+  for (var j = 0, variable; variable = variables[j]; j++)
+  {
+      // variables without types don't need to be written exclusivly
+      if (variable.type) {
+          var element1 = Blockly.Xml.variableToDom_(variable);
+          xml.appendChild(element1);
+      }
+  }
+
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
     xml.appendChild(Blockly.Xml.blockToDomWithXY(block));
@@ -55,12 +66,36 @@ Blockly.Xml.blockToDomWithXY = function(block) {
   if (block.workspace.RTL) {
     width = block.workspace.getWidth();
   }
-  var element = Blockly.Xml.blockToDom(block);
-  var xy = block.getRelativeToSurfaceXY();
+    var element = Blockly.Xml.blockToDom(block);
+    var xy = block.getRelativeToSurfaceXY();
   element.setAttribute('x',
       Math.round(block.workspace.RTL ? width - xy.x : xy.x));
-  element.setAttribute('y', Math.round(xy.y));
+    element.setAttribute('y', Math.round(xy.y));
   return element;
+};
+
+/**
+ * Create dom element for variable
+ * @param {!Blockly.Variable} variable The variable to convert.
+ * @returns {!Element} Tree of XML elements.
+ */
+Blockly.Xml.variableToDom_ = function (variable) {
+  var element = goog.dom.createDom("variable");
+  element.setAttribute('name', variable.name);
+  element.setAttribute('type', variable.type);
+  return element;
+};
+
+/**
+ * 
+ * @param {} element 
+ * @returns {!Blockly.Variable} 
+ */
+Blockly.Xml.domToVariable_ = function(element) {
+  return {
+    name: element.getAttribute('name'),
+    type: element.getAttribute('type')
+  };
 };
 
 /**
@@ -81,7 +116,9 @@ Blockly.Xml.blockToDom = function(block) {
   }
   function fieldToDom(field) {
     if (field.name && field.EDITABLE) {
-      var container = goog.dom.createDom('field', null, field.getValue());
+      var container = field.toDom
+        ? field.toDom()
+        : goog.dom.createDom('field', null, field.getValue());
       container.setAttribute('name', field.name);
       element.appendChild(container);
     }
@@ -276,6 +313,24 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   if (workspace.RTL) {
     width = workspace.getWidth();
   }
+
+  // lets first load all the variables temporary
+  // Safari 7.1.3 is known to provide node lists with extra references to
+  // children beyond the lists' length.  Trust the length, do not use the
+  // looping pattern of checking the index for an object.
+  var childCount = xml.childNodes.length;
+  var variables = [];
+  for (var i = 0; i < childCount; i++) {
+      var xmlChild = xml.childNodes[i];
+      var name = xmlChild.nodeName.toLowerCase();
+      if (name == 'variable') {
+          variables.push(Blockly.Xml.domToVariable_(xmlChild));
+      }
+  }
+  
+  // set unreferenced variables so that while restoring block we can find them
+  Blockly.Variables.setUnreferencedVariables(variables);
+
   Blockly.Field.startCache();
   // Safari 7.1.3 is known to provide node lists with extra references to
   // children beyond the lists' length.  Trust the length, do not use the
@@ -294,6 +349,9 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
     }
   }
   Blockly.Field.stopCache();
+
+  // variables should now be referenced otherwise get rid of them
+  Blockly.Variables.clearUnreferencedVariables();
 };
 
 /**
@@ -426,7 +484,11 @@ Blockly.Xml.domToBlockHeadless_ = function(workspace, xmlBlock) {
                        prototypeName);
           break;
         }
+        if (field.fromDom) {
+          field.fromDom(xmlChild, workspace);
+        } else {
         field.setValue(xmlChild.textContent);
+        }
         break;
       case 'value':
       case 'statement':

@@ -200,7 +200,9 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
       block.appendChild(mutation);
       for (var t = 0; t < args.length; t++) {
         var arg = goog.dom.createDom('arg');
-        arg.setAttribute('name', args[t]);
+        arg.setAttribute('name', args[t].name);
+        if (args[t].type)
+          arg.setAttribute('type', args[t].type);
         mutation.appendChild(arg);
       }
       xmlList.push(block);
@@ -255,12 +257,13 @@ Blockly.Procedures.disposeCallers = function(name, workspace) {
  * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
  * @param {!Array.<string>} paramNames Array of new parameter names.
  * @param {!Array.<string>} paramIds Array of unique parameter IDs.
+ * @param {string} returnType 
  */
 Blockly.Procedures.mutateCallers = function(name, workspace,
-                                            paramNames, paramIds) {
+                                            paramNames, paramIds, returnType) {
   var callers = Blockly.Procedures.getCallers(name, workspace);
   for (var i = 0; i < callers.length; i++) {
-    callers[i].setProcedureParameters(paramNames, paramIds);
+    callers[i].setProcedureParameters(paramNames, paramIds, returnType);
   }
 };
 

@@ -38,9 +38,29 @@ goog.require('goog.string');
 Blockly.Variables.NAME_TYPE = 'VARIABLE';
 
 /**
+ * Field to store variables that are loaded from xml but not yet referenced.
+ */
+Blockly.Variables.unreferencedVariables_ = [];
+
+/**
+ * Set unreferenced variables.
+ * @param {!Array.<Blockly.Variable>} variables The unreferenced variables.
+ */
+Blockly.Variables.setUnreferencedVariables = function (variables) {
+    Blockly.Variables.unreferencedVariables_ = variables;
+};
+
+/**
+ * Clear unreferenced variables
+ */
+Blockly.Variables.clearUnreferencedVariables = function() {
+    Blockly.Variables.unreferencedVariables_ = [];
+};
+
+/**
  * Find all user-created variables.
  * @param {!Blockly.Block|!Blockly.Workspace} root Root block or workspace.
- * @return {!Array.<string>} Array of variable names.
+ * @return {!Array.<Blockly.Variable>} Array of variables.
  */
 Blockly.Variables.allVariables = function(root) {
   var blocks;
@@ -54,15 +74,32 @@ Blockly.Variables.allVariables = function(root) {
     throw 'Not Block or Workspace: ' + root;
   }
   var variableHash = Object.create(null);
+
+  // add all unreferenced variables to the hash
+  var unreferencedVariables = Blockly.Variables.unreferencedVariables_;
+  for (var z = 0; z < unreferencedVariables.length; z++) {
+    var unreferencedVariable = unreferencedVariables[z];
+    if (unreferencedVariable.name) {
+        variableHash[unreferencedVariable.name.toLowerCase()] = unreferencedVariable;
+    }
+  }
+
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
     if (blocks[x].getVars) {
       var blockVariables = blocks[x].getVars();
       for (var y = 0; y < blockVariables.length; y++) {
-        var varName = blockVariables[y];
+        var variable = blockVariables[y];
         // Variable name may be null if the block is only half-built.
-        if (varName) {
-          variableHash[varName.toLowerCase()] = varName;
+        if (variable && variable.name) {
+          // variable may exist but without type so merge it
+          var current = variableHash[variable.name.toLowerCase()];
+          if (current) {
+              if (!current.type)
+                  current.type = variable.type;
+          } else {
+              variableHash[variable.name.toLowerCase()] = variable;
+          }
         }
       }
     }
@@ -76,17 +113,17 @@ Blockly.Variables.allVariables = function(root) {
 };
 
 /**
- * Find all instances of the specified variable and rename them.
- * @param {string} oldName Variable to rename.
- * @param {string} newName New variable name.
+ * Find all instances of the specified variable and change them.
+ * @param {{ name: string, type: ?string}} oldVar Variable to change.
+ * @param {{ name: string, type: ?string}} newVar New variable.
  * @param {!Blockly.Workspace} workspace Workspace rename variables in.
  */
-Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
+Blockly.Variables.changeVariable = function(oldVar, newVar, workspace) {
   var blocks = workspace.getAllBlocks();
   // Iterate through every block.
   for (var i = 0; i < blocks.length; i++) {
-    if (blocks[i].renameVar) {
-      blocks[i].renameVar(oldName, newName);
+      if (blocks[i].changeVar) {
+          blocks[i].changeVar(oldVar, newVar);
     }
   }
 };
@@ -102,8 +139,8 @@ Blockly.Variables.flyoutCategory = function(workspace) {
   // In addition to the user's variables, we also want to display the default
   // variable name at the top.  We also don't want this duplicated if the
   // user has created a variable of the same name.
-  goog.array.remove(variableList, Blockly.Msg.VARIABLES_DEFAULT_NAME);
-  variableList.unshift(Blockly.Msg.VARIABLES_DEFAULT_NAME);
+  goog.array.removeAllIf(variableList, function (e) { return e.name == Blockly.Msg.VARIABLES_DEFAULT_NAME });
+  variableList.unshift({ name: Blockly.Msg.VARIABLES_DEFAULT_NAME });
 
   var xmlList = [];
   for (var i = 0; i < variableList.length; i++) {
@@ -116,7 +153,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
       if (Blockly.Blocks['variables_get']) {
         block.setAttribute('gap', 8);
       }
-      var field = goog.dom.createDom('field', null, variableList[i]);
+      var field = goog.dom.createDom('field', null, variableList[i].name);
       field.setAttribute('name', 'VAR');
       block.appendChild(field);
       xmlList.push(block);
@@ -130,7 +167,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
       if (Blockly.Blocks['variables_set']) {
         block.setAttribute('gap', 24);
       }
-      var field = goog.dom.createDom('field', null, variableList[i]);
+      var field = goog.dom.createDom('field', null, variableList[i].name);
       field.setAttribute('name', 'VAR');
       block.appendChild(field);
       xmlList.push(block);
@@ -158,7 +195,7 @@ Blockly.Variables.generateUniqueName = function(workspace) {
     while (!newName) {
       var inUse = false;
       for (var i = 0; i < variableList.length; i++) {
-        if (variableList[i].toLowerCase() == potName) {
+        if (variableList[i].name.toLowerCase() == potName) {
           // This potential name is already used.
           inUse = true;
           break;

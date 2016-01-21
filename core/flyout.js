@@ -455,7 +455,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   Blockly.fireUiEventNow(window, 'resize');
   this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
       'blocklyWorkspaceChange', this, this.reflow);
-  this.workspace_.fireChangeEvent();
 };
 
 /**
@@ -694,8 +693,8 @@ Blockly.Flyout.prototype.getRect = function() {
   }
   // Fix scale if nested in zoomed workspace.
   var scale = this.targetWorkspace_ == mainWorkspace ? 1 : mainWorkspace.scale;
-    return new goog.math.Rect(x, -BIG_NUM,
-        BIG_NUM + this.width_ * scale, BIG_NUM * 2);
+  return new goog.math.Rect(x, -BIG_NUM,
+      BIG_NUM + this.width_ * scale, BIG_NUM * 2);
 };
 
 /**

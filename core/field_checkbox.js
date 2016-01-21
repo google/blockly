@@ -91,9 +91,6 @@ Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
     if (this.checkElement_) {
       this.checkElement_.style.display = newState ? 'block' : 'none';
     }
-    if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      this.sourceBlock_.workspace.fireChangeEvent();
-    }
   }
 };
 

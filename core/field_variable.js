@@ -87,14 +87,13 @@ Blockly.FieldVariable.prototype.init = function(block) {
     // Dropdown has already been initialized once.
     return;
   }
-
+  Blockly.FieldVariable.superClass_.init.call(this, block);
   if (!this.getValue()) {
     // Variables without names get uniquely named for this workspace.
     var workspace =
         block.isInFlyout ? block.workspace.targetWorkspace : block.workspace;
     this.setValue(Blockly.Variables.generateUniqueName(workspace));
   }
-  Blockly.FieldVariable.superClass_.init.call(this, block);
 };
 
 /**
@@ -110,6 +109,11 @@ Blockly.FieldVariable.prototype.getValue = function() {
  * Set the variable name.
  * @param {string} newValue New text.
  */
+Blockly.FieldVariable.prototype.setValue = function(newValue) {
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.value_, newValue));
+  }
   this.value_ = newValue;
   this.setText(newValue);
 };

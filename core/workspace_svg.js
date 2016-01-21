@@ -464,20 +464,6 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
 };
 
 /**
- * Fire a change event for this workspace.  Changes include new block, dropdown
- * edits, mutations, connections, etc.  Groups of simultaneous changes (e.g.
- * a tree of blocks being deleted) are merged into one event.
- * Applications may hook workspace changes by listening for
- * 'blocklyWorkspaceChange' on workspace.getCanvas().
- */
-Blockly.WorkspaceSvg.prototype.fireChangeEvent = function() {
-  if (this.rendered && this.svgBlockCanvas_) {
-    var details = {workspace: this.id};
-    Blockly.Events.fire(details);
-  }
-};
-
-/**
  * Paste the provided block onto the workspace.
  * @param {!Element} xmlBlock XML block element.
  */
@@ -691,7 +677,6 @@ Blockly.WorkspaceSvg.prototype.cleanUp_ = function() {
   }
   // Fire an event to allow scrollbars to resize.
   Blockly.fireUiEvent(window, 'resize');
-  this.fireChangeEvent();
 };
 
 /**

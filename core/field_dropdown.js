@@ -54,10 +54,9 @@ Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
   this.setChangeHandler(opt_changeHandler);
   this.trimOptions_();
   var firstTuple = this.getOptions_()[0];
-  this.value_ = firstTuple[1];
 
   // Call parent's constructor.
-  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
+  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1]);
 };
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 
@@ -268,6 +267,10 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
   if (newValue === null || newValue === this.value_) {
     return;  // No change if null.
   }
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.value_, newValue));
+  }
   this.value_ = newValue;
   // Look up and display the human-readable text.
   var options = this.getOptions_();
@@ -311,7 +314,6 @@ Blockly.FieldDropdown.prototype.setText = function(text) {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
   }
 };
 

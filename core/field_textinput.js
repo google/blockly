@@ -78,7 +78,7 @@ Blockly.FieldTextInput.prototype.dispose = function() {
  * @param {?string} text New text.
  * @override
  */
-Blockly.FieldTextInput.prototype.setText = function(text) {
+Blockly.FieldTextInput.prototype.setValue = function(text) {
   if (text === null) {
     return;  // No change if null.
   }
@@ -90,7 +90,7 @@ Blockly.FieldTextInput.prototype.setText = function(text) {
       text = validated;
     }
   }
-  Blockly.Field.prototype.setText.call(this, text);
+  Blockly.Field.prototype.setValue.call(this, text);
 };
 
 /**
@@ -120,9 +120,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
         newValue = override;
       }
     }
-    if (newValue !== null) {
-      this.setText(newValue);
-    }
+    this.setValue(newValue);
     return;
   }
 
@@ -172,7 +170,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputKeyDown_ = function(e) {
   if (e.keyCode == enterKey) {
     Blockly.WidgetDiv.hide();
   } else if (e.keyCode == escKey) {
-    this.setText(htmlInput.defaultValue);
+    htmlInput.value = htmlInput.defaultValue;
     Blockly.WidgetDiv.hide();
   } else if (e.keyCode == tabKey) {
     Blockly.WidgetDiv.hide();
@@ -200,6 +198,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
     // Chrome only (version 26, OS X).
     this.sourceBlock_.render();
   }
+  this.resizeEditor_();
 };
 
 /**
@@ -275,7 +274,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
         text = text1;
       }
     }
-    thisField.setText(text);
+    thisField.setValue(text);
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
     Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
     Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);

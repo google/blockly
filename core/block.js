@@ -121,6 +121,10 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
+  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+    var xmlBlock = Blockly.Xml.blockToDom(this);
+    Blockly.Events.fire(new Blockly.Events.Create(workspace, xmlBlock));
+  }
 };
 
 /**
@@ -160,6 +164,10 @@ Blockly.Block.prototype.colour_ = '#000000';
  */
 Blockly.Block.prototype.dispose = function(healStack, animate) {
   this.unplug(healStack, false);
+  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+    Blockly.Events.fire(new Blockly.Events.Delete(this));
+  }
+  Blockly.Events.disable();
 
   // This block is now at the top of the workspace.
   // Remove this block from the workspace's list of top-most blocks.
@@ -197,6 +205,7 @@ Blockly.Block.prototype.dispose = function(healStack, animate) {
   }
   // Remove from block database.
   delete Blockly.Block.BlockDB_[this.id];
+  Blockly.Events.enable();
 };
 
 /**
@@ -483,6 +492,11 @@ Blockly.Block.prototype.setShadow = function(shadow) {
     return;  // No change.
   }
   this.isShadow_ = shadow;
+  if (Blockly.Events.isEnabled() && !shadow) {
+    // Fire a creation event.
+    var xmlBlock = Blockly.Xml.blockToDom(this);
+    Blockly.Events.fire(new Blockly.Events.Create(this.workspace, xmlBlock));
+  }
 };
 
 /**
@@ -737,11 +751,14 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
  * @param {boolean} newBoolean True if inputs are horizontal.
  */
 Blockly.Block.prototype.setInputsInline = function(newBoolean) {
-  this.inputsInline = newBoolean;
-  if (this.rendered) {
-    this.render();
-    this.bumpNeighbours_();
-    this.workspace.fireChangeEvent();
+  if (this.inputsInline != newBoolean) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this, 'inline', null, this.inputsInline, newBoolean));
+    this.inputsInline = newBoolean;
+    if (this.rendered) {
+      this.render();
+      this.bumpNeighbours_();
+    }
   }
 };
 
@@ -777,7 +794,11 @@ Blockly.Block.prototype.getInputsInline = function() {
  * @param {boolean} disabled True if disabled.
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
-  this.disabled = disabled;
+  if (this.disabled != disabled) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this, 'disabled', null, this.disabled, disabled));
+    this.disabled = disabled;
+  }
 };
 
 /**
@@ -812,6 +833,8 @@ Blockly.Block.prototype.isCollapsed = function() {
  */
 Blockly.Block.prototype.setCollapsed = function(collapsed) {
   if (this.collapsed_ != collapsed) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this, 'collapsed', null, this.collapsed_, collapsed));
     this.collapsed_ = collapsed;
   }
 };
@@ -1207,6 +1230,8 @@ Blockly.Block.prototype.getCommentText = function() {
  */
 Blockly.Block.prototype.setCommentText = function(text) {
   if (this.comment != text) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+      this, 'comment', null, this.comment, text || ''));
     this.comment = text;
   }
 };

@@ -45,11 +45,9 @@ goog.require('goog.ui.ColorPicker');
  * @constructor
  */
 Blockly.FieldColour = function(colour, opt_changeHandler) {
-  Blockly.FieldColour.superClass_.constructor.call(this, '\u00A0\u00A0\u00A0');
-
+  Blockly.FieldColour.superClass_.constructor.call(this, colour);
+  this.setText(Blockly.Field.NBSP + Blockly.Field.NBSP + Blockly.Field.NBSP);
   this.setChangeHandler(opt_changeHandler);
-  // Set the initial state.
-  this.setValue(colour);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -103,12 +101,14 @@ Blockly.FieldColour.prototype.getValue = function() {
  * @param {string} colour The new colour in '#rrggbb' format.
  */
 Blockly.FieldColour.prototype.setValue = function(colour) {
+  if (this.sourceBlock_ && Blockly.Events.isEnabled() &&
+      this.colour_ != colour) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.colour_, colour));
+  }
   this.colour_ = colour;
   if (this.borderRect_) {
     this.borderRect_.style.fill = colour;
-  }
-  if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-    this.sourceBlock_.workspace.fireChangeEvent();
   }
 };
 

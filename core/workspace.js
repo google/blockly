@@ -77,7 +77,6 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
   this.topBlocks_.push(block);
-  this.fireChangeEvent();
 };
 
 /**
@@ -96,7 +95,6 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
   if (!found) {
     throw 'Block not present in workspace\'s list of top-most blocks.';
   }
-  this.fireChangeEvent();
 };
 
 /**
@@ -191,13 +189,6 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
   return this.options.maxBlocks - this.getAllBlocks().length;
-};
-
-/**
- * Something on this workspace has changed.
- */
-Blockly.Workspace.prototype.fireChangeEvent = function() {
-  // NOP.
 };
 
 /**

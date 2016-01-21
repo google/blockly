@@ -42,7 +42,7 @@ goog.require('goog.userAgent');
  */
 Blockly.Field = function(text) {
   this.size_ = new goog.math.Size(0, 25);
-  this.setText(text);
+  this.setValue(text);
 };
 
 /**
@@ -139,6 +139,10 @@ Blockly.Field.prototype.init = function(block) {
       Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
   // Force a render.
   this.updateTextNode_();
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, '', this.getValue()));
+  }
 };
 
 /**
@@ -326,7 +330,6 @@ Blockly.Field.prototype.setText = function(text) {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
   }
 };
 
@@ -385,6 +388,10 @@ Blockly.Field.prototype.setValue = function(newText) {
   var oldText = this.getValue();
   if (oldText == newText) {
     return;
+  }
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, oldText, newText));
   }
   this.setText(newText);
 };

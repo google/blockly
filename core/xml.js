@@ -295,6 +295,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
  */
 Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
   // Create top-level block.
+  Blockly.Events.disable();
   var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock);
   if (workspace.rendered) {
     // Hide connections to speed up assembly.
@@ -318,6 +319,10 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
     topBlock.updateDisabled();
     // Fire an event to allow scrollbars to resize.
     Blockly.fireUiEvent(window, 'resize');
+  }
+  Blockly.Events.enable();
+  if (Blockly.Events.isEnabled() && !topBlock.isShadow()) {
+    Blockly.Events.fire(new Blockly.Events.Create(workspace, xmlBlock));
   }
   return topBlock;
 };

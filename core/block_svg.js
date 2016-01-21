@@ -227,7 +227,6 @@ Blockly.BlockSvg.terminateDrag_ = function() {
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(window, 'resize');
-      selected.workspace.fireChangeEvent();
     }
   }
   Blockly.dragMode_ = 0;
@@ -388,7 +387,6 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     // all their functions and store them next to each other.  Expanding and
     // bumping causes all their definitions to go out of alignment.
   }
-  this.workspace.fireChangeEvent();
 };
 
 /**
@@ -1089,11 +1087,8 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
  * @param {boolean} animate If true, show a disposal animation and sound.
- * @param {boolean=} opt_dontRemoveFromWorkspace If true, don't remove this
- *     block from the workspace's list of top blocks.
  */
-Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
-                                              opt_dontRemoveFromWorkspace) {
+Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   Blockly.Field.startCache();
   // Terminate onchange event calls.
   if (this.onchangeWrapper_) {
@@ -1116,12 +1111,14 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   // Stop rerendering.
   this.rendered = false;
 
+  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
+  Blockly.Events.disable();
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
     icons[i].dispose();
   }
+  Blockly.Events.enable();
 
-  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
   goog.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
@@ -1509,14 +1506,12 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
  * @param {boolean} disabled True if disabled.
  */
 Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
-  if (this.disabled == disabled) {
-    return;
+  if (this.disabled != disabled) {
+    Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
+    if (this.rendered) {
+      this.updateDisabled();
+    }
   }
-  Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
-  if (this.rendered) {
-    this.updateDisabled();
-  }
-  this.workspace.fireChangeEvent();
 };
 
 /**

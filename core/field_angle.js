@@ -206,7 +206,7 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   }
   angle = String(angle);
   Blockly.FieldTextInput.htmlInput_.value = angle;
-  this.setText(angle);
+  this.setValue(angle);
   this.validate_();
 };
 

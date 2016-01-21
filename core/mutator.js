@@ -296,8 +296,6 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
       this.block_.render();
     }
     this.resizeBubble_();
-    // The source block may have changed, notify its workspace.
-    this.block_.workspace.fireChangeEvent();
     goog.Timer.callOnce(
         this.block_.bumpNeighbours_, Blockly.BUMP_DELAY, this.block_);
   }

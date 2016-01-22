@@ -133,12 +133,7 @@ Blockly.Events.Delete = function(block) {
   var parent = block.getParent();
   if (parent) {
     this.oldParentId = parent.id;
-    for (var i = 0, input; input = parent.inputList[i]; i++) {
-      if (input.connection && input.connection.targetBlock() == block) {
-        this.oldInput = input.name;
-        break;
-      }
-    }
+    this.oldInput = getInputWithBlock(block).name
   }
 };
 goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);

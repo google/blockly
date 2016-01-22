@@ -157,6 +157,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     throw 'Attempt to connect incompatible types.';
   }
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
+    // Value connections.
     if (this.targetConnection) {
       // Can't make a value connection if male block is already connected.
       throw 'Source connection already connected (value).';
@@ -193,6 +194,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
       }
     }
   } else {
+    // Statement connections.
     if (this.targetConnection) {
       throw 'Source connection already connected (block).';
     } else if (otherConnection.targetConnection) {

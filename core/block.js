@@ -331,6 +331,20 @@ Blockly.Block.prototype.getParent = function() {
 };
 
 /**
+ * Return the input that connects to the specified block.
+ * @param {!Blockly.Block} A block connected to an input on this block.
+ * @return {Blockly.Input} The input that connects to the specified block.
+ */
+Blockly.Block.prototype.getInputWithBlock = function(block) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (input.connection && input.connection.targetBlock() == block) {
+      return input
+    }
+  }
+  return null;
+};
+
+/**
  * Return the parent block that surrounds the current block, or null if this
  * block has no surrounding block.  A parent block might just be the previous
  * statement, whereas the surrounding block is an if statement, while loop, etc.
@@ -866,7 +880,8 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
   text = goog.string.trim(text.join(' ')) || '???';
   if (opt_maxLength) {
     // TODO: Improve truncation so that text from this block is given priority.
-    // TODO: Handle FieldImage better.
+    // E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not "1+2+3+4+5...".
+    // E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
     text = goog.string.truncate(text, opt_maxLength);
   }
   return text;

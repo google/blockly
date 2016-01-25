@@ -143,7 +143,10 @@ Blockly.Css.CONTENT = [
     'position: absolute;',
     'z-index: 99999;', /* big value for bootstrap3 compatibility */
   '}',
-
+  '.injectionDiv {',
+    'height: 100%;',
+    'position: relative;',
+  '}',
   '.blocklyTooltipDiv {',
     'background-color: #ffffc7;',
     'border: 1px solid #ddc;',

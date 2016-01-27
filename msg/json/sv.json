@@ -175,10 +175,10 @@
 	"MATH_MODULO_TITLE": "resten av %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Returnerar kvoten från divisionen av de två talen.",
 	"MATH_CONSTRAIN_TITLE": "begränsa %1 till mellan %2 och %3",
-	"MATH_CONSTRAIN_TOOLTIP": "Begränsa ett tal till att mellan de angivna gränsvärden (inklusive).",
+	"MATH_CONSTRAIN_TOOLTIP": "Begränsa ett tal till att mellan de angivna gränsvärden (inkluderande).",
 	"MATH_RANDOM_INT_HELPURL": "https://sv.wikipedia.org/wiki/Slumptalsgenerator",
 	"MATH_RANDOM_INT_TITLE": "slumpartat heltal från %1 till %2",
-	"MATH_RANDOM_INT_TOOLTIP": "Ger tillbaka ett slumpat heltal mellan två värden (inklusive).",
+	"MATH_RANDOM_INT_TOOLTIP": "Ger tillbaka ett slumpat heltal mellan två värden, inkluderande.",
 	"MATH_RANDOM_FLOAT_HELPURL": "https://sv.wikipedia.org/wiki/Slumptalsgenerator",
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "slumpat decimaltal",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "Ger tillbaka ett slumpat decimaltal mellan 0.0 (inkluderat) och 1.0 (exkluderat).",
@@ -308,6 +308,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "med:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "med:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Skapar en funktion utan output.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Beskriv denna funktion...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://sv.wikipedia.org/wiki/Funktion_%28programmering%29",
 	"PROCEDURES_DEFRETURN_RETURN": "returnera",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Skapar en funktion med output.",
@@ -324,5 +325,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Markera funktionsdefinition",
 	"PROCEDURES_CREATE_DO": "Skapa '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Om ett värde är sant returneras ett andra värde.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Varning: Detta block får användas endast i en funktionsdefinition."
 }

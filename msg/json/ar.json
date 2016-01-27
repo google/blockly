@@ -3,7 +3,8 @@
 		"authors": [
 			"Meno25",
 			"Test Create account",
-			"아라"
+			"아라",
+			"Diyariq"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "البند",
@@ -14,7 +15,7 @@
 	"INLINE_INPUTS": "ادخال خطي",
 	"DELETE_BLOCK": "إحذف القطعة",
 	"DELETE_X_BLOCKS": "إحذف قطع %1",
-	"DELETE_ALL_BLOCKS": "حذف كل بلوكات %1؟",
+	"DELETE_ALL_BLOCKS": "حذف كل مناعات %1؟",
 	"COLLAPSE_BLOCK": "إخفاء القطعة",
 	"COLLAPSE_ALL": "إخفاء القطع",
 	"EXPAND_BLOCK": "وسٌّع القطعة",

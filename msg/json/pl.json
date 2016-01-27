@@ -8,14 +8,15 @@
 			"Pio387",
 			"아라",
 			"Mateon1",
-			"Expert3222"
+			"Expert3222",
+			"Cirasean"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
 	"TODAY": "Dzisiaj",
 	"DUPLICATE_BLOCK": "Powiel",
 	"ADD_COMMENT": "Dodaj komentarz",
-	"REMOVE_COMMENT": "Usuń Komentarz",
+	"REMOVE_COMMENT": "Usuń komentarz",
 	"EXTERNAL_INPUTS": "Zewnętrzne wejścia",
 	"INLINE_INPUTS": "Wbudowane wejścia",
 	"DELETE_BLOCK": "Usuń blok",

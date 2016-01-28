@@ -929,7 +929,9 @@ Blockly.Block.prototype.jsonInit = function(json) {
       'Must not have both an output and a previousStatement.');
 
   // Set basic properties of block.
-  this.setColour(json['colour']);
+  if (json['colour'] !== undefined) {
+    this.setColour(json['colour']);
+  }
 
   // Interpolate the message blocks.
   var i = 0;

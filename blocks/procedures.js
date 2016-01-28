@@ -647,7 +647,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     for (var i = 0; i < this.arguments_.length; i++) {
       if (Blockly.Names.equals(oldName, this.arguments_[i])) {
         this.arguments_[i] = newName;
-        this.getInput('ARG' + i).fieldRow[0].setText(newName);
+        this.getInput('ARG' + i).fieldRow[0].setValue(newName);
       }
     }
   },

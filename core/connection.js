@@ -642,11 +642,8 @@ Blockly.Connection.prototype.setCheck = function(check) {
     this.check_ = check;
     // The new value type may not be compatible with the existing connection.
     if (this.targetConnection && !this.checkType_(this.targetConnection)) {
-      if (this.isSuperior()) {
-        this.targetBlock().setParent(null);
-      } else {
-        this.sourceBlock_.setParent(null);
-      }
+      var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
+      child.setParent(null);
       // Bump away.
       this.sourceBlock_.bumpNeighbours_();
     }

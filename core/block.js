@@ -160,10 +160,9 @@ Blockly.Block.prototype.colour_ = '#000000';
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
- * @param {boolean} animate If true, show a disposal animation and sound.
  */
-Blockly.Block.prototype.dispose = function(healStack, animate) {
-  this.unplug(healStack, false);
+Blockly.Block.prototype.dispose = function(healStack) {
+  this.unplug(healStack);
   if (Blockly.Events.isEnabled() && !this.isShadow()) {
     Blockly.Events.fire(new Blockly.Events.Delete(this));
   }
@@ -212,10 +211,8 @@ Blockly.Block.prototype.dispose = function(healStack, animate) {
  * Unplug this block from its superior block.  If this block is a statement,
  * optionally reconnect the block underneath with the block on top.
  * @param {boolean} healStack Disconnect child statement and reconnect stack.
- * @param {boolean} bump Move the unplugged block sideways a short distance.
  */
-Blockly.Block.prototype.unplug = function(healStack, bump) {
-  bump = bump && !!this.getParent();
+Blockly.Block.prototype.unplug = function(healStack) {
   if (this.outputConnection) {
     if (this.outputConnection.targetConnection) {
       // Disconnect from any superior block.
@@ -239,12 +236,6 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
         previousTarget.connect(nextTarget);
       }
     }
-  }
-  if (bump) {
-    // Bump the block sideways.
-    var dx = Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
-    var dy = Blockly.SNAP_RADIUS * 2;
-    this.moveBy(dx, dy);
   }
 };
 

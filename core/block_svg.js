@@ -499,12 +499,8 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     if (this.rendered) {
       // Trigger a connection animation.
       // Determine which connection is inferior (lower in the source stack).
-      var inferiorConnection;
-      if (Blockly.localConnection_.isSuperior()) {
-        inferiorConnection = Blockly.highlightedConnection_;
-      } else {
-        inferiorConnection = Blockly.localConnection_;
-      }
+      var inferiorConnection = Blockly.localConnection_.isSuperior() ?
+          Blockly.highlightedConnection_ : Blockly.localConnection_;
       inferiorConnection.sourceBlock_.connectionUiEffect();
     }
     if (this.workspace.trashcan) {
@@ -1105,7 +1101,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   }
 
   if (animate && this.rendered) {
-    this.unplug(healStack, false);
+    this.unplug(healStack);
     this.disposeUiEffect();
   }
   // Stop rerendering.

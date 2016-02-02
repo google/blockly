@@ -136,8 +136,33 @@ Blockly.ScrollbarPair.prototype.resize = function() {
  * @param {number} y Vertical scroll value.
  */
 Blockly.ScrollbarPair.prototype.set = function(x, y) {
-  this.hScroll.set(x);
-  this.vScroll.set(y);
+  // This function is equivalent to:
+  //   this.hScroll.set(x);
+  //   this.vScroll.set(y);
+  // However, that calls setMetrics twice.  Combining them speeds up rendering.
+  var xyRatio = {};
+
+  var knobValue = x * this.hScroll.ratio_;
+  this.hScroll.svgKnob_.setAttribute('x', knobValue);
+  var barLength = parseFloat(this.hScroll.svgBackground_.getAttribute('width'));
+  var ratio = knobValue / barLength;
+  if (isNaN(ratio)) {
+    ratio = 0;
+  }
+  xyRatio.x = ratio;
+
+  var knobValue = y * this.vScroll.ratio_;
+  this.vScroll.svgKnob_.setAttribute('y', knobValue);
+  var barLength =
+      parseFloat(this.vScroll.svgBackground_.getAttribute('height'));
+  var ratio = knobValue / barLength;
+  if (isNaN(ratio)) {
+    ratio = 0;
+  }
+  xyRatio.y = ratio;
+
+  this.workspace_.setMetrics(xyRatio);
+
 };
 
 // --------------------------------------------------------------------

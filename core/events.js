@@ -53,12 +53,18 @@ Blockly.Events.DELETE = 'delete';
 Blockly.Events.CHANGE = 'change';
 
 /**
+ * Name of event that moves a block.
+ * @const
+ */
+Blockly.Events.MOVE = 'move';
+
+/**
  * Create a custom event and fire it.
- * @param {Object} detail Custom data for event.
+ * @param {!Blockly.Events.Abstract} detail Custom data for event.
  */
 Blockly.Events.fire = function(detail) {
-  if (!Blockly.Events.isEnabled()) {
-    return;  // No events allowed.
+  if (!Blockly.Events.isEnabled() || detail.isNull()) {
+    return;
   }
   console.log(detail);
   var workspace = Blockly.Workspace.getById(detail.workspaceId);
@@ -104,6 +110,14 @@ Blockly.Events.isEnabled = function() {
  * @constructor
  */
 Blockly.Events.Abstract = function() {};
+
+/**
+ * Does this event record any change of state?
+ * @return {boolean} True if something changed.
+ */
+Blockly.Events.Abstract.prototype.isNull = function() {
+  return false;
+};
 
 /**
  * Class for a block creation event.
@@ -158,3 +172,71 @@ Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
   this.newValue = newValue;
 };
 goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
+
+/**
+ * Does this event record any change of state?
+ * @return {boolean} True if something changed.
+ */
+Blockly.Events.Change.prototype.isNull = function() {
+  return this.oldValue == this.newValue;
+};
+
+/**
+ * Class for a block move event.  Created before the move.
+ * @param {!Blockly.Block} block The moved block.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.Move = function(block) {
+  this.type = Blockly.Events.MOVE;
+  this.workspaceId = block.workspace.id;
+  this.blockId = block.id;
+
+  var location = this.currentLocation_();
+  this.oldParentId = location.parentId;
+  this.oldInputName = location.inputName;
+  this.oldCoordinate = location.coordinate;
+};
+goog.inherits(Blockly.Events.Move, Blockly.Events.Abstract);
+
+/**
+ * Record the block's new location.  Called after the move.
+ */
+Blockly.Events.Move.prototype.recordNew = function() {
+  var location = this.currentLocation_();
+  this.newParentId = location.parentId;
+  this.newInputName = location.inputName;
+  this.newCoordinate = location.coordinate;
+};
+
+/**
+ * Returns the parentId and input if the block is connected,
+ *   or the XY location if disconnected.
+ * @return {!Object} Collection of location info.
+ * @private
+ */
+Blockly.Events.Move.prototype.currentLocation_ = function() {
+  var block = Blockly.Block.getById(this.blockId);
+  var location = {};
+  var parent = block.getParent();
+  if (parent) {
+    location.parentId = parent.id;
+    var input = parent.getInputWithBlock(block);
+    if (input) {
+      location.inputName = input.name
+    }
+  } else {
+    location.coordinate = block.getRelativeToSurfaceXY();
+  }
+  return location;
+};
+
+/**
+ * Does this event record any change of state?
+ * @return {boolean} True if something changed.
+ */
+Blockly.Events.Move.prototype.isNull = function() {
+  return this.oldParentId == this.newParentId &&
+      this.oldInputName == this.newInputName &&
+      goog.math.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+};

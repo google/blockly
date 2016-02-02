@@ -217,6 +217,11 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       // Update the connection locations.
       var xy = selected.getRelativeToSurfaceXY();
       var dxy = goog.math.Coordinate.difference(xy, selected.dragStartXY_);
+      var event = new Blockly.Events.Move(selected);
+      event.oldCoordinate = selected.dragStartXY_;
+      event.recordNew();
+      Blockly.Events.fire(event);
+
       selected.moveConnections_(dxy.x, dxy.y);
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
@@ -286,10 +291,13 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dy Vertical offset.
  */
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
+  var event = new Blockly.Events.Move(this);
   var xy = this.getRelativeToSurfaceXY();
   this.getSvgRoot().setAttribute('transform',
       'translate(' + (xy.x + dx) + ',' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
+  event.recordNew();
+  Blockly.Events.fire(event);
 };
 
 /**

@@ -393,6 +393,10 @@ Blockly.Block.prototype.getChildren = function() {
  * @param {Blockly.Block} newParent New parent block.
  */
 Blockly.Block.prototype.setParent = function(newParent) {
+  var event;
+  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+    event = new Blockly.Events.Move(this);
+  }
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
     var children = this.parentBlock_.childBlocks_;
@@ -415,11 +419,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
     // its connection locations.
   } else {
     // Remove this block from the workspace's list of top-most blocks.
-    // Note that during realtime sync we sometimes create child blocks that are
-    // not top level so we check first before removing.
-    if (goog.array.contains(this.workspace.getTopBlocks(false), this)) {
-      this.workspace.removeTopBlock(this);
-    }
+    this.workspace.removeTopBlock(this);
   }
 
   this.parentBlock_ = newParent;
@@ -428,6 +428,10 @@ Blockly.Block.prototype.setParent = function(newParent) {
     newParent.childBlocks_.push(this);
   } else {
     this.workspace.addTopBlock(this);
+  }
+  if (event) {
+    event.recordNew();
+    Blockly.Events.fire(event);
   }
 };
 
@@ -1275,7 +1279,10 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dy Vertical offset.
  */
 Blockly.Block.prototype.moveBy = function(dx, dy) {
+  var event = new Blockly.Events.Move(this);
   this.xy_.translate(dx, dy);
+  event.recordNew();
+  Blockly.Events.fire(event);
 };
 
 /**

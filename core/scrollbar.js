@@ -162,7 +162,6 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
   xyRatio.y = ratio;
 
   this.workspace_.setMetrics(xyRatio);
-
 };
 
 // --------------------------------------------------------------------

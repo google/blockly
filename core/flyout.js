@@ -694,20 +694,19 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
  * Return the deletion rectangle for this flyout.
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
-Blockly.Flyout.prototype.getRect = function() {
+Blockly.Flyout.prototype.getClientRect = function() {
+  var flyoutRect = this.svgGroup_.getBoundingClientRect();
   // BIG_NUM is offscreen padding so that blocks dragged beyond the shown flyout
   // area are still deleted.  Must be larger than the largest screen size,
   // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
   var BIG_NUM = 1000000000;
-  var mainWorkspace = Blockly.mainWorkspace;
-  var x = Blockly.getSvgXY_(this.svgGroup_, mainWorkspace).x;
-  if (!this.RTL) {
-    x -= BIG_NUM;
+  if (this.RTL) {
+    var width = flyoutRect.left + flyoutRect.width + BIG_NUM;
+    return new goog.math.Rect(flyoutRect.left, -BIG_NUM, width, BIG_NUM * 2);
   }
-  // Fix scale if nested in zoomed workspace.
-  var scale = this.targetWorkspace_ == mainWorkspace ? 1 : mainWorkspace.scale;
-  return new goog.math.Rect(x, -BIG_NUM,
-      BIG_NUM + this.width_ * scale, BIG_NUM * 2);
+  // LTR
+  var width = BIG_NUM + flyoutRect.width + flyoutRect.left;
+  return new goog.math.Rect(-BIG_NUM, -BIG_NUM, width, BIG_NUM * 2);
 };
 
 /**

@@ -455,6 +455,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   Blockly.terminateDrag_();
   this.select();
   Blockly.hideChaff();
+  this.workspace.recordDeleteAreas();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
@@ -761,7 +762,6 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
         this.disconnectUiEffect();
       }
       this.setDragging_(true);
-      this.workspace.recordDeleteAreas();
     }
   }
   if (Blockly.dragMode_ == 2) {

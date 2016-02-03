@@ -77,6 +77,13 @@ Blockly.Flyout = function(workspaceOptions) {
    * @private
    */
   this.listeners_ = [];
+
+  /**
+   * List of blocks that should always be disabled.
+   * @type {!Array.<!Blockly.Block>}
+   * @private
+   */
+  this.permanentlyDisabled_ = [];
 };
 
 /**
@@ -380,10 +387,16 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // Create the blocks to be shown in this flyout.
   var blocks = [];
   var gaps = [];
+  this.permanentlyDisabled_.length = 0;
   for (var i = 0, xml; xml = xmlList[i]; i++) {
     if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
       var block = Blockly.Xml.domToBlock(
           /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
+      if (block.disabled) {
+        // Record blocks that were initially disabled.
+        // Do not enable these blocks as a result of capacity filtering.
+        this.permanentlyDisabled_.push(block);
+      }
       blocks.push(block);
       var gap = parseInt(xml.getAttribute('gap'), 10);
       gaps.push(gap || margin * 3);
@@ -670,9 +683,9 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var remainingCapacity = this.targetWorkspace_.remainingCapacity();
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
-    var allBlocks = block.getDescendants();
-    if (allBlocks.length > remainingCapacity) {
-      block.setDisabled(true);
+    if (this.permanentlyDisabled_.indexOf(block) == -1) {
+      var allBlocks = block.getDescendants();
+      block.setDisabled(allBlocks.length > remainingCapacity);
     }
   }
 };

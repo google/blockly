@@ -99,7 +99,7 @@ Blockly.Tooltip.RADIUS_OK = 10;
 /**
  * Delay before tooltip appears.
  */
-Blockly.Tooltip.HOVER_MS = 1000;
+Blockly.Tooltip.HOVER_MS = 750;
 
 /**
  * Horizontal padding between tooltip and screen edge.
@@ -236,7 +236,7 @@ Blockly.Tooltip.show_ = function() {
   goog.dom.removeChildren(/** @type {!Element} */ (Blockly.Tooltip.DIV));
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
-  if (goog.isFunction(tip)) {
+  while (goog.isFunction(tip)) {
     tip = tip();
   }
   tip = Blockly.Tooltip.wrap_(tip, Blockly.Tooltip.LIMIT);

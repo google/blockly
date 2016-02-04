@@ -1016,19 +1016,19 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
 };
 
 /**
- * Zooming the blocks to fit in the workspace if possible
-*/
+ * Zoom the blocks to fit in the workspace if possible.
+ */
 Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   var workspaceBBox = this.svgBackground_.getBBox();
   var blocksBBox = this.svgBlockCanvas_.getBBox();
   var workspaceWidth = workspaceBBox.width - this.toolbox_.width - 
-    Blockly.Scrollbar.scrollbarThickness;
+      Blockly.Scrollbar.scrollbarThickness;
   var workspaceHeight = workspaceBBox.height -
-    Blockly.Scrollbar.scrollbarThickness;
+      Blockly.Scrollbar.scrollbarThickness;
   var blocksWidth = blocksBBox.width;
   var blocksHeight = blocksBBox.height;
   if (blocksWidth == 0) {
-    return; // prevents zooming to the infinity
+    return;  // Prevents zooming to infinity.
   }
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;

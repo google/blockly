@@ -525,14 +525,14 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  */
 Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
   if (this.trashcan) {
-    this.deleteAreaTrash_ = this.trashcan.getRect();
+    this.deleteAreaTrash_ = this.trashcan.getClientRect();
   } else {
     this.deleteAreaTrash_ = null;
   }
   if (this.flyout_) {
-    this.deleteAreaToolbox_ = this.flyout_.getRect();
+    this.deleteAreaToolbox_ = this.flyout_.getClientRect();
   } else if (this.toolbox_) {
-    this.deleteAreaToolbox_ = this.toolbox_.getRect();
+    this.deleteAreaToolbox_ = this.toolbox_.getClientRect();
   } else {
     this.deleteAreaToolbox_ = null;
   }
@@ -546,8 +546,7 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var isDelete = false;
-  var mouseXY = Blockly.mouseToSvg(e, Blockly.mainWorkspace.getParentSvg());
-  var xy = new goog.math.Coordinate(mouseXY.x, mouseXY.y);
+  var xy = new goog.math.Coordinate(e.clientX, e.clientY);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {
       this.trashcan.setOpen_(true);

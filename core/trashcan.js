@@ -81,7 +81,7 @@ Blockly.Trashcan.prototype.MARGIN_SIDE_ = 20;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_HOTSPOT_ = 25;
+Blockly.Trashcan.prototype.MARGIN_HOTSPOT_ = 10;
 
 /**
  * Current open/close state of the lid.
@@ -234,13 +234,13 @@ Blockly.Trashcan.prototype.position = function() {
  * Return the deletion rectangle for this trash can.
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
-Blockly.Trashcan.prototype.getRect = function() {
-  var trashXY = Blockly.getSvgXY_(this.svgGroup_, this.workspace_);
-  return new goog.math.Rect(
-      trashXY.x - this.MARGIN_HOTSPOT_,
-      trashXY.y - this.MARGIN_HOTSPOT_,
-      this.WIDTH_ + 2 * this.MARGIN_HOTSPOT_,
-      this.BODY_HEIGHT_ + this.LID_HEIGHT_ + 2 * this.MARGIN_HOTSPOT_);
+Blockly.Trashcan.prototype.getClientRect = function() {
+  var trashRect = this.svgGroup_.getBoundingClientRect();
+  return new goog.math.Rect(trashRect.left - this.MARGIN_HOTSPOT_,
+			    trashRect.top - this.MARGIN_HOTSPOT_,
+                            trashRect.width + 2 * this.MARGIN_HOTSPOT_,
+                            trashRect.height + 2 * this.MARGIN_HOTSPOT_);
+
 };
 
 /**

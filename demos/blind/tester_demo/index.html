@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blind Blockly Sandbox</title>
+  <script src="../../../blockly_compressed.js"></script>
+  <script src="../../../blocks_compressed.js"></script>
+  <script src="../../../python_compressed.js"></script>
+  <script src="../../../msg/js/en.js"></script>
+
+  <!-- 1. Load libraries -->
+    <!-- IE required polyfill -->
+    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.umd.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-all.umd.js"></script>
+    <!--<script src="node_modules/systemjs/dist/system.js"></script>-->
+
+
+  <style>
+    body {
+      background-color: #e5ffff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    td {
+      vertical-align: top;
+    }
+    textarea {
+      width: 100%;
+      height: 20em;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Blind</h1>
+
+<h3>Demo Goals</h3>
+<ul>
+    <li>Demonstrate one way of displaying the traditional blockly code blocks in an accessible way for visually impaired users.</li>
+    <li>Demonstrate the ability to modify existing primitives (numbers, strings, etc).</li>
+</ul>
+<h3>Non-Goals</h3>
+<ul>
+    <li>This demo does not validate or run the code displayed.</li>
+    <li>This demo does not allow the creation of new blocks or variables.</li>
+    <li>This demo does not support list  or variable controls yet.</li>
+</ul>
+
+<p><h3>Instructions: </h3>Click one of the block buttons to display the proposed output for that block.</p>
+
+  <workspace-view>Loading Workspace...</workspace-view>
+
+  <!-- 2. Load our 'modules' -->
+  <script src='app/fieldview.component.js'></script>
+  <script src='app/treeview.component.js'></script>
+  <script src='app/workspaceview.component.js'></script>
+  <script src='app/boot.js'></script>
+</body>
+</html>

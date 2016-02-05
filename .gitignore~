@@ -1,8 +1,0 @@
-node_modules
-npm-debug.log
-package.json
-.DS_Store
-.settings
-.project
-*.pyc
-*.komodoproject

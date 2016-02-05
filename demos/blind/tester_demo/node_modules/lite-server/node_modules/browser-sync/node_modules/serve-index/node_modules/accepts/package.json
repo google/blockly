@@ -1,0 +1,55 @@
+{
+  "name": "accepts",
+  "description": "Higher-level content negotiation",
+  "version": "1.2.13",
+  "contributors": [
+    {
+      "name": "Douglas Christopher Wilson",
+      "email": "doug@somethingdoug.com"
+    },
+    {
+      "name": "Jonathan Ong",
+      "email": "me@jongleberry.com",
+      "url": "http://jongleberry.com"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jshttp/accepts"
+  },
+  "dependencies": {
+    "mime-types": "~2.1.6",
+    "negotiator": "0.5.3"
+  },
+  "devDependencies": {
+    "istanbul": "0.3.19",
+    "mocha": "~1.21.5"
+  },
+  "files": [
+    "LICENSE",
+    "HISTORY.md",
+    "index.js"
+  ],
+  "engines": {
+    "node": ">= 0.6"
+  },
+  "scripts": {
+    "test": "mocha --reporter spec --check-leaks --bail test/",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/"
+  },
+  "keywords": [
+    "content",
+    "negotiation",
+    "accept",
+    "accepts"
+  ],
+  "readme": "# accepts\n\n[![NPM Version][npm-image]][npm-url]\n[![NPM Downloads][downloads-image]][downloads-url]\n[![Node.js Version][node-version-image]][node-version-url]\n[![Build Status][travis-image]][travis-url]\n[![Test Coverage][coveralls-image]][coveralls-url]\n\nHigher level content negotiation based on [negotiator](https://www.npmjs.com/package/negotiator). Extracted from [koa](https://www.npmjs.com/package/koa) for general use.\n\nIn addition to negotiator, it allows:\n\n- Allows types as an array or arguments list, ie `(['text/html', 'application/json'])` as well as `('text/html', 'application/json')`.\n- Allows type shorthands such as `json`.\n- Returns `false` when no types match\n- Treats non-existent headers as `*`\n\n## Installation\n\n```sh\nnpm install accepts\n```\n\n## API\n\n```js\nvar accepts = require('accepts')\n```\n\n### accepts(req)\n\nCreate a new `Accepts` object for the given `req`.\n\n#### .charset(charsets)\n\nReturn the first accepted charset. If nothing in `charsets` is accepted,\nthen `false` is returned.\n\n#### .charsets()\n\nReturn the charsets that the request accepts, in the order of the client's\npreference (most preferred first).\n\n#### .encoding(encodings)\n\nReturn the first accepted encoding. If nothing in `encodings` is accepted,\nthen `false` is returned.\n\n#### .encodings()\n\nReturn the encodings that the request accepts, in the order of the client's\npreference (most preferred first).\n\n#### .language(languages)\n\nReturn the first accepted language. If nothing in `languages` is accepted,\nthen `false` is returned.\n\n#### .languages()\n\nReturn the languages that the request accepts, in the order of the client's\npreference (most preferred first).\n\n#### .type(types)\n\nReturn the first accepted type (and it is returned as the same text as what\nappears in the `types` array). If nothing in `types` is accepted, then `false`\nis returned.\n\nThe `types` array can contain full MIME types or file extensions. Any value\nthat is not a full MIME types is passed to `require('mime-types').lookup`.\n\n#### .types()\n\nReturn the types that the request accepts, in the order of the client's\npreference (most preferred first).\n\n## Examples\n\n### Simple type negotiation\n\nThis simple example shows how to use `accepts` to return a different typed\nrespond body based on what the client wants to accept. The server lists it's\npreferences in order and will get back the best match between the client and\nserver.\n\n```js\nvar accepts = require('accepts')\nvar http = require('http')\n\nfunction app(req, res) {\n  var accept = accepts(req)\n\n  // the order of this list is significant; should be server preferred order\n  switch(accept.type(['json', 'html'])) {\n    case 'json':\n      res.setHeader('Content-Type', 'application/json')\n      res.write('{\"hello\":\"world!\"}')\n      break\n    case 'html':\n      res.setHeader('Content-Type', 'text/html')\n      res.write('<b>hello, world!</b>')\n      break\n    default:\n      // the fallback is text/plain, so no need to specify it above\n      res.setHeader('Content-Type', 'text/plain')\n      res.write('hello, world!')\n      break\n  }\n\n  res.end()\n}\n\nhttp.createServer(app).listen(3000)\n```\n\nYou can test this out with the cURL program:\n```sh\ncurl -I -H'Accept: text/html' http://localhost:3000/\n```\n\n## License\n\n[MIT](LICENSE)\n\n[npm-image]: https://img.shields.io/npm/v/accepts.svg\n[npm-url]: https://npmjs.org/package/accepts\n[node-version-image]: https://img.shields.io/node/v/accepts.svg\n[node-version-url]: http://nodejs.org/download/\n[travis-image]: https://img.shields.io/travis/jshttp/accepts/master.svg\n[travis-url]: https://travis-ci.org/jshttp/accepts\n[coveralls-image]: https://img.shields.io/coveralls/jshttp/accepts/master.svg\n[coveralls-url]: https://coveralls.io/r/jshttp/accepts\n[downloads-image]: https://img.shields.io/npm/dm/accepts.svg\n[downloads-url]: https://npmjs.org/package/accepts\n",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/jshttp/accepts/issues"
+  },
+  "_id": "accepts@1.2.13",
+  "_from": "accepts@~1.2.12"
+}

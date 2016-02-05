@@ -1,0 +1,19 @@
+{
+  "name": "parsejson",
+  "version": "0.0.1",
+  "description": "Method that parses a JSON string and returns a JSON object",
+  "scripts": {
+    "test": "make test"
+  },
+  "devDependencies": {
+    "mocha": "1.17.1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "better-assert": "~1.0.0"
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "parsejson@0.0.1",
+  "_from": "parsejson@0.0.1"
+}

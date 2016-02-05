@@ -1,0 +1,18 @@
+{
+  "name": "object-component",
+  "version": "0.0.3",
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "component": {
+    "scripts": {
+      "object/index.js": "index.js"
+    }
+  },
+  "readme": "\n# object\n\n  Object utils.\n\n## API\n\n### .keys(obj)\n\n  Return the keys for `obj`.\n\n### .values(obj)\n\n  Return the values for `obj`.\n\n### .length(obj)\n\n  Return the number of keys for `obj`.\n\n### .isEmpty(obj)\n\n  Check if `obj` is empty.\n\n### .merge(a, b)\n\n  Merge object `b` into `a`, returns `a`.\n  Precedence is given to `b`.\n\n## License\n\n  MIT",
+  "readmeFilename": "Readme.md",
+  "description": "Object utils.",
+  "_id": "object-component@0.0.3",
+  "_from": "object-component@0.0.3"
+}

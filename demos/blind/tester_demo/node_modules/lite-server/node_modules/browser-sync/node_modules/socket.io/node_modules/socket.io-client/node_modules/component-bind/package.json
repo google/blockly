@@ -1,0 +1,29 @@
+{
+  "name": "component-bind",
+  "version": "1.0.0",
+  "description": "function binding utility",
+  "keywords": [
+    "bind",
+    "utility"
+  ],
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "component": {
+    "scripts": {
+      "bind/index.js": "index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/component/bind.git"
+  },
+  "readme": "# bind\n\n  Function binding utility.\n\n## Installation\n\n```\n$ component install component/bind\n```\n\n## API\n\n   - [bind(obj, fn)](#bindobj-fn)\n   - [bind(obj, fn, ...)](#bindobj-fn-)\n   - [bind(obj, name)](#bindobj-name)\n<a name=\"\"></a>\n \n<a name=\"bindobj-fn\"></a>\n### bind(obj, fn)\nshould bind the function to the given object.\n\n```js\nvar tobi = { name: 'tobi' };\n\nfunction name() {\n  return this.name;\n}\n\nvar fn = bind(tobi, name);\nfn().should.equal('tobi');\n```\n\n<a name=\"bindobj-fn-\"></a>\n### bind(obj, fn, ...)\nshould curry the remaining arguments.\n\n```js\nfunction add(a, b) {\n  return a + b;\n}\n\nbind(null, add)(1, 2).should.equal(3);\nbind(null, add, 1)(2).should.equal(3);\nbind(null, add, 1, 2)().should.equal(3);\n```\n\n<a name=\"bindobj-name\"></a>\n### bind(obj, name)\nshould bind the method of the given name.\n\n```js\nvar tobi = { name: 'tobi' };\n\ntobi.getName = function() {\n  return this.name;\n};\n\nvar fn = bind(tobi, 'getName');\nfn().should.equal('tobi');\n```\n\n## License \n\n  MIT",
+  "readmeFilename": "Readme.md",
+  "bugs": {
+    "url": "https://github.com/component/bind/issues"
+  },
+  "_id": "component-bind@1.0.0",
+  "_from": "component-bind@1.0.0"
+}

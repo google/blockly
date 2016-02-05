@@ -1,0 +1,27 @@
+{
+  "name": "parseuri",
+  "version": "0.0.4",
+  "description": "Method that parses a URI and returns an array of its components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/get/parseuri.git"
+  },
+  "homepage": "https://github.com/get/parseuri",
+  "scripts": {
+    "test": "make test"
+  },
+  "devDependencies": {
+    "mocha": "1.17.1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "better-assert": "~1.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/get/parseuri/issues"
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "parseuri@0.0.4",
+  "_from": "parseuri@0.0.4"
+}

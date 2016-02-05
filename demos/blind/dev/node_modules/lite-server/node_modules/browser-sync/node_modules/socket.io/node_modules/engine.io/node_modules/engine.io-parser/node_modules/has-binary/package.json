@@ -1,0 +1,21 @@
+{
+  "name": "has-binary",
+  "version": "0.1.6",
+  "description": "A function that takes anything in javascript and returns true if its argument contains binary data.",
+  "dependencies": {
+    "isarray": "0.0.1"
+  },
+  "devDependencies": {
+    "better-assert": "1.0.0",
+    "mocha": "1.17.1"
+  },
+  "author": {
+    "name": "Kevin Roark"
+  },
+  "license": "MIT",
+  "readme": "has-binarydata.js\n=================\n\nSimple module to test if an object contains binary data\n",
+  "readmeFilename": "README.md",
+  "_id": "has-binary@0.1.6",
+  "_from": "has-binary@0.1.6",
+  "scripts": {}
+}

@@ -1,0 +1,29 @@
+{
+  "name": "component-emitter",
+  "description": "Event emitter",
+  "version": "1.1.2",
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "component": {
+    "scripts": {
+      "emitter/index.js": "index.js"
+    }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/component/emitter.git"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "readme": "# Emitter [![Build Status](https://travis-ci.org/component/emitter.png)](https://travis-ci.org/component/emitter)\n\n  Event emitter component.\n\n## Installation\n\n```\n$ component install component/emitter\n```\n\n## API\n\n### Emitter(obj)\n\n  The `Emitter` may also be used as a mixin. For example\n  a \"plain\" object may become an emitter, or you may\n  extend an existing prototype.\n\n  As an `Emitter` instance:\n\n```js\nvar Emitter = require('emitter');\nvar emitter = new Emitter;\nemitter.emit('something');\n```\n\n  As a mixin:\n\n```js\nvar Emitter = require('emitter');\nvar user = { name: 'tobi' };\nEmitter(user);\n\nuser.emit('im a user');\n```\n\n  As a prototype mixin:\n\n```js\nvar Emitter = require('emitter');\nEmitter(User.prototype);\n```\n\n### Emitter#on(event, fn)\n\n  Register an `event` handler `fn`.\n\n### Emitter#once(event, fn)\n\n  Register a single-shot `event` handler `fn`,\n  removed immediately after it is invoked the\n  first time.\n\n### Emitter#off(event, fn)\n\n  * Pass `event` and `fn` to remove a listener.\n  * Pass `event` to remove all listeners on that event.\n  * Pass nothing to remove all listeners on all events.\n\n### Emitter#emit(event, ...)\n\n  Emit an `event` with variable option args.\n\n### Emitter#listeners(event)\n\n  Return an array of callbacks, or an empty array.\n\n### Emitter#hasListeners(event)\n\n  Check if this emitter has `event` handlers.\n\n## License\n\nMIT\n",
+  "readmeFilename": "Readme.md",
+  "bugs": {
+    "url": "https://github.com/component/emitter/issues"
+  },
+  "_id": "component-emitter@1.1.2",
+  "_from": "component-emitter@1.1.2"
+}

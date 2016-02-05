@@ -2,6 +2,7 @@ node_modules
 npm-debug.log
 package.json
 package.json~
+index.html
 .DS_Store
 .settings
 .project

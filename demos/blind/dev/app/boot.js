@@ -1,6 +1,7 @@
 var app = app || {};
 
 document.addEventListener('DOMContentLoaded', function() {
+    ng.platform.browser.bootstrap(app.ToolboxView);
     ng.platform.browser.bootstrap(app.WorkspaceView);
   });
 

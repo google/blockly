@@ -399,7 +399,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       }
       blocks.push(block);
       var gap = parseInt(xml.getAttribute('gap'), 10);
-      gaps.push(gap || margin * 3);
+      gaps.push(isNaN(gap) ? margin * 3 : gap);
     }
   }
 

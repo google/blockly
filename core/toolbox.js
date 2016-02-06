@@ -191,6 +191,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   rootOut.blocks = [];
   var hasColours = false;
   function syncTrees(treeIn, treeOut) {
+    var lastElement = null;
     for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
       if (!childIn.tagName) {
         // Skip over text.
@@ -227,13 +228,33 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
           } else {
             childOut.setExpanded(false);
           }
+          lastElement = childIn;
           break;
         case 'SEP':
-          treeOut.add(new Blockly.Toolbox.TreeSeparator());
+          if (lastElement) {
+            if (lastElement.tagName.toUpperCase() == 'CATEGORY') {
+              // Separator between two categories.
+              // <sep></sep>
+              treeOut.add(new Blockly.Toolbox.TreeSeparator());
+            } else {
+              // Change the gap between two blocks.
+              // <sep gap="36"></sep>
+              // The default gap is 24, can be set larger or smaller.
+              // Note that a deprecated method is to add a gap to a block.
+              // <block type="math_arithmetic" gap="8"></block>
+              var newGap = parseFloat(childIn.getAttribute('gap'));
+              if (!isNaN(newGap)) {
+                var oldGap = parseFloat(lastElement.getAttribute('gap'));
+                var gap = isNaN(oldGap) ? newGap : oldGap + newGap;
+                lastElement.setAttribute('gap', gap);
+              }
+            }
+          }
           break;
         case 'BLOCK':
         case 'SHADOW':
           treeOut.blocks.push(childIn);
+          lastElement = childIn;
           break;
       }
     }
@@ -298,7 +319,7 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   if (this.workspace_.RTL) {
     var width = toolboxRect.left + toolboxRect.width + BIG_NUM;
     return new goog.math.Rect(toolboxRect.left, -BIG_NUM, width, BIG_NUM * 2);
-  } 
+  }
   // LTR
   var width = BIG_NUM + toolboxRect.width + toolboxRect.left;
   return new goog.math.Rect(-BIG_NUM, -BIG_NUM, width, BIG_NUM * 2);

@@ -881,13 +881,12 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
     if (this.options.languageTree) {
       throw 'Can\'t nullify an existing toolbox.';
     }
-    // No change (null to null).
-    return;
+    return;  // No change (null to null).
   }
   if (!this.options.languageTree) {
     throw 'Existing toolbox is null.  Can\'t create new toolbox.';
   }
-  if (this.options.hasCategories) {
+  if (tree.getElementsByTagName('category').length) {
     if (!this.toolbox_) {
       throw 'Existing toolbox has no categories.  Can\'t change mode.';
     }

@@ -41,7 +41,8 @@ goog.require('goog.userAgent');
  */
 Blockly.inject = function(container, opt_options) {
   if (goog.isString(container)) {
-    container = document.getElementById(container);
+    var selector = container;
+    container = document.querySelector(selector) || document.querySelector('#'+selector);
   }
   // Verify that the container is in document.
   if (!goog.dom.contains(document, container)) {

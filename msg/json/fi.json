@@ -6,7 +6,8 @@
 			"Espertus",
 			"Pettevi",
 			"McSalama",
-			"Espeox"
+			"Espeox",
+			"SNuutti"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -18,6 +19,8 @@
 	"INLINE_INPUTS": "Tuo syötteet",
 	"DELETE_BLOCK": "Poista lohko",
 	"DELETE_X_BLOCKS": "Poista %1 lohkoa",
+	"DELETE_ALL_BLOCKS": "Poista kaikki %1 lohkot?",
+	"CLEAN_UP": "Siivoa Lohkot",
 	"COLLAPSE_BLOCK": "Sulje lohko",
 	"COLLAPSE_ALL": "Sulje lohkot",
 	"EXPAND_BLOCK": "Laajenna lohko",
@@ -299,6 +302,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "parametrit:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "parametrit:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Luo funktio, jolla ei ole tuotosta.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Kuvaile tämä funktio...",
 	"PROCEDURES_DEFRETURN_RETURN": "palauta",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Luo funktio, jolla ei ole tuotosta.",
 	"PROCEDURES_ALLOW_STATEMENTS": "salli kommentit",

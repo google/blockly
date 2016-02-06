@@ -291,6 +291,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "с:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "с:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Создаёт процедуру, не возвращающую значение.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Опишите эту функцию…",
 	"PROCEDURES_DEFRETURN_RETURN": "вернуть",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Создаёт процедуру, возвращающую значение.",
 	"PROCEDURES_ALLOW_STATEMENTS": "разрешить операторы",
@@ -306,5 +307,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Выделить определение процедуры",
 	"PROCEDURES_CREATE_DO": "Создать вызов '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Если первое значение истинно, возвращает второе значение.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Этот блок может использоваться только внутри определения функции."
 }

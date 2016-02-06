@@ -17,7 +17,7 @@
 	"INLINE_INPUTS": "インライン入力",
 	"DELETE_BLOCK": "ブロックを消す",
 	"DELETE_X_BLOCKS": "%1 個のブロックを消す",
-	"DELETE_ALL_BLOCKS": "%1 個すべてのブロックを消しますか?",
+	"DELETE_ALL_BLOCKS": "%1件のすべてのブロックを消しますか？",
 	"CLEAN_UP": "ブロックの整理",
 	"COLLAPSE_BLOCK": "ブロックを折りたたむ",
 	"COLLAPSE_ALL": "ブロックを折りたたむ",

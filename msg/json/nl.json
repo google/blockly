@@ -6,7 +6,8 @@
 			"Ribert",
 			"MedShot",
 			"아라",
-			"JaapDeKleine"
+			"JaapDeKleine",
+			"Sjoerddebruin"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -332,6 +333,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "met:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "met:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Maakt een functie zonder uitvoer.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Deze functie beschrijven...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://nl.wikipedia.org/wiki/Subprogramma",
 	"PROCEDURES_DEFRETURN_RETURN": "uitvoeren",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Maakt een functie met een uitvoer.",
@@ -348,5 +350,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Accentueer functiedefinitie",
 	"PROCEDURES_CREATE_DO": "Maak \"%1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Als de eerste waarde \"waar\" is, geef dan de tweede waarde terug.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Waarschuwing: dit blok mag alleen gebruikt worden binnen de definitie van een functie."
 }

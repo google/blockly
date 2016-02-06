@@ -288,6 +288,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "med:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "med:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Opretter en funktion der ikke har nogen returværdi.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Beskriv denne funktion...",
 	"PROCEDURES_DEFRETURN_RETURN": "returnér",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Opretter en funktion der har en returværdi.",
 	"PROCEDURES_ALLOW_STATEMENTS": "tillad erklæringer",

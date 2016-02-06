@@ -304,6 +304,7 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "与：",
 	"PROCEDURES_DEFNORETURN_DO": "空白",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "创建一个不带输出值的函数。",
+	"PROCEDURES_DEFNORETURN_COMMENT": "描述该功能...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://zh.wikipedia.org/wiki/子程序",
 	"PROCEDURES_DEFRETURN_RETURN": "返回",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "创建一个有输出值的函数。",
@@ -320,5 +321,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "突出显示函数定义",
 	"PROCEDURES_CREATE_DO": "创建“%1”",
 	"PROCEDURES_IFRETURN_TOOLTIP": "如果值为真，则返回第二个值。",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "警告: 仅在定义函数内可使用此块。"
 }

@@ -4,7 +4,8 @@
 			"Gasolin",
 			"Wehwei",
 			"Liuxinyu970226",
-			"LNDDYL"
+			"LNDDYL",
+			"Cwlin0416"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "變量",
@@ -16,7 +17,7 @@
 	"INLINE_INPUTS": "單行輸入",
 	"DELETE_BLOCK": "刪除積木",
 	"DELETE_X_BLOCKS": "刪除 %1 塊積木",
-	"DELETE_ALL_BLOCKS": "刪除共%1個積木？",
+	"DELETE_ALL_BLOCKS": "刪除共 %1 個積木？",
 	"COLLAPSE_BLOCK": "收合積木",
 	"COLLAPSE_ALL": "收合積木",
 	"EXPAND_BLOCK": "展開積木",
@@ -253,7 +254,7 @@
 	"LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST": "移除列表中的最後一個項目",
 	"LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM": "移除列表中隨機的一個項目",
 	"LISTS_SET_INDEX_SET": "設定",
-	"LISTS_SET_INDEX_INSERT": "插入到",
+	"LISTS_SET_INDEX_INSERT": "插入在",
 	"LISTS_SET_INDEX_INPUT_TO": "為",
 	"LISTS_SET_INDEX_TOOLTIP_SET_FROM_START": "設定在列表中的指定位置的項目。#1 是第一個項目。",
 	"LISTS_SET_INDEX_TOOLTIP_SET_FROM_END": "設定在列表中的指定位置的項目。#1 是最後一個項目。",

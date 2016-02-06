@@ -290,6 +290,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "con:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "con:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Crea una función sin salida.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Describe esta función...",
 	"PROCEDURES_DEFRETURN_RETURN": "devuelve",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Crea una función con una salida.",
 	"PROCEDURES_ALLOW_STATEMENTS": "permitir declaraciones",

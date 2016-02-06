@@ -6,7 +6,8 @@
 			"Matěj Grabovský",
 			"Espertus",
 			"Utar",
-			"Clon"
+			"Clon",
+			"Koo6"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "položka",
@@ -22,7 +23,7 @@
 	"CLEAN_UP": "Uspořádat bloky",
 	"COLLAPSE_BLOCK": "Skrýt blok",
 	"COLLAPSE_ALL": "Skrýt bloky",
-	"EXPAND_BLOCK": "Rozbalení bloku",
+	"EXPAND_BLOCK": "Rozbalit blok",
 	"EXPAND_ALL": "Rozbalit bloky",
 	"DISABLE_BLOCK": "Zakázat blok",
 	"ENABLE_BLOCK": "Povolit blok",
@@ -33,8 +34,8 @@
 	"CHANGE_VALUE_TITLE": "Změna hodnoty:",
 	"NEW_VARIABLE": "Nová proměnná...",
 	"NEW_VARIABLE_TITLE": "Nový název proměnné:",
-	"RENAME_VARIABLE": "Přejmenovat proměnné...",
-	"RENAME_VARIABLE_TITLE": "Přejmenujte všechny proměnné '%1':",
+	"RENAME_VARIABLE": "Přejmenovat proměnnou...",
+	"RENAME_VARIABLE_TITLE": "Přejmenuj všechny proměnné '%1':",
 	"COLOUR_PICKER_HELPURL": "https://cs.wikipedia.org/wiki/Barva",
 	"COLOUR_PICKER_TOOLTIP": "Vyberte barvu z palety.",
 	"COLOUR_RANDOM_TITLE": "náhodná barva",

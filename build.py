@@ -79,7 +79,8 @@ class Gen_uncompressed(threading.Thread):
     f = open(target_filename, 'w')
     f.write(HEADER)
     f.write("""
-var isNodeJS = !!(typeof module !== 'undefined' && module.exports);
+var isNodeJS = !!(typeof module !== 'undefined' && module.exports &&
+                  typeof window === 'undefined');
 
 if (isNodeJS) {
   var window = {};

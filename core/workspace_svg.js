@@ -605,11 +605,13 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     // See comment in inject.js Blockly.init_ as to why mouseup events are
     // bound to the document instead of the SVG's surface.
     if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
-      Blockly.onTouchUpWrapper_ =
-          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
+      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_ || [];
+      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_.concat(
+          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_));
     }
-    Blockly.onMouseMoveWrapper_ =
-        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_);
+    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_ || [];
+    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_.concat(
+        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_));
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
@@ -995,6 +997,46 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
   var x = metrics.viewWidth / 2;
   var y = metrics.viewHeight / 2;
   this.zoom(x, y, type);
+};
+
+/**
+ * Zoom the blocks to fit in the workspace if possible.
+ */
+Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
+  var workspaceBBox = this.svgBackground_.getBBox();
+  var blocksBBox = this.svgBlockCanvas_.getBBox();
+  var workspaceWidth = workspaceBBox.width - this.toolbox_.width - 
+      Blockly.Scrollbar.scrollbarThickness;
+  var workspaceHeight = workspaceBBox.height -
+      Blockly.Scrollbar.scrollbarThickness;
+  var blocksWidth = blocksBBox.width;
+  var blocksHeight = blocksBBox.height;
+  if (blocksWidth == 0) {
+    return;  // Prevents zooming to infinity.
+  }
+  var ratioX = workspaceWidth / blocksWidth;
+  var ratioY = workspaceHeight / blocksHeight;
+  var ratio = Math.min(ratioX, ratioY);
+  var speed = this.options.zoomOptions.scaleSpeed;
+  var numZooms = Math.floor(Math.log(ratio) / Math.log(speed));
+  var newScale = Math.pow(speed, numZooms);
+  if (newScale > this.options.zoomOptions.maxScale) {
+    newScale = this.options.zoomOptions.maxScale;
+  } else if (newScale < this.options.zoomOptions.minScale) {
+    newScale = this.options.zoomOptions.minScale;
+  }
+  this.scale = newScale;
+  this.updateGridPattern_();
+  this.scrollbar.resize();
+  Blockly.hideChaff(false);
+  if (this.flyout_) {
+    // No toolbox, resize flyout.
+    this.flyout_.reflow();
+  }
+  // Center the workspace.
+  var metrics = this.getMetrics();
+  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
+      (metrics.contentHeight - metrics.viewHeight) / 2);
 };
 
 /**

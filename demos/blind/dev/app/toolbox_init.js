@@ -1,21 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Blind Blockly Sandbox</title>
-</head>
-<body>
-  <ul>
-    <li>
-      <a href=src="/tester_demo/index.html">For the demo, go here.</a>
-    </li>
-    <li>
-      <a href=src="/dev/index.html">For the dev environment, go here.</a>
-    </li>
-  </ul>
+var app = app || {};
+app.toolbox = app.toolbox || new Blockly.Workspace();
 
-  <xml id="sightedToolbox" style="display: none">
-    <category name="Logic" colour="210">
+var makeBlindToolbox = function(){
+  //we have the html sitting in the DOM.
+  //grab element by ID
+  //recurse through the DOM to make our toolbox
+}
+
+app.toolboxInfo = makeBlindToolbox(app.sightedToolboxXml);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.toolboxInfo = {
+  'Logic':`
+  <xml>
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -23,9 +70,10 @@
       <block type="logic_boolean"></block>
       <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
-    </category>
-    <category name="Loops" colour="120">
-      <block type="controls_repeat_ext">
+  </xml>
+  `
+      ,
+  'Loops':`<block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
             <field name="NUM">10</field>
@@ -52,10 +100,9 @@
         </value>
       </block>
       <block type="controls_forEach"></block>
-      <block type="controls_flow_statements"></block>
-    </category>
-    <category name="Math" colour="230">
-      <block type="math_number" gap="32"></block>
+      <block type="controls_flow_statements"></block>`
+      ,
+  'Math':`<block type="math_number" gap="32"></block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">
@@ -146,10 +193,9 @@
           </shadow>
         </value>
       </block>
-      <block type="math_random_float"></block>
-    </category>
-    <category name="Text" colour="160">
-      <block type="text"></block>
+      <block type="math_random_float"></block>`
+      ,
+  'Text':`<block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
         <value name="TEXT">
@@ -224,9 +270,8 @@
           </shadow>
         </value>
       </block>
-    </category>
-    <category name="Lists" colour="260">
-      <block type="lists_create_with">
+  `,
+  'Lists':`<block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
       <block type="lists_create_with"></block>
@@ -273,10 +318,8 @@
             <field name="TEXT">,</field>
           </shadow>
         </value>
-      </block>
-    </category>
-    <category name="Colour" colour="20">
-      <block type="colour_picker"></block>
+      </block>`,
+  'Colour'`<block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
         <value name="RED">
@@ -311,11 +354,5 @@
             <field name="NUM">0.5</field>
           </shadow>
         </value>
-      </block>
-    </category>
-    <sep></sep>
-    <category name="Variables" colour="330" custom="VARIABLE"></category>
-    <category name="Functions" colour="290" custom="PROCEDURE"></category>
-  </xml>
-</body>
-</html>
+      </block>`,
+};

@@ -7,7 +7,8 @@
 			"Pettevi",
 			"McSalama",
 			"Espeox",
-			"SNuutti"
+			"SNuutti",
+			"PStudios"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -28,7 +29,7 @@
 	"DISABLE_BLOCK": "Passivoi lohko",
 	"ENABLE_BLOCK": "Aktivoi lohko",
 	"HELP": "Apua",
-	"CHAT": "Keskustele yhteistyökumppanisi kanssa tässä laatikossa!",
+	"CHAT": "Keskustele yhteistyökumppanisi kanssa kirjoittamalla tähän kenttään!",
 	"AUTH": "Valtuuta tämä ohjelma jotta voit tallettaa työsi ja jakaa sen.",
 	"ME": "Minä",
 	"CHANGE_VALUE_TITLE": "Muuta arvoa:",
@@ -96,7 +97,7 @@
 	"LOGIC_BOOLEAN_TOOLTIP": "Palauttaa joko tosi tai epätosi.",
 	"LOGIC_NULL": "ei mitään",
 	"LOGIC_NULL_TOOLTIP": "Palauttaa \"ei mitään\"-arvon.",
-	"LOGIC_TERNARY_CONDITION": "ehto",
+	"LOGIC_TERNARY_CONDITION": "testi",
 	"LOGIC_TERNARY_IF_TRUE": "jos tosi",
 	"LOGIC_TERNARY_IF_FALSE": "jos epätosi",
 	"LOGIC_TERNARY_TOOLTIP": "Tarkistaa testin ehdon. Jos ehto on tosi, palauttaa \"jos tosi\" arvon, muuten palauttaa \"jos epätosi\" arvon.",
@@ -223,7 +224,7 @@
 	"TEXT_TRIM_OPERATOR_LEFT": "poistaa välilyönnit vasemmalta puolelta",
 	"TEXT_TRIM_OPERATOR_RIGHT": "poistaa välilyönnit oikealta puolelta",
 	"TEXT_PRINT_TITLE": "tulosta %1",
-	"TEXT_PRINT_TOOLTIP": "Tulostaa annetun tekstin, numeron tia muun arvon.",
+	"TEXT_PRINT_TOOLTIP": "Tulostaa annetun tekstin, numeron tai muun arvon.",
 	"TEXT_PROMPT_TYPE_TEXT": "käyttäen annettua viestiä, kehottaa syöttämään tekstiä",
 	"TEXT_PROMPT_TYPE_NUMBER": "käyttäen annettua viestiä, kehottaa syöttämään numeron",
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Kehottaa käyttäjää syöttämään numeron.",
@@ -288,10 +289,11 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "päättyen kohtaan (lopusta laskien)",
 	"LISTS_GET_SUBLIST_END_LAST": "viimeinen",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Luo kopio määrätystä kohden listaa.",
-	"LISTS_SPLIT_LIST_FROM_TEXT": "tee listasta tekstiä",
-	"LISTS_SPLIT_TEXT_FROM_LIST": "tee tekstistä lista",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "tee lista tekstistä",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "tee listasta teksti",
 	"LISTS_SPLIT_WITH_DELIMITER": "erottimen kanssa",
 	"LISTS_SPLIT_TOOLTIP_SPLIT": "Jaa teksti osiin erotinmerkin perusteella ja järjestä osat listaksi.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Yhdistä luettelon tekstit yhdeksi tekstiksi, erotettuina välimerkillä.",
 	"VARIABLES_GET_TOOLTIP": "Palauttaa muuttujan arvon.",
 	"VARIABLES_GET_CREATE_SET": "Luo 'aseta %1'",
 	"VARIABLES_SET": "aseta %1 arvoksi %2",
@@ -318,5 +320,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Korosta funktion määritelmä",
 	"PROCEDURES_CREATE_DO": "Luo '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jos arvo on tosi, palauta toinen arvo.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Varoitus: tätä lohkoa voi käyttää vain funktion määrityksessä."
 }

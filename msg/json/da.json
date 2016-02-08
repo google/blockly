@@ -304,5 +304,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Markér funktionsdefinitionen",
 	"PROCEDURES_CREATE_DO": "Opret '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Hvis en værdi er sand, så returnér en anden værdi.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blok kan kun anvendes inden for en funktionsdefinition."
 }

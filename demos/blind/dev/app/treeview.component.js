@@ -5,9 +5,10 @@ app.TreeView = ng.core
     selector: 'tree-view',
     template: `
 <li>
-  <label style="color:red">{{block.toString()}}</label>
-  <select aria-label="block menu" (change)="blockMenuSelected(block,$event)">
-    <option value="COPY_BLOCK" select>copy</option>
+  <label style="color: red">{{block.toString()}}</label>
+  <select aria-label="block menu" (change)="blockMenuSelected(block, $event)">
+    <option value="NO_ACTION" select>select an action</option>
+    <option value="COPY_BLOCK">copy</option>
     <option value="CUT_BLOCK">cut</option>
     <option value="DELETE_BLOCK">delete</option>
   </select>
@@ -17,7 +18,8 @@ app.TreeView = ng.core
       <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()"></tree-view>
       <li *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
         {{inputType(inputBlock.connection)}} input needed:
-        <select aria-label="insert input menu">
+        <select aria-label="insert input menu" (change)="inputMenuSelected(inputBlock,$event)">
+          <option value="NO_ACTION" select>select an action</option>
           <option value="MARK_SPOT">Mark this spot</option>
           <option value="PASTE">Paste</option>
         </select>
@@ -63,8 +65,6 @@ app.TreeView = ng.core
       }
     },
     blockMenuSelected: function(block,event){
-      event.preventDefault();
-      event.stopPropagation();
       switch(event.target.value){
         case "DELETE_BLOCK":
           console.log("delete case");
@@ -77,6 +77,30 @@ app.TreeView = ng.core
           console.log("default case");
           break;
       }
-      console.log("done");
+      event.target.selectedIndex=0;
+    },
+    inputMenuSelected: function(input,event){
+      switch(event.target.value){
+        case "MARK_SPOT":
+          app.markedInput = input;
+          break;
+        case "PASTE":
+          if (app.clipboard){
+            if (app.clipboard.workspace.id == app.workspace.id){
+              input.connection.connect(app.clipboard.outputConnection);
+              //have to deal with error saying that I attempted to connect incompatible types
+            } else {
+              var xml = Blockly.Xml.blockToDom_(app.clipboard);
+              var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace, xml);
+              input.connection.connect(blockOnProperWorkspace.outputConnection);
+              //have to deal with error saying that I attempted to connect incompatible types
+            }
+          }
+          break;
+        default:
+          console.log(event.target.value);
+          break;
+      }
+      event.target.selectedIndex=0;
     }
   });

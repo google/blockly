@@ -99,6 +99,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
+  console.log(this.topBlocks_.length);
   var found = false;
   for (var child, i = 0; child = this.topBlocks_[i]; i++) {
     if (child == block) {

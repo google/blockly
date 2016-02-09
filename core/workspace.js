@@ -85,6 +85,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
+  console.log(this.topBlocks_.length);
   var found = false;
   for (var child, i = 0; child = this.topBlocks_[i]; i++) {
     if (child == block) {
@@ -97,6 +98,7 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
     throw 'Block not present in workspace\'s list of top-most blocks.';
   }
   this.fireChangeEvent();
+  console.log(this.topBlocks_.length);
 };
 
 /**

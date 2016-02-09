@@ -1,8 +1,8 @@
 var app = app || {};
 
-app.FieldView = ng.core
+app.ToolboxFieldView = ng.core
   .Component({
-    selector: 'field-view',
+    selector: 'toolbox-field-view',
     template: `
     <!-- html representation of a field -->
     <li *ngIf="isTextInput(field)">
@@ -11,11 +11,12 @@ app.FieldView = ng.core
     <! -- {{log(field.getText())}} "variable and first are going through this bit of code 10 times on a page load. It should only be once." -->
     <!-- {{log(getOptions(field))}} "gets called 10 times" -->
 
+<!-- "I feel like we need a special case for when the variable isn't named?"-->
     <li *ngIf="isDropdown(field)">
       <select  [ngModel]="field.getValue()" (ngModelChange)="handleDropdownChange(field,$event)">
           <!-- "this line is being called wayy to often?? Shouldn't it only be called twice?" -->
           <!-- "this isn't always true. Sometimes we want the dropdown selection to do something instead of set something." -->
-          <option value="NO_ACTION">select an option</option>
+          <option value="NO_ACTION" select>select an option</option>
           <option *ngFor="#optionValue of getOptions(field)" selected="{{isSelected(field, optionValue)}}" [value]="optionValue">{{optionText[optionValue]}}</option>
       </select>
     </li>
@@ -80,19 +81,18 @@ app.FieldView = ng.core
         switch (event) {
           case Blockly.Msg.RENAME_VARIABLE:
             //create an alert box that allows the user to change the name of the variable and affects the workspace.
-    	     //can I do that without passing in the block itself? Or is this enough?
-    	    break;
+	    //can I do that without passing in the block itself? Or is this enough?
+	    break;
           case Blockly.Msg.NEW_VARIABLE:
-          break;
+            break;
           default:
-          console.log("Unhandled event " + event + " from field " + field);
-          break;
+            console.log("Unhandled event " + event + " from field " + field);
+            break;
         }
-  } else {
+      } else {
         // console.log(field);
         field.setValue(event);
       }
-      event.target.selectedIndex=0;
     }
     ,
     log: function(obj){

@@ -63,8 +63,6 @@ app.TreeView = ng.core
       }
     },
     blockMenuSelected: function(block,event){
-      event.preventDefault();
-      event.stopPropagation();
       switch(event.target.value){
         case "DELETE_BLOCK":
           console.log("delete case");

@@ -68,7 +68,7 @@ Blockly.FieldAngle.prototype.setChangeHandler = function(handler) {
           v1 = value;
         }
         var v2 = Blockly.FieldAngle.angleValidator.call(this, v1);
-        if (v2 !== undefined) {
+        if (v2 === undefined) {
           v2 = v1;
         }
       }
@@ -90,6 +90,36 @@ Blockly.FieldAngle.ROUND = 15;
  * Half the width of protractor image.
  */
 Blockly.FieldAngle.HALF = 100 / 2;
+
+/* The following two settings work together to set the behaviour of the angle
+ * picker.  While many combinations are possible, two modes are typical:
+ * Math mode.
+ *   0 deg is right, 90 is up.  This is the style used by protractors.
+ *   Blockly.FieldAngle.CLOCKWISE = false;
+ *   Blockly.FieldAngle.OFFSET = 0;
+ * Compass mode.
+ *   0 deg is up, 90 is right.  This is the style used by maps.
+ *   Blockly.FieldAngle.CLOCKWISE = true;
+ *   Blockly.FieldAngle.OFFSET = 90;
+ */
+
+/**
+ * Angle increases clockwise (true) or counterclockwise (false).
+ */
+Blockly.FieldAngle.CLOCKWISE = false;
+
+/**
+ * Offset the location of 0 degrees (and all angles) by a constant.
+ * Usually either 0 (0 = right) or 90 (0 = up).
+ */
+Blockly.FieldAngle.OFFSET = 0;
+
+/**
+ * Maximum allowed angle before wrapping.
+ * Usually either 360 (for 0 to 359.9) or 180 (for -179.9 to 180).
+ */
+Blockly.FieldAngle.WRAP = 360;
+
 
 /**
  * Radius of protractor circle.  Slightly smaller than protractor size since
@@ -196,15 +226,16 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   } else if (dy > 0) {
     angle += 360;
   }
+  if (Blockly.FieldAngle.CLOCKWISE) {
+    angle = Blockly.FieldAngle.OFFSET + 360 - angle;
+  } else {
+    angle -= Blockly.FieldAngle.OFFSET;
+  }
   if (Blockly.FieldAngle.ROUND) {
     angle = Math.round(angle / Blockly.FieldAngle.ROUND) *
         Blockly.FieldAngle.ROUND;
   }
-  if (angle >= 360) {
-    // Rounding may have rounded up to 360.
-    angle -= 360;
-  }
-  angle = String(angle);
+  angle = Blockly.FieldAngle.angleValidator(angle);
   Blockly.FieldTextInput.htmlInput_.value = angle;
   this.setValue(angle);
   this.validate_();
@@ -239,26 +270,33 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
   if (!this.gauge_) {
     return;
   }
-  var angleRadians = goog.math.toRadians(Number(this.getText()));
-  if (isNaN(angleRadians)) {
-    this.gauge_.setAttribute('d',
-        'M ' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF);
-    this.line_.setAttribute('x2', Blockly.FieldAngle.HALF);
-    this.line_.setAttribute('y2', Blockly.FieldAngle.HALF);
-  } else {
-    var x = Blockly.FieldAngle.HALF + Math.cos(angleRadians) *
-        Blockly.FieldAngle.RADIUS;
-    var y = Blockly.FieldAngle.HALF + Math.sin(angleRadians) *
-        -Blockly.FieldAngle.RADIUS;
-    var largeFlag = (angleRadians > Math.PI) ? 1 : 0;
-    this.gauge_.setAttribute('d',
-        'M ' + Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF +
-        ' h ' + Blockly.FieldAngle.RADIUS +
-        ' A ' + Blockly.FieldAngle.RADIUS + ',' + Blockly.FieldAngle.RADIUS +
-        ' 0 ' + largeFlag + ' 0 ' + x + ',' + y + ' z');
-    this.line_.setAttribute('x2', x);
-    this.line_.setAttribute('y2', y);
+  var angleDegrees = Number(this.getText()) + Blockly.FieldAngle.OFFSET;
+  var angleRadians = goog.math.toRadians(angleDegrees);
+  var path = ['M ', Blockly.FieldAngle.HALF, ',', Blockly.FieldAngle.HALF];
+  var x2 = Blockly.FieldAngle.HALF;
+  var y2 = Blockly.FieldAngle.HALF;
+  if (!isNaN(angleRadians)) {
+    var angle0 = goog.math.toRadians(Blockly.FieldAngle.OFFSET);
+    var x1 = Math.cos(angle0) * Blockly.FieldAngle.RADIUS;
+    var y1 = Math.sin(angle0) * -Blockly.FieldAngle.RADIUS;
+    if (Blockly.FieldAngle.CLOCKWISE) {
+      angleRadians = 2 * angle0 - angleRadians;
+    }
+    x2 += Math.cos(angleRadians) * Blockly.FieldAngle.RADIUS;
+    y2 -= Math.sin(angleRadians) * Blockly.FieldAngle.RADIUS;
+    // Don't ask how the flag calculations work.  They just do.
+    var largeFlag = Math.abs(Math.floor((angleRadians - angle0) / Math.PI) % 2);
+    if (Blockly.FieldAngle.CLOCKWISE) {
+      largeFlag = 1 - largeFlag;
+    }
+    var sweepFlag = Number(Blockly.FieldAngle.CLOCKWISE);
+    path.push(' l ', x1, ',', y1,
+        ' A ', Blockly.FieldAngle.RADIUS, ',', Blockly.FieldAngle.RADIUS,
+        ' 0 ', largeFlag, ' ', sweepFlag, ' ', x2, ',', y2, ' z');
   }
+  this.gauge_.setAttribute('d', path.join(''));
+  this.line_.setAttribute('x2', x2);
+  this.line_.setAttribute('y2', y2);
 };
 
 /**
@@ -272,6 +310,9 @@ Blockly.FieldAngle.angleValidator = function(text) {
     n = n % 360;
     if (n < 0) {
       n += 360;
+    }
+    if (n > Blockly.FieldAngle.WRAP) {
+      n -= 360;
     }
     n = String(n);
    }

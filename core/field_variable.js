@@ -66,7 +66,7 @@ Blockly.FieldVariable.prototype.setChangeHandler = function(handler) {
           v1 = value;
         }
         var v2 = Blockly.FieldVariable.dropdownChange.call(this, v1);
-        if (v2 !== undefined) {
+        if (v2 === undefined) {
           v2 = v1;
         }
       }

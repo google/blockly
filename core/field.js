@@ -38,11 +38,16 @@ goog.require('goog.userAgent');
 /**
  * Abstract class for an editable field.
  * @param {string} text The initial content of the field.
+ * @param {Function=} opt_validator An optional function that is called
+ *     to validate any constraints on what the user entered.  Takes the new
+ *     text as an argument and returns either the accepted text, a replacement
+ *     text, or null to abort the change.
  * @constructor
  */
-Blockly.Field = function(text) {
+Blockly.Field = function(text, opt_validator) {
   this.size_ = new goog.math.Size(0, 25);
   this.setValue(text);
+  this.setValidator(opt_validator);
 };
 
 /**
@@ -69,32 +74,37 @@ Blockly.Field.prototype.name = undefined;
 
 /**
  * Maximum characters of text to display before adding an ellipsis.
+ * @type {number}
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
 
 /**
  * Visible text to display.
+ * @type {string}
  * @private
  */
 Blockly.Field.prototype.text_ = '';
 
 /**
  * Block this field is attached to.  Starts as null, then in set in init.
+ * @type {Blockly.Block}
  * @private
  */
 Blockly.Field.prototype.sourceBlock_ = null;
 
 /**
  * Is the field visible, or hidden due to the block being collapsed?
+ * @type {boolean}
  * @private
  */
 Blockly.Field.prototype.visible_ = true;
 
 /**
- * Change handler called when user edits an editable field.
+ * Validation function called when user edits an editable field.
+ * @type {Function}
  * @private
  */
-Blockly.Field.prototype.changeHandler_ = null;
+Blockly.Field.prototype.validator_ = null;
 
 /**
  * Non-breaking space.
@@ -158,7 +168,7 @@ Blockly.Field.prototype.dispose = function() {
   this.fieldGroup_ = null;
   this.textElement_ = null;
   this.borderRect_ = null;
-  this.changeHandler_ = null;
+  this.validator_ = null;
 };
 
 /**
@@ -208,11 +218,11 @@ Blockly.Field.prototype.setVisible = function(visible) {
 };
 
 /**
- * Sets a new change handler for editable fields.
- * @param {Function} handler New change handler, or null.
+ * Sets a new validation function for editable fields.
+ * @param {Function} handler New validation function, or null.
  */
-Blockly.Field.prototype.setChangeHandler = function(handler) {
-  this.changeHandler_ = handler;
+Blockly.Field.prototype.setValidator = function(handler) {
+  this.validator_ = handler;
 };
 
 /**

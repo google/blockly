@@ -36,16 +36,16 @@ goog.require('goog.userAgent');
 /**
  * Class for an editable text field.
  * @param {string} text The initial content of the field.
- * @param {Function=} opt_changeHandler An optional function that is called
+ * @param {Function=} opt_validator An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns either the accepted text, a replacement
  *     text, or null to abort the change.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldTextInput = function(text, opt_changeHandler) {
-  Blockly.FieldTextInput.superClass_.constructor.call(this, text);
-  this.setChangeHandler(opt_changeHandler);
+Blockly.FieldTextInput = function(text, opt_validator) {
+  Blockly.FieldTextInput.superClass_.constructor.call(this, text,
+      opt_validator);
 };
 goog.inherits(Blockly.FieldTextInput, Blockly.Field);
 
@@ -82,8 +82,8 @@ Blockly.FieldTextInput.prototype.setValue = function(text) {
   if (text === null) {
     return;  // No change if null.
   }
-  if (this.sourceBlock_ && this.changeHandler_) {
-    var validated = this.changeHandler_(text);
+  if (this.sourceBlock_ && this.validator_) {
+    var validated = this.validator_(text);
     // If the new text is invalid, validation returns null.
     // In this case we still want to display the illegal result.
     if (validated !== null && validated !== undefined) {
@@ -114,8 +114,8 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
                       goog.userAgent.IPAD)) {
     // Mobile browsers have issues with in-line textareas (focus & keyboards).
     var newValue = window.prompt(Blockly.Msg.CHANGE_VALUE_TITLE, this.text_);
-    if (this.sourceBlock_ && this.changeHandler_) {
-      var override = this.changeHandler_(newValue);
+    if (this.sourceBlock_ && this.validator_) {
+      var override = this.validator_(newValue);
       if (override !== undefined) {
         newValue = override;
       }
@@ -210,8 +210,8 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
   var valid = true;
   goog.asserts.assertObject(Blockly.FieldTextInput.htmlInput_);
   var htmlInput = Blockly.FieldTextInput.htmlInput_;
-  if (this.sourceBlock_ && this.changeHandler_) {
-    valid = this.changeHandler_(htmlInput.value);
+  if (this.sourceBlock_ && this.validator_) {
+    valid = this.validator_(htmlInput.value);
   }
   if (valid === null) {
     Blockly.addClass_(htmlInput, 'blocklyInvalidInput');
@@ -264,13 +264,13 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     var htmlInput = Blockly.FieldTextInput.htmlInput_;
     // Save the edit (if it validates).
     var text = htmlInput.value;
-    if (thisField.sourceBlock_ && thisField.changeHandler_) {
-      var text1 = thisField.changeHandler_(text);
+    if (thisField.sourceBlock_ && thisField.validator_) {
+      var text1 = thisField.validator_(text);
       if (text1 === null) {
         // Invalid edit.
         text = htmlInput.defaultValue;
       } else if (text1 !== undefined) {
-        // Change handler has changed the text.
+        // Validation function has changed the text.
         text = text1;
       }
     }

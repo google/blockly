@@ -36,15 +36,14 @@ goog.require('goog.string');
  * Class for a variable's dropdown field.
  * @param {?string} varname The default name for the variable.  If null,
  *     a unique variable name will be generated.
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected.  Its sole argument is the new option value.
  * @extends {Blockly.FieldDropdown}
  * @constructor
  */
-Blockly.FieldVariable = function(varname, opt_changeHandler) {
+Blockly.FieldVariable = function(varname, opt_validator) {
   Blockly.FieldVariable.superClass_.constructor.call(this,
-      Blockly.FieldVariable.dropdownCreate, null);
-  this.setChangeHandler(opt_changeHandler);
+      Blockly.FieldVariable.dropdownCreate, opt_validator);
   this.setValue(varname || '');
 };
 goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
@@ -53,7 +52,7 @@ goog.inherits(Blockly.FieldVariable, Blockly.FieldDropdown);
  * Sets a new change handler for angle field.
  * @param {Function} handler New change handler, or null.
  */
-Blockly.FieldVariable.prototype.setChangeHandler = function(handler) {
+Blockly.FieldVariable.prototype.setValidator = function(handler) {
   var wrappedHandler;
   if (handler) {
     // Wrap the user's change handler together with the variable rename handler.
@@ -75,7 +74,7 @@ Blockly.FieldVariable.prototype.setChangeHandler = function(handler) {
   } else {
     wrappedHandler = Blockly.FieldVariable.dropdownChange;
   }
-  Blockly.FieldVariable.superClass_.setChangeHandler.call(this, wrappedHandler);
+  Blockly.FieldVariable.superClass_.setValidator.call(this, wrappedHandler);
 };
 
 /**

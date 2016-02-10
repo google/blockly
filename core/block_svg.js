@@ -1123,7 +1123,6 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   }
   Blockly.Events.enable();
 
-
   goog.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;

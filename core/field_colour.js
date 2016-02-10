@@ -36,7 +36,7 @@ goog.require('goog.ui.ColorPicker');
 /**
  * Class for a colour input field.
  * @param {string} colour The initial colour in '#rrggbb' format.
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     colour is selected.  Its sole argument is the new colour value.  Its
  *     return value becomes the selected colour, unless it is undefined, in
  *     which case the new colour stands, or it is null, in which case the change
@@ -44,10 +44,9 @@ goog.require('goog.ui.ColorPicker');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldColour = function(colour, opt_changeHandler) {
-  Blockly.FieldColour.superClass_.constructor.call(this, colour);
+Blockly.FieldColour = function(colour, opt_validator) {
+  Blockly.FieldColour.superClass_.constructor.call(this, colour, opt_validator);
   this.setText(Blockly.Field.NBSP + Blockly.Field.NBSP + Blockly.Field.NBSP);
-  this.setChangeHandler(opt_changeHandler);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
 
@@ -215,9 +214,9 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       function(event) {
         var colour = event.target.getSelectedColor() || '#000000';
         Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_ && thisField.changeHandler_) {
-          // Call any change handler, and allow it to override.
-          var override = thisField.changeHandler_(colour);
+        if (thisField.sourceBlock_ && thisField.validator_) {
+          // Call any validation function, and allow it to override.
+          var override = thisField.validator_(colour);
           if (override !== undefined) {
             colour = override;
           }

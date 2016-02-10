@@ -41,7 +41,7 @@ goog.require('goog.userAgent');
  * Class for an editable dropdown field.
  * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of options
  *     for a dropdown list, or a function which generates these options.
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected, with the newly selected value as its sole argument.
  *     If it returns a value, that value (which must be one of the options) will
  *     become selected in place of the newly selected option, unless the return
@@ -49,14 +49,14 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   this.menuGenerator_ = menuGenerator;
-  this.setChangeHandler(opt_changeHandler);
   this.trimOptions_();
   var firstTuple = this.getOptions_()[0];
 
   // Call parent's constructor.
-  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1]);
+  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
+      opt_validator);
 };
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 
@@ -110,9 +110,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     var menuItem = e.target;
     if (menuItem) {
       var value = menuItem.getValue();
-      if (thisField.sourceBlock_ && thisField.changeHandler_) {
-        // Call any change handler, and allow it to override.
-        var override = thisField.changeHandler_(value);
+      if (thisField.sourceBlock_ && thisField.validator_) {
+        // Call any validation function, and allow it to override.
+        var override = thisField.validator_(value);
         if (override !== undefined) {
           value = override;
         }

@@ -34,20 +34,19 @@ goog.require('goog.userAgent');
 /**
  * Class for an editable angle field.
  * @param {string} text The initial content of the field.
- * @param {Function=} opt_changeHandler An optional function that is called
+ * @param {Function=} opt_validator An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns the accepted text or null to abort
  *     the change.
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
-Blockly.FieldAngle = function(text, opt_changeHandler) {
+Blockly.FieldAngle = function(text, opt_validator) {
   // Add degree symbol: "360°" (LTR) or "°360" (RTL)
   this.symbol_ = Blockly.createSvgElement('tspan', {}, null);
   this.symbol_.appendChild(document.createTextNode('\u00B0'));
 
-  Blockly.FieldAngle.superClass_.constructor.call(this, text, null);
-  this.setChangeHandler(opt_changeHandler);
+  Blockly.FieldAngle.superClass_.constructor.call(this, text, opt_validator);
 };
 goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
@@ -55,7 +54,7 @@ goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
  * Sets a new change handler for angle field.
  * @param {Function} handler New change handler, or null.
  */
-Blockly.FieldAngle.prototype.setChangeHandler = function(handler) {
+Blockly.FieldAngle.prototype.setValidator = function(handler) {
   var wrappedHandler;
   if (handler) {
     // Wrap the user's change handler together with the angle validator.
@@ -77,7 +76,7 @@ Blockly.FieldAngle.prototype.setChangeHandler = function(handler) {
   } else {
     wrappedHandler = Blockly.FieldAngle.angleValidator;
   }
-  Blockly.FieldAngle.superClass_.setChangeHandler.call(this, wrappedHandler);
+  Blockly.FieldAngle.superClass_.setValidator.call(this, wrappedHandler);
 };
 
 /**
@@ -276,16 +275,16 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
   var x2 = Blockly.FieldAngle.HALF;
   var y2 = Blockly.FieldAngle.HALF;
   if (!isNaN(angleRadians)) {
-    var angle0 = goog.math.toRadians(Blockly.FieldAngle.OFFSET);
-    var x1 = Math.cos(angle0) * Blockly.FieldAngle.RADIUS;
-    var y1 = Math.sin(angle0) * -Blockly.FieldAngle.RADIUS;
+    var angle1 = goog.math.toRadians(Blockly.FieldAngle.OFFSET);
+    var x1 = Math.cos(angle1) * Blockly.FieldAngle.RADIUS;
+    var y1 = Math.sin(angle1) * -Blockly.FieldAngle.RADIUS;
     if (Blockly.FieldAngle.CLOCKWISE) {
-      angleRadians = 2 * angle0 - angleRadians;
+      angleRadians = 2 * angle1 - angleRadians;
     }
     x2 += Math.cos(angleRadians) * Blockly.FieldAngle.RADIUS;
     y2 -= Math.sin(angleRadians) * Blockly.FieldAngle.RADIUS;
     // Don't ask how the flag calculations work.  They just do.
-    var largeFlag = Math.abs(Math.floor((angleRadians - angle0) / Math.PI) % 2);
+    var largeFlag = Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
     if (Blockly.FieldAngle.CLOCKWISE) {
       largeFlag = 1 - largeFlag;
     }

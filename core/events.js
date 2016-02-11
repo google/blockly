@@ -95,7 +95,7 @@ Blockly.Events.fireNow_ = function() {
   for (var i = 0, detail; detail = queue[i]; i++) {
     console.log(detail);
     var workspace = Blockly.Workspace.getById(detail.workspaceId);
-    if (workspace.rendered) {
+    if (workspace && workspace.rendered) {
       // Create a custom event in a browser-compatible way.
       if (typeof CustomEvent == 'function') {
         // W3
@@ -124,9 +124,19 @@ Blockly.Events.filter_ = function(queueIn) {
       if (event1.type == Blockly.Events.MOVE &&
           event2.type == Blockly.Events.MOVE &&
           event1.blockId == event2.blockId) {
+        // Merge move events.
         event1.newParentId = event2.newParentId;
         event1.newInputName = event2.newInputName;
         event1.newCoordinate = event2.newCoordinate;
+        queue.splice(j, 1);
+        j--;
+      } else if (event1.type == Blockly.Events.CHANGE &&
+          event2.type == Blockly.Events.CHANGE &&
+          event1.blockId == event2.blockId &&
+          event1.element == event2.element &&
+          event1.name == event2.name) {
+        // Merge change events.
+        event1.newValue = event2.newValue;
         queue.splice(j, 1);
         j--;
       }

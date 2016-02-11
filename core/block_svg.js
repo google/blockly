@@ -1038,7 +1038,7 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT =
 Blockly.BlockSvg.INNER_TOP_LEFT_CORNER =
     Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -' +
     (Blockly.BlockSvg.NOTCH_WIDTH - 15 - Blockly.BlockSvg.CORNER_RADIUS) +
-    ' h -0.5 a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
+    ' a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,0 -' +
     Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS;

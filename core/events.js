@@ -59,27 +59,86 @@ Blockly.Events.CHANGE = 'change';
 Blockly.Events.MOVE = 'move';
 
 /**
- * Create a custom event and fire it.
- * @param {!Blockly.Events.Abstract} detail Custom data for event.
+ * List of events queued for firing.
+ * @private
  */
-Blockly.Events.fire = function(detail) {
-  if (!Blockly.Events.isEnabled() || detail.isNull()) {
+Blockly.Events.FIRE_QUEUE_ = [];
+
+/**
+ * PID of next scheduled firing.
+ * @private
+ */
+Blockly.Events.fireTask_ = null;
+
+/**
+ * Create a custom event and fire it.
+ * @param {!Blockly.Events.Abstract} event Custom data for event.
+ */
+Blockly.Events.fire = function(event) {
+  if (!Blockly.Events.isEnabled()) {
     return;
   }
-  console.log(detail);
-  var workspace = Blockly.Workspace.getById(detail.workspaceId);
-  if (workspace.rendered) {
-    // Create a custom event in a browser-compatible way.
-    if (typeof CustomEvent == 'function') {
-      // W3
-      var evt = new CustomEvent('blocklyWorkspaceChange', {'detail': detail});
-    } else {
-      // MSIE
-      var evt = document.createEvent('CustomEvent');
-      evt.initCustomEvent(eventName, false, false, detail);
-    }
-    workspace.getCanvas().dispatchEvent(evt);
+  Blockly.Events.FIRE_QUEUE_.push(event);
+  if (Blockly.Events.fireTask_ === null) {
+    Blockly.Events.fireTask_ = setTimeout(Blockly.Events.fireNow_, 0);
   }
+};
+
+/**
+ * Fire all queued events.
+ * @private
+ */
+Blockly.Events.fireNow_ = function() {
+  var queue = Blockly.Events.filter_(Blockly.Events.FIRE_QUEUE_);
+  Blockly.Events.FIRE_QUEUE_.length = 0;
+  Blockly.Events.fireTask_ = null;
+  for (var i = 0, detail; detail = queue[i]; i++) {
+    console.log(detail);
+    var workspace = Blockly.Workspace.getById(detail.workspaceId);
+    if (workspace.rendered) {
+      // Create a custom event in a browser-compatible way.
+      if (typeof CustomEvent == 'function') {
+        // W3
+        var evt = new CustomEvent('blocklyWorkspaceChange', {'detail': detail});
+      } else {
+        // MSIE
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent(eventName, false, false, detail);
+      }
+      workspace.getCanvas().dispatchEvent(evt);
+    }
+  }
+};
+
+/**
+ * Filter the queued events and merge duplicates.
+ * @param {!Array.<!Blockly.Events.Abstract>} queueIn Array of events.
+ * @return {!Array.<!Blockly.Events.Abstract>} Array of filtered events.
+ * @private
+ */
+Blockly.Events.filter_ = function(queueIn) {
+  var queue = goog.array.clone(queueIn);
+  // Merge duplicates.  O(n^2), but n should be very small.
+  for (var i = 0, event1; event1 = queue[i]; i++) {
+    for (var j = i + 1, event2; event2 = queue[j]; j++) {
+      if (event1.type == Blockly.Events.MOVE &&
+          event2.type == Blockly.Events.MOVE &&
+          event1.blockId == event2.blockId) {
+        event1.newParentId = event2.newParentId;
+        event1.newInputName = event2.newInputName;
+        event1.newCoordinate = event2.newCoordinate;
+        queue.splice(j, 1);
+        j--;
+      }
+    }
+  }
+  // Remove null events.
+  for (var i = queue.length - 1; i >= 0; i--) {
+    if (queue[i].isNull()) {
+      queue.splice(i, 1);
+    }
+  }
+  return queue;
 };
 
 /**

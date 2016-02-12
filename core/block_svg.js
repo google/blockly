@@ -112,11 +112,6 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     Blockly.bindEvent_(this.getSvgRoot(), 'touchstart', null,
                        function(e) {Blockly.longStart_(e, thisBlock);});
   }
-  // Bind an onchange function, if it exists.
-  if (goog.isFunction(this.onchange) && !this.eventsInit_) {
-    this.onchangeWrapper_ = Blockly.bindEvent_(this.workspace.getCanvas(),
-        'blocklyWorkspaceChange', this, this.onchange);
-  }
   this.eventsInit_ = true;
 
   if (!this.getSvgRoot().parentNode) {
@@ -1094,11 +1089,6 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   Blockly.Field.startCache();
-  // Terminate onchange event calls.
-  if (this.onchangeWrapper_) {
-    Blockly.unbindEvent_(this.onchangeWrapper_);
-    this.onchangeWrapper_ = null;
-  }
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
     Blockly.terminateDrag_();

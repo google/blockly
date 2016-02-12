@@ -59,13 +59,6 @@ Blockly.WorkspaceSvg = function(options) {
    * @const
    */
   this.SOUNDS_ = Object.create(null);
-
-  /**
-   * Opaque data that can be passed to Blockly.unbindEvent_.
-   * @type {!Array.<!Array>}
-   * @private
-   */
-  this.eventWrappers_ = [];
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -212,7 +205,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
 Blockly.WorkspaceSvg.prototype.dispose = function() {
   // Stop rerendering.
   this.rendered = false;
-  Blockly.unbindEvent_(this.eventWrappers_);
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
@@ -905,31 +897,6 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
 };
 
 /**
- * When something in this workspace changes, call a function.
- * @param {!Function} func Function to call.
- * @return {!Array.<!Array>} Opaque data that can be passed to
- *     removeChangeListener.
- */
-Blockly.WorkspaceSvg.prototype.addChangeListener = function(func) {
-  var wrapper = Blockly.bindEvent_(this.getCanvas(),
-      'blocklyWorkspaceChange', null, func);
-  Array.prototype.push.apply(this.eventWrappers_, wrapper);
-  return wrapper;
-};
-
-/**
- * Stop listening for this workspace's changes.
- * @param {!Array.<!Array>} bindData Opaque data from addChangeListener.
- */
-Blockly.WorkspaceSvg.prototype.removeChangeListener = function(bindData) {
-  Blockly.unbindEvent_(bindData);
-  var i = this.eventWrappers_.indexOf(bindData);
-  if (i != -1) {
-    this.eventWrappers_.splice(i, 1);
-  }
-};
-
-/**
  * Mark this workspace as the currently focused main workspace.
  */
 Blockly.WorkspaceSvg.prototype.markFocused = function() {
@@ -1005,7 +972,7 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
 Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   var workspaceBBox = this.svgBackground_.getBBox();
   var blocksBBox = this.svgBlockCanvas_.getBBox();
-  var workspaceWidth = workspaceBBox.width - this.toolbox_.width - 
+  var workspaceWidth = workspaceBBox.width - this.toolbox_.width -
       Blockly.Scrollbar.scrollbarThickness;
   var workspaceHeight = workspaceBBox.height -
       Blockly.Scrollbar.scrollbarThickness;
@@ -1106,7 +1073,3 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['setVisible'] =
     Blockly.WorkspaceSvg.prototype.setVisible;
-Blockly.WorkspaceSvg.prototype['addChangeListener'] =
-    Blockly.WorkspaceSvg.prototype.addChangeListener;
-Blockly.WorkspaceSvg.prototype['removeChangeListener'] =
-    Blockly.WorkspaceSvg.prototype.removeChangeListener;

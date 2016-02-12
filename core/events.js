@@ -65,12 +65,6 @@ Blockly.Events.MOVE = 'move';
 Blockly.Events.FIRE_QUEUE_ = [];
 
 /**
- * PID of next scheduled firing.
- * @private
- */
-Blockly.Events.fireTask_ = null;
-
-/**
  * Create a custom event and fire it.
  * @param {!Blockly.Events.Abstract} event Custom data for event.
  */
@@ -78,10 +72,11 @@ Blockly.Events.fire = function(event) {
   if (!Blockly.Events.isEnabled()) {
     return;
   }
-  Blockly.Events.FIRE_QUEUE_.push(event);
-  if (Blockly.Events.fireTask_ === null) {
-    Blockly.Events.fireTask_ = setTimeout(Blockly.Events.fireNow_, 0);
+  if (Blockly.Events.FIRE_QUEUE_.length == 0) {
+    // Schedule a firing of the event queue.
+    setTimeout(Blockly.Events.fireNow_, 0);
   }
+  Blockly.Events.FIRE_QUEUE_.push(event);
 };
 
 /**
@@ -91,21 +86,10 @@ Blockly.Events.fire = function(event) {
 Blockly.Events.fireNow_ = function() {
   var queue = Blockly.Events.filter_(Blockly.Events.FIRE_QUEUE_);
   Blockly.Events.FIRE_QUEUE_.length = 0;
-  Blockly.Events.fireTask_ = null;
-  for (var i = 0, detail; detail = queue[i]; i++) {
-    console.log(detail);
-    var workspace = Blockly.Workspace.getById(detail.workspaceId);
-    if (workspace && workspace.rendered) {
-      // Create a custom event in a browser-compatible way.
-      if (typeof CustomEvent == 'function') {
-        // W3
-        var evt = new CustomEvent('blocklyWorkspaceChange', {'detail': detail});
-      } else {
-        // MSIE
-        var evt = document.createEvent('CustomEvent');
-        evt.initCustomEvent(eventName, false, false, detail);
-      }
-      workspace.getCanvas().dispatchEvent(evt);
+  for (var i = 0, event; event = queue[i]; i++) {
+    var workspace = Blockly.Workspace.getById(event.workspaceId);
+    if (workspace) {
+      workspace.fireChangeListener(event);
     }
   }
 };

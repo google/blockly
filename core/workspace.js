@@ -45,6 +45,8 @@ Blockly.Workspace = function(opt_options) {
   this.RTL = !!this.options.RTL;
   /** @type {!Array.<!Blockly.Block>} */
   this.topBlocks_ = [];
+  /** @type {!Array.<!Function>} */
+  this.listeners_ = [];
 };
 
 /**
@@ -58,6 +60,7 @@ Blockly.Workspace.prototype.rendered = false;
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Workspace.prototype.dispose = function() {
+  this.listeners_.length = 0;
   this.clear();
   // Remove from workspace database.
   delete Blockly.Workspace.WorkspaceDB_[this.id];
@@ -192,6 +195,38 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
 };
 
 /**
+ * When something in this workspace changes, call a function.
+ * @param {!Function} func Function to call.
+ * @return {!Function} Function that can be passed to
+ *     removeChangeListener.
+ */
+Blockly.Workspace.prototype.addChangeListener = function(func) {
+  this.listeners_.push(func);
+  return func;
+};
+
+/**
+ * Stop listening for this workspace's changes.
+ * @param {Function} func Function to stop calling.
+ */
+Blockly.Workspace.prototype.removeChangeListener = function(func) {
+  var i = this.listeners_.indexOf(func);
+  if (i != -1) {
+    this.listeners_.splice(i, 1);
+  }
+};
+
+/**
+ * Fire a change event.
+ * @param {!Blockly.Events.Abstract} event Event to fire.
+ */
+Blockly.Workspace.prototype.fireChangeListener = function(event) {
+  for (var i = 0, func; func = this.listeners_[i]; i++) {
+    func(event);
+  }
+};
+
+/**
  * Database of all workspaces.
  * @private
  */
@@ -208,3 +243,7 @@ Blockly.Workspace.getById = function(id) {
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
+Blockly.Workspace.prototype['addChangeListener'] =
+    Blockly.Workspace.prototype.addChangeListener;
+Blockly.Workspace.prototype['removeChangeListener'] =
+    Blockly.Workspace.prototype.removeChangeListener;

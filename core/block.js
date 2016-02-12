@@ -125,6 +125,11 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     var xmlBlock = Blockly.Xml.blockToDom(this);
     Blockly.Events.fire(new Blockly.Events.Create(workspace, xmlBlock));
   }
+  // Bind an onchange function, if it exists.
+  if (goog.isFunction(this.onchange)) {
+    this.onchangeWrapper_ = this.onchange.bind(this);
+    this.workspace.addChangeListener(this.onchangeWrapper_);
+  }
 };
 
 /**
@@ -162,6 +167,10 @@ Blockly.Block.prototype.colour_ = '#000000';
  *     all children of this block.
  */
 Blockly.Block.prototype.dispose = function(healStack) {
+  // Terminate onchange event calls.
+  if (this.onchangeWrapper_) {
+    this.workspace.removeChangeListener(this.onchangeWrapper_)
+  }
   this.unplug(healStack);
   if (Blockly.Events.isEnabled() && !this.isShadow()) {
     Blockly.Events.fire(new Blockly.Events.Delete(this));

@@ -591,9 +591,6 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
  * @private
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
-  if (Blockly.OPPOSITE_TYPE[this.type] != otherConnection.type) {
-    return false;
-  }
   // Don't split a connection where both sides are immovable.
   var thisTargetBlock = this.targetBlock();
   if (thisTargetBlock && !thisTargetBlock.isMovable() &&

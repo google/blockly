@@ -232,17 +232,14 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     if (this.block_.saveConnections) {
       var thisMutator = this;
       this.block_.saveConnections(this.rootBlock_);
-      this.sourceListener_ = Blockly.bindEvent_(
-          this.block_.workspace.getCanvas(),
-          'blocklyWorkspaceChange', null,
-          function() {
-            thisMutator.block_.saveConnections(thisMutator.rootBlock_)
-          });
+      this.sourceListener_ = function() {
+        thisMutator.block_.saveConnections(thisMutator.rootBlock_)
+      };
+      this.block_.workspace.addChangeListener(this.sourceListener_);
     }
     this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
-    Blockly.bindEvent_(this.workspace_.getCanvas(), 'blocklyWorkspaceChange',
-        this, this.workspaceChanged_);
+    this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
     this.updateColour();
   } else {
     // Dispose of the bubble.
@@ -255,7 +252,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.workspaceWidth_ = 0;
     this.workspaceHeight_ = 0;
     if (this.sourceListener_) {
-      Blockly.unbindEvent_(this.sourceListener_);
+      this.block_.workspace.removeChangeListener(this.sourceListener_);
       this.sourceListener_ = null;
     }
   }
@@ -283,7 +280,8 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
 
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
-    var oldMutation = this.block_.mutationToDom();
+    var oldMutationDom = this.block_.mutationToDom();
+    var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
     // Switch off rendering while the source block is rebuilt.
     var savedRendered = this.block_.rendered;
     this.block_.rendered = false;
@@ -293,9 +291,9 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     this.block_.rendered = savedRendered;
     // Mutation may have added some elements that need initalizing.
     this.block_.initSvg();
-    var newMutation = this.block_.mutationToDom();
-    if (Blockly.Xml.domToText(oldMutation) !=
-        Blockly.Xml.domToText(newMutation)) {
+    var newMutationDom = this.block_.mutationToDom();
+    var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
+    if (oldMutation != newMutation) {
       Blockly.Events.fire(new Blockly.Events.Change(
           this.block_, 'mutation', null, oldMutation, newMutation));
       goog.Timer.callOnce(

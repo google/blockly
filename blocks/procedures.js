@@ -647,7 +647,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     for (var i = 0; i < this.arguments_.length; i++) {
       if (Blockly.Names.equals(oldName, this.arguments_[i])) {
         this.arguments_[i] = newName;
-        this.getInput('ARG' + i).fieldRow[0].setText(newName);
+        this.getInput('ARG' + i).fieldRow[0].setValue(newName);
       }
     }
   },
@@ -749,8 +749,7 @@ Blockly.Blocks['procedures_ifreturn'] = {
     // Is the block nested in a procedure?
     var block = this;
     do {
-      if (block.type == 'procedures_defnoreturn' ||
-          block.type == 'procedures_defreturn') {
+      if (this.FUNCTION_TYPES.indexOf(block.type) != -1) {
         legal = true;
         break;
       }
@@ -774,5 +773,11 @@ Blockly.Blocks['procedures_ifreturn'] = {
     } else {
       this.setWarningText(Blockly.Msg.PROCEDURES_IFRETURN_WARNING);
     }
-  }
+  },
+  /**
+   * List of block types that are functions and thus do not need warnings.
+   * To add a new function type add this to your code:
+   * Blockly.Blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
+   */
+  FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn']
 };

@@ -177,19 +177,16 @@ Blockly.fireUiEventNow = function(node, eventName) {
       list.splice(i, 1);
     }
   }
-  // Fire the event in a browser-compatible way.
-  if (document.createEvent) {
+  // Create a UI event in a browser-compatible way.
+  if (typeof UIEvent == 'function') {
     // W3
-    var evt = document.createEvent('UIEvents');
-    evt.initEvent(eventName, true, true);  // event type, bubbling, cancelable
-    node.dispatchEvent(evt);
-  } else if (document.createEventObject) {
-    // MSIE
-    var evt = document.createEventObject();
-    node.fireEvent('on' + eventName, evt);
+    var evt = new UIEvent(eventName, {});
   } else {
-    throw 'FireEvent: No event creation mechanism.';
+    // MSIE
+    var evt = document.createEvent('UIEvent');
+    evt.initUIEvent(eventName, false, false, window, 0);
   }
+  node.dispatchEvent(evt);
 };
 
 /**

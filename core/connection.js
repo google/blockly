@@ -156,52 +156,41 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   if (Blockly.OPPOSITE_TYPE[this.type] != otherConnection.type) {
     throw 'Attempt to connect incompatible types.';
   }
-  if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    if (this.targetConnection) {
-      // Can't make a value connection if male block is already connected.
-      throw 'Source connection already connected (value).';
-    } else if (otherConnection.targetConnection) {
+  if (this.targetConnection) {
+    throw 'Source connection already connected.';
+  }
+  if (otherConnection.targetConnection) {
+    // Other connection is already connected to something.
+    var orphanBlock = otherConnection.targetBlock();
+    if (orphanBlock.isShadow()) {
+      orphanBlock.dispose();
+      orphanBlock = null;
+    } else if (this.type == Blockly.INPUT_VALUE ||
+               this.type == Blockly.OUTPUT_VALUE) {
+      // Value connections.
       // If female block is already connected, disconnect and bump the male.
-      var orphanBlock = otherConnection.targetBlock();
       orphanBlock.setParent(null);
-      if (orphanBlock.isShadow()) {
-        orphanBlock.dispose();
-      } else {
-        if (!orphanBlock.outputConnection) {
-          throw 'Orphan block does not have an output connection.';
-        }
-        // Attempt to reattach the orphan at the end of the newly inserted
-        // block.  Since this block may be a row, walk down to the end.
-        var newBlock = this.sourceBlock_;
-        var connection;
-        while (connection = Blockly.Connection.singleConnection_(
-            /** @type {!Blockly.Block} */ (newBlock), orphanBlock)) {
-          // '=' is intentional in line above.
-          newBlock = connection.targetBlock();
-          if (!newBlock || newBlock.isShadow()) {
-            orphanBlock.outputConnection.connect(connection);
-            orphanBlock = null;
-            break;
-          }
-        }
-        if (orphanBlock) {
-          // Unable to reattach orphan.  Bump it off to the side.
-          setTimeout(function() {
-                orphanBlock.outputConnection.bumpAwayFrom_(otherConnection);
-              }, Blockly.BUMP_DELAY);
+      if (!orphanBlock.outputConnection) {
+        throw 'Orphan block does not have an output connection.';
+      }
+      // Attempt to reattach the orphan at the end of the newly inserted
+      // block.  Since this block may be a row, walk down to the end.
+      var newBlock = this.sourceBlock_;
+      var connection;
+      while (connection = Blockly.Connection.singleConnection_(
+          /** @type {!Blockly.Block} */ (newBlock), orphanBlock)) {
+        // '=' is intentional in line above.
+        newBlock = connection.targetBlock();
+        if (!newBlock || newBlock.isShadow()) {
+          orphanBlock.outputConnection.connect(connection);
+          orphanBlock = null;
+          break;
         }
       }
-    }
-  } else {
-    if (this.targetConnection) {
-      throw 'Source connection already connected (block).';
-    } else if (otherConnection.targetConnection) {
+    } else if (this.type == Blockly.PREVIOUS_STATEMENT) {
+      // Statement connections.
       // Statement blocks may be inserted into the middle of a stack.
-      if (this.type != Blockly.PREVIOUS_STATEMENT) {
-        throw 'Can only do a mid-stack connection with the top of a block.';
-      }
       // Split the stack.
-      var orphanBlock = otherConnection.targetBlock();
       orphanBlock.setParent(null);
       if (!orphanBlock.previousConnection) {
         throw 'Orphan block does not have a previous connection.';
@@ -221,12 +210,18 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
           break;
         }
       }
-      if (orphanBlock) {
-        // Unable to reattach orphan.  Bump it off to the side.
-        setTimeout(function() {
-              orphanBlock.previousConnection.bumpAwayFrom_(otherConnection);
-            }, Blockly.BUMP_DELAY);
-      }
+    } else {
+      // Type is Blockly.NEXT_STATEMENT.
+      throw 'Can only do a mid-stack connection with the top of a block.';
+    }
+    if (orphanBlock) {
+      // Unable to reattach orphan.  Bump it off to the side after a moment.
+      setTimeout(function() {
+        // Verify orphan hasn't been deleted or reconnected (user on meth).
+        if (orphanBlock.workspace && !orphanBlock.getParent()) {
+          orphanBlock.outputConnection.bumpAwayFrom_(otherConnection);
+        }
+      }, Blockly.BUMP_DELAY);
     }
   }
 
@@ -433,14 +428,10 @@ Blockly.Connection.prototype.highlight = function() {
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
         Blockly.BlockSvg.TAB_WIDTH;
-    steps = 'm 0,0 v 5 c 0,10 ' + -tabWidth + ',-8 ' + -tabWidth + ',7.5 s ' +
-            tabWidth + ',-2.5 ' + tabWidth + ',7.5 v 5';
+    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
+
   } else {
-    if (this.sourceBlock_.RTL) {
-      steps = 'm 20,0 h -5 ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -5';
-    } else {
-      steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
-    }
+    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
@@ -448,7 +439,8 @@ Blockly.Connection.prototype.highlight = function() {
   Blockly.Connection.highlightedPath_ = Blockly.createSvgElement('path',
       {'class': 'blocklyHighlightedConnectionPath',
        'd': steps,
-       transform: 'translate(' + x + ',' + y + ')'},
+       transform: 'translate(' + x + ',' + y + ')' +
+           (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')},
       this.sourceBlock_.getSvgRoot());
 };
 
@@ -640,11 +632,8 @@ Blockly.Connection.prototype.setCheck = function(check) {
     this.check_ = check;
     // The new value type may not be compatible with the existing connection.
     if (this.targetConnection && !this.checkType_(this.targetConnection)) {
-      if (this.isSuperior()) {
-        this.targetBlock().setParent(null);
-      } else {
-        this.sourceBlock_.setParent(null);
-      }
+      var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
+      child.setParent(null);
       // Bump away.
       this.sourceBlock_.bumpNeighbours_();
     }

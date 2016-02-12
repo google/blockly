@@ -39,7 +39,7 @@ goog.require('goog.ui.DatePicker');
 /**
  * Class for a date input field.
  * @param {string} date The initial date.
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     date is selected.  Its sole argument is the new date value.  Its
  *     return value becomes the selected date, unless it is undefined, in
  *     which case the new date stands, or it is null, in which case the change
@@ -47,13 +47,12 @@ goog.require('goog.ui.DatePicker');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDate = function(date, opt_changeHandler) {
+Blockly.FieldDate = function(date, opt_validator) {
   if (!date) {
     date = new goog.date.Date().toIsoString(true);
   }
-  Blockly.FieldDate.superClass_.constructor.call(this, date);
+  Blockly.FieldDate.superClass_.constructor.call(this, date, opt_validator);
   this.setValue(date);
-  this.setChangeHandler(opt_changeHandler);
 };
 goog.inherits(Blockly.FieldDate, Blockly.Field);
 
@@ -83,8 +82,8 @@ Blockly.FieldDate.prototype.getValue = function() {
  * @param {string} date The new date.
  */
 Blockly.FieldDate.prototype.setValue = function(date) {
-  if (this.sourceBlock_ && this.changeHandler_) {
-    var validated = this.changeHandler_(date);
+  if (this.sourceBlock_ && this.validator_) {
+    var validated = this.validator_(date);
     // If the new date is invalid, validation returns null.
     // In this case we still want to display the illegal result.
     if (validated !== null && validated !== undefined) {
@@ -150,9 +149,9 @@ Blockly.FieldDate.prototype.showEditor_ = function() {
       function(event) {
         var date = event.date ? event.date.toIsoString(true) : '';
         Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_ && thisField.changeHandler_) {
-          // Call any change handler, and allow it to override.
-          var override = thisField.changeHandler_(date);
+        if (thisField.sourceBlock_ && thisField.validator_) {
+          // Call any validation function, and allow it to override.
+          var override = thisField.validator_(date);
           if (override !== undefined) {
             date = override;
           }

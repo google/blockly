@@ -32,17 +32,15 @@ goog.require('Blockly.Field');
 /**
  * Class for a checkbox field.
  * @param {string} state The initial state of the field ('TRUE' or 'FALSE').
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected.  Its sole argument is the new checkbox state.  If
  *     it returns a value, this becomes the new checkbox state, unless the
  *     value is null, in which case the change is aborted.
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldCheckbox = function(state, opt_changeHandler) {
-  Blockly.FieldCheckbox.superClass_.constructor.call(this, '');
-
-  this.setChangeHandler(opt_changeHandler);
+Blockly.FieldCheckbox = function(state, opt_validator) {
+  Blockly.FieldCheckbox.superClass_.constructor.call(this, '', opt_validator);
   // Set the initial state.
   this.setValue(state);
 };
@@ -91,9 +89,6 @@ Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
     if (this.checkElement_) {
       this.checkElement_.style.display = newState ? 'block' : 'none';
     }
-    if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      this.sourceBlock_.workspace.fireChangeEvent();
-    }
   }
 };
 
@@ -103,9 +98,9 @@ Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
  */
 Blockly.FieldCheckbox.prototype.showEditor_ = function() {
   var newState = !this.state_;
-  if (this.sourceBlock_ && this.changeHandler_) {
-    // Call any change handler, and allow it to override.
-    var override = this.changeHandler_(newState);
+  if (this.sourceBlock_ && this.validator_) {
+    // Call any validation function, and allow it to override.
+    var override = this.validator_(newState);
     if (override !== undefined) {
       newState = override;
     }

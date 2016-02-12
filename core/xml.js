@@ -44,7 +44,7 @@ Blockly.Xml.workspaceToDom = function(workspace) {
   var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
-    var element = Blockly.Xml.blockToDom_(block);
+    var element = Blockly.Xml.blockToDom(block);
     var xy = block.getRelativeToSurfaceXY();
     element.setAttribute('x', Math.round(workspace.RTL ? width - xy.x : xy.x));
     element.setAttribute('y', Math.round(xy.y));
@@ -57,15 +57,11 @@ Blockly.Xml.workspaceToDom = function(workspace) {
  * Encode a block subtree as XML.
  * @param {!Blockly.Block} block The root block to encode.
  * @return {!Element} Tree of XML elements.
- * @private
  */
-Blockly.Xml.blockToDom_ = function(block) {
+Blockly.Xml.blockToDom = function(block) {
   var element = goog.dom.createDom(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
-  if (false) {
-    // Only used by realtime.
-    element.setAttribute('id', block.id);
-  }
+  element.setAttribute('id', block.id);
   if (block.mutationToDom) {
     // Custom data for an advanced block.
     var mutation = block.mutationToDom();
@@ -120,7 +116,7 @@ Blockly.Xml.blockToDom_ = function(block) {
         container.appendChild(Blockly.Xml.cloneShadow_(shadow));
       }
       if (childBlock) {
-        container.appendChild(Blockly.Xml.blockToDom_(childBlock));
+        container.appendChild(Blockly.Xml.blockToDom(childBlock));
         empty = false;
       }
     }
@@ -151,7 +147,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var container = goog.dom.createDom('next', null,
-        Blockly.Xml.blockToDom_(nextBlock));
+        Blockly.Xml.blockToDom(nextBlock));
     element.appendChild(container);
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
@@ -299,6 +295,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
  */
 Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
   // Create top-level block.
+  Blockly.Events.disable();
   var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock);
   if (workspace.rendered) {
     // Hide connections to speed up assembly.
@@ -322,6 +319,10 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
     topBlock.updateDisabled();
     // Fire an event to allow scrollbars to resize.
     Blockly.fireUiEvent(window, 'resize');
+  }
+  Blockly.Events.enable();
+  if (Blockly.Events.isEnabled() && !topBlock.isShadow()) {
+    Blockly.Events.fire(new Blockly.Events.Create(workspace, xmlBlock));
   }
   return topBlock;
 };

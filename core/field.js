@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Input field.  Used for editable titles, variables, etc.
+ * @fileoverview Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
  * instances would be Blockly.FieldTextInput, Blockly.FieldDropdown, etc.
  * @author fraser@google.com (Neil Fraser)
@@ -36,13 +36,18 @@ goog.require('goog.userAgent');
 
 
 /**
- * Class for an editable field.
+ * Abstract class for an editable field.
  * @param {string} text The initial content of the field.
+ * @param {Function=} opt_validator An optional function that is called
+ *     to validate any constraints on what the user entered.  Takes the new
+ *     text as an argument and returns either the accepted text, a replacement
+ *     text, or null to abort the change.
  * @constructor
  */
-Blockly.Field = function(text) {
+Blockly.Field = function(text, opt_validator) {
   this.size_ = new goog.math.Size(0, 25);
-  this.setText(text);
+  this.setValue(text);
+  this.setValidator(opt_validator);
 };
 
 /**
@@ -59,31 +64,51 @@ Blockly.Field.cacheWidths_ = null;
  */
 Blockly.Field.cacheReference_ = 0;
 
+
+/**
+ * Name of field.  Unique within each block.
+ * Static labels are usually unnamed.
+ * @type {string=}
+ */
+Blockly.Field.prototype.name = undefined;
+
 /**
  * Maximum characters of text to display before adding an ellipsis.
+ * @type {number}
  */
 Blockly.Field.prototype.maxDisplayLength = 50;
 
 /**
+ * Visible text to display.
+ * @type {string}
+ * @private
+ */
+Blockly.Field.prototype.text_ = '';
+
+/**
  * Block this field is attached to.  Starts as null, then in set in init.
+ * @type {Blockly.Block}
  * @private
  */
 Blockly.Field.prototype.sourceBlock_ = null;
 
 /**
  * Is the field visible, or hidden due to the block being collapsed?
+ * @type {boolean}
  * @private
  */
 Blockly.Field.prototype.visible_ = true;
 
 /**
- * Change handler called when user edits an editable field.
+ * Validation function called when user edits an editable field.
+ * @type {Function}
  * @private
  */
-Blockly.Field.prototype.changeHandler_ = null;
+Blockly.Field.prototype.validator_ = null;
 
 /**
  * Non-breaking space.
+ * @const
  */
 Blockly.Field.NBSP = '\u00A0';
 
@@ -124,6 +149,10 @@ Blockly.Field.prototype.init = function(block) {
       Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
   // Force a render.
   this.updateTextNode_();
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, '', this.getValue()));
+  }
 };
 
 /**
@@ -139,7 +168,7 @@ Blockly.Field.prototype.dispose = function() {
   this.fieldGroup_ = null;
   this.textElement_ = null;
   this.borderRect_ = null;
-  this.changeHandler_ = null;
+  this.validator_ = null;
 };
 
 /**
@@ -189,11 +218,11 @@ Blockly.Field.prototype.setVisible = function(visible) {
 };
 
 /**
- * Sets a new change handler for editable fields.
- * @param {Function} handler New change handler, or null.
+ * Sets a new validation function for editable fields.
+ * @param {Function} handler New validation function, or null.
  */
-Blockly.Field.prototype.setChangeHandler = function(handler) {
-  this.changeHandler_ = handler;
+Blockly.Field.prototype.setValidator = function(handler) {
+  this.validator_ = handler;
 };
 
 /**
@@ -241,8 +270,6 @@ Blockly.Field.prototype.render_ = function() {
 /**
  * Start caching field widths.  Every call to this function MUST also call
  * stopCache.  Caches must not survive between execution threads.
- * @type {Object}
- * @private
  */
 Blockly.Field.startCache = function() {
   Blockly.Field.cacheReference_++;
@@ -254,8 +281,6 @@ Blockly.Field.startCache = function() {
 /**
  * Stop caching field widths.  Unless caching was already on when the
  * corresponding call to startCache was made.
- * @type {number}
- * @private
  */
 Blockly.Field.stopCache = function() {
   Blockly.Field.cacheReference_--;
@@ -315,7 +340,6 @@ Blockly.Field.prototype.setText = function(text) {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
   }
 };
 
@@ -364,10 +388,22 @@ Blockly.Field.prototype.getValue = function() {
 /**
  * By default there is no difference between the human-readable text and
  * the language-neutral values.  Subclasses (such as dropdown) may define this.
- * @param {string} text New text.
+ * @param {string} newText New text.
  */
-Blockly.Field.prototype.setValue = function(text) {
-  this.setText(text);
+Blockly.Field.prototype.setValue = function(newText) {
+  if (newText === null) {
+    // No change if null.
+    return;
+  }
+  var oldText = this.getValue();
+  if (oldText == newText) {
+    return;
+  }
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, oldText, newText));
+  }
+  this.setText(newText);
 };
 
 /**

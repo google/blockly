@@ -112,11 +112,6 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     Blockly.bindEvent_(this.getSvgRoot(), 'touchstart', null,
                        function(e) {Blockly.longStart_(e, thisBlock);});
   }
-  // Bind an onchange function, if it exists.
-  if (goog.isFunction(this.onchange) && !this.eventsInit_) {
-    this.onchangeWrapper_ = Blockly.bindEvent_(this.workspace.getCanvas(),
-        'blocklyWorkspaceChange', this, this.onchange);
-  }
   this.eventsInit_ = true;
 
   if (!this.getSvgRoot().parentNode) {
@@ -217,6 +212,11 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       // Update the connection locations.
       var xy = selected.getRelativeToSurfaceXY();
       var dxy = goog.math.Coordinate.difference(xy, selected.dragStartXY_);
+      var event = new Blockly.Events.Move(selected);
+      event.oldCoordinate = selected.dragStartXY_;
+      event.recordNew();
+      Blockly.Events.fire(event);
+
       selected.moveConnections_(dxy.x, dxy.y);
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
@@ -227,7 +227,6 @@ Blockly.BlockSvg.terminateDrag_ = function() {
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(window, 'resize');
-      selected.workspace.fireChangeEvent();
     }
   }
   Blockly.dragMode_ = 0;
@@ -287,10 +286,13 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dy Vertical offset.
  */
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
+  var event = new Blockly.Events.Move(this);
   var xy = this.getRelativeToSurfaceXY();
   this.getSvgRoot().setAttribute('transform',
       'translate(' + (xy.x + dx) + ',' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
+  event.recordNew();
+  Blockly.Events.fire(event);
 };
 
 /**
@@ -388,7 +390,6 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     // all their functions and store them next to each other.  Expanding and
     // bumping causes all their definitions to go out of alignment.
   }
-  this.workspace.fireChangeEvent();
 };
 
 /**
@@ -449,6 +450,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   Blockly.terminateDrag_();
   this.select();
   Blockly.hideChaff();
+  this.workspace.recordDeleteAreas();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
@@ -501,12 +503,8 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     if (this.rendered) {
       // Trigger a connection animation.
       // Determine which connection is inferior (lower in the source stack).
-      var inferiorConnection;
-      if (Blockly.localConnection_.isSuperior()) {
-        inferiorConnection = Blockly.highlightedConnection_;
-      } else {
-        inferiorConnection = Blockly.localConnection_;
-      }
+      var inferiorConnection = Blockly.localConnection_.isSuperior() ?
+          Blockly.highlightedConnection_ : Blockly.localConnection_;
       inferiorConnection.sourceBlock_.connectionUiEffect();
     }
     if (this.workspace.trashcan) {
@@ -759,7 +757,6 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
         this.disconnectUiEffect();
       }
       this.setDragging_(true);
-      this.workspace.recordDeleteAreas();
     }
   }
   if (Blockly.dragMode_ == 2) {
@@ -1036,7 +1033,7 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_HIGHLIGHT =
 Blockly.BlockSvg.INNER_TOP_LEFT_CORNER =
     Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -' +
     (Blockly.BlockSvg.NOTCH_WIDTH - 15 - Blockly.BlockSvg.CORNER_RADIUS) +
-    ' h -0.5 a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
+    ' a ' + Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,0 -' +
     Blockly.BlockSvg.CORNER_RADIUS + ',' +
     Blockly.BlockSvg.CORNER_RADIUS;
@@ -1089,17 +1086,9 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
  * @param {boolean} animate If true, show a disposal animation and sound.
- * @param {boolean=} opt_dontRemoveFromWorkspace If true, don't remove this
- *     block from the workspace's list of top blocks.
  */
-Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
-                                              opt_dontRemoveFromWorkspace) {
+Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   Blockly.Field.startCache();
-  // Terminate onchange event calls.
-  if (this.onchangeWrapper_) {
-    Blockly.unbindEvent_(this.onchangeWrapper_);
-    this.onchangeWrapper_ = null;
-  }
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
     Blockly.terminateDrag_();
@@ -1110,18 +1099,19 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate,
   }
 
   if (animate && this.rendered) {
-    this.unplug(healStack, false);
+    this.unplug(healStack);
     this.disposeUiEffect();
   }
   // Stop rerendering.
   this.rendered = false;
 
+  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
+  Blockly.Events.disable();
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
     icons[i].dispose();
   }
-
-  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
+  Blockly.Events.enable();
 
   goog.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.
@@ -1509,14 +1499,12 @@ Blockly.BlockSvg.prototype.setMutator = function(mutator) {
  * @param {boolean} disabled True if disabled.
  */
 Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
-  if (this.disabled == disabled) {
-    return;
+  if (this.disabled != disabled) {
+    Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
+    if (this.rendered) {
+      this.updateDisabled();
+    }
   }
-  Blockly.BlockSvg.superClass_.setDisabled.call(this, disabled);
-  if (this.rendered) {
-    this.updateDisabled();
-  }
-  this.workspace.fireChangeEvent();
 };
 
 /**

@@ -6,7 +6,7 @@ goog.provide('Blockly.Msg.el');
 
 goog.require('Blockly.Msg');
 
-Blockly.Msg.ADD_COMMENT = "Πρόσθεσε Σχόλιο";
+Blockly.Msg.ADD_COMMENT = "Πρόσθεσε Το Σχόλιο";
 Blockly.Msg.AUTH = "Παρακαλώ κάνε έγκριση της εφαρμογής για να επιτρέπεται  η αποθήκευση και κοινοποίηση της εργασίας σου.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Άλλαξε την τιμή:";
 Blockly.Msg.CHAT = "Μπορείς να μιλήσεις με τον συνεργάτη σου πληκτρολογώντας σ'αυτό το πλαίσιο!";
@@ -66,7 +66,7 @@ Blockly.Msg.DELETE_ALL_BLOCKS = "Να διαγραφούν και τα %1 μπλ
 Blockly.Msg.DELETE_BLOCK = "Διέγραψε Το Μπλοκ";
 Blockly.Msg.DELETE_X_BLOCKS = "Διέγραψε %1 Μπλοκ";
 Blockly.Msg.DISABLE_BLOCK = "Απενεργοποίησε Το Μπλοκ";
-Blockly.Msg.DUPLICATE_BLOCK = "Αντίγραφο";
+Blockly.Msg.DUPLICATE_BLOCK = "Διπλότυπο";
 Blockly.Msg.ENABLE_BLOCK = "Ενεργοποίησε Το Μπλοκ";
 Blockly.Msg.EXPAND_ALL = "Επέκτεινε Όλα Τα Μπλοκ";
 Blockly.Msg.EXPAND_BLOCK = "Επέκτεινε Το Μπλοκ";
@@ -118,7 +118,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = "Δημιουργεί ένα αντίγ�
 Blockly.Msg.LISTS_INDEX_OF_FIRST = "βρες την πρώτη εμφάνιση του στοιχείου";
 Blockly.Msg.LISTS_INDEX_OF_HELPURL = "Blockly";
 Blockly.Msg.LISTS_INDEX_OF_LAST = "βρες την τελευταία εμφάνιση του στοιχείου";
-Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Επιστρέφει τον δείκτη της πρώτης/τελευταίας εμφάνισης του στοιχείου στη λίστα.  Επιστρέφει τιμή 0, αν το κείμενο δεν βρεθεί.";
+Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Επιστρέφει τον δείκτη της πρώτης/τελευταίας εμφάνισης του στοιχείου στη λίστα.  Επιστρέφει τιμή 0, αν το στοιχείο δεν βρεθεί.";
 Blockly.Msg.LISTS_INLIST = "στη λίστα";
 Blockly.Msg.LISTS_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#is-empty";  // untranslated
 Blockly.Msg.LISTS_ISEMPTY_TITLE = "το %1 είναι κενό";
@@ -263,7 +263,7 @@ Blockly.Msg.ME = "Εγώ";
 Blockly.Msg.NEW_VARIABLE = "Νέα μεταβλητή...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Νέο όνομα μεταβλητής:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
-Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "allow statements";  // untranslated
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "να επιτρέπονται οι δηλώσεις";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "με:";
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = "https://el.wikipedia.org/wiki/%CE%94%CE%B9%CE%B1%CE%B4%CE%B9%CE%BA%CE%B1%CF%83%CE%AF%CE%B1_%28%CF%85%CF%80%CE%BF%CE%BB%CE%BF%CE%B3%CE%B9%CF%83%CF%84%CE%AD%CF%82%29";
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = "Εκτελεί την ορισμένη από τον χρήστη συνάρτηση «%1».";

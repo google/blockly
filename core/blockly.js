@@ -28,6 +28,7 @@
 goog.provide('Blockly');
 
 goog.require('Blockly.BlockSvg');
+goog.require('Blockly.Events');
 goog.require('Blockly.FieldAngle');
 goog.require('Blockly.FieldCheckbox');
 goog.require('Blockly.FieldColour');
@@ -433,7 +434,7 @@ Blockly.longStop_ = function() {
  * @private
  */
 Blockly.copy_ = function(block) {
-  var xmlBlock = Blockly.Xml.blockToDom_(block);
+  var xmlBlock = Blockly.Xml.blockToDom(block);
   if (Blockly.dragMode_ != 2) {
     Blockly.Xml.deleteNext(xmlBlock);
   }

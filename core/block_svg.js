@@ -460,6 +460,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     // dragged instead.
     return;
   } else {
+    Blockly.Events.group = Blockly.genUid();
     // Left-click (or middle click)
     Blockly.removeAllRanges();
     Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
@@ -528,6 +529,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     Blockly.highlightedConnection_ = null;
   }
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+  Blockly.Events.group = '';
 };
 
 /**

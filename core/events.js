@@ -28,6 +28,12 @@ goog.provide('Blockly.Events');
 
 
 /**
+ * Group ID for new events.  Grouped events are indivisible.
+ * @type {string}
+ */
+Blockly.Events.group = '';
+
+/**
  * Allow change events to be created and fired.
  * @type {number}
  * @private
@@ -159,10 +165,14 @@ Blockly.Events.isEnabled = function() {
 };
 
 /**
- * Abstract class for a change event.
+ * Abstract class for an event.
+ * @param {!Blockly.Workspace} workspace The workspace.
  * @constructor
  */
-Blockly.Events.Abstract = function() {};
+Blockly.Events.Abstract = function(workspace) {
+  this.workspaceId = workspace.id;
+  this.group = Blockly.Events.group;
+};
 
 /**
  * Does this event record any change of state?
@@ -180,11 +190,16 @@ Blockly.Events.Abstract.prototype.isNull = function() {
  * @constructor
  */
 Blockly.Events.Create = function(workspace, xml) {
-  this.type = Blockly.Events.CREATE;
-  this.workspaceId = workspace.id;
+  Blockly.Events.Create.superClass_.constructor.call(this, workspace);
   this.xml = xml;
 };
 goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.Create.prototype.type = Blockly.Events.CREATE;
 
 /**
  * Class for a block deletion event.
@@ -196,12 +211,17 @@ Blockly.Events.Delete = function(block) {
   if (block.getParent()) {
     throw 'Connected blocks cannot be deleted.';
   }
-  this.type = Blockly.Events.DELETE;
-  this.workspaceId = block.workspace.id;
+  Blockly.Events.Delete.superClass_.constructor.call(this, block.workspace);
   this.blockId = block.id;
   this.oldXml = Blockly.Xml.blockToDomWithXY(block);
 };
 goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.Delete.prototype.type = Blockly.Events.DELETE;
 
 /**
  * Class for a block change event.
@@ -214,15 +234,20 @@ goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);
  * @constructor
  */
 Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
-  this.type = Blockly.Events.CHANGE;
-  this.workspaceId = block.workspace.id;
+  Blockly.Events.Change.superClass_.constructor.call(this, block.workspace);
   this.blockId = block.id;
   this.element = element;
   this.name = name;
   this.oldValue = oldValue;
   this.newValue = newValue;
 };
-goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
+goog.inherits(Blockly.Events.Change, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.Change.prototype.type = Blockly.Events.CHANGE;
 
 /**
  * Does this event record any change of state?
@@ -239,8 +264,7 @@ Blockly.Events.Change.prototype.isNull = function() {
  * @constructor
  */
 Blockly.Events.Move = function(block) {
-  this.type = Blockly.Events.MOVE;
-  this.workspaceId = block.workspace.id;
+  Blockly.Events.Move.superClass_.constructor.call(this, block.workspace);
   this.blockId = block.id;
 
   var location = this.currentLocation_();
@@ -249,6 +273,12 @@ Blockly.Events.Move = function(block) {
   this.oldCoordinate = location.coordinate;
 };
 goog.inherits(Blockly.Events.Move, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.Move.prototype.type = Blockly.Events.MOVE;
 
 /**
  * Record the block's new location.  Called after the move.

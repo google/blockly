@@ -511,6 +511,7 @@ Blockly.Block.prototype.setShadow = function(shadow) {
   }
   this.isShadow_ = shadow;
   if (Blockly.Events.isEnabled() && !shadow) {
+    Blockly.Events.group = Blockly.genUid();
     // Fire a creation event.
     var xmlBlock = Blockly.Xml.blockToDom(this);
     Blockly.Events.fire(new Blockly.Events.Create(this.workspace, xmlBlock));
@@ -521,6 +522,7 @@ Blockly.Block.prototype.setShadow = function(shadow) {
     moveEvent.oldCoordinate = new goog.math.Coordinate(0, 0);
     moveEvent.recordNew();
     Blockly.Events.fire(moveEvent);
+    Blockly.Events.group = '';
   }
 };
 

@@ -193,15 +193,13 @@ goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
  * @constructor
  */
 Blockly.Events.Delete = function(block) {
+  if (block.getParent()) {
+    throw 'Connected blocks cannot be deleted.';
+  }
   this.type = Blockly.Events.DELETE;
   this.workspaceId = block.workspace.id;
   this.blockId = block.id;
-  this.oldXml = Blockly.Xml.blockToDom(block);
-  var parent = block.getParent();
-  if (parent) {
-    this.oldParentId = parent.id;
-    this.oldInput = getInputWithBlock(block).name
-  }
+  this.oldXml = Blockly.Xml.blockToDomWithXY(block);
 };
 goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);
 

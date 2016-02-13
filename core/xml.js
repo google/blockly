@@ -44,13 +44,23 @@ Blockly.Xml.workspaceToDom = function(workspace) {
   var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
-    var element = Blockly.Xml.blockToDom(block);
-    var xy = block.getRelativeToSurfaceXY();
-    element.setAttribute('x', Math.round(workspace.RTL ? width - xy.x : xy.x));
-    element.setAttribute('y', Math.round(xy.y));
-    xml.appendChild(element);
+    xml.appendChild(Blockly.Xml.blockToDomWithXY(block));
   }
   return xml;
+};
+
+/**
+ * Encode a block subtree as XML with XY coordinates.
+ * @param {!Blockly.Block} block The root block to encode.
+ * @return {!Element} Tree of XML elements.
+ */
+Blockly.Xml.blockToDomWithXY = function(block) {
+  var element = Blockly.Xml.blockToDom(block);
+  var xy = block.getRelativeToSurfaceXY();
+  element.setAttribute('x',
+      Math.round(block.workspace.RTL ? width - xy.x : xy.x));
+  element.setAttribute('y', Math.round(xy.y));
+  return element;
 };
 
 /**

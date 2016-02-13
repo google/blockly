@@ -514,6 +514,13 @@ Blockly.Block.prototype.setShadow = function(shadow) {
     // Fire a creation event.
     var xmlBlock = Blockly.Xml.blockToDom(this);
     Blockly.Events.fire(new Blockly.Events.Create(this.workspace, xmlBlock));
+    var moveEvent = new Blockly.Events.Move(this);
+    // Claim that the block was at 0,0 and is being connected.
+    moveEvent.oldParentId = undefined;
+    moveEvent.oldInputName = undefined;
+    moveEvent.oldCoordinate = new goog.math.Coordinate(0, 0);
+    moveEvent.recordNew();
+    Blockly.Events.fire(moveEvent);
   }
 };
 

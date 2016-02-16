@@ -37,10 +37,6 @@ goog.require('goog.dom');
  * @return {!Element} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace) {
-  var width;  // Not used in LTR.
-  if (workspace.RTL) {
-    width = workspace.getWidth();
-  }
   var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -55,6 +51,10 @@ Blockly.Xml.workspaceToDom = function(workspace) {
  * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDomWithXY = function(block) {
+  var width;  // Not used in LTR.
+  if (workspace.RTL) {
+    width = workspace.getWidth();
+  }
   var element = Blockly.Xml.blockToDom(block);
   var xy = block.getRelativeToSurfaceXY();
   element.setAttribute('x',

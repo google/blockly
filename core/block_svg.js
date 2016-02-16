@@ -838,7 +838,7 @@ Blockly.BlockSvg.prototype.setMovable = function(movable) {
 
 /**
  * Set whether this block is editable or not.
- * @param {boolean} movable True if editable.
+ * @param {boolean} editable True if editable.
  */
 Blockly.BlockSvg.prototype.setEditable = function(editable) {
   Blockly.BlockSvg.superClass_.setEditable.call(this, editable);

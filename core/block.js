@@ -332,7 +332,7 @@ Blockly.Block.prototype.getParent = function() {
 
 /**
  * Return the input that connects to the specified block.
- * @param {!Blockly.Block} A block connected to an input on this block.
+ * @param {!Blockly.Block} block A block connected to an input on this block.
  * @return {Blockly.Input} The input that connects to the specified block.
  */
 Blockly.Block.prototype.getInputWithBlock = function(block) {

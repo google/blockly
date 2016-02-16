@@ -576,6 +576,7 @@ Blockly.genUid = function() {
 
 /**
  * Determine if window.crypto or global.crypto exists.
+ * @this {Object}
  * @type {=RandomSource}
  * @private
  */

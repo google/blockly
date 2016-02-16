@@ -332,7 +332,7 @@ Blockly.Block.prototype.getParent = function() {
 
 /**
  * Return the input that connects to the specified block.
- * @param {!Blockly.Block} A block connected to an input on this block.
+ * @param {!Blockly.Block} block A block connected to an input on this block.
  * @return {Blockly.Input} The input that connects to the specified block.
  */
 Blockly.Block.prototype.getInputWithBlock = function(block) {
@@ -511,9 +511,18 @@ Blockly.Block.prototype.setShadow = function(shadow) {
   }
   this.isShadow_ = shadow;
   if (Blockly.Events.isEnabled() && !shadow) {
+    Blockly.Events.group = Blockly.genUid();
     // Fire a creation event.
     var xmlBlock = Blockly.Xml.blockToDom(this);
     Blockly.Events.fire(new Blockly.Events.Create(this.workspace, xmlBlock));
+    var moveEvent = new Blockly.Events.Move(this);
+    // Claim that the block was at 0,0 and is being connected.
+    moveEvent.oldParentId = undefined;
+    moveEvent.oldInputName = undefined;
+    moveEvent.oldCoordinate = new goog.math.Coordinate(0, 0);
+    moveEvent.recordNew();
+    Blockly.Events.fire(moveEvent);
+    Blockly.Events.group = '';
   }
 };
 

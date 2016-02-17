@@ -551,7 +551,7 @@ Blockly.tokenizeInterpolation = function(message) {
 
 /**
  * Generate a unique ID.  This should be globally unique.
- * 88 characters ^ 20 length ≈ 129 bits (one bit better than a UUID).
+ * 87 characters ^ 20 length > 128 bits (better than a UUID).
  * @return {string}
  */
 Blockly.genUid = function() {
@@ -585,7 +585,8 @@ Blockly.genUid.crypto_ = this.crypto;
 /**
  * Legal characters for the unique ID.
  * Should be all on a US keyboard.  No XML special characters or control codes.
+ * Removed $ due to issue 251.
  * @private
  */
-Blockly.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
+Blockly.genUid.soup_ = '!#%()*+,-./:;=?@[]^_`{|}~' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

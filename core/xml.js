@@ -52,8 +52,8 @@ Blockly.Xml.workspaceToDom = function(workspace) {
  */
 Blockly.Xml.blockToDomWithXY = function(block) {
   var width;  // Not used in LTR.
-  if (workspace.RTL) {
-    width = workspace.getWidth();
+  if (block.workspace.RTL) {
+    width = block.workspace.getWidth();
   }
   var element = Blockly.Xml.blockToDom(block);
   var xy = block.getRelativeToSurfaceXY();
@@ -332,7 +332,7 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
   }
   Blockly.Events.enable();
   if (Blockly.Events.isEnabled() && !topBlock.isShadow()) {
-    Blockly.Events.fire(new Blockly.Events.Create(workspace, xmlBlock));
+    Blockly.Events.fire(new Blockly.Events.Create(topBlock));
   }
   return topBlock;
 };

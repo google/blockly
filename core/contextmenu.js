@@ -123,6 +123,7 @@ Blockly.ContextMenu.hide = function() {
  */
 Blockly.ContextMenu.callbackFactory = function(block, xml) {
   return function() {
+    Blockly.Events.disable();
     var newBlock = Blockly.Xml.domToBlock(block.workspace, xml);
     // Move the new block next to the old block.
     var xy = block.getRelativeToSurfaceXY();
@@ -133,6 +134,10 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     }
     xy.y += Blockly.SNAP_RADIUS * 2;
     newBlock.moveBy(xy.x, xy.y);
+    Blockly.Events.enable();
+    if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {
+      Blockly.Events.fire(new Blockly.Events.Create(newBlock));
+    }
     newBlock.select();
   };
 };

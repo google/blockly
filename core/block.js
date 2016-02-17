@@ -122,8 +122,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
   if (Blockly.Events.isEnabled() && !this.isShadow()) {
-    var xmlBlock = Blockly.Xml.blockToDom(this);
-    Blockly.Events.fire(new Blockly.Events.Create(workspace, xmlBlock));
+    Blockly.Events.fire(new Blockly.Events.Create(this));
   }
   // Bind an onchange function, if it exists.
   if (goog.isFunction(this.onchange)) {
@@ -513,8 +512,7 @@ Blockly.Block.prototype.setShadow = function(shadow) {
   if (Blockly.Events.isEnabled() && !shadow) {
     Blockly.Events.group = Blockly.genUid();
     // Fire a creation event.
-    var xmlBlock = Blockly.Xml.blockToDom(this);
-    Blockly.Events.fire(new Blockly.Events.Create(this.workspace, xmlBlock));
+    Blockly.Events.fire(new Blockly.Events.Create(this));
     var moveEvent = new Blockly.Events.Move(this);
     // Claim that the block was at 0,0 and is being connected.
     moveEvent.oldParentId = undefined;

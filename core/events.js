@@ -166,11 +166,15 @@ Blockly.Events.isEnabled = function() {
 
 /**
  * Abstract class for an event.
- * @param {!Blockly.Workspace} workspace The workspace.
+ * @param {!Blockly.Block} block The block.
  * @constructor
  */
-Blockly.Events.Abstract = function(workspace) {
-  this.workspaceId = workspace.id;
+Blockly.Events.Abstract = function(block) {
+  if (block.isShadow()) {
+    console.error('Creating event for shadow block: ' + block.id);
+  }
+  this.blockId = block.id;
+  this.workspaceId = block.workspace.id;
   this.group = Blockly.Events.group;
 };
 
@@ -184,14 +188,13 @@ Blockly.Events.Abstract.prototype.isNull = function() {
 
 /**
  * Class for a block creation event.
- * @param {!Blockly.Workspace} workspace The workspace.
- * @param {!Element} xml XML DOM.
+ * @param {!Blockly.Block} block The created block.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
-Blockly.Events.Create = function(workspace, xml) {
-  Blockly.Events.Create.superClass_.constructor.call(this, workspace);
-  this.xml = xml;
+Blockly.Events.Create = function(block) {
+  Blockly.Events.Create.superClass_.constructor.call(this, block);
+  this.xml = Blockly.Xml.blockToDomWithXY(block);
 };
 goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
 
@@ -211,8 +214,7 @@ Blockly.Events.Delete = function(block) {
   if (block.getParent()) {
     throw 'Connected blocks cannot be deleted.';
   }
-  Blockly.Events.Delete.superClass_.constructor.call(this, block.workspace);
-  this.blockId = block.id;
+  Blockly.Events.Delete.superClass_.constructor.call(this, block);
   this.oldXml = Blockly.Xml.blockToDomWithXY(block);
 };
 goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);
@@ -225,7 +227,7 @@ Blockly.Events.Delete.prototype.type = Blockly.Events.DELETE;
 
 /**
  * Class for a block change event.
- * @param {!Blockly.Block} block The deleted block.
+ * @param {!Blockly.Block} block The changed block.
  * @param {string} element One of 'field', 'comment', 'disabled', etc.
  * @param {?string} name Name of input or field affected, or null.
  * @param {string} oldValue Previous value of element.
@@ -234,8 +236,7 @@ Blockly.Events.Delete.prototype.type = Blockly.Events.DELETE;
  * @constructor
  */
 Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
-  Blockly.Events.Change.superClass_.constructor.call(this, block.workspace);
-  this.blockId = block.id;
+  Blockly.Events.Change.superClass_.constructor.call(this, block);
   this.element = element;
   this.name = name;
   this.oldValue = oldValue;
@@ -264,9 +265,7 @@ Blockly.Events.Change.prototype.isNull = function() {
  * @constructor
  */
 Blockly.Events.Move = function(block) {
-  Blockly.Events.Move.superClass_.constructor.call(this, block.workspace);
-  this.blockId = block.id;
-
+  Blockly.Events.Move.superClass_.constructor.call(this, block);
   var location = this.currentLocation_();
   this.oldParentId = location.parentId;
   this.oldInputName = location.inputName;

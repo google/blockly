@@ -410,7 +410,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
     toolbox.flyout_.show(node.blocks);
     // Scroll the flyout to the top if the category has changed.
     if (toolbox.lastCategory_ != node) {
-      toolbox.flyout_.scrollToTop();
+      toolbox.flyout_.scrollToStart();
     }
   } else {
     // Hide the flyout.

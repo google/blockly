@@ -4,20 +4,20 @@ app.TreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
-<li>
-  <label style="color:red">{{block.toString()}}</label>
-  <select aria-label="block menu" (change)="blockMenuSelected(block,$event)">
+<li aria-describedby="block-label">
+  <label id="block-label" style="color:red">{{block.toString()}}</label>
+<!--  <select aria-describedby="block-label" aria-label="block menu" (change)="blockMenuSelected(block,$event)" aria-live="assertive">
     <option value="COPY_BLOCK" select>copy</option>
     <option value="CUT_BLOCK">cut</option>
     <option value="DELETE_BLOCK">delete</option>
-  </select>
+  </select> -->
   <ul>
     <div *ngFor="#inputBlock of block.inputList">
       <field-view *ngFor="#field of getInfo(inputBlock)" [field]="field"></field-view>
       <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()"></tree-view>
       <li *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
-        {{inputType(inputBlock.connection)}} input needed:
-        <select aria-label="insert input menu">
+        <label id="input-type-label">{{inputType(inputBlock.connection)}} input needed:</label>
+        <select aria-describedby="input-type-label" aria-label="insert input menu" aria-live="assertive">
           <option value="MARK_SPOT">Mark this spot</option>
           <option value="PASTE">Paste</option>
         </select>

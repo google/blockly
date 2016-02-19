@@ -87,12 +87,20 @@ app.TreeView = ng.core
         case "PASTE":
           if (app.clipboard){
             if (app.clipboard.workspace.id == app.workspace.id){
+<<<<<<< HEAD
+              input.connection.connect(app.clipboard.outputConnection || blockOnProperWorkspace.previousConnection);
+=======
               input.connection.connect(app.clipboard.outputConnection);
+>>>>>>> 68970829cf46a2e230cdd14e0c2dfa43e05d5646
               //have to deal with error saying that I attempted to connect incompatible types
             } else {
               var xml = Blockly.Xml.blockToDom_(app.clipboard);
               var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace, xml);
+<<<<<<< HEAD
+              input.connection.connect(blockOnProperWorkspace.outputConnection || blockOnProperWorkspace.previousConnection);
+=======
               input.connection.connect(blockOnProperWorkspace.outputConnection);
+>>>>>>> 68970829cf46a2e230cdd14e0c2dfa43e05d5646
               //have to deal with error saying that I attempted to connect incompatible types
             }
           }
@@ -101,6 +109,10 @@ app.TreeView = ng.core
           console.log(event.target.value);
           break;
       }
+<<<<<<< HEAD
+      console.log("reaching end");
+=======
+>>>>>>> 68970829cf46a2e230cdd14e0c2dfa43e05d5646
       event.target.selectedIndex=0;
     }
   });

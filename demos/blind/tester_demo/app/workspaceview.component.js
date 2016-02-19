@@ -8,9 +8,10 @@ app.WorkspaceView = ng.core
 <table>
   <tr>
     <td>
-      <ul>
+      <h3>Block List</h3>
+	<ul role="navigation">
         <li>
-          <button (click)="workspaceUpdated(block1)">Block 1</button>
+          <button #button1 aria-pressed="false" (click)="workspaceUpdated(block1,workspaceList, button1, button2, button3, 1)">Block 1</button>
           <ul>
             <li>
              <img src="app/block1.png" alt="image of what block1 traditionally looks like in Blockly">
@@ -18,7 +19,7 @@ app.WorkspaceView = ng.core
          </ul>
        </li>
        <li>
-        <button (click)="workspaceUpdated(block2)">Block 2: now working!!</button>
+        <button #button2 aria-pressed="false" (click)="workspaceUpdated(block2, workspaceList, button1, button2, button3, 2)">Block 2</button>
         <ul>
           <li>
            <img src="app/block2.png" alt="image of what block2 traditionally looks like in Blockly">
@@ -26,7 +27,7 @@ app.WorkspaceView = ng.core
        </ul>
      </li>
      <li>
-      <button (click)="workspaceUpdated(block3)">Block 3</button>
+      <button #button3 aria-pressed="false" (click)="workspaceUpdated(block3, workspaceList, button1, button2, button3, 3)">Block 3</button>
       <ul>
         <li>
           <img src="app/block3.png" alt="image of what block3 traditionally looks like in Blockly"> <!-- are these captions inclusive enough? -->
@@ -37,10 +38,13 @@ app.WorkspaceView = ng.core
 </td>
 <td>
 </td>
-<td *ngIf="workspace">
+<td #workspaceList role="main" tabindex="-1">
+<h3>Block Display Area</h3>  
+<div *ngIf="workspace">
   <ul *ngFor="#block of workspace.topBlocks_">
     <tree-view [block]="block"></tree-view>
   </ul>
+  </div>
 </td>
 </tr>
 </table>
@@ -70,7 +74,11 @@ app.WorkspaceView = ng.core
                 <field name="NUM">6</field>
               </block>
             </value>
-
+	    <value name="B">
+              <block type="math_number">
+                <field name="NUM">7</field>
+              </block>
+            </value>
           </block>
         </value>
         <value name="B">
@@ -190,7 +198,7 @@ app.WorkspaceView = ng.core
 </xml>
     `;
     },
-    workspaceUpdated: function(xmlText){
+    workspaceUpdated: function(xmlText, workspaceList, button1, button2, button3, num){
       //This function can be completely empty.
       //Any DOM event will trigger angular to reevaluate all objects
       //and update what is necessary.
@@ -210,6 +218,24 @@ app.WorkspaceView = ng.core
       Blockly.Xml.domToWorkspace(workspace, xml);
 
       this.workspace = workspace;
+      workspaceList.focus();
+      switch(num){
+        case 1:
+          button1.setAttribute("aria-pressed","true");
+          button2.setAttribute("aria-pressed","false");
+          button3.setAttribute("aria-pressed","false");
+          break;
+        case 2:
+          button1.setAttribute("aria-pressed","false");
+          button2.setAttribute("aria-pressed","true");
+          button3.setAttribute("aria-pressed","false");
+          break;
+        case 3:
+          button1.setAttribute("aria-pressed","false");
+          button2.setAttribute("aria-pressed","false");
+          button3.setAttribute("aria-pressed","true");
+          break;
+      }
       //it would be nice to have non-visual feedback when this completes successfully or not successfully.
     },
   });

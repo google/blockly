@@ -75,20 +75,8 @@ app.ToolboxFieldView = ng.core
     },
     handleDropdownChange(field,event){
       if (field instanceof Blockly.FieldVariable){
-        //do something fancy
         console.log(event);
-        //TODO: caseswitches in javascript?
-        switch (event) {
-          case Blockly.Msg.RENAME_VARIABLE:
-            //create an alert box that allows the user to change the name of the variable and affects the workspace.
-	    //can I do that without passing in the block itself? Or is this enough?
-	    break;
-          case Blockly.Msg.NEW_VARIABLE:
-            break;
-          default:
-            console.log("Unhandled event " + event + " from field " + field);
-            break;
-        }
+        Blockly.FieldVariable.dropdownChange(event);
       } else {
         // console.log(field);
         field.setValue(event);

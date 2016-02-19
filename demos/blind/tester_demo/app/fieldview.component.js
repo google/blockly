@@ -6,7 +6,7 @@ app.FieldView = ng.core
     template: `
     <!-- html representation of a field -->
     <li *ngIf="isTextInput(field)">
-      <input [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
+      <input [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)" aria-required="true" aria-live="assertive">
     </li>
     <! -- {{log(field.getText())}} "variable and first are going through this bit of code 10 times on a page load. It should only be once." -->
     <!-- {{log(getOptions(field))}} "gets called 10 times" -->

@@ -19,7 +19,7 @@ app.FieldView = ng.core
       </select>
     </li>
     <li *ngIf="isCheckbox(field)">
-      //TODO:CHECKBOX
+      //TODO(madeeha): Properly handle checkboxes.
     </li>
     <li *ngIf="isTextField(field) && notWhitespace(field)">
       <label>
@@ -37,7 +37,6 @@ app.FieldView = ng.core
       this.text="Nothing";
     },
     isTextInput: function(field){
-      //TODO: should I be just setting field to this.field instead or is that not how inputs work?
       return field instanceof Blockly.FieldTextInput;
     },
     isDropdown: function(field){
@@ -56,8 +55,7 @@ app.FieldView = ng.core
       return text != '';
     },
     getOptions: function(field){
-      //I'm pretty sure this is also going to get called like 10 times on a page load...
-      this.optionText.keys.length=0; //not 100% sure on this line
+      this.optionText.keys.length=0;
       for (var i = 0; i<field.getOptions_().length; i++){
         var tuple = field.getOptions_()[i]
         this.optionText[tuple[1]] = tuple[0];
@@ -66,20 +64,16 @@ app.FieldView = ng.core
       return this.optionText.keys;
     },
     isSelected: function(field,value){
-      //the reason this function works is terrible
       if (value == field.getValue()){
         return 'true';
       }
     },
     handleDropdownChange(field,event){
       if (field instanceof Blockly.FieldVariable){
-        //do something fancy
         console.log(event);
-        //TODO: caseswitches in javascript?
         switch (event) {
           case Blockly.Msg.RENAME_VARIABLE:
-            //create an alert box that allows the user to change the name of the variable and affects the workspace.
-	    //can I do that without passing in the block itself? Or is this enough?
+            //TODO(madeeha): create an alert box that allows the user to change the name of the variable and affects the workspace.
 	    break;
           case Blockly.Msg.NEW_VARIABLE:
             break;
@@ -88,18 +82,14 @@ app.FieldView = ng.core
             break;
         }
       } else {
-        // console.log(field);
         field.setValue(event);
       }
     }
     ,
     log: function(obj){
-      //TODO: delete after development is finished
+      //TODO(madeeha): delete after development is finished
       console.log(obj)
     },
 
 
   });
-
-//(ngModelChange)="handleDropdownChange(field,$event)"
-//{{optionText[optionValue]}}

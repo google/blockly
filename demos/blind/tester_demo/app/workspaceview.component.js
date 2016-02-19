@@ -30,7 +30,7 @@ app.WorkspaceView = ng.core
       <button #button3 aria-pressed="false" (click)="workspaceUpdated(block3, workspaceList, button1, button2, button3, 3)">Block 3</button>
       <ul>
         <li>
-          <img src="app/block3.png" alt="image of what block3 traditionally looks like in Blockly"> <!-- are these captions inclusive enough? -->
+          <img src="app/block3.png" alt="image of what block3 traditionally looks like in Blockly">
         </li>
       </ul>
     </li>
@@ -199,13 +199,6 @@ app.WorkspaceView = ng.core
     `;
     },
     workspaceUpdated: function(xmlText, workspaceList, button1, button2, button3, num){
-      //This function can be completely empty.
-      //Any DOM event will trigger angular to reevaluate all objects
-      //and update what is necessary.
-
-      //currently this button reevaluates the XML on the left hand side
-      //and makes that the new workspace
-
       // Parse the XML into a tree.
       try {
         var xml = Blockly.Xml.textToDom(xmlText)
@@ -213,11 +206,13 @@ app.WorkspaceView = ng.core
         alert(e);
         return;
       }
-      // Create a headless workspace.
+      //make a headless workspace
       workspace = new Blockly.Workspace();
       Blockly.Xml.domToWorkspace(workspace, xml);
 
       this.workspace = workspace;
+
+      //move keyboard focus to the workspace instead of the block list.
       workspaceList.focus();
       switch(num){
         case 1:
@@ -236,7 +231,7 @@ app.WorkspaceView = ng.core
           button3.setAttribute("aria-pressed","true");
           break;
       }
-      //it would be nice to have non-visual feedback when this completes successfully or not successfully.
+      //TODO(madeeha): it would be nice to have non-visual feedback when this completes successfully or not successfully.
     },
   });
 

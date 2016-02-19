@@ -38,10 +38,8 @@ app.TreeView = ng.core
       this.nextBlock = {};
     },
     getInfo: function(block){
-      //we're going to list all inputs
-
       if (this.infoBlocks[block.id]){
-        //TODO: is there a situation in which overwriting often unnecessarily is a problem?
+        //TODO(madeeha): is there a situation in which overwriting often unnecessarily is a problem?
         this.infoBlocks[block.id].length = 0;
       } else {
         this.infoBlocks[block.id] = [];

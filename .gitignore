@@ -8,4 +8,4 @@ index.html
 .project
 *.pyc
 *.komodoproject
-*~
+*.js~

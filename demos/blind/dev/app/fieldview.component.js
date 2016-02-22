@@ -90,6 +90,3 @@ app.FieldView = ng.core
 
 
   });
-
-//(ngModelChange)="handleDropdownChange(field,$event)"
-//{{optionText[optionValue]}}

@@ -90,6 +90,3 @@ app.ToolboxFieldView = ng.core
 
 
   });
-
-//(ngModelChange)="handleDropdownChange(field,$event)"
-//{{optionText[optionValue]}}

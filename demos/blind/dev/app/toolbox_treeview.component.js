@@ -81,7 +81,6 @@ app.ToolboxTreeView = ng.core
       event.target.selectedIndex=0;
     },
     notCompatibleWithMarkedBlock: function(block){
-<<<<<<< HEAD
       var blockConnection = block.outputConnection || block.previousConnection;
       if (app.markedInput && blockConnection){
         if(Blockly.OPPOSITE_TYPE[blockConnection.type] == app.markedInput.connection.type && app.markedInput.connection.checkType_(blockConnection)){
@@ -91,16 +90,6 @@ app.ToolboxTreeView = ng.core
           //true will result in the "copy to marked block" option being DISABLED
           return true;
           }
-=======
-      if (app.markedInput && block.outputConnection){
-        if(app.markedInput.connection.checkType_(block.outputConnection)){
-          //undefined will result in the "copy to marked block" option being ENABLED
-          return undefined;
-        } else {
-          //true will result in the "copy to marked block" option being DISABLED
-          return true;
-        }
->>>>>>> 68970829cf46a2e230cdd14e0c2dfa43e05d5646
       } else {
         return true;
       }

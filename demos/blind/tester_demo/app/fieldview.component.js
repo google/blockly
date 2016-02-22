@@ -8,13 +8,8 @@ app.FieldView = ng.core
     <li *ngIf="isTextInput(field)">
       <input [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)" aria-required="true" aria-live="assertive">
     </li>
-    <! -- {{log(field.getText())}} "variable and first are going through this bit of code 10 times on a page load. It should only be once." -->
-    <!-- {{log(getOptions(field))}} "gets called 10 times" -->
-
     <li *ngIf="isDropdown(field)">
       <select  [ngModel]="field.getValue()" (ngModelChange)="handleDropdownChange(field,$event)">
-          <!-- "this line is being called wayy to often?? Shouldn't it only be called twice?" -->
-          <!-- "this isn't always true. Sometimes we want the dropdown selection to do something instead of set something." -->
           <option *ngFor="#optionValue of getOptions(field)" selected="{{isSelected(field, optionValue)}}" [value]="optionValue">{{optionText[optionValue]}}</option>
       </select>
     </li>
@@ -90,6 +85,4 @@ app.FieldView = ng.core
       //TODO(madeeha): delete after development is finished
       console.log(obj)
     },
-
-
   });

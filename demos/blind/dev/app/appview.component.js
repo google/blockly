@@ -22,10 +22,10 @@ app.AppView = ng.core
   })
   .Class({
     constructor: function() {
-      //this literally only needs to exist in order for the workspace to be updated by both the toolbox and the workspace
+      //this function needs to exist in order for angular to update by both the toolbox and the workspace
     },
     log: function(obj){
-      //TODO: delete after development is finished
+      //TODO(madeeha): delete after development is finished
       console.log(obj)
     },
   });

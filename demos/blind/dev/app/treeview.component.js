@@ -40,10 +40,9 @@ app.TreeView = ng.core
       this.nextBlock = {};
     },
     getInfo: function(block){
-      //we're going to list all inputs
-
+      //List all inputs
       if (this.infoBlocks[block.id]){
-        //TODO: is there a situation in which overwriting often unnecessarily is a problem?
+        //TODO(madeeha): is there a situation in which overwriting often unnecessarily is a problem?
         this.infoBlocks[block.id].length = 0;
       } else {
         this.infoBlocks[block.id] = [];
@@ -88,12 +87,12 @@ app.TreeView = ng.core
           if (app.clipboard){
             if (app.clipboard.workspace.id == app.workspace.id){
               input.connection.connect(app.clipboard.outputConnection || blockOnProperWorkspace.previousConnection);
-              //have to deal with error saying that I attempted to connect incompatible types
+              //TODO(madeeha):have to deal with error saying that I attempted to connect incompatible types
             } else {
               var xml = Blockly.Xml.blockToDom_(app.clipboard);
               var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace, xml);
               input.connection.connect(blockOnProperWorkspace.outputConnection || blockOnProperWorkspace.previousConnection);
-              //have to deal with error saying that I attempted to connect incompatible types
+              //TODO(madeeha):have to deal with error saying that I attempted to connect incompatible types
             }
           }
           break;

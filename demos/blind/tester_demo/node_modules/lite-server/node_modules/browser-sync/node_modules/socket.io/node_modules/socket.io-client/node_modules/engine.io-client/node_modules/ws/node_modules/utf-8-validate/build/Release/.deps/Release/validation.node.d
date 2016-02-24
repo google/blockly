@@ -1,1 +1,0 @@
-cmd_Release/validation.node := ln -f "Release/obj.target/validation.node" "Release/validation.node" 2>/dev/null || (rm -rf "Release/validation.node" && cp -af "Release/obj.target/validation.node" "Release/validation.node")

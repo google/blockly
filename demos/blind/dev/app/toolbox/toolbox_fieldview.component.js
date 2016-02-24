@@ -18,26 +18,28 @@
  */
 
 /**
- * @fileoverview Angular2 Component that details how a Blockly.Field is rendered in the demo in BlindBlockly. Also handles any interactions with the field.
+ * @fileoverview Angular2 Component that details how a Blockly.Field is rendered in the toolbox in BlindBlockly. Also handles any interactions with the field.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 var app = app || {};
 
-app.FieldView = ng.core
+app.ToolboxFieldView = ng.core
   .Component({
-    selector: 'field-view',
+    selector: 'toolbox-field-view',
     template: `
     <!-- html representation of a field -->
     <li *ngIf='isTextInput(field)'>
-      <input [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)' aria-required='true' aria-live='assertive'>
+      <input [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
     </li>
+
     <li *ngIf='isDropdown(field)'>
       <select  [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
+          <option value='NO_ACTION' select>select an option</option>
           <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
       </select>
     </li>
     <li *ngIf='isCheckbox(field)'>
-      //TODO(madeeha): Properly handle checkboxes.
+      //TODO(madeeha):CHECKBOX
     </li>
     <li *ngIf='isTextField(field) && notWhitespace(field)'>
       <label>
@@ -65,12 +67,12 @@ app.FieldView = ng.core
     },
     isTextField: function(field) {
       return !(field instanceof Blockly.FieldTextInput) &&
-       !(field instanceof Blockly.FieldDropdown) &&
-       !(field instanceof Blockly.FieldCheckbox);
+      !(field instanceof Blockly.FieldDropdown) &&
+      !(field instanceof Blockly.FieldCheckbox);
     },
     notWhitespace: function(field) {
       var text = field.getText().trim();
-      return text != '';
+      return text !== '';
     },
     getOptions: function(field) {
       this.optionText.keys.length = 0;
@@ -83,27 +85,19 @@ app.FieldView = ng.core
     },
     isSelected: function(field, value) {
       if (value == field.getValue()) {
+        //true will result in the 'selected' option being ENABLED
         return 'true';
       }
+      //undefined will result in the 'selected' option being DISABLED
     },
     handleDropdownChange(field, event) {
       if (field instanceof Blockly.FieldVariable) {
         console.log(event);
-        switch (event) {
-          case Blockly.Msg.RENAME_VARIABLE:
-            //TODO(madeeha): create an alert box that allows the user to change the name of the variable and affects the workspace.
-            break;
-          case Blockly.Msg.NEW_VARIABLE:
-            break;
-          default:
-            console.log('Unhandled event ' + event + ' from field ' + field);
-            break;
-        }
+        Blockly.FieldVariable.dropdownChange(event);
       } else {
         field.setValue(event);
       }
-    }
-    ,
+    },
     log: function(obj) {
       //TODO(madeeha): delete after development is finished
       console.log(obj);

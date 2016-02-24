@@ -4,4 +4,4 @@ document.addEventListener('DOMContentLoaded', function() {
     ng.platform.browser.bootstrap(app.WorkspaceView);
   });
 
-var option = document.getElementById("selected");
+var option = document.getElementById('selected');

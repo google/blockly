@@ -1,1 +1,0 @@
-cmd_Release/bufferutil.node := ln -f "Release/obj.target/bufferutil.node" "Release/bufferutil.node" 2>/dev/null || (rm -rf "Release/bufferutil.node" && cp -af "Release/obj.target/bufferutil.node" "Release/bufferutil.node")

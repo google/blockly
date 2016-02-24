@@ -18,36 +18,31 @@
  */
 
 /**
- * @fileoverview Angular2 Component that details how the BlindBlockly app is rendered on the page.
+ * @fileoverview Angular2 Component that details how a Blockly.Workspace is rendered in BlindBlockly.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 var app = app || {};
-app.workspace = app.workspace || new Blockly.Workspace();
-app.markedInput;
 
-app.AppView = ng.core
+app.WorkspaceView = ng.core
   .Component({
-    selector: 'app',
+    selector: 'workspace-view',
     template: `
-    <table>
-    <tr>
-      <td>
-        <toolbox-view>Loading Toolbox...</toolbox-view>
-      </td>
-      <td>
-        <workspace-view>Loading Workspace...</workspace-view>
-      </td>
-    </tr>
-    </table>
+  <div *ngIf='workspace'>
+  <h1>Workspace</h1>
+  <ul *ngFor='#block of workspace.topBlocks_'>
+    <tree-view [block]='block'></tree-view>
+  </ul>
+  </div>
     `,
-    directives: [app.ToolboxView, app.WorkspaceView],
+    directives: [app.TreeView],
   })
   .Class({
     constructor: function() {
-      //this function needs to exist in order for angular to update by both the toolbox and the workspace
-    },
-    log: function(obj) {
-      //TODO(madeeha): delete after development is finished
-      console.log(obj);
-    },
+      if (app.workspace) {
+        this.workspace = app.workspace;
+      } else {
+        console.log('no workspace');
+        this.workspace;
+      }
+    }
   });

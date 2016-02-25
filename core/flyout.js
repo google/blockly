@@ -361,6 +361,7 @@ Blockly.Flyout.prototype.hide = function() {
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
+  Blockly.Events.disable();
   this.hide();
   // Delete any blocks from a previous showing.
   var blocks = this.workspace_.getTopBlocks(false);
@@ -471,6 +472,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   Blockly.fireUiEventNow(window, 'resize');
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
+  Blockly.Events.enable();
 };
 
 /**

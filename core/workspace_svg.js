@@ -369,7 +369,8 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
  * @return {number} Width.
  */
 Blockly.WorkspaceSvg.prototype.getWidth = function() {
-  return this.getMetrics().viewWidth;
+  var metrics = this.getMetrics();
+  return metrics ? metrics.viewWidth : 0;
 };
 
 /**

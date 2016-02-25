@@ -40,11 +40,11 @@ app.TreeView = ng.core
       <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
       <tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()'></tree-view>
       <li *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
-        {{inputType(inputBlock.connection)}} input needed:
+        {{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
         <select aria-label='insert input menu' (change)='inputMenuSelected(inputBlock,$event)'>
           <option value='NO_ACTION' select>select an action</option>
           <option value='MARK_SPOT'>Mark this spot</option>
-          <option value='PASTE'>Paste</option>
+          <option value='PASTE' disabled='{{notCompatibleWithClipboard(inputBlock)}}'>Paste</option>
         </select>
       </li>
     </div>
@@ -59,10 +59,11 @@ app.TreeView = ng.core
     inputs: ['block'],
   })
   .Class({
-    constructor: function() {
+    constructor: [app.ClipboardService, function(_service) {
       this.infoBlocks = {};
       this.nextBlock = {};
-    },
+      this.sharedClipboardService = _service;
+    }],
     getInfo: function(block) {
       //List all inputs
       if (this.infoBlocks[block.id]) {
@@ -90,14 +91,13 @@ app.TreeView = ng.core
     blockMenuSelected: function(block, event) {
       switch (event.target.value) {
         case 'DELETE_BLOCK':
-          console.log('delete case');
           block.dispose(true);
           break;
         case 'CUT_BLOCK':
-          console.log('cut case');
+          this.sharedClipboardService.cut(block);
           break;
         case 'COPY_BLOCK':
-          Blockly.clipboardXml_ = Blockly.Xml.blockToDom_(block);
+          this.sharedClipboardService.copy(block);
           break;
         default:
           console.log('default case');
@@ -108,21 +108,32 @@ app.TreeView = ng.core
     inputMenuSelected: function(input, event) {
       switch (event.target.value) {
         case 'MARK_SPOT':
-          app.markedInput = input;
+          this.sharedClipboardService.markConnection(input.connection);
+          console.log("marked spot");
           break;
         case 'PASTE':
-          if (Blockly.clipboardXml_) {
-            var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace,
-              Blockly.clipboardXml_);
-            input.connection.connect(blockOnProperWorkspace.outputConnection ||
-              blockOnProperWorkspace.previousConnection);
-            //TODO(madeeha):have to deal with error saying that I attempted to connect incompatible types
-          }
+          this.sharedClipboardService.paste(input.connection);
           break;
         default:
           console.log(event.target.value);
           break;
       }
       event.target.selectedIndex = 0;
+    },
+    notCompatibleWithClipboard: function(input) {
+      if (this.sharedClipboardService.isCompatibleWithClipboard(input, true)){
+        //undefined will result in the 'paste' option being ENABLED
+        return undefined;
+      } else {
+        //true will result in the 'paste' option being DISABLED
+        return true;
+      }
+    },
+    valueOrStatement: function(inputBlock) {
+      if (inputBlock.type == Blockly.NEXT_STATEMENT){
+        return "statement";
+      } else {
+        return "value";
+      }
     }
   });

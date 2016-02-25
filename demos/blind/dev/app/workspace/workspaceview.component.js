@@ -26,6 +26,7 @@ var app = app || {};
 app.WorkspaceView = ng.core
   .Component({
     selector: 'workspace-view',
+    viewInjector: [app.ClipboardService],
     template: `
   <div *ngIf='workspace'>
   <h1>Workspace</h1>

@@ -370,7 +370,7 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
  */
 Blockly.WorkspaceSvg.prototype.getWidth = function() {
   var metrics = this.getMetrics();
-  return metrics ? metrics.viewWidth : 0;
+  return metrics ? metrics.viewWidth / this.scale : 0;
 };
 
 /**

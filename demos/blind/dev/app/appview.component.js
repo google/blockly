@@ -23,7 +23,6 @@
  */
 var app = app || {};
 app.workspace = app.workspace || new Blockly.Workspace();
-app.markedInput;
 
 app.AppView = ng.core
   .Component({
@@ -41,11 +40,11 @@ app.AppView = ng.core
     </table>
     `,
     directives: [app.ToolboxView, app.WorkspaceView],
+    providers: [app.ClipboardService],
   })
   .Class({
-    constructor: function() {
-      //this function needs to exist in order for angular to update by both the toolbox and the workspace
-    },
+    constructor: [app.ClipboardService, function(_service) {
+    }],
     log: function(obj) {
       //TODO(madeeha): delete after development is finished
       console.log(obj);

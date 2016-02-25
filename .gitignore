@@ -10,3 +10,4 @@ index.html
 *.komodoproject
 *.js~
 html_formatter.html
+.jscsrc

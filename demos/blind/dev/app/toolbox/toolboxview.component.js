@@ -30,7 +30,7 @@ app.ToolboxView = ng.core
 <h1>Toolbox</h1>
 <ul *ngFor='#category of makeArray(sightedToolbox)'>
   <h2 #name>{{category.attributes.name.value}}</h2>
-  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [block]='block' [displayBlockMenu]='true'></toolbox-tree-view>
+  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
 </ul>
   `,
   directives: [app.ToolboxTreeView],
@@ -50,8 +50,6 @@ app.ToolboxView = ng.core
 
     this.toolboxCategories = [];
     this.toolboxWorkspaces = {};
-    this.markedInputBlock = app.markedInputBlock;
-    console.log(this.sightedToolbox);
   },
   makeArray: function(val) {
     if (val){

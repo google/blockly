@@ -54,10 +54,11 @@ app.ToolboxTreeView = ng.core
     inputs: ['block','displayBlockMenu'],
   })
   .Class({
-    constructor: function() {
+    constructor: [app.ClipboardService, function(_service) {
       this.infoBlocks = {};
       this.nextBlock = {};
-    },
+      this.sharedClipboardService = _service;
+    }],
     getInfo: function(block) {
       //list all inputs
       if (this.infoBlocks[block.id]) {
@@ -90,15 +91,14 @@ app.ToolboxTreeView = ng.core
           console.log('added block to workspace');
           break;
         case 'SEND_TO_SELECTED':
-          var xml = Blockly.Xml.blockToDom_(block);
-          var blockOnProperWorkspace =
-            Blockly.Xml.domToBlock(app.workspace, xml);
-          app.markedInput.connection.connect(
-            blockOnProperWorkspace.outputConnection ||
-            blockOnProperWorkspace.previousConnection);
+          if (this.sharedClipboardService) {
+            this.sharedClipboardService.pasteToMarkedConnection(block);
+          }
           break;
         case 'COPY_BLOCK':
-          Blockly.clipboardXml_ = Blockly.Xml.blockToDom_(block);
+          if (this.sharedClipboardService) {
+            this.sharedClipboardService.copy(block);
+          }
           break;
         default:
           console.log('default case');
@@ -107,18 +107,11 @@ app.ToolboxTreeView = ng.core
       event.target.selectedIndex = 0;
     },
     notCompatibleWithMarkedBlock: function(block) {
-      var blockConnection = block.outputConnection || block.previousConnection;
-      if (app.markedInput && blockConnection) {
-        if (Blockly.OPPOSITE_TYPE[blockConnection.type] ==
-            app.markedInput.connection.type &&
-            app.markedInput.connection.checkType_(blockConnection)) {
-          //undefined will result in the 'copy to marked block' option being ENABLED
-          return undefined;
-        } else {
-          //true will result in the 'copy to marked block' option being DISABLED
-          return true;
-        }
+      if (this.sharedClipboardService.isCompatibleWithMarkedConnection(block)){
+        //undefined will result in the 'copy to marked block' option being ENABLED
+        return undefined;
       } else {
+        //true will result in the 'copy to marked block' option being DISABLED
         return true;
       }
     }

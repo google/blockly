@@ -1,0 +1,10 @@
+<xml style='display: none'>
+  <category name='Logic' colour='210'>
+    <block type='controls_if'></block>
+    <block type='logic_compare'></block>
+  </category>
+  <category name='Math' colour='230'>
+    <block type='math_number' gap='32'></block>
+  </category>
+  <sep></sep>
+</xml>

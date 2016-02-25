@@ -200,6 +200,8 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
       throw 'Source connection already connected.';
     case Blockly.Connection.REASON_TARGET_NULL:
       throw 'Target connection is null.';
+    case Blockly.Connection.REASON_CHECKS_FAILED:
+      throw 'Connection checks failed.';
     default:
       throw 'Unknown connection failure: this should never happen!';
   }
@@ -293,8 +295,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   }
 
   // Establish the connections.
-  this.targetConnection = otherConnection;
-  otherConnection.targetConnection = this;
+  Blockly.Connection.connectReciprocally(this, otherConnection);
 
   // Demote the inferior block so that one is a child of the superior one.
   childBlock.setParent(parentBlock);
@@ -318,6 +319,19 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     }
   }
 };
+
+/**
+ * Update two connections to target each other.
+ * @param {Blockly.Connection} first The first connection to update.
+ * @param {Blockly.Connection} second The second conneciton to update.
+ */
+Blockly.Connection.connectReciprocally = function(first, second) {
+  if (!first || !second) {
+    throw 'Cannot connect null connections.';
+  }
+  first.targetConnection = second;
+  second.targetConnection = first;
+}
 
 /**
  * Does the given block have one and only one connection point that will accept

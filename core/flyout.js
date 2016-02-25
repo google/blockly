@@ -361,8 +361,9 @@ Blockly.Flyout.prototype.hide = function() {
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
-  Blockly.Events.disable();
   this.hide();
+  // Everything is being destroyed; there is no need to fire delete events.
+  Blockly.Events.disable();
   // Delete any blocks from a previous showing.
   var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -370,6 +371,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       block.dispose(false, false);
     }
   }
+  // The create events are needed since the blocks may need to react
+  // to the context of their own creation.
+  Blockly.Events.enable();
   // Delete any background buttons from a previous showing.
   for (var i = 0, rect; rect = this.buttons_[i]; i++) {
     goog.dom.removeNode(rect);
@@ -472,7 +476,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   Blockly.fireUiEventNow(window, 'resize');
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
-  Blockly.Events.enable();
 };
 
 /**

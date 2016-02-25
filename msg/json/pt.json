@@ -5,7 +5,8 @@
 			"Waldir",
 			"Vitorvicentevalente",
 			"아라",
-			"Nicola Nascimento"
+			"Nicola Nascimento",
+			"Önni"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -17,6 +18,8 @@
 	"INLINE_INPUTS": "Entradas Internas",
 	"DELETE_BLOCK": "Remover Bloco",
 	"DELETE_X_BLOCKS": "Remover %1 Blocos",
+	"DELETE_ALL_BLOCKS": "Apagar todos os %1 blocos?",
+	"CLEAN_UP": "Limpar os blocos",
 	"COLLAPSE_BLOCK": "Colapsar Bloco",
 	"COLLAPSE_ALL": "Recolher Blocos",
 	"EXPAND_BLOCK": "Expandir Bloco",
@@ -304,6 +307,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "com:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "com:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Cria uma função que não tem retorno.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Descreva esta função...",
 	"PROCEDURES_DEFRETURN_HELPURL": "http://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFRETURN_RETURN": "retorna",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Cria uma função que possui um valor de retorno.",

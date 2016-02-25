@@ -259,7 +259,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "يرجع قوس الظل للرقم.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "يرجع جيب التمام لدرجة (لا زواية نصف قطرية).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "يرجع جيب التمام لدرجة (لا زواية نصف قطرية).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "يرجع الظل لدرجة (لا دائرة نصف قطرية).";
-Blockly.Msg.ME = "Me";  // untranslated
+Blockly.Msg.ME = "أنا";
 Blockly.Msg.NEW_VARIABLE = "متغير جديد...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "اسم المتغير الجديد:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -353,7 +353,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = "إزالة الفراغات من كلا �
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "إزالة الفراغات من الجانب الأيسر من";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "إزالة الفراغات من الجانب الأيمن من";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "يرجع نسخة من النص مع حذف من أحد أو كلا الفراغات من أطرافه.";
-Blockly.Msg.TODAY = "Today";  // untranslated
+Blockly.Msg.TODAY = "اليوم";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "البند";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "انشئ 'التعيين %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

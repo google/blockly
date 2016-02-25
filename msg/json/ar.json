@@ -4,10 +4,12 @@
 			"Meno25",
 			"Test Create account",
 			"아라",
-			"Diyariq"
+			"Diyariq",
+			"محمد أحمد عبد الفتاح"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "البند",
+	"TODAY": "اليوم",
 	"DUPLICATE_BLOCK": "ادمج",
 	"ADD_COMMENT": "اضافة تعليق",
 	"REMOVE_COMMENT": "ازل التعليق",
@@ -24,6 +26,7 @@
 	"ENABLE_BLOCK": "أعد تفعيل القطعة",
 	"HELP": "مساعدة",
 	"CHAT": "دردش مع زملائك بالكتابة في هذا الصندوق!",
+	"ME": "أنا",
 	"CHANGE_VALUE_TITLE": "تغيير قيمة:",
 	"NEW_VARIABLE": "متغير جديد...",
 	"NEW_VARIABLE_TITLE": "اسم المتغير الجديد:",

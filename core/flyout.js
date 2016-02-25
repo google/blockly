@@ -393,8 +393,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.permanentlyDisabled_.length = 0;
   for (var i = 0, xml; xml = xmlList[i]; i++) {
     if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-      var block = Blockly.Xml.domToBlock(
-          /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
+      var block = Blockly.Xml.domToBlock(this.workspace_, xml);
       if (block.disabled) {
         // Record blocks that were initially disabled.
         // Do not enable these blocks as a result of capacity filtering.

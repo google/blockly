@@ -451,9 +451,7 @@ Blockly.init_ = function(mainWorkspace) {
       if (options.RTL) {
         mainWorkspace.scrollX *= -1;
       }
-      var translation = 'translate(' + mainWorkspace.scrollX + ',0)';
-      mainWorkspace.getCanvas().setAttribute('transform', translation);
-      mainWorkspace.getBubbleCanvas().setAttribute('transform', translation);
+      mainWorkspace.translate(mainWorkspace.scrollX, 0);
     }
   }
   if (options.hasScrollbars) {

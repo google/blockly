@@ -331,7 +331,7 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
     Blockly.fireUiEvent(window, 'resize');
   }
   Blockly.Events.enable();
-  if (Blockly.Events.isEnabled() && !topBlock.isShadow()) {
+  if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Create(topBlock));
   }
   return topBlock;

@@ -219,15 +219,17 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
     // Other connection is already connected to something.
     // Disconnect it and reattach it or bump it as needed.
     var orphanBlock = otherConnection.targetBlock();
+    orphanBlock.setParent(null);
     // Displaced shadow blocks dissolve rather than reattaching or bumping.
     if (orphanBlock.isShadow()) {
+      // Save the shadow block so that field values are preserved.
+      otherConnection.setShadowDom(Blockly.Xml.blockToDom(orphanBlock));
       orphanBlock.dispose();
       orphanBlock = null;
     } else if (this.type == Blockly.INPUT_VALUE ||
                this.type == Blockly.OUTPUT_VALUE) {
       // Value connections.
       // If female block is already connected, disconnect and bump the male.
-      orphanBlock.setParent(null);
       if (!orphanBlock.outputConnection) {
         throw 'Orphan block does not have an output connection.';
       }
@@ -244,7 +246,6 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
       // Statement connections.
       // Statement blocks may be inserted into the middle of a stack.
       // Split the stack.
-      orphanBlock.setParent(null);
       if (!orphanBlock.previousConnection) {
         throw 'Orphan block does not have a previous connection.';
       }

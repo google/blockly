@@ -121,7 +121,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
-  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+  if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Create(this));
   }
   // Bind an onchange function, if it exists.
@@ -171,7 +171,7 @@ Blockly.Block.prototype.dispose = function(healStack) {
     this.workspace.removeChangeListener(this.onchangeWrapper_)
   }
   this.unplug(healStack);
-  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+  if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Delete(this));
   }
   Blockly.Events.disable();
@@ -402,7 +402,7 @@ Blockly.Block.prototype.getChildren = function() {
  */
 Blockly.Block.prototype.setParent = function(newParent) {
   var event;
-  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+  if (Blockly.Events.isEnabled()) {
     event = new Blockly.Events.Move(this);
   }
   if (this.parentBlock_) {
@@ -505,23 +505,7 @@ Blockly.Block.prototype.isShadow = function() {
  * @param {boolean} shadow True if a shadow.
  */
 Blockly.Block.prototype.setShadow = function(shadow) {
-  if (this.isShadow_ == shadow) {
-    return;  // No change.
-  }
   this.isShadow_ = shadow;
-  if (Blockly.Events.isEnabled() && !shadow) {
-    Blockly.Events.group = Blockly.genUid();
-    // Fire a creation event.
-    Blockly.Events.fire(new Blockly.Events.Create(this));
-    var moveEvent = new Blockly.Events.Move(this);
-    // Claim that the block was at 0,0 and is being connected.
-    moveEvent.oldParentId = undefined;
-    moveEvent.oldInputName = undefined;
-    moveEvent.oldCoordinate = new goog.math.Coordinate(0, 0);
-    moveEvent.recordNew();
-    Blockly.Events.fire(moveEvent);
-    Blockly.Events.group = '';
-  }
 };
 
 /**

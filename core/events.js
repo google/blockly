@@ -170,9 +170,6 @@ Blockly.Events.isEnabled = function() {
  * @constructor
  */
 Blockly.Events.Abstract = function(block) {
-  if (block.isShadow()) {
-    console.error('Creating event for shadow block: ' + block.id);
-  }
   this.blockId = block.id;
   this.workspaceId = block.workspace.id;
   this.group = Blockly.Events.group;

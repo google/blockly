@@ -64,6 +64,44 @@ Blockly.ConnectionDB.prototype.addConnection_ = function(connection) {
 };
 
 /**
+ * Find the given connection.
+ * Starts by doing a binary search to find the approximate location, then linearly searches
+ * nearby for the exact connection.
+ * @param {Blockly.Connection} conn The connection to find.
+ * @return The index of the connection, or -1 if the connection was not found.
+ */
+Blockly.ConnectionDB.prototype.findConnection = function(conn) {
+  if (this.length == 0) {
+    return -1;
+  }
+
+  var bestGuess = this.findPositionForConnection_(conn);
+  if (bestGuess >= this.length) {
+    // Not in list
+    return -1;
+  }
+
+  var yPos = conn.y_;
+  // Walk forward and back on the y axis looking for the connection.
+  var pointerMin = bestGuess;
+  var pointerMax = bestGuess;
+  while(pointerMin >= 0 && this[pointerMin].y_ == yPos) {
+    if (this[pointerMin] == conn) {
+      return pointerMin;
+    }
+    pointerMin--;
+  }
+
+  while (pointerMax < this.length && this[pointerMax].y_ == yPos) {
+    if (this[pointerMax] == conn) {
+      return pointerMax;
+    }
+    pointerMax++;
+  }
+  return -1;
+};
+
+/**
  * Finds a candidate position for inserting this connection into the list.
  * This will be in the correct y order but makes no guarantees about ordering in the x axis.
  * @param {Blockly.Connection} connection The connection to insert.
@@ -99,41 +137,11 @@ Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
   if (!connection.inDB_) {
     throw 'Connection not in database.';
   }
-  connection.inDB_ = false;
-  // Find the connection using a binary search.
-  // About 10% faster than a linear search using indexOf.
-  var pointerMin = 0;
-  var pointerMax = this.length - 2;
-  var pointerMid = pointerMax;
-  while (pointerMin < pointerMid) {
-    if (this[pointerMid].y_ < connection.y_) {
-      pointerMin = pointerMid;
-    } else {
-      pointerMax = pointerMid;
-    }
-    pointerMid = Math.floor((pointerMin + pointerMax) / 2);
+  var removalIndex = this.findConnection(connection);
+  if (removalIndex == -1) {
+    throw 'Unable to find connection in connectionDB.';
   }
-
-  // Walk forward and back on the y axis looking for the connection.
-  // When found, splice it out of the array.
-  pointerMin = pointerMid;
-  pointerMax = pointerMid;
-  while (pointerMin >= 0 && this[pointerMin].y_ == connection.y_) {
-    if (this[pointerMin] == connection) {
-      this.splice(pointerMin, 1);
-      return;
-    }
-    pointerMin--;
-  }
-  do {
-    if (this[pointerMax] == connection) {
-      this.splice(pointerMax, 1);
-      return;
-    }
-    pointerMax++;
-  } while (pointerMax < this.length &&
-           this[pointerMax].y_ == connection.y_);
-  throw 'Unable to find connection in connectionDB.';
+  this.splice(removalIndex, 1);
 };
 
 /**

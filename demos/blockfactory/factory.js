@@ -258,7 +258,9 @@ function formatJavaScript_(blockType, rootBlock) {
   var colourBlock = rootBlock.getInputTargetBlock('COLOUR');
   if (colourBlock && !colourBlock.disabled) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
-    code.push('    this.setColour(' + hue + ');');
+    if (!isNaN(hue)) {
+      code.push('    this.setColour(' + hue + ');');
+    }
   }
   code.push("    this.setTooltip('');");
   code.push("    this.setHelpUrl('http://www.example.com/');");

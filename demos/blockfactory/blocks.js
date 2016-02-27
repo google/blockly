@@ -696,7 +696,10 @@ Blockly.Blocks['colour_hue'] = {
   },
   validator: function(text) {
     // Update the current block's colour to match.
-    this.sourceBlock_.setColour(text);
+    var hue = parseInt(text, 10);
+    if (!isNaN(hue)) {
+      this.sourceBlock_.setColour(hue);
+    }
   },
   mutationToDom: function(workspace) {
     var container = document.createElement('mutation');

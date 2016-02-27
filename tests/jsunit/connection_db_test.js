@@ -200,8 +200,66 @@ function test_DB_ordering() {
     }
 }
 
+function test_DB_isConnectionAllowed() {
+    var db = new Blockly.ConnectionDB();
+    var sharedWorkspace = {};
+    // Two connections of opposite types near each other
+    var one = helper_createConnection(5 /* x */, 10 /* y */, Blockly.INPUT_VALUE);
+    one.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+
+    var two = helper_createConnection(10 /* x */, 15 /* y */, Blockly.OUTPUT_VALUE);
+    two.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+
+    assertTrue(db.isConnectionAllowed(one, two, 20.0));
+    // Move connections farther apart
+    two.x_ = 100;
+    two.y_ = 100;
+    assertFalse(db.isConnectionAllowed(one, two, 20.0));
+
+    // Don't offer to connect an already connected left (male) value plug to
+    // an available right (female) value plug.
+    var three = helper_createConnection(0, 0, Blockly.OUTPUT_VALUE);
+    three.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+
+    assertTrue(db.isConnectionAllowed(one, three, 20.0));
+    var four = helper_createConnection(0, 0, Blockly.INPUT_VALUE);
+    four.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+
+    Blockly.Connection.connectReciprocally(three, four);
+    assertFalse(db.isConnectionAllowed(one, three, 20.0));
+
+    // Don't connect two connections on the same block
+    two.sourceBlock_ = one.sourceBlock_;
+    assertFalse(db.isConnectionAllowed(one, two, 1000.0));
+}
+
+// function test_DB_isConnectionAllowedNext() {
+//     var db = new Blockly.ConnectionDB();
+//     var one = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+//     one.setInput(new Input.InputValue("test input", "" /* align */, null /* checks */));
+
+//     var two = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+//     two.setInput(new Input.InputValue("test input", "" /* align */, null /* checks */));
+
+//     // Don't offer to connect the bottom of a statement block to one that's already connected.
+//     varv three = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+//     assertTrue(db.isConnectionAllowed(one, three, 20.0));
+//     three.connectReciprocally_(two);
+//     assertFalse(db.isConnectionAllowed(one, three, 20.0));
+// }
+
 function helper_getNeighbours(db, x, y, radius) {
   return db.getNeighbours(helper_createConnection(x, y, Blockly.NEXT_STATEMENT), radius);
+}
+
+function helper_makeSourceBlock(sharedWorkspace) {
+  return {workspace: sharedWorkspace,
+    parentBlock_: null,
+    getParent: function() { return null; },
+    movable_: true,
+    isMovable: function() { return true; },
+    isShadow: function() { return false; }
+  };
 }
 
 function helper_createConnection(x, y, type) {

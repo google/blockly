@@ -204,6 +204,126 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   return neighbours;
 };
 
+
+Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
+    return (Math.abs(this[index].y_ - baseY) <= maxRadius);
+}
+
+/**
+ * Find the closest compatible connection to this connection.
+ * @param {Blockly.Connection} conn The connection searching for a compatible mate.
+ * @param {number} maxRadius The maximum radius to another connection.
+ * @param {number} dx Horizontal offset between this connection's location
+ *     in the database and the current location (as a result of dragging).
+ * @param {number} dy Vertical offset between this connection's location
+ *     in the database and the current location (as a result of dragging).
+ * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two properties: 'connection' which is either
+ *     another connection or null, and 'radius' which is the distance.
+ */
+Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx, dy) {
+    // Don't bother.
+    if (this.length == 0) {
+        return null;
+    }
+
+    // Stash the values of x and y from before the drag.
+    var baseY = conn.y_;
+    var baseX = conn.x_;
+
+    conn.x_ = baseX + dx;
+    conn.y_ = baseY + dy;
+
+    // findPositionForConnection finds an index for insertion, which is always after any
+    // block with the same y index.  We want to search both forward and back, so search
+    // on both sides of the index.
+    var closestIndex = this.findPositionForConnection_(conn);
+
+    var bestConnection = null;
+    var bestRadius = maxRadius;
+    var temp;
+
+    // Walk forward and back on the y axis looking for the closest x,y point.
+    var pointerMin = closestIndex - 1;
+    while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
+        temp = this[pointerMin];
+        if (isConnectionAllowed(conn, temp, bestRadius)) {
+            bestConnection = temp;
+            bestRadius = temp.distanceFrom(conn);
+        }
+        pointerMin--;
+    }
+
+    var pointerMax = closestIndex;
+    while (pointerMax < this.length && this.isInYRange_(pointerMax, conn.y_, maxRadius)) {
+        temp = this[pointerMax];
+        if (isConnectionAllowed(conn, temp, bestRadius)) {
+            bestConnection = temp;
+            bestRadius = temp.distanceFrom(conn);
+        }
+        pointerMax++;
+    }
+
+    // Reset the values of x and y.
+    conn.x_ = baseX;
+    conn.y_ = baseY;
+    return bestConnection;
+};
+
+// TODO: fenichel: consider moving this to connection.js
+/**
+ * Check if the two connections can be dragged to connect to each other.
+ * @param {Blockly.Connection} moving The connection being dragged.
+ * @param {Blockly.Connection} candidate A nearby connection to check.
+ * @param {number} maxRadius The maximum radius allowed for connections.
+ * @return {boolean} True if the connection is allowed, false otherwise.
+ */
+Blockly.ConnectionDB.prototype.isConnectionAllowed = function(moving, candidate, maxRadius) {
+  if (moving.distanceFrom(candidate) > maxRadius) {
+      return false;
+  }
+
+  // Type checking
+  var canConnect = moving.canConnectWithReason_(candidate);
+  if (canConnect != Blockly.Connection.CAN_CONNECT
+          && canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
+      return false;
+  }
+
+  // Don't offer to connect an already connected left (male) value plug to
+  // an available right (female) value plug.  Don't offer to connect the
+  // bottom of a statement block to one that's already connected.
+  if (candidate.type == Blockly.OUTPUT_VALUE
+          || candidate.type == Blockly.PREVIOUS_STATEMENT) {
+      if (candidate.targetConnection) {
+          return false;
+      }
+  }
+
+  // Offering to connect the left (male) of a value block to an already
+  // connected value pair is ok, we'll splice it in.
+  // However, don't offer to splice into an unmovable block.
+  if (candidate.type == Blockly.INPUT_VALUE &&
+      candidate.targetConnection &&
+      !candidate.targetBlock().isMovable() &&
+      !candidate.targetBlock().isShadow()) {
+    return true;
+  }
+
+  // Don't let blocks try to connect to themselves or ones they nest.
+  var targetSourceBlock = candidate.sourceBlock_;
+  var sourceBlock = moving.sourceBlock_;
+  if (targetSourceBlock && sourceBlock) {
+    do {
+      if (sourceBlock == targetSourceBlock) {
+        return true;
+      }
+      targetSourceBlock = targetSourceBlock.getParent();
+    } while (targetSourceBlock);
+  }
+
+  return true;
+};
+
 /**
  * Initialize a set of connection DBs for a specified workspace.
  * @param {!Blockly.Workspace} workspace The workspace this DB is for.

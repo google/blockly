@@ -141,6 +141,7 @@ Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
   if (removalIndex == -1) {
     throw 'Unable to find connection in connectionDB.';
   }
+  connection.inDB_ = false;
   this.splice(removalIndex, 1);
 };
 
@@ -246,7 +247,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx, 
     var pointerMin = closestIndex - 1;
     while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
         temp = this[pointerMin];
-        if (isConnectionAllowed(conn, temp, bestRadius)) {
+        if (this.isConnectionAllowed(conn, temp, bestRadius)) {
             bestConnection = temp;
             bestRadius = temp.distanceFrom(conn);
         }
@@ -256,7 +257,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx, 
     var pointerMax = closestIndex;
     while (pointerMax < this.length && this.isInYRange_(pointerMax, conn.y_, maxRadius)) {
         temp = this[pointerMax];
-        if (isConnectionAllowed(conn, temp, bestRadius)) {
+        if (this.isConnectionAllowed(conn, temp, bestRadius)) {
             bestConnection = temp;
             bestRadius = temp.distanceFrom(conn);
         }

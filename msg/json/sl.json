@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Anzeljg",
-			"Miloš Košir"
+			"Miloš Košir",
+			"Dbc334"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -285,6 +286,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "s/z:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "s/z:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Ustvari funkcijo brez izhoda.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Opišite funkcijo ...",
 	"PROCEDURES_DEFRETURN_RETURN": "vrni",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Ustvari funkcijo z izhodom.",
 	"PROCEDURES_ALLOW_STATEMENTS": "dovoli korake",

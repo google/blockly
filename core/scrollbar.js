@@ -139,30 +139,40 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
   // This function is equivalent to:
   //   this.hScroll.set(x);
   //   this.vScroll.set(y);
-  // However, that calls setMetrics twice.  Combining them speeds up rendering.
+  // However, that calls setMetrics twice which causes a chain of
+  // getAttribute->setAttribute->getAttribute resulting in an extra layout pass.
+  // Combining them speeds up rendering.
   var xyRatio = {};
 
-  var knobValue = x * this.hScroll.ratio_;
-  this.hScroll.svgKnob_.setAttribute('x', knobValue);
-  var barLength = parseFloat(this.hScroll.svgBackground_.getAttribute('width'));
-  var ratio = knobValue / barLength;
-  if (isNaN(ratio)) {
-    ratio = 0;
-  }
-  xyRatio.x = ratio;
+  var hKnobValue = x * this.hScroll.ratio_;
+  var vKnobValue = y * this.vScroll.ratio_;
 
-  var knobValue = y * this.vScroll.ratio_;
-  this.vScroll.svgKnob_.setAttribute('y', knobValue);
-  var barLength =
+  var hBarLength =
+      parseFloat(this.hScroll.svgBackground_.getAttribute('width'));
+  var vBarLength =
       parseFloat(this.vScroll.svgBackground_.getAttribute('height'));
-  var ratio = knobValue / barLength;
-  if (isNaN(ratio)) {
-    ratio = 0;
-  }
-  xyRatio.y = ratio;
+
+  xyRatio.x = this.getRatio_(hKnobValue, hBarLength);
+  xyRatio.y = this.getRatio_(vKnobValue, vBarLength);
 
   this.workspace_.setMetrics(xyRatio);
-};
+  this.hScroll.svgKnob_.setAttribute('x', hKnobValue);
+  this.vScroll.svgKnob_.setAttribute('y', vKnobValue);
+}
+
+/**
+ * Helper to calculate the ratio of knob value to bar length.
+ * @param {number} barLength The length of the scroll bar.
+ * @param {number} knobValue The value of the knob.
+ * @private
+ */
+Blockly.ScrollbarPair.prototype.getRatio_ = function(knobValue, barLength) {
+  var ratio = knobValue / barLength;
+  if (isNaN(ratio)) {
+    return 0;
+  }
+  return ratio;
+}
 
 // --------------------------------------------------------------------
 

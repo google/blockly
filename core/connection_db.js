@@ -149,14 +149,14 @@ Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
 /**
  * Find all nearby connections to the given connection.
  * Type checking does not apply, since this function is used for bumping.
- * @param {Blockly.Connection} connection The connection whose neighbours should
+ * @param {!Blockly.Connection} connection The connection whose neighbours should
  *     be returned.
  * @param {number} maxRadius The maximum radius to another connection.
  * @return {!Array.<Blockly.Connection>} List of connections.
  * @private
  */
 Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
-  var db =  this;
+  var db = this;
   var currentX = connection.x_;
   var currentY = connection.y_;
 
@@ -226,54 +226,54 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  */
 Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx,
     dy) {
-    // Don't bother.
-    if (this.length == 0) {
-        return null;
+  // Don't bother.
+  if (!this.length) {
+    return null;
+  }
+
+  // Stash the values of x and y from before the drag.
+  var baseY = conn.y_;
+  var baseX = conn.x_;
+
+  conn.x_ = baseX + dx;
+  conn.y_ = baseY + dy;
+
+  // findPositionForConnection finds an index for insertion, which is always
+  // after any block with the same y index.  We want to search both forward
+  // and back, so search on both sides of the index.
+  var closestIndex = this.findPositionForConnection_(conn);
+
+  var bestConnection = null;
+  var bestRadius = maxRadius;
+  var temp;
+
+  // Walk forward and back on the y axis looking for the closest x,y point.
+  var pointerMin = closestIndex - 1;
+  while (pointerMin >= 0 &&
+      this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
+    temp = this[pointerMin];
+    if (conn.isConnectionAllowed(temp, bestRadius)) {
+        bestConnection = temp;
+        bestRadius = temp.distanceFrom(conn);
     }
+    pointerMin--;
+  }
 
-    // Stash the values of x and y from before the drag.
-    var baseY = conn.y_;
-    var baseX = conn.x_;
-
-    conn.x_ = baseX + dx;
-    conn.y_ = baseY + dy;
-
-    // findPositionForConnection finds an index for insertion, which is always
-    // after any block with the same y index.  We want to search both forward
-    // and back, so search on both sides of the index.
-    var closestIndex = this.findPositionForConnection_(conn);
-
-    var bestConnection = null;
-    var bestRadius = maxRadius;
-    var temp;
-
-    // Walk forward and back on the y axis looking for the closest x,y point.
-    var pointerMin = closestIndex - 1;
-    while (pointerMin >= 0 &&
-        this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
-      temp = this[pointerMin];
-      if (conn.isConnectionAllowed(temp, bestRadius)) {
-          bestConnection = temp;
-          bestRadius = temp.distanceFrom(conn);
-      }
-      pointerMin--;
+  var pointerMax = closestIndex;
+  while (pointerMax < this.length && this.isInYRange_(pointerMax, conn.y_,
+      maxRadius)) {
+    temp = this[pointerMax];
+    if (conn.isConnectionAllowed(temp, bestRadius)) {
+        bestConnection = temp;
+        bestRadius = temp.distanceFrom(conn);
     }
+    pointerMax++;
+  }
 
-    var pointerMax = closestIndex;
-    while (pointerMax < this.length && this.isInYRange_(pointerMax, conn.y_,
-        maxRadius)) {
-      temp = this[pointerMax];
-      if (conn.isConnectionAllowed(temp, bestRadius)) {
-          bestConnection = temp;
-          bestRadius = temp.distanceFrom(conn);
-      }
-      pointerMax++;
-    }
-
-    // Reset the values of x and y.
-    conn.x_ = baseX;
-    conn.y_ = baseY;
-    return bestConnection;
+  // Reset the values of x and y.
+  conn.x_ = baseX;
+  conn.y_ = baseY;
+  return bestConnection;
 };
 
 /**

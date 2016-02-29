@@ -225,23 +225,23 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
-   maxRadius) {
+    maxRadius) {
   if (this.distanceFrom(candidate) > maxRadius) {
-      return false;
+    return false;
   }
 
   // Type checking
   var canConnect = this.canConnectWithReason_(candidate);
-  if (canConnect != Blockly.Connection.CAN_CONNECT
-          && canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
-      return false;
+  if (canConnect != Blockly.Connection.CAN_CONNECT &&
+      canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
+    return false;
   }
 
   // Don't offer to connect an already connected left (male) value plug to
   // an available right (female) value plug.  Don't offer to connect the
   // bottom of a statement block to one that's already connected.
-  if (candidate.type == Blockly.OUTPUT_VALUE
-      || candidate.type == Blockly.PREVIOUS_STATEMENT) {
+  if (candidate.type == Blockly.OUTPUT_VALUE ||
+      candidate.type == Blockly.PREVIOUS_STATEMENT) {
     if (candidate.targetConnection || this.targetConnection) {
       return false;
     }

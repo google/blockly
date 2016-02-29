@@ -154,7 +154,8 @@ Blockly.Connection.prototype.isSuperior = function() {
 
 /**
  * Returns the distance between this connection and another connection.
- * @param {Blockly.Connection} otherConnection The other connection to measure the distance to.
+ * @param {!Blockly.Connection} otherConnection The other connection to measure
+ *     the distance to.
  * @return {number} The distance between connections.
  */
 Blockly.Connection.prototype.distanceFrom = function(otherConnection) {
@@ -215,6 +216,60 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
     default:
       throw 'Unknown connection failure: this should never happen!';
   }
+};
+
+/**
+ * Check if the two connections can be dragged to connect to each other.
+ * @param {Blockly.Connection} candidate A nearby connection to check.
+ * @param {number} maxRadius The maximum radius allowed for connections.
+ * @return {boolean} True if the connection is allowed, false otherwise.
+ */
+Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
+   maxRadius) {
+  if (this.distanceFrom(candidate) > maxRadius) {
+      return false;
+  }
+
+  // Type checking
+  var canConnect = this.canConnectWithReason_(candidate);
+  if (canConnect != Blockly.Connection.CAN_CONNECT
+          && canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
+      return false;
+  }
+
+  // Don't offer to connect an already connected left (male) value plug to
+  // an available right (female) value plug.  Don't offer to connect the
+  // bottom of a statement block to one that's already connected.
+  if (candidate.type == Blockly.OUTPUT_VALUE
+      || candidate.type == Blockly.PREVIOUS_STATEMENT) {
+    if (candidate.targetConnection || this.targetConnection) {
+      return false;
+    }
+  }
+
+  // Offering to connect the left (male) of a value block to an already
+  // connected value pair is ok, we'll splice it in.
+  // However, don't offer to splice into an unmovable block.
+  if (candidate.type == Blockly.INPUT_VALUE &&
+      candidate.targetConnection &&
+      !candidate.targetBlock().isMovable() &&
+      !candidate.targetBlock().isShadow()) {
+    return false;
+  }
+
+  // Don't let blocks try to connect to themselves or ones they nest.
+  var targetSourceBlock = candidate.sourceBlock_;
+  var sourceBlock = this.sourceBlock_;
+  if (targetSourceBlock && sourceBlock) {
+    do {
+      if (sourceBlock == targetSourceBlock) {
+        return false;
+      }
+      targetSourceBlock = targetSourceBlock.getParent();
+    } while (targetSourceBlock);
+  }
+
+  return true;
 };
 
 /**
@@ -513,7 +568,7 @@ Blockly.Connection.prototype.moveTo = function(x, y) {
   this.y_ = y;
   // Insert it into its new location in the database.
   if (!this.hidden_) {
-    this.db_.addConnection_(this);
+    this.db_.addConnection(this);
   }
 };
 
@@ -553,13 +608,16 @@ Blockly.Connection.prototype.tighten_ = function() {
  *     in the database and the current location (as a result of dragging).
  * @param {number} dy Vertical offset between this connection's location
  *     in the database and the current location (as a result of dragging).
- * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two properties: 'connection' which is either
- *     another connection or null, and 'radius' which is the distance.
+ * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
+ *     properties:' connection' which is either another connection or null,
+ *     and 'radius' which is the distance.
  */
 Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
-  var closestConnection = this.dbOpposite_.searchForClosest(this, maxLimit, dx, dy);
+  var closestConnection = this.dbOpposite_.searchForClosest(this, maxLimit, dx,
+      dy);
   if (closestConnection) {
-    return {connection: closestConnection, radius: this.distanceFrom(closestConnection)};
+    return {connection: closestConnection,
+      radius: this.distanceFrom(closestConnection)};
   }
   return {connection: null, radius: maxLimit};
 };
@@ -654,22 +712,6 @@ Blockly.Connection.prototype.neighbours_ = function(maxLimit) {
 // Appearance or lack thereof.
 
 /**
- * Returns a shape enum for this connection.
- * @return {number} Enum representing shape.
- */
-Blockly.Connection.prototype.getOutputShape = function() {
-    if (!this.check_) return Blockly.Connection.NUMBER;
-    if (this.check_.indexOf('Boolean') !== -1) {
-        return Blockly.Connection.BOOLEAN;
-    }
-    if (this.check_.indexOf('String') !== -1) {
-        return Blockly.Connection.STRING;
-    }
-
-    return Blockly.Connection.NUMBER;
-};
-
-/**
  * Set whether this connections is hidden (not tracked in a database) or not.
  * @param {boolean} hidden True if connection is hidden.
  */
@@ -678,7 +720,7 @@ Blockly.Connection.prototype.setHidden = function(hidden) {
   if (hidden && this.inDB_) {
     this.db_.removeConnection_(this);
   } else if (!hidden && !this.inDB_) {
-    this.db_.addConnection_(this);
+    this.db_.addConnection(this);
   }
 };
 
@@ -756,10 +798,10 @@ Blockly.Connection.prototype.highlight = function() {
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
         Blockly.BlockSvg.TAB_WIDTH;
-    steps = 'm 0,0 v 4 ' + Blockly.BlockSvg.NOTCH_PATH_DOWN + ' v 4';
+    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
 
   } else {
-    steps = 'm 0,0 v -4 ' + Blockly.BlockSvg.NOTCH_PATH_UP + ' v -4';
+    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;

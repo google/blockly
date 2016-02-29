@@ -158,7 +158,7 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
   this.workspace_.setMetrics(xyRatio);
   this.hScroll.svgKnob_.setAttribute('x', hKnobValue);
   this.vScroll.svgKnob_.setAttribute('y', vKnobValue);
-}
+};
 
 /**
  * Helper to calculate the ratio of knob value to bar length.
@@ -172,7 +172,7 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(knobValue, barLength) {
     return 0;
   }
   return ratio;
-}
+};
 
 // --------------------------------------------------------------------
 

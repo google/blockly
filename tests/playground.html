@@ -89,7 +89,7 @@ function start() {
   taChange();
   // Restore event logging state.
   var state = sessionStorage.getItem('logEvents');
-  logEvents(Boolean(state));
+  logEvents(Boolean(Number(state)));
 }
 
 function toXml() {

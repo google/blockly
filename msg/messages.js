@@ -43,9 +43,9 @@ goog.require('Blockly.Msg');
  */
 
 /**
- * Tip: Generate URLs for read-only blocks by creating the blocks in the Code app,
- * then evaluating this in the console:
- * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' + encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5, -6))
+ * Each message is preceded with a tripple-slash comment that becomes the
+ * message descriptor.  The build process extracts these descriptors, adds
+ * them to msg/json/qqq.json, and they show up in the translation console.
  */
 
 /// default name - A simple, general default name for a variable, preferably short.

@@ -349,6 +349,35 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
 };
 
 /**
+ * Returns the coordinates of a bounding box describing the dimensions of this block
+ * and any blocks stacked below it.
+ * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
+ *         Object with top left and bottom right coordinates of the bounding box.
+ */
+Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
+  var blockXY = this.getRelativeToSurfaceXY(this);
+  var tab = this.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
+  var blockBounds = this.getHeightWidth();
+  var topLeft;
+  var bottomRight;
+  if (this.RTL) {
+    // Width has the tab built into it already so subtract it here.
+    topLeft = new goog.math.Coordinate(blockXY.x - (blockBounds.width - tab), blockXY.y);
+    // Add the width of the tab/puzzle piece knob to the x coordinate
+    // since X is the corner of the rectangle, not the whole puzzle piece.
+    bottomRight = new goog.math.Coordinate(blockXY.x + tab, blockXY.y + blockBounds.height);
+  } else {
+    // Subtract the width of the tab/puzzle piece knob to the x coordinate
+    // since X is the corner of the rectangle, not the whole puzzle piece.
+    topLeft = new goog.math.Coordinate(blockXY.x - tab, blockXY.y);
+    // Width has the tab built into it already so subtract it here.
+    bottomRight = new goog.math.Coordinate(blockXY.x + blockBounds.width - tab,
+ 					   blockXY.y + blockBounds.height);
+  }
+  return { topLeft : topLeft, bottomRight : bottomRight };
+};
+
+/**
  * Set whether the block is collapsed or not.
  * @param {boolean} collapsed True if collapsed.
  */

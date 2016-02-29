@@ -521,12 +521,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   var MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS - 1;
   var viewWidth = svgSize.width - MARGIN;
   var viewHeight = svgSize.height - MARGIN;
-  try {
-    var blockBox = this.getCanvas().getBBox();
-  } catch (e) {
-    // Firefox has trouble with hidden elements (Bug 528969).
-    return null;
-  }
+  var blockBox = this.getBlocksBoundingBox();
+
   // Fix scale.
   var contentWidth = blockBox.width * this.scale;
   var contentHeight = blockBox.height * this.scale;

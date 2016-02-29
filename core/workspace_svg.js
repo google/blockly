@@ -661,6 +661,46 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
 };
 
 /**
+ * Calculate the bounding box for the blocks on the workspace.
+ *
+ * @return {Object} Contains the position and size of the bounding box
+ *   containing the blocks on the workspace.
+ */
+Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
+  var topBlocks = this.getTopBlocks();
+  // There are no blocks, return empty rectangle.
+  if (topBlocks.length <= 0) {
+    return {x: 0, y: 0, width: 0, height: 0};
+  }
+
+  // Initialize boundary using the first block.
+  var boundary = topBlocks[0].getBoundingRectangle();
+
+  // Start at 1 since the 0th block was used for initialization
+  for (var i = 1; i < topBlocks.length; i++) {
+    var blockBoundary = topBlocks[i].getBoundingRectangle();
+    if (blockBoundary.topLeft.x < boundary.topLeft.x) {
+      boundary.topLeft.x = blockBoundary.topLeft.x;
+    }
+    if (blockBoundary.bottomRight.x > boundary.bottomRight.x) {
+      boundary.bottomRight.x = blockBoundary.bottomRight.x
+    }
+    if (blockBoundary.topLeft.y < boundary.topLeft.y) {
+      boundary.topLeft.y = blockBoundary.topLeft.y;
+    }
+    if (blockBoundary.bottomRight.y > boundary.bottomRight.y) {
+      boundary.bottomRight.y = blockBoundary.bottomRight.y;
+    }
+  }
+  return {
+    x: boundary.topLeft.x,
+    y: boundary.topLeft.y,
+    width: boundary.bottomRight.x - boundary.topLeft.x,
+    height: boundary.bottomRight.y - boundary.topLeft.y
+  };
+};
+
+/**
  * Clean up the workspace by ordering all the blocks in a column.
  * @private
  */

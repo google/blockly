@@ -211,7 +211,7 @@ function test_SearchForClosest() {
   var db = new Blockly.ConnectionDB();
   var sharedWorkspace = {id: "Shared workspace"};
 
-  // search an empty list
+  // Search an empty list.
   assertEquals(null, helper_searchDB(db, 10 /* x */, 10 /* y */,
       100 /* radius */));
 
@@ -227,13 +227,13 @@ function test_SearchForClosest() {
     db.addConnection(tempConn);
   }
 
-  // should be at 0, 9
+  // Should be at 0, 9.
   var last = db[db.length - 1];
-  // correct connection is last in db; many connections in radius
+  // Correct connection is last in db; many connections in radius.
   assertEquals(last, helper_searchDB(db, 0, 10, 15, sharedWorkspace));
   // Nothing nearby.
   assertEquals(null, helper_searchDB(db, 100, 100, 3, sharedWorkspace));
-  // first in db, exact match
+  // First in db, exact match.
   assertEquals(db[0], helper_searchDB(db, 0, 0, 0, sharedWorkspace));
 
   tempConn = helper_createConnection(6, 6, Blockly.PREVIOUS_STATEMENT,

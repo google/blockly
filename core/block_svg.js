@@ -286,6 +286,7 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dy Vertical offset.
  */
 Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
+  goog.asserts.assert(!this.parentBlock_, 'Block has parent.');
   var event = new Blockly.Events.Move(this);
   var xy = this.getRelativeToSurfaceXY();
   this.getSvgRoot().setAttribute('transform',

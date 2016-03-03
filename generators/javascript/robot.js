@@ -97,6 +97,7 @@ Blockly.JavaScript['robot_perception_object_attributes'] = function(block) {
     code = value_object + '.scale.z';
   } else {
     code = 'null'; 
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
   }
 
   return [code, Blockly.JavaScript.ORDER_MEMBER];

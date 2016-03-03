@@ -82,14 +82,19 @@ function start() {
              },
           });
   // Restore previously displayed text.
-  var text = sessionStorage.getItem('textarea');
-  if (text) {
-    document.getElementById('importExport').value = text;
+  if (sessionStorage) {
+    var text = sessionStorage.getItem('textarea');
+    if (text) {
+      document.getElementById('importExport').value = text;
+    }
+    // Restore event logging state.
+    var state = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(state)));
+  } else {
+    // MSIE 11 does not support sessionStorage on file:// URLs.
+    logEvents(false);
   }
   taChange();
-  // Restore event logging state.
-  var state = sessionStorage.getItem('logEvents');
-  logEvents(Boolean(Number(state)));
 }
 
 function toXml() {
@@ -118,7 +123,9 @@ function toCode(lang) {
 // Preserve text between page reloads.
 function taChange() {
   var textarea = document.getElementById('importExport');
-  sessionStorage.setItem('textarea', textarea.value)
+  if (sessionStorage) {
+    sessionStorage.setItem('textarea', textarea.value);
+  }
   var valid = true;
   try {
     Blockly.Xml.textToDom(textarea.value);
@@ -131,7 +138,9 @@ function taChange() {
 function logEvents(state) {
   var checkbox = document.getElementById('logCheck');
   checkbox.checked = state;
-  sessionStorage.setItem('logEvents', Number(state));
+  if (sessionStorage) {
+    sessionStorage.setItem('logEvents', Number(state));
+  }
   if (state) {
     workspace.addChangeListener(logger);
   } else {

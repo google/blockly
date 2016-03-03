@@ -3,7 +3,7 @@ var app = app || {};
 app.ClipboardService = ng.core
   .Class({
     constructor: function() {
-      this.clipboardBlockXml
+      this.clipboardBlockXml;
       this.clipboardBlockConnection;
       this.markedConnection;
       // this.serviceId = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
@@ -11,36 +11,36 @@ app.ClipboardService = ng.core
     cut: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom_(block);
       this.clipboardBlockConnection = block.outputConnection ||
-        block.previousConnection;
+          block.previousConnection;
       block.dispose(true);
       console.log(this.clipboardBlockConnection);
-      console.log("cut");
+      console.log('cut');
     },
     copy: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom_(block);
       this.clipboardBlockConnection = block.outputConnection ||
-        block.previousConnection;
+          block.previousConnection;
     },
     paste: function(connection) {
       var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace,
-        this.clipboardBlockXml_);
+          this.clipboardBlockXml_);
       connection.connect(blockOnProperWorkspace.outputConnection ||
-        blockOnProperWorkspace.previousConnection);
+          blockOnProperWorkspace.previousConnection);
     },
     pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom_(block);
       var blockOnProperWorkspace =
         Blockly.Xml.domToBlock(app.workspace, xml);
       this.markedConnection.connect(
-        blockOnProperWorkspace.outputConnection ||
-        blockOnProperWorkspace.previousConnection);
+          blockOnProperWorkspace.outputConnection ||
+          blockOnProperWorkspace.previousConnection);
     },
     markConnection: function(connection) {
       this.markedConnection = connection;
     },
     isCompatibleWithConnection_: function(blockConnection, connection, debug) {
       //the connection and blockConnection exist
-      if (!connection || !blockConnection){
+      if (!connection || !blockConnection) {
         return false;
       }
 
@@ -49,8 +49,9 @@ app.ClipboardService = ng.core
             connection.type &&
             connection.checkType_(blockConnection);
 
-      if (debug){
-        console.log("checking: input " + blockConnection.check_ + " and clipboard " + connection.check_);
+      if (debug) {
+        console.log('checking: input ' + blockConnection.check_ +
+            ' and clipboard ' + connection.check_);
         console.log((Blockly.OPPOSITE_TYPE[blockConnection.type] ==
             connection.type));
         console.log(
@@ -58,17 +59,18 @@ app.ClipboardService = ng.core
       }
       return result;
     },
-    isCompatibleWithMarkedConnection: function(block,debug) {
+    isCompatibleWithMarkedConnection: function(block, debug) {
       var blockConnection = block.outputConnection || block.previousConnection;
       return this.markedConnection &&
           this.markedConnection.sourceBlock_.workspace != null &&
           this.isCompatibleWithConnection_(
-            blockConnection, this.markedConnection, debug);
+              blockConnection, this.markedConnection, debug);
     },
-    isCompatibleWithClipboard: function(input,debug) {
-      if (debug && input.connection && this.clipboardBlockConnection){
+    isCompatibleWithClipboard: function(input, debug) {
+      if (debug && input.connection && this.clipboardBlockConnection) {
         console.log(input);
       }
-      return this.isCompatibleWithConnection_(input.connection, this.clipboardBlockConnection, debug);
+      return this.isCompatibleWithConnection_(input.connection,
+          this.clipboardBlockConnection, debug);
     }
   });

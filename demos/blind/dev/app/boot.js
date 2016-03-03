@@ -1,7 +1,7 @@
 /**
  * Blockly Demos: BlindBlockly
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
  */
 
 /**
- * @fileoverview Starts up angular app.
+ * @fileoverview Starts up Angular app.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 

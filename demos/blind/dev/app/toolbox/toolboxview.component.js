@@ -1,7 +1,7 @@
 /**
  * Blockly Demos: BlindBlockly
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,8 @@
  */
 
 /**
- * @fileoverview Angular2 Component that details how a toolbox is rendered in BlindBlockly. Also handles any interactions with the toolbox.
+ * @fileoverview Angular2 Component that details how a toolbox is rendered
+ * in BlindBlockly. Also handles any interactions with the toolbox.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 var app = app || {};
@@ -52,19 +53,12 @@ app.ToolboxView = ng.core
     this.toolboxWorkspaces = {};
   },
   makeArray: function(val) {
-    if (val){
-      var children = val.documentElement.children;
+    if (val) {
       if (this.toolboxCategories.length > 0) {
         return this.toolboxCategories;
       } else {
-        this.toolboxCategories.length = 0;
-        var temp = Array.from(children);
-        for (var i = 0; i < temp.length; i++) {
-          tempNode = temp[i];
-          if (tempNode.nodeName == 'category') {
-            this.toolboxCategories.push(tempNode);
-          }
-        }
+        this.toolboxCategories = Array.from(
+            val.documentElement.getElementsByTagName('category'));
         return this.toolboxCategories;
       }
     }
@@ -74,9 +68,9 @@ app.ToolboxView = ng.core
     if (this.toolboxWorkspaces[catName]) {
       return this.toolboxWorkspaces[catName];
     } else {
-      var tempWorkspace = new Blockly.Workspace();
-      Blockly.Xml.domToWorkspace(tempWorkspace, categoryNode);
-      this.toolboxWorkspaces[catName] = tempWorkspace;
+      var categoryWorkspace = new Blockly.Workspace();
+      Blockly.Xml.domToWorkspace(categoryWorkspace, categoryNode);
+      this.toolboxWorkspaces[catName] = categoryWorkspace;
       return this.toolboxWorkspaces[catName];
     }
   },

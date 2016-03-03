@@ -1,7 +1,7 @@
 /**
  * Blockly Demos: BlindBlockly
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -99,9 +99,6 @@ app.TreeView = ng.core
         case 'COPY_BLOCK':
           this.sharedClipboardService.copy(block);
           break;
-        default:
-          console.log('default case');
-          break;
       }
       event.target.selectedIndex = 0;
     },
@@ -113,9 +110,6 @@ app.TreeView = ng.core
           break;
         case 'PASTE':
           this.sharedClipboardService.paste(input.connection);
-          break;
-        default:
-          console.log(event.target.value);
           break;
       }
       event.target.selectedIndex = 0;

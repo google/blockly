@@ -25,7 +25,6 @@
 'use strict';
 
 goog.provide('Blockly.Connection');
-goog.provide('Blockly.ConnectionDB');
 
 goog.require('goog.dom');
 
@@ -154,6 +153,18 @@ Blockly.Connection.prototype.isSuperior = function() {
 };
 
 /**
+ * Returns the distance between this connection and another connection.
+ * @param {!Blockly.Connection} otherConnection The other connection to measure
+ *     the distance to.
+ * @return {number} The distance between connections.
+ */
+Blockly.Connection.prototype.distanceFrom = function(otherConnection) {
+  var xDiff = this.x_ - otherConnection.x_;
+  var yDiff = this.y_ - otherConnection.y_;
+  return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+};
+
+/**
  * Checks whether the current connection can connect with the target
  * connection.
  * @param {Blockly.Connection} target Connection to check compatibility with.
@@ -205,6 +216,60 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
     default:
       throw 'Unknown connection failure: this should never happen!';
   }
+};
+
+/**
+ * Check if the two connections can be dragged to connect to each other.
+ * @param {Blockly.Connection} candidate A nearby connection to check.
+ * @param {number} maxRadius The maximum radius allowed for connections.
+ * @return {boolean} True if the connection is allowed, false otherwise.
+ */
+Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
+    maxRadius) {
+  if (this.distanceFrom(candidate) > maxRadius) {
+    return false;
+  }
+
+  // Type checking
+  var canConnect = this.canConnectWithReason_(candidate);
+  if (canConnect != Blockly.Connection.CAN_CONNECT &&
+      canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
+    return false;
+  }
+
+  // Don't offer to connect an already connected left (male) value plug to
+  // an available right (female) value plug.  Don't offer to connect the
+  // bottom of a statement block to one that's already connected.
+  if (candidate.type == Blockly.OUTPUT_VALUE ||
+      candidate.type == Blockly.PREVIOUS_STATEMENT) {
+    if (candidate.targetConnection || this.targetConnection) {
+      return false;
+    }
+  }
+
+  // Offering to connect the left (male) of a value block to an already
+  // connected value pair is ok, we'll splice it in.
+  // However, don't offer to splice into an unmovable block.
+  if (candidate.type == Blockly.INPUT_VALUE &&
+      candidate.targetConnection &&
+      !candidate.targetBlock().isMovable() &&
+      !candidate.targetBlock().isShadow()) {
+    return false;
+  }
+
+  // Don't let blocks try to connect to themselves or ones they nest.
+  var targetSourceBlock = candidate.sourceBlock_;
+  var sourceBlock = this.sourceBlock_;
+  if (targetSourceBlock && sourceBlock) {
+    do {
+      if (sourceBlock == targetSourceBlock) {
+        return false;
+      }
+      targetSourceBlock = targetSourceBlock.getParent();
+    } while (targetSourceBlock);
+  }
+
+  return true;
 };
 
 /**
@@ -332,7 +397,7 @@ Blockly.Connection.connectReciprocally = function(first, second) {
   }
   first.targetConnection = second;
   second.targetConnection = first;
-}
+};
 
 /**
  * Does the given block have one and only one connection point that will accept
@@ -503,7 +568,7 @@ Blockly.Connection.prototype.moveTo = function(x, y) {
   this.y_ = y;
   // Insert it into its new location in the database.
   if (!this.hidden_) {
-    this.db_.addConnection_(this);
+    this.db_.addConnection(this);
   }
 };
 
@@ -514,38 +579,6 @@ Blockly.Connection.prototype.moveTo = function(x, y) {
  */
 Blockly.Connection.prototype.moveBy = function(dx, dy) {
   this.moveTo(this.x_ + dx, this.y_ + dy);
-};
-
-/**
- * Add highlighting around this connection.
- */
-Blockly.Connection.prototype.highlight = function() {
-  var steps;
-  if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
-        Blockly.BlockSvg.TAB_WIDTH;
-    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
-
-  } else {
-    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
-  }
-  var xy = this.sourceBlock_.getRelativeToSurfaceXY();
-  var x = this.x_ - xy.x;
-  var y = this.y_ - xy.y;
-  Blockly.Connection.highlightedPath_ = Blockly.createSvgElement('path',
-      {'class': 'blocklyHighlightedConnectionPath',
-       'd': steps,
-       transform: 'translate(' + x + ',' + y + ')' +
-           (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')},
-      this.sourceBlock_.getSvgRoot());
-};
-
-/**
- * Remove the highlighting around this connection.
- */
-Blockly.Connection.prototype.unhighlight = function() {
-  goog.dom.removeNode(Blockly.Connection.highlightedPath_);
-  delete Blockly.Connection.highlightedPath_;
 };
 
 /**
@@ -575,108 +608,18 @@ Blockly.Connection.prototype.tighten_ = function() {
  *     in the database and the current location (as a result of dragging).
  * @param {number} dy Vertical offset between this connection's location
  *     in the database and the current location (as a result of dragging).
- * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two properties: 'connection' which is either
- *     another connection or null, and 'radius' which is the distance.
+ * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
+ *     properties:' connection' which is either another connection or null,
+ *     and 'radius' which is the distance.
  */
 Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
-  if (this.targetConnection) {
-    // Don't offer to connect to a connection that's already connected.
-    return {connection: null, radius: maxLimit};
+  var closestConnection = this.dbOpposite_.searchForClosest(this, maxLimit, dx,
+      dy);
+  if (closestConnection) {
+    return {connection: closestConnection,
+      radius: this.distanceFrom(closestConnection)};
   }
-  // Determine the opposite type of connection.
-  var db = this.dbOpposite_;
-
-  // Since this connection is probably being dragged, add the delta.
-  var currentX = this.x_ + dx;
-  var currentY = this.y_ + dy;
-
-  // Binary search to find the closest y location.
-  var pointerMin = 0;
-  var pointerMax = db.length - 2;
-  var pointerMid = pointerMax;
-  while (pointerMin < pointerMid) {
-    if (db[pointerMid].y_ < currentY) {
-      pointerMin = pointerMid;
-    } else {
-      pointerMax = pointerMid;
-    }
-    pointerMid = Math.floor((pointerMin + pointerMax) / 2);
-  }
-
-  // Walk forward and back on the y axis looking for the closest x,y point.
-  pointerMin = pointerMid;
-  pointerMax = pointerMid;
-  var closestConnection = null;
-  var sourceBlock = this.sourceBlock_;
-  var thisConnection = this;
-  if (db.length) {
-    while (pointerMin >= 0 && checkConnection_(pointerMin)) {
-      pointerMin--;
-    }
-    do {
-      pointerMax++;
-    } while (pointerMax < db.length && checkConnection_(pointerMax));
-  }
-
-  /**
-   * Computes if the current connection is within the allowed radius of another
-   * connection.
-   * This function is a closure and has access to outside variables.
-   * @param {number} yIndex The other connection's index in the database.
-   * @return {boolean} True if the search needs to continue: either the current
-   *     connection's vertical distance from the other connection is less than
-   *     the allowed radius, or if the connection is not compatible.
-   * @private
-   */
-  function checkConnection_(yIndex) {
-    var connection = db[yIndex];
-    if (connection.type == Blockly.OUTPUT_VALUE ||
-        connection.type == Blockly.PREVIOUS_STATEMENT) {
-      // Don't offer to connect an already connected left (male) value plug to
-      // an available right (female) value plug.  Don't offer to connect the
-      // bottom of a statement block to one that's already connected.
-      if (connection.targetConnection) {
-        return true;
-      }
-    }
-    // Offering to connect the top of a statement block to an already connected
-    // connection is ok, we'll just insert it into the stack.
-
-    // Offering to connect the left (male) of a value block to an already
-    // connected value pair is ok, we'll splice it in.
-    // However, don't offer to splice into an unmovable block.
-    if (connection.type == Blockly.INPUT_VALUE &&
-        connection.targetConnection &&
-        !connection.targetBlock().isMovable() &&
-        !connection.targetBlock().isShadow()) {
-      return true;
-    }
-
-    // Do type checking.
-    if (!thisConnection.checkType_(connection)) {
-      return true;
-    }
-
-    // Don't let blocks try to connect to themselves or ones they nest.
-    var targetSourceBlock = connection.sourceBlock_;
-    do {
-      if (sourceBlock == targetSourceBlock) {
-        return true;
-      }
-      targetSourceBlock = targetSourceBlock.getParent();
-    } while (targetSourceBlock);
-
-    // Only connections within the maxLimit radius.
-    var dx = currentX - connection.x_;
-    var dy = currentY - connection.y_;
-    var r = Math.sqrt(dx * dx + dy * dy);
-    if (r <= maxLimit) {
-      closestConnection = connection;
-      maxLimit = r;
-    }
-    return Math.abs(dy) < maxLimit;
-  }
-  return {connection: closestConnection, radius: maxLimit};
+  return {connection: null, radius: maxLimit};
 };
 
 /**
@@ -763,58 +706,10 @@ Blockly.Connection.prototype.getShadowDom = function() {
  * @private
  */
 Blockly.Connection.prototype.neighbours_ = function(maxLimit) {
-  // Determine the opposite type of connection.
-  var db = this.dbOpposite_;
-
-  var currentX = this.x_;
-  var currentY = this.y_;
-
-  // Binary search to find the closest y location.
-  var pointerMin = 0;
-  var pointerMax = db.length - 2;
-  var pointerMid = pointerMax;
-  while (pointerMin < pointerMid) {
-    if (db[pointerMid].y_ < currentY) {
-      pointerMin = pointerMid;
-    } else {
-      pointerMax = pointerMid;
-    }
-    pointerMid = Math.floor((pointerMin + pointerMax) / 2);
-  }
-
-  // Walk forward and back on the y axis looking for the closest x,y point.
-  pointerMin = pointerMid;
-  pointerMax = pointerMid;
-  var neighbours = [];
-  var sourceBlock = this.sourceBlock_;
-  if (db.length) {
-    while (pointerMin >= 0 && checkConnection_(pointerMin)) {
-      pointerMin--;
-    }
-    do {
-      pointerMax++;
-    } while (pointerMax < db.length && checkConnection_(pointerMax));
-  }
-
-  /**
-   * Computes if the current connection is within the allowed radius of another
-   * connection.
-   * This function is a closure and has access to outside variables.
-   * @param {number} yIndex The other connection's index in the database.
-   * @return {boolean} True if the current connection's vertical distance from
-   *     the other connection is less than the allowed radius.
-   */
-  function checkConnection_(yIndex) {
-    var dx = currentX - db[yIndex].x_;
-    var dy = currentY - db[yIndex].y_;
-    var r = Math.sqrt(dx * dx + dy * dy);
-    if (r <= maxLimit) {
-      neighbours.push(db[yIndex]);
-    }
-    return dy < maxLimit;
-  }
-  return neighbours;
+  return this.dbOpposite_.getNeighbours(this, maxLimit);
 };
+
+// Appearance or lack thereof.
 
 /**
  * Set whether this connections is hidden (not tracked in a database) or not.
@@ -825,7 +720,7 @@ Blockly.Connection.prototype.setHidden = function(hidden) {
   if (hidden && this.inDB_) {
     this.db_.removeConnection_(this);
   } else if (!hidden && !this.inDB_) {
-    this.db_.addConnection_(this);
+    this.db_.addConnection(this);
   }
 };
 
@@ -895,110 +790,34 @@ Blockly.Connection.prototype.unhideAll = function() {
   return renderList;
 };
 
-
 /**
- * Database of connections.
- * Connections are stored in order of their vertical component.  This way
- * connections in an area may be looked up quickly using a binary search.
- * @constructor
+ * Add highlighting around this connection.
  */
-Blockly.ConnectionDB = function() {
-};
+Blockly.Connection.prototype.highlight = function() {
+  var steps;
+  if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
+    var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
+        Blockly.BlockSvg.TAB_WIDTH;
+    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
 
-Blockly.ConnectionDB.prototype = new Array();
-/**
- * Don't inherit the constructor from Array.
- * @type {!Function}
- */
-Blockly.ConnectionDB.constructor = Blockly.ConnectionDB;
-
-/**
- * Add a connection to the database.  Must not already exist in DB.
- * @param {!Blockly.Connection} connection The connection to be added.
- * @private
- */
-Blockly.ConnectionDB.prototype.addConnection_ = function(connection) {
-  if (connection.inDB_) {
-    throw 'Connection already in database.';
+  } else {
+    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
   }
-  if (connection.sourceBlock_.isInFlyout) {
-    // Don't bother maintaining a database of connections in a flyout.
-    return;
-  }
-  // Insert connection using binary search.
-  var pointerMin = 0;
-  var pointerMax = this.length;
-  while (pointerMin < pointerMax) {
-    var pointerMid = Math.floor((pointerMin + pointerMax) / 2);
-    if (this[pointerMid].y_ < connection.y_) {
-      pointerMin = pointerMid + 1;
-    } else if (this[pointerMid].y_ > connection.y_) {
-      pointerMax = pointerMid;
-    } else {
-      pointerMin = pointerMid;
-      break;
-    }
-  }
-  this.splice(pointerMin, 0, connection);
-  connection.inDB_ = true;
+  var xy = this.sourceBlock_.getRelativeToSurfaceXY();
+  var x = this.x_ - xy.x;
+  var y = this.y_ - xy.y;
+  Blockly.Connection.highlightedPath_ = Blockly.createSvgElement('path',
+      {'class': 'blocklyHighlightedConnectionPath',
+       'd': steps,
+       transform: 'translate(' + x + ',' + y + ')' +
+           (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')},
+      this.sourceBlock_.getSvgRoot());
 };
 
 /**
- * Remove a connection from the database.  Must already exist in DB.
- * @param {!Blockly.Connection} connection The connection to be removed.
- * @private
+ * Remove the highlighting around this connection.
  */
-Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
-  if (!connection.inDB_) {
-    throw 'Connection not in database.';
-  }
-  connection.inDB_ = false;
-  // Find the connection using a binary search.
-  // About 10% faster than a linear search using indexOf.
-  var pointerMin = 0;
-  var pointerMax = this.length - 2;
-  var pointerMid = pointerMax;
-  while (pointerMin < pointerMid) {
-    if (this[pointerMid].y_ < connection.y_) {
-      pointerMin = pointerMid;
-    } else {
-      pointerMax = pointerMid;
-    }
-    pointerMid = Math.floor((pointerMin + pointerMax) / 2);
-  }
-
-  // Walk forward and back on the y axis looking for the connection.
-  // When found, splice it out of the array.
-  pointerMin = pointerMid;
-  pointerMax = pointerMid;
-  while (pointerMin >= 0 && this[pointerMin].y_ == connection.y_) {
-    if (this[pointerMin] == connection) {
-      this.splice(pointerMin, 1);
-      return;
-    }
-    pointerMin--;
-  }
-  do {
-    if (this[pointerMax] == connection) {
-      this.splice(pointerMax, 1);
-      return;
-    }
-    pointerMax++;
-  } while (pointerMax < this.length &&
-           this[pointerMax].y_ == connection.y_);
-  throw 'Unable to find connection in connectionDB.';
-};
-
-/**
- * Initialize a set of connection DBs for a specified workspace.
- * @param {!Blockly.Workspace} workspace The workspace this DB is for.
- */
-Blockly.ConnectionDB.init = function(workspace) {
-  // Create four databases, one for each connection type.
-  var dbList = [];
-  dbList[Blockly.INPUT_VALUE] = new Blockly.ConnectionDB();
-  dbList[Blockly.OUTPUT_VALUE] = new Blockly.ConnectionDB();
-  dbList[Blockly.NEXT_STATEMENT] = new Blockly.ConnectionDB();
-  dbList[Blockly.PREVIOUS_STATEMENT] = new Blockly.ConnectionDB();
-  workspace.connectionDBList = dbList;
+Blockly.Connection.prototype.unhighlight = function() {
+  goog.dom.removeNode(Blockly.Connection.highlightedPath_);
+  delete Blockly.Connection.highlightedPath_;
 };

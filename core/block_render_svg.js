@@ -29,6 +29,7 @@ goog.provide('Blockly.BlockSvg.render');
 
 goog.require('Blockly.BlockSvg');
 
+
 // UI constants for rendering blocks.
 /**
  * Horizontal space between elements.

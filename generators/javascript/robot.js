@@ -79,7 +79,7 @@ Blockly.JavaScript['robot_perception_find_objects'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['robot_object_attributes'] = function(block) {
+Blockly.JavaScript['robot_perception_object_attributes'] = function(block) {
   var dropdown_attribute = block.getFieldValue('ATTRIBUTE') || '';
   var value_object = Blockly.JavaScript.valueToCode(block, 'OBJECT', Blockly.JavaScript.ORDER_ATOMIC) || 'null';
   var code;

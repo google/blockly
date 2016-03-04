@@ -668,7 +668,8 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     }
     block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
     Blockly.Events.enable();
-    if (Blockly.Events.isEnabled() && !block.isShadow()) {
+    if (Blockly.Events.isEnabled()) {
+      Blockly.Events.setGroup(true);
       Blockly.Events.fire(new Blockly.Events.Create(block));
     }
     if (flyout.autoClose) {

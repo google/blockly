@@ -30,8 +30,15 @@ goog.provide('Blockly.Events');
 /**
  * Group ID for new events.  Grouped events are indivisible.
  * @type {string}
+ * @private
  */
-Blockly.Events.group = '';
+Blockly.Events.group_ = '';
+
+/**
+ * Sets whether events should be added to the undo stack.
+ * @type {boolean}
+ */
+Blockly.Events.recordUndo = true;
 
 /**
  * Allow change events to be created and fired.
@@ -165,6 +172,27 @@ Blockly.Events.isEnabled = function() {
 };
 
 /**
+ * Current group.
+ * @return {string} ID string.
+ */
+Blockly.Events.getGroup = function() {
+  return Blockly.Events.group_;
+};
+
+/**
+ * Start or stop a group.
+ * @param {boolean|string} state True to start new group, false to end group.
+ *   String to set group explicitly.
+ */
+Blockly.Events.setGroup = function(state) {
+  if (typeof state == 'boolean') {
+    Blockly.Events.group_ = state ? Blockly.genUid() : '';
+  } else {
+    Blockly.Events.group_ = state;
+  }
+};
+
+/**
  * Abstract class for an event.
  * @param {!Blockly.Block} block The block.
  * @constructor
@@ -172,7 +200,8 @@ Blockly.Events.isEnabled = function() {
 Blockly.Events.Abstract = function(block) {
   this.blockId = block.id;
   this.workspaceId = block.workspace.id;
-  this.group = Blockly.Events.group;
+  this.group = Blockly.Events.group_;
+  this.recordUndo = Blockly.Events.recordUndo;
 };
 
 /**
@@ -202,6 +231,24 @@ goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
 Blockly.Events.Create.prototype.type = Blockly.Events.CREATE;
 
 /**
+ * Run a creation event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.Create.prototype.run = function(forward) {
+  if (forward) {
+    var workspace = Blockly.Workspace.getById(this.workspaceId);
+    var xml = goog.dom.createDom('xml');
+    xml.appendChild(this.xml);
+    Blockly.Xml.domToWorkspace(workspace, xml);
+  } else {
+    var block = Blockly.Block.getById(this.blockId);
+    if (block) {
+      block.dispose(false, true);
+    }
+  }
+};
+
+/**
  * Class for a block deletion event.
  * @param {!Blockly.Block} block The deleted block.
  * @extends {Blockly.Events.Abstract}
@@ -221,6 +268,24 @@ goog.inherits(Blockly.Events.Delete, Blockly.Events.Abstract);
  * @type {string}
  */
 Blockly.Events.Delete.prototype.type = Blockly.Events.DELETE;
+
+/**
+ * Run a deletion event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.Delete.prototype.run = function(forward) {
+  if (forward) {
+    var block = Blockly.Block.getById(this.blockId);
+    if (block) {
+      block.dispose(false, true);
+    }
+  } else {
+    var workspace = Blockly.Workspace.getById(this.workspaceId);
+    var xml = goog.dom.createDom('xml');
+    xml.appendChild(this.oldXml);
+    Blockly.Xml.domToWorkspace(workspace, xml);
+  }
+};
 
 /**
  * Class for a block change event.
@@ -253,6 +318,48 @@ Blockly.Events.Change.prototype.type = Blockly.Events.CHANGE;
  */
 Blockly.Events.Change.prototype.isNull = function() {
   return this.oldValue == this.newValue;
+};
+
+/**
+ * Run a change event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.Change.prototype.run = function(forward) {
+  var block = Blockly.Block.getById(this.blockId);
+  if (!block) {
+    return;
+  }
+  var value = forward ? this.newValue : this.oldValue;
+  switch (this.element) {
+    case 'field':
+      var field = block.getField(this.name);
+      if (field) {
+        field.setValue(value);
+      }
+      break;
+    case 'comment':
+      block.setCommentText(value || null);
+      break;
+    case 'collapsed':
+      block.setCollapsed(value);
+      break;
+    case 'disabled':
+      block.setDisabled(value);
+      break;
+    case 'inline':
+      block.setInputsInline(value);
+      break;
+    case 'mutation':
+      if (block.mutator) {
+        // Close the mutator (if open) since we don't want to update it.
+        block.mutator.setVisible(false);
+      }
+      if (block.domToMutation) {
+        var dom = Blockly.Xml.textToDom('<xml>' + value + '</xml>');
+        block.domToMutation(dom.firstChild);
+      }
+      break;
+  }
 };
 
 /**
@@ -317,3 +424,46 @@ Blockly.Events.Move.prototype.isNull = function() {
       this.oldInputName == this.newInputName &&
       goog.math.Coordinate.equals(this.oldCoordinate, this.newCoordinate);
 };
+
+/**
+ * Run a move event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.Move.prototype.run = function(forward) {
+  var block = Blockly.Block.getById(this.blockId);
+  if (!block) {
+    return;
+  }
+  var parentId = forward ? this.newParentId : this.oldParentId;
+  var inputName = forward ? this.newInputName : this.oldInputName;
+  var coordinate = forward ? this.newCoordinate : this.oldCoordinate;
+  var parentBlock = null;
+  if (parentId) {
+    parentBlock = Blockly.Block.getById(parentId);
+    if (!parentBlock) {
+      return;
+    }
+  }
+  if (block.getParent()) {
+    block.unplug();
+  }
+  if (coordinate) {
+    var xy = block.getRelativeToSurfaceXY();
+    block.moveBy(coordinate.x - xy.x, coordinate.y - xy.y);
+  } else {
+    var blockConnection = block.outputConnection || block.previousConnection;
+    var parentConnection;
+    if (inputName) {
+      var input = parentBlock.getInput(inputName);
+      if (input) {
+        parentConnection = input.connection;
+      }
+    } else if (blockConnection.type == Blockly.PREVIOUS_STATEMENT) {
+      parentConnection = parentBlock.nextConnection;
+    }
+    if (parentConnection) {
+      blockConnection.connect(parentConnection);
+    }
+  }
+};
+

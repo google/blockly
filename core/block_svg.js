@@ -221,10 +221,18 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
-      goog.Timer.callOnce(
-          selected.snapToGrid, Blockly.BUMP_DELAY / 2, selected);
-      goog.Timer.callOnce(
-          selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
+      // Ensure that any stap and bump are part of this move's event group.
+      var group = Blockly.Events.getGroup();
+      setTimeout(function() {
+          Blockly.Events.setGroup(group);
+          selected.snapToGrid();
+          Blockly.Events.setGroup(false);
+      }, Blockly.BUMP_DELAY / 2)
+      setTimeout(function() {
+          Blockly.Events.setGroup(group);
+          selected.bumpNeighbours_();
+          Blockly.Events.setGroup(false);
+      }, Blockly.BUMP_DELAY)
       // Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(window, 'resize');
     }
@@ -238,6 +246,9 @@ Blockly.BlockSvg.terminateDrag_ = function() {
  * @param {Blockly.BlockSvg} newParent New parent block.
  */
 Blockly.BlockSvg.prototype.setParent = function(newParent) {
+  if (newParent == this.parentBlock_) {
+    return;
+  }
   var svgRoot = this.getSvgRoot();
   if (this.parentBlock_ && svgRoot) {
     // Move this block up the DOM.  Keep track of x/y translations.
@@ -461,7 +472,9 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     // dragged instead.
     return;
   } else {
-    Blockly.Events.group = Blockly.genUid();
+    if (!Blockly.Events.getGroup()) {
+      Blockly.Events.setGroup(true);
+    }
     // Left-click (or middle click)
     Blockly.removeAllRanges();
     Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
@@ -530,7 +543,9 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     Blockly.highlightedConnection_ = null;
   }
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  Blockly.Events.group = '';
+  if (!Blockly.WidgetDiv.isVisible()) {
+    Blockly.Events.setGroup(false);
+  }
 };
 
 /**
@@ -756,7 +771,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       group.skew_ = '';
       if (this.parentBlock_) {
         // Push this block to the very top of the stack.
-        this.setParent(null);
+        this.unplug();
         this.disconnectUiEffect();
       }
       this.setDragging_(true);

@@ -218,27 +218,28 @@ Blockly.Block.prototype.dispose = function(healStack) {
 /**
  * Unplug this block from its superior block.  If this block is a statement,
  * optionally reconnect the block underneath with the block on top.
- * @param {boolean} healStack Disconnect child statement and reconnect stack.
+ * @param {boolean} opt_healStack Disconnect child statement and reconnect
+ *   stack.  Defaults to false.
  */
-Blockly.Block.prototype.unplug = function(healStack) {
+Blockly.Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
     if (this.outputConnection.targetConnection) {
       // Disconnect from any superior block.
-      this.setParent(null);
+      this.outputConnection.disconnect();
     }
-  } else {
+  } else if (this.previousConnection) {
     var previousTarget = null;
-    if (this.previousConnection && this.previousConnection.targetConnection) {
+    if (this.previousConnection.targetConnection) {
       // Remember the connection that any next statements need to connect to.
       previousTarget = this.previousConnection.targetConnection;
       // Detach this block from the parent's tree.
-      this.setParent(null);
+      this.previousConnection.disconnect();
     }
     var nextBlock = this.getNextBlock();
-    if (healStack && nextBlock) {
+    if (opt_healStack && nextBlock) {
       // Disconnect the next statement.
       var nextTarget = this.nextConnection.targetConnection;
-      nextBlock.setParent(null);
+      nextTarget.disconnect();
       if (previousTarget && previousTarget.checkType_(nextTarget)) {
         // Attach the next statement to the previous statement.
         previousTarget.connect(nextTarget);
@@ -401,9 +402,8 @@ Blockly.Block.prototype.getChildren = function() {
  * @param {Blockly.Block} newParent New parent block.
  */
 Blockly.Block.prototype.setParent = function(newParent) {
-  var event;
-  if (Blockly.Events.isEnabled()) {
-    event = new Blockly.Events.Move(this);
+  if (newParent == this.parentBlock_) {
+    return;
   }
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
@@ -416,13 +416,13 @@ Blockly.Block.prototype.setParent = function(newParent) {
     }
 
     // Disconnect from superior blocks.
-    this.parentBlock_ = null;
     if (this.previousConnection && this.previousConnection.targetConnection) {
-      this.previousConnection.disconnect();
+      throw 'Still connected to previous block.';
     }
     if (this.outputConnection && this.outputConnection.targetConnection) {
-      this.outputConnection.disconnect();
+      throw 'Still connected to parent block.';
     }
+    this.parentBlock_ = null;
     // This block hasn't actually moved on-screen, so there's no need to update
     // its connection locations.
   } else {
@@ -436,10 +436,6 @@ Blockly.Block.prototype.setParent = function(newParent) {
     newParent.childBlocks_.push(this);
   } else {
     this.workspace.addTopBlock(this);
-  }
-  if (event) {
-    event.recordNew();
-    Blockly.Events.fire(event);
   }
 };
 
@@ -1218,7 +1214,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
     if (input.name == name) {
       if (input.connection && input.connection.targetConnection) {
         // Disconnect any attached block.
-        input.connection.targetBlock().setParent(null);
+        input.connection.targetBlock().unplug();
       }
       input.dispose();
       this.inputList.splice(i, 1);
@@ -1276,7 +1272,7 @@ Blockly.Block.prototype.getCommentText = function() {
 Blockly.Block.prototype.setCommentText = function(text) {
   if (this.comment != text) {
     Blockly.Events.fire(new Blockly.Events.Change(
-      this, 'comment', null, this.comment, text || ''));
+        this, 'comment', null, this.comment, text || ''));
     this.comment = text;
   }
 };

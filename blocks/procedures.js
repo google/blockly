@@ -234,7 +234,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           this.statementConnection_ = stackConnection.targetConnection;
           if (this.statementConnection_) {
             var stackBlock = stackConnection.targetBlock();
-            stackBlock.setParent(null);
+            stackBlock.unplug();
             stackBlock.bumpNeighbours_();
           }
           this.setStatements_(false);

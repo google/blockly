@@ -330,7 +330,7 @@ Blockly.Blocks['logic_compare'] = {
       for (var i = 0; i < this.prevBlocks_.length; i++) {
         var block = this.prevBlocks_[i];
         if (block === blockA || block === blockB) {
-          block.setParent(null);
+          block.unplug();
           block.bumpNeighbours_();
         }
       }
@@ -470,10 +470,10 @@ Blockly.Blocks['logic_ternary'] = {
         var block = (i == 1) ? blockA : blockB;
         if (block && !block.outputConnection.checkType_(parentConnection)) {
           if (parentConnection === this.prevParentConnection_) {
-            this.setParent(null);
+            this.unplug();
             parentConnection.sourceBlock_.bumpNeighbours_();
           } else {
-            block.setParent(null);
+            block.unplug();
             block.bumpNeighbours_();
           }
         }

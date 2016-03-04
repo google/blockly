@@ -368,6 +368,9 @@ Blockly.onKeyDown_ = function(e) {
       if (Blockly.clipboardXml_) {
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
       }
+    } else if (e.keyCode == 90) {
+      // 'z' for undo 'Z' is for redo.
+      Blockly.mainWorkspace.undo(e.shiftKey);
     }
   }
   if (deleteBlock) {

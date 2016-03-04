@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Connection');
 
+goog.require('goog.asserts');
 goog.require('goog.dom');
 
 
@@ -55,10 +56,129 @@ Blockly.Connection = function(source, type) {
 Blockly.Connection.CAN_CONNECT = 0;
 Blockly.Connection.REASON_SELF_CONNECTION = 1;
 Blockly.Connection.REASON_WRONG_TYPE = 2;
-Blockly.Connection.REASON_MUST_DISCONNECT = 3;
-Blockly.Connection.REASON_TARGET_NULL = 4;
-Blockly.Connection.REASON_CHECKS_FAILED = 5;
-Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 6;
+Blockly.Connection.REASON_TARGET_NULL = 3;
+Blockly.Connection.REASON_CHECKS_FAILED = 4;
+Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 5;
+
+/**
+ * Connect two connections together.
+ * @param {!Blockly.Connection} parentConnection Connection on superior block.
+ * @param {!Blockly.Connection} childConnection Connection on inferior block.
+ */
+Blockly.Connection.connect_ = function(parentConnection, childConnection) {
+  var parentBlock = parentConnection.sourceBlock_;
+  var childBlock = childConnection.sourceBlock_;
+  // Disconnect any existing parent on the child connection.
+  if (childConnection.targetConnection) {
+    childConnection.disconnect();
+  }
+  if (parentConnection.targetConnection) {
+    // Other connection is already connected to something.
+    // Disconnect it and reattach it or bump it as needed.
+    var orphanBlock = parentConnection.targetBlock();
+    var shadowDom = parentConnection.getShadowDom();
+    // Temporarily set the shadow DOM to null so it does not respawn.
+    parentConnection.setShadowDom(null);
+    // Displaced shadow blocks dissolve rather than reattaching or bumping.
+    if (orphanBlock.isShadow()) {
+      // Save the shadow block so that field values are preserved.
+      shadowDom = Blockly.Xml.blockToDom(orphanBlock);
+      orphanBlock.dispose();
+      orphanBlock = null;
+    } else if (parentConnection.type == Blockly.INPUT_VALUE) {
+      // Value connections.
+      // If female block is already connected, disconnect and bump the male.
+      if (!orphanBlock.outputConnection) {
+        throw 'Orphan block does not have an output connection.';
+      }
+      // Attempt to reattach the orphan at the end of the newly inserted
+      // block.  Since this block may be a row, walk down to the end
+      // or to the first (and only) shadow block.
+      var connection = Blockly.Connection.lastConnectionInRow_(
+          childBlock, orphanBlock);
+      if (connection) {
+        orphanBlock.outputConnection.connect(connection);
+        orphanBlock = null;
+      }
+    } else if (parentConnection.type == Blockly.NEXT_STATEMENT) {
+      // Statement connections.
+      // Statement blocks may be inserted into the middle of a stack.
+      // Split the stack.
+      if (!orphanBlock.previousConnection) {
+        throw 'Orphan block does not have a previous connection.';
+      }
+      // Attempt to reattach the orphan at the bottom of the newly inserted
+      // block.  Since this block may be a stack, walk down to the end.
+      var newBlock = childBlock;
+      while (newBlock.nextConnection) {
+        if (newBlock.nextConnection.targetConnection) {
+          newBlock = newBlock.getNextBlock();
+        } else {
+          if (orphanBlock.previousConnection.checkType_(
+              newBlock.nextConnection)) {
+            newBlock.nextConnection.connect(orphanBlock.previousConnection);
+            orphanBlock = null;
+          }
+          break;
+        }
+      }
+    }
+    if (orphanBlock) {
+      // Unable to reattach orphan.
+      parentConnection.disconnect();
+      if (Blockly.Events.recordUndo) {
+        // Bump it off to the side after a moment.
+        var group = Blockly.Events.getGroup();
+        setTimeout(function() {
+          // Verify orphan hasn't been deleted or reconnected (user on meth).
+          if (orphanBlock.workspace && !orphanBlock.getParent()) {
+            Blockly.Events.setGroup(group);
+            if (orphanBlock.outputConnection) {
+              orphanBlock.outputConnection.bumpAwayFrom_(parentConnection);
+            } else if (orphanBlock.previousConnection) {
+              orphanBlock.previousConnection.bumpAwayFrom_(parentConnection);
+            }
+            Blockly.Events.setGroup(false);
+          }
+        }, Blockly.BUMP_DELAY);
+      }
+    }
+    // Restore the shadow DOM.
+    parentConnection.setShadowDom(shadowDom);
+  }
+
+  var event;
+  if (Blockly.Events.isEnabled()) {
+    event = new Blockly.Events.Move(childBlock);
+  }
+  // Establish the connections.
+  Blockly.Connection.connectReciprocally_(parentConnection, childConnection);
+  // Demote the inferior block so that one is a child of the superior one.
+  childBlock.setParent(parentBlock);
+  if (event) {
+    event.recordNew();
+    Blockly.Events.fire(event);
+  }
+
+  if (parentBlock.rendered) {
+    parentBlock.updateDisabled();
+  }
+  if (childBlock.rendered) {
+    childBlock.updateDisabled();
+  }
+  if (parentBlock.rendered && childBlock.rendered) {
+    if (parentConnection.type == Blockly.NEXT_STATEMENT ||
+        parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
+      // Child block may need to square off its corners if it is in a stack.
+      // Rendering a child will render its parent.
+      childBlock.render();
+    } else {
+      // Child block does not change shape.  Rendering the parent node will
+      // move its connected children into position.
+      parentBlock.render();
+    }
+  }
+};
 
 /**
  * Connection this connection connects to.  Null if not connected.
@@ -179,8 +299,6 @@ Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;
-  } else if (this.targetConnection) {
-    return Blockly.Connection.REASON_MUST_DISCONNECT;
   } else if (this.sourceBlock_ && target.sourceBlock_ &&
       this.sourceBlock_.workspace !== target.sourceBlock_.workspace) {
     return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
@@ -207,8 +325,6 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
       throw 'Blocks are on different workspaces.';
     case Blockly.Connection.REASON_WRONG_TYPE:
       throw 'Attempt to connect incompatible types.';
-    case Blockly.Connection.REASON_MUST_DISCONNECT:
-      throw 'Source connection already connected.';
     case Blockly.Connection.REASON_TARGET_NULL:
       throw 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
@@ -277,112 +393,19 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
  * @param {!Blockly.Connection} otherConnection Connection to connect to.
  */
 Blockly.Connection.prototype.connect = function(otherConnection) {
-  this.checkConnection_(otherConnection);
-  // If the previous statement failed it would have thrown an exception.
-
-  if (otherConnection.targetConnection) {
-    // Other connection is already connected to something.
-    // Disconnect it and reattach it or bump it as needed.
-    var orphanBlock = otherConnection.targetBlock();
-    orphanBlock.setParent(null);
-    // Displaced shadow blocks dissolve rather than reattaching or bumping.
-    if (orphanBlock.isShadow()) {
-      // Save the shadow block so that field values are preserved.
-      otherConnection.setShadowDom(Blockly.Xml.blockToDom(orphanBlock));
-      orphanBlock.dispose();
-      orphanBlock = null;
-    } else if (this.type == Blockly.INPUT_VALUE ||
-               this.type == Blockly.OUTPUT_VALUE) {
-      // Value connections.
-      // If female block is already connected, disconnect and bump the male.
-      if (!orphanBlock.outputConnection) {
-        throw 'Orphan block does not have an output connection.';
-      }
-      // Attempt to reattach the orphan at the end of the newly inserted
-      // block.  Since this block may be a row, walk down to the end
-      // or to the first (and only) shadow block.
-      var connection = Blockly.Connection.lastConnectionInRow_(
-          this.sourceBlock_, orphanBlock);
-      if (connection != null) {
-        orphanBlock.outputConnection.connect(connection);
-        orphanBlock = null;
-      }
-    } else if (this.type == Blockly.PREVIOUS_STATEMENT) {
-      // Statement connections.
-      // Statement blocks may be inserted into the middle of a stack.
-      // Split the stack.
-      if (!orphanBlock.previousConnection) {
-        throw 'Orphan block does not have a previous connection.';
-      }
-      // Attempt to reattach the orphan at the bottom of the newly inserted
-      // block.  Since this block may be a stack, walk down to the end.
-      var newBlock = this.sourceBlock_;
-      while (newBlock.nextConnection) {
-        if (newBlock.nextConnection.targetConnection) {
-          newBlock = newBlock.getNextBlock();
-        } else {
-          if (orphanBlock.previousConnection.checkType_(
-              newBlock.nextConnection)) {
-            newBlock.nextConnection.connect(orphanBlock.previousConnection);
-            orphanBlock = null;
-          }
-          break;
-        }
-      }
-    } else {
-      // Type is Blockly.NEXT_STATEMENT.
-      throw 'Can only do a mid-stack connection with the top of a block.';
-    }
-    if (orphanBlock) {
-      // Unable to reattach orphan.  Bump it off to the side after a moment.
-      setTimeout(function() {
-        // Verify orphan hasn't been deleted or reconnected (user on meth).
-        if (orphanBlock.workspace && !orphanBlock.getParent()) {
-          if (orphanBlock.outputConnection) {
-            orphanBlock.outputConnection.bumpAwayFrom_(otherConnection);
-          } else if (orphanBlock.previousConnection) {
-            orphanBlock.previousConnection.bumpAwayFrom_(otherConnection);
-          }
-        }
-      }, Blockly.BUMP_DELAY);
-    }
+  if (this.targetConnection == otherConnection) {
+    // Already connected together.  NOP.
+    return;
   }
-
+  this.checkConnection_(otherConnection);
   // Determine which block is superior (higher in the source stack).
   var parentBlock, childBlock;
   if (this.isSuperior()) {
     // Superior block.
-    parentBlock = this.sourceBlock_;
-    childBlock = otherConnection.sourceBlock_;
+    Blockly.Connection.connect_(this, otherConnection);
   } else {
     // Inferior block.
-    parentBlock = otherConnection.sourceBlock_;
-    childBlock = this.sourceBlock_;
-  }
-
-  // Establish the connections.
-  Blockly.Connection.connectReciprocally(this, otherConnection);
-
-  // Demote the inferior block so that one is a child of the superior one.
-  childBlock.setParent(parentBlock);
-
-  if (parentBlock.rendered) {
-    parentBlock.updateDisabled();
-  }
-  if (childBlock.rendered) {
-    childBlock.updateDisabled();
-  }
-  if (parentBlock.rendered && childBlock.rendered) {
-    if (this.type == Blockly.NEXT_STATEMENT ||
-        this.type == Blockly.PREVIOUS_STATEMENT) {
-      // Child block may need to square off its corners if it is in a stack.
-      // Rendering a child will render its parent.
-      childBlock.render();
-    } else {
-      // Child block does not change shape.  Rendering the parent node will
-      // move its connected children into position.
-      parentBlock.render();
-    }
+    Blockly.Connection.connect_(otherConnection, this);
   }
 };
 
@@ -390,11 +413,10 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
  * Update two connections to target each other.
  * @param {Blockly.Connection} first The first connection to update.
  * @param {Blockly.Connection} second The second conneciton to update.
+ * @private
  */
-Blockly.Connection.connectReciprocally = function(first, second) {
-  if (!first || !second) {
-    throw 'Cannot connect null connections.';
-  }
+Blockly.Connection.connectReciprocally_ = function(first, second) {
+  goog.asserts.assert(first && second, 'Cannot connect null connections.');
   first.targetConnection = second;
   second.targetConnection = first;
 };
@@ -454,15 +476,10 @@ Blockly.Connection.lastConnectionInRow_ = function(startBlock, orphanBlock) {
  */
 Blockly.Connection.prototype.disconnect = function() {
   var otherConnection = this.targetConnection;
-  if (!otherConnection) {
-    throw 'Source connection not connected.';
-  } else if (otherConnection.targetConnection != this) {
-    throw 'Target connection not connected to source connection.';
-  }
-  otherConnection.targetConnection = null;
-  this.targetConnection = null;
+  goog.asserts.assert(otherConnection, 'Source connection not connected.');
+  goog.asserts.assert(otherConnection.targetConnection == this,
+      'Target connection not connected to source connection.');
 
-  // Rerender the parent so that it may reflow.
   var parentBlock, childBlock, parentConnection;
   if (this.isSuperior()) {
     // Superior block.
@@ -475,9 +492,22 @@ Blockly.Connection.prototype.disconnect = function() {
     childBlock = this.sourceBlock_;
     parentConnection = otherConnection;
   }
+
+  var event;
+  if (Blockly.Events.isEnabled()) {
+    event = new Blockly.Events.Move(childBlock);
+  }
+  otherConnection.targetConnection = null;
+  this.targetConnection = null;
+  childBlock.setParent(null);
+  if (event) {
+    event.recordNew();
+    Blockly.Events.fire(event);
+  }
+
+  // Respawn the shadow block if there is one.
   var shadow = parentConnection.getShadowDom();
-  if (parentBlock.workspace && !childBlock.isShadow() && shadow) {
-    // Respawn the shadow block.
+  if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
     var blockShadow =
         Blockly.Xml.domToBlock(parentBlock.workspace, shadow);
     if (blockShadow.outputConnection) {
@@ -490,6 +520,8 @@ Blockly.Connection.prototype.disconnect = function() {
     blockShadow.initSvg();
     blockShadow.render(false);
   }
+
+  // Rerender the parent so that it may reflow.
   if (parentBlock.rendered) {
     parentBlock.render();
   }
@@ -672,7 +704,7 @@ Blockly.Connection.prototype.setCheck = function(check) {
     // The new value type may not be compatible with the existing connection.
     if (this.targetConnection && !this.checkType_(this.targetConnection)) {
       var child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
-      child.setParent(null);
+      child.unplug();
       // Bump away.
       this.sourceBlock_.bumpNeighbours_();
     }

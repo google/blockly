@@ -4,28 +4,38 @@ app.ClipboardService = ng.core
   .Class({
     constructor: function() {
       this.clipboardBlockXml;
-      this.clipboardBlockConnection;
+      this.clipboardBlockSuperiorConnection;
       this.markedConnection;
       // this.serviceId = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
     },
     cut: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom_(block);
-      this.clipboardBlockConnection = block.outputConnection ||
+      this.clipboardBlockSuperiorConnection = block.outputConnection ||
           block.previousConnection;
+      this.clipboardBlockNextConnection = block.nextConnection;
       block.dispose(true);
-      console.log(this.clipboardBlockConnection);
       console.log('cut');
     },
     copy: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom_(block);
-      this.clipboardBlockConnection = block.outputConnection ||
+      this.clipboardBlockSuperiorConnection = block.outputConnection ||
           block.previousConnection;
+      this.clipboardBlockNextConnection = block.nextConnection;
+          block.dispose(true);
     },
     paste: function(connection) {
       var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace,
           this.clipboardBlockXml_);
-      connection.connect(blockOnProperWorkspace.outputConnection ||
-          blockOnProperWorkspace.previousConnection);
+      switch (connection.type) {
+        case Blockly.NEXT_STATEMENT:
+          connection.connect(blockOnProperWorkspace.previousConnection);
+          break;
+        case Blockly.PREVIOUS_STATEMENT:
+          connection.connect(blockOnProperWorkspace.nextConnection);
+          break;
+        default:
+          connection.connect(blockOnProperWorkspace.outputConnection);
+      }
     },
     pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom_(block);
@@ -50,27 +60,41 @@ app.ClipboardService = ng.core
             connection.checkType_(blockConnection);
 
       if (debug) {
-        console.log('checking: input ' + blockConnection.check_ +
-            ' and clipboard ' + connection.check_);
-        console.log((Blockly.OPPOSITE_TYPE[blockConnection.type] ==
-            connection.type));
-        console.log(
-            connection.checkType_(blockConnection));
+        // console.log('checking: input ' + blockConnection.check_ +
+        //     ' and clipboard ' + connection.check_);
+        // console.log('the blocks have the opposite connection types: ' +
+        //     (Blockly.OPPOSITE_TYPE[blockConnection.type] ==
+        //     connection.type));
+        // console.log(
+        //     'the blocks are of compatible types: ' +
+        //     connection.checkType_(blockConnection));
+        if (result){
+          console.log("Blocks should be connected");
+        } else {
+          console.log("Blocks should be connected");
+        }
       }
       return result;
     },
-    isCompatibleWithMarkedConnection: function(block, debug) {
+    isBlockCompatibleWithMarkedConnection: function(block, debug) {
       var blockConnection = block.outputConnection || block.previousConnection;
       return this.markedConnection &&
           this.markedConnection.sourceBlock_.workspace != null &&
           this.isCompatibleWithConnection_(
               blockConnection, this.markedConnection, debug);
     },
-    isCompatibleWithClipboard: function(input, debug) {
-      if (debug && input.connection && this.clipboardBlockConnection) {
-        console.log(input);
+    isConnectionCompatibleWithClipboard: function(connection, debug) {
+      if (debug) {
+        console.log('connection:');
+        console.log(connection);
+        console.log('clipboardBlockSuperiorConnection is:');
+        console.log(this.clipboardBlockSuperiorConnection);
+        console.log('clipboardBlockNextConnection is:');
+        console.log(this.clipboardBlockNextConnection);
       }
-      return this.isCompatibleWithConnection_(input.connection,
-          this.clipboardBlockConnection, debug);
+      return this.isCompatibleWithConnection_(connection,
+          this.clipboardBlockSuperiorConnection, debug) ||
+          this.isCompatibleWithConnection_(connection,
+          this.clipboardBlockNextConnection, debug);
     }
   });

@@ -106,7 +106,7 @@ app.ToolboxTreeView = ng.core
       event.target.selectedIndex = 0;
     },
     notCompatibleWithMarkedBlock: function(block) {
-      if (this.sharedClipboardService.isCompatibleWithMarkedConnection(block)) {
+      if (this.sharedClipboardService.isBlockCompatibleWithMarkedConnection(block)) {
         //undefined will result in the 'copy to marked block' option being ENABLED
         return undefined;
       } else {

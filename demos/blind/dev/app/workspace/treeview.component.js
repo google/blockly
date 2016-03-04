@@ -27,6 +27,13 @@ app.TreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
+<li *ngIf='isTopBlock && block.previousConnection'>
+  <select aria-label='insert block menu' (change)='inputMenuSelected(block.previousConnection, $event)'>
+    <option value='NO_ACTION' select>select an action</option>
+    <option value='MARK_SPOT'>Mark this spot</option>
+    <option value='PASTE' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>Paste</option>
+  </select>
+</li>
 <li>
   <label style='color: red'>{{block.toString()}}</label>
   <select aria-label='block menu' (change)='blockMenuSelected(block, $event)'>
@@ -41,22 +48,29 @@ app.TreeView = ng.core
       <tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()'></tree-view>
       <li *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
         {{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
-        <select aria-label='insert input menu' (change)='inputMenuSelected(inputBlock,$event)'>
+        <select aria-label='insert input menu' (change)='inputMenuSelected(inputBlock.connection, $event)'>
           <option value='NO_ACTION' select>select an action</option>
           <option value='MARK_SPOT'>Mark this spot</option>
-          <option value='PASTE' disabled='{{notCompatibleWithClipboard(inputBlock)}}'>Paste</option>
+          <option value='PASTE' disabled='{{notCompatibleWithClipboard(inputBlock.connection)}}'>Paste</option>
         </select>
       </li>
     </div>
   </ul>
 </li>
+<li *ngIf='block.nextConnection'>
+  <select aria-label='insert block menu' (change)='inputMenuSelected(block.nextConnection, $event)'>
+    <option value='NO_ACTION' select>select an action</option>
+    <option value='MARK_SPOT'>Mark this spot</option>
+    <option value='PASTE' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>Paste</option>
+  </select>
+</li>
 <li *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
-  <tree-view [block]='block.nextConnection.targetBlock()'></tree-view>
+  <tree-view [block]='block.nextConnection.targetBlock()' [isTopBlock]='false'></tree-view>
 </li>
     `,
     directives: [ng.core.forwardRef(
         function() { return app.TreeView; }), app.FieldView],
-    inputs: ['block'],
+    inputs: ['block', 'isTopBlock'],
   })
   .Class({
     constructor: [app.ClipboardService, function(_service) {
@@ -102,20 +116,21 @@ app.TreeView = ng.core
       }
       event.target.selectedIndex = 0;
     },
-    inputMenuSelected: function(input, event) {
+    inputMenuSelected: function(connection, event) {
       switch (event.target.value) {
         case 'MARK_SPOT':
-          this.sharedClipboardService.markConnection(input.connection);
+          this.sharedClipboardService.markConnection(connection);
           console.log("marked spot");
           break;
         case 'PASTE':
-          this.sharedClipboardService.paste(input.connection);
+          this.sharedClipboardService.paste(connection);
           break;
       }
       event.target.selectedIndex = 0;
     },
-    notCompatibleWithClipboard: function(input) {
-      if (this.sharedClipboardService.isCompatibleWithClipboard(input, true)){
+    notCompatibleWithClipboard: function(connection) {
+      if (this.sharedClipboardService.isConnectionCompatibleWithClipboard(
+              connection)){
         //undefined will result in the 'paste' option being ENABLED
         return undefined;
       } else {
@@ -129,5 +144,8 @@ app.TreeView = ng.core
       } else {
         return "value";
       }
+    },
+    log: function(obj) {
+      console.log(obj);
     }
   });

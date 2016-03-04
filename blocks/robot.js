@@ -169,6 +169,18 @@ Blockly.Blocks['robot_head_look_angles'] = {
   }
 };
 
+Blockly.Blocks['robot_head_look_at'] = {
+  init: function() {
+    this.appendValueInput("OBJECT_OR_PERSON")
+        .setCheck(["SceneObject", "Person"])
+        .appendField("look at");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(160);
+    this.setTooltip('Look at an object.');
+    this.setHelpUrl('');
+  }
+};
 
 Blockly.Blocks['robot_perception_find_objects'] = {
   init: function() {

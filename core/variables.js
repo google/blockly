@@ -80,11 +80,13 @@ Blockly.Variables.allVariables = function(root) {
  * @param {!Blockly.Workspace} workspace Workspace rename variables in.
  */
 Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
+  Blockly.Events.setGroup(true);
   var blocks = workspace.getAllBlocks();
   // Iterate through every block.
   for (var i = 0; i < blocks.length; i++) {
     blocks[i].renameVar(oldName, newName);
   }
+  Blockly.Events.setGroup(false);
 };
 
 /**

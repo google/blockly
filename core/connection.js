@@ -336,7 +336,7 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
 
 /**
  * Check if the two connections can be dragged to connect to each other.
- * @param {Blockly.Connection} candidate A nearby connection to check.
+ * @param {!Blockly.Connection} candidate A nearby connection to check.
  * @param {number} maxRadius The maximum radius allowed for connections.
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
@@ -346,7 +346,7 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
     return false;
   }
 
-  // Type checking
+  // Type checking.
   var canConnect = this.canConnectWithReason_(candidate);
   if (canConnect != Blockly.Connection.CAN_CONNECT &&
       canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
@@ -649,7 +649,7 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
       dy);
   if (closestConnection) {
     return {connection: closestConnection,
-      radius: this.distanceFrom(closestConnection)};
+            radius: this.distanceFrom(closestConnection)};
   }
   return {connection: null, radius: maxLimit};
 };

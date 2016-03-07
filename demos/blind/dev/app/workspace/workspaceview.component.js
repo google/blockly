@@ -30,6 +30,7 @@ app.WorkspaceView = ng.core
     template: `
   <div *ngIf='workspace'>
   <h1>Workspace</h1>
+  <button (click)="runCode()">Run Code</button>
   <ul *ngFor='#block of workspace.topBlocks_'>
     <tree-view [block]='block' [isTopBlock]='true'></tree-view>
   </ul>
@@ -42,5 +43,13 @@ app.WorkspaceView = ng.core
       if (app.workspace) {
         this.workspace = app.workspace;
       }
-    }
+    },
+    runCode: function() {
+      var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
+    },
   });

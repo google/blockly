@@ -40,6 +40,7 @@ app.TreeView = ng.core
     <option value='NO_ACTION' select>select an action</option>
     <option value='COPY_BLOCK'>copy</option>
     <option value='CUT_BLOCK'>cut</option>
+    <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to selected input</option>
     <option value='DELETE_BLOCK'>delete</option>
   </select>
   <ul>
@@ -113,6 +114,12 @@ app.TreeView = ng.core
         case 'COPY_BLOCK':
           this.sharedClipboardService.copy(block);
           break;
+        case 'SEND_TO_SELECTED':
+          if (this.sharedClipboardService) {
+            this.sharedClipboardService.pasteToMarkedConnection(block);
+            block.dispose(true);
+          }
+          break;
       }
       event.target.selectedIndex = 0;
     },
@@ -143,6 +150,15 @@ app.TreeView = ng.core
         return "statement";
       } else {
         return "value";
+      }
+    },
+    notCompatibleWithMarkedBlock: function(block) {
+      if (this.sharedClipboardService.isBlockCompatibleWithMarkedConnection(block)) {
+        //undefined will result in the 'copy to marked block' option being ENABLED
+        return undefined;
+      } else {
+        //true will result in the 'copy to marked block' option being DISABLED
+        return true;
       }
     },
     log: function(obj) {

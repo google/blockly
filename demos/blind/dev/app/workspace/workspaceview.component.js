@@ -31,9 +31,9 @@ app.WorkspaceView = ng.core
   <div *ngIf='workspace'>
   <h1>Workspace</h1>
   <button (click)="runCode()">Run Code</button>
-  <ul *ngFor='#block of workspace.topBlocks_'>
+  <ol *ngFor='#block of workspace.topBlocks_'>
     <tree-view [block]='block' [isTopBlock]='true'></tree-view>
-  </ul>
+  </ol>
   </div>
     `,
     directives: [app.TreeView],

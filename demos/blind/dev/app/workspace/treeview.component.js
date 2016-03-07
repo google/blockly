@@ -28,14 +28,14 @@ app.TreeView = ng.core
     selector: 'tree-view',
     template: `
 <li *ngIf='isTopBlock && block.previousConnection'>
-  <select aria-label='insert block menu' (change)='inputMenuSelected(block.previousConnection, $event)'>
+  <select aria-label='block connection menu' (change)='inputMenuSelected(block.previousConnection, $event)'>
     <option value='NO_ACTION' select>select an action</option>
     <option value='MARK_SPOT'>Mark this spot</option>
     <option value='PASTE' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>Paste</option>
   </select>
 </li>
 <li>
-  <label style='color: red'>{{block.toString()}}</label>
+  <h3 style='color: red'>{{block.toString()}}</h3>
   <select aria-label='block menu' (change)='blockMenuSelected(block, $event)'>
     <option value='NO_ACTION' select>select an action</option>
     <option value='COPY_BLOCK'>copy</option>
@@ -43,7 +43,7 @@ app.TreeView = ng.core
     <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to selected input</option>
     <option value='DELETE_BLOCK'>delete</option>
   </select>
-  <ul>
+  <ol>
     <div *ngFor='#inputBlock of block.inputList'>
       <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
       <tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()'></tree-view>
@@ -56,10 +56,10 @@ app.TreeView = ng.core
         </select>
       </li>
     </div>
-  </ul>
+  </ol>
 </li>
 <li *ngIf='block.nextConnection'>
-  <select aria-label='insert block menu' (change)='inputMenuSelected(block.nextConnection, $event)'>
+  <select aria-label='block connection menu' (change)='inputMenuSelected(block.nextConnection, $event)'>
     <option value='NO_ACTION' select>select an action</option>
     <option value='MARK_SPOT'>Mark this spot</option>
     <option value='PASTE' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>Paste</option>

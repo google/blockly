@@ -31,10 +31,10 @@ app.AppView = ng.core
     <table>
     <tr>
       <td>
-        <toolbox-view>Loading Toolbox...</toolbox-view>
+        <toolbox-view role='menu' aria-labelledby='toolbox-title'>Loading Toolbox...</toolbox-view>
       </td>
       <td>
-        <workspace-view>Loading Workspace...</workspace-view>
+        <workspace-view role='main' aria-labelledby='workspace-title'>Loading Workspace...</workspace-view>
       </td>
     </tr>
     </table>

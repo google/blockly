@@ -28,11 +28,11 @@ app.ToolboxView = ng.core
 .Component({
   selector: 'toolbox-view',
   template: `
-<h1>Toolbox</h1>
-<ul *ngFor='#category of makeArray(sightedToolbox)'>
-  <h2 #name>{{category.attributes.name.value}}</h2>
-  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
-</ul>
+<h1 id='toolbox-title'>Toolbox</h1>
+<ol role="menubar" aria-labelledby='category-title' *ngFor='#category of makeArray(sightedToolbox)'>
+  <h2 #name id='category-title'>{{category.attributes.name.value}}</h2>
+  <toolbox-tree-view role='menuitem' *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
+</ol>
   `,
   directives: [app.ToolboxTreeView],
 })

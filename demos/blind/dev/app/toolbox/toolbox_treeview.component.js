@@ -30,14 +30,14 @@ app.ToolboxTreeView = ng.core
     selector: 'toolbox-tree-view',
     template: `
 <li>
-  <label style='color:red'>{{block.toString()}}</label>
-  <select *ngIf='displayBlockMenu' aria-label='toolbar block menu' (change)='blockMenuSelected(block,$event)'>
+  <label style='color:red' id='block-title'>{{block.toString()}}</label>
+  <select aria-label='block menu'  *ngIf='displayBlockMenu' (change)='blockMenuSelected(block,$event)'>
     <option value='NO_ACTION' select>select an action</option>
     <option value='COPY_TO_WORKSPACE'>copy to workspace</option>
     <option value='COPY_BLOCK'>copy to Blockly clipboard</option>
     <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>copy to selected input</option>
   </select>
-  <ul>
+  <ol>
     <div *ngFor='#inputBlock of block.inputList'>
       <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
       <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
@@ -45,7 +45,7 @@ app.ToolboxTreeView = ng.core
         {{inputType(inputBlock.connection)}} input needed
       </li>
     </div>
-  </ul>
+  </ol>
 </li>
 <li *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
   <toolbox-tree-view [block]='block.nextConnection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>

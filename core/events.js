@@ -97,7 +97,7 @@ Blockly.Events.fire = function(event) {
  * @private
  */
 Blockly.Events.fireNow_ = function() {
-  var queue = Blockly.Events.filter_(Blockly.Events.FIRE_QUEUE_);
+  var queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_);
   Blockly.Events.FIRE_QUEUE_.length = 0;
   for (var i = 0, event; event = queue[i]; i++) {
     var workspace = Blockly.Workspace.getById(event.workspaceId);
@@ -111,9 +111,8 @@ Blockly.Events.fireNow_ = function() {
  * Filter the queued events and merge duplicates.
  * @param {!Array.<!Blockly.Events.Abstract>} queueIn Array of events.
  * @return {!Array.<!Blockly.Events.Abstract>} Array of filtered events.
- * @private
  */
-Blockly.Events.filter_ = function(queueIn) {
+Blockly.Events.filter = function(queueIn) {
   var queue = goog.array.clone(queueIn);
   // Merge duplicates.  O(n^2), but n should be very small.
   for (var i = 0, event1; event1 = queue[i]; i++) {
@@ -143,6 +142,14 @@ Blockly.Events.filter_ = function(queueIn) {
   for (var i = queue.length - 1; i >= 0; i--) {
     if (queue[i].isNull()) {
       queue.splice(i, 1);
+    }
+  }
+  // Move mutation events to the top of the queue.
+  // Intentionally skip first event.
+  for (var i = 1, event; event = queue[i]; i++) {
+    if (event.type == Blockly.Events.CHANGE &&
+        event.element == 'mutation') {
+      queue.unshift(queue.splice(i, 1)[0]);
     }
   }
   return queue;
@@ -335,6 +342,8 @@ Blockly.Events.Change.prototype.run = function(forward) {
       var field = block.getField(this.name);
       if (field) {
         field.setValue(value);
+      } else {
+        console.warn("Can't set non-existant field: " + this.name);
       }
       break;
     case 'comment':
@@ -354,10 +363,17 @@ Blockly.Events.Change.prototype.run = function(forward) {
         // Close the mutator (if open) since we don't want to update it.
         block.mutator.setVisible(false);
       }
+      var oldMutation = '';
+      if (block.mutationToDom) {
+        var oldMutationDom = block.mutationToDom();
+        oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+      }
       if (block.domToMutation) {
         var dom = Blockly.Xml.textToDom('<xml>' + value + '</xml>');
         block.domToMutation(dom.firstChild);
       }
+      Blockly.Events.fire(new Blockly.Events.Change(
+          block, 'mutation', null, oldMutation, value));
       break;
   }
 };
@@ -457,6 +473,8 @@ Blockly.Events.Move.prototype.run = function(forward) {
       var input = parentBlock.getInput(inputName);
       if (input) {
         parentConnection = input.connection;
+      } else {
+        console.warn("Can't connect to non-existant input: " + inputName);
       }
     } else if (blockConnection.type == Blockly.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
@@ -466,4 +484,3 @@ Blockly.Events.Move.prototype.run = function(forward) {
     }
   }
 };
-

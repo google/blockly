@@ -280,29 +280,36 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
 
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
-    var oldMutationDom = this.block_.mutationToDom();
+    Blockly.Events.setGroup(true);
+    var block = this.block_;
+    var oldMutationDom = block.mutationToDom();
     var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
     // Switch off rendering while the source block is rebuilt.
-    var savedRendered = this.block_.rendered;
-    this.block_.rendered = false;
+    var savedRendered = block.rendered;
+    block.rendered = false;
     // Allow the source block to rebuild itself.
-    this.block_.compose(this.rootBlock_);
+    block.compose(this.rootBlock_);
     // Restore rendering and show the changes.
-    this.block_.rendered = savedRendered;
+    block.rendered = savedRendered;
     // Mutation may have added some elements that need initalizing.
-    this.block_.initSvg();
-    var newMutationDom = this.block_.mutationToDom();
+    block.initSvg();
+    var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
     if (oldMutation != newMutation) {
       Blockly.Events.fire(new Blockly.Events.Change(
-          this.block_, 'mutation', null, oldMutation, newMutation));
-      goog.Timer.callOnce(
-          this.block_.bumpNeighbours_, Blockly.BUMP_DELAY, this.block_);
+          block, 'mutation', null, oldMutation, newMutation));
+      // Ensure that any bump is part of this mutation's event group.
+      var group = Blockly.Events.getGroup();
+      setTimeout(function() {
+          Blockly.Events.setGroup(group);
+          block.bumpNeighbours_();
+      }, Blockly.BUMP_DELAY);
     }
-    if (this.block_.rendered) {
-      this.block_.render();
+    if (block.rendered) {
+      block.render();
     }
     this.resizeBubble_();
+    Blockly.Events.setGroup(false);
   }
 };
 

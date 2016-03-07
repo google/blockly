@@ -227,12 +227,12 @@ Blockly.BlockSvg.terminateDrag_ = function() {
           Blockly.Events.setGroup(group);
           selected.snapToGrid();
           Blockly.Events.setGroup(false);
-      }, Blockly.BUMP_DELAY / 2)
+      }, Blockly.BUMP_DELAY / 2);
       setTimeout(function() {
           Blockly.Events.setGroup(group);
           selected.bumpNeighbours_();
           Blockly.Events.setGroup(false);
-      }, Blockly.BUMP_DELAY)
+      }, Blockly.BUMP_DELAY);
       // Fire an event to allow scrollbars to resize.
       Blockly.fireUiEvent(window, 'resize');
     }

@@ -214,15 +214,19 @@ Blockly.Workspace.prototype.undo = function(redo) {
   if (!event) {
     return;
   }
-  Blockly.Events.recordUndo = false;
-  event.run(redo);
-  Blockly.Events.recordUndo = true;
-  (redo ? this.undoStack_ : this.redoStack_).push(event);
+  var events = [event];
   // Do another undo/redo if the next one is of the same group.
-  if (sourceStack.length && event.group &&
+  while (sourceStack.length && event.group &&
       event.group == sourceStack[sourceStack.length - 1].group) {
-    this.undo(redo);
+    events.push(sourceStack.pop());
   }
+  events = Blockly.Events.filter(events);
+  Blockly.Events.recordUndo = false;
+  for (var i = 0, event; event = events[i]; i++) {
+    event.run(redo);
+    (redo ? this.undoStack_ : this.redoStack_).push(event);
+  }
+  Blockly.Events.recordUndo = true;
 };
 
 /**

@@ -30,8 +30,8 @@ app.ToolboxTreeView = ng.core
     selector: 'toolbox-tree-view',
     template: `
 <li>
-  <label style='color:red' id='block-title'>{{block.toString()}}</label>
-  <select aria-label='block menu'  *ngIf='displayBlockMenu' (change)='blockMenuSelected(block,$event)'>
+  <label style='color:red'>{{block.toString()}}</label>
+  <select *ngIf='displayBlockMenu' aria-label='toolbar block menu' (change)='blockMenuSelected(block,$event)'>
     <option value='NO_ACTION' select>select an action</option>
     <option value='COPY_TO_WORKSPACE'>copy to workspace</option>
     <option value='COPY_BLOCK'>copy to Blockly clipboard</option>

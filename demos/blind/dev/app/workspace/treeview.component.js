@@ -27,20 +27,17 @@ app.TreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
-<li *ngIf='isTopBlock && block.previousConnection'>
-  <select aria-label='block connection menu' (change)='inputMenuSelected(block.previousConnection, $event)'>
-    <option value='NO_ACTION' select>select an action</option>
-    <option value='MARK_SPOT'>Mark this spot</option>
-    <option value='PASTE' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>Paste</option>
-  </select>
-</li>
 <li>
-  <h3 style='color: red'>{{block.toString()}}</h3>
-  <select aria-label='block menu' (change)='blockMenuSelected(block, $event)'>
+  <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
+  <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
     <option value='NO_ACTION' select>select an action</option>
-    <option value='COPY_BLOCK'>copy</option>
-    <option value='CUT_BLOCK'>cut</option>
-    <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to selected input</option>
+    <option value='CUT_BLOCK'>cut block</option>
+    <option value='COPY_BLOCK'>copy block</option>
+    <option value='PASTE_ABOVE' disabled='block.previousConnection' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above this block</option>
+    <option value='PASTE_BELOW' disabled='block.nextConnection' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>paste below this block</option>
+    <option value='MARK_ABOVE' disabled='block.previousConnection'>mark spot above this block</option>
+    <option value='MARK_BELOW' disabled='block.nextConnection'>mark spot above this block</option>
+    <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to marked spot</option>
     <option value='DELETE_BLOCK'>delete</option>
   </select>
   <ol>
@@ -51,19 +48,12 @@ app.TreeView = ng.core
         {{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
         <select aria-label='insert input menu' (change)='inputMenuSelected(inputBlock.connection, $event)'>
           <option value='NO_ACTION' select>select an action</option>
-          <option value='MARK_SPOT'>Mark this spot</option>
-          <option value='PASTE' disabled='{{notCompatibleWithClipboard(inputBlock.connection)}}'>Paste</option>
+          <option value='MARK_SPOT'>mark this spot</option>
+          <option value='PASTE' disabled='{{notCompatibleWithClipboard(inputBlock.connection)}}'>paste</option>
         </select>
       </li>
     </div>
   </ol>
-</li>
-<li *ngIf='block.nextConnection'>
-  <select aria-label='block connection menu' (change)='inputMenuSelected(block.nextConnection, $event)'>
-    <option value='NO_ACTION' select>select an action</option>
-    <option value='MARK_SPOT'>Mark this spot</option>
-    <option value='PASTE' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>Paste</option>
-  </select>
 </li>
 <li *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
   <tree-view [block]='block.nextConnection.targetBlock()' [isTopBlock]='false'></tree-view>
@@ -113,6 +103,18 @@ app.TreeView = ng.core
           break;
         case 'COPY_BLOCK':
           this.sharedClipboardService.copy(block);
+          break;
+        case 'PASTE_BELOW':
+          this.sharedClipboardService.paste(block.nextConnection);
+          break;
+        case 'PASTE_ABOVE':
+          this.sharedClipboardService.paste(block.previousConnection);
+          break;
+        case 'MARK_BELOW':
+          this.sharedClipboardService.markConnection(block.nextConnection);
+          break;
+        case 'MARK_ABOVE':
+          this.sharedClipboardService.markConnection(block.previousConnection);
           break;
         case 'SEND_TO_SELECTED':
           if (this.sharedClipboardService) {

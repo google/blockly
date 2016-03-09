@@ -30,7 +30,7 @@ app.WorkspaceView = ng.core
     template: `
   <div *ngIf='workspace'>
   <h1>Workspace</h1>
-  <button (click)="runCode()">Run Code</button>
+  <button (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
   <ol *ngFor='#block of workspace.topBlocks_'>
     <tree-view [block]='block' [isTopBlock]='true'></tree-view>
   </ol>
@@ -52,4 +52,11 @@ app.WorkspaceView = ng.core
         alert(e);
       }
     },
+    disableRunCode: function() {
+      if (this.workspace.topBlocks_.length == 0){
+        return true;
+      } else {
+        return undefined;
+      }
+    }
   });

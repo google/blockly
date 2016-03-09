@@ -21,7 +21,6 @@ app.ClipboardService = ng.core
       this.clipboardBlockSuperiorConnection = block.outputConnection ||
           block.previousConnection;
       this.clipboardBlockNextConnection = block.nextConnection;
-          block.dispose(true);
     },
     paste: function(connection) {
       var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace,

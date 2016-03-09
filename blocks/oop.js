@@ -152,6 +152,8 @@ Blockly.Blocks['field_set'] = {
         this.input_ = this.appendValueInput('VALUE');
 
         this.setInputsInline(true);
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
     },
     /**
    * Called whenever anything on the workspace changes.

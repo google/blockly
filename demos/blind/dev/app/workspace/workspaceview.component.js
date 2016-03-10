@@ -31,6 +31,7 @@ app.WorkspaceView = ng.core
   <div *ngIf='workspace'>
   <h1>Workspace</h1>
   <button (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
+  <button (click)="workspace.clear()" disabled={{disableRunCode()}}>Clear Workspace</button>
   <ol *ngFor='#block of workspace.topBlocks_'>
     <tree-view [block]='block' [isTopBlock]='true'></tree-view>
   </ol>

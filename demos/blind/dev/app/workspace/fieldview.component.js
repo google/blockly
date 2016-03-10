@@ -30,19 +30,19 @@ app.FieldView = ng.core
     selector: 'field-view',
     template: `
     <!-- html representation of a field -->
-    <li *ngIf='isTextInput(field)'>
+    <li tabIndex='0' *ngIf='isTextInput(field)'>
       <input [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
     </li>
-    <li *ngIf='isDropdown(field)'>
+    <li tabIndex='0' *ngIf='isDropdown(field)'>
       <select [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
-      <option value='NO_ACTION' select>select an option</option>
+      <option value='NO_ACTION' selected>select an option</option>
       <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
       </select>
     </li>
-    <li *ngIf='isCheckbox(field)'>
+    <li tabIndex='0' *ngIf='isCheckbox(field)'>
       //TODO(madeeha):CHECKBOX
     </li>
-    <li *ngIf='isTextField(field) && notWhitespace(field)'>
+    <li tabIndex='0' *ngIf='isTextField(field) && notWhitespace(field)'>
       <label>
         {{field.getText()}}
       </label>
@@ -92,11 +92,15 @@ app.FieldView = ng.core
       }
       //undefined will result in the 'selected' option being DISABLED
     },
-    handleDropdownChange: function(field, event) {
+    handleDropdownChange: function(field, text) {
+      if (text == 'NO_ACTION') {
+        return;
+      }
       if (field instanceof Blockly.FieldVariable) {
-        Blockly.FieldVariable.dropdownChange(event);
+        console.log(field);
+        Blockly.FieldVariable.dropdownChange.call(field, text);
       } else {
-        field.setValue(event);
+        field.setValue(text);
       }
     },
     log: function(obj) {

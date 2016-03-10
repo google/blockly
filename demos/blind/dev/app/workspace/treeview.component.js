@@ -30,7 +30,7 @@ app.TreeView = ng.core
 <li>
   <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
   <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
-    <option value='NO_ACTION' select>select an action</option>
+    <option value='NO_ACTION' selected>select an action</option>
     <option value='CUT_BLOCK'>cut block</option>
     <option value='COPY_BLOCK'>copy block</option>
     <option value='PASTE_ABOVE' disabled='block.previousConnection' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above this block</option>
@@ -47,7 +47,7 @@ app.TreeView = ng.core
       <li *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
         {{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
         <select aria-label='insert input menu' (change)='inputMenuSelected(inputBlock.connection, $event)'>
-          <option value='NO_ACTION' select>select an action</option>
+          <option value='NO_ACTION' selected>select an action</option>
           <option value='MARK_SPOT'>mark this spot</option>
           <option value='PASTE' disabled='{{notCompatibleWithClipboard(inputBlock.connection)}}'>paste</option>
         </select>

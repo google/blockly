@@ -221,14 +221,15 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  *     in the database and the current location (as a result of dragging).
  * @param {number} dy Vertical offset between this connection's location
  *     in the database and the current location (as a result of dragging).
- * @return ?Blockly.Connection the closest valid connection.
- *     another connection or null, and 'radius' which is the distance.
+ * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
+ *     properties:' connection' which is either another connection or null,
+ *     and 'radius' which is the distance.
  */
 Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx,
     dy) {
   // Don't bother.
   if (!this.length) {
-    return null;
+    return {connection: null, radius: maxRadius};
   }
 
   // Stash the values of x and y from before the drag.
@@ -273,7 +274,9 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx,
   // Reset the values of x and y.
   conn.x_ = baseX;
   conn.y_ = baseY;
-  return bestConnection;
+
+  // If there were no valid connections, bestConnection will be null.
+  return {connection: bestConnection, radius: bestRadius};
 };
 
 /**

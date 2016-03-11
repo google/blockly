@@ -645,13 +645,7 @@ Blockly.Connection.prototype.tighten_ = function() {
  *     and 'radius' which is the distance.
  */
 Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
-  var closestConnection = this.dbOpposite_.searchForClosest(this, maxLimit, dx,
-      dy);
-  if (closestConnection) {
-    return {connection: closestConnection,
-            radius: this.distanceFrom(closestConnection)};
-  }
-  return {connection: null, radius: maxLimit};
+  return this.dbOpposite_.searchForClosest(this, maxLimit, dx, dy);
 };
 
 /**

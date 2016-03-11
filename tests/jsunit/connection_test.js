@@ -51,6 +51,7 @@ function connectionTest_tearDown() {
   dummyWorkspace = null;
 }
 
+var isMovableFn = function() { return true; };
 /**
  * These tests check that the reasons for failures to connect are consistent
  * (internal view of error states).
@@ -67,10 +68,10 @@ function testCanConnectWithReason_TargetNull() {
 function testCanConnectWithReason_Disconnect() {
   connectionTest_setUp();
 
-  var tempConnection = new Blockly.Connection({workspace: dummyWorkspace},
+  var tempConnection = new Blockly.Connection({workspace: dummyWorkspace, isMovable: isMovableFn},
       Blockly.OUTPUT_VALUE);
-  Blockly.Connection.connectReciprocally(input, tempConnection);
-  assertEquals(Blockly.Connection.REASON_MUST_DISCONNECT,
+  Blockly.Connection.connectReciprocally_(input, tempConnection);
+  assertEquals(Blockly.Connection.CAN_CONNECT,
       input.canConnectWithReason_(output));
 
   connectionTest_tearDown();
@@ -270,7 +271,7 @@ function test_isConnectionAllowed() {
   var four = helper_createConnection(0, 0, Blockly.INPUT_VALUE);
   four.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
 
-  Blockly.Connection.connectReciprocally(three, four);
+  Blockly.Connection.connectReciprocally_(three, four);
   assertFalse(one.isConnectionAllowed(three, 20.0));
 
   // Don't connect two connections on the same block.

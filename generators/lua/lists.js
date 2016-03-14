@@ -119,12 +119,12 @@ Blockly.Lua['lists_indexOf'] = function(block) {
  * @private
  * @param {string} listname Name of the list, used to calculate length.
  * @param {string} where The method of indexing, selected by dropdown in Blockly
- * @param {=string} opt_at The optional offset when indexing from start/end.
+ * @param {string=} opt_at The optional offset when indexing from start/end.
  * @return {string} Index expression.
  */
 Blockly.Lua.lists.getIndex_ = function(listname, where, opt_at) {
   if (where == 'FIRST') {
-    return 1;
+    return '1';
   } else if (where == 'FROM_END') {
     return '#' + listname + ' + 1 - ' + opt_at;
   } else if (where == 'LAST') {

@@ -45,7 +45,7 @@ Blockly.Lua = new Blockly.Generator('Lua');
  */
 Blockly.Lua.addReservedWords(
     // Special character
-    '_' +
+    '_,' +
     // From theoriginalbit's script:
     // https://github.com/espertus/blockly-lua/issues/6
     '__inext,assert,bit,colors,colours,coroutine,disk,dofile,error,fs,' +

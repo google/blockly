@@ -279,6 +279,25 @@ function test_isConnectionAllowed() {
   assertFalse(one.isConnectionAllowed(two, 1000.0));
 }
 
+function test_isConnectionAllowed_NoNext() {
+  var sharedWorkspace = {};
+  var one = helper_createConnection(0, 0, Blockly.NEXT_STATEMENT);
+  one.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  one.sourceBlock_.nextConnection = one;
+
+  var two = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  two.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+
+  assertTrue(two.isConnectionAllowed(one, 1000.0));
+
+  var three = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
+  three.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+  three.sourceBlock_.previousConnection = three;
+  Blockly.Connection.connectReciprocally_(one, three);
+
+  assertFalse(two.isConnectionAllowed(one, 1000.0));
+}
+
 function testCheckConnection_Okay() {
   connectionTest_setUp();
   previous.checkConnection_(next);

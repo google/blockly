@@ -373,6 +373,14 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
     return false;
   }
 
+  // Don't let a block with no next connection bump other blocks out of the
+  // stack.
+  if (this.type == Blockly.PREVIOUS_STATEMENT &&
+      candidate.targetConnection &&
+      !this.sourceBlock_.nextConnection) {
+    return false;
+  }
+
   // Don't let blocks try to connect to themselves or ones they nest.
   var targetSourceBlock = candidate.sourceBlock_;
   var sourceBlock = this.sourceBlock_;

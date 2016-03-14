@@ -822,6 +822,11 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     // Check to see if any of this block's connections are within range of
     // another block's connection.
     var myConnections = this.getConnections_(false);
+    // Also check the last connection on this stack
+    var lastOnStack = this.lastConnectionInStack_();
+    if (lastOnStack && lastOnStack != this.nextConnection) {
+      myConnections.push(lastOnStack);
+    }
     var closestConnection = null;
     var localConnection = null;
     var radiusConnection = Blockly.SNAP_RADIUS;

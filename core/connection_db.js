@@ -71,7 +71,7 @@ Blockly.ConnectionDB.prototype.addConnection = function(connection) {
  * @return The index of the connection, or -1 if the connection was not found.
  */
 Blockly.ConnectionDB.prototype.findConnection = function(conn) {
-  if (this.length == 0) {
+  if (!this.length) {
     return -1;
   }
 
@@ -110,7 +110,7 @@ Blockly.ConnectionDB.prototype.findConnection = function(conn) {
  * @private
  */
 Blockly.ConnectionDB.prototype.findPositionForConnection_ = function(connection) {
-  if (this.length == 0) {
+  if (!this.length) {
     return 0;
   }
   var pointerMin = 0;

@@ -152,16 +152,10 @@ Blockly.Blocks['controls_if'] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 1; i <= this.elseifCount_; i++) {
-      if (valueConnections[i]) {
-        this.getInput('IF' + i).connection.connect(valueConnections[i]);
-      }
-      if (statementConnections[i]) {
-        this.getInput('DO' + i).connection.connect(statementConnections[i]);
-      }
+      Blockly.Mutator.reconnect(valueConnections[i], this, 'IF' + i);
+      Blockly.Mutator.reconnect(statementConnections[i], this, 'DO' + i);
     }
-    if (elseStatementConnection) {
-      this.getInput('ELSE').connection.connect(elseStatementConnection);
-    }
+    Blockly.Mutator.reconnect(elseStatementConnection, this, 'ELSE');
   },
   /**
    * Store pointers to any connected child blocks.

@@ -340,3 +340,35 @@ Blockly.Mutator.prototype.dispose = function() {
   this.block_.mutator = null;
   Blockly.Icon.prototype.dispose.call(this);
 };
+
+/**
+ * Reconnect an block to a mutated input.
+ * @param {Blockly.Connection} connectionChild Connection on child block.
+ * @param {!Blockly.Block} block Parent block.
+ * @param {string} inputName Name of input on parent block.
+ */
+Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
+  if (!connectionChild) {
+    return;
+  }
+  var connectionParent = block.getInput(inputName).connection;
+  var currentParent = connectionChild.targetBlock();
+  if ((!currentParent || currentParent == block) &&
+      connectionParent.targetConnection != connectionChild) {
+    if (connectionParent.targetConnection) {
+      // There's already something connected here.  Get rid of it.
+      connectionParent.disconnect();
+    }
+    connectionParent.connect(connectionChild);
+  }
+};
+
+// Export symbols that would otherwise be renamed by Closure compiler.
+if (!goog.global['Blockly']) {
+  goog.global['Blockly'] = {};
+}
+if (!goog.global['Blockly']['Mutator']) {
+  goog.global['Blockly']['Mutator'] = {};
+}
+goog.global['Blockly']['Mutator']['reconnect'] = Blockly.Mutator.reconnect;
+

@@ -123,18 +123,7 @@ Blockly.Blocks['lists_create_with'] = {
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {
-      var connectionChild = connections[i];
-      if (connectionChild) {
-        var parent = connectionChild.targetBlock();
-        var connectionParent = this.getInput('ADD' + i).connection;
-        if (connectionParent.targetConnection != connectionChild &&
-            (!parent || parent == this)) {
-          if (connectionParent.targetConnection) {
-            connectionParent.disconnect();
-          }
-          connectionParent.connect(connectionChild);
-        }
-      }
+      Blockly.Mutator.reconnect(connections[i], this, 'ADD' + i);
     }
   },
   /**

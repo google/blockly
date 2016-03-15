@@ -209,22 +209,27 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
  * @param {boolean} redo False if undo, true if redo.
  */
 Blockly.Workspace.prototype.undo = function(redo) {
-  var sourceStack = redo ? this.redoStack_ : this.undoStack_;
-  var event = sourceStack.pop();
+  var inputStack = redo ? this.redoStack_ : this.undoStack_;
+  var outputStack = redo ? this.undoStack_ : this.redoStack_;
+  var event = inputStack.pop();
   if (!event) {
     return;
   }
   var events = [event];
   // Do another undo/redo if the next one is of the same group.
-  while (sourceStack.length && event.group &&
-      event.group == sourceStack[sourceStack.length - 1].group) {
-    events.push(sourceStack.pop());
+  while (inputStack.length && event.group &&
+      event.group == inputStack[inputStack.length - 1].group) {
+    events.push(inputStack.pop());
   }
-  events = Blockly.Events.filter(events);
+  // Push these popped events on the opposite stack.
+  for (var i = 0, event; event = events[i]; i++) {
+    outputStack.push(event);
+  }
+  events = Blockly.Events.filter(events, redo);
   Blockly.Events.recordUndo = false;
   for (var i = 0, event; event = events[i]; i++) {
+    console.log(event);
     event.run(redo);
-    (redo ? this.undoStack_ : this.redoStack_).push(event);
   }
   Blockly.Events.recordUndo = true;
 };

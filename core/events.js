@@ -97,7 +97,7 @@ Blockly.Events.fire = function(event) {
  * @private
  */
 Blockly.Events.fireNow_ = function() {
-  var queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_);
+  var queue = Blockly.Events.filter(Blockly.Events.FIRE_QUEUE_, true);
   Blockly.Events.FIRE_QUEUE_.length = 0;
   for (var i = 0, event; event = queue[i]; i++) {
     var workspace = Blockly.Workspace.getById(event.workspaceId);
@@ -110,10 +110,15 @@ Blockly.Events.fireNow_ = function() {
 /**
  * Filter the queued events and merge duplicates.
  * @param {!Array.<!Blockly.Events.Abstract>} queueIn Array of events.
+ * @param {boolean} forward True if forward (redo), false if backward (undo).
  * @return {!Array.<!Blockly.Events.Abstract>} Array of filtered events.
  */
-Blockly.Events.filter = function(queueIn) {
+Blockly.Events.filter = function(queueIn, forward) {
   var queue = goog.array.clone(queueIn);
+  if (!forward) {
+    // Undo is merged in reverse order.
+    queue.reverse();
+  }
   // Merge duplicates.  O(n^2), but n should be very small.
   for (var i = 0, event1; event1 = queue[i]; i++) {
     for (var j = i + 1, event2; event2 = queue[j]; j++) {
@@ -143,6 +148,10 @@ Blockly.Events.filter = function(queueIn) {
     if (queue[i].isNull()) {
       queue.splice(i, 1);
     }
+  }
+  if (!forward) {
+    // Restore undo order.
+    queue.reverse();
   }
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
@@ -251,6 +260,8 @@ Blockly.Events.Create.prototype.run = function(forward) {
     var block = Blockly.Block.getById(this.blockId);
     if (block) {
       block.dispose(false, true);
+    } else {
+      console.warn("Can't delete non-existant block: " + this.blockId);
     }
   }
 };
@@ -285,6 +296,8 @@ Blockly.Events.Delete.prototype.run = function(forward) {
     var block = Blockly.Block.getById(this.blockId);
     if (block) {
       block.dispose(false, true);
+    } else {
+      console.warn("Can't delete non-existant block: " + this.blockId);
     }
   } else {
     var workspace = Blockly.Workspace.getById(this.workspaceId);
@@ -334,6 +347,7 @@ Blockly.Events.Change.prototype.isNull = function() {
 Blockly.Events.Change.prototype.run = function(forward) {
   var block = Blockly.Block.getById(this.blockId);
   if (!block) {
+    console.warn("Can't change non-existant block: " + this.blockId);
     return;
   }
   var value = forward ? this.newValue : this.oldValue;
@@ -375,6 +389,8 @@ Blockly.Events.Change.prototype.run = function(forward) {
       Blockly.Events.fire(new Blockly.Events.Change(
           block, 'mutation', null, oldMutation, value));
       break;
+    default:
+      console.warn("Unknown change type: " + this.element);
   }
 };
 
@@ -448,6 +464,7 @@ Blockly.Events.Move.prototype.isNull = function() {
 Blockly.Events.Move.prototype.run = function(forward) {
   var block = Blockly.Block.getById(this.blockId);
   if (!block) {
+    console.warn("Can't move non-existant block: " + this.blockId);
     return;
   }
   var parentId = forward ? this.newParentId : this.oldParentId;
@@ -457,6 +474,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   if (parentId) {
     parentBlock = Blockly.Block.getById(parentId);
     if (!parentBlock) {
+      console.warn("Can't connect to non-existant block: " + parentId);
       return;
     }
   }
@@ -473,14 +491,14 @@ Blockly.Events.Move.prototype.run = function(forward) {
       var input = parentBlock.getInput(inputName);
       if (input) {
         parentConnection = input.connection;
-      } else {
-        console.warn("Can't connect to non-existant input: " + inputName);
       }
     } else if (blockConnection.type == Blockly.PREVIOUS_STATEMENT) {
       parentConnection = parentBlock.nextConnection;
     }
     if (parentConnection) {
       blockConnection.connect(parentConnection);
+    } else {
+      console.warn("Can't connect to non-existant input: " + inputName);
     }
   }
 };

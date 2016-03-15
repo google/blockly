@@ -941,13 +941,13 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   // Stop rerendering.
   this.rendered = false;
 
-  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
   Blockly.Events.disable();
   var icons = this.getIcons();
   for (var i = 0; i < icons.length; i++) {
     icons[i].dispose();
   }
   Blockly.Events.enable();
+  Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
   goog.dom.removeNode(this.svgGroup_);
   // Sever JavaScript to DOM connections.

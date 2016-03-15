@@ -85,6 +85,10 @@ Blockly.FieldCheckbox.prototype.getValue = function() {
 Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
   var newState = (strBool == 'TRUE');
   if (this.state_ !== newState) {
+    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+          this.sourceBlock_, 'field', this.name, this.state_, newState));
+    }
     this.state_ = newState;
     if (this.checkElement_) {
       this.checkElement_.style.display = newState ? 'block' : 'none';

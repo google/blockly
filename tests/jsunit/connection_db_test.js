@@ -38,35 +38,46 @@ function verify_DB_(msg, expected, db) {
 
 function test_DB_addConnection() {
   var db = new Blockly.ConnectionDB();
-  var o2 = {y_: 2, sourceBlock_: {}};
+  var o2 = {y_: 2, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
   db.addConnection(o2);
   verify_DB_('Adding connection #2', [o2], db);
 
-  var o4 = {y_: 4, sourceBlock_: {}};
+  var o4 = {y_: 4, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
   db.addConnection(o4);
   verify_DB_('Adding connection #4', [o2, o4], db);
 
-  var o1 = {y_: 1, sourceBlock_: {}};
+  var o1 = {y_: 1, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
   db.addConnection(o1);
   verify_DB_('Adding connection #1', [o1, o2, o4], db);
 
-  var o3a = {y_: 3, sourceBlock_: {}};
+  var o3a = {y_: 3, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
   db.addConnection(o3a);
   verify_DB_('Adding connection #3a', [o1, o2, o3a, o4], db);
 
-  var o3b = {y_: 3, sourceBlock_: {}};
+  var o3b = {y_: 3, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
   db.addConnection(o3b);
   verify_DB_('Adding connection #3b', [o1, o2, o3b, o3a, o4], db);
 }
 
 function test_DB_removeConnection() {
   var db = new Blockly.ConnectionDB();
-  var o1 = {y_: 1, sourceBlock_: {}};
-  var o2 = {y_: 2, sourceBlock_: {}};
-  var o3a = {y_: 3, sourceBlock_: {}};
-  var o3b = {y_: 3, sourceBlock_: {}};
-  var o3c = {y_: 3, sourceBlock_: {}};
-  var o4 = {y_: 4, sourceBlock_: {}};
+  var o1 = {y_: 1, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
+  var o2 = {y_: 2, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
+  var o3a = {y_: 3, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
+  var o3b = {y_: 3, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
+  var o3c = {y_: 3, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
+  var o4 = {y_: 4, sourceBlock_: {},
+      getSourceBlock: Blockly.Connection.prototype.getSourceBlock};
   db.addConnection(o1);
   db.addConnection(o2);
   db.addConnection(o3c);

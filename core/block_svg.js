@@ -549,7 +549,7 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
       // Determine which connection is inferior (lower in the source stack).
       var inferiorConnection = Blockly.localConnection_.isSuperior() ?
           Blockly.highlightedConnection_ : Blockly.localConnection_;
-      inferiorConnection.sourceBlock_.connectionUiEffect();
+      inferiorConnection.getSourceBlock().connectionUiEffect();
     }
     if (this.workspace.trashcan) {
       // Don't throw an object in the trash can if it just got connected.

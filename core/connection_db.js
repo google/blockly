@@ -54,7 +54,7 @@ Blockly.ConnectionDB.prototype.addConnection = function(connection) {
   if (connection.inDB_) {
     throw 'Connection already in database.';
   }
-  if (connection.sourceBlock_.isInFlyout) {
+  if (connection.getSourceBlock().isInFlyout) {
     // Don't bother maintaining a database of connections in a flyout.
     return;
   }
@@ -177,7 +177,7 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   pointerMin = pointerMid;
   pointerMax = pointerMid;
   var neighbours = [];
-  var sourceBlock = connection.sourceBlock_;
+  var sourceBlock = connection.getSourceBlock();
   if (db.length) {
     while (pointerMin >= 0 && checkConnection_(pointerMin)) {
       pointerMin--;

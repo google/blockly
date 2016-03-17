@@ -221,6 +221,22 @@ Blockly.Events.Abstract = function(block) {
 };
 
 /**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.Abstract.prototype.toJson = function() {
+  var json = {
+    'type': this.type,
+    'blockId': this.blockId,
+    'workspaceId': this.workspaceId
+  };
+  if (this.group) {
+    json['group'] = this.group;
+  }
+  return json;
+};
+
+/**
  * Does this event record any change of state?
  * @return {boolean} True if something changed.
  */
@@ -245,6 +261,16 @@ goog.inherits(Blockly.Events.Create, Blockly.Events.Abstract);
  * @type {string}
  */
 Blockly.Events.Create.prototype.type = Blockly.Events.CREATE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.Create.prototype.toJson = function() {
+  var json = Blockly.Events.Create.superClass_.toJson.call(this);
+  json['xml'] = Blockly.Xml.domToText(this.xml);
+  return json;
+};
 
 /**
  * Run a creation event.
@@ -333,6 +359,20 @@ goog.inherits(Blockly.Events.Change, Blockly.Events.Abstract);
 Blockly.Events.Change.prototype.type = Blockly.Events.CHANGE;
 
 /**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.Change.prototype.toJson = function() {
+  var json = Blockly.Events.Change.superClass_.toJson.call(this);
+  json['element'] = this.element;
+  if (this.name) {
+    json['name'] = this.name;
+  }
+  json['newValue'] = this.newValue;
+  return json;
+};
+
+/**
  * Does this event record any change of state?
  * @return {boolean} True if something changed.
  */
@@ -414,6 +454,25 @@ goog.inherits(Blockly.Events.Move, Blockly.Events.Abstract);
  * @type {string}
  */
 Blockly.Events.Move.prototype.type = Blockly.Events.MOVE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.Move.prototype.toJson = function() {
+  var json = Blockly.Events.Move.superClass_.toJson.call(this);
+  if (this.newParentId) {
+    json['newParentId'] = this.newParentId;
+  }
+  if (this.newInputName) {
+    json['newInputName'] = this.newInputName;
+  }
+  if (this.newCoordinate) {
+    json['newCoordinate'] = Math.round(this.newCoordinate.x) + ',' +
+        Math.round(this.newCoordinate.y);
+  }
+  return json;
+};
 
 /**
  * Record the block's new location.  Called after the move.

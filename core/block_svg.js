@@ -481,6 +481,9 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
+  if (this.workspace.options.readOnly) {
+    return;
+  }
   if (this.isInFlyout) {
     e.stopPropagation();
     return;

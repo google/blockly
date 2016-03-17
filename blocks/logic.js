@@ -465,7 +465,7 @@ Blockly.Blocks['logic_ternary'] = {
         if (block && !block.outputConnection.checkType_(parentConnection)) {
           if (parentConnection === this.prevParentConnection_) {
             this.unplug();
-            parentConnection.sourceBlock_.bumpNeighbours_();
+            parentConnection.getSourceBlock().bumpNeighbours_();
           } else {
             block.unplug();
             block.bumpNeighbours_();

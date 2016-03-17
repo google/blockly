@@ -221,7 +221,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
           if (stackConnection.targetConnection ||
               !this.statementConnection_ ||
               this.statementConnection_.targetConnection ||
-              this.statementConnection_.sourceBlock_.workspace !=
+              this.statementConnection_.getSourceBlock().workspace !=
               this.workspace) {
             // Block no longer exists or has been attached elsewhere.
             this.statementConnection_ = null;
@@ -552,7 +552,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         if (quarkName in this.quarkConnections_) {
           var connection = this.quarkConnections_[quarkName];
           if (!connection || connection.targetConnection ||
-              connection.sourceBlock_.workspace != this.workspace) {
+              connection.getSourceBlock().workspace != this.workspace) {
             // Block no longer exists or has been attached elsewhere.
             delete this.quarkConnections_[quarkName];
           } else {

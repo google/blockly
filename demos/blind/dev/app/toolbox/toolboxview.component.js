@@ -28,10 +28,11 @@ app.ToolboxView = ng.core
 .Component({
   selector: 'toolbox-view',
   template: `
-<h1>Toolbox</h1>
+<h1 tabIndex='0'>Toolbox</h1>
 <ol tabIndex='0' *ngFor='#category of makeArray(sightedToolbox)' (keydown)="keyHandler($event)">
   <h2 #name>{{category.attributes.name.value}}</h2>
-  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
+  {{labelCategory(name)}}
+  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=1 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
 </ol>
   `,
   directives: [app.ToolboxTreeView],
@@ -51,6 +52,14 @@ app.ToolboxView = ng.core
 
     this.toolboxCategories = [];
     this.toolboxWorkspaces = {};
+  },
+  labelCategory: function(h2){
+      var parent = h2.parentNode;
+      while (parent != null && parent.tagName != 'OL') {
+	  parent = parent.parentNode;
+      }
+      //console.log("labelled");
+      parent.setAttribute("aria-label", h2.innerText);
   },
   keyHandler: function(e){
       //console.log(document.activeElement);
@@ -74,7 +83,7 @@ app.ToolboxView = ng.core
         case 38:
           //up-facing arrow: go up a level, if possible. If not, make done sound
           var prevSibling = this.getPreviousSibling(currentElement);
-          if (prevSibling){
+	  if (prevSibling && prevSibling.tagName != 'H1'){
             prevSibling.focus();
           } else {
             console.log("no previous sibling");
@@ -93,6 +102,7 @@ app.ToolboxView = ng.core
           break;
         case 40:
           //down-facing arrow: go down a level, if possible. If not, make done sound
+	  //TODO(madeeha): should stop when done with all items at that level. Currently continues
           var nextSibling = this.getNextSibling(currentElement);
           if (nextSibling){
             nextSibling.focus();
@@ -129,7 +139,7 @@ app.ToolboxView = ng.core
         return element.nextElementSibling;
       } else {
         var parent = element.parentNode;
-        while (parent != null){
+        while (parent != null && parent.tagName != 'OL'){
           if (parent.nextElementSibling){
             var node = parent.nextElementSibling;
             if (node.tabIndex == 0){
@@ -146,7 +156,6 @@ app.ToolboxView = ng.core
     },
     getPreviousSibling: function(element){
       if (element.previousElementSibling){
-        console.log("found a previous sibling!");
         var sibling = element.previousElementSibling;
         if (sibling.tabIndex == '0') {
           return sibling;

@@ -1,0 +1,367 @@
+<html>
+<head><title>TreeView Experiments</title>
+<style>
+.tree a.focussed, .activedescendant > a {outline: 2px dotted #f00;}
+</style>
+</head>
+<body>
+<div class="treeview">
+        <h2>Tree</h2>
+        <ul class="tree">
+          <li><a href="#flora">Flora</a>
+            <ul class="children">
+              <li><a href="#herbs">Herbs</a>
+                <ul class="children">
+                  <li><a href="#sage">Sage</a></li>
+                  <li><a href="#rosemary">Rosemary</a></li>
+                  <li><a href="#thyme">Thyme</a></li>
+                </ul>
+              </li>
+              <li><a href="#flowers">Flowers</a>
+                <ul class="children">
+                  <li><a href="#daisy">Daisy</a></li>
+                  <li><a href="#poppy">Poppy</a></li>
+                  <li><a href="#rose">Rose</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#fauna">Fauna</a>
+            <ul class="children">
+              <li><a href="#mammals">Mammals</a>
+                <ul class="children">
+                  <li><a href="#elephant">Elephant</a></li>
+                  <li><a href="#monkey">Monkey</a></li>
+                  <li><a href="#whale">Whale</a></li>
+                </ul>
+              </li>
+              <li><a href="#reptiles">Reptiles</a>
+                <ul class="children">
+                  <li><a href="#lizard">Lizard</a></li>
+                  <li><a href="#snake">Snake</a></li>
+                  <li><a href="#turtle">Turtle</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+<script>
+var tree = document.getElementsByClassName("tree");
+
+if (tree.length != 1){
+  console.log("tree length not 1");
+}
+tree = tree[0];
+tree.setAttribute('role','tree');
+tree.setAttribute('tabIndex','0');
+tree.setAttribute('id','tree0');
+
+//set the ids for all the nodes
+var setIds = function(rootNode, parentId, index){
+  if (rootNode == null){
+    return;
+  }
+  if (rootNode.className == 'tree') {
+    var kids = rootNode.children;
+    for (var i=0; i<kids.length; i++){
+      setIds(kids[i], rootNode.id, i);
+    }
+    return;
+  }
+  if (rootNode.tagName != 'LI'){
+    if (rootNode.tagName == 'UL'){
+      rootNode.setAttribute("role","group");
+    }
+    var kids = rootNode.children;
+    for (var i=0; i<kids.length; i++){
+      setIds(kids[i], parentId, i);
+    }
+    return;
+  }
+  var parent = document.getElementById(parentId);
+  if (parent.tagName == 'LI' && parent.className != "hasChildren") {
+    parent.className = "hasChildren";
+  }
+  rootNode.id = parentId + "-node" + index;
+  rootNode.setAttribute("role", "treeitem");
+  rootNode.setAttribute("aria-selected", "false");
+  rootNode.tabIndex = -1;
+  var kids = rootNode.children;
+  for (var i=0; i<kids.length; i++){
+    setIds(kids[i], rootNode.id, i);
+  }
+  return;
+};
+setIds(tree);
+
+var allNodes = tree.getElementsByTagName('li');
+
+//only works because allNodes is in DFS order
+tree.setAttribute('aria-activedescendant', allNodes[0].id);
+var firstChild = document.getElementById(allNodes[0].id);
+
+for (var i=0; i<allNodes.length; i++){
+  var node = allNodes[i];
+  if (node.className != 'hasChildren'){
+    node.className = 'noChildren';
+  }
+}
+
+var lastNodeIdx = allNodes.length - 1;
+var lastNode = allNodes[-1];
+
+firstChild.className += " activedescendant";
+
+var updateSelectedNode = function(node){
+  console.log("updating node: " + node.id);
+  //console.log(node);
+  var activeDesc = tree.getElementsByClassName("activedescendant");
+  if (activeDesc.length != 1){
+    console.log("activeDesc length not 1");
+    console.log(activeDesc);
+  }
+  activeDesc = activeDesc[0];
+  activeDesc.classList.remove("activedescendant");
+  node.classList.add("activedescendant");
+  tree.setAttribute("aria-activedescendant",node.id);
+};
+
+var nextNode = function(node, key){
+  switch(key){
+    case 37:
+      //left-facing arrow: go out a level, if possible. If not, do nothing
+      console.log("in left arrow section");
+      var nextNode = node.parentNode;
+      while (nextNode.className != "treeview" && nextNode.tagName != 'LI') {
+        nextNode = nextNode.parentNode;
+      }
+      if (nextNode.className == "treeview" || nextNode == null){
+        return;
+      }
+      updateSelectedNode(nextNode);
+      break;
+    case 38:
+      //up-facing arrow: go up a level, if possible. If not, do nothing
+      console.log("node passed in: " + node.id);
+      var prevSibling = getPreviousSibling(node);
+      if (prevSibling && prevSibling.tagName != 'H1'){
+        updateSelectedNode(prevSibling);
+      } else {
+        console.log("no previous sibling");
+      }
+      break;
+    case 39:
+      //right-facing arrow: go in a level, if possible. If not, do nothing
+      console.log("in right arrow section");
+      var firstChild = getFirstChild(node);
+      if (firstChild){
+        updateSelectedNode(firstChild);
+      } else {
+        console.log("no valid child");
+      }
+      break;
+    case 40:
+      //down-facing arrow: go down a level, if possible. If not, do nothing
+      //TODO(madeeha): should stop when done with all items at that level. Currently continues
+      var nextSibling = getNextSibling(node);
+      if (nextSibling){
+        updateSelectedNode(nextSibling);
+      } else {
+        console.log("no next sibling");
+      }
+      break;
+  }
+};
+
+var keyHandler2 = function(e){
+  if (!(e.shiftKey || e.ctrlKey || e.altKey || e.metaKey)) {
+    console.log(e.keyCode);
+    var currentNode = document.getElementById(tree.getAttribute('aria-activedescendant'));
+    switch(e.keyCode) {
+      case 38: //up
+        e.preventDefault();
+        e.stopPropagation();
+        nextNode(currentNode, 38);
+        break;
+      case 40: //down
+        e.preventDefault();
+        e.stopPropagation();
+        nextNode(currentNode, 40);
+        break;
+      case 37: //left
+        e.preventDefault();
+        e.stopPropagation();
+        console.log(currentNode);
+        nextNode(currentNode, 37);
+        break;
+      case 39: //right
+        e.preventDefault();
+        e.stopPropagation();
+        nextNode(currentNode, 39);
+        break;
+      case 32: //space
+        // if ($('> a', $currentNode).length) {
+        //   location.href = $('> a', $currentNode).attr('href');
+        //   e.stopPropagation();
+        // }
+        break;
+    }
+  }
+};
+
+var keyHandler = function(e){
+  //console.log(document.activeElement);
+  var currentElement = document.activeElement;
+  console.log(e.keyCode);
+  switch (e.keyCode){
+    case 37:
+      //left-facing arrow: go out a level, if possible. If not, go to the previous top-level block
+      var tempElement = currentElement.parentNode;
+      while (tempElement != null && tempElement.tabIndex != 0) {
+        tempElement = tempElement.parentNode;
+      }
+      if (tempElement == null){
+        return;
+        e.preventDefault();
+      }
+      tempElement.focus();
+      console.log("focus on parent");
+      e.preventDefault();
+      break;
+    case 38:
+      //up-facing arrow: go up a level, if possible. If not, make done sound
+      var prevSibling = getPreviousSibling(currentElement);
+      if (prevSibling && prevSibling.tagName != 'H1'){
+              prevSibling.focus();
+            } else {
+              console.log("no previous sibling");
+            }
+            e.preventDefault();
+            break;
+    case 39:
+          //right-facing arrow: go in a level, if possible. If not, go to next top-level block
+          var firstChild = getFirstChild(currentElement);
+          if (firstChild){
+            firstChild.focus();
+          } else {
+            console.log("no valid child");
+          }
+          e.preventDefault();
+          break;
+    case 40:
+          //down-facing arrow: go down a level, if possible. If not, make done sound
+          //TODO(madeeha): should stop when done with all items at that level. Currently continues
+          var nextSibling = getNextSibling(currentElement);
+          if (nextSibling){
+            nextSibling.focus();
+          } else {
+            console.log("no next sibling");
+          }
+          e.preventDefault();
+          break;
+    }
+};
+
+var getFirstChild =  function(element){
+  //get the children of the element
+  //are any of them tabIndex=0?
+  //go to the children of the first child
+  if (element == null){
+    return element;
+  } else {
+    var childList = element.children;
+    for (var i=0; i<childList.length; i++){
+      if (childList[i].tagName == 'LI'){
+        return childList[i];
+      } else {
+        var potentialElement = getFirstChild(childList[i]);
+        if (potentialElement) {
+          return potentialElement;
+        }
+      }
+    }
+    return null;
+  }
+};
+
+var getNextSibling = function(element){
+  if (element.nextElementSibling){
+    return element.nextElementSibling;
+  } else {
+    var parent = element.parentNode;
+    //TODO(madeeha): change this to OL or UL depending on implementation: not both.
+    while (parent != null && parent.tagName != 'UL' && parent.tagName != 'OL'){
+      if (parent.nextElementSibling){
+        var node = parent.nextElementSibling;
+        if (node.tabIndex == 0){
+          return node;
+        } else {
+          return getFirstChild(node);
+        }
+      } else {
+        parent = parent.parentNode;
+      }
+    }
+    return null;
+  }
+};
+
+var getPreviousSibling = function(element){
+  if (element.previousElementSibling){
+    var sibling = element.previousElementSibling;
+    if (sibling.tagName == 'LI') {
+      return sibling;
+    } else {
+      return getLastChild(sibling);
+    }
+  } else {
+    var parent = element.parentNode;
+    while (parent != null){
+      console.log("looping");
+      if (parent.tagName == 'OL') {
+        break;
+      }
+      if (parent.previousElementSibling){
+        console.log("parent has a sibling!");
+        var node = parent.previousElementSibling;
+        if (node.tagName == 'LI'){
+          console.log("return the sibling of the parent!");
+          return node;
+        } else {
+          return getLastChild(node);
+        }
+      } else {
+        parent = parent.parentNode;
+      }
+    }
+    return null;
+  }
+};
+
+var getLastChild = function(element){
+  if (element == null){
+    console.log("no element");
+    return element;
+  } else {
+    var childList = element.children;
+    for (var i=childList.length-1; i>=0; i--){
+      if (childList[i].tabIndex == 0){
+        return childList[i];
+      } else {
+        var potentialElement = getLastChild(childList[i]);
+        if (potentialElement) {
+          return potentialElement;
+        }
+      }
+    }
+    console.log("no last child");
+    return null;
+  }
+};
+
+document.body.addEventListener("keydown", keyHandler2);
+</script>
+
+</body>
+</html>

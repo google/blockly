@@ -29,11 +29,11 @@ app.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-<li tabIndex='0'>
+<li tabIndex='0' [attr.aria-level]='level'>
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
-  <ol>
-    <li>
-      <select [attr.aria-labelledby]='block.id' aria-label='toolbar block menu' *ngIf='displayBlockMenu' (change)='blockMenuSelected(block, $event)'>
+  <ol [attr.aria-level]='level+1'>
+    <li *ngIf='displayBlockMenu' [attr.aria-level]='level+1'>
+      <select [attr.aria-labelledby]='block.id' aria-label='toolbar block menu' (change)='blockMenuSelected(block, $event)'>
         <option value='NO_ACTION' selected>select an action</option>
         <option value='COPY_TO_WORKSPACE'>copy to workspace</option>
         <option value='COPY_BLOCK'>copy to Blockly clipboard</option>
@@ -41,21 +41,21 @@ app.ToolboxTreeView = ng.core
       </select>
     </li>
     <div *ngFor='#inputBlock of block.inputList'>
-      <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
-      <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
-      <li tabIndex='0' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
+      <field-view [attr.aria-level]='level+1' *ngFor='#field of getInfo(inputBlock)' [field]='field' [level]='level+1'></field-view>
+      <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false' [level]='level+1'></toolbox-tree-view>
+      <li tabIndex='0' [attr.aria-level]='level+1' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
         {{inputType(inputBlock.connection)}} input needed
       </li>
     </div>
   </ol>
 </li>
-<li tabIndex='0' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
-  <toolbox-tree-view [block]='block.nextConnection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
+<li [attr.aria-level]='level' tabIndex='0' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
+  <toolbox-tree-view [level]='level+1' [block]='block.nextConnection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
 </li>
     `,
     directives: [ng.core.forwardRef(
         function() { return app.ToolboxTreeView; }), app.FieldView],
-    inputs: ['block','displayBlockMenu'],
+    inputs: ['block','displayBlockMenu','level'],
   })
   .Class({
     constructor: [app.ClipboardService, function(_service) {

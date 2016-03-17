@@ -30,25 +30,25 @@ app.FieldView = ng.core
     selector: 'field-view',
     template: `
     <!-- html representation of a field -->
-    <li tabIndex='0' *ngIf='isTextInput(field)'>
+    <li [attr.aria-level]='level' tabIndex='0' *ngIf='isTextInput(field)'>
       <input [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
     </li>
-    <li tabIndex='0' *ngIf='isDropdown(field)'>
+    <li [attr.aria-level]='level' tabIndex='0' *ngIf='isDropdown(field)'>
       <select [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
       <option value='NO_ACTION' selected>select an option</option>
       <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
       </select>
     </li>
-    <li tabIndex='0' *ngIf='isCheckbox(field)'>
+    <li [attr.aria-level]='level' tabIndex='0' *ngIf='isCheckbox(field)'>
       //TODO(madeeha):CHECKBOX
     </li>
-    <li tabIndex='0' *ngIf='isTextField(field) && notWhitespace(field)'>
+    <li [attr.aria-level]='level'  tabIndex='0' *ngIf='isTextField(field) && notWhitespace(field)'>
       <label>
         {{field.getText()}}
       </label>
     </li>
     `,
-    inputs: ['field'],
+    inputs: ['field', 'level'],
   })
   .Class({
     constructor: function() {

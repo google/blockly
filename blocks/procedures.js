@@ -217,17 +217,8 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         if (hasStatements) {
           this.setStatements_(true);
           // Restore the stack, if one was saved.
-          var stackConnection = this.getInput('STACK').connection;
-          if (stackConnection.targetConnection ||
-              !this.statementConnection_ ||
-              this.statementConnection_.targetConnection ||
-              this.statementConnection_.getSourceBlock().workspace !=
-              this.workspace) {
-            // Block no longer exists or has been attached elsewhere.
-            this.statementConnection_ = null;
-          } else {
-            stackConnection.connect(this.statementConnection_);
-          }
+          Blockly.Mutator.reconnect(this.statementConnection_, this, 'STACK');
+          this.statementConnection_ = null;
         } else {
           // Save the stack, then disconnect it.
           var stackConnection = this.getInput('STACK').connection;
@@ -512,10 +503,10 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       this.quarkArguments_ = paramIds;
       return;
     }
-    this.setCollapsed(false);
     if (paramIds.length != paramNames.length) {
       throw 'Error: paramNames and paramIds must be the same length.';
     }
+    this.setCollapsed(false);
     if (!this.quarkArguments_) {
       // Initialize tracking for this block.
       this.quarkConnections_ = {};

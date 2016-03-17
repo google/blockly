@@ -88,6 +88,10 @@ Blockly.Msg.DISABLE_BLOCK = 'Disable Block';
 Blockly.Msg.ENABLE_BLOCK = 'Enable Block';
 /// context menu - Provide helpful information about the selected block.\n{{Identical|Help}}
 Blockly.Msg.HELP = 'Help';
+/// context menu - Undo the previous action.\n{{Identical|Undo}}
+Blockly.Msg.UNDO = 'Undo';
+/// context menu - Undo the previous undo action.\n{{Identical|Redo}}
+Blockly.Msg.REDO = 'Redo';
 
 // Realtime collaboration.
 /// collaboration instruction - Tell the user that they can talk with other users.

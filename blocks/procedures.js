@@ -527,27 +527,21 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       if (input) {
         var connection = input.connection.targetConnection;
         this.quarkConnections_[this.quarkArguments_[i]] = connection;
-        // Disconnect all argument blocks and remove all inputs.
-        this.removeInput('ARG' + i);
       }
     }
     // Rebuild the block's arguments.
     this.arguments_ = [].concat(paramNames);
-    this.renderArgs_();
+    this.updateShape_();
     this.quarkArguments_ = paramIds;
     // Reconnect any child blocks.
     if (this.quarkArguments_) {
       for (var i = 0; i < this.arguments_.length; i++) {
-        var input = this.getInput('ARG' + i);
-        var quarkName = this.quarkArguments_[i];
-        if (quarkName in this.quarkConnections_) {
-          var connection = this.quarkConnections_[quarkName];
-          if (!connection || connection.targetConnection ||
-              connection.getSourceBlock().workspace != this.workspace) {
+        var quarkId = this.quarkArguments_[i];
+        if (quarkId in this.quarkConnections_) {
+          var connection = this.quarkConnections_[quarkId];
+          if (!Blockly.Mutator.reconnect(connection, this, 'ARG' + i)) {
             // Block no longer exists or has been attached elsewhere.
-            delete this.quarkConnections_[quarkName];
-          } else {
-            input.connection.connect(connection);
+            delete this.quarkConnections_[quarkId];
           }
         }
       }
@@ -559,28 +553,36 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     }
   },
   /**
-   * Render the arguments.
-   * @this Blockly.Block
+   * Modify this block to have the correct number of arguments.
    * @private
+   * @this Blockly.Block
    */
-  renderArgs_: function() {
+  updateShape_: function() {
+    // Add new inputs.
     for (var i = 0; i < this.arguments_.length; i++) {
-      var input = this.appendValueInput('ARG' + i)
-          .setAlign(Blockly.ALIGN_RIGHT)
-          .appendField(this.arguments_[i]);
-      input.init();
+      if (!this.getInput('ARG' + i)) {
+        var input = this.appendValueInput('ARG' + i)
+            .setAlign(Blockly.ALIGN_RIGHT)
+            .appendField(this.arguments_[i]);
+        input.init();
+      }
     }
-    // Add 'with:' if there are parameters.
-    var input = this.getInput('TOPROW');
-    if (input) {
+    // Remove deleted inputs.
+    while (this.getInput('ARG' + i)) {
+      this.removeInput('ARG' + i);
+      i++;
+    }
+    // Add 'with:' if there are parameters, remove otherwise.
+    var topRow = this.getInput('TOPROW');
+    if (topRow) {
       if (this.arguments_.length) {
         if (!this.getField('WITH')) {
-          input.appendField(Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS, 'WITH');
-          input.init();
+          topRow.appendField(Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS, 'WITH');
+          topRow.init();
         }
       } else {
         if (this.getField('WITH')) {
-          input.removeField('WITH');
+          topRow.removeField('WITH');
         }
       }
     }
@@ -680,7 +682,7 @@ Blockly.Blocks['procedures_callreturn'] = {
   renameProcedure: Blockly.Blocks['procedures_callnoreturn'].renameProcedure,
   setProcedureParameters:
       Blockly.Blocks['procedures_callnoreturn'].setProcedureParameters,
-  renderArgs_: Blockly.Blocks['procedures_callnoreturn'].renderArgs_,
+  updateShape_: Blockly.Blocks['procedures_callnoreturn'].updateShape_,
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
   renameVar: Blockly.Blocks['procedures_callnoreturn'].renameVar,

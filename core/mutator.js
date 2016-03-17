@@ -346,10 +346,11 @@ Blockly.Mutator.prototype.dispose = function() {
  * @param {Blockly.Connection} connectionChild Connection on child block.
  * @param {!Blockly.Block} block Parent block.
  * @param {string} inputName Name of input on parent block.
+ * @retun {boolean} True iff a reconnection was made, false otherwise.
  */
 Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
   if (!connectionChild) {
-    return;
+    return false;
   }
   var connectionParent = block.getInput(inputName).connection;
   var currentParent = connectionChild.targetBlock();
@@ -360,7 +361,9 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
       connectionParent.disconnect();
     }
     connectionParent.connect(connectionChild);
+    return true;
   }
+  return false;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
@@ -371,4 +374,3 @@ if (!goog.global['Blockly']['Mutator']) {
   goog.global['Blockly']['Mutator'] = {};
 }
 goog.global['Blockly']['Mutator']['reconnect'] = Blockly.Mutator.reconnect;
-

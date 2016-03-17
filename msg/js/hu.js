@@ -289,6 +289,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "változó:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Bemenet hozzáadása a függvényhez.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "paraméterek";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Bemenetek hozzáadása, eltávolítása vagy átrendezése ehhez a függvényhez.";
+Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Megjegyzés törlése";
 Blockly.Msg.RENAME_VARIABLE = "Változó átnevezése...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Minden \"%1\" változó átnevezése erre:";
@@ -354,6 +355,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "szóközök levágása az elejéről";
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "szóközök levágása a végéről";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Levágja a megadott szöveg végeiről a szóközöket.";
 Blockly.Msg.TODAY = "Ma";
+Blockly.Msg.UNDO = "Undo";  // untranslated
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "változó";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Készíts \"%1=\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

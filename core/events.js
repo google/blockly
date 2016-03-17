@@ -390,6 +390,10 @@ Blockly.Events.Change.prototype.run = function(forward) {
     console.warn("Can't change non-existant block: " + this.blockId);
     return;
   }
+  if (block.mutator) {
+    // Close the mutator (if open) since we don't want to update it.
+    block.mutator.setVisible(false);
+  }
   var value = forward ? this.newValue : this.oldValue;
   switch (this.element) {
     case 'field':
@@ -413,10 +417,6 @@ Blockly.Events.Change.prototype.run = function(forward) {
       block.setInputsInline(value);
       break;
     case 'mutation':
-      if (block.mutator) {
-        // Close the mutator (if open) since we don't want to update it.
-        block.mutator.setVisible(false);
-      }
       var oldMutation = '';
       if (block.mutationToDom) {
         var oldMutationDom = block.mutationToDom();

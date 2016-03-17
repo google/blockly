@@ -281,6 +281,10 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   // children beyond the lists' length.  Trust the length, do not use the
   // looping pattern of checking the index for an object.
   var childCount = xml.childNodes.length;
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
+  }
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
     var name = xmlChild.nodeName.toLowerCase();
@@ -292,6 +296,9 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
         block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
       }
     }
+  }
+  if (!existingGroup) {
+    Blockly.Events.setGroup(false);
   }
   Blockly.Field.stopCache();
 };

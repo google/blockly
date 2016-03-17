@@ -732,6 +732,20 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   }
   var menuOptions = [];
   var topBlocks = this.getTopBlocks(true);
+  var eventGroup = Blockly.genUid();
+
+  // Options to undo/redo previous action.
+  var undoOption = {};
+  undoOption.text = Blockly.Msg.UNDO;
+  undoOption.enabled = !!this.undoStack_.length > 0;
+  undoOption.callback = this.undo.bind(this, false);
+  menuOptions.push(undoOption);
+  var redoOption = {};
+  redoOption.text = Blockly.Msg.REDO;
+  redoOption.enabled = !!this.redoStack_.length > 0;
+  redoOption.callback = this.undo.bind(this, true);
+  menuOptions.push(redoOption);
+
   // Option to clean up blocks.
   var cleanOption = {};
   cleanOption.text = Blockly.Msg.CLEAN_UP;
@@ -819,6 +833,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     }
   };
   function deleteNext() {
+    Blockly.Events.setGroup(eventGroup);
     var block = deleteList.shift();
     if (block) {
       if (block.workspace) {
@@ -828,6 +843,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         deleteNext();
       }
     }
+    Blockly.Events.setGroup(false);
   }
   menuOptions.push(deleteOption);
 

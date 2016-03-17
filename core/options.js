@@ -69,6 +69,26 @@ Blockly.Options = function(options) {
       hasSounds = true;
     }
   }
+  var rtl = !!options['rtl'];
+  var horizontalLayout = options['horizontalLayout'];
+  if (horizontalLayout === undefined) {
+    horizontalLayout = false;
+  }
+  var toolboxAtStart = options['toolboxPosition'];
+  if (toolboxAtStart === 'end') {
+    toolboxAtStart = false;
+  } else {
+    toolboxAtStart = true;
+  }
+
+  if (horizontalLayout) {
+    var toolboxPosition = toolboxAtStart ?
+        Blockly.TOOLBOX_AT_TOP : Blockly.TOOLBOX_AT_BOTTOM;
+  } else {
+    var toolboxPosition = (toolboxAtStart == rtl) ?
+        Blockly.TOOLBOX_AT_RIGHT : Blockly.TOOLBOX_AT_LEFT;
+  }
+
   var hasScrollbars = options['scrollbars'];
   if (hasScrollbars === undefined) {
     hasScrollbars = hasCategories;
@@ -85,21 +105,28 @@ Blockly.Options = function(options) {
     pathToMedia = options['path'] + 'media/';
   }
 
-  this.RTL = !!options['rtl'];
+  var enableRealtime = !!options['realtime'];
+  var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
+
+  this.RTL = rtl;
   this.collapse = hasCollapse;
   this.comments = hasComments;
   this.disable = hasDisable;
   this.readOnly = readOnly;
-  this.maxBlocks =  options['maxBlocks'] || Infinity;
+  this.maxBlocks = options['maxBlocks'] || Infinity;
   this.pathToMedia = pathToMedia;
   this.hasCategories = hasCategories;
   this.hasScrollbars = hasScrollbars;
   this.hasTrashcan = hasTrashcan;
   this.hasSounds = hasSounds;
   this.hasCss = hasCss;
+  this.horizontalLayout = horizontalLayout;
   this.languageTree = languageTree;
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
+  this.enableRealtime = enableRealtime;
+  this.realtimeOptions = realtimeOptions;
+  this.toolboxPosition = toolboxPosition;
 };
 
 /**

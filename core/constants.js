@@ -162,3 +162,28 @@ Blockly.OPPOSITE_TYPE[Blockly.INPUT_VALUE] = Blockly.OUTPUT_VALUE;
 Blockly.OPPOSITE_TYPE[Blockly.OUTPUT_VALUE] = Blockly.INPUT_VALUE;
 Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
 Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
+
+
+/**
+ * ENUM for toolbox and flyout at top of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_TOP = 0;
+
+/**
+ * ENUM for toolbox and flyout at bottom of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_BOTTOM = 1;
+
+/**
+ * ENUM for toolbox and flyout at left of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_LEFT = 2;
+
+/**
+ * ENUM for toolbox and flyout at right of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_RIGHT = 3;

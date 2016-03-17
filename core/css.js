@@ -430,6 +430,16 @@ Blockly.Css.CONTENT = [
     'white-space: nowrap;',
   '}',
 
+  '.blocklyHorizontalTree {',
+    'float: left;',
+    'margin: 1px 5px 8px 0px;',
+  '}',
+
+  '.blocklyHorizontalTreeRtl {',
+    'float: right;',
+    'margin: 1px 0px 8px 5px;',
+  '}',
+
   '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
     'margin-left: 8px;',
   '}',
@@ -443,6 +453,14 @@ Blockly.Css.CONTENT = [
     'height: 0px;',
     'margin: 5px 0;',
   '}',
+
+  '.blocklyTreeSeparatorHorizontal {',
+    'border-right: solid #e5e5e5 1px;',
+    'width: 0px;',
+    'padding: 5px 0;',
+    'margin: 0 5px;',
+  '}',
+
 
   '.blocklyTreeIcon {',
     'background-image: url(<<<PATH>>>/sprites.png);',

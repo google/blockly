@@ -57,6 +57,18 @@ Blockly.Flyout = function(workspaceOptions) {
   this.RTL = !!workspaceOptions.RTL;
 
   /**
+   * Flyout should be laid out horizontally vs vertically.
+   * @type {boolean}
+   */
+  this.horizontalLayout_ = workspaceOptions.horizontalLayout;
+
+  /**
+   * Position of the toolbox and flyout relative to the workspace.
+   * @type {number}
+   */
+  this.toolboxPosition_ = workspaceOptions.toolboxPosition;
+
+  /**
    * Opaque data that can be passed to Blockly.unbindEvent_.
    * @type {!Array.<!Array>}
    * @private
@@ -121,6 +133,13 @@ Blockly.Flyout.prototype.width_ = 0;
 Blockly.Flyout.prototype.height_ = 0;
 
 /**
+ * Vertical offset of flyout.
+ * @type {number}
+ * @private
+ */
+Blockly.Flyout.prototype.verticalOffset_ = 0;
+
+/**
  * Creates the flyout's DOM.  Only needs to be called once.
  * @return {!Element} The flyout's SVG group.
  */
@@ -148,7 +167,8 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.targetWorkspace_ = targetWorkspace;
   this.workspace_.targetWorkspace = targetWorkspace;
   // Add scrollbar.
-  this.scrollbar_ = new Blockly.Scrollbar(this.workspace_, false, false);
+  this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
+      this.horizontalLayout_, false);
 
   this.hide();
 
@@ -197,9 +217,12 @@ Blockly.Flyout.prototype.dispose = function() {
  * .viewHeight: Height of the visible rectangle,
  * .viewWidth: Width of the visible rectangle,
  * .contentHeight: Height of the contents,
+ * .contentWidth: Width of the contents,
  * .viewTop: Offset of top edge of visible rectangle from parent,
  * .contentTop: Offset of the top-most content from the y=0 coordinate,
  * .absoluteTop: Top-edge of view.
+ * .viewLeft: Offset of the left edge of visible rectangle from parent,
+ * .contentLeft: Offset of the left-most content from the x=0 coordinate,
  * .absoluteLeft: Left-edge of view.
  * @return {Object} Contains size and position metrics of the flyout.
  * @private
@@ -209,43 +232,76 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     // Flyout is hidden.
     return null;
   }
-  var viewHeight = this.height_ - 2 * this.SCROLLBAR_PADDING;
-  var viewWidth = this.width_;
+
   try {
     var optionBox = this.workspace_.getCanvas().getBBox();
   } catch (e) {
     // Firefox has trouble with hidden elements (Bug 528969).
     var optionBox = {height: 0, y: 0};
   }
-  return {
+
+  var absoluteTop = this.verticalOffset_ + this.SCROLLBAR_PADDING
+  if (this.horizontalLayout_) {
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
+      absoluteTop = 0;
+    }
+    var viewHeight = this.height_;
+    var viewWidth = this.width_ - 2 * this.SCROLLBAR_PADDING;
+  } else {
+    var viewHeight = this.height_ - 2 * this.SCROLLBAR_PADDING;
+    var viewWidth = this.width_;
+  }
+
+  var metrics = {
     viewHeight: viewHeight,
     viewWidth: viewWidth,
-    contentHeight: (optionBox.height + optionBox.y) * this.workspace_.scale,
+    contentHeight: (optionBox.height) * this.workspace_.scale,
+    contentWidth: (optionBox.width) * this.workspace_.scale,
     viewTop: -this.workspace_.scrollY,
-    contentTop: 0,
-    absoluteTop: this.SCROLLBAR_PADDING,
-    absoluteLeft: 0
+    viewLeft: -this.workspace_.scrollX,
+    contentTop: optionBox.y,
+    contentLeft: 0,
+    absoluteTop: absoluteTop,
+    absoluteLeft: this.SCROLLBAR_PADDING
   };
+  return metrics;
 };
 
 /**
- * Sets the Y translation of the flyout to match the scrollbars.
- * @param {!Object} yRatio Contains a y property which is a float
- *     between 0 and 1 specifying the degree of scrolling.
+ * Sets the translation of the flyout to match the scrollbars.
+ * @param {!Object} xyRatio Contains a y property which is a float
+ *     between 0 and 1 specifying the degree of scrolling and a
+ *     similar x property.
  * @private
  */
-Blockly.Flyout.prototype.setMetrics_ = function(yRatio) {
+Blockly.Flyout.prototype.setMetrics_ = function(xyRatio) {
   var metrics = this.getMetrics_();
   // This is a fix to an apparent race condition.
   if (!metrics) {
     return;
   }
-  if (goog.isNumber(yRatio.y)) {
+  if (!this.horizontalLayout_ && goog.isNumber(xyRatio.y)) {
     this.workspace_.scrollY =
-        -metrics.contentHeight * yRatio.y - metrics.contentTop;
+        -metrics.contentHeight * xyRatio.y - metrics.contentTop;
+  } else if (this.horizontalLayout_ && goog.isNumber(xyRatio.x)) {
+    if (this.RTL) {
+      this.workspace_.scrollX =
+          -metrics.contentWidth * xyRatio.x + metrics.contentLeft;
+    } else {
+      this.workspace_.scrollX =
+          -metrics.contentWidth * xyRatio.x - metrics.contentLeft;
+    }
   }
-  this.workspace_.translate(0, this.workspace_.scrollY + metrics.absoluteTop);
+  var translateX = this.horizontalLayout_ && this.RTL ?
+      metrics.absoluteLeft + metrics.viewWidth - this.workspace_.scrollX :
+      this.workspace_.scrollX + metrics.absoluteLeft;
+  this.workspace_.translate(translateX,
+      this.workspace_.scrollY + metrics.absoluteTop);
 };
+
+Blockly.Flyout.prototype.setVerticalOffset = function(verticalOffset) {
+  this.verticalOffset_ = verticalOffset;
+}
 
 /**
  * Move the toolbox to the edge of the workspace.
@@ -259,47 +315,144 @@ Blockly.Flyout.prototype.position = function() {
     // Hidden components will return null.
     return;
   }
-  var edgeWidth = this.width_ - this.CORNER_RADIUS;
-  if (this.RTL) {
+  var edgeWidth = this.horizontalLayout_ ? metrics.viewWidth : this.width_;
+  edgeWidth -= this.CORNER_RADIUS;
+  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     edgeWidth *= -1;
   }
-  var path = ['M ' + (this.RTL ? this.width_ : 0) + ',0'];
-  path.push('h', edgeWidth);
-  path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
-      this.RTL ? 0 : 1,
-      this.RTL ? -this.CORNER_RADIUS : this.CORNER_RADIUS,
-      this.CORNER_RADIUS);
-  path.push('v', Math.max(0, metrics.viewHeight - this.CORNER_RADIUS * 2));
-  path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
-      this.RTL ? 0 : 1,
-      this.RTL ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
-      this.CORNER_RADIUS);
-  path.push('h', -edgeWidth);
-  path.push('z');
-  this.svgBackground_.setAttribute('d', path.join(' '));
+
+  this.setBackgroundPath_(edgeWidth,
+    this.horizontalLayout_ ? this.height_ + this.verticalOffset_ : metrics.viewHeight);
 
   var x = metrics.absoluteLeft;
-  if (this.RTL) {
+  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     x += metrics.viewWidth;
     x -= this.width_;
   }
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + x + ',' + metrics.absoluteTop + ')');
 
-  // Record the height for Blockly.Flyout.getMetrics_.
-  this.height_ = metrics.viewHeight;
+  var y = metrics.absoluteTop;
+  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
+    y += metrics.viewHeight;
+    y -= this.height_;
+  }
+
+  this.svgGroup_.setAttribute('transform',
+      'translate(' + x + ',' + y + ')');
+
+  // Record the height for Blockly.Flyout.getMetrics_, or width if the layout is
+  // horizontal.
+  if (this.horizontalLayout_) {
+    this.width_ = metrics.viewWidth;
+  } else {
+    this.height_ = metrics.viewHeight;
+  }
 
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
     this.scrollbar_.resize();
   }
+  // The blocks need to be visible in order to be laid out and measured
+  // correctly, but we don't want the flyout to show up until it's properly
+  // sized.  Opacity is set to zero in show().
+  this.svgGroup_.style.opacity = 1;
+};
+
+/**
+ * Create and set the path for the visible boundaries of the toolbox.
+ * @param {number} width The width of the toolbox, not including the
+ *     rounded corners.
+ * @param {number} height The height of the toolbox, not including
+ *     rounded corners.
+ * @private
+ */
+Blockly.Flyout.prototype.setBackgroundPath_ = function(width, height) {
+  if (this.horizontalLayout_) {
+    this.setBackgroundPathHorizontal_(width, height);
+  } else {
+    this.setBackgroundPathVertical_(width, height);
+  }
+};
+
+/**
+ * Create and set the path for the visible boundaries of the toolbox in vertical mode.
+ * @param {number} width The width of the toolbox, not including the
+ *     rounded corners.
+ * @param {number} height The height of the toolbox, not including
+ *     rounded corners.
+ * @private
+ */
+Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
+    var atRight = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT;
+  // Decide whether to start on the left or right.
+  var path = ['M ' + (atRight ? this.width_ : 0) + ',0'];
+  // Top.
+  path.push('h', width);
+  // Rounded corner.
+  path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
+      atRight ? 0 : 1,
+      atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS,
+      this.CORNER_RADIUS);
+  // Side closest to workspace.
+  path.push('v', Math.max(0, height - this.CORNER_RADIUS * 2));
+  // Rounded corner.
+  path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
+      atRight ? 0 : 1,
+      atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
+      this.CORNER_RADIUS);
+  // Bottom.
+  path.push('h', -width);
+  path.push('z');
+  this.svgBackground_.setAttribute('d', path.join(' '));
+};
+
+/**
+ * Create and set the path for the visible boundaries of the toolbox in horizontal mode.
+ * @param {number} width The width of the toolbox, not including the
+ *     rounded corners.
+ * @param {number} height The height of the toolbox, not including
+ *     rounded corners.
+ * @private
+ */
+Blockly.Flyout.prototype.setBackgroundPathHorizontal_ = function(width, height) {
+    var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
+  // start at top left.
+  var path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
+
+  if (atTop) {
+    // top
+    path.push('h', width + this.CORNER_RADIUS);
+    // right
+    path.push('v', height);
+    // bottom
+    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+        -this.CORNER_RADIUS, this.CORNER_RADIUS);
+    path.push('h', -1 * (width - this.CORNER_RADIUS));
+    // left
+    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+        -this.CORNER_RADIUS, -this.CORNER_RADIUS);
+    path.push('z');
+  } else {
+    // top
+    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+        this.CORNER_RADIUS, -this.CORNER_RADIUS);
+    path.push('h', width - this.CORNER_RADIUS);
+     // right
+    path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+        this.CORNER_RADIUS, this.CORNER_RADIUS);
+    path.push('v', height - this.CORNER_RADIUS);
+    // bottom
+    path.push('h', -width - this.CORNER_RADIUS);
+    // left
+    path.push('z');
+  }
+  this.svgBackground_.setAttribute('d', path.join(' '));
 };
 
 /**
  * Scroll the flyout to the top.
  */
 Blockly.Flyout.prototype.scrollToStart = function() {
-  this.scrollbar_.set(0);
+  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? 1000000000 : 0);
 };
 
 /**
@@ -308,6 +461,10 @@ Blockly.Flyout.prototype.scrollToStart = function() {
  * @private
  */
 Blockly.Flyout.prototype.wheel_ = function(e) {
+  // Don't scroll sideways.
+  if (this.horizontalLayout_) {
+    return;
+  }
   var delta = e.deltaY;
   if (delta) {
     if (goog.userAgent.GECKO) {
@@ -405,7 +562,14 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     }
   }
 
-  // Lay out the blocks vertically.
+  // The blocks need to be visible in order to be laid out and measured
+  // correctly, but we don't want the flyout to show up until it's properly
+  // sized.  Opacity is reset at the end of position().
+  this.svgGroup_.style.opacity = 0;
+  this.svgGroup_.style.display = 'block';
+
+  // Lay out the blocks.
+  var cursorX = margin / this.workspace_.scale + Blockly.BlockSvg.TAB_WIDTH;
   var cursorY = margin;
   for (var i = 0, block; block = blocks[i]; i++) {
     var allBlocks = block.getDescendants();
@@ -418,10 +582,12 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     block.render();
     var root = block.getSvgRoot();
     var blockHW = block.getHeightWidth();
-    var x = this.RTL ? 0 : margin / this.workspace_.scale +
-        Blockly.BlockSvg.TAB_WIDTH;
-    block.moveBy(x, cursorY);
-    cursorY += blockHW.height + gaps[i];
+    block.moveBy((this.horizontalLayout_ && this.RTL) ? -cursorX : cursorX, cursorY);
+    if (this.horizontalLayout_) {
+      cursorX += blockHW.width + gaps[i];
+    } else {
+      cursorY += blockHW.height + gaps[i];
+    }
 
     // Create an invisible rectangle under the block to act as a button.  Just
     // using the block as a button is poor, since blocks have holes in them.
@@ -431,6 +597,44 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     block.flyoutRect_ = rect;
     this.buttons_[i] = rect;
 
+    this.addBlockListeners_(root, block, rect);
+  }
+
+  // IE 11 is an incompetant browser that fails to fire mouseout events.
+  // When the mouse is over the background, deselect all blocks.
+  var deselectAll = function(e) {
+    var blocks = this.workspace_.getTopBlocks(false);
+    for (var i = 0, block; block = blocks[i]; i++) {
+      block.removeSelect();
+    }
+  };
+  this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
+      this, deselectAll));
+
+  if (this.horizontalLayout_) {
+    this.height_ = 0;
+  } else {
+    this.width_ = 0;
+  }
+  this.reflow();
+
+  this.filterForCapacity_();
+
+  // Fire a resize event to update the flyout's scrollbar.
+  Blockly.fireUiEventNow(window, 'resize');
+  this.reflowWrapper_ = this.reflow.bind(this);
+  this.workspace_.addChangeListener(this.reflowWrapper_);
+};
+
+/**
+ * Add listeners to a block that has been added to the flyout.
+ * @param {Element} root The root node of the SVG group the block is in.
+ * @param {!Blockly.Block} block The block to add listeners for.
+ * @param {!Element} rect The invisible rectangle under the block that acts as
+ *     a button for that block.
+ * @private
+ */
+Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
     if (this.autoClose) {
       this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
           this.createBlockFunc_(block)));
@@ -448,76 +652,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         block.addSelect));
     this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
         block.removeSelect));
-  }
-
-  // IE 11 is an incompetant browser that fails to fire mouseout events.
-  // When the mouse is over the background, deselect all blocks.
-  var deselectAll = function(e) {
-    var blocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; block = blocks[i]; i++) {
-      block.removeSelect();
-    }
-  };
-  this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
-      this, deselectAll));
-
-  this.width_ = 0;
-  this.reflow();
-
-  this.filterForCapacity_();
-
-  // Fire a resize event to update the flyout's scrollbar.
-  Blockly.fireUiEventNow(window, 'resize');
-  this.reflowWrapper_ = this.reflow.bind(this);
-  this.workspace_.addChangeListener(this.reflowWrapper_);
-};
-
-/**
- * Compute width of flyout.  Position button under each block.
- * For RTL: Lay out the blocks right-aligned.
- */
-Blockly.Flyout.prototype.reflow = function() {
-  this.workspace_.scale = this.targetWorkspace_.scale;
-  var flyoutWidth = 0;
-  var margin = this.CORNER_RADIUS;
-  var blocks = this.workspace_.getTopBlocks(false);
-  for (var x = 0, block; block = blocks[x]; x++) {
-    var width = block.getHeightWidth().width;
-    if (block.outputConnection) {
-      width -= Blockly.BlockSvg.TAB_WIDTH;
-    }
-    flyoutWidth = Math.max(flyoutWidth, width);
-  }
-  flyoutWidth += Blockly.BlockSvg.TAB_WIDTH;
-  flyoutWidth *= this.workspace_.scale;
-  flyoutWidth += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
-  if (this.width_ != flyoutWidth) {
-    for (var x = 0, block; block = blocks[x]; x++) {
-      var blockHW = block.getHeightWidth();
-      if (this.RTL) {
-        // With the flyoutWidth known, right-align the blocks.
-        var oldX = block.getRelativeToSurfaceXY().x;
-        var dx = flyoutWidth - margin;
-        dx /= this.workspace_.scale;
-        dx -= Blockly.BlockSvg.TAB_WIDTH;
-        block.moveBy(dx - oldX, 0);
-      }
-      if (block.flyoutRect_) {
-        block.flyoutRect_.setAttribute('width', blockHW.width);
-        block.flyoutRect_.setAttribute('height', blockHW.height);
-        // Blocks with output tabs are shifted a bit.
-        var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
-        var blockXY = block.getRelativeToSurfaceXY();
-        block.flyoutRect_.setAttribute('x',
-            this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
-        block.flyoutRect_.setAttribute('y', blockXY.y);
-      }
-    }
-    // Record the width for .getMetrics_ and .position.
-    this.width_ = flyoutWidth;
-    // Fire a resize event to update the flyout's scrollbar.
-    Blockly.fireUiEvent(window, 'resize');
-  }
 };
 
 /**
@@ -578,13 +712,23 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseMove_ = function(e) {
-  var dy = e.clientY - this.startDragMouseY_;
-  this.startDragMouseY_ = e.clientY;
-  var metrics = this.getMetrics_();
-  var y = metrics.viewTop - dy;
-  y = Math.min(y, metrics.contentHeight - metrics.viewHeight);
-  y = Math.max(y, 0);
-  this.scrollbar_.set(y);
+  if (this.horizontalLayout_) {
+    var dx = e.clientX - this.startDragMouseX_;
+    this.startDragMouseX_ = e.clientX;
+    var metrics = this.getMetrics_();
+    var x = metrics.viewLeft - dx;
+    x = Math.min(x, metrics.contentWidth - metrics.viewWidth);
+    x = Math.max(x, 0);
+    this.scrollbar_.set(x);
+  } else {
+    var dy = e.clientY - this.startDragMouseY_;
+    this.startDragMouseY_ = e.clientY;
+    var metrics = this.getMetrics_();
+    var y = metrics.viewTop - dy;
+    y = Math.min(y, metrics.contentHeight - metrics.viewHeight);
+    y = Math.max(y, 0);
+    this.scrollbar_.set(y);
+  }
 };
 
 /**
@@ -644,7 +788,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     }
     var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
     // Scale the scroll (getSvgXY_ did not do this).
-    if (flyout.RTL) {
+    if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
       var width = workspace.getMetrics().viewWidth - flyout.width_;
       xyOld.x += width / workspace.scale - width;
     } else {
@@ -708,13 +852,24 @@ Blockly.Flyout.prototype.getClientRect = function() {
   // area are still deleted.  Must be larger than the largest screen size,
   // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
   var BIG_NUM = 1000000000;
-  if (this.RTL) {
-    var width = flyoutRect.left + flyoutRect.width + BIG_NUM;
-    return new goog.math.Rect(flyoutRect.left, -BIG_NUM, width, BIG_NUM * 2);
+  var x = flyoutRect.left;
+  var y = flyoutRect.top;
+  var width = flyoutRect.width;
+  var height = flyoutRect.height;
+
+  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+    return new goog.math.Rect(-BIG_NUM, y - BIG_NUM, BIG_NUM * 2,
+      BIG_NUM + height);
+  } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
+    return new goog.math.Rect(-BIG_NUM, y + this.verticalOffset_, BIG_NUM * 2,
+      BIG_NUM + height);
+  } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+    return new goog.math.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,
+      BIG_NUM * 2);
+  } else {  // Right
+    return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width,
+      BIG_NUM * 2);
   }
-  // LTR
-  var width = BIG_NUM + flyoutRect.width + flyoutRect.left;
-  return new goog.math.Rect(-BIG_NUM, -BIG_NUM, width, BIG_NUM * 2);
 };
 
 /**
@@ -741,4 +896,94 @@ Blockly.Flyout.terminateDrag_ = function() {
   Blockly.Flyout.startDownEvent_ = null;
   Blockly.Flyout.startBlock_ = null;
   Blockly.Flyout.startFlyout_ = null;
+};
+
+/**
+ * Compute height of flyout.  Position button under each block.
+ * For RTL: Lay out the blocks right-aligned.
+ */
+Blockly.Flyout.prototype.reflowHorizontal = function() {
+  this.workspace_.scale = this.targetWorkspace_.scale;
+  var flyoutHeight = 0;
+  var margin = this.CORNER_RADIUS;
+  var blocks = this.workspace_.getTopBlocks(false);
+  for (var x = 0, block; block = blocks[x]; x++) {
+    var height = block.getHeightWidth().height;
+    flyoutHeight = Math.max(flyoutHeight, height);
+  }
+  flyoutHeight *= this.workspace_.scale;
+  flyoutHeight += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
+  if (this.height_ != flyoutHeight) {
+    for (var x = 0, block; block = blocks[x]; x++) {
+      var blockHW = block.getHeightWidth();
+      if (block.flyoutRect_) {
+        block.flyoutRect_.setAttribute('width', blockHW.width);
+        block.flyoutRect_.setAttribute('height', blockHW.height);
+        // Blocks with output tabs are shifted a bit.
+        var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
+        var blockXY = block.getRelativeToSurfaceXY();
+        block.flyoutRect_.setAttribute('y', blockXY.y);
+        block.flyoutRect_.setAttribute('x',
+            this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
+      }
+    }
+    // Record the width for .getMetrics_ and .position.
+    this.height_ = flyoutHeight;
+  }
+};
+
+/**
+ * Compute width of flyout.  Position button under each block.
+ * For RTL: Lay out the blocks right-aligned.
+ */
+Blockly.Flyout.prototype.reflowVertical = function() {
+  this.workspace_.scale = this.targetWorkspace_.scale;
+  var flyoutWidth = 0;
+  var margin = this.CORNER_RADIUS;
+  var blocks = this.workspace_.getTopBlocks(false);
+  for (var x = 0, block; block = blocks[x]; x++) {
+    var width = block.getHeightWidth().width;
+    if (block.outputConnection) {
+      width -= Blockly.BlockSvg.TAB_WIDTH;
+    }
+    flyoutWidth = Math.max(flyoutWidth, width);
+  }
+  flyoutWidth += Blockly.BlockSvg.TAB_WIDTH;
+  flyoutWidth *= this.workspace_.scale;
+  flyoutWidth += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
+  if (this.width_ != flyoutWidth) {
+    for (var x = 0, block; block = blocks[x]; x++) {
+      var blockHW = block.getHeightWidth();
+      if (this.RTL) {
+        // With the flyoutWidth known, right-align the blocks.
+        var oldX = block.getRelativeToSurfaceXY().x;
+        var dx = flyoutWidth - margin;
+        dx /= this.workspace_.scale;
+        dx -= Blockly.BlockSvg.TAB_WIDTH;
+        block.moveBy(dx - oldX, 0);
+      }
+      if (block.flyoutRect_) {
+        block.flyoutRect_.setAttribute('width', blockHW.width);
+        block.flyoutRect_.setAttribute('height', blockHW.height);
+        // Blocks with output tabs are shifted a bit.
+        var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
+        var blockXY = block.getRelativeToSurfaceXY();
+        block.flyoutRect_.setAttribute('x',
+            this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
+        block.flyoutRect_.setAttribute('y', blockXY.y);
+      }
+    }
+    // Record the width for .getMetrics_ and .position.
+    this.width_ = flyoutWidth;
+  }
+};
+
+Blockly.Flyout.prototype.reflow = function() {
+  if (this.horizontalLayout_) {
+    this.reflowHorizontal();
+  } else {
+    this.reflowVertical();
+  }
+  // Fire a resize event to update the flyout's scrollbar.
+  Blockly.fireUiEvent(window, 'resize');
 };

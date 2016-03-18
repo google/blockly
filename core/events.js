@@ -430,7 +430,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
           block, 'mutation', null, oldMutation, value));
       break;
     default:
-      console.warn("Unknown change type: " + this.element);
+      console.warn('Unknown change type: ' + this.element);
   }
 };
 
@@ -498,7 +498,7 @@ Blockly.Events.Move.prototype.currentLocation_ = function() {
     location.parentId = parent.id;
     var input = parent.getInputWithBlock(block);
     if (input) {
-      location.inputName = input.name
+      location.inputName = input.name;
     }
   } else {
     location.coordinate = block.getRelativeToSurfaceXY();

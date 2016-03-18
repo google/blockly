@@ -39,8 +39,8 @@ goog.require('goog.userAgent');
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of options
- *     for a dropdown list, or a function which generates these options.
+ * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of
+ *     options for a dropdown list, or a function which generates these options.
  * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected, with the newly selected value as its sole argument.
  *     If it returns a value, that value (which must be one of the options) will

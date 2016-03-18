@@ -168,7 +168,7 @@ Blockly.Block.prototype.colour_ = '#000000';
 Blockly.Block.prototype.dispose = function(healStack) {
   // Terminate onchange event calls.
   if (this.onchangeWrapper_) {
-    this.workspace.removeChangeListener(this.onchangeWrapper_)
+    this.workspace.removeChangeListener(this.onchangeWrapper_);
   }
   this.unplug(healStack);
   if (Blockly.Events.isEnabled()) {
@@ -357,7 +357,7 @@ Blockly.Block.prototype.getParent = function() {
 Blockly.Block.prototype.getInputWithBlock = function(block) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.connection && input.connection.targetBlock() == block) {
-      return input
+      return input;
     }
   }
   return null;
@@ -1253,7 +1253,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
 /**
  * Fetches the named input object.
  * @param {string} name The name of the input.
- * @return {Blockly.Input} The input object, or null of the input does not exist.
+ * @return {Blockly.Input} The input object, or null if input does not exist.
  */
 Blockly.Block.prototype.getInput = function(name) {
   for (var i = 0, input; input = this.inputList[i]; i++) {

@@ -384,9 +384,9 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
     topLeft = new goog.math.Coordinate(blockXY.x - tab, blockXY.y);
     // Width has the tab built into it already so subtract it here.
     bottomRight = new goog.math.Coordinate(blockXY.x + blockBounds.width - tab,
- 					   blockXY.y + blockBounds.height);
+        blockXY.y + blockBounds.height);
   }
-  return { topLeft : topLeft, bottomRight : bottomRight };
+  return {topLeft: topLeft, bottomRight: bottomRight};
 };
 
 /**
@@ -1116,7 +1116,7 @@ Blockly.BlockSvg.disconnectUiStep_ = function(group, magnitude, start) {
 Blockly.BlockSvg.disconnectUiStop_ = function() {
   if (Blockly.BlockSvg.disconnectUiStop_.group) {
     clearTimeout(Blockly.BlockSvg.disconnectUiStop_.pid);
-    var group = Blockly.BlockSvg.disconnectUiStop_.group
+    var group = Blockly.BlockSvg.disconnectUiStop_.group;
     group.skew_ = '';
     group.setAttribute('transform', group.translate_);
     Blockly.BlockSvg.disconnectUiStop_.group = null;

@@ -56,14 +56,11 @@ goog.require('goog.userAgent');
 var CLOSURE_DEFINES = {'goog.DEBUG': false};
 
 /**
- * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
- * @return {string} RGB code, e.g. '#5ba65b'.
+ * The main workspace most recently used.
+ * Set by Blockly.WorkspaceSvg.prototype.markFocused
+ * @type {Blockly.Workspace}
  */
-Blockly.hueToRgb = function(hue) {
-  return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
-      Blockly.HSV_VALUE * 255);
-};
+Blockly.mainWorkspace = null;
 
 /**
  * Currently selected block.
@@ -84,13 +81,6 @@ Blockly.highlightedConnection_ = null;
  * @private
  */
 Blockly.localConnection_ = null;
-
-/**
- * The main workspace most recently used.
- * Set by Blockly.WorkspaceSvg.prototype.markFocused
- * @type {Blockly.Workspace}
- */
-Blockly.mainWorkspace = null;
 
 /**
  * Contents of the local clipboard.
@@ -121,6 +111,16 @@ Blockly.dragMode_ = 0;
  * @private
  */
 Blockly.onTouchUpWrapper_ = null;
+
+/**
+ * Convert a hue (HSV model) into an RGB hex triplet.
+ * @param {number} hue Hue on a colour wheel (0-360).
+ * @return {string} RGB code, e.g. '#5ba65b'.
+ */
+Blockly.hueToRgb = function(hue) {
+  return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
+      Blockly.HSV_VALUE * 255);
+};
 
 /**
  * Returns the dimensions of the specified SVG image.

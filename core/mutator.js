@@ -233,7 +233,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       var thisMutator = this;
       this.block_.saveConnections(this.rootBlock_);
       this.sourceListener_ = function() {
-        thisMutator.block_.saveConnections(thisMutator.rootBlock_)
+        thisMutator.block_.saveConnections(thisMutator.rootBlock_);
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }
@@ -346,7 +346,7 @@ Blockly.Mutator.prototype.dispose = function() {
  * @param {Blockly.Connection} connectionChild Connection on child block.
  * @param {!Blockly.Block} block Parent block.
  * @param {string} inputName Name of input on parent block.
- * @retun {boolean} True iff a reconnection was made, false otherwise.
+ * @return {boolean} True iff a reconnection was made, false otherwise.
  */
 Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
   if (!connectionChild) {

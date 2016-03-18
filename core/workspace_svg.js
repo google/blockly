@@ -31,9 +31,9 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
-goog.require('Blockly.ZoomControls');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
+goog.require('Blockly.ZoomControls');
 
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
@@ -684,7 +684,7 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
       boundary.topLeft.x = blockBoundary.topLeft.x;
     }
     if (blockBoundary.bottomRight.x > boundary.bottomRight.x) {
-      boundary.bottomRight.x = blockBoundary.bottomRight.x
+      boundary.bottomRight.x = blockBoundary.bottomRight.x;
     }
     if (blockBoundary.topLeft.y < boundary.topLeft.y) {
       boundary.topLeft.y = blockBoundary.topLeft.y;
@@ -864,7 +864,7 @@ Blockly.WorkspaceSvg.prototype.loadAudio_ = function(filenames, name) {
   }
   try {
     var audioTest = new window['Audio']();
-  } catch(e) {
+  } catch (e) {
     // No browser support for Audio.
     // IE can throw an error even if the Audio object exists.
     return;

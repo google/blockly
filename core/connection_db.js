@@ -48,7 +48,6 @@ Blockly.ConnectionDB.constructor = Blockly.ConnectionDB;
 /**
  * Add a connection to the database.  Must not already exist in DB.
  * @param {!Blockly.Connection} connection The connection to be added.
- * @private
  */
 Blockly.ConnectionDB.prototype.addConnection = function(connection) {
   if (connection.inDB_) {
@@ -68,7 +67,8 @@ Blockly.ConnectionDB.prototype.addConnection = function(connection) {
  * Starts by doing a binary search to find the approximate location, then
  *     linearly searches nearby for the exact connection.
  * @param {Blockly.Connection} conn The connection to find.
- * @return The index of the connection, or -1 if the connection was not found.
+ * @return {number} The index of the connection, or -1 if the connection was
+ *     not found.
  */
 Blockly.ConnectionDB.prototype.findConnection = function(conn) {
   if (!this.length) {
@@ -85,7 +85,7 @@ Blockly.ConnectionDB.prototype.findConnection = function(conn) {
   // Walk forward and back on the y axis looking for the connection.
   var pointerMin = bestGuess;
   var pointerMax = bestGuess;
-  while(pointerMin >= 0 && this[pointerMin].y_ == yPos) {
+  while (pointerMin >= 0 && this[pointerMin].y_ == yPos) {
     if (this[pointerMin] == conn) {
       return pointerMin;
     }
@@ -109,7 +109,8 @@ Blockly.ConnectionDB.prototype.findConnection = function(conn) {
  * @return {number} The candidate index.
  * @private
  */
-Blockly.ConnectionDB.prototype.findPositionForConnection_ = function(connection) {
+Blockly.ConnectionDB.prototype.findPositionForConnection_ =
+    function(connection) {
   if (!this.length) {
     return 0;
   }
@@ -149,11 +150,10 @@ Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
 /**
  * Find all nearby connections to the given connection.
  * Type checking does not apply, since this function is used for bumping.
- * @param {!Blockly.Connection} connection The connection whose neighbours should
- *     be returned.
+ * @param {!Blockly.Connection} connection The connection whose neighbours
+ *     should be returned.
  * @param {number} maxRadius The maximum radius to another connection.
  * @return {!Array.<Blockly.Connection>} List of connections.
- * @private
  */
 Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
   var db = this;
@@ -208,9 +208,18 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
 };
 
 
+/**
+ * Is the candidate connection close to the reference connection.
+ * Extremely fast; only looks at Y distance.
+ * @param {number} index Index in database of candidate connection.
+ * @param {number} baseY Reference connection's Y value.
+ * @param {number} maxRadius The maximum radius to another connection.
+ * @return {boolean} True if connection is in range.
+ * @private
+ */
 Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
-    return (Math.abs(this[index].y_ - baseY) <= maxRadius);
-}
+  return (Math.abs(this[index].y_ - baseY) <= maxRadius);
+};
 
 /**
  * Find the closest compatible connection to this connection.
@@ -250,8 +259,7 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx,
 
   // Walk forward and back on the y axis looking for the closest x,y point.
   var pointerMin = closestIndex - 1;
-  while (pointerMin >= 0 &&
-      this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
+  while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
     temp = this[pointerMin];
     if (conn.isConnectionAllowed(temp, bestRadius)) {
         bestConnection = temp;

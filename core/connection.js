@@ -468,7 +468,7 @@ Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
  * are zero or multiple eligible connections, returns null.  Otherwise
  * returns the only input on the last block in the chain.
  * Terminates early for shadow blocks.
- * @param {!Blockly.Block} startBlack The block on which to start the search.
+ * @param {!Blockly.Block} startBlock The block on which to start the search.
  * @param {!Blockly.Block} orphanBlock The block that is looking for a home.
  * @return {Blockly.Connection} The suitable connection point on the chain
  *    of blocks, or null.

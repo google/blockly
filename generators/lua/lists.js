@@ -87,7 +87,7 @@ Blockly.Lua['lists_indexOf'] = function(block) {
   var argument1 = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_NONE) || '({})';
   var functionName;
-  if (block.getTitleValue('END') == 'FIRST') {
+  if (block.getFieldValue('END') == 'FIRST') {
     functionName = Blockly.Lua.provideFunction_(
         'first_index',
         ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t, elem)',
@@ -155,8 +155,8 @@ Blockly.Lua.lists.gensym_ = function() {
 Blockly.Lua['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
-  var mode = block.getTitleValue('MODE') || 'GET';
-  var where = block.getTitleValue('WHERE') || 'FROM_START';
+  var mode = block.getFieldValue('MODE') || 'GET';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Lua.valueToCode(block, 'AT',
       Blockly.Lua.ORDER_ADDITIVE) || '1';
   var list = Blockly.Lua.valueToCode(block, 'VALUE',

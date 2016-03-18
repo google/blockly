@@ -93,7 +93,7 @@ Blockly.Lua['text_indexOf'] = function(block) {
       Blockly.Lua.ORDER_NONE) || '\'\'';
   var str = Blockly.Lua.valueToCode(block, 'VALUE',
       Blockly.Lua.ORDER_NONE) || '\'\'';
-  if (block.getTitleValue('END') == 'FIRST') {
+  if (block.getFieldValue('END') == 'FIRST') {
     var functionName = Blockly.Lua.provideFunction_(
         'firstIndexOf',
         ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +

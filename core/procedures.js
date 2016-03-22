@@ -251,16 +251,28 @@ Blockly.Procedures.disposeCallers = function(name, workspace) {
 /**
  * When a procedure definition changes its parameters, find and edit all its
  * callers.
- * @param {string} name Name of edited procedure definition.
- * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
- * @param {!Array.<string>} paramNames Array of new parameter names.
- * @param {!Array.<string>} paramIds Array of unique parameter IDs.
+ * @param {!Blockly.Block} defBlock Procedure definition block.
  */
-Blockly.Procedures.mutateCallers = function(name, workspace,
-                                            paramNames, paramIds) {
-  var callers = Blockly.Procedures.getCallers(name, workspace);
-  for (var i = 0; i < callers.length; i++) {
-    callers[i].setProcedureParameters(paramNames, paramIds);
+Blockly.Procedures.mutateCallers = function(defBlock) {
+  var oldRecordUndo = Blockly.Events.recordUndo;
+  var name = defBlock.getProcedureDef()[0];
+  var xmlElement = defBlock.mutationToDom(true);
+  var callers = Blockly.Procedures.getCallers(name, defBlock.workspace);
+  for (var i = 0, caller; caller = callers[i]; i++) {
+    var oldMutationDom = caller.mutationToDom();
+    var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
+    caller.domToMutation(xmlElement);
+    var newMutationDom = caller.mutationToDom();
+    var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
+    if (oldMutation != newMutation) {
+      // Fire a mutation on every caller block.  But don't record this as an
+      // undo action since it is deterministically tied to the procedure's
+      // definition mutation.
+      Blockly.Events.recordUndo = false;
+      Blockly.Events.fire(new Blockly.Events.Change(
+          caller, 'mutation', null, oldMutation, newMutation));
+      Blockly.Events.recordUndo = oldRecordUndo;
+    }
   }
 };
 

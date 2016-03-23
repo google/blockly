@@ -23,16 +23,18 @@
  * with the blocks.
  * @author madeeha@google.com (Madeeha Ghori)
  */
+
 var app = app || {};
 
 app.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-<li tabIndex='0' [attr.aria-level]='level'>
+<li #parentList aria-selected=false role='treeitem' tabIndex='0' [attr.aria-level]='level' id='{{createId(parentList)}}' [attr.aria-labelledby]='block.id'>
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
-  <ol [attr.aria-level]='level+1'>
-    <li *ngIf='displayBlockMenu' [attr.aria-level]='level+1'>
+  <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
+    {{addClass(parentList, 'hasChildren')}}
+    <li aria-selected=false #listItem role='treeitem' *ngIf='displayBlockMenu' [attr.aria-level]='level+1' id={{createId(listItem)}}>
       <select [attr.aria-labelledby]='block.id' aria-label='toolbar block menu' (change)='blockMenuSelected(block, $event)'>
         <option value='NO_ACTION' selected>select an action</option>
         <option value='COPY_TO_WORKSPACE'>copy to workspace</option>
@@ -40,16 +42,16 @@ app.ToolboxTreeView = ng.core
         <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>copy to selected input</option>
       </select>
     </li>
-    <div *ngFor='#inputBlock of block.inputList'>
-      <field-view [attr.aria-level]='level+1' *ngFor='#field of getInfo(inputBlock)' [field]='field' [level]='level+1'></field-view>
+    <div *ngFor='#inputBlock of block.inputList; #i=index'>
+      <field-view [attr.aria-level]='level+1' *ngFor='#field of getInfo(inputBlock); #j=index' [field]='field' [level]='level+1'></field-view>
       <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false' [level]='level+1'></toolbox-tree-view>
-      <li tabIndex='0' [attr.aria-level]='level+1' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
-        {{inputType(inputBlock.connection)}} input needed
+      <li aria-selected=false #listItem1 role='treeitem' tabIndex='0' [attr.aria-level]='level+1' id='{{createId(listItem1)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
+        <label>{{inputType(inputBlock.connection)}} input needed</label>
       </li>
     </div>
   </ol>
 </li>
-<li [attr.aria-level]='level' tabIndex='0' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
+<li #listItem2 aria-selected=false role='treeitem' [attr.aria-level]='level' tabIndex='0' id='{{createId(listItem2)}}' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
   <toolbox-tree-view [level]='level+1' [block]='block.nextConnection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
 </li>
     `,
@@ -63,151 +65,30 @@ app.ToolboxTreeView = ng.core
       this.nextBlock = {};
       this.sharedClipboardService = _service;
     }],
-    keyHandler: function(e){
-      //console.log(document.activeElement);
-      var currentElement = document.activeElement;
-      console.log(e.keyCode);
-      switch (e.keyCode){
-        case 37:
-          //left-facing arrow: go out a level, if possible. If not, go to the previous top-level block
-          var tempElement = currentElement.parentNode;
-          while (tempElement != null && tempElement.tabIndex != 0) {
-            tempElement = tempElement.parentNode;
-          }
-          if (tempElement == null){
-            return;
-            e.preventDefault();
-          }
-          tempElement.focus();
-          console.log("focus on parent");
-          e.preventDefault();
-          break;
-        case 38:
-          //up-facing arrow: go up a level, if possible. If not, make done sound
-          var prevSibling = this.getPreviousSibling(currentElement);
-          if (prevSibling){
-            prevSibling.focus();
-          } else {
-            console.log("no previous sibling");
-          }
-          e.preventDefault();
-          break;
-        case 39:
-          //right-facing arrow: go in a level, if possible. If not, go to next top-level block
-          var firstChild = this.getFirstChild(currentElement);
-          if (firstChild){
-            firstChild.focus();
-          } else {
-            console.log("no valid child");
-          }
-          e.preventDefault();
-          break;
-        case 40:
-          //down-facing arrow: go down a level, if possible. If not, make done sound
-          var nextSibling = this.getNextSibling(currentElement);
-          if (nextSibling){
-            nextSibling.focus();
-          } else {
-            console.log("no next sibling");
-          }
-          e.preventDefault();
-          break;
-      }
-    },
-    getFirstChild: function(element){
-      //get the children of the element
-      //are any of them tabIndex=0?
-      //go to the children of the first child
-      if (element == null){
-        return element;
-      } else {
-        var childList = element.children;
-        for (var i=0; i<childList.length; i++){
-          if (childList[i].tabIndex == 0){
-            return childList[i];
-          } else {
-            var potentialElement = this.getFirstChild(childList[i]);
-            if (potentialElement) {
-              return potentialElement;
-            }
-          }
+    addClass: function(node, classText) {
+      //ensure that node doesn't have class already in it
+      var classList = node.className;
+      classList = classList.split(" ");
+      var canAdd = true;
+      for (var i=0; i<classList.length; i++){
+        if (classList[i] == classText) {
+          canAdd = false;
         }
-        return null;
       }
-    },
-    getNextSibling: function(element){
-      if (element.nextElementSibling){
-        return element.nextElementSibling;
-      } else {
-        var parent = element.parentNode;
-        while (parent != null){
-          if (parent.nextElementSibling){
-            var node = parent.nextElementSibling;
-            if (node.tabIndex == 0){
-              return node;
-            } else {
-              return this.getFirstChild(node);
-            }
-          } else {
-            parent = parent.parentNode;
-          }
-        }
-        return null;
-      }
-    },
-    getPreviousSibling: function(element){
-      if (element.previousElementSibling){
-        console.log("found a previous sibling!");
-        var sibling = element.previousElementSibling;
-        if (sibling.tabIndex == '0') {
-          return sibling;
+      //add class if it doesn't
+      if (canAdd) {
+        if (classList.length == 0) {
+          node.className += classText;
         } else {
-          return this.getLastChild(sibling);
+          node.className += (' ' + classText);
         }
-      } else {
-        var parent = element.parentNode;
-        console.log(parent);
-        while (parent != null){
-          console.log("looping");
-          if (parent.tagName == 'OL') {
-            break;
-          }
-          if (parent.previousElementSibling){
-            console.log("parent has a sibling!");
-            var node = parent.previousElementSibling;
-            if (node.tabIndex == 0){
-              console.log("return the sibling of the parent!");
-              return node;
-            } else {
-              return this.getLastChild(node);
-            }
-          } else {
-            parent = parent.parentNode;
-            console.log(parent);
-          }
-        }
-        return null;
       }
     },
-    getLastChild: function(element){
-      if (element == null){
-        console.log("no element");
-        return element;
-      } else {
-        var childList = element.children;
-        for (var i=childList.length-1; i>=0; i--){
-          if (childList[i].tabIndex == 0){
-            return childList[i];
-          } else {
-            var potentialElement = this.getLastChild(childList[i]);
-            if (potentialElement) {
-              return potentialElement;
-            }
-          }
-        }
-        console.log("no last child");
-        return null;
+    createId: function(obj){
+      if (obj && obj.id){
+        return obj.id;
       }
+      return Blockly.genUid();
     },
     getInfo: function(block) {
       //list all inputs
@@ -261,5 +142,8 @@ app.ToolboxTreeView = ng.core
         //true will result in the 'copy to marked block' option being DISABLED
         return true;
       }
-    }
+    },
+    log: function(obj){
+	console.log(obj);
+    },
   });

@@ -99,7 +99,7 @@ var allNodes = tree.getElementsByTagName('li');
 
 //only works because allNodes is in DFS order
 tree.setAttribute('aria-activedescendant', allNodes[0].id);
-var firstChild = document.getElementById(allNodes[0].id);
+var firstChild = allNodes[0];
 
 for (var i=0; i<allNodes.length; i++){
   var node = allNodes[i];

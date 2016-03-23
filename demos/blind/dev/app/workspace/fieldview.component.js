@@ -30,25 +30,25 @@ app.FieldView = ng.core
     selector: 'field-view',
     template: `
     <!-- html representation of a field -->
-    <li [attr.aria-level]='level' tabIndex='0' *ngIf='isTextInput(field)'>
+    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' tabIndex='0' *ngIf='isTextInput(field)' id='{{createId(listItem)}}'>
       <input [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
     </li>
-    <li [attr.aria-level]='level' tabIndex='0' *ngIf='isDropdown(field)'>
+    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' tabIndex='0' *ngIf='isDropdown(field)' id='{{createId(listItem)}}'>
       <select [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
       <option value='NO_ACTION' selected>select an option</option>
       <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
       </select>
     </li>
-    <li [attr.aria-level]='level' tabIndex='0' *ngIf='isCheckbox(field)'>
+    <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' tabIndex='0' *ngIf='isCheckbox(field)'>
       //TODO(madeeha):CHECKBOX
     </li>
-    <li [attr.aria-level]='level'  tabIndex='0' *ngIf='isTextField(field) && notWhitespace(field)'>
+    <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level'  tabIndex='0' *ngIf='isTextField(field) && notWhitespace(field)'>
       <label>
         {{field.getText()}}
       </label>
     </li>
     `,
-    inputs: ['field', 'level'],
+    inputs: ['field', 'level', 'index', 'parentId'],
   })
   .Class({
     constructor: function() {
@@ -56,6 +56,12 @@ app.FieldView = ng.core
         keys: []
       };
       this.text = 'Nothing';
+    },
+    createId: function(obj){
+      if (obj && obj.id){
+        return obj.id;
+      }
+      return Blockly.genUid();
     },
     isTextInput: function(field) {
       return field instanceof Blockly.FieldTextInput;

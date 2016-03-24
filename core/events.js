@@ -423,6 +423,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
         oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
       }
       if (block.domToMutation) {
+        value = value || '<mutation></mutation>';
         var dom = Blockly.Xml.textToDom('<xml>' + value + '</xml>');
         block.domToMutation(dom.firstChild);
       }

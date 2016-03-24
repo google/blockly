@@ -331,7 +331,8 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
     case Blockly.Connection.REASON_SELF_CONNECTION:
       throw 'Attempted to connect a block to itself.';
     case Blockly.Connection.REASON_DIFFERENT_WORKSPACES:
-      throw 'Blocks are on different workspaces.';
+      // Usually this means one block has been deleted.
+      throw 'Blocks not on same workspace.';
     case Blockly.Connection.REASON_WRONG_TYPE:
       throw 'Attempt to connect incompatible types.';
     case Blockly.Connection.REASON_TARGET_NULL:

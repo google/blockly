@@ -349,8 +349,8 @@ Blockly.Mutator.prototype.dispose = function() {
  * @return {boolean} True iff a reconnection was made, false otherwise.
  */
 Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
-  if (!connectionChild) {
-    return false;
+  if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
+    return false;  // No connection or block has been deleted.
   }
   var connectionParent = block.getInput(inputName).connection;
   var currentParent = connectionChild.targetBlock();

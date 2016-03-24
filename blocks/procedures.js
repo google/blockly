@@ -504,10 +504,16 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     //     Existing param IDs.
     // Note that quarkConnections_ may include IDs that no longer exist, but
     // which might reappear if a param is reattached in the mutator.
-    if (!paramIds) {
-      // Reset the quarks (a mutator is about to open).
+    var defBlock = Blockly.Procedures.getDefinition(this.getProcedureCall(),
+        this.workspace);
+    var mutatorOpen = defBlock && defBlock.mutator &&
+        defBlock.mutator.isVisible();
+    if (!mutatorOpen) {
       this.quarkConnections_ = {};
       this.quarkIds_ = null;
+    }
+    if (!paramIds) {
+      // Reset the quarks (a mutator is about to open).
       return;
     }
     if (goog.array.equals(this.arguments_, paramNames)) {
@@ -539,7 +545,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       if (input) {
         var connection = input.connection.targetConnection;
         this.quarkConnections_[this.quarkIds_[i]] = connection;
-        if (connection && paramIds.indexOf(this.quarkIds_[i]) == -1) {
+        if (mutatorOpen && connection &&
+            paramIds.indexOf(this.quarkIds_[i]) == -1) {
           // This connection should no longer be attached to this block.
           connection.disconnect();
           connection.getSourceBlock().bumpNeighbours_();

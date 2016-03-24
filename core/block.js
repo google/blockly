@@ -121,7 +121,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   // Record initial inline state.
   /** @type {boolean|undefined} */
   this.inputsInlineDefault = this.inputsInline;
-  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+  if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Create(this));
   }
   // Bind an onchange function, if it exists.
@@ -168,10 +168,10 @@ Blockly.Block.prototype.colour_ = '#000000';
 Blockly.Block.prototype.dispose = function(healStack) {
   // Terminate onchange event calls.
   if (this.onchangeWrapper_) {
-    this.workspace.removeChangeListener(this.onchangeWrapper_)
+    this.workspace.removeChangeListener(this.onchangeWrapper_);
   }
   this.unplug(healStack);
-  if (Blockly.Events.isEnabled() && !this.isShadow()) {
+  if (Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Delete(this));
   }
   Blockly.Events.disable();
@@ -218,27 +218,28 @@ Blockly.Block.prototype.dispose = function(healStack) {
 /**
  * Unplug this block from its superior block.  If this block is a statement,
  * optionally reconnect the block underneath with the block on top.
- * @param {boolean} healStack Disconnect child statement and reconnect stack.
+ * @param {boolean} opt_healStack Disconnect child statement and reconnect
+ *   stack.  Defaults to false.
  */
-Blockly.Block.prototype.unplug = function(healStack) {
+Blockly.Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
     if (this.outputConnection.targetConnection) {
       // Disconnect from any superior block.
-      this.setParent(null);
+      this.outputConnection.disconnect();
     }
-  } else {
+  } else if (this.previousConnection) {
     var previousTarget = null;
-    if (this.previousConnection && this.previousConnection.targetConnection) {
+    if (this.previousConnection.targetConnection) {
       // Remember the connection that any next statements need to connect to.
       previousTarget = this.previousConnection.targetConnection;
       // Detach this block from the parent's tree.
-      this.setParent(null);
+      this.previousConnection.disconnect();
     }
     var nextBlock = this.getNextBlock();
-    if (healStack && nextBlock) {
+    if (opt_healStack && nextBlock) {
       // Disconnect the next statement.
       var nextTarget = this.nextConnection.targetConnection;
-      nextBlock.setParent(null);
+      nextTarget.disconnect();
       if (previousTarget && previousTarget.checkType_(nextTarget)) {
         // Attach the next statement to the previous statement.
         previousTarget.connect(nextTarget);
@@ -278,6 +279,25 @@ Blockly.Block.prototype.getConnections_ = function(all) {
 };
 
 /**
+ * Walks down a stack of blocks and finds the last next connection on the stack.
+ * @return {Blockly.Connection} The last next connection on the stack, or null.
+ * @private
+ */
+Blockly.Block.prototype.lastConnectionInStack_ = function() {
+  var nextConnection = this.nextConnection;
+  while (nextConnection) {
+    var nextBlock = nextConnection.targetBlock();
+    if (!nextBlock) {
+      // Found a next connection with nothing on the other side.
+      return nextConnection;
+    }
+    nextConnection = nextBlock.nextConnection;
+  }
+  // Ran out of next connections.
+  return null;
+};
+
+/**
  * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
  * connected should not coincidentally line up on screen.
  * @private
@@ -307,7 +327,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
       // either one of them is unconnected, then there could be confusion.
       if (!connection.targetConnection || !otherConnection.targetConnection) {
         // Only bump blocks if they are from different tree structures.
-        if (otherConnection.sourceBlock_.getRootBlock() != rootBlock) {
+        if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
           // Always bump the inferior block.
           if (connection.isSuperior()) {
             otherConnection.bumpAwayFrom_(connection);
@@ -337,7 +357,7 @@ Blockly.Block.prototype.getParent = function() {
 Blockly.Block.prototype.getInputWithBlock = function(block) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.connection && input.connection.targetBlock() == block) {
-      return input
+      return input;
     }
   }
   return null;
@@ -401,9 +421,8 @@ Blockly.Block.prototype.getChildren = function() {
  * @param {Blockly.Block} newParent New parent block.
  */
 Blockly.Block.prototype.setParent = function(newParent) {
-  var event;
-  if (Blockly.Events.isEnabled() && !this.isShadow()) {
-    event = new Blockly.Events.Move(this);
+  if (newParent == this.parentBlock_) {
+    return;
   }
   if (this.parentBlock_) {
     // Remove this block from the old parent's child list.
@@ -416,13 +435,13 @@ Blockly.Block.prototype.setParent = function(newParent) {
     }
 
     // Disconnect from superior blocks.
-    this.parentBlock_ = null;
     if (this.previousConnection && this.previousConnection.targetConnection) {
-      this.previousConnection.disconnect();
+      throw 'Still connected to previous block.';
     }
     if (this.outputConnection && this.outputConnection.targetConnection) {
-      this.outputConnection.disconnect();
+      throw 'Still connected to parent block.';
     }
+    this.parentBlock_ = null;
     // This block hasn't actually moved on-screen, so there's no need to update
     // its connection locations.
   } else {
@@ -436,10 +455,6 @@ Blockly.Block.prototype.setParent = function(newParent) {
     newParent.childBlocks_.push(this);
   } else {
     this.workspace.addTopBlock(this);
-  }
-  if (event) {
-    event.recordNew();
-    Blockly.Events.fire(event);
   }
 };
 
@@ -505,23 +520,7 @@ Blockly.Block.prototype.isShadow = function() {
  * @param {boolean} shadow True if a shadow.
  */
 Blockly.Block.prototype.setShadow = function(shadow) {
-  if (this.isShadow_ == shadow) {
-    return;  // No change.
-  }
   this.isShadow_ = shadow;
-  if (Blockly.Events.isEnabled() && !shadow) {
-    Blockly.Events.group = Blockly.genUid();
-    // Fire a creation event.
-    Blockly.Events.fire(new Blockly.Events.Create(this));
-    var moveEvent = new Blockly.Events.Move(this);
-    // Claim that the block was at 0,0 and is being connected.
-    moveEvent.oldParentId = undefined;
-    moveEvent.oldInputName = undefined;
-    moveEvent.oldCoordinate = new goog.math.Coordinate(0, 0);
-    moveEvent.recordNew();
-    Blockly.Events.fire(moveEvent);
-    Blockly.Events.group = '';
-  }
 };
 
 /**
@@ -637,6 +636,39 @@ Blockly.Block.prototype.getField = function(name) {
     }
   }
   return null;
+};
+
+/**
+ * Return all variables referenced by this block.
+ * @return {!Array.<string>} List of variable names.
+ */
+Blockly.Block.prototype.getVars = function() {
+  var vars = [];
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable) {
+        vars.push(field.getValue());
+      }
+    }
+  }
+  return vars;
+};
+
+/**
+ * Notification that a variable is renaming.
+ * If the name matches one of this block's variables, rename it.
+ * @param {string} oldName Previous name of variable.
+ * @param {string} newName Renamed variable.
+ */
+Blockly.Block.prototype.renameVar = function(oldName, newName) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field instanceof Blockly.FieldVariable &&
+          Blockly.Names.equals(oldName, field.getValue())) {
+        field.setValue(newName);
+      }
+    }
+  }
 };
 
 /**
@@ -1201,7 +1233,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
     if (input.name == name) {
       if (input.connection && input.connection.targetConnection) {
         // Disconnect any attached block.
-        input.connection.targetBlock().setParent(null);
+        input.connection.targetBlock().unplug();
       }
       input.dispose();
       this.inputList.splice(i, 1);
@@ -1221,7 +1253,7 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
 /**
  * Fetches the named input object.
  * @param {string} name The name of the input.
- * @return {Blockly.Input} The input object, or null of the input does not exist.
+ * @return {Blockly.Input} The input object, or null if input does not exist.
  */
 Blockly.Block.prototype.getInput = function(name) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
@@ -1259,7 +1291,7 @@ Blockly.Block.prototype.getCommentText = function() {
 Blockly.Block.prototype.setCommentText = function(text) {
   if (this.comment != text) {
     Blockly.Events.fire(new Blockly.Events.Change(
-      this, 'comment', null, this.comment, text || ''));
+        this, 'comment', null, this.comment, text || ''));
     this.comment = text;
   }
 };
@@ -1295,6 +1327,7 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
  * @param {number} dy Vertical offset.
  */
 Blockly.Block.prototype.moveBy = function(dx, dy) {
+  goog.asserts.assert(!this.parentBlock_, 'Block has parent.');
   var event = new Blockly.Events.Move(this);
   this.xy_.translate(dx, dy);
   event.recordNew();

@@ -188,7 +188,6 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   // Update source block.
   var text = htmlInput.value;
   if (text !== htmlInput.oldValue_) {
-    this.sourceBlock_.setShadow(false);
     htmlInput.oldValue_ = text;
     this.setValue(text);
     this.validate_();

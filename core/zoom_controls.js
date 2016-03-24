@@ -98,17 +98,17 @@ Blockly.ZoomControls.prototype.createDom = function() {
     <clippath id="blocklyZoomoutClipPath837493">
       <rect width="32" height="32" y="77"></rect>
     </clippath>
-    <image width="96" height="124" x="-64" y="-15" xlink:href="media/sprites.png">
+    <image width="96" height="124" x="-64" y="-15" xlink:href="media/sprites.png"
         clip-path="url(#blocklyZoomoutClipPath837493)"></image>
     <clippath id="blocklyZoominClipPath837493">
       <rect width="32" height="32" y="43"></rect>
     </clippath>
-    <image width="96" height="124" x="-32" y="-49" xlink:href="media/sprites.png">
+    <image width="96" height="124" x="-32" y="-49" xlink:href="media/sprites.png"
         clip-path="url(#blocklyZoominClipPath837493)"></image>
     <clippath id="blocklyZoomresetClipPath837493">
       <rect width="32" height="32"></rect>
     </clippath>
-    <image width="96" height="124" y="-92" xlink:href="media/sprites.png">
+    <image width="96" height="124" y="-92" xlink:href="media/sprites.png"
         clip-path="url(#blocklyZoomresetClipPath837493)"></image>
   </g>
   */

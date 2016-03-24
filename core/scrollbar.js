@@ -162,8 +162,9 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
 
 /**
  * Helper to calculate the ratio of knob value to bar length.
- * @param {number} barLength The length of the scroll bar.
  * @param {number} knobValue The value of the knob.
+ * @param {number} barLength The length of the scroll bar.
+ * @return {number} Ratio.
  * @private
  */
 Blockly.ScrollbarPair.prototype.getRatio_ = function(knobValue, barLength) {
@@ -182,7 +183,7 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(knobValue, barLength) {
  * look or behave like the system's scrollbars.
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
- * @param {boolean=} opt_pair True if the scrollbar is part of a horiz/vert pair.
+ * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
  * @constructor
  */
 Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {

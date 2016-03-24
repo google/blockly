@@ -303,6 +303,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
       setTimeout(function() {
           Blockly.Events.setGroup(group);
           block.bumpNeighbours_();
+          Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
     }
     if (block.rendered) {

@@ -283,7 +283,7 @@ app.ToolboxView = ng.core
       return element;
     } else {
       var childList = element.children;
-      for (var i = childList.length - 1; i >= 0; i--) {
+      for (var i=childList.length-1; i>=0; i--){
         if (childList[i].tabIndex == 0){
           return childList[i];
         } else {

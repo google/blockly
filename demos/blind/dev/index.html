@@ -53,6 +53,14 @@
   <script src='app/workspace/workspaceview.component.js'></script>
   <script src='app/appview.component.js'></script>
   <script src='app/boot.js'></script>
+  <script>
 
+Blockly.Blocks['play_note'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("play note");
+  }
+};
+</script>
 </body>
 </html>

@@ -747,11 +747,13 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   menuOptions.push(redoOption);
 
   // Option to clean up blocks.
-  var cleanOption = {};
-  cleanOption.text = Blockly.Msg.CLEAN_UP;
-  cleanOption.enabled = topBlocks.length > 1;
-  cleanOption.callback = this.cleanUp_.bind(this);
-  menuOptions.push(cleanOption);
+  if (this.scrollbar) {
+    var cleanOption = {};
+    cleanOption.text = Blockly.Msg.CLEAN_UP;
+    cleanOption.enabled = topBlocks.length > 1;
+    cleanOption.callback = this.cleanUp_.bind(this);
+    menuOptions.push(cleanOption);
+  }
 
   // Add a little animation to collapsing and expanding.
   var DELAY = 10;
@@ -821,7 +823,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     addDeletableBlocks(topBlocks[i]);
   }
   var deleteOption = {
-    text: deleteList.length <= 1 ? Blockly.Msg.DELETE_BLOCK :
+    text: deleteList.length == 1 ? Blockly.Msg.DELETE_BLOCK :
         Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
     enabled: deleteList.length > 0,
     callback: function() {

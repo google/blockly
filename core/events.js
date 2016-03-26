@@ -165,6 +165,16 @@ Blockly.Events.filter = function(queueIn, forward) {
 };
 
 /**
+ * Modify pending undo events so that when they are fired they don't land
+ * in the undo stack.  Called by Blockly.Workspace.clearUndo.
+ */
+Blockly.Events.clearPendingUndo = function() {
+  for (var i = 0, event; event = Blockly.Events.FIRE_QUEUE_[i]; i++) {
+    event.recordUndo = false;
+  }
+};
+
+/**
  * Stop sending events.  Every call to this function MUST also call enable.
  */
 Blockly.Events.disable = function() {

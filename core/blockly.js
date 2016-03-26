@@ -263,6 +263,7 @@ Blockly.onKeyDown_ = function(e) {
       }
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.
+      Blockly.hideChaff();
       Blockly.mainWorkspace.undo(e.shiftKey);
     }
   }

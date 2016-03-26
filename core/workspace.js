@@ -241,6 +241,16 @@ Blockly.Workspace.prototype.undo = function(redo) {
 };
 
 /**
+ * Clear the undo/redo stacks.
+ */
+Blockly.Workspace.prototype.clearUndo = function() {
+  this.undoStack_.length = 0;
+  this.redoStack_.length = 0;
+  // Stop any events already in the firing queue from being undoable.
+  Blockly.Events.clearPendingUndo();
+};
+
+/**
  * When something in this workspace changes, call a function.
  * @param {!Function} func Function to call.
  * @return {!Function} Function that can be passed to
@@ -296,6 +306,8 @@ Blockly.Workspace.getById = function(id) {
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
+Blockly.Workspace.prototype['clearUndo'] =
+    Blockly.Workspace.prototype.clearUndo;
 Blockly.Workspace.prototype['addChangeListener'] =
     Blockly.Workspace.prototype.addChangeListener;
 Blockly.Workspace.prototype['removeChangeListener'] =

@@ -149,6 +149,7 @@ Plane.loadBlocks = function(defaultXml) {
     var xml = Blockly.Xml.textToDom(defaultXml);
     Blockly.Xml.domToWorkspace(Plane.workspace, xml);
   }
+  Plane.workspace.clearUndo();
 };
 
 /**

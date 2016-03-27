@@ -499,7 +499,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     // Right-click.
     this.showContextMenu_(e);
   } else if (!this.isMovable()) {
-    // Allow unmovable blocks to be selected and context menued, but not
+    // Allow immovable blocks to be selected and context menued, but not
     // dragged.  Let this event bubble up to document, so the workspace may be
     // dragged instead.
     return;

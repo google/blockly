@@ -375,9 +375,8 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
 
   // Offering to connect the left (male) of a value block to an already
   // connected value pair is ok, we'll splice it in.
-  // However, don't offer to splice into an unmovable block.
-  if (candidate.type == Blockly.INPUT_VALUE &&
-      candidate.targetConnection &&
+  // However, don't offer to splice into an immovable block.
+  if (candidate.type == Blockly.INPUT_VALUE && candidate.targetConnection &&
       !candidate.targetBlock().isMovable() &&
       !candidate.targetBlock().isShadow()) {
     return false;
@@ -674,17 +673,6 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
  * @private
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
-  // Don't split a connection where both sides are immovable.
-  var thisTargetBlock = this.targetBlock();
-  if (thisTargetBlock && !thisTargetBlock.isMovable() &&
-      !this.sourceBlock_.isMovable()) {
-    return false;
-  }
-  var otherTargetBlock = otherConnection.targetBlock();
-  if (otherTargetBlock && !otherTargetBlock.isMovable() &&
-      !otherConnection.getSourceBlock().isMovable()) {
-    return false;
-  }
   if (!this.check_ || !otherConnection.check_) {
     // One or both sides are promiscuous enough that anything will fit.
     return true;

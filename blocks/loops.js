@@ -253,9 +253,10 @@ Blockly.Blocks['controls_flow_statements'] = {
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
+   * @param {!Blockly.Events.Abstract} e Change event.
    * @this Blockly.Block
    */
-  onchange: function() {
+  onchange: function(e) {
     var legal = false;
     // Is the block nested in a loop?
     var block = this;

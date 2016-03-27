@@ -73,34 +73,36 @@ Blockly.Blocks['factory_base'] = {
     var bottomExists = this.getInput('BOTTOMTYPE');
     if (option == 'LEFT') {
       if (!outputExists) {
-        this.appendValueInput('OUTPUTTYPE')
-            .setCheck('Type')
-            .appendField('output type');
-        this.moveInputBefore('OUTPUTTYPE', 'COLOUR');
+        this.addTypeInput_('OUTPUTTYPE', 'output type');
       }
     } else if (outputExists) {
       this.removeInput('OUTPUTTYPE');
     }
     if (option == 'TOP' || option == 'BOTH') {
       if (!topExists) {
-        this.appendValueInput('TOPTYPE')
-            .setCheck('Type')
-            .appendField('top type');
-        this.moveInputBefore('TOPTYPE', 'COLOUR');
+        this.addTypeInput_('TOPTYPE', 'top type');
       }
     } else if (topExists) {
       this.removeInput('TOPTYPE');
     }
     if (option == 'BOTTOM' || option == 'BOTH') {
       if (!bottomExists) {
-        this.appendValueInput('BOTTOMTYPE')
-            .setCheck('Type')
-            .appendField('bottom type');
-        this.moveInputBefore('BOTTOMTYPE', 'COLOUR');
+        this.addTypeInput_('BOTTOMTYPE', 'bottom type');
       }
     } else if (bottomExists) {
       this.removeInput('BOTTOMTYPE');
     }
+  },
+  addTypeInput_: function(name, label) {
+    this.appendValueInput(name)
+        .setCheck('Type')
+        .appendField(label);
+    this.moveInputBefore(name, 'COLOUR');
+    var type = this.workspace.newBlock('type_null');
+    type.setShadow(true);
+    type.outputConnection.connect(this.getInput(name).connection);
+    type.initSvg();
+    type.render();
   }
 };
 

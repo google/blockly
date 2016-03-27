@@ -1232,8 +1232,15 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
       if (input.connection && input.connection.targetConnection) {
-        // Disconnect any attached block.
-        input.connection.targetBlock().unplug();
+        input.connection.setShadowDom(null);
+        var block = input.connection.targetBlock();
+        if (block.isShadow()) {
+          // Destroy any attached shadow block.
+          block.dispose();
+        } else {
+          // Disconnect any attached normal block.
+          block.unplug();
+        }
       }
       input.dispose();
       this.inputList.splice(i, 1);

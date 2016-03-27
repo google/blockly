@@ -312,15 +312,18 @@ Blockly.Blocks['logic_compare'] = {
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types from being compared.
+   * @param {!Blockly.Events.Abstract} e Change event.
    * @this Blockly.Block
    */
-  onchange: function() {
+  onchange: function(e) {
     var blockA = this.getInputTargetBlock('A');
     var blockB = this.getInputTargetBlock('B');
     // Disconnect blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
         !blockA.outputConnection.checkType_(blockB.outputConnection)) {
       // Mismatch between two inputs.  Disconnect previous and bump it away.
+      // Ensure that any disconnections are grouped with the causing event.
+      Blockly.Events.setGroup(e.group);
       for (var i = 0; i < this.prevBlocks_.length; i++) {
         var block = this.prevBlocks_[i];
         if (block === blockA || block === blockB) {
@@ -328,6 +331,7 @@ Blockly.Blocks['logic_compare'] = {
           block.bumpNeighbours_();
         }
       }
+      Blockly.Events.setGroup(false);
     }
     this.prevBlocks_[0] = blockA;
     this.prevBlocks_[1] = blockB;
@@ -452,9 +456,10 @@ Blockly.Blocks['logic_ternary'] = {
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types.
+   * @param {!Blockly.Events.Abstract} e Change event.
    * @this Blockly.Block
    */
-  onchange: function() {
+  onchange: function(e) {
     var blockA = this.getInputTargetBlock('THEN');
     var blockB = this.getInputTargetBlock('ELSE');
     var parentConnection = this.outputConnection.targetConnection;
@@ -463,6 +468,8 @@ Blockly.Blocks['logic_ternary'] = {
       for (var i = 0; i < 2; i++) {
         var block = (i == 1) ? blockA : blockB;
         if (block && !block.outputConnection.checkType_(parentConnection)) {
+          // Ensure that any disconnections are grouped with the causing event.
+          Blockly.Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {
             this.unplug();
             parentConnection.getSourceBlock().bumpNeighbours_();
@@ -470,6 +477,7 @@ Blockly.Blocks['logic_ternary'] = {
             block.unplug();
             block.bumpNeighbours_();
           }
+          Blockly.Events.setGroup(false);
         }
       }
     }

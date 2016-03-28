@@ -488,6 +488,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     e.stopPropagation();
     return;
   }
+  Blockly.setPageSelectable(false);
   this.workspace.markFocused();
   // Update Blockly's knowledge of its own location.
   Blockly.svgResize(this.workspace);
@@ -508,7 +509,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
       Blockly.Events.setGroup(true);
     }
     // Left-click (or middle click)
-    Blockly.removeAllRanges();
     Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
 
     this.dragStartXY_ = this.getRelativeToSurfaceXY();
@@ -543,6 +543,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
+  Blockly.setPageSelectable(true);
   Blockly.terminateDrag_();
   if (Blockly.selected && Blockly.highlightedConnection_) {
     // Connect two blocks together.
@@ -786,7 +787,6 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     e.stopPropagation();
     return;
   }
-  Blockly.removeAllRanges();
 
   var oldXY = this.getRelativeToSurfaceXY();
   var newXY = this.workspace.moveDrag(e);

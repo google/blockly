@@ -170,7 +170,7 @@ Blockly.onMouseUp_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.isScrolling = false;
-
+  Blockly.setPageSelectable(true);
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {
     Blockly.unbindEvent_(Blockly.onTouchUpWrapper_);
@@ -193,7 +193,6 @@ Blockly.onMouseMove_ = function(e) {
   }
   var workspace = Blockly.getMainWorkspace();
   if (workspace.isScrolling) {
-    Blockly.removeAllRanges();
     var dx = e.clientX - workspace.startDragMouseX;
     var dy = e.clientY - workspace.startDragMouseY;
     var metrics = workspace.startDragMetrics;

@@ -8,7 +8,8 @@
 			"McSalama",
 			"Espeox",
 			"SNuutti",
-			"PStudios"
+			"PStudios",
+			"Mikahama"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -29,6 +30,8 @@
 	"DISABLE_BLOCK": "Passivoi lohko",
 	"ENABLE_BLOCK": "Aktivoi lohko",
 	"HELP": "Apua",
+	"UNDO": "Kumoa",
+	"REDO": "Tee uudelleen",
 	"CHAT": "Keskustele yhteistyökumppanisi kanssa kirjoittamalla tähän kenttään!",
 	"AUTH": "Valtuuta tämä ohjelma jotta voit tallettaa työsi ja jakaa sen.",
 	"ME": "Minä",

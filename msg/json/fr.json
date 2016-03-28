@@ -29,6 +29,8 @@
 	"DISABLE_BLOCK": "Désactiver le bloc",
 	"ENABLE_BLOCK": "Activer le bloc",
 	"HELP": "Aide",
+	"UNDO": "Annuler",
+	"REDO": "Refaire",
 	"CHAT": "Discutez avec votre collaborateur en tapant dans cette zone !",
 	"AUTH": "Veuillez autoriser cette application à permettre la sauvegarde de votre travail et à l’autoriser à la partager.",
 	"ME": "Moi",

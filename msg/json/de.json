@@ -27,6 +27,8 @@
 	"DISABLE_BLOCK": "Block deaktivieren",
 	"ENABLE_BLOCK": "Block aktivieren",
 	"HELP": "Hilfe",
+	"UNDO": "Rückgängig",
+	"REDO": "Wiederholen",
 	"CHAT": "Chatte mit unserem Mitarbeiter durch Eingeben von Text in diesen Kasten!",
 	"AUTH": "Bitte autorisiere diese App zum Aktivieren der Speicherung deiner Arbeit und zum Teilen.",
 	"ME": "Ich",

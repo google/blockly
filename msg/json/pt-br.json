@@ -13,7 +13,8 @@
 			"Fasouzafreitas",
 			"Almondega",
 			"Rogerio Melfi",
-			"Caçador de Palavras"
+			"Caçador de Palavras",
+			"Luk3"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -34,6 +35,8 @@
 	"DISABLE_BLOCK": "Desabilitar bloco",
 	"ENABLE_BLOCK": "Habilitar bloco",
 	"HELP": "Ajuda",
+	"UNDO": "Desfazer",
+	"REDO": "Refazer",
 	"CHAT": "Converse com o seu colaborador digitando nesta caixa!",
 	"AUTH": "Por favor autorize este aplicativo para permitir que o seu trabalho seja gravado e que ele seja compartilhado por você.",
 	"ME": "Eu",

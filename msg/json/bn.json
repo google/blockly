@@ -3,7 +3,8 @@
 		"authors": [
 			"Aftabuzzaman",
 			"Rakibul",
-			"Tauhid16"
+			"Tauhid16",
+			"MasterMinhaz"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "পদ",
@@ -20,6 +21,8 @@
 	"DISABLE_BLOCK": "ব্লকটি বিকল কর",
 	"ENABLE_BLOCK": "ব্লকটি সচল কর",
 	"HELP": "সাহায্য",
+	"UNDO": "পূর্বাবস্থা",
+	"REDO": "পুনরায় করুন",
 	"CHAT": "এই বাক্সে লিখার মাধ্যমে আপনার সহযোগীর সাথে আলাপ করুন!",
 	"ME": "আমাকে",
 	"CHANGE_VALUE_TITLE": "মান পরিবর্তন করুন:",

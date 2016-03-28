@@ -28,6 +28,8 @@
 	"DISABLE_BLOCK": "Disattiva blocco",
 	"ENABLE_BLOCK": "Attiva blocco",
 	"HELP": "Aiuto",
+	"UNDO": "Annulla",
+	"REDO": "Ripeti",
 	"CHAT": "Chatta con il tuo collaboratore scrivendo in questo box!",
 	"AUTH": "Autorizza questa applicazione per consentire di salvare il tuo lavoro e per essere condiviso.",
 	"ME": "Me",

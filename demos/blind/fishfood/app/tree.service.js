@@ -1,6 +1,6 @@
 var app = app || {};
 
-app.ClipboardService = ng.core
+app.TreeService = ng.core
   .Class({
   	constructor: function(){
 

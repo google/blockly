@@ -127,6 +127,7 @@ Blockly.BlockSvg.prototype.select = function() {
     // Unselect any previously selected block.
     Blockly.selected.unselect();
   }
+  Blockly.Events.fire(new Blockly.Events.Ui(this, 'selected', false, true));
   Blockly.selected = this;
   this.addSelect();
   Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
@@ -136,6 +137,10 @@ Blockly.BlockSvg.prototype.select = function() {
  * Unselect this block.  Remove its highlighting.
  */
 Blockly.BlockSvg.prototype.unselect = function() {
+  if (Blockly.selected != this) {
+    return;
+  }
+  Blockly.Events.fire(new Blockly.Events.Ui(this, 'selected', true, false));
   Blockly.selected = null;
   this.removeSelect();
   Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');

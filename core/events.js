@@ -72,6 +72,12 @@ Blockly.Events.CHANGE = 'change';
 Blockly.Events.MOVE = 'move';
 
 /**
+ * Name of event that records a UI change.
+ * @const
+ */
+Blockly.Events.UI = 'ui';
+
+/**
  * List of events queued for firing.
  * @private
  */
@@ -252,6 +258,14 @@ Blockly.Events.Abstract.prototype.toJson = function() {
  */
 Blockly.Events.Abstract.prototype.isNull = function() {
   return false;
+};
+
+/**
+ * Run an event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.Abstract.prototype.run = function(forward) {
+  // Defined by subclasses.
 };
 
 /**
@@ -572,3 +586,47 @@ Blockly.Events.Move.prototype.run = function(forward) {
     }
   }
 };
+
+/**
+ * Class for a UI event.
+ * @param {!Blockly.Block} block The affected block.
+ * @param {string} element One of 'selected', 'comment', 'mutator', etc.
+ * @param {string} oldValue Previous value of element.
+ * @param {string} newValue New value of element.
+ * @extends {Blockly.Events.Abstract}
+ * @constructor
+ */
+Blockly.Events.Ui = function(block, element, oldValue, newValue) {
+  Blockly.Events.Ui.superClass_.constructor.call(this, block);
+  this.element = element;
+  this.oldValue = oldValue;
+  this.newValue = newValue;
+  this.recordUndo = false;
+};
+goog.inherits(Blockly.Events.Ui, Blockly.Events.Abstract);
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.Change.prototype.toJson = function() {
+  var json = Blockly.Events.Change.superClass_.toJson.call(this);
+  json['element'] = this.element;
+  json['newValue'] = this.newValue;
+  return json;
+};
+
+/**
+ * Does this event record any change of state?
+ * @return {boolean} True if something changed.
+ */
+Blockly.Events.Ui.prototype.isNull = function() {
+  return this.oldValue == this.newValue;
+};
+

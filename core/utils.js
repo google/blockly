@@ -347,23 +347,16 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
 };
 
 /**
- * Deselect any selections on the webpage.
- * Chrome will select text outside the SVG when double-clicking.
- * Deselect this text, so that it doesn't mess up any subsequent drag.
+ * Set css classes to allow/disallow the browser from selecting/highlighting
+ * text, etc. on the page.
+ * @param {boolean} selectable Whether elements on the page can be selected.
  */
-Blockly.removeAllRanges = function() {
-  if (window.getSelection) {
-    setTimeout(function() {
-        try {
-          var selection = window.getSelection();
-          if (!selection.isCollapsed) {
-            selection.removeAllRanges();
-          }
-        } catch (e) {
-          // MSIE throws 'error 800a025e' here.
-        }
-      }, 0);
-  }
+Blockly.setPageSelectable = function(selectable) {
+    if (selectable) {
+      Blockly.removeClass_(document.body, 'blocklyNonSelectable');
+    } else {
+      Blockly.addClass_(document.body, 'blocklyNonSelectable');
+    }
 };
 
 /**

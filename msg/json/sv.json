@@ -26,6 +26,8 @@
 	"DISABLE_BLOCK": "Inaktivera block",
 	"ENABLE_BLOCK": "Aktivera block",
 	"HELP": "Hjälp",
+	"UNDO": "Ångra",
+	"REDO": "Gör om",
 	"CHAT": "Chatta med din medarbetare genom att skriva i detta fält.",
 	"AUTH": "Var god godkänn denna app för att du ska kunna spara och dela den.",
 	"ME": "Jag",

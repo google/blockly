@@ -30,7 +30,7 @@ app.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-<li #parentList aria-selected=false role='treeitem' tabIndex='0' [attr.aria-level]='level' id='{{createId(parentList)}}' [attr.aria-labelledby]='block.id'>
+<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createId(parentList)}}' [attr.aria-labelledby]='block.id'>
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
   <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
     {{addClass(parentList, 'hasChildren')}}
@@ -45,14 +45,14 @@ app.ToolboxTreeView = ng.core
     <div *ngFor='#inputBlock of block.inputList; #i=index'>
       <field-view [attr.aria-level]='level+1' *ngFor='#field of getInfo(inputBlock); #j=index' [field]='field' [level]='level+1'></field-view>
       <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false' [level]='level+1'></toolbox-tree-view>
-      <li aria-selected=false #listItem1 role='treeitem' tabIndex='0' [attr.aria-level]='level+1' id='{{createId(listItem1)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
+      <li aria-selected=false #listItem1 role='treeitem' [attr.aria-level]='level+1' id='{{createId(listItem1)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
         <label #label id='{{createId(label)}}'>{{inputType(inputBlock.connection)}} input needed</label>
         {{labelParent(listItem1, label.id)}}
       </li>
     </div>
   </ol>
 </li>
-<li #listItem2 aria-selected=false role='treeitem' [attr.aria-level]='level' tabIndex='0' id='{{createId(listItem2)}}' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
+<li #listItem2 aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createId(listItem2)}}' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
   <toolbox-tree-view [level]='level+1' [block]='block.nextConnection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
 </li>
     `,

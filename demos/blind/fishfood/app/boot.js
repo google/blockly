@@ -25,7 +25,7 @@
 var app = app || {};
 
 document.addEventListener('DOMContentLoaded', function() {
-    ng.platform.browser.bootstrap(app.AppView);
+    ng.platform.browser.bootstrap(app.LevelManagerView);
   });
 
 var option = document.getElementById('selected');

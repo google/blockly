@@ -28,8 +28,8 @@ app.WorkspaceView = ng.core
     selector: 'workspace-view',
     viewInjector: [app.ClipboardService],
     template: `
-  <div *ngIf='workspace'>
-  <h1>Workspace</h1>
+  <div *ngIf='workspace' class='treeview'>
+  <h3 id='workspace-title'>Workspace</h3>
   <button (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
   <button (click)="workspace.clear()" disabled={{disableRunCode()}}>Clear Workspace</button>
   <ol *ngFor='#block of workspace.topBlocks_'>
@@ -46,9 +46,12 @@ app.WorkspaceView = ng.core
       }
     },
     runCode: function() {
-      var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+      //var code = Blockly.JavaScript.workspaceToCode(this.workspace);
       try {
-        eval(code);
+        //eval(code);
+        if(app.levelValidationFunctions[app.level]()){
+          alert('Good job! You completed the level!');
+        }
       } catch (e) {
         alert(e);
       }

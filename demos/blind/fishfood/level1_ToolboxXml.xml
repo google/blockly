@@ -1,6 +1,6 @@
 <xml style="display: none">
 <category name="Music">
-<block type="play_note">
+<block type="play_random_note">
 </block>
 </category>
 </xml>

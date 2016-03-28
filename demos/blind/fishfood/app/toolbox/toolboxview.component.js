@@ -29,13 +29,13 @@ app.ToolboxView = ng.core
   selector: 'toolbox-view',
   template: `
 <div class='treeview'>
-<h1 id='toolbox-title'>Toolbox</h1>
-<ol #tree *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' role='group' class='tree' #tree aria-labelledby='toolbox-title' role='tree' tabIndex='0' id='tree' (keydown)="keyHandler($event)">
+<h3 id='toolbox-title'>Toolbox</h3>
+<ol #tree id='tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' class='tree' role='tree' tabIndex='0' aria-labelledby='toolbox-title' (keydown)="keyHandler($event)">
 {{setActiveAttribute(tree)}}
-<li #parent role='treeitem' aria-level='1' aria-selected=false *ngFor='#category of makeArray(sightedToolbox); #i=index'>
+<li #parent *ngFor='#category of makeArray(sightedToolbox); #i=index' role='treeitem' aria-level='1' aria-selected=false>
   <label #name>{{category.attributes.name.value}}</label>
   {{labelCategory(name, i, tree)}}
-  <ol class='children' role='group' *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0'>
+  <ol *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0' class='children' role='group'>
     <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
     {{addClass(parent, 'hasChildren')}}
   </ol>
@@ -55,7 +55,7 @@ app.ToolboxView = ng.core
         _this.sightedToolbox = xhttp.responseXML;
       }
     };
-    xhttp.open('GET', 'oneblock_ToolboxXml.xml', true);
+    xhttp.open('GET', app.levelToolboxes[app.level], true);
     xhttp.send();
 
     this.toolboxCategories = [];
@@ -185,11 +185,20 @@ app.ToolboxView = ng.core
           break;
         case 13:
           //if I've pressed enter, I want to interact with a child
-          //I should update the aria-liveregion to let users know.
           if (this.activeDesc){
             var children = this.activeDesc.children;
-            if (children.length == 1 && children[0].tagName == 'INPUT' || children[0].tagName == 'SELECT'){
-              children[0].focus();
+            var child = children[0];
+            if (children.length == 1 && child.tagName == 'INPUT' || child.tagName == 'SELECT'){
+              child.focus();
+              //if it's a dropdown, we want the dropdown to open
+              //test this in all browsers, it may break in some places.
+              //also see if it's better for screen readers if you put the focus on it after it opens.
+              if(child.tagName == 'SELECT') {
+                var event;
+                event = document.createEvent('MouseEvents');
+                event.initMouseEvent('mousedown', true, true, window);
+                child.dispatchEvent(event);
+              }
             }
           }
 
@@ -197,9 +206,6 @@ app.ToolboxView = ng.core
 
     },
   getFirstChild:  function(element){
-    //get the children of the element
-    //are any of them tabIndex=0?
-    //go to the children of the first child
     if (element == null){
       return element;
     } else {

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blind Blockly Sandbox</title>
+  <script src="../../../blockly_compressed.js"></script>
+  <script src="../../../blocks_compressed.js"></script>
+  <script src="../../../javascript_compressed.js"></script>
+  <script src="../../../msg/js/en.js"></script>
+
+  <!-- 1. Load libraries -->
+    <!-- IE required polyfill -->
+    <script src="../libs/es6-shim.min.js"></script>
+    <script src="../libs/angular2-polyfills.min.js"></script>
+    <script src="../libs/Rx.umd.min.js"></script>
+    <script src="../libs/angular2-all.umd.min.js"></script>
+    <!--<script src="node_modules/systemjs/dist/system.js"></script>-->
+
+
+  <style>
+    body {
+      background-color: #e5ffff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    td {
+      vertical-align: top;
+    }
+    textarea {
+      width: 100%;
+      height: 20em;
+    }
+    .tree .activedescendant > label, .activedescendant > select, .activedescendant > input {outline: 2px dotted #00f;}
+    /*.tree .activedescendant {outline: 2px dotted #00f;}*/
+  </style>
+</head>
+<body>
+
+<h1>This is Madeeha's Development Environment. <a href="../tester_demo/index.html">The Kevin-ready demo is here.</a></h1>
+
+  <levelview></levelview>
+
+  <!-- 2. Load our app -->
+  <script src='app/clipboard.service.js'></script>
+  <script src='app/workspace/fieldview.component.js'></script>
+  <script src='app/toolbox/toolbox_fieldview.component.js'></script>
+  <script src='app/workspace/treeview.component.js'></script>
+  <script src='app/toolbox/toolbox_treeview.component.js'></script>
+  <script src='app/toolbox/toolboxview.component.js'></script>
+  <script src='app/workspace/workspaceview.component.js'></script>
+  <script src='app/appview.component.js'></script>
+  <script src='app/levelmanager.component.js'></script>
+  <script src='app/boot.js'></script>
+  <script>
+
+Blockly.Blocks['play_random_note'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("play random note");
+  }
+};
+</script>
+</body>
+</html>

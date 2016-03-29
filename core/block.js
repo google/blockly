@@ -187,10 +187,6 @@ Blockly.Block.prototype.dispose = function(healStack) {
   // well as corruption of the connection database.  Therefore we must
   // methodically step through the blocks and carefully disassemble them.
 
-  if (Blockly.selected == this) {
-    Blockly.selected = null;
-  }
-
   // First, dispose of all my children.
   for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
     this.childBlocks_[i].dispose(false);
@@ -306,7 +302,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
   if (!this.workspace) {
     return;  // Deleted block.
   }
-  if (Blockly.dragMode_ != 0) {
+  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
     return;  // Don't bump blocks during a drag.
   }
   var rootBlock = this.getRootBlock();

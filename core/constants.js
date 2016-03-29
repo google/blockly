@@ -28,16 +28,29 @@ goog.provide('Blockly.constants');
 
 
 /**
- * Required name space for SVG elements.
- * @const
+ * Number of pixels the mouse must move before a drag starts.
  */
-Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
+Blockly.DRAG_RADIUS = 5;
 
 /**
- * Required name space for HTML elements.
- * @const
+ * Maximum misalignment between connections for them to snap together.
  */
-Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
+Blockly.SNAP_RADIUS = 20;
+
+/**
+ * Delay in ms between trigger and bumping unconnected block out of alignment.
+ */
+Blockly.BUMP_DELAY = 250;
+
+/**
+ * Number of characters to truncate a collapsed block to.
+ */
+Blockly.COLLAPSE_CHARS = 30;
+
+/**
+ * Length in ms for a touch to become a long press.
+ */
+Blockly.LONGPRESS = 750;
 
 /**
  * The richness of block colours, regardless of the hue.
@@ -59,6 +72,20 @@ Blockly.SPRITE = {
   height: 124,
   url: 'sprites.png'
 };
+
+// Constants below this point are not intended to be changed.
+
+/**
+ * Required name space for SVG elements.
+ * @const
+ */
+Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
+
+/**
+ * Required name space for HTML elements.
+ * @const
+ */
+Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
  * ENUM for a right-facing value input.  E.g. 'set item to' or 'return'.
@@ -95,16 +122,36 @@ Blockly.DUMMY_INPUT = 5;
  * @const
  */
 Blockly.ALIGN_LEFT = -1;
+
 /**
  * ENUM for centre alignment.
  * @const
  */
 Blockly.ALIGN_CENTRE = 0;
+
 /**
  * ENUM for right alignment.
  * @const
  */
 Blockly.ALIGN_RIGHT = 1;
+
+/**
+ * ENUM for no drag operation.
+ * @const
+ */
+Blockly.DRAG_NONE = 0;
+
+/**
+ * ENUM for inside the sticky DRAG_RADIUS.
+ * @const
+ */
+Blockly.DRAG_STICKY = 1;
+
+/**
+ * ENUM for freely draggable.
+ * @const
+ */
+Blockly.DRAG_FREE = 2;
 
 /**
  * Lookup table for determining the opposite type of a connection.
@@ -115,28 +162,3 @@ Blockly.OPPOSITE_TYPE[Blockly.INPUT_VALUE] = Blockly.OUTPUT_VALUE;
 Blockly.OPPOSITE_TYPE[Blockly.OUTPUT_VALUE] = Blockly.INPUT_VALUE;
 Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
 Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
-
-/**
- * Number of pixels the mouse must move before a drag starts.
- */
-Blockly.DRAG_RADIUS = 5;
-
-/**
- * Maximum misalignment between connections for them to snap together.
- */
-Blockly.SNAP_RADIUS = 20;
-
-/**
- * Delay in ms between trigger and bumping unconnected block out of alignment.
- */
-Blockly.BUMP_DELAY = 250;
-
-/**
- * Number of characters to truncate a collapsed block to.
- */
-Blockly.COLLAPSE_CHARS = 30;
-
-/**
- * Length in ms for a touch to become a long press.
- */
-Blockly.LONGPRESS = 750;

@@ -241,12 +241,14 @@ Blockly.Events.getDescendantIds_ = function(block) {
 
 /**
  * Abstract class for an event.
- * @param {!Blockly.Block} block The block.
+ * @param {Blockly.Block} block The block.
  * @constructor
  */
 Blockly.Events.Abstract = function(block) {
-  this.blockId = block.id;
-  this.workspaceId = block.workspace.id;
+  if (block) {
+    this.blockId = block.id;
+    this.workspaceId = block.workspace.id;
+  }
   this.group = Blockly.Events.group_;
   this.recordUndo = Blockly.Events.recordUndo;
 };
@@ -269,7 +271,7 @@ Blockly.Events.Abstract.prototype.toJson = function() {
 
 /**
  * Does this event record any change of state?
- * @return {boolean} True if something changed.
+ * @return {boolean} True if null, false if something changed.
  */
 Blockly.Events.Abstract.prototype.isNull = function() {
   return false;
@@ -623,7 +625,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
 
 /**
  * Class for a UI event.
- * @param {!Blockly.Block} block The affected block.
+ * @param {Blockly.Block} block The affected block.
  * @param {string} element One of 'selected', 'comment', 'mutator', etc.
  * @param {string} oldValue Previous value of element.
  * @param {string} newValue New value of element.
@@ -652,15 +654,8 @@ Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
 Blockly.Events.Change.prototype.toJson = function() {
   var json = Blockly.Events.Change.superClass_.toJson.call(this);
   json['element'] = this.element;
-  json['newValue'] = this.newValue;
+  if (this.newValue !== undefined) {
+    json['newValue'] = this.newValue;
+  }
   return json;
 };
-
-/**
- * Does this event record any change of state?
- * @return {boolean} True if something changed.
- */
-Blockly.Events.Ui.prototype.isNull = function() {
-  return this.oldValue == this.newValue;
-};
-

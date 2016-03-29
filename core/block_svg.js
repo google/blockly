@@ -123,11 +123,20 @@ Blockly.BlockSvg.prototype.initSvg = function() {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function() {
-  if (Blockly.selected) {
-    // Unselect any previously selected block.
-    Blockly.selected.unselect();
+  if (Blockly.selected == this) {
+    return;
   }
-  Blockly.Events.fire(new Blockly.Events.Ui(this, 'selected', false, true));
+  var oldId = null;
+  if (Blockly.selected) {
+    oldId = Blockly.selected.id;
+    // Unselect any previously selected block.
+    Blockly.Events.disable();
+    Blockly.selected.unselect();
+    Blockly.Events.enable();
+  }
+  var event = new Blockly.Events.Ui(null, 'selected', oldId, this.id);
+  event.workspaceId = this.workspace.id;
+  Blockly.Events.fire(event);
   Blockly.selected = this;
   this.addSelect();
   Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
@@ -140,7 +149,9 @@ Blockly.BlockSvg.prototype.unselect = function() {
   if (Blockly.selected != this) {
     return;
   }
-  Blockly.Events.fire(new Blockly.Events.Ui(this, 'selected', true, false));
+  var event = new Blockly.Events.Ui(null, 'selected', this.id, null);
+  event.workspaceId = this.workspace.id;
+  Blockly.Events.fire(event);
   Blockly.selected = null;
   this.removeSelect();
   Blockly.fireUiEvent(this.workspace.getCanvas(), 'blocklySelectChange');
@@ -548,6 +559,10 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
+  if (Blockly.dragMode_ != 2) {
+    Blockly.Events.fire(
+        new Blockly.Events.Ui(this, 'click', undefined, undefined));
+  }
   Blockly.setPageSelectable(true);
   Blockly.terminateDrag_();
   if (Blockly.selected && Blockly.highlightedConnection_) {

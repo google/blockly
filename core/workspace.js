@@ -32,14 +32,14 @@ goog.require('goog.math');
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
- * @param {Object=} opt_options Dictionary of options.
+ * @param {Blockly.Options} opt_options Dictionary of options.
  * @constructor
  */
 Blockly.Workspace = function(opt_options) {
   /** @type {string} */
   this.id = Blockly.genUid();
   Blockly.Workspace.WorkspaceDB_[this.id] = this;
-  /** @type {!Object} */
+  /** @type {!Blockly.Options} */
   this.options = opt_options || {};
   /** @type {boolean} */
   this.RTL = !!this.options.RTL;

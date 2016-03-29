@@ -62,7 +62,7 @@ Blockly.inject = function(container, opt_options) {
 /**
  * Create the SVG image.
  * @param {!Element} container Containing element.
- * @param {Object} options Dictionary of options.
+ * @param {!Blockly.Options} options Dictionary of options.
  * @return {!Element} Newly created SVG image.
  * @private
  */
@@ -176,7 +176,7 @@ Blockly.createDom_ = function(container, options) {
 /**
  * Create a main workspace and add it to the SVG.
  * @param {!Element} svg SVG element with pattern defined.
- * @param {Object} options Dictionary of options.
+ * @param {!Blockly.Options} options Dictionary of options.
  * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */

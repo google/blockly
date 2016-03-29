@@ -43,7 +43,7 @@ goog.require('goog.userAgent');
 /**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
- * @param {!Object} options Dictionary of options.
+ * @param {!Blockly.Options} options Dictionary of options.
  * @extends {Blockly.Workspace}
  * @constructor
  */

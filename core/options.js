@@ -32,8 +32,7 @@ goog.provide('Blockly.Options');
  * is unspecified.
  * @param {!Object} options Dictionary of options.  Specification:
  *   https://developers.google.com/blockly/installation/overview#configuration
- * @return {!Blockly.Options} Object containing a dicitonary of normalized
- *   options.
+ * @constructor
  */
 Blockly.Options = function(options) {
   var readOnly = !!options['readOnly'];
@@ -108,6 +107,10 @@ Blockly.Options = function(options) {
   this.realtimeOptions = realtimeOptions;
 };
 
+/**
+ * @type {Blockly.Workspace} the parent of the current workspace, or null if
+ *    there is no parent workspace.
+ **/
 Blockly.Options.prototype.parentWorkspace = null;
 
 /**
@@ -127,7 +130,7 @@ Blockly.Options.prototype.getMetrics = function() { return null; };
  * Parse the user-specified zoom options, using reasonable defaults where
  * behaviour is unspecified.  See zoom documentation:
  *   https://developers.google.com/blockly/installation/zoom
- * @param {!Object} options Dictionary of options options.
+ * @param {!Object} options Dictionary of options.
  * @return {!Object} A dictionary of normalized options.
  * @private
  */

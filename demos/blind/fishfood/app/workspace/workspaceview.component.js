@@ -28,12 +28,13 @@ app.WorkspaceView = ng.core
     selector: 'workspace-view',
     viewInjector: [app.ClipboardService],
     template: `
-  <div *ngIf='workspace' class='treeview'>
-  <h3 id='workspace-title'>Workspace</h3>
+  <div *ngIf='workspace'>
+  <label><h3 id='workspace-title'>Workspace</h3>
   <button (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
   <button (click)="workspace.clear()" disabled={{disableRunCode()}}>Clear Workspace</button>
-  <ol *ngFor='#block of workspace.topBlocks_'>
-    <tree-view [block]='block' [isTopBlock]='true'></tree-view>
+  </label>
+  <ol *ngFor='#block of workspace.topBlocks_' class='children' role='group' aria-labelledby='workspace-title'>
+    <tree-view [level]=2 [block]='block' [isTopBlock]='true'></tree-view>
   </ol>
   </div>
     `,
@@ -43,6 +44,7 @@ app.WorkspaceView = ng.core
     constructor: function() {
       if (app.workspace) {
         this.workspace = app.workspace;
+        this.level = app.level;
       }
     },
     runCode: function() {

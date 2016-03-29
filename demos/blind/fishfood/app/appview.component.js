@@ -28,22 +28,23 @@ app.AppView = ng.core
   .Component({
     selector: 'app',
     template: `
-    <table>
-    <tr>
-      <td>
+    <div class='treeview'>
+    <ol #tree id='tree' class='tree' role='tree' tabIndex=0 (keydown)="treeService.keyHandler($event)">
+      <li id='toolbox' class='hasChildren' role='treeitem' aria-level='1' aria-labelledby='toolbox-title' aria-selected=false>
         <toolbox-view>Loading Toolbox...</toolbox-view>
-      </td>
-      <td>
+      </li>
+      <li id='workspace' class='hasChildren' role='treeitem' aria-level='1' aria-labelledby='workspace-title' aria-selected=false>
         <workspace-view>Loading Workspace...</workspace-view>
-      </td>
-    </tr>
-    </table>
+      </li>
+    </ol>
+    </div>
     `,
     directives: [app.ToolboxView, app.WorkspaceView],
-    providers: [app.ClipboardService],
+    providers: [app.ClipboardService, app.TreeService],
   })
   .Class({
-    constructor: [app.ClipboardService, function(_service) {
+    constructor: [app.ClipboardService, app.TreeService, function(_service1, _service2) {
+      this.treeService = _service2;
     }],
     log: function(obj) {
       //TODO(madeeha): delete after development is finished

@@ -22,27 +22,26 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 var app = app || {};
-app.workspace = app.workspace || new Blockly.Workspace();
 app.level =1;
 app.levelInstructions={};
-app.levelInstructions[1] = [`If you're using a screen reader, make sure to set your punctuation 
+app.levelInstructions[1] = [`If you're using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
-    `Let's start by navigating to the toolbox and copying the 'play random note' 
-    block onto the workspace. Both the Toolbox and the Workspace are aria-trees. 
-    Once you have tabbed to the tree, use your arrow keys to navigate. Trees are 
+    `Let's start by navigating to the toolbox and copying the 'play random note'
+    block onto the workspace. Both the Toolbox and the Workspace are trees.
+    Once you have tabbed to the tree, use your arrow keys to navigate. Trees are
     just a fancy way of saying nested list.`,
     `If you're at item A in the tree and you hit the up or down arrows, you will
     move up and down the list A is in. If you hit the right arrow, you'll be taken
     back to the parent list item of A. Hitting the left arrow will take you to the
     first child list item of A.`];
-app.levelInstructions[2] = [`If you're using a screen reader, make sure to set your punctuation 
+app.levelInstructions[2] = [`If you're using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
     `Play the C note.`,
     `Don't forget how to navigate a tree: If you're at item A in the tree and you hit the up or down arrows, you will
     move up and down the list A is in. If you hit the right arrow, you'll be taken
     back to the parent list item of A. Hitting the left arrow will take you to the
     first child list item of A.`];
-app.levelInstructions[3] = [`If you're using a screen reader, make sure to set your punctuation 
+app.levelInstructions[3] = [`If you're using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
     `Play 4 C notes. Use only 2 blocks.`,
     `Don't forget how to navigate a tree: If you're at item A in the tree and you hit the up or down arrows, you will
@@ -50,7 +49,10 @@ app.levelInstructions[3] = [`If you're using a screen reader, make sure to set y
     back to the parent list item of A. Hitting the left arrow will take you to the
     first child list item of A.`];
 app.levelToolboxes=['','level1_ToolboxXml.xml','level1_ToolboxXml.xml','level1_ToolboxXml.xml'];
+app.levelWorkspaces=[undefined,new Blockly.Workspace(),new Blockly.Workspace(),new Blockly.Workspace()];
 app.maxLevelAllowed=1;
+
+app.workspace = app.levelWorkspaces[app.level];
 
 app.LevelManagerView = ng.core
   .Component({
@@ -94,6 +96,7 @@ app.LevelManagerView = ng.core
     },
     setLevel: function(num){
       app.level = num;
+      app.workspace = app.levelWorkspaces[app.level];
     },
     setInstructions: function() {
       if (app.level && app.levelInstructions) {

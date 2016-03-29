@@ -28,25 +28,22 @@ app.ToolboxView = ng.core
 .Component({
   selector: 'toolbox-view',
   template: `
-<div class='treeview'>
-<h3 id='toolbox-title'>Toolbox</h3>
-<ol #tree id='tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' class='tree' role='tree' tabIndex='0' aria-labelledby='toolbox-title' (keydown)="keyHandler($event)">
-{{setActiveAttribute(tree)}}
-<li #parent *ngFor='#category of makeArray(sightedToolbox); #i=index' role='treeitem' aria-level='1' aria-selected=false>
+<label><h3 id='toolbox-title'>Toolbox</h3></label>
+<ol #tree *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' class='children' role='group' aria-labelledby='toolbox-title'>
+<li #parent *ngFor='#category of makeArray(sightedToolbox); #i=index' role='treeitem' aria-level='2' aria-selected=false>
   <label #name>{{category.attributes.name.value}}</label>
   {{labelCategory(name, i, tree)}}
   <ol *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0' class='children' role='group'>
-    <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
+    <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=3 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
     {{addClass(parent, 'hasChildren')}}
   </ol>
 </li>
 </ol>
-</div>
   `,
   directives: [app.ToolboxTreeView],
 })
 .Class({
-  constructor: function() {
+  constructor: [app.TreeService, function(_service) {
     console.log('toolbox constructor');
     var _this = this;
     var xhttp = new XMLHttpRequest();
@@ -60,28 +57,18 @@ app.ToolboxView = ng.core
 
     this.toolboxCategories = [];
     this.toolboxWorkspaces = {};
-    this.activeDesc;
-    this.toolboxTree;
-  },
-  setActiveAttribute: function(tree){
-    if (!this.toolboxTree){
-      this.toolboxTree = tree;
-    }
-    if (!tree.getAttribute('aria-activedescendant')){
-      console.log("setting tree active descendant");
-      tree.setAttribute('aria-activedescendant', 'tree-node0');
-    }
-  },
+    this.treeService = _service;
+  }],
   labelCategory: function(h2, i, tree){
       var parent = h2.parentNode;
       while (parent != null && parent.tagName != 'LI') {
-	  parent = parent.parentNode;
+	     parent = parent.parentNode;
       }
       parent.setAttribute("aria-label", h2.innerText);
       parent.id = 'tree-node'+i;
       if (i == 0 && tree.getAttribute('aria-activedescendant') == 'tree-node0') {
         this.addClass(parent, 'activedescendant');
-        this.activeDesc = parent;
+        this.treeService.setActiveDesc(parent);
         parent.setAttribute("aria-selected", "true");
       }
   },
@@ -106,201 +93,6 @@ app.ToolboxView = ng.core
       } else {
         node.className += (' ' + classText);
       }
-    }
-  },
-  updateSelectedNode: function(node){
-    console.log("updating node: " + node.id);
-    if (this.activeDesc) {
-      this.activeDesc.classList.remove("activedescendant");
-      node.classList.add("activedescendant");
-      tree.setAttribute("aria-activedescendant",node.id);
-      this.activeDesc = node;
-      node.setAttribute("aria-selected","true");
-      //make sure keyboard focus is on tree as a whole
-      //in case before the user was editing a block and keyboard focus got shifted.
-      this.toolboxTree.focus();
-    } else {
-      console.log("there is no active descendant");
-    }
-  },
-  keyHandler: function(e){
-      //console.log(document.activeElement);
-      var node = this.activeDesc;
-      if (!node){
-        console.log("no active descendant");
-      }
-      console.log(e.keyCode);
-      switch(e.keyCode){
-        case 32:
-          //space key:
-        case 37:
-          //left-facing arrow: go out a level, if possible. If not, do nothing
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("in left arrow section");
-          var nextNode = node.parentNode;
-          while (nextNode.className != "treeview" && nextNode.tagName != 'LI') {
-            nextNode = nextNode.parentNode;
-          }
-          if (nextNode.className == "treeview" || nextNode == null){
-            return;
-          }
-          this.updateSelectedNode(nextNode);
-          break;
-        case 38:
-          //up-facing arrow: go up a level, if possible. If not, do nothing
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("node passed in: " + node.id);
-          var prevSibling = this.getPreviousSibling(node);
-          if (prevSibling && prevSibling.tagName != 'H1'){
-            this.updateSelectedNode(prevSibling);
-          } else {
-            console.log("no previous sibling");
-          }
-          break;
-        case 39:
-          //right-facing arrow: go in a level, if possible. If not, do nothing
-          e.preventDefault();
-          e.stopPropagation();
-          console.log("in right arrow section");
-          var firstChild = this.getFirstChild(node);
-          if (firstChild){
-            this.updateSelectedNode(firstChild);
-          } else {
-            console.log("no valid child");
-          }
-          break;
-        case 40:
-          //down-facing arrow: go down a level, if possible. If not, do nothing
-          //TODO(madeeha): should stop when done with all items at that level. Currently continues
-          e.preventDefault();
-          e.stopPropagation();
-          var nextSibling = this.getNextSibling(node);
-          if (nextSibling){
-            this.updateSelectedNode(nextSibling);
-          } else {
-            console.log("no next sibling");
-          }
-          break;
-        case 13:
-          //if I've pressed enter, I want to interact with a child
-          if (this.activeDesc){
-            var children = this.activeDesc.children;
-            var child = children[0];
-            if (children.length == 1 && child.tagName == 'INPUT' || child.tagName == 'SELECT'){
-              child.focus();
-              //if it's a dropdown, we want the dropdown to open
-              //test this in all browsers, it may break in some places.
-              //also see if it's better for screen readers if you put the focus on it after it opens.
-              if(child.tagName == 'SELECT') {
-                var event;
-                event = document.createEvent('MouseEvents');
-                event.initMouseEvent('mousedown', true, true, window);
-                child.dispatchEvent(event);
-              }
-            }
-          }
-
-      }
-
-    },
-  getFirstChild:  function(element){
-    if (element == null){
-      return element;
-    } else {
-      var childList = element.children;
-      for (var i=0; i<childList.length; i++){
-        if (childList[i].tagName == 'LI'){
-          return childList[i];
-        } else {
-          var potentialElement = this.getFirstChild(childList[i]);
-          if (potentialElement) {
-            return potentialElement;
-          }
-        }
-      }
-      return null;
-    }
-  },
-  getNextSibling: function(element){
-    if (element.nextElementSibling){
-      //if there is a sibling, find the list element child of the sibling
-      var node = element.nextElementSibling;
-      if (node.tagName != 'LI'){
-        var listElems = node.getElementsByTagName('li');
-        //getElementsByTagName returns in DFS order
-        //therefore the first element is the first relevant list child
-        return listElems[0];
-      } else {
-        return element.nextElementSibling;
-      }
-    } else {
-      var parent = element.parentNode;
-      while (parent != null && parent.tagName != 'OL'){
-        if (parent.nextElementSibling){
-          var node = parent.nextElementSibling;
-          if (node.tabIndex == 0){
-            return node;
-          } else {
-            return this.getFirstChild(node);
-          }
-        } else {
-          parent = parent.parentNode;
-        }
-      }
-      return null;
-    }
-  },
-  getPreviousSibling: function(element){
-    if (element.previousElementSibling){
-      var sibling = element.previousElementSibling;
-      if (sibling.tagName == 'LI') {
-        return sibling;
-      } else {
-        return this.getLastChild(sibling);
-      }
-    } else {
-      var parent = element.parentNode;
-      while (parent != null){
-        console.log("looping");
-        if (parent.tagName == 'OL') {
-          break;
-        }
-        if (parent.previousElementSibling){
-          console.log("parent has a sibling!");
-          var node = parent.previousElementSibling;
-          if (node.tagName == 'LI'){
-            console.log("return the sibling of the parent!");
-            return node;
-          } else {
-            return this.getLastChild(node);
-          }
-        } else {
-          parent = parent.parentNode;
-        }
-      }
-      return null;
-    }
-  },
-  getLastChild: function(element){
-    if (element == null){
-      console.log("no element");
-      return element;
-    } else {
-      var childList = element.children;
-      for (var i=childList.length-1; i>=0; i--){
-        if (childList[i].tabIndex == 0){
-          return childList[i];
-        } else {
-          var potentialElement = this.getLastChild(childList[i]);
-          if (potentialElement) {
-            return potentialElement;
-          }
-        }
-      }
-      console.log("no last child");
-      return null;
     }
   },
   makeArray: function(val) {

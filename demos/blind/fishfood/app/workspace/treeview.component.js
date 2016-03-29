@@ -27,20 +27,22 @@ app.TreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
-<li>
+<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{treeService.createId(parentList)}}' [attr.aria-labelledby]='block.id'>
   <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
-  <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
-    <option value='NO_ACTION' selected>select an action</option>
-    <option value='CUT_BLOCK'>cut block</option>
-    <option value='COPY_BLOCK'>copy block</option>
-    <option value='PASTE_ABOVE' disabled='block.previousConnection' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above this block</option>
-    <option value='PASTE_BELOW' disabled='block.nextConnection' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>paste below this block</option>
-    <option value='MARK_ABOVE' disabled='block.previousConnection'>mark spot above this block</option>
-    <option value='MARK_BELOW' disabled='block.nextConnection'>mark spot above this block</option>
-    <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to marked spot</option>
-    <option value='DELETE_BLOCK'>delete</option>
-  </select>
-  <ol>
+  <ol role='group' class='children' [attr.aria-level]='level+1'>
+    <li aria-selected=false #listItem role='treeitem' [attr.aria-level]='level+1' id='{{treeService.createId(listItem)}}' [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
+        <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
+          <option value='NO_ACTION' selected>select an action</option>
+          <option value='CUT_BLOCK'>cut block</option>
+          <option value='COPY_BLOCK'>copy block</option>
+          <option value='PASTE_ABOVE' disabled='block.previousConnection' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above this block</option>
+          <option value='PASTE_BELOW' disabled='block.nextConnection' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>paste below this block</option>
+          <option value='MARK_ABOVE' disabled='block.previousConnection'>mark spot above this block</option>
+          <option value='MARK_BELOW' disabled='block.nextConnection'>mark spot above this block</option>
+          <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to marked spot</option>
+          <option value='DELETE_BLOCK'>delete</option>
+        </select>
+    </li>
     <div *ngFor='#inputBlock of block.inputList'>
       <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
       <tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()'></tree-view>
@@ -61,13 +63,14 @@ app.TreeView = ng.core
     `,
     directives: [ng.core.forwardRef(
         function() { return app.TreeView; }), app.FieldView],
-    inputs: ['block', 'isTopBlock'],
+    inputs: ['block', 'isTopBlock', 'level'],
   })
   .Class({
-    constructor: [app.ClipboardService, function(_service) {
+    constructor: [app.ClipboardService, app.TreeService, function(_service, _service2) {
       this.infoBlocks = {};
       this.nextBlock = {};
       this.sharedClipboardService = _service;
+      this.treeService = _service2;
     }],
     getInfo: function(block) {
       //List all inputs

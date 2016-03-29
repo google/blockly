@@ -185,14 +185,22 @@ app.ToolboxView = ng.core
           break;
         case 13:
           //if I've pressed enter, I want to interact with a child
-          //I should update the aria-liveregion to let users know.
           if (this.activeDesc){
             var children = this.activeDesc.children;
-            if (children.length == 1 && children[0].tagName == 'INPUT' || children[0].tagName == 'SELECT'){
-              children[0].focus();
+            var child = children[0];
+            if (children.length == 1 && child.tagName == 'INPUT' || child.tagName == 'SELECT'){
+              child.focus();
+              //if it's a dropdown, we want the dropdown to open
+              //test this in all browsers, it may break in some places.
+              //also see if it's better for screen readers if you put the focus on it after it opens.
+              if(child.tagName == 'SELECT') {
+                var event;
+                event = document.createEvent('MouseEvents');
+                event.initMouseEvent('mousedown', true, true, window);
+                child.dispatchEvent(event);
+              }
             }
           }
-
       }
 
     },

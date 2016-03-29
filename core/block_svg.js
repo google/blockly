@@ -935,6 +935,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   Blockly.Field.startCache();
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
+    this.unselect();
     Blockly.terminateDrag_();
   }
   // If this block has a context menu open, close it.

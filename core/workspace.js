@@ -149,6 +149,7 @@ Blockly.Workspace.prototype.getAllBlocks = function() {
  * Dispose of all blocks in workspace.
  */
 Blockly.Workspace.prototype.clear = function() {
+  Blockly.WidgetDiv.hide();
   var existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
     Blockly.Events.setGroup(true);

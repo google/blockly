@@ -567,7 +567,7 @@ Blockly.Connection.prototype.targetBlock = function() {
  * @private
  */
 Blockly.Connection.prototype.bumpAwayFrom_ = function(staticConnection) {
-  if (Blockly.dragMode_ != 0) {
+  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
     // Don't move blocks around while the user is doing the same.
     return;
   }

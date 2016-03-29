@@ -103,7 +103,7 @@ Blockly.clipboardSource_ = null;
  * 2 - Freely draggable.
  * @private
  */
-Blockly.dragMode_ = 0;
+Blockly.dragMode_ = Blockly.DRAG_NONE;
 
 /**
  * Wrapper function called when a touch mouseUp occurs during a drag operation.
@@ -269,7 +269,7 @@ Blockly.onKeyDown_ = function(e) {
   if (deleteBlock) {
     // Common code for delete and cut.
     Blockly.hideChaff();
-    var heal = Blockly.dragMode_ != 2;
+    var heal = Blockly.dragMode_ != Blockly.DRAG_FREE;
     Blockly.selected.dispose(heal, true);
     if (Blockly.highlightedConnection_) {
       Blockly.highlightedConnection_.unhighlight();
@@ -331,7 +331,7 @@ Blockly.longStop_ = function() {
  */
 Blockly.copy_ = function(block) {
   var xmlBlock = Blockly.Xml.blockToDom(block);
-  if (Blockly.dragMode_ != 2) {
+  if (Blockly.dragMode_ != Blockly.DRAG_FREE) {
     Blockly.Xml.deleteNext(xmlBlock);
   }
   // Encode start position in XML.

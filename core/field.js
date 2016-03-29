@@ -422,7 +422,7 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
   } else if (Blockly.isRightButton(e)) {
     // Right-click.
     return;
-  } else if (Blockly.dragMode_ == 2) {
+  } else if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   } else if (this.sourceBlock_.isEditable()) {

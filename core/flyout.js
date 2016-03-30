@@ -240,7 +240,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     var optionBox = {height: 0, y: 0};
   }
 
-  var absoluteTop = this.verticalOffset_ + this.SCROLLBAR_PADDING
+  var absoluteTop = this.verticalOffset_ + this.SCROLLBAR_PADDING;
   if (this.horizontalLayout_) {
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
       absoluteTop = 0;
@@ -284,13 +284,9 @@ Blockly.Flyout.prototype.setMetrics_ = function(xyRatio) {
     this.workspace_.scrollY =
         -metrics.contentHeight * xyRatio.y - metrics.contentTop;
   } else if (this.horizontalLayout_ && goog.isNumber(xyRatio.x)) {
-    if (this.RTL) {
-      this.workspace_.scrollX =
-          -metrics.contentWidth * xyRatio.x + metrics.contentLeft;
-    } else {
-      this.workspace_.scrollX =
-          -metrics.contentWidth * xyRatio.x - metrics.contentLeft;
-    }
+    this.workspace_.scrollX =
+        -metrics.contentWidth * xyRatio.x +
+        (this.RTL ? metrics.contentLeft : -metrics.contentLeft);
   }
   var translateX = this.horizontalLayout_ && this.RTL ?
       metrics.absoluteLeft + metrics.viewWidth - this.workspace_.scrollX :
@@ -382,7 +378,7 @@ Blockly.Flyout.prototype.setBackgroundPath_ = function(width, height) {
  * @private
  */
 Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
-    var atRight = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT;
+  var atRight = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT;
   // Decide whether to start on the left or right.
   var path = ['M ' + (atRight ? this.width_ : 0) + ',0'];
   // Top.
@@ -414,35 +410,35 @@ Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
  * @private
  */
 Blockly.Flyout.prototype.setBackgroundPathHorizontal_ = function(width, height) {
-    var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
-  // start at top left.
+  var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
+  // Start at top left.
   var path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
 
   if (atTop) {
-    // top
+    // Top.
     path.push('h', width + this.CORNER_RADIUS);
-    // right
+    // Right.
     path.push('v', height);
-    // bottom
+    // Bottom.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, this.CORNER_RADIUS);
     path.push('h', -1 * (width - this.CORNER_RADIUS));
-    // left
+    // Left.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, -this.CORNER_RADIUS);
     path.push('z');
   } else {
-    // top
+    // Top.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, -this.CORNER_RADIUS);
     path.push('h', width - this.CORNER_RADIUS);
-     // right
+     // Right.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, this.CORNER_RADIUS);
     path.push('v', height - this.CORNER_RADIUS);
-    // bottom
+    // Bottom.
     path.push('h', -width - this.CORNER_RADIUS);
-    // left
+    // Left.
     path.push('z');
   }
   this.svgBackground_.setAttribute('d', path.join(' '));
@@ -628,7 +624,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
 /**
  * Add listeners to a block that has been added to the flyout.
- * @param {Element} root The root node of the SVG group the block is in.
+ * @param {!Element} root The root node of the SVG group the block is in.
  * @param {!Blockly.Block} block The block to add listeners for.
  * @param {!Element} rect The invisible rectangle under the block that acts as
  *     a button for that block.
@@ -707,7 +703,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
 };
 
 /**
- * Handle a mouse-move to vertically drag the flyout.
+ * Handle a mouse-move to drag the flyout.
  * @param {!Event} e Mouse move event.
  * @private
  */
@@ -717,16 +713,14 @@ Blockly.Flyout.prototype.onMouseMove_ = function(e) {
     this.startDragMouseX_ = e.clientX;
     var metrics = this.getMetrics_();
     var x = metrics.viewLeft - dx;
-    x = Math.min(x, metrics.contentWidth - metrics.viewWidth);
-    x = Math.max(x, 0);
+    x = goog.math.clamp(x, 0, metrics.contentWidth - metrics.viewWidth);
     this.scrollbar_.set(x);
   } else {
     var dy = e.clientY - this.startDragMouseY_;
     this.startDragMouseY_ = e.clientY;
     var metrics = this.getMetrics_();
     var y = metrics.viewTop - dy;
-    y = Math.min(y, metrics.contentHeight - metrics.viewHeight);
-    y = Math.max(y, 0);
+    y = goog.math.clamp(y, o, metrics.contentHeight - metrics.viewHeight);
     this.scrollbar_.set(y);
   }
 };
@@ -859,16 +853,15 @@ Blockly.Flyout.prototype.getClientRect = function() {
 
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
     return new goog.math.Rect(-BIG_NUM, y - BIG_NUM, BIG_NUM * 2,
-      BIG_NUM + height);
+        BIG_NUM + height);
   } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
     return new goog.math.Rect(-BIG_NUM, y + this.verticalOffset_, BIG_NUM * 2,
-      BIG_NUM + height);
+        BIG_NUM + height);
   } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
     return new goog.math.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,
-      BIG_NUM * 2);
+        BIG_NUM * 2);
   } else {  // Right
-    return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width,
-      BIG_NUM * 2);
+    return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, BIG_NUM * 2);
   }
 };
 
@@ -907,14 +900,13 @@ Blockly.Flyout.prototype.reflowHorizontal = function() {
   var flyoutHeight = 0;
   var margin = this.CORNER_RADIUS;
   var blocks = this.workspace_.getTopBlocks(false);
-  for (var x = 0, block; block = blocks[x]; x++) {
-    var height = block.getHeightWidth().height;
-    flyoutHeight = Math.max(flyoutHeight, height);
+  for (var i = 0, block; block = blocks[i]; i++) {
+    flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
   }
   flyoutHeight *= this.workspace_.scale;
   flyoutHeight += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
   if (this.height_ != flyoutHeight) {
-    for (var x = 0, block; block = blocks[x]; x++) {
+    for (var i = 0, block; block = blocks[i]; i++) {
       var blockHW = block.getHeightWidth();
       if (block.flyoutRect_) {
         block.flyoutRect_.setAttribute('width', blockHW.width);
@@ -941,7 +933,7 @@ Blockly.Flyout.prototype.reflowVertical = function() {
   var flyoutWidth = 0;
   var margin = this.CORNER_RADIUS;
   var blocks = this.workspace_.getTopBlocks(false);
-  for (var x = 0, block; block = blocks[x]; x++) {
+  for (var i = 0, block; block = blocks[i]; i++) {
     var width = block.getHeightWidth().width;
     if (block.outputConnection) {
       width -= Blockly.BlockSvg.TAB_WIDTH;
@@ -952,7 +944,7 @@ Blockly.Flyout.prototype.reflowVertical = function() {
   flyoutWidth *= this.workspace_.scale;
   flyoutWidth += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
   if (this.width_ != flyoutWidth) {
-    for (var x = 0, block; block = blocks[x]; x++) {
+    for (var i = 0, block; block = blocks[i]; i++) {
       var blockHW = block.getHeightWidth();
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.

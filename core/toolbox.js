@@ -402,10 +402,10 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
     return new goog.math.Rect(x, -BIG_NUM, BIG_NUM + width, 2 * BIG_NUM);
   } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
-      return new goog.math.Rect(-BIG_NUM, -BIG_NUM, 2 * BIG_NUM,
-          BIG_NUM + y + height);
+    return new goog.math.Rect(-BIG_NUM, -BIG_NUM, 2 * BIG_NUM,
+        BIG_NUM + y + height);
   } else { // Bottom
-      return new goog.math.Rect(0, y,  2 * BIG_NUM, BIG_NUM + width);
+    return new goog.math.Rect(0, y,  2 * BIG_NUM, BIG_NUM + width);
   }
 };
 

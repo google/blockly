@@ -359,7 +359,7 @@ Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
   var currentParent = connectionChild.targetBlock();
   if ((!currentParent || currentParent == block) &&
       connectionParent.targetConnection != connectionChild) {
-    if (connectionParent.targetConnection) {
+    if (connectionParent.isConnected()) {
       // There's already something connected here.  Get rid of it.
       connectionParent.disconnect();
     }

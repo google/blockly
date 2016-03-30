@@ -465,7 +465,7 @@ Blockly.Xml.domToBlockHeadless_ = function(workspace, xmlBlock) {
         if (childBlockNode) {
           if (!block.nextConnection) {
             throw 'Next statement does not exist.';
-          } else if (block.nextConnection.targetConnection) {
+          } else if (block.nextConnection.isConnected()) {
             // This could happen if there is more than one XML 'next' tag.
             throw 'Next statement is already connected.';
           }

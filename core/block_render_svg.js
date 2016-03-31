@@ -379,7 +379,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       input.renderWidth = 0;
     }
     // Expand input size if there is a connection.
-    if (input.connection && input.connection.targetConnection) {
+    if (input.connection && input.connection.isConnected()) {
       var linkedBlock = input.connection.targetBlock();
       var bBox = linkedBlock.getHeightWidth();
       input.renderHeight = Math.max(input.renderHeight, bBox.height);
@@ -692,7 +692,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
           connectionY = connectionsXY.y + cursorY +
               Blockly.BlockSvg.INLINE_PADDING_Y + 1;
           input.connection.moveTo(connectionX, connectionY);
-          if (input.connection.targetConnection) {
+          if (input.connection.isConnected()) {
             input.connection.tighten_();
           }
         }
@@ -740,7 +740,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
           (this.RTL ? -inputRows.rightEdge - 1 : inputRows.rightEdge + 1);
       connectionY = connectionsXY.y + cursorY;
       input.connection.moveTo(connectionX, connectionY);
-      if (input.connection.targetConnection) {
+      if (input.connection.isConnected()) {
         input.connection.tighten_();
         this.width = Math.max(this.width, inputRows.rightEdge +
             input.connection.targetBlock().getHeightWidth().width -
@@ -822,7 +822,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       connectionX = connectionsXY.x + (this.RTL ? -cursorX : cursorX + 1);
       connectionY = connectionsXY.y + cursorY + 1;
       input.connection.moveTo(connectionX, connectionY);
-      if (input.connection.targetConnection) {
+      if (input.connection.isConnected()) {
         input.connection.tighten_();
         this.width = Math.max(this.width, inputRows.statementEdge +
             input.connection.targetBlock().getHeightWidth().width);
@@ -873,7 +873,7 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
     }
     var connectionY = connectionsXY.y + cursorY + 1;
     this.nextConnection.moveTo(connectionX, connectionY);
-    if (this.nextConnection.targetConnection) {
+    if (this.nextConnection.isConnected()) {
       this.nextConnection.tighten_();
     }
     this.height += 4;  // Height of tab.

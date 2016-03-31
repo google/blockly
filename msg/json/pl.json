@@ -30,6 +30,8 @@
 	"DISABLE_BLOCK": "Wyłącz blok",
 	"ENABLE_BLOCK": "Włącz blok",
 	"HELP": "Pomoc",
+	"UNDO": "Cofnij",
+	"REDO": "Ponów",
 	"CHAT": "Rozmawiaj z swoim współpracownikiem, pisząc w tym polu!",
 	"AUTH": "Proszę autoryzować ten program, aby można było zapisać swoją pracę i umożliwić Ci dzielenie się nią.",
 	"ME": "Ja",

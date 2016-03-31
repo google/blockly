@@ -246,10 +246,16 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
       absoluteTop = 0;
     }
     var viewHeight = this.height_;
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      viewHeight += this.CORNER_RADIUS - this.SCROLLBAR_PADDING;
+    }
     var viewWidth = this.width_ - 2 * this.SCROLLBAR_PADDING;
   } else {
     var viewHeight = this.height_ - 2 * this.SCROLLBAR_PADDING;
     var viewWidth = this.width_;
+    if (!this.RTL) {
+      viewWidth -= this.SCROLLBAR_PADDING;
+    }
   }
 
   var metrics = {
@@ -720,7 +726,7 @@ Blockly.Flyout.prototype.onMouseMove_ = function(e) {
     this.startDragMouseY_ = e.clientY;
     var metrics = this.getMetrics_();
     var y = metrics.viewTop - dy;
-    y = goog.math.clamp(y, o, metrics.contentHeight - metrics.viewHeight);
+    y = goog.math.clamp(y, 0, metrics.contentHeight - metrics.viewHeight);
     this.scrollbar_.set(y);
   }
 };

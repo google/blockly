@@ -265,11 +265,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
         case 'CATEGORY':
           var childOut = rootOut.createNode(childIn.getAttribute('name'));
           childOut.blocks = [];
-          if (that.horizontalLayout_) {
-            treeOut.add(childOut);
-          } else {
-            treeOut.addChildAt(childOut, 0);
-          }
+          treeOut.add(childOut);
           var custom = childIn.getAttribute('custom');
           if (custom) {
             // Variables and procedures are special dynamic categories.
@@ -303,13 +299,8 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
             if (lastElement.tagName.toUpperCase() == 'CATEGORY') {
               // Separator between two categories.
               // <sep></sep>
-              if (that.horizontalLayout_) {
-                treeOut.add(new Blockly.Toolbox.TreeSeparator(
-                    that.treeSeparatorConfig_));
-              } else {
-                treeOut.addChildAt(new Blockly.Toolbox.TreeSeparator(
-                    that.treeSeparatorConfig_), 0);
-              }
+              treeOut.add(new Blockly.Toolbox.TreeSeparator(
+                  that.treeSeparatorConfig_));
             } else {
               // Change the gap between two blocks.
               // <sep gap="36"></sep>

@@ -1,0 +1,20 @@
+{
+  "name": "blockly",
+  "description": "Blockly is a library for building visual programming editors.",
+  "main": "blockly_compressed.js",
+  "license": "Apache-2.0",
+  "keywords": [
+    "blockly"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "appengine",
+    "demos",
+    "core"
+  ]
+}

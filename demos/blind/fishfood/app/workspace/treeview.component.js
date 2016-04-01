@@ -27,7 +27,8 @@ app.TreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
-<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{setId(parentList)}}' [attr.aria-labelledby]='block.id'>
+<li #parentList aria-selected=false role='treeitem' class='hasChildren' [attr.aria-level]='level' id='{{setId(parentList)}}' [attr.aria-labelledby]='block.id'>
+  {{checkParentList(parentList)}}
   <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
   <ol role='group' class='children' [attr.aria-level]='level+1'>
     <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' [attr.aria-level]='level+1' aria-selected=false  [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
@@ -63,7 +64,7 @@ app.TreeView = ng.core
     `,
     directives: [ng.core.forwardRef(
         function() { return app.TreeView; }), app.FieldView],
-    inputs: ['block', 'isTopBlock', 'level', 'parentId'],
+    inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId'],
   })
   .Class({
     constructor: [app.ClipboardService, app.TreeService, function(_service, _service2) {
@@ -72,10 +73,20 @@ app.TreeView = ng.core
       this.sharedClipboardService = _service;
       this.treeService = _service2;
     }],
+    checkParentList: function(parentList) {
+      console.log("setting parent list");
+      var tree = parentList;
+      while (tree && tree.id != 'workspace-tree0') {
+        tree = tree.parentNode;
+      }
+      if (tree && tree.getAttribute('aria-activedescendant') == parentList.id){
+        this.treeService.updateSelectedNode(parentList, tree, false);
+      }
+    },
     setId: function(block){
       if (this.isTopBlock){
         //TODO(madeeha): this should be the number of top level block that this is.
-        return parentId+'node0';
+        return this.parentId+'-node0';
       }
       return this.treeService.createId(parentList);
     },

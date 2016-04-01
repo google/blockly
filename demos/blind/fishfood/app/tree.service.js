@@ -21,27 +21,30 @@ app.TreeService = ng.core
       }
     },
     setActiveDesc: function(node, id) {
-      console.log("setting active node for tree " + id);
+      console.log("setting active descendant for tree " + id);
       this.activeDesc_[id] = node;
     },
     getActiveDesc: function(id) {
       return this.activeDesc_[id];
     },
-    updateSelectedNode: function(node, tree){
+    updateSelectedNode: function(node, tree, keepFocus){
       console.log("updating node: " + node.id);
       var treeId = tree.id;
       var activeDesc = this.getActiveDesc(treeId);
       if (activeDesc) {
         activeDesc.classList.remove("activedescendant");
-        node.classList.add("activedescendant");
-        tree.setAttribute("aria-activedescendant",node.id);
-        this.setActiveDesc(node, treeId);
-        node.setAttribute("aria-selected","true");
-        //make sure keyboard focus is on tree as a whole
-        //in case before the user was editing a block and keyboard focus got shifted.
-        tree.focus();
       } else {
         console.log("updateSelectedNode: there is no active descendant");
+      }
+      node.classList.add("activedescendant");
+      tree.setAttribute("aria-activedescendant",node.id);
+      this.setActiveDesc(node, treeId);
+      node.setAttribute("aria-selected","true");
+      //make sure keyboard focus is on tree as a whole
+      //in case before the user was editing a block and keyboard focus got shifted.
+
+      if(keepFocus){
+        tree.focus();
       }
     },
     keyHandler: function(e, tree){

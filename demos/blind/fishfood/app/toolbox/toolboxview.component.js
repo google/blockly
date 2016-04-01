@@ -29,7 +29,7 @@ app.ToolboxView = ng.core
   selector: 'toolbox-view',
   template: `
 <div class='treeview'>
-<h1 id='toolbox-title'>Toolbox</h1>
+<h3 id='toolbox-title'>Toolbox</h3>
 <ol #tree id='toolbox-tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' tabIndex='0' role='group' class='tree' aria-labelledby='toolbox-title' (keydown)="treeService.keyHandler($event, tree)">
 {{treeService.setActiveAttribute(tree)}}
 <li #parent role='treeitem' aria-level='1' aria-selected=false *ngFor='#category of makeArray(sightedToolbox); #i=index'>

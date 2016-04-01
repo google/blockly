@@ -27,10 +27,10 @@ app.TreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
-<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{treeService.createId(parentList)}}' [attr.aria-labelledby]='block.id'>
+<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{setId(parentList)}}' [attr.aria-labelledby]='block.id'>
   <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
   <ol role='group' class='children' [attr.aria-level]='level+1'>
-    <li aria-selected=false #listItem role='treeitem' [attr.aria-level]='level+1' id='{{treeService.createId(listItem)}}' [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
+    <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' [attr.aria-level]='level+1' aria-selected=false  [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
         <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
           <option value='NO_ACTION' selected>select an action</option>
           <option value='CUT_BLOCK'>cut block</option>
@@ -45,8 +45,8 @@ app.TreeView = ng.core
     </li>
     <div *ngFor='#inputBlock of block.inputList'>
       <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
-      <tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()'></tree-view>
-      <li *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
+      <tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [isTopBlock]='false' [level]='level'></tree-view>
+      <li #inputList [attr.aria-level]='level+1' id='{{treeService.createId(inputList)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
         {{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
         <select aria-label='insert input menu' (change)='inputMenuSelected(inputBlock.connection, $event)'>
           <option value='NO_ACTION' selected>select an action</option>
@@ -57,13 +57,13 @@ app.TreeView = ng.core
     </div>
   </ol>
 </li>
-<li *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
-  <tree-view [block]='block.nextConnection.targetBlock()' [isTopBlock]='false'></tree-view>
+<li #nextBlock [attr.aria-level]='level' id='{{treeService.createId(nextBlock)}}' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
+  <tree-view [block]='block.nextConnection.targetBlock()' [isTopBlock]='false' [level]='level+1'></tree-view>
 </li>
     `,
     directives: [ng.core.forwardRef(
         function() { return app.TreeView; }), app.FieldView],
-    inputs: ['block', 'isTopBlock', 'level'],
+    inputs: ['block', 'isTopBlock', 'level', 'parentId'],
   })
   .Class({
     constructor: [app.ClipboardService, app.TreeService, function(_service, _service2) {
@@ -72,6 +72,13 @@ app.TreeView = ng.core
       this.sharedClipboardService = _service;
       this.treeService = _service2;
     }],
+    setId: function(block){
+      if (this.isTopBlock){
+        //TODO(madeeha): this should be the number of top level block that this is.
+        return parentId+'node0';
+      }
+      return this.treeService.createId(parentList);
+    },
     getInfo: function(block) {
       //List all inputs
       if (this.infoBlocks[block.id]) {

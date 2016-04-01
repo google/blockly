@@ -34,7 +34,7 @@ app.ToolboxTreeView = ng.core
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
   <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
     {{addClass(parentList, 'hasChildren')}}
-    <li #listItem *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'  [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
+    <li #listItem id='{{treeService.createId(listItem)}}' *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'  [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
       <select #select id='{{treeService.createId(select)}}' [attr.aria-labelledby]='block.id' aria-label='toolbar block menu' (change)='blockMenuSelected(block, $event)'>
         <option value='NO_ACTION' selected>select an action</option>
         <option value='COPY_TO_WORKSPACE'>copy to workspace</option>

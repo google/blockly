@@ -28,17 +28,20 @@ app.ToolboxView = ng.core
 .Component({
   selector: 'toolbox-view',
   template: `
-<label><h3 id='toolbox-title'>Toolbox</h3></label>
-<ol #tree *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' class='children' role='group' aria-labelledby='toolbox-title'>
-<li #parent *ngFor='#category of makeArray(sightedToolbox); #i=index' role='treeitem' aria-level='2' aria-selected=false>
+<div class='treeview'>
+<h1 id='toolbox-title'>Toolbox</h1>
+<ol #tree id='toolbox-tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' tabIndex='0' role='group' class='tree' aria-labelledby='toolbox-title' (keydown)="treeService.keyHandler($event, tree)">
+{{treeService.setActiveAttribute(tree)}}
+<li #parent role='treeitem' aria-level='1' aria-selected=false *ngFor='#category of makeArray(sightedToolbox); #i=index'>
   <label #name>{{category.attributes.name.value}}</label>
   {{labelCategory(name, i, tree)}}
-  <ol *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0' class='children' role='group'>
-    <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=3 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
+  <ol class='children' role='group' *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0'>
+    <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
     {{addClass(parent, 'hasChildren')}}
   </ol>
 </li>
 </ol>
+</div>
   `,
   directives: [app.ToolboxTreeView],
 })
@@ -65,10 +68,10 @@ app.ToolboxView = ng.core
 	     parent = parent.parentNode;
       }
       parent.setAttribute("aria-label", h2.innerText);
-      parent.id = 'tree-node'+i;
-      if (i == 0 && tree.getAttribute('aria-activedescendant') == 'tree-node0') {
+      parent.id = 'toolbox-tree-node'+i;
+      if (i == 0 && tree.getAttribute('aria-activedescendant') == 'toolbox-tree-node0') {
         this.addClass(parent, 'activedescendant');
-        this.treeService.setActiveDesc(parent);
+        this.treeService.setActiveDesc(parent, tree.id);
         parent.setAttribute("aria-selected", "true");
       }
   },

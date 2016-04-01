@@ -3,8 +3,8 @@ var app = app || {};
 app.TreeService = ng.core
   .Class({
   	constructor: function(){
-      this.activeDesc_;
-      this.tree_;
+      console.log("making a new tree service");
+      this.activeDesc_={};
       this.previousKey_;
       this.inDropdown = false;
   	},
@@ -15,40 +15,41 @@ app.TreeService = ng.core
       return Blockly.genUid();
     },
     setActiveAttribute: function(tree){
-      if (!this.tree_){
-        this.tree_ = tree;
-      }
       if (!tree.getAttribute('aria-activedescendant')){
         console.log("setting tree active descendant");
-        tree.setAttribute('aria-activedescendant', 'tree-node0');
+        tree.setAttribute('aria-activedescendant', tree.id+'-node0');
       }
     },
-    setActiveDesc: function(node) {
-      this.activeDesc_ = node;
+    setActiveDesc: function(node, id) {
+      console.log("setting active node for tree " + id);
+      this.activeDesc_[id] = node;
     },
-    getActiveDesc: function() {
-      return this.activeDesc_;
+    getActiveDesc: function(id) {
+      return this.activeDesc_[id];
     },
-    updateSelectedNode: function(node){
+    updateSelectedNode: function(node, tree){
       console.log("updating node: " + node.id);
-      if (this.activeDesc_) {
-        this.activeDesc_.classList.remove("activedescendant");
+      var treeId = tree.id;
+      var activeDesc = this.getActiveDesc(treeId);
+      if (activeDesc) {
+        activeDesc.classList.remove("activedescendant");
         node.classList.add("activedescendant");
         tree.setAttribute("aria-activedescendant",node.id);
-        this.activeDesc_ = node;
+        this.setActiveDesc(node, treeId);
         node.setAttribute("aria-selected","true");
         //make sure keyboard focus is on tree as a whole
         //in case before the user was editing a block and keyboard focus got shifted.
-        this.tree_.focus();
+        tree.focus();
       } else {
-        console.log("there is no active descendant");
+        console.log("updateSelectedNode: there is no active descendant");
       }
     },
-    keyHandler: function(e){
+    keyHandler: function(e, tree){
         //console.log(document.activeElement);
-        var node = this.activeDesc_;
+        var treeId = tree.id;
+        var node = this.getActiveDesc(treeId);
         if (!node){
-          console.log("no active descendant");
+          console.log("KeyHandler: no active descendant");
         }
         console.log(e.keyCode);
         console.log("inside TreeService");
@@ -73,7 +74,7 @@ app.TreeService = ng.core
             if (nextNode.className == "treeview" || nextNode == null){
               return;
             }
-            this.updateSelectedNode(nextNode);
+            this.updateSelectedNode(nextNode, tree);
             break;
           case 38:
             //up-facing arrow: go up a level, if possible. If not, do nothing
@@ -82,7 +83,7 @@ app.TreeService = ng.core
             console.log("node passed in: " + node.id);
             var prevSibling = this.getPreviousSibling(node);
             if (prevSibling && prevSibling.tagName != 'H1'){
-              this.updateSelectedNode(prevSibling);
+              this.updateSelectedNode(prevSibling, tree);
             } else {
               console.log("no previous sibling");
             }
@@ -99,7 +100,7 @@ app.TreeService = ng.core
             console.log("in right arrow section");
             var firstChild = this.getFirstChild(node);
             if (firstChild){
-              this.updateSelectedNode(firstChild);
+              this.updateSelectedNode(firstChild, tree);
             } else {
               console.log("no valid child");
             }
@@ -117,7 +118,7 @@ app.TreeService = ng.core
             e.stopPropagation();
             var nextSibling = this.getNextSibling(node);
             if (nextSibling){
-              this.updateSelectedNode(nextSibling);
+              this.updateSelectedNode(nextSibling, tree);
             } else {
               console.log("no next sibling");
             }
@@ -130,8 +131,9 @@ app.TreeService = ng.core
             }
             //if I've pressed enter, I want to interact with a child
             console.log("enter is pressed");
-            if (this.activeDesc_){
-              var children = this.activeDesc_.children;
+            var activeDesc = this.getActiveDesc(treeId);
+            if (activeDesc){
+              var children = activeDesc.children;
               var child = children[0];
               if (children.length == 1 && child.tagName == 'INPUT' || child.tagName == 'SELECT'){
                 child.focus();
@@ -146,7 +148,7 @@ app.TreeService = ng.core
                 }
               }
             } else {
-              console.log("no activeDesc_");
+              console.log("no activeDesc");
             }
         }
         this.previousKey_=e.keyCode;

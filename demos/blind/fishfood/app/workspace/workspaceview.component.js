@@ -28,24 +28,29 @@ app.WorkspaceView = ng.core
     selector: 'workspace-view',
     viewInjector: [app.ClipboardService],
     template: `
-  <div *ngIf='workspace'>
+  <div class='treeview' *ngIf='workspace'>
   <label><h3 id='workspace-title'>Workspace</h3>
   <button (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
   <button (click)="workspace.clear()" disabled={{disableRunCode()}}>Clear Workspace</button>
   </label>
-  <ol *ngFor='#block of workspace.topBlocks_' class='children' role='group' aria-labelledby='workspace-title'>
-    <tree-view [level]=2 [block]='block' [isTopBlock]='true'></tree-view>
+  <ol #tree id={{makeId(i)}} *ngFor='#block of workspace.topBlocks_; #i=index' tabIndex='0' class='tree' role='group' aria-labelledby='workspace-title' (keydown)="treeService.keyHandler($event, tree)">
+    {{treeService.setActiveAttribute(tree)}}
+    <tree-view [level]=1 [block]='block' [isTopBlock]='true' [topBlockIndex]='i'></tree-view>
   </ol>
   </div>
     `,
     directives: [app.TreeView],
   })
   .Class({
-    constructor: function() {
+    constructor: [app.TreeService, function(_service) {
       if (app.workspace) {
         this.workspace = app.workspace;
         this.level = app.level;
+        this.treeService = _service;
       }
+    }],
+    makeId: function(index){
+      return 'workspace-tree'+index;
     },
     runCode: function() {
       //var code = Blockly.JavaScript.workspaceToCode(this.workspace);

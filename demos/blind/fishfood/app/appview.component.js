@@ -28,16 +28,16 @@ app.AppView = ng.core
   .Component({
     selector: 'app',
     template: `
-    <div class='treeview'>
-    <ol #tree id='tree' class='tree' role='tree' tabIndex=0 (keydown)="treeService.keyHandler($event)">
-      <li id='toolbox' class='hasChildren' role='treeitem' aria-level='1' aria-labelledby='toolbox-title' aria-selected=false>
+    <table>
+    <tr>
+      <td>
         <toolbox-view>Loading Toolbox...</toolbox-view>
-      </li>
-      <li id='workspace' class='hasChildren' role='treeitem' aria-level='1' aria-labelledby='workspace-title' aria-selected=false>
+      </td>
+      <td>
         <workspace-view>Loading Workspace...</workspace-view>
-      </li>
-    </ol>
-    </div>
+      </td>
+    </tr>
+    </table>
     `,
     directives: [app.ToolboxView, app.WorkspaceView],
     providers: [app.ClipboardService, app.TreeService],

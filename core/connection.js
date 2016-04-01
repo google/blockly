@@ -64,12 +64,76 @@ Blockly.Connection.REASON_CHECKS_FAILED = 4;
 Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 5;
 
 /**
- * Connect two connections together.
- * @param {!Blockly.Connection} parentConnection Connection on superior block.
+ * Connection this connection connects to.  Null if not connected.
+ * @type {Blockly.Connection}
+ */
+Blockly.Connection.prototype.targetConnection = null;
+
+/**
+ * List of compatible value types.  Null if all types are compatible.
+ * @type {Array}
+ * @private
+ */
+Blockly.Connection.prototype.check_ = null;
+
+/**
+ * DOM representation of a shadow block, or null if none.
+ * @type {Element}
+ * @private
+ */
+Blockly.Connection.prototype.shadowDom_ = null;
+
+/**
+ * Horizontal location of this connection.
+ * @type {number}
+ * @private
+ */
+Blockly.Connection.prototype.x_ = 0;
+
+/**
+ * Vertical location of this connection.
+ * @type {number}
+ * @private
+ */
+Blockly.Connection.prototype.y_ = 0;
+
+/**
+ * Has this connection been added to the connection database?
+ * @type {boolean}
+ * @private
+ */
+Blockly.Connection.prototype.inDB_ = false;
+
+/**
+ * Connection database for connections of this type on the current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.Connection.prototype.db_ = null;
+
+/**
+ * Connection database for connections compatible with this type on the
+ * current workspace.
+ * @type {Blockly.ConnectionDB}
+ * @private
+ */
+Blockly.Connection.prototype.dbOpposite_ = null;
+
+/**
+ * Whether this connections is hidden (not tracked in a database) or not.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Connection.prototype.hidden_ = null;
+
+/**
+ * Connect two connections together.  This is the connection on the superior
+ * block.
  * @param {!Blockly.Connection} childConnection Connection on inferior block.
  * @private
  */
-Blockly.Connection.connect_ = function(parentConnection, childConnection) {
+Blockly.Connection.prototype.connect_ = function(childConnection) {
+  var parentConnection = this;
   var parentBlock = parentConnection.getSourceBlock();
   var childBlock = childConnection.getSourceBlock();
   // Disconnect any existing parent on the child connection.
@@ -163,89 +227,7 @@ Blockly.Connection.connect_ = function(parentConnection, childConnection) {
     event.recordNew();
     Blockly.Events.fire(event);
   }
-
-  if (parentBlock.rendered) {
-    parentBlock.updateDisabled();
-  }
-  if (childBlock.rendered) {
-    childBlock.updateDisabled();
-  }
-  if (parentBlock.rendered && childBlock.rendered) {
-    if (parentConnection.type == Blockly.NEXT_STATEMENT ||
-        parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
-      // Child block may need to square off its corners if it is in a stack.
-      // Rendering a child will render its parent.
-      childBlock.render();
-    } else {
-      // Child block does not change shape.  Rendering the parent node will
-      // move its connected children into position.
-      parentBlock.render();
-    }
-  }
 };
-
-/**
- * Connection this connection connects to.  Null if not connected.
- * @type {Blockly.Connection}
- */
-Blockly.Connection.prototype.targetConnection = null;
-
-/**
- * List of compatible value types.  Null if all types are compatible.
- * @type {Array}
- * @private
- */
-Blockly.Connection.prototype.check_ = null;
-
-/**
- * DOM representation of a shadow block, or null if none.
- * @type {Element}
- * @private
- */
-Blockly.Connection.prototype.shadowDom_ = null;
-
-/**
- * Horizontal location of this connection.
- * @type {number}
- * @private
- */
-Blockly.Connection.prototype.x_ = 0;
-
-/**
- * Vertical location of this connection.
- * @type {number}
- * @private
- */
-Blockly.Connection.prototype.y_ = 0;
-
-/**
- * Has this connection been added to the connection database?
- * @type {boolean}
- * @private
- */
-Blockly.Connection.prototype.inDB_ = false;
-
-/**
- * Connection database for connections of this type on the current workspace.
- * @type {Blockly.ConnectionDB}
- * @private
- */
-Blockly.Connection.prototype.db_ = null;
-
-/**
- * Connection database for connections compatible with this type on the
- * current workspace.
- * @type {Blockly.ConnectionDB}
- * @private
- */
-Blockly.Connection.prototype.dbOpposite_ = null;
-
-/**
- * Whether this connections is hidden (not tracked in a database) or not.
- * @type {boolean}
- * @private
- */
-Blockly.Connection.prototype.hidden_ = null;
 
 /**
  * Sever all links to this connection (not including from the source object).
@@ -282,6 +264,14 @@ Blockly.Connection.prototype.getSourceBlock = function() {
 Blockly.Connection.prototype.isSuperior = function() {
   return this.type == Blockly.INPUT_VALUE ||
       this.type == Blockly.NEXT_STATEMENT;
+};
+
+/**
+ * Is the connection connected?
+ * @return {boolean} True if connection is connected to another connection.
+ */
+Blockly.Connection.prototype.isConnected = function() {
+  return !!this.targetConnection;
 };
 
 /**
@@ -404,10 +394,10 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   // Determine which block is superior (higher in the source stack).
   if (this.isSuperior()) {
     // Superior block.
-    Blockly.Connection.connect_(this, otherConnection);
+    this.connect_(otherConnection);
   } else {
     // Inferior block.
-    Blockly.Connection.connect_(otherConnection, this);
+    otherConnection.connect_(this);
   }
 };
 
@@ -494,12 +484,12 @@ Blockly.Connection.prototype.disconnect = function() {
     childBlock = this.sourceBlock_;
     parentConnection = otherConnection;
   }
-  this.disconnectInternal(parentBlock, childBlock, parentConnection);
+  this.disconnectInternal(parentBlock, childBlock, otherConnection);
   this.respawnShadow(parentConnection, parentBlock);
 };
 
 Blockly.Connection.prototype.disconnectInternal = function(parentBlock,
-    childBlock, parentConnection) {
+    childBlock, otherConnection) {
   var event;
   if (Blockly.Events.isEnabled()) {
     event = new Blockly.Events.Move(childBlock);
@@ -604,15 +594,4 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
  */
 Blockly.Connection.prototype.getShadowDom = function() {
   return this.shadowDom_;
-};
-
-/**
- * Find all nearby compatible connections to this connection.
- * Type checking does not apply, since this function is used for bumping.
- * @param {number} maxLimit The maximum radius to another connection.
- * @return {!Array.<Blockly.Connection>} List of connections.
- * @private
- */
-Blockly.Connection.prototype.neighbours_ = function(maxLimit) {
-  return this.dbOpposite_.getNeighbours(this, maxLimit);
 };

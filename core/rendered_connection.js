@@ -24,10 +24,10 @@
  */
 'use strict';
 
+
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
-
 
 /**
  * Class for a connection between blocks that may be rendered on screen.
@@ -223,7 +223,6 @@ Blockly.RenderedConnection.prototype.unhideAll = function() {
   return renderList;
 };
 
-
 /**
  * Remove the highlighting around this connection.
  */
@@ -287,9 +286,9 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
 };
 
 Blockly.RenderedConnection.prototype.disconnectInternal = function(parentBlock,
-    childBlock, parentConnection) {
+    childBlock, otherConnection) {
   Blockly.RenderedConnection.superClass_.disconnectInternal.call(this,
-      parentBlock, childBlock, parentConnection);
+      parentBlock, childBlock, otherConnection);
   // Rerender the parent so that it may reflow.
   if (parentBlock.rendered) {
     parentBlock.render();
@@ -316,5 +315,43 @@ Blockly.RenderedConnection.prototype.respawnShadow = function(parentConnection,
     }
     blockShadow.initSvg();
     blockShadow.render(false);
+  }
+};
+
+/**
+ * Find all nearby compatible connections to this connection.
+ * Type checking does not apply, since this function is used for bumping.
+ * @param {number} maxLimit The maximum radius to another connection.
+ * @return {!Array.<Blockly.Connection>} List of connections.
+ * @private
+ */
+Blockly.RenderedConnection.prototype.neighbours_ = function(maxLimit) {
+  return this.dbOpposite_.getNeighbours(this, maxLimit);
+};
+
+Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
+  Blockly.RenderedConnection.superClass_.connect_.call(this, childConnection);
+
+  var parentConnection = this;
+  var parentBlock = parentConnection.getSourceBlock();
+  var childBlock = childConnection.getSourceBlock();
+
+  if (parentBlock.rendered) {
+    parentBlock.updateDisabled();
+  }
+  if (childBlock.rendered) {
+    childBlock.updateDisabled();
+  }
+  if (parentBlock.rendered && childBlock.rendered) {
+    if (parentConnection.type == Blockly.NEXT_STATEMENT ||
+        parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
+      // Child block may need to square off its corners if it is in a stack.
+      // Rendering a child will render its parent.
+      childBlock.render();
+    } else {
+      // Child block does not change shape.  Rendering the parent node will
+      // move its connected children into position.
+      parentBlock.render();
+    }
   }
 };

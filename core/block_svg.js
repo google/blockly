@@ -1589,3 +1589,7 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
   }
   return myConnections;
 };
+
+Blockly.BlockSvg.prototype.makeConnection = function(type) {
+  return new Blockly.RenderedConnection(this, type);
+};

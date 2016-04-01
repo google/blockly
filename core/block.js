@@ -746,8 +746,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
     if (!this.previousConnection) {
       goog.asserts.assert(!this.outputConnection,
           'Remove output connection prior to adding previous connection.');
-      this.previousConnection =
-          new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
+      this.previousConnection = this.makeConnection(Blockly.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -772,8 +771,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.nextConnection) {
-      this.nextConnection =
-          new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
+      this.nextConnection = this.makeConnection(Blockly.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -801,8 +799,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     if (!this.outputConnection) {
       goog.asserts.assert(!this.previousConnection,
           'Remove previous connection prior to adding output connection.');
-      this.outputConnection =
-          new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
+      this.outputConnection = this.makeConnection(Blockly.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {
@@ -1159,7 +1156,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
-    connection = new Blockly.Connection(this, type);
+    connection = this.makeConnection(type);
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
@@ -1335,4 +1332,23 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
   event.recordNew();
   Blockly.Events.fire(event);
+};
+
+/**
+ * Database of all blocks.
+ * @private
+ */
+Blockly.Block.BlockDB_ = Object.create(null);
+
+/**
+ * Find the block with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Block.getById = function(id) {
+  return Blockly.Block.BlockDB_[id] || null;
+};
+
+Blockly.Block.prototype.makeConnection = function(type) {
+  return new Blockly.Connection(this, type);
 };

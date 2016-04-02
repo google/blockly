@@ -55,7 +55,7 @@ app.ToolboxView = ng.core
         _this.sightedToolbox = xhttp.responseXML;
       }
     };
-    xhttp.open('GET', 'oneblock_ToolboxXml.xml', true);
+    xhttp.open('GET', 'ToolboxXml.xml', true);
     xhttp.send();
 
     this.toolboxCategories = [];

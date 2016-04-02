@@ -121,15 +121,18 @@ app.ToolboxTreeView = ng.core
           var xml = Blockly.Xml.blockToDom_(block);
           Blockly.Xml.domToBlock(app.workspace, xml);
           console.log('added block to workspace');
+          alert('block added to workspace');
           break;
         case 'SEND_TO_SELECTED':
           if (this.sharedClipboardService) {
             this.sharedClipboardService.pasteToMarkedConnection(block);
+            alert('block sent to marked spot');
           }
           break;
         case 'COPY_BLOCK':
           if (this.sharedClipboardService) {
             this.sharedClipboardService.copy(block);
+            alert('block copied to clipboard');
           }
           break;
       }

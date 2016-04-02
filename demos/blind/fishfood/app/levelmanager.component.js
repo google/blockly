@@ -1,7 +1,7 @@
 /**
  * Blockly Demos: BlindBlockly
  *
- * Copyright 2016 Google Inc.
+ * Copyleft 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,22 +31,22 @@ app.levelInstructions[1] = [`If you're using a screen reader, make sure to set y
     Once you have tabbed to the tree, use your arrow keys to navigate. Trees are
     just a fancy way of saying nested list.`,
     `If you're at item A in the tree and you hit the up or down arrows, you will
-    move up and down the list A is in. If you hit the right arrow, you'll be taken
-    back to the parent list item of A. Hitting the left arrow will take you to the
+    move up and down the list A is in. If you hit the left arrow, you'll be taken
+    back to the parent list item of A. Hitting the right arrow will take you to the
     first child list item of A.`];
 app.levelInstructions[2] = [`If you're using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
     `Play the C note.`,
     `Don't forget how to navigate a tree: If you're at item A in the tree and you hit the up or down arrows, you will
-    move up and down the list A is in. If you hit the right arrow, you'll be taken
-    back to the parent list item of A. Hitting the left arrow will take you to the
+    move up and down the list A is in. If you hit the left arrow, you'll be taken
+    back to the parent list item of A. Hitting the right arrow will take you to the
     first child list item of A.`];
 app.levelInstructions[3] = [`If you're using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
     `Play 4 C notes. Use only 2 blocks.`,
     `Don't forget how to navigate a tree: If you're at item A in the tree and you hit the up or down arrows, you will
-    move up and down the list A is in. If you hit the right arrow, you'll be taken
-    back to the parent list item of A. Hitting the left arrow will take you to the
+    move up and down the list A is in. If you hit the left arrow, you'll be taken
+    back to the parent list item of A. Hitting the right arrow will take you to the
     first child list item of A.`];
 app.levelToolboxes=['','level1_ToolboxXml.xml','level1_ToolboxXml.xml','level1_ToolboxXml.xml'];
 app.levelWorkspaces=[undefined,new Blockly.Workspace(),new Blockly.Workspace(),new Blockly.Workspace()];
@@ -60,9 +60,9 @@ app.LevelManagerView = ng.core
     template: `
     <h2>Instructions</h2>
     <p *ngFor='#para of setInstructions()'>{{para}}</p>
-    <button (click)='setLevel(1)' disabled={{disableButton(1)}}>Level 1</button>
-    <button (click)='setLevel(2)' disabled={{disableButton(2)}}>Level 2</button>
-    <button (click)='setLevel(3)' disabled={{disableButton(3)}}>Level 3</button>
+    <button #level1 aria-selected='true' (click)='setLevel(1, level1, [level2,level3])' disabled={{disableButton(1)}}>Level 1</button>
+    <button #level2 aria-selected='false' (click)='setLevel(2, level2, [level1,level3])' disabled={{disableButton(2)}}>Level 2</button>
+    <button #level3 aria-selected='false' (click)='setLevel(3, level3, [level2,level1])' disabled={{disableButton(3)}}>Level 3</button>
     <app></app>
     `,
     directives: [app.AppView],
@@ -79,7 +79,6 @@ app.LevelManagerView = ng.core
         if (correct && app.level >= app.maxLevelAllowed){
           app.maxLevelAllowed = Math.min(app.level + 1,3);
         }
-
         return correct;
       };
       app.levelValidationFunctions[2] = function(){
@@ -94,9 +93,13 @@ app.LevelManagerView = ng.core
         return true;
       }
     },
-    setLevel: function(num){
+    setLevel: function(num, rightButton, wrongButtons){
       app.level = num;
       app.workspace = app.levelWorkspaces[app.level];
+      rightButton.setAttribute('aria-selected','true');
+      for (var i=0; i<wrongButtons.length; i++) {
+        wrongButtons[i].setAttribute('aria-selected','false');
+      }
     },
     setInstructions: function() {
       if (app.level && app.levelInstructions) {

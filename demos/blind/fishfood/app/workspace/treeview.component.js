@@ -31,7 +31,7 @@ app.TreeView = ng.core
   {{checkParentList(parentList)}}
   <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
   <ol role='group' class='children' [attr.aria-level]='level+1'>
-    <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' [attr.aria-level]='level+1' aria-selected=false  [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
+    <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' [attr.aria-level]='level+1' aria-selected=false  aria-label='block action menu'>
         <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
           <option value='NO_ACTION' selected>select an action</option>
           <option value='CUT_BLOCK'>cut block</option>
@@ -118,29 +118,37 @@ app.TreeView = ng.core
       switch (event.target.value) {
         case 'DELETE_BLOCK':
           block.dispose(true);
+          alert('block deleted');
           break;
         case 'CUT_BLOCK':
           this.sharedClipboardService.cut(block);
+          alert('block cut');
           break;
         case 'COPY_BLOCK':
           this.sharedClipboardService.copy(block);
+          alert('block copied');
           break;
         case 'PASTE_BELOW':
           this.sharedClipboardService.paste(block.nextConnection);
+          alert('block pasted below');
           break;
         case 'PASTE_ABOVE':
           this.sharedClipboardService.paste(block.previousConnection);
+          alert('block pasted above');
           break;
         case 'MARK_BELOW':
           this.sharedClipboardService.markConnection(block.nextConnection);
+          alert('marked spot below');
           break;
         case 'MARK_ABOVE':
           this.sharedClipboardService.markConnection(block.previousConnection);
+          alert('marked spot above');
           break;
         case 'SEND_TO_SELECTED':
           if (this.sharedClipboardService) {
             this.sharedClipboardService.pasteToMarkedConnection(block);
             block.dispose(true);
+            alert('block sent to marked spot');
           }
           break;
       }

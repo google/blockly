@@ -64,6 +64,7 @@ Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 5;
  * Connect two connections together.
  * @param {!Blockly.Connection} parentConnection Connection on superior block.
  * @param {!Blockly.Connection} childConnection Connection on inferior block.
+ * @private
  */
 Blockly.Connection.connect_ = function(parentConnection, childConnection) {
   var parentBlock = parentConnection.getSourceBlock();

@@ -828,6 +828,8 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       if (this.parentBlock_) {
         // Push this block to the very top of the stack.
         this.unplug();
+        var group = this.getSvgRoot();
+        group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
         this.disconnectUiEffect();
       }
       this.setDragging_(true);

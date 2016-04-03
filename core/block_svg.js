@@ -726,7 +726,9 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
           Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(descendantCount)),
       enabled: true,
       callback: function() {
+        Blockly.Events.setGroup(true);
         block.dispose(true, true);
+        Blockly.Events.setGroup(false);
       }
     };
     menuOptions.push(deleteOption);

@@ -268,6 +268,7 @@ Blockly.onKeyDown_ = function(e) {
   }
   if (deleteBlock) {
     // Common code for delete and cut.
+    Blockly.Events.setGroup(true);
     Blockly.hideChaff();
     var heal = Blockly.dragMode_ != Blockly.DRAG_FREE;
     Blockly.selected.dispose(heal, true);
@@ -275,6 +276,7 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.highlightedConnection_.unhighlight();
       Blockly.highlightedConnection_ = null;
     }
+    Blockly.Events.setGroup(false);
   }
 };
 

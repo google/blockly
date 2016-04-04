@@ -854,11 +854,6 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     // Check to see if any of this block's connections are within range of
     // another block's connection.
     var myConnections = this.getConnections_(false);
-    // Also check the last connection on this stack
-    var lastOnStack = this.lastConnectionInStack_();
-    if (lastOnStack && lastOnStack != this.nextConnection) {
-      myConnections.push(lastOnStack);
-    }
     var closestConnection = null;
     var localConnection = null;
     var radiusConnection = Blockly.SNAP_RADIUS;
@@ -925,8 +920,9 @@ Blockly.BlockSvg.prototype.setMovable = function(movable) {
 Blockly.BlockSvg.prototype.setEditable = function(editable) {
   Blockly.BlockSvg.superClass_.setEditable.call(this, editable);
   if (this.rendered) {
-    for (var i = 0; i < this.icons_.length; i++) {
-      this.icons_[i].updateEditable();
+    var icons = this.getIcons();
+    for (var i = 0; i < icons.length; i++) {
+      icons[i].updateEditable();
     }
   }
 };

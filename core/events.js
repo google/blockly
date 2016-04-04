@@ -651,8 +651,8 @@ Blockly.Events.Ui.prototype.type = Blockly.Events.UI;
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.Change.prototype.toJson = function() {
-  var json = Blockly.Events.Change.superClass_.toJson.call(this);
+Blockly.Events.Ui.prototype.toJson = function() {
+  var json = Blockly.Events.Ui.superClass_.toJson.call(this);
   json['element'] = this.element;
   if (this.newValue !== undefined) {
     json['newValue'] = this.newValue;

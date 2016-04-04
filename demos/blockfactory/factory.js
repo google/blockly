@@ -99,8 +99,8 @@ function updateLanguage() {
  */
 function formatJson_(blockType, rootBlock) {
   var JS = {};
-  // ID is not used by Blockly, but may be used by a loader.
-  JS.id = blockType;
+  // Type is not used by Blockly, but may be used by a loader.
+  JS.type = blockType;
   // Generate inputs.
   var message = [];
   var args = [];

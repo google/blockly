@@ -412,6 +412,12 @@ Blockly.init_ = function(mainWorkspace) {
           e.preventDefault();
         }
       });
+  Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
+      function(e) {
+        if (!Blockly.isTargetInput_(e)) {
+          e.preventDefault();
+        }
+      });
   // Bind events for scrolling the workspace.
   // Most of these events should be bound to the SVG's surface.
   // However, 'mouseup' has to be on the whole document so that a block dragged

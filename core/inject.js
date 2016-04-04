@@ -35,36 +35,26 @@ goog.require('goog.userAgent');
 
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
- * @param {!Element|string} container Containing element or its ID.
+ * @param {!Element|string} container Containing element, or its ID,
+ *     or a CSS selector.
  * @param {Object=} opt_options Optional dictionary of options.
  * @return {!Blockly.Workspace} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
   if (goog.isString(container)) {
-    container = document.getElementById(container);
+    container = document.getElementById(container) ||
+        document.querySelector(container);
   }
   // Verify that the container is in document.
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
   }
   var options = Blockly.parseOptions_(opt_options || {});
-  var workspace;
-  var startUi = function() {
-    var svg = Blockly.createDom_(container, options);
-    workspace = Blockly.createMainWorkspace_(svg, options);
-    Blockly.init_(workspace);
-    workspace.markFocused();
-    Blockly.bindEvent_(svg, 'focus', workspace, workspace.markFocused);
-  };
-  if (options.enableRealtime) {
-    var realtimeElement = document.getElementById('realtime');
-    if (realtimeElement) {
-      realtimeElement.style.display = 'block';
-    }
-    Blockly.Realtime.startRealtime(startUi, container, options.realtimeOptions);
-  } else {
-    startUi();
-  }
+  var svg = Blockly.createDom_(container, options);
+  var workspace = Blockly.createMainWorkspace_(svg, options);
+  Blockly.init_(workspace);
+  workspace.markFocused();
+  Blockly.bindEvent_(svg, 'focus', workspace, workspace.markFocused);
   return workspace;
 };
 
@@ -76,12 +66,16 @@ Blockly.inject = function(container, opt_options) {
  */
 Blockly.parseToolboxTree_ = function(tree) {
   if (tree) {
-    if (typeof tree != 'string' && typeof XSLTProcessor == 'undefined') {
-      // In this case the tree will not have been properly built by the
-      // browser. The HTML will be contained in the element, but it will
-      // not have the proper DOM structure since the browser doesn't support
-      // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
-      tree = tree.outerHTML;
+    if (typeof tree != 'string') {
+      if (typeof XSLTProcessor == 'undefined' && tree.outerHTML) {
+        // In this case the tree will not have been properly built by the
+        // browser. The HTML will be contained in the element, but it will
+        // not have the proper DOM structure since the browser doesn't support
+        // XSLTProcessor (XML -> HTML). This is the case in IE 9+.
+        tree = tree.outerHTML;
+      } else if (!(tree instanceof Element)) {
+        tree = null;
+      }
     }
     if (typeof tree == 'string') {
       tree = Blockly.Xml.textToDom(tree);
@@ -328,7 +322,6 @@ Blockly.createDom_ = function(container, options) {
     // x1, y1, x1, x2 properties will be set later in updateGridPattern_.
   }
   options.gridPattern = gridPattern;
-  options.svg = svg;
   return svg;
 };
 
@@ -352,7 +345,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
 
   if (!options.readOnly && !options.hasScrollbars) {
     var workspaceChanged = function() {
-      if (Blockly.dragMode_ == 0) {
+      if (Blockly.dragMode_ == Blockly.DRAG_NONE) {
         var metrics = mainWorkspace.getMetrics();
         var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
         var edgeTop = metrics.viewTop + metrics.absoluteTop;
@@ -411,7 +404,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
  */
 Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
-  var svg = mainWorkspace.options.svg;
+  var svg = mainWorkspace.getParentSvg();
   // Supress the browser's context menu.
   Blockly.bindEvent_(svg, 'contextmenu', null,
       function(e) {
@@ -460,9 +453,7 @@ Blockly.init_ = function(mainWorkspace) {
       if (options.RTL) {
         mainWorkspace.scrollX *= -1;
       }
-      var translation = 'translate(' + mainWorkspace.scrollX + ',0)';
-      mainWorkspace.getCanvas().setAttribute('transform', translation);
-      mainWorkspace.getBubbleCanvas().setAttribute('transform', translation);
+      mainWorkspace.translate(mainWorkspace.scrollX, 0);
     }
   }
   if (options.hasScrollbars) {

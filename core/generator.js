@@ -163,6 +163,8 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   var code = func.call(block, block);
   if (goog.isArray(code)) {
     // Value blocks return tuples of code and operator order.
+    goog.asserts.assert(block.outputConnection,
+        'Expecting string from statement block "%s".', block.type);
     return [this.scrub_(block, code[0]), code[1]];
   } else if (goog.isString(code)) {
     if (this.STATEMENT_PREFIX) {
@@ -202,8 +204,8 @@ Blockly.Generator.prototype.valueToCode = function(block, name, order) {
   }
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
-  goog.asserts.assertArray(tuple,
-      'Expecting tuple from value block "%s".', targetBlock.type);
+  goog.asserts.assertArray(tuple, 'Expecting tuple from value block "%s".',
+      targetBlock.type);
   var code = tuple[0];
   var innerOrder = tuple[1];
   if (isNaN(innerOrder)) {
@@ -239,8 +241,7 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
   var code = this.blockToCode(targetBlock);
   // Value blocks must return code and order of operations info.
   // Statement blocks must only return code.
-  goog.asserts.assertString(code,
-      'Expecting code from statement block "%s".',
+  goog.asserts.assertString(code, 'Expecting code from statement block "%s".',
       targetBlock && targetBlock.type);
   if (code) {
     code = this.prefixLines(/** @type {string} */ (code), this.INDENT);

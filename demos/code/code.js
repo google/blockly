@@ -79,7 +79,7 @@ Code.LANGUAGE_NAME = {
 /**
  * List of RTL languages.
  */
-Code.LANGUAGE_RTL = ['ar', 'fa', 'he'];
+Code.LANGUAGE_RTL = ['ar', 'fa', 'he', 'lki'];
 
 /**
  * Blockly's main workspace.
@@ -244,7 +244,7 @@ Code.LANG = Code.getLang();
  * List of tab names.
  * @private
  */
-Code.TABS_ = ['blocks', 'javascript', 'php', 'python', 'dart', 'xml'];
+Code.TABS_ = ['blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'xml'];
 
 Code.selected = 'blocks';
 
@@ -339,6 +339,14 @@ Code.renderContent = function() {
     if (typeof prettyPrintOne == 'function') {
       code = content.innerHTML;
       code = prettyPrintOne(code, 'dart');
+      content.innerHTML = code;
+    }
+  } else if (content.id == 'content_lua') {
+    code = Blockly.Lua.workspaceToCode(Code.workspace);
+    content.textContent = code;
+    if (typeof prettyPrintOne == 'function') {
+      code = content.innerHTML;
+      code = prettyPrintOne(code, 'lua');
       content.innerHTML = code;
     }
   }
@@ -517,7 +525,9 @@ Code.discard = function() {
   if (count < 2 ||
       window.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1', count))) {
     Code.workspace.clear();
-    window.location.hash = '';
+    if (window.location.hash) {
+      window.location.hash = '';
+    }
   }
 };
 

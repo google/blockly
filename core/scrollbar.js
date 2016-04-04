@@ -136,8 +136,43 @@ Blockly.ScrollbarPair.prototype.resize = function() {
  * @param {number} y Vertical scroll value.
  */
 Blockly.ScrollbarPair.prototype.set = function(x, y) {
-  this.hScroll.set(x);
-  this.vScroll.set(y);
+  // This function is equivalent to:
+  //   this.hScroll.set(x);
+  //   this.vScroll.set(y);
+  // However, that calls setMetrics twice which causes a chain of
+  // getAttribute->setAttribute->getAttribute resulting in an extra layout pass.
+  // Combining them speeds up rendering.
+  var xyRatio = {};
+
+  var hKnobValue = x * this.hScroll.ratio_;
+  var vKnobValue = y * this.vScroll.ratio_;
+
+  var hBarLength =
+      parseFloat(this.hScroll.svgBackground_.getAttribute('width'));
+  var vBarLength =
+      parseFloat(this.vScroll.svgBackground_.getAttribute('height'));
+
+  xyRatio.x = this.getRatio_(hKnobValue, hBarLength);
+  xyRatio.y = this.getRatio_(vKnobValue, vBarLength);
+
+  this.workspace_.setMetrics(xyRatio);
+  this.hScroll.svgKnob_.setAttribute('x', hKnobValue);
+  this.vScroll.svgKnob_.setAttribute('y', vKnobValue);
+};
+
+/**
+ * Helper to calculate the ratio of knob value to bar length.
+ * @param {number} knobValue The value of the knob.
+ * @param {number} barLength The length of the scroll bar.
+ * @return {number} Ratio.
+ * @private
+ */
+Blockly.ScrollbarPair.prototype.getRatio_ = function(knobValue, barLength) {
+  var ratio = knobValue / barLength;
+  if (isNaN(ratio)) {
+    return 0;
+  }
+  return ratio;
 };
 
 // --------------------------------------------------------------------
@@ -148,7 +183,7 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
  * look or behave like the system's scrollbars.
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
- * @param {boolean=} opt_pair True if the scrollbar is part of a horiz/vert pair.
+ * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
  * @constructor
  */
 Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
@@ -243,7 +278,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
       // Only show the scrollbar if needed.
       // Ideally this would also apply to scrollbar pairs, but that's a bigger
       // headache (due to interactions with the corner square).
-      this.setVisible(outerLength < hostMetrics.contentHeight);
+      this.setVisible(outerLength < hostMetrics.contentWidth);
     }
     this.ratio_ = outerLength / hostMetrics.contentWidth;
     if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
@@ -369,7 +404,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.options.svg);
+  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
   var knobXY = Blockly.getSvgXY_(this.svgKnob_, this.workspace_);
@@ -407,6 +442,7 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
     e.stopPropagation();
     return;
   }
+  Blockly.setPageSelectable(false);
   // Look up the current translation and record it.
   this.startDragKnob = parseFloat(
       this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
@@ -439,7 +475,7 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpKnob_ = function() {
-  Blockly.removeAllRanges();
+  Blockly.setPageSelectable(true);
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);

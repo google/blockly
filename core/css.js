@@ -143,6 +143,13 @@ Blockly.Css.CONTENT = [
     'z-index: 999;',
   '}',
 
+  '.blocklyNonSelectable {',
+    'user-select: none;',
+    '-moz-user-select: none;',
+    '-webkit-user-select: none;',
+    '-ms-user-select: none;',
+  '}',
+
   '.blocklyTooltipDiv {',
     'background-color: #ffffc7;',
     'border: 1px solid #ddc;',
@@ -270,6 +277,16 @@ Blockly.Css.CONTENT = [
   '.blocklyIconGroup:not(:hover),',
   '.blocklyIconGroupReadonly {',
     'opacity: .6;',
+  '}',
+
+  '.blocklyIconShape {',
+    'fill: #00f;',
+    'stroke: #fff;',
+    'stroke-width: 1px;',
+  '}',
+
+  '.blocklyIconSymbol {',
+    'fill: #fff;',
   '}',
 
   '.blocklyMinimalBody {',

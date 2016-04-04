@@ -39,9 +39,9 @@ goog.require('goog.userAgent');
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of options
- *     for a dropdown list, or a function which generates these options.
- * @param {Function=} opt_changeHandler A function that is executed when a new
+ * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of
+ *     options for a dropdown list, or a function which generates these options.
+ * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected, with the newly selected value as its sole argument.
  *     If it returns a value, that value (which must be one of the options) will
  *     become selected in place of the newly selected option, unless the return
@@ -49,15 +49,14 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
+Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   this.menuGenerator_ = menuGenerator;
-  this.setChangeHandler(opt_changeHandler);
   this.trimOptions_();
   var firstTuple = this.getOptions_()[0];
-  this.value_ = firstTuple[1];
 
   // Call parent's constructor.
-  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
+  Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[1],
+      opt_validator);
 };
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 
@@ -111,15 +110,14 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     var menuItem = e.target;
     if (menuItem) {
       var value = menuItem.getValue();
-      if (thisField.sourceBlock_ && thisField.changeHandler_) {
-        // Call any change handler, and allow it to override.
-        var override = thisField.changeHandler_(value);
+      if (thisField.sourceBlock_ && thisField.validator_) {
+        // Call any validation function, and allow it to override.
+        var override = thisField.validator_(value);
         if (override !== undefined) {
           value = override;
         }
       }
       if (value !== null) {
-        thisField.sourceBlock_.setShadow(false);
         thisField.setValue(value);
       }
     }
@@ -265,6 +263,13 @@ Blockly.FieldDropdown.prototype.getValue = function() {
  * @param {string} newValue New value to set.
  */
 Blockly.FieldDropdown.prototype.setValue = function(newValue) {
+  if (newValue === null || newValue === this.value_) {
+    return;  // No change if null.
+  }
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.value_, newValue));
+  }
   this.value_ = newValue;
   // Look up and display the human-readable text.
   var options = this.getOptions_();
@@ -287,7 +292,7 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
 Blockly.FieldDropdown.prototype.setText = function(text) {
   if (this.sourceBlock_ && this.arrow_) {
     // Update arrow's colour.
-    this.arrow_.style.fill = Blockly.makeColour(this.sourceBlock_.getColour());
+    this.arrow_.style.fill = this.sourceBlock_.getColour();
   }
   if (text === null || text === this.text_) {
     // No change if null.
@@ -308,7 +313,6 @@ Blockly.FieldDropdown.prototype.setText = function(text) {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
   }
 };
 

@@ -177,19 +177,16 @@ Blockly.fireUiEventNow = function(node, eventName) {
       list.splice(i, 1);
     }
   }
-  // Fire the event in a browser-compatible way.
-  if (document.createEvent) {
+  // Create a UI event in a browser-compatible way.
+  if (typeof UIEvent == 'function') {
     // W3
-    var evt = document.createEvent('UIEvents');
-    evt.initEvent(eventName, true, true);  // event type, bubbling, cancelable
-    node.dispatchEvent(evt);
-  } else if (document.createEventObject) {
-    // MSIE
-    var evt = document.createEventObject();
-    node.fireEvent('on' + eventName, evt);
+    var evt = new UIEvent(eventName, {});
   } else {
-    throw 'FireEvent: No event creation mechanism.';
+    // MSIE
+    var evt = document.createEvent('UIEvent');
+    evt.initUIEvent(eventName, false, false, window, 0);
   }
+  node.dispatchEvent(evt);
 };
 
 /**
@@ -318,7 +315,7 @@ Blockly.getSvgXY_ = function(element, workspace) {
     x += xy.x * scale;
     y += xy.y * scale;
     element = element.parentNode;
-  } while (element && element != workspace.options.svg);
+  } while (element && element != workspace.getParentSvg());
   return new goog.math.Coordinate(x, y);
 };
 
@@ -350,23 +347,16 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
 };
 
 /**
- * Deselect any selections on the webpage.
- * Chrome will select text outside the SVG when double-clicking.
- * Deselect this text, so that it doesn't mess up any subsequent drag.
+ * Set css classes to allow/disallow the browser from selecting/highlighting
+ * text, etc. on the page.
+ * @param {boolean} selectable Whether elements on the page can be selected.
  */
-Blockly.removeAllRanges = function() {
-  if (window.getSelection) {
-    setTimeout(function() {
-        try {
-          var selection = window.getSelection();
-          if (!selection.isCollapsed) {
-            selection.removeAllRanges();
-          }
-        } catch (e) {
-          // MSIE throws 'error 800a025e' here.
-        }
-      }, 0);
-  }
+Blockly.setPageSelectable = function(selectable) {
+    if (selectable) {
+      Blockly.removeClass_(document.body, 'blocklyNonSelectable');
+    } else {
+      Blockly.addClass_(document.body, 'blocklyNonSelectable');
+    }
 };
 
 /**
@@ -554,41 +544,24 @@ Blockly.tokenizeInterpolation = function(message) {
 
 /**
  * Generate a unique ID.  This should be globally unique.
- * 88 characters ^ 20 length ≈ 129 bits (one bit better than a UUID).
+ * 87 characters ^ 20 length > 128 bits (better than a UUID).
  * @return {string}
  */
 Blockly.genUid = function() {
   var length = 20;
   var soupLength = Blockly.genUid.soup_.length;
   var id = [];
-  if (Blockly.genUid.crypto_) {
-    // Cryptographically strong randomness is supported.
-    var array = new Uint32Array(length);
-    Blockly.genUid.crypto_.getRandomValues(array);
-    for (var i = 0; i < length; i++) {
-      id[i] = Blockly.genUid.soup_.charAt(array[i] % soupLength);
-    }
-  } else {
-    // Fall back to Math.random for IE 10.
-    for (var i = 0; i < length; i++) {
-      id[i] = Blockly.genUid.soup_.charAt(Math.random() * soupLength);
-    }
+  for (var i = 0; i < length; i++) {
+    id[i] = Blockly.genUid.soup_.charAt(Math.random() * soupLength);
   }
   return id.join('');
 };
 
 /**
- * Determine if window.crypto or global.crypto exists.
- * @type {=RandomSource}
- * @private
- */
-Blockly.genUid.crypto_ = this.crypto;
-
-/**
  * Legal characters for the unique ID.
  * Should be all on a US keyboard.  No XML special characters or control codes.
+ * Removed $ due to issue 251.
  * @private
  */
-Blockly.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
+Blockly.genUid.soup_ = '!#%()*+,-./:;=?@[]^_`{|}~' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-

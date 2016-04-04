@@ -5,7 +5,8 @@
 			"Base",
 			"Igor Zavadsky",
 			"Lxlalexlxl",
-			"아라"
+			"아라",
+			"Visem"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -26,6 +27,8 @@
 	"DISABLE_BLOCK": "Вимкнути блок",
 	"ENABLE_BLOCK": "Увімкнути блок",
 	"HELP": "Довідка",
+	"UNDO": "Скасувати",
+	"REDO": "Повторити",
 	"CHAT": "Спілкуйтеся з вашими співавторами, набираючи у цьому полі!",
 	"AUTH": "Будь ласка, авторизуйте цю програму, аби можна було зберігати вашу роботу і для надання можливості вам поширювати її.",
 	"ME": "Я",
@@ -305,13 +308,13 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "з:",
 	"PROCEDURES_DEFNORETURN_DO": "блок тексту",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Створює функцію без виводу.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Опишіть цю функцію...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://uk.wikipedia.org/wiki/Підпрограма",
 	"PROCEDURES_DEFRETURN_RETURN": "повернути",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Створює функцію з виводом.",
 	"PROCEDURES_ALLOW_STATEMENTS": "дозволити дії",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Увага: ця функція має дубльовані параметри.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://uk.wikipedia.org/wiki/Підпрограма",
-	"PROCEDURES_CALLNORETURN_CALL": "блок тексту",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Запустити користувацьку функцію \"%1\".",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://uk.wikipedia.org/wiki/Підпрограма",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Запустити користувацьку функцію \"%1\" і використати її вивід.",
@@ -322,5 +325,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Підсвітити визначення функції",
 	"PROCEDURES_CREATE_DO": "Створити \"%1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Якщо значення істинне, то повернути друге значення.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Попередження: цей блок може використовуватися лише в межах визначення функції."
 }

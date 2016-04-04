@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-12-24 12:08:53.227341",
+		"lastupdated": "2016-03-17 14:41:13.974918",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -24,6 +24,8 @@
 	"DISABLE_BLOCK": "Disable Block",
 	"ENABLE_BLOCK": "Enable Block",
 	"HELP": "Help",
+	"UNDO": "Undo",
+	"REDO": "Redo",
 	"CHAT": "Chat with your collaborator by typing in this box!",
 	"AUTH": "Please authorize this app to enable your work to be saved and to allow it to be shared by you.",
 	"ME": "Me",
@@ -343,13 +345,13 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "with:",
 	"PROCEDURES_DEFNORETURN_DO": "",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Creates a function with no output.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Describe this function...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFRETURN_RETURN": "return",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Creates a function with an output.",
 	"PROCEDURES_ALLOW_STATEMENTS": "allow statements",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Warning: This function has duplicate parameters.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
-	"PROCEDURES_CALLNORETURN_CALL": "",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Run the user-defined function '%1'.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Run the user-defined function '%1' and use its output.",
@@ -360,5 +362,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Highlight function definition",
 	"PROCEDURES_CREATE_DO": "Create '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition."
 }

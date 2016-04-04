@@ -82,6 +82,7 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.DIV.style.top = xy.y + 'px';
   Blockly.WidgetDiv.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.WidgetDiv.DIV.style.display = 'block';
+  Blockly.Events.setGroup(true);
 };
 
 /**
@@ -89,14 +90,15 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  */
 Blockly.WidgetDiv.hide = function() {
   if (Blockly.WidgetDiv.owner_) {
+    Blockly.WidgetDiv.owner_ = null;
     Blockly.WidgetDiv.DIV.style.display = 'none';
     Blockly.WidgetDiv.DIV.style.left = '';
     Blockly.WidgetDiv.DIV.style.top = '';
     Blockly.WidgetDiv.DIV.style.height = '';
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
-    Blockly.WidgetDiv.owner_ = null;
     Blockly.WidgetDiv.dispose_ = null;
     goog.dom.removeChildren(Blockly.WidgetDiv.DIV);
+    Blockly.Events.setGroup(false);
   }
 };
 

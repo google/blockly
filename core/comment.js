@@ -44,12 +44,6 @@ Blockly.Comment = function(block) {
 goog.inherits(Blockly.Comment, Blockly.Icon);
 
 /**
- * Icon in base64 format.
- * @private
- */
-Blockly.Comment.prototype.png_ = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAANyAAADcgBffIlqAAAAAd0SU1FB98DGgAnBf0Xj5sAAAIBSURBVDjLjZO9SxxRFMXPrFkWl2UFYSOIRtF210YtAiH/gGATRNZFgo19IBaB9Ipgk3SiEoKQgI19JIVgGaOIgpWJEAV1kZk3b1ad0V+KRYIzk5ALh1ecc88978tRSgHPg0Bjvq/BbFalMNR5oaBv+bzWHMfZjOudWPOg6+pDva6elRXlt7fVcnYmPX4sDQ3pdmpKQXu7frS16aXjON8T06OIMWOwtRp3jgNSEpkMTE5y5/v4UcSLePxnroutVNKb4xgYANfFAk/vDbLG8Gtk5P8M7jE6CsZwDDwSMLm5iYmLlpbg4ABOTmBjA4aHk0ZbWxigposLvlarScH5OSwvw9oaABwdJTW1GtTrfJHnUe/uTgqKxeZaKEAUgTEQP/CeHvA8LhRFhLlc+r6zWVhfbyaZn0/yuRxEEaGCAK9USjdZWGgarK5CS0uS7+gAa3EzjYaOy2WlludJi4vSzIx0e5vky2Xp6ko/M4WCPleruk4zsVa6vJSur9OHTEzoqljUJwEdQYDf25uMe3jY3E5fX5Lr7wdr8YGSJCkIeL23h9/a+lA4Pg7T039u6h75POzv4wcBrx5Ec11Wd3bwOzv//VK7umB3F991+Zj2/R1reWstdnaWm3L5YXOlAnNz3FiLbTR4Azj6WwFPjOG953EahoT1On4YEnoep8bwDuiO9/wG1sM4kG8A4fUAAAAASUVORK5CYII=';
-
-/**
  * Comment text (if bubble is not visible).
  * @private
  */
@@ -66,6 +60,30 @@ Blockly.Comment.prototype.width_ = 160;
  * @private
  */
 Blockly.Comment.prototype.height_ = 80;
+
+/**
+ * Draw the comment icon.
+ * @param {!Element} group The icon group.
+ * @private
+ */
+Blockly.Comment.prototype.drawIcon_ = function(group) {
+  // Circle.
+  Blockly.createSvgElement('circle',
+      {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
+       group);
+  // Can't use a real '?' text character since different browsers and operating
+  // systems render it differently.
+  // Body of question mark.
+  Blockly.createSvgElement('path',
+      {'class': 'blocklyIconSymbol',
+       'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405 0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25 -1.201,0.998 -1.201,1.528 -1.204,2.19z'},
+       group);
+  // Dot of question point.
+  Blockly.createSvgElement('rect',
+      {'class': 'blocklyIconSymbol',
+       'x': '6.8', 'y': '10.78', 'height': '2', 'width': '2'},
+       group);
+};
 
 /**
  * Create the editor for the comment's bubble.
@@ -98,6 +116,14 @@ Blockly.Comment.prototype.createEditor_ = function() {
   Blockly.bindEvent_(this.textarea_, 'wheel', this, function(e) {
     e.stopPropagation();
   });
+  Blockly.bindEvent_(this.textarea_, 'change', this, function(e) {
+    if (this.text_ != this.textarea_.value) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+        this.block_, 'comment', null, this.text_, this.textarea_.value));
+      this.text_ = this.textarea_.value;
+    }
+  });
+
   return this.foreignObject_;
 };
 
@@ -138,6 +164,8 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
+  Blockly.Events.fire(
+      new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
   if ((!this.block_.isEditable() && !this.textarea_) || goog.userAgent.IE) {
     // Steal the code from warnings to make an uneditable text bubble.
     // MSIE does not support foreignobject; textareas are impossible.
@@ -158,7 +186,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
         this.width_, this.height_);
     this.bubble_.registerResizeEvent(this, this.resizeBubble_);
     this.updateColour();
-    this.text_ = null;
   } else {
     // Dispose of the bubble.
     this.bubble_.dispose();
@@ -225,10 +252,13 @@ Blockly.Comment.prototype.getText = function() {
  * @param {string} text Comment text.
  */
 Blockly.Comment.prototype.setText = function(text) {
+  if (this.text_ != text) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+      this.block_, 'comment', null, this.text_, text));
+    this.text_ = text;
+  }
   if (this.textarea_) {
     this.textarea_.value = text;
-  } else {
-    this.text_ = text;
   }
 };
 
@@ -236,6 +266,9 @@ Blockly.Comment.prototype.setText = function(text) {
  * Dispose of this comment.
  */
 Blockly.Comment.prototype.dispose = function() {
+  if (Blockly.Events.isEnabled()) {
+    this.setText('');  // Fire event to delete comment.
+  }
   this.block_.comment = null;
   Blockly.Icon.prototype.dispose.call(this);
 };

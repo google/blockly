@@ -24,7 +24,8 @@
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Maximum Block Limit</h1>
 
-  <p>This is a demo of Blockly which has been restricted to a maximum of five blocks.</p>
+  <p>This is a demo of Blockly which has been restricted to a maximum of
+  five blocks.</p>
 
   <p><b>You have <span id="capacity"></span> block(s) left.</b></p>
 
@@ -84,11 +85,13 @@
          maxBlocks: 5,
          toolbox: document.getElementById('toolbox')});
 
-    function onchange() {
-      document.getElementById('capacity').innerHTML = workspace.remainingCapacity();
+    function onchange(event) {
+      document.getElementById('capacity').innerHTML =
+          workspace.remainingCapacity();
     }
 
     workspace.addChangeListener(onchange);
+    onchange();
   </script>
 
 </body>

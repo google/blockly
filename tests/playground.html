@@ -40,6 +40,15 @@
 <script src="../generators/dart/colour.js"></script>
 <script src="../generators/dart/variables.js"></script>
 <script src="../generators/dart/procedures.js"></script>
+<script src="../generators/lua.js"></script>
+<script src="../generators/lua/logic.js"></script>
+<script src="../generators/lua/loops.js"></script>
+<script src="../generators/lua/math.js"></script>
+<script src="../generators/lua/text.js"></script>
+<script src="../generators/lua/lists.js"></script>
+<script src="../generators/lua/colour.js"></script>
+<script src="../generators/lua/variables.js"></script>
+<script src="../generators/lua/procedures.js"></script>
 <script src="../msg/messages.js"></script>
 <script src="../blocks/logic.js"></script>
 <script src="../blocks/loops.js"></script>
@@ -49,18 +58,11 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
-<!-- Load the Google Drive SDK Realtime libraries. -->
-<script src="https://apis.google.com/js/api.js"></script>
 <script>
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
-
-function enableRealtimeSpecificUi() {
-  var realtimeDiv = document.getElementById('realtime');
-  realtimeDiv.display = 'block';
-}
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -76,11 +78,6 @@ function start() {
            maxBlocks: Infinity,
            media: '../media/',
            readOnly: false,
-           realtime: false,
-           realtimeOptions:
-             {clientId: 'YOUR CLIENT ID GOES HERE',
-              chatbox: {elementId: 'chatbox'},
-              collabElementId: 'collaborators'},
            rtl: rtl,
            scrollbars: true,
            toolbox: toolbox,
@@ -93,9 +90,20 @@ function start() {
               scaleSpeed: 1.1
              },
           });
-  if (Blockly.Realtime.isEnabled()) {
-    enableRealtimeSpecificUi();
+  // Restore previously displayed text.
+  if (sessionStorage) {
+    var text = sessionStorage.getItem('textarea');
+    if (text) {
+      document.getElementById('importExport').value = text;
+    }
+    // Restore event logging state.
+    var state = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(state)));
+  } else {
+    // MSIE 11 does not support sessionStorage on file:// URLs.
+    logEvents(false);
   }
+  taChange();
 }
 
 function toXml() {
@@ -104,17 +112,53 @@ function toXml() {
   output.value = Blockly.Xml.domToPrettyText(xml);
   output.focus();
   output.select();
+  taChange();
 }
 
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
   Blockly.Xml.domToWorkspace(workspace, xml);
+  taChange();
 }
 
 function toCode(lang) {
   var output = document.getElementById('importExport');
   output.value = Blockly[lang].workspaceToCode(workspace);
+  taChange();
+}
+
+// Disable the "Import from XML" button if the XML is invalid.
+// Preserve text between page reloads.
+function taChange() {
+  var textarea = document.getElementById('importExport');
+  if (sessionStorage) {
+    sessionStorage.setItem('textarea', textarea.value);
+  }
+  var valid = true;
+  try {
+    Blockly.Xml.textToDom(textarea.value);
+  } catch (e) {
+    valid = false;
+  }
+  document.getElementById('import').disabled = !valid;
+}
+
+function logEvents(state) {
+  var checkbox = document.getElementById('logCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('logEvents', Number(state));
+  }
+  if (state) {
+    workspace.addChangeListener(logger);
+  } else {
+    workspace.removeChangeListener(logger);
+  }
+}
+
+function logger(e) {
+  console.log(e);
 }
 
 function airstrike(n) {
@@ -126,7 +170,7 @@ function airstrike(n) {
   }
   for (var i = 0; i < n; i++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
-    var block = Blockly.Block.obtain(workspace, prototype);
+    var block = workspace.newBlock(prototype);
     block.initSvg();
     block.getSvgRoot().setAttribute('transform', 'translate(' +
         Math.round(Math.random() * 450 + 40) + ', ' +
@@ -198,26 +242,12 @@ h1 {
   height: 95%;
   width: 70%;
 }
-#collaborators {
-  float: right;
-  width: 30px;
-  margin-left: 10px;
-}
-#collaborators > img {
-  margin-right: 5px;
-  height: 30px;
-  padding-bottom: 5px;
-  width: 30px;
-  border-radius: 3px;
-}
 #importExport {
   font-family: monospace;
 }
 </style>
 </head>
 <body onload="start()">
-
-  <div id="collaborators"></div>
 
   <div id="blocklyDiv"></div>
 
@@ -541,7 +571,7 @@ h1 {
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()">
+    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
     <br>
     <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
     &nbsp;
@@ -550,40 +580,22 @@ h1 {
     <input type="button" value="To PHP" onclick="toCode('PHP')">
     &nbsp;
     <input type="button" value="To Dart" onclick="toCode('Dart')">
+    &nbsp;
+    <input type="button" value="To Lua" onclick="toCode('Lua')">
     <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
+    <textarea id="importExport" style="width: 26%; height: 12em"
+      onchange="taChange();" onkeyup="taChange()"></textarea>
   </p>
-  <hr>
 
   <p>
-    Stress test:
+    Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
+  <p>
+    Log events: &nbsp;
+    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
 
-  <!-- Realtime setup buttons. -->
-
-  <div id="realtime" style="display: none">
-
-    <p>Test realtime collaboration by opening
-      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
-        this link</a> in a separate browser window or tab and they will be
-      synchronized.  You can even share the link with a friend!.</p>
-
-    <br>
-    <br>
-
-    <!-- Undo and redo buttons. -->
-    <!-- TODO: Uncomment this when undo/redo are fixed. -->
-    <!--
-      <button id="undoButton" disabled>Undo</button>
-      <button id="redoButton" disabled>Redo</button>
-      <br />
-    -->
-
-    <!-- Text area that will be used for our collaborative chat box. -->
-    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
-
-  </div>
 </body>
 </html>

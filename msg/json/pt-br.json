@@ -11,7 +11,10 @@
 			"Rodrigo codignoli",
 			"Webysther",
 			"Fasouzafreitas",
-			"Almondega"
+			"Almondega",
+			"Rogerio Melfi",
+			"Caçador de Palavras",
+			"Luk3"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -32,6 +35,8 @@
 	"DISABLE_BLOCK": "Desabilitar bloco",
 	"ENABLE_BLOCK": "Habilitar bloco",
 	"HELP": "Ajuda",
+	"UNDO": "Desfazer",
+	"REDO": "Refazer",
 	"CHAT": "Converse com o seu colaborador digitando nesta caixa!",
 	"AUTH": "Por favor autorize este aplicativo para permitir que o seu trabalho seja gravado e que ele seja compartilhado por você.",
 	"ME": "Eu",
@@ -232,7 +237,7 @@
 	"LISTS_LENGTH_TITLE": "tamanho de %1",
 	"LISTS_LENGTH_TOOLTIP": "Retorna o tamanho de uma lista.",
 	"LISTS_ISEMPTY_TITLE": "%1 é vazia",
-	"LISTS_ISEMPTY_TOOLTIP": "Retona verdadeiro se a lista estiver vazia.",
+	"LISTS_ISEMPTY_TOOLTIP": "Retorna ao verdadeiro se a lista estiver vazia.",
 	"LISTS_INLIST": "na lista",
 	"LISTS_INDEX_OF_FIRST": "encontre a primeira ocorrência do item",
 	"LISTS_INDEX_OF_LAST": "encontre a última ocorrência do item",
@@ -295,6 +300,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "com:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "com:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Cria uma função que não tem retorno.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Descreva esta função...",
 	"PROCEDURES_DEFRETURN_RETURN": "retorna",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Cria uma função que possui um valor de retorno.",
 	"PROCEDURES_ALLOW_STATEMENTS": "permitir declarações",
@@ -310,5 +316,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Destacar definição da função",
 	"PROCEDURES_CREATE_DO": "Criar \"%1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Se um valor é verdadeiro, então retorna um valor.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Atenção: Este bloco só pode ser utilizado dentro da definição de uma função."
 }

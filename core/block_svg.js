@@ -791,8 +791,11 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
     group.translate_ = '';
     group.skew_ = '';
     this.addDragging();
+    Blockly.draggingConnections_ =
+        Blockly.draggingConnections_.concat(this.getConnections_(true));
   } else {
     this.removeDragging();
+    Blockly.draggingConnections_ = [];
   }
   // Recurse through all blocks attached under this one.
   for (var i = 0; i < this.childBlocks_.length; i++) {
@@ -854,6 +857,11 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     // Check to see if any of this block's connections are within range of
     // another block's connection.
     var myConnections = this.getConnections_(false);
+    // Also check the last connection on this stack
+    var lastOnStack = this.lastConnectionInStack_();
+    if (lastOnStack && lastOnStack != this.nextConnection) {
+      myConnections.push(lastOnStack);
+    }
     var closestConnection = null;
     var localConnection = null;
     var radiusConnection = Blockly.SNAP_RADIUS;

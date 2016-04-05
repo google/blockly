@@ -400,15 +400,8 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  var targetSourceBlock = candidate.getSourceBlock();
-  var sourceBlock = this.sourceBlock_;
-  if (targetSourceBlock && sourceBlock) {
-    do {
-      if (sourceBlock == targetSourceBlock) {
-        return false;
-      }
-      targetSourceBlock = targetSourceBlock.getParent();
-    } while (targetSourceBlock);
+  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+    return false;
   }
 
   return true;

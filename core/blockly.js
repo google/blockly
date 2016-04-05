@@ -82,6 +82,8 @@ Blockly.highlightedConnection_ = null;
  */
 Blockly.localConnection_ = null;
 
+Blockly.draggingConnections_ = [];
+
 /**
  * Contents of the local clipboard.
  * @type {Element}

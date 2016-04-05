@@ -535,7 +535,7 @@ Blockly.Connection.prototype.disconnect = function() {
   var shadow = parentConnection.getShadowDom();
   if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
     var blockShadow =
-        Blockly.Xml.domToBlock(parentBlock.workspace, shadow);
+        Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {
       parentConnection.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {

@@ -393,7 +393,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.permanentlyDisabled_.length = 0;
   for (var i = 0, xml; xml = xmlList[i]; i++) {
     if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-      var block = Blockly.Xml.domToBlock(this.workspace_, xml);
+      var block = Blockly.Xml.domToBlock(xml, this.workspace_);
       if (block.disabled) {
         // Record blocks that were initially disabled.
         // Do not enable these blocks as a result of capacity filtering.
@@ -636,7 +636,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     Blockly.Events.disable();
     // Create the new block by cloning the block in the flyout (via XML).
     var xml = Blockly.Xml.blockToDom(originBlock);
-    var block = Blockly.Xml.domToBlock(workspace, xml);
+    var block = Blockly.Xml.domToBlock(xml, workspace);
     // Place it in the same spot as the flyout copy.
     var svgRootOld = originBlock.getSvgRoot();
     if (!svgRootOld) {

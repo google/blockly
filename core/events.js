@@ -324,7 +324,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
     var workspace = Blockly.Workspace.getById(this.workspaceId);
     var xml = goog.dom.createDom('xml');
     xml.appendChild(this.xml);
-    Blockly.Xml.domToWorkspace(workspace, xml);
+    Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
     for (var i = 0, id; id = this.ids[i]; i++) {
       var block = Blockly.Block.getById(id);
@@ -389,7 +389,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
     var workspace = Blockly.Workspace.getById(this.workspaceId);
     var xml = goog.dom.createDom('xml');
     xml.appendChild(this.oldXml);
-    Blockly.Xml.domToWorkspace(workspace, xml);
+    Blockly.Xml.domToWorkspace(xml, workspace);
   }
 };
 

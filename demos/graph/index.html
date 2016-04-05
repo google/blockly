@@ -338,8 +338,8 @@ Graph.init = function() {
       {collapse: false,
        media: '../../media/',
        toolbox: document.getElementById('toolbox')});
-  Blockly.Xml.domToWorkspace(Graph.workspace,
-      document.getElementById('startBlocks'));
+  Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                             Graph.workspace);
   Graph.workspace.clearUndo();
 
   // When Blockly changes, update the graph.

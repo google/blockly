@@ -72,6 +72,11 @@ Blockly.BlockSvg.NOTCH_WIDTH = 30;
  */
 Blockly.BlockSvg.CORNER_RADIUS = 8;
 /**
+ * Margin base unit used to calculate margins
+ * @const
+ */
+Blockly.BlockSvg.MARGIN_BASE = 8;
+/**
  * Do blocks with no previous or output connections have a 'hat' on top?
  * @const
  */

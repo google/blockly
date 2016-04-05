@@ -100,6 +100,12 @@ Blockly.Flyout.prototype.autoClose = true;
 Blockly.Flyout.prototype.CORNER_RADIUS = 8;
 
 /**
+ * Margin base unit used to calculate margins
+ * @const
+ */
+Blockly.Flyout.prototype.MARGIN_BASE = 8;
+
+/**
  * Top/bottom padding between scrollbar and edge of flyout background.
  * @type {number}
  * @const
@@ -385,7 +391,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
   }
 
-  var margin = this.CORNER_RADIUS;
+  var margin = this.MARGIN_BASE;
   this.svgGroup_.style.display = 'block';
   // Create the blocks to be shown in this flyout.
   var blocks = [];
@@ -479,7 +485,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 Blockly.Flyout.prototype.reflow = function() {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutWidth = 0;
-  var margin = this.CORNER_RADIUS;
+  var margin = this.MARGIN_BASE;
   var blocks = this.workspace_.getTopBlocks(false);
   for (var x = 0, block; block = blocks[x]; x++) {
     var width = block.getHeightWidth().width;

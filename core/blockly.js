@@ -416,7 +416,7 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   }
   // Set the margin to match the flyout's margin so that the workspace does
   // not jump as blocks are added.
-  var MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS - 1;
+  var MARGIN = Blockly.Flyout.prototype.MARGIN_BASE - 1;
   var viewWidth = svgSize.width - MARGIN;
   var viewHeight = svgSize.height - MARGIN;
   var blockBox = this.getBlocksBoundingBox();

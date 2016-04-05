@@ -196,17 +196,7 @@ Blockly.Blocks['input_dummy'] = {
   // Dummy input.
   init: function() {
     this.jsonInit({
-      "message0": "dummy input %1 %2",
-      "args0": [
-        {
-          "type": "field_input",
-          "name": "INPUTNAME",
-          "text": "NAME"
-        },
-        {
-          "type": "input_dummy"
-        },
-      ],
+      "message0": "dummy input",
       "message1": FIELD_MESSAGE,
       "args1": FIELD_ARGS,
       "previousStatement": "Input",
@@ -599,27 +589,30 @@ Blockly.Blocks['type_group'] = {
 Blockly.Blocks['type_group_container'] = {
   // Container.
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('add types');
-    this.appendStatementInput('STACK');
-    this.setTooltip('Add, or remove allowed type.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677');
-    this.contextMenu = false;
+    this.jsonInit({
+      "message0": "add types %1 %2",
+      "args0": [
+        {"type": "input_dummy"},
+        {"type": "input_statement", "name": "STACK"}
+      ],
+      "colour": 230,
+      "tooltip": "Add, or remove allowed type.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677"
+    });
   }
 };
 
 Blockly.Blocks['type_group_item'] = {
   // Add type.
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('type');
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setTooltip('Add a new allowed type.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677');
-    this.contextMenu = false;
+    this.jsonInit({
+      "message0": "type",
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": 230,
+      "tooltip": "Add a new allowed type.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677"
+    });
   }
 };
 
@@ -627,12 +620,13 @@ Blockly.Blocks['type_null'] = {
   // Null type.
   valueType: null,
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('any');
-    this.setOutput(true, 'Type');
-    this.setTooltip('Any type is allowed.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602');
+    this.jsonInit({
+      "message0": "any",
+      "output": "Type",
+      "colour": 230,
+      "tooltip": "Any type is allowed.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602"
+    });
   }
 };
 
@@ -640,12 +634,13 @@ Blockly.Blocks['type_boolean'] = {
   // Boolean type.
   valueType: 'Boolean',
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('Boolean');
-    this.setOutput(true, 'Type');
-    this.setTooltip('Booleans (true/false) are allowed.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602');
+    this.jsonInit({
+      "message0": "Boolean",
+      "output": "Type",
+      "colour": 230,
+      "tooltip": "Booleans (true/false) are allowed.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602"
+    });
   }
 };
 
@@ -653,12 +648,13 @@ Blockly.Blocks['type_number'] = {
   // Number type.
   valueType: 'Number',
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('Number');
-    this.setOutput(true, 'Type');
-    this.setTooltip('Numbers (int/float) are allowed.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602');
+    this.jsonInit({
+      "message0": "Number",
+      "output": "Type",
+      "colour": 230,
+      "tooltip": "Numbers (int/float) are allowed.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602"
+    });
   }
 };
 
@@ -666,12 +662,13 @@ Blockly.Blocks['type_string'] = {
   // String type.
   valueType: 'String',
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('String');
-    this.setOutput(true, 'Type');
-    this.setTooltip('Strings (text) are allowed.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602');
+    this.jsonInit({
+      "message0": "String",
+      "output": "Type",
+      "colour": 230,
+      "tooltip": "Strings (text) are allowed.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602"
+    });
   }
 };
 
@@ -679,25 +676,27 @@ Blockly.Blocks['type_list'] = {
   // List type.
   valueType: 'Array',
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('Array');
-    this.setOutput(true, 'Type');
-    this.setTooltip('Arrays (lists) are allowed.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602');
+    this.jsonInit({
+      "message0": "Array",
+      "output": "Type",
+      "colour": 230,
+      "tooltip": "Arrays (lists) are allowed.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602"
+    });
   }
 };
 
 Blockly.Blocks['type_other'] = {
   // Other type.
   init: function() {
-    this.setColour(230);
-    this.appendDummyInput()
-        .appendField('other')
-        .appendField(new Blockly.FieldTextInput(''), 'TYPE');
-    this.setOutput(true, 'Type');
-    this.setTooltip('Custom type to allow.');
-    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=702');
+    this.jsonInit({
+      "message0": "other %1",
+      "args0": [{"type": "field_input", "name": "TYPE", "text": ""}],
+      "output": "Type",
+      "colour": 230,
+      "tooltip": "Custom type to allow.",
+      "helpUrl": "https://www.youtube.com/watch?v=s2_xaEvcVI0#t=702"
+    });
   }
 };
 

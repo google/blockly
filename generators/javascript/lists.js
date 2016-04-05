@@ -299,6 +299,29 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.JavaScript.valueToCode(
+      block, 'LIST',
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
+  var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+  var sortFunctionName = Blockly.JavaScript.provideFunction_(
+          'lists_get_sort',
+  ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+              '(a, b) {',
+                '  var compareFuncs = {',
+                '    "numeric":  function(a, b) { return a - b }, ',
+                '    "text": function(a, b) { return a.localeCompare(b, "en") },',
+                '    "ignoreCase": function(a, b) { return a.localeCompare(b, "en", {"sensitivity": "base"}) },',
+                '  };',
+                '  var compare = compareFuncs["' + type + '"];',
+                '  return compare(a, b) * ' + direction + ';',
+              '}']);
+  return [listCode + '.sort(' + sortFunctionName + ')', 
+      Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
 Blockly.JavaScript['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var value_input = Blockly.JavaScript.valueToCode(block, 'INPUT',

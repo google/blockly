@@ -143,6 +143,8 @@ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = "يحدد العنصر في �
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = "يحدد العنصر في الموضع المحدد في قائمة ما.  #1 هو العنصر الأول.";
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_LAST = "يحدد العنصر الأخير في قائمة.";
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_RANDOM = "يحدد عنصرا عشوائيا في قائمة.";
+Blockly.Msg.LISTS_SORT = "sort";  // untranslated
+Blockly.Msg.LISTS_SORT_TOOLTIP = "Sort a list.";  // untranslated
 Blockly.Msg.LISTS_SPLIT_HELPURL = "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists";  // untranslated
 Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = "إعداد قائمة من النصوص";
 Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST = "إعداد نص من القائمة";

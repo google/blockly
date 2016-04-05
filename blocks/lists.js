@@ -643,6 +643,51 @@ Blockly.Blocks['lists_getSublist'] = {
   }
 };
 
+
+Blockly.Blocks['lists_sort'] = {
+  /**
+   * Block for sorting a list.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "id": "list_sort",
+      "message0": "sort %1 %2 %3",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "DIRECTION",
+          "options": [
+            ["ascending", "1"],
+            ["descending", "-1"]
+          ]
+        },
+        {
+          "type": "field_dropdown",
+          "name": "TYPE",
+          "options": [
+            ["numbers", "numeric"],
+            ["text", "text"],
+            ["text ignore case", "ignoreCase"],
+            ["text length", "textLength"]
+          ]
+        },
+        {
+          "type": "input_value",
+          "name": "LIST",
+          "check": "Array"
+        }
+      ],
+      //"previousStatement": null,
+      //"nextStatement": null,
+      "output": "Array",
+      "colour": Blockly.Blocks.lists.HUE,
+      "tooltip": Blockly.Msg.LISTS_SORT_TOOLTIP,
+      "helpUrl": "http://www.example.com/"
+    });
+  }
+};
+
 Blockly.Blocks['lists_split'] = {
   /**
    * Block for splitting text into a list, or joining a list into text.

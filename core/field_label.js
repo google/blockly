@@ -53,15 +53,12 @@ Blockly.FieldLabel.prototype.EDITABLE = false;
 
 /**
  * Install this text on a block.
- * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldLabel.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+Blockly.FieldLabel.prototype.init = function() {
+  if (this.textElement_) {
     // Text has already been initialized once.
     return;
   }
-  this.sourceBlock_ = block;
-
   // Build the DOM.
   this.textElement_ = Blockly.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 5}, null);
@@ -71,7 +68,7 @@ Blockly.FieldLabel.prototype.init = function(block) {
   if (!this.visible_) {
     this.textElement_.style.display = 'none';
   }
-  block.getSvgRoot().appendChild(this.textElement_);
+  this.sourceBlock_.getSvgRoot().appendChild(this.textElement_);
 
   // Configure the field to be transparent with respect to tooltips.
   this.textElement_.tooltip = this.sourceBlock_;

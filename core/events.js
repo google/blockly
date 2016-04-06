@@ -327,7 +327,7 @@ Blockly.Events.Create.prototype.run = function(forward) {
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
     for (var i = 0, id; id = this.ids[i]; i++) {
-      var block = Blockly.Block.getById(id);
+      var block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false, true);
       } else if (id == this.blockId) {
@@ -375,9 +375,10 @@ Blockly.Events.Delete.prototype.toJson = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Delete.prototype.run = function(forward) {
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
   if (forward) {
     for (var i = 0, id; id = this.ids[i]; i++) {
-      var block = Blockly.Block.getById(id);
+      var block = workspace.getBlockById(id);
       if (block) {
         block.dispose(false, true);
       } else if (id == this.blockId) {
@@ -386,7 +387,6 @@ Blockly.Events.Delete.prototype.run = function(forward) {
       }
     }
   } else {
-    var workspace = Blockly.Workspace.getById(this.workspaceId);
     var xml = goog.dom.createDom('xml');
     xml.appendChild(this.oldXml);
     Blockly.Xml.domToWorkspace(xml, workspace);
@@ -445,7 +445,8 @@ Blockly.Events.Change.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Change.prototype.run = function(forward) {
-  var block = Blockly.Block.getById(this.blockId);
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  var block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't change non-existant block: " + this.blockId);
     return;
@@ -552,7 +553,8 @@ Blockly.Events.Move.prototype.recordNew = function() {
  * @private
  */
 Blockly.Events.Move.prototype.currentLocation_ = function() {
-  var block = Blockly.Block.getById(this.blockId);
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  var block = workspace.getBlockById(this.blockId);
   var location = {};
   var parent = block.getParent();
   if (parent) {
@@ -582,7 +584,8 @@ Blockly.Events.Move.prototype.isNull = function() {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Move.prototype.run = function(forward) {
-  var block = Blockly.Block.getById(this.blockId);
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
+  var block = workspace.getBlockById(this.blockId);
   if (!block) {
     console.warn("Can't move non-existant block: " + this.blockId);
     return;
@@ -592,7 +595,7 @@ Blockly.Events.Move.prototype.run = function(forward) {
   var coordinate = forward ? this.newCoordinate : this.oldCoordinate;
   var parentBlock = null;
   if (parentId) {
-    parentBlock = Blockly.Block.getById(parentId);
+    parentBlock = workspace.getBlockById(parentId);
     if (!parentBlock) {
       console.warn("Can't connect to non-existant block: " + parentId);
       return;

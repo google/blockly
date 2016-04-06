@@ -52,9 +52,9 @@ goog.require('goog.string');
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
-  this.id = (opt_id && !Blockly.Block.getById(opt_id)) ?
+  this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
       opt_id : Blockly.genUid();
-  Blockly.Block.BlockDB_[this.id] = this;
+  workspace.blockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
   /** @type {Blockly.Connection} */
@@ -178,6 +178,8 @@ Blockly.Block.prototype.dispose = function(healStack) {
   // Remove this block from the workspace's list of top-most blocks.
   if (this.workspace) {
     this.workspace.removeTopBlock(this);
+    // Remove from block database.
+    delete this.workspace.blockDB_[this.id];
     this.workspace = null;
   }
 
@@ -204,8 +206,6 @@ Blockly.Block.prototype.dispose = function(healStack) {
     }
     connections[i].dispose();
   }
-  // Remove from block database.
-  delete Blockly.Block.BlockDB_[this.id];
   Blockly.Events.enable();
 };
 
@@ -1293,19 +1293,4 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
   event.recordNew();
   Blockly.Events.fire(event);
-};
-
-/**
- * Database of all blocks.
- * @private
- */
-Blockly.Block.BlockDB_ = Object.create(null);
-
-/**
- * Find the block with the specified ID.
- * @param {string} id ID of block to find.
- * @return {Blockly.Block} The sought after block or null if not found.
- */
-Blockly.Block.getById = function(id) {
-  return Blockly.Block.BlockDB_[id] || null;
 };

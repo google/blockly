@@ -438,7 +438,7 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
   }
   var block = null;
   if (id) {
-    block = Blockly.Block.getById(id);
+    block = this.getBlockById(id);
     if (!block) {
       return;
     }

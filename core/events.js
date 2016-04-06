@@ -240,6 +240,37 @@ Blockly.Events.getDescendantIds_ = function(block) {
 };
 
 /**
+ * Decode the JSON into an event.
+ * @param {!Object} json JSON representation.
+ * @param {!Blockly.Workspace} workspace Target workspace for event.
+ */
+Blockly.Events.fromJson = function(json, workspace) {
+  var event;
+  switch (json.type) {
+    case Blockly.Events.CREATE:
+      event = new Blockly.Events.Create(null);
+      break;
+    case Blockly.Events.DELETE:
+      event = new Blockly.Events.Delete(null);
+      break;
+    case Blockly.Events.CHANGE:
+      event = new Blockly.Events.Change(null);
+      break;
+    case Blockly.Events.MOVE:
+      event = new Blockly.Events.Move(null);
+      break;
+    case Blockly.Events.UI:
+      event = new Blockly.Events.Ui(null);
+      break;
+    default:
+      throw 'Unknown event type.'
+  }
+  event.fromJson(json);
+  event.workspaceId = workspace.id;
+  return event;
+};
+
+/**
  * Abstract class for an event.
  * @param {Blockly.Block} block The block.
  * @constructor
@@ -260,13 +291,21 @@ Blockly.Events.Abstract = function(block) {
 Blockly.Events.Abstract.prototype.toJson = function() {
   var json = {
     'type': this.type,
-    'blockId': this.blockId,
-    'workspaceId': this.workspaceId
+    'blockId': this.blockId
   };
   if (this.group) {
     json['group'] = this.group;
   }
   return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Abstract.prototype.fromJson = function(json) {
+  this.blockId = json['blockId'];
+  this.group = json['group'];
 };
 
 /**
@@ -287,11 +326,14 @@ Blockly.Events.Abstract.prototype.run = function(forward) {
 
 /**
  * Class for a block creation event.
- * @param {!Blockly.Block} block The created block.
+ * @param {Blockly.Block} block The created block.  Null for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
 Blockly.Events.Create = function(block) {
+  if (!block) {
+    return;  // Blank event to be populated by fromJson.
+  }
   Blockly.Events.Create.superClass_.constructor.call(this, block);
   this.xml = Blockly.Xml.blockToDomWithXY(block);
   this.ids = Blockly.Events.getDescendantIds_(block);
@@ -316,12 +358,22 @@ Blockly.Events.Create.prototype.toJson = function() {
 };
 
 /**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Create.prototype.fromJson = function(json) {
+  Blockly.Events.Create.superClass_.fromJson.call(this, json);
+  this.xml = Blockly.Xml.textToDom('<xml>' + json['xml'] + '</xml>').firstChild;
+  this.ids = json['ids'];
+};
+
+/**
  * Run a creation event.
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.Create.prototype.run = function(forward) {
+  var workspace = Blockly.Workspace.getById(this.workspaceId);
   if (forward) {
-    var workspace = Blockly.Workspace.getById(this.workspaceId);
     var xml = goog.dom.createDom('xml');
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
@@ -340,11 +392,14 @@ Blockly.Events.Create.prototype.run = function(forward) {
 
 /**
  * Class for a block deletion event.
- * @param {!Blockly.Block} block The deleted block.
+ * @param {Blockly.Block} block The deleted block.  Null for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
 Blockly.Events.Delete = function(block) {
+  if (!block) {
+    return;  // Blank event to be populated by fromJson.
+  }
   if (block.getParent()) {
     throw 'Connected blocks cannot be deleted.';
   }
@@ -368,6 +423,15 @@ Blockly.Events.Delete.prototype.toJson = function() {
   var json = Blockly.Events.Delete.superClass_.toJson.call(this);
   json['ids'] = this.ids;
   return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Delete.prototype.fromJson = function(json) {
+  Blockly.Events.Delete.superClass_.fromJson.call(this, json);
+  this.ids = json['ids'];
 };
 
 /**
@@ -395,7 +459,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
 
 /**
  * Class for a block change event.
- * @param {!Blockly.Block} block The changed block.
+ * @param {Blockly.Block} block The changed block.  Null for a blank event.
  * @param {string} element One of 'field', 'comment', 'disabled', etc.
  * @param {?string} name Name of input or field affected, or null.
  * @param {string} oldValue Previous value of element.
@@ -404,6 +468,9 @@ Blockly.Events.Delete.prototype.run = function(forward) {
  * @constructor
  */
 Blockly.Events.Change = function(block, element, name, oldValue, newValue) {
+  if (!block) {
+    return;  // Blank event to be populated by fromJson.
+  }
   Blockly.Events.Change.superClass_.constructor.call(this, block);
   this.element = element;
   this.name = name;
@@ -430,6 +497,17 @@ Blockly.Events.Change.prototype.toJson = function() {
   }
   json['newValue'] = this.newValue;
   return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Change.prototype.fromJson = function(json) {
+  Blockly.Events.Change.superClass_.fromJson.call(this, json);
+  this.element = json['element'];
+  this.name = json['name'];
+  this.newValue = json['newValue'];
 };
 
 /**
@@ -498,11 +576,14 @@ Blockly.Events.Change.prototype.run = function(forward) {
 
 /**
  * Class for a block move event.  Created before the move.
- * @param {!Blockly.Block} block The moved block.
+ * @param {Blockly.Block} block The moved block.  Null for a blank event.
  * @extends {Blockly.Events.Abstract}
  * @constructor
  */
 Blockly.Events.Move = function(block) {
+  if (!block) {
+    return;  // Blank event to be populated by fromJson.
+  }
   Blockly.Events.Move.superClass_.constructor.call(this, block);
   var location = this.currentLocation_();
   this.oldParentId = location.parentId;
@@ -534,6 +615,21 @@ Blockly.Events.Move.prototype.toJson = function() {
         Math.round(this.newCoordinate.y);
   }
   return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Move.prototype.fromJson = function(json) {
+  Blockly.Events.Move.superClass_.fromJson.call(this, json);
+  this.newParentId = json['newParentId'];
+  this.newInputName = json['newInputName'];
+  if (json['newCoordinate']) {
+    var xy = json['newCoordinate'].split(',');
+    this.newCoordinate =
+        new goog.math.Coordinate(parseFloat(xy[0]), parseFloat(xy[1]));
+  }
 };
 
 /**
@@ -661,4 +757,14 @@ Blockly.Events.Ui.prototype.toJson = function() {
     json['newValue'] = this.newValue;
   }
   return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Ui.prototype.fromJson = function(json) {
+  Blockly.Events.Ui.superClass_.fromJson.call(this, json);
+  this.element = json['element'];
+  this.newValue = json['newValue'];
 };

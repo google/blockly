@@ -163,7 +163,7 @@ Blockly.Blocks['robot_head_look_angles'] = {
         .appendField(new Blockly.FieldAngle('0'), "LEFT");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour(160);
+    this.setColour(230);
     this.setTooltip('Look some number of degrees up and/or to the left.');
     this.setHelpUrl('');
   }
@@ -200,6 +200,21 @@ Blockly.Blocks['robot_perception_object_attributes'] = {
     this.setOutput(true);
     this.setColour(230);
     this.setTooltip('Gets an attribute about the given object.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_movement_tuck_arms'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["tuck", "TUCK"], ["deploy", "DEPLOY"]]), "LEFT_ACTION")
+        .appendField("left arm and")
+        .appendField(new Blockly.FieldDropdown([["tuck", "TUCK"], ["deploy", "DEPLOY"]]), "RIGHT_ACTION")
+        .appendField("right arm");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('Tucks or deploys the robot\'s arms.');
     this.setHelpUrl('');
   }
 };

@@ -88,6 +88,24 @@ Blockly.Events.FIRE_QUEUE_ = [];
  * @param {!Blockly.Events.Abstract} event Custom data for event.
  */
 Blockly.Events.fire = function(event) {
+  var block = Blockly.Block.getById(event.blockId);
+
+  // If the shadowMorph option is enabled, check if a shadow block is being
+  // changed. In that case, the block must be morphed to a regular one.
+  if (Blockly.Workspace.getById(event.workspaceId).options.shadowMorphEnabled &&
+      event.type === Blockly.Events.CHANGE && event.element !== 'shadow' &&
+      block.isShadow()) {
+
+    // The call to .setShadow(false) will fire the corresponding event, so
+    // Blockly.Events.setGroup is used to join that event to the same event
+    // group as the current event.
+    var currGroupBackup = Blockly.Events.getGroup();
+    Blockly.Events.setGroup(event.group || true);
+    block.setShadow(false);
+    event.group = Blockly.Events.getGroup();
+    Blockly.Events.setGroup(currGroupBackup);
+  }
+
   if (!Blockly.Events.isEnabled()) {
     return;
   }
@@ -489,6 +507,9 @@ Blockly.Events.Change.prototype.run = function(forward) {
       }
       Blockly.Events.fire(new Blockly.Events.Change(
           block, 'mutation', null, oldMutation, value));
+      break;
+    case 'shadow':
+      block.setShadow(value);
       break;
     default:
       console.warn('Unknown change type: ' + this.element);

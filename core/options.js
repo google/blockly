@@ -68,6 +68,10 @@ Blockly.Options = function(options) {
     if (hasSounds === undefined) {
       hasSounds = true;
     }
+    var shadowMorphEnabled = options['shadowMorph'];
+    if (shadowMorphEnabled === undefined) {
+      shadowMorphEnabled = false;
+    }
   }
   var hasScrollbars = options['scrollbars'];
   if (hasScrollbars === undefined) {
@@ -99,6 +103,7 @@ Blockly.Options = function(options) {
   this.hasScrollbars = hasScrollbars;
   this.hasTrashcan = hasTrashcan;
   this.hasSounds = hasSounds;
+  this.shadowMorphEnabled = shadowMorphEnabled;
   this.hasCss = hasCss;
   this.languageTree = languageTree;
   this.gridOptions = Blockly.Options.parseGridOptions_(options);

@@ -51,6 +51,8 @@ Blockly.Workspace = function(opt_options) {
   this.undoStack_ = [];
   /** @type {!Array.<!Blockly.Events.Abstract>} */
   this.redoStack_ = [];
+  /** @type {!Object} */
+  this.blockDB_ = Object.create(null);
 };
 
 /**
@@ -287,6 +289,15 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
   for (var i = 0, func; func = this.listeners_[i]; i++) {
     func(event);
   }
+};
+
+/**
+ * Find the block on this workspace with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Workspace.prototype.getBlockById = function(id) {
+  return this.blockDB_[id] || null;
 };
 
 /**

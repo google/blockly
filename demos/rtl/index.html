@@ -27,8 +27,8 @@
           {media: '../../media/',
            rtl: true,
            toolbox: document.getElementById('toolbox')});
-      Blockly.Xml.domToWorkspace(workspace,
-          document.getElementById('startBlocks'));
+      Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                                 workspace);
       //window.onbeforeunload = function() {
       //  return 'Leaving this page will result in the loss of your work.';
       //};

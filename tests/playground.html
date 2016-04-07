@@ -87,8 +87,7 @@ function start() {
               startScale: 1.0,
               maxScale: 4,
               minScale: .25,
-              scaleSpeed: 1.1
-             },
+              scaleSpeed: 1.1}
           });
   // Restore previously displayed text.
   if (sessionStorage) {
@@ -118,7 +117,7 @@ function toXml() {
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(workspace, xml);
+  Blockly.Xml.domToWorkspace(xml, workspace);
   taChange();
 }
 
@@ -188,7 +187,7 @@ function spaghetti(n) {
   xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(workspace, dom);
+  Blockly.Xml.domToWorkspace(dom, workspace);
   console.timeEnd('Spaghetti domToWorkspace');
 }
 var spaghettiXml = [

@@ -66,7 +66,7 @@ Blockly.ConnectionDB.prototype.addConnection = function(connection) {
  * Find the given connection.
  * Starts by doing a binary search to find the approximate location, then
  *     linearly searches nearby for the exact connection.
- * @param {Blockly.Connection} conn The connection to find.
+ * @param {!Blockly.Connection} conn The connection to find.
  * @return {number} The index of the connection, or -1 if the connection was
  *     not found.
  */
@@ -105,7 +105,7 @@ Blockly.ConnectionDB.prototype.findConnection = function(conn) {
  * Finds a candidate position for inserting this connection into the list.
  * This will be in the correct y order but makes no guarantees about ordering in
  *     the x axis.
- * @param {Blockly.Connection} connection The connection to insert.
+ * @param {!Blockly.Connection} connection The connection to insert.
  * @return {number} The candidate index.
  * @private
  */
@@ -223,7 +223,7 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
 
 /**
  * Find the closest compatible connection to this connection.
- * @param {Blockly.Connection} conn The connection searching for a compatible
+ * @param {!Blockly.Connection} conn The connection searching for a compatible
  *     mate.
  * @param {number} maxRadius The maximum radius to another connection.
  * @param {number} dx Horizontal offset between this connection's location

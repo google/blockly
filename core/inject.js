@@ -326,8 +326,8 @@ Blockly.inject.bindDocumentEvents_ = function() {
 
 /**
  * Load sounds for the given workspace.
- * @param options {string} The path to the media directory.
- * @param workspace {!Blockly.Workspace} The workspace to load sounds for.
+ * @param {string} options The path to the media directory.
+ * @param {!Blockly.Workspace} workspace The workspace to load sounds for.
  * @private
  */
 Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {

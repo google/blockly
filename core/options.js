@@ -85,9 +85,6 @@ Blockly.Options = function(options) {
     pathToMedia = options['path'] + 'media/';
   }
 
-  var enableRealtime = !!options['realtime'];
-  var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
-
   this.RTL = !!options['rtl'];
   this.collapse = hasCollapse;
   this.comments = hasComments;
@@ -103,8 +100,6 @@ Blockly.Options = function(options) {
   this.languageTree = languageTree;
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
-  this.enableRealtime = enableRealtime;
-  this.realtimeOptions = realtimeOptions;
 };
 
 /**

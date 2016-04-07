@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Megjegyzés törlése";
 Blockly.Msg.RENAME_VARIABLE = "Változó átnevezése...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Minden \"%1\" változó átnevezése erre:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "szövegéhez fűzd hozzá";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "A";

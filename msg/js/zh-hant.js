@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "重試";
 Blockly.Msg.REMOVE_COMMENT = "移除註解";
 Blockly.Msg.RENAME_VARIABLE = "重新命名變量...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "將所有 \"%1\" 變量重新命名為:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "後加入文字";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "在";

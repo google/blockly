@@ -463,6 +463,10 @@ Blockly.Css.CONTENT = [
     'background-position: -16px -1px;',
   '}',
 
+  '.blocklyTreeSearch {',
+    'padding-right: 8px;',
+  '}',
+
   '.blocklyTreeSelected>.blocklyTreeIconClosedLtr {',
     'background-position: -32px -17px;',
   '}',

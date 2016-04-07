@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Fjern kommentar";
 Blockly.Msg.RENAME_VARIABLE = "Omdøb variabel...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Omdøb alle '%1' variabler til:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "tilføj tekst";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "til";

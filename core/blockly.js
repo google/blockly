@@ -266,6 +266,9 @@ Blockly.onKeyDown_ = function(e) {
       Blockly.hideChaff();
       Blockly.mainWorkspace.undo(e.shiftKey);
     }
+    if (e.keyCode == 32) {
+      Blockly.getMainWorkspace().focusToolboxSearch();
+    }
   }
   if (deleteBlock) {
     // Common code for delete and cut.

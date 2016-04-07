@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "내용 제거";
 Blockly.Msg.RENAME_VARIABLE = "변수 이름 바꾸기:";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "'%1' 변수 이름을 바꾸기:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "내용 덧붙이기";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";
 Blockly.Msg.TEXT_APPEND_TO = "다음";

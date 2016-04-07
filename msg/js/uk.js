@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Повторити";
 Blockly.Msg.REMOVE_COMMENT = "Видалити коментар";
 Blockly.Msg.RENAME_VARIABLE = "Перейменувати змінну...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Перейменувати усі змінні \"%1\" до:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "додати текст";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "до";

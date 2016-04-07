@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Suprimir un comentari";
 Blockly.Msg.RENAME_VARIABLE = "Renomenar la variabla…";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";  // untranslated
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "apondre lo tèxte";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "a";

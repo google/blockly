@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "wumqa'";
 Blockly.Msg.REMOVE_COMMENT = "QInHom chelHa'";
 Blockly.Msg.RENAME_VARIABLE = "lIw pong choH...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Hoch \"%1\" lIwmey pongmey choH:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "ghItlh";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "chel";

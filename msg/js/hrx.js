@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Kommentar entferne";
 Blockly.Msg.RENAME_VARIABLE = "Die neie Variable sei Noome:";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "All \"%1\" Variable umbenenne in:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "Text oonhänge";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "An";

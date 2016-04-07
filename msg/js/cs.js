@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Odstranit komentář";
 Blockly.Msg.RENAME_VARIABLE = "Přejmenovat proměnnou...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Přejmenuj všech '%1' proměnných na:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "přidat text";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "do";

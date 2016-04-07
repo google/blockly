@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Ponów";
 Blockly.Msg.REMOVE_COMMENT = "Usuń komentarz";
 Blockly.Msg.RENAME_VARIABLE = "Zmień nazwę zmiennej...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Zmień nazwy wszystkich '%1' zmiennych na:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "dołącz tekst";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "do";

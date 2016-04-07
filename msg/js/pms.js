@@ -293,6 +293,7 @@ Blockly.Msg.REDO = "Fé torna";
 Blockly.Msg.REMOVE_COMMENT = "Scancelé un coment";
 Blockly.Msg.RENAME_VARIABLE = "Arnomé la variàbil...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Arnomé tute le variàbij '%1' 'me:";
+Blockly.Msg.SEARCH = "Search";  // untranslated
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "taché ël test";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://github.com/google/blockly/wiki/Text#text-modification";  // untranslated
 Blockly.Msg.TEXT_APPEND_TO = "a";

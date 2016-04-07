@@ -163,7 +163,7 @@ Blockly.Blocks['robot_head_look_angles'] = {
         .appendField(new Blockly.FieldAngle('0'), "LEFT");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour(20);
+    this.setColour(230);
     this.setTooltip('Look some number of degrees up and/or to the left.');
     this.setHelpUrl('');
   }
@@ -202,7 +202,7 @@ Blockly.Blocks['robot_movement_tuck_arms'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
-    this.setTooltip('');
+    this.setTooltip('Tucks or deploys the robot\'s arms.');
     this.setHelpUrl('');
   }
 };

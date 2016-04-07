@@ -191,3 +191,18 @@ Blockly.Blocks['robot_object_attributes'] = {
     this.setHelpUrl('');
   }
 };
+
+Blockly.Blocks['robot_movement_tuck_arms'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["tuck", "TUCK"], ["deploy", "DEPLOY"]]), "LEFT_ACTION")
+        .appendField("left arm and")
+        .appendField(new Blockly.FieldDropdown([["tuck", "TUCK"], ["deploy", "DEPLOY"]]), "RIGHT_ACTION")
+        .appendField("right arm");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  }
+};

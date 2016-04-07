@@ -101,3 +101,18 @@ Blockly.JavaScript['robot_object_attributes'] = function(block) {
 
   return [code, Blockly.JavaScript.ORDER_MEMBER];
 };
+
+Blockly.JavaScript['robot_movement_tuck_arms'] = function(block) {
+  var dropdown_left_action = block.getFieldValue('LEFT_ACTION');
+  var dropdown_right_action = block.getFieldValue('RIGHT_ACTION');
+  var left_action = 'true';
+  if (dropdown_left_action === 'DEPLOY') {
+    left_action = 'false';
+  }
+  var right_action = 'true';
+  if (dropdown_right_action === 'DEPLOY') {
+    right_action = 'false';
+  }
+  var code = 'robot.tuckArms(' + left_action + ', ' + right_action + ');\n';
+  return code;
+};

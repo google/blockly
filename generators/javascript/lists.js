@@ -309,15 +309,16 @@ Blockly.JavaScript['lists_sort'] = function(block) {
   var sortFunctionName = Blockly.JavaScript.provideFunction_(
           'lists_get_sort',
   ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(a, b) {',
-                '  var compareFuncs = {',
-                '    "numeric":  function(a, b) { return a - b }, ',
-                '    "text": function(a, b) { return a.localeCompare(b, "en") },',
-                '    "ignoreCase": function(a, b) { return a.localeCompare(b, "en", {"sensitivity": "base"}) },',
-                '  };',
-                '  var compare = compareFuncs["' + type + '"];',
-                '  return compare(a, b) * ' + direction + ';',
-              '}']);
+    '(a, b) {',
+      '  var compareFuncs = {',
+      '    "numeric":  function(a, b) { return a - b }, ',
+      '    "text": function(a, b) { return a.localeCompare(b, "en") },',
+      '    "ignoreCase": function(a, b) {',
+      '       return a.localeCompare(b, "en", {"sensitivity": "base"}) },',
+      '  };',
+      '  var compare = compareFuncs["' + type + '"];',
+      '  return compare(a, b) * ' + direction + ';',
+    '}']);
   return [listCode + '.sort(' + sortFunctionName + ')', 
       Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

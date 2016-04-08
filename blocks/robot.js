@@ -232,7 +232,6 @@ Blockly.Blocks['robot_manipulation_pick_default'] = {
   }
 };
 
-
 Blockly.Blocks['robot_manipulation_place_default'] = {
   init: function() {
     this.appendDummyInput()
@@ -240,6 +239,20 @@ Blockly.Blocks['robot_manipulation_place_default'] = {
     this.setOutput(true, "Boolean");
     this.setColour(20);
     this.setTooltip('Places the held object onto the nearest table.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_manipulation_set_gripper'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["open", "OPEN"], ["close", "CLOSE"]]), "ACTION")
+        .appendField(new Blockly.FieldDropdown([["left", "LEFT"], ["right", "RIGHT"]]), "SIDE")
+        .appendField("gripper");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('Opens or closes the gripper.');
     this.setHelpUrl('');
   }
 };

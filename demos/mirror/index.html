@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Mirrored Blockly</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Mirrored Blockly</h1>
+
+  <p>This is a simple demo of a master Blockly that controls a slave Blockly.
+  Open the JavaScript console to see the event passing.</p>
+
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/hacking/events">events</a>&hellip;</p>
+
+  <table width="100%">
+    <tr>
+      <td>
+        <div id="masterDiv" style="height: 480px; width: 600px;"></div>
+      </td>
+      <td>
+        <div id="slaveDiv" style="height: 480px; width: 430px;"></div>
+      </td>
+    </tr>
+  </table>
+
+  <xml id="toolbox" style="display: none">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="text_print"></block>
+  </xml>
+
+  <script>
+    // Inject master workspace.
+    var masterWorkspace = Blockly.inject('masterDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
+    // Inject slave workspace.
+    var slaveWorkspace = Blockly.inject('slaveDiv',
+        {media: '../../media/',
+         readOnly: true});
+    // Listen to events on master workspace.
+    masterWorkspace.addChangeListener(mirrorEvent);
+
+    function mirrorEvent(masterEvent) {
+      if (masterEvent.type == Blockly.Events.UI) {
+        return;  // Don't mirror UI events.
+      }
+      // Convert event to JSON.  This could then be transmitted across the net.
+      var json = masterEvent.toJson();
+      console.log(json);
+      // Convert JSON back into an event, then execute it.
+      var slaveEvent = Blockly.Events.fromJson(json, slaveWorkspace);
+      slaveEvent.run(true);
+    }
+  </script>
+
+</body>
+</html>

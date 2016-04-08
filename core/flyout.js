@@ -59,12 +59,14 @@ Blockly.Flyout = function(workspaceOptions) {
   /**
    * Flyout should be laid out horizontally vs vertically.
    * @type {boolean}
+   * @private
    */
   this.horizontalLayout_ = workspaceOptions.horizontalLayout;
 
   /**
    * Position of the toolbox and flyout relative to the workspace.
    * @type {number}
+   * @private
    */
   this.toolboxPosition_ = workspaceOptions.toolboxPosition;
 
@@ -303,7 +305,7 @@ Blockly.Flyout.prototype.setMetrics_ = function(xyRatio) {
 
 Blockly.Flyout.prototype.setVerticalOffset = function(verticalOffset) {
   this.verticalOffset_ = verticalOffset;
-}
+};
 
 /**
  * Move the toolbox to the edge of the workspace.
@@ -324,7 +326,8 @@ Blockly.Flyout.prototype.position = function() {
   }
 
   this.setBackgroundPath_(edgeWidth,
-    this.horizontalLayout_ ? this.height_ + this.verticalOffset_ : metrics.viewHeight);
+      this.horizontalLayout_ ?
+      this.height_ + this.verticalOffset_ : metrics.viewHeight);
 
   var x = metrics.absoluteLeft;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
@@ -376,7 +379,8 @@ Blockly.Flyout.prototype.setBackgroundPath_ = function(width, height) {
 };
 
 /**
- * Create and set the path for the visible boundaries of the toolbox in vertical mode.
+ * Create and set the path for the visible boundaries of the toolbox in vertical
+ * mode.
  * @param {number} width The width of the toolbox, not including the
  *     rounded corners.
  * @param {number} height The height of the toolbox, not including
@@ -408,14 +412,16 @@ Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
 };
 
 /**
- * Create and set the path for the visible boundaries of the toolbox in horizontal mode.
+ * Create and set the path for the visible boundaries of the toolbox in
+ * horizontal mode.
  * @param {number} width The width of the toolbox, not including the
  *     rounded corners.
  * @param {number} height The height of the toolbox, not including
  *     rounded corners.
  * @private
  */
-Blockly.Flyout.prototype.setBackgroundPathHorizontal_ = function(width, height) {
+Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
+    function(width, height) {
   var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
   // Start at top left.
   var path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
@@ -454,7 +460,7 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ = function(width, height) 
  * Scroll the flyout to the top.
  */
 Blockly.Flyout.prototype.scrollToStart = function() {
-  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? 1000000000 : 0);
+  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? Infinity : 0);
 };
 
 /**
@@ -584,7 +590,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     block.render();
     var root = block.getSvgRoot();
     var blockHW = block.getHeightWidth();
-    block.moveBy((this.horizontalLayout_ && this.RTL) ? -cursorX : cursorX, cursorY);
+    block.moveBy((this.horizontalLayout_ && this.RTL) ?
+        -cursorX : cursorX, cursorY);
     if (this.horizontalLayout_) {
       cursorX += blockHW.width + gaps[i];
     } else {
@@ -699,6 +706,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   Blockly.hideChaff(true);
   Blockly.Flyout.terminateDrag_();
   this.startDragMouseY_ = e.clientY;
+  this.startDragMouseX_ = e.clientX;
   Blockly.Flyout.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove',
       this, this.onMouseMove_);
   Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEvent_(document, 'mouseup',
@@ -714,17 +722,22 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseMove_ = function(e) {
+  var metrics = this.getMetrics_();
   if (this.horizontalLayout_) {
+    if (metrics.contentWidth - metrics.viewWidth < 0) {
+      return;
+    }
     var dx = e.clientX - this.startDragMouseX_;
     this.startDragMouseX_ = e.clientX;
-    var metrics = this.getMetrics_();
     var x = metrics.viewLeft - dx;
     x = goog.math.clamp(x, 0, metrics.contentWidth - metrics.viewWidth);
     this.scrollbar_.set(x);
   } else {
+    if (metrics.contentHeight - metrics.viewHeight < 0) {
+      return;
+    }
     var dy = e.clientY - this.startDragMouseY_;
     this.startDragMouseY_ = e.clientY;
-    var metrics = this.getMetrics_();
     var y = metrics.viewTop - dy;
     y = goog.math.clamp(y, 0, metrics.contentHeight - metrics.viewHeight);
     this.scrollbar_.set(y);
@@ -778,37 +791,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       return;
     }
     Blockly.Events.disable();
-    // Create the new block by cloning the block in the flyout (via XML).
-    var xml = Blockly.Xml.blockToDom(originBlock);
-    var block = Blockly.Xml.domToBlock(xml, workspace);
-    // Place it in the same spot as the flyout copy.
-    var svgRootOld = originBlock.getSvgRoot();
-    if (!svgRootOld) {
-      throw 'originBlock is not rendered.';
-    }
-    var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
-    // Scale the scroll (getSvgXY_ did not do this).
-    if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
-      var width = workspace.getMetrics().viewWidth - flyout.width_;
-      xyOld.x += width / workspace.scale - width;
-    } else {
-      xyOld.x += flyout.workspace_.scrollX / flyout.workspace_.scale -
-          flyout.workspace_.scrollX;
-    }
-    xyOld.y += flyout.workspace_.scrollY / flyout.workspace_.scale -
-        flyout.workspace_.scrollY;
-    var svgRootNew = block.getSvgRoot();
-    if (!svgRootNew) {
-      throw 'block is not rendered.';
-    }
-    var xyNew = Blockly.getSvgXY_(svgRootNew, workspace);
-    // Scale the scroll (getSvgXY_ did not do this).
-    xyNew.x += workspace.scrollX / workspace.scale - workspace.scrollX;
-    xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
-    if (workspace.toolbox_ && !workspace.scrollbar) {
-      xyNew.x += workspace.toolbox_.width / workspace.scale;
-    }
-    block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
+    var block = Blockly.Flyout.placeNewBlock_(originBlock, workspace, flyout);
     Blockly.Events.enable();
     if (Blockly.Events.isEnabled()) {
       Blockly.Events.setGroup(true);
@@ -824,6 +807,50 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     Blockly.dragMode_ = Blockly.DRAG_FREE;
     block.setDragging_(true);
   };
+};
+
+Blockly.Flyout.placeNewBlock_ = function(originBlock, workspace,
+    flyout) {
+  var svgRootOld = originBlock.getSvgRoot();
+  if (!svgRootOld) {
+    throw 'originBlock is not rendered.';
+  }
+  // Figure out where the original block is on the screen, relative to the upper
+  // left corner of the workspace.
+  var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
+  // Scale the scroll (getSvgXY_ did not do this).
+  if (flyout.RTL) {
+    var width = workspace.getMetrics().viewWidth - flyout.width_;
+    xyOld.x += width / workspace.scale - width;
+  } else {
+    xyOld.x += flyout.workspace_.scrollX / flyout.workspace_.scale -
+        flyout.workspace_.scrollX;
+  }
+  xyOld.y += flyout.workspace_.scrollY / flyout.workspace_.scale -
+      flyout.workspace_.scrollY;
+
+  // Create the new block by cloning the block in the flyout (via XML).
+  var xml = Blockly.Xml.blockToDom(originBlock);
+  var block = Blockly.Xml.domToBlock(xml, workspace);
+  // Place it in the same spot as the flyout copy.
+  var svgRootNew = block.getSvgRoot();
+  if (!svgRootNew) {
+    throw 'block is not rendered.';
+  }
+  // Figure out where the new block got placed on the screen, relative to the
+  // upper left corner of the workspace.  This may not be the same as the
+  // original block because the original block was in the flyout.
+  var xyNew = Blockly.getSvgXY_(svgRootNew, workspace);
+  // Scale the scroll (getSvgXY_ did not do this).
+  xyNew.x += workspace.scrollX / workspace.scale - workspace.scrollX;
+  xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
+  if (workspace.toolbox_ && !workspace.scrollbar) {
+    xyNew.x += workspace.toolbox_.width / workspace.scale;
+    xyNew.y += workspace.toolbox_.height / workspace.scale;
+  }
+  // Move the new block to where the old block is.
+  block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
+  return block;
 };
 
 /**

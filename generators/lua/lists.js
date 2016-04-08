@@ -320,6 +320,17 @@ Blockly.Lua['lists_getSublist'] = function(block) {
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
+Blockly.Lua['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.JavaScript.valueToCode(
+    block, 'LIST', Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
+  var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+
+  var code = 'table.sort(' + listCode + ')';
+  return [code, Blockly.Lua.ORDER_HIGH];  
+};
+  
 Blockly.Lua['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var value_input = Blockly.Lua.valueToCode(block, 'INPUT',

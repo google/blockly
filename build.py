@@ -33,6 +33,7 @@
 #   javascript_compressed.js: The compressed Javascript generator.
 #   python_compressed.js: The compressed Python generator.
 #   dart_compressed.js: The compressed Dart generator.
+#   lua_compressed.js: The compressed Lua generator.
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
 import sys
@@ -79,7 +80,8 @@ class Gen_uncompressed(threading.Thread):
     f = open(target_filename, 'w')
     f.write(HEADER)
     f.write("""
-var isNodeJS = !!(typeof module !== 'undefined' && module.exports);
+var isNodeJS = !!(typeof module !== 'undefined' && module.exports &&
+                  typeof window === 'undefined');
 
 if (isNodeJS) {
   var window = {};
@@ -177,6 +179,7 @@ class Gen_compressed(threading.Thread):
     self.gen_generator("python")
     self.gen_generator("php")
     self.gen_generator("dart")
+    self.gen_generator("lua")
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"

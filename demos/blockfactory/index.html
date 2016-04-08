@@ -142,7 +142,7 @@
                 <select id="format">
                   <option value="JavaScript">JavaScript</option>
                   <option value="JSON">JSON</option>
-                  <option value="Manual">Manual edit...</option>
+                  <option value="Manual">Manual edit&hellip;</option>
                 </select>
               </h3>
             </td>
@@ -161,6 +161,7 @@
                   <option value="Python">Python</option>
                   <option value="PHP">PHP</option>
                   <option value="Dart">Dart</option>
+                  <option value="Lua">Lua</option>
                 </select>
               </h3>
             </td>
@@ -176,8 +177,16 @@
   </table>
   <xml id="toolbox" style="display: none">
     <category name="Input">
-      <block type="input_value"></block>
-      <block type="input_statement"></block>
+      <block type="input_value">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
+      <block type="input_statement">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
       <block type="input_dummy"></block>
     </category>
     <category name="Field">

@@ -346,6 +346,7 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "사용:",
 	"PROCEDURES_DEFNORETURN_DO": "",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "실행 후, 결과 값을 돌려주지 않는 함수를 만듭니다.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "이 함수를 설명하세요...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://ko.wikipedia.org/wiki/%ED%95%A8%EC%88%98_%28%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D%29",
 	"PROCEDURES_DEFRETURN_RETURN": "다음을 돌려줌",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "실행 후, 결과 값을 돌려주는 함수를 만듭니다.",
@@ -362,5 +363,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "함수 정의 찾기",
 	"PROCEDURES_CREATE_DO": "'%1' 생성",
 	"PROCEDURES_IFRETURN_TOOLTIP": "값이 참이라면, 두번째 값을 반환합니다.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "경고: 이 블럭은, 함수 정의 블럭 안에서만 사용할 수 있습니다."
 }

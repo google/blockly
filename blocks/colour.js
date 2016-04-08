@@ -51,8 +51,14 @@ Blockly.Blocks['colour_picker'] = {
       ],
       "output": "Colour",
       "colour": Blockly.Blocks.colour.HUE,
-      "tooltip": Blockly.Msg.COLOUR_PICKER_TOOLTIP,
       "helpUrl": Blockly.Msg.COLOUR_PICKER_HELPURL
+    });
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    // Colour block is trivial.  Use tooltip of parent block if it exists.
+    this.setTooltip(function() {
+      var parent = thisBlock.getParent();
+      return (parent && parent.tooltip) || Blockly.Msg.COLOUR_PICKER_TOOLTIP;
     });
   }
 };

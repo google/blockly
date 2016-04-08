@@ -143,12 +143,13 @@ Plane.loadBlocks = function(defaultXml) {
     // Language switching stores the blocks during the reload.
     delete window.sessionStorage.loadOnceBlocks;
     var xml = Blockly.Xml.textToDom(loadOnce);
-    Blockly.Xml.domToWorkspace(Plane.workspace, xml);
+    Blockly.Xml.domToWorkspace(xml, Plane.workspace);
   } else if (defaultXml) {
     // Load the editor with default starting blocks.
     var xml = Blockly.Xml.textToDom(defaultXml);
-    Blockly.Xml.domToWorkspace(Plane.workspace, xml);
+    Blockly.Xml.domToWorkspace(xml, Plane.workspace);
   }
+  Plane.workspace.clearUndo();
 };
 
 /**

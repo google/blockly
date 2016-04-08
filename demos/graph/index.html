@@ -39,7 +39,7 @@
 
   <p>This is a demo of giving instant feedback as blocks are changed.</p>
 
-  <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/code-generators#realtime_generation">Realtime generation</a>...</p>
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/code-generators#realtime_generation">Realtime generation</a>&hellip;</p>
 
   <table>
     <tr>
@@ -193,12 +193,13 @@ if (typeof google == 'object') {
 Blockly.Blocks['graph_get_x'] = {
   // x variable getter.
   init: function() {
-    this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
-    this.setColour(330);
-    this.appendDummyInput()
-        .appendField('x');
-    this.setOutput(true, 'Number');
-    this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
+    this.jsonInit({
+      "message0": "x",
+      "output": "Number",
+      "colour": Blockly.Blocks.variables.HUE,
+      "tooltip": Blockly.Msg.VARIABLES_GET_TOOLTIP,
+      "helpUrl": Blockly.Msg.VARIABLES_GET_HELPURL
+    });
   }
 };
 
@@ -210,12 +211,19 @@ Blockly.JavaScript['graph_get_x'] = function(block) {
 Blockly.Blocks['graph_set_y'] = {
   // y variable setter.
   init: function() {
-    this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
-    this.setColour(330);
-    this.appendValueInput('VALUE')
-        .appendField('y =')
-        .setCheck('Number');
-    this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
+    this.jsonInit({
+      "message0": "y = %1",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "VALUE",
+          "check": "Number"
+        }
+      ],
+      "colour": Blockly.Blocks.variables.HUE,
+      "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
+      "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
+    });
   }
 };
 
@@ -327,10 +335,12 @@ Graph.resize = function() {
  */
 Graph.init = function() {
   Graph.workspace = Blockly.inject('blocklyDiv',
-      {media: '../../media/',
+      {collapse: false,
+       media: '../../media/',
        toolbox: document.getElementById('toolbox')});
-  Blockly.Xml.domToWorkspace(Graph.workspace,
-      document.getElementById('startBlocks'));
+  Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                             Graph.workspace);
+  Graph.workspace.clearUndo();
 
   // When Blockly changes, update the graph.
   Graph.workspace.addChangeListener(Graph.drawVisualization);

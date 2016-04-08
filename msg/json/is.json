@@ -3,7 +3,8 @@
 		"authors": [
 			"Jonbg",
 			"아라",
-			"Gaddi00"
+			"Gaddi00",
+			"Sveinki"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "atriði",
@@ -16,6 +17,7 @@
 	"DELETE_BLOCK": "Eyða kubbi",
 	"DELETE_X_BLOCKS": "Eyða %1 kubbum",
 	"DELETE_ALL_BLOCKS": "Eyða öllum %1 kubbunum?",
+	"CLEAN_UP": "Hreinsa kubba",
 	"COLLAPSE_BLOCK": "Loka kubbi",
 	"COLLAPSE_ALL": "Loka kubbum",
 	"EXPAND_BLOCK": "Opna kubb",
@@ -57,7 +59,7 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Endurtaka eitthvað á meðan gildi er satt.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Endurtaka eitthvað á meðan gildi er ósatt.",
 	"CONTROLS_FOR_HELPURL": "https://github.com/google/blockly/wiki/Loops#count-with",
-	"CONTROLS_FOR_TOOLTIP": "Láta breytuna \"%1\" taka inn gildi frá fyrstu tölu til síðustu tölu hlaupandi á bilinu og endurtaka kubbana fyrir hverja tölu.",
+	"CONTROLS_FOR_TOOLTIP": "Láta breytuna '%1' taka inn gildi frá fyrstu tölu til síðustu tölu, hlaupandi á tiltekna bilinu og gera tilteknu kubbana.",
 	"CONTROLS_FOR_TITLE": "telja með %1 frá %2 til %3 um %4",
 	"CONTROLS_FOREACH_TITLE": "fyrir hvert %1 í lista %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Fyrir hvert atriði í lista er breyta '%1' stillt á atriðið og skipanir gerðar.",
@@ -264,7 +266,7 @@
 	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
 	"LISTS_INDEX_OF_FIRST": "finna fyrsta tilfelli atriðis",
 	"LISTS_INDEX_OF_LAST": "finna síðasta tilfelli atriðis",
-	"LISTS_INDEX_OF_TOOLTIP": "Finnur hvar atriðið kemur fyrir fyrst/síðast í listanum og skilar sæti þess. Skilar 0 ef textinn finnst ekki.",
+	"LISTS_INDEX_OF_TOOLTIP": "Finnur hvar atriðið kemur fyrir fyrst/síðast í listanum og skilar sæti þess. Skilar 0 ef atriðið finnst ekki.",
 	"LISTS_GET_INDEX_GET": "sækja",
 	"LISTS_GET_INDEX_GET_REMOVE": "sækja og fjarlægja",
 	"LISTS_GET_INDEX_REMOVE": "fjarlægja",
@@ -328,6 +330,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "með:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "með:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Býr til fall sem skilar engu.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Lýstu þessari aðgerð/falli...",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFRETURN_RETURN": "skila",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Býr til fall sem skilar úttaki.",
@@ -344,5 +347,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Sýna skilgreiningu falls",
 	"PROCEDURES_CREATE_DO": "Búa til '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ef gildi er satt, skal skila öðru gildi.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Aðvörun: Þennan kubb má aðeins nota í skilgreiningu falls."
 }

@@ -3,7 +3,8 @@
 		"authors": [
 			"Cocu",
 			"Kingu",
-			"아라"
+			"아라",
+			"SuperPotato"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -16,6 +17,7 @@
 	"DELETE_BLOCK": "Slett blokk",
 	"DELETE_X_BLOCKS": "Slett %1 blokker",
 	"DELETE_ALL_BLOCKS": "Slett alle %1 blokker?",
+	"CLEAN_UP": "Rydd opp Blocks",
 	"COLLAPSE_BLOCK": "Skjul blokk",
 	"COLLAPSE_ALL": "Skjul blokker",
 	"EXPAND_BLOCK": "Utvid blokk",
@@ -247,7 +249,7 @@
 	"LISTS_INLIST": "i listen",
 	"LISTS_INDEX_OF_FIRST": "finn første forekomst av elementet",
 	"LISTS_INDEX_OF_LAST": "finn siste forekomst av elementet",
-	"LISTS_INDEX_OF_TOOLTIP": "Returnerer posisjonen til den første/siste forekomsten av elementet i en liste. Returnerer 0 hvis ikke funnet.",
+	"LISTS_INDEX_OF_TOOLTIP": "Returnerer indeksen av den første/siste forekomsten av elementet i lista. Returnerer 0 hvis ikke funnet.",
 	"LISTS_GET_INDEX_GET": "hent",
 	"LISTS_GET_INDEX_GET_REMOVE": "hent og fjern",
 	"LISTS_GET_INDEX_REMOVE": "fjern",
@@ -293,6 +295,8 @@
 	"LISTS_GET_SUBLIST_END_LAST": "til siste",
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Kopiérer en ønsket del av en liste.",
+	"LISTS_SPLIT_LIST_FROM_TEXT": "lag liste av tekst",
+	"LISTS_SPLIT_TEXT_FROM_LIST": "lag tekst av liste",
 	"ORDINAL_NUMBER_SUFFIX": "",
 	"VARIABLES_GET_TOOLTIP": "Returnerer verdien av denne variabelen.",
 	"VARIABLES_GET_CREATE_SET": "Opprett 'sett %1'",

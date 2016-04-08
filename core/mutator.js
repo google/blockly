@@ -198,6 +198,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
+  Blockly.Events.fire(
+      new Blockly.Events.Ui(this.block_, 'mutatorOpen', !visible, visible));
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(this.block_.workspace,
@@ -232,17 +234,14 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     if (this.block_.saveConnections) {
       var thisMutator = this;
       this.block_.saveConnections(this.rootBlock_);
-      this.sourceListener_ = Blockly.bindEvent_(
-          this.block_.workspace.getCanvas(),
-          'blocklyWorkspaceChange', null,
-          function() {
-            thisMutator.block_.saveConnections(thisMutator.rootBlock_)
-          });
+      this.sourceListener_ = function() {
+        thisMutator.block_.saveConnections(thisMutator.rootBlock_);
+      };
+      this.block_.workspace.addChangeListener(this.sourceListener_);
     }
     this.resizeBubble_();
     // When the mutator's workspace changes, update the source block.
-    Blockly.bindEvent_(this.workspace_.getCanvas(), 'blocklyWorkspaceChange',
-        this, this.workspaceChanged_);
+    this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));
     this.updateColour();
   } else {
     // Dispose of the bubble.
@@ -255,7 +254,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.workspaceWidth_ = 0;
     this.workspaceHeight_ = 0;
     if (this.sourceListener_) {
-      Blockly.unbindEvent_(this.sourceListener_);
+      this.block_.workspace.removeChangeListener(this.sourceListener_);
       this.sourceListener_ = null;
     }
   }
@@ -268,7 +267,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Mutator.prototype.workspaceChanged_ = function() {
-  if (Blockly.dragMode_ == 0) {
+  if (Blockly.dragMode_ == Blockly.DRAG_NONE) {
     var blocks = this.workspace_.getTopBlocks(false);
     var MARGIN = 20;
     for (var b = 0, block; block = blocks[b]; b++) {
@@ -283,23 +282,37 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
 
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
+    Blockly.Events.setGroup(true);
+    var block = this.block_;
+    var oldMutationDom = block.mutationToDom();
+    var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
     // Switch off rendering while the source block is rebuilt.
-    var savedRendered = this.block_.rendered;
-    this.block_.rendered = false;
+    var savedRendered = block.rendered;
+    block.rendered = false;
     // Allow the source block to rebuild itself.
-    this.block_.compose(this.rootBlock_);
+    block.compose(this.rootBlock_);
     // Restore rendering and show the changes.
-    this.block_.rendered = savedRendered;
+    block.rendered = savedRendered;
     // Mutation may have added some elements that need initalizing.
-    this.block_.initSvg();
-    if (this.block_.rendered) {
-      this.block_.render();
+    block.initSvg();
+    var newMutationDom = block.mutationToDom();
+    var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);
+    if (oldMutation != newMutation) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+          block, 'mutation', null, oldMutation, newMutation));
+      // Ensure that any bump is part of this mutation's event group.
+      var group = Blockly.Events.getGroup();
+      setTimeout(function() {
+          Blockly.Events.setGroup(group);
+          block.bumpNeighbours_();
+          Blockly.Events.setGroup(false);
+      }, Blockly.BUMP_DELAY);
+    }
+    if (block.rendered) {
+      block.render();
     }
     this.resizeBubble_();
-    // The source block may have changed, notify its workspace.
-    this.block_.workspace.fireChangeEvent();
-    goog.Timer.callOnce(
-        this.block_.bumpNeighbours_, Blockly.BUMP_DELAY, this.block_);
+    Blockly.Events.setGroup(false);
   }
 };
 
@@ -330,3 +343,37 @@ Blockly.Mutator.prototype.dispose = function() {
   this.block_.mutator = null;
   Blockly.Icon.prototype.dispose.call(this);
 };
+
+/**
+ * Reconnect an block to a mutated input.
+ * @param {Blockly.Connection} connectionChild Connection on child block.
+ * @param {!Blockly.Block} block Parent block.
+ * @param {string} inputName Name of input on parent block.
+ * @return {boolean} True iff a reconnection was made, false otherwise.
+ */
+Blockly.Mutator.reconnect = function(connectionChild, block, inputName) {
+  if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
+    return false;  // No connection or block has been deleted.
+  }
+  var connectionParent = block.getInput(inputName).connection;
+  var currentParent = connectionChild.targetBlock();
+  if ((!currentParent || currentParent == block) &&
+      connectionParent.targetConnection != connectionChild) {
+    if (connectionParent.isConnected()) {
+      // There's already something connected here.  Get rid of it.
+      connectionParent.disconnect();
+    }
+    connectionParent.connect(connectionChild);
+    return true;
+  }
+  return false;
+};
+
+// Export symbols that would otherwise be renamed by Closure compiler.
+if (!goog.global['Blockly']) {
+  goog.global['Blockly'] = {};
+}
+if (!goog.global['Blockly']['Mutator']) {
+  goog.global['Blockly']['Mutator'] = {};
+}
+goog.global['Blockly']['Mutator']['reconnect'] = Blockly.Mutator.reconnect;

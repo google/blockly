@@ -24,6 +24,8 @@
 	"DISABLE_BLOCK": "Адключыць блёк",
 	"ENABLE_BLOCK": "Уключыць блёк",
 	"HELP": "Дапамога",
+	"UNDO": "Скасаваць",
+	"REDO": "Паўтарыць",
 	"CHAT": "Стасуйцеся са сваім калегам, набіраючы тэкст у гэтым полі!",
 	"AUTH": "Калі ласка, аўтарызуйце гэтае прыкладаньне, каб можна было захоўваць Вашую працу і мець магчымасьць дзяліцца ёю.",
 	"ME": "Я",
@@ -286,6 +288,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "з:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "з:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Стварае функцыю бяз выніку.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Апішыце гэтую функцыю…",
 	"PROCEDURES_DEFRETURN_RETURN": "вярнуць",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Стварае функцыю з вынікам.",
 	"PROCEDURES_ALLOW_STATEMENTS": "дазволіць зацьвярджэньне",
@@ -301,5 +304,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Падсьвяціць вызначэньне функцыі",
 	"PROCEDURES_CREATE_DO": "Стварыць '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Калі значэньне ісьціна, вярнуць другое значэньне.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Папярэджаньне: гэты блёк можа выкарыстоўвацца толькі ў вызначанай функцыі."
 }

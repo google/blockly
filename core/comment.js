@@ -116,6 +116,14 @@ Blockly.Comment.prototype.createEditor_ = function() {
   Blockly.bindEvent_(this.textarea_, 'wheel', this, function(e) {
     e.stopPropagation();
   });
+  Blockly.bindEvent_(this.textarea_, 'change', this, function(e) {
+    if (this.text_ != this.textarea_.value) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+        this.block_, 'comment', null, this.text_, this.textarea_.value));
+      this.text_ = this.textarea_.value;
+    }
+  });
+
   return this.foreignObject_;
 };
 
@@ -156,6 +164,8 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
+  Blockly.Events.fire(
+      new Blockly.Events.Ui(this.block_, 'commentOpen', !visible, visible));
   if ((!this.block_.isEditable() && !this.textarea_) || goog.userAgent.IE) {
     // Steal the code from warnings to make an uneditable text bubble.
     // MSIE does not support foreignobject; textareas are impossible.
@@ -176,7 +186,6 @@ Blockly.Comment.prototype.setVisible = function(visible) {
         this.width_, this.height_);
     this.bubble_.registerResizeEvent(this, this.resizeBubble_);
     this.updateColour();
-    this.text_ = null;
   } else {
     // Dispose of the bubble.
     this.bubble_.dispose();
@@ -243,10 +252,13 @@ Blockly.Comment.prototype.getText = function() {
  * @param {string} text Comment text.
  */
 Blockly.Comment.prototype.setText = function(text) {
+  if (this.text_ != text) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+      this.block_, 'comment', null, this.text_, text));
+    this.text_ = text;
+  }
   if (this.textarea_) {
     this.textarea_.value = text;
-  } else {
-    this.text_ = text;
   }
 };
 
@@ -254,6 +266,9 @@ Blockly.Comment.prototype.setText = function(text) {
  * Dispose of this comment.
  */
 Blockly.Comment.prototype.dispose = function() {
+  if (Blockly.Events.isEnabled()) {
+    this.setText('');  // Fire event to delete comment.
+  }
   this.block_.comment = null;
   Blockly.Icon.prototype.dispose.call(this);
 };

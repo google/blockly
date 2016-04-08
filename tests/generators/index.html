@@ -49,6 +49,18 @@
 <script src="../../generators/dart/variables.js"></script>
 <script src="../../generators/dart/procedures.js"></script>
 
+<script src="../../generators/lua.js"></script>
+<script src="unittest_lua.js"></script>
+<script src="../../generators/lua/logic.js"></script>
+<script src="../../generators/lua/loops.js"></script>
+<script src="../../generators/lua/math.js"></script>
+<script src="../../generators/lua/text.js"></script>
+<script src="../../generators/lua/lists.js"></script>
+<script src="../../generators/lua/colour.js"></script>
+<script src="../../generators/lua/variables.js"></script>
+<script src="../../generators/lua/procedures.js"></script>
+
+
 <script src="unittest.js"></script>
 <script src="../../msg/messages.js"></script>
 <script src="../../blocks/logic.js"></script>
@@ -116,7 +128,7 @@ function fromXml(xmlText) {
     alert('Error parsing XML:\n' + e);
     return;
   }
-  Blockly.Xml.domToWorkspace(workspace, xmlDoc);
+  Blockly.Xml.domToWorkspace(xmlDoc, workspace);
 }
 
 function setOutput(text) {
@@ -151,6 +163,11 @@ function toPhp() {
 
 function toDart() {
   var code = Blockly.Dart.workspaceToCode(workspace);
+  setOutput(code);
+}
+
+function toLua() {
+  var code = Blockly.Lua.workspaceToCode(workspace);
   setOutput(code);
 }
 </script>
@@ -287,6 +304,7 @@ h1 {
       <input type="button" value="Python" onclick="toPython()">
       <input type="button" value="PHP" onclick="toPhp()">
       <input type="button" value="Dart" onclick="toDart()">
+      <input type="button" value="Lua" onclick="toLua()">
     </p>
   </td></tr><tr><td height="99%">
     <textarea id="importExport" readonly="readonly" wrap="off"></textarea>

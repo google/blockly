@@ -22,6 +22,8 @@
 	"DISABLE_BLOCK": "Disativé ël blòch",
 	"ENABLE_BLOCK": "Ativé ël blòch",
 	"HELP": "Agiut",
+	"UNDO": "Anulé",
+	"REDO": "Fé torna",
 	"CHAT": "Ch'a ciaciara con sò colaborator an scrivend an costa casela!",
 	"AUTH": "Për piasì, ch'a autorisa costa aplicassion a përmëtte ëd salvé sò travaj e a autoriselo a esse partagià da chiel.",
 	"ME": "Mi",
@@ -286,6 +288,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "con:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "con:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "A crea na fonsion sensa surtìa.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Descrive sa fonsion...",
 	"PROCEDURES_DEFRETURN_RETURN": "artorn",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "A crea na fonsion con na surtìa.",
 	"PROCEDURES_ALLOW_STATEMENTS": "përmëtte le diciairassion",
@@ -301,5 +304,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Sot-ligné la definission dla fonsion",
 	"PROCEDURES_CREATE_DO": "Creé '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Se un valor a l'é ver, antlora smon-e un second valor.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Atension: Ës blòch a podria esse dovrà mach an na definission ëd fonsion."
 }

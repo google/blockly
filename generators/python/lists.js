@@ -312,6 +312,21 @@ Blockly.Python['lists_getSublist'] = function(block) {
   return [code, Blockly.Python.ORDER_MEMBER];
 };
 
+Blockly.Python['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var list = (Blockly.Python.valueToCode(block, 'LIST', 
+    Blockly.Python.ORDER_MEMBER) || '[]');
+  var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
+  var type = block.getFieldValue('TYPE');
+  var key = (type === 'numeric' ? 'float' :
+    type === 'text' ? 'str' :
+    type === 'ignoreCase' ? 'str.lower' : 
+    type === 'length' ? 'len' : 'unknown');
+  
+  var code = 'sorted(' + list + ', key=' + key + ', reverse=' + reverse + ')';
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+};
+
 Blockly.Python['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var mode = block.getFieldValue('MODE');

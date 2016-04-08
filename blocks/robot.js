@@ -202,7 +202,21 @@ Blockly.Blocks['robot_movement_tuck_arms'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(20);
-    this.setTooltip('');
+    this.setTooltip('Tucks or deploys the arms.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_manipulation_set_gripper'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["open", "OPEN"], ["close", "CLOSE"]]), "ACTION")
+        .appendField(new Blockly.FieldDropdown([["left", "LEFT"], ["right", "RIGHT"]]), "SIDE")
+        .appendField("gripper");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('Opens or closes the gripper.');
     this.setHelpUrl('');
   }
 };

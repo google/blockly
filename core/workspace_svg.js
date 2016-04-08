@@ -29,6 +29,7 @@ goog.provide('Blockly.WorkspaceSvg');
 // TODO(scr): Fix circular dependencies
 // goog.require('Blockly.Block');
 goog.require('Blockly.ConnectionDB');
+goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
@@ -438,7 +439,7 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
   }
   var block = null;
   if (id) {
-    block = Blockly.Block.getById(id);
+    block = this.getBlockById(id);
     if (!block) {
       return;
     }
@@ -468,7 +469,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
   }
   Blockly.terminateDrag_();  // Dragging while pasting?  No.
   Blockly.Events.disable();
-  var block = Blockly.Xml.domToBlock(this, xmlBlock);
+  var block = Blockly.Xml.domToBlock(xmlBlock, this);
   // Move the duplicate to original position.
   var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
   var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
@@ -937,7 +938,7 @@ Blockly.WorkspaceSvg.prototype.playAudio = function(name, opt_volume) {
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  */
 Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
-  tree = Blockly.parseToolboxTree_(tree);
+  tree = Blockly.Options.parseToolboxTree(tree);
   if (!tree) {
     if (this.options.languageTree) {
       throw 'Can\'t nullify an existing toolbox.';

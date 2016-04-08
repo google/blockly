@@ -153,6 +153,6 @@ Blockly.JavaScript['robot_manipulation_set_gripper'] = function(block) {
     action = 2;
   }
   var max_effort = -1;
-  var code = 'robot.setGripper(' + dropdown_action + ', ' + dropdown_side + ', ' + max_effort + ');\n';
+  var code = 'robot.setGripper(' + side + ', ' + action + ', ' + max_effort + ');\n';
   return code;
 };

@@ -176,7 +176,7 @@ Blockly.Blocks['robot_head_look_at'] = {
         .appendField("look at");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour(160);
+    this.setColour(230);
     this.setTooltip('Look at an object.');
     this.setHelpUrl('');
   }
@@ -196,6 +196,7 @@ Blockly.Blocks['robot_perception_find_objects'] = {
 Blockly.Blocks['robot_perception_object_attributes'] = {
   init: function() {
     this.appendValueInput("OBJECT")
+        .setCheck("SceneObject")
         .appendField(new Blockly.FieldDropdown([["x of object", "X"], ["y of object", "Y"], ["z of object", "Z"], ["long side length of object", "LONGSIDELENGTH"], ["short side length of object", "SHORTSIDELENGTH"], ["height of object", "HEIGHT"]]), "ATTRIBUTE");
     this.setOutput(true);
     this.setColour(230);
@@ -215,6 +216,30 @@ Blockly.Blocks['robot_movement_tuck_arms'] = {
     this.setNextStatement(true, null);
     this.setColour(20);
     this.setTooltip('Tucks or deploys the robot\'s arms.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_manipulation_pick_default'] = {
+  init: function() {
+    this.appendValueInput("OBJ")
+        .setCheck("SceneObject")
+        .appendField("pick up object");
+    this.setOutput(true, "Boolean");
+    this.setColour(20);
+    this.setTooltip('Picks up the given object.');
+    this.setHelpUrl('');
+  }
+};
+
+
+Blockly.Blocks['robot_manipulation_place_default'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("place object on table");
+    this.setOutput(true, "Boolean");
+    this.setColour(20);
+    this.setTooltip('Places the held object onto the nearest table.');
     this.setHelpUrl('');
   }
 };

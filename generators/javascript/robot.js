@@ -123,3 +123,17 @@ Blockly.JavaScript['robot_movement_tuck_arms'] = function(block) {
   var code = 'robot.tuckArms(' + left_action + ', ' + right_action + ');\n';
   return code;
 };
+
+
+Blockly.JavaScript['robot_manipulation_pick_default'] = function(block) {
+  var value_obj = Blockly.JavaScript.valueToCode(block, 'OBJ', Blockly.JavaScript.ORDER_MEMBER) || 'null';
+  var arm_id = 0; // DEFAULT
+  var code = 'robot.pick(' + value_obj + ', ' + arm_id + ')';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};
+
+Blockly.JavaScript['robot_manipulation_place_default'] = function(block) {
+  var arm_id = 0; // DEFAULT
+  var code = 'robot.place(' + arm_id + ')';
+  return [code, Blockly.JavaScript.ORDER_MEMBER];
+};

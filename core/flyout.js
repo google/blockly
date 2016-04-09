@@ -809,6 +809,14 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
   };
 };
 
+/**
+ * Copy a block from the flyout to the workspace and position it correctly.
+ * @param {!Blockly.Block} originBlock The flyout block to copy.
+ * @param {!Blockly.Workspace} workspace The main workspace.
+ * @param {!Blockly.Flyout} flyout The flyout where originBlock originates.
+ * @return {!Blockly.Block} The new block in the main workspace.
+ * @private
+ */
 Blockly.Flyout.placeNewBlock_ = function(originBlock, workspace,
     flyout) {
   var svgRootOld = originBlock.getSvgRoot();
@@ -816,38 +824,61 @@ Blockly.Flyout.placeNewBlock_ = function(originBlock, workspace,
     throw 'originBlock is not rendered.';
   }
   // Figure out where the original block is on the screen, relative to the upper
-  // left corner of the workspace.
+  // left corner of the main workspace.
   var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
-  // Scale the scroll (getSvgXY_ did not do this).
-  if (flyout.RTL) {
-    var width = workspace.getMetrics().viewWidth - flyout.width_;
-    xyOld.x += width / workspace.scale - width;
-  } else {
-    xyOld.x += flyout.workspace_.scrollX / flyout.workspace_.scale -
-        flyout.workspace_.scrollX;
+  // If the flyout is on the right side, (0, 0) in the flyout is offset to
+  // the right of (0, 0) in the main workspace.  Offset to take that into
+  // account.
+  if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
+    var scrollX = workspace.getMetrics().viewWidth - flyout.width_;
+    var scale = workspace.scale;
+    // Scale the scroll (getSvgXY_ did not do this).
+    xyOld.x += scrollX / scale - scrollX;
   }
-  xyOld.y += flyout.workspace_.scrollY / flyout.workspace_.scale -
-      flyout.workspace_.scrollY;
+  // Take into account that the flyout might have been scrolled horizontally
+  // (separately from the main workspace).
+  // Generally a no-op in vertical mode but likely to happen in horizontal
+  // mode.
+  scrollX = flyout.workspace_.scrollX;
+  scale = flyout.workspace_.scale;
+  xyOld.x += scrollX / scale - scrollX;
+
+  // If the flyout is on the bottom, (0, 0) in the flyout is offset to be below
+  // (0, 0) in the main workspace.  Offset to take that into account.
+  if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
+    var scrollY = workspace.getMetrics().viewHeight - flyout.height_;
+    var scale = workspace.scale;
+    xyOld.y += scrollY / scale - scrollY;
+  }
+  // Take into account that the flyout might have been scrolled vertically
+  // (separately from the main workspace).
+  // Generally a no-op in horizontal mode but likely to happen in vertical
+  // mode.
+  scrollY = flyout.workspace_.scrollY;
+  scale = flyout.workspace_.scale;
+  xyOld.y += scrollY / scale - scrollY;
 
   // Create the new block by cloning the block in the flyout (via XML).
   var xml = Blockly.Xml.blockToDom(originBlock);
   var block = Blockly.Xml.domToBlock(xml, workspace);
-  // Place it in the same spot as the flyout copy.
   var svgRootNew = block.getSvgRoot();
   if (!svgRootNew) {
     throw 'block is not rendered.';
   }
   // Figure out where the new block got placed on the screen, relative to the
   // upper left corner of the workspace.  This may not be the same as the
-  // original block because the original block was in the flyout.
+  // original block because the flyout's origin may not be the same as the
+  // main workspace's origin.
   var xyNew = Blockly.getSvgXY_(svgRootNew, workspace);
   // Scale the scroll (getSvgXY_ did not do this).
   xyNew.x += workspace.scrollX / workspace.scale - workspace.scrollX;
   xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
+  // If the flyout is collapsible and the workspace can't be scrolled
   if (workspace.toolbox_ && !workspace.scrollbar) {
     xyNew.x += workspace.toolbox_.width / workspace.scale;
     xyNew.y += workspace.toolbox_.height / workspace.scale;
   }
+
   // Move the new block to where the old block is.
   block.moveBy(xyOld.x - xyNew.x, xyOld.y - xyNew.y);
   return block;

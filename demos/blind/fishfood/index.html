@@ -8,6 +8,12 @@
   <script src="../../../javascript_compressed.js"></script>
   <script src="../../../msg/js/en.js"></script>
 
+  <script src="music.js"></script>
+
+  <!-- Libraries for MIDI playback. -->
+  <script src="../../../MIDI.js/build/MIDI.js"></script>
+  <script src="../../../MIDI.js/inc/shim/Base64binary.js"></script>
+
   <!-- 1. Load libraries -->
     <!-- IE required polyfill -->
     <script src="../libs/es6-shim.min.js"></script>
@@ -53,14 +59,90 @@
   <script src='app/appview.component.js'></script>
   <script src='app/levelmanager.component.js'></script>
   <script src='app/boot.js'></script>
-  <script>
 
-Blockly.Blocks['play_random_note'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField("play random note");
+<script>
+
+ MIDI.loadPlugin({
+    soundfontUrl: '../../../MIDI.js/examples/soundfont/',
+    instrument: 'acoustic_grand_piano',
+    callback: function() {}
+  });
+
+  var _MIDI_CHANNEL = 0;
+  var _MIDI_VELOCITY = 127;
+  var _MILLISECS_PER_BEAT = 2000.0;
+  var notesBuffer = [];
+  var currentTimeInSecs = 0;
+  var activeTimeouts = [];
+
+  function getMidiValueFromPitch(pitch) {
+    var PITCHES_TO_MIDI_VALUES = {
+      B: 71,
+      A: 69,
+      G: 67,
+      F: 65,
+      E: 64,
+      D: 62,
+      C: 60
+    };
+    if (PITCHES_TO_MIDI_VALUES.hasOwnProperty(pitch)) {
+      return PITCHES_TO_MIDI_VALUES[pitch];
+    } else {
+      // TODO(sll): change this.
+      return 5;
+    }
   }
-};
+  function addNotesToBuffer(pitches, durationInBeats) {
+    var midiValues = [];
+    pitches.forEach(function(pitch) {
+      midiValues.push(getMidiValueFromPitch(pitch));
+    });
+    notesBuffer.push({
+      midiValues: midiValues,
+      durationInBeats: durationInBeats,
+      delayInBeats: currentTimeInSecs
+    });
+    currentTimeInSecs += durationInBeats;
+  }
+  function playBuffer() {
+    notesBuffer.forEach(function(note) {
+      activeTimeouts.push(
+        setTimeout(function() {
+          playNote([note.midiValues[0] - 12], note.durationInBeats);
+        }, note.delayInBeats * _MILLISECS_PER_BEAT)
+      );
+    });
+    activeTimeouts.push(
+      setTimeout(function() {
+        gradeChallenge();
+      }, currentTimeInSecs * _MILLISECS_PER_BEAT)
+    );
+  }
+  function playBufferWithMelody() {
+    // Play a backing melody, too.
+    MELODIES[1].forEach(function(noteAndLength) {
+      activeTimeouts.push(
+        setTimeout(function() {
+          playNote([getMidiValueFromPitch(noteAndLength[0])], noteAndLength[1]);
+        }, noteAndLength[2] * _MILLISECS_PER_BEAT)
+      );
+    });
+    playBuffer();
+  }
+  function playNote(midiValues, durationInBeats) {
+    MIDI.chordOn(
+      _MIDI_CHANNEL, midiValues, _MIDI_VELOCITY, 0);
+    MIDI.chordOff(
+      _MIDI_CHANNEL, midiValues, durationInBeats);
+  }
+  function gradeChallenge() {
+      if(app.levelValidationFunctions[app.level]()){
+        alert('Good job! You completed the level!');
+      } else {
+        alert('Not quite! Try again!');
+      }
+  }
+</script>
 </script>
 </body>
 </html>

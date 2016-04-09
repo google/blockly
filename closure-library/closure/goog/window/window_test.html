@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2009 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+
+  @author marcosalmeida@google.com (Marcos Almeida)
+-->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+  <title>
+   Closure Unit Tests - goog.window
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+    goog.require('goog.windowTest');
+  </script>
+  <style type="text/css">
+   .goog-like-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+
+<h4>Some links for testing referrer stripping manually.</h4>
+<div class='goog-like-link'>http://www.google.com/search?q=;</div>
+<div class='goog-like-link'>http://www.google.com/search?q=x&amp;lang=en</div>
+<div class='goog-like-link'>http://www.google.com/search?q=x;lang=en</div>
+<div class='goog-like-link'>http://www.google.com/search?q="</div>
+<div class='goog-like-link'>http://www.google.com/search?q='</div>
+<div class='goog-like-link'>http://www.google.com/search?q=&lt;</div>
+<div class='goog-like-link'>http://www.google.com/search?q=&gt;</div>
+
+</body>
+</html>

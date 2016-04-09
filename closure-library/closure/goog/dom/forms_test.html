@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2006 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8" />
+<title>Closure Unit Tests - goog.dom.forms</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.dom.formsTest');
+</script>
+</head>
+<body>
+  <!-- empty div to test against -->
+  <div id="testdiv1"></div>
+
+  <form id="testform1" onsubmit="return false">
+
+    <!-- text input with one value -->
+    <input id="in1" name="in1" value="foo">
+
+    <!-- text inputs with two values -->
+    <input id="in2" name="in2" value="bar">
+    <input id="in2" name="in2" value="baaz">
+
+    <!-- empty text input -->
+    <input id="in3" name="in3" value="">
+
+    <!-- password -->
+    <input id="pass" name="pass" type="password" value="bar">
+
+    <!-- textarea -->
+    <textarea id="textarea1" name="textarea">foo bar baz</textarea>
+
+    <!-- select single -->
+    <select id="select1" name="select1">
+      <option value="1" selected>one</option>
+      <option value="2">two</option>
+    </select>
+
+    <!-- select multiple -->
+    <select id="select2" name="select2" multiple=true>
+      <option value="a" selected>A</option>
+      <option value="b">B</option>
+      <option value="c" selected>C</option>
+    </select>
+
+    <!-- select no value -->
+    <select id="select3" name="select3">
+      <option></option>
+      <option value="1">one</option>
+      <option value="2">two</option>
+    </select>
+
+    <!-- checkboxes -->
+    <fieldset id="testfieldset1">
+      <legend id="testlegend1">Checkboxes</legend>
+      <input id="checkbox1" type="checkbox" name="checkbox1" checked>
+      <input id="checkbox2" type="checkbox" name="checkbox2">
+    </fieldset>
+
+    <!-- radio buttons -->
+    <fieldset>
+      <legend>Radio Buttons</legend>
+      <input id="radio1" type="radio" name="radio" value="X" checked>
+      <input id="radio2" type="radio" name="radio" value="Y">
+    </fieldset>
+
+    <fieldset>
+      <legend>Radio Buttons</legend>
+      <input id="radio3" type="radio" name="radio2" value="X">
+      <input id="radio4" type="radio" name="radio2" value="Y" checked>
+    </fieldset>
+
+    <!-- button -->
+    <button id="button" name="button" type="button" value="button" onclick="testSetValueSelectMultiple()">button</button>
+
+    <!-- submit -->
+    <input id="submit" type="submit" name="submit" value="submit">
+
+    <!-- reset -->
+    <input id="reset" type="reset" name="reset" value="reset">
+
+  </form>
+
+  <form id="testform2">
+    <input type="file" name="file">
+  </form>
+
+  <form id="testform3">
+    <!-- text input -->
+    <input id="in4" name="in4">
+
+    <!-- textarea -->
+    <textarea id="textarea2" name="textarea"></textarea>
+
+    <!-- select single -->
+    <select id="select4" name="select1">
+      <option value="1">one</option>
+      <option value="2">two</option>
+    </select>
+
+    <!-- select multiple -->
+    <select id="select5" name="select5" multiple=true>
+      <option value="a">A</option>
+      <option value="b">B</option>
+      <option value="c">C</option>
+    </select>
+
+    <!-- radio -->
+    <input id="radio3" type="radio" name="radio3" value="Z">
+
+    <!-- checkbox -->
+    <input id="checkbox2" type="checkbox" name="checkbox2">
+
+
+    <!-- select multiple no value -->
+    <select id="select6" name="select6" multiple=true>
+      <option value="a">A</option>
+      <option value="b">B</option>
+    </select>
+
+    <!-- select with empty value -->
+    <select id="select7" name="select7">
+      <option value="">Empty</option>
+      <option value="a">A</option>
+      <option value="b">B</option>
+    </select>
+
+  </form>
+
+  <form id="testform4">
+    <embed ></embed>
+    <embed type="foo/bar"></embed>
+    <object></object>
+  </form>
+</body>
+</html>

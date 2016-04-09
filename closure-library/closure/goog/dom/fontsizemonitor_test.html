@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!--
+Author: arv@google.com (Erik Arvidsson)
+-->
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8" />
+<title>Closure Unit Tests - goog.dom.FontSizeMonitor</title>
+<script src="../base.js"></script>
+<script>
+  goog.require('goog.dom.FontSizeMonitorTest');
+</script>
+</head>
+<body>
+
+<!-- iframe to be used to test DomHelper support -->
+<iframe></iframe>
+
+<!--
+This div has a script in it that creates a FontSizeMonitor.  This ensures that
+we do not get an "Operation abort" error in IE.
+-->
+<div>
+  <script>
+    var operationAbortTester = new goog.dom.FontSizeMonitor();
+    // Close script tag before disposing.
+  </script>
+  <script>
+    operationAbortTester.dispose();
+  </script>
+</div>
+
+</body>
+</html>

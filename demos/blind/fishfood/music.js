@@ -37,6 +37,27 @@ var MUSIC_DUMMY_HELPURL = 'Dummy help URL';
  */
 Blockly.Blocks.music.HUE = 20;
 
+Blockly.Blocks['music_play_random_note'] = {
+  /**
+   * Block for playing a random music note.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "play random note",
+      "args0": [
+        {
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.music.HUE,
+      "tooltip": MUSIC_DUMMY_TOOLTIP,
+      "helpUrl": MUSIC_DUMMY_HELPURL
+    });
+  }
+};
+
 Blockly.Blocks['music_play_note'] = {
   /**
    * Block for playing a music note.

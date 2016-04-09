@@ -123,7 +123,7 @@ app.ToolboxTreeView = ng.core
     blockMenuSelected: function(block, event) {
       switch (event.target.value) {
         case 'COPY_TO_WORKSPACE':
-          var xml = Blockly.Xml.blockToDom_(block);
+          var xml = Blockly.Xml.blockToDom(block);
           Blockly.Xml.domToBlock(app.workspace, xml);
           console.log('added block to workspace');
           break;

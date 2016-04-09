@@ -1,0 +1,35 @@
+# Copyright 2014 The Closure Library Authors. All Rights Reserved.
+#
+# Use of this source code is governed by the Apache License, Version 2.0.
+# See the LICENSE file for details.
+
+# Use new container-based infrastructure.
+language: node_js
+sudo: false
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - ./scripts/ci/install_closure_deps.sh
+
+before_script:
+  - ./scripts/http/simple_http_server.py 2> /dev/null & sleep 5
+  - ./scripts/ci/sauce_connect.sh
+  # Ensure we point to the version of clang-format that we installed in
+  # install_closure_deps.sh. Travis has an older version on the $PATH and
+  # clang-format-diff.py invokes "clang-format" with no option of specifying
+  # a binary path.
+  - export PATH=$PWD/../clang/bin/:$PATH
+
+script:
+  - ./scripts/ci/compile_closure.sh
+  - ./scripts/ci/lint_pull_request.sh
+  - ./scripts/ci/check_code_format.sh
+  - travis_wait 30 ./scripts/ci/run_all_tests.sh
+
+env:
+  global:
+    - SAUCE_USERNAME=closure-sauce
+    - SAUCE_ACCESS_KEY=dfd98f70a612-e69a-ad34-6149-3ca056f8

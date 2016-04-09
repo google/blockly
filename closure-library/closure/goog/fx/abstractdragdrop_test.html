@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+ <!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <!--
+  Author: eae@google.com (Emil A Eklund)
+  Author: dgajda@google.com (Damian Gajda)
+-->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+  <title>
+   Closure Unit Tests - goog.fx.AbstractDragDrop
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+    goog.require('goog.fx.AbstractDragDropTest');
+  </script>
+  <style>
+   #cont {
+    position: relative;
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+  }
+  #cont div {
+    position: absolute;
+    overflow: hidden;
+  }
+  </style>
+ </head>
+ <body>
+  <div id="cont" style="">
+  </div>
+  <button onclick="drawTargets(targets, 10)">
+   draw targets 1
+  </button>
+  <br />
+  <button onclick="drawTargets(targets2, 1)">
+   draw targets 2
+  </button>
+  <br />
+  <button onclick="drawTargets(targets3, 10)">
+   draw targets 3
+  </button>
+  <div id="container1">
+   <div id="child1">
+   </div>
+   <div id="child2">
+   </div>
+  </div>
+ </body>
+</html>

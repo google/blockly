@@ -9,7 +9,7 @@ app.ClipboardService = ng.core
       // this.serviceId = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
     },
     cut: function(block) {
-      this.clipboardBlockXml_ = Blockly.Xml.blockToDom_(block);
+      this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
       this.clipboardBlockSuperiorConnection = block.outputConnection ||
           block.previousConnection;
       this.clipboardBlockNextConnection = block.nextConnection;
@@ -17,7 +17,7 @@ app.ClipboardService = ng.core
       console.log('cut');
     },
     copy: function(block) {
-      this.clipboardBlockXml_ = Blockly.Xml.blockToDom_(block);
+      this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
       this.clipboardBlockSuperiorConnection = block.outputConnection ||
           block.previousConnection;
       this.clipboardBlockNextConnection = block.nextConnection;
@@ -37,7 +37,7 @@ app.ClipboardService = ng.core
       }
     },
     pasteToMarkedConnection: function(block) {
-      var xml = Blockly.Xml.blockToDom_(block);
+      var xml = Blockly.Xml.blockToDom(block);
       var blockOnProperWorkspace =
         Blockly.Xml.domToBlock(app.workspace, xml);
       this.markedConnection.connect(

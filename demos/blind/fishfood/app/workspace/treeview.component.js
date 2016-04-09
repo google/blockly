@@ -58,9 +58,8 @@ app.TreeView = ng.core
     </div>
   </ol>
 </li>
-<li #nextBlock [attr.aria-level]='level' id='{{treeService.createId(nextBlock)}}' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
-  <tree-view [block]='block.nextConnection.targetBlock()' [isTopBlock]='false' [level]='level+1'></tree-view>
-</li>
+  <tree-view *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()' [block]='block.nextConnection.targetBlock()' [isTopBlock]='false' [level]='level'></tree-view>
+
     `,
     directives: [ng.core.forwardRef(
         function() { return app.TreeView; }), app.FieldView],
@@ -88,7 +87,7 @@ app.TreeView = ng.core
         //TODO(madeeha): this should be the number of top level block that this is.
         return this.parentId+'-node0';
       }
-      return this.treeService.createId(parentList);
+      return this.treeService.createId(block);
     },
     getInfo: function(block) {
       //List all inputs

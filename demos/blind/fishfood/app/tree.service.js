@@ -24,7 +24,7 @@ app.TreeService = ng.core
       console.log("setting active descendant for tree " + id);
       this.activeDesc_[id] = node;
     },
-    getActiveDesc: function(id) {
+    getActiveDesc: function(id){
       return this.activeDesc_[id];
     },
     updateSelectedNode: function(node, tree, keepFocus){

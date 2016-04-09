@@ -23,6 +23,7 @@
  */
 var app = app || {};
 app.workspace = app.workspace || new Blockly.Workspace();
+Blockly.mainWorkspace = app.workspace;
 
 app.AppView = ng.core
   .Component({

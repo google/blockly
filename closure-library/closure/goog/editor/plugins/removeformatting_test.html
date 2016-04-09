@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+  All Rights Reserved.
+-->
+<html>
+ <!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <head>
+  <!--
+This test has not yet been updated to run on IE8. See http://b/hotlist?id=36311
+-->
+  <!--meta http-equiv="X-UA-Compatible" content="IE=edge"-->
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+  <meta charset="UTF-8" />
+  <title>
+   goog.editor.plugins.RemoveFormatting Tests
+  </title>
+  <script type="text/javascript" src="../../base.js">
+  </script>
+  <script type="text/javascript">
+    goog.require('goog.editor.plugins.RemoveFormattingTest');
+  </script>
+ </head>
+ <body>
+  <!--
+This wrapper table is outside the mock editor and only used ensure that it is
+ignored by the tests.
+-->
+  <table>
+   <tr>
+    <td>
+     <div id="html">
+     </div>
+    </td>
+   </tr>
+  </table>
+  <div id="abcde">abcde</div>
+ </body>
+</html>

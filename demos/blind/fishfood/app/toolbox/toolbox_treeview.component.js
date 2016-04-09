@@ -67,7 +67,7 @@ app.ToolboxTreeView = ng.core
       this.sharedClipboardService = _service;
       this.treeService = _service2;
     }],
-    labelParent: function(parent, childId){
+    labelParent: function(parent, childId) {
       if (!parent.getAttribute('aria-labelledby')) {
         parent.setAttribute('aria-labelledby', childId);
       }
@@ -118,7 +118,7 @@ app.ToolboxTreeView = ng.core
     blockMenuSelected: function(block, event) {
       switch (event.target.value) {
         case 'COPY_TO_WORKSPACE':
-          var xml = Blockly.Xml.blockToDom_(block);
+          var xml = Blockly.Xml.blockToDom(block);
           Blockly.Xml.domToBlock(app.workspace, xml);
           console.log('added block to workspace');
           alert('block added to workspace');

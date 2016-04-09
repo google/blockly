@@ -1,0 +1,42 @@
+<!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!--
+
+  Author: nicksantos@google.com (Nick Santos)
+  -->
+  <meta charset="UTF-8" />
+  <title>
+   Closure Unit Tests - goog.testing.events
+  </title>
+  <script src="../../base.js">
+  </script>
+  <script>
+    goog.require('goog.testing.eventsTest');
+  </script>
+ </head>
+ <body>
+  <div id="root">
+  </div>
+  <input id="testButton" type="input" value="Click Me" />
+  <div id="input">
+   Prevent Default these events:
+   <br />
+  </div>
+  <div id="log" style="position:absolute;right:0;top:0">
+   Logged events:
+  </div>
+  <div id="parentEl">
+   <div id="childEl">
+    hello!
+   </div>
+  </div>
+ </body>
+</html>

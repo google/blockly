@@ -36,7 +36,7 @@ app.FieldView = ng.core
     <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' tabIndex='0' *ngIf='isDropdown(field)' id='{{createId(listItem)}}'>
       <select [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
       <option value='NO_ACTION' selected>select an option</option>
-      <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
+      <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}'>{{optionText[optionValue]}}</option>
       </select>
     </li>
     <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' tabIndex='0' *ngIf='isCheckbox(field)'>
@@ -99,6 +99,7 @@ app.FieldView = ng.core
       //undefined will result in the 'selected' option being DISABLED
     },
     handleDropdownChange: function(field, text) {
+      console.log("handleDropdownChange called");
       if (text == 'NO_ACTION') {
         return;
       }

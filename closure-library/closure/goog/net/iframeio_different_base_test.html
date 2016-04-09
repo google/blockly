@@ -1,0 +1,28 @@
+<html>
+<!--
+Copyright 2011 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <head>
+  <meta charset="UTF-8" />
+  <title>
+   Closure Unit Tests - goog.net.IframeIo (with different base URL)
+  </title>
+  <script>
+    // We use a different base to reproduce the conditions of crbug.com/66987
+    var href = window.location.href;
+    var newHref = href.replace(/net.*/, '');
+    document.write('<base href="' + newHref + '">');
+
+    var baseScript = 'base.js';
+    document.write('<script src="' + baseScript + '"><\/script>');
+  </script>
+  <script>
+    goog.require('goog.net.iframeIoDifferentBaseTest');
+  </script>
+ </head>
+ <body>
+ </body>
+</html>

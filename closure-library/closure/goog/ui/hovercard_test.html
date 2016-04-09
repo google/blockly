@@ -1,0 +1,56 @@
+<html>
+ <!--
+Copyright 2010 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="UTF-8" />
+  <title>
+   Closure Unit Tests - goog.ui.HoverCard
+  </title>
+  <style type="text/css">
+   .goog-tooltip {
+    background: infobackground;
+    color: infotext;
+    border: 1px solid infotext;
+    padding: 1px;
+    font:menu;
+  }
+  </style>
+  <script type="text/javascript" src="../base.js">
+  </script>
+  <script type="text/javascript">
+   goog.require('goog.ui.HoverCardTest');
+  </script>
+ </head>
+ <body>
+  <p id="notpopup">
+   Content
+  </p>
+  <span id="john" email="john@gmail.com">
+   Span for John that can trigger a
+    hovercard.
+  </span>
+  <br />
+  <span id="jane">
+   Span for Jane that doesn't trigger a hovercard (no email
+    attribute)
+  </span>
+  <br />
+  <span id="james" email="james@gmail.com">
+   Span for James that can trigger a
+    hovercard
+   <span id="child">
+    Child of james
+   </span>
+  </span>
+  <br />
+  <div id="bill" email="bill@gmail.com">
+   Doesn't trigger for Bill because
+    it's a div
+  </div>
+ </body>
+</html>

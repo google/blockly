@@ -52,15 +52,32 @@ app.WorkspaceView = ng.core
       return 'workspace-tree'+index;
     },
     runCode: function() {
-      //var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+      // var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+      // try {
+      //   eval(code);
+      //   if(app.levelValidationFunctions[app.level]()){
+      //     alert('Good job! You completed the level!');
+      //   }
+      // } catch (e) {
+      //   alert(e);
+      // }
+      //sll@'s version Generate JavaScript code and run it.
+      window.LoopTrap = 1000;
+      Blockly.JavaScript.INFINITE_LOOP_TRAP =
+          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+      var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      activeTimeouts.forEach(function(timeout) {
+        clearTimeout(timeout);
+      });
+      notesBuffer = [];
+      currentTimeInSecs = 0;
       try {
-        //eval(code);
-        if(app.levelValidationFunctions[app.level]()){
-          alert('Good job! You completed the level!');
-        }
+        eval(code);
       } catch (e) {
         alert(e);
       }
+      playBuffer();
     },
     disableRunCode: function() {
       if (this.workspace.topBlocks_.length == 0){

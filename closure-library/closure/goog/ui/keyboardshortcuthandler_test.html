@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+ <!--
+Copyright 2008 The Closure Library Authors. All Rights Reserved.
+
+Use of this source code is governed by the Apache License, Version 2.0.
+See the COPYING file for details.
+-->
+ <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Author:  gboyer@google.com (Garrett Boyer) -->
+  <meta charset="UTF-8" />
+  <title>
+   Closure Unit Tests - goog.ui.KeyboardShortcutHandler
+  </title>
+  <script src="../base.js">
+  </script>
+  <script>
+   goog.require('goog.ui.KeyboardShortcutHandlerTest');
+  </script>
+ </head>
+ <body>
+  <div id="rootDiv">
+   <div id="targetDiv">
+    The test presses keys on me!
+   </div>
+   <button id="targetButton">
+    A Button
+   </button>
+   <input type="checkbox" id="targetCheckBox" />
+   <input type="color" id="targetColor" value="#FF0000" />
+   <input type="date" id="targetDate" value="1995-12-31" />
+   <input type="datetime" id="targetDateTime" value="1995-12-31T23:59:59.99Z" />
+   <input type="datetime-local" id="targetDateTimeLocal" value="1995-12-31T23:59:59.99" />
+   <input type="email" id="targetEmail" value="test@google.com" />
+   <input type="month" id="targetMonth" value="1995-12" />
+   <input type="number" id="targetNumber" value="12345" />
+   <input type="password" id="targetPassword" value="password" />
+   <input type="search" id="targetSearch" value="search terms" />
+   <input type="tel" id="targetTel" value="555 1212" />
+   <input type="text" id="targetText" value="text box" />
+   <input type="time" id="targetTime" value="12:00" />
+   <input type="url" id="targetUrl" value="http://www.google.com" />
+   <input type="week" id="targetWeek" value="2005-W52" />
+   <select id="targetSelect">
+    <option>
+     select
+    </option>
+   </select>
+   <textarea id="targetTextArea">
+    text area
+   </textarea>
+  </div>
+ </body>
+</html>

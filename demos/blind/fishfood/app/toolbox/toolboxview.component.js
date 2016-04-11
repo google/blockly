@@ -32,6 +32,7 @@ app.ToolboxView = ng.core
 <h3 id='toolbox-title'>Toolbox</h3>
 <ol #tree id='toolbox-tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' tabIndex='0' role='group' class='tree' aria-labelledby='toolbox-title' (keydown)="treeService.keyHandler($event, tree)">
 {{treeService.setActiveAttribute(tree)}}
+<div *ngIf='toolboxHasCategories'>
 <li #parent role='treeitem' aria-level='1' aria-selected=false *ngFor='#category of makeArray(sightedToolbox); #i=index'>
   <label #name>{{category.attributes.name.value}}</label>
   {{labelCategory(name, i, tree)}}
@@ -40,6 +41,10 @@ app.ToolboxView = ng.core
     {{addClass(parent, 'hasChildren')}}
   </ol>
 </li>
+</div>
+<div *ngIf='!toolboxHasCategories'>
+  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
+</div>
 </ol>
 </div>
   `,
@@ -61,6 +66,8 @@ app.ToolboxView = ng.core
     this.toolboxCategories = [];
     this.toolboxWorkspaces = {};
     this.treeService = _service;
+
+    this.toolboxHasCategories = false;
   }],
   labelCategory: function(h2, i, tree){
       var parent = h2.parentNode;
@@ -103,14 +110,26 @@ app.ToolboxView = ng.core
       if (this.toolboxCategories.length > 0) {
         return this.toolboxCategories;
       } else {
-        this.toolboxCategories = Array.from(
-            val.documentElement.getElementsByTagName('category'));
-        return this.toolboxCategories;
+        var categories = val.documentElement.getElementsByTagName('category');
+        if (categories.length > 0){
+          this.toolboxHasCategories = true;
+          this.toolboxCategories = Array.from(categories);
+          return this.toolboxCategories;
+        } else {
+          this.toolboxHasCategories = false;
+          this.toolboxCategories = Array.from(val.getElementsByTagName('xml'));
+          console.log(this.toolboxCategories);
+          return this.toolboxCategories;
+        }
       }
     }
   },
   getToolboxWorkspace: function(categoryNode) {
-    var catName = categoryNode.attributes.name.value;
+    if (categoryNode.attributes.name){
+      var catName = categoryNode.attributes.name.value;
+    } else {
+      var catName = 'no-category';
+    }
     if (this.toolboxWorkspaces[catName]) {
       return this.toolboxWorkspaces[catName];
     } else {

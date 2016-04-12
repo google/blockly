@@ -166,18 +166,17 @@ Blockly.Toolbox.prototype.position = function() {
   var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.workspace_.RTL) {
-    treeDiv.style.left =
-        (svgPosition.x + svgSize.width - treeDiv.offsetWidth) + 'px';
+	  treeDiv.style.right = '0px';
   } else {
-    //treeDiv.style.left = svgPosition.x + 'px';
+      treeDiv.style.left = '0px';
   }
   treeDiv.style.height = svgSize.height + 'px';
   //treeDiv.style.top = svgPosition.y + 'px';
   this.width = treeDiv.offsetWidth;
-  if (!this.workspace_.RTL) {
-    // For some reason the LTR toolbox now reports as 1px too wide.
-    this.width -= 1;
-  }
+  
+  // For some reason the LTR and RTL toolbox now reports as 1px too wide.
+  this.width -= 1;
+   
   this.flyout_.position();
 };
 

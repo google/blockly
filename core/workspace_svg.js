@@ -1100,6 +1100,7 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
   }
   // This event has been handled.  Don't start a workspace drag.
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**

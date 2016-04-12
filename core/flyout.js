@@ -460,7 +460,7 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
  * Scroll the flyout to the top.
  */
 Blockly.Flyout.prototype.scrollToStart = function() {
-  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? Infinity : 0);
+  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? 1000000000 : 0);
 };
 
 /**
@@ -826,37 +826,37 @@ Blockly.Flyout.placeNewBlock_ = function(originBlock, workspace,
   // Figure out where the original block is on the screen, relative to the upper
   // left corner of the main workspace.
   var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
-  // If the flyout is on the right side, (0, 0) in the flyout is offset to
-  // the right of (0, 0) in the main workspace.  Offset to take that into
-  // account.
-  if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
-    var scrollX = workspace.getMetrics().viewWidth - flyout.width_;
-    var scale = workspace.scale;
-    // Scale the scroll (getSvgXY_ did not do this).
-    xyOld.x += scrollX / scale - scrollX;
-  }
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).
   // Generally a no-op in vertical mode but likely to happen in horizontal
   // mode.
-  scrollX = flyout.workspace_.scrollX;
-  scale = flyout.workspace_.scale;
+  var scrollX = flyout.workspace_.scrollX;
+  var scale = flyout.workspace_.scale;
   xyOld.x += scrollX / scale - scrollX;
-
-  // If the flyout is on the bottom, (0, 0) in the flyout is offset to be below
-  // (0, 0) in the main workspace.  Offset to take that into account.
-  if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    var scrollY = workspace.getMetrics().viewHeight - flyout.height_;
-    var scale = workspace.scale;
-    xyOld.y += scrollY / scale - scrollY;
+  // If the flyout is on the right side, (0, 0) in the flyout is offset to
+  // the right of (0, 0) in the main workspace.  Offset to take that into
+  // account.
+  if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
+    scrollX = workspace.getMetrics().viewWidth - flyout.width_;
+    scale = workspace.scale;
+    // Scale the scroll (getSvgXY_ did not do this).
+    xyOld.x += scrollX / scale - scrollX;
   }
+
   // Take into account that the flyout might have been scrolled vertically
   // (separately from the main workspace).
   // Generally a no-op in horizontal mode but likely to happen in vertical
   // mode.
-  scrollY = flyout.workspace_.scrollY;
+  var scrollY = flyout.workspace_.scrollY;
   scale = flyout.workspace_.scale;
   xyOld.y += scrollY / scale - scrollY;
+  // If the flyout is on the bottom, (0, 0) in the flyout is offset to be below
+  // (0, 0) in the main workspace.  Offset to take that into account.
+  if (flyout.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
+    scrollY = workspace.getMetrics().viewHeight - flyout.height_;
+    scale = workspace.scale;
+    xyOld.y += scrollY / scale - scrollY;
+  }
 
   // Create the new block by cloning the block in the flyout (via XML).
   var xml = Blockly.Xml.blockToDom(originBlock);
@@ -873,7 +873,7 @@ Blockly.Flyout.placeNewBlock_ = function(originBlock, workspace,
   // Scale the scroll (getSvgXY_ did not do this).
   xyNew.x += workspace.scrollX / workspace.scale - workspace.scrollX;
   xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
-  // If the flyout is collapsible and the workspace can't be scrolled
+  // If the flyout is collapsible and the workspace can't be scrolled.
   if (workspace.toolbox_ && !workspace.scrollbar) {
     xyNew.x += workspace.toolbox_.width / workspace.scale;
     xyNew.y += workspace.toolbox_.height / workspace.scale;

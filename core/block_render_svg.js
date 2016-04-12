@@ -77,10 +77,17 @@ Blockly.BlockSvg.CORNER_RADIUS = 8;
  */
 Blockly.BlockSvg.START_HAT = false;
 /**
+ * Height of the top hat.
+ * @const
+ */
+Blockly.BlockSvg.START_HAT_HEIGHT = 15;
+/**
  * Path of the top hat's curve.
  * @const
  */
-Blockly.BlockSvg.START_HAT_PATH = 'c 30,-15 70,-15 100,0';
+Blockly.BlockSvg.START_HAT_PATH = 'c 30,-' +
+  Blockly.BlockSvg.START_HAT_HEIGHT +' 70,-' +
+  Blockly.BlockSvg.START_HAT_HEIGHT +' 100,0';
 /**
  * Path of the top hat's curve's highlight in LTR.
  * @const
@@ -480,6 +487,9 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
  */
 Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   this.startHat_ = false;
+  // Reset the height to zero and let the rendering process add in
+  // portions of the block height as it goes. (e.g. hats, inputs, etc.)
+  this.height = 0;
   // Should the top and bottom left corners be rounded or square?
   if (this.outputConnection) {
     this.squareTopLeftCorner_ = true;
@@ -497,6 +507,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
       // No output or previous connection.
       this.squareTopLeftCorner_ = true;
       this.startHat_ = true;
+      this.height += Blockly.BlockSvg.START_HAT_HEIGHT;
       inputRows.rightEdge = Math.max(inputRows.rightEdge, 100);
     }
     var nextBlock = this.getNextBlock();
@@ -860,7 +871,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
  */
 Blockly.BlockSvg.prototype.renderDrawBottom_ =
     function(steps, highlightSteps, connectionsXY, cursorY) {
-  this.height = cursorY + 1;  // Add one for the shadow.
+  this.height += cursorY + 1;  // Add one for the shadow.
   if (this.nextConnection) {
     steps.push('H', (Blockly.BlockSvg.NOTCH_WIDTH + (this.RTL ? 0.5 : - 0.5)) +
         ' ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT);

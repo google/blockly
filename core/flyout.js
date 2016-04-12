@@ -510,6 +510,14 @@ Blockly.Flyout.prototype.reflow = function() {
         var blockXY = block.getRelativeToSurfaceXY();
         block.flyoutRect_.setAttribute('x',
             this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
+        // For hat blocks we want to shift them down by the hat height
+        // since the y coordinate is the corner, not the top of the
+        // hat.
+        var hatOffset =
+          block.startHat_ ? Blockly.BlockSvg.START_HAT_HEIGHT : 0;
+        if (hatOffset != 0) {
+          block.moveBy(0, hatOffset);
+        }
         block.flyoutRect_.setAttribute('y', blockXY.y);
       }
     }

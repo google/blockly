@@ -413,7 +413,13 @@ Blockly.hideChaff = function(opt_allowToolbox) {
 Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize(this.getParentSvg());
   if (this.toolbox_) {
-    svgSize.width -= this.toolbox_.width;
+    // If the toolbox is at the bottom it's laid out separately from the main
+    // workspace, rather than overlapping.
+    if (this.toolbox_.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+      svgSize.height -= this.toolbox_.height;
+    } else {
+      svgSize.width -= this.toolbox_.width;
+    }
   }
   // Set the margin to match the flyout's margin so that the workspace does
   // not jump as blocks are added.
@@ -448,6 +454,11 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   if (this.toolbox_ && this.toolbox_.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
     absoluteLeft = this.toolbox_.width;
   }
+  var absoluteTop = 0;
+  if (this.toolbox_ && this.toolbox_.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    absoluteTop = this.toolbox_.height;
+  }
+
   var metrics = {
     viewHeight: svgSize.height,
     viewWidth: svgSize.width,
@@ -457,7 +468,7 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     viewLeft: -this.scrollX,
     contentTop: topEdge,
     contentLeft: leftEdge,
-    absoluteTop: 0,
+    absoluteTop: absoluteTop,
     absoluteLeft: absoluteLeft
   };
   return metrics;

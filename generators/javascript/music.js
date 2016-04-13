@@ -28,6 +28,12 @@ goog.provide('Blockly.JavaScript.music');
 
 goog.require('Blockly.JavaScript');
 
+Blockly.JavaScript['music_play_random_note'] = function(block) {
+  // Play a single note.
+  var code =
+      'addBassChord([45], 1);\n';
+  return code;
+};
 
 Blockly.JavaScript['music_play_note'] = function(block) {
   // Play a single note.

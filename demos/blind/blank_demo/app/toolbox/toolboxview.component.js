@@ -60,7 +60,7 @@ app.ToolboxView = ng.core
         _this.sightedToolbox = xhttp.responseXML;
       }
     };
-    xhttp.open('GET', app.gameManager.levelToolboxes[app.gameManager.level], true);
+    xhttp.open('GET', 'test_ToolboxXml.xml', true);
     xhttp.send();
 
     this.toolboxCategories = [];

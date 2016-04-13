@@ -22,10 +22,12 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 var app = app || {};
-app.level = 1;
-app.levelInstructions = {};
-app.levelHints = {};
-app.levelInstructions[1] = [`If you are using a screen reader, make sure to set your punctuation
+app.gameManager = {};
+app.gameManager.level = 1;
+app.gameManager.levelInstructions = {};
+app.gameManager.levelHints = {};
+app.gameManager.expectedBassLines = {};
+app.gameManager.levelInstructions[1] = [`If you are using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
     `Let us start by navigating to the toolbox and copying the 'play random note'
     block onto the workspace. Both the Toolbox and the Workspace are trees.
@@ -35,29 +37,91 @@ app.levelInstructions[1] = [`If you are using a screen reader, make sure to set 
     move up and down the list A is in. If you hit the left arrow, you will be taken
     back to the parent list item of A. Hitting the right arrow will take you to the
     first child list item of A.`];
-app.levelInstructions[2] = [`If you are using a screen reader, make sure to set your punctuation
+app.gameManager.levelInstructions[2] = [`If you are using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
-    `Play the C note.`,
+    `Play the G3 note.`,
     `Do not forget how to navigate a tree: If you are at item A in the tree and you hit the up or down arrows, you will
     move up and down the list A is in. If you hit the left arrow, you will be taken
     back to the parent list item of A. Hitting the right arrow will take you to the
     first child list item of A.`];
-app.levelInstructions[3] = [`If you are using a screen reader, make sure to set your punctuation
+app.gameManager.levelInstructions[3] = [`If you are using a screen reader, make sure to set your punctuation
     setting to 'all'.`,
-    `Play 2 C notes. Make sure the blocks are connected to each other.`,
+    `Play 2 G3 notes. Make sure the blocks are connected to each other.`,
     `Do not forget how to navigate a tree: If you are at item A in the tree and you hit the up or down arrows, you will
-    move up and down the list A is in. If you hit the left arrow, you'll be taken
+    move up and down the list A is in. If you hit the left arrow, you will be taken
     back to the parent list item of A. Hitting the right arrow will take you to the
     first child list item of A.`];
-app.levelHints[3] = [`Each list in the workspace is a set of connected blocks. So if you have two blocks,
+app.gameManager.levelHints[3] = [`Each list in the workspace is a set of connected blocks. So if you have two blocks,
     each item number 1 of its own list, then those blocks are not connected.
     If you have two blocks, one item 1 of a list and one item 2 of a list, then they are connected.`,
     `Try to make use of the 'copy to Blockly clipboard' and 'paste above'/'paste below' options in the block menus.`];
-app.levelToolboxes=['','level1_ToolboxXml.xml','level1_ToolboxXml.xml','level1_ToolboxXml.xml'];
-app.levelWorkspaces=[undefined,new Blockly.Workspace(),new Blockly.Workspace(),new Blockly.Workspace()];
-app.maxLevelAllowed=1;
+app.gameManager.expectedBassLines[1] = [
+      [[45], 1],
+    ];
+app.gameManager.expectedBassLines[2] = [
+      [[43], 1],
+    ];
+app.gameManager.expectedBassLines[3] = [
+      [[43], 1],
+      [[43], 1]
+    ];
+app.gameManager.expectedBlockType = [undefined, 'music_play_random_note', 'music_play_note', 'music_play_note'];
+app.gameManager.levelToolboxes=['', 'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml'];
+app.gameManager.levelWorkspaces=[undefined, new Blockly.Workspace(), new Blockly.Workspace(), new Blockly.Workspace()];
+app.gameManager.maxLevelAllowed=1;
 
-app.workspace = app.levelWorkspaces[app.level];
+app.gameManager.validateLevel = function(){
+  var correct = true;
+  var level = app.gameManager.level;
+  var expectedBassLine = new MusicLine();
+  var topBlock = app.workspace.topBlocks_[0];
+  var errorMessage = 'Not quite! Try again!';
+
+  //we should only report the earliest problem with their code
+  var errorMessageChanged = false;
+
+  expectedBassLine.setFromChordsAndDurations(
+    app.gameManager.expectedBassLines[level]);
+  correct = correct && musicPlayer.doesBassLineEqual(expectedBassLine);
+  if (!correct && !errorMessageChanged){
+    errorMessage = 'Not quite! Are you playing the right note?'
+    errorMessageChanged = true;
+  }
+
+  if (level != 3) {
+    correct = correct && app.workspace.topBlocks_.length == 1;
+  } else {
+    //if there are two topblocks that aren't connected, the error message should be the error message on line 112
+    correct = correct && (app.workspace.topBlocks_.length == 1 || app.workspace.topBlocks_.length == 2);
+  }
+  if (!correct && !errorMessageChanged){
+    errorMessage = 'Not quite! Are you playing the right number of blocks?'
+    errorMessageChanged = true;
+  }
+
+  correct = correct && topBlock && topBlock.type == app.gameManager.expectedBlockType[level];
+  if (!correct && !errorMessageChanged){
+    errorMessage = 'Not quite! Are you playing the right block?'
+    errorMessageChanged = true;
+  }
+
+  if (level == 3){
+    var connection = topBlock.nextConnection.targetConnection;
+    correct = correct && connection && connection.sourceBlock_ && connection.sourceBlock_.type == app.gameManager.expectedBlockType[level];
+    if (!correct && !errorMessageChanged){
+      errorMessage = 'Not quite! Are your blocks connected?'
+      errorMessageChanged = true;
+    }
+  }
+  if (correct){
+    alert('Good job! You completed the level!');
+    app.gameManager.maxLevelAllowed = Math.min(app.gameManager.maxLevelAllowed + 1, 3);
+  } else {
+    alert(errorMessage);
+  }
+}
+
+app.workspace = app.gameManager.levelWorkspaces[app.gameManager.level];
 
 app.LevelManagerView = ng.core
   .Component({
@@ -76,68 +140,20 @@ app.LevelManagerView = ng.core
   })
   .Class({
     constructor: function() {
-      this.level = app.level;
-      app.levelValidationFunctions={};
-      app.levelValidationFunctions[1] = function(){
-        var correct = true;
-        correct = correct && app.workspace.topBlocks_.length == 1;
-        correct = correct && app.workspace.topBlocks_[0].type == 'music_play_random_note';
-        //if we have completed a level, update the max level the user can try.
-        if (correct && app.level >= app.maxLevelAllowed){
-          app.maxLevelAllowed = Math.min(app.level + 1,3);
-        }
-        return correct;
-      };
-      app.levelValidationFunctions[2] = function(){
-        var correct = true;
-        correct = correct && app.workspace.topBlocks_.length == 1;
-        correct = correct && app.workspace.topBlocks_[0].type == 'music_play_note';
-        correct = correct && notesBuffer.length == 1;
-        correct = correct && notesBuffer[0].midiValues.length == 1 && notesBuffer[0].midiValues[0] == 60;
-        correct = correct && notesBuffer[0].durationInBeats == 1;
-        correct = correct && notesBuffer[0].delayInBeats == 0;
-        //if we have completed a level, update the max level the user can try.
-        if (correct && app.level >= app.maxLevelAllowed){
-          app.maxLevelAllowed = Math.min(app.level + 1,3);
-        }
-        return correct;
-      };
-      app.levelValidationFunctions[3] = function(){
-        //we have one topBlock
-        //the topBlock has something connected to it.
-        //block.nextConnection.targetConnection.sourceBlock_
-        var topBlock = app.workspace.topBlocks_[0];
-        var connectedBlock = topBlock.nextConnection.targetConnection.sourceBlock_;
-        var correct = topBlock && connectedBlock;
-        correct = correct && app.workspace.topBlocks_.length == 1;
-        correct = correct && topBlock.type == 'music_play_note';
-        correct = correct && connectedBlock.type == 'music_play_note';
-        correct = correct && notesBuffer.length == 2;
-        correct = correct && notesBuffer[0].midiValues.length == 1 && notesBuffer[0].midiValues[0] == 60;
-        correct = correct && notesBuffer[0].durationInBeats == 1;
-        correct = correct && notesBuffer[0].delayInBeats == 0;
-        correct = correct && notesBuffer[1].midiValues.length == 1 && notesBuffer[1].midiValues[0] == 60;
-        correct = correct && notesBuffer[1].durationInBeats == 1;
-        correct = correct && notesBuffer[1].delayInBeats == 1;
-        //if we have completed a level, update the max level the user can try.
-        if (correct && app.level >= app.maxLevelAllowed){
-          app.maxLevelAllowed = Math.min(app.level + 1,3);
-        }
-        return correct;
-      };
+      this.level = app.gameManager.level;
     },
     getHints: function(){
-      return app.levelHints[app.level];
+      return app.gameManager.levelHints[app.level];
     },
     disableButton: function(num) {
-      if (num > app.maxLevelAllowed) {
+      if (num > app.gameManager.maxLevelAllowed) {
         return true;
       }
     },
     setLevel: function(num, rightButton, wrongButtons){
-      app.level = num;
+      app.gameManager.level = num;
       //TODO(madeeha): make it so that workspaces switch across the app.
-      //app.workspace = app.levelWorkspaces[app.level];
+      //app.workspace = app.gameManager.levelWorkspaces[app.level];
       //app.workspace.clear();
       console.log(app.workspace.id);
       rightButton.setAttribute('aria-selected','true');
@@ -146,8 +162,8 @@ app.LevelManagerView = ng.core
       }
     },
     setInstructions: function() {
-      if (app.level && app.levelInstructions) {
-        return app.levelInstructions[app.level];
+      if (app.gameManager.level && app.gameManager.levelInstructions) {
+        return app.gameManager.levelInstructions[app.gameManager.level];
       }
     },
     log: function(obj) {

@@ -37,6 +37,27 @@ var MUSIC_DUMMY_HELPURL = 'Dummy help URL';
  */
 Blockly.Blocks.music.HUE = 20;
 
+Blockly.Blocks['music_play_random_note'] = {
+  /**
+   * Block for playing a random music note.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "play random note",
+      "args0": [
+        {
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.music.HUE,
+      "tooltip": MUSIC_DUMMY_TOOLTIP,
+      "helpUrl": MUSIC_DUMMY_HELPURL
+    });
+  }
+};
+
 Blockly.Blocks['music_play_note'] = {
   /**
    * Block for playing a music note.
@@ -47,9 +68,24 @@ Blockly.Blocks['music_play_note'] = {
       "message0": "play note %1",
       "args0": [
         {
-          "type": "field_input",
+          "type": "field_dropdown",
           "name": "PITCH",
-          "text": "A"
+          "options": [
+            ["C3", "36"],
+            ["D3", "38"],
+            ["E3", "40"],
+            ["F3", "41"],
+            ["G3", "43"],
+            ["A3", "45"],
+            ["B3", "47"],
+            ["C4", "48"],
+            ["D4", "50"],
+            ["E4", "52"],
+            ["F4", "53"],
+            ["G4", "55"],
+            ["A4", "57"],
+            ["B4", "59"]
+          ]
         }
       ],
       "previousStatement": null,
@@ -71,14 +107,35 @@ Blockly.Blocks['music_play_note_with_duration'] = {
       "message0": "play note %1 for %2 beat(s)",
       "args0": [
         {
-          "type": "field_input",
+          "type": "field_dropdown",
           "name": "PITCH",
-          "text": 'A'
+          "options": [
+            ["C3", "36"],
+            ["D3", "38"],
+            ["E3", "40"],
+            ["F3", "41"],
+            ["G3", "43"],
+            ["A3", "45"],
+            ["B3", "47"],
+            ["C4", "48"],
+            ["D4", "50"],
+            ["E4", "52"],
+            ["F4", "53"],
+            ["G4", "55"],
+            ["A4", "57"],
+            ["B4", "59"]
+          ]
         },
         {
-          "type": "field_input",
+          "type": "field_dropdown",
           "name": "DURATION",
-          "text": "1"
+          "options": [
+            ["1", "1"],
+            ["2", "2"],
+            ["4", "4"],
+            ["1/2", "0.5"],
+            ["1/4", "0.25"]
+          ]
         }
       ],
       "previousStatement": null,

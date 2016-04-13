@@ -406,6 +406,11 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * .contentLeft: Offset of the left-most content from the x=0 coordinate.
  * .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
+ * .toolboxWidth: Width of toolbox, if it exists.  Otherwise zero.
+ * .toolboxHeight: Height of toolbox, if it exists.  Otherwise zero.
+ * .flyoutWidth: Width of the flyout if it is always open.  Otherwise zero.
+ * .flyoutHeight: Height of flyout if it is always open.  Otherwise zero.
+ * .toolboxPosition: Top, bottom, left or right.
  * @return {Object} Contains size and position metrics of main workspace.
  * @private
  * @this Blockly.WorkspaceSvg
@@ -415,10 +420,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   if (this.toolbox_) {
     // If the toolbox is at the bottom it's laid out separately from the main
     // workspace, rather than overlapping.
-    if (this.toolbox_.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
-      svgSize.height -= this.toolbox_.height;
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+      svgSize.height -= this.toolbox_.getHeight();
     } else {
-      svgSize.width -= this.toolbox_.width;
+      svgSize.width -= this.toolbox_.getWidth();
     }
   }
   // Set the margin to match the flyout's margin so that the workspace does
@@ -451,12 +456,12 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var bottomEdge = topEdge + blockBox.height;
   }
   var absoluteLeft = 0;
-  if (this.toolbox_ && this.toolbox_.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-    absoluteLeft = this.toolbox_.width;
+  if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    absoluteLeft = this.toolbox_.getWidth();
   }
   var absoluteTop = 0;
-  if (this.toolbox_ && this.toolbox_.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
-    absoluteTop = this.toolbox_.height;
+  if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    absoluteTop = this.toolbox_.getHeight();
   }
 
   var metrics = {
@@ -469,7 +474,12 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     contentTop: topEdge,
     contentLeft: leftEdge,
     absoluteTop: absoluteTop,
-    absoluteLeft: absoluteLeft
+    absoluteLeft: absoluteLeft,
+    toolboxWidth: this.toolbox_ ? this.toolbox_.getWidth() : 0,
+    toolboxHeight: this.toolbox_ ? this.toolbox_.getHeight() : 0,
+    flyoutWidth: this.flyout_ ? this.flyout_.getWidth() : 0,
+    flyoutHeight: this.flyout_ ? this.flyout_.getHeight() : 0,
+    toolboxPosition: this.toolboxPosition
   };
   return metrics;
 };

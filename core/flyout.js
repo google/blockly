@@ -135,13 +135,6 @@ Blockly.Flyout.prototype.width_ = 0;
 Blockly.Flyout.prototype.height_ = 0;
 
 /**
- * Vertical offset of flyout.
- * @type {number}
- * @private
- */
-Blockly.Flyout.prototype.verticalOffset_ = 0;
-
-/**
  * Creates the flyout's DOM.  Only needs to be called once.
  * @return {!Element} The flyout's SVG group.
  */
@@ -214,6 +207,22 @@ Blockly.Flyout.prototype.dispose = function() {
 };
 
 /**
+ * Get the width of the flyout.
+ * @return {number} the width of the flyout.
+ */
+Blockly.Flyout.prototype.getWidth = function() {
+  return this.width_;
+};
+
+/**
+ * Get the height of the flyout.
+ * @return {number} the width of the flyout.
+ */
+Blockly.Flyout.prototype.getHeight = function() {
+  return this.height_;
+};
+
+/**
  * Return an object with all the metrics required to size scrollbars for the
  * flyout.  The following properties are computed:
  * .viewHeight: Height of the visible rectangle,
@@ -242,7 +251,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     var optionBox = {height: 0, y: 0};
   }
 
-  var absoluteTop = this.verticalOffset_ + this.SCROLLBAR_PADDING;
+  var absoluteTop = this.SCROLLBAR_PADDING;
   if (this.horizontalLayout_) {
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
       absoluteTop = 0;
@@ -303,10 +312,6 @@ Blockly.Flyout.prototype.setMetrics_ = function(xyRatio) {
       this.workspace_.scrollY + metrics.absoluteTop);
 };
 
-Blockly.Flyout.prototype.setVerticalOffset = function(verticalOffset) {
-  this.verticalOffset_ = verticalOffset;
-};
-
 /**
  * Move the toolbox to the edge of the workspace.
  */
@@ -326,8 +331,7 @@ Blockly.Flyout.prototype.position = function() {
   }
 
   this.setBackgroundPath_(edgeWidth,
-      this.horizontalLayout_ ?
-      this.height_ + this.verticalOffset_ : metrics.viewHeight);
+      this.horizontalLayout_ ? this.height_ : metrics.viewHeight);
 
   var x = metrics.absoluteLeft;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
@@ -875,8 +879,8 @@ Blockly.Flyout.placeNewBlock_ = function(originBlock, workspace,
   xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
   // If the flyout is collapsible and the workspace can't be scrolled.
   if (workspace.toolbox_ && !workspace.scrollbar) {
-    xyNew.x += workspace.toolbox_.width / workspace.scale;
-    xyNew.y += workspace.toolbox_.height / workspace.scale;
+    xyNew.x += workspace.toolbox_.getWidth() / workspace.scale;
+    xyNew.y += workspace.toolbox_.getHeight() / workspace.scale;
   }
 
   // Move the new block to where the old block is.
@@ -919,7 +923,7 @@ Blockly.Flyout.prototype.getClientRect = function() {
     return new goog.math.Rect(-BIG_NUM, y - BIG_NUM, BIG_NUM * 2,
         BIG_NUM + height);
   } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    return new goog.math.Rect(-BIG_NUM, y + this.verticalOffset_, BIG_NUM * 2,
+    return new goog.math.Rect(-BIG_NUM, y, BIG_NUM * 2,
         BIG_NUM + height);
   } else if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
     return new goog.math.Rect(x - BIG_NUM, -BIG_NUM, BIG_NUM + width,

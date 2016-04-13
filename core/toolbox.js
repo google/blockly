@@ -203,6 +203,22 @@ Blockly.Toolbox.prototype.dispose = function() {
 };
 
 /**
+ * Get the width of the toolbox.
+ * @return {number} the width of the toolbox.
+ */
+Blockly.Toolbox.prototype.getWidth = function() {
+  return this.width;
+};
+
+/**
+ * Get the height of the toolbox.
+ * @return {number} the width of the toolbox.
+ */
+Blockly.Toolbox.prototype.getHeight = function() {
+  return this.height;
+};
+
+/**
  * Move the toolbox to the edge.
  */
 Blockly.Toolbox.prototype.position = function() {
@@ -221,11 +237,9 @@ Blockly.Toolbox.prototype.position = function() {
     this.height = treeDiv.offsetHeight;
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
       treeDiv.style.top = svgPosition.y + 'px';
-      this.flyout_.setVerticalOffset(treeDiv.offsetHeight);
     } else {  // Bottom
       var topOfToolbox = svgPosition.y + svgSize.height;
       treeDiv.style.top = topOfToolbox + 'px';
-      this.flyout_.setVerticalOffset(topOfToolbox);
     }
   } else {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {  // Right

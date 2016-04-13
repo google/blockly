@@ -220,6 +220,10 @@ Blockly.Trashcan.prototype.position = function() {
   }
   if (this.workspace_.RTL) {
     this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
+    if (this.workspace_.toolbox_ &&
+      this.workspace_.toolbox_.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+      this.left_ += metrics.absoluteLeft;
+    }
   } else {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;

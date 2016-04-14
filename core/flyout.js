@@ -531,18 +531,7 @@ Blockly.Flyout.prototype.hide = function() {
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
   this.hide();
-  // Delete any blocks from a previous showing.
-  var blocks = this.workspace_.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.workspace == this.workspace_) {
-      block.dispose(false, false);
-    }
-  }
-  // Delete any background buttons from a previous showing.
-  for (var i = 0, rect; rect = this.buttons_[i]; i++) {
-    goog.dom.removeNode(rect);
-  }
-  this.buttons_.length = 0;
+  this.clearOldBlocks_();
 
   if (xmlList == Blockly.Variables.NAME_TYPE) {
     // Special category for variables.
@@ -562,25 +551,60 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.permanentlyDisabled_.length = 0;
   for (var i = 0, xml; xml = xmlList[i]; i++) {
     if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-      var block = Blockly.Xml.domToBlock(xml, this.workspace_);
-      if (block.disabled) {
+      var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
+      if (curBlock.disabled) {
         // Record blocks that were initially disabled.
         // Do not enable these blocks as a result of capacity filtering.
-        this.permanentlyDisabled_.push(block);
+        this.permanentlyDisabled_.push(curBlock);
       }
-      blocks.push(block);
+      blocks.push(curBlock);
       var gap = parseInt(xml.getAttribute('gap'), 10);
       gaps.push(isNaN(gap) ? margin * 3 : gap);
     }
   }
 
+  this.layoutBlocks_(blocks, gaps, margin);
+
+  // IE 11 is an incompetant browser that fails to fire mouseout events.
+  // When the mouse is over the background, deselect all blocks.
+  var deselectAll = function(e) {
+    var blocks = this.workspace_.getTopBlocks(false);
+    for (var i = 0, block; block = blocks[i]; i++) {
+      block.removeSelect();
+    }
+  };
+  this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
+      this, deselectAll));
+
+  if (this.horizontalLayout_) {
+    this.height_ = 0;
+  } else {
+    this.width_ = 0;
+  }
+  this.reflow();
+
+  this.filterForCapacity_();
+
+  // Fire a resize event to update the flyout's scrollbar.
+  Blockly.fireUiEventNow(window, 'resize');
+  this.reflowWrapper_ = this.reflow.bind(this);
+  this.workspace_.addChangeListener(this.reflowWrapper_);
+};
+
+/**
+ * Lay out the blocks in the flyout.
+ * @param {!Array<Blockly.BlockSvg>} blocks The blocks to lay out.
+ * @param {!Array<number>} gaps The visible gaps between blocks.
+ * @param {number} margin The margin around the edges of the flyout.
+ * @private
+ */
+Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps, margin) {
   // The blocks need to be visible in order to be laid out and measured
   // correctly, but we don't want the flyout to show up until it's properly
   // sized.  Opacity is reset at the end of position().
   this.svgGroup_.style.opacity = 0;
   this.svgGroup_.style.display = 'block';
 
-  // Lay out the blocks.
   var cursorX = margin / this.workspace_.scale + Blockly.BlockSvg.TAB_WIDTH;
   var cursorY = margin;
   for (var i = 0, block; block = blocks[i]; i++) {
@@ -612,31 +636,25 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
     this.addBlockListeners_(root, block, rect);
   }
+};
 
-  // IE 11 is an incompetant browser that fails to fire mouseout events.
-  // When the mouse is over the background, deselect all blocks.
-  var deselectAll = function(e) {
-    var blocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; block = blocks[i]; i++) {
-      block.removeSelect();
+/**
+ * Delete blocks and background buttons from a previous showing of the flyout.
+ * @private
+ */
+Blockly.Flyout.prototype.clearOldBlocks_ = function() {
+  // Delete any blocks from a previous showing.
+  var oldBlocks = this.workspace_.getTopBlocks(false);
+  for (var i = 0, block; block = oldBlocks[i]; i++) {
+    if (block.workspace == this.workspace_) {
+      block.dispose(false, false);
     }
-  };
-  this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
-      this, deselectAll));
-
-  if (this.horizontalLayout_) {
-    this.height_ = 0;
-  } else {
-    this.width_ = 0;
   }
-  this.reflow();
-
-  this.filterForCapacity_();
-
-  // Fire a resize event to update the flyout's scrollbar.
-  Blockly.fireUiEventNow(window, 'resize');
-  this.reflowWrapper_ = this.reflow.bind(this);
-  this.workspace_.addChangeListener(this.reflowWrapper_);
+  // Delete any background buttons from a previous showing.
+  for (var j = 0, rect; rect = this.buttons_[j]; j++) {
+    goog.dom.removeNode(rect);
+  }
+  this.buttons_.length = 0;
 };
 
 /**
@@ -648,23 +666,23 @@ Blockly.Flyout.prototype.show = function(xmlList) {
  * @private
  */
 Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
-    if (this.autoClose) {
-      this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
-          this.createBlockFunc_(block)));
-    } else {
-      this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
-          this.blockMouseDown_(block)));
-    }
-    this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
-        block.addSelect));
-    this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
-        block.removeSelect));
-    this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
+  if (this.autoClose) {
+    this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
         this.createBlockFunc_(block)));
-    this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
-        block.addSelect));
-    this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
-        block.removeSelect));
+  } else {
+    this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
+        this.blockMouseDown_(block)));
+  }
+  this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
+      block.addSelect));
+  this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
+      block.removeSelect));
+  this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
+      this.createBlockFunc_(block)));
+  this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
+      block.addSelect));
+  this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
+      block.removeSelect));
 };
 
 /**
@@ -974,7 +992,7 @@ Blockly.Flyout.prototype.reflowHorizontal = function() {
   flyoutHeight *= this.workspace_.scale;
   flyoutHeight += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
   if (this.height_ != flyoutHeight) {
-    for (var i = 0, block; block = blocks[i]; i++) {
+    for (i = 0, block; block = blocks[i]; i++) {
       var blockHW = block.getHeightWidth();
       if (block.flyoutRect_) {
         block.flyoutRect_.setAttribute('width', blockHW.width);
@@ -987,7 +1005,7 @@ Blockly.Flyout.prototype.reflowHorizontal = function() {
             this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
       }
     }
-    // Record the width for .getMetrics_ and .position.
+    // Record the height for .getMetrics_ and .position.
     this.height_ = flyoutHeight;
   }
 };

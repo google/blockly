@@ -4,7 +4,8 @@
 			"Jonbg",
 			"아라",
 			"Gaddi00",
-			"Sveinki"
+			"Sveinki",
+			"Sveinn í Felli"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "atriði",
@@ -25,6 +26,8 @@
 	"DISABLE_BLOCK": "Óvirkja kubb",
 	"ENABLE_BLOCK": "Virkja kubb",
 	"HELP": "Hjálp",
+	"UNDO": "Afturkalla",
+	"REDO": "Endurtaka",
 	"CHAT": "Spjallaðu við félaga með því að skrifa í þennan reit!",
 	"AUTH": "Vinsamlegast heimilaðu þetta forrit svo að hægt sé að vista verk þitt og svo að þú megir deila því",
 	"ME": "Mig",

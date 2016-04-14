@@ -32,6 +32,8 @@
 	"DISABLE_BLOCK": "Blokk letiltása",
 	"ENABLE_BLOCK": "Blokk engedélyezése",
 	"HELP": "Súgó",
+	"UNDO": "Visszavonás",
+	"REDO": "Újra",
 	"CHAT": "Ebben a mezőben tudsz a közreműködőkkel beszélgetni!",
 	"AUTH": "Kérjük, engedélyezd az alkalmazásnak munkád elmentését és megosztását.",
 	"ME": "Én",

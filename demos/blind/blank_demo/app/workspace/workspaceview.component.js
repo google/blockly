@@ -44,7 +44,7 @@ app.WorkspaceView = ng.core
     constructor: [app.TreeService, function(_service) {
       if (app.workspace) {
         this.workspace = app.workspace;
-        this.level = app.level;
+        this.level = app.gameManager.level;
         this.treeService = _service;
       }
     }],
@@ -52,23 +52,7 @@ app.WorkspaceView = ng.core
       return 'workspace-tree'+index;
     },
     runCode: function() {
-      //sll@'s version Generate JavaScript code and run it.
-      window.LoopTrap = 1000;
-      Blockly.JavaScript.INFINITE_LOOP_TRAP =
-          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
-      var code = Blockly.JavaScript.workspaceToCode(this.workspace);
-      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-      activeTimeouts.forEach(function(timeout) {
-        clearTimeout(timeout);
-      });
-      notesBuffer = [];
-      currentTimeInSecs = 0;
-      try {
-        eval(code);
-      } catch (e) {
-        alert(e);
-      }
-      //playBuffer();
+      playAndGrade();
     },
     disableRunCode: function() {
       if (this.workspace.topBlocks_.length == 0){

@@ -30,7 +30,7 @@ app.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{treeService.createId(parentList)}}' [attr.aria-labelledby]='block.id'>
+<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createCategoryDependantId(index, parentList)}}' [attr.aria-labelledby]='block.id'>
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
   <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
     {{addClass(parentList, 'hasChildren')}}
@@ -58,7 +58,7 @@ app.ToolboxTreeView = ng.core
     `,
     directives: [ng.core.forwardRef(
         function() { return app.ToolboxTreeView; }), app.FieldView],
-    inputs: ['block','displayBlockMenu','level'],
+    inputs: ['block', 'displayBlockMenu', 'level', 'index', 'tree'],
   })
   .Class({
     constructor: [app.ClipboardService, app.TreeService, function(_service, _service2) {
@@ -67,6 +67,19 @@ app.ToolboxTreeView = ng.core
       this.sharedClipboardService = _service;
       this.treeService = _service2;
     }],
+    createCategoryDependantId: function(index, parentList){
+      //if this is the first block in a category-less toolbox, the id should be toolbox-tree-node0
+      if (index != undefined && index == 0) {
+        if (this.tree.getAttribute('aria-activedescendant') == 'toolbox-tree-node0') {
+          this.addClass(parentList, 'activedescendant');
+          parentList.setAttribute("aria-selected", "true");
+          this.treeService.setActiveDesc(parentList, this.tree.id);
+        }
+        return 'toolbox-tree-node0';
+      } else {
+        return this.treeService.createId(parentList);
+      }
+    },
     labelParent: function(parent, childId) {
       if (!parent.getAttribute('aria-labelledby')) {
         parent.setAttribute('aria-labelledby', childId);

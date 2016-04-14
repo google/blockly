@@ -16,16 +16,19 @@ app.TreeService = ng.core
     },
     setActiveAttribute: function(tree){
       if (!tree.getAttribute('aria-activedescendant')){
+        console.log("setting tree active descendant");
         tree.setAttribute('aria-activedescendant', tree.id+'-node0');
       }
     },
     setActiveDesc: function(node, id) {
+      console.log("setting active descendant for tree " + id);
       this.activeDesc_[id] = node;
     },
     getActiveDesc: function(id){
       return this.activeDesc_[id];
     },
     updateSelectedNode: function(node, tree, keepFocus){
+      console.log("updating node: " + node.id);
       var treeId = tree.id;
       var activeDesc = this.getActiveDesc(treeId);
       if (activeDesc) {
@@ -51,6 +54,8 @@ app.TreeService = ng.core
         if (!node){
           console.log("KeyHandler: no active descendant");
         }
+        console.log(e.keyCode);
+        console.log("inside TreeService");
         switch(e.keyCode){
           case 27:
             //escape key: no longer in dropdown mode
@@ -64,6 +69,7 @@ app.TreeService = ng.core
             //left-facing arrow: go out a level, if possible. If not, do nothing
             e.preventDefault();
             e.stopPropagation();
+            console.log("in left arrow section");
             var nextNode = node.parentNode;
             while (nextNode.className != "treeview" && nextNode.tagName != 'LI') {
               nextNode = nextNode.parentNode;
@@ -77,9 +83,12 @@ app.TreeService = ng.core
             //up-facing arrow: go up a level, if possible. If not, do nothing
             e.preventDefault();
             e.stopPropagation();
+            console.log("node passed in: " + node.id);
             var prevSibling = this.getPreviousSibling(node);
             if (prevSibling && prevSibling.tagName != 'H1'){
               this.updateSelectedNode(prevSibling, tree);
+            } else {
+              console.log("no previous sibling");
             }
             break;
           case 39:
@@ -91,9 +100,12 @@ app.TreeService = ng.core
 
             e.preventDefault();
             e.stopPropagation();
+            console.log("in right arrow section");
             var firstChild = this.getFirstChild(node);
             if (firstChild){
               this.updateSelectedNode(firstChild, tree);
+            } else {
+              console.log("no valid child");
             }
             break;
           case 40:
@@ -102,12 +114,16 @@ app.TreeService = ng.core
               this.inDropdown = true;
               break;
             }
+
             //down-facing arrow: go down a level, if possible. If not, do nothing
+            //TODO(madeeha): should stop when done with all items at that level. Currently continues
             e.preventDefault();
             e.stopPropagation();
             var nextSibling = this.getNextSibling(node);
             if (nextSibling){
               this.updateSelectedNode(nextSibling, tree);
+            } else {
+              console.log("no next sibling");
             }
             break;
           case 13:
@@ -117,6 +133,7 @@ app.TreeService = ng.core
               break;
             }
             //if I've pressed enter, I want to interact with a child
+            console.log("enter is pressed");
             var activeDesc = this.getActiveDesc(treeId);
             if (activeDesc){
               var children = activeDesc.children;
@@ -124,7 +141,8 @@ app.TreeService = ng.core
               if (children.length == 1 && child.tagName == 'INPUT' || child.tagName == 'SELECT'){
                 child.focus();
                 //if it's a dropdown, we want the dropdown to open
-                //only works in screenreader/browser combinations as specified in TestMatrix
+                //test this in all browsers, it may break in some places.
+                //also see if it's better for screen readers if you put the focus on it after it opens.
                 if(child.tagName == 'SELECT') {
                   var event;
                   event = document.createEvent('MouseEvents');
@@ -196,12 +214,15 @@ app.TreeService = ng.core
         } else {
           var parent = element.parentNode;
           while (parent != null){
+            console.log("looping");
             if (parent.tagName == 'OL') {
               break;
             }
             if (parent.previousElementSibling){
+              console.log("parent has a sibling!");
               var node = parent.previousElementSibling;
               if (node.tagName == 'LI'){
+                console.log("return the sibling of the parent!");
                 return node;
               } else {
                 return this.getLastChild(node);
@@ -215,6 +236,7 @@ app.TreeService = ng.core
       },
       getLastChild: function(element){
         if (element == null){
+          console.log("no element");
           return element;
         } else {
           var childList = element.children;
@@ -228,7 +250,7 @@ app.TreeService = ng.core
               }
             }
           }
-          //no last child
+          console.log("no last child");
           return null;
         }
       },

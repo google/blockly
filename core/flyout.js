@@ -313,7 +313,7 @@ Blockly.Flyout.prototype.setMetrics_ = function(xyRatio) {
 };
 
 /**
- * Move the toolbox to the edge of the workspace.
+ * Move the flyout to the edge of the workspace.
  */
 Blockly.Flyout.prototype.position = function() {
   if (!this.isVisible()) {
@@ -367,10 +367,10 @@ Blockly.Flyout.prototype.position = function() {
 };
 
 /**
- * Create and set the path for the visible boundaries of the toolbox.
- * @param {number} width The width of the toolbox, not including the
+ * Create and set the path for the visible boundaries of the flyout.
+ * @param {number} width The width of the flyout, not including the
  *     rounded corners.
- * @param {number} height The height of the toolbox, not including
+ * @param {number} height The height of the flyout, not including
  *     rounded corners.
  * @private
  */
@@ -383,11 +383,11 @@ Blockly.Flyout.prototype.setBackgroundPath_ = function(width, height) {
 };
 
 /**
- * Create and set the path for the visible boundaries of the toolbox in vertical
+ * Create and set the path for the visible boundaries of the flyout in vertical
  * mode.
- * @param {number} width The width of the toolbox, not including the
+ * @param {number} width The width of the flyout, not including the
  *     rounded corners.
- * @param {number} height The height of the toolbox, not including
+ * @param {number} height The height of the flyout, not including
  *     rounded corners.
  * @private
  */
@@ -416,11 +416,11 @@ Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
 };
 
 /**
- * Create and set the path for the visible boundaries of the toolbox in
+ * Create and set the path for the visible boundaries of the flyout in
  * horizontal mode.
- * @param {number} width The width of the toolbox, not including the
+ * @param {number} width The width of the flyout, not including the
  *     rounded corners.
- * @param {number} height The height of the toolbox, not including
+ * @param {number} height The height of the flyout, not including
  *     rounded corners.
  * @private
  */

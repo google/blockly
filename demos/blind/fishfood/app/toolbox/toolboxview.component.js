@@ -43,7 +43,7 @@ app.ToolboxView = ng.core
 </li>
 </div>
 <div *ngIf='!toolboxHasCategories'>
-  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
+  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService' [index]='i' [tree]='tree'></toolbox-tree-view>
 </div>
 </ol>
 </div>
@@ -118,7 +118,6 @@ app.ToolboxView = ng.core
         } else {
           this.toolboxHasCategories = false;
           this.toolboxCategories = Array.from(val.getElementsByTagName('xml'));
-          console.log(this.toolboxCategories);
           return this.toolboxCategories;
         }
       }

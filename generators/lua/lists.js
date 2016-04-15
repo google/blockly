@@ -322,12 +322,27 @@ Blockly.Lua['lists_getSublist'] = function(block) {
 
 Blockly.Lua['lists_sort'] = function(block) {
   // Block for sorting a list.
-  var listCode = Blockly.JavaScript.valueToCode(
-    block, 'LIST', Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
+  var listCode = Blockly.Lua.valueToCode(
+    block, 'LIST', Blockly.Lua.ORDER_HIGH) || '({})';
   var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
 
-  var code = 'table.sort(' + listCode + ')';
+  var functionName = Blockly.Lua.provideFunction_(
+      'list_sort_' + Blockly.Lua.lists.gensym_(),
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(list)',
+       '  local t = {}',
+       '  for n,v in pairs(list) do table.insert(t, v) end', // shallow-copy
+       '  local compareFuncs = {}',
+       '  compareFuncs.numeric = function(a, b) return a < b end ',
+       '  compareFuncs.text = function(a, b) return a < b end',
+       '  compareFuncs.ignoreCase = function(a, b)',
+       '       return string.lower(a) < string.lower(b) end',
+       '  local compare = compareFuncs["' + type + '"]',
+       '  table.sort(t, compare)',
+       '  return t',
+       'end']);
+
+  var code = functionName + '(' + listCode + ')';
   return [code, Blockly.Lua.ORDER_HIGH];  
 };
   

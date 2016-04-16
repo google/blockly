@@ -1000,27 +1000,18 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   } else if (newScale < this.options.zoomOptions.minScale) {
     scaleChange = this.options.zoomOptions.minScale / this.scale;
   }
-  var matrix = canvas.getCTM()
-      .translate(x * (1 - scaleChange), y * (1 - scaleChange))
-      .scale(scaleChange);
-  // newScale and matrix.a should be identical (within a rounding error).
-  if (this.scale == matrix.a) {
+  if (this.scale == newScale) {
     return;  // No change in zoom.
   }
-  this.scale = matrix.a;
-  this.scrollX = matrix.e - metrics.absoluteLeft;
-  this.scrollY = matrix.f - metrics.absoluteTop;
-  this.updateGridPattern_();
   if (this.scrollbar) {
-    this.scrollbar.resize();
-  } else {
-    this.translate(0, 0);
+    var matrix = canvas.getCTM()
+        .translate(x * (1 - scaleChange), y * (1 - scaleChange))
+        .scale(scaleChange);
+    // newScale and matrix.a should be identical (within a rounding error).
+    this.scrollX = matrix.e - metrics.absoluteLeft;
+    this.scrollY = matrix.f - metrics.absoluteTop;
   }
-  Blockly.hideChaff(false);
-  if (this.flyout_) {
-    // No toolbox, resize flyout.
-    this.flyout_.reflow();
-  }
+  this.setScale(newScale);
 };
 
 /**
@@ -1038,40 +1029,27 @@ Blockly.WorkspaceSvg.prototype.zoomCenter = function(type) {
  * Zoom the blocks to fit in the workspace if possible.
  */
 Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
-  var workspaceBBox = this.svgBackground_.getBBox();
-  var blocksBBox = this.svgBlockCanvas_.getBBox();
-  var workspaceWidth = workspaceBBox.width - this.toolbox_.width -
-      Blockly.Scrollbar.scrollbarThickness;
-  var workspaceHeight = workspaceBBox.height -
-      Blockly.Scrollbar.scrollbarThickness;
-  var blocksWidth = blocksBBox.width;
-  var blocksHeight = blocksBBox.height;
-  if (blocksWidth == 0) {
+  var metrics = this.getMetrics();
+  var blocksBox = this.getBlocksBoundingBox();
+  var blocksWidth = blocksBox.width;
+  var blocksHeight = blocksBox.height;
+  if (!blocksWidth) {
     return;  // Prevents zooming to infinity.
+  }
+  var workspaceWidth = metrics.viewWidth;
+  var workspaceHeight = metrics.viewHeight;
+  if (this.flyout_) {
+    workspaceWidth -= this.flyout_.width_;
+  }
+  if (!this.scrollbar) {
+    // Orgin point of 0,0 is fixed, blocks will not scroll to center.
+    blocksWidth += metrics.contentLeft;
+    blocksHeight += metrics.contentTop;
   }
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
-  var ratio = Math.min(ratioX, ratioY);
-  var speed = this.options.zoomOptions.scaleSpeed;
-  var numZooms = Math.floor(Math.log(ratio) / Math.log(speed));
-  var newScale = Math.pow(speed, numZooms);
-  if (newScale > this.options.zoomOptions.maxScale) {
-    newScale = this.options.zoomOptions.maxScale;
-  } else if (newScale < this.options.zoomOptions.minScale) {
-    newScale = this.options.zoomOptions.minScale;
-  }
-  this.scale = newScale;
-  this.updateGridPattern_();
-  this.scrollbar.resize();
-  Blockly.hideChaff(false);
-  if (this.flyout_) {
-    // No toolbox, resize flyout.
-    this.flyout_.reflow();
-  }
-  // Center the workspace.
-  var metrics = this.getMetrics();
-  this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
-      (metrics.contentHeight - metrics.viewHeight) / 2);
+  this.setScale(Math.min(ratioX, ratioY));
+  this.scrollCenter_();
 };
 
 /**
@@ -1079,27 +1057,57 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
  * @param {!Event} e Mouse down event.
  */
 Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
-  this.scale = 1;
+  this.setScale(1);
+  this.scrollCenter_();
+  // This event has been handled.  Don't start a workspace drag.
+  e.stopPropagation();
+};
+
+/**
+ * Center the workspace.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.scrollCenter_ = function() {
+  if (!this.scrollbar) {
+    // Can't center a non-scrolling workspace.
+    return;
+  }
+  var metrics = this.getMetrics();
+  var x = (metrics.contentWidth - metrics.viewWidth) / 2;
+  if (this.flyout_) {
+    x -= this.flyout_.width_ / 2;
+  }
+  var y = (metrics.contentHeight - metrics.viewHeight) / 2;
+  this.scrollbar.set(x, y);
+};
+
+/**
+ * Set the workspace's zoom factor.
+ * @param {number} newScale Zoom factor.
+ */
+Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
+  if (this.options.zoomOptions.maxScale &&
+      newScale > this.options.zoomOptions.maxScale) {
+    newScale = this.options.zoomOptions.maxScale;
+  } else if (this.options.zoomOptions.minScale &&
+      newScale < this.options.zoomOptions.minScale) {
+    newScale = this.options.zoomOptions.minScale;
+  }
+  this.scale = newScale;
   this.updateGridPattern_();
+  if (this.scrollbar) {
+    this.scrollbar.resize();
+  } else {
+    this.translate(this.scrollX, this.scrollY);
+  }
   Blockly.hideChaff(false);
   if (this.flyout_) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
   }
-  // Zoom level has changed, update the scrollbars.
-  if (this.scrollbar) {
-    this.scrollbar.resize();
-  }
-  // Center the workspace.
-  var metrics = this.getMetrics();
-  if (this.scrollbar) {
-    this.scrollbar.set((metrics.contentWidth - metrics.viewWidth) / 2,
-        (metrics.contentHeight - metrics.viewHeight) / 2);
-  } else {
-    this.translate(0, 0);
-  }
   // This event has been handled.  Don't start a workspace drag.
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**

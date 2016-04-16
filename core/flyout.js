@@ -426,6 +426,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     // Create an invisible rectangle under the block to act as a button.  Just
     // using the block as a button is poor, since blocks have holes in them.
     var rect = Blockly.createSvgElement('rect', {'fill-opacity': 0}, null);
+    rect.tooltip = block;
+    Blockly.Tooltip.bindMouseEvents(rect);
     // Add the rectangles under the blocks, so that the blocks' tooltips work.
     this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
     block.flyoutRect_ = rect;

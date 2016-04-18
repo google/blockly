@@ -53,7 +53,7 @@ app.TreeService = ng.core
       switch(e.keyCode){
         case 9:
           //16,9: shift, tab
-          if (this.previousKey_ == 16){
+          if (e.shiftKey){
             console.log("shifttabbing");
             //if the previous key is shift, we're shift-tabbing mode
             //if we're at the runCode button, then shift-tab should take us to the toolbox tree as a whole
@@ -80,7 +80,7 @@ app.TreeService = ng.core
         switch(e.keyCode){
           case 9:
             //16,9: shift, tab
-            if (this.previousKey_ == 16){
+            if (e.shiftKey){
               console.log("shifttabbing");
               //if the previous key is shift, we're shift-tabbing mode
               //if we're at the runCode button, then shift-tab should take us to the toolbox tree as a whole
@@ -158,6 +158,7 @@ app.TreeService = ng.core
 
             //down-facing arrow: go down a level, if possible. If not, do nothing
             //TODO(madeeha): should stop when done with all items at that level. Currently continues
+            console.log("preventing propogation");
             e.preventDefault();
             e.stopPropagation();
             var nextSibling = this.getNextSibling(node);

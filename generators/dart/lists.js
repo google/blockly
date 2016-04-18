@@ -310,6 +310,31 @@ Blockly.Dart['lists_getSublist'] = function(block) {
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
+Blockly.Dart['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.Dart.valueToCode(block, 'LIST',
+    Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+  var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+  var sortFunctionName = Blockly.Dart.provideFunction_(
+          'lists_sort',
+  ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + 
+              '(list, direction) {',
+      '  var compareFuncs = {',
+      '    "numeric": (a, b) => direction * a.compareTo(b),',
+      '    "text": (a, b) => direction * a.compareTo(b),',
+      '    "ignoreCase": ',
+      '       (a, b) => direction * a.toLowerCase().compareTo(b.toLowerCase())',
+      '  };',
+      '  var compare = compareFuncs["' + type + '"];',
+      '  list = new List.from(list);', // clone the list
+      '  list.sort(compare);',
+       ' return list;',
+    '}']);
+  return [sortFunctionName + '(' + listCode + ', ' + direction + ')', 
+      Blockly.Dart.ORDER_UNARY_POSTFIX];
+};
+
 Blockly.Dart['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var value_input = Blockly.Dart.valueToCode(block, 'INPUT',

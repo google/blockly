@@ -186,22 +186,6 @@ Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
 };
 
 /**
- * Finds the block with the specified ID in this workspace.
- * @param {string} id ID of block to find.
- * @return {Blockly.Block} The matching block, or null if not found.
- */
-Blockly.Workspace.prototype.getBlockById = function(id) {
-  // If this O(n) function fails to scale well, maintain a hash table of IDs.
-  var blocks = this.getAllBlocks();
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.id == id) {
-      return block;
-    }
-  }
-  return null;
-};
-
-/**
  * The number of blocks that may be added to the workspace before reaching
  *     the maxBlocks.
  * @return {number} Number of blocks left.

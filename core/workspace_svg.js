@@ -1061,6 +1061,7 @@ Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
   this.scrollCenter_();
   // This event has been handled.  Don't start a workspace drag.
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**
@@ -1105,9 +1106,6 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
   }
-  // This event has been handled.  Don't start a workspace drag.
-  e.stopPropagation();
-  e.preventDefault();
 };
 
 /**

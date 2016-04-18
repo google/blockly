@@ -2,12 +2,12 @@ var app = app || {};
 
 app.TreeService = ng.core
   .Class({
-  	constructor: function(){
+    constructor: function(){
       console.log("making a new tree service");
       this.activeDesc_={};
       this.previousKey_;
       this.inDropdown = false;
-  	},
+    },
     createId: function(obj){
       if (obj && obj.id){
         return obj.id;
@@ -57,6 +57,22 @@ app.TreeService = ng.core
         console.log(e.keyCode);
         console.log("inside TreeService");
         switch(e.keyCode){
+          case 9:
+            //16,9: shift, tab
+            if (this.previousKey_ == 16){
+              //if the previous key is shift, we're shift-tabbing mode
+              //we want to go to the level buttons
+              //this should actually happen by default given the way our app is designed.
+            } else {
+              //if previous key isn't shift, we're tabbing
+              //we want to go to the run code button
+              if (app.runCodeButton){
+                app.runCodeButton.focus();
+              }
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            break;
           case 27:
             //escape key: no longer in dropdown mode
             this.inDropdown = false;
@@ -222,9 +238,11 @@ app.TreeService = ng.core
               console.log("parent has a sibling!");
               var node = parent.previousElementSibling;
               if (node.tagName == 'LI'){
+                //the parent has a list sibling!
                 console.log("return the sibling of the parent!");
                 return node;
               } else {
+                //find the last list element child of the sibling of the parent
                 return this.getLastChild(node);
               }
             } else {
@@ -241,7 +259,8 @@ app.TreeService = ng.core
         } else {
           var childList = element.children;
           for (var i=childList.length-1; i>=0; i--){
-            if (childList[i].tabIndex == 0){
+            //find the last child that is a list element
+            if (childList[i].tagName == 'LI'){
               return childList[i];
             } else {
               var potentialElement = this.getLastChild(childList[i]);

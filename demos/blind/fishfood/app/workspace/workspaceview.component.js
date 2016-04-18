@@ -29,13 +29,16 @@ app.WorkspaceView = ng.core
     viewInjector: [app.ClipboardService],
     template: `
   <label><h3 id='workspace-title'>Workspace</h3></label>
-  <button (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
+  <div (keydown)="treeService.workspaceButtonKeyHandler($event)"> <!--put keyboard handler here-->
+  <button #runCodeButton id='run-code-button' (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
+  {{saveRunCodeButton(runCodeButton)}}
   <button (click)="workspace.clear()" disabled={{disableRunCode()}}>Clear Workspace</button>
-  <div class='treeview' *ngIf='workspace'>
+  <div *ngIf='workspace'>
   <ol #tree id={{makeId(i)}} *ngFor='#block of workspace.topBlocks_; #i=index' tabIndex='0' class='tree' role='group' aria-labelledby='workspace-title' (keydown)="treeService.keyHandler($event, tree)">
     {{treeService.setActiveAttribute(tree)}}
     <tree-view [level]=1 [block]='block' [isTopBlock]='true' [topBlockIndex]='i' [parentId]='tree.id'></tree-view>
   </ol>
+  </div>
   </div>
     `,
     directives: [app.TreeView],
@@ -48,6 +51,9 @@ app.WorkspaceView = ng.core
         this.treeService = _service;
       }
     }],
+    saveRunCodeButton: function(button){
+      app.runCodeButton = button;
+    },
     makeId: function(index){
       return 'workspace-tree'+index;
     },

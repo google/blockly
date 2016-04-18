@@ -47,6 +47,27 @@ app.TreeService = ng.core
         tree.focus();
       }
     },
+    workspaceButtonKeyHandler: function(e){
+      console.log(e.keyCode);
+      console.log("inside TreeService");
+      switch(e.keyCode){
+        case 9:
+          //16,9: shift, tab
+          if (this.previousKey_ == 16){
+            console.log("shifttabbing");
+            //if the previous key is shift, we're shift-tabbing mode
+            //if we're at the runCode button, then shift-tab should take us to the toolbox tree as a whole
+            if (document.activeElement.id == 'run-code-button'){
+              var toolbox = document.getElementById('toolbox-tree');
+              toolbox.focus();
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }
+          break;
+      }
+      this.previousKey_=e.keyCode;   
+    },
     keyHandler: function(e, tree){
         //console.log(document.activeElement);
         var treeId = tree.id;
@@ -57,6 +78,26 @@ app.TreeService = ng.core
         console.log(e.keyCode);
         console.log("inside TreeService");
         switch(e.keyCode){
+          case 9:
+            //16,9: shift, tab
+            if (this.previousKey_ == 16){
+              console.log("shifttabbing");
+              //if the previous key is shift, we're shift-tabbing mode
+              //if we're at the runCode button, then shift-tab should take us to the toolbox tree as a whole
+              if (document.activeElement.id == 'run-code-button'){
+                var toolbox = document.getElementById('toolbox-tree');
+                toolbox.focus();
+              }
+            } else {
+              //if previous key isn't shift, we're tabbing
+              //we want to go to the run code button
+              if (app.runCodeButton){
+                app.runCodeButton.focus();
+              }
+              e.preventDefault();
+              e.stopPropagation();
+            }
+            break;          
           case 27:
             //escape key: no longer in dropdown mode
             this.inDropdown = false;
@@ -222,9 +263,11 @@ app.TreeService = ng.core
               console.log("parent has a sibling!");
               var node = parent.previousElementSibling;
               if (node.tagName == 'LI'){
+                //the parent has a list sibling!
                 console.log("return the sibling of the parent!");
                 return node;
               } else {
+                //find the last list element child of the sibling of the parent
                 return this.getLastChild(node);
               }
             } else {
@@ -241,7 +284,8 @@ app.TreeService = ng.core
         } else {
           var childList = element.children;
           for (var i=childList.length-1; i>=0; i--){
-            if (childList[i].tabIndex == 0){
+            //find the last child that is a list element
+            if (childList[i].tagName == 'LI'){
               return childList[i];
             } else {
               var potentialElement = this.getLastChild(childList[i]);

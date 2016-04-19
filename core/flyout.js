@@ -468,7 +468,7 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
  * Scroll the flyout to the top.
  */
 Blockly.Flyout.prototype.scrollToStart = function() {
-  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? 100000 : 0);
+  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? Infinity : 0);
 };
 
 /**

@@ -114,6 +114,13 @@ Blockly.Flyout.prototype.autoClose = true;
 Blockly.Flyout.prototype.CORNER_RADIUS = 8;
 
 /**
+ * Margin around the edges of the blocks in the flyout.
+ * @type {number}
+ * @const
+ */
+Blockly.Flyout.prototype.MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS;
+
+/**
  * Top/bottom padding between scrollbar and edge of flyout background.
  * @type {number}
  * @const
@@ -248,7 +255,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     var optionBox = this.workspace_.getCanvas().getBBox();
   } catch (e) {
     // Firefox has trouble with hidden elements (Bug 528969).
-    var optionBox = {height: 0, y: 0};
+    var optionBox = {height: 0, y: 0, width: 0, x: 0};
   }
 
   var absoluteTop = this.SCROLLBAR_PADDING;
@@ -258,7 +265,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     }
     var viewHeight = this.height_;
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-      viewHeight += this.CORNER_RADIUS - this.SCROLLBAR_PADDING;
+      viewHeight += this.MARGIN - this.SCROLLBAR_PADDING;
     }
     var viewWidth = this.width_ - 2 * this.SCROLLBAR_PADDING;
   } else {
@@ -273,13 +280,13 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     viewHeight: viewHeight,
     viewWidth: viewWidth,
     contentHeight: (optionBox.height) * this.workspace_.scale,
-    contentWidth: (optionBox.width) * this.workspace_.scale,
+    contentWidth: (optionBox.width + 2 * this.MARGIN) * this.workspace_.scale,
     viewTop: -this.workspace_.scrollY,
     viewLeft: -this.workspace_.scrollX,
     contentTop: optionBox.y,
     contentLeft: 0,
     absoluteTop: absoluteTop,
-    absoluteLeft: this.SCROLLBAR_PADDING
+    absoluteLeft: this.horizontalLayout ? 0 : this.SCROLLBAR_PADDING
   };
   return metrics;
 };
@@ -302,13 +309,10 @@ Blockly.Flyout.prototype.setMetrics_ = function(xyRatio) {
         -metrics.contentHeight * xyRatio.y - metrics.contentTop;
   } else if (this.horizontalLayout_ && goog.isNumber(xyRatio.x)) {
     this.workspace_.scrollX =
-        -metrics.contentWidth * xyRatio.x +
-        (this.RTL ? metrics.contentLeft : -metrics.contentLeft);
+        -metrics.contentWidth * xyRatio.x - metrics.contentLeft;
   }
-  var translateX = this.horizontalLayout_ && this.RTL ?
-      metrics.absoluteLeft + metrics.viewWidth - this.workspace_.scrollX :
-      this.workspace_.scrollX + metrics.absoluteLeft;
-  this.workspace_.translate(translateX,
+
+  this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
       this.workspace_.scrollY + metrics.absoluteTop);
 };
 
@@ -464,7 +468,7 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
  * Scroll the flyout to the top.
  */
 Blockly.Flyout.prototype.scrollToStart = function() {
-  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? 1000000000 : 0);
+  this.scrollbar_.set((this.horizontalLayout_ && this.RTL) ? 100000 : 0);
 };
 
 /**
@@ -581,8 +585,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   } else {
     this.width_ = 0;
   }
-  this.reflow();
+  this.reflow(true /* opt_skip_resize */);
 
+  this.offsetHorizontalRtlBlocks(this.workspace_.getTopBlocks(false));
   this.filterForCapacity_();
 
   // Fire a resize event to update the flyout's scrollbar.
@@ -753,6 +758,7 @@ Blockly.Flyout.prototype.onMouseMove_ = function(e) {
     this.startDragMouseX_ = e.clientX;
     var x = metrics.viewLeft - dx;
     x = goog.math.clamp(x, 0, metrics.contentWidth - metrics.viewWidth);
+    this.scrollbar_.set(metrics.contentLeft - x);
     this.scrollbar_.set(x);
   } else {
     if (metrics.contentHeight - metrics.viewHeight < 0) {
@@ -980,12 +986,12 @@ Blockly.Flyout.terminateDrag_ = function() {
 /**
  * Compute height of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
+ * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
  */
-Blockly.Flyout.prototype.reflowHorizontal = function() {
+Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutHeight = 0;
   var margin = this.CORNER_RADIUS;
-  var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
   }
@@ -997,7 +1003,7 @@ Blockly.Flyout.prototype.reflowHorizontal = function() {
       if (block.flyoutRect_) {
         block.flyoutRect_.setAttribute('width', blockHW.width);
         block.flyoutRect_.setAttribute('height', blockHW.height);
-        // Blocks with output tabs are shifted a bit.
+        // Rectangles behind blocks with output tabs are shifted a bit.
         var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
         var blockXY = block.getRelativeToSurfaceXY();
         block.flyoutRect_.setAttribute('y', blockXY.y);
@@ -1013,12 +1019,12 @@ Blockly.Flyout.prototype.reflowHorizontal = function() {
 /**
  * Compute width of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
+ * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
  */
-Blockly.Flyout.prototype.reflowVertical = function() {
+Blockly.Flyout.prototype.reflowVertical = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutWidth = 0;
   var margin = this.CORNER_RADIUS;
-  var blocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
     var width = block.getHeightWidth().width;
     if (block.outputConnection) {
@@ -1056,12 +1062,51 @@ Blockly.Flyout.prototype.reflowVertical = function() {
   }
 };
 
-Blockly.Flyout.prototype.reflow = function() {
+/**
+ * Reflow blocks and their buttons.
+ * @param {boolean} opt_skip_resize Possibly skip resizing, since sometimes a
+ * resize will be called immediately anyway.
+ */
+Blockly.Flyout.prototype.reflow = function(opt_skip_resize) {
+  var blocks = this.workspace_.getTopBlocks(false);
   if (this.horizontalLayout_) {
-    this.reflowHorizontal();
+    this.reflowHorizontal(blocks);
   } else {
-    this.reflowVertical();
+    this.reflowVertical(blocks);
   }
   // Fire a resize event to update the flyout's scrollbar.
-  Blockly.fireUiEvent(window, 'resize');
+  if (!opt_skip_resize) {
+    Blockly.fireUiEvent(window, 'resize');
+  }
+};
+
+/**
+ * In the horizontal RTL case all of the blocks will be laid out to the left of
+ * the origin, but we won't know how big the workspace is until the layout pass
+ * is done.
+ * Now that it's done, shunt all the blocks to be right of the origin.
+ * @param {!Array<!Blockly.Block>} blocks The blocks to repositions.
+ */
+Blockly.Flyout.prototype.offsetHorizontalRtlBlocks = function(blocks) {
+  if (this.horizontalLayout_ && this.RTL) {
+    try {
+      var optionBox = this.workspace_.getCanvas().getBBox();
+    } catch (e) {
+      // Firefox has trouble with hidden elements (Bug 528969).
+      optionBox = {height: 0, y: 0, width: 0, x: 0};
+    }
+
+    console.log(optionBox);
+    var offset = Math.max(-optionBox.x, this.width_ / this.workspace_.scale);
+    console.log(this.width_);
+    console.log(offset);
+
+    for (var i = 0, block; block = blocks[i]; i++) {
+      block.moveBy(offset, 0);
+      if (block.flyoutRect_) {
+        block.flyoutRect_.setAttribute('x',
+            offset + Number(block.flyoutRect_.getAttribute('x')));
+      }
+    }
+  }
 };

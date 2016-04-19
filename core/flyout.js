@@ -1096,10 +1096,7 @@ Blockly.Flyout.prototype.offsetHorizontalRtlBlocks = function(blocks) {
       optionBox = {height: 0, y: 0, width: 0, x: 0};
     }
 
-    console.log(optionBox);
     var offset = Math.max(-optionBox.x, this.width_ / this.workspace_.scale);
-    console.log(this.width_);
-    console.log(offset);
 
     for (var i = 0, block; block = blocks[i]; i++) {
       block.moveBy(offset, 0);

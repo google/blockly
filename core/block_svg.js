@@ -127,6 +127,11 @@ Blockly.BlockSvg.prototype.initSvg = function() {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function() {
+  if (this.isShadow() && this.getParent()) {
+    // Shadow blocks should not be selected.
+    this.getParent().select();
+    return;
+  }
   if (Blockly.selected == this) {
     return;
   }
@@ -563,7 +568,8 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
-  if (Blockly.dragMode_ != Blockly.DRAG_FREE) {
+  if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
+      !Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.fire(
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }

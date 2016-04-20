@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Events');
 
+goog.require('goog.math.Coordinate');
+
 
 /**
  * Group ID for new events.  Grouped events are indivisible.

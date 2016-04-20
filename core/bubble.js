@@ -29,6 +29,7 @@ goog.provide('Blockly.Bubble');
 goog.require('Blockly.Workspace');
 goog.require('goog.dom');
 goog.require('goog.math');
+goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
 
@@ -263,9 +264,9 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
 
-  this.workspace_.startDrag(e,
+  this.workspace_.startDrag(e, new goog.math.Coordinate(
       this.workspace_.RTL ? -this.relativeLeft_ : this.relativeLeft_,
-      this.relativeTop_);
+      this.relativeTop_));
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);
@@ -306,8 +307,8 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   // Left-click (or middle click)
   Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
 
-  this.workspace_.startDrag(e,
-      this.workspace_.RTL ? -this.width_ : this.width_, this.height_);
+  this.workspace_.startDrag(e, new goog.math.Coordinate(
+      this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
       'mouseup', this, Blockly.Bubble.unbindDragEvents_);

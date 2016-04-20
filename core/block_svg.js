@@ -853,8 +853,8 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     // Drag all the nested bubbles.
     for (var i = 0; i < this.draggedBubbles_.length; i++) {
       var commentData = this.draggedBubbles_[i];
-      commentData.bubble.setIconLocation(commentData.x + dx,
-          commentData.y + dy);
+      commentData.bubble.setIconLocation(
+          new goog.math.Coordinate(commentData.x + dx, commentData.y + dy));
     }
 
     // Check to see if any of this block's connections are within range of

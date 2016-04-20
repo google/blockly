@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="1327005465775917626" datatype="html">
         <source>An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of 1st class and 2nd class passenger seats.  Each 1st class row contains four seats. Each 2nd class row contains five seats.</source>
-        <target>Sebuah kapal terbnag mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang kelas pertama dan kelas kedua. Setiap baris kelas pertama mengandungi empat tempat duduk. Setiap baris kelas pertama mengandungi lima tempat duduk.</target>
+        <target>Sebuah kapal terbang mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang kelas pertama dan kelas kedua. Setiap baris kelas pertama mengandungi empat tempat duduk. Setiap baris kelas pertama mengandungi lima tempat duduk.</target>
       </trans-unit>
       <trans-unit id="1649099567159388799" datatype="html">
         <source>?</source>
@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="4755413400587385256" datatype="html">
         <source>An airplane has two seats in the flight deck (for the pilot and co-pilot), and a number of rows of passenger seats.  Each row contains four seats.</source>
-        <target>Sebuah kapal terbnag mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang. Setiap baris mengandungi empat tempat duduk.</target>
+        <target>Sebuah kapal terbang mempunyai tempat duduk di kokpit (untuk juruterbang dan pembantunya) dan sebilangan baris tempat duduk penumpang. Setiap baris mengandungi empat tempat duduk.</target>
       </trans-unit>
       <trans-unit id="5622822520334788359" datatype="html">
         <source>1st class rows (%1)</source>
@@ -32,7 +32,7 @@
       </trans-unit>
       <trans-unit id="6523489254328705062" datatype="html">
         <source>2nd class rows: %1</source>
-        <target>Baris kelas ke-2: %1</target>
+        <target>Baris kelas kedua: %1</target>
       </trans-unit>
       <trans-unit id="6636919311618748816" datatype="html">
         <source>Seats: %1</source>
@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="8347578891541780742" datatype="html">
         <source>2nd class rows (%1)</source>
-        <target>baris kelas ke-2 (%1)</target>
+        <target>baris kelas kedua (%1)</target>
       </trans-unit>
     </body>
   </file>

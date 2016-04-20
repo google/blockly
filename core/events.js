@@ -145,6 +145,15 @@ Blockly.Events.filter = function(queueIn, forward) {
           event1.newValue = event2.newValue;
           queue.splice(j, 1);
           j--;
+        } else if (event1.type == Blockly.Events.UI &&
+            event2.element == 'click' &&
+            (event1.element == 'commentOpen' ||
+             event1.element == 'mutatorOpen' ||
+             event1.element == 'warningOpen')) {
+          // Merge change events.
+          event1.newValue = event2.newValue;
+          queue.splice(j, 1);
+          j--;
         }
       }
     }

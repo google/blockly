@@ -543,7 +543,9 @@ Blockly.Connection.prototype.disconnect = function() {
     } else {
       throw 'Child block does not have output or previous statement.';
     }
-    blockShadow.initSvg();
+    if (blockShadow.initSvg) {
+      blockShadow.initSvg();
+    }
     blockShadow.render(false);
   }
 

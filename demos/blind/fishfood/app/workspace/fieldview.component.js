@@ -57,6 +57,11 @@ app.FieldView = ng.core
       };
       this.text = 'Nothing';
     },
+    setLabelledBy: function(item,string){
+      if (!item.getAttribute('aria-labelledby')) {
+        item.setAttribute('aria-labelledby', string);
+      }
+    },
     createId: function(obj){
       if (obj && obj.id){
         return obj.id;

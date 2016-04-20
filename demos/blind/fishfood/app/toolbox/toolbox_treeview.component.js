@@ -30,11 +30,13 @@ app.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createCategoryDependantId(index, parentList)}}' [attr.aria-labelledby]='block.id'>
+<li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createCategoryDependantId(index, parentList)}}'>
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
+  {{setLabelledBy(parentList, concatStringWithSpaces(block.id,'block-summary'))}}
   <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
     {{addClass(parentList, 'hasChildren')}}
-    <li #listItem id='{{treeService.createId(listItem)}}' *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'  [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>
+    <li #listItem id='{{treeService.createId(listItem)}}' *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
+      {{setLabelledBy(listItem, concatStringWithSpaces(block.id,'block-menu'))}}
       <select #select id='{{treeService.createId(select)}}' [attr.aria-labelledby]='block.id' aria-label='toolbar block menu' (change)='blockMenuSelected(block, $event)'>
         <option value='NO_ACTION' selected>select an action</option>
         <option value='COPY_TO_WORKSPACE'>copy to workspace</option>
@@ -46,8 +48,8 @@ app.ToolboxTreeView = ng.core
       <field-view [attr.aria-level]='level+1' *ngFor='#field of getInfo(inputBlock); #j=index' [field]='field' [level]='level+1'></field-view>
       <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false' [level]='level+1'></toolbox-tree-view>
       <li aria-selected=false #listItem1 role='treeitem' [attr.aria-level]='level+1' id='{{treeService.createId(listItem1)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
-        <label #label id='{{treeService.createId(label)}}'>{{inputType(inputBlock.connection)}} input needed</label>
-        {{labelParent(listItem1, label.id)}}
+        <label #label id='{{treeService.createId(label)}}'>{{inputType(inputBlock.connection)}} argument needed</label>
+        {{setLabelledBy(listItem1, label.id)}}
       </li>
     </div>
   </ol>
@@ -67,6 +69,14 @@ app.ToolboxTreeView = ng.core
       this.sharedClipboardService = _service;
       this.treeService = _service2;
     }],
+    setLabelledBy: function(item,string){
+      if (!item.getAttribute('aria-labelledby')) {
+        item.setAttribute('aria-labelledby', string);
+      }
+    },
+    concatStringWithSpaces: function(a,b){
+      return a + ' ' + b;
+    },
     createCategoryDependantId: function(index, parentList){
       //if this is the first block in a category-less toolbox, the id should be toolbox-tree-node0
       if (index != undefined && index == 0) {
@@ -78,11 +88,6 @@ app.ToolboxTreeView = ng.core
         return 'toolbox-tree-node0';
       } else {
         return this.treeService.createId(parentList);
-      }
-    },
-    labelParent: function(parent, childId) {
-      if (!parent.getAttribute('aria-labelledby')) {
-        parent.setAttribute('aria-labelledby', childId);
       }
     },
     addClass: function(node, classText) {

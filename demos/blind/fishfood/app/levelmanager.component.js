@@ -131,9 +131,9 @@ app.LevelManagerView = ng.core
     <p *ngFor='#para of setInstructions()'>{{para}}</p>
     <h2 *ngIf='getHints()'>Hints</h2>
     <p *ngFor='#para of getHints()'>{{para}}</p>
-    <button #level1 aria-selected='true' (click)='setLevel(1, level1, [level2,level3])' disabled={{disableButton(1)}}>Level 1</button>
-    <button #level2 aria-selected='false' (click)='setLevel(2, level2, [level1,level3])' disabled={{disableButton(2)}}>Level 2</button>
-    <button #level3 aria-selected='false' (click)='setLevel(3, level3, [level2,level1])' disabled={{disableButton(3)}}>Level 3</button>
+    <button #level1 aria-pressed='true' (click)='setLevel(1, level1, [level2,level3])' disabled={{disableButton(1)}}>Level 1</button>
+    <button #level2 aria-pressed='false' (click)='setLevel(2, level2, [level1,level3])' disabled={{disableButton(2)}}>Level 2</button>
+    <button #level3 aria-pressed='false' (click)='setLevel(3, level3, [level2,level1])' disabled={{disableButton(3)}}>Level 3</button>
     <app></app>
     `,
     directives: [app.AppView],
@@ -156,10 +156,11 @@ app.LevelManagerView = ng.core
       //app.workspace = app.gameManager.levelWorkspaces[app.level];
       //app.workspace.clear();
       console.log(app.workspace.id);
-      rightButton.setAttribute('aria-selected','true');
+      rightButton.setAttribute('aria-pressed','true');
       for (var i=0; i<wrongButtons.length; i++) {
-        wrongButtons[i].setAttribute('aria-selected','false');
+        wrongButtons[i].setAttribute('aria-pressed','false');
       }
+      app.workspace.clear();
     },
     setInstructions: function() {
       if (app.gameManager.level && app.gameManager.levelInstructions) {

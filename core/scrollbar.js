@@ -516,7 +516,7 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
   var barLength = parseFloat(
       this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
   var ratio = knobValue / barLength;
-  if (isNaN(ratio)) {
+  if (isNaN(ratio) || !barLength) {
     ratio = 0;
   }
   var xyRatio = {};

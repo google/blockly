@@ -281,8 +281,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
 /**
  * Recalculate a horizontal scrollbar's location and length.
  * @param {!Object} hostMetrics A data structure describing all the
- * required dimensions, possibly fetched from the host
- * object.
+ *     required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
@@ -321,8 +320,7 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
 /**
  * Recalculate a vertical scrollbar's location and length.
  * @param {!Object} hostMetrics A data structure describing all the
- * required dimensions, possibly fetched from the host
- * object.
+ *     required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {

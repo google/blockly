@@ -86,8 +86,8 @@ Blockly.BlockSvg.START_HAT_HEIGHT = 15;
  * @const
  */
 Blockly.BlockSvg.START_HAT_PATH = 'c 30,-' +
-  Blockly.BlockSvg.START_HAT_HEIGHT +' 70,-' +
-  Blockly.BlockSvg.START_HAT_HEIGHT +' 100,0';
+    Blockly.BlockSvg.START_HAT_HEIGHT + ' 70,-' +
+    Blockly.BlockSvg.START_HAT_HEIGHT + ' 100,0';
 /**
  * Path of the top hat's curve's highlight in LTR.
  * @const
@@ -106,14 +106,14 @@ Blockly.BlockSvg.START_HAT_HIGHLIGHT_RTL =
  * @const
  */
 Blockly.BlockSvg.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
-      (Blockly.BlockSvg.CORNER_RADIUS - 0.5) + 0.5;
+    (Blockly.BlockSvg.CORNER_RADIUS - 0.5) + 0.5;
 /**
  * Distance from shape edge to intersect with a curved corner at 45 degrees.
  * Applies to highlighting on around the outside of a curve.
  * @const
  */
 Blockly.BlockSvg.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
-      (Blockly.BlockSvg.CORNER_RADIUS + 0.5) - 0.5;
+    (Blockly.BlockSvg.CORNER_RADIUS + 0.5) - 0.5;
 /**
  * SVG path for drawing next/previous notch from left to right.
  * @const

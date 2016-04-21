@@ -440,8 +440,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
 /**
  * Lay out the blocks in the flyout.
- * @param {!Array<Blockly.BlockSvg>} blocks The blocks to lay out.
- * @param {!Array<number>} gaps The visible gaps between blocks.
+ * @param {!Array.<!Blockly.BlockSvg>} blocks The blocks to lay out.
+ * @param {!Array.<number>} gaps The visible gaps between blocks.
  * @param {number} margin The margin around the edges of the flyout.
  * @private
  */
@@ -566,11 +566,10 @@ Blockly.Flyout.prototype.reflow = function() {
         block.flyoutRect_.setAttribute('x',
             this.RTL ? blockXY.x - blockHW.width + tab : blockXY.x - tab);
         // For hat blocks we want to shift them down by the hat height
-        // since the y coordinate is the corner, not the top of the
-        // hat.
+        // since the y coordinate is the corner, not the top of the hat.
         var hatOffset =
-          block.startHat_ ? Blockly.BlockSvg.START_HAT_HEIGHT : 0;
-        if (hatOffset != 0) {
+            block.startHat_ ? Blockly.BlockSvg.START_HAT_HEIGHT : 0;
+        if (hatOffset) {
           block.moveBy(0, hatOffset);
         }
         block.flyoutRect_.setAttribute('y', blockXY.y);

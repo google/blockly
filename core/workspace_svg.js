@@ -107,18 +107,11 @@ Blockly.WorkspaceSvg.prototype.startScrollX = 0;
 Blockly.WorkspaceSvg.prototype.startScrollY = 0;
 
 /**
- * Horizontal distance from mouse to object being dragged.
- * @type {number}
+ * Distance from mouse to object being dragged.
+ * @type {goog.math.Coordinate}
  * @private
  */
-Blockly.WorkspaceSvg.prototype.dragDeltaX_ = 0;
-
-/**
- * Vertical distance from mouse to object being dragged.
- * @type {number}
- * @private
- */
-Blockly.WorkspaceSvg.prototype.dragDeltaY_ = 0;
+Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
 
 /**
  * Current scale.
@@ -494,8 +487,8 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
         // Check for blocks in snap range to any of its connections.
         var connections = block.getConnections_(false);
         for (var i = 0, connection; connection = connections[i]; i++) {
-          var neighbour =
-              connection.closest(Blockly.SNAP_RADIUS, blockX, blockY);
+          var neighbour = connection.closest(Blockly.SNAP_RADIUS,
+              new goog.math.Coordinate(blockX, blockY));
           if (neighbour.connection) {
             collide = true;
             break;
@@ -620,17 +613,15 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
 /**
  * Start tracking a drag of an object on this workspace.
  * @param {!Event} e Mouse down event.
- * @param {number} x Starting horizontal location of object.
- * @param {number} y Starting vertical location of object.
+ * @param {!goog.math.Coordinate} xy Starting location of object.
  */
-Blockly.WorkspaceSvg.prototype.startDrag = function(e, x, y) {
+Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Record the starting offset between the bubble's location and the mouse.
   var point = Blockly.mouseToSvg(e, this.getParentSvg());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  this.dragDeltaX_ = x - point.x;
-  this.dragDeltaY_ = y - point.y;
+  this.dragDeltaXY_ = goog.math.Coordinate.difference(xy, point);
 };
 
 /**
@@ -643,9 +634,7 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
-  var x = this.dragDeltaX_ + point.x;
-  var y = this.dragDeltaY_ + point.y;
-  return new goog.math.Coordinate(x, y);
+  return goog.math.Coordinate.sum(this.dragDeltaXY_, point);
 };
 
 /**
@@ -1049,25 +1038,13 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
   this.setScale(Math.min(ratioX, ratioY));
-  this.scrollCenter_();
-};
-
-/**
- * Reset zooming and dragging.
- * @param {!Event} e Mouse down event.
- */
-Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
-  this.setScale(1);
-  this.scrollCenter_();
-  // This event has been handled.  Don't start a workspace drag.
-  e.stopPropagation();
+  this.scrollCenter();
 };
 
 /**
  * Center the workspace.
- * @private
  */
-Blockly.WorkspaceSvg.prototype.scrollCenter_ = function() {
+Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   if (!this.scrollbar) {
     // Can't center a non-scrolling workspace.
     return;
@@ -1105,9 +1082,6 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
     // No toolbox, resize flyout.
     this.flyout_.reflow();
   }
-  // This event has been handled.  Don't start a workspace drag.
-  e.stopPropagation();
-  e.preventDefault();
 };
 
 /**

@@ -664,16 +664,14 @@ Blockly.Connection.prototype.tighten_ = function() {
 /**
  * Find the closest compatible connection to this connection.
  * @param {number} maxLimit The maximum radius to another connection.
- * @param {number} dx Horizontal offset between this connection's location
- *     in the database and the current location (as a result of dragging).
- * @param {number} dy Vertical offset between this connection's location
+ * @param {!goog.math.Coordinate} dxy Offset between this connection's location
  *     in the database and the current location (as a result of dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties:' connection' which is either another connection or null,
  *     and 'radius' which is the distance.
  */
-Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
-  return this.dbOpposite_.searchForClosest(this, maxLimit, dx, dy);
+Blockly.Connection.prototype.closest = function(maxLimit, dxy) {
+  return this.dbOpposite_.searchForClosest(this, maxLimit, dxy);
 };
 
 /**

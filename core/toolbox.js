@@ -202,10 +202,6 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
           var childOut = rootOut.createNode(childIn.getAttribute('name'));
           childOut.blocks = [];
           treeOut.add(childOut);
-          var customId = childIn.getAttribute('id');
-          if (customId) {
-            childOut.setId(customId);
-          }
           var custom = childIn.getAttribute('custom');
           if (custom) {
             // Variables and procedures are special dynamic categories.

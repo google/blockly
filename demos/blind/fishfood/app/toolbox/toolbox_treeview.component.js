@@ -32,11 +32,11 @@ app.ToolboxTreeView = ng.core
     template: `
 <li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createCategoryDependantId(index, parentList)}}'>
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
-  {{setLabelledBy(parentList, concatStringWithSpaces(block.id,'block-summary'))}}
+  {{setLabelledBy(parentList, concatStringWithSpaces('block-summary', block.id))}}
   <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
     {{addClass(parentList, 'hasChildren')}}
     <li #listItem id='{{treeService.createId(listItem)}}' *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
-      {{setLabelledBy(listItem, concatStringWithSpaces(block.id,'block-menu'))}}
+      {{setLabelledBy(listItem, concatStringWithSpaces('block-menu', block.id))}}
       <select #select id='{{treeService.createId(select)}}' [attr.aria-labelledby]='block.id' aria-label='toolbar block menu' (change)='blockMenuSelected(block, $event)'>
         <option value='NO_ACTION' selected>select an action</option>
         <option value='COPY_TO_WORKSPACE'>copy to workspace</option>
@@ -48,15 +48,13 @@ app.ToolboxTreeView = ng.core
       <field-view [attr.aria-level]='level+1' *ngFor='#field of getInfo(inputBlock); #j=index' [field]='field' [level]='level+1'></field-view>
       <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false' [level]='level+1'></toolbox-tree-view>
       <li aria-selected=false #listItem1 role='treeitem' [attr.aria-level]='level+1' id='{{treeService.createId(listItem1)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
-        <label #label id='{{treeService.createId(label)}}'>{{inputType(inputBlock.connection)}} argument needed</label>
-        {{setLabelledBy(listItem1, label.id)}}
+        <label #label id='{{treeService.createId(label)}}'>{{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:</label>
+        {{setLabelledBy(listItem1, concatStringWithSpaces('argument-text', label.id))}}
       </li>
     </div>
   </ol>
 </li>
-<li #listItem2 aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{treeService.createId(listItem2)}}' *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()'>
-  <toolbox-tree-view [level]='level+1' [block]='block.nextConnection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
-</li>
+<toolbox-tree-view *ngIf= 'block.nextConnection && block.nextConnection.targetBlock()' [level]='level' [block]='block.nextConnection.targetBlock()' [displayBlockMenu]='false'></toolbox-tree-view>
     `,
     directives: [ng.core.forwardRef(
         function() { return app.ToolboxTreeView; }), app.FieldView],
@@ -112,8 +110,8 @@ app.ToolboxTreeView = ng.core
     getInfo: function(block) {
       //list all inputs
       if (this.infoBlocks[block.id]) {
-        //TODO(madeeha): is there a situation in which overwriting often unnecessarily is a problem?
-        this.infoBlocks[block.id].length = 0;
+        //this is required for some reason
+        this.infoBlocks[block.id].length=0;
       } else {
         this.infoBlocks[block.id] = [];
       }
@@ -163,6 +161,13 @@ app.ToolboxTreeView = ng.core
       } else {
         //true will result in the 'copy to marked block' option being DISABLED
         return true;
+      }
+    },
+    valueOrStatement: function(inputBlock) {
+      if (inputBlock.type == Blockly.NEXT_STATEMENT){
+        return "statement";
+      } else {
+        return "value";
       }
     },
     log: function(obj){

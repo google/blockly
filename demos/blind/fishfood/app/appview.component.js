@@ -43,6 +43,7 @@ app.AppView = ng.core
     <label id='argument-menu' aria-hidden='true' hidden>argument menu</label>
     <label id='argument-input' aria-hidden='true' hidden>argument input</label>
     <label id='argument-block-menu' aria-hidden='true' hidden>argument block menu</label>
+    <label id='argument-text' aria-hidden='true' hidden>text</label>
     `,
     directives: [app.ToolboxView, app.WorkspaceView],
     providers: [app.ClipboardService, app.TreeService],

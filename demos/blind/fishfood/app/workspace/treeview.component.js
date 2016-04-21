@@ -30,8 +30,10 @@ app.TreeView = ng.core
 <li #parentList aria-selected=false role='treeitem' class='hasChildren' [attr.aria-level]='level' id='{{setId(parentList)}}' [attr.aria-labelledby]='block.id'>
   {{checkParentList(parentList)}}
   <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
+  {{setLabelledBy(parentList, concatStringWithSpaces('block-summary', block.id))}}
   <ol role='group' class='children' [attr.aria-level]='level+1'>
     <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' [attr.aria-level]='level+1' aria-selected=false  aria-label='block action menu'>
+        {{setLabelledBy(listItem, concatStringWithSpaces('block-menu', block.id))}}
         <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
           <option value='NO_ACTION' selected>select an action</option>
           <option value='CUT_BLOCK'>cut block</option>
@@ -47,7 +49,7 @@ app.TreeView = ng.core
     <div *ngFor='#inputBlock of block.inputList'>
       <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
       <tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [isTopBlock]='false' [level]='level'></tree-view>
-      <li #inputList [attr.aria-level]='level+1' id='{{treeService.createId(inputList)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
+      <li #inputList [attr.aria-level]='level+1' id='{{treeService.createId(inputList)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()' (keydown)="treeService.keyHandler($event, tree)">
         {{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
         <select aria-label='insert input menu' (change)='inputMenuSelected(inputBlock.connection, $event)'>
           <option value='NO_ACTION' selected>select an action</option>
@@ -72,6 +74,14 @@ app.TreeView = ng.core
       this.sharedClipboardService = _service;
       this.treeService = _service2;
     }],
+    setLabelledBy: function(item,string){
+      if (!item.getAttribute('aria-labelledby')) {
+        item.setAttribute('aria-labelledby', string);
+      }
+    },
+    concatStringWithSpaces: function(a,b){
+      return a + ' ' + b;
+    },
     checkParentList: function(parentList) {
       console.log("setting parent list");
       var tree = parentList;

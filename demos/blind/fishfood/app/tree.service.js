@@ -66,7 +66,7 @@ app.TreeService = ng.core
           }
           break;
       }
-      this.previousKey_=e.keyCode;   
+      this.previousKey_=e.keyCode;
     },
     keyHandler: function(e, tree){
         //console.log(document.activeElement);
@@ -97,10 +97,11 @@ app.TreeService = ng.core
               e.preventDefault();
               e.stopPropagation();
             }
-            break;          
+            break;
           case 27:
             //escape key: no longer in dropdown mode
             this.inDropdown = false;
+            tree.focus();
             break;
           case 37:
             if (this.inDropdown) {
@@ -151,7 +152,17 @@ app.TreeService = ng.core
             break;
           case 40:
             //down-facing arrow: if the previous key was an Alt key, we want to do an Alt+Down to open a dropdown
-            if (this.previousKey_ == 18 || this.inDropdown){
+            if (e.altKey){
+              console.log("in dropdown");
+              var activeDesc = this.getActiveDesc(treeId);
+              if (activeDesc){
+                var children = activeDesc.children;
+                var child = children[0];
+                if (children.length == 1 && child.tagName == 'SELECT'){
+                  child.children[1].focus();
+                  console.log(child.children[1]);
+                }
+              }
               this.inDropdown = true;
               break;
             }
@@ -186,10 +197,11 @@ app.TreeService = ng.core
                 //test this in all browsers, it may break in some places.
                 //also see if it's better for screen readers if you put the focus on it after it opens.
                 if(child.tagName == 'SELECT') {
-                  var event;
-                  event = document.createEvent('MouseEvents');
-                  event.initMouseEvent('mousedown', true, true, window);
-                  child.dispatchEvent(event);
+                  // var event;
+                  // event = document.createEvent('MouseEvents');
+                  // event.initMouseEvent('mousedown', true, true, window);
+                  // child.dispatchEvent(event);
+                  child.click();
                 }
               }
             } else {
@@ -233,7 +245,7 @@ app.TreeService = ng.core
           while (parent != null && parent.tagName != 'OL'){
             if (parent.nextElementSibling){
               var node = parent.nextElementSibling;
-              if (node.tabIndex == 0){
+              if (node.tagName == 'LI'){
                 return node;
               } else {
                 return this.getFirstChild(node);

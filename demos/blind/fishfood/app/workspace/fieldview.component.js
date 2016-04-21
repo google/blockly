@@ -31,21 +31,24 @@ app.FieldView = ng.core
     template: `
     <!-- html representation of a field -->
     <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isTextInput(field)' id='{{createId(listItem)}}'>
-      <input [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
+      <input #input id='{{createId(input)}}' [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
+      {{setLabelledBy(listItem, concatStringWithSpaces('argument-input', input.id))}}
     </li>
     <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isDropdown(field)' id='{{createId(listItem)}}'>
-      <select [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
+      <select #select id='{{createId(select)}}' [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
       <option value='NO_ACTION' selected>select an option</option>
       <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
       </select>
+      {{setLabelledBy(listItem, concatStringWithSpaces('argument-menu', select.id))}}
     </li>
     <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' *ngIf='isCheckbox(field)'>
       //TODO(madeeha):CHECKBOX
     </li>
     <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' *ngIf='isTextField(field) && notWhitespace(field)'>
-      <label>
+      <label #label id='{{createId(label)}}'>
         {{field.getText()}}
       </label>
+      {{setLabelledBy(listItem, concatStringWithSpaces('argument-text', label.id))}}
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
@@ -61,6 +64,9 @@ app.FieldView = ng.core
       if (!item.getAttribute('aria-labelledby')) {
         item.setAttribute('aria-labelledby', string);
       }
+    },
+    concatStringWithSpaces: function(a,b){
+      return a + ' ' + b;
     },
     createId: function(obj){
       if (obj && obj.id){

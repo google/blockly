@@ -1038,26 +1038,13 @@ Blockly.WorkspaceSvg.prototype.zoomToFit = function() {
   var ratioX = workspaceWidth / blocksWidth;
   var ratioY = workspaceHeight / blocksHeight;
   this.setScale(Math.min(ratioX, ratioY));
-  this.scrollCenter_();
-};
-
-/**
- * Reset zooming and dragging.
- * @param {!Event} e Mouse down event.
- */
-Blockly.WorkspaceSvg.prototype.zoomReset = function(e) {
-  this.setScale(1);
-  this.scrollCenter_();
-  // This event has been handled.  Don't start a workspace drag.
-  e.stopPropagation();
-  e.preventDefault();
+  this.scrollCenter();
 };
 
 /**
  * Center the workspace.
- * @private
  */
-Blockly.WorkspaceSvg.prototype.scrollCenter_ = function() {
+Blockly.WorkspaceSvg.prototype.scrollCenter = function() {
   if (!this.scrollbar) {
     // Can't center a non-scrolling workspace.
     return;

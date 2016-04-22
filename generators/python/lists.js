@@ -314,7 +314,7 @@ Blockly.Python['lists_getSublist'] = function(block) {
 
 Blockly.Python['lists_sort'] = function(block) {
   // Block for sorting a list.
-  var list = (Blockly.Python.valueToCode(block, 'LIST', 
+  var listCode = (Blockly.Python.valueToCode(block, 'LIST', 
     Blockly.Python.ORDER_MEMBER) || '[]');
   var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
   var type = block.getFieldValue('TYPE');
@@ -322,8 +322,16 @@ Blockly.Python['lists_sort'] = function(block) {
     type === 'text' ? 'str' :
     type === 'ignoreCase' ? 'str.lower' : 
     type === 'length' ? 'len' : 'unknown');
-  
-  var code = 'sorted(' + list + ', key=' + key + ', reverse=' + reverse + ')';
+  var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
+  ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + 
+      '(listv, keyv, reversev):',
+    '  tmp_list = list(listv)', // clone the list
+    '  sorted(tmp_list, key=keyv, reverse=reversev)',
+    '  return tmp_list'
+  ]);  
+
+  var code = sortFunctionName + 
+    '(' + listCode + ', ' + key + ', ' + reverse + ')';
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 

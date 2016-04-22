@@ -306,20 +306,24 @@ Blockly.JavaScript['lists_sort'] = function(block) {
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
   var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
-  var sortFunctionName = Blockly.JavaScript.provideFunction_(
+  var getCompareFunctionName = Blockly.JavaScript.provideFunction_(
           'lists_get_sort',
   ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-    '(a, b) {',
+    '(direction, type) {',
       '  var compareFuncs = {',
-      '    "numeric":  function(a, b) { return a - b }, ',
-      '    "text": function(a, b) { return a.localeCompare(b, "en") },',
+      '    "numeric":  function(a, b) { ',
+      '        return parseFloat(a) - parseFloat(b) }, ',
+      '    "text": function(a, b) {',
+      '        return a.toString().localeCompare(b.toString(), "en") },',
       '    "ignoreCase": function(a, b) {',
-      '       return a.localeCompare(b, "en", {"sensitivity": "base"}) },',
+      '        return a.toString().localeCompare(b.toString(), "en", ',
+      '          {"sensitivity": "base"}) },',
       '  };',
-      '  var compare = compareFuncs["' + type + '"];',
-      '  return compare(a, b) * ' + direction + ';',
+      '  var compare = compareFuncs[type];',
+      '  return function(a, b) { return compare(a, b) * direction; }',
     '}']);
-  return [listCode + '.sort(' + sortFunctionName + ')', 
+  return [listCode + '.sort(' + 
+      getCompareFunctionName + '(' + direction + ', "' + type + '"))', 
       Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 

@@ -320,7 +320,7 @@ Blockly.Python['lists_sort'] = function(block) {
   var type = block.getFieldValue('TYPE');
   var key = (type === 'numeric' ? 'float' :
     type === 'text' ? 'str' :
-    type === 'ignoreCase' ? 'str.lower' : 
+    type === 'ignoreCase' ? 'lambda s: str(s).lower()' : 
     type === 'length' ? 'len' : 'unknown');
   var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
   ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + 

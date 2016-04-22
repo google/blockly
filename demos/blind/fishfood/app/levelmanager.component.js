@@ -66,7 +66,7 @@ app.gameManager.expectedBassLines[3] = [
       [[43], 1]
     ];
 app.gameManager.expectedBlockType = [undefined, 'music_play_random_note', 'music_play_note', 'music_play_note'];
-app.gameManager.levelToolboxes=['', 'ToolboxXml.xml', 'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml'];
+app.gameManager.levelToolboxes=['', 'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml'];
 app.gameManager.levelWorkspaces=[undefined, new Blockly.Workspace(), new Blockly.Workspace(), new Blockly.Workspace()];
 app.gameManager.maxLevelAllowed=1;
 

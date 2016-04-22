@@ -35,11 +35,17 @@ app.FieldView = ng.core
       {{setLabelledBy(listItem, concatStringWithSpaces('argument-input', input.id))}}
     </li>
     <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isDropdown(field)' id='{{createId(listItem)}}'>
-      <select #select id='{{createId(select)}}' [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
+      <label #label id='{{treeService.createId(label)}}'>current argument value: {{field.getText()}}</label>
+      <ol role='group' class='children' [attr.aria-level]='level+1'>
+        <li #option *ngFor='#optionValue of getOptions(field)' id='{{treeService.createId(option)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
+          <button (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}} button</button>
+        </li>
+      <!--<select #select id='{{createId(select)}}' [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
       <option value='NO_ACTION' selected>select an option</option>
       <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
-      </select>
-      {{setLabelledBy(listItem, concatStringWithSpaces('argument-menu', select.id))}}
+      </select>-->
+      </ol>
+      {{setLabelledBy(listItem, concatStringWithSpaces('argument-menu', label.id))}}
     </li>
     <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' *ngIf='isCheckbox(field)'>
       //TODO(madeeha):CHECKBOX
@@ -54,12 +60,13 @@ app.FieldView = ng.core
     inputs: ['field', 'level', 'index', 'parentId'],
   })
   .Class({
-    constructor: function() {
+    constructor: [app.TreeService, function(_service) {
       this.optionText = {
         keys: []
       };
       this.text = 'Nothing';
-    },
+      this.treeService = _service;
+    }],
     setLabelledBy: function(item,string){
       if (!item.getAttribute('aria-labelledby')) {
         item.setAttribute('aria-labelledby', string);

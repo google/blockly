@@ -39,10 +39,10 @@ app.AppView = ng.core
     </tr>
     </table>
     <label id='block-summary' aria-hidden='true' hidden>block summary</label>
-    <label id='block-menu' aria-hidden='true' hidden>block menu</label>
-    <label id='argument-menu' aria-hidden='true' hidden>argument menu</label>
+    <label id='block-menu' aria-hidden='true' hidden>block action list</label>
+    <label id='argument-menu' aria-hidden='true' hidden>argument options list</label>
     <label id='argument-input' aria-hidden='true' hidden>argument input</label>
-    <label id='argument-block-menu' aria-hidden='true' hidden>argument block menu</label>
+    <label id='argument-block-menu' aria-hidden='true' hidden>argument block dropdown</label>
     <label id='argument-text' aria-hidden='true' hidden>text</label>
     `,
     directives: [app.ToolboxView, app.WorkspaceView],

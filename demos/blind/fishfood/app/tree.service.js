@@ -6,7 +6,7 @@ app.TreeService = ng.core
       console.log("making a new tree service");
       this.activeDesc_={};
       this.previousKey_;
-      this.inDropdown = false;
+      this.trees = document.getElementsByClassName('tree');
   	},
     createId: function(obj){
       if (obj && obj.id){
@@ -47,7 +47,7 @@ app.TreeService = ng.core
         tree.focus();
       }
     },
-    workspaceButtonKeyHandler: function(e){
+    workspaceButtonKeyHandler: function(e, treeId){
       console.log(e.keyCode);
       console.log("inside TreeService");
       switch(e.keyCode){
@@ -56,17 +56,63 @@ app.TreeService = ng.core
           if (e.shiftKey){
             console.log("shifttabbing");
             //if the previous key is shift, we're shift-tabbing mode
-            //if we're at the runCode button, then shift-tab should take us to the toolbox tree as a whole
-            if (document.activeElement.id == 'run-code-button'){
-              var toolbox = document.getElementById('toolbox-tree');
-              toolbox.focus();
-              e.preventDefault();
-              e.stopPropagation();
-            }
+            this.goToPreviousTree(treeId,e);
+          } else {
+            //if previous key isn't shift, we're tabbing
+            //we want to go to the run code button
+            this.goToNextTree(treeId,e);
           }
           break;
       }
       this.previousKey_=e.keyCode;
+    },
+    findParentOfNode: function(node){
+      var parent = node;
+      while (node && node.className != 'class'){
+        parent = node.parentNode;
+      }
+      return parent;
+    },
+    goToNextTree: function(treeId,e){
+      //if we're at the last tree, we want tab to go to the default
+      // if (treeId == this.trees[this.trees.length-1].id){
+      //   return;
+      // }
+      var next = false;
+      for (var i=0; i<this.trees.length; i++){
+        if (next){
+          this.trees[i].focus();
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        if (this.trees[i].id == treeId){
+          next = true;
+        }
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    goToPreviousTree: function(treeId, e){
+      //if we're at the first tree, we want shift+tab to go to the default
+      if (treeId == this.trees[0].id){
+        return;
+      }
+      //otherwise, go to the previous tree class
+      var next = false;
+      for (var i=(this.trees.length - 1); i>=0; i--){
+        if (next){
+          this.trees[i].focus();
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        if (this.trees[i].id == treeId){
+          next = true;
+        }
+      }
+      e.preventDefault();
+      e.stopPropagation();
     },
     keyHandler: function(e, tree){
         //console.log(document.activeElement);
@@ -83,37 +129,20 @@ app.TreeService = ng.core
             if (e.shiftKey){
               console.log("shifttabbing");
               //if the previous key is shift, we're shift-tabbing mode
-              //if we're at the runCode button, then shift-tab should take us to the toolbox tree as a whole
-              if (document.activeElement.id == 'run-code-button'){
-                var toolbox = document.getElementById('toolbox-tree');
-                toolbox.focus();
-              }
+              this.goToPreviousTree(treeId,e);
             } else {
               //if previous key isn't shift, we're tabbing
               //we want to go to the run code button
-              if (app.runCodeButton){
-                app.runCodeButton.focus();
-              }
-              e.preventDefault();
-              e.stopPropagation();
+              this.goToNextTree(treeId,e);
             }
-            break;
-          case 27:
-            //escape key: no longer in dropdown mode
-            this.inDropdown = false;
-            tree.focus();
             break;
           case 37:
-            if (this.inDropdown) {
-              this.inDropdown = false;
-              break;
-            }
             //left-facing arrow: go out a level, if possible. If not, do nothing
             e.preventDefault();
             e.stopPropagation();
             console.log("in left arrow section");
             var nextNode = node.parentNode;
-            while (nextNode.className != "treeview" && nextNode.tagName != 'LI') {
+            while (nextNode && nextNode.className != "treeview" && nextNode.tagName != 'LI') {
               nextNode = nextNode.parentNode;
             }
             if (nextNode.className == "treeview" || nextNode == null){
@@ -134,12 +163,6 @@ app.TreeService = ng.core
             }
             break;
           case 39:
-            //right-facing arrow: go in a level, if possible. If not, do nothing
-            if (this.inDropdown) {
-              this.inDropdown = false;
-              break;
-            }
-
             e.preventDefault();
             e.stopPropagation();
             console.log("in right arrow section");
@@ -151,22 +174,6 @@ app.TreeService = ng.core
             }
             break;
           case 40:
-            //down-facing arrow: if the previous key was an Alt key, we want to do an Alt+Down to open a dropdown
-            if (e.altKey){
-              console.log("in dropdown");
-              var activeDesc = this.getActiveDesc(treeId);
-              if (activeDesc){
-                var children = activeDesc.children;
-                var child = children[0];
-                if (children.length == 1 && child.tagName == 'SELECT'){
-                  child.children[1].focus();
-                  console.log(child.children[1]);
-                }
-              }
-              this.inDropdown = true;
-              break;
-            }
-
             //down-facing arrow: go down a level, if possible. If not, do nothing
             //TODO(madeeha): should stop when done with all items at that level. Currently continues
             console.log("preventing propogation");
@@ -180,29 +187,26 @@ app.TreeService = ng.core
             }
             break;
           case 13:
-            //if we've pressed enter or escape and I'm in dropdown mode, I no longer want to be in dropdown mode
-            if (this.inDropdown) {
-              this.inDropdown = false;
-              break;
-            }
             //if I've pressed enter, I want to interact with a child
             console.log("enter is pressed");
             var activeDesc = this.getActiveDesc(treeId);
             if (activeDesc){
               var children = activeDesc.children;
               var child = children[0];
-              if (children.length == 1 && child.tagName == 'INPUT' || child.tagName == 'SELECT'){
-                child.focus();
-                //if it's a dropdown, we want the dropdown to open
-                //test this in all browsers, it may break in some places.
-                //also see if it's better for screen readers if you put the focus on it after it opens.
-                if(child.tagName == 'SELECT') {
-                  // var event;
-                  // event = document.createEvent('MouseEvents');
-                  // event.initMouseEvent('mousedown', true, true, window);
-                  // child.dispatchEvent(event);
+              if (children.length == 1 && (child.tagName == 'INPUT' || child.tagName == 'BUTTON')){
+                if (child.tagName == 'BUTTON'){
                   child.click();
                 }
+                if (child.tagName == 'INPUT'){
+                  child.focus();
+                }
+                // child.focus();
+                // //if it's a dropdown, we want the dropdown to open
+                // //test this in all browsers, it may break in some places.
+                // //also see if it's better for screen readers if you put the focus on it after it opens.
+                // if(child.tagName == 'BUTTON') {
+                //   child.click();
+                // }
               }
             } else {
               console.log("no activeDesc");

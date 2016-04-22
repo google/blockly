@@ -29,10 +29,9 @@ app.WorkspaceView = ng.core
     viewInjector: [app.ClipboardService],
     template: `
   <label><h3 id='workspace-title'>Workspace</h3></label>
-  <div (keydown)="treeService.workspaceButtonKeyHandler($event)"> <!--put keyboard handler here-->
-  <button #runCodeButton id='run-code-button' (click)="runCode()" disabled={{disableRunCode()}}>Run Code</button>
-  {{saveRunCodeButton(runCodeButton)}}
-  <button (click)="workspace.clear()" disabled={{disableRunCode()}}>Clear Workspace</button>
+  <div (keydown)="treeService.workspaceButtonKeyHandler($event, activeButtonId())"> <!--put keyboard handler here-->
+  <button id='run-code' (click)="runCode()" disabled={{disableRunCode()}} [attr.aria-disabled]='disableRunCode()' class="tree">Run Code</button>
+  <button id='clear-workspace' (click)="workspace.clear()" disabled={{disableRunCode()}} [attr.aria-disabled]='disableRunCode()' class="tree">Clear Workspace</button>
   <div *ngIf='workspace'>
   <ol #tree id={{makeId(i)}} *ngFor='#block of workspace.topBlocks_; #i=index' tabIndex='0' class='tree' role='group' aria-labelledby='workspace-title' (keydown)="treeService.keyHandler($event, tree)">
     {{treeService.setActiveAttribute(tree)}}
@@ -51,8 +50,11 @@ app.WorkspaceView = ng.core
         this.treeService = _service;
       }
     }],
-    saveRunCodeButton: function(button){
-      app.runCodeButton = button;
+    activeButtonId: function(){
+      var id = document.activeElement.id;
+      if(id == 'run-code' || id == 'clear-workspace'){
+        return id;
+      }
     },
     makeId: function(index){
       return 'workspace-tree'+index;

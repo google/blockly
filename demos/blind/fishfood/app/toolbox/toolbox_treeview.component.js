@@ -37,12 +37,19 @@ app.ToolboxTreeView = ng.core
     {{addClass(parentList, 'hasChildren')}}
     <li #listItem id='{{treeService.createId(listItem)}}' *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
       {{setLabelledBy(listItem, concatStringWithSpaces('block-menu', block.id))}}
-      <select #select id='{{treeService.createId(select)}}' [attr.aria-labelledby]='block.id' aria-label='toolbar block menu' (change)='blockMenuSelected(block, $event)'>
-        <option value='NO_ACTION' selected>select an action</option>
-        <option value='COPY_TO_WORKSPACE'>copy to workspace</option>
-        <option value='COPY_BLOCK'>copy to Blockly clipboard</option>
-        <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>copy to selected input</option>
-      </select>
+      <label #label id='{{treeService.createId(label)}}'>block action list </label>
+      <ol role='group' *ngIf='displayBlockMenu' class='children' [attr.aria-level]='level+2'>
+        <li #workspaceCopy id='{{treeService.createId(workspaceCopy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="copyToWorkspace(block)">copy to workspace button</button>
+        </li>
+        <li #blockCopy id='{{treeService.createId(blockCopy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="copyToClipboard(block)">copy to clipboard button</button>
+        </li>
+        <li #sendToSelected *ngIf='!notCompatibleWithMarkedBlock(block)' id='{{treeService.createId(sendToSelected)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="copyToMarked(block)" disabled='{{notCompatibleWithMarkedBlock(block)}}' [attr.aria-disabled]='notCompatibleWithMarkedBlock(block)'>copy to marked spot button</button>
+        </li>
+      </ol>
+      {{addClass(listItem, 'hasChildren')}}
     </li>
     <div *ngFor='#inputBlock of block.inputList; #i=index'>
       <field-view [attr.aria-level]='level+1' *ngFor='#field of getInfo(inputBlock); #j=index' [field]='field' [level]='level+1'></field-view>
@@ -131,28 +138,23 @@ app.ToolboxTreeView = ng.core
         return 'any';
       }
     },
-    blockMenuSelected: function(block, event) {
-      switch (event.target.value) {
-        case 'COPY_TO_WORKSPACE':
-          var xml = Blockly.Xml.blockToDom(block);
-          Blockly.Xml.domToBlock(app.workspace, xml);
-          console.log('added block to workspace');
-          alert('block added to workspace');
-          break;
-        case 'SEND_TO_SELECTED':
-          if (this.sharedClipboardService) {
-            this.sharedClipboardService.pasteToMarkedConnection(block);
-            alert('block sent to marked spot');
-          }
-          break;
-        case 'COPY_BLOCK':
-          if (this.sharedClipboardService) {
-            this.sharedClipboardService.copy(block);
-            alert('block copied to clipboard');
-          }
-          break;
+    copyToWorkspace: function(block){
+      var xml = Blockly.Xml.blockToDom(block);
+      Blockly.Xml.domToBlock(app.workspace, xml);
+      console.log('added block to workspace');
+      alert('block added to workspace');
+    },
+    copyToClipboard: function(block){
+      if (this.sharedClipboardService) {
+        this.sharedClipboardService.copy(block);
+        alert('block copied to clipboard');
       }
-      event.target.selectedIndex = 0;
+    },
+    copyToMarked: function(block){
+      if (this.sharedClipboardService) {
+        this.sharedClipboardService.pasteToMarkedConnection(block);
+        alert('block sent to marked spot');
+      }
     },
     notCompatibleWithMarkedBlock: function(block) {
       if (this.sharedClipboardService.isBlockCompatibleWithMarkedConnection(block)) {
@@ -171,8 +173,6 @@ app.ToolboxTreeView = ng.core
       }
     },
     log: function(obj){
-	console.log(obj);
+	   console.log(obj);
     },
-    globallyUniqueId: function(){
-    }
   });

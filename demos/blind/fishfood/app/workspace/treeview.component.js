@@ -32,19 +32,36 @@ app.TreeView = ng.core
   <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
   {{setLabelledBy(parentList, concatStringWithSpaces('block-summary', block.id))}}
   <ol role='group' class='children' [attr.aria-level]='level+1'>
-    <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' [attr.aria-level]='level+1' aria-selected=false  aria-label='block action menu'>
-        {{setLabelledBy(listItem, concatStringWithSpaces('block-menu', block.id))}}
-        <select [attr.aria-labelledby]='block.id' (change)='blockMenuSelected(block, $event)'>
-          <option value='NO_ACTION' selected>select an action</option>
-          <option value='CUT_BLOCK'>cut block</option>
-          <option value='COPY_BLOCK'>copy block</option>
-          <option value='PASTE_ABOVE' disabled='block.previousConnection' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above this block</option>
-          <option value='PASTE_BELOW' disabled='block.nextConnection' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>paste below this block</option>
-          <option value='MARK_ABOVE' disabled='block.previousConnection'>mark spot above this block</option>
-          <option value='MARK_BELOW' disabled='block.nextConnection'>mark spot above this block</option>
-          <option value='SEND_TO_SELECTED' disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to marked spot</option>
-          <option value='DELETE_BLOCK'>delete</option>
-        </select>
+    <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
+      {{setLabelledBy(listItem, concatStringWithSpaces('block-menu', block.id))}}
+      <label #label id='{{treeService.createId(label)}}'>block action list </label>
+      <ol role='group' class='children' [attr.aria-level]='level+2'>
+        <li #cut id='{{treeService.createId(cut)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="sharedClipboardService.cut(block)">cut block button</button>
+        </li>
+        <li #copy id='{{treeService.createId(copy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="sharedClipboardService.copy(block)">copy block button</button>
+        </li>
+        <li #pasteBelow *ngIf='!hasNoNextConnection(block) && !notCompatibleWithClipboard(block.nextConnection)' id='{{treeService.createId(pasteBelow)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="sharedClipboardService.paste(block.nextConnection);" disabled='{{hasNoNextConnection(block)}}' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>paste below button</button>
+        </li>
+        <li #pasteAbove *ngIf='!hasNoPreviousConnection(block) && !notCompatibleWithClipboard(block.nextConnection)' id='{{treeService.createId(pasteAbove)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="sharedClipboardService.paste(block.previousConnection)" disabled='{{hasNoPreviousConnection(block)}}' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above button</button>
+        </li>
+        <li #markBelow *ngIf='!hasNoNextConnection(block)' id='{{treeService.createId(markBelow)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="sharedClipboardService.markConnection(block.nextConnection)" disabled='{{hasNoNextConnection(block)}}'>mark spot below button</button>
+        </li>
+        <li #markAbove *ngIf='!hasNoPreviousConnection(block)' id='{{treeService.createId(markAbove)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="sharedClipboardService.markConnection(block.previousConnection)" disabled='{{hasNoPreviousConnection(block)}}'>mark spot above button</button>
+        </li>
+        <li #sendToSelected *ngIf='!notCompatibleWithMarkedBlock(block)' id='{{treeService.createId(sendToSelected)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="sendToSelected(block)" disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to marked spot button</button>
+        </li>
+        <li #delete id='{{treeService.createId(delete)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button (click)="block.dispose(true)">delete button</button>
+        </li>
+      </ol>
+      {{addClass(listItem, 'hasChildren')}}
     </li>
     <div *ngFor='#inputBlock of block.inputList'>
       <field-view *ngFor='#field of getInfo(inputBlock)' [field]='field'></field-view>
@@ -82,6 +99,20 @@ app.TreeView = ng.core
     concatStringWithSpaces: function(a,b){
       return a + ' ' + b;
     },
+    hasNoPreviousConnection: function(block){
+      if (!block.previousConnection){
+        return true;
+      } else {
+        return undefined;
+      }
+    },
+    hasNoNextConnection: function(block){
+      if (!block.nextConnection){
+        return true;
+      } else {
+        return undefined;
+      }
+    },
     checkParentList: function(parentList) {
       console.log("setting parent list");
       var tree = parentList;
@@ -90,6 +121,25 @@ app.TreeView = ng.core
       }
       if (tree && tree.getAttribute('aria-activedescendant') == parentList.id){
         this.treeService.updateSelectedNode(parentList, tree, false);
+      }
+    },
+    addClass: function(node, classText) {
+      //ensure that node doesn't have class already in it
+      var classList = node.className;
+      classList = classList.split(" ");
+      var canAdd = true;
+      for (var i=0; i<classList.length; i++){
+        if (classList[i] == classText) {
+          canAdd = false;
+        }
+      }
+      //add class if it doesn't
+      if (canAdd) {
+        if (classList.length == 0) {
+          node.className += classText;
+        } else {
+          node.className += (' ' + classText);
+        }
       }
     },
     setId: function(block){
@@ -123,45 +173,12 @@ app.TreeView = ng.core
         return 'any';
       }
     },
-    blockMenuSelected: function(block, event) {
-      switch (event.target.value) {
-        case 'DELETE_BLOCK':
-          block.dispose(true);
-          alert('block deleted');
-          break;
-        case 'CUT_BLOCK':
-          this.sharedClipboardService.cut(block);
-          alert('block cut');
-          break;
-        case 'COPY_BLOCK':
-          this.sharedClipboardService.copy(block);
-          alert('block copied');
-          break;
-        case 'PASTE_BELOW':
-          this.sharedClipboardService.paste(block.nextConnection);
-          alert('block pasted below');
-          break;
-        case 'PASTE_ABOVE':
-          this.sharedClipboardService.paste(block.previousConnection);
-          alert('block pasted above');
-          break;
-        case 'MARK_BELOW':
-          this.sharedClipboardService.markConnection(block.nextConnection);
-          alert('marked spot below');
-          break;
-        case 'MARK_ABOVE':
-          this.sharedClipboardService.markConnection(block.previousConnection);
-          alert('marked spot above');
-          break;
-        case 'SEND_TO_SELECTED':
-          if (this.sharedClipboardService) {
-            this.sharedClipboardService.pasteToMarkedConnection(block);
-            block.dispose(true);
-            alert('block sent to marked spot');
-          }
-          break;
+    sendToSelected: function(block){
+      if (this.sharedClipboardService) {
+        this.sharedClipboardService.pasteToMarkedConnection(block);
+        block.dispose(true);
+        alert('block sent to marked spot');
       }
-      event.target.selectedIndex = 0;
     },
     inputMenuSelected: function(connection, event) {
       switch (event.target.value) {

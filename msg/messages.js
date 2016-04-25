@@ -271,9 +271,9 @@ Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false. Returns 
 
 /// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value https://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/Logic#values';
-/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.\n{{Identical|True}}
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
-/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.\n{{Identical|False}}
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = 'false';
 /// tooltip - Indicates that the block returns either of the two possible [https://en.wikipedia.org/wiki/Truth_value logical values].
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = 'Returns either true or false.';

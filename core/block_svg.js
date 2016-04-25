@@ -127,6 +127,11 @@ Blockly.BlockSvg.prototype.initSvg = function() {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.select = function() {
+  if (this.isShadow() && this.getParent()) {
+    // Shadow blocks should not be selected.
+    this.getParent().select();
+    return;
+  }
   if (Blockly.selected == this) {
     return;
   }
@@ -532,7 +537,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
 
     this.dragStartXY_ = this.getRelativeToSurfaceXY();
-    this.workspace.startDrag(e, this.dragStartXY_.x, this.dragStartXY_.y);
+    this.workspace.startDrag(e, this.dragStartXY_);
 
     Blockly.dragMode_ = Blockly.DRAG_STICKY;
     Blockly.BlockSvg.onMouseUpWrapper_ = Blockly.bindEvent_(document,
@@ -563,7 +568,8 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
-  if (Blockly.dragMode_ != Blockly.DRAG_FREE) {
+  if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
+      !Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.fire(
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }
@@ -839,16 +845,15 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
   }
   if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
     // Unrestricted dragging.
-    var dx = oldXY.x - this.dragStartXY_.x;
-    var dy = oldXY.y - this.dragStartXY_.y;
+    var dxy = goog.math.Coordinate.difference(oldXY, this.dragStartXY_);
     var group = this.getSvgRoot();
     group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
     group.setAttribute('transform', group.translate_ + group.skew_);
     // Drag all the nested bubbles.
     for (var i = 0; i < this.draggedBubbles_.length; i++) {
       var commentData = this.draggedBubbles_[i];
-      commentData.bubble.setIconLocation(commentData.x + dx,
-          commentData.y + dy);
+      commentData.bubble.setIconLocation(
+          goog.math.Coordinate.sum(commentData, dxy));
     }
 
     // Check to see if any of this block's connections are within range of
@@ -859,7 +864,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     var radiusConnection = Blockly.SNAP_RADIUS;
     for (var i = 0; i < myConnections.length; i++) {
       var myConnection = myConnections[i];
-      var neighbour = myConnection.closest(radiusConnection, dx, dy);
+      var neighbour = myConnection.closest(radiusConnection, dxy);
       if (neighbour.connection) {
         closestConnection = neighbour.connection;
         localConnection = myConnection;

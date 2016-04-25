@@ -45,7 +45,7 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree = Blockly.Options.parseToolboxTree_(options['toolbox']);
+    var languageTree = Blockly.Options.parseToolboxTree(options['toolbox']);
     var hasCategories = Boolean(languageTree &&
         languageTree.getElementsByTagName('category').length);
     var hasTrashcan = options['trashcan'];
@@ -214,9 +214,8 @@ Blockly.Options.parseGridOptions_ = function(options) {
  * Parse the provided toolbox tree into a consistent DOM format.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  * @return {Node} DOM tree of blocks, or null.
- * @private
  */
-Blockly.Options.parseToolboxTree_ = function(tree) {
+Blockly.Options.parseToolboxTree = function(tree) {
   if (tree) {
     if (typeof tree != 'string') {
       if (typeof XSLTProcessor == 'undefined' && tree.outerHTML) {

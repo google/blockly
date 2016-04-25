@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Events');
 
+goog.require('goog.math.Coordinate');
+
 
 /**
  * Group ID for new events.  Grouped events are indivisible.
@@ -128,24 +130,33 @@ Blockly.Events.filter = function(queueIn, forward) {
   // Merge duplicates.  O(n^2), but n should be very small.
   for (var i = 0, event1; event1 = queue[i]; i++) {
     for (var j = i + 1, event2; event2 = queue[j]; j++) {
-      if (event1.type == Blockly.Events.MOVE &&
-          event2.type == Blockly.Events.MOVE &&
-          event1.blockId == event2.blockId) {
-        // Merge move events.
-        event1.newParentId = event2.newParentId;
-        event1.newInputName = event2.newInputName;
-        event1.newCoordinate = event2.newCoordinate;
-        queue.splice(j, 1);
-        j--;
-      } else if (event1.type == Blockly.Events.CHANGE &&
-          event2.type == Blockly.Events.CHANGE &&
+      if (event1.type == event2.type &&
           event1.blockId == event2.blockId &&
-          event1.element == event2.element &&
-          event1.name == event2.name) {
-        // Merge change events.
-        event1.newValue = event2.newValue;
-        queue.splice(j, 1);
-        j--;
+          event1.workspaceId == event2.workspaceId) {
+        if (event1.type == Blockly.Events.MOVE) {
+          // Merge move events.
+          event1.newParentId = event2.newParentId;
+          event1.newInputName = event2.newInputName;
+          event1.newCoordinate = event2.newCoordinate;
+          queue.splice(j, 1);
+          j--;
+        } else if (event1.type == Blockly.Events.CHANGE &&
+            event1.element == event2.element &&
+            event1.name == event2.name) {
+          // Merge change events.
+          event1.newValue = event2.newValue;
+          queue.splice(j, 1);
+          j--;
+        } else if (event1.type == Blockly.Events.UI &&
+            event2.element == 'click' &&
+            (event1.element == 'commentOpen' ||
+             event1.element == 'mutatorOpen' ||
+             event1.element == 'warningOpen')) {
+          // Merge change events.
+          event1.newValue = event2.newValue;
+          queue.splice(j, 1);
+          j--;
+        }
       }
     }
   }

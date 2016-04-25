@@ -281,8 +281,7 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
 /**
  * Recalculate a horizontal scrollbar's location and length.
  * @param {!Object} hostMetrics A data structure describing all the
- * required dimensions, possibly fetched from the host
- * object.
+ *     required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
@@ -307,7 +306,8 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
   this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
   this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (this.pair_ && this.workspace_.RTL) {
-    this.xCoordinate += Blockly.Scrollbar.scrollbarThickness;
+    //this.xCoordinate += hostMetrics.absoluteLeft +
+    //    Blockly.Scrollbar.scrollbarThickness;
   }
   // Horizontal toolbar should always be just above the bottom of the workspace.
   this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
@@ -321,8 +321,7 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
 /**
  * Recalculate a vertical scrollbar's location and length.
  * @param {!Object} hostMetrics A data structure describing all the
- * required dimensions, possibly fetched from the host
- * object.
+ *     required dimensions, possibly fetched from the host object.
  * @private
  */
 Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
@@ -538,7 +537,7 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
   var barLength = parseFloat(
       this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
   var ratio = knobValue / barLength;
-  if (isNaN(ratio)) {
+  if (isNaN(ratio) || !barLength) {
     ratio = 0;
   }
   var xyRatio = {};

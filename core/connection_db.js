@@ -226,16 +226,14 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
  * @param {!Blockly.Connection} conn The connection searching for a compatible
  *     mate.
  * @param {number} maxRadius The maximum radius to another connection.
- * @param {number} dx Horizontal offset between this connection's location
- *     in the database and the current location (as a result of dragging).
- * @param {number} dy Vertical offset between this connection's location
+ * @param {!goog.math.Coordinate} dxy Offset between this connection's location
  *     in the database and the current location (as a result of dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties:' connection' which is either another connection or null,
  *     and 'radius' which is the distance.
  */
-Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx,
-    dy) {
+Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
+    dxy) {
   // Don't bother.
   if (!this.length) {
     return {connection: null, radius: maxRadius};
@@ -245,8 +243,8 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx,
   var baseY = conn.y_;
   var baseX = conn.x_;
 
-  conn.x_ = baseX + dx;
-  conn.y_ = baseY + dy;
+  conn.x_ = baseX + dxy.x;
+  conn.y_ = baseY + dxy.y;
 
   // findPositionForConnection finds an index for insertion, which is always
   // after any block with the same y index.  We want to search both forward

@@ -321,10 +321,12 @@ Blockly.Dart['lists_sort'] = function(block) {
   ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + 
               '(list, direction) {',
       '  var compareFuncs = {',
-      '    "numeric": (a, b) => direction * a.compareTo(b),',
-      '    "text": (a, b) => direction * a.compareTo(b),',
+      '    "numeric": (a, b) => direction * ', 
+      '      double.parse(a.toString()).compareTo(double.parse(b.toString())),',
+      '    "text": (a, b) => direction * a.toString().compareTo(b.toString()),',
       '    "ignoreCase": ',
-      '       (a, b) => direction * a.toLowerCase().compareTo(b.toLowerCase())',
+      '       (a, b) => direction * ',
+      '      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())',
       '  };',
       '  var compare = compareFuncs["' + type + '"];',
       '  list = new List.from(list);', // clone the list

@@ -31,7 +31,7 @@ app.FieldView = ng.core
     template: `
     <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isTextInput(field)' id='{{createId(listItem)}}'>
       <input #input id='{{createId(input)}}' [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
-      {{setLabelledBy(listItem, concatStringWithSpaces('argument-input', input.id))}}
+      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-input', input.id))}}
     </li>
     <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isDropdown(field)' id='{{createId(listItem)}}'>
       <label #label id='{{treeService.createId(label)}}'>current argument value: {{field.getText()}}</label>
@@ -40,7 +40,7 @@ app.FieldView = ng.core
           <button #optionButton id='{{treeService.createId(optionButton)}}' (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}} button</button>
         </li>
       </ol>
-      {{setLabelledBy(listItem, concatStringWithSpaces('argument-menu', label.id))}}
+      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-menu', label.id))}}
     </li>
     <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' *ngIf='isCheckbox(field)'>
       //TODO(madeeha):CHECKBOX
@@ -49,7 +49,7 @@ app.FieldView = ng.core
       <label #label id='{{createId(label)}}'>
         {{field.getText()}}
       </label>
-      {{setLabelledBy(listItem, concatStringWithSpaces('argument-text', label.id))}}
+      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-text', label.id))}}
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],

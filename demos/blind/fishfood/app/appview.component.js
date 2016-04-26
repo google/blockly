@@ -38,14 +38,14 @@ app.AppView = ng.core
       </td>
     </tr>
     </table>
-    <label id='block-summary' aria-hidden='true' hidden>block summary</label>
-    <label id='block-menu' aria-hidden='true' hidden>block action list</label>
-    <label id='argument-menu' aria-hidden='true' hidden>argument options list</label>
-    <label id='argument-input' aria-hidden='true' hidden>argument input</label>
-    <label id='argument-block-menu' aria-hidden='true' hidden>argument block dropdown</label>
-    <label id='argument-text' aria-hidden='true' hidden>text</label>
-    <label id='button' aria-hidden='true' hidden>button</label>
-    <label id='disabled' aria-hidden='true' hidden>unavailable</label>
+    <label id='blockly-block-summary' aria-hidden='true' hidden>block summary</label>
+    <label id='blockly-block-menu' aria-hidden='true' hidden>block action list</label>
+    <label id='blockly-argument-menu' aria-hidden='true' hidden>argument options list</label>
+    <label id='blockly-argument-input' aria-hidden='true' hidden>argument input</label>
+    <label id='blockly-argument-block-menu' aria-hidden='true' hidden>argument block action list</label>
+    <label id='blockly-argument-text' aria-hidden='true' hidden>text</label>
+    <label id='blockly-button' aria-hidden='true' hidden>button</label>
+    <label id='blockly-disabled' aria-hidden='true' hidden>unavailable</label>
     `,
     directives: [app.ToolboxView, app.WorkspaceView],
     providers: [app.ClipboardService, app.TreeService],

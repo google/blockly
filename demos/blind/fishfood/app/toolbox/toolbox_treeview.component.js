@@ -32,24 +32,24 @@ app.ToolboxTreeView = ng.core
     template: `
 <li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createCategoryDependantId(index, parentList)}}'>
   <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
-  {{setLabelledBy(parentList, concatStringWithSpaces('block-summary', block.id))}}
+  {{setLabelledBy(parentList, concatStringWithSpaces('blockly-block-summary', block.id))}}
   <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
     {{addClass(parentList, 'hasChildren')}}
     <li #listItem id='{{treeService.createId(listItem)}}' *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
-      {{setLabelledBy(listItem, concatStringWithSpaces('block-menu', block.id))}}
+      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-block-menu', block.id))}}
       <label #label id='{{treeService.createId(label)}}'>block action list </label>
       <ol role='group' *ngIf='displayBlockMenu' class='children' [attr.aria-level]='level+2'>
         <li #workspaceCopy id='{{treeService.createId(workspaceCopy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
           <button #workspaceCopyButton id='{{treeService.createId(workspaceCopyButton)}}' (click)="copyToWorkspace(block)">copy to workspace</button>
-          {{setLabelledBy(workspaceCopy, concatStringWithSpaces(workspaceCopyButton.id, 'button'))}}
+          {{setLabelledBy(workspaceCopy, concatStringWithSpaces(workspaceCopyButton.id, 'blockly-button'))}}
         </li>
         <li #blockCopy id='{{treeService.createId(blockCopy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
           <button #blockCopyButton id='{{treeService.createId(blockCopyButton)}}' (click)="copyToClipboard(block)">copy to clipboard</button>
-          {{setLabelledBy(blockCopy, concatStringWithSpaces(blockCopyButton.id, 'button'))}}
+          {{setLabelledBy(blockCopy, concatStringWithSpaces(blockCopyButton.id, 'blockly-button'))}}
         </li>
         <li #sendToSelected id='{{treeService.createId(sendToSelected)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
           <button #sendToSelectedButton id='{{treeService.createId(sendToSelectedButton)}}' (click)="copyToMarked(block)" disabled='{{notCompatibleWithMarkedBlock(block)}}' [attr.aria-disabled]='notCompatibleWithMarkedBlock(block)'>copy to marked spot</button>
-          {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, 'button', notCompatibleWithMarkedBlock(block)))}}
+          {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, 'blockly-button', notCompatibleWithMarkedBlock(block)))}}
         </li>
       </ol>
       {{addClass(listItem, 'hasChildren')}}
@@ -59,7 +59,7 @@ app.ToolboxTreeView = ng.core
       <toolbox-tree-view *ngIf='inputBlock.connection && inputBlock.connection.targetBlock()' [block]='inputBlock.connection.targetBlock()' [displayBlockMenu]='false' [level]='level+1'></toolbox-tree-view>
       <li aria-selected=false #listItem1 role='treeitem' [attr.aria-level]='level+1' id='{{treeService.createId(listItem1)}}' *ngIf='inputBlock.connection && !inputBlock.connection.targetBlock()'>
         <label #label id='{{treeService.createId(label)}}'>{{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:</label>
-        {{setLabelledBy(listItem1, concatStringWithSpaces('argument-text', label.id))}}
+        {{setLabelledBy(listItem1, concatStringWithSpaces('blockly-argument-text', label.id))}}
       </li>
     </div>
   </ol>
@@ -173,7 +173,7 @@ app.ToolboxTreeView = ng.core
         return undefined;
       } else {
         //anything will result in the 'copy to marked block' option being DISABLED
-        return 'disabled';
+        return 'blockly-disabled';
       }
     },
     valueOrStatement: function(inputBlock) {

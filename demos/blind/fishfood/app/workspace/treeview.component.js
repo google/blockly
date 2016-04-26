@@ -29,7 +29,7 @@ app.TreeView = ng.core
     template: `
 <li #parentList aria-selected=false role='treeitem' class='hasChildren' [attr.aria-level]='level' id='{{setId(parentList)}}' [attr.aria-labelledby]='block.id'>
   {{checkParentList(parentList)}}
-  <label id='{{block.id}}' style='color: red'>{{block.toString()}}</label>
+  <label id='{{block.id}}'>{{block.toString()}}</label>
   {{setLabelledBy(parentList, concatStringWithSpaces('block-summary', block.id))}}
   <ol role='group' class='children' [attr.aria-level]='level+1'>
     <li #listItem id='{{treeService.createId(listItem)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
@@ -37,28 +37,35 @@ app.TreeView = ng.core
       <label #label id='{{treeService.createId(label)}}'>block action list </label>
       <ol role='group' class='children' [attr.aria-level]='level+2'>
         <li #cut id='{{treeService.createId(cut)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="sharedClipboardService.cut(block)">cut block button</button>
+          <button #cutButton id='{{treeService.createId(cutButton)}}' (click)="sharedClipboardService.cut(block)">cut block</button>
+          {{setLabelledBy(cut, concatStringWithSpaces(cutButton.id, 'button'))}}
         </li>
         <li #copy id='{{treeService.createId(copy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="sharedClipboardService.copy(block)">copy block button</button>
+          <button #copyButton id='{{treeService.createId(copyButton)}}' (click)="sharedClipboardService.copy(block)">copy block</button>
+          {{setLabelledBy(copy, concatStringWithSpaces(copyButton.id, 'button'))}}
         </li>
-        <li #pasteBelow *ngIf='!hasNoNextConnection(block) && !notCompatibleWithClipboard(block.nextConnection)' id='{{treeService.createId(pasteBelow)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="sharedClipboardService.paste(block.nextConnection);" disabled='{{hasNoNextConnection(block)}}' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>paste below button</button>
+        <li #pasteBelow id='{{treeService.createId(pasteBelow)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button #pasteBelowButton id='{{treeService.createId(pasteBelowButton)}}' (click)="sharedClipboardService.paste(block.nextConnection);" disabled='{{hasNoNextConnection(block)}}' disabled='{{notCompatibleWithClipboard(block.nextConnection)}}'>paste below</button>
+          {{setLabelledBy(pasteBelow, concatStringWithSpaces(pasteBelowButton.id, 'button', (hasNoNextConnection(block)||notCompatibleWithClipboard(block.nextConnection))))}}
         </li>
-        <li #pasteAbove *ngIf='!hasNoPreviousConnection(block) && !notCompatibleWithClipboard(block.nextConnection)' id='{{treeService.createId(pasteAbove)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="sharedClipboardService.paste(block.previousConnection)" disabled='{{hasNoPreviousConnection(block)}}' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above button</button>
+        <li #pasteAbove id='{{treeService.createId(pasteAbove)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button #pasteAboveButton id='{{treeService.createId(pasteAboveButton)}}' (click)="sharedClipboardService.paste(block.previousConnection)" disabled='{{hasNoPreviousConnection(block)}}' disabled='{{notCompatibleWithClipboard(block.previousConnection)}}'>paste above</button>
+          {{setLabelledBy(pasteAbove, concatStringWithSpaces(pasteAboveButton.id, 'button', (hasNoPreviousConnection(block)||notCompatibleWithClipboard(block.previousConnection))))}}
         </li>
-        <li #markBelow *ngIf='!hasNoNextConnection(block)' id='{{treeService.createId(markBelow)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="sharedClipboardService.markConnection(block.nextConnection)" disabled='{{hasNoNextConnection(block)}}'>mark spot below button</button>
+        <li #markBelow id='{{treeService.createId(markBelow)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button #markBelowButton id='{{treeService.createId(markBelowButton)}}' (click)="sharedClipboardService.markConnection(block.nextConnection)" disabled='{{hasNoNextConnection(block)}}'>mark spot below</button>
+          {{setLabelledBy(markBelow, concatStringWithSpaces(markBelowButton.id, 'button', hasNoNextConnection(block)))}}
         </li>
-        <li #markAbove *ngIf='!hasNoPreviousConnection(block)' id='{{treeService.createId(markAbove)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="sharedClipboardService.markConnection(block.previousConnection)" disabled='{{hasNoPreviousConnection(block)}}'>mark spot above button</button>
+        <li #markAbove id='{{treeService.createId(markAbove)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button #markAboveButton id='{{treeService.createId(markAboveButton)}}' (click)="sharedClipboardService.markConnection(block.previousConnection)" disabled='{{hasNoPreviousConnection(block)}}'>mark spot above</button>
+          {{setLabelledBy(markAbove, concatStringWithSpaces(markAboveButton.id, 'button', hasNoPreviousConnection(block)))}}
         </li>
-        <li #sendToSelected *ngIf='!notCompatibleWithMarkedBlock(block)' id='{{treeService.createId(sendToSelected)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="sendToSelected(block)" disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to marked spot button</button>
+        <li #sendToSelected id='{{treeService.createId(sendToSelected)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button #sendToSelectedButton id='{{treeService.createId(sendToSelectedButton)}}' (click)="sendToSelected(block)" disabled='{{notCompatibleWithMarkedBlock(block)}}'>move to marked spot</button>
+          {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, 'button', notCompatibleWithMarkedBlock(block)))}}
         </li>
         <li #delete id='{{treeService.createId(delete)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="block.dispose(true)">delete button</button>
+          <button #deleteButton id='{{treeService.createId(deleteButton)}}' (click)="block.dispose(true)">delete button</button>
         </li>
       </ol>
       {{addClass(listItem, 'hasChildren')}}
@@ -96,19 +103,23 @@ app.TreeView = ng.core
         item.setAttribute('aria-labelledby', string);
       }
     },
-    concatStringWithSpaces: function(a,b){
-      return a + ' ' + b;
+    concatStringWithSpaces: function(){
+      var string = arguments[0];
+      for (i = 1; i < arguments.length; i++) {
+        string = string + ' ' + arguments[i];
+      }
+      return string;
     },
     hasNoPreviousConnection: function(block){
       if (!block.previousConnection){
-        return true;
+        return 'disabled';
       } else {
         return undefined;
       }
     },
     hasNoNextConnection: function(block){
       if (!block.nextConnection){
-        return true;
+        return 'disabled';
       } else {
         return undefined;
       }
@@ -144,7 +155,6 @@ app.TreeView = ng.core
     },
     setId: function(block){
       if (this.isTopBlock){
-        //TODO(madeeha): this should be the number of top level block that this is.
         return this.parentId+'-node0';
       }
       return this.treeService.createId(block);
@@ -198,8 +208,8 @@ app.TreeView = ng.core
         //undefined will result in the 'paste' option being ENABLED
         return undefined;
       } else {
-        //true will result in the 'paste' option being DISABLED
-        return true;
+        //any value returned will result in the 'paste' option being DISABLED
+        return 'disabled';
       }
     },
     valueOrStatement: function(inputBlock) {
@@ -214,8 +224,8 @@ app.TreeView = ng.core
         //undefined will result in the 'copy to marked block' option being ENABLED
         return undefined;
       } else {
-        //true will result in the 'copy to marked block' option being DISABLED
-        return true;
+        //any value returned will result in the 'copy to marked block' option being DISABLED
+        return 'disabled';
       }
     },
     log: function(obj) {

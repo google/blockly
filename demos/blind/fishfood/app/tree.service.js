@@ -28,6 +28,11 @@ app.TreeService = ng.core
       return this.activeDesc_[id];
     },
     updateSelectedNode: function(node, tree, keepFocus){
+      //if the node has a direct descendent that is a button we want to put focus on that instead
+      // var children = node.children;
+      // if(children[0].tagName == 'BUTTON' || children[0].tagName == 'INPUT'){
+      //   node = children[0];
+      // }
       console.log("updating node: " + node.id);
       var treeId = tree.id;
       var activeDesc = this.getActiveDesc(treeId);
@@ -40,9 +45,9 @@ app.TreeService = ng.core
       tree.setAttribute("aria-activedescendant",node.id);
       this.setActiveDesc(node, treeId);
       node.setAttribute("aria-selected","true");
+
       //make sure keyboard focus is on tree as a whole
       //in case before the user was editing a block and keyboard focus got shifted.
-
       if(keepFocus){
         tree.focus();
       }
@@ -59,7 +64,6 @@ app.TreeService = ng.core
             this.goToPreviousTree(treeId,e);
           } else {
             //if previous key isn't shift, we're tabbing
-            //we want to go to the run code button
             this.goToNextTree(treeId,e);
           }
           break;
@@ -74,10 +78,6 @@ app.TreeService = ng.core
       return parent;
     },
     goToNextTree: function(treeId,e){
-      //if we're at the last tree, we want tab to go to the default
-      // if (treeId == this.trees[this.trees.length-1].id){
-      //   return;
-      // }
       var next = false;
       for (var i=0; i<this.trees.length; i++){
         if (next){
@@ -94,7 +94,6 @@ app.TreeService = ng.core
       e.stopPropagation();
     },
     goToPreviousTree: function(treeId, e){
-      //if we're at the first tree, we want shift+tab to go to the default
       if (treeId == this.trees[0].id){
         return;
       }
@@ -115,7 +114,6 @@ app.TreeService = ng.core
       e.stopPropagation();
     },
     keyHandler: function(e, tree){
-        //console.log(document.activeElement);
         var treeId = tree.id;
         var node = this.getActiveDesc(treeId);
         if (!node){
@@ -142,6 +140,9 @@ app.TreeService = ng.core
             e.stopPropagation();
             console.log("in left arrow section");
             var nextNode = node.parentNode;
+            if (node.tagName == 'BUTTON' || node.tagName == 'INPUT'){
+              nextNode = nextNode.parentNode;
+            }
             while (nextNode && nextNode.className != "treeview" && nextNode.tagName != 'LI') {
               nextNode = nextNode.parentNode;
             }
@@ -175,7 +176,6 @@ app.TreeService = ng.core
             break;
           case 40:
             //down-facing arrow: go down a level, if possible. If not, do nothing
-            //TODO(madeeha): should stop when done with all items at that level. Currently continues
             console.log("preventing propogation");
             e.preventDefault();
             e.stopPropagation();
@@ -190,6 +190,12 @@ app.TreeService = ng.core
             //if I've pressed enter, I want to interact with a child
             console.log("enter is pressed");
             var activeDesc = this.getActiveDesc(treeId);
+            // if (activeDesc.tagName == 'BUTTON') {
+            //   activeDesc.click();
+            // }
+            // if (activeDesc.tagName == 'INPUT'){
+            //       activeDesc.focus();
+            // }
             if (activeDesc){
               var children = activeDesc.children;
               var child = children[0];
@@ -200,13 +206,6 @@ app.TreeService = ng.core
                 if (child.tagName == 'INPUT'){
                   child.focus();
                 }
-                // child.focus();
-                // //if it's a dropdown, we want the dropdown to open
-                // //test this in all browsers, it may break in some places.
-                // //also see if it's better for screen readers if you put the focus on it after it opens.
-                // if(child.tagName == 'BUTTON') {
-                //   child.click();
-                // }
               }
             } else {
               console.log("no activeDesc");

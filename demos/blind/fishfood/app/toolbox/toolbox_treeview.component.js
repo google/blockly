@@ -40,13 +40,16 @@ app.ToolboxTreeView = ng.core
       <label #label id='{{treeService.createId(label)}}'>block action list </label>
       <ol role='group' *ngIf='displayBlockMenu' class='children' [attr.aria-level]='level+2'>
         <li #workspaceCopy id='{{treeService.createId(workspaceCopy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="copyToWorkspace(block)">copy to workspace button</button>
+          <button #workspaceCopyButton id='{{treeService.createId(workspaceCopyButton)}}' (click)="copyToWorkspace(block)">copy to workspace</button>
+          {{setLabelledBy(workspaceCopy, concatStringWithSpaces(workspaceCopyButton.id, 'button'))}}
         </li>
         <li #blockCopy id='{{treeService.createId(blockCopy)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="copyToClipboard(block)">copy to clipboard button</button>
+          <button #blockCopyButton id='{{treeService.createId(blockCopyButton)}}' (click)="copyToClipboard(block)">copy to clipboard</button>
+          {{setLabelledBy(blockCopy, concatStringWithSpaces(blockCopyButton.id, 'button'))}}
         </li>
-        <li #sendToSelected *ngIf='!notCompatibleWithMarkedBlock(block)' id='{{treeService.createId(sendToSelected)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
-          <button (click)="copyToMarked(block)" disabled='{{notCompatibleWithMarkedBlock(block)}}' [attr.aria-disabled]='notCompatibleWithMarkedBlock(block)'>copy to marked spot button</button>
+        <li #sendToSelected id='{{treeService.createId(sendToSelected)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+2'>
+          <button #sendToSelectedButton id='{{treeService.createId(sendToSelectedButton)}}' (click)="copyToMarked(block)" disabled='{{notCompatibleWithMarkedBlock(block)}}' [attr.aria-disabled]='notCompatibleWithMarkedBlock(block)'>copy to marked spot</button>
+          {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, 'button', notCompatibleWithMarkedBlock(block)))}}
         </li>
       </ol>
       {{addClass(listItem, 'hasChildren')}}
@@ -79,8 +82,16 @@ app.ToolboxTreeView = ng.core
         item.setAttribute('aria-labelledby', string);
       }
     },
-    concatStringWithSpaces: function(a,b){
-      return a + ' ' + b;
+    concatStringWithSpaces: function(){
+      var string = arguments[0];
+      for (i = 1; i < arguments.length; i++) {
+        var arg = arguments[i];
+        //arg can be undefined if it is coming from a function that checks whether the button should be disabled or not.
+        if (arg){
+          string = string + ' ' + arguments[i];
+        }
+      }
+      return string;
     },
     createCategoryDependantId: function(index, parentList){
       //if this is the first block in a category-less toolbox, the id should be toolbox-tree-node0
@@ -161,8 +172,8 @@ app.ToolboxTreeView = ng.core
         //undefined will result in the 'copy to marked block' option being ENABLED
         return undefined;
       } else {
-        //true will result in the 'copy to marked block' option being DISABLED
-        return true;
+        //anything will result in the 'copy to marked block' option being DISABLED
+        return 'disabled';
       }
     },
     valueOrStatement: function(inputBlock) {

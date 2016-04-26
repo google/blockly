@@ -29,7 +29,6 @@ app.FieldView = ng.core
   .Component({
     selector: 'field-view',
     template: `
-    <!-- html representation of a field -->
     <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isTextInput(field)' id='{{createId(listItem)}}'>
       <input #input id='{{createId(input)}}' [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
       {{setLabelledBy(listItem, concatStringWithSpaces('argument-input', input.id))}}
@@ -38,12 +37,8 @@ app.FieldView = ng.core
       <label #label id='{{treeService.createId(label)}}'>current argument value: {{field.getText()}}</label>
       <ol role='group' class='children' [attr.aria-level]='level+1'>
         <li #option *ngFor='#optionValue of getOptions(field)' id='{{treeService.createId(option)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
-          <button (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}} button</button>
+          <button #optionButton id='{{treeService.createId(optionButton)}}' (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}} button</button>
         </li>
-      <!--<select #select id='{{createId(select)}}' [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
-      <option value='NO_ACTION' selected>select an option</option>
-      <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
-      </select>-->
       </ol>
       {{setLabelledBy(listItem, concatStringWithSpaces('argument-menu', label.id))}}
     </li>

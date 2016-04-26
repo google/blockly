@@ -64,7 +64,7 @@ app.WorkspaceView = ng.core
     },
     disableRunCode: function() {
       if (this.workspace.topBlocks_.length == 0){
-        return true;
+        return 'disabled';
       } else {
         return undefined;
       }

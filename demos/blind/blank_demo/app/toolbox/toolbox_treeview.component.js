@@ -31,7 +31,7 @@ app.ToolboxTreeView = ng.core
     selector: 'toolbox-tree-view',
     template: `
 <li #parentList aria-selected=false role='treeitem' [attr.aria-level]='level' id='{{createCategoryDependantId(index, parentList)}}' [attr.aria-labelledby]='block.id'>
-  <label id='{{block.id}}' style='color:red'>{{block.toString()}}</label>
+  <label id='{{block.id}}'>{{block.toString()}}</label>
   <ol role='group' *ngIf='displayBlockMenu || block.inputList.length > 0' class='children' [attr.aria-level]='level+1'>
     {{addClass(parentList, 'hasChildren')}}
     <li #listItem id='{{treeService.createId(listItem)}}' *ngIf='displayBlockMenu' role='treeitem' aria-selected=false [attr.aria-level]='level+1'  [attr.aria-labelledby]='block.id' aria-label='toolbar block menu'>

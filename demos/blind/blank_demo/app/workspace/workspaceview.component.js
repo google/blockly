@@ -44,7 +44,6 @@ app.WorkspaceView = ng.core
     constructor: [app.TreeService, function(_service) {
       if (app.workspace) {
         this.workspace = app.workspace;
-        this.level = app.gameManager.level;
         this.treeService = _service;
       }
     }],

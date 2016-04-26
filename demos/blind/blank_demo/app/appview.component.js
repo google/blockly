@@ -30,10 +30,10 @@ app.AccessibleBlocklyView = ng.core
     template: `
     <table>
     <tr>
-      <td>
+      <td class='blockly-td'>
         <toolbox-view>Loading Toolbox...</toolbox-view>
       </td>
-      <td>
+      <td class='blockly-td'>
         <workspace-view>Loading Workspace...</workspace-view>
       </td>
     </tr>

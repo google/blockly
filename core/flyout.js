@@ -260,6 +260,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
   }
 
   var absoluteTop = this.SCROLLBAR_PADDING;
+  var absoluteLeft = this.SCROLLBAR_PADDING;
   if (this.horizontalLayout_) {
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
       absoluteTop = 0;
@@ -270,6 +271,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     }
     var viewWidth = this.width_ - 2 * this.SCROLLBAR_PADDING;
   } else {
+    absoluteLeft = 0;
     var viewHeight = this.height_ - 2 * this.SCROLLBAR_PADDING;
     var viewWidth = this.width_;
     if (!this.RTL) {
@@ -287,7 +289,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     contentTop: optionBox.y,
     contentLeft: 0,
     absoluteTop: absoluteTop,
-    absoluteLeft: this.horizontalLayout ? 0 : this.SCROLLBAR_PADDING
+    absoluteLeft: absoluteLeft
   };
   return metrics;
 };
@@ -586,7 +588,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   } else {
     this.width_ = 0;
   }
-  this.reflow(true /* opt_skip_resize */);
+  this.reflow();
 
   this.offsetHorizontalRtlBlocks(this.workspace_.getTopBlocks(false));
   this.filterForCapacity_();
@@ -624,10 +626,14 @@ Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps, margin) {
     block.render();
     var root = block.getSvgRoot();
     var blockHW = block.getHeightWidth();
+    var tab = block.outputConnection ? Blockly.BlockSvg.TAB_WIDTH : 0;
+    if (this.horizontalLayout_) {
+      cursorX += tab;
+    }
     block.moveBy((this.horizontalLayout_ && this.RTL) ?
         -cursorX : cursorX, cursorY);
     if (this.horizontalLayout_) {
-      cursorX += blockHW.width + gaps[i];
+      cursorX += (blockHW.width + gaps[i] - tab);
     } else {
       cursorY += blockHW.height + gaps[i];
     }
@@ -726,16 +732,18 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
   if (this.autoClose) {
     this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
         this.createBlockFunc_(block)));
+    this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
+        this.createBlockFunc_(block)));
   } else {
     this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
+        this.blockMouseDown_(block)));
+    this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
         this.blockMouseDown_(block)));
   }
   this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
       block.addSelect));
   this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
       block.removeSelect));
-  this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
-      this.createBlockFunc_(block)));
   this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
       block.addSelect));
   this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
@@ -1054,6 +1062,8 @@ Blockly.Flyout.terminateDrag_ = function() {
  * Compute height of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
  * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
+ * @param {boolean} opt_skip_resize Possibly skip resizing, since sometimes a
+ *    resize will be called immediately anyway.
  */
 Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
@@ -1088,6 +1098,7 @@ Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
     }
     // Record the height for .getMetrics_ and .position.
     this.height_ = flyoutHeight;
+    Blockly.fireUiEvent(window, 'resize');
   }
 };
 
@@ -1095,6 +1106,8 @@ Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
  * Compute width of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
  * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
+ * @param {boolean} opt_skip_resize Possibly skip resizing, since sometimes a
+ *    resize will be called immediately anyway.
  */
 Blockly.Flyout.prototype.reflowVertical = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
@@ -1141,24 +1154,21 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
     }
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
+    Blockly.fireUiEvent(window, 'resize');
   }
 };
 
 /**
  * Reflow blocks and their buttons.
  * @param {boolean} opt_skip_resize Possibly skip resizing, since sometimes a
- * resize will be called immediately anyway.
+ *    resize will be called immediately anyway.
  */
-Blockly.Flyout.prototype.reflow = function(opt_skip_resize) {
+Blockly.Flyout.prototype.reflow = function() {
   var blocks = this.workspace_.getTopBlocks(false);
   if (this.horizontalLayout_) {
     this.reflowHorizontal(blocks);
   } else {
     this.reflowVertical(blocks);
-  }
-  // Fire a resize event to update the flyout's scrollbar.
-  if (!opt_skip_resize) {
-    Blockly.fireUiEvent(window, 'resize');
   }
 };
 
@@ -1171,6 +1181,8 @@ Blockly.Flyout.prototype.reflow = function(opt_skip_resize) {
  */
 Blockly.Flyout.prototype.offsetHorizontalRtlBlocks = function(blocks) {
   if (this.horizontalLayout_ && this.RTL) {
+    // We don't know this workspace's view width yet.
+    this.position();
     try {
       var optionBox = this.workspace_.getCanvas().getBBox();
     } catch (e) {

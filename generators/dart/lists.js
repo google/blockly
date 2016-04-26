@@ -316,9 +316,10 @@ Blockly.Dart['lists_sort'] = function(block) {
     Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
-  var getCompareFunctionName = Blockly.Dart.provideFunction_(
+  var sortFunctionName = Blockly.Dart.provideFunction_(
           'lists_sort',
-  ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + '(direction, type) {',
+  ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + 
+      '(list, direction, type) {',
       '  var compareFuncs = {',
       '    "numeric": (a, b) => direction * ', 
       '      double.parse(a.toString()).compareTo(double.parse(b.toString())),',
@@ -327,10 +328,13 @@ Blockly.Dart['lists_sort'] = function(block) {
       '       (a, b) => direction * ',
       '      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())',
       '  };',
-      ' return compareFuncs[type];',
+      '  list = (new List.from(list))', // Clone the list.
+      '  var compare = compareFuncs[type];',
+      '  list.sort(compare);',
+      '  return list;',
     '}']);
-  return ['(new List.from(' + listCode + ')).sort(',
-      getCompareFunctionName + '(' + direction + ', "' + type + '"))',
+  return [sortFunctionName + '(' + listCode + ', ' + 
+      direction + ', "' + type + '")',
       Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 

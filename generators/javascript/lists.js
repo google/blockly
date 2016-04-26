@@ -322,7 +322,7 @@ Blockly.JavaScript['lists_sort'] = function(block) {
       '  var compare = compareFuncs[type];',
       '  return function(a, b) { return compare(a, b) * direction; }',
     '}']);
-  return [listCode + '.sort(' + 
+  return [listCode + '.slice().sort(' + 
       getCompareFunctionName + '(' + direction + ', "' + type + '"))', 
       Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

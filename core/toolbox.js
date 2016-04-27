@@ -238,7 +238,7 @@ Blockly.Toolbox.prototype.position = function() {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
       treeDiv.style.top = svgPosition.y + 'px';
     } else {  // Bottom
-      var topOfToolbox = svgPosition.y + svgSize.height;
+      var topOfToolbox = svgPosition.y + svgSize.height - treeDiv.offsetHeight;
       treeDiv.style.top = topOfToolbox + 'px';
     }
   } else {

@@ -415,10 +415,8 @@ Blockly.hideChaff = function(opt_allowToolbox) {
 Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize(this.getParentSvg());
   if (this.toolbox_) {
-    // If the toolbox is at the bottom it's laid out separately from the main
-    // workspace, rather than overlapping, so we don't need to take its size
-    // into account.
-    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
       svgSize.height -= this.toolbox_.getHeight();
     } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
         this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {

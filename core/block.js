@@ -1334,21 +1334,6 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   Blockly.Events.fire(event);
 };
 
-/**
- * Database of all blocks.
- * @private
- */
-Blockly.Block.BlockDB_ = Object.create(null);
-
-/**
- * Find the block with the specified ID.
- * @param {string} id ID of block to find.
- * @return {Blockly.Block} The sought after block or null if not found.
- */
-Blockly.Block.getById = function(id) {
-  return Blockly.Block.BlockDB_[id] || null;
-};
-
 Blockly.Block.prototype.makeConnection = function(type) {
   return new Blockly.Connection(this, type);
 };

@@ -416,10 +416,12 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize(this.getParentSvg());
   if (this.toolbox_) {
     // If the toolbox is at the bottom it's laid out separately from the main
-    // workspace, rather than overlapping.
+    // workspace, rather than overlapping, so we don't need to take its size
+    // into account.
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
       svgSize.height -= this.toolbox_.getHeight();
-    } else {
+    } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
       svgSize.width -= this.toolbox_.getWidth();
     }
   }

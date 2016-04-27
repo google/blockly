@@ -287,7 +287,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     viewTop: -this.workspace_.scrollY,
     viewLeft: -this.workspace_.scrollX,
     contentTop: optionBox.y,
-    contentLeft: 0,
+    contentLeft: optionBox.x,
     absoluteTop: absoluteTop,
     absoluteLeft: absoluteLeft
   };
@@ -308,11 +308,9 @@ Blockly.Flyout.prototype.setMetrics_ = function(xyRatio) {
     return;
   }
   if (!this.horizontalLayout_ && goog.isNumber(xyRatio.y)) {
-    this.workspace_.scrollY =
-        -metrics.contentHeight * xyRatio.y - metrics.contentTop;
+    this.workspace_.scrollY = -metrics.contentHeight * xyRatio.y;
   } else if (this.horizontalLayout_ && goog.isNumber(xyRatio.x)) {
-    this.workspace_.scrollX =
-        -metrics.contentWidth * xyRatio.x - metrics.contentLeft;
+    this.workspace_.scrollX = -metrics.contentWidth * xyRatio.x;
   }
 
   this.workspace_.translate(this.workspace_.scrollX + metrics.absoluteLeft,
@@ -672,36 +670,6 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
 };
 
 /**
- * Add listeners to a block that has been added to the flyout.
- * @param {!Element} root The root node of the SVG group the block is in.
- * @param {!Blockly.Block} block The block to add listeners for.
- * @param {!Element} rect The invisible rectangle under the block that acts as
- *     a button for that block.
- * @private
- */
-Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
-  if (this.autoClose) {
-    this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
-        this.createBlockFunc_(block)));
-    this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
-        this.createBlockFunc_(block)));
-  } else {
-    this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
-        this.blockMouseDown_(block)));
-    this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
-        this.blockMouseDown_(block)));
-  }
-  this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
-      block.addSelect));
-  this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
-      block.removeSelect));
-  this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
-      block.addSelect));
-  this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
-      block.removeSelect));
-};
-
-/**
  * Delete blocks and background buttons from a previous showing of the flyout.
  * @private
  */
@@ -835,7 +803,6 @@ Blockly.Flyout.prototype.onMouseMove_ = function(e) {
     this.startDragMouseX_ = e.clientX;
     var x = metrics.viewLeft - dx;
     x = goog.math.clamp(x, 0, metrics.contentWidth - metrics.viewWidth);
-    this.scrollbar_.set(metrics.contentLeft - x);
     this.scrollbar_.set(x);
   } else {
     if (metrics.contentHeight - metrics.viewHeight < 0) {

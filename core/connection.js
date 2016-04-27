@@ -517,7 +517,9 @@ Blockly.Connection.prototype.respawnShadow = function(parentConnection,
     } else {
       throw 'Child block does not have output or previous statement.';
     }
+    return blockShadow;
   }
+  return null;
 };
 
 /**

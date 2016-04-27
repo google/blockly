@@ -305,14 +305,8 @@ Blockly.RenderedConnection.prototype.respawnShadow = function(parentConnection,
   var shadow = parentConnection.getShadowDom();
   if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
     var blockShadow =
-        Blockly.Xml.domToBlock(parentBlock.workspace, shadow);
-    if (blockShadow.outputConnection) {
-      parentConnection.connect(blockShadow.outputConnection);
-    } else if (blockShadow.previousConnection) {
-      parentConnection.connect(blockShadow.previousConnection);
-    } else {
-      throw 'Child block does not have output or previous statement.';
-    }
+        Blockly.RenderedConnection.superClass_.respawnShadow.call(this,
+        parentConnection, parentBlock, childBlock);
     blockShadow.initSvg();
     blockShadow.render(false);
   }

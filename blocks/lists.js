@@ -656,20 +656,19 @@ Blockly.Blocks['lists_sort'] = {
       "args0": [
         {
           "type": "field_dropdown",
-          "name": "DIRECTION",
+          "name": "TYPE",
           "options": [
-            ["ascending", "1"],
-            ["descending", "-1"]
+            [Blockly.Msg.LISTS_SORT_TYPE_NUMERIC, "numeric"],
+            [Blockly.Msg.LISTS_SORT_TYPE_TEXT, "text"],
+            [Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE, "ignoreCase"] 
           ]
         },
         {
           "type": "field_dropdown",
-          "name": "TYPE",
+          "name": "DIRECTION",
           "options": [
-            ["numbers", "numeric"],
-            ["text", "text"],
-            ["text ignore case", "ignoreCase"],
-            ["text length", "textLength"]
+            [Blockly.Msg.LISTS_SORT_ORDER_ASCENDING, "1"],
+            [Blockly.Msg.LISTS_SORT_ORDER_DESCENDING, "-1"]
           ]
         },
         {

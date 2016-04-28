@@ -328,21 +328,31 @@ Blockly.Lua['lists_sort'] = function(block) {
   var type = block.getFieldValue('TYPE');
 
   var functionName = Blockly.Lua.provideFunction_(
-      'list_sort_' + Blockly.Lua.lists.gensym_(),
-      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(list)',
+      'list_sort',
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + 
+          '(list, typev, direction)',
        '  local t = {}',
        '  for n,v in pairs(list) do table.insert(t, v) end', // shallow-copy
-       '  local compareFuncs = {}',
-       '  compareFuncs.numeric = function(a, b) return a < b end ',
-       '  compareFuncs.text = function(a, b) return a < b end',
-       '  compareFuncs.ignoreCase = function(a, b)',
-       '       return string.lower(a) < string.lower(b) end',
-       '  local compare = compareFuncs["' + type + '"]',
+       '  local compareFuncs = {',
+       '    numeric = function(a, b)',
+       '      return (tonumber(tostring(a)) or 0)',
+       '          < (tonumber(tostring(b)) or 0) end,',
+       '    text = function(a, b)',
+       '      return tostring(a) < tostring(b) end,',
+       '    ignoreCase = function(a, b)',
+       '      return string.lower(tostring(a)) < string.lower(tostring(b)) end',
+       '  }',
+       '  local compareTemp = compareFuncs[typev]',
+       '  local compare = compareTemp',
+       '  if direction == -1',
+       '  then compare = function(a, b) return compareTemp(b, a) end',
+       '  end',
        '  table.sort(t, compare)',
        '  return t',
        'end']);
 
-  var code = functionName + '(' + listCode + ')';
+  var code = functionName + 
+    '(' + listCode + ',"' + type + '", ' + direction + ')';
   return [code, Blockly.Lua.ORDER_HIGH];  
 };
   

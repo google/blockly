@@ -307,9 +307,9 @@ Blockly.JavaScript['lists_sort'] = function(block) {
   var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
   var getCompareFunctionName = Blockly.JavaScript.provideFunction_(
-          'lists_get_sort',
+          'lists_get_sort_compare',
   ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-    '(direction, type) {',
+    '(type, direction) {',
       '  var compareFuncs = {',
       '    "numeric":  function(a, b) { ',
       '        return parseFloat(a) - parseFloat(b) }, ',
@@ -321,9 +321,9 @@ Blockly.JavaScript['lists_sort'] = function(block) {
       '  };',
       '  var compare = compareFuncs[type];',
       '  return function(a, b) { return compare(a, b) * direction; }',
-    '}']);
-  return [listCode + '.slice().sort(' + 
-      getCompareFunctionName + '(' + direction + ', "' + type + '"))', 
+      '}']);
+  return ['(' + listCode + ').slice().sort(' + 
+      getCompareFunctionName + '("' + type + '", ' + direction + '))', 
       Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 

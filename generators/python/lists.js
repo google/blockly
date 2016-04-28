@@ -316,22 +316,28 @@ Blockly.Python['lists_sort'] = function(block) {
   // Block for sorting a list.
   var listCode = (Blockly.Python.valueToCode(block, 'LIST', 
     Blockly.Python.ORDER_MEMBER) || '[]');
-  var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
   var type = block.getFieldValue('TYPE');
-  var key = (type === 'numeric' ? 'float' :
-    type === 'text' ? 'str' :
-    type === 'ignoreCase' ? 'lambda s: str(s).lower()' : 
-    type === 'length' ? 'len' : 'unknown');
+  var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
   var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
   ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + 
-      '(listv, keyv, reversev):',
+      '(listv, type, reversev):',
+    '  def tryfloat(s):',
+    '    try:',
+    '      return float(s)',
+    '    except:',
+    '      return 0',
+    '  keyFuncts = {',
+    '    "numeric": tryfloat,',
+    '    "text": str,',
+    '    "ignoreCase": lambda s: str(s).lower()', 
+    '  }',
+    '  keyv = keyFuncts[type]',
     '  tmp_list = list(listv)', // clone the list
-    '  sorted(tmp_list, key=keyv, reverse=reversev)',
-    '  return tmp_list'
+    '  return sorted(tmp_list, key=keyv, reverse=reversev)'
   ]);  
 
   var code = sortFunctionName + 
-    '(' + listCode + ', ' + key + ', ' + reverse + ')';
+    '(' + listCode + ', "' + type + '", ' + reverse + ')';
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 

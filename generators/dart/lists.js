@@ -319,7 +319,7 @@ Blockly.Dart['lists_sort'] = function(block) {
   var sortFunctionName = Blockly.Dart.provideFunction_(
           'lists_sort',
   ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + 
-      '(list, direction, type) {',
+      '(list, type, direction) {',
       '  var compareFuncs = {',
       '    "numeric": (a, b) => direction * ', 
       '      double.parse(a.toString()).compareTo(double.parse(b.toString())),',
@@ -334,7 +334,7 @@ Blockly.Dart['lists_sort'] = function(block) {
       '  return list;',
     '}']);
   return [sortFunctionName + '(' + listCode + ', ' + 
-      direction + ', "' + type + '")',
+      '"' + type + '", ' + direction + ')',
       Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 

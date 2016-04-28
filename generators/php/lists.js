@@ -364,18 +364,23 @@ Blockly.PHP['lists_sort'] = function(block) {
   var type = block.getFieldValue('TYPE');
   var functionName = Blockly.PHP.provideFunction_(
     'lists_sort', [
-    'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($list) {',
+    'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + 
+      '($list, $type, $direction) {',
     '  $sortFuncs = array(',
-    '    "numeric" => sort,',
-    '    "text" => natsort,',
-    '    "ignoreCase" => natcasesort',
+    '    "numeric" => "sort",',
+    '    "text" => "natsort",',
+    '    "ignoreCase" => "natcasesort"',
     '  );',
-    '  $sort = $sortFuncs[' + type + '];',
+    '  $sort = $sortFuncs[$type];',
     '  $list2 = $list;', // clone list
     '  $sort($list2);',
+    '  if ($direction == -1) {',
+    '    $list2 = array_reverse($list2);',
+    '  }',
     '  return $list2;',
     '}']);
-  var sortCode = functionName + '(' + listCode + ')';
+  var sortCode = functionName + 
+    '(' + listCode + ', "' + type + '", ' + direction + ')';
   return [sortCode, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 

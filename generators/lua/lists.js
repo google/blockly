@@ -324,7 +324,7 @@ Blockly.Lua['lists_sort'] = function(block) {
   // Block for sorting a list.
   var listCode = Blockly.Lua.valueToCode(
     block, 'LIST', Blockly.Lua.ORDER_HIGH) || '({})';
-  var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
 
   var functionName = Blockly.Lua.provideFunction_(

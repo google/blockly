@@ -304,7 +304,7 @@ Blockly.JavaScript['lists_sort'] = function(block) {
   var listCode = Blockly.JavaScript.valueToCode(
       block, 'LIST',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
-  var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
   var getCompareFunctionName = Blockly.JavaScript.provideFunction_(
           'lists_get_sort_compare',

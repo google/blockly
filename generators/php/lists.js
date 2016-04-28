@@ -360,7 +360,7 @@ Blockly.PHP['lists_sort'] = function(block) {
   // Block for sorting a list.
   var listCode = Blockly.PHP.valueToCode(block, 'LIST',
       Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
-  var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
   var functionName = Blockly.PHP.provideFunction_(
     'lists_sort', [

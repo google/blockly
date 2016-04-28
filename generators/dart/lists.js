@@ -314,7 +314,7 @@ Blockly.Dart['lists_sort'] = function(block) {
   // Block for sorting a list.
   var listCode = Blockly.Dart.valueToCode(block, 'LIST',
     Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
-  var direction = block.getFieldValue('DIRECTION') == '1' ? 1 : -1;
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
   var sortFunctionName = Blockly.Dart.provideFunction_(
           'lists_sort',

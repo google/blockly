@@ -1,6 +1,0 @@
-<xml style="display: none">
-<block type="music_play_random_note">
-</block>
-<block type="music_play_note"></block>
-<block type="music_play_note_with_duration"></block>
-</xml>

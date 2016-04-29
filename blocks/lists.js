@@ -652,7 +652,7 @@ Blockly.Blocks['lists_sort'] = {
   init: function() {
     this.jsonInit({
       "id": "list_sort",
-      "message0": "sort %1 %2 %3",
+      "message0": Blockly.Msg.LISTS_SORT_TITLE,
       "args0": [
         {
           "type": "field_dropdown",
@@ -682,7 +682,7 @@ Blockly.Blocks['lists_sort'] = {
       "output": "Array",
       "colour": Blockly.Blocks.lists.HUE,
       "tooltip": Blockly.Msg.LISTS_SORT_TOOLTIP,
-      "helpUrl": "http://www.example.com/"
+      "helpUrl": Blockly.Msg.LISTS_SORT_HELPURL
     });
   }
 };

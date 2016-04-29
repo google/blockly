@@ -976,14 +976,20 @@ Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
 
 /// url - Infomation describing sorting a list.
-Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#sorting-lists';
-
-Blockly.Msg.LISTS_SORT = 'sort';
+Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#sorting-a-list';
+/// Sort a list of items.
+Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list
 Blockly.Msg.LISTS_SORT_TOOLTIP = 'Sort a list.';
+/// sorting order or direction from low to high values
 Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = 'ascending';
+/// sorting order or direction from high to low values
 Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = 'descending';
+/// sorting by treating each item as a numeric value.
 Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = 'numeric';
+/// sorting by treating each item as text.
 Blockly.Msg.LISTS_SORT_TYPE_TEXT = 'text';
+/// sorting by treating each item as text, ignoring differences in case.
 Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = 'text ignore case';
 
 /// url - Information describing splitting text into a list, or joining a list into text.

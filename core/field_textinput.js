@@ -108,7 +108,7 @@ Blockly.FieldTextInput.prototype.setSpellcheck = function(check) {
  * @private
  */
 Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
-  var workspace = this.sourceBlock_.workspace;
+  this.workspace_ = this.sourceBlock_.workspace;
   var quietInput = opt_quietInput || false;
   if (!quietInput && (goog.userAgent.MOBILE || goog.userAgent.ANDROID ||
                       goog.userAgent.IPAD)) {
@@ -129,7 +129,8 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   // Create the input.
   var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
-  var fontSize = (Blockly.FieldTextInput.FONTSIZE * workspace.scale) + 'pt';
+  var fontSize =
+      (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
   div.style.fontSize = fontSize;
   htmlInput.style.fontSize = fontSize;
   /** @type {!HTMLInputElement} */
@@ -155,7 +156,7 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   htmlInput.onKeyPressWrapper_ =
       Blockly.bindEvent_(htmlInput, 'keypress', this, this.onHtmlInputChange_);
   htmlInput.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);
-  workspace.addChangeListener(htmlInput.onWorkspaceChangeWrapper_);
+  this.workspace_.addChangeListener(htmlInput.onWorkspaceChangeWrapper_);
 };
 
 /**
@@ -188,7 +189,6 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   // Update source block.
   var text = htmlInput.value;
   if (text !== htmlInput.oldValue_) {
-    this.sourceBlock_.setShadow(false);
     htmlInput.oldValue_ = text;
     this.setValue(text);
     this.validate_();
@@ -226,8 +226,8 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
 Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
   var bBox = this.fieldGroup_.getBBox();
-  div.style.width = bBox.width * this.sourceBlock_.workspace.scale + 'px';
-  div.style.height = bBox.height * this.sourceBlock_.workspace.scale + 'px';
+  div.style.width = bBox.width * this.workspace_.scale + 'px';
+  div.style.height = bBox.height * this.workspace_.scale + 'px';
   var xy = this.getAbsoluteXY_();
   // In RTL mode block fields and LTR input fields the left edge moves,
   // whereas the right edge is fixed.  Reposition the editor.
@@ -278,7 +278,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
     Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
     Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
-    thisField.sourceBlock_.workspace.removeChangeListener(
+    thisField.workspace_.removeChangeListener(
         htmlInput.onWorkspaceChangeWrapper_);
     Blockly.FieldTextInput.htmlInput_ = null;
     // Delete style properties.

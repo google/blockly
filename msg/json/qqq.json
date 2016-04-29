@@ -1,11 +1,4 @@
 {
-	"@metadata": {
-		"authors": [
-			"Espertus",
-			"Liuxinyu970226",
-			"Shirayuki"
-		]
-	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -24,6 +17,8 @@
 	"DISABLE_BLOCK": "context menu - Make the selected block have no effect (unless reenabled).",
 	"ENABLE_BLOCK": "context menu - Make the selected block have effect (after having been disabled earlier).",
 	"HELP": "context menu - Provide helpful information about the selected block.\n{{Identical|Help}}",
+	"UNDO": "context menu - Undo the previous action.\n{{Identical|Undo}}",
+	"REDO": "context menu - Undo the previous undo action.\n{{Identical|Redo}}",
 	"CHAT": "collaboration instruction - Tell the user that they can talk with other users.",
 	"AUTH": "authorization instruction - Ask the user to authorize this app so it can be saved and shared by them.",
 	"ME": "First person singular - objective case",
@@ -90,15 +85,15 @@
 	"LOGIC_COMPARE_TOOLTIP_GTE": "tooltip - Describes the greater than or equals (≥) block.",
 	"LOGIC_OPERATION_HELPURL": "url - Information about the Boolean conjunction ('and') and disjunction ('or') operators.  Consider using the translation of [https://en.wikipedia.org/wiki/Boolean_logic https://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.",
 	"LOGIC_OPERATION_TOOLTIP_AND": "tooltip - See [https://en.wikipedia.org/wiki/Logical_conjunction https://en.wikipedia.org/wiki/Logical_conjunction].",
-	"LOGIC_OPERATION_AND": "block text - See [https://en.wikipedia.org/wiki/Logical_conjunction https://en.wikipedia.org/wiki/Logical_conjunction].",
+	"LOGIC_OPERATION_AND": "block text - See [https://en.wikipedia.org/wiki/Logical_conjunction https://en.wikipedia.org/wiki/Logical_conjunction].\n{{Identical|And}}",
 	"LOGIC_OPERATION_TOOLTIP_OR": "block text - See [https://en.wikipedia.org/wiki/Disjunction https://en.wikipedia.org/wiki/Disjunction].",
-	"LOGIC_OPERATION_OR": "block text - See [https://en.wikipedia.org/wiki/Disjunction https://en.wikipedia.org/wiki/Disjunction].",
+	"LOGIC_OPERATION_OR": "block text - See [https://en.wikipedia.org/wiki/Disjunction https://en.wikipedia.org/wiki/Disjunction].\n{{Identical|Or}}",
 	"LOGIC_NEGATE_HELPURL": "url - Information about logical negation.  The translation of [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation] is recommended if it exists in the target language.",
 	"LOGIC_NEGATE_TITLE": "block text - This is a unary operator that returns ''false'' when the input is ''true'', and ''true'' when the input is ''false''. \n\nParameters:\n* %1 - the input (which should be either the value 'true' or 'false')",
 	"LOGIC_NEGATE_TOOLTIP": "tooltip - See [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation].",
 	"LOGIC_BOOLEAN_HELPURL": "url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value https://en.wikipedia.org/wiki/Truth_value] if it exists in your language.",
-	"LOGIC_BOOLEAN_TRUE": "block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.",
-	"LOGIC_BOOLEAN_FALSE": "block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.",
+	"LOGIC_BOOLEAN_TRUE": "block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.\n{{Identical|True}}",
+	"LOGIC_BOOLEAN_FALSE": "block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.\n{{Identical|False}}",
 	"LOGIC_BOOLEAN_TOOLTIP": "tooltip - Indicates that the block returns either of the two possible [https://en.wikipedia.org/wiki/Truth_value logical values].",
 	"LOGIC_NULL_HELPURL": "url - Provide a link to the translation of [https://en.wikipedia.org/wiki/Nullable_type https://en.wikipedia.org/wiki/Nullable_type], if it exists in your language; otherwise, do not worry about translating this advanced concept.",
 	"LOGIC_NULL": "block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for 'nothing' or 'invalid'.",

@@ -118,15 +118,22 @@ Blockly.Field.NBSP = '\u00A0';
 Blockly.Field.prototype.EDITABLE = true;
 
 /**
- * Install this field on a block.
+ * Attach this field to a block.
  * @param {!Blockly.Block} block The block containing this field.
  */
-Blockly.Field.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+Blockly.Field.prototype.setSourceBlock = function(block) {
+  goog.asserts.assert(!this.sourceBlock_, 'Field already bound to a block.');
+  this.sourceBlock_ = block;
+};
+
+/**
+ * Install this field on a block.
+ */
+Blockly.Field.prototype.init = function() {
+  if (this.fieldGroup_) {
     // Field has already been initialized once.
     return;
   }
-  this.sourceBlock_ = block;
   // Build the DOM.
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   if (!this.visible_) {
@@ -144,7 +151,7 @@ Blockly.Field.prototype.init = function(block) {
       this.fieldGroup_);
 
   this.updateEditable();
-  block.getSvgRoot().appendChild(this.fieldGroup_);
+  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseUpWrapper_ =
       Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
   // Force a render.
@@ -304,6 +311,7 @@ Blockly.Field.prototype.getSize = function() {
  * Returns the height and width of the field,
  * accounting for the workspace scaling.
  * @return {!goog.math.Size} Height and width.
+ * @private
  */
 Blockly.Field.prototype.getScaledBBox_ = function() {
   var bBox = this.borderRect_.getBBox();
@@ -421,7 +429,7 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
   } else if (Blockly.isRightButton(e)) {
     // Right-click.
     return;
-  } else if (Blockly.dragMode_ == 2) {
+  } else if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   } else if (this.sourceBlock_.isEditable()) {

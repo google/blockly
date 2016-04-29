@@ -6,7 +6,8 @@
 			"Vitorvicentevalente",
 			"아라",
 			"Nicola Nascimento",
-			"Önni"
+			"Önni",
+			"Diniscoelho"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -27,6 +28,7 @@
 	"DISABLE_BLOCK": "Desabilitar Bloco",
 	"ENABLE_BLOCK": "Habilitar Bloco",
 	"HELP": "Ajuda",
+	"UNDO": "Desfazer",
 	"CHAT": "Converse com o seu colaborador, ao digitar nesta caixa!",
 	"AUTH": "Por favor autorize esta aplicação para permitir que o seu trabalho seja gravado e que o possa partilhar.",
 	"ME": "Eu",
@@ -247,7 +249,7 @@
 	"LISTS_INLIST": "na lista",
 	"LISTS_INDEX_OF_FIRST": "encontre a primeira ocorrência do item",
 	"LISTS_INDEX_OF_LAST": "encontre a última ocorrência do item",
-	"LISTS_INDEX_OF_TOOLTIP": "Retorna a posição da primeira/última ocorrência do item na lista.  Retorna 0 se o texto não for encontrado.",
+	"LISTS_INDEX_OF_TOOLTIP": "Retorna a posição da primeira/última ocorrência do item na lista.  Retorna 0 se o item não for encontrado.",
 	"LISTS_GET_INDEX_GET": "obter",
 	"LISTS_GET_INDEX_GET_REMOVE": "obter e remover",
 	"LISTS_GET_INDEX_REMOVE": "remover",

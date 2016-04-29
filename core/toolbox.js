@@ -390,7 +390,6 @@ Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
  * @override
  */
 Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
-  Blockly.removeAllRanges();
   var toolbox = this.toolbox_;
   if (node == this.selectedItem_ || node == toolbox.tree_) {
     return;
@@ -405,6 +404,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
     // not rendered.
     toolbox.addColour_(node);
   }
+  var oldNode = this.getSelectedItem();
   goog.ui.tree.TreeControl.prototype.setSelectedItem.call(this, node);
   if (node && node.blocks && node.blocks.length) {
     toolbox.flyout_.show(node.blocks);
@@ -415,6 +415,12 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
   } else {
     // Hide the flyout.
     toolbox.flyout_.hide();
+  }
+  if (oldNode != node && oldNode != this) {
+    var event = new Blockly.Events.Ui(null, 'category',
+        oldNode && oldNode.getHtml(), node && node.getHtml());
+    event.workspaceId = toolbox.workspace_.id;
+    Blockly.Events.fire(event);
   }
   if (node) {
     toolbox.lastCategory_ = node;

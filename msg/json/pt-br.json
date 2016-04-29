@@ -12,7 +12,9 @@
 			"Webysther",
 			"Fasouzafreitas",
 			"Almondega",
-			"Rogerio Melfi"
+			"Rogerio Melfi",
+			"Caçador de Palavras",
+			"Luk3"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -33,6 +35,8 @@
 	"DISABLE_BLOCK": "Desabilitar bloco",
 	"ENABLE_BLOCK": "Habilitar bloco",
 	"HELP": "Ajuda",
+	"UNDO": "Desfazer",
+	"REDO": "Refazer",
 	"CHAT": "Converse com o seu colaborador digitando nesta caixa!",
 	"AUTH": "Por favor autorize este aplicativo para permitir que o seu trabalho seja gravado e que ele seja compartilhado por você.",
 	"ME": "Eu",
@@ -233,7 +237,7 @@
 	"LISTS_LENGTH_TITLE": "tamanho de %1",
 	"LISTS_LENGTH_TOOLTIP": "Retorna o tamanho de uma lista.",
 	"LISTS_ISEMPTY_TITLE": "%1 é vazia",
-	"LISTS_ISEMPTY_TOOLTIP": "Retona verdadeiro se a lista estiver vazia.",
+	"LISTS_ISEMPTY_TOOLTIP": "Retorna ao verdadeiro se a lista estiver vazia.",
 	"LISTS_INLIST": "na lista",
 	"LISTS_INDEX_OF_FIRST": "encontre a primeira ocorrência do item",
 	"LISTS_INDEX_OF_LAST": "encontre a última ocorrência do item",

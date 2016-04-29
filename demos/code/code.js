@@ -72,7 +72,7 @@ Code.LANGUAGE_NAME = {
   'tr': 'Türkçe',
   'uk': 'Українська',
   'vi': 'Tiếng Việt',
-  'zh-hans': '簡體中文',
+  'zh-hans': '简体中文',
   'zh-hant': '正體中文'
 };
 
@@ -139,11 +139,11 @@ Code.loadBlocks = function(defaultXml) {
     // Language switching stores the blocks during the reload.
     delete window.sessionStorage.loadOnceBlocks;
     var xml = Blockly.Xml.textToDom(loadOnce);
-    Blockly.Xml.domToWorkspace(Code.workspace, xml);
+    Blockly.Xml.domToWorkspace(xml, Code.workspace);
   } else if (defaultXml) {
     // Load the editor with default starting blocks.
     var xml = Blockly.Xml.textToDom(defaultXml);
-    Blockly.Xml.domToWorkspace(Code.workspace, xml);
+    Blockly.Xml.domToWorkspace(xml, Code.workspace);
   } else if ('BlocklyStorage' in window) {
     // Restore saved blocks in a separate thread so that subsequent
     // initialization is not affected from a failed load.
@@ -244,7 +244,7 @@ Code.LANG = Code.getLang();
  * List of tab names.
  * @private
  */
-Code.TABS_ = ['blocks', 'javascript', 'php', 'python', 'dart', 'xml'];
+Code.TABS_ = ['blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'xml'];
 
 Code.selected = 'blocks';
 
@@ -270,7 +270,7 @@ Code.tabClick = function(clickedName) {
     }
     if (xmlDom) {
       Code.workspace.clear();
-      Blockly.Xml.domToWorkspace(Code.workspace, xmlDom);
+      Blockly.Xml.domToWorkspace(xmlDom, Code.workspace);
     }
   }
 
@@ -339,6 +339,14 @@ Code.renderContent = function() {
     if (typeof prettyPrintOne == 'function') {
       code = content.innerHTML;
       code = prettyPrintOne(code, 'dart');
+      content.innerHTML = code;
+    }
+  } else if (content.id == 'content_lua') {
+    code = Blockly.Lua.workspaceToCode(Code.workspace);
+    content.textContent = code;
+    if (typeof prettyPrintOne == 'function') {
+      code = content.innerHTML;
+      code = prettyPrintOne(code, 'lua');
       content.innerHTML = code;
     }
   }

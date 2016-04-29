@@ -25,7 +25,7 @@
 
   <p>This is a simple demo of executing code with a sandboxed JavaScript interpreter.</p>
 
-  <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/js-interpreter">JS Interpreter</a>...</p>
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/js-interpreter">JS Interpreter</a>&hellip;</p>
 
   <p>
     <button onclick="parseCode()">Parse JavaScript</button>
@@ -124,8 +124,8 @@
     var workspace = Blockly.inject('blocklyDiv',
         {media: '../../media/',
          toolbox: document.getElementById('toolbox')});
-    Blockly.Xml.domToWorkspace(workspace,
-        document.getElementById('startBlocks'));
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                               workspace);
 
     var myInterpreter = null;
 

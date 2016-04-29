@@ -222,7 +222,6 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
           }
         }
         if (colour !== null) {
-          thisField.sourceBlock_.setShadow(false);
           thisField.setValue(colour);
         }
       });

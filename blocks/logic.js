@@ -94,17 +94,7 @@ Blockly.Blocks['controls_if'] = {
   domToMutation: function(xmlElement) {
     this.elseifCount_ = parseInt(xmlElement.getAttribute('elseif'), 10) || 0;
     this.elseCount_ = parseInt(xmlElement.getAttribute('else'), 10) || 0;
-    for (var i = 1; i <= this.elseifCount_; i++) {
-      this.appendValueInput('IF' + i)
-          .setCheck('Boolean')
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
-      this.appendStatementInput('DO' + i)
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-    }
-    if (this.elseCount_) {
-      this.appendStatementInput('ELSE')
-          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-    }
+    this.updateShape_();
   },
   /**
    * Populate the mutator's dialog with this block's components.
@@ -135,44 +125,23 @@ Blockly.Blocks['controls_if'] = {
    * @this Blockly.Block
    */
   compose: function(containerBlock) {
-    // Disconnect the else input blocks and remove the inputs.
-    if (this.elseCount_) {
-      this.removeInput('ELSE');
-    }
-    this.elseCount_ = 0;
-    // Disconnect all the elseif input blocks and remove the inputs.
-    for (var i = this.elseifCount_; i > 0; i--) {
-      this.removeInput('IF' + i);
-      this.removeInput('DO' + i);
-    }
-    this.elseifCount_ = 0;
-    // Rebuild the block's optional inputs.
     var clauseBlock = containerBlock.nextConnection.targetBlock();
+    // Count number of inputs.
+    this.elseifCount_ = 0;
+    this.elseCount_ = 0;
+    var valueConnections = [null];
+    var statementConnections = [null];
+    var elseStatementConnection = null;
     while (clauseBlock) {
       switch (clauseBlock.type) {
         case 'controls_if_elseif':
           this.elseifCount_++;
-          var ifInput = this.appendValueInput('IF' + this.elseifCount_)
-              .setCheck('Boolean')
-              .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
-          var doInput = this.appendStatementInput('DO' + this.elseifCount_);
-          doInput.appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-          // Reconnect any child blocks.
-          if (clauseBlock.valueConnection_) {
-            ifInput.connection.connect(clauseBlock.valueConnection_);
-          }
-          if (clauseBlock.statementConnection_) {
-            doInput.connection.connect(clauseBlock.statementConnection_);
-          }
+          valueConnections.push(clauseBlock.valueConnection_);
+          statementConnections.push(clauseBlock.statementConnection_);
           break;
         case 'controls_if_else':
           this.elseCount_++;
-          var elseInput = this.appendStatementInput('ELSE');
-          elseInput.appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-          // Reconnect any child blocks.
-          if (clauseBlock.statementConnection_) {
-            elseInput.connection.connect(clauseBlock.statementConnection_);
-          }
+          elseStatementConnection = clauseBlock.statementConnection_;
           break;
         default:
           throw 'Unknown block type.';
@@ -180,6 +149,13 @@ Blockly.Blocks['controls_if'] = {
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();
     }
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      Blockly.Mutator.reconnect(valueConnections[i], this, 'IF' + i);
+      Blockly.Mutator.reconnect(statementConnections[i], this, 'DO' + i);
+    }
+    Blockly.Mutator.reconnect(elseStatementConnection, this, 'ELSE');
   },
   /**
    * Store pointers to any connected child blocks.
@@ -210,6 +186,35 @@ Blockly.Blocks['controls_if'] = {
       }
       clauseBlock = clauseBlock.nextConnection &&
           clauseBlock.nextConnection.targetBlock();
+    }
+  },
+  /**
+   * Modify this block to have the correct number of inputs.
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function() {
+    // Delete everything.
+    if (this.getInput('ELSE')) {
+      this.removeInput('ELSE');
+    }
+    var i = 1;
+    while (this.getInput('IF' + i)) {
+      this.removeInput('IF' + i);
+      this.removeInput('DO' + i);
+      i++;
+    }
+    // Rebuild block.
+    for (var i = 1; i <= this.elseifCount_; i++) {
+      this.appendValueInput('IF' + i)
+          .setCheck('Boolean')
+          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF);
+      this.appendStatementInput('DO' + i)
+          .appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
+    }
+    if (this.elseCount_) {
+      this.appendStatementInput('ELSE')
+          .appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
     }
   }
 };
@@ -307,22 +312,26 @@ Blockly.Blocks['logic_compare'] = {
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types from being compared.
+   * @param {!Blockly.Events.Abstract} e Change event.
    * @this Blockly.Block
    */
-  onchange: function() {
+  onchange: function(e) {
     var blockA = this.getInputTargetBlock('A');
     var blockB = this.getInputTargetBlock('B');
     // Disconnect blocks that existed prior to this change if they don't match.
     if (blockA && blockB &&
         !blockA.outputConnection.checkType_(blockB.outputConnection)) {
       // Mismatch between two inputs.  Disconnect previous and bump it away.
+      // Ensure that any disconnections are grouped with the causing event.
+      Blockly.Events.setGroup(e.group);
       for (var i = 0; i < this.prevBlocks_.length; i++) {
         var block = this.prevBlocks_[i];
         if (block === blockA || block === blockB) {
-          block.setParent(null);
+          block.unplug();
           block.bumpNeighbours_();
         }
       }
+      Blockly.Events.setGroup(false);
     }
     this.prevBlocks_[0] = blockA;
     this.prevBlocks_[1] = blockB;
@@ -447,9 +456,10 @@ Blockly.Blocks['logic_ternary'] = {
   /**
    * Called whenever anything on the workspace changes.
    * Prevent mismatched types.
+   * @param {!Blockly.Events.Abstract} e Change event.
    * @this Blockly.Block
    */
-  onchange: function() {
+  onchange: function(e) {
     var blockA = this.getInputTargetBlock('THEN');
     var blockB = this.getInputTargetBlock('ELSE');
     var parentConnection = this.outputConnection.targetConnection;
@@ -458,13 +468,16 @@ Blockly.Blocks['logic_ternary'] = {
       for (var i = 0; i < 2; i++) {
         var block = (i == 1) ? blockA : blockB;
         if (block && !block.outputConnection.checkType_(parentConnection)) {
+          // Ensure that any disconnections are grouped with the causing event.
+          Blockly.Events.setGroup(e.group);
           if (parentConnection === this.prevParentConnection_) {
-            this.setParent(null);
-            parentConnection.sourceBlock_.bumpNeighbours_();
+            this.unplug();
+            parentConnection.getSourceBlock().bumpNeighbours_();
           } else {
-            block.setParent(null);
+            block.unplug();
             block.bumpNeighbours_();
           }
+          Blockly.Events.setGroup(false);
         }
       }
     }

@@ -105,13 +105,14 @@ Blockly.Warning.prototype.setVisible = function(visible) {
     // No change.
     return;
   }
+  Blockly.Events.fire(
+      new Blockly.Events.Ui(this.block_, 'warningOpen', !visible, visible));
   if (visible) {
     // Create the bubble to display all warnings.
     var paragraph = Blockly.Warning.textToDom_(this.getText());
     this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.Workspace} */ (this.block_.workspace),
-        paragraph, this.block_.svgPath_,
-        this.iconX_, this.iconY_, null, null);
+        /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
+        paragraph, this.block_.svgPath_, this.iconXY_, null, null);
     if (this.block_.RTL) {
       // Right-align the paragraph.
       // This cannot be done until the bubble is rendered on screen.

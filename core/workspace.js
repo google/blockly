@@ -32,14 +32,14 @@ goog.require('goog.math');
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
- * @param {Object=} opt_options Dictionary of options.
+ * @param {Blockly.Options} opt_options Dictionary of options.
  * @constructor
  */
 Blockly.Workspace = function(opt_options) {
   /** @type {string} */
   this.id = Blockly.genUid();
   Blockly.Workspace.WorkspaceDB_[this.id] = this;
-  /** @type {!Object} */
+  /** @type {!Blockly.Options} */
   this.options = opt_options || {};
   /** @type {boolean} */
   this.RTL = !!this.options.RTL;
@@ -47,6 +47,12 @@ Blockly.Workspace = function(opt_options) {
   this.topBlocks_ = [];
   /** @type {!Array.<!Function>} */
   this.listeners_ = [];
+  /** @type {!Array.<!Blockly.Events.Abstract>} */
+  this.undoStack_ = [];
+  /** @type {!Array.<!Blockly.Events.Abstract>} */
+  this.redoStack_ = [];
+  /** @type {!Object} */
+  this.blockDB_ = Object.create(null);
 };
 
 /**
@@ -54,6 +60,12 @@ Blockly.Workspace = function(opt_options) {
  * @type {boolean} True if visible.  False if headless.
  */
 Blockly.Workspace.prototype.rendered = false;
+
+/**
+ * Maximum number of undo events in stack.
+ * @type {number} 0 to turn off undo, Infinity for unlimited.
+ */
+Blockly.Workspace.prototype.MAX_UNDO = 1024;
 
 /**
  * Dispose of this workspace.
@@ -139,8 +151,15 @@ Blockly.Workspace.prototype.getAllBlocks = function() {
  * Dispose of all blocks in workspace.
  */
 Blockly.Workspace.prototype.clear = function() {
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
+  }
   while (this.topBlocks_.length) {
     this.topBlocks_[0].dispose();
+  }
+  if (!existingGroup) {
+    Blockly.Events.setGroup(false);
   }
 };
 
@@ -167,22 +186,6 @@ Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
 };
 
 /**
- * Finds the block with the specified ID in this workspace.
- * @param {string} id ID of block to find.
- * @return {Blockly.Block} The matching block, or null if not found.
- */
-Blockly.Workspace.prototype.getBlockById = function(id) {
-  // If this O(n) function fails to scale well, maintain a hash table of IDs.
-  var blocks = this.getAllBlocks();
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.id == id) {
-      return block;
-    }
-  }
-  return null;
-};
-
-/**
  * The number of blocks that may be added to the workspace before reaching
  *     the maxBlocks.
  * @return {number} Number of blocks left.
@@ -192,6 +195,45 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
     return Infinity;
   }
   return this.options.maxBlocks - this.getAllBlocks().length;
+};
+
+/**
+ * Undo or redo the previous action.
+ * @param {boolean} redo False if undo, true if redo.
+ */
+Blockly.Workspace.prototype.undo = function(redo) {
+  var inputStack = redo ? this.redoStack_ : this.undoStack_;
+  var outputStack = redo ? this.undoStack_ : this.redoStack_;
+  var event = inputStack.pop();
+  if (!event) {
+    return;
+  }
+  var events = [event];
+  // Do another undo/redo if the next one is of the same group.
+  while (inputStack.length && event.group &&
+      event.group == inputStack[inputStack.length - 1].group) {
+    events.push(inputStack.pop());
+  }
+  // Push these popped events on the opposite stack.
+  for (var i = 0, event; event = events[i]; i++) {
+    outputStack.push(event);
+  }
+  events = Blockly.Events.filter(events, redo);
+  Blockly.Events.recordUndo = false;
+  for (var i = 0, event; event = events[i]; i++) {
+    event.run(redo);
+  }
+  Blockly.Events.recordUndo = true;
+};
+
+/**
+ * Clear the undo/redo stacks.
+ */
+Blockly.Workspace.prototype.clearUndo = function() {
+  this.undoStack_.length = 0;
+  this.redoStack_.length = 0;
+  // Stop any events already in the firing queue from being undoable.
+  Blockly.Events.clearPendingUndo();
 };
 
 /**
@@ -221,9 +263,25 @@ Blockly.Workspace.prototype.removeChangeListener = function(func) {
  * @param {!Blockly.Events.Abstract} event Event to fire.
  */
 Blockly.Workspace.prototype.fireChangeListener = function(event) {
+  if (event.recordUndo) {
+    this.undoStack_.push(event);
+    this.redoStack_.length = 0;
+    if (this.undoStack_.length > this.MAX_UNDO) {
+      this.undoStack_.unshift();
+    }
+  }
   for (var i = 0, func; func = this.listeners_[i]; i++) {
     func(event);
   }
+};
+
+/**
+ * Find the block on this workspace with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Workspace.prototype.getBlockById = function(id) {
+  return this.blockDB_[id] || null;
 };
 
 /**
@@ -243,6 +301,8 @@ Blockly.Workspace.getById = function(id) {
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
+Blockly.Workspace.prototype['clearUndo'] =
+    Blockly.Workspace.prototype.clearUndo;
 Blockly.Workspace.prototype['addChangeListener'] =
     Blockly.Workspace.prototype.addChangeListener;
 Blockly.Workspace.prototype['removeChangeListener'] =

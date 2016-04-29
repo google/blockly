@@ -39,8 +39,8 @@ goog.require('goog.userAgent');
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of options
- *     for a dropdown list, or a function which generates these options.
+ * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of
+ *     options for a dropdown list, or a function which generates these options.
  * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected, with the newly selected value as its sole argument.
  *     If it returns a value, that value (which must be one of the options) will
@@ -80,11 +80,10 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldDropdown.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+  if (this.fieldGroup_) {
     // Dropdown has already been initialized once.
     return;
   }
-
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
   this.arrow_.appendChild(document.createTextNode(
@@ -118,7 +117,6 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
         }
       }
       if (value !== null) {
-        thisField.sourceBlock_.setShadow(false);
         thisField.setValue(value);
       }
     }

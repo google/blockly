@@ -47,6 +47,11 @@ Blockly.FieldCheckbox = function(state, opt_validator) {
 goog.inherits(Blockly.FieldCheckbox, Blockly.Field);
 
 /**
+ * Character for the checkmark.
+ */
+Blockly.FieldCheckbox.CHECK_CHAR = '\u2713';
+
+/**
  * Mouse cursor style when over the hotspot that initiates editability.
  */
 Blockly.FieldCheckbox.prototype.CURSOR = 'default';
@@ -56,7 +61,7 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldCheckbox.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+  if (this.fieldGroup_) {
     // Checkbox has already been initialized once.
     return;
   }
@@ -64,8 +69,9 @@ Blockly.FieldCheckbox.prototype.init = function(block) {
   // The checkbox doesn't use the inherited text element.
   // Instead it uses a custom checkmark element that is either visible or not.
   this.checkElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText', 'x': -3, 'y': 14}, this.fieldGroup_);
-  var textNode = document.createTextNode('\u2713');
+      {'class': 'blocklyText blocklyCheckbox', 'x': -3, 'y': 14},
+      this.fieldGroup_);
+  var textNode = document.createTextNode(Blockly.FieldCheckbox.CHECK_CHAR);
   this.checkElement_.appendChild(textNode);
   this.checkElement_.style.display = this.state_ ? 'block' : 'none';
 };
@@ -85,6 +91,10 @@ Blockly.FieldCheckbox.prototype.getValue = function() {
 Blockly.FieldCheckbox.prototype.setValue = function(strBool) {
   var newState = (strBool == 'TRUE');
   if (this.state_ !== newState) {
+    if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+      Blockly.Events.fire(new Blockly.Events.Change(
+          this.sourceBlock_, 'field', this.name, this.state_, newState));
+    }
     this.state_ = newState;
     if (this.checkElement_) {
       this.checkElement_.style.display = newState ? 'block' : 'none';
@@ -106,7 +116,6 @@ Blockly.FieldCheckbox.prototype.showEditor_ = function() {
     }
   }
   if (newState !== null) {
-    this.sourceBlock_.setShadow(false);
     this.setValue(String(newState).toUpperCase());
   }
 };

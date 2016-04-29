@@ -7,7 +7,8 @@
 			"Revi",
 			"SeoJeongHo",
 			"Alex00728",
-			"Kurousagi"
+			"Kurousagi",
+			"Lemondoge"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
@@ -28,6 +29,7 @@
 	"DISABLE_BLOCK": "블록 비활성화",
 	"ENABLE_BLOCK": "블록 활성화",
 	"HELP": "도움말",
+	"UNDO": "끄르다",
 	"CHAT": "이 상자에 입력하여 당신의 동료와 채팅하세요!",
 	"AUTH": "당신의 작업을 저장하고 다른 사람과 공유할 수 있도록 이 애플리케이션을 인증해 주십시오.",
 	"ME": "나",

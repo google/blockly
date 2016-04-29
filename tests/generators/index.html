@@ -38,6 +38,17 @@
 <script src="../../generators/php/variables.js"></script>
 <script src="../../generators/php/procedures.js"></script>
 
+<script src="../../generators/lua.js"></script>
+<script src="unittest_lua.js"></script>
+<script src="../../generators/lua/logic.js"></script>
+<script src="../../generators/lua/loops.js"></script>
+<script src="../../generators/lua/math.js"></script>
+<script src="../../generators/lua/text.js"></script>
+<script src="../../generators/lua/lists.js"></script>
+<script src="../../generators/lua/colour.js"></script>
+<script src="../../generators/lua/variables.js"></script>
+<script src="../../generators/lua/procedures.js"></script>
+
 <script src="../../generators/dart.js"></script>
 <script src="unittest_dart.js"></script>
 <script src="../../generators/dart/logic.js"></script>
@@ -66,7 +77,8 @@ var workspace = null;
 
 function start() {
   workspace = Blockly.inject('blocklyDiv',
-      {media: '../../media/', toolbox: document.getElementById('toolbox')});
+      {media: '../../media/',
+       toolbox: document.getElementById('toolbox')});
 }
 
 function loadXml() {
@@ -116,7 +128,7 @@ function fromXml(xmlText) {
     alert('Error parsing XML:\n' + e);
     return;
   }
-  Blockly.Xml.domToWorkspace(workspace, xmlDoc);
+  Blockly.Xml.domToWorkspace(xmlDoc, workspace);
 }
 
 function setOutput(text) {
@@ -146,6 +158,11 @@ function toPython() {
 
 function toPhp() {
   var code = Blockly.PHP.workspaceToCode(workspace);
+  setOutput(code);
+}
+
+function toLua() {
+  var code = Blockly.Lua.workspaceToCode(workspace);
   setOutput(code);
 }
 
@@ -286,6 +303,7 @@ h1 {
       <input type="button" value="JavaScript" onclick="toJavaScript()">
       <input type="button" value="Python" onclick="toPython()">
       <input type="button" value="PHP" onclick="toPhp()">
+      <input type="button" value="Lua" onclick="toLua()">
       <input type="button" value="Dart" onclick="toDart()">
     </p>
   </td></tr><tr><td height="99%">

@@ -347,23 +347,16 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
 };
 
 /**
- * Deselect any selections on the webpage.
- * Chrome will select text outside the SVG when double-clicking.
- * Deselect this text, so that it doesn't mess up any subsequent drag.
+ * Set css classes to allow/disallow the browser from selecting/highlighting
+ * text, etc. on the page.
+ * @param {boolean} selectable Whether elements on the page can be selected.
  */
-Blockly.removeAllRanges = function() {
-  if (window.getSelection) {
-    setTimeout(function() {
-        try {
-          var selection = window.getSelection();
-          if (!selection.isCollapsed) {
-            selection.removeAllRanges();
-          }
-        } catch (e) {
-          // MSIE throws 'error 800a025e' here.
-        }
-      }, 0);
-  }
+Blockly.setPageSelectable = function(selectable) {
+    if (selectable) {
+      Blockly.removeClass_(document.body, 'blocklyNonSelectable');
+    } else {
+      Blockly.addClass_(document.body, 'blocklyNonSelectable');
+    }
 };
 
 /**
@@ -558,29 +551,11 @@ Blockly.genUid = function() {
   var length = 20;
   var soupLength = Blockly.genUid.soup_.length;
   var id = [];
-  if (Blockly.genUid.crypto_) {
-    // Cryptographically strong randomness is supported.
-    var array = new Uint32Array(length);
-    Blockly.genUid.crypto_.getRandomValues(array);
-    for (var i = 0; i < length; i++) {
-      id[i] = Blockly.genUid.soup_.charAt(array[i] % soupLength);
-    }
-  } else {
-    // Fall back to Math.random for IE 10.
-    for (var i = 0; i < length; i++) {
-      id[i] = Blockly.genUid.soup_.charAt(Math.random() * soupLength);
-    }
+  for (var i = 0; i < length; i++) {
+    id[i] = Blockly.genUid.soup_.charAt(Math.random() * soupLength);
   }
   return id.join('');
 };
-
-/**
- * Determine if window.crypto or global.crypto exists.
- * @this {Object}
- * @type {=RandomSource}
- * @private
- */
-Blockly.genUid.crypto_ = this.crypto;
 
 /**
  * Legal characters for the unique ID.

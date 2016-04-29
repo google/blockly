@@ -23,6 +23,8 @@
 	"DISABLE_BLOCK": "Disactivar bloco",
 	"ENABLE_BLOCK": "Activar bloco",
 	"HELP": "Adjuta",
+	"UNDO": "Disfacer",
+	"REDO": "Refacer",
 	"CHAT": "Conversa con tu collaborator scribente in iste quadro!",
 	"AUTH": "Per favor autorisa iste application pro permitter de salveguardar tu travalio e pro permitter que tu lo divide con alteres.",
 	"ME": "Io",

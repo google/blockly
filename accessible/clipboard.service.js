@@ -1,12 +1,11 @@
-var app = app || {};
+var blocklyApp = blocklyApp || {};
 
-app.ClipboardService = ng.core
+blocklyApp.ClipboardService = ng.core
   .Class({
     constructor: function() {
       this.clipboardBlockXml;
       this.clipboardBlockSuperiorConnection;
       this.markedConnection;
-      // this.serviceId = Math.floor(Math.random() * (10 - 0 + 1)) + 0;
     },
     cut: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
@@ -23,7 +22,7 @@ app.ClipboardService = ng.core
       this.clipboardBlockNextConnection = block.nextConnection;
     },
     paste: function(connection) {
-      var blockOnProperWorkspace = Blockly.Xml.domToBlock(app.workspace,
+      var blockOnProperWorkspace = Blockly.Xml.domToBlock(blocklyApp.workspace,
           this.clipboardBlockXml_);
       switch (connection.type) {
         case Blockly.NEXT_STATEMENT:
@@ -39,7 +38,7 @@ app.ClipboardService = ng.core
     pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       var blockOnProperWorkspace =
-        Blockly.Xml.domToBlock(app.workspace, xml);
+        Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
       this.markedConnection.connect(
           blockOnProperWorkspace.outputConnection ||
           blockOnProperWorkspace.previousConnection);
@@ -68,9 +67,9 @@ app.ClipboardService = ng.core
         //     'the blocks are of compatible types: ' +
         //     connection.checkType_(blockConnection));
         if (result){
-          console.log("Blocks should be connected");
+          console.log('Blocks should be connected');
         } else {
-          console.log("Blocks should be connected");
+          console.log('Blocks should be connected');
         }
       }
       return result;

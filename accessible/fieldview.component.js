@@ -1,17 +1,17 @@
 /**
- * Blockly Demos: BlindBlockly
+ * Blockly Demos: AccessibleBlockly
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -19,49 +19,56 @@
 
 /**
  * @fileoverview Angular2 Component that details how a Blockly.Field is
- * rendered in the toolbox in BlindBlockly. Also handles any interactions
+ * rendered in the toolbox in AccessibleBlockly. Also handles any interactions
  * with the field.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-var app = app || {};
+var blocklyApp = blocklyApp || {};
 
-app.FieldView = ng.core
+blocklyApp.FieldView = ng.core
   .Component({
     selector: 'field-view',
     template: `
-    <!-- html representation of a field -->
-    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isTextInput(field)' id='{{createId(listItem)}}'>
-      <input [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
+    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isTextInput(field)' id='{{treeService.createId(listItem)}}'>
+      <input #input id='{{treeService.createId(input)}}' [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
+      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-input', input.id))}}
     </li>
-    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isDropdown(field)' id='{{createId(listItem)}}'>
-      <select [ngModel]='field.getValue()' (ngModelChange)='handleDropdownChange(field,$event)'>
-      <option value='NO_ACTION' selected>select an option</option>
-      <option *ngFor='#optionValue of getOptions(field)' selected='{{isSelected(field, optionValue)}}' [value]='optionValue'>{{optionText[optionValue]}}</option>
-      </select>
+    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isDropdown(field)' id='{{treeService.createId(listItem)}}'>
+      <label #label id='{{treeService.createId(label)}}'>current argument value: {{field.getText()}}</label>
+      <ol role='group'  [attr.aria-level]='level+1'>
+        <li #option *ngFor='#optionValue of getOptions(field)' id='{{treeService.createId(option)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
+          <button #optionButton id='{{treeService.createId(optionButton)}}' (click)='handleDropdownChange(field,optionValue)'>{{optionText[optionValue]}} button</button>
+        </li>
+      </ol>
+      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-menu', label.id))}}
     </li>
-    <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' *ngIf='isCheckbox(field)'>
+    <li #listItem aria-selected=false role='treeitem' id='{{treeService.createId(listItem)}}' [attr.aria-level]='level' *ngIf='isCheckbox(field)'>
       //TODO(madeeha):CHECKBOX
     </li>
-    <li #listItem aria-selected=false role='treeitem' id='{{createId(listItem)}}' [attr.aria-level]='level' *ngIf='isTextField(field) && notWhitespace(field)'>
-      <label>
+    <li #listItem aria-selected=false role='treeitem' id='{{treeService.createId(listItem)}}' [attr.aria-level]='level' *ngIf='isTextField(field) && notWhitespace(field)'>
+      <label #label id='{{treeService.createId(label)}}'>
         {{field.getText()}}
       </label>
+      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-text', label.id))}}
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
   })
   .Class({
-    constructor: function() {
+    constructor: [blocklyApp.TreeService, function(_service) {
       this.optionText = {
         keys: []
       };
       this.text = 'Nothing';
-    },
-    createId: function(obj){
-      if (obj && obj.id){
-        return obj.id;
+      this.treeService = _service;
+    }],
+    setLabelledBy: function(item,string){
+      if (!item.getAttribute('aria-labelledby')) {
+        item.setAttribute('aria-labelledby', string);
       }
-      return Blockly.genUid();
+    },
+    concatStringWithSpaces: function(a,b){
+      return a + ' ' + b;
     },
     isTextInput: function(field) {
       return field instanceof Blockly.FieldTextInput;

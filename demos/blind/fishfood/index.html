@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset='utf-8'>
   <title>Blind Blockly Sandbox</title>
-  <script src="../../../blockly_compressed.js"></script>
-  <script src="../../../blocks_compressed.js"></script>
-  <script src="../../../javascript_compressed.js"></script>
-  <script src="../../../msg/js/en.js"></script>
 
-  <script src="music_player.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../../media/accessible.css">
+
+  <script src='../../../blockly_compressed.js'></script>
+  <script src='../../../blocks_compressed.js'></script>
+  <script src='../../../javascript_compressed.js'></script>
+  <script src='../../../msg/js/en.js'></script>
+
+  <script src='music_player.js'></script>
 
   <!-- Libraries for MIDI playback. -->
-  <script src="../../../MIDI.js/build/MIDI.js"></script>
-  <script src="../../../MIDI.js/inc/shim/Base64binary.js"></script>
+  <script src='../../../MIDI.js/build/MIDI.js'></script>
+  <script src='../../../MIDI.js/inc/shim/Base64binary.js'></script>
 
   <!-- 1. Load libraries -->
-    <!-- IE required polyfill -->
-    <script src="../libs/es6-shim.min.js"></script>
-    <script src="../libs/angular2-polyfills.min.js"></script>
-    <script src="../libs/Rx.umd.min.js"></script>
-    <script src="../libs/angular2-all.umd.min.js"></script>
-    <!--<script src="node_modules/systemjs/dist/system.js"></script>-->
+  <!-- IE required polyfill -->
+  <script src='../libs/es6-shim.min.js'></script>
+  <script src='../libs/angular2-polyfills.min.js'></script>
+  <script src='../libs/Rx.umd.min.js'></script>
+  <script src='../libs/angular2-all.umd.min.js'></script>
+  <!--<script src='node_modules/systemjs/dist/system.js'></script>-->
 
 
   <style>
@@ -32,15 +35,10 @@
       font-weight: normal;
       font-size: 140%;
     }
-    td {
-      vertical-align: top;
-    }
     textarea {
       width: 100%;
       height: 20em;
     }
-    .tree .activedescendant > label, .activedescendant > button, .activedescendant > input {outline: 2px dotted #00f;}
-    /*.tree .activedescendant {outline: 2px dotted #00f;}*/
   </style>
 </head>
 <body>
@@ -72,14 +70,14 @@
   function playAndGrade() {
     musicPlayer.reset();
     runCodeToPopulateBassLine();
-    musicPlayer.playBassLine(app.gameManager.validateLevel);
+    musicPlayer.playBassLine(blocklyApp.gameManager.validateLevel);
   }
   function runCodeToPopulateBassLine() {
     // Generate JavaScript code and run it.
     window.LoopTrap = 1000;
     Blockly.JavaScript.INFINITE_LOOP_TRAP =
-        'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
-    var code = Blockly.JavaScript.workspaceToCode(app.workspace);
+        'if (--window.LoopTrap == 0) throw \'Infinite loop.\';\n';
+    var code = Blockly.JavaScript.workspaceToCode(blocklyApp.workspace);
     Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
     try {
       eval(code);

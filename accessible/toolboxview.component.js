@@ -1,17 +1,17 @@
 /**
- * Blockly Demos: BlindBlockly
+ * Blockly Demos: AccessibleBlockly
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -19,39 +19,35 @@
 
 /**
  * @fileoverview Angular2 Component that details how a toolbox is rendered
- * in BlindBlockly. Also handles any interactions with the toolbox.
+ * in AccessibleBlockly. Also handles any interactions with the toolbox.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-var app = app || {};
+var blocklyApp = blocklyApp || {};
 
-app.ToolboxView = ng.core
+blocklyApp.ToolboxView = ng.core
 .Component({
   selector: 'toolbox-view',
   template: `
-<div class='treeview'>
-<h3 id='toolbox-title'>Toolbox</h3>
-<ol #tree id='toolbox-tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' tabIndex='0' role='group' class='tree' aria-labelledby='toolbox-title' (keydown)="treeService.keyHandler($event, tree)">
+<h3 #toolboxTitle id='blockly-toolbox-title'>Toolbox</h3>
+<ol #tree id='blockly-toolbox-tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' tabIndex='0' role='group' class='blocklyTree' [attr.aria-labelledby]='toolboxTitle.id' (keydown)='treeService.keyHandler($event, tree)'>
 {{treeService.setActiveAttribute(tree)}}
-<div *ngIf='toolboxHasCategories'>
-<li #parent role='treeitem' aria-level='1' aria-selected=false *ngFor='#category of makeArray(sightedToolbox); #i=index'>
+<li #parent *ngIf='toolboxHasCategories' role='treeitem' aria-level='1' aria-selected=false *ngFor='#category of makeArray(sightedToolbox); #i=index'>
   <label #name>{{category.attributes.name.value}}</label>
   {{labelCategory(name, i, tree)}}
-  <ol class='children' role='group' *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0'>
+  <ol  role='group' *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0'>
     <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
-    {{addClass(parent, 'hasChildren')}}
+    {{addClass(parent, 'blocklyHasChildren')}}
   </ol>
 </li>
-</div>
 <div *ngIf='!toolboxHasCategories'>
-  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService' [index]='i' [tree]='tree'></toolbox-tree-view>
+  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index' [level]=1 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService' [index]='i' [tree]='tree'></toolbox-tree-view>
 </div>
 </ol>
-</div>
   `,
-  directives: [app.ToolboxTreeView],
+  directives: [blocklyApp.ToolboxTreeView],
 })
 .Class({
-  constructor: [app.TreeService, function(_service) {
+  constructor: [blocklyApp.TreeService, function(_service) {
     console.log('toolbox constructor');
     var _this = this;
     var xhttp = new XMLHttpRequest();
@@ -60,7 +56,7 @@ app.ToolboxView = ng.core
         _this.sightedToolbox = xhttp.responseXML;
       }
     };
-    xhttp.open('GET', 'ToolboxXml.xml', true);
+    xhttp.open('GET', blocklyApp.gameManager.levelToolboxes[blocklyApp.gameManager.level], true);
     xhttp.send();
 
     this.toolboxCategories = [];
@@ -74,19 +70,19 @@ app.ToolboxView = ng.core
       while (parent != null && parent.tagName != 'LI') {
 	     parent = parent.parentNode;
       }
-      parent.setAttribute("aria-label", h2.innerText);
+      parent.setAttribute('aria-label', h2.innerText);
       parent.id = 'toolbox-tree-node'+i;
       if (i == 0 && tree.getAttribute('aria-activedescendant') == 'toolbox-tree-node0') {
-        this.addClass(parent, 'activedescendant');
+        this.addClass(parent, 'blocklyActiveDescendant');
         this.treeService.setActiveDesc(parent, tree.id);
-        parent.setAttribute("aria-selected", "true");
+        parent.setAttribute('aria-selected', 'true');
       }
   },
   addClass: function(node, classText) {
     //ensure that node doesn't have class already in it
     var classList = node.className;
     if (classList) {
-      classList = classList.split(" ");
+      classList = classList.split(' ');
     } else {
       classList = [];
     }

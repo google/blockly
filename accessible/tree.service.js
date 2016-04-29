@@ -1,96 +1,140 @@
-var app = app || {};
+var blocklyApp = blocklyApp || {};
 
-app.TreeService = ng.core
+blocklyApp.TreeService = ng.core
   .Class({
-    constructor: function(){
-      console.log("making a new tree service");
+  	constructor: function(){
+      console.log('making a new tree service');
       this.activeDesc_={};
       this.previousKey_;
-      this.inDropdown = false;
-    },
+      this.trees = document.getElementsByClassName('blocklyTree');
+  	},
     createId: function(obj){
       if (obj && obj.id){
         return obj.id;
       }
-      return Blockly.genUid();
+      return 'blockly-' + Blockly.genUid();
     },
     setActiveAttribute: function(tree){
-      if (!tree.getAttribute('aria-activedescendant')){
-        console.log("setting tree active descendant");
+      if (!document.getElementById(tree.getAttribute('aria-activedescendant'))){
+        console.log('setting tree active descendant');
         tree.setAttribute('aria-activedescendant', tree.id+'-node0');
       }
     },
     setActiveDesc: function(node, id) {
-      console.log("setting active descendant for tree " + id);
+      console.log('setting active descendant for tree ' + id);
       this.activeDesc_[id] = node;
     },
     getActiveDesc: function(id){
       return this.activeDesc_[id];
     },
     updateSelectedNode: function(node, tree, keepFocus){
-      console.log("updating node: " + node.id);
+      console.log('updating node: ' + node.id);
       var treeId = tree.id;
       var activeDesc = this.getActiveDesc(treeId);
       if (activeDesc) {
-        activeDesc.classList.remove("activedescendant");
+        activeDesc.classList.remove('blocklyActiveDescendant');
       } else {
-        console.log("updateSelectedNode: there is no active descendant");
+        console.log('updateSelectedNode: there is no active descendant');
       }
-      node.classList.add("activedescendant");
-      tree.setAttribute("aria-activedescendant",node.id);
+      node.classList.add('blocklyActiveDescendant');
+      tree.setAttribute('aria-activedescendant',node.id);
       this.setActiveDesc(node, treeId);
-      node.setAttribute("aria-selected","true");
+      node.setAttribute('aria-selected','true');
+
       //make sure keyboard focus is on tree as a whole
       //in case before the user was editing a block and keyboard focus got shifted.
-
       if(keepFocus){
         tree.focus();
       }
     },
+    workspaceButtonKeyHandler: function(e, treeId){
+      console.log(e.keyCode);
+      console.log('inside TreeService');
+      switch(e.keyCode){
+        case 9:
+          //16,9: shift, tab
+          if (e.shiftKey){
+            console.log('shifttabbing');
+            //if the previous key is shift, we're shift-tabbing mode
+            this.goToPreviousTree(treeId,e);
+          } else {
+            //if previous key isn't shift, we're tabbing
+            this.goToNextTree(treeId,e);
+          }
+          break;
+      }
+      this.previousKey_=e.keyCode;
+    },
+    goToNextTree: function(treeId,e){
+      var next = false;
+      for (var i=0; i<this.trees.length; i++){
+        if (next){
+          this.trees[i].focus();
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        if (this.trees[i].id == treeId){
+          next = true;
+        }
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    goToPreviousTree: function(treeId, e){
+      if (treeId == this.trees[0].id){
+        return;
+      }
+      //otherwise, go to the previous tree class
+      var next = false;
+      for (var i=(this.trees.length - 1); i>=0; i--){
+        if (next){
+          this.trees[i].focus();
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        if (this.trees[i].id == treeId){
+          next = true;
+        }
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    },
     keyHandler: function(e, tree){
-        //console.log(document.activeElement);
         var treeId = tree.id;
         var node = this.getActiveDesc(treeId);
         if (!node){
-          console.log("KeyHandler: no active descendant");
+          console.log('KeyHandler: no active descendant');
         }
         console.log(e.keyCode);
-        console.log("inside TreeService");
+        console.log('inside TreeService');
         switch(e.keyCode){
           case 9:
             //16,9: shift, tab
-            if (this.previousKey_ == 16){
+            if (e.shiftKey){
+              console.log('shifttabbing');
               //if the previous key is shift, we're shift-tabbing mode
-              //we want to go to the level buttons
-              //this should actually happen by default given the way our app is designed.
+              this.goToPreviousTree(treeId,e);
             } else {
               //if previous key isn't shift, we're tabbing
               //we want to go to the run code button
-              if (app.runCodeButton){
-                app.runCodeButton.focus();
-              }
-              e.preventDefault();
-              e.stopPropagation();
+              this.goToNextTree(treeId,e);
             }
-            break;
-          case 27:
-            //escape key: no longer in dropdown mode
-            this.inDropdown = false;
             break;
           case 37:
-            if (this.inDropdown) {
-              this.inDropdown = false;
-              break;
-            }
             //left-facing arrow: go out a level, if possible. If not, do nothing
             e.preventDefault();
             e.stopPropagation();
-            console.log("in left arrow section");
+            console.log('in left arrow section');
             var nextNode = node.parentNode;
-            while (nextNode.className != "treeview" && nextNode.tagName != 'LI') {
+            if (node.tagName == 'BUTTON' || node.tagName == 'INPUT'){
               nextNode = nextNode.parentNode;
             }
-            if (nextNode.className == "treeview" || nextNode == null){
+            while (nextNode && nextNode.className != 'treeview' && nextNode.tagName != 'LI') {
+              nextNode = nextNode.parentNode;
+            }
+            if (nextNode.className == 'treeview' || nextNode == null){
               return;
             }
             this.updateSelectedNode(nextNode, tree);
@@ -99,75 +143,60 @@ app.TreeService = ng.core
             //up-facing arrow: go up a level, if possible. If not, do nothing
             e.preventDefault();
             e.stopPropagation();
-            console.log("node passed in: " + node.id);
+            console.log('node passed in: ' + node.id);
             var prevSibling = this.getPreviousSibling(node);
             if (prevSibling && prevSibling.tagName != 'H1'){
               this.updateSelectedNode(prevSibling, tree);
             } else {
-              console.log("no previous sibling");
+              console.log('no previous sibling');
             }
             break;
           case 39:
-            //right-facing arrow: go in a level, if possible. If not, do nothing
-            if (this.inDropdown) {
-              this.inDropdown = false;
-              break;
-            }
-
             e.preventDefault();
             e.stopPropagation();
-            console.log("in right arrow section");
+            console.log('in right arrow section');
             var firstChild = this.getFirstChild(node);
             if (firstChild){
               this.updateSelectedNode(firstChild, tree);
             } else {
-              console.log("no valid child");
+              console.log('no valid child');
             }
             break;
           case 40:
-            //down-facing arrow: if the previous key was an Alt key, we want to do an Alt+Down to open a dropdown
-            if (this.previousKey_ == 18 || this.inDropdown){
-              this.inDropdown = true;
-              break;
-            }
-
             //down-facing arrow: go down a level, if possible. If not, do nothing
-            //TODO(madeeha): should stop when done with all items at that level. Currently continues
+            console.log('preventing propogation');
             e.preventDefault();
             e.stopPropagation();
             var nextSibling = this.getNextSibling(node);
             if (nextSibling){
               this.updateSelectedNode(nextSibling, tree);
             } else {
-              console.log("no next sibling");
+              console.log('no next sibling');
             }
             break;
           case 13:
-            //if we've pressed enter or escape and I'm in dropdown mode, I no longer want to be in dropdown mode
-            if (this.inDropdown) {
-              this.inDropdown = false;
-              break;
-            }
             //if I've pressed enter, I want to interact with a child
-            console.log("enter is pressed");
+            console.log('enter is pressed');
             var activeDesc = this.getActiveDesc(treeId);
+            // if (activeDesc.tagName == 'BUTTON') {
+            //   activeDesc.click();
+            // }
+            // if (activeDesc.tagName == 'INPUT'){
+            //       activeDesc.focus();
+            // }
             if (activeDesc){
               var children = activeDesc.children;
               var child = children[0];
-              if (children.length == 1 && child.tagName == 'INPUT' || child.tagName == 'SELECT'){
-                child.focus();
-                //if it's a dropdown, we want the dropdown to open
-                //test this in all browsers, it may break in some places.
-                //also see if it's better for screen readers if you put the focus on it after it opens.
-                if(child.tagName == 'SELECT') {
-                  var event;
-                  event = document.createEvent('MouseEvents');
-                  event.initMouseEvent('mousedown', true, true, window);
-                  child.dispatchEvent(event);
+              if (children.length == 1 && (child.tagName == 'INPUT' || child.tagName == 'BUTTON')){
+                if (child.tagName == 'BUTTON'){
+                  child.click();
+                }
+                if (child.tagName == 'INPUT'){
+                  child.focus();
                 }
               }
             } else {
-              console.log("no activeDesc");
+              console.log('no activeDesc');
             }
         }
         this.previousKey_=e.keyCode;
@@ -207,7 +236,7 @@ app.TreeService = ng.core
           while (parent != null && parent.tagName != 'OL'){
             if (parent.nextElementSibling){
               var node = parent.nextElementSibling;
-              if (node.tabIndex == 0){
+              if (node.tagName == 'LI'){
                 return node;
               } else {
                 return this.getFirstChild(node);
@@ -230,16 +259,16 @@ app.TreeService = ng.core
         } else {
           var parent = element.parentNode;
           while (parent != null){
-            console.log("looping");
+            console.log('looping');
             if (parent.tagName == 'OL') {
               break;
             }
             if (parent.previousElementSibling){
-              console.log("parent has a sibling!");
+              console.log('parent has a sibling!');
               var node = parent.previousElementSibling;
               if (node.tagName == 'LI'){
                 //the parent has a list sibling!
-                console.log("return the sibling of the parent!");
+                console.log('return the sibling of the parent!');
                 return node;
               } else {
                 //find the last list element child of the sibling of the parent
@@ -254,7 +283,7 @@ app.TreeService = ng.core
       },
       getLastChild: function(element){
         if (element == null){
-          console.log("no element");
+          console.log('no element');
           return element;
         } else {
           var childList = element.children;
@@ -269,7 +298,7 @@ app.TreeService = ng.core
               }
             }
           }
-          console.log("no last child");
+          console.log('no last child');
           return null;
         }
       },

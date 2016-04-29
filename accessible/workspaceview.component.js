@@ -28,15 +28,17 @@ blocklyApp.WorkspaceView = ng.core
     selector: 'workspace-view',
     viewInjector: [blocklyApp.ClipboardService],
     template: `
-  <label><h3 #workspaceTitle id='blockly-workspace-title'>Workspace</h3></label>
-  <div id='blockly-workspace-toolbar' (keydown)='treeService.workspaceButtonKeyHandler($event, activeElementId())'>
-  </div>
-  <div *ngIf='workspace'>
-  <ol #tree id={{makeId(i)}} *ngFor='#block of workspace.topBlocks_; #i=index' tabIndex='0' class='blocklyTree' role='group' [attr.aria-labelledby]='workspaceTitle.id' (keydown)='treeService.keyHandler($event, tree)'>
-    {{treeService.setActiveAttribute(tree)}}
-    <tree-view [level]=1 [block]='block' [isTopBlock]='true' [topBlockIndex]='i' [parentId]='tree.id'></tree-view>
-  </ol>
-  </div>
+      <label>
+        <h3 #workspaceTitle id='blockly-workspace-title'>Workspace</h3>
+      </label>
+      <div id='blockly-workspace-toolbar' (keydown)='treeService.workspaceButtonKeyHandler($event, activeElementId())'>
+      </div>
+      <div *ngIf='workspace'>
+        <ol #tree id={{makeId(i)}} *ngFor='#block of workspace.topBlocks_; #i=index' tabIndex='0' class='blocklyTree' role='group' [attr.aria-labelledby]='workspaceTitle.id' (keydown)='treeService.keyHandler($event, tree)'>
+          {{treeService.setActiveAttribute(tree)}}
+          <tree-view [level]=1 [block]='block' [isTopBlock]='true' [topBlockIndex]='i' [parentId]='tree.id'></tree-view>
+        </ol>
+      </div>
     `,
     directives: [blocklyApp.TreeView],
   })

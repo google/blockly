@@ -156,3 +156,17 @@ Blockly.JavaScript['robot_manipulation_set_gripper'] = function(block) {
   var code = 'robot.setGripper(' + side + ', ' + action + ', ' + max_effort + ');\n';
   return code;
 };
+
+Blockly.JavaScript['robot_manipulation_is_gripper_open'] = function(block) {
+  var dropdown_gripper = block.getFieldValue('GRIPPER') || '';
+  var dropdown_state = block.getFieldValue('STATE') || 'OPEN';
+  var code = '';
+  var order = Blockly.JavaScript.ORDER_FUNCTION_CALL;
+  if (dropdown_state === 'OPEN') {
+    code = 'robot.isGripperOpen(' + Blockly.JavaScript.quote_(dropdown_gripper) + ')';
+  } else {
+    code = '!robot.isGripperOpen(' + Blockly.JavaScript.quote_(dropdown_gripper) + ')';
+    order = Blockly.JavaScript.ORDER_LOGICAL_NOT;
+  }
+  return [code, order];
+};

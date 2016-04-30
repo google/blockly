@@ -256,3 +256,15 @@ Blockly.Blocks['robot_manipulation_set_gripper'] = {
     this.setHelpUrl('');
   }
 };
+
+Blockly.Blocks['robot_manipulation_is_gripper_open'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["is left gripper", "LEFT"], ["is right gripper", "RIGHT"]]), "GRIPPER")
+        .appendField(new Blockly.FieldDropdown([["open", "OPEN"], ["closed", "CLOSED"]]), "STATE");
+    this.setOutput(true, "Boolean");
+    this.setColour(20);
+    this.setTooltip('Checks if the gripper is open or closed.');
+    this.setHelpUrl('');
+  }
+};

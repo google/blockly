@@ -656,25 +656,6 @@ Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps, margin) {
  */
 Blockly.Flyout.prototype.clearOldBlocks_ = function() {
   // Delete any blocks from a previous showing.
-  var blocks = this.workspace_.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.workspace == this.workspace_) {
-      block.dispose(false, false);
-    }
-  }
-  // Delete any background buttons from a previous showing.
-  for (var j = 0, rect; rect = this.buttons_[j]; j++) {
-    goog.dom.removeNode(rect);
-  }
-  this.buttons_.length = 0;
-};
-
-/**
- * Delete blocks and background buttons from a previous showing of the flyout.
- * @private
- */
-Blockly.Flyout.prototype.clearOldBlocks_ = function() {
-  // Delete any blocks from a previous showing.
   var oldBlocks = this.workspace_.getTopBlocks(false);
   for (var i = 0, block; block = oldBlocks[i]; i++) {
     if (block.workspace == this.workspace_) {

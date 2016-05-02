@@ -271,7 +271,7 @@ function helper_searchDB(db, x, y, radius, shared_workspace) {
   var tempConn = helper_createConnection(x, y,
       Blockly.NEXT_STATEMENT, shared_workspace);
   tempConn.sourceBlock_ = helper_makeSourceBlock(shared_workspace);
-  var closest = db.searchForClosest(tempConn, radius, {x: 0, y: 0});
+  var closest = db.searchForClosest(tempConn, radius, 0, 0);
   return closest.connection;
 }
 

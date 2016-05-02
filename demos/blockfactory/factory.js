@@ -99,8 +99,8 @@ function updateLanguage() {
  */
 function formatJson_(blockType, rootBlock) {
   var JS = {};
-  // Type is not used by Blockly, but may be used by a loader.
-  JS.type = blockType;
+  // ID is not used by Blockly, but may be used by a loader.
+  JS.id = blockType;
   // Generate inputs.
   var message = [];
   var args = [];
@@ -786,7 +786,7 @@ function init() {
                                mainWorkspace);
   } else {
     var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
+    Blockly.Xml.domToWorkspace(mainWorkspace, Blockly.Xml.textToDom(xml));
   }
   mainWorkspace.clearUndo();
 

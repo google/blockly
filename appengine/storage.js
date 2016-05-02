@@ -60,7 +60,7 @@ BlocklyStorage.restoreBlocks = function(opt_workspace) {
   if ('localStorage' in window && window.localStorage[url]) {
     var workspace = opt_workspace || Blockly.getMainWorkspace();
     var xml = Blockly.Xml.textToDom(window.localStorage[url]);
-    Blockly.Xml.domToWorkspace(xml, workspace);
+    Blockly.Xml.domToWorkspace(workspace, xml);
   }
 };
 
@@ -181,7 +181,7 @@ BlocklyStorage.loadXml_ = function(xml, workspace) {
   }
   // Clear the workspace to avoid merge.
   workspace.clear();
-  Blockly.Xml.domToWorkspace(xml, workspace);
+  Blockly.Xml.domToWorkspace(workspace, xml);
 };
 
 /**

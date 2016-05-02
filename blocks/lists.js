@@ -643,6 +643,50 @@ Blockly.Blocks['lists_getSublist'] = {
   }
 };
 
+
+Blockly.Blocks['lists_sort'] = {
+  /**
+   * Block for sorting a list.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "id": "list_sort",
+      "message0": Blockly.Msg.LISTS_SORT_TITLE,
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "TYPE",
+          "options": [
+            [Blockly.Msg.LISTS_SORT_TYPE_NUMERIC, "numeric"],
+            [Blockly.Msg.LISTS_SORT_TYPE_TEXT, "text"],
+            [Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE, "ignoreCase"] 
+          ]
+        },
+        {
+          "type": "field_dropdown",
+          "name": "DIRECTION",
+          "options": [
+            [Blockly.Msg.LISTS_SORT_ORDER_ASCENDING, "1"],
+            [Blockly.Msg.LISTS_SORT_ORDER_DESCENDING, "-1"]
+          ]
+        },
+        {
+          "type": "input_value",
+          "name": "LIST",
+          "check": "Array"
+        }
+      ],
+      //"previousStatement": null,
+      //"nextStatement": null,
+      "output": "Array",
+      "colour": Blockly.Blocks.lists.HUE,
+      "tooltip": Blockly.Msg.LISTS_SORT_TOOLTIP,
+      "helpUrl": Blockly.Msg.LISTS_SORT_HELPURL
+    });
+  }
+};
+
 Blockly.Blocks['lists_split'] = {
   /**
    * Block for splitting text into a list, or joining a list into text.

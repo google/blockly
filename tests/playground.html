@@ -13,15 +13,6 @@
 <script src="../generators/javascript/colour.js"></script>
 <script src="../generators/javascript/variables.js"></script>
 <script src="../generators/javascript/procedures.js"></script>
-<script src="../generators/python.js"></script>
-<script src="../generators/python/logic.js"></script>
-<script src="../generators/python/loops.js"></script>
-<script src="../generators/python/math.js"></script>
-<script src="../generators/python/text.js"></script>
-<script src="../generators/python/lists.js"></script>
-<script src="../generators/python/colour.js"></script>
-<script src="../generators/python/variables.js"></script>
-<script src="../generators/python/procedures.js"></script>
 <script src="../generators/php.js"></script>
 <script src="../generators/php/logic.js"></script>
 <script src="../generators/php/loops.js"></script>
@@ -31,15 +22,15 @@
 <script src="../generators/php/colour.js"></script>
 <script src="../generators/php/variables.js"></script>
 <script src="../generators/php/procedures.js"></script>
-<script src="../generators/lua.js"></script>
-<script src="../generators/lua/logic.js"></script>
-<script src="../generators/lua/loops.js"></script>
-<script src="../generators/lua/math.js"></script>
-<script src="../generators/lua/text.js"></script>
-<script src="../generators/lua/lists.js"></script>
-<script src="../generators/lua/colour.js"></script>
-<script src="../generators/lua/variables.js"></script>
-<script src="../generators/lua/procedures.js"></script>
+<script src="../generators/python.js"></script>
+<script src="../generators/python/logic.js"></script>
+<script src="../generators/python/loops.js"></script>
+<script src="../generators/python/math.js"></script>
+<script src="../generators/python/text.js"></script>
+<script src="../generators/python/lists.js"></script>
+<script src="../generators/python/colour.js"></script>
+<script src="../generators/python/variables.js"></script>
+<script src="../generators/python/procedures.js"></script>
 <script src="../generators/dart.js"></script>
 <script src="../generators/dart/logic.js"></script>
 <script src="../generators/dart/loops.js"></script>
@@ -49,6 +40,15 @@
 <script src="../generators/dart/colour.js"></script>
 <script src="../generators/dart/variables.js"></script>
 <script src="../generators/dart/procedures.js"></script>
+<script src="../generators/lua.js"></script>
+<script src="../generators/lua/logic.js"></script>
+<script src="../generators/lua/loops.js"></script>
+<script src="../generators/lua/math.js"></script>
+<script src="../generators/lua/text.js"></script>
+<script src="../generators/lua/lists.js"></script>
+<script src="../generators/lua/colour.js"></script>
+<script src="../generators/lua/variables.js"></script>
+<script src="../generators/lua/procedures.js"></script>
 <script src="../msg/messages.js"></script>
 <script src="../blocks/logic.js"></script>
 <script src="../blocks/loops.js"></script>
@@ -87,7 +87,8 @@ function start() {
               startScale: 1.0,
               maxScale: 4,
               minScale: .25,
-              scaleSpeed: 1.1}
+              scaleSpeed: 1.1
+             },
           });
   // Restore previously displayed text.
   if (sessionStorage) {
@@ -117,7 +118,7 @@ function toXml() {
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(xml, workspace);
+  Blockly.Xml.domToWorkspace(workspace, xml);
   taChange();
 }
 
@@ -187,7 +188,7 @@ function spaghetti(n) {
   xml = '<xml xmlns="http://www.w3.org/1999/xhtml">' + xml + '</xml>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(dom, workspace);
+  Blockly.Xml.domToWorkspace(workspace, dom);
   console.timeEnd('Spaghetti domToWorkspace');
 }
 var spaghettiXml = [
@@ -510,6 +511,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="lists_sort"></block>
     </category>
     <category name="Colour" colour="20">
       <block type="colour_picker"></block>
@@ -578,9 +580,9 @@ h1 {
     &nbsp;
     <input type="button" value="To PHP" onclick="toCode('PHP')">
     &nbsp;
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
     <input type="button" value="To Dart" onclick="toCode('Dart')">
+    &nbsp;
+    <input type="button" value="To Lua" onclick="toCode('Lua')">
     <br>
     <textarea id="importExport" style="width: 26%; height: 12em"
       onchange="taChange();" onkeyup="taChange()"></textarea>

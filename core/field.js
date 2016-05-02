@@ -118,22 +118,15 @@ Blockly.Field.NBSP = '\u00A0';
 Blockly.Field.prototype.EDITABLE = true;
 
 /**
- * Attach this field to a block.
+ * Install this field on a block.
  * @param {!Blockly.Block} block The block containing this field.
  */
-Blockly.Field.prototype.setSourceBlock = function(block) {
-  goog.asserts.assert(!this.sourceBlock_, 'Field already bound to a block.');
-  this.sourceBlock_ = block;
-};
-
-/**
- * Install this field on a block.
- */
-Blockly.Field.prototype.init = function() {
-  if (this.fieldGroup_) {
+Blockly.Field.prototype.init = function(block) {
+  if (this.sourceBlock_) {
     // Field has already been initialized once.
     return;
   }
+  this.sourceBlock_ = block;
   // Build the DOM.
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   if (!this.visible_) {
@@ -151,7 +144,7 @@ Blockly.Field.prototype.init = function() {
       this.fieldGroup_);
 
   this.updateEditable();
-  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
+  block.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseUpWrapper_ =
       Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
   // Force a render.

@@ -66,7 +66,7 @@ Blockly.ConnectionDB.prototype.addConnection = function(connection) {
  * Find the given connection.
  * Starts by doing a binary search to find the approximate location, then
  *     linearly searches nearby for the exact connection.
- * @param {!Blockly.Connection} conn The connection to find.
+ * @param {Blockly.Connection} conn The connection to find.
  * @return {number} The index of the connection, or -1 if the connection was
  *     not found.
  */
@@ -105,7 +105,7 @@ Blockly.ConnectionDB.prototype.findConnection = function(conn) {
  * Finds a candidate position for inserting this connection into the list.
  * This will be in the correct y order but makes no guarantees about ordering in
  *     the x axis.
- * @param {!Blockly.Connection} connection The connection to insert.
+ * @param {Blockly.Connection} connection The connection to insert.
  * @return {number} The candidate index.
  * @private
  */
@@ -223,17 +223,19 @@ Blockly.ConnectionDB.prototype.isInYRange_ = function(index, baseY, maxRadius) {
 
 /**
  * Find the closest compatible connection to this connection.
- * @param {!Blockly.Connection} conn The connection searching for a compatible
+ * @param {Blockly.Connection} conn The connection searching for a compatible
  *     mate.
  * @param {number} maxRadius The maximum radius to another connection.
- * @param {!goog.math.Coordinate} dxy Offset between this connection's location
+ * @param {number} dx Horizontal offset between this connection's location
+ *     in the database and the current location (as a result of dragging).
+ * @param {number} dy Vertical offset between this connection's location
  *     in the database and the current location (as a result of dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties:' connection' which is either another connection or null,
  *     and 'radius' which is the distance.
  */
-Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
-    dxy) {
+Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius, dx,
+    dy) {
   // Don't bother.
   if (!this.length) {
     return {connection: null, radius: maxRadius};
@@ -243,8 +245,8 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   var baseY = conn.y_;
   var baseX = conn.x_;
 
-  conn.x_ = baseX + dxy.x;
-  conn.y_ = baseY + dxy.y;
+  conn.x_ = baseX + dx;
+  conn.y_ = baseY + dy;
 
   // findPositionForConnection finds an index for insertion, which is always
   // after any block with the same y index.  We want to search both forward

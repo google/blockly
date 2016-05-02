@@ -45,7 +45,7 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    var languageTree = Blockly.Options.parseToolboxTree(options['toolbox']);
+    var languageTree = Blockly.Options.parseToolboxTree_(options['toolbox']);
     var hasCategories = Boolean(languageTree &&
         languageTree.getElementsByTagName('category').length);
     var hasTrashcan = options['trashcan'];
@@ -85,12 +85,15 @@ Blockly.Options = function(options) {
     pathToMedia = options['path'] + 'media/';
   }
 
+  var enableRealtime = !!options['realtime'];
+  var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
+
   this.RTL = !!options['rtl'];
   this.collapse = hasCollapse;
   this.comments = hasComments;
   this.disable = hasDisable;
   this.readOnly = readOnly;
-  this.maxBlocks = options['maxBlocks'] || Infinity;
+  this.maxBlocks =  options['maxBlocks'] || Infinity;
   this.pathToMedia = pathToMedia;
   this.hasCategories = hasCategories;
   this.hasScrollbars = hasScrollbars;
@@ -100,6 +103,8 @@ Blockly.Options = function(options) {
   this.languageTree = languageTree;
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
+  this.enableRealtime = enableRealtime;
+  this.realtimeOptions = realtimeOptions;
 };
 
 /**
@@ -187,8 +192,9 @@ Blockly.Options.parseGridOptions_ = function(options) {
  * Parse the provided toolbox tree into a consistent DOM format.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  * @return {Node} DOM tree of blocks, or null.
+ * @private
  */
-Blockly.Options.parseToolboxTree = function(tree) {
+Blockly.Options.parseToolboxTree_ = function(tree) {
   if (tree) {
     if (typeof tree != 'string') {
       if (typeof XSLTProcessor == 'undefined' && tree.outerHTML) {

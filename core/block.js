@@ -52,9 +52,9 @@ goog.require('goog.string');
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
-  this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
+  this.id = (opt_id && !Blockly.Block.getById(opt_id)) ?
       opt_id : Blockly.genUid();
-  workspace.blockDB_[this.id] = this;
+  Blockly.Block.BlockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
   /** @type {Blockly.Connection} */
@@ -178,8 +178,6 @@ Blockly.Block.prototype.dispose = function(healStack) {
   // Remove this block from the workspace's list of top-most blocks.
   if (this.workspace) {
     this.workspace.removeTopBlock(this);
-    // Remove from block database.
-    delete this.workspace.blockDB_[this.id];
     this.workspace = null;
   }
 
@@ -206,6 +204,8 @@ Blockly.Block.prototype.dispose = function(healStack) {
     }
     connections[i].dispose();
   }
+  // Remove from block database.
+  delete Blockly.Block.BlockDB_[this.id];
   Blockly.Events.enable();
 };
 
@@ -709,24 +709,21 @@ Blockly.Block.prototype.setTitleValue = function(newValue, name) {
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
+  if (this.previousConnection) {
+    goog.asserts.assert(!this.previousConnection.isConnected(),
+        'Must disconnect previous statement before removing connection.');
+    this.previousConnection.dispose();
+    this.previousConnection = null;
+  }
   if (newBoolean) {
+    goog.asserts.assert(!this.outputConnection,
+        'Remove output connection prior to adding previous connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
-    if (!this.previousConnection) {
-      goog.asserts.assert(!this.outputConnection,
-          'Remove output connection prior to adding previous connection.');
-      this.previousConnection =
-          new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
-    }
+    this.previousConnection =
+        new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
     this.previousConnection.setCheck(opt_check);
-  } else {
-    if (this.previousConnection) {
-      goog.asserts.assert(!this.previousConnection.isConnected(),
-          'Must disconnect previous statement before removing connection.');
-      this.previousConnection.dispose();
-      this.previousConnection = null;
-    }
   }
 };
 
@@ -737,22 +734,19 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
+  if (this.nextConnection) {
+    goog.asserts.assert(!this.nextConnection.isConnected(),
+        'Must disconnect next statement before removing connection.');
+    this.nextConnection.dispose();
+    this.nextConnection = null;
+  }
   if (newBoolean) {
     if (opt_check === undefined) {
       opt_check = null;
     }
-    if (!this.nextConnection) {
-      this.nextConnection =
-          new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
-    }
+    this.nextConnection =
+        new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
     this.nextConnection.setCheck(opt_check);
-  } else {
-    if (this.nextConnection) {
-      goog.asserts.assert(!this.nextConnection.isConnected(),
-          'Must disconnect next statement before removing connection.');
-      this.nextConnection.dispose();
-      this.nextConnection = null;
-    }
   }
 };
 
@@ -764,24 +758,21 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
  *     (e.g. variable get).
  */
 Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
+  if (this.outputConnection) {
+    goog.asserts.assert(!this.outputConnection.isConnected(),
+        'Must disconnect output value before removing connection.');
+    this.outputConnection.dispose();
+    this.outputConnection = null;
+  }
   if (newBoolean) {
+    goog.asserts.assert(!this.previousConnection,
+        'Remove previous connection prior to adding output connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
-    if (!this.outputConnection) {
-      goog.asserts.assert(!this.previousConnection,
-          'Remove previous connection prior to adding output connection.');
-      this.outputConnection =
-          new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
-    }
+    this.outputConnection =
+        new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
     this.outputConnection.setCheck(opt_check);
-  } else {
-    if (this.outputConnection) {
-      goog.asserts.assert(!this.outputConnection.isConnected(),
-          'Must disconnect output value before removing connection.');
-      this.outputConnection.dispose();
-      this.outputConnection = null;
-    }
   }
 };
 
@@ -1302,4 +1293,19 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
   event.recordNew();
   Blockly.Events.fire(event);
+};
+
+/**
+ * Database of all blocks.
+ * @private
+ */
+Blockly.Block.BlockDB_ = Object.create(null);
+
+/**
+ * Find the block with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Block.getById = function(id) {
+  return Blockly.Block.BlockDB_[id] || null;
 };

@@ -7,8 +7,7 @@
 			"MedShot",
 			"아라",
 			"JaapDeKleine",
-			"Sjoerddebruin",
-			"Lemondoge"
+			"Sjoerddebruin"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -29,8 +28,6 @@
 	"DISABLE_BLOCK": "Blok uitschakelen",
 	"ENABLE_BLOCK": "Blok inschakelen",
 	"HELP": "Hulp",
-	"UNDO": "Ongedaan maken",
-	"REDO": "Opnieuw",
 	"CHAT": "Chat met iemand die ook aan het werk is via dit venster!",
 	"AUTH": "Sta deze app toe om uw werk op te slaan het uw werk te delen.",
 	"ME": "Ik",

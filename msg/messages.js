@@ -271,9 +271,9 @@ Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false. Returns 
 
 /// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value https://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/Logic#values';
-/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.\n{{Identical|True}}
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
-/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.\n{{Identical|False}}
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = 'false';
 /// tooltip - Indicates that the block returns either of the two possible [https://en.wikipedia.org/wiki/Truth_value logical values].
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = 'Returns either true or false.';
@@ -974,6 +974,23 @@ Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
 /// https://github.com/google/blockly/wiki/Lists#getting-a-sublist] for more information.
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
+
+/// url - Infomation describing sorting a list.
+Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#sorting-a-list';
+/// Sort a list of items.
+Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list
+Blockly.Msg.LISTS_SORT_TOOLTIP = 'Sort a list.';
+/// sorting order or direction from low to high values
+Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = 'ascending';
+/// sorting order or direction from high to low values
+Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = 'descending';
+/// sorting by treating each item as a numeric value.
+Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = 'numeric';
+/// sorting by treating each item as text.
+Blockly.Msg.LISTS_SORT_TYPE_TEXT = 'text';
+/// sorting by treating each item as text, ignoring differences in case.
+Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = 'text ignore case';
 
 /// url - Information describing splitting text into a list, or joining a list into text.
 Blockly.Msg.LISTS_SPLIT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists';

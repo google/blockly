@@ -64,13 +64,6 @@ Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
 Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 
 /**
- * The method of indenting.  Defaults to two spaces, but language generators
- * may override this to increase indent or change to tabs.
- * @type {string}
- */
-Blockly.Generator.prototype.INDENT = '  ';
-
-/**
  * Generate code for all blocks in the workspace to the specified language.
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
  * @return {string} Generated code.
@@ -275,6 +268,13 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
 };
 
 /**
+ * The method of indenting.  Defaults to two spaces, but language generators
+ * may override this to increase indent or change to tabs.
+ * @type {string}
+ */
+Blockly.Generator.prototype.INDENT = '  ';
+
+/**
  * Comma-separated list of reserved words.
  * @type {string}
  * @private
@@ -312,7 +312,7 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
  * The code gets output when Blockly.Generator.finish() is called.
  *
  * @param {string} desiredName The desired name of the function (e.g., isPrime).
- * @param {!Array.<string>} code A list of statements.  Use '  ' for indents.
+ * @param {!Array.<string>} code A list of Python statements.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
  * @private
@@ -322,15 +322,8 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
     var functionName =
         this.variableDB_.getDistinctName(desiredName, this.NAME_TYPE);
     this.functionNames_[desiredName] = functionName;
-    var codeText = code.join('\n').replace(
+    this.definitions_[desiredName] = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
-    // Change all '  ' indents into the desired indent.
-    var oldCodeText;
-    while (oldCodeText != codeText) {
-      oldCodeText = codeText;
-      codeText = codeText.replace(/^((  )*)  /gm, '$1' + this.INDENT);
-    }
-    this.definitions_[desiredName] = codeText;
   }
   return this.functionNames_[desiredName];
 };

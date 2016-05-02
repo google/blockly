@@ -268,17 +268,10 @@ Blockly.Xml.textToDom = function(text) {
 
 /**
  * Decode an XML DOM and create blocks on the workspace.
- * @param {!Element} xml XML DOM.
  * @param {!Blockly.Workspace} workspace The workspace.
+ * @param {!Element} xml XML DOM.
  */
-Blockly.Xml.domToWorkspace = function(xml, workspace) {
-  if (xml instanceof Blockly.Workspace) {
-    var swap = xml;
-    xml = workspace;
-    workspace = swap;
-    console.warn('Deprecated call to Blockly.Xml.domToWorkspace, ' +
-                 'swap the arguments.');
-  }
+Blockly.Xml.domToWorkspace = function(workspace, xml) {
   var width;  // Not used in LTR.
   if (workspace.RTL) {
     width = workspace.getWidth();
@@ -296,7 +289,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     var xmlChild = xml.childNodes[i];
     var name = xmlChild.nodeName.toLowerCase();
     if (name == 'block' || name == 'shadow') {
-      var block = Blockly.Xml.domToBlock(xmlChild, workspace);
+      var block = Blockly.Xml.domToBlock(workspace, xmlChild);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
       if (!isNaN(blockX) && !isNaN(blockY)) {
@@ -313,21 +306,14 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * @param {!Element} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
+ * @param {!Element} xmlBlock XML block element.
  * @return {!Blockly.Block} The root block created.
  */
-Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
-  if (xmlBlock instanceof Blockly.Workspace) {
-    var swap = xmlBlock;
-    xmlBlock = workspace;
-    workspace = swap;
-    console.warn('Deprecated call to Blockly.Xml.domToBlock, ' +
-                 'swap the arguments.');
-  }
+Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
   // Create top-level block.
   Blockly.Events.disable();
-  var topBlock = Blockly.Xml.domToBlockHeadless_(xmlBlock, workspace);
+  var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock);
   if (workspace.rendered) {
     // Hide connections to speed up assembly.
     topBlock.setConnectionsHidden(true);
@@ -361,12 +347,12 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
- * @param {!Element} xmlBlock XML block element.
  * @param {!Blockly.Workspace} workspace The workspace.
+ * @param {!Element} xmlBlock XML block element.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
+Blockly.Xml.domToBlockHeadless_ = function(workspace, xmlBlock) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
@@ -461,8 +447,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
           input.connection.setShadowDom(childShadowNode);
         }
         if (childBlockNode) {
-          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
-              workspace);
+          blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
+              childBlockNode);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
@@ -483,8 +469,8 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
             // This could happen if there is more than one XML 'next' tag.
             throw 'Next statement is already connected.';
           }
-          blockChild = Blockly.Xml.domToBlockHeadless_(childBlockNode,
-              workspace);
+          blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
+              childBlockNode);
           if (!blockChild.previousConnection) {
             throw 'Next block does not have previous statement.';
           }

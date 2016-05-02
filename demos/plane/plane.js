@@ -65,7 +65,7 @@ Plane.LANGUAGE_NAME = {
   'tr': 'Türkçe',
   'uk': 'Українська',
   'vi': 'Tiếng Việt',
-  'zh-hans': '简体中文',
+  'zh-hans': '簡體中文',
   'zh-hant': '正體中文'
 };
 
@@ -143,11 +143,11 @@ Plane.loadBlocks = function(defaultXml) {
     // Language switching stores the blocks during the reload.
     delete window.sessionStorage.loadOnceBlocks;
     var xml = Blockly.Xml.textToDom(loadOnce);
-    Blockly.Xml.domToWorkspace(xml, Plane.workspace);
+    Blockly.Xml.domToWorkspace(Plane.workspace, xml);
   } else if (defaultXml) {
     // Load the editor with default starting blocks.
     var xml = Blockly.Xml.textToDom(defaultXml);
-    Blockly.Xml.domToWorkspace(xml, Plane.workspace);
+    Blockly.Xml.domToWorkspace(Plane.workspace, xml);
   }
   Plane.workspace.clearUndo();
 };

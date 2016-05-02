@@ -61,7 +61,7 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldCheckbox.prototype.init = function(block) {
-  if (this.fieldGroup_) {
+  if (this.sourceBlock_) {
     // Checkbox has already been initialized once.
     return;
   }

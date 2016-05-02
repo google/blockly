@@ -202,9 +202,9 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       new Blockly.Events.Ui(this.block_, 'mutatorOpen', !visible, visible));
   if (visible) {
     // Create the bubble.
-    this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
-        this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
+    this.bubble_ = new Blockly.Bubble(this.block_.workspace,
+        this.createEditor_(), this.block_.svgPath_,
+        this.iconX_, this.iconY_, null, null);
     var tree = this.workspace_.options.languageTree;
     if (tree) {
       this.workspace_.flyout_.init(this.workspace_);

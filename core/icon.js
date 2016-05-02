@@ -27,7 +27,6 @@
 goog.provide('Blockly.Icon');
 
 goog.require('goog.dom');
-goog.require('goog.math.Coordinate');
 
 
 /**
@@ -57,11 +56,16 @@ Blockly.Icon.prototype.SIZE = 17;
 Blockly.Icon.prototype.bubble_ = null;
 
 /**
- * Absolute coordinate of icon's center.
- * @type {goog.math.Coordinate}
+ * Absolute X coordinate of icon's center.
  * @private
  */
-Blockly.Icon.prototype.iconXY_ = null;
+Blockly.Icon.prototype.iconX_ = 0;
+
+/**
+ * Absolute Y coordinate of icon's centre.
+ * @private
+ */
+Blockly.Icon.prototype.iconY_ = 0;
 
 /**
  * Create the icon on the block.
@@ -172,12 +176,14 @@ Blockly.Icon.prototype.renderIcon = function(cursorX) {
 
 /**
  * Notification that the icon has moved.  Update the arrow accordingly.
- * @param {!goog.math.Coordinate} xy Absolute location.
+ * @param {number} x Absolute horizontal location.
+ * @param {number} y Absolute vertical location.
  */
-Blockly.Icon.prototype.setIconLocation = function(xy) {
-  this.iconXY_ = xy;
+Blockly.Icon.prototype.setIconLocation = function(x, y) {
+  this.iconX_ = x;
+  this.iconY_ = y;
   if (this.isVisible()) {
-    this.bubble_.setAnchorLocation(xy);
+    this.bubble_.setAnchorLocation(x, y);
   }
 };
 
@@ -189,18 +195,17 @@ Blockly.Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
   var blockXY = this.block_.getRelativeToSurfaceXY();
   var iconXY = Blockly.getRelativeXY_(this.iconGroup_);
-  var newXY = new goog.math.Coordinate(
-      blockXY.x + iconXY.x + this.SIZE / 2,
-      blockXY.y + iconXY.y + this.SIZE / 2);
-  if (!goog.math.Coordinate.equals(this.getIconLocation(), newXY)) {
-    this.setIconLocation(newXY);
+  var newX = blockXY.x + iconXY.x + this.SIZE / 2;
+  var newY = blockXY.y + iconXY.y + this.SIZE / 2;
+  if (newX !== this.iconX_ || newY !== this.iconY_) {
+    this.setIconLocation(newX, newY);
   }
 };
 
 /**
  * Returns the center of the block's icon relative to the surface.
- * @return {!goog.math.Coordinate} Object with x and y properties.
+ * @return {!Object} Object with x and y properties.
  */
 Blockly.Icon.prototype.getIconLocation = function() {
-  return this.iconXY_;
+  return {x: this.iconX_, y: this.iconY_};
 };

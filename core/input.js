@@ -84,9 +84,8 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
   if (goog.isString(field)) {
     field = new Blockly.FieldLabel(/** @type {string} */ (field));
   }
-  field.setSourceBlock(this.sourceBlock_);
   if (this.sourceBlock_.rendered) {
-    field.init();
+    field.init(this.sourceBlock_);
   }
   field.name = opt_name;
 

@@ -535,7 +535,7 @@ Blockly.Connection.prototype.disconnect = function() {
   var shadow = parentConnection.getShadowDom();
   if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
     var blockShadow =
-        Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
+        Blockly.Xml.domToBlock(parentBlock.workspace, shadow);
     if (blockShadow.outputConnection) {
       parentConnection.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {
@@ -543,9 +543,7 @@ Blockly.Connection.prototype.disconnect = function() {
     } else {
       throw 'Child block does not have output or previous statement.';
     }
-    if (blockShadow.initSvg) {
-      blockShadow.initSvg();
-    }
+    blockShadow.initSvg();
     blockShadow.render(false);
   }
 
@@ -664,14 +662,16 @@ Blockly.Connection.prototype.tighten_ = function() {
 /**
  * Find the closest compatible connection to this connection.
  * @param {number} maxLimit The maximum radius to another connection.
- * @param {!goog.math.Coordinate} dxy Offset between this connection's location
+ * @param {number} dx Horizontal offset between this connection's location
+ *     in the database and the current location (as a result of dragging).
+ * @param {number} dy Vertical offset between this connection's location
  *     in the database and the current location (as a result of dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
  *     properties:' connection' which is either another connection or null,
  *     and 'radius' which is the distance.
  */
-Blockly.Connection.prototype.closest = function(maxLimit, dxy) {
-  return this.dbOpposite_.searchForClosest(this, maxLimit, dxy);
+Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
+  return this.dbOpposite_.searchForClosest(this, maxLimit, dx, dy);
 };
 
 /**

@@ -180,9 +180,10 @@ Blockly.Comment.prototype.setVisible = function(visible) {
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
+        /** @type {!Blockly.Workspace} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_,
-        this.iconXY_, this.width_, this.height_);
+        this.iconX_, this.iconY_,
+        this.width_, this.height_);
     this.bubble_.registerResizeEvent(this, this.resizeBubble_);
     this.updateColour();
   } else {

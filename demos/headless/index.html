@@ -110,7 +110,7 @@
       }
       // Create a headless workspace.
       var workspace = new Blockly.Workspace();
-      Blockly.Xml.domToWorkspace(workspace, xml);
+      Blockly.Xml.domToWorkspace(xml, workspace);
       var code = Blockly.Python.workspaceToCode(workspace);
       document.getElementById('code_output').value = code;
     }

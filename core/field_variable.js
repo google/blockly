@@ -82,7 +82,7 @@ Blockly.FieldVariable.prototype.setValidator = function(handler) {
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldVariable.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+  if (this.fieldGroup_) {
     // Dropdown has already been initialized once.
     return;
   }

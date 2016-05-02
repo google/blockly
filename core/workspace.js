@@ -51,6 +51,8 @@ Blockly.Workspace = function(opt_options) {
   this.undoStack_ = [];
   /** @type {!Array.<!Blockly.Events.Abstract>} */
   this.redoStack_ = [];
+  /** @type {!Object} */
+  this.blockDB_ = Object.create(null);
 };
 
 /**
@@ -184,22 +186,6 @@ Blockly.Workspace.prototype.newBlock = function(prototypeName, opt_id) {
 };
 
 /**
- * Finds the block with the specified ID in this workspace.
- * @param {string} id ID of block to find.
- * @return {Blockly.Block} The matching block, or null if not found.
- */
-Blockly.Workspace.prototype.getBlockById = function(id) {
-  // If this O(n) function fails to scale well, maintain a hash table of IDs.
-  var blocks = this.getAllBlocks();
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.id == id) {
-      return block;
-    }
-  }
-  return null;
-};
-
-/**
  * The number of blocks that may be added to the workspace before reaching
  *     the maxBlocks.
  * @return {number} Number of blocks left.
@@ -287,6 +273,15 @@ Blockly.Workspace.prototype.fireChangeListener = function(event) {
   for (var i = 0, func; func = this.listeners_[i]; i++) {
     func(event);
   }
+};
+
+/**
+ * Find the block on this workspace with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Workspace.prototype.getBlockById = function(id) {
+  return this.blockDB_[id] || null;
 };
 
 /**

@@ -80,11 +80,10 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
  * @param {!Blockly.Block} block The block containing this text.
  */
 Blockly.FieldDropdown.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+  if (this.fieldGroup_) {
     // Dropdown has already been initialized once.
     return;
   }
-
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
   this.arrow_.appendChild(document.createTextNode(

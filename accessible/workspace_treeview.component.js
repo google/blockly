@@ -74,7 +74,7 @@ blocklyApp.TreeView = ng.core
             <field-view *ngFor="#field of getInfo(inputBlock)" [field]="field"></field-view>
             <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
             <li #inputList [attr.aria-level]="level+1" id="{{treeService.createId(inputList)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.keyHandler($event, tree)">
-              {{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
+              {{getInputTypeLabel(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
               <select aria-label="insert input menu" (change)="inputMenuSelected(inputBlock.connection, $event)">
                 <option value="NO_ACTION" selected>select an action</option>
                 <option value="MARK_SPOT">mark this spot</option>
@@ -175,7 +175,7 @@ blocklyApp.TreeView = ng.core
 
       return this.infoBlocks[block.id];
     },
-    inputType: function(connection) {
+    getInputTypeLabel: function(connection) {
       if (connection.check_) {
         return connection.check_.join(', ').toUpperCase();
       } else {

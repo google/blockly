@@ -55,7 +55,7 @@ blocklyApp.ToolboxTreeView = ng.core
             <field-view [attr.aria-level]="level+1" *ngFor="#field of getInfo(inputBlock); #j=index" [field]="field" [level]="level+1"></field-view>
             <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [displayBlockMenu]="false" [level]="level+1"></toolbox-tree-view>
             <li aria-selected=false #listItem1 role="treeitem" [attr.aria-level]="level+1" id="{{treeService.createId(listItem1)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
-              <label #label id="{{treeService.createId(label)}}">{{inputType(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:</label>
+              <label #label id="{{treeService.createId(label)}}">{{getInputTypeLabel(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:</label>
               {{setLabelledBy(listItem1, concatStringWithSpaces("blockly-argument-text", label.id))}}
             </li>
           </div>
@@ -142,7 +142,7 @@ blocklyApp.ToolboxTreeView = ng.core
 
       return this.infoBlocks[block.id];
     },
-    inputType: function(connection) {
+    getInputTypeLabel: function(connection) {
       if (connection.check_) {
         return connection.check_.join(', ').toUpperCase();
       } else {

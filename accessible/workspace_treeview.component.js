@@ -23,9 +23,6 @@
  * interactions with the blocks.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-
-var blocklyApp = blocklyApp || {};
-
 blocklyApp.TreeView = ng.core
   .Component({
     selector: 'tree-view',

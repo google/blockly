@@ -22,8 +22,6 @@
  * in AccessibleBlockly. Also handles any interactions with the toolbox.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-var blocklyApp = blocklyApp || {};
-
 blocklyApp.ToolboxView = ng.core
 .Component({
   selector: 'toolbox-view',

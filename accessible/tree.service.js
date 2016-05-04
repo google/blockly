@@ -21,9 +21,6 @@
  * @fileoverview Angular2 Service that handles all tree keyboard navigation.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-
-var blocklyApp = blocklyApp || {};
-
 blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {

@@ -23,9 +23,6 @@
  * with the blocks.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-
-var blocklyApp = blocklyApp || {};
-
 blocklyApp.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',

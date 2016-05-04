@@ -22,9 +22,6 @@
  * rendered in AccessibleBlockly.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-
-var blocklyApp = blocklyApp || {};
-
 blocklyApp.WorkspaceView = ng.core
   .Component({
     selector: 'workspace-view',

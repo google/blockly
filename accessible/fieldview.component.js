@@ -23,8 +23,6 @@
  * with the field.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-var blocklyApp = blocklyApp || {};
-
 blocklyApp.FieldView = ng.core
   .Component({
     selector: 'field-view',

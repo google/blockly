@@ -22,7 +22,6 @@
  * app is rendered on the page.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-var blocklyApp = blocklyApp || {};
 blocklyApp.workspace = blocklyApp.workspace || new Blockly.Workspace();
 //if the debug flag is true, print extra console.logs to help with debugging.
 blocklyApp.debug = false;

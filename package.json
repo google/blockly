@@ -1,23 +1,32 @@
 {
-  "name": "angular2-quickstart",
+  "name": "blockly",
   "version": "1.0.0",
+  "description": "Blockly is a library for building visual programming editors.",
+  "keywords": ["blockly"],
   "scripts": {
-    "start": "npm run lite",
-    "lite": "lite-server"
+    "lint": "jshint ."
   },
-  "license": "ISC",
-  "dependencies": {
-    "@angular/common": "2.0.0-rc.0",
-    "@angular/compiler": "2.0.0-rc.0",
-    "@angular/core": "2.0.0-rc.0",
-    "@angular/platform-browser": "2.0.0-rc.0",
-    "@angular/platform-browser-dynamic": "2.0.0-rc.0",
-    "reflect-metadata": "0.1.3",
-    "rxjs": "5.0.0-beta.6",
-    "zone.js": "0.6.12"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/google/blockly.git"
   },
+  "bugs": {
+    "url": "https://github.com/google/blockly/issues"
+  },
+  "homepage": "https://developers.google.com/blockly/",
+  "author": {
+    "name": "Neil Fraser"
+  },
+  "license": "Apache-2.0",
+  "private": true,
   "devDependencies": {
-    "concurrently": "^2.0.0",
-    "lite-server": "^2.2.0"
+    "jshint": "latest"
+  },
+  "jshintConfig": {
+    "globalstrict": true,
+    "predef": ["Blockly", "goog", "window", "document", "soy", "XMLHttpRequest"],
+    "sub": true,
+    "undef": true,
+    "unused": true
   }
 }

@@ -53,12 +53,12 @@ blocklyApp.FieldView = ng.core
     inputs: ['field', 'level', 'index', 'parentId'],
   })
   .Class({
-    constructor: [blocklyApp.TreeService, function(_service) {
+    constructor: [blocklyApp.TreeService, function(_treeService) {
       this.optionText = {
         keys: []
       };
       this.text = 'Nothing';
-      this.treeService = _service;
+      this.treeService = _treeService;
     }],
     setLabelledBy: function(item, id) {
       if (!item.getAttribute('aria-labelledby')) {

@@ -42,11 +42,11 @@ blocklyApp.WorkspaceView = ng.core
     directives: [blocklyApp.TreeView],
   })
   .Class({
-    constructor: [blocklyApp.TreeService, function(_service) {
+    constructor: [blocklyApp.TreeService, function(_treeService) {
       if (blocklyApp.workspace) {
         this.workspace = blocklyApp.workspace;
         this.level = blocklyApp.gameManager.level;
-        this.treeService = _service;
+        this.treeService = _treeService;
       }
     }],
     activeElementId: function() {

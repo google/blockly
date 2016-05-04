@@ -45,7 +45,7 @@ blocklyApp.ToolboxView = ng.core
   directives: [blocklyApp.ToolboxTreeView],
 })
 .Class({
-  constructor: [blocklyApp.TreeService, function(_service) {
+  constructor: [blocklyApp.TreeService, function(_treeService) {
     var _this = this;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -59,7 +59,7 @@ blocklyApp.ToolboxView = ng.core
 
     this.toolboxCategories = [];
     this.toolboxWorkspaces = {};
-    this.treeService = _service;
+    this.treeService = _treeService;
 
     this.toolboxHasCategories = false;
   }],

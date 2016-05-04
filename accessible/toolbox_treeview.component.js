@@ -70,11 +70,11 @@ blocklyApp.ToolboxTreeView = ng.core
   })
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
-                  function(_service, _service2) {
+                  function(_clipboardService, _treeService) {
       this.infoBlocks = {};
       this.nextBlock = {};
-      this.sharedClipboardService = _service;
-      this.treeService = _service2;
+      this.sharedClipboardService = _clipboardService;
+      this.treeService = _treeService;
     }],
     setLabelledBy: function(item, id) {
       if (!item.getAttribute('aria-labelledby')) {

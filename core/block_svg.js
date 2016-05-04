@@ -48,16 +48,31 @@ goog.require('goog.userAgent');
  */
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Create core elements for the block.
-  /** @type {SVGElement} */
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-  /** @type {SVGElement} */
+
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgPathDark_ = Blockly.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgGroup_);
-  /** @type {SVGElement} */
+
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgPath_ = Blockly.createSvgElement('path', {'class': 'blocklyPath'},
       this.svgGroup_);
-  /** @type {SVGElement} */
+
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgPathLight_ = Blockly.createSvgElement('path',
       {'class': 'blocklyPathLight'}, this.svgGroup_);
   this.svgPath_.tooltip = this;
@@ -104,7 +119,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     input.init();
   }
   var icons = this.getIcons();
-  for (var i = 0; i < icons.length; i++) {
+  for (i = 0; i < icons.length; i++) {
     icons[i].createIcon();
   }
   this.updateColour();
@@ -365,7 +380,8 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
 /**
  * Returns a bounding box describing the dimensions of this block
  * and any blocks stacked below it.
- * @return {!{height: number, width: number}} Object with height and width properties.
+ * @return {!{height: number, width: number}} Object with height and width
+ *    properties.
  */
 Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var height = this.height;
@@ -384,10 +400,10 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
 };
 
 /**
- * Returns the coordinates of a bounding box describing the dimensions of this block
- * and any blocks stacked below it.
+ * Returns the coordinates of a bounding box describing the dimensions of this
+ * block and any blocks stacked below it.
  * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
- *         Object with top left and bottom right coordinates of the bounding box.
+ *    Object with top left and bottom right coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY(this);
@@ -397,10 +413,12 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var bottomRight;
   if (this.RTL) {
     // Width has the tab built into it already so subtract it here.
-    topLeft = new goog.math.Coordinate(blockXY.x - (blockBounds.width - tab), blockXY.y);
+    topLeft = new goog.math.Coordinate(blockXY.x - (blockBounds.width - tab),
+        blockXY.y);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    bottomRight = new goog.math.Coordinate(blockXY.x + tab, blockXY.y + blockBounds.height);
+    bottomRight = new goog.math.Coordinate(blockXY.x + tab,
+        blockXY.y + blockBounds.height);
   } else {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
@@ -429,7 +447,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
   if (collapsed) {
     var icons = this.getIcons();
-    for (var i = 0; i < icons.length; i++) {
+    for (i = 0; i < icons.length; i++) {
       icons[i].setVisible(false);
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
@@ -446,7 +464,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     renderList[0] = this;
   }
   if (this.rendered) {
-    for (var i = 0, block; block = renderList[i]; i++) {
+    for (var j = 0, block; block = renderList[j]; j++) {
       block.render();
     }
     // Don't bump neighbours.
@@ -479,7 +497,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
       }
     }
   }
-  var i = list.indexOf(start);
+  i = list.indexOf(start);
   if (i == -1) {
     // No start location, start at the beginning or end.
     i = forward ? -1 : list.length;
@@ -774,12 +792,12 @@ Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
     myConnections[i].moveBy(dx, dy);
   }
   var icons = this.getIcons();
-  for (var i = 0; i < icons.length; i++) {
+  for (i = 0; i < icons.length; i++) {
     icons[i].computeIconLocation();
   }
 
   // Recurse through all blocks attached under this one.
-  for (var i = 0; i < this.childBlocks_.length; i++) {
+  for (i = 0; i < this.childBlocks_.length; i++) {
     this.childBlocks_[i].moveConnections_(dx, dy);
   }
 };
@@ -844,7 +862,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
   if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
     // Unrestricted dragging.
     var dxy = goog.math.Coordinate.difference(oldXY, this.dragStartXY_);
-    var group = this.getSvgRoot();
+    group = this.getSvgRoot();
     group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
     group.setAttribute('transform', group.translate_ + group.skew_);
     // Drag all the nested bubbles.
@@ -860,7 +878,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     var closestConnection = null;
     var localConnection = null;
     var radiusConnection = Blockly.SNAP_RADIUS;
-    for (var i = 0; i < myConnections.length; i++) {
+    for (i = 0; i < myConnections.length; i++) {
       var myConnection = myConnections[i];
       var neighbour = myConnection.closest(radiusConnection, dxy);
       if (neighbour.connection) {

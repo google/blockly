@@ -37,7 +37,10 @@ goog.require('goog.dom');
  * @constructor
  */
 Blockly.Connection = function(source, type) {
-  /** @type {!Blockly.Block} */
+  /**
+   * @type {!Blockly.Block}
+   * @private
+   */
   this.sourceBlock_ = source;
   /** @type {number} */
   this.type = type;
@@ -425,7 +428,6 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   }
   this.checkConnection_(otherConnection);
   // Determine which block is superior (higher in the source stack).
-  var parentBlock, childBlock;
   if (this.isSuperior()) {
     // Superior block.
     Blockly.Connection.connect_(this, otherConnection);
@@ -837,8 +839,6 @@ Blockly.Connection.prototype.unhideAll = function() {
 Blockly.Connection.prototype.highlight = function() {
   var steps;
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
-        Blockly.BlockSvg.TAB_WIDTH;
     steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
 
   } else {

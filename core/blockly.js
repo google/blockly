@@ -462,10 +462,10 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var bottomEdge = Math.max(contentY + contentHeight + viewHeight / 2,
                               contentY + viewHeight);
   } else {
-    var leftEdge = blockBox.x;
-    var rightEdge = leftEdge + blockBox.width;
-    var topEdge = blockBox.y;
-    var bottomEdge = topEdge + blockBox.height;
+    leftEdge = blockBox.x;
+    rightEdge = leftEdge + blockBox.width;
+    topEdge = blockBox.y;
+    bottomEdge = topEdge + blockBox.height;
   }
   var absoluteLeft = 0;
   if (!this.RTL && this.toolbox_) {

@@ -66,7 +66,7 @@ Blockly.FieldAngle.prototype.setValidator = function(handler) {
         if (v1 === undefined) {
           v1 = value;
         }
-        var v2 = Blockly.FieldAngle.angleValidator.call(this, v1);
+        v2 = Blockly.FieldAngle.angleValidator.call(this, v1);
         if (v2 === undefined) {
           v2 = v1;
         }
@@ -315,6 +315,6 @@ Blockly.FieldAngle.angleValidator = function(text) {
       n -= 360;
     }
     n = String(n);
-   }
+  }
   return n;
 };

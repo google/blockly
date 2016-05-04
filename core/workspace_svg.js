@@ -413,7 +413,7 @@ Blockly.WorkspaceSvg.prototype.traceOn = function(armed) {
   }
   if (armed) {
     this.traceWrapper_ = Blockly.bindEvent_(this.svgBlockCanvas_,
-        'blocklySelectChange', this, function() {this.traceOn_ = false});
+        'blocklySelectChange', this, function() {this.traceOn_ = false;});
   }
 };
 
@@ -486,7 +486,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
       if (!collide) {
         // Check for blocks in snap range to any of its connections.
         var connections = block.getConnections_(false);
-        for (var i = 0, connection; connection = connections[i]; i++) {
+        for (var j = 0, connection; connection = connections[j]; j++) {
           var neighbour = connection.closest(Blockly.SNAP_RADIUS,
               new goog.math.Coordinate(blockX, blockY));
           if (neighbour.connection) {
@@ -538,7 +538,6 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  * @return {boolean} True if event is in a delete area.
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
-  var isDelete = false;
   var xy = new goog.math.Coordinate(e.clientX, e.clientY);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {
@@ -809,7 +808,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
       }
     }
   }
-  for (var i = 0; i < topBlocks.length; i++) {
+  for (i = 0; i < topBlocks.length; i++) {
     addDeletableBlocks(topBlocks[i]);
   }
   var deleteOption = {

@@ -161,7 +161,7 @@ Blockly.Events.filter = function(queueIn, forward) {
     }
   }
   // Remove null events.
-  for (var i = queue.length - 1; i >= 0; i--) {
+  for (i = queue.length - 1; i >= 0; i--) {
     if (queue[i].isNull()) {
       queue.splice(i, 1);
     }
@@ -172,7 +172,7 @@ Blockly.Events.filter = function(queueIn, forward) {
   }
   // Move mutation events to the top of the queue.
   // Intentionally skip first event.
-  for (var i = 1, event; event = queue[i]; i++) {
+  for (var k = 1, event; event = queue[k]; k++) {
     if (event.type == Blockly.Events.CHANGE &&
         event.element == 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);
@@ -254,6 +254,7 @@ Blockly.Events.getDescendantIds_ = function(block) {
  * Decode the JSON into an event.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.Abstract} the event represented by the json.
  */
 Blockly.Events.fromJson = function(json, workspace) {
   var event;
@@ -274,7 +275,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.Ui(null);
       break;
     default:
-      throw 'Unknown event type.'
+      throw 'Unknown event type.';
   }
   event.fromJson(json);
   event.workspaceId = workspace.id;

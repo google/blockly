@@ -64,7 +64,7 @@ Blockly.FieldVariable.prototype.setValidator = function(handler) {
         if (v1 === undefined) {
           v1 = value;
         }
-        var v2 = Blockly.FieldVariable.dropdownChange.call(this, v1);
+        v2 = Blockly.FieldVariable.dropdownChange.call(this, v1);
         if (v2 === undefined) {
           v2 = v1;
         }
@@ -128,7 +128,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
     var variableList =
         Blockly.Variables.allVariables(this.sourceBlock_.workspace);
   } else {
-    var variableList = [];
+    variableList = [];
   }
   // Ensure that the currently selected variable is an option.
   var name = this.getText();

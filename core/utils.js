@@ -104,7 +104,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
       func.call(thisObject, e);
     };
   } else {
-    var wrapFunc = func;
+    wrapFunc = func;
   }
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];
@@ -295,11 +295,11 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
  * @param {boolean} selectable Whether elements on the page can be selected.
  */
 Blockly.setPageSelectable = function(selectable) {
-    if (selectable) {
-      Blockly.removeClass_(document.body, 'blocklyNonSelectable');
-    } else {
-      Blockly.addClass_(document.body, 'blocklyNonSelectable');
-    }
+  if (selectable) {
+    Blockly.removeClass_(document.body, 'blocklyNonSelectable');
+  } else {
+    Blockly.addClass_(document.body, 'blocklyNonSelectable');
+  }
 };
 
 /**
@@ -374,8 +374,8 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
       wordPrefix = len + 1;
     }
   }
-  for (var i = 1; i < array.length; i++) {
-    var letter = array[i][len];
+  for (i = 1; i < array.length; i++) {
+    letter = array[i][len];
     if (letter && letter != ' ') {
       return wordPrefix;
     }
@@ -409,8 +409,8 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
       wordPrefix = len + 1;
     }
   }
-  for (var i = 1; i < array.length; i++) {
-    var letter = array[i].charAt(array[i].length - len - 1);
+  for (i = 1; i < array.length; i++) {
+    letter = array[i].charAt(array[i].length - len - 1);
     if (letter && letter != ' ') {
       return wordPrefix;
     }
@@ -478,7 +478,7 @@ Blockly.tokenizeInterpolation = function(message) {
       }
     }
   }
-  var text = buffer.join('');
+  text = buffer.join('');
   if (text) {
     tokens.push(text);
   }
@@ -488,7 +488,7 @@ Blockly.tokenizeInterpolation = function(message) {
 /**
  * Generate a unique ID.  This should be globally unique.
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
- * @return {string}
+ * @return {string} A globally unique ID string.
  */
 Blockly.genUid = function() {
   var length = 20;

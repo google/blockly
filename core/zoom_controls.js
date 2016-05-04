@@ -131,7 +131,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
   zoomoutSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       workspace.options.pathToMedia + Blockly.SPRITE.url);
 
-  var clip = Blockly.createSvgElement('clipPath',
+  clip = Blockly.createSvgElement('clipPath',
       {'id': 'blocklyZoominClipPath' + rnd},
       this.svgGroup_);
   Blockly.createSvgElement('rect',
@@ -147,7 +147,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
   zoominSvg.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       workspace.options.pathToMedia + Blockly.SPRITE.url);
 
-  var clip = Blockly.createSvgElement('clipPath',
+  clip = Blockly.createSvgElement('clipPath',
       {'id': 'blocklyZoomresetClipPath' + rnd},
       this.svgGroup_);
   Blockly.createSvgElement('rect',

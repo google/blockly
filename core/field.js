@@ -254,11 +254,11 @@ Blockly.Field.prototype.render_ = function() {
       var width = Blockly.Field.cacheWidths_[key];
     } else {
       try {
-        var width = this.textElement_.getComputedTextLength();
+        width = this.textElement_.getComputedTextLength();
       } catch (e) {
         // MSIE 11 is known to throw "Unexpected call to method or property
         // access." if Blockly is hidden.
-        var width = this.textElement_.textContent.length * 8;
+        width = this.textElement_.textContent.length * 8;
       }
       if (Blockly.Field.cacheWidths_) {
         Blockly.Field.cacheWidths_[key] = width;
@@ -269,7 +269,7 @@ Blockly.Field.prototype.render_ = function() {
           width + Blockly.BlockSvg.SEP_SPACE_X);
     }
   } else {
-    var width = 0;
+    width = 0;
   }
   this.size_.width = width;
 };
@@ -450,7 +450,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
 /**
  * Return the absolute coordinates of the top-left corner of this field.
  * The origin (0,0) is the top-left corner of the page body.
- * @return {{!goog.math.Coordinate}} Object with .x and .y properties.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
  * @private
  */
 Blockly.Field.prototype.getAbsoluteXY_ = function() {

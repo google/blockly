@@ -109,7 +109,7 @@ Blockly.Xml.blockToDom = function(block) {
     element.appendChild(dataElement);
   }
 
-  for (var i = 0, input; input = block.inputList[i]; i++) {
+  for (i = 0; input = block.inputList[i]; i++) {
     var container;
     var empty = true;
     if (input.type == Blockly.DUMMY_INPUT) {
@@ -156,11 +156,11 @@ Blockly.Xml.blockToDom = function(block) {
 
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
-    var container = goog.dom.createDom('next', null,
+    container = goog.dom.createDom('next', null,
         Blockly.Xml.blockToDom(nextBlock));
     element.appendChild(container);
   }
-  var shadow = block.nextConnection && block.nextConnection.getShadowDom();
+  shadow = block.nextConnection && block.nextConnection.getShadowDom();
   if (shadow && (!nextBlock || !nextBlock.isShadow())) {
     container.appendChild(Blockly.Xml.cloneShadow_(shadow));
   }
@@ -337,7 +337,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].initSvg();
     }
-    for (var i = blocks.length - 1; i >= 0; i--) {
+    for (i = blocks.length - 1; i >= 0; i--) {
       blocks[i].render(false);
     }
     // Populating the connection database may be defered until after the blocks
@@ -386,7 +386,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Find any enclosed blocks or shadows in this tag.
     var childBlockNode = null;
     var childShadowNode = null;
-    var shadowActive = false;
     for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
          j++) {
       if (grandchildNode.nodeType == 1) {
@@ -400,7 +399,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Use the shadow block if there is no child block.
     if (!childBlockNode && childShadowNode) {
       childBlockNode = childShadowNode;
-      shadowActive = true;
     }
 
     var name = xmlChild.getAttribute('name');

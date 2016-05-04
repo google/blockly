@@ -43,15 +43,30 @@ Blockly.Workspace = function(opt_options) {
   this.options = opt_options || {};
   /** @type {boolean} */
   this.RTL = !!this.options.RTL;
-  /** @type {!Array.<!Blockly.Block>} */
+  /**
+   * @type {!Array.<!Blockly.Block>}
+   * @private
+   */
   this.topBlocks_ = [];
-  /** @type {!Array.<!Function>} */
+  /**
+   * @type {!Array.<!Function>}
+   * @private
+   */
   this.listeners_ = [];
-  /** @type {!Array.<!Blockly.Events.Abstract>} */
+  /**
+   * @type {!Array.<!Blockly.Events.Abstract>}
+   * @private
+   */
   this.undoStack_ = [];
-  /** @type {!Array.<!Blockly.Events.Abstract>} */
+  /**
+   * @type {!Array.<!Blockly.Events.Abstract>}
+   * @private
+   */
   this.redoStack_ = [];
-  /** @type {!Object} */
+  /**
+   * @type {!Object}
+   * @private
+   */
   this.blockDB_ = Object.create(null);
 };
 
@@ -204,14 +219,14 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
 Blockly.Workspace.prototype.undo = function(redo) {
   var inputStack = redo ? this.redoStack_ : this.undoStack_;
   var outputStack = redo ? this.undoStack_ : this.redoStack_;
-  var event = inputStack.pop();
-  if (!event) {
+  var inputEvent = inputStack.pop();
+  if (!inputEvent) {
     return;
   }
-  var events = [event];
+  var events = [inputEvent];
   // Do another undo/redo if the next one is of the same group.
-  while (inputStack.length && event.group &&
-      event.group == inputStack[inputStack.length - 1].group) {
+  while (inputStack.length && inputEvent.group &&
+      inputEvent.group == inputStack[inputStack.length - 1].group) {
     events.push(inputStack.pop());
   }
   // Push these popped events on the opposite stack.
@@ -220,7 +235,7 @@ Blockly.Workspace.prototype.undo = function(redo) {
   }
   events = Blockly.Events.filter(events, redo);
   Blockly.Events.recordUndo = false;
-  for (var i = 0, event; event = events[i]; i++) {
+  for (i = 0; event = events[i]; i++) {
     event.run(redo);
   }
   Blockly.Events.recordUndo = true;

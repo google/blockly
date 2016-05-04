@@ -108,7 +108,7 @@ blocklyApp.FieldView = ng.core
         return;
       }
       if (field instanceof Blockly.FieldVariable) {
-        console.log(field);
+        blocklyApp.debug && console.log(field);
         Blockly.FieldVariable.dropdownChange.call(field, text);
       } else {
         field.setValue(text);

@@ -52,7 +52,8 @@ Blockly.Blocks['text'] = {
     // Text block is trivial.  Use tooltip of parent block if it exists.
     this.setTooltip(function() {
       var parent = thisBlock.getParent();
-      return (parent && parent.tooltip) || Blockly.Msg.TEXT_TEXT_TOOLTIP;
+      return (parent && parent.getInputsInline() && parent.tooltip) ||
+          Blockly.Msg.TEXT_TEXT_TOOLTIP;
     });
   },
   /**

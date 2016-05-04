@@ -43,11 +43,3 @@ Blockly.FieldNumber = function(text, opt_validator) {
       opt_validator);
 };
 goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
-
-/**
- * Return the current value.
- * @return {number} Current value as a number
- */
-Blockly.FieldColour.prototype.getValue = function() {
-  return parseFloat(this.text_ || 0);
-};

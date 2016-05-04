@@ -349,7 +349,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     }, 1);
     topBlock.updateDisabled();
     // Fire an event to allow scrollbars to resize.
-    Blockly.fireUiEvent(window, 'resize');
+    Blockly.asyncSvgResize(workspace);
   }
   Blockly.Events.enable();
   if (Blockly.Events.isEnabled()) {

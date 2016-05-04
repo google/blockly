@@ -133,11 +133,36 @@ Blockly.svgSize = function(svg) {
 };
 
 /**
+ * Schedule a call to the resize handler.  Groups of simultaneous events (e.g.
+ * a tree of blocks being deleted) are merged into one call.
+ * @param {Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
+ */
+Blockly.asyncSvgResize = function(workspace) {
+  if (Blockly.svgResizePending_) {
+    return;
+  }
+  if (!workspace) {
+    workspace = Blockly.getMainWorkspace();
+  }
+  Blockly.svgResizePending_ = true;
+  setTimeout(function() {Blockly.svgResize(workspace);}, 0);
+};
+
+/**
+ * Flag indicating a resize event is scheduled.
+ * Used to fire only one resize after multiple changes.
+ * @type {boolean}
+ * @private
+ */
+Blockly.svgResizePending_ = false;
+
+/**
  * Size the SVG image to completely fill its container.
  * Record the height/width of the SVG image.
  * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
  */
 Blockly.svgResize = function(workspace) {
+  Blockly.svgResizePending_ = false;
   var mainWorkspace = workspace;
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;

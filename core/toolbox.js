@@ -267,7 +267,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   }
 
   // Fire a resize event since the toolbox may have changed width and height.
-  Blockly.fireUiEvent(window, 'resize');
+  Blockly.asyncSvgResize(this.workspace_);
 };
 
 /**
@@ -442,7 +442,7 @@ Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
   if (toolbox) {
     var resize = function() {
-      Blockly.fireUiEvent(window, 'resize');
+      Blockly.asyncSvgResize(toolbox.workspace_);
     };
     // Fire a resize event since the toolbox may have changed width.
     goog.events.listen(toolbox.tree_,

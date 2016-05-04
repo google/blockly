@@ -708,7 +708,7 @@ Blockly.WorkspaceSvg.prototype.cleanUp_ = function() {
   }
   Blockly.Events.setGroup(false);
   // Fire an event to allow scrollbars to resize.
-  Blockly.fireUiEvent(window, 'resize');
+  Blockly.asyncSvgResize(this);
 };
 
 /**

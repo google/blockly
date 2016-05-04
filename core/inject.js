@@ -263,7 +263,10 @@ Blockly.init_ = function(mainWorkspace) {
       });
 
   Blockly.bindEvent_(window, 'resize', null,
-                     function() {Blockly.svgResize(mainWorkspace);});
+      function() {
+        Blockly.hideChaff(true);
+        Blockly.asyncSvgResize(mainWorkspace);
+      });
 
   Blockly.inject.bindDocumentEvents_();
 
@@ -317,7 +320,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (goog.userAgent.IPAD) {
       Blockly.bindEvent_(window, 'orientationchange', document, function() {
-        Blockly.fireUiEvent(window, 'resize');
+        Blockly.asyncSvgResize();
       });
     }
   }

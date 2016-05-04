@@ -102,7 +102,7 @@ Blockly.Toolbox.prototype.init = function() {
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   document.body.appendChild(this.HtmlDiv);
 
-  // Clicking on toolbar closes popups.
+  // Clicking on toolbox closes popups.
   Blockly.bindEvent_(this.HtmlDiv, 'mousedown', this,
       function(e) {
         if (Blockly.isRightButton(e) || e.target == this.HtmlDiv) {
@@ -305,7 +305,7 @@ Blockly.Toolbox.prototype.clearSelection = function() {
 };
 
 /**
- * Return the deletion rectangle for this toolbar.
+ * Return the deletion rectangle for this toolbox.
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {

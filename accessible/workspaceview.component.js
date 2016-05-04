@@ -1,5 +1,5 @@
 /**
- * Blockly Demos: AccessibleBlockly
+ * AccessibleBlockly
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -18,9 +18,11 @@
  */
 
 /**
- * @fileoverview Angular2 Component that details how a Blockly.Workspace is rendered in AccessibleBlockly.
+ * @fileoverview Angular2 Component that details how a Blockly.Workspace is
+ * rendered in AccessibleBlockly.
  * @author madeeha@google.com (Madeeha Ghori)
  */
+
 var blocklyApp = blocklyApp || {};
 
 blocklyApp.WorkspaceView = ng.core
@@ -29,14 +31,14 @@ blocklyApp.WorkspaceView = ng.core
     viewInjector: [blocklyApp.ClipboardService],
     template: `
       <label>
-        <h3 #workspaceTitle id='blockly-workspace-title'>Workspace</h3>
+        <h3 #workspaceTitle id="blockly-workspace-title">Workspace</h3>
       </label>
-      <div id='blockly-workspace-toolbar' (keydown)='treeService.workspaceButtonKeyHandler($event, activeElementId())'>
+      <div id="blockly-workspace-toolbar" (keydown)="treeService.workspaceButtonKeyHandler($event, activeElementId())">
       </div>
-      <div *ngIf='workspace'>
-        <ol #tree id={{makeId(i)}} *ngFor='#block of workspace.topBlocks_; #i=index' tabIndex='0' class='blocklyTree' role='group' [attr.aria-labelledby]='workspaceTitle.id' (keydown)='treeService.keyHandler($event, tree)'>
+      <div *ngIf="workspace">
+        <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index" tabIndex="0" class="blocklyTree" role="group" [attr.aria-labelledby]="workspaceTitle.id" (keydown)="treeService.keyHandler($event, tree)">
           {{treeService.setActiveAttribute(tree)}}
-          <tree-view [level]=1 [block]='block' [isTopBlock]='true' [topBlockIndex]='i' [parentId]='tree.id'></tree-view>
+          <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id"></tree-view>
         </ol>
       </div>
     `,
@@ -50,10 +52,10 @@ blocklyApp.WorkspaceView = ng.core
         this.treeService = _service;
       }
     }],
-    activeElementId: function(){
+    activeElementId: function() {
       return document.activeElement.id;
     },
-    makeId: function(index){
-      return 'blockly-workspace-tree'+index;
+    makeId: function(index) {
+      return 'blockly-workspace-tree' + index;
     }
   });

@@ -1,5 +1,5 @@
 /**
- * Blockly Demos: AccessibleBlockly
+ * AccessibleBlockly
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -18,34 +18,37 @@
  */
 
 /**
- * @fileoverview Angular2 Component that details how the AccessibleBlockly app is rendered on the page.
+ * @fileoverview Angular2 Component that details how the AccessibleBlockly
+ * app is rendered on the page.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 var blocklyApp = blocklyApp || {};
 blocklyApp.workspace = blocklyApp.workspace || new Blockly.Workspace();
+//if the debug flag is true, print extra console.logs to help with debugging.
+blocklyApp.debug = false;
 
 blocklyApp.AppView = ng.core
   .Component({
     selector: 'blockly-app',
     template: `
     <table>
-    <tr>
-      <td class='blocklyTable'>
-        <toolbox-view>Loading Toolbox...</toolbox-view>
-      </td>
-      <td class='blocklyTable'>
-        <workspace-view>Loading Workspace...</workspace-view>
-      </td>
-    </tr>
+      <tr>
+        <td class="blocklyTable">
+          <toolbox-view>Loading Toolbox...</toolbox-view>
+        </td>
+        <td class="blocklyTable">
+          <workspace-view>Loading Workspace...</workspace-view>
+        </td>
+      </tr>
     </table>
-    <label id='blockly-block-summary' aria-hidden='true' hidden>block summary</label>
-    <label id='blockly-block-menu' aria-hidden='true' hidden>block action list</label>
-    <label id='blockly-argument-menu' aria-hidden='true' hidden>argument options list</label>
-    <label id='blockly-argument-input' aria-hidden='true' hidden>argument input</label>
-    <label id='blockly-argument-block-menu' aria-hidden='true' hidden>argument block action list</label>
-    <label id='blockly-argument-text' aria-hidden='true' hidden>text</label>
-    <label id='blockly-button' aria-hidden='true' hidden>button</label>
-    <label id='blockly-disabled' aria-hidden='true' hidden>unavailable</label>
+    <label id="blockly-block-summary" aria-hidden="true" hidden>block summary</label>
+    <label id="blockly-block-menu" aria-hidden="true" hidden>block action list</label>
+    <label id="blockly-argument-menu" aria-hidden="true" hidden>argument options list</label>
+    <label id="blockly-argument-input" aria-hidden="true" hidden>argument input</label>
+    <label id="blockly-argument-block-menu" aria-hidden="true" hidden>argument block action list</label>
+    <label id="blockly-argument-text" aria-hidden="true" hidden>text</label>
+    <label id="blockly-button" aria-hidden="true" hidden>button</label>
+    <label id="blockly-disabled" aria-hidden="true" hidden>unavailable</label>
     `,
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
     providers: [blocklyApp.ClipboardService, blocklyApp.TreeService],
@@ -53,9 +56,5 @@ blocklyApp.AppView = ng.core
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService, function(_service1, _service2) {
       this.treeService = _service2;
-    }],
-    log: function(obj) {
-      //TODO(madeeha): delete after development is finished
-      console.log(obj);
-    },
+    }]
   });

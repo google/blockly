@@ -1,5 +1,5 @@
 /**
- * Blockly Demos: AccessibleBlockly
+ * AccessibleBlockly
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -28,27 +28,26 @@ blocklyApp.ToolboxView = ng.core
 .Component({
   selector: 'toolbox-view',
   template: `
-<h3 #toolboxTitle id='blockly-toolbox-title'>Toolbox</h3>
-<ol #tree id='blockly-toolbox-tree' *ngIf='makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0' tabIndex='0' role='group' class='blocklyTree' [attr.aria-labelledby]='toolboxTitle.id' (keydown)='treeService.keyHandler($event, tree)'>
-{{treeService.setActiveAttribute(tree)}}
-<li #parent *ngIf='toolboxHasCategories' role='treeitem' aria-level='1' aria-selected=false *ngFor='#category of makeArray(sightedToolbox); #i=index'>
-  <label #name>{{category.attributes.name.value}}</label>
-  {{labelCategory(name, i, tree)}}
-  <ol  role='group' *ngIf='getToolboxWorkspace(category).topBlocks_.length > 0'>
-    <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(category).topBlocks_' [level]=2 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService'></toolbox-tree-view>
-    {{addClass(parent, 'blocklyHasChildren')}}
-  </ol>
-</li>
-<div *ngIf='!toolboxHasCategories'>
-  <toolbox-tree-view *ngFor='#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index' [level]=1 [block]='block' [displayBlockMenu]='true' [clipboardService]='sharedClipboardService' [index]='i' [tree]='tree'></toolbox-tree-view>
-</div>
-</ol>
+    <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
+    <ol #tree id="blockly-toolbox-tree" *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0" tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="toolboxTitle.id" (keydown)="treeService.keyHandler($event, tree)">
+    {{treeService.setActiveAttribute(tree)}}
+    <li #parent *ngIf="toolboxHasCategories" role="treeitem" aria-level="1" aria-selected=false *ngFor="#category of makeArray(sightedToolbox); #i=index">
+      <label #name>{{category.attributes.name.value}}</label>
+      {{labelCategory(name, i, tree)}}
+      <ol  role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
+        <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_" [level]=2 [block]="block" [displayBlockMenu]="true" [clipboardService]="sharedClipboardService"></toolbox-tree-view>
+        {{addClass(parent, "blocklyHasChildren")}}
+      </ol>
+    </li>
+    <div *ngIf="!toolboxHasCategories">
+      <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index" [level]=1 [block]="block" [displayBlockMenu]="true" [clipboardService]="sharedClipboardService" [index]="i" [tree]="tree"></toolbox-tree-view>
+    </div>
+    </ol>
   `,
   directives: [blocklyApp.ToolboxTreeView],
 })
 .Class({
   constructor: [blocklyApp.TreeService, function(_service) {
-    console.log('toolbox constructor');
     var _this = this;
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -56,7 +55,8 @@ blocklyApp.ToolboxView = ng.core
         _this.sightedToolbox = xhttp.responseXML;
       }
     };
-    xhttp.open('GET', blocklyApp.gameManager.levelToolboxes[blocklyApp.gameManager.level], true);
+    xhttp.open('GET', blocklyApp.gameManager
+      .levelToolboxes[blocklyApp.gameManager.level], true);
     xhttp.send();
 
     this.toolboxCategories = [];
@@ -65,21 +65,22 @@ blocklyApp.ToolboxView = ng.core
 
     this.toolboxHasCategories = false;
   }],
-  labelCategory: function(h2, i, tree){
-      var parent = h2.parentNode;
-      while (parent != null && parent.tagName != 'LI') {
-	     parent = parent.parentNode;
-      }
-      parent.setAttribute('aria-label', h2.innerText);
-      parent.id = 'toolbox-tree-node'+i;
-      if (i == 0 && tree.getAttribute('aria-activedescendant') == 'toolbox-tree-node0') {
-        this.addClass(parent, 'blocklyActiveDescendant');
-        this.treeService.setActiveDesc(parent, tree.id);
-        parent.setAttribute('aria-selected', 'true');
-      }
+  labelCategory: function(h2, i, tree) {
+    var parent = h2.parentNode;
+    while (parent != null && parent.tagName != 'LI') {
+      parent = parent.parentNode;
+    }
+    parent.setAttribute('aria-label', h2.innerText);
+    parent.id = 'toolbox-tree-node' + i;
+    if (i == 0 && tree.getAttribute('aria-activedescendant') ==
+      'toolbox-tree-node0') {
+      this.addClass(parent, 'blocklyActiveDescendant');
+      this.treeService.setActiveDesc(parent, tree.id);
+      parent.setAttribute('aria-selected', 'true');
+    }
   },
   addClass: function(node, classText) {
-    //ensure that node doesn't have class already in it
+    // ensure that node doesn't have class already in it
     var classList = node.className;
     if (classList) {
       classList = classList.split(' ');
@@ -87,40 +88,39 @@ blocklyApp.ToolboxView = ng.core
       classList = [];
     }
     var canAdd = true;
-    for (var i=0; i<classList.length; i++){
+    for (var i = 0; i < classList.length; i++) {
       if (classList[i] == classText) {
         canAdd = false;
       }
     }
-    //add class if it doesn't
+    // add class if it doesn't
     if (canAdd) {
-      if (classList.length == 0) {
-        node.className += classText;
-      } else {
+      if (classList.length) {
         node.className += (' ' + classText);
+      } else {
+        node.className += classText;
       }
     }
   },
   makeArray: function(val) {
     if (val) {
-      if (this.toolboxCategories.length > 0) {
+      if (this.toolboxCategories.length) {
         return this.toolboxCategories;
       } else {
         var categories = val.documentElement.getElementsByTagName('category');
-        if (categories.length > 0){
+        if (categories.length) {
           this.toolboxHasCategories = true;
           this.toolboxCategories = Array.from(categories);
           return this.toolboxCategories;
-        } else {
-          this.toolboxHasCategories = false;
-          this.toolboxCategories = Array.from(val.getElementsByTagName('xml'));
-          return this.toolboxCategories;
         }
+        this.toolboxHasCategories = false;
+        this.toolboxCategories = Array.from(val.getElementsByTagName('xml'));
+        return this.toolboxCategories;
       }
     }
   },
   getToolboxWorkspace: function(categoryNode) {
-    if (categoryNode.attributes.name){
+    if (categoryNode.attributes.name) {
       var catName = categoryNode.attributes.name.value;
     } else {
       var catName = 'no-category';
@@ -133,9 +133,6 @@ blocklyApp.ToolboxView = ng.core
       this.toolboxWorkspaces[catName] = categoryWorkspace;
       return this.toolboxWorkspaces[catName];
     }
-  },
-  log: function(obj) {
-    console.log(obj);
   }
 });
 

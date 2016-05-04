@@ -1,5 +1,5 @@
 /**
- * Blockly Demos: AccessibleBlockly
+ * AccessibleBlockly
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -29,27 +29,27 @@ blocklyApp.FieldView = ng.core
   .Component({
     selector: 'field-view',
     template: `
-    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isTextInput(field)' id='{{treeService.createId(listItem)}}'>
-      <input #input id='{{treeService.createId(input)}}' [ngModel]='field.getValue()' (ngModelChange)='field.setValue($event)'>
-      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-input', input.id))}}
+    <li #listItem aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isTextInput(field)" id="{{treeService.createId(listItem)}}">
+      <input #input id="{{treeService.createId(input)}}" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
+      {{setLabelledBy(listItem, concatStringWithSpaces("blockly-argument-input", input.id))}}
     </li>
-    <li #listItem aria-selected=false role='treeitem' [attr.aria-level]='level' *ngIf='isDropdown(field)' id='{{treeService.createId(listItem)}}'>
-      <label #label id='{{treeService.createId(label)}}'>current argument value: {{field.getText()}}</label>
-      <ol role='group'  [attr.aria-level]='level+1'>
-        <li #option *ngFor='#optionValue of getOptions(field)' id='{{treeService.createId(option)}}' role='treeitem' aria-selected=false [attr.aria-level]='level+1'>
-          <button #optionButton id='{{treeService.createId(optionButton)}}' (click)='handleDropdownChange(field,optionValue)'>{{optionText[optionValue]}} button</button>
+    <li #listItem aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isDropdown(field)" id="{{treeService.createId(listItem)}}">
+      <label #label id="{{treeService.createId(label)}}">current argument value: {{field.getText()}}</label>
+      <ol role="group"  [attr.aria-level]="level+1">
+        <li #option *ngFor="#optionValue of getOptions(field)" id="{{treeService.createId(option)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
+          <button #optionButton id="{{treeService.createId(optionButton)}}" (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}} button</button>
         </li>
       </ol>
-      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-menu', label.id))}}
+      {{setLabelledBy(listItem, concatStringWithSpaces("blockly-argument-menu", label.id))}}
     </li>
-    <li #listItem aria-selected=false role='treeitem' id='{{treeService.createId(listItem)}}' [attr.aria-level]='level' *ngIf='isCheckbox(field)'>
-      //TODO(madeeha):CHECKBOX
+    <li #listItem aria-selected=false role="treeitem" id="{{treeService.createId(listItem)}}" [attr.aria-level]="level" *ngIf="isCheckbox(field)">
+      //checkboxes not currently supported.
     </li>
-    <li #listItem aria-selected=false role='treeitem' id='{{treeService.createId(listItem)}}' [attr.aria-level]='level' *ngIf='isTextField(field) && notWhitespace(field)'>
-      <label #label id='{{treeService.createId(label)}}'>
+    <li #listItem aria-selected=false role="treeitem" id="{{treeService.createId(listItem)}}" [attr.aria-level]="level" *ngIf="isTextField(field) && hasVisibleText(field)">
+      <label #label id="{{treeService.createId(label)}}">
         {{field.getText()}}
       </label>
-      {{setLabelledBy(listItem, concatStringWithSpaces('blockly-argument-text', label.id))}}
+      {{setLabelledBy(listItem, concatStringWithSpaces("blockly-argument-text", label.id))}}
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
@@ -62,12 +62,12 @@ blocklyApp.FieldView = ng.core
       this.text = 'Nothing';
       this.treeService = _service;
     }],
-    setLabelledBy: function(item,string){
+    setLabelledBy: function(item, id) {
       if (!item.getAttribute('aria-labelledby')) {
-        item.setAttribute('aria-labelledby', string);
+        item.setAttribute('aria-labelledby', id);
       }
     },
-    concatStringWithSpaces: function(a,b){
+    concatStringWithSpaces: function(a, b) {
       return a + ' ' + b;
     },
     isTextInput: function(field) {
@@ -84,7 +84,7 @@ blocklyApp.FieldView = ng.core
           !(field instanceof Blockly.FieldDropdown) &&
           !(field instanceof Blockly.FieldCheckbox);
     },
-    notWhitespace: function(field) {
+    hasVisibleText: function(field) {
       var text = field.getText().trim();
       return !!text;
     },
@@ -100,10 +100,10 @@ blocklyApp.FieldView = ng.core
     },
     isSelected: function(field, value) {
       if (value == field.getValue()) {
-        //true will result in the 'selected' option being ENABLED
+        // true will result in the 'selected' option being ENABLED
         return 'true';
       }
-      //undefined will result in the 'selected' option being DISABLED
+      // undefined will result in the 'selected' option being DISABLED
     },
     handleDropdownChange: function(field, text) {
       if (text == 'NO_ACTION') {
@@ -115,9 +115,5 @@ blocklyApp.FieldView = ng.core
       } else {
         field.setValue(text);
       }
-    },
-    log: function(obj) {
-      //TODO(madeeha): delete after development is finished
-      console.log(obj);
-    },
+    }
   });

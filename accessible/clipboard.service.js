@@ -1,25 +1,51 @@
+/**
+ * AccessibleBlockly
+ *
+ * Copyright 2016 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License');
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview Angular2 Service deals with the clipboard and marked spots.
+ * @author madeeha@google.com (Madeeha Ghori)
+ */
+
 var blocklyApp = blocklyApp || {};
 
 blocklyApp.ClipboardService = ng.core
   .Class({
     constructor: function() {
-      this.clipboardBlockXml;
-      this.clipboardBlockSuperiorConnection;
-      this.markedConnection;
+      this.clipboardBlockXml_ = null;
+      this.clipboardBlockSuperiorConnection_ = null;
+      this.clipboardBlockNextConnection_ = null;
+      this.markedConnection_ = null;
     },
     cut: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
-      this.clipboardBlockSuperiorConnection = block.outputConnection ||
+      this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
           block.previousConnection;
-      this.clipboardBlockNextConnection = block.nextConnection;
+      this.clipboardBlockNextConnection_ = block.nextConnection;
       block.dispose(true);
-      console.log('cut');
+      blocklyApp.debug && console.log('cut');
     },
     copy: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
-      this.clipboardBlockSuperiorConnection = block.outputConnection ||
+      this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
           block.previousConnection;
-      this.clipboardBlockNextConnection = block.nextConnection;
+      this.clipboardBlockNextConnection_ = block.nextConnection;
+      blocklyApp.debug && console.log('copy');
     },
     paste: function(connection) {
       var blockOnProperWorkspace = Blockly.Xml.domToBlock(blocklyApp.workspace,
@@ -34,65 +60,51 @@ blocklyApp.ClipboardService = ng.core
         default:
           connection.connect(blockOnProperWorkspace.outputConnection);
       }
+      blocklyApp.debug && console.log('paste');
     },
     pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       var blockOnProperWorkspace =
-        Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      this.markedConnection.connect(
+          Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
+      this.markedConnection_.connect(
           blockOnProperWorkspace.outputConnection ||
           blockOnProperWorkspace.previousConnection);
+      blocklyApp.debug && console.log('paste to mark connection');
     },
     markConnection: function(connection) {
-      this.markedConnection = connection;
+      this.markedConnection_ = connection;
+      blocklyApp.debug && console.log('mark connection');
     },
-    isCompatibleWithConnection_: function(blockConnection, connection, debug) {
-      //the connection and blockConnection exist
+    isCompatibleWithConnection_: function(blockConnection, connection) {
+      // the connection and blockConnection exist
       if (!connection || !blockConnection) {
         return false;
       }
 
-      //the types match and it's the right kind of connection
+      // the types match and it's the right kind of connection
       var result = Blockly.OPPOSITE_TYPE[blockConnection.type] ==
-            connection.type &&
-            connection.checkType_(blockConnection);
+          connection.type && connection.checkType_(blockConnection);
 
-      if (debug) {
-        // console.log('checking: input ' + blockConnection.check_ +
-        //     ' and clipboard ' + connection.check_);
-        // console.log('the blocks have the opposite connection types: ' +
-        //     (Blockly.OPPOSITE_TYPE[blockConnection.type] ==
-        //     connection.type));
-        // console.log(
-        //     'the blocks are of compatible types: ' +
-        //     connection.checkType_(blockConnection));
-        if (result){
+      if (blocklyApp.debug) {
+        if (result) {
           console.log('Blocks should be connected');
         } else {
-          console.log('Blocks should be connected');
+          console.log('Blocks not connected');
         }
       }
       return result;
     },
-    isBlockCompatibleWithMarkedConnection: function(block, debug) {
+    isBlockCompatibleWithMarkedConnection: function(block) {
       var blockConnection = block.outputConnection || block.previousConnection;
-      return this.markedConnection &&
-          this.markedConnection.sourceBlock_.workspace != null &&
+      return this.markedConnection_ &&
+          this.markedConnection_.sourceBlock_.workspace != null &&
           this.isCompatibleWithConnection_(
-              blockConnection, this.markedConnection, debug);
+              blockConnection, this.markedConnection_);
     },
-    isConnectionCompatibleWithClipboard: function(connection, debug) {
-      if (debug) {
-        console.log('connection:');
-        console.log(connection);
-        console.log('clipboardBlockSuperiorConnection is:');
-        console.log(this.clipboardBlockSuperiorConnection);
-        console.log('clipboardBlockNextConnection is:');
-        console.log(this.clipboardBlockNextConnection);
-      }
+    isConnectionCompatibleWithClipboard: function(connection) {
       return this.isCompatibleWithConnection_(connection,
-          this.clipboardBlockSuperiorConnection, debug) ||
+          this.clipboardBlockSuperiorConnection_) ||
           this.isCompatibleWithConnection_(connection,
-          this.clipboardBlockNextConnection, debug);
+          this.clipboardBlockNextConnection_);
     }
   });

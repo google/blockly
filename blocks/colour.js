@@ -58,7 +58,8 @@ Blockly.Blocks['colour_picker'] = {
     // Colour block is trivial.  Use tooltip of parent block if it exists.
     this.setTooltip(function() {
       var parent = thisBlock.getParent();
-      return (parent && parent.tooltip) || Blockly.Msg.COLOUR_PICKER_TOOLTIP;
+      return (parent && parent.getInputsInline() && parent.tooltip) ||
+          Blockly.Msg.COLOUR_PICKER_TOOLTIP;
     });
   }
 };

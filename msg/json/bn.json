@@ -4,7 +4,8 @@
 			"Aftabuzzaman",
 			"Rakibul",
 			"Tauhid16",
-			"MasterMinhaz"
+			"MasterMinhaz",
+			"এম আবু সাঈদ"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "পদ",
@@ -67,7 +68,7 @@
 	"LOGIC_BOOLEAN_FALSE": "মিথ্যা",
 	"LOGIC_BOOLEAN_TOOLTIP": "পাঠাবে হয় সত্য অথবা মিথ্যা।",
 	"LOGIC_NULL": "কিছু না",
-	"LOGIC_NULL_TOOLTIP": "কিছু না ফেরত দিবে।",
+	"LOGIC_NULL_TOOLTIP": "কিছু ফেরত দিবে না।",
 	"LOGIC_TERNARY_CONDITION": "পরীক্ষা",
 	"LOGIC_TERNARY_IF_TRUE": "যদি সত্য হয়",
 	"LOGIC_TERNARY_IF_FALSE": "যদি মিথ্যা হয়",
@@ -119,7 +120,7 @@
 	"LISTS_CREATE_EMPTY_TOOLTIP": "পাঠাবে একটি তালিকা, দের্ঘ্য হবে ০, কোন উপাত্ত থাকবে না",
 	"LISTS_CREATE_WITH_TOOLTIP": "যেকোন সংখ্যক পদ নিয়ে একটি তালিকা তৈরি করুন।",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "তালিকা",
-	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "তালিকায় একটি পদ যোগ করে।",
+	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "তালিকায় একটি পদ যোগ করুন।",
 	"LISTS_LENGTH_TITLE": "%1-এর দৈর্ঘ্য",
 	"LISTS_LENGTH_TOOLTIP": "একটি তালিকার দৈর্ঘ্য পাঠাবে।",
 	"LISTS_ISEMPTY_TITLE": "%1 খালি",

@@ -57,7 +57,7 @@ blocklyApp.FieldView = ng.core
       this.optionText = {
         keys: []
       };
-      this.text = 'Nothing';
+      this.text = '';
       this.treeService = _treeService;
     }],
     setLabelledBy: function(item, id) {

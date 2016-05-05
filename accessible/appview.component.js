@@ -22,7 +22,7 @@
  * app is rendered on the page.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-blocklyApp.workspace = blocklyApp.workspace || new Blockly.Workspace();
+blocklyApp.workspace = new Blockly.Workspace();
 // If the debug flag is true, print console.logs to help with debugging.
 blocklyApp.debug = false;
 
@@ -53,7 +53,7 @@ blocklyApp.AppView = ng.core
     providers: [blocklyApp.ClipboardService, blocklyApp.TreeService],
   })
   .Class({
-    constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService, function(_service1, _service2) {
-      this.treeService = _service2;
+    constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService, function(_clipboardService, _treeService) {
+      this.treeService = _treeService;
     }]
   });

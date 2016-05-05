@@ -32,7 +32,7 @@ blocklyApp.ToolboxView = ng.core
     <li #parent *ngIf="toolboxHasCategories" role="treeitem" aria-level="1" aria-selected=false *ngFor="#category of makeArray(sightedToolbox); #i=index">
       <label #name>{{category.attributes.name.value}}</label>
       {{labelCategory(name, i, tree)}}
-      <ol  role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
+      <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
         <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_" [level]=2 [block]="block" [displayBlockMenu]="true" [clipboardService]="sharedClipboardService"></toolbox-tree-view>
         {{addClass(parent, "blocklyHasChildren")}}
       </ol>
@@ -54,7 +54,7 @@ blocklyApp.ToolboxView = ng.core
       }
     };
     xhttp.open('GET', blocklyApp.gameManager
-      .levelToolboxes[blocklyApp.gameManager.level], true);
+        .levelToolboxes[blocklyApp.gameManager.level], true);
     xhttp.send();
 
     this.toolboxCategories = [];
@@ -65,7 +65,7 @@ blocklyApp.ToolboxView = ng.core
   }],
   labelCategory: function(h2, i, tree) {
     var parent = h2.parentNode;
-    while (parent != null && parent.tagName != 'LI') {
+    while (parent && parent.tagName != 'LI') {
       parent = parent.parentNode;
     }
     parent.setAttribute('aria-label', h2.innerText);
@@ -79,24 +79,14 @@ blocklyApp.ToolboxView = ng.core
   },
   addClass: function(node, classText) {
     // Ensure that node doesn't have class already in it.
-    var classList = node.className;
-    if (classList) {
-      classList = classList.split(' ');
-    } else {
-      classList = [];
-    }
-    var canAdd = true;
-    for (var i = 0; i < classList.length; i++) {
-      if (classList[i] == classText) {
-        canAdd = false;
-      }
-    }
+    var classList = (node.className || []).split('');
+    var canAdd = classList.indexOf(classText) == -1;
     // Add class if it doesn't.
     if (canAdd) {
       if (classList.length) {
-        node.className += (' ' + classText);
-      } else {
         node.className += classText;
+      } else {
+        node.className += ' ' + classText;
       }
     }
   },

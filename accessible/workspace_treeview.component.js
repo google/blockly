@@ -136,20 +136,14 @@ blocklyApp.TreeView = ng.core
     },
     addClass: function(node, classText) {
       // Ensure that node doesn't have class already in it.
-      var classList = node.className;
-      classList = classList.split(' ');
-      var canAdd = true;
-      for (var i = 0; i < classList.length; i++) {
-        if (classList[i] == classText) {
-          canAdd = false;
-        }
-      }
+      var classList = (node.className || []).split('');
+      var canAdd = classList.indexOf(classText) == -1;
       // Add class if it doesn't.
       if (canAdd) {
         if (classList.length) {
-          node.className += ' ' + classText;
-        } else {
           node.className += classText;
+        } else {
+          node.className += ' ' + classText;
         }
       }
     },
@@ -169,7 +163,7 @@ blocklyApp.TreeView = ng.core
 
       var blockInfoList = this.infoBlocks[block.id];
 
-      for (var j = 0, field; field = block.fieldRow[j]; j++) {
+      for (var i = 0, field; field = block.fieldRow[i]; i++) {
         blockInfoList.push(field);
       }
 

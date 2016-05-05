@@ -109,14 +109,8 @@ blocklyApp.ToolboxTreeView = ng.core
     },
     addClass: function(node, classText) {
       // Ensure that node doesn't have class already in it.
-      var classList = node.className;
-      classList = classList.split(' ');
-      var canAdd = true;
-      for (var i = 0; i < classList.length; i++) {
-        if (classList[i] == classText) {
-          canAdd = false;
-        }
-      }
+      var classList = (node.className || []).split('');
+      var canAdd = classList.indexOf(classText) == -1;
       // Add class if it doesn't.
       if (canAdd) {
         if (classList.length) {
@@ -136,7 +130,7 @@ blocklyApp.ToolboxTreeView = ng.core
 
       var blockInfoList = this.infoBlocks[block.id];
 
-      for (var j = 0, field; field = block.fieldRow[j]; j++) {
+      for (var i = 0, field; field = block.fieldRow[i]; i++) {
         blockInfoList.push(field);
       }
 
@@ -152,18 +146,18 @@ blocklyApp.ToolboxTreeView = ng.core
     copyToWorkspace: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      alert('block added to workspace');
+      alert('Block added to workspace');
     },
     copyToClipboard: function(block) {
       if (this.sharedClipboardService) {
         this.sharedClipboardService.copy(block);
-        alert('block copied to clipboard');
+        alert('Block copied to clipboard');
       }
     },
     copyToMarked: function(block) {
       if (this.sharedClipboardService) {
         this.sharedClipboardService.pasteToMarkedConnection(block);
-        alert('block sent to marked spot');
+        alert('Block sent to marked spot');
       }
     },
     markedBlockCompatibilityHTMLText: function(block) {

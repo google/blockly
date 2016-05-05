@@ -18,7 +18,7 @@
  */
 
 /**
- * @fileoverview Angular2 Service deals with the clipboard and marked spots.
+ * @fileoverview Angular2 Service that handles the clipboard and marked spots.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
@@ -69,7 +69,7 @@ blocklyApp.ClipboardService = ng.core
       this.markedConnection_.connect(
           blockOnProperWorkspace.outputConnection ||
           blockOnProperWorkspace.previousConnection);
-      blocklyApp.debug && console.log('paste to mark connection');
+      blocklyApp.debug && console.log('paste to marked connection');
     },
     markConnection: function(connection) {
       this.markedConnection_ = connection;
@@ -82,17 +82,17 @@ blocklyApp.ClipboardService = ng.core
       }
 
       // Checking that the types match and it's the right kind of connection.
-      var result = Blockly.OPPOSITE_TYPE[blockConnection.type] ==
+      var isCompatible = Blockly.OPPOSITE_TYPE[blockConnection.type] ==
           connection.type && connection.checkType_(blockConnection);
 
       if (blocklyApp.debug) {
-        if (result) {
-          console.log('Blocks should be connected');
+        if (isCompatible) {
+          console.log('blocks should be connected');
         } else {
-          console.log('Blocks not connected');
+          console.log('blocks should not be connected');
         }
       }
-      return result;
+      return isCompatible;
     },
     isBlockCompatibleWithMarkedConnection: function(block) {
       var blockConnection = block.outputConnection || block.previousConnection;

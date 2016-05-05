@@ -332,7 +332,7 @@ Blockly.Python['lists_sort'] = function(block) {
     '    "IGNORE_CASE": lambda s: str(s).lower()', 
     '  }',
     '  keyv = keyFuncts[type]',
-    '  tmp_list = list(listv)', // clone the list
+    '  tmp_list = list(listv)', // Clone the list.
     '  return sorted(tmp_list, key=keyv, reverse=reversev)'
   ]);  
 

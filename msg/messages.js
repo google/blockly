@@ -981,12 +981,9 @@ Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#s
 Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list].
 Blockly.Msg.LISTS_SORT_TOOLTIP = 'Sort a list.';
-/// sorting order or direction from low to high values
-/// sorting order, or direction. 
-/// Ascending means low to high value for numeric, or A-Z for alphabetic.
+/// sorting order or direction from low to high value for numeric, or A-Z for alphabetic.
 Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = 'ascending';
-/// sorting order, or direction. 
-/// Descending means the opposite direction from ascending.
+/// sorting order or direction from high to low value for numeric, or Z-A for alphabetic.
 Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = 'descending';
 /// sort by treating each item as a number.
 Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = 'numeric';

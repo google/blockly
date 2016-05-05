@@ -87,17 +87,17 @@ blocklyApp.ToolboxTreeView = ng.core
         var arg = arguments[i];
         // arg can be undefined and if so, should be ignored.
         if (arg) {
-          string = string + ' ' + arguments[i];
+          string += ' ' + arg;
         }
       }
       return string;
     },
     createCategoryDependantId: function(index, parentList) {
-      // if this is the first block in a category-less toolbox,
-      // the id should be blockly-toolbox-tree-node0
-      if (index !== undefined && index === 0) {
+      // If this is the first block in a category-less toolbox,
+      // the id should be blockly-toolbox-tree-node0.
+      if (index === 0) {
         if (this.tree.getAttribute('aria-activedescendant') ==
-          'blockly-toolbox-tree-node0') {
+            'blockly-toolbox-tree-node0') {
           this.addClass(parentList, 'blocklyActiveDescendant');
           parentList.setAttribute('aria-selected', 'true');
           this.treeService.setActiveDesc(parentList, this.tree.id);
@@ -108,7 +108,7 @@ blocklyApp.ToolboxTreeView = ng.core
       }
     },
     addClass: function(node, classText) {
-      // ensure that node doesn't have class already in it
+      // Ensure that node doesn't have class already in it.
       var classList = node.className;
       classList = classList.split(' ');
       var canAdd = true;
@@ -117,7 +117,7 @@ blocklyApp.ToolboxTreeView = ng.core
           canAdd = false;
         }
       }
-      // add class if it doesn't
+      // Add class if it doesn't.
       if (canAdd) {
         if (classList.length) {
           node.className += classText;
@@ -127,7 +127,7 @@ blocklyApp.ToolboxTreeView = ng.core
       }
     },
     getInfo: function(block) {
-      // list all inputs
+      // Get the list all inputs.
       if (this.infoBlocks[block.id]) {
         this.infoBlocks[block.id].length = 0;
       } else {
@@ -170,11 +170,11 @@ blocklyApp.ToolboxTreeView = ng.core
       if (this.sharedClipboardService
           .isBlockCompatibleWithMarkedConnection(block)) {
         // undefined will result in the
-        // 'copy to marked block' option being ENABLED
+        // 'copy to marked block' option being ENABLED.
         return undefined;
       } else {
-        // anything will result in the
-        // 'copy to marked block' option being DISABLED
+        // Anything will result in the
+        // 'copy to marked block' option being DISABLED.
         return 'blockly-disabled';
       }
     },

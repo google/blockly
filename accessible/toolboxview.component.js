@@ -78,7 +78,7 @@ blocklyApp.ToolboxView = ng.core
     }
   },
   addClass: function(node, classText) {
-    // ensure that node doesn't have class already in it
+    // Ensure that node doesn't have class already in it.
     var classList = node.className;
     if (classList) {
       classList = classList.split(' ');
@@ -91,7 +91,7 @@ blocklyApp.ToolboxView = ng.core
         canAdd = false;
       }
     }
-    // add class if it doesn't
+    // Add class if it doesn't.
     if (canAdd) {
       if (classList.length) {
         node.className += (' ' + classText);

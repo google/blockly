@@ -135,7 +135,7 @@ blocklyApp.TreeView = ng.core
       }
     },
     addClass: function(node, classText) {
-      //ensure that node doesn't have class already in it
+      // Ensure that node doesn't have class already in it.
       var classList = node.className;
       classList = classList.split(' ');
       var canAdd = true;
@@ -144,7 +144,7 @@ blocklyApp.TreeView = ng.core
           canAdd = false;
         }
       }
-      //add class if it doesn't
+      // Add class if it doesn't.
       if (canAdd) {
         if (classList.length) {
           node.className += ' ' + classText;
@@ -160,7 +160,7 @@ blocklyApp.TreeView = ng.core
       return this.treeService.createId(block);
     },
     getInfo: function(block) {
-      // List all inputs
+      // List all inputs.
       if (this.infoBlocks[block.id]) {
         this.infoBlocks[block.id].length = 0;
       } else {
@@ -204,10 +204,10 @@ blocklyApp.TreeView = ng.core
     clipboardCompatibilityHTMLText: function(connection) {
       if (this.sharedClipboardService.isConnectionCompatibleWithClipboard(
               connection)) {
-        // undefined will result in the 'paste' option being ENABLED
+        // Undefined will result in the 'paste' option being ENABLED.
         return undefined;
       } else {
-        // any value returned will result in the 'paste' option being DISABLED
+        // Any value returned will result in the 'paste' option being DISABLED.
         return 'blockly-disabled';
       }
     },
@@ -221,12 +221,12 @@ blocklyApp.TreeView = ng.core
     markedBlockCompatibilityHTMLText: function(block) {
       if (this.sharedClipboardService
           .isBlockCompatibleWithMarkedConnection(block)) {
-        // undefined will result in the 'copy to marked block'
-        // option being ENABLED
+        // Undefined will result in the 'copy to marked block'
+        // option being ENABLED.
         return undefined;
       } else {
-        // any value returned will result in the 'copy to marked block'
-        // option being DISABLED
+        // Any value returned will result in the 'copy to marked block'
+        // option being DISABLED.
         return 'blockly-disabled';
       }
     }

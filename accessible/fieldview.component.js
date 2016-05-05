@@ -41,7 +41,7 @@ blocklyApp.FieldView = ng.core
       {{setLabelledBy(listItem, concatStringWithSpaces("blockly-argument-menu", label.id))}}
     </li>
     <li #listItem aria-selected=false role="treeitem" id="{{treeService.createId(listItem)}}" [attr.aria-level]="level" *ngIf="isCheckbox(field)">
-      //checkboxes not currently supported.
+      // Checkboxes not currently supported.
     </li>
     <li #listItem aria-selected=false role="treeitem" id="{{treeService.createId(listItem)}}" [attr.aria-level]="level" *ngIf="isTextField(field) && hasVisibleText(field)">
       <label #label id="{{treeService.createId(label)}}">

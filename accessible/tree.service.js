@@ -63,7 +63,7 @@ blocklyApp.TreeService = ng.core
       this.setActiveDesc(node, treeId);
       node.setAttribute('aria-selected', 'true');
 
-      // make sure keyboard focus is on tree as a whole
+      // Make sure keyboard focus is on tree as a whole
       // in case before the user was editing a block and keyboard
       // focus got shifted.
       if (keepFocus) {
@@ -78,10 +78,10 @@ blocklyApp.TreeService = ng.core
           // 16,9: shift, tab
           if (e.shiftKey) {
             console.log('shifttabbing');
-            // if the previous key is shift, we're shift-tabbing mode
+            // If the previous key is shift, we're shift-tabbing mode.
             this.goToPreviousTree(treeId, e);
           } else {
-            // if previous key isn't shift, we're tabbing
+            // If previous key isn't shift, we're tabbing.
             this.goToNextTree(treeId, e);
           }
           break;
@@ -108,7 +108,6 @@ blocklyApp.TreeService = ng.core
       if (treeId == this.trees[0].id) {
         return;
       }
-      // otherwise, go to the previous tree class
       var next = false;
       for (var i = (this.trees.length - 1); i >= 0; i--) {
         if (next) {
@@ -137,16 +136,16 @@ blocklyApp.TreeService = ng.core
           // 16,9: shift, tab
           if (e.shiftKey) {
             console.log('shifttabbing');
-            // if the previous key is shift, we're shift-tabbing mode
+            // If the previous key is shift, we're shift-tabbing mode.
             this.goToPreviousTree(treeId, e);
           } else {
-            // if previous key isn't shift, we're tabbing
-            // we want to go to the run code button
+            // If previous key isn't shift, we're tabbing
+            // we want to go to the run code button.
             this.goToNextTree(treeId, e);
           }
           break;
         case 37:
-          // left-facing arrow: go out a level, if possible. If not, do nothing
+          // Left-facing arrow: go out a level, if possible. If not, do nothing.
           e.preventDefault();
           e.stopPropagation();
           blocklyApp.debug && console.log('in left arrow section');
@@ -164,7 +163,7 @@ blocklyApp.TreeService = ng.core
           this.updateSelectedNode(nextNode, tree);
           break;
         case 38:
-          // up-facing arrow: go up a level, if possible. If not, do nothing
+          // Up-facing arrow: go up a level, if possible. If not, do nothing.
           e.preventDefault();
           e.stopPropagation();
           console.log('node passed in: ' + node.id);
@@ -187,8 +186,8 @@ blocklyApp.TreeService = ng.core
           }
           break;
         case 40:
-          // down-facing arrow: go down a level, if possible.
-          // If not, do nothing
+          // Down-facing arrow: go down a level, if possible.
+          // If not, do nothing.
           blocklyApp.debug && console.log('preventing propogation');
           e.preventDefault();
           e.stopPropagation();
@@ -200,7 +199,7 @@ blocklyApp.TreeService = ng.core
           }
           break;
         case 13:
-          // if I've pressed enter, I want to interact with a child
+          // If I've pressed enter, I want to interact with a child.
           blocklyApp.debug && console.log('enter is pressed');
           var activeDesc = this.getActiveDesc(treeId);
           if (activeDesc) {
@@ -241,12 +240,12 @@ blocklyApp.TreeService = ng.core
     },
     getNextSibling: function(element) {
       if (element.nextElementSibling) {
-        // if there is a sibling, find the list element child of the sibling
+        // If there is a sibling, find the list element child of the sibling.
         var node = element.nextElementSibling;
         if (node.tagName != 'LI') {
           var listElems = node.getElementsByTagName('li');
           // getElementsByTagName returns in DFS order
-          // therefore the first element is the first relevant list child
+          // therefore the first element is the first relevant list child.
           return listElems[0];
         } else {
           return element.nextElementSibling;
@@ -287,11 +286,10 @@ blocklyApp.TreeService = ng.core
             blocklyApp.debug && console.log('parent has a sibling!');
             var node = parent.previousElementSibling;
             if (node.tagName == 'LI') {
-              // the parent has a list sibling!
               blocklyApp.debug && console.log('return the sibling of the parent!');
               return node;
             } else {
-              // find the last list element child of the sibling of the parent
+              // Find the last list element child of the sibling of the parent.
               return this.getLastChild(node);
             }
           } else {
@@ -308,7 +306,7 @@ blocklyApp.TreeService = ng.core
       } else {
         var childList = element.children;
         for (var i = childList.length - 1; i >= 0; i--) {
-          // find the last child that is a list element
+          // Find the last child that is a list element.
           if (childList[i].tagName == 'LI') {
             return childList[i];
           } else {

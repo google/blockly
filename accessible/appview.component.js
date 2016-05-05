@@ -23,7 +23,7 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 blocklyApp.workspace = blocklyApp.workspace || new Blockly.Workspace();
-//if the debug flag is true, print extra console.logs to help with debugging.
+// If the debug flag is true, print console.logs to help with debugging.
 blocklyApp.debug = false;
 
 blocklyApp.AppView = ng.core

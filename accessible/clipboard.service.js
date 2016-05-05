@@ -76,12 +76,12 @@ blocklyApp.ClipboardService = ng.core
       blocklyApp.debug && console.log('mark connection');
     },
     isCompatibleWithConnection_: function(blockConnection, connection) {
-      // the connection and blockConnection exist
+      // Checking that the connection and blockConnection exist.
       if (!connection || !blockConnection) {
         return false;
       }
 
-      // the types match and it's the right kind of connection
+      // Checking that the types match and it's the right kind of connection.
       var result = Blockly.OPPOSITE_TYPE[blockConnection.type] ==
           connection.type && connection.checkType_(blockConnection);
 
@@ -97,7 +97,7 @@ blocklyApp.ClipboardService = ng.core
     isBlockCompatibleWithMarkedConnection: function(block) {
       var blockConnection = block.outputConnection || block.previousConnection;
       return this.markedConnection_ &&
-          this.markedConnection_.sourceBlock_.workspace != null &&
+          this.markedConnection_.sourceBlock_.workspace &&
           this.isCompatibleWithConnection_(
               blockConnection, this.markedConnection_);
     },

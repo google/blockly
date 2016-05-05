@@ -27,9 +27,10 @@ blocklyApp.ToolboxView = ng.core
   selector: 'toolbox-view',
   template: `
     <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
-    <ol #tree id="blockly-toolbox-tree" *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0" tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="toolboxTitle.id" (keydown)="treeService.keyHandler($event, tree)">
+    <ol #tree id="blockly-toolbox-tree" *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length" tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="toolboxTitle.id" (keydown)="treeService.keyHandler($event, tree)">
     {{treeService.setActiveAttribute(tree)}}
-    <li #parent *ngIf="toolboxHasCategories" role="treeitem" aria-level="1" aria-selected=false *ngFor="#category of makeArray(sightedToolbox); #i=index">
+    <div *ngIf="toolboxHasCategories">
+    <li #parent role="treeitem" aria-level="1" aria-selected=false *ngFor="#category of makeArray(sightedToolbox); #i=index">
       <label #name>{{category.attributes.name.value}}</label>
       {{labelCategory(name, i, tree)}}
       <ol  role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
@@ -37,8 +38,12 @@ blocklyApp.ToolboxView = ng.core
         {{addClass(parent, "blocklyHasChildren")}}
       </ol>
     </li>
+    </div>
     <div *ngIf="!toolboxHasCategories">
-      <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index" [level]=1 [block]="block" [displayBlockMenu]="true" [clipboardService]="sharedClipboardService" [index]="i" [tree]="tree"></toolbox-tree-view>
+      No Categories!
+      <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index" [level]=1 [block]="block" [displayBlockMenu]="true" [clipboardService]="sharedClipboardService" [index]="i" [tree]="tree">
+        Toolbox Tree View Not Loaded.
+      </toolbox-tree-view>
     </div>
     </ol>
   `,
@@ -46,16 +51,17 @@ blocklyApp.ToolboxView = ng.core
 })
 .Class({
   constructor: [blocklyApp.TreeService, function(_treeService) {
-    var _this = this;
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (xhttp.readyState == 4 && xhttp.status == 200) {
-        _this.sightedToolbox = xhttp.responseXML;
-      }
-    };
-    xhttp.open('GET', blocklyApp.gameManager
-      .levelToolboxes[blocklyApp.gameManager.level], true);
-    xhttp.send();
+    this.sightedToolbox = document.getElementById('toolbox-xml');
+    // var _this = this;
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.onreadystatechange = function() {
+    //   if (xhttp.readyState == 4 && xhttp.status == 200) {
+    //     _this.sightedToolbox = xhttp.responseXML;
+    //   }
+    // };
+    // xhttp.open('GET', blocklyApp.gameManager
+    //   .levelToolboxes[blocklyApp.gameManager.level], true);
+    // xhttp.send();
 
     this.toolboxCategories = [];
     this.toolboxWorkspaces = {};
@@ -101,21 +107,35 @@ blocklyApp.ToolboxView = ng.core
     }
   },
   makeArray: function(val) {
-    if (val) {
-      if (this.toolboxCategories.length) {
-        return this.toolboxCategories;
-      } else {
-        var categories = val.documentElement.getElementsByTagName('category');
-        if (categories.length) {
+    if (this.toolboxCategories.length > 0){
+      return this.toolboxCategories;
+    } else {
+     this.toolboxCategories.length = 0;
+     var temp = Array.from(val.children);
+     for (var i=0; i<temp.length; i++){
+         tempNode = temp[i];
+         if (tempNode.nodeName == "CATEGORY"){
           this.toolboxHasCategories = true;
-          this.toolboxCategories = Array.from(categories);
-          return this.toolboxCategories;
+          this.toolboxCategories.push(tempNode);
         }
-        this.toolboxHasCategories = false;
-        this.toolboxCategories = Array.from(val.getElementsByTagName('xml'));
-        return this.toolboxCategories;
       }
+      return this.toolboxCategories;
     }
+    // if (val) {
+    //   if (this.toolboxCategories.length) {
+    //     return this.toolboxCategories;
+    //   } else {
+    //     var categories = val.getElementsByTagName('category');
+    //     if (categories.length) {
+    //       this.toolboxHasCategories = true;
+    //       this.toolboxCategories = Array.from(categories);
+    //       return this.toolboxCategories;
+    //     }
+    //     this.toolboxHasCategories = false;
+    //     this.toolboxCategories = Array.from(val.children);
+    //     return this.toolboxCategories;
+    //   }
+    // }
   },
   getToolboxWorkspace: function(categoryNode) {
     if (categoryNode.attributes.name) {
@@ -131,6 +151,15 @@ blocklyApp.ToolboxView = ng.core
       this.toolboxWorkspaces[catName] = categoryWorkspace;
       return this.toolboxWorkspaces[catName];
     }
+    // var catName = categoryNode.attributes["name"].value;
+    // if (this.toolboxWorkspaces[catName]){
+    //  return this.toolboxWorkspaces[catName];
+    // } else {
+    //  var tempWorkspace = new Blockly.Workspace();
+    //  Blockly.Xml.domToWorkspace(tempWorkspace, categoryNode);
+    //  this.toolboxWorkspaces[catName] = tempWorkspace;
+    //  return this.toolboxWorkspaces[catName];
+    // }
   }
 });
 

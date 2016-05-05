@@ -366,14 +366,14 @@ Blockly.PHP['lists_sort'] = function(block) {
     'lists_sort', [
     'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + 
       '($list, $type, $direction) {',
-    '  $sortFuncs = array(',
-    '    "NUMERIC" => "sort",',
-    '    "TEXT" => "natsort",',
-    '    "IGNORE_CASE" => "natcasesort"',
+    '  $sortCmpFuncs = array(',
+    '    "NUMERIC" => "strnatcasecmp",',
+    '    "TEXT" => "strcmp",',
+    '    "IGNORE_CASE" => "strcasecmp"',
     '  );',
-    '  $sort = $sortFuncs[$type];',
+    '  $sortCmp = $sortCmpFuncs[$type];',
     '  $list2 = $list;', // Clone list.
-    '  $sort($list2);',
+    '  usort($list2, $sortCmp);',
     '  if ($direction == -1) {',
     '    $list2 = array_reverse($list2);',
     '  }',

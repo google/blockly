@@ -45,24 +45,24 @@ blocklyApp.TreeView = ng.core
                 {{setLabelledBy(copyListItem, concatStringWithSpaces(copyButton.id, "blockly-button"))}}
               </li>
               <li #pasteBelow id="{{treeService.createId(pasteBelow)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #pasteBelowButton id="{{treeService.createId(pasteBelowButton)}}" (click)="sharedClipboardService.paste(block.nextConnection)" disabled="{{hasNoNextConnection(block)}}" disabled="{{notCompatibleWithClipboard(block.nextConnection)}}">paste below</button>
-                {{setLabelledBy(pasteBelow, concatStringWithSpaces(pasteBelowButton.id, "blockly-button", (hasNoNextConnection(block)||notCompatibleWithClipboard(block.nextConnection))))}}
+                <button #pasteBelowButton id="{{treeService.createId(pasteBelowButton)}}" (click)="sharedClipboardService.paste(block.nextConnection)" disabled="{{noNextConnectionHTMLText(block)}}" disabled="{{clipboardCompatibilityHTMLText(block.nextConnection)}}">paste below</button>
+                {{setLabelledBy(pasteBelow, concatStringWithSpaces(pasteBelowButton.id, "blockly-button", (noNextConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.nextConnection))))}}
               </li>
               <li #pasteAbove id="{{treeService.createId(pasteAbove)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #pasteAboveButton id="{{treeService.createId(pasteAboveButton)}}" (click)="sharedClipboardService.paste(block.previousConnection)" disabled="{{hasNoPreviousConnection(block)}}" disabled="{{notCompatibleWithClipboard(block.previousConnection)}}">paste above</button>
-                {{setLabelledBy(pasteAbove, concatStringWithSpaces(pasteAboveButton.id, "blockly-button", (hasNoPreviousConnection(block)||notCompatibleWithClipboard(block.previousConnection))))}}
+                <button #pasteAboveButton id="{{treeService.createId(pasteAboveButton)}}" (click)="sharedClipboardService.paste(block.previousConnection)" disabled="{{noPreviousConnectionHTMLText(block)}}" disabled="{{clipboardCompatibilityHTMLText(block.previousConnection)}}">paste above</button>
+                {{setLabelledBy(pasteAbove, concatStringWithSpaces(pasteAboveButton.id, "blockly-button", (noPreviousConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.previousConnection))))}}
               </li>
               <li #markBelow id="{{treeService.createId(markBelow)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #markBelowButton id="{{treeService.createId(markBelowButton)}}" (click)="sharedClipboardService.markConnection(block.nextConnection)" disabled="{{hasNoNextConnection(block)}}">mark spot below</button>
-                {{setLabelledBy(markBelow, concatStringWithSpaces(markBelowButton.id, "blockly-button", hasNoNextConnection(block)))}}
+                <button #markBelowButton id="{{treeService.createId(markBelowButton)}}" (click)="sharedClipboardService.markConnection(block.nextConnection)" disabled="{{noNextConnectionHTMLText(block)}}">mark spot below</button>
+                {{setLabelledBy(markBelow, concatStringWithSpaces(markBelowButton.id, "blockly-button", noNextConnectionHTMLText(block)))}}
               </li>
               <li #markAbove id="{{treeService.createId(markAbove)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #markAboveButton id="{{treeService.createId(markAboveButton)}}" (click)="sharedClipboardService.markConnection(block.previousConnection)" disabled="{{hasNoPreviousConnection(block)}}">mark spot above</button>
-                {{setLabelledBy(markAbove, concatStringWithSpaces(markAboveButton.id, "blockly-button", hasNoPreviousConnection(block)))}}
+                <button #markAboveButton id="{{treeService.createId(markAboveButton)}}" (click)="sharedClipboardService.markConnection(block.previousConnection)" disabled="{{noPreviousConnectionHTMLText(block)}}">mark spot above</button>
+                {{setLabelledBy(markAbove, concatStringWithSpaces(markAboveButton.id, "blockly-button", noPreviousConnectionHTMLText(block)))}}
               </li>
               <li #sendToSelected id="{{treeService.createId(sendToSelected)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="sendToSelected(block)" disabled="{{notCompatibleWithMarkedBlock(block)}}">move to marked spot</button>
-                {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", notCompatibleWithMarkedBlock(block)))}}
+                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="sendToSelected(block)" disabled="{{markedBlockCompatibilityHTMLText(block)}}">move to marked spot</button>
+                {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", markedBlockCompatibilityHTMLText(block)))}}
               </li>
               <li #delete id="{{treeService.createId(delete)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
                 <button #deleteButton id="{{treeService.createId(deleteButton)}}" (click)="block.dispose(true)">delete button</button>
@@ -78,7 +78,7 @@ blocklyApp.TreeView = ng.core
               <select aria-label="insert input menu" (change)="inputMenuSelected(inputBlock.connection, $event)">
                 <option value="NO_ACTION" selected>select an action</option>
                 <option value="MARK_SPOT">mark this spot</option>
-                <option value="PASTE" disabled="{{notCompatibleWithClipboard(inputBlock.connection)}}">paste</option>
+                <option value="PASTE" disabled="{{clipboardCompatibilityHTMLText(inputBlock.connection)}}">paste</option>
               </select>
             </li>
           </div>
@@ -110,14 +110,14 @@ blocklyApp.TreeView = ng.core
       }
       return string;
     },
-    hasNoPreviousConnection: function(block) {
+    noPreviousConnectionHTMLText: function(block) {
       if (!block.previousConnection) {
         return 'blockly-disabled';
       } else {
         return undefined;
       }
     },
-    hasNoNextConnection: function(block) {
+    noNextConnectionHTMLText: function(block) {
       if (!block.nextConnection) {
         return 'blockly-disabled';
       } else {
@@ -201,7 +201,7 @@ blocklyApp.TreeView = ng.core
       }
       event.target.selectedIndex = 0;
     },
-    notCompatibleWithClipboard: function(connection) {
+    clipboardCompatibilityHTMLText: function(connection) {
       if (this.sharedClipboardService.isConnectionCompatibleWithClipboard(
               connection)) {
         // undefined will result in the 'paste' option being ENABLED
@@ -218,7 +218,7 @@ blocklyApp.TreeView = ng.core
         return 'value';
       }
     },
-    notCompatibleWithMarkedBlock: function(block) {
+    markedBlockCompatibilityHTMLText: function(block) {
       if (this.sharedClipboardService
           .isBlockCompatibleWithMarkedConnection(block)) {
         // undefined will result in the 'copy to marked block'

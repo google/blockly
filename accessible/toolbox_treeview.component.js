@@ -45,8 +45,8 @@ blocklyApp.ToolboxTreeView = ng.core
                 {{setLabelledBy(blockCopy, concatStringWithSpaces(blockCopyButton.id, "blockly-button"))}}
               </li>
               <li #sendToSelected id="{{treeService.createId(sendToSelected)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="copyToMarked(block)" disabled="{{notCompatibleWithMarkedBlock(block)}}" [attr.aria-disabled]="notCompatibleWithMarkedBlock(block)">copy to marked spot</button>
-                {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", notCompatibleWithMarkedBlock(block)))}}
+                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="copyToMarked(block)" disabled="{{markedBlockCompatibilityHTMLText(block)}}" [attr.aria-disabled]="markedBlockCompatibilityHTMLText(block)">copy to marked spot</button>
+                {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", markedBlockCompatibilityHTMLText(block)))}}
               </li>
             </ol>
             {{addClass(listItem, "blocklyHasChildren")}}
@@ -166,7 +166,7 @@ blocklyApp.ToolboxTreeView = ng.core
         alert('block sent to marked spot');
       }
     },
-    notCompatibleWithMarkedBlock: function(block) {
+    markedBlockCompatibilityHTMLText: function(block) {
       if (this.sharedClipboardService
           .isBlockCompatibleWithMarkedConnection(block)) {
         // undefined will result in the

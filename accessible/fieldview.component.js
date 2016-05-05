@@ -96,13 +96,6 @@ blocklyApp.FieldView = ng.core
       }
       return this.optionText.keys;
     },
-    isSelected: function(field, value) {
-      if (value == field.getValue()) {
-        // true will result in the 'selected' option being ENABLED
-        return 'true';
-      }
-      // undefined will result in the 'selected' option being DISABLED
-    },
     handleDropdownChange: function(field, text) {
       if (text == 'NO_ACTION') {
         return;

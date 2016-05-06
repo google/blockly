@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-05-05 20:43:47.484000",
+		"lastupdated": "2016-05-06 10:42:01.474947",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -325,7 +325,7 @@
 	"LISTS_GET_SUBLIST_TOOLTIP": "Creates a copy of the specified portion of a list.",
 	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SORT_TITLE": "sort %1 %2 %3",
-	"LISTS_SORT_TOOLTIP": "Sort a list.",
+	"LISTS_SORT_TOOLTIP": "Sort a copy of a list.",
 	"LISTS_SORT_ORDER_ASCENDING": "ascending",
 	"LISTS_SORT_ORDER_DESCENDING": "descending",
 	"LISTS_SORT_TYPE_NUMERIC": "numeric",

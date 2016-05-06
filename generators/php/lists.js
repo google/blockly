@@ -380,7 +380,7 @@ Blockly.PHP['lists_sort'] = function(block) {
     '  return $list2;',
     '}']);
   var sortCode = functionName + 
-    '(' + listCode + ', "' + type + '", ' + direction + ')';
+      '(' + listCode + ', "' + type + '", ' + direction + ')';
   return [sortCode, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 

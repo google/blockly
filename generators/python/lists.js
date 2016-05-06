@@ -337,7 +337,7 @@ Blockly.Python['lists_sort'] = function(block) {
   ]);  
 
   var code = sortFunctionName + 
-    '(' + listCode + ', "' + type + '", ' + reverse + ')';
+      '(' + listCode + ', "' + type + '", ' + reverse + ')';
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 

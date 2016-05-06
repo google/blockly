@@ -975,12 +975,12 @@ Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
 
-/// url - Infomation describing sorting a list.
+/// url - Information describing sorting a list.
 Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#sorting-a-list';
-/// Sort as type %1 (numeric or alphabetic) in order %2 a list of items %1.
+/// Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.
 Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list].
-Blockly.Msg.LISTS_SORT_TOOLTIP = 'Sort a list.';
+Blockly.Msg.LISTS_SORT_TOOLTIP = 'Sort a copy of a list.';
 /// sorting order or direction from low to high value for numeric, or A-Z for alphabetic.
 Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = 'ascending';
 /// sorting order or direction from high to low value for numeric, or Z-A for alphabetic.

@@ -352,7 +352,7 @@ Blockly.Lua['lists_sort'] = function(block) {
        'end']);
 
   var code = functionName + 
-    '(' + listCode + ',"' + type + '", ' + direction + ')';
+      '(' + listCode + ',"' + type + '", ' + direction + ')';
   return [code, Blockly.Lua.ORDER_HIGH];  
 };
 

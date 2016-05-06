@@ -650,7 +650,6 @@ Blockly.Blocks['lists_sort'] = {
    */
   init: function() {
     this.jsonInit({
-      "id": "list_sort",
       "message0": Blockly.Msg.LISTS_SORT_TITLE,
       "args0": [
         {
@@ -676,8 +675,6 @@ Blockly.Blocks['lists_sort'] = {
           "check": "Array"
         }
       ],
-      //"previousStatement": null,
-      //"nextStatement": null,
       "output": "Array",
       "colour": Blockly.Blocks.lists.HUE,
       "tooltip": Blockly.Msg.LISTS_SORT_TOOLTIP,

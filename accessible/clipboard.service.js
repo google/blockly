@@ -47,28 +47,28 @@ blocklyApp.ClipboardService = ng.core
       this.clipboardBlockNextConnection_ = block.nextConnection;
       blocklyApp.debug && console.log('copy');
     },
-    paste: function(connection) {
-      var blockOnProperWorkspace = Blockly.Xml.domToBlock(blocklyApp.workspace,
+    pasteFromClipboard: function(connection) {
+      var reconstitutedBlock = Blockly.Xml.domToBlock(blocklyApp.workspace,
           this.clipboardBlockXml_);
       switch (connection.type) {
         case Blockly.NEXT_STATEMENT:
-          connection.connect(blockOnProperWorkspace.previousConnection);
+          connection.connect(reconstitutedBlock.previousConnection);
           break;
         case Blockly.PREVIOUS_STATEMENT:
-          connection.connect(blockOnProperWorkspace.nextConnection);
+          connection.connect(reconstitutedBlock.nextConnection);
           break;
         default:
-          connection.connect(blockOnProperWorkspace.outputConnection);
+          connection.connect(reconstitutedBlock.outputConnection);
       }
       blocklyApp.debug && console.log('paste');
     },
     pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
-      var blockOnProperWorkspace =
+      var reconstitutedBlock =
           Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
       this.markedConnection_.connect(
-          blockOnProperWorkspace.outputConnection ||
-          blockOnProperWorkspace.previousConnection);
+          reconstitutedBlock.outputConnection ||
+          reconstitutedBlock.previousConnection);
       blocklyApp.debug && console.log('paste to marked connection');
     },
     markConnection: function(connection) {

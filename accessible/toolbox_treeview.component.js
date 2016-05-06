@@ -41,7 +41,7 @@ blocklyApp.ToolboxTreeView = ng.core
                 {{setLabelledBy(workspaceCopy, concatStringWithSpaces(workspaceCopyButton.id, "blockly-button"))}}
               </li>
               <li #blockCopy id="{{treeService.createId(blockCopy)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #blockCopyButton id="{{treeService.createId(blockCopyButton)}}" (click)="sharedClipboardService.copy(block)">copy to clipboard</button>
+                <button #blockCopyButton id="{{treeService.createId(blockCopyButton)}}" (click)="clipboardService.copy(block)">copy to clipboard</button>
                 {{setLabelledBy(blockCopy, concatStringWithSpaces(blockCopyButton.id, "blockly-button"))}}
               </li>
               <li #sendToSelected id="{{treeService.createId(sendToSelected)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
@@ -73,7 +73,7 @@ blocklyApp.ToolboxTreeView = ng.core
                   function(_clipboardService, _treeService) {
       this.infoBlocks = {};
       this.nextBlock = {};
-      this.sharedClipboardService = _clipboardService;
+      this.clipboardService = _clipboardService;
       this.treeService = _treeService;
     }],
     setLabelledBy: function(item, id) {
@@ -121,7 +121,7 @@ blocklyApp.ToolboxTreeView = ng.core
       }
     },
     getInfo: function(block) {
-      // Get the list all inputs.
+      // Get the list of all inputs.
       if (this.infoBlocks[block.id]) {
         this.infoBlocks[block.id].length = 0;
       } else {
@@ -149,19 +149,19 @@ blocklyApp.ToolboxTreeView = ng.core
       alert('Block added to workspace');
     },
     copyToClipboard: function(block) {
-      if (this.sharedClipboardService) {
-        this.sharedClipboardService.copy(block);
+      if (this.clipboardService) {
+        this.clipboardService.copy(block);
         alert('Block copied to clipboard');
       }
     },
     copyToMarked: function(block) {
-      if (this.sharedClipboardService) {
-        this.sharedClipboardService.pasteToMarkedConnection(block);
+      if (this.clipboardService) {
+        this.clipboardService.pasteToMarkedConnection(block);
         alert('Block sent to marked spot');
       }
     },
     markedBlockCompatibilityHTMLText: function(block) {
-      if (this.sharedClipboardService
+      if (this.clipboardService
           .isBlockCompatibleWithMarkedConnection(block)) {
         // undefined will result in the
         // 'copy to marked block' option being ENABLED.

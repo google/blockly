@@ -128,8 +128,7 @@ blocklyApp.TreeService = ng.core
       if (!node) {
         blocklyApp.debug && console.log('KeyHandler: no active descendant');
       }
-      blocklyApp.debug && console.log(e.keyCode);
-      blocklyApp.debug && console.log('inside TreeService');
+      blocklyApp.debug && console.log(e.keyCode + ': inside TreeService');
       switch (e.keyCode) {
         case 9:
           // 16,9: shift, tab
@@ -153,7 +152,7 @@ blocklyApp.TreeService = ng.core
             nextNode = nextNode.parentNode;
           }
           while (nextNode && nextNode.className != 'treeview' &&
-              nextNode.tagName != 'LI') {
+            nextNode.tagName != 'LI') {
             nextNode = nextNode.parentNode;
           }
           if (nextNode.className == 'treeview' || nextNode == null) {
@@ -165,7 +164,7 @@ blocklyApp.TreeService = ng.core
           // Up-facing arrow: go up a level, if possible. If not, do nothing.
           e.preventDefault();
           e.stopPropagation();
-          console.log('node passed in: ' + node.id);
+          blocklyApp.debug && console.log('node passed in: ' + node.id);
           var prevSibling = this.getPreviousSibling(node);
           if (prevSibling && prevSibling.tagName != 'H1') {
             this.updateSelectedNode(prevSibling, tree);
@@ -209,7 +208,7 @@ blocklyApp.TreeService = ng.core
               if (child.tagName == 'BUTTON') {
                 child.click();
               }
-              if (child.tagName == 'INPUT') {
+              else if (child.tagName == 'INPUT') {
                 child.focus();
               }
             }
@@ -220,7 +219,7 @@ blocklyApp.TreeService = ng.core
       this.previousKey_ = e.keyCode;
     },
     getFirstChild: function(element) {
-      if (element == null) {
+      if (!element) {
         return element;
       } else {
         var childList = element.children;
@@ -299,7 +298,7 @@ blocklyApp.TreeService = ng.core
       }
     },
     getLastChild: function(element) {
-      if (element == null) {
+      if (!element) {
         blocklyApp.debug && console.log('no element');
         return element;
       } else {

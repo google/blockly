@@ -33,12 +33,12 @@ blocklyApp.ToolboxView = ng.core
       <label #name>{{category.attributes.name.value}}</label>
       {{labelCategory(name, i, tree)}}
       <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
-        <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_" [level]=2 [block]="block" [displayBlockMenu]="true" [clipboardService]="sharedClipboardService"></toolbox-tree-view>
+        <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_" [level]=2 [block]="block" [displayBlockMenu]="true" [clipboardService]="clipboardService"></toolbox-tree-view>
         {{addClass(parent, "blocklyHasChildren")}}
       </ol>
     </li>
     <div *ngIf="!toolboxHasCategories">
-      <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index" [level]=1 [block]="block" [displayBlockMenu]="true" [clipboardService]="sharedClipboardService" [index]="i" [tree]="tree"></toolbox-tree-view>
+      <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index" [level]=1 [block]="block" [displayBlockMenu]="true" [clipboardService]="clipboardService" [index]="i" [tree]="tree"></toolbox-tree-view>
     </div>
     </ol>
   `,

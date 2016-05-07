@@ -220,7 +220,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.setMovable(false);
     this.rootBlock_.setDeletable(false);
     if (this.workspace_.flyout_) {
-      var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
+      var margin = this.workspace_.flyout_.MARGIN_BASE * 2;
       var x = this.workspace_.flyout_.width_ + margin;
     } else {
       var margin = 16;

@@ -31,6 +31,8 @@ blocklyApp.WorkspaceView = ng.core
         <h3 #workspaceTitle id="blockly-workspace-title">Workspace</h3>
       </label>
       <div id="blockly-workspace-toolbar" (keydown)="treeService.workspaceButtonKeyHandler($event, activeElementId())">
+        <button id='run-code' (click)='runCode()' disabled={{disableRunCode()}} [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>Run Code</button>
+        <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableRunCode()}} [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>Clear Workspace</button>
       </div>
       <div *ngIf="workspace">
         <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index" tabIndex="0" class="blocklyTree" role="group" [attr.aria-labelledby]="workspaceTitle.id" (keydown)="treeService.keyHandler($event, tree)">
@@ -54,5 +56,18 @@ blocklyApp.WorkspaceView = ng.core
     },
     makeId: function(index) {
       return 'blockly-workspace-tree' + index;
-    }
+    },
+    runCode: function() {
+      //TODO(madeeha): this function needs to be here so
+      //that I can test the demo with the aBlockly library
+      //it should be removed before final check in.
+      playAndGrade();
+    },
+    disableRunCode: function() {
+      if (blocklyApp.workspace.topBlocks_.length == 0){
+        return 'blockly-disabled';
+      } else {
+        return undefined;
+      }
+    },
   });

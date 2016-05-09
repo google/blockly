@@ -35,13 +35,6 @@ blocklyApp.TreeService = ng.core
       }
       return 'blockly-' + Blockly.genUid();
     },
-    setActiveAttribute: function(tree) {
-      if (!document.getElementById(tree.getAttribute(
-          'aria-activedescendant'))) {
-        blocklyApp.debug && console.log('setting tree active descendant');
-        tree.setAttribute('aria-activedescendant', tree.id + '-node0');
-      }
-    },
     setActiveDesc: function(node, id) {
       blocklyApp.debug && console.log('setting active descendant for tree ' + id);
       this.activeDesc_[id] = node;

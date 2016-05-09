@@ -36,7 +36,6 @@ blocklyApp.WorkspaceView = ng.core
       </div>
       <div *ngIf="workspace">
         <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index" tabIndex="0" class="blocklyTree" role="group" [attr.aria-labelledby]="workspaceTitle.id" [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' " (keydown)="treeService.onKeypress($event, tree)">
-          {{treeService.setActiveAttribute(tree)}}
           <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id"></tree-view>
         </ol>
       </div>

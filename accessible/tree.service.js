@@ -25,7 +25,7 @@ blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
       blocklyApp.debug && console.log('making a new tree service');
-      this.activeDesc_ = {};
+      this.activeDesc_ = Object.create(null);
       this.previousKey_;
       this.trees = document.getElementsByClassName('blocklyTree');
     },
@@ -49,6 +49,7 @@ blocklyApp.TreeService = ng.core
     getActiveDesc: function(id) {
       return this.activeDesc_[id];
     },
+    // Makes a given node the active descendant of a given tree.
     updateSelectedNode: function(node, tree, keepFocus) {
       blocklyApp.debug && console.log('updating node: ' + node.id);
       var treeId = tree.id;
@@ -70,8 +71,8 @@ blocklyApp.TreeService = ng.core
         tree.focus();
       }
     },
-    workspaceButtonKeyHandler: function(e, treeId) {
-      blocklyApp.debug && console.log(e.keyCode + 'inside TreeService workspaceButtonKeyHandler');
+    onWorkspaceToolbarKeypress: function(e, treeId) {
+      blocklyApp.debug && console.log(e.keyCode + 'inside TreeService onWorkspaceToolbarKeypress');
       switch (e.keyCode) {
         case 9:
           // 16,9: shift, tab
@@ -103,22 +104,18 @@ blocklyApp.TreeService = ng.core
       if (treeId == this.trees[0].id) {
         return;
       }
-      var next = false;
       for (var i = (this.trees.length - 1); i >= 0; i--) {
-        if (next) {
-          this.trees[i].focus();
-          e.preventDefault();
-          e.stopPropagation();
-          return;
-        }
         if (this.trees[i].id == treeId) {
-          next = true;
+          if (i - 1 < this.trees.length) {
+            this.trees[i - 1].focus();
+          }
+          break;
         }
       }
       e.preventDefault();
       e.stopPropagation();
     },
-    keyHandler: function(e, tree) {
+    onKeypress: function(e, tree) {
       var treeId = tree.id;
       var node = this.getActiveDesc(treeId);
       if (!node) {

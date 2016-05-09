@@ -55,7 +55,7 @@ blocklyApp.ToolboxTreeView = ng.core
             <field-view [attr.aria-level]="level+1" *ngFor="#field of getInfo(inputBlock); #j=index" [field]="field" [level]="level+1"></field-view>
             <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [displayBlockMenu]="false" [level]="level+1"></toolbox-tree-view>
             <li aria-selected=false #listItem1 role="treeitem" [attr.aria-level]="level+1" id="{{treeService.createId(listItem1)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
-              <label #label id="{{treeService.createId(label)}}">{{getInputTypeLabel(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:</label>
+              <label #label id="{{treeService.createId(label)}}">{{getInputTypeLabel(inputBlock.connection)}} {{getValueOrStatementLabel(inputBlock)}} needed:</label>
               {{setLabelledBy(listItem1, concatStringWithSpaces("blockly-argument-text", label.id))}}
             </li>
           </div>
@@ -71,7 +71,7 @@ blocklyApp.ToolboxTreeView = ng.core
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
                   function(_clipboardService, _treeService) {
-      this.infoBlocks = {};
+      this.infoBlocks = Object.create(null);
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;
     }],
@@ -171,7 +171,7 @@ blocklyApp.ToolboxTreeView = ng.core
         return 'blockly-disabled';
       }
     },
-    valueOrStatement: function(inputBlock) {
+    getValueOrStatementLabel: function(inputBlock) {
       if (inputBlock.type == Blockly.NEXT_STATEMENT) {
         return 'statement';
       } else {

@@ -27,7 +27,7 @@ blocklyApp.ToolboxView = ng.core
     selector: 'toolbox-view',
     template: `
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
-      <ol #tree id="blockly-toolbox-tree" *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0" tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="toolboxTitle.id" (keydown)="treeService.keyHandler($event, tree)">
+      <ol #tree id="blockly-toolbox-tree" *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0" tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="toolboxTitle.id" (keydown)="treeService.onKeypress($event, tree)">
         {{treeService.setActiveAttribute(tree)}}
         <li #parent *ngIf="toolboxHasCategories" role="treeitem" aria-level="1" aria-selected=false *ngFor="#category of makeArray(sightedToolbox); #i=index">
           <label #name>{{category.attributes.name.value}}</label>
@@ -58,7 +58,7 @@ blocklyApp.ToolboxView = ng.core
       xhttp.send();
 
       this.toolboxCategories = [];
-      this.toolboxWorkspaces = {};
+      this.toolboxWorkspaces = Object.create(null);
       this.treeService = _treeService;
 
       this.toolboxHasCategories = false;

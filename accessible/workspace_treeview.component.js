@@ -60,12 +60,13 @@ blocklyApp.TreeView = ng.core
                 <button #markAboveButton id="{{treeService.createId(markAboveButton)}}" (click)="clipboardService.markConnection(block.previousConnection)" disabled="{{noPreviousConnectionHTMLText(block)}}">mark spot above</button>
                 {{setLabelledBy(markAbove, concatStringWithSpaces(markAboveButton.id, "blockly-button", noPreviousConnectionHTMLText(block)))}}
               </li>
-              <li #sendToSelected id="{{treeService.createId(sendToSelected)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
+              <li #sendToSelectedListItem id="{{treeService.createId(sendToSelectedListItem)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
                 <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="sendToSelected(block)" disabled="{{markedBlockCompatibilityHTMLText(block)}}">move to marked spot</button>
-                {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", markedBlockCompatibilityHTMLText(block)))}}
+                {{setLabelledBy(sendToSelectedListItem, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", markedBlockCompatibilityHTMLText(block)))}}
               </li>
               <li #delete id="{{treeService.createId(delete)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #deleteButton id="{{treeService.createId(deleteButton)}}" (click)="block.dispose(true)">delete button</button>
+                <button #deleteButton id="{{treeService.createId(deleteButton)}}" (click)="block.dispose(true)">delete</button>
+                {{setLabelledBy(delete, concatStringWithSpaces(deleteButton.id, "blockly-button"))}}
               </li>
             </ol>
             {{addClass(listItem, "blocklyHasChildren")}}
@@ -73,8 +74,8 @@ blocklyApp.TreeView = ng.core
           <div *ngFor="#inputBlock of block.inputList">
             <field-view *ngFor="#field of getInfo(inputBlock)" [field]="field"></field-view>
             <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
-            <li #inputList [attr.aria-level]="level+1" id="{{treeService.createId(inputList)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.keyHandler($event, tree)">
-              {{getInputTypeLabel(inputBlock.connection)}} {{valueOrStatement(inputBlock)}} needed:
+            <li #inputList [attr.aria-level]="level+1" id="{{treeService.createId(inputList)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
+              {{getInputTypeLabel(inputBlock.connection)}} {{getValueOrStatementLabel(inputBlock)}} needed:
               <select aria-label="insert input menu" (change)="inputMenuSelected(inputBlock.connection, $event)">
                 <option value="NO_ACTION" selected>select an action</option>
                 <option value="MARK_SPOT">mark this spot</option>
@@ -93,8 +94,7 @@ blocklyApp.TreeView = ng.core
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
       function(_clipboardService, _treeService) {
-      this.infoBlocks = {};
-      this.nextBlock = {};
+      this.infoBlocks = Object.create(null);
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;
     }],
@@ -206,7 +206,7 @@ blocklyApp.TreeView = ng.core
         return 'blockly-disabled';
       }
     },
-    valueOrStatement: function(inputBlock) {
+    getValueOrStatementLabel: function(inputBlock) {
       if (inputBlock.type == Blockly.NEXT_STATEMENT) {
         return 'statement';
       } else {

@@ -30,12 +30,12 @@ blocklyApp.WorkspaceView = ng.core
       <label>
         <h3 #workspaceTitle id="blockly-workspace-title">Workspace</h3>
       </label>
-      <div id="blockly-workspace-toolbar" (keydown)="treeService.workspaceButtonKeyHandler($event, activeElementId())">
+      <div id="blockly-workspace-toolbar" (keydown)="treeService.onWorkspaceToolbarKeypress($event, getActiveElementId())">
         <button id='run-code' (click)='runCode()' disabled={{disableRunCode()}} [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>Run Code</button>
         <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableRunCode()}} [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>Clear Workspace</button>
       </div>
       <div *ngIf="workspace">
-        <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index" tabIndex="0" class="blocklyTree" role="group" [attr.aria-labelledby]="workspaceTitle.id" (keydown)="treeService.keyHandler($event, tree)">
+        <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index" tabIndex="0" class="blocklyTree" role="group" [attr.aria-labelledby]="workspaceTitle.id" (keydown)="treeService.onKeypress($event, tree)">
           {{treeService.setActiveAttribute(tree)}}
           <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id"></tree-view>
         </ol>
@@ -47,11 +47,10 @@ blocklyApp.WorkspaceView = ng.core
     constructor: [blocklyApp.TreeService, function(_treeService) {
       if (blocklyApp.workspace) {
         this.workspace = blocklyApp.workspace;
-        this.level = blocklyApp.gameManager.level;
         this.treeService = _treeService;
       }
     }],
-    activeElementId: function() {
+    getActiveElementId: function() {
       return document.activeElement.id;
     },
     makeId: function(index) {

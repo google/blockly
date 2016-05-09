@@ -11,7 +11,8 @@
 			"McAang",
 			"Gurkanht",
 			"HakanIST",
-			"Imabadplayer"
+			"Imabadplayer",
+			"Kumkumuk"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "öge",
@@ -32,6 +33,8 @@
 	"DISABLE_BLOCK": "Bloğu Devre Dışı Bırak",
 	"ENABLE_BLOCK": "Bloğu Etkinleştir",
 	"HELP": "Yardım",
+	"UNDO": "Geri al",
+	"REDO": "Yinele",
 	"CHAT": "Bu kutuya yazarak iş birlikçin ile sohbet et!",
 	"AUTH": "Çalışmanızın kaydedilmesi ve sizinle paylaşılmasına izin verilmesi için lütfen bu uygulamaya yetki verin.",
 	"ME": "Beni",

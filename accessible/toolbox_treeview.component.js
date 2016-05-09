@@ -136,6 +136,11 @@ blocklyApp.ToolboxTreeView = ng.core
       return this.infoBlocks[block.id];
     },
     getInputTypeLabel: function(connection) {
+      // Returns an upper case string in the case of official input type names.
+      // Returns the lower case string 'any' if any official input type qualifies.
+      // The differentiation between upper and lower case signifies the difference
+      // between an input type (BOOLEAN, LIST, etc) and the colloquial english term
+      // 'any'.
       if (connection.check_) {
         return connection.check_.join(', ').toUpperCase();
       } else {

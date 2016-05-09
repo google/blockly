@@ -32,23 +32,23 @@ blocklyApp.ToolboxTreeView = ng.core
             'blockly-toolbox-tree-node0'" role="treeitem" [attr.aria-level]="level" id="{{getCategoryId(index, parentList)}}">
         {{setActiveDesc(parentList)}}
         <label #blockSummaryLabel id="blockly-{{block.id}}" style="color:red">{{block.toString()}}</label>
-        {{setLabelledBy(parentList, concatStringWithSpaces("blockly-block-summary", blockSummaryLabel.id))}}
+        {{utilsService.setLabelledBy(parentList, utilsService.concatStringWithSpaces("blockly-block-summary", blockSummaryLabel.id))}}
         <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0"  [attr.aria-level]="level+1">
           <li #listItem class="blocklyHasChildren" id="{{treeService.createId(listItem)}}" *ngIf="displayBlockMenu" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
-            {{setLabelledBy(listItem, concatStringWithSpaces("blockly-block-menu", blockSummaryLabel.id))}}
+            {{utilsService.setLabelledBy(listItem, utilsService.concatStringWithSpaces("blockly-block-menu", blockSummaryLabel.id))}}
             <label #label id="{{treeService.createId(label)}}">block action list </label>
             <ol role="group" *ngIf="displayBlockMenu"  [attr.aria-level]="level+2">
               <li #workspaceCopy id="{{treeService.createId(workspaceCopy)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
                 <button #workspaceCopyButton id="{{treeService.createId(workspaceCopyButton)}}" (click)="copyToWorkspace(block)">copy to workspace</button>
-                {{setLabelledBy(workspaceCopy, concatStringWithSpaces(workspaceCopyButton.id, "blockly-button"))}}
+                {{utilsService.setLabelledBy(workspaceCopy, utilsService.concatStringWithSpaces(workspaceCopyButton.id, "blockly-button"))}}
               </li>
               <li #blockCopy id="{{treeService.createId(blockCopy)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
                 <button #blockCopyButton id="{{treeService.createId(blockCopyButton)}}" (click)="clipboardService.copy(block)">copy to clipboard</button>
-                {{setLabelledBy(blockCopy, concatStringWithSpaces(blockCopyButton.id, "blockly-button"))}}
+                {{utilsService.setLabelledBy(blockCopy, utilsService.concatStringWithSpaces(blockCopyButton.id, "blockly-button"))}}
               </li>
               <li #sendToSelected id="{{treeService.createId(sendToSelected)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="copyToMarked(block)" disabled="{{markedBlockCompatibilityHTMLText(block)}}" [attr.aria-disabled]="markedBlockCompatibilityHTMLText(block)">copy to marked spot</button>
-                {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", markedBlockCompatibilityHTMLText(block)))}}
+                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="copyToMarked(block)" disabled="{{utilsService.markedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))}}">copy to marked spot</button>
+                {{utilsService.setLabelledBy(sendToSelected, utilsService.concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", utilsService.markedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))))}}
               </li>
             </ol>
           </li>
@@ -56,8 +56,8 @@ blocklyApp.ToolboxTreeView = ng.core
             <field-view [attr.aria-level]="level+1" *ngFor="#field of getInfo(inputBlock); #j=index" [field]="field" [level]="level+1"></field-view>
             <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [displayBlockMenu]="false" [level]="level+1"></toolbox-tree-view>
             <li aria-selected=false #listItem1 role="treeitem" [attr.aria-level]="level+1" id="{{treeService.createId(listItem1)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
-              <label #label id="{{treeService.createId(label)}}">{{getInputTypeLabel(inputBlock.connection)}} {{getValueOrStatementLabel(inputBlock)}} needed:</label>
-              {{setLabelledBy(listItem1, concatStringWithSpaces("blockly-argument-text", label.id))}}
+              <label #label id="{{treeService.createId(label)}}">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getValueOrStatementLabel(inputBlock)}} needed:</label>
+              {{utilsService.setLabelledBy(listItem1, utilsService.concatStringWithSpaces("blockly-argument-text", label.id))}}
             </li>
           </div>
         </ol>
@@ -71,10 +71,12 @@ blocklyApp.ToolboxTreeView = ng.core
   })
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
-                  function(_clipboardService, _treeService) {
+                  blocklyApp.UtilsService,
+                  function(_clipboardService, _treeService, _utilsService) {
       this.infoBlocks = Object.create(null);
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;
+      this.utilsService = _utilsService;
     }],
     setActiveDesc: function(parentList){
       // If this is the first child of the toolbox and the
@@ -84,22 +86,6 @@ blocklyApp.ToolboxTreeView = ng.core
             'blockly-toolbox-tree-node0'){
         this.treeService.setActiveDesc(parentList, this.tree.id);
       }
-    },
-    setLabelledBy: function(item, id) {
-      if (!item.getAttribute('aria-labelledby')) {
-        item.setAttribute('aria-labelledby', id);
-      }
-    },
-    concatStringWithSpaces: function() {
-      var string = arguments[0];
-      for (i = 1; i < arguments.length; i++) {
-        var arg = arguments[i];
-        // arg can be undefined and if so, should be ignored.
-        if (arg) {
-          string += ' ' + arg;
-        }
-      }
-      return string;
     },
     getCategoryId: function(index, parentList) {
       // If this is the first block in a category-less toolbox,
@@ -139,18 +125,6 @@ blocklyApp.ToolboxTreeView = ng.core
 
       return this.infoBlocks[block.id];
     },
-    getInputTypeLabel: function(connection) {
-      // Returns an upper case string in the case of official input type names.
-      // Returns the lower case string 'any' if any official input type qualifies.
-      // The differentiation between upper and lower case signifies the difference
-      // between an input type (BOOLEAN, LIST, etc) and the colloquial english term
-      // 'any'.
-      if (connection.check_) {
-        return connection.check_.join(', ').toUpperCase();
-      } else {
-        return 'any';
-      }
-    },
     copyToWorkspace: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
@@ -166,25 +140,6 @@ blocklyApp.ToolboxTreeView = ng.core
       if (this.clipboardService) {
         this.clipboardService.pasteToMarkedConnection(block);
         alert('Block sent to marked spot');
-      }
-    },
-    markedBlockCompatibilityHTMLText: function(block) {
-      if (this.clipboardService
-          .isBlockCompatibleWithMarkedConnection(block)) {
-        // undefined will result in the
-        // 'copy to marked block' option being ENABLED.
-        return undefined;
-      } else {
-        // Anything will result in the
-        // 'copy to marked block' option being DISABLED.
-        return 'blockly-disabled';
-      }
-    },
-    getValueOrStatementLabel: function(inputBlock) {
-      if (inputBlock.type == Blockly.NEXT_STATEMENT) {
-        return 'statement';
-      } else {
-        return 'value';
       }
     }
   });

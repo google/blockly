@@ -75,19 +75,6 @@ blocklyApp.ToolboxView = ng.core
         parent.setAttribute('aria-selected', 'true');
       }
     },
-    addClass: function(node, classText) {
-      // Ensure that node doesn't have class already in it.
-      var classList = (node.className || []).split('');
-      var canAdd = classList.indexOf(classText) == -1;
-      // Add class if it doesn't.
-      if (canAdd) {
-        if (classList.length) {
-          node.className += classText;
-        } else {
-          node.className += ' ' + classText;
-        }
-      }
-    },
     makeArray: function(val) {
       if (val) {
         if (this.toolboxCategories.length) {

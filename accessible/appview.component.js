@@ -50,10 +50,10 @@ blocklyApp.AppView = ng.core
     <label id="blockly-disabled" aria-hidden="true" hidden>unavailable</label>
     `,
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
-    providers: [blocklyApp.ClipboardService, blocklyApp.TreeService],
+    providers: [blocklyApp.ClipboardService, blocklyApp.TreeService, blocklyApp.UtilsService],
   })
   .Class({
-    constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService, function(_clipboardService, _treeService) {
+    constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService, blocklyApp.UtilsService, function(_clipboardService, _treeService, _utilsService) {
       this.treeService = _treeService;
     }]
   });

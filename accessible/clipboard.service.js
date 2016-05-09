@@ -21,8 +21,6 @@
  * @fileoverview Angular2 Service that handles the clipboard and marked spots.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-var blocklyApp = {};
-
 blocklyApp.ClipboardService = ng.core
   .Class({
     constructor: function() {

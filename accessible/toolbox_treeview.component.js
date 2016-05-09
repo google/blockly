@@ -72,7 +72,6 @@ blocklyApp.ToolboxTreeView = ng.core
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
                   function(_clipboardService, _treeService) {
       this.infoBlocks = {};
-      this.nextBlock = {};
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;
     }],

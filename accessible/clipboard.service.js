@@ -22,7 +22,7 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-var blocklyApp = blocklyApp || {};
+var blocklyApp = {};
 
 blocklyApp.ClipboardService = ng.core
   .Class({

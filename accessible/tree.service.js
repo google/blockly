@@ -24,7 +24,7 @@
 blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
-      console.log('making a new tree service');
+      blocklyApp.debug && console.log('making a new tree service');
       this.activeDesc_ = {};
       this.previousKey_;
       this.trees = document.getElementsByClassName('blocklyTree');
@@ -88,16 +88,12 @@ blocklyApp.TreeService = ng.core
       this.previousKey_ = e.keyCode;
     },
     goToNextTree: function(treeId, e) {
-      var next = false;
       for (var i = 0; i < this.trees.length; i++) {
-        if (next) {
-          this.trees[i].focus();
-          e.preventDefault();
-          e.stopPropagation();
-          return;
-        }
         if (this.trees[i].id == treeId) {
-          next = true;
+          if (i + 1 < this.trees.length) {
+            this.trees[i + 1].focus();
+          }
+          break;
         }
       }
       e.preventDefault();
@@ -133,8 +129,8 @@ blocklyApp.TreeService = ng.core
         case 9:
           // 16,9: shift, tab
           if (e.shiftKey) {
-            console.log('shifttabbing');
-            // If the previous key is shift, we're shift-tabbing mode.
+            blocklyApp.debug && console.log('shifttabbing');
+            // If the previous key is shift, we're shift-tabbing.
             this.goToPreviousTree(treeId, e);
           } else {
             // If previous key isn't shift, we're tabbing

@@ -27,12 +27,11 @@ blocklyApp.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-      <li #parentList aria-selected=false role="treeitem" [attr.aria-level]="level" id="{{createCategoryDependantId(index, parentList)}}">
+      <li #parentList [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0}" aria-selected=false role="treeitem" [attr.aria-level]="level" id="{{createCategoryDependantId(index, parentList)}}">
         <label #blockSummaryLabel id="blockly-{{block.id}}" style="color:red">{{block.toString()}}</label>
         {{setLabelledBy(parentList, concatStringWithSpaces("blockly-block-summary", blockSummaryLabel.id))}}
         <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0"  [attr.aria-level]="level+1">
-          {{addClass(parentList, "blocklyHasChildren")}}
-          <li #listItem id="{{treeService.createId(listItem)}}" *ngIf="displayBlockMenu" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
+          <li #listItem class="blocklyHasChildren" id="{{treeService.createId(listItem)}}" *ngIf="displayBlockMenu" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
             {{setLabelledBy(listItem, concatStringWithSpaces("blockly-block-menu", blockSummaryLabel.id))}}
             <label #label id="{{treeService.createId(label)}}">block action list </label>
             <ol role="group" *ngIf="displayBlockMenu"  [attr.aria-level]="level+2">
@@ -49,7 +48,6 @@ blocklyApp.ToolboxTreeView = ng.core
                 {{setLabelledBy(sendToSelected, concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", markedBlockCompatibilityHTMLText(block)))}}
               </li>
             </ol>
-            {{addClass(listItem, "blocklyHasChildren")}}
           </li>
           <div *ngFor="#inputBlock of block.inputList; #i=index">
             <field-view [attr.aria-level]="level+1" *ngFor="#field of getInfo(inputBlock); #j=index" [field]="field" [level]="level+1"></field-view>

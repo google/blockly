@@ -29,12 +29,11 @@ blocklyApp.ToolboxView = ng.core
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
       <ol #tree id="blockly-toolbox-tree" *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0" tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="toolboxTitle.id" (keydown)="treeService.onKeypress($event, tree)">
         {{treeService.setActiveAttribute(tree)}}
-        <li #parent *ngIf="toolboxHasCategories" role="treeitem" aria-level="1" aria-selected=false *ngFor="#category of makeArray(sightedToolbox); #i=index">
+        <li #parent [ngClass]="{blocklyHasChildren: getToolboxWorkspace(category).topBlocks_.length > 0}" *ngIf="toolboxHasCategories" role="treeitem" aria-level="1" aria-selected=false *ngFor="#category of makeArray(sightedToolbox); #i=index">
           <label #name>{{category.attributes.name.value}}</label>
           {{labelCategory(name, i, tree)}}
           <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
             <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_" [level]=2 [block]="block" [displayBlockMenu]="true" [clipboardService]="clipboardService"></toolbox-tree-view>
-            {{addClass(parent, "blocklyHasChildren")}}
           </ol>
         </li>
         <div *ngIf="!toolboxHasCategories">

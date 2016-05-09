@@ -32,7 +32,7 @@ blocklyApp.TreeView = ng.core
         <label #blockSummary id="blockly-{{block.id}}">{{block.toString()}}</label>
         {{setLabelledBy(parentList, concatStringWithSpaces("blockly-block-summary", blockSummary.id))}}
         <ol role="group"  [attr.aria-level]="level+1">
-          <li #listItem id="{{treeService.createId(listItem)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
+          <li #listItem id="{{treeService.createId(listItem)}}" class="blocklyHasChildren" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
             {{setLabelledBy(listItem, concatStringWithSpaces("blockly-block-menu", blockSummary.id))}}
             <label #label id="{{treeService.createId(label)}}">block action list </label>
             <ol role="group"  [attr.aria-level]="level+2">
@@ -69,7 +69,6 @@ blocklyApp.TreeView = ng.core
                 {{setLabelledBy(delete, concatStringWithSpaces(deleteButton.id, "blockly-button"))}}
               </li>
             </ol>
-            {{addClass(listItem, "blocklyHasChildren")}}
           </li>
           <div *ngFor="#inputBlock of block.inputList">
             <field-view *ngFor="#field of getInfo(inputBlock)" [field]="field"></field-view>
@@ -133,19 +132,6 @@ blocklyApp.TreeView = ng.core
       }
       if (tree && tree.getAttribute('aria-activedescendant') == parentList.id) {
         this.treeService.updateSelectedNode(parentList, tree, false);
-      }
-    },
-    addClass: function(node, classText) {
-      // Ensure that node doesn't have class already in it.
-      var classList = (node.className || '').split(' ');
-      var canAdd = classList.indexOf(classText) == -1;
-      // Add class if it doesn't.
-      if (canAdd) {
-        if (classList.length) {
-          node.className += ' ' + classText;
-        } else {
-          node.className = classText;
-        }
       }
     },
     setId: function(block) {

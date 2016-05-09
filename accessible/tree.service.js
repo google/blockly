@@ -56,6 +56,7 @@ blocklyApp.TreeService = ng.core
       var activeDesc = this.getActiveDesc(treeId);
       if (activeDesc) {
         activeDesc.classList.remove('blocklyActiveDescendant');
+        activeDesc.setAttribute('aria-selected', 'false');
       } else {
         blocklyApp.debug && console.log('updateSelectedNode: there is no active descendant');
       }

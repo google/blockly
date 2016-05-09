@@ -27,7 +27,9 @@ blocklyApp.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-      <li #parentList [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0}" aria-selected=false role="treeitem" [attr.aria-level]="level" id="{{getCategoryId(index, parentList)}}">
+      <li #parentList [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && tree.getAttribute('aria-activedescendant') ==
+            'blockly-toolbox-tree-node0'}" [attr.aria-selected]="index == 0 && tree.getAttribute('aria-activedescendant') ==
+            'blockly-toolbox-tree-node0'" role="treeitem" [attr.aria-level]="level" id="{{getCategoryId(index, parentList)}}">
         {{setActiveDesc(parentList)}}
         <label #blockSummaryLabel id="blockly-{{block.id}}" style="color:red">{{block.toString()}}</label>
         {{setLabelledBy(parentList, concatStringWithSpaces("blockly-block-summary", blockSummaryLabel.id))}}
@@ -77,14 +79,10 @@ blocklyApp.ToolboxTreeView = ng.core
     setActiveDesc: function(parentList){
       // If this is the first child of the toolbox and the
       // current active descendant of the tree is this child,
-      // then give this the blocklyActiveDescendant class.
-      if (this.index == 0){
-        if (this.tree.getAttribute('aria-activedescendant') ==
-            'blockly-toolbox-tree-node0') {
-          this.addClass(parentList, 'blocklyActiveDescendant');
-          parentList.setAttribute('aria-selected', 'true');
-          this.treeService.setActiveDesc(parentList, this.tree.id);
-        }
+      // then set the active descendant stored in the treeService.
+      if (this.index == 0 && this.tree.getAttribute('aria-activedescendant') ==
+            'blockly-toolbox-tree-node0'){
+        this.treeService.setActiveDesc(parentList, this.tree.id);
       }
     },
     setLabelledBy: function(item, id) {

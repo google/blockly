@@ -511,7 +511,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     e.stopPropagation();
     return;
   }
-  Blockly.setPageSelectable(false);
   this.workspace.markFocused();
   // Update Blockly's knowledge of its own location.
   Blockly.svgResize(this.workspace);
@@ -556,6 +555,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**
@@ -571,7 +571,6 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     Blockly.Events.fire(
         new Blockly.Events.Ui(this, 'click', undefined, undefined));
   }
-  Blockly.setPageSelectable(true);
   Blockly.terminateDrag_();
   if (Blockly.selected && Blockly.highlightedConnection_) {
     // Connect two blocks together.
@@ -892,6 +891,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**

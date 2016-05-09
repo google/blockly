@@ -290,19 +290,6 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
 };
 
 /**
- * Set css classes to allow/disallow the browser from selecting/highlighting
- * text, etc. on the page.
- * @param {boolean} selectable Whether elements on the page can be selected.
- */
-Blockly.setPageSelectable = function(selectable) {
-    if (selectable) {
-      Blockly.removeClass_(document.body, 'blocklyNonSelectable');
-    } else {
-      Blockly.addClass_(document.body, 'blocklyNonSelectable');
-    }
-};
-
-/**
  * Is this event a right-click?
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.

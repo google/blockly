@@ -285,10 +285,16 @@ Blockly.RenderedConnection.prototype.isConnectionAllowed = function(candidate,
       candidate);
 };
 
-Blockly.RenderedConnection.prototype.disconnectInternal = function(parentBlock,
-    childBlock, otherConnection) {
-  Blockly.RenderedConnection.superClass_.disconnectInternal.call(this,
-      parentBlock, childBlock, otherConnection);
+/**
+ * Disconnect two blocks that are connected by this connection.
+ * @param {!Blockly.Block} parentBlock The superior block.
+ * @param {!Blockly.Block} childBlock The inferior block.
+ * @private
+ */
+Blockly.RenderedConnection.prototype.disconnectInternal_ = function(parentBlock,
+    childBlock) {
+  Blockly.RenderedConnection.superClass_.disconnectInternal_.call(this,
+      parentBlock, childBlock);
   // Rerender the parent so that it may reflow.
   if (parentBlock.rendered) {
     parentBlock.render();
@@ -299,16 +305,26 @@ Blockly.RenderedConnection.prototype.disconnectInternal = function(parentBlock,
   }
 };
 
-Blockly.RenderedConnection.prototype.respawnShadow = function(parentConnection,
-    parentBlock) {
+/**
+ * Respawn the shadow block if there was one connected to the this connection.
+ * Render/rerender blocks as needed.
+ * @private
+ */
+Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
+  var parentBlock = this.getSourceBlock();
   // Respawn the shadow block if there is one.
-  var shadow = parentConnection.getShadowDom();
+  var shadow = this.getShadowDom();
   if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
     var blockShadow =
-        Blockly.RenderedConnection.superClass_.respawnShadow.call(this,
-        parentConnection, parentBlock, childBlock);
+        Blockly.RenderedConnection.superClass_.respawnShadow_.call(this);
+    if (!blockShadow) {
+      throw 'Couldn\'t respawn the shadow block that should exist here.';
+    }
     blockShadow.initSvg();
     blockShadow.render(false);
+    if (parentBlock.rendered) {
+      parentBlock.render();
+    }
   }
 };
 
@@ -323,6 +339,12 @@ Blockly.RenderedConnection.prototype.neighbours_ = function(maxLimit) {
   return this.dbOpposite_.getNeighbours(this, maxLimit);
 };
 
+/**
+ * Connect two connections together.  This is the connection on the superior
+ * block.  Rerender blocks as needed.
+ * @param {!Blockly.Connection} childConnection Connection on inferior block.
+ * @private
+ */
 Blockly.RenderedConnection.prototype.connect_ = function(childConnection) {
   Blockly.RenderedConnection.superClass_.connect_.call(this, childConnection);
 

@@ -484,16 +484,23 @@ Blockly.Connection.prototype.disconnect = function() {
     childBlock = this.sourceBlock_;
     parentConnection = otherConnection;
   }
-  this.disconnectInternal(parentBlock, childBlock, otherConnection);
-  this.respawnShadow(parentConnection, parentBlock);
+  this.disconnectInternal_(parentBlock, childBlock);
+  parentConnection.respawnShadow_();
 };
 
-Blockly.Connection.prototype.disconnectInternal = function(parentBlock,
-    childBlock, otherConnection) {
+/**
+ * Disconnect two blocks that are connected by this connection.
+ * @param {!Blockly.Block} parentBlock The superior block.
+ * @param {!Blockly.Block} childBlock The inferior block.
+ * @private
+ */
+Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
+    childBlock) {
   var event;
   if (Blockly.Events.isEnabled()) {
     event = new Blockly.Events.Move(childBlock);
   }
+  var otherConnection = this.targetConnection;
   otherConnection.targetConnection = null;
   this.targetConnection = null;
   childBlock.setParent(null);
@@ -503,17 +510,22 @@ Blockly.Connection.prototype.disconnectInternal = function(parentBlock,
   }
 };
 
-Blockly.Connection.prototype.respawnShadow = function(parentConnection,
-    parentBlock) {
-  // Respawn the shadow block if there is one.
-  var shadow = parentConnection.getShadowDom();
+/**
+ * Respawn the shadow block if there was one connected to the this connection.
+ * @return {Blockly.Block} The newly spawned shadow block, or null if none was
+ *    spawned.
+ * @private
+ */
+Blockly.Connection.prototype.respawnShadow_ = function() {
+  var parentBlock = this.getSourceBlock();
+  var shadow = this.getShadowDom();
   if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
     var blockShadow =
         Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {
-      parentConnection.connect(blockShadow.outputConnection);
+      this.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {
-      parentConnection.connect(blockShadow.previousConnection);
+      this.connect(blockShadow.previousConnection);
     } else {
       throw 'Child block does not have output or previous statement.';
     }

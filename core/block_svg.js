@@ -1590,6 +1590,12 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
   return myConnections;
 };
 
-Blockly.BlockSvg.prototype.makeConnection = function(type) {
+/**
+ * Create a connection of the specified type.
+ * @param {number} type The type of the connection to create.
+ * @return {!Blockly.RenderedConnection} A new connection of the specified type.
+ * @private
+ */
+Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
   return new Blockly.RenderedConnection(this, type);
 };

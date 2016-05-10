@@ -486,7 +486,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
       if (!collide) {
         // Check for blocks in snap range to any of its connections.
         var connections = block.getConnections_(false);
-        for (var j = 0, connection; connection = connections[j]; j++) {
+        for (var i = 0, connection; connection = connections[i]; i++) {
           var neighbour = connection.closest(Blockly.SNAP_RADIUS,
               new goog.math.Coordinate(blockX, blockY));
           if (neighbour.connection) {
@@ -808,7 +808,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
       }
     }
   }
-  for (i = 0; i < topBlocks.length; i++) {
+  for (var i = 0; i < topBlocks.length; i++) {
     addDeletableBlocks(topBlocks[i]);
   }
   var deleteOption = {

@@ -119,7 +119,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     input.init();
   }
   var icons = this.getIcons();
-  for (i = 0; i < icons.length; i++) {
+  for (var i = 0; i < icons.length; i++) {
     icons[i].createIcon();
   }
   this.updateColour();
@@ -447,7 +447,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
   var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
   if (collapsed) {
     var icons = this.getIcons();
-    for (i = 0; i < icons.length; i++) {
+    for (var i = 0; i < icons.length; i++) {
       icons[i].setVisible(false);
     }
     var text = this.toString(Blockly.COLLAPSE_CHARS);
@@ -464,7 +464,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     renderList[0] = this;
   }
   if (this.rendered) {
-    for (var j = 0, block; block = renderList[j]; j++) {
+    for (var i = 0, block; block = renderList[i]; i++) {
       block.render();
     }
     // Don't bump neighbours.
@@ -497,7 +497,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
       }
     }
   }
-  i = list.indexOf(start);
+  var i = list.indexOf(start);
   if (i == -1) {
     // No start location, start at the beginning or end.
     i = forward ? -1 : list.length;
@@ -792,12 +792,12 @@ Blockly.BlockSvg.prototype.moveConnections_ = function(dx, dy) {
     myConnections[i].moveBy(dx, dy);
   }
   var icons = this.getIcons();
-  for (i = 0; i < icons.length; i++) {
+  for (var i = 0; i < icons.length; i++) {
     icons[i].computeIconLocation();
   }
 
   // Recurse through all blocks attached under this one.
-  for (i = 0; i < this.childBlocks_.length; i++) {
+  for (var i = 0; i < this.childBlocks_.length; i++) {
     this.childBlocks_[i].moveConnections_(dx, dy);
   }
 };
@@ -862,7 +862,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
   if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
     // Unrestricted dragging.
     var dxy = goog.math.Coordinate.difference(oldXY, this.dragStartXY_);
-    group = this.getSvgRoot();
+    var group = this.getSvgRoot();
     group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
     group.setAttribute('transform', group.translate_ + group.skew_);
     // Drag all the nested bubbles.
@@ -878,7 +878,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
     var closestConnection = null;
     var localConnection = null;
     var radiusConnection = Blockly.SNAP_RADIUS;
-    for (i = 0; i < myConnections.length; i++) {
+    for (var i = 0; i < myConnections.length; i++) {
       var myConnection = myConnections[i];
       var neighbour = myConnection.closest(radiusConnection, dxy);
       if (neighbour.connection) {

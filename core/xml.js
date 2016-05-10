@@ -109,7 +109,7 @@ Blockly.Xml.blockToDom = function(block) {
     element.appendChild(dataElement);
   }
 
-  for (i = 0; input = block.inputList[i]; i++) {
+  for (var i = 0, input; input = block.inputList[i]; i++) {
     var container;
     var empty = true;
     if (input.type == Blockly.DUMMY_INPUT) {
@@ -156,11 +156,11 @@ Blockly.Xml.blockToDom = function(block) {
 
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
-    container = goog.dom.createDom('next', null,
+    var container = goog.dom.createDom('next', null,
         Blockly.Xml.blockToDom(nextBlock));
     element.appendChild(container);
   }
-  shadow = block.nextConnection && block.nextConnection.getShadowDom();
+  var shadow = block.nextConnection && block.nextConnection.getShadowDom();
   if (shadow && (!nextBlock || !nextBlock.isShadow())) {
     container.appendChild(Blockly.Xml.cloneShadow_(shadow));
   }
@@ -337,7 +337,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].initSvg();
     }
-    for (i = blocks.length - 1; i >= 0; i--) {
+    for (var i = blocks.length - 1; i >= 0; i--) {
       blocks[i].render(false);
     }
     // Populating the connection database may be defered until after the blocks

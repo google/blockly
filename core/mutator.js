@@ -115,7 +115,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
       quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
     }
   } else {
-    quarkXml = null;
+    var quarkXml = null;
   }
   var workspaceOptions = {
     languageTree: quarkXml,
@@ -223,8 +223,8 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       var margin = this.workspace_.flyout_.CORNER_RADIUS * 2;
       var x = this.workspace_.flyout_.width_ + margin;
     } else {
-      margin = 16;
-      x = margin;
+      var margin = 16;
+      var x = margin;
     }
     if (this.block_.RTL) {
       x = -x;
@@ -283,7 +283,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace == this.workspace_) {
     Blockly.Events.setGroup(true);
-    block = this.block_;
+    var block = this.block_;
     var oldMutationDom = block.mutationToDom();
     var oldMutation = oldMutationDom && Blockly.Xml.domToText(oldMutationDom);
     // Switch off rendering while the source block is rebuilt.

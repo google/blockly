@@ -104,7 +104,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
       func.call(thisObject, e);
     };
   } else {
-    wrapFunc = func;
+    var wrapFunc = func;
   }
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];
@@ -374,8 +374,8 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
       wordPrefix = len + 1;
     }
   }
-  for (i = 1; i < array.length; i++) {
-    letter = array[i][len];
+  for (var i = 1; i < array.length; i++) {
+    var letter = array[i][len];
     if (letter && letter != ' ') {
       return wordPrefix;
     }
@@ -409,8 +409,8 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
       wordPrefix = len + 1;
     }
   }
-  for (i = 1; i < array.length; i++) {
-    letter = array[i].charAt(array[i].length - len - 1);
+  for (var i = 1; i < array.length; i++) {
+    var letter = array[i].charAt(array[i].length - len - 1);
     if (letter && letter != ' ') {
       return wordPrefix;
     }
@@ -478,7 +478,7 @@ Blockly.tokenizeInterpolation = function(message) {
       }
     }
   }
-  text = buffer.join('');
+  var text = buffer.join('');
   if (text) {
     tokens.push(text);
   }

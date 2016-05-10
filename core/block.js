@@ -84,7 +84,8 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
    */
   this.childBlocks_ = [];
 
-  /** @type {boolean}
+  /**
+   * @type {boolean}
    * @private
    */
   this.deletable_ = true;
@@ -222,13 +223,13 @@ Blockly.Block.prototype.dispose = function(healStack) {
   }
   // Then dispose of myself.
   // Dispose of all inputs and their fields.
-  for (var j = 0, input; input = this.inputList[j]; j++) {
+  for (var i = 0, input; input = this.inputList[i]; i++) {
     input.dispose();
   }
   this.inputList.length = 0;
   // Dispose of any remaining connections (next/previous/output).
   var connections = this.getConnections_(true);
-  for (i = 0; i < connections.length; i++) {
+  for (var i = 0; i < connections.length; i++) {
     var connection = connections[i];
     if (connection.isConnected()) {
       connection.disconnect();
@@ -586,7 +587,7 @@ Blockly.Block.prototype.setConnectionsHidden = function(hidden) {
     for (var i = 0, connection; connection = myConnections[i]; i++) {
       connection.setHidden(hidden);
       if (connection.isSuperior()) {
-        child = connection.targetBlock();
+        var child = connection.targetBlock();
         if (child) {
           child.setConnectionsHidden(hidden);
         }
@@ -843,7 +844,7 @@ Blockly.Block.prototype.getInputsInline = function() {
       return false;
     }
   }
-  for (i = 1; i < this.inputList.length; i++) {
+  for (var i = 1; i < this.inputList.length; i++) {
     if (this.inputList[i - 1].type == Blockly.INPUT_VALUE &&
         this.inputList[i].type == Blockly.DUMMY_INPUT) {
       // Dummy input after a value input.  Inline them.
@@ -1063,7 +1064,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   };
   // Populate block with inputs and fields.
   var fieldStack = [];
-  for (i = 0; i < elements.length; i++) {
+  for (var i = 0; i < elements.length; i++) {
     var element = elements[i];
     if (typeof element == 'string') {
       fieldStack.push([element, undefined]);

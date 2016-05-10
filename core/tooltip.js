@@ -317,7 +317,7 @@ Blockly.Tooltip.wrap_ = function(text, limit) {
     // Seed the list with evenly spaced linebreaks.
     var steps = words.length / lineCount;
     var insertedBreaks = 1;
-    for (i = 0; i < words.length - 1; i++) {
+    for (var i = 0; i < words.length - 1; i++) {
       if (insertedBreaks < (i + 1.5) / steps) {
         insertedBreaks++;
         wordBreaks[i] = true;
@@ -358,7 +358,7 @@ Blockly.Tooltip.wrapScore_ = function(words, wordBreaks, limit) {
   var maxLength = Math.max.apply(Math, lineLengths);
 
   var score = 0;
-  for (i = 0; i < lineLengths.length; i++) {
+  for (var i = 0; i < lineLengths.length; i++) {
     // Optimize for width.
     // -2 points per char over limit (scaled to the power of 1.5).
     score -= Math.pow(Math.abs(limit - lineLengths[i]), 1.5) * 2;

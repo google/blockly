@@ -45,26 +45,26 @@ Blockly.Options = function(options) {
     var hasDisable = false;
     var hasSounds = false;
   } else {
-    languageTree = Blockly.Options.parseToolboxTree(options['toolbox']);
-    hasCategories = Boolean(languageTree &&
+    var languageTree = Blockly.Options.parseToolboxTree(options['toolbox']);
+    var hasCategories = Boolean(languageTree &&
         languageTree.getElementsByTagName('category').length);
-    hasTrashcan = options['trashcan'];
+    var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
     }
-    hasCollapse = options['collapse'];
+    var hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
     }
-    hasComments = options['comments'];
+    var hasComments = options['comments'];
     if (hasComments === undefined) {
       hasComments = hasCategories;
     }
-    hasDisable = options['disable'];
+    var hasDisable = options['disable'];
     if (hasDisable === undefined) {
       hasDisable = hasCategories;
     }
-    hasSounds = options['sounds'];
+    var hasSounds = options['sounds'];
     if (hasSounds === undefined) {
       hasSounds = true;
     }

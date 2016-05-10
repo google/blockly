@@ -285,7 +285,7 @@ Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
       if (this.hasColours_) {
         var border = '8px solid ' + (child.hexColour || '#ddd');
       } else {
-        border = 'none';
+        var border = 'none';
       }
       if (this.workspace_.RTL) {
         element.style.borderRight = border;
@@ -321,7 +321,7 @@ Blockly.Toolbox.prototype.getClientRect = function() {
     return new goog.math.Rect(toolboxRect.left, -BIG_NUM, width, BIG_NUM * 2);
   }
   // LTR
-  width = BIG_NUM + toolboxRect.width + toolboxRect.left;
+  var width = BIG_NUM + toolboxRect.width + toolboxRect.left;
   return new goog.math.Rect(-BIG_NUM, -BIG_NUM, width, BIG_NUM * 2);
 };
 

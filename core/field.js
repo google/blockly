@@ -254,11 +254,11 @@ Blockly.Field.prototype.render_ = function() {
       var width = Blockly.Field.cacheWidths_[key];
     } else {
       try {
-        width = this.textElement_.getComputedTextLength();
+        var width = this.textElement_.getComputedTextLength();
       } catch (e) {
         // MSIE 11 is known to throw "Unexpected call to method or property
         // access." if Blockly is hidden.
-        width = this.textElement_.textContent.length * 8;
+        var width = this.textElement_.textContent.length * 8;
       }
       if (Blockly.Field.cacheWidths_) {
         Blockly.Field.cacheWidths_[key] = width;
@@ -269,7 +269,7 @@ Blockly.Field.prototype.render_ = function() {
           width + Blockly.BlockSvg.SEP_SPACE_X);
     }
   } else {
-    width = 0;
+    var width = 0;
   }
   this.size_.width = width;
 };

@@ -24,10 +24,10 @@
  */
 'use strict';
 
-
 goog.provide('Blockly.RenderedConnection');
 
 goog.require('Blockly.Connection');
+
 
 /**
  * Class for a connection between blocks that may be rendered on screen.
@@ -151,7 +151,7 @@ Blockly.RenderedConnection.prototype.tighten_ = function() {
  * @param {number} dy Vertical offset between this connection's location
  *     in the database and the current location (as a result of dragging).
  * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
- *     properties:' connection' which is either another connection or null,
+ *     properties: 'connection' which is either another connection or null,
  *     and 'radius' which is the distance.
  */
 Blockly.RenderedConnection.prototype.closest = function(maxLimit, dx, dy) {
@@ -332,7 +332,7 @@ Blockly.RenderedConnection.prototype.respawnShadow_ = function() {
  * Find all nearby compatible connections to this connection.
  * Type checking does not apply, since this function is used for bumping.
  * @param {number} maxLimit The maximum radius to another connection.
- * @return {!Array.<Blockly.Connection>} List of connections.
+ * @return {!Array.<!Blockly.Connection>} List of connections.
  * @private
  */
 Blockly.RenderedConnection.prototype.neighbours_ = function(maxLimit) {

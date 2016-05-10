@@ -413,7 +413,7 @@ Blockly.WorkspaceSvg.prototype.traceOn = function(armed) {
   }
   if (armed) {
     this.traceWrapper_ = Blockly.bindEvent_(this.svgBlockCanvas_,
-        'blocklySelectChange', this, function() {this.traceOn_ = false});
+        'blocklySelectChange', this, function() {this.traceOn_ = false;});
   }
 };
 
@@ -538,7 +538,6 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  * @return {boolean} True if event is in a delete area.
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
-  var isDelete = false;
   var xy = new goog.math.Coordinate(e.clientX, e.clientY);
   if (this.deleteAreaTrash_) {
     if (this.deleteAreaTrash_.contains(xy)) {

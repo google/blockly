@@ -48,16 +48,31 @@ goog.require('goog.userAgent');
  */
 Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   // Create core elements for the block.
-  /** @type {SVGElement} */
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-  /** @type {SVGElement} */
+
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgPathDark_ = Blockly.createSvgElement('path',
       {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
       this.svgGroup_);
-  /** @type {SVGElement} */
+
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgPath_ = Blockly.createSvgElement('path', {'class': 'blocklyPath'},
       this.svgGroup_);
-  /** @type {SVGElement} */
+
+  /**
+   * @type {SVGElement}
+   * @private
+   */
   this.svgPathLight_ = Blockly.createSvgElement('path',
       {'class': 'blocklyPathLight'}, this.svgGroup_);
   this.svgPath_.tooltip = this;
@@ -365,7 +380,8 @@ Blockly.BlockSvg.prototype.snapToGrid = function() {
 /**
  * Returns a bounding box describing the dimensions of this block
  * and any blocks stacked below it.
- * @return {!{height: number, width: number}} Object with height and width properties.
+ * @return {!{height: number, width: number}} Object with height and width
+ *    properties.
  */
 Blockly.BlockSvg.prototype.getHeightWidth = function() {
   var height = this.height;
@@ -384,10 +400,10 @@ Blockly.BlockSvg.prototype.getHeightWidth = function() {
 };
 
 /**
- * Returns the coordinates of a bounding box describing the dimensions of this block
- * and any blocks stacked below it.
+ * Returns the coordinates of a bounding box describing the dimensions of this
+ * block and any blocks stacked below it.
  * @return {!{topLeft: goog.math.Coordinate, bottomRight: goog.math.Coordinate}}
- *         Object with top left and bottom right coordinates of the bounding box.
+ *    Object with top left and bottom right coordinates of the bounding box.
  */
 Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var blockXY = this.getRelativeToSurfaceXY(this);
@@ -397,10 +413,12 @@ Blockly.BlockSvg.prototype.getBoundingRectangle = function() {
   var bottomRight;
   if (this.RTL) {
     // Width has the tab built into it already so subtract it here.
-    topLeft = new goog.math.Coordinate(blockXY.x - (blockBounds.width - tab), blockXY.y);
+    topLeft = new goog.math.Coordinate(blockXY.x - (blockBounds.width - tab),
+        blockXY.y);
     // Add the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.
-    bottomRight = new goog.math.Coordinate(blockXY.x + tab, blockXY.y + blockBounds.height);
+    bottomRight = new goog.math.Coordinate(blockXY.x + tab,
+        blockXY.y + blockBounds.height);
   } else {
     // Subtract the width of the tab/puzzle piece knob to the x coordinate
     // since X is the corner of the rectangle, not the whole puzzle piece.

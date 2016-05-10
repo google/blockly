@@ -475,7 +475,7 @@ Blockly.tokenizeInterpolation = function(message) {
 /**
  * Generate a unique ID.  This should be globally unique.
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
- * @return {string}
+ * @return {string} A globally unique ID string.
  */
 Blockly.genUid = function() {
   var length = 20;

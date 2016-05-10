@@ -72,25 +72,55 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {boolean} */
   this.contextMenu = true;
 
-  /** @type {Blockly.Block} */
+  /**
+   * @type {Blockly.Block}
+   * @private
+   */
   this.parentBlock_ = null;
-  /** @type {!Array.<!Blockly.Block>} */
+
+  /**
+   * @type {!Array.<!Blockly.Block>}
+   * @private
+   */
   this.childBlocks_ = [];
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.deletable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.movable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.editable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.isShadow_ = false;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.collapsed_ = false;
 
   /** @type {string|Blockly.Comment} */
   this.comment = null;
 
-  /** @type {!goog.math.Coordinate} */
+  /**
+   * @type {!goog.math.Coordinate}
+   * @private
+   */
   this.xy_ = new goog.math.Coordinate(0, 0);
 
   /** @type {!Blockly.Workspace} */
@@ -1020,11 +1050,11 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
       elements[elements.length - 1]['type'].indexOf('field_') == 0)) {
-    var input = {type: 'input_dummy'};
+    var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {
-      input['align'] = lastDummyAlign;
+      dummyInput['align'] = lastDummyAlign;
     }
-    elements.push(input);
+    elements.push(dummyInput);
   }
   // Lookup of alignment constants.
   var alignmentLookup = {

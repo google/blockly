@@ -61,8 +61,8 @@ blocklyApp.TreeView = ng.core
                 {{utilsService.setLabelledBy(markAbove, utilsService.concatStringWithSpaces(markAboveButton.id, "blockly-button", noPreviousConnectionHTMLText(block)))}}
               </li>
               <li #sendToSelectedListItem id="{{treeService.createId(sendToSelectedListItem)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="sendToSelected(block)" disabled="{{utilsService.markedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))}}">move to marked spot</button>
-                {{utilsService.setLabelledBy(sendToSelectedListItem, utilsService.concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", utilsService.markedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))))}}
+                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="sendToSelected(block)" disabled="{{utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))}}">move to marked spot</button>
+                {{utilsService.setLabelledBy(sendToSelectedListItem, utilsService.concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))))}}
               </li>
               <li #delete id="{{treeService.createId(delete)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
                 <button #deleteButton id="{{treeService.createId(deleteButton)}}" (click)="block.dispose(true)">delete</button>
@@ -74,7 +74,7 @@ blocklyApp.TreeView = ng.core
             <field-view *ngFor="#field of getInfo(inputBlock)" [field]="field"></field-view>
             <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
             <li #inputList [attr.aria-level]="level+1" id="{{treeService.createId(inputList)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
-              {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getValueOrStatementLabel(inputBlock)}} needed:
+              {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
               <select aria-label="insert input menu" (change)="inputMenuSelected(inputBlock.connection, $event)">
                 <option value="NO_ACTION" selected>select an action</option>
                 <option value="MARK_SPOT">mark this spot</option>

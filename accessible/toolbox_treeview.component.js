@@ -47,8 +47,8 @@ blocklyApp.ToolboxTreeView = ng.core
                 {{utilsService.setLabelledBy(blockCopy, utilsService.concatStringWithSpaces(blockCopyButton.id, "blockly-button"))}}
               </li>
               <li #sendToSelected id="{{treeService.createId(sendToSelected)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="copyToMarked(block)" disabled="{{utilsService.markedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))}}">copy to marked spot</button>
-                {{utilsService.setLabelledBy(sendToSelected, utilsService.concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", utilsService.markedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))))}}
+                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="copyToMarked(block)" disabled="{{utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))}}">copy to marked spot</button>
+                {{utilsService.setLabelledBy(sendToSelected, utilsService.concatStringWithSpaces(sendToSelectedButton.id, "blockly-button", utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))))}}
               </li>
             </ol>
           </li>
@@ -56,7 +56,7 @@ blocklyApp.ToolboxTreeView = ng.core
             <field-view [attr.aria-level]="level+1" *ngFor="#field of getInfo(inputBlock); #j=index" [field]="field" [level]="level+1"></field-view>
             <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [displayBlockMenu]="false" [level]="level+1"></toolbox-tree-view>
             <li aria-selected=false #listItem1 role="treeitem" [attr.aria-level]="level+1" id="{{treeService.createId(listItem1)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
-              <label #label id="{{treeService.createId(label)}}">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getValueOrStatementLabel(inputBlock)}} needed:</label>
+              <label #label id="{{treeService.createId(label)}}">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:</label>
               {{utilsService.setLabelledBy(listItem1, utilsService.concatStringWithSpaces("blockly-argument-text", label.id))}}
             </li>
           </div>

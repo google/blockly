@@ -50,14 +50,14 @@ blocklyApp.UtilsService = ng.core
         return 'any';
       }
     },
-    getValueOrStatementLabel: function(inputBlock) {
+    getBlockTypeLabel: function(inputBlock) {
       if (inputBlock.type == Blockly.NEXT_STATEMENT) {
         return 'statement';
       } else {
         return 'value';
       }
     },
-    markedBlockCompatibilityHTMLText: function(isCompatible) {
+    getMarkedBlockCompatibilityHTMLText: function(isCompatible) {
       if (isCompatible) {
         // undefined will result in the
         // 'copy to marked block' option being ENABLED.

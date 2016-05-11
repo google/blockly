@@ -350,8 +350,7 @@ Blockly.Flyout.prototype.position = function() {
     y -= this.height_;
   }
 
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + x + ',' + y + ')');
+  this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
 
   // Record the height for Blockly.Flyout.getMetrics_, or width if the layout is
   // horizontal.
@@ -365,10 +364,6 @@ Blockly.Flyout.prototype.position = function() {
   if (this.scrollbar_) {
     this.scrollbar_.resize();
   }
-  // The blocks need to be visible in order to be laid out and measured
-  // correctly, but we don't want the flyout to show up until it's properly
-  // sized.  Opacity is set to zero in show().
-  this.svgGroup_.style.opacity = 1;
 };
 
 /**
@@ -548,7 +543,6 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
   }
 
-  var margin = this.CORNER_RADIUS;
   this.svgGroup_.style.display = 'block';
   // Create the blocks to be shown in this flyout.
   var blocks = [];
@@ -564,11 +558,11 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       }
       blocks.push(curBlock);
       var gap = parseInt(xml.getAttribute('gap'), 10);
-      gaps.push(isNaN(gap) ? margin * 3 : gap);
+      gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
     }
   }
 
-  this.layoutBlocks_(blocks, gaps, margin);
+  this.layoutBlocks_(blocks, gaps);
 
   // IE 11 is an incompetant browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
@@ -601,17 +595,11 @@ Blockly.Flyout.prototype.show = function(xmlList) {
  * Lay out the blocks in the flyout.
  * @param {!Array.<!Blockly.BlockSvg>} blocks The blocks to lay out.
  * @param {!Array.<number>} gaps The visible gaps between blocks.
- * @param {number} margin The margin around the edges of the flyout.
  * @private
  */
-Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps, margin) {
-  // The blocks need to be visible in order to be laid out and measured
-  // correctly, but we don't want the flyout to show up until it's properly
-  // sized.  Opacity is reset at the end of position().
-  this.svgGroup_.style.opacity = 0;
-  this.svgGroup_.style.display = 'block';
-
-  var cursorX = margin / this.workspace_.scale + Blockly.BlockSvg.TAB_WIDTH;
+Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps) {
+  var margin = this.MARGIN * this.workspace_.scale;
+  var cursorX = this.RTL ? margin : margin + Blockly.BlockSvg.TAB_WIDTH;
   var cursorY = margin;
   for (var i = 0, block; block = blocks[i]; i++) {
     var allBlocks = block.getDescendants();
@@ -628,8 +616,8 @@ Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps, margin) {
     if (this.horizontalLayout_) {
       cursorX += tab;
     }
-    block.moveBy((this.horizontalLayout_ && this.RTL) ?
-        -cursorX : cursorX, cursorY);
+    block.moveBy((this.horizontalLayout_ && this.RTL) ? -cursorX : cursorX,
+        cursorY);
     if (this.horizontalLayout_) {
       cursorX += (blockHW.width + gaps[i] - tab);
     } else {
@@ -1015,12 +1003,12 @@ Blockly.Flyout.terminateDrag_ = function() {
 Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutHeight = 0;
-  var margin = this.CORNER_RADIUS;
   for (var i = 0, block; block = blocks[i]; i++) {
     flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
   }
+  flyoutHeight += this.MARGIN * 1.5;
   flyoutHeight *= this.workspace_.scale;
-  flyoutHeight += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
+  flyoutHeight += Blockly.Scrollbar.scrollbarThickness;
   if (this.height_ != flyoutHeight) {
     for (i = 0, block; block = blocks[i]; i++) {
       var blockHW = block.getHeightWidth();
@@ -1057,7 +1045,6 @@ Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
 Blockly.Flyout.prototype.reflowVertical = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
   var flyoutWidth = 0;
-  var margin = this.CORNER_RADIUS;
   for (var i = 0, block; block = blocks[i]; i++) {
     var width = block.getHeightWidth().width;
     if (block.outputConnection) {
@@ -1065,16 +1052,16 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
     }
     flyoutWidth = Math.max(flyoutWidth, width);
   }
-  flyoutWidth += Blockly.BlockSvg.TAB_WIDTH;
+  flyoutWidth += this.MARGIN * 1.5 + Blockly.BlockSvg.TAB_WIDTH;
   flyoutWidth *= this.workspace_.scale;
-  flyoutWidth += margin * 1.5 + Blockly.Scrollbar.scrollbarThickness;
+  flyoutWidth += Blockly.Scrollbar.scrollbarThickness;
   if (this.width_ != flyoutWidth) {
     for (var i = 0, block; block = blocks[i]; i++) {
       var blockHW = block.getHeightWidth();
       if (this.RTL) {
         // With the flyoutWidth known, right-align the blocks.
         var oldX = block.getRelativeToSurfaceXY().x;
-        var dx = flyoutWidth - margin;
+        var dx = flyoutWidth - this.MARGIN;
         dx /= this.workspace_.scale;
         dx -= Blockly.BlockSvg.TAB_WIDTH;
         block.moveBy(dx - oldX, 0);
@@ -1120,7 +1107,7 @@ Blockly.Flyout.prototype.reflow = function() {
  * the origin, but we won't know how big the workspace is until the layout pass
  * is done.
  * Now that it's done, shunt all the blocks to be right of the origin.
- * @param {!Array<!Blockly.Block>} blocks The blocks to repositions.
+ * @param {!Array<!Blockly.Block>} blocks The blocks to reposition.
  */
 Blockly.Flyout.prototype.offsetHorizontalRtlBlocks = function(blocks) {
   if (this.horizontalLayout_ && this.RTL) {
@@ -1133,7 +1120,8 @@ Blockly.Flyout.prototype.offsetHorizontalRtlBlocks = function(blocks) {
       optionBox = {height: 0, y: 0, width: 0, x: 0};
     }
 
-    var offset = Math.max(-optionBox.x, this.width_ / this.workspace_.scale);
+    var offset = Math.max(-optionBox.x + this.MARGIN,
+        this.width_ / this.workspace_.scale);
 
     for (var i = 0, block; block = blocks[i]; i++) {
       block.moveBy(offset, 0);

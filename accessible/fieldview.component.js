@@ -29,7 +29,7 @@ blocklyApp.FieldView = ng.core
     template: `
     <li #listItem aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isTextInput(field)" id="{{treeService.createId(listItem)}}">
       <input #input id="{{treeService.createId(input)}}" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
-      {{utilsService.setLabelledBy(listItem, utilsService.concatStringWithSpaces("blockly-argument-input", input.id))}}
+      {{utilsService.setLabelledBy(listItem, utilsService.generateAriaLabelledByAttr("blockly-argument-input", input.id))}}
     </li>
     <li #listItem aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isDropdown(field)" id="{{treeService.createId(listItem)}}">
       <label #label id="{{treeService.createId(label)}}">current argument value: {{field.getText()}}</label>
@@ -38,7 +38,7 @@ blocklyApp.FieldView = ng.core
           <button #optionButton id="{{treeService.createId(optionButton)}}" (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}} button</button>
         </li>
       </ol>
-      {{utilsService.setLabelledBy(listItem, utilsService.concatStringWithSpaces("blockly-argument-menu", label.id))}}
+      {{utilsService.setLabelledBy(listItem, utilsService.generateAriaLabelledByAttr("blockly-argument-menu", label.id))}}
     </li>
     <li #listItem aria-selected=false role="treeitem" id="{{treeService.createId(listItem)}}" [attr.aria-level]="level" *ngIf="isCheckbox(field)">
       // Checkboxes not currently supported.
@@ -47,7 +47,7 @@ blocklyApp.FieldView = ng.core
       <label #label id="{{treeService.createId(label)}}">
         {{field.getText()}}
       </label>
-      {{utilsService.setLabelledBy(listItem, utilsService.concatStringWithSpaces("blockly-argument-text", label.id))}}
+      {{utilsService.setLabelledBy(listItem, utilsService.generateAriaLabelledByAttr("blockly-argument-text", label.id))}}
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],

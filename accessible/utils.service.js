@@ -27,16 +27,12 @@ blocklyApp.UtilsService = ng.core
   .Class({
     constructor: function() {
     },
-    concatStringWithSpaces: function() {
-      var string = arguments[0];
+    generateAriaLabelledByAttr: function() {
+      var labels = arguments[0];
       for (i = 1; i < arguments.length; i++) {
-        var arg = arguments[i];
-        // arg can be undefined and if so, should be ignored.
-        if (arg) {
-          string += ' ' + arg;
-        }
+        labels += ' ' + arguments[i];
       }
-      return string;
+      return labels.trim();
     },
     getInputTypeLabel: function(connection) {
       // Returns an upper case string in the case of official input type names.
@@ -61,7 +57,7 @@ blocklyApp.UtilsService = ng.core
       if (isCompatible) {
         // undefined will result in the
         // 'copy to marked block' option being ENABLED.
-        return undefined;
+        return '';
       } else {
         // Anything will result in the
         // 'copy to marked block' option being DISABLED.

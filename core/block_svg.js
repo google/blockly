@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.RenderedConnection');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -1588,4 +1589,14 @@ Blockly.BlockSvg.prototype.getConnections_ = function(all) {
     }
   }
   return myConnections;
+};
+
+/**
+ * Create a connection of the specified type.
+ * @param {number} type The type of the connection to create.
+ * @return {!Blockly.RenderedConnection} A new connection of the specified type.
+ * @private
+ */
+Blockly.BlockSvg.prototype.makeConnection_ = function(type) {
+  return new Blockly.RenderedConnection(this, type);
 };

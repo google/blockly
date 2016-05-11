@@ -747,7 +747,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
       goog.asserts.assert(!this.outputConnection,
           'Remove output connection prior to adding previous connection.');
       this.previousConnection =
-          new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
+          this.makeConnection_(Blockly.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -772,8 +772,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.nextConnection) {
-      this.nextConnection =
-          new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
+      this.nextConnection = this.makeConnection_(Blockly.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -801,8 +800,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     if (!this.outputConnection) {
       goog.asserts.assert(!this.previousConnection,
           'Remove previous connection prior to adding output connection.');
-      this.outputConnection =
-          new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
+      this.outputConnection = this.makeConnection_(Blockly.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {
@@ -1159,7 +1157,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
-    connection = new Blockly.Connection(this, type);
+    connection = this.makeConnection_(type);
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
@@ -1335,4 +1333,14 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
   event.recordNew();
   Blockly.Events.fire(event);
+};
+
+/**
+ * Create a connection of the specified type.
+ * @param {number} type The type of the connection to create.
+ * @return {!Blockly.Connection} A new connection of the specified type.
+ * @private
+ */
+Blockly.Block.prototype.makeConnection_ = function(type) {
+  return new Blockly.Connection(this, type);
 };

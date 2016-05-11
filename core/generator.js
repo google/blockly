@@ -77,7 +77,7 @@ Blockly.Generator.prototype.INDENT = '  ';
  */
 Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   if (!workspace) {
-    // Backwards compatability from before there could be multiple workspaces.
+    // Backwards compatibility from before there could be multiple workspaces.
     console.warn('No workspace specified in workspaceToCode call.  Guessing.');
     workspace = Blockly.getMainWorkspace();
   }

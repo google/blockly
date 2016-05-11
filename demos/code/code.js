@@ -294,7 +294,7 @@ Code.tabClick = function(clickedName) {
   if (clickedName == 'blocks') {
     Code.workspace.setVisible(true);
   }
-  Blockly.fireUiEvent(window, 'resize');
+  Blockly.asyncSvgResize(this.workspace_);
 };
 
 /**

@@ -833,7 +833,6 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
  */
 Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
   var flyout = this;
-  var workspace = this.targetWorkspace_;
   return function(e) {
     if (Blockly.isRightButton(e)) {
       // Right-click.  Don't create a block, let the context menu show.
@@ -844,7 +843,7 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       return;
     }
     Blockly.Events.disable();
-    var block = flyout.placeNewBlock_(originBlock, workspace);
+    var block = flyout.placeNewBlock_(originBlock);
     Blockly.Events.enable();
     if (Blockly.Events.isEnabled()) {
       Blockly.Events.setGroup(true);
@@ -864,19 +863,19 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
 
 /**
  * Copy a block from the flyout to the workspace and position it correctly.
- * @param {!Blockly.Block} originBlock The flyout block to copy.
- * @param {!Blockly.Workspace} workspace The main workspace.
+ * @param {!Blockly.Block} originBlock The flyout block to copy..
  * @return {!Blockly.Block} The new block in the main workspace.
  * @private
  */
-Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock, workspace) {
+Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
+  var targetWorkspace = this.targetWorkspace_;
   var svgRootOld = originBlock.getSvgRoot();
   if (!svgRootOld) {
     throw 'originBlock is not rendered.';
   }
   // Figure out where the original block is on the screen, relative to the upper
   // left corner of the main workspace.
-  var xyOld = Blockly.getSvgXY_(svgRootOld, workspace);
+  var xyOld = Blockly.getSvgXY_(svgRootOld, targetWorkspace);
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).
   // Generally a no-op in vertical mode but likely to happen in horizontal
@@ -888,8 +887,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock, workspace) {
   // the right of (0, 0) in the main workspace.  Offset to take that into
   // account.
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
-    scrollX = workspace.getMetrics().viewWidth - this.width_;
-    scale = workspace.scale;
+    scrollX = targetWorkspace.getMetrics().viewWidth - this.width_;
+    scale = targetWorkspace.scale;
     // Scale the scroll (getSvgXY_ did not do this).
     xyOld.x += scrollX / scale - scrollX;
   }
@@ -904,14 +903,14 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock, workspace) {
   // If the flyout is on the bottom, (0, 0) in the flyout is offset to be below
   // (0, 0) in the main workspace.  Offset to take that into account.
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    scrollY = workspace.getMetrics().viewHeight - this.height_;
-    scale = workspace.scale;
+    scrollY = targetWorkspace.getMetrics().viewHeight - this.height_;
+    scale = targetWorkspace.scale;
     xyOld.y += scrollY / scale - scrollY;
   }
 
   // Create the new block by cloning the block in the flyout (via XML).
   var xml = Blockly.Xml.blockToDom(originBlock);
-  var block = Blockly.Xml.domToBlock(xml, workspace);
+  var block = Blockly.Xml.domToBlock(xml, targetWorkspace);
   var svgRootNew = block.getSvgRoot();
   if (!svgRootNew) {
     throw 'block is not rendered.';
@@ -920,14 +919,16 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock, workspace) {
   // upper left corner of the workspace.  This may not be the same as the
   // original block because the flyout's origin may not be the same as the
   // main workspace's origin.
-  var xyNew = Blockly.getSvgXY_(svgRootNew, workspace);
+  var xyNew = Blockly.getSvgXY_(svgRootNew, targetWorkspace);
   // Scale the scroll (getSvgXY_ did not do this).
-  xyNew.x += workspace.scrollX / workspace.scale - workspace.scrollX;
-  xyNew.y += workspace.scrollY / workspace.scale - workspace.scrollY;
+  xyNew.x +=
+      targetWorkspace.scrollX / targetWorkspace.scale - targetWorkspace.scrollX;
+  xyNew.y +=
+      targetWorkspace.scrollY / targetWorkspace.scale - targetWorkspace.scrollY;
   // If the flyout is collapsible and the workspace can't be scrolled.
-  if (workspace.toolbox_ && !workspace.scrollbar) {
-    xyNew.x += workspace.toolbox_.getWidth() / workspace.scale;
-    xyNew.y += workspace.toolbox_.getHeight() / workspace.scale;
+  if (targetWorkspace.toolbox_ && !targetWorkspace.scrollbar) {
+    xyNew.x += targetWorkspace.toolbox_.getWidth() / targetWorkspace.scale;
+    xyNew.y += targetWorkspace.toolbox_.getHeight() / targetWorkspace.scale;
   }
 
   // Move the new block to where the old block is.
@@ -1010,8 +1011,6 @@ Blockly.Flyout.terminateDrag_ = function() {
  * Compute height of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
  * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
- * @param {boolean} opt_skip_resize Possibly skip resizing, since sometimes a
- *    resize will be called immediately anyway.
  */
 Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
@@ -1046,7 +1045,7 @@ Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
     }
     // Record the height for .getMetrics_ and .position.
     this.height_ = flyoutHeight;
-    Blockly.fireUiEvent(window, 'resize');
+    Blockly.asyncSvgResize(this.workspace_);
   }
 };
 
@@ -1054,8 +1053,6 @@ Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
  * Compute width of flyout.  Position button under each block.
  * For RTL: Lay out the blocks right-aligned.
  * @param {!Array<!Blockly.Block>} blocks The blocks to reflow.
- * @param {boolean} opt_skip_resize Possibly skip resizing, since sometimes a
- *    resize will be called immediately anyway.
  */
 Blockly.Flyout.prototype.reflowVertical = function(blocks) {
   this.workspace_.scale = this.targetWorkspace_.scale;
@@ -1102,14 +1099,12 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
     }
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
-    Blockly.fireUiEvent(window, 'resize');
+    Blockly.asyncSvgResize(this.workspace_);
   }
 };
 
 /**
  * Reflow blocks and their buttons.
- * @param {boolean} opt_skip_resize Possibly skip resizing, since sometimes a
- *    resize will be called immediately anyway.
  */
 Blockly.Flyout.prototype.reflow = function() {
   var blocks = this.workspace_.getTopBlocks(false);

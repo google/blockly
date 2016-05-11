@@ -310,6 +310,33 @@ Blockly.Dart['lists_getSublist'] = function(block) {
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
+Blockly.Dart['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.Dart.valueToCode(block, 'LIST',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+  var sortFunctionName = Blockly.Dart.provideFunction_(
+          'lists_sort',
+  ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ + 
+      '(list, type, direction) {',
+      '  var compareFuncs = {',
+      '    "NUMERIC": (a, b) => direction * a.compareTo(b),', 
+      '    "TEXT": (a, b) => direction * a.toString().compareTo(b.toString()),',
+      '    "IGNORE_CASE": ',
+      '       (a, b) => direction * ',
+      '      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())',
+      '  };',
+      '  list = new List.from(list);', // Clone the list.
+      '  var compare = compareFuncs[type];',
+      '  list.sort(compare);',
+      '  return list;',
+    '}']);
+  return [sortFunctionName + '(' + listCode + ', ' + 
+      '"' + type + '", ' + direction + ')',
+      Blockly.Dart.ORDER_UNARY_POSTFIX];
+};
+
 Blockly.Dart['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var value_input = Blockly.Dart.valueToCode(block, 'INPUT',

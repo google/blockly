@@ -30,7 +30,7 @@
  * @param {number} y The vertical offset of the slider.
  * @param {number} width The total width of the slider.
  * @param {!Element} svgParent The SVG element to append the slider to.
- * @param {Function} opt_changeFunc Optional callback function that will be
+ * @param {Function=} opt_changeFunc Optional callback function that will be
  *     called when the slider is moved.  The current value is passed.
  * @constructor
  */

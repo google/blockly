@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Execută programul definit de către blocuri în spațiul de lucru.",
   badCode: "Eroare de program:\n%1",
   timeout: "Numărul maxim de iterații a fost depășit.",
-  discard: "Ștergi toate cele %1 (de) blocuri?",
   trashTooltip: "Șterge toate blocurile.",
   catLogic: "Logic",
   catLoops: "Bucle",

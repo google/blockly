@@ -64,11 +64,8 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
     menu.addChild(menuItem, true);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      var evtHandlerCapturer = function(callback) {
-        return function() { Blockly.doCommand(callback); };
-      };
       goog.events.listen(menuItem, goog.ui.Component.EventType.ACTION,
-                         evtHandlerCapturer(option.callback));
+                         option.callback);
     }
   }
   goog.events.listen(menu, goog.ui.Component.EventType.ACTION,
@@ -126,7 +123,8 @@ Blockly.ContextMenu.hide = function() {
  */
 Blockly.ContextMenu.callbackFactory = function(block, xml) {
   return function() {
-    var newBlock = Blockly.Xml.domToBlock(block.workspace, xml);
+    Blockly.Events.disable();
+    var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
     // Move the new block next to the old block.
     var xy = block.getRelativeToSurfaceXY();
     if (block.RTL) {
@@ -136,6 +134,10 @@ Blockly.ContextMenu.callbackFactory = function(block, xml) {
     }
     xy.y += Blockly.SNAP_RADIUS * 2;
     newBlock.moveBy(xy.x, xy.y);
+    Blockly.Events.enable();
+    if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {
+      Blockly.Events.fire(new Blockly.Events.Create(newBlock));
+    }
     newBlock.select();
   };
 };

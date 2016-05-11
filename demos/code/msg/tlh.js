@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "",
   badCode: "Qagh:\n%1",
   timeout: "tlhoy nI'qu' poH.",
-  discard: "Hoch %1 ngoghmey Qaw'?",
   trashTooltip: "",
   catLogic: "meq",
   catLoops: "vIHtaHbogh ghomey",

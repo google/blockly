@@ -24,7 +24,7 @@
 
   <p>This is a simple demo of generating code from blocks.</p>
 
-  <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/code-generators">Code Generators</a>...</p>
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/code-generators">Code Generators</a>&hellip;</p>
 
   <p>
     <button onclick="showCode()">Show JavaScript</button>
@@ -116,8 +116,8 @@
     var workspace = Blockly.inject('blocklyDiv',
         {media: '../../media/',
          toolbox: document.getElementById('toolbox')});
-    Blockly.Xml.domToWorkspace(workspace,
-        document.getElementById('startBlocks'));
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                               workspace);
 
     function showCode() {
       // Generate JavaScript code and display it.

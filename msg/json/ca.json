@@ -3,7 +3,8 @@
 		"authors": [
 			"Alvaro Vidal-Abarca",
 			"Espertus",
-			"Hiperpobla"
+			"Hiperpobla",
+			"Jaumeortola"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -14,6 +15,7 @@
 	"INLINE_INPUTS": "Entrades en línia",
 	"DELETE_BLOCK": "Esborra bloc",
 	"DELETE_X_BLOCKS": "Esborra %1 blocs",
+	"DELETE_ALL_BLOCKS": "Esborrar els %1 blocs?",
 	"COLLAPSE_BLOCK": "Contraure bloc",
 	"COLLAPSE_ALL": "Contraure blocs",
 	"EXPAND_BLOCK": "Expandir bloc",
@@ -53,7 +55,6 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Mentre un valor sigui fals, llavors executar unes sentències.",
 	"CONTROLS_FOR_TOOLTIP": "Fer que la variable \"%1\" prengui els valors des del nombre inicial fins al nombre final, incrementant a cada pas l'interval indicat, i executar els blocs especificats.",
 	"CONTROLS_FOR_TITLE": "comptar amb %1 des de %2 fins a %3 en increments de %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each bloc for-each",
 	"CONTROLS_FOREACH_TITLE": "per a cada element %1 en la llista %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Per a cada element en la llista, desar l'element dins la variable '%1', i llavors executar unes sentències.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "sortir del bucle",
@@ -156,7 +157,7 @@
 	"MATH_MODULO_TITLE": "residu de %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Retorna el residu de dividir els dos nombres.",
 	"MATH_CONSTRAIN_TITLE": "limitar %1 entre %2 i %3",
-	"MATH_CONSTRAIN_TOOLTIP": "Limita un nombre per tal que estigui entre els límits especificats (inclosos).",
+	"MATH_CONSTRAIN_TOOLTIP": "Limita un nombre perquè estigui entre els límits especificats (inclosos).",
 	"MATH_RANDOM_INT_HELPURL": "https://ca.wikipedia.org/wiki/Generaci%C3%B3_de_nombres_aleatoris",
 	"MATH_RANDOM_INT_TITLE": "nombre aleatori entre %1 i %2",
 	"MATH_RANDOM_INT_TOOLTIP": "Retorna un nombre aleatori entre els dos límits especificats, inclosos.",

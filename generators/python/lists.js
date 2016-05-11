@@ -56,14 +56,14 @@ Blockly.Python['lists_repeat'] = function(block) {
 };
 
 Blockly.Python['lists_length'] = function(block) {
-  // List length.
+  // String or array length.
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '[]';
   return ['len(' + argument0 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['lists_isEmpty'] = function(block) {
-  // Is the list empty?
+  // Is the string null or array empty?
   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '[]';
   var code = 'not len(' + argument0 + ')';
@@ -310,6 +310,35 @@ Blockly.Python['lists_getSublist'] = function(block) {
   }
   var code = list + '[' + at1 + ' : ' + at2 + ']';
   return [code, Blockly.Python.ORDER_MEMBER];
+};
+
+Blockly.Python['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = (Blockly.Python.valueToCode(block, 'LIST', 
+      Blockly.Python.ORDER_MEMBER) || '[]');
+  var type = block.getFieldValue('TYPE');
+  var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
+  var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
+  ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + 
+      '(listv, type, reversev):',
+    '  def tryfloat(s):',
+    '    try:',
+    '      return float(s)',
+    '    except:',
+    '      return 0',
+    '  keyFuncts = {',
+    '    "NUMERIC": tryfloat,',
+    '    "TEXT": str,',
+    '    "IGNORE_CASE": lambda s: str(s).lower()', 
+    '  }',
+    '  keyv = keyFuncts[type]',
+    '  tmp_list = list(listv)', // Clone the list.
+    '  return sorted(tmp_list, key=keyv, reverse=reversev)'
+  ]);  
+
+  var code = sortFunctionName + 
+      '(' + listCode + ', "' + type + '", ' + reverse + ')';
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['lists_split'] = function(block) {

@@ -51,4 +51,8 @@
       </block>
     </statement>
   </block>
+  <block type="variables_get" x="300" y="100">
+    <field name="VAR">naked</field>
+    <comment pinned="true" h="80" w="160">Intentionally non-connected variable.</comment>
+  </block>
 </xml>

@@ -62,7 +62,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="395" y="125">
-    <mutation></mutation>
     <field name="NAME">test operations on single</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -206,13 +205,12 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="23" y="194">
-    <mutation></mutation>
     <field name="NAME">test arithmetic</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">add</field>
         <value name="ACTUAL">
-          <block type="math_arithmetic" inline="true">
+          <block type="math_arithmetic">
             <field name="OP">ADD</field>
             <value name="A">
               <block type="math_number">
@@ -235,7 +233,7 @@
           <block type="unittest_assertequals" inline="false">
             <field name="MESSAGE">subtract</field>
             <value name="ACTUAL">
-              <block type="math_arithmetic" inline="true">
+              <block type="math_arithmetic">
                 <field name="OP">MINUS</field>
                 <value name="A">
                   <block type="math_number">
@@ -258,7 +256,7 @@
               <block type="unittest_assertequals" inline="false">
                 <field name="MESSAGE">multiply</field>
                 <value name="ACTUAL">
-                  <block type="math_arithmetic" inline="true">
+                  <block type="math_arithmetic">
                     <field name="OP">MULTIPLY</field>
                     <value name="A">
                       <block type="math_number">
@@ -281,7 +279,7 @@
                   <block type="unittest_assertequals" inline="false">
                     <field name="MESSAGE">divide</field>
                     <value name="ACTUAL">
-                      <block type="math_arithmetic" inline="true">
+                      <block type="math_arithmetic">
                         <field name="OP">DIVIDE</field>
                         <value name="A">
                           <block type="math_number">
@@ -304,7 +302,7 @@
                       <block type="unittest_assertequals" inline="false">
                         <field name="MESSAGE">power</field>
                         <value name="ACTUAL">
-                          <block type="math_arithmetic" inline="true">
+                          <block type="math_arithmetic">
                             <field name="OP">POWER</field>
                             <value name="A">
                               <block type="math_number">
@@ -335,7 +333,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="16" y="727">
-    <mutation></mutation>
     <field name="NAME">test trig</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -459,7 +456,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="311" y="733">
-    <mutation></mutation>
     <field name="NAME">test constant</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -468,7 +464,7 @@
           <block type="math_round" inline="false">
             <field name="OP">ROUNDDOWN</field>
             <value name="NUM">
-              <block type="math_arithmetic" inline="true">
+              <block type="math_arithmetic">
                 <field name="OP">MULTIPLY</field>
                 <value name="A">
                   <block type="math_constant">
@@ -496,7 +492,7 @@
               <block type="math_round" inline="false">
                 <field name="OP">ROUNDDOWN</field>
                 <value name="NUM">
-                  <block type="math_arithmetic" inline="true">
+                  <block type="math_arithmetic">
                     <field name="OP">MULTIPLY</field>
                     <value name="A">
                       <block type="math_constant">
@@ -524,7 +520,7 @@
                   <block type="math_round" inline="false">
                     <field name="OP">ROUNDDOWN</field>
                     <value name="NUM">
-                      <block type="math_arithmetic" inline="true">
+                      <block type="math_arithmetic">
                         <field name="OP">MULTIPLY</field>
                         <value name="A">
                           <block type="math_constant">
@@ -552,7 +548,7 @@
                       <block type="math_round" inline="false">
                         <field name="OP">ROUNDDOWN</field>
                         <value name="NUM">
-                          <block type="math_arithmetic" inline="true">
+                          <block type="math_arithmetic">
                             <field name="OP">MULTIPLY</field>
                             <value name="A">
                               <block type="math_constant">
@@ -580,7 +576,7 @@
                           <block type="math_round" inline="false">
                             <field name="OP">ROUNDDOWN</field>
                             <value name="NUM">
-                              <block type="math_arithmetic" inline="true">
+                              <block type="math_arithmetic">
                                 <field name="OP">MULTIPLY</field>
                                 <value name="A">
                                   <block type="math_constant">
@@ -606,7 +602,7 @@
                             <field name="MESSAGE">const infinity</field>
                             <field name="EXPECTED">TRUE</field>
                             <value name="ACTUAL">
-                              <block type="logic_compare" inline="true">
+                              <block type="logic_compare">
                                 <field name="OP">LT</field>
                                 <value name="A">
                                   <block type="math_number">
@@ -634,14 +630,13 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="18" y="1279">
-    <mutation></mutation>
     <field name="NAME">test number properties</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
         <field name="MESSAGE">even</field>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
-          <block type="math_number_property" inline="true">
+          <block type="math_number_property">
             <mutation divisor_input="false"></mutation>
             <field name="PROPERTY">EVEN</field>
             <value name="NUMBER_TO_CHECK">
@@ -656,7 +651,7 @@
             <field name="MESSAGE">odd</field>
             <field name="EXPECTED">FALSE</field>
             <value name="ACTUAL">
-              <block type="math_number_property" inline="true">
+              <block type="math_number_property">
                 <mutation divisor_input="false"></mutation>
                 <field name="PROPERTY">ODD</field>
                 <value name="NUMBER_TO_CHECK">
@@ -671,7 +666,7 @@
                 <field name="MESSAGE">prime 5</field>
                 <field name="EXPECTED">TRUE</field>
                 <value name="ACTUAL">
-                  <block type="math_number_property" inline="true">
+                  <block type="math_number_property">
                     <mutation divisor_input="false"></mutation>
                     <field name="PROPERTY">PRIME</field>
                     <value name="NUMBER_TO_CHECK">
@@ -686,7 +681,7 @@
                     <field name="MESSAGE">prime 25</field>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
-                      <block type="math_number_property" inline="true">
+                      <block type="math_number_property">
                         <mutation divisor_input="false"></mutation>
                         <field name="PROPERTY">PRIME</field>
                         <value name="NUMBER_TO_CHECK">
@@ -701,7 +696,7 @@
                         <field name="MESSAGE">prime negative</field>
                         <field name="EXPECTED">FALSE</field>
                         <value name="ACTUAL">
-                          <block type="math_number_property" inline="true">
+                          <block type="math_number_property">
                             <mutation divisor_input="false"></mutation>
                             <field name="PROPERTY">PRIME</field>
                             <value name="NUMBER_TO_CHECK">
@@ -716,7 +711,7 @@
                             <field name="MESSAGE">whole</field>
                             <field name="EXPECTED">FALSE</field>
                             <value name="ACTUAL">
-                              <block type="math_number_property" inline="true">
+                              <block type="math_number_property">
                                 <mutation divisor_input="false"></mutation>
                                 <field name="PROPERTY">WHOLE</field>
                                 <value name="NUMBER_TO_CHECK">
@@ -731,7 +726,7 @@
                                 <field name="MESSAGE">positive</field>
                                 <field name="EXPECTED">TRUE</field>
                                 <value name="ACTUAL">
-                                  <block type="math_number_property" inline="true">
+                                  <block type="math_number_property">
                                     <mutation divisor_input="false"></mutation>
                                     <field name="PROPERTY">POSITIVE</field>
                                     <value name="NUMBER_TO_CHECK">
@@ -746,7 +741,7 @@
                                     <field name="MESSAGE">negative</field>
                                     <field name="EXPECTED">TRUE</field>
                                     <value name="ACTUAL">
-                                      <block type="math_number_property" inline="true">
+                                      <block type="math_number_property">
                                         <mutation divisor_input="false"></mutation>
                                         <field name="PROPERTY">NEGATIVE</field>
                                         <value name="NUMBER_TO_CHECK">
@@ -761,7 +756,7 @@
                                         <field name="MESSAGE">divisible</field>
                                         <field name="EXPECTED">TRUE</field>
                                         <value name="ACTUAL">
-                                          <block type="math_number_property" inline="true">
+                                          <block type="math_number_property">
                                             <mutation divisor_input="true"></mutation>
                                             <field name="PROPERTY">DIVISIBLE_BY</field>
                                             <value name="NUMBER_TO_CHECK">
@@ -796,7 +791,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="387" y="1282">
-    <mutation></mutation>
     <field name="NAME">test round</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -860,7 +854,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="394" y="1819">
-    <mutation></mutation>
     <field name="NAME">test change</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -916,7 +909,7 @@
           <block type="controls_if" inline="false">
             <mutation else="1"></mutation>
             <value name="IF0">
-              <block type="logic_compare" inline="true">
+              <block type="logic_compare">
                 <field name="OP">NEQ</field>
                 <value name="A">
                   <block type="lists_length" inline="false">
@@ -949,7 +942,7 @@
               </block>
             </statement>
             <statement name="ELSE">
-              <block type="controls_for" inline="true">
+              <block type="controls_for">
                 <field name="VAR">x</field>
                 <value name="FROM">
                   <block type="math_number">
@@ -971,35 +964,35 @@
                       <block type="logic_compare" inline="false">
                         <field name="OP">NEQ</field>
                         <value name="A">
-                          <block type="lists_getIndex" inline="true">
+                          <block type="lists_getIndex">
                             <mutation statement="false" at="true"></mutation>
                             <field name="MODE">GET</field>
                             <field name="WHERE">FROM_START</field>
-                            <value name="AT">
-                              <block type="variables_get">
-                                <field name="VAR">x</field>
-                              </block>
-                            </value>
                             <value name="VALUE">
                               <block type="variables_get">
                                 <field name="VAR">a</field>
                               </block>
                             </value>
-                          </block>
-                        </value>
-                        <value name="B">
-                          <block type="lists_getIndex" inline="true">
-                            <mutation statement="false" at="true"></mutation>
-                            <field name="MODE">GET</field>
-                            <field name="WHERE">FROM_START</field>
                             <value name="AT">
                               <block type="variables_get">
                                 <field name="VAR">x</field>
                               </block>
                             </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="lists_getIndex">
+                            <mutation statement="false" at="true"></mutation>
+                            <field name="MODE">GET</field>
+                            <field name="WHERE">FROM_START</field>
                             <value name="VALUE">
                               <block type="variables_get">
                                 <field name="VAR">b</field>
+                              </block>
+                            </value>
+                            <value name="AT">
+                              <block type="variables_get">
+                                <field name="VAR">x</field>
                               </block>
                             </value>
                           </block>
@@ -1064,13 +1057,13 @@
     </value>
   </block>
   <block type="procedures_defnoreturn" x="24" y="2568">
-    <mutation></mutation>
     <field name="NAME">test operations on list</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">sum</field>
         <value name="ACTUAL">
           <block type="math_on_list" inline="false">
+            <mutation op="SUM"></mutation>
             <field name="OP">SUM</field>
             <value name="LIST">
               <block type="lists_create_with" inline="true">
@@ -1104,6 +1097,7 @@
             <field name="MESSAGE">min</field>
             <value name="ACTUAL">
               <block type="math_on_list" inline="false">
+                <mutation op="MIN"></mutation>
                 <field name="OP">MIN</field>
                 <value name="LIST">
                   <block type="lists_create_with" inline="true">
@@ -1137,6 +1131,7 @@
                 <field name="MESSAGE">max</field>
                 <value name="ACTUAL">
                   <block type="math_on_list" inline="false">
+                    <mutation op="MAX"></mutation>
                     <field name="OP">MAX</field>
                     <value name="LIST">
                       <block type="lists_create_with" inline="true">
@@ -1170,6 +1165,7 @@
                     <field name="MESSAGE">average</field>
                     <value name="ACTUAL">
                       <block type="math_on_list" inline="false">
+                        <mutation op="AVERAGE"></mutation>
                         <field name="OP">AVERAGE</field>
                         <value name="LIST">
                           <block type="lists_create_with" inline="true">
@@ -1203,6 +1199,7 @@
                         <field name="MESSAGE">median</field>
                         <value name="ACTUAL">
                           <block type="math_on_list" inline="false">
+                            <mutation op="MEDIAN"></mutation>
                             <field name="OP">MEDIAN</field>
                             <value name="LIST">
                               <block type="lists_create_with" inline="true">
@@ -1248,6 +1245,7 @@
                                 </mutation>
                                 <value name="ARG0">
                                   <block type="math_on_list" inline="false">
+                                    <mutation op="MODE"></mutation>
                                     <field name="OP">MODE</field>
                                     <value name="LIST">
                                       <block type="lists_create_with" inline="true">
@@ -1288,6 +1286,7 @@
                                 <field name="MESSAGE">standard dev</field>
                                 <value name="ACTUAL">
                                   <block type="math_on_list" inline="false">
+                                    <mutation op="STD_DEV"></mutation>
                                     <field name="OP">STD_DEV</field>
                                     <value name="LIST">
                                       <block type="lists_create_with" inline="true">
@@ -1326,8 +1325,29 @@
                                         <value name="A">
                                           <block type="lists_indexOf" inline="false">
                                             <field name="END">FIRST</field>
+                                            <value name="VALUE">
+                                              <block type="lists_create_with" inline="true">
+                                                <mutation items="3"></mutation>
+                                                <value name="ADD0">
+                                                  <block type="math_number">
+                                                    <field name="NUM">3</field>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD1">
+                                                  <block type="math_number">
+                                                    <field name="NUM">4</field>
+                                                  </block>
+                                                </value>
+                                                <value name="ADD2">
+                                                  <block type="math_number">
+                                                    <field name="NUM">5</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
                                             <value name="FIND">
                                               <block type="math_on_list" inline="false">
+                                                <mutation op="RANDOM"></mutation>
                                                 <field name="OP">RANDOM</field>
                                                 <value name="LIST">
                                                   <block type="lists_create_with" inline="false">
@@ -1347,26 +1367,6 @@
                                                         <field name="NUM">5</field>
                                                       </block>
                                                     </value>
-                                                  </block>
-                                                </value>
-                                              </block>
-                                            </value>
-                                            <value name="VALUE">
-                                              <block type="lists_create_with" inline="true">
-                                                <mutation items="3"></mutation>
-                                                <value name="ADD0">
-                                                  <block type="math_number">
-                                                    <field name="NUM">3</field>
-                                                  </block>
-                                                </value>
-                                                <value name="ADD1">
-                                                  <block type="math_number">
-                                                    <field name="NUM">4</field>
-                                                  </block>
-                                                </value>
-                                                <value name="ADD2">
-                                                  <block type="math_number">
-                                                    <field name="NUM">5</field>
                                                   </block>
                                                 </value>
                                               </block>
@@ -1398,13 +1398,12 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="15" y="3494">
-    <mutation></mutation>
     <field name="NAME">test mod</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">mod</field>
         <value name="ACTUAL">
-          <block type="math_modulo" inline="true">
+          <block type="math_modulo">
             <value name="DIVIDEND">
               <block type="math_number">
                 <field name="NUM">42</field>
@@ -1426,13 +1425,12 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="373" y="3499">
-    <mutation></mutation>
     <field name="NAME">test constraint</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">constraint</field>
         <value name="ACTUAL">
-          <block type="math_constrain" inline="true">
+          <block type="math_constrain">
             <value name="VALUE">
               <block type="math_number">
                 <field name="NUM">100</field>
@@ -1459,13 +1457,12 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="15" y="3664">
-    <mutation></mutation>
     <field name="NAME">test random integer</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">rand</field>
         <value name="VALUE">
-          <block type="math_random_int" inline="true">
+          <block type="math_random_int">
             <value name="FROM">
               <block type="math_number">
                 <field name="NUM">5</field>
@@ -1483,10 +1480,10 @@
             <field name="MESSAGE">randRange</field>
             <field name="EXPECTED">TRUE</field>
             <value name="ACTUAL">
-              <block type="logic_operation" inline="true">
+              <block type="logic_operation">
                 <field name="OP">AND</field>
                 <value name="A">
-                  <block type="logic_compare" inline="true">
+                  <block type="logic_compare">
                     <field name="OP">GTE</field>
                     <value name="A">
                       <block type="variables_get">
@@ -1501,7 +1498,7 @@
                   </block>
                 </value>
                 <value name="B">
-                  <block type="logic_compare" inline="true">
+                  <block type="logic_compare">
                     <field name="OP">LTE</field>
                     <value name="A">
                       <block type="variables_get">
@@ -1522,7 +1519,7 @@
                 <field name="MESSAGE">randInteger</field>
                 <field name="EXPECTED">TRUE</field>
                 <value name="ACTUAL">
-                  <block type="math_number_property" inline="true">
+                  <block type="math_number_property">
                     <mutation divisor_input="false"></mutation>
                     <field name="PROPERTY">WHOLE</field>
                     <value name="NUMBER_TO_CHECK">
@@ -1540,7 +1537,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="15" y="3931">
-    <mutation></mutation>
     <field name="NAME">test random fraction</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -1553,10 +1549,10 @@
             <field name="MESSAGE">randFloat</field>
             <field name="EXPECTED">TRUE</field>
             <value name="ACTUAL">
-              <block type="logic_operation" inline="true">
+              <block type="logic_operation">
                 <field name="OP">AND</field>
                 <value name="A">
-                  <block type="logic_compare" inline="true">
+                  <block type="logic_compare">
                     <field name="OP">GTE</field>
                     <value name="A">
                       <block type="variables_get">
@@ -1571,7 +1567,7 @@
                   </block>
                 </value>
                 <value name="B">
-                  <block type="logic_compare" inline="true">
+                  <block type="logic_compare">
                     <field name="OP">LTE</field>
                     <value name="A">
                       <block type="variables_get">

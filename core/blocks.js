@@ -19,35 +19,9 @@
  */
 
 /**
- * @fileoverview Flexible templating system for defining blocks.
+ * @fileoverview Empty name space for the Blocks singleton.
  * @author spertus@google.com (Ellen Spertus)
  */
 'use strict';
-goog.require('goog.asserts');
 
-/**
- * Name space for the Blocks singleton.
- * Blocks gets populated in the blocks files, possibly through calls to
- * Blocks.addTemplate().
- */
 goog.provide('Blockly.Blocks');
-
-/**
- * Unique ID counter for created blocks.
- * @private
- */
-Blockly.Blocks.uidCounter_ = 0;
-
-/**
- * Generate a unique ID.  This will be locally or globally unique, depending on
- * whether we are in single user or realtime collaborative mode.
- * @return {string}
- */
-Blockly.Blocks.genUid = function() {
-  var uid = (++Blockly.Blocks.uidCounter_).toString();
-  if (Blockly.Realtime.isEnabled()) {
-    return Blockly.Realtime.genUid(uid);
-  } else {
-    return uid;
-  }
-};

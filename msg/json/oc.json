@@ -12,6 +12,7 @@
 	"INLINE_INPUTS": "Entradas en linha",
 	"DELETE_BLOCK": "Suprimir lo blòt",
 	"DELETE_X_BLOCKS": "Suprimir %1 blòts",
+	"DELETE_ALL_BLOCKS": "Suprimir totes los %1 blòts ?",
 	"COLLAPSE_BLOCK": "Redusir lo blòt",
 	"COLLAPSE_ALL": "Redusir los blòts",
 	"EXPAND_BLOCK": "Desvolopar lo blòt",

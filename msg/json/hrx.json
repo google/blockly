@@ -12,6 +12,7 @@
 	"INLINE_INPUTS": "interne Ingänge",
 	"DELETE_BLOCK": "Block lösche",
 	"DELETE_X_BLOCKS": "Block %1 lösche",
+	"DELETE_ALL_BLOCKS": "All %1 Bausten lösche?",
 	"COLLAPSE_BLOCK": "Block zusammerfalte",
 	"COLLAPSE_ALL": "Blocke zusammerfalte",
 	"EXPAND_BLOCK": "Block entfalte",

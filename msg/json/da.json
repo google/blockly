@@ -3,7 +3,8 @@
 		"authors": [
 			"Christian List",
 			"RickiRunge",
-			"MGA73"
+			"MGA73",
+			"Mads Haupt"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -15,6 +16,8 @@
 	"INLINE_INPUTS": "Indlejrede inputs",
 	"DELETE_BLOCK": "Slet blok",
 	"DELETE_X_BLOCKS": "Slet %1 blokke",
+	"DELETE_ALL_BLOCKS": "Slet alle %1 blokke?",
+	"CLEAN_UP": "Ryd op i blokke",
 	"COLLAPSE_BLOCK": "Fold blokken sammen",
 	"COLLAPSE_ALL": "Fold blokkene sammen",
 	"EXPAND_BLOCK": "Fold blokken ud",
@@ -54,7 +57,6 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Udfør nogle kommandoer, sålænge en værdi er falsk.",
 	"CONTROLS_FOR_TOOLTIP": "Få variablen \"%1\" til at have værdierne fra startværdien til slutværdien, mens der tælles med det angivne interval, og udfør de angivne blokke.",
 	"CONTROLS_FOR_TITLE": "tæl med %1 fra %2 til %3 med %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each gentagelsesblok",
 	"CONTROLS_FOREACH_TITLE": "for hvert element %1 i listen %2",
 	"CONTROLS_FOREACH_TOOLTIP": "For hvert element i en liste, sæt variablen '%1' til elementet, og udfør derefter nogle kommandoer.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "bryd ud af løkken",
@@ -228,7 +230,7 @@
 	"LISTS_INLIST": "i listen",
 	"LISTS_INDEX_OF_FIRST": "find første forekomst af elementet",
 	"LISTS_INDEX_OF_LAST": "find sidste forekomst af elementet",
-	"LISTS_INDEX_OF_TOOLTIP": "Returnerer indeks for første/sidste forekomst af elementet i listen. Returnerer 0, hvis teksten ikke er fundet.",
+	"LISTS_INDEX_OF_TOOLTIP": "Returnerer indeks for første/sidste forekomst af elementet i listen. Returnerer 0, hvis elementet ikke kan findes.",
 	"LISTS_GET_INDEX_GET": "hent",
 	"LISTS_GET_INDEX_GET_REMOVE": "hent og fjern",
 	"LISTS_GET_INDEX_REMOVE": "fjern",
@@ -286,6 +288,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "med:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "med:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Opretter en funktion der ikke har nogen returværdi.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Beskriv denne funktion...",
 	"PROCEDURES_DEFRETURN_RETURN": "returnér",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Opretter en funktion der har en returværdi.",
 	"PROCEDURES_ALLOW_STATEMENTS": "tillad erklæringer",
@@ -301,5 +304,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Markér funktionsdefinitionen",
 	"PROCEDURES_CREATE_DO": "Opret '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Hvis en værdi er sand, så returnér en anden værdi.",
+	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blok kan kun anvendes inden for en funktionsdefinition."
 }

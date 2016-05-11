@@ -36,7 +36,7 @@ goog.require('goog.ui.ColorPicker');
 /**
  * Class for a colour input field.
  * @param {string} colour The initial colour in '#rrggbb' format.
- * @param {Function} opt_changeHandler A function that is executed when a new
+ * @param {Function=} opt_validator A function that is executed when a new
  *     colour is selected.  Its sole argument is the new colour value.  Its
  *     return value becomes the selected colour, unless it is undefined, in
  *     which case the new colour stands, or it is null, in which case the change
@@ -44,18 +44,25 @@ goog.require('goog.ui.ColorPicker');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldColour = function(colour, opt_changeHandler) {
-  Blockly.FieldColour.superClass_.constructor.call(this, '\u00A0\u00A0\u00A0');
-
-  this.setChangeHandler(opt_changeHandler);
-  // Set the initial state.
-  this.setValue(colour);
-
-  // By default use the global constants for colours and columns.
-  this.colours_ = null;
-  this.columns_ = 0;
+Blockly.FieldColour = function(colour, opt_validator) {
+  Blockly.FieldColour.superClass_.constructor.call(this, colour, opt_validator);
+  this.setText(Blockly.Field.NBSP + Blockly.Field.NBSP + Blockly.Field.NBSP);
 };
 goog.inherits(Blockly.FieldColour, Blockly.Field);
+
+/**
+ * By default use the global constants for colours.
+ * @type {Array.<string>}
+ * @private
+ */
+Blockly.FieldColour.prototype.colours_ = null;
+
+/**
+ * By default use the global constants for columns.
+ * @type {number}
+ * @private
+ */
+Blockly.FieldColour.prototype.columns_ = 0;
 
 /**
  * Install this field on a block.
@@ -65,15 +72,6 @@ Blockly.FieldColour.prototype.init = function(block) {
   Blockly.FieldColour.superClass_.init.call(this, block);
   this.borderRect_.style['fillOpacity'] = 1;
   this.setValue(this.getValue());
-};
-
-/**
- * Clone this FieldColour.
- * @return {!Blockly.FieldColour} The result of calling the constructor again
- *   with the current values of the arguments used during construction.
- */
-Blockly.FieldColour.prototype.clone = function() {
-  return new Blockly.FieldColour(this.getValue(), this.changeHandler_);
 };
 
 /**
@@ -102,15 +100,14 @@ Blockly.FieldColour.prototype.getValue = function() {
  * @param {string} colour The new colour in '#rrggbb' format.
  */
 Blockly.FieldColour.prototype.setValue = function(colour) {
+  if (this.sourceBlock_ && Blockly.Events.isEnabled() &&
+      this.colour_ != colour) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.colour_, colour));
+  }
   this.colour_ = colour;
   if (this.borderRect_) {
     this.borderRect_.style.fill = colour;
-  }
-  if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-    // Since we're not re-rendering we need to explicitly call
-    // Blockly.Realtime.blockChanged()
-    Blockly.Realtime.blockChanged(this.sourceBlock_);
-    this.sourceBlock_.workspace.fireChangeEvent();
   }
 };
 
@@ -120,6 +117,7 @@ Blockly.FieldColour.prototype.setValue = function(colour) {
  */
 Blockly.FieldColour.prototype.getText = function() {
   var colour = this.colour_;
+  // Try to use #rgb format if possible, rather than #rrggbb.
   var m = colour.match(/^#(.)\1(.)\2(.)\3$/);
   if (m) {
     colour = '#' + m[1] + m[2] + m[3];
@@ -179,7 +177,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
   var xy = this.getAbsoluteXY_();
-  var borderBBox = this.borderRect_.getBBox();
+  var borderBBox = this.getScaledBBox_();
   var div = Blockly.WidgetDiv.DIV;
   picker.render(div);
   picker.setSelectedColor(this.getValue());
@@ -216,9 +214,9 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       function(event) {
         var colour = event.target.getSelectedColor() || '#000000';
         Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_ && thisField.changeHandler_) {
-          // Call any change handler, and allow it to override.
-          var override = thisField.changeHandler_(colour);
+        if (thisField.sourceBlock_ && thisField.validator_) {
+          // Call any validation function, and allow it to override.
+          var override = thisField.validator_(colour);
           if (override !== undefined) {
             colour = override;
           }

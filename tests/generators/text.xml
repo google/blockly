@@ -47,7 +47,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="261" y="3">
-    <mutation></mutation>
     <field name="NAME">test length</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -89,7 +88,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="266" y="219">
-    <mutation></mutation>
     <field name="NAME">test empty</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
@@ -123,7 +121,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-21" y="342">
-    <mutation></mutation>
     <field name="NAME">test create text</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -202,7 +199,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-23" y="733">
-    <mutation></mutation>
     <field name="NAME">test append item</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -276,7 +272,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-24" y="1069">
-    <mutation></mutation>
     <field name="NAME">test substring</field>
     <statement name="STACK">
       <block type="variables_set" inline="false">
@@ -290,7 +285,7 @@
           <block type="unittest_assertequals" inline="false">
             <field name="MESSAGE">substring # start</field>
             <value name="ACTUAL">
-              <block type="text_getSubstring" inline="true">
+              <block type="text_getSubstring">
                 <mutation at1="true" at2="true"></mutation>
                 <field name="WHERE1">FROM_START</field>
                 <field name="WHERE2">FROM_START</field>
@@ -320,7 +315,7 @@
               <block type="unittest_assertequals" inline="false">
                 <field name="MESSAGE">substring # end</field>
                 <value name="ACTUAL">
-                  <block type="text_getSubstring" inline="true">
+                  <block type="text_getSubstring">
                     <mutation at1="true" at2="true"></mutation>
                     <field name="WHERE1">FROM_END</field>
                     <field name="WHERE2">FROM_END</field>
@@ -350,7 +345,7 @@
                   <block type="unittest_assertequals" inline="false">
                     <field name="MESSAGE">substring first-last</field>
                     <value name="ACTUAL">
-                      <block type="text_getSubstring" inline="true">
+                      <block type="text_getSubstring">
                         <mutation at1="false" at2="false"></mutation>
                         <field name="WHERE1">FIRST</field>
                         <field name="WHERE2">LAST</field>
@@ -376,13 +371,12 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-24" y="1429">
-    <mutation></mutation>
     <field name="NAME">test find</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">first find</field>
         <value name="ACTUAL">
-          <block type="text_indexOf" inline="true">
+          <block type="text_indexOf">
             <field name="END">FIRST</field>
             <value name="VALUE">
               <block type="text">
@@ -405,7 +399,7 @@
           <block type="unittest_assertequals" inline="false">
             <field name="MESSAGE">last find</field>
             <value name="ACTUAL">
-              <block type="text_indexOf" inline="true">
+              <block type="text_indexOf">
                 <field name="END">LAST</field>
                 <value name="VALUE">
                   <block type="text">
@@ -428,7 +422,7 @@
               <block type="unittest_assertequals" inline="false">
                 <field name="MESSAGE">no find</field>
                 <value name="ACTUAL">
-                  <block type="text_indexOf" inline="true">
+                  <block type="text_indexOf">
                     <field name="END">FIRST</field>
                     <value name="VALUE">
                       <block type="text">
@@ -455,13 +449,12 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-22" y="1789">
-    <mutation></mutation>
     <field name="NAME">test letter</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">letter #</field>
         <value name="ACTUAL">
-          <block type="text_charAt" inline="true">
+          <block type="text_charAt">
             <mutation at="true"></mutation>
             <field name="WHERE">FROM_START</field>
             <value name="VALUE">
@@ -485,7 +478,7 @@
           <block type="unittest_assertequals" inline="false">
             <field name="MESSAGE">letter # from end</field>
             <value name="ACTUAL">
-              <block type="text_charAt" inline="true">
+              <block type="text_charAt">
                 <mutation at="true"></mutation>
                 <field name="WHERE">FROM_END</field>
                 <value name="VALUE">
@@ -509,7 +502,7 @@
               <block type="unittest_assertequals" inline="false">
                 <field name="MESSAGE">first letter</field>
                 <value name="ACTUAL">
-                  <block type="text_charAt" inline="true">
+                  <block type="text_charAt">
                     <mutation at="false"></mutation>
                     <field name="WHERE">FIRST</field>
                     <value name="VALUE">
@@ -528,7 +521,7 @@
                   <block type="unittest_assertequals" inline="false">
                     <field name="MESSAGE">last letter</field>
                     <value name="ACTUAL">
-                      <block type="text_charAt" inline="true">
+                      <block type="text_charAt">
                         <mutation at="false"></mutation>
                         <field name="WHERE">LAST</field>
                         <value name="VALUE">
@@ -548,7 +541,7 @@
                         <field name="MESSAGE">random letter</field>
                         <field name="EXPECTED">TRUE</field>
                         <value name="ACTUAL">
-                          <block type="math_number_property" inline="true">
+                          <block type="math_number_property">
                             <mutation divisor_input="false"></mutation>
                             <field name="PROPERTY">POSITIVE</field>
                             <value name="NUMBER_TO_CHECK">
@@ -560,7 +553,7 @@
                                   </block>
                                 </value>
                                 <value name="FIND">
-                                  <block type="text_charAt" inline="true">
+                                  <block type="text_charAt">
                                     <mutation at="false"></mutation>
                                     <field name="WHERE">RANDOM</field>
                                     <value name="VALUE">
@@ -586,7 +579,6 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-20" y="2295">
-    <mutation></mutation>
     <field name="NAME">test case</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -650,14 +642,12 @@
     </statement>
   </block>
   <block type="procedures_defnoreturn" x="-20" y="2598">
-    <mutation></mutation>
     <field name="NAME">test trim</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">trim both</field>
         <value name="ACTUAL">
           <block type="text_trim" inline="false">
-            <mutation plural="true"></mutation>
             <field name="MODE">BOTH</field>
             <value name="TEXT">
               <block type="text">
@@ -676,7 +666,6 @@
             <field name="MESSAGE">trim left</field>
             <value name="ACTUAL">
               <block type="text_trim" inline="false">
-                <mutation plural="false"></mutation>
                 <field name="MODE">LEFT</field>
                 <value name="TEXT">
                   <block type="text">
@@ -695,7 +684,6 @@
                 <field name="MESSAGE">trim right</field>
                 <value name="ACTUAL">
                   <block type="text_trim" inline="false">
-                    <mutation plural="false"></mutation>
                     <field name="MODE">RIGHT</field>
                     <value name="TEXT">
                       <block type="text">

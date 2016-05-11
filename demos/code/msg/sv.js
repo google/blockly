@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Kör programmet som definierats av blocken i arbetsytan.",
   badCode: "Programfel:\n%1",
   timeout: "Det maximala antalet utförda loopar har överskridits.",
-  discard: "Radera alla %1 block?",
   trashTooltip: "Släng alla block.",
   catLogic: "Logik",
   catLoops: "Loopar",

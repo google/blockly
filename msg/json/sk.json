@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jaroslav.micek",
-			"Marian.stano"
+			"Marian.stano",
+			"Mark"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "prvok",
@@ -14,6 +15,8 @@
 	"INLINE_INPUTS": "Riadkové vstupy",
 	"DELETE_BLOCK": "Odstrániť blok",
 	"DELETE_X_BLOCKS": "Odstrániť %1 blokov",
+	"DELETE_ALL_BLOCKS": "Zmazať všetkých %1 dielcov?",
+	"CLEAN_UP": "Narovnať bloky",
 	"COLLAPSE_BLOCK": "Zvinúť blok",
 	"COLLAPSE_ALL": "Zvinúť bloky",
 	"EXPAND_BLOCK": "Rozvinúť blok",
@@ -51,9 +54,8 @@
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "opakuj kým nebude",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_WHILE": "Kým je hodnota pravdivá, vykonávaj príkazy.",
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Kým je hodnota nepravdivá, vykonávaj príkazy.",
-	"CONTROLS_FOR_TOOLTIP": "Nechá premennú \"%1\" nadobúdať hodnoty od začiatočného čísla po konečné s daným medzikrokom a vykoná zadané bloky.",
+	"CONTROLS_FOR_TOOLTIP": "Nechá premennú '%1' nadobúdať hodnoty od začiatočného čísla po konečné s daným medzikrokom a vykoná zadané bloky.",
 	"CONTROLS_FOR_TITLE": "počítať s %1 od %2 do %3 o %4",
-	"CONTROLS_FOREACH_HELPURL": "https://github.com/google/blockly/wiki/Loops#for-each pre každý blok",
 	"CONTROLS_FOREACH_TITLE": "pre každý prvok %1 v zozname %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Pre každý prvok v zozname priraď jeho hodnotu do premenej '%1' a vykonaj príkazy.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "opustiť slučku",
@@ -95,6 +97,9 @@
 	"LOGIC_TERNARY_TOOLTIP": "Skontroluj podmienku testom. Ak je podmienka pravda, vráť hodnotu \"ak pravda\", inak vráť hodnotu \"ak nepravda\".",
 	"MATH_NUMBER_HELPURL": "https://en.wikipedia.org/wiki/Number",
 	"MATH_NUMBER_TOOLTIP": "Číslo.",
+	"MATH_TRIG_ASIN": "arcsin",
+	"MATH_TRIG_ACOS": "arccos",
+	"MATH_TRIG_ATAN": "arctan",
 	"MATH_ARITHMETIC_HELPURL": "https://en.wikipedia.org/wiki/Arithmetic",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "Vráť súčet dvoch čísel.",
 	"MATH_ARITHMETIC_TOOLTIP_MINUS": "Vráť rozdiel dvoch čísel.",
@@ -227,7 +232,7 @@
 	"LISTS_INLIST": "v zozname",
 	"LISTS_INDEX_OF_FIRST": "nájdi prvý výskyt prvku",
 	"LISTS_INDEX_OF_LAST": "nájdi posledný výskyt prvku",
-	"LISTS_INDEX_OF_TOOLTIP": "Vráti index prvého/posledného výskytu prvku v zozname. Ak nenašiel, vráti 0.",
+	"LISTS_INDEX_OF_TOOLTIP": "Vráti index prvého/posledného výskytu prvku v zozname. Ak sa nič nenašlo, vráti 0.",
 	"LISTS_GET_INDEX_GET": "zisti",
 	"LISTS_GET_INDEX_GET_REMOVE": "zisti a odstráň",
 	"LISTS_GET_INDEX_REMOVE": "odstráň",
@@ -285,6 +290,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "s:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "s:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Vytvorí funciu bez výstupu.",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Doplň, čo robí táto funkcia...",
 	"PROCEDURES_DEFRETURN_RETURN": "vrátiť",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Vytvorí funkciu s výstupom.",
 	"PROCEDURES_ALLOW_STATEMENTS": "povoliť príkazy",

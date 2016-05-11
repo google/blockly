@@ -66,14 +66,14 @@ Blockly.JavaScript['lists_repeat'] = function(block) {
 };
 
 Blockly.JavaScript['lists_length'] = function(block) {
-  // List length.
+  // String or array length.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
   return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 
 Blockly.JavaScript['lists_isEmpty'] = function(block) {
-  // Is the list empty?
+  // Is the string null or array empty?
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
   return ['!' + argument0 + '.length', Blockly.JavaScript.ORDER_LOGICAL_NOT];
@@ -297,6 +297,34 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+Blockly.JavaScript['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.JavaScript.valueToCode(
+      block, 'LIST',
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+  var getCompareFunctionName = Blockly.JavaScript.provideFunction_(
+          'lists_get_sort_compare',
+  ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+    '(type, direction) {',
+      '  var compareFuncs = {',
+      '    "NUMERIC": function(a, b) {',
+      '        return parseFloat(a) - parseFloat(b); },',
+      '    "TEXT": function(a, b) {',
+      '        return a.toString().localeCompare(b.toString(), "en"); },',
+      '    "IGNORE_CASE": function(a, b) {',
+      '        return a.toString().localeCompare(b.toString(), "en",',
+      '          {"sensitivity": "base"}); },',
+      '  };',
+      '  var compare = compareFuncs[type];',
+      '  return function(a, b) { return compare(a, b) * direction; }',
+      '}']);
+  return ['(' + listCode + ').slice().sort(' + 
+      getCompareFunctionName + '("' + type + '", ' + direction + '))', 
+      Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['lists_split'] = function(block) {

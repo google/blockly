@@ -28,7 +28,9 @@
 
 goog.provide('Blockly.utils');
 
+goog.require('goog.dom');
 goog.require('goog.events.BrowserFeature');
+goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
 
 
@@ -175,19 +177,16 @@ Blockly.fireUiEventNow = function(node, eventName) {
       list.splice(i, 1);
     }
   }
-  // Fire the event in a browser-compatible way.
-  if (document.createEvent) {
+  // Create a UI event in a browser-compatible way.
+  if (typeof UIEvent == 'function') {
     // W3
-    var evt = document.createEvent('UIEvents');
-    evt.initEvent(eventName, true, true);  // event type, bubbling, cancelable
-    node.dispatchEvent(evt);
-  } else if (document.createEventObject) {
-    // MSIE
-    var evt = document.createEventObject();
-    node.fireEvent('on' + eventName, evt);
+    var evt = new UIEvent(eventName, {});
   } else {
-    throw 'FireEvent: No event creation mechanism.';
+    // MSIE
+    var evt = document.createEvent('UIEvent');
+    evt.initUIEvent(eventName, false, false, window, 0);
   }
+  node.dispatchEvent(evt);
 };
 
 /**
@@ -241,18 +240,19 @@ Blockly.isTargetInput_ = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
-         e.target.type == 'tel' || e.target.type == 'url';
+         e.target.type == 'tel' || e.target.type == 'url' ||
+         e.target.isContentEditable;
 };
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
- * @return {!Object} Object with .x and .y properties.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
  * @private
  */
 Blockly.getRelativeXY_ = function(element) {
-  var xy = {x: 0, y: 0};
+  var xy = new goog.math.Coordinate(0, 0);
   // First, check for x and y attributes.
   var x = element.getAttribute('x');
   if (x) {
@@ -264,12 +264,7 @@ Blockly.getRelativeXY_ = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  // Note that Firefox and IE (9,10) return 'translate(12)' instead of
-  // 'translate(12, 0)'.
-  // Note that IE (9,10) returns 'translate(16 8)' instead of
-  // 'translate(16, 8)'.
-  var r = transform &&
-          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
+  var r = transform && transform.match(Blockly.getRelativeXY_.XY_REGEXP_);
   if (r) {
     xy.x += parseFloat(r[1]);
     if (r[3]) {
@@ -280,33 +275,60 @@ Blockly.getRelativeXY_ = function(element) {
 };
 
 /**
- * Return the absolute coordinates of the top-left corner of this element.
- * The origin (0,0) is the top-left corner of the nearest SVG.
- * @param {!Element} element Element to find the coordinates of.
- * @return {!Object} Object with .x and .y properties.
+ * Static regex to pull the x,y values out of an SVG translate() directive.
+ * Note that Firefox and IE (9,10) return 'translate(12)' instead of
+ * 'translate(12, 0)'.
+ * Note that IE (9,10) returns 'translate(16 8)' instead of 'translate(16, 8)'.
+ * Note that IE has been reported to return scientific notation (0.123456e-42).
+ * @type {!RegExp}
  * @private
  */
-Blockly.getSvgXY_ = function(element) {
+Blockly.getRelativeXY_.XY_REGEXP_ =
+    /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
+
+/**
+ * Return the absolute coordinates of the top-left corner of this element,
+ * scales that after canvas SVG element, if it's a descendant.
+ * The origin (0,0) is the top-left corner of the Blockly SVG.
+ * @param {!Element} element Element to find the coordinates of.
+ * @param {!Blockly.Workspace} workspace Element must be in this workspace.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * @private
+ */
+Blockly.getSvgXY_ = function(element, workspace) {
   var x = 0;
   var y = 0;
+  var scale = 1;
+  if (goog.dom.contains(workspace.getCanvas(), element) ||
+      goog.dom.contains(workspace.getBubbleCanvas(), element)) {
+    // Before the SVG canvas, scale the coordinates.
+    scale = workspace.scale;
+  }
   do {
     // Loop through this block and every parent.
     var xy = Blockly.getRelativeXY_(element);
-    x += xy.x;
-    y += xy.y;
+    if (element == workspace.getCanvas() ||
+        element == workspace.getBubbleCanvas()) {
+      // After the SVG canvas, don't scale the coordinates.
+      scale = 1;
+    }
+    x += xy.x * scale;
+    y += xy.y * scale;
     element = element.parentNode;
-  } while (element && element.nodeName.toLowerCase() != 'svg');
-  return {x: x, y: y};
+  } while (element && element != workspace.getParentSvg());
+  return new goog.math.Coordinate(x, y);
 };
 
 /**
  * Helper method for creating SVG elements.
  * @param {string} name Element's tag name.
  * @param {!Object} attrs Dictionary of attribute names and values.
- * @param {Element=} opt_parent Optional parent on which to append the element.
+ * @param {Element} parent Optional parent on which to append the element.
+ * @param {Blockly.Workspace=} opt_workspace Optional workspace for access to
+ *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.createSvgElement = function(name, attrs, opt_parent) {
+Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
@@ -318,10 +340,23 @@ Blockly.createSvgElement = function(name, attrs, opt_parent) {
   if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
     e.runtimeStyle = e.currentStyle = e.style;
   }
-  if (opt_parent) {
-    opt_parent.appendChild(e);
+  if (parent) {
+    parent.appendChild(e);
   }
   return e;
+};
+
+/**
+ * Set css classes to allow/disallow the browser from selecting/highlighting
+ * text, etc. on the page.
+ * @param {boolean} selectable Whether elements on the page can be selected.
+ */
+Blockly.setPageSelectable = function(selectable) {
+    if (selectable) {
+      Blockly.removeClass_(document.body, 'blocklyNonSelectable');
+    } else {
+      Blockly.addClass_(document.body, 'blocklyNonSelectable');
+    }
 };
 
 /**
@@ -374,7 +409,7 @@ Blockly.shortestStringLength = function(array) {
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
  * @param {!Array.<string>} array Array of strings.
- * @param {?number} opt_shortest Length of shortest string.
+ * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
 Blockly.commonWordPrefix = function(array, opt_shortest) {
@@ -409,7 +444,7 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
  * Given an array of strings, return the length of the common suffix.
  * Words may not be split.  Any space after a word is included in the length.
  * @param {!Array.<string>} array Array of strings.
- * @param {?number} opt_shortest Length of shortest string.
+ * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */
 Blockly.commonWordSuffix = function(array, opt_shortest) {
@@ -448,3 +483,85 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
 Blockly.isNumber = function(str) {
   return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
 };
+
+/**
+ * Parse a string with any number of interpolation tokens (%1, %2, ...).
+ * '%' characters may be self-escaped (%%).
+ * @param {string} message Text containing interpolation tokens.
+ * @return {!Array.<string|number>} Array of strings and numbers.
+ */
+Blockly.tokenizeInterpolation = function(message) {
+  var tokens = [];
+  var chars = message.split('');
+  chars.push('');  // End marker.
+  // Parse the message with a finite state machine.
+  // 0 - Base case.
+  // 1 - % found.
+  // 2 - Digit found.
+  var state = 0;
+  var buffer = [];
+  var number = null;
+  for (var i = 0; i < chars.length; i++) {
+    var c = chars[i];
+    if (state == 0) {
+      if (c == '%') {
+        state = 1;  // Start escape.
+      } else {
+        buffer.push(c);  // Regular char.
+      }
+    } else if (state == 1) {
+      if (c == '%') {
+        buffer.push(c);  // Escaped %: %%
+        state = 0;
+      } else if ('0' <= c && c <= '9') {
+        state = 2;
+        number = c;
+        var text = buffer.join('');
+        if (text) {
+          tokens.push(text);
+        }
+        buffer.length = 0;
+      } else {
+        buffer.push('%', c);  // Not an escape: %a
+        state = 0;
+      }
+    } else if (state == 2) {
+      if ('0' <= c && c <= '9') {
+        number += c;  // Multi-digit number.
+      } else {
+        tokens.push(parseInt(number, 10));
+        i--;  // Parse this char again.
+        state = 0;
+      }
+    }
+  }
+  var text = buffer.join('');
+  if (text) {
+    tokens.push(text);
+  }
+  return tokens;
+};
+
+/**
+ * Generate a unique ID.  This should be globally unique.
+ * 87 characters ^ 20 length > 128 bits (better than a UUID).
+ * @return {string}
+ */
+Blockly.genUid = function() {
+  var length = 20;
+  var soupLength = Blockly.genUid.soup_.length;
+  var id = [];
+  for (var i = 0; i < length; i++) {
+    id[i] = Blockly.genUid.soup_.charAt(Math.random() * soupLength);
+  }
+  return id.join('');
+};
+
+/**
+ * Legal characters for the unique ID.
+ * Should be all on a US keyboard.  No XML special characters or control codes.
+ * Removed $ due to issue 251.
+ * @private
+ */
+Blockly.genUid.soup_ = '!#%()*+,-./:;=?@[]^_`{|}~' +
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

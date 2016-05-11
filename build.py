@@ -33,6 +33,7 @@
 #   javascript_compressed.js: The compressed Javascript generator.
 #   python_compressed.js: The compressed Python generator.
 #   dart_compressed.js: The compressed Dart generator.
+#   lua_compressed.js: The compressed Lua generator.
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
 import sys
@@ -75,55 +76,68 @@ class Gen_uncompressed(threading.Thread):
     self.search_paths = search_paths
 
   def run(self):
-    target_filename = "blockly_uncompressed.js"
-    f = open(target_filename, "w")
+    target_filename = 'blockly_uncompressed.js'
+    f = open(target_filename, 'w')
     f.write(HEADER)
     f.write("""
-// 'this' is 'window' in a browser, or 'global' in node.js.
-this.BLOCKLY_DIR = (function() {
-  // Find name of current directory.
-  var scripts = document.getElementsByTagName('script');
-  var re = new RegExp('(.+)[\/]blockly_uncompressed\.js$');
-  for (var x = 0, script; script = scripts[x]; x++) {
-    var match = re.exec(script.src);
-    if (match) {
-      return match[1];
+var isNodeJS = !!(typeof module !== 'undefined' && module.exports &&
+                  typeof window === 'undefined');
+
+if (isNodeJS) {
+  var window = {};
+  require('../closure-library/closure/goog/bootstrap/nodejs');
+}
+
+window.BLOCKLY_DIR = (function() {
+  if (!isNodeJS) {
+    // Find name of current directory.
+    var scripts = document.getElementsByTagName('script');
+    var re = new RegExp('(.+)[\/]blockly_uncompressed\.js$');
+    for (var i = 0, script; script = scripts[i]; i++) {
+      var match = re.exec(script.src);
+      if (match) {
+        return match[1];
+      }
     }
+    alert('Could not detect Blockly\\'s directory name.');
   }
-  alert('Could not detect Blockly\\'s directory name.');
   return '';
 })();
 
-this.BLOCKLY_BOOT = function() {
-// Execute after Closure has loaded.
-if (!this.goog) {
-  alert('Error: Closure not found.  Read this:\\n' +
-        'developers.google.com/blockly/hacking/closure');
-}
-
-// Build map of all dependencies (used and unused).
-var dir = this.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
+window.BLOCKLY_BOOT = function() {
+  var dir = '';
+  if (isNodeJS) {
+    require('../closure-library/closure/goog/bootstrap/nodejs');
+    dir = 'blockly';
+  } else {
+    // Execute after Closure has loaded.
+    if (!window.goog) {
+      alert('Error: Closure not found.  Read this:\\n' +
+            'developers.google.com/blockly/hacking/closure');
+    }
+    dir = window.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
+  }
 """)
     add_dependency = []
     base_path = calcdeps.FindClosureBasePath(self.search_paths)
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
       add_dependency.append(calcdeps.GetDepsLine(dep, base_path))
-    add_dependency = "\n".join(add_dependency)
+    add_dependency = '\n'.join(add_dependency)
     # Find the Blockly directory name and replace it with a JS variable.
     # This allows blockly_uncompressed.js to be compiled on one computer and be
     # used on another, even if the directory name differs.
-    m = re.search("[\\/]([^\\/]+)[\\/]core[\\/]blockly.js", add_dependency)
-    add_dependency = re.sub("([\\/])" + re.escape(m.group(1)) +
-        "([\\/]core[\\/])", '\\1" + dir + "\\2', add_dependency)
-    f.write(add_dependency + "\n")
+    m = re.search('[\\/]([^\\/]+)[\\/]core[\\/]blockly.js', add_dependency)
+    add_dependency = re.sub('([\\/])' + re.escape(m.group(1)) +
+        '([\\/]core[\\/])', '\\1" + dir + "\\2', add_dependency)
+    f.write(add_dependency + '\n')
 
     provides = []
     for dep in calcdeps.BuildDependenciesFromFiles(self.search_paths):
-      if not dep.filename.startswith(os.pardir + os.sep):  # "../"
+      if not dep.filename.startswith(os.pardir + os.sep):  # '../'
         provides.extend(dep.provides)
     provides.sort()
-    f.write("\n")
-    f.write("// Load Blockly.\n")
+    f.write('\n')
+    f.write('// Load Blockly.\n')
     for provide in provides:
       f.write("goog.require('%s');\n" % provide)
 
@@ -132,17 +146,17 @@ delete this.BLOCKLY_DIR;
 delete this.BLOCKLY_BOOT;
 };
 
-if (typeof DOMParser == 'undefined' && typeof require == 'function') {
-  // Node.js needs DOMParser loaded separately.
-  var DOMParser = require('xmldom').DOMParser;
+if (isNodeJS) {
+  window.BLOCKLY_BOOT()
+  module.exports = Blockly;
+} else {
+  // Delete any existing Closure (e.g. Soy's nogoog_shim).
+  document.write('<script>var goog = undefined;</script>');
+  // Load fresh Closure Library.
+  document.write('<script src="' + window.BLOCKLY_DIR +
+      '/../closure-library/closure/goog/base.js"></script>');
+  document.write('<script>window.BLOCKLY_BOOT();</script>');
 }
-
-// Delete any existing Closure (e.g. Soy's nogoog_shim).
-document.write('<script>var goog = undefined;</script>');
-// Load fresh Closure Library.
-document.write('<script src="' + this.BLOCKLY_DIR +
-    '/../closure-library/closure/goog/base.js"></script>');
-document.write('<script>this.BLOCKLY_BOOT()</script>');
 """)
     f.close()
     print("SUCCESS: " + target_filename)
@@ -165,6 +179,7 @@ class Gen_compressed(threading.Thread):
     self.gen_generator("python")
     self.gen_generator("php")
     self.gen_generator("dart")
+    self.gen_generator("lua")
 
   def gen_core(self):
     target_filename = "blockly_compressed.js"
@@ -300,6 +315,8 @@ class Gen_compressed(threading.Thread):
       code = code.replace(remove, "")
 
       # Trim down Google's Apache licences.
+      # The Closure Compiler used to preserve these until August 2015.
+      # Delete this in a few months if the licences don't return.
       LICENSE = re.compile("""/\\*
 
  [\w ]+
@@ -426,10 +443,18 @@ if __name__ == "__main__":
       print("Error: Closure directory needs to be renamed from"
             "'closure-library-read-only' to 'closure-library'.\n"
             "Please rename this directory.")
+    elif os.path.isdir(os.path.join(os.path.pardir, "google-closure-library")):
+      # When Closure is installed by npm, it is named "google-closure-library".
+      #calcdeps = import_path(os.path.join(
+      # os.path.pardir, "google-closure-library", "closure", "bin", "calcdeps.py"))
+      print("Error: Closure directory needs to be renamed from"
+           "'google-closure-library' to 'closure-library'.\n"
+           "Please rename this directory.")
     else:
       print("""Error: Closure not found.  Read this:
 https://developers.google.com/blockly/hacking/closure""")
     sys.exit(1)
+
   search_paths = calcdeps.ExpandDirectories(
       ["core", os.path.join(os.path.pardir, "closure-library")])
 

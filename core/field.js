@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Input field.  Used for editable titles, variables, etc.
+ * @fileoverview Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
  * instances would be Blockly.FieldTextInput, Blockly.FieldDropdown, etc.
  * @author fraser@google.com (Neil Fraser)
@@ -36,46 +36,79 @@ goog.require('goog.userAgent');
 
 
 /**
- * Class for an editable field.
+ * Abstract class for an editable field.
  * @param {string} text The initial content of the field.
+ * @param {Function=} opt_validator An optional function that is called
+ *     to validate any constraints on what the user entered.  Takes the new
+ *     text as an argument and returns either the accepted text, a replacement
+ *     text, or null to abort the change.
  * @constructor
  */
-Blockly.Field = function(text) {
+Blockly.Field = function(text, opt_validator) {
   this.size_ = new goog.math.Size(0, 25);
-  this.setText(text);
+  this.setValue(text);
+  this.setValidator(opt_validator);
 };
 
 /**
+ * Temporary cache of text widths.
+ * @type {Object}
+ * @private
+ */
+Blockly.Field.cacheWidths_ = null;
+
+/**
+ * Number of current references to cache.
+ * @type {number}
+ * @private
+ */
+Blockly.Field.cacheReference_ = 0;
+
+
+/**
+ * Name of field.  Unique within each block.
+ * Static labels are usually unnamed.
+ * @type {string=}
+ */
+Blockly.Field.prototype.name = undefined;
+
+/**
+ * Maximum characters of text to display before adding an ellipsis.
+ * @type {number}
+ */
+Blockly.Field.prototype.maxDisplayLength = 50;
+
+/**
+ * Visible text to display.
+ * @type {string}
+ * @private
+ */
+Blockly.Field.prototype.text_ = '';
+
+/**
  * Block this field is attached to.  Starts as null, then in set in init.
+ * @type {Blockly.Block}
  * @private
  */
 Blockly.Field.prototype.sourceBlock_ = null;
 
 /**
  * Is the field visible, or hidden due to the block being collapsed?
+ * @type {boolean}
  * @private
  */
 Blockly.Field.prototype.visible_ = true;
 
 /**
- * Change handler called when user edits an editable field.
+ * Validation function called when user edits an editable field.
+ * @type {Function}
  * @private
  */
-Blockly.Field.prototype.changeHandler_ = null;
-
-/**
- * Clone this Field.  This must be implemented by all classes derived from
- * Field.  Since this class should not be instantiated, calling this method
- * throws an exception.
- * @throws {goog.assert.AssertionError}
- */
-Blockly.Field.prototype.clone = function() {
-  goog.asserts.fail('There should never be an instance of Field, ' +
-      'only its derived classes.');
-};
+Blockly.Field.prototype.validator_ = null;
 
 /**
  * Non-breaking space.
+ * @const
  */
 Blockly.Field.NBSP = '\u00A0';
 
@@ -85,15 +118,22 @@ Blockly.Field.NBSP = '\u00A0';
 Blockly.Field.prototype.EDITABLE = true;
 
 /**
- * Install this field on a block.
+ * Attach this field to a block.
  * @param {!Blockly.Block} block The block containing this field.
  */
-Blockly.Field.prototype.init = function(block) {
-  if (this.sourceBlock_) {
+Blockly.Field.prototype.setSourceBlock = function(block) {
+  goog.asserts.assert(!this.sourceBlock_, 'Field already bound to a block.');
+  this.sourceBlock_ = block;
+};
+
+/**
+ * Install this field on a block.
+ */
+Blockly.Field.prototype.init = function() {
+  if (this.fieldGroup_) {
     // Field has already been initialized once.
     return;
   }
-  this.sourceBlock_ = block;
   // Build the DOM.
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   if (!this.visible_) {
@@ -103,17 +143,23 @@ Blockly.Field.prototype.init = function(block) {
       {'rx': 4,
        'ry': 4,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
-       'y': -12,
-       'height': 16}, this.fieldGroup_);
+       'y': 0,
+       'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);
+  /** @type {!Element} */
   this.textElement_ = Blockly.createSvgElement('text',
-      {'class': 'blocklyText'}, this.fieldGroup_);
+      {'class': 'blocklyText', 'y': this.size_.height - 12.5},
+      this.fieldGroup_);
 
   this.updateEditable();
-  block.getSvgRoot().appendChild(this.fieldGroup_);
+  this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseUpWrapper_ =
       Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
   // Force a render.
   this.updateTextNode_();
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, '', this.getValue()));
+  }
 };
 
 /**
@@ -129,7 +175,7 @@ Blockly.Field.prototype.dispose = function() {
   this.fieldGroup_ = null;
   this.textElement_ = null;
   this.borderRect_ = null;
-  this.changeHandler_ = null;
+  this.validator_ = null;
 };
 
 /**
@@ -179,11 +225,11 @@ Blockly.Field.prototype.setVisible = function(visible) {
 };
 
 /**
- * Sets a new change handler for editable fields.
- * @param {Function} handler New change handler, or null.
+ * Sets a new validation function for editable fields.
+ * @param {Function} handler New validation function, or null.
  */
-Blockly.Field.prototype.setChangeHandler = function(handler) {
-  this.changeHandler_ = handler;
+Blockly.Field.prototype.setValidator = function(handler) {
+  this.validator_ = handler;
 };
 
 /**
@@ -202,12 +248,21 @@ Blockly.Field.prototype.getSvgRoot = function() {
  */
 Blockly.Field.prototype.render_ = function() {
   if (this.visible_ && this.textElement_) {
-    try {
-      var width = this.textElement_.getComputedTextLength();
-    } catch (e) {
-      // MSIE 11 is known to throw "Unexpected call to method or property
-      // access." if Blockly is hidden.
-      var width = this.textElement_.textContent.length * 8;
+    var key = this.textElement_.textContent + '\n' +
+        this.textElement_.className.baseVal;
+    if (Blockly.Field.cacheWidths_ && Blockly.Field.cacheWidths_[key]) {
+      var width = Blockly.Field.cacheWidths_[key];
+    } else {
+      try {
+        var width = this.textElement_.getComputedTextLength();
+      } catch (e) {
+        // MSIE 11 is known to throw "Unexpected call to method or property
+        // access." if Blockly is hidden.
+        var width = this.textElement_.textContent.length * 8;
+      }
+      if (Blockly.Field.cacheWidths_) {
+        Blockly.Field.cacheWidths_[key] = width;
+      }
     }
     if (this.borderRect_) {
       this.borderRect_.setAttribute('width',
@@ -220,6 +275,28 @@ Blockly.Field.prototype.render_ = function() {
 };
 
 /**
+ * Start caching field widths.  Every call to this function MUST also call
+ * stopCache.  Caches must not survive between execution threads.
+ */
+Blockly.Field.startCache = function() {
+  Blockly.Field.cacheReference_++;
+  if (!Blockly.Field.cacheWidths_) {
+    Blockly.Field.cacheWidths_ = {};
+  }
+};
+
+/**
+ * Stop caching field widths.  Unless caching was already on when the
+ * corresponding call to startCache was made.
+ */
+Blockly.Field.stopCache = function() {
+  Blockly.Field.cacheReference_--;
+  if (!Blockly.Field.cacheReference_) {
+    Blockly.Field.cacheWidths_ = null;
+  }
+};
+
+/**
  * Returns the height and width of the field.
  * @return {!goog.math.Size} Height and width.
  */
@@ -228,6 +305,19 @@ Blockly.Field.prototype.getSize = function() {
     this.render_();
   }
   return this.size_;
+};
+
+/**
+ * Returns the height and width of the field,
+ * accounting for the workspace scaling.
+ * @return {!goog.math.Size} Height and width.
+ * @private
+ */
+Blockly.Field.prototype.getScaledBBox_ = function() {
+  var bBox = this.borderRect_.getBBox();
+  // Create new object, as getBBox can return an uneditable SVGRect in IE.
+  return new goog.math.Size(bBox.width * this.sourceBlock_.workspace.scale,
+                            bBox.height * this.sourceBlock_.workspace.scale);
 };
 
 /**
@@ -258,7 +348,6 @@ Blockly.Field.prototype.setText = function(text) {
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();
-    this.sourceBlock_.workspace.fireChangeEvent();
   }
 };
 
@@ -272,6 +361,10 @@ Blockly.Field.prototype.updateTextNode_ = function() {
     return;
   }
   var text = this.text_;
+  if (text.length > this.maxDisplayLength) {
+    // Truncate displayed string and add an ellipsis ('...').
+    text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
+  }
   // Empty the text element.
   goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
@@ -303,10 +396,22 @@ Blockly.Field.prototype.getValue = function() {
 /**
  * By default there is no difference between the human-readable text and
  * the language-neutral values.  Subclasses (such as dropdown) may define this.
- * @param {string} text New text.
+ * @param {string} newText New text.
  */
-Blockly.Field.prototype.setValue = function(text) {
-  this.setText(text);
+Blockly.Field.prototype.setValue = function(newText) {
+  if (newText === null) {
+    // No change if null.
+    return;
+  }
+  var oldText = this.getValue();
+  if (oldText == newText) {
+    return;
+  }
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, oldText, newText));
+  }
+  this.setText(newText);
 };
 
 /**
@@ -324,7 +429,7 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
   } else if (Blockly.isRightButton(e)) {
     // Right-click.
     return;
-  } else if (Blockly.dragMode_ == 2) {
+  } else if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   } else if (this.sourceBlock_.isEditable()) {

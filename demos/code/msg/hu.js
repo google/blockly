@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Program futtatása.",
   badCode: "Program hiba:\n%1",
   timeout: "A program elérte a maximális végrehajtási időt.",
-  discard: "Az összes %1 blokk törlése?",
   trashTooltip: "Összes blokk törlése.",
   catLogic: "Logikai műveletek",
   catLoops: "Ciklusok",

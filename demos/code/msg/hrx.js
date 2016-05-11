@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Das Programm ausfüahre, das von den Bausten im Oorweitsbereich definiert ist.",
   badCode: "Programmfehler:\n%1",
   timeout: "Die maximale Ausführungswiederholunge woore üwerschritt.",
-  discard: "All %1 Bausten lösche?",
   trashTooltip: "All Bausten verwerfe.",
   catLogic: "Logik",
   catLoops: "Schleife",

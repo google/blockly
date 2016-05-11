@@ -5,7 +5,6 @@ var MSG = {
   runTooltip: "Lañsañ ar programm termenet gant ar bloc'hadoù en takad labour.",
   badCode: "Fazi programm :\n%1",
   timeout: "Tizhet eo bet an niver brasañ a iteradurioù seveniñ aotreet.",
-  discard: "Diverkañ an holl vloc'hoù %1 ?",
   trashTooltip: "Disteurel an holl vloc'hoù.",
   catLogic: "Poell",
   catLoops: "Boukloù",

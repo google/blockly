@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Azpirin",
-			"Octahedron80"
+			"Octahedron80",
+			"Horus"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "รายการ",
@@ -14,6 +15,7 @@
 	"INLINE_INPUTS": "อินพุตในบรรทัด",
 	"DELETE_BLOCK": "ลบบล็อก",
 	"DELETE_X_BLOCKS": "ลบ %1 บล็อก",
+	"DELETE_ALL_BLOCKS": "ต้องการลบบล็อกทั้ง %1 บล็อกหรือไม่",
 	"COLLAPSE_BLOCK": "ย่อบล็อก",
 	"COLLAPSE_ALL": "ย่อบล็อก",
 	"EXPAND_BLOCK": "ขยายบล็อก",

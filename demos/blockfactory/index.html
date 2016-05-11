@@ -38,14 +38,28 @@
     #blockly {
       position: fixed;
     }
+    #blocklyMask {
+      background-color: #000;
+      cursor: not-allowed;
+      display: none;
+      position: fixed;
+      opacity: 0.2;
+      z-index: 9;
+    }
     #preview {
       position: absolute;
     }
-    pre {
+    pre,
+    #languageTA {
+      border: #ddd 1px solid;
       margin-top: 0;
       position: absolute;
-      border: #ddd 1px solid;
       overflow: scroll;
+    }
+    #languageTA {
+      display: none;
+      font-family: monospace;
+      font-size: 10pt;
     }
 
     button {
@@ -57,14 +71,17 @@
       margin: 0 5px;
       font-size: large;
     }
-    button:hover {
+    button:hover:not(:disabled) {
       box-shadow: 2px 2px 5px #888;
+    }
+    button:disabled {
+      opacity: 0.6;
     }
     button>* {
       opacity: 0.6;
       vertical-align: text-bottom;
     }
-    button:hover>* {
+    button:hover:not(:disabled)>* {
       opacity: 1;
     }
     #linkButton {
@@ -110,6 +127,7 @@
     <tr>
       <td width="50%" height="95%" style="padding: 2px;">
         <div id="blockly"></div>
+        <div id="blocklyMask"></div>
       </td>
       <td width="50%" height="95%">
         <table>
@@ -124,6 +142,7 @@
                 <select id="format">
                   <option value="JavaScript">JavaScript</option>
                   <option value="JSON">JSON</option>
+                  <option value="Manual">Manual edit&hellip;</option>
                 </select>
               </h3>
             </td>
@@ -131,6 +150,7 @@
           <tr>
             <td height="30%">
               <pre id="languagePre"></pre>
+              <textarea id="languageTA"></textarea>
             </td>
           </tr>
           <tr>
@@ -140,6 +160,7 @@
                   <option value="JavaScript">JavaScript</option>
                   <option value="Python">Python</option>
                   <option value="PHP">PHP</option>
+                  <option value="Lua">Lua</option>
                   <option value="Dart">Dart</option>
                 </select>
               </h3>
@@ -156,8 +177,16 @@
   </table>
   <xml id="toolbox" style="display: none">
     <category name="Input">
-      <block type="input_value"></block>
-      <block type="input_statement"></block>
+      <block type="input_value">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
+      <block type="input_statement">
+        <value name="TYPE">
+          <shadow type="type_null"></shadow>
+        </value>
+      </block>
       <block type="input_dummy"></block>
     </category>
     <category name="Field">

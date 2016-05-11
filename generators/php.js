@@ -31,7 +31,7 @@ goog.require('Blockly.Generator');
 
 /**
  * PHP code generator.
- * @type !Blockly.Generator
+ * @type {!Blockly.Generator}
  */
 Blockly.PHP = new Blockly.Generator('PHP');
 
@@ -96,15 +96,15 @@ Blockly.PHP.init = function(workspace) {
 
   if (!Blockly.PHP.variableDB_) {
     Blockly.PHP.variableDB_ =
-        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, true);
+        new Blockly.Names(Blockly.PHP.RESERVED_WORDS_, '$');
   } else {
     Blockly.PHP.variableDB_.reset();
   }
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  for (var x = 0; x < variables.length; x++) {
-    defvars[x] = Blockly.PHP.variableDB_.getName(variables[x],
+  for (var i = 0; i < variables.length; i++) {
+    defvars[i] = Blockly.PHP.variableDB_.getName(variables[i],
         Blockly.Variables.NAME_TYPE) + ';';
   }
   Blockly.PHP.definitions_['variables'] = defvars.join('\n');
@@ -121,6 +121,10 @@ Blockly.PHP.finish = function(code) {
   for (var name in Blockly.PHP.definitions_) {
     definitions.push(Blockly.PHP.definitions_[name]);
   }
+  // Clean up temporary data.
+  delete Blockly.PHP.definitions_;
+  delete Blockly.PHP.functionNames_;
+  Blockly.PHP.variableDB_.reset();
   return definitions.join('\n\n') + '\n\n\n' + code;
 };
 

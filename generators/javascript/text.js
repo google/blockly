@@ -73,17 +73,17 @@ Blockly.JavaScript['text_append'] = function(block) {
 };
 
 Blockly.JavaScript['text_length'] = function(block) {
-  // String length.
+  // String or array length.
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
   return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 
 Blockly.JavaScript['text_isEmpty'] = function(block) {
-  // Is the string null?
+  // Is the string null or array empty?
   var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  return ['!' + argument0, Blockly.JavaScript.ORDER_LOGICAL_NOT];
+  return ['!' + argument0 + '.length', Blockly.JavaScript.ORDER_LOGICAL_NOT];
 };
 
 Blockly.JavaScript['text_indexOf'] = function(block) {
@@ -233,9 +233,16 @@ Blockly.JavaScript['text_print'] = function(block) {
   return 'window.alert(' + argument0 + ');\n';
 };
 
-Blockly.JavaScript['text_prompt'] = function(block) {
-  // Prompt function (internal message).
-  var msg = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
+Blockly.JavaScript['text_prompt_ext'] = function(block) {
+  // Prompt function.
+  if (block.getField('TEXT')) {
+    // Internal message.
+    var msg = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
+  } else {
+    // External message.
+    var msg = Blockly.JavaScript.valueToCode(block, 'TEXT',
+        Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  }
   var code = 'window.prompt(' + msg + ')';
   var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
   if (toNumber) {
@@ -244,14 +251,4 @@ Blockly.JavaScript['text_prompt'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['text_prompt_ext'] = function(block) {
-  // Prompt function (external message).
-  var msg = Blockly.JavaScript.valueToCode(block, 'TEXT',
-      Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  var code = 'window.prompt(' + msg + ')';
-  var toNumber = block.getFieldValue('TYPE') == 'NUMBER';
-  if (toNumber) {
-    code = 'parseFloat(' + code + ')';
-  }
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-};
+Blockly.JavaScript['text_prompt'] = Blockly.JavaScript['text_prompt_ext'];

@@ -69,48 +69,48 @@
      xmlns:xlink="http://www.w3.org/1999/xlink"
      version="1.1"
      width="600"
-     height="256"
-     viewBox="0 142 600 256">
+     height="320"
+     viewBox="0 110 600 320">
     <defs>
       <g id="row1st">
         <rect
            class="seat1st"
            width="10" height="10"
-           x="75" y="245" />
+           x="75" y="243" />
         <rect
            class="seat1st"
            width="10" height="10"
-           x="75" y="256" />
+           x="75" y="254" />
         <rect
            class="seat1st"
            width="10" height="10"
-           x="75" y="274" />
+           x="75" y="272" />
         <rect
            class="seat1st"
            width="10" height="10"
-           x="75" y="285" />
+           x="75" y="283" />
       </g>
       <g id="row2nd">
         <rect
            class="seat2nd"
            width="10" height="8"
-           x="75" y="245" />
+           x="75" y="243" />
         <rect
            class="seat2nd"
            width="10" height="8"
-           x="75" y="253" />
+           x="75" y="251" />
         <rect
            class="seat2nd"
            width="10" height="8"
-           x="75" y="271" />
+           x="75" y="269" />
         <rect
            class="seat2nd"
            width="10" height="8"
-           x="75" y="279" />
+           x="75" y="277" />
         <rect
            class="seat2nd"
            width="10" height="8"
-           x="75" y="287" />
+           x="75" y="285" />
       </g>
       <linearGradient id="grad1" x1="0%" y1="100%" x2="0%" y2="0%">
         <stop offset="0%" style="stop-color:#fff;stop-opacity:0" />
@@ -122,28 +122,28 @@
       </linearGradient>
     </defs>
     <path
-        d="M 404,1 373,15 230,244 230,297 373,524 404,542 330,351 330,189 z"
+        d="m 214,270 l 159,-254 31,-16 -74,189 0,162 74,189 -31,16 z"
         id="wing" />
     <path
-        d="m 577,269 22,-93 -27,6 -44,88 44,88 27,6 z"
+        d="m 577,270 22,-93 -27,6 -44,88 44,88 27,6 z"
         id="tail" />
     <path
-        d="m 483,296 h -407 c -38,0 -75,-13 -75,-26 c 0,-13 38,-26 75,-26 h 407 l 94,24 z"
+        d="m 577,270 l -94,24 h -407 c -38,0 -75,-13 -75,-26 c 0,-13 38,-26 75,-26 h 407 z"
         id="fuselage" />
     <rect
        width="610"
        height="100"
        x="-5"
-       y="142"
+       y="110"
        fill="url(#grad1)" />
     <rect
        width="610"
        height="100"
        x="-5"
-       y="298"
+       y="330"
        fill="url(#grad2)" />
     <text id="row1stText" x="55" y="380"></text>
-    <text id="row2ndText" x="350" y="380"></text>
+    <text id="row2ndText" x="55" y="420"></text>
     <text x="55" y="210">
       <tspan id="seatText"></tspan>
       <tspan id="seatYes" style="fill: #0c0;" dy="10">&#x2713;</tspan>
@@ -153,11 +153,11 @@
       <rect
           id="crew_right" class="crew"
           width="10" height="10"
-          x="35" y="256" />
+          x="35" y="254" />
       <rect
           id="crew_left" class="crew"
           width="10" height="10"
-          x="35" y="274" />
+          x="35" y="272" />
     {/if}
   </svg>
 
@@ -190,9 +190,30 @@
 {template .toolbox}
   <xml id="toolbox" style="display: none">
     <block type="math_number"></block>
-    <block type="math_arithmetic"></block>
+    <block type="math_arithmetic">
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
     <block type="math_arithmetic">
       <field name="OP">MULTIPLY</field>
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
     </block>
     {if $ij.level <= 2}
       <block type="plane_get_rows"></block>

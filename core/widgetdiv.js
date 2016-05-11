@@ -30,25 +30,26 @@ goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.Css');
 goog.require('goog.dom');
+goog.require('goog.style');
 
 
 /**
  * The HTML container.  Set once by Blockly.WidgetDiv.createDom.
- * @type Element
+ * @type {Element}
  */
 Blockly.WidgetDiv.DIV = null;
 
 /**
  * The object currently using this container.
+ * @type {Object}
  * @private
- * @type Object
  */
 Blockly.WidgetDiv.owner_ = null;
 
 /**
  * Optional cleanup function set by whichever object uses the widget.
+ * @type {Function}
  * @private
- * @type Function
  */
 Blockly.WidgetDiv.dispose_ = null;
 
@@ -75,6 +76,10 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
   Blockly.WidgetDiv.hide();
   Blockly.WidgetDiv.owner_ = newOwner;
   Blockly.WidgetDiv.dispose_ = dispose;
+  // Temporarily move the widget to the top of the screen so that it does not
+  // cause a scrollbar jump in Firefox when displayed.
+  var xy = goog.style.getViewportPageOffset(document);
+  Blockly.WidgetDiv.DIV.style.top = xy.y + 'px';
   Blockly.WidgetDiv.DIV.style.direction = rtl ? 'rtl' : 'ltr';
   Blockly.WidgetDiv.DIV.style.display = 'block';
 };
@@ -84,9 +89,12 @@ Blockly.WidgetDiv.show = function(newOwner, rtl, dispose) {
  */
 Blockly.WidgetDiv.hide = function() {
   if (Blockly.WidgetDiv.owner_) {
-    Blockly.WidgetDiv.DIV.style.display = 'none';
-    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.owner_ = null;
+    Blockly.WidgetDiv.DIV.style.display = 'none';
+    Blockly.WidgetDiv.DIV.style.left = '';
+    Blockly.WidgetDiv.DIV.style.top = '';
+    Blockly.WidgetDiv.DIV.style.height = '';
+    Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.dispose_ = null;
     goog.dom.removeChildren(Blockly.WidgetDiv.DIV);
   }
@@ -127,7 +135,7 @@ Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
     anchorY = scrollOffset.y;
   }
   if (rtl) {
-    // Don't let the menu go right of the right edge of the window.
+    // Don't let the widget go right of the right edge of the window.
     if (anchorX > windowSize.width + scrollOffset.x) {
       anchorX = windowSize.width + scrollOffset.x;
     }
@@ -139,4 +147,6 @@ Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
   }
   Blockly.WidgetDiv.DIV.style.left = anchorX + 'px';
   Blockly.WidgetDiv.DIV.style.top = anchorY + 'px';
+  Blockly.WidgetDiv.DIV.style.height =
+      (windowSize.height - anchorY + scrollOffset.y) + 'px';
 };

@@ -66,14 +66,23 @@ Blockly.PHP['lists_repeat'] = function(block) {
 };
 
 Blockly.PHP['lists_length'] = function(block) {
-  // List length.
+  // String or array length.
+  var functionName = Blockly.PHP.provideFunction_(
+      'length',
+      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($value) {',
+        '  if (is_string($value)) {',
+        '    return strlen($value);',
+        '  } else {',
+        '    return count($value);',
+        '  }',
+        '}']);
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
-  return ['count(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
+      Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
+  return [functionName  + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['lists_isEmpty'] = function(block) {
-  // Is the list empty?
+  // Is the string null or array empty?
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
   return ['empty(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
@@ -169,7 +178,8 @@ Blockly.PHP['lists_getIndex'] = function(block) {
       var code = 'array_slice(' + list + ', -' + at + ', 1)[0]';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
     } else if (mode == 'GET_REMOVE' || mode == 'REMOVE') {
-      code = 'array_splice(' + list + ', count(' + list + ') - ' + at + ', 1)[0]';
+      code = 'array_splice(' + list +
+          ', count(' + list + ') - ' + at + ', 1)[0]';
       if (mode == 'GET_REMOVE') {
         return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
@@ -346,6 +356,34 @@ Blockly.PHP['lists_getSublist'] = function(block) {
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
+Blockly.PHP['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.PHP.valueToCode(block, 'LIST',
+      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+  var functionName = Blockly.PHP.provideFunction_(
+    'lists_sort', [
+    'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + 
+      '($list, $type, $direction) {',
+    '  $sortCmpFuncs = array(',
+    '    "NUMERIC" => "strnatcasecmp",',
+    '    "TEXT" => "strcmp",',
+    '    "IGNORE_CASE" => "strcasecmp"',
+    '  );',
+    '  $sortCmp = $sortCmpFuncs[$type];',
+    '  $list2 = $list;', // Clone list.
+    '  usort($list2, $sortCmp);',
+    '  if ($direction == -1) {',
+    '    $list2 = array_reverse($list2);',
+    '  }',
+    '  return $list2;',
+    '}']);
+  var sortCode = functionName + 
+      '(' + listCode + ', "' + type + '", ' + direction + ')';
+  return [sortCode, Blockly.PHP.ORDER_FUNCTION_CALL];
+};
+
 Blockly.PHP['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var value_input = Blockly.PHP.valueToCode(block, 'INPUT',
@@ -366,6 +404,6 @@ Blockly.PHP['lists_split'] = function(block) {
   } else {
     throw 'Unknown mode: ' + mode;
   }
-  var code = functionName + '('+ value_delim + ', ' + value_input + ')';
+  var code = functionName + '(' + value_delim + ', ' + value_input + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

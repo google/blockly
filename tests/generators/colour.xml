@@ -1,6 +1,23 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
+  <block type="procedures_defnoreturn" x="260" y="14">
+    <field name="NAME">test colour picker</field>
+    <statement name="STACK">
+      <block type="unittest_assertequals" inline="false">
+        <field name="MESSAGE">static colour</field>
+        <value name="ACTUAL">
+          <block type="colour_picker">
+            <field name="COLOUR">#ff6600</field>
+          </block>
+        </value>
+        <value name="EXPECTED">
+          <block type="text">
+            <field name="TEXT">#ff6600</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
   <block type="procedures_defnoreturn" x="630" y="13">
-    <mutation></mutation>
     <field name="NAME">test rgb</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -22,25 +39,6 @@
                 <field name="NUM">0</field>
               </block>
             </value>
-          </block>
-        </value>
-        <value name="EXPECTED">
-          <block type="text">
-            <field name="TEXT">#ff6600</field>
-          </block>
-        </value>
-      </block>
-    </statement>
-  </block>
-  <block type="procedures_defnoreturn" x="260" y="14">
-    <mutation></mutation>
-    <field name="NAME">test colour picker</field>
-    <statement name="STACK">
-      <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">static colour</field>
-        <value name="ACTUAL">
-          <block type="colour_picker">
-            <field name="COLOUR">#ff6600</field>
           </block>
         </value>
         <value name="EXPECTED">
@@ -73,8 +71,124 @@
       </block>
     </statement>
   </block>
+  <block type="procedures_defnoreturn" x="-7" y="223">
+    <field name="NAME">test colour random</field>
+    <statement name="STACK">
+      <block type="controls_repeat_ext" inline="true">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="variables_set" inline="false">
+            <field name="VAR">item</field>
+            <value name="VALUE">
+              <block type="colour_random"></block>
+            </value>
+            <next>
+              <block type="unittest_assertequals" inline="false">
+                <field name="MESSAGE">test name</field>
+                <value name="ACTUAL">
+                  <block type="text_length" inline="false">
+                    <value name="VALUE">
+                      <block type="variables_get">
+                        <field name="VAR">item</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="EXPECTED">
+                  <block type="math_number">
+                    <field name="NUM">7</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="unittest_assertequals" inline="false">
+                    <field name="MESSAGE">test name</field>
+                    <value name="ACTUAL">
+                      <block type="text_charAt">
+                        <mutation at="false"></mutation>
+                        <field name="WHERE">FIRST</field>
+                        <value name="VALUE">
+                          <block type="variables_get">
+                            <field name="VAR">item</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="EXPECTED">
+                      <block type="text">
+                        <field name="TEXT">#</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="controls_for">
+                        <field name="VAR">i</field>
+                        <value name="FROM">
+                          <block type="math_number">
+                            <field name="NUM">2</field>
+                          </block>
+                        </value>
+                        <value name="TO">
+                          <block type="math_number">
+                            <field name="NUM">7</field>
+                          </block>
+                        </value>
+                        <statement name="DO">
+                          <block type="unittest_assertvalue" inline="false">
+                            <field name="MESSAGE">test name</field>
+                            <field name="EXPECTED">TRUE</field>
+                            <value name="ACTUAL">
+                              <block type="logic_compare">
+                                <field name="OP">NEQ</field>
+                                <value name="A">
+                                  <block type="math_number">
+                                    <field name="NUM">0</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="text_indexOf" inline="false">
+                                    <field name="END">FIRST</field>
+                                    <value name="VALUE">
+                                      <block type="text">
+                                        <field name="TEXT">abcdefABDEF0123456789</field>
+                                      </block>
+                                    </value>
+                                    <value name="FIND">
+                                      <block type="text_charAt">
+                                        <mutation at="true"></mutation>
+                                        <field name="WHERE">FROM_START</field>
+                                        <value name="VALUE">
+                                          <block type="variables_get">
+                                            <field name="VAR">item</field>
+                                          </block>
+                                        </value>
+                                        <value name="AT">
+                                          <block type="variables_get">
+                                            <field name="VAR">i</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
   <block type="procedures_defnoreturn" x="520" y="205">
-    <mutation></mutation>
     <field name="NAME">test blend</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
@@ -117,124 +231,6 @@
             <field name="TEXT">#ff2900</field>
           </block>
         </value>
-      </block>
-    </statement>
-  </block>
-  <block type="procedures_defnoreturn" x="-7" y="223">
-    <mutation></mutation>
-    <field name="NAME">test colour random</field>
-    <statement name="STACK">
-      <block type="controls_repeat_ext" inline="true">
-        <value name="TIMES">
-          <block type="math_number">
-            <field name="NUM">100</field>
-          </block>
-        </value>
-        <statement name="DO">
-          <block type="variables_set" inline="false">
-            <field name="VAR">item</field>
-            <value name="VALUE">
-              <block type="colour_random"></block>
-            </value>
-            <next>
-              <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">test name</field>
-                <value name="ACTUAL">
-                  <block type="text_length" inline="false">
-                    <value name="VALUE">
-                      <block type="variables_get">
-                        <field name="VAR">item</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <value name="EXPECTED">
-                  <block type="math_number">
-                    <field name="NUM">7</field>
-                  </block>
-                </value>
-                <next>
-                  <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">test name</field>
-                    <value name="ACTUAL">
-                      <block type="text_charAt" inline="true">
-                        <mutation at="false"></mutation>
-                        <field name="WHERE">FIRST</field>
-                        <value name="VALUE">
-                          <block type="variables_get">
-                            <field name="VAR">item</field>
-                          </block>
-                        </value>
-                      </block>
-                    </value>
-                    <value name="EXPECTED">
-                      <block type="text">
-                        <field name="TEXT">#</field>
-                      </block>
-                    </value>
-                    <next>
-                      <block type="controls_for" inline="true">
-                        <field name="VAR">i</field>
-                        <value name="FROM">
-                          <block type="math_number">
-                            <field name="NUM">2</field>
-                          </block>
-                        </value>
-                        <value name="TO">
-                          <block type="math_number">
-                            <field name="NUM">7</field>
-                          </block>
-                        </value>
-                        <statement name="DO">
-                          <block type="unittest_assertvalue" inline="false">
-                            <field name="MESSAGE">test name</field>
-                            <field name="EXPECTED">TRUE</field>
-                            <value name="ACTUAL">
-                              <block type="logic_compare" inline="true">
-                                <field name="OP">NEQ</field>
-                                <value name="A">
-                                  <block type="math_number">
-                                    <field name="NUM">0</field>
-                                  </block>
-                                </value>
-                                <value name="B">
-                                  <block type="text_indexOf" inline="false">
-                                    <field name="END">FIRST</field>
-                                    <value name="VALUE">
-                                      <block type="text">
-                                        <field name="TEXT">abcdefABDEF0123456789</field>
-                                      </block>
-                                    </value>
-                                    <value name="FIND">
-                                      <block type="text_charAt" inline="true">
-                                        <mutation at="true"></mutation>
-                                        <field name="WHERE">FROM_START</field>
-                                        <value name="VALUE">
-                                          <block type="variables_get">
-                                            <field name="VAR">item</field>
-                                          </block>
-                                        </value>
-                                        <value name="AT">
-                                          <block type="variables_get">
-                                            <field name="VAR">i</field>
-                                          </block>
-                                        </value>
-                                      </block>
-                                    </value>
-                                  </block>
-                                </value>
-                              </block>
-                            </value>
-                          </block>
-                        </statement>
-                      </block>
-                    </next>
-                  </block>
-                </next>
-              </block>
-            </next>
-          </block>
-        </statement>
       </block>
     </statement>
   </block>

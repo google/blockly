@@ -1,6 +1,6 @@
 {
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
-	"TODAY": "button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}",
+	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
 	"ADD_COMMENT": "context menu - Add a descriptive comment to the selected block.",
 	"REMOVE_COMMENT": "context menu - Remove the descriptive comment from the selected block.",

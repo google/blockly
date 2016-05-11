@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.fr');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Ajouter un commentaire";
-Blockly.Msg.AUTH = "Veuillez autoriser cette application à permettre la sauvegarde de votre travail et à l’autoriser à la partager.";
+Blockly.Msg.AUTH = "Veuillez autoriser cette application à permettre la sauvegarde de votre travail et à l’autoriser d'être partagé par vous.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifier la valeur :";
 Blockly.Msg.CHAT = "Discutez avec votre collaborateur en tapant dans cette zone !";
 Blockly.Msg.CLEAN_UP = "Nettoyer les blocs";
@@ -28,7 +28,7 @@ Blockly.Msg.COLOUR_RGB_BLUE = "bleu";
 Blockly.Msg.COLOUR_RGB_GREEN = "vert";
 Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.html";
 Blockly.Msg.COLOUR_RGB_RED = "rouge";
-Blockly.Msg.COLOUR_RGB_TITLE = "colorer avec";
+Blockly.Msg.COLOUR_RGB_TITLE = "colorier avec";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Créer une couleur avec la quantité spécifiée de rouge, vert et bleu. Les valeurs doivent être comprises entre 0 et 100.";
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = "https://github.com/google/blockly/wiki/Loops#loop-termination-blocks";  // untranslated
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK = "quitter la boucle";
@@ -269,7 +269,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Renvoie le sinus d’un angle en degrés (p
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Renvoie la tangente d’un angle en degrés (pas en radians).";
 Blockly.Msg.ME = "Moi";
 Blockly.Msg.NEW_VARIABLE = "Nouvelle variable…";
-Blockly.Msg.NEW_VARIABLE_TITLE = "Nom de la nouvelle variable :";
+Blockly.Msg.NEW_VARIABLE_TITLE = "Nouveau nom de la variable :";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
 Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = "autoriser les ordres";
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = "avec :";

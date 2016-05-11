@@ -446,6 +446,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
                              this.constrainKnob_(knobValue));
   this.onScroll_();
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**
@@ -462,7 +463,6 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
     e.stopPropagation();
     return;
   }
-  Blockly.setPageSelectable(false);
   // Look up the current translation and record it.
   this.startDragKnob = parseFloat(
       this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
@@ -473,6 +473,7 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
   Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
       'mousemove', this, this.onMouseMoveKnob_);
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**
@@ -495,7 +496,6 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpKnob_ = function() {
-  Blockly.setPageSelectable(true);
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);

@@ -315,6 +315,6 @@ Blockly.FieldAngle.angleValidator = function(text) {
       n -= 360;
     }
     n = String(n);
-   }
+  }
   return n;
 };

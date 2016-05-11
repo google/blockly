@@ -164,63 +164,6 @@ Blockly.unbindEvent_ = function(bindData) {
 };
 
 /**
- * Fire a synthetic event synchronously.
- * @param {!EventTarget} node The event's target node.
- * @param {string} eventName Name of event (e.g. 'click').
- */
-Blockly.fireUiEventNow = function(node, eventName) {
-  // Remove the event from the anti-duplicate database.
-  var list = Blockly.fireUiEvent.DB_[eventName];
-  if (list) {
-    var i = list.indexOf(node);
-    if (i != -1) {
-      list.splice(i, 1);
-    }
-  }
-  // Create a UI event in a browser-compatible way.
-  if (typeof UIEvent == 'function') {
-    // W3
-    var evt = new UIEvent(eventName, {});
-  } else {
-    // MSIE
-    var evt = document.createEvent('UIEvent');
-    evt.initUIEvent(eventName, false, false, window, 0);
-  }
-  node.dispatchEvent(evt);
-};
-
-/**
- * Fire a synthetic event asynchronously.  Groups of simultaneous events (e.g.
- * a tree of blocks being deleted) are merged into one event.
- * @param {!EventTarget} node The event's target node.
- * @param {string} eventName Name of event (e.g. 'click').
- */
-Blockly.fireUiEvent = function(node, eventName) {
-  var list = Blockly.fireUiEvent.DB_[eventName];
-  if (list) {
-    if (list.indexOf(node) != -1) {
-      // This event is already scheduled to fire.
-      return;
-    }
-    list.push(node);
-  } else {
-    Blockly.fireUiEvent.DB_[eventName] = [node];
-  }
-  var fire = function() {
-    Blockly.fireUiEventNow(node, eventName);
-  };
-  setTimeout(fire, 0);
-};
-
-/**
- * Database of upcoming firing event types.
- * Used to fire only one event after multiple changes.
- * @type {!Object}
- * @private
- */
-Blockly.fireUiEvent.DB_ = {};
-
-/**
  * Don't do anything for this event, just halt propagation.
  * @param {!Event} e An event.
  */
@@ -344,19 +287,6 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
     parent.appendChild(e);
   }
   return e;
-};
-
-/**
- * Set css classes to allow/disallow the browser from selecting/highlighting
- * text, etc. on the page.
- * @param {boolean} selectable Whether elements on the page can be selected.
- */
-Blockly.setPageSelectable = function(selectable) {
-    if (selectable) {
-      Blockly.removeClass_(document.body, 'blocklyNonSelectable');
-    } else {
-      Blockly.addClass_(document.body, 'blocklyNonSelectable');
-    }
 };
 
 /**
@@ -545,7 +475,7 @@ Blockly.tokenizeInterpolation = function(message) {
 /**
  * Generate a unique ID.  This should be globally unique.
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
- * @return {string}
+ * @return {string} A globally unique ID string.
  */
 Blockly.genUid = function() {
   var length = 20;

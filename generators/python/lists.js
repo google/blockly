@@ -312,6 +312,35 @@ Blockly.Python['lists_getSublist'] = function(block) {
   return [code, Blockly.Python.ORDER_MEMBER];
 };
 
+Blockly.Python['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = (Blockly.Python.valueToCode(block, 'LIST', 
+      Blockly.Python.ORDER_MEMBER) || '[]');
+  var type = block.getFieldValue('TYPE');
+  var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
+  var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
+  ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + 
+      '(listv, type, reversev):',
+    '  def tryfloat(s):',
+    '    try:',
+    '      return float(s)',
+    '    except:',
+    '      return 0',
+    '  keyFuncts = {',
+    '    "NUMERIC": tryfloat,',
+    '    "TEXT": str,',
+    '    "IGNORE_CASE": lambda s: str(s).lower()', 
+    '  }',
+    '  keyv = keyFuncts[type]',
+    '  tmp_list = list(listv)', // Clone the list.
+    '  return sorted(tmp_list, key=keyv, reverse=reversev)'
+  ]);  
+
+  var code = sortFunctionName + 
+      '(' + listCode + ', "' + type + '", ' + reverse + ')';
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
+};
+
 Blockly.Python['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var mode = block.getFieldValue('MODE');

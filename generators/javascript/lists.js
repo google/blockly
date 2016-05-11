@@ -299,6 +299,34 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.JavaScript.valueToCode(
+      block, 'LIST',
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+  var getCompareFunctionName = Blockly.JavaScript.provideFunction_(
+          'lists_get_sort_compare',
+  ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+    '(type, direction) {',
+      '  var compareFuncs = {',
+      '    "NUMERIC": function(a, b) {',
+      '        return parseFloat(a) - parseFloat(b); },',
+      '    "TEXT": function(a, b) {',
+      '        return a.toString().localeCompare(b.toString(), "en"); },',
+      '    "IGNORE_CASE": function(a, b) {',
+      '        return a.toString().localeCompare(b.toString(), "en",',
+      '          {"sensitivity": "base"}); },',
+      '  };',
+      '  var compare = compareFuncs[type];',
+      '  return function(a, b) { return compare(a, b) * direction; }',
+      '}']);
+  return ['(' + listCode + ').slice().sort(' + 
+      getCompareFunctionName + '("' + type + '", ' + direction + '))', 
+      Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
 Blockly.JavaScript['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var value_input = Blockly.JavaScript.valueToCode(block, 'INPUT',

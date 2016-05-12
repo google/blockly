@@ -84,6 +84,13 @@ Blockly.highlightedConnection_ = null;
 Blockly.localConnection_ = null;
 
 /**
+ * All of the connections on blocks that are currently being dragged.
+ * @type {!Array.<!Blockly.Connection>}
+ * @private
+ */
+Blockly.draggingConnections_ = [];
+
+/**
  * Contents of the local clipboard.
  * @type {Element}
  * @private

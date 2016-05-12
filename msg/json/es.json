@@ -4,7 +4,10 @@
 			"Fitoschido",
 			"VegaDark",
 			"WeSiToS",
-			"Macofe"
+			"Macofe",
+			"Codynguyen1116",
+			"Indiralena",
+			"Rubentl134"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -276,6 +279,14 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "hasta # del final",
 	"LISTS_GET_SUBLIST_END_LAST": "hasta el último",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Crea una copia de la parte especificada de una lista.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TITLE": "tipo %1 %2 %3",
+	"LISTS_SORT_TOOLTIP": "Ordenar una copia de una lista.",
+	"LISTS_SORT_ORDER_ASCENDING": "ascendente",
+	"LISTS_SORT_ORDER_DESCENDING": "descendente",
+	"LISTS_SORT_TYPE_NUMERIC": "numérico",
+	"LISTS_SORT_TYPE_TEXT": "alfabético",
+	"LISTS_SORT_TYPE_IGNORECASE": "alfabético, ignorar tamaño",
 	"LISTS_SPLIT_HELPURL": "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "hacer lista a partir de texto",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "hacer texto a partir de lista",

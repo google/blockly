@@ -120,7 +120,7 @@
 	"MATH_SINGLE_TOOLTIP_LOG10": "返回指定數字的對數。",
 	"MATH_SINGLE_TOOLTIP_EXP": "返回指定數字指數的 e",
 	"MATH_SINGLE_TOOLTIP_POW10": "返回指定數字指數的10的冪次。",
-	"MATH_TRIG_HELPURL": "https://en.wikipedia.org/wiki/Trigonometric_functions",
+	"MATH_TRIG_HELPURL": "https://zh.wikipedia.org/wiki/三角函數",
 	"MATH_TRIG_TOOLTIP_SIN": "返回指定角度的正弦值(非弧度）。",
 	"MATH_TRIG_TOOLTIP_COS": "返回指定角度的餘弦值(非弧度）。",
 	"MATH_TRIG_TOOLTIP_TAN": "返回指定角度的正切值(非弧度）。",

@@ -320,6 +320,42 @@ Blockly.Lua['lists_getSublist'] = function(block) {
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 
+Blockly.Lua['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.Lua.valueToCode(
+      block, 'LIST', Blockly.Lua.ORDER_HIGH) || '({})';
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+
+  var functionName = Blockly.Lua.provideFunction_(
+      'list_sort',
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + 
+          '(list, typev, direction)',
+       '  local t = {}',
+       '  for n,v in pairs(list) do table.insert(t, v) end', // Shallow-copy.
+       '  local compareFuncs = {',
+       '    NUMERIC = function(a, b)',
+       '      return (tonumber(tostring(a)) or 0)',
+       '          < (tonumber(tostring(b)) or 0) end,',
+       '    TEXT = function(a, b)',
+       '      return tostring(a) < tostring(b) end,',
+       '    IGNORE_CASE = function(a, b)',
+       '      return string.lower(tostring(a)) < string.lower(tostring(b)) end',
+       '  }',
+       '  local compareTemp = compareFuncs[typev]',
+       '  local compare = compareTemp',
+       '  if direction == -1',
+       '  then compare = function(a, b) return compareTemp(b, a) end',
+       '  end',
+       '  table.sort(t, compare)',
+       '  return t',
+       'end']);
+
+  var code = functionName + 
+      '(' + listCode + ',"' + type + '", ' + direction + ')';
+  return [code, Blockly.Lua.ORDER_HIGH];  
+};
+
 Blockly.Lua['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var value_input = Blockly.Lua.valueToCode(block, 'INPUT',

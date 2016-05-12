@@ -9,12 +9,13 @@
 			"아라",
 			"Mateon1",
 			"Expert3222",
-			"Cirasean"
+			"Cirasean",
+			"Fringoo"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
 	"TODAY": "Dzisiaj",
-	"DUPLICATE_BLOCK": "Powiel",
+	"DUPLICATE_BLOCK": "Duplikuj",
 	"ADD_COMMENT": "Dodaj komentarz",
 	"REMOVE_COMMENT": "Usuń komentarz",
 	"EXTERNAL_INPUTS": "Zewnętrzne wejścia",
@@ -33,7 +34,7 @@
 	"UNDO": "Cofnij",
 	"REDO": "Ponów",
 	"CHAT": "Rozmawiaj z swoim współpracownikiem, pisząc w tym polu!",
-	"AUTH": "Proszę autoryzować ten program, aby można było zapisać swoją pracę i umożliwić Ci dzielenie się nią.",
+	"AUTH": "Autoryzuj ten program, aby można było zapisać Twoją pracę i umożliwić Ci dzielenie się nią z innymi.",
 	"ME": "Ja",
 	"CHANGE_VALUE_TITLE": "Zmień wartość:",
 	"NEW_VARIABLE": "Nowa zmienna...",
@@ -67,12 +68,12 @@
 	"CONTROLS_FOR_TOOLTIP": "Przypisuje zmiennej %1 wartości od numeru startowego do numeru końcowego, licząc co określony interwał, wykonując określone bloki.",
 	"CONTROLS_FOR_TITLE": "licz z %1 od %2 do %3 co %4 (wartość kroku)",
 	"CONTROLS_FOREACH_TITLE": "dla każdego elementu %1 na liście %2",
-	"CONTROLS_FOREACH_TOOLTIP": "Dla każdego elementu z listy przyporządkuj zmienną '%1', a następnie wykonaj kilka instrukcji.",
+	"CONTROLS_FOREACH_TOOLTIP": "Dla każdego elementu listy ustaw zmienną %1 na ten element, a następnie wykonaj kilka instrukcji.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "wyjdź z pętli",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "przejdź do kolejnej iteracji pętli",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "Wyjdź z zawierającej pętli.",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE": "Pomiń resztę pętli i kontynuuj w kolejnej iteracji.",
-	"CONTROLS_FLOW_STATEMENTS_WARNING": "Ostrzeżenie: Ten blok może być użyty tylko w pętli.",
+	"CONTROLS_FLOW_STATEMENTS_WARNING": "Uwaga: Ten blok może być użyty tylko w pętli.",
 	"CONTROLS_IF_TOOLTIP_1": "Jeśli wartość jest prawdziwa, to wykonaj kilka instrukcji.",
 	"CONTROLS_IF_TOOLTIP_2": "Jeśli wartość jest prawdziwa, to wykonaj pierwszy blok instrukcji.  W przeciwnym razie, wykonaj drugi blok instrukcji.",
 	"CONTROLS_IF_TOOLTIP_3": "Jeśli pierwsza wartość jest prawdziwa, to wykonaj pierwszy blok instrukcji.  W przeciwnym razie, jeśli druga wartość jest prawdziwa, to wykonaj drugi blok instrukcji.",
@@ -325,7 +326,7 @@
 	"PROCEDURES_DEFRETURN_RETURN": "zwróć",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Tworzy funkcję z wynikiem.",
 	"PROCEDURES_ALLOW_STATEMENTS": "zezwól na instrukcje",
-	"PROCEDURES_DEF_DUPLICATE_WARNING": "Ostrzeżenie: Ta funkcja ma powtórzone parametry.",
+	"PROCEDURES_DEF_DUPLICATE_WARNING": "Uwaga: Ta funkcja ma powtórzone parametry.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "Uruchom funkcję zdefiniowaną przez użytkownika '%1'.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
@@ -337,5 +338,5 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Podświetl definicję funkcji",
 	"PROCEDURES_CREATE_DO": "Stwórz '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jeśli wartość jest prawdziwa, zwróć drugą wartość.",
-	"PROCEDURES_IFRETURN_WARNING": "Ostrzeżenie: Ten blok może być używany tylko w definicji funkcji."
+	"PROCEDURES_IFRETURN_WARNING": "Uwaga: Ten blok może być używany tylko w definicji funkcji."
 }

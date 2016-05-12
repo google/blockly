@@ -38,6 +38,7 @@ goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
@@ -135,11 +136,36 @@ Blockly.svgSize = function(svg) {
 };
 
 /**
+ * Schedule a call to the resize handler.  Groups of simultaneous events (e.g.
+ * a tree of blocks being deleted) are merged into one call.
+ * @param {Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
+ */
+Blockly.asyncSvgResize = function(workspace) {
+  if (Blockly.svgResizePending_) {
+    return;
+  }
+  if (!workspace) {
+    workspace = Blockly.getMainWorkspace();
+  }
+  Blockly.svgResizePending_ = true;
+  setTimeout(function() {Blockly.svgResize(workspace);}, 0);
+};
+
+/**
+ * Flag indicating a resize event is scheduled.
+ * Used to fire only one resize after multiple changes.
+ * @type {boolean}
+ * @private
+ */
+Blockly.svgResizePending_ = false;
+
+/**
  * Size the SVG image to completely fill its container.
  * Record the height/width of the SVG image.
  * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
  */
 Blockly.svgResize = function(workspace) {
+  Blockly.svgResizePending_ = false;
   var mainWorkspace = workspace;
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
@@ -147,7 +173,7 @@ Blockly.svgResize = function(workspace) {
   var svg = mainWorkspace.getParentSvg();
   var div = svg.parentNode;
   if (!div) {
-    // Workspace deteted, or something.
+    // Workspace deleted, or something.
     return;
   }
   var width = div.offsetWidth;
@@ -172,7 +198,6 @@ Blockly.onMouseUp_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.isScrolling = false;
-  Blockly.setPageSelectable(true);
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {
     Blockly.unbindEvent_(Blockly.onTouchUpWrapper_);
@@ -215,6 +240,7 @@ Blockly.onMouseMove_ = function(e) {
       Blockly.longStop_();
     }
     e.stopPropagation();
+    e.preventDefault();
   }
 };
 
@@ -224,7 +250,8 @@ Blockly.onMouseMove_ = function(e) {
  * @private
  */
 Blockly.onKeyDown_ = function(e) {
-  if (Blockly.isTargetInput_(e)) {
+  if (Blockly.mainWorkspace.options.readOnly || Blockly.isTargetInput_(e)) {
+    // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     return;
   }
@@ -234,15 +261,12 @@ Blockly.onKeyDown_ = function(e) {
     Blockly.hideChaff();
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
-    try {
-      if (Blockly.selected && Blockly.selected.isDeletable()) {
-        deleteBlock = true;
-      }
-    } finally {
-      // Stop the browser from going back to the previous page.
-      // Use a finally so that any error in delete code above doesn't disappear
-      // from the console when the page rolls back.
-      e.preventDefault();
+    // Stop the browser from going back to the previous page.
+    // Do this first to prevent an error in the delete code from resulting in
+    // data loss.
+    e.preventDefault();
+    if (Blockly.selected && Blockly.selected.isDeletable()) {
+      deleteBlock = true;
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
     if (Blockly.selected &&

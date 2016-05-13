@@ -872,8 +872,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   var scale = this.workspace_.scale;
   xyOld.x += scrollX / scale - scrollX;
   // If the flyout is on the right side, (0, 0) in the flyout is offset to
-  // the right of (0, 0) in the main workspace.  Offset to take that into
-  // account.
+  // the right of (0, 0) in the main workspace.  Add an offset to take that
+  // into account.
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     scrollX = targetWorkspace.getMetrics().viewWidth - this.width_;
     scale = targetWorkspace.scale;
@@ -889,7 +889,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   scale = this.workspace_.scale;
   xyOld.y += scrollY / scale - scrollY;
   // If the flyout is on the bottom, (0, 0) in the flyout is offset to be below
-  // (0, 0) in the main workspace.  Offset to take that into account.
+  // (0, 0) in the main workspace.  Add an offset to take that into account.
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
     scrollY = targetWorkspace.getMetrics().viewHeight - this.height_;
     scale = targetWorkspace.scale;

@@ -142,7 +142,7 @@ blocklyApp.TreeService = ng.core
             nextNode.tagName != 'LI') {
             nextNode = nextNode.parentNode;
           }
-          if (nextNode.className == 'treeview' || nextNode == null) {
+          if (!nextNode || nextNode.className == 'treeview') {
             return;
           }
           this.updateSelectedNode(nextNode, tree);

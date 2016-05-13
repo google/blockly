@@ -216,7 +216,7 @@ Blockly.Flyout.prototype.dispose = function() {
 
 /**
  * Get the width of the flyout.
- * @return {number} the width of the flyout.
+ * @return {number} The width of the flyout.
  */
 Blockly.Flyout.prototype.getWidth = function() {
   return this.width_;
@@ -224,7 +224,7 @@ Blockly.Flyout.prototype.getWidth = function() {
 
 /**
  * Get the height of the flyout.
- * @return {number} the width of the flyout.
+ * @return {number} The width of the flyout.
  */
 Blockly.Flyout.prototype.getHeight = function() {
   return this.height_;
@@ -475,24 +475,36 @@ Blockly.Flyout.prototype.scrollToStart = function() {
 Blockly.Flyout.prototype.wheel_ = function(e) {
   // Don't scroll sideways.
   if (this.horizontalLayout_) {
-    return;
-  }
-  var delta = e.deltaY;
-  if (delta) {
-    if (goog.userAgent.GECKO) {
-      // Firefox's deltas are a tenth that of Chrome/Safari.
-      delta *= 10;
+    var delta = e.deltaX;
+    if (delta) {
+      if (goog.userAgent.GECKO) {
+        // Firefox's deltas are a tenth that of Chrome/Safari.
+        delta *= 10;
+      }
+      var metrics = this.getMetrics_();
+      var x = metrics.viewLeft + delta;
+      x = Math.min(x, metrics.contentWidth - metrics.viewWidth);
+      x = Math.max(x, 0);
+      this.scrollbar_.set(x);
     }
-    var metrics = this.getMetrics_();
-    var y = metrics.viewTop + delta;
-    y = Math.min(y, metrics.contentHeight - metrics.viewHeight);
-    y = Math.max(y, 0);
-    this.scrollbar_.set(y);
-    // Don't scroll the page.
-    e.preventDefault();
-    // Don't propagate mousewheel event (zooming).
-    e.stopPropagation();
+  } else {
+    var delta = e.deltaY;
+    if (delta) {
+      if (goog.userAgent.GECKO) {
+        // Firefox's deltas are a tenth that of Chrome/Safari.
+        delta *= 10;
+      }
+      var metrics = this.getMetrics_();
+      var y = metrics.viewTop + delta;
+      y = Math.min(y, metrics.contentHeight - metrics.viewHeight);
+      y = Math.max(y, 0);
+      this.scrollbar_.set(y);
+    }
   }
+  // Don't scroll the page.
+  e.preventDefault();
+  // Don't propagate mousewheel event (zooming).
+  e.stopPropagation();
 };
 
 /**

@@ -106,9 +106,9 @@ Blockly.Toolbox = function(workspace) {
         ' blocklyHorizontalTreeRtl' : ' blocklyHorizontalTree');
 
     this.treeSeparatorConfig_['cssTreeRow'] =
-        'blocklyTreeSeparatorHorizontal' +
+        'blocklyTreeSeparatorHorizontal ' +
         (workspace.RTL ?
-        ' blocklyHorizontalTreeRtl' : ' blocklyHorizontalTree');
+        'blocklyHorizontalTreeRtl' : 'blocklyHorizontalTree');
     this.config_['cssTreeIcon'] = '';
   }
 };
@@ -204,7 +204,7 @@ Blockly.Toolbox.prototype.dispose = function() {
 
 /**
  * Get the width of the toolbox.
- * @return {number} the width of the toolbox.
+ * @return {number} The width of the toolbox.
  */
 Blockly.Toolbox.prototype.getWidth = function() {
   return this.width;
@@ -212,7 +212,7 @@ Blockly.Toolbox.prototype.getWidth = function() {
 
 /**
  * Get the height of the toolbox.
- * @return {number} the width of the toolbox.
+ * @return {number} The width of the toolbox.
  */
 Blockly.Toolbox.prototype.getHeight = function() {
   return this.height;
@@ -245,7 +245,7 @@ Blockly.Toolbox.prototype.position = function() {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {  // Right
       treeDiv.style.left =
           (svgPosition.x + svgSize.width - treeDiv.offsetWidth) + 'px';
-    } else { // Left
+    } else {  // Left
       treeDiv.style.left = svgPosition.x + 'px';
     }
     treeDiv.style.height = svgSize.height + 'px';
@@ -411,7 +411,7 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
     return new goog.math.Rect(-BIG_NUM, -BIG_NUM, 2 * BIG_NUM,
         BIG_NUM + y + height);
-  } else { // Bottom
+  } else {  // Bottom
     return new goog.math.Rect(0, y, 2 * BIG_NUM, BIG_NUM + width);
   }
 };

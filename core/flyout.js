@@ -29,7 +29,10 @@ goog.provide('Blockly.Flyout');
 goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Events');
+goog.require('Blockly.Events.Create');
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.WorkspaceSvg');
+
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.math.Rect');
@@ -419,8 +422,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // IE 11 is an incompetant browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
   var deselectAll = function(e) {
-    var blocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; block = blocks[i]; i++) {
+    var topBlocks = this.workspace_.getTopBlocks(false);
+    for (var i = 0, block; block = topBlocks[i]; i++) {
       block.removeSelect();
     }
   };

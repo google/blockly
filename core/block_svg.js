@@ -27,7 +27,11 @@
 goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.Comment');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.Events.Move');
+goog.require('Blockly.Warning');
+
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');

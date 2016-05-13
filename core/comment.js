@@ -27,7 +27,9 @@
 goog.provide('Blockly.Comment');
 
 goog.require('Blockly.Bubble');
+goog.require('Blockly.Events.Change');
 goog.require('Blockly.Icon');
+
 goog.require('goog.userAgent');
 
 

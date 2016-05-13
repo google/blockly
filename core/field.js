@@ -28,6 +28,8 @@
 
 goog.provide('Blockly.Field');
 
+goog.require('Blockly.Events.Change');
+
 goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.math.Size');

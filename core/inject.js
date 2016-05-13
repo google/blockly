@@ -28,7 +28,9 @@ goog.provide('Blockly.inject');
 
 goog.require('Blockly.Css');
 goog.require('Blockly.Options');
+goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.WorkspaceSvg');
+
 goog.require('goog.dom');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
@@ -210,25 +212,27 @@ Blockly.createMainWorkspace_ = function(svg, options) {
           for (var b = 0, block; block = blocks[b]; b++) {
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
+            var overflow;
+
             // Bump any block that's above the top back inside.
-            var overflow = edgeTop + MARGIN - blockHW.height - blockXY.y;
+            overflow = edgeTop + MARGIN - blockHW.height - blockXY.y;
             if (overflow > 0) {
               block.moveBy(0, overflow);
             }
             // Bump any block that's below the bottom back inside.
-            var overflow = edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+            overflow = edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
             if (overflow < 0) {
               block.moveBy(0, overflow);
             }
             // Bump any block that's off the left back inside.
-            var overflow = MARGIN + edgeLeft -
+            overflow = MARGIN + edgeLeft -
                 blockXY.x - (options.RTL ? 0 : blockHW.width);
             if (overflow > 0) {
               block.moveBy(overflow, 0);
             }
             // Bump any block that's off the right back inside.
-            var overflow = edgeLeft + metrics.viewWidth - MARGIN -
-                blockXY.x + (options.RTL ? blockHW.width : 0);
+            overflow = edgeLeft + metrics.viewWidth - MARGIN - blockXY.x +
+              (options.RTL ? blockHW.width : 0);
             if (overflow < 0) {
               block.moveBy(overflow, 0);
             }

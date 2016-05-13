@@ -1,10 +1,10 @@
 {
   "name": "blockly",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": ["blockly"],
   "scripts": {
-    "lint": "jshint ."
+    "patch": "npm version patch && git add package.json"
   },
   "repository": {
     "type": "git",
@@ -19,14 +19,5 @@
   },
   "license": "Apache-2.0",
   "private": true,
-  "devDependencies": {
-    "jshint": "latest"
-  },
-  "jshintConfig": {
-    "globalstrict": true,
-    "predef": ["Blockly", "goog", "window", "document", "soy", "XMLHttpRequest"],
-    "sub": true,
-    "undef": true,
-    "unused": true
-  }
+  "devDependencies": {}
 }

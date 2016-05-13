@@ -27,6 +27,8 @@
 goog.provide('Blockly.Blocks.lists');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.Mutator');
 
 
 /**
@@ -658,7 +660,7 @@ Blockly.Blocks['lists_sort'] = {
           "options": [
             [Blockly.Msg.LISTS_SORT_TYPE_NUMERIC, "NUMERIC"],
             [Blockly.Msg.LISTS_SORT_TYPE_TEXT, "TEXT"],
-            [Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE, "IGNORE_CASE"] 
+            [Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE, "IGNORE_CASE"]
           ]
         },
         {

@@ -468,39 +468,29 @@ Blockly.Flyout.prototype.scrollToStart = function() {
 };
 
 /**
- * Scroll the flyout up or down.
+ * Scroll the flyout.
  * @param {!Event} e Mouse wheel scroll event.
  * @private
  */
 Blockly.Flyout.prototype.wheel_ = function(e) {
-  // Don't scroll sideways.
-  if (this.horizontalLayout_) {
-    var delta = e.deltaX;
-    if (delta) {
-      if (goog.userAgent.GECKO) {
-        // Firefox's deltas are a tenth that of Chrome/Safari.
-        delta *= 10;
-      }
-      var metrics = this.getMetrics_();
-      var x = metrics.viewLeft + delta;
-      x = Math.min(x, metrics.contentWidth - metrics.viewWidth);
-      x = Math.max(x, 0);
-      this.scrollbar_.set(x);
+  var delta = this.horizontalLayout_ ? e.deltaX : e.deltaY;
+
+  if (delta) {
+    if (goog.userAgent.GECKO) {
+      // Firefox's deltas are a tenth that of Chrome/Safari.
+      delta *= 10;
     }
-  } else {
-    var delta = e.deltaY;
-    if (delta) {
-      if (goog.userAgent.GECKO) {
-        // Firefox's deltas are a tenth that of Chrome/Safari.
-        delta *= 10;
-      }
-      var metrics = this.getMetrics_();
-      var y = metrics.viewTop + delta;
-      y = Math.min(y, metrics.contentHeight - metrics.viewHeight);
-      y = Math.max(y, 0);
-      this.scrollbar_.set(y);
-    }
+    var metrics = this.getMetrics_();
+    var pos = this.horizontalLayout_ ? metrics.viewLeft + delta :
+        metrics.viewTop + delta;
+    var limit = this.horizontalLayout_ ?
+        metrics.contentWidth - metrics.viewWidth :
+        metrics.contentHeight - metrics.viewHeight;
+    pos = Math.min(pos, limit);
+    pos = Math.max(pos, 0);
+    this.scrollbar_.set(pos);
   }
+
   // Don't scroll the page.
   e.preventDefault();
   // Don't propagate mousewheel event (zooming).

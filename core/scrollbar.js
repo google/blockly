@@ -306,9 +306,9 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
   this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
   this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (this.pair_ && this.workspace_.RTL) {
-    this.xCoordinate += hostMetrics.absoluteLeft +
-        Blockly.Scrollbar.scrollbarThickness;
+    this.xCoordinate += Blockly.Scrollbar.scrollbarThickness;
   }
+  // Horizontal toolbar should always be just above the bottom of the workspace.
   this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
       Blockly.Scrollbar.scrollbarThickness - 0.5;
   this.svgGroup_.setAttribute('transform',

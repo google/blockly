@@ -27,27 +27,24 @@ blocklyApp.FieldView = ng.core
   .Component({
     selector: 'field-view',
     template: `
-    <li #listItem aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isTextInput(field)" id="{{treeService.createId(listItem)}}">
-      <input #input id="{{treeService.createId(input)}}" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
-      {{utilsService.setLabelledBy(listItem, utilsService.generateAriaLabelledByAttr("blockly-argument-input", input.id))}}
+    <li [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])" aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isTextInput(field)" [id]="idMap['listItem']">
+      <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
     </li>
-    <li #listItem aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isDropdown(field)" id="{{treeService.createId(listItem)}}">
-      <label #label id="{{treeService.createId(label)}}">current argument value: {{field.getText()}}</label>
-      <ol role="group"  [attr.aria-level]="level+1">
-        <li #option *ngFor="#optionValue of getOptions(field)" id="{{treeService.createId(option)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
-          <button #optionButton id="{{treeService.createId(optionButton)}}" (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}} button</button>
+    <li [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isDropdown(field)" [id]="idMap['listItem']">
+      <label [id]="idMap['label']">current argument value: {{field.getText()}}</label>
+      <ol role="group" [attr.aria-level]="level+1">
+        <li *ngFor="#optionValue of getOptions(field)" [id]="idMap[optionValue]" [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
+          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}}</button>
         </li>
       </ol>
-      {{utilsService.setLabelledBy(listItem, utilsService.generateAriaLabelledByAttr("blockly-argument-menu", label.id))}}
     </li>
-    <li #listItem aria-selected=false role="treeitem" id="{{treeService.createId(listItem)}}" [attr.aria-level]="level" *ngIf="isCheckbox(field)">
+    <li aria-selected=false role="treeitem" [id]="idMap['listItem']" [attr.aria-level]="level" *ngIf="isCheckbox(field)">
       // Checkboxes not currently supported.
     </li>
-    <li #listItem aria-selected=false role="treeitem" id="{{treeService.createId(listItem)}}" [attr.aria-level]="level" *ngIf="isTextField(field) && hasVisibleText(field)">
-      <label #label id="{{treeService.createId(label)}}">
+    <li aria-selected=false [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])" role="treeitem" [id]="idMap['listItem']" [attr.aria-level]="level" *ngIf="isTextField(field) && hasVisibleText(field)">
+      <label [id]="idMap['label']">
         {{field.getText()}}
       </label>
-      {{utilsService.setLabelledBy(listItem, utilsService.generateAriaLabelledByAttr("blockly-argument-text", label.id))}}
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
@@ -62,6 +59,32 @@ blocklyApp.FieldView = ng.core
       this.treeService = _treeService;
       this.utilsService = _utilsService;
     }],
+    ngOnInit: function(){
+      var elementsNeedingIds = this.generateElementNames(this.field);
+      this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+    },
+    generateElementNames: function(field){
+      var elementNames = ['listItem'];
+      switch(true){
+        case this.isTextInput(field):
+          elementNames.push('input');
+          break;
+        case this.isDropdown(field):
+          elementNames.push('label');
+          var keys = this.getOptions(field);
+          for (var i=0; i<keys.length; i++){
+            elementNames.push(keys[i]);
+            elementNames.push(keys[i]+'Button');
+          }
+          break;
+        case this.isTextField(field) && this.hasVisibleText(field):
+          elementNames.push('label');
+          break;
+        default:
+          break;
+      }
+      return elementNames;
+    },
     isTextInput: function(field) {
       return field instanceof Blockly.FieldTextInput;
     },
@@ -81,7 +104,9 @@ blocklyApp.FieldView = ng.core
       return !!text;
     },
     getOptions: function(field) {
-      this.optionText.keys.length = 0;
+      if (this.optionText.keys.length){
+        return this.optionText.keys;
+      }
       var options = field.getOptions_();
       for (var i = 0; i < options.length; i++) {
         var tuple = options[i];

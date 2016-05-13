@@ -27,37 +27,31 @@ blocklyApp.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-      <li #parentList [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', block.id)" [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && tree.getAttribute('aria-activedescendant') ==
+      <li #parentList [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])" [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && tree.getAttribute('aria-activedescendant') ==
             'blockly-toolbox-tree-node0'}" [attr.aria-selected]="index == 0 && tree.getAttribute('aria-activedescendant') ==
-            'blockly-toolbox-tree-node0'" role="treeitem" [attr.aria-level]="level" id="{{getCategoryId(index, parentList)}}">
+            'blockly-toolbox-tree-node0'" role="treeitem" [attr.aria-level]="level" [id]="idMap['parentList']">
         {{setActiveDesc(parentList)}}
-        <label #blockSummaryLabel [attr.id]="'blockly-' + block.id" style="color:red">{{block.toString()}}</label>
-        <!--{{utilsService.setLabelledBy(parentList, utilsService.generateAriaLabelledByAttr("blockly-block-summary", blockSummaryLabel.id))}}-->
+        <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']" style="color:red">{{block.toString()}}</label>
         <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0"  [attr.aria-level]="level+1">
-          <li #listItem class="blocklyHasChildren" id="{{treeService.createId(listItem)}}" *ngIf="displayBlockMenu" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
-            {{utilsService.setLabelledBy(listItem, utilsService.generateAriaLabelledByAttr("blockly-block-menu", blockSummaryLabel.id))}}
-            <label #label id="{{treeService.createId(label)}}">block action list </label>
+          <li #listItem [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummaryLabel'])" class="blocklyHasChildren" [id]="idMap['listItem']" *ngIf="displayBlockMenu" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
+            <label #label [id]="idMap['label']">block action list </label>
             <ol role="group" *ngIf="displayBlockMenu"  [attr.aria-level]="level+2">
-              <li #workspaceCopy id="{{treeService.createId(workspaceCopy)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #workspaceCopyButton id="{{treeService.createId(workspaceCopyButton)}}" (click)="copyToWorkspace(block)">copy to workspace</button>
-                {{utilsService.setLabelledBy(workspaceCopy, utilsService.generateAriaLabelledByAttr(workspaceCopyButton.id, "blockly-button"))}}
+              <li #workspaceCopy [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')" [id]="idMap['workspaceCopy']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
+                <button #workspaceCopyButton [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace(block)">copy to workspace</button>
               </li>
-              <li #blockCopy id="{{treeService.createId(blockCopy)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #blockCopyButton id="{{treeService.createId(blockCopyButton)}}" (click)="clipboardService.copy(block)">copy to clipboard</button>
-                {{utilsService.setLabelledBy(blockCopy, utilsService.generateAriaLabelledByAttr(blockCopyButton.id, "blockly-button"))}}
+              <li #blockCopy [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')" [id]="idMap['blockCopy']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
+                <button #blockCopyButton [id]="idMap['blockCopyButton']" (click)="clipboardService.copy(block)">copy to clipboard</button>
               </li>
-              <li #sendToSelected id="{{treeService.createId(sendToSelected)}}" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton id="{{treeService.createId(sendToSelectedButton)}}" (click)="copyToMarked(block)" [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">copy to marked spot</button>
-                {{utilsService.setLabelledBy(sendToSelected, utilsService.generateAriaLabelledByAttr(sendToSelectedButton.id, "blockly-button", utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))))}}
+              <li #sendToSelected [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" [id]="idMap['sendToSelected']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
+                <button #sendToSelectedButton [id]="idMap['sendToSelectedButton']" (click)="copyToMarked(block)" [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">copy to marked spot</button>
               </li>
             </ol>
           </li>
           <div *ngFor="#inputBlock of block.inputList; #i=index">
             <field-view [attr.aria-level]="level+1" *ngFor="#field of getInfo(inputBlock); #j=index" [field]="field" [level]="level+1"></field-view>
             <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [displayBlockMenu]="false" [level]="level+1"></toolbox-tree-view>
-            <li aria-selected=false #listItem1 role="treeitem" [attr.aria-level]="level+1" id="{{treeService.createId(listItem1)}}" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
-              <label #label id="{{treeService.createId(label)}}">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:</label>
-              {{utilsService.setLabelledBy(listItem1, utilsService.generateAriaLabelledByAttr("blockly-argument-text", label.id))}}
+            <li aria-selected=false #listItem1 [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])" role="treeitem" [attr.aria-level]="level+1" [id]="idMap['listItem' + i]" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
+              <label #label [id]="idMap['listItem' + i + 'Label']">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:</label>
             </li>
           </div>
         </ol>
@@ -77,15 +71,20 @@ blocklyApp.ToolboxTreeView = ng.core
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
-      // console.log(this.block);
-      //console.log(this.block.id);
-      // console.log(this.displayBlockMenu);
-      // console.log(this.tree);
     }],
-      ngOnInit: function() {
-    console.log(this.block.id); // object here
-  },
-
+    ngOnInit: function(){
+      var elementsNeedingIds = ['parentList', 'blockSummaryLabel'];
+      if (this.displayBlockMenu && this.block.inputList.length){
+        elementsNeedingIds.concat(['listItem', 'label', 'workspaceCopy', 
+            'workspaceCopyButton', 'blockCopy', 'blockCopyButton',
+            'sendToSelected', 'sendToSelectedButton']);
+      }
+      for (var i=0; i<this.block.inputList.length; i++){
+        elementsNeedingIds.push('listItem' + i);
+        elementsNeedingIds.push('listItem' + i + 'Label')
+      }
+      this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+    },
     setActiveDesc: function(parentList){
       // If this is the first child of the toolbox and the
       // current active descendant of the tree is this child,
@@ -149,8 +148,5 @@ blocklyApp.ToolboxTreeView = ng.core
         this.clipboardService.pasteToMarkedConnection(block);
         alert('Block sent to marked spot');
       }
-    },
-    log: function(obj){
-      console.log(obj);
     }
   });

@@ -27,6 +27,16 @@ blocklyApp.UtilsService = ng.core
   .Class({
     constructor: function() {
     },
+    generateUniqueId: function() {
+      return 'blockly-' + Blockly.genUid();
+    },
+    generateIds: function(elementsList){
+      var idMap = {};
+      for (var i=0; i<elementsList.length; i++){
+        idMap[elementsList[i]] = this.generateUniqueId();
+      }
+      return idMap;
+    },
     generateAriaLabelledByAttr: function() {
       var labels = arguments[0];
       for (i = 1; i < arguments.length; i++) {
@@ -63,10 +73,5 @@ blocklyApp.UtilsService = ng.core
         // 'copy to marked block' option being DISABLED.
         return 'blockly-disabled';
       }
-    },
-    setLabelledBy: function(item, id) {
-      if (!item.getAttribute('aria-labelledby')) {
-        item.setAttribute('aria-labelledby', id);
-      }
     }
-});
+  });

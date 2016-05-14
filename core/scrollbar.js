@@ -306,9 +306,9 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
   this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
   this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (this.pair_ && this.workspace_.RTL) {
-    this.xCoordinate += hostMetrics.absoluteLeft +
-        Blockly.Scrollbar.scrollbarThickness;
+    this.xCoordinate += Blockly.Scrollbar.scrollbarThickness;
   }
+  // Horizontal toolbar should always be just above the bottom of the workspace.
   this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
       Blockly.Scrollbar.scrollbarThickness - 0.5;
   this.svgGroup_.setAttribute('transform',
@@ -446,6 +446,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
                              this.constrainKnob_(knobValue));
   this.onScroll_();
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**
@@ -462,7 +463,6 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
     e.stopPropagation();
     return;
   }
-  Blockly.setPageSelectable(false);
   // Look up the current translation and record it.
   this.startDragKnob = parseFloat(
       this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
@@ -473,6 +473,7 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
   Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
       'mousemove', this, this.onMouseMoveKnob_);
   e.stopPropagation();
+  e.preventDefault();
 };
 
 /**
@@ -495,7 +496,6 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpKnob_ = function() {
-  Blockly.setPageSelectable(true);
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);

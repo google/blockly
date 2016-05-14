@@ -245,15 +245,15 @@ function testCheckConnection_TypeNextOutput() {
   connectionTest_tearDown();
 }
 
-function test_isConnectionAllowed() {
+function test_isConnectionAllowed_Distance() {
   var sharedWorkspace = {};
   // Two connections of opposite types near each other.
   var one = helper_createConnection(5 /* x */, 10 /* y */,
-      Blockly.INPUT_VALUE);
+      Blockly.INPUT_VALUE, null, true);
   one.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
 
   var two = helper_createConnection(10 /* x */, 15 /* y */,
-      Blockly.OUTPUT_VALUE);
+      Blockly.OUTPUT_VALUE, null, true);
   two.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
 
   assertTrue(one.isConnectionAllowed(two, 20.0));
@@ -261,22 +261,30 @@ function test_isConnectionAllowed() {
   two.x_ = 100;
   two.y_ = 100;
   assertFalse(one.isConnectionAllowed(two, 20.0));
+}
+
+function test_isConnectionAllowed_Unrendered() {
+  var sharedWorkspace = {};
+
+  var one = helper_createConnection(5 /* x */, 10 /* y */,
+      Blockly.INPUT_VALUE);
+  one.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
 
   // Don't offer to connect an already connected left (male) value plug to
   // an available right (female) value plug.
-  var three = helper_createConnection(0, 0, Blockly.OUTPUT_VALUE);
+  var two = helper_createConnection(0, 0, Blockly.OUTPUT_VALUE);
+  two.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
+
+  assertTrue(one.isConnectionAllowed(two));
+  var three = helper_createConnection(0, 0, Blockly.INPUT_VALUE);
   three.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
 
-  assertTrue(one.isConnectionAllowed(three, 20.0));
-  var four = helper_createConnection(0, 0, Blockly.INPUT_VALUE);
-  four.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
-
-  Blockly.Connection.connectReciprocally_(three, four);
-  assertFalse(one.isConnectionAllowed(three, 20.0));
+  Blockly.Connection.connectReciprocally_(two, three);
+  assertFalse(one.isConnectionAllowed(two));
 
   // Don't connect two connections on the same block.
   two.sourceBlock_ = one.sourceBlock_;
-  assertFalse(one.isConnectionAllowed(two, 1000.0));
+  assertFalse(one.isConnectionAllowed(two));
 }
 
 function test_isConnectionAllowed_NoNext() {
@@ -288,14 +296,14 @@ function test_isConnectionAllowed_NoNext() {
   var two = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
   two.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
 
-  assertTrue(two.isConnectionAllowed(one, 1000.0));
+  assertTrue(two.isConnectionAllowed(one));
 
   var three = helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT);
   three.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
   three.sourceBlock_.previousConnection = three;
   Blockly.Connection.connectReciprocally_(one, three);
 
-  assertFalse(two.isConnectionAllowed(one, 1000.0));
+  assertFalse(two.isConnectionAllowed(one));
 }
 
 function testCheckConnection_Okay() {

@@ -122,6 +122,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
     RTL: this.block_.RTL,
+    toolboxPosition: this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
+        Blockly.TOOLBOX_AT_LEFT,
+    horizontalLayout: false,
     getMetrics: this.getFlyoutMetrics_.bind(this),
     setMetrics: null
   };

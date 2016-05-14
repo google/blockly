@@ -450,7 +450,7 @@ Blockly.Field.prototype.setTooltip = function(newTip) {
 /**
  * Return the absolute coordinates of the top-left corner of this field.
  * The origin (0,0) is the top-left corner of the page body.
- * @return {{!goog.math.Coordinate}} Object with .x and .y properties.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
  * @private
  */
 Blockly.Field.prototype.getAbsoluteXY_ = function() {

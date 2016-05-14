@@ -173,20 +173,7 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
     pointerMid = Math.floor((pointerMin + pointerMax) / 2);
   }
 
-  // Walk forward and back on the y axis looking for the closest x,y point.
-  pointerMin = pointerMid;
-  pointerMax = pointerMid;
   var neighbours = [];
-  var sourceBlock = connection.getSourceBlock();
-  if (db.length) {
-    while (pointerMin >= 0 && checkConnection_(pointerMin)) {
-      pointerMin--;
-    }
-    do {
-      pointerMax++;
-    } while (pointerMax < db.length && checkConnection_(pointerMax));
-  }
-
   /**
    * Computes if the current connection is within the allowed radius of another
    * connection.
@@ -204,6 +191,19 @@ Blockly.ConnectionDB.prototype.getNeighbours = function(connection, maxRadius) {
     }
     return dy < maxRadius;
   }
+
+  // Walk forward and back on the y axis looking for the closest x,y point.
+  pointerMin = pointerMid;
+  pointerMax = pointerMid;
+  if (db.length) {
+    while (pointerMin >= 0 && checkConnection_(pointerMin)) {
+      pointerMin--;
+    }
+    do {
+      pointerMax++;
+    } while (pointerMax < db.length && checkConnection_(pointerMax));
+  }
+
   return neighbours;
 };
 
@@ -260,8 +260,8 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
   while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y_, maxRadius)) {
     temp = this[pointerMin];
     if (conn.isConnectionAllowed(temp, bestRadius)) {
-        bestConnection = temp;
-        bestRadius = temp.distanceFrom(conn);
+      bestConnection = temp;
+      bestRadius = temp.distanceFrom(conn);
     }
     pointerMin--;
   }
@@ -271,8 +271,8 @@ Blockly.ConnectionDB.prototype.searchForClosest = function(conn, maxRadius,
       maxRadius)) {
     temp = this[pointerMax];
     if (conn.isConnectionAllowed(temp, bestRadius)) {
-        bestConnection = temp;
-        bestRadius = temp.distanceFrom(conn);
+      bestConnection = temp;
+      bestRadius = temp.distanceFrom(conn);
     }
     pointerMax++;
   }

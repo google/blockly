@@ -47,7 +47,10 @@ Blockly.Input = function(type, name, block, connection) {
   this.type = type;
   /** @type {string} */
   this.name = name;
-  /** @type {!Blockly.Block} */
+  /**
+   * @type {!Blockly.Block}
+   * @private
+   */
   this.sourceBlock_ = block;
   /** @type {Blockly.Connection} */
   this.connection = connection;

@@ -10,7 +10,8 @@
 			"Dvb",
 			"LaG roiL",
 			"아라",
-			"Elyashiv"
+			"Elyashiv",
+			"Guycn2"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "פריט",
@@ -241,6 +242,11 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "ל # מהסוף",
 	"LISTS_GET_SUBLIST_END_LAST": "לאחרון",
 	"LISTS_GET_SUBLIST_TOOLTIP": "יוצרת עותק של חלק מסוים מהרשימה.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_ORDER_ASCENDING": "סדר עולה",
+	"LISTS_SORT_ORDER_DESCENDING": "סדר יורד",
+	"LISTS_SORT_TYPE_TEXT": "סדר אלפביתי",
+	"LISTS_SORT_TYPE_IGNORECASE": "סדר אלפביתי, לא תלוי רישיות",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "יצירת רשימה מטקסט",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "יצירת טקסט מרשימה",
 	"VARIABLES_GET_TOOLTIP": "להחזיר את הערך של משתנה זה.",

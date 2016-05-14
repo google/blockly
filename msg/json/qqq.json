@@ -1,4 +1,11 @@
 {
+	"@metadata": {
+		"authors": [
+			"Espertus",
+			"Liuxinyu970226",
+			"Shirayuki"
+		]
+	},
 	"VARIABLES_DEFAULT_NAME": "default name - A simple, general default name for a variable, preferably short. For more context, see [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}",
 	"TODAY": "button text - Button that sets a calendar to today's date.\n{{Identical|Today}}",
 	"DUPLICATE_BLOCK": "context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}",
@@ -96,7 +103,7 @@
 	"LOGIC_BOOLEAN_FALSE": "block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.\n{{Identical|False}}",
 	"LOGIC_BOOLEAN_TOOLTIP": "tooltip - Indicates that the block returns either of the two possible [https://en.wikipedia.org/wiki/Truth_value logical values].",
 	"LOGIC_NULL_HELPURL": "url - Provide a link to the translation of [https://en.wikipedia.org/wiki/Nullable_type https://en.wikipedia.org/wiki/Nullable_type], if it exists in your language; otherwise, do not worry about translating this advanced concept.",
-	"LOGIC_NULL": "block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for 'nothing' or 'invalid'.",
+	"LOGIC_NULL": "block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for 'nothing' or 'invalid'.\n{{Identical|Null}}",
 	"LOGIC_NULL_TOOLTIP": "tooltip - This should use the word from the previous message.",
 	"LOGIC_TERNARY_HELPURL": "url - Describes the programming language operator known as the ''ternary'' or ''conditional'' operator.  It is recommended that you use the translation of [https://en.wikipedia.org/wiki/%3F: https://en.wikipedia.org/wiki/%3F:] if it exists.",
 	"LOGIC_TERNARY_CONDITION": "block input text - Label for the input whose value determines which of the other two inputs is returned.  In some programming languages, this is called a ''''predicate''''.",
@@ -320,8 +327,8 @@
 	"LISTS_SORT_HELPURL": "url - Information describing sorting a list.",
 	"LISTS_SORT_TITLE": "Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.",
 	"LISTS_SORT_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list].",
-	"LISTS_SORT_ORDER_ASCENDING": "sorting order or direction from low to high value for numeric, or A-Z for alphabetic.",
-	"LISTS_SORT_ORDER_DESCENDING": "sorting order or direction from high to low value for numeric, or Z-A for alphabetic.",
+	"LISTS_SORT_ORDER_ASCENDING": "sorting order or direction from low to high value for numeric, or A-Z for alphabetic.\n{{Identical|Ascending}}",
+	"LISTS_SORT_ORDER_DESCENDING": "sorting order or direction from high to low value for numeric, or Z-A for alphabetic.\n{{Identical|Descending}}",
 	"LISTS_SORT_TYPE_NUMERIC": "sort by treating each item as a number.",
 	"LISTS_SORT_TYPE_TEXT": "sort by treating each item alphabetically, case-sensitive.",
 	"LISTS_SORT_TYPE_IGNORECASE": "sort by treating each item alphabetically, ignoring differences in case.",

@@ -79,18 +79,19 @@ Blockly.FieldVariable.prototype.setValidator = function(handler) {
 
 /**
  * Install this dropdown on a block.
- * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldVariable.prototype.init = function(block) {
+Blockly.FieldVariable.prototype.init = function() {
   if (this.fieldGroup_) {
     // Dropdown has already been initialized once.
     return;
   }
-  Blockly.FieldVariable.superClass_.init.call(this, block);
+  Blockly.FieldVariable.superClass_.init.call(this);
   if (!this.getValue()) {
     // Variables without names get uniquely named for this workspace.
     var workspace =
-        block.isInFlyout ? block.workspace.targetWorkspace : block.workspace;
+        this.sourceBlock_.isInFlyout ?
+            this.sourceBlock_.workspace.targetWorkspace :
+            this.sourceBlock_.workspace;
     this.setValue(Blockly.Variables.generateUniqueName(workspace));
   }
 };

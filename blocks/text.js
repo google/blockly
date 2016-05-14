@@ -649,7 +649,7 @@ Blockly.Blocks['text_prompt'] = {
     var TYPES =
         [[Blockly.Msg.TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
          [Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']];
-    // Assign 'this' to a variable for use in the closure below.
+    // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);

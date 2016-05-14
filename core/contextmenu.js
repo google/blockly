@@ -60,7 +60,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   */
   var menu = new goog.ui.Menu();
   menu.setRightToLeft(rtl);
-  for (var x = 0, option; option = options[x]; x++) {
+  for (var i = 0, option; option = options[i]; i++) {
     var menuItem = new goog.ui.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menu.addChild(menuItem, true);

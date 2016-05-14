@@ -258,6 +258,7 @@ Blockly.Events.getDescendantIds_ = function(block) {
  * Decode the JSON into an event.
  * @param {!Object} json JSON representation.
  * @param {!Blockly.Workspace} workspace Target workspace for event.
+ * @return {!Blockly.Events.Abstract} The event represented by the JSON.
  */
 Blockly.Events.fromJson = function(json, workspace) {
   var event;
@@ -278,7 +279,7 @@ Blockly.Events.fromJson = function(json, workspace) {
       event = new Blockly.Events.Ui(null);
       break;
     default:
-      throw 'Unknown event type.'
+      throw 'Unknown event type.';
   }
   event.fromJson(json);
   event.workspaceId = workspace.id;

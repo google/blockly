@@ -38,6 +38,7 @@ goog.require('Blockly.FieldColour');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldImage');
 goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
@@ -81,6 +82,13 @@ Blockly.highlightedConnection_ = null;
  * @private
  */
 Blockly.localConnection_ = null;
+
+/**
+ * All of the connections on blocks that are currently being dragged.
+ * @type {!Array.<!Blockly.Connection>}
+ * @private
+ */
+Blockly.draggingConnections_ = [];
 
 /**
  * Contents of the local clipboard.
@@ -133,11 +141,36 @@ Blockly.svgSize = function(svg) {
 };
 
 /**
+ * Schedule a call to the resize handler.  Groups of simultaneous events (e.g.
+ * a tree of blocks being deleted) are merged into one call.
+ * @param {Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
+ */
+Blockly.asyncSvgResize = function(workspace) {
+  if (Blockly.svgResizePending_) {
+    return;
+  }
+  if (!workspace) {
+    workspace = Blockly.getMainWorkspace();
+  }
+  Blockly.svgResizePending_ = true;
+  setTimeout(function() {Blockly.svgResize(workspace);}, 0);
+};
+
+/**
+ * Flag indicating a resize event is scheduled.
+ * Used to fire only one resize after multiple changes.
+ * @type {boolean}
+ * @private
+ */
+Blockly.svgResizePending_ = false;
+
+/**
  * Size the SVG image to completely fill its container.
  * Record the height/width of the SVG image.
  * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
  */
 Blockly.svgResize = function(workspace) {
+  Blockly.svgResizePending_ = false;
   var mainWorkspace = workspace;
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
@@ -170,7 +203,6 @@ Blockly.onMouseUp_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.isScrolling = false;
-  Blockly.setPageSelectable(true);
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {
     Blockly.unbindEvent_(Blockly.onTouchUpWrapper_);
@@ -213,6 +245,7 @@ Blockly.onMouseMove_ = function(e) {
       Blockly.longStop_();
     }
     e.stopPropagation();
+    e.preventDefault();
   }
 };
 
@@ -403,6 +436,11 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * .contentLeft: Offset of the left-most content from the x=0 coordinate.
  * .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
+ * .toolboxWidth: Width of toolbox, if it exists.  Otherwise zero.
+ * .toolboxHeight: Height of toolbox, if it exists.  Otherwise zero.
+ * .flyoutWidth: Width of the flyout if it is always open.  Otherwise zero.
+ * .flyoutHeight: Height of flyout if it is always open.  Otherwise zero.
+ * .toolboxPosition: Top, bottom, left or right.
  * @return {Object} Contains size and position metrics of main workspace.
  * @private
  * @this Blockly.WorkspaceSvg
@@ -410,7 +448,13 @@ Blockly.hideChaff = function(opt_allowToolbox) {
 Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize(this.getParentSvg());
   if (this.toolbox_) {
-    svgSize.width -= this.toolbox_.width;
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+      svgSize.height -= this.toolbox_.getHeight();
+    } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+      svgSize.width -= this.toolbox_.getWidth();
+    }
   }
   // Set the margin to match the flyout's margin so that the workspace does
   // not jump as blocks are added.
@@ -442,9 +486,14 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     var bottomEdge = topEdge + blockBox.height;
   }
   var absoluteLeft = 0;
-  if (!this.RTL && this.toolbox_) {
-    absoluteLeft = this.toolbox_.width;
+  if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    absoluteLeft = this.toolbox_.getWidth();
   }
+  var absoluteTop = 0;
+  if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    absoluteTop = this.toolbox_.getHeight();
+  }
+
   var metrics = {
     viewHeight: svgSize.height,
     viewWidth: svgSize.width,
@@ -454,8 +503,13 @@ Blockly.getMainWorkspaceMetrics_ = function() {
     viewLeft: -this.scrollX,
     contentTop: topEdge,
     contentLeft: leftEdge,
-    absoluteTop: 0,
-    absoluteLeft: absoluteLeft
+    absoluteTop: absoluteTop,
+    absoluteLeft: absoluteLeft,
+    toolboxWidth: this.toolbox_ ? this.toolbox_.getWidth() : 0,
+    toolboxHeight: this.toolbox_ ? this.toolbox_.getHeight() : 0,
+    flyoutWidth: this.flyout_ ? this.flyout_.getWidth() : 0,
+    flyoutHeight: this.flyout_ ? this.flyout_.getHeight() : 0,
+    toolboxPosition: this.toolboxPosition
   };
   return metrics;
 };

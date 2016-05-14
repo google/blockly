@@ -212,29 +212,29 @@ Blockly.createMainWorkspace_ = function(svg, options) {
           for (var b = 0, block; block = blocks[b]; b++) {
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
-            var overflow;
 
             // Bump any block that's above the top back inside.
-            overflow = edgeTop + MARGIN - blockHW.height - blockXY.y;
-            if (overflow > 0) {
-              block.moveBy(0, overflow);
+            var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
+            if (overflowTop > 0) {
+              block.moveBy(0, overflowTop);
             }
             // Bump any block that's below the bottom back inside.
-            overflow = edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
-            if (overflow < 0) {
-              block.moveBy(0, overflow);
+            var overflowBottom =
+                edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+            if (overflowBottom < 0) {
+              block.moveBy(0, overflowBottom);
             }
             // Bump any block that's off the left back inside.
-            overflow = MARGIN + edgeLeft -
+            var overflowLeft = MARGIN + edgeLeft -
                 blockXY.x - (options.RTL ? 0 : blockHW.width);
-            if (overflow > 0) {
-              block.moveBy(overflow, 0);
+            if (overflowLeft > 0) {
+              block.moveBy(overflowLeft, 0);
             }
             // Bump any block that's off the right back inside.
-            overflow = edgeLeft + metrics.viewWidth - MARGIN - blockXY.x +
-              (options.RTL ? blockHW.width : 0);
-            if (overflow < 0) {
-              block.moveBy(overflow, 0);
+            var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
+                blockXY.x + (options.RTL ? blockHW.width : 0);
+            if (overflowRight < 0) {
+              block.moveBy(overflowRight, 0);
             }
           }
         }
@@ -267,7 +267,10 @@ Blockly.init_ = function(mainWorkspace) {
       });
 
   Blockly.bindEvent_(window, 'resize', null,
-                     function() {Blockly.svgResize(mainWorkspace);});
+      function() {
+        Blockly.hideChaff(true);
+        Blockly.asyncSvgResize(mainWorkspace);
+      });
 
   Blockly.inject.bindDocumentEvents_();
 
@@ -278,9 +281,10 @@ Blockly.init_ = function(mainWorkspace) {
       // Build a fixed flyout with the root blocks.
       mainWorkspace.flyout_.init(mainWorkspace);
       mainWorkspace.flyout_.show(options.languageTree.childNodes);
+      mainWorkspace.flyout_.scrollToStart();
       // Translate the workspace sideways to avoid the fixed flyout.
       mainWorkspace.scrollX = mainWorkspace.flyout_.width_;
-      if (options.RTL) {
+      if (options.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
         mainWorkspace.scrollX *= -1;
       }
       mainWorkspace.translate(mainWorkspace.scrollX, 0);
@@ -321,7 +325,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (goog.userAgent.IPAD) {
       Blockly.bindEvent_(window, 'orientationchange', document, function() {
-        Blockly.fireUiEvent(window, 'resize');
+        Blockly.asyncSvgResize();
       });
     }
   }

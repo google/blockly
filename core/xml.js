@@ -349,7 +349,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
     }, 1);
     topBlock.updateDisabled();
     // Fire an event to allow scrollbars to resize.
-    Blockly.fireUiEvent(window, 'resize');
+    Blockly.asyncSvgResize(workspace);
   }
   Blockly.Events.enable();
   if (Blockly.Events.isEnabled()) {
@@ -386,7 +386,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Find any enclosed blocks or shadows in this tag.
     var childBlockNode = null;
     var childShadowNode = null;
-    var shadowActive = false;
     for (var j = 0, grandchildNode; grandchildNode = xmlChild.childNodes[j];
          j++) {
       if (grandchildNode.nodeType == 1) {
@@ -400,7 +399,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     // Use the shadow block if there is no child block.
     if (!childBlockNode && childShadowNode) {
       childBlockNode = childShadowNode;
-      shadowActive = true;
     }
 
     var name = xmlChild.getAttribute('name');

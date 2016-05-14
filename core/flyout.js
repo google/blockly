@@ -569,8 +569,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // IE 11 is an incompetant browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
   var deselectAll = function(e) {
-    var blocks = this.workspace_.getTopBlocks(false);
-    for (var i = 0, block; block = blocks[i]; i++) {
+    var topBlocks = this.workspace_.getTopBlocks(false);
+    for (var i = 0, block; block = topBlocks[i]; i++) {
       block.removeSelect();
     }
   };
@@ -1012,7 +1012,7 @@ Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
   flyoutHeight *= this.workspace_.scale;
   flyoutHeight += Blockly.Scrollbar.scrollbarThickness;
   if (this.height_ != flyoutHeight) {
-    for (i = 0, block; block = blocks[i]; i++) {
+    for (var i = 0, block; block = blocks[i]; i++) {
       var blockHW = block.getHeightWidth();
       if (block.flyoutRect_) {
         block.flyoutRect_.setAttribute('width', blockHW.width);

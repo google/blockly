@@ -763,8 +763,8 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
       }
     }
 
-    /*
-     * Option to collapse or expand top blocks
+    /**
+     * Option to collapse or expand top blocks.
      * @param {boolean} shouldCollapse Whether a block should collapse.
      * @private
      */

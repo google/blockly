@@ -280,7 +280,7 @@ Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = 'Returns either true or false.';
 
 /// url - Provide a link to the translation of [https://en.wikipedia.org/wiki/Nullable_type https://en.wikipedia.org/wiki/Nullable_type], if it exists in your language; otherwise, do not worry about translating this advanced concept.
 Blockly.Msg.LOGIC_NULL_HELPURL = 'https://en.wikipedia.org/wiki/Nullable_type';
-/// block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for "nothing" or "invalid".
+/// block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for "nothing" or "invalid".\n{{Identical|Null}}
 Blockly.Msg.LOGIC_NULL = 'null';
 /// tooltip - This should use the word from the previous message.
 Blockly.Msg.LOGIC_NULL_TOOLTIP = 'Returns null.';
@@ -981,9 +981,9 @@ Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#s
 Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list].
 Blockly.Msg.LISTS_SORT_TOOLTIP = 'Sort a copy of a list.';
-/// sorting order or direction from low to high value for numeric, or A-Z for alphabetic.
+/// sorting order or direction from low to high value for numeric, or A-Z for alphabetic.\n{{Identical|Ascending}}
 Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = 'ascending';
-/// sorting order or direction from high to low value for numeric, or Z-A for alphabetic.
+/// sorting order or direction from high to low value for numeric, or Z-A for alphabetic.\n{{Identical|Descending}}
 Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = 'descending';
 /// sort by treating each item as a number.
 Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = 'numeric';

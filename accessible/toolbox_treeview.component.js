@@ -27,30 +27,45 @@ blocklyApp.ToolboxTreeView = ng.core
   .Component({
     selector: 'toolbox-tree-view',
     template: `
-      <li #parentList [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])" [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && tree.getAttribute('aria-activedescendant') ==
-            'blockly-toolbox-tree-node0'}" [attr.aria-selected]="index == 0 && tree.getAttribute('aria-activedescendant') ==
-            'blockly-toolbox-tree-node0'" role="treeitem" [attr.aria-level]="level" [id]="idMap['parentList']">
+      <li #parentList [id]="idMap['parentList']" role="treeitem"
+            [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && tree.getAttribute('aria-activedescendant') == 'blockly-toolbox-tree-node0'}" 
+            [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])"             
+            [attr.aria-selected]="index == 0 && tree.getAttribute('aria-activedescendant') == 'blockly-toolbox-tree-node0'" 
+            [attr.aria-level]="level">
         {{setActiveDesc(parentList)}}
         <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']" style="color:red">{{block.toString()}}</label>
         <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0"  [attr.aria-level]="level+1">
           <li #listItem [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummaryLabel'])" class="blocklyHasChildren" [id]="idMap['listItem']" *ngIf="displayBlockMenu" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
             <label #label [id]="idMap['label']">block action list </label>
             <ol role="group" *ngIf="displayBlockMenu"  [attr.aria-level]="level+2">
-              <li #workspaceCopy [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')" [id]="idMap['workspaceCopy']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #workspaceCopyButton [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace(block)">copy to workspace</button>
+              <li #workspaceCopy [id]="idMap['workspaceCopy']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')" 
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button #workspaceCopyButton [id]="idMap['workspaceCopyButton']" 
+                    (click)="copyToWorkspace(block)">copy to workspace</button>
               </li>
-              <li #blockCopy [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')" [id]="idMap['blockCopy']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #blockCopyButton [id]="idMap['blockCopyButton']" (click)="clipboardService.copy(block)">copy to clipboard</button>
+              <li #blockCopy [id]="idMap['blockCopy']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')" 
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button #blockCopyButton [id]="idMap['blockCopyButton']" 
+                    (click)="clipboardService.copy(block)">copy to clipboard</button>
               </li>
-              <li #sendToSelected [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" [id]="idMap['sendToSelected']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton [id]="idMap['sendToSelectedButton']" (click)="copyToMarked(block)" [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">copy to marked spot</button>
+              <li #sendToSelected [id]="idMap['sendToSelected']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" 
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button #sendToSelectedButton [id]="idMap['sendToSelectedButton']" (click)="copyToMarked(block)" 
+                    [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">
+                    copy to marked spot</button>
               </li>
             </ol>
           </li>
           <div *ngFor="#inputBlock of block.inputList; #i=index">
-            <field-view [attr.aria-level]="level+1" *ngFor="#field of getInfo(inputBlock); #j=index" [field]="field" [level]="level+1"></field-view>
+            <field-view *ngFor="#field of getInfo(inputBlock); #j=index" [attr.aria-level]="level+1" [field]="field" [level]="level+1"></field-view>
             <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [displayBlockMenu]="false" [level]="level+1"></toolbox-tree-view>
-            <li aria-selected=false #listItem1 [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])" role="treeitem" [attr.aria-level]="level+1" [id]="idMap['listItem' + i]" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()">
+            <li #listItem1 [id]="idMap['listItem' + i]" role="treeitem" 
+                *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" 
+                [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])" 
+                [attr.aria-level]="level+1" aria-selected=false>
               <label #label [id]="idMap['listItem' + i + 'Label']">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:</label>
             </li>
           </div>

@@ -27,21 +27,34 @@ blocklyApp.FieldView = ng.core
   .Component({
     selector: 'field-view',
     template: `
-    <li [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])" aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isTextInput(field)" [id]="idMap['listItem']">
+    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput(field)" 
+        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])" 
+        [attr.aria-level]="level"  aria-selected=false>
       <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
     </li>
-    <li [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" aria-selected=false role="treeitem" [attr.aria-level]="level" *ngIf="isDropdown(field)" [id]="idMap['listItem']">
+    <li [id]="idMap['listItem']" *ngIf="isDropdown(field)"
+        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" 
+        [attr.aria-level]="level" aria-selected=false role="treeitem">
       <label [id]="idMap['label']">current argument value: {{field.getText()}}</label>
       <ol role="group" [attr.aria-level]="level+1">
-        <li *ngFor="#optionValue of getOptions(field)" [id]="idMap[optionValue]" [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
-          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field,optionValue)">{{optionText[optionValue]}}</button>
+        <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions(field)" 
+            [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" 
+            [attr.aria-level]="level+1" aria-selected=false>
+          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field,optionValue)">
+            {{optionText[optionValue]}}
+          </button>
         </li>
       </ol>
     </li>
-    <li aria-selected=false role="treeitem" [id]="idMap['listItem']" [attr.aria-level]="level" *ngIf="isCheckbox(field)">
+    <li [id]="idMap['listItem']" role="treeitem" 
+        *ngIf="isCheckbox(field)" [attr.aria-level]="level" 
+        aria-selected=false>
       // Checkboxes not currently supported.
     </li>
-    <li aria-selected=false [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])" role="treeitem" [id]="idMap['listItem']" [attr.aria-level]="level" *ngIf="isTextField(field) && hasVisibleText(field)">
+    <li [id]="idMap['listItem']" role="treeitem" 
+        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])" 
+        *ngIf="isTextField(field) && hasVisibleText(field)" 
+        [attr.aria-level]="level" aria-selected=false>
       <label [id]="idMap['label']">
         {{field.getText()}}
       </label>

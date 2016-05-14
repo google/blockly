@@ -27,36 +27,59 @@ blocklyApp.TreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
-      <li #parentList [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])" aria-selected=false role="treeitem" class="blocklyHasChildren" [attr.aria-level]="level" [id]="idMap['parentList']">
+      <li #parentList [id]="idMap['parentList']" role="treeitem" class="blocklyHasChildren" 
+          [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])" 
+          [attr.aria-level]="level" aria-selected=false>
         {{checkParentList(parentList)}}
-        <label #blockSummary [id]="idMap['blockSummary']">{{block.toString()}}</label>
+        <label [id]="idMap['blockSummary']">{{block.toString()}}</label>
         <ol role="group"  [attr.aria-level]="level+1">
-          <li #listItem [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummary'])" [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
-            <label #label [id]="idMap['label']">block action list </label>
+          <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem" 
+              [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummary'])" 
+              [attr.aria-level]="level+1" aria-selected=false>
+            <label [id]="idMap['label']">block action list </label>
             <ol role="group"  [attr.aria-level]="level+2">
-              <li #cutListItem [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['cutButton'], 'blockly-button')" [id]="idMap['cutListItem']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #cutButton [id]="idMap['cutButton']" (click)="clipboardService.cut(block)">cut block</button>
+              <li [id]="idMap['cutListItem']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['cutButton'], 'blockly-button')" 
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button [id]="idMap['cutButton']" (click)="clipboardService.cut(block)">cut block</button>
               </li>
-              <li #copyListItem [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['copyButton'], 'blockly-button')" [id]="idMap['copyListItem']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #copyButton [id]="idMap['copyButton']" (click)="clipboardService.copy(block)">copy block</button>
+              <li [id]="idMap['copyListItem']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['copyButton'], 'blockly-button')" 
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button [id]="idMap['copyButton']" (click)="clipboardService.copy(block)">copy block</button>
               </li>
-              <li #pasteBelow [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteBelowButton'], 'blockly-button', (noNextConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.nextConnection)))"  [id]="idMap['pasteBelow']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #pasteBelowButton [id]="idMap['pasteBelowButton']" (click)="clipboardService.pasteFromClipboard(block.nextConnection)" [disabled]="noNextConnectionHTMLText(block)" [disabled]="clipboardCompatibilityHTMLText(block.nextConnection)">paste below</button>
+              <li [id]="idMap['pasteBelow']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteBelowButton'], 'blockly-button', (noNextConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.nextConnection)))"  
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button [id]="idMap['pasteBelowButton']" (click)="clipboardService.pasteFromClipboard(block.nextConnection)" 
+                    [disabled]="noNextConnectionHTMLText(block)" [disabled]="clipboardCompatibilityHTMLText(block.nextConnection)">paste below</button>
               </li>
-              <li #pasteAbove [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteAboveButton'], 'blockly-button', (noPreviousConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.previousConnection)))"  [id]="idMap['pasteAbove']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #pasteAboveButton [id]="idMap['pasteAboveButton']" (click)="clipboardService.pasteFromClipboard(block.previousConnection)" [disabled]="noPreviousConnectionHTMLText(block)" [disabled]="clipboardCompatibilityHTMLText(block.previousConnection)">paste above</button>
+              <li [id]="idMap['pasteAbove']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteAboveButton'], 'blockly-button', (noPreviousConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.previousConnection)))"  
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button [id]="idMap['pasteAboveButton']" (click)="clipboardService.pasteFromClipboard(block.previousConnection)" 
+                    [disabled]="noPreviousConnectionHTMLText(block)" [disabled]="clipboardCompatibilityHTMLText(block.previousConnection)">paste above</button>
               </li>
-              <li #markBelow [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markBelowButton'], 'blockly-button', noNextConnectionHTMLText(block))"  [id]="idMap['markBelow']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #markBelowButton [id]="idMap['markBelowButton']" (click)="clipboardService.markConnection(block.nextConnection)" [disabled]="noNextConnectionHTMLText(block)">mark spot below</button>
+              <li [id]="idMap['markBelow']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markBelowButton'], 'blockly-button', noNextConnectionHTMLText(block))"  
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button [id]="idMap['markBelowButton']" (click)="clipboardService.markConnection(block.nextConnection)" 
+                    [disabled]="noNextConnectionHTMLText(block)">mark spot below</button>
               </li>
-              <li #markAbove [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markAboveButton'], 'blockly-button', noPreviousConnectionHTMLText(block))"  [id]="idMap['markAbove']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #markAboveButton [id]="idMap['markAboveButton']" (click)="clipboardService.markConnection(block.previousConnection)" [disabled]="noPreviousConnectionHTMLText(block)">mark spot above</button>
+              <li [id]="idMap['markAbove']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markAboveButton'], 'blockly-button', noPreviousConnectionHTMLText(block))" 
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button [id]="idMap['markAboveButton']" (click)="clipboardService.markConnection(block.previousConnection)" 
+                    [disabled]="noPreviousConnectionHTMLText(block)">mark spot above</button>
               </li>
-              <li #sendToSelectedListItem [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))"  [id]="idMap['sendToSelectedListItem']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #sendToSelectedButton [id]="idMap['sendToSelectedButton']" (click)="sendToSelected(block)" [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">move to marked spot</button>
+              <li [id]="idMap['sendToSelectedListItem']" role="treeitem" 
+                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" 
+                  [attr.aria-level]="level+2" aria-selected=false>
+                <button [id]="idMap['sendToSelectedButton']" (click)="sendToSelected(block)" 
+                    [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">move to marked spot</button>
               </li>
-              <li #delete [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['deleteButton'], 'blockly-button')"  [id]="idMap['delete']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button #deleteButton [id]="idMap['deleteButton']" (click)="block.dispose(true)">delete</button>
+              <li [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['deleteButton'], 'blockly-button')"  [id]="idMap['delete']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
+                <button [id]="idMap['deleteButton']" (click)="block.dispose(true)">delete</button>
               </li>
             </ol>
           </li>

@@ -58,14 +58,13 @@ Blockly.FieldCheckbox.prototype.CURSOR = 'default';
 
 /**
  * Install this checkbox on a block.
- * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldCheckbox.prototype.init = function(block) {
+Blockly.FieldCheckbox.prototype.init = function() {
   if (this.fieldGroup_) {
     // Checkbox has already been initialized once.
     return;
   }
-  Blockly.FieldCheckbox.superClass_.init.call(this, block);
+  Blockly.FieldCheckbox.superClass_.init.call(this);
   // The checkbox doesn't use the inherited text element.
   // Instead it uses a custom checkmark element that is either visible or not.
   this.checkElement_ = Blockly.createSvgElement('text',

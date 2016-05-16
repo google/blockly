@@ -53,15 +53,13 @@ musicGame.gameManager.expectedBlockType = [undefined, 'music_play_random_note',
    'music_play_note', 'music_play_note'];
 musicGame.gameManager.levelToolboxes=['', 'level1_ToolboxXml.xml', 
   'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml'];
-musicGame.gameManager.levelWorkspaces=[undefined, new Blockly.Workspace(), 
-  new Blockly.Workspace(), new Blockly.Workspace()];
 musicGame.gameManager.maxLevelAllowed=1;
 
 musicGame.gameManager.validateLevel = function(){
   var correct = true;
   var level = musicGame.gameManager.level;
   var expectedBassLine = new MusicLine();
-  var topBlock = musicGame.workspace.topBlocks_[0];
+  var topBlock = blocklyApp.workspace.topBlocks_[0];
   var errorMessage = 'Not quite! Try again!';
 
   //we should only report the earliest problem with their code
@@ -76,11 +74,11 @@ musicGame.gameManager.validateLevel = function(){
   }
 
   if (level != 3) {
-    correct = correct && musicGame.workspace.topBlocks_.length == 1;
+    correct = correct && blocklyApp.workspace.topBlocks_.length == 1;
   } else {
     //if there are two topblocks that aren't connected, the error message should be the error message on line 112
-    correct = correct && (musicGame.workspace.topBlocks_.length == 1 
-        || musicGame.workspace.topBlocks_.length == 2);
+    correct = correct && (blocklyApp.workspace.topBlocks_.length == 1 
+        || blocklyApp.workspace.topBlocks_.length == 2);
   }
   if (!correct && !errorMessageChanged) {
     errorMessage = 'Not quite! Are you playing the right number of blocks?'
@@ -110,8 +108,6 @@ musicGame.gameManager.validateLevel = function(){
     alert(errorMessage);
   }
 }
-
-musicGame.workspace = musicGame.gameManager.levelWorkspaces[musicGame.gameManager.level];
 
 musicGame.LevelManagerView = ng.core
   .Component({
@@ -201,7 +197,7 @@ musicGame.LevelManagerView = ng.core
         wrongButtons[i].setAttribute('aria-pressed','false');
       }
       this.level = musicGame.gameManager.level;
-      musicGame.workspace.clear();
+      blocklyApp.workspace.clear();
     },
     setInstructions: function() {
       if (musicGame.gameManager.level && musicGame.gameManager.levelInstructions) {

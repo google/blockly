@@ -18,7 +18,6 @@
  */
 
 /**
-<<<<<<< HEAD
  * @fileoverview Angular2 Component that manages all game logic and rendering.
  * @author madeeha@google.com (Madeeha Ghori)
  */
@@ -50,9 +49,12 @@ musicGame.gameManager.expectedBassLines[3] = [
       [[43], 1],
       [[43], 1]
     ];
-musicGame.gameManager.expectedBlockType = [undefined, 'music_play_random_note', 'music_play_note', 'music_play_note'];
-musicGame.gameManager.levelToolboxes=['', 'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml'];
-musicGame.gameManager.levelWorkspaces=[undefined, new Blockly.Workspace(), new Blockly.Workspace(), new Blockly.Workspace()];
+musicGame.gameManager.expectedBlockType = [undefined, 'music_play_random_note',
+   'music_play_note', 'music_play_note'];
+musicGame.gameManager.levelToolboxes=['', 'level1_ToolboxXml.xml', 
+  'level1_ToolboxXml.xml', 'level1_ToolboxXml.xml'];
+musicGame.gameManager.levelWorkspaces=[undefined, new Blockly.Workspace(), 
+  new Blockly.Workspace(), new Blockly.Workspace()];
 musicGame.gameManager.maxLevelAllowed=1;
 
 musicGame.gameManager.validateLevel = function(){
@@ -77,26 +79,31 @@ musicGame.gameManager.validateLevel = function(){
     correct = correct && musicGame.workspace.topBlocks_.length == 1;
   } else {
     //if there are two topblocks that aren't connected, the error message should be the error message on line 112
-    correct = correct && (musicGame.workspace.topBlocks_.length == 1 || musicGame.workspace.topBlocks_.length == 2);
-  if (!correct && !errorMessageChanged){
+    correct = correct && (musicGame.workspace.topBlocks_.length == 1 
+        || musicGame.workspace.topBlocks_.length == 2);
+  }
+  if (!correct && !errorMessageChanged) {
     errorMessage = 'Not quite! Are you playing the right number of blocks?'
     errorMessageChanged = true;
   }
-  correct = correct && topBlock && topBlock.type == musicGame.gameManager.expectedBlockType[level];
-  if (!correct && !errorMessageChanged){
+
+  correct = correct && topBlock && topBlock.type == 
+      musicGame.gameManager.expectedBlockType[level];
+  if (!correct && !errorMessageChanged) {
     errorMessage = 'Not quite! Are you playing the right block?'
     errorMessageChanged = true;
   }
 
-  if (level == 3){
+  if (level == 3) {
     var connection = topBlock.nextConnection.targetConnection;
-    correct = correct && connection && connection.sourceBlock_ && connection.sourceBlock_.type == musicGame.gameManager.expectedBlockType[level];
-    if (!correct && !errorMessageChanged){
+    correct = correct && connection && connection.sourceBlock_ && 
+        connection.sourceBlock_.type == musicGame.gameManager.expectedBlockType[level];
+    if (!correct && !errorMessageChanged) {
       errorMessage = 'Not quite! Are your blocks connected?'
       errorMessageChanged = true;
     }
   }
-  if (correct){
+  if (correct) {
     alert('Good job! You completed the level!');
     musicGame.gameManager.maxLevelAllowed = Math.min(musicGame.gameManager.maxLevelAllowed + 1, 3);
   } else {
@@ -165,9 +172,12 @@ musicGame.LevelManagerView = ng.core
     <p *ngFor='#para of setInstructions()'>{{para}}</p>
     <h2 *ngIf='getHints()'>Hints</h2>
     <p *ngFor='#para of getHints()'>{{para}}</p>
-    <button #level1 aria-pressed='true' (click)='setLevel(1, level1, [level2,level3])' disabled={{disableButton(1)}}>Level 1</button>
-    <button #level2 aria-pressed='false' (click)='setLevel(2, level2, [level1,level3])' disabled={{disableButton(2)}}>Level 2</button>
-    <button #level3 aria-pressed='false' (click)='setLevel(3, level3, [level2,level1])' disabled={{disableButton(3)}}>Level 3</button>
+    <button #level1 aria-pressed='true' (click)='setLevel(1, level1, [level2,level3])' 
+        disabled={{disableButton(1)}}>Level 1</button>
+    <button #level2 aria-pressed='false' (click)='setLevel(2, level2, [level1,level3])' 
+        disabled={{disableButton(2)}}>Level 2</button>
+    <button #level3 aria-pressed='false' (click)='setLevel(3, level3, [level2,level1])' 
+        disabled={{disableButton(3)}}>Level 3</button>
     <blockly-app></blockly-app>
     `,
     directives: [blocklyApp.AppView],
@@ -186,7 +196,6 @@ musicGame.LevelManagerView = ng.core
     },
     setLevel: function(num, rightButton, wrongButtons){
       musicGame.gameManager.level = num;
-      musicGame.debug && console.log(musicGame.workspace.id);
       rightButton.setAttribute('aria-pressed','true');
       for (var i=0; i<wrongButtons.length; i++) {
         wrongButtons[i].setAttribute('aria-pressed','false');
@@ -198,5 +207,5 @@ musicGame.LevelManagerView = ng.core
       if (musicGame.gameManager.level && musicGame.gameManager.levelInstructions) {
         return musicGame.gameManager.levelInstructions[musicGame.gameManager.level];
       }
-    }  
+    }
   });

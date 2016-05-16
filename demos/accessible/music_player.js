@@ -179,8 +179,4 @@ MusicPlayer.prototype.playBassLine = function(onFinishBassLineCallback) {
 MusicPlayer.prototype.playAllLines = function(onFinishBassLineCallback) {
   this.playLines_(
     [CONSTANTS.LINE_BASS, CONSTANTS.LINE_MELODY], onFinishBassLineCallback);
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> a83cca8394e638edc043bd6f1bf95575d18769b9

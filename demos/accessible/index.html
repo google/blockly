@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Blind Blockly Sandbox</title>
-  <script src="../../../blockly_compressed.js"></script>
-  <script src="../../../blocks_compressed.js"></script>
-  <script src="../../../javascript_compressed.js"></script>
-  <script src="../../../msg/js/en.js"></script>
+  <meta charset='utf-8'>
+  <title>accessibleBlockly Demo</title>
 
-  <script src="music_player.js"></script>
+  <!-- Load Blockly -->
+  <script src='../../../blockly_compressed.js'></script>
+  <script src='../../../blocks_compressed.js'></script>
+  <script src='../../../javascript_compressed.js'></script>
+  <script src='../../../msg/js/en.js'></script>
 
   <!-- TODO(sll): This will need to change as music blocks become part of the core library. --> 
   <script src="../../../blocks/music.js"></script>
   <script src="../../../generators/javascript/music.js"></script>
 
+  <!-- Load accessibleBlockly -->
+  <script src='../../../accessible/libs/es6-shim.min.js'></script>
+  <script src='../../../accessible/libs/angular2-polyfills.min.js'></script>
+  <script src='../../../accessible/libs/Rx.umd.min.js'></script>
+  <script src='../../../accessible/libs/angular2-all.umd.min.js'></script>
+  <script src='../../../accessible/clipboard.service.js'></script>
+  <script src='../../../accessible/tree.service.js'></script>
+  <script src='../../../accessible/fieldview.component.js'></script>
+  <script src='../../../accessible/workspace_treeview.component.js'></script>
+  <script src='../../../accessible/toolbox_treeview.component.js'></script>
+  <script src='../../../accessible/toolboxview.component.js'></script>
+  <script src='../../../accessible/workspaceview.component.js'></script>
+  <script src='../../../accessible/appview.component.js'></script>
+
+  <link rel="stylesheet" type="text/css" href="../../../media/accessible.css">
+
   <!-- Libraries for MIDI playback. -->
   <!-- see the readme with Sean's demo for instructions for getting the MIDI library:
   https://github.com/seanlip/blockly/tree/music/demos/music -->
-  <script src="../../../MIDI.js/build/MIDI.js"></script>
-  <script src="../../../MIDI.js/inc/shim/Base64binary.js"></script>
+  <script src='../../../MIDI.js/build/MIDI.js'></script>
+  <script src='../../../MIDI.js/inc/shim/Base64binary.js'></script>
 
-  <!-- 1. Load libraries -->
-  <!-- IE required polyfill -->
-  <script src="../../../accessible/libs/es6-shim.min.js"></script>
-  <script src="../../../accessible/libs/angular2-polyfills.min.js"></script>
-  <script src="../../../accessible/libs/Rx.umd.min.js"></script>
-  <script src="../../../accessible/libs/angular2-all.umd.min.js"></script>
-  <!--<script src="node_modules/systemjs/dist/system.js"></script>-->
-
-  <link rel="stylesheet" type="text/css" href="../../../media/accessible.css">
+  <script src='music_player.js'></script>
 
   <style>
     body {
@@ -39,9 +47,7 @@
       font-weight: normal;
       font-size: 140%;
     }
-    td {
-      vertical-align: top;
-    }
+
     textarea {
       width: 100%;
       height: 20em;
@@ -52,16 +58,6 @@
 
   <levelview></levelview>
 
-  <!-- 2. Load our app -->
-  <script src='../../../accessible/utils.service.js'></script>
-  <script src='../../../accessible/clipboard.service.js'></script>
-  <script src='../../../accessible/tree.service.js'></script>
-  <script src='../../../accessible/fieldview.component.js'></script>
-  <script src='../../../accessible/workspace_treeview.component.js'></script>
-  <script src='../../../accessible/toolbox_treeview.component.js'></script>
-  <script src='../../../accessible/toolboxview.component.js'></script>
-  <script src='../../../accessible/workspaceview.component.js'></script>
-  <script src='../../../accessible/appview.component.js'></script>
   <script src='levelmanager.component.js'></script>
   <script src='boot.js'></script>
 
@@ -82,7 +78,7 @@
     // Generate JavaScript code and run it.
     window.LoopTrap = 1000;
     Blockly.JavaScript.INFINITE_LOOP_TRAP =
-        'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+        'if (--window.LoopTrap == 0) throw \'Infinite loop.\';\n';
     var code = Blockly.JavaScript.workspaceToCode(blocklyApp.workspace);
     Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
     try {
@@ -93,9 +89,11 @@
   }
 </script>
 
-<xml id="toolbox_xml" style="display: none">
+<xml id="toolbox-xml" style="display: none">
+<category name="Music" colour="230">
 <block type="music_play_random_note"></block>
 <block type="music_play_note"></block>
+</category>
 </xml>
 
 </body>

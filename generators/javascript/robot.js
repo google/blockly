@@ -170,3 +170,17 @@ Blockly.JavaScript['robot_manipulation_is_gripper_open'] = function(block) {
   }
   return [code, order];
 };
+
+
+Blockly.JavaScript['robot_manipulation_pbd_actions'] = function(block) {
+  var dropdown_action_id = block.getFieldValue('ACTION_ID');
+  var code = Blockly.JavaScript.quote_(dropdown_action_id);
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
+  var value_action_id = Blockly.JavaScript.valueToCode(block, 'ACTION_ID', Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var code = 'robot.runPbdAction(' + value_action_id + ')';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+

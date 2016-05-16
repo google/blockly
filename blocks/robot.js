@@ -28,6 +28,8 @@ goog.provide('Blockly.Blocks.robot');
 
 goog.require('Blockly.Blocks');
 
+Blockly.robot = Blockly.robot || {};
+
 Blockly.Blocks['robot_display_message_h1h2'] = {
   init: function() {
     this.appendDummyInput()
@@ -85,7 +87,6 @@ Blockly.Blocks['robot_movement_go_to'] = {
   }
 };
 
-Blockly.robot = Blockly.robot || {};
 Blockly.robot.locations = [['<Select a location>', '<Select a location>']];
 Blockly.robot.getLocations = function() {
   var options = [];
@@ -239,6 +240,70 @@ Blockly.Blocks['robot_manipulation_place_default'] = {
     this.setOutput(true, "Boolean");
     this.setColour(20);
     this.setTooltip('Places the held object onto the nearest table.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.robot.pbdActions = [['<Select an action>', '<Select an action>']];
+Blockly.robot.getPbdActions = function() {
+  var options = [];
+  var client = new ROSLIB.Service({
+    ros: ROS,
+    name: '/mongo_msg_db/list',
+    serviceType : 'mongo_msg_db_msgs/List'
+  });
+
+  var request = new ROSLIB.ServiceRequest({
+    collection: {
+      db: 'pr2_pbd',
+      collection: 'actions'
+    }
+  });
+  client.callService(request, function(result) {
+    for (var i=0; i<result.messages.length; ++i) {
+      var message = result.messages[i];
+      var program = JSON.parse(message.json);
+      options.push([program.name, message.id]);
+    }
+    Blockly.robot.pbdActions = options;
+    return options;
+  });
+};
+
+Blockly.robot.getPbdActions();
+
+Blockly.Blocks['robot_manipulation_pbd_actions'] = {
+  init: function() {
+    Blockly.robot.getPbdActions();
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(Blockly.robot.pbdActions), "ACTION_ID");
+    this.setOutput(true, "String");
+    this.setColour(20);
+    this.setTooltip('The Programming by Demonstration actions the robot knows.');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    if (this.getFieldValue('ACTION_ID') === '<Select an action>') {
+      if (Blockly.robot.pbdActions.length === 1) {
+        this.setWarningText('No programming by demonstration actions have been created yet.');
+      } else {
+        this.setWarningText('Select an action from the list.');
+      }
+    } else {
+      this.setWarningText(null);
+    }
+  },
+};
+
+Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
+  init: function() {
+    this.appendValueInput("ACTION_ID")
+        .setCheck("String")
+        .appendField("run PbD action");
+    this.setOutput(true, "Boolean");
+    this.setColour(20);
+    this.setTooltip('Executes an action created using the Programming by Demonstration interface.');
     this.setHelpUrl('');
   }
 };

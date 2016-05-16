@@ -28,7 +28,7 @@ blocklyApp.ToolboxTreeView = ng.core
     selector: 'toolbox-tree-view',
     template: `
       <li #parentList [id]="idMap['parentList']" role="treeitem"
-            [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && tree.getAttribute('aria-activedescendant') == 'blockly-toolbox-tree-node0'}" 
+            [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && noCategories}" 
             [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])"             
             [attr.aria-selected]="index == 0 && tree.getAttribute('aria-activedescendant') == 'blockly-toolbox-tree-node0'" 
             [attr.aria-level]="level">
@@ -76,7 +76,7 @@ blocklyApp.ToolboxTreeView = ng.core
     directives: [ng.core.forwardRef(
         function() { return blocklyApp.ToolboxTreeView; }),
         blocklyApp.FieldView],
-    inputs: ['block', 'displayBlockMenu', 'level', 'index', 'tree'],
+    inputs: ['block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories'],
   })
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
@@ -88,7 +88,7 @@ blocklyApp.ToolboxTreeView = ng.core
       this.utilsService = _utilsService;
     }],
     ngOnInit: function(){
-      var elementsNeedingIds = ['parentList', 'blockSummaryLabel'];
+      var elementsNeedingIds = ['blockSummaryLabel'];
       if (this.displayBlockMenu && this.block.inputList.length){
         elementsNeedingIds.concat(['listItem', 'label', 'workspaceCopy', 
             'workspaceCopyButton', 'blockCopy', 'blockCopyButton',
@@ -99,6 +99,11 @@ blocklyApp.ToolboxTreeView = ng.core
         elementsNeedingIds.push('listItem' + i + 'Label')
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+      if (this.index == 0 && this.noCategories){
+        this.idMap['parentList'] = 'blockly-toolbox-tree-node0';
+      } else {
+        this.idMap['parentList'] = this.utilsService.generateUniqueId();
+      }
     },
     setActiveDesc: function(parentList){
       // If this is the first child of the toolbox and the

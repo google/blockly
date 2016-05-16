@@ -32,51 +32,61 @@ blocklyApp.ToolboxView = ng.core
           tabIndex="0" [attr.aria-labelledby]="toolboxTitle.id" 
           [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' " 
           (keydown)="treeService.onKeypress($event, tree)">
-        <li #parent role="treeitem" [ngClass]="{blocklyHasChildren: getToolboxWorkspace(category).topBlocks_.length > 0}" 
+        {{storeTree(tree)}}
+        <li #parent [id]="idMap['Parent' + i]" role="treeitem" 
+            [ngClass]="{blocklyHasChildren: true,
+                blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}" 
             *ngIf="toolboxHasCategories" *ngFor="#category of makeArray(sightedToolbox); #i=index" 
             aria-level="1" aria-selected=false>
-          <label #name>{{category.attributes.name.value}}</label>
-          {{labelCategory(name, i, tree)}}
-          <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
-            <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_" [level]=2 [block]="block" [displayBlockMenu]="true" [clipboardService]="clipboardService"></toolbox-tree-view>
-          </ol>
+          <!-- TODO(sll@): This div is required. There seems to be some bug in Angular that makes it 
+          access index=undefined. Talk to fraser@.-->
+          <div *ngIf="category && category.attributes">
+            <label [id]="idMap['Label' + i]" #name>{{category.attributes.name.value}}</label>
+            {{labelCategory(name, i, tree)}}
+            <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
+              <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_" [level]=2 [block]="block" [displayBlockMenu]="true" [clipboardService]="clipboardService"></toolbox-tree-view>
+            </ol>
+          </div>
         </li>
         <div *ngIf="!toolboxHasCategories">
-          <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index" [level]=1 [block]="block" [displayBlockMenu]="true" [clipboardService]="clipboardService" [index]="i" [tree]="tree"></toolbox-tree-view>
+          <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index" [level]=1 [block]="block" [displayBlockMenu]="true" [clipboardService]="clipboardService" [index]="i" [tree]="tree" [noCategories]="true"></toolbox-tree-view>
         </div>
       </ol>
     `,
     directives: [blocklyApp.ToolboxTreeView],
   })
   .Class({
-    constructor: [blocklyApp.TreeService, function(_treeService) {
-      var _this = this;
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          _this.sightedToolbox = xhttp.responseXML;
-        }
-      };
-      xhttp.open('GET', blocklyApp.gameManager
-          .levelToolboxes[blocklyApp.gameManager.level], true);
-      xhttp.send();
+    constructor: [blocklyApp.TreeService, blocklyApp.UtilsService, function(_treeService, _utilsService) {
+      this.sightedToolbox = document.getElementById('blockly-toolbox-xml');
 
       this.toolboxCategories = [];
       this.toolboxWorkspaces = Object.create(null);
       this.treeService = _treeService;
+      this.utilsService = _utilsService;
 
       this.toolboxHasCategories = false;
     }],
+    ngOnInit: function() {
+      var elementsNeedingIds = [];
+      var categories = this.makeArray(this.sightedToolbox);
+      if (this.toolboxHasCategories) {
+        for (var i = 0; i < categories.length; i++){
+          elementsNeedingIds.push('Parent' + i);
+          elementsNeedingIds.push('Label' + i);
+        }
+        this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+        this.idMap['Parent0'] = 'blockly-toolbox-tree-node0';
+      }
+    },
     labelCategory: function(h2, i, tree) {
       var parent = h2.parentNode;
       while (parent && parent.tagName != 'LI') {
         parent = parent.parentNode;
       }
       parent.setAttribute('aria-label', h2.innerText);
-      parent.id = 'toolbox-tree-node' + i;
+      parent.id = 'blockly-toolbox-tree-node' + i;
       if (i == 0 && tree.getAttribute('aria-activedescendant') ==
-        'toolbox-tree-node0') {
-        this.addClass(parent, 'blocklyActiveDescendant');
+        'blockly-toolbox-tree-node0') {
         this.treeService.setActiveDesc(parent, tree.id);
         parent.setAttribute('aria-selected', 'true');
       }
@@ -86,20 +96,20 @@ blocklyApp.ToolboxView = ng.core
         if (this.toolboxCategories.length) {
           return this.toolboxCategories;
         } else {
-          var categories = val.documentElement.getElementsByTagName('category');
+          var categories = val.getElementsByTagName('category');
           if (categories.length) {
             this.toolboxHasCategories = true;
             this.toolboxCategories = Array.from(categories);
             return this.toolboxCategories;
           }
           this.toolboxHasCategories = false;
-          this.toolboxCategories = Array.from(val.getElementsByTagName('xml'));
+          this.toolboxCategories = [Array.from(val.children)];
           return this.toolboxCategories;
         }
       }
     },
     getToolboxWorkspace: function(categoryNode) {
-      if (categoryNode.attributes.name) {
+      if (categoryNode.attributes && categoryNode.attributes.name) {
         var catName = categoryNode.attributes.name.value;
       } else {
         var catName = 'no-category';
@@ -108,9 +118,20 @@ blocklyApp.ToolboxView = ng.core
         return this.toolboxWorkspaces[catName];
       } else {
         var categoryWorkspace = new Blockly.Workspace();
-        Blockly.Xml.domToWorkspace(categoryWorkspace, categoryNode);
+        if (catName == 'no-category'){
+          for (var i=0; i < categoryNode.length; i++){
+            Blockly.Xml.domToBlock(categoryWorkspace, categoryNode[i]);
+          }
+        } else {
+          Blockly.Xml.domToWorkspace(categoryWorkspace, categoryNode);
+        }
         this.toolboxWorkspaces[catName] = categoryWorkspace;
         return this.toolboxWorkspaces[catName];
+      }
+    },
+    storeTree: function(_tree) {
+      if (!this.tree){
+        this.tree = _tree;
       }
     }
   });

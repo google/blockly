@@ -8,7 +8,8 @@
 			"SeoJeongHo",
 			"Alex00728",
 			"Kurousagi",
-			"Lemondoge"
+			"Lemondoge",
+			"Ykhwong"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "항목",
@@ -30,6 +31,7 @@
 	"ENABLE_BLOCK": "블록 활성화",
 	"HELP": "도움말",
 	"UNDO": "끄르다",
+	"REDO": "다시 시도",
 	"CHAT": "이 상자에 입력하여 당신의 동료와 채팅하세요!",
 	"AUTH": "당신의 작업을 저장하고 다른 사람과 공유할 수 있도록 이 애플리케이션을 인증해 주십시오.",
 	"ME": "나",
@@ -327,6 +329,14 @@
 	"LISTS_GET_SUBLIST_END_LAST": "마지막으로",
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "특정 부분을 복사해 새로운 리스트로 생성합니다.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TITLE": "정렬 %1 %2 %3",
+	"LISTS_SORT_TOOLTIP": "목록의 사본을 정렬합니다.",
+	"LISTS_SORT_ORDER_ASCENDING": "오름차순",
+	"LISTS_SORT_ORDER_DESCENDING": "내림차순",
+	"LISTS_SORT_TYPE_NUMERIC": "숫자순",
+	"LISTS_SORT_TYPE_TEXT": "알파벳순",
+	"LISTS_SORT_TYPE_IGNORECASE": "알파벳순 (대소문자 구분 안 함)",
 	"LISTS_SPLIT_HELPURL": "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "텍스트에서 목록 만들기",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "목록에서 텍스트 만들기",

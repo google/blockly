@@ -273,6 +273,8 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "па № з канца",
 	"LISTS_GET_SUBLIST_END_LAST": "да апошняга",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Стварае копію пазначанай часткі сьпісу.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TITLE": "сартаваць %1 %2 %3",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "стварыць сьпіс з тэксту",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "стварыць тэкст са сьпісу",
 	"LISTS_SPLIT_WITH_DELIMITER": "з падзяляльнікам",

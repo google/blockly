@@ -123,12 +123,14 @@ Blockly.JavaScript.init = function(workspace) {
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  for (var i = 0; i < variables.length; i++) {
-    defvars[i] = 'var ' +
-        Blockly.JavaScript.variableDB_.getName(variables[i],
-        Blockly.Variables.NAME_TYPE) + ';';
+  if (variables.length) {
+    for (var i = 0; i < variables.length; i++) {
+      defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i],
+          Blockly.Variables.NAME_TYPE);
+    }
+    Blockly.JavaScript.definitions_['variables'] =
+        'var ' + defvars.join(', ') + ';';
   }
-  Blockly.JavaScript.definitions_['variables'] = defvars.join('\n');
 };
 
 /**

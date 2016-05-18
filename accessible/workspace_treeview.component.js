@@ -86,15 +86,17 @@ blocklyApp.TreeView = ng.core
           <div *ngFor="#inputBlock of block.inputList; #i = index">
             <field-view *ngFor="#field of getInfo(inputBlock)" [field]="field"></field-view>
             <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
-            <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]" *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
-              {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
+            <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]" 
+                [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])" 
+                *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
+              <label [id]="idMap['inputMenuLabel' + i]"> {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed: </label>
               <ol role="group"  [attr.aria-level]="level+2">
-                <li [id]="idMap['markListItem' + i]" role="treeitem" 
+                <li [id]="idMap['markSpot' + i]" role="treeitem" 
                     [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markButton' + i], 'blockly-button')" 
                     [attr.aria-level]="level + 2" aria-selected=false>
-                  <button [id]="idMap['markButton + i']" (click)="clipboardService.cut(block)">mark this spot</button>
+                  <button [id]="idMap['markSpotButton + i']" (click)="clipboardService.cut(block)">mark this spot</button>
                 </li>
-                <li [id]="idMap['pasteListItem' + i]" role="treeitem" 
+                <li [id]="idMap['paste' + i]" role="treeitem" 
                     [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteButton' + i], 'blockly-button', clipboardCompatibilityHTMLText(inputBlock.connection))" 
                     [attr.aria-level]="level+2" aria-selected=false>
                   <button [id]="idMap['pasteButton' + i]" (click)="clipboardService.pasteFromClipboard(inputBlock.connection)" 
@@ -129,9 +131,9 @@ blocklyApp.TreeView = ng.core
           'deleteButton'];
       for (var i=0; i<this.block.inputList.length; i++){
         var inputBlock = this.block.inputList[i];
-        elementsNeedingIds.push('inputList'+i);
         if (inputBlock.connection && !inputBlock.connection.targetBlock()){
-          elementsNeedingIds.concat(['markSpot' + i, 'markSpotButton' + i, 'paste' + i, 'pasteButton' + i]);
+          elementsNeedingIds.concat(['inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
+             'markSpotButton' + i, 'paste' + i, 'pasteButton' + i]);
         }
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);

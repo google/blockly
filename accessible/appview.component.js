@@ -42,6 +42,7 @@ blocklyApp.AppView = ng.core
     </table>
     <label id="blockly-block-summary" aria-hidden="true" hidden>block summary</label>
     <label id="blockly-block-menu" aria-hidden="true" hidden>block action list</label>
+    <label id="blockly-menu" aria-hidden="true" hidden>option list</label>
     <label id="blockly-argument-menu" aria-hidden="true" hidden>argument options list</label>
     <label id="blockly-argument-input" aria-hidden="true" hidden>argument input</label>
     <label id="blockly-argument-block-menu" aria-hidden="true" hidden>argument block action list</label>

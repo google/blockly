@@ -78,12 +78,12 @@ blocklyApp.ToolboxView = ng.core
         this.idMap['Parent0'] = 'blockly-toolbox-tree-node0';
       }
     },
-    labelCategory: function(h2, i, tree) {
-      var parent = h2.parentNode;
+    labelCategory: function(label, i, tree) {
+      var parent = label.parentNode;
       while (parent && parent.tagName != 'LI') {
         parent = parent.parentNode;
       }
-      parent.setAttribute('aria-label', h2.innerText);
+      parent.setAttribute('aria-label', label.innerText);
       parent.id = 'blockly-toolbox-tree-node' + i;
       if (i == 0 && tree.getAttribute('aria-activedescendant') ==
         'blockly-toolbox-tree-node0') {

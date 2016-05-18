@@ -202,6 +202,8 @@ blocklyApp.TreeService = ng.core
           } else {
             blocklyApp.debug && console.log('no activeDesc');
           }
+        default:
+          break;
       }
       this.previousKey_ = e.keyCode;
     },

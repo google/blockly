@@ -61,10 +61,17 @@ blocklyApp.WorkspaceView = ng.core
       return 'blockly-workspace-tree' + index;
     },
     runCode: function() {
-      //TODO(madeeha): this function needs to be here so
-      //that I can test the demo with the aBlockly library
-      //it should be removed before final check in.
-      playAndGrade();
+      // Generate JavaScript code and run it.
+      window.LoopTrap = 1000;
+      Blockly.JavaScript.INFINITE_LOOP_TRAP =
+          'if (--window.LoopTrap == 0) throw \'Infinite loop.\';\n';
+      var code = Blockly.JavaScript.workspaceToCode(blocklyApp.workspace);
+      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
     },
     disableRunCode: function() {
       if (blocklyApp.workspace.topBlocks_.length == 0){

@@ -30,10 +30,7 @@ blocklyApp.ClipboardService = ng.core
       this.markedConnection_ = null;
     },
     cut: function(block) {
-      this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
-      this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
-          block.previousConnection;
-      this.clipboardBlockNextConnection_ = block.nextConnection;
+      this.copy(block);
       block.dispose(true);
       blocklyApp.debug && console.log('cut');
     },

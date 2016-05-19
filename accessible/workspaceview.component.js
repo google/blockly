@@ -45,7 +45,7 @@ blocklyApp.WorkspaceView = ng.core
         </ol>
       </div>
     `,
-    directives: [blocklyApp.TreeView],
+    directives: [blocklyApp.WorkspaceTreeView],
   })
   .Class({
     constructor: [blocklyApp.TreeService, function(_treeService) {

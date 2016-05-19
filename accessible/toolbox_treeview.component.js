@@ -48,7 +48,7 @@ blocklyApp.ToolboxTreeView = ng.core
                   [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button #blockCopyButton [id]="idMap['blockCopyButton']" 
-                    (click)="clipboardService.copy(block)">copy to clipboard</button>
+                    (click)="clipboardService.copy(block, true)">copy to clipboard</button>
               </li>
               <li #sendToSelected [id]="idMap['sendToSelected']" role="treeitem" 
                   [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" 
@@ -155,18 +155,16 @@ blocklyApp.ToolboxTreeView = ng.core
     copyToWorkspace: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      alert('Block added to workspace');
+      alert('Added block to workspace: ' + block.toString());
     },
     copyToClipboard: function(block) {
       if (this.clipboardService) {
-        this.clipboardService.copy(block);
-        alert('Block copied to clipboard');
+        this.clipboardService.copy(block, true);
       }
     },
     copyToMarked: function(block) {
       if (this.clipboardService) {
         this.clipboardService.pasteToMarkedConnection(block);
-        alert('Block sent to marked spot');
       }
     }
   });

@@ -23,7 +23,7 @@
  * interactions with the blocks.
  * @author madeeha@google.com (Madeeha Ghori)
  */
-blocklyApp.TreeView = ng.core
+blocklyApp.WorkspaceTreeView = ng.core
   .Component({
     selector: 'tree-view',
     template: `
@@ -46,7 +46,7 @@ blocklyApp.TreeView = ng.core
               <li [id]="idMap['copyListItem']" role="treeitem" 
                   [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['copyButton'], 'blockly-button')" 
                   [attr.aria-level]="level+2" aria-selected=false>
-                <button [id]="idMap['copyButton']" (click)="clipboardService.copy(block)">copy block</button>
+                <button [id]="idMap['copyButton']" (click)="clipboardService.copy(block, true)">copy block</button>
               </li>
               <li [id]="idMap['pasteBelow']" role="treeitem" 
                   [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteBelowButton'], 'blockly-button', (noNextConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.nextConnection)))"  
@@ -110,7 +110,7 @@ blocklyApp.TreeView = ng.core
       <tree-view *ngIf= "block.nextConnection && block.nextConnection.targetBlock()" [block]="block.nextConnection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
     `,
     directives: [ng.core.forwardRef(
-        function() { return blocklyApp.TreeView; }), blocklyApp.FieldView],
+        function() { return blocklyApp.WorkspaceTreeView; }), blocklyApp.FieldView],
     inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId'],
   })
   .Class({

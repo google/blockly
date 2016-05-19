@@ -30,18 +30,22 @@ blocklyApp.ClipboardService = ng.core
       this.markedConnection_ = null;
     },
     cut: function(block) {
-      this.copy(block);
+      this.copy(block, false);
       block.dispose(true);
       blocklyApp.debug && console.log('cut');
+      alert('Cut block: ' + block.toString());
     },
-    copy: function(block) {
+    copy: function(block, announce) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
       this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
           block.previousConnection;
       this.clipboardBlockNextConnection_ = block.nextConnection;
       blocklyApp.debug && console.log('copy');
+      if (announce) {
+        alert('Copied block to clipboard: ' + block.toString());
+      }
     },
-    pasteFromClipboard: function(connection) {
+    pasteFromClipboard: function(connection, announce) {
       var reconstitutedBlock = Blockly.Xml.domToBlock(blocklyApp.workspace,
           this.clipboardBlockXml_);
       switch (connection.type) {
@@ -55,8 +59,9 @@ blocklyApp.ClipboardService = ng.core
           connection.connect(reconstitutedBlock.outputConnection);
       }
       blocklyApp.debug && console.log('paste');
+      alert('Pasted block from clipboard: ' + block.toString());
     },
-    pasteToMarkedConnection: function(block) {
+    pasteToMarkedConnection: function(block, announce) {
       var xml = Blockly.Xml.blockToDom(block);
       var reconstitutedBlock =
           Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
@@ -64,10 +69,12 @@ blocklyApp.ClipboardService = ng.core
           reconstitutedBlock.outputConnection ||
           reconstitutedBlock.previousConnection);
       blocklyApp.debug && console.log('paste to marked connection');
+      alert('Pasted block to marked spot: ' + block.toString());
     },
-    markConnection: function(connection) {
+    markConnection: function(connection, announce) {
       this.markedConnection_ = connection;
       blocklyApp.debug && console.log('mark connection');
+      alert('Marked spot');
     },
     isCompatibleWithConnection_: function(blockConnection, connection) {
       // Checking that the connection and blockConnection exist.

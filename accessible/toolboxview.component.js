@@ -123,7 +123,7 @@ blocklyApp.ToolboxView = ng.core
             Blockly.Xml.domToBlock(categoryWorkspace, categoryNode[i]);
           }
         } else {
-          Blockly.Xml.domToWorkspace(categoryWorkspace, categoryNode);
+          Blockly.Xml.domToWorkspace(categoryNode, categoryWorkspace);
         }
         this.toolboxWorkspaces[catName] = categoryWorkspace;
         return this.toolboxWorkspaces[catName];

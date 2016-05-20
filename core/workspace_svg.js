@@ -830,7 +830,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     var block = deleteList.shift();
     if (block) {
       if (block.workspace) {
-        block.dispose(false, true);
+        block.dispose(false, false);
         setTimeout(deleteNext, DELAY);
       } else {
         deleteNext();

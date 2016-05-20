@@ -66,7 +66,7 @@ blocklyApp.ToolboxTreeView = ng.core
                 *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" 
                 [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])" 
                 [attr.aria-level]="level+1" aria-selected=false>
-              <!-- i18n here will need to happen in a different way due to the way grammar changes based on language. Leaving that as a TODO(sll@) -->
+              <!--TODO(madeeha): i18n here will need to happen in a different way due to the way grammar changes based on language.-->
               <label #label [id]="idMap['listItem' + i + 'Label']">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:</label>
             </li>
           </div>

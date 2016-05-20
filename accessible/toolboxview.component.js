@@ -38,7 +38,7 @@ blocklyApp.ToolboxView = ng.core
                 blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}" 
             *ngIf="toolboxHasCategories" *ngFor="#category of makeArray(sightedToolbox); #i=index" 
             aria-level="1" aria-selected=false>
-          <!-- TODO(sll@): This div is required. There seems to be some bug in Angular that makes it 
+          <!-- TODO(madeeha): This div is required. There seems to be some bug in Angular that makes it 
           access index=undefined. Talk to fraser@.-->
           <div *ngIf="category && category.attributes">
             <label [id]="idMap['Label' + i]" #name>{{category.attributes.name.value}}</label>

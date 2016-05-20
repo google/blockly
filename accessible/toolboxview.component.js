@@ -54,6 +54,7 @@ blocklyApp.ToolboxView = ng.core
       </ol>
     `,
     directives: [blocklyApp.ToolboxTreeView],
+    providers: [blocklyApp.TreeService, blocklyApp.UtilsService],
   })
   .Class({
     constructor: [blocklyApp.TreeService, blocklyApp.UtilsService, function(_treeService, _utilsService) {

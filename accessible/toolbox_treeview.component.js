@@ -60,12 +60,13 @@ blocklyApp.ToolboxTreeView = ng.core
             </ol>
           </li>
           <div *ngFor="#inputBlock of block.inputList; #i=index">
-            <field-view *ngFor="#field of getInfo(inputBlock); #j=index" [attr.aria-level]="level+1" [field]="field" [level]="level+1"></field-view>
+            <field-view *ngFor="#field of inputBlock.fieldRow; #j=index" [attr.aria-level]="level+1" [field]="field" [level]="level+1"></field-view>
             <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [displayBlockMenu]="false" [level]="level+1"></toolbox-tree-view>
             <li #listItem1 [id]="idMap['listItem' + i]" role="treeitem" 
                 *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" 
                 [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])" 
                 [attr.aria-level]="level+1" aria-selected=false>
+              <!-- i18n here will need to happen in a different way due to the way grammar changes based on language. Leaving that as a TODO(sll@) -->
               <label #label [id]="idMap['listItem' + i + 'Label']">{{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:</label>
             </li>
           </div>
@@ -77,6 +78,7 @@ blocklyApp.ToolboxTreeView = ng.core
         function() { return blocklyApp.ToolboxTreeView; }),
         blocklyApp.FieldView],
     inputs: ['block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories'],
+    providers: [blocklyApp.TreeService, blocklyApp.UtilsService, blocklyApp.ClipboardService],
   })
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
@@ -141,22 +143,6 @@ blocklyApp.ToolboxTreeView = ng.core
           node.className = classText;
         }
       }
-    },
-    getInfo: function(block) {
-      // Get the list of all inputs.
-      if (this.infoBlocks[block.id]) {
-        this.infoBlocks[block.id].length = 0;
-      } else {
-        this.infoBlocks[block.id] = [];
-      }
-
-      var blockInfoList = this.infoBlocks[block.id];
-
-      for (var i = 0, field; field = block.fieldRow[i]; i++) {
-        blockInfoList.push(field);
-      }
-
-      return this.infoBlocks[block.id];
     },
     copyToWorkspace: function(block) {
       var xml = Blockly.Xml.blockToDom(block);

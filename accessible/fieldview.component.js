@@ -61,6 +61,7 @@ blocklyApp.FieldView = ng.core
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
+    providers: [blocklyApp.TreeService, blocklyApp.UtilsService],
   })
   .Class({
     constructor: [blocklyApp.TreeService, blocklyApp.UtilsService, 

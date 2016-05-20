@@ -46,6 +46,7 @@ blocklyApp.WorkspaceView = ng.core
       </div>
     `,
     directives: [blocklyApp.WorkspaceTreeView],
+    providers: [blocklyApp.TreeService],
   })
   .Class({
     constructor: [blocklyApp.TreeService, function(_treeService) {

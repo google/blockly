@@ -79,6 +79,8 @@ blocklyApp.TreeService = ng.core
             this.goToNextTree(treeId, e);
           }
           break;
+        default:
+          break;
       }
       this.previousKey_ = e.keyCode;
     },

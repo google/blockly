@@ -84,7 +84,7 @@ blocklyApp.WorkspaceTreeView = ng.core
             </ol>
           </li>
           <div *ngFor="#inputBlock of block.inputList; #i = index">
-            <field-view *ngFor="#field of getInfo(inputBlock)" [field]="field"></field-view>
+            <field-view *ngFor="#field of inputBlock.fieldRow" [field]="field"></field-view>
             <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
             <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]" 
                 [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])" 
@@ -112,6 +112,7 @@ blocklyApp.WorkspaceTreeView = ng.core
     directives: [ng.core.forwardRef(
         function() { return blocklyApp.WorkspaceTreeView; }), blocklyApp.FieldView],
     inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId'],
+    providers: [blocklyApp.TreeService, blocklyApp.UtilsService, blocklyApp.ClipboardService],
   })
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
@@ -189,22 +190,6 @@ blocklyApp.WorkspaceTreeView = ng.core
         return this.parentId + '-node0';
       }
       return this.treeService.createId(block);
-    },
-    getInfo: function(block) {
-      // List all inputs.
-      if (this.infoBlocks[block.id]) {
-        this.infoBlocks[block.id].length = 0;
-      } else {
-        this.infoBlocks[block.id] = [];
-      }
-
-      var blockInfoList = this.infoBlocks[block.id];
-
-      for (var i = 0, field; field = block.fieldRow[i]; i++) {
-        blockInfoList.push(field);
-      }
-
-      return this.infoBlocks[block.id];
     },
     sendToSelected: function(block) {
       if (this.clipboardService) {

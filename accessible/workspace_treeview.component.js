@@ -89,6 +89,7 @@ blocklyApp.WorkspaceTreeView = ng.core
             <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]" 
                 [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])" 
                 *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
+              <!-- i18n here will need to happen in a different way due to the way grammar changes based on language. Leaving that as a TODO(sll@) -->
               <label [id]="idMap['inputMenuLabel' + i]"> {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed: </label>
               <ol role="group"  [attr.aria-level]="level+2">
                 <li [id]="idMap['markSpot' + i]" role="treeitem" 

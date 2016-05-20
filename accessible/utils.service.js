@@ -53,14 +53,14 @@ blocklyApp.UtilsService = ng.core
       if (connection.check_) {
         return connection.check_.join(', ').toUpperCase();
       } else {
-        return 'any';
+        return Blockly.Msg.ANY;
       }
     },
     getBlockTypeLabel: function(inputBlock) {
       if (inputBlock.type == Blockly.NEXT_STATEMENT) {
-        return 'statement';
+        return Blockly.Msg.STATEMENT;
       } else {
-        return 'value';
+        return Blockly.Msg.VALUE;
       }
     },
     getMarkedBlockCompatibilityHTMLText: function(isCompatible) {

@@ -30,10 +30,11 @@ blocklyApp.ClipboardService = ng.core
       this.markedConnection_ = null;
     },
     cut: function(block) {
+      var blockSummary = block.toString();
       this.copy(block, false);
       block.dispose(true);
       blocklyApp.debug && console.log('cut');
-      alert('Cut block: ' + block.toString());
+      alert(Blockly.Msg.CUT_BLOCK_MSG + blockSummary);
     },
     copy: function(block, announce) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
@@ -42,10 +43,10 @@ blocklyApp.ClipboardService = ng.core
       this.clipboardBlockNextConnection_ = block.nextConnection;
       blocklyApp.debug && console.log('copy');
       if (announce) {
-        alert('Copied block to clipboard: ' + block.toString());
+        alert(Block.Msg.COPIED_BLOCK_MSG + block.toString());
       }
     },
-    pasteFromClipboard: function(connection, announce) {
+    pasteFromClipboard: function(connection) {
       var reconstitutedBlock = Blockly.Xml.domToBlock(blocklyApp.workspace,
           this.clipboardBlockXml_);
       switch (connection.type) {
@@ -59,7 +60,7 @@ blocklyApp.ClipboardService = ng.core
           connection.connect(reconstitutedBlock.outputConnection);
       }
       blocklyApp.debug && console.log('paste');
-      alert('Pasted block from clipboard: ' + block.toString());
+      alert(Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG + block.toString());
     },
     pasteToMarkedConnection: function(block, announce) {
       var xml = Blockly.Xml.blockToDom(block);
@@ -69,12 +70,14 @@ blocklyApp.ClipboardService = ng.core
           reconstitutedBlock.outputConnection ||
           reconstitutedBlock.previousConnection);
       blocklyApp.debug && console.log('paste to marked connection');
-      alert('Pasted block to marked spot: ' + block.toString());
+      if (announce){
+        alert(Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG + block.toString());        
+      }
     },
-    markConnection: function(connection, announce) {
+    markConnection: function(connection) {
       this.markedConnection_ = connection;
       blocklyApp.debug && console.log('mark connection');
-      alert('Marked spot');
+      alert(Blockly.Msg.MARKED_SPOT_MSG);
     },
     isCompatibleWithConnection_: function(blockConnection, connection) {
       // Checking that the connection and blockConnection exist.

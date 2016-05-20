@@ -36,26 +36,26 @@ blocklyApp.ToolboxTreeView = ng.core
         <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']" style="color:red">{{block.toString()}}</label>
         <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0"  [attr.aria-level]="level+1">
           <li #listItem [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummaryLabel'])" class="blocklyHasChildren" [id]="idMap['listItem']" *ngIf="displayBlockMenu" role="treeitem" aria-selected=false [attr.aria-level]="level+1">
-            <label #label [id]="idMap['label']">block action list </label>
+            <label #label [id]="idMap['label']">{{stringMap['BLOCK_ACTION_LIST']}}</label>
             <ol role="group" *ngIf="displayBlockMenu"  [attr.aria-level]="level+2">
               <li #workspaceCopy [id]="idMap['workspaceCopy']" role="treeitem" 
                   [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button #workspaceCopyButton [id]="idMap['workspaceCopyButton']" 
-                    (click)="copyToWorkspace(block)">copy to workspace</button>
+                    (click)="copyToWorkspace(block)">{{stringMap['COPY_TO_WORKSPACE']}}</button>
               </li>
               <li #blockCopy [id]="idMap['blockCopy']" role="treeitem" 
                   [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button #blockCopyButton [id]="idMap['blockCopyButton']" 
-                    (click)="clipboardService.copy(block, true)">copy to clipboard</button>
+                    (click)="clipboardService.copy(block, true)">{{stringMap['COPY_TO_CLIPBOARD']}}</button>
               </li>
               <li #sendToSelected [id]="idMap['sendToSelected']" role="treeitem" 
                   [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button #sendToSelectedButton [id]="idMap['sendToSelectedButton']" (click)="copyToMarked(block)" 
                     [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">
-                    copy to marked spot</button>
+                    {{stringMap['COPY_TO_MARKED_SPOT']}}</button>
               </li>
             </ol>
           </li>
@@ -86,15 +86,21 @@ blocklyApp.ToolboxTreeView = ng.core
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
+      this.stringMap = {
+        'BLOCK_ACTION_LIST': Blockly.Msg.BLOCK_ACTION_LIST,
+        'COPY_TO_CLIPBOARD': Blockly.Msg.COPY_TO_CLIPBOARD,
+        'COPY_TO_WORKSPACE': Blockly.Msg.COPY_TO_WORKSPACE,
+        'COPY_TO_MARKED_SPOT': Blockly.Msg.COPY_TO_MARKED_SPOT,
+      };
     }],
-    ngOnInit: function(){
+    ngOnInit: function() {
       var elementsNeedingIds = ['blockSummaryLabel'];
       if (this.displayBlockMenu && this.block.inputList.length){
         elementsNeedingIds.concat(['listItem', 'label', 'workspaceCopy', 
             'workspaceCopyButton', 'blockCopy', 'blockCopyButton',
             'sendToSelected', 'sendToSelectedButton']);
       }
-      for (var i=0; i<this.block.inputList.length; i++){
+      for (var i = 0; i < this.block.inputList.length; i++){
         elementsNeedingIds.push('listItem' + i);
         elementsNeedingIds.push('listItem' + i + 'Label')
       }
@@ -105,7 +111,7 @@ blocklyApp.ToolboxTreeView = ng.core
         this.idMap['parentList'] = this.utilsService.generateUniqueId();
       }
     },
-    setActiveDesc: function(parentList){
+    setActiveDesc: function(parentList) {
       // If this is the first child of the toolbox and the
       // current active descendant of the tree is this child,
       // then set the active descendant stored in the treeService.

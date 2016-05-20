@@ -33,22 +33,22 @@ blocklyApp.AppView = ng.core
     <table>
       <tr>
         <td class="blocklyTable">
-          <toolbox-view>Loading Toolbox...</toolbox-view>
+          <toolbox-view>Blockly.Msg.TOOLBOX_LOAD_MSG</toolbox-view>
         </td>
         <td class="blocklyTable">
-          <workspace-view>Loading Workspace...</workspace-view>
+          <workspace-view>Blockly.Msg.WORKSPACE_LOAD_MSG</workspace-view>
         </td>
       </tr>
     </table>
-    <label id="blockly-block-summary" aria-hidden="true" hidden>block summary</label>
-    <label id="blockly-block-menu" aria-hidden="true" hidden>block action list</label>
-    <label id="blockly-menu" aria-hidden="true" hidden>option list</label>
-    <label id="blockly-argument-menu" aria-hidden="true" hidden>argument options list</label>
-    <label id="blockly-argument-input" aria-hidden="true" hidden>argument input</label>
-    <label id="blockly-argument-block-menu" aria-hidden="true" hidden>argument block action list</label>
-    <label id="blockly-argument-text" aria-hidden="true" hidden>text</label>
-    <label id="blockly-button" aria-hidden="true" hidden>button</label>
-    <label id="blockly-disabled" aria-hidden="true" hidden>unavailable</label>
+    <label id="blockly-block-summary" aria-hidden="true" hidden>Blockly.Msg.BLOCK_SUMMARY</label>
+    <label id="blockly-block-menu" aria-hidden="true" hidden>Blockly.Msg.BLOCK_ACTION_LIST</label>
+    <label id="blockly-menu" aria-hidden="true" hidden>Blockly.Msg.OPTION_LIST</label>
+    <label id="blockly-argument-menu" aria-hidden="true" hidden>Blockly.Msg.ARGUMENT_OPTIONS_LIST</label>
+    <label id="blockly-argument-input" aria-hidden="true" hidden>Blockly.Msg.ARGUMENT_INPUT</label>
+    <label id="blockly-argument-block-menu" aria-hidden="true" hidden>Blockly.Msg.ARGUMENT_BLOCK_ACTION_LIST</label>
+    <label id="blockly-argument-text" aria-hidden="true" hidden>Blockly.Msg.TEXT</label>
+    <label id="blockly-button" aria-hidden="true" hidden>Blockly.Msg.BUTTON</label>
+    <label id="blockly-disabled" aria-hidden="true" hidden>Blockly.Msg.UNAVAILABLE</label>
     `,
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
     providers: [blocklyApp.ClipboardService, blocklyApp.TreeService, blocklyApp.UtilsService],

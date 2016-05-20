@@ -28,13 +28,13 @@ blocklyApp.WorkspaceView = ng.core
     viewInjector: [blocklyApp.ClipboardService],
     template: `
       <label>
-        <h3 #workspaceTitle id="blockly-workspace-title">Workspace</h3>
+        <h3 #workspaceTitle id="blockly-workspace-title">{{stringMap['WORKSPACE']}}</h3>
       </label>
       <div id="blockly-workspace-toolbar" (keydown)="treeService.onWorkspaceToolbarKeypress($event, getActiveElementId())">
         <button id='run-code' (click)='runCode()' disabled={{disableRunCode()}} 
-            [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>Run Code</button>
+            [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>{{stringMap['RUN_CODE']}}</button>
         <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableRunCode()}} 
-            [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>Clear Workspace</button>
+            [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>{{stringMap['CLEAR_WORKSPACE']}}</button>
       </div>
       <div *ngIf="workspace">
         <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index" 
@@ -53,7 +53,15 @@ blocklyApp.WorkspaceView = ng.core
         this.workspace = blocklyApp.workspace;
         this.treeService = _treeService;
       }
+      this.stringMap = {
+        'WORKSPACE': Blockly.Msg.WORKSPACE,
+        'RUN_CODE': Blockly.Msg.RUN_CODE,
+        'CLEAR_WORKSPACE': Blockly.Msg.CLEAR_WORKSPACE,
+      };
     }],
+    getString: function(blockly_msg) {
+      return blockly_msg;
+    },
     getActiveElementId: function() {
       return document.activeElement.id;
     },

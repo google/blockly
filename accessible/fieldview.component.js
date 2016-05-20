@@ -35,7 +35,7 @@ blocklyApp.FieldView = ng.core
     <li [id]="idMap['listItem']" *ngIf="isDropdown(field)"
         [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" 
         [attr.aria-level]="level" aria-selected=false role="treeitem">
-      <label [id]="idMap['label']">current argument value: {{field.getText()}}</label>
+      <label [id]="idMap['label']">{{stringMap['CURRENT_ARGUMENT_VALUE']}} {{field.getText()}}</label>
       <ol role="group" [attr.aria-level]="level+1">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions(field)" 
             [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" 
@@ -71,23 +71,26 @@ blocklyApp.FieldView = ng.core
       this.text = '';
       this.treeService = _treeService;
       this.utilsService = _utilsService;
+      this.stringMap = {
+        'CURRENT_ARGUMENT_VALUE': Blockly.Msg.CURRENT_ARGUMENT_VALUE,
+      };
     }],
-    ngOnInit: function(){
+    ngOnInit: function() {
       var elementsNeedingIds = this.generateElementNames(this.field);
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
     },
-    generateElementNames: function(field){
+    generateElementNames: function(field) {
       var elementNames = ['listItem'];
-      switch(true){
+      switch(true) {
         case this.isTextInput(field):
           elementNames.push('input');
           break;
         case this.isDropdown(field):
           elementNames.push('label');
           var keys = this.getOptions(field);
-          for (var i=0; i<keys.length; i++){
+          for (var i = 0; i < keys.length; i++){
             elementNames.push(keys[i]);
-            elementNames.push(keys[i]+'Button');
+            elementNames.push(keys[i] + 'Button');
           }
           break;
         case this.isTextField(field) && this.hasVisibleText(field):
@@ -117,7 +120,7 @@ blocklyApp.FieldView = ng.core
       return !!text;
     },
     getOptions: function(field) {
-      if (this.optionText.keys.length){
+      if (this.optionText.keys.length) {
         return this.optionText.keys;
       }
       var options = field.getOptions_();

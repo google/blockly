@@ -23,5 +23,5 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    ng.platform.browser.bootstrap(blocklyApp.AppView);
-  });
+  ng.platform.browser.bootstrap(blocklyApp.AppView);
+});

@@ -33,26 +33,39 @@ blocklyApp.AppView = ng.core
     <table>
       <tr>
         <td class="blocklyTable">
-          <toolbox-view>Blockly.Msg.TOOLBOX_LOAD_MSG</toolbox-view>
+          <toolbox-view>{{stringMap['TOOLBOX_LOAD']}}</toolbox-view>
         </td>
         <td class="blocklyTable">
-          <workspace-view>Blockly.Msg.WORKSPACE_LOAD_MSG</workspace-view>
+          <workspace-view>{{stringMap['WORKSPACE_LOAD']}}</workspace-view>
         </td>
       </tr>
     </table>
-    <label id="blockly-block-summary" aria-hidden="true" hidden>Blockly.Msg.BLOCK_SUMMARY</label>
-    <label id="blockly-block-menu" aria-hidden="true" hidden>Blockly.Msg.BLOCK_ACTION_LIST</label>
-    <label id="blockly-menu" aria-hidden="true" hidden>Blockly.Msg.OPTION_LIST</label>
-    <label id="blockly-argument-menu" aria-hidden="true" hidden>Blockly.Msg.ARGUMENT_OPTIONS_LIST</label>
-    <label id="blockly-argument-input" aria-hidden="true" hidden>Blockly.Msg.ARGUMENT_INPUT</label>
-    <label id="blockly-argument-block-menu" aria-hidden="true" hidden>Blockly.Msg.ARGUMENT_BLOCK_ACTION_LIST</label>
-    <label id="blockly-argument-text" aria-hidden="true" hidden>Blockly.Msg.TEXT</label>
-    <label id="blockly-button" aria-hidden="true" hidden>Blockly.Msg.BUTTON</label>
-    <label id="blockly-disabled" aria-hidden="true" hidden>Blockly.Msg.UNAVAILABLE</label>
+    <label id="blockly-block-summary" aria-hidden="true" hidden>{{stringMap['BLOCK_SUMMARY']}}</label>
+    <label id="blockly-block-menu" aria-hidden="true" hidden>{{stringMap['BLOCK_ACTION_LIST']}}</label>
+    <label id="blockly-menu" aria-hidden="true" hidden>{{stringMap['OPTION_LIST']}}</label>
+    <label id="blockly-argument-menu" aria-hidden="true" hidden>{{stringMap['ARGUMENT_OPTIONS_LIST']}}</label>
+    <label id="blockly-argument-input" aria-hidden="true" hidden>{{stringMap['ARGUMENT_INPUT']}}</label>
+    <label id="blockly-argument-block-menu" aria-hidden="true" hidden>{{stringMap['ARGUMENT_BLOCK_ACTION_LIST']}}</label>
+    <label id="blockly-argument-text" aria-hidden="true" hidden>{{stringMap['TEXT']}}</label>
+    <label id="blockly-button" aria-hidden="true" hidden>{{stringMap['BUTTON']}}</label>
+    <label id="blockly-disabled" aria-hidden="true" hidden>{{stringMap['UNAVAILABLE']}}</label>
     `,
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
   })
   .Class({
     constructor: function() {
+      this.stringMap = {
+        ['TOOLBOX_LOAD']: Blockly.Msg.TOOLBOX_LOAD_MSG,
+        ['WORKSPACE_LOAD']: Blockly.Msg.WORKSPACE_LOAD_MSG, 
+        ['BLOCK_SUMMARY']: Blockly.Msg.BLOCK_SUMMARY,
+        ['BLOCK_ACTION_LIST']: Blockly.Msg.BLOCK_ACTION_LIST,
+        ['OPTION_LIST']: Blockly.Msg.OPTION_LIST,
+        ['ARGUMENT_OPTIONS_LIST']: Blockly.Msg.ARGUMENT_OPTIONS_LIST,
+        ['UNAVAILABLE']: Blockly.Msg.UNAVAILABLE,
+        ['BUTTON']: Blockly.Msg.BUTTON,
+        ['TEXT']: Blockly.Msg.TEXT,
+        ['ARGUMENT_BLOCK_ACTION_LIST']: Blockly.Msg.ARGUMENT_BLOCK_ACTION_LIST,
+        ['ARGUMENT_INPUT']: Blockly.Msg.ARGUMENT_INPUT,
+      };
     }
   });

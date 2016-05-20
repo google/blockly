@@ -25,5 +25,3 @@
 document.addEventListener('DOMContentLoaded', function() {
     ng.platform.browser.bootstrap(blocklyApp.AppView);
   });
-
-var option = document.getElementById('selected');

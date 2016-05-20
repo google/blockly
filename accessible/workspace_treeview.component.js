@@ -146,7 +146,7 @@ blocklyApp.WorkspaceTreeView = ng.core
           'deleteButton'];
       for (var i=0; i<this.block.inputList.length; i++){
         var inputBlock = this.block.inputList[i];
-        if (inputBlock.connection && !inputBlock.connection.targetBlock()){
+        if (inputBlock.connection && !inputBlock.connection.targetBlock()) {
           elementsNeedingIds.concat(['inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
              'markSpotButton' + i, 'paste' + i, 'pasteButton' + i]);
         }

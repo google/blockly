@@ -60,9 +60,6 @@ blocklyApp.WorkspaceView = ng.core
         'CLEAR_WORKSPACE': Blockly.Msg.CLEAR_WORKSPACE,
       };
     }],
-    getString: function(blockly_msg) {
-      return blockly_msg;
-    },
     getActiveElementId: function() {
       return document.activeElement.id;
     },

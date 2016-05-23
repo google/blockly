@@ -78,7 +78,7 @@ blocklyApp.ToolboxTreeView = ng.core
         function() { return blocklyApp.ToolboxTreeView; }),
         blocklyApp.FieldView],
     inputs: ['block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories'],
-    providers: [blocklyApp.TreeService, blocklyApp.UtilsService, blocklyApp.ClipboardService],
+    providers: [blocklyApp.TreeService, blocklyApp.UtilsService],
   })
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
@@ -97,8 +97,8 @@ blocklyApp.ToolboxTreeView = ng.core
     }],
     ngOnInit: function() {
       var elementsNeedingIds = ['blockSummaryLabel'];
-      if (this.displayBlockMenu && this.block.inputList.length){
-        elementsNeedingIds.concat(['listItem', 'label', 'workspaceCopy', 
+      if (this.displayBlockMenu || this.block.inputList.length){
+        elementsNeedingIds = elementsNeedingIds.concat(['listItem', 'label', 'workspaceCopy', 
             'workspaceCopyButton', 'blockCopy', 'blockCopyButton',
             'sendToSelected', 'sendToSelectedButton']);
       }

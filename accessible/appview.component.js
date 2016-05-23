@@ -51,6 +51,9 @@ blocklyApp.AppView = ng.core
     <label id="blockly-disabled" aria-hidden="true" hidden>{{stringMap['UNAVAILABLE']}}</label>
     `,
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
+    // ClipboardService declared here so that all components are using the same 
+    // instance of the clipboard.
+    providers: [blocklyApp.ClipboardService]
   })
   .Class({
     constructor: function() {

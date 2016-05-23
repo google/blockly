@@ -95,7 +95,7 @@ blocklyApp.WorkspaceTreeView = ng.core
                 <li [id]="idMap['markSpot' + i]" role="treeitem" 
                     [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['markButton' + i], 'blockly-button')" 
                     [attr.aria-level]="level + 2" aria-selected=false>
-                  <button [id]="idMap['markSpotButton + i']" (click)="clipboardService.cut(block)">{{stringMap['MARK_THIS_SPOT']}}</button>
+                  <button [id]="idMap['markSpotButton + i']" (click)="clipboardService.markConnection(inputBlock.connection)">{{stringMap['MARK_THIS_SPOT']}}</button>
                 </li>
                 <li [id]="idMap['paste' + i]" role="treeitem" 
                     [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['pasteButton' + i], 'blockly-button', clipboardService.getClipboardCompatibilityHTMLText(inputBlock.connection))" 
@@ -113,7 +113,7 @@ blocklyApp.WorkspaceTreeView = ng.core
     directives: [ng.core.forwardRef(
         function() { return blocklyApp.WorkspaceTreeView; }), blocklyApp.FieldView],
     inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId'],
-    providers: [blocklyApp.TreeService, blocklyApp.UtilsService, blocklyApp.ClipboardService],
+    providers: [blocklyApp.TreeService, blocklyApp.UtilsService],
   })
   .Class({
     constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
@@ -153,7 +153,7 @@ blocklyApp.WorkspaceTreeView = ng.core
       for (var i = 0; i < this.block.inputList.length; i++) {
         var inputBlock = this.block.inputList[i];
         if (inputBlock.connection && !inputBlock.connection.targetBlock()) {
-          elementsNeedingIds.concat(['inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
+          elementsNeedingIds = elementsNeedingIds.concat(['inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
              'markSpotButton' + i, 'paste' + i, 'pasteButton' + i]);
         }
       }

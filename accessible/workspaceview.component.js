@@ -73,17 +73,7 @@ blocklyApp.WorkspaceView = ng.core
       return 'blockly-workspace-tree' + index;
     },
     runCode: function() {
-      // Generate JavaScript code and run it.
-      window.LoopTrap = 1000;
-      Blockly.JavaScript.INFINITE_LOOP_TRAP =
-          'if (--window.LoopTrap == 0) throw \'Infinite loop.\';\n';
-      var code = Blockly.JavaScript.workspaceToCode(blocklyApp.workspace);
-      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-      try {
-        eval(code);
-      } catch (e) {
-        alert(e);
-      }
+      runCode();
     },
     disableRunCode: function() {
       if (blocklyApp.workspace.topBlocks_.length == 0){

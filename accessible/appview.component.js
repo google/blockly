@@ -53,6 +53,7 @@ blocklyApp.AppView = ng.core
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
     // ClipboardService declared here so that all components are using the same 
     // instance of the clipboard.
+    // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
     providers: [blocklyApp.ClipboardService]
   })
   .Class({

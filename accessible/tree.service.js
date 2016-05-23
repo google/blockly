@@ -79,10 +79,14 @@ blocklyApp.TreeService = ng.core
           if (e.shiftKey) {
             blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing mode.
-            this.goToPreviousTree(treeId, e);
+            this.goToPreviousTree(treeId);
+            e.preventDefault();
+            e.stopPropagation();
           } else {
             // If previous key isn't shift, we're tabbing.
-            this.goToNextTree(treeId, e);
+            this.goToNextTree(treeId);
+            e.preventDefault();
+            e.stopPropagation();
           }
           break;
         default:
@@ -98,8 +102,6 @@ blocklyApp.TreeService = ng.core
           break;
         }
       }
-      e.preventDefault();
-      e.stopPropagation();
     },
     goToPreviousTree: function(treeId, e) {
       if (treeId == this.trees[0].id) {
@@ -113,8 +115,6 @@ blocklyApp.TreeService = ng.core
           break;
         }
       }
-      e.preventDefault();
-      e.stopPropagation();
     },
     onKeypress: function(e, tree) {
       var treeId = tree.id;
@@ -130,11 +130,15 @@ blocklyApp.TreeService = ng.core
           if (e.shiftKey) {
             blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing.
-            this.goToPreviousTree(treeId, e);
+            this.goToPreviousTree(treeId);
+            e.preventDefault();
+            e.stopPropagation();
           } else {
             // If previous key isn't shift, we're tabbing
             // we want to go to the run code button.
-            this.goToNextTree(treeId, e);
+            this.goToNextTree(treeId);
+            e.preventDefault();
+            e.stopPropagation();
           }
           // Setting the previous key variable in each case because
           // we only want to save the previous navigation keystroke,

@@ -79,7 +79,7 @@ blocklyApp.WorkspaceTreeView = ng.core
                     [disabled]="getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">{{stringMap['MOVE_TO_MARKED_SPOT']}}</button>
               </li>
               <li [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['deleteButton'], 'blockly-button')"  [id]="idMap['delete']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
-                <button [id]="idMap['deleteButton']" (click)="block.dispose(true)">{{stringMap['DELETE']}}</button>
+                <button [id]="idMap['deleteButton']" (click)="deleteBlock(block)">{{stringMap['DELETE']}}</button>
               </li>
             </ol>
           </li>
@@ -137,6 +137,19 @@ blocklyApp.WorkspaceTreeView = ng.core
         'DELETE': Blockly.Msg.DELETE,
       };
     }],
+    deleteBlock: function(block) {
+      // If this is the top block, we should shift focus to the previous tree
+      var topBlocks = blocklyApp.workspace.topBlocks_;
+      for (var i=0; i < topBlocks.length; i++) {
+        if (topBlocks[i].id == block.id) {
+          this.treeService.goToPreviousTree(this.parentId);
+          break;
+        }
+      }
+      // If this is not the top block, we should change the active descendant of the tree.
+
+      block.dispose(true);
+    },
     getMarkedBlockCompatibilityHTMLText: function(isCompatible) {
       return this.utilsService.getMarkedBlockCompatibilityHTMLText(isCompatible);
     },

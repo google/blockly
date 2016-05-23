@@ -25,8 +25,8 @@ blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
       blocklyApp.debug && console.log('making a new tree service');
+      // Keeping track of the active descendants in each tree.
       this.activeDesc_ = Object.create(null);
-      this.previousKey_;
       this.trees = document.getElementsByClassName('blocklyTree');
     },
     createId: function(obj) {
@@ -59,8 +59,8 @@ blocklyApp.TreeService = ng.core
       node.setAttribute('aria-selected', 'true');
 
       // Make sure keyboard focus is on tree as a whole
-      // in case before the user was editing a block and keyboard
-      // focus got shifted.
+      // in case focus was previously on a button or input
+      // element.
       if (keepFocus) {
         tree.focus();
       }
@@ -82,7 +82,6 @@ blocklyApp.TreeService = ng.core
         default:
           break;
       }
-      this.previousKey_ = e.keyCode;
     },
     goToNextTree: function(treeId, e) {
       for (var i = 0; i < this.trees.length; i++) {
@@ -207,7 +206,6 @@ blocklyApp.TreeService = ng.core
         default:
           break;
       }
-      this.previousKey_ = e.keyCode;
     },
     getFirstChild: function(element) {
       if (!element) {

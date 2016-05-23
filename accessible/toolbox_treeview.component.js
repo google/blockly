@@ -107,7 +107,7 @@ blocklyApp.ToolboxTreeView = ng.core
         elementsNeedingIds.push('listItem' + i + 'Label')
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
-      if (this.index == 0 && this.noCategories){
+      if (this.index == 0 && this.noCategories) {
         this.idMap['parentList'] = 'blockly-toolbox-tree-node0';
       } else {
         this.idMap['parentList'] = this.utilsService.generateUniqueId();
@@ -124,17 +124,8 @@ blocklyApp.ToolboxTreeView = ng.core
       // current active descendant of the tree is this child,
       // then set the active descendant stored in the treeService.
       if (this.index == 0 && this.tree.getAttribute('aria-activedescendant') ==
-            'blockly-toolbox-tree-node0'){
+            'blockly-toolbox-tree-node0') {
         this.treeService.setActiveDesc(parentList, this.tree.id);
-      }
-    },
-    getCategoryId: function(index, parentList) {
-      // If this is the first block in a category-less toolbox,
-      // the id should be blockly-toolbox-tree-node0.
-      if (index === 0) {
-        return 'blockly-toolbox-tree-node0';
-      } else {
-        return this.treeService.createId(parentList);
       }
     },
     addClass: function(node, classText) {

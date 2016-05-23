@@ -30,9 +30,9 @@ blocklyApp.UtilsService = ng.core
     generateUniqueId: function() {
       return 'blockly-' + Blockly.genUid();
     },
-    generateIds: function(elementsList){
+    generateIds: function(elementsList) {
       var idMap = {};
-      for (var i=0; i<elementsList.length; i++){
+      for (var i = 0; i < elementsList.length; i++){
         idMap[elementsList[i]] = this.generateUniqueId();
       }
       return idMap;

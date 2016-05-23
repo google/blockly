@@ -27,17 +27,17 @@ blocklyApp.FieldView = ng.core
   .Component({
     selector: 'field-view',
     template: `
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput(field)" 
+    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()" 
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])" 
         [attr.aria-level]="level"  aria-selected=false>
       <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
     </li>
-    <li [id]="idMap['listItem']" *ngIf="isDropdown(field)"
+    <li [id]="idMap['listItem']" *ngIf="isDropdown()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" 
         [attr.aria-level]="level" aria-selected=false role="treeitem">
       <label [id]="idMap['label']">{{stringMap['CURRENT_ARGUMENT_VALUE']}} {{field.getText()}}</label>
       <ol role="group" [attr.aria-level]="level+1">
-        <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions(field)" 
+        <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()" 
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" 
             [attr.aria-level]="level+1" aria-selected=false>
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)">
@@ -47,13 +47,13 @@ blocklyApp.FieldView = ng.core
       </ol>
     </li>
     <li [id]="idMap['listItem']" role="treeitem" 
-        *ngIf="isCheckbox(field)" [attr.aria-level]="level" 
+        *ngIf="isCheckbox()" [attr.aria-level]="level" 
         aria-selected=false>
       // Checkboxes not currently supported.
     </li>
     <li [id]="idMap['listItem']" role="treeitem" 
         [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])" 
-        *ngIf="isTextField(field) && hasVisibleText(field)" 
+        *ngIf="isTextField() && hasVisibleText()" 
         [attr.aria-level]="level" aria-selected=false>
       <label [id]="idMap['label']">
         {{field.getText()}}
@@ -82,21 +82,21 @@ blocklyApp.FieldView = ng.core
     generateAriaLabelledByAttr: function() {
       return this.utilsService.generateAriaLabelledByAttr.apply(this,arguments);
     },
-    generateElementNames: function(field) {
+    generateElementNames: function() {
       var elementNames = ['listItem'];
       switch(true) {
-        case this.isTextInput(field):
+        case this.isTextInput():
           elementNames.push('input');
           break;
-        case this.isDropdown(field):
+        case this.isDropdown():
           elementNames.push('label');
-          var keys = this.getOptions(field);
+          var keys = this.getOptions();
           for (var i = 0; i < keys.length; i++){
             elementNames.push(keys[i]);
             elementNames.push(keys[i] + 'Button');
           }
           break;
-        case this.isTextField(field) && this.hasVisibleText(field):
+        case this.isTextField() && this.hasVisibleText():
           elementNames.push('label');
           break;
         default:
@@ -104,29 +104,29 @@ blocklyApp.FieldView = ng.core
       }
       return elementNames;
     },
-    isTextInput: function(field) {
-      return field instanceof Blockly.FieldTextInput;
+    isTextInput: function() {
+      return this.field instanceof Blockly.FieldTextInput;
     },
-    isDropdown: function(field) {
-      return field instanceof Blockly.FieldDropdown;
+    isDropdown: function() {
+      return this.field instanceof Blockly.FieldDropdown;
     },
-    isCheckbox: function(field) {
-      return field instanceof Blockly.FieldCheckbox;
+    isCheckbox: function() {
+      return this.field instanceof Blockly.FieldCheckbox;
     },
-    isTextField: function(field) {
-      return !(field instanceof Blockly.FieldTextInput) &&
-          !(field instanceof Blockly.FieldDropdown) &&
-          !(field instanceof Blockly.FieldCheckbox);
+    isTextField: function() {
+      return !(this.field instanceof Blockly.FieldTextInput) &&
+          !(this.field instanceof Blockly.FieldDropdown) &&
+          !(this.field instanceof Blockly.FieldCheckbox);
     },
-    hasVisibleText: function(field) {
-      var text = field.getText().trim();
+    hasVisibleText: function() {
+      var text = this.field.getText().trim();
       return !!text;
     },
-    getOptions: function(field) {
+    getOptions: function() {
       if (this.optionText.keys.length) {
         return this.optionText.keys;
       }
-      var options = field.getOptions_();
+      var options = this.field.getOptions_();
       for (var i = 0; i < options.length; i++) {
         var tuple = options[i];
         this.optionText[tuple[1]] = tuple[0];
@@ -138,11 +138,11 @@ blocklyApp.FieldView = ng.core
       if (text == 'NO_ACTION') {
         return;
       }
-      if (field instanceof Blockly.FieldVariable) {
-        blocklyApp.debug && console.log(field);
-        Blockly.FieldVariable.dropdownChange.call(field, text);
+      if (this.field instanceof Blockly.FieldVariable) {
+        blocklyApp.debug && console.log();
+        Blockly.FieldVariable.dropdownChange.call(this.field, text);
       } else {
-        field.setValue(text);
+        this.field.setValue(text);
       }
     }
   });

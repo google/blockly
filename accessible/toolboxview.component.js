@@ -32,7 +32,6 @@ blocklyApp.ToolboxView = ng.core
           tabIndex="0" [attr.aria-labelledby]="toolboxTitle.id" 
           [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' " 
           (keydown)="treeService.onKeypress($event, tree)">
-        {{storeTree(tree)}}
         <li #parent [id]="idMap['Parent' + i]" role="treeitem" 
             [ngClass]="{blocklyHasChildren: true,
                 blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}" 
@@ -111,28 +110,23 @@ blocklyApp.ToolboxView = ng.core
     },
     getToolboxWorkspace: function(categoryNode) {
       if (categoryNode.attributes && categoryNode.attributes.name) {
-        var catName = categoryNode.attributes.name.value;
+        var categoryName = categoryNode.attributes.name.value;
       } else {
-        var catName = 'no-category';
+        var categoryName = 'no-category';
       }
-      if (this.toolboxWorkspaces[catName]) {
-        return this.toolboxWorkspaces[catName];
+      if (this.toolboxWorkspaces[categoryName]) {
+        return this.toolboxWorkspaces[categoryName];
       } else {
         var categoryWorkspace = new Blockly.Workspace();
-        if (catName == 'no-category'){
-          for (var i=0; i < categoryNode.length; i++){
+        if (categoryName == 'no-category') {
+          for (var i = 0; i < categoryNode.length; i++) {
             Blockly.Xml.domToBlock(categoryWorkspace, categoryNode[i]);
           }
         } else {
           Blockly.Xml.domToWorkspace(categoryNode, categoryWorkspace);
         }
-        this.toolboxWorkspaces[catName] = categoryWorkspace;
-        return this.toolboxWorkspaces[catName];
-      }
-    },
-    storeTree: function(_tree) {
-      if (!this.tree){
-        this.tree = _tree;
+        this.toolboxWorkspaces[categoryName] = categoryWorkspace;
+        return this.toolboxWorkspaces[categoryName];
       }
     }
   });

@@ -70,7 +70,7 @@ blocklyApp.ClipboardService = ng.core
           reconstitutedBlock.outputConnection ||
           reconstitutedBlock.previousConnection);
       blocklyApp.debug && console.log('paste to marked connection');
-      if (announce){
+      if (announce) {
         alert(Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG + block.toString());        
       }
     },
@@ -100,15 +100,19 @@ blocklyApp.ClipboardService = ng.core
     },
     isBlockCompatibleWithMarkedConnection: function(block) {
       var blockConnection = block.outputConnection || block.previousConnection;
-      return this.markedConnection_ &&
+      return Boolean(this.markedConnection_ &&
           this.markedConnection_.sourceBlock_.workspace &&
           this.isCompatibleWithConnection_(
-              blockConnection, this.markedConnection_);
+              blockConnection, this.markedConnection_));
     },
-    isConnectionCompatibleWithClipboard: function(connection) {
-      return this.isCompatibleWithConnection_(connection,
+    getClipboardCompatibilityHTMLText: function(connection) {
+      if (this.isCompatibleWithConnection_(connection,
           this.clipboardBlockSuperiorConnection_) ||
           this.isCompatibleWithConnection_(connection,
-          this.clipboardBlockNextConnection_);
+          this.clipboardBlockNextConnection_)){
+        return '';
+      } else {
+        return 'blockly-disabled';
+      }
     }
   });

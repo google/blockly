@@ -28,57 +28,57 @@ blocklyApp.WorkspaceTreeView = ng.core
     selector: 'tree-view',
     template: `
       <li #parentList [id]="idMap['parentList']" role="treeitem" class="blocklyHasChildren" 
-          [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])" 
+          [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])" 
           [attr.aria-level]="level" aria-selected=false>
         {{checkParentList(parentList)}}
         <label [id]="idMap['blockSummary']">{{block.toString()}}</label>
         <ol role="group"  [attr.aria-level]="level+1">
           <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem" 
-              [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummary'])" 
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummary'])" 
               [attr.aria-level]="level+1" aria-selected=false>
             <label [id]="idMap['label']">{{stringMap['BLOCK_ACTION_LIST']}}</label>
             <ol role="group"  [attr.aria-level]="level+2">
               <li [id]="idMap['cutListItem']" role="treeitem" 
-                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['cutButton'], 'blockly-button')" 
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['cutButton'], 'blockly-button')" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button [id]="idMap['cutButton']" (click)="clipboardService.cut(block)">{{stringMap['CUT_BLOCK']}}</button>
               </li>
               <li [id]="idMap['copyListItem']" role="treeitem" 
-                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['copyButton'], 'blockly-button')" 
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['copyButton'], 'blockly-button')" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button [id]="idMap['copyButton']" (click)="clipboardService.copy(block, true)">{{stringMap['COPY_BLOCK']}}</button>
               </li>
               <li [id]="idMap['pasteBelow']" role="treeitem" 
-                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteBelowButton'], 'blockly-button', (noNextConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.nextConnection)))"  
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['pasteBelowButton'], 'blockly-button', (getNoNextConnectionHTMLText(block)||clipboardService.getClipboardCompatibilityHTMLText(block.nextConnection)))"  
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button [id]="idMap['pasteBelowButton']" (click)="clipboardService.pasteFromClipboard(block.nextConnection)" 
-                    [disabled]="noNextConnectionHTMLText(block)" [disabled]="clipboardCompatibilityHTMLText(block.nextConnection)">{{stringMap['PASTE_BELOW']}}</button>
+                    [disabled]="getNoNextConnectionHTMLText(block)" [disabled]="clipboardService.getClipboardCompatibilityHTMLText(block.nextConnection)">{{stringMap['PASTE_BELOW']}}</button>
               </li>
               <li [id]="idMap['pasteAbove']" role="treeitem" 
-                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteAboveButton'], 'blockly-button', (noPreviousConnectionHTMLText(block)||clipboardCompatibilityHTMLText(block.previousConnection)))"  
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['pasteAboveButton'], 'blockly-button', (getNoPreviousConnectionHTMLText(block) || clipboardService.getClipboardCompatibilityHTMLText(block.previousConnection)))"  
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button [id]="idMap['pasteAboveButton']" (click)="clipboardService.pasteFromClipboard(block.previousConnection)" 
-                    [disabled]="noPreviousConnectionHTMLText(block)" [disabled]="clipboardCompatibilityHTMLText(block.previousConnection)">{{stringMap['PASTE_ABOVE']}}</button>
+                    [disabled]="getNoPreviousConnectionHTMLText(block)" [disabled]="clipboardService.getClipboardCompatibilityHTMLText(block.previousConnection)">{{stringMap['PASTE_ABOVE']}}</button>
               </li>
               <li [id]="idMap['markBelow']" role="treeitem" 
-                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markBelowButton'], 'blockly-button', noNextConnectionHTMLText(block))"  
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['markBelowButton'], 'blockly-button', getNoNextConnectionHTMLText(block))"  
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button [id]="idMap['markBelowButton']" (click)="clipboardService.markConnection(block.nextConnection)" 
-                    [disabled]="noNextConnectionHTMLText(block)">{{stringMap['MARK_SPOT_BELOW']}}</button>
+                    [disabled]="getNoNextConnectionHTMLText(block)">{{stringMap['MARK_SPOT_BELOW']}}</button>
               </li>
               <li [id]="idMap['markAbove']" role="treeitem" 
-                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markAboveButton'], 'blockly-button', noPreviousConnectionHTMLText(block))" 
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['markAboveButton'], 'blockly-button', getNoPreviousConnectionHTMLText(block))" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button [id]="idMap['markAboveButton']" (click)="clipboardService.markConnection(block.previousConnection)" 
-                    [disabled]="noPreviousConnectionHTMLText(block)">{{stringMap['MARK_SPOT_ABOVE']}}</button>
+                    [disabled]="getNoPreviousConnectionHTMLText(block)">{{stringMap['MARK_SPOT_ABOVE']}}</button>
               </li>
               <li [id]="idMap['sendToSelectedListItem']" role="treeitem" 
-                  [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" 
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))" 
                   [attr.aria-level]="level+2" aria-selected=false>
                 <button [id]="idMap['sendToSelectedButton']" (click)="sendToSelected(block)" 
-                    [disabled]="utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">{{stringMap['MOVE_TO_MARKED_SPOT']}}</button>
+                    [disabled]="getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">{{stringMap['MOVE_TO_MARKED_SPOT']}}</button>
               </li>
-              <li [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['deleteButton'], 'blockly-button')"  [id]="idMap['delete']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
+              <li [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['deleteButton'], 'blockly-button')"  [id]="idMap['delete']" role="treeitem" aria-selected=false [attr.aria-level]="level+2">
                 <button [id]="idMap['deleteButton']" (click)="block.dispose(true)">{{stringMap['DELETE']}}</button>
               </li>
             </ol>
@@ -87,21 +87,21 @@ blocklyApp.WorkspaceTreeView = ng.core
             <field-view *ngFor="#field of inputBlock.fieldRow" [field]="field"></field-view>
             <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
             <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]" 
-                [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])" 
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])" 
                 *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
               <!-- TODO(madeeha): i18n here will need to happen in a different way due to the way grammar changes based on language. -->
               <label [id]="idMap['inputMenuLabel' + i]"> {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed: </label>
               <ol role="group"  [attr.aria-level]="level+2">
                 <li [id]="idMap['markSpot' + i]" role="treeitem" 
-                    [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['markButton' + i], 'blockly-button')" 
+                    [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['markButton' + i], 'blockly-button')" 
                     [attr.aria-level]="level + 2" aria-selected=false>
                   <button [id]="idMap['markSpotButton + i']" (click)="clipboardService.cut(block)">{{stringMap['MARK_THIS_SPOT']}}</button>
                 </li>
                 <li [id]="idMap['paste' + i]" role="treeitem" 
-                    [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap['pasteButton' + i], 'blockly-button', clipboardCompatibilityHTMLText(inputBlock.connection))" 
+                    [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['pasteButton' + i], 'blockly-button', clipboardService.getClipboardCompatibilityHTMLText(inputBlock.connection))" 
                     [attr.aria-level]="level+2" aria-selected=false>
                   <button [id]="idMap['pasteButton' + i]" (click)="clipboardService.pasteFromClipboard(inputBlock.connection)" 
-                      [disabled]="clipboardCompatibilityHTMLText(inputBlock.connection)">{{stringMap['PASTE']}}</button>
+                      [disabled]="clipboardService.getClipboardCompatibilityHTMLText(inputBlock.connection)">{{stringMap['PASTE']}}</button>
                 </li>
               </ol>
             </li>
@@ -137,14 +137,20 @@ blocklyApp.WorkspaceTreeView = ng.core
         'DELETE': Blockly.Msg.DELETE,
       };
     }],
-    ngOnInit: function(){
+    getMarkedBlockCompatibilityHTMLText: function(isCompatible) {
+      return this.utilsService.getMarkedBlockCompatibilityHTMLText(isCompatible);
+    },
+    generateAriaLabelledByAttr: function() {
+      return this.utilsService.generateAriaLabelledByAttr.apply(this,arguments);
+    },
+    ngOnInit: function() {
       var elementsNeedingIds = ['blockSummary', 'listItem', 'label',
           'cutListItem', 'cutButton', 'copyListItem', 'copyButton',
           'pasteBelow', 'pasteBelowButton', 'pasteAbove', 'pasteAboveButton',
           'markBelow', 'markBelowButton', 'markAbove', 'markAboveButton',
           'sendToSelectedListItem', 'sendToSelectedButton', 'delete',
           'deleteButton'];
-      for (var i=0; i<this.block.inputList.length; i++){
+      for (var i = 0; i < this.block.inputList.length; i++) {
         var inputBlock = this.block.inputList[i];
         if (inputBlock.connection && !inputBlock.connection.targetBlock()) {
           elementsNeedingIds.concat(['inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
@@ -154,21 +160,21 @@ blocklyApp.WorkspaceTreeView = ng.core
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
       this.idMap['parentList'] = this.generateParentListId();
     },
-    generateParentListId: function(){
-      if (this.isTopBlock){
+    generateParentListId: function() {
+      if (this.isTopBlock) {
         return this.parentId + '-node0'
       } else {
         return this.utilsService.generateUniqueId();
       }
     },
-    noPreviousConnectionHTMLText: function(block) {
+    getNoPreviousConnectionHTMLText: function(block) {
       if (!block.previousConnection) {
         return 'blockly-disabled';
       } else {
         return '';
       }
     },
-    noNextConnectionHTMLText: function(block) {
+    getNoNextConnectionHTMLText: function(block) {
       if (!block.nextConnection) {
         return 'blockly-disabled';
       } else {
@@ -197,16 +203,6 @@ blocklyApp.WorkspaceTreeView = ng.core
         this.clipboardService.pasteToMarkedConnection(block, false);
         block.dispose(true);
         alert('Block moved to marked spot: ' + block.toString());
-      }
-    },
-    clipboardCompatibilityHTMLText: function(connection) {
-      if (this.clipboardService.isConnectionCompatibleWithClipboard(
-              connection)) {
-        // Undefined will result in the 'paste' option being ENABLED.
-        return undefined;
-      } else {
-        // Any value returned will result in the 'paste' option being DISABLED.
-        return 'blockly-disabled';
       }
     }
   });

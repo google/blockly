@@ -28,19 +28,19 @@ blocklyApp.FieldView = ng.core
     selector: 'field-view',
     template: `
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput(field)" 
-        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])" 
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])" 
         [attr.aria-level]="level"  aria-selected=false>
       <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
     </li>
     <li [id]="idMap['listItem']" *ngIf="isDropdown(field)"
-        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" 
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" 
         [attr.aria-level]="level" aria-selected=false role="treeitem">
       <label [id]="idMap['label']">{{stringMap['CURRENT_ARGUMENT_VALUE']}} {{field.getText()}}</label>
       <ol role="group" [attr.aria-level]="level+1">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions(field)" 
-            [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" 
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" 
             [attr.aria-level]="level+1" aria-selected=false>
-          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field,optionValue)">
+          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)">
             {{optionText[optionValue]}}
           </button>
         </li>
@@ -69,7 +69,6 @@ blocklyApp.FieldView = ng.core
       this.optionText = {
         keys: []
       };
-      this.text = '';
       this.treeService = _treeService;
       this.utilsService = _utilsService;
       this.stringMap = {
@@ -79,6 +78,9 @@ blocklyApp.FieldView = ng.core
     ngOnInit: function() {
       var elementsNeedingIds = this.generateElementNames(this.field);
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+    },
+    generateAriaLabelledByAttr: function() {
+      return this.utilsService.generateAriaLabelledByAttr.apply(this,arguments);
     },
     generateElementNames: function(field) {
       var elementNames = ['listItem'];

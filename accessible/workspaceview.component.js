@@ -30,7 +30,7 @@ blocklyApp.WorkspaceView = ng.core
       <label>
         <h3 #workspaceTitle id="blockly-workspace-title">{{stringMap['WORKSPACE']}}</h3>
       </label>
-      <div id="blockly-workspace-toolbar" (keydown)="treeService.onWorkspaceToolbarKeypress($event, getActiveElementId())">
+      <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event, getActiveElementId())">
         <button id='run-code' (click)='runCode()' disabled={{disableRunCode()}} 
             [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>{{stringMap['RUN_CODE']}}</button>
         <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableRunCode()}} 
@@ -40,7 +40,7 @@ blocklyApp.WorkspaceView = ng.core
         <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index" 
             tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="workspaceTitle.id" 
             [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' " 
-            (keydown)="treeService.onKeypress($event, tree)">
+            (keydown)="onKeypress($event, tree)">
           <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id"></tree-view>
         </ol>
       </div>
@@ -60,6 +60,12 @@ blocklyApp.WorkspaceView = ng.core
         'CLEAR_WORKSPACE': Blockly.Msg.CLEAR_WORKSPACE,
       };
     }],
+    onWorkspaceToolbarKeypress: function(event, id) {
+      this.treeService.onWorkspaceToolbarKeypress(event, id);
+    },
+    onKeypress: function(event, tree){
+      this.treeService.onKeypress(event, tree);
+    },
     getActiveElementId: function() {
       return document.activeElement.id;
     },

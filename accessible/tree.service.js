@@ -40,7 +40,7 @@ blocklyApp.TreeService = ng.core
       this.activeDesc_[id] = node;
     },
     getActiveDesc: function(id) {
-      return this.activeDesc_[id];
+      return this.activeDesc_[id] || document.getElementById((document.getElementById(id)).getAttribute('aria-activedescendant'));
     },
     // Makes a given node the active descendant of a given tree.
     updateSelectedNode: function(node, tree, keepFocus) {

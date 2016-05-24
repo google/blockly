@@ -64,7 +64,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * inconsistent as a result of the XML loading.
    * @this Blockly.Block
    */
-  validate: function () {
+  validate: function() {
     var name = Blockly.Procedures.findLegalName(
         this.getFieldValue('NAME'), this);
     this.setFieldValue(name, 'NAME');
@@ -126,7 +126,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
   /**
    * Create XML to represent the argument inputs.
    * @param {=boolean} opt_paramIds If true include the IDs of the parameter
-   *     quarks.  Used by Blockly.Procedures.mutateCallers for reconnection.
+   *    quarks.  Used by Blockly.Procedures.mutateCallers for reconnection.
    * @return {!Element} XML storage element.
    * @this Blockly.Block
    */

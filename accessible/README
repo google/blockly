@@ -14,6 +14,6 @@ Use Accessible Blockly in Your Web App
 -----------
 1. see the basic demo under blockly/demos/accessible. This covers the absolute minimum required to import Accessible Blockly into your own web app.
 2. You will need to import the files in the same order as in the demo: utils.service.js will need to be the first Angular file imported.
-3. You will need a boot.js file. If you aren't creating any extra Angular components, your boot.js file will look identical to that in the demo. If you are creating a different Angular component that should be loaded first, change line 26 accordingly.
+3. When the DOMContentLoaded event fires, call ng.platform.browser.bootstrap() on the main component to be loaded. This will usually be blocklyApp.AppView, but if you have another component that wraps it, use that one instead.
 4. You will need to implement a runCode() function in the global scope. This function will be called when the user presses the Run Code button in the Accessible Blockly app.
 5. Note that we do not support having multiple Accessible Blockly apps in a single webpage.

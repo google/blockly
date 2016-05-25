@@ -583,6 +583,9 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
 
 /**
  * A blank separator node in the tree.
+ * @param {Object=} config The configuration for the tree. See
+ *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
+ *    will be used.
  * @constructor
  * @extends {Blockly.Toolbox.TreeNode}
  */

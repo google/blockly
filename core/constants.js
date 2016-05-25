@@ -53,6 +53,12 @@ Blockly.COLLAPSE_CHARS = 30;
 Blockly.LONGPRESS = 750;
 
 /**
+ * Prevent a sound from playing if another sound preceded it within this many
+ * miliseconds.
+ */
+Blockly.SOUND_LIMIT = 100;
+
+/**
  * The richness of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
  */

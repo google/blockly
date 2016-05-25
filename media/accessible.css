@@ -1,0 +1,9 @@
+.blocklyTable {
+  vertical-align: top;
+}
+.blocklyTree .blocklyActiveDescendant > label,
+.blocklyTree .blocklyActiveDescendant > div > label,
+.blocklyActiveDescendant > button,
+.blocklyActiveDescendant > input {
+  outline: 2px dotted #00f;
+}

@@ -1,0 +1,19 @@
+Accessible Blockly
+=======
+
+Google's Blockly is a web-based, visual programming editor: accessible to blind users.
+
+What Does Accessible Blockly Do?
+-----------
+* renders a version of the blockly toolbox and workspace that is easily navigable using solely the keyboard
+* renders a version of the blockly toolbox and workspace that is compatible with JAWS/NVDA screen readers on Firefox for Windows.
+	* Accessible Blockly will hopefully be modified to work well with most other screen readers, however JAWS and NVDA are the most robust screen readers and are compatible with many more aria tags than other screen readers. Therefore it was easiest to first be compatible with them.
+* Accessible Blockly will be modified to suit accessibility needs other than visual impairments as well. Deaf users will be expected to continue using Blockly over Accessible Blockly.
+
+Use Accessible Blockly in Your Web App
+-----------
+1. see the basic demo under blockly/demos/accessible. This covers the absolute minimum required to import Accessible Blockly into your own web app.
+2. You will need to import the files in the same order as in the demo: utils.service.js will need to be the first Angular file imported.
+3. When the DOMContentLoaded event fires, call ng.platform.browser.bootstrap() on the main component to be loaded. This will usually be blocklyApp.AppView, but if you have another component that wraps it, use that one instead.
+4. You will need to implement a runCode() function in the global scope. This function will be called when the user presses the Run Code button in the Accessible Blockly app.
+5. Note that we do not support having multiple Accessible Blockly apps in a single webpage.

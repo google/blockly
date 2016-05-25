@@ -340,9 +340,9 @@ Blockly.longPid_ = 0;
 Blockly.longStart_ = function(e, uiObject) {
   Blockly.longStop_();
   Blockly.longPid_ = setTimeout(function() {
-      e.button = 2;  // Simulate a right button click.
-      uiObject.onMouseDown_(e);
-    }, Blockly.LONGPRESS);
+    e.button = 2;  // Simulate a right button click.
+    uiObject.onMouseDown_(e);
+  }, Blockly.LONGPRESS);
 };
 
 /**

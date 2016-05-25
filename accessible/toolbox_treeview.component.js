@@ -132,19 +132,6 @@ blocklyApp.ToolboxTreeView = ng.core
         this.treeService.setActiveDesc(parentList, this.tree.id);
       }
     },
-    addClass: function(node, classText) {
-      // Ensure that node doesn't have class already in it.
-      if (node.className) {
-        var classList = node.className.split(' ');
-        var canAdd = classList.indexOf(classText) == -1;
-        // Add class if it doesn't.
-        if (canAdd) {
-          node.className += ' ' + classText;
-        }
-      } else {
-        node.className = classText;
-      }
-    },
     copyToWorkspace: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       Blockly.Xml.domToBlock(blocklyApp.workspace, xml);

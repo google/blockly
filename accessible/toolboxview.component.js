@@ -22,22 +22,23 @@
  * in AccessibleBlockly. Also handles any interactions with the toolbox.
  * @author madeeha@google.com (Madeeha Ghori)
  */
+
 blocklyApp.ToolboxView = ng.core
   .Component({
     selector: 'toolbox-view',
     template: `
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
       <ol #tree id="blockly-toolbox-tree" role="group" class="blocklyTree"
-          *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0" 
-          tabIndex="0" [attr.aria-labelledby]="toolboxTitle.id" 
-          [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' " 
+          *ngIf="makeArray(sightedToolbox) && makeArray(sightedToolbox).length > 0"
+          tabIndex="0" [attr.aria-labelledby]="toolboxTitle.id"
+          [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
           (keydown)="treeService.onKeypress($event, tree)">
-        <li #parent [id]="idMap['Parent' + i]" role="treeitem" 
+        <li #parent [id]="idMap['Parent' + i]" role="treeitem"
             [ngClass]="{blocklyHasChildren: true,
-                blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}" 
-            *ngIf="toolboxHasCategories" *ngFor="#category of makeArray(sightedToolbox); #i=index" 
+                blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}"
+            *ngIf="toolboxHasCategories" *ngFor="#category of makeArray(sightedToolbox); #i=index"
             aria-level="1" aria-selected=false>
-          <!-- TODO(madeeha): There seems to be some bug in Angular that makes it 
+          <!-- TODO(madeeha): There seems to be some bug in Angular that makes it
           access index=undefined in the ngFor loop. This causes it to throw an error once it reaches line
           44. To combat this, we have added the div at line 43. Talk to fraser@.-->
           <div *ngIf="category && category.attributes">
@@ -87,7 +88,7 @@ blocklyApp.ToolboxView = ng.core
       parent.setAttribute('aria-label', label.innerText);
       parent.id = 'blockly-toolbox-tree-node' + i;
       if (i == 0 && tree.getAttribute('aria-activedescendant') ==
-        'blockly-toolbox-tree-node0') {
+          'blockly-toolbox-tree-node0') {
         this.treeService.setActiveDesc(parent, tree.id);
         parent.setAttribute('aria-selected', 'true');
       }
@@ -131,4 +132,3 @@ blocklyApp.ToolboxView = ng.core
       }
     }
   });
-

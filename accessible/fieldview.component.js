@@ -23,22 +23,23 @@
  * with the field.
  * @author madeeha@google.com (Madeeha Ghori)
  */
+
 blocklyApp.FieldView = ng.core
   .Component({
     selector: 'field-view',
     template: `
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()" 
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])" 
+    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])"
         [attr.aria-level]="level"  aria-selected=false>
       <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
     </li>
     <li [id]="idMap['listItem']" *ngIf="isDropdown()"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])" 
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])"
         [attr.aria-level]="level" aria-selected=false role="treeitem">
       <label [id]="idMap['label']">{{stringMap['CURRENT_ARGUMENT_VALUE']}} {{field.getText()}}</label>
       <ol role="group" [attr.aria-level]="level+1">
-        <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()" 
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')" 
+        <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
             [attr.aria-level]="level+1" aria-selected=false>
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)">
             {{optionText[optionValue]}}
@@ -46,14 +47,14 @@ blocklyApp.FieldView = ng.core
         </li>
       </ol>
     </li>
-    <li [id]="idMap['listItem']" role="treeitem" 
-        *ngIf="isCheckbox()" [attr.aria-level]="level" 
+    <li [id]="idMap['listItem']" role="treeitem"
+        *ngIf="isCheckbox()" [attr.aria-level]="level"
         aria-selected=false>
       // Checkboxes not currently supported.
     </li>
-    <li [id]="idMap['listItem']" role="treeitem" 
-        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])" 
-        *ngIf="isTextField() && hasVisibleText()" 
+    <li [id]="idMap['listItem']" role="treeitem"
+        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])"
+        *ngIf="isTextField() && hasVisibleText()"
         [attr.aria-level]="level" aria-selected=false>
       <label [id]="idMap['label']">
         {{field.getText()}}
@@ -61,10 +62,10 @@ blocklyApp.FieldView = ng.core
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
-    providers: [blocklyApp.TreeService, blocklyApp.UtilsService],
+    providers: [blocklyApp.TreeService, blocklyApp.UtilsService]
   })
   .Class({
-    constructor: [blocklyApp.TreeService, blocklyApp.UtilsService, 
+    constructor: [blocklyApp.TreeService, blocklyApp.UtilsService,
         function(_treeService, _utilsService) {
       this.optionText = {
         keys: []
@@ -72,7 +73,7 @@ blocklyApp.FieldView = ng.core
       this.treeService = _treeService;
       this.utilsService = _utilsService;
       this.stringMap = {
-        'CURRENT_ARGUMENT_VALUE': Blockly.Msg.CURRENT_ARGUMENT_VALUE,
+        'CURRENT_ARGUMENT_VALUE': Blockly.Msg.CURRENT_ARGUMENT_VALUE
       };
     }],
     ngOnInit: function() {
@@ -80,27 +81,21 @@ blocklyApp.FieldView = ng.core
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
     },
     generateAriaLabelledByAttr: function() {
-      return this.utilsService.generateAriaLabelledByAttr.apply(this,arguments);
+      return this.utilsService.generateAriaLabelledByAttr.apply(this,
+          arguments);
     },
     generateElementNames: function() {
       var elementNames = ['listItem'];
-      switch(true) {
-        case this.isTextInput():
-          elementNames.push('input');
-          break;
-        case this.isDropdown():
-          elementNames.push('label');
-          var keys = this.getOptions();
-          for (var i = 0; i < keys.length; i++){
-            elementNames.push(keys[i]);
-            elementNames.push(keys[i] + 'Button');
-          }
-          break;
-        case this.isTextField() && this.hasVisibleText():
-          elementNames.push('label');
-          break;
-        default:
-          break;
+      if (this.isTextInput()) {
+        elementNames.push('input');
+      } else if (this.isDropdown()) {
+        elementNames.push('label');
+        var keys = this.getOptions();
+        for (var i = 0; i < keys.length; i++){
+          elementNames.push(keys[i], keys[i] + 'Button');
+        }
+      } else if (this.isTextField() && this.hasVisibleText()) {
+        elementNames.push('label');
       }
       return elementNames;
     },

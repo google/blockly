@@ -22,7 +22,9 @@
  * components.
  * @author madeeha@google.com (Madeeha Ghori)
  */
+
 var blocklyApp = {};
+
 blocklyApp.UtilsService = ng.core
   .Class({
     constructor: function() {
@@ -38,11 +40,7 @@ blocklyApp.UtilsService = ng.core
       return idMap;
     },
     generateAriaLabelledByAttr: function() {
-      var labels = arguments[0];
-      for (i = 1; i < arguments.length; i++) {
-        labels += ' ' + arguments[i];
-      }
-      return labels.trim();
+      return Array.from(arguments).join(' ').trim();
     },
     getInputTypeLabel: function(connection) {
       // Returns an upper case string in the case of official input type names.

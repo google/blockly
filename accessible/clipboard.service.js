@@ -21,6 +21,7 @@
  * @fileoverview Angular2 Service that handles the clipboard and marked spots.
  * @author madeeha@google.com (Madeeha Ghori)
  */
+
 blocklyApp.ClipboardService = ng.core
   .Class({
     constructor: function() {
@@ -71,7 +72,7 @@ blocklyApp.ClipboardService = ng.core
           reconstitutedBlock.previousConnection);
       blocklyApp.debug && console.log('paste to marked connection');
       if (announce) {
-        alert(Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG + block.toString());        
+        alert(Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG + block.toString());
       }
     },
     markConnection: function(connection) {

@@ -22,7 +22,9 @@
  * app is rendered on the page.
  * @author madeeha@google.com (Madeeha Ghori)
  */
+
 blocklyApp.workspace = new Blockly.Workspace();
+
 // If the debug flag is true, print console.logs to help with debugging.
 blocklyApp.debug = false;
 
@@ -51,7 +53,7 @@ blocklyApp.AppView = ng.core
     <label id="blockly-disabled" aria-hidden="true" hidden>{{stringMap['UNAVAILABLE']}}</label>
     `,
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
-    // ClipboardService declared here so that all components are using the same 
+    // ClipboardService declared here so that all components are using the same
     // instance of the clipboard.
     // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
     providers: [blocklyApp.ClipboardService]
@@ -60,7 +62,7 @@ blocklyApp.AppView = ng.core
     constructor: function() {
       this.stringMap = {
         ['TOOLBOX_LOAD']: Blockly.Msg.TOOLBOX_LOAD_MSG,
-        ['WORKSPACE_LOAD']: Blockly.Msg.WORKSPACE_LOAD_MSG, 
+        ['WORKSPACE_LOAD']: Blockly.Msg.WORKSPACE_LOAD_MSG,
         ['BLOCK_SUMMARY']: Blockly.Msg.BLOCK_SUMMARY,
         ['BLOCK_ACTION_LIST']: Blockly.Msg.BLOCK_ACTION_LIST,
         ['OPTION_LIST']: Blockly.Msg.OPTION_LIST,
@@ -69,7 +71,7 @@ blocklyApp.AppView = ng.core
         ['BUTTON']: Blockly.Msg.BUTTON,
         ['TEXT']: Blockly.Msg.TEXT,
         ['ARGUMENT_BLOCK_ACTION_LIST']: Blockly.Msg.ARGUMENT_BLOCK_ACTION_LIST,
-        ['ARGUMENT_INPUT']: Blockly.Msg.ARGUMENT_INPUT,
+        ['ARGUMENT_INPUT']: Blockly.Msg.ARGUMENT_INPUT
       };
     }
   });

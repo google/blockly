@@ -569,7 +569,6 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   if (Blockly.isTargetInput_(e)) {
     return;
   }
-  Blockly.svgResize(this);
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
   Blockly.hideChaff();
   var isTargetWorkspace = e.target && e.target.nodeName &&

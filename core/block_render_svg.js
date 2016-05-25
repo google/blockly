@@ -503,7 +503,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
       var prevBlock = this.previousConnection.targetBlock();
       if (prevBlock && prevBlock.getNextBlock() == this) {
         this.squareTopLeftCorner_ = true;
-       }
+      }
     } else if (Blockly.BlockSvg.START_HAT) {
       // No output or previous connection.
       this.squareTopLeftCorner_ = true;
@@ -535,7 +535,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   var cursorY = this.renderDrawRight_(steps, highlightSteps, inlineSteps,
       highlightInlineSteps, connectionsXY, inputRows, iconWidth);
   this.renderDrawBottom_(steps, highlightSteps, connectionsXY, cursorY);
-  this.renderDrawLeft_(steps, highlightSteps, connectionsXY, cursorY);
+  this.renderDrawLeft_(steps, highlightSteps, connectionsXY);
 
   var pathString = steps.join(' ') + '\n' + inlineSteps.join(' ');
   this.svgPath_.setAttribute('d', pathString);
@@ -560,6 +560,7 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
  */
 Blockly.BlockSvg.prototype.renderDrawTop_ =
     function(steps, highlightSteps, connectionsXY, rightEdge) {
+  /* eslint-disable indent */
   // Position the cursor at the top-left starting point.
   if (this.squareTopLeftCorner_) {
     steps.push('m 0,0');
@@ -596,7 +597,7 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
   steps.push('H', rightEdge);
   highlightSteps.push('H', rightEdge - 0.5);
   this.width = rightEdge;
-};
+};  /* eslint-enable indent */
 
 /**
  * Render the right edge of the block.
@@ -872,6 +873,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
  */
 Blockly.BlockSvg.prototype.renderDrawBottom_ =
     function(steps, highlightSteps, connectionsXY, cursorY) {
+  /* eslint-disable indent */
   this.height += cursorY + 1;  // Add one for the shadow.
   if (this.nextConnection) {
     steps.push('H', (Blockly.BlockSvg.NOTCH_WIDTH + (this.RTL ? 0.5 : - 0.5)) +
@@ -911,18 +913,18 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
           '0.5,' + (cursorY - Blockly.BlockSvg.CORNER_RADIUS));
     }
   }
-};
+};  /* eslint-enable indent */
 
 /**
  * Render the left edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
  * @param {!Array.<string>} highlightSteps Path of block highlights.
  * @param {!Object} connectionsXY Location of block.
- * @param {number} cursorY Height of block.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawLeft_ =
-    function(steps, highlightSteps, connectionsXY, cursorY) {
+    function(steps, highlightSteps, connectionsXY) {
+  /* eslint-disable indent */
   if (this.outputConnection) {
     // Create output connection.
     this.outputConnection.moveTo(connectionsXY.x, connectionsXY.y);
@@ -952,4 +954,4 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ =
     }
   }
   steps.push('z');
-};
+};  /* eslint-enable indent */

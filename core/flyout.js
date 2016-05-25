@@ -426,6 +426,7 @@ Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
  */
 Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
     function(width, height) {
+  /* eslint-disable indent */
   var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
   // Start at top left.
   var path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
@@ -458,7 +459,7 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
     path.push('z');
   }
   this.svgBackground_.setAttribute('d', path.join(' '));
-};
+};  /* eslint-enable indent */
 
 /**
  * Scroll the flyout to the top.
@@ -568,12 +569,13 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
   // IE 11 is an incompetant browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
-  var deselectAll = function(e) {
+  var deselectAll = function() {
     var topBlocks = this.workspace_.getTopBlocks(false);
     for (var i = 0, block; block = topBlocks[i]; i++) {
       block.removeSelect();
     }
   };
+
   this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
       this, deselectAll));
 

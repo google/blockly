@@ -147,17 +147,18 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
   var hKnobValue = x * this.hScroll.ratio_;
   var vKnobValue = y * this.vScroll.ratio_;
 
-  var hBarLength =
-      parseFloat(this.hScroll.svgBackground_.getAttribute('width'));
-  var vBarLength =
-      parseFloat(this.vScroll.svgBackground_.getAttribute('height'));
+  var hBarLength = this.hScroll.barLength;
+  var vBarLength = this.vScroll.barLength;
 
   xyRatio.x = this.getRatio_(hKnobValue, hBarLength);
   xyRatio.y = this.getRatio_(vKnobValue, vBarLength);
-
   this.workspace_.setMetrics(xyRatio);
+
   this.hScroll.svgKnob_.setAttribute('x', hKnobValue);
+  this.hScroll.knobOffset = hKnobValue;
+
   this.vScroll.svgKnob_.setAttribute('y', vKnobValue);
+  this.vScroll.knobOffset = vKnobValue;
 };
 
 /**
@@ -190,9 +191,17 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   this.workspace_ = workspace;
   this.pair_ = opt_pair || false;
   this.horizontal_ = horizontal;
-  this.oldHostMetrics_ = {};
+  this.oldHostMetrics_ = null;
 
   this.createDom_();
+
+  this.barLength = 0;
+  this.knobLength = 0;
+  this.knobOffset = 0;
+  this.isVisible_ = true;
+
+  this.yCoordinate = 0;
+  this.xCoordinate = 0;
 
   if (horizontal) {
     this.svgBackground_.setAttribute('height',
@@ -322,25 +331,41 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
  * @private
  */
 Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
-  var outerLength = hostMetrics.viewWidth - 1;
-  if (this.pair_) {
-    // Shorten the scrollbar to make room for the corner square.
-    outerLength -= Blockly.Scrollbar.scrollbarThickness;
-  } else {
+  this.resizeViewHorizontal_(hostMetrics);
+  this.resizeContentHorizontal_(hostMetrics);
+};
+
+Blockly.Scrollbar.prototype.resizeContentHorizontal_ = function(hostMetrics) {
+  if (!this.pair_) {
     // Only show the scrollbar if needed.
     // Ideally this would also apply to scrollbar pairs, but that's a bigger
     // headache (due to interactions with the corner square).
-    this.setVisible(outerLength < hostMetrics.contentWidth);
+    this.setVisible(this.barLength < hostMetrics.contentWidth);
   }
-  this.ratio_ = outerLength / hostMetrics.contentWidth;
+
+  this.ratio_ = this.barLength / hostMetrics.contentWidth;
   if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
       isNaN(this.ratio_)) {
     this.ratio_ = 0;
   }
-  var innerLength = hostMetrics.viewWidth * this.ratio_;
+
   var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
       this.ratio_;
-  this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
+  this.knobOffset = this.constrainKnob_(innerOffset);
+  this.svgKnob_.setAttribute('x', this.knobOffset);
+
+  var innerLength = hostMetrics.viewWidth * this.ratio_;
+  this.knobLength = Math.max(0, innerLength);
+  this.svgKnob_.setAttribute('width', this.knobLength);
+};
+
+Blockly.Scrollbar.prototype.resizeViewHorizontal_ = function(hostMetrics) {
+  var outerLength = hostMetrics.viewWidth - 1;
+  if (this.pair_) {
+    // Shorten the scrollbar to make room for the corner square.
+    outerLength -= Blockly.Scrollbar.scrollbarThickness;
+  }
+
   this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (this.pair_ && this.workspace_.RTL) {
     this.xCoordinate += Blockly.Scrollbar.scrollbarThickness;
@@ -350,8 +375,9 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
       Blockly.Scrollbar.scrollbarThickness - 0.5;
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
-  this.svgBackground_.setAttribute('width', Math.max(0, outerLength));
-  this.svgKnob_.setAttribute('x', this.constrainKnob_(innerOffset));
+
+  this.barLength = Math.max(0, outerLength);
+  this.svgBackground_.setAttribute('width', this.barLength);
 };
 
 /**
@@ -361,23 +387,40 @@ Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
  * @private
  */
 Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
-  var outerLength = hostMetrics.viewHeight - 1;
-  if (this.pair_) {
-    // Shorten the scrollbar to make room for the corner square.
-    outerLength -= Blockly.Scrollbar.scrollbarThickness;
-  } else {
+  this.resizeViewVertical_(hostMetrics);
+  this.resizeContentVertical_(hostMetrics);
+};
+
+Blockly.Scrollbar.prototype.resizeContentVertical_ = function(hostMetrics) {
+  if (!this.pair_) {
     // Only show the scrollbar if needed.
-    this.setVisible(outerLength < hostMetrics.contentHeight);
+    this.setVisible(this.barLength < hostMetrics.contentHeight);
   }
-  this.ratio_ = outerLength / hostMetrics.contentHeight;
+
+  this.ratio_ = this.barLength / hostMetrics.contentHeight;
   if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
       isNaN(this.ratio_)) {
     this.ratio_ = 0;
   }
+
   var innerLength = hostMetrics.viewHeight * this.ratio_;
+  this.knobLength = Math.max(0, innerLength);
+  this.svgKnob_.setAttribute('height', this.knobLength);
+
   var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) *
       this.ratio_;
-  this.svgKnob_.setAttribute('height', Math.max(0, innerLength));
+  this.knobOffset = this.constrainKnob_(innerOffset);
+  this.svgKnob_.setAttribute('y', this.knobOffset);
+
+};
+
+Blockly.Scrollbar.prototype.resizeViewVertical_ = function(hostMetrics) {
+  var outerLength = hostMetrics.viewHeight - 1;
+  if (this.pair_) {
+    // Shorten the scrollbar to make room for the corner square.
+    outerLength -= Blockly.Scrollbar.scrollbarThickness;
+  }
+
   this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (!this.workspace_.RTL) {
     this.xCoordinate += hostMetrics.viewWidth -
@@ -386,8 +429,9 @@ Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
   this.yCoordinate = hostMetrics.absoluteTop + 0.5;
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
-  this.svgBackground_.setAttribute('height', Math.max(0, outerLength));
-  this.svgKnob_.setAttribute('y', this.constrainKnob_(innerOffset));
+
+  this.barLength = Math.max(0, outerLength);
+  this.svgBackground_.setAttribute('height', this.barLength);
 };
 
 /**
@@ -421,7 +465,7 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
  * @return {boolean} True if visible.
  */
 Blockly.Scrollbar.prototype.isVisible = function() {
-  return this.svgGroup_.getAttribute('display') != 'none';
+  return this.isVisible_;
 };
 
 /**
@@ -438,6 +482,9 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
   if (this.pair_) {
     throw 'Unable to toggle visibility of paired scrollbars.';
   }
+
+  this.isVisible_ = visible;
+
   if (visible) {
     this.svgGroup_.setAttribute('display', 'block');
   } else {
@@ -466,21 +513,20 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
 
   var knobXY = Blockly.getSvgXY_(this.svgKnob_, this.workspace_);
   var knobStart = this.horizontal_ ? knobXY.x : knobXY.y;
-  var knobLength = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'width' : 'height'));
-  var knobValue = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+  var knobValue = this.knobOffset;
 
-  var pageLength = knobLength * 0.95;
+  var pageLength = this.knobLength * 0.95;
   if (mouseLocation <= knobStart) {
     // Decrease the scrollbar's value by a page.
     knobValue -= pageLength;
-  } else if (mouseLocation >= knobStart + knobLength) {
+  } else if (mouseLocation >= knobStart + this.knobLength) {
     // Increase the scrollbar's value by a page.
     knobValue += pageLength;
   }
-  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
-                             this.constrainKnob_(knobValue));
+
+  this.knobOffset = this.constrainKnob_(knobValue);
+  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y', this.knobOffset);
+
   this.onScroll_();
   e.stopPropagation();
   e.preventDefault();
@@ -501,8 +547,7 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
     return;
   }
   // Look up the current translation and record it.
-  this.startDragKnob = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
+  this.startDragKnob = this.knobOffset;
   // Record the current mouse position.
   this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
   Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
@@ -523,8 +568,8 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
   var mouseDelta = currentMouse - this.startDragMouse;
   var knobValue = this.startDragKnob + mouseDelta;
   // Position the bar.
-  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y',
-                             this.constrainKnob_(knobValue));
+  this.knobOffset = this.constrainKnob_(knobValue);
+  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y', this.knobOffset);
   this.onScroll_();
 };
 
@@ -555,10 +600,7 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
   if (value <= 0 || isNaN(value)) {
     value = 0;
   } else {
-    var axis = this.horizontal_ ? 'width' : 'height';
-    var barLength = parseFloat(this.svgBackground_.getAttribute(axis));
-    var knobLength = parseFloat(this.svgKnob_.getAttribute(axis));
-    value = Math.min(value, barLength - knobLength);
+    value = Math.min(value, this.barLength - this.knobLength);
   }
   return value;
 };
@@ -568,12 +610,8 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
  * @private
  */
 Blockly.Scrollbar.prototype.onScroll_ = function() {
-  var knobValue = parseFloat(
-      this.svgKnob_.getAttribute(this.horizontal_ ? 'x' : 'y'));
-  var barLength = parseFloat(
-      this.svgBackground_.getAttribute(this.horizontal_ ? 'width' : 'height'));
-  var ratio = knobValue / barLength;
-  if (isNaN(ratio) || !barLength) {
+  var ratio = this.knobOffset / this.barLength;
+  if (isNaN(ratio)) {
     ratio = 0;
   }
   var xyRatio = {};
@@ -590,9 +628,8 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
  * @param {number} value The distance from the top/left end of the bar.
  */
 Blockly.Scrollbar.prototype.set = function(value) {
-  var constrainedValue = this.constrainKnob_(value * this.ratio_);
-  // Move the scrollbar slider.
-  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y', constrainedValue);
+  this.knobOffset = this.constrainKnob_(value * this.ratio_);
+  this.svgKnob_.setAttribute(this.horizontal_ ? 'x' : 'y', this.knobOffset);
   this.onScroll_();
 };
 

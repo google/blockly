@@ -324,29 +324,31 @@ Blockly.Flyout.prototype.position = function() {
   if (!this.isVisible()) {
     return;
   }
-  var metrics = this.targetWorkspace_.getMetrics();
-  if (!metrics) {
+  var targetWorkspaceMetrics = this.targetWorkspace_.getMetrics();
+  if (!targetWorkspaceMetrics) {
     // Hidden components will return null.
     return;
   }
-  var edgeWidth = this.horizontalLayout_ ? metrics.viewWidth : this.width_;
+  var edgeWidth = this.horizontalLayout_ ?
+      targetWorkspaceMetrics.viewWidth : this.width_;
   edgeWidth -= this.CORNER_RADIUS;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     edgeWidth *= -1;
   }
 
   this.setBackgroundPath_(edgeWidth,
-      this.horizontalLayout_ ? this.height_ : metrics.viewHeight);
+      this.horizontalLayout_ ? this.height_ :
+      targetWorkspaceMetrics.viewHeight);
 
-  var x = metrics.absoluteLeft;
+  var x = targetWorkspaceMetrics.absoluteLeft;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
-    x += metrics.viewWidth;
+    x += targetWorkspaceMetrics.viewWidth;
     x -= this.width_;
   }
 
-  var y = metrics.absoluteTop;
+  var y = targetWorkspaceMetrics.absoluteTop;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    y += metrics.viewHeight;
+    y += targetWorkspaceMetrics.viewHeight;
     y -= this.height_;
   }
 
@@ -355,9 +357,9 @@ Blockly.Flyout.prototype.position = function() {
   // Record the height for Blockly.Flyout.getMetrics_, or width if the layout is
   // horizontal.
   if (this.horizontalLayout_) {
-    this.width_ = metrics.viewWidth;
+    this.width_ = targetWorkspaceMetrics.viewWidth;
   } else {
-    this.height_ = metrics.viewHeight;
+    this.height_ = targetWorkspaceMetrics.viewHeight;
   }
 
   // Update the scrollbar (if one exists).

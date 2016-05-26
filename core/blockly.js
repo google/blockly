@@ -141,36 +141,27 @@ Blockly.svgSize = function(svg) {
 };
 
 /**
- * Schedule a call to the resize handler.  Groups of simultaneous events (e.g.
- * a tree of blocks being deleted) are merged into one call.
- * @param {Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
+ * Size the workspace when the contents change.  This also updates
+ * scrollbars accordingly.
+ * @param {!Blockly.WorkspaceSvg} workspace. Any workspace in teh SVG.
  */
-Blockly.asyncSvgResize = function(workspace) {
-  if (Blockly.svgResizePending_) {
-    return;
-  }
+Blockly.resizeSvgContents = function(workspace) {
   if (!workspace) {
     workspace = Blockly.getMainWorkspace();
   }
-  Blockly.svgResizePending_ = true;
-  setTimeout(function() {Blockly.svgResize(workspace);}, 0);
+  workspace.resizeContents();
 };
 
-/**
- * Flag indicating a resize event is scheduled.
- * Used to fire only one resize after multiple changes.
- * @type {boolean}
- * @private
- */
-Blockly.svgResizePending_ = false;
 
 /**
- * Size the SVG image to completely fill its container.
+ * Size the SVG image to completely fill its container. Call this when the view
+ * actually changes sizes (e.g. on a window resize/device orientation change).
+ * See Blockly.resizeSvgContents to resize the workspace when the contents
+ * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
  * @param {!Blockly.WorkspaceSvg} workspace Any workspace in the SVG.
  */
 Blockly.svgResize = function(workspace) {
-  Blockly.svgResizePending_ = false;
   var mainWorkspace = workspace;
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;

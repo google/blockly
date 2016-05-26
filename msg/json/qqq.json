@@ -325,7 +325,7 @@
 	"LISTS_GET_SUBLIST_TAIL": "block text - This appears in the rightmost position ('tail') of the sublist block, as described at [https://github.com/google/blockly/wiki/Lists#getting-a-sublist https://github.com/google/blockly/wiki/Lists#getting-a-sublist]. In English and most other languages, this is the empty string. [[File:Blockly-get-sublist.png]]",
 	"LISTS_GET_SUBLIST_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-sublist https://github.com/google/blockly/wiki/Lists#getting-a-sublist] for more information. [[File:Blockly-get-sublist.png]]",
 	"LISTS_SORT_HELPURL": "url - Information describing sorting a list.",
-	"LISTS_SORT_TITLE": "Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.",
+	"LISTS_SORT_TITLE": "Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.\n{{Identical|Sort}}",
 	"LISTS_SORT_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list].",
 	"LISTS_SORT_ORDER_ASCENDING": "sorting order or direction from low to high value for numeric, or A-Z for alphabetic.\n{{Identical|Ascending}}",
 	"LISTS_SORT_ORDER_DESCENDING": "sorting order or direction from high to low value for numeric, or Z-A for alphabetic.\n{{Identical|Descending}}",

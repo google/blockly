@@ -134,7 +134,7 @@ Blockly.Options.prototype.parentWorkspace = null;
  * If set, sets the translation of the workspace to match the scrollbars.
  * No-op if unset.
  */
-Blockly.Options.prototype.setMetrics = function(translation) { return; };
+Blockly.Options.prototype.setMetrics = function() { return; };
 
 /**
  * Return an object with the metrics required to size the workspace, or null

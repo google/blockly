@@ -144,29 +144,29 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
   // Combining them speeds up rendering.
   var xyRatio = {};
 
-  var hKnobValue = x * this.hScroll.ratio_;
-  var vKnobValue = y * this.vScroll.ratio_;
+  var hHandlePosition = x * this.hScroll.ratio_;
+  var vHandlePosition = y * this.vScroll.ratio_;
 
-  var hBarLength = this.hScroll.barLength;
-  var vBarLength = this.vScroll.barLength;
+  var hBarLength = this.hScroll.scrollViewSize_;
+  var vBarLength = this.vScroll.scrollViewSize_;
 
-  xyRatio.x = this.getRatio_(hKnobValue, hBarLength);
-  xyRatio.y = this.getRatio_(vKnobValue, vBarLength);
+  xyRatio.x = this.getRatio_(hHandlePosition, hBarLength);
+  xyRatio.y = this.getRatio_(vHandlePosition, vBarLength);
   this.workspace_.setMetrics(xyRatio);
 
-  this.hScroll.setKnobOffset(hKnobValue);
-  this.vScroll.setKnobOffset(vKnobValue)
+  this.hScroll.setHandlePosition(hHandlePosition);
+  this.vScroll.setHandlePosition(vHandlePosition);
 };
 
 /**
- * Helper to calculate the ratio of knob value to bar length.
- * @param {number} knobValue The value of the knob.
- * @param {number} barLength The length of the scroll bar.
+ * Helper to calculate the ratio of handle position to scrollbar view size.
+ * @param {number} handlePosition The value of the knob.
+ * @param {number} viewSize The total size of the scrollbar's view.
  * @return {number} Ratio.
  * @private
  */
-Blockly.ScrollbarPair.prototype.getRatio_ = function(knobValue, barLength) {
-  var ratio = knobValue / barLength;
+Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
+  var ratio = handlePosition / viewSize;
   if (isNaN(ratio)) {
     return 0;
   }
@@ -179,6 +179,7 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(knobValue, barLength) {
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
+ * NB: "Knob" and "handle" are used interchangeably in this file.
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
@@ -192,9 +193,9 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
 
   this.createDom_();
 
-  this.barLength = 0;
-  this.knobLength = 0;
-  this.knobOffset = 0;
+  this.scrollViewSize_ = 0;
+  this.handleLength_ = 0;
+  this.handlePosition_ = 0;
   this.isVisible_ = true;
 
   this.yCoordinate = 0;
@@ -207,8 +208,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
         Blockly.Scrollbar.scrollbarThickness - 5);
     this.svgKnob_.setAttribute('y', 2.5);
 
-    this.lengthAttribute = 'width';
-    this.knobOffsetAttribute = 'x';
+    this.lengthAttribute_ = 'width';
+    this.positionAttribute_ = 'x';
   } else {
     this.svgBackground_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness);
@@ -216,8 +217,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
         Blockly.Scrollbar.scrollbarThickness - 5);
     this.svgKnob_.setAttribute('x', 2.5);
 
-    this.lengthAttribute = 'height';
-    this.knobOffsetAttribute = 'y';
+    this.lengthAttribute_ = 'height';
+    this.positionAttribute_ = 'y';
   }
   var scrollbar = this;
   this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
@@ -284,33 +285,34 @@ Blockly.Scrollbar.prototype.dispose = function() {
 };
 
 /**
- * Set the length of the scrollbar's knob and change the SVG attribute
+ * Set the length of the scrollbar's handle and change the SVG attribute
  * accordingly.
  * @param {number} newLength The new scrollbar handle length.
  */
-Blockly.Scrollbar.prototype.setKnobLength = function(newLength) {
-  this.knobLength = newLength;
-  this.svgKnob_.setAttribute(this.lengthAttribute, this.knobLength);
+Blockly.Scrollbar.prototype.setHandleLength_ = function(newLength) {
+  this.handleLength_ = newLength;
+  this.svgKnob_.setAttribute(this.lengthAttribute_, this.handleLength_);
 };
 
 /**
- * Set the offset of the scrollbar's knob and change the SVG attribute
+ * Set the offset of the scrollbar's handle and change the SVG attribute
  * accordingly.
- * @param {number} newOffset The new scrollbar handle offset.
+ * @param {number} newPosition The new scrollbar handle offset.
  */
-Blockly.Scrollbar.prototype.setKnobOffset = function(newOffset) {
-  this.knobOffset = newOffset;
-  this.svgKnob_.setAttribute(this.knobOffsetAttribute, this.knobOffset);
+Blockly.Scrollbar.prototype.setHandlePosition = function(newPosition) {
+  this.handlePosition_ = newPosition;
+  this.svgKnob_.setAttribute(this.positionAttribute_, this.handlePosition_);
 };
 
 /**
- * Set the length of the scrollbar's background and change the SVG attribute
+ * Set the size of the scrollbar's background and change the SVG attribute
  * accordingly.
- * @param {number} newLength The new scrollbar background length.
+ * @param {number} newSize The new scrollbar background length.
+ * @private
  */
-Blockly.Scrollbar.prototype.setBarLength = function(newLength) {
-  this.barLength = newLength;
-  this.svgBackground_.setAttribute(this.lengthAttribute, this.barLength);
+Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
+  this.scrollViewSize_ = newSize;
+  this.svgBackground_.setAttribute(this.lengthAttribute_, this.scrollViewSize_);
 };
 
 /**
@@ -364,37 +366,9 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
  * @private
  */
 Blockly.Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
-  this.resizeViewHorizontal_(hostMetrics);
-  this.resizeContentHorizontal_(hostMetrics);
-};
-
-/**
- * Recalculate a horizontal scrollbar's location within its path and length.
- * This should be called when the contents of the workspace have changed.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
- * @private
- */
-Blockly.Scrollbar.prototype.resizeContentHorizontal_ = function(hostMetrics) {
-  if (!this.pair_) {
-    // Only show the scrollbar if needed.
-    // Ideally this would also apply to scrollbar pairs, but that's a bigger
-    // headache (due to interactions with the corner square).
-    this.setVisible(this.barLength < hostMetrics.contentWidth);
-  }
-
-  this.ratio_ = this.barLength / hostMetrics.contentWidth;
-  if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
-      isNaN(this.ratio_)) {
-    this.ratio_ = 0;
-  }
-
-  var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
-      this.ratio_;
-  this.setKnobOffset(this.constrainKnob_(innerOffset));
-
-  var innerLength = hostMetrics.viewWidth * this.ratio_;
-  this.setKnobLength(Math.max(0, innerLength));
+  // TODO: Inspect metrics to determine if we can get away with just a content
+  // resize.
+  this.resizeViewHorizontal(hostMetrics);
 };
 
 /**
@@ -402,14 +376,14 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal_ = function(hostMetrics) {
  * This should be called when the layout or size of the window has changed.
  * @param {!Object} hostMetrics A data structure describing all the
  *     required dimensions, possibly fetched from the host object.
- * @private
  */
-Blockly.Scrollbar.prototype.resizeViewHorizontal_ = function(hostMetrics) {
-  var outerLength = hostMetrics.viewWidth - 1;
+Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
+  var viewSize = hostMetrics.viewWidth - 1;
   if (this.pair_) {
     // Shorten the scrollbar to make room for the corner square.
-    outerLength -= Blockly.Scrollbar.scrollbarThickness;
+    viewSize -= Blockly.Scrollbar.scrollbarThickness;
   }
+  this.setScrollViewSize_(Math.max(0, viewSize));
 
   this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (this.pair_ && this.workspace_.RTL) {
@@ -421,7 +395,37 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal_ = function(hostMetrics) {
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
 
-  this.setBarLength(Math.max(0, outerLength));
+  // If the view has been resized, a content resize will also be necessary.  The
+  // reverse is not true.
+  this.resizeContentHorizontal(hostMetrics);
+};
+
+/**
+ * Recalculate a horizontal scrollbar's location within its path and length.
+ * This should be called when the contents of the workspace have changed.
+ * @param {!Object} hostMetrics A data structure describing all the
+ *     required dimensions, possibly fetched from the host object.
+ */
+Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
+  if (!this.pair_) {
+    // Only show the scrollbar if needed.
+    // Ideally this would also apply to scrollbar pairs, but that's a bigger
+    // headache (due to interactions with the corner square).
+    this.setVisible(this.scrollViewSize_ < hostMetrics.contentWidth);
+  }
+
+  this.ratio_ = this.scrollViewSize_ / hostMetrics.contentWidth;
+  if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+      isNaN(this.ratio_)) {
+    this.ratio_ = 0;
+  }
+
+  var handleLength = hostMetrics.viewWidth * this.ratio_;
+  this.setHandleLength_(Math.max(0, handleLength));
+
+  var handlePosition = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
+      this.ratio_;
+  this.setHandlePosition(this.constrainHandle_(handlePosition));
 };
 
 /**
@@ -431,35 +435,9 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal_ = function(hostMetrics) {
  * @private
  */
 Blockly.Scrollbar.prototype.resizeVertical_ = function(hostMetrics) {
-  this.resizeViewVertical_(hostMetrics);
-  this.resizeContentVertical_(hostMetrics);
-};
-
-/**
- * Recalculate a vertical scrollbar's location within its path and length.
- * This should be called when the contents of the workspace have changed.
- * @param {!Object} hostMetrics A data structure describing all the
- *     required dimensions, possibly fetched from the host object.
- * @private
- */
-Blockly.Scrollbar.prototype.resizeContentVertical_ = function(hostMetrics) {
-  if (!this.pair_) {
-    // Only show the scrollbar if needed.
-    this.setVisible(this.barLength < hostMetrics.contentHeight);
-  }
-
-  this.ratio_ = this.barLength / hostMetrics.contentHeight;
-  if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
-      isNaN(this.ratio_)) {
-    this.ratio_ = 0;
-  }
-
-  var innerLength = hostMetrics.viewHeight * this.ratio_;
-  this.setKnobLength(Math.max(0, innerLength));
-
-  var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) *
-      this.ratio_;
-  this.setKnobOffset(this.constrainKnob_(innerOffset));
+  // TODO: Inspect metrics to determine if we can get away with just a content
+  // resize.
+  this.resizeViewVertical(hostMetrics);
 };
 
 /**
@@ -467,14 +445,14 @@ Blockly.Scrollbar.prototype.resizeContentVertical_ = function(hostMetrics) {
  * This should be called when the layout or size of the window has changed.
  * @param {!Object} hostMetrics A data structure describing all the
  *     required dimensions, possibly fetched from the host object.
- * @private
  */
-Blockly.Scrollbar.prototype.resizeViewVertical_ = function(hostMetrics) {
-  var outerLength = hostMetrics.viewHeight - 1;
+Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
+  var viewSize = hostMetrics.viewHeight - 1;
   if (this.pair_) {
     // Shorten the scrollbar to make room for the corner square.
-    outerLength -= Blockly.Scrollbar.scrollbarThickness;
+    viewSize -= Blockly.Scrollbar.scrollbarThickness;
   }
+  this.setScrollViewSize_(Math.max(0, viewSize));
 
   this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (!this.workspace_.RTL) {
@@ -485,7 +463,35 @@ Blockly.Scrollbar.prototype.resizeViewVertical_ = function(hostMetrics) {
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
 
-  this.setBarLength(Math.max(0, outerLength));
+  // If the view has been resized, a content resize will also be necessary.  The
+  // reverse is not true.
+  this.resizeContentVertical(hostMetrics);
+};
+
+/**
+ * Recalculate a vertical scrollbar's location within its path and length.
+ * This should be called when the contents of the workspace have changed.
+ * @param {!Object} hostMetrics A data structure describing all the
+ *     required dimensions, possibly fetched from the host object.
+ */
+Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
+  if (!this.pair_) {
+    // Only show the scrollbar if needed.
+    this.setVisible(this.scrollViewSize_ < hostMetrics.contentHeight);
+  }
+
+  this.ratio_ = this.scrollViewSize_ / hostMetrics.contentHeight;
+  if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+      isNaN(this.ratio_)) {
+    this.ratio_ = 0;
+  }
+
+  var handleLength = hostMetrics.viewHeight * this.ratio_;
+  this.setHandleLength_(Math.max(0, handleLength));
+
+  var handlePosition = (hostMetrics.viewTop - hostMetrics.contentTop) *
+      this.ratio_;
+  this.setHandlePosition(this.constrainHandle_(handlePosition));
 };
 
 /**
@@ -565,20 +571,20 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
   var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
-  var knobXY = Blockly.getSvgXY_(this.svgKnob_, this.workspace_);
-  var knobStart = this.horizontal_ ? knobXY.x : knobXY.y;
-  var knobValue = this.knobOffset;
+  var handleXY = Blockly.getSvgXY_(this.svgKnob_, this.workspace_);
+  var handleStart = this.horizontal_ ? handleXY.x : handleXY.y;
+  var handlePosition = this.handlePosition_;
 
-  var pageLength = this.knobLength * 0.95;
-  if (mouseLocation <= knobStart) {
+  var pageLength = this.handleLength_ * 0.95;
+  if (mouseLocation <= handleStart) {
     // Decrease the scrollbar's value by a page.
-    knobValue -= pageLength;
-  } else if (mouseLocation >= knobStart + this.knobLength) {
+    handlePosition -= pageLength;
+  } else if (mouseLocation >= handleStart + this.handleLength_) {
     // Increase the scrollbar's value by a page.
-    knobValue += pageLength;
+    handlePosition += pageLength;
   }
 
-  this.setKnobOffset(this.constrainKnob_(knobValue));
+  this.setHandlePosition(this.constrainHandle_(handlePosition));
 
   this.onScroll_();
   e.stopPropagation();
@@ -600,7 +606,7 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
     return;
   }
   // Look up the current translation and record it.
-  this.startDragKnob = this.knobOffset;
+  this.startDragKnob = this.handlePosition_;
   // Record the current mouse position.
   this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
   Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
@@ -621,7 +627,7 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
   var mouseDelta = currentMouse - this.startDragMouse;
   var knobValue = this.startDragKnob + mouseDelta;
   // Position the bar.
-  this.setKnobOffset(this.constrainKnob_(knobValue));
+  this.setHandlePosition(this.constrainHandle_(knobValue));
   this.onScroll_();
 };
 
@@ -642,17 +648,17 @@ Blockly.Scrollbar.prototype.onMouseUpKnob_ = function() {
 };
 
 /**
- * Constrain the knob's position within the minimum (0) and maximum
+ * Constrain the handle's position within the minimum (0) and maximum
  * (length of scrollbar) values allowed for the scrollbar.
  * @param {number} value Value that is potentially out of bounds.
  * @return {number} Constrained value.
  * @private
  */
-Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
+Blockly.Scrollbar.prototype.constrainHandle_ = function(value) {
   if (value <= 0 || isNaN(value)) {
     value = 0;
   } else {
-    value = Math.min(value, this.barLength - this.knobLength);
+    value = Math.min(value, this.scrollViewSize_ - this.handleLength_);
   }
   return value;
 };
@@ -662,7 +668,7 @@ Blockly.Scrollbar.prototype.constrainKnob_ = function(value) {
  * @private
  */
 Blockly.Scrollbar.prototype.onScroll_ = function() {
-  var ratio = this.knobOffset / this.barLength;
+  var ratio = this.handlePosition_ / this.scrollViewSize_;
   if (isNaN(ratio)) {
     ratio = 0;
   }
@@ -680,7 +686,7 @@ Blockly.Scrollbar.prototype.onScroll_ = function() {
  * @param {number} value The distance from the top/left end of the bar.
  */
 Blockly.Scrollbar.prototype.set = function(value) {
-  this.setKnobOffset(this.constrainKnob_(value * this.ratio_));
+  this.setHandlePosition(this.constrainHandle_(value * this.ratio_));
   this.onScroll_();
 };
 

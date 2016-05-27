@@ -454,7 +454,7 @@ Blockly.Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   }
 
   this.ratio_ = this.scrollViewSize_ / hostMetrics.contentWidth;
-  if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+  if (this.ratio_ == -Infinity || this.ratio_ == Infinity ||
       isNaN(this.ratio_)) {
     this.ratio_ = 0;
   }
@@ -519,7 +519,7 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
   }
 
   this.ratio_ = this.scrollViewSize_ / hostMetrics.contentHeight;
-  if (this.ratio_ === -Infinity || this.ratio_ === Infinity ||
+  if (this.ratio_ == -Infinity || this.ratio_ == Infinity ||
       isNaN(this.ratio_)) {
     this.ratio_ = 0;
   }

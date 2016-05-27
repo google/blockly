@@ -160,7 +160,7 @@ Blockly.ScrollbarPair.prototype.set = function(x, y) {
 
 /**
  * Helper to calculate the ratio of handle position to scrollbar view size.
- * @param {number} handlePosition The value of the knob.
+ * @param {number} handlePosition The value of the handle.
  * @param {number} viewSize The total size of the scrollbar's view.
  * @return {number} Ratio.
  * @private
@@ -179,7 +179,6 @@ Blockly.ScrollbarPair.prototype.getRatio_ = function(handlePosition, viewSize) {
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
- * NB: "Knob" and "handle" are used interchangeably in this file.
  * @param {!Blockly.Workspace} workspace Workspace to bind the scrollbar to.
  * @param {boolean} horizontal True if horizontal, false if vertical.
  * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
@@ -204,18 +203,18 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   if (horizontal) {
     this.svgBackground_.setAttribute('height',
         Blockly.Scrollbar.scrollbarThickness);
-    this.svgKnob_.setAttribute('height',
+    this.svgHandle_.setAttribute('height',
         Blockly.Scrollbar.scrollbarThickness - 5);
-    this.svgKnob_.setAttribute('y', 2.5);
+    this.svgHandle_.setAttribute('y', 2.5);
 
     this.lengthAttribute_ = 'width';
     this.positionAttribute_ = 'x';
   } else {
     this.svgBackground_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness);
-    this.svgKnob_.setAttribute('width',
+    this.svgHandle_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness - 5);
-    this.svgKnob_.setAttribute('x', 2.5);
+    this.svgHandle_.setAttribute('x', 2.5);
 
     this.lengthAttribute_ = 'height';
     this.positionAttribute_ = 'y';
@@ -223,8 +222,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   var scrollbar = this;
   this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
       'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-  this.onMouseDownKnobWrapper_ = Blockly.bindEvent_(this.svgKnob_,
-      'mousedown', scrollbar, scrollbar.onMouseDownKnob_);
+  this.onMouseDownHandleWrapper_ = Blockly.bindEvent_(this.svgHandle_,
+      'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
 
 /**
@@ -271,16 +270,16 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Scrollbar.prototype.dispose = function() {
-  this.onMouseUpKnob_();
+  this.onMouseUpHandle_();
   Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
   this.onMouseDownBarWrapper_ = null;
-  Blockly.unbindEvent_(this.onMouseDownKnobWrapper_);
-  this.onMouseDownKnobWrapper_ = null;
+  Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
+  this.onMouseDownHandleWrapper_ = null;
 
   goog.dom.removeNode(this.svgGroup_);
   this.svgGroup_ = null;
   this.svgBackground_ = null;
-  this.svgKnob_ = null;
+  this.svgHandle_ = null;
   this.workspace_ = null;
 };
 
@@ -291,7 +290,7 @@ Blockly.Scrollbar.prototype.dispose = function() {
  */
 Blockly.Scrollbar.prototype.setHandleLength_ = function(newLength) {
   this.handleLength_ = newLength;
-  this.svgKnob_.setAttribute(this.lengthAttribute_, this.handleLength_);
+  this.svgHandle_.setAttribute(this.lengthAttribute_, this.handleLength_);
 };
 
 /**
@@ -301,7 +300,7 @@ Blockly.Scrollbar.prototype.setHandleLength_ = function(newLength) {
  */
 Blockly.Scrollbar.prototype.setHandlePosition = function(newPosition) {
   this.handlePosition_ = newPosition;
-  this.svgKnob_.setAttribute(this.positionAttribute_, this.handlePosition_);
+  this.svgHandle_.setAttribute(this.positionAttribute_, this.handlePosition_);
 };
 
 /**
@@ -503,7 +502,7 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   /* Create the following DOM:
   <g class="blocklyScrollbarHorizontal">
     <rect class="blocklyScrollbarBackground" />
-    <rect class="blocklyScrollbarKnob" rx="8" ry="8" />
+    <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
   </g>
   */
   var className = 'blocklyScrollbar' +
@@ -512,8 +511,8 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   this.svgBackground_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
-  this.svgKnob_ = Blockly.createSvgElement('rect',
-      {'class': 'blocklyScrollbarKnob', 'rx': radius, 'ry': radius},
+  this.svgHandle_ = Blockly.createSvgElement('rect',
+      {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
       this.svgGroup_);
   Blockly.Scrollbar.insertAfter_(this.svgGroup_,
                                  this.workspace_.getBubbleCanvas());
@@ -561,7 +560,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
-  this.onMouseUpKnob_();
+  this.onMouseUpHandle_();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -571,7 +570,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
   var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
-  var handleXY = Blockly.getSvgXY_(this.svgKnob_, this.workspace_);
+  var handleXY = Blockly.getSvgXY_(this.svgHandle_, this.workspace_);
   var handleStart = this.horizontal_ ? handleXY.x : handleXY.y;
   var handlePosition = this.handlePosition_;
 
@@ -593,12 +592,12 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
 
 /**
  * Start a dragging operation.
- * Called when scrollbar knob is clicked.
+ * Called when scrollbar handle is clicked.
  * @param {!Event} e Mouse down event.
  * @private
  */
-Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
-  this.onMouseUpKnob_();
+Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
+  this.onMouseUpHandle_();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -606,28 +605,28 @@ Blockly.Scrollbar.prototype.onMouseDownKnob_ = function(e) {
     return;
   }
   // Look up the current translation and record it.
-  this.startDragKnob = this.handlePosition_;
+  this.startDragHandle = this.handlePosition_;
   // Record the current mouse position.
   this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
   Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
-      'mouseup', this, this.onMouseUpKnob_);
+      'mouseup', this, this.onMouseUpHandle_);
   Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
-      'mousemove', this, this.onMouseMoveKnob_);
+      'mousemove', this, this.onMouseMoveHandle_);
   e.stopPropagation();
   e.preventDefault();
 };
 
 /**
- * Drag the scrollbar's knob.
+ * Drag the scrollbar's handle.
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
+Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
   var currentMouse = this.horizontal_ ? e.clientX : e.clientY;
   var mouseDelta = currentMouse - this.startDragMouse;
-  var knobValue = this.startDragKnob + mouseDelta;
+  var handlePosition = this.startDragHandle + mouseDelta;
   // Position the bar.
-  this.setHandlePosition(this.constrainHandle_(knobValue));
+  this.setHandlePosition(this.constrainHandle_(handlePosition));
   this.onScroll_();
 };
 
@@ -635,7 +634,7 @@ Blockly.Scrollbar.prototype.onMouseMoveKnob_ = function(e) {
  * Stop binding to the global mouseup and mousemove events.
  * @private
  */
-Blockly.Scrollbar.prototype.onMouseUpKnob_ = function() {
+Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);

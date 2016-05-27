@@ -118,12 +118,12 @@ Blockly.ScrollbarPair.prototype.resize = function() {
   if (!this.oldHostMetrics_ ||
       this.oldHostMetrics_.viewWidth != hostMetrics.viewWidth ||
       this.oldHostMetrics_.absoluteLeft != hostMetrics.absoluteLeft) {
-    this.corner_.setAttribute('x', this.vScroll.xCoordinate);
+    this.corner_.setAttribute('x', this.vScroll.position_.x);
   }
   if (!this.oldHostMetrics_ ||
       this.oldHostMetrics_.viewHeight != hostMetrics.viewHeight ||
       this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop) {
-    this.corner_.setAttribute('y', this.hScroll.yCoordinate);
+    this.corner_.setAttribute('y', this.hScroll.position_.y);
   }
 
   // Cache the current metrics to potentially short-cut the next resize event.
@@ -192,13 +192,12 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
 
   this.createDom_();
 
-  this.scrollViewSize_ = 0;
-  this.handleLength_ = 0;
-  this.handlePosition_ = 0;
-  this.isVisible_ = true;
-
-  this.yCoordinate = 0;
-  this.xCoordinate = 0;
+  /**
+   * The upper left corner of the scrollbar's svg group.
+   * @type {goog.math.Coordinate}
+   * @private
+   */
+  this.position_ = new goog.math.Coordinate(0, 0);
 
   if (horizontal) {
     this.svgBackground_.setAttribute('height',
@@ -225,6 +224,34 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   this.onMouseDownHandleWrapper_ = Blockly.bindEvent_(this.svgHandle_,
       'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
+
+/**
+ * The size of the area within which the scrollbar handle can move.
+ * @type {number}
+ * @private
+ */
+Blockly.Scrollbar.prototype.scrollViewSize_ = 0;
+
+/**
+ * The length of the scrollbar handle.
+ * @type {number}
+ * @private
+ */
+Blockly.Scrollbar.prototype.handleLength_ = 0;
+
+/**
+ * The offset of the start of the handle from the start of the scrollbar range.
+ * @type {number}
+ * @private
+ */
+Blockly.Scrollbar.prototype.handlePosition_ = 0;
+
+/**
+ * Whether the scrollbar handle is visible.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Scrollbar.prototype.isVisible_ = true;
 
 /**
  * Width of vertical scrollbar or height of horizontal scrollbar.
@@ -315,6 +342,19 @@ Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
 };
 
 /**
+ * Set the position of the scrollbar's svg group.
+ * @param {number} x The new x coordinate.
+ * @param {number} y The new y coordinate.
+ */
+Blockly.Scrollbar.prototype.setPosition = function(x, y) {
+  this.position_.x = x;
+  this.position_.y = y;
+
+  this.svgGroup_.setAttribute('transform',
+      'translate(' + this.position_.x + ',' + this.position_.y + ')');
+};
+
+/**
  * Recalculate the scrollbar's location and its length.
  * @param {Object=} opt_metrics A data structure of from the describing all the
  * required dimensions.  If not provided, it will be fetched from the host
@@ -384,15 +424,15 @@ Blockly.Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
   }
   this.setScrollViewSize_(Math.max(0, viewSize));
 
-  this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
+  var xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (this.pair_ && this.workspace_.RTL) {
-    this.xCoordinate += Blockly.Scrollbar.scrollbarThickness;
+    xCoordinate += Blockly.Scrollbar.scrollbarThickness;
   }
+
   // Horizontal toolbar should always be just above the bottom of the workspace.
-  this.yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
+  var yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
       Blockly.Scrollbar.scrollbarThickness - 0.5;
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
+  this.setPosition(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.  The
   // reverse is not true.
@@ -453,14 +493,13 @@ Blockly.Scrollbar.prototype.resizeViewVertical = function(hostMetrics) {
   }
   this.setScrollViewSize_(Math.max(0, viewSize));
 
-  this.xCoordinate = hostMetrics.absoluteLeft + 0.5;
+  var xCoordinate = hostMetrics.absoluteLeft + 0.5;
   if (!this.workspace_.RTL) {
-    this.xCoordinate += hostMetrics.viewWidth -
+    xCoordinate += hostMetrics.viewWidth -
         Blockly.Scrollbar.scrollbarThickness - 1;
   }
-  this.yCoordinate = hostMetrics.absoluteTop + 0.5;
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + this.xCoordinate + ',' + this.yCoordinate + ')');
+  var yCoordinate = hostMetrics.absoluteTop + 0.5;
+  this.setPosition(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.  The
   // reverse is not true.

@@ -78,6 +78,8 @@ blocklyApp.FieldView = ng.core
     }],
     ngOnInit: function() {
       var elementsNeedingIds = this.generateElementNames(this.field);
+      // Warning: this assumes that the elements returned by
+      // this.generateElementNames() are unique.
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
     },
     generateAriaLabelledByAttr: function() {

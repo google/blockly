@@ -521,6 +521,12 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     block.setCollapsed(collapsed == 'true');
   }
   if (xmlBlock.nodeName.toLowerCase() == 'shadow') {
+    // Ensure all children are also shadows.
+    var children = block.getChildren();
+    for (var i = 0, child; child = children[i]; i++) {
+      goog.asserts.assert(child.isShadow(),
+                          'Shadow block not allowed non-shadow child.');
+    }
     block.setShadow(true);
   }
   // Give the block a chance to clean up any initial inputs.

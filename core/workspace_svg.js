@@ -301,7 +301,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
 
 /**
  * Resize the parts of the workspace that change when the workspace
- * contents (e.g. block positions) change.
+ * contents (e.g. block positions) change.  This will also scroll the
+ * workspace contents if needed.
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
   if (this.scrollbar) {
@@ -312,6 +313,13 @@ Blockly.WorkspaceSvg.prototype.resizeContents = function() {
   }
 };
 
+/**
+ * Resize and reposition all of the workspace chrome (toolbox,
+ * trash, scrollbars etc.)
+ * This should be called when something changes that
+ * requires recalculating dimensions and positions of the
+ * trash, zoom, toolbox, etc. (e.g. window resize).
+ */
 Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.toolbox_) {
     this.toolbox_.position();

@@ -587,7 +587,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.offsetHorizontalRtlBlocks(this.workspace_.getTopBlocks(false));
   this.filterForCapacity_();
 
-  // To position the flyout's scrollbar when it opens.
+  // Correctly position the flyout's scrollbar when it opens.
   this.position();
 
   this.reflowWrapper_ = this.reflow.bind(this);

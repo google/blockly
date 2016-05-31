@@ -260,7 +260,6 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
-
   Blockly.Field.startCache();
   this.rendered = true;
 
@@ -280,8 +279,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
 
   var inputRows = this.renderCompute_(cursorX);
   this.renderDraw_(cursorX, inputRows);
-
-  this.renderMoveConnections();
+  this.renderMoveConnections_();
 
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).
@@ -552,8 +550,9 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
  * Update all of the connections on this block with the new locations calculated
  * in renderCompute.  Also move all of the connected blocks based on the new
  * connection locations.
+ * @private
  */
-Blockly.BlockSvg.prototype.renderMoveConnections = function() {
+Blockly.BlockSvg.prototype.renderMoveConnections_ = function() {
   var blockTL = this.getRelativeToSurfaceXY();
   if (this.previousConnection) {
     this.previousConnection.moveToOffset(blockTL);

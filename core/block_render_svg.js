@@ -260,6 +260,7 @@ Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_LTR =
  *   If true, also render block's parent, grandparent, etc.  Defaults to true.
  */
 Blockly.BlockSvg.prototype.render = function(opt_bubble) {
+
   Blockly.Field.startCache();
   this.rendered = true;
 
@@ -279,6 +280,8 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
 
   var inputRows = this.renderCompute_(cursorX);
   this.renderDraw_(cursorX, inputRows);
+
+  this.renderMoveConnections();
 
   if (opt_bubble !== false) {
     // Render all blocks above this one (propagate a reflow).
@@ -517,10 +520,6 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
     }
   }
 
-  // Fetch the block's coordinates on the surface for use in anchoring
-  // the connections.
-  var connectionsXY = this.getRelativeToSurfaceXY();
-
   // Assemble the block's path.
   var steps = [];
   var inlineSteps = [];
@@ -530,12 +529,11 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
   var highlightSteps = [];
   var highlightInlineSteps = [];
 
-  this.renderDrawTop_(steps, highlightSteps, connectionsXY,
-      inputRows.rightEdge);
+  this.renderDrawTop_(steps, highlightSteps, inputRows.rightEdge);
   var cursorY = this.renderDrawRight_(steps, highlightSteps, inlineSteps,
-      highlightInlineSteps, connectionsXY, inputRows, iconWidth);
-  this.renderDrawBottom_(steps, highlightSteps, connectionsXY, cursorY);
-  this.renderDrawLeft_(steps, highlightSteps, connectionsXY);
+      highlightInlineSteps, inputRows, iconWidth);
+  this.renderDrawBottom_(steps, highlightSteps, cursorY);
+  this.renderDrawLeft_(steps, highlightSteps);
 
   var pathString = steps.join(' ') + '\n' + inlineSteps.join(' ');
   this.svgPath_.setAttribute('d', pathString);
@@ -551,15 +549,50 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
 };
 
 /**
+ * Update all of the connections on this block with the new locations calculated
+ * in renderCompute.  Also move all of the connected blocks based on the new
+ * connection locations.
+ */
+Blockly.BlockSvg.prototype.renderMoveConnections = function() {
+  var blockTL = this.getRelativeToSurfaceXY();
+  if (this.previousConnection) {
+    this.previousConnection.moveToOffset(blockTL);
+    // Don't tighten the previous connection because it's an inferior
+    // connection.
+  }
+
+  for (var i = 0; i < this.inputList.length; i++) {
+    var conn = this.inputList[i].connection;
+    if (conn) {
+      conn.moveToOffset(blockTL);
+      if (conn.isConnected()) {
+        conn.tighten_();
+      }
+    }
+  }
+
+  if (this.nextConnection) {
+    this.nextConnection.moveToOffset(blockTL);
+    if (this.nextConnection.isConnected()) {
+      this.nextConnection.tighten_();
+    }
+  }
+
+  if (this.outputConnection) {
+    this.outputConnection.moveToOffset(blockTL);
+    // Don't tighten the output connection because it's an inferior connection.
+  }
+};
+
+/**
  * Render the top edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
  * @param {!Array.<string>} highlightSteps Path of block highlights.
- * @param {!Object} connectionsXY Location of block.
  * @param {number} rightEdge Minimum width of block.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawTop_ =
-    function(steps, highlightSteps, connectionsXY, rightEdge) {
+    function(steps, highlightSteps, rightEdge) {
   /* eslint-disable indent */
   // Position the cursor at the top-left starting point.
   if (this.squareTopLeftCorner_) {
@@ -587,12 +620,10 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
     highlightSteps.push('H', Blockly.BlockSvg.NOTCH_WIDTH - 15);
     steps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT);
     highlightSteps.push(Blockly.BlockSvg.NOTCH_PATH_LEFT_HIGHLIGHT);
-    // Create previous block connection.
-    var connectionX = connectionsXY.x + (this.RTL ?
+
+    var connectionX = (this.RTL ?
         -Blockly.BlockSvg.NOTCH_WIDTH : Blockly.BlockSvg.NOTCH_WIDTH);
-    var connectionY = connectionsXY.y;
-    this.previousConnection.moveTo(connectionX, connectionY);
-    // This connection will be tightened when the parent renders.
+    this.previousConnection.setOffsetInBlock(connectionX, 0);
   }
   steps.push('H', rightEdge);
   highlightSteps.push('H', rightEdge - 0.5);
@@ -605,7 +636,6 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
  * @param {!Array.<string>} highlightSteps Path of block highlights.
  * @param {!Array.<string>} inlineSteps Inline block outlines.
  * @param {!Array.<string>} highlightInlineSteps Inline block highlights.
- * @param {!Object} connectionsXY Location of block.
  * @param {!Array.<!Array.<!Object>>} inputRows 2D array of objects, each
  *     containing position information.
  * @param {number} iconWidth Offset of first row due to icons.
@@ -613,7 +643,7 @@ Blockly.BlockSvg.prototype.renderDrawTop_ =
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
-    inlineSteps, highlightInlineSteps, connectionsXY, inputRows, iconWidth) {
+    inlineSteps, highlightInlineSteps, inputRows, iconWidth) {
   var cursorX;
   var cursorY = 0;
   var connectionX, connectionY;
@@ -694,20 +724,16 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
           }
           // Create inline input connection.
           if (this.RTL) {
-            connectionX = connectionsXY.x - cursorX -
+            connectionX = -cursorX -
                 Blockly.BlockSvg.TAB_WIDTH + Blockly.BlockSvg.SEP_SPACE_X +
                 input.renderWidth + 1;
           } else {
-            connectionX = connectionsXY.x + cursorX +
+            connectionX = cursorX +
                 Blockly.BlockSvg.TAB_WIDTH - Blockly.BlockSvg.SEP_SPACE_X -
                 input.renderWidth - 1;
           }
-          connectionY = connectionsXY.y + cursorY +
-              Blockly.BlockSvg.INLINE_PADDING_Y + 1;
-          input.connection.moveTo(connectionX, connectionY);
-          if (input.connection.isConnected()) {
-            input.connection.tighten_();
-          }
+          connectionY = cursorY + Blockly.BlockSvg.INLINE_PADDING_Y + 1;
+          input.connection.setOffsetInBlock(connectionX, connectionY);
         }
       }
 
@@ -749,12 +775,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
             ',-2.1');
       }
       // Create external input connection.
-      connectionX = connectionsXY.x +
-          (this.RTL ? -inputRows.rightEdge - 1 : inputRows.rightEdge + 1);
-      connectionY = connectionsXY.y + cursorY;
-      input.connection.moveTo(connectionX, connectionY);
+      connectionX = (this.RTL ? -inputRows.rightEdge - 1 :
+          inputRows.rightEdge + 1);
+      input.connection.setOffsetInBlock(connectionX, cursorY);
       if (input.connection.isConnected()) {
-        input.connection.tighten_();
         this.width = Math.max(this.width, inputRows.rightEdge +
             input.connection.targetBlock().getHeightWidth().width -
             Blockly.BlockSvg.TAB_WIDTH + 1);
@@ -832,11 +856,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         highlightSteps.push('H', inputRows.rightEdge - 0.5);
       }
       // Create statement connection.
-      connectionX = connectionsXY.x + (this.RTL ? -cursorX : cursorX + 1);
-      connectionY = connectionsXY.y + cursorY + 1;
-      input.connection.moveTo(connectionX, connectionY);
+      connectionX = (this.RTL ? -cursorX : cursorX + 1);
+
+      input.connection.setOffsetInBlock(connectionX, cursorY + 1);
       if (input.connection.isConnected()) {
-        input.connection.tighten_();
         this.width = Math.max(this.width, inputRows.statementEdge +
             input.connection.targetBlock().getHeightWidth().width);
       }
@@ -867,12 +890,11 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
  * Render the bottom edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
  * @param {!Array.<string>} highlightSteps Path of block highlights.
- * @param {!Object} connectionsXY Location of block.
  * @param {number} cursorY Height of block.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDrawBottom_ =
-    function(steps, highlightSteps, connectionsXY, cursorY) {
+    function(steps, highlightSteps, cursorY) {
   /* eslint-disable indent */
   this.height += cursorY + 1;  // Add one for the shadow.
   if (this.nextConnection) {
@@ -881,15 +903,11 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
     // Create next block connection.
     var connectionX;
     if (this.RTL) {
-      connectionX = connectionsXY.x - Blockly.BlockSvg.NOTCH_WIDTH;
+      connectionX = -Blockly.BlockSvg.NOTCH_WIDTH;
     } else {
-      connectionX = connectionsXY.x + Blockly.BlockSvg.NOTCH_WIDTH;
+      connectionX = Blockly.BlockSvg.NOTCH_WIDTH;
     }
-    var connectionY = connectionsXY.y + cursorY + 1;
-    this.nextConnection.moveTo(connectionX, connectionY);
-    if (this.nextConnection.isConnected()) {
-      this.nextConnection.tighten_();
-    }
+    this.nextConnection.setOffsetInBlock(connectionX, cursorY + 1);
     this.height += 4;  // Height of tab.
   }
 
@@ -919,16 +937,12 @@ Blockly.BlockSvg.prototype.renderDrawBottom_ =
  * Render the left edge of the block.
  * @param {!Array.<string>} steps Path of block outline.
  * @param {!Array.<string>} highlightSteps Path of block highlights.
- * @param {!Object} connectionsXY Location of block.
  * @private
  */
-Blockly.BlockSvg.prototype.renderDrawLeft_ =
-    function(steps, highlightSteps, connectionsXY) {
-  /* eslint-disable indent */
+Blockly.BlockSvg.prototype.renderDrawLeft_ = function(steps, highlightSteps) {
   if (this.outputConnection) {
     // Create output connection.
-    this.outputConnection.moveTo(connectionsXY.x, connectionsXY.y);
-    // This connection will be tightened when the parent renders.
+    this.outputConnection.setOffsetInBlock(0, 0);
     steps.push('V', Blockly.BlockSvg.TAB_HEIGHT);
     steps.push('c 0,-10 -' + Blockly.BlockSvg.TAB_WIDTH + ',8 -' +
         Blockly.BlockSvg.TAB_WIDTH + ',-7.5 s ' + Blockly.BlockSvg.TAB_WIDTH +
@@ -954,4 +968,4 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ =
     }
   }
   steps.push('z');
-};  /* eslint-enable indent */
+};

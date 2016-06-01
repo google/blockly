@@ -32,10 +32,13 @@ blocklyApp.WorkspaceView = ng.core
         <h3 #workspaceTitle id="blockly-workspace-title">{{stringMap['WORKSPACE']}}</h3>
       </label>
       <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event, getActiveElementId())">
-        <button id='run-code' (click)='runCode()' disabled={{disableRunCode()}}
-            [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>{{stringMap['RUN_CODE']}}</button>
-        <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableRunCode()}}
-            [attr.aria-disabled]='disableRunCode()' class='blocklyTree'>{{stringMap['CLEAR_WORKSPACE']}}</button>
+        <span *ngFor="#buttonConfig of toolbarButtonConfig">
+          <button (click)='buttonConfig.action()' class='blocklyTree'>
+            {{buttonConfig.text}}
+          </button>
+        </span>
+        <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableClearWorkspace()}}
+            [attr.aria-disabled]='disableClearWorkspace()' class='blocklyTree'>{{stringMap['CLEAR_WORKSPACE']}}</button>
       </div>
       <div *ngIf="workspace">
         <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index"
@@ -55,9 +58,16 @@ blocklyApp.WorkspaceView = ng.core
         this.workspace = blocklyApp.workspace;
         this.treeService = _treeService;
       }
+      // ACCESSIBLE_GLOBALS is a global variable defined by the containing
+      // page. It should contain a key, toolbarButtonConfig, whose
+      // corresponding value is an Array with two keys: 'text' and 'action'.
+      // The first is the text to display on the button, and the second is the
+      // function that gets run when the button is clicked.
+      this.toolbarButtonConfig =
+        ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
+        ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
       this.stringMap = {
         'WORKSPACE': Blockly.Msg.WORKSPACE,
-        'RUN_CODE': Blockly.Msg.RUN_CODE,
         'CLEAR_WORKSPACE': Blockly.Msg.CLEAR_WORKSPACE
       };
     }],
@@ -73,10 +83,7 @@ blocklyApp.WorkspaceView = ng.core
     makeId: function(index) {
       return 'blockly-workspace-tree' + index;
     },
-    runCode: function() {
-      runCode();
-    },
-    disableRunCode: function() {
+    disableClearWorkspace: function() {
       if (blocklyApp.workspace.topBlocks_.length){
         return undefined;
       } else {

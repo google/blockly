@@ -52,6 +52,11 @@
   <blockly-app></blockly-app>
 
   <script>
+    var ACCESSIBLE_GLOBALS = {
+      // Additional buttons for the workspace toolbar that
+      // go before the "Clear Workspace" button.
+      toolbarButtonConfig: []
+    };
     document.addEventListener('DOMContentLoaded', function() {
       ng.platform.browser.bootstrap(blocklyApp.AppView);
     });

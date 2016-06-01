@@ -63,7 +63,7 @@
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
-var fakeDragQueue = [];
+var fakeDragStack = [];
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -180,11 +180,11 @@ function airstrike(n) {
 }
 
 function fakeDrag(id, dx, dy, opt_workspace) {
-  var ws = opt_workspace ? opt_workspace : Blockly.getMainWorkspace();
+  var ws = opt_workspace || Blockly.getMainWorkspace();
   var blockToDrag = ws.getBlockById(id);
 
   if (!blockToDrag) {
-    return;
+    fakeDragWrapper();
   }
   var blockTop = blockToDrag.svgGroup_.getBoundingClientRect().top;
   var blockLeft = blockToDrag.svgGroup_.getBoundingClientRect().left;
@@ -195,7 +195,7 @@ function fakeDrag(id, dx, dy, opt_workspace) {
   blockToDrag.onMouseDown_(mouseDownEvent);
 
   // Throw in a move for good measure.
-  window.setTimeout(
+  setTimeout(
     function() {
       var mouseMoveEvent = new MouseEvent('mousemove',
           {clientX: blockLeft + dx,
@@ -203,36 +203,35 @@ function fakeDrag(id, dx, dy, opt_workspace) {
       blockToDrag.onMouseMove_(mouseMoveEvent);
 
       // Drop at dx, dy.
-      window.setTimeout(
+      setTimeout(
         function() {
           var mouseUpEvent = new MouseEvent('mouseup',
               {clientX: blockLeft + dx,
               clientY: blockTop + dy});
           blockToDrag.onMouseUp_(mouseUpEvent);
 
-          window.setTimeout(fakeDragWrapper(), 100);
+          setTimeout(fakeDragWrapper(), 100);
         }, 30);
     }, 30);
 };
 
 function fakeDragWrapper() {
-  var dragInfo = fakeDragQueue.pop();
+  var dragInfo = fakeDragStack.pop();
   if (dragInfo) {
     fakeDrag(dragInfo.id, dragInfo.dx, dragInfo.dy, dragInfo.workspace);
   }
 }
 
 function fakeManyDrags() {
-  var ws = Blockly.getMainWorkspace();
-  var blockList = ws.getAllBlocks();
+  var blockList = workspace.getAllBlocks();
   for (var i = 0; i < 2 * blockList.length; i++) {
-    fakeDragQueue.push(
+    fakeDragStack.push(
       {
         id: blockList[Math.round(Math.random() * (blockList.length - 1))].id,
         // Move some blocks up and to the left, but mostly down and to the right.
         dx: Math.round((Math.random() - 0.25) * 200),
-        dy: Math.round((Math.random() - 0.25)* 200),
-        workspace: ws
+        dy: Math.round((Math.random() - 0.25) * 200),
+        workspace: workspace
       });
   }
   fakeDragWrapper();
@@ -651,8 +650,8 @@ h1 {
     Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-     <input type="button" value="Fake some drags!" onclick="fakeManyDrags()">
- </p>
+    <input type="button" value="Fake some drags!" onclick="fakeManyDrags()">
+  </p>
   <p>
     Log events: &nbsp;
     <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">

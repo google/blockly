@@ -185,6 +185,7 @@ function fakeDrag(id, dx, dy, opt_workspace) {
 
   if (!blockToDrag) {
     fakeDragWrapper();
+    return;
   }
   var blockTop = blockToDrag.svgGroup_.getBoundingClientRect().top;
   var blockLeft = blockToDrag.svgGroup_.getBoundingClientRect().left;

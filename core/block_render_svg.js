@@ -554,10 +554,13 @@ Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
  */
 Blockly.BlockSvg.prototype.renderMoveConnections_ = function() {
   var blockTL = this.getRelativeToSurfaceXY();
+  // Don't tighten previous or output connecitons because they are inferior
+  // connections.
   if (this.previousConnection) {
     this.previousConnection.moveToOffset(blockTL);
-    // Don't tighten the previous connection because it's an inferior
-    // connection.
+  }
+  if (this.outputConnection) {
+    this.outputConnection.moveToOffset(blockTL);
   }
 
   for (var i = 0; i < this.inputList.length; i++) {
@@ -577,10 +580,6 @@ Blockly.BlockSvg.prototype.renderMoveConnections_ = function() {
     }
   }
 
-  if (this.outputConnection) {
-    this.outputConnection.moveToOffset(blockTL);
-    // Don't tighten the output connection because it's an inferior connection.
-  }
 };
 
 /**
@@ -774,8 +773,8 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
             ',-2.1');
       }
       // Create external input connection.
-      connectionX = (this.RTL ? -inputRows.rightEdge - 1 :
-          inputRows.rightEdge + 1);
+      connectionX = this.RTL ? -inputRows.rightEdge - 1 :
+          inputRows.rightEdge + 1;
       input.connection.setOffsetInBlock(connectionX, cursorY);
       if (input.connection.isConnected()) {
         this.width = Math.max(this.width, inputRows.rightEdge +
@@ -855,9 +854,9 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         highlightSteps.push('H', inputRows.rightEdge - 0.5);
       }
       // Create statement connection.
-      connectionX = (this.RTL ? -cursorX : cursorX + 1);
-
+      connectionX = this.RTL ? -cursorX : cursorX + 1;
       input.connection.setOffsetInBlock(connectionX, cursorY + 1);
+
       if (input.connection.isConnected()) {
         this.width = Math.max(this.width, inputRows.statementEdge +
             input.connection.targetBlock().getHeightWidth().width);

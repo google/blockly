@@ -127,7 +127,7 @@ Blockly.RenderedConnection.prototype.moveBy = function(dx, dy) {
 /**
  * Move this connection to the location given by its offset within the block and
  * the coordinate of the block's top left corner.
- * @param {goog.math.Coordinate} blockTL The coordinate of the top left corner
+ * @param {!goog.math.Coordinate} blockTL The coordinate of the top left corner
  *     of the block.
  */
 Blockly.RenderedConnection.prototype.moveToOffset = function(blockTL) {

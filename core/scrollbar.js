@@ -190,6 +190,7 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   this.workspace_ = workspace;
   this.pair_ = opt_pair || false;
   this.horizontal_ = horizontal;
+  this.oldHostMetrics_ = {};
 
   this.createDom_();
 
@@ -222,6 +223,35 @@ Blockly.Scrollbar.scrollbarThickness = 15;
 if (goog.events.BrowserFeature.TOUCH_ENABLED) {
   Blockly.Scrollbar.scrollbarThickness = 25;
 }
+
+/**
+ * @param {!Object} first An object containing computed measurements of a
+ *    workspace.
+ * @param {!Object} second Another object containing computed measurements of a
+ *    workspace.
+ * @return {boolean} Whether the two sets of metrics are equivalent.
+ * @private
+ */
+Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
+  if (!(first && second)) {
+    return false;
+  }
+
+  if (first.viewWidth != second.viewWidth ||
+      first.viewHeight != second.viewHeight ||
+      first.viewLeft != second.viewLeft ||
+      first.viewTop != second.viewTop ||
+      first.absoluteTop != second.absoluteTop ||
+      first.absoluteLeft != second.absoluteLeft ||
+      first.contentWidth != second.contentWidth ||
+      first.contentHeight != second.contentHeight ||
+      first.contentLeft != second.contentLeft ||
+      first.contentTop != second.contentTop) {
+    return false;
+  }
+
+  return true;
+};
 
 /**
  * Dispose of this scrollbar.
@@ -257,6 +287,13 @@ Blockly.Scrollbar.prototype.resize = function(opt_metrics) {
       return;
     }
   }
+
+  if (Blockly.Scrollbar.metricsAreEquivalent_(hostMetrics,
+      this.oldHostMetrics_)) {
+    return;
+  }
+  this.oldHostMetrics_ = hostMetrics;
+
   /* hostMetrics is an object with the following properties.
    * .viewHeight: Height of the visible rectangle,
    * .viewWidth: Width of the visible rectangle,

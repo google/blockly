@@ -265,14 +265,14 @@ Blockly.BlockSvg.terminateDrag_ = function() {
       // Ensure that any stap and bump are part of this move's event group.
       var group = Blockly.Events.getGroup();
       setTimeout(function() {
-          Blockly.Events.setGroup(group);
-          selected.snapToGrid();
-          Blockly.Events.setGroup(false);
+        Blockly.Events.setGroup(group);
+        selected.snapToGrid();
+        Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY / 2);
       setTimeout(function() {
-          Blockly.Events.setGroup(group);
-          selected.bumpNeighbours_();
-          Blockly.Events.setGroup(false);
+        Blockly.Events.setGroup(group);
+        selected.bumpNeighbours_();
+        Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
       // Fire an event to allow scrollbars to resize.
       Blockly.asyncSvgResize(this.workspace);
@@ -984,6 +984,7 @@ Blockly.BlockSvg.prototype.getSvgRoot = function() {
  * @param {boolean} animate If true, show a disposal animation and sound.
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
+  Blockly.Tooltip.hide();
   Blockly.Field.startCache();
   // If this block is being dragged, unlink the mouse events.
   if (Blockly.selected == this) {
@@ -1462,6 +1463,7 @@ Blockly.BlockSvg.prototype.setColour = function(colour) {
  */
 Blockly.BlockSvg.prototype.setPreviousStatement =
     function(newBoolean, opt_check) {
+  /* eslint-disable indent */
   Blockly.BlockSvg.superClass_.setPreviousStatement.call(this, newBoolean,
       opt_check);
 
@@ -1469,7 +1471,7 @@ Blockly.BlockSvg.prototype.setPreviousStatement =
     this.render();
     this.bumpNeighbours_();
   }
-};
+};  /* eslint-enable indent */
 
 /**
  * Set whether another block can chain onto the bottom of this block.

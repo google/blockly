@@ -327,29 +327,31 @@ Blockly.Flyout.prototype.position = function() {
   if (!this.isVisible()) {
     return;
   }
-  var metrics = this.targetWorkspace_.getMetrics();
-  if (!metrics) {
+  var targetWorkspaceMetrics = this.targetWorkspace_.getMetrics();
+  if (!targetWorkspaceMetrics) {
     // Hidden components will return null.
     return;
   }
-  var edgeWidth = this.horizontalLayout_ ? metrics.viewWidth : this.width_;
+  var edgeWidth = this.horizontalLayout_ ?
+      targetWorkspaceMetrics.viewWidth : this.width_;
   edgeWidth -= this.CORNER_RADIUS;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     edgeWidth *= -1;
   }
 
   this.setBackgroundPath_(edgeWidth,
-      this.horizontalLayout_ ? this.height_ : metrics.viewHeight);
+      this.horizontalLayout_ ? this.height_ :
+      targetWorkspaceMetrics.viewHeight);
 
-  var x = metrics.absoluteLeft;
+  var x = targetWorkspaceMetrics.absoluteLeft;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
-    x += metrics.viewWidth;
+    x += targetWorkspaceMetrics.viewWidth;
     x -= this.width_;
   }
 
-  var y = metrics.absoluteTop;
+  var y = targetWorkspaceMetrics.absoluteTop;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
-    y += metrics.viewHeight;
+    y += targetWorkspaceMetrics.viewHeight;
     y -= this.height_;
   }
 
@@ -358,9 +360,9 @@ Blockly.Flyout.prototype.position = function() {
   // Record the height for Blockly.Flyout.getMetrics_, or width if the layout is
   // horizontal.
   if (this.horizontalLayout_) {
-    this.width_ = metrics.viewWidth;
+    this.width_ = targetWorkspaceMetrics.viewWidth;
   } else {
-    this.height_ = metrics.viewHeight;
+    this.height_ = targetWorkspaceMetrics.viewHeight;
   }
 
   // Update the scrollbar (if one exists).
@@ -429,6 +431,7 @@ Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
  */
 Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
     function(width, height) {
+  /* eslint-disable indent */
   var atTop = this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP;
   // Start at top left.
   var path = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
@@ -461,7 +464,7 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ =
     path.push('z');
   }
   this.svgBackground_.setAttribute('d', path.join(' '));
-};
+};  /* eslint-enable indent */
 
 /**
  * Scroll the flyout to the top.
@@ -571,12 +574,13 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
   // IE 11 is an incompetant browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
-  var deselectAll = function(e) {
+  var deselectAll = function() {
     var topBlocks = this.workspace_.getTopBlocks(false);
     for (var i = 0, block; block = topBlocks[i]; i++) {
       block.removeSelect();
     }
   };
+
   this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
       this, deselectAll));
 

@@ -91,12 +91,14 @@ Blockly.Dart.init = function(workspace) {
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  for (var i = 0; i < variables.length; i++) {
-    defvars[i] = 'var ' +
-        Blockly.Dart.variableDB_.getName(variables[i],
-        Blockly.Variables.NAME_TYPE) + ';';
+  if (variables.length) {
+    for (var i = 0; i < variables.length; i++) {
+      defvars[i] = Blockly.Dart.variableDB_.getName(variables[i],
+          Blockly.Variables.NAME_TYPE);
+    }
+    Blockly.Dart.definitions_['variables'] =
+        'var ' + defvars.join(', ') + ';';
   }
-  Blockly.Dart.definitions_['variables'] = defvars.join('\n');
 };
 
 /**

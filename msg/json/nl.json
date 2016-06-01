@@ -8,7 +8,8 @@
 			"아라",
 			"JaapDeKleine",
 			"Sjoerddebruin",
-			"Lemondoge"
+			"Lemondoge",
+			"Jeleniccz"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -318,6 +319,14 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "naar # vanaf einde",
 	"LISTS_GET_SUBLIST_END_LAST": "naar laatste",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Maakt een kopie van het opgegeven deel van de lijst.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TITLE": "sorteer %1 %2 %3",
+	"LISTS_SORT_TOOLTIP": "Sorteer een kopie van een lijst.",
+	"LISTS_SORT_ORDER_ASCENDING": "oplopend",
+	"LISTS_SORT_ORDER_DESCENDING": "aflopend",
+	"LISTS_SORT_TYPE_NUMERIC": "numerieke",
+	"LISTS_SORT_TYPE_TEXT": "in alfabetische volgorde",
+	"LISTS_SORT_TYPE_IGNORECASE": "alfabetisch, negeer zaak",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "lijst maken van tekst",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "tekst maken van lijst",
 	"LISTS_SPLIT_WITH_DELIMITER": "met scheidingsteken",

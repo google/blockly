@@ -143,15 +143,9 @@ Blockly.svgSize = function(svg) {
 /**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
- * @param {!Blockly.WorkspaceSvg} opt_workspace. The svg group of the workspace
- *   to resize. If the workspace isn't specified, the main workspace will be
- *   used.
+ * @param {!Blockly.WorkspaceSvg} workspace. The workspace to resize.
  */
-Blockly.resizeSvgContents = function(opt_workspace) {
-  var workspace = opt_workspace;
-  if (!workspace) {
-    workspace = Blockly.getMainWorkspace();
-  }
+Blockly.resizeSvgContents = function(workspace) {
   workspace.resizeContents();
 };
 

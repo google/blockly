@@ -232,7 +232,6 @@ Blockly.BlockSvg.onMouseMoveWrapper_ = null;
 
 /**
  * Stop binding to the global mouseup and mousemove events.
- * @private
  */
 Blockly.BlockSvg.terminateDrag_ = function() {
   Blockly.BlockSvg.disconnectUiStop_();
@@ -273,7 +272,7 @@ Blockly.BlockSvg.terminateDrag_ = function() {
           Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
       // Fire an event to allow scrollbars to resize.
-      Blockly.resizeSvgContents(this.workspace);
+      Blockly.resizeSvgContents(selected.workspace);
     }
   }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
@@ -609,11 +608,14 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     if (trashcan) {
       goog.Timer.callOnce(trashcan.close, 100, trashcan);
     }
+    // Save the block's workspace temporarily so we can resize the
+    // contents once the block is disposed.
+    var selectedWorkspace = Blockly.selected.workspace;
     Blockly.selected.dispose(false, true);
     // Dropping a block on the trash can will usually cause the workspace to
     // resize to contain the newly positioned block.  Force a second resize
     // now that the block has been deleted.
-    Blockly.resizeSvgContents(this.workspace);
+    Blockly.resizeSvgContents(selectedWorkspace);
   }
   if (Blockly.highlightedConnection_) {
     Blockly.highlightedConnection_.unhighlight();

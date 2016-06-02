@@ -15,49 +15,79 @@
 <script src="../blocks/procedures.js"></script>
 <script>
 'use strict';
+ // True if we're showing toolboxes, false if showing open flyouts.
+ var showingToolbox = true;
+ // The workspaces we're showing.
+ var workspaces = [];
 
-function start() {
-  startBlocklyInstance('VertStartLTR', false, false, 'start');
-  startBlocklyInstance('VertStartRTL', true, false, 'start');
-
-  startBlocklyInstance('VertEndLTR', false, false, 'end');
-  startBlocklyInstance('VertEndRTL', true, false, 'end');
-
-
-  startBlocklyInstance('HorizontalStartLTR', false, true, 'start');
-  startBlocklyInstance('HorizontalStartRTL', true, true, 'start');
-
-  startBlocklyInstance('HorizontalEndLTR', false, true, 'end');
-  startBlocklyInstance('HorizontalEndRTL', true, true, 'end');
-}
-
-function startBlocklyInstance(suffix, rtl, horizontalLayout, position) {
-  var toolbox = document.getElementById('toolbox_categoriesScroll');
-  var options = {
-    comments: false,
-    disable: false,
-    collapse: false,
-    maxBlocks: Infinity,
-    media: '../media/',
-    readOnly: false,
-    rtl: rtl,
-    scrollbars: true,
-    toolbox: toolbox,
-    trashcan: true,
-    horizontalLayout: horizontalLayout,
-    toolboxPosition: position,
-    zoom: {
-      controls: true,
-      wheel: false,
-      startScale: 1.0,
-      maxScale: 4,
-      minScale: 0.25,
-      scaleSpeed: 1.1
+ var options = {
+  comments: false,
+  disable: false,
+  collapse: false,
+  maxBlocks: Infinity,
+  media: '../media/',
+  readOnly: false,
+  rtl: false,
+  scrollbars: true,
+  trashcan: true,
+  horizontalLayout: false,
+  toolboxPosition: 'start',
+  zoom: {
+    controls: true,
+    wheel: false,
+    startScale: 1.0,
+    maxScale: 4,
+    minScale: 0.25,
+    scaleSpeed: 1.1
     },
   };
-  Blockly.inject('blocklyDiv' + suffix, options);
+
+function start(toolboxId) {
+  startBlocklyInstance('VertStartLTR', false, false, 'start', toolboxId);
+  startBlocklyInstance('VertStartRTL', true, false, 'start', toolboxId);
+
+  startBlocklyInstance('VertEndLTR', false, false, 'end', toolboxId);
+  startBlocklyInstance('VertEndRTL', true, false, 'end', toolboxId);
+
+  startBlocklyInstance('HorizontalStartLTR', false, true, 'start', toolboxId);
+  startBlocklyInstance('HorizontalStartRTL', true, true, 'start', toolboxId);
+
+  startBlocklyInstance('HorizontalEndLTR', false, true, 'end', toolboxId);
+  startBlocklyInstance('HorizontalEndRTL', true, true, 'end', toolboxId);
 }
 
+function startBlocklyInstance(suffix, rtl, horizontalLayout, position,
+  toolboxId) {
+  var toolbox = document.getElementById(toolboxId);
+  options.rtl = rtl;
+  options.toolbox = toolbox;
+  options.horizontalLayout = horizontalLayout;
+  options.toolboxPosition = position;
+  workspaces.push(Blockly.inject('blocklyDiv' + suffix, options));
+}
+
+function swapFlyoutToolbox() {
+  var button = document.getElementById('swap');
+  var toolboxId;
+  if (showingToolbox) {
+    swap.textContent = 'Show toolboxes';
+    toolboxId = 'toolbox_alwaysOpen';
+  } else {
+    toolboxId = 'toolbox_categoriesScroll';
+    swap.textContent = 'Show flyouts';
+  }
+
+  // Dispose of all existing workspace stuff so
+  // we can repopulate.
+  for (var i = 0, ws; ws = workspaces[i]; i++) {
+   ws.dispose();
+  }
+  workspaces = [];
+
+  // Re-inject all the workspaces with new ids.
+  start(toolboxId);
+  showingToolbox = !showingToolbox;
+}
 </script>
 
 <style>
@@ -92,12 +122,22 @@ h1 {
 #importExport {
   font-family: monospace;
 }
+#swap {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  text-decoration: none;
+  font-size: 12px;
+}
 </style>
 </head>
-<body onload="start()">
-
+<body onload="start('toolbox_categoriesScroll')">
   <div id="collaborators"></div>
   <table>
+    <tr>
+      <td>
+        <button id="swap" type="button" valaue="Swap toolbox" onclick="swapFlyoutToolbox()">Show Flyouts</button>  
+      </td>
+    </tr>
     <tr>
       <td/>
       <td>LTR</td>

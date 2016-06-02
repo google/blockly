@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.ContextMenu');
 
+goog.require('Blockly.Events.Create');
+
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.style');

@@ -27,8 +27,12 @@
 goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
+goog.require('Blockly.Comment');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.Events.Move');
 goog.require('Blockly.RenderedConnection');
+goog.require('Blockly.Warning');
+
 goog.require('goog.Timer');
 goog.require('goog.asserts');
 goog.require('goog.dom');
@@ -218,15 +222,13 @@ Blockly.BlockSvg.prototype.getIcons = function() {
 
 /**
  * Wrapper function called when a mouseUp occurs during a drag operation.
- * @type {Array.<!Array>}
- * @private
+ * @private {Array.<!Array>}
  */
 Blockly.BlockSvg.onMouseUpWrapper_ = null;
 
 /**
  * Wrapper function called when a mouseMove occurs during a drag operation.
- * @type {Array.<!Array>}
- * @private
+ * @private {Array.<!Array>}
  */
 Blockly.BlockSvg.onMouseMoveWrapper_ = null;
 

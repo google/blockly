@@ -25,6 +25,10 @@
 'use strict';
 
 goog.provide('Blockly.Events');
+goog.provide('Blockly.Events.Change');
+goog.provide('Blockly.Events.Create');
+goog.provide('Blockly.Events.Delete');
+goog.provide('Blockly.Events.Move');
 
 goog.require('goog.math.Coordinate');
 

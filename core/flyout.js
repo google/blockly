@@ -29,7 +29,10 @@ goog.provide('Blockly.Flyout');
 goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Events');
+goog.require('Blockly.Events.Create');
+goog.require('Blockly.Scrollbar');
 goog.require('Blockly.WorkspaceSvg');
+
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.math.Rect');

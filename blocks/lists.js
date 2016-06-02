@@ -27,6 +27,8 @@
 goog.provide('Blockly.Blocks.lists');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.Mutator');
 
 
 /**

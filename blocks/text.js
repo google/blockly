@@ -27,6 +27,11 @@
 goog.provide('Blockly.Blocks.texts');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldImage');
+goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldVariable');
+goog.require('Blockly.Mutator');
 
 
 /**

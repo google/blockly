@@ -28,7 +28,9 @@ goog.provide('Blockly.inject');
 
 goog.require('Blockly.Css');
 goog.require('Blockly.Options');
+goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.WorkspaceSvg');
+
 goog.require('goog.dom');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
@@ -210,6 +212,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
           for (var b = 0, block; block = blocks[b]; b++) {
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
+
             // Bump any block that's above the top back inside.
             var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
             if (overflowTop > 0) {

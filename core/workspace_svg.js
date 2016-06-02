@@ -42,7 +42,7 @@ goog.require('goog.userAgent');
 
 
 /**
- * Class for a workspace.  This is an onscreen area with optional trashcan,
+ * Class for a workspace.  This is an on-screen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  * @param {!Blockly.Options} options Dictionary of options.
  * @extends {Blockly.Workspace}
@@ -108,8 +108,7 @@ Blockly.WorkspaceSvg.prototype.startScrollY = 0;
 
 /**
  * Distance from mouse to object being dragged.
- * @type {goog.math.Coordinate}
- * @private
+ * @private {goog.math.Coordinate}
  */
 Blockly.WorkspaceSvg.prototype.dragDeltaXY_ = null;
 
@@ -205,7 +204,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.WorkspaceSvg.prototype.dispose = function() {
-  // Stop rerendering.
+  // Stop re-rendering.
   this.rendered = false;
   Blockly.WorkspaceSvg.superClass_.dispose.call(this);
   if (this.svgGroup_) {

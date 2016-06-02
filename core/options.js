@@ -39,19 +39,15 @@ Blockly.Options = function(options) {
   if (readOnly) {
     var languageTree = null;
     var hasCategories = false;
-    var hasTrashcan = false;
     var hasCollapse = false;
     var hasComments = false;
     var hasDisable = false;
     var hasSounds = false;
+    var hasTrashcan = false;
   } else {
     var languageTree = Blockly.Options.parseToolboxTree(options['toolbox']);
     var hasCategories = Boolean(languageTree &&
         languageTree.getElementsByTagName('category').length);
-    var hasTrashcan = options['trashcan'];
-    if (hasTrashcan === undefined) {
-      hasTrashcan = hasCategories;
-    }
     var hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
@@ -68,11 +64,19 @@ Blockly.Options = function(options) {
     if (hasSounds === undefined) {
       hasSounds = true;
     }
+    var hasTrashcan = options['trashcan'];
+    if (hasTrashcan === undefined) {
+      hasTrashcan = hasCategories;
+    }
   }
   var rtl = !!options['rtl'];
-  var horizontalLayout = options['horizontalLayout'];
-  if (horizontalLayout === undefined) {
-    horizontalLayout = false;
+  var hasCss = options['css'];
+  if (hasCss === undefined) {
+    hasCss = true;
+  }
+  var hasScrollbars = options['scrollbars'];
+  if (hasScrollbars === undefined) {
+    hasScrollbars = hasCategories;
   }
   var toolboxAtStart = options['toolboxPosition'];
   if (toolboxAtStart === 'end') {
@@ -80,22 +84,16 @@ Blockly.Options = function(options) {
   } else {
     toolboxAtStart = true;
   }
-
+  var horizontalLayout = options['horizontalLayout'];
+  if (horizontalLayout === undefined) {
+    horizontalLayout = false;
+  }
   if (horizontalLayout) {
     var toolboxPosition = toolboxAtStart ?
         Blockly.TOOLBOX_AT_TOP : Blockly.TOOLBOX_AT_BOTTOM;
   } else {
     var toolboxPosition = (toolboxAtStart == rtl) ?
         Blockly.TOOLBOX_AT_RIGHT : Blockly.TOOLBOX_AT_LEFT;
-  }
-
-  var hasScrollbars = options['scrollbars'];
-  if (hasScrollbars === undefined) {
-    hasScrollbars = hasCategories;
-  }
-  var hasCss = options['css'];
-  if (hasCss === undefined) {
-    hasCss = true;
   }
   var pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
   if (options['media']) {
@@ -109,19 +107,20 @@ Blockly.Options = function(options) {
   this.collapse = hasCollapse;
   this.comments = hasComments;
   this.disable = hasDisable;
-  this.readOnly = readOnly;
-  this.maxBlocks = options['maxBlocks'] || Infinity;
-  this.pathToMedia = pathToMedia;
+  this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.hasCategories = hasCategories;
-  this.hasScrollbars = hasScrollbars;
-  this.hasTrashcan = hasTrashcan;
-  this.hasSounds = hasSounds;
   this.hasCss = hasCss;
+  this.hasScrollbars = hasScrollbars;
+  this.hasSounds = hasSounds;
+  this.hasTrashcan = hasTrashcan;
   this.horizontalLayout = horizontalLayout;
   this.languageTree = languageTree;
-  this.gridOptions = Blockly.Options.parseGridOptions_(options);
-  this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
+  this.maxBlocks = options['maxBlocks'] || Infinity;
+  this.modalOptions = Blockly.Options.parseModalOptions_(options);
+  this.pathToMedia = pathToMedia;
+  this.readOnly = readOnly;
   this.toolboxPosition = toolboxPosition;
+  this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
 };
 
 /**
@@ -142,6 +141,49 @@ Blockly.Options.prototype.setMetrics = function() { return; };
  * @return {Object} Contains size an position metrics, or null.
  */
 Blockly.Options.prototype.getMetrics = function() { return null; };
+
+/**
+ * Parse the user-specified grid options, using reasonable defaults where
+ * behaviour is unspecified. See grid documentation:
+ *   https://developers.google.com/blockly/installation/grid
+ * @param {!Object} options Dictionary of options.
+ * @return {!Object} A dictionary of normalized options.
+ * @private
+ */
+Blockly.Options.parseGridOptions_ = function(options) {
+  var grid = options['grid'] || {};
+  var gridOptions = {};
+  gridOptions.spacing = parseFloat(grid['spacing']) || 0;
+  gridOptions.colour = grid['colour'] || '#888';
+  gridOptions.length = parseFloat(grid['length']) || 1;
+  gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
+  return gridOptions;
+};
+
+/**
+ * Parse the user-specified modal options.
+ * @param {!Object} options Dictionary of options.
+ * @return {!Object} A dictionary of normalized options.
+ * @private
+ */
+Blockly.Options.parseModalOptions_ = function(options) {
+  var modal = options['modal'] || {};
+  var modalOptions = {
+    alert: null,
+    confirm: null,
+    prompt: null
+  };
+  if (goog.isFunction(modal['alert'])) {
+    modalOptions.alert = modal['alert'];
+  }
+  if (goog.isFunction(modal['confirm'])) {
+    modalOptions.confirm = modal['confirm'];
+  }
+  if (goog.isFunction(modal['prompt'])) {
+    modalOptions.prompt = modal['prompt'];
+  }
+  return modalOptions;
+};
 
 /**
  * Parse the user-specified zoom options, using reasonable defaults where
@@ -185,24 +227,6 @@ Blockly.Options.parseZoomOptions_ = function(options) {
     zoomOptions.scaleSpeed = parseFloat(zoom['scaleSpeed']);
   }
   return zoomOptions;
-};
-
-/**
- * Parse the user-specified grid options, using reasonable defaults where
- * behaviour is unspecified. See grid documentation:
- *   https://developers.google.com/blockly/installation/grid
- * @param {!Object} options Dictionary of options.
- * @return {!Object} A dictionary of normalized options.
- * @private
- */
-Blockly.Options.parseGridOptions_ = function(options) {
-  var grid = options['grid'] || {};
-  var gridOptions = {};
-  gridOptions.spacing = parseFloat(grid['spacing']) || 0;
-  gridOptions.colour = grid['colour'] || '#888';
-  gridOptions.length = parseFloat(grid['length']) || 1;
-  gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
-  return gridOptions;
 };
 
 /**

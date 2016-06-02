@@ -169,7 +169,8 @@ Blockly.JavaScript.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.JavaScript.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
+  // Can't use goog.string.quote since Google's style guide recommends
+  // JS string literals use single quotes.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/'/g, '\\\'');

@@ -149,7 +149,7 @@ Blockly.Dart.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.Dart.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
+  // Can't use goog.string.quote since $ must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/\$/g, '\\$')

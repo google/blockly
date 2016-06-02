@@ -64,8 +64,8 @@ blocklyApp.WorkspaceView = ng.core
       // The first is the text to display on the button, and the second is the
       // function that gets run when the button is clicked.
       this.toolbarButtonConfig =
-        ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
-        ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
+          ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
+          ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
       this.stringMap = {
         'WORKSPACE': Blockly.Msg.WORKSPACE,
         'CLEAR_WORKSPACE': Blockly.Msg.CLEAR_WORKSPACE

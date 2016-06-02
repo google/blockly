@@ -535,7 +535,7 @@ Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
       // surface of the workspace has, so we may need to reposition everything.
-      Blockly.svgResize(Blockly.getMainWorkspace());
+      Blockly.svgResize(toolbox.workspace_);
     };
     // Fire a resize event since the toolbox may have changed width.
     goog.events.listen(toolbox.tree_,

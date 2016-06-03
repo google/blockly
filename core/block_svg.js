@@ -232,9 +232,9 @@ Blockly.BlockSvg.onMouseMoveWrapper_ = null;
 
 /**
  * Stop binding to the global mouseup and mousemove events.
- * @private
+ * @package
  */
-Blockly.BlockSvg.terminateDrag_ = function() {
+Blockly.BlockSvg.terminateDrag = function() {
   Blockly.BlockSvg.disconnectUiStop_();
   if (Blockly.BlockSvg.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.BlockSvg.onMouseUpWrapper_);
@@ -273,7 +273,7 @@ Blockly.BlockSvg.terminateDrag_ = function() {
         Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
       // Fire an event to allow scrollbars to resize.
-      Blockly.asyncSvgResize(this.workspace);
+      Blockly.resizeSvgContents(selected.workspace);
     }
   }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
@@ -531,8 +531,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     return;
   }
   this.workspace.markFocused();
-  // Update Blockly's knowledge of its own location.
-  Blockly.svgResize(this.workspace);
   Blockly.terminateDrag_();
   this.select();
   Blockly.hideChaff();
@@ -611,11 +609,14 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
     if (trashcan) {
       goog.Timer.callOnce(trashcan.close, 100, trashcan);
     }
+    // Save the block's workspace temporarily so we can resize the
+    // contents once the block is disposed.
+    var selectedWorkspace = Blockly.selected.workspace;
     Blockly.selected.dispose(false, true);
     // Dropping a block on the trash can will usually cause the workspace to
     // resize to contain the newly positioned block.  Force a second resize
     // now that the block has been deleted.
-    Blockly.asyncSvgResize(this.workspace);
+    Blockly.resizeSvgContents(selectedWorkspace);
   }
   if (Blockly.highlightedConnection_) {
     Blockly.highlightedConnection_.unhighlight();

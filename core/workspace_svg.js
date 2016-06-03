@@ -300,7 +300,26 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
 };
 
 /**
- * Resize this workspace and its containing objects.
+ * Resize the parts of the workspace that change when the workspace
+ * contents (e.g. block positions) change.  This will also scroll the
+ * workspace contents if needed.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.resizeContents = function() {
+  if (this.scrollbar) {
+    // TODO(picklesrus): Once rachel-fenichel's scrollbar refactoring
+    // is complete, call the method that only resizes scrollbar
+    // based on contents.
+    this.scrollbar.resize();
+  }
+};
+
+/**
+ * Resize and reposition all of the workspace chrome (toolbox,
+ * trash, scrollbars etc.)
+ * This should be called when something changes that
+ * requires recalculating dimensions and positions of the
+ * trash, zoom, toolbox, etc. (e.g. window resize).
  */
 Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.toolbox_) {
@@ -576,7 +595,6 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   if (Blockly.isTargetInput_(e)) {
     return;
   }
-  Blockly.svgResize(this);
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
   Blockly.hideChaff();
   var isTargetWorkspace = e.target && e.target.nodeName &&
@@ -716,7 +734,7 @@ Blockly.WorkspaceSvg.prototype.cleanUp_ = function() {
   }
   Blockly.Events.setGroup(false);
   // Fire an event to allow scrollbars to resize.
-  Blockly.asyncSvgResize(this);
+  Blockly.resizeSvgContents(this);
 };
 
 /**

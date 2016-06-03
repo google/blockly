@@ -591,8 +591,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   this.offsetHorizontalRtlBlocks(this.workspace_.getTopBlocks(false));
   this.filterForCapacity_();
 
-  // Fire a resize event to update the flyout's scrollbar.
-  Blockly.svgResize(this.workspace_);
+  // Correctly position the flyout's scrollbar when it opens.
+  this.position();
+
   this.reflowWrapper_ = this.reflow.bind(this);
   this.workspace_.addChangeListener(this.reflowWrapper_);
 };
@@ -1039,7 +1040,7 @@ Blockly.Flyout.prototype.reflowHorizontal = function(blocks) {
     }
     // Record the height for .getMetrics_ and .position.
     this.height_ = flyoutHeight;
-    Blockly.asyncSvgResize(this.workspace_);
+    Blockly.resizeSvgContents(this.workspace_);
   }
 };
 
@@ -1092,7 +1093,7 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
     }
     // Record the width for .getMetrics_ and .position.
     this.width_ = flyoutWidth;
-    Blockly.asyncSvgResize(this.workspace_);
+    Blockly.resizeSvgContents(this.workspace_);
   }
 };
 

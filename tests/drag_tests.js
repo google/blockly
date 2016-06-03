@@ -7,20 +7,30 @@ var workspace = null;
 
 /** Full set of possible tests. */
 var testSuite = {
+  "drag_to_next": {
+    description: "Create a stack of two blocks",
+    dragList: [
+      function() { dragToNext("a", "b", true); }
+    ]
+  },
   "drag_to_next_twice": {
+    description: "Create a stack of three blocks",
     dragList: [
       function() { dragToNext("a", "b", true); },
       function() { dragToNext("b", "c", false); }
     ]
   },
-  "drag_to_next": {
-      dragList: [
-      function() { dragToNext("a", "b", true); }
-    ]
-  },
   "drag_to_next_by_inferior": {
+    description: "Drag the inferior block",
     dragList: [
       function() { dragToNext("a", "b", false); }
+    ]
+  },
+  "drag_between": {
+    description: "Drag a block between two connected blocks",
+    dragList: [
+      function() { dragToNext("a", "b", true); },
+      function() { dragToNext("a", "c", false); }
     ]
   }
 };
@@ -111,10 +121,9 @@ function addCheckedTests() {
     var value = testSuite[key];
     var input = value.input;
     if (input && input.checked) {
-      console.log("adding test " + key);
       testToRunList.push(
         testSuite[key]
-        );
+      );
     }
   }
 }
@@ -203,8 +212,8 @@ function dragToInput(superiorBlockId, inferiorBlockId, inputName, dragSuperior) 
   var superiorBlock = Blockly.getMainWorkspace().getBlockById(superiorBlockId);
   var inferiorBlock = Blockly.getMainWorkspace().getBlockById(inferiorBlockId);
 
-  assert(superiorBlock, 'Superior block was missing.');
-  assert(inferiorBlock, 'Inferior block was missing.');
+  assert(superiorBlock, 'Superior block was missing.  Id was ' + superiorBlockId);
+  assert(inferiorBlock, 'Inferior block was missing.  Id was ' + inferiorBlockId);
 
   var superiorBlockInput = superiorBlock.getInput(inputName);
   assert(superiorBlockInput, 'Input not found on superior block.');
@@ -225,13 +234,11 @@ function dragToInput(superiorBlockId, inferiorBlockId, inputName, dragSuperior) 
 }
 
 function dragToNext(superiorBlockId, inferiorBlockId, dragSuperior) {
-  console.info("dragToNext: " + superiorBlockId + ", " + inferiorBlockId +
-       ", " + (dragSuperior ? "true" : "false"));
   var superiorBlock = Blockly.getMainWorkspace().getBlockById(superiorBlockId);
   var inferiorBlock = Blockly.getMainWorkspace().getBlockById(inferiorBlockId);
 
-  assert(superiorBlock, 'Superior block was missing.');
-  assert(inferiorBlock, 'Inferior block was missing.');
+  assert(superiorBlock, 'Superior block was missing.  Id was ' + superiorBlockId);
+  assert(inferiorBlock, 'Inferior block was missing.  Id was ' + inferiorBlockId);
 
   var superiorBlockConnection = superiorBlock.nextConnection;
   assert(superiorBlockConnection, 'Connection not found on superior block.');
@@ -365,7 +372,15 @@ function dragWrapper() {
   var dragInfo = dragList[dragIndex];
   dragIndex++;
   if (dragInfo) {
-    dragInfo();
+    try {
+      dragInfo();
+    } catch (e) {
+      dragIndex = 0;
+      workspace.clear();
+      console.error('test failed: ' + runningTestInfo.name);
+      console.error(e);
+      setTestStatus(runningTestInfo, TEST_FAILED);
+    }
   } else {
     try {
       endTest();

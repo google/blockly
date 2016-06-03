@@ -46,7 +46,9 @@ h1 {
   <input type="button" value="Select none" onclick="setAllCheckboxes(false)">
   <input type="button" value="Run!" onclick="addCheckedTests();startTesting()">
   <br/>
+  <label for="run_speed">Speed</label>
   <input type="range" min="1" max="10" value="10" id="run_speed">
+
   <xml id="drag_to_next_twice_initial" class="workspace_xml">
     <block type="variables_set" id="a" x="63" y="363">
       <field name="VAR">item</field>
@@ -106,6 +108,31 @@ h1 {
       <next>
         <block type="math_change" id="b">
           <field name="VAR">item</field>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <xml id="drag_between_initial" class="workspace_xml">
+    <block type="variables_set" id="a" x="63" y="363">
+      <field name="VAR">item</field>
+    </block>
+    <block type="math_change" id="b" x="63" y="463">
+      <field name="VAR">item</field>
+    </block>
+    <block type="text_print" id="c" x="63" y="563"></block>
+  </xml>
+
+  <xml id="drag_between_golden" class="workspace_xml">
+    <block type="variables_set" id="a" x="0" y="0">
+      <field name="VAR">item</field>
+      <next>
+        <block type="text_print" id="c">
+          <next>
+            <block type="math_change" id="b">
+              <field name="VAR">item</field>
+            </block>
+          </next>
         </block>
       </next>
     </block>

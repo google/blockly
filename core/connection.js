@@ -284,6 +284,9 @@ Blockly.Connection.prototype.isConnected = function() {
  * @private
  */
 Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
+  if (!target) {
+    return Blockly.Connection.REASON_TARGET_NULL;
+  }
   if (this.isSuperior()) {
     var blockA = this.sourceBlock_;
     var blockB = target.getSourceBlock();
@@ -291,9 +294,7 @@ Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
     var blockB = this.sourceBlock_;
     var blockA = target.getSourceBlock();
   }
-  if (!target) {
-    return Blockly.Connection.REASON_TARGET_NULL;
-  } else if (blockA && blockA == blockB) {
+  if (blockA && blockA == blockB) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;

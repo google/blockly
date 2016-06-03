@@ -77,6 +77,8 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   menu.render(div);
   var menuDom = menu.getElement();
   Blockly.addClass_(menuDom, 'blocklyContextMenu');
+  // Prevent system context menu when right-clicking a Blockly context menu.
+  Blockly.bindEvent_(menuDom, 'contextmenu', null, Blockly.noEvent);
   // Record menuSize after adding menu.
   var menuSize = goog.style.getSize(menuDom);
 

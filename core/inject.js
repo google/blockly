@@ -56,6 +56,7 @@ Blockly.inject = function(container, opt_options) {
   Blockly.init_(workspace);
   workspace.markFocused();
   Blockly.bindEvent_(svg, 'focus', workspace, workspace.markFocused);
+  Blockly.svgResize(workspace);
   return workspace;
 };
 
@@ -266,7 +267,7 @@ Blockly.init_ = function(mainWorkspace) {
   Blockly.bindEvent_(window, 'resize', null,
       function() {
         Blockly.hideChaff(true);
-        Blockly.asyncSvgResize(mainWorkspace);
+        Blockly.svgResize(mainWorkspace);
       });
 
   Blockly.inject.bindDocumentEvents_();
@@ -322,7 +323,8 @@ Blockly.inject.bindDocumentEvents_ = function() {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (goog.userAgent.IPAD) {
       Blockly.bindEvent_(window, 'orientationchange', document, function() {
-        Blockly.asyncSvgResize();
+        // TODO(#397): Fix for multiple blockly workspaces.
+        Blockly.svgResize(Blockly.getMainWorkspace());
       });
     }
   }

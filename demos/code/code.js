@@ -294,7 +294,7 @@ Code.tabClick = function(clickedName) {
   if (clickedName == 'blocks') {
     Code.workspace.setVisible(true);
   }
-  Blockly.asyncSvgResize(this.workspace_);
+  Blockly.svgResize(Code.workspace);
 };
 
 /**
@@ -380,7 +380,6 @@ Code.init = function() {
           // Account for the 19 pixel margin and on each side.
     }
   };
-  onresize();
   window.addEventListener('resize', onresize, false);
 
   var toolbox = document.getElementById('toolbox');
@@ -432,6 +431,8 @@ Code.init = function() {
     Code.bindClick('tab_' + name,
         function(name_) {return function() {Code.tabClick(name_);};}(name));
   }
+  onresize();
+  Blockly.svgResize(Code.workspace);
 
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Code.importPrettify, 1);

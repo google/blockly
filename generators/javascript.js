@@ -169,7 +169,8 @@ Blockly.JavaScript.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.JavaScript.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
+  // Can't use goog.string.quote since Google's style guide recommends
+  // JS string literals use single quotes.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/'/g, '\\\'');
@@ -196,9 +197,9 @@ Blockly.JavaScript.scrub_ = function(block, code) {
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].connection.targetBlock();
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.JavaScript.allNestedComments(childBlock);
           if (comment) {

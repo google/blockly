@@ -12,8 +12,8 @@ What Does Accessible Blockly Do?
 
 Use Accessible Blockly in Your Web App
 -----------
-1. see the basic demo under blockly/demos/accessible. This covers the absolute minimum required to import Accessible Blockly into your own web app.
+1. See the basic demo under blockly/demos/accessible. This covers the absolute minimum required to import Accessible Blockly into your own web app.
 2. You will need to import the files in the same order as in the demo: utils.service.js will need to be the first Angular file imported.
 3. When the DOMContentLoaded event fires, call ng.platform.browser.bootstrap() on the main component to be loaded. This will usually be blocklyApp.AppView, but if you have another component that wraps it, use that one instead.
-4. You will need to implement a runCode() function in the global scope. This function will be called when the user presses the Run Code button in the Accessible Blockly app.
+4. If you want to customize the toolbar, you will need an ACCESSIBLE_GLOBALS object in the global scope. It should have a 'toolbarButtonConfig' key, whose value is an Array. Each element in this array should be an Object with two keys: 'text' (the text to display on the button) and 'action' (the function that gets run when the button is clicked).
 5. Note that we do not support having multiple Accessible Blockly apps in a single webpage.

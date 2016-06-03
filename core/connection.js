@@ -62,6 +62,7 @@ Blockly.Connection.REASON_WRONG_TYPE = 2;
 Blockly.Connection.REASON_TARGET_NULL = 3;
 Blockly.Connection.REASON_CHECKS_FAILED = 4;
 Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 5;
+Blockly.Connection.REASON_SHADOW_PARENT = 6;
 
 /**
  * Connection this connection connects to.  Null if not connected.
@@ -285,16 +286,24 @@ Blockly.Connection.prototype.isConnected = function() {
 Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
   if (!target) {
     return Blockly.Connection.REASON_TARGET_NULL;
-  } else if (this.sourceBlock_ &&
-      target.getSourceBlock() == this.sourceBlock_) {
+  }
+  if (this.isSuperior()) {
+    var blockA = this.sourceBlock_;
+    var blockB = target.getSourceBlock();
+  } else {
+    var blockB = this.sourceBlock_;
+    var blockA = target.getSourceBlock();
+  }
+  if (blockA && blockA == blockB) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;
-  } else if (this.sourceBlock_ && target.getSourceBlock() &&
-      this.sourceBlock_.workspace !== target.getSourceBlock().workspace) {
+  } else if (blockA && blockB && blockA.workspace !== blockB.workspace) {
     return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
   } else if (!this.checkType_(target)) {
     return Blockly.Connection.REASON_CHECKS_FAILED;
+  } else if (blockA.isShadow() && !blockB.isShadow()) {
+    return Blockly.Connection.REASON_SHADOW_PARENT;
   }
   return Blockly.Connection.CAN_CONNECT;
 };
@@ -321,6 +330,8 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
       throw 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
       throw 'Connection checks failed.';
+    case Blockly.Connection.REASON_SHADOW_PARENT:
+      throw 'Connecting non-shadow to shadow block.';
     default:
       throw 'Unknown connection failure: this should never happen!';
   }

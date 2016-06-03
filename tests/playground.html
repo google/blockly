@@ -556,30 +556,6 @@ h1 {
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
 
-  <xml id="startXml" style="display: none" xmlns="http://www.w3.org/1999/xhtml">
-    <block type="variables_set" id="a" x="63" y="363">
-      <field name="VAR">item</field>
-    </block>
-    <block type="math_change" id="b" x="63" y="463">
-      <field name="VAR">item</field>
-    </block>
-    <block type="text_print" id="c" x="63" y="563"></block>
-  </xml>
-
-  <xml id="endXml" style="display: none" xmlns="http://www.w3.org/1999/xhtml">
-    <block type="variables_set" id="a" x="0" y="0">
-      <field name="VAR">item</field>
-      <next>
-        <block type="math_change" id="b">
-          <field name="VAR">item</field>
-          <next>
-            <block type="text_print" id="c"></block>
-          </next>
-        </block>
-      </next>
-    </block>
-  </xml>
-
   <h1>Blockly Playground</h1>
 
   <p><a href="javascript:void(workspace.setVisible(true))">Show</a>

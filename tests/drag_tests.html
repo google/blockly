@@ -14,39 +14,6 @@
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
 <script src="drag_tests.js"></script>
-<script>
-'use strict';
-// Depending on the URL argument, render as LTR or RTL.
-var rtl = (document.location.search == '?rtl');
-var workspace = null;
-
-function start() {
-  var toolbox = document.getElementById('toolbox');
-  workspace = Blockly.inject('blocklyDiv',
-          {comments: true,
-           disable: true,
-           collapse: true,
-           grid:
-             {spacing: 25,
-              length: 3,
-              colour: '#ccc',
-              snap: true},
-           maxBlocks: Infinity,
-           media: '../media/',
-           readOnly: false,
-           rtl: rtl,
-           scrollbars: true,
-           toolbox: {},
-           zoom:
-             {controls: true,
-              wheel: true,
-              startScale: 1.0,
-              maxScale: 4,
-              minScale: .25,
-              scaleSpeed: 1.1}
-          });
-}
-</script>
 
 <style>
 html, body {
@@ -62,18 +29,24 @@ h1 {
   font-size: 140%;
 }
 #blocklyDiv {
-  float: center;
+  float: right;
   height: 100%;
-  width: 100%;
+  width: 75%;
 }
 .workspace_xml {
   display: none;
 }
 </style>
 </head>
-<body onload="start(); setUp(); runTestWrapper();">
+<body onload="start();">
   <div id="blocklyDiv"></div>
 
+  <div id="test_picker"> </div>
+  <input type="button" value="Select all" onclick="setAllCheckboxes(true)">
+  <input type="button" value="Select none" onclick="setAllCheckboxes(false)">
+  <input type="button" value="Run!" onclick="addCheckedTests();startTesting()">
+  <br/>
+  <input type="range" min="1" max="10" value="10" id="run_speed">
   <xml id="drag_to_next_twice_initial" class="workspace_xml">
     <block type="variables_set" id="a" x="63" y="363">
       <field name="VAR">item</field>
@@ -98,7 +71,6 @@ h1 {
     </block>
   </xml>
 
-
   <xml id="drag_to_next_initial" class="workspace_xml">
     <block type="variables_set" id="a" x="63" y="363">
       <field name="VAR">item</field>
@@ -106,7 +78,6 @@ h1 {
     <block type="math_change" id="b" x="63" y="463">
       <field name="VAR">item</field>
     </block>
-    <block type="text_print" id="c" x="63" y="563"></block>
   </xml>
 
   <xml id="drag_to_next_golden" class="workspace_xml">
@@ -118,7 +89,26 @@ h1 {
         </block>
       </next>
     </block>
-    <block type="text_print" id="c" x="1" y="1"></block>
+  </xml>
+
+  <xml id="drag_to_next_by_inferior_initial" class="workspace_xml">
+    <block type="variables_set" id="a" x="63" y="363">
+      <field name="VAR">item</field>
+    </block>
+    <block type="math_change" id="b" x="63" y="463">
+      <field name="VAR">item</field>
+    </block>
+  </xml>
+
+  <xml id="drag_to_next_by_inferior_golden" class="workspace_xml">
+    <block type="variables_set" id="a" x="0" y="0">
+        <field name="VAR">item</field>
+      <next>
+        <block type="math_change" id="b">
+          <field name="VAR">item</field>
+        </block>
+      </next>
+    </block>
   </xml>
 
 </body>

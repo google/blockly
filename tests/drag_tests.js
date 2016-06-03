@@ -1,5 +1,123 @@
 
-var fakeDragStack = [];
+'use strict';
+
+// Depending on the URL argument, render as LTR or RTL.
+var rtl = (document.location.search == '?rtl');
+var workspace = null;
+
+/** Full set of possible tests. */
+var testSuite = {
+  "drag_to_next_twice": {
+    dragList: [
+      function() { dragToNext("a", "b", true); },
+      function() { dragToNext("b", "c", false); }
+    ]
+  },
+  "drag_to_next": {
+      dragList: [
+      function() { dragToNext("a", "b", true); }
+    ]
+  },
+  "drag_to_next_by_inferior": {
+    dragList: [
+      function() { dragToNext("a", "b", false); }
+    ]
+  }
+};
+
+var runSpeed = 1;
+// Which tests to run on this pass.
+var testToRunList = [];
+var testIndex = 0;
+var runningTestInfo = null;
+var dragList = [];
+var dragIndex = 0;
+
+var TEST_PASSED = 0;
+var TEST_FAILED = 1;
+var TEST_NOT_RUN = 2;
+
+
+function createTestPicker() {
+  var container = document.getElementById('test_picker');
+
+  for (var key in testSuite) {
+    var value = testSuite[key];
+
+    var label = document.createElement("label");
+    var input = document.createElement("input");
+    input.type = "checkbox";
+    input.name = key;
+    input.value = key;
+    input.id = key;
+    input.checked = true;
+    label.appendChild(input);
+    container.appendChild(label);
+    label.appendChild(document.createTextNode(key));
+    var statusLabel = document.createTextNode("");
+    label.appendChild(statusLabel);
+    container.appendChild(document.createElement("br"));
+
+    // Remember inputs and status labels so we don't have to find them later.
+    value.input = input;
+    value.statusLabel = statusLabel;
+    value.label = label;
+    value.name = key;
+  }
+}
+
+function start() {
+  var toolbox = document.getElementById('toolbox');
+  workspace = Blockly.inject('blocklyDiv',
+          {comments: true,
+           disable: true,
+           collapse: true,
+           grid:
+             {spacing: 25,
+              length: 3,
+              colour: '#ccc',
+              snap: true},
+           maxBlocks: Infinity,
+           media: '../media/',
+           readOnly: false,
+           rtl: rtl,
+           scrollbars: true,
+           toolbox: {},
+           zoom:
+             {controls: true,
+              wheel: true,
+              startScale: 1.0,
+              maxScale: 4,
+              minScale: .25,
+              scaleSpeed: 1.1}
+          });
+  createTestPicker();
+}
+
+function addAllTests() {
+  setAllCheckboxes(true);
+  addCheckedTests(true);
+}
+
+function setAllCheckboxes(state) {
+  for (var key in testSuite) {
+    testSuite[key].input.checked = state;
+  }
+}
+
+function addCheckedTests() {
+  testToRunList = [];
+  for (var key in testSuite) {
+    var value = testSuite[key];
+    var input = value.input;
+    if (input && input.checked) {
+      console.log("adding test " + key);
+      testToRunList.push(
+        testSuite[key]
+        );
+    }
+  }
+}
 
 function assert(condition, message) {
   if (!condition) {
@@ -13,18 +131,7 @@ function assertEquals(a, b, message) {
   }
 }
 
-function fakeDragById(id, dx, dy, opt_workspace) {
-  var ws = opt_workspace ? opt_workspace : Blockly.getMainWorkspace();
-  var blockToDrag = ws.getBlockById(id);
-  if (!blockToDrag) {
-    dragWrapper();
-    return;
-  }
-  fakeDragByBlock(blockToDrag, dx, dy);
-}
-
-
-function fakeDragByBlock(blockToDrag, dx, dy) {
+function dragByBlock(blockToDrag, dx, dy) {
   if (!blockToDrag) {
     dragWrapper();
     return;
@@ -58,39 +165,13 @@ function fakeDragByBlock(blockToDrag, dx, dy) {
                 {clientX: blockLeft + dx,
                 clientY: blockTop + dy});
             blockToDrag.onMouseUp_(mouseUpEvent);
-            window.setTimeout(dragWrapper, 100);
-          }, 30);
-      }, 30);
-    }, 30);
+            window.setTimeout(dragWrapper, 100 * runSpeed);
+          }, 30 * runSpeed);
+      }, 30 * runSpeed);
+    }, 30 * runSpeed);
 }
 
-function fakeDragConnectBefore(firstBlockId, secondBlockId) {
-  var firstBlock = Blockly.getMainWorkspace().getBlockById(firstBlockId);
-  var secondBlock = Blockly.getMainWorkspace().getBlockById(secondBlockId);
-
-  if (!(firstBlock && secondBlock)) {
-    throw 'Couldn\'t find those blocks';
-  }
-  var firstBlockNext = firstBlock.nextConnection;
-  var secondBlockPrevious = secondBlock.previousConnection;
-
-  if (!(firstBlockNext && secondBlockPrevious)) {
-    throw 'These blocks don\'t have the right connections.';
-  }
-
-  var firstBlockBounds = firstBlock.svgGroup_.getBoundingClientRect();
-  var secondBlockBounds = secondBlock.svgGroup_.getBoundingClientRect();
-
-  var xDiff = (secondBlockBounds.left + secondBlockPrevious.offsetInBlock_.x) -
-      (firstBlockBounds.left + firstBlockNext.offsetInBlock_.x);
-  var yDiff = (secondBlockBounds.top + secondBlockPrevious.offsetInBlock_.y) -
-      (firstBlockBounds.top + firstBlockNext.offsetInBlock_.y);
-
-  //fakeDragByBlock(firstBlockId, xDiff - 1, yDiff - 1);
-  fakeDragById(firstBlockId, xDiff - 1, yDiff - 1);
-}
-
-function fakeDragByConnection(superiorBlock, superiorBlockConnection,
+function dragByConnection(superiorBlock, superiorBlockConnection,
     inferiorBlock, inferiorBlockConnection, dragSuperior) {
 
   var superiorBlockBounds = superiorBlock.svgGroup_.getBoundingClientRect();
@@ -102,20 +183,23 @@ function fakeDragByConnection(superiorBlock, superiorBlockConnection,
       (superiorBlockBounds.top + superiorBlockConnection.offsetInBlock_.y);
 
   if(dragSuperior) {
-    fakeDragByBlock(superiorBlock, dx, dy);
+    dragByBlock(superiorBlock, dx, dy);
   } else {
-    fakeDragByBlock(inferiorBlock, dx, dy);
+    dragByBlock(inferiorBlock, -dx, -dy);
   }
-};
+}
 
 /**
- * @param superiorBlockId the id of the block that will be superior after the drag.
- * @param inferiorBlockId The id of the block that will be inferior after the drag.
- * @param inputName The name of the input to connect to on the superior block.
+ * @param {string} superiorBlockId the id of the block that will be superior
+ *    after the drag.
+ * @param {string} inferiorBlockId The id of the block that will be inferior
+ *    after the drag.
+ * @param {string} inputName The name of the input to connect to on the superior
+ *    block.
  * @param {boolean} dragSuperior True if the superior block should be dragged,
  *     false if the inferior block should be dragged.
  */
-function fakeDragToInput(superiorBlockId, inferiorBlockId, inputName, dragSuperior) {
+function dragToInput(superiorBlockId, inferiorBlockId, inputName, dragSuperior) {
   var superiorBlock = Blockly.getMainWorkspace().getBlockById(superiorBlockId);
   var inferiorBlock = Blockly.getMainWorkspace().getBlockById(inferiorBlockId);
 
@@ -136,11 +220,13 @@ function fakeDragToInput(superiorBlockId, inferiorBlockId, inputName, dragSuperi
     assert(inferiorBlockConnection, 'No previous connection on inferior block');
   }
 
-  fakeDragByConnection(superiorBlock, superiorBlockConnection,
+  dragByConnection(superiorBlock, superiorBlockConnection,
       inferiorBlock, inferiorBlockConnection, dragSuperior);
-};
+}
 
-function fakeDragToNext(superiorBlockId, inferiorBlockId, dragSuperior) {
+function dragToNext(superiorBlockId, inferiorBlockId, dragSuperior) {
+  console.info("dragToNext: " + superiorBlockId + ", " + inferiorBlockId +
+       ", " + (dragSuperior ? "true" : "false"));
   var superiorBlock = Blockly.getMainWorkspace().getBlockById(superiorBlockId);
   var inferiorBlock = Blockly.getMainWorkspace().getBlockById(inferiorBlockId);
 
@@ -153,58 +239,76 @@ function fakeDragToNext(superiorBlockId, inferiorBlockId, dragSuperior) {
   var inferiorBlockConnection = inferiorBlock.previousConnection;
   assert(inferiorBlockConnection, 'Connection not found on inferior block.');
 
-  fakeDragByConnection(superiorBlock, superiorBlockConnection,
+  dragByConnection(superiorBlock, superiorBlockConnection,
       inferiorBlock, inferiorBlockConnection, dragSuperior);
-};
+}
 
-var testToRunList = [];
-var runningTestInfo = null;
-
-
-
-function setUp() {
-  testToRunList.push({
-    name: "drag_to_next_twice",
-    dragStack: [
-      function() { fakeDragToNext("a", "b", true); },
-      function() { fakeDragToNext("b", "c", true); }
-    ]
-  });
-
-  testToRunList.push({
-    name: "drag_to_next",
-    dragStack: [
-      function() { fakeDragToNext("a", "b", true); }
-    ]
-  });
-
-  console.time('Running tests');
+function clearStatuses() {
+  for (var key in testSuite) {
+    setTestStatus(testSuite[key], TEST_NOT_RUN);
+  }
 }
 
 function runTestWrapper() {
-  var testInfo = testToRunList.pop();
+  var testInfo = testToRunList[testIndex];
+  testIndex++;
   if (testInfo) {
     runningTestInfo = testInfo;
     runTest();
   } else {
     console.log("Done running tests");
-    console.timeEnd('Running tests');
   }
 }
 
 function runTest() {
+  var statusLabel = runningTestInfo.statusLabel;
+  statusLabel.nodeValue = "\tRunning...";
+  console.info("Running test " + runningTestInfo.name);
   var elementId = runningTestInfo.name + '_initial';
   Blockly.Xml.domToWorkspace(document.getElementById(elementId), workspace);
-  fakeDragStack = runningTestInfo.dragStack;
+  dragList = runningTestInfo.dragList;
   dragWrapper();
 }
 
+function startTesting() {
+  runSpeed = Math.round(10 / document.getElementById('run_speed').value);
+  testIndex = 0;
+  clearStatuses();
+  runTestWrapper();
+}
+
+function setTestStatus(testInfo, state) {
+  if (state == TEST_PASSED) {
+    var text = ":\tPassed";
+    var color = "green";
+  } else if (state == TEST_FAILED) {
+    var text = ":\tFailed";
+    var color = "red";
+  } else if (state == TEST_NOT_RUN) {
+    var text = "";
+    var color = "black";
+  }
+  testInfo.statusLabel.nodeValue = text;
+  testInfo.label.setAttribute("style", "color:" + color);
+}
+
+/**
+ * Creates a function that returns a false location for the block when it is
+ * being serialized to XML.
+ * @param {number} i The value to use in the fake coordinate.
+ */
 function reposition_factory(i) {
   return function() {
     return new goog.math.Coordinate(i, i);
   };
 }
 
+/**
+ * Helper function to normalize block locatiosn at the end of a test.  Top level
+ * blocks are sorted by id and given unique locations.  This guarantees that two
+ * workspaces with the same blocks can be compared by xml without needing to
+ * strip out location attributes.
+ */
 function repositionBlocks() {
   var blocks = workspace.getTopBlocks();
   blocks.sort(function(a, b) {
@@ -214,6 +318,21 @@ function repositionBlocks() {
   for(var i = 0; i < blocks.length; i++) {
     blocks[i].getRelativeToSurfaceXY = reposition_factory(i);
   }
+}
+
+/**
+ * Normalizes workspace DOM to a format that can be compared with string
+ * comparison.
+ * @param {!Element} input A tree of XML elements.
+ * @return {string} Text representation with most whitespace removed.
+ */
+function normalizedDomToPrettyText(input) {
+  var result = Blockly.Xml.domToPrettyText(input);
+  // Replace whitespace with simple spaces.
+  result = result.replace(/(\r\n|\n|\r|\t|\s)/gm," ");
+  // Combine multiple spaces.
+  result = result.replace(/\s+/g," ");
+  return result;
 }
 
 function endTest() {
@@ -226,26 +345,25 @@ function endTest() {
       getElementsByTagName("block");
 
   for (var i = 0; i < result.length; i++) {
-    var comparableResult =
-        Blockly.Xml.domToPrettyText(result[i]).replace(/(\r\n|\n|\r|\s)/gm,"");
-    var comparableGolden =
-        Blockly.Xml.domToPrettyText(golden[i]).replace(/(\r\n|\n|\r|\s)/gm,"");
-    assertEquals(comparableResult, comparableGolden,
+    var comparableResult = normalizedDomToPrettyText(result[i]);
+    var comparableGolden = normalizedDomToPrettyText(golden[i]);
+    assertEquals(comparableGolden, comparableResult,
         "Resulting workspaces were not the same");
   }
-  console.log('test passed: ' + runningTestInfo.name);
+  console.log('%ctest passed: ' + runningTestInfo.name, 'color:green');
+  setTestStatus(runningTestInfo, TEST_PASSED);
 }
 
 
-function cleanUp() {
-  setTimeout(function() {
-      workspace.clear();
-      runTestWrapper(); },
-    1000);
+function cleanUpTest() {
+  dragIndex = 0;
+  workspace.clear();
+  setTimeout(runTestWrapper, 30 * runSpeed);
 }
 
 function dragWrapper() {
-  var dragInfo = fakeDragStack.pop();
+  var dragInfo = dragList[dragIndex];
+  dragIndex++;
   if (dragInfo) {
     dragInfo();
   } else {
@@ -254,9 +372,8 @@ function dragWrapper() {
     } catch (e) {
       console.error('test failed: ' + runningTestInfo.name);
       console.error(e);
+      setTestStatus(runningTestInfo, TEST_FAILED);
     }
-    cleanUp();
+    setTimeout(cleanUpTest, 300 * runSpeed);
   }
 }
-
-

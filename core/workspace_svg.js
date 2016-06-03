@@ -303,6 +303,7 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
  * Resize the parts of the workspace that change when the workspace
  * contents (e.g. block positions) change.  This will also scroll the
  * workspace contents if needed.
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
   if (this.scrollbar) {

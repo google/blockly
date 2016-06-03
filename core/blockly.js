@@ -304,7 +304,7 @@ Blockly.onKeyDown_ = function(e) {
  * @private
  */
 Blockly.terminateDrag_ = function() {
-  Blockly.BlockSvg.terminateDrag_();
+  Blockly.BlockSvg.terminateDrag();
   Blockly.Flyout.terminateDrag_();
 };
 

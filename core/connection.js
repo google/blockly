@@ -516,8 +516,6 @@ Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
 
 /**
  * Respawn the shadow block if there was one connected to the this connection.
- * @return {Blockly.Block} The newly spawned shadow block, or null if none was
- *    spawned.
  * @private
  */
 Blockly.Connection.prototype.respawnShadow_ = function() {
@@ -533,9 +531,7 @@ Blockly.Connection.prototype.respawnShadow_ = function() {
     } else {
       throw 'Child block does not have output or previous statement.';
     }
-    return blockShadow;
   }
-  return null;
 };
 
 /**

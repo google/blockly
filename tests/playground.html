@@ -58,12 +58,12 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
-<script src="drag_tests.js"></script>
 <script>
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
+var fakeDragStack = [];
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -177,6 +177,65 @@ function airstrike(n) {
         Math.round(Math.random() * 600 + 40) + ')');
     block.render();
   }
+}
+
+function fakeDrag(id, dx, dy, opt_workspace) {
+  var ws = opt_workspace || Blockly.getMainWorkspace();
+  var blockToDrag = ws.getBlockById(id);
+
+  if (!blockToDrag) {
+    fakeDragWrapper();
+    return;
+  }
+  var blockTop = blockToDrag.svgGroup_.getBoundingClientRect().top;
+  var blockLeft = blockToDrag.svgGroup_.getBoundingClientRect().left;
+
+  // Click somewhere on the block.
+  var mouseDownEvent = new MouseEvent('mousedown',
+      {clientX: blockLeft + 5, clientY: blockTop + 5});
+  blockToDrag.onMouseDown_(mouseDownEvent);
+
+  // Throw in a move for good measure.
+  setTimeout(
+    function() {
+      var mouseMoveEvent = new MouseEvent('mousemove',
+          {clientX: blockLeft + dx,
+          clientY: blockTop + dy});
+      blockToDrag.onMouseMove_(mouseMoveEvent);
+
+      // Drop at dx, dy.
+      setTimeout(
+        function() {
+          var mouseUpEvent = new MouseEvent('mouseup',
+              {clientX: blockLeft + dx,
+              clientY: blockTop + dy});
+          blockToDrag.onMouseUp_(mouseUpEvent);
+
+          setTimeout(fakeDragWrapper(), 100);
+        }, 30);
+    }, 30);
+};
+
+function fakeDragWrapper() {
+  var dragInfo = fakeDragStack.pop();
+  if (dragInfo) {
+    fakeDrag(dragInfo.id, dragInfo.dx, dragInfo.dy, dragInfo.workspace);
+  }
+}
+
+function fakeManyDrags() {
+  var blockList = workspace.getAllBlocks();
+  for (var i = 0; i < 2 * blockList.length; i++) {
+    fakeDragStack.push(
+      {
+        id: blockList[Math.round(Math.random() * (blockList.length - 1))].id,
+        // Move some blocks up and to the left, but mostly down and to the right.
+        dx: Math.round((Math.random() - 0.25) * 200),
+        dy: Math.round((Math.random() - 0.25) * 200),
+        workspace: workspace
+      });
+  }
+  fakeDragWrapper();
 }
 
 function spaghetti(n) {

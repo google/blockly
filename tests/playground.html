@@ -60,13 +60,24 @@
 <script src="../blocks/procedures.js"></script>
 <script>
 'use strict';
-// Depending on the URL argument, render as LTR or RTL.
-var rtl = (document.location.search == '?rtl');
 var workspace = null;
 var fakeDragStack = [];
 
 function start() {
-  var toolbox = document.getElementById('toolbox');
+  // Parse the URL arguments.
+  var match = location.search.match(/dir=([^&]+)/);
+  var rtl = match && match[1] == 'rtl';
+  document.forms.options.elements.dir.selectedIndex = Number(rtl);
+  var match = location.search.match(/toolbox=([^&]+)/);
+  var toolbox =
+      document.getElementById('toolbox-' + (match ? match[1] : 'simple'));
+  document.forms.options.elements.toolbox.selectedIndex =
+      Number(toolbox.getElementsByTagName('category').length == 0);
+  match = location.search.match(/side=([^&]+)/);
+  var side = match ? match[1] : 'start';
+  console.log(side)
+  document.forms.options.elements.side.value = side;
+  // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
           {comments: true,
            disable: true,
@@ -76,12 +87,14 @@ function start() {
               length: 3,
               colour: '#ccc',
               snap: true},
+           horizontalLayout: side == 'top' || side == 'bottom',
            maxBlocks: Infinity,
            media: '../media/',
            readOnly: false,
            rtl: rtl,
            scrollbars: true,
            toolbox: toolbox,
+           toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
            zoom:
              {controls: true,
               wheel: true,
@@ -310,7 +323,7 @@ h1 {
 
   <div id="blocklyDiv"></div>
 
-  <xml id="toolbox" style="display: none">
+  <xml id="toolbox-categories" style="display: none">
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -615,18 +628,37 @@ h1 {
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
 
+  <xml id="toolbox-simple" style="display: none">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="text_print"></block>
+  </xml>
+
   <h1>Blockly Playground</h1>
 
   <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
    - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
 
-  <script>
-    if (rtl) {
-      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
-    } else {
-      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
-    }
-  </script>
+  <form id="options">
+    <select name="dir" onchange="document.forms.options.submit()">
+      <option value="ltr">LTR</option>
+      <option value="rtl">RTL</option>
+    </select>
+    <select name="toolbox" onchange="document.forms.options.submit()">
+      <option value="categories">Categories</option>
+      <option value="simple">Simple</option>
+    </select>
+    <select name="side" onchange="document.forms.options.submit()">
+      <option value="start">Start</option>
+      <option value="end">End</option>
+      <option value="top">Top</option>
+      <option value="bottom">Bottom</option>
+    </select>
+  </form>
 
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">

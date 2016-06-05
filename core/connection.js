@@ -180,8 +180,9 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       // block.  Since this block may be a stack, walk down to the end.
       var newBlock = childBlock;
       while (newBlock.nextConnection) {
-        if (newBlock.nextConnection.isConnected()) {
-          newBlock = newBlock.getNextBlock();
+        var nextBlock = newBlock.getNextBlock();
+        if (nextBlock && !nextBlock.isShadow()) {
+          newBlock = nextBlock;
         } else {
           if (orphanBlock.previousConnection.checkType_(
               newBlock.nextConnection)) {

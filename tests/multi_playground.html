@@ -15,23 +15,19 @@
 <script src="../blocks/procedures.js"></script>
 <script>
 'use strict';
- // True if we're showing toolboxes, false if showing open flyouts.
- var showingToolbox = true;
- // The workspaces we're showing.
- var workspaces = [];
-
- var options = {
-  comments: false,
-  disable: false,
-  collapse: false,
+var options = {
+  comments: true,
+  disable: true,
+  collapse: true,
   maxBlocks: Infinity,
   media: '../media/',
   readOnly: false,
-  rtl: false,
+  //rtl: false,
   scrollbars: true,
   trashcan: true,
-  horizontalLayout: false,
-  toolboxPosition: 'start',
+  //toolbox: null,
+  //horizontalLayout: false,
+  //toolboxPosition: 'start',
   zoom: {
     controls: true,
     wheel: false,
@@ -39,54 +35,35 @@
     maxScale: 4,
     minScale: 0.25,
     scaleSpeed: 1.1
-    },
-  };
+  },
+};
 
-function start(toolboxId) {
-  startBlocklyInstance('VertStartLTR', false, false, 'start', toolboxId);
-  startBlocklyInstance('VertStartRTL', true, false, 'start', toolboxId);
+function start() {
+  var match = location.search.match(/toolbox=([^&]+)/);
+  var toolbox =
+      document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
+  document.forms.options.elements.toolbox.selectedIndex =
+      Number(toolbox.getElementsByTagName('category').length == 0);
+  startBlocklyInstance('VertStartLTR', false, false, 'start', toolbox);
+  startBlocklyInstance('VertStartRTL', true, false, 'start', toolbox);
 
-  startBlocklyInstance('VertEndLTR', false, false, 'end', toolboxId);
-  startBlocklyInstance('VertEndRTL', true, false, 'end', toolboxId);
+  startBlocklyInstance('VertEndLTR', false, false, 'end', toolbox);
+  startBlocklyInstance('VertEndRTL', true, false, 'end', toolbox);
 
-  startBlocklyInstance('HorizontalStartLTR', false, true, 'start', toolboxId);
-  startBlocklyInstance('HorizontalStartRTL', true, true, 'start', toolboxId);
+  startBlocklyInstance('HorizontalStartLTR', false, true, 'start', toolbox);
+  startBlocklyInstance('HorizontalStartRTL', true, true, 'start', toolbox);
 
-  startBlocklyInstance('HorizontalEndLTR', false, true, 'end', toolboxId);
-  startBlocklyInstance('HorizontalEndRTL', true, true, 'end', toolboxId);
+  startBlocklyInstance('HorizontalEndLTR', false, true, 'end', toolbox);
+  startBlocklyInstance('HorizontalEndRTL', true, true, 'end', toolbox);
 }
 
 function startBlocklyInstance(suffix, rtl, horizontalLayout, position,
-  toolboxId) {
-  var toolbox = document.getElementById(toolboxId);
+    toolbox) {
   options.rtl = rtl;
   options.toolbox = toolbox;
   options.horizontalLayout = horizontalLayout;
   options.toolboxPosition = position;
-  workspaces.push(Blockly.inject('blocklyDiv' + suffix, options));
-}
-
-function swapFlyoutToolbox() {
-  var button = document.getElementById('swap');
-  var toolboxId;
-  if (showingToolbox) {
-    swap.textContent = 'Show toolboxes';
-    toolboxId = 'toolbox_alwaysOpen';
-  } else {
-    toolboxId = 'toolbox_categoriesScroll';
-    swap.textContent = 'Show flyouts';
-  }
-
-  // Dispose of all existing workspace stuff so
-  // we can repopulate.
-  for (var i = 0, ws; ws = workspaces[i]; i++) {
-   ws.dispose();
-  }
-  workspaces = [];
-
-  // Re-inject all the workspaces with new ids.
-  start(toolboxId);
-  showingToolbox = !showingToolbox;
+  Blockly.inject('blocklyDiv' + suffix, options);
 }
 </script>
 
@@ -102,86 +79,69 @@ h1 {
   font-weight: normal;
   font-size: 140%;
 }
-#blocklyDiv {
-  float: right;
-  height: 95%;
-  width: 70%;
+
+#octaweb {
+  width: 100%;
 }
-#collaborators {
-  float: right;
-  width: 30px;
-  margin-left: 10px;
+#octaweb th {
+  padding-top: 1em;
+  width: 50%;
 }
-#collaborators > img {
-  margin-right: 5px;
-  height: 30px;
-  padding-bottom: 5px;
-  width: 30px;
-  border-radius: 3px;
+#octaweb td {
+  width: 50%;
 }
-#importExport {
-  font-family: monospace;
-}
-#swap {
-  background-color: #4CAF50; /* Green */
-  color: white;
-  text-decoration: none;
-  font-size: 12px;
+#octaweb td div {
+  height: 480px;
+  width: 100%;
 }
 </style>
 </head>
-<body onload="start('toolbox_categoriesScroll')">
-  <div id="collaborators"></div>
-  <table>
+<body onload="start()">
+  <h1>Blockly Multi Playground</h1>
+
+  <form id="options">
+    <select name="toolbox" onchange="document.forms.options.submit()">
+      <option value="categories">Categories</option>
+      <option value="simple">Simple</option>
+    </select>
+  </form>
+
+  <table id="octaweb">
     <tr>
-      <td>
-        <button id="swap" type="button" valaue="Swap toolbox" onclick="swapFlyoutToolbox()">Show Flyouts</button>  
-      </td>
+      <th>LTR, Vertical, Start</th>
+      <th>RTL, Vertical, Start</th>
     </tr>
     <tr>
-      <td/>
-      <td>LTR</td>
-      <td>RTL</td>
+      <td><div id="blocklyDivVertStartLTR"></div></td>
+      <td><div id="blocklyDivVertStartRTL"></div></td>
     </tr>
     <tr>
-      <td>Vertical layout; toolbox at start</td>
-      <td>
-        <div id="blocklyDivVertStartLTR" style="height: 480px; width: 600px;"></div>
-      </td>
-      <td>
-        <div id="blocklyDivVertStartRTL" style="height: 480px; width: 600px;"></div>
-      </td>
+      <th>LTR, Vertical, End</th>
+      <th>RTL, Vertical, End</th>
     </tr>
     <tr>
-      <td>Vertical layout; toolbox at end</td>
-      <td>
-        <div id="blocklyDivVertEndLTR" style="height: 480px; width: 600px;"></div>
-      </td>
-      <td>
-        <div id="blocklyDivVertEndRTL" style="height: 480px; width: 600px;"></div>
-      </td>
+      <td><div id="blocklyDivVertEndLTR"></div></td>
+      <td><div id="blocklyDivVertEndRTL"></div></td>
     </tr>
     <tr>
-      <td>Horizontal layout; toolbox at start</td>
-      <td>
-        <div id="blocklyDivHorizontalStartLTR" style="height: 480px; width: 600px;"></div>
-      </td>
-      <td>
-        <div id="blocklyDivHorizontalStartRTL" style="height: 480px; width: 600px;"></div>
-      </td>
+      <th>LTR, Horizontal, Start</th>
+      <th>RTL, Horizontal, Start</th>
     </tr>
     <tr>
-      <td>Horizontal layout; toolbox at end</td>
-      <td>
-        <div id="blocklyDivHorizontalEndLTR" style="height: 480px; width: 600px;"></div>
-      </td>
-      <td>
-        <div id="blocklyDivHorizontalEndRTL" style="height: 480px; width: 600px;"></div>
-      </td>
+      <td><div id="blocklyDivHorizontalStartLTR"></div></td>
+      <td><div id="blocklyDivHorizontalStartRTL"></div></td>
+    </tr>
+    <tr>
+      <th>LTR, Horizontal, End</th>
+      <th>RTL, Horizontal, End</th>
+    </tr>
+    <tr>
+      <td><div id="blocklyDivHorizontalEndLTR"></div></td>
+      <td><div id="blocklyDivHorizontalEndRTL"></div></td>
     </tr>
   </table>
 
-  <xml id="toolbox_alwaysOpen" style="display: none">
+  <xml id="toolbox-simple" style="display: none">
     <block type="controls_if"></block>
     <block type="logic_compare"></block>
     <!-- <block type="control_repeat"></block> -->
@@ -200,7 +160,7 @@ h1 {
     <block type="logic_ternary"></block>
   </xml>
 
-  <xml id="toolbox_categoriesScroll" style="display: none">
+  <xml id="toolbox-categories" style="display: none">
      <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -460,6 +420,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="lists_sort"></block>
     </category>
     <category name="Colour" colour="20">
       <block type="colour_picker"></block>

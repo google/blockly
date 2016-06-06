@@ -193,7 +193,14 @@ Blockly.JavaScript.scrub_ = function(block, code) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += Blockly.JavaScript.prefixLines(comment, '// ') + '\n';
+      if (block.getProcedureDef) {
+        // Use a comment block for function comments.
+        commentCode += '/**\n' +
+                       Blockly.JavaScript.prefixLines(comment + '\n', ' * ') +
+                       ' */\n';
+      } else {
+        commentCode += Blockly.JavaScript.prefixLines(comment + '\n', '// ');
+      }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.

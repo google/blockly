@@ -176,7 +176,12 @@ Blockly.Python.scrub_ = function(block, code) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += Blockly.Python.prefixLines(comment, '# ') + '\n';
+      if (block.getProcedureDef) {
+        // Use a comment block for function comments.
+        commentCode += '"""' + comment + '\n"""\n';
+      } else {
+        commentCode += Blockly.Python.prefixLines(comment + '\n', '# ');
+      }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.

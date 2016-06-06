@@ -180,8 +180,9 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
       // block.  Since this block may be a stack, walk down to the end.
       var newBlock = childBlock;
       while (newBlock.nextConnection) {
-        if (newBlock.nextConnection.isConnected()) {
-          newBlock = newBlock.getNextBlock();
+        var nextBlock = newBlock.getNextBlock();
+        if (nextBlock && !nextBlock.isShadow()) {
+          newBlock = nextBlock;
         } else {
           if (orphanBlock.previousConnection.checkType_(
               newBlock.nextConnection)) {
@@ -516,8 +517,6 @@ Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
 
 /**
  * Respawn the shadow block if there was one connected to the this connection.
- * @return {Blockly.Block} The newly spawned shadow block, or null if none was
- *    spawned.
  * @private
  */
 Blockly.Connection.prototype.respawnShadow_ = function() {
@@ -533,9 +532,7 @@ Blockly.Connection.prototype.respawnShadow_ = function() {
     } else {
       throw 'Child block does not have output or previous statement.';
     }
-    return blockShadow;
   }
-  return null;
 };
 
 /**

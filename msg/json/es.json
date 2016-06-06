@@ -7,7 +7,8 @@
 			"Macofe",
 			"Codynguyen1116",
 			"Indiralena",
-			"Rubentl134"
+			"Rubentl134",
+			"Martineduardo"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "elemento",
@@ -138,7 +139,7 @@
 	"MATH_IS_DIVISIBLE_BY": "es divisible por",
 	"MATH_IS_TOOLTIP": "Comprueba si un número es par, impar, primo, entero, positivo, negativo, o si es divisible por un número determinado. Devuelve verdadero o falso.",
 	"MATH_CHANGE_HELPURL": "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter",
-	"MATH_CHANGE_TITLE": "cambiar %1 por %2",
+	"MATH_CHANGE_TITLE": "añadir %2 a %1",
 	"MATH_CHANGE_TOOLTIP": "Añadir un número a la variable «%1».",
 	"MATH_ROUND_HELPURL": "https://es.wikipedia.org/wiki/Redondeo",
 	"MATH_ROUND_TOOLTIP": "Redondear un número hacia arriba o hacia abajo.",

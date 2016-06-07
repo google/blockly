@@ -68,9 +68,7 @@ function start() {
   var match = location.search.match(/dir=([^&]+)/);
   var rtl = match && match[1] == 'rtl';
   document.forms.options.elements.dir.selectedIndex = Number(rtl);
-  var match = location.search.match(/toolbox=([^&]+)/);
-  var toolbox =
-      document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
+  var toolbox = getToolboxElement();
   document.forms.options.elements.toolbox.selectedIndex =
       Number(toolbox.getElementsByTagName('category').length == 0);
   match = location.search.match(/side=([^&]+)/);
@@ -116,6 +114,11 @@ function start() {
     logEvents(false);
   }
   taChange();
+}
+
+function getToolboxElement() {
+  var match = location.search.match(/toolbox=([^&]+)/);
+  return document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
 }
 
 function toXml() {
@@ -175,7 +178,7 @@ function logger(e) {
 
 function airstrike(n) {
   var prototypes = [];
-  var toolbox = document.getElementById('toolbox');
+  var toolbox = getToolboxElement();
   var blocks = toolbox.getElementsByTagName('block');
   for (var i = 0, block; block = blocks[i]; i++) {
     prototypes.push(block.getAttribute('type'));

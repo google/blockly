@@ -26,8 +26,6 @@
 
 goog.provide('Blockly.Input');
 
-// TODO(scr): Fix circular dependencies
-// goog.require('Blockly.Block');
 goog.require('Blockly.Connection');
 goog.require('Blockly.FieldLabel');
 goog.require('goog.asserts');

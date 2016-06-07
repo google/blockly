@@ -109,7 +109,11 @@ blocklyApp.WorkspaceTreeView = ng.core
           </div>
         </ol>
       </li>
-      <tree-view *ngIf= "block.nextConnection && block.nextConnection.targetBlock()" [block]="block.nextConnection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
+      <tree-view *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
+                 [block]="block.nextConnection.targetBlock()"
+                 [isTopBlock]="false"
+                 [level]="level">
+      </tree-view>
     `,
     directives: [ng.core.forwardRef(
         function() { return blocklyApp.WorkspaceTreeView; }), blocklyApp.FieldView],

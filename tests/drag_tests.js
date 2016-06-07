@@ -5,6 +5,19 @@
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
 
+var runSpeed = 1;
+// Which tests to run on this pass.
+var testToRunList = [];
+var testIndex = 0;
+var runningTestInfo = null;
+var dragList = [];
+var dragIndex = 0;
+
+var TEST_PASSED = 0;
+var TEST_FAILED = 1;
+var TEST_NOT_RUN = 2;
+var TEST_RUNNING = 3;
+
 /** Full set of possible tests. */
 var testSuite = {
   "drag_to_next": {
@@ -32,21 +45,68 @@ var testSuite = {
       function() { dragToNext("a", "b", true); },
       function() { dragToNext("a", "c", false); }
     ]
+  },
+  "drag_to_input_with_shadow_by_inferior": {
+    description: "Drag a number block over an existing shadow block",
+    dragList: [
+      function() { dragToInput("change_by", "number", "DELTA", false); }
+    ]
+  },
+  "drag_to_input_with_shadow": {
+    description: "Drag a block with a shadow to a compatible non-shadow block." +
+        "No connection should be made.",
+    dragList: [
+      function() { dragToInput("change_by", "number", "DELTA", true); }
+    ]
+  },
+  "drag_to_statement_input": {
+    description: "Drag a block with a statement input to a statement block.",
+    dragList: [
+      function() { dragToInput("loop", "statement", "DO", true); }
+    ]
+  },
+  "drag_to_statement_input_by_inferior": {
+    description: "Drag a statement block to a statement input.",
+    dragList: [
+      function() { dragToInput("loop", "statement", "DO", false); }
+    ]
+  },
+  "drag_over_shadow_statement": {
+    description: "Drag a statement block over a connected shadow statement.",
+    dragList: [
+      function() { dragToInput("loop", "statement", "DO", false); }
+    ]
+  },
+  "drag_over_shadow_statement_then_away": {
+    description: "Drag a statement block over a connected shadow statement." +
+        "Drop it in place, then remove it again.  The shadow should come back.",
+    dragList: [
+      function() { dragToInput("loop", "statement", "DO", false); },
+      function() {
+        dragByBlock(Blockly.getMainWorkspace().getBlockById("statement"),
+            100, 100);
+      }
+    ]
+  },
+  "drag_to_input_with_shadow_by_inferior_then_away": {
+    description: "Change an existing shadow block, then drag a number block " +
+        "over it and then away again.",
+    dragList: [
+      function() {
+        setTimeout(function() {
+          Blockly.getMainWorkspace().getBlockById("shadow_number").
+              getField("NUM").setValue('142');
+          setTimeout(dragWrapper, 100 * runSpeed);
+        }, 100 * runSpeed);
+      },
+      function() { dragToInput("change_by", "number", "DELTA", false); },
+      function() {
+        dragByBlock(Blockly.getMainWorkspace().getBlockById("number"),
+            100, 100);
+      }
+    ]
   }
 };
-
-var runSpeed = 1;
-// Which tests to run on this pass.
-var testToRunList = [];
-var testIndex = 0;
-var runningTestInfo = null;
-var dragList = [];
-var dragIndex = 0;
-
-var TEST_PASSED = 0;
-var TEST_FAILED = 1;
-var TEST_NOT_RUN = 2;
-
 
 function createTestPicker() {
   var container = document.getElementById('test_picker');
@@ -63,7 +123,7 @@ function createTestPicker() {
     input.checked = true;
     label.appendChild(input);
     container.appendChild(label);
-    label.appendChild(document.createTextNode(key));
+    label.appendChild(document.createTextNode(key.replace(/_/g, " ")));
     var statusLabel = document.createTextNode("");
     label.appendChild(statusLabel);
     container.appendChild(document.createElement("br"));
@@ -73,6 +133,7 @@ function createTestPicker() {
     value.statusLabel = statusLabel;
     value.label = label;
     value.name = key;
+    value.status = TEST_NOT_RUN;
   }
 }
 
@@ -113,6 +174,25 @@ function setAllCheckboxes(state) {
   for (var key in testSuite) {
     testSuite[key].input.checked = state;
   }
+
+  // Assume that if we're running all the tests we want to run them fast.
+  if (state) {
+    document.getElementById('run_speed').value = 10;
+  }
+}
+
+function selectFailing() {
+  for (var key in testSuite) {
+    var value = testSuite[key];
+    if (value.status == TEST_FAILED) {
+      value.input.checked = true;
+    } else {
+      value.input.checked = false;
+    }
+  }
+
+  // Assume that if we're running only failing tests we want to run them slowly.
+  document.getElementById('run_speed').value = 1;
 }
 
 function addCheckedTests() {
@@ -149,30 +229,34 @@ function dragByBlock(blockToDrag, dx, dy) {
   // this up but lose some encapsulation.  If necessary we'll do it later.
   var blockTop = blockToDrag.svgGroup_.getBoundingClientRect().top;
   var blockLeft = blockToDrag.svgGroup_.getBoundingClientRect().left;
+
+  var start = new goog.math.Coordinate(blockLeft + 5, blockTop + 5);
+  var end = new goog.math.Coordinate(start.x + dx, start.y + dy);
+
   // Click somewhere on the block.
   var mouseDownEvent = new MouseEvent('mousedown',
-      {clientX: blockLeft + 5, clientY: blockTop + 5});
+      {clientX: start.x, clientY: start.y});
   blockToDrag.onMouseDown_(mouseDownEvent);
   // Throw in a move for good measure.
   window.setTimeout(
     function() {
       var mouseMoveEvent = new MouseEvent('mousemove',
-          {clientX: blockLeft + dx,
-          clientY: blockTop + dy});
+          {clientX: end.x,
+          clientY: end.y});
       blockToDrag.onMouseMove_(mouseMoveEvent);
       // And a second mvoe to get the highlighting right.
       window.setTimeout(
       function() {
         var mouseMoveEvent = new MouseEvent('mousemove',
-            {clientX: blockLeft + dx,
-            clientY: blockTop + dy});
+            {clientX: end.x,
+            clientY: end.y});
         blockToDrag.onMouseMove_(mouseMoveEvent);
         // Drop at dx, dy.
         window.setTimeout(
           function() {
             var mouseUpEvent = new MouseEvent('mouseup',
-                {clientX: blockLeft + dx,
-                clientY: blockTop + dy});
+                {clientX: end.x,
+                clientY: end.y});
             blockToDrag.onMouseUp_(mouseUpEvent);
             window.setTimeout(dragWrapper, 100 * runSpeed);
           }, 30 * runSpeed);
@@ -268,8 +352,7 @@ function runTestWrapper() {
 }
 
 function runTest() {
-  var statusLabel = runningTestInfo.statusLabel;
-  statusLabel.nodeValue = "\tRunning...";
+  setTestStatus(runningTestInfo, TEST_RUNNING);
   console.info("Running test " + runningTestInfo.name);
   var elementId = runningTestInfo.name + '_initial';
   Blockly.Xml.domToWorkspace(document.getElementById(elementId), workspace);
@@ -294,9 +377,13 @@ function setTestStatus(testInfo, state) {
   } else if (state == TEST_NOT_RUN) {
     var text = "";
     var color = "black";
+  } else if (state == TEST_RUNNING) {
+    var text = ":\tRunning...";
+    var color = "blue";
   }
   testInfo.statusLabel.nodeValue = text;
   testInfo.label.setAttribute("style", "color:" + color);
+  testInfo.status = state;
 }
 
 /**

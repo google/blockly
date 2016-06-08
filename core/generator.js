@@ -71,6 +71,13 @@ Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 Blockly.Generator.prototype.INDENT = '  ';
 
 /**
+ * Maximum length for a comment before wrapping.  Does not account for
+ * indenting level.
+ * @type {number}
+ */
+Blockly.Generator.prototype.COMMENT_WRAP = 60;
+
+/**
  * Generate code for all blocks in the workspace to the specified language.
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
  * @return {string} Generated code.

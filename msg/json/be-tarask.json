@@ -278,6 +278,7 @@
 	"LISTS_SORT_TOOLTIP": "Сартаваць копію сьпісу.",
 	"LISTS_SORT_ORDER_ASCENDING": "па павелічэньні",
 	"LISTS_SORT_ORDER_DESCENDING": "па зьмяншэньні",
+	"LISTS_SORT_TYPE_NUMERIC": "як лікі",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "стварыць сьпіс з тэксту",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "стварыць тэкст са сьпісу",
 	"LISTS_SPLIT_WITH_DELIMITER": "з падзяляльнікам",

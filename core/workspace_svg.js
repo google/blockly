@@ -664,6 +664,14 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
 };
 
 /**
+ * Is the user currently dragging a block or scrolling the workspace?
+ * @return {boolean} True if currently dragging or scrolling
+ */
+Blockly.WorkspaceSvg.prototype.isDragging = function() {
+  return Blockly.dragMode_ == Blockly.DRAG_FREE || this.isScrolling;
+};
+
+/**
  * Handle a mouse-wheel on SVG drawing surface.
  * @param {!Event} e Mouse wheel event.
  * @private

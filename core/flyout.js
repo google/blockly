@@ -755,8 +755,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseUp_ = function(e) {
-  if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
-      !Blockly.WidgetDiv.isVisible()) {
+  if (!this.workspace_.isDragging() && !Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.fire(
         new Blockly.Events.Ui(Blockly.Flyout.startBlock_, 'click',
                               undefined, undefined));

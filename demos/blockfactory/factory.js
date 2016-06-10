@@ -656,7 +656,7 @@ function updatePreview() {
 
     if (format == 'JSON') {
       var json = JSON.parse(code);
-      Blockly.Blocks[json.id || UNNAMED] = {
+      Blockly.Blocks[json.type || UNNAMED] = {
         init: function() {
           this.jsonInit(json);
         }

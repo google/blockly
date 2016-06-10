@@ -569,7 +569,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
   this.layoutBlocks_(blocks, gaps);
 
-  // IE 11 is an incompetant browser that fails to fire mouseout events.
+  // IE 11 is an incompetent browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
   var deselectAll = function() {
     var topBlocks = this.workspace_.getTopBlocks(false);
@@ -806,7 +806,7 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
      Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events
      on certain touch actions. Ignore events with these signatures.
      This may result in a one-pixel blind spot in other browsers,
-     but this shouldn't be noticable. */
+     but this shouldn't be noticeable. */
     e.stopPropagation();
     return;
   }

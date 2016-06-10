@@ -66,12 +66,10 @@ blocklyApp.FieldView = ng.core
     providers: [blocklyApp.TreeService, blocklyApp.UtilsService]
   })
   .Class({
-    constructor: [blocklyApp.TreeService, blocklyApp.UtilsService,
-        function(_treeService, _utilsService) {
+    constructor: [blocklyApp.UtilsService, function(_utilsService) {
       this.optionText = {
         keys: []
       };
-      this.treeService = _treeService;
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {

@@ -36,12 +36,6 @@ blocklyApp.TreeService = ng.core
       // to shift focus back to the tree as a whole.
       this.previousKey_ = null;
     },
-    createId: function(obj) {
-      if (obj && obj.id) {
-        return obj.id;
-      }
-      return 'blockly-' + Blockly.genUid();
-    },
     setActiveDesc: function(node, id) {
       blocklyApp.debug && console.log('setting active descendant for tree ' + id);
       this.activeDesc_[id] = node;

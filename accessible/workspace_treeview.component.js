@@ -203,12 +203,6 @@ blocklyApp.WorkspaceTreeView = ng.core
         this.treeService.updateSelectedNode(parentList, tree, false);
       }
     },
-    setId: function(block) {
-      if (this.isTopBlock) {
-        return this.parentId + '-node0';
-      }
-      return this.treeService.createId(block);
-    },
     sendToSelected: function(block) {
       if (this.clipboardService) {
         this.clipboardService.pasteToMarkedConnection(block, false);

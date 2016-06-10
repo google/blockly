@@ -2299,7 +2299,7 @@
                 </value>
                 <value name="ADD1">
                   <block type="text">
-                    <field name="TEXT">Klingon</field>
+                    <field name="TEXT">klingon</field>
                   </block>
                 </value>
                 <value name="ADD2">
@@ -2329,12 +2329,12 @@
                 </value>
                 <value name="ADD1">
                   <block type="text">
-                    <field name="TEXT">Klingon</field>
+                    <field name="TEXT">Vulcan</field>
                   </block>
                 </value>
                 <value name="ADD2">
                   <block type="text">
-                    <field name="TEXT">Vulcan</field>
+                    <field name="TEXT">klingon</field>
                   </block>
                 </value>
               </block>
@@ -2356,25 +2356,20 @@
             <field name="DIRECTION">1</field>
             <value name="LIST">
               <block type="lists_create_with" inline="false">
-                <mutation items="4"></mutation>
+                <mutation items="3"></mutation>
                 <value name="ADD0">
                   <block type="text">
-                    <field name="TEXT">borg</field>
+                    <field name="TEXT">Vulcan</field>
                   </block>
                 </value>
                 <value name="ADD1">
                   <block type="text">
-                    <field name="TEXT">Klingon</field>
+                    <field name="TEXT">klingon</field>
                   </block>
                 </value>
                 <value name="ADD2">
                   <block type="text">
                     <field name="TEXT">Borg</field>
-                  </block>
-                </value>
-                <value name="ADD3">
-                  <block type="text">
-                    <field name="TEXT">Vulcan</field>
                   </block>
                 </value>
               </block>
@@ -2391,23 +2386,18 @@
             </value>
             <value name="EXPECTED">
               <block type="lists_create_with" inline="false">
-                <mutation items="4"></mutation>
+                <mutation items="3"></mutation>
                 <value name="ADD0">
-                  <block type="text">
-                    <field name="TEXT">borg</field>
-                  </block>
-                </value>
-                <value name="ADD1">
                   <block type="text">
                     <field name="TEXT">Borg</field>
                   </block>
                 </value>
-                <value name="ADD2">
+                <value name="ADD1">
                   <block type="text">
-                    <field name="TEXT">Klingon</field>
+                    <field name="TEXT">klingon</field>
                   </block>
                 </value>
-                <value name="ADD3">
+                <value name="ADD2">
                   <block type="text">
                     <field name="TEXT">Vulcan</field>
                   </block>
@@ -2433,18 +2423,18 @@
               <block type="lists_create_with" inline="false">
                 <mutation items="3"></mutation>
                 <value name="ADD0">
-                  <block type="text">
-                    <field name="TEXT">0-Borg</field>
+                  <block type="math_number">
+                    <field name="NUM">8</field>
                   </block>
                 </value>
                 <value name="ADD1">
-                  <block type="text">
-                    <field name="TEXT">Vulcan</field>
+                  <block type="math_number">
+                    <field name="NUM">18</field>
                   </block>
                 </value>
                 <value name="ADD2">
-                  <block type="text">
-                    <field name="TEXT">1-Klingon</field>
+                  <block type="math_number">
+                    <field name="NUM">-1</field>
                   </block>
                 </value>
               </block>
@@ -2463,18 +2453,18 @@
               <block type="lists_create_with" inline="false">
                 <mutation items="3"></mutation>
                 <value name="ADD0">
-                  <block type="text">
-                    <field name="TEXT">Vulcan</field>
+                  <block type="math_number">
+                    <field name="NUM">18</field>
                   </block>
                 </value>
                 <value name="ADD1">
-                  <block type="text">
-                    <field name="TEXT">1-Klingon</field>
+                  <block type="math_number">
+                    <field name="NUM">8</field>
                   </block>
                 </value>
                 <value name="ADD2">
-                  <block type="text">
-                    <field name="TEXT">0-Borg</field>
+                  <block type="math_number">
+                    <field name="NUM">-1</field>
                   </block>
                 </value>
               </block>

@@ -314,10 +314,10 @@ Blockly.JavaScript['lists_sort'] = function(block) {
       '    "NUMERIC": function(a, b) {',
       '        return parseFloat(a) - parseFloat(b); },',
       '    "TEXT": function(a, b) {',
-      '        return a.toString().localeCompare(b.toString(), "en"); },',
+      '        return a.toString() > b.toString() ? 1 : -1; },',
       '    "IGNORE_CASE": function(a, b) {',
-      '        return a.toString().localeCompare(b.toString(), "en",',
-      '          {"sensitivity": "base"}); },',
+      '        return a.toString().toLowerCase() > ' +
+      'b.toString().toLowerCase() ? 1 : -1; },',
       '  };',
       '  var compare = compareFuncs[type];',
       '  return function(a, b) { return compare(a, b) * direction; }',

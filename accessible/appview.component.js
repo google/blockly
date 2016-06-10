@@ -35,43 +35,31 @@ blocklyApp.AppView = ng.core
     <table>
       <tr>
         <td class="blocklyTable">
-          <toolbox-view>{{stringMap['TOOLBOX_LOAD']}}</toolbox-view>
+          <toolbox-view>{{'TOOLBOX_LOAD'|translate}}</toolbox-view>
         </td>
         <td class="blocklyTable">
-          <workspace-view>{{stringMap['WORKSPACE_LOAD']}}</workspace-view>
+          <workspace-view>{{'WORKSPACE_LOAD'|translate}}</workspace-view>
         </td>
       </tr>
     </table>
-    <label id="blockly-block-summary" aria-hidden="true" hidden>{{stringMap['BLOCK_SUMMARY']}}</label>
-    <label id="blockly-block-menu" aria-hidden="true" hidden>{{stringMap['BLOCK_ACTION_LIST']}}</label>
-    <label id="blockly-menu" aria-hidden="true" hidden>{{stringMap['OPTION_LIST']}}</label>
-    <label id="blockly-argument-menu" aria-hidden="true" hidden>{{stringMap['ARGUMENT_OPTIONS_LIST']}}</label>
-    <label id="blockly-argument-input" aria-hidden="true" hidden>{{stringMap['ARGUMENT_INPUT']}}</label>
-    <label id="blockly-argument-block-menu" aria-hidden="true" hidden>{{stringMap['ARGUMENT_BLOCK_ACTION_LIST']}}</label>
-    <label id="blockly-argument-text" aria-hidden="true" hidden>{{stringMap['TEXT']}}</label>
-    <label id="blockly-button" aria-hidden="true" hidden>{{stringMap['BUTTON']}}</label>
-    <label id="blockly-disabled" aria-hidden="true" hidden>{{stringMap['UNAVAILABLE']}}</label>
+
+    <label aria-hidden="true" hidden id="blockly-argument-block-menu">{{'ARGUMENT_BLOCK_ACTION_LIST'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-argument-input">{{'ARGUMENT_INPUT'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-argument-menu">{{'ARGUMENT_OPTIONS_LIST'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-argument-text">{{'TEXT'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-block-menu">{{'BLOCK_ACTION_LIST'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-block-summary">{{'BLOCK_SUMMARY'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-button">{{'BUTTON'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-disabled">{{'UNAVAILABLE'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-menu">{{'OPTION_LIST'|translate}}</label>
     `,
     directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
+    pipes: [blocklyApp.TranslatePipe],
     // ClipboardService declared here so that all components are using the same
     // instance of the clipboard.
     // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
     providers: [blocklyApp.ClipboardService]
   })
   .Class({
-    constructor: function() {
-      this.stringMap = {
-        ['TOOLBOX_LOAD']: Blockly.Msg.TOOLBOX_LOAD_MSG,
-        ['WORKSPACE_LOAD']: Blockly.Msg.WORKSPACE_LOAD_MSG,
-        ['BLOCK_SUMMARY']: Blockly.Msg.BLOCK_SUMMARY,
-        ['BLOCK_ACTION_LIST']: Blockly.Msg.BLOCK_ACTION_LIST,
-        ['OPTION_LIST']: Blockly.Msg.OPTION_LIST,
-        ['ARGUMENT_OPTIONS_LIST']: Blockly.Msg.ARGUMENT_OPTIONS_LIST,
-        ['UNAVAILABLE']: Blockly.Msg.UNAVAILABLE,
-        ['BUTTON']: Blockly.Msg.BUTTON,
-        ['TEXT']: Blockly.Msg.TEXT,
-        ['ARGUMENT_BLOCK_ACTION_LIST']: Blockly.Msg.ARGUMENT_BLOCK_ACTION_LIST,
-        ['ARGUMENT_INPUT']: Blockly.Msg.ARGUMENT_INPUT
-      };
-    }
+    constructor: function() {}
   });

@@ -36,7 +36,7 @@ blocklyApp.FieldView = ng.core
     <li [id]="idMap['listItem']" *ngIf="isDropdown()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])"
         [attr.aria-level]="level" aria-selected=false role="treeitem">
-      <label [id]="idMap['label']">{{stringMap['CURRENT_ARGUMENT_VALUE']}} {{field.getText()}}</label>
+      <label [id]="idMap['label']">{{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}</label>
       <ol role="group" [attr.aria-level]="level+1">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
@@ -62,6 +62,7 @@ blocklyApp.FieldView = ng.core
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
+    pipes: [blocklyApp.TranslatePipe],
     providers: [blocklyApp.TreeService, blocklyApp.UtilsService]
   })
   .Class({
@@ -72,9 +73,6 @@ blocklyApp.FieldView = ng.core
       };
       this.treeService = _treeService;
       this.utilsService = _utilsService;
-      this.stringMap = {
-        'CURRENT_ARGUMENT_VALUE': Blockly.Msg.CURRENT_ARGUMENT_VALUE
-      };
     }],
     ngOnInit: function() {
       var elementsNeedingIds = this.generateElementNames(this.field);

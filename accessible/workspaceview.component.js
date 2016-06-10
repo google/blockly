@@ -26,30 +26,32 @@
 blocklyApp.WorkspaceView = ng.core
   .Component({
     selector: 'workspace-view',
-    viewInjector: [blocklyApp.ClipboardService],
     template: `
-      <label>
-        <h3 #workspaceTitle id="blockly-workspace-title">{{stringMap['WORKSPACE']}}</h3>
-      </label>
-      <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event, getActiveElementId())">
-        <span *ngFor="#buttonConfig of toolbarButtonConfig">
-          <button (click)='buttonConfig.action()' class='blocklyTree'>
-            {{buttonConfig.text}}
-          </button>
-        </span>
-        <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableClearWorkspace()}}
-            [attr.aria-disabled]='disableClearWorkspace()' class='blocklyTree'>{{stringMap['CLEAR_WORKSPACE']}}</button>
-      </div>
-      <div *ngIf="workspace">
-        <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index"
-            tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="workspaceTitle.id"
-            [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
-            (keydown)="onKeypress($event, tree)">
-          <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id"></tree-view>
-        </ol>
-      </div>
+    <label>
+      <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
+    </label>
+    <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event, getActiveElementId())">
+      <span *ngFor="#buttonConfig of toolbarButtonConfig">
+        <button (click)='buttonConfig.action()' class='blocklyTree'>
+          {{buttonConfig.text}}
+        </button>
+      </span>
+      <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableClearWorkspace()}}
+              [attr.aria-disabled]='disableClearWorkspace()' class='blocklyTree'>
+        {{'CLEAR_WORKSPACE'|translate}}
+      </button>
+    </div>
+    <div *ngIf="workspace">
+      <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index"
+          tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="workspaceTitle.id"
+          [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
+          (keydown)="onKeypress($event, tree)">
+        <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id"></tree-view>
+      </ol>
+    </div>
     `,
     directives: [blocklyApp.WorkspaceTreeView],
+    pipes: [blocklyApp.TranslatePipe],
     providers: [blocklyApp.TreeService]
   })
   .Class({

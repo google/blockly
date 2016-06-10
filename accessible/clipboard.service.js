@@ -61,7 +61,9 @@ blocklyApp.ClipboardService = ng.core
           connection.connect(reconstitutedBlock.outputConnection);
       }
       blocklyApp.debug && console.log('paste');
-      alert(Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG + block.toString());
+      alert(
+          Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
+          reconstitutedBlock.toString());
     },
     pasteToMarkedConnection: function(block, announce) {
       var xml = Blockly.Xml.blockToDom(block);
@@ -72,7 +74,9 @@ blocklyApp.ClipboardService = ng.core
           reconstitutedBlock.previousConnection);
       blocklyApp.debug && console.log('paste to marked connection');
       if (announce) {
-        alert(Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG + block.toString());
+        alert(
+            Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
+            reconstitutedBlock.toString());
       }
     },
     markConnection: function(connection) {

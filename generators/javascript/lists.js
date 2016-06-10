@@ -89,7 +89,7 @@ Blockly.JavaScript['lists_indexOf'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
   var code = argument1 + '.' + operator + '(' + argument0 + ')';
   // Adjust index if using one-based indices.
-  if(Blockly.JavaScript.ONE_BASED_INDEXING) {
+  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
     code += ' + 1';
   }
   return [code, Blockly.JavaScript.ORDER_ADDITION];

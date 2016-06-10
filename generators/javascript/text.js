@@ -96,7 +96,7 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   var code = argument1 + '.' + operator + '(' + argument0 + ')';
   // Adjust index if using one-based indices.
-  if(Blockly.JavaScript.ONE_BASED_INDEXING) {
+  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
     code += ' + 1';
   }
   return [code, Blockly.JavaScript.ORDER_ADDITION];
@@ -119,7 +119,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 'FROM_START':
       // Adjust index if using one-based indices.
-      if(Blockly.JavaScript.ONE_BASED_INDEXING) {
+      if (Blockly.JavaScript.ONE_BASED_INDEXING) {
         if (Blockly.isNumber(at)) {
           // If the index is a naked number, decrement it right now.
           at = parseFloat(at) - 1;
@@ -132,7 +132,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 'FROM_END':
       // Adjust index if not using one-based indices.
-      if(!Blockly.JavaScript.ONE_BASED_INDEXING) {
+      if (!Blockly.JavaScript.ONE_BASED_INDEXING) {
         if (Blockly.isNumber(at)) {
           // If the index is a naked number, decrement it right now.
           at = parseFloat(at) + 1;
@@ -146,11 +146,11 @@ Blockly.JavaScript['text_charAt'] = function(block) {
     case 'RANDOM':
       var functionName = Blockly.JavaScript.provideFunction_(
           'textRandomLetter',
-          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(text) {',
-            '  var x = Math.floor(Math.random() * text.length);',
-            '  return text[x];',
-            '}']);
+          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+             '(text) {',
+           '  var x = Math.floor(Math.random() * text.length);',
+           '  return text[x];',
+           '}']);
       code = functionName + '(' + text + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
@@ -171,25 +171,23 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
   } else {
-    var getSubStringFunction = [
+    var subsequenceFunction = [
       'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(list, where1, at1, where2, at2) {',
+        '(list, where1, at1, where2, at2) {',
       '  function getAt(where, at) {'];
-    // Adjust index if using one-based indices.
-    if(Blockly.JavaScript.ONE_BASED_INDEXING) {
-      getSubStringFunction.concat([
+    // Adjust index depending on if using zero or one based indexing.
+    if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+      subsequenceFunction = subsequenceFunction.concat([
         '    if (where == \'FROM_START\') {',
         '      at--;',
         '    } else if (where == \'FROM_END\') {',
-        '      at = list.length - at;',
-      ]);
+        '      at = list.length - at;']);
     } else {
-      getSubStringFunction.concat([
+      subsequenceFunction = subsequenceFunction.concat([
         '    if (where == \'FROM_END\') {',
-        '      at = list.length - at + 1;',
-      ]);
+        '      at = list.length - at + 1;']);
     }
-    getSubStringFunction.concat([
+    subsequenceFunction = subsequenceFunction.concat([
       '    } else if (where == \'FIRST\') {',
       '      at = 0;',
       '    } else if (where == \'LAST\') {',
@@ -202,11 +200,10 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
       '  at1 = getAt(where1, at1);',
       '  at2 = getAt(where2, at2) + 1;',
       '  return list.slice(at1, at2);',
-      '}'
-    ]);
+      '}']);
     var functionName = Blockly.JavaScript.provideFunction_(
-        'textGetSubstring',
-        getSubStringFunction);
+        'getSubsequence',
+        subsequenceFunction);
     var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
@@ -231,12 +228,12 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
     // Title case is not a native JavaScript function.  Define one.
     var functionName = Blockly.JavaScript.provideFunction_(
         'textToTitleCase',
-        [ 'function ' +
-            Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(str) {',
-          '  return str.replace(/\\S+/g,',
-          '      function(txt) {return txt[0].toUpperCase() + ' +
-              'txt.substring(1).toLowerCase();});',
-          '}']);
+        ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+           '(str) {',
+         '  return str.replace(/\\S+/g,',
+         '      function(txt) {return txt[0].toUpperCase() + ' +
+             'txt.substring(1).toLowerCase();});',
+         '}']);
     var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
     code = functionName + '(' + argument0 + ')';

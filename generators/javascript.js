@@ -104,6 +104,12 @@ Blockly.JavaScript.ORDER_COMMA = 17;         // ,
 Blockly.JavaScript.ORDER_NONE = 99;          // (...)
 
 /**
+ * Allow for switching between one and zero based indexing, one based by
+ * default.
+ */
+Blockly.JavaScript.ONE_BASED_INDEXING = true;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */

@@ -37,29 +37,29 @@ Blockly.JavaScript['text'] = function(block) {
 
 Blockly.JavaScript['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
-  var code;
-  if (block.itemCount_ == 0) {
-    return ['\'\'', Blockly.JavaScript.ORDER_ATOMIC];
-  } else if (block.itemCount_ == 1) {
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = 'String(' + argument0 + ')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-  } else if (block.itemCount_ == 2) {
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    var argument1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = 'String(' + argument0 + ') + String(' + argument1 + ')';
-    return [code, Blockly.JavaScript.ORDER_ADDITION];
-  } else {
-    code = new Array(block.itemCount_);
-    for (var n = 0; n < block.itemCount_; n++) {
-      code[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
-          Blockly.JavaScript.ORDER_COMMA) || '\'\'';
-    }
-    code = '[' + code.join(',') + '].join(\'\')';
-    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  switch (block.itemCount_) {
+    case 0:
+      return ['\'\'', Blockly.JavaScript.ORDER_ATOMIC];
+    case 1:
+      var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
+              Blockly.JavaScript.ORDER_NONE) || '\'\'';
+      var code = 'String(' + argument0 + ')';
+      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+    case 2:
+      var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
+              Blockly.JavaScript.ORDER_NONE) || '\'\'';
+      var argument1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
+              Blockly.JavaScript.ORDER_NONE) || '\'\'';
+      var code = 'String(' + argument0 + ') + String(' + argument1 + ')';
+      return [code, Blockly.JavaScript.ORDER_ADDITION];
+    default:
+      var code = new Array(block.itemCount_);
+      for (var n = 0; n < block.itemCount_; n++) {
+        code[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
+                Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+      }
+      code = '[' + code.join(',') + '].join(\'\')';
+      return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
 };
 
@@ -110,6 +110,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       Blockly.JavaScript.ORDER_UNARY_NEGATION) || '1';
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+
   switch (where) {
     case 'FIRST':
       var code = text + '.charAt(0)';
@@ -168,6 +169,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
       Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
   var at2 = Blockly.JavaScript.valueToCode(block, 'AT2',
       Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
+
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
   } else {
@@ -218,12 +220,12 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
     'TITLECASE': null
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
-  var code;
+
   if (operator) {
     // Upper and lower case are functions built into JavaScript.
     var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
         Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-    code = argument0 + operator;
+    var code = argument0 + operator;
   } else {
     // Title case is not a native JavaScript function.  Define one.
     var functionName = Blockly.JavaScript.provideFunction_(
@@ -236,7 +238,7 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
          '}']);
     var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
         Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    code = functionName + '(' + argument0 + ')';
+    var code = functionName + '(' + argument0 + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

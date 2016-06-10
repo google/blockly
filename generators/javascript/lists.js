@@ -335,7 +335,6 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
       '  return list.slice(at1, at2);',
       '}'
     ]);
-
     var functionName = Blockly.JavaScript.provideFunction_(
         'listsGetSublist',
         getSublistFunction);

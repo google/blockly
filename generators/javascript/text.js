@@ -94,7 +94,11 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var argument1 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
+  var code = argument1 + '.' + operator + '(' + argument0 + ')';
+  // Adjust index if using one-based indices.
+  if(Blockly.JavaScript.ONE_BASED_INDEXING) {
+    code += ' + 1';
+  }
   return [code, Blockly.JavaScript.ORDER_MEMBER];
 };
 
@@ -114,17 +118,29 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       var code = text + '.slice(-1)';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 'FROM_START':
-      // Blockly uses one-based indicies.
-      if (Blockly.isNumber(at)) {
-        // If the index is a naked number, decrement it right now.
-        at = parseFloat(at) - 1;
-      } else {
-        // If the index is dynamic, decrement it in code.
-        at += ' - 1';
+      // Adjust index if using one-based indices.
+      if(Blockly.JavaScript.ONE_BASED_INDEXING) {
+        if (Blockly.isNumber(at)) {
+          // If the index is a naked number, decrement it right now.
+          at = parseFloat(at) - 1;
+        } else {
+          // If the index is dynamic, decrement it in code.
+          at += ' - 1';
+        }
       }
       var code = text + '.charAt(' + at + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 'FROM_END':
+      // Adjust index if not using one-based indices.
+      if(!Blockly.JavaScript.ONE_BASED_INDEXING) {
+        if (Blockly.isNumber(at)) {
+          // If the index is a naked number, decrement it right now.
+          at = parseFloat(at) + 1;
+        } else {
+          // If the index is dynamic, decrement it in code.
+          at += ' + 1';
+        }
+      }
       var code = text + '.slice(-' + at + ').charAt(0)';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 'RANDOM':
@@ -147,35 +163,50 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
+  var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
   var at1 = Blockly.JavaScript.valueToCode(block, 'AT1',
-      Blockly.JavaScript.ORDER_NONE) || '1';
+      Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
   var at2 = Blockly.JavaScript.valueToCode(block, 'AT2',
-      Blockly.JavaScript.ORDER_NONE) || '1';
+      Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
   } else {
+    var getSubStringFunction = [
+      'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(list, where1, at1, where2, at2) {',
+      '  function getAt(where, at) {'];
+    // Adjust index if using one-based indices.
+    if(Blockly.JavaScript.ONE_BASED_INDEXING) {
+      getSubStringFunction.concat([
+        '    if (where == \'FROM_START\') {',
+        '      at--;',
+        '    } else if (where == \'FROM_END\') {',
+        '      at = list.length - at;',
+      ]);
+    } else {
+      getSubStringFunction.concat([
+        '    if (where == \'FROM_END\') {',
+        '      at = list.length - at + 1;',
+      ]);
+    }
+    getSubStringFunction.concat([
+      '    } else if (where == \'FIRST\') {',
+      '      at = 0;',
+      '    } else if (where == \'LAST\') {',
+      '      at = list.length - 1;',
+      '    } else {',
+      '      throw \'Unhandled option (lists_getSublist).\';',
+      '    }',
+      '    return at;',
+      '  }',
+      '  at1 = getAt(where1, at1);',
+      '  at2 = getAt(where2, at2) + 1;',
+      '  return list.slice(at1, at2);',
+      '}'
+    ]);
     var functionName = Blockly.JavaScript.provideFunction_(
         'textGetSubstring',
-        [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-            '(text, where1, at1, where2, at2) {',
-          '  function getAt(where, at) {',
-          '    if (where == \'FROM_START\') {',
-          '      at--;',
-          '    } else if (where == \'FROM_END\') {',
-          '      at = text.length - at;',
-          '    } else if (where == \'FIRST\') {',
-          '      at = 0;',
-          '    } else if (where == \'LAST\') {',
-          '      at = text.length - 1;',
-          '    } else {',
-          '      throw \'Unhandled option (text_getSubstring).\';',
-          '    }',
-          '    return at;',
-          '  }',
-          '  at1 = getAt(where1, at1);',
-          '  at2 = getAt(where2, at2) + 1;',
-          '  return text.slice(at1, at2);',
-          '}']);
+        getSubStringFunction);
     var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }

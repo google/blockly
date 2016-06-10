@@ -62,8 +62,7 @@ blocklyApp.FieldView = ng.core
     </li>
     `,
     inputs: ['field', 'level', 'index', 'parentId'],
-    pipes: [blocklyApp.TranslatePipe],
-    providers: [blocklyApp.TreeService, blocklyApp.UtilsService]
+    pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
     constructor: [blocklyApp.UtilsService, function(_utilsService) {

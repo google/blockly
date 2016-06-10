@@ -25,6 +25,7 @@
 blocklyApp.ClipboardService = ng.core
   .Class({
     constructor: function() {
+      blocklyApp.debug && console.log('Clipboard service constructed');
       this.clipboardBlockXml_ = null;
       this.clipboardBlockSuperiorConnection_ = null;
       this.clipboardBlockNextConnection_ = null;

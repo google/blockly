@@ -19,6 +19,8 @@
 
 /**
  * @fileoverview Angular2 Service that handles all tree keyboard navigation.
+ * A separate TreeService is constructed for each tree in the application.
+ *
  * @author madeeha@google.com (Madeeha Ghori)
  */
 

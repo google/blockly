@@ -117,11 +117,12 @@ blocklyApp.WorkspaceTreeView = ng.core
                [level]="level">
     </tree-view>
     `,
-    directives: [ng.core.forwardRef(
-        function() { return blocklyApp.WorkspaceTreeView; }), blocklyApp.FieldView],
+    directives: [ng.core.forwardRef(function() {
+      return blocklyApp.WorkspaceTreeView;
+    }), blocklyApp.FieldView],
     inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId'],
     pipes: [blocklyApp.TranslatePipe],
-    providers: [blocklyApp.TreeService, blocklyApp.UtilsService],
+    providers: [blocklyApp.TreeService],
   })
   .Class({
     constructor: [

@@ -18,8 +18,10 @@
  */
 
 /**
- * @fileoverview Angular2 Service with functions required by multiple
- * components.
+ * @fileoverview Angular2 utility service for multiple components. All
+ * functions in this service should be stateless, since this is a singleton
+ * service that is used for the entire application.
+ *
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
@@ -28,6 +30,7 @@ var blocklyApp = {};
 blocklyApp.UtilsService = ng.core
   .Class({
     constructor: function() {
+      blocklyApp.debug && console.log('Utils service constructed');
     },
     generateUniqueId: function() {
       return 'blockly-' + Blockly.genUid();

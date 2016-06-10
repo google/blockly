@@ -105,13 +105,14 @@ blocklyApp.ToolboxTreeView = ng.core
     }), blocklyApp.FieldView],
     inputs: [
         'block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories'],
-    pipes: [blocklyApp.TranslatePipe],
-    providers: [blocklyApp.TreeService, blocklyApp.UtilsService]
+    pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
-    constructor: [blocklyApp.ClipboardService, blocklyApp.TreeService,
-                  blocklyApp.UtilsService,
-                  function(_clipboardService, _treeService, _utilsService) {
+    constructor: [
+        blocklyApp.ClipboardService, blocklyApp.TreeService, blocklyApp.UtilsService,
+        function(_clipboardService, _treeService, _utilsService) {
+      // ClipboardService and UtilsService are app-wide singleton services.
+      // TreeService is from the parent ToolboxView component.
       this.infoBlocks = Object.create(null);
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;

@@ -95,7 +95,7 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
   var argument1 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
-  return [code, Blockly.JavaScript.ORDER_MEMBER];
+  return [code, Blockly.JavaScript.ORDER_ADDITION];
 };
 
 Blockly.JavaScript['text_charAt'] = function(block) {

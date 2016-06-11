@@ -111,14 +111,11 @@ blocklyApp.ClipboardService = ng.core
           this.isCompatibleWithConnection_(
               blockConnection, this.markedConnection_);
     },
-    getClipboardCompatibilityHTMLText: function(connection) {
-      if (this.isCompatibleWithConnection_(connection,
-          this.clipboardBlockSuperiorConnection_) ||
-          this.isCompatibleWithConnection_(connection,
-          this.clipboardBlockNextConnection_)){
-        return '';
-      } else {
-        return 'blockly-disabled';
-      }
+    isClipboardCompatibleWithConnection: function(connection) {
+      var superiorConnection = this.clipboardBlockSuperiorConnection_;
+      var nextConnection = this.clipboardBlockNextConnection_;
+      return
+          this.isCompatibleWithConnection_(connection, superiorConnection) ||
+          this.isCompatibleWithConnection_(connection, nextConnection);
     }
   });

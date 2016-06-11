@@ -60,12 +60,12 @@ blocklyApp.ToolboxTreeView = ng.core
               </button>
             </li>
             <li #sendToSelected [id]="idMap['sendToSelected']" role="treeitem"
-                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', utilsService.getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block)))"
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !clipboardService.isBlockCompatibleWithMarkedConnection(block))"
                 [attr.aria-level]="level+2" aria-selected=false>
               <button #sendToSelectedButton
                       [id]="idMap['sendToSelectedButton']"
                       (click)="copyToMarked(block)"
-                      [disabled]="getMarkedBlockCompatibilityHTMLText(clipboardService.isBlockCompatibleWithMarkedConnection(block))">
+                      [disabled]="!clipboardService.isBlockCompatibleWithMarkedConnection(block)">
                 {{'COPY_TO_MARKED_SPOT'|translate}}
               </button>
             </li>
@@ -135,13 +135,9 @@ blocklyApp.ToolboxTreeView = ng.core
         this.idMap['parentList'] = this.utilsService.generateUniqueId();
       }
     },
-    getMarkedBlockCompatibilityHTMLText: function(isCompatible) {
-      return this.utilsService.getMarkedBlockCompatibilityHTMLText(
-          isCompatible);
-    },
-    generateAriaLabelledByAttr: function() {
-      return this.utilsService.generateAriaLabelledByAttr.apply(
-          this, arguments);
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
+      return this.utilsService.generateAriaLabelledByAttr(
+          mainLabel, secondLabel, isDisabled);
     },
     setActiveDesc: function(parentList) {
       // If this is the first child of the toolbox and the

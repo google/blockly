@@ -30,17 +30,19 @@ blocklyApp.WorkspaceView = ng.core
     <label>
       <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
     </label>
+
     <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event, getActiveElementId())">
       <span *ngFor="#buttonConfig of toolbarButtonConfig">
-        <button (click)='buttonConfig.action()' class='blocklyTree'>
+        <button (click)="buttonConfig.action()" class="blocklyTree">
           {{buttonConfig.text}}
         </button>
       </span>
-      <button id='clear-workspace' (click)='workspace.clear()' disabled={{disableClearWorkspace()}}
-              [attr.aria-disabled]='disableClearWorkspace()' class='blocklyTree'>
+      <button id="clear-workspace" (click)="workspace.clear()"
+              [disabled]="isWorkspaceEmpty()" class="blocklyTree">
         {{'CLEAR_WORKSPACE'|translate}}
       </button>
     </div>
+
     <div *ngIf="workspace">
       <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index"
           tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="workspaceTitle.id"
@@ -85,11 +87,7 @@ blocklyApp.WorkspaceView = ng.core
     makeId: function(index) {
       return 'blockly-workspace-tree' + index;
     },
-    disableClearWorkspace: function() {
-      if (blocklyApp.workspace.topBlocks_.length){
-        return undefined;
-      } else {
-        return 'blockly-disabled';
-      }
+    isWorkspaceEmpty: function() {
+      return !blocklyApp.workspace.topBlocks_.length;
     }
   });

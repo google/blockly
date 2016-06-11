@@ -30,12 +30,12 @@ blocklyApp.FieldView = ng.core
     template: `
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])"
-        [attr.aria-level]="level"  aria-selected=false>
+        [attr.aria-level]="level" aria-selected=false>
       <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
     </li>
-    <li [id]="idMap['listItem']" *ngIf="isDropdown()"
+    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isDropdown()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])"
-        [attr.aria-level]="level" aria-selected=false role="treeitem">
+        [attr.aria-level]="level" aria-selected=false>
       <label [id]="idMap['label']">{{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}</label>
       <ol role="group" [attr.aria-level]="level+1">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
@@ -47,14 +47,12 @@ blocklyApp.FieldView = ng.core
         </li>
       </ol>
     </li>
-    <li [id]="idMap['listItem']" role="treeitem"
-        *ngIf="isCheckbox()" [attr.aria-level]="level"
-        aria-selected=false>
-      // Checkboxes not currently supported.
+    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isCheckbox()"
+        [attr.aria-level]="level" aria-selected=false>
+      // Checkboxes are not currently supported.
     </li>
-    <li [id]="idMap['listItem']" role="treeitem"
+    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextField() && hasVisibleText()"
         [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])"
-        *ngIf="isTextField() && hasVisibleText()"
         [attr.aria-level]="level" aria-selected=false>
       <label [id]="idMap['label']">
         {{field.getText()}}
@@ -77,9 +75,8 @@ blocklyApp.FieldView = ng.core
       // this.generateElementNames() are unique.
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
     },
-    generateAriaLabelledByAttr: function() {
-      return this.utilsService.generateAriaLabelledByAttr.apply(this,
-          arguments);
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
+      return mainLabel + ' ' + secondLabel;
     },
     generateElementNames: function() {
       var elementNames = ['listItem'];

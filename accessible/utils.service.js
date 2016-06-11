@@ -42,8 +42,12 @@ blocklyApp.UtilsService = ng.core
       }
       return idMap;
     },
-    generateAriaLabelledByAttr: function() {
-      return Array.from(arguments).join(' ').trim();
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
+      var attrValue = mainLabel + ' ' + secondLabel;
+      if (isDisabled) {
+        attrValue += ' blockly-disabled';
+      }
+      return attrValue;
     },
     getInputTypeLabel: function(connection) {
       // Returns an upper case string in the case of official input type names.
@@ -62,17 +66,6 @@ blocklyApp.UtilsService = ng.core
         return Blockly.Msg.STATEMENT;
       } else {
         return Blockly.Msg.VALUE;
-      }
-    },
-    getMarkedBlockCompatibilityHTMLText: function(isCompatible) {
-      if (isCompatible) {
-        // undefined will result in the
-        // 'copy to marked block' option being ENABLED.
-        return '';
-      } else {
-        // Anything will result in the
-        // 'copy to marked block' option being DISABLED.
-        return 'blockly-disabled';
       }
     }
   });

@@ -31,7 +31,7 @@ blocklyApp.WorkspaceView = ng.core
       <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
     </label>
 
-    <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event, getActiveElementId())">
+    <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
       <span *ngFor="#buttonConfig of toolbarButtonConfig">
         <button (click)="buttonConfig.action()" class="blocklyTree">
           {{buttonConfig.text}}
@@ -44,11 +44,11 @@ blocklyApp.WorkspaceView = ng.core
     </div>
 
     <div *ngIf="workspace">
-      <ol #tree id={{makeId(i)}} *ngFor="#block of workspace.topBlocks_; #i=index"
+      <ol #tree id="blockly-workspace-tree{{i}}" *ngFor="#block of workspace.topBlocks_; #i = index"
           tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="workspaceTitle.id"
           [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
           (keydown)="onKeypress($event, tree)">
-        <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id"></tree-view>
+        <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id" [tree]="tree"></tree-view>
       </ol>
     </div>
     `,
@@ -58,10 +58,6 @@ blocklyApp.WorkspaceView = ng.core
   })
   .Class({
     constructor: [blocklyApp.TreeService, function(_treeService) {
-      if (blocklyApp.workspace) {
-        this.workspace = blocklyApp.workspace;
-        this.treeService = _treeService;
-      }
       // ACCESSIBLE_GLOBALS is a global variable defined by the containing
       // page. It should contain a key, toolbarButtonConfig, whose
       // corresponding value is an Array with two keys: 'text' and 'action'.
@@ -70,22 +66,15 @@ blocklyApp.WorkspaceView = ng.core
       this.toolbarButtonConfig =
           ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
           ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
-      this.stringMap = {
-        'WORKSPACE': Blockly.Msg.WORKSPACE,
-        'CLEAR_WORKSPACE': Blockly.Msg.CLEAR_WORKSPACE
-      };
+      this.workspace = blocklyApp.workspace;
+      this.treeService = _treeService;
     }],
-    onWorkspaceToolbarKeypress: function(event, id) {
-      this.treeService.onWorkspaceToolbarKeypress(event, id);
+    onWorkspaceToolbarKeypress: function(event) {
+      var activeElementId = document.activeElement.id;
+      this.treeService.onWorkspaceToolbarKeypress(event, activeElementId);
     },
     onKeypress: function(event, tree){
       this.treeService.onKeypress(event, tree);
-    },
-    getActiveElementId: function() {
-      return document.activeElement.id;
-    },
-    makeId: function(index) {
-      return 'blockly-workspace-tree' + index;
     },
     isWorkspaceEmpty: function() {
       return !blocklyApp.workspace.topBlocks_.length;

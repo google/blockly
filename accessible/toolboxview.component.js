@@ -111,8 +111,7 @@ blocklyApp.ToolboxView = ng.core
       parent.id = 'blockly-toolbox-tree-node' + i;
       if (i == 0 && tree.getAttribute('aria-activedescendant') ==
           'blockly-toolbox-tree-node0') {
-        this.treeService.setActiveDesc(parent, tree.id);
-        parent.setAttribute('aria-selected', 'true');
+        this.treeService.setActiveDesc(parent, tree);
       }
     },
     getToolboxWorkspace: function(categoryNode) {

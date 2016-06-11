@@ -31,7 +31,6 @@ blocklyApp.WorkspaceTreeView = ng.core
     <li #parentList [id]="idMap['parentList']" role="treeitem" class="blocklyHasChildren"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])"
         [attr.aria-level]="level" aria-selected=false>
-      {{checkParentList(parentList)}}
       <label [id]="idMap['blockSummary']">{{block.toString()}}</label>
       <ol role="group"  [attr.aria-level]="level+1">
         <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
@@ -128,7 +127,7 @@ blocklyApp.WorkspaceTreeView = ng.core
     directives: [ng.core.forwardRef(function() {
       return blocklyApp.WorkspaceTreeView;
     }), blocklyApp.FieldView],
-    inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId'],
+    inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId', 'tree'],
     pipes: [blocklyApp.TranslatePipe],
     providers: [blocklyApp.TreeService],
   })
@@ -157,7 +156,20 @@ blocklyApp.WorkspaceTreeView = ng.core
         }
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
-      this.idMap['parentList'] = this.generateParentListId();
+      this.idMap['parentList'] =
+          this.isTopBlock ? this.parentId + '-node0' :
+          this.utilsService.generateUniqueId();
+    },
+    ngAfterViewInit: function() {
+      // If this is a top-level tree in the workspace, set its active
+      // descendant after the ids have been computed.
+      if (this.tree &&
+          this.tree.getAttribute('aria-activedescendant') ==
+              this.idMap['parentList']) {
+        this.treeService.setActiveDesc(
+            document.getElementById(this.idMap['parentList']),
+            this.tree);
+      }
     },
     isCompatibleWithClipboard: function(connection) {
       return this.clipboardService.isClipboardCompatibleWithConnection(
@@ -179,29 +191,11 @@ blocklyApp.WorkspaceTreeView = ng.core
       return this.utilsService.generateAriaLabelledByAttr(
           mainLabel, secondLabel, isDisabled);
     },
-    generateParentListId: function() {
-      if (this.isTopBlock) {
-        return this.parentId + '-node0'
-      } else {
-        return this.utilsService.generateUniqueId();
-      }
-    },
     hasPreviousConnection: function(block) {
       return Boolean(block.previousConnection);
     },
     hasNextConnection: function(block) {
       return Boolean(block.nextConnection);
-    },
-    checkParentList: function(parentList) {
-      blocklyApp.debug && console.log('setting parent list');
-      var tree = parentList;
-      var regex = /^blockly-workspace-tree\d+$/;
-      while (tree && !tree.id.match(regex)) {
-        tree = tree.parentNode;
-      }
-      if (tree && tree.getAttribute('aria-activedescendant') == parentList.id) {
-        this.treeService.updateSelectedNode(parentList, tree, false);
-      }
     },
     sendToSelected: function(block) {
       if (this.clipboardService) {

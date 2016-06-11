@@ -33,7 +33,6 @@ blocklyApp.ToolboxTreeView = ng.core
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])"
         [attr.aria-selected]="index == 0 && tree.getAttribute('aria-activedescendant') == 'blockly-toolbox-tree-node0'"
         [attr.aria-level]="level">
-      {{setActiveDesc(parentList)}}
       <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{block.toString()}}</label>
       <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0"
           [attr.aria-level]="level+1">
@@ -135,18 +134,20 @@ blocklyApp.ToolboxTreeView = ng.core
         this.idMap['parentList'] = this.utilsService.generateUniqueId();
       }
     },
+    ngAfterViewInit: function() {
+      // If this is a top-level tree in the toolbox, set its active
+      // descendant after the ids have been computed.
+      if (this.index == 0 &&
+          this.tree.getAttribute('aria-activedescendant') ==
+              'blockly-toolbox-tree-node0') {
+        this.treeService.setActiveDesc(
+            document.getElementById(this.idMap['parentList']),
+            this.tree);
+      }
+    },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
       return this.utilsService.generateAriaLabelledByAttr(
           mainLabel, secondLabel, isDisabled);
-    },
-    setActiveDesc: function(parentList) {
-      // If this is the first child of the toolbox and the
-      // current active descendant of the tree is this child,
-      // then set the active descendant stored in the treeService.
-      if (this.index == 0 && this.tree.getAttribute('aria-activedescendant') ==
-            'blockly-toolbox-tree-node0') {
-        this.treeService.setActiveDesc(parentList, this.tree.id);
-      }
     },
     copyToWorkspace: function(block) {
       var xml = Blockly.Xml.blockToDom(block);

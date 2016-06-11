@@ -86,36 +86,26 @@ blocklyApp.ClipboardService = ng.core
       alert(Blockly.Msg.MARKED_SPOT_MSG);
     },
     isCompatibleWithConnection_: function(blockConnection, connection) {
-      // Checking that the connection and blockConnection exist.
-      if (!connection || !blockConnection) {
-        return false;
-      }
-
-      // Checking that the types match and it's the right kind of connection.
-      var isCompatible = Blockly.OPPOSITE_TYPE[blockConnection.type] ==
-          connection.type && connection.checkType_(blockConnection);
-
-      if (blocklyApp.debug) {
-        if (isCompatible) {
-          console.log('blocks should be connected');
-        } else {
-          console.log('blocks should not be connected');
-        }
-      }
-      return isCompatible;
+      // Check that both connections exist, that the types match, and that it's
+      // the right kind of connection.
+      return Boolean(
+          connection && blockConnection &&
+          Blockly.OPPOSITE_TYPE[blockConnection.type] == connection.type &&
+          connection.checkType_(blockConnection));
     },
     isBlockCompatibleWithMarkedConnection: function(block) {
       var blockConnection = block.outputConnection || block.previousConnection;
-      return this.markedConnection_ &&
+      return Boolean(
+          this.markedConnection_ &&
           this.markedConnection_.sourceBlock_.workspace &&
           this.isCompatibleWithConnection_(
-              blockConnection, this.markedConnection_);
+              blockConnection, this.markedConnection_));
     },
     isClipboardCompatibleWithConnection: function(connection) {
       var superiorConnection = this.clipboardBlockSuperiorConnection_;
       var nextConnection = this.clipboardBlockNextConnection_;
-      return
+      return Boolean(
           this.isCompatibleWithConnection_(connection, superiorConnection) ||
-          this.isCompatibleWithConnection_(connection, nextConnection);
+          this.isCompatibleWithConnection_(connection, nextConnection));
     }
   });

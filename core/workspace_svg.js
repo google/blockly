@@ -1114,7 +1114,11 @@ Blockly.WorkspaceSvg.prototype.setScale = function(newScale) {
   Blockly.hideChaff(false);
   if (this.flyout_) {
     // No toolbox, resize flyout.
+    // Reflow repositions the buttons under the flyout blocks
+    // and recalculates the size of the flyout.
     this.flyout_.reflow();
+    // Position actually changes the size of the flyout background.
+    this.flyout_.position();
   }
 };
 

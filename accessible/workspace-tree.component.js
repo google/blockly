@@ -24,9 +24,9 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.WorkspaceTreeView = ng.core
+blocklyApp.WorkspaceTreeComponent = ng.core
   .Component({
-    selector: 'tree-view',
+    selector: 'blockly-workspace-tree',
     template: `
     <li #parentList [id]="idMap['parentList']" role="treeitem" class="blocklyHasChildren"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])"
@@ -92,8 +92,11 @@ blocklyApp.WorkspaceTreeView = ng.core
           </ol>
         </li>
         <div *ngFor="#inputBlock of block.inputList; #i = index">
-          <field-view *ngFor="#field of inputBlock.fieldRow" [field]="field"></field-view>
-          <tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()" [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false" [level]="level"></tree-view>
+          <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field"></blockly-field>
+          <blockly-workspace-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
+                                  [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false"
+                                  [level]="level">
+          </blockly-workspace-tree>
           <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
@@ -118,15 +121,16 @@ blocklyApp.WorkspaceTreeView = ng.core
         </div>
       </ol>
     </li>
-    <tree-view *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-               [block]="block.nextConnection.targetBlock()"
-               [isTopBlock]="false"
-               [level]="level">
-    </tree-view>
+
+    <blockly-workspace-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
+                            [block]="block.nextConnection.targetBlock()"
+                            [isTopBlock]="false"
+                            [level]="level">
+    </blockly-workspace-tree>
     `,
-    directives: [ng.core.forwardRef(function() {
-      return blocklyApp.WorkspaceTreeView;
-    }), blocklyApp.FieldView],
+    directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
+      return blocklyApp.WorkspaceTreeComponent;
+    })],
     inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId', 'tree'],
     pipes: [blocklyApp.TranslatePipe],
     providers: [blocklyApp.TreeService],

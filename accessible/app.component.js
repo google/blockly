@@ -35,10 +35,10 @@ blocklyApp.AppView = ng.core
     <table>
       <tr>
         <td class="blocklyTable">
-          <toolbox-view>{{'TOOLBOX_LOAD'|translate}}</toolbox-view>
+          <blockly-toolbox>{{'TOOLBOX_LOAD'|translate}}</blockly-toolbox>
         </td>
         <td class="blocklyTable">
-          <workspace-view>{{'WORKSPACE_LOAD'|translate}}</workspace-view>
+          <blockly-workspace>{{'WORKSPACE_LOAD'|translate}}</blockly-workspace>
         </td>
       </tr>
     </table>
@@ -53,7 +53,7 @@ blocklyApp.AppView = ng.core
     <label aria-hidden="true" hidden id="blockly-disabled">{{'UNAVAILABLE'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-menu">{{'OPTION_LIST'|translate}}</label>
     `,
-    directives: [blocklyApp.ToolboxView, blocklyApp.WorkspaceView],
+    directives: [blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent],
     pipes: [blocklyApp.TranslatePipe],
     // The clipboard and utils services are declared here, so that all
     // components in the application use the same instance of the service.

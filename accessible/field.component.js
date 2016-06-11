@@ -24,9 +24,9 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.FieldView = ng.core
+blocklyApp.FieldComponent = ng.core
   .Component({
-    selector: 'field-view',
+    selector: 'blockly-field',
     template: `
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])"

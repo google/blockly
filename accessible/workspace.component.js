@@ -23,9 +23,9 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.WorkspaceView = ng.core
+blocklyApp.WorkspaceComponent = ng.core
   .Component({
-    selector: 'workspace-view',
+    selector: 'blockly-workspace',
     template: `
     <label>
       <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
@@ -48,11 +48,14 @@ blocklyApp.WorkspaceView = ng.core
           tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="workspaceTitle.id"
           [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
           (keydown)="onKeypress($event, tree)">
-        <tree-view [level]=1 [block]="block" [isTopBlock]="true" [topBlockIndex]="i" [parentId]="tree.id" [tree]="tree"></tree-view>
+        <blockly-workspace-tree [level]=1 [block]="block" [isTopBlock]="true"
+                                [topBlockIndex]="i" [parentId]="tree.id"
+                                [tree]="tree">
+        </blockly-workspace-tree>
       </ol>
     </div>
     `,
-    directives: [blocklyApp.WorkspaceTreeView],
+    directives: [blocklyApp.WorkspaceTreeComponent],
     pipes: [blocklyApp.TranslatePipe],
     providers: [blocklyApp.TreeService]
   })

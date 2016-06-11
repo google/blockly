@@ -24,9 +24,9 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.ToolboxTreeView = ng.core
+blocklyApp.ToolboxTreeComponent = ng.core
   .Component({
-    selector: 'toolbox-tree-view',
+    selector: 'blockly-toolbox-tree',
     template: `
     <li #parentList [id]="idMap['parentList']" role="treeitem"
         [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && noCategories}"
@@ -71,15 +71,15 @@ blocklyApp.ToolboxTreeView = ng.core
           </ol>
         </li>
         <div *ngFor="#inputBlock of block.inputList; #i=index">
-          <field-view *ngFor="#field of inputBlock.fieldRow; #j=index"
+          <blockly-field *ngFor="#field of inputBlock.fieldRow; #j=index"
                       [attr.aria-level]="level+1" [field]="field"
                       [level]="level+1">
-          </field-view>
-          <toolbox-tree-view *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
-                             [block]="inputBlock.connection.targetBlock()"
-                             [displayBlockMenu]="false"
-                             [level]="level+1">
-          </toolbox-tree-view>
+          </blockly-field>
+          <blockly-toolbox-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
+                                [block]="inputBlock.connection.targetBlock()"
+                                [displayBlockMenu]="false"
+                                [level]="level+1">
+          </blockly-toolbox-tree>
           <li #listItem1 [id]="idMap['listItem' + i]" role="treeitem"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])"
@@ -93,15 +93,15 @@ blocklyApp.ToolboxTreeView = ng.core
         </div>
       </ol>
     </li>
-    <toolbox-tree-view *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-                       [level]="level"
-                       [block]="block.nextConnection.targetBlock()"
-                       [displayBlockMenu]="false">
-    </toolbox-tree-view>
+    <blockly-toolbox-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
+                          [level]="level"
+                          [block]="block.nextConnection.targetBlock()"
+                          [displayBlockMenu]="false">
+    </blockly-toolbox-tree>
     `,
-    directives: [ng.core.forwardRef(function() {
-      return blocklyApp.ToolboxTreeView;
-    }), blocklyApp.FieldView],
+    directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
+      return blocklyApp.ToolboxTreeComponent;
+    })],
     inputs: [
         'block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories'],
     pipes: [blocklyApp.TranslatePipe]
@@ -111,7 +111,7 @@ blocklyApp.ToolboxTreeView = ng.core
         blocklyApp.ClipboardService, blocklyApp.TreeService, blocklyApp.UtilsService,
         function(_clipboardService, _treeService, _utilsService) {
       // ClipboardService and UtilsService are app-wide singleton services.
-      // TreeService is from the parent ToolboxView component.
+      // TreeService is from the parent ToolboxComponent.
       this.infoBlocks = Object.create(null);
       this.clipboardService = _clipboardService;
       this.treeService = _treeService;

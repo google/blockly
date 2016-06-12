@@ -70,7 +70,8 @@ Blockly.PHP['procedures_defreturn'] = function(block) {
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
       globals + branch + returnValue + '}';
   code = Blockly.PHP.scrub_(block, code);
-  Blockly.PHP.definitions_[funcName] = code;
+  // Add % so as not to collide with helper functions in definitions list.
+  Blockly.PHP.definitions_['%' + funcName] = code;
   return null;
 };
 

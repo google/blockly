@@ -251,7 +251,7 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE':
-      // math_median([null,null,1,3]) == 2.0.
+      // mathMean([null,null,1,3]) == 2.0.
       var functionName = Blockly.JavaScript.provideFunction_(
           'mathMean',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
@@ -264,7 +264,7 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     case 'MEDIAN':
-      // math_median([null,null,1,3]) == 2.0.
+      // mathMedian([null,null,1,3]) == 2.0.
       var functionName = Blockly.JavaScript.provideFunction_(
           'mathMedian',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +

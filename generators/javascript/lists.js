@@ -315,6 +315,57 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
 
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = list + '.concat()';
+  } else if (list.match(/^\w+$/) ||
+      (where1 != 'FROM_END' && where1 != 'LAST' &&
+      where2 != 'FROM_END' && where2 != 'LAST')) {
+    // If the list is a simple value or doesn't require a call for length, don't
+    // generate a helper function.
+    var getIndex = function(where, at, opt_increment) {
+      function getAdjusted(delta, opt_parenthesis) {
+        // Adjust if using one-based indices.
+        if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+          delta--;
+        }
+        if(delta) {
+          if (Blockly.isNumber(at)) {
+            // If the index is a naked number, decrement it right now.
+            return parseFloat(at) + delta;
+          } else {
+            // If the index is dynamic, decrement it in code.
+            var adjustedIndex = at;
+            if (delta > 0) {
+              adjustedIndex += ' + ' + delta;
+            } else {
+              adjustedIndex += ' - ' + -delta;
+            }
+            if(opt_parenthesis) {
+              adjustedIndex = '(' + adjustedIndex + ')';
+            }
+            return adjustedIndex;
+          }
+        } else {
+          return at;
+        }
+      }
+      var index;
+      var increment = opt_increment || 0;
+      switch(where) {
+        case 'FROM_START':
+          return getAdjusted(increment);
+        case 'FROM_END':
+          return list + '.length - ' + getAdjusted(1 - increment, true);
+        case 'FIRST':
+          return '0';
+        case 'LAST':
+          index = list + '.length';
+          if(increment) {
+            return index;
+          }
+          return index + ' - 1';
+      }
+      throw 'Unhandled option (lists_getSublist).';
+    };
+    code = list + '.slice(' + getIndex(where1, at1) + ', ' + getIndex(where2, at2, 1) + ')';
   } else {
     var subSequenceFunction = [
       'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +

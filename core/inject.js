@@ -264,11 +264,12 @@ Blockly.init_ = function(mainWorkspace) {
         }
       });
 
-  Blockly.bindEvent_(window, 'resize', null,
-      function() {
-        Blockly.hideChaff(true);
-        Blockly.svgResize(mainWorkspace);
-      });
+  var workspaceResizeHandler = Blockly.bindEvent_(window, 'resize', null,
+       function() {
+         Blockly.hideChaff(true);
+         Blockly.svgResize(mainWorkspace);
+       });
+  mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
   Blockly.inject.bindDocumentEvents_();
 

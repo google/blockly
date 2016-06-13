@@ -2025,83 +2025,49 @@
     </statement>
   </block>
   <block type="procedures_defreturn" x="0" y="7692">
+    <mutation statements="false"></mutation>
     <field name="NAME">getList</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
-    <statement name="STACK">
-      <block type="variables_set" inline="false">
-        <field name="VAR">list</field>
-        <value name="VALUE">
-          <block type="lists_create_with" inline="false">
-            <mutation items="5"></mutation>
-            <value name="ADD0">
-              <block type="text">
-                <field name="TEXT">Columbia</field>
-              </block>
-            </value>
-            <value name="ADD1">
-              <block type="text">
-                <field name="TEXT">Challenger</field>
-              </block>
-            </value>
-            <value name="ADD2">
-              <block type="text">
-                <field name="TEXT">Discovery</field>
-              </block>
-            </value>
-            <value name="ADD3">
-              <block type="text">
-                <field name="TEXT">Atlantis</field>
-              </block>
-            </value>
-            <value name="ADD4">
-              <block type="text">
-                <field name="TEXT">Endeavour</field>
-              </block>
-            </value>
+    <value name="RETURN">
+      <block type="lists_create_with" inline="false">
+        <mutation items="5"></mutation>
+        <value name="ADD0">
+          <block type="text">
+            <field name="TEXT">Columbia</field>
+          </block>
+        </value>
+        <value name="ADD1">
+          <block type="text">
+            <field name="TEXT">Challenger</field>
+          </block>
+        </value>
+        <value name="ADD2">
+          <block type="text">
+            <field name="TEXT">Discovery</field>
+          </block>
+        </value>
+        <value name="ADD3">
+          <block type="text">
+            <field name="TEXT">Atlantis</field>
+          </block>
+        </value>
+        <value name="ADD4">
+          <block type="text">
+            <field name="TEXT">Endeavour</field>
           </block>
         </value>
       </block>
-    </statement>
-    <value name="RETURN">
-      <block type="variables_get">
-        <field name="VAR">list</field>
-      </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="0" y="7904">
+  <block type="procedures_defnoreturn" x="0" y="7874">
     <field name="NAME">test sublist</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">list</field>
         <value name="VALUE">
-          <block type="lists_create_with" inline="false">
-            <mutation items="5"></mutation>
-            <value name="ADD0">
-              <block type="text">
-                <field name="TEXT">Columbia</field>
-              </block>
-            </value>
-            <value name="ADD1">
-              <block type="text">
-                <field name="TEXT">Challenger</field>
-              </block>
-            </value>
-            <value name="ADD2">
-              <block type="text">
-                <field name="TEXT">Discovery</field>
-              </block>
-            </value>
-            <value name="ADD3">
-              <block type="text">
-                <field name="TEXT">Atlantis</field>
-              </block>
-            </value>
-            <value name="ADD4">
-              <block type="text">
-                <field name="TEXT">Endeavour</field>
-              </block>
-            </value>
+          <block type="procedures_callreturn">
+            <mutation name="getList"></mutation>
           </block>
         </value>
         <next>
@@ -2206,7 +2172,7 @@
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">sublist # start functionCall</field>
+                        <field name="MESSAGE">sublist # start complex</field>
                         <value name="ACTUAL">
                           <block type="lists_getSublist">
                             <mutation at1="true" at2="true"></mutation>
@@ -2246,7 +2212,7 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">sublist # end functionCall</field>
+                            <field name="MESSAGE">sublist # end complex</field>
                             <value name="ACTUAL">
                               <block type="lists_getSublist">
                                 <mutation at1="true" at2="true"></mutation>
@@ -2286,7 +2252,7 @@
                             </value>
                             <next>
                               <block type="unittest_assertequals" inline="false">
-                                <field name="MESSAGE">sublist first-last functionCall</field>
+                                <field name="MESSAGE">sublist first-last complex</field>
                                 <value name="ACTUAL">
                                   <block type="lists_getSublist">
                                     <mutation at1="false" at2="false"></mutation>
@@ -2319,7 +2285,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="0" y="8731">
+  <block type="procedures_defnoreturn" x="0" y="8597">
     <field name="NAME">test join</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
@@ -2374,7 +2340,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="0" y="8963">
+  <block type="procedures_defnoreturn" x="0" y="8829">
     <field name="NAME">test split</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
@@ -2429,7 +2395,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="0" y="9195">
+  <block type="procedures_defnoreturn" x="0" y="9061">
     <field name="NAME">test sort alphabetic</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
@@ -2494,7 +2460,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="0" y="9468">
+  <block type="procedures_defnoreturn" x="0" y="9334">
     <field name="NAME">test sort ignoreCase</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
@@ -2569,7 +2535,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="0" y="9793">
+  <block type="procedures_defnoreturn" x="0" y="9659">
     <field name="NAME">test sort numeric</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">

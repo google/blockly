@@ -23,9 +23,9 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.ToolboxView = ng.core
+blocklyApp.ToolboxComponent = ng.core
   .Component({
-    selector: 'toolbox-view',
+    selector: 'blockly-toolbox',
     template: `
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
       <ol #tree
@@ -46,28 +46,28 @@ blocklyApp.ToolboxView = ng.core
               </label>
               {{labelCategory(name, i, tree)}}
               <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
-                <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(category).topBlocks_"
-                                   [level]=2 [block]="block"
-                                   [displayBlockMenu]="true"
-                                   [clipboardService]="clipboardService">
-                </toolbox-tree-view>
+                <blockly-toolbox-tree *ngFor="#block of getToolboxWorkspace(category).topBlocks_"
+                                      [level]=2 [block]="block"
+                                      [displayBlockMenu]="true"
+                                      [clipboardService]="clipboardService">
+                </blockly-toolbox-tree>
               </ol>
             </div>
           </li>
         </template>
         <div *ngIf="!xmlHasCategories">
-          <toolbox-tree-view *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index"
-                             [level]=1 [block]="block"
-                             [displayBlockMenu]="true"
-                             [clipboardService]="clipboardService"
-                             [index]="i" [tree]="tree"
-                             [noCategories]="true">
-          </toolbox-tree-view>
+          <blockly-toolbox-tree *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index"
+                                [level]=1 [block]="block"
+                                [displayBlockMenu]="true"
+                                [clipboardService]="clipboardService"
+                                [index]="i" [tree]="tree"
+                                [noCategories]="true">
+          </blockly-toolbox-tree>
         </div>
       </ol>
     `,
-    directives: [blocklyApp.ToolboxTreeView],
-    providers: [blocklyApp.TreeService, blocklyApp.UtilsService],
+    directives: [blocklyApp.ToolboxTreeComponent],
+    providers: [blocklyApp.TreeService],
   })
   .Class({
     constructor: [
@@ -111,8 +111,7 @@ blocklyApp.ToolboxView = ng.core
       parent.id = 'blockly-toolbox-tree-node' + i;
       if (i == 0 && tree.getAttribute('aria-activedescendant') ==
           'blockly-toolbox-tree-node0') {
-        this.treeService.setActiveDesc(parent, tree.id);
-        parent.setAttribute('aria-selected', 'true');
+        this.treeService.setActiveDesc(parent, tree);
       }
     },
     getToolboxWorkspace: function(categoryNode) {

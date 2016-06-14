@@ -34,7 +34,7 @@ window.BLOCKLY_BOOT = function() {
     // Execute after Closure has loaded.
     if (!window.goog) {
       alert('Error: Closure not found.  Read this:\n' +
-            'developers.google.com/blockly/hacking/closure');
+            'developers.google.com/blockly/guides/modify/web/closure');
     }
     dir = window.BLOCKLY_DIR.match(/[^\/]+$/)[0];
   }
@@ -276,8 +276,8 @@ goog.addDependency("dom/controlrange.js", ['goog.dom.ControlRange', 'goog.dom.Co
 goog.addDependency("dom/controlrange_test.js", ['goog.dom.ControlRangeTest'], ['goog.dom', 'goog.dom.ControlRange', 'goog.dom.RangeType', 'goog.dom.TagName', 'goog.dom.TextRange', 'goog.testing.dom', 'goog.testing.jsunit', 'goog.userAgent']);
 goog.addDependency("dom/dataset.js", ['goog.dom.dataset'], ['goog.string', 'goog.userAgent.product']);
 goog.addDependency("dom/dataset_test.js", ['goog.dom.datasetTest'], ['goog.dom', 'goog.dom.dataset', 'goog.testing.jsunit']);
-goog.addDependency("dom/dom.js", ['goog.dom', 'goog.dom.Appendable', 'goog.dom.DomHelper'], ['goog.array', 'goog.asserts', 'goog.dom.BrowserFeature', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.math.Coordinate', 'goog.math.Size', 'goog.object', 'goog.string', 'goog.string.Unicode', 'goog.userAgent']);
-goog.addDependency("dom/dom_test.js", ['goog.dom.dom_test'], ['goog.dom', 'goog.dom.BrowserFeature', 'goog.dom.DomHelper', 'goog.dom.InputType', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.functions', 'goog.html.testing', 'goog.object', 'goog.string.Unicode', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion']);
+goog.addDependency("dom/dom.js", ['goog.dom', 'goog.dom.Appendable', 'goog.dom.DomHelper'], ['goog.array', 'goog.asserts', 'goog.dom.BrowserFeature', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeHtml', 'goog.html.uncheckedconversions', 'goog.math.Coordinate', 'goog.math.Size', 'goog.object', 'goog.string', 'goog.string.Unicode', 'goog.userAgent']);
+goog.addDependency("dom/dom_test.js", ['goog.dom.dom_test'], ['goog.array', 'goog.dom', 'goog.dom.BrowserFeature', 'goog.dom.DomHelper', 'goog.dom.InputType', 'goog.dom.NodeType', 'goog.dom.TagName', 'goog.functions', 'goog.html.testing', 'goog.object', 'goog.string.Const', 'goog.string.Unicode', 'goog.testing.PropertyReplacer', 'goog.testing.asserts', 'goog.userAgent', 'goog.userAgent.product', 'goog.userAgent.product.isVersion']);
 goog.addDependency("dom/fontsizemonitor.js", ['goog.dom.FontSizeMonitor', 'goog.dom.FontSizeMonitor.EventType'], ['goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.events.EventTarget', 'goog.events.EventType', 'goog.userAgent']);
 goog.addDependency("dom/fontsizemonitor_test.js", ['goog.dom.FontSizeMonitorTest'], ['goog.dom', 'goog.dom.FontSizeMonitor', 'goog.dom.TagName', 'goog.events', 'goog.events.Event', 'goog.testing.PropertyReplacer', 'goog.testing.events', 'goog.testing.jsunit', 'goog.userAgent']);
 goog.addDependency("dom/forms.js", ['goog.dom.forms'], ['goog.dom.InputType', 'goog.dom.TagName', 'goog.structs.Map', 'goog.window']);
@@ -781,6 +781,7 @@ goog.addDependency("math/exponentialbackoff.js", ['goog.math.ExponentialBackoff'
 goog.addDependency("math/exponentialbackoff_test.js", ['goog.math.ExponentialBackoffTest'], ['goog.math.ExponentialBackoff', 'goog.testing.jsunit']);
 goog.addDependency("math/integer.js", ['goog.math.Integer'], []);
 goog.addDependency("math/integer_test.js", ['goog.math.IntegerTest'], ['goog.math.Integer', 'goog.testing.jsunit']);
+goog.addDependency("math/irect.js", ['goog.math.IRect'], []);
 goog.addDependency("math/line.js", ['goog.math.Line'], ['goog.math', 'goog.math.Coordinate']);
 goog.addDependency("math/line_test.js", ['goog.math.LineTest'], ['goog.math.Coordinate', 'goog.math.Line', 'goog.testing.jsunit']);
 goog.addDependency("math/long.js", ['goog.math.Long'], ['goog.reflect']);
@@ -797,7 +798,7 @@ goog.addDependency("math/range.js", ['goog.math.Range'], ['goog.asserts']);
 goog.addDependency("math/range_test.js", ['goog.math.RangeTest'], ['goog.math.Range', 'goog.testing.jsunit']);
 goog.addDependency("math/rangeset.js", ['goog.math.RangeSet'], ['goog.array', 'goog.iter.Iterator', 'goog.iter.StopIteration', 'goog.math.Range']);
 goog.addDependency("math/rangeset_test.js", ['goog.math.RangeSetTest'], ['goog.iter', 'goog.math.Range', 'goog.math.RangeSet', 'goog.testing.jsunit']);
-goog.addDependency("math/rect.js", ['goog.math.Rect'], ['goog.asserts', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.Size']);
+goog.addDependency("math/rect.js", ['goog.math.Rect'], ['goog.asserts', 'goog.math.Box', 'goog.math.Coordinate', 'goog.math.IRect', 'goog.math.Size']);
 goog.addDependency("math/rect_test.js", ['goog.math.RectTest'], ['goog.math.Box', 'goog.math.Coordinate', 'goog.math.Rect', 'goog.math.Size', 'goog.testing.jsunit']);
 goog.addDependency("math/size.js", ['goog.math.Size'], []);
 goog.addDependency("math/size_test.js", ['goog.math.SizeTest'], ['goog.math.Size', 'goog.testing.jsunit']);

@@ -71,6 +71,13 @@ Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 Blockly.Generator.prototype.INDENT = '  ';
 
 /**
+ * Maximum length for a comment before wrapping.  Does not account for
+ * indenting level.
+ * @type {number}
+ */
+Blockly.Generator.prototype.COMMENT_WRAP = 60;
+
+/**
  * Generate code for all blocks in the workspace to the specified language.
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
  * @return {string} Generated code.
@@ -319,8 +326,8 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    var functionName =
-        this.variableDB_.getDistinctName(desiredName, this.NAME_TYPE);
+    var functionName = this.variableDB_.getDistinctName(desiredName,
+        Blockly.Procedures.NAME_TYPE);
     this.functionNames_[desiredName] = functionName;
     var codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);

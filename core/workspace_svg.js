@@ -65,6 +65,12 @@ Blockly.WorkspaceSvg = function(options) {
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
 /**
+ * Wrapper function called when a resize event occurs.
+ * @type {Array.<!Array>} Data that can be passed to unbindEvent_
+ */
+Blockly.WorkspaceSvg.prototype.resizeHandlerWrapper_ = null;
+
+/**
  * Svg workspaces are user-visible (as opposed to a headless workspace).
  * @type {boolean} True if visible.  False if headless.
  */
@@ -137,6 +143,14 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.lastSound_ = null;
+
+/**
+ * Save resize handler data so we can delete it later in dispose.
+ * @param {!Array.<!Array>} handler Data that can be passed to unbindEvent_.
+ */
+Blockly.WorkspaceSvg.prototype.setResizeHandlerWrapper = function(handler) {
+  this.resizeHandlerWrapper_ = handler;
+};
 
 /**
  * Create the workspace DOM elements.
@@ -237,6 +251,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the SVG too.
     goog.dom.removeNode(this.getParentSvg());
+  }
+  if (this.resizeHandlerWrapper_) {
+    Blockly.unbindEvent_(this.resizeHandlerWrapper_);
+    this.resizeHandlerWrapper_ = null;
   }
 };
 
@@ -932,7 +950,7 @@ Blockly.WorkspaceSvg.prototype.playAudio = function(name, opt_volume) {
   var sound = this.SOUNDS_[name];
   if (sound) {
     // Don't play one sound on top of another.
-    var now = new Date();
+    var now = new Date;
     if (now - this.lastSound_ < Blockly.SOUND_LIMIT) {
       return;
     }

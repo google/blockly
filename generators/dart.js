@@ -173,7 +173,12 @@ Blockly.Dart.scrub_ = function(block, code) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += Blockly.Dart.prefixLines(comment, '// ') + '\n';
+      if (block.getProcedureDef) {
+        // Use documentation comment for function comments.
+        commentCode += Blockly.Dart.prefixLines(comment + '\n', '/// ');
+      } else {
+        commentCode += Blockly.Dart.prefixLines(comment + '\n', '// ');
+      }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.

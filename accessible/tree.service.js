@@ -19,6 +19,8 @@
 
 /**
  * @fileoverview Angular2 Service that handles all tree keyboard navigation.
+ * A separate TreeService is constructed for each tree in the application.
+ *
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
@@ -26,8 +28,6 @@ blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
       blocklyApp.debug && console.log('making a new tree service');
-      // Keeping track of the active descendants in each tree.
-      this.activeDesc_ = Object.create(null);
       this.trees = document.getElementsByClassName('blocklyTree');
       // Keeping track of the last key pressed. If the user presses
       // enter (to edit a text input or press a button), the keyboard
@@ -36,42 +36,30 @@ blocklyApp.TreeService = ng.core
       // to shift focus back to the tree as a whole.
       this.previousKey_ = null;
     },
-    createId: function(obj) {
-      if (obj && obj.id) {
-        return obj.id;
-      }
-      return 'blockly-' + Blockly.genUid();
-    },
-    setActiveDesc: function(node, id) {
-      blocklyApp.debug && console.log('setting active descendant for tree ' + id);
-      this.activeDesc_[id] = node;
-    },
-    getActiveDesc: function(id) {
-      return this.activeDesc_[id] ||
-          document.getElementById((document.getElementById(id)).getAttribute('aria-activedescendant'));
-    },
-    // Makes a given node the active descendant of a given tree.
-    updateSelectedNode: function(node, tree, keepFocus) {
-      blocklyApp.debug && console.log('updating node: ' + node.id);
-      var treeId = tree.id;
-      var activeDesc = this.getActiveDesc(treeId);
+    // Make a given node the active descendant of a given tree.
+    setActiveDesc: function(node, tree, keepFocus) {
+      blocklyApp.debug && console.log('setting activeDesc for tree ' + tree.id);
+
+      var activeDesc = this.getActiveDesc(tree.id);
       if (activeDesc) {
         activeDesc.classList.remove('blocklyActiveDescendant');
         activeDesc.setAttribute('aria-selected', 'false');
-      } else {
-        blocklyApp.debug && console.log('updateSelectedNode: there is no active descendant');
       }
-      node.classList.add('blocklyActiveDescendant');
-      tree.setAttribute('aria-activedescendant', node.id);
-      this.setActiveDesc(node, treeId);
-      node.setAttribute('aria-selected', 'true');
 
-      // Make sure keyboard focus is on tree as a whole
-      // in case focus was previously on a button or input
-      // element.
+      node.classList.add('blocklyActiveDescendant');
+      node.setAttribute('aria-selected', 'true');
+      tree.setAttribute('aria-activedescendant', node.id);
+
+      // Make sure keyboard focus is on the entire tree in the case where the
+      // focus was previously on a button or input element.
       if (keepFocus) {
         tree.focus();
       }
+    },
+    getActiveDesc: function(treeId) {
+      var activeDescendantId = document.getElementById(
+          treeId).getAttribute('aria-activedescendant');
+      return document.getElementById(activeDescendantId);
     },
     onWorkspaceToolbarKeypress: function(e, treeId) {
       blocklyApp.debug && console.log(e.keyCode + 'inside TreeService onWorkspaceToolbarKeypress');
@@ -155,7 +143,7 @@ blocklyApp.TreeService = ng.core
           if (!nextNode || nextNode.className == 'treeview') {
             return;
           }
-          this.updateSelectedNode(nextNode, tree, keepFocus);
+          this.setActiveDesc(nextNode, tree, keepFocus);
           this.previousKey_ = e.keyCode;
           e.preventDefault();
           e.stopPropagation();
@@ -165,7 +153,7 @@ blocklyApp.TreeService = ng.core
           blocklyApp.debug && console.log('node passed in: ' + node.id);
           var prevSibling = this.getPreviousSibling(node);
           if (prevSibling && prevSibling.tagName != 'H1') {
-            this.updateSelectedNode(prevSibling, tree, keepFocus);
+            this.setActiveDesc(prevSibling, tree, keepFocus);
           } else {
             blocklyApp.debug && console.log('no previous sibling');
           }
@@ -177,7 +165,7 @@ blocklyApp.TreeService = ng.core
           blocklyApp.debug && console.log('in right arrow section');
           var firstChild = this.getFirstChild(node);
           if (firstChild) {
-            this.updateSelectedNode(firstChild, tree, keepFocus);
+            this.setActiveDesc(firstChild, tree, keepFocus);
           } else {
             blocklyApp.debug && console.log('no valid child');
           }
@@ -191,7 +179,7 @@ blocklyApp.TreeService = ng.core
           blocklyApp.debug && console.log('preventing propogation');
           var nextSibling = this.getNextSibling(node);
           if (nextSibling) {
-            this.updateSelectedNode(nextSibling, tree, keepFocus);
+            this.setActiveDesc(nextSibling, tree, keepFocus);
           } else {
             blocklyApp.debug && console.log('no next sibling');
           }

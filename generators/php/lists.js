@@ -104,7 +104,7 @@ Blockly.PHP['lists_indexOf'] = function(block) {
         [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
         '($haystack, $needle) {',
           '  for ($index = 0; $index < count($haystack); $index++) {',
-          '    if ($haystack[$index] == $needle) return $index+1;',
+          '    if ($haystack[$index] == $needle) return $index + 1;',
           '  }',
           '  return 0;',
           '}']);
@@ -116,7 +116,7 @@ Blockly.PHP['lists_indexOf'] = function(block) {
         '($haystack, $needle) {',
           '  $last = 0;',
           '  for ($index = 0; $index < count($haystack); $index++) {',
-          '    if ($haystack[$index] == $needle) $last = $index+1;',
+          '    if ($haystack[$index] == $needle) $last = $index + 1;',
           '  }',
           '  return $last;',
           '}']);
@@ -132,8 +132,17 @@ Blockly.PHP['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.PHP.valueToCode(block, 'AT',
       Blockly.PHP.ORDER_UNARY_NEGATION) || '1';
-  var list = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
+  if (mode == 'GET') {
+    // Special case to avoid wrapping function calls in unneeded parenthesis.
+    // func()[0] is prefered over (func())[0]
+    var valueBlock = this.getInputTargetBlock('VALUE');
+    var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
+        Blockly.PHP.ORDER_NONE : Blockly.PHP.ORDER_FUNCTION_CALL;
+  } else {
+    // List will be an argument in a function call.
+    var order = Blockly.PHP.ORDER_COMMA;
+  }
+  var list = Blockly.PHP.valueToCode(block, 'VALUE', order) || 'array()';
 
   if (where == 'FIRST') {
     if (mode == 'GET') {
@@ -364,7 +373,7 @@ Blockly.PHP['lists_sort'] = function(block) {
   var type = block.getFieldValue('TYPE');
   var functionName = Blockly.PHP.provideFunction_(
     'lists_sort', [
-    'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + 
+    'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
       '($list, $type, $direction) {',
     '  $sortCmpFuncs = array(',
     '    "NUMERIC" => "strnatcasecmp",',
@@ -379,7 +388,7 @@ Blockly.PHP['lists_sort'] = function(block) {
     '  }',
     '  return $list2;',
     '}']);
-  var sortCode = functionName + 
+  var sortCode = functionName +
       '(' + listCode + ', "' + type + '", ' + direction + ')';
   return [sortCode, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

@@ -346,8 +346,7 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
 Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
   // Type checking.
   var canConnect = this.canConnectWithReason_(candidate);
-  if (canConnect != Blockly.Connection.CAN_CONNECT &&
-      canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
+  if (canConnect != Blockly.Connection.CAN_CONNECT) {
     return false;
   }
 

@@ -100,7 +100,7 @@ Blockly.Python['text_indexOf'] = function(block) {
   var argument1 = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
   var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
-  return [code, Blockly.Python.ORDER_MEMBER];
+  return [code, Blockly.Python.ORDER_ADDITIVE];
 };
 
 Blockly.Python['text_charAt'] = function(block) {

@@ -17,15 +17,18 @@
   <script src="../../accessible/libs/angular2-polyfills.min.js"></script>
   <script src="../../accessible/libs/Rx.umd.min.js"></script>
   <script src="../../accessible/libs/angular2-all.umd.min.js"></script>
+
   <script src="../../accessible/utils.service.js"></script>
   <script src="../../accessible/clipboard.service.js"></script>
   <script src="../../accessible/tree.service.js"></script>
-  <script src="../../accessible/fieldview.component.js"></script>
-  <script src="../../accessible/workspace_treeview.component.js"></script>
-  <script src="../../accessible/toolbox_treeview.component.js"></script>
-  <script src="../../accessible/toolboxview.component.js"></script>
-  <script src="../../accessible/workspaceview.component.js"></script>
-  <script src="../../accessible/appview.component.js"></script>
+  <script src="../../accessible/translate.pipe.js"></script>
+
+  <script src="../../accessible/field.component.js"></script>
+  <script src="../../accessible/toolbox-tree.component.js"></script>
+  <script src="../../accessible/toolbox.component.js"></script>
+  <script src="../../accessible/workspace-tree.component.js"></script>
+  <script src="../../accessible/workspace.component.js"></script>
+  <script src="../../accessible/app.component.js"></script>
 
   <link rel="stylesheet" href="../../media/accessible.css">
   <style>
@@ -75,28 +78,28 @@
     <category name="Loops" colour="120">
       <block type="controls_repeat_ext">
         <value name="TIMES">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">10</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="controls_repeat" disabled="true"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for">
         <value name="FROM">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">1</field>
-          </shadow>
+          </block>
         </value>
         <value name="TO">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">10</field>
-          </shadow>
+          </block>
         </value>
         <value name="BY">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">1</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="controls_forEach"></block>
@@ -106,92 +109,92 @@
       <block type="math_number" gap="32"></block>
       <block type="math_arithmetic">
         <value name="A">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">1</field>
-          </shadow>
+          </block>
         </value>
         <value name="B">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">1</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_single">
         <value name="NUM">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">9</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_trig">
         <value name="NUM">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">45</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_constant"></block>
       <block type="math_number_property">
         <value name="NUMBER_TO_CHECK">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">0</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_change">
         <value name="DELTA">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">1</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_round">
         <value name="NUM">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">3.1</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_on_list"></block>
       <block type="math_modulo">
         <value name="DIVIDEND">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">64</field>
-          </shadow>
+          </block>
         </value>
         <value name="DIVISOR">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">10</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_constrain">
         <value name="VALUE">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">50</field>
-          </shadow>
+          </block>
         </value>
         <value name="LOW">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">1</field>
-          </shadow>
+          </block>
         </value>
         <value name="HIGH">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">100</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_random_int">
         <value name="FROM">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">1</field>
-          </shadow>
+          </block>
         </value>
         <value name="TO">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">100</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="math_random_float"></block>
@@ -201,21 +204,21 @@
       <block type="text_join"></block>
       <block type="text_append">
         <value name="TEXT">
-          <shadow type="text"></shadow>
+          <block type="text"></block>
         </value>
       </block>
       <block type="text_length">
         <value name="VALUE">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT">abc</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="text_isEmpty">
         <value name="VALUE">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT"></field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="text_indexOf">
@@ -225,9 +228,9 @@
           </block>
         </value>
         <value name="FIND">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT">abc</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="text_charAt">
@@ -246,30 +249,30 @@
       </block>
       <block type="text_changeCase">
         <value name="TEXT">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT">abc</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="text_trim">
         <value name="TEXT">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT">abc</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="text_print">
         <value name="TEXT">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT">abc</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="text_prompt_ext">
         <value name="TEXT">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT">abc</field>
-          </shadow>
+          </block>
         </value>
       </block>
     </category>
@@ -280,9 +283,9 @@
       <block type="lists_create_with"></block>
       <block type="lists_repeat">
         <value name="NUM">
-          <shadow type="math_number">
+          <block type="math_number">
             <field name="NUM">5</field>
-          </shadow>
+          </block>
         </value>
       </block>
       <block type="lists_length"></block>
@@ -317,9 +320,9 @@
       </block>
       <block type="lists_split">
         <value name="DELIM">
-          <shadow type="text">
+          <block type="text">
             <field name="TEXT">,</field>
-          </shadow>
+          </block>
         </value>
       </block>
     </category>

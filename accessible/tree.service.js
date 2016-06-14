@@ -18,8 +18,8 @@
  */
 
 /**
- * @fileoverview Angular2 Service that handles all tree keyboard navigation.
- * A separate TreeService is constructed for each tree in the application.
+ * @fileoverview Angular2 Service that handles tree keyboard navigation.
+ * This is a singleton service for the entire application.
  *
  * @author madeeha@google.com (Madeeha Ghori)
  */
@@ -27,14 +27,65 @@
 blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
-      blocklyApp.debug && console.log('making a new tree service');
-      this.trees = document.getElementsByClassName('blocklyTree');
+      // A list of all trees in the application.
+      this.treeRegistry = [];
       // Keeping track of the last key pressed. If the user presses
       // enter (to edit a text input or press a button), the keyboard
       // focus shifts to that element. In the next keystroke, if the user
       // navigates away from the element using the arrow keys, we want
       // to shift focus back to the tree as a whole.
       this.previousKey_ = null;
+    },
+    initTreeRegistry: function() {
+      this.treeRegistry = [];
+      this.treeRegistry.push(document.getElementById('blockly-toolbox-tree'));
+      // TODO(sll): Extend this to handle injected toolbar buttons.
+      this.treeRegistry.push(document.getElementById('clear-workspace'));
+
+      // Focus on the toolbox tree.
+      this.treeRegistry[0].focus();
+    },
+    isTreeInRegistry: function(treeId) {
+      return this.treeRegistry.some(function(tree) {
+        return tree.id == treeId;
+      });
+    },
+    addTreeToRegistry: function(tree) {
+      this.treeRegistry.push(tree);
+    },
+    deleteTreeFromRegistry: function(treeId) {
+      // Shift focus to the next tree (if it exists), otherwise shift focus
+      // to the previous tree.
+      var movedToNextTree = this.goToNextTree(treeId);
+      if (!movedToNextTree) {
+        this.goToPreviousTree(treeId);
+      }
+
+      // Delete the tree from the tree registry.
+      for (var i = 0; i < this.treeRegistry.length; i++) {
+        if (this.treeRegistry[i].id == treeId) {
+          this.treeRegistry.splice(i, 1);
+          break;
+        }
+      }
+    },
+    goToNextTree: function(treeId) {
+      for (var i = 0; i < this.treeRegistry.length - 1; i++) {
+        if (this.treeRegistry[i].id == treeId) {
+          this.treeRegistry[i + 1].focus();
+          return true;
+        }
+      }
+      return false;
+    },
+    goToPreviousTree: function(treeId) {
+      for (var i = this.treeRegistry.length - 1; i > 0; i--) {
+        if (this.treeRegistry[i].id == treeId) {
+          this.treeRegistry[i - 1].focus();
+          return true;
+        }
+      }
+      return false;
     },
     // Make a given node the active descendant of a given tree.
     setActiveDesc: function(node, tree, keepFocus) {
@@ -62,7 +113,8 @@ blocklyApp.TreeService = ng.core
       return document.getElementById(activeDescendantId);
     },
     onWorkspaceToolbarKeypress: function(e, treeId) {
-      blocklyApp.debug && console.log(e.keyCode + 'inside TreeService onWorkspaceToolbarKeypress');
+      blocklyApp.debug && console.log(
+          e.keyCode + 'inside TreeService onWorkspaceToolbarKeypress');
       switch (e.keyCode) {
         case 9:
           // 16,9: shift, tab
@@ -77,29 +129,6 @@ blocklyApp.TreeService = ng.core
           e.preventDefault();
           e.stopPropagation();
           break;
-      }
-    },
-    goToNextTree: function(treeId, e) {
-      for (var i = 0; i < this.trees.length; i++) {
-        if (this.trees[i].id == treeId) {
-          if (i + 1 < this.trees.length) {
-            this.trees[i + 1].focus();
-          }
-          break;
-        }
-      }
-    },
-    goToPreviousTree: function(treeId, e) {
-      if (treeId == this.trees[0].id) {
-        return;
-      }
-      for (var i = (this.trees.length - 1); i >= 0; i--) {
-        if (this.trees[i].id == treeId) {
-          if (i - 1 < this.trees.length) {
-            this.trees[i - 1].focus();
-          }
-          break;
-        }
       }
     },
     onKeypress: function(e, tree) {

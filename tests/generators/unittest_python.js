@@ -129,3 +129,13 @@ Blockly.Python['unittest_fail'] = function(block) {
        '  ' + resultsVar + '.append((False, "Fail.", message))']);
   return functionName + '(' + message + ')\n';
 };
+
+Blockly.Python['unittest_adjustindex'] = function(block) {
+  var index = Blockly.Python.valueToCode(block, 'INDEX',
+          Blockly.Python.ORDER_ADDITIVE) || '0';
+  // Adjust index if using one-based indexing.
+  if (Blockly.Python.ORDER_ADDITIVE) {
+    return [index + ' + 1', Blockly.Python.ORDER_ADDITIVE];
+  }
+  return [index, Blockly.Python.ORDER_ADDITIVE];
+};

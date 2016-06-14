@@ -154,3 +154,14 @@ Blockly.Dart['unittest_fail'] = function(block) {
         '}']);
   return functionName + '(' + message + ');\n';
 };
+
+
+Blockly.Dart['unittest_adjustindex'] = function(block) {
+  var index = Blockly.Dart.valueToCode(block, 'INDEX',
+          Blockly.Dart.ORDER_ADDITIVE) || '0';
+  // Adjust index if using one-based indexing.
+  if (Blockly.Dart.ONE_BASED_INDEXING) {
+    return [index + ' + 1', Blockly.Dart.ORDER_ADDITIVE];
+  }
+  return [index, Blockly.Dart.ORDER_ADDITIVE];
+};

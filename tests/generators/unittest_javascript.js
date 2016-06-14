@@ -158,3 +158,13 @@ Blockly.JavaScript['unittest_fail'] = function(block) {
         '}']);
   return functionName + '(' + message + ');\n';
 };
+
+Blockly.JavaScript['unittest_adjustindex'] = function(block) {
+  var index = Blockly.JavaScript.valueToCode(block, 'INDEX',
+          Blockly.JavaScript.ORDER_ADDITION) || '0';
+  // Adjust index if using one-based indexing.
+  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+    return [index + ' + 1', Blockly.JavaScript.ORDER_ADDITION];
+  }
+  return [index, Blockly.JavaScript.ORDER_ADDITION];
+};

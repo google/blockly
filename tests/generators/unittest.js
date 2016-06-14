@@ -92,3 +92,24 @@ Blockly.Blocks['unittest_fail'] = {
     return ['unittestResults'];
   }
 };
+
+Blockly.Blocks['unittest_adjustindex'] = {
+  // Adjusts the indexing based on current setting.
+  init: function() {
+    this.jsonInit({
+      "message0": "adjusted %1",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "INDEX",
+          "check": "Number"
+        }
+      ],
+      "inputsInline": true,
+      "output": "Number",
+      "colour": 65,
+      "tooltip": "Adjusts the value based on whether generated code is using " +
+      "zero or one based indexing"
+    });
+  }
+};

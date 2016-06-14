@@ -161,3 +161,13 @@ Blockly.Lua['unittest_fail'] = function(block) {
        'end']);
   return functionName + '(' + message + ')\n';
 };
+
+Blockly.Lua['unittest_adjustindex'] = function(block) {
+  var index = Blockly.Lua.valueToCode(block, 'INDEX',
+          Blockly.Lua.ORDER_ADDITIVE) || '0';
+  // Adjust index if using one-based indexing.
+  if (Blockly.Lua.ONE_BASED_INDEXING) {
+    return [index + ' + 1', Blockly.Lua.ORDER_ADDITIVE];
+  }
+  return [index, Blockly.Lua.ORDER_ADDITIVE];
+};

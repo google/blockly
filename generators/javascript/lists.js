@@ -308,10 +308,6 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
-  var at1 = Blockly.JavaScript.valueToCode(block, 'AT1',
-      Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
-  var at2 = Blockly.JavaScript.valueToCode(block, 'AT2',
-      Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
 
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = list + '.concat()';
@@ -320,32 +316,49 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
       where2 != 'FROM_END' && where2 != 'LAST')) {
     // If the list is a simple value or doesn't require a call for length, don't
     // generate a helper function.
-    var getIndex = function(where, at, opt_increment) {
-      function getAdjusted(delta, opt_parenthesis) {
+    var getIndex = function(where, atID, opt_increment) {
+      function getAdjusted(delta, opt_order) {
         // Adjust if using one-based indices.
         if (Blockly.JavaScript.ONE_BASED_INDEXING) {
           delta--;
         }
-        if(delta) {
+        if (delta > 0) {
+          var at = Blockly.JavaScript.valueToCode(block, atID,
+                     Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;
           if (Blockly.isNumber(at)) {
-            // If the index is a naked number, decrement it right now.
+            // If the index is a naked number, adjust it right now.
             return parseFloat(at) + delta;
           } else {
-            // If the index is dynamic, decrement it in code.
-            var adjustedIndex = at;
-            if (delta > 0) {
-              adjustedIndex += ' + ' + delta;
-            } else {
-              adjustedIndex += ' - ' + -delta;
-            }
+
+            // If the index is dynamic, adjust it in code.
+            var adjustedIndex = at + ' + ' + delta;
             if(opt_parenthesis) {
               adjustedIndex = '(' + adjustedIndex + ')';
             }
             return adjustedIndex;
           }
-        } else {
-          return at;
         }
+        else if (delta < 0) {
+          var at = Blockly.JavaScript.valueToCode(block, atID,
+                  Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
+          if (Blockly.isNumber(at)) {
+            // If the index is a naked number, adjust it right now.
+            return parseFloat(at) + delta;
+          } else {
+            // If the index is dynamic, adjust it in code.
+            var adjustedIndex = at + ' - ' + -delta;
+            if(opt_order) {
+              adjustedIndex = '(' + adjustedIndex + ')';
+            }
+            return adjustedIndex;
+          }
+        }
+        if (opt_order) {
+          return Blockly.JavaScript.valueToCode(block, atID,
+                  opt_order) || defaultAtIndex;
+        }
+        return Blockly.JavaScript.valueToCode(block, atID,
+                Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
       }
       var index;
       var increment = opt_increment || 0;
@@ -353,7 +366,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
         case 'FROM_START':
           return getAdjusted(increment);
         case 'FROM_END':
-          return list + '.length - ' + getAdjusted(1 - increment, true);
+          return list + '.length - ' + getAdjusted(1 - increment, Blockly.JavaScript.ORDER_SUBTRACTION);
         case 'FIRST':
           return '0';
         case 'LAST':
@@ -365,8 +378,12 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
       }
       throw 'Unhandled option (lists_getSublist).';
     };
-    code = list + '.slice(' + getIndex(where1, at1) + ', ' + getIndex(where2, at2, 1) + ')';
+    code = list + '.slice(' + getIndex(where1, 'AT1') + ', ' + getIndex(where2, 'AT2', 1) + ')';
   } else {
+    var at1 = Blockly.JavaScript.valueToCode(block, 'AT1',
+            Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
+    var at2 = Blockly.JavaScript.valueToCode(block, 'AT2',
+            Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
     var subSequenceFunction = [
       'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
         '(list, where1, at1, where2, at2) {',

@@ -132,8 +132,17 @@ Blockly.PHP['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.PHP.valueToCode(block, 'AT',
       Blockly.PHP.ORDER_UNARY_NEGATION) || '1';
-  var list = Blockly.PHP.valueToCode(block, 'VALUE',
-      Blockly.PHP.ORDER_FUNCTION_CALL) || 'array()';
+  if (mode == 'GET') {
+    // Special case to avoid wrapping function calls in unneeded parenthesis.
+    // func()[0] is prefered over (func())[0]
+    var valueBlock = this.getInputTargetBlock('VALUE');
+    var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
+        Blockly.PHP.ORDER_NONE : Blockly.PHP.ORDER_FUNCTION_CALL;
+  } else {
+    // List will be an argument in a function call.
+    var order = Blockly.PHP.ORDER_COMMA;
+  }
+  var list = Blockly.PHP.valueToCode(block, 'VALUE', order) || 'array()';
 
   if (where == 'FIRST') {
     if (mode == 'GET') {

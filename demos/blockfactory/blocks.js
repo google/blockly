@@ -56,7 +56,7 @@ Blockly.Blocks['factory_base'] = {
     this.setTooltip('Build a custom block by plugging\n' +
         'fields, inputs and other blocks here.');
     this.setHelpUrl(
-        'https://developers.google.com/blockly/custom-blocks/block-factory');
+        'https://developers.google.com/blockly/guides/create-custom-blocks/block-factory');
   },
   mutationToDom: function() {
     var container = document.createElement('mutation');

@@ -102,9 +102,13 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
   var at = Blockly.JavaScript.valueToCode(block, 'AT',
-      Blockly.JavaScript.ORDER_UNARY_NEGATION) || defaultAtIndex;
-  var list = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_MEMBER) || '[]';
+      Blockly.JavaScript.ORDER_UNARY_NEGATION) || '1';
+  // Special case to avoid wrapping function calls in unneeded parenthesis.
+  // func()[0] is prefered over (func())[0]
+  var valueBlock = this.getInputTargetBlock('VALUE');
+  var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
+      Blockly.JavaScript.ORDER_NONE : Blockly.JavaScript.ORDER_MEMBER;
+  var list = Blockly.JavaScript.valueToCode(block, 'VALUE', order) || '[]';
 
   switch (where) {
     case ('FIRST'):

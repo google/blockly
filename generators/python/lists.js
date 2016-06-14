@@ -105,8 +105,12 @@ Blockly.Python['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Python.valueToCode(block, 'AT',
       Blockly.Python.ORDER_UNARY_SIGN) || '1';
-  var list = Blockly.Python.valueToCode(block, 'VALUE',
-      Blockly.Python.ORDER_MEMBER) || '[]';
+  // Special case to avoid wrapping function calls in unneeded parenthesis.
+  // func()[0] is prefered over (func())[0]
+  var valueBlock = this.getInputTargetBlock('VALUE');
+  var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
+      Blockly.Python.ORDER_NONE : Blockly.Python.ORDER_MEMBER;
+  var list = Blockly.Python.valueToCode(block, 'VALUE', order) || '[]';
 
   if (where == 'FIRST') {
     if (mode == 'GET') {
@@ -314,12 +318,12 @@ Blockly.Python['lists_getSublist'] = function(block) {
 
 Blockly.Python['lists_sort'] = function(block) {
   // Block for sorting a list.
-  var listCode = (Blockly.Python.valueToCode(block, 'LIST', 
+  var listCode = (Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_MEMBER) || '[]');
   var type = block.getFieldValue('TYPE');
   var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
   var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
-  ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + 
+  ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ +
       '(listv, type, reversev):',
     '  def tryfloat(s):',
     '    try:',
@@ -329,14 +333,14 @@ Blockly.Python['lists_sort'] = function(block) {
     '  keyFuncts = {',
     '    "NUMERIC": tryfloat,',
     '    "TEXT": str,',
-    '    "IGNORE_CASE": lambda s: str(s).lower()', 
+    '    "IGNORE_CASE": lambda s: str(s).lower()',
     '  }',
     '  keyv = keyFuncts[type]',
     '  tmp_list = list(listv)', // Clone the list.
     '  return sorted(tmp_list, key=keyv, reverse=reversev)'
-  ]);  
+  ]);
 
-  var code = sortFunctionName + 
+  var code = sortFunctionName +
       '(' + listCode + ', "' + type + '", ' + reverse + ')';
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };

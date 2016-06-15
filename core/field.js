@@ -233,6 +233,14 @@ Blockly.Field.prototype.setValidator = function(handler) {
 };
 
 /**
+ * Gets the validation function for editable fields.
+ * @return {Function} Validation function, or null.
+ */
+Blockly.Field.prototype.getValidator = function() {
+  return this.validator_;
+};
+
+/**
  * Gets the group element for this editable field.
  * Used for measuring the size and for positioning.
  * @return {!Element} The group element.

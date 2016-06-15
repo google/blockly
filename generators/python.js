@@ -80,6 +80,12 @@ Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
+ * Allow for switching between one and zero based indexing, one based by
+ * default.
+ */
+Blockly.Python.ONE_BASED_INDEXING = true;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */

@@ -153,27 +153,37 @@ function toXml() {
 }
 
 function toJavaScript() {
+  var oneBasedIndexing = document.getElementById('indexing').checked;
+  Blockly.JavaScript.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = '\'use strict\';\n\n'
   code += Blockly.JavaScript.workspaceToCode(workspace);
   setOutput(code);
 }
 
 function toPython() {
+  var oneBasedIndexing = document.getElementById('indexing').checked;
+  Blockly.Python.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.Python.workspaceToCode(workspace);
   setOutput(code);
 }
 
 function toPhp() {
+  var oneBasedIndexing = document.getElementById('indexing').checked;
+  Blockly.PHP.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.PHP.workspaceToCode(workspace);
   setOutput(code);
 }
 
 function toLua() {
+  var oneBasedIndexing = document.getElementById('indexing').checked;
+  Blockly.Lua.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.Lua.workspaceToCode(workspace);
   setOutput(code);
 }
 
 function toDart() {
+  var oneBasedIndexing = document.getElementById('indexing').checked;
+  Blockly.Dart.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.Dart.workspaceToCode(workspace);
   setOutput(code);
 }
@@ -304,6 +314,10 @@ h1 {
         <option value="">Other...</option>
       </select>
       <input type="button" value="Load" onclick="loadXml()">
+    </p>
+
+    <p>
+      <input id="indexing" type="checkbox" checked> Generate with one-based indexing
     </p>
 
     <p>

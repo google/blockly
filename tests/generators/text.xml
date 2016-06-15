@@ -763,7 +763,7 @@
                                                         </value>
                                                         <value name="EXPECTED">
                                                           <block type="text">
-                                                            <field name="TEXT">789</field>
+                                                            <field name="TEXT">123456789</field>
                                                           </block>
                                                         </value>
                                                         <next>
@@ -801,7 +801,7 @@
                                                             </value>
                                                             <value name="EXPECTED">
                                                               <block type="text">
-                                                                <field name="TEXT">789</field>
+                                                                <field name="TEXT">123456789</field>
                                                               </block>
                                                             </value>
                                                             <next>
@@ -859,7 +859,7 @@
                                                                 </value>
                                                                 <value name="EXPECTED">
                                                                   <block type="text">
-                                                                    <field name="TEXT">789</field>
+                                                                    <field name="TEXT">123456789</field>
                                                                   </block>
                                                                 </value>
                                                                 <next>

@@ -134,7 +134,7 @@ Blockly.Python['unittest_adjustindex'] = function(block) {
   var index = Blockly.Python.valueToCode(block, 'INDEX',
                 Blockly.Python.ORDER_ADDITIVE) || '0';
   // Adjust index if using one-based indexing.
-  if (Blockly.Python.ONE_BASED_INDEXING) {
+  if (typeof Blockly.Python.ONE_BASED_INDEXING === 'undefined' || Blockly.Python.ONE_BASED_INDEXING) {
     if (Blockly.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
       return [parseFloat(index) + 1, Blockly.Python.ORDER_ATOMIC];

@@ -166,7 +166,7 @@ Blockly.Lua['unittest_adjustindex'] = function(block) {
   var index = Blockly.Lua.valueToCode(block, 'INDEX',
                 Blockly.Lua.ORDER_ADDITIVE) || '0';
   // Adjust index if using one-based indexing.
-  if (Blockly.Lua.ONE_BASED_INDEXING) {
+  if (typeof Blockly.Lua.ONE_BASED_INDEXING === 'undefined' || Blockly.Lua.ONE_BASED_INDEXING) {
     if (Blockly.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
       return [parseFloat(index) + 1, Blockly.Lua.ORDER_ATOMIC];

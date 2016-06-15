@@ -852,7 +852,7 @@
                                     <field name="EXPECTED">TRUE</field>
                                     <value name="ACTUAL">
                                       <block type="logic_compare">
-                                        <field name="OP">EQ</field>
+                                        <field name="OP">GT</field>
                                         <value name="A">
                                           <block type="lists_indexOf" inline="false">
                                             <field name="END">FIRST</field>
@@ -876,8 +876,12 @@
                                           </block>
                                         </value>
                                         <value name="B">
-                                          <block type="math_number">
-                                            <field name="NUM">0</field>
+                                          <block type="unittest_adjustindex">
+                                            <value name="INDEX">
+                                              <block type="math_number">
+                                                <field name="NUM">-1</field>
+                                              </block>
+                                            </value>
                                           </block>
                                         </value>
                                       </block>

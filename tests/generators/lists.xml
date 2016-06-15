@@ -3300,22 +3300,31 @@
                                     </value>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">sublist first #</field>
+                                        <field name="MESSAGE">sublist first-last with # #-end simple</field>
                                         <value name="ACTUAL">
                                           <block type="lists_getSublist">
-                                            <mutation at1="false" at2="true"></mutation>
-                                            <field name="WHERE1">FIRST</field>
-                                            <field name="WHERE2">FROM_START</field>
+                                            <mutation at1="true" at2="true"></mutation>
+                                            <field name="WHERE1">FROM_START</field>
+                                            <field name="WHERE2">FROM_END</field>
                                             <value name="LIST">
                                               <block type="variables_get">
                                                 <field name="VAR">list</field>
+                                              </block>
+                                            </value>
+                                            <value name="AT1">
+                                              <block type="unittest_adjustindex">
+                                                <value name="INDEX">
+                                                  <block type="math_number">
+                                                    <field name="NUM">0</field>
+                                                  </block>
+                                                </value>
                                               </block>
                                             </value>
                                             <value name="AT2">
                                               <block type="unittest_adjustindex">
                                                 <value name="INDEX">
                                                   <block type="math_number">
-                                                    <field name="NUM">3</field>
+                                                    <field name="NUM">0</field>
                                                   </block>
                                                 </value>
                                               </block>
@@ -3323,48 +3332,57 @@
                                           </block>
                                         </value>
                                         <value name="EXPECTED">
-                                          <block type="lists_create_with" inline="false">
-                                            <mutation items="4"></mutation>
-                                            <value name="ADD0">
-                                              <block type="text">
-                                                <field name="TEXT">Columbia</field>
-                                              </block>
-                                            </value>
-                                            <value name="ADD1">
-                                              <block type="text">
-                                                <field name="TEXT">Challenger</field>
-                                              </block>
-                                            </value>
-                                            <value name="ADD2">
-                                              <block type="text">
-                                                <field name="TEXT">Discovery</field>
-                                              </block>
-                                            </value>
-                                            <value name="ADD3">
-                                              <block type="text">
-                                                <field name="TEXT">Atlantis</field>
-                                              </block>
-                                            </value>
+                                          <block type="variables_get">
+                                            <field name="VAR">list</field>
                                           </block>
                                         </value>
                                         <next>
                                           <block type="unittest_assertequals" inline="false">
-                                            <field name="MESSAGE">sublist first #-end</field>
+                                            <field name="MESSAGE">sublist first-last with # #-end math simple</field>
                                             <value name="ACTUAL">
                                               <block type="lists_getSublist">
-                                                <mutation at1="false" at2="true"></mutation>
-                                                <field name="WHERE1">FIRST</field>
+                                                <mutation at1="true" at2="true"></mutation>
+                                                <field name="WHERE1">FROM_START</field>
                                                 <field name="WHERE2">FROM_END</field>
                                                 <value name="LIST">
                                                   <block type="variables_get">
                                                     <field name="VAR">list</field>
                                                   </block>
                                                 </value>
-                                                <value name="AT2">
-                                                  <block type="unittest_adjustindex">
-                                                    <value name="INDEX">
+                                                <value name="AT1">
+                                                  <block type="math_arithmetic">
+                                                    <field name="OP">ADD</field>
+                                                    <value name="A">
                                                       <block type="math_number">
-                                                        <field name="NUM">3</field>
+                                                        <field name="NUM">0</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="B">
+                                                      <block type="unittest_adjustindex">
+                                                        <value name="INDEX">
+                                                          <block type="math_number">
+                                                            <field name="NUM">0</field>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                                <value name="AT2">
+                                                  <block type="math_arithmetic">
+                                                    <field name="OP">ADD</field>
+                                                    <value name="A">
+                                                      <block type="math_number">
+                                                        <field name="NUM">0</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="B">
+                                                      <block type="unittest_adjustindex">
+                                                        <value name="INDEX">
+                                                          <block type="math_number">
+                                                            <field name="NUM">0</field>
+                                                          </block>
+                                                        </value>
                                                       </block>
                                                     </value>
                                                   </block>
@@ -3372,34 +3390,24 @@
                                               </block>
                                             </value>
                                             <value name="EXPECTED">
-                                              <block type="lists_create_with" inline="false">
-                                                <mutation items="2"></mutation>
-                                                <value name="ADD0">
-                                                  <block type="text">
-                                                    <field name="TEXT">Columbia</field>
-                                                  </block>
-                                                </value>
-                                                <value name="ADD1">
-                                                  <block type="text">
-                                                    <field name="TEXT">Challenger</field>
-                                                  </block>
-                                                </value>
+                                              <block type="variables_get">
+                                                <field name="VAR">list</field>
                                               </block>
                                             </value>
                                             <next>
                                               <block type="unittest_assertequals" inline="false">
-                                                <field name="MESSAGE">sublist # last</field>
+                                                <field name="MESSAGE">sublist first #</field>
                                                 <value name="ACTUAL">
                                                   <block type="lists_getSublist">
-                                                    <mutation at1="true" at2="false"></mutation>
-                                                    <field name="WHERE1">FROM_START</field>
-                                                    <field name="WHERE2">LAST</field>
+                                                    <mutation at1="false" at2="true"></mutation>
+                                                    <field name="WHERE1">FIRST</field>
+                                                    <field name="WHERE2">FROM_START</field>
                                                     <value name="LIST">
                                                       <block type="variables_get">
                                                         <field name="VAR">list</field>
                                                       </block>
                                                     </value>
-                                                    <value name="AT1">
+                                                    <value name="AT2">
                                                       <block type="unittest_adjustindex">
                                                         <value name="INDEX">
                                                           <block type="math_number">
@@ -3412,33 +3420,43 @@
                                                 </value>
                                                 <value name="EXPECTED">
                                                   <block type="lists_create_with" inline="false">
-                                                    <mutation items="2"></mutation>
+                                                    <mutation items="4"></mutation>
                                                     <value name="ADD0">
                                                       <block type="text">
-                                                        <field name="TEXT">Atlantis</field>
+                                                        <field name="TEXT">Columbia</field>
                                                       </block>
                                                     </value>
                                                     <value name="ADD1">
                                                       <block type="text">
-                                                        <field name="TEXT">Endeavour</field>
+                                                        <field name="TEXT">Challenger</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="ADD2">
+                                                      <block type="text">
+                                                        <field name="TEXT">Discovery</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="ADD3">
+                                                      <block type="text">
+                                                        <field name="TEXT">Atlantis</field>
                                                       </block>
                                                     </value>
                                                   </block>
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">sublist #-end last</field>
+                                                    <field name="MESSAGE">sublist first #-end</field>
                                                     <value name="ACTUAL">
                                                       <block type="lists_getSublist">
-                                                        <mutation at1="true" at2="false"></mutation>
-                                                        <field name="WHERE1">FROM_END</field>
-                                                        <field name="WHERE2">LAST</field>
+                                                        <mutation at1="false" at2="true"></mutation>
+                                                        <field name="WHERE1">FIRST</field>
+                                                        <field name="WHERE2">FROM_END</field>
                                                         <value name="LIST">
                                                           <block type="variables_get">
                                                             <field name="VAR">list</field>
                                                           </block>
                                                         </value>
-                                                        <value name="AT1">
+                                                        <value name="AT2">
                                                           <block type="unittest_adjustindex">
                                                             <value name="INDEX">
                                                               <block type="math_number">
@@ -3451,64 +3469,76 @@
                                                     </value>
                                                     <value name="EXPECTED">
                                                       <block type="lists_create_with" inline="false">
-                                                        <mutation items="4"></mutation>
+                                                        <mutation items="2"></mutation>
                                                         <value name="ADD0">
                                                           <block type="text">
-                                                            <field name="TEXT">Challenger</field>
+                                                            <field name="TEXT">Columbia</field>
                                                           </block>
                                                         </value>
                                                         <value name="ADD1">
                                                           <block type="text">
-                                                            <field name="TEXT">Discovery</field>
-                                                          </block>
-                                                        </value>
-                                                        <value name="ADD2">
-                                                          <block type="text">
-                                                            <field name="TEXT">Atlantis</field>
-                                                          </block>
-                                                        </value>
-                                                        <value name="ADD3">
-                                                          <block type="text">
-                                                            <field name="TEXT">Endeavour</field>
+                                                            <field name="TEXT">Challenger</field>
                                                           </block>
                                                         </value>
                                                       </block>
                                                     </value>
                                                     <next>
-                                                      <block type="variables_set">
-                                                        <field name="VAR">number of calls</field>
-                                                        <value name="VALUE">
-                                                          <block type="math_number">
-                                                            <field name="NUM">0</field>
+                                                      <block type="unittest_assertequals" inline="false">
+                                                        <field name="MESSAGE">sublist # last</field>
+                                                        <value name="ACTUAL">
+                                                          <block type="lists_getSublist">
+                                                            <mutation at1="true" at2="false"></mutation>
+                                                            <field name="WHERE1">FROM_START</field>
+                                                            <field name="WHERE2">LAST</field>
+                                                            <value name="LIST">
+                                                              <block type="variables_get">
+                                                                <field name="VAR">list</field>
+                                                              </block>
+                                                            </value>
+                                                            <value name="AT1">
+                                                              <block type="unittest_adjustindex">
+                                                                <value name="INDEX">
+                                                                  <block type="math_number">
+                                                                    <field name="NUM">3</field>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                        <value name="EXPECTED">
+                                                          <block type="lists_create_with" inline="false">
+                                                            <mutation items="2"></mutation>
+                                                            <value name="ADD0">
+                                                              <block type="text">
+                                                                <field name="TEXT">Atlantis</field>
+                                                              </block>
+                                                            </value>
+                                                            <value name="ADD1">
+                                                              <block type="text">
+                                                                <field name="TEXT">Endeavour</field>
+                                                              </block>
+                                                            </value>
                                                           </block>
                                                         </value>
                                                         <next>
                                                           <block type="unittest_assertequals" inline="false">
-                                                            <field name="MESSAGE">sublist # start complex</field>
+                                                            <field name="MESSAGE">sublist #-end last</field>
                                                             <value name="ACTUAL">
                                                               <block type="lists_getSublist">
-                                                                <mutation at1="true" at2="true"></mutation>
-                                                                <field name="WHERE1">FROM_START</field>
-                                                                <field name="WHERE2">FROM_START</field>
+                                                                <mutation at1="true" at2="false"></mutation>
+                                                                <field name="WHERE1">FROM_END</field>
+                                                                <field name="WHERE2">LAST</field>
                                                                 <value name="LIST">
-                                                                  <block type="procedures_callreturn">
-                                                                    <mutation name="getSpaceShuttles"></mutation>
+                                                                  <block type="variables_get">
+                                                                    <field name="VAR">list</field>
                                                                   </block>
                                                                 </value>
                                                                 <value name="AT1">
                                                                   <block type="unittest_adjustindex">
                                                                     <value name="INDEX">
                                                                       <block type="math_number">
-                                                                        <field name="NUM">1</field>
-                                                                      </block>
-                                                                    </value>
-                                                                  </block>
-                                                                </value>
-                                                                <value name="AT2">
-                                                                  <block type="unittest_adjustindex">
-                                                                    <value name="INDEX">
-                                                                      <block type="math_number">
-                                                                        <field name="NUM">2</field>
+                                                                        <field name="NUM">3</field>
                                                                       </block>
                                                                     </value>
                                                                   </block>
@@ -3517,7 +3547,7 @@
                                                             </value>
                                                             <value name="EXPECTED">
                                                               <block type="lists_create_with" inline="false">
-                                                                <mutation items="2"></mutation>
+                                                                <mutation items="4"></mutation>
                                                                 <value name="ADD0">
                                                                   <block type="text">
                                                                     <field name="TEXT">Challenger</field>
@@ -3528,24 +3558,29 @@
                                                                     <field name="TEXT">Discovery</field>
                                                                   </block>
                                                                 </value>
+                                                                <value name="ADD2">
+                                                                  <block type="text">
+                                                                    <field name="TEXT">Atlantis</field>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="ADD3">
+                                                                  <block type="text">
+                                                                    <field name="TEXT">Endeavour</field>
+                                                                  </block>
+                                                                </value>
                                                               </block>
                                                             </value>
                                                             <next>
-                                                              <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">sublist # start complex number of calls</field>
-                                                                <value name="ACTUAL">
-                                                                  <block type="variables_get">
-                                                                    <field name="VAR">number of calls</field>
-                                                                  </block>
-                                                                </value>
-                                                                <value name="EXPECTED">
+                                                              <block type="variables_set">
+                                                                <field name="VAR">number of calls</field>
+                                                                <value name="VALUE">
                                                                   <block type="math_number">
-                                                                    <field name="NUM">1</field>
+                                                                    <field name="NUM">0</field>
                                                                   </block>
                                                                 </value>
                                                                 <next>
                                                                   <block type="unittest_assertequals" inline="false">
-                                                                    <field name="MESSAGE">sublist # start complex order</field>
+                                                                    <field name="MESSAGE">sublist # start complex</field>
                                                                     <value name="ACTUAL">
                                                                       <block type="lists_getSublist">
                                                                         <mutation at1="true" at2="true"></mutation>
@@ -3557,44 +3592,20 @@
                                                                           </block>
                                                                         </value>
                                                                         <value name="AT1">
-                                                                          <block type="logic_ternary">
-                                                                            <value name="IF">
-                                                                              <block type="logic_boolean">
-                                                                                <field name="BOOL">TRUE</field>
+                                                                          <block type="unittest_adjustindex">
+                                                                            <value name="INDEX">
+                                                                              <block type="math_number">
+                                                                                <field name="NUM">1</field>
                                                                               </block>
-                                                                            </value>
-                                                                            <value name="THEN">
-                                                                              <block type="unittest_adjustindex">
-                                                                                <value name="INDEX">
-                                                                                  <block type="math_number">
-                                                                                    <field name="NUM">1</field>
-                                                                                  </block>
-                                                                                </value>
-                                                                              </block>
-                                                                            </value>
-                                                                            <value name="ELSE">
-                                                                              <block type="logic_null"></block>
                                                                             </value>
                                                                           </block>
                                                                         </value>
                                                                         <value name="AT2">
-                                                                          <block type="logic_ternary">
-                                                                            <value name="IF">
-                                                                              <block type="logic_boolean">
-                                                                                <field name="BOOL">TRUE</field>
+                                                                          <block type="unittest_adjustindex">
+                                                                            <value name="INDEX">
+                                                                              <block type="math_number">
+                                                                                <field name="NUM">2</field>
                                                                               </block>
-                                                                            </value>
-                                                                            <value name="THEN">
-                                                                              <block type="unittest_adjustindex">
-                                                                                <value name="INDEX">
-                                                                                  <block type="math_number">
-                                                                                    <field name="NUM">2</field>
-                                                                                  </block>
-                                                                                </value>
-                                                                              </block>
-                                                                            </value>
-                                                                            <value name="ELSE">
-                                                                              <block type="logic_null"></block>
                                                                             </value>
                                                                           </block>
                                                                         </value>
@@ -3616,41 +3627,70 @@
                                                                       </block>
                                                                     </value>
                                                                     <next>
-                                                                      <block type="variables_set">
-                                                                        <field name="VAR">number of calls</field>
-                                                                        <value name="VALUE">
+                                                                      <block type="unittest_assertequals" inline="false">
+                                                                        <field name="MESSAGE">sublist # start complex number of calls</field>
+                                                                        <value name="ACTUAL">
+                                                                          <block type="variables_get">
+                                                                            <field name="VAR">number of calls</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="EXPECTED">
                                                                           <block type="math_number">
-                                                                            <field name="NUM">0</field>
+                                                                            <field name="NUM">1</field>
                                                                           </block>
                                                                         </value>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">sublist # end complex</field>
+                                                                            <field name="MESSAGE">sublist # start complex order</field>
                                                                             <value name="ACTUAL">
                                                                               <block type="lists_getSublist">
                                                                                 <mutation at1="true" at2="true"></mutation>
-                                                                                <field name="WHERE1">FROM_END</field>
-                                                                                <field name="WHERE2">FROM_END</field>
+                                                                                <field name="WHERE1">FROM_START</field>
+                                                                                <field name="WHERE2">FROM_START</field>
                                                                                 <value name="LIST">
                                                                                   <block type="procedures_callreturn">
                                                                                     <mutation name="getSpaceShuttles"></mutation>
                                                                                   </block>
                                                                                 </value>
                                                                                 <value name="AT1">
-                                                                                  <block type="unittest_adjustindex">
-                                                                                    <value name="INDEX">
-                                                                                      <block type="math_number">
-                                                                                        <field name="NUM">2</field>
+                                                                                  <block type="logic_ternary">
+                                                                                    <value name="IF">
+                                                                                      <block type="logic_boolean">
+                                                                                        <field name="BOOL">TRUE</field>
                                                                                       </block>
+                                                                                    </value>
+                                                                                    <value name="THEN">
+                                                                                      <block type="unittest_adjustindex">
+                                                                                        <value name="INDEX">
+                                                                                          <block type="math_number">
+                                                                                            <field name="NUM">1</field>
+                                                                                          </block>
+                                                                                        </value>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                    <value name="ELSE">
+                                                                                      <block type="logic_null"></block>
                                                                                     </value>
                                                                                   </block>
                                                                                 </value>
                                                                                 <value name="AT2">
-                                                                                  <block type="unittest_adjustindex">
-                                                                                    <value name="INDEX">
-                                                                                      <block type="math_number">
-                                                                                        <field name="NUM">1</field>
+                                                                                  <block type="logic_ternary">
+                                                                                    <value name="IF">
+                                                                                      <block type="logic_boolean">
+                                                                                        <field name="BOOL">TRUE</field>
                                                                                       </block>
+                                                                                    </value>
+                                                                                    <value name="THEN">
+                                                                                      <block type="unittest_adjustindex">
+                                                                                        <value name="INDEX">
+                                                                                          <block type="math_number">
+                                                                                            <field name="NUM">2</field>
+                                                                                          </block>
+                                                                                        </value>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                    <value name="ELSE">
+                                                                                      <block type="logic_null"></block>
                                                                                     </value>
                                                                                   </block>
                                                                                 </value>
@@ -3661,32 +3701,27 @@
                                                                                 <mutation items="2"></mutation>
                                                                                 <value name="ADD0">
                                                                                   <block type="text">
-                                                                                    <field name="TEXT">Discovery</field>
+                                                                                    <field name="TEXT">Challenger</field>
                                                                                   </block>
                                                                                 </value>
                                                                                 <value name="ADD1">
                                                                                   <block type="text">
-                                                                                    <field name="TEXT">Atlantis</field>
+                                                                                    <field name="TEXT">Discovery</field>
                                                                                   </block>
                                                                                 </value>
                                                                               </block>
                                                                             </value>
                                                                             <next>
-                                                                              <block type="unittest_assertequals" inline="false">
-                                                                                <field name="MESSAGE">sublist # end complex number of calls</field>
-                                                                                <value name="ACTUAL">
-                                                                                  <block type="variables_get">
-                                                                                    <field name="VAR">number of calls</field>
-                                                                                  </block>
-                                                                                </value>
-                                                                                <value name="EXPECTED">
+                                                                              <block type="variables_set">
+                                                                                <field name="VAR">number of calls</field>
+                                                                                <value name="VALUE">
                                                                                   <block type="math_number">
-                                                                                    <field name="NUM">1</field>
+                                                                                    <field name="NUM">0</field>
                                                                                   </block>
                                                                                 </value>
                                                                                 <next>
                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                    <field name="MESSAGE">sublist # end complex order</field>
+                                                                                    <field name="MESSAGE">sublist # end complex</field>
                                                                                     <value name="ACTUAL">
                                                                                       <block type="lists_getSublist">
                                                                                         <mutation at1="true" at2="true"></mutation>
@@ -3698,39 +3733,19 @@
                                                                                           </block>
                                                                                         </value>
                                                                                         <value name="AT1">
-                                                                                          <block type="math_arithmetic">
-                                                                                            <field name="OP">ADD</field>
-                                                                                            <value name="A">
+                                                                                          <block type="unittest_adjustindex">
+                                                                                            <value name="INDEX">
                                                                                               <block type="math_number">
-                                                                                                <field name="NUM">0</field>
-                                                                                              </block>
-                                                                                            </value>
-                                                                                            <value name="B">
-                                                                                              <block type="unittest_adjustindex">
-                                                                                                <value name="INDEX">
-                                                                                                  <block type="math_number">
-                                                                                                    <field name="NUM">2</field>
-                                                                                                  </block>
-                                                                                                </value>
+                                                                                                <field name="NUM">2</field>
                                                                                               </block>
                                                                                             </value>
                                                                                           </block>
                                                                                         </value>
                                                                                         <value name="AT2">
-                                                                                          <block type="math_arithmetic">
-                                                                                            <field name="OP">ADD</field>
-                                                                                            <value name="A">
+                                                                                          <block type="unittest_adjustindex">
+                                                                                            <value name="INDEX">
                                                                                               <block type="math_number">
-                                                                                                <field name="NUM">0</field>
-                                                                                              </block>
-                                                                                            </value>
-                                                                                            <value name="B">
-                                                                                              <block type="unittest_adjustindex">
-                                                                                                <value name="INDEX">
-                                                                                                  <block type="math_number">
-                                                                                                    <field name="NUM">1</field>
-                                                                                                  </block>
-                                                                                                </value>
+                                                                                                <field name="NUM">1</field>
                                                                                               </block>
                                                                                             </value>
                                                                                           </block>
@@ -3753,46 +3768,131 @@
                                                                                       </block>
                                                                                     </value>
                                                                                     <next>
-                                                                                      <block type="variables_set">
-                                                                                        <field name="VAR">number of calls</field>
-                                                                                        <value name="VALUE">
+                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                        <field name="MESSAGE">sublist # end complex number of calls</field>
+                                                                                        <value name="ACTUAL">
+                                                                                          <block type="variables_get">
+                                                                                            <field name="VAR">number of calls</field>
+                                                                                          </block>
+                                                                                        </value>
+                                                                                        <value name="EXPECTED">
                                                                                           <block type="math_number">
-                                                                                            <field name="NUM">0</field>
+                                                                                            <field name="NUM">1</field>
                                                                                           </block>
                                                                                         </value>
                                                                                         <next>
                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                            <field name="MESSAGE">sublist first-last complex</field>
+                                                                                            <field name="MESSAGE">sublist # end complex order</field>
                                                                                             <value name="ACTUAL">
                                                                                               <block type="lists_getSublist">
-                                                                                                <mutation at1="false" at2="false"></mutation>
-                                                                                                <field name="WHERE1">FIRST</field>
-                                                                                                <field name="WHERE2">LAST</field>
+                                                                                                <mutation at1="true" at2="true"></mutation>
+                                                                                                <field name="WHERE1">FROM_END</field>
+                                                                                                <field name="WHERE2">FROM_END</field>
                                                                                                 <value name="LIST">
                                                                                                   <block type="procedures_callreturn">
                                                                                                     <mutation name="getSpaceShuttles"></mutation>
                                                                                                   </block>
                                                                                                 </value>
+                                                                                                <value name="AT1">
+                                                                                                  <block type="math_arithmetic">
+                                                                                                    <field name="OP">ADD</field>
+                                                                                                    <value name="A">
+                                                                                                      <block type="math_number">
+                                                                                                        <field name="NUM">0</field>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                    <value name="B">
+                                                                                                      <block type="unittest_adjustindex">
+                                                                                                        <value name="INDEX">
+                                                                                                          <block type="math_number">
+                                                                                                            <field name="NUM">2</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                  </block>
+                                                                                                </value>
+                                                                                                <value name="AT2">
+                                                                                                  <block type="math_arithmetic">
+                                                                                                    <field name="OP">ADD</field>
+                                                                                                    <value name="A">
+                                                                                                      <block type="math_number">
+                                                                                                        <field name="NUM">0</field>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                    <value name="B">
+                                                                                                      <block type="unittest_adjustindex">
+                                                                                                        <value name="INDEX">
+                                                                                                          <block type="math_number">
+                                                                                                            <field name="NUM">1</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                  </block>
+                                                                                                </value>
                                                                                               </block>
                                                                                             </value>
                                                                                             <value name="EXPECTED">
-                                                                                              <block type="variables_get">
-                                                                                                <field name="VAR">list</field>
+                                                                                              <block type="lists_create_with" inline="false">
+                                                                                                <mutation items="2"></mutation>
+                                                                                                <value name="ADD0">
+                                                                                                  <block type="text">
+                                                                                                    <field name="TEXT">Discovery</field>
+                                                                                                  </block>
+                                                                                                </value>
+                                                                                                <value name="ADD1">
+                                                                                                  <block type="text">
+                                                                                                    <field name="TEXT">Atlantis</field>
+                                                                                                  </block>
+                                                                                                </value>
                                                                                               </block>
                                                                                             </value>
                                                                                             <next>
-                                                                                              <block type="unittest_assertequals" inline="false">
-                                                                                                <field name="MESSAGE">sublist first-last complex number of calls</field>
-                                                                                                <value name="ACTUAL">
-                                                                                                  <block type="variables_get">
-                                                                                                    <field name="VAR">number of calls</field>
-                                                                                                  </block>
-                                                                                                </value>
-                                                                                                <value name="EXPECTED">
+                                                                                              <block type="variables_set">
+                                                                                                <field name="VAR">number of calls</field>
+                                                                                                <value name="VALUE">
                                                                                                   <block type="math_number">
-                                                                                                    <field name="NUM">1</field>
+                                                                                                    <field name="NUM">0</field>
                                                                                                   </block>
                                                                                                 </value>
+                                                                                                <next>
+                                                                                                  <block type="unittest_assertequals" inline="false">
+                                                                                                    <field name="MESSAGE">sublist first-last complex</field>
+                                                                                                    <value name="ACTUAL">
+                                                                                                      <block type="lists_getSublist">
+                                                                                                        <mutation at1="false" at2="false"></mutation>
+                                                                                                        <field name="WHERE1">FIRST</field>
+                                                                                                        <field name="WHERE2">LAST</field>
+                                                                                                        <value name="LIST">
+                                                                                                          <block type="procedures_callreturn">
+                                                                                                            <mutation name="getSpaceShuttles"></mutation>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                    <value name="EXPECTED">
+                                                                                                      <block type="variables_get">
+                                                                                                        <field name="VAR">list</field>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                    <next>
+                                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                                        <field name="MESSAGE">sublist first-last complex number of calls</field>
+                                                                                                        <value name="ACTUAL">
+                                                                                                          <block type="variables_get">
+                                                                                                            <field name="VAR">number of calls</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                        <value name="EXPECTED">
+                                                                                                          <block type="math_number">
+                                                                                                            <field name="NUM">1</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                      </block>
+                                                                                                    </next>
+                                                                                                  </block>
+                                                                                                </next>
                                                                                               </block>
                                                                                             </next>
                                                                                           </block>
@@ -3840,7 +3940,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="13263">
+  <block type="procedures_defnoreturn" x="13" y="13488">
     <field name="NAME">test join</field>
     <comment pinned="false" h="80" w="160">Tests the "join" block.</comment>
     <statement name="STACK">
@@ -3885,7 +3985,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="13463">
+  <block type="procedures_defnoreturn" x="13" y="13688">
     <field name="NAME">test split</field>
     <comment pinned="false" h="80" w="160">Tests the "split" block.</comment>
     <statement name="STACK">
@@ -3930,7 +4030,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="13663">
+  <block type="procedures_defnoreturn" x="13" y="13888">
     <field name="NAME">test sort alphabetic</field>
     <comment pinned="false" h="80" w="160">Tests the "alphabetic sort" block.</comment>
     <statement name="STACK">
@@ -3985,7 +4085,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="13913">
+  <block type="procedures_defnoreturn" x="13" y="14138">
     <field name="NAME">test sort ignoreCase</field>
     <comment pinned="false" h="80" w="160">Tests the "alphabetic sort ignore case" block.</comment>
     <statement name="STACK">
@@ -4040,7 +4140,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="14163">
+  <block type="procedures_defnoreturn" x="13" y="14388">
     <field name="NAME">test sort numeric</field>
     <comment pinned="false" h="80" w="160">Tests the "numeric sort" block.</comment>
     <statement name="STACK">

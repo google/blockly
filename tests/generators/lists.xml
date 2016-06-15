@@ -498,10 +498,9 @@
                     <field name="MESSAGE">get random</field>
                     <field name="EXPECTED">TRUE</field>
                     <value name="ACTUAL">
-                      <block type="math_number_property">
-                        <mutation divisor_input="false"></mutation>
-                        <field name="PROPERTY">POSITIVE</field>
-                        <value name="NUMBER_TO_CHECK">
+                      <block type="logic_compare">
+                        <field name="OP">GT</field>
+                        <value name="A">
                           <block type="lists_indexOf" inline="false">
                             <field name="END">FIRST</field>
                             <value name="VALUE">
@@ -519,6 +518,15 @@
                                     <field name="VAR">list</field>
                                   </block>
                                 </value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="unittest_adjustindex">
+                            <value name="INDEX">
+                              <block type="math_number">
+                                <field name="NUM">-1</field>
                               </block>
                             </value>
                           </block>

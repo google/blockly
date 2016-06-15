@@ -167,7 +167,7 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
           at = parseFloat(at) + 1;
         } else {
           // If the index is dynamic, decrement it in code.
-          at = '(' + at + ')';
+          at = '(' + at + ' + 1)';
         }
       } else {
         var at = Blockly.JavaScript.valueToCode(block, 'AT',
@@ -349,10 +349,10 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
             // If the index is a naked number, adjust it right now.
             return parseFloat(at) + delta;
           } else {
-
             // If the index is dynamic, adjust it in code.
             var adjustedIndex = at + ' + ' + delta;
-            if (opt_parenthesis) {
+            if (opt_order &&
+                opt_order >= Blockly.JavaScript.ORDER_ADDITION) {
               adjustedIndex = '(' + adjustedIndex + ')';
             }
             return adjustedIndex;
@@ -367,7 +367,8 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
           } else {
             // If the index is dynamic, adjust it in code.
             var adjustedIndex = at + ' - ' + -delta;
-            if (opt_order) {
+            if (opt_order &&
+                opt_order >= Blockly.JavaScript.ORDER_SUBTRACTION) {
               adjustedIndex = '(' + adjustedIndex + ')';
             }
             return adjustedIndex;
@@ -380,7 +381,6 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
         return Blockly.JavaScript.valueToCode(block, atID,
                 Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
       }
-      var index;
       var increment = opt_increment || 0;
       switch (where) {
         case 'FROM_START':
@@ -391,7 +391,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
         case 'FIRST':
           return '0';
         case 'LAST':
-          index = list + '.length';
+          var index = list + '.length';
           if (increment) {
             return index;
           }
@@ -420,7 +420,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
     } else {
       subSequenceFunction = subSequenceFunction.concat([
         '    if (where == \'FROM_END\') {',
-        '      at = list.length - at + 1;']);
+        '      at = list.length - 1 - at;']);
     }
     subSequenceFunction = subSequenceFunction.concat([
       '    } else if (where == \'FIRST\') {',

@@ -101,8 +101,6 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
-  var at = Blockly.JavaScript.valueToCode(block, 'AT',
-      Blockly.JavaScript.ORDER_UNARY_NEGATION) || '1';
   // Special case to avoid wrapping function calls in unneeded parenthesis.
   // func()[0] is prefered over (func())[0]
   var valueBlock = this.getInputTargetBlock('VALUE');
@@ -136,6 +134,8 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
     case ('FROM_START'):
       // Adjust index if using one-based indices.
       if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                   Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
         if (Blockly.isNumber(at)) {
           // If the index is a naked number, decrement it right now.
           at = parseFloat(at) - 1;
@@ -143,6 +143,9 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
           // If the index is dynamic, decrement it in code.
           at += ' - 1';
         }
+      } else {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                   Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
       }
       if (mode == 'GET') {
         var code = list + '[' + at + ']';
@@ -157,13 +160,18 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
     case ('FROM_END'):
       // Adjust index if not using one-based indices.
       if (! Blockly.JavaScript.ONE_BASED_INDEXING) {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;
         if (Blockly.isNumber(at)) {
           // If the index is a naked number, decrement it right now.
           at = parseFloat(at) + 1;
         } else {
           // If the index is dynamic, decrement it in code.
-          at += ' + 1';
+          at = '(' + at + ')';
         }
+      } else {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                   Blockly.JavaScript.ORDER_UNARY_NEGATION) || defaultAtIndex;
       }
       if (mode == 'GET') {
         var code = list + '.slice(-' + at + ')[0]';
@@ -215,8 +223,6 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
-  var at = Blockly.JavaScript.valueToCode(block, 'AT',
-      Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
   var value = Blockly.JavaScript.valueToCode(block, 'TO',
       Blockly.JavaScript.ORDER_ASSIGNMENT) || 'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.
@@ -252,6 +258,8 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
     case ('FROM_START'):
       // Adjust index if using one-based indices.
       if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                   Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
         if (Blockly.isNumber(at)) {
           // If the index is a naked number, decrement it right now.
           at = parseFloat(at) - 1;
@@ -259,6 +267,9 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
           // If the index is dynamic, decrement it in code.
           at += ' - 1';
         }
+      } else {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                   Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
       }
       if (mode == 'SET') {
         return list + '[' + at + '] = ' + value + ';\n';
@@ -269,13 +280,18 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
     case ('FROM_END'):
       // Adjust index if not using one-based indices.
       if (! Blockly.JavaScript.ONE_BASED_INDEXING) {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                   Blockly.JavaScript.ORDER_NONE) || defaultAtIndex;
         if (Blockly.isNumber(at)) {
           // If the index is a naked number, decrement it right now.
           at = parseFloat(at) + 1;
         } else {
           // If the index is dynamic, decrement it in code.
-          at += ' + 1';
+          at = '(' + at + ' + 1)';
         }
+      } else {
+        var at = Blockly.JavaScript.valueToCode(block, 'AT',
+                   Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
       }
       var code = cacheList();
       if (mode == 'SET') {

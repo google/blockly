@@ -8,7 +8,8 @@
 			"Xiaomingyan",
 			"Yfdyh000",
 			"아라",
-			"Hudafu"
+			"Hudafu",
+			"Shatteredwind"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "项目",
@@ -204,7 +205,7 @@
 	"TEXT_GET_SUBSTRING_TOOLTIP": "返回指定的部分文本。",
 	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "自文本",
 	"TEXT_GET_SUBSTRING_START_FROM_START": "取得一段字串自#",
-	"TEXT_GET_SUBSTRING_START_FROM_END": "取得一段字串自#到末尾",
+	"TEXT_GET_SUBSTRING_START_FROM_END": "取得一段字串自倒数第#个字符",
 	"TEXT_GET_SUBSTRING_START_FIRST": "取得一段字串自第一个字符",
 	"TEXT_GET_SUBSTRING_END_FROM_START": "到字符#",
 	"TEXT_GET_SUBSTRING_END_FROM_END": "到倒数第#个字符",

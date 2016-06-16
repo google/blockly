@@ -27,8 +27,6 @@
 blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
-      // A list of all trees in the application.
-      this.treeRegistry = [];
       // Keeping track of the last key pressed. If the user presses
       // enter (to edit a text input or press a button), the keyboard
       // focus shifts to that element. In the next keystroke, if the user
@@ -36,52 +34,66 @@ blocklyApp.TreeService = ng.core
       // to shift focus back to the tree as a whole.
       this.previousKey_ = null;
     },
-    initTreeRegistry: function() {
-      this.treeRegistry = [];
-      this.treeRegistry.push(document.getElementById('blockly-toolbox-tree'));
-      // TODO(sll): Extend this to handle injected toolbar buttons.
-      this.treeRegistry.push(document.getElementById('clear-workspace'));
-
-      // Focus on the toolbox tree.
-      this.treeRegistry[0].focus();
+    getToolboxTreeNode_: function() {
+      return document.getElementById('blockly-toolbox-tree');
     },
-    isTreeInRegistry: function(treeId) {
-      return this.treeRegistry.some(function(tree) {
+    getWorkspaceTreeNodes_: function() {
+      // Returns a list of all the top-level workspace tree nodes on the page.
+      return Array.from(document.querySelectorAll('ol.blocklyWorkspaceTree'));
+    },
+    getAllTreeNodes_: function() {
+      // Returns a list of all top-level tree nodes on the page.
+      var trees = [];
+
+      trees.push(document.getElementById('blockly-toolbox-tree'));
+      // TODO(sll): Extend this to handle injected toolbar buttons.
+      if (blocklyApp.workspace.topBlocks_.length > 0) {
+        trees.push(document.getElementById('clear-workspace'));
+      }
+
+      trees = trees.concat(this.getWorkspaceTreeNodes_());
+      return trees;
+    },
+    focusOnToolbox: function() {
+      this.getToolboxTreeNode_().focus();
+    },
+    isTopLevelWorkspaceTree: function(treeId) {
+      return this.getWorkspaceTreeNodes_().some(function(tree) {
         return tree.id == treeId;
       });
     },
-    addTreeToRegistry: function(tree) {
-      this.treeRegistry.push(tree);
-    },
-    deleteTreeFromRegistry: function(treeId) {
-      // Shift focus to the next tree (if it exists), otherwise shift focus
-      // to the previous tree.
-      var movedToNextTree = this.goToNextTree(treeId);
-      if (!movedToNextTree) {
-        this.goToPreviousTree(treeId);
-      }
-
-      // Delete the tree from the tree registry.
-      for (var i = 0; i < this.treeRegistry.length; i++) {
-        if (this.treeRegistry[i].id == treeId) {
-          this.treeRegistry.splice(i, 1);
-          break;
+    getNodeToFocusOnWhenTreeIsDeleted: function(deletedTreeId) {
+      // This returns the node to focus on after the deletion happens.
+      // We shift focus to the next tree (if it exists), otherwise we shift
+      // focus to the previous tree.
+      var workspaceTrees = this.getWorkspaceTreeNodes_();
+      for (var i = 0; i < workspaceTrees.length; i++) {
+        if (workspaceTrees[i].id == deletedTreeId) {
+          if (i + 1 < workspaceTrees.length) {
+            return workspaceTrees[i + 1];
+          } else if (i > 0) {
+            return workspaceTrees[i - 1];
+          }
         }
       }
+
+      return this.getToolboxTreeNode_();
     },
     goToNextTree: function(treeId) {
-      for (var i = 0; i < this.treeRegistry.length - 1; i++) {
-        if (this.treeRegistry[i].id == treeId) {
-          this.treeRegistry[i + 1].focus();
+      var trees = this.getAllTreeNodes_();
+      for (var i = 0; i < trees.length - 1; i++) {
+        if (trees[i].id == treeId) {
+          trees[i + 1].focus();
           return true;
         }
       }
       return false;
     },
     goToPreviousTree: function(treeId) {
-      for (var i = this.treeRegistry.length - 1; i > 0; i--) {
-        if (this.treeRegistry[i].id == treeId) {
-          this.treeRegistry[i - 1].focus();
+      var trees = this.getAllTreeNodes_();
+      for (var i = trees.length - 1; i > 0; i--) {
+        if (trees[i].id == treeId) {
+          trees[i - 1].focus();
           return true;
         }
       }

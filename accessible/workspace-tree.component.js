@@ -161,12 +161,12 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       this.idMap['parentList'] = this.utilsService.generateUniqueId();
     },
     ngAfterViewInit: function() {
-      // If this is a top-level tree in the workspace, add it to the tree
-      // registry and set its active descendant.
+      // If this is a top-level tree in the workspace, set its active
+      // descendant.
       if (this.tree &&
-          (!this.tree.id || !this.treeService.isTreeInRegistry(this.tree.id))) {
+          (!this.tree.id ||
+           !this.treeService.isTopLevelWorkspaceTree(this.tree.id))) {
         this.tree.id = this.utilsService.generateUniqueId();
-        this.treeService.addTreeToRegistry(this.tree);
         this.treeService.setActiveDesc(
             document.getElementById(this.idMap['parentList']),
             this.tree);
@@ -183,18 +183,25 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     },
     cutToClipboard: function(block) {
       if (this.isTopLevelBlock(block)) {
-        this.treeService.deleteTreeFromRegistry(this.tree.id);
+        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
+            this.tree.id);
+        this.clipboardService.cut(block);
+        nextNodeToFocusOn.focus();
+      } else {
+        // TODO(sll): Change the active descendant of the tree.
+        this.clipboardService.cut(block);
       }
-
-      this.clipboardService.cut(block);
     },
     deleteBlock: function(block, cutToClipboard) {
       if (this.isTopLevelBlock(block)) {
-        this.treeService.deleteTreeFromRegistry(this.tree.id);
+        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
+            this.tree.id);
+        block.dispose(true);
+        nextNodeToFocusOn.focus();
+      } else {
+        // TODO(sll): Change the active descendant of the tree.
+        block.dispose(true);
       }
-
-      // TODO(sll): Change the active descendant of the tree.
-      block.dispose(true);
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
       return this.utilsService.generateAriaLabelledByAttr(
@@ -210,9 +217,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       this.clipboardService.pasteToMarkedConnection(block, false);
 
       if (this.isTopLevelBlock(block)) {
-        this.treeService.deleteTreeFromRegistry(this.tree.id);
+        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
+            this.tree.id);
+        block.dispose(true);
+        nextNodeToFocusOn.focus();
+      } else {
+        // TODO(sll): Change the active descendant of the tree.
+        block.dispose(true);
       }
-      block.dispose(true);
 
       alert('Block moved to marked spot: ' + block.toString());
     }

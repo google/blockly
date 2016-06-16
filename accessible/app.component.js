@@ -63,10 +63,5 @@ blocklyApp.AppView = ng.core
         blocklyApp.UtilsService]
   })
   .Class({
-    constructor: [blocklyApp.TreeService, function(_treeService) {
-      this.treeService = _treeService;
-    }],
-    ngAfterViewInit: function() {
-      this.treeService.initTreeRegistry();
-    }
+    constructor: [function() {}]
   });

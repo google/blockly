@@ -45,7 +45,7 @@ blocklyApp.WorkspaceComponent = ng.core
 
     <div *ngIf="workspace">
       <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
-          tabIndex="0" role="group" class="blocklyTree"
+          tabIndex="0" role="group" class="blocklyTree blocklyWorkspaceTree"
           [attr.aria-labelledby]="workspaceTitle.id"
           (keydown)="onKeypress($event, tree)">
         <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree">
@@ -71,14 +71,14 @@ blocklyApp.WorkspaceComponent = ng.core
     }],
     clearWorkspace: function() {
       this.workspace.clear();
-      this.treeService.initTreeRegistry();
+      this.treeService.focusOnToolbox();
     },
-    onWorkspaceToolbarKeypress: function(event) {
+    onWorkspaceToolbarKeypress: function(e) {
       this.treeService.onWorkspaceToolbarKeypress(
-          event, document.activeElement.id);
+          e, document.activeElement.id);
     },
-    onKeypress: function(event, tree){
-      this.treeService.onKeypress(event, tree);
+    onKeypress: function(e, tree) {
+      this.treeService.onKeypress(e, tree);
     },
     isWorkspaceEmpty: function() {
       return !this.workspace.topBlocks_.length;

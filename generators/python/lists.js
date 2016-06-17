@@ -107,14 +107,28 @@ Blockly.Python['lists_indexOf'] = function(block) {
 };
 
 /**
- *
- * @param {string} at The index to adjust
- * @param {number} opt_delta
- * @param {boolean} opt_negate
+ * Gets a property, adjusts the value (taking into account indexing), and casts
+ * to an integer.
+ * @param {?} block the block
+ * @param {string} atID the property ID of the element to get
+ * @param {number=} opt_delta value to add
+ * @param {boolean=} opt_negate whether to negate the value
  * @returns {string|number}
  */
-Blockly.Python.castInt = function(at, opt_delta, opt_negate) {
+Blockly.Python.getAdjustedInt = function(block, atID, opt_delta, opt_negate) {
   var delta = opt_delta || 0;
+  if (Blockly.Python.ONE_BASED_INDEXING) {
+    delta--;
+  }
+  var defaultAtIndex = (Blockly.Python.ONE_BASED_INDEXING) ? '1' : '0';
+  if(delta) {
+    var at = Blockly.Python.valueToCode(block, atID,
+            Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
+  } else {
+    var at = Blockly.Python.valueToCode(block, atID,
+            Blockly.Python.ORDER_NONE) || defaultAtIndex;
+  }
+
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = parseInt(at, 10) + delta;
@@ -142,7 +156,6 @@ Blockly.Python['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
-  var defaultAtIndex = (Blockly.Python.ONE_BASED_INDEXING) ? '1' : '0';
   // Special case to avoid wrapping function calls in unneeded parenthesis.
   // func()[0] is prefered over (func())[0]
   var valueBlock = this.getInputTargetBlock('VALUE');
@@ -174,15 +187,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
         }
       break;
     case 'FROM_START':
-        if (Blockly.Python.ONE_BASED_INDEXING) {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-              Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at, -1);
-        } else {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-              Blockly.Python.ORDER_NONE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at);
-        }
+      var at = Blockly.Python.getAdjustedInt(block, 'AT');
         if (mode == 'GET') {
           var code = list + '[' + at + ']';
           return [code, Blockly.Python.ORDER_MEMBER];
@@ -194,15 +199,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
         }
       break;
     case'FROM_END':
-        if (Blockly.Python.ONE_BASED_INDEXING) {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-                  Blockly.Python.ORDER_NONE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at, 0, true);
-        } else {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-                  Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at, 1, true);
-        }
+      var at = Blockly.Python.getAdjustedInt(block, 'AT', 1, true);
         if (mode == 'GET') {
           var code = list + '[-' + at + ']';
           return [code, Blockly.Python.ORDER_MEMBER];
@@ -242,7 +239,6 @@ Blockly.Python['lists_setIndex'] = function(block) {
   var list = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_MEMBER) || '[]';
   var mode = block.getFieldValue('MODE') || 'GET';
-  var defaultAtIndex = (Blockly.Python.ONE_BASED_INDEXING) ? '1' : '0';
   var value = Blockly.Python.valueToCode(block, 'TO',
       Blockly.Python.ORDER_NONE) || 'None';
   // Cache non-trivial values to variables to prevent repeated look-ups.
@@ -274,15 +270,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
         }
       break;
     case 'FROM_START':
-        if (Blockly.Python.ONE_BASED_INDEXING) {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-              Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at, -1);
-        } else {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-              Blockly.Python.ORDER_NONE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at);
-        }
+      var at = Blockly.Python.getAdjustedInt(block, 'AT');
         if (mode == 'SET') {
           return list + '[' + at + '] = ' + value + '\n';
         } else if (mode == 'INSERT') {
@@ -290,15 +278,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
         }
       break;
     case 'FROM_END':
-        if (Blockly.Python.ONE_BASED_INDEXING) {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-                  Blockly.Python.ORDER_NONE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at, 0, true);
-        } else {
-          var at = Blockly.Python.valueToCode(block, 'AT',
-                  Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-          at = Blockly.Python.castInt(at, 1, true);
-        }
+      var at = Blockly.Python.getAdjustedInt(block, 'AT', 1, true);
         if (mode == 'SET') {
           return list + '[' + at + '] = ' + value + '\n';
         } else if (mode == 'INSERT') {
@@ -327,55 +307,30 @@ Blockly.Python['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_MEMBER) || '[]';
-  var defaultAtIndex = (Blockly.Python.ONE_BASED_INDEXING) ? '1' : '0';
   switch (block.getFieldValue('WHERE1')) {
-    case 'FIRST':
-        var at1 = '';
-      break;
     case 'FROM_START':
-      if (Blockly.Python.ONE_BASED_INDEXING) {
-        var at1 = Blockly.Python.valueToCode(block, 'AT1',
-            Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-        at1 = Blockly.Python.castInt(at1, -1);
-      } else {
-        var at1 = Blockly.Python.valueToCode(block, 'AT1',
-            Blockly.Python.ORDER_NONE) || defaultAtIndex;
-        at1 = Blockly.Python.castInt(at1);
-      }
+      var at1 = Blockly.Python.getAdjustedInt(block, 'AT1');
       if (at1 == '0') {
         at1 = '';
       }
       break;
     case 'FROM_END':
-      if (Blockly.Python.ONE_BASED_INDEXING) {
-        var at1 = Blockly.Python.valueToCode(block, 'AT1',
-                Blockly.Python.ORDER_NONE) || defaultAtIndex;
-        at1 = Blockly.Python.castInt(at1, 0, true);
-      } else {
-        var at1 = Blockly.Python.valueToCode(block, 'AT1',
-                Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-        at1 = Blockly.Python.castInt(at1, 1, true);
-      }
+      var at1 = Blockly.Python.getAdjustedInt(block, 'AT1', 1, true);
+      break;
+    case 'FIRST':
+      var at1 = '';
       break;
     default:
       throw 'Unhandled option (lists_getSublist)';
   }
   switch (block.getFieldValue('WHERE2')) {
-    case 'LAST':
-      var at2 = '';
+    case 'FROM_START':
+      var at2 = Blockly.Python.getAdjustedInt(block, 'AT2', 1);
       break;
     case 'FROM_END':
-      if (Blockly.Python.ONE_BASED_INDEXING) {
-        var at2 = Blockly.Python.valueToCode(block, 'AT2',
-                Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-        at2 = Blockly.Python.castInt(at2, -1, true);
-      } else {
-        var at2 = Blockly.Python.valueToCode(block, 'AT2',
-                Blockly.Python.ORDER_NONE) || defaultAtIndex;
-        at2 = Blockly.Python.castInt(at2, 0, true);
-      }
+      var at2 = Blockly.Python.getAdjustedInt(block, 'AT2', 0, true);
       // Ensure that if the result calculated is 0 that sub-sequence will
-      // include all elements
+      // include all elements as expected.
       if (!Blockly.isNumber(String(at2))) {
         Blockly.Python.definitions_['import_sys'] = 'import sys';
         at2 += ' or sys.maxsize';
@@ -384,16 +339,8 @@ Blockly.Python['lists_getSublist'] = function(block) {
         at2 = '';
       }
       break;
-    case 'FROM_START':
-      if (Blockly.Python.ONE_BASED_INDEXING) {
-        var at2 = Blockly.Python.valueToCode(block, 'AT2',
-            Blockly.Python.ORDER_NONE) || defaultAtIndex;
-        at2 = Blockly.Python.castInt(at2);
-      } else {
-        var at2 = Blockly.Python.valueToCode(block, 'AT2',
-            Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-        at2 = Blockly.Python.castInt(at2, 1);
-      }
+    case 'LAST':
+      var at2 = '';
       break;
     default:
       throw 'Unhandled option (lists_getSublist)';

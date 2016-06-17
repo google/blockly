@@ -41,7 +41,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             <li [id]="idMap['cutListItem']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['cutButton'], 'blockly-button')"
                 [attr.aria-level]="level+2" aria-selected=false>
-              <button [id]="idMap['cutButton']" (click)="clipboardService.cut(block)">{{'CUT_BLOCK'|translate}}</button>
+              <button [id]="idMap['cutButton']" (click)="cutToClipboard(block)">{{'CUT_BLOCK'|translate}}</button>
             </li>
             <li [id]="idMap['copyListItem']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['copyButton'], 'blockly-button')"
@@ -81,7 +81,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             <li [id]="idMap['sendToSelectedListItem']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !clipboardService.isBlockCompatibleWithMarkedConnection(block))"
                 [attr.aria-level]="level+2" aria-selected=false>
-              <button [id]="idMap['sendToSelectedButton']" (click)="sendToSelected(block)"
+              <button [id]="idMap['sendToSelectedButton']" (click)="sendToMarkedSpot(block)"
                       [disabled]="!clipboardService.isBlockCompatibleWithMarkedConnection(block)">{{'MOVE_TO_MARKED_SPOT'|translate}}</button>
             </li>
             <li [id]="idMap['delete']" role="treeitem"
@@ -94,8 +94,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         <div *ngFor="#inputBlock of block.inputList; #i = index">
           <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field"></blockly-field>
           <blockly-workspace-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
-                                  [block]="inputBlock.connection.targetBlock()" [isTopBlock]="false"
-                                  [level]="level">
+                                  [block]="inputBlock.connection.targetBlock()" [level]="level">
           </blockly-workspace-tree>
           <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])"
@@ -124,16 +123,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
     <blockly-workspace-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
                             [block]="block.nextConnection.targetBlock()"
-                            [isTopBlock]="false"
                             [level]="level">
     </blockly-workspace-tree>
     `,
     directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
       return blocklyApp.WorkspaceTreeComponent;
     })],
-    inputs: ['block', 'isTopBlock', 'topBlockIndex', 'level', 'parentId', 'tree'],
-    pipes: [blocklyApp.TranslatePipe],
-    providers: [blocklyApp.TreeService],
+    // The 'tree' input is only passed down at the top level.
+    inputs: ['block', 'level', 'tree'],
+    pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
     constructor: [
@@ -160,16 +158,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         }
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
-      this.idMap['parentList'] =
-          this.isTopBlock ? this.parentId + '-node0' :
-          this.utilsService.generateUniqueId();
+      this.idMap['parentList'] = this.utilsService.generateUniqueId();
     },
     ngAfterViewInit: function() {
       // If this is a top-level tree in the workspace, set its active
-      // descendant after the ids have been computed.
+      // descendant.
       if (this.tree &&
-          this.tree.getAttribute('aria-activedescendant') ==
-              this.idMap['parentList']) {
+          (!this.tree.id ||
+           this.treeService.isTopLevelWorkspaceTree(this.tree.id))) {
+        this.tree.id = this.utilsService.generateUniqueId();
         this.treeService.setActiveDesc(
             document.getElementById(this.idMap['parentList']),
             this.tree);
@@ -179,17 +176,32 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       return this.clipboardService.isClipboardCompatibleWithConnection(
           connection);
     },
-    deleteBlock: function(block) {
-      // If this is the top block, shift focus to the previous tree.
-      var topBlocks = blocklyApp.workspace.topBlocks_;
-      for (var i = 0; i < topBlocks.length; i++) {
-        if (topBlocks[i].id == block.id) {
-          this.treeService.goToPreviousTree(this.parentId);
-          break;
-        }
+    isTopLevelBlock: function(block) {
+      return blocklyApp.workspace.topBlocks_.some(function(topBlock) {
+        return topBlock.id == block.id;
+      });
+    },
+    cutToClipboard: function(block) {
+      if (this.isTopLevelBlock(block)) {
+        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
+            this.tree.id);
+        this.clipboardService.cut(block);
+        nextNodeToFocusOn.focus();
+      } else {
+        // TODO(sll): Change the active descendant of the tree.
+        this.clipboardService.cut(block);
       }
-      // If this is not the top block, change the active descendant of the tree.
-      block.dispose(true);
+    },
+    deleteBlock: function(block, cutToClipboard) {
+      if (this.isTopLevelBlock(block)) {
+        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
+            this.tree.id);
+        block.dispose(true);
+        nextNodeToFocusOn.focus();
+      } else {
+        // TODO(sll): Change the active descendant of the tree.
+        block.dispose(true);
+      }
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
       return this.utilsService.generateAriaLabelledByAttr(
@@ -201,11 +213,19 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     hasNextConnection: function(block) {
       return Boolean(block.nextConnection);
     },
-    sendToSelected: function(block) {
-      if (this.clipboardService) {
-        this.clipboardService.pasteToMarkedConnection(block, false);
+    sendToMarkedSpot: function(block) {
+      this.clipboardService.pasteToMarkedConnection(block, false);
+
+      if (this.isTopLevelBlock(block)) {
+        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
+            this.tree.id);
         block.dispose(true);
-        alert('Block moved to marked spot: ' + block.toString());
+        nextNodeToFocusOn.focus();
+      } else {
+        // TODO(sll): Change the active descendant of the tree.
+        block.dispose(true);
       }
+
+      alert('Block moved to marked spot: ' + block.toString());
     }
   });

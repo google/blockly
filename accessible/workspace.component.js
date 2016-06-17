@@ -33,31 +33,30 @@ blocklyApp.WorkspaceComponent = ng.core
 
     <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
       <span *ngFor="#buttonConfig of toolbarButtonConfig">
-        <button (click)="buttonConfig.action()" class="blocklyTree">
+        <button (click)="buttonConfig.action()"
+                class="blocklyTree blocklyWorkspaceToolbarButton">
           {{buttonConfig.text}}
         </button>
       </span>
-      <button id="clear-workspace" (click)="workspace.clear()"
-              [disabled]="isWorkspaceEmpty()" class="blocklyTree">
+      <button id="clear-workspace" (click)="clearWorkspace()"
+              [attr.aria-disabled]="isWorkspaceEmpty()"
+              class="blocklyTree blocklyWorkspaceToolbarButton">
         {{'CLEAR_WORKSPACE'|translate}}
       </button>
     </div>
 
     <div *ngIf="workspace">
-      <ol #tree id="blockly-workspace-tree{{i}}" *ngFor="#block of workspace.topBlocks_; #i = index"
-          tabIndex="0" role="group" class="blocklyTree" [attr.aria-labelledby]="workspaceTitle.id"
-          [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
+      <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
+          tabIndex="0" role="group" class="blocklyTree blocklyWorkspaceTree"
+          [attr.aria-labelledby]="workspaceTitle.id"
           (keydown)="onKeypress($event, tree)">
-        <blockly-workspace-tree [level]=1 [block]="block" [isTopBlock]="true"
-                                [topBlockIndex]="i" [parentId]="tree.id"
-                                [tree]="tree">
+        <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree">
         </blockly-workspace-tree>
       </ol>
     </div>
     `,
     directives: [blocklyApp.WorkspaceTreeComponent],
-    pipes: [blocklyApp.TranslatePipe],
-    providers: [blocklyApp.TreeService]
+    pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
     constructor: [blocklyApp.TreeService, function(_treeService) {
@@ -72,14 +71,17 @@ blocklyApp.WorkspaceComponent = ng.core
       this.workspace = blocklyApp.workspace;
       this.treeService = _treeService;
     }],
-    onWorkspaceToolbarKeypress: function(event) {
-      var activeElementId = document.activeElement.id;
-      this.treeService.onWorkspaceToolbarKeypress(event, activeElementId);
+    clearWorkspace: function() {
+      this.workspace.clear();
     },
-    onKeypress: function(event, tree){
-      this.treeService.onKeypress(event, tree);
+    onWorkspaceToolbarKeypress: function(e) {
+      this.treeService.onWorkspaceToolbarKeypress(
+          e, document.activeElement.id);
+    },
+    onKeypress: function(e, tree) {
+      this.treeService.onKeypress(e, tree);
     },
     isWorkspaceEmpty: function() {
-      return !blocklyApp.workspace.topBlocks_.length;
+      return !this.workspace.topBlocks_.length;
     }
   });

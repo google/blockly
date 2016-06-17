@@ -66,8 +66,7 @@ blocklyApp.ToolboxComponent = ng.core
         </div>
       </ol>
     `,
-    directives: [blocklyApp.ToolboxTreeComponent],
-    providers: [blocklyApp.TreeService],
+    directives: [blocklyApp.ToolboxTreeComponent]
   })
   .Class({
     constructor: [

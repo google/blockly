@@ -18,8 +18,8 @@
  */
 
 /**
- * @fileoverview Angular2 Service that handles all tree keyboard navigation.
- * A separate TreeService is constructed for each tree in the application.
+ * @fileoverview Angular2 Service that handles tree keyboard navigation.
+ * This is a singleton service for the entire application.
  *
  * @author madeeha@google.com (Madeeha Ghori)
  */
@@ -27,14 +27,72 @@
 blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
-      blocklyApp.debug && console.log('making a new tree service');
-      this.trees = document.getElementsByClassName('blocklyTree');
       // Keeping track of the last key pressed. If the user presses
       // enter (to edit a text input or press a button), the keyboard
       // focus shifts to that element. In the next keystroke, if the user
       // navigates away from the element using the arrow keys, we want
       // to shift focus back to the tree as a whole.
       this.previousKey_ = null;
+    },
+    getToolboxTreeNode_: function() {
+      return document.getElementById('blockly-toolbox-tree');
+    },
+    getWorkspaceToolbarButtonNodes_: function() {
+      return Array.from(document.querySelectorAll(
+          'button.blocklyWorkspaceToolbarButton'));
+    },
+    // Returns a list of all top-level workspace tree nodes on the page.
+    getWorkspaceTreeNodes_: function() {
+      return Array.from(document.querySelectorAll('ol.blocklyWorkspaceTree'));
+    },
+    // Returns a list of all top-level tree nodes on the page.
+    getAllTreeNodes_: function() {
+      var treeNodes = [this.getToolboxTreeNode_()];
+      treeNodes = treeNodes.concat(this.getWorkspaceToolbarButtonNodes_());
+      treeNodes = treeNodes.concat(this.getWorkspaceTreeNodes_());
+      return treeNodes;
+    },
+    isTopLevelWorkspaceTree: function(treeId) {
+      return this.getWorkspaceTreeNodes_().some(function(tree) {
+        return tree.id == treeId;
+      });
+    },
+    getNodeToFocusOnWhenTreeIsDeleted: function(deletedTreeId) {
+      // This returns the node to focus on after the deletion happens.
+      // We shift focus to the next tree (if it exists), otherwise we shift
+      // focus to the previous tree.
+      var trees = this.getAllTreeNodes_();
+      for (var i = 0; i < trees.length; i++) {
+        if (trees[i].id == deletedTreeId) {
+          if (i + 1 < trees.length) {
+            return trees[i + 1];
+          } else if (i > 0) {
+            return trees[i - 1];
+          }
+        }
+      }
+
+      return this.getToolboxTreeNode_();
+    },
+    focusOnNextTree_: function(treeId) {
+      var trees = this.getAllTreeNodes_();
+      for (var i = 0; i < trees.length - 1; i++) {
+        if (trees[i].id == treeId) {
+          trees[i + 1].focus();
+          return true;
+        }
+      }
+      return false;
+    },
+    focusOnPreviousTree_: function(treeId) {
+      var trees = this.getAllTreeNodes_();
+      for (var i = trees.length - 1; i > 0; i--) {
+        if (trees[i].id == treeId) {
+          trees[i - 1].focus();
+          return true;
+        }
+      }
+      return false;
     },
     // Make a given node the active descendant of a given tree.
     setActiveDesc: function(node, tree, keepFocus) {
@@ -62,44 +120,22 @@ blocklyApp.TreeService = ng.core
       return document.getElementById(activeDescendantId);
     },
     onWorkspaceToolbarKeypress: function(e, treeId) {
-      blocklyApp.debug && console.log(e.keyCode + 'inside TreeService onWorkspaceToolbarKeypress');
+      blocklyApp.debug && console.log(
+          e.keyCode + 'inside TreeService onWorkspaceToolbarKeypress');
       switch (e.keyCode) {
         case 9:
           // 16,9: shift, tab
           if (e.shiftKey) {
             blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing mode.
-            this.goToPreviousTree(treeId);
+            this.focusOnPreviousTree_(treeId);
           } else {
             // If previous key isn't shift, we're tabbing.
-            this.goToNextTree(treeId);
+            this.focusOnNextTree_(treeId);
           }
           e.preventDefault();
           e.stopPropagation();
           break;
-      }
-    },
-    goToNextTree: function(treeId, e) {
-      for (var i = 0; i < this.trees.length; i++) {
-        if (this.trees[i].id == treeId) {
-          if (i + 1 < this.trees.length) {
-            this.trees[i + 1].focus();
-          }
-          break;
-        }
-      }
-    },
-    goToPreviousTree: function(treeId, e) {
-      if (treeId == this.trees[0].id) {
-        return;
-      }
-      for (var i = (this.trees.length - 1); i >= 0; i--) {
-        if (this.trees[i].id == treeId) {
-          if (i - 1 < this.trees.length) {
-            this.trees[i - 1].focus();
-          }
-          break;
-        }
       }
     },
     onKeypress: function(e, tree) {
@@ -116,11 +152,11 @@ blocklyApp.TreeService = ng.core
           if (e.shiftKey) {
             blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing.
-            this.goToPreviousTree(treeId);
+            this.focusOnPreviousTree_(treeId);
           } else {
             // If previous key isn't shift, we're tabbing
             // we want to go to the run code button.
-            this.goToNextTree(treeId);
+            this.focusOnNextTree_(treeId);
           }
           // Setting the previous key variable in each case because
           // we only want to save the previous navigation keystroke,

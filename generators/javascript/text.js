@@ -175,7 +175,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
   } else {
     var subsequenceFunction = [
       'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-        '(list, where1, at1, where2, at2) {',
+        '(sequence, where1, at1, where2, at2) {',
       '  function getAt(where, at) {'];
     // Adjust index depending on if using zero or one based indexing.
     if (Blockly.JavaScript.ONE_BASED_INDEXING) {
@@ -183,25 +183,25 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
         '    if (where == \'FROM_START\') {',
         '      at--;',
         '    } else if (where == \'FROM_END\') {',
-        '      at = list.length - at;']);
+        '      at = sequence.length - at;']);
     } else {
       subsequenceFunction = subsequenceFunction.concat([
         '    if (where == \'FROM_END\') {',
-        '      at = list.length - at + 1;']);
+        '      at = sequence.length - at + 1;']);
     }
     subsequenceFunction = subsequenceFunction.concat([
       '    } else if (where == \'FIRST\') {',
       '      at = 0;',
       '    } else if (where == \'LAST\') {',
-      '      at = list.length - 1;',
+      '      at = sequence.length - 1;',
       '    } else {',
-      '      throw \'Unhandled option (lists_getSublist).\';',
+      '      throw \'Unhandled option (getSubsequence).\';',
       '    }',
       '    return at;',
       '  }',
       '  at1 = getAt(where1, at1);',
       '  at2 = getAt(where2, at2) + 1;',
-      '  return list.slice(at1, at2);',
+      '  return sequence.slice(at1, at2);',
       '}']);
     var functionName = Blockly.JavaScript.provideFunction_(
         'getSubsequence',

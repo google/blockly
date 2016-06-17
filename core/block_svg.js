@@ -1037,7 +1037,7 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   this.workspace.getParentSvg().appendChild(clone);
   clone.bBox_ = clone.getBBox();
   // Start the animation.
-  Blockly.BlockSvg.disposeUiStep_(clone, this.RTL, new Date(),
+  Blockly.BlockSvg.disposeUiStep_(clone, this.RTL, new Date,
       this.workspace.scale);
 };
 
@@ -1052,7 +1052,7 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
  * @private
  */
 Blockly.BlockSvg.disposeUiStep_ = function(clone, rtl, start, workspaceScale) {
-  var ms = (new Date()) - start;
+  var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
     goog.dom.removeNode(clone);
@@ -1094,7 +1094,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
        'stroke': '#888', 'stroke-width': 10},
       this.workspace.getParentSvg());
   // Start the animation.
-  Blockly.BlockSvg.connectionUiStep_(ripple, new Date(), this.workspace.scale);
+  Blockly.BlockSvg.connectionUiStep_(ripple, new Date, this.workspace.scale);
 };
 
 /**
@@ -1105,7 +1105,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
  * @private
  */
 Blockly.BlockSvg.connectionUiStep_ = function(ripple, start, workspaceScale) {
-  var ms = (new Date()) - start;
+  var ms = new Date - start;
   var percent = ms / 150;
   if (percent > 1) {
     goog.dom.removeNode(ripple);
@@ -1136,7 +1136,7 @@ Blockly.BlockSvg.prototype.disconnectUiEffect = function() {
     magnitude *= -1;
   }
   // Start the animation.
-  Blockly.BlockSvg.disconnectUiStep_(this.svgGroup_, magnitude, new Date());
+  Blockly.BlockSvg.disconnectUiStep_(this.svgGroup_, magnitude, new Date);
 };
 
 /**
@@ -1150,7 +1150,7 @@ Blockly.BlockSvg.disconnectUiStep_ = function(group, magnitude, start) {
   var DURATION = 200;  // Milliseconds.
   var WIGGLES = 3;  // Half oscillations.
 
-  var ms = (new Date()) - start;
+  var ms = new Date - start;
   var percent = ms / DURATION;
 
   if (percent > 1) {

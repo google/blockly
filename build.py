@@ -113,7 +113,7 @@ window.BLOCKLY_BOOT = function() {
     // Execute after Closure has loaded.
     if (!window.goog) {
       alert('Error: Closure not found.  Read this:\\n' +
-            'developers.google.com/blockly/hacking/closure');
+            'developers.google.com/blockly/guides/modify/web/closure');
     }
     dir = window.BLOCKLY_DIR.match(/[^\\/]+$/)[0];
   }
@@ -452,7 +452,7 @@ if __name__ == "__main__":
            "Please rename this directory.")
     else:
       print("""Error: Closure not found.  Read this:
-https://developers.google.com/blockly/hacking/closure""")
+developers.google.com/blockly/guides/modify/web/closure""")
     sys.exit(1)
 
   search_paths = calcdeps.ExpandDirectories(

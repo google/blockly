@@ -159,8 +159,17 @@ Blockly.Lua['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Lua.valueToCode(block, 'AT',
       Blockly.Lua.ORDER_ADDITIVE) || '1';
-  var list = Blockly.Lua.valueToCode(block, 'VALUE',
-      Blockly.Lua.ORDER_HIGH) || '({})';
+  if (mode == 'GET') {
+    // Special case to avoid wrapping function calls in unneeded parenthesis.
+    // func()[0] is prefered over (func())[0]
+    var valueBlock = this.getInputTargetBlock('VALUE');
+    var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
+        Blockly.Lua.ORDER_NONE : Blockly.Lua.ORDER_HIGH;
+  } else {
+    // List will be an argument in a function call.
+    var order = Blockly.Lua.ORDER_NONE;
+  }
+  var list = Blockly.Lua.valueToCode(block, 'VALUE', order) || '({})';
   var getIndex_ = Blockly.Lua.lists.getIndex_;
   var gensym_ = Blockly.Lua.lists.gensym_;
 
@@ -329,7 +338,7 @@ Blockly.Lua['lists_sort'] = function(block) {
 
   var functionName = Blockly.Lua.provideFunction_(
       'list_sort',
-      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + 
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
           '(list, typev, direction)',
        '  local t = {}',
        '  for n,v in pairs(list) do table.insert(t, v) end', // Shallow-copy.
@@ -351,9 +360,9 @@ Blockly.Lua['lists_sort'] = function(block) {
        '  return t',
        'end']);
 
-  var code = functionName + 
+  var code = functionName +
       '(' + listCode + ',"' + type + '", ' + direction + ')';
-  return [code, Blockly.Lua.ORDER_HIGH];  
+  return [code, Blockly.Lua.ORDER_HIGH];
 };
 
 Blockly.Lua['lists_split'] = function(block) {

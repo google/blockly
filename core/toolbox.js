@@ -390,6 +390,10 @@ Blockly.Toolbox.prototype.clearSelection = function() {
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
+  if (!this.HtmlDiv) {
+    return null;
+  }
+
   // BIG_NUM is offscreen padding so that blocks dragged beyond the toolbox
   // area are still deleted.  Must be smaller than Infinity, but larger than
   // the largest screen size.

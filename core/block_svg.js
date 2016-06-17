@@ -535,7 +535,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   Blockly.terminateDrag_();
   this.select();
   Blockly.hideChaff();
-  this.workspace.recordDeleteAreas();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);

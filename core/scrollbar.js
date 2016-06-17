@@ -606,7 +606,8 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg());
+  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg(),
+      this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
   var handleXY = Blockly.getSvgXY_(this.svgHandle_, this.workspace_);

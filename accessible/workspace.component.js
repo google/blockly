@@ -33,12 +33,14 @@ blocklyApp.WorkspaceComponent = ng.core
 
     <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
       <span *ngFor="#buttonConfig of toolbarButtonConfig">
-        <button (click)="buttonConfig.action()" class="blocklyTree">
+        <button (click)="buttonConfig.action()"
+                class="blocklyTree blocklyWorkspaceToolbarButton">
           {{buttonConfig.text}}
         </button>
       </span>
       <button id="clear-workspace" (click)="clearWorkspace()"
-              [disabled]="isWorkspaceEmpty()" class="blocklyTree">
+              [attr.aria-disabled]="isWorkspaceEmpty()"
+              class="blocklyTree blocklyWorkspaceToolbarButton">
         {{'CLEAR_WORKSPACE'|translate}}
       </button>
     </div>
@@ -71,7 +73,6 @@ blocklyApp.WorkspaceComponent = ng.core
     }],
     clearWorkspace: function() {
       this.workspace.clear();
-      this.treeService.focusOnToolbox();
     },
     onWorkspaceToolbarKeypress: function(e) {
       this.treeService.onWorkspaceToolbarKeypress(

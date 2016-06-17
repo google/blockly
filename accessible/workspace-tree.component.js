@@ -165,7 +165,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // descendant.
       if (this.tree &&
           (!this.tree.id ||
-           !this.treeService.isTopLevelWorkspaceTree(this.tree.id))) {
+           this.treeService.isTopLevelWorkspaceTree(this.tree.id))) {
         this.tree.id = this.utilsService.generateUniqueId();
         this.treeService.setActiveDesc(
             document.getElementById(this.idMap['parentList']),

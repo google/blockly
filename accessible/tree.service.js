@@ -37,25 +37,20 @@ blocklyApp.TreeService = ng.core
     getToolboxTreeNode_: function() {
       return document.getElementById('blockly-toolbox-tree');
     },
+    getWorkspaceToolbarButtonNodes_: function() {
+      return Array.from(document.querySelectorAll(
+          'button.blocklyWorkspaceToolbarButton'));
+    },
+    // Returns a list of all top-level workspace tree nodes on the page.
     getWorkspaceTreeNodes_: function() {
-      // Returns a list of all the top-level workspace tree nodes on the page.
       return Array.from(document.querySelectorAll('ol.blocklyWorkspaceTree'));
     },
+    // Returns a list of all top-level tree nodes on the page.
     getAllTreeNodes_: function() {
-      // Returns a list of all top-level tree nodes on the page.
-      var trees = [];
-
-      trees.push(document.getElementById('blockly-toolbox-tree'));
-      // TODO(sll): Extend this to handle injected toolbar buttons.
-      if (blocklyApp.workspace.topBlocks_.length > 0) {
-        trees.push(document.getElementById('clear-workspace'));
-      }
-
-      trees = trees.concat(this.getWorkspaceTreeNodes_());
-      return trees;
-    },
-    focusOnToolbox: function() {
-      this.getToolboxTreeNode_().focus();
+      var treeNodes = [this.getToolboxTreeNode_()];
+      treeNodes = treeNodes.concat(this.getWorkspaceToolbarButtonNodes_());
+      treeNodes = treeNodes.concat(this.getWorkspaceTreeNodes_());
+      return treeNodes;
     },
     isTopLevelWorkspaceTree: function(treeId) {
       return this.getWorkspaceTreeNodes_().some(function(tree) {
@@ -66,20 +61,20 @@ blocklyApp.TreeService = ng.core
       // This returns the node to focus on after the deletion happens.
       // We shift focus to the next tree (if it exists), otherwise we shift
       // focus to the previous tree.
-      var workspaceTrees = this.getWorkspaceTreeNodes_();
-      for (var i = 0; i < workspaceTrees.length; i++) {
-        if (workspaceTrees[i].id == deletedTreeId) {
-          if (i + 1 < workspaceTrees.length) {
-            return workspaceTrees[i + 1];
+      var trees = this.getAllTreeNodes_();
+      for (var i = 0; i < trees.length; i++) {
+        if (trees[i].id == deletedTreeId) {
+          if (i + 1 < trees.length) {
+            return trees[i + 1];
           } else if (i > 0) {
-            return workspaceTrees[i - 1];
+            return trees[i - 1];
           }
         }
       }
 
       return this.getToolboxTreeNode_();
     },
-    goToNextTree: function(treeId) {
+    focusOnNextTree_: function(treeId) {
       var trees = this.getAllTreeNodes_();
       for (var i = 0; i < trees.length - 1; i++) {
         if (trees[i].id == treeId) {
@@ -89,7 +84,7 @@ blocklyApp.TreeService = ng.core
       }
       return false;
     },
-    goToPreviousTree: function(treeId) {
+    focusOnPreviousTree_: function(treeId) {
       var trees = this.getAllTreeNodes_();
       for (var i = trees.length - 1; i > 0; i--) {
         if (trees[i].id == treeId) {
@@ -133,10 +128,10 @@ blocklyApp.TreeService = ng.core
           if (e.shiftKey) {
             blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing mode.
-            this.goToPreviousTree(treeId);
+            this.focusOnPreviousTree_(treeId);
           } else {
             // If previous key isn't shift, we're tabbing.
-            this.goToNextTree(treeId);
+            this.focusOnNextTree_(treeId);
           }
           e.preventDefault();
           e.stopPropagation();
@@ -157,11 +152,11 @@ blocklyApp.TreeService = ng.core
           if (e.shiftKey) {
             blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing.
-            this.goToPreviousTree(treeId);
+            this.focusOnPreviousTree_(treeId);
           } else {
             // If previous key isn't shift, we're tabbing
             // we want to go to the run code button.
-            this.goToNextTree(treeId);
+            this.focusOnNextTree_(treeId);
           }
           // Setting the previous key variable in each case because
           // we only want to save the previous navigation keystroke,

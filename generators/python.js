@@ -208,3 +208,49 @@ Blockly.Python.scrub_ = function(block, code) {
   var nextCode = Blockly.Python.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
+
+/**
+ * Gets a property, adjusts the value (taking into account indexing), and casts
+ * to an integer.
+ * @param {?} block the block
+ * @param {string} atId the property ID of the element to get
+ * @param {number=} opt_delta value to add
+ * @param {boolean=} opt_negate whether to negate the value
+ * @return {string|number}
+ */
+Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
+  var delta = opt_delta || 0;
+  if (Blockly.Python.ONE_BASED_INDEXING) {
+    delta--;
+  }
+  var defaultAtIndex = (Blockly.Python.ONE_BASED_INDEXING) ? '1' : '0';
+  if (delta) {
+    var at = Blockly.Python.valueToCode(block, atId,
+            Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
+  } else {
+    var at = Blockly.Python.valueToCode(block, atId,
+            Blockly.Python.ORDER_NONE) || defaultAtIndex;
+  }
+
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseInt(at, 10) + delta;
+    if (opt_negate) {
+      at = -at;
+    }
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = 'int(' + at + ' + ' + delta + ')';
+    } else if (delta < 0) {
+      at = 'int(' + at + ' - ' + -delta + ')';
+    } else {
+      at = 'int(' + at + ')';
+    }
+    if (opt_negate) {
+      at = '-' + at;
+    }
+  }
+  return at;
+};
+

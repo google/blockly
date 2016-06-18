@@ -48,9 +48,10 @@ blocklyApp.WorkspaceComponent = ng.core
     <div *ngIf="workspace">
       <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
           tabIndex="0" role="group" class="blocklyTree blocklyWorkspaceTree"
+          [attr.aria-activedescendant]="getActiveDescId(tree.id)"
           [attr.aria-labelledby]="workspaceTitle.id"
           (keydown)="onKeypress($event, tree)">
-        <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree">
+        <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree" [isTopLevel]="true">
         </blockly-workspace-tree>
       </ol>
     </div>
@@ -73,6 +74,9 @@ blocklyApp.WorkspaceComponent = ng.core
     }],
     clearWorkspace: function() {
       this.workspace.clear();
+    },
+    getActiveDescId: function(tree) {
+      return this.treeService.getActiveDescId(tree.id);
     },
     onWorkspaceToolbarKeypress: function(e) {
       this.treeService.onWorkspaceToolbarKeypress(

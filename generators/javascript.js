@@ -227,3 +227,57 @@ Blockly.JavaScript.scrub_ = function(block, code) {
   var nextCode = Blockly.JavaScript.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
+
+/**
+ * Gets a property and adjusts the value (taking into account indexing).
+ * @param {?} block the block
+ * @param {string} atId the property ID of the element to get
+ * @param {number=} opt_delta value to add
+ * @param {boolean=} opt_negate whether to negate the value
+ * @param {number=} opt_order highest order acting on this value
+ * @return {string|number}
+ */
+Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
+    opt_order) {
+  var delta = opt_delta || 0;
+  var order = opt_order || Blockly.JavaScript.ORDER_NONE;
+  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+    delta--;
+  }
+  var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
+  if (delta > 0) {
+    var at = Blockly.JavaScript.valueToCode(block, atId,
+            Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;
+  } else if (delta < 0) {
+    var at = Blockly.JavaScript.valueToCode(block, atId,
+            Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
+  } else {
+    var at = Blockly.JavaScript.valueToCode(block, atId,
+            order) || defaultAtIndex;
+  }
+
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseFloat(at) + delta;
+    if (opt_negate) {
+      at = -at;
+    }
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = at + ' + ' + delta;
+      var innerOrder = Blockly.JavaScript.ORDER_ADDITION;
+    } else if (delta < 0) {
+      at = at + ' - ' + -delta;
+      var innerOrder = Blockly.JavaScript.ORDER_SUBTRACTION;
+    }
+    if (opt_negate) {
+      at = '-(' + at + ')';
+      var innerOrder = Blockly.JavaScript.ORDER_UNARY_NEGATION;
+    }
+    if (innerOrder && order >= innerOrder) {
+      at = '(' + at + ')';
+    }
+  }
+  return at;
+};

@@ -62,7 +62,7 @@ Blockly.Python['text_join'] = function(block) {
         code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
                 Blockly.Python.ORDER_NONE) || '\'\'';
       }
-      var tempVar = Blockly.Python.variableDB_.getDistinctName('temp_value',
+      var tempVar = Blockly.Python.variableDB_.getDistinctName('x',
           Blockly.Variables.NAME_TYPE);
       code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
           code.join(', ') + ']])';

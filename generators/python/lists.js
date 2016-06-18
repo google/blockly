@@ -310,20 +310,20 @@ Blockly.Python['lists_sort'] = function(block) {
   var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
   var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
   ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ +
-      '(listv, type, reversev):',
+      '(list, type, reverse):',
     '  def try_float(s):',
     '    try:',
     '      return float(s)',
     '    except:',
     '      return 0',
-    '  keyFuncts = {',
+    '  key_funcs = {',
     '    "NUMERIC": try_float,',
     '    "TEXT": str,',
     '    "IGNORE_CASE": lambda s: str(s).lower()',
     '  }',
-    '  keyv = keyFuncts[type]',
-    '  tmp_list = list(listv)', // Clone the list.
-    '  return sorted(tmp_list, key=keyv, reverse=reversev)'
+    '  key_func = key_funcs[type]',
+    '  list_cpy = list(list)', // Clone the list.
+    '  return sorted(list_cpy, key=key_func, reverse=reverse)'
   ]);
 
   var code = sortFunctionName +

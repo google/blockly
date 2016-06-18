@@ -289,7 +289,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
         at1 = list + '.length - ' + at1;
         break;
       case 'FIRST':
-        var at1 =  '0';
+        var at1 = '0';
         break;
       default:
         throw 'Unhandled option (lists_getSublist).';
@@ -309,7 +309,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
       default:
         throw 'Unhandled option (lists_getSublist).';
     }
-    code = list + '.slice(' +at1 + ', ' + at2 + ')';
+    code = list + '.slice(' + at1 + ', ' + at2 + ')';
   } else {
     var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
     var at1 = Blockly.JavaScript.valueToCode(block, 'AT1',

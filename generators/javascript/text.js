@@ -97,9 +97,9 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
   var code = argument1 + '.' + operator + '(' + argument0 + ')';
   // Adjust index if using one-based indices.
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
-    code += ' + 1';
+    return [code + ' + 1', Blockly.JavaScript.ORDER_ADDITIVE];
   }
-  return [code, Blockly.JavaScript.ORDER_ADDITION];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['text_charAt'] = function(block) {
@@ -163,7 +163,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
         at1 = text + '.length - ' + at1;
         break;
       case 'FIRST':
-        var at1 =  '0';
+        var at1 = '0';
         break;
       default:
         throw 'Unhandled option (text_getSubstring).';
@@ -183,7 +183,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
       default:
         throw 'Unhandled option (text_getSubstring).';
     }
-    code = text + '.slice(' +at1 + ', ' + at2 + ')';
+    code = text + '.slice(' + at1 + ', ' + at2 + ')';
   } else {
     var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
     var at1 = Blockly.JavaScript.valueToCode(block, 'AT1',

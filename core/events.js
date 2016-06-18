@@ -550,6 +550,10 @@ Blockly.Events.Change.prototype.run = function(forward) {
     case 'field':
       var field = block.getField(this.name);
       if (field) {
+        // Run the validator for any side-effects it may have.
+        // The validator's opinion on validity is ignored.
+        var validator = field.getValidator();
+        validator && validator.call(field, value);
         field.setValue(value);
       } else {
         console.warn("Can't set non-existant field: " + this.name);

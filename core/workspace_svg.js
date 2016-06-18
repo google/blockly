@@ -211,6 +211,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.addFlyout_();
   }
   this.updateGridPattern_();
+  this.recordDeleteAreas();
   return this.svgGroup_;
 };
 
@@ -355,6 +356,8 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.scrollbar) {
     this.scrollbar.resize();
   }
+
+  this.recordDeleteAreas();
 };
 
 /**

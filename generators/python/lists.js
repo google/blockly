@@ -333,23 +333,21 @@ Blockly.Python['lists_sort'] = function(block) {
 
 Blockly.Python['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
-  switch (block.getFieldValue('MODE')) {
-    case 'SPLIT':
-      var value_input = Blockly.Python.valueToCode(block, 'INPUT',
-              Blockly.Python.ORDER_MEMBER) || '\'\'';
-      var value_delim = Blockly.Python.valueToCode(block, 'DELIM',
-          Blockly.Python.ORDER_NONE);
-      var code = value_input + '.split(' + value_delim + ')';
-      break;
-    case 'JOIN':
-      var value_input = Blockly.Python.valueToCode(block, 'INPUT',
-              Blockly.Python.ORDER_NONE) || '[]';
-      var value_delim = Blockly.Python.valueToCode(block, 'DELIM',
-              Blockly.Python.ORDER_MEMBER) || '\'\'';
-      var code = value_delim + '.join(' + value_input + ')';
-      break;
-    default:
-        throw 'Unknown mode: ' + mode;
+  var mode = block.getFieldValue('MODE');
+  if(mode == 'INPUT') {
+    var value_input = Blockly.Python.valueToCode(block, 'INPUT',
+            Blockly.Python.ORDER_MEMBER) || '\'\'';
+    var value_delim = Blockly.Python.valueToCode(block, 'DELIM',
+        Blockly.Python.ORDER_NONE);
+    var code = value_input + '.split(' + value_delim + ')';
+  } else if (mode == 'JOIN') {
+    var value_input = Blockly.Python.valueToCode(block, 'INPUT',
+            Blockly.Python.ORDER_NONE) || '[]';
+    var value_delim = Blockly.Python.valueToCode(block, 'DELIM',
+            Blockly.Python.ORDER_MEMBER) || '\'\'';
+    var code = value_delim + '.join(' + value_input + ')';
+  } else {
+    throw 'Unknown mode: ' + mode;
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };

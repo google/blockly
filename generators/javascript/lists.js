@@ -389,20 +389,18 @@ Blockly.JavaScript['lists_split'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER);
   var value_delim = Blockly.JavaScript.valueToCode(block, 'DELIM',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  switch (block.getFieldValue('MODE')) {
-    case 'SPLIT':
-      if (!value_input) {
-        value_input = '\'\'';
-      }
-      var functionName = 'split';
-      break;
-    case 'JOIN':
-      if (!value_input) {
-        value_input = '[]';
-      }
-      var functionName = 'join';
-      break;
-    default:
+  var mode = block.getFieldValue('MODE');
+  if(mode == 'SPLIT') {
+    if (!value_input) {
+      value_input = '\'\'';
+    }
+    var functionName = 'split';
+  } else if (mode == 'JOIN') {
+    if (!value_input) {
+      value_input = '[]';
+    }
+    var functionName = 'join';
+  } else {
     throw 'Unknown mode: ' + mode;
   }
   var code = value_input + '.' + functionName + '(' + value_delim + ')';

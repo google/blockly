@@ -208,7 +208,6 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
     list = listVar;
     return code;
   }
-
   switch (where) {
     case ('FIRST'):
       if (mode == 'SET') {
@@ -390,7 +389,7 @@ Blockly.JavaScript['lists_split'] = function(block) {
   var value_delim = Blockly.JavaScript.valueToCode(block, 'DELIM',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var mode = block.getFieldValue('MODE');
-  if(mode == 'SPLIT') {
+  if (mode == 'SPLIT') {
     if (!value_input) {
       value_input = '\'\'';
     }

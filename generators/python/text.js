@@ -145,9 +145,11 @@ Blockly.Python['text_charAt'] = function(block) {
 
 Blockly.Python['text_getSubstring'] = function(block) {
   // Get substring.
+  var where1 = block.getFieldValue('WHERE1');
+  var where2 = block.getFieldValue('WHERE2');
   var text = Blockly.Python.valueToCode(block, 'STRING',
           Blockly.Python.ORDER_MEMBER) || '\'\'';
-  switch (block.getFieldValue('WHERE1')) {
+  switch (where1) {
     case 'FROM_START':
       var at1 = Blockly.Python.getAdjustedInt(block, 'AT1');
       if (at1 == '0') {
@@ -163,7 +165,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
     default:
       throw 'Unhandled option (text_getSubstring)';
   }
-  switch (block.getFieldValue('WHERE2')) {
+  switch (where2) {
     case 'FROM_START':
       var at2 = Blockly.Python.getAdjustedInt(block, 'AT2', 1);
       break;

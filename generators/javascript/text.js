@@ -97,7 +97,7 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
   var code = argument1 + '.' + operator + '(' + argument0 + ')';
   // Adjust index if using one-based indices.
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
-    return [code + ' + 1', Blockly.JavaScript.ORDER_ADDITIVE];
+    return [code + ' + 1', Blockly.JavaScript.ORDER_ADDITION];
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
@@ -108,7 +108,6 @@ Blockly.JavaScript['text_charAt'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-
   switch (where) {
     case 'FIRST':
       var code = text + '.charAt(0)';
@@ -222,8 +221,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
       '  return sequence.slice(at1, at2);',
       '}']);
     var functionName = Blockly.JavaScript.provideFunction_(
-        'getSubsequence',
-        subsequenceFunction);
+        'getSubsequence', subsequenceFunction);
     var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }

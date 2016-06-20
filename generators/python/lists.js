@@ -110,6 +110,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   // Special case to avoid wrapping function calls in unneeded parenthesis.
   // func()[0] is prefered over (func())[0]
   var valueBlock = this.getInputTargetBlock('VALUE');
@@ -117,7 +118,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
       Blockly.Python.ORDER_NONE : Blockly.Python.ORDER_MEMBER;
   var list = Blockly.Python.valueToCode(block, 'VALUE', order) || '[]';
 
-  switch (block.getFieldValue('WHERE') || 'FROM_START') {
+  switch (where) {
     case 'FIRST':
       if (mode == 'GET') {
         var code = list + '[0]';
@@ -193,6 +194,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
   var list = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_MEMBER) || '[]';
   var mode = block.getFieldValue('MODE') || 'GET';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var value = Blockly.Python.valueToCode(block, 'TO',
       Blockly.Python.ORDER_NONE) || 'None';
   // Cache non-trivial values to variables to prevent repeated look-ups.
@@ -208,7 +210,7 @@ Blockly.Python['lists_setIndex'] = function(block) {
     return code;
   }
 
-  switch (block.getFieldValue('WHERE') || 'FROM_START') {
+  switch (where) {
     case 'FIRST':
       if (mode == 'SET') {
         return list + '[0] = ' + value + '\n';
@@ -261,7 +263,9 @@ Blockly.Python['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.Python.valueToCode(block, 'LIST',
       Blockly.Python.ORDER_MEMBER) || '[]';
-  switch (block.getFieldValue('WHERE1')) {
+  var where1 = block.getFieldValue('WHERE1');
+  var where2 = block.getFieldValue('WHERE2');
+  switch (where1) {
     case 'FROM_START':
       var at1 = Blockly.Python.getAdjustedInt(block, 'AT1');
       if (at1 == '0') {
@@ -277,7 +281,7 @@ Blockly.Python['lists_getSublist'] = function(block) {
     default:
       throw 'Unhandled option (lists_getSublist)';
   }
-  switch (block.getFieldValue('WHERE2')) {
+  switch (where2) {
     case 'FROM_START':
       var at2 = Blockly.Python.getAdjustedInt(block, 'AT2', 1);
       break;
@@ -334,7 +338,7 @@ Blockly.Python['lists_sort'] = function(block) {
 Blockly.Python['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   var mode = block.getFieldValue('MODE');
-  if(mode == 'INPUT') {
+  if (mode == 'SPLIT') {
     var value_input = Blockly.Python.valueToCode(block, 'INPUT',
             Blockly.Python.ORDER_MEMBER) || '\'\'';
     var value_delim = Blockly.Python.valueToCode(block, 'DELIM',

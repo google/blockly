@@ -97,7 +97,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
       Blockly.Dart.ORDER_NONE : Blockly.Dart.ORDER_UNARY_POSTFIX;
   var list = Blockly.Dart.valueToCode(block, 'VALUE', order) || '[]';
 
-  switch(block.getFieldValue('WHERE') || 'FROM_START') {
+  switch (block.getFieldValue('WHERE') || 'FROM_START') {
     case 'FIRST':
       if (mode == 'GET') {
         var code = list + '.first';
@@ -207,7 +207,7 @@ Blockly.Dart['lists_setIndex'] = function(block) {
     list = listVar;
     return code;
   }
-  switch(block.getFieldValue('WHERE') || 'FROM_START') {
+  switch (block.getFieldValue('WHERE') || 'FROM_START') {
     case 'FIRST':
       if (mode == 'SET') {
         return list + '[0] = ' + value + ';\n';
@@ -237,8 +237,8 @@ Blockly.Dart['lists_setIndex'] = function(block) {
           Blockly.Dart.ORDER_ADDITIVE);
       var code = cacheList();
       if (mode == 'SET') {
-        code += list + '[' + list + '.length - ' + at + '] = ' + value
-            + ';\n';
+        code += list + '[' + list + '.length - ' + at + '] = ' + value +
+            ';\n';
         return code;
       } else if (mode == 'INSERT') {
         code += list + '.insert(' + list + '.length - ' + at + ', ' +
@@ -272,10 +272,6 @@ Blockly.Dart['lists_getSublist'] = function(block) {
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
-  var at1 = Blockly.Dart.valueToCode(block, 'AT1',
-      Blockly.Dart.ORDER_NONE) || '1';
-  var at2 = Blockly.Dart.valueToCode(block, 'AT2',
-      Blockly.Dart.ORDER_NONE) || '1';
   if (list.match(/^\w+$/) || (where1 != 'FROM_END' && where2 == 'FROM_START')) {
     // If the list is a simple value or doesn't require a call for length, don't
     // generate a helper function.
@@ -314,7 +310,12 @@ Blockly.Dart['lists_getSublist'] = function(block) {
       var code = list + '.sublist(' + at1 + ', ' + at2 + ')';
     }
   } else {
-    var sublistFunction = [ 'List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+    var defaultAtIndex = (Blockly.Dart.ONE_BASED_INDEXING) ? '1' : '0';
+    var at1 = Blockly.Dart.valueToCode(block, 'AT1',
+            Blockly.Dart.ORDER_NONE) || defaultAtIndex;
+    var at2 = Blockly.Dart.valueToCode(block, 'AT2',
+            Blockly.Dart.ORDER_NONE) || defaultAtIndex;
+    var sublistFunction = ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
     '(list, where1, at1, where2, at2) {',
       '  int getAt(where, at) {'];
 

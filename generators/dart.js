@@ -54,7 +54,7 @@ Blockly.Dart.addReservedWords(
  * https://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
  */
 Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
-Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] .
+Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
 Blockly.Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
 Blockly.Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
 Blockly.Dart.ORDER_ADDITIVE = 4;       // + -
@@ -66,10 +66,17 @@ Blockly.Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
 Blockly.Dart.ORDER_EQUALITY = 10;      // == !=
 Blockly.Dart.ORDER_LOGICAL_AND = 11;   // &&
 Blockly.Dart.ORDER_LOGICAL_OR = 12;    // ||
-Blockly.Dart.ORDER_CONDITIONAL = 13;   // expr ? expr : expr
-Blockly.Dart.ORDER_CASCADE = 14;       // ..
-Blockly.Dart.ORDER_ASSIGNMENT = 15;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+Blockly.Dart.ORDER_IF_NULL = 13;
+Blockly.Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
+Blockly.Dart.ORDER_CASCADE = 15;       // ..
+Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
+
+/**
+ * Allow for switching between one and zero based indexing, one based by
+ * default.
+ */
+Blockly.Dart.ONE_BASED_INDEXING = true;
 
 /**
  * Initialise the database of variable names.
@@ -197,4 +204,62 @@ Blockly.Dart.scrub_ = function(block, code) {
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   var nextCode = Blockly.Dart.blockToCode(nextBlock);
   return commentCode + code + nextCode;
+};
+
+/**
+ * Gets a property and adjusts the value (taking into account indexing).
+ * @param {Blockly.Block} block the block
+ * @param {string} atId the property ID of the element to get
+ * @param {number=} opt_delta value to add
+ * @param {boolean=} opt_negate whether to negate the value
+ * @param {number=} opt_order highest order acting on this value
+ * @return {string|number}
+ */
+Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
+    opt_order) {
+  var delta = opt_delta || 0;
+  var order = opt_order || Blockly.Dart.ORDER_NONE;
+  if (Blockly.Dart.ONE_BASED_INDEXING) {
+    delta--;
+  }
+  var defaultAtIndex = (Blockly.Dart.ONE_BASED_INDEXING) ? '1' : '0';
+  if (delta) {
+    var at = Blockly.Dart.valueToCode(block, atId,
+            Blockly.Dart.ORDER_ADDITIVE) || defaultAtIndex;
+  } else if (opt_negate) {
+    var at = Blockly.Dart.valueToCode(block, atId,
+            Blockly.Dart.ORDER_UNARY_PREFIX) || defaultAtIndex;
+  } else {
+    var at = Blockly.Dart.valueToCode(block, atId, order)
+        || defaultAtIndex;
+  }
+
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseInt(at) + delta;
+    if (opt_negate) {
+      at = -at;
+    }
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = at + ' + ' + delta;
+      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
+    } else if (delta < 0) {
+      at = at + ' - ' + -delta;
+      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
+    }
+    if (opt_negate) {
+      if(delta) {
+        at = '-(' + at + ')';
+      } else {
+        at = '-' + at;
+      }
+      var innerOrder = Blockly.Dart.ORDER_UNARY_PREFIX;
+    }
+    if (innerOrder && order >= innerOrder) {
+      at = '(' + at + ')';
+    }
+  }
+  return at;
 };

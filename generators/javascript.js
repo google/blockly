@@ -230,7 +230,7 @@ Blockly.JavaScript.scrub_ = function(block, code) {
 
 /**
  * Gets a property and adjusts the value (taking into account indexing).
- * @param {?} block the block
+ * @param {Blockly.Block} block the block
  * @param {string} atId the property ID of the element to get
  * @param {number=} opt_delta value to add
  * @param {boolean=} opt_negate whether to negate the value
@@ -251,9 +251,12 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
   } else if (delta < 0) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
             Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
-  } else {
+  } else if (opt_negate) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
-            order) || defaultAtIndex;
+            Blockly.JavaScript.ORDER_UNARY_NEGATION) || defaultAtIndex;
+  } else {
+    var at = Blockly.JavaScript.valueToCode(block, atId, order)
+        || defaultAtIndex;
   }
 
   if (Blockly.isNumber(at)) {
@@ -272,7 +275,11 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
       var innerOrder = Blockly.JavaScript.ORDER_SUBTRACTION;
     }
     if (opt_negate) {
-      at = '-(' + at + ')';
+      if(delta) {
+        at = '-(' + at + ')';
+      } else {
+        at = '-' + at;
+      }
       var innerOrder = Blockly.JavaScript.ORDER_UNARY_NEGATION;
     }
     if (innerOrder && order >= innerOrder) {

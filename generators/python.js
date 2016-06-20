@@ -212,7 +212,7 @@ Blockly.Python.scrub_ = function(block, code) {
 /**
  * Gets a property, adjusts the value (taking into account indexing), and casts
  * to an integer.
- * @param {?} block the block
+ * @param {Blockly.Block} block the block
  * @param {string} atId the property ID of the element to get
  * @param {number=} opt_delta value to add
  * @param {boolean=} opt_negate whether to negate the value

@@ -89,9 +89,9 @@ Blockly.JavaScript['lists_indexOf'] = function(block) {
       Blockly.JavaScript.ORDER_MEMBER) || '[]';
   var code = argument1 + '.' + operator + '(' + argument0 + ')';
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
-    code += ' + 1';
+    return [code + ' + 1', Blockly.JavaScript.ORDER_ADDITION];
   }
-  return [code, Blockly.JavaScript.ORDER_ADDITION];
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['lists_getIndex'] = function(block) {
@@ -275,8 +275,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = list + '.concat()';
   } else if (list.match(/^\w+$/) ||
-      (where1 != 'FROM_END' && where1 != 'LAST' &&
-      where2 != 'FROM_END' && where2 != 'LAST')) {
+      (where1 != 'FROM_END' && where2 == 'FROM_START')) {
     // If the list is a simple value or doesn't require a call for length, don't
     // generate a helper function.
     switch (where1) {

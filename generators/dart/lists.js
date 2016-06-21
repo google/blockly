@@ -94,7 +94,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   var list = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
 
-  switch (block.getFieldValue('WHERE') || 'FROM_START') {
+  switch (where) {
     case 'FIRST':
       if (mode == 'GET') {
         var code = list + '.first';

@@ -337,6 +337,7 @@ Graph.resize = function() {
 Graph.init = function() {
   Graph.workspace = Blockly.inject('blocklyDiv',
       {collapse: false,
+       disable: false,
        media: '../../media/',
        toolbox: document.getElementById('toolbox')});
   Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
@@ -345,6 +346,7 @@ Graph.init = function() {
 
   // When Blockly changes, update the graph.
   Graph.workspace.addChangeListener(Graph.drawVisualization);
+  Graph.workspace.addChangeListener(Blockly.Events.disableOrphans);
   Graph.resize();
 };
 

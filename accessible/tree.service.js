@@ -33,6 +33,8 @@ blocklyApp.TreeService = ng.core
       // navigates away from the element using the arrow keys, we want
       // to shift focus back to the tree as a whole.
       this.previousKey_ = null;
+      // Stores active descendant ids for each tree in the page.
+      this.activeDescendantIds_ = {};
     },
     getToolboxTreeNode_: function() {
       return document.getElementById('blockly-toolbox-tree');
@@ -94,39 +96,49 @@ blocklyApp.TreeService = ng.core
       }
       return false;
     },
-    // Make a given node the active descendant of a given tree.
-    setActiveDesc: function(node, tree, keepFocus) {
-      blocklyApp.debug && console.log('setting activeDesc for tree ' + tree.id);
-
-      var activeDesc = this.getActiveDesc(tree.id);
+    getActiveDescId: function(treeId) {
+      return this.activeDescendantIds_[treeId] || '';
+    },
+    unmarkActiveDesc_: function(activeDescId) {
+      var activeDesc = document.getElementById(activeDescId);
       if (activeDesc) {
         activeDesc.classList.remove('blocklyActiveDescendant');
         activeDesc.setAttribute('aria-selected', 'false');
       }
-
-      node.classList.add('blocklyActiveDescendant');
-      node.setAttribute('aria-selected', 'true');
-      tree.setAttribute('aria-activedescendant', node.id);
-
-      // Make sure keyboard focus is on the entire tree in the case where the
-      // focus was previously on a button or input element.
-      if (keepFocus) {
-        tree.focus();
-      }
     },
-    getActiveDesc: function(treeId) {
-      var activeDescendantId = document.getElementById(
-          treeId).getAttribute('aria-activedescendant');
-      return document.getElementById(activeDescendantId);
+    markActiveDesc_: function(activeDescId) {
+      var newActiveDesc = document.getElementById(activeDescId);
+      newActiveDesc.classList.add('blocklyActiveDescendant');
+      newActiveDesc.setAttribute('aria-selected', 'true');
+    },
+    // Runs the given function while preserving the focus and active descendant
+    // for the given tree.
+    runWhilePreservingFocus: function(func, treeId) {
+      var activeDescId = this.getActiveDescId(treeId);
+      this.unmarkActiveDesc_(activeDescId);
+      func();
+
+      // The timeout is needed in order to give the DOM time to stabilize
+      // before setting the new active descendant, especially in cases like
+      // pasteAbove().
+      var that = this;
+      setTimeout(function() {
+        that.markActiveDesc_(activeDescId);
+        that.activeDescendantIds_[treeId] = activeDescId;
+        document.getElementById(treeId).focus();
+      }, 0);
+    },
+    // Make a given node the active descendant of a given tree.
+    setActiveDesc: function(newActiveDesc, tree) {
+      this.unmarkActiveDesc_(this.getActiveDescId(tree.id));
+      this.markActiveDesc_(newActiveDesc.id);
+      this.activeDescendantIds_[tree.id] = newActiveDesc.id;
     },
     onWorkspaceToolbarKeypress: function(e, treeId) {
-      blocklyApp.debug && console.log(
-          e.keyCode + 'inside TreeService onWorkspaceToolbarKeypress');
       switch (e.keyCode) {
         case 9:
           // 16,9: shift, tab
           if (e.shiftKey) {
-            blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing mode.
             this.focusOnPreviousTree_(treeId);
           } else {
@@ -140,17 +152,15 @@ blocklyApp.TreeService = ng.core
     },
     onKeypress: function(e, tree) {
       var treeId = tree.id;
-      var node = this.getActiveDesc(treeId);
+      var node = document.getElementById(this.getActiveDescId(treeId));
       var keepFocus = this.previousKey_ == 13;
       if (!node) {
         blocklyApp.debug && console.log('KeyHandler: no active descendant');
       }
-      blocklyApp.debug && console.log(e.keyCode + ': inside TreeService');
       switch (e.keyCode) {
         case 9:
           // 16,9: shift, tab
           if (e.shiftKey) {
-            blocklyApp.debug && console.log('shifttabbing');
             // If the previous key is shift, we're shift-tabbing.
             this.focusOnPreviousTree_(treeId);
           } else {
@@ -167,7 +177,6 @@ blocklyApp.TreeService = ng.core
           break;
         case 37:
           // Left-facing arrow: go out a level, if possible. If not, do nothing.
-          blocklyApp.debug && console.log('in left arrow section');
           var nextNode = node.parentNode;
           if (node.tagName == 'BUTTON' || node.tagName == 'INPUT') {
             nextNode = nextNode.parentNode;
@@ -179,17 +188,16 @@ blocklyApp.TreeService = ng.core
           if (!nextNode || nextNode.className == 'treeview') {
             return;
           }
-          this.setActiveDesc(nextNode, tree, keepFocus);
+          this.setActiveDesc(nextNode, tree);
           this.previousKey_ = e.keyCode;
           e.preventDefault();
           e.stopPropagation();
           break;
         case 38:
           // Up-facing arrow: go up a level, if possible. If not, do nothing.
-          blocklyApp.debug && console.log('node passed in: ' + node.id);
           var prevSibling = this.getPreviousSibling(node);
           if (prevSibling && prevSibling.tagName != 'H1') {
-            this.setActiveDesc(prevSibling, tree, keepFocus);
+            this.setActiveDesc(prevSibling, tree);
           } else {
             blocklyApp.debug && console.log('no previous sibling');
           }
@@ -198,10 +206,9 @@ blocklyApp.TreeService = ng.core
           e.stopPropagation();
           break;
         case 39:
-          blocklyApp.debug && console.log('in right arrow section');
           var firstChild = this.getFirstChild(node);
           if (firstChild) {
-            this.setActiveDesc(firstChild, tree, keepFocus);
+            this.setActiveDesc(firstChild, tree);
           } else {
             blocklyApp.debug && console.log('no valid child');
           }
@@ -212,10 +219,9 @@ blocklyApp.TreeService = ng.core
         case 40:
           // Down-facing arrow: go down a level, if possible.
           // If not, do nothing.
-          blocklyApp.debug && console.log('preventing propogation');
           var nextSibling = this.getNextSibling(node);
           if (nextSibling) {
-            this.setActiveDesc(nextSibling, tree, keepFocus);
+            this.setActiveDesc(nextSibling, tree);
           } else {
             blocklyApp.debug && console.log('no next sibling');
           }
@@ -225,8 +231,7 @@ blocklyApp.TreeService = ng.core
           break;
         case 13:
           // If I've pressed enter, I want to interact with a child.
-          blocklyApp.debug && console.log('enter is pressed');
-          var activeDesc = this.getActiveDesc(treeId);
+          var activeDesc = node;
           if (activeDesc) {
             var children = activeDesc.children;
             var child = children[0];
@@ -304,15 +309,12 @@ blocklyApp.TreeService = ng.core
       } else {
         var parent = element.parentNode;
         while (parent) {
-          blocklyApp.debug && console.log('looping');
           if (parent.tagName == 'OL') {
             break;
           }
           if (parent.previousElementSibling) {
-            blocklyApp.debug && console.log('parent has a sibling!');
             var node = parent.previousElementSibling;
             if (node.tagName == 'LI') {
-              blocklyApp.debug && console.log('return the sibling of the parent!');
               return node;
             } else {
               // Find the last list element child of the sibling of the parent.
@@ -327,7 +329,6 @@ blocklyApp.TreeService = ng.core
     },
     getLastChild: function(element) {
       if (!element) {
-        blocklyApp.debug && console.log('no element');
         return element;
       } else {
         var childList = element.children;

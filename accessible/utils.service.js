@@ -29,9 +29,7 @@ var blocklyApp = {};
 
 blocklyApp.UtilsService = ng.core
   .Class({
-    constructor: function() {
-      blocklyApp.debug && console.log('Utils service constructed');
-    },
+    constructor: function() {},
     generateUniqueId: function() {
       return 'blockly-' + Blockly.genUid();
     },

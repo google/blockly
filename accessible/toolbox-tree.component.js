@@ -103,7 +103,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       return blocklyApp.ToolboxTreeComponent;
     })],
     inputs: [
-        'block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories'],
+        'block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories', 'isTopLevel'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
@@ -128,21 +128,10 @@ blocklyApp.ToolboxTreeComponent = ng.core
         elementsNeedingIds.push('listItem' + i, 'listItem' + i + 'Label')
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
-      if (this.index == 0 && this.noCategories) {
+      if (this.isTopLevel) {
         this.idMap['parentList'] = 'blockly-toolbox-tree-node0';
       } else {
         this.idMap['parentList'] = this.utilsService.generateUniqueId();
-      }
-    },
-    ngAfterViewInit: function() {
-      // If this is a top-level tree in the toolbox, set its active
-      // descendant after the ids have been computed.
-      if (this.index == 0 &&
-          this.tree.getAttribute('aria-activedescendant') ==
-              'blockly-toolbox-tree-node0') {
-        this.treeService.setActiveDesc(
-            document.getElementById(this.idMap['parentList']),
-            this.tree);
       }
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {

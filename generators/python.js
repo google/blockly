@@ -86,6 +86,16 @@ Blockly.Python.ORDER_NONE = 99;             // (...)
 Blockly.Python.ONE_BASED_INDEXING = true;
 
 /**
+ * List of outer-inner pairings that do NOT require parentheses.
+ * @type {!Array.<!Array.<number>>}
+ */
+Blockly.Python.ORDER_OVERRIDES = [
+  // (foo()).bar() -> foo().bar()
+  // (foo())[0] -> foo()[0]
+  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_MEMBER]
+];
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */

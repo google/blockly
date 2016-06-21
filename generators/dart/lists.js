@@ -90,12 +90,9 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   // Get element at index.
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
-  // Special case to avoid wrapping function calls in unneeded parenthesis.
-  // func()[0] is prefered over (func())[0]
-  var valueBlock = this.getInputTargetBlock('VALUE');
-  var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
-      Blockly.Dart.ORDER_NONE : Blockly.Dart.ORDER_UNARY_POSTFIX;
-  var list = Blockly.Dart.valueToCode(block, 'VALUE', order) || '[]';
+  var where = block.getFieldValue('WHERE') || 'FROM_START';
+  var list = Blockly.Dart.valueToCode(block, 'VALUE',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
 
   switch (block.getFieldValue('WHERE') || 'FROM_START') {
     case 'FIRST':

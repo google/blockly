@@ -111,12 +111,8 @@ Blockly.Python['lists_getIndex'] = function(block) {
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  // Special case to avoid wrapping function calls in unneeded parenthesis.
-  // func()[0] is prefered over (func())[0]
-  var valueBlock = this.getInputTargetBlock('VALUE');
-  var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
-      Blockly.Python.ORDER_NONE : Blockly.Python.ORDER_MEMBER;
-  var list = Blockly.Python.valueToCode(block, 'VALUE', order) || '[]';
+  var list = Blockly.Python.valueToCode(block, 'VALUE',
+      Blockly.Python.ORDER_MEMBER) || '[]';
 
   switch (where) {
     case 'FIRST':

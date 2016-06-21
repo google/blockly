@@ -1111,7 +1111,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
                 element['width'], element['height'], element['alt']);
             break;
           case 'field_number':
-            field = new Blockly.FieldNumber(element['text']);
+            field = new Blockly.FieldNumber(element['value']);
+            field.setPrecision(element['precision']);
+            field.setMin(element['min']);
+            field.setMax(element['max']);
             break;
           case 'field_date':
             if (Blockly.FieldDate) {

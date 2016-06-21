@@ -270,16 +270,16 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
   var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
   if (delta > 0) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
-            Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;
+        Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;
   } else if (delta < 0) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
-            Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
+        Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
   } else if (opt_negate) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
-            Blockly.JavaScript.ORDER_UNARY_NEGATION) || defaultAtIndex;
+        Blockly.JavaScript.ORDER_UNARY_NEGATION) || defaultAtIndex;
   } else {
-    var at = Blockly.JavaScript.valueToCode(block, atId, order)
-        || defaultAtIndex;
+    var at = Blockly.JavaScript.valueToCode(block, atId, order) ||
+        defaultAtIndex;
   }
 
   if (Blockly.isNumber(at)) {

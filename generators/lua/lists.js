@@ -160,11 +160,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
   var at = Blockly.Lua.valueToCode(block, 'AT',
       Blockly.Lua.ORDER_ADDITIVE) || '1';
   if (mode == 'GET') {
-    // Special case to avoid wrapping function calls in unneeded parenthesis.
-    // func()[0] is prefered over (func())[0]
-    var valueBlock = this.getInputTargetBlock('VALUE');
-    var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
-        Blockly.Lua.ORDER_NONE : Blockly.Lua.ORDER_HIGH;
+    var order = Blockly.Lua.ORDER_HIGH;
   } else {
     // List will be an argument in a function call.
     var order = Blockly.Lua.ORDER_NONE;

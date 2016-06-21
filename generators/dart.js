@@ -257,6 +257,8 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
       }
       var innerOrder = Blockly.Dart.ORDER_UNARY_PREFIX;
     }
+    innerOrder = Math.floor(innerOrder);
+    order = Math.floor(order);
     if (innerOrder && order >= innerOrder) {
       at = '(' + at + ')';
     }

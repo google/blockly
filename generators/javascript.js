@@ -305,6 +305,8 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
       }
       var innerOrder = Blockly.JavaScript.ORDER_UNARY_NEGATION;
     }
+    innerOrder = Math.floor(innerOrder);
+    order = Math.floor(order);
     if (innerOrder && order >= innerOrder) {
       at = '(' + at + ')';
     }

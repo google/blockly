@@ -103,6 +103,9 @@ Blockly.Variables.flyoutCategory = function(workspace) {
   variableList.unshift(Blockly.Msg.VARIABLES_DEFAULT_NAME);
 
   var xmlList = [];
+  var button = goog.dom.createDom('button');
+  button.setAttribute('text', 'Create variable');
+  xmlList.push(button);
   for (var i = 0; i < variableList.length; i++) {
     if (Blockly.Blocks['variables_set']) {
       // <block type="variables_set" gap="8">

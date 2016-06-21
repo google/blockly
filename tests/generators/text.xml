@@ -931,32 +931,56 @@
                                                                                 </value>
                                                                                 <next>
                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                    <field name="MESSAGE">substring #-end complex</field>
+                                                                                    <field name="MESSAGE">substring # complex order</field>
                                                                                     <value name="ACTUAL">
                                                                                       <block type="text_getSubstring">
                                                                                         <mutation at1="true" at2="true"></mutation>
-                                                                                        <field name="WHERE1">FROM_END</field>
-                                                                                        <field name="WHERE2">FROM_END</field>
+                                                                                        <field name="WHERE1">FROM_START</field>
+                                                                                        <field name="WHERE2">FROM_START</field>
                                                                                         <value name="STRING">
-                                                                                          <block type="procedures_callreturn">
-                                                                                            <mutation name="get numbers"></mutation>
+                                                                                          <block type="variables_get">
+                                                                                            <field name="VAR">text</field>
                                                                                           </block>
                                                                                         </value>
                                                                                         <value name="AT1">
-                                                                                          <block type="unittest_adjustindex">
-                                                                                            <value name="INDEX">
-                                                                                              <block type="math_number">
-                                                                                                <field name="NUM">2</field>
+                                                                                          <block type="logic_ternary">
+                                                                                            <value name="IF">
+                                                                                              <block type="logic_boolean">
+                                                                                                <field name="BOOL">TRUE</field>
                                                                                               </block>
+                                                                                            </value>
+                                                                                            <value name="THEN">
+                                                                                              <block type="unittest_adjustindex">
+                                                                                                <value name="INDEX">
+                                                                                                  <block type="math_number">
+                                                                                                    <field name="NUM">1</field>
+                                                                                                  </block>
+                                                                                                </value>
+                                                                                              </block>
+                                                                                            </value>
+                                                                                            <value name="ELSE">
+                                                                                              <block type="logic_null"></block>
                                                                                             </value>
                                                                                           </block>
                                                                                         </value>
                                                                                         <value name="AT2">
-                                                                                          <block type="unittest_adjustindex">
-                                                                                            <value name="INDEX">
-                                                                                              <block type="math_number">
-                                                                                                <field name="NUM">1</field>
+                                                                                          <block type="logic_ternary">
+                                                                                            <value name="IF">
+                                                                                              <block type="logic_boolean">
+                                                                                                <field name="BOOL">TRUE</field>
                                                                                               </block>
+                                                                                            </value>
+                                                                                            <value name="THEN">
+                                                                                              <block type="unittest_adjustindex">
+                                                                                                <value name="INDEX">
+                                                                                                  <block type="math_number">
+                                                                                                    <field name="NUM">2</field>
+                                                                                                  </block>
+                                                                                                </value>
+                                                                                              </block>
+                                                                                            </value>
+                                                                                            <value name="ELSE">
+                                                                                              <block type="logic_null"></block>
                                                                                             </value>
                                                                                           </block>
                                                                                         </value>
@@ -964,12 +988,12 @@
                                                                                     </value>
                                                                                     <value name="EXPECTED">
                                                                                       <block type="text">
-                                                                                        <field name="TEXT">78</field>
+                                                                                        <field name="TEXT">23</field>
                                                                                       </block>
                                                                                     </value>
                                                                                     <next>
                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                        <field name="MESSAGE">substring #-end complex number of calls</field>
+                                                                                        <field name="MESSAGE">substring # complex order number of calls</field>
                                                                                         <value name="ACTUAL">
                                                                                           <block type="variables_get">
                                                                                             <field name="VAR">number of calls</field>
@@ -990,27 +1014,45 @@
                                                                                             </value>
                                                                                             <next>
                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                <field name="MESSAGE">substring first-last</field>
+                                                                                                <field name="MESSAGE">substring #-end complex</field>
                                                                                                 <value name="ACTUAL">
                                                                                                   <block type="text_getSubstring">
-                                                                                                    <mutation at1="false" at2="false"></mutation>
-                                                                                                    <field name="WHERE1">FIRST</field>
-                                                                                                    <field name="WHERE2">LAST</field>
+                                                                                                    <mutation at1="true" at2="true"></mutation>
+                                                                                                    <field name="WHERE1">FROM_END</field>
+                                                                                                    <field name="WHERE2">FROM_END</field>
                                                                                                     <value name="STRING">
                                                                                                       <block type="procedures_callreturn">
                                                                                                         <mutation name="get numbers"></mutation>
                                                                                                       </block>
                                                                                                     </value>
+                                                                                                    <value name="AT1">
+                                                                                                      <block type="unittest_adjustindex">
+                                                                                                        <value name="INDEX">
+                                                                                                          <block type="math_number">
+                                                                                                            <field name="NUM">2</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                      </block>
+                                                                                                    </value>
+                                                                                                    <value name="AT2">
+                                                                                                      <block type="unittest_adjustindex">
+                                                                                                        <value name="INDEX">
+                                                                                                          <block type="math_number">
+                                                                                                            <field name="NUM">1</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                      </block>
+                                                                                                    </value>
                                                                                                   </block>
                                                                                                 </value>
                                                                                                 <value name="EXPECTED">
-                                                                                                  <block type="variables_get">
-                                                                                                    <field name="VAR">text</field>
+                                                                                                  <block type="text">
+                                                                                                    <field name="TEXT">78</field>
                                                                                                   </block>
                                                                                                 </value>
                                                                                                 <next>
                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                    <field name="MESSAGE">substring first-last complex number of calls</field>
+                                                                                                    <field name="MESSAGE">substring #-end complex number of calls</field>
                                                                                                     <value name="ACTUAL">
                                                                                                       <block type="variables_get">
                                                                                                         <field name="VAR">number of calls</field>
@@ -1021,6 +1063,707 @@
                                                                                                         <field name="NUM">1</field>
                                                                                                       </block>
                                                                                                     </value>
+                                                                                                    <next>
+                                                                                                      <block type="variables_set">
+                                                                                                        <field name="VAR">number of calls</field>
+                                                                                                        <value name="VALUE">
+                                                                                                          <block type="math_number">
+                                                                                                            <field name="NUM">0</field>
+                                                                                                          </block>
+                                                                                                        </value>
+                                                                                                        <next>
+                                                                                                          <block type="unittest_assertequals" inline="false">
+                                                                                                            <field name="MESSAGE">substring #-end order order</field>
+                                                                                                            <value name="ACTUAL">
+                                                                                                              <block type="text_getSubstring">
+                                                                                                                <mutation at1="true" at2="true"></mutation>
+                                                                                                                <field name="WHERE1">FROM_END</field>
+                                                                                                                <field name="WHERE2">FROM_END</field>
+                                                                                                                <value name="STRING">
+                                                                                                                  <block type="variables_get">
+                                                                                                                    <field name="VAR">text</field>
+                                                                                                                  </block>
+                                                                                                                </value>
+                                                                                                                <value name="AT1">
+                                                                                                                  <block type="math_arithmetic">
+                                                                                                                    <field name="OP">ADD</field>
+                                                                                                                    <value name="A">
+                                                                                                                      <block type="math_number">
+                                                                                                                        <field name="NUM">0</field>
+                                                                                                                      </block>
+                                                                                                                    </value>
+                                                                                                                    <value name="B">
+                                                                                                                      <block type="unittest_adjustindex">
+                                                                                                                        <value name="INDEX">
+                                                                                                                          <block type="math_number">
+                                                                                                                            <field name="NUM">2</field>
+                                                                                                                          </block>
+                                                                                                                        </value>
+                                                                                                                      </block>
+                                                                                                                    </value>
+                                                                                                                  </block>
+                                                                                                                </value>
+                                                                                                                <value name="AT2">
+                                                                                                                  <block type="math_arithmetic">
+                                                                                                                    <field name="OP">ADD</field>
+                                                                                                                    <value name="A">
+                                                                                                                      <block type="math_number">
+                                                                                                                        <field name="NUM">0</field>
+                                                                                                                      </block>
+                                                                                                                    </value>
+                                                                                                                    <value name="B">
+                                                                                                                      <block type="unittest_adjustindex">
+                                                                                                                        <value name="INDEX">
+                                                                                                                          <block type="math_number">
+                                                                                                                            <field name="NUM">1</field>
+                                                                                                                          </block>
+                                                                                                                        </value>
+                                                                                                                      </block>
+                                                                                                                    </value>
+                                                                                                                  </block>
+                                                                                                                </value>
+                                                                                                              </block>
+                                                                                                            </value>
+                                                                                                            <value name="EXPECTED">
+                                                                                                              <block type="text">
+                                                                                                                <field name="TEXT">78</field>
+                                                                                                              </block>
+                                                                                                            </value>
+                                                                                                            <next>
+                                                                                                              <block type="unittest_assertequals" inline="false">
+                                                                                                                <field name="MESSAGE">substring #-end complex order number of calls</field>
+                                                                                                                <value name="ACTUAL">
+                                                                                                                  <block type="variables_get">
+                                                                                                                    <field name="VAR">number of calls</field>
+                                                                                                                  </block>
+                                                                                                                </value>
+                                                                                                                <value name="EXPECTED">
+                                                                                                                  <block type="math_number">
+                                                                                                                    <field name="NUM">1</field>
+                                                                                                                  </block>
+                                                                                                                </value>
+                                                                                                                <next>
+                                                                                                                  <block type="variables_set">
+                                                                                                                    <field name="VAR">number of calls</field>
+                                                                                                                    <value name="VALUE">
+                                                                                                                      <block type="math_number">
+                                                                                                                        <field name="NUM">0</field>
+                                                                                                                      </block>
+                                                                                                                    </value>
+                                                                                                                    <next>
+                                                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                                                        <field name="MESSAGE">substring first-last</field>
+                                                                                                                        <value name="ACTUAL">
+                                                                                                                          <block type="text_getSubstring">
+                                                                                                                            <mutation at1="false" at2="false"></mutation>
+                                                                                                                            <field name="WHERE1">FIRST</field>
+                                                                                                                            <field name="WHERE2">LAST</field>
+                                                                                                                            <value name="STRING">
+                                                                                                                              <block type="procedures_callreturn">
+                                                                                                                                <mutation name="get numbers"></mutation>
+                                                                                                                              </block>
+                                                                                                                            </value>
+                                                                                                                          </block>
+                                                                                                                        </value>
+                                                                                                                        <value name="EXPECTED">
+                                                                                                                          <block type="variables_get">
+                                                                                                                            <field name="VAR">text</field>
+                                                                                                                          </block>
+                                                                                                                        </value>
+                                                                                                                        <next>
+                                                                                                                          <block type="unittest_assertequals" inline="false">
+                                                                                                                            <field name="MESSAGE">substring first-last complex number of calls</field>
+                                                                                                                            <value name="ACTUAL">
+                                                                                                                              <block type="variables_get">
+                                                                                                                                <field name="VAR">number of calls</field>
+                                                                                                                              </block>
+                                                                                                                            </value>
+                                                                                                                            <value name="EXPECTED">
+                                                                                                                              <block type="math_number">
+                                                                                                                                <field name="NUM">1</field>
+                                                                                                                              </block>
+                                                                                                                            </value>
+                                                                                                                            <next>
+                                                                                                                              <block type="variables_set">
+                                                                                                                                <field name="VAR">number of calls</field>
+                                                                                                                                <value name="VALUE">
+                                                                                                                                  <block type="math_number">
+                                                                                                                                    <field name="NUM">0</field>
+                                                                                                                                  </block>
+                                                                                                                                </value>
+                                                                                                                                <next>
+                                                                                                                                  <block type="unittest_assertequals" inline="false">
+                                                                                                                                    <field name="MESSAGE">substring # #-end complex</field>
+                                                                                                                                    <value name="ACTUAL">
+                                                                                                                                      <block type="text_getSubstring">
+                                                                                                                                        <mutation at1="true" at2="true"></mutation>
+                                                                                                                                        <field name="WHERE1">FROM_START</field>
+                                                                                                                                        <field name="WHERE2">FROM_END</field>
+                                                                                                                                        <value name="STRING">
+                                                                                                                                          <block type="procedures_callreturn">
+                                                                                                                                            <mutation name="get numbers"></mutation>
+                                                                                                                                          </block>
+                                                                                                                                        </value>
+                                                                                                                                        <value name="AT1">
+                                                                                                                                          <block type="unittest_adjustindex">
+                                                                                                                                            <value name="INDEX">
+                                                                                                                                              <block type="math_number">
+                                                                                                                                                <field name="NUM">1</field>
+                                                                                                                                              </block>
+                                                                                                                                            </value>
+                                                                                                                                          </block>
+                                                                                                                                        </value>
+                                                                                                                                        <value name="AT2">
+                                                                                                                                          <block type="unittest_adjustindex">
+                                                                                                                                            <value name="INDEX">
+                                                                                                                                              <block type="math_number">
+                                                                                                                                                <field name="NUM">1</field>
+                                                                                                                                              </block>
+                                                                                                                                            </value>
+                                                                                                                                          </block>
+                                                                                                                                        </value>
+                                                                                                                                      </block>
+                                                                                                                                    </value>
+                                                                                                                                    <value name="EXPECTED">
+                                                                                                                                      <block type="text">
+                                                                                                                                        <field name="TEXT">2345678</field>
+                                                                                                                                      </block>
+                                                                                                                                    </value>
+                                                                                                                                    <next>
+                                                                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                                                                        <field name="MESSAGE">substring # #-end complex number of calls</field>
+                                                                                                                                        <value name="ACTUAL">
+                                                                                                                                          <block type="variables_get">
+                                                                                                                                            <field name="VAR">number of calls</field>
+                                                                                                                                          </block>
+                                                                                                                                        </value>
+                                                                                                                                        <value name="EXPECTED">
+                                                                                                                                          <block type="math_number">
+                                                                                                                                            <field name="NUM">1</field>
+                                                                                                                                          </block>
+                                                                                                                                        </value>
+                                                                                                                                        <next>
+                                                                                                                                          <block type="variables_set">
+                                                                                                                                            <field name="VAR">number of calls</field>
+                                                                                                                                            <value name="VALUE">
+                                                                                                                                              <block type="math_number">
+                                                                                                                                                <field name="NUM">0</field>
+                                                                                                                                              </block>
+                                                                                                                                            </value>
+                                                                                                                                            <next>
+                                                                                                                                              <block type="unittest_assertequals" inline="false">
+                                                                                                                                                <field name="MESSAGE">substring #-end # complex</field>
+                                                                                                                                                <value name="ACTUAL">
+                                                                                                                                                  <block type="text_getSubstring">
+                                                                                                                                                    <mutation at1="true" at2="true"></mutation>
+                                                                                                                                                    <field name="WHERE1">FROM_END</field>
+                                                                                                                                                    <field name="WHERE2">FROM_START</field>
+                                                                                                                                                    <value name="STRING">
+                                                                                                                                                      <block type="procedures_callreturn">
+                                                                                                                                                        <mutation name="get numbers"></mutation>
+                                                                                                                                                      </block>
+                                                                                                                                                    </value>
+                                                                                                                                                    <value name="AT1">
+                                                                                                                                                      <block type="unittest_adjustindex">
+                                                                                                                                                        <value name="INDEX">
+                                                                                                                                                          <block type="math_number">
+                                                                                                                                                            <field name="NUM">6</field>
+                                                                                                                                                          </block>
+                                                                                                                                                        </value>
+                                                                                                                                                      </block>
+                                                                                                                                                    </value>
+                                                                                                                                                    <value name="AT2">
+                                                                                                                                                      <block type="unittest_adjustindex">
+                                                                                                                                                        <value name="INDEX">
+                                                                                                                                                          <block type="math_number">
+                                                                                                                                                            <field name="NUM">3</field>
+                                                                                                                                                          </block>
+                                                                                                                                                        </value>
+                                                                                                                                                      </block>
+                                                                                                                                                    </value>
+                                                                                                                                                  </block>
+                                                                                                                                                </value>
+                                                                                                                                                <value name="EXPECTED">
+                                                                                                                                                  <block type="text">
+                                                                                                                                                    <field name="TEXT">34</field>
+                                                                                                                                                  </block>
+                                                                                                                                                </value>
+                                                                                                                                                <next>
+                                                                                                                                                  <block type="unittest_assertequals" inline="false">
+                                                                                                                                                    <field name="MESSAGE">substring #-end # complex number of calls</field>
+                                                                                                                                                    <value name="ACTUAL">
+                                                                                                                                                      <block type="variables_get">
+                                                                                                                                                        <field name="VAR">number of calls</field>
+                                                                                                                                                      </block>
+                                                                                                                                                    </value>
+                                                                                                                                                    <value name="EXPECTED">
+                                                                                                                                                      <block type="math_number">
+                                                                                                                                                        <field name="NUM">1</field>
+                                                                                                                                                      </block>
+                                                                                                                                                    </value>
+                                                                                                                                                    <next>
+                                                                                                                                                      <block type="variables_set">
+                                                                                                                                                        <field name="VAR">number of calls</field>
+                                                                                                                                                        <value name="VALUE">
+                                                                                                                                                          <block type="math_number">
+                                                                                                                                                            <field name="NUM">0</field>
+                                                                                                                                                          </block>
+                                                                                                                                                        </value>
+                                                                                                                                                        <next>
+                                                                                                                                                          <block type="unittest_assertequals" inline="false">
+                                                                                                                                                            <field name="MESSAGE">substring first # complex</field>
+                                                                                                                                                            <value name="ACTUAL">
+                                                                                                                                                              <block type="text_getSubstring">
+                                                                                                                                                                <mutation at1="false" at2="true"></mutation>
+                                                                                                                                                                <field name="WHERE1">FIRST</field>
+                                                                                                                                                                <field name="WHERE2">FROM_START</field>
+                                                                                                                                                                <value name="STRING">
+                                                                                                                                                                  <block type="procedures_callreturn">
+                                                                                                                                                                    <mutation name="get numbers"></mutation>
+                                                                                                                                                                  </block>
+                                                                                                                                                                </value>
+                                                                                                                                                                <value name="AT2">
+                                                                                                                                                                  <block type="unittest_adjustindex">
+                                                                                                                                                                    <value name="INDEX">
+                                                                                                                                                                      <block type="math_number">
+                                                                                                                                                                        <field name="NUM">3</field>
+                                                                                                                                                                      </block>
+                                                                                                                                                                    </value>
+                                                                                                                                                                  </block>
+                                                                                                                                                                </value>
+                                                                                                                                                              </block>
+                                                                                                                                                            </value>
+                                                                                                                                                            <value name="EXPECTED">
+                                                                                                                                                              <block type="text">
+                                                                                                                                                                <field name="TEXT">1234</field>
+                                                                                                                                                              </block>
+                                                                                                                                                            </value>
+                                                                                                                                                            <next>
+                                                                                                                                                              <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                <field name="MESSAGE">substring first # complex number of calls</field>
+                                                                                                                                                                <value name="ACTUAL">
+                                                                                                                                                                  <block type="variables_get">
+                                                                                                                                                                    <field name="VAR">number of calls</field>
+                                                                                                                                                                  </block>
+                                                                                                                                                                </value>
+                                                                                                                                                                <value name="EXPECTED">
+                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                    <field name="NUM">1</field>
+                                                                                                                                                                  </block>
+                                                                                                                                                                </value>
+                                                                                                                                                                <next>
+                                                                                                                                                                  <block type="variables_set">
+                                                                                                                                                                    <field name="VAR">number of calls</field>
+                                                                                                                                                                    <value name="VALUE">
+                                                                                                                                                                      <block type="math_number">
+                                                                                                                                                                        <field name="NUM">0</field>
+                                                                                                                                                                      </block>
+                                                                                                                                                                    </value>
+                                                                                                                                                                    <next>
+                                                                                                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                        <field name="MESSAGE">substring first #-end complex</field>
+                                                                                                                                                                        <value name="ACTUAL">
+                                                                                                                                                                          <block type="text_getSubstring">
+                                                                                                                                                                            <mutation at1="false" at2="true"></mutation>
+                                                                                                                                                                            <field name="WHERE1">FIRST</field>
+                                                                                                                                                                            <field name="WHERE2">FROM_END</field>
+                                                                                                                                                                            <value name="STRING">
+                                                                                                                                                                              <block type="procedures_callreturn">
+                                                                                                                                                                                <mutation name="get numbers"></mutation>
+                                                                                                                                                                              </block>
+                                                                                                                                                                            </value>
+                                                                                                                                                                            <value name="AT2">
+                                                                                                                                                                              <block type="unittest_adjustindex">
+                                                                                                                                                                                <value name="INDEX">
+                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                    <field name="NUM">1</field>
+                                                                                                                                                                                  </block>
+                                                                                                                                                                                </value>
+                                                                                                                                                                              </block>
+                                                                                                                                                                            </value>
+                                                                                                                                                                          </block>
+                                                                                                                                                                        </value>
+                                                                                                                                                                        <value name="EXPECTED">
+                                                                                                                                                                          <block type="text">
+                                                                                                                                                                            <field name="TEXT">12345678</field>
+                                                                                                                                                                          </block>
+                                                                                                                                                                        </value>
+                                                                                                                                                                        <next>
+                                                                                                                                                                          <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                            <field name="MESSAGE">substring first #-end complex number of calls</field>
+                                                                                                                                                                            <value name="ACTUAL">
+                                                                                                                                                                              <block type="variables_get">
+                                                                                                                                                                                <field name="VAR">number of calls</field>
+                                                                                                                                                                              </block>
+                                                                                                                                                                            </value>
+                                                                                                                                                                            <value name="EXPECTED">
+                                                                                                                                                                              <block type="math_number">
+                                                                                                                                                                                <field name="NUM">1</field>
+                                                                                                                                                                              </block>
+                                                                                                                                                                            </value>
+                                                                                                                                                                            <next>
+                                                                                                                                                                              <block type="variables_set">
+                                                                                                                                                                                <field name="VAR">number of calls</field>
+                                                                                                                                                                                <value name="VALUE">
+                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                    <field name="NUM">0</field>
+                                                                                                                                                                                  </block>
+                                                                                                                                                                                </value>
+                                                                                                                                                                                <next>
+                                                                                                                                                                                  <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                    <field name="MESSAGE">substring # last complex</field>
+                                                                                                                                                                                    <value name="ACTUAL">
+                                                                                                                                                                                      <block type="text_getSubstring">
+                                                                                                                                                                                        <mutation at1="true" at2="false"></mutation>
+                                                                                                                                                                                        <field name="WHERE1">FROM_START</field>
+                                                                                                                                                                                        <field name="WHERE2">LAST</field>
+                                                                                                                                                                                        <value name="STRING">
+                                                                                                                                                                                          <block type="procedures_callreturn">
+                                                                                                                                                                                            <mutation name="get numbers"></mutation>
+                                                                                                                                                                                          </block>
+                                                                                                                                                                                        </value>
+                                                                                                                                                                                        <value name="AT1">
+                                                                                                                                                                                          <block type="unittest_adjustindex">
+                                                                                                                                                                                            <value name="INDEX">
+                                                                                                                                                                                              <block type="math_number">
+                                                                                                                                                                                                <field name="NUM">6</field>
+                                                                                                                                                                                              </block>
+                                                                                                                                                                                            </value>
+                                                                                                                                                                                          </block>
+                                                                                                                                                                                        </value>
+                                                                                                                                                                                      </block>
+                                                                                                                                                                                    </value>
+                                                                                                                                                                                    <value name="EXPECTED">
+                                                                                                                                                                                      <block type="text">
+                                                                                                                                                                                        <field name="TEXT">789</field>
+                                                                                                                                                                                      </block>
+                                                                                                                                                                                    </value>
+                                                                                                                                                                                    <next>
+                                                                                                                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                        <field name="MESSAGE">substring # last complex number of calls</field>
+                                                                                                                                                                                        <value name="ACTUAL">
+                                                                                                                                                                                          <block type="variables_get">
+                                                                                                                                                                                            <field name="VAR">number of calls</field>
+                                                                                                                                                                                          </block>
+                                                                                                                                                                                        </value>
+                                                                                                                                                                                        <value name="EXPECTED">
+                                                                                                                                                                                          <block type="math_number">
+                                                                                                                                                                                            <field name="NUM">1</field>
+                                                                                                                                                                                          </block>
+                                                                                                                                                                                        </value>
+                                                                                                                                                                                        <next>
+                                                                                                                                                                                          <block type="variables_set">
+                                                                                                                                                                                            <field name="VAR">number of calls</field>
+                                                                                                                                                                                            <value name="VALUE">
+                                                                                                                                                                                              <block type="math_number">
+                                                                                                                                                                                                <field name="NUM">0</field>
+                                                                                                                                                                                              </block>
+                                                                                                                                                                                            </value>
+                                                                                                                                                                                            <next>
+                                                                                                                                                                                              <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                <field name="MESSAGE">substring #-end last complex</field>
+                                                                                                                                                                                                <value name="ACTUAL">
+                                                                                                                                                                                                  <block type="text_getSubstring">
+                                                                                                                                                                                                    <mutation at1="true" at2="false"></mutation>
+                                                                                                                                                                                                    <field name="WHERE1">FROM_END</field>
+                                                                                                                                                                                                    <field name="WHERE2">LAST</field>
+                                                                                                                                                                                                    <value name="STRING">
+                                                                                                                                                                                                      <block type="procedures_callreturn">
+                                                                                                                                                                                                        <mutation name="get numbers"></mutation>
+                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                    <value name="AT1">
+                                                                                                                                                                                                      <block type="unittest_adjustindex">
+                                                                                                                                                                                                        <value name="INDEX">
+                                                                                                                                                                                                          <block type="math_number">
+                                                                                                                                                                                                            <field name="NUM">2</field>
+                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                </value>
+                                                                                                                                                                                                <value name="EXPECTED">
+                                                                                                                                                                                                  <block type="text">
+                                                                                                                                                                                                    <field name="TEXT">789</field>
+                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                </value>
+                                                                                                                                                                                                <next>
+                                                                                                                                                                                                  <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                    <field name="MESSAGE">substring #-end last complex number of calls</field>
+                                                                                                                                                                                                    <value name="ACTUAL">
+                                                                                                                                                                                                      <block type="variables_get">
+                                                                                                                                                                                                        <field name="VAR">number of calls</field>
+                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                    <value name="EXPECTED">
+                                                                                                                                                                                                      <block type="math_number">
+                                                                                                                                                                                                        <field name="NUM">1</field>
+                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                    <next>
+                                                                                                                                                                                                      <block type="variables_set">
+                                                                                                                                                                                                        <field name="VAR">number of calls</field>
+                                                                                                                                                                                                        <value name="VALUE">
+                                                                                                                                                                                                          <block type="math_number">
+                                                                                                                                                                                                            <field name="NUM">0</field>
+                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                        <next>
+                                                                                                                                                                                                          <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                            <field name="MESSAGE">substring all with # #-end complex</field>
+                                                                                                                                                                                                            <value name="ACTUAL">
+                                                                                                                                                                                                              <block type="text_getSubstring">
+                                                                                                                                                                                                                <mutation at1="true" at2="true"></mutation>
+                                                                                                                                                                                                                <field name="WHERE1">FROM_START</field>
+                                                                                                                                                                                                                <field name="WHERE2">FROM_END</field>
+                                                                                                                                                                                                                <value name="STRING">
+                                                                                                                                                                                                                  <block type="procedures_callreturn">
+                                                                                                                                                                                                                    <mutation name="get numbers"></mutation>
+                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                <value name="AT1">
+                                                                                                                                                                                                                  <block type="unittest_adjustindex">
+                                                                                                                                                                                                                    <value name="INDEX">
+                                                                                                                                                                                                                      <block type="math_number">
+                                                                                                                                                                                                                        <field name="NUM">0</field>
+                                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                <value name="AT2">
+                                                                                                                                                                                                                  <block type="unittest_adjustindex">
+                                                                                                                                                                                                                    <value name="INDEX">
+                                                                                                                                                                                                                      <block type="math_number">
+                                                                                                                                                                                                                        <field name="NUM">0</field>
+                                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                            <value name="EXPECTED">
+                                                                                                                                                                                                              <block type="text">
+                                                                                                                                                                                                                <field name="TEXT">123456789</field>
+                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                            <next>
+                                                                                                                                                                                                              <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                                <field name="MESSAGE">substring all with # #-end complex number of calls</field>
+                                                                                                                                                                                                                <value name="ACTUAL">
+                                                                                                                                                                                                                  <block type="variables_get">
+                                                                                                                                                                                                                    <field name="VAR">number of calls</field>
+                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                <value name="EXPECTED">
+                                                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                                                    <field name="NUM">1</field>
+                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                <next>
+                                                                                                                                                                                                                  <block type="variables_set">
+                                                                                                                                                                                                                    <field name="VAR">number of calls</field>
+                                                                                                                                                                                                                    <value name="VALUE">
+                                                                                                                                                                                                                      <block type="math_number">
+                                                                                                                                                                                                                        <field name="NUM">0</field>
+                                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                                    <next>
+                                                                                                                                                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                                        <field name="MESSAGE">substring all with #-end # copmlex</field>
+                                                                                                                                                                                                                        <value name="ACTUAL">
+                                                                                                                                                                                                                          <block type="text_getSubstring">
+                                                                                                                                                                                                                            <mutation at1="true" at2="true"></mutation>
+                                                                                                                                                                                                                            <field name="WHERE1">FROM_END</field>
+                                                                                                                                                                                                                            <field name="WHERE2">FROM_START</field>
+                                                                                                                                                                                                                            <value name="STRING">
+                                                                                                                                                                                                                              <block type="procedures_callreturn">
+                                                                                                                                                                                                                                <mutation name="get numbers"></mutation>
+                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                            <value name="AT1">
+                                                                                                                                                                                                                              <block type="unittest_adjustindex">
+                                                                                                                                                                                                                                <value name="INDEX">
+                                                                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                                                                    <field name="NUM">8</field>
+                                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                            <value name="AT2">
+                                                                                                                                                                                                                              <block type="unittest_adjustindex">
+                                                                                                                                                                                                                                <value name="INDEX">
+                                                                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                                                                    <field name="NUM">8</field>
+                                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                                        <value name="EXPECTED">
+                                                                                                                                                                                                                          <block type="text">
+                                                                                                                                                                                                                            <field name="TEXT">123456789</field>
+                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                                        <next>
+                                                                                                                                                                                                                          <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                                            <field name="MESSAGE">substring all with #-end # copmlex number of calls</field>
+                                                                                                                                                                                                                            <value name="ACTUAL">
+                                                                                                                                                                                                                              <block type="variables_get">
+                                                                                                                                                                                                                                <field name="VAR">number of calls</field>
+                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                            <value name="EXPECTED">
+                                                                                                                                                                                                                              <block type="math_number">
+                                                                                                                                                                                                                                <field name="NUM">1</field>
+                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                            <next>
+                                                                                                                                                                                                                              <block type="variables_set">
+                                                                                                                                                                                                                                <field name="VAR">number of calls</field>
+                                                                                                                                                                                                                                <value name="VALUE">
+                                                                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                                                                    <field name="NUM">0</field>
+                                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                                <next>
+                                                                                                                                                                                                                                  <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                                                    <field name="MESSAGE">substring all with # #-end math complex</field>
+                                                                                                                                                                                                                                    <value name="ACTUAL">
+                                                                                                                                                                                                                                      <block type="text_getSubstring">
+                                                                                                                                                                                                                                        <mutation at1="true" at2="true"></mutation>
+                                                                                                                                                                                                                                        <field name="WHERE1">FROM_START</field>
+                                                                                                                                                                                                                                        <field name="WHERE2">FROM_END</field>
+                                                                                                                                                                                                                                        <value name="STRING">
+                                                                                                                                                                                                                                          <block type="procedures_callreturn">
+                                                                                                                                                                                                                                            <mutation name="get numbers"></mutation>
+                                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                                                        <value name="AT1">
+                                                                                                                                                                                                                                          <block type="math_arithmetic">
+                                                                                                                                                                                                                                            <field name="OP">ADD</field>
+                                                                                                                                                                                                                                            <value name="A">
+                                                                                                                                                                                                                                              <block type="math_number">
+                                                                                                                                                                                                                                                <field name="NUM">0</field>
+                                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                                            <value name="B">
+                                                                                                                                                                                                                                              <block type="unittest_adjustindex">
+                                                                                                                                                                                                                                                <value name="INDEX">
+                                                                                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                                                                                    <field name="NUM">0</field>
+                                                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                                                        <value name="AT2">
+                                                                                                                                                                                                                                          <block type="math_arithmetic">
+                                                                                                                                                                                                                                            <field name="OP">ADD</field>
+                                                                                                                                                                                                                                            <value name="A">
+                                                                                                                                                                                                                                              <block type="math_number">
+                                                                                                                                                                                                                                                <field name="NUM">0</field>
+                                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                                            <value name="B">
+                                                                                                                                                                                                                                              <block type="unittest_adjustindex">
+                                                                                                                                                                                                                                                <value name="INDEX">
+                                                                                                                                                                                                                                                  <block type="math_number">
+                                                                                                                                                                                                                                                    <field name="NUM">0</field>
+                                                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                                                </value>
+                                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                                            </value>
+                                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                                                    <value name="EXPECTED">
+                                                                                                                                                                                                                                      <block type="text">
+                                                                                                                                                                                                                                        <field name="TEXT">123456789</field>
+                                                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                                                    </value>
+                                                                                                                                                                                                                                    <next>
+                                                                                                                                                                                                                                      <block type="unittest_assertequals" inline="false">
+                                                                                                                                                                                                                                        <field name="MESSAGE">substring all with # #-end math complex number of calls</field>
+                                                                                                                                                                                                                                        <value name="ACTUAL">
+                                                                                                                                                                                                                                          <block type="variables_get">
+                                                                                                                                                                                                                                            <field name="VAR">number of calls</field>
+                                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                                                        <value name="EXPECTED">
+                                                                                                                                                                                                                                          <block type="math_number">
+                                                                                                                                                                                                                                            <field name="NUM">1</field>
+                                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                                        </value>
+                                                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                                                    </next>
+                                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                                </next>
+                                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                                            </next>
+                                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                                        </next>
+                                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                                    </next>
+                                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                                </next>
+                                                                                                                                                                                                              </block>
+                                                                                                                                                                                                            </next>
+                                                                                                                                                                                                          </block>
+                                                                                                                                                                                                        </next>
+                                                                                                                                                                                                      </block>
+                                                                                                                                                                                                    </next>
+                                                                                                                                                                                                  </block>
+                                                                                                                                                                                                </next>
+                                                                                                                                                                                              </block>
+                                                                                                                                                                                            </next>
+                                                                                                                                                                                          </block>
+                                                                                                                                                                                        </next>
+                                                                                                                                                                                      </block>
+                                                                                                                                                                                    </next>
+                                                                                                                                                                                  </block>
+                                                                                                                                                                                </next>
+                                                                                                                                                                              </block>
+                                                                                                                                                                            </next>
+                                                                                                                                                                          </block>
+                                                                                                                                                                        </next>
+                                                                                                                                                                      </block>
+                                                                                                                                                                    </next>
+                                                                                                                                                                  </block>
+                                                                                                                                                                </next>
+                                                                                                                                                              </block>
+                                                                                                                                                            </next>
+                                                                                                                                                          </block>
+                                                                                                                                                        </next>
+                                                                                                                                                      </block>
+                                                                                                                                                    </next>
+                                                                                                                                                  </block>
+                                                                                                                                                </next>
+                                                                                                                                              </block>
+                                                                                                                                            </next>
+                                                                                                                                          </block>
+                                                                                                                                        </next>
+                                                                                                                                      </block>
+                                                                                                                                    </next>
+                                                                                                                                  </block>
+                                                                                                                                </next>
+                                                                                                                              </block>
+                                                                                                                            </next>
+                                                                                                                          </block>
+                                                                                                                        </next>
+                                                                                                                      </block>
+                                                                                                                    </next>
+                                                                                                                  </block>
+                                                                                                                </next>
+                                                                                                              </block>
+                                                                                                            </next>
+                                                                                                          </block>
+                                                                                                        </next>
+                                                                                                      </block>
+                                                                                                    </next>
                                                                                                   </block>
                                                                                                 </next>
                                                                                               </block>
@@ -1070,7 +1813,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="3763">
+  <block type="procedures_defnoreturn" x="13" y="6063">
     <field name="NAME">test find</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block.</comment>
     <statement name="STACK">
@@ -1171,7 +1914,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="4163">
+  <block type="procedures_defnoreturn" x="13" y="6463">
     <field name="NAME">test get</field>
     <comment pinned="false" h="80" w="160">Tests the "get letter" block.</comment>
     <statement name="STACK">
@@ -1410,7 +2153,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="4988">
+  <block type="procedures_defnoreturn" x="13" y="7288">
     <field name="NAME">test case</field>
     <comment pinned="false" h="80" w="160">Tests the "change casing" block.</comment>
     <statement name="STACK">
@@ -1474,7 +2217,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="5288">
+  <block type="procedures_defnoreturn" x="13" y="7588">
     <field name="NAME">test trim</field>
     <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
     <statement name="STACK">

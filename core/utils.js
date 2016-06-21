@@ -315,6 +315,10 @@ Blockly.mouseToSvg = function(e, svg, matrix) {
   var svgPoint = svg.createSVGPoint();
   svgPoint.x = e.clientX;
   svgPoint.y = e.clientY;
+
+  if (!matrix) {
+    matrix = svg.getScreenCTM().inverse();
+  }
   return svgPoint.matrixTransform(matrix);
 };
 

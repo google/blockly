@@ -92,7 +92,7 @@ Blockly.Python.ONE_BASED_INDEXING = true;
 Blockly.Python.ORDER_OVERRIDES = [
   // (foo()).bar() -> foo().bar()
   // (foo())[0] -> foo()[0]
-  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_MEMBER]
+  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_FUNCTION_CALL]
 ];
 
 /**

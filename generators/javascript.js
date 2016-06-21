@@ -110,7 +110,7 @@ Blockly.JavaScript.ORDER_NONE = 99;            // (...)
 Blockly.JavaScript.ORDER_OVERRIDES = [
   // (foo()).bar() -> foo().bar()
   // (foo())[0] -> foo()[0]
-  [Blockly.JavaScript.ORDER_FUNCTION_CALL, Blockly.JavaScript.ORDER_MEMBER],
+  [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_FUNCTION_CALL],
   // (foo[0])[1] -> foo[0][1]
   // (foo.bar).baz -> foo.bar.baz
   [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_MEMBER],

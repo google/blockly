@@ -8,7 +8,8 @@
 			"Utar",
 			"Clon",
 			"Koo6",
-			"Vtmarvin"
+			"Vtmarvin",
+			"Dvorapa"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "položka",
@@ -291,9 +292,13 @@
 	"LISTS_GET_SUBLIST_END_LAST": "jako poslední",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Vytvoří kopii určené části seznamu.",
 	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TITLE": "seřadit %1 %2 %3",
+	"LISTS_SORT_TOOLTIP": "Seřadit kopii seznamu.",
 	"LISTS_SORT_ORDER_ASCENDING": "vzestupně",
 	"LISTS_SORT_ORDER_DESCENDING": "sestupně",
 	"LISTS_SORT_TYPE_NUMERIC": "číselné",
+	"LISTS_SORT_TYPE_TEXT": "abecedně",
+	"LISTS_SORT_TYPE_IGNORECASE": "abecedně, na velikosti písmen nezáleží",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "udělat z textu seznam",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "udělat ze seznamu text",
 	"LISTS_SPLIT_WITH_DELIMITER": "s oddělovačem",

@@ -105,7 +105,9 @@ Blockly.Lua['unittest_main'].defineAssert_ = function(block) {
        '      actual = "{" .. table.concat(actual, ", ") .. "}"',
        '    end',
        '  end',
-       '  if actual == expected then',
+       '  if actual == expected or (type(actual) == "number" and ' +
+          'type(expected) == "number" and math.abs(actual - expected) < ' +
+          '1e-9) then ',
        '    table.insert(' + resultsVar +
            ', {success=true, log="OK", title=message})',
        '  else',

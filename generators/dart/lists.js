@@ -304,43 +304,28 @@ Blockly.Dart['lists_getSublist'] = function(block) {
       var code = list + '.sublist(' + at1 + ', ' + at2 + ')';
     }
   } else {
-    var defaultAtIndex = (Blockly.Dart.ONE_BASED_INDEXING) ? '1' : '0';
-    var at1 = Blockly.Dart.valueToCode(block, 'AT1',
-            Blockly.Dart.ORDER_NONE) || defaultAtIndex;
-    var at2 = Blockly.Dart.valueToCode(block, 'AT2',
-            Blockly.Dart.ORDER_NONE) || defaultAtIndex;
-    var sublistFunction = ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-    '(list, where1, at1, where2, at2) {',
-      '  int getAt(where, at) {'];
-
-    if (Blockly.Dart.ONE_BASED_INDEXING) {
-      sublistFunction = sublistFunction.concat([
-        '    if (where == \'FROM_START\') {',
-        '      at--;',
-        '    } else if (where == \'FROM_END\') {',
-        '      at = list.length - at;']);
-    } else {
-      sublistFunction = sublistFunction.concat([
-        '    if (where == \'FROM_END\') {',
-        '      at = list.length - 1 - at;']);
-    }
-
-    sublistFunction = sublistFunction.concat([
-        '    } else if (where == \'FIRST\') {',
-        '      at = 0;',
-        '    } else if (where == \'LAST\') {',
-        '      at = list.length - 1;',
-        '    } else {',
-        '      throw \'Unhandled option (lists_getSublist).\';',
-        '    }',
-        '    return at;',
-        '  }',
-        '  at1 = getAt(where1, at1);',
-        '  at2 = getAt(where2, at2) + 1;',
-        '  return list.sublist(at1, at2);',
-        '}']);
+    var at1 = Blockly.Dart.getAdjusted(block, 'AT1');
+    var at2 = Blockly.Dart.getAdjusted(block, 'AT2');
     var functionName = Blockly.Dart.provideFunction_(
-        'lists_get_sublist', sublistFunction);
+        'lists_get_sublist',
+        [ 'List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+            '(list, where1, at1, where2, at2) {',
+          '  int getAt(where, at) {',
+          '    if (where == \'FROM_END\') {',
+          '      at = list.length - 1 - at;',
+          '    } else if (where == \'FIRST\') {',
+          '      at = 0;',
+          '    } else if (where == \'LAST\') {',
+          '      at = list.length - 1;',
+          '    } else if (where != \'FROM_START\') {',
+          '      throw \'Unhandled option (lists_getSublist).\';',
+          '    }',
+          '    return at;',
+          '  }',
+          '  at1 = getAt(where1, at1);',
+          '  at2 = getAt(where2, at2) + 1;',
+          '  return list.sublist(at1, at2);',
+          '}']);
     var code = functionName + '(' + list + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
@@ -354,21 +339,21 @@ Blockly.Dart['lists_sort'] = function(block) {
   var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
   var sortFunctionName = Blockly.Dart.provideFunction_(
-          'lists_sort',
-  ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-      '(list, type, direction) {',
-      '  var compareFuncs = {',
-      '    "NUMERIC": (a, b) => direction * a.compareTo(b),',
-      '    "TEXT": (a, b) => direction * a.toString().compareTo(b.toString()),',
-      '    "IGNORE_CASE": ',
-      '       (a, b) => direction * ',
-      '      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())',
-      '  };',
-      '  list = new List.from(list);', // Clone the list.
-      '  var compare = compareFuncs[type];',
-      '  list.sort(compare);',
-      '  return list;',
-    '}']);
+      'lists_sort',
+      [ 'List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+          '(list, type, direction) {',
+        '  var compareFuncs = {',
+        '    "NUMERIC": (a, b) => direction * a.compareTo(b),',
+        '    "TEXT": (a, b) => direction * a.toString().compareTo(b.toString()),',
+        '    "IGNORE_CASE": ',
+        '       (a, b) => direction * ',
+        '      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())',
+        '  };',
+        '  list = new List.from(list);', // Clone the list.
+        '  var compare = compareFuncs[type];',
+        '  list.sort(compare);',
+        '  return list;',
+        '}']);
   return [sortFunctionName + '(' + listCode + ', ' +
       '"' + type + '", ' + direction + ')',
       Blockly.Dart.ORDER_UNARY_POSTFIX];

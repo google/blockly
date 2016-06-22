@@ -186,43 +186,28 @@ Blockly.Dart['text_getSubstring'] = function(block) {
       var code = text + '.substring(' + at1 + ', ' + at2 + ')';
     }
   } else {
-    var defaultAtIndex = (Blockly.Dart.ONE_BASED_INDEXING) ? '1' : '0';
-    var at1 = Blockly.Dart.valueToCode(block, 'AT1',
-            Blockly.Dart.ORDER_NONE) || defaultAtIndex;
-    var at2 = Blockly.Dart.valueToCode(block, 'AT2',
-            Blockly.Dart.ORDER_NONE) || defaultAtIndex;
-    var substringFunction = ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
-        '(text, where1, at1, where2, at2) {',
-      '  int getAt(where, at) {'];
-
-    if (Blockly.Dart.ONE_BASED_INDEXING) {
-      substringFunction = substringFunction.concat([
-        '    if (where == \'FROM_START\') {',
-        '      at--;',
-        '    } else if (where == \'FROM_END\') {',
-        '      at = text.length - at;']);
-    } else {
-      substringFunction = substringFunction.concat([
-        '    if (where == \'FROM_END\') {',
-        '      at = text.length - 1 - at;']);
-    }
-
-    substringFunction = substringFunction.concat([
-      '    } else if (where == \'FIRST\') {',
-      '      at = 0;',
-      '    } else if (where == \'LAST\') {',
-      '      at = text.length - 1;',
-      '    } else {',
-      '      throw \'Unhandled option (text_getSubstring).\';',
-      '    }',
-      '    return at;',
-      '  }',
-      '  at1 = getAt(where1, at1);',
-      '  at2 = getAt(where2, at2) + 1;',
-      '  return text.substring(at1, at2);',
-      '}']);
+    var at1 = Blockly.Dart.getAdjusted(block, 'AT1');
+    var at2 = Blockly.Dart.getAdjusted(block, 'AT2');
     var functionName = Blockly.Dart.provideFunction_(
-        'text_get_substring', substringFunction);
+        'text_get_substring',
+        [ 'List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+            '(text, where1, at1, where2, at2) {',
+          '  int getAt(where, at) {',
+          '    if (where == \'FROM_END\') {',
+          '      at = text.length - 1 - at;',
+          '    } else if (where == \'FIRST\') {',
+          '      at = 0;',
+          '    } else if (where == \'LAST\') {',
+          '      at = text.length - 1;',
+          '    } else if (where != \'FROM_START\') {',
+          '      throw \'Unhandled option (text_getSubstring).\';',
+          '    }',
+          '    return at;',
+          '  }',
+          '  at1 = getAt(where1, at1);',
+          '  at2 = getAt(where2, at2) + 1;',
+          '  return text.substring(at1, at2);',
+          '}']);
     var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }

@@ -32,6 +32,9 @@ goog.require('goog.math');
 /**
  * Class for an editable number field.
  * @param {string} value The initial content of the field.
+ * @param {number|string|undefined} opt_min Minimum value.
+ * @param {number|string|undefined} opt_max Maximum value.
+ * @param {number|string|undefined} opt_precision Precision for value.
  * @param {Function=} opt_validator An optional function that is called
  *     to validate any constraints on what the user entered.  Takes the new
  *     text as an argument and returns either the accepted text, a replacement
@@ -39,66 +42,32 @@ goog.require('goog.math');
  * @extends {Blockly.FieldTextInput}
  * @constructor
  */
-Blockly.FieldNumber = function(value, opt_validator) {
+Blockly.FieldNumber =
+    function(value, opt_min, opt_max, opt_precision, opt_validator) {
   Blockly.FieldNumber.superClass_.constructor.call(this, value, opt_validator);
+  this.setConstraints(opt_min, opt_max, opt_precision);
 };
 goog.inherits(Blockly.FieldNumber, Blockly.FieldTextInput);
 
 /**
- * Steps between allowed numbers.
- * @private
- * @type {number}
- */
-Blockly.FieldNumber.prototype.precision_ = 0;
-
-/**
- * Minimum allowed value.
- * @private
- * @type {number}
- */
-Blockly.FieldNumber.prototype.min_ = -Infinity;
-
-/**
- * Maximum allowed value.
- * @private
- * @type {number}
- */
-Blockly.FieldNumber.prototype.max_ = Infinity;
-
-/**
+ * Set the maximum, minimum and precision constraints on this field.
+ * Any of these properties may be undefiend or NaN to be disabled.
  * Setting precision (usually a power of 10) enforces a minimum step between
  * values. That is, the user's value will rounded to the closest multiple of
  * precision. The least significant digit place is inferred from the precision.
  * Integers values can be enforces by choosing an integer precision.
+ * @param {number|string|undefined} min Minimum value.
+ * @param {number|string|undefined} max Maximum value.
  * @param {number|string|undefined} precision Precision for value.
  */
-Blockly.FieldNumber.prototype.setPrecision = function(precision) {
+Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
   precision = parseFloat(precision);
-  if (!isNaN(precision)) {
-    this.precision_ = precision;
-  }
-};
-
-/**
- * Set a maximum limit on this field's value.
- * @param {number|string|undefined} max Maximum value.
- */
-Blockly.FieldNumber.prototype.setMin = function(min) {
+  this.precision_ = isNaN(precision) ? 0 : precision;
   min = parseFloat(min);
-  if (!isNaN(min)) {
-    this.min_ = min;
-  }
-};
-
-/**
- * Set a maximum limit on this field's value.
- * @param {number|string|undefined} max Minimum value.
- */
-Blockly.FieldNumber.prototype.setMax = function(max) {
+  this.min_ = isNaN(min) ? -Infinity : min;
   max = parseFloat(max);
-  if (!isNaN(max)) {
-    this.max_ = max;
-  }
+  this.max_ = isNaN(max) ? Infinity : max;
+  this.setValue(this.numberValidator(this.getValue));
 };
 
 /**
@@ -117,7 +86,7 @@ Blockly.FieldNumber.prototype.setValidator = function(handler) {
         if (v1 === undefined) {
           v1 = value;
         }
-        var v2 = Blockly.FieldNumber.numberValidator.call(this, v1);
+        var v2 = this.numberValidator(v1);
         if (v2 === undefined) {
           v2 = v1;
         }
@@ -125,7 +94,7 @@ Blockly.FieldNumber.prototype.setValidator = function(handler) {
       return v2 === value ? undefined : v2;
     };
   } else {
-    wrappedHandler = Blockly.FieldNumber.numberValidator;
+    wrappedHandler = this.numberValidator;
   }
   Blockly.FieldNumber.superClass_.setValidator.call(this, wrappedHandler);
 };
@@ -135,7 +104,7 @@ Blockly.FieldNumber.prototype.setValidator = function(handler) {
  * @param {string} text The user's text.
  * @return {?string} A string representing a valid number, or null if invalid.
  */
-Blockly.FieldNumber.numberValidator = function(text) {
+Blockly.FieldNumber.prototype.numberValidator = function(text) {
   if (text === null) {
     return null;
   }

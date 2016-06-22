@@ -1,5 +1,5 @@
 <xml xmlns="http://www.w3.org/1999/xhtml">
-  <block type="unittest_main" x="1" y="-198">
+  <block type="unittest_main" x="13" y="13">
     <statement name="DO">
       <block type="procedures_callnoreturn">
         <mutation name="test arithmetic"></mutation>
@@ -61,8 +61,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="395" y="125">
+  <block type="procedures_defnoreturn" x="13" y="388">
     <field name="NAME">test operations on single</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">sqrt</field>
@@ -204,8 +205,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="23" y="194">
+  <block type="procedures_defnoreturn" x="13" y="988">
     <field name="NAME">test arithmetic</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">add</field>
@@ -254,73 +256,143 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">multiply</field>
+                <field name="MESSAGE">subtract order with add</field>
                 <value name="ACTUAL">
                   <block type="math_arithmetic">
-                    <field name="OP">MULTIPLY</field>
+                    <field name="OP">MINUS</field>
                     <value name="A">
                       <block type="math_number">
-                        <field name="NUM">4</field>
+                        <field name="NUM">1</field>
                       </block>
                     </value>
                     <value name="B">
-                      <block type="math_number">
-                        <field name="NUM">2.5</field>
+                      <block type="math_arithmetic">
+                        <field name="OP">ADD</field>
+                        <value name="A">
+                          <block type="math_number">
+                            <field name="NUM">0</field>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="math_number">
+                            <field name="NUM">2</field>
+                          </block>
+                        </value>
                       </block>
                     </value>
                   </block>
                 </value>
                 <value name="EXPECTED">
                   <block type="math_number">
-                    <field name="NUM">10</field>
+                    <field name="NUM">-1</field>
                   </block>
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">divide</field>
+                    <field name="MESSAGE">subtract order with subtract</field>
                     <value name="ACTUAL">
                       <block type="math_arithmetic">
-                        <field name="OP">DIVIDE</field>
+                        <field name="OP">MINUS</field>
                         <value name="A">
                           <block type="math_number">
-                            <field name="NUM">8.2</field>
+                            <field name="NUM">1</field>
                           </block>
                         </value>
                         <value name="B">
-                          <block type="math_number">
-                            <field name="NUM">-5</field>
+                          <block type="math_arithmetic">
+                            <field name="OP">MINUS</field>
+                            <value name="A">
+                              <block type="math_number">
+                                <field name="NUM">0</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
                           </block>
                         </value>
                       </block>
                     </value>
                     <value name="EXPECTED">
                       <block type="math_number">
-                        <field name="NUM">-1.64</field>
+                        <field name="NUM">3</field>
                       </block>
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">power</field>
+                        <field name="MESSAGE">multiply</field>
                         <value name="ACTUAL">
                           <block type="math_arithmetic">
-                            <field name="OP">POWER</field>
+                            <field name="OP">MULTIPLY</field>
                             <value name="A">
                               <block type="math_number">
-                                <field name="NUM">10</field>
+                                <field name="NUM">4</field>
                               </block>
                             </value>
                             <value name="B">
                               <block type="math_number">
-                                <field name="NUM">4</field>
+                                <field name="NUM">2.5</field>
                               </block>
                             </value>
                           </block>
                         </value>
                         <value name="EXPECTED">
                           <block type="math_number">
-                            <field name="NUM">10000</field>
+                            <field name="NUM">10</field>
                           </block>
                         </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <field name="MESSAGE">divide</field>
+                            <value name="ACTUAL">
+                              <block type="math_arithmetic">
+                                <field name="OP">DIVIDE</field>
+                                <value name="A">
+                                  <block type="math_number">
+                                    <field name="NUM">8.2</field>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="math_number">
+                                    <field name="NUM">-5</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="math_number">
+                                <field name="NUM">-1.64</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="unittest_assertequals" inline="false">
+                                <field name="MESSAGE">power</field>
+                                <value name="ACTUAL">
+                                  <block type="math_arithmetic">
+                                    <field name="OP">POWER</field>
+                                    <value name="A">
+                                      <block type="math_number">
+                                        <field name="NUM">10</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="math_number">
+                                        <field name="NUM">4</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="EXPECTED">
+                                  <block type="math_number">
+                                    <field name="NUM">10000</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
                       </block>
                     </next>
                   </block>
@@ -332,8 +404,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="16" y="727">
+  <block type="procedures_defnoreturn" x="13" y="1688">
     <field name="NAME">test trig</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">sin</field>
@@ -455,8 +528,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="311" y="733">
+  <block type="procedures_defnoreturn" x="13" y="2213">
     <field name="NAME">test constant</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">const pi</field>
@@ -629,8 +703,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="18" y="1279">
+  <block type="procedures_defnoreturn" x="13" y="2788">
     <field name="NAME">test number properties</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
         <field name="MESSAGE">even</field>
@@ -790,8 +865,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="387" y="1282">
+  <block type="procedures_defnoreturn" x="13" y="3413">
     <field name="NAME">test round</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">round</field>
@@ -853,8 +929,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="394" y="1819">
+  <block type="procedures_defnoreturn" x="13" y="3713">
     <field name="NAME">test change</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">varToChange</field>
@@ -891,12 +968,13 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" inline="false" x="30" y="2074">
+  <block type="procedures_defreturn" inline="false" x="13" y="3913">
     <mutation>
       <arg name="a"></arg>
       <arg name="b"></arg>
     </mutation>
     <field name="NAME">assert list equal</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">equal</field>
@@ -1056,8 +1134,9 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="24" y="2568">
+  <block type="procedures_defnoreturn" x="13" y="4413">
     <field name="NAME">test operations on list</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">sum</field>
@@ -1397,8 +1476,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="15" y="3494">
+  <block type="procedures_defnoreturn" x="13" y="5288">
     <field name="NAME">test mod</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">mod</field>
@@ -1424,8 +1504,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="373" y="3499">
+  <block type="procedures_defnoreturn" x="13" y="5438">
     <field name="NAME">test constraint</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
         <field name="MESSAGE">constraint</field>
@@ -1456,8 +1537,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="15" y="3664">
+  <block type="procedures_defnoreturn" x="13" y="5588">
     <field name="NAME">test random integer</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">rand</field>
@@ -1536,8 +1618,9 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="15" y="3931">
+  <block type="procedures_defnoreturn" x="13" y="5838">
     <field name="NAME">test random fraction</field>
+    <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
       <block type="variables_set" inline="false">
         <field name="VAR">rand</field>

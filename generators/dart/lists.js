@@ -93,7 +93,6 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var list = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
-
   switch (where) {
     case 'FIRST':
       if (mode == 'GET') {
@@ -188,8 +187,6 @@ Blockly.Dart['lists_setIndex'] = function(block) {
   var list = Blockly.Dart.valueToCode(block, 'LIST',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   var mode = block.getFieldValue('MODE') || 'GET';
-  var at = Blockly.Dart.valueToCode(block, 'AT',
-      Blockly.Dart.ORDER_ADDITIVE) || '1';
   var value = Blockly.Dart.valueToCode(block, 'TO',
       Blockly.Dart.ORDER_ASSIGNMENT) || 'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.

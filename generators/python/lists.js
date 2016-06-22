@@ -77,11 +77,11 @@ Blockly.Python['lists_indexOf'] = function(block) {
   var list = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
   if (Blockly.Python.ONE_BASED_INDEXING) {
-    var exceptionIndex = ' 0';
+    var errorIndex = ' 0';
     var firstIndexAdjustment = ' + 1';
     var lastIndexAdjustment = '';
   } else {
-    var exceptionIndex = ' -1';
+    var errorIndex = ' -1';
     var firstIndexAdjustment = '';
     var lastIndexAdjustment = ' - 1';
   }
@@ -90,7 +90,7 @@ Blockly.Python['lists_indexOf'] = function(block) {
         'first_index',
         ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(my_list, elem):',
          '  try: index = my_list.index(elem)' + firstIndexAdjustment,
-         '  except: index =' + exceptionIndex,
+         '  except: index =' + errorIndex,
          '  return index']);
     var code = functionName + '(' + list + ', ' + item + ')';
     return [code, Blockly.Python.ORDER_FUNCTION_CALL];
@@ -100,7 +100,7 @@ Blockly.Python['lists_indexOf'] = function(block) {
       ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(my_list, elem):',
        '  try: index = len(my_list) - my_list[::-1].index(elem)' +
          lastIndexAdjustment,
-       '  except: index =' + exceptionIndex,
+       '  except: index =' + errorIndex,
        '  return index']);
   var code = functionName + '(' + list + ', ' + item + ')';
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];

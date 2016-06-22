@@ -95,10 +95,10 @@ Blockly.PHP['lists_indexOf'] = function(block) {
   var argument1 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_MEMBER) || '[]';
   if (Blockly.PHP.ONE_BASED_INDEXING) {
-    var exceptionIndex = ' 0';
+    var errorIndex = ' 0';
     var indexAdjustment = ' + 1';
   } else {
-    var exceptionIndex = ' -1';
+    var errorIndex = ' -1';
     var indexAdjustment = '';
   }
   if (block.getFieldValue('END') == 'FIRST'){
@@ -111,7 +111,7 @@ Blockly.PHP['lists_indexOf'] = function(block) {
           '    if ($haystack[$index] == $needle) return $index' +
             indexAdjustment + ';',
           '  }',
-          '  return ' + exceptionIndex + ';',
+          '  return ' + errorIndex + ';',
           '}']);
   } else {
     // lastIndexOf
@@ -119,7 +119,7 @@ Blockly.PHP['lists_indexOf'] = function(block) {
         'lastIndexOf',
         [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
         '($haystack, $needle) {',
-          '  $last = ' + exceptionIndex + ';',
+          '  $last = ' + errorIndex + ';',
           '  for ($index = 0; $index < count($haystack); $index++) {',
           '    if ($haystack[$index] == $needle) $last = $index' +
             indexAdjustment + ';',
@@ -412,7 +412,8 @@ Blockly.PHP['lists_getSublist'] = function(block) {
   } else {
     var at1 = Blockly.PHP.getAdjusted(block, 'AT1');
     var at2 = Blockly.PHP.getAdjusted(block, 'AT2');
-    var sublistFunction =
+    var functionName = Blockly.PHP.provideFunction_(
+        'lists_get_sublist',
         [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
             '($list, $where1, $at1, $where2, $at2) {',
           '  if ($where1 == \'FROM_END\') {',
@@ -433,9 +434,7 @@ Blockly.PHP['lists_getSublist'] = function(block) {
           '    throw new Exception(\'Unhandled option (lists_get_sublist).\');',
           '  }',
           '  return array_slice($list, $at1, $length);',
-          '}'];
-    var functionName = Blockly.PHP.provideFunction_(
-        'lists_get_sublist', sublistFunction);
+          '}']);
     var code = functionName + '(' + list + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }

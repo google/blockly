@@ -114,6 +114,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
   workspace.addTopBlock(this);
 
+	this.namespace = undefined; //namespacing
   // Call an initialization function, if it exists.
   if (goog.isFunction(this.init)) {
     this.init();
@@ -652,6 +653,14 @@ Blockly.Block.prototype.getVars = function() {
     }
   }
   return vars;
+};
+
+/**
+ * Return the type of the block. This is used to add namespaces to variables
+ * @return {string|undefined} the variable type as a string. 
+ */
+Blockly.Block.prototype.getNamespace = function() {
+  return this.namespace;
 };
 
 /**

@@ -338,7 +338,7 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
     case Blockly.Connection.REASON_TARGET_NULL:
       throw 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
-      throw 'Connection checks failed.';
+      throw 'Connection checks failed.' + target.getSourceBlock().type + " and " ;
     default:
       throw 'Unknown connection failure: this should never happen!';
   }

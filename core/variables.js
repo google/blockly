@@ -42,7 +42,7 @@ Blockly.Variables.NAME_TYPE = 'VARIABLE';
  * @param {!Blockly.Block|!Blockly.Workspace} root Root block or workspace.
  * @return {!Array.<string>} Array of variable names.
  */
-Blockly.Variables.allVariables = function(root) {
+Blockly.Variables.allVariables = function(root,origin_variable_name) {
   var blocks;
   if (root.getDescendants) {
     // Root is Block.
@@ -54,16 +54,46 @@ Blockly.Variables.allVariables = function(root) {
     throw 'Not Block or Workspace: ' + root;
   }
   var variableHash = Object.create(null);
-  // Iterate through every block and add each variable to the hash.
-  for (var x = 0; x < blocks.length; x++) {
-    var blockVariables = blocks[x].getVars();
-    for (var y = 0; y < blockVariables.length; y++) {
-      var varName = blockVariables[y];
-      // Variable name may be null if the block is only half-built.
-      if (varName) {
-        variableHash[varName.toLowerCase()] = varName;
+  if(origin_variable_name == ''){ //if a variable is created
+    // Iterate through every block and add each variable to the hash.
+    for (var x = 0; x < blocks.length; x++) {
+      var blockVariables = blocks[x].getVars();
+      for (var y = 0; y < blockVariables.length; y++) {
+        var varName = blockVariables[y];
+        // Variable name may be null if the block is only half-built.
+        if (varName) {
+          variableHash[varName.toLowerCase()] = varName;
+        }
       }
     }
+  } else { //if a variable is selected in dropdown
+    // Iterate through every block and find the first block which mentions this variable and get the namespace.
+    var origin_variable_namespace = undefined;
+    for (var x = 0; x < blocks.length; x++) {
+      var blockVariables = blocks[x].getVars();
+      for (var y = 0; y < blockVariables.length; y++) {
+        var varName = blockVariables[y];
+        if (varName == origin_variable_name) {
+          origin_variable_namespace = blocks[x].getNamespace();
+          break;
+        }
+      }
+    }
+    //then find all variables with the same namespace
+    for (var x = 0; x < blocks.length; x++) {
+      var blockType = blocks[x].getNamespace();
+      if(blockType == origin_variable_namespace){
+        var blockVariables = blocks[x].getVars();
+        for (var y = 0; y < blockVariables.length; y++) {
+          var varName = blockVariables[y];
+            // Variable name may be null if the block is only half-built.
+          if (varName) {
+            variableHash[varName.toLowerCase()] = varName;
+          }
+        }
+      }
+    }
+
   }
   // Flatten the hash into a list.
   var variableList = [];

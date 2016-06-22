@@ -938,8 +938,8 @@
                                                                                         <field name="WHERE1">FROM_START</field>
                                                                                         <field name="WHERE2">FROM_START</field>
                                                                                         <value name="STRING">
-                                                                                          <block type="variables_get">
-                                                                                            <field name="VAR">text</field>
+                                                                                          <block type="procedures_callreturn">
+                                                                                            <mutation name="get numbers"></mutation>
                                                                                           </block>
                                                                                         </value>
                                                                                         <value name="AT1">
@@ -1080,8 +1080,8 @@
                                                                                                                 <field name="WHERE1">FROM_END</field>
                                                                                                                 <field name="WHERE2">FROM_END</field>
                                                                                                                 <value name="STRING">
-                                                                                                                  <block type="variables_get">
-                                                                                                                    <field name="VAR">text</field>
+                                                                                                                  <block type="procedures_callreturn">
+                                                                                                                    <mutation name="get numbers"></mutation>
                                                                                                                   </block>
                                                                                                                 </value>
                                                                                                                 <value name="AT1">

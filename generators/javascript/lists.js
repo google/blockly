@@ -310,7 +310,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
         'getSubsequence',
         [
           'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(sequence, where1, at1, where2, at2) {',
+            '(sequence, where1, at1, where2, at2) {',
           '  function getAt(where, at) {',
           '    if (where == \'FROM_END\') {',
           '      at = sequence.length - 1 - at;',
@@ -342,8 +342,8 @@ Blockly.JavaScript['lists_sort'] = function(block) {
   var type = block.getFieldValue('TYPE');
   var getCompareFunctionName = Blockly.JavaScript.provideFunction_(
           'listsGetSortCompare',
-  ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-    '(type, direction) {',
+      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(type, direction) {',
       '  var compareFuncs = {',
       '    "NUMERIC": function(a, b) {',
       '        return parseFloat(a) - parseFloat(b); },',
@@ -351,7 +351,7 @@ Blockly.JavaScript['lists_sort'] = function(block) {
       '        return a.toString() > b.toString() ? 1 : -1; },',
       '    "IGNORE_CASE": function(a, b) {',
       '        return a.toString().toLowerCase() > ' +
-      'b.toString().toLowerCase() ? 1 : -1; },',
+        'b.toString().toLowerCase() ? 1 : -1; },',
       '  };',
       '  var compare = compareFuncs[type];',
       '  return function(a, b) { return compare(a, b) * direction; }',

@@ -47,20 +47,14 @@ Blockly.PHP['math_arithmetic'] = function(block) {
     'MINUS': [' - ', Blockly.PHP.ORDER_SUBTRACTION],
     'MULTIPLY': [' * ', Blockly.PHP.ORDER_MULTIPLICATION],
     'DIVIDE': [' / ', Blockly.PHP.ORDER_DIVISION],
-    'POWER': [null, Blockly.PHP.ORDER_COMMA]  // Handle power separately.
+    'POWER': [' ** ', Blockly.PHP.ORDER_POWER]
   };
   var tuple = OPERATORS[block.getFieldValue('OP')];
   var operator = tuple[0];
   var order = tuple[1];
   var argument0 = Blockly.PHP.valueToCode(block, 'A', order) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'B', order) || '0';
-  var code;
-  // Power in PHP requires a special case since it has no operator.
-  if (!operator) {
-    code = 'pow(' + argument0 + ', ' + argument1 + ')';
-    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-  }
-  code = argument0 + operator + argument1;
+  var code = argument0 + operator + argument1;
   return [code, order];
 };
 

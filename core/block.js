@@ -1021,7 +1021,7 @@ Blockly.Block.prototype.jsonInit = function(json) {
  * @private
  */
 Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
-  var tokens = Blockly.tokenizeInterpolation(message);
+  var tokens = Blockly.utils.tokenizeInterpolation(message);
   // Interpolate the arguments.  Build a list of elements.
   var indexDup = [];
   var indexCount = 0;

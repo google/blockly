@@ -549,7 +549,8 @@ Blockly.addChangeListener = function(func) {
 
 /**
  * Returns the main workspace.  Returns the last used main workspace (based on
- * focus).
+ * focus).  Try not to use this function, particularly if there are multiple
+ * Blockly instances on a page.
  * @return {!Blockly.Workspace} The main workspace.
  */
 Blockly.getMainWorkspace = function() {

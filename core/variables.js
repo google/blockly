@@ -56,11 +56,13 @@ Blockly.Variables.allVariables = function(root) {
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
     var blockVariables = blocks[x].getVars();
-    for (var y = 0; y < blockVariables.length; y++) {
-      var varName = blockVariables[y];
-      // Variable name may be null if the block is only half-built.
-      if (varName) {
-        variableHash[varName.toLowerCase()] = varName;
+    if (blockVariables) {
+      for (var y = 0; y < blockVariables.length; y++) {
+        var varName = blockVariables[y];
+        // Variable name may be null if the block is only half-built.
+        if (varName) {
+          variableHash[varName.toLowerCase()] = varName;
+        }
       }
     }
   }
@@ -86,6 +88,8 @@ Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
     blocks[i].renameVar(oldName, newName);
   }
   Blockly.Events.setGroup(false);
+
+  workspace.renameVariable(oldName, newName);
 };
 
 /**
@@ -94,7 +98,7 @@ Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
-  var variableList = Blockly.Variables.allVariables(workspace);
+  var variableList = workspace.variableList;
   variableList.sort(goog.string.caseInsensitiveCompare);
   // In addition to the user's variables, we also want to display the default
   // variable name at the top.  We also don't want this duplicated if the
@@ -148,7 +152,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
 * @return {string} New variable name.
 */
 Blockly.Variables.generateUniqueName = function(workspace) {
-  var variableList = Blockly.Variables.allVariables(workspace);
+  var variableList = workspace.variableList;
   var newName = '';
   if (variableList.length) {
     var nameSuffix = 1;

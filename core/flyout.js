@@ -546,6 +546,49 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     // Special category for procedures.
     xmlList =
         Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
+  } else if (xmlList.constructor != Array) { //single get function under a namespace
+    //example: block name is "ioport_get", namespace is IO_Number, the custom should be ioport_get
+    var namespace = xmlList;
+    var block_name = 'variable_get';  //default value, should be replaced if the naming scheme is xxx_set and xxx_get
+    var blocks = this.workspace_.targetWorkspace.getAllBlocks();
+    if (blocks.length == 0) {
+      throw("Custom list: no blocks in workspace")
+    }
+    //find variables
+    var variableHash = Object.create(null);
+    for (var x = 0; x < blocks.length; x++) {
+      if (blocks[x].namespace == namespace) {
+        //get the name of the block.
+        var other_name = blocks[x].type;
+        if (other_name.indexOf("_set") > -1) {
+          block_name = other_name.replace("_set","_get");
+        }
+        var blockVariables = blocks[x].getVars();
+        for (var y = 0; y < blockVariables.length; y++) {
+          var varName = blockVariables[y];
+          // Variable name may be null if the block is only half-built.
+          if (varName) {
+            variableHash[varName.toLowerCase()] = varName;
+          }
+        }
+      }
+    }
+    var variableList = [];
+    for (var name in variableHash) {
+      variableList.push(variableHash[name]);
+    }
+    variableList.sort(goog.string.caseInsensitiveCompare);
+    //create a list with all the blocks
+    var xmlList = [];
+    for (var i = 0; i < variableList.length; i++) {
+      var block = goog.dom.createDom('block');
+      block.setAttribute('type', block_name);
+      block.setAttribute('gap', 24);
+      var field = goog.dom.createDom('field', null, variableList[i]);
+      field.setAttribute('name', 'VAR');
+      block.appendChild(field);
+      xmlList.push(block);
+    }    
   }
 
   this.svgGroup_.style.display = 'block';

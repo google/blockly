@@ -330,7 +330,7 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
     case Blockly.Connection.REASON_TARGET_NULL:
       throw 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
-      throw 'Connection checks failed.';
+      throw 'Connection checks failed at' ++ target.getSourceBlock().type + "." ;
     case Blockly.Connection.REASON_SHADOW_PARENT:
       throw 'Connecting non-shadow to shadow block.';
     default:

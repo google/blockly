@@ -80,15 +80,14 @@ Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
- * Empty loops or conditionals are not allowed in Python.
- */
-Blockly.Python.PASS = '  pass\n';
-
-/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.Python.init = function(workspace) {
+  /**
+   * Empty loops or conditionals are not allowed in Python.
+   */
+  Blockly.Python.PASS = this.INDENT + 'pass\n';
   // Create a dictionary of definitions to be printed before the code.
   Blockly.Python.definitions_ = Object.create(null);
   // Create a dictionary mapping desired function names in definitions_
@@ -153,7 +152,7 @@ Blockly.Python.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.Python.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
+  // Can't use goog.string.quote since % must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/\%/g, '\\%')
@@ -176,8 +175,14 @@ Blockly.Python.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
+    comment = Blockly.utils.wrap(comment, this.COMMENT_WRAP - 3);
     if (comment) {
-      commentCode += Blockly.Python.prefixLines(comment, '# ') + '\n';
+      if (block.getProcedureDef) {
+        // Use a comment block for function comments.
+        commentCode += '"""' + comment + '\n"""\n';
+      } else {
+        commentCode += Blockly.Python.prefixLines(comment + '\n', '# ');
+      }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.

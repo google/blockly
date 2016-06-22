@@ -38,7 +38,7 @@ Blockly.JavaScript['colour_picker'] = function(block) {
 Blockly.JavaScript['colour_random'] = function(block) {
   // Generate a random colour.
   var functionName = Blockly.JavaScript.provideFunction_(
-      'colour_random',
+      'colourRandom',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
         '  var num = Math.floor(Math.random() * Math.pow(2, 24));',
         '  return \'#\' + (\'00000\' + num.toString(16)).substr(-6);',
@@ -56,7 +56,7 @@ Blockly.JavaScript['colour_rgb'] = function(block) {
   var blue = Blockly.JavaScript.valueToCode(block, 'BLUE',
       Blockly.JavaScript.ORDER_COMMA) || 0;
   var functionName = Blockly.JavaScript.provideFunction_(
-      'colour_rgb',
+      'colourRgb',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(r, g, b) {',
         '  r = Math.max(Math.min(Number(r), 100), 0) * 2.55;',
@@ -80,7 +80,7 @@ Blockly.JavaScript['colour_blend'] = function(block) {
   var ratio = Blockly.JavaScript.valueToCode(block, 'RATIO',
       Blockly.JavaScript.ORDER_COMMA) || 0.5;
   var functionName = Blockly.JavaScript.provideFunction_(
-      'colour_blend',
+      'colourBlend',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(c1, c2, ratio) {',
         '  ratio = Math.max(Math.min(Number(ratio), 1), 0);',

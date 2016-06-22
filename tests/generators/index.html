@@ -38,17 +38,6 @@
 <script src="../../generators/php/variables.js"></script>
 <script src="../../generators/php/procedures.js"></script>
 
-<script src="../../generators/dart.js"></script>
-<script src="unittest_dart.js"></script>
-<script src="../../generators/dart/logic.js"></script>
-<script src="../../generators/dart/loops.js"></script>
-<script src="../../generators/dart/math.js"></script>
-<script src="../../generators/dart/text.js"></script>
-<script src="../../generators/dart/lists.js"></script>
-<script src="../../generators/dart/colour.js"></script>
-<script src="../../generators/dart/variables.js"></script>
-<script src="../../generators/dart/procedures.js"></script>
-
 <script src="../../generators/lua.js"></script>
 <script src="unittest_lua.js"></script>
 <script src="../../generators/lua/logic.js"></script>
@@ -60,6 +49,16 @@
 <script src="../../generators/lua/variables.js"></script>
 <script src="../../generators/lua/procedures.js"></script>
 
+<script src="../../generators/dart.js"></script>
+<script src="unittest_dart.js"></script>
+<script src="../../generators/dart/logic.js"></script>
+<script src="../../generators/dart/loops.js"></script>
+<script src="../../generators/dart/math.js"></script>
+<script src="../../generators/dart/text.js"></script>
+<script src="../../generators/dart/lists.js"></script>
+<script src="../../generators/dart/colour.js"></script>
+<script src="../../generators/dart/variables.js"></script>
+<script src="../../generators/dart/procedures.js"></script>
 
 <script src="unittest.js"></script>
 <script src="../../msg/messages.js"></script>
@@ -78,7 +77,15 @@ var workspace = null;
 
 function start() {
   workspace = Blockly.inject('blocklyDiv',
-      {media: '../../media/', toolbox: document.getElementById('toolbox')});
+      {grid:
+         {spacing: 25,
+          length: 3,
+          colour: '#ccc',
+          snap: true},
+       media: '../../media/',
+       toolbox: document.getElementById('toolbox'),
+       zoom: {controls: true, wheel: true}
+       });
 }
 
 function loadXml() {
@@ -128,7 +135,7 @@ function fromXml(xmlText) {
     alert('Error parsing XML:\n' + e);
     return;
   }
-  Blockly.Xml.domToWorkspace(workspace, xmlDoc);
+  Blockly.Xml.domToWorkspace(xmlDoc, workspace);
 }
 
 function setOutput(text) {
@@ -161,13 +168,13 @@ function toPhp() {
   setOutput(code);
 }
 
-function toDart() {
-  var code = Blockly.Dart.workspaceToCode(workspace);
+function toLua() {
+  var code = Blockly.Lua.workspaceToCode(workspace);
   setOutput(code);
 }
 
-function toLua() {
-  var code = Blockly.Lua.workspaceToCode(workspace);
+function toDart() {
+  var code = Blockly.Dart.workspaceToCode(workspace);
   setOutput(code);
 }
 </script>
@@ -264,6 +271,7 @@ h1 {
       <block type="lists_getIndex"></block>
       <block type="lists_setIndex"></block>
       <block type="lists_getSublist"></block>
+      <block type="lists_sort"></block>
       <block type="lists_split"></block>
     </category>
     <category name="Colour" colour="20">
@@ -303,8 +311,8 @@ h1 {
       <input type="button" value="JavaScript" onclick="toJavaScript()">
       <input type="button" value="Python" onclick="toPython()">
       <input type="button" value="PHP" onclick="toPhp()">
-      <input type="button" value="Dart" onclick="toDart()">
       <input type="button" value="Lua" onclick="toLua()">
+      <input type="button" value="Dart" onclick="toDart()">
     </p>
   </td></tr><tr><td height="99%">
     <textarea id="importExport" readonly="readonly" wrap="off"></textarea>

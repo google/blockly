@@ -64,13 +64,27 @@ Blockly.Generator.prototype.INFINITE_LOOP_TRAP = null;
 Blockly.Generator.prototype.STATEMENT_PREFIX = null;
 
 /**
+ * The method of indenting.  Defaults to two spaces, but language generators
+ * may override this to increase indent or change to tabs.
+ * @type {string}
+ */
+Blockly.Generator.prototype.INDENT = '  ';
+
+/**
+ * Maximum length for a comment before wrapping.  Does not account for
+ * indenting level.
+ * @type {number}
+ */
+Blockly.Generator.prototype.COMMENT_WRAP = 60;
+
+/**
  * Generate code for all blocks in the workspace to the specified language.
  * @param {Blockly.Workspace} workspace Workspace to generate code from.
  * @return {string} Generated code.
  */
 Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   if (!workspace) {
-    // Backwards compatability from before there could be multiple workspaces.
+    // Backwards compatibility from before there could be multiple workspaces.
     console.warn('No workspace specified in workspaceToCode call.  Guessing.');
     workspace = Blockly.getMainWorkspace();
   }
@@ -268,13 +282,6 @@ Blockly.Generator.prototype.addLoopTrap = function(branch, id) {
 };
 
 /**
- * The method of indenting.  Defaults to two spaces, but language generators
- * may override this to increase indent or change to tabs.
- * @type {string}
- */
-Blockly.Generator.prototype.INDENT = '  ';
-
-/**
  * Comma-separated list of reserved words.
  * @type {string}
  * @private
@@ -312,18 +319,25 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
  * The code gets output when Blockly.Generator.finish() is called.
  *
  * @param {string} desiredName The desired name of the function (e.g., isPrime).
- * @param {!Array.<string>} code A list of Python statements.
+ * @param {!Array.<string>} code A list of statements.  Use '  ' for indents.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
  * @private
  */
 Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   if (!this.definitions_[desiredName]) {
-    var functionName =
-        this.variableDB_.getDistinctName(desiredName, this.NAME_TYPE);
+    var functionName = this.variableDB_.getDistinctName(desiredName,
+        Blockly.Procedures.NAME_TYPE);
     this.functionNames_[desiredName] = functionName;
-    this.definitions_[desiredName] = code.join('\n').replace(
+    var codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
+    // Change all '  ' indents into the desired indent.
+    var oldCodeText;
+    while (oldCodeText != codeText) {
+      oldCodeText = codeText;
+      codeText = codeText.replace(/^((  )*)  /gm, '$1' + this.INDENT);
+    }
+    this.definitions_[desiredName] = codeText;
   }
   return this.functionNames_[desiredName];
 };

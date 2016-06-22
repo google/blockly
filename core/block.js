@@ -52,9 +52,9 @@ goog.require('goog.string');
  */
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
-  this.id = (opt_id && !Blockly.Block.getById(opt_id)) ?
+  this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
       opt_id : Blockly.genUid();
-  Blockly.Block.BlockDB_[this.id] = this;
+  workspace.blockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
   /** @type {Blockly.Connection} */
@@ -66,33 +66,61 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {boolean|undefined} */
   this.inputsInline = undefined;
   /** @type {boolean} */
-  this.rendered = false;
-  /** @type {boolean} */
   this.disabled = false;
   /** @type {string|!Function} */
   this.tooltip = '';
   /** @type {boolean} */
   this.contextMenu = true;
 
-  /** @type {Blockly.Block} */
+  /**
+   * @type {Blockly.Block}
+   * @private
+   */
   this.parentBlock_ = null;
-  /** @type {!Array.<!Blockly.Block>} */
+
+  /**
+   * @type {!Array.<!Blockly.Block>}
+   * @private
+   */
   this.childBlocks_ = [];
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.deletable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.movable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.editable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.isShadow_ = false;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.collapsed_ = false;
 
   /** @type {string|Blockly.Comment} */
   this.comment = null;
 
-  /** @type {!goog.math.Coordinate} */
+  /**
+   * @type {!goog.math.Coordinate}
+   * @private
+   */
   this.xy_ = new goog.math.Coordinate(0, 0);
 
   /** @type {!Blockly.Workspace} */
@@ -181,16 +209,14 @@ Blockly.Block.prototype.dispose = function(healStack) {
   // Remove this block from the workspace's list of top-most blocks.
   if (this.workspace) {
     this.workspace.removeTopBlock(this);
+    // Remove from block database.
+    delete this.workspace.blockDB_[this.id];
     this.workspace = null;
   }
 
   // Just deleting this block from the DOM would result in a memory leak as
   // well as corruption of the connection database.  Therefore we must
   // methodically step through the blocks and carefully disassemble them.
-
-  if (Blockly.selected == this) {
-    Blockly.selected = null;
-  }
 
   // First, dispose of all my children.
   for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
@@ -206,13 +232,11 @@ Blockly.Block.prototype.dispose = function(healStack) {
   var connections = this.getConnections_(true);
   for (var i = 0; i < connections.length; i++) {
     var connection = connections[i];
-    if (connection.targetConnection) {
+    if (connection.isConnected()) {
       connection.disconnect();
     }
     connections[i].dispose();
   }
-  // Remove from block database.
-  delete Blockly.Block.BlockDB_[this.id];
   Blockly.Events.enable();
 };
 
@@ -224,13 +248,13 @@ Blockly.Block.prototype.dispose = function(healStack) {
  */
 Blockly.Block.prototype.unplug = function(opt_healStack) {
   if (this.outputConnection) {
-    if (this.outputConnection.targetConnection) {
+    if (this.outputConnection.isConnected()) {
       // Disconnect from any superior block.
       this.outputConnection.disconnect();
     }
   } else if (this.previousConnection) {
     var previousTarget = null;
-    if (this.previousConnection.targetConnection) {
+    if (this.previousConnection.isConnected()) {
       // Remember the connection that any next statements need to connect to.
       previousTarget = this.previousConnection.targetConnection;
       // Detach this block from the parent's tree.
@@ -251,29 +275,23 @@ Blockly.Block.prototype.unplug = function(opt_healStack) {
 
 /**
  * Returns all connections originating from this block.
- * @param {boolean} all If true, return all connections even hidden ones.
- *     Otherwise return those that are visible.
  * @return {!Array.<!Blockly.Connection>} Array of connections.
  * @private
  */
-Blockly.Block.prototype.getConnections_ = function(all) {
+Blockly.Block.prototype.getConnections_ = function() {
   var myConnections = [];
-  if (all || this.rendered) {
-    if (this.outputConnection) {
-      myConnections.push(this.outputConnection);
-    }
-    if (this.previousConnection) {
-      myConnections.push(this.previousConnection);
-    }
-    if (this.nextConnection) {
-      myConnections.push(this.nextConnection);
-    }
-    if (all || !this.collapsed_) {
-      for (var i = 0, input; input = this.inputList[i]; i++) {
-        if (input.connection) {
-          myConnections.push(input.connection);
-        }
-      }
+  if (this.outputConnection) {
+    myConnections.push(this.outputConnection);
+  }
+  if (this.previousConnection) {
+    myConnections.push(this.previousConnection);
+  }
+  if (this.nextConnection) {
+    myConnections.push(this.nextConnection);
+  }
+  for (var i = 0, input; input = this.inputList[i]; i++) {
+    if (input.connection) {
+      myConnections.push(input.connection);
     }
   }
   return myConnections;
@@ -307,7 +325,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
   if (!this.workspace) {
     return;  // Deleted block.
   }
-  if (Blockly.dragMode_ != 0) {
+  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
     return;  // Don't bump blocks during a drag.
   }
   var rootBlock = this.getRootBlock();
@@ -318,7 +336,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
   var myConnections = this.getConnections_(false);
   for (var i = 0, connection; connection = myConnections[i]; i++) {
     // Spider down from this block bumping all sub-blocks.
-    if (connection.targetConnection && connection.isSuperior()) {
+    if (connection.isConnected() && connection.isSuperior()) {
       connection.targetBlock().bumpNeighbours_();
     }
 
@@ -326,7 +344,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
     for (var j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
       // If both connections are connected, that's probably fine.  But if
       // either one of them is unconnected, then there could be confusion.
-      if (!connection.targetConnection || !otherConnection.targetConnection) {
+      if (!connection.isConnected() || !otherConnection.isConnected()) {
         // Only bump blocks if they are from different tree structures.
         if (otherConnection.getSourceBlock().getRootBlock() != rootBlock) {
           // Always bump the inferior block.
@@ -436,10 +454,10 @@ Blockly.Block.prototype.setParent = function(newParent) {
     }
 
     // Disconnect from superior blocks.
-    if (this.previousConnection && this.previousConnection.targetConnection) {
+    if (this.previousConnection && this.previousConnection.isConnected()) {
       throw 'Still connected to previous block.';
     }
-    if (this.outputConnection && this.outputConnection.targetConnection) {
+    if (this.outputConnection && this.outputConnection.isConnected()) {
       throw 'Still connected to parent block.';
     }
     this.parentBlock_ = null;
@@ -618,9 +636,6 @@ Blockly.Block.prototype.setColour = function(colour) {
   } else {
     throw 'Invalid colour: ' + colour;
   }
-  if (this.rendered) {
-    this.updateColour();
-  }
 };
 
 /**
@@ -733,25 +748,24 @@ Blockly.Block.prototype.setTitleValue = function(newValue, name) {
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
-  if (this.previousConnection) {
-    goog.asserts.assert(!this.previousConnection.targetConnection,
-        'Must disconnect previous statement before removing connection.');
-    this.previousConnection.dispose();
-    this.previousConnection = null;
-  }
   if (newBoolean) {
-    goog.asserts.assert(!this.outputConnection,
-        'Remove output connection prior to adding previous connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
-    this.previousConnection =
-        new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
+    if (!this.previousConnection) {
+      goog.asserts.assert(!this.outputConnection,
+          'Remove output connection prior to adding previous connection.');
+      this.previousConnection =
+          this.makeConnection_(Blockly.PREVIOUS_STATEMENT);
+    }
     this.previousConnection.setCheck(opt_check);
-  }
-  if (this.rendered) {
-    this.render();
-    this.bumpNeighbours_();
+  } else {
+    if (this.previousConnection) {
+      goog.asserts.assert(!this.previousConnection.isConnected(),
+          'Must disconnect previous statement before removing connection.');
+      this.previousConnection.dispose();
+      this.previousConnection = null;
+    }
   }
 };
 
@@ -762,23 +776,21 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
  *     list of statement types.  Null/undefined if any type could be connected.
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
-  if (this.nextConnection) {
-    goog.asserts.assert(!this.nextConnection.targetConnection,
-        'Must disconnect next statement before removing connection.');
-    this.nextConnection.dispose();
-    this.nextConnection = null;
-  }
   if (newBoolean) {
     if (opt_check === undefined) {
       opt_check = null;
     }
-    this.nextConnection =
-        new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
+    if (!this.nextConnection) {
+      this.nextConnection = this.makeConnection_(Blockly.NEXT_STATEMENT);
+    }
     this.nextConnection.setCheck(opt_check);
-  }
-  if (this.rendered) {
-    this.render();
-    this.bumpNeighbours_();
+  } else {
+    if (this.nextConnection) {
+      goog.asserts.assert(!this.nextConnection.isConnected(),
+          'Must disconnect next statement before removing connection.');
+      this.nextConnection.dispose();
+      this.nextConnection = null;
+    }
   }
 };
 
@@ -790,25 +802,23 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
  *     (e.g. variable get).
  */
 Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
-  if (this.outputConnection) {
-    goog.asserts.assert(!this.outputConnection.targetConnection,
-        'Must disconnect output value before removing connection.');
-    this.outputConnection.dispose();
-    this.outputConnection = null;
-  }
   if (newBoolean) {
-    goog.asserts.assert(!this.previousConnection,
-        'Remove previous connection prior to adding output connection.');
     if (opt_check === undefined) {
       opt_check = null;
     }
-    this.outputConnection =
-        new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
+    if (!this.outputConnection) {
+      goog.asserts.assert(!this.previousConnection,
+          'Remove previous connection prior to adding output connection.');
+      this.outputConnection = this.makeConnection_(Blockly.OUTPUT_VALUE);
+    }
     this.outputConnection.setCheck(opt_check);
-  }
-  if (this.rendered) {
-    this.render();
-    this.bumpNeighbours_();
+  } else {
+    if (this.outputConnection) {
+      goog.asserts.assert(!this.outputConnection.isConnected(),
+          'Must disconnect output value before removing connection.');
+      this.outputConnection.dispose();
+      this.outputConnection = null;
+    }
   }
 };
 
@@ -821,10 +831,6 @@ Blockly.Block.prototype.setInputsInline = function(newBoolean) {
     Blockly.Events.fire(new Blockly.Events.Change(
         this, 'inline', null, this.inputsInline, newBoolean));
     this.inputsInline = newBoolean;
-    if (this.rendered) {
-      this.render();
-      this.bumpNeighbours_();
-    }
   }
 };
 
@@ -1051,11 +1057,11 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
       elements[elements.length - 1]['type'].indexOf('field_') == 0)) {
-    var input = {type: 'input_dummy'};
+    var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {
-      input['align'] = lastDummyAlign;
+      dummyInput['align'] = lastDummyAlign;
     }
-    elements.push(input);
+    elements.push(dummyInput);
   }
   // Lookup of alignment constants.
   var alignmentLookup = {
@@ -1113,6 +1119,9 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             field = new Blockly.FieldImage(element['src'],
                 element['width'], element['height'], element['alt']);
             break;
+          case 'field_number':
+            field = new Blockly.FieldNumber(element['text']);
+            break;
           case 'field_date':
             if (Blockly.FieldDate) {
               field = new Blockly.FieldDate(element['date']);
@@ -1157,16 +1166,11 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
-    connection = new Blockly.Connection(this, type);
+    connection = this.makeConnection_(type);
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
   this.inputList.push(input);
-  if (this.rendered) {
-    this.render();
-    // Adding an input will cause the block to change shape.
-    this.bumpNeighbours_();
-  }
   return input;
 };
 
@@ -1223,11 +1227,6 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
   }
   // Reinsert input.
   this.inputList.splice(refIndex, 0, input);
-  if (this.rendered) {
-    this.render();
-    // Moving an input will cause the block to change shape.
-    this.bumpNeighbours_();
-  }
 };
 
 /**
@@ -1240,7 +1239,7 @@ Blockly.Block.prototype.moveNumberedInputBefore = function(
 Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
   for (var i = 0, input; input = this.inputList[i]; i++) {
     if (input.name == name) {
-      if (input.connection && input.connection.targetConnection) {
+      if (input.connection && input.connection.isConnected()) {
         input.connection.setShadowDom(null);
         var block = input.connection.targetBlock();
         if (block.isShadow()) {
@@ -1253,11 +1252,6 @@ Blockly.Block.prototype.removeInput = function(name, opt_quiet) {
       }
       input.dispose();
       this.inputList.splice(i, 1);
-      if (this.rendered) {
-        this.render();
-        // Removing an input will cause the block to change shape.
-        this.bumpNeighbours_();
-      }
       return;
     }
   }
@@ -1351,16 +1345,11 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
 };
 
 /**
- * Database of all blocks.
+ * Create a connection of the specified type.
+ * @param {number} type The type of the connection to create.
+ * @return {!Blockly.Connection} A new connection of the specified type.
  * @private
  */
-Blockly.Block.BlockDB_ = Object.create(null);
-
-/**
- * Find the block with the specified ID.
- * @param {string} id ID of block to find.
- * @return {Blockly.Block} The sought after block or null if not found.
- */
-Blockly.Block.getById = function(id) {
-  return Blockly.Block.BlockDB_[id] || null;
+Blockly.Block.prototype.makeConnection_ = function(type) {
+  return new Blockly.Connection(this, type);
 };

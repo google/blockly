@@ -104,6 +104,12 @@ Blockly.JavaScript.ORDER_COMMA = 17;         // ,
 Blockly.JavaScript.ORDER_NONE = 99;          // (...)
 
 /**
+ * Allow for switching between one and zero based indexing, one based by
+ * default.
+ */
+Blockly.JavaScript.ONE_BASED_INDEXING = true;
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -123,12 +129,14 @@ Blockly.JavaScript.init = function(workspace) {
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  for (var i = 0; i < variables.length; i++) {
-    defvars[i] = 'var ' +
-        Blockly.JavaScript.variableDB_.getName(variables[i],
-        Blockly.Variables.NAME_TYPE) + ';';
+  if (variables.length) {
+    for (var i = 0; i < variables.length; i++) {
+      defvars[i] = Blockly.JavaScript.variableDB_.getName(variables[i],
+          Blockly.Variables.NAME_TYPE);
+    }
+    Blockly.JavaScript.definitions_['variables'] =
+        'var ' + defvars.join(', ') + ';';
   }
-  Blockly.JavaScript.definitions_['variables'] = defvars.join('\n');
 };
 
 /**
@@ -167,7 +175,8 @@ Blockly.JavaScript.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.JavaScript.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
+  // Can't use goog.string.quote since Google's style guide recommends
+  // JS string literals use single quotes.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/'/g, '\\\'');
@@ -189,14 +198,22 @@ Blockly.JavaScript.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
+    comment = Blockly.utils.wrap(comment, this.COMMENT_WRAP - 3);
     if (comment) {
-      commentCode += Blockly.JavaScript.prefixLines(comment, '// ') + '\n';
+      if (block.getProcedureDef) {
+        // Use a comment block for function comments.
+        commentCode += '/**\n' +
+                       Blockly.JavaScript.prefixLines(comment + '\n', ' * ') +
+                       ' */\n';
+      } else {
+        commentCode += Blockly.JavaScript.prefixLines(comment + '\n', '// ');
+      }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].connection.targetBlock();
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.JavaScript.allNestedComments(childBlock);
           if (comment) {

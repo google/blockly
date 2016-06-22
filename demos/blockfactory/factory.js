@@ -99,8 +99,8 @@ function updateLanguage() {
  */
 function formatJson_(blockType, rootBlock) {
   var JS = {};
-  // ID is not used by Blockly, but may be used by a loader.
-  JS.id = blockType;
+  // Type is not used by Blockly, but may be used by a loader.
+  JS.type = blockType;
   // Generate inputs.
   var message = [];
   var args = [];
@@ -656,7 +656,7 @@ function updatePreview() {
 
     if (format == 'JSON') {
       var json = JSON.parse(code);
-      Blockly.Blocks[json.id || UNNAMED] = {
+      Blockly.Blocks[json.type || UNNAMED] = {
         init: function() {
           this.jsonInit(json);
         }
@@ -753,7 +753,7 @@ function init() {
 
   document.getElementById('helpButton').addEventListener('click',
     function() {
-      open('https://developers.google.com/blockly/custom-blocks/block-factory',
+      open('https://developers.google.com/blockly/guides/create-custom-blocks/block-factory',
            'BlockFactoryHelp');
     });
 
@@ -786,7 +786,7 @@ function init() {
                                mainWorkspace);
   } else {
     var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(mainWorkspace, Blockly.Xml.textToDom(xml));
+    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
   }
   mainWorkspace.clearUndo();
 

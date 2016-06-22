@@ -35,7 +35,7 @@ blockly/
      `- python_compressed.js
 
 Instructions for fetching the optional Closure library may be found here:
-  https://developers.google.com/blockly/hacking/closure
+  https://developers.google.com/blockly/guides/modify/web/closure
 
 Go to https://appengine.google.com/ and create your App Engine application.
 Modify the 'application' name of app.yaml to your App Engine application name.

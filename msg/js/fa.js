@@ -143,6 +143,14 @@ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = "مورد مشخص‌شده �
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = "مورد مشخص‌شده در یک فهرست را قرار می‌دهد.  #1 اولین مورد است.";
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_LAST = "آخرین مورد در یک فهرست را تعیین می‌کند.";
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_RANDOM = "یک مورد تصادفی در یک فهرست را تعیین می‌کند.";
+Blockly.Msg.LISTS_SORT_HELPURL = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";  // untranslated
+Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = "صعودی";
+Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = "نزولی";
+Blockly.Msg.LISTS_SORT_TITLE = "sort %1 %2 %3";  // untranslated
+Blockly.Msg.LISTS_SORT_TOOLTIP = "Sort a copy of a list.";  // untranslated
+Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = "حروفی ، رد کردن مورد";
+Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = "عددی";
+Blockly.Msg.LISTS_SORT_TYPE_TEXT = "حروفی ، الفبایی";
 Blockly.Msg.LISTS_SPLIT_HELPURL = "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists";  // untranslated
 Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = "ایجاد فهرست از متن";
 Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST = "ایجاد متن از فهرست";
@@ -271,7 +279,7 @@ Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = "https://fa.wikipedia.org/wiki/%D8%B
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "اجرای تابع تعریف‌شده توسط کاربر «%1» و استفاده از خروجی آن.";
 Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = "با:";
 Blockly.Msg.PROCEDURES_CREATE_DO = "ساختن «%1»";
-Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "Describe this function...";  // untranslated
+Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = "توصیف این عملکرد...";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";  // untranslated
 Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "انجام چیزی";
@@ -289,7 +297,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "نام ورودی:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "اضافه کردن ورودی به تابع.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "ورودی‌ها";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "افزودن، حذف یا دوباره مرتب‌کردن ورودی این تابع.";
-Blockly.Msg.REDO = "Redo";  // untranslated
+Blockly.Msg.REDO = "واگردانی";
 Blockly.Msg.REMOVE_COMMENT = "حذف نظر";
 Blockly.Msg.RENAME_VARIABLE = "تغییر نام متغیر...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "تغییر نام همهٔ متغیرهای «%1» به:";
@@ -355,7 +363,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = "تراشیدن فاصله‌ها از  ط
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "تراشیدن فاصله‌ها از  طرف چپ";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "کپی از متن با فاصله‌های حذف‌شده از یک یا هر دو پایان باز می‌گرداند.";
 Blockly.Msg.TODAY = "امروز";
-Blockly.Msg.UNDO = "Undo";  // untranslated
+Blockly.Msg.UNDO = "واگردانی";
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "مورد";
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "درست‌کردن «تنظیم %1»";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://github.com/google/blockly/wiki/Variables#get";  // untranslated

@@ -95,7 +95,7 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
   var argument1 = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
   var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
-  return [code, Blockly.JavaScript.ORDER_MEMBER];
+  return [code, Blockly.JavaScript.ORDER_ADDITION];
 };
 
 Blockly.JavaScript['text_charAt'] = function(block) {
@@ -129,7 +129,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 'RANDOM':
       var functionName = Blockly.JavaScript.provideFunction_(
-          'text_random_letter',
+          'textRandomLetter',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(text) {',
             '  var x = Math.floor(Math.random() * text.length);',
@@ -155,7 +155,7 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
     var code = text;
   } else {
     var functionName = Blockly.JavaScript.provideFunction_(
-        'text_get_substring',
+        'textGetSubstring',
         [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
             '(text, where1, at1, where2, at2) {',
           '  function getAt(where, at) {',
@@ -199,7 +199,7 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
   } else {
     // Title case is not a native JavaScript function.  Define one.
     var functionName = Blockly.JavaScript.provideFunction_(
-        'text_toTitleCase',
+        'textToTitleCase',
         [ 'function ' +
             Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(str) {',
           '  return str.replace(/\\S+/g,',

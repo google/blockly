@@ -146,7 +146,6 @@ Blockly.PHP.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.PHP.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/'/g, '\\\'');
@@ -168,6 +167,7 @@ Blockly.PHP.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
+    comment = Blockly.utils.wrap(comment, this.COMMENT_WRAP - 3);
     if (comment) {
       commentCode += Blockly.PHP.prefixLines(comment, '// ') + '\n';
     }

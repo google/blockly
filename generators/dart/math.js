@@ -317,7 +317,7 @@ Blockly.Dart['math_on_list'] = function(block) {
       // This operation exclude null and values that are not int or float:
       //   math_mean([null,null,"aString",1,9]) == 5.0.
       var functionName = Blockly.Dart.provideFunction_(
-          'math_average',
+          'math_mean',
           [ 'num ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
               '(List myList) {',
             '  // First filter list for numbers only.',

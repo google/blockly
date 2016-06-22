@@ -58,7 +58,7 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   */
   var menu = new goog.ui.Menu();
   menu.setRightToLeft(rtl);
-  for (var x = 0, option; option = options[x]; x++) {
+  for (var i = 0, option; option = options[i]; i++) {
     var menuItem = new goog.ui.MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
     menu.addChild(menuItem, true);
@@ -77,6 +77,8 @@ Blockly.ContextMenu.show = function(e, options, rtl) {
   menu.render(div);
   var menuDom = menu.getElement();
   Blockly.addClass_(menuDom, 'blocklyContextMenu');
+  // Prevent system context menu when right-clicking a Blockly context menu.
+  Blockly.bindEvent_(menuDom, 'contextmenu', null, Blockly.noEvent);
   // Record menuSize after adding menu.
   var menuSize = goog.style.getSize(menuDom);
 
@@ -124,7 +126,7 @@ Blockly.ContextMenu.hide = function() {
 Blockly.ContextMenu.callbackFactory = function(block, xml) {
   return function() {
     Blockly.Events.disable();
-    var newBlock = Blockly.Xml.domToBlock(block.workspace, xml);
+    var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
     // Move the new block next to the old block.
     var xy = block.getRelativeToSurfaceXY();
     if (block.RTL) {

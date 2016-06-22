@@ -64,7 +64,7 @@ Blockly.Blocks['procedures_defnoreturn'] = {
    * inconsistent as a result of the XML loading.
    * @this Blockly.Block
    */
-  validate: function () {
+  validate: function() {
     var name = Blockly.Procedures.findLegalName(
         this.getFieldValue('NAME'), this);
     this.setFieldValue(name, 'NAME');

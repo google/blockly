@@ -103,7 +103,6 @@ Blockly.PHP['text_indexOf'] = function(block) {
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
   var argument1 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
-  var code = operator + '(' + argument1 + ', ' + argument0 + ') + 1';
 
   var functionName = Blockly.PHP.provideFunction_(
       block.getFieldValue('END') == 'FIRST' ?
@@ -113,7 +112,7 @@ Blockly.PHP['text_indexOf'] = function(block) {
         '  $pos = ' + operator + '($text, $search);',
         '  return $pos === false ? 0 : $pos + 1;',
         '}']);
-  code = functionName + '(' + argument1 + ', ' + argument0 + ')';
+  var code = functionName + '(' + argument1 + ', ' + argument0 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 

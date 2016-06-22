@@ -80,7 +80,7 @@ Blockly.Dart['lists_indexOf'] = function(block) {
   var argument1 = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   var code = argument1 + '.' + operator + '(' + argument0 + ') + 1';
-  return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+  return [code, Blockly.Dart.ORDER_ADDITIVE];
 };
 
 Blockly.Dart['lists_getIndex'] = function(block) {
@@ -90,8 +90,12 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Dart.valueToCode(block, 'AT',
       Blockly.Dart.ORDER_UNARY_PREFIX) || '1';
-  var list = Blockly.Dart.valueToCode(block, 'VALUE',
-      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+  // Special case to avoid wrapping function calls in unneeded parenthesis.
+  // func()[0] is prefered over (func())[0]
+  var valueBlock = this.getInputTargetBlock('VALUE');
+  var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
+      Blockly.Dart.ORDER_NONE : Blockly.Dart.ORDER_UNARY_POSTFIX;
+  var list = Blockly.Dart.valueToCode(block, 'VALUE', order) || '[]';
 
   if (where == 'FIRST') {
     if (mode == 'GET') {
@@ -308,6 +312,33 @@ Blockly.Dart['lists_getSublist'] = function(block) {
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
+};
+
+Blockly.Dart['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.Dart.valueToCode(block, 'LIST',
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+  var sortFunctionName = Blockly.Dart.provideFunction_(
+          'lists_sort',
+  ['List ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
+      '(list, type, direction) {',
+      '  var compareFuncs = {',
+      '    "NUMERIC": (a, b) => direction * a.compareTo(b),',
+      '    "TEXT": (a, b) => direction * a.toString().compareTo(b.toString()),',
+      '    "IGNORE_CASE": ',
+      '       (a, b) => direction * ',
+      '      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())',
+      '  };',
+      '  list = new List.from(list);', // Clone the list.
+      '  var compare = compareFuncs[type];',
+      '  list.sort(compare);',
+      '  return list;',
+    '}']);
+  return [sortFunctionName + '(' + listCode + ', ' +
+      '"' + type + '", ' + direction + ')',
+      Blockly.Dart.ORDER_UNARY_POSTFIX];
 };
 
 Blockly.Dart['lists_split'] = function(block) {

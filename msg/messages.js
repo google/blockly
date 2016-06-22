@@ -52,7 +52,7 @@ goog.require('Blockly.Msg');
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}
 Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
-/// button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}
+/// button text - Button that sets a calendar to today's date.\n{{Identical|Today}}
 Blockly.Msg.TODAY = 'Today';
 
 // Context menus.
@@ -271,16 +271,16 @@ Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false. Returns 
 
 /// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value https://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/Logic#values';
-/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.\n{{Identical|True}}
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
-/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.
+/// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.\n{{Identical|False}}
 Blockly.Msg.LOGIC_BOOLEAN_FALSE = 'false';
 /// tooltip - Indicates that the block returns either of the two possible [https://en.wikipedia.org/wiki/Truth_value logical values].
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = 'Returns either true or false.';
 
 /// url - Provide a link to the translation of [https://en.wikipedia.org/wiki/Nullable_type https://en.wikipedia.org/wiki/Nullable_type], if it exists in your language; otherwise, do not worry about translating this advanced concept.
 Blockly.Msg.LOGIC_NULL_HELPURL = 'https://en.wikipedia.org/wiki/Nullable_type';
-/// block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for "nothing" or "invalid".
+/// block text - In computer languages, ''null'' is a special value that indicates that no value has been set.  You may use your language's word for "nothing" or "invalid".\n{{Identical|Null}}
 Blockly.Msg.LOGIC_NULL = 'null';
 /// tooltip - This should use the word from the previous message.
 Blockly.Msg.LOGIC_NULL_TOOLTIP = 'Returns null.';
@@ -974,6 +974,23 @@ Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
 /// https://github.com/google/blockly/wiki/Lists#getting-a-sublist] for more information.
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
+
+/// url - Information describing sorting a list.
+Blockly.Msg.LISTS_SORT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#sorting-a-list';
+/// Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.\n{{Identical|Sort}}
+Blockly.Msg.LISTS_SORT_TITLE = 'sort %1 %2 %3';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list].
+Blockly.Msg.LISTS_SORT_TOOLTIP = 'Sort a copy of a list.';
+/// sorting order or direction from low to high value for numeric, or A-Z for alphabetic.\n{{Identical|Ascending}}
+Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = 'ascending';
+/// sorting order or direction from high to low value for numeric, or Z-A for alphabetic.\n{{Identical|Descending}}
+Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = 'descending';
+/// sort by treating each item as a number.
+Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = 'numeric';
+/// sort by treating each item alphabetically, case-sensitive.
+Blockly.Msg.LISTS_SORT_TYPE_TEXT = 'alphabetic';
+/// sort by treating each item alphabetically, ignoring differences in case.
+Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = 'alphabetic, ignore case';
 
 /// url - Information describing splitting text into a list, or joining a list into text.
 Blockly.Msg.LISTS_SPLIT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists';

@@ -5,7 +5,8 @@
 			"아라",
 			"Mirws",
 			"Marwan Mohamad",
-			"Kasimtan"
+			"Kasimtan",
+			"Arifin.wijaya"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "item",
@@ -26,6 +27,8 @@
 	"DISABLE_BLOCK": "Nonaktifkan Blok",
 	"ENABLE_BLOCK": "Aktifkan Blok",
 	"HELP": "Bantuan",
+	"UNDO": "Urungkan",
+	"REDO": "Lakukan ulang",
 	"CHAT": "Chatting dengan kolaborator anda dengan mengetikkan di kotak ini!",
 	"AUTH": "Silakan mengotorisasi aplikasi ini untuk memungkinkan pekerjaan Anda dapat disimpan dan digunakan bersama.",
 	"ME": "Saya",
@@ -290,6 +293,14 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "ke # dari akhir",
 	"LISTS_GET_SUBLIST_END_LAST": "ke yang paling akhir",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Buat salinan bagian tertentu dari list.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TITLE": "urutkan %1 %2 %3",
+	"LISTS_SORT_TOOLTIP": "Urutkan salinan dari daftar",
+	"LISTS_SORT_ORDER_ASCENDING": "menaik",
+	"LISTS_SORT_ORDER_DESCENDING": "menurun",
+	"LISTS_SORT_TYPE_NUMERIC": "sesuai nomor",
+	"LISTS_SORT_TYPE_TEXT": "sesuai abjad",
+	"LISTS_SORT_TYPE_IGNORECASE": "sesuai abjad, abaikan kasus",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "buat list dari teks",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "buat teks dari list",
 	"LISTS_SPLIT_WITH_DELIMITER": "dengan pembatas",

@@ -77,8 +77,15 @@ var workspace = null;
 
 function start() {
   workspace = Blockly.inject('blocklyDiv',
-      {media: '../../media/',
-       toolbox: document.getElementById('toolbox')});
+      {grid:
+         {spacing: 25,
+          length: 3,
+          colour: '#ccc',
+          snap: true},
+       media: '../../media/',
+       toolbox: document.getElementById('toolbox'),
+       zoom: {controls: true, wheel: true}
+       });
 }
 
 function loadXml() {
@@ -264,6 +271,7 @@ h1 {
       <block type="lists_getIndex"></block>
       <block type="lists_setIndex"></block>
       <block type="lists_getSublist"></block>
+      <block type="lists_sort"></block>
       <block type="lists_split"></block>
     </category>
     <category name="Colour" colour="20">

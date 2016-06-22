@@ -91,12 +91,14 @@ Blockly.Dart.init = function(workspace) {
 
   var defvars = [];
   var variables = Blockly.Variables.allVariables(workspace);
-  for (var i = 0; i < variables.length; i++) {
-    defvars[i] = 'var ' +
-        Blockly.Dart.variableDB_.getName(variables[i],
-        Blockly.Variables.NAME_TYPE) + ';';
+  if (variables.length) {
+    for (var i = 0; i < variables.length; i++) {
+      defvars[i] = Blockly.Dart.variableDB_.getName(variables[i],
+          Blockly.Variables.NAME_TYPE);
+    }
+    Blockly.Dart.definitions_['variables'] =
+        'var ' + defvars.join(', ') + ';';
   }
-  Blockly.Dart.definitions_['variables'] = defvars.join('\n');
 };
 
 /**
@@ -147,7 +149,7 @@ Blockly.Dart.scrubNakedValue = function(line) {
  * @private
  */
 Blockly.Dart.quote_ = function(string) {
-  // TODO: This is a quick hack.  Replace with goog.string.quote
+  // Can't use goog.string.quote since $ must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
                  .replace(/\$/g, '\\$')
@@ -171,7 +173,12 @@ Blockly.Dart.scrub_ = function(block, code) {
     // Collect comment for this block.
     var comment = block.getCommentText();
     if (comment) {
-      commentCode += Blockly.Dart.prefixLines(comment, '// ') + '\n';
+      if (block.getProcedureDef) {
+        // Use documentation comment for function comments.
+        commentCode += Blockly.Dart.prefixLines(comment + '\n', '/// ');
+      } else {
+        commentCode += Blockly.Dart.prefixLines(comment + '\n', '// ');
+      }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.

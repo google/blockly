@@ -72,25 +72,55 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {boolean} */
   this.contextMenu = true;
 
-  /** @type {Blockly.Block} */
+  /**
+   * @type {Blockly.Block}
+   * @private
+   */
   this.parentBlock_ = null;
-  /** @type {!Array.<!Blockly.Block>} */
+
+  /**
+   * @type {!Array.<!Blockly.Block>}
+   * @private
+   */
   this.childBlocks_ = [];
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.deletable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.movable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.editable_ = true;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.isShadow_ = false;
-  /** @type {boolean} */
+
+  /**
+   * @type {boolean}
+   * @private
+   */
   this.collapsed_ = false;
 
   /** @type {string|Blockly.Comment} */
   this.comment = null;
 
-  /** @type {!goog.math.Coordinate} */
+  /**
+   * @type {!goog.math.Coordinate}
+   * @private
+   */
   this.xy_ = new goog.math.Coordinate(0, 0);
 
   /** @type {!Blockly.Workspace} */
@@ -717,7 +747,7 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
       goog.asserts.assert(!this.outputConnection,
           'Remove output connection prior to adding previous connection.');
       this.previousConnection =
-          new Blockly.Connection(this, Blockly.PREVIOUS_STATEMENT);
+          this.makeConnection_(Blockly.PREVIOUS_STATEMENT);
     }
     this.previousConnection.setCheck(opt_check);
   } else {
@@ -742,8 +772,7 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
       opt_check = null;
     }
     if (!this.nextConnection) {
-      this.nextConnection =
-          new Blockly.Connection(this, Blockly.NEXT_STATEMENT);
+      this.nextConnection = this.makeConnection_(Blockly.NEXT_STATEMENT);
     }
     this.nextConnection.setCheck(opt_check);
   } else {
@@ -771,8 +800,7 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
     if (!this.outputConnection) {
       goog.asserts.assert(!this.previousConnection,
           'Remove previous connection prior to adding output connection.');
-      this.outputConnection =
-          new Blockly.Connection(this, Blockly.OUTPUT_VALUE);
+      this.outputConnection = this.makeConnection_(Blockly.OUTPUT_VALUE);
     }
     this.outputConnection.setCheck(opt_check);
   } else {
@@ -1020,11 +1048,11 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
       elements[elements.length - 1]['type'].indexOf('field_') == 0)) {
-    var input = {type: 'input_dummy'};
+    var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {
-      input['align'] = lastDummyAlign;
+      dummyInput['align'] = lastDummyAlign;
     }
-    elements.push(input);
+    elements.push(dummyInput);
   }
   // Lookup of alignment constants.
   var alignmentLookup = {
@@ -1082,6 +1110,9 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
             field = new Blockly.FieldImage(element['src'],
                 element['width'], element['height'], element['alt']);
             break;
+          case 'field_number':
+            field = new Blockly.FieldNumber(element['text']);
+            break;
           case 'field_date':
             if (Blockly.FieldDate) {
               field = new Blockly.FieldDate(element['date']);
@@ -1126,7 +1157,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
-    connection = new Blockly.Connection(this, type);
+    connection = this.makeConnection_(type);
   }
   var input = new Blockly.Input(type, name, this, connection);
   // Append input to list.
@@ -1302,4 +1333,14 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   this.xy_.translate(dx, dy);
   event.recordNew();
   Blockly.Events.fire(event);
+};
+
+/**
+ * Create a connection of the specified type.
+ * @param {number} type The type of the connection to create.
+ * @return {!Blockly.Connection} A new connection of the specified type.
+ * @private
+ */
+Blockly.Block.prototype.makeConnection_ = function(type) {
+  return new Blockly.Connection(this, type);
 };

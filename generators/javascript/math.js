@@ -167,7 +167,7 @@ Blockly.JavaScript['math_number_property'] = function(block) {
   if (dropdown_property == 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     var functionName = Blockly.JavaScript.provideFunction_(
-        'math_isPrime',
+        'mathIsPrime',
         [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
           '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
           '  if (n == 2 || n == 3) {',
@@ -251,9 +251,9 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE':
-      // math_median([null,null,1,3]) == 2.0.
+      // mathMean([null,null,1,3]) == 2.0.
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_mean',
+          'mathMean',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(myList) {',
             '  return myList.reduce(function(x, y) {return x + y;}) / ' +
@@ -264,9 +264,9 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     case 'MEDIAN':
-      // math_median([null,null,1,3]) == 2.0.
+      // mathMedian([null,null,1,3]) == 2.0.
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_median',
+          'mathMedian',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(myList) {',
             '  var localList = myList.filter(function (x) ' +
@@ -289,7 +289,7 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_modes',
+          'mathModes',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(values) {',
             '  var modes = [];',
@@ -325,7 +325,7 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       break;
     case 'STD_DEV':
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_standard_deviation',
+          'mathStandardDeviation',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(numbers) {',
             '  var n = numbers.length;',
@@ -344,7 +344,7 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       break;
     case 'RANDOM':
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_random_list',
+          'mathRandomList',
           [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(list) {',
             '  var x = Math.floor(Math.random() * list.length);',
@@ -390,7 +390,7 @@ Blockly.JavaScript['math_random_int'] = function(block) {
   var argument1 = Blockly.JavaScript.valueToCode(block, 'TO',
       Blockly.JavaScript.ORDER_COMMA) || '0';
   var functionName = Blockly.JavaScript.provideFunction_(
-      'math_random_int',
+      'mathRandomInt',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(a, b) {',
         '  if (a > b) {',

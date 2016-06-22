@@ -77,9 +77,8 @@ Blockly.FieldDropdown.prototype.CURSOR = 'default';
 
 /**
  * Install this dropdown on a block.
- * @param {!Blockly.Block} block The block containing this text.
  */
-Blockly.FieldDropdown.prototype.init = function(block) {
+Blockly.FieldDropdown.prototype.init = function() {
   if (this.fieldGroup_) {
     // Dropdown has already been initialized once.
     return;
@@ -87,10 +86,10 @@ Blockly.FieldDropdown.prototype.init = function(block) {
   // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
   this.arrow_.appendChild(document.createTextNode(
-      block.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
+      this.sourceBlock_.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' ' :
           ' ' + Blockly.FieldDropdown.ARROW_CHAR));
 
-  Blockly.FieldDropdown.superClass_.init.call(this, block);
+  Blockly.FieldDropdown.superClass_.init.call(this);
   // Force a reset of the text to add the arrow.
   var text = this.text_;
   this.text_ = null;

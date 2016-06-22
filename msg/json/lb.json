@@ -116,6 +116,8 @@
 	"LISTS_SET_INDEX_TOOLTIP_SET_RANDOM": "Setzt en zoufällegt Element an eng Lëscht.",
 	"LISTS_SET_INDEX_TOOLTIP_INSERT_LAST": "Setzt d'Element um Enn vun enger Lëscht derbäi.",
 	"LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM": "Setzt d'Element op eng zoufälleg Plaz an d'Lëscht derbäi.",
+	"LISTS_SORT_TYPE_NUMERIC": "numeresch",
+	"LISTS_SORT_TYPE_TEXT": "alphabetesch",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "eppes maachen",
 	"PROCEDURES_BEFORE_PARAMS": "mat:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "mat:",

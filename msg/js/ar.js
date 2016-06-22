@@ -143,6 +143,14 @@ Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = "يحدد العنصر في �
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = "يحدد العنصر في الموضع المحدد في قائمة ما.  #1 هو العنصر الأول.";
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_LAST = "يحدد العنصر الأخير في قائمة.";
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_RANDOM = "يحدد عنصرا عشوائيا في قائمة.";
+Blockly.Msg.LISTS_SORT_HELPURL = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";  // untranslated
+Blockly.Msg.LISTS_SORT_ORDER_ASCENDING = "ascending";  // untranslated
+Blockly.Msg.LISTS_SORT_ORDER_DESCENDING = "descending";  // untranslated
+Blockly.Msg.LISTS_SORT_TITLE = "sort %1 %2 %3";  // untranslated
+Blockly.Msg.LISTS_SORT_TOOLTIP = "Sort a copy of a list.";  // untranslated
+Blockly.Msg.LISTS_SORT_TYPE_IGNORECASE = "alphabetic, ignore case";  // untranslated
+Blockly.Msg.LISTS_SORT_TYPE_NUMERIC = "numeric";  // untranslated
+Blockly.Msg.LISTS_SORT_TYPE_TEXT = "alphabetic";  // untranslated
 Blockly.Msg.LISTS_SPLIT_HELPURL = "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists";  // untranslated
 Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = "إعداد قائمة من النصوص";
 Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST = "إعداد نص من القائمة";
@@ -364,6 +372,7 @@ Blockly.Msg.VARIABLES_SET = "تعيين %1 إلى %2";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "انشئ 'احصل على %1'";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "تعيين هذا المتغير لتكون مساوية للقيمة المدخلة.";
+Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
@@ -372,7 +381,6 @@ Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
 Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;

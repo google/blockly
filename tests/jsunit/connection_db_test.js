@@ -115,7 +115,7 @@ function test_DB_getNeighbours() {
   // Set up some connections.
   for (var i = 0; i < 10; i++) {
     db.addConnection(helper_createConnection(0, i,
-        Blockly.PREVIOUS_STATEMENT));
+        Blockly.PREVIOUS_STATEMENT, null, true));
   }
 
   // Test block belongs at beginning.
@@ -154,14 +154,20 @@ function test_DB_getNeighbours() {
 
 function test_DB_findPositionForConnection() {
   var db = new Blockly.ConnectionDB();
-  db.addConnection(helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT));
-  db.addConnection(helper_createConnection(0, 1, Blockly.PREVIOUS_STATEMENT));
-  db.addConnection(helper_createConnection(0, 2, Blockly.PREVIOUS_STATEMENT));
-  db.addConnection(helper_createConnection(0, 4, Blockly.PREVIOUS_STATEMENT));
-  db.addConnection(helper_createConnection(0, 5, Blockly.PREVIOUS_STATEMENT));
+  db.addConnection(helper_createConnection(0, 0, Blockly.PREVIOUS_STATEMENT,
+      null, true));
+  db.addConnection(helper_createConnection(0, 1, Blockly.PREVIOUS_STATEMENT,
+      null, true));
+  db.addConnection(helper_createConnection(0, 2, Blockly.PREVIOUS_STATEMENT,
+      null, true));
+  db.addConnection(helper_createConnection(0, 4, Blockly.PREVIOUS_STATEMENT,
+      null, true));
+  db.addConnection(helper_createConnection(0, 5, Blockly.PREVIOUS_STATEMENT,
+      null, true));
 
   assertEquals(5, db.length);
-  var conn = helper_createConnection(0, 3, Blockly.PREVIOUS_STATEMENT);
+  var conn = helper_createConnection(0, 3, Blockly.PREVIOUS_STATEMENT, null,
+      true);
   assertEquals(3, db.findPositionForConnection_(conn));
 }
 
@@ -169,16 +175,17 @@ function test_DB_findConnection() {
   var db = new Blockly.ConnectionDB();
   for (var i = 0; i < 10; i++) {
     db.addConnection(helper_createConnection(i, 0,
-        Blockly.PREVIOUS_STATEMENT));
+        Blockly.PREVIOUS_STATEMENT, null, true));
     db.addConnection(helper_createConnection(0, i,
-        Blockly.PREVIOUS_STATEMENT));
+        Blockly.PREVIOUS_STATEMENT, null, true));
   }
 
-  var conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT);
+  var conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT, null,
+      true);
   db.addConnection(conn);
   assertEquals(conn, db[db.findConnection(conn)]);
 
-  conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT);
+  conn = helper_createConnection(3, 3, Blockly.PREVIOUS_STATEMENT, null, true);
   assertEquals(-1, db.findConnection(conn));
 }
 
@@ -186,7 +193,7 @@ function test_DB_ordering() {
   var db = new Blockly.ConnectionDB();
   for (var i = 0; i < 10; i++) {
     db.addConnection(helper_createConnection(0, 9 - i,
-        Blockly.PREVIOUS_STATEMENT));
+        Blockly.PREVIOUS_STATEMENT), null, true);
   }
 
   for (i = 0; i < 10; i++) {
@@ -210,7 +217,7 @@ function test_DB_ordering() {
       -19, -20, -95];
   for (i = 0; i < xCoords.length; i++) {
     db.addConnection(helper_createConnection(xCoords[i], yCoords[i],
-        Blockly.PREVIOUS_STATEMENT));
+        Blockly.PREVIOUS_STATEMENT), null, true);
   }
 
   for (i = 1; i < xCoords.length; i++) {
@@ -227,13 +234,13 @@ function test_SearchForClosest() {
       100 /* radius */));
 
   db.addConnection(helper_createConnection(100, 0, Blockly.PREVIOUS_STATEMENT,
-      sharedWorkspace));
+      sharedWorkspace, true));
   assertEquals(null, helper_searchDB(db, 0, 0, 5, sharedWorkspace));
 
   db = new Blockly.ConnectionDB();
   for (var i = 0; i < 10; i++) {
     var tempConn = helper_createConnection(0, i, Blockly.PREVIOUS_STATEMENT,
-        sharedWorkspace);
+        sharedWorkspace, true);
     tempConn.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
     db.addConnection(tempConn);
   }
@@ -248,11 +255,11 @@ function test_SearchForClosest() {
   assertEquals(db[0], helper_searchDB(db, 0, 0, 0, sharedWorkspace));
 
   tempConn = helper_createConnection(6, 6, Blockly.PREVIOUS_STATEMENT,
-      sharedWorkspace);
+      sharedWorkspace, true);
   tempConn.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
   db.addConnection(tempConn);
   tempConn = helper_createConnection(5, 5, Blockly.PREVIOUS_STATEMENT,
-      sharedWorkspace);
+      sharedWorkspace, true);
   tempConn.sourceBlock_ = helper_makeSourceBlock(sharedWorkspace);
   db.addConnection(tempConn);
 
@@ -263,15 +270,16 @@ function test_SearchForClosest() {
 
 
 function helper_getNeighbours(db, x, y, radius) {
-  return db.getNeighbours(helper_createConnection(x, y, Blockly.NEXT_STATEMENT),
+  return db.getNeighbours(helper_createConnection(x, y, Blockly.NEXT_STATEMENT,
+    null, true),
       radius);
 }
 
 function helper_searchDB(db, x, y, radius, shared_workspace) {
   var tempConn = helper_createConnection(x, y,
-      Blockly.NEXT_STATEMENT, shared_workspace);
+      Blockly.NEXT_STATEMENT, shared_workspace, true);
   tempConn.sourceBlock_ = helper_makeSourceBlock(shared_workspace);
-  var closest = db.searchForClosest(tempConn, radius, 0, 0);
+  var closest = db.searchForClosest(tempConn, radius, {x: 0, y: 0});
   return closest.connection;
 }
 
@@ -285,9 +293,14 @@ function helper_makeSourceBlock(sharedWorkspace) {
   };
 }
 
-function helper_createConnection(x, y, type, opt_shared_workspace) {
+function helper_createConnection(x, y, type, opt_shared_workspace,
+    opt_rendered) {
   var workspace = opt_shared_workspace ? opt_shared_workspace : {};
-  var conn = new Blockly.Connection({workspace: workspace}, type);
+  if (opt_rendered) {
+    var conn = new Blockly.RenderedConnection({workspace: workspace}, type);
+  } else {
+    var conn = new Blockly.Connection({workspace: workspace}, type);
+  }
   conn.x_ = x;
   conn.y_ = y;
   return conn;

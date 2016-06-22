@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-03-17 14:41:13.974918",
+		"lastupdated": "2016-05-06 10:42:01.474947",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -323,6 +323,14 @@
 	"LISTS_GET_SUBLIST_END_LAST": "to last",
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Creates a copy of the specified portion of a list.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TITLE": "sort %1 %2 %3",
+	"LISTS_SORT_TOOLTIP": "Sort a copy of a list.",
+	"LISTS_SORT_ORDER_ASCENDING": "ascending",
+	"LISTS_SORT_ORDER_DESCENDING": "descending",
+	"LISTS_SORT_TYPE_NUMERIC": "numeric",
+	"LISTS_SORT_TYPE_TEXT": "alphabetic",
+	"LISTS_SORT_TYPE_IGNORECASE": "alphabetic, ignore case",
 	"LISTS_SPLIT_HELPURL": "https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "make list from text",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "make text from list",

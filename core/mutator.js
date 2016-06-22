@@ -122,6 +122,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
     RTL: this.block_.RTL,
+    toolboxPosition: this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
+        Blockly.TOOLBOX_AT_LEFT,
+    horizontalLayout: false,
     getMetrics: this.getFlyoutMetrics_.bind(this),
     setMetrics: null
   };
@@ -202,9 +205,9 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
       new Blockly.Events.Ui(this.block_, 'mutatorOpen', !visible, visible));
   if (visible) {
     // Create the bubble.
-    this.bubble_ = new Blockly.Bubble(this.block_.workspace,
-        this.createEditor_(), this.block_.svgPath_,
-        this.iconX_, this.iconY_, null, null);
+    this.bubble_ = new Blockly.Bubble(
+        /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
+        this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
     var tree = this.workspace_.options.languageTree;
     if (tree) {
       this.workspace_.flyout_.init(this.workspace_);
@@ -303,9 +306,9 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
       // Ensure that any bump is part of this mutation's event group.
       var group = Blockly.Events.getGroup();
       setTimeout(function() {
-          Blockly.Events.setGroup(group);
-          block.bumpNeighbours_();
-          Blockly.Events.setGroup(false);
+        Blockly.Events.setGroup(group);
+        block.bumpNeighbours_();
+        Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
     }
     if (block.rendered) {

@@ -39,7 +39,7 @@
 
   <p>This is a demo of giving instant feedback as blocks are changed.</p>
 
-  <p>&rarr; More info on <a href="https://developers.google.com/blockly/installation/code-generators#realtime_generation">Realtime generation</a>&hellip;</p>
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure/web/code-generators#generating_code">Realtime generation</a>&hellip;</p>
 
   <table>
     <tr>
@@ -328,6 +328,7 @@ Graph.plot = function(code) {
 Graph.resize = function() {
   var width = Math.max(window.innerWidth - 440, 250);
   document.getElementById('blocklyDiv').style.width = width + 'px';
+  Blockly.svgResize(Graph.workspace);
 };
 
 /**
@@ -344,6 +345,7 @@ Graph.init = function() {
 
   // When Blockly changes, update the graph.
   Graph.workspace.addChangeListener(Graph.drawVisualization);
+  Graph.resize();
 };
 
 window.addEventListener('load', Graph.init);

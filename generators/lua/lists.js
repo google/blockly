@@ -159,8 +159,17 @@ Blockly.Lua['lists_getIndex'] = function(block) {
   var where = block.getFieldValue('WHERE') || 'FROM_START';
   var at = Blockly.Lua.valueToCode(block, 'AT',
       Blockly.Lua.ORDER_ADDITIVE) || '1';
-  var list = Blockly.Lua.valueToCode(block, 'VALUE',
-      Blockly.Lua.ORDER_HIGH) || '({})';
+  if (mode == 'GET') {
+    // Special case to avoid wrapping function calls in unneeded parenthesis.
+    // func()[0] is prefered over (func())[0]
+    var valueBlock = this.getInputTargetBlock('VALUE');
+    var order = (valueBlock && valueBlock.type == 'procedures_callreturn') ?
+        Blockly.Lua.ORDER_NONE : Blockly.Lua.ORDER_HIGH;
+  } else {
+    // List will be an argument in a function call.
+    var order = Blockly.Lua.ORDER_NONE;
+  }
+  var list = Blockly.Lua.valueToCode(block, 'VALUE', order) || '({})';
   var getIndex_ = Blockly.Lua.lists.getIndex_;
   var gensym_ = Blockly.Lua.lists.gensym_;
 
@@ -317,6 +326,42 @@ Blockly.Lua['lists_getSublist'] = function(block) {
        '  return t',
        'end']);
   var code = functionName + '(' + list + ')';
+  return [code, Blockly.Lua.ORDER_HIGH];
+};
+
+Blockly.Lua['lists_sort'] = function(block) {
+  // Block for sorting a list.
+  var listCode = Blockly.Lua.valueToCode(
+      block, 'LIST', Blockly.Lua.ORDER_HIGH) || '({})';
+  var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
+  var type = block.getFieldValue('TYPE');
+
+  var functionName = Blockly.Lua.provideFunction_(
+      'list_sort',
+      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
+          '(list, typev, direction)',
+       '  local t = {}',
+       '  for n,v in pairs(list) do table.insert(t, v) end', // Shallow-copy.
+       '  local compareFuncs = {',
+       '    NUMERIC = function(a, b)',
+       '      return (tonumber(tostring(a)) or 0)',
+       '          < (tonumber(tostring(b)) or 0) end,',
+       '    TEXT = function(a, b)',
+       '      return tostring(a) < tostring(b) end,',
+       '    IGNORE_CASE = function(a, b)',
+       '      return string.lower(tostring(a)) < string.lower(tostring(b)) end',
+       '  }',
+       '  local compareTemp = compareFuncs[typev]',
+       '  local compare = compareTemp',
+       '  if direction == -1',
+       '  then compare = function(a, b) return compareTemp(b, a) end',
+       '  end',
+       '  table.sort(t, compare)',
+       '  return t',
+       'end']);
+
+  var code = functionName +
+      '(' + listCode + ',"' + type + '", ' + direction + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 

@@ -60,12 +60,21 @@
 <script src="../blocks/procedures.js"></script>
 <script>
 'use strict';
-// Depending on the URL argument, render as LTR or RTL.
-var rtl = (document.location.search == '?rtl');
 var workspace = null;
+var fakeDragStack = [];
 
 function start() {
-  var toolbox = document.getElementById('toolbox');
+  // Parse the URL arguments.
+  var match = location.search.match(/dir=([^&]+)/);
+  var rtl = match && match[1] == 'rtl';
+  document.forms.options.elements.dir.selectedIndex = Number(rtl);
+  var toolbox = getToolboxElement();
+  document.forms.options.elements.toolbox.selectedIndex =
+      Number(toolbox.getElementsByTagName('category').length == 0);
+  match = location.search.match(/side=([^&]+)/);
+  var side = match ? match[1] : 'start';
+  document.forms.options.elements.side.value = side;
+  // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
           {comments: true,
            disable: true,
@@ -75,12 +84,14 @@ function start() {
               length: 3,
               colour: '#ccc',
               snap: true},
+           horizontalLayout: side == 'top' || side == 'bottom',
            maxBlocks: Infinity,
            media: '../media/',
            readOnly: false,
            rtl: rtl,
            scrollbars: true,
            toolbox: toolbox,
+           toolboxPosition: side == 'top' || side == 'start' ? 'start' : 'end',
            zoom:
              {controls: true,
               wheel: true,
@@ -103,6 +114,11 @@ function start() {
     logEvents(false);
   }
   taChange();
+}
+
+function getToolboxElement() {
+  var match = location.search.match(/toolbox=([^&]+)/);
+  return document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
 }
 
 function toXml() {
@@ -162,7 +178,7 @@ function logger(e) {
 
 function airstrike(n) {
   var prototypes = [];
-  var toolbox = document.getElementById('toolbox');
+  var toolbox = getToolboxElement();
   var blocks = toolbox.getElementsByTagName('block');
   for (var i = 0, block; block = blocks[i]; i++) {
     prototypes.push(block.getAttribute('type'));
@@ -176,6 +192,65 @@ function airstrike(n) {
         Math.round(Math.random() * 600 + 40) + ')');
     block.render();
   }
+}
+
+function fakeDrag(id, dx, dy, opt_workspace) {
+  var ws = opt_workspace || Blockly.getMainWorkspace();
+  var blockToDrag = ws.getBlockById(id);
+
+  if (!blockToDrag) {
+    fakeDragWrapper();
+    return;
+  }
+  var blockTop = blockToDrag.svgGroup_.getBoundingClientRect().top;
+  var blockLeft = blockToDrag.svgGroup_.getBoundingClientRect().left;
+
+  // Click somewhere on the block.
+  var mouseDownEvent = new MouseEvent('mousedown',
+      {clientX: blockLeft + 5, clientY: blockTop + 5});
+  blockToDrag.onMouseDown_(mouseDownEvent);
+
+  // Throw in a move for good measure.
+  setTimeout(
+    function() {
+      var mouseMoveEvent = new MouseEvent('mousemove',
+          {clientX: blockLeft + dx,
+          clientY: blockTop + dy});
+      blockToDrag.onMouseMove_(mouseMoveEvent);
+
+      // Drop at dx, dy.
+      setTimeout(
+        function() {
+          var mouseUpEvent = new MouseEvent('mouseup',
+              {clientX: blockLeft + dx,
+              clientY: blockTop + dy});
+          blockToDrag.onMouseUp_(mouseUpEvent);
+
+          setTimeout(fakeDragWrapper(), 100);
+        }, 30);
+    }, 30);
+};
+
+function fakeDragWrapper() {
+  var dragInfo = fakeDragStack.pop();
+  if (dragInfo) {
+    fakeDrag(dragInfo.id, dragInfo.dx, dragInfo.dy, dragInfo.workspace);
+  }
+}
+
+function fakeManyDrags() {
+  var blockList = workspace.getAllBlocks();
+  for (var i = 0; i < 2 * blockList.length; i++) {
+    fakeDragStack.push(
+      {
+        id: blockList[Math.round(Math.random() * (blockList.length - 1))].id,
+        // Move some blocks up and to the left, but mostly down and to the right.
+        dx: Math.round((Math.random() - 0.25) * 200),
+        dy: Math.round((Math.random() - 0.25) * 200),
+        workspace: workspace
+      });
+  }
+  fakeDragWrapper();
 }
 
 function spaghetti(n) {
@@ -250,7 +325,78 @@ h1 {
 
   <div id="blocklyDiv"></div>
 
-  <xml id="toolbox" style="display: none">
+  <h1>Blockly Playground</h1>
+
+  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
+   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
+
+  <form id="options">
+    <select name="dir" onchange="document.forms.options.submit()">
+      <option value="ltr">LTR</option>
+      <option value="rtl">RTL</option>
+    </select>
+    <select name="toolbox" onchange="document.forms.options.submit()">
+      <option value="categories">Categories</option>
+      <option value="simple">Simple</option>
+    </select>
+    <select name="side" onchange="document.forms.options.submit()">
+      <option value="start">Start</option>
+      <option value="end">End</option>
+      <option value="top">Top</option>
+      <option value="bottom">Bottom</option>
+    </select>
+  </form>
+
+  <p>
+    <input type="button" value="Export to XML" onclick="toXml()">
+    &nbsp;
+    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
+    <br>
+    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
+    &nbsp;
+    <input type="button" value="To Python" onclick="toCode('Python')">
+    &nbsp;
+    <input type="button" value="To PHP" onclick="toCode('PHP')">
+    &nbsp;
+    <input type="button" value="To Lua" onclick="toCode('Lua')">
+    &nbsp;
+    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <br>
+    <textarea id="importExport" style="width: 26%; height: 12em"
+      onchange="taChange();" onkeyup="taChange()"></textarea>
+  </p>
+
+  <p>
+    Stress test: &nbsp;
+    <input type="button" value="Airstrike!" onclick="airstrike(100)">
+    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input type="button" value="Fake some drags!" onclick="fakeManyDrags()">
+  </p>
+  <p>
+    Log events: &nbsp;
+    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+  </p>
+
+  <xml id="toolbox-simple" style="display: none">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <!-- <block type="control_repeat"></block> -->
+    <block type="logic_operation"></block>
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+    <block type="logic_null" disabled="true"></block>
+    <block type="logic_ternary"></block>
+  </xml>
+
+  <xml id="toolbox-categories" style="display: none">
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -510,6 +656,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="lists_sort"></block>
     </category>
     <category name="Colour" colour="20">
       <block type="colour_picker"></block>
@@ -553,48 +700,5 @@ h1 {
     <category name="Variables" colour="330" custom="VARIABLE"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
-
-  <h1>Blockly Playground</h1>
-
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
-
-  <script>
-    if (rtl) {
-      document.write('[ &larr; RTL. Switch to <A HREF="?ltr">LTR</A>. ]');
-    } else {
-      document.write('[ &rarr; LTR. Switch to <A HREF="?rtl">RTL</A>. ]');
-    }
-  </script>
-
-  <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
-    <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
-    <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"
-      onchange="taChange();" onkeyup="taChange()"></textarea>
-  </p>
-
-  <p>
-    Stress test: &nbsp;
-    <input type="button" value="Airstrike!" onclick="airstrike(100)">
-    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-  </p>
-  <p>
-    Log events: &nbsp;
-    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
-  </p>
-
 </body>
 </html>

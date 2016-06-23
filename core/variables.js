@@ -191,3 +191,56 @@ Blockly.Variables.generateUniqueName = function(workspace) {
   }
   return newName;
 };
+
+/**
+ * Find all the uses of a named variable.
+ * @param {string} name Name of variable.
+ * @param {!Blockly.Workspace} workspace The workspace to find uses in.
+ * @return {!Array.<!Blockly.Block>} Array of block usages.
+ */
+Blockly.Variables.getUses = function(name, workspace) {
+  var uses = [];
+  var blocks = workspace.getAllBlocks();
+  // Iterate through every block and check the name.
+  for (var i = 0; i < blocks.length; i++) {
+    var blockVariables = blocks[i].getVars();
+    if (blockVariables) {
+      for (var j = 0; j < blockVariables.length; j++) {
+        var varName = blockVariables[j];
+        // Variable name may be null if the block is only half-built.
+        if (varName && Blockly.Names.equals(varName, name)) {
+          uses.push(blocks[i]);
+        }
+      }
+    }
+  }
+  return uses;
+};
+
+/**
+ * When a variable is deleted, find and dispose of all uses of it.
+ * @param {string} name Name of deleted variable.
+ * @param {!Blockly.Workspace} workspace The workspace to delete uses from.
+ */
+Blockly.Variables.disposeUses = function(name, workspace) {
+  var uses = Blockly.Variables.getUses(name, workspace);
+  Blockly.Events.setGroup(true);
+  for (var i = 0; i < uses.length; i++) {
+    uses[i].dispose(true, false);
+  }
+  Blockly.Events.setGroup(false);
+};
+
+/**
+ * Delete a variables and all of its uses from the given workspace.
+ * @param {string} name Name of variable to delete.
+ * @param {!Blockly.Workspace} workspace The workspace to delete uses from.
+ */
+Blockly.Variables.delete = function(name, workspace) {
+  var variableIndex = workspace.variableList.indexOf(name);
+  if (variableIndex != -1) {
+    workspace.variableList.splice(variableIndex, 1);
+  }
+
+  Blockly.Variables.disposeUses(name, workspace);
+};

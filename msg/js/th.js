@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "ตราบเท่าที�
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "ตราบเท่าที่ค่าเป็นจริง ก็จะทำบางคำสั่ง";
 Blockly.Msg.DELETE_ALL_BLOCKS = "ต้องการลบบล็อกทั้ง %1 บล็อกหรือไม่";
 Blockly.Msg.DELETE_BLOCK = "ลบบล็อก";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "ลบ %1 บล็อก";
 Blockly.Msg.DISABLE_BLOCK = "ปิดใช้งานบล็อก";
 Blockly.Msg.DUPLICATE_BLOCK = "ทำซ้ำ";

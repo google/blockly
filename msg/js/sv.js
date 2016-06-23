@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Medan ett värde är falskt, ut
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Medan ett värde är sant, utför några kommandon.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Radera alla %1 block?";
 Blockly.Msg.DELETE_BLOCK = "Radera block";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Radera %1 block";
 Blockly.Msg.DISABLE_BLOCK = "Inaktivera block";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplicera";

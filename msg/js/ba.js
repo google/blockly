@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Мәғәнә ялған бул�
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Мәғәнә дөрөҫ булғанда, командаларҙы ҡабатлай.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Бөтә %1 блоктарҙы юйырғамы?";
 Blockly.Msg.DELETE_BLOCK = "Блокты юйҙырырға";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = " %1 блокты юйҙырырға";
 Blockly.Msg.DISABLE_BLOCK = "Блокты һүндерергә";
 Blockly.Msg.DUPLICATE_BLOCK = "Күсереп алырға";

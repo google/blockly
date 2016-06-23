@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Kocke se izvajajo dokler je vre
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Kocke se izvajajo dokler je vrednost resnična.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Izbrišem vseh %1 kock?";
 Blockly.Msg.DELETE_BLOCK = "Izbriši kocko";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Izbriši kocke";
 Blockly.Msg.DISABLE_BLOCK = "Onemogoči kocko";
 Blockly.Msg.DUPLICATE_BLOCK = "Podvoji";

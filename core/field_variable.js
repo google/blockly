@@ -111,6 +111,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
   variableList.sort(goog.string.caseInsensitiveCompare);
   variableList.push(Blockly.Msg.RENAME_VARIABLE);
   variableList.push(Blockly.Msg.NEW_VARIABLE);
+  variableList.push(Blockly.Msg.DELETE_VARIABLE.replace('%1', name));
   // Variables are not language-specific, use the name as both the user-facing
   // text and the internal representation.
   var options = [];
@@ -163,6 +164,9 @@ Blockly.FieldVariable.classValidator = function(text) {
       Blockly.Variables.renameVariable(text, text, workspace);
       return text;
     }
+    return null;
+  } else if (text == Blockly.Msg.DELETE_VARIABLE.replace('%1', this.getText())) {
+    Blockly.Variables.delete(this.getText(), this.sourceBlock_.workspace);
     return null;
   }
   return undefined;

@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Поки значення хи�
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Поки значення істинне, виконувати певні дії.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Вилучити всі блоки %1?";
 Blockly.Msg.DELETE_BLOCK = "Видалити блок";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Видалити %1 блоків";
 Blockly.Msg.DISABLE_BLOCK = "Вимкнути блок";
 Blockly.Msg.DUPLICATE_BLOCK = "Дублювати";

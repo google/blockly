@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "當值為否時，執行一些�
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "當值為真時，執行一些語句";
 Blockly.Msg.DELETE_ALL_BLOCKS = "刪除共 %1 塊積木？";
 Blockly.Msg.DELETE_BLOCK = "刪除積木";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "刪除 %1 塊積木";
 Blockly.Msg.DISABLE_BLOCK = "停用積木";
 Blockly.Msg.DUPLICATE_BLOCK = "複製";

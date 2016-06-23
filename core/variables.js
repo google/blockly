@@ -43,13 +43,24 @@ Blockly.Variables.NAME_TYPE = 'VARIABLE';
  * @return {string} namespace of the first block which matches
  */
 Blockly.Variables.getNamespace = function(root,variable_name) {
+  var blocks;
+  if (root.getDescendants) {
+    // Root is Block.
+    blocks = root.getDescendants();
+  } else if (root.getAllBlocks) {
+    // Root is Workspace.
+    blocks = root.getAllBlocks();
+  } else {
+    throw 'Not Block or Workspace: ' + root;
+  }
+
   // Iterate through every block and find the first block which mentions this variable and get the namespace.
   var variable_namespace = undefined;
   for (var x = 0; x < blocks.length; x++) {
     var blockVariables = blocks[x].getVars();
     for (var y = 0; y < blockVariables.length; y++) {
       var varName = blockVariables[y];
-      if (varName == origin_variable_name) {
+      if (varName == variable_name) {
         variable_namespace = blocks[x].getNamespace();
         break;
       }

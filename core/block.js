@@ -142,7 +142,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
 
   workspace.addTopBlock(this);
 
-	this.namespace = undefined; //namespacing
+  this.namespace = undefined;
   // Call an initialization function, if it exists.
   if (goog.isFunction(this.init)) {
     this.init();

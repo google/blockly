@@ -265,6 +265,10 @@ Blockly.Trashcan.prototype.position = function() {
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
 Blockly.Trashcan.prototype.getClientRect = function() {
+  if (!this.svgGroup_) {
+    return null;
+  }
+
   var trashRect = this.svgGroup_.getBoundingClientRect();
   var left = trashRect.left + this.SPRITE_LEFT_ - this.MARGIN_HOTSPOT_;
   var top = trashRect.top + this.SPRITE_TOP_ - this.MARGIN_HOTSPOT_;

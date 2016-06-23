@@ -549,12 +549,21 @@ Blockly.addChangeListener = function(func) {
 
 /**
  * Returns the main workspace.  Returns the last used main workspace (based on
- * focus).
+ * focus).  Try not to use this function, particularly if there are multiple
+ * Blockly instances on a page.
  * @return {!Blockly.Workspace} The main workspace.
  */
 Blockly.getMainWorkspace = function() {
   return Blockly.mainWorkspace;
 };
+
+// IE9 does not have a console.  Create a stub to stop errors.
+if (!goog.global['console']) {
+  goog.global['console'] = {
+    'log': function() {},
+    'warn': function() {}
+  };
+}
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 if (!goog.global['Blockly']) {

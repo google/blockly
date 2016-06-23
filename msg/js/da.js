@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Udfør nogle kommandoer, sålæ
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Udfør nogle kommandoer, sålænge en værdi er sand.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Slet alle %1 blokke?";
 Blockly.Msg.DELETE_BLOCK = "Slet blok";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Slet %1 blokke";
 Blockly.Msg.DISABLE_BLOCK = "Deaktivér blok";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplikér";

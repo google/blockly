@@ -54,6 +54,8 @@ goog.require('Blockly.Msg');
 Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
 /// button text - Button that sets a calendar to today's date.\n{{Identical|Today}}
 Blockly.Msg.TODAY = 'Today';
+/// dropdown choice - Delete the currently selected variable.
+Blockly.Msg.DELETE_VARIABLE = 'Delete the "%1" variable';
 
 // Context menus.
 /// context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}

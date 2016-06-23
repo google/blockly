@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Додека вредноста
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Додека вредноста е вистинита, исполнува наредби.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Да ги избришам сите %1 блокчиња?";
 Blockly.Msg.DELETE_BLOCK = "Избриши блок";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Избриши %1 блока";
 Blockly.Msg.DISABLE_BLOCK = "Исклучи блок";
 Blockly.Msg.DUPLICATE_BLOCK = "Ископирај";

@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "값이 거짓일 때, 몇 가�
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "값이 참일 때, 몇 가지 선언을 합니다.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "모든 블록 %1개를 삭제하겠습니까?";
 Blockly.Msg.DELETE_BLOCK = "블록 삭제";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "블록 %1 삭제";
 Blockly.Msg.DISABLE_BLOCK = "블록 비활성화";
 Blockly.Msg.DUPLICATE_BLOCK = "중복됨";

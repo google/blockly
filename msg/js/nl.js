@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Terwijl een waarde onwaar is de
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Terwijl een waarde waar is de volgende opdrachten uitvoeren.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Alle %1 blokken verwijderen?";
 Blockly.Msg.DELETE_BLOCK = "Blok verwijderen";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 blokken verwijderen";
 Blockly.Msg.DISABLE_BLOCK = "Blok uitschakelen";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplicaat";

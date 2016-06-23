@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Så lenge et utsagn ikke stemme
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Så lenge et utsagn stemmer, utfør noen instruksjoner.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Slett alle %1 blokker?";
 Blockly.Msg.DELETE_BLOCK = "Slett blokk";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Slett %1 blokker";
 Blockly.Msg.DISABLE_BLOCK = "Deaktiver blokk";
 Blockly.Msg.DUPLICATE_BLOCK = "duplikat";

@@ -41,24 +41,24 @@ Blockly.JavaScript['text_join'] = function(block) {
     case 0:
       return ['\'\'', Blockly.JavaScript.ORDER_ATOMIC];
     case 1:
-      var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
-              Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      var code = 'String(' + argument0 + ')';
+      var element = Blockly.JavaScript.valueToCode(block, 'ADD0',
+          Blockly.JavaScript.ORDER_NONE) || '\'\'';
+      var code = 'String(' + element + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
     case 2:
-      var argument0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
-              Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      var argument1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
-              Blockly.JavaScript.ORDER_NONE) || '\'\'';
-      var code = 'String(' + argument0 + ') + String(' + argument1 + ')';
+      var element0 = Blockly.JavaScript.valueToCode(block, 'ADD0',
+          Blockly.JavaScript.ORDER_NONE) || '\'\'';
+      var element1 = Blockly.JavaScript.valueToCode(block, 'ADD1',
+          Blockly.JavaScript.ORDER_NONE) || '\'\'';
+      var code = 'String(' + element0 + ') + String(' + element1 + ')';
       return [code, Blockly.JavaScript.ORDER_ADDITION];
     default:
-      var code = new Array(block.itemCount_);
+      var elements = new Array(block.itemCount_);
       for (var n = 0; n < block.itemCount_; n++) {
-        code[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
-                Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+        elements[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
+            Blockly.JavaScript.ORDER_COMMA) || '\'\'';
       }
-      code = '[' + code.join(',') + '].join(\'\')';
+      var code = '[' + elements.join(',') + '].join(\'\')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
 };
@@ -67,34 +67,34 @@ Blockly.JavaScript['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.JavaScript.variableDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
+  var value = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  return varName + ' = String(' + varName + ') + String(' + argument0 + ');\n';
+  return varName + ' = String(' + varName + ') + String(' + value + ');\n';
 };
 
 Blockly.JavaScript['text_length'] = function(block) {
   // String or array length.
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
+  var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
-  return [argument0 + '.length', Blockly.JavaScript.ORDER_MEMBER];
+  return [text + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 
 Blockly.JavaScript['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'VALUE',
+  var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  return ['!' + argument0 + '.length', Blockly.JavaScript.ORDER_LOGICAL_NOT];
+  return ['!' + text + '.length', Blockly.JavaScript.ORDER_LOGICAL_NOT];
 };
 
 Blockly.JavaScript['text_indexOf'] = function(block) {
   // Search the text for a substring.
   var operator = block.getFieldValue('END') == 'FIRST' ?
       'indexOf' : 'lastIndexOf';
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'FIND',
+  var element = Blockly.JavaScript.valueToCode(block, 'FIND',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  var argument1 = Blockly.JavaScript.valueToCode(block, 'VALUE',
+  var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  var code = argument1 + '.' + operator + '(' + argument0 + ')';
+  var code = text + '.' + operator + '(' + element + ')';
   // Adjust index if using one-based indices.
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
     return [code + ' + 1', Blockly.JavaScript.ORDER_ADDITION];
@@ -106,8 +106,10 @@ Blockly.JavaScript['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
+  var text_order = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
+      Blockly.JavaScript.ORDER_MEMBER;
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+      text_order) || '\'\'';
   switch (where) {
     case 'FIRST':
       var code = text + '.charAt(0)';
@@ -128,11 +130,11 @@ Blockly.JavaScript['text_charAt'] = function(block) {
       var functionName = Blockly.JavaScript.provideFunction_(
           'textRandomLetter',
           ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-             '(text) {',
+              '(text) {',
            '  var x = Math.floor(Math.random() * text.length);',
            '  return text[x];',
            '}']);
-      code = functionName + '(' + text + ')';
+      var code = functionName + '(' + text + ')';
       return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
   throw 'Unhandled option (text_charAt).';
@@ -141,17 +143,16 @@ Blockly.JavaScript['text_charAt'] = function(block) {
 Blockly.JavaScript['text_getSubstring'] = function(block) {
   // Get substring.
   var text = Blockly.JavaScript.valueToCode(block, 'STRING',
-      Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
+      Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
-
   if (where1 == 'FIRST' && where2 == 'LAST') {
     var code = text;
-  } else if (text.match(/^\w+$/) ||
+  } else if (text.match(/^'?\w+'?$/) ||
       (where1 != 'FROM_END' && where1 != 'LAST' &&
       where2 != 'FROM_END' && where2 != 'LAST')) {
-    // If the text is a simple value or doesn't require a call for length, don't
-    // generate a helper function.
+    // If the text is a variable or literal or doesn't require a call for
+    // length, don't generate a helper function.
     switch (where1) {
       case 'FROM_START':
         var at1 = Blockly.JavaScript.getAdjusted(block, 'AT1');
@@ -188,25 +189,24 @@ Blockly.JavaScript['text_getSubstring'] = function(block) {
     var at2 = Blockly.JavaScript.getAdjusted(block, 'AT2');
     var functionName = Blockly.JavaScript.provideFunction_(
         'getSubsequence',
-        [
-          'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
             '(sequence, where1, at1, where2, at2) {',
-          '  function getAt(where, at) {',
-          '    if (where == \'FROM_END\') {',
-          '      at = sequence.length - 1 - at;',
-          '    } else if (where == \'FIRST\') {',
-          '      at = 0;',
-          '    } else if (where == \'LAST\') {',
-          '      at = sequence.length - 1;',
-          '    } else if (where != \'FROM_START\') {',
-          '      throw \'Unhandled option (getSubsequence).\';',
-          '    }',
-          '    return at;',
-          '  }',
-          '  at1 = getAt(where1, at1);',
-          '  at2 = getAt(where2, at2) + 1;',
-          '  return sequence.slice(at1, at2);',
-          '}']);
+         '  function getAt(where, at) {',
+         '    if (where == \'FROM_END\') {',
+         '      at = sequence.length - 1 - at;',
+         '    } else if (where == \'FIRST\') {',
+         '      at = 0;',
+         '    } else if (where == \'LAST\') {',
+         '      at = sequence.length - 1;',
+         '    } else if (where != \'FROM_START\') {',
+         '      throw \'Unhandled option (getSubsequence).\';',
+         '    }',
+         '    return at;',
+         '  }',
+         '  at1 = getAt(where1, at1);',
+         '  at2 = getAt(where2, at2) + 1;',
+         '  return sequence.slice(at1, at2);',
+         '}']);
     var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
@@ -221,25 +221,24 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
     'TITLECASE': null
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
-
+  var text_order = (operator) ? Blockly.JavaScript.ORDER_MEMBER :
+      Blockly.JavaScript.ORDER_NONE;
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
+      text_order) || '\'\'';
   if (operator) {
     // Upper and lower case are functions built into JavaScript.
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
-        Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-    var code = argument0 + operator;
+    var code = text + operator;
   } else {
     // Title case is not a native JavaScript function.  Define one.
     var functionName = Blockly.JavaScript.provideFunction_(
         'textToTitleCase',
         ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-           '(str) {',
+            '(str) {',
          '  return str.replace(/\\S+/g,',
          '      function(txt) {return txt[0].toUpperCase() + ' +
-             'txt.substring(1).toLowerCase();});',
+            'txt.substring(1).toLowerCase();});',
          '}']);
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
-        Blockly.JavaScript.ORDER_NONE) || '\'\'';
-    var code = functionName + '(' + argument0 + ')';
+    var code = functionName + '(' + text + ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
@@ -252,16 +251,16 @@ Blockly.JavaScript['text_trim'] = function(block) {
     'BOTH': '.trim()'
   };
   var operator = OPERATORS[block.getFieldValue('MODE')];
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
+  var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  return [argument0 + operator, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [text + operator, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
 Blockly.JavaScript['text_print'] = function(block) {
   // Print statement.
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'TEXT',
+  var msg = Blockly.JavaScript.valueToCode(block, 'TEXT',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  return 'window.alert(' + argument0 + ');\n';
+  return 'window.alert(' + msg + ');\n';
 };
 
 Blockly.JavaScript['text_prompt_ext'] = function(block) {

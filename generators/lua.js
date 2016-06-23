@@ -87,6 +87,12 @@ Blockly.Lua.ORDER_OR = 9;              // or
 Blockly.Lua.ORDER_NONE = 99;
 
 /**
+ * Lua is not supporting zero-indexing since the language itself is one-indexed,
+ * so there is not flag for ONE_BASED_INDEXING to indicate which indexing is
+ * used.
+ */
+
+/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */

@@ -39,8 +39,8 @@ Blockly.Dart['lists_create_empty'] = function(block) {
 Blockly.Dart['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   var elements = new Array(block.itemCount_);
-  for (var n = 0; n < block.itemCount_; n++) {
-    elements[n] = Blockly.Dart.valueToCode(block, 'ADD' + n,
+  for (var i = 0; i < block.itemCount_; i++) {
+    elements[i] = Blockly.Dart.valueToCode(block, 'ADD' + i,
         Blockly.Dart.ORDER_NONE) || 'null';
   }
   var code = '[' + elements.join(', ') + ']';
@@ -91,9 +91,9 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var list_order = (where == 'RANDOM' || where == 'FROM_END') ?
+  var listOrder = (where == 'RANDOM' || where == 'FROM_END') ?
       Blockly.Dart.ORDER_NONE : Blockly.Dart.ORDER_UNARY_POSTFIX;
-  var list = Blockly.Dart.valueToCode(block, 'VALUE', list_order) || '[]';
+  var list = Blockly.Dart.valueToCode(block, 'VALUE', listOrder) || '[]';
   switch (where) {
     case 'FIRST':
       if (mode == 'GET') {

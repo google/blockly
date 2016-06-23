@@ -54,8 +54,8 @@ Blockly.JavaScript['text_join'] = function(block) {
       return [code, Blockly.JavaScript.ORDER_ADDITION];
     default:
       var elements = new Array(block.itemCount_);
-      for (var n = 0; n < block.itemCount_; n++) {
-        elements[n] = Blockly.JavaScript.valueToCode(block, 'ADD' + n,
+      for (var i = 0; i < block.itemCount_; i++) {
+        elements[i] = Blockly.JavaScript.valueToCode(block, 'ADD' + i,
             Blockly.JavaScript.ORDER_COMMA) || '\'\'';
       }
       var code = '[' + elements.join(',') + '].join(\'\')';
@@ -106,10 +106,10 @@ Blockly.JavaScript['text_charAt'] = function(block) {
   // Get letter at index.
   // Note: Until January 2013 this block did not have the WHERE input.
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var text_order = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
+  var textOrder = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_NONE :
       Blockly.JavaScript.ORDER_MEMBER;
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      text_order) || '\'\'';
+      textOrder) || '\'\'';
   switch (where) {
     case 'FIRST':
       var code = text + '.charAt(0)';
@@ -221,10 +221,10 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
     'TITLECASE': null
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
-  var text_order = (operator) ? Blockly.JavaScript.ORDER_MEMBER :
+  var textOrder = (operator) ? Blockly.JavaScript.ORDER_MEMBER :
       Blockly.JavaScript.ORDER_NONE;
   var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
-      text_order) || '\'\'';
+      textOrder) || '\'\'';
   if (operator) {
     // Upper and lower case are functions built into JavaScript.
     var code = text + operator;

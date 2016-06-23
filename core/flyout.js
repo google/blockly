@@ -547,9 +547,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     xmlList =
         Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
   } else if (xmlList.constructor != Array) { //single get function under a namespace
-    //example: block name is "ioport_get", namespace is IO_Number, the custom should be ioport_get
     var namespace = xmlList;
-    var block_name = 'variable_get';  //default value, should be replaced if the naming scheme is xxx_set and xxx_get
+    var block_name = 'variable_get';  //default value, should be replaced if the naming scheme is xxx_set and xxx_get. 
     var blocks = this.workspace_.targetWorkspace.getAllBlocks();
     if (blocks.length == 0) {
       throw("Custom list: no blocks in workspace")

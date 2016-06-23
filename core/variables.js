@@ -37,11 +37,35 @@ goog.require('goog.string');
 Blockly.Variables.NAME_TYPE = 'VARIABLE';
 
 /**
+ * get namespace given the variable name
+ * @param {Blockly.Workspace} root workspace
+ * @param {string} variable name
+ * @return {string} namespace of the first block which matches
+ */
+Blockly.Variables.getNamespace = function(root,variable_name) {
+  // Iterate through every block and find the first block which mentions this variable and get the namespace.
+  var variable_namespace = undefined;
+  for (var x = 0; x < blocks.length; x++) {
+    var blockVariables = blocks[x].getVars();
+    for (var y = 0; y < blockVariables.length; y++) {
+      var varName = blockVariables[y];
+      if (varName == origin_variable_name) {
+        variable_namespace = blocks[x].getNamespace();
+        break;
+      }
+    }
+  }
+  return variable_namespace;
+}
+
+
+/**
  * Find all user-created variables.
  * @param {!Blockly.Block|!Blockly.Workspace} root Root block or workspace.
+ * @param {string|undefined} namespace
  * @return {!Array.<string>} Array of variable names.
  */
-Blockly.Variables.allVariables = function(root,origin_variable_name) {
+Blockly.Variables.allVariables = function(root,namespace) {
   var blocks;
   if (root.getDescendants) {
     // Root is Block.
@@ -53,7 +77,7 @@ Blockly.Variables.allVariables = function(root,origin_variable_name) {
     throw 'Not Block or Workspace: ' + root;
   }
   var variableHash = Object.create(null);
-  if(origin_variable_name == ''){ //if a variable is created
+  if(namespace == undefined){ //if no namespace
     // Iterate through every block and add each variable to the hash.
     for (var x = 0; x < blocks.length; x++) {
       var blockVariables = blocks[x].getVars();
@@ -65,27 +89,14 @@ Blockly.Variables.allVariables = function(root,origin_variable_name) {
         }
       }
     }
-  } else { //if a variable is selected in dropdown
-    // Iterate through every block and find the first block which mentions this variable and get the namespace.
-    var origin_variable_namespace = undefined;
-    for (var x = 0; x < blocks.length; x++) {
-      var blockVariables = blocks[x].getVars();
-      for (var y = 0; y < blockVariables.length; y++) {
-        var varName = blockVariables[y];
-        if (varName == origin_variable_name) {
-          origin_variable_namespace = blocks[x].getNamespace();
-          break;
-        }
-      }
-    }
-    //then find all variables with the same namespace
+  } else { //if a namespace is specified
+    //find all variables with the same namespace
     for (var x = 0; x < blocks.length; x++) {
       var blockType = blocks[x].getNamespace();
-      if(blockType == origin_variable_namespace){
+      if(blockType == namespace){
         var blockVariables = blocks[x].getVars();
         for (var y = 0; y < blockVariables.length; y++) {
           var varName = blockVariables[y];
-            // Variable name may be null if the block is only half-built.
           if (varName) {
             variableHash[varName.toLowerCase()] = varName;
           }
@@ -101,6 +112,8 @@ Blockly.Variables.allVariables = function(root,origin_variable_name) {
   }
   return variableList;
 };
+
+
 
 /**
  * Find all instances of the specified variable and rename them.

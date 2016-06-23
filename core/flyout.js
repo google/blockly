@@ -551,7 +551,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     var block_name = 'variable_get';  //default value, should be replaced if the naming scheme is xxx_set and xxx_get. 
     var blocks = this.workspace_.targetWorkspace.getAllBlocks();
     if (blocks.length == 0) {
-      throw("Custom list: no blocks in workspace")
+      throw("Custom flyout list: no blocks in workspace")
     }
     //find variables
     var variableHash = Object.create(null);
@@ -559,7 +559,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       if (blocks[x].namespace == namespace) {
         //get the name of the block.
         var other_name = blocks[x].type;
-        if (other_name.indexOf("_set") > -1) {
+        if (other_name.indexOf("_set") > -1) {//if the name of the block contains _set
           block_name = other_name.replace("_set","_get");
         }
         var blockVariables = blocks[x].getVars();

@@ -536,6 +536,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
 Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
   if (toolbox) {
+    this.horizontalLayout_ = toolbox.horizontalLayout_;
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
       // surface of the workspace has, so we may need to reposition everything.
@@ -585,6 +586,43 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
  */
 Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
   // NOP.
+};
+
+/**
+ * Decorate original onKeyDown handler to swap
+ * LEFT/RIGHT keys with UP/DOWN in horizontalLayout.
+ * @param {!goog.events.BrowserEvent} e The browser event.
+ * @return {boolean} The handled value.
+ * @override
+ * @private
+ */
+Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
+  var ret;
+
+  if (this.horizontalLayout_) {
+    var right = goog.events.KeyCodes.RIGHT;
+    var left = goog.events.KeyCodes.LEFT;
+    var up = goog.events.KeyCodes.UP;
+    var down = goog.events.KeyCodes.DOWN;
+
+    // Swap keycodes
+    goog.events.KeyCodes.RIGHT = down;
+    goog.events.KeyCodes.LEFT = up;
+    goog.events.KeyCodes.UP = left;
+    goog.events.KeyCodes.DOWN = right;
+
+    ret = Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
+
+    // Restore keycodes
+    goog.events.KeyCodes.RIGHT = right;
+    goog.events.KeyCodes.LEFT = left;
+    goog.events.KeyCodes.UP = up;
+    goog.events.KeyCodes.DOWN = down;
+  } else {
+    ret = Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
+  }
+
+  return ret;
 };
 
 /**

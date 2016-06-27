@@ -31,7 +31,7 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['lists_create_empty'] = function(block) {
   // Create an empty list.
-  return ['array()', Blockly.PHP.ORDER_ATOMIC];
+  return ['array()', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['lists_create_with'] = function(block) {
@@ -42,7 +42,7 @@ Blockly.PHP['lists_create_with'] = function(block) {
         Blockly.PHP.ORDER_COMMA) || 'null';
   }
   code = 'array(' + code.join(', ') + ')';
-  return [code, Blockly.PHP.ORDER_ATOMIC];
+  return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['lists_repeat'] = function(block) {
@@ -105,14 +105,14 @@ Blockly.PHP['lists_indexOf'] = function(block) {
     // indexOf
     var functionName = Blockly.PHP.provideFunction_(
         'indexOf',
-        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+        ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
             '($haystack, $needle) {',
-          '  for ($index = 0; $index < count($haystack); $index++) {',
-          '    if ($haystack[$index] == $needle) return $index' +
+         '  for ($index = 0; $index < count($haystack); $index++) {',
+         '    if ($haystack[$index] == $needle) return $index' +
             indexAdjustment + ';',
-          '  }',
-          '  return ' + errorIndex + ';',
-          '}']);
+         '  }',
+         '  return ' + errorIndex + ';',
+         '}']);
   } else {
     // lastIndexOf
     var functionName = Blockly.PHP.provideFunction_(

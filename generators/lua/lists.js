@@ -140,12 +140,8 @@ Blockly.Lua['lists_getIndex'] = function(block) {
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var atOrder = (where == 'FROM_END' || where == 'FROM_START') ?
-      Blockly.Lua.ORDER_ADDITIVE : Blockly.Lua.ORDER_NONE;
-  var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
-  var listOrder = (mode == 'GET') ? Blockly.Lua.ORDER_HIGH :
-      Blockly.Lua.ORDER_NONE;
-  var list = Blockly.Lua.valueToCode(block, 'VALUE', listOrder) || '{}';
+  var list = Blockly.Lua.valueToCode(block, 'VALUE', Blockly.Lua.ORDER_NONE) ||
+      '{}';
   var getIndex_ = Blockly.Lua.lists.getIndex_;
 
   // If `list` would be evaluated more than once (which is the case for LAST,
@@ -155,6 +151,9 @@ Blockly.Lua['lists_getIndex'] = function(block) {
     // `list` is an expression, so we may not evaluate it more than once.
     if (mode == 'REMOVE') {
       // We can use multiple statements.
+      var atOrder = (where == 'FROM_END')  ? Blockly.Lua.ORDER_ADDITIVE :
+          Blockly.Lua.ORDER_NONE;
+      var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
       var listVar = Blockly.Lua.variableDB_.getDistinctName(
           'tmp_list', Blockly.Variables.NAME_TYPE);
       at = getIndex_(listVar, where, at);
@@ -163,6 +162,8 @@ Blockly.Lua['lists_getIndex'] = function(block) {
       return code;
     } else {
       // We need to create a procedure to avoid reevaluating values.
+      var at = Blockly.Lua.valueToCode(block, 'AT', Blockly.Lua.ORDER_NONE) ||
+          '1';
       if (mode == 'GET') {
         var functionName = Blockly.Lua.provideFunction_(
             'list_get_' + where.toLowerCase(),
@@ -191,6 +192,9 @@ Blockly.Lua['lists_getIndex'] = function(block) {
   } else {
     // Either `list` is a simple variable, or we only need to refer to `list`
     // once.
+    var atOrder = (mode == 'GET' && where == 'FROM_END') ?
+        Blockly.Lua.ORDER_ADDITIVE : Blockly.Lua.ORDER_NONE;
+    var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
     at = getIndex_(list, where, at);
     if (mode == 'GET') {
       var code = list + '[' + at + ']';

@@ -40,24 +40,24 @@ Blockly.Lua['text_join'] = function(block) {
   if (block.itemCount_ == 0) {
     return ['\'\'', Blockly.Lua.ORDER_ATOMIC];
   } else if (block.itemCount_ == 1) {
-    var argument0 = Blockly.Lua.valueToCode(block, 'ADD0',
+    var element = Blockly.Lua.valueToCode(block, 'ADD0',
         Blockly.Lua.ORDER_NONE) || '\'\'';
-    var code = argument0;
+    var code = element;
     return [code, Blockly.Lua.ORDER_HIGH];
   } else if (block.itemCount_ == 2) {
-    var argument0 = Blockly.Lua.valueToCode(block, 'ADD0',
-        Blockly.Lua.ORDER_NONE) || '\'\'';
-    var argument1 = Blockly.Lua.valueToCode(block, 'ADD1',
-        Blockly.Lua.ORDER_NONE) || '\'\'';
-    var code = argument0 + ' .. ' + argument1;
-    return [code, Blockly.Lua.ORDER_UNARY];
+    var element0 = Blockly.Lua.valueToCode(block, 'ADD0',
+        Blockly.Lua.ORDER_CONCATENATION) || '\'\'';
+    var element1 = Blockly.Lua.valueToCode(block, 'ADD1',
+        Blockly.Lua.ORDER_CONCATENATION) || '\'\'';
+    var code = element0 + ' .. ' + element1;
+    return [code, Blockly.Lua.ORDER_CONCATENATION];
   } else {
-    var code = [];
+    var elements = [];
     for (var n = 0; n < block.itemCount_; n++) {
-      code[n] = Blockly.Lua.valueToCode(block, 'ADD' + n,
+      elements[n] = Blockly.Lua.valueToCode(block, 'ADD' + n,
           Blockly.Lua.ORDER_NONE) || '\'\'';
     }
-    code = 'table.concat({' + code.join(', ') + '})';
+    var code = 'table.concat({' + elements.join(', ') + '})';
     return [code, Blockly.Lua.ORDER_HIGH];
   }
 };

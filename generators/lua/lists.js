@@ -246,13 +246,13 @@ Blockly.Lua['lists_setIndex'] = function(block) {
 Blockly.Lua['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.Lua.valueToCode(block, 'LIST',
-      Blockly.Lua.ORDER_HIGH) || '{}';
+      Blockly.Lua.ORDER_NONE) || '{}';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   var at1 = Blockly.Lua.valueToCode(block, 'AT1',
-      Blockly.Lua.ORDER_ADDITIVE) || '1';
+      Blockly.Lua.ORDER_NONE) || '1';
   var at2 = Blockly.Lua.valueToCode(block, 'AT2',
-      Blockly.Lua.ORDER_ADDITIVE) || '1';
+      Blockly.Lua.ORDER_NONE) || '1';
   var getIndex_ = Blockly.Lua.lists.getIndex_;
 
   var functionName = Blockly.Lua.provideFunction_(
@@ -282,8 +282,8 @@ Blockly.Lua['lists_getSublist'] = function(block) {
 
 Blockly.Lua['lists_sort'] = function(block) {
   // Block for sorting a list.
-  var listCode = Blockly.Lua.valueToCode(
-      block, 'LIST', Blockly.Lua.ORDER_HIGH) || '{}';
+  var list = Blockly.Lua.valueToCode(
+      block, 'LIST', Blockly.Lua.ORDER_NONE) || '{}';
   var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');
 
@@ -312,7 +312,7 @@ Blockly.Lua['lists_sort'] = function(block) {
        'end']);
 
   var code = functionName +
-      '(' + listCode + ',"' + type + '", ' + direction + ')';
+      '(' + list + ',"' + type + '", ' + direction + ')';
   return [code, Blockly.Lua.ORDER_HIGH];
 };
 

@@ -280,6 +280,7 @@
 	"LISTS_SORT_ORDER_DESCENDING": "па зьмяншэньні",
 	"LISTS_SORT_TYPE_NUMERIC": "як лікі",
 	"LISTS_SORT_TYPE_TEXT": "паводле альфабэту",
+	"LISTS_SORT_TYPE_IGNORECASE": "паводле альфабэту, ігнараваць рэгістар",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "стварыць сьпіс з тэксту",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "стварыць тэкст са сьпісу",
 	"LISTS_SPLIT_WITH_DELIMITER": "з падзяляльнікам",

@@ -309,7 +309,8 @@ function test_isConnectionAllowed_NoNext() {
   three.sourceBlock_.previousConnection = three;
   Blockly.Connection.connectReciprocally_(one, three);
 
-  assertFalse(two.isConnectionAllowed(one));
+  // A terminal block is allowed to replace another terminal block.
+  assertTrue(two.isConnectionAllowed(one));
 }
 
 function testCheckConnection_Okay() {

@@ -25,7 +25,6 @@
 blocklyApp.ClipboardService = ng.core
   .Class({
     constructor: function() {
-      blocklyApp.debug && console.log('Clipboard service constructed');
       this.clipboardBlockXml_ = null;
       this.clipboardBlockSuperiorConnection_ = null;
       this.clipboardBlockNextConnection_ = null;
@@ -35,7 +34,6 @@ blocklyApp.ClipboardService = ng.core
       var blockSummary = block.toString();
       this.copy(block, false);
       block.dispose(true);
-      blocklyApp.debug && console.log('cut');
       alert(Blockly.Msg.CUT_BLOCK_MSG + blockSummary);
     },
     copy: function(block, announce) {
@@ -43,7 +41,6 @@ blocklyApp.ClipboardService = ng.core
       this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
           block.previousConnection;
       this.clipboardBlockNextConnection_ = block.nextConnection;
-      blocklyApp.debug && console.log('copy');
       if (announce) {
         alert(Blockly.Msg.COPIED_BLOCK_MSG + block.toString());
       }
@@ -61,7 +58,6 @@ blocklyApp.ClipboardService = ng.core
         default:
           connection.connect(reconstitutedBlock.outputConnection);
       }
-      blocklyApp.debug && console.log('paste');
       alert(
           Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
           reconstitutedBlock.toString());
@@ -73,7 +69,6 @@ blocklyApp.ClipboardService = ng.core
       this.markedConnection_.connect(
           reconstitutedBlock.outputConnection ||
           reconstitutedBlock.previousConnection);
-      blocklyApp.debug && console.log('paste to marked connection');
       if (announce) {
         alert(
             Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
@@ -82,7 +77,6 @@ blocklyApp.ClipboardService = ng.core
     },
     markConnection: function(connection) {
       this.markedConnection_ = connection;
-      blocklyApp.debug && console.log('mark connection');
       alert(Blockly.Msg.MARKED_SPOT_MSG);
     },
     isCompatibleWithConnection_: function(blockConnection, connection) {

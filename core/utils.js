@@ -308,14 +308,17 @@ Blockly.isRightButton = function(e) {
  * The origin (0,0) is the top-left corner of the Blockly svg.
  * @param {!Event} e Mouse event.
  * @param {!Element} svg SVG element.
+ * @param {SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!Object} Object with .x and .y properties.
  */
-Blockly.mouseToSvg = function(e, svg) {
+Blockly.mouseToSvg = function(e, svg, matrix) {
   var svgPoint = svg.createSVGPoint();
   svgPoint.x = e.clientX;
   svgPoint.y = e.clientY;
-  var matrix = svg.getScreenCTM();
-  matrix = matrix.inverse();
+
+  if (!matrix) {
+    matrix = svg.getScreenCTM().inverse();
+  }
   return svgPoint.matrixTransform(matrix);
 };
 
@@ -420,7 +423,7 @@ Blockly.isNumber = function(str) {
  * @param {string} message Text containing interpolation tokens.
  * @return {!Array.<string|number>} Array of strings and numbers.
  */
-Blockly.tokenizeInterpolation = function(message) {
+Blockly.utils.tokenizeInterpolation = function(message) {
   var tokens = [];
   var chars = message.split('');
   chars.push('');  // End marker.

@@ -790,6 +790,7 @@ function init() {
   }
   mainWorkspace.clearUndo();
 
+  mainWorkspace.addChangeListener(Blockly.Events.disableOrphans);
   mainWorkspace.addChangeListener(updateLanguage);
   document.getElementById('direction')
       .addEventListener('change', updatePreview);

@@ -30,6 +30,37 @@ goog.require('Blockly.Blocks');
 
 Blockly.robot = Blockly.robot || {};
 
+Blockly.Blocks['robot_display_message_h2'] = {
+  init: function() {
+    this.appendValueInput("TEXT")
+        .setCheck("String")
+        .appendField("display message");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(260);
+    this.setTooltip('Displays a message on the robot\'s screen.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_display_message_h1h2_no_timeout'] = {
+  init: function() {
+    this.appendValueInput("H1_TEXT")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("display big text");
+    this.appendValueInput("H2 TEXT")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("regular text");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(260);
+    this.setTooltip('Displays a message with both big and regular size text.');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['robot_display_message_h1h2'] = {
   init: function() {
     this.appendDummyInput()
@@ -330,6 +361,23 @@ Blockly.Blocks['robot_manipulation_is_gripper_open'] = {
     this.setOutput(true, "Boolean");
     this.setColour(20);
     this.setTooltip('Checks if the gripper is open or closed.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_wait_for_seconds'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("wait for");
+    this.appendValueInput("SECONDS")
+        .setCheck("Number");
+    this.appendDummyInput()
+        .appendField("seconds");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(120);
+    this.setTooltip('Makes the robot pause and wait for some time.');
     this.setHelpUrl('');
   }
 };

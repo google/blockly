@@ -28,6 +28,19 @@ goog.provide('Blockly.JavaScript.robot');
 
 goog.require('Blockly.JavaScript');
 
+Blockly.JavaScript['robot_display_message_h2'] = function(block) {
+  var value_text = Blockly.JavaScript.valueToCode(block, 'TEXT', Blockly.JavaScript.ORDER_COMMA);
+  var code = 'robot.displayMessage(' + value_text + ', \'\', 0);\n';
+  return code;
+};
+
+Blockly.JavaScript['robot_display_message_h1h2_no_timeout'] = function(block) {
+  var value_h1_text = Blockly.JavaScript.valueToCode(block, 'H1_TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var value_h2_text = Blockly.JavaScript.valueToCode(block, 'H2 TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+  var code = 'robot.displayMessage(' + value_h1_text + ', ' + value_h2_text + ', 0);\n';
+  return code;
+};
+
 Blockly.JavaScript['robot_display_message_h1h2'] = function(block) {
   var value_h1text = Blockly.JavaScript.valueToCode(block, 'H1TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
   var value_h2text = Blockly.JavaScript.valueToCode(block, 'H2TEXT', Blockly.JavaScript.ORDER_COMMA) || '\'\'';
@@ -184,3 +197,8 @@ Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript['robot_wait_for_seconds'] = function(block) {
+  var value_seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_NONE) || 0;
+  var code = 'robot.waitForDuration(' + value_seconds + ');\n';
+  return code;
+};

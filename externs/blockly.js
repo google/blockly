@@ -81,6 +81,15 @@ Blockly.JavaScript.prototype.workspaceToCode = function(workspace) {};
 Blockly.JavaScript.prototype.blockToCode = function(block) {};
 
 /**
+ * Generate code representing the statement.  Indent the code.
+ * @param {!Blockly.Block} block The block containing the input.
+ * @param {string} name The name of the input.
+ * @return {string} Generated code or '' if no blocks are connected.
+ */
+Blockly.JavaScript.prototype.statementToCode = function(block, name) {};
+
+
+/**
  * Encode a block tree as XML.
  * @param {!Blockly.Workspace} workspace The workspace containing blocks.
  * @return {!Element} XML document.

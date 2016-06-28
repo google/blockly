@@ -199,6 +199,6 @@ Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
 
 Blockly.JavaScript['robot_wait_for_seconds'] = function(block) {
   var value_seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_NONE) || 0;
-  var code = 'robot.waitForDuration(' + value_seconds + ');\n';
+  var code = 'waitForDuration(' + value_seconds + ');\n';
   return code;
 };

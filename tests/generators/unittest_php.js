@@ -120,7 +120,8 @@ Blockly.PHP['unittest_main'].defineAssert_ = function(block) {
 
 Blockly.PHP['unittest_assertequals'] = function(block) {
     // Asserts that a value equals another value.
-    var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
+    var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
+      Blockly.PHP.ORDER_NONE) || '';
     var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
             Blockly.PHP.ORDER_COMMA) || 'null';
     var expected = Blockly.PHP.valueToCode(block, 'EXPECTED',
@@ -131,7 +132,8 @@ Blockly.PHP['unittest_assertequals'] = function(block) {
 
 Blockly.PHP['unittest_assertvalue'] = function(block) {
     // Asserts that a value is true, false, or null.
-    var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
+    var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
+      Blockly.PHP.ORDER_NONE) || '';
     var actual = Blockly.PHP.valueToCode(block, 'ACTUAL',
             Blockly.PHP.ORDER_COMMA) || 'null';
     var expected = block.getFieldValue('EXPECTED');
@@ -150,7 +152,8 @@ Blockly.PHP['unittest_fail'] = function(block) {
     // Always assert an error.
     var resultsVar = Blockly.PHP.variableDB_.getName('unittestResults',
         Blockly.Variables.NAME_TYPE);
-    var message = Blockly.PHP.quote_(block.getFieldValue('MESSAGE'));
+    var message = Blockly.PHP.valueToCode(block, 'MESSAGE',
+      Blockly.PHP.ORDER_NONE) || '';
     var functionName = Blockly.PHP.provideFunction_(
         'unittest_fail',
         [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +

@@ -51,7 +51,11 @@
     <comment pinned="false" h="80" w="160">Tests the "length" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">length</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">length</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="text_length" inline="false">
             <value name="VALUE">
@@ -68,7 +72,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">length</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">length</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="text_length" inline="false">
                 <value name="VALUE">
@@ -93,7 +101,11 @@
     <comment pinned="false" h="80" w="160">Tests the "is empty" block".</comment>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
-        <field name="MESSAGE">not empty</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">not empty</field>
+           </block>
+         </value>
         <field name="EXPECTED">FALSE</field>
         <value name="ACTUAL">
           <block type="text_isEmpty" inline="false">
@@ -106,7 +118,11 @@
         </value>
         <next>
           <block type="unittest_assertvalue" inline="false">
-            <field name="MESSAGE">empty</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">empty</field>
+               </block>
+             </value>
             <field name="EXPECTED">TRUE</field>
             <value name="ACTUAL">
               <block type="text_isEmpty" inline="false">
@@ -127,7 +143,11 @@
     <comment pinned="false" h="80" w="160">Tests the "create text with" block with varying number of inputs.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">no text</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">no text</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="text_join" inline="false">
             <mutation items="1"></mutation>
@@ -140,7 +160,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">single text</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">single text</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="text_join" inline="false">
                 <mutation items="1"></mutation>
@@ -158,7 +182,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">double text</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">double text</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="text_join" inline="false">
                     <mutation items="2"></mutation>
@@ -181,7 +209,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">triple text</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">triple text</field>
+                       </block>
+                     </value>
                     <value name="ACTUAL">
                       <block type="text_join" inline="false">
                         <mutation items="3"></mutation>
@@ -237,7 +269,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">append text</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">append text</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">item</field>
@@ -266,7 +302,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">append number</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">append number</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">item</field>
@@ -322,7 +362,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">substring # simple</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">substring # simple</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="text_getSubstring">
                 <mutation at1="true" at2="true"></mutation>
@@ -360,7 +404,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">substring # simple order</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">substring # simple order</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="text_getSubstring">
                     <mutation at1="true" at2="true"></mutation>
@@ -422,7 +470,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">substring #-end simple</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">substring #-end simple</field>
+                       </block>
+                     </value>
                     <value name="ACTUAL">
                       <block type="text_getSubstring">
                         <mutation at1="true" at2="true"></mutation>
@@ -460,7 +512,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">substring #-end simple order</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">substring #-end simple order</field>
+                           </block>
+                         </value>
                         <value name="ACTUAL">
                           <block type="text_getSubstring">
                             <mutation at1="true" at2="true"></mutation>
@@ -518,7 +574,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">substring first-last simple</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">substring first-last simple</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="text_getSubstring">
                                 <mutation at1="false" at2="false"></mutation>
@@ -538,7 +598,11 @@
                             </value>
                             <next>
                               <block type="unittest_assertequals" inline="false">
-                                <field name="MESSAGE">substring # #-end simple</field>
+                                <value name="MESSAGE">
+                                   <block type="text">
+                                     <field name="TEXT">substring # #-end simple</field>
+                                   </block>
+                                 </value>
                                 <value name="ACTUAL">
                                   <block type="text_getSubstring">
                                     <mutation at1="true" at2="true"></mutation>
@@ -576,7 +640,11 @@
                                 </value>
                                 <next>
                                   <block type="unittest_assertequals" inline="false">
-                                    <field name="MESSAGE">substring #-end # simple</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">substring #-end # simple</field>
+                                       </block>
+                                     </value>
                                     <value name="ACTUAL">
                                       <block type="text_getSubstring">
                                         <mutation at1="true" at2="true"></mutation>
@@ -614,7 +682,11 @@
                                     </value>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">substring first # simple</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">substring first # simple</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="text_getSubstring">
                                             <mutation at1="false" at2="true"></mutation>
@@ -643,7 +715,11 @@
                                         </value>
                                         <next>
                                           <block type="unittest_assertequals" inline="false">
-                                            <field name="MESSAGE">substring first #-end simple</field>
+                                            <value name="MESSAGE">
+                                               <block type="text">
+                                                 <field name="TEXT">substring first #-end simple</field>
+                                               </block>
+                                             </value>
                                             <value name="ACTUAL">
                                               <block type="text_getSubstring">
                                                 <mutation at1="false" at2="true"></mutation>
@@ -672,7 +748,11 @@
                                             </value>
                                             <next>
                                               <block type="unittest_assertequals" inline="false">
-                                                <field name="MESSAGE">substring # last simple</field>
+                                                <value name="MESSAGE">
+                                                   <block type="text">
+                                                     <field name="TEXT">substring # last simple</field>
+                                                   </block>
+                                                 </value>
                                                 <value name="ACTUAL">
                                                   <block type="text_getSubstring">
                                                     <mutation at1="true" at2="false"></mutation>
@@ -701,7 +781,11 @@
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">substring #-end last simple</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">substring #-end last simple</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="text_getSubstring">
                                                         <mutation at1="true" at2="false"></mutation>
@@ -730,7 +814,11 @@
                                                     </value>
                                                     <next>
                                                       <block type="unittest_assertequals" inline="false">
-                                                        <field name="MESSAGE">substring all with # #-end simple</field>
+                                                        <value name="MESSAGE">
+                                                           <block type="text">
+                                                             <field name="TEXT">substring all with # #-end simple</field>
+                                                           </block>
+                                                         </value>
                                                         <value name="ACTUAL">
                                                           <block type="text_getSubstring">
                                                             <mutation at1="true" at2="true"></mutation>
@@ -768,7 +856,11 @@
                                                         </value>
                                                         <next>
                                                           <block type="unittest_assertequals" inline="false">
-                                                            <field name="MESSAGE">substring all with #-end # simple</field>
+                                                            <value name="MESSAGE">
+                                                               <block type="text">
+                                                                 <field name="TEXT">substring all with #-end # simple</field>
+                                                               </block>
+                                                             </value>
                                                             <value name="ACTUAL">
                                                               <block type="text_getSubstring">
                                                                 <mutation at1="true" at2="true"></mutation>
@@ -806,7 +898,11 @@
                                                             </value>
                                                             <next>
                                                               <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">substring all with # #-end math simple</field>
+                                                                <value name="MESSAGE">
+                                                                   <block type="text">
+                                                                     <field name="TEXT">substring all with # #-end math simple</field>
+                                                                   </block>
+                                                                 </value>
                                                                 <value name="ACTUAL">
                                                                   <block type="text_getSubstring">
                                                                     <mutation at1="true" at2="true"></mutation>
@@ -872,7 +968,11 @@
                                                                     </value>
                                                                     <next>
                                                                       <block type="unittest_assertequals" inline="false">
-                                                                        <field name="MESSAGE">substring # complex</field>
+                                                                        <value name="MESSAGE">
+                                                                           <block type="text">
+                                                                             <field name="TEXT">substring # complex</field>
+                                                                           </block>
+                                                                         </value>
                                                                         <value name="ACTUAL">
                                                                           <block type="text_getSubstring">
                                                                             <mutation at1="true" at2="true"></mutation>
@@ -910,7 +1010,11 @@
                                                                         </value>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">substring # complex number of calls</field>
+                                                                            <value name="MESSAGE">
+                                                                               <block type="text">
+                                                                                 <field name="TEXT">substring # complex number of calls</field>
+                                                                               </block>
+                                                                             </value>
                                                                             <value name="ACTUAL">
                                                                               <block type="variables_get">
                                                                                 <field name="VAR">number of calls</field>
@@ -931,7 +1035,11 @@
                                                                                 </value>
                                                                                 <next>
                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                    <field name="MESSAGE">substring # complex order</field>
+                                                                                    <value name="MESSAGE">
+                                                                                       <block type="text">
+                                                                                         <field name="TEXT">substring # complex order</field>
+                                                                                       </block>
+                                                                                     </value>
                                                                                     <value name="ACTUAL">
                                                                                       <block type="text_getSubstring">
                                                                                         <mutation at1="true" at2="true"></mutation>
@@ -993,7 +1101,11 @@
                                                                                     </value>
                                                                                     <next>
                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                        <field name="MESSAGE">substring # complex order number of calls</field>
+                                                                                        <value name="MESSAGE">
+                                                                                           <block type="text">
+                                                                                             <field name="TEXT">substring # complex order number of calls</field>
+                                                                                           </block>
+                                                                                         </value>
                                                                                         <value name="ACTUAL">
                                                                                           <block type="variables_get">
                                                                                             <field name="VAR">number of calls</field>
@@ -1014,7 +1126,11 @@
                                                                                             </value>
                                                                                             <next>
                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                <field name="MESSAGE">substring #-end complex</field>
+                                                                                                <value name="MESSAGE">
+                                                                                                   <block type="text">
+                                                                                                     <field name="TEXT">substring #-end complex</field>
+                                                                                                   </block>
+                                                                                                 </value>
                                                                                                 <value name="ACTUAL">
                                                                                                   <block type="text_getSubstring">
                                                                                                     <mutation at1="true" at2="true"></mutation>
@@ -1052,7 +1168,11 @@
                                                                                                 </value>
                                                                                                 <next>
                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                    <field name="MESSAGE">substring #-end complex number of calls</field>
+                                                                                                    <value name="MESSAGE">
+                                                                                                       <block type="text">
+                                                                                                         <field name="TEXT">substring #-end complex number of calls</field>
+                                                                                                       </block>
+                                                                                                     </value>
                                                                                                     <value name="ACTUAL">
                                                                                                       <block type="variables_get">
                                                                                                         <field name="VAR">number of calls</field>
@@ -1073,7 +1193,11 @@
                                                                                                         </value>
                                                                                                         <next>
                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                            <field name="MESSAGE">substring #-end order order</field>
+                                                                                                            <value name="MESSAGE">
+                                                                                                               <block type="text">
+                                                                                                                 <field name="TEXT">substring #-end order order</field>
+                                                                                                               </block>
+                                                                                                             </value>
                                                                                                             <value name="ACTUAL">
                                                                                                               <block type="text_getSubstring">
                                                                                                                 <mutation at1="true" at2="true"></mutation>
@@ -1131,7 +1255,11 @@
                                                                                                             </value>
                                                                                                             <next>
                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                <field name="MESSAGE">substring #-end complex order number of calls</field>
+                                                                                                                <value name="MESSAGE">
+                                                                                                                   <block type="text">
+                                                                                                                     <field name="TEXT">substring #-end complex order number of calls</field>
+                                                                                                                   </block>
+                                                                                                                 </value>
                                                                                                                 <value name="ACTUAL">
                                                                                                                   <block type="variables_get">
                                                                                                                     <field name="VAR">number of calls</field>
@@ -1152,7 +1280,11 @@
                                                                                                                     </value>
                                                                                                                     <next>
                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                        <field name="MESSAGE">substring first-last</field>
+                                                                                                                        <value name="MESSAGE">
+                                                                                                                           <block type="text">
+                                                                                                                             <field name="TEXT">substring first-last</field>
+                                                                                                                           </block>
+                                                                                                                         </value>
                                                                                                                         <value name="ACTUAL">
                                                                                                                           <block type="text_getSubstring">
                                                                                                                             <mutation at1="false" at2="false"></mutation>
@@ -1172,7 +1304,11 @@
                                                                                                                         </value>
                                                                                                                         <next>
                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                            <field name="MESSAGE">substring first-last complex number of calls</field>
+                                                                                                                            <value name="MESSAGE">
+                                                                                                                               <block type="text">
+                                                                                                                                 <field name="TEXT">substring first-last complex number of calls</field>
+                                                                                                                               </block>
+                                                                                                                             </value>
                                                                                                                             <value name="ACTUAL">
                                                                                                                               <block type="variables_get">
                                                                                                                                 <field name="VAR">number of calls</field>
@@ -1193,7 +1329,11 @@
                                                                                                                                 </value>
                                                                                                                                 <next>
                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                    <field name="MESSAGE">substring # #-end complex</field>
+                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                       <block type="text">
+                                                                                                                                         <field name="TEXT">substring # #-end complex</field>
+                                                                                                                                       </block>
+                                                                                                                                     </value>
                                                                                                                                     <value name="ACTUAL">
                                                                                                                                       <block type="text_getSubstring">
                                                                                                                                         <mutation at1="true" at2="true"></mutation>
@@ -1231,7 +1371,11 @@
                                                                                                                                     </value>
                                                                                                                                     <next>
                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                        <field name="MESSAGE">substring # #-end complex number of calls</field>
+                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                           <block type="text">
+                                                                                                                                             <field name="TEXT">substring # #-end complex number of calls</field>
+                                                                                                                                           </block>
+                                                                                                                                         </value>
                                                                                                                                         <value name="ACTUAL">
                                                                                                                                           <block type="variables_get">
                                                                                                                                             <field name="VAR">number of calls</field>
@@ -1252,7 +1396,11 @@
                                                                                                                                             </value>
                                                                                                                                             <next>
                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                <field name="MESSAGE">substring #-end # complex</field>
+                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                   <block type="text">
+                                                                                                                                                     <field name="TEXT">substring #-end # complex</field>
+                                                                                                                                                   </block>
+                                                                                                                                                 </value>
                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                   <block type="text_getSubstring">
                                                                                                                                                     <mutation at1="true" at2="true"></mutation>
@@ -1290,7 +1438,11 @@
                                                                                                                                                 </value>
                                                                                                                                                 <next>
                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                    <field name="MESSAGE">substring #-end # complex number of calls</field>
+                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                       <block type="text">
+                                                                                                                                                         <field name="TEXT">substring #-end # complex number of calls</field>
+                                                                                                                                                       </block>
+                                                                                                                                                     </value>
                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                       <block type="variables_get">
                                                                                                                                                         <field name="VAR">number of calls</field>
@@ -1311,7 +1463,11 @@
                                                                                                                                                         </value>
                                                                                                                                                         <next>
                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                            <field name="MESSAGE">substring first # complex</field>
+                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                               <block type="text">
+                                                                                                                                                                 <field name="TEXT">substring first # complex</field>
+                                                                                                                                                               </block>
+                                                                                                                                                             </value>
                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                               <block type="text_getSubstring">
                                                                                                                                                                 <mutation at1="false" at2="true"></mutation>
@@ -1340,7 +1496,11 @@
                                                                                                                                                             </value>
                                                                                                                                                             <next>
                                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                <field name="MESSAGE">substring first # complex number of calls</field>
+                                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                                   <block type="text">
+                                                                                                                                                                     <field name="TEXT">substring first # complex number of calls</field>
+                                                                                                                                                                   </block>
+                                                                                                                                                                 </value>
                                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                                   <block type="variables_get">
                                                                                                                                                                     <field name="VAR">number of calls</field>
@@ -1361,7 +1521,11 @@
                                                                                                                                                                     </value>
                                                                                                                                                                     <next>
                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                        <field name="MESSAGE">substring first #-end complex</field>
+                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                           <block type="text">
+                                                                                                                                                                             <field name="TEXT">substring first #-end complex</field>
+                                                                                                                                                                           </block>
+                                                                                                                                                                         </value>
                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                           <block type="text_getSubstring">
                                                                                                                                                                             <mutation at1="false" at2="true"></mutation>
@@ -1390,7 +1554,11 @@
                                                                                                                                                                         </value>
                                                                                                                                                                         <next>
                                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                            <field name="MESSAGE">substring first #-end complex number of calls</field>
+                                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                                               <block type="text">
+                                                                                                                                                                                 <field name="TEXT">substring first #-end complex number of calls</field>
+                                                                                                                                                                               </block>
+                                                                                                                                                                             </value>
                                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                                               <block type="variables_get">
                                                                                                                                                                                 <field name="VAR">number of calls</field>
@@ -1411,7 +1579,11 @@
                                                                                                                                                                                 </value>
                                                                                                                                                                                 <next>
                                                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                    <field name="MESSAGE">substring # last complex</field>
+                                                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                                                       <block type="text">
+                                                                                                                                                                                         <field name="TEXT">substring # last complex</field>
+                                                                                                                                                                                       </block>
+                                                                                                                                                                                     </value>
                                                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                                                       <block type="text_getSubstring">
                                                                                                                                                                                         <mutation at1="true" at2="false"></mutation>
@@ -1440,7 +1612,11 @@
                                                                                                                                                                                     </value>
                                                                                                                                                                                     <next>
                                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                        <field name="MESSAGE">substring # last complex number of calls</field>
+                                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                                           <block type="text">
+                                                                                                                                                                                             <field name="TEXT">substring # last complex number of calls</field>
+                                                                                                                                                                                           </block>
+                                                                                                                                                                                         </value>
                                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                                           <block type="variables_get">
                                                                                                                                                                                             <field name="VAR">number of calls</field>
@@ -1461,7 +1637,11 @@
                                                                                                                                                                                             </value>
                                                                                                                                                                                             <next>
                                                                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                <field name="MESSAGE">substring #-end last complex</field>
+                                                                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                                                                   <block type="text">
+                                                                                                                                                                                                     <field name="TEXT">substring #-end last complex</field>
+                                                                                                                                                                                                   </block>
+                                                                                                                                                                                                 </value>
                                                                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                                                                   <block type="text_getSubstring">
                                                                                                                                                                                                     <mutation at1="true" at2="false"></mutation>
@@ -1490,7 +1670,11 @@
                                                                                                                                                                                                 </value>
                                                                                                                                                                                                 <next>
                                                                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                    <field name="MESSAGE">substring #-end last complex number of calls</field>
+                                                                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                                                                       <block type="text">
+                                                                                                                                                                                                         <field name="TEXT">substring #-end last complex number of calls</field>
+                                                                                                                                                                                                       </block>
+                                                                                                                                                                                                     </value>
                                                                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                                                                       <block type="variables_get">
                                                                                                                                                                                                         <field name="VAR">number of calls</field>
@@ -1511,7 +1695,11 @@
                                                                                                                                                                                                         </value>
                                                                                                                                                                                                         <next>
                                                                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                            <field name="MESSAGE">substring all with # #-end complex</field>
+                                                                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                                                                               <block type="text">
+                                                                                                                                                                                                                 <field name="TEXT">substring all with # #-end complex</field>
+                                                                                                                                                                                                               </block>
+                                                                                                                                                                                                             </value>
                                                                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                                                                               <block type="text_getSubstring">
                                                                                                                                                                                                                 <mutation at1="true" at2="true"></mutation>
@@ -1549,7 +1737,11 @@
                                                                                                                                                                                                             </value>
                                                                                                                                                                                                             <next>
                                                                                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                <field name="MESSAGE">substring all with # #-end complex number of calls</field>
+                                                                                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                                                                                   <block type="text">
+                                                                                                                                                                                                                     <field name="TEXT">substring all with # #-end complex number of calls</field>
+                                                                                                                                                                                                                   </block>
+                                                                                                                                                                                                                 </value>
                                                                                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                                                                                   <block type="variables_get">
                                                                                                                                                                                                                     <field name="VAR">number of calls</field>
@@ -1570,7 +1762,11 @@
                                                                                                                                                                                                                     </value>
                                                                                                                                                                                                                     <next>
                                                                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                        <field name="MESSAGE">substring all with #-end # copmlex</field>
+                                                                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                                                                           <block type="text">
+                                                                                                                                                                                                                             <field name="TEXT">substring all with #-end # copmlex</field>
+                                                                                                                                                                                                                           </block>
+                                                                                                                                                                                                                         </value>
                                                                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                                                                           <block type="text_getSubstring">
                                                                                                                                                                                                                             <mutation at1="true" at2="true"></mutation>
@@ -1608,7 +1804,11 @@
                                                                                                                                                                                                                         </value>
                                                                                                                                                                                                                         <next>
                                                                                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                            <field name="MESSAGE">substring all with #-end # copmlex number of calls</field>
+                                                                                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                                                                                               <block type="text">
+                                                                                                                                                                                                                                 <field name="TEXT">substring all with #-end # copmlex number of calls</field>
+                                                                                                                                                                                                                               </block>
+                                                                                                                                                                                                                             </value>
                                                                                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                                                                                               <block type="variables_get">
                                                                                                                                                                                                                                 <field name="VAR">number of calls</field>
@@ -1629,7 +1829,11 @@
                                                                                                                                                                                                                                 </value>
                                                                                                                                                                                                                                 <next>
                                                                                                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                                    <field name="MESSAGE">substring all with # #-end math complex</field>
+                                                                                                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                                                                                                       <block type="text">
+                                                                                                                                                                                                                                         <field name="TEXT">substring all with # #-end math complex</field>
+                                                                                                                                                                                                                                       </block>
+                                                                                                                                                                                                                                     </value>
                                                                                                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                                                                                                       <block type="text_getSubstring">
                                                                                                                                                                                                                                         <mutation at1="true" at2="true"></mutation>
@@ -1687,7 +1891,11 @@
                                                                                                                                                                                                                                     </value>
                                                                                                                                                                                                                                     <next>
                                                                                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                                        <field name="MESSAGE">substring all with # #-end math complex number of calls</field>
+                                                                                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                                                                                           <block type="text">
+                                                                                                                                                                                                                                             <field name="TEXT">substring all with # #-end math complex number of calls</field>
+                                                                                                                                                                                                                                           </block>
+                                                                                                                                                                                                                                         </value>
                                                                                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                                                                                           <block type="variables_get">
                                                                                                                                                                                                                                             <field name="VAR">number of calls</field>
@@ -1826,7 +2034,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">find first</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">find first</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="text_indexOf">
                 <field name="END">FIRST</field>
@@ -1853,7 +2065,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">find last</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">find last</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="text_indexOf">
                     <field name="END">LAST</field>
@@ -1880,7 +2096,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">find none</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">find none</field>
+                       </block>
+                     </value>
                     <value name="ACTUAL">
                       <block type="text_indexOf">
                         <field name="END">FIRST</field>
@@ -1927,7 +2147,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">get first</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">get first</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="text_charAt">
                 <mutation at="false"></mutation>
@@ -1946,7 +2170,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">get last</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">get last</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="text_charAt">
                     <mutation at="false"></mutation>
@@ -1965,7 +2193,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="MESSAGE">get random</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">get random</field>
+                       </block>
+                     </value>
                     <field name="EXPECTED">TRUE</field>
                     <value name="ACTUAL">
                       <block type="logic_compare">
@@ -2004,7 +2236,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">get #</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">get #</field>
+                           </block>
+                         </value>
                         <value name="ACTUAL">
                           <block type="text_charAt">
                             <mutation at="true"></mutation>
@@ -2032,7 +2268,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">get # order</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">get # order</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="text_charAt">
                                 <mutation at="true"></mutation>
@@ -2072,7 +2312,11 @@
                             </value>
                             <next>
                               <block type="unittest_assertequals" inline="false">
-                                <field name="MESSAGE">get #-end</field>
+                                <value name="MESSAGE">
+                                   <block type="text">
+                                     <field name="TEXT">get #-end</field>
+                                   </block>
+                                 </value>
                                 <value name="ACTUAL">
                                   <block type="text_charAt">
                                     <mutation at="true"></mutation>
@@ -2100,7 +2344,11 @@
                                 </value>
                                 <next>
                                   <block type="unittest_assertequals" inline="false">
-                                    <field name="MESSAGE">get #-end order</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">get #-end order</field>
+                                       </block>
+                                     </value>
                                     <value name="ACTUAL">
                                       <block type="text_charAt">
                                         <mutation at="true"></mutation>
@@ -2158,7 +2406,11 @@
     <comment pinned="false" h="80" w="160">Tests the "change casing" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">uppercase</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">uppercase</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="text_changeCase" inline="false">
             <field name="CASE">UPPERCASE</field>
@@ -2176,7 +2428,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">lowercase</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">lowercase</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="text_changeCase" inline="false">
                 <field name="CASE">LOWERCASE</field>
@@ -2194,7 +2450,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">titlecase</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">titlecase</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="text_changeCase" inline="false">
                     <field name="CASE">TITLECASE</field>
@@ -2222,7 +2482,11 @@
     <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">trim both</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">trim both</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="text_trim" inline="false">
             <field name="MODE">BOTH</field>
@@ -2240,7 +2504,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">trim left</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">trim left</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="text_trim" inline="false">
                 <field name="MODE">LEFT</field>
@@ -2258,7 +2526,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">trim right</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">trim right</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="text_trim" inline="false">
                     <field name="MODE">RIGHT</field>

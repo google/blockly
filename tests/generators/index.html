@@ -222,8 +222,20 @@ h1 {
   <xml id="toolbox" style="display: none">
     <category name="Unit test" colour="65">
       <block type="unittest_main"></block>
-      <block type="unittest_assertequals"></block>
-      <block type="unittest_assertvalue"></block>
+      <block type="unittest_assertequals">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+      </block>
+      <block type="unittest_assertvalue">
+        <value name="MESSAGE">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+      </block>
       <block type="unittest_fail"></block>
       <block type="unittest_adjustindex"></block>
     </category>

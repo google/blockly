@@ -45,11 +45,12 @@ Blockly.Blocks['unittest_assertequals'] = {
     this.setColour(65);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput('test name'), 'MESSAGE');
-    this.appendValueInput('ACTUAL', null)
+    this.appendValueInput('MESSAGE')
+        .appendField('name')
+        .setCheck('String');
+    this.appendValueInput('ACTUAL')
         .appendField('actual');
-    this.appendValueInput('EXPECTED', null)
+    this.appendValueInput('EXPECTED')
         .appendField('expected');
     this.setTooltip('Tests that "actual == expected".');
   },
@@ -64,9 +65,10 @@ Blockly.Blocks['unittest_assertvalue'] = {
     this.setColour(65);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput('test name'), 'MESSAGE');
-    this.appendValueInput('ACTUAL', Boolean)
+    this.appendValueInput('MESSAGE', 'test name')
+        .appendField('name')
+        .setCheck('String');
+    this.appendValueInput('ACTUAL')
         .appendField('assert')
         .appendField(new Blockly.FieldDropdown(
         [['true', 'TRUE'], ['false', 'FALSE'], ['null', 'NULL']]), 'EXPECTED');

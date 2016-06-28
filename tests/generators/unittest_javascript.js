@@ -115,7 +115,8 @@ Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
 
 Blockly.JavaScript['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
-  var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
+  var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
+      Blockly.JavaScript.ORDER_NONE) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
       Blockly.JavaScript.ORDER_COMMA) || 'null';
   var expected = Blockly.JavaScript.valueToCode(block, 'EXPECTED',
@@ -126,7 +127,8 @@ Blockly.JavaScript['unittest_assertequals'] = function(block) {
 
 Blockly.JavaScript['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
-  var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
+  var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
+      Blockly.JavaScript.ORDER_NONE) || '';
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
       Blockly.JavaScript.ORDER_COMMA) || 'null';
   var expected = block.getFieldValue('EXPECTED');
@@ -145,7 +147,8 @@ Blockly.JavaScript['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
+  var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
+      Blockly.JavaScript.ORDER_NONE) || '';
   var functionName = Blockly.JavaScript.provideFunction_(
       'unittest_fail',
       [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +

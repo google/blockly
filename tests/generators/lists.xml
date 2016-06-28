@@ -76,7 +76,11 @@
     <comment pinned="false" h="80" w="160">Tests the "create list with" and "create empty list" blocks.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">test create empty</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">test create empty</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_create_with">
             <mutation items="0"></mutation>
@@ -87,7 +91,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">test create items</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">test create items</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="lists_create_with" inline="false">
                 <mutation items="2"></mutation>
@@ -120,7 +128,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">test create repeated</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">test create repeated</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="lists_repeat" inline="true">
                     <value name="ITEM">
@@ -167,7 +179,11 @@
     <comment pinned="false" h="80" w="160">Tests the "is empty" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
-        <field name="MESSAGE">not empty</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">not empty</field>
+           </block>
+         </value>
         <field name="EXPECTED">FALSE</field>
         <value name="ACTUAL">
           <block type="lists_isEmpty" inline="false">
@@ -185,7 +201,11 @@
         </value>
         <next>
           <block type="unittest_assertvalue" inline="false">
-            <field name="MESSAGE">empty</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">empty</field>
+               </block>
+             </value>
             <field name="EXPECTED">TRUE</field>
             <value name="ACTUAL">
               <block type="lists_isEmpty" inline="false">
@@ -204,7 +224,11 @@
     <comment pinned="false" h="80" w="160">Tests the "length" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">zero length</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">zero length</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_length" inline="false">
             <value name="VALUE">
@@ -219,7 +243,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">one length</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">one length</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="lists_length" inline="false">
                 <value name="VALUE">
@@ -241,7 +269,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">three length</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">three length</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="lists_length" inline="false">
                     <value name="VALUE">
@@ -281,7 +313,11 @@
     <comment pinned="false" h="80" w="160">Tests the "find" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">find first</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">find first</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_indexOf" inline="false">
             <field name="END">FIRST</field>
@@ -328,7 +364,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">find last</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">find last</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="lists_indexOf" inline="false">
                 <field name="END">LAST</field>
@@ -375,7 +415,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">find none</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">find none</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="lists_indexOf" inline="false">
                     <field name="END">FIRST</field>
@@ -455,7 +499,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">get first</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">get first</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="lists_getIndex">
                 <mutation statement="false" at="false"></mutation>
@@ -475,7 +523,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">get last</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">get last</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="lists_getIndex">
                     <mutation statement="false" at="false"></mutation>
@@ -495,7 +547,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="MESSAGE">get random</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">get random</field>
+                       </block>
+                     </value>
                     <field name="EXPECTED">TRUE</field>
                     <value name="ACTUAL">
                       <block type="logic_compare">
@@ -535,7 +591,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">get #</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">get #</field>
+                           </block>
+                         </value>
                         <value name="ACTUAL">
                           <block type="lists_getIndex">
                             <mutation statement="false" at="true"></mutation>
@@ -564,7 +624,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">get # order</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">get # order</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="lists_getIndex">
                                 <mutation statement="false" at="true"></mutation>
@@ -605,7 +669,11 @@
                             </value>
                             <next>
                               <block type="unittest_assertequals" inline="false">
-                                <field name="MESSAGE">get #-end</field>
+                                <value name="MESSAGE">
+                                   <block type="text">
+                                     <field name="TEXT">get #-end</field>
+                                   </block>
+                                 </value>
                                 <value name="ACTUAL">
                                   <block type="lists_getIndex">
                                     <mutation statement="false" at="true"></mutation>
@@ -634,7 +702,11 @@
                                 </value>
                                 <next>
                                   <block type="unittest_assertequals" inline="false">
-                                    <field name="MESSAGE">get #-end order</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">get #-end order</field>
+                                       </block>
+                                     </value>
                                     <value name="ACTUAL">
                                       <block type="lists_getIndex">
                                         <mutation statement="false" at="true"></mutation>
@@ -716,7 +788,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">getremove first</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">getremove first</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="lists_getIndex">
                 <mutation statement="false" at="false"></mutation>
@@ -736,7 +812,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">getremove first list</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">getremove first list</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">list</field>
@@ -782,7 +862,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">getremove last</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">getremove last</field>
+                           </block>
+                         </value>
                         <value name="ACTUAL">
                           <block type="lists_getIndex">
                             <mutation statement="false" at="false"></mutation>
@@ -802,7 +886,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">getremove last list</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">getremove last list</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">list</field>
@@ -848,7 +936,11 @@
                                 </value>
                                 <next>
                                   <block type="unittest_assertvalue" inline="false">
-                                    <field name="MESSAGE">getremove random</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">getremove random</field>
+                                       </block>
+                                     </value>
                                     <field name="EXPECTED">TRUE</field>
                                     <value name="ACTUAL">
                                       <block type="logic_compare">
@@ -888,7 +980,11 @@
                                     </value>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">getremove random list</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">getremove random list</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="lists_length" inline="false">
                                             <value name="VALUE">
@@ -928,7 +1024,11 @@
                                             </value>
                                             <next>
                                               <block type="unittest_assertequals" inline="false">
-                                                <field name="MESSAGE">getremove #</field>
+                                                <value name="MESSAGE">
+                                                   <block type="text">
+                                                     <field name="TEXT">getremove #</field>
+                                                   </block>
+                                                 </value>
                                                 <value name="ACTUAL">
                                                   <block type="lists_getIndex">
                                                     <mutation statement="false" at="true"></mutation>
@@ -957,7 +1057,11 @@
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">getremove # list</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">getremove # list</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="variables_get">
                                                         <field name="VAR">list</field>
@@ -1003,7 +1107,11 @@
                                                         </value>
                                                         <next>
                                                           <block type="unittest_assertequals" inline="false">
-                                                            <field name="MESSAGE">getremove # order</field>
+                                                            <value name="MESSAGE">
+                                                               <block type="text">
+                                                                 <field name="TEXT">getremove # order</field>
+                                                               </block>
+                                                             </value>
                                                             <value name="ACTUAL">
                                                               <block type="lists_getIndex">
                                                                 <mutation statement="false" at="true"></mutation>
@@ -1044,7 +1152,11 @@
                                                             </value>
                                                             <next>
                                                               <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">getremove # order list</field>
+                                                                <value name="MESSAGE">
+                                                                   <block type="text">
+                                                                     <field name="TEXT">getremove # order list</field>
+                                                                   </block>
+                                                                 </value>
                                                                 <value name="ACTUAL">
                                                                   <block type="variables_get">
                                                                     <field name="VAR">list</field>
@@ -1090,7 +1202,11 @@
                                                                     </value>
                                                                     <next>
                                                                       <block type="unittest_assertequals" inline="false">
-                                                                        <field name="MESSAGE">getremove #-end</field>
+                                                                        <value name="MESSAGE">
+                                                                           <block type="text">
+                                                                             <field name="TEXT">getremove #-end</field>
+                                                                           </block>
+                                                                         </value>
                                                                         <value name="ACTUAL">
                                                                           <block type="lists_getIndex">
                                                                             <mutation statement="false" at="true"></mutation>
@@ -1119,7 +1235,11 @@
                                                                         </value>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">getremove #-end list</field>
+                                                                            <value name="MESSAGE">
+                                                                               <block type="text">
+                                                                                 <field name="TEXT">getremove #-end list</field>
+                                                                               </block>
+                                                                             </value>
                                                                             <value name="ACTUAL">
                                                                               <block type="variables_get">
                                                                                 <field name="VAR">list</field>
@@ -1165,7 +1285,11 @@
                                                                                 </value>
                                                                                 <next>
                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                    <field name="MESSAGE">getremove #-end order</field>
+                                                                                    <value name="MESSAGE">
+                                                                                       <block type="text">
+                                                                                         <field name="TEXT">getremove #-end order</field>
+                                                                                       </block>
+                                                                                     </value>
                                                                                     <value name="ACTUAL">
                                                                                       <block type="lists_getIndex">
                                                                                         <mutation statement="false" at="true"></mutation>
@@ -1204,7 +1328,11 @@
                                                                                     </value>
                                                                                     <next>
                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                        <field name="MESSAGE">getremove #-end order list</field>
+                                                                                        <value name="MESSAGE">
+                                                                                           <block type="text">
+                                                                                             <field name="TEXT">getremove #-end order list</field>
+                                                                                           </block>
+                                                                                         </value>
                                                                                         <value name="ACTUAL">
                                                                                           <block type="variables_get">
                                                                                             <field name="VAR">list</field>
@@ -1306,7 +1434,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">remove first list</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">remove first list</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">list</field>
@@ -1362,7 +1494,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">remove last list</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">remove last list</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">list</field>
@@ -1418,7 +1554,11 @@
                                     </value>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">remove random list</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">remove random list</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="lists_length" inline="false">
                                             <value name="VALUE">
@@ -1477,7 +1617,11 @@
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">remove # list</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">remove # list</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="variables_get">
                                                         <field name="VAR">list</field>
@@ -1554,7 +1698,11 @@
                                                             </value>
                                                             <next>
                                                               <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">remove # order list</field>
+                                                                <value name="MESSAGE">
+                                                                   <block type="text">
+                                                                     <field name="TEXT">remove # order list</field>
+                                                                   </block>
+                                                                 </value>
                                                                 <value name="ACTUAL">
                                                                   <block type="variables_get">
                                                                     <field name="VAR">list</field>
@@ -1619,7 +1767,11 @@
                                                                         </value>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">remove #-end list</field>
+                                                                            <value name="MESSAGE">
+                                                                               <block type="text">
+                                                                                 <field name="TEXT">remove #-end list</field>
+                                                                               </block>
+                                                                             </value>
                                                                             <value name="ACTUAL">
                                                                               <block type="variables_get">
                                                                                 <field name="VAR">list</field>
@@ -1694,7 +1846,11 @@
                                                                                     </value>
                                                                                     <next>
                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                        <field name="MESSAGE">remove #-end order list</field>
+                                                                                        <value name="MESSAGE">
+                                                                                           <block type="text">
+                                                                                             <field name="TEXT">remove #-end order list</field>
+                                                                                           </block>
+                                                                                         </value>
                                                                                         <value name="ACTUAL">
                                                                                           <block type="variables_get">
                                                                                             <field name="VAR">list</field>
@@ -1801,7 +1957,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">set first list</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">set first list</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">list</field>
@@ -1867,7 +2027,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">set last list</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">set last list</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">list</field>
@@ -1933,7 +2097,11 @@
                                     </value>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">set random list</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">set random list</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="lists_length" inline="false">
                                             <value name="VALUE">
@@ -1997,7 +2165,11 @@
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">set # list</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">set # list</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="variables_get">
                                                         <field name="VAR">list</field>
@@ -2084,7 +2256,11 @@
                                                             </value>
                                                             <next>
                                                               <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">set # order list</field>
+                                                                <value name="MESSAGE">
+                                                                   <block type="text">
+                                                                     <field name="TEXT">set # order list</field>
+                                                                   </block>
+                                                                 </value>
                                                                 <value name="ACTUAL">
                                                                   <block type="variables_get">
                                                                     <field name="VAR">list</field>
@@ -2159,7 +2335,11 @@
                                                                         </value>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">set #-end list</field>
+                                                                            <value name="MESSAGE">
+                                                                               <block type="text">
+                                                                                 <field name="TEXT">set #-end list</field>
+                                                                               </block>
+                                                                             </value>
                                                                             <value name="ACTUAL">
                                                                               <block type="variables_get">
                                                                                 <field name="VAR">list</field>
@@ -2244,7 +2424,11 @@
                                                                                     </value>
                                                                                     <next>
                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                        <field name="MESSAGE">set #-end order list</field>
+                                                                                        <value name="MESSAGE">
+                                                                                           <block type="text">
+                                                                                             <field name="TEXT">set #-end order list</field>
+                                                                                           </block>
+                                                                                         </value>
                                                                                         <value name="ACTUAL">
                                                                                           <block type="variables_get">
                                                                                             <field name="VAR">list</field>
@@ -2356,7 +2540,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">insert first list</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">insert first list</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">list</field>
@@ -2427,7 +2615,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">insert last list</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">insert last list</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">list</field>
@@ -2498,7 +2690,11 @@
                                     </value>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">insert random list</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">insert random list</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="lists_length" inline="false">
                                             <value name="VALUE">
@@ -2562,7 +2758,11 @@
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">insert # list</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">insert # list</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="variables_get">
                                                         <field name="VAR">list</field>
@@ -2654,7 +2854,11 @@
                                                             </value>
                                                             <next>
                                                               <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">insert # order list</field>
+                                                                <value name="MESSAGE">
+                                                                   <block type="text">
+                                                                     <field name="TEXT">insert # order list</field>
+                                                                   </block>
+                                                                 </value>
                                                                 <value name="ACTUAL">
                                                                   <block type="variables_get">
                                                                     <field name="VAR">list</field>
@@ -2734,7 +2938,11 @@
                                                                         </value>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">insert #-end list</field>
+                                                                            <value name="MESSAGE">
+                                                                               <block type="text">
+                                                                                 <field name="TEXT">insert #-end list</field>
+                                                                               </block>
+                                                                             </value>
                                                                             <value name="ACTUAL">
                                                                               <block type="variables_get">
                                                                                 <field name="VAR">list</field>
@@ -2824,7 +3032,11 @@
                                                                                     </value>
                                                                                     <next>
                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                        <field name="MESSAGE">insert #-end order list</field>
+                                                                                        <value name="MESSAGE">
+                                                                                           <block type="text">
+                                                                                             <field name="TEXT">insert #-end order list</field>
+                                                                                           </block>
+                                                                                         </value>
                                                                                         <value name="ACTUAL">
                                                                                           <block type="variables_get">
                                                                                             <field name="VAR">list</field>
@@ -2980,7 +3192,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">sublist # simple</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">sublist # simple</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="lists_getSublist">
                 <mutation at1="true" at2="true"></mutation>
@@ -3028,7 +3244,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">sublist # simple order</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">sublist # simple order</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="lists_getSublist">
                     <mutation at1="true" at2="true"></mutation>
@@ -3100,7 +3320,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">sublist #-end simple</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">sublist #-end simple</field>
+                       </block>
+                     </value>
                     <value name="ACTUAL">
                       <block type="lists_getSublist">
                         <mutation at1="true" at2="true"></mutation>
@@ -3148,7 +3372,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">sublist #-end simple order</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">sublist #-end simple order</field>
+                           </block>
+                         </value>
                         <value name="ACTUAL">
                           <block type="lists_getSublist">
                             <mutation at1="true" at2="true"></mutation>
@@ -3216,7 +3444,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">sublist first-last simple</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">sublist first-last simple</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="lists_getSublist">
                                 <mutation at1="false" at2="false"></mutation>
@@ -3294,7 +3526,11 @@
                                         </value>
                                         <next>
                                           <block type="unittest_assertequals" inline="false">
-                                            <field name="MESSAGE">sublist first-last simple copy check</field>
+                                            <value name="MESSAGE">
+                                               <block type="text">
+                                                 <field name="TEXT">sublist first-last simple copy check</field>
+                                               </block>
+                                             </value>
                                             <value name="ACTUAL">
                                               <block type="variables_get">
                                                 <field name="VAR">list copy</field>
@@ -3307,7 +3543,11 @@
                                             </value>
                                             <next>
                                               <block type="unittest_assertequals" inline="false">
-                                                <field name="MESSAGE">sublist # #-end simple</field>
+                                                <value name="MESSAGE">
+                                                   <block type="text">
+                                                     <field name="TEXT">sublist # #-end simple</field>
+                                                   </block>
+                                                 </value>
                                                 <value name="ACTUAL">
                                                   <block type="lists_getSublist">
                                                     <mutation at1="true" at2="true"></mutation>
@@ -3360,7 +3600,11 @@
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">sublist #-end # simple</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">sublist #-end # simple</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="lists_getSublist">
                                                         <mutation at1="true" at2="true"></mutation>
@@ -3408,7 +3652,11 @@
                                                     </value>
                                                     <next>
                                                       <block type="unittest_assertequals" inline="false">
-                                                        <field name="MESSAGE">sublist first # simple</field>
+                                                        <value name="MESSAGE">
+                                                           <block type="text">
+                                                             <field name="TEXT">sublist first # simple</field>
+                                                           </block>
+                                                         </value>
                                                         <value name="ACTUAL">
                                                           <block type="lists_getSublist">
                                                             <mutation at1="false" at2="true"></mutation>
@@ -3457,7 +3705,11 @@
                                                         </value>
                                                         <next>
                                                           <block type="unittest_assertequals" inline="false">
-                                                            <field name="MESSAGE">sublist first #-end simple</field>
+                                                            <value name="MESSAGE">
+                                                               <block type="text">
+                                                                 <field name="TEXT">sublist first #-end simple</field>
+                                                               </block>
+                                                             </value>
                                                             <value name="ACTUAL">
                                                               <block type="lists_getSublist">
                                                                 <mutation at1="false" at2="true"></mutation>
@@ -3496,7 +3748,11 @@
                                                             </value>
                                                             <next>
                                                               <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">sublist # last simple</field>
+                                                                <value name="MESSAGE">
+                                                                   <block type="text">
+                                                                     <field name="TEXT">sublist # last simple</field>
+                                                                   </block>
+                                                                 </value>
                                                                 <value name="ACTUAL">
                                                                   <block type="lists_getSublist">
                                                                     <mutation at1="true" at2="false"></mutation>
@@ -3535,7 +3791,11 @@
                                                                 </value>
                                                                 <next>
                                                                   <block type="unittest_assertequals" inline="false">
-                                                                    <field name="MESSAGE">sublist #-end last simple</field>
+                                                                    <value name="MESSAGE">
+                                                                       <block type="text">
+                                                                         <field name="TEXT">sublist #-end last simple</field>
+                                                                       </block>
+                                                                     </value>
                                                                     <value name="ACTUAL">
                                                                       <block type="lists_getSublist">
                                                                         <mutation at1="true" at2="false"></mutation>
@@ -3584,7 +3844,11 @@
                                                                     </value>
                                                                     <next>
                                                                       <block type="unittest_assertequals" inline="false">
-                                                                        <field name="MESSAGE">sublist all with # #-end simple</field>
+                                                                        <value name="MESSAGE">
+                                                                           <block type="text">
+                                                                             <field name="TEXT">sublist all with # #-end simple</field>
+                                                                           </block>
+                                                                         </value>
                                                                         <value name="ACTUAL">
                                                                           <block type="lists_getSublist">
                                                                             <mutation at1="true" at2="true"></mutation>
@@ -3622,7 +3886,11 @@
                                                                         </value>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">sublist all with #-end # simple</field>
+                                                                            <value name="MESSAGE">
+                                                                               <block type="text">
+                                                                                 <field name="TEXT">sublist all with #-end # simple</field>
+                                                                               </block>
+                                                                             </value>
                                                                             <value name="ACTUAL">
                                                                               <block type="lists_getSublist">
                                                                                 <mutation at1="true" at2="true"></mutation>
@@ -3660,7 +3928,11 @@
                                                                             </value>
                                                                             <next>
                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                <field name="MESSAGE">sublist all with # #-end math simple</field>
+                                                                                <value name="MESSAGE">
+                                                                                   <block type="text">
+                                                                                     <field name="TEXT">sublist all with # #-end math simple</field>
+                                                                                   </block>
+                                                                                 </value>
                                                                                 <value name="ACTUAL">
                                                                                   <block type="lists_getSublist">
                                                                                     <mutation at1="true" at2="true"></mutation>
@@ -3726,7 +3998,11 @@
                                                                                     </value>
                                                                                     <next>
                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                        <field name="MESSAGE">sublist # start complex</field>
+                                                                                        <value name="MESSAGE">
+                                                                                           <block type="text">
+                                                                                             <field name="TEXT">sublist # start complex</field>
+                                                                                           </block>
+                                                                                         </value>
                                                                                         <value name="ACTUAL">
                                                                                           <block type="lists_getSublist">
                                                                                             <mutation at1="true" at2="true"></mutation>
@@ -3774,7 +4050,11 @@
                                                                                         </value>
                                                                                         <next>
                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                            <field name="MESSAGE">sublist # start complex number of calls</field>
+                                                                                            <value name="MESSAGE">
+                                                                                               <block type="text">
+                                                                                                 <field name="TEXT">sublist # start complex number of calls</field>
+                                                                                               </block>
+                                                                                             </value>
                                                                                             <value name="ACTUAL">
                                                                                               <block type="variables_get">
                                                                                                 <field name="VAR">number of calls</field>
@@ -3795,7 +4075,11 @@
                                                                                                 </value>
                                                                                                 <next>
                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                    <field name="MESSAGE">sublist # start complex order</field>
+                                                                                                    <value name="MESSAGE">
+                                                                                                       <block type="text">
+                                                                                                         <field name="TEXT">sublist # start complex order</field>
+                                                                                                       </block>
+                                                                                                     </value>
                                                                                                     <value name="ACTUAL">
                                                                                                       <block type="lists_getSublist">
                                                                                                         <mutation at1="true" at2="true"></mutation>
@@ -3867,7 +4151,11 @@
                                                                                                     </value>
                                                                                                     <next>
                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                        <field name="MESSAGE">sublist # start complex order number of calls</field>
+                                                                                                        <value name="MESSAGE">
+                                                                                                           <block type="text">
+                                                                                                             <field name="TEXT">sublist # start complex order number of calls</field>
+                                                                                                           </block>
+                                                                                                         </value>
                                                                                                         <value name="ACTUAL">
                                                                                                           <block type="variables_get">
                                                                                                             <field name="VAR">number of calls</field>
@@ -3888,7 +4176,11 @@
                                                                                                             </value>
                                                                                                             <next>
                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                <field name="MESSAGE">sublist # end complex</field>
+                                                                                                                <value name="MESSAGE">
+                                                                                                                   <block type="text">
+                                                                                                                     <field name="TEXT">sublist # end complex</field>
+                                                                                                                   </block>
+                                                                                                                 </value>
                                                                                                                 <value name="ACTUAL">
                                                                                                                   <block type="lists_getSublist">
                                                                                                                     <mutation at1="true" at2="true"></mutation>
@@ -3936,7 +4228,11 @@
                                                                                                                 </value>
                                                                                                                 <next>
                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                    <field name="MESSAGE">sublist # end complex number of calls</field>
+                                                                                                                    <value name="MESSAGE">
+                                                                                                                       <block type="text">
+                                                                                                                         <field name="TEXT">sublist # end complex number of calls</field>
+                                                                                                                       </block>
+                                                                                                                     </value>
                                                                                                                     <value name="ACTUAL">
                                                                                                                       <block type="variables_get">
                                                                                                                         <field name="VAR">number of calls</field>
@@ -3957,7 +4253,11 @@
                                                                                                                         </value>
                                                                                                                         <next>
                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                            <field name="MESSAGE">sublist # end complex order</field>
+                                                                                                                            <value name="MESSAGE">
+                                                                                                                               <block type="text">
+                                                                                                                                 <field name="TEXT">sublist # end complex order</field>
+                                                                                                                               </block>
+                                                                                                                             </value>
                                                                                                                             <value name="ACTUAL">
                                                                                                                               <block type="lists_getSublist">
                                                                                                                                 <mutation at1="true" at2="true"></mutation>
@@ -4025,7 +4325,11 @@
                                                                                                                             </value>
                                                                                                                             <next>
                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                <field name="MESSAGE">sublist # end complex order number of calls</field>
+                                                                                                                                <value name="MESSAGE">
+                                                                                                                                   <block type="text">
+                                                                                                                                     <field name="TEXT">sublist # end complex order number of calls</field>
+                                                                                                                                   </block>
+                                                                                                                                 </value>
                                                                                                                                 <value name="ACTUAL">
                                                                                                                                   <block type="variables_get">
                                                                                                                                     <field name="VAR">number of calls</field>
@@ -4046,7 +4350,11 @@
                                                                                                                                     </value>
                                                                                                                                     <next>
                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                        <field name="MESSAGE">sublist first-last complex</field>
+                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                           <block type="text">
+                                                                                                                                             <field name="TEXT">sublist first-last complex</field>
+                                                                                                                                           </block>
+                                                                                                                                         </value>
                                                                                                                                         <value name="ACTUAL">
                                                                                                                                           <block type="lists_getSublist">
                                                                                                                                             <mutation at1="false" at2="false"></mutation>
@@ -4066,7 +4374,11 @@
                                                                                                                                         </value>
                                                                                                                                         <next>
                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                            <field name="MESSAGE">sublist first-last complex number of calls</field>
+                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                               <block type="text">
+                                                                                                                                                 <field name="TEXT">sublist first-last complex number of calls</field>
+                                                                                                                                               </block>
+                                                                                                                                             </value>
                                                                                                                                             <value name="ACTUAL">
                                                                                                                                               <block type="variables_get">
                                                                                                                                                 <field name="VAR">number of calls</field>
@@ -4087,7 +4399,11 @@
                                                                                                                                                 </value>
                                                                                                                                                 <next>
                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                    <field name="MESSAGE">sublist # #-end complex</field>
+                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                       <block type="text">
+                                                                                                                                                         <field name="TEXT">sublist # #-end complex</field>
+                                                                                                                                                       </block>
+                                                                                                                                                     </value>
                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                       <block type="lists_getSublist">
                                                                                                                                                         <mutation at1="true" at2="true"></mutation>
@@ -4140,7 +4456,11 @@
                                                                                                                                                     </value>
                                                                                                                                                     <next>
                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                        <field name="MESSAGE">sublist # #-end complex number of calls</field>
+                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                           <block type="text">
+                                                                                                                                                             <field name="TEXT">sublist # #-end complex number of calls</field>
+                                                                                                                                                           </block>
+                                                                                                                                                         </value>
                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                           <block type="variables_get">
                                                                                                                                                             <field name="VAR">number of calls</field>
@@ -4161,7 +4481,11 @@
                                                                                                                                                             </value>
                                                                                                                                                             <next>
                                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                <field name="MESSAGE">sublist #-end # complex</field>
+                                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                                   <block type="text">
+                                                                                                                                                                     <field name="TEXT">sublist #-end # complex</field>
+                                                                                                                                                                   </block>
+                                                                                                                                                                 </value>
                                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                                   <block type="lists_getSublist">
                                                                                                                                                                     <mutation at1="true" at2="true"></mutation>
@@ -4209,7 +4533,11 @@
                                                                                                                                                                 </value>
                                                                                                                                                                 <next>
                                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                    <field name="MESSAGE">sublist #-end # complex number of calls</field>
+                                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                                       <block type="text">
+                                                                                                                                                                         <field name="TEXT">sublist #-end # complex number of calls</field>
+                                                                                                                                                                       </block>
+                                                                                                                                                                     </value>
                                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                                       <block type="variables_get">
                                                                                                                                                                         <field name="VAR">number of calls</field>
@@ -4230,7 +4558,11 @@
                                                                                                                                                                         </value>
                                                                                                                                                                         <next>
                                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                            <field name="MESSAGE">sublist first # complex</field>
+                                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                                               <block type="text">
+                                                                                                                                                                                 <field name="TEXT">sublist first # complex</field>
+                                                                                                                                                                               </block>
+                                                                                                                                                                             </value>
                                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                                               <block type="lists_getSublist">
                                                                                                                                                                                 <mutation at1="false" at2="true"></mutation>
@@ -4279,7 +4611,11 @@
                                                                                                                                                                             </value>
                                                                                                                                                                             <next>
                                                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                <field name="MESSAGE">sublist first # complex number of calls</field>
+                                                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                                                   <block type="text">
+                                                                                                                                                                                     <field name="TEXT">sublist first # complex number of calls</field>
+                                                                                                                                                                                   </block>
+                                                                                                                                                                                 </value>
                                                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                                                   <block type="variables_get">
                                                                                                                                                                                     <field name="VAR">number of calls</field>
@@ -4300,7 +4636,11 @@
                                                                                                                                                                                     </value>
                                                                                                                                                                                     <next>
                                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                        <field name="MESSAGE">sublist first #-end complex</field>
+                                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                                           <block type="text">
+                                                                                                                                                                                             <field name="TEXT">sublist first #-end complex</field>
+                                                                                                                                                                                           </block>
+                                                                                                                                                                                         </value>
                                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                                           <block type="lists_getSublist">
                                                                                                                                                                                             <mutation at1="false" at2="true"></mutation>
@@ -4339,7 +4679,11 @@
                                                                                                                                                                                         </value>
                                                                                                                                                                                         <next>
                                                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                            <field name="MESSAGE">sublist first #-end complex number of calls</field>
+                                                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                                                               <block type="text">
+                                                                                                                                                                                                 <field name="TEXT">sublist first #-end complex number of calls</field>
+                                                                                                                                                                                               </block>
+                                                                                                                                                                                             </value>
                                                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                                                               <block type="variables_get">
                                                                                                                                                                                                 <field name="VAR">number of calls</field>
@@ -4360,7 +4704,11 @@
                                                                                                                                                                                                 </value>
                                                                                                                                                                                                 <next>
                                                                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                    <field name="MESSAGE">sublist # last complex</field>
+                                                                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                                                                       <block type="text">
+                                                                                                                                                                                                         <field name="TEXT">sublist # last complex</field>
+                                                                                                                                                                                                       </block>
+                                                                                                                                                                                                     </value>
                                                                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                                                                       <block type="lists_getSublist">
                                                                                                                                                                                                         <mutation at1="true" at2="false"></mutation>
@@ -4399,7 +4747,11 @@
                                                                                                                                                                                                     </value>
                                                                                                                                                                                                     <next>
                                                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                        <field name="MESSAGE">sublist # last complex number of calls</field>
+                                                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                                                           <block type="text">
+                                                                                                                                                                                                             <field name="TEXT">sublist # last complex number of calls</field>
+                                                                                                                                                                                                           </block>
+                                                                                                                                                                                                         </value>
                                                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                                                           <block type="variables_get">
                                                                                                                                                                                                             <field name="VAR">number of calls</field>
@@ -4420,7 +4772,11 @@
                                                                                                                                                                                                             </value>
                                                                                                                                                                                                             <next>
                                                                                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                <field name="MESSAGE">sublist #-end last simple</field>
+                                                                                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                                                                                   <block type="text">
+                                                                                                                                                                                                                     <field name="TEXT">sublist #-end last simple</field>
+                                                                                                                                                                                                                   </block>
+                                                                                                                                                                                                                 </value>
                                                                                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                                                                                   <block type="lists_getSublist">
                                                                                                                                                                                                                     <mutation at1="true" at2="false"></mutation>
@@ -4469,7 +4825,11 @@
                                                                                                                                                                                                                 </value>
                                                                                                                                                                                                                 <next>
                                                                                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                    <field name="MESSAGE">sublist # last complex number of calls</field>
+                                                                                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                                                                                       <block type="text">
+                                                                                                                                                                                                                         <field name="TEXT">sublist # last complex number of calls</field>
+                                                                                                                                                                                                                       </block>
+                                                                                                                                                                                                                     </value>
                                                                                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                                                                                       <block type="variables_get">
                                                                                                                                                                                                                         <field name="VAR">number of calls</field>
@@ -4490,7 +4850,11 @@
                                                                                                                                                                                                                         </value>
                                                                                                                                                                                                                         <next>
                                                                                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                            <field name="MESSAGE">sublist all with # #-end complex</field>
+                                                                                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                                                                                               <block type="text">
+                                                                                                                                                                                                                                 <field name="TEXT">sublist all with # #-end complex</field>
+                                                                                                                                                                                                                               </block>
+                                                                                                                                                                                                                             </value>
                                                                                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                                                                                               <block type="lists_getSublist">
                                                                                                                                                                                                                                 <mutation at1="true" at2="true"></mutation>
@@ -4528,7 +4892,11 @@
                                                                                                                                                                                                                             </value>
                                                                                                                                                                                                                             <next>
                                                                                                                                                                                                                               <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                                <field name="MESSAGE">sublist all with # #-end complex number of calls</field>
+                                                                                                                                                                                                                                <value name="MESSAGE">
+                                                                                                                                                                                                                                   <block type="text">
+                                                                                                                                                                                                                                     <field name="TEXT">sublist all with # #-end complex number of calls</field>
+                                                                                                                                                                                                                                   </block>
+                                                                                                                                                                                                                                 </value>
                                                                                                                                                                                                                                 <value name="ACTUAL">
                                                                                                                                                                                                                                   <block type="variables_get">
                                                                                                                                                                                                                                     <field name="VAR">number of calls</field>
@@ -4549,7 +4917,11 @@
                                                                                                                                                                                                                                     </value>
                                                                                                                                                                                                                                     <next>
                                                                                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                                        <field name="MESSAGE">sublist all with #-end # complex</field>
+                                                                                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                                                                                           <block type="text">
+                                                                                                                                                                                                                                             <field name="TEXT">sublist all with #-end # complex</field>
+                                                                                                                                                                                                                                           </block>
+                                                                                                                                                                                                                                         </value>
                                                                                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                                                                                           <block type="lists_getSublist">
                                                                                                                                                                                                                                             <mutation at1="true" at2="true"></mutation>
@@ -4587,7 +4959,11 @@
                                                                                                                                                                                                                                         </value>
                                                                                                                                                                                                                                         <next>
                                                                                                                                                                                                                                           <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                                            <field name="MESSAGE">sublist all with #-end # complex number of calls</field>
+                                                                                                                                                                                                                                            <value name="MESSAGE">
+                                                                                                                                                                                                                                               <block type="text">
+                                                                                                                                                                                                                                                 <field name="TEXT">sublist all with #-end # complex number of calls</field>
+                                                                                                                                                                                                                                               </block>
+                                                                                                                                                                                                                                             </value>
                                                                                                                                                                                                                                             <value name="ACTUAL">
                                                                                                                                                                                                                                               <block type="variables_get">
                                                                                                                                                                                                                                                 <field name="VAR">number of calls</field>
@@ -4608,7 +4984,11 @@
                                                                                                                                                                                                                                                 </value>
                                                                                                                                                                                                                                                 <next>
                                                                                                                                                                                                                                                   <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                                                    <field name="MESSAGE">sublist all with # #-end math complex</field>
+                                                                                                                                                                                                                                                    <value name="MESSAGE">
+                                                                                                                                                                                                                                                       <block type="text">
+                                                                                                                                                                                                                                                         <field name="TEXT">sublist all with # #-end math complex</field>
+                                                                                                                                                                                                                                                       </block>
+                                                                                                                                                                                                                                                     </value>
                                                                                                                                                                                                                                                     <value name="ACTUAL">
                                                                                                                                                                                                                                                       <block type="lists_getSublist">
                                                                                                                                                                                                                                                         <mutation at1="true" at2="true"></mutation>
@@ -4666,7 +5046,11 @@
                                                                                                                                                                                                                                                     </value>
                                                                                                                                                                                                                                                     <next>
                                                                                                                                                                                                                                                       <block type="unittest_assertequals" inline="false">
-                                                                                                                                                                                                                                                        <field name="MESSAGE">sublist all with # #-end math complex number of calls</field>
+                                                                                                                                                                                                                                                        <value name="MESSAGE">
+                                                                                                                                                                                                                                                           <block type="text">
+                                                                                                                                                                                                                                                             <field name="TEXT">sublist all with # #-end math complex number of calls</field>
+                                                                                                                                                                                                                                                           </block>
+                                                                                                                                                                                                                                                         </value>
                                                                                                                                                                                                                                                         <value name="ACTUAL">
                                                                                                                                                                                                                                                           <block type="variables_get">
                                                                                                                                                                                                                                                             <field name="VAR">number of calls</field>
@@ -4805,7 +5189,11 @@
     <comment pinned="false" h="80" w="160">Tests the "join" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">join</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">join</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_split">
             <mutation mode="JOIN"></mutation>
@@ -4850,7 +5238,11 @@
     <comment pinned="false" h="80" w="160">Tests the "split" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">split</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">split</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_split">
             <mutation mode="SPLIT"></mutation>
@@ -4895,7 +5287,11 @@
     <comment pinned="false" h="80" w="160">Tests the "alphabetic sort" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">sort alphabetic ascending</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">sort alphabetic ascending</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_sort">
             <field name="TYPE">TEXT</field>
@@ -4950,7 +5346,11 @@
     <comment pinned="false" h="80" w="160">Tests the "alphabetic sort ignore case" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">sort ignore case ascending</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">sort ignore case ascending</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_sort">
             <field name="TYPE">IGNORE_CASE</field>
@@ -5005,7 +5405,11 @@
     <comment pinned="false" h="80" w="160">Tests the "numeric sort" block.</comment>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">sort numeric descending</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">sort numeric descending</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="lists_sort">
             <field name="TYPE">NUMERIC</field>

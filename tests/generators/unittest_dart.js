@@ -111,7 +111,8 @@ Blockly.Dart['unittest_main'].defineAssert_ = function() {
 
 Blockly.Dart['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
-  var message = Blockly.Dart.quote_(block.getFieldValue('MESSAGE'));
+  var message = Blockly.Dart.valueToCode(block, 'MESSAGE',
+      Blockly.Dart.ORDER_NONE) || '';
   var actual = Blockly.Dart.valueToCode(block, 'ACTUAL',
       Blockly.Dart.ORDER_NONE) || 'null';
   var expected = Blockly.Dart.valueToCode(block, 'EXPECTED',
@@ -122,7 +123,8 @@ Blockly.Dart['unittest_assertequals'] = function(block) {
 
 Blockly.Dart['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
-  var message = Blockly.Dart.quote_(block.getFieldValue('MESSAGE'));
+  var message = Blockly.Dart.valueToCode(block, 'MESSAGE',
+      Blockly.Dart.ORDER_NONE) || '';
   var actual = Blockly.Dart.valueToCode(block, 'ACTUAL',
       Blockly.Dart.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
@@ -141,7 +143,8 @@ Blockly.Dart['unittest_fail'] = function(block) {
   // Always assert an error.
   var resultsVar = Blockly.Dart.variableDB_.getName('unittestResults',
       Blockly.Variables.NAME_TYPE);
-  var message = Blockly.Dart.quote_(block.getFieldValue('MESSAGE'));
+  var message = Blockly.Dart.valueToCode(block, 'MESSAGE',
+      Blockly.Dart.ORDER_NONE) || '';
   var functionName = Blockly.Dart.provideFunction_(
       'unittest_fail',
       [ 'void ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +

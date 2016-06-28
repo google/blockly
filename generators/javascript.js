@@ -120,7 +120,7 @@ Blockly.JavaScript.ORDER_OVERRIDES = [
   [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_MEMBER],
   // (foo.bar)() -> foo.bar()
   // (foo[0])() -> foo[0]()
-  [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_FUNCTION_CALL]
+  [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_FUNCTION_CALL],
 
   // !(!foo) -> !!foo
   [Blockly.JavaScript.ORDER_LOGICAL_NOT, Blockly.JavaScript.ORDER_LOGICAL_NOT],

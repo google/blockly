@@ -49,7 +49,7 @@ Blockly.Blocks['robot_display_message_h1h2_no_timeout'] = {
         .setCheck("String")
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("display big text");
-    this.appendValueInput("H2 TEXT")
+    this.appendValueInput("H2_TEXT")
         .setCheck("String")
         .setAlign(Blockly.ALIGN_RIGHT)
         .appendField("regular text");

@@ -96,7 +96,7 @@ Blockly.Python.ORDER_OVERRIDES = [
   [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_MEMBER],
   // (foo.bar)() -> foo.bar()
   // (foo[0])() -> foo[0]()
-  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_FUNCTION_CALL]
+  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_FUNCTION_CALL],
 
   // not (not foo) -> not not foo
   [Blockly.Python.ORDER_LOGICAL_NOT, Blockly.Python.ORDER_LOGICAL_NOT],

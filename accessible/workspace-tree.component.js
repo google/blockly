@@ -180,9 +180,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
       if (this.tree && this.isTopLevel &&
           !this.treeService.getActiveDescId(this.tree.id)) {
-        this.treeService.setActiveDesc(
-            document.getElementById(this.idMap['parentList']),
-            this.tree);
+        this.treeService.setActiveDesc(this.idMap['parentList'], this.tree.id);
       }
     },
     hasPreviousConnection: function(block) {

@@ -25,9 +25,6 @@
 
 blocklyApp.workspace = new Blockly.Workspace();
 
-// If the debug flag is true, print console.logs to help with debugging.
-blocklyApp.debug = false;
-
 blocklyApp.AppView = ng.core
   .Component({
     selector: 'blockly-app',

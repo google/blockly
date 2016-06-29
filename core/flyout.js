@@ -151,23 +151,26 @@ Blockly.Flyout.prototype.height_ = 0;
 
 /**
  * Is the flyout dragging (scrolling)?
- * 0 - DRAG_NONE - no drag is ongoing or state is undetermined
- * 1 - DRAG_STICKY - still within the sticky drag radius
- * 2 - DRAG_FREE - in scroll mode (never create a new block)
+ * 0 - DRAG_NONE - no drag is ongoing or state is undetermined.
+ * 1 - DRAG_STICKY - still within the sticky drag radius.
+ * 2 - DRAG_FREE - in scroll mode (never create a new block).
  * @private
  */
 Blockly.Flyout.prototype.dragMode_ = Blockly.DRAG_NONE;
 
 /**
- * Range of a drag angle from a fixed flyout considered "dragging toward workspace."
+ * Range of a drag angle from a flyout considered "dragging toward workspace".
  * Drags that are within the bounds of this many degrees from the orthogonal
- * line to the flyout edge are considered to be "drags toward the workspace."
+ * line to the flyout edge are considered to be "drags toward the workspace".
  * Example:
  * Flyout                                                  Edge   Workspace
  * [block] /  <-within this angle, drags "toward workspace" |
  * [block] ---- orthogonal to flyout boundary ----          |
  * [block] \                                                |
  * The angle is given in degrees from the orthogonal.
+ *
+ * This is used to know when to create a new block and when to scroll the
+ * flyout. Setting it to 360 means that all drags create a new block.
  * @type {number}
  * @private
 */
@@ -855,7 +858,7 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
     this.createBlockFunc_(Blockly.Flyout.startBlock_)(
         Blockly.Flyout.startDownEvent_);
   } else if (this.dragMode_ == Blockly.DRAG_FREE) {
-    // Do a scroll
+    // Do a scroll.
     this.onMouseMove_(e);
   }
   e.stopPropagation();
@@ -865,9 +868,10 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
  * Determine the intention of a drag.
  * Updates dragMode_ based on a drag delta and the current mode,
  * and returns true if we should create a new block.
- * @param {number} dx X delta of the drag
- * @param {number} dy Y delta of the drag
+ * @param {number} dx X delta of the drag.
+ * @param {number} dy Y delta of the drag.
  * @return {boolean} True if a new block should be created.
+ * @private
  */
 Blockly.Flyout.prototype.determineDragIntention_ = function(dx, dy) {
   if (this.dragMode_ == Blockly.DRAG_FREE) {
@@ -876,12 +880,12 @@ Blockly.Flyout.prototype.determineDragIntention_ = function(dx, dy) {
   }
   var dragDistance = Math.sqrt(dx * dx + dy * dy);
   if (dragDistance < this.DRAG_RADIUS) {
-    // Still within the sticky drag radius
+    // Still within the sticky drag radius.
     this.dragMode_ = Blockly.DRAG_STICKY;
     return false;
   } else {
     if (this.isDragTowardWorkspace_(dx, dy) || !this.scrollbar_.isVisible()) {
-      // Immediately create a block
+      // Immediately create a block.
       return true;
     } else {
       // Immediately move to free mode - the drag is away from the workspace.
@@ -895,8 +899,8 @@ Blockly.Flyout.prototype.determineDragIntention_ = function(dx, dy) {
  * Determine if a drag delta is toward the workspace, based on the position
  * and orientation of the flyout. This is used in determineDragIntention_ to
  * determine if a new block should be created or if the flyout should scroll.
- * @param {number} dx X delta of the drag
- * @param {number} dy Y delta of the drag
+ * @param {number} dx X delta of the drag.
+ * @param {number} dy Y delta of the drag.
  * @return {boolean} true if the drag is toward the workspace.
  * @private
  */
@@ -908,24 +912,24 @@ Blockly.Flyout.prototype.isDragTowardWorkspace_ = function(dx, dy) {
   var range = this.dragAngleRange_;
   if (this.horizontalLayout_) {
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-      // Horizontal at top
-      if (dragDirection < 90 + range && dragDirection > 90 - range ) {
+      // Horizontal at top.
+      if (dragDirection < 90 + range && dragDirection > 90 - range) {
         draggingTowardWorkspace = true;
       }
     } else {
-      // Horizontal at bottom
+      // Horizontal at bottom.
       if (dragDirection > -90 - range && dragDirection < -90 + range) {
         draggingTowardWorkspace = true;
       }
     }
   } else {
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-      // Vertical at left
+      // Vertical at left.
       if (dragDirection < range && dragDirection > -range) {
         draggingTowardWorkspace = true;
       }
     } else {
-      // Vertical at right
+      // Vertical at right.
       if (dragDirection < -180 + range || dragDirection > 180 - range) {
         draggingTowardWorkspace = true;
       }

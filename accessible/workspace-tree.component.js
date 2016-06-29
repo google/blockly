@@ -79,10 +79,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
                       [disabled]="!hasPreviousConnection(block)">{{'MARK_SPOT_ABOVE'|translate}}</button>
             </li>
             <li [id]="idMap['sendToSelectedListItem']" role="treeitem"
-                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !clipboardService.isBlockCompatibleWithMarkedConnection(block))"
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeMovedToMarkedConnection(block))"
                 [attr.aria-level]="level+2" aria-selected=false>
               <button [id]="idMap['sendToSelectedButton']" (click)="sendToMarkedSpot(block)"
-                      [disabled]="!clipboardService.isBlockCompatibleWithMarkedConnection(block)">{{'MOVE_TO_MARKED_SPOT'|translate}}</button>
+                      [disabled]="!canBeMovedToMarkedConnection(block)">{{'MOVE_TO_MARKED_SPOT'|translate}}</button>
             </li>
             <li [id]="idMap['delete']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['deleteButton'], 'blockly-button')"
@@ -161,7 +161,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
       return elementsNeedingIds;
     },
-    ngOnInit: function() {
+    ngOnChanges: function() {
+      // The ids needs to be generated on every change (as opposed to only on
+      // init), so that they will update if, e.g., a new workspace-tree
+      // component is added to the middle of an array.
       var elementsNeedingIds = this.getElementsNeedingIds_();
 
       this.idMap = {}
@@ -183,6 +186,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         this.treeService.setActiveDesc(this.idMap['parentList'], this.tree.id);
       }
     },
+    canBeMovedToMarkedConnection: function(block) {
+      return this.clipboardService.canBeMovedToMarkedConnection(block);
+    },
     hasPreviousConnection: function(block) {
       return Boolean(block.previousConnection);
     },
@@ -190,8 +196,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       return Boolean(block.nextConnection);
     },
     isCompatibleWithClipboard: function(connection) {
-      return this.clipboardService.isClipboardCompatibleWithConnection(
-          connection);
+      return this.clipboardService.isCompatibleWithClipboard(connection);
     },
     isTopLevelBlock: function(block) {
       return blocklyApp.workspace.topBlocks_.some(function(topBlock) {

@@ -303,8 +303,10 @@ Blockly.Events.Abstract = function(block) {
 Blockly.Events.Abstract.prototype.toJson = function() {
   var json = {
     'type': this.type,
-    'blockId': this.blockId
   };
+  if (this.blockId) {
+    json['blockId'] = this.blockId;
+  }
   if (this.group) {
     json['group'] = this.group;
   }

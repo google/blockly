@@ -606,7 +606,8 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg());
+  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg(),
+      this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
   var handleXY = Blockly.getSvgXY_(this.svgHandle_, this.workspace_);
@@ -693,7 +694,7 @@ Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
  * @private
  */
 Blockly.Scrollbar.prototype.constrainHandle_ = function(value) {
-  if (value <= 0 || isNaN(value)) {
+  if (value <= 0 || isNaN(value) || this.scrollViewSize_ < this.handleLength_) {
     value = 0;
   } else {
     value = Math.min(value, this.scrollViewSize_ - this.handleLength_);

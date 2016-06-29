@@ -98,7 +98,7 @@ blocklyApp.ToolboxComponent = ng.core
           this.idMap['Parent' + i] = 'blockly-toolbox-tree-node' + i;
         }
       } else {
-        // Create a single category is created with all the top-level blocks.
+        // Create a single category with all the top-level blocks.
         this.xmlHasCategories = false;
         this.toolboxCategories = [Array.from(xmlToolboxElt.children)];
       }
@@ -108,8 +108,7 @@ blocklyApp.ToolboxComponent = ng.core
       // descendant after the ids have been computed.
       if (this.xmlHasCategories) {
         this.treeService.setActiveDesc(
-            document.getElementById('blockly-toolbox-tree-node0'),
-            document.getElementById('blockly-toolbox-tree'));
+            'blockly-toolbox-tree-node0', 'blockly-toolbox-tree');
       }
     },
     getToolboxWorkspace: function(categoryNode) {

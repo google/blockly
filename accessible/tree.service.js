@@ -27,11 +27,6 @@
 blocklyApp.TreeService = ng.core
   .Class({
     constructor: function() {
-      // Keeping track of whether the user has just focused into an input
-      // field. In the next keystroke, if the user navigates away from the
-      // field using the arrow keys, we want to shift focus back to the tree as
-      // a whole.
-      this.justFocusedIntoField_ = false;
       // Stores active descendant ids for each tree in the page.
       this.activeDescendantIds_ = {};
     },
@@ -190,13 +185,6 @@ blocklyApp.TreeService = ng.core
         e.stopPropagation();
       } else if (e.keyCode >= 37 && e.keyCode <= 40) {
         // Arrow keys.
-
-        // If the user has just focused into a text field, shift focus back to
-        // the main tree.
-        if (this.justFocusedIntoField_) {
-          this.focusOnCurrentTree_(treeId);
-        }
-
         if (e.keyCode == 37) {
           // Left arrow key. Go up a level, if possible.
           var nextNode = activeDesc.parentNode;
@@ -232,8 +220,6 @@ blocklyApp.TreeService = ng.core
         e.preventDefault();
         e.stopPropagation();
       }
-
-      this.justFocusedIntoField_ = isFocusingIntoField;
     },
     getFirstChild: function(element) {
       if (!element) {

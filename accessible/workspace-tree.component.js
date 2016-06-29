@@ -198,6 +198,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         return topBlock.id == block.id;
       });
     },
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
+      return this.utilsService.generateAriaLabelledByAttr(
+          mainLabel, secondLabel, isDisabled);
+    },
     pasteAbove: function(block) {
       var that = this;
       this.treeService.runWhilePreservingFocus(function() {
@@ -231,10 +235,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         // TODO(sll): Change the active descendant of the tree.
         block.dispose(true);
       }
-    },
-    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
-      return this.utilsService.generateAriaLabelledByAttr(
-          mainLabel, secondLabel, isDisabled);
     },
     sendToMarkedSpot: function(block) {
       this.clipboardService.pasteToMarkedConnection(block, false);

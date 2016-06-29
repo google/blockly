@@ -589,7 +589,7 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
 };
 
 /**
- * Decorate original onKeyDown handler to swap
+ * Modify original onKeyDown handler to swap
  * LEFT/RIGHT keys with UP/DOWN in horizontalLayout.
  * @param {!goog.events.BrowserEvent} e The browser event.
  * @return {boolean} The handled value.
@@ -597,32 +597,72 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
  * @private
  */
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
-  var ret;
+  var handled = true;
+  var vertical = !this.horizontalLayout_;
 
-  if (this.horizontalLayout_) {
-    var right = goog.events.KeyCodes.RIGHT;
-    var left = goog.events.KeyCodes.LEFT;
-    var up = goog.events.KeyCodes.UP;
-    var down = goog.events.KeyCodes.DOWN;
+  var right = vertical ? 'RIGHT' : 'DOWN';
+  var left  = vertical ? 'LEFT'  : 'UP';
+  var up    = vertical ? 'UP'    : 'LEFT';
+  var down  = vertical ? 'DOWN'  : 'RIGHT';
 
-    // Swap keycodes
-    goog.events.KeyCodes.RIGHT = down;
-    goog.events.KeyCodes.LEFT = up;
-    goog.events.KeyCodes.UP = left;
-    goog.events.KeyCodes.DOWN = right;
+  switch (e.keyCode) {
+    case goog.events.KeyCodes[right]:
+      if (e.altKey) {
+        break;
+      }
+      if (this.hasChildren()) {
+        if (!this.getExpanded()) {
+          this.setExpanded(true);
+        } else {
+          this.getFirstChild().select();
+        }
+      }
+      break;
 
-    ret = Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
+    case goog.events.KeyCodes[left]:
+      if (e.altKey) {
+        break;
+      }
+      if (this.hasChildren() && this.getExpanded() && this.isUserCollapsible_) {
+        this.setExpanded(false);
+      } else {
+        var parent = this.getParent();
+        var tree = this.getTree();
+        // don't go to root if hidden
+        if (parent && (tree.getShowRootNode() || parent != tree)) {
+          parent.select();
+        }
+      }
+      break;
 
-    // Restore keycodes
-    goog.events.KeyCodes.RIGHT = right;
-    goog.events.KeyCodes.LEFT = left;
-    goog.events.KeyCodes.UP = up;
-    goog.events.KeyCodes.DOWN = down;
-  } else {
-    ret = Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
+    case goog.events.KeyCodes[down]:
+      var nextNode = this.getNextShownNode();
+      if (nextNode) {
+        nextNode.select();
+      }
+      break;
+
+    case goog.events.KeyCodes[up]:
+      var previousNode = this.getPreviousShownNode();
+      if (previousNode) {
+        previousNode.select();
+      }
+      break;
+
+    default:
+      handled = false;
   }
 
-  return ret;
+  if (handled) {
+    e.preventDefault();
+    var tree = this.getTree();
+    if (tree) {
+      // clear type ahead buffer as user navigates with arrow keys
+      tree.clearTypeAhead();
+    }
+  }
+
+  return handled;
 };
 
 /**

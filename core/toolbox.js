@@ -278,7 +278,6 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   Blockly.resizeSvgContents(this.workspace_);
 };
 
-
 /**
  * Sync trees of the toolbox.
  * @param {Node} treeIn DOM tree of blocks, or null.
@@ -356,7 +355,6 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
     }
   }
 };
-
 
 /**
  * Recursively add colours to this toolbox.
@@ -457,6 +455,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
         this.handleTouchEvent_);
   }
 };
+
 /**
  * Handles touch events.
  * @param {!goog.events.BrowserEvent} e The browser event.

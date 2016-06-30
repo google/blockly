@@ -312,7 +312,7 @@
                   <block type="text_isEmpty" inline="true">
                     <value name="VALUE">
                       <block type="procedures_callreturn">
-                        <mutation name="test find complex"></mutation>
+                        <mutation name="do something"></mutation>
                       </block>
                     </value>
                   </block>
@@ -322,7 +322,7 @@
                     <field name="EXPECTED">TRUE</field>
                     <value name="MESSAGE">
                       <block type="text">
-                        <field name="TEXT">empty complex</field>
+                        <field name="TEXT">empty order</field>
                       </block>
                     </value>
                     <value name="ACTUAL">

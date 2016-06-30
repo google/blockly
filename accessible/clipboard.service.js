@@ -111,5 +111,7 @@ blocklyApp.ClipboardService = ng.core
             Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
             reconstitutedBlock.toString());
       }
+
+      this.markedConnection_ = null;
     }
   });

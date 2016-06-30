@@ -168,7 +168,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       var elementsNeedingIds = this.getElementsNeedingIds_();
 
       this.idMap = {}
-      this.idMap['parentList'] = this.utilsService.generateUniqueId();
+      this.idMap['parentList'] = this.block.id + 'parent';
       for (var i = 0; i < elementsNeedingIds.length; i++) {
         this.idMap[elementsNeedingIds[i]] =
             this.block.id + elementsNeedingIds[i];
@@ -198,10 +198,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     isCompatibleWithClipboard: function(connection) {
       return this.clipboardService.isCompatibleWithClipboard(connection);
     },
-    isTopLevelBlock: function(block) {
-      return blocklyApp.workspace.topBlocks_.some(function(topBlock) {
-        return topBlock.id == block.id;
-      });
+    isIsolatedTopLevelBlock: function(block) {
+      // Returns whether the given block is at the top level, and has no
+      // siblings.
+      return Boolean(
+          !block.nextConnection.targetConnection &&
+          !block.previousConnection.targetConnection &&
+          blocklyApp.workspace.topBlocks_.some(function(topBlock) {
+            return topBlock.id == block.id;
+          }));
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
       return this.utilsService.generateAriaLabelledByAttr(
@@ -219,40 +224,45 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         that.clipboardService.pasteFromClipboard(block.nextConnection);
       }, this.tree.id);
     },
-    cutToClipboard: function(block) {
-      if (this.isTopLevelBlock(block)) {
-        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
-            this.tree.id);
-        this.clipboardService.cut(block);
+    getRootNode: function() {
+      // Gets the root HTML node for this component.
+      return document.getElementById(this.idMap['parentList']);
+    },
+    removeBlockAndSetFocus_: function(block, deleteBlockFunc) {
+      // This method runs the given function and then does one of two things:
+      // - If the block is an isolated top-level block, it shifts the tree
+      //   focus.
+      // - Otherwise, it sets the correct new active desc for the current tree.
+      if (this.isIsolatedTopLevelBlock(block)) {
+        var nextNodeToFocusOn =
+            this.treeService.getNodeToFocusOnWhenTreeIsDeleted(this.tree.id);
+        deleteBlockFunc();
         nextNodeToFocusOn.focus();
       } else {
-        // TODO(sll): Change the active descendant of the tree.
-        this.clipboardService.cut(block);
+        var nextActiveDesc =
+            this.treeService.getNextActiveDescWhenBlockIsDeleted(
+                this.getRootNode());
+        this.treeService.runWhilePreservingFocus(
+            deleteBlockFunc, this.tree.id, nextActiveDesc.id);
       }
     },
+    cutToClipboard: function(block) {
+      var that = this;
+      this.removeBlockAndSetFocus_(block, function() {
+        that.clipboardService.cut(block);
+      });
+    },
     deleteBlock: function(block) {
-      if (this.isTopLevelBlock(block)) {
-        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
-            this.tree.id);
+      this.removeBlockAndSetFocus_(block, function() {
         block.dispose(true);
-        nextNodeToFocusOn.focus();
-      } else {
-        // TODO(sll): Change the active descendant of the tree.
-        block.dispose(true);
-      }
+      });
     },
     sendToMarkedSpot: function(block) {
       this.clipboardService.pasteToMarkedConnection(block, false);
 
-      if (this.isTopLevelBlock(block)) {
-        nextNodeToFocusOn = this.treeService.getNodeToFocusOnWhenTreeIsDeleted(
-            this.tree.id);
+      this.removeBlockAndSetFocus_(block, function() {
         block.dispose(true);
-        nextNodeToFocusOn.focus();
-      } else {
-        // TODO(sll): Change the active descendant of the tree.
-        block.dispose(true);
-      }
+      });
 
       alert('Block moved to marked spot: ' + block.toString());
     }

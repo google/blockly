@@ -117,9 +117,10 @@ blocklyApp.TreeService = ng.core
     },
     // Runs the given function while preserving the focus and active descendant
     // for the given tree.
-    runWhilePreservingFocus: function(func, treeId) {
-      var activeDescId = this.getActiveDescId(treeId);
-      this.unmarkActiveDesc_(activeDescId);
+    runWhilePreservingFocus: function(func, treeId, optionalNewActiveDescId) {
+      var oldDescId = this.getActiveDescId(treeId);
+      var newDescId = optionalNewActiveDescId || oldDescId;
+      this.unmarkActiveDesc_(oldDescId);
       func();
 
       // The timeout is needed in order to give the DOM time to stabilize
@@ -127,8 +128,8 @@ blocklyApp.TreeService = ng.core
       // pasteAbove().
       var that = this;
       setTimeout(function() {
-        that.markActiveDesc_(activeDescId);
-        that.activeDescendantIds_[treeId] = activeDescId;
+        that.markActiveDesc_(newDescId);
+        that.activeDescendantIds_[treeId] = newDescId;
         document.getElementById(treeId).focus();
       }, 0);
     },
@@ -153,11 +154,43 @@ blocklyApp.TreeService = ng.core
     isButtonOrFieldNode_: function(node) {
       return ['BUTTON', 'INPUT'].indexOf(node.tagName) != -1;
     },
+    getNextActiveDescWhenBlockIsDeleted: function(blockRootNode) {
+      // Go up a level, if possible.
+      var nextNode = blockRootNode.parentNode;
+      while (nextNode && nextNode.tagName != 'LI') {
+        nextNode = nextNode.parentNode;
+      }
+      if (nextNode) {
+        return nextNode;
+      }
+
+      // Otherwise, go to the next sibling.
+      var nextSibling = this.getNextSibling(blockRootNode);
+      if (nextSibling) {
+        return nextSibling;
+      }
+
+      // Otherwise, go to the previous sibling.
+      var previousSibling = this.getPreviousSibling(blockRootNode);
+      if (previousSibling) {
+        return previousSibling;
+      }
+
+      // Otherwise, this is a top-level isolated block, which means that
+      // something's gone wrong and this function should not have been called
+      // in the first place.
+      console.error('Could not handle deletion of block.' + blockRootNode);
+    },
     onKeypress: function(e, tree) {
       var treeId = tree.id;
       var activeDesc = document.getElementById(this.getActiveDescId(treeId));
       if (!activeDesc) {
-        console.log('ERROR: no active descendant for current tree.');
+        console.error('ERROR: no active descendant for current tree.');
+        // TODO(sll): This just gives the focus somewhere to go in the event
+        // of an error, but we need to generalize this to other trees (both
+        // within and outside the workspace).
+        this.setActiveDesc(
+            blocklyApp.workspace.topBlocks_[0].id + 'blockSummary', treeId);
         return;
       }
 

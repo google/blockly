@@ -140,7 +140,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var list = Blockly.Lua.valueToCode(block, 'VALUE', Blockly.Lua.ORDER_NONE) ||
+  var list = Blockly.Lua.valueToCode(block, 'VALUE', Blockly.Lua.ORDER_HIGH) ||
       '{}';
   var getIndex_ = Blockly.Lua.lists.getIndex_;
 
@@ -170,7 +170,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
             ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
                 // The value for 'FROM_END' and'FROM_START' depends on `at` so
                 // we add it as a parameter.
-                (where == 'FROM_END' || where == 'FROM_START') ? ', at)' : ')',
+                ((where == 'FROM_END' || where == 'FROM_START') ? ', at)' : ')'),
              '  return t[' + getIndex_('t', where, 'at') + ']',
              'end']);
       } else {  // mode == 'GET_REMOVE'
@@ -179,14 +179,14 @@ Blockly.Lua['lists_getIndex'] = function(block) {
             ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
                 // The value for 'FROM_END' and'FROM_START' depends on `at` so
                 // we add it as a parameter.
-                (where == 'FROM_END' || where == 'FROM_START') ? ', at)' : ')',
+                ((where == 'FROM_END' || where == 'FROM_START') ? ', at)' : ')'),
              '  return table.remove(t, ' + getIndex_('t', where, 'at') + ')',
              'end']);
       }
       var code = functionName + '(' + list +
           // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
           // pass it.
-          (where == 'FROM_END' || where == 'FROM_START') ? ', ' + at: '' +  ')';
+          ((where == 'FROM_END' || where == 'FROM_START') ? ', ' + at : '') +  ')';
       return [code, Blockly.Lua.ORDER_HIGH];
     }
   } else {
@@ -232,7 +232,7 @@ Blockly.Lua['lists_setIndex'] = function(block) {
     // We can use multiple statements.
     var listVar = Blockly.Lua.variableDB_.getDistinctName(
         'tmp_list', Blockly.Variables.NAME_TYPE);
-    code = 'var ' + listVar + ' = ' + list + ';\n';
+    code = listVar + ' = ' + list + '\n';
     list = listVar;
   }
   if (mode == 'SET') {

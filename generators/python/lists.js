@@ -123,7 +123,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
         var code = list + '.pop(0)';
         return [code, Blockly.Python.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
-        return code + '.pop(0)\n';
+        return list + '.pop(0)\n';
       }
       break;
     case 'LAST':
@@ -134,7 +134,7 @@ Blockly.Python['lists_getIndex'] = function(block) {
         var code = list + '.pop()';
         return [code, Blockly.Python.ORDER_FUNCTION_CALL];
       } else if (mode == 'REMOVE') {
-        return code + '.pop()\n';
+        return list + '.pop()\n';
       }
       break;
     case 'FROM_START':
@@ -310,7 +310,7 @@ Blockly.Python['lists_sort'] = function(block) {
   var reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
   var sortFunctionName = Blockly.Python.provideFunction_('lists_sort',
   ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ +
-      '(list, type, reverse):',
+      '(my_list, type, reverse):',
     '  def try_float(s):',
     '    try:',
     '      return float(s)',
@@ -322,7 +322,7 @@ Blockly.Python['lists_sort'] = function(block) {
     '    "IGNORE_CASE": lambda s: str(s).lower()',
     '  }',
     '  key_func = key_funcs[type]',
-    '  list_cpy = list(list)', // Clone the list.
+    '  list_cpy = list(my_list)', // Clone the list.
     '  return sorted(list_cpy, key=key_func, reverse=reverse)'
   ]);
 

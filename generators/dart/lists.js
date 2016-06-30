@@ -265,7 +265,7 @@ Blockly.Dart['lists_setIndex'] = function(block) {
 Blockly.Dart['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.Dart.valueToCode(block, 'LIST',
-      Blockly.Dart.ORDER_NONE) || '[]';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   if (list.match(/^\w+$/) || (where1 != 'FROM_END' && where2 == 'FROM_START')) {
@@ -346,7 +346,7 @@ Blockly.Dart['lists_sort'] = function(block) {
           '(list, type, direction) {',
        '  var compareFuncs = {',
        '    "NUMERIC": (a, b) => direction * a.compareTo(b),',
-       '    "TEXT": (a, b) => direction * ;' +
+       '    "TEXT": (a, b) => direction * ' +
           'a.toString().compareTo(b.toString()),',
        '    "IGNORE_CASE": ',
        '       (a, b) => direction * ',

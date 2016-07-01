@@ -143,105 +143,158 @@
               <block type="unittest_assertequals" inline="false">
                 <value name="MESSAGE">
                   <block type="text">
-                    <field name="TEXT">create double text</field>
+                    <field name="TEXT">create single number</field>
                   </block>
                 </value>
                 <value name="ACTUAL">
-                  <block type="text_join" inline="true">
-                    <mutation items="2"></mutation>
+                  <block type="text_join" inline="false">
+                    <mutation items="1"></mutation>
                     <value name="ADD0">
-                      <block type="text">
-                        <field name="TEXT">K</field>
-                      </block>
-                    </value>
-                    <value name="ADD1">
                       <block type="math_number">
-                        <field name="NUM">9</field>
+                        <field name="NUM">-1</field>
                       </block>
                     </value>
                   </block>
                 </value>
                 <value name="EXPECTED">
                   <block type="text">
-                    <field name="TEXT">K9</field>
+                    <field name="TEXT">-1</field>
                   </block>
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
                     <value name="MESSAGE">
                       <block type="text">
-                        <field name="TEXT">create triple</field>
+                        <field name="TEXT">create double text</field>
                       </block>
                     </value>
                     <value name="ACTUAL">
                       <block type="text_join" inline="true">
-                        <mutation items="3"></mutation>
+                        <mutation items="2"></mutation>
                         <value name="ADD0">
-                          <block type="math_number">
-                            <field name="NUM">1</field>
+                          <block type="text">
+                            <field name="TEXT">K</field>
                           </block>
                         </value>
                         <value name="ADD1">
                           <block type="math_number">
-                            <field name="NUM">2</field>
-                          </block>
-                        </value>
-                        <value name="ADD2">
-                          <block type="math_number">
-                            <field name="NUM">3</field>
+                            <field name="NUM">9</field>
                           </block>
                         </value>
                       </block>
                     </value>
                     <value name="EXPECTED">
                       <block type="text">
-                        <field name="TEXT">123</field>
+                        <field name="TEXT">K9</field>
                       </block>
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
                         <value name="MESSAGE">
                           <block type="text">
-                            <field name="TEXT">create order</field>
+                            <field name="TEXT">create double text numbers</field>
                           </block>
                         </value>
                         <value name="ACTUAL">
-                          <block type="text_join" inline="false">
-                            <mutation items="3"></mutation>
+                          <block type="text_join" inline="true">
+                            <mutation items="2"></mutation>
                             <value name="ADD0">
                               <block type="math_number">
-                                <field name="NUM">1</field>
+                                <field name="NUM">4</field>
                               </block>
                             </value>
                             <value name="ADD1">
-                              <block type="logic_ternary" inline="true">
-                                <value name="IF">
-                                  <block type="logic_boolean">
-                                    <field name="BOOL">TRUE</field>
-                                  </block>
-                                </value>
-                                <value name="THEN">
-                                  <block type="math_number">
-                                    <field name="NUM">0</field>
-                                  </block>
-                                </value>
-                                <value name="ELSE">
-                                  <block type="logic_null"></block>
-                                </value>
-                              </block>
-                            </value>
-                            <value name="ADD2">
-                              <block type="text">
-                                <field name="TEXT">M</field>
+                              <block type="math_number">
+                                <field name="NUM">2</field>
                               </block>
                             </value>
                           </block>
                         </value>
                         <value name="EXPECTED">
                           <block type="text">
-                            <field name="TEXT">10M</field>
+                            <field name="TEXT">42</field>
                           </block>
                         </value>
+                        <next>
+                          <block type="unittest_assertequals" inline="false">
+                            <value name="MESSAGE">
+                              <block type="text">
+                                <field name="TEXT">create triple</field>
+                              </block>
+                            </value>
+                            <value name="ACTUAL">
+                              <block type="text_join" inline="true">
+                                <mutation items="3"></mutation>
+                                <value name="ADD0">
+                                  <block type="math_number">
+                                    <field name="NUM">1</field>
+                                  </block>
+                                </value>
+                                <value name="ADD1">
+                                  <block type="math_number">
+                                    <field name="NUM">2</field>
+                                  </block>
+                                </value>
+                                <value name="ADD2">
+                                  <block type="math_number">
+                                    <field name="NUM">3</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="EXPECTED">
+                              <block type="text">
+                                <field name="TEXT">123</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="unittest_assertequals" inline="false">
+                                <value name="MESSAGE">
+                                  <block type="text">
+                                    <field name="TEXT">create order</field>
+                                  </block>
+                                </value>
+                                <value name="ACTUAL">
+                                  <block type="text_join" inline="false">
+                                    <mutation items="3"></mutation>
+                                    <value name="ADD0">
+                                      <block type="math_number">
+                                        <field name="NUM">1</field>
+                                      </block>
+                                    </value>
+                                    <value name="ADD1">
+                                      <block type="logic_ternary" inline="true">
+                                        <value name="IF">
+                                          <block type="logic_boolean">
+                                            <field name="BOOL">TRUE</field>
+                                          </block>
+                                        </value>
+                                        <value name="THEN">
+                                          <block type="math_number">
+                                            <field name="NUM">0</field>
+                                          </block>
+                                        </value>
+                                        <value name="ELSE">
+                                          <block type="logic_null"></block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <value name="ADD2">
+                                      <block type="text">
+                                        <field name="TEXT">M</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <value name="EXPECTED">
+                                  <block type="text">
+                                    <field name="TEXT">10M</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
                       </block>
                     </next>
                   </block>
@@ -253,7 +306,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="1113">
+  <block type="procedures_defreturn" x="13" y="1263">
     <mutation statements="false"></mutation>
     <field name="NAME">get empty</field>
     <comment pinned="false" h="80" w="160">Creates an empty string for use with the empty test.</comment>
@@ -263,7 +316,7 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="1188">
+  <block type="procedures_defnoreturn" x="13" y="1338">
     <field name="NAME">test empty</field>
     <comment pinned="false" h="80" w="160">Tests the "is empty" block".</comment>
     <statement name="STACK">
@@ -355,7 +408,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="1513">
+  <block type="procedures_defnoreturn" x="13" y="1663">
     <field name="NAME">test length</field>
     <comment pinned="false" h="80" w="160">Tests the "length" block.</comment>
     <statement name="STACK">
@@ -440,7 +493,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="1813">
+  <block type="procedures_defnoreturn" x="13" y="1963">
     <field name="NAME">test append</field>
     <comment pinned="false" h="80" w="160">Tests the "append text" block with different types of parameters.</comment>
     <statement name="STACK">
@@ -573,7 +626,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="2288">
+  <block type="procedures_defnoreturn" x="13" y="2438">
     <field name="NAME">test find simple</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a variable.</comment>
     <statement name="STACK">
@@ -686,7 +739,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="2688">
+  <block type="procedures_defreturn" x="13" y="2838">
     <field name="NAME">get fruit</field>
     <comment pinned="false" h="80" w="160">Creates a string for use with the find test.</comment>
     <statement name="STACK">
@@ -705,7 +758,7 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="2788">
+  <block type="procedures_defnoreturn" x="13" y="2938">
     <field name="NAME">test find complex</field>
     <comment pinned="false" h="80" w="160">Tests the "find" block with a function call.</comment>
     <statement name="STACK">
@@ -1075,7 +1128,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="3863">
+  <block type="procedures_defnoreturn" x="13" y="4013">
     <field name="NAME">test get simple</field>
     <comment pinned="false" h="80" w="160">Tests the "get letter" block with a variable.</comment>
     <statement name="STACK">
@@ -1343,7 +1396,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="4688">
+  <block type="procedures_defreturn" x="13" y="4838">
     <field name="NAME">get Blockly</field>
     <comment pinned="false" h="80" w="160">Creates a string for use with the get test.</comment>
     <statement name="STACK">
@@ -1362,7 +1415,7 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="4788">
+  <block type="procedures_defnoreturn" x="13" y="4938">
     <field name="NAME">test get complex</field>
     <comment pinned="false" h="80" w="160">Tests the "get letter" block with a function call.</comment>
     <statement name="STACK">
@@ -2005,7 +2058,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defreturn" x="13" y="6588">
+  <block type="procedures_defreturn" x="13" y="6738">
     <field name="NAME">get numbers</field>
     <comment pinned="false" h="80" w="160">Creates a string for use with the substring test.</comment>
     <statement name="STACK">
@@ -2024,7 +2077,7 @@
       </block>
     </value>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="6688">
+  <block type="procedures_defnoreturn" x="13" y="6838">
     <field name="NAME">test substring simple</field>
     <comment pinned="false" h="80" w="160">Tests the "get substring" block with a variable.</comment>
     <statement name="STACK">
@@ -2666,7 +2719,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="8238">
+  <block type="procedures_defnoreturn" x="13" y="8388">
     <field name="NAME">test substring complex</field>
     <comment pinned="false" h="80" w="160">Tests the "get substring" block with a function call.</comment>
     <statement name="STACK">
@@ -3630,7 +3683,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="10688">
+  <block type="procedures_defnoreturn" x="13" y="10838">
     <field name="NAME">test case</field>
     <comment pinned="false" h="80" w="160">Tests the "change casing" block.</comment>
     <statement name="STACK">
@@ -3844,7 +3897,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="11338">
+  <block type="procedures_defnoreturn" x="13" y="11488">
     <field name="NAME">test trim</field>
     <comment pinned="false" h="80" w="160">Tests the "trim" block.</comment>
     <statement name="STACK">

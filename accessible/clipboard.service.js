@@ -46,11 +46,18 @@ blocklyApp.ClipboardService = ng.core
           this.areConnectionsCompatible_(connection, nextConnection));
     },
     isMovableToMarkedConnection: function(block) {
-      // It should not be possible to move a block to one of its own
-      // connections.
-      if (this.markedConnection_ &&
-          this.markedConnection_.sourceBlock_.id == block.id) {
+      // It should not be possible to move any ancestor of the block containing
+      // the marked spot to the marked spot.
+      if (!this.markedConnection_) {
         return false;
+      }
+
+      var markedSpotAncestorBlock = this.markedConnection_.getSourceBlock();
+      while (markedSpotAncestorBlock) {
+        if (markedSpotAncestorBlock.id == block.id) {
+          return false;
+        }
+        markedSpotAncestorBlock = markedSpotAncestorBlock.getParent();
       }
 
       return this.canBeCopiedToMarkedConnection(block);

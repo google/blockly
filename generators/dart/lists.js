@@ -117,7 +117,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
           'tmp_x', Blockly.Variables.NAME_TYPE);
       code += 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
           '.length);\n';
-      code += list + '.removeAt(' + list + '.length' + ' - ' + xVar + ');\n';
+      code += list + '.removeAt(' + xVar + ');\n';
       return code;
     } else { // where == 'FROM_END'
       if (mode == 'REMOVE') {
@@ -214,7 +214,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
               'tmp_x', Blockly.Variables.NAME_TYPE);
           var code = 'int ' +  xVar + ' = new Math.Random().nextInt(' + list
               + '.length);\n';
-          code += list + '.removeAt(' + list + '.length' + ' - ' + xVar + ');\n';
+          code += list + '.removeAt(' + xVar + ');\n';
           return code;
         } else if (mode == 'GET' || mode == 'GET_REMOVE'){
           if (mode == 'GET') {

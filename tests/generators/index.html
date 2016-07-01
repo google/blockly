@@ -175,8 +175,6 @@ function toPhp() {
 }
 
 function toLua() {
-  var oneBasedIndexing = document.getElementById('indexing').checked;
-  Blockly.Lua.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.Lua.workspaceToCode(workspace);
   setOutput(code);
 }

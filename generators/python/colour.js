@@ -46,11 +46,11 @@ Blockly.Python['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
   var functionName = Blockly.Python.provideFunction_(
       'colour_rgb',
-      [ 'def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b):',
-        '  r = round(min(100, max(0, r)) * 2.55)',
-        '  g = round(min(100, max(0, g)) * 2.55)',
-        '  b = round(min(100, max(0, b)) * 2.55)',
-        '  return \'#%02x%02x%02x\' % (r, g, b)']);
+      ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b):',
+       '  r = round(min(100, max(0, r)) * 2.55)',
+       '  g = round(min(100, max(0, g)) * 2.55)',
+       '  b = round(min(100, max(0, b)) * 2.55)',
+       '  return \'#%02x%02x%02x\' % (r, g, b)']);
   var r = Blockly.Python.valueToCode(block, 'RED',
                                      Blockly.Python.ORDER_NONE) || 0;
   var g = Blockly.Python.valueToCode(block, 'GREEN',

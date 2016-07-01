@@ -73,8 +73,8 @@ Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
 
 /**
- * Allow for switching between one and zero based indexing, one based by
- * default.
+ * Allow for switching between one and zero based indexing for lists and text,
+ * one based by default.
  */
 Blockly.Dart.ONE_BASED_INDEXING = true;
 
@@ -207,12 +207,12 @@ Blockly.Dart.scrub_ = function(block, code) {
 };
 
 /**
- * Gets a property and adjusts the value (taking into account indexing).
- * @param {Blockly.Block} block the block
- * @param {string} atId the property ID of the element to get
- * @param {number=} opt_delta value to add
- * @param {boolean=} opt_negate whether to negate the value
- * @param {number=} opt_order highest order acting on this value
+ * Gets a property and adjusts the value taking into account indexing.
+ * @param {!Blockly.Block} block The block.
+ * @param {string} atId The property ID of the element to get.
+ * @param {number=} opt_delta Value to add.
+ * @param {boolean=} opt_negate Whether to negate the value.
+ * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
 Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
@@ -222,21 +222,21 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   if (Blockly.Dart.ONE_BASED_INDEXING) {
     delta--;
   }
-  var defaultAtIndex = (Blockly.Dart.ONE_BASED_INDEXING) ? '1' : '0';
+  var defaultAtIndex = Blockly.Dart.ONE_BASED_INDEXING ? '1' : '0';
   if (delta) {
     var at = Blockly.Dart.valueToCode(block, atId,
-            Blockly.Dart.ORDER_ADDITIVE) || defaultAtIndex;
+        Blockly.Dart.ORDER_ADDITIVE) || defaultAtIndex;
   } else if (opt_negate) {
     var at = Blockly.Dart.valueToCode(block, atId,
-            Blockly.Dart.ORDER_UNARY_PREFIX) || defaultAtIndex;
+        Blockly.Dart.ORDER_UNARY_PREFIX) || defaultAtIndex;
   } else {
-    var at = Blockly.Dart.valueToCode(block, atId, order)
-        || defaultAtIndex;
+    var at = Blockly.Dart.valueToCode(block, atId, order) ||
+        defaultAtIndex;
   }
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
-    at = parseInt(at) + delta;
+    at = parseInt(at, 10) + delta;
     if (opt_negate) {
       at = -at;
     }
@@ -250,7 +250,7 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
       var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
     }
     if (opt_negate) {
-      if(delta) {
+      if (delta) {
         at = '-(' + at + ')';
       } else {
         at = '-' + at;

@@ -151,7 +151,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
     // `list` is an expression, so we may not evaluate it more than once.
     if (mode == 'REMOVE') {
       // We can use multiple statements.
-      var atOrder = (where == 'FROM_END')  ? Blockly.Lua.ORDER_ADDITIVE :
+      var atOrder = (where == 'FROM_END') ? Blockly.Lua.ORDER_ADDITIVE :
           Blockly.Lua.ORDER_NONE;
       var at = Blockly.Lua.valueToCode(block, 'AT', atOrder) || '1';
       var listVar = Blockly.Lua.variableDB_.getDistinctName(
@@ -186,7 +186,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
       var code = functionName + '(' + list +
           // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
           // pass it.
-          ((where == 'FROM_END' || where == 'FROM_START') ? ', ' + at : '') +  ')';
+          ((where == 'FROM_END' || where == 'FROM_START') ? ', ' + at : '') + ')';
       return [code, Blockly.Lua.ORDER_HIGH];
     }
   } else {

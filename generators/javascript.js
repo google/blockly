@@ -306,7 +306,7 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
       var innerOrder = Blockly.JavaScript.ORDER_SUBTRACTION;
     }
     if (opt_negate) {
-      if(delta) {
+      if (delta) {
         at = '-(' + at + ')';
       } else {
         at = '-' + at;

@@ -106,9 +106,9 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   // If `list` would be evaluated more than once (which is the case for
   // RANDOM REMOVE and FROM_END) and is non-trivial, make sure to access it
   // only once.
-  if (((where == 'RANDOM' && mode == 'REMOVE')|| where == 'FROM_END') && !list.match(/^\w+$/)) {
+  if (((where == 'RANDOM' && mode == 'REMOVE') || where == 'FROM_END') && !list.match(/^\w+$/)) {
     // `list` is an expression, so we may not evaluate it more than once.
-    if(where == 'RANDOM') {
+    if (where == 'RANDOM') {
       Blockly.Dart.definitions_['import_dart_math'] =
           'import \'dart:math\' as Math;';
       // We can use multiple statements.
@@ -128,10 +128,10 @@ Blockly.Dart['lists_getIndex'] = function(block) {
         code += list + '.removeAt(' + list + '.length' + ' - ' + at + ');\n';
         return code;
 
-      } else if (mode == 'GET' || mode == 'GET_REMOVE'){
+      } else if (mode == 'GET' || mode == 'GET_REMOVE') {
         var at = Blockly.Dart.getAdjusted(block, 'AT', 1);
         // We need to create a procedure to avoid reevaluating values.
-        if(mode == 'GET') {
+        if (mode == 'GET') {
           var functionName = Blockly.Dart.provideFunction_(
               'lists_get_from_end',
               ['dynamic ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
@@ -212,11 +212,11 @@ Blockly.Dart['lists_getIndex'] = function(block) {
           // We can use multiple statements.
           var xVar = Blockly.Dart.variableDB_.getDistinctName(
               'tmp_x', Blockly.Variables.NAME_TYPE);
-          var code = 'int ' +  xVar + ' = new Math.Random().nextInt(' + list
-              + '.length);\n';
+          var code = 'int ' + xVar + ' = new Math.Random().nextInt(' + list +
+              '.length);\n';
           code += list + '.removeAt(' + xVar + ');\n';
           return code;
-        } else if (mode == 'GET' || mode == 'GET_REMOVE'){
+        } else if (mode == 'GET' || mode == 'GET_REMOVE') {
           if (mode == 'GET') {
             var functionName = Blockly.Dart.provideFunction_(
                 'lists_get_random_item',

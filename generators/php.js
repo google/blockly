@@ -253,8 +253,8 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
     var at = Blockly.PHP.valueToCode(block, atId,
             Blockly.PHP.ORDER_UNARY_NEGATION) || defaultAtIndex;
   } else {
-    var at = Blockly.PHP.valueToCode(block, atId, order)
-        || defaultAtIndex;
+    var at = Blockly.PHP.valueToCode(block, atId, order) ||
+        defaultAtIndex;
   }
 
   if (Blockly.isNumber(at)) {
@@ -273,7 +273,7 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
       var innerOrder = Blockly.PHP.ORDER_SUBTRACTION;
     }
     if (opt_negate) {
-      if(delta) {
+      if (delta) {
         at = '-(' + at + ')';
       } else {
         at = '-' + at;

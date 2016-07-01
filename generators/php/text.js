@@ -76,16 +76,16 @@ Blockly.PHP['text_length'] = function(block) {
   // String or array length.
   var functionName = Blockly.PHP.provideFunction_(
       'length',
-      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($value) {',
-        '  if (is_string($value)) {',
-        '    return strlen($value);',
-        '  } else {',
-        '    return count($value);',
-        '  }',
-        '}']);
+      ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($value) {',
+       '  if (is_string($value)) {',
+       '    return strlen($value);',
+       '  } else {',
+       '    return count($value);',
+       '  }',
+       '}']);
   var argument0 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_FUNCTION_CALL) || '\'\'';
-  return [functionName  + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [functionName + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_isEmpty'] = function(block) {
@@ -113,12 +113,12 @@ Blockly.PHP['text_indexOf'] = function(block) {
   var functionName = Blockly.PHP.provideFunction_(
       block.getFieldValue('END') == 'FIRST' ?
           'text_indexOf' : 'text_lastIndexOf',
-      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
           '($text, $search) {',
-        '  $pos = ' + operator + '($text, $search);',
-        '  return $pos === false ? ' + errorIndex + ' : $pos' +
-            indexAdjustment + ';',
-        '}']);
+       '  $pos = ' + operator + '($text, $search);',
+       '  return $pos === false ? ' + errorIndex + ' : $pos' +
+          indexAdjustment + ';',
+       '}']);
   var code = functionName + '(' + argument1 + ', ' + argument0 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };
@@ -154,9 +154,9 @@ Blockly.PHP['text_charAt'] = function(block) {
           Blockly.PHP.ORDER_NONE) || '\'\'';
       var functionName = Blockly.PHP.provideFunction_(
           'text_random_letter',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($text) {',
-            '  return $text[rand(0, strlen($text) - 1)];',
-            '}']);
+          ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($text) {',
+           '  return $text[rand(0, strlen($text) - 1)];',
+           '}']);
       code = functionName + '(' + text + ')';
       return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
   }
@@ -180,27 +180,27 @@ Blockly.PHP['text_getSubstring'] = function(block) {
     var at2 = Blockly.PHP.getAdjusted(block, 'AT2');
     var functionName = Blockly.PHP.provideFunction_(
         'text_get_substring',
-        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+        ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
             '($text, $where1, $at1, $where2, $at2) {',
-          '  if ($where1 == \'FROM_END\') {',
-          '    $at1 = strlen($text) - 1 - $at1;',
-          '  } else if ($where1 == \'FIRST\') {',
-          '    $at1 = 0;',
-          '  } else if ($where1 != \'FROM_START\'){',
-          '    throw new Exception(\'Unhandled option (text_get_substring).\');',
-          '  }',
-          '  $length = 0;',
-          '  if ($where2 == \'FROM_START\') {',
-          '    $length = $at2 - $at1 + 1;',
-          '  } else if ($where2 == \'FROM_END\') {',
-          '    $length = strlen($text) - $at1 - $at2;',
-          '  } else if ($where2 == \'LAST\') {',
-          '    $length = strlen($text) - $at1;',
-          '  } else {',
-          '    throw new Exception(\'Unhandled option (text_get_substring).\');',
-          '  }',
-          '  return substr($text, $at1, $length);',
-          '}']);
+         '  if ($where1 == \'FROM_END\') {',
+         '    $at1 = strlen($text) - 1 - $at1;',
+         '  } else if ($where1 == \'FIRST\') {',
+         '    $at1 = 0;',
+         '  } else if ($where1 != \'FROM_START\'){',
+         '    throw new Exception(\'Unhandled option (text_get_substring).\');',
+         '  }',
+         '  $length = 0;',
+         '  if ($where2 == \'FROM_START\') {',
+         '    $length = $at2 - $at1 + 1;',
+         '  } else if ($where2 == \'FROM_END\') {',
+         '    $length = strlen($text) - $at1 - $at2;',
+         '  } else if ($where2 == \'LAST\') {',
+         '    $length = strlen($text) - $at1;',
+         '  } else {',
+         '    throw new Exception(\'Unhandled option (text_get_substring).\');',
+         '  }',
+         '  return substr($text, $at1, $length);',
+         '}']);
     var code = functionName + '(' + text + ', \'' +
         where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
   }
@@ -236,7 +236,7 @@ Blockly.PHP['text_trim'] = function(block) {
   var operator = OPERATORS[block.getFieldValue('MODE')];
   var argument0 = Blockly.PHP.valueToCode(block, 'TEXT',
       Blockly.PHP.ORDER_NONE) || '\'\'';
-  return [ operator + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
+  return [operator + '(' + argument0 + ')', Blockly.PHP.ORDER_FUNCTION_CALL];
 };
 
 Blockly.PHP['text_print'] = function(block) {

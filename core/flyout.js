@@ -608,7 +608,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       }
       else if (tagName == 'BUTTON') {
         var label = xml.getAttribute('text');
-        var curButton = new Blockly.FlyoutButton(this.workspace_, label);
+        var curButton = new Blockly.FlyoutButton(this.workspace_,
+            this.targetWorkspace_, label);
         contents.push({type: 'button', button: curButton});
         gaps.push(this.MARGIN);
       }

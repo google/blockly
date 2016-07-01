@@ -217,18 +217,31 @@ Blockly.Workspace.prototype.updateVariableList = function() {
 
 /**
  * Rename a variable by updating its name in the variable list.
+ * TODO: #468
  * @param {string} oldName Variable to rename.
  * @param {string} newName New variable name.
  */
 Blockly.Workspace.prototype.renameVariable = function(oldName, newName) {
   // Find the old name in the list and replace it.
   var variableIndex = this.variableList.indexOf(oldName);
-  if (variableIndex != -1) {
+  var newVariableIndex = this.variableList.indexOf(newName);
+  if (variableIndex != -1 && newVariableIndex == -1) {
     this.variableList[variableIndex] = newName;
+  } else if (variableIndex != -1 && newVariableIndex != -1) {
+    this.variableList.splice(variableIndex, 1);
   } else {
     this.variableList.push(newName);
     console.log('Tried to rename an non-existent variable.');
   }
+};
+
+/**
+ * Create a variables with the given name.
+ * TODO: #468
+ * @param {string} name The new variable's name.
+ */
+Blockly.Workspace.prototype.createVariable = function(name) {
+  this.variableList.push(name);
 };
 
 /**

@@ -590,6 +590,19 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
 };
 
 /**
+ * Create a new variable with the given name.  Update the flyout to show the new
+ *     variable immediately.
+ * TODO: #468
+ * @param {string} name The new variable's name.
+ */
+Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
+  Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
+  if (this.toolbox_ && this.toolbox_.flyout_) {
+    this.toolbox_.refreshSelection();
+  }
+};
+
+/**
  * Make a list of all the delete areas for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {

@@ -142,7 +142,7 @@ Blockly.Dart['text_charAt'] = function(block) {
 Blockly.Dart['text_getSubstring'] = function(block) {
   // Get substring.
   var text = Blockly.Dart.valueToCode(block, 'STRING',
-      Blockly.Dart.ORDER_NONE) || '\'\'';
+      Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   if (where1 == 'FIRST' && where2 == 'LAST') {

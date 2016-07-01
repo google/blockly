@@ -147,7 +147,16 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     pasteToConnection_: function(connection) {
       var that = this;
       this.treeService.runWhilePreservingFocus(function() {
-        that.clipboardService.pasteFromClipboard(connection);
+        // If the connection is a 'previousConnection' and that connection is
+        // already joined to something, use the 'nextConnection' of the
+        // previous block instead in order to do an insertion.
+        if (connection.type == Blockly.PREVIOUS_STATEMENT &&
+            connection.isConnected()) {
+          that.clipboardService.pasteFromClipboard(
+              connection.targetConnection);
+        } else {
+          that.clipboardService.pasteFromClipboard(connection);
+        }
       }, this.tree.id);
     },
     sendToMarkedSpot_: function() {

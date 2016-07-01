@@ -63,12 +63,22 @@ blocklyApp.ClipboardService = ng.core
       return this.canBeCopiedToMarkedConnection(block);
     },
     canBeCopiedToMarkedConnection: function(block) {
-      var blockConnection = block.outputConnection || block.previousConnection;
-      return Boolean(
-          this.markedConnection_ &&
-          this.markedConnection_.sourceBlock_.workspace &&
-          this.areConnectionsCompatible_(
-              blockConnection, this.markedConnection_));
+      if (!this.markedConnection_ ||
+          !this.markedConnection_.getSourceBlock().workspace) {
+        return false;
+      }
+
+      var potentialConnections = [
+          block.outputConnection,
+          block.previousConnection,
+          block.nextConnection
+      ];
+
+      var that = this;
+      return potentialConnections.some(function(connection) {
+        return that.areConnectionsCompatible_(
+            connection, that.markedConnection_);
+      });
     },
     markConnection: function(connection) {
       this.markedConnection_ = connection;
@@ -110,9 +120,28 @@ blocklyApp.ClipboardService = ng.core
       var xml = Blockly.Xml.blockToDom(block);
       var reconstitutedBlock = Blockly.Xml.domToBlock(
           blocklyApp.workspace, xml);
-      this.markedConnection_.connect(
-          reconstitutedBlock.outputConnection ||
-          reconstitutedBlock.previousConnection);
+
+      var potentialConnections = [
+          reconstitutedBlock.outputConnection,
+          reconstitutedBlock.previousConnection,
+          reconstitutedBlock.nextConnection
+      ];
+
+      var connectionSuccessful = false;
+      for (var i = 0; i < potentialConnections.length; i++) {
+        if (this.areConnectionsCompatible_(
+            this.markedConnection_, potentialConnections[i])) {
+          this.markedConnection_.connect(potentialConnections[i]);
+          connectionSuccessful = true;
+          break;
+        }
+      }
+
+      if (!connectionSuccessful) {
+        console.error('ERROR: Could not connect block to marked spot.');
+        return;
+      }
+
       if (announce) {
         alert(
             Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +

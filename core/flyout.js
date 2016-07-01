@@ -607,7 +607,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
       }
       else if (tagName == 'BUTTON') {
-        contents.push({type: 'button', label: xml.getAttribute('text')});
+        var label = xml.getAttribute('text');
+        var curButton = new Blockly.FlyoutButton(this.workspace_, label);
+        contents.push({type: 'button', button: curButton});
         gaps.push(this.MARGIN);
       }
     }
@@ -645,7 +647,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
 /**
  * Lay out the blocks in the flyout.
- * @param {!Array.<!Blockly.BlockSvg>} blocks The blocks to lay out.
+ * @param {!Array.<!Object>} contents The blocks and buttons to lay out.
  * @param {!Array.<number>} gaps The visible gaps between blocks.
  * @private
  */
@@ -695,7 +697,7 @@ Blockly.Flyout.prototype.layout_ = function(contents, gaps) {
 
       this.addBlockListeners_(root, block, rect);
     } else if (item.type == 'button') {
-      var button = new Blockly.FlyoutButton(this.workspace_, item.label);
+      var button = item.button;
       var buttonSvg = button.createDom();
       button.moveTo(cursorX, cursorY);
       button.show();

@@ -45,7 +45,7 @@ blocklyApp.ClipboardService = ng.core
           this.areConnectionsCompatible_(connection, superiorConnection) ||
           this.areConnectionsCompatible_(connection, nextConnection));
     },
-    canBeMovedToMarkedConnection: function(block) {
+    isMovableToMarkedConnection: function(block) {
       // It should not be possible to move a block to one of its own
       // connections.
       if (this.markedConnection_ &&

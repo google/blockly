@@ -186,11 +186,17 @@ blocklyApp.TreeService = ng.core
       var activeDesc = document.getElementById(this.getActiveDescId(treeId));
       if (!activeDesc) {
         console.error('ERROR: no active descendant for current tree.');
-        // TODO(sll): This just gives the focus somewhere to go in the event
-        // of an error, but we need to generalize this to other trees (both
-        // within and outside the workspace).
-        this.setActiveDesc(
-            blocklyApp.workspace.topBlocks_[0].id + 'blockSummary', treeId);
+
+        // TODO(sll): Generalize this to other trees (outside the workspace).
+        var workspaceTreeNodes = this.getWorkspaceTreeNodes_();
+        for (var i = 0; i < workspaceTreeNodes.length; i++) {
+          if (workspaceTreeNodes[i].id == treeId) {
+            // Set the active desc to the first child in this tree.
+            this.setActiveDesc(
+                this.getFirstChild(workspaceTreeNodes[i]).id, treeId);
+            break;
+          }
+        }
         return;
       }
 

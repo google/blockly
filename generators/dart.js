@@ -207,7 +207,7 @@ Blockly.Dart.scrub_ = function(block, code) {
 };
 
 /**
- * Gets a property and adjusts the value taking into account indexing.
+ * Gets a property and adjusts the value while taking into account indexing.
  * @param {!Blockly.Block} block The block.
  * @param {string} atId The property ID of the element to get.
  * @param {number=} opt_delta Value to add.

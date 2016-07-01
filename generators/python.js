@@ -80,8 +80,8 @@ Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
- * Allow for switching between one and zero based indexing, one based by
- * default.
+ * Allow for switching between one and zero based indexing for lists and text,
+ * one based by default.
  */
 Blockly.Python.ONE_BASED_INDEXING = true;
 
@@ -237,12 +237,12 @@ Blockly.Python.scrub_ = function(block, code) {
 };
 
 /**
- * Gets a property, adjusts the value (taking into account indexing), and casts
- * to an integer.
- * @param {Blockly.Block} block the block
- * @param {string} atId the property ID of the element to get
- * @param {number=} opt_delta value to add
- * @param {boolean=} opt_negate whether to negate the value
+ * Gets a property and adjusts the value, taking into account indexing, and
+ * casts to an integer.
+ * @param {!Blockly.Block} block The block.
+ * @param {string} atId The property ID of the element to get.
+ * @param {number=} opt_delta Value to add.
+ * @param {boolean=} opt_negate Whether to negate the value.
  * @return {string|number}
  */
 Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
@@ -250,7 +250,7 @@ Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   if (Blockly.Python.ONE_BASED_INDEXING) {
     delta--;
   }
-  var defaultAtIndex = (Blockly.Python.ONE_BASED_INDEXING) ? '1' : '0';
+  var defaultAtIndex = Blockly.Python.ONE_BASED_INDEXING ?'1' : '0';
   if (delta) {
     var at = Blockly.Python.valueToCode(block, atId,
             Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;

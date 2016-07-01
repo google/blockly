@@ -135,8 +135,8 @@ Blockly.JavaScript.ORDER_OVERRIDES = [
 ];
 
 /**
- * Allow for switching between one and zero based indexing, one based by
- * default.
+ * Allow for switching between one and zero based indexing for lists and text,
+ * one based by default.
  */
 Blockly.JavaScript.ONE_BASED_INDEXING = true;
 
@@ -260,12 +260,12 @@ Blockly.JavaScript.scrub_ = function(block, code) {
 };
 
 /**
- * Gets a property and adjusts the value (taking into account indexing).
- * @param {Blockly.Block} block the block
- * @param {string} atId the property ID of the element to get
- * @param {number=} opt_delta value to add
- * @param {boolean=} opt_negate whether to negate the value
- * @param {number=} opt_order highest order acting on this value
+ * Gets a property and adjusts the value while taking into account indexing.
+ * @param {!Blockly.Block} block The block.
+ * @param {string} atId The property ID of the element to get.
+ * @param {number=} opt_delta Value to add.
+ * @param {boolean=} opt_negate Whether to negate the value.
+ * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
 Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
@@ -275,7 +275,7 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
     delta--;
   }
-  var defaultAtIndex = (Blockly.JavaScript.ONE_BASED_INDEXING) ? '1' : '0';
+  var defaultAtIndex = Blockly.JavaScript.ONE_BASED_INDEXING ?'1' : '0';
   if (delta > 0) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
         Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;

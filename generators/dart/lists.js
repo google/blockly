@@ -357,6 +357,7 @@ Blockly.Dart['lists_getSublist'] = function(block) {
         at2 = list + '.length - ' + at2;
         break;
       case 'LAST':
+        // There is no second index if LAST option is chosen.
         break;
       default:
         throw 'Unhandled option (lists_getSublist).';

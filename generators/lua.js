@@ -89,7 +89,7 @@ Blockly.Lua.ORDER_NONE = 99;
 /**
  * Lua is not supporting zero-indexing since the language itself is one-indexed,
  * so there is not flag for ONE_BASED_INDEXING to indicate which indexing is
- * used.
+ * used for lists and text.
  */
 
 /**

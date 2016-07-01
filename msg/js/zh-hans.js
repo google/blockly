@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "只要值为假，执行一些�
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "只要值为真，执行一些语句。";
 Blockly.Msg.DELETE_ALL_BLOCKS = "删除所有%1块吗？";
 Blockly.Msg.DELETE_BLOCK = "删除块";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "删除 %1 块";
 Blockly.Msg.DISABLE_BLOCK = "禁用块";
 Blockly.Msg.DUPLICATE_BLOCK = "复制";

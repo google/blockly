@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Finché un valore è falso, ese
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Finché un valore è vero, esegue alcune istruzioni.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Cancellare tutti i %1 blocchi?";
 Blockly.Msg.DELETE_BLOCK = "Cancella blocco";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Cancella %1 blocchi";
 Blockly.Msg.DISABLE_BLOCK = "Disattiva blocco";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplica";

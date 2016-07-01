@@ -313,6 +313,8 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     Blockly.Events.setGroup(false);
   }
   Blockly.Field.stopCache();
+
+  workspace.updateVariableList();
 };
 
 /**

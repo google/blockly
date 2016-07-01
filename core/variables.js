@@ -56,11 +56,13 @@ Blockly.Variables.allVariables = function(root) {
   // Iterate through every block and add each variable to the hash.
   for (var x = 0; x < blocks.length; x++) {
     var blockVariables = blocks[x].getVars();
-    for (var y = 0; y < blockVariables.length; y++) {
-      var varName = blockVariables[y];
-      // Variable name may be null if the block is only half-built.
-      if (varName) {
-        variableHash[varName.toLowerCase()] = varName;
+    if (blockVariables) {
+      for (var y = 0; y < blockVariables.length; y++) {
+        var varName = blockVariables[y];
+        // Variable name may be null if the block is only half-built.
+        if (varName) {
+          variableHash[varName.toLowerCase()] = varName;
+        }
       }
     }
   }
@@ -86,6 +88,8 @@ Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
     blocks[i].renameVar(oldName, newName);
   }
   Blockly.Events.setGroup(false);
+
+  workspace.renameVariable(oldName, newName);
 };
 
 /**
@@ -94,7 +98,7 @@ Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Variables.flyoutCategory = function(workspace) {
-  var variableList = Blockly.Variables.allVariables(workspace);
+  var variableList = workspace.variableList;
   variableList.sort(goog.string.caseInsensitiveCompare);
   // In addition to the user's variables, we also want to display the default
   // variable name at the top.  We also don't want this duplicated if the
@@ -148,7 +152,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
 * @return {string} New variable name.
 */
 Blockly.Variables.generateUniqueName = function(workspace) {
-  var variableList = Blockly.Variables.allVariables(workspace);
+  var variableList = workspace.variableList;
   var newName = '';
   if (variableList.length) {
     var nameSuffix = 1;
@@ -186,4 +190,57 @@ Blockly.Variables.generateUniqueName = function(workspace) {
     newName = 'i';
   }
   return newName;
+};
+
+/**
+ * Find all the uses of a named variable.
+ * @param {string} name Name of variable.
+ * @param {!Blockly.Workspace} workspace The workspace to find uses in.
+ * @return {!Array.<!Blockly.Block>} Array of block usages.
+ */
+Blockly.Variables.getUses = function(name, workspace) {
+  var uses = [];
+  var blocks = workspace.getAllBlocks();
+  // Iterate through every block and check the name.
+  for (var i = 0; i < blocks.length; i++) {
+    var blockVariables = blocks[i].getVars();
+    if (blockVariables) {
+      for (var j = 0; j < blockVariables.length; j++) {
+        var varName = blockVariables[j];
+        // Variable name may be null if the block is only half-built.
+        if (varName && Blockly.Names.equals(varName, name)) {
+          uses.push(blocks[i]);
+        }
+      }
+    }
+  }
+  return uses;
+};
+
+/**
+ * When a variable is deleted, find and dispose of all uses of it.
+ * @param {string} name Name of deleted variable.
+ * @param {!Blockly.Workspace} workspace The workspace to delete uses from.
+ */
+Blockly.Variables.disposeUses = function(name, workspace) {
+  var uses = Blockly.Variables.getUses(name, workspace);
+  Blockly.Events.setGroup(true);
+  for (var i = 0; i < uses.length; i++) {
+    uses[i].dispose(true, false);
+  }
+  Blockly.Events.setGroup(false);
+};
+
+/**
+ * Delete a variables and all of its uses from the given workspace.
+ * @param {string} name Name of variable to delete.
+ * @param {!Blockly.Workspace} workspace The workspace to delete uses from.
+ */
+Blockly.Variables.delete = function(name, workspace) {
+  var variableIndex = workspace.variableList.indexOf(name);
+  if (variableIndex != -1) {
+    workspace.variableList.splice(variableIndex, 1);
+  }
+
+  Blockly.Variables.disposeUses(name, workspace);
 };

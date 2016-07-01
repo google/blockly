@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Féiert d'Uweisungen aus, soula
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Féiert d'Uweisungen aus, soulaang wéi de Wäert richteg ass";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Block läschen";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 Bléck läschen";
 Blockly.Msg.DISABLE_BLOCK = "Block desaktivéieren";
 Blockly.Msg.DUPLICATE_BLOCK = "Eng Kopie maachen";

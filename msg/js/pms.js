@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Cand un valor a l'é fàuss, es
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Cand un valor a l'é ver, eseguì chèiche anstrussion.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Scancelé tuti ij %1 blòch?";
 Blockly.Msg.DELETE_BLOCK = "Scancelé ël blòch";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Scancelé %1 blòch";
 Blockly.Msg.DISABLE_BLOCK = "Disativé ël blòch";
 Blockly.Msg.DUPLICATE_BLOCK = "Dupliché";

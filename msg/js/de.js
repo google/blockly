@@ -64,6 +64,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Führe die Anweisung solange au
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Führe die Anweisung solange aus wie die Bedingung wahr (true) ist.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Alle %1 Bausteine löschen?";
 Blockly.Msg.DELETE_BLOCK = "Block löschen";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Block %1 löschen";
 Blockly.Msg.DISABLE_BLOCK = "Block deaktivieren";
 Blockly.Msg.DUPLICATE_BLOCK = "Kopieren";

@@ -113,7 +113,7 @@ Blockly.Lua['unittest_main'].defineAssert_ = function(block) {
        '  else',
        '    table.insert(' + resultsVar + ', {success=false, ' +
            'log=string.format("Expected: %s\\nActual: %s"' +
-               ', expected, actual), title=message})',
+               ', tostring(expected), tostring(actual)), title=message})',
        '  end',
        'end']);
   return functionName;

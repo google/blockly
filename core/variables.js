@@ -117,12 +117,41 @@ Blockly.Variables.flyoutCategory = function(workspace) {
     // </block>
     var block = goog.dom.createDom('block');
     block.setAttribute('type', 'variables_set');
-    if (Blockly.Blocks['variables_get']) {
-      block.setAttribute('gap', 20);
+    if (Blockly.Blocks['math_change']) {
+      block.setAttribute('gap', 8);
+    } else {
+      block.setAttribute('gap', 24);
     }
     var field = goog.dom.createDom('field', null, variableList[0]);
     field.setAttribute('name', 'VAR');
     block.appendChild(field);
+    xmlList.push(block);
+  }
+  if (Blockly.Blocks['math_change']) {
+    // <block type="math_change">
+    //   <value name="DELTA">
+    //     <shadow type="math_number">
+    //       <field name="NUM">1</field>
+    //     </shadow>
+    //   </value>
+    // </block>
+    var block = goog.dom.createDom('block');
+    block.setAttribute('type', 'math_change');
+    if (Blockly.Blocks['variables_get']) {
+      block.setAttribute('gap', 20);
+    }
+    var value = goog.dom.createDom('value');
+    value.setAttribute('name', 'DELTA');
+    block.appendChild(value);
+
+    var shadowBlock = goog.dom.createDom('shadow');
+    shadowBlock.setAttribute('type', 'math_number');
+    value.appendChild(shadowBlock);
+
+    var field = goog.dom.createDom('field', null, '1');
+    field.setAttribute('name', 'NUM');
+    shadowBlock.appendChild(field);
+
     xmlList.push(block);
   }
 

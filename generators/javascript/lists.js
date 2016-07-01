@@ -334,7 +334,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
 
 Blockly.JavaScript['lists_sort'] = function(block) {
   // Block for sorting a list.
-  var listCode = Blockly.JavaScript.valueToCode(
+  var list = Blockly.JavaScript.valueToCode(
       block, 'LIST',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
   var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
@@ -355,7 +355,7 @@ Blockly.JavaScript['lists_sort'] = function(block) {
        '  var compare = compareFuncs[type];',
        '  return function(a, b) { return compare(a, b) * direction; }',
        '}']);
-  return ['(' + listCode + ').slice().sort(' +
+  return [list + '.slice().sort(' +
       getCompareFunctionName + '("' + type + '", ' + direction + '))',
       Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

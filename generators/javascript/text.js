@@ -143,7 +143,7 @@ Blockly.JavaScript['text_charAt'] = function(block) {
 Blockly.JavaScript['text_getSubstring'] = function(block) {
   // Get substring.
   var text = Blockly.JavaScript.valueToCode(block, 'STRING',
-      Blockly.JavaScript.ORDER_COMMA) || '\'\'';
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   if (where1 == 'FIRST' && where2 == 'LAST') {

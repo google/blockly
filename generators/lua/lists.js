@@ -38,8 +38,8 @@ Blockly.Lua['lists_create_empty'] = function(block) {
 Blockly.Lua['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   var elements = new Array(block.itemCount_);
-  for (var n = 0; n < block.itemCount_; n++) {
-    elements[n] = Blockly.Lua.valueToCode(block, 'ADD' + n,
+  for (var i = 0; i < block.itemCount_; i++) {
+    elements[i] = Blockly.Lua.valueToCode(block, 'ADD' + i,
         Blockly.Lua.ORDER_NONE) || 'None';
   }
   var code = '{' + elements.join(', ') + '}';
@@ -170,7 +170,8 @@ Blockly.Lua['lists_getIndex'] = function(block) {
             ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
                 // The value for 'FROM_END' and'FROM_START' depends on `at` so
                 // we add it as a parameter.
-                ((where == 'FROM_END' || where == 'FROM_START') ? ', at)' : ')'),
+                ((where == 'FROM_END' || where == 'FROM_START') ?
+                    ', at)' : ')'),
              '  return t[' + getIndex_('t', where, 'at') + ']',
              'end']);
       } else {  // mode == 'GET_REMOVE'
@@ -179,14 +180,16 @@ Blockly.Lua['lists_getIndex'] = function(block) {
             ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t' +
                 // The value for 'FROM_END' and'FROM_START' depends on `at` so
                 // we add it as a parameter.
-                ((where == 'FROM_END' || where == 'FROM_START') ? ', at)' : ')'),
+                ((where == 'FROM_END' || where == 'FROM_START') ?
+                    ', at)' : ')'),
              '  return table.remove(t, ' + getIndex_('t', where, 'at') + ')',
              'end']);
       }
       var code = functionName + '(' + list +
           // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
           // pass it.
-          ((where == 'FROM_END' || where == 'FROM_START') ? ', ' + at : '') + ')';
+          ((where == 'FROM_END' || where == 'FROM_START') ? ', ' + at : '') +
+          ')';
       return [code, Blockly.Lua.ORDER_HIGH];
     }
   } else {

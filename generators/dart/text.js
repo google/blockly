@@ -85,11 +85,11 @@ Blockly.Dart['text_indexOf'] = function(block) {
   // Search the text for a substring.
   var operator = block.getFieldValue('END') == 'FIRST' ?
       'indexOf' : 'lastIndexOf';
-  var element = Blockly.Dart.valueToCode(block, 'FIND',
+  var substring = Blockly.Dart.valueToCode(block, 'FIND',
       Blockly.Dart.ORDER_NONE) || '\'\'';
   var text = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '\'\'';
-  var code = text + '.' + operator + '(' + element + ')';
+  var code = text + '.' + operator + '(' + substring + ')';
   if (Blockly.Dart.ONE_BASED_INDEXING) {
     return [code + ' + 1', Blockly.Dart.ORDER_ADDITIVE];
   }

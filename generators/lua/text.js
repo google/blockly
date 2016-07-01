@@ -53,8 +53,8 @@ Blockly.Lua['text_join'] = function(block) {
     return [code, Blockly.Lua.ORDER_CONCATENATION];
   } else {
     var elements = [];
-    for (var n = 0; n < block.itemCount_; n++) {
-      elements[n] = Blockly.Lua.valueToCode(block, 'ADD' + n,
+    for (var i = 0; i < block.itemCount_; i++) {
+      elements[i] = Blockly.Lua.valueToCode(block, 'ADD' + i,
           Blockly.Lua.ORDER_NONE) || '\'\'';
     }
     var code = 'table.concat({' + elements.join(', ') + '})';

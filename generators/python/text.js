@@ -43,29 +43,29 @@ Blockly.Python['text_join'] = function(block) {
       return ['\'\'', Blockly.Python.ORDER_ATOMIC];
       break;
     case 1:
-      var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
+      var element = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + argument0 + ')';
+      var code = 'str(' + element + ')';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
       break;
     case 2:
-      var argument0 = Blockly.Python.valueToCode(block, 'ADD0',
+      var element0 = Blockly.Python.valueToCode(block, 'ADD0',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      var argument1 = Blockly.Python.valueToCode(block, 'ADD1',
+      var element1 = Blockly.Python.valueToCode(block, 'ADD1',
               Blockly.Python.ORDER_NONE) || '\'\'';
-      var code = 'str(' + argument0 + ') + str(' + argument1 + ')';
-      return [code, Blockly.Python.ORDER_UNARY_SIGN];
+      var code = 'str(' + element0 + ') + str(' + element1 + ')';
+      return [code, Blockly.Python.ORDER_ADDITIVE];
       break;
     default:
-      var code = [];
-      for (var n = 0; n < block.itemCount_; n++) {
-        code[n] = Blockly.Python.valueToCode(block, 'ADD' + n,
+      var elements = [];
+      for (var i = 0; i < block.itemCount_; i++) {
+        elements[i] = Blockly.Python.valueToCode(block, 'ADD' + i,
                 Blockly.Python.ORDER_NONE) || '\'\'';
       }
       var tempVar = Blockly.Python.variableDB_.getDistinctName('x',
           Blockly.Variables.NAME_TYPE);
-      code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
-          code.join(', ') + ']])';
+      var code = '\'\'.join([str(' + tempVar + ') for ' + tempVar + ' in [' +
+          elements.join(', ') + ']])';
       return [code, Blockly.Python.ORDER_FUNCTION_CALL];
   }
 };
@@ -74,23 +74,23 @@ Blockly.Python['text_append'] = function(block) {
   // Append to a variable in place.
   var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
-  var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
+  var value = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  return varName + ' = str(' + varName + ') + str(' + argument0 + ')\n';
+  return varName + ' = str(' + varName + ') + str(' + value + ')\n';
 };
 
 Blockly.Python['text_length'] = function(block) {
   // Is the string null or array empty?
-  var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
+  var text = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  return ['len(' + argument0 + ')', Blockly.Python.ORDER_FUNCTION_CALL];
+  return ['len(' + text + ')', Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
-  var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
+  var text = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  var code = 'not len(' + argument0 + ')';
+  var code = 'not len(' + text + ')';
   return [code, Blockly.Python.ORDER_LOGICAL_NOT];
 };
 
@@ -98,11 +98,11 @@ Blockly.Python['text_indexOf'] = function(block) {
   // Search the text for a substring.
   // Should we allow for non-case sensitive???
   var operator = block.getFieldValue('END') == 'FIRST' ? 'find' : 'rfind';
-  var argument0 = Blockly.Python.valueToCode(block, 'FIND',
+  var substring = Blockly.Python.valueToCode(block, 'FIND',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  var argument1 = Blockly.Python.valueToCode(block, 'VALUE',
+  var text = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
-  var code = argument1 + '.' + operator + '(' + argument0 + ')';
+  var code = text + '.' + operator + '(' + substring + ')';
   if (Blockly.Python.ONE_BASED_INDEXING) {
     return [code + ' + 1', Blockly.Python.ORDER_ADDITIVE];
   }
@@ -148,7 +148,7 @@ Blockly.Python['text_getSubstring'] = function(block) {
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   var text = Blockly.Python.valueToCode(block, 'STRING',
-          Blockly.Python.ORDER_MEMBER) || '\'\'';
+      Blockly.Python.ORDER_MEMBER) || '\'\'';
   switch (where1) {
     case 'FROM_START':
       var at1 = Blockly.Python.getAdjustedInt(block, 'AT1');
@@ -198,10 +198,10 @@ Blockly.Python['text_changeCase'] = function(block) {
     'TITLECASE': '.title()'
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
-  var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
+  var text = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
-  var code = argument0 + operator;
-  return [code, Blockly.Python.ORDER_MEMBER];
+  var code = text + operator;
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['text_trim'] = function(block) {
@@ -212,17 +212,17 @@ Blockly.Python['text_trim'] = function(block) {
     'BOTH': '.strip()'
   };
   var operator = OPERATORS[block.getFieldValue('MODE')];
-  var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
+  var text = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
-  var code = argument0 + operator;
-  return [code, Blockly.Python.ORDER_MEMBER];
+  var code = text + operator;
+  return [code, Blockly.Python.ORDER_FUNCTION_CALL];
 };
 
 Blockly.Python['text_print'] = function(block) {
   // Print statement.
-  var argument0 = Blockly.Python.valueToCode(block, 'TEXT',
+  var msg = Blockly.Python.valueToCode(block, 'TEXT',
       Blockly.Python.ORDER_NONE) || '\'\'';
-  return 'print(' + argument0 + ')\n';
+  return 'print(' + msg + ')\n';
 };
 
 Blockly.Python['text_prompt_ext'] = function(block) {

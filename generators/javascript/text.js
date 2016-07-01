@@ -90,11 +90,11 @@ Blockly.JavaScript['text_indexOf'] = function(block) {
   // Search the text for a substring.
   var operator = block.getFieldValue('END') == 'FIRST' ?
       'indexOf' : 'lastIndexOf';
-  var element = Blockly.JavaScript.valueToCode(block, 'FIND',
+  var substring = Blockly.JavaScript.valueToCode(block, 'FIND',
       Blockly.JavaScript.ORDER_NONE) || '\'\'';
   var text = Blockly.JavaScript.valueToCode(block, 'VALUE',
       Blockly.JavaScript.ORDER_MEMBER) || '\'\'';
-  var code = text + '.' + operator + '(' + element + ')';
+  var code = text + '.' + operator + '(' + substring + ')';
   // Adjust index if using one-based indices.
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
     return [code + ' + 1', Blockly.JavaScript.ORDER_ADDITION];

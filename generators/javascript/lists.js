@@ -334,8 +334,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
 
 Blockly.JavaScript['lists_sort'] = function(block) {
   // Block for sorting a list.
-  var list = Blockly.JavaScript.valueToCode(
-      block, 'LIST',
+  var list = Blockly.JavaScript.valueToCode(block, 'LIST',
       Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
   var direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   var type = block.getFieldValue('TYPE');

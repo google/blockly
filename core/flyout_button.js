@@ -2,7 +2,7 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2013 Google Inc.
+ * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
 
 /**
  * @fileoverview Object representing an icon on a block.
- * @author fraser@google.com (Neil Fraser)
+ * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
@@ -32,14 +32,47 @@ goog.require('goog.math.Coordinate');
 
 /**
  * Class for a button in the flyout.
- * @param {Blockly.Workspace} workspace The workspace in which to place this
- * button.
+ * @param {!Blockly.Workspace} workspace The workspace in which to place this
+ *     button.
+ * @param {string} text The text to display on the button.
  * @constructor
  */
 Blockly.FlyoutButton = function(workspace, text) {
+  /**
+   * @type {!Blockly.Workspace}
+   * @private
+   */
   this.workspace_ = workspace;
+
+  /**
+   * @type {string}
+   * @private
+   */
   this.text_ = text;
+
+  /**
+   * @type {goog.math.Coordinate}
+   * @private
+   */
+  this.position_ = new goog.math.Coordinate(0, 0);
 };
+
+/**
+ * The margin around the text in the button.
+ */
+Blockly.FlyoutButton.MARGIN = 5;
+
+/**
+ * The width of the button's rect.
+ * @type {number}
+ */
+Blockly.FlyoutButton.prototype.width = 0;
+
+/**
+ * The height of the button's rect.
+ * @type {number}
+ */
+Blockly.FlyoutButton.prototype.height = 0;
 
 /**
  * Create the button elements.
@@ -47,33 +80,63 @@ Blockly.FlyoutButton = function(workspace, text) {
  */
 Blockly.FlyoutButton.prototype.createDom = function() {
   this.svgGroup_ = Blockly.createSvgElement('g',
-      {'class': 'blocklyFlyoutButton'}, this.workspace_.svgGroup_);
-
-  this.height = 16;
-  this.width = 40;
+      {'class': 'blocklyFlyoutButton'}, this.workspace_.getCanvas());
 
   // Rect with rounded corners.
-  Blockly.createSvgElement('rect',
-      {'class': 'blocklyIconShape',
-       'rx': '4', 'ry': '4',
-       'height': this.height, 'width': this.width},
+  var rect = Blockly.createSvgElement('rect',
+      {'rx': 4, 'ry': 4,
+       'height': 0, 'width': 0},
        this.svgGroup_);
 
-  Blockly.createSvgElement('text',
-      {'class': 'blocklyButtonText', 'x': '0', 'y': '0'}, this.svgGroup_);
+  var svgText = Blockly.createSvgElement('text',
+      {'class': 'blocklyText', 'x': 0, 'y': 0,
+       'text-anchor': 'middle'}, this.svgGroup_);
+  svgText.textContent = this.text_;
 
+  this.width = svgText.getComputedTextLength() +
+      2 * Blockly.FlyoutButton.MARGIN;
+  this.height = 20; // Can't compute it :(
+
+  rect.setAttribute('width', this.width);
+  rect.setAttribute('height', this.height);
+
+  svgText.setAttribute('x', this.width / 2);
+  svgText.setAttribute('y', this.height - Blockly.FlyoutButton.MARGIN);
+
+  this.updateTransform_();
   return this.svgGroup_;
 };
 
+/**
+ * Correctly position the flyout button and make it visible.
+ */
 Blockly.FlyoutButton.prototype.show = function() {
+  this.updateTransform_();
   this.svgGroup_.setAttribute('display', 'block');
 };
 
-Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
-  this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' +
-      y + ')');
+/**
+ * Update svg attributes to match internal state.
+ */
+Blockly.FlyoutButton.prototype.updateTransform_ = function() {
+  this.svgGroup_.setAttribute('transform', 'translate(' + this.position_.x +
+      ',' + this.position_.y + ')');
 };
 
+/**
+ * Move the button to the given x, y coordinates.
+ * @param {number} x The new x coordinate.
+ * @param {number} y The new y coordinate.
+ */
+Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
+  this.position_.x = x;
+  this.position_.y = y;
+  this.updateTransform_();
+};
+
+/**
+ * Dispose of this button.
+ */
 Blockly.FlyoutButton.prototype.dispose = function() {
   if (this.svgGroup_) {
     goog.dom.removeNode(this.svgGroup_);
@@ -83,8 +146,13 @@ Blockly.FlyoutButton.prototype.dispose = function() {
 };
 
 /**
- * Do something
+ * Do something when the button is clicked.
+ * @param {!Event} e Mouse up event.
  */
-Blockly.FlyoutButton.prototype.click = function() {
-  console.log('Go away');
+Blockly.FlyoutButton.prototype.onMouseUp = function(e) {
+  console.log("Button was clicked");
+  // Don't scroll the page.
+  e.preventDefault();
+  // Don't propagate mousewheel event (zooming).
+  e.stopPropagation();
 };

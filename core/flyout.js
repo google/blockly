@@ -555,7 +555,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
 
   this.svgGroup_.style.display = 'block';
   // Create the blocks to be shown in this flyout.
-  var blocks = [];
+  var contents = [];
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
   for (var i = 0, xml; xml = xmlList[i]; i++) {
@@ -568,18 +568,18 @@ Blockly.Flyout.prototype.show = function(xmlList) {
           // Do not enable these blocks as a result of capacity filtering.
           this.permanentlyDisabled_.push(curBlock);
         }
-        blocks.push({type: 'block', block: curBlock});
+        contents.push({type: 'block', block: curBlock});
         var gap = parseInt(xml.getAttribute('gap'), 10);
         gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
       }
       else if (tagName == 'BUTTON') {
-        blocks.push({type: 'button', label: xml.getAttribute('text')});
+        contents.push({type: 'button', label: xml.getAttribute('text')});
         gaps.push(this.MARGIN);
       }
     }
   }
 
-  this.layoutBlocks_(blocks, gaps);
+  this.layout_(contents, gaps);
 
   // IE 11 is an incompetent browser that fails to fire mouseout events.
   // When the mouse is over the background, deselect all blocks.
@@ -615,16 +615,18 @@ Blockly.Flyout.prototype.show = function(xmlList) {
  * @param {!Array.<number>} gaps The visible gaps between blocks.
  * @private
  */
-Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps) {
+Blockly.Flyout.prototype.layout_ = function(contents, gaps) {
+  this.workspace_.scale = this.targetWorkspace_.scale;
   var margin = this.MARGIN;
   var cursorX = this.RTL ? margin : margin + Blockly.BlockSvg.TAB_WIDTH;
   var cursorY = margin;
   if (this.horizontalLayout_ && this.RTL) {
-    blocks = blocks.reverse();
+    contents = contents.reverse();
   }
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.type == 'block') {
-      block = block.block;
+
+  for (var i = 0, item; item = contents[i]; i++) {
+    if (item.type == 'block') {
+      var block = item.block;
       var allBlocks = block.getDescendants();
       for (var j = 0, child; child = allBlocks[j]; j++) {
         // Mark blocks as being inside a flyout.  This is used to detect and
@@ -658,12 +660,13 @@ Blockly.Flyout.prototype.layoutBlocks_ = function(blocks, gaps) {
       this.backgroundButtons_[i] = rect;
 
       this.addBlockListeners_(root, block, rect);
-    } else if (block.type == 'button') {
-      var button = new Blockly.FlyoutButton(this.workspace_, block.text);
+    } else if (item.type == 'button') {
+      var button = new Blockly.FlyoutButton(this.workspace_, item.label);
       var buttonSvg = button.createDom();
-      button.show();
       button.moveTo(cursorX, cursorY);
-      Blockly.bindEvent_(buttonSvg, 'mouseup', button, button.click);
+      button.show();
+      Blockly.bindEvent_(buttonSvg, 'mouseup', button, button.onMouseUp);
+
       this.buttons_.push(button);
       if (this.horizontalLayout_) {
         cursorX += (button.width + gaps[i]);
@@ -1097,6 +1100,9 @@ Blockly.Flyout.prototype.reflowVertical = function(blocks) {
       width -= Blockly.BlockSvg.TAB_WIDTH;
     }
     flyoutWidth = Math.max(flyoutWidth, width);
+  }
+  for (var i = 0, button; button = this.buttons_[i]; i++) {
+    flyoutWidth = Math.max(flyoutWidth, button.width);
   }
   flyoutWidth += this.MARGIN * 1.5 + Blockly.BlockSvg.TAB_WIDTH;
   flyoutWidth *= this.workspace_.scale;

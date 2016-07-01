@@ -216,13 +216,16 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (this.options.zoomOptions && this.options.zoomOptions.controls) {
     bottom = this.addZoomControls_(bottom);
   }
-  Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
-  var thisWorkspace = this;
-  Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
-                     function(e) {Blockly.longStart_(e, thisWorkspace);});
-  if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
-    // Mouse-wheel.
-    Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.onMouseWheel_);
+
+  if (!this.isFlyout) {
+    Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
+    var thisWorkspace = this;
+    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
+                       function(e) {Blockly.longStart_(e, thisWorkspace);});
+    if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
+      // Mouse-wheel.
+      Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.onMouseWheel_);
+    }
   }
 
   // Determine if there needs to be a category tree, or a simple list of

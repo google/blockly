@@ -76,11 +76,12 @@ Blockly.PHP.ORDER_STRING_CONCAT = 9.3;  // .
 Blockly.PHP.ORDER_BITWISE_SHIFT = 10;    // << >>
 Blockly.PHP.ORDER_RELATIONAL = 11;       // < <= > >=
 Blockly.PHP.ORDER_EQUALITY = 12;         // == != === !== <> <=>
+Blockly.PHP.ORDER_REFERENCE = 13;       // &
 Blockly.PHP.ORDER_BITWISE_AND = 13;     // &
 Blockly.PHP.ORDER_BITWISE_XOR = 14;     // ^
 Blockly.PHP.ORDER_BITWISE_OR = 15;      // |
-Blockly.PHP.ORDER_LOGICAL_AND = 16;     // and
-Blockly.PHP.ORDER_LOGICAL_OR = 17;      // or
+Blockly.PHP.ORDER_LOGICAL_AND = 16;     // &&
+Blockly.PHP.ORDER_LOGICAL_OR = 17;      // ||
 Blockly.PHP.ORDER_IF_NULL = 18;         // ??
 Blockly.PHP.ORDER_CONDITIONAL = 19;     // ?:
 Blockly.PHP.ORDER_ASSIGNMENT = 20;      // = += -= *= /= %= <<= >>= ...

@@ -22,6 +22,13 @@
  * @fileoverview Generating PHP for list blocks.
  * @author daarond@gmail.com (Daaron Dwyer)
  */
+
+/*
+ * Lists in PHP are known to break when non-variables are passed into blocks
+ * that require a list. PHP, unlike other languages, passes arrays are reference
+ * value instead of value so we are unable to support it to the extent we can
+ * for the other languages.
+ */
 'use strict';
 
 goog.provide('Blockly.PHP.lists');
@@ -252,13 +259,12 @@ Blockly.PHP['lists_setIndex'] = function(block) {
   // Note: Until February 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var where = block.getFieldValue('WHERE') || 'FROM_START';
   var value = Blockly.PHP.valueToCode(block, 'TO',
       Blockly.PHP.ORDER_ASSIGNMENT) || 'null';
   // Cache non-trivial values to variables to prevent repeated look-ups.
   // Closure, which accesses and modifies 'list'.
   function cacheList() {
-    if (list.match(/^\w+$/)) {
+    if (list.match(/^\$\w+$/)) {
       return '';
     }
     var listVar = Blockly.PHP.variableDB_.getDistinctName(
@@ -330,7 +336,7 @@ Blockly.PHP['lists_setIndex'] = function(block) {
       break;
     case 'RANDOM':
       var list = Blockly.PHP.valueToCode(block, 'LIST',
-              Blockly.PHP.ORDER_NONE) || 'array()';
+              Blockly.PHP.ORDER_REFERENCE) || 'array()';
       var code = cacheList();
       var xVar = Blockly.PHP.variableDB_.getDistinctName(
           'tmp_x', Blockly.Variables.NAME_TYPE);

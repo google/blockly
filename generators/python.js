@@ -59,8 +59,8 @@ Blockly.Python.addReservedWords(
 Blockly.Python.ORDER_ATOMIC = 0;            // 0 "" ...
 Blockly.Python.ORDER_COLLECTION = 1;        // tuples, lists, dictionaries
 Blockly.Python.ORDER_STRING_CONVERSION = 1; // `expression...`
-Blockly.Python.ORDER_MEMBER = 2;            // . []
-Blockly.Python.ORDER_FUNCTION_CALL = 2;     // ()
+Blockly.Python.ORDER_MEMBER = 2.1;          // . []
+Blockly.Python.ORDER_FUNCTION_CALL = 2.2;   // ()
 Blockly.Python.ORDER_EXPONENTIATION = 3;    // **
 Blockly.Python.ORDER_UNARY_SIGN = 4;        // + -
 Blockly.Python.ORDER_BITWISE_NOT = 4;       // ~
@@ -90,9 +90,26 @@ Blockly.Python.ONE_BASED_INDEXING = true;
  * @type {!Array.<!Array.<number>>}
  */
 Blockly.Python.ORDER_OVERRIDES = [
-  // (foo()).bar() -> foo().bar()
+  // (foo()).bar -> foo().bar
   // (foo())[0] -> foo()[0]
-  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_FUNCTION_CALL]
+  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_MEMBER],
+  // (foo())() -> foo()()
+  [Blockly.Python.ORDER_FUNCTION_CALL, Blockly.Python.ORDER_FUNCTION_CALL],
+  // (foo.bar).baz -> foo.bar.baz
+  // (foo.bar)[0] -> foo.bar[0]
+  // (foo[0]).bar -> foo[0].bar
+  // (foo[0])[1] -> foo[0][1]
+  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_MEMBER],
+  // (foo.bar)() -> foo.bar()
+  // (foo[0])() -> foo[0]()
+  [Blockly.Python.ORDER_MEMBER, Blockly.Python.ORDER_FUNCTION_CALL],
+
+  // not (not foo) -> not not foo
+  [Blockly.Python.ORDER_LOGICAL_NOT, Blockly.Python.ORDER_LOGICAL_NOT],
+  // a and (b and c) -> a and b and c
+  [Blockly.Python.ORDER_LOGICAL_AND, Blockly.Python.ORDER_LOGICAL_AND],
+  // a or (b or c) -> a or b or c
+  [Blockly.Python.ORDER_LOGICAL_OR, Blockly.Python.ORDER_LOGICAL_OR]
 ];
 
 /**

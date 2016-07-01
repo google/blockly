@@ -423,7 +423,7 @@ Blockly.isNumber = function(str) {
  * @param {string} message Text containing interpolation tokens.
  * @return {!Array.<string|number>} Array of strings and numbers.
  */
-Blockly.tokenizeInterpolation = function(message) {
+Blockly.utils.tokenizeInterpolation = function(message) {
   var tokens = [];
   var chars = message.split('');
   chars.push('');  // End marker.

@@ -71,23 +71,23 @@ Blockly.JavaScript.addReservedWords(
  * https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
  */
 Blockly.JavaScript.ORDER_ATOMIC = 0;           // 0 "" ...
-Blockly.JavaScript.ORDER_MEMBER = 1.1;         // . []
-Blockly.JavaScript.ORDER_NEW = 1.2;            // new
+Blockly.JavaScript.ORDER_NEW = 1.1;            // new
+Blockly.JavaScript.ORDER_MEMBER = 1.2;         // . []
 Blockly.JavaScript.ORDER_FUNCTION_CALL = 2;    // ()
 Blockly.JavaScript.ORDER_INCREMENT = 3;        // ++
 Blockly.JavaScript.ORDER_DECREMENT = 3;        // --
-Blockly.JavaScript.ORDER_LOGICAL_NOT = 4.1;    // !
-Blockly.JavaScript.ORDER_BITWISE_NOT = 4.2;    // ~
-Blockly.JavaScript.ORDER_UNARY_PLUS = 4.3;     // +
-Blockly.JavaScript.ORDER_UNARY_NEGATION = 4.4; // -
+Blockly.JavaScript.ORDER_BITWISE_NOT = 4.1;    // ~
+Blockly.JavaScript.ORDER_UNARY_PLUS = 4.2;     // +
+Blockly.JavaScript.ORDER_UNARY_NEGATION = 4.3; // -
+Blockly.JavaScript.ORDER_LOGICAL_NOT = 4.4;    // !
 Blockly.JavaScript.ORDER_TYPEOF = 4.5;         // typeof
 Blockly.JavaScript.ORDER_VOID = 4.6;           // void
 Blockly.JavaScript.ORDER_DELETE = 4.7;         // delete
-Blockly.JavaScript.ORDER_MULTIPLICATION = 5.1; // *
-Blockly.JavaScript.ORDER_DIVISION = 5.2;       // /
+Blockly.JavaScript.ORDER_DIVISION = 5.1;       // /
+Blockly.JavaScript.ORDER_MULTIPLICATION = 5.2; // *
 Blockly.JavaScript.ORDER_MODULUS = 5.3;        // %
-Blockly.JavaScript.ORDER_ADDITION = 6.1;       // +
-Blockly.JavaScript.ORDER_SUBTRACTION = 6.2;    // -
+Blockly.JavaScript.ORDER_SUBTRACTION = 6.1;    // -
+Blockly.JavaScript.ORDER_ADDITION = 6.2;       // +
 Blockly.JavaScript.ORDER_BITWISE_SHIFT = 7;    // << >> >>>
 Blockly.JavaScript.ORDER_RELATIONAL = 8;       // < <= > >=
 Blockly.JavaScript.ORDER_IN = 8;               // in
@@ -108,12 +108,20 @@ Blockly.JavaScript.ORDER_NONE = 99;            // (...)
  * @type {!Array.<!Array.<number>>}
  */
 Blockly.JavaScript.ORDER_OVERRIDES = [
-  // (foo()).bar() -> foo().bar()
+  // (foo()).bar -> foo().bar
   // (foo())[0] -> foo()[0]
-  [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_FUNCTION_CALL],
-  // (foo[0])[1] -> foo[0][1]
+  [Blockly.JavaScript.ORDER_FUNCTION_CALL, Blockly.JavaScript.ORDER_MEMBER],
+  // (foo())() -> foo()()
+  [Blockly.JavaScript.ORDER_FUNCTION_CALL, Blockly.JavaScript.ORDER_FUNCTION_CALL],
   // (foo.bar).baz -> foo.bar.baz
+  // (foo.bar)[0] -> foo.bar[0]
+  // (foo[0]).bar -> foo[0].bar
+  // (foo[0])[1] -> foo[0][1]
   [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_MEMBER],
+  // (foo.bar)() -> foo.bar()
+  // (foo[0])() -> foo[0]()
+  [Blockly.JavaScript.ORDER_MEMBER, Blockly.JavaScript.ORDER_FUNCTION_CALL],
+
   // !(!foo) -> !!foo
   [Blockly.JavaScript.ORDER_LOGICAL_NOT, Blockly.JavaScript.ORDER_LOGICAL_NOT],
   // a * (b * c) -> a * b * c

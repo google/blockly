@@ -51,35 +51,6 @@ Blockly.FieldAngle = function(text, opt_validator) {
 goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
 /**
- * Sets a new change handler for angle field.
- * @param {Function} handler New change handler, or null.
- */
-Blockly.FieldAngle.prototype.setValidator = function(handler) {
-  var wrappedHandler;
-  if (handler) {
-    // Wrap the user's change handler together with the angle validator.
-    wrappedHandler = function(value) {
-      var v1 = handler.call(this, value);
-      if (v1 === null) {
-        var v2 = v1;
-      } else {
-        if (v1 === undefined) {
-          v1 = value;
-        }
-        var v2 = Blockly.FieldAngle.angleValidator.call(this, v1);
-        if (v2 === undefined) {
-          v2 = v1;
-        }
-      }
-      return v2 === value ? undefined : v2;
-    };
-  } else {
-    wrappedHandler = Blockly.FieldAngle.angleValidator;
-  }
-  Blockly.FieldAngle.superClass_.setValidator.call(this, wrappedHandler);
-};
-
-/**
  * Round angles to the nearest 15 degrees when using mouse.
  * Set to 0 to disable rounding.
  */
@@ -303,8 +274,9 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
  * Ensure that only an angle may be entered.
  * @param {string} text The user's text.
  * @return {?string} A string representing a valid angle, or null if invalid.
+ * @this {!Blockly.FieldAngle}
  */
-Blockly.FieldAngle.angleValidator = function(text) {
+Blockly.FieldAngle.classValidator = function(text) {
   if (text === null) {
     return null;
   }

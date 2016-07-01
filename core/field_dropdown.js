@@ -108,12 +108,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     var menuItem = e.target;
     if (menuItem) {
       var value = menuItem.getValue();
-      if (thisField.sourceBlock_ && thisField.validator_) {
+      if (thisField.sourceBlock_) {
         // Call any validation function, and allow it to override.
-        var override = thisField.validator_(value);
-        if (override !== undefined) {
-          value = override;
-        }
+        value = thisField.callValidator(value);
       }
       if (value !== null) {
         thisField.setValue(value);

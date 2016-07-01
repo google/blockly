@@ -237,6 +237,37 @@ Blockly.Field.prototype.getValidator = function() {
 };
 
 /**
+ * Calls the validation function for this field, as well as all the validation
+ * function for the field's class and its parents.
+ * @param {string} text Proposed text.
+ * @return {?string} Revised text, or null if invalid.
+ */
+Blockly.Field.prototype.callValidator = function(text) {
+  // Collect a list of validators, from Field, through to the subclass, ending
+  // with the user's validator.
+  var validators = [this.getValidator()];
+  var fieldClass = this.constructor;
+  while (fieldClass) {
+    validators.unshift(fieldClass.classValidator);
+    fieldClass = fieldClass.superClass_;
+  }
+  // Call each validator in turn, allowing each to rewrite or reject.
+  for (var i = 0; i < validators.length; i++) {
+    var validator = validators[i];
+    if (validator) {
+      var result = validator.call(this, text);
+      if (result === null) {
+        // Validator rejects value.  Game over.
+        return null;
+      } else if (result !== undefined) {
+        text = result;
+      }
+    }
+  }
+  return text;
+};
+
+/**
  * Gets the group element for this editable field.
  * Used for measuring the size and for positioning.
  * @return {!Element} The group element.
@@ -433,7 +464,7 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
   } else if (Blockly.isRightButton(e)) {
     // Right-click.
     return;
-  } else if (Blockly.dragMode_ == Blockly.DRAG_FREE) {
+  } else if (this.sourceBlock_.workspace.isDragging()) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   } else if (this.sourceBlock_.isEditable()) {

@@ -68,7 +68,7 @@ Blockly.JavaScript['lists_repeat'] = function(block) {
 Blockly.JavaScript['lists_length'] = function(block) {
   // String or array length.
   var list = Blockly.JavaScript.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '[]';
+      Blockly.JavaScript.ORDER_MEMBER) || '[]';
   return [list + '.length', Blockly.JavaScript.ORDER_MEMBER];
 };
 
@@ -99,10 +99,10 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
   // Note: Until January 2013 this block did not have MODE or WHERE inputs.
   var mode = block.getFieldValue('MODE') || 'GET';
   var where = block.getFieldValue('WHERE') || 'FROM_START';
-  var listOrder = (where == 'RANDOM' ||
-      (where == 'FROM_END' && mode != 'GET')) ? Blockly.JavaScript.ORDER_COMMA :
+  var listOrder = (where == 'RANDOM') ? Blockly.JavaScript.ORDER_COMMA :
       Blockly.JavaScript.ORDER_MEMBER;
   var list = Blockly.JavaScript.valueToCode(block, 'VALUE', listOrder) || '[]';
+
   switch (where) {
     case ('FIRST'):
       if (mode == 'GET') {
@@ -139,25 +139,15 @@ Blockly.JavaScript['lists_getIndex'] = function(block) {
       }
       break;
     case ('FROM_END'):
+      var at = Blockly.JavaScript.getAdjusted(block, 'AT', 1, true);
       if (mode == 'GET') {
-        var at = Blockly.JavaScript.getAdjusted(block, 'AT', 1, true);
         var code = list + '.slice(' + at + ')[0]';
         return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-      } else if (mode == 'GET_REMOVE' || mode == 'REMOVE') {
-        var at = Blockly.JavaScript.getAdjusted(block, 'AT', 1);
-        var functionName = Blockly.JavaScript.provideFunction_(
-            'listsRemoveFromEnd',
-            ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-                '(list, x) {',
-             '  x = list.length - x;',
-             '  return list.splice(x, 1)[0];',
-             '}']);
-        code = functionName + '(' + list + ', ' + at + ')';
-        if (mode == 'GET_REMOVE') {
-          return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
-        } else if (mode == 'REMOVE') {
-          return code + ';\n';
-        }
+      } else if (mode == 'GET_REMOVE') {
+        var code = list + '.splice(' + at + ', 1)[0]';
+        return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+      } else if (mode == 'REMOVE') {
+        return list + '.splice(' + at + ', 1);';
       }
       break;
     case ('RANDOM'):

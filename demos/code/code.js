@@ -382,7 +382,12 @@ Code.init = function() {
   };
   window.addEventListener('resize', onresize, false);
 
-  var toolbox = document.getElementById('toolbox');
+  // Interpolate translated messages into toolbox.
+  var toolboxText = document.getElementById('toolbox').outerHTML;
+  toolboxText = toolboxText.replace(/{(\w+)}/g,
+      function(m, p1) {return MSG[p1]});
+  var toolboxXml = Blockly.Xml.textToDom(toolboxText);
+
   Code.workspace = Blockly.inject('content_blocks',
       {grid:
           {spacing: 25,
@@ -391,7 +396,7 @@ Code.init = function() {
            snap: true},
        media: '../../media/',
        rtl: rtl,
-       toolbox: toolbox,
+       toolbox: toolboxXml,
        zoom:
            {controls: true,
             wheel: true}
@@ -481,20 +486,6 @@ Code.initLanguage = function() {
   document.getElementById('linkButton').title = MSG['linkTooltip'];
   document.getElementById('runButton').title = MSG['runTooltip'];
   document.getElementById('trashButton').title = MSG['trashTooltip'];
-
-  var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
-                    'catColour', 'catVariables', 'catFunctions'];
-  for (var i = 0, cat; cat = categories[i]; i++) {
-    document.getElementById(cat).setAttribute('name', MSG[cat]);
-  }
-  var textVars = document.getElementsByClassName('textVar');
-  for (var i = 0, textVar; textVar = textVars[i]; i++) {
-    textVar.textContent = MSG['textVariable'];
-  }
-  var listVars = document.getElementsByClassName('listVar');
-  for (var i = 0, listVar; listVar = listVars[i]; i++) {
-    listVar.textContent = MSG['listVariable'];
-  }
 };
 
 /**

@@ -265,90 +265,95 @@ Blockly.Toolbox.prototype.position = function() {
  * @private
  */
 Blockly.Toolbox.prototype.populate_ = function(newTree) {
-  var rootOut = this.tree_;
-  var that = this;
-  rootOut.removeChildren();  // Delete any existing content.
-  rootOut.blocks = [];
-  var hasColours = false;
-  function syncTrees(treeIn, treeOut, pathToMedia) {
-    var lastElement = null;
-    for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
-      if (!childIn.tagName) {
-        // Skip over text.
-        continue;
-      }
-      switch (childIn.tagName.toUpperCase()) {
-        case 'CATEGORY':
-          var childOut = rootOut.createNode(childIn.getAttribute('name'));
-          childOut.blocks = [];
-          treeOut.add(childOut);
-          var custom = childIn.getAttribute('custom');
-          if (custom) {
-            // Variables and procedures are special dynamic categories.
-            childOut.blocks = custom;
-          } else {
-            syncTrees(childIn, childOut, pathToMedia);
-          }
-          var colour = childIn.getAttribute('colour');
-          if (goog.isString(colour)) {
-            if (colour.match(/^#[0-9a-fA-F]{6}$/)) {
-              childOut.hexColour = colour;
-            } else {
-              childOut.hexColour = Blockly.hueToRgb(colour);
-            }
-            hasColours = true;
-          } else {
-            childOut.hexColour = '';
-          }
-          if (childIn.getAttribute('expanded') == 'true') {
-            if (childOut.blocks.length) {
-              rootOut.setSelectedItem(childOut);
-            }
-            childOut.setExpanded(true);
-          } else {
-            childOut.setExpanded(false);
-          }
-          lastElement = childIn;
-          break;
-        case 'SEP':
-          if (lastElement) {
-            if (lastElement.tagName.toUpperCase() == 'CATEGORY') {
-              // Separator between two categories.
-              // <sep></sep>
-              treeOut.add(new Blockly.Toolbox.TreeSeparator(
-                  that.treeSeparatorConfig_));
-            } else {
-              // Change the gap between two blocks.
-              // <sep gap="36"></sep>
-              // The default gap is 24, can be set larger or smaller.
-              // Note that a deprecated method is to add a gap to a block.
-              // <block type="math_arithmetic" gap="8"></block>
-              var newGap = parseFloat(childIn.getAttribute('gap'));
-              if (!isNaN(newGap)) {
-                var oldGap = parseFloat(lastElement.getAttribute('gap'));
-                var gap = isNaN(oldGap) ? newGap : oldGap + newGap;
-                lastElement.setAttribute('gap', gap);
-              }
-            }
-          }
-          break;
-        case 'BLOCK':
-        case 'SHADOW':
-          treeOut.blocks.push(childIn);
-          lastElement = childIn;
-          break;
-      }
-    }
-  }
-  syncTrees(newTree, this.tree_, this.workspace_.options.pathToMedia);
-  this.hasColours_ = hasColours;
+  this.tree_.removeChildren();  // Delete any existing content.
+  this.tree_.blocks = [];
+  this.hasColours_ = false;
+  this.syncTrees_(newTree, this.tree_, this.workspace_.options.pathToMedia);
 
-  if (rootOut.blocks.length) {
+  if (this.tree_.blocks.length) {
     throw 'Toolbox cannot have both blocks and categories in the root level.';
   }
 
   // Fire a resize event since the toolbox may have changed width and height.
   Blockly.resizeSvgContents(this.workspace_);
+};
+
+/**
+ * Sync trees of the toolbox.
+ * @param {Node} treeIn DOM tree of blocks, or null.
+ * @param {Blockly.Toolbox.TreeControl} treeOut
+ * @param {string} pathToMedia
+ * @private
+ */
+Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
+  var lastElement = null;
+  for (var i = 0, childIn; childIn = treeIn.childNodes[i]; i++) {
+    if (!childIn.tagName) {
+      // Skip over text.
+      continue;
+    }
+    switch (childIn.tagName.toUpperCase()) {
+      case 'CATEGORY':
+        var childOut = this.tree_.createNode(childIn.getAttribute('name'));
+        childOut.blocks = [];
+        treeOut.add(childOut);
+        var custom = childIn.getAttribute('custom');
+        if (custom) {
+          // Variables and procedures are special dynamic categories.
+          childOut.blocks = custom;
+        } else {
+          this.syncTrees_(childIn, childOut, pathToMedia);
+        }
+        var colour = childIn.getAttribute('colour');
+        if (goog.isString(colour)) {
+          if (colour.match(/^#[0-9a-fA-F]{6}$/)) {
+            childOut.hexColour = colour;
+          } else {
+            childOut.hexColour = Blockly.hueToRgb(colour);
+          }
+          this.hasColours_ = true;
+        } else {
+          childOut.hexColour = '';
+        }
+        if (childIn.getAttribute('expanded') == 'true') {
+          if (childOut.blocks.length) {
+            this.tree_.setSelectedItem(childOut);
+          }
+          childOut.setExpanded(true);
+        } else {
+          childOut.setExpanded(false);
+        }
+        lastElement = childIn;
+        break;
+      case 'SEP':
+        if (lastElement) {
+          if (lastElement.tagName.toUpperCase() == 'CATEGORY') {
+            // Separator between two categories.
+            // <sep></sep>
+            treeOut.add(new Blockly.Toolbox.TreeSeparator(
+                this.treeSeparatorConfig_));
+          } else {
+            // Change the gap between two blocks.
+            // <sep gap="36"></sep>
+            // The default gap is 24, can be set larger or smaller.
+            // Note that a deprecated method is to add a gap to a block.
+            // <block type="math_arithmetic" gap="8"></block>
+            var newGap = parseFloat(childIn.getAttribute('gap'));
+            if (!isNaN(newGap)) {
+              var oldGap = parseFloat(lastElement.getAttribute('gap'));
+              var gap = isNaN(oldGap) ? newGap : oldGap + newGap;
+              lastElement.setAttribute('gap', gap);
+            }
+          }
+        }
+        break;
+      case 'BLOCK':
+      case 'SHADOW':
+        treeOut.blocks.push(childIn);
+        lastElement = childIn;
+        break;
+    }
+  }
 };
 
 /**
@@ -390,6 +395,10 @@ Blockly.Toolbox.prototype.clearSelection = function() {
  * @return {goog.math.Rect} Rectangle in which to delete.
  */
 Blockly.Toolbox.prototype.getClientRect = function() {
+  if (!this.HtmlDiv) {
+    return null;
+  }
+
   // BIG_NUM is offscreen padding so that blocks dragged beyond the toolbox
   // area are still deleted.  Must be smaller than Infinity, but larger than
   // the largest screen size.
@@ -446,6 +455,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
         this.handleTouchEvent_);
   }
 };
+
 /**
  * Handles touch events.
  * @param {!goog.events.BrowserEvent} e The browser event.

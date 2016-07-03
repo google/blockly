@@ -156,10 +156,6 @@ Blockly.Field.prototype.init = function() {
       Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
   // Force a render.
   this.updateTextNode_();
-  if (Blockly.Events.isEnabled()) {
-    Blockly.Events.fire(new Blockly.Events.Change(
-        this.sourceBlock_, 'field', this.name, '', this.getValue()));
-  }
 };
 
 /**
@@ -230,6 +226,14 @@ Blockly.Field.prototype.setVisible = function(visible) {
  */
 Blockly.Field.prototype.setValidator = function(handler) {
   this.validator_ = handler;
+};
+
+/**
+ * Gets the validation function for editable fields.
+ * @return {Function} Validation function, or null.
+ */
+Blockly.Field.prototype.getValidator = function() {
+  return this.validator_;
 };
 
 /**

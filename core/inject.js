@@ -358,7 +358,6 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
     while (soundBinds.length) {
       Blockly.unbindEvent_(soundBinds.pop());
     }
-    workspace.preloadAudio_();
   };
   // Android ignores any sound not loaded as a result of a user action.
   soundBinds.push(

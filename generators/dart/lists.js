@@ -119,7 +119,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
           '.length);\n';
       code += list + '.removeAt(' + xVar + ');\n';
       return code;
-    } else { // where == 'FROM_END'
+    } else {  // where == 'FROM_END'
       if (mode == 'REMOVE') {
         // We can use multiple statements.
         var at = Blockly.Dart.getAdjusted(block, 'AT', 1, false,
@@ -139,7 +139,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
                 '  x = my_list.length - x;',
                 '  return my_list[x];',
                 '}']);
-        } else { // mode == 'GET_REMOVE'
+        } else {  // mode == 'GET_REMOVE'
           var functionName = Blockly.Dart.provideFunction_(
               'lists_remove_from_end',
               ['dynamic ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +
@@ -225,7 +225,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
                   '  int x = new Math.Random().nextInt(my_list.length);',
                   '  return my_list[x];',
                   '}']);
-          } else { // mode == 'GET_REMOVE'
+          } else {  // mode == 'GET_REMOVE'
             var functionName = Blockly.Dart.provideFunction_(
                 'lists_remove_random_item',
                 ['dynamic ' + Blockly.Dart.FUNCTION_NAME_PLACEHOLDER_ +

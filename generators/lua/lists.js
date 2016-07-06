@@ -174,7 +174,7 @@ Blockly.Lua['lists_getIndex'] = function(block) {
                     ', at)' : ')'),
              '  return t[' + getIndex_('t', where, 'at') + ']',
              'end']);
-      } else {  // mode == 'GET_REMOVE'
+      } else {  //  mode == 'GET_REMOVE'
         var functionName = Blockly.Lua.provideFunction_(
             'list_remove_' + where.toLowerCase(),
             ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t' +

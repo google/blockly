@@ -257,7 +257,7 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   var where1 = block.getFieldValue('WHERE1');
   var where2 = block.getFieldValue('WHERE2');
   if (where1 == 'FIRST' && where2 == 'LAST') {
-    var code = list + '.concat()';
+    var code = list + '.slice(0)';
   } else if (list.match(/^\w+$/) ||
       (where1 != 'FROM_END' && where2 == 'FROM_START')) {
     // If the list is a variable or doesn't require a call for length, don't

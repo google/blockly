@@ -132,7 +132,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
  * @return {string} The prefixed lines of code.
  */
 Blockly.Generator.prototype.prefixLines = function(text, prefix) {
-  return prefix + text.replace(/\n(.)/g, '\n' + prefix + '$1');
+  return prefix + text.replace(/(?!\n$)\n/g, '\n' + prefix);
 };
 
 /**

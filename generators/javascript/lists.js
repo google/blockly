@@ -235,7 +235,7 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
     case ('RANDOM'):
       var code = cacheList();
       var xVar = Blockly.JavaScript.variableDB_.getDistinctName(
-          'tmp_x', Blockly.Variables.NAME_TYPE);
+          'tmpX', Blockly.Variables.NAME_TYPE);
       code += 'var ' + xVar + ' = Math.floor(Math.random() * ' + list +
           '.length);\n';
       if (mode == 'SET') {

@@ -44,8 +44,8 @@ Blockly.PHP['lists_create_empty'] = function(block) {
 Blockly.PHP['lists_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
   var code = new Array(block.itemCount_);
-  for (var n = 0; n < block.itemCount_; n++) {
-    code[n] = Blockly.PHP.valueToCode(block, 'ADD' + n,
+  for (var i = 0; i < block.itemCount_; i++) {
+    code[i] = Blockly.PHP.valueToCode(block, 'ADD' + i,
         Blockly.PHP.ORDER_COMMA) || 'null';
   }
   code = 'array(' + code.join(', ') + ')';

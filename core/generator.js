@@ -143,8 +143,8 @@ Blockly.Generator.prototype.prefixLines = function(text, prefix) {
 Blockly.Generator.prototype.allNestedComments = function(block) {
   var comments = [];
   var blocks = block.getDescendants();
-  for (var x = 0; x < blocks.length; x++) {
-    var comment = blocks[x].getCommentText();
+  for (var i = 0; i < blocks.length; i++) {
+    var comment = blocks[i].getCommentText();
     if (comment) {
       comments.push(comment);
     }

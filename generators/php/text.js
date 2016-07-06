@@ -53,8 +53,8 @@ Blockly.PHP['text_join'] = function(block) {
     return [code, Blockly.PHP.ORDER_ADDITION];
   } else {
     var elements = new Array(block.itemCount_);
-    for (var n = 0; n < block.itemCount_; n++) {
-      elements[n] = Blockly.PHP.valueToCode(block, 'ADD' + n,
+    for (var i = 0; i < block.itemCount_; i++) {
+      elements[i] = Blockly.PHP.valueToCode(block, 'ADD' + i,
           Blockly.PHP.ORDER_COMMA) || '\'\'';
     }
     var code = 'implode(\'\', array(' + elements.join(',') + '))';

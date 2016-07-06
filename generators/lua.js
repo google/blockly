@@ -176,9 +176,9 @@ Blockly.Lua.scrub_ = function(block, code) {
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].connection.targetBlock();
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = Blockly.Lua.allNestedComments(childBlock);
           if (comment) {

@@ -31,7 +31,6 @@ goog.require('Blockly.Lua');
 
 Blockly.Lua['lists_create_empty'] = function(block) {
   // Create an empty list.
-  // List literals must be parenthesized before indexing into.
   return ['{}', Blockly.Lua.ORDER_ATOMIC];
 };
 

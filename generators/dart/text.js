@@ -222,7 +222,7 @@ Blockly.Dart['text_changeCase'] = function(block) {
     'TITLECASE': null
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
-  var textOrder = (operator) ? Blockly.Dart.ORDER_UNARY_POSTFIX :
+  var textOrder = operator ? Blockly.Dart.ORDER_UNARY_POSTFIX :
       Blockly.Dart.ORDER_NONE;
   var text = Blockly.Dart.valueToCode(block, 'TEXT', textOrder) || '\'\'';
   if (operator) {

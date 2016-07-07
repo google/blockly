@@ -62,10 +62,10 @@ Blockly.PHP['colour_rgb'] = function(block) {
        '  $r = round(max(min($r, 100), 0) * 2.55);',
        '  $g = round(max(min($g, 100), 0) * 2.55);',
        '  $b = round(max(min($b, 100), 0) * 2.55);',
-       '  $hex = "#";',
-       '  $hex .= str_pad(dechex($r), 2, "0", STR_PAD_LEFT);',
-       '  $hex .= str_pad(dechex($g), 2, "0", STR_PAD_LEFT);',
-       '  $hex .= str_pad(dechex($b), 2, "0", STR_PAD_LEFT);',
+       '  $hex = \'#\';',
+       '  $hex .= str_pad(dechex($r), 2, \'0\', STR_PAD_LEFT);',
+       '  $hex .= str_pad(dechex($g), 2, \'0\', STR_PAD_LEFT);',
+       '  $hex .= str_pad(dechex($b), 2, \'0\', STR_PAD_LEFT);',
        '  return $hex;',
        '}']);
   var code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
@@ -94,10 +94,10 @@ Blockly.PHP['colour_blend'] = function(block) {
        '  $r = round($r1 * (1 - $ratio) + $r2 * $ratio);',
        '  $g = round($g1 * (1 - $ratio) + $g2 * $ratio);',
        '  $b = round($b1 * (1 - $ratio) + $b2 * $ratio);',
-       '  $hex = "#";',
-       '  $hex .= str_pad(dechex($r), 2, "0", STR_PAD_LEFT);',
-       '  $hex .= str_pad(dechex($g), 2, "0", STR_PAD_LEFT);',
-       '  $hex .= str_pad(dechex($b), 2, "0", STR_PAD_LEFT);',
+       '  $hex = \'#\';',
+       '  $hex .= str_pad(dechex($r), 2, \'0\', STR_PAD_LEFT);',
+       '  $hex .= str_pad(dechex($g), 2, \'0\', STR_PAD_LEFT);',
+       '  $hex .= str_pad(dechex($b), 2, \'0\', STR_PAD_LEFT);',
        '  return $hex;',
        '}']);
   var code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';

@@ -250,14 +250,10 @@ Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   if (Blockly.Python.ONE_BASED_INDEXING) {
     delta--;
   }
-  var defaultAtIndex = Blockly.Python.ONE_BASED_INDEXING ?'1' : '0';
-  if (delta) {
-    var at = Blockly.Python.valueToCode(block, atId,
-            Blockly.Python.ORDER_ADDITIVE) || defaultAtIndex;
-  } else {
-    var at = Blockly.Python.valueToCode(block, atId,
-            Blockly.Python.ORDER_NONE) || defaultAtIndex;
-  }
+  var defaultAtIndex = Blockly.Python.ONE_BASED_INDEXING ? '1' : '0';
+  var atOrder = delta ? Blockly.Python.ORDER_ADDITIVE :
+      Blockly.Python.ORDER_NONE;
+  var at = Blockly.Python.valueToCode(block, atId, atOrder) || defaultAtIndex;
 
   if (Blockly.isNumber(at)) {
     // If the index is a naked number, adjust it right now.

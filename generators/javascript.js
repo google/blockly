@@ -275,7 +275,7 @@ Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
     delta--;
   }
-  var defaultAtIndex = Blockly.JavaScript.ONE_BASED_INDEXING ?'1' : '0';
+  var defaultAtIndex = Blockly.JavaScript.ONE_BASED_INDEXING ? '1' : '0';
   if (delta > 0) {
     var at = Blockly.JavaScript.valueToCode(block, atId,
         Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;

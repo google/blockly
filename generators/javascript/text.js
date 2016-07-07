@@ -241,7 +241,7 @@ Blockly.JavaScript['text_changeCase'] = function(block) {
     'TITLECASE': null
   };
   var operator = OPERATORS[block.getFieldValue('CASE')];
-  var textOrder = (operator) ? Blockly.JavaScript.ORDER_MEMBER :
+  var textOrder = operator ? Blockly.JavaScript.ORDER_MEMBER :
       Blockly.JavaScript.ORDER_NONE;
   var text = Blockly.JavaScript.valueToCode(block, 'TEXT',
       textOrder) || '\'\'';

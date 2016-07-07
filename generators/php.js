@@ -52,44 +52,44 @@ Blockly.PHP.addReservedWords(
  * Order of operation ENUMs.
  * http://php.net/manual/en/language.operators.precedence.php
  */
-Blockly.PHP.ORDER_ATOMIC = 0;           // 0 "" ...
-Blockly.PHP.ORDER_CLONE = 1;            // clone
-Blockly.PHP.ORDER_NEW = 1;              // new
-Blockly.PHP.ORDER_MEMBER = 2.1;         // []
-Blockly.PHP.ORDER_FUNCTION_CALL = 2.2;  // ()
-Blockly.PHP.ORDER_POWER = 3;            // **
-Blockly.PHP.ORDER_INCREMENT = 4;        // ++
-Blockly.PHP.ORDER_DECREMENT = 4;        // --
-Blockly.PHP.ORDER_BITWISE_NOT = 4;      // ~
-Blockly.PHP.ORDER_CAST = 4;             // (int) (float) (string) (array) ...
-Blockly.PHP.ORDER_SUPPRESS_ERROR = 4;   // @
-Blockly.PHP.ORDER_INSTANCEOF = 5;       // instanceof
-Blockly.PHP.ORDER_LOGICAL_NOT = 6;      // !
-Blockly.PHP.ORDER_UNARY_PLUS = 7.1;     // +
-Blockly.PHP.ORDER_UNARY_NEGATION = 7.2; // -
-Blockly.PHP.ORDER_MULTIPLICATION = 8.1; // *
-Blockly.PHP.ORDER_DIVISION = 8.2;       // /
-Blockly.PHP.ORDER_MODULUS = 8.3;        // %
-Blockly.PHP.ORDER_ADDITION = 9.1;       // +
-Blockly.PHP.ORDER_SUBTRACTION = 9.2;    // -
-Blockly.PHP.ORDER_STRING_CONCAT = 9.3;  // .
-Blockly.PHP.ORDER_BITWISE_SHIFT = 10;    // << >>
-Blockly.PHP.ORDER_RELATIONAL = 11;       // < <= > >=
-Blockly.PHP.ORDER_EQUALITY = 12;         // == != === !== <> <=>
-Blockly.PHP.ORDER_REFERENCE = 13;       // &
-Blockly.PHP.ORDER_BITWISE_AND = 13;     // &
-Blockly.PHP.ORDER_BITWISE_XOR = 14;     // ^
-Blockly.PHP.ORDER_BITWISE_OR = 15;      // |
-Blockly.PHP.ORDER_LOGICAL_AND = 16;     // &&
-Blockly.PHP.ORDER_LOGICAL_OR = 17;      // ||
-Blockly.PHP.ORDER_IF_NULL = 18;         // ??
-Blockly.PHP.ORDER_CONDITIONAL = 19;     // ?:
-Blockly.PHP.ORDER_ASSIGNMENT = 20;      // = += -= *= /= %= <<= >>= ...
-Blockly.PHP.ORDER_LOGICAL_AND_WEAK = 21;// and
-Blockly.PHP.ORDER_LOGICAL_XOR = 22;     // xor
-Blockly.PHP.ORDER_LOGICAL_OR_WEAK = 23; // or
-Blockly.PHP.ORDER_COMMA = 24;           // ,
-Blockly.PHP.ORDER_NONE = 99;            // (...)
+Blockly.PHP.ORDER_ATOMIC = 0;             // 0 "" ...
+Blockly.PHP.ORDER_CLONE = 1;              // clone
+Blockly.PHP.ORDER_NEW = 1;                // new
+Blockly.PHP.ORDER_MEMBER = 2.1;           // []
+Blockly.PHP.ORDER_FUNCTION_CALL = 2.2;    // ()
+Blockly.PHP.ORDER_POWER = 3;              // **
+Blockly.PHP.ORDER_INCREMENT = 4;          // ++
+Blockly.PHP.ORDER_DECREMENT = 4;          // --
+Blockly.PHP.ORDER_BITWISE_NOT = 4;        // ~
+Blockly.PHP.ORDER_CAST = 4;               // (int) (float) (string) (array) ...
+Blockly.PHP.ORDER_SUPPRESS_ERROR = 4;     // @
+Blockly.PHP.ORDER_INSTANCEOF = 5;         // instanceof
+Blockly.PHP.ORDER_LOGICAL_NOT = 6;        // !
+Blockly.PHP.ORDER_UNARY_PLUS = 7.1;       // +
+Blockly.PHP.ORDER_UNARY_NEGATION = 7.2;   // -
+Blockly.PHP.ORDER_MULTIPLICATION = 8.1;   // *
+Blockly.PHP.ORDER_DIVISION = 8.2;         // /
+Blockly.PHP.ORDER_MODULUS = 8.3;          // %
+Blockly.PHP.ORDER_ADDITION = 9.1;         // +
+Blockly.PHP.ORDER_SUBTRACTION = 9.2;      // -
+Blockly.PHP.ORDER_STRING_CONCAT = 9.3;    // .
+Blockly.PHP.ORDER_BITWISE_SHIFT = 10;     // << >>
+Blockly.PHP.ORDER_RELATIONAL = 11;        // < <= > >=
+Blockly.PHP.ORDER_EQUALITY = 12;          // == != === !== <> <=>
+Blockly.PHP.ORDER_REFERENCE = 13;         // &
+Blockly.PHP.ORDER_BITWISE_AND = 13;       // &
+Blockly.PHP.ORDER_BITWISE_XOR = 14;       // ^
+Blockly.PHP.ORDER_BITWISE_OR = 15;        // |
+Blockly.PHP.ORDER_LOGICAL_AND = 16;       // &&
+Blockly.PHP.ORDER_LOGICAL_OR = 17;        // ||
+Blockly.PHP.ORDER_IF_NULL = 18;           // ??
+Blockly.PHP.ORDER_CONDITIONAL = 19;       // ?:
+Blockly.PHP.ORDER_ASSIGNMENT = 20;        // = += -= *= /= %= <<= >>= ...
+Blockly.PHP.ORDER_LOGICAL_AND_WEAK = 21;  // and
+Blockly.PHP.ORDER_LOGICAL_XOR = 22;       // xor
+Blockly.PHP.ORDER_LOGICAL_OR_WEAK = 23;   // or
+Blockly.PHP.ORDER_COMMA = 24;             // ,
+Blockly.PHP.ORDER_NONE = 99;              // (...)
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
@@ -243,7 +243,7 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
   if (Blockly.PHP.ONE_BASED_INDEXING) {
     delta--;
   }
-  var defaultAtIndex = Blockly.PHP.ONE_BASED_INDEXING ?'1' : '0';
+  var defaultAtIndex = Blockly.PHP.ONE_BASED_INDEXING ? '1' : '0';
   if (delta > 0) {
     var at = Blockly.PHP.valueToCode(block, atId,
             Blockly.PHP.ORDER_ADDITION) || defaultAtIndex;

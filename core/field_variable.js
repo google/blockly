@@ -141,7 +141,8 @@ Blockly.FieldVariable.classValidator = function(text) {
       Blockly.Variables.renameVariable(oldVar, text, workspace);
     }
     return null;
-  }else if (text == Blockly.Msg.DELETE_VARIABLE.replace('%1', this.getText())) {
+  } else if (text == Blockly.Msg.DELETE_VARIABLE.replace('%1',
+      this.getText())) {
     Blockly.Variables.delete(this.getText(), this.sourceBlock_.workspace);
     return null;
   }

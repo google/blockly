@@ -45,9 +45,21 @@ Blockly.Dart = new Blockly.Generator('Dart');
 Blockly.Dart.addReservedWords(
     // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
     // Section 16.1.1
-    'assert,break,case,catch,class,const,continue,default,do,else,enum,extends,false,final,finally,for,if,in,is,new,null,rethrow,return,super,switch,this,throw,true,try,var,void,while,with,' +
+    'assert,break,case,catch,class,const,continue,default,do,else,enum,' +
+    'extends,false,final,finally,for,if,in,is,new,null,rethrow,return,super,' +
+    'switch,this,throw,true,try,var,void,while,with,' +
     // https://api.dartlang.org/dart_core.html
-    'print,identityHashCode,identical,BidirectionalIterator,Comparable,double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,ArgumentError,AssertionError,CastError,ConcurrentModificationError,CyclicInitializationError,Error,Exception,FallThroughError,FormatException,IntegerDivisionByZeroException,NoSuchMethodError,NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,StateError,TypeError,UnimplementedError,UnsupportedError');
+    'print,identityHashCode,identical,BidirectionalIterator,Comparable,' +
+    'double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,' +
+    'Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,' +
+    'Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,' +
+    'StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,' +
+    'ArgumentError,AssertionError,CastError,ConcurrentModificationError,' +
+    'CyclicInitializationError,Error,Exception,FallThroughError,' +
+    'FormatException,IntegerDivisionByZeroException,NoSuchMethodError,' +
+    'NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,' +
+    'StateError,TypeError,UnimplementedError,UnsupportedError'
+);
 
 /**
  * Order of operation ENUMs.

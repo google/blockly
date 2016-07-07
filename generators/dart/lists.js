@@ -106,7 +106,8 @@ Blockly.Dart['lists_getIndex'] = function(block) {
   // If `list` would be evaluated more than once (which is the case for
   // RANDOM REMOVE and FROM_END) and is non-trivial, make sure to access it
   // only once.
-  if (((where == 'RANDOM' && mode == 'REMOVE') || where == 'FROM_END') && !list.match(/^\w+$/)) {
+  if (((where == 'RANDOM' && mode == 'REMOVE') || where == 'FROM_END') &&
+      !list.match(/^\w+$/)) {
     // `list` is an expression, so we may not evaluate it more than once.
     if (where == 'RANDOM') {
       Blockly.Dart.definitions_['import_dart_math'] =
@@ -140,7 +141,7 @@ Blockly.Dart['lists_getIndex'] = function(block) {
               '}']);
         var code = functionName + '(' + list + ', ' + at + ')';
         return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];
-      } else if(mode == 'GET_REMOVE') {
+      } else if (mode == 'GET_REMOVE') {
         var at = Blockly.Dart.getAdjusted(block, 'AT', 1);
         // We need to create a procedure to avoid reevaluating values.
         var functionName = Blockly.Dart.provideFunction_(

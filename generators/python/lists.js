@@ -88,7 +88,8 @@ Blockly.Python['lists_indexOf'] = function(block) {
   if (block.getFieldValue('END') == 'FIRST') {
     var functionName = Blockly.Python.provideFunction_(
         'first_index',
-        ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ + '(my_list, elem):',
+        ['def ' + Blockly.Python.FUNCTION_NAME_PLACEHOLDER_ +
+            '(my_list, elem):',
          '  try: index = my_list.index(elem)' + firstIndexAdjustment,
          '  except: index =' + errorIndex,
          '  return index']);

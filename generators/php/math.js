@@ -283,7 +283,7 @@ Blockly.PHP['math_on_list'] = function(block) {
            '  if (empty($values)) return array();',
            '  $counts = array_count_values($values);',
            '  arsort($counts); // Sort counts in descending order',
-           '  $modes = array_keys($counts, current($counts), TRUE);',
+           '  $modes = array_keys($counts, current($counts), true);',
            '  return $modes;',
            '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',

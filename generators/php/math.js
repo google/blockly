@@ -265,7 +265,8 @@ Blockly.PHP['math_on_list'] = function(block) {
               '($arr) {',
            '  sort($arr,SORT_NUMERIC);',
            '  return (count($arr) % 2) ? $arr[floor(count($arr)/2)] : ',
-           '      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2) - 1]) / 2;',
+           '      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2)' +
+              ' - 1]) / 2;',
            '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || '[]';
@@ -297,7 +298,8 @@ Blockly.PHP['math_on_list'] = function(block) {
            '  $n = count($numbers);',
            '  if (!$n) return null;',
            '  $mean = array_sum($numbers) / count($numbers);',
-           '  foreach($numbers as $key => $num) $devs[$key] = pow($num - $mean, 2);',
+           '  foreach($numbers as $key => $num) $devs[$key] = ' +
+              'pow($num - $mean, 2);',
            '  return sqrt(array_sum($devs) / (count($devs) - 1));',
            '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',

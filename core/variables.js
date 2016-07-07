@@ -299,7 +299,7 @@ Blockly.Variables.createVariable = function(workspace) {
  * Prompt the user for a new variable name.
  * @param {string} promptText The string of the prompt.
  * @param {string} defaultText The default value to show in the prompt's field.
- * @return {string|null} The new variable name, or null if the user picked
+ * @return {?string} The new variable name, or null if the user picked
  *     something illegal.
  */
 Blockly.Variables.promptName = function(promptText, defaultText) {

@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Object representing an icon on a block.
+ * @fileoverview Class for a button in the flyout.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';

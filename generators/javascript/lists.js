@@ -250,6 +250,26 @@ Blockly.JavaScript['lists_setIndex'] = function(block) {
   throw 'Unhandled combination (lists_setIndex).';
 };
 
+/**
+ * Returns an expression calculating the index into a list.
+ * @private
+ * @param {string} listName Name of the list, used to calculate length.
+ * @param {string} where The method of indexing, selected by dropdown in Blockly
+ * @param {string=} opt_at The optional offset when indexing from start/end.
+ * @return {string} Index expression.
+ */
+Blockly.JavaScript.lists.getIndex_ = function(listName, where, opt_at) {
+  if (where == 'FIRST') {
+    return '0';
+  } else if (where == 'FROM_END') {
+    return listName + '.length - 1 - ' + opt_at;
+  } else if (where == 'LAST') {
+    return listName + '.length - 1';
+  } else {
+    return opt_at;
+  }
+};
+
 Blockly.JavaScript['lists_getSublist'] = function(block) {
   // Get sublist.
   var list = Blockly.JavaScript.valueToCode(block, 'LIST',
@@ -296,28 +316,28 @@ Blockly.JavaScript['lists_getSublist'] = function(block) {
   } else {
     var at1 = Blockly.JavaScript.getAdjusted(block, 'AT1');
     var at2 = Blockly.JavaScript.getAdjusted(block, 'AT2');
+    var getIndex_ = Blockly.JavaScript.lists.getIndex_;
+    var wherePascalCase = {'FIRST': 'First', 'LAST': 'Last',
+        'FROM_START': 'FromStart', 'FROM_END': 'FromEnd'};
     var functionName = Blockly.JavaScript.provideFunction_(
-        'getSubsequence',
+        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2],
         ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-            '(sequence, where1, at1, where2, at2) {',
-         '  function getAt(where, at) {',
-         '    if (where == \'FROM_END\') {',
-         '      at = sequence.length - 1 - at;',
-         '    } else if (where == \'FIRST\') {',
-         '      at = 0;',
-         '    } else if (where == \'LAST\') {',
-         '      at = sequence.length - 1;',
-         '    } else if (where != \'FROM_START\') {',
-         '      throw \'Unhandled option (getSubsequence).\';',
-         '    }',
-         '    return at;',
-         '  }',
-         '  at1 = getAt(where1, at1);',
-         '  at2 = getAt(where2, at2) + 1;',
-         '  return sequence.slice(at1, at2);',
-         '}']);
-    var code = functionName + '(' + list + ', \'' +
-        where1 + '\', ' + at1 + ', \'' + where2 + '\', ' + at2 + ')';
+            '(sequence' +
+            // The value for 'FROM_END' and'FROM_START' depends on `at` so
+            // we add it as a parameter.
+            ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', at1' : '') +
+            ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', at2' : '') +
+            ') {',
+          '  var start = ' + getIndex_('sequence', where1, 'at1') + ';',
+          '  var end = ' + getIndex_('sequence', where2, 'at2') + ' + 1;',
+          '  return sequence.slice(start, end);',
+          '}']);
+    var code = functionName + '(' + list +
+        // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
+        // pass it.
+        ((where1 == 'FROM_END' || where1 == 'FROM_START') ? ', ' + at1 : '') +
+        ((where2 == 'FROM_END' || where2 == 'FROM_START') ? ', ' + at2 : '') +
+        ')';
   }
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

@@ -4,7 +4,8 @@
 			"Espertus",
 			"MS",
 			"Okras",
-			"RedFox"
+			"RedFox",
+			"Mailman"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "элемент",
@@ -76,10 +77,10 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Добавьте, удалите, переставьте фрагменты для переделки блока \"если\".",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Добавляет условие к блоку \"если\"",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Добавить заключительный подблок для случая, когда все условия ложны.",
-	"LOGIC_COMPARE_HELPURL": "https://ru.wikipedia.org/wiki/%D0%9D%D0%B5%D1%80%D0%B0%D0%B2%D0%B5%D0%BD%D1%81%D1%82%D0%B2%D0%BE",
-	"LOGIC_COMPARE_TOOLTIP_EQ": "Возвращает значение истина, если вставки равны.",
-	"LOGIC_COMPARE_TOOLTIP_NEQ": "Возвращает значение истина, если вставки не равны.",
-	"LOGIC_COMPARE_TOOLTIP_LT": "Возвращает значение истина, если первая вставка меньше второй.",
+	"LOGIC_COMPARE_HELPURL": "https://ru.wikipedia.org/wiki/Неравенство",
+	"LOGIC_COMPARE_TOOLTIP_EQ": "Возвращает положительное значение, если вводы равны.",
+	"LOGIC_COMPARE_TOOLTIP_NEQ": "Возвращает положительное значение, если вводы не равны.",
+	"LOGIC_COMPARE_TOOLTIP_LT": "Возвращает положительное значение, если первый ввод меньше второго.",
 	"LOGIC_COMPARE_TOOLTIP_LTE": "Возвращает значение истина, если первая вставка меньше или равна  второй.",
 	"LOGIC_COMPARE_TOOLTIP_GT": "Возвращает значение истина, если первая вставка больше второй.",
 	"LOGIC_COMPARE_TOOLTIP_GTE": "Возвращает значение истина, если первая вставка больше или равна  второй.",

@@ -120,8 +120,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // The params field is deterministic based on the mutation,
     // no need to fire a change event.
     Blockly.Events.disable();
-    this.setFieldValue(paramString, 'PARAMS');
-    Blockly.Events.enable();
+    try {
+      this.setFieldValue(paramString, 'PARAMS');
+    } finally {
+      Blockly.Events.enable();
+    }
   },
   /**
    * Create XML to represent the argument inputs.
@@ -589,8 +592,11 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         // The argument name field is deterministic based on the mutation,
         // no need to fire a change event.
         Blockly.Events.disable();
-        field.setValue(this.arguments_[i]);
-        Blockly.Events.enable();
+        try {
+          field.setValue(this.arguments_[i]);
+        } finally {
+          Blockly.Events.enable();
+        }
       } else {
         // Add new input.
         field = new Blockly.FieldLabel(this.arguments_[i]);

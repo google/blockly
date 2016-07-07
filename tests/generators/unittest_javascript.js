@@ -164,7 +164,7 @@ Blockly.JavaScript['unittest_fail'] = function(block) {
 
 Blockly.JavaScript['unittest_adjustindex'] = function(block) {
   var index = Blockly.JavaScript.valueToCode(block, 'INDEX',
-                Blockly.JavaScript.ORDER_ADDITION) || '0';
+      Blockly.JavaScript.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
   if (Blockly.JavaScript.ONE_BASED_INDEXING) {
     if (Blockly.isNumber(index)) {

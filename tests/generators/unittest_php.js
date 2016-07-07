@@ -170,7 +170,7 @@ Blockly.PHP['unittest_fail'] = function(block) {
 
 Blockly.PHP['unittest_adjustindex'] = function(block) {
   var index = Blockly.PHP.valueToCode(block, 'INDEX',
-                Blockly.PHP.ORDER_ADDITION) || '0';
+      Blockly.PHP.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
   if (Blockly.PHP.ONE_BASED_INDEXING) {
     if (Blockly.isNumber(index)) {

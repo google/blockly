@@ -135,7 +135,7 @@ Blockly.Python['unittest_fail'] = function(block) {
 
 Blockly.Python['unittest_adjustindex'] = function(block) {
   var index = Blockly.Python.valueToCode(block, 'INDEX',
-                Blockly.Python.ORDER_ADDITIVE) || '0';
+      Blockly.Python.ORDER_ADDITIVE) || '0';
   // Adjust index if using one-based indexing.
   if (Blockly.Python.ONE_BASED_INDEXING) {
     if (Blockly.isNumber(index)) {

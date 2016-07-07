@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Object representing an icon on a block.
+ * @fileoverview Class for a button in the flyout.
  * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
@@ -34,15 +34,22 @@ goog.require('goog.math.Coordinate');
  * Class for a button in the flyout.
  * @param {!Blockly.Workspace} workspace The workspace in which to place this
  *     button.
+ * @param {!Blockly.Workspace} targetWorkspace The flyout's target workspace.
  * @param {string} text The text to display on the button.
  * @constructor
  */
-Blockly.FlyoutButton = function(workspace, text) {
+Blockly.FlyoutButton = function(workspace, targetWorkspace, text) {
   /**
    * @type {!Blockly.Workspace}
    * @private
    */
   this.workspace_ = workspace;
+
+  /**
+   * @type {!Blockly.Workspace}
+   * @private
+   */
+  this.targetWorkspace_ = targetWorkspace;
 
   /**
    * @type {string}
@@ -150,9 +157,10 @@ Blockly.FlyoutButton.prototype.dispose = function() {
  * @param {!Event} e Mouse up event.
  */
 Blockly.FlyoutButton.prototype.onMouseUp = function(e) {
-  console.log("Button was clicked");
   // Don't scroll the page.
   e.preventDefault();
   // Don't propagate mousewheel event (zooming).
   e.stopPropagation();
+
+  Blockly.Variables.createVariable(this.targetWorkspace_);
 };

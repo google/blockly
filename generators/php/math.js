@@ -279,10 +279,11 @@ Blockly.PHP['math_on_list'] = function(block) {
           'math_modes',
           ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($values) {',
-           '  $v = array_count_values($values);',
-           '  arsort($v);',
-           '  foreach($v as $k => $v){$total = $k; break;}',
-           '  return array($total);',
+           '  if (empty($values)) return array();',
+           '  $counts = array_count_values($values);',
+           '  arsort($counts); // Sort counts in descending order',
+           '  $modes = array_keys($counts, current($counts), TRUE);',
+           '  return $modes;',
            '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || '[]';

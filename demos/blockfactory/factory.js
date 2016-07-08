@@ -806,6 +806,57 @@ function importBlockFromFile() {
   }
 }
 
+/**
+ * Checks to see if object under provided name exists.
+ * If not, creates and stores an object with specified name into localStorage.
+ * @param {String, Object} name of object you are putting in localStorage, optional
+ * @return {Object} you created
+ */
+function createLocalStorageObjectIfNotMadeYet(name, opt_object){
+  var objectToStore = opt_object || {};
+  if (!window.localStorage[name]){
+    window.localStorage[name] = JSON.stringify(objectToStore);
+  }
+  else{
+    console.log('object with name ' + name + ' is already in local storage');
+  }
+}
+
+/**
+ * Saves block XML as a String value  with the blockType (e.g. 'colour_picker') as its key
+ * in the window.localStorage.BlockLibrary object.
+ */
+function saveBlockToLocalStorage() {
+  createLocalStorageObjectIfNotMadeYet('blockLibrary');
+  var rootBlock = getRootBlock();
+  var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
+  var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
+  var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
+  var blockLibrary = JSON.parse(window.localStorage['blockLibrary']);
+  blockLibrary[blockType] = prettyXml;
+  window.localStorage['blockLibrary'] = JSON.stringify(blockLibrary);
+  console.log(JSON.parse(window.localStorage['blockLibrary']));
+}
+
+
+function viewBlockLibrary() {
+  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
+  console.log(blockLibrary);
+  for (var block in blockLibrary){
+    console.log(block);
+    console.log(blockLibrary[block]);
+  }
+}
+
+function clearBlockLibrary() {
+  var check = prompt('Are you sure you want to clear your Block Library? ("yes" or "no")');
+  if (check == "yes"){
+    window.localStorage.removeItem('blockLibrary');
+  }
+  createLocalStorageObjectIfNotMadeYet('blockLibrary');
+}
+
+
 
 /**
  * Initialize Blockly and layout.  Called on page load.
@@ -829,6 +880,15 @@ function init() {
 
   document.getElementById('localSaveButton')
     .addEventListener('click', saveWorkspaceToFile);
+  
+  document.getElementById('localStorageButton')
+    .addEventListener('click', saveBlockToLocalStorage);
+
+  document.getElementById('viewBlockLibraryButton')
+    .addEventListener('click', viewBlockLibrary);
+
+  document.getElementById('clearBlockLibraryButton')
+    .addEventListener('click', clearBlockLibrary);
 
   document.getElementById('files').addEventListener('change',
     function() {

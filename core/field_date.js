@@ -193,14 +193,14 @@ Blockly.FieldDate.loadLanguage_ = function() {
  */
 Blockly.FieldDate.CSS = [
   /* Copied from: goog/css/datepicker.css */
-  /*
+  /**
    * Copyright 2009 The Closure Library Authors. All Rights Reserved.
    *
    * Use of this source code is governed by the Apache License, Version 2.0.
    * See the COPYING file for details.
    */
 
-  /*
+  /**
    * Standard styling for a goog.ui.DatePicker.
    *
    * @author arv@google.com (Erik Arvidsson)

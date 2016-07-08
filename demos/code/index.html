@@ -74,7 +74,7 @@
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 
   <xml id="toolbox" style="display: none">
-    <category id="catLogic" colour="210">
+    <category name="{catLogic}" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
       <block type="logic_operation"></block>
@@ -83,7 +83,7 @@
       <block type="logic_null"></block>
       <block type="logic_ternary"></block>
     </category>
-    <category id="catLoops" colour="120">
+    <category name="{catLoops}" colour="120">
       <block type="controls_repeat_ext">
         <value name="TIMES">
           <shadow type="math_number">
@@ -112,7 +112,7 @@
       <block type="controls_forEach"></block>
       <block type="controls_flow_statements"></block>
     </category>
-    <category id="catMath" colour="230">
+    <category name="{catMath}" colour="230">
       <block type="math_number"></block>
       <block type="math_arithmetic">
         <value name="A">
@@ -206,7 +206,7 @@
       </block>
       <block type="math_random_float"></block>
     </category>
-    <category id="catText" colour="160">
+    <category name="{catText}" colour="160">
       <block type="text"></block>
       <block type="text_join"></block>
       <block type="text_append">
@@ -231,7 +231,7 @@
       <block type="text_indexOf">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">text</field>
+            <field name="VAR">{textVariable}</field>
           </block>
         </value>
         <value name="FIND">
@@ -243,14 +243,14 @@
       <block type="text_charAt">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">text</field>
+            <field name="VAR">{textVariable}</field>
           </block>
         </value>
       </block>
       <block type="text_getSubstring">
         <value name="STRING">
           <block type="variables_get">
-            <field name="VAR">text</field>
+            <field name="VAR">{textVariable}</field>
           </block>
         </value>
       </block>
@@ -283,7 +283,7 @@
         </value>
       </block>
     </category>
-    <category id="catLists" colour="260">
+    <category name="{catLists}" colour="260">
       <block type="lists_create_with">
         <mutation items="0"></mutation>
       </block>
@@ -300,28 +300,28 @@
       <block type="lists_indexOf">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
       <block type="lists_getIndex">
         <value name="VALUE">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
       <block type="lists_setIndex">
         <value name="LIST">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
       <block type="lists_getSublist">
         <value name="LIST">
           <block type="variables_get">
-            <field name="VAR">list</field>
+            <field name="VAR">{listVariable}</field>
           </block>
         </value>
       </block>
@@ -334,7 +334,7 @@
       </block>
       <block type="lists_sort"></block>
     </category>
-    <category id="catColour" colour="20">
+    <category name="{catColour}" colour="20">
       <block type="colour_picker"></block>
       <block type="colour_random"></block>
       <block type="colour_rgb">
@@ -373,8 +373,8 @@
       </block>
     </category>
     <sep></sep>
-    <category id="catVariables" colour="330" custom="VARIABLE"></category>
-    <category id="catFunctions" colour="290" custom="PROCEDURE"></category>
+    <category name="{catVariables}" colour="330" custom="VARIABLE"></category>
+    <category name="{catFunctions}" colour="290" custom="PROCEDURE"></category>
   </xml>
 
 </body>

@@ -145,6 +145,28 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 Blockly.WorkspaceSvg.prototype.lastSound_ = null;
 
 /**
+ * Inverted screen CTM, for use in mouseToSvg.
+ * @type {SVGMatrix}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.inverseScreenCTM_ = null;
+
+/**
+ * Getter for the inverted screen CTM.
+ * @return {SVGMatrix} The matrix to use in mouseToSvg
+ */
+Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
+  return this.inverseScreenCTM_;
+};
+
+/**
+ * Update the inverted screen CTM.
+ */
+Blockly.WorkspaceSvg.prototype.updateInverseScreenCTM = function() {
+  this.inverseScreenCTM_ = this.getParentSvg().getScreenCTM().inverse();
+};
+
+/**
  * Save resize handler data so we can delete it later in dispose.
  * @param {!Array.<!Array>} handler Data that can be passed to unbindEvent_.
  */
@@ -211,6 +233,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.addFlyout_();
   }
   this.updateGridPattern_();
+  this.recordDeleteAreas();
   return this.svgGroup_;
 };
 
@@ -330,6 +353,7 @@ Blockly.WorkspaceSvg.prototype.resizeContents = function() {
     // based on contents.
     this.scrollbar.resize();
   }
+  this.updateInverseScreenCTM();
 };
 
 /**
@@ -355,6 +379,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.scrollbar) {
     this.scrollbar.resize();
   }
+
+  this.updateInverseScreenCTM();
+  this.recordDeleteAreas();
 };
 
 /**
@@ -508,51 +535,54 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
   }
   Blockly.terminateDrag_();  // Dragging while pasting?  No.
   Blockly.Events.disable();
-  var block = Blockly.Xml.domToBlock(xmlBlock, this);
-  // Move the duplicate to original position.
-  var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-  var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
-  if (!isNaN(blockX) && !isNaN(blockY)) {
-    if (this.RTL) {
-      blockX = -blockX;
-    }
-    // Offset block until not clobbering another block and not in connection
-    // distance with neighbouring blocks.
-    do {
-      var collide = false;
-      var allBlocks = this.getAllBlocks();
-      for (var i = 0, otherBlock; otherBlock = allBlocks[i]; i++) {
-        var otherXY = otherBlock.getRelativeToSurfaceXY();
-        if (Math.abs(blockX - otherXY.x) <= 1 &&
-            Math.abs(blockY - otherXY.y) <= 1) {
-          collide = true;
-          break;
-        }
+  try {
+    var block = Blockly.Xml.domToBlock(xmlBlock, this);
+    // Move the duplicate to original position.
+    var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
+    var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+    if (!isNaN(blockX) && !isNaN(blockY)) {
+      if (this.RTL) {
+        blockX = -blockX;
       }
-      if (!collide) {
-        // Check for blocks in snap range to any of its connections.
-        var connections = block.getConnections_(false);
-        for (var i = 0, connection; connection = connections[i]; i++) {
-          var neighbour = connection.closest(Blockly.SNAP_RADIUS,
-              new goog.math.Coordinate(blockX, blockY));
-          if (neighbour.connection) {
+      // Offset block until not clobbering another block and not in connection
+      // distance with neighbouring blocks.
+      do {
+        var collide = false;
+        var allBlocks = this.getAllBlocks();
+        for (var i = 0, otherBlock; otherBlock = allBlocks[i]; i++) {
+          var otherXY = otherBlock.getRelativeToSurfaceXY();
+          if (Math.abs(blockX - otherXY.x) <= 1 &&
+              Math.abs(blockY - otherXY.y) <= 1) {
             collide = true;
             break;
           }
         }
-      }
-      if (collide) {
-        if (this.RTL) {
-          blockX -= Blockly.SNAP_RADIUS;
-        } else {
-          blockX += Blockly.SNAP_RADIUS;
+        if (!collide) {
+          // Check for blocks in snap range to any of its connections.
+          var connections = block.getConnections_(false);
+          for (var i = 0, connection; connection = connections[i]; i++) {
+            var neighbour = connection.closest(Blockly.SNAP_RADIUS,
+                new goog.math.Coordinate(blockX, blockY));
+            if (neighbour.connection) {
+              collide = true;
+              break;
+            }
+          }
         }
-        blockY += Blockly.SNAP_RADIUS * 2;
-      }
-    } while (collide);
-    block.moveBy(blockX, blockY);
+        if (collide) {
+          if (this.RTL) {
+            blockX -= Blockly.SNAP_RADIUS;
+          } else {
+            blockX += Blockly.SNAP_RADIUS;
+          }
+          blockY += Blockly.SNAP_RADIUS * 2;
+        }
+      } while (collide);
+      block.moveBy(blockX, blockY);
+    }
+  } finally {
+    Blockly.Events.enable();
   }
-  Blockly.Events.enable();
   if (Blockly.Events.isEnabled() && !block.isShadow()) {
     Blockly.Events.fire(new Blockly.Events.Create(block));
   }
@@ -661,7 +691,8 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
  */
 Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
   // Record the starting offset between the bubble's location and the mouse.
-  var point = Blockly.mouseToSvg(e, this.getParentSvg());
+  var point = Blockly.mouseToSvg(e, this.getParentSvg(),
+      this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -674,7 +705,8 @@ Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
  * @return {!goog.math.Coordinate} New location of object.
  */
 Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
-  var point = Blockly.mouseToSvg(e, this.getParentSvg());
+  var point = Blockly.mouseToSvg(e, this.getParentSvg(),
+      this.getInverseScreenCTM());
   // Fix scale of mouse event.
   point.x /= this.scale;
   point.y /= this.scale;
@@ -690,7 +722,8 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
   Blockly.terminateDrag_();
   var delta = e.deltaY > 0 ? -1 : 1;
-  var position = Blockly.mouseToSvg(e, this.getParentSvg());
+  var position = Blockly.mouseToSvg(e, this.getParentSvg(),
+      this.getInverseScreenCTM());
   this.zoom(position.x, position.y, delta);
   e.preventDefault();
 };

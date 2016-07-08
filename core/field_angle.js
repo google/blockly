@@ -305,16 +305,19 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
  * @return {?string} A string representing a valid angle, or null if invalid.
  */
 Blockly.FieldAngle.angleValidator = function(text) {
-  var n = Blockly.FieldTextInput.numberValidator(text);
-  if (n !== null) {
-    n = n % 360;
-    if (n < 0) {
-      n += 360;
-    }
-    if (n > Blockly.FieldAngle.WRAP) {
-      n -= 360;
-    }
-    n = String(n);
+  if (text === null) {
+    return null;
   }
-  return n;
+  var n = parseFloat(text || 0);
+  if (isNaN(n)) {
+    return null;
+  }
+  n = n % 360;
+  if (n < 0) {
+    n += 360;
+  }
+  if (n > Blockly.FieldAngle.WRAP) {
+    n -= 360;
+  }
+  return String(n);
 };

@@ -141,7 +141,6 @@ Blockly.Procedures.rename = function(name) {
   // Ensure two identically-named procedures don't exist.
   var legalName = Blockly.Procedures.findLegalName(name, this.sourceBlock_);
   var oldName = this.text_;
-  console.log(oldName + ' ' + name + ' ' + legalName)
   if (oldName != name && oldName != legalName) {
     // Rename any callers.
     var blocks = this.sourceBlock_.workspace.getAllBlocks();

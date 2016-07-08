@@ -103,6 +103,26 @@
       </td>
       <td width="50%" height="5%">
         <table>
+          <tr id="blockLibrary">
+            <td style="vertical-align: bottom;">
+            <span>
+              <h3>Block Library:</h3>
+              <select id="blockLibraryDropdown" onChange="selectHandler(this);">
+              </select>                
+            </span>
+            </td>
+            <td style="vertical-align: middle; text-align: right;">
+            <button id="saveToBlockLibraryButton" title="Save block xml to a local file.">
+              <span>Save to Block Library</span>
+            </button>
+            <button id="removeBlockFromLibraryButton" title="Remove block from library.">
+              <span>Remove Current Block from Library</span>
+            </button>            
+            <button id="clearBlockLibraryButton" title="Clear Block Library below.">
+              <span>Clear Block Library</span>
+            </button>  
+            </td>                           
+          </tr>
           <tr>
             <td style="vertical-align: bottom;">
               <h3>Preview:
@@ -125,15 +145,6 @@
               <button id="localSaveButton" title="Save block xml to a local file.">
                 <span>Download block</span>
               </button>
-              <button id="saveToBlockLibraryButton" title="Save block xml to a local file.">
-                <span>Save to Block Library</span>
-              </button>
-              <button id="viewBlockLibraryButton" title="View Block Library below.">
-                <span>View Block Library</span>
-              </button> 
-              <button id="clearBlockLibraryButton" title="Clear Block Library below.">
-                <span>Clear Block Library</span>
-              </button>                             
               <button id="helpButton" title="View documentation in new window.">
                 <span>Help</span>
               </button>
@@ -199,15 +210,6 @@
           </tr>
         </table>
       </td>
-    </tr>
-    <tr>
-     <td>
-      <div id="blocklyLibraryContainer">
-        <select id="blockLibraryDropdown" onChange="selectHandler(this);">
-        </select>
-      </div>
-     </td>
-    </tr>
   </table>
   <xml id="toolbox" style="display: none">
     <category name="Input">

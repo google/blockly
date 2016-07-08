@@ -822,6 +822,12 @@ function createLocalStorageObjectIfNotMadeYet(name, opt_object){
   }
 }
 
+function getCurrentBlockType(){
+  var rootBlock = getRootBlock();
+  var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
+  return blockType;
+}
+
 /**
  * Saves block XML as a String value  with the blockType (e.g. 'colour_picker') as its key
  * in the window.localStorage.BlockLibrary object.
@@ -829,8 +835,7 @@ function createLocalStorageObjectIfNotMadeYet(name, opt_object){
  */
 function saveBlockToLocalStorage() {
   createLocalStorageObjectIfNotMadeYet('blockLibrary');
-  var rootBlock = getRootBlock();
-  var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
+  var blockType = getCurrentBlockType();
   var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
   var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
   var blockLibrary = JSON.parse(window.localStorage['blockLibrary']);
@@ -854,22 +859,62 @@ function addOption(optionName, optionText, dropdownID){
   console.log(option);
 }
 
+/**
+ * Removes option currently selected in dropdown from dropdown.
+ * @param {String} 
+ */
+function removeOption(dropdownID){
+  var dropdown = document.getElementById(dropdownID);
+  dropdown.remove(dropdown.selectedIndex);
+}
+
+/**
+ * Removes all options from dropdown. 
+ * @param {String} 
+ */
+function clearOptions(dropdownID){
+  var dropdown = document.getElementById(dropdownID);
+  while (dropdown.length > 0) {
+      dropdown.remove(dropdown.length-1);
+  }
+}
+
 function saveToBlockLibrary(){
   var blockType = saveBlockToLocalStorage();
   addOption(blockType, blockType, 'blockLibraryDropdown');
 }
 
-function viewBlockLibrary() {
+function loadBlockLibrary() {
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
   if (Object.keys(blockLibrary).length === 0){
     alert('No blocks in BlockLibrary!');
   }
   console.log(blockLibrary);
+  clearOptions('blockLibraryDropdown');
   for (var block in blockLibrary){
     console.log(block);
     console.log(blockLibrary[block]);
     addOption(block, block, 'blockLibraryDropdown');
   }
+}
+
+function printBlockLibrary(){
+  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
+  console.log(blockLibrary);
+}
+
+function removeFromLocalStorage(optionName){
+  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
+  console.log("deleting " + optionName);
+  delete blockLibrary[optionName];
+  window.localStorage.blockLibrary = JSON.stringify(blockLibrary);
+}
+
+function removeFromBlockLibrary(){
+  var blockType = getCurrentBlockType();
+  removeFromLocalStorage(blockType, 'blockLibraryDropdown');
+  //removeOption('blockLibraryDropdown');
+  loadBlockLibrary();
 }
 
 function loadBlockFromLocalStorage(blockType){
@@ -897,9 +942,8 @@ function clearBlockLibrary() {
   if (check == "yes"){
     window.localStorage.removeItem('blockLibrary');
   }
-  createLocalStorageObjectIfNotMadeYet('blockLibrary');
+  window.localStorage.blockLibrary = JSON.stringify({});
 }
-
 
 
 /**
@@ -922,17 +966,19 @@ function init() {
     disableEnableLink();
   }
 
+  loadBlockLibrary();
+
   document.getElementById('localSaveButton')
     .addEventListener('click', saveWorkspaceToFile);
   
   document.getElementById('saveToBlockLibraryButton')
     .addEventListener('click', saveToBlockLibrary);
 
-  document.getElementById('viewBlockLibraryButton')
-    .addEventListener('click', viewBlockLibrary);
-
   document.getElementById('clearBlockLibraryButton')
     .addEventListener('click', clearBlockLibrary);
+
+  document.getElementById('removeBlockFromLibraryButton')
+    .addEventListener('click', removeFromBlockLibrary);
 
   document.getElementById('files').addEventListener('change',
     function() {

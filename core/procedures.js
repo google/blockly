@@ -235,19 +235,6 @@ Blockly.Procedures.getCallers = function(name, workspace) {
 };
 
 /**
- * When a procedure definition is disposed of, find and dispose of all its
- *     callers.
- * @param {string} name Name of deleted procedure definition.
- * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
- */
-Blockly.Procedures.disposeCallers = function(name, workspace) {
-  var callers = Blockly.Procedures.getCallers(name, workspace);
-  for (var i = 0; i < callers.length; i++) {
-    callers[i].dispose(true, false);
-  }
-};
-
-/**
  * When a procedure definition changes its parameters, find and edit all its
  * callers.
  * @param {!Blockly.Block} defBlock Procedure definition block.
@@ -282,7 +269,8 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
  * @return {Blockly.Block} The procedure definition block, or null not found.
  */
 Blockly.Procedures.getDefinition = function(name, workspace) {
-  var blocks = workspace.getAllBlocks();
+  // Assume that a procedure definition is a top block.
+  var blocks = workspace.getTopBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
       var tuple = blocks[i].getProcedureDef();

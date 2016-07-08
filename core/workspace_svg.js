@@ -740,7 +740,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
  *   containing the blocks on the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
-  var topBlocks = this.getTopBlocks();
+  var topBlocks = this.getTopBlocks(false);
   // There are no blocks, return empty rectangle.
   if (!topBlocks.length) {
     return {x: 0, y: 0, width: 0, height: 0};

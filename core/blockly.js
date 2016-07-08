@@ -277,7 +277,9 @@ Blockly.onKeyDown_ = function(e) {
     if (e.keyCode == 86) {
       // 'v' for paste.
       if (Blockly.clipboardXml_) {
+        Blockly.Events.setGroup(true);
         Blockly.clipboardSource_.paste(Blockly.clipboardXml_);
+        Blockly.Events.setGroup(false);
       }
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.

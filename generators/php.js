@@ -221,7 +221,7 @@ Blockly.PHP.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, this.COMMENT_WRAP - 3);
+    comment = Blockly.utils.wrap(comment, Blockly.PHP.COMMENT_WRAP - 3);
     if (comment) {
       commentCode += Blockly.PHP.prefixLines(comment, '// ') + '\n';
     }

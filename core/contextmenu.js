@@ -126,17 +126,20 @@ Blockly.ContextMenu.hide = function() {
 Blockly.ContextMenu.callbackFactory = function(block, xml) {
   return function() {
     Blockly.Events.disable();
-    var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
-    // Move the new block next to the old block.
-    var xy = block.getRelativeToSurfaceXY();
-    if (block.RTL) {
-      xy.x -= Blockly.SNAP_RADIUS;
-    } else {
-      xy.x += Blockly.SNAP_RADIUS;
+    try {
+      var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
+      // Move the new block next to the old block.
+      var xy = block.getRelativeToSurfaceXY();
+      if (block.RTL) {
+        xy.x -= Blockly.SNAP_RADIUS;
+      } else {
+        xy.x += Blockly.SNAP_RADIUS;
+      }
+      xy.y += Blockly.SNAP_RADIUS * 2;
+      newBlock.moveBy(xy.x, xy.y);
+    } finally {
+      Blockly.Events.enable();
     }
-    xy.y += Blockly.SNAP_RADIUS * 2;
-    newBlock.moveBy(xy.x, xy.y);
-    Blockly.Events.enable();
     if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {
       Blockly.Events.fire(new Blockly.Events.Create(newBlock));
     }

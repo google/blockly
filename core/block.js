@@ -204,39 +204,42 @@ Blockly.Block.prototype.dispose = function(healStack) {
   }
   Blockly.Events.disable();
 
-  // This block is now at the top of the workspace.
-  // Remove this block from the workspace's list of top-most blocks.
-  if (this.workspace) {
-    this.workspace.removeTopBlock(this);
-    // Remove from block database.
-    delete this.workspace.blockDB_[this.id];
-    this.workspace = null;
-  }
-
-  // Just deleting this block from the DOM would result in a memory leak as
-  // well as corruption of the connection database.  Therefore we must
-  // methodically step through the blocks and carefully disassemble them.
-
-  // First, dispose of all my children.
-  for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
-    this.childBlocks_[i].dispose(false);
-  }
-  // Then dispose of myself.
-  // Dispose of all inputs and their fields.
-  for (var i = 0, input; input = this.inputList[i]; i++) {
-    input.dispose();
-  }
-  this.inputList.length = 0;
-  // Dispose of any remaining connections (next/previous/output).
-  var connections = this.getConnections_(true);
-  for (var i = 0; i < connections.length; i++) {
-    var connection = connections[i];
-    if (connection.isConnected()) {
-      connection.disconnect();
+  try {
+    // This block is now at the top of the workspace.
+    // Remove this block from the workspace's list of top-most blocks.
+    if (this.workspace) {
+      this.workspace.removeTopBlock(this);
+      // Remove from block database.
+      delete this.workspace.blockDB_[this.id];
+      this.workspace = null;
     }
-    connections[i].dispose();
+
+    // Just deleting this block from the DOM would result in a memory leak as
+    // well as corruption of the connection database.  Therefore we must
+    // methodically step through the blocks and carefully disassemble them.
+
+    // First, dispose of all my children.
+    for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
+      this.childBlocks_[i].dispose(false);
+    }
+    // Then dispose of myself.
+    // Dispose of all inputs and their fields.
+    for (var i = 0, input; input = this.inputList[i]; i++) {
+      input.dispose();
+    }
+    this.inputList.length = 0;
+    // Dispose of any remaining connections (next/previous/output).
+    var connections = this.getConnections_(true);
+    for (var i = 0; i < connections.length; i++) {
+      var connection = connections[i];
+      if (connection.isConnected()) {
+        connection.disconnect();
+      }
+      connections[i].dispose();
+    }
+  } finally {
+    Blockly.Events.enable();
   }
-  Blockly.Events.enable();
 };
 
 /**

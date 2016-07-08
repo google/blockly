@@ -135,8 +135,8 @@ Blockly.JavaScript.ORDER_OVERRIDES = [
 ];
 
 /**
- * Allow for switching between one and zero based indexing, one based by
- * default.
+ * Allow for switching between one and zero based indexing for lists and text,
+ * one based by default.
  */
 Blockly.JavaScript.ONE_BASED_INDEXING = true;
 
@@ -257,4 +257,67 @@ Blockly.JavaScript.scrub_ = function(block, code) {
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   var nextCode = Blockly.JavaScript.blockToCode(nextBlock);
   return commentCode + code + nextCode;
+};
+
+/**
+ * Gets a property and adjusts the value while taking into account indexing.
+ * @param {!Blockly.Block} block The block.
+ * @param {string} atId The property ID of the element to get.
+ * @param {number=} opt_delta Value to add.
+ * @param {boolean=} opt_negate Whether to negate the value.
+ * @param {number=} opt_order The highest order acting on this value.
+ * @return {string|number}
+ */
+Blockly.JavaScript.getAdjusted = function(block, atId, opt_delta, opt_negate,
+    opt_order) {
+  var delta = opt_delta || 0;
+  var order = opt_order || Blockly.JavaScript.ORDER_NONE;
+  if (Blockly.JavaScript.ONE_BASED_INDEXING) {
+    delta--;
+  }
+  var defaultAtIndex = Blockly.JavaScript.ONE_BASED_INDEXING ? '1' : '0';
+  if (delta > 0) {
+    var at = Blockly.JavaScript.valueToCode(block, atId,
+        Blockly.JavaScript.ORDER_ADDITION) || defaultAtIndex;
+  } else if (delta < 0) {
+    var at = Blockly.JavaScript.valueToCode(block, atId,
+        Blockly.JavaScript.ORDER_SUBTRACTION) || defaultAtIndex;
+  } else if (opt_negate) {
+    var at = Blockly.JavaScript.valueToCode(block, atId,
+        Blockly.JavaScript.ORDER_UNARY_NEGATION) || defaultAtIndex;
+  } else {
+    var at = Blockly.JavaScript.valueToCode(block, atId, order) ||
+        defaultAtIndex;
+  }
+
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseFloat(at) + delta;
+    if (opt_negate) {
+      at = -at;
+    }
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = at + ' + ' + delta;
+      var innerOrder = Blockly.JavaScript.ORDER_ADDITION;
+    } else if (delta < 0) {
+      at = at + ' - ' + -delta;
+      var innerOrder = Blockly.JavaScript.ORDER_SUBTRACTION;
+    }
+    if (opt_negate) {
+      if (delta) {
+        at = '-(' + at + ')';
+      } else {
+        at = '-' + at;
+      }
+      var innerOrder = Blockly.JavaScript.ORDER_UNARY_NEGATION;
+    }
+    innerOrder = Math.floor(innerOrder);
+    order = Math.floor(order);
+    if (innerOrder && order >= innerOrder) {
+      at = '(' + at + ')';
+    }
+  }
+  return at;
 };

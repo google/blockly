@@ -154,15 +154,15 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
       'y1': Blockly.FieldAngle.HALF,
       'class': 'blocklyAngleLine'}, svg);
   // Draw markers around the edge.
-  for (var a = 0; a < 360; a += 15) {
+  for (var angle = 0; angle < 360; angle += 15) {
     Blockly.createSvgElement('line', {
       'x1': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS,
       'y1': Blockly.FieldAngle.HALF,
       'x2': Blockly.FieldAngle.HALF + Blockly.FieldAngle.RADIUS -
-          (a % 45 == 0 ? 10 : 5),
+          (angle % 45 == 0 ? 10 : 5),
       'y2': Blockly.FieldAngle.HALF,
       'class': 'blocklyAngleMarks',
-      'transform': 'rotate(' + a + ',' +
+      'transform': 'rotate(' + angle + ',' +
           Blockly.FieldAngle.HALF + ',' + Blockly.FieldAngle.HALF + ')'
     }, svg);
   }

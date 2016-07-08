@@ -501,8 +501,8 @@ function getTypesFrom_(block, name) {
     types = [escapeString(typeBlock.getFieldValue('TYPE'))];
   } else if (typeBlock.type == 'type_group') {
     types = [];
-    for (var n = 0; n < typeBlock.typeCount_; n++) {
-      types = types.concat(getTypesFrom_(typeBlock, 'TYPE' + n));
+    for (var i = 0; i < typeBlock.typeCount_; i++) {
+      types = types.concat(getTypesFrom_(typeBlock, 'TYPE' + i));
     }
     // Remove duplicates.
     var hash = Object.create(null);

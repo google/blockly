@@ -197,9 +197,9 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
       var mutation = goog.dom.createDom('mutation');
       mutation.setAttribute('name', name);
       block.appendChild(mutation);
-      for (var t = 0; t < args.length; t++) {
+      for (var j = 0; j < args.length; j++) {
         var arg = goog.dom.createDom('arg');
-        arg.setAttribute('name', args[t]);
+        arg.setAttribute('name', args[j]);
         mutation.appendChild(arg);
       }
       xmlList.push(block);

@@ -93,7 +93,11 @@
                 </statement>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">while continue</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">while continue</field>
+                       </block>
+                     </value>
                     <value name="ACTUAL">
                       <block type="variables_get">
                         <field name="VAR">log</field>
@@ -184,7 +188,11 @@
                                 </statement>
                                 <next>
                                   <block type="unittest_assertequals" inline="false">
-                                    <field name="MESSAGE">until continue</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">until continue</field>
+                                       </block>
+                                     </value>
                                     <value name="ACTUAL">
                                       <block type="variables_get">
                                         <field name="VAR">log</field>
@@ -252,7 +260,11 @@
                                             </statement>
                                             <next>
                                               <block type="unittest_assertequals" inline="false">
-                                                <field name="MESSAGE">count continue</field>
+                                                <value name="MESSAGE">
+                                                   <block type="text">
+                                                     <field name="TEXT">count continue</field>
+                                                   </block>
+                                                 </value>
                                                 <value name="ACTUAL">
                                                   <block type="variables_get">
                                                     <field name="VAR">log</field>
@@ -335,7 +347,11 @@
                                                         </statement>
                                                         <next>
                                                           <block type="unittest_assertequals" inline="false">
-                                                            <field name="MESSAGE">for continue</field>
+                                                            <value name="MESSAGE">
+                                                               <block type="text">
+                                                                 <field name="TEXT">for continue</field>
+                                                               </block>
+                                                             </value>
                                                             <value name="ACTUAL">
                                                               <block type="variables_get">
                                                                 <field name="VAR">log</field>
@@ -439,7 +455,11 @@
             </statement>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">while break</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">while break</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">count</field>
@@ -512,7 +532,11 @@
                         </statement>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">until break</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">until break</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">count</field>
@@ -580,7 +604,11 @@
                                     </statement>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">count break</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">count break</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="variables_get">
                                             <field name="VAR">log</field>
@@ -663,7 +691,11 @@
                                                 </statement>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">for break</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">for break</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="variables_get">
                                                         <field name="VAR">log</field>

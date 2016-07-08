@@ -809,6 +809,7 @@ function importBlockFromFile() {
 /**
  * Checks to see if object under provided name exists.
  * If not, creates and stores an object with specified name into localStorage.
+ *
  * @param {String, Object} name of object you are putting in localStorage, optional
  * @return {Object} you created
  */
@@ -822,6 +823,10 @@ function createLocalStorageObjectIfNotMadeYet(name, opt_object){
   }
 }
 
+/**
+ * Returns the block type of the block the user is building at time of call to function.
+ * @return {String}  blockType - the block type of the block the user is currently building
+ */
 function getCurrentBlockType(){
   var rootBlock = getRootBlock();
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();

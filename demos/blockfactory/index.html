@@ -125,7 +125,7 @@
               <button id="localSaveButton" title="Save block xml to a local file.">
                 <span>Download block</span>
               </button>
-              <button id="localStorageButton" title="Save block xml to a local file.">
+              <button id="saveToBlockLibraryButton" title="Save block xml to a local file.">
                 <span>Save to Block Library</span>
               </button>
               <button id="viewBlockLibraryButton" title="View Block Library below.">
@@ -199,6 +199,14 @@
           </tr>
         </table>
       </td>
+    </tr>
+    <tr>
+     <td>
+      <div id="blocklyLibraryContainer">
+        <select id="blockLibraryDropdown" onChange="selectHandler(this);">
+        </select>
+      </div>
+     </td>
     </tr>
   </table>
   <xml id="toolbox" style="display: none">

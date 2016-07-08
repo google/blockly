@@ -825,6 +825,7 @@ function createLocalStorageObjectIfNotMadeYet(name, opt_object){
 /**
  * Saves block XML as a String value  with the blockType (e.g. 'colour_picker') as its key
  * in the window.localStorage.BlockLibrary object.
+ * @return {String} blockType of block saved to storage
  */
 function saveBlockToLocalStorage() {
   createLocalStorageObjectIfNotMadeYet('blockLibrary');
@@ -836,17 +837,60 @@ function saveBlockToLocalStorage() {
   blockLibrary[blockType] = prettyXml;
   window.localStorage['blockLibrary'] = JSON.stringify(blockLibrary);
   console.log(JSON.parse(window.localStorage['blockLibrary']));
+  return blockType;
 }
 
+/**
+ * Creates a node of a given element type and appends to the node with given id.
+ * @param {String, String, String}
+ * @return {Object} the changed parent node
+ */
+function addOption(optionName, optionText, dropdownID){
+  var dropdown = document.getElementById(dropdownID);
+  var option = document.createElement('option');
+  option.text = optionText;
+  option.value = optionName;
+  dropdown.add(option);
+  console.log(option);
+}
+
+function saveToBlockLibrary(){
+  var blockType = saveBlockToLocalStorage();
+  addOption(blockType, blockType, 'blockLibraryDropdown');
+}
 
 function viewBlockLibrary() {
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
+  if (Object.keys(blockLibrary).length === 0){
+    alert('No blocks in BlockLibrary!');
+  }
   console.log(blockLibrary);
   for (var block in blockLibrary){
     console.log(block);
     console.log(blockLibrary[block]);
+    addOption(block, block, 'blockLibraryDropdown');
   }
 }
+
+function loadBlockFromLocalStorage(blockType){
+  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
+  var xmlText = blockLibrary[blockType];
+  var xml = Blockly.Xml.textToDom(xmlText)
+  mainWorkspace.clear();
+  Blockly.Xml.domToWorkspace(xml, mainWorkspace);
+}
+
+/**
+ * Updates the workspace to show the block user selected from library
+ * @param {HTML Select element} your blockLibrary dropdown
+ * @return {String} blockType
+ */
+function selectHandler(blockLibraryDropdown){
+  var index = blockLibraryDropdown.selectedIndex;
+  var blockType = blockLibraryDropdown.options[index].value;
+  loadBlockFromLocalStorage(blockType);
+}
+
 
 function clearBlockLibrary() {
   var check = prompt('Are you sure you want to clear your Block Library? ("yes" or "no")');
@@ -881,8 +925,8 @@ function init() {
   document.getElementById('localSaveButton')
     .addEventListener('click', saveWorkspaceToFile);
   
-  document.getElementById('localStorageButton')
-    .addEventListener('click', saveBlockToLocalStorage);
+  document.getElementById('saveToBlockLibraryButton')
+    .addEventListener('click', saveToBlockLibrary);
 
   document.getElementById('viewBlockLibraryButton')
     .addEventListener('click', viewBlockLibrary);

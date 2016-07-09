@@ -825,6 +825,7 @@ function createLocalStorageObjectIfNotMadeYet(name, opt_object){
 
 /**
  * Returns the block type of the block the user is building at time of call to function.
+ * 
  * @return {String}  blockType - the block type of the block the user is currently building
  */
 function getCurrentBlockType(){
@@ -836,7 +837,8 @@ function getCurrentBlockType(){
 /**
  * Saves block XML as a String value  with the blockType (e.g. 'colour_picker') as its key
  * in the window.localStorage.BlockLibrary object.
- * @return {String} blockType of block saved to storage
+ * 
+ * @return {String} blockType - type of block saved to storage
  */
 function saveBlockToLocalStorage() {
   createLocalStorageObjectIfNotMadeYet('blockLibrary');
@@ -852,8 +854,11 @@ function saveBlockToLocalStorage() {
 
 /**
  * Creates a node of a given element type and appends to the node with given id.
+ * 
  * @param {String, String, String}
- * @return {Object} the changed parent node
+ *  optionName - value of option
+ *  optionText - text in option
+ *  dropdownID - id for HTML select element
  */
 function addOption(optionName, optionText, dropdownID){
   var dropdown = document.getElementById(dropdownID);
@@ -865,7 +870,8 @@ function addOption(optionName, optionText, dropdownID){
 }
 
 /**
- * Removes option currently selected in dropdown from dropdown.
+ * Removes option currently selected in dropdown from dropdown menu.
+ *
  * @param {String} 
  */
 function removeOption(dropdownID){
@@ -875,6 +881,7 @@ function removeOption(dropdownID){
 
 /**
  * Removes all options from dropdown. 
+ *
  * @param {String} 
  */
 function clearOptions(dropdownID){
@@ -884,11 +891,17 @@ function clearOptions(dropdownID){
   }
 }
 
+/**
+ * Saves current block to local storage and updates dropdown.
+ */
 function saveToBlockLibrary(){
   var blockType = saveBlockToLocalStorage();
   addOption(blockType, blockType, 'blockLibraryDropdown');
 }
 
+/**
+ * Loads block library from local storage and populates the dropdown menu.
+ */
 function loadBlockLibrary() {
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
   if (Object.keys(blockLibrary).length === 0){
@@ -903,35 +916,54 @@ function loadBlockLibrary() {
   }
 }
 
+/**
+ * For debugging purposes, prints out the localStorage.blockLibrary object.
+ */
 function printBlockLibrary(){
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
   console.log(blockLibrary);
 }
 
-function removeFromLocalStorage(optionName){
+/**
+ * Removes block from local storage.
+ *
+ * @param {String} blockType - type of block
+ */
+function removeFromLocalStorage(blockType){
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
-  console.log("deleting " + optionName);
-  delete blockLibrary[optionName];
+  console.log("deleting " + blockType);
+  delete blockLibrary[blockType];
   window.localStorage.blockLibrary = JSON.stringify(blockLibrary);
 }
 
+/**
+ * Removes current block from Block Library
+ *
+ * @param {String} blockType - type of block
+ */
 function removeFromBlockLibrary(){
   var blockType = getCurrentBlockType();
   removeFromLocalStorage(blockType, 'blockLibraryDropdown');
-  //removeOption('blockLibraryDropdown');
   loadBlockLibrary();
 }
 
+/**
+ * Loads block of given type from local storage, updating the workspace,
+ * preview and generated code.
+ *
+ * @param {String} blockType - type of block
+ */
 function loadBlockFromLocalStorage(blockType){
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
   var xmlText = blockLibrary[blockType];
-  var xml = Blockly.Xml.textToDom(xmlText)
+  var xml = Blockly.Xml.textToDom(xmlText);
   mainWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, mainWorkspace);
 }
 
 /**
  * Updates the workspace to show the block user selected from library
+ *
  * @param {HTML Select element} your blockLibrary dropdown
  * @return {String} blockType
  */
@@ -941,13 +973,16 @@ function selectHandler(blockLibraryDropdown){
   loadBlockFromLocalStorage(blockType);
 }
 
-
+/**
+ * Clears the block library in local storage and updates the dropdown.
+ */
 function clearBlockLibrary() {
   var check = prompt('Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes"){
     window.localStorage.removeItem('blockLibrary');
   }
   window.localStorage.blockLibrary = JSON.stringify({});
+  clearOptions('blockLibraryDropdown');
 }
 
 
@@ -987,7 +1022,7 @@ function init() {
 
   document.getElementById('files').addEventListener('change',
     function() {
-      importBlockFromFile();      
+      importBlockFromFile();
       // Clear this so that the change event still fires even if the
       // same file is chosen again. If the user re-imports a file, we
       // want to reload the workspace with its contents.

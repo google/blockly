@@ -31,4 +31,3 @@ goog.provide('Blockly.Blocks');
  * one based by default.
  */
 Blockly.Blocks.ONE_BASED_INDEXING = true;
-

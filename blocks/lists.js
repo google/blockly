@@ -300,7 +300,9 @@ Blockly.Blocks['lists_indexOf'] = {
     this.appendValueInput('FIND')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'END');
     this.setInputsInline(true);
-    this.setTooltip(Blockly.Msg.LISTS_INDEX_OF_TOOLTIP);
+    var tooltip = Blockly.Msg.LISTS_INDEX_OF_TOOLTIP
+        .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '0' : '-1');
+    this.setTooltip(tooltip);
   }
 };
 

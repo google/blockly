@@ -539,8 +539,8 @@ Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = 'Returns true if the provided text is empty.'
 
 /// url - Information about finding a character in a piece of text.
 Blockly.Msg.TEXT_INDEXOF_HELPURL = 'https://github.com/google/blockly/wiki/Text#finding-text';
-/// tooltip - See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text].
-Blockly.Msg.TEXT_INDEXOF_TOOLTIP = 'Returns the index of the first/last occurrence of the first text in the second text. Returns 0 if text is not found.';
+/// tooltip - %1 will be replaced by either the number 0 or -1 depending on the indexing mode. See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text].
+Blockly.Msg.TEXT_INDEXOF_TOOLTIP = 'Returns the index of the first/last occurrence of the first text in the second text. Returns %1 if text is not found.';
 /// block text - Title of blocks allowing users to find text.  See
 /// [https://github.com/google/blockly/wiki/Text#finding-text
 /// https://github.com/google/blockly/wiki/Text#finding-text].
@@ -801,10 +801,10 @@ Blockly.Msg.LISTS_INDEX_OF_FIRST = 'find first occurrence of item';
 /// https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list].
 /// [[File:Blockly-list-find.png]]
 Blockly.Msg.LISTS_INDEX_OF_LAST = 'find last occurrence of item';
-/// dropdown - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list
+/// tooltip - %1 will be replaced by either the number 0 or -1 depending on the indexing mode.  See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list
 /// https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list].
 /// [[File:Blockly-list-find.png]]
-Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the list. Returns 0 if item is not found.';
+Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the list. Returns %1 if item is not found.';
 
 Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
 /// dropdown - Indicates that the user wishes to

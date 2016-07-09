@@ -187,7 +187,7 @@
 	"LISTS_INLIST": "sąraše",
 	"LISTS_INDEX_OF_FIRST": "rask pirmą reikšmę",
 	"LISTS_INDEX_OF_LAST": "rask paskutinę reikšmę",
-	"LISTS_INDEX_OF_TOOLTIP": "Grąžina pirmos/paskutinės reikšmės eilės nr. sąraše. Grąžina 0, jei reikšmės neranda.",
+	"LISTS_INDEX_OF_TOOLTIP": "Grąžina pirmos/paskutinės reikšmės eilės nr. sąraše. Grąžina %1, jei reikšmės neranda.",
 	"LISTS_GET_INDEX_GET": "paimk",
 	"LISTS_GET_INDEX_GET_REMOVE": "paimk ir ištrink",
 	"LISTS_GET_INDEX_REMOVE": "pašalinti",

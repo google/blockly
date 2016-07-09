@@ -116,7 +116,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = "Erstellt eine Kopie mit dem angegebenen
 Blockly.Msg.LISTS_INDEX_OF_FIRST = "suche erstes Auftreten von";
 Blockly.Msg.LISTS_INDEX_OF_HELPURL = "http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Farsubex.htm";
 Blockly.Msg.LISTS_INDEX_OF_LAST = "suche letztes Auftreten von";
-Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Sucht die Position (Index) eines Elementes in der Liste. Gibt 0 zurück, falls kein Element gefunden wurde.";
+Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "Sucht die Position (Index) eines Elementes in der Liste. Gibt %1 zurück, falls kein Element gefunden wurde.";
 Blockly.Msg.LISTS_INLIST = "in der Liste";
 Blockly.Msg.LISTS_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#is-empty";  // untranslated
 Blockly.Msg.LISTS_ISEMPTY_TITLE = "%1 ist leer";
@@ -334,7 +334,7 @@ Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = "im Text";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "suche erstes Auftreten des Begriffs";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "suche letztes Auftreten des Begriffs";
 Blockly.Msg.TEXT_INDEXOF_TAIL = "";
-Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Findet das erste / letzte Auftreten eines Suchbegriffs in einem Text.  Gibt die Position des Begriffs zurück oder 0 falls der Suchbegriff nicht gefunden wurde.";
+Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "Findet das erste / letzte Auftreten eines Suchbegriffs in einem Text.  Gibt die Position des Begriffs zurück oder %1 falls der Suchbegriff nicht gefunden wurde.";
 Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 ist leer";
 Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = "Ist wahr, falls der Text keine Zeichen enthält ist.";

@@ -116,7 +116,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = "يقوم بإنشاء نسخة من ا�
 Blockly.Msg.LISTS_INDEX_OF_FIRST = "ابحث على على التواجد الأول للعنصر";
 Blockly.Msg.LISTS_INDEX_OF_HELPURL = "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list";  // untranslated
 Blockly.Msg.LISTS_INDEX_OF_LAST = "ابحث على التواجد الأخير للعنصر";
-Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "تقوم بإرجاع مؤشر التواجد  الأول/الأخير في القائمة.  تقوم بإرجاع 0 إذا لم يتم العثور على النص.";
+Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = "تقوم بإرجاع مؤشر التواجد  الأول/الأخير في القائمة.  تقوم بإرجاع %1 إذا لم يتم العثور على النص.";
 Blockly.Msg.LISTS_INLIST = "في قائمة";
 Blockly.Msg.LISTS_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Lists#is-empty";  // untranslated
 Blockly.Msg.LISTS_ISEMPTY_TITLE = "%1 فارغ";
@@ -334,7 +334,7 @@ Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = "في النص";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = "ابحث عن التواجد الأول للنص";
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = "ابحث عن التواجد الأخير للنص";
 Blockly.Msg.TEXT_INDEXOF_TAIL = "";  // untranslated
-Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "تقوم بإرجاع مؤشر التواجد الأول/الأخير للنص الأول في النص الثاني.  تقوم بإرجاع 0 إذا لم يتم العثور على النص.";
+Blockly.Msg.TEXT_INDEXOF_TOOLTIP = "تقوم بإرجاع مؤشر التواجد الأول/الأخير للنص الأول في النص الثاني.  تقوم بإرجاع %1 إذا لم يتم العثور على النص.";
 Blockly.Msg.TEXT_ISEMPTY_HELPURL = "https://github.com/google/blockly/wiki/Text#checking-for-empty-text";  // untranslated
 Blockly.Msg.TEXT_ISEMPTY_TITLE = "%1 فارغ";
 Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = "يرجع \"صحيح\" إذا كان النص المقدم فارغ.";

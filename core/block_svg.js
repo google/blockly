@@ -531,7 +531,6 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     return;
   }
   if (this.isInFlyout) {
-    e.stopPropagation();
     return;
   }
   this.workspace.markFocused();

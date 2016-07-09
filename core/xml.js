@@ -535,10 +535,6 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
     }
     block.setShadow(true);
   }
-  // Give the block a chance to clean up any initial inputs.
-  if (block.validate) {
-    block.validate();
-  }
   return block;
 };
 

@@ -2,7 +2,11 @@
   <block type="unittest_main" x="-4" y="-12">
     <statement name="DO">
       <block type="unittest_assertvalue" inline="false">
-        <field name="MESSAGE">True</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">True</field>
+           </block>
+         </value>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
           <block type="logic_boolean">
@@ -11,7 +15,11 @@
         </value>
         <next>
           <block type="unittest_assertvalue" inline="false">
-            <field name="MESSAGE">False</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">False</field>
+               </block>
+             </value>
             <field name="EXPECTED">FALSE</field>
             <value name="ACTUAL">
               <block type="logic_boolean">
@@ -20,7 +28,11 @@
             </value>
             <next>
               <block type="unittest_assertvalue" inline="false">
-                <field name="MESSAGE">Not true</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">Not true</field>
+                   </block>
+                 </value>
                 <field name="EXPECTED">TRUE</field>
                 <value name="ACTUAL">
                   <block type="logic_negate" inline="false">
@@ -33,7 +45,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="MESSAGE">Not false</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">Not false</field>
+                       </block>
+                     </value>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
                       <block type="logic_negate" inline="false">
@@ -89,7 +105,7 @@
         </value>
         <statement name="DO0">
           <block type="unittest_fail">
-            <field name="MESSAGE">if false</field>
+             <field name="MESSAGE">if false</field>
           </block>
         </statement>
         <next>
@@ -119,7 +135,11 @@
                 </statement>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="MESSAGE">if true</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">if true</field>
+                       </block>
+                     </value>
                     <field name="EXPECTED">TRUE</field>
                     <value name="ACTUAL">
                       <block type="variables_get">
@@ -144,7 +164,7 @@
                             </value>
                             <statement name="DO0">
                               <block type="unittest_fail">
-                                <field name="MESSAGE">if/else false</field>
+                                 <field name="MESSAGE">if/else false</field>
                               </block>
                             </statement>
                             <statement name="ELSE">
@@ -159,7 +179,11 @@
                             </statement>
                             <next>
                               <block type="unittest_assertvalue" inline="false">
-                                <field name="MESSAGE">if/else false</field>
+                                <value name="MESSAGE">
+                                   <block type="text">
+                                     <field name="TEXT">if/else false</field>
+                                   </block>
+                                 </value>
                                 <field name="EXPECTED">TRUE</field>
                                 <value name="ACTUAL">
                                   <block type="variables_get">
@@ -194,12 +218,16 @@
                                         </statement>
                                         <statement name="ELSE">
                                           <block type="unittest_fail">
-                                            <field name="MESSAGE">if/else true</field>
+                                             <field name="MESSAGE">if/else true</field>
                                           </block>
                                         </statement>
                                         <next>
                                           <block type="unittest_assertvalue" inline="false">
-                                            <field name="MESSAGE">if/else true</field>
+                                            <value name="MESSAGE">
+                                               <block type="text">
+                                                 <field name="TEXT">if/else true</field>
+                                               </block>
+                                             </value>
                                             <field name="EXPECTED">TRUE</field>
                                             <value name="ACTUAL">
                                               <block type="variables_get">
@@ -224,7 +252,7 @@
                                                     </value>
                                                     <statement name="DO0">
                                                       <block type="unittest_fail">
-                                                        <field name="MESSAGE">elseif 1</field>
+                                                         <field name="MESSAGE">elseif 1</field>
                                                       </block>
                                                     </statement>
                                                     <value name="IF1">
@@ -249,17 +277,21 @@
                                                     </value>
                                                     <statement name="DO2">
                                                       <block type="unittest_fail">
-                                                        <field name="MESSAGE">elseif 2</field>
+                                                         <field name="MESSAGE">elseif 2</field>
                                                       </block>
                                                     </statement>
                                                     <statement name="ELSE">
                                                       <block type="unittest_fail">
-                                                        <field name="MESSAGE">elseif 3</field>
+                                                         <field name="MESSAGE">elseif 3</field>
                                                       </block>
                                                     </statement>
                                                     <next>
                                                       <block type="unittest_assertvalue" inline="false">
-                                                        <field name="MESSAGE">elseif 4</field>
+                                                        <value name="MESSAGE">
+                                                           <block type="text">
+                                                             <field name="TEXT">elseif 4</field>
+                                                           </block>
+                                                         </value>
                                                         <field name="EXPECTED">TRUE</field>
                                                         <value name="ACTUAL">
                                                           <block type="variables_get">
@@ -297,7 +329,11 @@
     <field name="NAME">test equalities</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
-        <field name="MESSAGE">Equal yes</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">Equal yes</field>
+           </block>
+         </value>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
           <block type="logic_compare">
@@ -316,7 +352,11 @@
         </value>
         <next>
           <block type="unittest_assertvalue" inline="false">
-            <field name="MESSAGE">Equal no</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">Equal no</field>
+               </block>
+             </value>
             <field name="EXPECTED">FALSE</field>
             <value name="ACTUAL">
               <block type="logic_compare">
@@ -335,7 +375,11 @@
             </value>
             <next>
               <block type="unittest_assertvalue" inline="false">
-                <field name="MESSAGE">Not equal yes</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">Not equal yes</field>
+                   </block>
+                 </value>
                 <field name="EXPECTED">TRUE</field>
                 <value name="ACTUAL">
                   <block type="logic_compare">
@@ -354,7 +398,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="MESSAGE">Not equal no</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">Not equal no</field>
+                       </block>
+                     </value>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
                       <block type="logic_compare">
@@ -373,7 +421,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertvalue" inline="false">
-                        <field name="MESSAGE">Smaller yes</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">Smaller yes</field>
+                           </block>
+                         </value>
                         <field name="EXPECTED">TRUE</field>
                         <value name="ACTUAL">
                           <block type="logic_compare">
@@ -392,7 +444,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertvalue" inline="false">
-                            <field name="MESSAGE">Smaller no</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">Smaller no</field>
+                               </block>
+                             </value>
                             <field name="EXPECTED">FALSE</field>
                             <value name="ACTUAL">
                               <block type="logic_compare">
@@ -411,7 +467,11 @@
                             </value>
                             <next>
                               <block type="unittest_assertvalue" inline="false">
-                                <field name="MESSAGE">Greater yes</field>
+                                <value name="MESSAGE">
+                                   <block type="text">
+                                     <field name="TEXT">Greater yes</field>
+                                   </block>
+                                 </value>
                                 <field name="EXPECTED">TRUE</field>
                                 <value name="ACTUAL">
                                   <block type="logic_compare">
@@ -430,7 +490,11 @@
                                 </value>
                                 <next>
                                   <block type="unittest_assertvalue" inline="false">
-                                    <field name="MESSAGE">Greater no</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">Greater no</field>
+                                       </block>
+                                     </value>
                                     <field name="EXPECTED">FALSE</field>
                                     <value name="ACTUAL">
                                       <block type="logic_compare">
@@ -449,7 +513,11 @@
                                     </value>
                                     <next>
                                       <block type="unittest_assertvalue" inline="false">
-                                        <field name="MESSAGE">Smaller-equal yes</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">Smaller-equal yes</field>
+                                           </block>
+                                         </value>
                                         <field name="EXPECTED">TRUE</field>
                                         <value name="ACTUAL">
                                           <block type="logic_compare">
@@ -468,7 +536,11 @@
                                         </value>
                                         <next>
                                           <block type="unittest_assertvalue" inline="false">
-                                            <field name="MESSAGE">Smaller-equal no</field>
+                                            <value name="MESSAGE">
+                                               <block type="text">
+                                                 <field name="TEXT">Smaller-equal no</field>
+                                               </block>
+                                             </value>
                                             <field name="EXPECTED">FALSE</field>
                                             <value name="ACTUAL">
                                               <block type="logic_compare">
@@ -487,7 +559,11 @@
                                             </value>
                                             <next>
                                               <block type="unittest_assertvalue" inline="false">
-                                                <field name="MESSAGE">Greater-equal yes</field>
+                                                <value name="MESSAGE">
+                                                   <block type="text">
+                                                     <field name="TEXT">Greater-equal yes</field>
+                                                   </block>
+                                                 </value>
                                                 <field name="EXPECTED">TRUE</field>
                                                 <value name="ACTUAL">
                                                   <block type="logic_compare">
@@ -506,7 +582,11 @@
                                                 </value>
                                                 <next>
                                                   <block type="unittest_assertvalue" inline="false">
-                                                    <field name="MESSAGE">Greater-equal no</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">Greater-equal no</field>
+                                                       </block>
+                                                     </value>
                                                     <field name="EXPECTED">FALSE</field>
                                                     <value name="ACTUAL">
                                                       <block type="logic_compare">
@@ -552,7 +632,11 @@
     <field name="NAME">test or</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
-        <field name="MESSAGE">Or true/true</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">Or true/true</field>
+           </block>
+         </value>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
           <block type="logic_operation">
@@ -571,7 +655,11 @@
         </value>
         <next>
           <block type="unittest_assertvalue" inline="false">
-            <field name="MESSAGE">Or false/true</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">Or false/true</field>
+               </block>
+             </value>
             <field name="EXPECTED">TRUE</field>
             <value name="ACTUAL">
               <block type="logic_operation">
@@ -590,7 +678,11 @@
             </value>
             <next>
               <block type="unittest_assertvalue" inline="false">
-                <field name="MESSAGE">Or true/false</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">Or true/false</field>
+                   </block>
+                 </value>
                 <field name="EXPECTED">TRUE</field>
                 <value name="ACTUAL">
                   <block type="logic_operation">
@@ -609,7 +701,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="MESSAGE">Or false/false</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">Or false/false</field>
+                       </block>
+                     </value>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
                       <block type="logic_operation">
@@ -639,7 +735,11 @@
     <field name="NAME">test and</field>
     <statement name="STACK">
       <block type="unittest_assertvalue" inline="false">
-        <field name="MESSAGE">And true/true</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">And true/true</field>
+           </block>
+         </value>
         <field name="EXPECTED">TRUE</field>
         <value name="ACTUAL">
           <block type="logic_operation">
@@ -658,7 +758,11 @@
         </value>
         <next>
           <block type="unittest_assertvalue" inline="false">
-            <field name="MESSAGE">And false/true</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">And false/true</field>
+               </block>
+             </value>
             <field name="EXPECTED">FALSE</field>
             <value name="ACTUAL">
               <block type="logic_operation">
@@ -677,7 +781,11 @@
             </value>
             <next>
               <block type="unittest_assertvalue" inline="false">
-                <field name="MESSAGE">And true/false</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">And true/false</field>
+                   </block>
+                 </value>
                 <field name="EXPECTED">FALSE</field>
                 <value name="ACTUAL">
                   <block type="logic_operation">
@@ -696,7 +804,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="MESSAGE">And false/false</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">And false/false</field>
+                       </block>
+                     </value>
                     <field name="EXPECTED">FALSE</field>
                     <value name="ACTUAL">
                       <block type="logic_operation">
@@ -726,7 +838,11 @@
     <field name="NAME">test ternary</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">if true</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">if true</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="logic_ternary" inline="true">
             <value name="IF">
@@ -753,7 +869,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">if true</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">if true</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="logic_ternary" inline="true">
                 <value name="IF">

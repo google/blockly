@@ -947,6 +947,7 @@ Blockly.WorkspaceSvg.prototype.loadAudio_ = function(filenames, name) {
     if (ext && audioTest.canPlayType('audio/' + ext[1])) {
       // Found an audio format we can play.
       sound = new window['Audio'](filename);
+      sound.setAttribute('preload', 'auto');
       break;
     }
   }
@@ -955,23 +956,6 @@ Blockly.WorkspaceSvg.prototype.loadAudio_ = function(filenames, name) {
   }
 };
 
-/**
- * Preload all the audio files so that they play quickly when asked for.
- * @private
- */
-Blockly.WorkspaceSvg.prototype.preloadAudio_ = function() {
-  for (var name in this.SOUNDS_) {
-    var sound = this.SOUNDS_[name];
-    sound.volume = .01;
-    sound.play();
-    sound.pause();
-    // iOS can only process one sound at a time.  Trying to load more than one
-    // corrupts the earlier ones.  Just load one and leave the others uncached.
-    if (goog.userAgent.IPAD || goog.userAgent.IPHONE) {
-      break;
-    }
-  }
-};
 
 /**
  * Play an audio file at specified value.  If volume is not specified,

@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.be.tarask');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Дадаць камэнтар";
-Blockly.Msg.AUTH = "Калі ласка, аўтарызуйце гэтае прыкладаньне, каб можна было захоўваць Вашую працу і мець магчымасьць дзяліцца ёю.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Зьмяніць значэньне:";
-Blockly.Msg.CHAT = "Стасуйцеся са сваім калегам, набіраючы тэкст у гэтым полі!";
 Blockly.Msg.CLEAN_UP = "Ачысьціць блёкі";
 Blockly.Msg.COLLAPSE_ALL = "Згарнуць блёкі";
 Blockly.Msg.COLLAPSE_BLOCK = "Згарнуць блёк";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Вяртае арктангэнс ліку
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Вяртае косынус кута ў градусах.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Вяртае сынус кута ў градусах.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Вяртае тангэнс кута ў градусах.";
-Blockly.Msg.ME = "Я";
 Blockly.Msg.NEW_VARIABLE = "Новая зьменная…";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Імя новай зьменнай:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

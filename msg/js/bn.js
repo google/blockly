@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.bn');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "মন্তব্য যোগ করুন";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "মান পরিবর্তন করুন:";
-Blockly.Msg.CHAT = "এই বাক্সে লিখার মাধ্যমে আপনার সহযোগীর সাথে আলাপ করুন!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Collapse Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_BLOCK = "Collapse Block";  // untranslated
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";  // u
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";  // untranslated
-Blockly.Msg.ME = "আমাকে";
 Blockly.Msg.NEW_VARIABLE = "নতুন চলক...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "নতুন চলকের নাম:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

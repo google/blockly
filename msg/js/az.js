@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.az');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Şərh əlavə et";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Qiyməti dəyiş:";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.CLEAN_UP = "Blokları təmizlə";
 Blockly.Msg.COLLAPSE_ALL = "Blokları yığ";
 Blockly.Msg.COLLAPSE_BLOCK = "Bloku yığ";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Ədədin arctanqensini qaytarır.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Dərəcənin kosinusunu qaytarır (radianın yox).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Dərəcənin sinusunu qaytar (radianın yox).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Dərəcənin tangensini qaytar (radianın yox).";
-Blockly.Msg.ME = "Mənə";
 Blockly.Msg.NEW_VARIABLE = "Yeni dəyişən...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Yeni dəyişənin adı:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

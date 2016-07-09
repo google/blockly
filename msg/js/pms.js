@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.pms');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Gionté un coment";
-Blockly.Msg.AUTH = "Për piasì, ch'a autorisa costa aplicassion a përmëtte ëd salvé sò travaj e a autoriselo a esse partagià da chiel.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifiché ël valor:";
-Blockly.Msg.CHAT = "Ch'a ciaciara con sò colaborator an scrivend an costa casela!";
 Blockly.Msg.CLEAN_UP = "Dëscancelé ij blòch";
 Blockly.Msg.COLLAPSE_ALL = "Arduve ij blòch";
 Blockly.Msg.COLLAPSE_BLOCK = "Arduve ël blòch";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "A smon l'arch-tangenta d'un nùmer.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "A smon ël cosen ëd n'àngol an gré (pa an radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "A smon ël sen ëd n'àngol an gré (pa an radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "A smon la tangenta ëd n'àngol an gré (pa an radiant).";
-Blockly.Msg.ME = "Mi";
 Blockly.Msg.NEW_VARIABLE = "Neuva variàbil...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nòm ëd la neuva variàbil:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

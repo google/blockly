@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.id');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Tambahkan Komentar";
-Blockly.Msg.AUTH = "Silakan mengotorisasi aplikasi ini untuk memungkinkan pekerjaan Anda dapat disimpan dan digunakan bersama.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
-Blockly.Msg.CHAT = "Chatting dengan kolaborator anda dengan mengetikkan di kotak ini!";
 Blockly.Msg.CLEAN_UP = "Bersihkan Blok";
 Blockly.Msg.COLLAPSE_ALL = "Ciutkan Blok";
 Blockly.Msg.COLLAPSE_BLOCK = "Ciutkan Blok";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kembalikan atan dari angka.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kembalikan cosinus dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kembalikan sinus dari derajat (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kembalikan tangen dari derajat (bukan radian).";
-Blockly.Msg.ME = "Saya";
 Blockly.Msg.NEW_VARIABLE = "Variabel baru...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nama variabel baru:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.sq');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Vendos nje Koment";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ndrysho Vlerat:";
-Blockly.Msg.CHAT = "Chat with your collaborator by typing in this box!";  // untranslated
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Mbyll blloqet";
 Blockly.Msg.COLLAPSE_BLOCK = "Mbyll bllokun";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kthe tg-1 e nje numeri.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kthe kosinusin e nje grade (jo ne radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kthe kosinusin e nje kendi (jo ne radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kthe tangentin e nje kendi (jo radiant).";
-Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "Identifikatorë i ri...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Emri i identifikatorit të ri:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

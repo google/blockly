@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.hu');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Megjegyzés hozzáadása";
-Blockly.Msg.AUTH = "Kérjük, engedélyezd az alkalmazásnak munkád elmentését és megosztását.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Érték módosítása:";
-Blockly.Msg.CHAT = "Ebben a mezőben tudsz a közreműködőkkel beszélgetni!";
 Blockly.Msg.CLEAN_UP = "Blokkok kiürítése";
 Blockly.Msg.COLLAPSE_ALL = "Blokkok összecsukása";
 Blockly.Msg.COLLAPSE_BLOCK = "Blokk összecsukása";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "A fokban megadott szög arkusz tangens ér
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "A fokban megadott szög koszinusz értéke.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "A fokban megadott szög szinusz értéke.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "A fokban megadott szög tangens értéke.";
-Blockly.Msg.ME = "Én";
 Blockly.Msg.NEW_VARIABLE = "Új változó...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Az új változó neve:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = ".";

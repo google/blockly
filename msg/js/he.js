@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.he');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "הוסף תגובה";
-Blockly.Msg.AUTH = "בבקשה נא לאשר את היישום הזה כדי לאפשר לעבודה שלך להישמר וכדי לאפשר את השיתוף על ידיך.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "שנה ערך:";
-Blockly.Msg.CHAT = "שוחח עם משתף פעולה שלך על-ידי הקלדה בתיבה זו!";
 Blockly.Msg.CLEAN_UP = "סידור בלוקים";
 Blockly.Msg.COLLAPSE_ALL = "צמצם קטעי קוד";
 Blockly.Msg.COLLAPSE_BLOCK = "צמצם קטע קוד";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";  // u
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "החזרת הקוסינוס של מעלה (לא רדיאן).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "החזרת הסינוס של מעלה (לא רדיאן).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "החזרת הטנגס של מעלה (לא רדיאן).";
-Blockly.Msg.ME = "אותי";
 Blockly.Msg.NEW_VARIABLE = "משתנה חדש...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "שם המשתנה החדש:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

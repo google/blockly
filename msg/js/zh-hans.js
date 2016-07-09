@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.zh.hans');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "添加注释";
-Blockly.Msg.AUTH = "请授权这个应用程序以保存您的作品并共享。";
 Blockly.Msg.CHANGE_VALUE_TITLE = "更改值：";
-Blockly.Msg.CHAT = "通过在此框输入与您的合作者沟通！";
 Blockly.Msg.CLEAN_UP = "清理块";
 Blockly.Msg.COLLAPSE_ALL = "折叠块";
 Blockly.Msg.COLLAPSE_BLOCK = "折叠块";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "返回指定角度的反正切值。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "返回指定角度的余弦值(非弧度）。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "返回指定角度的正弦值(非弧度）。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "返回指定角度的正切值(非弧度）。";
-Blockly.Msg.ME = "我";
 Blockly.Msg.NEW_VARIABLE = "新变量...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "新变量的名称：";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "空白";

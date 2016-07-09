@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.lki');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "گةپ دائن";
-Blockly.Msg.AUTH = "لطفا ئئ اپلیکیشن را ثبت کةن و آثارتان فعال کةن تا ذخیره بو و اجازهٔ اشتراک‌ نیائن  توسط هؤمة بو";
 Blockly.Msg.CHANGE_VALUE_TITLE = "تةغییر مقدار:";
-Blockly.Msg.CHAT = "!وةگةرد هؤمکارةتان وة نام ئئ کادرة گةپ بةن";
 Blockly.Msg.CLEAN_UP = "تمیزکردن بلاکةل";
 Blockly.Msg.COLLAPSE_ALL = "چؤیچانن/پشکانن بلاکةل";
 Blockly.Msg.COLLAPSE_BLOCK = "چؤیچانن/پشکانن بلاک";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "بازگرداندن آرک‌تانژان
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "بازگرداندن کسینوس درجه (نه رادیان).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "بازگرداندن سینوس درجه (نه رادیان).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "بازگرداندن تانژانت یک درجه (نه رادیان).";
-Blockly.Msg.ME = "مإ";
 Blockly.Msg.NEW_VARIABLE = "متغیر تازه...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "نام متغیر تازه:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

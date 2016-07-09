@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.th');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "ใส่คำอธิบาย";
-Blockly.Msg.AUTH = "กรุณาอนุญาตแอปนี้เพื่อเปิดใช้งาน การบันทึกงานของคุณ และยินยอมให้คุณแบ่งปันงานของคุณได้";
 Blockly.Msg.CHANGE_VALUE_TITLE = "เปลี่ยนค่า:";
-Blockly.Msg.CHAT = "คุยกับผู้ร่วมงานของคุณโดยพิมพ์ลงในกล่องนี้!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "ย่อบล็อก";
 Blockly.Msg.COLLAPSE_BLOCK = "ย่อบล็อก";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "คืนค่า arctangent ของต
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "คืนค่า cosine ขององศา (ไม่ใช่เรเดียน)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "คืนค่า sine ขององศา (ไม่ใช่เรเดียน)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "คืนค่า tangent ขององศา (ไม่ใช่เรเดียน)";
-Blockly.Msg.ME = "ฉัน";
 Blockly.Msg.NEW_VARIABLE = "สร้างตัวแปร...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "ชื่อตัวแปรใหม่:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.hrx');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Kommentar hinzufüche";
-Blockly.Msg.AUTH = "Weart ännre:";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Neie Variable...";
-Blockly.Msg.CHAT = "Sprech mit unsrem Mitoorweiter doorrich renschreiwe von Text hier in den Kaste!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Blocke zusammerfalte";
 Blockly.Msg.COLLAPSE_BLOCK = "Block zusammerfalte";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Ist der Arcustangens von en Ingäbweart.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Ist der Cosinus von en Winkel.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Ist der Sinus von en Winkel.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Ist der Tangens von en Winkel.";
-Blockly.Msg.ME = "Ich";
 Blockly.Msg.NEW_VARIABLE = "Neie Variable...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Die neie Variable sei Noome:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

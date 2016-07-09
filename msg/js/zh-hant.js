@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.zh.hant');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "加入註解";
-Blockly.Msg.AUTH = "請授權這個應用程式以保存您的作品並共享。";
 Blockly.Msg.CHANGE_VALUE_TITLE = "修改值:";
-Blockly.Msg.CHAT = "與您的合作者洽談藉由在此框輸入！";
 Blockly.Msg.CLEAN_UP = "清理積木";
 Blockly.Msg.COLLAPSE_ALL = "收合積木";
 Blockly.Msg.COLLAPSE_BLOCK = "收合積木";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "返回指定角度的反正切值。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "返回指定角度的餘弦值(非弧度）。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "返回指定角度的正弦值(非弧度）。";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "返回指定角度的正切值(非弧度）。";
-Blockly.Msg.ME = "我";
 Blockly.Msg.NEW_VARIABLE = "新變數...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "新變數名稱:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

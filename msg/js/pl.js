@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.pl');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Dodaj komentarz";
-Blockly.Msg.AUTH = "Autoryzuj ten program, aby można było zapisać Twoją pracę i umożliwić Ci dzielenie się nią z innymi.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Zmień wartość:";
-Blockly.Msg.CHAT = "Rozmawiaj z swoim współpracownikiem, pisząc w tym polu!";
 Blockly.Msg.CLEAN_UP = "Uporządkuj bloki";
 Blockly.Msg.COLLAPSE_ALL = "Zwiń bloki";
 Blockly.Msg.COLLAPSE_BLOCK = "Zwiń blok";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Zwróć arcus tangens danej liczby.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Zwróć wartość cosinusa o stopniu (nie w radianach).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Zwróć wartość sinusa o stopniu (nie w radianach).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Zwróć tangens o stopniu (nie w radianach).";
-Blockly.Msg.ME = "Ja";
 Blockly.Msg.NEW_VARIABLE = "Nowa zmienna...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nowa nazwa zmiennej:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

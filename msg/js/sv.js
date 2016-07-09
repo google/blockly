@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.sv');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Lägg till kommentar";
-Blockly.Msg.AUTH = "Var god godkänn denna app för att du ska kunna spara och dela den.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ändra värde:";
-Blockly.Msg.CHAT = "Chatta med din medarbetare genom att skriva i detta fält.";
 Blockly.Msg.CLEAN_UP = "Rada upp block";
 Blockly.Msg.COLLAPSE_ALL = "Fäll ihop block";
 Blockly.Msg.COLLAPSE_BLOCK = "Fäll ihop block";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Ger tillbaka arcus tangens (arctan) av ett
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Ger tillbaka cosinus för en grad (inte radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Ger tillbaka sinus för en grad (inte radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Ger tillbaka tangens för en grad (inte radian).";
-Blockly.Msg.ME = "Jag";
 Blockly.Msg.NEW_VARIABLE = "Ny variabel...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nytt variabelnamn:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

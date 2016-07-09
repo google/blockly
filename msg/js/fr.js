@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.fr');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Ajouter un commentaire";
-Blockly.Msg.AUTH = "Veuillez autoriser cette application à permettre la sauvegarde de votre travail et à l’autoriser d'être partagé par vous.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifier la valeur :";
-Blockly.Msg.CHAT = "Discutez avec votre collaborateur en tapant dans cette zone !";
 Blockly.Msg.CLEAN_UP = "Nettoyer les blocs";
 Blockly.Msg.COLLAPSE_ALL = "Réduire les blocs";
 Blockly.Msg.COLLAPSE_BLOCK = "Réduire le bloc";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Renvoie l’arctangente d’un nombre.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Renvoie le cosinus d’un angle en degrés (pas en radians).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Renvoie le sinus d’un angle en degrés (pas en radians).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Renvoie la tangente d’un angle en degrés (pas en radians).";
-Blockly.Msg.ME = "Moi";
 Blockly.Msg.NEW_VARIABLE = "Nouvelle variable…";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nouveau nom de la variable :";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

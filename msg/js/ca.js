@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.ca');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Afegeix un comentari";
-Blockly.Msg.AUTH = "Si us plau, autoritzeu que aquesta aplicació pugui desar la vostra feina i que la pugueu compartir.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Canvia valor:";
-Blockly.Msg.CHAT = "Xateja amb el teu col·laborador escrivint en aquest quadre!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Contraure blocs";
 Blockly.Msg.COLLAPSE_BLOCK = "Contraure bloc";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Retorna l'arctangent d'un nombre.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Retorna el cosinus d'un grau (no radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Retorna el sinus d'un grau (no radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Retorna la tangent d'un grau (no radiant).";
-Blockly.Msg.ME = "Jo";
 Blockly.Msg.NEW_VARIABLE = "Nova variable...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nou nom de variable:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

@@ -28,8 +28,6 @@
 	"HELP": "ヘルプ",
 	"UNDO": "取り消し",
 	"REDO": "やり直し",
-	"CHAT": "このボックスに入力して共同編集者とチャットしよう！",
-	"ME": "私に",
 	"CHANGE_VALUE_TITLE": "値を変更します。",
 	"NEW_VARIABLE": "新しい変数",
 	"NEW_VARIABLE_TITLE": "新しい変数の、名前",

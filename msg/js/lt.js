@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.lt');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Palikti komentarą";
-Blockly.Msg.AUTH = "Norint išsaugoti (ir dalintis) savo sukurtas programas, reikia prisijungti (autorizuotis).";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Keisti reikšmę:";
-Blockly.Msg.CHAT = "Galite susirašinėti su projekto bendradarbiais.";
 Blockly.Msg.CLEAN_UP = "Išvalyti blokus";
 Blockly.Msg.COLLAPSE_ALL = "Suskleisti blokus";
 Blockly.Msg.COLLAPSE_BLOCK = "Suskleisti bloką";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Grąžinti skaičiaus arktangentą.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Grąžinti laipsnio kosinusą (ne radiano).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Grąžinti laipsnio sinusą (ne radiano).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Grąžinti laipsnio tangentą (ne radiano).";
-Blockly.Msg.ME = "Mane";
 Blockly.Msg.NEW_VARIABLE = "Naujas kintamasis...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Naujo kintamojo pavadinimas:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

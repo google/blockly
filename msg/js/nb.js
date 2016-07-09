@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.nb');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Legg til kommentar";
-Blockly.Msg.AUTH = "Vennligst godkjenn at denne appen gjør det mulig for deg å lagre arbeidet slik at du kan dele det.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Bytt verdi:";
-Blockly.Msg.CHAT = "Chat med din medarbeider ved å skrive i dette feltet!";
 Blockly.Msg.CLEAN_UP = "Rydd opp Blocks";
 Blockly.Msg.COLLAPSE_ALL = "Skjul blokker";
 Blockly.Msg.COLLAPSE_BLOCK = "Skjul blokk";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Returner arctangens til et tall.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Returner cosinus av en vinkel (ikke radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Returner sinus av en vinkel (ikke radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Returner tangenten av en vinkel (ikke radian).";
-Blockly.Msg.ME = "Jeg";
 Blockly.Msg.NEW_VARIABLE = "Ny variabel...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nytt variabelnavn:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

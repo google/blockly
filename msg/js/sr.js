@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.sr');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Додај коментар";
-Blockly.Msg.AUTH = "Пријавите се молим то је апликација да се окрену свој посао, да побегне и да му се омогући да буде заједничко за вас.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Промените вредност:";
-Blockly.Msg.CHAT = "Комуницирају са својим колегом, уносећи у то поље!";
 Blockly.Msg.CLEAN_UP = "Уклоните блокова";
 Blockly.Msg.COLLAPSE_ALL = "Скупи блокове";
 Blockly.Msg.COLLAPSE_BLOCK = "Скупи блок";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Враћа аркус тангенс бр�
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Враћа косинус степена (не радијан).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Враћа синус степена (не радијан).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Враћа тангенс степена (не радијан).";
-Blockly.Msg.ME = "Ми";
 Blockly.Msg.NEW_VARIABLE = "Нова променљива…";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Име нове променљиве:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

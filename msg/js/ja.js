@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.ja');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "コメントを追加";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "値を変更します。";
-Blockly.Msg.CHAT = "このボックスに入力して共同編集者とチャットしよう！";
 Blockly.Msg.CLEAN_UP = "ブロックの整理";
 Blockly.Msg.COLLAPSE_ALL = "ブロックを折りたたむ";
 Blockly.Msg.COLLAPSE_BLOCK = "ブロックを折りたたむ";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "番号のarctangent を返すます";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "番号のcosineの次数を返す";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "番号のsineの次数を返す";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "番号のtangentの次数を返す";
-Blockly.Msg.ME = "私に";
 Blockly.Msg.NEW_VARIABLE = "新しい変数";
 Blockly.Msg.NEW_VARIABLE_TITLE = "新しい変数の、名前";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

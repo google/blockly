@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.sl');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Dodaj komentar";
-Blockly.Msg.AUTH = "Prosimo, avtoriziraj to aplikacijo, da boš lahko svoje delo shranil(-a) in delil(-a) z drugimi.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Spremeni vrednost:";
-Blockly.Msg.CHAT = "Klepetaj s sodelavcem tako, da tipkaš v to okno!";
 Blockly.Msg.CLEAN_UP = "Ponastavi kocke";
 Blockly.Msg.COLLAPSE_ALL = "Skrči kocke";
 Blockly.Msg.COLLAPSE_BLOCK = "Skrči kocko";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Vrne arkus tangens števila.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Vrne kosinus kota v stopinjah (ne radianih).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Vrne sinus kota v stopinjah (ne radianih).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Vrne tangens kota v stopinjah (ne radianih).";
-Blockly.Msg.ME = "Jaz";
 Blockly.Msg.NEW_VARIABLE = "Nova spremenljivka...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Ime nove spremenljivke:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

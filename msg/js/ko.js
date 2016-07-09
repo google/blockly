@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.ko');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "댓글 추가";
-Blockly.Msg.AUTH = "당신의 작업을 저장하고 다른 사람과 공유할 수 있도록 이 애플리케이션을 인증해 주십시오.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "값 바꾸기:";
-Blockly.Msg.CHAT = "이 상자에 입력하여 당신의 동료와 채팅하세요!";
 Blockly.Msg.CLEAN_UP = "블록 정리";
 Blockly.Msg.COLLAPSE_ALL = "블록 축소";
 Blockly.Msg.COLLAPSE_BLOCK = "블록 축소";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "어떤 수에 대한, atan(arctangent) 값
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "각도의 코사인을 반환합니다. (라디안 아님)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "각도의 사인을 반환합니다. (라디안 아님)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "각도의 탄젠트를 반환합니다. (라디안 아님)";
-Blockly.Msg.ME = "나";
 Blockly.Msg.NEW_VARIABLE = "새 변수";
 Blockly.Msg.NEW_VARIABLE_TITLE = "새 변수 이름:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

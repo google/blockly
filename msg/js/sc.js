@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.sc');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Agiunghe unu cumentu";
-Blockly.Msg.AUTH = "Permiti a custa app de sarvare su traballu tuo e de ti lu fàghere cumpartzire.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muda valori:";
-Blockly.Msg.CHAT = "Faedda cun su cumpàngiu tuo iscriende inoghe!";
 Blockly.Msg.CLEAN_UP = "Lìmpia is brocus";
 Blockly.Msg.COLLAPSE_ALL = "Serra e stringi Brocus";
 Blockly.Msg.COLLAPSE_BLOCK = "Serra e stringi Brocu";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Torrat su arctangenti de unu numeru.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Torrat su cosinu de unu gradu (no radianti).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Torrat su sinu de unu gradu (no radianti).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Torrat sa tangenti de unu gradu (no radianti).";
-Blockly.Msg.ME = "Deo";
 Blockly.Msg.NEW_VARIABLE = "Variabili noa...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nòmini de sa variabili noa:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.de');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Kommentar hinzufügen";
-Blockly.Msg.AUTH = "Bitte autorisiere diese App um deine Arbeit speichern und teilen zu können.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Wert ändern:";
-Blockly.Msg.CHAT = "Chatte mit unserem Mitarbeiter durch Eingeben von Text in diesen Kasten!";
 Blockly.Msg.CLEAN_UP = "Bausteine aufräumen";
 Blockly.Msg.COLLAPSE_ALL = "Alle Bausteine zusammenfalten";
 Blockly.Msg.COLLAPSE_BLOCK = "Baustein zusammenfalten";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Ist der Arkustangens des Eingabewertes.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Ist der Kosinus des Winkels.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Ist der Sinus des Winkels.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Ist der Tangens des Winkels.";
-Blockly.Msg.ME = "Ich";
 Blockly.Msg.NEW_VARIABLE = "Neue Variable …";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Name der neuen Variable:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

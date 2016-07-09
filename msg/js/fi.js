@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.fi');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Lisää kommentti";
-Blockly.Msg.AUTH = "Valtuuta tämä ohjelma jotta voit tallettaa työsi ja jakaa sen.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muuta arvoa:";
-Blockly.Msg.CHAT = "Keskustele yhteistyökumppanisi kanssa kirjoittamalla tähän kenttään!";
 Blockly.Msg.CLEAN_UP = "Siivoa lohkot";
 Blockly.Msg.COLLAPSE_ALL = "Sulje lohkot";
 Blockly.Msg.COLLAPSE_BLOCK = "Sulje lohko";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Palauttaa luvun arkustangentin.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Palauttaa asteluvun (ei radiaanin) kosinin.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Palauttaa asteluvun (ei radiaanin) sinin.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Palauttaa asteluvun (ei radiaanin) tangentin.";
-Blockly.Msg.ME = "Minä";
 Blockly.Msg.NEW_VARIABLE = "Uusi muuttuja...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Uuden muuttujan nimi:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.cs');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Přidat komentář";
-Blockly.Msg.AUTH = "Prosím udělte oprávnění této aplikaci aby jste mohli uložit a sdílet svou práci.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Změnit hodnotu:";
-Blockly.Msg.CHAT = "Psaním do tohoto políčka komunikujte se spolupracovníky!";
 Blockly.Msg.CLEAN_UP = "Uspořádat bloky";
 Blockly.Msg.COLLAPSE_ALL = "Sbalit bloky";
 Blockly.Msg.COLLAPSE_BLOCK = "Sbalit blok";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Vrátí arkus tangens čísla.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Vrátí kosinus úhlu ve stupních.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Vrátí sinus úhlu ve stupních.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Vrátí tangens úhlu ve stupních.";
-Blockly.Msg.ME = "Já";
 Blockly.Msg.NEW_VARIABLE = "Nová proměnná...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nový název proměnné:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

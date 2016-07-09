@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.sk');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Pridať komentár";
-Blockly.Msg.AUTH = "Autorizujte prosím túto aplikáciu, aby ste mohli uložiť a zdieľať vašu prácu.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Zmeniť hodnotu:";
-Blockly.Msg.CHAT = "Písaním do tohto políčka komunikujte so spolupracovníkmi!";
 Blockly.Msg.CLEAN_UP = "Narovnať bloky";
 Blockly.Msg.COLLAPSE_ALL = "Zvinúť bloky";
 Blockly.Msg.COLLAPSE_BLOCK = "Zvinúť blok";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Vráť arkus tangens čísla.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Vráť kosínus uhla (v stupňoch).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Vráť sínus uhla (v stupňoch).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Vráť tangens uhla (v stupňoch).";
-Blockly.Msg.ME = "Ja";
 Blockly.Msg.NEW_VARIABLE = "Nová premenná...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Názov novej premennej:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

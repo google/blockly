@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.ms');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Berikan Komen";
-Blockly.Msg.AUTH = "Sila benarkan aplikasi ini untuk membolehkan hasil kerja anda disimpan, malah dikongsikan oleh anda.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ubah nilai:";
-Blockly.Msg.CHAT = "Bersembang dengan rakan kerjasama anda dengan menaip di dalam petak ini!";
 Blockly.Msg.CLEAN_UP = "Kemaskan Blok";
 Blockly.Msg.COLLAPSE_ALL = "Lipat Blok²";
 Blockly.Msg.COLLAPSE_BLOCK = "Lipat Blok";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Kembalikan beberapa nombor arctangent.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Kembalikan darjah kosinus (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Kembalikan darjah sine (bukan radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Kembalikan darjah tangen (bukan radian).";
-Blockly.Msg.ME = "Saya";
 Blockly.Msg.NEW_VARIABLE = "Pembolehubah baru...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nama pembolehubah baru:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

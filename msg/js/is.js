@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.is');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Skrifa skýringu";
-Blockly.Msg.AUTH = "Vinsamlegast heimilaðu þetta forrit svo að hægt sé að vista verk þitt og svo að þú megir deila því";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Breyta gildi:";
-Blockly.Msg.CHAT = "Spjallaðu við félaga með því að skrifa í þennan reit!";
 Blockly.Msg.CLEAN_UP = "Hreinsa kubba";
 Blockly.Msg.COLLAPSE_ALL = "Loka kubbum";
 Blockly.Msg.COLLAPSE_BLOCK = "Loka kubbi";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Skila arkartangensi tölu.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Skila kósínusi horns gefnu í gráðum.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Skila sínusi horns gefnu í gráðum.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Skila tangensi horns gefnu í gráðum.";
-Blockly.Msg.ME = "Mig";
 Blockly.Msg.NEW_VARIABLE = "Ný breyta...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Heiti nýrrar breytu:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

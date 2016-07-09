@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.lb');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Bemierkung derbäisetzen";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "Wäert änneren:";
-Blockly.Msg.CHAT = "Mat ärem Mataarbechter chatten an deem Dir an dës Këscht tippt!";
 Blockly.Msg.CLEAN_UP = "Bléck opraumen";
 Blockly.Msg.COLLAPSE_ALL = "Bléck zesummeklappen";
 Blockly.Msg.COLLAPSE_BLOCK = "Block zesummeklappen";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";  // u
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";  // untranslated
-Blockly.Msg.ME = "Mech";
 Blockly.Msg.NEW_VARIABLE = "Nei Variabel...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Neie variabelen Numm:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

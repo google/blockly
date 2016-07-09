@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.tlh');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "QInHom chel";
-Blockly.Msg.AUTH = "ngogh nablIj DapollaHmeH qoj latlhvaD DangeHlaHmeH chaw' yInob.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "choH:";
-Blockly.Msg.CHAT = "beqpu'lI'vaD bIjawmeH naDev yIrI'!";
 Blockly.Msg.CLEAN_UP = "ngoghmeyvaD tlhegh rurmoH";
 Blockly.Msg.COLLAPSE_ALL = "ngoghmey DejmoH";
 Blockly.Msg.COLLAPSE_BLOCK = "ngogh DejmoH";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";  // u
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";  // untranslated
-Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "lIw chu'...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "lIw chu' pong:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.ia');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Adder commento";
-Blockly.Msg.AUTH = "Per favor autorisa iste application pro permitter de salveguardar tu travalio e pro permitter que tu lo divide con alteres.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Cambiar valor:";
-Blockly.Msg.CHAT = "Conversa con tu collaborator scribente in iste quadro!";
 Blockly.Msg.CLEAN_UP = "Clarar le blocos";
 Blockly.Msg.COLLAPSE_ALL = "Plicar blocos";
 Blockly.Msg.COLLAPSE_BLOCK = "Plicar bloco";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Retornar le arcotangente de un numero.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Retornar le cosino de un grado (non radiano).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Retornar le sino de un grado (non radiano).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Retornar le tangente de un grado (non radiano).";
-Blockly.Msg.ME = "Io";
 Blockly.Msg.NEW_VARIABLE = "Nove variabile...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nomine del nove variabile:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.tr');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Yorum Ekle";
-Blockly.Msg.AUTH = "Çalışmanızın kaydedilmesi ve sizinle paylaşılmasına izin verilmesi için lütfen bu uygulamaya yetki verin.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Değeri değiştir:";
-Blockly.Msg.CHAT = "Bu kutuya yazarak iş birlikçin ile sohbet et!";
 Blockly.Msg.CLEAN_UP = "Blokları temizle";
 Blockly.Msg.COLLAPSE_ALL = "Blokları Daralt";
 Blockly.Msg.COLLAPSE_BLOCK = "Blok'u Daralt";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Bir sayının ters tanjantını döndür .
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Bir açının kosinüsünü döndür(radyan olarak değil).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Bir açının sinüsünü döndür(radyan olarak değil).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Bir açının tanjantını döndür(radyan olarak değil).";
-Blockly.Msg.ME = "Beni";
 Blockly.Msg.NEW_VARIABLE = "Yeni değişken...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Yeni değişken ismi :";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";

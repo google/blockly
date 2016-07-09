@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.bg');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Добави коментар";
-Blockly.Msg.AUTH = "Позволи на приложението да записва и споделя работата ти.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Промени стойността:";
-Blockly.Msg.CHAT = "Говори с колега, като пишеш в това поле!";
 Blockly.Msg.CLEAN_UP = "Премахни блокове";
 Blockly.Msg.COLLAPSE_ALL = "Скрий блокове";
 Blockly.Msg.COLLAPSE_BLOCK = "Скрий блок";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Върни аркустангенс от �
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Върни косинус от ъгъл в градуси (не в радиани)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Върни синус от ъгъл в градуси (не в радиани)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Върни тангенс от ъгъл в градуси (не в радиани)";
-Blockly.Msg.ME = "Аз";
 Blockly.Msg.NEW_VARIABLE = "Нова променлива...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Ново име на променливата:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

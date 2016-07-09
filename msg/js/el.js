@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.el');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Πρόσθεσε Το Σχόλιο";
-Blockly.Msg.AUTH = "Παρακαλώ κάνε έγκριση της εφαρμογής για να επιτρέπεται  η αποθήκευση και κοινοποίηση της εργασίας σου.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Άλλαξε την τιμή:";
-Blockly.Msg.CHAT = "Μπορείς να μιλήσεις με τον συνεργάτη σου πληκτρολογώντας σ'αυτό το πλαίσιο!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Σύμπτυξτε Όλα Τα Μπλοκ";
 Blockly.Msg.COLLAPSE_BLOCK = "Σύμπτυξε Το Μπλοκ";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Επιστρέφει το τόξο εφα�
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Επιστρέφει το συνημίτονο ενός βαθμού (όχι ακτινίου).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Επιστρέφει το ημίτονο ενός βαθμού (όχι ακτινίου).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Επιστρέφει την εφαπτομένη ενός βαθμού (όχι ακτινίου).";
-Blockly.Msg.ME = "Εγώ";
 Blockly.Msg.NEW_VARIABLE = "Νέα μεταβλητή...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Νέο όνομα μεταβλητής:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

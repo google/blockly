@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.mk');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Додај коментар:";
-Blockly.Msg.AUTH = "Овластете го извршников за да можете да ја зачувате вашата работа и да можете да ја споделувате.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Смена на вредност:";
-Blockly.Msg.CHAT = "Разговарајте со вашиот соработник во ова поле!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Собери блокови";
 Blockly.Msg.COLLAPSE_BLOCK = "Собери блок";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";  // u
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";  // untranslated
-Blockly.Msg.ME = "Мене";
 Blockly.Msg.NEW_VARIABLE = "Нова променлива...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Назив на новата променлива:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

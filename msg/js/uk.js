@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.uk');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Додати коментар";
-Blockly.Msg.AUTH = "Будь ласка, авторизуйте цю програму, аби можна було зберігати вашу роботу і для надання можливості вам поширювати її.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Змінити значення:";
-Blockly.Msg.CHAT = "Спілкуйтеся з вашими співавторами, набираючи у цьому полі!";
 Blockly.Msg.CLEAN_UP = "Вирівняти блоки";
 Blockly.Msg.COLLAPSE_ALL = "Згорнути блоки";
 Blockly.Msg.COLLAPSE_BLOCK = "Згорнути блок";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Повертає арктангенс чи
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Повертає косинус кута в градусах (не в радіанах).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Повертає синус кута в градусах (не в радіанах).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Повертає тангенс кута в градусах (не в радіанах).";
-Blockly.Msg.ME = "Я";
 Blockly.Msg.NEW_VARIABLE = "Нова змінна...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Нова назва змінної:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "-ий.";

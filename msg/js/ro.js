@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.ro');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Adaugă un comentariu";
-Blockly.Msg.AUTH = "Va rugăm să autorizați această aplicație să permită salvarea activității dumneavoastră și să permită distribuirea acesteia de către dumneavoastră.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Schimbaţi valoarea:";
-Blockly.Msg.CHAT = "Discută cu colaboratorul tău tastând în cadrul acestei zone!";
 Blockly.Msg.CLEAN_UP = "Clean up Blocks";  // untranslated
 Blockly.Msg.COLLAPSE_ALL = "Restrange blocurile";
 Blockly.Msg.COLLAPSE_BLOCK = "Restrange blocul";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Returnează arctangenta unui număr.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Întoarce cosinusul unui grad (nu radianul).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Întoarce cosinusul unui grad (nu radianul).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Întoarce tangenta unui grad (nu radianul).";
-Blockly.Msg.ME = "Eu";
 Blockly.Msg.NEW_VARIABLE = "Variabilă nouă...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Noul nume de variabilă:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

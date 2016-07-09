@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.br');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Ouzhpennañ un evezhiadenn";
-Blockly.Msg.AUTH = "Roit aotre, mar plij, d'an arload-mañ evit gallout saveteiñ ho labour ha reiñ aotre dezhañ da rannañ ho labour ganimp.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Kemmañ an dalvoudenn :";
-Blockly.Msg.CHAT = "Flapañ gant ho kenlabourer en ur skrivañ er voest-se !";
 Blockly.Msg.CLEAN_UP = "Naetaat ar bloc'hoù";
 Blockly.Msg.COLLAPSE_ALL = "Bihanaat ar bloc'hoù";
 Blockly.Msg.COLLAPSE_BLOCK = "Bihanaat ar bloc'h";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Distreiñ ark tangent un niver";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Distreiñ kosinuz ur c'horn (ket e radianoù)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Distreiñ sinuz ur c'horn (ket e radianoù)";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Distreiñ tangent ur c'horn (ket e radianoù).";
-Blockly.Msg.ME = "Me";
 Blockly.Msg.NEW_VARIABLE = "Argemmenn nevez...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Anv an argemmenn nevez :";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

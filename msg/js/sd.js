@@ -7,9 +7,7 @@ goog.provide('Blockly.Msg.sd');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "تاثرات ڏيو";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
 Blockly.Msg.CHANGE_VALUE_TITLE = "قدر بدلايو";
-Blockly.Msg.CHAT = "هن دٻيءَ ۾ ٽائيپ ڪري پنهنجي ساٿاريءَ سان ڳالهايو";
 Blockly.Msg.CLEAN_UP = "بندشون هٽايو";
 Blockly.Msg.COLLAPSE_ALL = "بلاڪَ ڍڪيو";
 Blockly.Msg.COLLAPSE_BLOCK = "بلاڪ ڍڪيو";
@@ -267,7 +265,6 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";  // u
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";  // untranslated
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";  // untranslated
-Blockly.Msg.ME = "آئون";
 Blockly.Msg.NEW_VARIABLE = "نئون ڦرڻو";
 Blockly.Msg.NEW_VARIABLE_TITLE = "ڦرڻي جو نئون نالو:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated

@@ -918,7 +918,8 @@ function loadBlockLibrary() {
 }
 
 /**
- * For debugging purposes, prints out the localStorage.blockLibrary object.
+ * For debugging purposes, prints out the localStorage.blockLibrary object to
+ * console.
  */
 function printBlockLibrary(){
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
@@ -965,8 +966,7 @@ function loadBlockFromLocalStorage(blockType){
 /**
  * Updates the workspace to show the block user selected from library
  *
- * @param {HTML Select element} your blockLibrary dropdown
- * @return {String} blockType
+ * @param {Element} your blockLibrary dropdown
  */
 function selectHandler(blockLibraryDropdown){
   var index = blockLibraryDropdown.selectedIndex;

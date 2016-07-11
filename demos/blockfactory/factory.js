@@ -309,10 +309,31 @@ function getFieldsJs_(block) {
               escapeString(block.getFieldValue('TEXT')) + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
+        case 'field_number':
+          // Result: new Blockly.FieldNumber(10, 0, 100, 1), 'NUMBER'
+          var args = [
+            Number(block.getFieldValue('VALUE')),
+            Number(block.getFieldValue('MIN')),
+            Number(block.getFieldValue('MAX')),
+            Number(block.getFieldValue('PRECISION'))
+          ];
+          // Remove any trailing arguments that aren't needed.
+          if (args[3] == 0) {
+            args.pop();
+            if (args[2] == Infinity) {
+              args.pop();
+              if (args[1] == -Infinity) {
+                args.pop();
+              }
+            }
+          }
+          fields.push('new Blockly.FieldNumber(' + args.join(', ') + '), ' +
+              escapeString(block.getFieldValue('FIELDNAME')));
+          break;
         case 'field_angle':
           // Result: new Blockly.FieldAngle(90), 'ANGLE'
           fields.push('new Blockly.FieldAngle(' +
-              parseFloat(block.getFieldValue('ANGLE')) + '), ' +
+              Number(block.getFieldValue('ANGLE')) + '), ' +
               escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_checkbox':
@@ -354,7 +375,7 @@ function getFieldsJs_(block) {
           }
           break;
         case 'field_image':
-          // Result: new Blockly.FieldImage('http://...', 80, 60)
+          // Result: new Blockly.FieldImage('http://...', 80, 60, '*')
           var src = escapeString(block.getFieldValue('SRC'));
           var width = Number(block.getFieldValue('WIDTH'));
           var height = Number(block.getFieldValue('HEIGHT'));
@@ -390,6 +411,26 @@ function getFieldsJson_(block) {
             name: block.getFieldValue('FIELDNAME'),
             text: block.getFieldValue('TEXT')
           });
+          break;
+        case 'field_number':
+          var obj = {
+            type: block.type,
+            name: block.getFieldValue('FIELDNAME'),
+            value: parseFloat(block.getFieldValue('VALUE'))
+          };
+          var min = parseFloat(block.getFieldValue('MIN'));
+          if (min > -Infinity) {
+            obj.min = min;
+          }
+          var max = parseFloat(block.getFieldValue('MAX'));
+          if (max < Infinity) {
+            obj.max = max;
+          }
+          var precision = parseFloat(block.getFieldValue('PRECISION'));
+          if (precision) {
+            obj.precision = precision;
+          }
+          fields.push(obj);
           break;
         case 'field_angle':
           fields.push({
@@ -561,6 +602,9 @@ function updateGenerator(block) {
                   " = block.getFieldValue('" + name + "') == 'TRUE';");
       } else if (field instanceof Blockly.FieldDropdown) {
         code.push(makeVar('dropdown', name) +
+                  " = block.getFieldValue('" + name + "');");
+      } else if (field instanceof Blockly.FieldNumber) {
+        code.push(makeVar('number', name) +
                   " = block.getFieldValue('" + name + "');");
       } else if (field instanceof Blockly.FieldTextInput) {
         code.push(makeVar('text', name) +

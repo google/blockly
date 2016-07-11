@@ -267,6 +267,8 @@
 	"LISTS_SPLIT_LIST_FROM_TEXT": "ساخت لیست إژ متن",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "ساخت متن إژ لیست",
 	"LISTS_SPLIT_WITH_DELIMITER": "همراه جداساز",
+	"LISTS_SPLIT_TOOLTIP_SPLIT": "Split text into a list of texts, breaking at each delimiter.",
+	"LISTS_SPLIT_TOOLTIP_JOIN": "Join a list of texts into one text, separated by a delimiter.",
 	"VARIABLES_GET_TOOLTIP": "مقدار این متغیر را بر می‌گرداند.",
 	"VARIABLES_GET_CREATE_SET": "درست‌کردن «تنظیم %1»",
 	"VARIABLES_SET": "مجموعه %1 به %2",

@@ -191,6 +191,7 @@ Blockly.onMouseUp_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.isScrolling = false;
+  workspace.dragMode_ = Blockly.DRAG_NONE;
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {
     Blockly.unbindEvent_(Blockly.onTouchUpWrapper_);
@@ -212,7 +213,7 @@ Blockly.onMouseMove_ = function(e) {
     return;  // Multi-touch gestures won't have e.clientX.
   }
   var workspace = Blockly.getMainWorkspace();
-  if (workspace.isScrolling) {
+  if (workspace.dragMode_ != Blockly.DRAG_NONE) {
     var dx = e.clientX - workspace.startDragMouseX;
     var dy = e.clientY - workspace.startDragMouseY;
     var metrics = workspace.startDragMetrics;
@@ -231,6 +232,7 @@ Blockly.onMouseMove_ = function(e) {
     // Cancel the long-press if the drag has moved too far.
     if (Math.sqrt(dx * dx + dy * dy) > Blockly.DRAG_RADIUS) {
       Blockly.longStop_();
+      workspace.dragMode_ = Blockly.DRAG_FREE;
     }
     e.stopPropagation();
     e.preventDefault();

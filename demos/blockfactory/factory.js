@@ -752,7 +752,7 @@ function createAndDownloadFile_(contents, filename, fileType) {
   a.href = window.URL.createObjectURL(data);
   a.download = filename;
   a.textContent = 'Download file!';
-  a.dispatchEvent(clickEvent); 
+  a.dispatchEvent(clickEvent);
 }
 
 /**
@@ -762,7 +762,7 @@ function createAndDownloadFile_(contents, filename, fileType) {
 function saveWorkspaceToFile() {
   var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
   var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
-  createAndDownloadFile_(prettyXml, 'blockXml', 'xml'); 
+  createAndDownloadFile_(prettyXml, 'blockXml', 'xml');
 }
 
 /**
@@ -810,8 +810,8 @@ function importBlockFromFile() {
  * Checks to see if object under provided name exists.
  * If not, creates and stores an object with specified name into localStorage.
  *
- * @param {String, Object} name of object you are putting in localStorage, optional
- * @return {Object} you created
+ * @param {String} name - name of object you are putting in localStorage
+ * @param {Object} [opt_object=] object you would like to put in localStorage
  */
 function createLocalStorageObjectIfNotMadeYet(name, opt_object){
   var objectToStore = opt_object || {};
@@ -824,9 +824,10 @@ function createLocalStorageObjectIfNotMadeYet(name, opt_object){
 }
 
 /**
- * Returns the block type of the block the user is building at time of call to function.
- * 
- * @return {String}  blockType - the block type of the block the user is currently building
+ * Returns the block type of the block the user is building at time of call to
+ * function.
+ *
+ * @return {String} the block type of the block the user is currently building
  */
 function getCurrentBlockType(){
   var rootBlock = getRootBlock();
@@ -835,10 +836,10 @@ function getCurrentBlockType(){
 }
 
 /**
- * Saves block XML as a String value  with the blockType (e.g. 'colour_picker') as its key
- * in the window.localStorage.BlockLibrary object.
- * 
- * @return {String} blockType - type of block saved to storage
+ * Saves block XML as a String value  with the blockType (e.g. 'colour_picker')
+ * as its key in the window.localStorage.BlockLibrary object.
+ *
+ * @return {String} type of block saved to storage
  */
 function saveBlockToLocalStorage() {
   createLocalStorageObjectIfNotMadeYet('blockLibrary');
@@ -854,11 +855,10 @@ function saveBlockToLocalStorage() {
 
 /**
  * Creates a node of a given element type and appends to the node with given id.
- * 
- * @param {String, String, String}
- *  optionName - value of option
- *  optionText - text in option
- *  dropdownID - id for HTML select element
+ *
+ * @param {String} optionName - value of option
+ * @param {String} optionText - text in option
+ * @param {String} dropdownID - id for HTML select element
  */
 function addOption(optionName, optionText, dropdownID){
   var dropdown = document.getElementById(dropdownID);
@@ -872,22 +872,23 @@ function addOption(optionName, optionText, dropdownID){
 /**
  * Removes option currently selected in dropdown from dropdown menu.
  *
- * @param {String} 
+ * @param {String} dropdownID - id of HTML select element within which to find
+ *     the selected option.
  */
-function removeOption(dropdownID){
+function removeSelectedOption(dropdownID){
   var dropdown = document.getElementById(dropdownID);
   dropdown.remove(dropdown.selectedIndex);
 }
 
 /**
- * Removes all options from dropdown. 
+ * Removes all options from dropdown.
  *
- * @param {String} 
+ * @param {String} dropdownID - id of HTML select element to clear options of.
  */
 function clearOptions(dropdownID){
   var dropdown = document.getElementById(dropdownID);
   while (dropdown.length > 0) {
-      dropdown.remove(dropdown.length-1);
+    dropdown.remove(dropdown.length-1);
   }
 }
 
@@ -977,7 +978,8 @@ function selectHandler(blockLibraryDropdown){
  * Clears the block library in local storage and updates the dropdown.
  */
 function clearBlockLibrary() {
-  var check = prompt('Are you sure you want to clear your Block Library? ("yes" or "no")');
+  var check = prompt(
+      'Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes"){
     window.localStorage.removeItem('blockLibrary');
   }
@@ -1010,7 +1012,7 @@ function init() {
 
   document.getElementById('localSaveButton')
     .addEventListener('click', saveWorkspaceToFile);
-  
+
   document.getElementById('saveToBlockLibraryButton')
     .addEventListener('click', saveToBlockLibrary);
 
@@ -1072,7 +1074,8 @@ function init() {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                mainWorkspace);
   } else {
-    var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
+    var xml = '<xml><block type="factory_base" deletable="false" \
+        movable="false"></block></xml>';
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
   }
   mainWorkspace.clearUndo();

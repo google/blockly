@@ -176,7 +176,6 @@
 	"TEXT_LENGTH_TOOLTIP": "தொடரில் உள்ள எழுத்துக்களின் (இடைவெளிகளையும் சேர்த்து) எண்ணிகையை பின்கொடு.",
 	"TEXT_ISEMPTY_TITLE": "%1 காலியானது",
 	"TEXT_ISEMPTY_TOOLTIP": "காலியானது என்றால் மெய் மதிப்பை பின்கொடு",
-	"TEXT_INDEXOF_TOOLTIP": "இரண்டாவது உரையில் முதல் உரையின் முதல்/கடை இருக்கை குறிஎண்ணை பின்கொடு.",
 	"TEXT_INDEXOF_INPUT_INTEXT": "உரையில்",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "உரையில் முதல் தோற்ற இடத்தை பின்கொடு",
 	"TEXT_INDEXOF_OPERATOR_LAST": "உரையில் கடைசி தோற்ற இடத்தை பின்கொடு",

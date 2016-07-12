@@ -1,15 +1,14 @@
- //var categories = [];
- //var numCategories = 0;
-
 var selected = 'default';
 var categoryXmlMap = new Map();
 var categoryTabMap = new Map();
+var categoryTopBlocksMap = new Map();
 
 
 var addCategory = function() {
     do {
         var name = prompt("Enter the name of your new category: ");
     } while (!validNameCheck(name))
+    if (name == null) return; //cancelled
     //categories[numCategories] = name;
     //numCategories++;
     addCategoryRow(name);
@@ -46,6 +45,7 @@ var removeCategoryByName = function(name) { //update remove accordingly
     var count = table.rows.length;
     categoryXmlMap.delete(name);
     categoryTabMap.delete(name);
+    categoryTopBlocksMap.delete(name);
     if (name == selected) {
       var newTabOpen = getNextEmptyCategory();
       toggleTabs(newTabOpen);
@@ -87,6 +87,7 @@ var toggleTabs = function(name) {
     toolboxWorkspace.clearUndo();
     window.console.log(name + " " + categoryXmlMap.get(name));
     Blockly.Xml.domToWorkspace(categoryXmlMap.get(name),toolboxWorkspace);
+    categoryTopBlocksMap.set(name,toolboxWorkspace.getTopBlocks());
 
 };
 
@@ -209,17 +210,11 @@ Blockly.Xml.blockToDomSimple = function(block) {
 
 //adapted from workspaceToDom but calling blockToDom instead of blockToDo WithXY
 //eventually add to xml.js
-var workspaceToDomToolbox = function(workspace) {
-    var xml = goog.dom.createDom('xml',
-        {
-            'id' : 'toolbox',
-            'style' : 'display:none'
-        });
-    var blocks = workspace.getTopBlocks(true);
+var categoryToDom = function(xmlDom, categoryName) {
+    var blocks = categoryTopBlocksMap.get(categoryName);
     for (var i=0, block; block=blocks[i]; i++) {
-        xml.appendChild(Blockly.Xml.blockToDomSimple(block)); //make blockToDomSimple that generates xml w/out ids
+        xmlDom.appendChild(Blockly.Xml.blockToDomSimple(block)); //make blockToDomSimple that generates xml w/out ids
     }
-    return xml;
 };
 
 
@@ -238,22 +233,55 @@ var createAndDownloadFile = function(contents, filename, fileType) {
    a.dispatchEvent(clickEvent);
  };
 
+
+ //have better way to save the toolbox xml -- have two versions, when you toggle tabs it save both to reload, have a save function that updates selected in both
+ var generateConfigXml = function() {
+  var xmlDom = goog.dom.createDom('xml',
+        {
+            'id' : 'toolbox',
+            'style' : 'display:none'
+        });
+  categoryXmlMap.set(selected, Blockly.Xml.workspaceToDom(toolboxWorkspace));
+  categoryTopBlocksMap.set(selected, toolboxWorkspace.getTopBlocks());
+
+  for (var category of categoryTopBlocksMap.keys()) {
+    if (category != 'default') {
+      var categoryElement = goog.dom.createDom('category');
+      categoryElement.setAttribute('name',category);
+      categoryToDom(categoryElement,category);
+      xmlDom.appendChild(categoryElement);
+    } else {
+      window.console.log("default");
+      categoryToDom(xmlDom, category);   //workspaceToDomToolbox(toolboxWorkspace)
+    }
+    /*
+    if (category!='default') {
+      generatedXml += '<category name="' + category + '">' + xmlElement + '</category>';
+    } */
+   }
+
+   return xmlDom;
+ }
+
 var exportConfig = function() {
-   var xmlElement = workspaceToDomToolbox(toolboxWorkspace);
-   var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
+   var configXml = Blockly.Xml.domToPrettyText(generateConfigXml());
    var fileName = prompt("File Name: ");
-   createAndDownloadFile(prettyXml, fileName, 'xml');
+   createAndDownloadFile(configXml, fileName, 'xml');
  };
 
 var printConfig = function() {
-  var xmlElement = workspaceToDomToolbox(toolboxWorkspace);
-  var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
-  window.console.log(prettyXml);
+  window.console.log(Blockly.Xml.domToPrettyText(generateConfigXml()));
 }
 
 //TODO(edauterman): modify blockly inject call to reflect selected options
+//FLYOUT NOT WORKING
 var updatePreview = function() {
-    previewWorkspace.flyout_.show(workspaceToDomToolbox(toolboxWorkspace).childNodes)
+  var response = prompt ("Toolbox or flyout? ");
+  if (response == 'flyout') {
+    previewWorkspace.flyout_.show((generateConfigXml()).childNodes);
+  } else {
+    previewWorkspace.toolbox_.populate_(generateConfigXml());
+  }
 
 
     //previewWorkspace.toolbox.populate_(previewXml);

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
   <title>Blockly Workspace Factory</title>
   <script src="../../blockly_uncompressed.js"></script>
   <script src="../../generators/javascript.js"></script>
@@ -23,72 +22,7 @@
   <script src="../../blocks/variables.js"></script>
   <script src="../../blocks/procedures.js"></script>
   <script src="workspacefactory.js"></script>
-  <style>
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-    }
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-    section {
-      float: left;
-      width: 70%;
-    }
-    aside {
-      float: right;
-      width: 30%;
-    }
-    #categoryTable>table {
-      border: 1px solid #ccc;
-      border-bottom: none;
-    }
-    td.tabon {
-      border-bottom-color: #ddd !important;
-      background-color: #ddd;
-      padding: 5px 19px;
-    }
-    td.taboff {
-      cursor: pointer;
-      padding: 5px 19px;
-    }
-    td.taboff:hover {
-      background-color: #eee;
-    }
-    button {
-      border-radius: 4px;
-      border: 1px solid #ddd;
-      background-color: #eee;
-      color: #000;
-      padding: 10px;
-      margin: 0 5px;
-      font-size: large;
-    }
-    button:hover:not(:disabled) {
-      box-shadow: 2px 2px 5px #888;
-    }
-    button:disabled {
-      opacity: 0.6;
-    }
-    button>* {
-      opacity: 0.6;
-      vertical-align: text-bottom;
-    }
-    button:hover:not(:disabled)>* {
-      opacity: 1;
-    }
-    table {
-      border-collapse: collapse;
-      margin: 0;
-      padding: 0;
-      border: none;
-    }
-    td {
-      padding: 0;
-      vertical-align: top;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <table width="100%" height="100%">
@@ -112,7 +46,7 @@
         </td>
       </tr>
   </table>
-
+<!-- Add all this to stylesheet -->
 <section style = "width:70%">
   <p>Drag blocks into your toolbox</p>
   <section style = "width:80%">
@@ -444,9 +378,6 @@
              snap: true},
          media: '../../media/',
          toolbox: toolbox,
-         zoom:
-             {controls: true,
-              wheel: true}
         });
 
   var previewWorkspace = Blockly.inject('preview_blocks',

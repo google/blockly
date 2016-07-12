@@ -44,6 +44,7 @@ goog.require('goog.math');
  */
 Blockly.FieldNumber =
     function(value, opt_min, opt_max, opt_precision, opt_validator) {
+  value = String(value);
   Blockly.FieldNumber.superClass_.constructor.call(this, value, opt_validator);
   this.setConstraints(opt_min, opt_max, opt_precision);
 };

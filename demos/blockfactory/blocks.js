@@ -243,6 +243,32 @@ Blockly.Blocks['field_input'] = {
   }
 };
 
+Blockly.Blocks['field_number'] = {
+  // Numeric input.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput()
+        .appendField('numeric input')
+        .appendField(new Blockly.FieldNumber(0), 'VALUE')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.appendDummyInput()
+        .appendField('min')
+        .appendField(new Blockly.FieldNumber(-Infinity), 'MIN')
+        .appendField('max')
+        .appendField(new Blockly.FieldNumber(Infinity), 'MAX')
+        .appendField('precision')
+        .appendField(new Blockly.FieldNumber(0, 0), 'PRECISION');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('An input field for the user to enter a number.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=319');
+  },
+  onchange: function() {
+    fieldNameCheck(this);
+  }
+};
+
 Blockly.Blocks['field_angle'] = {
   // Angle input.
   init: function() {

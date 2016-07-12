@@ -84,9 +84,12 @@ Blockly.WorkspaceSvg.prototype.isFlyout = false;
 
 /**
  * Is this workspace currently being dragged around?
- * @type {boolean}
+ * DRAG_NONE - No drag operation.
+ * DRAG_BEGIN - Still inside the initial DRAG_RADIUS.
+ * DRAG_FREE - Workspace has been dragged further than DRAG_RADIUS.
+ * @private
  */
-Blockly.WorkspaceSvg.prototype.isScrolling = false;
+Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
 
 /**
  * Current horizontal scrolling offset.
@@ -656,7 +659,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     // Right-click.
     this.showContextMenu_(e);
   } else if (this.scrollbar) {
-    this.isScrolling = true;
+    this.dragMode_ = Blockly.DRAG_BEGIN;
     // Record the current mouse position.
     this.startDragMouseX = e.clientX;
     this.startDragMouseY = e.clientY;
@@ -716,7 +719,8 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
  * @return {boolean} True if currently dragging or scrolling.
  */
 Blockly.WorkspaceSvg.prototype.isDragging = function() {
-  return Blockly.dragMode_ == Blockly.DRAG_FREE || this.isScrolling;
+  return Blockly.dragMode_ == Blockly.DRAG_FREE ||
+      this.dragMode_ == Blockly.DRAG_FREE;
 };
 
 /**

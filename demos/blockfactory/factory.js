@@ -876,6 +876,14 @@ BlockLibrary.UI.loadBlockLibraryUI = function() {
 };
 
 /**
+ * Pulls up a menu for user to customize which blocks and what type of scripts
+ * to download, and what to name the file. Downloads upon submit.
+ */
+ BlockLibrary.UI.loadDownloadMenu = function() {
+  //TODO(quacht)
+ }
+
+/**
 * namespace for Block Library UI
 * @namespace UI
 * @memberof BlockLibrary
@@ -1035,6 +1043,7 @@ BlockLibrary.getBlockLibrary = function() {
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
   return blockLibrary;
 };
+
 /**
  * For debugging purposes, prints out the localStorage.blockLibrary object to
  * console.
@@ -1042,6 +1051,55 @@ BlockLibrary.getBlockLibrary = function() {
 BlockLibrary.printBlockLibrary = function() {
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
   console.log(blockLibrary);
+};
+
+/**
+ * For debugging purposes, prints out the localStorage.blockLibrary object to
+ * console.
+ */
+BlockLibrary.printBlockLibrary = function() {
+  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
+  console.log(blockLibrary);
+};
+
+/**
+ * Pulls up a menu for user to customize which blocks and what type of scripts
+ * to download, and what to name the file. Downloads upon submit.
+ *
+ */
+BlockLibrary.downloadBlockFiles = function(blockTypes, definitionFormat,
+    generatorLang){
+  //TODO(quacht)
+};
+
+/**
+ * Return the given language code of each block type in an array.
+ *
+ * @param {string[]} blockTypes - array of block types for which to get block
+ * definitions
+ * @param {string} definitionFormat - 'JSON' or 'JavaScript'
+ * @return {string} in the desired format, the concatenation of each block's
+ * language code.
+ */
+BlockLibrary.getBlockDefs = function(blockTypes, definitionFormat) {
+  var rootBlock = getRootBlock();
+  var blockCode = [];
+  for (var i = 0; i < blockTypes.length; i++) {
+    var blockType = blockTypes[i];
+    blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
+    switch (definitionFormat) {
+      case 'JSON':
+        var code = formatJson_(blockType, rootBlock);
+        break;
+      case 'JavaScript':
+        var code = formatJavaScript_(blockType, rootBlock);
+        break;
+    }
+    blockCode.push(code);
+  }
+  console.log("blockCode:");
+  console.log(blockCode);
+  return blockCode.join("\n\n");
 };
 
 
@@ -1069,6 +1127,9 @@ function init() {
 
   document.getElementById('localSaveButton')
     .addEventListener('click', BlockLibrary.saveWorkspaceToFile);
+
+  document.getElementById('downloadFromLibButton')
+    .addEventListener('click', BlockLibrary.downloadBlockFiles);
 
   document.getElementById('saveToBlockLibraryButton')
     .addEventListener('click', BlockLibrary.saveToBlockLibrary);

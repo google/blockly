@@ -968,7 +968,7 @@ BlockLibrary.getCurrentBlockType = function() {
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
   BlockLibrary.LocalStorage.removeFromLocalStorage(blockType, 'blockLibraryDropdown');
-  BlockLibrary.loadBlockLibrary();
+  BlockLibrary.UI.loadBlockLibraryUI();
 };
 
 /**
@@ -999,8 +999,31 @@ BlockLibrary.clearBlockLibrary = function() {
  * Saves current block to local storage and updates dropdown.
  */
 BlockLibrary.saveToBlockLibrary = function() {
-  var blockType = BlockLibrary.LocalStorage.saveBlockToLocalStorage();
-  BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
+  var blockType = BlockLibrary.getCurrentBlockType();
+  if (BlockLibrary.isInBlockLibrary(blockType)){
+    alert('You already saved a block called ' + blockType+ ' to your library.' +
+      ' Please rename your block or delete the old one.');
+  }
+  else {
+    var blockType = BlockLibrary.LocalStorage.saveBlockToLocalStorage();
+    BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
+  }
+};
+
+/**
+ * Checks to see if the given blockType is already in Block Library
+ *
+ * @param {String} blockType - type of block
+ * @return {Boolean} indicates whether or not block is in the library
+ */
+BlockLibrary.isInBlockLibrary = function(blockType) {
+  var blockLibrary = BlockLibrary.getBlockLibrary();
+  for (var type in blockLibrary) {
+    if (type == blockType) {
+      return true;
+    }
+  }
+  return false;
 };
 
 /**

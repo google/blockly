@@ -84,17 +84,9 @@ Blockly.WorkspaceSvg.prototype.isFlyout = false;
 
 /**
  * Is this workspace currently being dragged around?
- * Equivalent to dragMode_ != Blockly.DRAG_NONE, but kept for backwards
- * compatibility.
- * @type {boolean}
- */
-Blockly.WorkspaceSvg.prototype.isScrolling = false;
-
-/**
- * Is this workspace currently being dragged around?
- * 0 - DRAG_NONE - no drag operation.
- * 1 - DRAG_STICKY - still within the sticky DRAG_RADIUS.
- * 2 - DRAG_FREE - in scroll mode.
+ * DRAG_NONE - No drag operation.
+ * DRAG_BEGIN - Still inside the initial DRAG_RADIUS.
+ * DRAG_FREE - Workspace has been dragged further than DRAG_RADIUS.
  * @private
  */
 Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
@@ -667,8 +659,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     // Right-click.
     this.showContextMenu_(e);
   } else if (this.scrollbar) {
-    this.isScrolling = true;
-    this.dragMode_ = Blockly.DRAG_STICKY;
+    this.dragMode_ = Blockly.DRAG_BEGIN;
     // Record the current mouse position.
     this.startDragMouseX = e.clientX;
     this.startDragMouseY = e.clientY;

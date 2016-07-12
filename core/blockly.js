@@ -106,9 +106,9 @@ Blockly.clipboardSource_ = null;
 
 /**
  * Is the mouse dragging a block?
- * 0 - No drag operation.
- * 1 - Still inside the sticky DRAG_RADIUS.
- * 2 - Freely draggable.
+ * DRAG_NONE - No drag operation.
+ * DRAG_STICKY - Still inside the sticky DRAG_RADIUS.
+ * DRAG_FREE - Freely draggable.
  * @private
  */
 Blockly.dragMode_ = Blockly.DRAG_NONE;
@@ -190,7 +190,6 @@ Blockly.svgResize = function(workspace) {
 Blockly.onMouseUp_ = function(e) {
   var workspace = Blockly.getMainWorkspace();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  workspace.isScrolling = false;
   workspace.dragMode_ = Blockly.DRAG_NONE;
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {

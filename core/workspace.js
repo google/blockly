@@ -119,7 +119,7 @@ Blockly.Workspace.SCAN_ANGLE = 3;
 Blockly.Workspace.prototype.addTopBlock = function(block) {
   this.topBlocks_.push(block);
   if (this.isFlyout) {
-    var variables = Blockly.Variables.allVariables(block);
+    var variables = Blockly.Variables.allUsedVariables(block);
     for (var i = 0; i < variables.length; i++) {
       if (this.variableList.indexOf(variables[i]) == -1) {
         this.variableList.push(variables[i]);

@@ -37,13 +37,14 @@ goog.require('goog.string');
 Blockly.Variables.NAME_TYPE = 'VARIABLE';
 
 /**
- * Find all user-created variables.
+ * Find all user-created variables that are in use in the workspace.
+ * For use by generators.
  * @param {!Blockly.Block|!Blockly.Workspace} root Root block or workspace.
  * @return {!Array.<string>} Array of variable names.
  */
-Blockly.Variables.allVariables = function(root) {
+Blockly.Variables.allUsedVariables = function(root) {
   var blocks;
-  if (root.getDescendants) {
+  if (root instanceof Blockly.Block) {
     // Root is Block.
     blocks = root.getDescendants();
   } else if (root.getAllBlocks) {
@@ -72,6 +73,22 @@ Blockly.Variables.allVariables = function(root) {
     variableList.push(variableHash[name]);
   }
   return variableList;
+};
+
+/**
+ * Find all variables that the user has created through the workspace or
+ * toolbox.  For use by generators.
+ * @param {!Blockly.Workspace} root The workspace to inspect.
+ * @return {!Array.<string>} Array of variable names.
+ */
+Blockly.Variables.allVariables = function(root) {
+  if (root instanceof Blockly.Block) {
+    // Root is Block.
+    console.warn('Deprecated call to Blockly.Variables.allVariables ' +
+                 'with a block instead of a workspace.  You may want ' +
+                 'Blockly.Variables.allUsedVariables');
+  }
+  return root.variableList;
 };
 
 /**

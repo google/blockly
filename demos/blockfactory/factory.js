@@ -853,31 +853,23 @@ BlockLibrary.UI.removeSelectedOption = function(dropdownID) {
 BlockLibrary.UI.clearOptions = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   while (dropdown.length > 0) {
-    dropdown.remove(dropdown.length-1);
+    dropdown.remove(dropdown.length - 1);
   }
 };
 
 /**
  * Loads block library from local storage and populates the dropdown menu.
  */
-BlockLibrary.UI.loadBlockLibraryUI = function() {
+BlockLibrary.loadBlockLibrary = function() {
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
-  if (Object.keys(blockLibrary).length === 0){
+  if (Object.keys(blockLibrary).length == 0) {
     alert('No blocks in BlockLibrary!');
   }
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
-  for (var block in blockLibrary){
+  for (var block in blockLibrary) {
     BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
   }
 };
-
-/**
- * Pulls up a menu for user to customize which blocks and what type of scripts
- * to download, and what to name the file. Downloads upon submit.
- */
- BlockLibrary.UI.loadDownloadMenu = function() {
-  //TODO(quacht)
- }
 
 /**
 * namespace for Block Library UI
@@ -895,12 +887,36 @@ BlockLibrary.LocalStorage = {};
  */
 BlockLibrary.LocalStorage.createLocalStorageObj = function(name, opt_object) {
   var objectToStore = opt_object || {};
-  if (!window.localStorage[name]){
+  if (!window.localStorage[name]) {
     window.localStorage[name] = JSON.stringify(objectToStore);
   }
   else{
     alert('object with name ' + name + ' is already in local storage');
   }
+};
+
+/**
+ * Returns an object under a specified name from localStorage. If there is no
+ * object under that name in localStorage, returns empty object.
+ *
+ * @param {String} name - name of object you are putting in localStorage
+ * @return {Object} object you want from localStorage
+ */
+BlockLibrary.LocalStorage.loadObject = function(name) {
+  var object = window.localStorage[name];
+  return object ? JSON.parse(object) : {};
+};
+
+/**
+ * stores an object (empty if not provided) under a specified name into
+ * localStorage.
+ *
+ * @param {String} name - name of object you are putting in localStorage
+ * @param {Object} [opt_object=] object you would like to put in localStorage
+ */
+BlockLibrary.LocalStorage.saveObject = function(name, opt_object) {
+  var objectToStore = opt_object || {};
+  window.localStorage[name] = JSON.stringify(objectToStore);
 };
 
 
@@ -970,7 +986,7 @@ BlockLibrary.getCurrentBlockType = function() {
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
   BlockLibrary.LocalStorage.removeFromLocalStorage(blockType, 'blockLibraryDropdown');
-  BlockLibrary.UI.loadBlockLibraryUI();
+  BlockLibrary.loadBlockLibrary();
 };
 
 /**
@@ -1026,6 +1042,20 @@ BlockLibrary.isInBlockLibrary = function(blockType) {
     }
   }
   return false;
+};
+
+/**
+ * Loads block library from local storage and populates the dropdown menu.
+ */
+BlockLibrary.loadBlockLibrary = function() {
+  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
+  if (Object.keys(blockLibrary).length === 0){
+    alert('No blocks in BlockLibrary!');
+  }
+  BlockLibrary.UI.clearOptions('blockLibraryDropdown');
+  for (var block in blockLibrary){
+    BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
+  }
 };
 
 /**
@@ -1087,7 +1117,7 @@ function init() {
     disableEnableLink();
   }
 
-  BlockLibrary.UI.loadBlockLibraryUI();
+  BlockLibrary.loadBlockLibrary();
 
   document.getElementById('localSaveButton')
     .addEventListener('click', BlockLibrary.saveWorkspaceToFile);

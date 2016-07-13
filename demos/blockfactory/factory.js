@@ -879,32 +879,15 @@ BlockLibrary.loadBlockLibrary = function() {
 BlockLibrary.LocalStorage = {};
 
 /**
- * Checks to see if object under provided name exists.
- * If not, creates and stores an object with specified name into localStorage.
- *
- * @param {String} name - name of object you are putting in localStorage
- * @param {Object} [opt_object=] object you would like to put in localStorage
- */
-BlockLibrary.LocalStorage.createLocalStorageObj = function(name, opt_object) {
-  var objectToStore = opt_object || {};
-  if (!window.localStorage[name]) {
-    window.localStorage[name] = JSON.stringify(objectToStore);
-  }
-  else{
-    alert('object with name ' + name + ' is already in local storage');
-  }
-};
-
-/**
  * Returns an object under a specified name from localStorage. If there is no
- * object under that name in localStorage, returns empty object.
+ * object under that name in localStorage, returns null.
  *
  * @param {String} name - name of object you are putting in localStorage
  * @return {Object} object you want from localStorage
  */
 BlockLibrary.LocalStorage.loadObject = function(name) {
   var object = window.localStorage[name];
-  return object ? JSON.parse(object) : {};
+  return object ? JSON.parse(object) : null;
 };
 
 /**
@@ -922,18 +905,22 @@ BlockLibrary.LocalStorage.saveObject = function(name, opt_object) {
 
 /**
  * Saves block XML as a String value  with the blockType (e.g. 'colour_picker')
- * as its key in the window.localStorage.BlockLibrary object.
+ * as its key in the window.localStorage.blockLibrary object. Creates a block
+ * library if it doesn't yet exist.
  *
  * @return {String} type of block saved to storage
  */
 BlockLibrary.LocalStorage.saveBlockToLocalStorage = function() {
-  BlockLibrary.LocalStorage.createLocalStorageObj('blockLibrary', JSON.parse(window.localStorage['blockLibrary']));
+  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
+  if (blockLibrary == null) {
+    BlockLibrary.LocalStorage.saveObject('blockLibrary');
+    blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
+  }
   var blockType = BlockLibrary.getCurrentBlockType();
   var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
   var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
-  var blockLibrary = JSON.parse(window.localStorage['blockLibrary']);
   blockLibrary[blockType] = prettyXml;
-  window.localStorage['blockLibrary'] = JSON.stringify(blockLibrary);
+  BlockLibrary.LocalStorage.saveObject('blockLibrary', blockLibrary);
   return blockType;
 };
 
@@ -1019,7 +1006,7 @@ BlockLibrary.clearBlockLibrary = function() {
 BlockLibrary.saveToBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
   if (BlockLibrary.isInBlockLibrary(blockType)){
-    alert('You already saved a block called ' + blockType+ ' to your library.' +
+    alert('You already saved a block called ' + blockType + ' to your library.' +
       ' Please rename your block or delete the old one.');
   }
   else {

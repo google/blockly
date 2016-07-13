@@ -891,7 +891,7 @@ BlockLibrary.LocalStorage.loadObject = function(name) {
 };
 
 /**
- * stores an object (empty if not provided) under a specified name into
+ * Stores an object (empty if not provided) under a specified name into
  * localStorage.
  *
  * @param {String} name - name of object you are putting in localStorage
@@ -902,26 +902,22 @@ BlockLibrary.LocalStorage.saveObject = function(name, opt_object) {
   window.localStorage[name] = JSON.stringify(objectToStore);
 };
 
-
 /**
- * Saves block XML as a String value  with the blockType (e.g. 'colour_picker')
- * as its key in the window.localStorage.blockLibrary object. Creates a block
- * library if it doesn't yet exist.
+ * Saves block to block library in localStorage, creates block library if it
+ * doesn't exist yet.
  *
- * @return {String} type of block saved to storage
+ * @param {String} blockType - the type the block
+ * @param {Element} blockXML - the block's XML pulled from workspace
  */
-BlockLibrary.LocalStorage.saveBlockToLocalStorage = function() {
+BlockLibrary.LocalStorage.saveBlock = function(blockType, blockXML) {
   var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
   if (blockLibrary == null) {
     BlockLibrary.LocalStorage.saveObject('blockLibrary');
     blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
   }
-  var blockType = BlockLibrary.getCurrentBlockType();
-  var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
-  var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
+  var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
   blockLibrary[blockType] = prettyXml;
   BlockLibrary.LocalStorage.saveObject('blockLibrary', blockLibrary);
-  return blockType;
 };
 
 /**
@@ -972,7 +968,8 @@ BlockLibrary.getCurrentBlockType = function() {
  */
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
-  BlockLibrary.LocalStorage.removeFromLocalStorage(blockType, 'blockLibraryDropdown');
+  BlockLibrary.LocalStorage.removeFromLocalStorage(
+      blockType, 'blockLibraryDropdown');
   BlockLibrary.loadBlockLibrary();
 };
 
@@ -1008,9 +1005,8 @@ BlockLibrary.saveToBlockLibrary = function() {
   if (BlockLibrary.isInBlockLibrary(blockType)){
     alert('You already saved a block called ' + blockType + ' to your library.' +
       ' Please rename your block or delete the old one.');
-  }
-  else {
-    var blockType = BlockLibrary.LocalStorage.saveBlockToLocalStorage();
+  } else {
+    var blockType = BlockLibrary.saveBlockToLocalStorage();
     BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
   }
 };
@@ -1043,6 +1039,18 @@ BlockLibrary.loadBlockLibrary = function() {
   for (var block in blockLibrary){
     BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
   }
+};
+
+/**
+ * Saves current block to Block Library.
+ *
+ * @return {String} type of block saved to storage
+ */
+BlockLibrary.saveBlockToLocalStorage = function() {
+  var blockType = BlockLibrary.getCurrentBlockType();
+  var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
+  BlockLibrary.LocalStorage.saveBlock(blockType, xmlElement);
+  return blockType;
 };
 
 /**

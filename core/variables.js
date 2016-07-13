@@ -44,7 +44,7 @@ Blockly.Variables.NAME_TYPE = 'VARIABLE';
  */
 Blockly.Variables.allUsedVariables = function(root) {
   var blocks;
-  if (root.getDescendants) {
+  if (root instanceof Blockly.Block) {
     // Root is Block.
     blocks = root.getDescendants();
   } else if (root.getAllBlocks) {
@@ -82,7 +82,7 @@ Blockly.Variables.allUsedVariables = function(root) {
  * @return {!Array.<string>} Array of variable names.
  */
 Blockly.Variables.allVariables = function(root) {
-  if (root.getDescendants) {
+  if (root instanceof Blockly.Block) {
     // Root is Block.
     console.warn('Deprecated call to Blockly.Variables.allVariables ' +
                  'with a block instead of a workspace.  You may want ' +

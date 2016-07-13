@@ -411,7 +411,7 @@ Blockly.Field.prototype.setValue = function(newText) {
     // If the shadowMorph option is enabled in the workspace, any change in the
     // field value trigger the parent block to become "not shadow".
     var noGroup = false;
-    if (workspace.options.shadowMorphEnabled &&
+    if (this.sourceBlock_.workspace.options.shadowMorphEnabled &&
         Blockly.Events.recordUndo) {
       if (Blockly.Events.isEnabled()) {
         // In case we are not already in a group of events, we create a new one,

@@ -832,7 +832,6 @@ BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID) {
   option.text = optionText;
   option.value = optionName;
   dropdown.add(option);
-  console.log(option);
 };
 
 /**
@@ -866,11 +865,8 @@ BlockLibrary.UI.loadBlockLibraryUI = function() {
   if (Object.keys(blockLibrary).length === 0){
     alert('No blocks in BlockLibrary!');
   }
-  console.log(blockLibrary);
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   for (var block in blockLibrary){
-    console.log(block);
-    console.log(blockLibrary[block]);
     BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
   }
 };
@@ -903,7 +899,7 @@ BlockLibrary.LocalStorage.createLocalStorageObj = function(name, opt_object) {
     window.localStorage[name] = JSON.stringify(objectToStore);
   }
   else{
-    console.log('object with name ' + name + ' is already in local storage');
+    alert('object with name ' + name + ' is already in local storage');
   }
 };
 
@@ -922,7 +918,6 @@ BlockLibrary.LocalStorage.saveBlockToLocalStorage = function() {
   var blockLibrary = JSON.parse(window.localStorage['blockLibrary']);
   blockLibrary[blockType] = prettyXml;
   window.localStorage['blockLibrary'] = JSON.stringify(blockLibrary);
-  console.log(JSON.parse(window.localStorage['blockLibrary']));
   return blockType;
 };
 
@@ -933,7 +928,6 @@ BlockLibrary.LocalStorage.saveBlockToLocalStorage = function() {
  */
 BlockLibrary.LocalStorage.removeFromLocalStorage = function(blockType) {
   var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
-  console.log("deleting " + blockType);
   delete blockLibrary[blockType];
   window.localStorage.blockLibrary = JSON.stringify(blockLibrary);
 };
@@ -1045,34 +1039,6 @@ BlockLibrary.getBlockLibrary = function() {
 };
 
 /**
- * For debugging purposes, prints out the localStorage.blockLibrary object to
- * console.
- */
-BlockLibrary.printBlockLibrary = function() {
-  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
-  console.log(blockLibrary);
-};
-
-/**
- * For debugging purposes, prints out the localStorage.blockLibrary object to
- * console.
- */
-BlockLibrary.printBlockLibrary = function() {
-  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
-  console.log(blockLibrary);
-};
-
-/**
- * Pulls up a menu for user to customize which blocks and what type of scripts
- * to download, and what to name the file. Downloads upon submit.
- *
- */
-BlockLibrary.downloadBlockFiles = function(blockTypes, definitionFormat,
-    generatorLang){
-  //TODO(quacht)
-};
-
-/**
  * Return the given language code of each block type in an array.
  *
  * @param {string[]} blockTypes - array of block types for which to get block
@@ -1097,8 +1063,6 @@ BlockLibrary.getBlockDefs = function(blockTypes, definitionFormat) {
     }
     blockCode.push(code);
   }
-  console.log("blockCode:");
-  console.log(blockCode);
   return blockCode.join("\n\n");
 };
 

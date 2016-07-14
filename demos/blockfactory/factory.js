@@ -858,20 +858,6 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
 };
 
 /**
- * Loads block library from local storage and populates the dropdown menu.
- */
-BlockLibrary.loadBlockLibrary = function() {
-  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
-  if (Object.keys(blockLibrary).length == 0) {
-    alert('No blocks in BlockLibrary!');
-  }
-  BlockLibrary.UI.clearOptions('blockLibraryDropdown');
-  for (var block in blockLibrary) {
-    BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
-  }
-};
-
-/**
 * namespace for Block Library UI
 * @namespace UI
 * @memberof BlockLibrary
@@ -900,6 +886,15 @@ BlockLibrary.LocalStorage.loadObject = function(name) {
 BlockLibrary.LocalStorage.saveObject = function(name, opt_object) {
   var objectToStore = opt_object || {};
   window.localStorage[name] = JSON.stringify(objectToStore);
+};
+
+/**
+ * Clears local storage object saved under given objectName
+ *
+ * @param {String} objectName - e.g. window.localStorage.NAMEHERE
+ */
+BlockLibrary.LocalStorage.clear = function(objectName) {
+  BlockLibrary.LocalStorage.saveObject(objectName, {});
 };
 
 /**
@@ -986,8 +981,22 @@ BlockLibrary.clearBlockLibrary = function() {
   var check = prompt(
       'Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes"){
-    BlockLibrary.LocalStorage.saveObject('blockLibrary', {});
+    BlockLibrary.LocalStorage.clear('blockLibrary');
     BlockLibrary.UI.clearOptions('blockLibraryDropdown');
+  }
+};
+
+/**
+ * Loads block library from local storage and populates the dropdown menu.
+ */
+BlockLibrary.loadBlockLibrary = function() {
+  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
+  if (Object.keys(blockLibrary).length == 0) {
+    alert('No blocks in BlockLibrary!');
+  }
+  BlockLibrary.UI.clearOptions('blockLibraryDropdown');
+  for (var block in blockLibrary) {
+    BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
   }
 };
 

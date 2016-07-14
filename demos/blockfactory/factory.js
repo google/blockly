@@ -858,61 +858,52 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
 };
 
 /**
-* namespace for Block Library UI
-* @namespace UI
+* Represents a block library's storage
+* @constructor
 * @memberof BlockLibrary
+* @param {String} blockLibraryName - desired name of Block Library
 */
-BlockLibrary.LocalStorage = {};
-
-/**
- * Returns an object under a specified name from localStorage. If there is no
- * object under that name in localStorage, returns null.
- *
- * @param {String} name - name of object you are putting in localStorage
- * @return {Object} object you want from localStorage
- */
-BlockLibrary.LocalStorage.loadObject = function(name) {
-  var object = window.localStorage[name];
-  return object ? JSON.parse(object) : null;
+BlockLibrary.Storage = function(blockLibraryName) {
+  this.name = blockLibraryName;
+  this.blocks = {};
 };
 
 /**
- * Stores an object (empty if not provided) under a specified name into
- * localStorage.
- *
- * @param {String} name - name of object you are putting in localStorage
- * @param {Object} [opt_object=] object you would like to put in localStorage
+ * Syncs BlockLibrary.Storage.blocks with the block library stored in local
+ * storage.
  */
-BlockLibrary.LocalStorage.saveObject = function(name, opt_object) {
-  var objectToStore = opt_object || {};
-  window.localStorage[name] = JSON.stringify(objectToStore);
+BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
+  var object = window.localStorage[this.name];
+  this.blocks = object ? JSON.parse(object) : null;
 };
 
 /**
- * Clears local storage object saved under given objectName
- *
- * @param {String} objectName - e.g. window.localStorage.NAMEHERE
+ * Syncs the block library in local storage with BlockLibrary.Storage.blocks,
+ * saving changes made to the instance variable to local storage.
  */
-BlockLibrary.LocalStorage.clear = function(objectName) {
-  BlockLibrary.LocalStorage.saveObject(objectName, {});
+BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
+  var objectToStore = this.blocks;
+  window.localStorage[this.name] = JSON.stringify(objectToStore);
 };
 
 /**
- * Saves block to block library in localStorage, creates block library if it
- * doesn't exist yet.
+ * Clears Block Library
+ */
+BlockLibrary.Storage.clear = function() {
+  this.blocks = {};
+  BlockLibrary.Storage.saveToLocalStorage();
+};
+
+/**
+ * Saves block to block library in localStorage,
  *
  * @param {String} blockType - the type the block
  * @param {Element} blockXML - the block's XML pulled from workspace
  */
-BlockLibrary.LocalStorage.saveBlock = function(blockType, blockXML) {
-  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
-  if (blockLibrary == null) {
-    BlockLibrary.LocalStorage.saveObject('blockLibrary');
-    blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
-  }
+BlockLibrary.Storage.saveBlock = function(blockType, blockXML) {
   var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
-  blockLibrary[blockType] = prettyXml;
-  BlockLibrary.LocalStorage.saveObject('blockLibrary', blockLibrary);
+  this.blocks[blockType] = prettyXml;
+  BlockLibrary.Storage.saveToLocalStorage();
 };
 
 /**
@@ -920,10 +911,27 @@ BlockLibrary.LocalStorage.saveBlock = function(blockType, blockXML) {
  *
  * @param {String} blockType - type of block
  */
-BlockLibrary.LocalStorage.removeBlock = function(blockType) {
-  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
-  blockLibrary[blockType] = null;
-  BlockLibrary.LocalStorage.saveObject('blockLibrary', blockLibrary);
+BlockLibrary.Storage.removeBlock = function(blockType) {
+  this.blocks[blockType] = null;
+  BlockLibrary.Storage.saveToLocalStorage();
+};
+
+/**
+ * Checks to see if block library is empty.
+ *
+ * @return {Boolean} true if empty, false otherwise.
+ */
+BlockLibrary.Storage.isEmpty = function() {
+  if (Object.keys(this.blocks).length == 0) {
+    return true;
+  } else {
+    for (var blockType in this.blocks) {
+      if (this.blocks[blockType] != null) {
+        return false;
+      }
+    }
+  }
+  return true;
 };
 
 /**
@@ -933,7 +941,7 @@ BlockLibrary.LocalStorage.removeBlock = function(blockType) {
  * @param {String} blockType - type of block
  */
 BlockLibrary.loadBlock = function(blockType) {
-  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
+  var blockLibrary = BlockLibrary.Storage.loadFromLocalStorage('blockLibrary');
   var xmlText = blockLibrary[blockType];
   var xml = Blockly.Xml.textToDom(xmlText);
   mainWorkspace.clear();
@@ -959,7 +967,7 @@ BlockLibrary.getCurrentBlockType = function() {
  */
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
-  BlockLibrary.LocalStorage.removeBlock(blockType, 'blockLibraryDropdown');
+  BlockLibrary.Storage.removeBlock(blockType, 'blockLibraryDropdown');
   BlockLibrary.loadBlockLibrary();
 };
 
@@ -981,7 +989,7 @@ BlockLibrary.clearBlockLibrary = function() {
   var check = prompt(
       'Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes"){
-    BlockLibrary.LocalStorage.clear('blockLibrary');
+    BlockLibrary.Storage.clear('blockLibrary');
     BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   }
 };
@@ -997,7 +1005,7 @@ BlockLibrary.saveToBlockLibrary = function() {
   } else {
     var blockType = BlockLibrary.getCurrentBlockType();
     var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
-    BlockLibrary.LocalStorage.saveBlock(blockType, xmlElement);
+    BlockLibrary.Storage.saveBlock(blockType, xmlElement);
     BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
   }
 };
@@ -1010,11 +1018,9 @@ BlockLibrary.saveToBlockLibrary = function() {
  */
 BlockLibrary.isInBlockLibrary = function(blockType) {
   var blockLibrary = BlockLibrary.getBlockLibrary();
-  for (var type in blockLibrary) {
-    if (type == blockType) {
-      if (blockLibrary[type] != null){
-        return true;
-      }
+  if (blockType in blockLibrary) {
+    if (blockLibrary[blockType] != null) {
+      return true;
     }
   }
   return false;
@@ -1024,7 +1030,7 @@ BlockLibrary.isInBlockLibrary = function(blockType) {
  * Loads block library from local storage and populates the dropdown menu.
  */
 BlockLibrary.loadBlockLibrary = function() {
-  if (BlockLibrary.LocalStorage.isEmpty()){
+  if (BlockLibrary.Storage.isEmpty()){
     alert('No blocks in BlockLibrary!');
   }
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
@@ -1036,25 +1042,14 @@ BlockLibrary.loadBlockLibrary = function() {
   }
 };
 
-/**
- * Checks to see if block library is empty.
- *
- * @return {Boolean} true if empty, false otherwise.
- */
-BlockLibrary.LocalStorage.isEmpty = function() {
-  var blockLibrary = BlockLibrary.getBlockLibrary();
-  if (Object.keys(blockLibrary).length == 0){
-    return true;
-  }
-  return false;
-};
+
 /**
  * Get block library from local storage.
  *
  * @return {Object} block library
  */
 BlockLibrary.getBlockLibrary = function() {
-  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
+  var blockLibrary = BlockLibrary.Storage.loadFromLocalStorage('blockLibrary');
   return blockLibrary;
 };
 

@@ -8,11 +8,9 @@ h1 {
 }
 section {
   float: left;
-  width: 70%;
 }
 aside {
   float: right;
-  width: 30%;
 }
 #categoryTable>table {
   border: 1px solid #ccc;
@@ -61,4 +59,24 @@ table {
 td {
   padding: 0;
   vertical-align: top;
+}
+#toolbox_section {
+  width: 80%;
+}
+#toolbox_blocks {
+  height: 480px;
+  width: 100%;
+}
+#preview_blocks {
+  height: 300px;
+  width: 100%;
+}
+#createDiv {
+  width: 70%;
+}
+#previewDiv {
+  width: 30%;
+}
+#category_section {
+  width: 20%;
 }

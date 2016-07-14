@@ -314,7 +314,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   }
   Blockly.Field.stopCache();
 
-  workspace.updateVariableList();
+  workspace.updateVariableList(false);
 };
 
 /**

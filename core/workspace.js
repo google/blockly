@@ -202,15 +202,18 @@ Blockly.Workspace.prototype.clear = function() {
 /**
  * Walk the workspace and update the list of variables to only contain ones in
  * use on the workspace.  Use when loading new workspaces from disk.
+ * @param {boolean} clearList True if the old variable list should be cleared.
  */
-Blockly.Workspace.prototype.updateVariableList = function() {
+Blockly.Workspace.prototype.updateVariableList = function(clearList) {
   // TODO: Sort
   if (!this.isFlyout) {
     // Update the list in place so that the flyout's references stay correct.
-    this.variableList.length = 0;
-    var allVariables = Blockly.Variables.allVariables(this);
+    if (clearList) {
+      this.variableList.length = 0;
+    }
+    var allVariables = Blockly.Variables.allUsedVariables(this);
     for (var i = 0; i < allVariables.length; i++) {
-      this.variableList.push(allVariables[i]);
+      this.createVariable(allVariables[i]);
     }
   }
 };
@@ -241,7 +244,10 @@ Blockly.Workspace.prototype.renameVariable = function(oldName, newName) {
  * @param {string} name The new variable's name.
  */
 Blockly.Workspace.prototype.createVariable = function(name) {
-  this.variableList.push(name);
+  var index = this.variableList.indexOf(name);
+  if (index == -1) {
+    this.variableList.push(name);
+  }
 };
 
 /**

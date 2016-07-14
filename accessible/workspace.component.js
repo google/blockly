@@ -75,8 +75,8 @@ blocklyApp.WorkspaceComponent = ng.core
     clearWorkspace: function() {
       this.workspace.clear();
     },
-    getActiveDescId: function(tree) {
-      return this.treeService.getActiveDescId(tree.id);
+    getActiveDescId: function(treeId) {
+      return this.treeService.getActiveDescId(treeId);
     },
     onWorkspaceToolbarKeypress: function(e) {
       this.treeService.onWorkspaceToolbarKeypress(

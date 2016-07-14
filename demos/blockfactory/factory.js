@@ -932,7 +932,7 @@ BlockLibrary.LocalStorage.removeBlock = function(blockType) {
  *
  * @param {String} blockType - type of block
  */
-BlockLibrary.loadBlockFromLocalStorage = function(blockType) {
+BlockLibrary.loadBlock = function(blockType) {
   var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
   var xmlText = blockLibrary[blockType];
   var xml = Blockly.Xml.textToDom(xmlText);
@@ -966,12 +966,12 @@ BlockLibrary.removeFromBlockLibrary = function() {
 /**
  * Updates the workspace to show the block user selected from library
  *
- * @param {Element} blockLibraryDropdown -your blockLibrary dropdown
+ * @param {Element} blockLibraryDropdown - your blockLibrary dropdown
  */
 BlockLibrary.selectHandler = function(blockLibraryDropdown) {
   var index = blockLibraryDropdown.selectedIndex;
   var blockType = blockLibraryDropdown.options[index].value;
-  BlockLibrary.loadBlockFromLocalStorage(blockType);
+  BlockLibrary.loadBlock(blockType);
 };
 
 /**
@@ -987,20 +987,6 @@ BlockLibrary.clearBlockLibrary = function() {
 };
 
 /**
- * Loads block library from local storage and populates the dropdown menu.
- */
-BlockLibrary.loadBlockLibrary = function() {
-  var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
-  if (Object.keys(blockLibrary).length == 0) {
-    alert('No blocks in BlockLibrary!');
-  }
-  BlockLibrary.UI.clearOptions('blockLibraryDropdown');
-  for (var block in blockLibrary) {
-    BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
-  }
-};
-
-/**
  * Saves current block to local storage and updates dropdown.
  */
 BlockLibrary.saveToBlockLibrary = function() {
@@ -1009,7 +995,9 @@ BlockLibrary.saveToBlockLibrary = function() {
     alert('You already have a block called ' + blockType + ' in your library.' +
       ' Please rename your block or delete the old one.');
   } else {
-    var blockType = BlockLibrary.saveBlockToLocalStorage();
+    var blockType = BlockLibrary.getCurrentBlockType();
+    var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
+    BlockLibrary.LocalStorage.saveBlock(blockType, xmlElement);
     BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
   }
 };
@@ -1036,12 +1024,12 @@ BlockLibrary.isInBlockLibrary = function(blockType) {
  * Loads block library from local storage and populates the dropdown menu.
  */
 BlockLibrary.loadBlockLibrary = function() {
-  var blockLibrary = BlockLibrary.getBlockLibrary();
-  if (Object.keys(blockLibrary).length === 0){
+  if (BlockLibrary.LocalStorage.isEmpty()){
     alert('No blocks in BlockLibrary!');
   }
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
-  for (var block in blockLibrary){
+  var blockLibrary = BlockLibrary.getBlockLibrary();
+  for (var block in blockLibrary) {
     if (blockLibrary[block] != null) {
       BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
     }
@@ -1049,17 +1037,17 @@ BlockLibrary.loadBlockLibrary = function() {
 };
 
 /**
- * Saves current block to Block Library.
+ * Checks to see if block library is empty.
  *
- * @return {String} type of block saved to storage
+ * @return {Boolean} true if empty, false otherwise.
  */
-BlockLibrary.saveBlockToLocalStorage = function() {
-  var blockType = BlockLibrary.getCurrentBlockType();
-  var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
-  BlockLibrary.LocalStorage.saveBlock(blockType, xmlElement);
-  return blockType;
+BlockLibrary.LocalStorage.isEmpty = function() {
+  var blockLibrary = BlockLibrary.getBlockLibrary();
+  if (Object.keys(blockLibrary).length == 0){
+    return true;
+  }
+  return false;
 };
-
 /**
  * Get block library from local storage.
  *
@@ -1069,35 +1057,6 @@ BlockLibrary.getBlockLibrary = function() {
   var blockLibrary = BlockLibrary.LocalStorage.loadObject('blockLibrary');
   return blockLibrary;
 };
-
-/**
- * Return the given language code of each block type in an array.
- *
- * @param {string[]} blockTypes - array of block types for which to get block
- * definitions
- * @param {string} definitionFormat - 'JSON' or 'JavaScript'
- * @return {string} in the desired format, the concatenation of each block's
- * language code.
- */
-BlockLibrary.getBlockDefs = function(blockTypes, definitionFormat) {
-  var rootBlock = getRootBlock();
-  var blockCode = [];
-  for (var i = 0; i < blockTypes.length; i++) {
-    var blockType = blockTypes[i];
-    blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
-    switch (definitionFormat) {
-      case 'JSON':
-        var code = formatJson_(blockType, rootBlock);
-        break;
-      case 'JavaScript':
-        var code = formatJavaScript_(blockType, rootBlock);
-        break;
-    }
-    blockCode.push(code);
-  }
-  return blockCode.join("\n\n");
-};
-
 
 /**
  * Initialize Blockly and layout.  Called on page load.
@@ -1110,7 +1069,7 @@ function init() {
         'Share your blocks with this link:\n\n%1';
     BlocklyStorage.HASH_ERROR =
         'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
+    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +
         'Perhaps it was created with a different version of Blockly?';
     var linkButton = document.getElementById('linkButton');
     linkButton.style.display = 'inline-block';
@@ -1123,9 +1082,6 @@ function init() {
 
   document.getElementById('localSaveButton')
     .addEventListener('click', BlockLibrary.saveWorkspaceToFile);
-
-  document.getElementById('downloadFromLibButton')
-    .addEventListener('click', BlockLibrary.downloadBlockFiles);
 
   document.getElementById('saveToBlockLibraryButton')
     .addEventListener('click', BlockLibrary.saveToBlockLibrary);

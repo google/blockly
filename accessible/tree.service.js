@@ -200,76 +200,96 @@ blocklyApp.TreeService = ng.core
         return;
       }
 
-      var isFocusingIntoField = false;
+      if (document.activeElement.tagName == 'INPUT') {
+        // For input fields, only Esc and Tab keystrokes are handled specially.
+        if (e.keyCode == 27 || e.keyCode == 9) {
+          // For Esc and Tab keys, the focus is removed from the input field.
+          this.focusOnCurrentTree_(treeId);
 
-      if (e.keyCode == 13) {
-        // Enter key. The user wants to interact with a child.
-        if (activeDesc.children.length == 1) {
-          var child = activeDesc.children[0];
-          if (child.tagName == 'BUTTON') {
-            child.click();
-            this.isFocusingIntoField = true;
-          } else if (child.tagName == 'INPUT') {
-            child.focus();
+          // In addition, for Tab keys, the user tabs to the previous/next tree.
+          if (e.keyCode == 9) {
+            if (e.shiftKey) {
+              this.focusOnPreviousTree_(treeId);
+            } else {
+              this.focusOnNextTree_(treeId);
+            }
           }
-        }
-      } else if (e.keyCode == 9) {
-        // Tab key.
-        if (e.shiftKey) {
-          this.focusOnPreviousTree_(treeId);
-        } else {
-          this.focusOnNextTree_(treeId);
-        }
-        e.preventDefault();
-        e.stopPropagation();
-      } else if (e.keyCode >= 35 && e.keyCode <= 40) {
-        // End, home, and arrow keys.
-        if (e.keyCode == 35) {
-          // End key. Go to the last sibling in the subtree.
-          var finalSibling = this.getFinalSibling(activeDesc);
-          if (finalSibling) {
-            this.setActiveDesc(finalSibling.id, treeId);
-          }
-        } else if (e.keyCode == 36) {
-          // Home key. Go to the first sibling in the subtree.
-          var initialSibling = this.getInitialSibling(activeDesc);
-          if (initialSibling) {
-            this.setActiveDesc(initialSibling.id, treeId);
-          }
-        } else if (e.keyCode == 37) {
-          // Left arrow key. Go up a level, if possible.
-          var nextNode = activeDesc.parentNode;
-          if (this.isButtonOrFieldNode_(activeDesc)) {
-            nextNode = nextNode.parentNode;
-          }
-          while (nextNode && nextNode.tagName != 'LI') {
-            nextNode = nextNode.parentNode;
-          }
-          if (nextNode) {
-            this.setActiveDesc(nextNode.id, treeId);
-          }
-        } else if (e.keyCode == 38) {
-          // Up arrow key. Go to the previous sibling, if possible.
-          var prevSibling = this.getPreviousSibling(activeDesc);
-          if (prevSibling) {
-            this.setActiveDesc(prevSibling.id, treeId);
-          }
-        } else if (e.keyCode == 39) {
-          // Right arrow key. Go down a level, if possible.
-          var firstChild = this.getFirstChild(activeDesc);
-          if (firstChild) {
-            this.setActiveDesc(firstChild.id, treeId);
-          }
-        } else if (e.keyCode == 40) {
-          // Down arrow key. Go to the next sibling, if possible.
-          var nextSibling = this.getNextSibling(activeDesc);
-          if (nextSibling) {
-            this.setActiveDesc(nextSibling.id, treeId);
-          }
-        }
 
-        e.preventDefault();
-        e.stopPropagation();
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      } else {
+        // Outside an input field, Enter, Tab and navigation keys are all
+        // recognized.
+        if (e.keyCode == 13) {
+          // Enter key. The user wants to interact with a button or an input
+          // field.
+          if (activeDesc.children.length == 1) {
+            var child = activeDesc.children[0];
+            if (child.tagName == 'BUTTON') {
+              child.click();
+            } else if (child.tagName == 'INPUT') {
+              child.focus();
+            }
+          }
+        } else if (e.keyCode == 9) {
+          // Tab key.
+          if (e.shiftKey) {
+            this.focusOnPreviousTree_(treeId);
+          } else {
+            this.focusOnNextTree_(treeId);
+          }
+          e.preventDefault();
+          e.stopPropagation();
+        } else if (e.keyCode >= 35 && e.keyCode <= 40) {
+          // End, home, and arrow keys.
+          if (e.keyCode == 35) {
+            // End key. Go to the last sibling in the subtree.
+            var finalSibling = this.getFinalSibling(activeDesc);
+            if (finalSibling) {
+              this.setActiveDesc(finalSibling.id, treeId);
+            }
+          } else if (e.keyCode == 36) {
+            // Home key. Go to the first sibling in the subtree.
+            var initialSibling = this.getInitialSibling(activeDesc);
+            if (initialSibling) {
+              this.setActiveDesc(initialSibling.id, treeId);
+            }
+          } else if (e.keyCode == 37) {
+            // Left arrow key. Go up a level, if possible.
+            var nextNode = activeDesc.parentNode;
+            if (this.isButtonOrFieldNode_(activeDesc)) {
+              nextNode = nextNode.parentNode;
+            }
+            while (nextNode && nextNode.tagName != 'LI') {
+              nextNode = nextNode.parentNode;
+            }
+            if (nextNode) {
+              this.setActiveDesc(nextNode.id, treeId);
+            }
+          } else if (e.keyCode == 38) {
+            // Up arrow key. Go to the previous sibling, if possible.
+            var prevSibling = this.getPreviousSibling(activeDesc);
+            if (prevSibling) {
+              this.setActiveDesc(prevSibling.id, treeId);
+            }
+          } else if (e.keyCode == 39) {
+            // Right arrow key. Go down a level, if possible.
+            var firstChild = this.getFirstChild(activeDesc);
+            if (firstChild) {
+              this.setActiveDesc(firstChild.id, treeId);
+            }
+          } else if (e.keyCode == 40) {
+            // Down arrow key. Go to the next sibling, if possible.
+            var nextSibling = this.getNextSibling(activeDesc);
+            if (nextSibling) {
+              this.setActiveDesc(nextSibling.id, treeId);
+            }
+          }
+
+          e.preventDefault();
+          e.stopPropagation();
+        }
       }
     },
     getFirstChild: function(element) {

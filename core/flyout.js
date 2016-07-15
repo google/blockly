@@ -157,9 +157,9 @@ Blockly.Flyout.prototype.height_ = 0;
 
 /**
  * Is the flyout dragging (scrolling)?
- * 0 - DRAG_NONE - no drag is ongoing or state is undetermined.
- * 1 - DRAG_STICKY - still within the sticky drag radius.
- * 2 - DRAG_FREE - in scroll mode (never create a new block).
+ * DRAG_NONE - no drag is ongoing or state is undetermined.
+ * DRAG_STICKY - still within the sticky drag radius.
+ * DRAG_FREE - in scroll mode (never create a new block).
  * @private
  */
 Blockly.Flyout.prototype.dragMode_ = Blockly.DRAG_NONE;
@@ -990,8 +990,11 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       return;
     }
     Blockly.Events.disable();
-    var block = flyout.placeNewBlock_(originBlock);
-    Blockly.Events.enable();
+    try {
+      var block = flyout.placeNewBlock_(originBlock);
+    } finally {
+      Blockly.Events.enable();
+    }
     if (Blockly.Events.isEnabled()) {
       Blockly.Events.setGroup(true);
       Blockly.Events.fire(new Blockly.Events.Create(block));

@@ -132,7 +132,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
  * @return {string} The prefixed lines of code.
  */
 Blockly.Generator.prototype.prefixLines = function(text, prefix) {
-  return prefix + text.replace(/\n(.)/g, '\n' + prefix + '$1');
+  return prefix + text.replace(/(?!\n$)\n/g, '\n' + prefix);
 };
 
 /**
@@ -143,8 +143,8 @@ Blockly.Generator.prototype.prefixLines = function(text, prefix) {
 Blockly.Generator.prototype.allNestedComments = function(block) {
   var comments = [];
   var blocks = block.getDescendants();
-  for (var x = 0; x < blocks.length; x++) {
-    var comment = blocks[x].getCommentText();
+  for (var i = 0; i < blocks.length; i++) {
+    var comment = blocks[i].getCommentText();
     if (comment) {
       comments.push(comment);
     }

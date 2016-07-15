@@ -29,10 +29,10 @@ blocklyApp.ToolboxComponent = ng.core
     template: `
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
       <ol #tree
-          id="blockly-toolbox-tree" role="group" class="blocklyTree"
+          id="blockly-toolbox-tree" role="tree" class="blocklyTree"
           *ngIf="toolboxCategories && toolboxCategories.length > 0" tabIndex="0"
           [attr.aria-labelledby]="toolboxTitle.id"
-          [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
+          [attr.aria-activedescendant]="getActiveDescId()"
           (keydown)="treeService.onKeypress($event, tree)">
         <template [ngIf]="xmlHasCategories">
           <li #parent
@@ -106,10 +106,18 @@ blocklyApp.ToolboxComponent = ng.core
     ngAfterViewInit: function() {
       // If this is a top-level tree in the toolbox, set its active
       // descendant after the ids have been computed.
+      // Note that a timeout is needed here in order to trigger Angular
+      // change detection.
       if (this.xmlHasCategories) {
-        this.treeService.setActiveDesc(
-            'blockly-toolbox-tree-node0', 'blockly-toolbox-tree');
+        var that = this;
+        setTimeout(function() {
+          that.treeService.setActiveDesc(
+              'blockly-toolbox-tree-node0', 'blockly-toolbox-tree');
+        });
       }
+    },
+    getActiveDescId: function() {
+      return this.treeService.getActiveDescId('blockly-toolbox-tree');
     },
     getToolboxWorkspace: function(categoryNode) {
       if (categoryNode.attributes && categoryNode.attributes.name) {

@@ -77,7 +77,7 @@ Blockly.Lua.ORDER_ATOMIC = 0;          // literals
 // The next level was not explicit in documentation and inferred by Ellen.
 Blockly.Lua.ORDER_HIGH = 1;            // Function calls, tables[]
 Blockly.Lua.ORDER_EXPONENTIATION = 2;  // ^
-Blockly.Lua.ORDER_UNARY = 3;           // not # - ()
+Blockly.Lua.ORDER_UNARY = 3;           // not # - ~
 Blockly.Lua.ORDER_MULTIPLICATIVE = 4;  // * / %
 Blockly.Lua.ORDER_ADDITIVE = 5;        // + -
 Blockly.Lua.ORDER_CONCATENATION = 6;   // ..
@@ -85,6 +85,12 @@ Blockly.Lua.ORDER_RELATIONAL = 7;      // < > <=  >= ~= ==
 Blockly.Lua.ORDER_AND = 8;             // and
 Blockly.Lua.ORDER_OR = 9;              // or
 Blockly.Lua.ORDER_NONE = 99;
+
+/**
+ * Lua is not supporting zero-indexing since the language itself is one-indexed,
+ * so there is not flag for ONE_BASED_INDEXING to indicate which indexing is
+ * used for lists and text.
+ */
 
 /**
  * Initialise the database of variable names.
@@ -164,15 +170,15 @@ Blockly.Lua.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, this.COMMENT_WRAP - 3);
+    comment = Blockly.utils.wrap(comment, Blockly.Lua.COMMENT_WRAP - 3);
     if (comment) {
       commentCode += Blockly.Lua.prefixLines(comment, '-- ') + '\n';
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].connection.targetBlock();
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           comment = Blockly.Lua.allNestedComments(childBlock);
           if (comment) {

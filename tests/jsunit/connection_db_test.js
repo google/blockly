@@ -22,8 +22,8 @@
 function verify_DB_(msg, expected, db) {
    var equal = (expected.length == db.length);
    if (equal) {
-     for (var x = 0; x < expected.length; x++) {
-       if (expected[x] != db[x]) {
+     for (var i = 0; i < expected.length; i++) {
+       if (expected[i] != db[i]) {
          equal = false;
          break;
        }

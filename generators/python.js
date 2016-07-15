@@ -46,11 +46,22 @@ Blockly.Python.addReservedWords(
     // import keyword
     // print ','.join(keyword.kwlist)
     // http://docs.python.org/reference/lexical_analysis.html#keywords
-    'and,as,assert,break,class,continue,def,del,elif,else,except,exec,finally,for,from,global,if,import,in,is,lambda,not,or,pass,print,raise,return,try,while,with,yield,' +
+    'and,as,assert,break,class,continue,def,del,elif,else,except,exec,' +
+    'finally,for,from,global,if,import,in,is,lambda,not,or,pass,print,raise,' +
+    'return,try,while,with,yield,' +
     //http://docs.python.org/library/constants.html
-    'True,False,None,NotImplemented,Ellipsis,__debug__,quit,exit,copyright,license,credits,' +
+    'True,False,None,NotImplemented,Ellipsis,__debug__,quit,exit,copyright,' +
+    'license,credits,' +
     // http://docs.python.org/library/functions.html
-    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,coerce,dir,id,oct,sorted,intern');
+    'abs,divmod,input,open,staticmethod,all,enumerate,int,ord,str,any,eval,' +
+    'isinstance,pow,sum,basestring,execfile,issubclass,print,super,bin,file,' +
+    'iter,property,tuple,bool,filter,len,range,type,bytearray,float,list,' +
+    'raw_input,unichr,callable,format,locals,reduce,unicode,chr,frozenset,' +
+    'long,reload,vars,classmethod,getattr,map,repr,xrange,cmp,globals,max,' +
+    'reversed,zip,compile,hasattr,memoryview,round,__import__,complex,hash,' +
+    'min,set,apply,delattr,help,next,setattr,buffer,dict,hex,object,slice,' +
+    'coerce,dir,id,oct,sorted,intern'
+);
 
 /**
  * Order of operation ENUMs.
@@ -78,6 +89,12 @@ Blockly.Python.ORDER_LOGICAL_OR = 14;       // or
 Blockly.Python.ORDER_CONDITIONAL = 15;      // if else
 Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
+
+/**
+ * Allow for switching between one and zero based indexing for lists and text,
+ * one based by default.
+ */
+Blockly.Python.ONE_BASED_INDEXING = true;
 
 /**
  * List of outer-inner pairings that do NOT require parentheses.
@@ -202,7 +219,7 @@ Blockly.Python.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
-    comment = Blockly.utils.wrap(comment, this.COMMENT_WRAP - 3);
+    comment = Blockly.utils.wrap(comment, Blockly.Python.COMMENT_WRAP - 3);
     if (comment) {
       if (block.getProcedureDef) {
         // Use a comment block for function comments.
@@ -213,9 +230,9 @@ Blockly.Python.scrub_ = function(block, code) {
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].connection.targetBlock();
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.Python.allNestedComments(childBlock);
           if (comment) {
@@ -229,3 +246,45 @@ Blockly.Python.scrub_ = function(block, code) {
   var nextCode = Blockly.Python.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
+
+/**
+ * Gets a property and adjusts the value, taking into account indexing, and
+ * casts to an integer.
+ * @param {!Blockly.Block} block The block.
+ * @param {string} atId The property ID of the element to get.
+ * @param {number=} opt_delta Value to add.
+ * @param {boolean=} opt_negate Whether to negate the value.
+ * @return {string|number}
+ */
+Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
+  var delta = opt_delta || 0;
+  if (Blockly.Python.ONE_BASED_INDEXING) {
+    delta--;
+  }
+  var defaultAtIndex = Blockly.Python.ONE_BASED_INDEXING ? '1' : '0';
+  var atOrder = delta ? Blockly.Python.ORDER_ADDITIVE :
+      Blockly.Python.ORDER_NONE;
+  var at = Blockly.Python.valueToCode(block, atId, atOrder) || defaultAtIndex;
+
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseInt(at, 10) + delta;
+    if (opt_negate) {
+      at = -at;
+    }
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = 'int(' + at + ' + ' + delta + ')';
+    } else if (delta < 0) {
+      at = 'int(' + at + ' - ' + -delta + ')';
+    } else {
+      at = 'int(' + at + ')';
+    }
+    if (opt_negate) {
+      at = '-' + at;
+    }
+  }
+  return at;
+};
+

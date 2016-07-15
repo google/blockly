@@ -25,3 +25,9 @@
 'use strict';
 
 goog.provide('Blockly.Blocks');
+
+/**
+ * Allow for switching between one and zero based indexing for lists and text,
+ * one based by default.
+ */
+Blockly.Blocks.ONE_BASED_INDEXING = true;

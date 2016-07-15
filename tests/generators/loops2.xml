@@ -51,7 +51,11 @@
             </statement>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">count up ints</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">count up ints</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">log</field>
@@ -100,7 +104,11 @@
                         </statement>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">count down ints</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">count down ints</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">log</field>
@@ -154,7 +162,11 @@
                                     </statement>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">count with floats</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">count with floats</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="variables_get">
                                             <field name="VAR">loglist</field>
@@ -263,7 +275,11 @@
                                                 </statement>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">count up non-trivial ints</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">count up non-trivial ints</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="variables_get">
                                                         <field name="VAR">loglist</field>
@@ -377,7 +393,11 @@
                                                             </statement>
                                                             <next>
                                                               <block type="unittest_assertequals" inline="false">
-                                                                <field name="MESSAGE">count down non-trivial ints</field>
+                                                                <value name="MESSAGE">
+                                                                   <block type="text">
+                                                                     <field name="TEXT">count down non-trivial ints</field>
+                                                                   </block>
+                                                                 </value>
                                                                 <value name="ACTUAL">
                                                                   <block type="variables_get">
                                                                     <field name="VAR">loglist</field>
@@ -481,7 +501,11 @@
                                                                         </statement>
                                                                         <next>
                                                                           <block type="unittest_assertequals" inline="false">
-                                                                            <field name="MESSAGE">count with floats</field>
+                                                                            <value name="MESSAGE">
+                                                                               <block type="text">
+                                                                                 <field name="TEXT">count with floats</field>
+                                                                               </block>
+                                                                             </value>
                                                                             <value name="ACTUAL">
                                                                               <block type="variables_get">
                                                                                 <field name="VAR">loglist</field>
@@ -589,7 +613,11 @@
             </statement>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">count up</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">count up</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">log</field>
@@ -633,7 +661,11 @@
                         </statement>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">count down</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">count down</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">log</field>
@@ -702,7 +734,11 @@
                                     </statement>
                                     <next>
                                       <block type="unittest_assertequals" inline="false">
-                                        <field name="MESSAGE">count up non-trivial</field>
+                                        <value name="MESSAGE">
+                                           <block type="text">
+                                             <field name="TEXT">count up non-trivial</field>
+                                           </block>
+                                         </value>
                                         <value name="ACTUAL">
                                           <block type="variables_get">
                                             <field name="VAR">loglist</field>
@@ -791,7 +827,11 @@
                                                 </statement>
                                                 <next>
                                                   <block type="unittest_assertequals" inline="false">
-                                                    <field name="MESSAGE">count down non-trivial</field>
+                                                    <value name="MESSAGE">
+                                                       <block type="text">
+                                                         <field name="TEXT">count down non-trivial</field>
+                                                       </block>
+                                                     </value>
                                                     <value name="ACTUAL">
                                                       <block type="variables_get">
                                                         <field name="VAR">loglist</field>

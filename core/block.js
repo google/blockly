@@ -204,39 +204,42 @@ Blockly.Block.prototype.dispose = function(healStack) {
   }
   Blockly.Events.disable();
 
-  // This block is now at the top of the workspace.
-  // Remove this block from the workspace's list of top-most blocks.
-  if (this.workspace) {
-    this.workspace.removeTopBlock(this);
-    // Remove from block database.
-    delete this.workspace.blockDB_[this.id];
-    this.workspace = null;
-  }
-
-  // Just deleting this block from the DOM would result in a memory leak as
-  // well as corruption of the connection database.  Therefore we must
-  // methodically step through the blocks and carefully disassemble them.
-
-  // First, dispose of all my children.
-  for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
-    this.childBlocks_[i].dispose(false);
-  }
-  // Then dispose of myself.
-  // Dispose of all inputs and their fields.
-  for (var i = 0, input; input = this.inputList[i]; i++) {
-    input.dispose();
-  }
-  this.inputList.length = 0;
-  // Dispose of any remaining connections (next/previous/output).
-  var connections = this.getConnections_(true);
-  for (var i = 0; i < connections.length; i++) {
-    var connection = connections[i];
-    if (connection.isConnected()) {
-      connection.disconnect();
+  try {
+    // This block is now at the top of the workspace.
+    // Remove this block from the workspace's list of top-most blocks.
+    if (this.workspace) {
+      this.workspace.removeTopBlock(this);
+      // Remove from block database.
+      delete this.workspace.blockDB_[this.id];
+      this.workspace = null;
     }
-    connections[i].dispose();
+
+    // Just deleting this block from the DOM would result in a memory leak as
+    // well as corruption of the connection database.  Therefore we must
+    // methodically step through the blocks and carefully disassemble them.
+
+    // First, dispose of all my children.
+    for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
+      this.childBlocks_[i].dispose(false);
+    }
+    // Then dispose of myself.
+    // Dispose of all inputs and their fields.
+    for (var i = 0, input; input = this.inputList[i]; i++) {
+      input.dispose();
+    }
+    this.inputList.length = 0;
+    // Dispose of any remaining connections (next/previous/output).
+    var connections = this.getConnections_(true);
+    for (var i = 0; i < connections.length; i++) {
+      var connection = connections[i];
+      if (connection.isConnected()) {
+        connection.disconnect();
+      }
+      connections[i].dispose();
+    }
+  } finally {
+    Blockly.Events.enable();
   }
-  Blockly.Events.enable();
 };
 
 /**
@@ -1071,61 +1074,65 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
       var input = null;
       do {
         var altRepeat = false;
-        switch (element['type']) {
-          case 'input_value':
-            input = this.appendValueInput(element['name']);
-            break;
-          case 'input_statement':
-            input = this.appendStatementInput(element['name']);
-            break;
-          case 'input_dummy':
-            input = this.appendDummyInput(element['name']);
-            break;
-          case 'field_label':
-            field = new Blockly.FieldLabel(element['text'], element['class']);
-            break;
-          case 'field_input':
-            field = new Blockly.FieldTextInput(element['text']);
-            if (typeof element['spellcheck'] == 'boolean') {
-              field.setSpellcheck(element['spellcheck']);
-            }
-            break;
-          case 'field_angle':
-            field = new Blockly.FieldAngle(element['angle']);
-            break;
-          case 'field_checkbox':
-            field = new Blockly.FieldCheckbox(
-                element['checked'] ? 'TRUE' : 'FALSE');
-            break;
-          case 'field_colour':
-            field = new Blockly.FieldColour(element['colour']);
-            break;
-          case 'field_variable':
-            field = new Blockly.FieldVariable(element['variable']);
-            break;
-          case 'field_dropdown':
-            field = new Blockly.FieldDropdown(element['options']);
-            break;
-          case 'field_image':
-            field = new Blockly.FieldImage(element['src'],
-                element['width'], element['height'], element['alt']);
-            break;
-          case 'field_number':
-            field = new Blockly.FieldNumber(element['value'],
-                element['min'], element['max'], element['precision']);
-            break;
-          case 'field_date':
-            if (Blockly.FieldDate) {
-              field = new Blockly.FieldDate(element['date']);
+        if (typeof element == 'string') {
+          field = new Blockly.FieldLabel(element);
+        } else {
+          switch (element['type']) {
+            case 'input_value':
+              input = this.appendValueInput(element['name']);
               break;
-            }
-            // Fall through if FieldDate is not compiled in.
-          default:
-            // Unknown field.
-            if (element['alt']) {
-              element = element['alt'];
-              altRepeat = true;
-            }
+            case 'input_statement':
+              input = this.appendStatementInput(element['name']);
+              break;
+            case 'input_dummy':
+              input = this.appendDummyInput(element['name']);
+              break;
+            case 'field_label':
+              field = new Blockly.FieldLabel(element['text'], element['class']);
+              break;
+            case 'field_input':
+              field = new Blockly.FieldTextInput(element['text']);
+              if (typeof element['spellcheck'] == 'boolean') {
+                field.setSpellcheck(element['spellcheck']);
+              }
+              break;
+            case 'field_angle':
+              field = new Blockly.FieldAngle(element['angle']);
+              break;
+            case 'field_checkbox':
+              field = new Blockly.FieldCheckbox(
+                  element['checked'] ? 'TRUE' : 'FALSE');
+              break;
+            case 'field_colour':
+              field = new Blockly.FieldColour(element['colour']);
+              break;
+            case 'field_variable':
+              field = new Blockly.FieldVariable(element['variable']);
+              break;
+            case 'field_dropdown':
+              field = new Blockly.FieldDropdown(element['options']);
+              break;
+            case 'field_image':
+              field = new Blockly.FieldImage(element['src'],
+                  element['width'], element['height'], element['alt']);
+              break;
+            case 'field_number':
+              field = new Blockly.FieldNumber(element['value'],
+                  element['min'], element['max'], element['precision']);
+              break;
+            case 'field_date':
+              if (Blockly.FieldDate) {
+                field = new Blockly.FieldDate(element['date']);
+                break;
+              }
+              // Fall through if FieldDate is not compiled in.
+            default:
+              // Unknown field.
+              if (element['alt']) {
+                element = element['alt'];
+                altRepeat = true;
+              }
+          }
         }
       } while (altRepeat);
       if (field) {

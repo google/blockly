@@ -38,8 +38,8 @@ WorkspaceFactory.hasCategories = false;
 WorkspaceFactory.addCategory = function() {
     do {
       var name = prompt('Enter the name of your new category: ');
-    } while (WorkspaceFactory.categoryXmlMap.has(name))
-    if (name == null) return;   //if cancelled
+    } while (WorkspaceFactory.categoryXmlMap.has(name));
+    if (!name) return;   //if cancelled
     WorkspaceFactory.hasCategories = true;
     WorkspaceFactory.addCategoryRow(name);
 };
@@ -67,7 +67,7 @@ WorkspaceFactory.removeCategory = function() {
  * a correponding tab for an empty category. Switches to that category. Updates
  * corresponding data structures.
  *
- * @param name The name of the category to be created
+ * @param {string} name The name of the category to be created
  */
 WorkspaceFactory.addCategoryRow = function(name) {
     var table = document.getElementById('categoryTable');
@@ -93,8 +93,8 @@ WorkspaceFactory.addCategoryRow = function(name) {
  * to be false.
  * TODO(edauterman): Find a better tab than just the first tab in the map.
  *
- * @param {String} name of cateegory being deleted
- * @return {String} name of next category to switch to
+ * @param {string} name of cateegory being deleted
+ * @return {string} name of next category to switch to
  */
 WorkspaceFactory.getNextOpenCategory = function(name){
     for (var key of WorkspaceFactory.categoryTabMap.keys()) {
@@ -111,7 +111,7 @@ WorkspaceFactory.getNextOpenCategory = function(name){
  * DOM elements, and if the deleted tab was selected, switches to another
  * tab.
  *
- * @param {String} name Name of category, guaranteed by caller to be a valid
+ * @param {string} name Name of category, guaranteed by caller to be a valid
  * category to remove.
  */
 WorkspaceFactory.removeCategoryByName = function(name) {
@@ -137,7 +137,7 @@ WorkspaceFactory.removeCategoryByName = function(name) {
  * Used to bind a click to a certain DOM element (used for category tabs).
  * Taken directly from code.js
  *
- * @param {String|!Element} e1 tab element or corresponding id string
+ * @param {string|!Element} e1 tab element or corresponding id string
  * @param {!Function} func Function to be executed on click
  */
 WorkspaceFactory.bindClick = function(el, func) {
@@ -158,7 +158,7 @@ WorkspaceFactory.bindClick = function(el, func) {
  * the option to put these blocks in a category so they don't lose all their
  * work.
  *
- * @param {String} name name of tab to be opened, must be valid category name
+ * @param {string} name name of tab to be opened, must be valid category name
  */
 WorkspaceFactory.toggleTabs = function(name) {
     if (name == null) {
@@ -309,9 +309,9 @@ WorkspaceFactory.categoryWorkspaceToDom = function(xmlDom, topBlocks) {
  * request for block factory. In some browsers downloads, and in other browsers,
  * opens new tab with contents.
  *
- * @param {!String} contents material to be written to file
- * @param {!String} filename Name of file
- * @param {!String} fileType Type of file to be downloaded
+ * @param {!string} contents material to be written to file
+ * @param {!string} filename Name of file
+ * @param {!string} fileType Type of file to be downloaded
  */
 WorkspaceFactory.createAndDownloadFile = function(contents, filename,
     fileType) {

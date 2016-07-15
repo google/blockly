@@ -1040,7 +1040,7 @@ BlockLibrary.isInBlockLibrary = function(blockType) {
 BlockLibrary.loadBlockLibrary = function() {
   BlockLibrary.localStorage = new BlockLibrary.Storage(BlockLibrary.name);
   if (BlockLibrary.localStorage.isEmpty()) {
-    alert('Your block library is empty! Click "Save to Block Library" so' +
+    alert('Your block library is empty! Click "Save to Block Library" so ' +
          'you can reopen it the next time you visit Block Factory!');
   }
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
@@ -1051,7 +1051,6 @@ BlockLibrary.loadBlockLibrary = function() {
     }
   }
 };
-
 
 /**
  * Get block library from local storage.

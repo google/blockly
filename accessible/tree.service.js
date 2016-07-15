@@ -222,9 +222,21 @@ blocklyApp.TreeService = ng.core
         }
         e.preventDefault();
         e.stopPropagation();
-      } else if (e.keyCode >= 37 && e.keyCode <= 40) {
-        // Arrow keys.
-        if (e.keyCode == 37) {
+      } else if (e.keyCode >= 35 && e.keyCode <= 40) {
+        // End, home, and arrow keys.
+        if (e.keyCode == 35) {
+          // End key. Go to the last sibling in the subtree.
+          var finalSibling = this.getFinalSibling(activeDesc);
+          if (finalSibling) {
+            this.setActiveDesc(finalSibling.id, treeId);
+          }
+        } else if (e.keyCode == 36) {
+          // Home key. Go to the first sibling in the subtree.
+          var initialSibling = this.getInitialSibling(activeDesc);
+          if (initialSibling) {
+            this.setActiveDesc(initialSibling.id, treeId);
+          }
+        } else if (e.keyCode == 37) {
           // Left arrow key. Go up a level, if possible.
           var nextNode = activeDesc.parentNode;
           if (this.isButtonOrFieldNode_(activeDesc)) {
@@ -276,6 +288,26 @@ blocklyApp.TreeService = ng.core
           }
         }
         return null;
+      }
+    },
+    getFinalSibling: function(element) {
+      while (true) {
+        var nextSibling = this.getNextSibling(element);
+        if (nextSibling && nextSibling.id != element.id) {
+          element = nextSibling;
+        } else {
+          return element;
+        }
+      }
+    },
+    getInitialSibling: function(element) {
+      while (true) {
+        var previousSibling = this.getPreviousSibling(element);
+        if (previousSibling && previousSibling.id != element.id) {
+          element = previousSibling;
+        } else {
+          return element;
+        }
       }
     },
     getNextSibling: function(element) {

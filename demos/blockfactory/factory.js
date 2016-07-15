@@ -857,22 +857,22 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
   }
 };
 
-/**B
-* Represents a block library's storage
-* @constructor
-* @memberof BlockLibrary
-* @param {String} blockLibraryName - desired name of Block Library
-*/
+/**
+ * Represents a block library's storage
+ * @constructor
+ * @memberof BlockLibrary
+ *
+ * @param {String} blockLibraryName - desired name of Block Library, also used
+ * create the key for where it's stored in local storage.
+ */
 BlockLibrary.Storage = function(blockLibraryName) {
   this.name = 'bl_' + blockLibraryName;
   this.loadFromLocalStorage();
   if (this.blocks == null) {
-    console.log('this.blocks was null, creating new lib now');
     this.blocks = Object.create(null);
     //the line above is equivalent of {} except that this object is TRULY
     //empty. It doesn't have built-in attributes/functions such as toString
     this.saveToLocalStorage();
-    console.log('saved new lib to local storage');
   }
 };
 
@@ -894,7 +894,7 @@ BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
 };
 
 /**
- * Clears Block Library
+ * Clears Block Library.
  */
 BlockLibrary.Storage.prototype.clear = function() {
   this.blocks = Object.create(null);
@@ -904,7 +904,7 @@ BlockLibrary.Storage.prototype.clear = function() {
 };
 
 /**
- * Saves block to block library in localStorage,
+ * Saves block to block library in localStorage.
  *
  * @param {String} blockType - the type the block
  * @param {Element} blockXML - the block's XML pulled from workspace
@@ -1007,7 +1007,7 @@ BlockLibrary.clearBlockLibrary = function() {
  */
 BlockLibrary.saveToBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
-  if (BlockLibrary.isInBlockLibrary(blockType)){
+  if (BlockLibrary.isInBlockLibrary(blockType)) {
     alert('You already have a block called ' + blockType + ' in your library.' +
       ' Please rename your block or delete the old one.');
   } else {

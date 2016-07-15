@@ -944,8 +944,8 @@ BlockLibrary.Storage.prototype.isEmpty = function() {
 };
 
 /**
- * Loads block of given type from local storage, updating the workspace,
- * preview and generated code.
+ * Loads block of given type from local storage by pulling its XML from local
+ * storage and updating the Block Factory page accordingly.
  *
  * @param {String} blockType - type of block
  */

@@ -72,8 +72,8 @@ blocklyApp.ToolboxTreeComponent = ng.core
         </li>
         <div *ngFor="#inputBlock of block.inputList; #i=index">
           <blockly-field *ngFor="#field of inputBlock.fieldRow; #j=index"
-                      [attr.aria-level]="level+1" [field]="field"
-                      [level]="level+1">
+                         [attr.aria-level]="level+1" [field]="field"
+                         [level]="level+1" [disabled]="true">
           </blockly-field>
           <blockly-toolbox-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
                                 [block]="inputBlock.connection.targetBlock()"

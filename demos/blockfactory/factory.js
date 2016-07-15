@@ -857,7 +857,7 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
   }
 };
 
-/**
+/**B
 * Represents a block library's storage
 * @constructor
 * @memberof BlockLibrary
@@ -865,10 +865,14 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
 */
 BlockLibrary.Storage = function(blockLibraryName) {
   this.name = 'bl_' + blockLibraryName;
-  this.blocks = this.loadFromLocalStorage();
+  this.loadFromLocalStorage();
   if (this.blocks == null) {
+    console.log('this.blocks was null, creating new lib now');
     this.blocks = Object.create(null);
+    //the line above is equivalent of {} except that this object is TRULY
+    //empty. It doesn't have built-in attributes/functions such as toString
     this.saveToLocalStorage();
+    console.log('saved new lib to local storage');
   }
 };
 
@@ -893,8 +897,10 @@ BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
  * Clears Block Library
  */
 BlockLibrary.Storage.prototype.clear = function() {
-  this.blocks = {};
-  BlockLibrary.Storage.saveToLocalStorage();
+  this.blocks = Object.create(null);
+  //the line above is equivalent of {} except that this object is TRULY
+  //empty. It doesn't have built-in attributes/functions such as toString
+  this.saveToLocalStorage();
 };
 
 /**
@@ -906,7 +912,7 @@ BlockLibrary.Storage.prototype.clear = function() {
 BlockLibrary.Storage.prototype.saveBlock = function(blockType, blockXML) {
   var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
   this.blocks[blockType] = prettyXml;
-  BlockLibrary.Storage.saveToLocalStorage();
+  this.saveToLocalStorage();
 };
 
 /**
@@ -916,7 +922,7 @@ BlockLibrary.Storage.prototype.saveBlock = function(blockType, blockXML) {
  */
 BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
   this.blocks[blockType] = null;
-  BlockLibrary.Storage.saveToLocalStorage();
+  this.saveToLocalStorage();
 };
 
 /**
@@ -944,8 +950,7 @@ BlockLibrary.Storage.prototype.isEmpty = function() {
  * @param {String} blockType - type of block
  */
 BlockLibrary.loadBlock = function(blockType) {
-  var blockLibrary = BlockLibrary.localStorage.loadFromLocalStorage('blockLibrary');
-  var xmlText = blockLibrary[blockType];
+  var xmlText = BlockLibrary.localStorage.blocks[blockType];
   var xml = Blockly.Xml.textToDom(xmlText);
   mainWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, mainWorkspace);
@@ -970,7 +975,7 @@ BlockLibrary.getCurrentBlockType = function() {
  */
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
-  BlockLibrary.localStorage.removeBlock(blockType, 'blockLibraryDropdown');
+  BlockLibrary.localStorage.removeBlock(blockType);
   BlockLibrary.loadBlockLibrary();
 };
 
@@ -992,7 +997,7 @@ BlockLibrary.clearBlockLibrary = function() {
   var check = prompt(
       'Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes"){
-    BlockLibrary.localStorage.clear('blockLibrary');
+    BlockLibrary.localStorage.clear();
     BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   }
 };
@@ -1033,9 +1038,10 @@ BlockLibrary.isInBlockLibrary = function(blockType) {
  * Loads block library from local storage and populates the dropdown menu.
  */
 BlockLibrary.loadBlockLibrary = function() {
-  BlockLibrary.localStorage = new BlockLibrary.Storage('blockLibrary');
-  if (BlockLibrary.localStorage.isEmpty()){
-    alert('No blocks in BlockLibrary!');
+  BlockLibrary.localStorage = new BlockLibrary.Storage(BlockLibrary.name);
+  if (BlockLibrary.localStorage.isEmpty()) {
+    alert('Your block library is empty! Click "Save to Block Library" so' +
+         'you can reopen it the next time you visit Block Factory!');
   }
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   var blockLibrary = BlockLibrary.getBlockLibrary();
@@ -1053,7 +1059,7 @@ BlockLibrary.loadBlockLibrary = function() {
  * @return {Object} block library
  */
 BlockLibrary.getBlockLibrary = function() {
-  BlockLibrary.localStorage.loadFromLocalStorage('blockLibrary');
+  BlockLibrary.localStorage.loadFromLocalStorage();
   return BlockLibrary.localStorage.blocks;
 };
 
@@ -1077,6 +1083,7 @@ function init() {
     disableEnableLink();
   }
 
+  BlockLibrary.name = 'blockLibrary';
   BlockLibrary.loadBlockLibrary();
 
   document.getElementById('localSaveButton')

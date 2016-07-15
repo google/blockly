@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <title>Blockly Workspace Factory</title>
-<script src="../../blockly_uncompressed.js"></script>
+<script src="../../blockly_compressed.js"></script>
 <script src="../../generators/javascript.js"></script>
 <script src="../../generators/javascript/logic.js"></script>
 <script src="../../generators/javascript/loops.js"></script>
@@ -20,7 +20,10 @@
 <script src="../../blocks/colour.js"></script>
 <script src="../../blocks/variables.js"></script>
 <script src="../../blocks/procedures.js"></script>
-<script src="workspacefactory.js"></script>
+<script src="factory_model.js"></script>
+<script src="factory_controller.js"></script>
+<script src="factory_view.js"></script>
+<script src="factory_generator.js"></script>
 <link rel="stylesheet" href="style.css">
 <table width="100%" height="100%">
   <tr>
@@ -34,11 +37,11 @@
   <tr>
     <td>
       <p>
-        <button onclick="WorkspaceFactory.addCategory()">Add Category</button>
-        <button onclick="WorkspaceFactory.removeCategory()">Remove Category</button>
-        <button onclick="WorkspaceFactory.exportConfig()">Export Config</button>
-        <button onclick="WorkspaceFactory.printConfig()">Print Config</button>
-        <button onclick="WorkspaceFactory.updatePreview()">Update Preview</button>
+        <button onclick="FactoryController.addCategory()">Add Category</button>
+        <button onclick="FactoryController.removeCategory()">Remove Category</button>
+        <button onclick="FactoryController.exportConfig()">Export Config</button>
+        <button onclick="FactoryController.printConfig()">Print Config</button>
+        <button onclick="FactoryController.updatePreview()">Update Preview</button>
       </p>
     </td>
   </tr>
@@ -392,6 +395,8 @@
         wheel: true}
     });
 
+  var model = new FactoryModel();
+  var view = new FactoryView();
 
-    </script>
-    </html>
+</script>
+</html>

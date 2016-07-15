@@ -909,7 +909,7 @@ BlockLibrary.Storage.prototype.clear = function() {
  * @param {String} blockType - the type the block
  * @param {Element} blockXML - the block's XML pulled from workspace
  */
-BlockLibrary.Storage.prototype.saveBlock = function(blockType, blockXML) {
+BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
   var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
   this.blocks[blockType] = prettyXml;
   this.saveToLocalStorage();
@@ -1013,7 +1013,7 @@ BlockLibrary.saveToBlockLibrary = function() {
   } else {
     var blockType = BlockLibrary.getCurrentBlockType();
     var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
-    BlockLibrary.localStorage.saveBlock(blockType, xmlElement);
+    BlockLibrary.localStorage.addBlock(blockType, xmlElement);
     BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
   }
 };

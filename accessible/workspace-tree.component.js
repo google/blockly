@@ -266,14 +266,18 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     },
     ngAfterViewInit: function() {
       // If this is a top-level tree in the workspace, set its id and active
-      // descendant.
-      if (this.tree && this.isTopLevel && !this.tree.id) {
-        this.tree.id = this.utilsService.generateUniqueId();
-      }
-      if (this.tree && this.isTopLevel &&
-          !this.treeService.getActiveDescId(this.tree.id)) {
-        this.treeService.setActiveDesc(this.idMap['blockRoot'], this.tree.id);
-      }
+      // descendant. (Note that a timeout is needed here in order to trigger
+      // Angular change detection.)
+      var that = this;
+      setTimeout(function() {
+        if (that.tree && that.isTopLevel && !that.tree.id) {
+          that.tree.id = that.utilsService.generateUniqueId();
+        }
+        if (that.tree && that.isTopLevel &&
+            !that.treeService.getActiveDescId(that.tree.id)) {
+          that.treeService.setActiveDesc(that.idMap['blockRoot'], that.tree.id);
+        }
+      });
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
       return this.utilsService.generateAriaLabelledByAttr(

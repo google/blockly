@@ -114,8 +114,8 @@ Blockly.FieldVariable.dropdownCreate = function() {
   // Variables are not language-specific, use the name as both the user-facing
   // text and the internal representation.
   var options = [];
-  for (var x = 0; x < variableList.length; x++) {
-    options[x] = [variableList[x], variableList[x]];
+  for (var i = 0; i < variableList.length; i++) {
+    options[i] = [variableList[i], variableList[i]];
   }
   return options;
 };

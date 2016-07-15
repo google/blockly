@@ -322,7 +322,9 @@ Blockly.Blocks['text_indexOf'] = {
       this.appendDummyInput().appendField(Blockly.Msg.TEXT_INDEXOF_TAIL);
     }
     this.setInputsInline(true);
-    this.setTooltip(Blockly.Msg.TEXT_INDEXOF_TOOLTIP);
+    var tooltip = Blockly.Msg.TEXT_INDEXOF_TOOLTIP
+        .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '0' : '-1');
+    this.setTooltip(tooltip);
   }
 };
 

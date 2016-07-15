@@ -60,16 +60,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.statementConnection_ = null;
   },
   /**
-   * Initialization of the block has completed, clean up anything that may be
-   * inconsistent as a result of the XML loading.
-   * @this Blockly.Block
-   */
-  validate: function() {
-    var name = Blockly.Procedures.findLegalName(
-        this.getFieldValue('NAME'), this);
-    this.setFieldValue(name, 'NAME');
-  },
-  /**
    * Add or remove the statement block from this function definition.
    * @param {boolean} hasStatements True if a statement block is needed.
    * @this Blockly.Block
@@ -120,8 +110,11 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     // The params field is deterministic based on the mutation,
     // no need to fire a change event.
     Blockly.Events.disable();
-    this.setFieldValue(paramString, 'PARAMS');
-    Blockly.Events.enable();
+    try {
+      this.setFieldValue(paramString, 'PARAMS');
+    } finally {
+      Blockly.Events.enable();
+    }
   },
   /**
    * Create XML to represent the argument inputs.
@@ -245,16 +238,6 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
   },
   /**
-   * Dispose of any callers.
-   * @this Blockly.Block
-   */
-  dispose: function() {
-    var name = this.getFieldValue('NAME');
-    Blockly.Procedures.disposeCallers(name, this.workspace);
-    // Call parent's destructor.
-    this.constructor.prototype.dispose.apply(this, arguments);
-  },
-  /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:
    *     - the name of the defined procedure,
@@ -371,13 +354,11 @@ Blockly.Blocks['procedures_defreturn'] = {
     this.statementConnection_ = null;
   },
   setStatements_: Blockly.Blocks['procedures_defnoreturn'].setStatements_,
-  validate: Blockly.Blocks['procedures_defnoreturn'].validate,
   updateParams_: Blockly.Blocks['procedures_defnoreturn'].updateParams_,
   mutationToDom: Blockly.Blocks['procedures_defnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_defnoreturn'].domToMutation,
   decompose: Blockly.Blocks['procedures_defnoreturn'].decompose,
   compose: Blockly.Blocks['procedures_defnoreturn'].compose,
-  dispose: Blockly.Blocks['procedures_defnoreturn'].dispose,
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:
@@ -589,8 +570,11 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         // The argument name field is deterministic based on the mutation,
         // no need to fire a change event.
         Blockly.Events.disable();
-        field.setValue(this.arguments_[i]);
-        Blockly.Events.enable();
+        try {
+          field.setValue(this.arguments_[i]);
+        } finally {
+          Blockly.Events.enable();
+        }
       } else {
         // Add new input.
         field = new Blockly.FieldLabel(this.arguments_[i]);
@@ -669,6 +653,72 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     }
   },
   /**
+   * Procedure calls cannot exist without the corresponding procedure
+   * definition.  Enforce this link whenever an event is fired.
+   * @this Blockly.Block
+   */
+  onchange: function(event) {
+    if (!this.workspace || this.workspace.isFlyout) {
+      // Block is deleted or is in a flyout.
+      return;
+    }
+    if (event.type == Blockly.Events.CREATE &&
+        event.ids.indexOf(this.id) != -1) {
+      // Look for the case where a procedure call was created (usually through
+      // paste) and there is no matching definition.  In this case, create
+      // an empty definition block with the correct signature.
+      var name = this.getProcedureCall();
+      var def = Blockly.Procedures.getDefinition(name, this.workspace);
+      if (def && (def.type != this.defType_ ||
+          JSON.stringify(def.arguments_) != JSON.stringify(this.arguments_))) {
+        // The signatures don't match.
+        def = null;
+      }
+      if (!def) {
+        Blockly.Events.setGroup(event.group);
+        /**
+         * Create matching definition block.
+         * <xml>
+         *   <block type="procedures_defreturn" x="10" y="20">
+         *     <mutation name="test">
+         *       <arg name="x"></arg>
+         *     </mutation>
+         *     <field name="NAME">test</field>
+         *   </block>
+         * </xml>
+         */
+        var xml = goog.dom.createDom('xml');
+        var block = goog.dom.createDom('block');
+        block.setAttribute('type', this.defType_);
+        var xy = this.getRelativeToSurfaceXY();
+        var x = xy.x + Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
+        var y = xy.y + Blockly.SNAP_RADIUS * 2;
+        block.setAttribute('x', x);
+        block.setAttribute('y', y);
+        var mutation = this.mutationToDom();
+        block.appendChild(mutation);
+        var field = goog.dom.createDom('field');
+        field.setAttribute('name', 'NAME');
+        field.appendChild(document.createTextNode(this.getProcedureCall()));
+        block.appendChild(field);
+        xml.appendChild(block);
+        Blockly.Xml.domToWorkspace(xml, this.workspace);
+        Blockly.Events.setGroup(false);
+      }
+    } else if (event.type == Blockly.Events.DELETE) {
+      // Look for the case where a procedure definition has been deleted,
+      // leaving this block (a procedure call) orphaned.  In this case, delete
+      // the orphan.
+      var name = this.getProcedureCall();
+      var def = Blockly.Procedures.getDefinition(name, this.workspace);
+      if (!def) {
+        Blockly.Events.setGroup(event.group);
+        this.dispose(true, false);
+        Blockly.Events.setGroup(false);
+      }
+    }
+  },
+  /**
    * Add menu option to find the definition block for this call.
    * @param {!Array} options List of menu options to add to.
    * @this Blockly.Block
@@ -683,7 +733,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
       def && def.select();
     };
     options.push(option);
-  }
+  },
+  defType_: 'procedures_defnoreturn'
 };
 
 Blockly.Blocks['procedures_callreturn'] = {
@@ -710,7 +761,10 @@ Blockly.Blocks['procedures_callreturn'] = {
   mutationToDom: Blockly.Blocks['procedures_callnoreturn'].mutationToDom,
   domToMutation: Blockly.Blocks['procedures_callnoreturn'].domToMutation,
   renameVar: Blockly.Blocks['procedures_callnoreturn'].renameVar,
-  customContextMenu: Blockly.Blocks['procedures_callnoreturn'].customContextMenu
+  onchange: Blockly.Blocks['procedures_callnoreturn'].onchange,
+  customContextMenu:
+      Blockly.Blocks['procedures_callnoreturn'].customContextMenu,
+  defType_: 'procedures_defreturn'
 };
 
 Blockly.Blocks['procedures_ifreturn'] = {

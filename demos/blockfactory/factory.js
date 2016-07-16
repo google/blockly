@@ -822,9 +822,9 @@ BlockLibrary.UI = {};
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *
- * @param {String} optionName - value of option
- * @param {String} optionText - text in option
- * @param {String} dropdownID - id for HTML select element
+ * @param {string} optionName - value of option
+ * @param {string} optionText - text in option
+ * @param {string} dropdownID - id for HTML select element
  */
 BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID) {
   var dropdown = document.getElementById(dropdownID);
@@ -837,7 +837,7 @@ BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID) {
 /**
  * Removes option currently selected in dropdown from dropdown menu.
  *
- * @param {String} dropdownID - id of HTML select element within which to find
+ * @param {string} dropdownID - id of HTML select element within which to find
  *     the selected option.
  */
 BlockLibrary.UI.removeSelectedOption = function(dropdownID) {
@@ -850,7 +850,7 @@ BlockLibrary.UI.removeSelectedOption = function(dropdownID) {
 /**
  * Removes all options from dropdown.
  *
- * @param {String} dropdownID - id of HTML select element to clear options of.
+ * @param {string} dropdownID - id of HTML select element to clear options of.
  */
 BlockLibrary.UI.clearOptions = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
@@ -864,7 +864,7 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
  * @constructor
  * @memberof BlockLibrary
  *
- * @param {String} blockLibraryName - desired name of Block Library, also used
+ * @param {string} blockLibraryName - desired name of Block Library, also used
  * to create the key for where it's stored in local storage.
  */
 BlockLibrary.Storage = function(blockLibraryName) {
@@ -907,7 +907,7 @@ BlockLibrary.Storage.prototype.clear = function() {
 /**
  * Saves block to block library in localStorage.
  *
- * @param {String} blockType - the type the block
+ * @param {string} blockType - the type the block
  * @param {Element} blockXML - the block's XML pulled from workspace
  */
 BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
@@ -919,11 +919,22 @@ BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
 /**
  * Removes block from local storage.
  *
- * @param {String} blockType - type of block
+ * @param {string} blockType - type of block
  */
 BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
   this.blocks[blockType] = null;
   this.saveToLocalStorage();
+};
+
+/**
+ * Returns the xml of given block type stored in this.blocks.
+ *
+ * @param {string} blockType - type of block
+ * @return {Element} the xml that represents the block type
+ */
+BlockLibrary.Storage.prototype.getBlockXML = function(blockType) {
+  var xmlText = this.blocks[blockType];
+  return Blockly.Xml.textToDom(xmlText);
 };
 
 /**
@@ -945,14 +956,13 @@ BlockLibrary.Storage.prototype.isEmpty = function() {
 };
 
 /**
- * Loads block of given type from local storage by pulling its XML from local
- * storage and updating the Block Factory page accordingly.
+ * Pulls XML of given block type from local storage and updates workspace,
+ * preview, and generated code accordingly.
  *
- * @param {String} blockType - type of block
+ * @param {string} blockType - type of block
  */
 BlockLibrary.loadBlock = function(blockType) {
-  var xmlText = BlockLibrary.localStorage.blocks[blockType];
-  var xml = Blockly.Xml.textToDom(xmlText);
+  var xml = BlockLibrary.localStorage.getBlockXML(blockType);
   mainWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, mainWorkspace);
 };
@@ -961,7 +971,7 @@ BlockLibrary.loadBlock = function(blockType) {
  * Returns the block type of the block the user is building at time of call to
  * function.
  *
- * @return {String} the block type of the block the user is currently building
+ * @return {string} the block type of the block the user is currently building
  */
 BlockLibrary.getCurrentBlockType = function() {
   var rootBlock = getRootBlock();
@@ -972,7 +982,7 @@ BlockLibrary.getCurrentBlockType = function() {
 /**
  * Removes current block from Block Library
  *
- * @param {String} blockType - type of block
+ * @param {string} blockType - type of block
  */
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
@@ -1022,8 +1032,8 @@ BlockLibrary.saveToBlockLibrary = function() {
 /**
  * Checks to see if the given blockType is already in Block Library
  *
- * @param {String} blockType - type of block
- * @return {Boolean} indicates whether or not block is in the library
+ * @param {string} blockType - type of block
+ * @return {boolean} indicates whether or not block is in the library
  */
 BlockLibrary.isInBlockLibrary = function(blockType) {
   var blockLibrary = BlockLibrary.getBlockLibrary();

@@ -888,24 +888,23 @@ BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
 };
 
 /**
- * Writes the current block library to local storage.
+ * Writes the current block library (this.blocks) to local storage.
  */
 BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
   window.localStorage[this.name] = JSON.stringify(this.blocks);
 };
 
 /**
- * Clears the current block library and the corresponding local storage.
+ * Clears the current block library.
  */
 BlockLibrary.Storage.prototype.clear = function() {
   this.blocks = Object.create(null);
   //the line above is equivalent of {} except that this object is TRULY
   //empty. It doesn't have built-in attributes/functions such as toString
-  this.saveToLocalStorage();
 };
 
 /**
- * Saves block to block library in localStorage.
+ * Saves block to block library.
  *
  * @param {string} blockType - the type the block
  * @param {Element} blockXML - the block's XML pulled from workspace
@@ -917,7 +916,7 @@ BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
 };
 
 /**
- * Removes block from local storage.
+ * Removes block from current block library (this.blocks).
  *
  * @param {string} blockType - type of block
  */
@@ -987,6 +986,7 @@ BlockLibrary.getCurrentBlockType = function() {
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
   BlockLibrary.localStorage.removeBlock(blockType);
+  BlockLibrary.localStorage.saveToLocalStorage();
   BlockLibrary.loadBlockLibrary();
 };
 
@@ -1009,6 +1009,7 @@ BlockLibrary.clearBlockLibrary = function() {
       'Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes"){
     BlockLibrary.localStorage.clear();
+    BlockLibrary.localStorage.saveToLocalStorage();
     BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   }
 };
@@ -1025,6 +1026,7 @@ BlockLibrary.saveToBlockLibrary = function() {
     var blockType = BlockLibrary.getCurrentBlockType();
     var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
     BlockLibrary.localStorage.addBlock(blockType, xmlElement);
+    BlockLibrary.localStorage.saveToLocalStorage();
     BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
   }
 };

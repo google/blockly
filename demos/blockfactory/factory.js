@@ -859,7 +859,7 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
 };
 
 /**
- * Represents a block library's storage
+ * Represents a block library's storage.
  * @constructor
  *
  * @param {string} blockLibraryName - desired name of Block Library, also used
@@ -872,7 +872,8 @@ BlockLibrary.Storage = function(blockLibraryName) {
   if (this.blocks == null) {
     this.blocks = Object.create(null);
     // The line above is equivalent of {} except that this object is TRULY
-    // empty. It doesn't have built-in attributes/functions such as toString.
+    // empty. It doesn't have built-in attributes/functions such as length
+    // or toString.
     this.saveToLocalStorage();
   }
 };
@@ -898,7 +899,8 @@ BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
 BlockLibrary.Storage.prototype.clear = function() {
   this.blocks = Object.create(null);
   // The line above is equivalent of {} except that this object is TRULY
-  // empty. It doesn't have built-in attributes/functions such as toString.
+  // empty. It doesn't have built-in attributes/functions such as length or
+  // toString.
 };
 
 /**
@@ -945,6 +947,8 @@ BlockLibrary.Storage.prototype.isEmpty = function() {
     return true;
   } else {
     for (var blockType in this.blocks) {
+      // Deleted blocks are represented by a null value so simply iterating over
+      // the attributes will not work.
       if (this.blocks[blockType] != null) {
         return false;
       }
@@ -954,10 +958,9 @@ BlockLibrary.Storage.prototype.isEmpty = function() {
 };
 
 /**
- * Returns the block type of the block the user is building at time of call to
- * function.
+ * Returns the block type of the block the user is building.
  *
- * @return {string} the block type of the block the user is currently building
+ * @return {string} the current block's type
  */
 BlockLibrary.getCurrentBlockType = function() {
   var rootBlock = getRootBlock();
@@ -979,7 +982,7 @@ BlockLibrary.removeFromBlockLibrary = function() {
 /**
  * Updates the workspace to show the block user selected from library
  *
- * @param {Element} blockLibraryDropdown - your blockLibrary dropdown
+ * @param {Element} blockLibraryDropdown - your block library dropdown
  */
 BlockLibrary.selectHandler = function(blockLibraryDropdown) {
   var index = blockLibraryDropdown.selectedIndex;
@@ -1044,6 +1047,7 @@ BlockLibrary.populateBlockLibrary = function() {
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   var blockLibrary = BlockLibrary.storage.blocks;
   for (var block in blockLibrary) {
+    // Make sure the block wasn't deleted.
     if (blockLibrary[block] != null) {
       BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
     }

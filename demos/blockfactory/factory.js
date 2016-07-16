@@ -865,10 +865,11 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
  * @memberof BlockLibrary
  *
  * @param {String} blockLibraryName - desired name of Block Library, also used
- * create the key for where it's stored in local storage.
+ * to create the key for where it's stored in local storage.
  */
 BlockLibrary.Storage = function(blockLibraryName) {
-  this.name = 'bl_' + blockLibraryName;
+  //add prefix to this.name to avoid collisions in local storage
+  this.name = 'BlockLibrary.Storage.' + blockLibraryName;
   this.loadFromLocalStorage();
   if (this.blocks == null) {
     this.blocks = Object.create(null);

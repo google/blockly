@@ -815,7 +815,6 @@ var BlockLibrary = {};
 /**
 * namespace for Block Library UI
 * @namespace UI
-* @memberof BlockLibrary
 */
 BlockLibrary.UI = {};
 
@@ -862,19 +861,18 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
 /**
  * Represents a block library's storage
  * @constructor
- * @memberof BlockLibrary
  *
  * @param {string} blockLibraryName - desired name of Block Library, also used
  * to create the key for where it's stored in local storage.
  */
 BlockLibrary.Storage = function(blockLibraryName) {
-  //Add prefix to this.name to avoid collisions in local storage.
+  // Add prefix to this.name to avoid collisions in local storage.
   this.name = 'BlockLibrary.Storage.' + blockLibraryName;
   this.loadFromLocalStorage();
   if (this.blocks == null) {
     this.blocks = Object.create(null);
-    //The line above is equivalent of {} except that this object is TRULY
-    //empty. It doesn't have built-in attributes/functions such as toString.
+    // The line above is equivalent of {} except that this object is TRULY
+    // empty. It doesn't have built-in attributes/functions such as toString.
     this.saveToLocalStorage();
   }
 };
@@ -899,8 +897,8 @@ BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
  */
 BlockLibrary.Storage.prototype.clear = function() {
   this.blocks = Object.create(null);
-  //the line above is equivalent of {} except that this object is TRULY
-  //empty. It doesn't have built-in attributes/functions such as toString
+  // The line above is equivalent of {} except that this object is TRULY
+  // empty. It doesn't have built-in attributes/functions such as toString.
 };
 
 /**
@@ -956,18 +954,6 @@ BlockLibrary.Storage.prototype.isEmpty = function() {
 };
 
 /**
- * Loads block from local storage and updates Block Factory workspace, preview,
- * and generated code accordingly.
- *
- * @param {string} blockType - type of block
- */
-BlockLibrary.loadBlock = function(blockType) {
-  var xml = BlockLibrary.localStorage.getBlockXML(blockType);
-  mainWorkspace.clear();
-  Blockly.Xml.domToWorkspace(xml, mainWorkspace);
-};
-
-/**
  * Returns the block type of the block the user is building at time of call to
  * function.
  *
@@ -985,8 +971,8 @@ BlockLibrary.getCurrentBlockType = function() {
  */
 BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
-  BlockLibrary.localStorage.removeBlock(blockType);
-  BlockLibrary.localStorage.saveToLocalStorage();
+  BlockLibrary.storage.removeBlock(blockType);
+  BlockLibrary.storage.saveToLocalStorage();
   BlockLibrary.populateBlockLibrary();
 };
 
@@ -998,7 +984,9 @@ BlockLibrary.removeFromBlockLibrary = function() {
 BlockLibrary.selectHandler = function(blockLibraryDropdown) {
   var index = blockLibraryDropdown.selectedIndex;
   var blockType = blockLibraryDropdown.options[index].value;
-  BlockLibrary.loadBlock(blockType);
+  var xml = BlockLibrary.storage.getBlockXML(blockType);
+  mainWorkspace.clear();
+  Blockly.Xml.domToWorkspace(xml, mainWorkspace);
 };
 
 /**
@@ -1007,9 +995,9 @@ BlockLibrary.selectHandler = function(blockLibraryDropdown) {
 BlockLibrary.clearBlockLibrary = function() {
   var check = prompt(
       'Are you sure you want to clear your Block Library? ("yes" or "no")');
-  if (check == "yes"){
-    BlockLibrary.localStorage.clear();
-    BlockLibrary.localStorage.saveToLocalStorage();
+  if (check == "yes") {
+    BlockLibrary.storage.clear();
+    BlockLibrary.storage.saveToLocalStorage();
     BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   }
 };
@@ -1025,8 +1013,8 @@ BlockLibrary.saveToBlockLibrary = function() {
   } else {
     var blockType = BlockLibrary.getCurrentBlockType();
     var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
-    BlockLibrary.localStorage.addBlock(blockType, xmlElement);
-    BlockLibrary.localStorage.saveToLocalStorage();
+    BlockLibrary.storage.addBlock(blockType, xmlElement);
+    BlockLibrary.storage.saveToLocalStorage();
     BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
   }
 };
@@ -1038,41 +1026,28 @@ BlockLibrary.saveToBlockLibrary = function() {
  * @return {boolean} indicates whether or not block is in the library
  */
 BlockLibrary.isInBlockLibrary = function(blockType) {
-  var blockLibrary = BlockLibrary.getBlockLibrary();
-  if (blockType in blockLibrary) {
-    if (blockLibrary[blockType] != null) {
-      return true;
-    }
-  }
-  return false;
+  var blockLibrary = BlockLibrary.storage.blocks;
+  return (blockType in blockLibrary && blockLibrary[blockType] != null);
 };
+
+
 
 /**
  * Loads block library from local storage and populates the dropdown menu.
  */
 BlockLibrary.populateBlockLibrary = function() {
-  BlockLibrary.localStorage = new BlockLibrary.Storage(BlockLibrary.name);
-  if (BlockLibrary.localStorage.isEmpty()) {
+  BlockLibrary.storage = new BlockLibrary.Storage(BlockLibrary.name);
+  if (BlockLibrary.storage.isEmpty()) {
     alert('Your block library is empty! Click "Save to Block Library" so ' +
          'you can reopen it the next time you visit Block Factory!');
   }
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
-  var blockLibrary = BlockLibrary.getBlockLibrary();
+  var blockLibrary = BlockLibrary.storage.blocks;
   for (var block in blockLibrary) {
     if (blockLibrary[block] != null) {
       BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
     }
   }
-};
-
-/**
- * Get block library from local storage.
- *
- * @return {Object} block library
- */
-BlockLibrary.getBlockLibrary = function() {
-  BlockLibrary.localStorage.loadFromLocalStorage();
-  return BlockLibrary.localStorage.blocks;
 };
 
 /**

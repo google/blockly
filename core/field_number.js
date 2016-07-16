@@ -75,9 +75,8 @@ Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
  * Ensure that only a number in the correct range may be entered.
  * @param {string} text The user's text.
  * @return {?string} A string representing a valid number, or null if invalid.
- * @this {!Blockly.FieldNumber}
  */
-Blockly.FieldNumber.classValidator = function(text) {
+Blockly.FieldNumber.prototype.classValidator = function(text) {
   if (text === null) {
     return null;
   }

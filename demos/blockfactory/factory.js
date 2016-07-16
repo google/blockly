@@ -926,7 +926,8 @@ BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
 };
 
 /**
- * Returns the xml of given block type stored in this.blocks.
+ * Returns the xml of given block type stored in current block library
+ * (this.blocks).
  *
  * @param {string} blockType - type of block
  * @return {Element} the xml that represents the block type
@@ -955,8 +956,8 @@ BlockLibrary.Storage.prototype.isEmpty = function() {
 };
 
 /**
- * Pulls XML of given block type from local storage and updates workspace,
- * preview, and generated code accordingly.
+ * Loads block from local storage and updates Block Factory workspace, preview,
+ * and generated code accordingly.
  *
  * @param {string} blockType - type of block
  */
@@ -974,8 +975,7 @@ BlockLibrary.loadBlock = function(blockType) {
  */
 BlockLibrary.getCurrentBlockType = function() {
   var rootBlock = getRootBlock();
-  var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
-  return blockType;
+  return rootBlock.getFieldValue('NAME').trim().toLowerCase();
 };
 
 /**
@@ -987,7 +987,7 @@ BlockLibrary.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.getCurrentBlockType();
   BlockLibrary.localStorage.removeBlock(blockType);
   BlockLibrary.localStorage.saveToLocalStorage();
-  BlockLibrary.loadBlockLibrary();
+  BlockLibrary.populateBlockLibrary();
 };
 
 /**
@@ -1050,7 +1050,7 @@ BlockLibrary.isInBlockLibrary = function(blockType) {
 /**
  * Loads block library from local storage and populates the dropdown menu.
  */
-BlockLibrary.loadBlockLibrary = function() {
+BlockLibrary.populateBlockLibrary = function() {
   BlockLibrary.localStorage = new BlockLibrary.Storage(BlockLibrary.name);
   if (BlockLibrary.localStorage.isEmpty()) {
     alert('Your block library is empty! Click "Save to Block Library" so ' +
@@ -1096,7 +1096,7 @@ function init() {
   }
 
   BlockLibrary.name = 'blockLibrary';
-  BlockLibrary.loadBlockLibrary();
+  BlockLibrary.populateBlockLibrary();
 
   document.getElementById('localSaveButton')
     .addEventListener('click', BlockLibrary.saveWorkspaceToFile);

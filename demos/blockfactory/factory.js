@@ -868,20 +868,19 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
  * to create the key for where it's stored in local storage.
  */
 BlockLibrary.Storage = function(blockLibraryName) {
-  //add prefix to this.name to avoid collisions in local storage
+  //Add prefix to this.name to avoid collisions in local storage.
   this.name = 'BlockLibrary.Storage.' + blockLibraryName;
   this.loadFromLocalStorage();
   if (this.blocks == null) {
     this.blocks = Object.create(null);
-    //the line above is equivalent of {} except that this object is TRULY
-    //empty. It doesn't have built-in attributes/functions such as toString
+    //The line above is equivalent of {} except that this object is TRULY
+    //empty. It doesn't have built-in attributes/functions such as toString.
     this.saveToLocalStorage();
   }
 };
 
 /**
- * Syncs BlockLibrary.Storage.blocks with the block library stored in local
- * storage.
+ * Reads the named block library from local storage and saves it in this.blocks.
  */
 BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
   var object = window.localStorage[this.name];
@@ -889,15 +888,14 @@ BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
 };
 
 /**
- * Syncs the block library in local storage with BlockLibrary.Storage.blocks,
- * saving changes made to the instance variable to local storage.
+ * Writes the current block library to local storage.
  */
 BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
   window.localStorage[this.name] = JSON.stringify(this.blocks);
 };
 
 /**
- * Clears Block Library.
+ * Clears the current block library and the corresponding local storage.
  */
 BlockLibrary.Storage.prototype.clear = function() {
   this.blocks = Object.create(null);

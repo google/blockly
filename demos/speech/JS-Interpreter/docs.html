@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS-Interpreter Documentation</title>
+  <link href="demos/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <h1>JS-Interpreter Documentation</h1>
+
+  <p>JS-Interpreter is a sandboxed JavaScript interpreter written in JavaScript.
+  It allows for execution of arbitrary JavaScript code line by line.  Execution
+  is completely isolated from the main JavaScript environment.  Multiple
+  instances of the JS-Interpreter allow for multi-threaded concurrent JavaScript
+  without the use of Web Workers.</p>
+
+  <p>Play with the <a href="index.html">JS-Interpreter demo</a>.</p>
+
+  <p>Get the <a href="https://github.com/NeilFraser/JS-Interpreter">source code</a>.</p>
+
+  <h2>Usage</h2>
+
+  <p>Start by including the two JavaScript source files:</p>
+
+  <pre>
+    &lt;script src="acorn.js"&gt;&lt;/script&gt;
+    &lt;script src="interpreter.js"&gt;&lt;/script&gt;
+  </pre>
+
+  <p>Alternatively, use the compressed bundle (70kb):</p>
+
+  <pre>
+    &lt;script src="acorn_interpreter.js"&gt;&lt;/script&gt;
+  </pre>
+
+  <p>Next, instantiate an interpreter with the JavaScript code that needs to be
+  parsed:</p>
+
+  <pre>
+    var myCode = 'var a=1; for(var i=0;i&lt;4;i++){a*=i;} a;';
+    var myInterpreter = new Interpreter(myCode);
+  </pre>
+
+  <p>Additional JavaScript code may be added at any time (frequently used to
+  interactively call previously defined functions):</p>
+
+  <pre>
+    myInterpreter.appendCode('foo();');
+  </pre>
+
+  <p>To run the code step by step, call the <code>step</code> function
+  repeatedly until it returns false:</p>
+
+  <pre>
+    function nextStep() {
+      if (myInterpreter.step()) {
+        window.setTimeout(nextStep, 0);
+      }
+    }
+    nextStep();
+  </pre>
+
+  <p>Alternatively, if the code is known to be safe from infinite loops, it may
+  be executed to completion by calling the <code>run</code> function once:</p>
+
+  <pre>
+    myInterpreter.run();
+  </pre>
+
+  <p>In cases where the code encounters asynchronous API calls (see below),
+  <code>run</code> will return true if it is blocked and needs to be reexecuted
+  at a later time.</p>
+
+  <h2>External API</h2>
+
+  <p>Similar to the <code>eval</code> function, the result of the last
+  statement executed is available in <code>myInterpreter.value</code>:</p>
+
+  <pre>
+    var myInterpreter = new Interpreter('6 * 7');
+    myInterpreter.run();
+    alert(myInterpreter.value);
+  </pre>
+
+  <p>Additionally, API calls may be added to the interpreter during creation.
+  Here is the addition of <code>alert()</code> and a <code>url</code>
+  variable:</p>
+
+  <pre>
+    var myCode = 'alert(url);';
+    var initFunc = function(interpreter, scope) {
+      interpreter.setProperty(scope, 'url',
+          interpreter.createPrimitive(location.toString()));
+
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(alert(text));
+      };
+      interpreter.setProperty(scope, 'alert',
+          interpreter.createNativeFunction(wrapper));
+    };
+    var myInterpreter = new Interpreter(myCode, initFunc);
+  </pre>
+
+  <p>See the <a href="demos/json.html">JSON demo</a> for an example of
+  exchanging JSON between the browser and the interpreter.
+  For more complicated examples, see the <code>initGlobalScope</code> function
+  which creates APIs for Math, Array, Function, and other globals.</p>
+
+  <p>Asynchronous API functions may wrapped so that they appear to be
+  synchronous to interpreter.  For example, a <code>getXhr(url)</code> function
+  that returns the contents of an XMLHttpRequest could be defined in
+  <code>initFunc</code> like this:</p>
+
+  <pre>
+    var wrapper = function getXhr(href, callback) {
+      href = href ? href.toString() : '';
+      var req = new XMLHttpRequest();
+      req.open('GET', href, true);
+      req.onreadystatechange = function() {
+        if (req.readyState == 4 && req.status == 200) {
+          callback(interpreter.createPrimitive(req.responseText));
+        }
+      };
+      req.send(null);
+    };
+    interpreter.setProperty(scope, 'getXhr',
+        interpreter.createAsyncFunction(wrapper));
+  </pre>
+
+  <p>This snippet uses <code>createAsyncFunction</code> in the same way that
+  <code>createNativeFunction</code> was used earlier.  The difference is that
+  the wrapped asynchronous function's return value is ignored.  Instead, an
+  extra callback function is passed in when the wrapper is called.  When the
+  wrapper is ready to return, it calls the callback function with the value it
+  wishes to return.  From the point of view of the code running inside the
+  JS-Interpreter, a function call was made and the result was returned
+  immediately.</p>
+
+  <p>For a working example, see the
+  <a href="demos/async.html">async demo</a>.</p>
+
+  <h2>Limitations</h2>
+
+  <p>The version of JavaScript implemented by the interpreter has a few
+  differences from that which executes in a browser:</p>
+
+  <dl>
+    <dt>API</dt>
+    <dd>None of the DOM APIs are exposed.  That's kind of the point of a
+    sandbox.  If you need these, write your own interfaces.</dd>
+    <dt>ES6</dt>
+    <dd>More recent additions to JavaScript such as <code>let</code> or
+    <code>Set</code> aren't implemented.  Feel free to add them if you need them.</dd>
+    <dt>Wat</dt>
+    <dd>Some of the more obscure type conversions (e.g. <code>[] + {}</code>)
+    may return different results from JavaScript.  Patches are welcome.</dd>
+    <dt>Passed functions</dt>
+    <dd><code>Array.sort</code> does not support custom compare functions.
+    A workaround can be found in the <a href="demos/sort.html">sort demo</a>.
+    Likewise, <code>String.replace</code> does not support custom replacement
+    functions.  <code>Array.every/filter/map</code> does not exist.</dd>
+    <dt>Performance</dt>
+    <dd>No attempt has been made to make the interpreter particularly
+    efficient.</dd>
+  </dl>
+
+  <h2>Dependency</h2>
+
+  <p>The only dependency is <a href="http://marijnhaverbeke.nl/acorn/">Acorn</a>,
+  a beautifully written JavaScript parser by Marijn Haverbeke.  It is included
+  in the JS-Interpreter package.</p>
+
+  <h2>Compatibility</h2>
+
+  <p>The limiting factor for browser support is the use of
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create"><code>Object.create(null)</code></a>
+  to create hash objects in both Acorn and JS-Interpreter.
+  This results in the following minimum browser requirements:</p>
+
+  <ul>
+    <li>Chrome 5</li>
+    <li>Firefox 4.0</li>
+    <li>IE 9</li>
+    <li>Opera 11.6</li>
+    <li>Safari 5</li>
+  </ul>
+
+  <h2>Disclaimer</h2>
+
+  <p>This project is not an official Google product.</p>
+</body>
+</html>

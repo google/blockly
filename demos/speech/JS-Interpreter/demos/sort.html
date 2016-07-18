@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS-Interpreter Sort Demo</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <script src="../acorn.js"></script>
+  <script src="../interpreter.js"></script>
+  <script>
+    var myInterpreter;
+    function initAlert(interpreter, scope) {
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(alert(text));
+      };
+      interpreter.setProperty(scope, 'alert',
+          interpreter.createNativeFunction(wrapper));
+    };
+
+    function parseButton() {
+      var code = document.getElementById('code').value
+      myInterpreter = new Interpreter(code, initAlert);
+      disable('');
+    }
+
+    function stepButton() {
+      if (myInterpreter.stateStack[0]) {
+        var node = myInterpreter.stateStack[0].node;
+        var start = node.start;
+        var end = node.end;
+      } else {
+        var start = 0;
+        var end = 0;
+      }
+      createSelection(start, end);
+      try {
+        var ok = myInterpreter.step();
+      } finally {
+        if (!ok) {
+          disable('disabled');
+        }
+      }
+    }
+
+    function runButton() {
+      disable('disabled');
+      myInterpreter.run()
+    }
+
+    function disable(disabled) {
+      document.getElementById('stepButton').disabled = disabled;
+      document.getElementById('runButton').disabled = disabled;
+    }
+
+    function createSelection(start, end) {
+      var field = document.getElementById('code')
+      if (field.createTextRange) {
+        var selRange = field.createTextRange();
+        selRange.collapse(true);
+        selRange.moveStart('character', start);
+        selRange.moveEnd('character', end);
+        selRange.select();
+      } else if (field.setSelectionRange) {
+        field.setSelectionRange(start, end);
+      } else if (field.selectionStart) {
+        field.selectionStart = start;
+        field.selectionEnd = end;
+      }
+      field.focus();
+    }
+  </script>
+</head>
+<body>
+  <h1>JS-Interpreter Sort Demo</h1>
+
+  <p>JavaScript's <code>Array.sort</code> function takes an optional argument
+  that is used by sort as a comparator function.  This is difficult to replicate
+  in the JS-Interpreter, since execution would need to step through this
+  function an arbitrary number of times.  As a result, the provided
+  <code>Array.sort</code> function does not support custom comparator
+  functions.</p>
+
+  <p>If this functionality is needed, the easiest way to implement it is to
+  monkey patch the environment at runtime.  Just add the
+  <code>Array.prototype.sort</code> definition shown below, and custom
+  comparator functions will be fully supported.</p>
+
+  <p>Click <em>Parse</em>, then either click <em>Step</em> repeatedly,
+  or click <em>Run</em> once.  Open your browser's console for errors.</p>
+
+  <p><textarea id="code" style="height: 25em;">
+Array.prototype.sort = function(opt_comp) {
+  for (var i = 0; i < this.length; i++) {
+    var changes = 0;
+    for (var j = 0; j < this.length - i - 1; j++) {
+      if (opt_comp ? opt_comp(this[j], this[j + 1]) > 0 : this[j] > this[j + 1]) {
+        var swap = this[j];
+        this[j] = this[j + 1];
+        this[j + 1] = swap;
+        changes++;
+      }
+    }
+    if (changes <= 1) break;
+  }
+  return this;
+};
+
+alert(['C', 'a', 'd', 'B'].sort(function (a, b) {
+    return a.toLowerCase().localeCompare(b.toLowerCase());
+}));
+</textarea><br>
+  <button onclick="parseButton()">Parse</button>
+  <button onclick="stepButton()" id="stepButton" disabled="disabled">Step</button>
+  <button onclick="runButton()" id="runButton" disabled="disabled">Run</button>
+  </p>
+  <p>Back to the <a href="../docs.html">JS-Interpreter documentation</a>.</p>
+
+  <script>
+    disable('disabled');
+  </script>
+</body>
+</html>

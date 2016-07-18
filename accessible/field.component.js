@@ -31,7 +31,8 @@ blocklyApp.FieldComponent = ng.core
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])"
         [attr.aria-level]="level" aria-selected=false>
-      <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)">
+      <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
+             [disabled]="disabled">
     </li>
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isDropdown()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])"
@@ -41,7 +42,8 @@ blocklyApp.FieldComponent = ng.core
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
             [attr.aria-level]="level+1" aria-selected=false>
-          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)">
+          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)"
+                  [disabled]="disabled">
             {{optionText[optionValue]}}
           </button>
         </li>
@@ -59,7 +61,7 @@ blocklyApp.FieldComponent = ng.core
       </label>
     </li>
     `,
-    inputs: ['field', 'level', 'index', 'parentId'],
+    inputs: ['field', 'level', 'index', 'parentId', 'disabled'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({

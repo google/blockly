@@ -14,7 +14,7 @@ FactoryGenerator = {};
 
 /**
  * Adaped from workspaceToDom, encodes workspace for a particular category
- * in an xml dom
+ * in an xml dom.
  *
  * @param {!Element} xmlDom Tree of XML elements to be appended to.
  * @param {!Array.<!Blockly.Block>} topBlocks top level blocks to add to xmlDom
@@ -47,7 +47,7 @@ FactoryGenerator.generateConfigXml = function() {
         toolboxWorkspace.getTopBlocks());
   }
   else {
-    //capture any changes made by user before generating xml
+    // Capture any changes made by user before generating xml.
     model.captureState(model.getSelected());
     for (var category in model.getIterableCategories()) {
       var categoryElement = goog.dom.createDom('category');

@@ -16,9 +16,9 @@ FactoryModel = function() {
   this.categoryMap = Object.create(null);
 };
 
-//string name of current selected category, null if no categories
+// String name of current selected category, null if no categories.
 FactoryModel.prototype.selected = null;
-//false if in "simple" mode, true if at least 1 category
+// False if in "simple" mode, true if at least 1 category.
 FactoryModel.prototype.hasCategories = false;
 
 /**
@@ -50,7 +50,7 @@ FactoryModel.prototype.getNextOpenCategory = function(name){
       return key;
     }
   }
-  this.hasCategories = false;  //no category left to switch to
+  this.hasCategories = false;  // No category left to switch to.
   return null;
 };
 
@@ -88,7 +88,7 @@ FactoryModel.prototype.setSelected = function(name) {
  * Captures the statue of a current category, updating its entry in categoryMap.
  */
 FactoryModel.prototype.captureState = function(name) {
-  if (!name) {  //never want to capture state for null
+  if (!name) {  // Never want to capture state for null.
     return;
   }
   this.categoryMap[name] = {

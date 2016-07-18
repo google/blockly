@@ -24,7 +24,7 @@ FactoryController.addCategory = function() {
   do {
     var name = prompt('Enter the name of your new category: ');
   } while (model.isCategory(name));
-  if (!name) {  //if cancelled
+  if (!name) {  // If cancelled.
     return;
   }
   model.addCategoryEntry(name);
@@ -76,7 +76,7 @@ FactoryController.switchCategory = function(name) {
     return;
   }
   var table = document.getElementById('categoryTable');
-  //caches information to reload or generate xml if switching from category
+  // Caches information to reload or generate xml if switching from category.
   if (model.getSelected() != null) {
       model.captureState(model.getSelected());
       view.toggleTab(model.getSelected(),false);

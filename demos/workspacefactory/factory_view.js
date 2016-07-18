@@ -23,17 +23,17 @@ FactoryView = function(){
  * @param {string} name The name of the category to be created
  */
 FactoryView.prototype.addCategoryRow = function(name) {
-  //create tab
+  // Create tab.
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
-  //configure tab
+  // Configure tab.
   nextEntry.id = "tab_" + name;
   nextEntry.textContent = name;
-  //store tab
+  // Store tab.
   this.tabMap[name] = table.rows[count].cells[0];
-  //when click the tab with that name, switch to that tab
+  // When click the tab with that name, switch to that tab.
   this.bindClick(nextEntry, function(name) {return function ()
       {FactoryController.switchCategory(name)};}(name));
 };

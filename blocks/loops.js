@@ -178,9 +178,9 @@ Blockly.Blocks['controls_for'] = {
       var option = {enabled: true};
       var name = this.getFieldValue('VAR');
       option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
-      var xmlField = goog.dom.createDom('field', null, name);
+      var xmlField = goog.dom.createUntypedDom('field', null, name);
       xmlField.setAttribute('name', 'VAR');
-      var xmlBlock = goog.dom.createDom('block', null, xmlField);
+      var xmlBlock = goog.dom.createUntypedDom('block', null, xmlField);
       xmlBlock.setAttribute('type', 'variables_get');
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);

@@ -388,7 +388,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
 Blockly.Events.Create.prototype.run = function(forward) {
   var workspace = Blockly.Workspace.getById(this.workspaceId);
   if (forward) {
-    var xml = goog.dom.createDom('xml');
+    var xml = goog.dom.createUntypedDom('xml');
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
@@ -465,7 +465,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
       }
     }
   } else {
-    var xml = goog.dom.createDom('xml');
+    var xml = goog.dom.createUntypedDom('xml');
     xml.appendChild(this.oldXml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }

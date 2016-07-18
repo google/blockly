@@ -295,14 +295,14 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     var option = {enabled: true};
     var name = this.getFieldValue('NAME');
     option.text = Blockly.Msg.PROCEDURES_CREATE_DO.replace('%1', name);
-    var xmlMutation = goog.dom.createDom('mutation');
+    var xmlMutation = goog.dom.createUntypedDom('mutation');
     xmlMutation.setAttribute('name', name);
     for (var i = 0; i < this.arguments_.length; i++) {
-      var xmlArg = goog.dom.createDom('arg');
+      var xmlArg = goog.dom.createUntypedDom('arg');
       xmlArg.setAttribute('name', this.arguments_[i]);
       xmlMutation.appendChild(xmlArg);
     }
-    var xmlBlock = goog.dom.createDom('block', null, xmlMutation);
+    var xmlBlock = goog.dom.createUntypedDom('block', null, xmlMutation);
     xmlBlock.setAttribute('type', this.callType_);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
@@ -313,9 +313,9 @@ Blockly.Blocks['procedures_defnoreturn'] = {
         var option = {enabled: true};
         var name = this.arguments_[i];
         option.text = Blockly.Msg.VARIABLES_SET_CREATE_GET.replace('%1', name);
-        var xmlField = goog.dom.createDom('field', null, name);
+        var xmlField = goog.dom.createUntypedDom('field', null, name);
         xmlField.setAttribute('name', 'VAR');
-        var xmlBlock = goog.dom.createDom('block', null, xmlField);
+        var xmlBlock = goog.dom.createUntypedDom('block', null, xmlField);
         xmlBlock.setAttribute('type', 'variables_get');
         option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
         options.push(option);
@@ -687,8 +687,8 @@ Blockly.Blocks['procedures_callnoreturn'] = {
          *   </block>
          * </xml>
          */
-        var xml = goog.dom.createDom('xml');
-        var block = goog.dom.createDom('block');
+        var xml = goog.dom.createUntypedDom('xml');
+        var block = goog.dom.createUntypedDom('block');
         block.setAttribute('type', this.defType_);
         var xy = this.getRelativeToSurfaceXY();
         var x = xy.x + Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
@@ -697,7 +697,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
         block.setAttribute('y', y);
         var mutation = this.mutationToDom();
         block.appendChild(mutation);
-        var field = goog.dom.createDom('field');
+        var field = goog.dom.createUntypedDom('field');
         field.setAttribute('name', 'NAME');
         field.appendChild(document.createTextNode(this.getProcedureCall()));
         block.appendChild(field);

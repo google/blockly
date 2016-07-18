@@ -89,7 +89,7 @@ Blockly.Procedures.findLegalName = function(name, block) {
     // Flyouts can have multiple procedures called 'do something'.
     return name;
   }
-  while (!Blockly.Procedures.isLegalName(name, block.workspace, block)) {
+  while (!Blockly.Procedures.isLegalName_(name, block.workspace, block)) {
     // Collision with another procedure.
     var r = name.match(/^(.*?)(\d+)$/);
     if (!r) {
@@ -109,8 +109,9 @@ Blockly.Procedures.findLegalName = function(name, block) {
  * @param {Blockly.Block=} opt_exclude Optional block to exclude from
  *     comparisons (one doesn't want to collide with oneself).
  * @return {boolean} True if the name is legal.
+ * @private
  */
-Blockly.Procedures.isLegalName = function(name, workspace, opt_exclude) {
+Blockly.Procedures.isLegalName_ = function(name, workspace, opt_exclude) {
   var blocks = workspace.getAllBlocks();
   // Iterate through every block and check the name.
   for (var i = 0; i < blocks.length; i++) {
@@ -129,24 +130,27 @@ Blockly.Procedures.isLegalName = function(name, workspace, opt_exclude) {
 
 /**
  * Rename a procedure.  Called by the editable field.
- * @param {string} text The proposed new name.
+ * @param {string} name The proposed new name.
  * @return {string} The accepted name.
  * @this {!Blockly.Field}
  */
-Blockly.Procedures.rename = function(text) {
+Blockly.Procedures.rename = function(name) {
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
-  text = text.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
+  name = name.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
 
   // Ensure two identically-named procedures don't exist.
-  text = Blockly.Procedures.findLegalName(text, this.sourceBlock_);
-  // Rename any callers.
-  var blocks = this.sourceBlock_.workspace.getAllBlocks();
-  for (var i = 0; i < blocks.length; i++) {
-    if (blocks[i].renameProcedure) {
-      blocks[i].renameProcedure(this.text_, text);
+  var legalName = Blockly.Procedures.findLegalName(name, this.sourceBlock_);
+  var oldName = this.text_;
+  if (oldName != name && oldName != legalName) {
+    // Rename any callers.
+    var blocks = this.sourceBlock_.workspace.getAllBlocks();
+    for (var i = 0; i < blocks.length; i++) {
+      if (blocks[i].renameProcedure) {
+        blocks[i].renameProcedure(oldName, legalName);
+      }
     }
   }
-  return text;
+  return legalName;
 };
 
 /**
@@ -197,9 +201,9 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
       var mutation = goog.dom.createDom('mutation');
       mutation.setAttribute('name', name);
       block.appendChild(mutation);
-      for (var t = 0; t < args.length; t++) {
+      for (var j = 0; j < args.length; j++) {
         var arg = goog.dom.createDom('arg');
-        arg.setAttribute('name', args[t]);
+        arg.setAttribute('name', args[j]);
         mutation.appendChild(arg);
       }
       xmlList.push(block);
@@ -232,19 +236,6 @@ Blockly.Procedures.getCallers = function(name, workspace) {
     }
   }
   return callers;
-};
-
-/**
- * When a procedure definition is disposed of, find and dispose of all its
- *     callers.
- * @param {string} name Name of deleted procedure definition.
- * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
- */
-Blockly.Procedures.disposeCallers = function(name, workspace) {
-  var callers = Blockly.Procedures.getCallers(name, workspace);
-  for (var i = 0; i < callers.length; i++) {
-    callers[i].dispose(true, false);
-  }
 };
 
 /**
@@ -282,7 +273,8 @@ Blockly.Procedures.mutateCallers = function(defBlock) {
  * @return {Blockly.Block} The procedure definition block, or null not found.
  */
 Blockly.Procedures.getDefinition = function(name, workspace) {
-  var blocks = workspace.getAllBlocks();
+  // Assume that a procedure definition is a top block.
+  var blocks = workspace.getTopBlocks(false);
   for (var i = 0; i < blocks.length; i++) {
     if (blocks[i].getProcedureDef) {
       var tuple = blocks[i].getProcedureDef();

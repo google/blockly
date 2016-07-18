@@ -62,7 +62,11 @@
             </statement>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">for loop</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">for loop</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">log</field>
@@ -93,7 +97,7 @@
         </value>
         <statement name="DO">
           <block type="unittest_fail">
-            <field name="MESSAGE">while 0</field>
+             <field name="MESSAGE">while 0</field>
           </block>
         </statement>
         <next>
@@ -106,7 +110,7 @@
             </value>
             <statement name="DO">
               <block type="unittest_fail">
-                <field name="MESSAGE">until 0</field>
+                 <field name="MESSAGE">until 0</field>
               </block>
             </statement>
             <next>
@@ -147,7 +151,11 @@
                     </statement>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">while 10</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">while 10</field>
+                           </block>
+                         </value>
                         <value name="ACTUAL">
                           <block type="variables_get">
                             <field name="VAR">count</field>
@@ -196,7 +204,11 @@
                                 </statement>
                                 <next>
                                   <block type="unittest_assertequals" inline="false">
-                                    <field name="MESSAGE">until 10</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">until 10</field>
+                                       </block>
+                                     </value>
                                     <value name="ACTUAL">
                                       <block type="variables_get">
                                         <field name="VAR">count</field>
@@ -254,7 +266,11 @@
             </statement>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">repeat 10</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">repeat 10</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="variables_get">
                     <field name="VAR">count</field>

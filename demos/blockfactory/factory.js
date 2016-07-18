@@ -912,7 +912,6 @@ BlockLibrary.Storage.prototype.clear = function() {
 BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
   var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
   this.blocks[blockType] = prettyXml;
-  this.saveToLocalStorage();
 };
 
 /**
@@ -922,7 +921,6 @@ BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
  */
 BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
   this.blocks[blockType] = null;
-  this.saveToLocalStorage();
 };
 
 /**

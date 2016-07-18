@@ -178,7 +178,7 @@ Blockly.Field.prototype.dispose = function() {
  * Add or remove the UI indicating if this field is editable or not.
  */
 Blockly.Field.prototype.updateEditable = function() {
-  if (!this.EDITABLE || !this.sourceBlock_) {
+  if (!this.EDITABLE || !this.fieldGroup_) {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
@@ -261,7 +261,7 @@ Blockly.Field.prototype.callValidator = function(text) {
   }
   var userValidator = this.getValidator();
   if (userValidator) {
-    var userResult = userValidator(text);
+    var userResult = userValidator.call(this, text);
     if (userResult === null) {
       // User validator rejects value.  Game over.
       return null;

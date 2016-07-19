@@ -542,6 +542,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
 Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
   if (toolbox) {
+    this.horizontalLayout_ = toolbox.horizontalLayout_;
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
       // surface of the workspace has, so we may need to reposition everything.
@@ -591,6 +592,28 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
  */
 Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
   // NOP.
+};
+
+/**
+ * Remap event.keyCode in horizontalLayout so that arrow
+ * keys work properly and call original onKeyDown handler.
+ * @param {!goog.events.BrowserEvent} e The browser event.
+ * @return {boolean} The handled value.
+ * @override
+ * @private
+ */
+Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
+  if (this.horizontalLayout_) {
+    var map = {};
+    map[goog.events.KeyCodes.RIGHT] = goog.events.KeyCodes.DOWN;
+    map[goog.events.KeyCodes.LEFT] = goog.events.KeyCodes.UP;
+    map[goog.events.KeyCodes.UP] = goog.events.KeyCodes.LEFT;
+    map[goog.events.KeyCodes.DOWN] = goog.events.KeyCodes.RIGHT;
+
+    var newKeyCode = map[e.keyCode]
+    e.keyCode = newKeyCode ? newKeyCode : e.keyCode;
+  }
+  return Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
 };
 
 /**

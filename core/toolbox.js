@@ -544,6 +544,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
 Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
   if (toolbox) {
+    this.horizontalLayout_ = toolbox.horizontalLayout_;
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
       // surface of the workspace has, so we may need to reposition everything.
@@ -593,6 +594,83 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
  */
 Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
   // NOP.
+};
+
+/**
+ * Modify original onKeyDown handler to swap
+ * LEFT/RIGHT keys with UP/DOWN in horizontalLayout.
+ * @param {!goog.events.BrowserEvent} e The browser event.
+ * @return {boolean} The handled value.
+ * @override
+ * @private
+ */
+Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
+  var handled = true;
+  var vertical = !this.horizontalLayout_;
+
+  var right = vertical ? 'RIGHT' : 'DOWN';
+  var left  = vertical ? 'LEFT'  : 'UP';
+  var up    = vertical ? 'UP'    : 'LEFT';
+  var down  = vertical ? 'DOWN'  : 'RIGHT';
+
+  switch (e.keyCode) {
+    case goog.events.KeyCodes[right]:
+      if (e.altKey) {
+        break;
+      }
+      if (this.hasChildren()) {
+        if (!this.getExpanded()) {
+          this.setExpanded(true);
+        } else {
+          this.getFirstChild().select();
+        }
+      }
+      break;
+
+    case goog.events.KeyCodes[left]:
+      if (e.altKey) {
+        break;
+      }
+      if (this.hasChildren() && this.getExpanded() && this.isUserCollapsible_) {
+        this.setExpanded(false);
+      } else {
+        var parent = this.getParent();
+        var tree = this.getTree();
+        // don't go to root if hidden
+        if (parent && (tree.getShowRootNode() || parent != tree)) {
+          parent.select();
+        }
+      }
+      break;
+
+    case goog.events.KeyCodes[down]:
+      var nextNode = this.getNextShownNode();
+      if (nextNode) {
+        nextNode.select();
+      }
+      break;
+
+    case goog.events.KeyCodes[up]:
+      var previousNode = this.getPreviousShownNode();
+      if (previousNode) {
+        previousNode.select();
+      }
+      break;
+
+    default:
+      handled = false;
+  }
+
+  if (handled) {
+    e.preventDefault();
+    var tree = this.getTree();
+    if (tree) {
+      // clear type ahead buffer as user navigates with arrow keys
+      tree.clearTypeAhead();
+    }
+  }
+
+  return handled;
 };
 
 /**

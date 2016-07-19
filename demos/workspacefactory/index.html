@@ -353,7 +353,7 @@
 </xml>
 <script>
     // Create empty workspace for configuring workspace.
-  this.toolboxWorkspace = Blockly.inject('toolbox_blocks',
+  var toolboxWorkspace = Blockly.inject('toolbox_blocks',
     {grid:
       {spacing: 25,
        length: 3,
@@ -363,7 +363,7 @@
        toolbox: toolbox,
      });
   // Create empty workspace for previewing created workspace.
-  this.previewWorkspace = Blockly.inject('preview_blocks',
+  var previewWorkspace = Blockly.inject('preview_blocks',
     {grid:
       {spacing: 25,
        length: 3,

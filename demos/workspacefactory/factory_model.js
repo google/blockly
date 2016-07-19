@@ -35,6 +35,15 @@ FactoryModel.prototype.hasCategory = function(name) {
 };
 
 /**
+ * Determines if the user has any categories using categoryMap.
+ *
+ * @return {boolean} true if categories exist, false otherwise
+ */
+FactoryModel.prototype.hasCategories = function() {
+  return this.categoryMap.size > 0;
+}
+
+/**
  * Finds the next open category to switch to. Returns null if
  * no categories left to switch to, and updates hasCategories to be false.
  * TODO(edauterman): Find a better tab than just the first tab in the map (done
@@ -45,24 +54,25 @@ FactoryModel.prototype.hasCategory = function(name) {
  */
 FactoryModel.prototype.getNextOpenCategory = function(name) {
   for (var key in this.categoryMap) {
-    if (key != name) {
-      return key;
-    }
+    return key;
   }
   return null;
 };
 
 /**
- * Adds an empty category entry, updating state variables accordingly.
+ * Saves the current category, updating its entry in categoryMap.
  *
- * @param {string} name name of category to be added
+ * @param {!string} name Name of category to save
+ * @param {!Blockly.workspace} workspace Workspace to save from
  */
-FactoryModel.prototype.addCategoryEntry = function(name) {
-  this.hasCategories = true;
+FactoryModel.prototype.saveCategoryEntry = function(name, workspace) {
+  if (!name) {  // Never want to save null.
+    return;
+  }
   this.categoryMap[name] = {
-    'xml': Blockly.Xml.textToDom('<xml></xml>'),
-    'blocks': null
-  };
+    'xml': Blockly.Xml.workspaceToDom(workspace),
+    'blocks': workspace.getTopBlocks()
+  }
 };
 
 /**
@@ -91,21 +101,7 @@ FactoryModel.prototype.getSelected = function() {
 FactoryModel.prototype.setSelected = function(name) {
   this.selected = name;
 }
-/**
- * Captures the statue of a current category, updating its entry in categoryMap.
- *
- * @param {!string} name Name of category to capture state of
- * @param {!Blockly.workspace} workspace Workspace to capture state from
- */
-FactoryModel.prototype.captureState = function(name, workspace) {
-  if (!name) {  // Never want to capture state for null.
-    return;
-  }
-  this.categoryMap[name] = {
-    'xml': Blockly.Xml.workspaceToDom(workspace),
-    'blocks': workspace.getTopBlocks()
-  }
-};
+
 /**
  * Returns the xml to load a given category
  *

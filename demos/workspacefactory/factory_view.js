@@ -29,7 +29,7 @@ FactoryView.prototype.addCategoryRow = function(name) {
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
   // Configure tab.
-  nextEntry.id = 'tab_' + name;
+  nextEntry.id = this.createCategoryIdName(name);
   nextEntry.textContent = name;
   // Store tab.
   this.tabMap[name] = table.rows[count].cells[0];
@@ -49,12 +49,22 @@ FactoryView.prototype.deleteCategoryRow = function(name) {
   var count = table.rows.length;
   for (var i = 0; i < count; i++) {
     var row = table.rows[i];
-    if (row.cells[0].id == 'tab_' + name) {
+    if (row.cells[0].id == this.createCategoryIdName(name)) {
       table.deleteRow(i);
       return;
     }
   }
 };
+
+/**
+ * Determines the DOM id for a category given its name.
+ *
+ * @param {!string} name Name of category
+ * @return {!string} ID of category tab
+ */
+FactoryView.prototype.createCategoryIdName = function(name) {
+  return 'tab_' + name;
+}
 
 /**
  * Switches a tab on or off.
@@ -63,6 +73,9 @@ FactoryView.prototype.deleteCategoryRow = function(name) {
  * @param {boolean} on true if tab should be on, false if tab should be off
  */
 FactoryView.prototype.setCategoryTabSelection = function(name, selected) {
+  if (!this.tabMap[name]) {
+    return;
+  }
   this.tabMap[name].className = selected ? 'tabon' : 'taboff';
 };
 

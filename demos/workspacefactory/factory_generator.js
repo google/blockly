@@ -24,7 +24,7 @@ FactoryGenerator = function(model, toolboxWorkspace) {
  * @param {!Array.<!Blockly.Block>} topBlocks top level blocks to add to xmlDom
  */
 FactoryGenerator.prototype.categoryWorkspaceToDom = function(xmlDom, blocks) {
-  for (var i=0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; block = blocks[i]; i++) {
     var blockChild = Blockly.Xml.blockToDom(block);
     blockChild.removeAttribute('id');
     xmlDom.appendChild(blockChild);
@@ -46,7 +46,7 @@ FactoryGenerator.prototype.generateConfigXml = function() {
         'id' : 'toolbox',
         'style' : 'display:none'
       });
-  if (!this.model.getSelected()) {
+  if (!this.model.hasCategories()) {
     this.categoryWorkspaceToDom(xmlDom,
         this.toolboxWorkspace.getTopBlocks());
   }

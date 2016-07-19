@@ -37,7 +37,8 @@ FactoryModel.prototype.hasCategory = function(name) {
 /**
  * Finds the next open category to switch to. Returns null if
  * no categories left to switch to, and updates hasCategories to be false.
- * TODO(edauterman): Find a better tab than just the first tab in the map.
+ * TODO(edauterman): Find a better tab than just the first tab in the map (done
+ * in next CL).
  *
  * @param {!string} name name of category currently open, cannot be switched to
  * @return {string} name of next category to switch to
@@ -70,7 +71,6 @@ FactoryModel.prototype.addCategoryEntry = function(name) {
  * @param {string} name of category to be deleted
  */
 FactoryModel.prototype.deleteCategoryEntry = function(name) {
-  window.console.log("Deleting " + name);
   delete this.categoryMap[name];
 };
 

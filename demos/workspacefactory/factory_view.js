@@ -73,7 +73,7 @@ FactoryView.prototype.setCategoryTabSelection = function(name, selected) {
  * @param {string|!Element} e1 tab element or corresponding id string
  * @param {!Function} func Function to be executed on click
  */
-FactoryController.prototype.bindClick = function(el, func) {
+FactoryView.prototype.bindClick = function(el, func) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
   }

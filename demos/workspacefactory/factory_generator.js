@@ -1,7 +1,8 @@
 /**
  * @fileoverview Generates the configuration xml used to update the preview
  * workspace or print to the console or downlaod to a file. Leverages
- * Blockly.Xml and depends on information in the model and in toolboxWorkspace.
+ * Blockly.Xml and depends on information in the model and in toolboxWorkspace,
+ * by holding references to them.
  *
  * @author Emma Dauterman (edauterman)
  */

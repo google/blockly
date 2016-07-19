@@ -185,7 +185,7 @@ Blockly.Field.prototype.updateEditable = function() {
     Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
                       'blocklyEditableText');
     Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_),
-                         'blocklyNoNEditableText');
+                         'blocklyNonEditableText');
     this.fieldGroup_.style.cursor = this.CURSOR;
   } else {
     Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),

@@ -54,40 +54,26 @@ FactoryController.prototype.addCategory = function() {
 };
 
 /**
- * Attached to "Remove Category" button. Prompts the user for a name, and
- * removes the specified category. Alerts the user and exits immediately if
- * the user tries to remove a nonexistent category. If currently on the category
- * being removed, switches to the first category added. When the last category
- * is removed, it switches to a single flyout mode.
+ * Attached to "Remove Category" button. Checks if the user wants to delete
+ * the current category.  Removes the category and switches to another category.
+ * When the last category is removed, it switches to a single flyout mode.
  *
  * TODO(edauterman): make case insensitive, have it switch to a more logical
  * category (e.g. most recently added category)
  */
 FactoryController.prototype.removeCategory = function() {
-  var name = prompt('Enter the name of your category to remove: ');
-  if (!this.model.hasCategory(name)) {
-    if (!name) {  // Return if cancelled.
-      return;
-    }
-    alert('No such category to delete.');
+  var check = prompt('Are you sure you want to delete the currently selected'
+        + ' category? ');
+  if (check.toLowerCase() != 'yes') {
     return;
   }
-  if (name == this.model.getSelected()) {
-    var check = prompt('Are you sure you want to delete the currently selected'
-        + ' category? ');
-    if (check.toLowerCase() != 'yes') {
-      return;
-    }
-  }
-  this.model.deleteCategoryEntry(name);
-  this.view.deleteCategoryRow(name);
-  if (name == this.model.getSelected()) {
-    var next = this.model.getNextOpenCategory();
-    this.clearAndLoadCategory(next);
-    if (!next) {
-      alert("You currently have no categories. All your blocks will be " +
-          "displayed in a single flyout.");
-    }
+  this.model.deleteCategoryEntry(this.model.getSelected());
+  this.view.deleteCategoryRow(this.model.getSelected());
+  var next = this.model.getNextOpenCategory();
+  this.clearAndLoadCategory(next);
+  if (!next) {
+    alert("You currently have no categories. All your blocks will be " +
+        "displayed in a single flyout.");
   }
 };
 

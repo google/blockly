@@ -7,10 +7,13 @@
  */
 
 /**
- * namespace for workspace factory xml generation code
- * @namespace FactoryGenerator
+ * Class for a FactoryGenerator
+ * @constructor
  */
-FactoryGenerator = {};
+FactoryGenerator = function(model, toolboxWorkspace) {
+  this.model = model;
+  this.toolboxWorkspace = toolboxWorkspace;
+};
 
 /**
  * Adaped from workspaceToDom, encodes workspace for a particular category
@@ -19,8 +22,8 @@ FactoryGenerator = {};
  * @param {!Element} xmlDom Tree of XML elements to be appended to.
  * @param {!Array.<!Blockly.Block>} topBlocks top level blocks to add to xmlDom
  */
-FactoryGenerator.categoryWorkspaceToDom = function(xmlDom, blocks) {
-  for (var i=0, block; block=blocks[i]; i++) {
+FactoryGenerator.prototype.categoryWorkspaceToDom = function(xmlDom, blocks) {
+  for (var i=0, block; block = blocks[i]; i++) {
     var blockChild = Blockly.Xml.blockToDom(block);
     blockChild.removeAttribute('id');
     xmlDom.appendChild(blockChild);
@@ -36,23 +39,23 @@ FactoryGenerator.categoryWorkspaceToDom = function(xmlDom, blocks) {
  * @return {!Element} XML element representing toolbox or flyout corresponding
  * to toolbox workspace.
  */
-FactoryGenerator.generateConfigXml = function() {
+FactoryGenerator.prototype.generateConfigXml = function() {
   var xmlDom = goog.dom.createDom('xml',
       {
         'id' : 'toolbox',
         'style' : 'display:none'
       });
-  if (!model.hasCategories) {
-    FactoryGenerator.categoryWorkspaceToDom(xmlDom,
-        toolboxWorkspace.getTopBlocks());
+  if (!this.model.getSelected()) {
+    this.categoryWorkspaceToDom(xmlDom,
+        this.toolboxWorkspace.getTopBlocks());
   }
   else {
     // Capture any changes made by user before generating xml.
-    model.captureState(model.getSelected());
-    for (var category in model.getIterableCategories()) {
+    this.model.captureState(this.model.getSelected(), this.toolboxWorkspace);
+    for (var category in this.getIterableCategories()) {
       var categoryElement = goog.dom.createDom('category');
       categoryElement.setAttribute('name',category);
-      FactoryGenerator.categoryWorkspaceToDom(categoryElement,
+      this.categoryWorkspaceToDom(categoryElement,
           model.getBlocks(category));
       xmlDom.appendChild(categoryElement);
     }

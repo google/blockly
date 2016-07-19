@@ -12,15 +12,15 @@
   * @constructor
   */
 
-FactoryView = function(){
+FactoryView = function() {
   this.tabMap = Object.create(null);
 };
 
 /**
- * Adds a category tab to the UI, and sets the tab so that when clicked, it
- * switches to that tab. Updates tabMap accordingly.
+ * Adds a category tab to the UI, and updates tabMap accordingly.
  *
  * @param {string} name The name of the category to be created
+ * @return {!Element} DOM element created for tab
  */
 FactoryView.prototype.addCategoryRow = function(name) {
   // Create tab.
@@ -29,13 +29,13 @@ FactoryView.prototype.addCategoryRow = function(name) {
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
   // Configure tab.
-  nextEntry.id = "tab_" + name;
+  nextEntry.id = 'tab_' + name;
   nextEntry.textContent = name;
   // Store tab.
   this.tabMap[name] = table.rows[count].cells[0];
   // When click the tab with that name, switch to that tab.
-  this.bindClick(nextEntry, function(name) {return function ()
-      {FactoryController.switchCategory(name)};}(name));
+  return nextEntry;
+
 };
 
 /**
@@ -47,9 +47,9 @@ FactoryView.prototype.deleteCategoryRow = function(name) {
   delete this.tabMap[name];
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
-  for (var i=0; i<count; i++) {
+  for (var i = 0; i < count; i++) {
     var row = table.rows[i];
-    if (row.cells[0].childNodes[0].textContent == name) {
+    if (row.cells[0].id == 'tab_' + name) {
       table.deleteRow(i);
       return;
     }
@@ -62,8 +62,8 @@ FactoryView.prototype.deleteCategoryRow = function(name) {
  * @param {string} name name of the tab to switch on or off
  * @param {boolean} on true if tab should be on, false if tab should be off
  */
-FactoryView.prototype.toggleTab = function(name, on) {
-  this.tabMap[name].className = on ? 'tabon' : 'taboff';
+FactoryView.prototype.setCategoryTabSelection = function(name, selected) {
+  this.tabMap[name].className = selected ? 'tabon' : 'taboff';
 };
 
 /**
@@ -73,7 +73,7 @@ FactoryView.prototype.toggleTab = function(name, on) {
  * @param {string|!Element} e1 tab element or corresponding id string
  * @param {!Function} func Function to be executed on click
  */
-FactoryView.prototype.bindClick = function(el, func) {
+FactoryController.prototype.bindClick = function(el, func) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
   }
@@ -85,13 +85,10 @@ FactoryView.prototype.bindClick = function(el, func) {
  * Creates a file and downloads it. In some browsers downloads, and in other
  * browsers, opens new tab with contents.
  *
- * @param {!string} contents material to be written to file
  * @param {!string} filename Name of file
- * @param {!string} fileType Type of file to be downloaded
+ * @param {!Blob} data Blob containing contents to download
  */
-FactoryView.prototype.createAndDownloadFile = function(contents, filename,
-    fileType) {
-   var data = new Blob([contents], {type: 'text/' + fileType});
+FactoryView.prototype.createAndDownloadFile = function(filename, data) {
    var clickEvent = new MouseEvent("click", {
      "view": window,
      "bubbles": true,

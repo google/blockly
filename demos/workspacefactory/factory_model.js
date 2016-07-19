@@ -1,7 +1,7 @@
 /**
  * @fileoverview Stores and updates information about state and categories
  * in workspace factory. Keeps a map that for each category, stores
- * the xml to laod that category and all the blocks in that category. Also
+ * the xml to load that category and all the blocks in that category. Also
  * stores the selected category and a boolean for if there are any categories
  * or if it's in "simple" mode (1 flyout).
  *
@@ -18,8 +18,6 @@ FactoryModel = function() {
 
 // String name of current selected category, null if no categories.
 FactoryModel.prototype.selected = null;
-// False if in "simple" mode, true if at least 1 category.
-FactoryModel.prototype.hasCategories = false;
 
 /**
  * Given a name, determines if it is the name of a category already present.
@@ -27,7 +25,7 @@ FactoryModel.prototype.hasCategories = false;
  * @param {string} name string to be compared against
  * @return {boolean} true if string is a used category name, false otherwise
  */
-FactoryModel.prototype.isCategory = function(name) {
+FactoryModel.prototype.hasCategory = function(name) {
   for (var category in this.categoryMap) {
     if (category == name) {
         return true;
@@ -37,20 +35,19 @@ FactoryModel.prototype.isCategory = function(name) {
 };
 
 /**
- * Finds the next open category to switch to, excluding name. Returns null if
+ * Finds the next open category to switch to. Returns null if
  * no categories left to switch to, and updates hasCategories to be false.
  * TODO(edauterman): Find a better tab than just the first tab in the map.
  *
- * @param {string} name of cateegory being deleted
+ * @param {!string} name name of category currently open, cannot be switched to
  * @return {string} name of next category to switch to
  */
-FactoryModel.prototype.getNextOpenCategory = function(name){
+FactoryModel.prototype.getNextOpenCategory = function(name) {
   for (var key in this.categoryMap) {
     if (key != name) {
       return key;
     }
   }
-  this.hasCategories = false;  // No category left to switch to.
   return null;
 };
 
@@ -65,6 +62,16 @@ FactoryModel.prototype.addCategoryEntry = function(name) {
     'xml': Blockly.Xml.textToDom('<xml></xml>'),
     'blocks': null
   };
+};
+
+/**
+ * Deletes a category entry and all associated data.
+ *
+ * @param {string} name of category to be deleted
+ */
+FactoryModel.prototype.deleteCategoryEntry = function(name) {
+  window.console.log("Deleting " + name);
+  delete this.categoryMap[name];
 };
 
 /**
@@ -86,14 +93,17 @@ FactoryModel.prototype.setSelected = function(name) {
 }
 /**
  * Captures the statue of a current category, updating its entry in categoryMap.
+ *
+ * @param {!string} name Name of category to capture state of
+ * @param {!Blockly.workspace} workspace Workspace to capture state from
  */
-FactoryModel.prototype.captureState = function(name) {
+FactoryModel.prototype.captureState = function(name, workspace) {
   if (!name) {  // Never want to capture state for null.
     return;
   }
   this.categoryMap[name] = {
-    'xml': Blockly.Xml.workspaceToDom(toolboxWorkspace),
-    'blocks': toolboxWorkspace.getTopBlocks()
+    'xml': Blockly.Xml.workspaceToDom(workspace),
+    'blocks': workspace.getTopBlocks()
   }
 };
 /**
@@ -110,24 +120,18 @@ FactoryModel.prototype.getXml = function(name) {
  * Returns xml for the blocks of a given category.
  *
  * @param {string} name name of category to fetch blocks for
- * @return{ !Array.<!Blockly.Block>} top level block objects
+ * @return {!Array.<!Blockly.Block>} top level block objects
  */
 FactoryModel.prototype.getBlocks = function(name) {
   return this.categoryMap[name].blocks;
 };
 
 /**
- * Deletes a category entry and all associated data.
- *
- * @param {string} name of category to be deleted
- */
-FactoryModel.prototype.deleteCategoryEntry = function(name) {
-  delete this.categoryMap[name];
-};
-
-/**
  * Return map of categories that can be iterated over in a for-in loop.
  * Used when it is necessary to look through all categories.
+ *
+ * @return {!Map<string,<!Element,!Array.<!Blockly.Block>>>} Map of category
+ * name to object with XML dom element and array of top level block objects.
  */
 FactoryModel.prototype.getIterableCategories = function() {
   return this.categoryMap;

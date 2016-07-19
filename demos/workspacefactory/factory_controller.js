@@ -1,35 +1,56 @@
 /**
  * @fileoverview Contains the controller code for workspace factory. Depends
- * on the model and view objects and interacts with previewWorkspace and
- * toolboxWorkspace. Provides the functionality for the actions the user
- * can initiate, including adding and removing categories, switching between
- * categories, printing and downloading configuration xml, and updating
- * the preview workspace.
+ * on the model and view objects (created as internal variables) and interacts
+ * with previewWorkspace and toolboxWorkspace (internal references stored
+ * to both). Provides the functionality for the actions the user can initiate,
+ * including:
+ * -adding and removing categories
+ * -switching between categories
+ * -printing and downloading configuration xml
+ * -updating the preview workspace.
  *
  * @author Emma Dauterman (edauterman)
  */
 
 /**
- * namespace for controller code for workspace factory
- * @namespace FactoryController
+ * Class for a FactoryController
+ * @constructor
+ * @param {!Blockly.workspace} toolboxWorkspace workspace where blocks are
+ * dragged into corresponding categories
+ * @param {!Blockly.workspace} previewWorkspace workspace that shows preview
+ * of what workspace would look like using generated XML
  */
-FactoryController = {};
+FactoryController = function(toolboxWorkspace, previewWorkspace) {
+  this.toolboxWorkspace = toolboxWorkspace;
+  this.previewWorkspace = previewWorkspace;
+  this.model = new FactoryModel();
+  this.view = new FactoryView();
+  this.generator = new FactoryGenerator(this.model, this.toolboxWorkspace);
+};
 
 /**
  * Attached to "Add Category" button. Currently prompts the user for a name,
  * checking that it's valid (not used before), and then creates a tab and
  * switches to it.
  */
-FactoryController.addCategory = function() {
-  do {
-    var name = prompt('Enter the name of your new category: ');
-  } while (model.isCategory(name));
+FactoryController.prototype.addCategory = function() {
+  var name = prompt('Enter the name of your new category: ');
+  while (this.model.hasCategory(name)){
+    name = prompt('That name is already in use. Please enter another name: ');
+  }
   if (!name) {  // If cancelled.
     return;
   }
-  model.addCategoryEntry(name);
-  view.addCategoryRow(name, model.getSelected());
-  FactoryController.switchCategory(name);
+  this.model.addCategoryEntry(name);
+  var tab = this.view.addCategoryRow(name);
+  var self = this;
+  var clickFunction = function(name) {  // Keep this in scope for switchCategory
+    return function() {
+      self.switchCategory(name);
+    };
+  };
+  this.view.bindClick(tab, clickFunction(name));
+  this.switchCategory(name);
 };
 
 /**
@@ -41,109 +62,115 @@ FactoryController.addCategory = function() {
  * TODO(edauterman): make case insensitive, have it switch to a more logical
  * category (e.g. most recently added category)
  */
-FactoryController.removeCategory = function() {
+FactoryController.prototype.removeCategory = function() {
   var name = prompt('Enter the name of your category to remove: ');
-  if (!model.isCategory(name)) {
+  if (!this.model.hasCategory(name)) {
+    if (!name) {  // Return if cancelled.
+      return;
+    }
     alert('No such category to delete.');
     return;
   }
-  if (name == model.getSelected()) {
-    var next = model.getNextOpenCategory(name);
-    FactoryController.switchCategory(next);
+  if (name == this.model.getSelected()) {
+    var check = prompt('Are you sure you want to delete the currently selected'
+        + ' category? ');
+    if (check.toLowerCase() != 'yes') {
+      return;
+    }
   }
-  model.deleteCategoryEntry(name);
-  view.deleteCategoryRow(name);
+  if (name == this.model.getSelected()) {
+    var next = this.model.getNextOpenCategory(name);
+    this.switchCategory(next);
+  }
+  this.model.deleteCategoryEntry(name);
+  this.view.deleteCategoryRow(name);
 };
 
 /**
  * Switches to a new tab for the category given by name. Stores XML and blocks
  * to reload later, updates selected accordingly, and clears the workspace
- * and clears undo, then loads the new category. Special case if selected =
- * null, meaning it's the first category so category information doesn't need
- * to be stored. Also special case if switching to null, meaning that it's
- * switching back to no categories.
+ * and clears undo, then loads the new category.
  * TODO(edauterman): If they've put blocks in a "simple" flyout, give the user
  * the option to put these blocks in a category so they don't lose all their
  * work.
  *
  * @param {string} name name of tab to be opened, must be valid category name
  */
-FactoryController.switchCategory = function(name) {
-  if (name == null) {
-    toolboxWorkspace.clear();
-    toolboxWorkspace.clearUndo();
-    model.setSelected(null);
-    return;
-  }
+FactoryController.prototype.switchCategory = function(name) {
   var table = document.getElementById('categoryTable');
-  // Caches information to reload or generate xml if switching from category.
-  if (model.getSelected() != null) {
-      model.captureState(model.getSelected());
-      view.toggleTab(model.getSelected(),false);
+  // Caches information to reload or generate xml if switching to/from category.
+  if (this.model.getSelected() != null && name != null) {
+      this.model.captureState(this.model.getSelected(), this.toolboxWorkspace);
+      this.view.setCategoryTabSelection(this.model.getSelected(), false);
   }
-  view.toggleTab(name,true);
-  model.setSelected(name);
-  toolboxWorkspace.clear();
-  toolboxWorkspace.clearUndo();
-  Blockly.Xml.domToWorkspace(model.getXml(name), toolboxWorkspace);
+  this.model.setSelected(name);
+  this.toolboxWorkspace.clear();
+  this.toolboxWorkspace.clearUndo();
+  if (name != null) { // Loads next category if switching to a category.
+    this.view.setCategoryTabSelection(name, true);
+    Blockly.Xml.domToWorkspace(this.model.getXml(name), this.toolboxWorkspace);
+  }
 };
 
 /**
  * Tied to "Export Config" button. Gets a file name from the user and downloads
  * the corresponding configuration xml to that file.
  */
-FactoryController.exportConfig = function() {
+FactoryController.prototype.exportConfig = function() {
    var configXml = Blockly.Xml.domToPrettyText
-      (FactoryGenerator.generateConfigXml());
+      (this.generator.generateConfigXml());
    var fileName = prompt("File Name: ");
-   view.createAndDownloadFile(configXml, fileName, 'xml');
+   if (!fileName) { // If cancelled
+    return;
+   }
+   var data = new Blob([configXml], {type: 'text/xml'});
+   this.view.createAndDownloadFile(fileName, data);
  };
 
 /**
  * Tied to "Print Config" button. Mainly used for debugging purposes. Prints
  * the configuration XML to the console.
  */
-FactoryController.printConfig = function() {
+FactoryController.prototype.printConfig = function() {
   window.console.log(Blockly.Xml.domToPrettyText
-      (FactoryGenerator.generateConfigXml()));
+      (this.generator.generateConfigXml()));
 };
 
 /**
  * Tied to "Update Preview" button. Updates the preview workspace based on
- * the toolbox workspace. If no categories, creates a simple flyout. If
- * switching from no categories to categories or categories to no categories,
- * reinjects Blockly with reinjectPreview (more expensive, but shows automatic
- * creation of trashcan, scrollbar, etc.). If updating simple or category
- * display, just updates without reinjecting.
+ * the toolbox workspace. If switching from no categories to categories or
+ * categories to no categories, reinjects Blockly with reinjectPreview,
+ * otherwise just updates without reinjecting.
  */
-FactoryController.updatePreview = function() {
+FactoryController.prototype.updatePreview = function() {
   var tree = Blockly.Options.parseToolboxTree
-      (FactoryGenerator.generateConfigXml());
-  if (tree.getElementsByTagName('category').length==0) {
-    if (previewWorkspace.toolbox_){
-      FactoryController.reinjectPreview(tree);
+      (this.generator.generateConfigXml());
+  if (tree.getElementsByTagName('category').length == 0) {
+    if (this.previewWorkspace.toolbox_) {
+      this.reinjectPreview(tree);
     } else {
-    previewWorkspace.flyout_.show(tree.childNodes);
+      this.previewWorkspace.flyout_.show(tree.childNodes);
     }
   } else {
     if (!previewWorkspace.toolbox_) {
-      FactoryController.reinjectPreview(tree);
+      this.reinjectPreview(tree);
     } else {
-      previewWorkspace.toolbox_.populate_(tree);
+      this.previewWorkspace.toolbox_.populate_(tree);
     }
   }
 };
 
 /**
- * Used to completely reinject the preview workspace. Done when switching from
- * simple flyout to categories, or categories to simple flyout. More expensive.
+ * Used to completely reinject the preview workspace. Use only when switching
+ * from simple flyout to categories, or categories to simple flyout. More
+ * expensive than simply updating the flyout or toolbox.
  *
  * @param {!Element} tree of xml elements
  */
-FactoryController.reinjectPreview = function(tree) {
-  previewWorkspace.dispose();
+FactoryController.prototype.reinjectPreview = function(tree) {
+  this.previewWorkspace.dispose();
   previewToolbox = Blockly.Xml.domToPrettyText(tree);
-  previewWorkspace = Blockly.inject('preview_blocks',
+  this.previewWorkspace = Blockly.inject('preview_blocks',
     {grid:
       {spacing: 25,
        length: 3,

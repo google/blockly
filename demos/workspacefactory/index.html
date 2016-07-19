@@ -2,24 +2,9 @@
 <html>
 <title>Blockly Workspace Factory</title>
 <script src="../../blockly_compressed.js"></script>
-<script src="../../generators/javascript.js"></script>
-<script src="../../generators/javascript/logic.js"></script>
-<script src="../../generators/javascript/loops.js"></script>
-<script src="../../generators/javascript/math.js"></script>
-<script src="../../generators/javascript/text.js"></script>
-<script src="../../generators/javascript/lists.js"></script>
-<script src="../../generators/javascript/colour.js"></script>
-<script src="../../generators/javascript/variables.js"></script>
-<script src="../../generators/javascript/procedures.js"></script>
+<script src="../../javascript_compressed.js"></script>
 <script src="../../msg/messages.js"></script>
-<script src="../../blocks/logic.js"></script>
-<script src="../../blocks/loops.js"></script>
-<script src="../../blocks/math.js"></script>
-<script src="../../blocks/text.js"></script>
-<script src="../../blocks/lists.js"></script>
-<script src="../../blocks/colour.js"></script>
-<script src="../../blocks/variables.js"></script>
-<script src="../../blocks/procedures.js"></script>
+<script src="../../blocks_compressed.js"></script>
 <script src="factory_model.js"></script>
 <script src="factory_controller.js"></script>
 <script src="factory_view.js"></script>
@@ -37,11 +22,11 @@
   <tr>
     <td>
       <p>
-        <button onclick="FactoryController.addCategory()">Add Category</button>
-        <button onclick="FactoryController.removeCategory()">Remove Category</button>
-        <button onclick="FactoryController.exportConfig()">Export Config</button>
-        <button onclick="FactoryController.printConfig()">Print Config</button>
-        <button onclick="FactoryController.updatePreview()">Update Preview</button>
+        <button id="button_add">Add Category</button>
+        <button id="button_remove">Remove Category</button>
+        <button id="button_export">Export Config</button>
+        <button id="button_print">Print Config</button>
+        <button id="button_preview">Update Preview</button>
       </p>
     </td>
   </tr>
@@ -366,12 +351,9 @@
   <category name="Variables" colour="330" custom="VARIABLE"></category>
   <category name="Functions" colour="290" custom="PROCEDURE"></category>
 </xml>
-
-<script type="text/javascript">
-  //create empty workspace for creating toolbox/flyout
-  var toolbox = document.getElementById('toolbox');
-  var previewToolbox = '<xml></xml>';
-  var toolboxWorkspace = Blockly.inject('toolbox_blocks',
+<script>
+    // Create empty workspace for configuring workspace.
+  this.toolboxWorkspace = Blockly.inject('toolbox_blocks',
     {grid:
       {spacing: 25,
        length: 3,
@@ -380,9 +362,8 @@
        media: '../../media/',
        toolbox: toolbox,
      });
-
-  //create empty workspace for previewing created workspace
-  var previewWorkspace = Blockly.inject('preview_blocks',
+  // Create empty workspace for previewing created workspace.
+  this.previewWorkspace = Blockly.inject('preview_blocks',
     {grid:
       {spacing: 25,
        length: 3,
@@ -395,8 +376,35 @@
         wheel: true}
     });
 
-  var model = new FactoryModel();
-  var view = new FactoryView();
+  var controller = new FactoryController(toolboxWorkspace, previewWorkspace);
+
+  // Wrappers to attach buttons to method calls for the controller object
+  var addWrapper = function() {
+    controller.addCategory();
+  };
+  var removeWrapper = function() {
+    controller.removeCategory();
+  }
+  var exportWrapper = function() {
+    controller.exportConfig();
+  };
+  var printWrapper = function() {
+    controller.printConfig();
+  }
+  var previewWrapper = function() {
+    controller.updatePreview();
+  }
+
+  document.getElementById('button_add').addEventListener
+      ('click', addWrapper);
+  document.getElementById('button_remove').addEventListener
+      ('click', removeWrapper);
+  document.getElementById('button_export').addEventListener
+      ('click', exportWrapper);
+  document.getElementById('button_print').addEventListener
+      ('click', printWrapper);
+  document.getElementById('button_preview').addEventListener
+      ('click', previewWrapper);
 
 </script>
 </html>

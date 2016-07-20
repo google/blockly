@@ -35,12 +35,12 @@ FactoryModel.prototype.hasCategory = function(name) {
 };
 
 /**
- * Determines if the user has any categories using categoryMap.
+ * Determines if the user has any categories using selected.
  *
  * @return {boolean} true if categories exist, false otherwise
  */
 FactoryModel.prototype.hasCategories = function() {
-  return this.categoryMap.size > 0;
+  return this.selected != null;
 }
 
 /**

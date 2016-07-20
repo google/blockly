@@ -62,13 +62,16 @@ FactoryController.prototype.addCategory = function() {
  * category (e.g. most recently added category)
  */
 FactoryController.prototype.removeCategory = function() {
-  var check = prompt('Are you sure you want to delete the currently selected'
+  // Check if user wants to remove current category.
+  var check = confirm('Are you sure you want to delete the currently selected'
         + ' category? ');
-  if (check.toLowerCase() != 'yes') {
+  if (!check) {
     return;
   }
+  // Delete category.
   this.model.deleteCategoryEntry(this.model.getSelected());
   this.view.deleteCategoryRow(this.model.getSelected());
+  // Open next category.
   var next = this.model.getNextOpenCategory();
   this.clearAndLoadCategory(next);
   if (!next) {
@@ -169,7 +172,7 @@ FactoryController.prototype.updatePreview = function() {
 };
 
 /**
- * Used to completely reinject the preview workspace. This should be useds only
+ * Used to completely reinject the preview workspace. This should be used only
  * when switching from simple flyout to categories, or categories to simple
  * flyout. More expensive than simply updating the flyout or toolbox.
  *

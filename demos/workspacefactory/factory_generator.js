@@ -52,12 +52,13 @@ FactoryGenerator.prototype.generateConfigXml = function() {
   }
   else {
     // Capture any changes made by user before generating xml.
-    this.model.captureState(this.model.getSelected(), this.toolboxWorkspace);
-    for (var category in this.getIterableCategories()) {
+    this.model.saveCategoryEntry(this.model.getSelected(),
+        this.toolboxWorkspace);
+    for (var category in this.model.getIterableCategories()) {
       var categoryElement = goog.dom.createDom('category');
       categoryElement.setAttribute('name',category);
       this.categoryWorkspaceToDom(categoryElement,
-          model.getBlocks(category));
+          this.model.getBlocks(category));
       xmlDom.appendChild(categoryElement);
     }
   }

@@ -614,7 +614,7 @@ Blockly.utils.wrapScore_ = function(words, wordBreaks, limit) {
   return score;
 };
 
-Blockly.readPythonFile = function(file) {
+Blockly.readFile = function(file) {
     var rawFile = new XMLHttpRequest();
     var code = "";
     rawFile.open("GET", file, false);

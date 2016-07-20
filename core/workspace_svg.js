@@ -715,11 +715,13 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
 };
 
 /**
- * Is the user currently dragging a block or scrolling the workspace?
+ * Is the user currently dragging a block or scrolling the flyout/workspace?
  * @return {boolean} True if currently dragging or scrolling.
  */
 Blockly.WorkspaceSvg.prototype.isDragging = function() {
   return Blockly.dragMode_ == Blockly.DRAG_FREE ||
+      (Blockly.Flyout.startFlyout_ &&
+          Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) ||
       this.dragMode_ == Blockly.DRAG_FREE;
 };
 
@@ -984,7 +986,7 @@ Blockly.WorkspaceSvg.prototype.preloadAudio_ = function() {
 };
 
 /**
- * Play an audio file at specified value.  If volume is not specified,
+ * Play a named sound at specified volume.  If volume is not specified,
  * use full volume (1).
  * @param {string} name Name of sound.
  * @param {number=} opt_volume Volume of sound (0-1).

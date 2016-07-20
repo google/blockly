@@ -31,7 +31,7 @@ goog.require('goog.math');
 
 /**
  * Class for an editable number field.
- * @param {string} value The initial content of the field.
+ * @param {number|string} value The initial content of the field.
  * @param {number|string|undefined} opt_min Minimum value.
  * @param {number|string|undefined} opt_max Maximum value.
  * @param {number|string|undefined} opt_precision Precision for value.
@@ -68,16 +68,15 @@ Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
   this.min_ = isNaN(min) ? -Infinity : min;
   max = parseFloat(max);
   this.max_ = isNaN(max) ? Infinity : max;
-  this.setValue(this.callValidator(this.getValue));
+  this.setValue(this.callValidator(this.getValue()));
 };
 
 /**
  * Ensure that only a number in the correct range may be entered.
  * @param {string} text The user's text.
  * @return {?string} A string representing a valid number, or null if invalid.
- * @this {!Blockly.FieldNumber}
  */
-Blockly.FieldNumber.classValidator = function(text) {
+Blockly.FieldNumber.prototype.classValidator = function(text) {
   if (text === null) {
     return null;
   }

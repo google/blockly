@@ -178,14 +178,14 @@ Blockly.Field.prototype.dispose = function() {
  * Add or remove the UI indicating if this field is editable or not.
  */
 Blockly.Field.prototype.updateEditable = function() {
-  if (!this.EDITABLE || !this.sourceBlock_) {
+  if (!this.EDITABLE || !this.fieldGroup_) {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
     Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
                       'blocklyEditableText');
     Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_),
-                         'blocklyNoNEditableText');
+                         'blocklyNonEditableText');
     this.fieldGroup_.style.cursor = this.CURSOR;
   } else {
     Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
@@ -237,31 +237,36 @@ Blockly.Field.prototype.getValidator = function() {
 };
 
 /**
+ * Validates a change.  Does nothing.  Subclasses may override this.
+ * @param {string} text The user's text.
+ * @return {string} No change needed.
+ */
+Blockly.Field.prototype.classValidator = function(text) {
+  return text;
+};
+
+/**
  * Calls the validation function for this field, as well as all the validation
  * function for the field's class and its parents.
  * @param {string} text Proposed text.
  * @return {?string} Revised text, or null if invalid.
  */
 Blockly.Field.prototype.callValidator = function(text) {
-  // Collect a list of validators, from Field, through to the subclass, ending
-  // with the user's validator.
-  var validators = [this.getValidator()];
-  var fieldClass = this.constructor;
-  while (fieldClass) {
-    validators.unshift(fieldClass.classValidator);
-    fieldClass = fieldClass.superClass_;
+  var classResult = this.classValidator(text);
+  if (classResult === null) {
+    // Class validator rejects value.  Game over.
+    return null;
+  } else if (classResult !== undefined) {
+    text = classResult;
   }
-  // Call each validator in turn, allowing each to rewrite or reject.
-  for (var i = 0; i < validators.length; i++) {
-    var validator = validators[i];
-    if (validator) {
-      var result = validator.call(this, text);
-      if (result === null) {
-        // Validator rejects value.  Game over.
-        return null;
-      } else if (result !== undefined) {
-        text = result;
-      }
+  var userValidator = this.getValidator();
+  if (userValidator) {
+    var userResult = userValidator.call(this, text);
+    if (userResult === null) {
+      // User validator rejects value.  Game over.
+      return null;
+    } else if (userResult !== undefined) {
+      text = userResult;
     }
   }
   return text;

@@ -774,6 +774,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   this.dragMode_ = Blockly.DRAG_FREE;
   this.startDragMouseY_ = e.clientY;
   this.startDragMouseX_ = e.clientX;
+  Blockly.Flyout.startFlyout_ = this;
   Blockly.Flyout.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove',
       this, this.onMouseMove_);
   Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEvent_(document, 'mouseup',

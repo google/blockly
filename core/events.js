@@ -388,7 +388,7 @@ Blockly.Events.Create.prototype.fromJson = function(json) {
 Blockly.Events.Create.prototype.run = function(forward) {
   var workspace = Blockly.Workspace.getById(this.workspaceId);
   if (forward) {
-    var xml = goog.dom.createDom('xml');
+    var xml = goog.dom.createUntypedDom('xml');
     xml.appendChild(this.xml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   } else {
@@ -465,7 +465,7 @@ Blockly.Events.Delete.prototype.run = function(forward) {
       }
     }
   } else {
-    var xml = goog.dom.createDom('xml');
+    var xml = goog.dom.createUntypedDom('xml');
     xml.appendChild(this.oldXml);
     Blockly.Xml.domToWorkspace(xml, workspace);
   }
@@ -554,8 +554,7 @@ Blockly.Events.Change.prototype.run = function(forward) {
       if (field) {
         // Run the validator for any side-effects it may have.
         // The validator's opinion on validity is ignored.
-        var validator = field.getValidator();
-        validator && validator.call(field, value);
+        field.callValidator(value);
         field.setValue(value);
       } else {
         console.warn("Can't set non-existant field: " + this.name);
@@ -802,10 +801,10 @@ Blockly.Events.disableOrphans = function(event) {
     var block = workspace.getBlockById(event.blockId);
     if (block) {
       if (block.getParent() && !block.getParent().disabled) {
-        do {
-          block.setDisabled(false);
-          block = block.getNextBlock();
-        } while (block);
+        var children = block.getDescendants();
+        for (var i = 0, child; child = children[i]; i++) {
+          child.setDisabled(false);
+        }
       } else if ((block.outputConnection || block.previousConnection) &&
                  Blockly.dragMode_ == Blockly.DRAG_NONE) {
         do {

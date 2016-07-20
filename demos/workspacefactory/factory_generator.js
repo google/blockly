@@ -41,19 +41,21 @@ FactoryGenerator.prototype.categoryWorkspaceToDom = function(xmlDom, blocks) {
  * to toolbox workspace.
  */
 FactoryGenerator.prototype.generateConfigXml = function() {
+  // Create DOM for XML
   var xmlDom = goog.dom.createDom('xml',
       {
         'id' : 'toolbox',
         'style' : 'display:none'
       });
+  // If no categories, use XML directly from workspace
   if (!this.model.hasCategories()) {
     this.categoryWorkspaceToDom(xmlDom,
         this.toolboxWorkspace.getTopBlocks());
-  }
-  else {
+  } else {
     // Capture any changes made by user before generating xml.
     this.model.saveCategoryEntry(this.model.getSelected(),
         this.toolboxWorkspace);
+    // Iterate through each category and add XML
     for (var category in this.model.getIterableCategories()) {
       var categoryElement = goog.dom.createDom('category');
       categoryElement.setAttribute('name',category);

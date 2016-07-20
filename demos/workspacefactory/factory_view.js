@@ -44,11 +44,14 @@ FactoryView.prototype.addCategoryRow = function(name) {
  * @param {string} name Then name of the category to be deleted
  */
 FactoryView.prototype.deleteCategoryRow = function(name) {
+  // Delete tab entry.
   delete this.tabMap[name];
+  // Find tab row.
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
   for (var i = 0; i < count; i++) {
     var row = table.rows[i];
+    // Delete tab row.
     if (row.cells[0].id == this.createCategoryIdName(name)) {
       table.deleteRow(i);
       return;

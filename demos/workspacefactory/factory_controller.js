@@ -34,6 +34,7 @@ FactoryController = function(toolboxWorkspace, previewWorkspace) {
  * switches to it.
  */
 FactoryController.prototype.addCategory = function() {
+  // Get name from user.
   var name = prompt('Enter the name of your new category: ');
   while (this.model.hasCategory(name)){
     name = prompt('That name is already in use. Please enter another name: ');
@@ -41,6 +42,7 @@ FactoryController.prototype.addCategory = function() {
       return;
     }
   }
+  // Create new category.
   var tab = this.view.addCategoryRow(name);
   var self = this;
   var clickFunction = function(name) {  // Keep this in scope for switchCategory
@@ -49,7 +51,9 @@ FactoryController.prototype.addCategory = function() {
     };
   };
   this.view.bindClick(tab, clickFunction(name));
+  // Switch to category.
   this.switchCategory(name);
+  // Save category.
   this.model.saveCategoryEntry(name, this.toolboxWorkspace);
 };
 
@@ -96,6 +100,7 @@ FactoryController.prototype.switchCategory = function(name) {
     this.model.saveCategoryEntry(this.model.getSelected(),
         this.toolboxWorkspace);
   }
+  // Load category.
   this.clearAndLoadCategory(name);
 };
 
@@ -107,15 +112,19 @@ FactoryController.prototype.switchCategory = function(name) {
  */
 FactoryController.prototype.clearAndLoadCategory = function(name) {
   var table = document.getElementById('categoryTable');
+  // Unselect current tab if switching to/from a category.
   if (this.model.getSelected() != null && name != null) {
     this.view.setCategoryTabSelection(this.model.getSelected(), false);
   }
+  // Set next category.
   this.model.setSelected(name);
+  // Clear workspace.
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
-  if (name != null) { // Loads next category if switching to a category.
+  // Loads next category if switching to a category.
+  if (name != null) {
     this.view.setCategoryTabSelection(name, true);
-    if (this.model.hasCategory(name)) {
+    if (this.model.hasCategory(name)) { // Only load pre-existing categories.
       Blockly.Xml.domToWorkspace(this.model.getXml(name),
           this.toolboxWorkspace);
     }
@@ -127,14 +136,17 @@ FactoryController.prototype.clearAndLoadCategory = function(name) {
  * the corresponding configuration xml to that file.
  */
 FactoryController.prototype.exportConfig = function() {
-   var configXml = Blockly.Xml.domToPrettyText
+  // Generate XML.
+  var configXml = Blockly.Xml.domToPrettyText
       (this.generator.generateConfigXml());
-   var fileName = prompt("File Name: ");
-   if (!fileName) { // If cancelled
+  // Get file name.
+  var fileName = prompt("File Name: ");
+  if (!fileName) { // If cancelled
     return;
-   }
-   var data = new Blob([configXml], {type: 'text/xml'});
-   this.view.createAndDownloadFile(fileName, data);
+  }
+  // Download file.
+  var data = new Blob([configXml], {type: 'text/xml'});
+  this.view.createAndDownloadFile(fileName, data);
  };
 
 /**
@@ -162,7 +174,8 @@ FactoryController.prototype.updatePreview = function() {
     } else {
       this.previewWorkspace.flyout_.show(tree.childNodes);
     }
-  } else {  // Uses categories, creates a toolbox.
+  // Uses categories, creates a toolbox.
+  } else {
     if (!previewWorkspace.toolbox_) {
       this.reinjectPreview(tree); //Create a toolbox, more expensive
     } else {

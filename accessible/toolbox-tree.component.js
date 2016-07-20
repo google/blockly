@@ -62,7 +62,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
                 [attr.aria-level]="level + 2" aria-selected="false">
               <button #sendToSelectedButton
                       [id]="idMap['sendToSelectedButton']"
-                      (click)="copyToMarked(block)"
+                      (click)="copyToMarkedSpot(block)"
                       [disabled]="!canBeCopiedToMarkedConnection(block)">
                 {{'COPY_TO_MARKED_SPOT'|translate}}
               </button>
@@ -149,9 +149,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
         this.clipboardService.copy(block, true);
       }
     },
-    copyToMarked: function(block) {
+    copyToMarkedSpot: function(block) {
       if (this.clipboardService) {
-        this.clipboardService.pasteToMarkedConnection(block);
+        this.clipboardService.pasteToMarkedConnection(block, true);
       }
     }
   });

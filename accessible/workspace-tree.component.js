@@ -159,7 +159,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         }
       }, this.tree.id);
     },
-    sendToMarkedSpot_: function() {
+    moveToMarkedSpot_: function() {
       this.clipboardService.pasteToMarkedConnection(this.block, false);
 
       var that = this;
@@ -224,9 +224,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           return !that.block.previousConnection;
         }
       }, {
-        baseIdKey: 'sendToMarkedSpot',
+        baseIdKey: 'moveToMarkedSpot',
         translationIdForText: 'MOVE_TO_MARKED_SPOT',
-        action: that.sendToMarkedSpot_.bind(that),
+        action: that.moveToMarkedSpot_.bind(that),
         isDisabled: function() {
           return !that.clipboardService.isMovableToMarkedConnection(
               that.block);

@@ -78,6 +78,10 @@ Blockly.Icon.prototype.createIcon = function() {
   */
   this.iconGroup_ = Blockly.createSvgElement('g',
       {'class': 'blocklyIconGroup'}, null);
+  if (this.block_.isInFlyout) {
+    Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+                      'blocklyIconGroupReadonly');
+  }
   this.drawIcon_(this.iconGroup_);
 
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
@@ -101,13 +105,6 @@ Blockly.Icon.prototype.dispose = function() {
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
 Blockly.Icon.prototype.updateEditable = function() {
-  if (this.block_.isInFlyout || !this.block_.isEditable()) {
-    Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
-                      'blocklyIconGroupReadonly');
-  } else {
-    Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
-                         'blocklyIconGroupReadonly');
-  }
 };
 
 /**

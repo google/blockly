@@ -30,7 +30,6 @@ goog.provide('Blockly.WidgetDiv');
 
 goog.require('Blockly.Css');
 goog.require('goog.dom');
-goog.require('goog.dom.TagName');
 goog.require('goog.style');
 
 
@@ -62,8 +61,7 @@ Blockly.WidgetDiv.createDom = function() {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  Blockly.WidgetDiv.DIV =
-      goog.dom.createDom(goog.dom.TagName.DIV, 'blocklyWidgetDiv');
+  Blockly.WidgetDiv.DIV = goog.dom.createDom('div', 'blocklyWidgetDiv');
   document.body.appendChild(Blockly.WidgetDiv.DIV);
 };
 

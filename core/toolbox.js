@@ -610,8 +610,8 @@ Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
     map[goog.events.KeyCodes.UP] = goog.events.KeyCodes.LEFT;
     map[goog.events.KeyCodes.DOWN] = goog.events.KeyCodes.RIGHT;
 
-    var newKeyCode = map[e.keyCode]
-    e.keyCode = newKeyCode ? newKeyCode : e.keyCode;
+    var newKeyCode = map[e.keyCode];
+    e.keyCode = newKeyCode || e.keyCode;
   }
   return Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
 };

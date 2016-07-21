@@ -50,6 +50,7 @@ Blockly.inject = function(container, opt_options) {
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
   }
+  Blockly.container_ = container;
   var options = new Blockly.Options(opt_options || {});
   var svg = Blockly.createDom_(container, options);
   var workspace = Blockly.createMainWorkspace_(svg, options);
@@ -74,6 +75,9 @@ Blockly.createDom_ = function(container, options) {
   container.setAttribute('dir', 'LTR');
   // Closure can be trusted to create HTML widgets with the proper direction.
   goog.ui.Component.setDefaultRightToLeft(options.RTL);
+
+  //Set container to position relative
+  container.style.position = 'relative';
 
   // Load CSS.
   Blockly.Css.inject(options.hasCss, options.pathToMedia);

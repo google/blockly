@@ -45,25 +45,26 @@ blocklyApp.ToolboxTreeComponent = ng.core
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
                 [attr.aria-level]="level + 2" aria-selected="false">
               <button #workspaceCopyButton [id]="idMap['workspaceCopyButton']"
-                      (click)="copyToWorkspace(block)">
+                      (click)="copyToWorkspace()">
                 {{'COPY_TO_WORKSPACE'|translate}}
               </button>
             </li>
             <li #blockCopy [id]="idMap['blockCopy']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
                 [attr.aria-level]="level + 2" aria-selected="false">
-              <button #blockCopyButton [id]="idMap['blockCopyButton']"
-                      (click)="clipboardService.copy(block, true)">
+              <button #blockCopyButton
+                      [id]="idMap['blockCopyButton']"
+                      (click)="copyToClipboard()">
                 {{'COPY_TO_CLIPBOARD'|translate}}
               </button>
             </li>
             <li #sendToSelected [id]="idMap['sendToSelected']" role="treeitem"
-                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection(block))"
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
                 [attr.aria-level]="level + 2" aria-selected="false">
               <button #sendToSelectedButton
                       [id]="idMap['sendToSelectedButton']"
-                      (click)="copyToMarkedSpot(block)"
-                      [disabled]="!canBeCopiedToMarkedConnection(block)">
+                      (click)="copyToMarkedSpot()"
+                      [disabled]="!canBeCopiedToMarkedConnection()">
                 {{'COPY_TO_MARKED_SPOT'|translate}}
               </button>
             </li>
@@ -136,22 +137,36 @@ blocklyApp.ToolboxTreeComponent = ng.core
       return this.utilsService.generateAriaLabelledByAttr(
           mainLabel, secondLabel, isDisabled);
     },
-    canBeCopiedToMarkedConnection: function(block) {
-      return this.clipboardService.canBeCopiedToMarkedConnection(block);
+    canBeCopiedToMarkedConnection: function() {
+      return this.clipboardService.canBeCopiedToMarkedConnection(this.block);
     },
-    copyToWorkspace: function(block) {
-      var xml = Blockly.Xml.blockToDom(block);
+    copyToWorkspace: function() {
+      var xml = Blockly.Xml.blockToDom(this.block);
       Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      alert('Added block to workspace: ' + block.toString());
+      alert('Added block to workspace: ' + this.block.toString());
     },
-    copyToClipboard: function(block) {
-      if (this.clipboardService) {
-        this.clipboardService.copy(block, true);
-      }
+    copyToClipboard: function() {
+      this.clipboardService.copy(this.block, true);
     },
-    copyToMarkedSpot: function(block) {
-      if (this.clipboardService) {
-        this.clipboardService.pasteToMarkedConnection(block, true);
-      }
+    copyToMarkedSpot: function() {
+      // This involves two steps:
+      // - Put the block on the destination tree.
+      // - Change the current tree-level focus to the destination tree, and the
+      // screenreader focus for the destination tree to the block just moved.
+      var blockDescription = this.block.toString();
+
+      var newBlockId = this.clipboardService.pasteToMarkedConnection(
+          this.block);
+
+      // Invoke a digest cycle, so that the DOM settles.
+      var that = this;
+      setTimeout(function() {
+        var destinationTreeId = that.treeService.getTreeIdForBlock(newBlockId);
+        document.getElementById(destinationTreeId).focus();
+        that.treeService.setActiveDesc(
+            newBlockId + 'blockRoot', destinationTreeId);
+
+        alert('Block copied to marked spot: ' + blockDescription);
+      });
     }
   });

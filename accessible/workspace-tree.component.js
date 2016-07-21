@@ -176,15 +176,18 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       var blockDescription = this.block.toString();
 
       var newBlockId = this.clipboardService.pasteToMarkedConnection(
-          this.block, false);
+          this.block);
 
       var that = this;
       this.removeBlockAndSetFocus_(this.block, function() {
         that.block.dispose(true);
       });
 
+      // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
         var destinationTreeId = that.treeService.getTreeIdForBlock(newBlockId);
+        that.treeService.clearActiveDesc(destinationTreeId);
+
         document.getElementById(destinationTreeId).focus();
         that.treeService.setActiveDesc(
             newBlockId + 'blockRoot', destinationTreeId);

@@ -116,7 +116,7 @@ blocklyApp.ClipboardService = ng.core
           Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
           reconstitutedBlock.toString());
     },
-    pasteToMarkedConnection: function(block, announce) {
+    pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       var reconstitutedBlock = Blockly.Xml.domToBlock(
           blocklyApp.workspace, xml);
@@ -140,12 +140,6 @@ blocklyApp.ClipboardService = ng.core
       if (!connectionSuccessful) {
         console.error('ERROR: Could not connect block to marked spot.');
         return;
-      }
-
-      if (announce) {
-        alert(
-            Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
-            reconstitutedBlock.toString());
       }
 
       this.markedConnection_ = null;

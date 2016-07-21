@@ -99,40 +99,39 @@ Blockly.hasClass_ = function(element, className) {
  * @private
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
-  if (thisObject) {
-    var wrapFunc = function(e) {
-      if (!Blockly.checkTouchIdentifier(e)) {
+  var wrapFunc = function(e) {
+    // Handle each touch point separately.  If the event was a mouse event, this
+    // will hand back an array with one element, which we're fine handling.
+    var events = Blockly.bindEvent_.splitEventByTouches(e);
+    for (var i = 0; i < events.length; i++) {
+      var event = events[i];
+      if (!Blockly.checkTouchIdentifier(event)) {
         return;
       }
-      Blockly.bindEvent_.setClientFromTouch(e);
-      func.call(thisObject, e);
-    };
-  } else {
-    var wrapFunc = function(e) {
-      if (!Blockly.checkTouchIdentifier(e)) {
-        return;
+      Blockly.bindEvent_.setClientFromTouch(event);
+      if (thisObject) {
+        func.call(thisObject, event);
       }
-      Blockly.bindEvent_.setClientFromTouch(e);
-      func(e);
-    };
-  }
+      else {
+        func(event);
+      }
+    }
+  };
+
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];
+
   // Add equivalent touch event.
   if (name in Blockly.bindEvent_.TOUCH_MAP) {
-    wrapFunc = function(e) {
-      if (!Blockly.checkTouchIdentifier(e)) {
-        return;
-      }
-      Blockly.bindEvent_.setClientFromTouch(e);
-      func.call(thisObject, e);
+    var touchWrapFunc = function(e) {
+      wrapFunc(e);
       // Stop the browser from scrolling/zooming the page.
       e.preventDefault();
     };
     for (var i = 0, eventName;
          eventName = Blockly.bindEvent_.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, wrapFunc, false);
-      bindData.push([node, eventName, wrapFunc]);
+      node.addEventListener(eventName, touchWrapFunc, false);
+      bindData.push([node, eventName, touchWrapFunc]);
     }
   }
   return bindData;
@@ -164,6 +163,28 @@ Blockly.bindEvent_.setClientFromTouch = function(e) {
     e.clientX = touchPoint.clientX;
     e.clientY = touchPoint.clientY;
   }
+};
+
+/**
+ * Split an event into an array of events, one per changed touch or mouse
+ * point.
+ * @param {Event} e A mouse event or a touch event with one or more changed
+ * touches.
+ * @return {Array.<Event>} An array of mouse or touch events.  Each touch event
+ *     will have exactly one changed touch.
+ */
+Blockly.bindEvent_.splitEventByTouches = function(e) {
+  var events = [];
+  if (e.changedTouches && e.changedTouches.length > 1) {
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      var newEvent = new TouchEvent(e.type,
+          { "changedTouches": [e.changedTouches[i]] });
+      events.push(newEvent);
+    }
+  } else {
+    events.push(e);
+  }
+  return events;
 };
 
 /**

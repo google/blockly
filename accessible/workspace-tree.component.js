@@ -106,12 +106,13 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     isIsolatedTopLevelBlock_: function(block) {
       // Returns whether the given block is at the top level, and has no
       // siblings.
-      return Boolean(
-          !block.nextConnection.targetConnection &&
-          !block.previousConnection.targetConnection &&
-          blocklyApp.workspace.topBlocks_.some(function(topBlock) {
-            return topBlock.id == block.id;
-          }));
+      var blockIsAtTopLevel = !block.getParent();
+      var blockHasNoSiblings = (
+          (!block.nextConnection ||
+           !block.nextConnection.targetConnection) &&
+          (!block.previousConnection ||
+           !block.previousConnection.targetConnection));
+      return blockIsAtTopLevel && blockHasNoSiblings;
     },
     removeBlockAndSetFocus_: function(block, deleteBlockFunc) {
       // This method runs the given function and then does one of two things:
@@ -139,10 +140,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       });
     },
     deleteBlock_: function() {
+      var blockDescription = this.block.toString();
+
       var that = this;
       this.removeBlockAndSetFocus_(this.block, function() {
         that.block.dispose(true);
       });
+
+      alert('Block deleted: ' + blockDescription);
     },
     pasteToConnection_: function(connection) {
       var that = this;

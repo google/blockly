@@ -34,6 +34,8 @@ FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
   if (firstCategory) {
     table.deleteRow(0);
     document.getElementById('button_name').disabled = false;
+    document.getElementById('button_up').disabled = false;
+    document.getElementById('button_down').disabled = false;
   }
   // Create tab.
   var count = table.rows.length;
@@ -51,9 +53,10 @@ FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
 /**
  * Deletes a category tab from the UI and updates tabMap accordingly.
  *
- * @param {!string} id ID of category to be deleted
+ * @param {!string} id ID of category to be deleted.
+ * @param {!string} name The name of the category to be deleted.
  */
-FactoryView.prototype.deleteCategoryRow = function(id) {
+FactoryView.prototype.deleteCategoryRow = function(id, name) {
   // Delete tab entry.
   delete this.tabMap[id];
   // Find tab row.
@@ -70,6 +73,8 @@ FactoryView.prototype.deleteCategoryRow = function(id) {
         var row = table.insertRow(0);
         row.textContent = 'Your categories will appear here';
         document.getElementById('button_name').disabled = true;
+        document.getElementById('button_up').disabled = true
+        document.getElementById('button_down').disabled = true;
       }
     }
   }

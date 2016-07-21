@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS-Interpreter Async Demo</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <script src="../acorn.js"></script>
+  <script src="../interpreter.js"></script>
+  <script>
+    var myInterpreter;
+    function initAlert(interpreter, scope) {
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(alert(text));
+      };
+      interpreter.setProperty(scope, 'alert',
+          interpreter.createNativeFunction(wrapper));
+
+      var wrapper = function getXhr(href, callback) {
+        href = href ? href.toString() : '';
+        var req = new XMLHttpRequest();
+        req.open('GET', href, true);
+        req.onreadystatechange = function() {
+          if (req.readyState == 4 && req.status == 200) {
+            callback(interpreter.createPrimitive(req.responseText));
+          }
+        };
+        req.send(null);
+      };
+      interpreter.setProperty(scope, 'getXhr',
+          interpreter.createAsyncFunction(wrapper));
+    };
+
+    function parseButton() {
+      var code = document.getElementById('code').value
+      myInterpreter = new Interpreter(code, initAlert);
+      disable('');
+    }
+
+    function stepButton() {
+      if (myInterpreter.stateStack[0]) {
+        var node = myInterpreter.stateStack[0].node;
+        var start = node.start;
+        var end = node.end;
+      } else {
+        var start = 0;
+        var end = 0;
+      }
+      createSelection(start, end);
+      try {
+        var ok = myInterpreter.step();
+      } finally {
+        if (!ok) {
+          disable('disabled');
+        }
+      }
+    }
+
+    function runButton() {
+      disable('disabled');
+      if (myInterpreter.run()) {
+        // Ran until an async call.  Give this call a chance to run.
+        // Then start running again later.
+        // 1000ms is waaay too long, but is used here to demo the pause.
+        setTimeout(runButton, 1000);
+      }
+    }
+
+    function disable(disabled) {
+      document.getElementById('stepButton').disabled = disabled;
+      document.getElementById('runButton').disabled = disabled;
+    }
+
+    function createSelection(start, end) {
+      var field = document.getElementById('code')
+      if (field.createTextRange) {
+        var selRange = field.createTextRange();
+        selRange.collapse(true);
+        selRange.moveStart('character', start);
+        selRange.moveEnd('character', end);
+        selRange.select();
+      } else if (field.setSelectionRange) {
+        field.setSelectionRange(start, end);
+      } else if (field.selectionStart) {
+        field.selectionStart = start;
+        field.selectionEnd = end;
+      }
+      field.focus();
+    }
+  </script>
+</head>
+<body>
+  <h1>JS-Interpreter Async Demo</h1>
+
+  <p>Asynchronous function calls in the real world can be wrapped to appear
+  synchronous to code running in the JS-Interpreter.  The example below
+  (see this page's source) creates a <code>getXhr</code> function that
+  fetches a URL and returns the content.</p>
+
+  <p>This function is defined using <code>createAsyncFunction</code> during
+  initialization.  When called, the interpreter is paused until the callback
+  occurs.  During this paused state, <code>step</code> and <code>run</code>
+  will both do nothing, returning <code>true</code> to indicate that the program
+  still has code to execute.</p>
+
+  <p>Click <em>Parse</em>, then either click <em>Step</em> repeatedly,
+  or click <em>Run</em> once.  Open your browser's console for errors.</p>
+
+  <p><textarea id="code">
+alert(getXhr('async.txt'));
+</textarea><br>
+  <button onclick="parseButton()">Parse</button>
+  <button onclick="stepButton()" id="stepButton" disabled="disabled">Step</button>
+  <button onclick="runButton()" id="runButton" disabled="disabled">Run</button>
+  </p>
+
+  <p>Back to the <a href="../docs.html">JS-Interpreter documentation</a>.</p>
+
+  <script>
+    disable('disabled');
+    if (location.protocol == 'file:' &&
+        navigator.userAgent.indexOf('Firefox') == -1) {
+      alert('Warning: This page is loaded with the "file:" protocol.\n' +
+            'Your browser might prevent XHR from working here.')
+    }
+  </script>
+</body>
+</html>

@@ -106,7 +106,7 @@ FactoryController.prototype.removeCategory = function() {
   }
   var selectedName = this.model.getSelectedName();
   // Delete category visually.
-  this.view.deleteCategoryRow(this.model.getSelectedId());
+  this.view.deleteCategoryRow(this.model.getSelectedId(), selectedName);
   // Find next logical category to switch to.
   var next = this.model.getNextCategoryOnDelete(selectedName);
   // Delete category in model.
@@ -279,36 +279,43 @@ FactoryController.prototype.changeName = function() {
 };
 
 /**
- * Tied to arrow up and arrow down keys. On pressing the up or down key, moves
- * the selected category up or down one space in the list of categories.
+ * Tied to arrow up and arrow down buttons. Swaps with the category above or
+ * below the currently selected category (offset categories away from the
+ * current category).
  *
- * @param {Event} e Keyboard event received, fired onkeydown and used to get
- * which key was pressed.
+ * @param {int} offset The index offset from the currently selected category
+ * to swap with. Positive if the category to be swapped with is below, negative
+ * if the category to be swapped with is above.
  */
-FactoryController.prototype.moveCategory = function(e) {
-  // Do nothing if not arrow up or arrow down, or no categories.
-  if ((e.key != 'ArrowUp' && e.key != 'ArrowDown') ||
-      !this.model.getSelectedId()) {
-    return;
-  }
+FactoryController.prototype.moveCategory = function(offset) {
   // Get categories.
   var curr = this.model.getSelected();
   if (!curr) {  // Return if no selected category.
     return;
   }
-  var swapIndex = this.model.getIndexByCategoryId(curr.id) + (e.key == 'ArrowUp'
-      ? - 1 : + 1);
+  var swapIndex = this.model.getIndexByCategoryId(curr.id) + offset;
   var swap = this.model.getCategoryByIndex(swapIndex);
   if (!swap) {  // Return if cannot swap in that direction.
     return;
   }
-  // Visually swap category labels.
-  this.view.swapCategories(curr, swap);
   // Save currently loaded category.
   this.model.saveCategoryEntry(curr, this.toolboxWorkspace);
-  // Swap model information about categories, swap model.
-  this.model.swapCategoryIds(curr, swap);
-  this.model.swapCategoryOrder(curr, swap);
+  // Swap curr and swap.
+  this.performSwap(curr, swap);
   // Switch to the same category the user was on.
   this.switchCategory(curr.id);
 };
+
+/**
+ * Given two categories, swaps them visually and in the model.
+ *
+ * @param {Category} category1 The first category to swap.
+ * @param {Category} category2 The second category to swap
+ */
+FactoryController.prototype.performSwap = function(category1, category2) {
+  // Visually swap category labels.
+  this.view.swapCategories(category1, category2);
+  // Swap model information about categories, swap model.
+  this.model.swapCategoryIds(category1, category2);
+  this.model.swapCategoryOrder(category1, category2);
+}

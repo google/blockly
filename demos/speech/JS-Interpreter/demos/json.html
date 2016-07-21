@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS-Interpreter JSON Demo</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <script src="../acorn.js"></script>
+  <script src="../interpreter.js"></script>
+  <script>
+    var myInterpreter;
+    function initAlert(interpreter, scope) {
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        return interpreter.createPrimitive(alert(text));
+      };
+      interpreter.setProperty(scope, 'alert',
+          interpreter.createNativeFunction(wrapper));
+
+      var wrapper = function() {
+        var text = document.getElementById('JSON_input').value;
+        return interpreter.createPrimitive(text);
+      };
+      interpreter.setProperty(scope, 'getInput',
+          interpreter.createNativeFunction(wrapper));
+
+      var wrapper = function(text) {
+        text = text ? text.toString() : '';
+        document.getElementById('JSON_output').value = text;
+      };
+      interpreter.setProperty(scope, 'setOutput',
+          interpreter.createNativeFunction(wrapper));
+    };
+
+    function parseButton() {
+      var code = document.getElementById('code').value
+      myInterpreter = new Interpreter(code, initAlert);
+      disable('');
+    }
+
+    function stepButton() {
+      if (myInterpreter.stateStack[0]) {
+        var node = myInterpreter.stateStack[0].node;
+        var start = node.start;
+        var end = node.end;
+      } else {
+        var start = 0;
+        var end = 0;
+      }
+      createSelection(start, end);
+      try {
+        var ok = myInterpreter.step();
+      } finally {
+        if (!ok) {
+          disable('disabled');
+        }
+      }
+    }
+
+    function runButton() {
+      disable('disabled');
+      myInterpreter.run()
+    }
+
+    function disable(disabled) {
+      document.getElementById('stepButton').disabled = disabled;
+      document.getElementById('runButton').disabled = disabled;
+    }
+
+    function createSelection(start, end) {
+      var field = document.getElementById('code')
+      if (field.createTextRange) {
+        var selRange = field.createTextRange();
+        selRange.collapse(true);
+        selRange.moveStart('character', start);
+        selRange.moveEnd('character', end);
+        selRange.select();
+      } else if (field.setSelectionRange) {
+        field.setSelectionRange(start, end);
+      } else if (field.selectionStart) {
+        field.selectionStart = start;
+        field.selectionEnd = end;
+      }
+      field.focus();
+    }
+  </script>
+</head>
+<body>
+  <h1>JS-Interpreter JSON Demo</h1>
+
+  <p>Moving primitive values (numbers, strings, booleans, etc) in and out of the
+  interpreter is easy, just use <code>interpreter.createPrimitive(value)</code>
+  to wrap a JS primitive into an interpreter's primitive, and
+  <code>value.valueOf()</code> to extract a JS primitive from an interpreter's
+  primitive (or use <code>value.toString()</code>,
+  <code>value.toNumber()</code>, or <code>value.toBoolean()</code> to coerce
+  specific types).</p>
+
+  <p>By contrast, moving objects in and out of the interpreter is not advised.
+  Having two JavaScript environments with handles to the same mutable JS object
+  would be problematic.  As a result, the best way to move objects (including
+  arrays) in and out of the interpreter is to serialize and deserialize them
+  as JSON.  Below is a minimal example of round-tripping a JSON object though
+  the interperter and back.</p>
+
+  <p>Click <em>Parse</em>, then either click <em>Step</em> repeatedly,
+  or click <em>Run</em> once.  Open your browser's console for errors.</p>
+
+  <p><textarea id="code" style="height: 10em;">
+var data = JSON.parse(getInput());
+alert(Object.keys(data));
+setOutput(JSON.stringify(data));
+</textarea><br>
+  <button onclick="parseButton()">Parse</button>
+  <button onclick="stepButton()" id="stepButton" disabled="disabled">Step</button>
+  <button onclick="runButton()" id="runButton" disabled="disabled">Run</button>
+  </p>
+
+  <p>JSON Input: <input id="JSON_input" style="width: 90%" value='{"apollo11":["Neil Armstrong","Buzz Aldrin"],"apollo12":["Pete Conrad","Alan Bean"],"apollo13":[],"apollo14":["Alan Shepard","Edgar Mitchell"],"apollo15":["David Scott","James Irwin"],"apollo16":["John W. Young","Charles Duke"],"apollo17":["Eugene Cernan","Harrison Schmitt"]}'></p>
+  <p>JSON Output: <input id="JSON_output" style="width: 90%" readonly="true"></p>
+
+  <p>Back to the <a href="../docs.html">JS-Interpreter documentation</a>.</p>
+
+  <script>
+    disable('disabled');
+  </script>
+</body>
+</html>

@@ -42,6 +42,9 @@
     <p>&nbsp;</p>
     <button id="button_add">+</button>
     <button id="button_remove">-</button>
+    <p>&nbsp;</p>
+    <button id="button_up">&#8593;</button>
+    <button id="button_down">&#8595;</button>
     <button id="button_name">Edit</button>
   </aside>
 </section>
@@ -400,8 +403,11 @@
   var nameWrapper = function() {
     controller.changeName();
   };
-  var swapWrapper = function(e) {
-    controller.moveCategory(e);
+  var upWrapper = function() {
+    controller.moveCategory(-1);
+  };
+  var downWrapper = function() {
+    controller.moveCategory(1);
   };
   document.getElementById('button_add').addEventListener
       ('click', addWrapper);
@@ -415,7 +421,12 @@
       ('click', previewWrapper);
   document.getElementById('button_name').addEventListener
       ('click', nameWrapper);
-  window.addEventListener('keydown', swapWrapper);
+  document.getElementById('button_up').addEventListener
+      ('click', upWrapper);
+  document.getElementById('button_down').addEventListener
+      ('click', downWrapper);
   document.getElementById('button_name').disabled = true;
+  document.getElementById('button_up').disabled = true;
+  document.getElementById('button_down').disabled = true;
 </script>
 </html>

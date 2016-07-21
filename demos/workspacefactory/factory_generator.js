@@ -37,9 +37,6 @@ FactoryGenerator.prototype.categoryWorkspaceToDom = function(xmlDom, blocks) {
  * a category. If there are categories, then each category is briefly loaded
  * and the top blocks are used to generate the xml for the flyout for that
  * category.
- * This was changed to load each category instead of just using the stored
- * top blocks because blocks connected to the top blocks were lost if the
- * whole workspace was not loaded (including shadow blocks, block groups, etc.).
  *
  * @return {!Element} XML element representing toolbox or flyout corresponding
  * to toolbox workspace.
@@ -58,19 +55,20 @@ FactoryGenerator.prototype.generateConfigXml = function() {
   }
   else {
     // Capture any changes made by user before generating xml.
-    this.model.saveCategoryEntry(this.model.getSelectedId(),
+    this.model.saveCategoryEntry(this.model.getSelected(),
         this.toolboxWorkspace);
     var categoryList = this.model.getCategoryList();
-    // Iterate through each category to generate XML for each.
+    // Iterate through each category to generate XML for each. Load each
+    // category to make sure that all the blocks that are not top blocks are
+    // also captured as block groups in the flyout.
     for (var i = 0; i < categoryList.length; i++) {
       // Create category DOM element.
       var category = categoryList[i];
       var categoryElement = goog.dom.createDom('category');
-      categoryElement.setAttribute('name',category);
+      categoryElement.setAttribute('name',category.name);
       // Load that category to workspace.
       this.toolboxWorkspace.clear();
-      Blockly.Xml.domToWorkspace(this.model.getXmlByName(category),
-          this.toolboxWorkspace);
+      Blockly.Xml.domToWorkspace(category.xml, this.toolboxWorkspace);
       // Generate XML for that category, append to DOM for all XML
       this.categoryWorkspaceToDom(categoryElement,
           this.toolboxWorkspace.getTopBlocks());
@@ -78,7 +76,7 @@ FactoryGenerator.prototype.generateConfigXml = function() {
     }
     // Load category user was working on.
     this.toolboxWorkspace.clear();
-    Blockly.Xml.domToWorkspace(this.model.getXmlById(this.model.getSelectedId()),
+    Blockly.Xml.domToWorkspace(this.model.getSelected().xml,
         this.toolboxWorkspace);
   }
   return xmlDom;

@@ -30,9 +30,10 @@ FactoryView = function(){
  */
 FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
   var table = document.getElementById('categoryTable');
-  // Delete help label if it's the first category created.
+  // Delete help label and enable edit button if it's the first category.
   if (firstCategory) {
     table.deleteRow(0);
+    document.getElementById('button_name').disabled = false;
   }
   // Create tab.
   var count = table.rows.length;
@@ -51,11 +52,8 @@ FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
  * Deletes a category tab from the UI and updates tabMap accordingly.
  *
  * @param {!string} id ID of category to be deleted
- * @return {!string} name of category being deleted.
  */
 FactoryView.prototype.deleteCategoryRow = function(id) {
-  // Get name of category.
-  var name = this.tabMap[id].textContent;
   // Delete tab entry.
   delete this.tabMap[id];
   // Find tab row.
@@ -66,12 +64,13 @@ FactoryView.prototype.deleteCategoryRow = function(id) {
     // Delete tab row.
     if (row.cells[0].id == this.createCategoryIdName(name)) {
       table.deleteRow(i);
-      // If last category removed, add category help text.
+      // If last category removed, add category help text and disable edit
+      // button.
       if (count == 1) {
         var row = table.insertRow(0);
         row.textContent = 'Your categories will appear here';
+        document.getElementById('button_name').disabled = true;
       }
-      return name;
     }
   }
 };
@@ -155,35 +154,18 @@ FactoryView.prototype.updateCategoryName = function(newName, id) {
  * (so that the model can access it later). Returns null if the user attempts
  * to swap a category out of bounds.
  *
- * @param {!string} currID ID of currently selected category
- * @param {boolean} swapUp true if switching with the category above, false
- * if switching with the category below
- * @return {(string, string)} curr field contains the name of the currently
- * selected category, swap contains the name of the category to be swapped
- * with. Null if there is no valid category to swap.
+ * @param {Category} curr Category currently selected.
+ * @param {Category} swap Category to be swapped with.
  */
-FactoryView.prototype.swapCategories = function(currID, swapUp) {
+FactoryView.prototype.swapCategories = function(curr, swap) {
   // Find tabs to swap.
-  var currTab = this.tabMap[currID];
-  var currName = currTab.textContent;
-  var currIndex = currTab.parentNode.rowIndex;
-  var table = document.getElementById('categoryTable');
-  var swapIndex = currIndex + (swapUp ? - 1 : + 1);
-  if ((swapIndex < 0) || (swapIndex >= table.rows.length)) {
-    return null;  // Return null if out of bounds.
-  }
-  var swapTab = table.rows[swapIndex].cells[0];
-  var swapName = swapTab.textContent;
+  var currTab = this.tabMap[curr.id];
+  var swapTab = this.tabMap[swap.id];
   // Adjust text content and IDs of tabs.
-  swapTab.textContent = currName;
-  swapTab.id = this.createCategoryIdName(currName);
-  currTab.textContent = swapName;
-  currTab.id = this.createCategoryIdName(swapName);
+  swapTab.textContent = curr.name;
+  swapTab.id = this.createCategoryIdName(curr.name);
+  currTab.textContent = swap.name;
+  currTab.id = this.createCategoryIdName(swap.name);
   // Unselect tab currently on (now refers to the swapped category).
-  this.setCategoryTabSelection(currID,false);
-  // Return name of swapped categories in object.
-  return {
-    curr: currName,
-    swap: swapName
-  };
+  this.setCategoryTabSelection(curr.id,false);
 }

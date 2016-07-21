@@ -735,9 +735,9 @@ function downloadTextArea(filename, id) {
 
 /**
  * Create a file with the given attributes and download it.
- * @param {string} contents The contents of the file.
- * @param {string} filename The name of the file to save to.
- * @param {string} The type of the file to save.
+ * @param {string} contents - The contents of the file.
+ * @param {string} filename - The name of the file to save to.
+ * @param {string} fileType - The type of the file to save.
  * @private
  */
 function createAndDownloadFile_(contents, filename, fileType) {
@@ -752,7 +752,7 @@ function createAndDownloadFile_(contents, filename, fileType) {
   a.href = window.URL.createObjectURL(data);
   a.download = filename;
   a.textContent = 'Download file!';
-  a.dispatchEvent(clickEvent); 
+  a.dispatchEvent(clickEvent);
 }
 
 /**
@@ -762,7 +762,7 @@ function createAndDownloadFile_(contents, filename, fileType) {
 function saveWorkspaceToFile() {
   var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
   var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
-  createAndDownloadFile_(prettyXml, 'blockXml', 'xml'); 
+  createAndDownloadFile_(prettyXml, 'blockXml', 'xml');
 }
 
 /**
@@ -807,100 +807,250 @@ function importBlockFromFile() {
 }
 
 /**
- * Checks to see if object under provided name exists.
- * If not, creates and stores an object with specified name into localStorage.
- * @param {String, Object} name of object you are putting in localStorage, optional
- * @return {Object} you created
- */
-function createLocalStorageObjectIfNotMadeYet(name, opt_object){
-  var objectToStore = opt_object || {};
-  if (!window.localStorage[name]){
-    window.localStorage[name] = JSON.stringify(objectToStore);
-  }
-  else{
-    console.log('object with name ' + name + ' is already in local storage');
-  }
-}
+* namespace for Block Library
+* @namespace BlockLibrary
+*/
+var BlockLibrary = {};
 
 /**
- * Saves block XML as a String value  with the blockType (e.g. 'colour_picker') as its key
- * in the window.localStorage.BlockLibrary object.
- * @return {String} blockType of block saved to storage
- */
-function saveBlockToLocalStorage() {
-  createLocalStorageObjectIfNotMadeYet('blockLibrary');
-  var rootBlock = getRootBlock();
-  var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
-  var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
-  var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
-  var blockLibrary = JSON.parse(window.localStorage['blockLibrary']);
-  blockLibrary[blockType] = prettyXml;
-  window.localStorage['blockLibrary'] = JSON.stringify(blockLibrary);
-  console.log(JSON.parse(window.localStorage['blockLibrary']));
-  return blockType;
-}
+* namespace for Block Library UI
+* @namespace UI
+*/
+BlockLibrary.UI = {};
 
 /**
  * Creates a node of a given element type and appends to the node with given id.
- * @param {String, String, String}
- * @return {Object} the changed parent node
+ *
+ * @param {string} optionName - value of option
+ * @param {string} optionText - text in option
+ * @param {string} dropdownID - id for HTML select element
  */
-function addOption(optionName, optionText, dropdownID){
+BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   var option = document.createElement('option');
   option.text = optionText;
   option.value = optionName;
   dropdown.add(option);
-  console.log(option);
-}
+};
 
-function saveToBlockLibrary(){
-  var blockType = saveBlockToLocalStorage();
-  addOption(blockType, blockType, 'blockLibraryDropdown');
-}
-
-function viewBlockLibrary() {
-  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
-  if (Object.keys(blockLibrary).length === 0){
-    alert('No blocks in BlockLibrary!');
+/**
+ * Removes option currently selected in dropdown from dropdown menu.
+ *
+ * @param {string} dropdownID - id of HTML select element within which to find
+ *     the selected option.
+ */
+BlockLibrary.UI.removeSelectedOption = function(dropdownID) {
+  var dropdown = document.getElementById(dropdownID);
+  if (dropdown) {
+    dropdown.remove(dropdown.selectedIndex);
   }
-  console.log(blockLibrary);
-  for (var block in blockLibrary){
-    console.log(block);
-    console.log(blockLibrary[block]);
-    addOption(block, block, 'blockLibraryDropdown');
-  }
-}
+};
 
-function loadBlockFromLocalStorage(blockType){
-  var blockLibrary = JSON.parse(window.localStorage.blockLibrary);
-  var xmlText = blockLibrary[blockType];
-  var xml = Blockly.Xml.textToDom(xmlText)
-  mainWorkspace.clear();
-  Blockly.Xml.domToWorkspace(xml, mainWorkspace);
-}
+/**
+ * Removes all options from dropdown.
+ *
+ * @param {string} dropdownID - id of HTML select element to clear options of.
+ */
+BlockLibrary.UI.clearOptions = function(dropdownID) {
+  var dropdown = document.getElementById(dropdownID);
+  while (dropdown.length > 0) {
+    dropdown.remove(dropdown.length - 1);
+  }
+};
+
+/**
+ * Represents a block library's storage.
+ * @constructor
+ *
+ * @param {string} blockLibraryName - desired name of Block Library, also used
+ * to create the key for where it's stored in local storage.
+ */
+BlockLibrary.Storage = function(blockLibraryName) {
+  // Add prefix to this.name to avoid collisions in local storage.
+  this.name = 'BlockLibrary.Storage.' + blockLibraryName;
+  this.loadFromLocalStorage();
+  if (this.blocks == null) {
+    this.blocks = Object.create(null);
+    // The line above is equivalent of {} except that this object is TRULY
+    // empty. It doesn't have built-in attributes/functions such as length
+    // or toString.
+    this.saveToLocalStorage();
+  }
+};
+
+/**
+ * Reads the named block library from local storage and saves it in this.blocks.
+ */
+BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
+  var object = window.localStorage[this.name];
+  this.blocks = object ? JSON.parse(object) : null;
+};
+
+/**
+ * Writes the current block library (this.blocks) to local storage.
+ */
+BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
+  window.localStorage[this.name] = JSON.stringify(this.blocks);
+};
+
+/**
+ * Clears the current block library.
+ */
+BlockLibrary.Storage.prototype.clear = function() {
+  this.blocks = Object.create(null);
+  // The line above is equivalent of {} except that this object is TRULY
+  // empty. It doesn't have built-in attributes/functions such as length or
+  // toString.
+};
+
+/**
+ * Saves block to block library.
+ *
+ * @param {string} blockType - the type the block
+ * @param {Element} blockXML - the block's XML pulled from workspace
+ */
+BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
+  var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
+  this.blocks[blockType] = prettyXml;
+};
+
+/**
+ * Removes block from current block library (this.blocks).
+ *
+ * @param {string} blockType - type of block
+ */
+BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
+  this.blocks[blockType] = null;
+};
+
+/**
+ * Returns the xml of given block type stored in current block library
+ * (this.blocks).
+ *
+ * @param {string} blockType - type of block
+ * @return {Element} the xml that represents the block type
+ */
+BlockLibrary.Storage.prototype.getBlockXML = function(blockType) {
+  var xmlText = this.blocks[blockType];
+  return Blockly.Xml.textToDom(xmlText);
+};
+
+/**
+ * Checks to see if block library is empty.
+ *
+ * @return {Boolean} true if empty, false otherwise.
+ */
+BlockLibrary.Storage.prototype.isEmpty = function() {
+  if (Object.keys(this.blocks).length == 0) {
+    return true;
+  } else {
+    for (var blockType in this.blocks) {
+      // Deleted blocks are represented by a null value so simply iterating over
+      // the attributes will not work.
+      if (this.blocks[blockType] != null) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+/**
+ * Returns the block type of the block the user is building.
+ *
+ * @return {string} the current block's type
+ */
+BlockLibrary.getCurrentBlockType = function() {
+  var rootBlock = getRootBlock();
+  return rootBlock.getFieldValue('NAME').trim().toLowerCase();
+};
+
+/**
+ * Removes current block from Block Library
+ *
+ * @param {string} blockType - type of block
+ */
+BlockLibrary.removeFromBlockLibrary = function() {
+  var blockType = BlockLibrary.getCurrentBlockType();
+  BlockLibrary.storage.removeBlock(blockType);
+  BlockLibrary.storage.saveToLocalStorage();
+  BlockLibrary.populateBlockLibrary();
+};
 
 /**
  * Updates the workspace to show the block user selected from library
- * @param {HTML Select element} your blockLibrary dropdown
- * @return {String} blockType
+ *
+ * @param {Element} blockLibraryDropdown - your block library dropdown
  */
-function selectHandler(blockLibraryDropdown){
+BlockLibrary.selectHandler = function(blockLibraryDropdown) {
   var index = blockLibraryDropdown.selectedIndex;
   var blockType = blockLibraryDropdown.options[index].value;
-  loadBlockFromLocalStorage(blockType);
-}
+  var xml = BlockLibrary.storage.getBlockXML(blockType);
+  mainWorkspace.clear();
+  Blockly.Xml.domToWorkspace(xml, mainWorkspace);
+};
 
-
-function clearBlockLibrary() {
-  var check = prompt('Are you sure you want to clear your Block Library? ("yes" or "no")');
-  if (check == "yes"){
-    window.localStorage.removeItem('blockLibrary');
+/**
+ * Clears the block library in local storage and updates the dropdown.
+ */
+BlockLibrary.clearBlockLibrary = function() {
+  var check = prompt(
+      'Are you sure you want to clear your Block Library? ("yes" or "no")');
+  if (check == "yes") {
+    BlockLibrary.storage.clear();
+    BlockLibrary.storage.saveToLocalStorage();
+    BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   }
-  createLocalStorageObjectIfNotMadeYet('blockLibrary');
-}
+};
+
+/**
+ * Saves current block to local storage and updates dropdown.
+ */
+BlockLibrary.saveToBlockLibrary = function() {
+  var blockType = BlockLibrary.getCurrentBlockType();
+  if (BlockLibrary.isInBlockLibrary(blockType)) {
+    alert('You already have a block called ' + blockType + ' in your library.' +
+      ' Please rename your block or delete the old one.');
+  } else {
+    var blockType = BlockLibrary.getCurrentBlockType();
+    var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
+    BlockLibrary.storage.addBlock(blockType, xmlElement);
+    BlockLibrary.storage.saveToLocalStorage();
+    BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
+  }
+};
+
+/**
+ * Checks to see if the given blockType is already in Block Library
+ *
+ * @param {string} blockType - type of block
+ * @return {boolean} indicates whether or not block is in the library
+ */
+BlockLibrary.isInBlockLibrary = function(blockType) {
+  var blockLibrary = BlockLibrary.storage.blocks;
+  return (blockType in blockLibrary && blockLibrary[blockType] != null);
+};
 
 
+
+/**
+ * Loads block library from local storage and populates the dropdown menu.
+ */
+BlockLibrary.populateBlockLibrary = function() {
+  BlockLibrary.storage = new BlockLibrary.Storage(BlockLibrary.name);
+  if (BlockLibrary.storage.isEmpty()) {
+    alert('Your block library is empty! Click "Save to Block Library" so ' +
+         'you can reopen it the next time you visit Block Factory!');
+  }
+  BlockLibrary.UI.clearOptions('blockLibraryDropdown');
+  var blockLibrary = BlockLibrary.storage.blocks;
+  for (var block in blockLibrary) {
+    // Make sure the block wasn't deleted.
+    if (blockLibrary[block] != null) {
+      BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
+    }
+  }
+};
 
 /**
  * Initialize Blockly and layout.  Called on page load.
@@ -913,7 +1063,7 @@ function init() {
         'Share your blocks with this link:\n\n%1';
     BlocklyStorage.HASH_ERROR =
         'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
+    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +
         'Perhaps it was created with a different version of Blockly?';
     var linkButton = document.getElementById('linkButton');
     linkButton.style.display = 'inline-block';
@@ -922,21 +1072,24 @@ function init() {
     disableEnableLink();
   }
 
-  document.getElementById('localSaveButton')
-    .addEventListener('click', saveWorkspaceToFile);
-  
-  document.getElementById('saveToBlockLibraryButton')
-    .addEventListener('click', saveToBlockLibrary);
+  BlockLibrary.name = 'blockLibrary';
+  BlockLibrary.populateBlockLibrary();
 
-  document.getElementById('viewBlockLibraryButton')
-    .addEventListener('click', viewBlockLibrary);
+  document.getElementById('localSaveButton')
+    .addEventListener('click', BlockLibrary.saveWorkspaceToFile);
+
+  document.getElementById('saveToBlockLibraryButton')
+    .addEventListener('click', BlockLibrary.saveToBlockLibrary);
 
   document.getElementById('clearBlockLibraryButton')
-    .addEventListener('click', clearBlockLibrary);
+    .addEventListener('click', BlockLibrary.clearBlockLibrary);
+
+  document.getElementById('removeBlockFromLibraryButton')
+    .addEventListener('click', BlockLibrary.removeFromBlockLibrary);
 
   document.getElementById('files').addEventListener('change',
     function() {
-      importBlockFromFile();      
+      importBlockFromFile();
       // Clear this so that the change event still fires even if the
       // same file is chosen again. If the user re-imports a file, we
       // want to reload the workspace with its contents.
@@ -986,7 +1139,8 @@ function init() {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                mainWorkspace);
   } else {
-    var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
+    var xml = '<xml><block type="factory_base" deletable="false" ' +
+        'movable="false"></block></xml>';
     Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
   }
   mainWorkspace.clearUndo();

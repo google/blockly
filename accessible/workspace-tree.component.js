@@ -122,6 +122,8 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       if (this.isIsolatedTopLevelBlock_(block)) {
         var nextNodeToFocusOn =
             this.treeService.getNodeToFocusOnWhenTreeIsDeleted(this.tree.id);
+
+        this.treeService.clearActiveDesc(this.tree.id);
         deleteBlockFunc();
         nextNodeToFocusOn.focus();
       } else {
@@ -165,14 +167,30 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       }, this.tree.id);
     },
     moveToMarkedSpot_: function() {
-      this.clipboardService.pasteToMarkedConnection(this.block, false);
+      // This involves three steps:
+      // - Put the block on the destination tree.
+      // - Remove the block from the source tree, while preserving the
+      // screenreader focus for that tree.
+      // - Change the current tree-level focus to the destination tree, and the
+      // screenreader focus for the destination tree to the block just moved.
+      var blockDescription = this.block.toString();
+
+      var newBlockId = this.clipboardService.pasteToMarkedConnection(
+          this.block, false);
 
       var that = this;
       this.removeBlockAndSetFocus_(this.block, function() {
         that.block.dispose(true);
       });
 
-      alert('Block moved to marked spot: ' + this.block.toString());
+      setTimeout(function() {
+        var destinationTreeId = that.treeService.getTreeIdForBlock(newBlockId);
+        document.getElementById(destinationTreeId).focus();
+        that.treeService.setActiveDesc(
+            newBlockId + 'blockRoot', destinationTreeId);
+
+        alert('Block moved to marked spot: ' + blockDescription);
+      });
     },
     ngOnInit: function() {
       var that = this;

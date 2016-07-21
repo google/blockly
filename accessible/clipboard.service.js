@@ -149,5 +149,7 @@ blocklyApp.ClipboardService = ng.core
       }
 
       this.markedConnection_ = null;
+
+      return reconstitutedBlock.id;
     }
   });

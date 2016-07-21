@@ -133,11 +133,25 @@ blocklyApp.TreeService = ng.core
         document.getElementById(treeId).focus();
       }, 0);
     },
+    // This clears the active descendant of the given tree. It is used just
+    // before the tree is deleted.
+    clearActiveDesc: function(treeId) {
+      this.unmarkActiveDesc_(this.getActiveDescId(treeId));
+      delete this.activeDescendantIds_[treeId];
+    },
     // Make a given node the active descendant of a given tree.
     setActiveDesc: function(newActiveDescId, treeId) {
       this.unmarkActiveDesc_(this.getActiveDescId(treeId));
       this.markActiveDesc_(newActiveDescId);
       this.activeDescendantIds_[treeId] = newActiveDescId;
+    },
+    getTreeIdForBlock: function(blockId) {
+      // Walk up the DOM until we get to the root node of the tree.
+      var domNode = document.getElementById(blockId + 'blockRoot');
+      while (!domNode.classList.contains('blocklyTree')) {
+        domNode = domNode.parentNode;
+      }
+      return domNode.id;
     },
     onWorkspaceToolbarKeypress: function(e, treeId) {
       if (e.keyCode == 9) {

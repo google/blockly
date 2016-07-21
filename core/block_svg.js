@@ -523,7 +523,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
 
 /**
  * Handle a mouse-down on an SVG block.
- * @param {!Event} e Mouse down event.
+ * @param {!Event} e Mouse down event or touch start event.
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
@@ -585,6 +585,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
+  Blockly.touchIdentifier_ = null;
   if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
       !Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.fire(

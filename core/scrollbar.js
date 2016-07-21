@@ -637,7 +637,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
-  this.onMouseUpHandle_();
+  Blockly.hideChaff(true);
   if (Blockly.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -675,6 +675,7 @@ Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
+  Blockly.touchIdentifier_ = null;
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);

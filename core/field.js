@@ -460,6 +460,7 @@ Blockly.Field.prototype.setValue = function(newText) {
  * @private
  */
 Blockly.Field.prototype.onMouseUp_ = function(e) {
+  Blockly.touchIdentifier_ = null;
   if ((goog.userAgent.IPHONE || goog.userAgent.IPAD) &&
       !goog.userAgent.isVersionOrHigher('537.51.2') &&
       e.layerX !== 0 && e.layerY !== 0) {

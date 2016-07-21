@@ -791,6 +791,7 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseUp_ = function(e) {
+  Blockly.touchIdentifier_ = null;
   if (!this.workspace_.isDragging()) {
     if (this.autoClose) {
       this.createBlockFunc_(Blockly.Flyout.startBlock_)(

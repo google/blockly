@@ -101,23 +101,30 @@ Blockly.hasClass_ = function(element, className) {
 Blockly.bindEvent_ = function(node, name, thisObject, func) {
   if (thisObject) {
     var wrapFunc = function(e) {
+      if (!Blockly.checkTouchIdentifier(e)) {
+        return;
+      }
+      Blockly.bindEvent_.setClientFromTouch(e);
       func.call(thisObject, e);
     };
   } else {
-    var wrapFunc = func;
+    var wrapFunc = function(e) {
+      if (!Blockly.checkTouchIdentifier(e)) {
+        return;
+      }
+      Blockly.bindEvent_.setClientFromTouch(e);
+      func(e);
+    };
   }
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];
   // Add equivalent touch event.
   if (name in Blockly.bindEvent_.TOUCH_MAP) {
     wrapFunc = function(e) {
-      // Punt on multitouch events.
-      if (e.changedTouches.length == 1) {
-        // Map the touch event's properties to the event.
-        var touchPoint = e.changedTouches[0];
-        e.clientX = touchPoint.clientX;
-        e.clientY = touchPoint.clientY;
+      if (!Blockly.checkTouchIdentifier(e)) {
+        return;
       }
+      Blockly.bindEvent_.setClientFromTouch(e);
       func.call(thisObject, e);
       // Stop the browser from scrolling/zooming the page.
       e.preventDefault();
@@ -144,6 +151,20 @@ if (goog.events.BrowserFeature.TOUCH_ENABLED) {
     'mouseup': ['touchend', 'touchcancel']
   };
 }
+
+/**
+ * Set an event's clientX and clientY from its first changed touch.  Use this to
+ * make a touch event work in a mouse event handler.
+ * @param {Event} e A touch event.
+ */
+Blockly.bindEvent_.setClientFromTouch = function(e) {
+  if (e.type.indexOf('touch') == 0) {
+    // Map the touch event's properties to the event.
+    var touchPoint = e.changedTouches[0];
+    e.clientX = touchPoint.clientX;
+    e.clientY = touchPoint.clientY;
+  }
+};
 
 /**
  * Unbind one or more events event from a function call.

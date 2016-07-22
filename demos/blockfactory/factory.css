@@ -35,8 +35,7 @@ p {
   -webkit-margin-after: 0em;
   -webkit-margin-start: 0px;
   -webkit-margin-end: 0px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding: 16px 0px;
 }
 
 

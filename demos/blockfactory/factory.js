@@ -28,7 +28,6 @@
  */
 goog.provide('BlockFactory');
 
-
 /**
  * Workspace for user to build block.
  * @type {Blockly.Workspace}

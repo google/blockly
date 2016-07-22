@@ -129,7 +129,8 @@ BlockFactory.formatJson_ = function(blockType, rootBlock) {
   var lastInput = null;
   while (contentsBlock) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
-      var fields = BlockFactory.getFieldsJson_(contentsBlock.getInputTargetBlock('FIELDS'));
+      var fields = BlockFactory.getFieldsJson_(
+          contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
         if (typeof fields[i] == 'string') {
           message.push(fields[i].replace(/%/g, '%%'));
@@ -144,7 +145,8 @@ BlockFactory.formatJson_ = function(blockType, rootBlock) {
       if (contentsBlock.type != 'input_dummy') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
-      var check = JSON.parse(BlockFactory.getOptTypesFrom(contentsBlock, 'TYPE') || 'null');
+      var check = JSON.parse(
+          BlockFactory.getOptTypesFrom(contentsBlock, 'TYPE') || 'null');
       if (check) {
         input.check = check;
       }
@@ -185,21 +187,26 @@ BlockFactory.formatJson_ = function(blockType, rootBlock) {
   switch (rootBlock.getFieldValue('CONNECTIONS')) {
     case 'LEFT':
       JS.output =
-          JSON.parse(BlockFactory.getOptTypesFrom(rootBlock, 'OUTPUTTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'OUTPUTTYPE') || 'null');
       break;
     case 'BOTH':
       JS.previousStatement =
-          JSON.parse(BlockFactory.getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
       JS.nextStatement =
-          JSON.parse(BlockFactory.getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
       break;
     case 'TOP':
       JS.previousStatement =
-          JSON.parse(BlockFactory.getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
       break;
     case 'BOTTOM':
       JS.nextStatement =
-          JSON.parse(BlockFactory.getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
       break;
   }
   // Generate colour.
@@ -234,7 +241,8 @@ BlockFactory.formatJavaScript_ = function(blockType, rootBlock) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
       if (contentsBlock.type != 'input_dummy') {
-        name = BlockFactory.escapeString(contentsBlock.getFieldValue('INPUTNAME'));
+        name =
+            BlockFactory.escapeString(contentsBlock.getFieldValue('INPUTNAME'));
       }
       code.push('    this.' + TYPES[contentsBlock.type] + '(' + name + ')');
       var check = BlockFactory.getOptTypesFrom(contentsBlock, 'TYPE');
@@ -245,7 +253,8 @@ BlockFactory.formatJavaScript_ = function(blockType, rootBlock) {
       if (align != 'LEFT') {
         code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
       }
-      var fields = BlockFactory.getFieldsJs_(contentsBlock.getInputTargetBlock('FIELDS'));
+      var fields = BlockFactory.getFieldsJs_(
+          contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
         code.push('        .appendField(' + fields[i] + ')');
       }
@@ -267,14 +276,18 @@ BlockFactory.formatJavaScript_ = function(blockType, rootBlock) {
       code.push(BlockFactory.connectionLineJs_('setOutput', 'OUTPUTTYPE'));
       break;
     case 'BOTH':
-      code.push(BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
-      code.push(BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+      code.push(
+          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
+      code.push(
+          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
       break;
     case 'TOP':
-      code.push(BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
+      code.push(
+          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
       break;
     case 'BOTTOM':
-      code.push(BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+      code.push(
+          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
       break;
   }
   // Generate colour.
@@ -340,13 +353,15 @@ BlockFactory.getFieldsJs_ = function(block) {
         case 'field_checkbox':
           // Result: new Blockly.FieldCheckbox('TRUE'), 'CHECK'
           fields.push('new Blockly.FieldCheckbox(' +
-              BlockFactory.escapeString(block.getFieldValue('CHECKED')) + '), ' +
+              BlockFactory.escapeString(block.getFieldValue('CHECKED')) +
+               '), ' +
               BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_colour':
           // Result: new Blockly.FieldColour('#ff0000'), 'COLOUR'
           fields.push('new Blockly.FieldColour(' +
-              BlockFactory.escapeString(block.getFieldValue('COLOUR')) + '), ' +
+              BlockFactory.escapeString(block.getFieldValue('COLOUR')) +
+              '), ' +
               BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_date':
@@ -357,7 +372,8 @@ BlockFactory.getFieldsJs_ = function(block) {
           break;
         case 'field_variable':
           // Result: new Blockly.FieldVariable('item'), 'VAR'
-          var varname = BlockFactory.escapeString(block.getFieldValue('TEXT') || null);
+          var varname
+              = BlockFactory.escapeString(block.getFieldValue('TEXT') || null);
           fields.push('new Blockly.FieldVariable(' + varname + '), ' +
               BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
@@ -366,8 +382,10 @@ BlockFactory.getFieldsJs_ = function(block) {
           // new Blockly.FieldDropdown([['yes', '1'], ['no', '0']]), 'TOGGLE'
           var options = [];
           for (var i = 0; i < block.optionCount_; i++) {
-            options[i] = '[' + BlockFactory.escapeString(block.getFieldValue('USER' + i)) +
-                ', ' + BlockFactory.escapeString(block.getFieldValue('CPU' + i)) + ']';
+            options[i] = '[' +
+                BlockFactory.escapeString(block.getFieldValue('USER' + i)) +
+                ', ' +
+                BlockFactory.escapeString(block.getFieldValue('CPU' + i)) + ']';
           }
           if (options.length) {
             fields.push('new Blockly.FieldDropdown([' +

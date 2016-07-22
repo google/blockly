@@ -28,7 +28,8 @@ function init() {
     var linkButton = document.getElementById('linkButton');
     linkButton.style.display = 'inline-block';
     linkButton.addEventListener('click',
-        function() {BlocklyStorage.link(BlockLibrary.Controller.mainWorkspace);});
+        function() {
+            BlocklyStorage.link(BlockLibrary.Controller.mainWorkspace);});
     BlockLibrary.Controller.disableEnableLink();
   }
 
@@ -109,7 +110,8 @@ function init() {
   } else {
     var xml = '<xml><block type="factory_base" deletable="false" ' +
         'movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
+    Blockly.Xml.domToWorkspace(
+        Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
   }
   BlockFactory.mainWorkspace.clearUndo();
 

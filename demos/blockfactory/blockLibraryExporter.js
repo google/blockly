@@ -43,7 +43,8 @@ BlockLibrary.Exporter = function(hiddenWorkspaceContainerID) {
  * @return {string} in the desired format, the concatenation of each block's
  * language code.
  */
-BlockLibrary.Exporter.prototype.getBlockDefs = function(blockTypes, definitionFormat) {
+BlockLibrary.Exporter.prototype.getBlockDefs =
+    function(blockTypes, definitionFormat) {
   var blockCode = [];
   for (var i = 0; i < blockTypes.length; i++) {
     var blockType = blockTypes[i];
@@ -54,7 +55,8 @@ BlockLibrary.Exporter.prototype.getBlockDefs = function(blockTypes, definitionFo
     Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
     var rootBlock = BlockFactory.getRootBlock(this.hiddenWorkspace);
     // Generate the block's definition.
-    var code = BlockFactory.getBlockDefinition(blockType, rootBlock, definitionFormat);
+    var code =
+        BlockFactory.getBlockDefinition(blockType, rootBlock, definitionFormat);
     // Add block's definition to the definitions to return.
     blockCode.push(code);
   }
@@ -74,8 +76,8 @@ BlockLibrary.Exporter.prototype.getBlockDefs = function(blockTypes, definitionFo
 BlockLibrary.Exporter.prototype.getGeneratorCode =
     function(blockTypes, generatorLanguage) {
   var multiblockCode = [];
-  // Define the custom blocks in order to be able to create instances of them in the
-  // exporter workspace.
+  // Define the custom blocks in order to be able to create instances of them in
+  // the exporter workspace.
   var blockDefs = this.getBlockDefs(blockTypes, 'JavaScript');
   eval(blockDefs);
 
@@ -86,7 +88,8 @@ BlockLibrary.Exporter.prototype.getGeneratorCode =
     var tempBlock = this.hiddenWorkspace.newBlock(blockType);
     this.hiddenWorkspace.clearUndo();
     // Get generator stub for the given block and add to  generator code.
-    var blockGenCode = BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
+    var blockGenCode =
+        BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
     multiblockCode.push(blockGenCode);
   }
   return multiblockCode.join("\n\n");

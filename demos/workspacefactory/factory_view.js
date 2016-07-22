@@ -31,7 +31,6 @@ FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
   // Delete help label and enable category buttons if it's the first category.
   if (firstCategory) {
     table.deleteRow(0);
-    this.enableCategoryTools(true);
   }
   // Create tab.
   var count = table.rows.length;
@@ -64,37 +63,26 @@ FactoryView.prototype.deleteCategoryRow = function(id, index) {
   if (count == 1) {
     var row = table.insertRow(0);
     row.textContent = 'Your categories will appear here';
-    this.enableCategoryTools(false);
   }
 };
 
 /**
- * Enables or disables tools to edit categories depending on value of
- * enable. Used when switching from no categories to having categories or
- * vice versa. Should be called when adding or removing categories.
+ * Given the index of the currently selected category, updates the state of
+ * the buttons that allow the user to edit the categories. Updates the edit
+ * name and arrow buttons. Should be called when adding or removing categories
+ * or when changing to a new category or when swapping to a different category.
  *
- * @param {boolean} enable True if tools should be enabled (if categories exist)
- * and false otherwise.
- */
-FactoryView.prototype.enableCategoryTools = function(enable) {
-  document.getElementById('button_name').disabled = !enable;
-  document.getElementById('button_up').disabled = !enable;
-  document.getElementById('button_down').disabled = !enable;
-};
-
-/**
- * Enables or disables the move up and down buttons depending on the index
- * of the selected category. Should be called when switching categories.
+ * TODO(evd2014): Switch to using CSS to add/remove styles.
  *
- * @param {int} selectedIndex The index of the selected category.
+ * @param {int} selectedIndex The index of the currently selected category.
  */
-FactoryView.prototype.enableMoveBasedOnSelection = function(selectedIndex) {
+FactoryView.prototype.updateState = function(selectedIndex) {
+  document.getElementById('button_name').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled =
       selectedIndex == 0 ? true : false;
   var table = document.getElementById('categoryTable');
-  var count = table.rows.length;
   document.getElementById('button_down').disabled =
-      selectedIndex == count - 1 ? true : false;
+      selectedIndex == table.rows.length - 1 ? true : false;
 };
 
 /**
@@ -105,7 +93,7 @@ FactoryView.prototype.enableMoveBasedOnSelection = function(selectedIndex) {
  */
 FactoryView.prototype.createCategoryIdName = function(name) {
   return 'tab_' + name;
-}
+};
 
 /**
  * Switches a tab on or off.

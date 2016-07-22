@@ -186,10 +186,12 @@ FactoryController.prototype.clearAndLoadCategory = function(id) {
   // Loads next category if switching to a category.
   if (id != null) {
     this.view.setCategoryTabSelection(id, true);
-    this.view.enableMoveBasedOnSelection(this.model.getIndexByCategoryId(id));
     Blockly.Xml.domToWorkspace(this.model.getSelectedXml(),
         this.toolboxWorkspace);
   }
+  // Update category editing buttons.
+  this.view.updateState(this.model.getIndexByCategoryId
+      (this.model.getSelectedId()));
 };
 
 /**
@@ -277,8 +279,9 @@ FactoryController.prototype.reinjectPreview = function(tree) {
  */
 FactoryController.prototype.changeName = function() {
   // Return if no category selected.
-  if (!this.model.getSelected())
+  if (!this.model.getSelected()) {
     return;
+  }
   // Get new name from user.
   var newName = this.promptForNewCategoryName('What do you want to change this'
     + ' category\'s name to?');
@@ -316,6 +319,9 @@ FactoryController.prototype.moveCategory = function(offset) {
   this.model.saveCategoryEntry(curr, this.toolboxWorkspace);
   // Swap curr and swap categories.
   this.performSwap(curr, swap);
+  // Update category editing buttons.
+  this.view.updateState(this.model.getIndexByCategoryId
+      (this.model.getSelectedId()));
 };
 
 /**

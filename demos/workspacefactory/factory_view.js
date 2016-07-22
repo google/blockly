@@ -1,8 +1,9 @@
 /**
- * Controls the UI elements for workspace factory, mostly controlling
- * the category tabs. Also includes downlaoding files because that interacts
- * directly with the DOM. Depends on FactoryController (for adding mouse
- * listeners).
+ * Controls the UI elements for workspace factory, mainly the category tabs.
+ * Also includes downlaoding files because that interacts directly with the DOM.
+ * Depends on FactoryController (for adding mouse listeners). Tabs for each
+ * category are stored in tab map, which associates a unique ID for a
+ * category with a particular tab.
  *
  * @author Emma Dauterman (edauterman)
  */
@@ -12,19 +13,26 @@
   * @constructor
   */
 
-FactoryView = function() {
+FactoryView = function(){
   this.tabMap = Object.create(null);
 };
 
 /**
  * Adds a category tab to the UI, and updates tabMap accordingly.
  *
- * @param {string} name The name of the category to be created
+ * @param {!string} name The name of the category being created
+ * @param {!string} id ID of category being created
+ * @param {boolean} firstCategory true if it's the first category, false
+ * otherwise
  * @return {!Element} DOM element created for tab
  */
-FactoryView.prototype.addCategoryRow = function(name) {
-  // Create tab.
+FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
   var table = document.getElementById('categoryTable');
+  // Delete help label and enable category buttons if it's the first category.
+  if (firstCategory) {
+    table.deleteRow(0);
+  }
+  // Create tab.
   var count = table.rows.length;
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
@@ -32,31 +40,49 @@ FactoryView.prototype.addCategoryRow = function(name) {
   nextEntry.id = this.createCategoryIdName(name);
   nextEntry.textContent = name;
   // Store tab.
-  this.tabMap[name] = table.rows[count].cells[0];
-  // When click the tab with that name, switch to that tab.
+  this.tabMap[id] = table.rows[count].cells[0];
+  // Return tab.
   return nextEntry;
-
 };
 
 /**
  * Deletes a category tab from the UI and updates tabMap accordingly.
  *
- * @param {string} name Then name of the category to be deleted
+ * @param {!string} id ID of category to be deleted.
+ * @param {!string} name The name of the category to be deleted.
  */
-FactoryView.prototype.deleteCategoryRow = function(name) {
+FactoryView.prototype.deleteCategoryRow = function(id, index) {
   // Delete tab entry.
-  delete this.tabMap[name];
-  // Find tab row.
+  delete this.tabMap[id];
+  // Delete tab row.
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
-  for (var i = 0; i < count; i++) {
-    var row = table.rows[i];
-    // Delete tab row.
-    if (row.cells[0].id == this.createCategoryIdName(name)) {
-      table.deleteRow(i);
-      return;
-    }
+  table.deleteRow(index);
+  // If last category removed, add category help text and disable category
+  // buttons.
+  if (count == 1) {
+    var row = table.insertRow(0);
+    row.textContent = 'Your categories will appear here';
   }
+};
+
+/**
+ * Given the index of the currently selected category, updates the state of
+ * the buttons that allow the user to edit the categories. Updates the edit
+ * name and arrow buttons. Should be called when adding or removing categories
+ * or when changing to a new category or when swapping to a different category.
+ *
+ * TODO(evd2014): Switch to using CSS to add/remove styles.
+ *
+ * @param {int} selectedIndex The index of the currently selected category.
+ */
+FactoryView.prototype.updateState = function(selectedIndex) {
+  document.getElementById('button_name').disabled = selectedIndex < 0;
+  document.getElementById('button_up').disabled =
+      selectedIndex == 0 ? true : false;
+  var table = document.getElementById('categoryTable');
+  document.getElementById('button_down').disabled =
+      selectedIndex == table.rows.length - 1 ? true : false;
 };
 
 /**
@@ -67,19 +93,20 @@ FactoryView.prototype.deleteCategoryRow = function(name) {
  */
 FactoryView.prototype.createCategoryIdName = function(name) {
   return 'tab_' + name;
-}
+};
 
 /**
  * Switches a tab on or off.
  *
- * @param {string} name name of the tab to switch on or off
- * @param {boolean} on true if tab should be on, false if tab should be off
+ * @param {!string} id ID of the tab to switch on or off.
+ * @param {boolean} selected True if tab should be on, false if tab should be
+ * off.
  */
-FactoryView.prototype.setCategoryTabSelection = function(name, selected) {
-  if (!this.tabMap[name]) {
-    return;
+FactoryView.prototype.setCategoryTabSelection = function(id, selected) {
+  if (!this.tabMap[id]) {
+    return;   // Exit if tab does not exist.
   }
-  this.tabMap[name].className = selected ? 'tabon' : 'taboff';
+  this.tabMap[id].className = selected ? 'tabon' : 'taboff';
 };
 
 /**
@@ -116,3 +143,36 @@ FactoryView.prototype.createAndDownloadFile = function(filename, data) {
    a.textContent = 'Download file!';
    a.dispatchEvent(clickEvent);
  };
+
+/**
+ * Given the ID of a certain category, updates the corresponding tab in
+ * the DOM to show a new name.
+ *
+ * @param {!string} newName Name of string to be displayed on tab
+ * @param {!string} id ID of category to be updated
+ *
+ */
+FactoryView.prototype.updateCategoryName = function(newName, id) {
+  this.tabMap[id].textContent = newName;
+  this.tabMap[id].id = this.createCategoryIdName(newName);
+};
+
+/**
+ * Given the two tabs to be swapped and the indexes of those tabs, swaps
+ * them.
+ *
+ * @param {Category} curr Category currently selected.
+ * @param {Category} swap Category to be swapped with.
+ * @param {int} currIndex Index of category currently selected.
+ * @param {int} swapIndex Index of category to be swapped with.
+ */
+FactoryView.prototype.swapCategories = function(curr, swap,
+    currIndex, swapIndex) {
+  // Find tabs to swap.
+  var currTab = this.tabMap[curr.id];
+  var swapTab = this.tabMap[swap.id];
+  var table = document.getElementById('categoryTable');
+  // Swap tabs.
+  table.rows[currIndex].appendChild(swapTab);
+  table.rows[swapIndex].appendChild(currTab);
+};

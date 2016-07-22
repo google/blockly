@@ -22,8 +22,6 @@
   <tr>
     <td>
       <p>
-        <button id="button_add">Add Category</button>
-        <button id="button_remove">Remove Category</button>
         <button id="button_export">Export Config</button>
         <button id="button_print">Print Config</button>
         <button id="button_preview">Update Preview</button>
@@ -39,7 +37,15 @@
   </section>
   <aside id="category_section">
     <table id="categoryTable">
+      <td id="tab_help">Your categories will appear here</td>
     </table>
+    <p>&nbsp;</p>
+    <button id="button_add">+</button>
+    <button id="button_remove">-</button>
+    <p>&nbsp;</p>
+    <button id="button_up">&#8593;</button>
+    <button id="button_down">&#8595;</button>
+    <button id="button_name">Edit</button>
   </aside>
 </section>
 
@@ -351,7 +357,7 @@
   <category name="Variables" colour="330" custom="VARIABLE"></category>
   <category name="Functions" colour="290" custom="PROCEDURE"></category>
 </xml>
-<script>
+<script type="text/javascript">
   // Create empty workspace for configuring workspace.
   var toolboxWorkspace = Blockly.inject('toolbox_blocks',
     {grid:
@@ -384,17 +390,25 @@
   };
   var removeWrapper = function() {
     controller.removeCategory();
-  }
+  };
   var exportWrapper = function() {
     controller.exportConfig();
   };
   var printWrapper = function() {
     controller.printConfig();
-  }
+  };
   var previewWrapper = function() {
     controller.updatePreview();
-  }
-
+  };
+  var nameWrapper = function() {
+    controller.changeName();
+  };
+  var upWrapper = function() {
+    controller.moveCategory(-1);
+  };
+  var downWrapper = function() {
+    controller.moveCategory(1);
+  };
   document.getElementById('button_add').addEventListener
       ('click', addWrapper);
   document.getElementById('button_remove').addEventListener
@@ -405,6 +419,14 @@
       ('click', printWrapper);
   document.getElementById('button_preview').addEventListener
       ('click', previewWrapper);
-
+  document.getElementById('button_name').addEventListener
+      ('click', nameWrapper);
+  document.getElementById('button_up').addEventListener
+      ('click', upWrapper);
+  document.getElementById('button_down').addEventListener
+      ('click', downWrapper);
+  document.getElementById('button_name').disabled = true;
+  document.getElementById('button_up').disabled = true;
+  document.getElementById('button_down').disabled = true;
 </script>
 </html>

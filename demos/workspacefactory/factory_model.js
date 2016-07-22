@@ -1,11 +1,10 @@
 /**
  * @fileoverview Stores and updates information about state and categories
- * in workspace factory. Keeps a map that for each category, stores
- * the xml to load that category and all the blocks in that category. Also
- * stores the selected category and a boolean for if there are any categories
- * or if it's in "simple" mode (1 flyout).
+ * in workspace factory. Each category has a name, XML to load that category,
+ * and a unique ID making it possible to change category names and move
+ * categories easily. Also keeps track of the currently selected category.
  *
- * @author Emma Dauterman (edauterman)
+ * @author Emma Dauterman (evd2014)
  */
 
 /**
@@ -13,21 +12,23 @@
  * @constructor
  */
 FactoryModel = function() {
-  this.categoryMap = Object.create(null);
+  // Ordered list of Category objects.
+  this.categoryList = [];
 };
 
-// String name of current selected category, null if no categories.
+// String name of current selected category, null if no categories
 FactoryModel.prototype.selected = null;
 
 /**
  * Given a name, determines if it is the name of a category already present.
+ * Used when getting a valid category name from the user.
  *
- * @param {string} name string to be compared against
- * @return {boolean} true if string is a used category name, false otherwise
+ * @param {string} name String name to be compared against.
+ * @return {boolean} True if string is a used category name, false otherwise.
  */
-FactoryModel.prototype.hasCategory = function(name) {
-  for (var category in this.categoryMap) {
-    if (category == name) {
+FactoryModel.prototype.hasCategoryByName = function(name) {
+  for (var i = 0; i < this.categoryList.length; i++) {
+    if (this.categoryList[i].name == name) {
         return true;
     }
   }
@@ -35,100 +36,204 @@ FactoryModel.prototype.hasCategory = function(name) {
 };
 
 /**
- * Determines if the user has any categories using selected.
+ * Determines if the user has any categories. Uses the length of categoryList.
  *
- * @return {boolean} true if categories exist, false otherwise
+ * @return {boolean} True if categories exist, false otherwise.
  */
 FactoryModel.prototype.hasCategories = function() {
-  return this.selected != null;
-}
-
-/**
- * Finds the next open category to switch to. Returns null if
- * no categories left to switch to, and updates hasCategories to be false.
- * TODO(edauterman): Find a better tab than just the first tab in the map (done
- * in next CL).
- *
- * @param {!string} name name of category currently open, cannot be switched to
- * @return {string} name of next category to switch to
- */
-FactoryModel.prototype.getNextOpenCategory = function(name) {
-  for (var key in this.categoryMap) {
-    return key;
-  }
-  return null;
+  return this.categoryList.length > 0;
 };
 
 /**
- * Saves the current category, updating its entry in categoryMap.
+ * Adds an empty category entry, updating state variables accordingly. Generates
+ * the unique ID for the category and adds the category at the end of the list.
  *
- * @param {!string} name Name of category to save
- * @param {!Blockly.workspace} workspace Workspace to save from
+ * @param {string} name The name of category to be added.
  */
-FactoryModel.prototype.saveCategoryEntry = function(name, workspace) {
-  if (!name) {  // Never want to save null.
+FactoryModel.prototype.addNewCategoryEntry = function(name) {
+  this.categoryList.push(new Category(name));
+};
+
+/**
+ * Deletes a category entry and all associated data given a category name.
+ *
+ * @param {int} index The index of the category to delete.
+ */
+FactoryModel.prototype.deleteCategoryEntry = function(index) {
+  if (index < 0 || index > this.categoryList.length) {
+    return; // No entry to delete.
+  }
+  this.categoryList.splice(index, 1);
+};
+
+/**
+ * Saves the current category by updating its XML.
+ *
+ * @param {Category} category The Category object to save.
+ * @param {Blockly.workspace} workspace The workspace to save category entry
+ * from.
+ */
+FactoryModel.prototype.saveCategoryEntry = function(category, workspace) {
+  // Only save category entries for valid IDs.
+  if (!category) {
     return;
   }
-  this.categoryMap[name] = {
-    'xml': Blockly.Xml.workspaceToDom(workspace),
-    'blocks': workspace.getTopBlocks()
-  }
+  category.xml = Blockly.Xml.workspaceToDom(workspace);
 };
 
 /**
- * Deletes a category entry and all associated data.
+ * Changes the name of a category object given a new name.
  *
- * @param {string} name of category to be deleted
+ * @param {string} newName New name of category.
+ * @param {Category} category The category to be updated.
  */
-FactoryModel.prototype.deleteCategoryEntry = function(name) {
-  delete this.categoryMap[name];
+FactoryModel.prototype.changeCategoryName = function (newName, category) {
+  category.name = newName;
 };
 
 /**
- * Returns category currently selected.
+ * Swaps the order of two categories in the category list.
  *
- * @return {string} name of category currently selected
+ * @param {Category} category1 First category to be swapped.
+ * @param {Category} category2 Second category to be swapped.
+ */
+FactoryModel.prototype.swapCategoryOrder = function(category1, category2) {
+  var index1 = this.getIndexByCategoryId(category1.id);
+  var index2 = this.getIndexByCategoryId(category2.id);
+  var temp = this.categoryList[index1];
+  this.categoryList[index1] = this.categoryList[index2];
+  this.categoryList[index2] = temp;
+};
+
+/**
+ * Returns the ID of the currently selected category. Returns null if there are
+ * no categories (if selected == null).
+ *
+ * @return {string} The ID of the category currently selected.
+ */
+FactoryModel.prototype.getSelectedId = function() {
+  return this.selected ? this.selected.id : null;
+};
+
+/**
+ * Returns the name of the currently selected category. Returns null if there
+ * are no categories (if selected == null).
+ *
+ * @return {string} The name of the category currently selected.
+ */
+FactoryModel.prototype.getSelectedName = function() {
+  return this.selected ? this.selected.name : null;
+};
+
+/**
+ * Returns the currently selected category object.
+ *
+ * @return {Category} The currently selected category.
  */
 FactoryModel.prototype.getSelected = function() {
   return this.selected;
 };
 
 /**
- * Sets category currently selected.
+ * Sets category currently selected by id.
  *
- * @param {string} name name of category that should now be selected
+ * @param {string} id ID of category that should now be selected.
  */
-FactoryModel.prototype.setSelected = function(name) {
-  this.selected = name;
-}
-
-/**
- * Returns the xml to load a given category
- *
- * @param {string} name name of category to fetch xml for
- * @return {!Element} xml element to be loaded to workspace
- */
-FactoryModel.prototype.getXml = function(name) {
-  return this.categoryMap[name].xml;
+FactoryModel.prototype.setSelectedById = function(id) {
+  this.selected = this.getCategoryById(id);
 };
 
 /**
- * Returns xml for the blocks of a given category.
+ * Given an ID of a category, returns the index of that category in
+ * categoryList. Returns -1 if ID is not present.
  *
- * @param {string} name name of category to fetch blocks for
- * @return {!Array.<!Blockly.Block>} top level block objects
+ * @param {!string} id The ID of category to search for.
+ * @return {int} The index of category in categoryList, or -1 if it doesn't
+ * exist.
  */
-FactoryModel.prototype.getBlocks = function(name) {
-  return this.categoryMap[name].blocks;
+
+FactoryModel.prototype.getIndexByCategoryId = function(id) {
+  for (var i = 0; i < this.categoryList.length; i++) {
+    if (this.categoryList[i].id == id) {
+      return i;
+    }
+  }
+  return -1;  // ID not present in categoryList.
 };
 
 /**
- * Return map of categories that can be iterated over in a for-in loop.
- * Used when it is necessary to look through all categories.
+ * Given the ID of a category, returns that Category object.
  *
- * @return {!Map<string,<!Element,!Array.<!Blockly.Block>>>} Map of category
- * name to object with XML dom element and array of top level block objects.
+ * @param {!string} id The ID of category to search for.
+ * @return {Category} Corresponding category object in categoryList, or null
+ * if that category does not exist.
  */
-FactoryModel.prototype.getIterableCategories = function() {
-  return this.categoryMap;
+
+FactoryModel.prototype.getCategoryById = function(id) {
+  for (var i = 0; i < this.categoryList.length; i++) {
+    if (this.categoryList[i].id == id) {
+      return this.categoryList[i];
+    }
+  }
+  return null;  // ID not present in categoryList.
+};
+
+/**
+ * Given the index of a category in categoryList, returns that Category object.
+ *
+ * @param {int} index The index of the category to return.
+ * @return {Category} The corresponding category object in categoryList.
+ */
+FactoryModel.prototype.getCategoryByIndex = function(index) {
+  if (index < 0 || index >= this.categoryList.length) {
+    return null;
+  }
+  return this.categoryList[index];
+};
+
+/**
+ * Returns the xml to load the selected category.
+ *
+ * @return {!Element} The XML of the selected category, or null if there is
+ * no selected category.
+ */
+FactoryModel.prototype.getSelectedXml = function() {
+  return this.selected ? this.selected.xml : null;
+};
+
+/**
+ * Return ordered list Category objects.
+ *
+ * @return {!Array<!Category>} ordered list of Category objects
+ */
+FactoryModel.prototype.getCategoryList = function() {
+  return this.categoryList;
+};
+
+/**
+ * Gets the ID of a category given its name.
+ *
+ * @param {string} name Name of category.
+ * @return {int} ID of category
+ */
+FactoryModel.prototype.getCategoryIdByName = function(name) {
+  for (var i = 0; i < this.categoryList.length; i++) {
+    if (this.categoryList[i].name == name) {
+      return this.categoryList[i].id;
+    }
+  }
+  return null;  // Name not present in categoryList.
+};
+
+/**
+ * Class for a Category
+ * @constructor
+ */
+Category = function(name) {
+  // XML DOM element to load the category.
+  this.xml = Blockly.Xml.textToDom('<xml></xml>');
+  // Name of category. Can be changed by user.
+  this.name = name;
+  // Unique ID of category. Does not change.
+  this.id = Blockly.genUid();
 };

@@ -1,15 +1,16 @@
 /**
  * @fileoverview Contains the controller code for workspace factory. Depends
  * on the model and view objects (created as internal variables) and interacts
- * with previewWorkspace and toolboxWorkspace (internal references stored
- * to both). Provides the functionality for the actions the user can initiate,
- * including:
- * -adding and removing categories
- * -switching between categories
- * -printing and downloading configuration xml
- * -updating the preview workspace.
+ * with previewWorkspace and toolboxWorkspace (internal references stored to
+ * both). Provides the functionality for the actions the user can initiate:
+ * - adding and removing categories
+ * - switching between categories
+ * - printing and downloading configuration xml
+ * - updating the preview workspace
+ * - changing a category name
+ * - moving the position of a category.
  *
- * @author Emma Dauterman (edauterman)
+ * @author Emma Dauterman (evd2014)
  */
 
 /**
@@ -21,10 +22,15 @@
  * of what workspace would look like using generated XML
  */
 FactoryController = function(toolboxWorkspace, previewWorkspace) {
+  // Workspace for user to drag blocks in for a certain category.
   this.toolboxWorkspace = toolboxWorkspace;
+  // Workspace for user to preview their changes.
   this.previewWorkspace = previewWorkspace;
+  // Model to keep track of categories and blocks.
   this.model = new FactoryModel();
+  // Updates the category tabs.
   this.view = new FactoryView();
+  // Generates XML for categories.
   this.generator = new FactoryGenerator(this.model, this.toolboxWorkspace);
 };
 
@@ -34,101 +40,158 @@ FactoryController = function(toolboxWorkspace, previewWorkspace) {
  * switches to it.
  */
 FactoryController.prototype.addCategory = function() {
-  // Get name from user.
-  var name = prompt('Enter the name of your new category: ');
-  while (this.model.hasCategory(name)){
-    name = prompt('That name is already in use. Please enter another name: ');
-    if (!name) {  // If cancelled.
-      return;
+  // Check if it's the first category added.
+  var firstCategory = !this.model.hasCategories();
+  // Give the option to save blocks if their workspace is not empty and they
+  // are creating their first category.
+  if (firstCategory && this.toolboxWorkspace.getAllBlocks().length > 0) {
+    var confirmCreate = confirm('Do you want to save your work in another '
+        + 'category? If you don\'t, the blocks in your workspace will be ' +
+        'deleted.');
+    // Create a new category for current blocks.
+    if (confirmCreate) {
+      var name = prompt('Enter the name of the category for your ' +
+          'current blocks: ');
+      if (!name) {  // Exit if cancelled.
+        return;
+      }
+      this.createCategory(name, true);
+      this.model.setSelectedById(this.model.getCategoryIdByName(name));
     }
   }
+  // After possibly creating a category, check again if it's the first category.
+  firstCategory = !this.model.hasCategories();
+  // Get name from user.
+  name = this.promptForNewCategoryName('Enter the name of your new category: ');
+  if (!name) {  //Exit if cancelled.
+    return;
+  }
+  // Create category.
+ this.createCategory(name, firstCategory);
+  // Switch to category.
+  this.switchCategory(this.model.getCategoryIdByName(name));
+};
+
+/**
+ * Helper method for addCategory. Creates a category given a name and a boolean
+ * for if it's the first category created. Updates the model and the view but
+ * doesn't switch to the category.
+ *
+ * @param {!string} name Name of category to be created
+ * @param {boolean} firstCategory true if it's the first category created,
+ * false otherwise
+ */
+
+FactoryController.prototype.createCategory = function(name, firstCategory) {
+  // Create empty category
+  this.model.addNewCategoryEntry(name);
   // Create new category.
-  var tab = this.view.addCategoryRow(name);
+  var tab = this.view.addCategoryRow(name, this.model.getCategoryIdByName(name),
+      firstCategory);
   var self = this;
-  var clickFunction = function(name) {  // Keep this in scope for switchCategory
+  var clickFunction = function(id) {  // Keep this in scope for switchCategory
     return function() {
-      self.switchCategory(name);
+      self.switchCategory(id);
     };
   };
-  this.view.bindClick(tab, clickFunction(name));
-  // Switch to category.
-  this.switchCategory(name);
-  // Save category.
-  this.model.saveCategoryEntry(name, this.toolboxWorkspace);
-};
+  this.view.bindClick(tab, clickFunction(this.model.getCategoryIdByName(name)));
+}
 
 /**
  * Attached to "Remove Category" button. Checks if the user wants to delete
  * the current category.  Removes the category and switches to another category.
  * When the last category is removed, it switches to a single flyout mode.
  *
- * TODO(edauterman): make case insensitive, have it switch to a more logical
- * category (e.g. most recently added category)
  */
 FactoryController.prototype.removeCategory = function() {
+  // Check that there is a currently selected category to remove.
+  if (!this.model.getSelected()) {
+    return;
+  }
   // Check if user wants to remove current category.
   var check = confirm('Are you sure you want to delete the currently selected'
         + ' category? ');
-  if (!check) {
+  if (!check) { // If cancelled, exit.
     return;
   }
-  // Delete category.
-  this.model.deleteCategoryEntry(this.model.getSelected());
-  this.view.deleteCategoryRow(this.model.getSelected());
+  var selectedId = this.model.getSelectedId();
+  var selectedIndex = this.model.getIndexByCategoryId(selectedId);
+  // Delete category visually.
+  this.view.deleteCategoryRow(selectedId, selectedIndex);
+  // Delete category in model.
+  this.model.deleteCategoryEntry(selectedIndex);
+  // Find next logical category to switch to.
+  var next = this.model.getCategoryByIndex(selectedIndex);
+  if (!next && this.model.hasCategories()) {
+    next = this.model.getCategoryByIndex(selectedIndex - 1);
+  }
+  var nextId = next ? next.id : null;
   // Open next category.
-  var next = this.model.getNextOpenCategory();
-  this.clearAndLoadCategory(next);
-  if (!next) {
-    alert("You currently have no categories. All your blocks will be " +
-        "displayed in a single flyout.");
+  this.clearAndLoadCategory(nextId);
+  if (!nextId) {
+    alert('You currently have no categories. All your blocks will be ' +
+        'displayed in a single flyout.');
   }
 };
+
+/**
+ * Gets a valid name for a new category from the user.
+ *
+ * @param {!string} promptString Prompt for the user to enter a name.
+ * @return {string} Valid name for a new category, or null if cancelled.
+ */
+FactoryController.prototype.promptForNewCategoryName = function(promptString) {
+  do {
+    var name = prompt(promptString);
+    if (!name) {  // If cancelled.
+      return null;
+    }
+  } while (this.model.hasCategoryByName(name));
+  return name;
+}
 
 /**
  * Switches to a new tab for the category given by name. Stores XML and blocks
  * to reload later, updates selected accordingly, and clears the workspace
  * and clears undo, then loads the new category.
- * TODO(edauterman): If they've put blocks in a "simple" flyout, give the user
- * the option to put these blocks in a category so they don't lose all their
- * work.
  *
- * @param {string} name name of tab to be opened, must be valid category name
+ * @param {!string} id ID of tab to be opened, must be valid category ID.
  */
-FactoryController.prototype.switchCategory = function(name) {
+FactoryController.prototype.switchCategory = function(id) {
   // Caches information to reload or generate xml if switching to/from category.
-  if (this.model.getSelected() != null && name != null) {
+  if (this.model.getSelectedId() != null && id != null) {
     this.model.saveCategoryEntry(this.model.getSelected(),
         this.toolboxWorkspace);
   }
   // Load category.
-  this.clearAndLoadCategory(name);
+  this.clearAndLoadCategory(id);
 };
 
 /**
  * Switches to a new tab for the category by name. Helper for switchCategory.
  * Updates selected, clears the workspace and clears undo, loads a new category.
  *
- * @param {!string} name Name of category to load
+ * @param {!string} id ID of category to load
  */
-FactoryController.prototype.clearAndLoadCategory = function(name) {
-  var table = document.getElementById('categoryTable');
+FactoryController.prototype.clearAndLoadCategory = function(id) {
   // Unselect current tab if switching to/from a category.
-  if (this.model.getSelected() != null && name != null) {
-    this.view.setCategoryTabSelection(this.model.getSelected(), false);
+  if (this.model.getSelectedId() != null && id != null) {
+    this.view.setCategoryTabSelection(this.model.getSelectedId(), false);
   }
   // Set next category.
-  this.model.setSelected(name);
+  this.model.setSelectedById(id);
   // Clear workspace.
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
   // Loads next category if switching to a category.
-  if (name != null) {
-    this.view.setCategoryTabSelection(name, true);
-    if (this.model.hasCategory(name)) { // Only load pre-existing categories.
-      Blockly.Xml.domToWorkspace(this.model.getXml(name),
-          this.toolboxWorkspace);
-    }
+  if (id != null) {
+    this.view.setCategoryTabSelection(id, true);
+    Blockly.Xml.domToWorkspace(this.model.getSelectedXml(),
+        this.toolboxWorkspace);
   }
+  // Update category editing buttons.
+  this.view.updateState(this.model.getIndexByCategoryId
+      (this.model.getSelectedId()));
 };
 
 /**
@@ -177,7 +240,7 @@ FactoryController.prototype.updatePreview = function() {
   // Uses categories, creates a toolbox.
   } else {
     if (!previewWorkspace.toolbox_) {
-      this.reinjectPreview(tree); //Create a toolbox, more expensive
+      this.reinjectPreview(tree); // Create a toolbox, more expensive.
     } else {
       this.previewWorkspace.toolbox_.populate_(tree);
     }
@@ -208,3 +271,71 @@ FactoryController.prototype.reinjectPreview = function(tree) {
         wheel: true}
     });
 };
+
+/**
+ * Tied to "change name" button. Changes the name of the selected category.
+ * Continues prompting the user until they input a category name that is not
+ * currently in use, exits if user presses cancel.
+ */
+FactoryController.prototype.changeName = function() {
+  // Return if no category selected.
+  if (!this.model.getSelected()) {
+    return;
+  }
+  // Get new name from user.
+  var newName = this.promptForNewCategoryName('What do you want to change this'
+    + ' category\'s name to?');
+  if (!newName) { // If cancelled.
+    return;
+  }
+  // Change category name.
+  this.model.changeCategoryName(newName, this.model.getSelected());
+  this.view.updateCategoryName(newName, this.model.getSelectedId());
+};
+
+/**
+ * Tied to arrow up and arrow down buttons. Swaps with the category above or
+ * below the currently selected category (offset categories away from the
+ * current category).
+ * TODO(edauterman): Refactor to insert a category at a specific index (using
+ * Closure TreeControl).
+ *
+ * @param {int} offset The index offset from the currently selected category
+ * to swap with. Positive if the category to be swapped with is below, negative
+ * if the category to be swapped with is above.
+ */
+FactoryController.prototype.moveCategory = function(offset) {
+  // Get categories.
+  var curr = this.model.getSelected();
+  if (!curr) {  // Return if no selected category.
+    return;
+  }
+  var swapIndex = this.model.getIndexByCategoryId(curr.id) + offset;
+  var swap = this.model.getCategoryByIndex(swapIndex);
+  if (!swap) {  // Return if cannot swap in that direction.
+    return;
+  }
+  // Save currently loaded category.
+  this.model.saveCategoryEntry(curr, this.toolboxWorkspace);
+  // Swap curr and swap categories.
+  this.performSwap(curr, swap);
+  // Update category editing buttons.
+  this.view.updateState(this.model.getIndexByCategoryId
+      (this.model.getSelectedId()));
+};
+
+/**
+ * Given two categories, swaps them visually and in the model.
+ *
+ * @param {Category} category1 The first category to swap.
+ * @param {Category} category2 The second category to swap
+ */
+FactoryController.prototype.performSwap = function(curr, swap) {
+  // Get indexes of categories.
+  var currIndex = this.model.getIndexByCategoryId(curr.id);
+  var swapIndex = this.model.getIndexByCategoryId(swap.id)
+  // Visually swap category labels.
+  this.view.swapCategories(curr, swap, currIndex, swapIndex);
+  // Swap model information about categories, swap model.
+  this.model.swapCategoryOrder(curr, swap);
+}

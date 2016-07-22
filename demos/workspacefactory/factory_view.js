@@ -18,9 +18,7 @@ FactoryView = function(){
 };
 
 /**
- * Adds a category tab to the UI, and sets the tab so that when clicked, it
- * switches to that category based on the unique ID associated with that
- * tab. Updates tabMap accordingly.
+ * Adds a category tab to the UI, and updates tabMap accordingly.
  *
  * @param {!string} name The name of the category being created
  * @param {!string} id ID of category being created
@@ -30,12 +28,10 @@ FactoryView = function(){
  */
 FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
   var table = document.getElementById('categoryTable');
-  // Delete help label and enable edit button if it's the first category.
+  // Delete help label and enable category buttons if it's the first category.
   if (firstCategory) {
     table.deleteRow(0);
-    document.getElementById('button_name').disabled = false;
-    document.getElementById('button_up').disabled = false;
-    document.getElementById('button_down').disabled = false;
+    this.enableCategoryTools(true);
   }
   // Create tab.
   var count = table.rows.length;
@@ -46,7 +42,7 @@ FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
   nextEntry.textContent = name;
   // Store tab.
   this.tabMap[id] = table.rows[count].cells[0];
-  // When click the tab with that name, switch to that tab.
+  // Return tab.
   return nextEntry;
 };
 
@@ -56,28 +52,49 @@ FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
  * @param {!string} id ID of category to be deleted.
  * @param {!string} name The name of the category to be deleted.
  */
-FactoryView.prototype.deleteCategoryRow = function(id, name) {
+FactoryView.prototype.deleteCategoryRow = function(id, index) {
   // Delete tab entry.
   delete this.tabMap[id];
-  // Find tab row.
+  // Delete tab row.
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
-  for (var i = 0; i < count; i++) {
-    var row = table.rows[i];
-    // Delete tab row.
-    if (row.cells[0].id == this.createCategoryIdName(name)) {
-      table.deleteRow(i);
-      // If last category removed, add category help text and disable edit
-      // button.
-      if (count == 1) {
-        var row = table.insertRow(0);
-        row.textContent = 'Your categories will appear here';
-        document.getElementById('button_name').disabled = true;
-        document.getElementById('button_up').disabled = true
-        document.getElementById('button_down').disabled = true;
-      }
-    }
+  table.deleteRow(index);
+  // If last category removed, add category help text and disable category
+  // buttons.
+  if (count == 1) {
+    var row = table.insertRow(0);
+    row.textContent = 'Your categories will appear here';
+    this.enableCategoryTools(false);
   }
+};
+
+/**
+ * Enables or disables tools to edit categories depending on value of
+ * enable. Used when switching from no categories to having categories or
+ * vice versa. Should be called when adding or removing categories.
+ *
+ * @param {boolean} enable True if tools should be enabled (if categories exist)
+ * and false otherwise.
+ */
+FactoryView.prototype.enableCategoryTools = function(enable) {
+  document.getElementById('button_name').disabled = !enable;
+  document.getElementById('button_up').disabled = !enable;
+  document.getElementById('button_down').disabled = !enable;
+};
+
+/**
+ * Enables or disables the move up and down buttons depending on the index
+ * of the selected category. Should be called when switching categories.
+ *
+ * @param {int} selectedIndex The index of the selected category.
+ */
+FactoryView.prototype.enableMoveBasedOnSelection = function(selectedIndex) {
+  document.getElementById('button_up').disabled =
+      selectedIndex == 0 ? true : false;
+  var table = document.getElementById('categoryTable');
+  var count = table.rows.length;
+  document.getElementById('button_down').disabled =
+      selectedIndex == count - 1 ? true : false;
 };
 
 /**
@@ -93,13 +110,13 @@ FactoryView.prototype.createCategoryIdName = function(name) {
 /**
  * Switches a tab on or off.
  *
- * @param {!string} id ID of the tab to switch on or off
- * @param {boolean} selected true if tab should be on, false if tab should be
- * off
+ * @param {!string} id ID of the tab to switch on or off.
+ * @param {boolean} selected True if tab should be on, false if tab should be
+ * off.
  */
 FactoryView.prototype.setCategoryTabSelection = function(id, selected) {
   if (!this.tabMap[id]) {
-    return;
+    return;   // Exit if tab does not exist.
   }
   this.tabMap[id].className = selected ? 'tabon' : 'taboff';
 };
@@ -153,24 +170,21 @@ FactoryView.prototype.updateCategoryName = function(newName, id) {
 };
 
 /**
- * Given the ID of the current category selected and the direction of the swap,
- * swaps the labels on two categories, turns off the current tab, and returns
- * the name of the category currently selected and the one being swapped to
- * (so that the model can access it later). Returns null if the user attempts
- * to swap a category out of bounds.
+ * Given the two tabs to be swapped and the indexes of those tabs, swaps
+ * them.
  *
  * @param {Category} curr Category currently selected.
  * @param {Category} swap Category to be swapped with.
+ * @param {int} currIndex Index of category currently selected.
+ * @param {int} swapIndex Index of category to be swapped with.
  */
-FactoryView.prototype.swapCategories = function(curr, swap) {
+FactoryView.prototype.swapCategories = function(curr, swap,
+    currIndex, swapIndex) {
   // Find tabs to swap.
   var currTab = this.tabMap[curr.id];
   var swapTab = this.tabMap[swap.id];
-  // Adjust text content and IDs of tabs.
-  swapTab.textContent = curr.name;
-  swapTab.id = this.createCategoryIdName(curr.name);
-  currTab.textContent = swap.name;
-  currTab.id = this.createCategoryIdName(swap.name);
-  // Unselect tab currently on (now refers to the swapped category).
-  this.setCategoryTabSelection(curr.id,false);
-}
+  var table = document.getElementById('categoryTable');
+  // Swap tabs.
+  table.rows[currIndex].appendChild(swapTab);
+  table.rows[swapIndex].appendChild(currTab);
+};

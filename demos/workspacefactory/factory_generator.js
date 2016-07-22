@@ -17,8 +17,8 @@ FactoryGenerator = function(model, toolboxWorkspace) {
 };
 
 /**
- * Adaped from workspaceToDom, encodes workspace for a particular category
- * in an xml dom
+ * Encodes workspace for a particular category in a XML DOM element. Very
+ * similar to workspaceToDom, but doesn't capture IDs.
  *
  * @param {!Element} xmlDom Tree of XML elements to be appended to.
  * @param {!Array.<!Blockly.Block>} topBlocks top level blocks to add to xmlDom
@@ -54,6 +54,10 @@ FactoryGenerator.prototype.generateConfigXml = function() {
         toolboxWorkspace.getTopBlocks());
   }
   else {
+    // Assert that selected != null
+    if (!this.model.getSelected()) {
+      throw new Error('Selected is null when there are categories');
+    }
     // Capture any changes made by user before generating xml.
     this.model.saveCategoryEntry(this.model.getSelected(),
         this.toolboxWorkspace);
@@ -69,14 +73,14 @@ FactoryGenerator.prototype.generateConfigXml = function() {
       // Load that category to workspace.
       this.toolboxWorkspace.clear();
       Blockly.Xml.domToWorkspace(category.xml, this.toolboxWorkspace);
-      // Generate XML for that category, append to DOM for all XML
+      // Generate XML for that category, append to DOM for all XML.
       this.categoryWorkspaceToDom(categoryElement,
           this.toolboxWorkspace.getTopBlocks());
       xmlDom.appendChild(categoryElement);
     }
     // Load category user was working on.
     this.toolboxWorkspace.clear();
-    Blockly.Xml.domToWorkspace(this.model.getSelected().xml,
+    Blockly.Xml.domToWorkspace(this.model.getSelectedXml(),
         this.toolboxWorkspace);
   }
   return xmlDom;

@@ -63,17 +63,11 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             <!-- TODO(madeeha): i18n here will need to happen in a different way due to the way grammar changes based on language. -->
             <label [id]="idMap['inputMenuLabel' + i]"> {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed: </label>
             <ol role="group">
-              <li [id]="idMap['markSpot' + i]" role="treeitem"
-                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['markButton' + i], 'blockly-button')"
+              <li [id]="idMap['markSpot' + i]" role="treeitem" *ngFor="#fieldButtonInfo of fieldButtonsInfo"
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[fieldButtonInfo.baseIdKey + 'Button'], 'blockly-button', fieldButtonInfo.isDisabled(inputBlock.connection))"
                   [attr.aria-level]="level + 2" aria-selected="false">
-                <button [id]="idMap['markSpotButton + i']" (click)="clipboardService.markConnection(inputBlock.connection)">{{'MARK_THIS_SPOT'|translate}}</button>
-              </li>
-              <li [id]="idMap['paste' + i]" role="treeitem"
-                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['pasteButton' + i], 'blockly-button', !isCompatibleWithClipboard(inputBlock.connection))"
-                  [attr.aria-level]="level + 2" aria-selected="false">
-                <button [id]="idMap['pasteButton' + i]" (click)="clipboardService.pasteFromClipboard(inputBlock.connection)"
-                        [disabled]="!isCompatibleWithClipboard(inputBlock.connection)">
-                  {{'PASTE'|translate}}
+                <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button']" (click)="fieldButtonInfo.action(inputBlock.connection)">
+                  {{fieldButtonInfo.translationIdForText|translate}}
                 </button>
               </li>
             </ol>
@@ -268,6 +262,27 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         action: that.deleteBlock_.bind(that),
         isDisabled: function() {
           return false;
+        }
+      }];
+
+      // Generate a list of action buttons.
+      this.fieldButtonsInfo = [{
+        baseIdKey: 'markSpot',
+        translationIdForText: 'MARK_THIS_SPOT',
+        action: function(connection) {
+          that.clipboardService.markConnection(connection);
+        },
+        isDisabled: function() {
+          return false;
+        }
+      }, {
+        baseIdKey: 'paste',
+        translationIdForText: 'PASTE',
+        action: function(connection) {
+          that.clipboardService.pasteFromClipboard(connection);
+        },
+        isDisabled: function(connection) {
+          return !that.isCompatibleWithClipboard(connection);
         }
       }];
 

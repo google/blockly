@@ -29,10 +29,14 @@ blocklyApp.FieldComponent = ng.core
     selector: 'blockly-field',
     template: `
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])"
         [attr.aria-level]="level" aria-selected="false">
       <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-             [disabled]="disabled">
+             [disabled]="disabled" type="text" aria-label="string">
+    </li>
+    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isNumberInput()"
+        [attr.aria-level]="level" aria-selected="false">
+      <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
+             [disabled]="disabled" type="number" aria-label="number">
     </li>
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isDropdown()"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])"
@@ -82,7 +86,7 @@ blocklyApp.FieldComponent = ng.core
     },
     generateElementNames: function() {
       var elementNames = ['listItem'];
-      if (this.isTextInput()) {
+      if (this.isTextInput() || this.isNumberInput()) {
         elementNames.push('input');
       } else if (this.isDropdown()) {
         elementNames.push('label');
@@ -95,8 +99,12 @@ blocklyApp.FieldComponent = ng.core
       }
       return elementNames;
     },
+    isNumberInput: function() {
+      return this.field instanceof Blockly.FieldNumber;
+    },
     isTextInput: function() {
-      return this.field instanceof Blockly.FieldTextInput;
+      return this.field instanceof Blockly.FieldTextInput &&
+          !(this.field instanceof Blockly.FieldNumber);
     },
     isDropdown: function() {
       return this.field instanceof Blockly.FieldDropdown;

@@ -157,13 +157,18 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         // If the connection is a 'previousConnection' and that connection is
         // already joined to something, use the 'nextConnection' of the
         // previous block instead in order to do an insertion.
+        var newBlockId = null;
+
         if (connection.type == Blockly.PREVIOUS_STATEMENT &&
             connection.isConnected()) {
-          that.clipboardService.pasteFromClipboard(
+          newBlockId = that.clipboardService.pasteFromClipboard(
               connection.targetConnection);
         } else {
-          that.clipboardService.pasteFromClipboard(connection);
+          newBlockId = that.clipboardService.pasteFromClipboard(connection);
         }
+
+        // Move the screenreader focus to the newly-pasted block.
+        that.treeService.setActiveDesc(newBlockId + 'blockRoot', that.tree.id);
       }, this.tree.id);
     },
     moveToMarkedSpot_: function() {

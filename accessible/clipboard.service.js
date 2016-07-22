@@ -115,6 +115,7 @@ blocklyApp.ClipboardService = ng.core
       alert(
           Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
           reconstitutedBlock.toString());
+      return reconstitutedBlock.id;
     },
     pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);

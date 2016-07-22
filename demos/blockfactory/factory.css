@@ -29,6 +29,17 @@ td {
   padding: 0;
 }
 
+p {
+  display: block;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+
 #blockly {
   position: fixed;
 }
@@ -92,4 +103,45 @@ button, .buttonStyle {
 
 #linkButton {
   display: none;
+}
+
+.hiding {
+ display: none;
+}
+
+#blockFactoryContent {
+  height: 87%;
+}
+
+#blockLibraryContainer {
+  vertical-align: bottom;
+}
+
+#blockLibraryControls {
+  text-align: right;
+  vertical-align: middle;
+}
+
+#previewContainer {
+  vertical-align: bottom;
+}
+
+#buttonContainer {
+  text-align: right;
+  vertical-align: middle;
+}
+
+#files {
+  position: absolute;
+  visibility: hidden;
+}
+
+#toolbox {
+  display: none;
+}
+
+#blocklyWorkspaceContainer {
+  height: 95%;
+  padding: 2px;
+  width: 50%;
 }

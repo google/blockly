@@ -144,6 +144,16 @@ blocklyApp.TreeService = ng.core
       this.unmarkActiveDesc_(this.getActiveDescId(treeId));
       this.markActiveDesc_(newActiveDescId);
       this.activeDescendantIds_[treeId] = newActiveDescId;
+
+      // Scroll the new active desc into view, if needed. This has no effect
+      // for blind users, but is helpful for sighted onlookers.
+      var activeDescNode = document.getElementById(newActiveDescId);
+      var documentNode = document.body || document.documentElement;
+      if (activeDescNode.offsetTop < documentNode.scrollTop ||
+          activeDescNode.offsetTop >
+              documentNode.scrollTop + window.innerHeight) {
+        window.scrollTo(0, activeDescNode.offsetTop);
+      }
     },
     getTreeIdForBlock: function(blockId) {
       // Walk up the DOM until we get to the root node of the tree.

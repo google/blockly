@@ -16,13 +16,15 @@ goog.require('BlockLibrary');
  * @param {string} optionName - value of option
  * @param {string} optionText - text in option
  * @param {string} dropdownID - id for HTML select element
+ * @param {boolean} selected - whether or not the option should be selected on the
+ *     dropdown
  */
-BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID) {
+BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID, selected) {
   var dropdown = document.getElementById(dropdownID);
   var option = document.createElement('option');
   option.text = optionText;
   option.value = optionName;
-  option.selected = true;
+  option.selected = selected;
   dropdown.add(option);
 };
 

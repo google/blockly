@@ -89,7 +89,7 @@ BlockLibrary.Controller.saveToBlockLibrary = function() {
     var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
     BlockLibrary.Controller.storage.addBlock(blockType, xmlElement);
     BlockLibrary.Controller.storage.saveToLocalStorage();
-    BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown');
+    BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown', true);
   }
 };
 
@@ -119,7 +119,7 @@ BlockLibrary.Controller.populateBlockLibrary = function(libraryName) {
   for (var block in blockLibrary) {
     // Make sure the block wasn't deleted.
     if (blockLibrary[block] != null) {
-      BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown');
+      BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown', false);
     }
   }
 };

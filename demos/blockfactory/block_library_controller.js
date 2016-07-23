@@ -59,7 +59,7 @@ BlockLibrary.Controller.openBlock = function(blockType) {
  *
  * @param {Element} blockLibraryDropdown - your block library dropdown
  */
-BlockLibrary.Controller.selectHandler = function(blockLibraryDropdown) {
+BlockLibrary.Controller.onSelectedBlockChanged = function(blockLibraryDropdown) {
   var blockType = BlockLibrary.UI.getSelected(blockLibraryDropdown);
   BlockLibrary.Controller.openBlock(blockType);
 };

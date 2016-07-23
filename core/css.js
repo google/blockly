@@ -585,6 +585,38 @@ Blockly.Css.CONTENT = [
     'z-index: 20000;',  /* Arbitrary, but some apps depend on it... */
   '}',
 
+  /* Copied from: goog/css/filteredmenu.css */
+  /*
+   * Copyright 2007 The Closure Library Authors. All Rights Reserved.
+   *
+   * Use of this source code is governed by the Apache License, Version 2.0.
+   * See the COPYING file for details.
+   */
+
+  /* Author: pupius@google.com (Daniel Pupius) */
+
+  /* goog.ui.FilteredMenu */
+
+  '.blocklyWidgetDiv .goog-menu-filter {',
+    'margin: 2px;',
+    'border: 1px solid silver;',
+    'background: white;',
+    'overflow: hidden;',
+  '}',
+
+  '.blocklyWidgetDiv .goog-menu-filter div {',
+    'color: gray;',
+    'position: absolute;',
+    'padding: 1px;',
+  '}',
+
+  '.blocklyWidgetDiv .goog-menu-filter input {',
+    'margin: 0;',
+    'border: 0;',
+    'background: transparent;',
+    'width: 100%;',
+  '}',
+
   /* Copied from: goog/css/menuitem.css */
   /*
    * Copyright 2009 The Closure Library Authors. All Rights Reserved.

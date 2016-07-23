@@ -31,9 +31,42 @@
     <div id="blocklibraryExporter_tab" class="tab taboff"> Block Library Exporter</div>
   </div>
 
-  <div id="exporterHiddenWorkspace" class="hiding"></div>
-
-  <div id="blockLibraryExporter"></div>
+  <div id="blockLibraryExporter" class="hiding">
+    <div id="exporterHiddenWorkspace" class="hiding"></div>
+    <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+    <!-- Inject exportSelectorWorkspace into this div -->
+    <div id="exportSelector"></div>
+    <!-- Users may customize export settings through this form -->
+    <div id="exportSettings">
+      <h3> Block Export Settings </h3>
+      <br>
+      <form id="exportSettingsForm">
+        Download Block Definition:
+        <input type="checkbox" id="blockDefCheck"><br>
+              Language code:
+                <select id="exportFormat">
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="JSON">JSON</option>
+                </select><br>
+          Block Definition(s) File Name:<br>
+          <input type="text" id="blockDef_filename"><br>
+          <br>
+        Download Generator Stubs:
+        <input type="checkbox" id="genStubCheck"><br>
+                <select id="exportLanguage">
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Python">Python</option>
+                  <option value="PHP">PHP</option>
+                  <option value="Lua">Lua</option>
+                  <option value="Dart">Dart</option>
+                </select><br>
+          Block Generator Stub(s) File Name: <br>
+          <input type="text" id="generatorStub_filename"><br>
+          <br>
+          <button id="exporterSubmitButton"> Submit </button>
+      </form>
+    </div>
+  </div>
 
   <table id="blockFactoryContent">
     <tr>

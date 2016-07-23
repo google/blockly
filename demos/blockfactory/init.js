@@ -103,6 +103,9 @@ function init() {
        toolbox: toolbox,
        media: '../../media/'});
 
+  // Add Tab handlers
+  BlockFactory.addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
+
   // Create the root block.on main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),

@@ -30,19 +30,19 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     template: `
     <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])"
-        [attr.aria-level]="level" aria-selected="false">
+        [attr.aria-level]="level">
       <label [id]="idMap['blockSummary']">{{block.toString()}}</label>
 
       <ol role="group">
         <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummary'])"
-            [attr.aria-level]="level + 1" aria-selected="false">
+            [attr.aria-level]="level + 1">
           <label [id]="idMap['label']">{{'BLOCK_ACTION_LIST'|translate}}</label>
           <ol role="group">
             <li *ngFor="#buttonInfo of actionButtonsInfo"
                 [id]="idMap[buttonInfo.baseIdKey]" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[buttonInfo.baseIdKey + 'Button'], 'blockly-button', buttonInfo.isDisabled())"
-                [attr.aria-level]="level + 2" aria-selected="false">
+                [attr.aria-level]="level + 2">
               <button [id]="idMap[buttonInfo.baseIdKey + 'Button']" (click)="buttonInfo.action()"
                       [disabled]="buttonInfo.isDisabled()">
                 {{buttonInfo.translationIdForText|translate}}
@@ -65,7 +65,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             <ol role="group">
               <li [id]="idMap['markSpot' + i]" role="treeitem" *ngFor="#fieldButtonInfo of fieldButtonsInfo"
                   [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[fieldButtonInfo.baseIdKey + 'Button'], 'blockly-button', fieldButtonInfo.isDisabled(inputBlock.connection))"
-                  [attr.aria-level]="level + 2" aria-selected="false">
+                  [attr.aria-level]="level + 2">
                 <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button']" (click)="fieldButtonInfo.action(inputBlock.connection)">
                   {{fieldButtonInfo.translationIdForText|translate}}
                 </button>

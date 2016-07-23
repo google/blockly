@@ -107,13 +107,11 @@ blocklyApp.TreeService = ng.core
       var activeDesc = document.getElementById(activeDescId);
       if (activeDesc) {
         activeDesc.classList.remove('blocklyActiveDescendant');
-        activeDesc.setAttribute('aria-selected', 'false');
       }
     },
     markActiveDesc_: function(activeDescId) {
       var newActiveDesc = document.getElementById(activeDescId);
       newActiveDesc.classList.add('blocklyActiveDescendant');
-      newActiveDesc.setAttribute('aria-selected', 'true');
     },
     // Runs the given function while preserving the focus and active descendant
     // for the given tree.

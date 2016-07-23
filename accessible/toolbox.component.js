@@ -39,7 +39,7 @@ blocklyApp.ToolboxComponent = ng.core
               [id]="idMap['Parent' + i]" role="treeitem"
               [ngClass]="{blocklyHasChildren: true, blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}"
               *ngFor="#category of toolboxCategories; #i=index"
-              aria-level="1" aria-selected="false"
+              aria-level="1"
               [attr.aria-label]="category.attributes.name.value">
             <div *ngIf="category && category.attributes">
               <label [id]="idMap['Label' + i]" #name>

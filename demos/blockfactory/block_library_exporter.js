@@ -95,3 +95,51 @@ BlockLibrary.Exporter.prototype.getGeneratorCode =
   return multiblockCode.join("\n\n");
 };
 
+BlockLibrary.Exporter.prototype.initializeAllBlocks =
+    function(BlockLibraryStorage) {
+      // Define the custom blocks in order to be able to create instances of them in
+      // the exporter workspace.
+      var blockTypes = Object.keys(BlockLibraryStorage.blocks);
+      var blockDefs = this.getBlockDefs(blockTypes, 'JavaScript');
+      eval(blockDefs);
+    };
+
+// TODO(quacht): depends on instantiated
+// controller.storage
+// blockLibrary.exporter
+//
+//NEED TO TEST
+BlockLibrary.Exporter.generateToolBox = function() {
+  // Create DOM for XML.
+  var xmlDom = goog.dom.createDom('xml',
+      {
+        'id' : 'toolbox',
+        'style' : 'display:none'
+      });
+
+  // Object mapping block type to XML
+  var blocks = BlockLibrary.Controller.storage.blocks;
+
+  for (var blockType in blocks){
+    // Create category DOM element.
+    var categoryElement = goog.dom.createDom('category');
+    categoryElement.setAttribute('name',blockType);
+
+    // Define all blocks in Block Library.
+    BlockLibrary.exporter.initializeAllBlocks(BlockLibrary.Controller.storage);
+
+    // Render block in hidden workspace.
+    BlockLibrary.exporter.hiddenWorkspace.clear();
+    var block = BlockLibrary.exporter.hiddenWorkspace.newBlock(blockType);
+
+    // Get preview block XML
+    var blockChild = Blockly.Xml.blockToDom(block);
+    blockChild.removeAttribute('id');
+
+    // Add block to category and category to XML
+    categoryElement.appendChild(blockChild);
+    xmlDom.appendChild(categoryElement);
+  }
+  return xmlDom;
+ };
+

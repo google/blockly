@@ -863,3 +863,63 @@ BlockFactory.importBlockFromFile = function() {
   }
 };
 
+/**
+ * Hides element so that it's invisible and doesn't take up space.
+ *
+ * @param {string} elementID - ID of element to hide
+ */
+BlockFactory.hide = function(elementID) {
+  document.getElementById(elementID).className = 'hiding';
+};
+
+/**
+ * Un-hides an element.
+ *
+ * @param {string} elementID - ID of element to hide
+ */
+BlockFactory.show = function(elementID) {
+  document.getElementById(elementID).className = '';
+};
+
+/**
+ * Hides element so that it's invisible but still takes up space.
+ *
+ * @param {string} elementID - ID of element to hide
+ */
+BlockFactory.makeInvisible = function(elementID) {
+  document.getElementById(elementID).visibility = 'hidden';
+};
+
+/**
+ * Makes element visible.
+ *
+ * @param {string} elementID - ID of element to hide
+ */
+BlockFactory.makeVisible = function(elementID) {
+  document.getElementById(elementID).visibility = 'visible';
+};
+
+/**
+ * TODO
+ */
+BlockFactory.addTabHandlers =
+    function(blockFactoryTabID, blockExporterTabID) {
+      var blockFactoryTab = document.getElementById(blockFactoryTabID);
+      blockFactoryTab.addEventListener('click',
+        function() {
+          blockFactoryTab.className = "tab tabon";
+          blockExporterTab.className = "tab taboff";
+          // Hide container of exporter.
+          BlockFactory.hide('blockLibraryExporter');
+        });
+
+      var blockExporterTab = document.getElementById(blockExporterTabID);
+      blockExporterTab.addEventListener('click',
+        function() {
+          blockExporterTab.className = "tab tabon";
+          blockFactoryTab.className = "tab taboff";
+          // Show container of exporter.
+          BlockFactory.show('blockLibraryExporter');
+        });
+    };
+

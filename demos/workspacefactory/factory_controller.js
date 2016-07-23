@@ -296,46 +296,41 @@ FactoryController.prototype.changeName = function() {
 /**
  * Tied to arrow up and arrow down buttons. Swaps with the category above or
  * below the currently selected category (offset categories away from the
- * current category).
- * TODO(edauterman): Refactor to insert a category at a specific index (using
- * Closure TreeControl).
+ * current category). Updates state to enable the correct category editing
+ * buttons.
  *
  * @param {int} offset The index offset from the currently selected category
  * to swap with. Positive if the category to be swapped with is below, negative
  * if the category to be swapped with is above.
  */
 FactoryController.prototype.moveCategory = function(offset) {
-  // Get categories.
   var curr = this.model.getSelected();
   if (!curr) {  // Return if no selected category.
     return;
   }
+  var currIndex = this.model.getIndexByCategoryId(curr.id);
   var swapIndex = this.model.getIndexByCategoryId(curr.id) + offset;
   var swap = this.model.getCategoryByIndex(swapIndex);
   if (!swap) {  // Return if cannot swap in that direction.
     return;
   }
-  // Save currently loaded category.
-  this.model.saveCategoryEntry(curr, this.toolboxWorkspace);
-  // Swap curr and swap categories.
-  this.performSwap(curr, swap);
+  // Move currently selected category to index of other category.
+  // Indexes must be valid because confirmed that curr and swap exist.
+  this.moveCategoryToIndex(curr, swapIndex, currIndex);
   // Update category editing buttons.
-  this.view.updateState(this.model.getIndexByCategoryId
-      (this.model.getSelectedId()));
+  this.view.updateState(swapIndex);
 };
 
 /**
- * Given two categories, swaps them visually and in the model.
+ * Moves a category to a specified index and updates the model and view
+ * accordingly. Helper functions throw an error if indexes are out of bounds.
  *
- * @param {Category} category1 The first category to swap.
- * @param {Category} category2 The second category to swap
+ * @param {!Category} category The category to move.
+ * @param {int} newIndex The index to insert the category at.
+ * @param {int} oldIndex The index the category is currently at.
  */
-FactoryController.prototype.performSwap = function(curr, swap) {
-  // Get indexes of categories.
-  var currIndex = this.model.getIndexByCategoryId(curr.id);
-  var swapIndex = this.model.getIndexByCategoryId(swap.id)
-  // Visually swap category labels.
-  this.view.swapCategories(curr, swap, currIndex, swapIndex);
-  // Swap model information about categories, swap model.
-  this.model.swapCategoryOrder(curr, swap);
-}
+FactoryController.prototype.moveCategoryToIndex = function(category, newIndex,
+    oldIndex) {
+  this.model.moveInCategoryList(category, newIndex, oldIndex);
+  this.view.moveTabToLocation(category.id, newIndex, oldIndex);
+};

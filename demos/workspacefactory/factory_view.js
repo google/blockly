@@ -176,3 +176,30 @@ FactoryView.prototype.swapCategories = function(curr, swap,
   table.rows[currIndex].appendChild(swapTab);
   table.rows[swapIndex].appendChild(currTab);
 };
+
+/**
+ * Moves a tab from one index to another. Adjusts index inserting before
+ * based on if inserting before or after. Checks that the indexes are in
+ * bounds, throws error if not.
+ *
+ * @param {int} id The ID of the category to move.
+ * @param {int} newIndex The index to move the category to.
+ * @param {int} oldIndex The index the category is currently at.
+ */
+FactoryView.prototype.moveTabToLocation = function(id, newIndex, oldIndex) {
+  var table = document.getElementById('categoryTable');
+  // Check that indexes are in bounds
+  if (newIndex < 0 || newIndex >= table.rows.length || oldIndex < 0 ||
+      oldIndex >= table.rows.length) {
+    throw new Error('Index out of bounds');
+  }
+  if (newIndex < oldIndex) {  // Inserting before.
+    var row = table.insertRow(newIndex);
+    row.appendChild(this.tabMap[id]);
+    table.deleteRow(oldIndex + 1);
+  } else {  // Inserting after.
+    var row = table.insertRow(newIndex + 1);
+    row.appendChild(this.tabMap[id]);
+    table.deleteRow(oldIndex);
+  }
+};

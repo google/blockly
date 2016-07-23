@@ -149,24 +149,30 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       alert('Block deleted: ' + blockDescription);
     },
     pasteToConnection_: function(connection) {
+      // This involves two steps:
+      // - Put the block on the destination tree.
+      // - Change the current tree-level focus to the destination tree, and the
+      // screenreader focus for the destination tree to the block just moved.
+      var newBlockId = null;
+
+      // If the connection is a 'previousConnection' and that connection is
+      // already joined to something, use the 'nextConnection' of the
+      // previous block instead in order to do an insertion.
+      if (connection.type == Blockly.PREVIOUS_STATEMENT &&
+          connection.isConnected()) {
+        newBlockId = this.clipboardService.pasteFromClipboard(
+            connection.targetConnection);
+      } else {
+        newBlockId = this.clipboardService.pasteFromClipboard(connection);
+      }
+
+      // Invoke a digest cycle, so that the DOM settles.
       var that = this;
-      this.treeService.runWhilePreservingFocus(function() {
-        // If the connection is a 'previousConnection' and that connection is
-        // already joined to something, use the 'nextConnection' of the
-        // previous block instead in order to do an insertion.
-        var newBlockId = null;
-
-        if (connection.type == Blockly.PREVIOUS_STATEMENT &&
-            connection.isConnected()) {
-          newBlockId = that.clipboardService.pasteFromClipboard(
-              connection.targetConnection);
-        } else {
-          newBlockId = that.clipboardService.pasteFromClipboard(connection);
-        }
-
+      setTimeout(function() {
         // Move the screenreader focus to the newly-pasted block.
+        that.treeService.clearActiveDesc(that.tree.id);
         that.treeService.setActiveDesc(newBlockId + 'blockRoot', that.tree.id);
-      }, this.tree.id);
+      });
     },
     moveToMarkedSpot_: function() {
       // This involves three steps:
@@ -282,7 +288,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         baseIdKey: 'paste',
         translationIdForText: 'PASTE',
         action: function(connection) {
-          that.clipboardService.pasteFromClipboard(connection);
+          that.pasteToConnection_(connection);
         },
         isDisabled: function(connection) {
           return !that.isCompatibleWithClipboard(connection);

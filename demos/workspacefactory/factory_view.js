@@ -158,26 +158,6 @@ FactoryView.prototype.updateCategoryName = function(newName, id) {
 };
 
 /**
- * Given the two tabs to be swapped and the indexes of those tabs, swaps
- * them.
- *
- * @param {Category} curr Category currently selected.
- * @param {Category} swap Category to be swapped with.
- * @param {int} currIndex Index of category currently selected.
- * @param {int} swapIndex Index of category to be swapped with.
- */
-FactoryView.prototype.swapCategories = function(curr, swap,
-    currIndex, swapIndex) {
-  // Find tabs to swap.
-  var currTab = this.tabMap[curr.id];
-  var swapTab = this.tabMap[swap.id];
-  var table = document.getElementById('categoryTable');
-  // Swap tabs.
-  table.rows[currIndex].appendChild(swapTab);
-  table.rows[swapIndex].appendChild(currTab);
-};
-
-/**
  * Moves a tab from one index to another. Adjusts index inserting before
  * based on if inserting before or after. Checks that the indexes are in
  * bounds, throws error if not.
@@ -186,7 +166,7 @@ FactoryView.prototype.swapCategories = function(curr, swap,
  * @param {int} newIndex The index to move the category to.
  * @param {int} oldIndex The index the category is currently at.
  */
-FactoryView.prototype.moveTabToLocation = function(id, newIndex, oldIndex) {
+FactoryView.prototype.moveTabToIndex = function(id, newIndex, oldIndex) {
   var table = document.getElementById('categoryTable');
   // Check that indexes are in bounds
   if (newIndex < 0 || newIndex >= table.rows.length || oldIndex < 0 ||

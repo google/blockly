@@ -331,6 +331,6 @@ FactoryController.prototype.moveCategory = function(offset) {
  */
 FactoryController.prototype.moveCategoryToIndex = function(category, newIndex,
     oldIndex) {
-  this.model.moveInCategoryList(category, newIndex, oldIndex);
-  this.view.moveTabToLocation(category.id, newIndex, oldIndex);
+  this.model.moveCategoryToIndex(category, newIndex, oldIndex);
+  this.view.moveTabToIndex(category.id, newIndex, oldIndex);
 };

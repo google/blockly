@@ -63,10 +63,13 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             <!-- TODO(madeeha): i18n here will need to happen in a different way due to the way grammar changes based on language. -->
             <label [id]="idMap['inputMenuLabel' + i]"> {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed: </label>
             <ol role="group">
-              <li [id]="idMap['markSpot' + i]" role="treeitem" *ngFor="#fieldButtonInfo of fieldButtonsInfo"
+              <li *ngFor="#fieldButtonInfo of fieldButtonsInfo"
+                  [id]="idMap[fieldButtonInfo.baseIdKey]" role="treeitem"
                   [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[fieldButtonInfo.baseIdKey + 'Button'], 'blockly-button', fieldButtonInfo.isDisabled(inputBlock.connection))"
                   [attr.aria-level]="level + 2">
-                <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button']" (click)="fieldButtonInfo.action(inputBlock.connection)">
+                <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button']"
+                        (click)="fieldButtonInfo.action(inputBlock.connection)"
+                        [disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)">
                   {{fieldButtonInfo.translationIdForText|translate}}
                 </button>
               </li>
@@ -289,6 +292,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // Make a list of all the id keys.
       this.idKeys = ['blockRoot', 'blockSummary', 'listItem', 'label'];
       this.actionButtonsInfo.forEach(function(buttonInfo) {
+        that.idKeys.push(buttonInfo.baseIdKey, buttonInfo.baseIdKey + 'Button');
+      });
+      this.fieldButtonsInfo.forEach(function(buttonInfo) {
         that.idKeys.push(buttonInfo.baseIdKey, buttonInfo.baseIdKey + 'Button');
       });
       for (var i = 0; i < this.block.inputList.length; i++) {

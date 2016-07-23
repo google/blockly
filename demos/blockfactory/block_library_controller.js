@@ -46,18 +46,22 @@ BlockLibrary.Controller.removeFromBlockLibrary = function() {
 /**
  * Updates the workspace to show the block user selected from library
  *
+ * @param {string} blockType - block to edit on block factory
+ */
+BlockLibrary.Controller.openBlock = function(blockType) {
+   var xml = BlockLibrary.Controller.storage.getBlockXML(blockType);
+   BlockFactory.mainWorkspace.clear();
+   Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+ };
+
+/**
+ * Updates the workspace to show the block user selected from library
+ *
  * @param {Element} blockLibraryDropdown - your block library dropdown
- * TODO(quacht): selectBlock(blockType) - get blocktype from dropdown before
- * calling
-  */
+ */
 BlockLibrary.Controller.selectHandler = function(blockLibraryDropdown) {
-  var index = blockLibraryDropdown.selectedIndex;
-  var blockType = blockLibraryDropdown.options[index].value;
-  // TODO: move this code above into the UI -- getSelected.
-  // updateselected.
-  var xml = BlockLibrary.Controller.storage.getBlockXML(blockType);
-  BlockFactory.mainWorkspace.clear();
-  Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+  var blockType = BlockLibrary.UI.getSelected(blockLibraryDropdown);
+  BlockLibrary.Controller.openBlock(blockType);
 };
 
 /**

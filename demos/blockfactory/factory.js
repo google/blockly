@@ -102,7 +102,7 @@ BlockFactory.updateLanguage = function() {
   }
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   if (!blockType) {
-    blockType = UNNAMED;
+    blockType = BlockFactory.UNNAMED;
   }
   var format = document.getElementById('format').value;
   var code = BlockFactory.getBlockDefinition(blockType, rootBlock, format);

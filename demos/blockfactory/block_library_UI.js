@@ -10,8 +10,6 @@
 goog.provide('BlockLibrary.UI');
 goog.require('BlockLibrary');
 
-// TODO: check out closure dropdown
-
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *
@@ -24,6 +22,7 @@ BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID) {
   var option = document.createElement('option');
   option.text = optionText;
   option.value = optionName;
+  option.selected = true;
   dropdown.add(option);
 };
 
@@ -32,7 +31,6 @@ BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID) {
  *
  * @param {string} dropdownID - id of HTML select element within which to find
  *     the selected option.
- * TODO: split into removeOption and getSelectedOption
  */
 BlockLibrary.UI.removeSelectedOption = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
@@ -52,3 +50,15 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
     dropdown.remove(dropdown.length - 1);
   }
 };
+
+/**
+ * Returns block type of selected block.
+ *
+ * @param {Element} dropdown - HTML select element
+ * @return {string} type of block selected
+ */
+BlockLibrary.UI.getSelected = function(dropdown) {
+  var index = dropdown.selectedIndex;
+  return dropdown.options[index].value;
+};
+

@@ -909,20 +909,21 @@ BlockFactory.makeVisible = function(elementID) {
  */
 BlockFactory.addTabHandlers =
     function(blockFactoryTabID, blockExporterTabID) {
-      var blockFactoryTab = document.getElementById(blockFactoryTabID);
+      var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+      var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+
       blockFactoryTab.addEventListener('click',
         function() {
-          blockFactoryTab.className = "tab tabon";
-          blockExporterTab.className = "tab taboff";
+          goog.dom.classes.swap(blockFactoryTab, 'taboff', 'tabon');
+          goog.dom.classes.swap(blockExporterTab, 'tabon', 'taboff');
           // Hide container of exporter.
           BlockFactory.hide('blockLibraryExporter');
         });
 
-      var blockExporterTab = document.getElementById(blockExporterTabID);
       blockExporterTab.addEventListener('click',
         function() {
-          blockExporterTab.className = "tab tabon";
-          blockFactoryTab.className = "tab taboff";
+          goog.dom.classes.swap(blockFactoryTab, 'tabon', 'taboff');
+          goog.dom.classes.swap(blockExporterTab, 'taboff', 'tabon');
           // Show container of exporter.
           BlockFactory.show('blockLibraryExporter');
         });

@@ -27,6 +27,7 @@
  * Namespace for Block Factory.
  */
 goog.provide('BlockFactory');
+goog.require('goog.dom.classes');
 
 /**
  * Workspace for user to build block.
@@ -869,7 +870,7 @@ BlockFactory.importBlockFromFile = function() {
  * @param {string} elementID - ID of element to hide
  */
 BlockFactory.hide = function(elementID) {
-  document.getElementById(elementID).className = 'hiding';
+  document.getElementById(elementID).style.display = 'none';
 };
 
 /**
@@ -878,7 +879,7 @@ BlockFactory.hide = function(elementID) {
  * @param {string} elementID - ID of element to hide
  */
 BlockFactory.show = function(elementID) {
-  document.getElementById(elementID).className = '';
+  document.getElementById(elementID).style.display = 'inline';
 };
 
 /**

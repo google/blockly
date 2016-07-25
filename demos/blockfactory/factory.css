@@ -147,6 +147,7 @@ button, .buttonStyle {
 
 #blockLibraryExporter {
   clear: both;
+  display: none;
   height: 90%;
 }
 
@@ -158,8 +159,12 @@ button, .buttonStyle {
 
 #exportSettings {
   margin: auto;
-  padding: 16px 16px;
+  padding: 16px;
   overflow: hidden;
+}
+
+#exporterHiddenWorkspace {
+ display: none;
 }
 
 /* Tabs */
@@ -176,4 +181,8 @@ button, .buttonStyle {
 
 .tab.taboff {
   cursor: pointer;
+}
+
+#helperText {
+  clear: both;
 }

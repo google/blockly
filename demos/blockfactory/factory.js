@@ -900,7 +900,11 @@ BlockFactory.makeVisible = function(elementID) {
 };
 
 /**
- * TODO
+ * Add tab handlers to allow switching between the Block Factory
+ * tab and the Block Exporter tab.
+ *
+ * @param {string} blockFactoryTabID - ID of element containing Block Factory
+ * @param {string} blockExporterTabID - ID of element containing Block Exporter
  */
 BlockFactory.addTabHandlers =
     function(blockFactoryTabID, blockExporterTabID) {

@@ -93,7 +93,7 @@ FactoryModel.prototype.changeCategoryName = function (newName, category) {
 
 /**
  * Moves a category to a certain position in categoryList by removing it
- * and then inserting it at the correct index. Checks that indexes are in
+ * and then inserting it at the correct index. Checks that indices are in
  * bounds (throws error if not), but assumes that oldIndex is the correct index
  * for category.
  *

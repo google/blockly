@@ -11,8 +11,6 @@
 <script src="factory_generator.js"></script>
 <script src="../../../closure-library/closure/goog/base.js"></script>
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="../../../closure-library/closure/goog/css/colorpicker-simplegrid.css">
-
 
 <script>
 goog.require('goog.ui.PopupColorPicker');
@@ -368,6 +366,69 @@ goog.require('goog.ui.ColorPicker');
   <category name="Functions" colour="290" custom="PROCEDURE"></category>
 </xml>
 <script type="text/javascript">
+  // Array of Blockly category colors, variety of hues with saturation 45%
+  // and value 65% as specified in Developer documentation.
+  var colors = ['#A65C5C',
+      '#A6635C',
+      '#A66A5C',
+      '#A6725C',
+      '#A6795C',
+      '#A6815C',
+      '#A6885C',
+      '#A6905C',
+      '#A6975C',
+      '#A69F5C',
+      '#A6A65C',
+      '#9FA65C',
+      '#97A65C',
+      '#90A65C',
+      '#88A65C',
+      '#81A65C',
+      '#79A65C',
+      '#6FA65C',
+      '#66A65C',
+      '#5EA65C',
+      '#5CA661',
+      '#5CA668',
+      '#5CA66F',
+      '#5CA677',
+      '#5CA67E',
+      '#5CA686',
+      '#5CA68D',
+      '#5CA695',
+      '#5CA69C',
+      '#5CA6A4',
+      '#5CA1A6',
+      '#5C9AA6',
+      '#5C92A6',
+      '#5C8BA6',
+      '#5C83A6',
+      '#5C7CA6',
+      '#5C74A6',
+      '#5C6AA6',
+      '#5C61A6',
+      '#5E5CA6',
+      '#665CA6',
+      '#6D5CA6',
+      '#745CA6',
+      '#7C5CA6',
+      '#835CA6',
+      '#8B5CA6',
+      '#925CA6',
+      '#9A5CA6',
+      '#A15CA6',
+      '#A65CA4',
+      '#A65C9C',
+      '#A65C95',
+      '#A65C8D',
+      '#A65C86',
+      '#A65C7E',
+      '#A65C77',
+      '#A65C6F',
+      '#A65C66',
+      '#A65C61',
+      '#A65C5E'];
+
   // Create empty workspace for configuring workspace.
   var toolboxWorkspace = Blockly.inject('toolbox_blocks',
     {grid:
@@ -391,76 +452,6 @@ goog.require('goog.ui.ColorPicker');
        {controls: true,
         wheel: true}
     });
-
-  var colors = ['#A65C5C',
-    '#A6645C',
-    '#A6775C',
-    '#A6805C',
-    '#A68A5C',
-    '#A6945C',
-    '#A69F5C',
-    '#A5A65C',
-    '#91A65C',
-    '#87A65C',
-    '#7EA65C',
-    '#76A65C',
-    '#6CA65C',
-    '#62A65C',
-    '#5CA65D',
-    '#5CA666',
-    '#5CA66E',
-    '#5CA679',
-    '#5CA682',
-    '#5CA68C',
-    '#5CA696',
-    '#5CA6A0',
-    '#5CA3A6',
-    '#5C9BA6',
-    '#5C91A6',
-    '#5C87A6',
-    '#5C7DA6',
-    '#5C73A6',
-    '#5C69A6',
-    '#5C62A6',
-    '#5E5CA6',
-    '#665CA6',
-    '#6F5CA6',
-    '#775CA6',
-    '#815CA6',
-    '#8A5CA6',
-    '#925CA6',
-    '#9A5CA6',
-    '#A45CA6',
-    '#A65C9F',
-    '#A65C95',
-    '#A65C8B',
-    '#A65C81',
-    '#A65C77',
-    '#A65C6D',
-    '#A65C63',
-    '#A65C7E',
-    '#A65C74',
-    '#A65C68',
-
-    "#3366ff",
-    "#3333ff",
-    "#000099",
-    "#000066",
-    "#ccccff",
-    "#9999ff",
-    "#6666cc",
-    "#6633ff",
-    "#6600cc",
-    "#333399",
-    "#330099",
-    "#ffccff",
-    "#ff99ff",
-    "#cc66cc",
-    "#cc33cc",
-    "#993399",
-    "#663366",
-    "#330033",
-    "#33ccff"];
 
   var controller = new FactoryController(toolboxWorkspace, previewWorkspace);
 
@@ -505,18 +496,16 @@ goog.require('goog.ui.ColorPicker');
       ('click', upWrapper);
   document.getElementById('button_down').addEventListener
       ('click', downWrapper);
-
-  /*var mypicker = new goog.ui.ColorPicker();
-  mypicker.setColors(colors);*/
-  var picker = new goog.ui.PopupColorPicker();
-  picker.addColors(colors);
-  picker.render();
-  picker.attach(document.getElementById('button_color'));
-  //document.getElementById('button_color').appendChild(picker);
-  picker.setPinnedCorner('TOP_RIGHT');
-  picker.setFocusable(true);
-  goog.events.listen(picker, 'change', function(e) {
-        controller.changeColor(picker.getSelectedColor());
+  // Create color picker with specific set of Blockly colors.
+  var colorPicker = new goog.ui.ColorPicker();
+  colorPicker.setColors(colors);
+  // Create and render the popup color picker and attach to button.
+  var popupPicker = new goog.ui.PopupColorPicker(null, colorPicker);
+  popupPicker.render();
+  popupPicker.attach(document.getElementById('button_color'));
+  popupPicker.setFocusable(true);
+  goog.events.listen(popupPicker, 'change', function(e) {
+        controller.changeColor(popupPicker.getSelectedColor());
       });
 
   document.getElementById('button_name').disabled = true;

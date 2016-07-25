@@ -70,7 +70,7 @@ FactoryGenerator.prototype.generateConfigXml = function() {
       var category = categoryList[i];
       var categoryElement = goog.dom.createDom('category');
       categoryElement.setAttribute('name', category.name);
-      // Add a colour if one exists.
+      // Add a colour attribute if one exists.
       if (category.color != null) {
         categoryElement.setAttribute('colour', category.color);
       }

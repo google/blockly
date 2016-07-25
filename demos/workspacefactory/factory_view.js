@@ -186,11 +186,12 @@ FactoryView.prototype.moveTabToIndex = function(id, newIndex, oldIndex) {
 };
 
 /**
- * Given a category ID and its color, color the left border of the tab with
- * that ID with that color.
+ * Given a category ID and color, use that color to color the left border of the
+ * tab for that category.
  *
  * @param {!string} id The ID of the category to color.
- * @param {!string} color CSS representation of the color that should be used.
+ * @param {!string} color The color for to be used for the border of the tab.
+ * Must be a valid CSS string.
  */
 FactoryView.prototype.setBorderColor = function(id, color) {
   var tab = this.tabMap[id];

@@ -289,7 +289,7 @@
 	"LISTS_GET_INDEX_RANDOM": "임의로",
 	"LISTS_GET_INDEX_TAIL": "",
 	"LISTS_INDEX_FROM_START_TOOLTIP": "%1은 첫 번째 항목입니다.",
-	"LISTS_INDEX_FROM_END_TOOLTIP": "%1은 마지막 항목입니다.",
+	"LISTS_INDEX_FROM_END_TOOLTIP": "%1은(는) 마지막 항목입니다.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "목록에서 특정 위치의 항목을 반환합니다.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FIRST": "첫 번째 아이템을 찾아 돌려줍니다.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_LAST": "마지막 아이템을 찾아 돌려줍니다.",

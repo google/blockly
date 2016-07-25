@@ -92,18 +92,25 @@ FactoryModel.prototype.changeCategoryName = function (newName, category) {
 };
 
 /**
- * Swaps the order of two categories in the category list.
+ * Moves a category to a certain position in categoryList by removing it
+ * and then inserting it at the correct index. Checks that indexes are in
+ * bounds (throws error if not), but assumes that oldIndex is the correct index
+ * for category.
  *
- * @param {Category} category1 First category to be swapped.
- * @param {Category} category2 Second category to be swapped.
+ * @param {!Category} category The category to move in categoryList.
+ * @param {int} newIndex The index to insert the category at.
+ * @param {int} oldIndex The index the category is currently at.
  */
-FactoryModel.prototype.swapCategoryOrder = function(category1, category2) {
-  var index1 = this.getIndexByCategoryId(category1.id);
-  var index2 = this.getIndexByCategoryId(category2.id);
-  var temp = this.categoryList[index1];
-  this.categoryList[index1] = this.categoryList[index2];
-  this.categoryList[index2] = temp;
-};
+FactoryModel.prototype.moveCategoryToIndex = function(category, newIndex,
+    oldIndex) {
+  // Check that indexes are in bounds.
+  if (newIndex < 0 || newIndex >= this.categoryList.length || oldIndex < 0 ||
+      oldIndex >= this.categoryList.length) {
+    throw new Error('Index out of bounds');
+  }
+  this.deleteCategoryEntry(oldIndex);
+  this.categoryList.splice(newIndex, 0, category);
+}
 
 /**
  * Returns the ID of the currently selected category. Returns null if there are

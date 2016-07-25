@@ -104,10 +104,6 @@ button, .buttonStyle {
   display: none;
 }
 
-.hiding {
- display: none;
-}
-
 #blockFactoryContent {
   height: 87%;
 }
@@ -153,8 +149,8 @@ button, .buttonStyle {
 
 #exportSelector {
   float: left;
-  height: 100%;
-  width: 70%;
+  height: 80%;
+  width: 60%;
 }
 
 #exportSettings {

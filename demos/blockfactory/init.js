@@ -10,7 +10,11 @@ goog.require('BlockLibrary');
 goog.require('BlockLibrary.UI');
 goog.require('BlockLibrary.Storage');
 goog.require('BlockLibrary.Controller');
-goog.require('BlockLibrary.Exporter');
+goog.require('BlockExporter');
+goog.require('BlockExporter.Tools');
+goog.require('BlockExporter.View');
+goog.require('goog.dom.classlist');
+
 
 /**
  * Initialize Blockly and layout.  Called on page load.
@@ -36,8 +40,15 @@ function init() {
   // Initialize Block Library and Exporter.
   BlockLibrary.name = 'blockLibrary';
   BlockLibrary.Controller.populateBlockLibrary(BlockLibrary.name);
-  BlockLibrary.exporter =
-      new BlockLibrary.Exporter('exporterHiddenWorkspace');
+  BlockExporter.view = new BlockExporter.View('blockLibraryExporter',
+      BlockLibrary.Controller.storage);
+
+  document.getElementById('exporterSubmitButton').addEventListener('click',
+      function() {
+        var boundExportBlocks =
+            BlockExporter.view.exportBlocks.bind(BlockExporter.view);
+        boundExportBlocks();
+      });
 
   // Assign button click handlers for Block Library.
   document.getElementById('saveToBlockLibraryButton')
@@ -104,7 +115,40 @@ function init() {
        media: '../../media/'});
 
   // Add Tab handlers
-  BlockFactory.addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
+  /**
+ * Add tab handlers to allow switching between the Block Factory
+ * tab and the Block Exporter tab.
+ *
+ * @param {string} blockFactoryTabID - ID of element containing Block Factory
+ * @param {string} blockExporterTabID - ID of element containing Block Exporter
+ */
+var addTabHandlers =
+    function(blockFactoryTabID, blockExporterTabID) {
+      var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+      var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+
+      blockFactoryTab.addEventListener('click',
+        function() {
+          goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
+          goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
+
+          // Hide container of exporter.
+          BlockFactory.hide('blockLibraryExporter');
+          window.dispatchEvent(new Event('resize'));
+
+        });
+
+      blockExporterTab.addEventListener('click',
+        function() {
+          goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+          goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+
+          // Show container of exporter.
+          BlockFactory.show('blockLibraryExporter');
+          window.dispatchEvent(new Event('resize'));
+        });
+    };
+  addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
 
   // Create the root block.on main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

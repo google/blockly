@@ -1,19 +1,16 @@
 /**
- * @fileoverview Javascript for the Block Library Exporter class. Allows
- * users to export block definitions and generator stubs of their saved blocks
- * easily. Depends on the Block Library Controller for stored blocks, the Block
- * Factory for code generation, and Block Library for its namespace.
+ * @fileoverview Javascript for the BlockExporter Tools class.
  *
  * @author quachtina96 (Tina Quach)
  */
-
 'use strict';
 
-goog.provide('BlockLibrary.Exporter');
+goog.provide('BlockExporter.Tools');
 
+goog.require('BlockExporter');
 goog.require('BlockFactory');
-goog.require('BlockLibrary');
 goog.require('BlockLibrary.Controller');
+goog.require('goog.dom');
 
 
 /**
@@ -23,13 +20,23 @@ goog.require('BlockLibrary.Controller');
 * @param {string} hiddenWorkspaceContainerID - ID of div element to contain the
 * exporter's hidden workspace
 */
-BlockLibrary.Exporter = function(hiddenWorkspaceContainerID) {
+BlockExporter.Tools = function() {
+  // Create container for hidden workspace
+  this.container = goog.dom.createDom('div',
+    {
+      'id': 'blockExporterTools_hiddenWorkspace',
+      'display':'none'
+    },
+    '' // Empty div
+    );
+  goog.dom.appendChild(
+      document.getElementsByTagName('body')[0], this.container);
   /**
-   * Hidden workspace for the Block Library Exporter that holds pieces that make
+   * Hidden workspace for the Block Exporter that holds pieces that make
    * up the block
    * @type {Blockly.Workspace}
    */
-  this.hiddenWorkspace =  Blockly.inject(hiddenWorkspaceContainerID,
+  this.hiddenWorkspace = Blockly.inject(this.container.id,
       {collapse: false,
        media: '../../media/'});
 };
@@ -43,7 +50,7 @@ BlockLibrary.Exporter = function(hiddenWorkspaceContainerID) {
  * @return {string} in the desired format, the concatenation of each block's
  * language code.
  */
-BlockLibrary.Exporter.prototype.getBlockDefs =
+BlockExporter.Tools.prototype.getBlockDefs =
     function(blockTypes, definitionFormat) {
   var blockCode = [];
   for (var i = 0; i < blockTypes.length; i++) {
@@ -73,7 +80,7 @@ BlockLibrary.Exporter.prototype.getBlockDefs =
  * @return {string} in the desired format, the concatenation of each block's
  * generator code.
  */
-BlockLibrary.Exporter.prototype.getGeneratorCode =
+BlockExporter.Tools.prototype.getGeneratorCode =
     function(blockTypes, generatorLanguage) {
   var multiblockCode = [];
   // Define the custom blocks in order to be able to create instances of them in
@@ -94,3 +101,4 @@ BlockLibrary.Exporter.prototype.getGeneratorCode =
   }
   return multiblockCode.join("\n\n");
 };
+

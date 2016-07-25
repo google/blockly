@@ -15,7 +15,9 @@
   <script src="block_library_ui.js"></script>
   <script src="block_library_storage.js"></script>
   <script src="block_library_controller.js"></script>
-  <script src="block_library_exporter.js"></script>
+  <script src="block_exporter.js"></script>
+  <script src="block_exporter_tools.js"></script>
+  <script src="block_exporter_view.js"></script>
   <script src="blocks.js"></script>
   <script src="init.js"></script>
   <link rel="stylesheet" href="factory.css">
@@ -33,7 +35,6 @@
   </div>
 
   <div id="blockLibraryExporter">
-    <div id="exporterHiddenWorkspace"></div>
     <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
     <!-- Inject exportSelectorWorkspace into this div -->
     <div id="exportSelector"></div>
@@ -64,8 +65,8 @@
           Block Generator Stub(s) File Name: <br>
           <input type="text" id="generatorStub_filename"><br>
           <br>
-          <button id="exporterSubmitButton"> Submit </button>
       </form>
+        <button id="exporterSubmitButton"> Export </button>
     </div>
   </div>
 

@@ -900,36 +900,3 @@ BlockFactory.makeVisible = function(elementID) {
   document.getElementById(elementID).visibility = 'visible';
 };
 
-/**
- * Add tab handlers to allow switching between the Block Factory
- * tab and the Block Exporter tab.
- *
- * @param {string} blockFactoryTabID - ID of element containing Block Factory
- * @param {string} blockExporterTabID - ID of element containing Block Exporter
- */
-BlockFactory.addTabHandlers =
-    function(blockFactoryTabID, blockExporterTabID) {
-      var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-      var blockExporterTab = goog.dom.getElement(blockExporterTabID);
-
-      blockFactoryTab.addEventListener('click',
-        function() {
-          // Turn Block Factory Tab on and Block Exporter Tab off.
-          goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
-          goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
-
-          // Hide container of exporter.
-          BlockFactory.hide('blockLibraryExporter');
-        });
-
-      blockExporterTab.addEventListener('click',
-        function() {
-          // Turn Block Exporter Tab on and Block Factory Tab off.
-          goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-          goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
-
-          // Show container of exporter.
-          BlockFactory.show('blockLibraryExporter');
-        });
-    };
-

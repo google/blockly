@@ -78,6 +78,7 @@ FactoryView.prototype.deleteCategoryRow = function(id, index) {
  */
 FactoryView.prototype.updateState = function(selectedIndex) {
   document.getElementById('button_name').disabled = selectedIndex < 0;
+  document.getElementById('button_color').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled =
       selectedIndex == 0 ? true : false;
   var table = document.getElementById('categoryTable');
@@ -162,7 +163,7 @@ FactoryView.prototype.updateCategoryName = function(newName, id) {
  * based on if inserting before or after. Checks that the indexes are in
  * bounds, throws error if not.
  *
- * @param {int} id The ID of the category to move.
+ * @param {!string} id The ID of the category to move.
  * @param {int} newIndex The index to move the category to.
  * @param {int} oldIndex The index the category is currently at.
  */
@@ -171,7 +172,7 @@ FactoryView.prototype.moveTabToIndex = function(id, newIndex, oldIndex) {
   // Check that indexes are in bounds
   if (newIndex < 0 || newIndex >= table.rows.length || oldIndex < 0 ||
       oldIndex >= table.rows.length) {
-    throw new Error('Index out of bounds');
+    throw new Error('Index out of bounds when moving tab in the view.');
   }
   if (newIndex < oldIndex) {  // Inserting before.
     var row = table.insertRow(newIndex);
@@ -183,3 +184,17 @@ FactoryView.prototype.moveTabToIndex = function(id, newIndex, oldIndex) {
     table.deleteRow(oldIndex);
   }
 };
+
+/**
+ * Given a category ID and its color, color the left border of the tab with
+ * that ID with that color.
+ *
+ * @param {!string} id The ID of the category to color.
+ * @param {!string} color CSS representation of the color that should be used.
+ */
+FactoryView.prototype.setBorderColor = function(id, color) {
+  var tab = this.tabMap[id];
+  tab.style.borderLeftWidth = "8px";
+  tab.style.borderLeftStyle = "solid";
+  tab.style.borderColor = color;
+}

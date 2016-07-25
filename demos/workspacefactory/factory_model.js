@@ -106,7 +106,7 @@ FactoryModel.prototype.moveCategoryToIndex = function(category, newIndex,
   // Check that indexes are in bounds.
   if (newIndex < 0 || newIndex >= this.categoryList.length || oldIndex < 0 ||
       oldIndex >= this.categoryList.length) {
-    throw new Error('Index out of bounds');
+    throw new Error('Index out of bounds when moving category in the model.');
   }
   this.deleteCategoryEntry(oldIndex);
   this.categoryList.splice(newIndex, 0, category);
@@ -233,6 +233,17 @@ FactoryModel.prototype.getCategoryIdByName = function(name) {
 };
 
 /**
+ * Given the ID of a category, sets the color of that category.
+ *
+ * @param {!string} id The ID of the category to update.
+ * @param {!string} color The color that should be used for that category.
+ */
+FactoryModel.prototype.setCategoryColorById = function (id, color) {
+  var category = this.getCategoryById(id);
+  category.color = color;
+}
+
+/**
  * Class for a Category
  * @constructor
  */
@@ -243,4 +254,6 @@ Category = function(name) {
   this.name = name;
   // Unique ID of category. Does not change.
   this.id = Blockly.genUid();
+  // Color of category. Default is no color.
+  this.color = null;
 };

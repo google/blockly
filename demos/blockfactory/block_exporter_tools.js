@@ -1,5 +1,8 @@
 /**
- * @fileoverview Javascript for the BlockExporter Tools class.
+ * @fileoverview Javascript for the BlockExporter Tools class, which generates
+ * block definitions and generator stubs for given blockTypes. Depends on the
+ * BlockLibrary.Controller for its storage object and on the BlockFactory for
+ * its code generation functions.
  *
  * @author quachtina96 (Tina Quach)
  */
@@ -25,7 +28,7 @@ BlockExporter.Tools = function() {
   this.container = goog.dom.createDom('div',
     {
       'id': 'blockExporterTools_hiddenWorkspace',
-      'display':'none'
+      'display': 'none'
     },
     '' // Empty div
     );

@@ -2,7 +2,7 @@
  * @fileoverview Contains the controller code for workspace factory. Depends
  * on the model and view objects (created as internal variables) and interacts
  * with previewWorkspace and toolboxWorkspace (internal references stored to
- * both). Also depends on prebuilt_categories.js for standard Blockly
+ * both). Also depends on standard_categories.js for standard Blockly
  * categories. Provides the functionality for the actions the user can initiate:
  * - adding and removing categories
  * - switching between categories

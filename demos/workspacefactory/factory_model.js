@@ -3,6 +3,7 @@
  * in workspace factory. Each category has a name, XML to load that category,
  * and a unique ID making it possible to change category names and move
  * categories easily. Also keeps track of the currently selected category.
+ * Depends on standard_categories.js for standard Blockly categories. .
  *
  * @author Emma Dauterman (evd2014)
  */
@@ -241,7 +242,25 @@ FactoryModel.prototype.getCategoryIdByName = function(name) {
 FactoryModel.prototype.setCategoryColorById = function (id, color) {
   var category = this.getCategoryById(id);
   category.color = color;
-}
+};
+
+/**
+ * Sets the attributes of a category based on a stadard category given the
+ * id of the category to update and the name of the standard category
+ * (case insensitive).
+ *
+ * @param {!string} id The ID of the category to update.
+ * @param {!string} name The name of the standard category to load.
+ */
+FactoryModel.prototype.loadStandardCategory = function(id, name) {
+  var category = this.getCategoryById(id);
+  if (!standardCategories[name.toLowerCase()]) {
+    throw new Error('Trying to load category that does not exist.');
+  }
+  category.xml = standardCategories[name.toLowerCase()].xml;
+  category.color = standardCategories[name.toLowerCase()].color;
+  category.custom = standardCategories[name.toLowerCase()].custom;
+};
 
 /**
  * Class for a Category
@@ -256,4 +275,6 @@ Category = function(name) {
   this.id = Blockly.genUid();
   // Color of category. Default is no color.
   this.color = null;
+  // Stores a custom tag, if necessary. Null if no custom tag.
+  this.custom = null;
 };

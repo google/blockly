@@ -9,6 +9,7 @@
 <script src="factory_controller.js"></script>
 <script src="factory_view.js"></script>
 <script src="factory_generator.js"></script>
+<script src="standard_categories.js"></script>
 <script src="../../../closure-library/closure/goog/base.js"></script>
 <link rel="stylesheet" href="style.css">
 
@@ -47,18 +48,24 @@ goog.require('goog.ui.ColorPicker');
       <td id="tab_help">Your categories will appear here</td>
     </table>
     <p>&nbsp;</p>
+    <div class='dropdown'>
     <button id="button_add">+</button>
+    <div id="dropdown_add" class="dropdown-content">
+      <a id='dropdown_newCategory'>New Category</a>
+      <a id='dropdown_loadCategory'>Pre-existing Category</a>
+    </div>
+    </div>
     <button id="button_remove">-</button>
-    <button id="button_up">&#8593;</button>
-    <button id="button_down">&#8595;</button>
     <p>&nbsp;</p>
     <div class='dropdown'>
     <button id="button_edit">Edit</button>
     <div id="dropdown_edit" class="dropdown-content">
-      <a href='#' id='dropdown_name'>Name</a>
-      <a href='#' id='dropdown_color'>Color</a>
+      <a id='dropdown_name'>Name</a>
+      <a id='dropdown_color'>Color</a>
     </div>
     </div>
+    <button id="button_up">&#8593;</button>
+    <button id="button_down">&#8595;</button>
   </aside>
 </section>
 
@@ -463,7 +470,15 @@ goog.require('goog.ui.ColorPicker');
 
   // Wrappers to attach buttons to method calls for the controller object
   var addWrapper = function() {
+    document.getElementById('dropdown_add').classList.toggle("show");
+  };
+  var newCategoryWrapper = function() {
     controller.addCategory();
+    document.getElementById('dropdown_add').classList.toggle("show");
+  };
+  var loadCategoryWrapper = function() {
+    controller.loadCategory();
+    document.getElementById('dropdown_add').classList.toggle("show");
   };
   var removeWrapper = function() {
     controller.removeCategory();
@@ -490,8 +505,13 @@ goog.require('goog.ui.ColorPicker');
     controller.changeName();
     document.getElementById('dropdown_edit').classList.toggle("show");
   };
+
   document.getElementById('button_add').addEventListener
       ('click', addWrapper);
+  document.getElementById('dropdown_newCategory').addEventListener
+      ('click', newCategoryWrapper);
+  document.getElementById('dropdown_loadCategory').addEventListener
+      ('click', loadCategoryWrapper);
   document.getElementById('button_remove').addEventListener
       ('click', removeWrapper);
   document.getElementById('button_export').addEventListener
@@ -508,6 +528,7 @@ goog.require('goog.ui.ColorPicker');
       ('click', editWrapper);
   document.getElementById('dropdown_name').addEventListener
       ('click', nameWrapper);
+
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
   colorPicker.setColors(colors);
@@ -520,9 +541,12 @@ goog.require('goog.ui.ColorPicker');
         controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
         document.getElementById('dropdown_edit').classList.toggle("show");
       });
-
+  // Disable category editing buttons until categories are created.
+  document.getElementById('button_remove').disabled = true;
   document.getElementById('button_edit').disabled = true;
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
+  // TODO(evd2014): Listen for Blockly events to update preview, figure out
+  // why getting overwhelmed with create/delete events when changing categories.
 </script>
 </html>

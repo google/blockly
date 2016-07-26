@@ -74,6 +74,10 @@ FactoryGenerator.prototype.generateConfigXml = function() {
       if (category.color != null) {
         categoryElement.setAttribute('colour', category.color);
       }
+      // Add a custom attribute if one exists.
+      if (category.custom != null) {
+        categoryElement.setAttribute('custom', category.custom);
+      }
       // Load that category to workspace.
       this.toolboxWorkspace.clear();
       Blockly.Xml.domToWorkspace(category.xml, this.toolboxWorkspace);

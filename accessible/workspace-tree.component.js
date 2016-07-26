@@ -122,7 +122,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
         this.treeService.clearActiveDesc(this.tree.id);
         deleteBlockFunc();
-        nextNodeToFocusOn.focus();
+        // Invoke a digest cycle, so that the DOM settles.
+        setTimeout(function() {
+          nextNodeToFocusOn.focus();
+        });
       } else {
         var blockRootNode = document.getElementById(this.idMap['blockRoot']);
         var nextActiveDesc =

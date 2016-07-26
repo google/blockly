@@ -31,7 +31,7 @@ blocklyApp.FieldComponent = ng.core
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
         [attr.aria-level]="level">
       <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-             [disabled]="disabled" type="text" aria-label="string">
+             [disabled]="disabled" type="text" aria-label="text">
     </li>
     <li [id]="idMap['listItem']" role="treeitem" *ngIf="isNumberInput()"
         [attr.aria-level]="level">

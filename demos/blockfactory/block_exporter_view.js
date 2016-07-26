@@ -167,7 +167,8 @@ BlockExporter.View.prototype.exportBlocks = function() {
     } else {
       var blockDefs = this.tools.getBlockDefs(blockTypes,
           definitionFormat);
-      BlockFactory.createAndDownloadFile_(blockDefs, blockDef_filename, definitionFormat);
+      BlockFactory.createAndDownloadFile_(
+          blockDefs, blockDef_filename, definitionFormat);
     }
   }
 
@@ -177,7 +178,8 @@ BlockExporter.View.prototype.exportBlocks = function() {
     } else {
       var genStubs = this.tools.getGeneratorCode(blockTypes,
           definitionFormat);
-      BlockFactory.createAndDownloadFile_(genStubs, generatorStub_filename, language);
+      BlockFactory.createAndDownloadFile_(
+          genStubs, generatorStub_filename, language);
     }
   }
 };

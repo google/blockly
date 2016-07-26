@@ -143,9 +143,11 @@ var addTabHandlers =
           goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
           goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
-          // Show container of exporter.
+          // Update toolbox to reflect current block library.
           BlockExporter.view.updateToolbox();
           BlockExporter.view.renderToolbox();
+
+          // Show container of exporter.
           BlockFactory.show('blockLibraryExporter');
           window.dispatchEvent(new Event('resize'));
         });

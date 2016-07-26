@@ -914,16 +914,20 @@ BlockFactory.addTabHandlers =
 
       blockFactoryTab.addEventListener('click',
         function() {
-          goog.dom.classes.swap(blockFactoryTab, 'taboff', 'tabon');
-          goog.dom.classes.swap(blockExporterTab, 'tabon', 'taboff');
+          // Turn Block Factory Tab on and Block Exporter Tab off.
+          goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
+          goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
+
           // Hide container of exporter.
           BlockFactory.hide('blockLibraryExporter');
         });
 
       blockExporterTab.addEventListener('click',
         function() {
-          goog.dom.classes.swap(blockFactoryTab, 'tabon', 'taboff');
-          goog.dom.classes.swap(blockExporterTab, 'taboff', 'tabon');
+          // Turn Block Exporter Tab on and Block Factory Tab off.
+          goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+          goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+
           // Show container of exporter.
           BlockFactory.show('blockLibraryExporter');
         });

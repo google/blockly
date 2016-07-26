@@ -506,7 +506,7 @@ goog.require('goog.ui.ColorPicker');
   popupPicker.attach(document.getElementById('button_color'));
   popupPicker.setFocusable(true);
   goog.events.listen(popupPicker, 'change', function(e) {
-        controller.changeColor(popupPicker.getSelectedColor());
+        controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
       });
 
   document.getElementById('button_name').disabled = true;

@@ -341,7 +341,7 @@ FactoryController.prototype.moveCategoryToIndex = function(category, newIndex,
  * @param {!string} color The color to change the selected category. Must be
  * a valid CSS string.
  */
-FactoryController.prototype.changeColor = function(color) {
+FactoryController.prototype.changeSelectedCategoryColor = function(color) {
   var selectedId = this.model.getSelectedId();
   this.model.setCategoryColorById(selectedId, color);
   this.view.setBorderColor(selectedId, color);

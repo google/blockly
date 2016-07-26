@@ -158,6 +158,8 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // screenreader focus for the destination tree to the block just moved.
       var newBlockId = null;
 
+      this.treeService.clearActiveDesc(this.tree.id);
+
       // If the connection is a 'previousConnection' and that connection is
       // already joined to something, use the 'nextConnection' of the
       // previous block instead in order to do an insertion.
@@ -172,8 +174,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // Invoke a digest cycle, so that the DOM settles.
       var that = this;
       setTimeout(function() {
+        // Move the focus to the current tree.
+        document.getElementById(that.tree.id).focus();
         // Move the screenreader focus to the newly-pasted block.
-        that.treeService.clearActiveDesc(that.tree.id);
         that.treeService.setActiveDesc(newBlockId + 'blockRoot', that.tree.id);
       });
     },

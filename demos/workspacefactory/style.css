@@ -100,3 +100,45 @@ td {
 #category_section {
   width: 20%;
 }
+
+/* Rules for Closure popup color picker */
+.goog-palette {
+  outline: none;
+  cursor: default;
+}
+
+.goog-palette-cell {
+  height: 13px;
+  width: 15px;
+  margin: 0;
+  border: 0;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 1px solid #000000;
+  font-size: 1px;
+}
+
+.goog-palette-colorswatch {
+  position: relative;
+  height: 13px;
+  width: 15px;
+  border: 1px solid #000000;
+}
+
+.goog-palette-cell-hover .goog-palette-colorswatch {
+  border: 1px solid #FFF;
+}
+
+.goog-palette-cell-selected .goog-palette-colorswatch {
+  border: 1px solid #000;
+  color: #fff;
+}
+
+.goog-palette-table {
+  border: 1px solid #000000;
+  border-collapse: collapse;
+}
+
+.goog-popupcolorpicker {
+  position: absolute;
+}

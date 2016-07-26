@@ -334,3 +334,15 @@ FactoryController.prototype.moveCategoryToIndex = function(category, newIndex,
   this.model.moveCategoryToIndex(category, newIndex, oldIndex);
   this.view.moveTabToIndex(category.id, newIndex, oldIndex);
 };
+
+/**
+ * Changes the color of the selected category.
+ *
+ * @param {!string} color The color to change the selected category. Must be
+ * a valid CSS string.
+ */
+FactoryController.prototype.changeSelectedCategoryColor = function(color) {
+  var selectedId = this.model.getSelectedId();
+  this.model.setCategoryColorById(selectedId, color);
+  this.view.setBorderColor(selectedId, color);
+};

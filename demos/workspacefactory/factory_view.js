@@ -77,7 +77,7 @@ FactoryView.prototype.deleteCategoryRow = function(id, index) {
  * @param {int} selectedIndex The index of the currently selected category.
  */
 FactoryView.prototype.updateState = function(selectedIndex) {
-  document.getElementById('button_name').disabled = selectedIndex < 0;
+  document.getElementById('button_edit').disabled = selectedIndex < 0;
   document.getElementById('button_color').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled =
       selectedIndex == 0 ? true : false;

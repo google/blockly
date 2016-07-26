@@ -52,8 +52,13 @@ goog.require('goog.ui.ColorPicker');
     <button id="button_up">&#8593;</button>
     <button id="button_down">&#8595;</button>
     <p>&nbsp;</p>
-    <button id="button_name">Edit</button>
-    <button id="button_color">Color</button>
+    <div class='dropdown'>
+    <button id="button_edit">Edit</button>
+    <div id="dropdown_edit" class="dropdown-content">
+      <a href='#' id='dropdown_name'>Name</a>
+      <a href='#' id='dropdown_color'>Color</a>
+    </div>
+    </div>
   </aside>
 </section>
 
@@ -472,14 +477,18 @@ goog.require('goog.ui.ColorPicker');
   var previewWrapper = function() {
     controller.updatePreview();
   };
-  var nameWrapper = function() {
-    controller.changeName();
-  };
   var upWrapper = function() {
     controller.moveCategory(-1);
   };
   var downWrapper = function() {
     controller.moveCategory(1);
+  };
+  var editWrapper = function() {
+    document.getElementById('dropdown_edit').classList.toggle("show");
+  };
+  var nameWrapper = function() {
+    controller.changeName();
+    document.getElementById('dropdown_edit').classList.toggle("show");
   };
   document.getElementById('button_add').addEventListener
       ('click', addWrapper);
@@ -491,27 +500,29 @@ goog.require('goog.ui.ColorPicker');
       ('click', printWrapper);
   document.getElementById('button_preview').addEventListener
       ('click', previewWrapper);
-  document.getElementById('button_name').addEventListener
-      ('click', nameWrapper);
   document.getElementById('button_up').addEventListener
       ('click', upWrapper);
   document.getElementById('button_down').addEventListener
       ('click', downWrapper);
+  document.getElementById('button_edit').addEventListener
+      ('click', editWrapper);
+  document.getElementById('dropdown_name').addEventListener
+      ('click', nameWrapper);
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
   colorPicker.setColors(colors);
   // Create and render the popup color picker and attach to button.
   var popupPicker = new goog.ui.PopupColorPicker(null, colorPicker);
   popupPicker.render();
-  popupPicker.attach(document.getElementById('button_color'));
+  popupPicker.attach(document.getElementById('dropdown_color'));
   popupPicker.setFocusable(true);
   goog.events.listen(popupPicker, 'change', function(e) {
         controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
+        document.getElementById('dropdown_edit').classList.toggle("show");
       });
 
-  document.getElementById('button_name').disabled = true;
+  document.getElementById('button_edit').disabled = true;
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
-  document.getElementById('button_color').disabled = true;
 </script>
 </html>

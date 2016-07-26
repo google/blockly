@@ -122,36 +122,36 @@ function init() {
  * @param {string} blockFactoryTabID - ID of element containing Block Factory
  * @param {string} blockExporterTabID - ID of element containing Block Exporter
  */
-var addTabHandlers =
-    function(blockFactoryTabID, blockExporterTabID) {
-      var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-      var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+  var addTabHandlers =
+      function(blockFactoryTabID, blockExporterTabID) {
+        var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+        var blockExporterTab = goog.dom.getElement(blockExporterTabID);
 
-      blockFactoryTab.addEventListener('click',
-        function() {
-          goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
-          goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
+        blockFactoryTab.addEventListener('click',
+          function() {
+            goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
+            goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
 
-          // Hide container of exporter.
-          BlockFactory.hide('blockLibraryExporter');
-          window.dispatchEvent(new Event('resize'));
+            // Hide container of exporter.
+            BlockFactory.hide('blockLibraryExporter');
+            window.dispatchEvent(new Event('resize'));
 
-        });
+          });
 
-      blockExporterTab.addEventListener('click',
-        function() {
-          goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-          goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+        blockExporterTab.addEventListener('click',
+          function() {
+            goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+            goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
-          // Update toolbox to reflect current block library.
-          BlockExporter.view.updateToolbox();
-          BlockExporter.view.renderToolbox();
+            // Update toolbox to reflect current block library.
+            BlockExporter.view.updateToolbox();
+            BlockExporter.view.renderToolbox();
 
-          // Show container of exporter.
-          BlockFactory.show('blockLibraryExporter');
-          window.dispatchEvent(new Event('resize'));
-        });
-    };
+            // Show container of exporter.
+            BlockFactory.show('blockLibraryExporter');
+            window.dispatchEvent(new Event('resize'));
+          });
+      };
   addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
 
   // Create the root block.on main workspace.

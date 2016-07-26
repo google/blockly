@@ -94,4 +94,3 @@ BlockLibrary.Exporter.prototype.getGeneratorCode =
   }
   return multiblockCode.join("\n\n");
 };
-

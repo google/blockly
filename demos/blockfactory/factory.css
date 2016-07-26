@@ -144,3 +144,44 @@ button, .buttonStyle {
   padding: 2px;
   width: 50%;
 }
+
+#blockLibraryExporter {
+  clear: both;
+  display: none;
+  height: 90%;
+}
+
+#exportSelector {
+  float: left;
+  height: 100%;
+  width: 70%;
+}
+
+#exportSettings {
+  margin: auto;
+  padding: 16px;
+  overflow: hidden;
+}
+
+#exporterHiddenWorkspace {
+ display: none;
+}
+
+/* Tabs */
+
+.tab {
+  float: left;
+  padding: 5px 19px;
+}
+
+.tab.tabon {
+  background-color: #ddd;
+}
+
+.tab.taboff {
+  cursor: pointer;
+}
+
+#helperText {
+  clear: both;
+}

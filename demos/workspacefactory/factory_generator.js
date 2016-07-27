@@ -50,8 +50,7 @@ FactoryGenerator.prototype.generateConfigXml = function() {
       });
   // If no categories, use XML directly from workspace
   if (!this.model.hasCategories()) {
-    this.categoryWorkspaceToDom(xmlDom,
-        toolboxWorkspace.getTopBlocks());
+    this.categoryWorkspaceToDom(xmlDom, this.toolboxWorkspace.getTopBlocks());
   }
   else {
     // Assert that selected != null

@@ -32,7 +32,6 @@ goog.require('goog.ui.ColorPicker');
       <p>
         <button id="button_export">Export Config</button>
         <button id="button_print">Print Config</button>
-        <button id="button_preview">Update Preview</button>
       </p>
     </td>
   </tr>
@@ -489,9 +488,6 @@ goog.require('goog.ui.ColorPicker');
   var printWrapper = function() {
     controller.printConfig();
   };
-  var previewWrapper = function() {
-    controller.updatePreview();
-  };
   var upWrapper = function() {
     controller.moveCategory(-1);
   };
@@ -518,8 +514,6 @@ goog.require('goog.ui.ColorPicker');
       ('click', exportWrapper);
   document.getElementById('button_print').addEventListener
       ('click', printWrapper);
-  document.getElementById('button_preview').addEventListener
-      ('click', previewWrapper);
   document.getElementById('button_up').addEventListener
       ('click', upWrapper);
   document.getElementById('button_down').addEventListener
@@ -546,7 +540,11 @@ goog.require('goog.ui.ColorPicker');
   document.getElementById('button_edit').disabled = true;
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
-  // TODO(evd2014): Listen for Blockly events to update preview, figure out
-  // why getting overwhelmed with create/delete events when changing categories.
+  // Listen for Blockly move and delete events to update preview.
+  toolboxWorkspace.addChangeListener(function(e) {
+    if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
+      controller.updatePreview();
+    }
+  });
 </script>
 </html>

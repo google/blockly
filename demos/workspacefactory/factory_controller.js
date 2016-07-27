@@ -231,12 +231,13 @@ FactoryController.prototype.printConfig = function() {
  * from no categories to categories or categories to no categories, reinjects
  * Blockly with reinjectPreview, otherwise just updates without reinjecting.
  * Called whenever a category is created, removed, or modified and when
- * "Update Preview" button is pressed.
- *
- * TODO(evd2014): Call updatePreview for Blockly Events. Figure out why
- * getting overwhelmed with create and delete events on category creation.
+ * Blockly move and delete events are fired. Do not call on create events
+ * or disabling will cause the user to "drop" their current blocks.
  */
 FactoryController.prototype.updatePreview = function() {
+  // Disable events to stop updatePreview from recursively calling itself
+  // through event handlers.
+  Blockly.Events.disable();
   var tree = Blockly.Options.parseToolboxTree
       (this.generator.generateConfigXml());
   // No categories, creates a simple flyout.
@@ -254,6 +255,8 @@ FactoryController.prototype.updatePreview = function() {
       this.previewWorkspace.toolbox_.populate_(tree);
     }
   }
+  // Reenable events.
+  Blockly.Events.enable();
 };
 
 /**

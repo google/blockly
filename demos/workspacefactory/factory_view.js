@@ -78,11 +78,12 @@ FactoryView.prototype.deleteCategoryRow = function(id, index) {
  */
 FactoryView.prototype.updateState = function(selectedIndex) {
   document.getElementById('button_edit').disabled = selectedIndex < 0;
+  document.getElementById('button_remove').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled =
-      selectedIndex == 0 ? true : false;
+      selectedIndex <= 0 ? true : false;
   var table = document.getElementById('categoryTable');
-  document.getElementById('button_down').disabled =
-      selectedIndex == table.rows.length - 1 ? true : false;
+  document.getElementById('button_down').disabled = selectedIndex >=
+      table.rows.length - 1 || selectedIndex < 0 ? true : false;
 };
 
 /**

@@ -541,6 +541,9 @@ goog.require('goog.ui.ColorPicker');
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
   // Listen for Blockly move and delete events to update preview.
+  // Not listening for Blockly create events because causes the user to drop blocks
+  // when dragging them into workspace. Could cause problems if ever load blocks into
+  // workspace directly without calling updatePreview.
   toolboxWorkspace.addChangeListener(function(e) {
     if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
       controller.updatePreview();

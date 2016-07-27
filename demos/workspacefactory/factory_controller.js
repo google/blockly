@@ -56,7 +56,8 @@ FactoryController.prototype.addCategory = function() {
       if (!name) {  // Exit if cancelled.
         return;
       }
-      this.createCategory(name, true);
+      this.model.addNewCategoryEntry(name);
+      this.addCategoryToView(name, this.model.getCategoryIdByName(name), true);
       this.model.setSelectedById(this.model.getCategoryIdByName(name));
     }
   }
@@ -68,7 +69,9 @@ FactoryController.prototype.addCategory = function() {
     return;
   }
   // Create category.
-  this.createCategory(name, firstCategory);
+  this.model.addNewCategoryEntry(name);
+  this.addCategoryToView(name, this.model.getCategoryIdByName(name),
+      firstCategory);
   // Switch to category.
   this.switchCategory(this.model.getCategoryIdByName(name));
   // Update preview.
@@ -76,28 +79,26 @@ FactoryController.prototype.addCategory = function() {
 };
 
 /**
- * Helper method for addCategory. Creates a category given a name and a boolean
- * for if it's the first category created. Updates the model and the view but
- * doesn't switch to the category.
+ * Helper method for addCategory. Adds a category to the view given a name, ID,
+ * and a boolean for if it's the first category created. Assumes the category
+ * has already been created in the model. Does not switch to category.
  *
- * @param {!string} name Name of category to be created
- * @param {boolean} firstCategory true if it's the first category created,
- * false otherwise
+ * @param {!string} name Name of category being added.
+ * @param {!string} id The ID of the category being added.
+ * @param {boolean} firstCategory True if it's the first category created,
+ * false otherwise.
  */
 
-FactoryController.prototype.createCategory = function(name, firstCategory) {
-  // Create empty category
-  this.model.addNewCategoryEntry(name);
-  // Create new category.
-  var tab = this.view.addCategoryRow(name, this.model.getCategoryIdByName(name),
-      firstCategory);
+FactoryController.prototype.addCategoryToView = function(name, id,
+    firstCategory) {
+  var tab = this.view.addCategoryRow(name, id, firstCategory);
   var self = this;
   var clickFunction = function(id) {  // Keep this in scope for switchCategory
     return function() {
       self.switchCategory(id);
     };
   };
-  this.view.bindClick(tab, clickFunction(this.model.getCategoryIdByName(name)));
+  this.view.bindClick(tab, clickFunction(id));
 }
 
 /**
@@ -380,20 +381,17 @@ FactoryController.prototype.loadCategory = function() {
     }
   } while (!this.isStandardCategoryName(name));
 
-  // Create an empty category in the model and view.
-  var standardCategory = this.standardCategories[name.toLowerCase()]
-  this.createCategory(standardCategory.name, this.model.getSelected() == null);
-  var id = this.model.getCategoryIdByName(standardCategory.name);
-  var newCategory = this.model.getCategoryById(id);
-  // Copy attributes of standard category to new category in the model.
-  this.model.copyCategory(newCategory, standardCategory);
+  // Copy the standard category in the model.
+  var standardCategory = this.standardCategories[name.toLowerCase()];
+  var copy = this.model.copyCategory(standardCategory);
+  // Update the copy in the view.
+  this.addCategoryToView(copy.name, copy.id, this.model.getSelected() == null);
   // Color the category tab in the view.
-  if (!newCategory.color) {
-    throw new Error("No color in standard category.");
+  if (copy.color) {
+    this.view.setBorderColor(copy.id, copy.color);
   }
-  this.view.setBorderColor(id, newCategory.color);
   // Switch to loaded category.
-  this.switchCategory(id);
+  this.switchCategory(copy.id);
   // Update preview.
   this.updatePreview();
 };

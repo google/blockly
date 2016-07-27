@@ -244,23 +244,25 @@ FactoryModel.prototype.setCategoryColorById = function (id, color) {
 };
 
 /**
- * Given two categories, copies everything from the original to the copy except
- * for the ID (which must stay unique between categories). Throws an error
- * if either the original category or the category to be copied into are null.
+ * Makes a copy of the original category, adds it to the categoryList, and
+ * returns it. Everything about the copy is identical except for its ID. Throws
+ * an error if the original category is null.
  *
- * @param {!Category} copy The category that should be changed to mirror
- * original.
- * @param {!Category} original The category that should be copied into copy.
+ * @param {!Category} original The category that should be copied.
+ * @return {!Category} The copy of original.
  */
-FactoryModel.prototype.copyCategory = function(copy, original) {
-  if (!copy || !original) {
+FactoryModel.prototype.copyCategory = function(original) {
+  if (!original) {
     throw new Error('Trying to copy null category.');
   }
+  copy = new Category(original.name);
   // Copy all attributes except ID.
   copy.xml = original.xml;
   copy.color = original.color;
   copy.custom = original.custom;
-  copy.name = original.name;
+  // Add copy to the category list and return it.
+  this.categoryList.push(copy);
+  return copy;
 };
 
 /**

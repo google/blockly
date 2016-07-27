@@ -55,8 +55,7 @@ FactoryController.prototype.addCategory = function() {
       if (!name) {  // Exit if cancelled.
         return;
       }
-      this.model.addNewCategoryEntry(name);
-      this.addCategoryToView(name, this.model.getCategoryIdByName(name), true);
+      this.createCategory(name, true);
       this.model.setSelectedById(this.model.getCategoryIdByName(name));
     }
   }
@@ -68,9 +67,7 @@ FactoryController.prototype.addCategory = function() {
     return;
   }
   // Create category.
-  this.model.addNewCategoryEntry(name);
-  this.addCategoryToView(name, this.model.getCategoryIdByName(name),
-      firstCategory);
+  this.createCategory(name, firstCategory);
   // Switch to category.
   this.switchElement(this.model.getCategoryIdByName(name));
   // Update preview.
@@ -481,5 +478,103 @@ FactoryController.prototype.addSeparator = function() {
   this.addClickToSwitch(tab, separator.id);
   // Switch to the separator and update the preview.
   this.switchElement(separator.id);
+  this.updatePreview();
+};
+
+/**
+ * Connected to the import button. Given the file path inputted by the user
+ * from file input, this function loads that toolbox XML to the workspace,
+ * creating category and separator tabs as necessary. This allows the user
+ * to be able to edit toolboxes given their XML form. Catches errors from
+ * file reading and prints an error message alerting the user.
+ *
+ * @param {string} file The path for the file to be imported into the workspace.
+ * Should contain valid toolbox XML.
+ */
+FactoryController.prototype.importFile = function(file) {
+  // Exit if cancelled.
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  // To be executed when the reader has read the file.
+  reader.onload = function() {
+    // Try to parse XML from file and load it into toolbox editing area.
+    // Print error message if fail.
+    try {
+      var tree = Blockly.Xml.textToDom(reader.result);
+      controller.importFromTree_(tree);
+    } catch(e) {
+      alert('Cannot load XML from file.');
+    }
+  }
+  // Read the file.
+  reader.readAsText(file);
+};
+
+/**
+ * Given a XML DOM tree, loads it into the toolbox editing area so that the
+ * user can continue editing their work. Assumes that tree is in valid toolbox
+ * XML format.
+ * @private
+ *
+ * @param {!Element} tree XML tree to be loaded to toolbox editing area.
+ */
+FactoryController.prototype.importFromTree_ = function(tree) {
+  // Clear current editing area.
+  this.model.clearToolboxList();
+  this.view.clearToolboxTabs();
+
+  if (tree.getElementsByTagName('category').length == 0) {
+    // No categories present.
+    // Load all the blocks into a single category evenly spaced.
+    Blockly.Xml.domToWorkspace(tree, this.toolboxWorkspace);
+    this.toolboxWorkspace.cleanUp_();
+    // Add message to denote empty category.
+    this.view.addEmptyCategoryMessage();
+  } else {
+    // Categories/separators present.
+    for (var i = 0, item; item = tree.children[i]; i++) {
+      if (item.tagName == 'category') {
+      // If the element is a category, create a new category and switch to it.
+        this.createCategory(item.getAttribute('name'), false);
+        var category = this.model.getElementByIndex(i);
+        this.switchElement(category.id);
+
+        // Load all blocks in that category to the workspace to be evenly
+        // spaced and saved to that category.
+        for (var j = 0, blockXml; blockXml = item.children[j]; j++) {
+          Blockly.Xml.domToBlock(blockXml, this.toolboxWorkspace);
+        }
+
+        // Evenly space the blocks.
+        // TODO(evd2014): Change to cleanUp once cleanUp_ is made public in
+        // master.
+        this.toolboxWorkspace.cleanUp_();
+        // Set category color.
+        if (item.color) {
+          category.changeColor(item.color);
+        }
+      } else {
+      // If the element is a separator, add the separator and switch to it.
+        this.addSeparator();
+        this.switchElement(this.model.getElementByIndex(i).id);
+      }
+    }
+  }
+
+  this.updatePreview();
+};
+
+/**
+ * Clears the toolbox editing area completely, deleting all categories and all
+ * blocks in the model and view.
+ */
+FactoryController.prototype.clear = function() {
+  this.model.clearToolboxList();
+  this.view.clearToolboxTabs();
+  this.view.addEmptyCategoryMessage();
+  this.toolboxWorkspace.clear();
+  this.toolboxWorkspace.clearUndo();
   this.updatePreview();
 };

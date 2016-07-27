@@ -3,6 +3,7 @@
  * standard Blockly categories into the user's toolbox. The map is keyed by
  * the lower case name of the category, and contains the Category object for
  * that particular category.
+ * TODO(evd2014): Remove XY attributes and layout using cleanUp() instead.
  *
  * @author Emma Dauterman (evd2014)
  */

@@ -63,6 +63,33 @@ button:hover:not(:disabled)>* {
   opacity: 1;
 }
 
+label {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #eee;
+  color: #000;
+  font-size: large;
+  margin: 0 5px;
+  padding: 10px;
+}
+
+label:hover:not(:disabled) {
+  box-shadow: 2px 2px 5px #888;
+}
+
+label:disabled {
+  opacity: .6;
+}
+
+label>* {
+  opacity: .6;
+  vertical-align: text-bottom;
+}
+
+label:hover:not(:disabled)>* {
+  opacity: 1;
+}
+
 table {
   border: none;
   border-collapse: collapse;
@@ -73,6 +100,15 @@ table {
 td {
   padding: 0;
   vertical-align: top;
+}
+
+.inputfile {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  z-index: -1;
 }
 
 #toolbox_section {

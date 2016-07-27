@@ -248,6 +248,14 @@ FactoryModel.prototype.getCategoryIdByName = function(name) {
 };
 
 /**
+ * Clears the toolbox list, deleting all ListElements.
+ */
+FactoryModel.prototype.clearToolboxList = function() {
+  this.toolboxList = [];
+  // TODO: When merge changes, also clear shadowList.
+};
+
+/**
  * Class for a ListElement
  * @constructor
  */
@@ -282,6 +290,7 @@ ListElement.prototype.saveFromWorkspace = function(workspace) {
   }
   this.xml = Blockly.Xml.workspaceToDom(workspace);
 };
+
 
 /**
  * Changes the name of a category object given a new name. Returns if

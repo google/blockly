@@ -235,7 +235,7 @@ FactoryModel.prototype.copyElement = function(original) {
 
 
 /**
- * Class for a ListElement
+ * Class for a ListElement.
  * @constructor
  */
 ListElement = function(type, opt_name) {

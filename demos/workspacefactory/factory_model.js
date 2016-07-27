@@ -3,7 +3,6 @@
  * in workspace factory. Each category has a name, XML to load that category,
  * and a unique ID making it possible to change category names and move
  * categories easily. Also keeps track of the currently selected category.
- * Depends on standard_categories.js for standard Blockly categories. .
  *
  * @author Emma Dauterman (evd2014)
  */
@@ -245,21 +244,23 @@ FactoryModel.prototype.setCategoryColorById = function (id, color) {
 };
 
 /**
- * Sets the attributes of a category based on a stadard category given the
- * id of the category to update and the name of the standard category
- * (case insensitive).
+ * Given two categories, copies everything from the original to the copy except
+ * for the ID (which must stay unique between categories). Throws an error
+ * if either the original category or the category to be copied into are null.
  *
- * @param {!string} id The ID of the category to update.
- * @param {!string} name The name of the standard category to load.
+ * @param {!Category} copy The category that should be changed to mirror
+ * original.
+ * @param {!Category} original The category that should be copied into copy.
  */
-FactoryModel.prototype.loadStandardCategory = function(id, name) {
-  var category = this.getCategoryById(id);
-  if (!standardCategories[name.toLowerCase()]) {
-    throw new Error('Trying to load category that does not exist.');
+FactoryModel.prototype.copyCategory = function(copy, original) {
+  if (!copy || !original) {
+    throw new Error('Trying to copy null category.');
   }
-  category.xml = standardCategories[name.toLowerCase()].xml;
-  category.color = standardCategories[name.toLowerCase()].color;
-  category.custom = standardCategories[name.toLowerCase()].custom;
+  // Copy all attributes except ID.
+  copy.xml = original.xml;
+  copy.color = original.color;
+  copy.custom = original.custom;
+  copy.name = original.name;
 };
 
 /**

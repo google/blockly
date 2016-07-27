@@ -44,7 +44,6 @@ button {
   font-size: large;
   margin: 0 5px;
   padding: 10px;
-  z-index: -1;
 }
 
 button:hover:not(:disabled) {

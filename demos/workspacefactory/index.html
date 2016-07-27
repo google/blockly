@@ -473,11 +473,11 @@ goog.require('goog.ui.ColorPicker');
   };
   var newCategoryWrapper = function() {
     controller.addCategory();
-    document.getElementById('dropdown_add').classList.toggle("show");
+    document.getElementById('dropdown_add').classList.remove("show");
   };
   var loadCategoryWrapper = function() {
     controller.loadCategory();
-    document.getElementById('dropdown_add').classList.toggle("show");
+    document.getElementById('dropdown_add').classList.remove("show");
   };
   var removeWrapper = function() {
     controller.removeCategory();
@@ -499,7 +499,7 @@ goog.require('goog.ui.ColorPicker');
   };
   var nameWrapper = function() {
     controller.changeName();
-    document.getElementById('dropdown_edit').classList.toggle("show");
+    document.getElementById('dropdown_edit').classList.remove("show");
   };
 
   document.getElementById('button_add').addEventListener
@@ -533,7 +533,7 @@ goog.require('goog.ui.ColorPicker');
   popupPicker.setFocusable(true);
   goog.events.listen(popupPicker, 'change', function(e) {
         controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
-        document.getElementById('dropdown_edit').classList.toggle("show");
+        document.getElementById('dropdown_edit').classList.remove("show");
       });
   // Disable category editing buttons until categories are created.
   document.getElementById('button_remove').disabled = true;

@@ -379,16 +379,19 @@ FactoryController.prototype.loadCategory = function() {
       return;   // Exit if cancelled.
     }
   } while (!this.isStandardCategoryName(name));
+
   // Create an empty category in the model and view.
-  this.createCategory(name, this.model.getSelected() == null);
-  var id = this.model.getCategoryIdByName(name);
-  // Load attributes of standard category.
-  this.model.loadStandardCategory(id, name);
+  var standardCategory = this.standardCategories[name.toLowerCase()]
+  this.createCategory(standardCategory.name, this.model.getSelected() == null);
+  var id = this.model.getCategoryIdByName(standardCategory.name);
+  var newCategory = this.model.getCategoryById(id);
+  // Copy attributes of standard category to new category in the model.
+  this.model.copyCategory(newCategory, standardCategory);
   // Color the category tab in the view.
-  if (!this.model.getCategoryById(id).color) {
-    throw new Error("No color in pre-built category.");
+  if (!newCategory.color) {
+    throw new Error("No color in standard category.");
   }
-  this.view.setBorderColor(id, this.model.getCategoryById(id).color);
+  this.view.setBorderColor(id, newCategory.color);
   // Switch to loaded category.
   this.switchCategory(id);
   // Update preview.
@@ -404,7 +407,7 @@ FactoryController.prototype.loadCategory = function() {
  * @return {boolean} True if name is a standard category name, false otherwise.
  */
 FactoryController.prototype.isStandardCategoryName = function(name) {
-  for (var category in standardCategories) {
+  for (var category in this.standardCategories) {
     if (name.toLowerCase() == category) {
       return true;
     }

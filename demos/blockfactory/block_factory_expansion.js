@@ -1,25 +1,23 @@
 /**
- * @fileoverview Defines the init function called on load of the Block
- * Factory Page and binds it to the onload event as its handler.
+ * @fileoverview Uses the BlockFactoryExpansion namespace and defines the init
+ * function called on load of the BlockFactory Page and binds it to the onload
+ * event as its handler.
  *
  * @author quachtina96 (Tina Quach)
  */
-
+goog.provide('BlockFactoryExpansion');
 goog.require('BlockFactory');
-goog.require('BlockLibrary');
-goog.require('BlockLibrary.UI');
-goog.require('BlockLibrary.Storage');
 goog.require('BlockLibrary.Controller');
-goog.require('BlockExporter');
-goog.require('BlockExporter.Tools');
-goog.require('BlockExporter.View');
+goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
 
+BlockFactoryExpansion.blockLibraryName = null;
+BlockFactoryExpansion.exporter = null;
 
 /**
  * Initialize Blockly and layout.  Called on page load.
  */
-function init() {
+BlockFactoryExpansion.init = function() {
   if ('BlocklyStorage' in window) {
     BlocklyStorage.HTTPREQUEST_ERROR =
         'There was a problem with the request.\n';
@@ -34,19 +32,22 @@ function init() {
     linkButton.addEventListener('click',
         function() {
             BlocklyStorage.link(BlockLibrary.Controller.mainWorkspace);});
-    BlockLibrary.Controller.disableEnableLink();
+    BlockFactory.disableEnableLink();
   }
 
   // Initialize Block Library and Exporter.
-  BlockLibrary.name = 'blockLibrary';
-  BlockLibrary.Controller.populateBlockLibrary(BlockLibrary.name);
-  BlockExporter.view = new BlockExporter.View('blockLibraryExporter',
-      BlockLibrary.Controller.storage);
+  BlockFactoryExpansion.blockLibraryName = 'blockLibrary';
+  BlockLibrary.Controller.populateBlockLibrary(
+      BlockFactoryExpansion.blockLibraryName);
+  BlockFactoryExpansion.exporter = new BlockExporterController(
+      'blockLibraryExporter', BlockLibrary.Controller.storage);
 
+  // Assign button click handlers for Block Exporter.
   document.getElementById('exporterSubmitButton').addEventListener('click',
       function() {
         var boundExportBlocks =
-            BlockExporter.view.exportBlocks.bind(BlockExporter.view);
+            BlockFactoryExpansion.exporter.exportBlocks.bind(
+                BlockFactoryExpansion.exporter);
         boundExportBlocks();
       });
 
@@ -114,8 +115,7 @@ function init() {
        toolbox: toolbox,
        media: '../../media/'});
 
-  // Add Tab handlers
-  /**
+/**
  * Add tab handlers to allow switching between the Block Factory
  * tab and the Block Exporter tab.
  *
@@ -134,8 +134,9 @@ function init() {
 
             // Hide container of exporter.
             BlockFactory.hide('blockLibraryExporter');
-            window.dispatchEvent(new Event('resize'));
 
+            // Resize to render workspaces' toolboxes correctly.
+            window.dispatchEvent(new Event('resize'));
           });
 
         blockExporterTab.addEventListener('click',
@@ -144,11 +145,12 @@ function init() {
             goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
             // Update toolbox to reflect current block library.
-            BlockExporter.view.updateToolbox();
-            BlockExporter.view.renderToolbox();
+            BlockFactoryExpansion.exporter.updateToolbox();
 
             // Show container of exporter.
             BlockFactory.show('blockLibraryExporter');
+
+            // Resize to render workspaces' toolboxes correctly.
             window.dispatchEvent(new Event('resize'));
           });
       };
@@ -177,5 +179,5 @@ function init() {
       .addEventListener('change', BlockFactory.formatChange);
   document.getElementById('language')
       .addEventListener('change', BlockFactory.updatePreview);
-}
-window.addEventListener('load', init);
+};
+window.addEventListener('load', BlockFactoryExpansion.init);

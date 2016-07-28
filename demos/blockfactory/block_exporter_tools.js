@@ -8,9 +8,8 @@
  */
 'use strict';
 
-goog.provide('BlockExporter.Tools');
+goog.provide('BlockExporterTools');
 
-goog.require('BlockExporter');
 goog.require('BlockFactory');
 goog.require('BlockLibrary.Controller');
 goog.require('goog.dom');
@@ -23,7 +22,7 @@ goog.require('goog.dom');
 * @param {string} hiddenWorkspaceContainerID - ID of div element to contain the
 * exporter's hidden workspace
 */
-BlockExporter.Tools = function() {
+BlockExporterTools = function() {
   // Create container for hidden workspace
   this.container = goog.dom.createDom('div',
     {
@@ -47,27 +46,36 @@ BlockExporter.Tools = function() {
 /**
  * Return the given language code of each block type in an array.
  *
- * @param {string[]} blockTypes - array of block types for which to get block
- * definitions
+ * @param {string[]} blockTypes - array of block types for which to generate
+ * block definitions
+ * @param {string[]} blockXmls - corresponding array of blockXmls from which to
+ * generate block definitions
  * @param {string} definitionFormat - 'JSON' or 'JavaScript'
  * @return {string} in the desired format, the concatenation of each block's
  * language code.
  */
-BlockExporter.Tools.prototype.getBlockDefs =
-    function(blockTypes, definitionFormat) {
+BlockExporterTools.prototype.getBlockDefs =
+    function(blockTypes, blockXmls, definitionFormat) {
   var blockCode = [];
-  for (var i = 0; i < blockTypes.length; i++) {
+  for (var i = 0; i < blockXmls.length; i++) {
     var blockType = blockTypes[i];
-    var xml = BlockLibrary.Controller.storage.getBlockXML(blockType);
-
-    // Render and get block from hidden workspace.
-    this.hiddenWorkspace.clear();
-    Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
-    var rootBlock = BlockFactory.getRootBlock(this.hiddenWorkspace);
-    // Generate the block's definition.
-    var code =
-        BlockFactory.getBlockDefinition(blockType, rootBlock, definitionFormat);
-    // Add block's definition to the definitions to return.
+    var xml = blockXmls[i];
+    if (xml) {
+      // Render and get block from hidden workspace.
+      this.hiddenWorkspace.clear();
+      Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
+      var rootBlock = BlockFactory.getRootBlock(this.hiddenWorkspace);
+      // Generate the block's definition.
+      var code =
+          BlockFactory.getBlockDefinition(blockType, rootBlock, definitionFormat);
+      // Add block's definition to the definitions to return.
+    } else {
+      // Append warning comment and write to console.
+      var code = '// No block definition generated for ' + blockTypes[i] +
+        '. Block was not found in Block Library Storage.';
+      console.log('No block definition generated for ' + blockTypes[i] +
+        '. Block was not found in Block Library Storage.');
+    }
     blockCode.push(code);
   }
   return blockCode.join("\n\n");
@@ -76,30 +84,41 @@ BlockExporter.Tools.prototype.getBlockDefs =
 /**
  * Return the generator code of each block type in an array in a given language.
  *
- * @param {string[]} blockTypes - array of block types for which to get block
- * definitions
+ * @param {string[]} blockTypes - array of block types for which to generate
+ * block definitions
+ * @param {string[]} blockXmls - corresponding array of blockXmls from which to
+ * generate block definitions
  * @param {string} generatorLanguage - e.g.'JavaScript', 'Python', 'PHP', 'Lua',
  *     'Dart'
  * @return {string} in the desired format, the concatenation of each block's
  * generator code.
  */
-BlockExporter.Tools.prototype.getGeneratorCode =
-    function(blockTypes, generatorLanguage) {
+BlockExporterTools.prototype.getGeneratorCode =
+    function(blockTypes, blockXmls, generatorLanguage) {
   var multiblockCode = [];
   // Define the custom blocks in order to be able to create instances of them in
   // the exporter workspace.
-  var blockDefs = this.getBlockDefs(blockTypes, 'JavaScript');
+  var blockDefs = this.getBlockDefs(blockTypes, blockXmls, 'JavaScript');
   eval(blockDefs);
 
   for (var i = 0; i < blockTypes.length; i++) {
     var blockType = blockTypes[i];
-    // Render the preview block in the hidden workspace.
-    this.hiddenWorkspace.clear();
-    var tempBlock = this.hiddenWorkspace.newBlock(blockType);
-    this.hiddenWorkspace.clearUndo();
-    // Get generator stub for the given block and add to  generator code.
-    var blockGenCode =
-        BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
+    var xml = blockXmls[i];
+    if (xml) {
+      // Render the preview block in the hidden workspace.
+      this.hiddenWorkspace.clear();
+      var tempBlock = this.hiddenWorkspace.newBlock(blockType);
+      this.hiddenWorkspace.clearUndo();
+      // Get generator stub for the given block and add to  generator code.
+      var blockGenCode =
+          BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
+    } else {
+      // Append warning comment and write to console.
+      var blockGenCode = '// No generator stub generated for ' + blockTypes[i] +
+        '. Block was not found in Block Library Storage.';
+      console.log('No block generator stub generated for ' + blockTypes[i] +
+        '. Block was not found in Block Library Storage.');
+    }
     multiblockCode.push(blockGenCode);
   }
   return multiblockCode.join("\n\n");

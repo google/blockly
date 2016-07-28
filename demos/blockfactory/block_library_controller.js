@@ -14,10 +14,13 @@
 
 goog.provide('BlockLibrary.Controller');
 
-goog.require('BlockLibrary');
 goog.require('BlockLibrary.Storage');
 goog.require('BlockLibrary.UI');
 goog.require('BlockFactory');
+
+// Block Library Storage object, initialized with populateBlockLibrary function.
+BlockLibrary.Controller.storage = null;
+BlockLibrary.Controller.name = null;
 
 /**
  * Returns the block type of the block the user is building.
@@ -40,7 +43,7 @@ BlockLibrary.Controller.removeFromBlockLibrary = function() {
   var blockType = BlockLibrary.Controller.getCurrentBlockType();
   BlockLibrary.Controller.storage.removeBlock(blockType);
   BlockLibrary.Controller.storage.saveToLocalStorage();
-  BlockLibrary.Controller.populateBlockLibrary(BlockLibrary.name);
+  BlockLibrary.Controller.populateBlockLibrary(BlockLibrary.Controller.name);
 };
 
 /**
@@ -49,7 +52,7 @@ BlockLibrary.Controller.removeFromBlockLibrary = function() {
  * @param {string} blockType - block to edit on block factory
  */
 BlockLibrary.Controller.openBlock = function(blockType) {
-   var xml = BlockLibrary.Controller.storage.getBlockXML(blockType);
+   var xml = BlockLibrary.Controller.storage.getBlockXml(blockType);
    BlockFactory.mainWorkspace.clear();
    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
  };
@@ -109,7 +112,10 @@ BlockLibrary.Controller.isInBlockLibrary = function(blockType) {
  * @param {string} libraryName - name of Block Library
  */
 BlockLibrary.Controller.populateBlockLibrary = function(libraryName) {
+  // Create a new, empty Block Library Storage object, or load existing one.
   BlockLibrary.Controller.storage = new BlockLibrary.Storage(libraryName);
+  BlockLibrary.Controller.name = libraryName;
+
   if (BlockLibrary.Controller.storage.isEmpty()) {
     alert('Your block library is empty! Click "Save to Block Library" so ' +
          'you can reopen it the next time you visit Block Factory!');

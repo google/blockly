@@ -829,9 +829,11 @@ BlockFactory.saveWorkspaceToFile = function() {
 BlockFactory.disableEnableLink = function() {
   var linkButton = document.getElementById('linkButton');
   var saveBlockButton = document.getElementById('localSaveButton');
+  var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
   var disabled = document.getElementById('format').value == 'Manual';
-  linkButton.disabled = buttonDisabled;
-  saveBlockButton.disabled = buttonDisabled;
+  linkButton.disabled = disabled;
+  saveBlockButton.disabled = disabled;
+  saveToLibButton.disabled = disabled;
 };
 
 /**

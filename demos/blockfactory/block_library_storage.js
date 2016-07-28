@@ -8,7 +8,6 @@
 'use strict';
 
 goog.provide('BlockLibrary.Storage');
-goog.require('BlockLibrary');
 
 /**
  * Represents a block library's storage.
@@ -92,10 +91,38 @@ BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
  * @param {string} blockType - type of block
  * @return {Element} the xml that represents the block type or null
  */
-BlockLibrary.Storage.prototype.getBlockXML = function(blockType) {
-  var xmlText = this.blocks[blockType];
-  var xml = Blockly.Xml.textToDom(xmlText) || null;
+BlockLibrary.Storage.prototype.getBlockXml = function(blockType) {
+  var xml = this.blocks[blockType] || null;
+  if (xml) {
+    var xml = Blockly.Xml.textToDom(xml);
+  }
   return xml;
+};
+
+/**
+ * Returns array of xmls of given block types stored in current block library
+ * (this.blocks).
+ *
+ * @param {string} blockType - type of block
+ * @return {!Array.<Element>} array of xmls that represents the block types
+ * or null if that block isn't stored in library
+ */
+BlockLibrary.Storage.prototype.getBlockXmls = function(blockTypes) {
+  var blockXmls = [];
+  for (var i = 0; i < blockTypes.length; i++) {
+    var xml = this.getBlockXml(blockTypes[i]);
+    blockXmls.push(xml);
+  }
+  return blockXmls;
+};
+
+/**
+ * Returns array of all block types stored in current block library.
+ *
+ * @return {!Array.<string>} array of block types stored in library
+ */
+BlockLibrary.Storage.prototype.getBlockTypes = function() {
+  return Object.keys(this.blocks);
 };
 
 /**

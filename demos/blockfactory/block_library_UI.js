@@ -8,7 +8,6 @@
 'use strict';
 
 goog.provide('BlockLibrary.UI');
-goog.require('BlockLibrary');
 
 /**
  * Creates a node of a given element type and appends to the node with given id.

@@ -151,3 +151,40 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
   this.view.setToolbox(updatedToolbox);
   this.view.renderToolbox(updatedToolbox);
 };
+
+/**
+ * Disable block in selector workspace's toolbox.
+ *
+ * @param {blockType}
+ */
+BlockExporterController.prototype.disableBlock = function(blockType) {
+  var oldToolboxXml = BlockExporterController.view.toolbox;
+
+  // TODO(quacht): implement
+};
+
+/**
+ * Enable block in selector workspace's toolbox.
+ *
+ * @param {blockType}
+ */
+BlockExporterController.prototype.enableBlock = function(blockType) {
+// TODO(quacht): implement
+};
+
+BlockExporterController.prototype.onSelectBlockForExport = function(event) {
+  // Disable the selected block. Users can only export one copy of starter code
+  // per block.
+  // Edit helper text (currently selected)
+};
+
+BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
+  // Enable the selected block. Users can only export one copy of starter code
+  // per block.
+  // Edit helper text (currently selected)
+};
+
+// need to add change listener to the view object
+BlockExporterController.view.selectorWorkspace.addChangeListener(onSelectBlockForExport);
+BlockExporterController.view.selectorWorkspace.addChangeListener(onDeselectBlockForExport);
+

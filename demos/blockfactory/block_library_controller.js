@@ -18,16 +18,27 @@ goog.require('BlockLibrary.Storage');
 goog.require('BlockLibrary.UI');
 goog.require('BlockFactory');
 
-// Block Library Storage object, initialized with populateBlockLibrary function.
-BlockLibrary.Controller.storage = null;
-BlockLibrary.Controller.name = null;
+/**
+ * Block Library Controller Class
+ * @constructor
+ *
+ * @param {string} blockLibraryName - desired name of Block Library, also used
+ * to create the key for where it's stored in local storage.
+ * @param {blockLibrary} blockLibraryName - desired name of Block Library, also used
+ * to create the key for where it's stored in local storage.
+ */
+BlockLibrary.Controller = function(blockLibraryName) {
+  this.name = blockLibraryName;
+  // Create a new, empty Block Library Storage object, or load existing one.
+  this.storage = new BlockLibrary.Storage(this.name);
+};
 
 /**
  * Returns the block type of the block the user is building.
  *
  * @return {string} the current block's type
  */
-BlockLibrary.Controller.getCurrentBlockType = function() {
+BlockLibrary.Controller.prototype.getCurrentBlockType = function() {
   var rootBlock = BlockFactory.getRootBlock(BlockFactory.mainWorkspace);
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   // Replace white space with underscores
@@ -39,11 +50,11 @@ BlockLibrary.Controller.getCurrentBlockType = function() {
  *
  * @param {string} blockType - type of block
  */
-BlockLibrary.Controller.removeFromBlockLibrary = function() {
-  var blockType = BlockLibrary.Controller.getCurrentBlockType();
-  BlockLibrary.Controller.storage.removeBlock(blockType);
-  BlockLibrary.Controller.storage.saveToLocalStorage();
-  BlockLibrary.Controller.populateBlockLibrary(BlockLibrary.Controller.name);
+BlockLibrary.Controller.prototype.removeFromBlockLibrary = function() {
+  var blockType = this.getCurrentBlockType();
+  this.storage.removeBlock(blockType);
+  this.storage.saveToLocalStorage();
+  this.populateBlockLibrary();
 };
 
 /**
@@ -51,8 +62,8 @@ BlockLibrary.Controller.removeFromBlockLibrary = function() {
  *
  * @param {string} blockType - block to edit on block factory
  */
-BlockLibrary.Controller.openBlock = function(blockType) {
-   var xml = BlockLibrary.Controller.storage.getBlockXml(blockType);
+BlockLibrary.Controller.prototype.openBlock = function(blockType) {
+   var xml = this.storage.getBlockXml(blockType);
    BlockFactory.mainWorkspace.clear();
    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
  };
@@ -62,20 +73,20 @@ BlockLibrary.Controller.openBlock = function(blockType) {
  *
  * @param {Element} blockLibraryDropdown - your block library dropdown
  */
-BlockLibrary.Controller.onSelectedBlockChanged = function(blockLibraryDropdown) {
+BlockLibrary.Controller.prototype.onSelectedBlockChanged = function(blockLibraryDropdown) {
   var blockType = BlockLibrary.UI.getSelected(blockLibraryDropdown);
-  BlockLibrary.Controller.openBlock(blockType);
+  this.openBlock(blockType);
 };
 
 /**
  * Clears the block library in local storage and updates the dropdown.
  */
-BlockLibrary.Controller.clearBlockLibrary = function() {
+BlockLibrary.Controller.prototype.clearBlockLibrary = function() {
   var check = prompt(
       'Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes") {
-    BlockLibrary.Controller.storage.clear();
-    BlockLibrary.Controller.storage.saveToLocalStorage();
+    this.storage.clear();
+    this.storage.saveToLocalStorage();
     BlockLibrary.UI.clearOptions('blockLibraryDropdown');
   }
 };
@@ -83,15 +94,15 @@ BlockLibrary.Controller.clearBlockLibrary = function() {
 /**
  * Saves current block to local storage and updates dropdown.
  */
-BlockLibrary.Controller.saveToBlockLibrary = function() {
-  var blockType = BlockLibrary.Controller.getCurrentBlockType();
-  if (BlockLibrary.Controller.isInBlockLibrary(blockType)) {
+BlockLibrary.Controller.prototype.saveToBlockLibrary = function() {
+  var blockType = this.getCurrentBlockType();
+  if (this.isInBlockLibrary(blockType)) {
     alert('You already have a block called ' + blockType + ' in your library.' +
       ' Please rename your block or delete the old one.');
   } else {
     var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
-    BlockLibrary.Controller.storage.addBlock(blockType, xmlElement);
-    BlockLibrary.Controller.storage.saveToLocalStorage();
+    this.storage.addBlock(blockType, xmlElement);
+    this.storage.saveToLocalStorage();
     BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown', true);
   }
 };
@@ -102,26 +113,21 @@ BlockLibrary.Controller.saveToBlockLibrary = function() {
  * @param {string} blockType - type of block
  * @return {boolean} indicates whether or not block is in the library
  */
-BlockLibrary.Controller.isInBlockLibrary = function(blockType) {
-  var blockLibrary = BlockLibrary.Controller.storage.blocks;
+BlockLibrary.Controller.prototype.isInBlockLibrary = function(blockType) {
+  var blockLibrary = this.storage.blocks;
   return (blockType in blockLibrary && blockLibrary[blockType] != null);
 };
 
 /**
- * Loads block library from local storage and populates the dropdown menu.
- * @param {string} libraryName - name of Block Library
+ *  Populates the dropdown menu.
  */
-BlockLibrary.Controller.populateBlockLibrary = function(libraryName) {
-  // Create a new, empty Block Library Storage object, or load existing one.
-  BlockLibrary.Controller.storage = new BlockLibrary.Storage(libraryName);
-  BlockLibrary.Controller.name = libraryName;
-
-  if (BlockLibrary.Controller.storage.isEmpty()) {
+BlockLibrary.Controller.prototype.populateBlockLibrary = function() {
+  if (this.storage.isEmpty()) {
     alert('Your block library is empty! Click "Save to Block Library" so ' +
          'you can reopen it the next time you visit Block Factory!');
   }
   BlockLibrary.UI.clearOptions('blockLibraryDropdown');
-  var blockLibrary = BlockLibrary.Controller.storage.blocks;
+  var blockLibrary = this.storage.blocks;
   for (var block in blockLibrary) {
     // Make sure the block wasn't deleted.
     if (blockLibrary[block] != null) {

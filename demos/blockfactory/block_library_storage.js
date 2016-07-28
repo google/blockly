@@ -34,10 +34,7 @@ BlockLibrary.Storage = function(blockLibraryName) {
 
 /**
  * Reads the named block library from local storage and saves it in this.blocks.
- * @private
- * TODO(quacht): add semicolon to the end
  */
-
 BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
   // goog.global is synonymous to window, and  allows for flexibility
   // between browsers.
@@ -47,8 +44,6 @@ BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
 
 /**
  * Writes the current block library (this.blocks) to local storage.
- * @private
- * TODO(quacht): add semicolon to the end
  */
 BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
   goog.global.localStorage[this.name] = JSON.stringify(this.blocks);

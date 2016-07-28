@@ -35,15 +35,19 @@ BlockFactoryExpansion.init = function() {
     BlockFactory.disableEnableLink();
   }
 
-  // Initialize Block Library and Exporter.
+  // Initialize Block Library
   BlockFactoryExpansion.blockLibraryName = 'blockLibrary';
-  BlockLibrary.Controller.populateBlockLibrary(
-      BlockFactoryExpansion.blockLibraryName);
+  BlockFactoryExpansion.blockLibrary =
+      new BlockLibrary.Controller(BlockFactoryExpansion.blockLibraryName);
+  BlockFactoryExpansion.blockLibrary.populateBlockLibrary();
+
+  // Initialize Block Exporter
   BlockFactoryExpansion.exporter = new BlockExporterController(
-      'blockLibraryExporter', BlockLibrary.Controller.storage);
+      'blockLibraryExporter', BlockFactoryExpansion.blockLibrary.storage);
 
   // Assign button click handlers for Block Exporter.
   document.getElementById('exporterSubmitButton').addEventListener('click',
+      // Bind exporter instance to 'this' for the function.
       function() {
         var boundExportBlocks =
             BlockFactoryExpansion.exporter.exportBlocks.bind(
@@ -52,14 +56,33 @@ BlockFactoryExpansion.init = function() {
       });
 
   // Assign button click handlers for Block Library.
-  document.getElementById('saveToBlockLibraryButton')
-    .addEventListener('click', BlockLibrary.Controller.saveToBlockLibrary);
+  document.getElementById('saveToBlockLibraryButton').addEventListener('click',
+      // Bind Block Library instance to 'this' for the function.
+      function() {
+        var boundSaveToLib =
+            BlockFactoryExpansion.blockLibrary.saveToBlockLibrary.bind(
+                BlockFactoryExpansion.blockLibrary);
+        boundSaveToLib();
+      });
 
-  document.getElementById('clearBlockLibraryButton')
-    .addEventListener('click', BlockLibrary.Controller.clearBlockLibrary);
+  document.getElementById('removeBlockFromLibraryButton').addEventListener(
+    'click',
+      // Bind Block Library instance to 'this' for the function.
+      function() {
+        var boundRemoveFromLib =
+            BlockFactoryExpansion.blockLibrary.removeFromBlockLibrary.bind(
+                BlockFactoryExpansion.blockLibrary);
+        boundRemoveFromLib();
+      });
 
-  document.getElementById('removeBlockFromLibraryButton')
-    .addEventListener('click', BlockLibrary.Controller.removeFromBlockLibrary);
+  document.getElementById('clearBlockLibraryButton').addEventListener('click',
+      // Bind Block Library instance to 'this' for the function.
+      function() {
+        var boundClearLib =
+            BlockFactoryExpansion.blockLibrary.clearBlockLibrary.bind(
+                BlockFactoryExpansion.blockLibrary);
+        boundClearLib();
+      });
 
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')

@@ -43,7 +43,6 @@ BlockExporterController.prototype.initializeAllBlocks =
       var blockXmls = this.blockLibStorage.getBlockXmls(allBlockTypes);
       var blockDefs =
           this.tools.getBlockDefs(allBlockTypes, blockXmls, 'JavaScript');
-      console.log(blockDefs);
       eval(blockDefs);
     };
 

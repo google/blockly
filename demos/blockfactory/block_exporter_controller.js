@@ -194,18 +194,35 @@ BlockExporterController.prototype.enableBlock = function(blockType) {
 };
 
 BlockExporterController.prototype.onSelectBlockForExport = function(event) {
-  // Disable the selected block. Users can only export one copy of starter code
-  // per block.
-  // Edit helper text (currently selected)
+  // BUG: this is currently undefined
+  if (event.type == Blockly.Events.CREATE) {
+    // Get type of block created.
+    var blockType = this.view.selectorWorkspace.getBlockById(event.blockId);
+    // Disable the selected block. Users can only export one copy of starter code
+    // per block.
+    this.disableBlock(blockType);
+    // Edit helper text (currently selected)
+    this.view.updateHelperText('Currently Selected:' +
+        this.getSelectedBlockTypes());
+  }
 };
 
 BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
-  // Enable the selected block. Users can only export one copy of starter code
-  // per block.
-  // Edit helper text (currently selected)
+  // this is currently undefined.
+  if (event.type == Blockly.Events.DELETE) {
+    // Get type of block created.
+    var blockType = this.view.selectorWorkspace.getBlockById(event.blockId);
+    // Enable the deselected block.
+    this.enableBlock(blockType);
+    // Edit helper text (currently selected)
+    this.view.updateHelperText('Currently Selected:' +
+        this.getSelectedBlockTypes());
+  }
 };
 
-// // need to add change listener to the view object
-// this.view.selectorWorkspace.addChangeListener(onSelectBlockForExport);
-// this.view.selectorWorkspace.addChangeListener(onDeselectBlockForExport);
+BlockExporterController.prototype.addChangeListeners = function() {
+  this.view.selectorWorkspace.addChangeListener(this.onSelectBlockForExport);
+  this.view.selectorWorkspace.addChangeListener(this.onDeselectBlockForExport);
+};
+
 

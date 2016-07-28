@@ -42,6 +42,7 @@ BlockFactoryExpansion.init = function() {
   BlockFactoryExpansion.exporter = new BlockExporterController(
       'blockLibraryExporter', BlockLibrary.Controller.storage);
 
+  BlockFactoryExpansion.exporter.addChangeListeners();
   // Assign button click handlers for Block Exporter.
   document.getElementById('exporterSubmitButton').addEventListener('click',
       function() {

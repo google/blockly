@@ -24,7 +24,7 @@ FactoryGenerator = function(model, toolboxWorkspace) {
  * @param {!Array.<!Blockly.Block>} topBlocks top level blocks to add to xmlDom
  */
 FactoryGenerator.prototype.categoryWorkspaceToDom = function(xmlDom, blocks) {
-  for (var i  =0, block; block = blocks[i]; i++) {
+  for (var i = 0, block; block = blocks[i]; i++) {
     var blockChild = Blockly.Xml.blockToDom(block);
     blockChild.removeAttribute('id');
     xmlDom.appendChild(blockChild);
@@ -50,8 +50,7 @@ FactoryGenerator.prototype.generateConfigXml = function() {
       });
   // If no categories, use XML directly from workspace
   if (!this.model.hasCategories()) {
-    this.categoryWorkspaceToDom(xmlDom,
-        toolboxWorkspace.getTopBlocks());
+    this.categoryWorkspaceToDom(xmlDom, this.toolboxWorkspace.getTopBlocks());
   }
   else {
     // Assert that selected != null
@@ -73,6 +72,10 @@ FactoryGenerator.prototype.generateConfigXml = function() {
       // Add a colour attribute if one exists.
       if (category.color != null) {
         categoryElement.setAttribute('colour', category.color);
+      }
+      // Add a custom attribute if one exists.
+      if (category.custom != null) {
+        categoryElement.setAttribute('custom', category.custom);
       }
       // Load that category to workspace.
       this.toolboxWorkspace.clear();

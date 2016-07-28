@@ -241,7 +241,29 @@ FactoryModel.prototype.getCategoryIdByName = function(name) {
 FactoryModel.prototype.setCategoryColorById = function (id, color) {
   var category = this.getCategoryById(id);
   category.color = color;
-}
+};
+
+/**
+ * Makes a copy of the original category, adds it to the categoryList, and
+ * returns it. Everything about the copy is identical except for its ID. Throws
+ * an error if the original category is null.
+ *
+ * @param {!Category} original The category that should be copied.
+ * @return {!Category} The copy of original.
+ */
+FactoryModel.prototype.copyCategory = function(original) {
+  if (!original) {
+    throw new Error('Trying to copy null category.');
+  }
+  copy = new Category(original.name);
+  // Copy all attributes except ID.
+  copy.xml = original.xml;
+  copy.color = original.color;
+  copy.custom = original.custom;
+  // Add copy to the category list and return it.
+  this.categoryList.push(copy);
+  return copy;
+};
 
 /**
  * Class for a Category
@@ -256,4 +278,6 @@ Category = function(name) {
   this.id = Blockly.genUid();
   // Color of category. Default is no color.
   this.color = null;
+  // Stores a custom tag, if necessary. Null if no custom tag.
+  this.custom = null;
 };

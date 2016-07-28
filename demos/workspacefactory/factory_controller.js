@@ -2,7 +2,8 @@
  * @fileoverview Contains the controller code for workspace factory. Depends
  * on the model and view objects (created as internal variables) and interacts
  * with previewWorkspace and toolboxWorkspace (internal references stored to
- * both). Provides the functionality for the actions the user can initiate:
+ * both). Also depends on standard_categories.js for standard Blockly
+ * categories. Provides the functionality for the actions the user can initiate:
  * - adding and removing categories
  * - switching between categories
  * - printing and downloading configuration xml
@@ -55,7 +56,8 @@ FactoryController.prototype.addCategory = function() {
       if (!name) {  // Exit if cancelled.
         return;
       }
-      this.createCategory(name, true);
+      this.model.addNewCategoryEntry(name);
+      this.addCategoryToView(name, this.model.getCategoryIdByName(name), true);
       this.model.setSelectedById(this.model.getCategoryIdByName(name));
     }
   }
@@ -67,34 +69,36 @@ FactoryController.prototype.addCategory = function() {
     return;
   }
   // Create category.
- this.createCategory(name, firstCategory);
+  this.model.addNewCategoryEntry(name);
+  this.addCategoryToView(name, this.model.getCategoryIdByName(name),
+      firstCategory);
   // Switch to category.
   this.switchCategory(this.model.getCategoryIdByName(name));
+  // Update preview.
+  this.updatePreview();
 };
 
 /**
- * Helper method for addCategory. Creates a category given a name and a boolean
- * for if it's the first category created. Updates the model and the view but
- * doesn't switch to the category.
+ * Helper method for addCategory. Adds a category to the view given a name, ID,
+ * and a boolean for if it's the first category created. Assumes the category
+ * has already been created in the model. Does not switch to category.
  *
- * @param {!string} name Name of category to be created
- * @param {boolean} firstCategory true if it's the first category created,
- * false otherwise
+ * @param {!string} name Name of category being added.
+ * @param {!string} id The ID of the category being added.
+ * @param {boolean} firstCategory True if it's the first category created,
+ * false otherwise.
  */
 
-FactoryController.prototype.createCategory = function(name, firstCategory) {
-  // Create empty category
-  this.model.addNewCategoryEntry(name);
-  // Create new category.
-  var tab = this.view.addCategoryRow(name, this.model.getCategoryIdByName(name),
-      firstCategory);
+FactoryController.prototype.addCategoryToView = function(name, id,
+    firstCategory) {
+  var tab = this.view.addCategoryRow(name, id, firstCategory);
   var self = this;
   var clickFunction = function(id) {  // Keep this in scope for switchCategory
     return function() {
       self.switchCategory(id);
     };
   };
-  this.view.bindClick(tab, clickFunction(this.model.getCategoryIdByName(name)));
+  this.view.bindClick(tab, clickFunction(id));
 }
 
 /**
@@ -132,6 +136,8 @@ FactoryController.prototype.removeCategory = function() {
     alert('You currently have no categories. All your blocks will be ' +
         'displayed in a single flyout.');
   }
+  // Update preview.
+  this.updatePreview();
 };
 
 /**
@@ -222,12 +228,17 @@ FactoryController.prototype.printConfig = function() {
 };
 
 /**
- * Tied to "Update Preview" button. Updates the preview workspace based on
- * the toolbox workspace. If switching from no categories to categories or
- * categories to no categories, reinjects Blockly with reinjectPreview,
- * otherwise just updates without reinjecting.
+ * Updates the preview workspace based on the toolbox workspace. If switching
+ * from no categories to categories or categories to no categories, reinjects
+ * Blockly with reinjectPreview, otherwise just updates without reinjecting.
+ * Called whenever a category is created, removed, or modified and when
+ * Blockly move and delete events are fired. Do not call on create events
+ * or disabling will cause the user to "drop" their current blocks.
  */
 FactoryController.prototype.updatePreview = function() {
+  // Disable events to stop updatePreview from recursively calling itself
+  // through event handlers.
+  Blockly.Events.disable();
   var tree = Blockly.Options.parseToolboxTree
       (this.generator.generateConfigXml());
   // No categories, creates a simple flyout.
@@ -245,6 +256,8 @@ FactoryController.prototype.updatePreview = function() {
       this.previewWorkspace.toolbox_.populate_(tree);
     }
   }
+  // Reenable events.
+  Blockly.Events.enable();
 };
 
 /**
@@ -291,6 +304,8 @@ FactoryController.prototype.changeName = function() {
   // Change category name.
   this.model.changeCategoryName(newName, this.model.getSelected());
   this.view.updateCategoryName(newName, this.model.getSelectedId());
+  // Update preview.
+  this.updatePreview();
 };
 
 /**
@@ -319,6 +334,8 @@ FactoryController.prototype.moveCategory = function(offset) {
   this.moveCategoryToIndex(curr, swapIndex, currIndex);
   // Update category editing buttons.
   this.view.updateState(swapIndex);
+  // Update preview.
+  this.updatePreview();
 };
 
 /**
@@ -345,4 +362,53 @@ FactoryController.prototype.changeSelectedCategoryColor = function(color) {
   var selectedId = this.model.getSelectedId();
   this.model.setCategoryColorById(selectedId, color);
   this.view.setBorderColor(selectedId, color);
+  this.updatePreview();
+};
+
+/**
+ * Tied to the "Pre-existing Category" dropdown option, this function prompts
+ * the user for a name of a standard Blockly category (case insensitive) and
+ * loads it as a new category and switches to it. Leverages standardCategories
+ * map in standard_categories.js.
+ */
+FactoryController.prototype.loadCategory = function() {
+  // Prompt user for the name of the standard category to load.
+  do {
+    var name = prompt('Enter the name of the category you would like to import '
+        + '(Logic, Loops, Math, Text, Lists, Colour, Variables, or Functions)');
+    if (!name) {
+      return;   // Exit if cancelled.
+    }
+  } while (!this.isStandardCategoryName(name));
+
+  // Copy the standard category in the model.
+  var standardCategory = this.standardCategories[name.toLowerCase()];
+  var copy = this.model.copyCategory(standardCategory);
+  // Update the copy in the view.
+  this.addCategoryToView(copy.name, copy.id, this.model.getSelected() == null);
+  // Color the category tab in the view.
+  if (copy.color) {
+    this.view.setBorderColor(copy.id, copy.color);
+  }
+  // Switch to loaded category.
+  this.switchCategory(copy.id);
+  // Update preview.
+  this.updatePreview();
+};
+
+/**
+ * Given the name of a category, determines if it's the name of a standard
+ * category (case insensitive).
+ *
+ * @param {string} name The name of the category that should be checked if it's
+ * in standardCategories
+ * @return {boolean} True if name is a standard category name, false otherwise.
+ */
+FactoryController.prototype.isStandardCategoryName = function(name) {
+  for (var category in this.standardCategories) {
+    if (name.toLowerCase() == category) {
+      return true;
+    }
+  }
+  return false;
 };

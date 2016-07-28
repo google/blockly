@@ -9,6 +9,7 @@
 <script src="factory_controller.js"></script>
 <script src="factory_view.js"></script>
 <script src="factory_generator.js"></script>
+<script src="standard_categories.js"></script>
 <script src="../../../closure-library/closure/goog/base.js"></script>
 <link rel="stylesheet" href="style.css">
 
@@ -31,7 +32,6 @@ goog.require('goog.ui.ColorPicker');
       <p>
         <button id="button_export">Export Config</button>
         <button id="button_print">Print Config</button>
-        <button id="button_preview">Update Preview</button>
       </p>
     </td>
   </tr>
@@ -47,13 +47,24 @@ goog.require('goog.ui.ColorPicker');
       <td id="tab_help">Your categories will appear here</td>
     </table>
     <p>&nbsp;</p>
+    <div class='dropdown'>
     <button id="button_add">+</button>
+    <div id="dropdown_add" class="dropdown-content">
+      <a id='dropdown_newCategory'>New Category</a>
+      <a id='dropdown_loadCategory'>Standard Category</a>
+    </div>
+    </div>
     <button id="button_remove">-</button>
+    <p>&nbsp;</p>
+    <div class='dropdown'>
+    <button id="button_edit">Edit</button>
+    <div id="dropdown_edit" class="dropdown-content">
+      <a id='dropdown_name'>Name</a>
+      <a id='dropdown_color'>Color</a>
+    </div>
+    </div>
     <button id="button_up">&#8593;</button>
     <button id="button_down">&#8595;</button>
-    <p>&nbsp;</p>
-    <button id="button_name">Edit</button>
-    <button id="button_color">Color</button>
   </aside>
 </section>
 
@@ -458,7 +469,15 @@ goog.require('goog.ui.ColorPicker');
 
   // Wrappers to attach buttons to method calls for the controller object
   var addWrapper = function() {
+    document.getElementById('dropdown_add').classList.toggle("show");
+  };
+  var newCategoryWrapper = function() {
     controller.addCategory();
+    document.getElementById('dropdown_add').classList.remove("show");
+  };
+  var loadCategoryWrapper = function() {
+    controller.loadCategory();
+    document.getElementById('dropdown_add').classList.remove("show");
   };
   var removeWrapper = function() {
     controller.removeCategory();
@@ -469,49 +488,66 @@ goog.require('goog.ui.ColorPicker');
   var printWrapper = function() {
     controller.printConfig();
   };
-  var previewWrapper = function() {
-    controller.updatePreview();
-  };
-  var nameWrapper = function() {
-    controller.changeName();
-  };
   var upWrapper = function() {
     controller.moveCategory(-1);
   };
   var downWrapper = function() {
     controller.moveCategory(1);
   };
+  var editWrapper = function() {
+    document.getElementById('dropdown_edit').classList.toggle("show");
+  };
+  var nameWrapper = function() {
+    controller.changeName();
+    document.getElementById('dropdown_edit').classList.remove("show");
+  };
+
   document.getElementById('button_add').addEventListener
       ('click', addWrapper);
+  document.getElementById('dropdown_newCategory').addEventListener
+      ('click', newCategoryWrapper);
+  document.getElementById('dropdown_loadCategory').addEventListener
+      ('click', loadCategoryWrapper);
   document.getElementById('button_remove').addEventListener
       ('click', removeWrapper);
   document.getElementById('button_export').addEventListener
       ('click', exportWrapper);
   document.getElementById('button_print').addEventListener
       ('click', printWrapper);
-  document.getElementById('button_preview').addEventListener
-      ('click', previewWrapper);
-  document.getElementById('button_name').addEventListener
-      ('click', nameWrapper);
   document.getElementById('button_up').addEventListener
       ('click', upWrapper);
   document.getElementById('button_down').addEventListener
       ('click', downWrapper);
+  document.getElementById('button_edit').addEventListener
+      ('click', editWrapper);
+  document.getElementById('dropdown_name').addEventListener
+      ('click', nameWrapper);
+
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
   colorPicker.setColors(colors);
   // Create and render the popup color picker and attach to button.
   var popupPicker = new goog.ui.PopupColorPicker(null, colorPicker);
   popupPicker.render();
-  popupPicker.attach(document.getElementById('button_color'));
+  popupPicker.attach(document.getElementById('dropdown_color'));
   popupPicker.setFocusable(true);
   goog.events.listen(popupPicker, 'change', function(e) {
         controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
+        document.getElementById('dropdown_edit').classList.remove("show");
       });
-
-  document.getElementById('button_name').disabled = true;
+  // Disable category editing buttons until categories are created.
+  document.getElementById('button_remove').disabled = true;
+  document.getElementById('button_edit').disabled = true;
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
-  document.getElementById('button_color').disabled = true;
+  // Listen for Blockly move and delete events to update preview.
+  // Not listening for Blockly create events because causes the user to drop
+  // blocks when dragging them into workspace. Could cause problems if ever load
+  // blocks into workspace directly without calling updatePreview.
+  toolboxWorkspace.addChangeListener(function(e) {
+    if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
+      controller.updatePreview();
+    }
+  });
 </script>
 </html>

@@ -12,6 +12,7 @@ goog.provide('BlockExporterController');
 // Need controller to get the specific BlockLibrary.Storage object.
 goog.require('BlockExporterView');
 goog.require('BlockExporterTools');
+goog.require('goog.dom.xml');
 
 /**
  * BlockExporter Controller Class
@@ -27,9 +28,11 @@ BlockExporterController = function(blockExporterContainerID, blockLibStorage) {
   this.blockLibStorage = blockLibStorage;
   // Utils for generating code to export
   this.tools = new BlockExporterTools();
-  // Xml representation of the toolbox
+  // View provides the selector workspace and export settings UI.
   this.view = new BlockExporterView(blockExporterContainerID,
       this.generateToolboxFromLibrary());
+  // Object mapping disabled block types to their enabled xmls
+  this.disabledBlocks = Object.create(null);
 };
 
 /**
@@ -43,7 +46,6 @@ BlockExporterController.prototype.initializeAllBlocks =
       var blockXmls = this.blockLibStorage.getBlockXmls(allBlockTypes);
       var blockDefs =
           this.tools.getBlockDefs(allBlockTypes, blockXmls, 'JavaScript');
-      console.log(blockDefs);
       eval(blockDefs);
     };
 
@@ -155,21 +157,40 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
 /**
  * Disable block in selector workspace's toolbox.
  *
- * @param {blockType}
+ * @param {string} blockType - type of block to disable
  */
 BlockExporterController.prototype.disableBlock = function(blockType) {
-  var oldToolboxXml = BlockExporterController.view.toolbox;
-
-  // TODO(quacht): implement
+  var toolboxXml = this.view.toolbox;
+  var category = goog.dom.xml.selectSingleNode(toolboxXml,
+      '//category[@name=\'' + blockType + '\']');
+  var block = goog.dom.getFirstElementChild(category);
+  // Save enabled block xml.
+  var clonedBlock = block.cloneNode(true);
+  this.disabledBlocks[blockType] = clonedBlock;
+  // Disable block.
+  goog.dom.xml.setAttributes(block, {disabled: true});
 };
 
 /**
  * Enable block in selector workspace's toolbox.
  *
- * @param {blockType}
+ * @param {string} blockType - type of block to enable
  */
 BlockExporterController.prototype.enableBlock = function(blockType) {
-// TODO(quacht): implement
+  var toolboxXml = this.view.toolbox;
+  var category = goog.dom.xml.selectSingleNode(toolboxXml,
+      '//category[@name=\'' + blockType + '\']');
+  var block = goog.dom.getFirstElementChild(category);
+  // Remove disabled block xml from toolbox.
+  goog.dom.removeNode(block);
+  // Get enabled block xml and add to toolbox, replacing disabled block xml
+  // within category.
+  var enabledBlock = this.disabledBlocks[blockType];
+  goog.dom.appendChild(category, enabledBlock);
+  // Remove block from map of disabled blocks.
+  delete this.disabledBlocks[blockType];
+  // Update toolbox.
+  this.updateToolbox(toolboxXml);
 };
 
 BlockExporterController.prototype.onSelectBlockForExport = function(event) {
@@ -184,7 +205,7 @@ BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
   // Edit helper text (currently selected)
 };
 
-// need to add change listener to the view object
-BlockExporterController.view.selectorWorkspace.addChangeListener(onSelectBlockForExport);
-BlockExporterController.view.selectorWorkspace.addChangeListener(onDeselectBlockForExport);
+// // need to add change listener to the view object
+// this.view.selectorWorkspace.addChangeListener(onSelectBlockForExport);
+// this.view.selectorWorkspace.addChangeListener(onDeselectBlockForExport);
 

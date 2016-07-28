@@ -908,10 +908,13 @@ Blockly.Block.prototype.setCollapsed = function(collapsed) {
 /**
  * Create a human-readable text representation of this block and any children.
  * @param {number=} opt_maxLength Truncate the string to this length.
+ * @param {string=} opt_emptyToken The placeholder string used to denote an
+ *     empty field. If not specified, '?' is used.
  * @return {string} Text of block.
  */
-Blockly.Block.prototype.toString = function(opt_maxLength) {
+Blockly.Block.prototype.toString = function(opt_maxLength, opt_emptyToken) {
   var text = [];
+  var emptyFieldPlaceholder = opt_emptyToken || '?';
   if (this.collapsed_) {
     text.push(this.getInput('_TEMP_COLLAPSED_INPUT').fieldRow[0].text_);
   } else {
@@ -924,7 +927,7 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
         if (child) {
           text.push(child.toString());
         } else {
-          text.push('?');
+          text.push(emptyFieldPlaceholder);
         }
       }
     }

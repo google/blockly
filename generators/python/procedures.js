@@ -48,14 +48,16 @@ Blockly.Python['procedures_defreturn'] = function(block) {
   var funcName = Blockly.Python.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Python.statementToCode(block, 'STACK');
+  // Escaping all $ signs by $$ for replace function
+  var regexp_ready_block_id = block.id.replace(/\$/g, "$$$$");
   if (Blockly.Python.STATEMENT_PREFIX) {
     branch = Blockly.Python.prefixLines(
         Blockly.Python.STATEMENT_PREFIX.replace(/%1/g,
-        '\'' + block.id + '\''), Blockly.Python.INDENT) + branch;
+        '\'' + regexp_ready_block_id + '\''), Blockly.Python.INDENT) + branch;
   }
   if (Blockly.Python.INFINITE_LOOP_TRAP) {
     branch = Blockly.Python.INFINITE_LOOP_TRAP.replace(/%1/g,
-        '"' + block.id + '"') + branch;
+        '"' + regexp_ready_block_id + '"') + branch;
   }
   var returnValue = Blockly.Python.valueToCode(block, 'RETURN',
       Blockly.Python.ORDER_NONE) || '';

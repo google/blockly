@@ -9,8 +9,6 @@
 'use strict';
 
 goog.provide('BlockExporterView');
-// Need controller to get the specific BlockLibrary.Storage object.
-goog.require('BlockLibrary.Controller');
 goog.require('BlockFactory');
 goog.require('goog.dom');
 
@@ -42,8 +40,6 @@ BlockExporterView = function(blockExporterContainerID, toolbox) {
           colour: '#ccc',
           snap: true}
         });
-  // TODO(quacht): does this assign a pointer to the inputted blockLibStorage
-  // object?
 };
 
 /**
@@ -78,7 +74,6 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
   } else {
     goog.dom.getElement('helperText').textContent = newText;
   }
-  return goog.dom.getElement('helperText').textContent;
 };
 
 

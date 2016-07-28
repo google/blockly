@@ -40,9 +40,9 @@ BlockExporterController.prototype.initializeAllBlocks =
     function() {
       // Define the custom blocks in order to be able to
       var allBlockTypes = this.blockLibStorage.getBlockTypes();
-      var blockXmls = this.blockLibStorage.getBlockXmls(allBlockTypes);
+      var blockXmlMap = this.blockLibStorage.getBlockXmls(allBlockTypes);
       var blockDefs =
-          this.tools.getBlockDefs(allBlockTypes, blockXmls, 'JavaScript');
+          this.tools.getBlockDefs(blockXmlMap, 'JavaScript');
       eval(blockDefs);
     };
 
@@ -105,7 +105,7 @@ BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
  */
 BlockExporterController.prototype.exportBlocks = function() {
   var blockTypes = this.getSelectedBlockTypes_();
-  var blockXmls = this.blockLibStorage.getBlockXmls(blockTypes);
+  var blockXmlMap = this.blockLibStorage.getBlockXmls(blockTypes);
 
   // Pull inputs from the Export Settings form.
   var definitionFormat = document.getElementById('exportFormat').value;
@@ -120,7 +120,7 @@ BlockExporterController.prototype.exportBlocks = function() {
     if (!blockDef_filename) {
       alert('Please enter a filename for your block definition(s) download.');
     } else {
-      var blockDefs = this.tools.getBlockDefs(blockTypes, blockXmls,
+      var blockDefs = this.tools.getBlockDefs(blockXmlMap,
           definitionFormat);
       BlockFactory.createAndDownloadFile_(
           blockDefs, blockDef_filename, definitionFormat);
@@ -131,7 +131,7 @@ BlockExporterController.prototype.exportBlocks = function() {
     if (!generatorStub_filename) {
       alert('Please enter a filename for your generator stub(s) download.');
     } else {
-      var genStubs = this.tools.getGeneratorCode(blockTypes, blockXmls,
+      var genStubs = this.tools.getGeneratorCode(blockXmlMap,
           language);
       BlockFactory.createAndDownloadFile_(
           genStubs, generatorStub_filename, language);

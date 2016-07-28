@@ -94,19 +94,20 @@ BlockLibrary.Storage.prototype.getBlockXml = function(blockType) {
   return xml;
 };
 
+
 /**
  * Returns array of xmls of given block types stored in current block library
  * (this.blocks).
  *
  * @param {string} blockType - type of block
- * @return {!Array.<Element>} array of xmls that represents the block types
- * or null if that block isn't stored in library
+ * @return {!Object} map of block type to corresponding xml
  */
 BlockLibrary.Storage.prototype.getBlockXmls = function(blockTypes) {
-  var blockXmls = [];
+  var blockXmls = {};
   for (var i = 0; i < blockTypes.length; i++) {
-    var xml = this.getBlockXml(blockTypes[i]);
-    blockXmls.push(xml);
+    var blockType = blockTypes[i];
+    var xml = this.getBlockXml(blockType);
+    blockXmls[blockType] = xml;
   }
   return blockXmls;
 };

@@ -12,7 +12,13 @@ goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
 
 BlockFactoryExpansion.blockLibraryName = null;
+BlockFactoryExpansion.blockLibraryController = null;
 BlockFactoryExpansion.exporter = null;
+
+BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
+  var blockType = BlockLibrary.UI.getSelected(blockLibraryDropdown);
+  BlockFactoryExpansion.blockLibraryController.openBlock(blockType);
+};
 
 /**
  * Initialize Blockly and layout.  Called on page load.
@@ -37,51 +43,36 @@ BlockFactoryExpansion.init = function() {
 
   // Initialize Block Library
   BlockFactoryExpansion.blockLibraryName = 'blockLibrary';
-  BlockFactoryExpansion.blockLibrary =
+  BlockFactoryExpansion.blockLibraryController =
       new BlockLibrary.Controller(BlockFactoryExpansion.blockLibraryName);
-  BlockFactoryExpansion.blockLibrary.populateBlockLibrary();
+  BlockFactoryExpansion.blockLibraryController.populateBlockLibrary();
 
   // Initialize Block Exporter
   BlockFactoryExpansion.exporter = new BlockExporterController(
-      'blockLibraryExporter', BlockFactoryExpansion.blockLibrary.storage);
+      'blockLibraryExporter', BlockFactoryExpansion.blockLibraryController.storage);
 
   // Assign button click handlers for Block Exporter.
   document.getElementById('exporterSubmitButton').addEventListener('click',
       // Bind exporter instance to 'this' for the function.
       function() {
-        var boundExportBlocks =
-            BlockFactoryExpansion.exporter.exportBlocks.bind(
-                BlockFactoryExpansion.exporter);
-        boundExportBlocks();
+        BlockFactoryExpansion.exporter.exportBlocks();
       });
 
   // Assign button click handlers for Block Library.
   document.getElementById('saveToBlockLibraryButton').addEventListener('click',
-      // Bind Block Library instance to 'this' for the function.
       function() {
-        var boundSaveToLib =
-            BlockFactoryExpansion.blockLibrary.saveToBlockLibrary.bind(
-                BlockFactoryExpansion.blockLibrary);
-        boundSaveToLib();
+        BlockFactoryExpansion.blockLibraryController.saveToBlockLibrary()
       });
 
   document.getElementById('removeBlockFromLibraryButton').addEventListener(
     'click',
-      // Bind Block Library instance to 'this' for the function.
       function() {
-        var boundRemoveFromLib =
-            BlockFactoryExpansion.blockLibrary.removeFromBlockLibrary.bind(
-                BlockFactoryExpansion.blockLibrary);
-        boundRemoveFromLib();
+        BlockFactoryExpansion.blockLibraryController.removeFromBlockLibrary();
       });
 
   document.getElementById('clearBlockLibraryButton').addEventListener('click',
-      // Bind Block Library instance to 'this' for the function.
       function() {
-        var boundClearLib =
-            BlockFactoryExpansion.blockLibrary.clearBlockLibrary.bind(
-                BlockFactoryExpansion.blockLibrary);
-        boundClearLib();
+            BlockFactoryExpansion.blockLibraryController.clearBlockLibrary();
       });
 
   // Assign button event handlers for Block Factory.
@@ -138,13 +129,13 @@ BlockFactoryExpansion.init = function() {
        toolbox: toolbox,
        media: '../../media/'});
 
-/**
- * Add tab handlers to allow switching between the Block Factory
- * tab and the Block Exporter tab.
- *
- * @param {string} blockFactoryTabID - ID of element containing Block Factory
- * @param {string} blockExporterTabID - ID of element containing Block Exporter
- */
+  /**
+   * Add tab handlers to allow switching between the Block Factory
+   * tab and the Block Exporter tab.
+   *
+   * @param {string} blockFactoryTabID - ID of element containing Block Factory
+   * @param {string} blockExporterTabID - ID of element containing Block Exporter
+   */
   var addTabHandlers =
       function(blockFactoryTabID, blockExporterTabID) {
         var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);

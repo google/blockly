@@ -14,7 +14,6 @@ goog.require('BlockFactory');
 goog.require('BlockLibrary.Controller');
 goog.require('goog.dom');
 
-
 /**
 * Block Library Export Class
 * @constructor
@@ -31,8 +30,7 @@ BlockExporterTools = function() {
     },
     '' // Empty div
     );
-  goog.dom.appendChild(
-      document.getElementsByTagName('body')[0], this.container);
+  goog.dom.appendChild(document.body, this.container);
   /**
    * Hidden workspace for the Block Exporter that holds pieces that make
    * up the block
@@ -47,12 +45,12 @@ BlockExporterTools = function() {
  * Return the given language code of each block type in an array.
  *
  * @param {string[]} blockTypes - array of block types for which to generate
- * block definitions
+ *    block definitions
  * @param {string[]} blockXmls - corresponding array of blockXmls from which to
- * generate block definitions
+ *    generate block definitions
  * @param {string} definitionFormat - 'JSON' or 'JavaScript'
  * @return {string} in the desired format, the concatenation of each block's
- * language code.
+ *    language code.
  */
 BlockExporterTools.prototype.getBlockDefs =
     function(blockTypes, blockXmls, definitionFormat) {
@@ -122,5 +120,9 @@ BlockExporterTools.prototype.getGeneratorCode =
     multiblockCode.push(blockGenCode);
   }
   return multiblockCode.join("\n\n");
+};
+
+BlockExporterTools.prototype.getBlockTypeFromStoredXml = function(storedXml) {
+
 };
 

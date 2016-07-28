@@ -86,10 +86,11 @@ BlockExporterController.prototype.generateToolboxFromLibrary = function() {
 
 /**
  * Get the selected block types.
+ * @private
  *
  * @return {!Array.<string>} types of blocks in workspace
  */
-BlockExporterController.prototype.getSelectedBlockTypes = function() {
+BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
   var selectedBlocks = this.view.selectorWorkspace.getAllBlocks();
   var blockTypes = [];
   for (var i = 0; i < selectedBlocks.length; i++) {
@@ -103,8 +104,7 @@ BlockExporterController.prototype.getSelectedBlockTypes = function() {
  * Settings form in Block Exporter, and downloads block code accordingly.
  */
 BlockExporterController.prototype.exportBlocks = function() {
-  var blockTypes = this.getSelectedBlockTypes();
-  //TODO(quacht): check line below for errors
+  var blockTypes = this.getSelectedBlockTypes_();
   var blockXmls = this.blockLibStorage.getBlockXmls(blockTypes);
 
   // Pull inputs from the Export Settings form.

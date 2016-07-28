@@ -65,5 +65,8 @@ blocklyApp.UtilsService = ng.core
       } else {
         return Blockly.Msg.VALUE;
       }
+    },
+    getBlockDescription: function(block) {
+      return block.toString();
     }
   });

@@ -32,7 +32,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
         [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && noCategories}"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])"
         [attr.aria-level]="level">
-      <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{block.toString()}}</label>
+      <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0">
         <li #listItem class="blocklyHasChildren" [id]="idMap['listItem']"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummaryLabel'])"
@@ -132,6 +132,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
         this.idMap['parentList'] = this.utilsService.generateUniqueId();
       }
     },
+    getBlockDescription: function() {
+      return this.utilsService.getBlockDescription(this.block);
+    },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
       return this.utilsService.generateAriaLabelledByAttr(
           mainLabel, secondLabel, isDisabled);
@@ -142,7 +145,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
     copyToWorkspace: function() {
       var xml = Blockly.Xml.blockToDom(this.block);
       Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      alert('Added block to workspace: ' + this.block.toString());
+      alert('Added block to workspace: ' + this.getBlockDescription());
     },
     copyToClipboard: function() {
       this.clipboardService.copy(this.block, true);
@@ -152,7 +155,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       // - Put the block on the destination tree.
       // - Change the current tree-level focus to the destination tree, and the
       // screenreader focus for the destination tree to the block just moved.
-      var blockDescription = this.block.toString();
+      var blockDescription = this.getBlockDescription();
 
       var newBlockId = this.clipboardService.pasteToMarkedConnection(
           this.block);

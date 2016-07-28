@@ -31,7 +31,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])"
         [attr.aria-level]="level">
-      <label [id]="idMap['blockSummary']">{{block.toString()}}</label>
+      <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
 
       <ol role="group">
         <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
@@ -100,6 +100,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       this.treeService = _treeService;
       this.utilsService = _utilsService;
     }],
+    getBlockDescription: function() {
+      return this.utilsService.getBlockDescription(this.block);
+    },
     isIsolatedTopLevelBlock_: function(block) {
       // Returns whether the given block is at the top level, and has no
       // siblings.
@@ -136,13 +139,17 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       }
     },
     cutBlock_: function() {
+      var blockDescription = this.getBlockDescription();
+
       var that = this;
       this.removeBlockAndSetFocus_(this.block, function() {
         that.clipboardService.cut(that.block);
       });
+
+      alert(Blockly.Msg.CUT_BLOCK_MSG + blockDescription);
     },
     deleteBlock_: function() {
-      var blockDescription = this.block.toString();
+      var blockDescription = this.getBlockDescription();
 
       var that = this;
       this.removeBlockAndSetFocus_(this.block, function() {
@@ -187,7 +194,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // screenreader focus for that tree.
       // - Change the current tree-level focus to the destination tree, and the
       // screenreader focus for the destination tree to the block just moved.
-      var blockDescription = this.block.toString();
+      var blockDescription = this.getBlockDescription();
 
       var newBlockId = this.clipboardService.pasteToMarkedConnection(
           this.block);

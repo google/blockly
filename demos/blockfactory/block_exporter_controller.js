@@ -162,7 +162,7 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
 BlockExporterController.prototype.disableBlock = function(blockType) {
   var toolboxXml = this.view.toolbox;
   var category = goog.dom.xml.selectSingleNode(toolboxXml,
-      '//category[@name=\'' + blockType + '\']');
+      '//category[@name="' + blockType + '"]');
   var block = goog.dom.getFirstElementChild(category);
   // Save enabled block xml.
   var clonedBlock = block.cloneNode(true);
@@ -179,7 +179,7 @@ BlockExporterController.prototype.disableBlock = function(blockType) {
 BlockExporterController.prototype.enableBlock = function(blockType) {
   var toolboxXml = this.view.toolbox;
   var category = goog.dom.xml.selectSingleNode(toolboxXml,
-      '//category[@name=\'' + blockType + '\']');
+      '//category[@name="' + blockType + '"]');
   var block = goog.dom.getFirstElementChild(category);
   // Remove disabled block xml from toolbox.
   goog.dom.removeNode(block);
@@ -197,13 +197,14 @@ BlockExporterController.prototype.onSelectBlockForExport = function(event) {
   // BUG: this is currently undefined
   if (event.type == Blockly.Events.CREATE) {
     // Get type of block created.
-    var blockType = this.view.selectorWorkspace.getBlockById(event.blockId);
+    var block = this.view.selectorWorkspace.getBlockById(event.blockId);
+    var blockType = block.type;
     // Disable the selected block. Users can only export one copy of starter code
     // per block.
     this.disableBlock(blockType);
     // Edit helper text (currently selected)
-    this.view.updateHelperText('Currently Selected:' +
-        this.getSelectedBlockTypes());
+    var selectedBlocksText = this.getSelectedBlockTypes().join(', ');
+    this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);
   }
 };
 
@@ -211,18 +212,14 @@ BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
   // this is currently undefined.
   if (event.type == Blockly.Events.DELETE) {
     // Get type of block created.
-    var blockType = this.view.selectorWorkspace.getBlockById(event.blockId);
+    var deletedBlockXml = event.oldXml;
+    var blockType = deletedBlockXml.getAttribute('type');
     // Enable the deselected block.
     this.enableBlock(blockType);
     // Edit helper text (currently selected)
-    this.view.updateHelperText('Currently Selected:' +
-        this.getSelectedBlockTypes());
+    var selectedBlocksText = this.getSelectedBlockTypes().join(', ');
+    this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);
   }
-};
-
-BlockExporterController.prototype.addChangeListeners = function() {
-  this.view.selectorWorkspace.addChangeListener(this.onSelectBlockForExport);
-  this.view.selectorWorkspace.addChangeListener(this.onDeselectBlockForExport);
 };
 
 

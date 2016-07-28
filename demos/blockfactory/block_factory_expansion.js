@@ -42,7 +42,6 @@ BlockFactoryExpansion.init = function() {
   BlockFactoryExpansion.exporter = new BlockExporterController(
       'blockLibraryExporter', BlockLibrary.Controller.storage);
 
-  BlockFactoryExpansion.exporter.addChangeListeners();
   // Assign button click handlers for Block Exporter.
   document.getElementById('exporterSubmitButton').addEventListener('click',
       function() {
@@ -116,46 +115,58 @@ BlockFactoryExpansion.init = function() {
        toolbox: toolbox,
        media: '../../media/'});
 
-/**
- * Add tab handlers to allow switching between the Block Factory
- * tab and the Block Exporter tab.
- *
- * @param {string} blockFactoryTabID - ID of element containing Block Factory
- * @param {string} blockExporterTabID - ID of element containing Block Exporter
- */
-  var addTabHandlers =
-      function(blockFactoryTabID, blockExporterTabID) {
-        var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-        var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+  /**
+   * Add tab handlers to allow switching between the Block Factory
+   * tab and the Block Exporter tab.
+   *
+   * @param {string} blockFactoryTabID - ID of element containing BlockFactory
+   * @param {string} blockExporterTabID - ID of element containing BlockExporter
+   */
+  var addTabHandlers = function(blockFactoryTabID, blockExporterTabID) {
+    var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+    var blockExporterTab = goog.dom.getElement(blockExporterTabID);
 
-        blockFactoryTab.addEventListener('click',
-          function() {
-            goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
-            goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
+    blockFactoryTab.addEventListener('click',
+      function() {
+        goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
+        goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
 
-            // Hide container of exporter.
-            BlockFactory.hide('blockLibraryExporter');
+        // Hide container of exporter.
+        BlockFactory.hide('blockLibraryExporter');
 
-            // Resize to render workspaces' toolboxes correctly.
-            window.dispatchEvent(new Event('resize'));
-          });
+        // Resize to render workspaces' toolboxes correctly.
+        window.dispatchEvent(new Event('resize'));
+      });
 
-        blockExporterTab.addEventListener('click',
-          function() {
-            goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-            goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+    blockExporterTab.addEventListener('click',
+      function() {
+        goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+        goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
-            // Update toolbox to reflect current block library.
-            BlockFactoryExpansion.exporter.updateToolbox();
+        // Update toolbox to reflect current block library.
+        BlockFactoryExpansion.exporter.updateToolbox();
 
-            // Show container of exporter.
-            BlockFactory.show('blockLibraryExporter');
+        // Show container of exporter.
+        BlockFactory.show('blockLibraryExporter');
 
-            // Resize to render workspaces' toolboxes correctly.
-            window.dispatchEvent(new Event('resize'));
-          });
-      };
+        // Resize to render workspaces' toolboxes correctly.
+        window.dispatchEvent(new Event('resize'));
+      });
+  };
   addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
+
+  var addChangeListenersToSelectorWorkspace = function() {
+    var selector = BlockFactoryExpansion.exporter.view.selectorWorkspace;
+    selector.addChangeListener(
+      function(event) {
+        BlockFactoryExpansion.exporter.onSelectBlockForExport(event);
+      });
+    selector.addChangeListener(
+      function(event) {
+        BlockFactoryExpansion.exporter.onDeselectBlockForExport(event);
+      });
+  };
+  addChangeListenersToSelectorWorkspace();
 
   // Create the root block.on main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

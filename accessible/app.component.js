@@ -47,7 +47,7 @@ blocklyApp.AppView = ng.core
     <label aria-hidden="true" hidden id="blockly-block-menu">{{'BLOCK_ACTION_LIST'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-block-summary">{{'BLOCK_SUMMARY'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-button">{{'BUTTON'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-disabled">{{'UNAVAILABLE'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-disabled">{{'DISABLED'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-menu">{{'OPTION_LIST'|translate}}</label>
     `,
     directives: [blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent],

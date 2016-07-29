@@ -48,6 +48,57 @@ BlockFactory.previewWorkspace = null;
 BlockFactory.UNNAMED = 'unnamed';
 
 /**
+ * Existing direction ('ltr' vs 'rtl') of preview.
+ */
+BlockFactory.oldDir = null;
+
+// UI
+
+/**
+ * Inject code into a pre tag, with syntax highlighting.
+ * Safe from HTML/script injection.
+ * @param {string} code Lines of code.
+ * @param {string} id ID of <pre> element to inject into.
+ */
+BlockFactory.injectCode = function(code, id) {
+  var pre = document.getElementById(id);
+  pre.textContent = code;
+  code = pre.innerHTML;
+  code = prettyPrintOne(code, 'js');
+  pre.innerHTML = code;
+};
+
+// Utils
+
+/**
+ * Escape a string.
+ * @param {string} string String to escape.
+ * @return {string} Escaped string surrouned by quotes.
+ */
+BlockFactory.escapeString = function(string) {
+  return JSON.stringify(string);
+};
+
+/**
+ * Return the uneditable container block that everything else attaches to in
+ * given workspace
+ *
+ * @param {!Blockly.Workspace} workspace - where the root block lives
+ * @return {Blockly.Block} root block
+ */
+BlockFactory.getRootBlock = function(workspace) {
+  var blocks = workspace.getTopBlocks(false);
+  for (var i = 0, block; block = blocks[i]; i++) {
+    if (block.type == 'factory_base') {
+      return block;
+    }
+  }
+  return null;
+};
+
+// Language Code: Block Definitions
+
+/**
  * Change the language code format.
  */
 BlockFactory.formatChange = function() {
@@ -503,15 +554,6 @@ BlockFactory.getFieldsJson_ = function(block) {
 };
 
 /**
- * Escape a string.
- * @param {string} string String to escape.
- * @return {string} Escaped string surrouned by quotes.
- */
-BlockFactory.escapeString = function(string) {
-  return JSON.stringify(string);
-};
-
-/**
  * Fetch the type(s) defined in the given input.
  * Format as a string for appending to the generated code.
  * @param {!Blockly.Block} block Block with input.
@@ -563,6 +605,8 @@ BlockFactory.getTypesFrom_ = function(block, name) {
   }
   return types;
 };
+
+// Generator Code
 
 /**
  * Get the generator code for a given block.
@@ -662,10 +706,7 @@ BlockFactory.updateGenerator = function(block) {
   BlockFactory.injectCode(generatorStub, 'generatorPre');
 };
 
-/**
- * Existing direction ('ltr' vs 'rtl') of preview.
- */
-BlockFactory.oldDir = null;
+// Preview Block
 
 /**
  * Update the preview display.
@@ -755,36 +796,7 @@ BlockFactory.updatePreview = function() {
   }
 };
 
-/**
- * Inject code into a pre tag, with syntax highlighting.
- * Safe from HTML/script injection.
- * @param {string} code Lines of code.
- * @param {string} id ID of <pre> element to inject into.
- */
-BlockFactory.injectCode = function(code, id) {
-  var pre = document.getElementById(id);
-  pre.textContent = code;
-  code = pre.innerHTML;
-  code = prettyPrintOne(code, 'js');
-  pre.innerHTML = code;
-};
-
-/**
- * Return the uneditable container block that everything else attaches to in
- * given workspace
- *
- * @param {!Blockly.Workspace} workspace - Where the root block lives.
- * @return {Blockly.Block} root block
- */
-BlockFactory.getRootBlock = function(workspace) {
-  var blocks = workspace.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.type == 'factory_base') {
-      return block;
-    }
-  }
-  return null;
-};
+// File Import, Creation, Download
 
 /**
  * Generate a file from the contents of a given text area and
@@ -830,19 +842,6 @@ BlockFactory.saveWorkspaceToFile = function() {
 };
 
 /**
- * Disable link and save buttons if the format is 'Manual', enable otherwise.
- */
-BlockFactory.disableEnableLink = function() {
-  var linkButton = document.getElementById('linkButton');
-  var saveBlockButton = document.getElementById('localSaveButton');
-  var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
-  var disabled = document.getElementById('format').value == 'Manual';
-  linkButton.disabled = disabled;
-  saveBlockButton.disabled = disabled;
-  saveToLibButton.disabled = disabled;
-};
-
-/**
  * Imports xml file for a block to the workspace.
  */
 BlockFactory.importBlockFromFile = function() {
@@ -871,6 +870,20 @@ BlockFactory.importBlockFromFile = function() {
     fileReader.readAsText(file);
   }
 };
+
+/**
+ * Disable link and save buttons if the format is 'Manual', enable otherwise.
+ */
+BlockFactory.disableEnableLink = function() {
+  var linkButton = document.getElementById('linkButton');
+  var saveBlockButton = document.getElementById('localSaveButton');
+  var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
+  var disabled = document.getElementById('format').value == 'Manual';
+  linkButton.disabled = disabled;
+  saveBlockButton.disabled = disabled;
+  saveToLibButton.disabled = disabled;
+};
+// Block Factory Expansion View Utils
 
 /**
  * Hides element so that it's invisible and doesn't take up space.

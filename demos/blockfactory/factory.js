@@ -74,11 +74,11 @@ BlockFactory.formatChange = function() {
 /**
  * Get block definition code for the current block.
  *
- * @param {string} blockType - type of block
- * @param {!Blockly.Block} rootBlock - rootBlock from main workspace in which
+ * @param {string} blockType - Type of block.
+ * @param {!Blockly.Block} rootBlock - RootBlock from main workspace in which
  *    user uses Block Factory Blocks to create a custom block.
- * @param {string} format - 'JSON' or 'JavaScript'
- * @return {string} block definition
+ * @param {string} format - 'JSON' or 'JavaScript'.
+ * @return {string} Block definition.
  */
 BlockFactory.getBlockDefinition = function(blockType, rootBlock, format) {
   blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
@@ -562,9 +562,9 @@ BlockFactory.getTypesFrom_ = function(block, name) {
  * Get the generator code for a given block.
  *
  * @param {!Blockly.Block} block - Rendered block in preview workspace.
- * @param {string} generatorLanguage - e.g.'JavaScript', 'Python', 'PHP', 'Lua',
- *     'Dart'
- * @return {string} generator code for multiple blocks.
+ * @param {string} generatorLanguage - 'JavaScript', 'Python', 'PHP', 'Lua',
+ *     'Dart'.
+ * @return {string} Generator code for multiple blocks.
  */
 BlockFactory.getGeneratorStub = function(block, generatorLanguage) {
   function makeVar(root, name) {
@@ -869,7 +869,7 @@ BlockFactory.importBlockFromFile = function() {
 /**
  * Hides element so that it's invisible and doesn't take up space.
  *
- * @param {string} elementID - ID of element to hide
+ * @param {string} elementID - ID of element to hide.
  */
 BlockFactory.hide = function(elementID) {
   document.getElementById(elementID).style.display = 'none';
@@ -878,7 +878,7 @@ BlockFactory.hide = function(elementID) {
 /**
  * Un-hides an element.
  *
- * @param {string} elementID - ID of element to hide
+ * @param {string} elementID - ID of element to hide.
  */
 BlockFactory.show = function(elementID) {
   document.getElementById(elementID).style.display = 'inline';
@@ -887,7 +887,7 @@ BlockFactory.show = function(elementID) {
 /**
  * Hides element so that it's invisible but still takes up space.
  *
- * @param {string} elementID - ID of element to hide
+ * @param {string} elementID - ID of element to hide.
  */
 BlockFactory.makeInvisible = function(elementID) {
   document.getElementById(elementID).visibility = 'hidden';
@@ -896,7 +896,7 @@ BlockFactory.makeInvisible = function(elementID) {
 /**
  * Makes element visible.
  *
- * @param {string} elementID - ID of element to hide
+ * @param {string} elementID - ID of element to hide.
  */
 BlockFactory.makeVisible = function(elementID) {
   document.getElementById(elementID).visibility = 'visible';

@@ -1,27 +1,24 @@
 /**
  * @fileoverview Javascript for the BlockExporter Tools class, which generates
- * block definitions and generator stubs for given blockTypes. Depends on the
- * BlockFactory for its code generation functions.
+ * block definitions and generator stubs for given block types. Also generates
+ * toolbox xml for the exporter's workspace. Depends on the BlockFactory for
+ * its code generation functions.
  *
  * @author quachtina96 (Tina Quach)
  */
 'use strict';
 
 goog.provide('BlockExporterTools');
-
 goog.require('BlockFactory');
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
 
 /**
-* Block Library Export Class
+* Block Exporter Tools Class
 * @constructor
-*
-* @param {string} hiddenWorkspaceContainerID - ID of div element to contain the
-* exporter's hidden workspace
 */
 BlockExporterTools = function() {
-  // Create container for hidden workspace
+  // Create container for hidden workspace.
   this.container = goog.dom.createDom('div',
     {
       'id': 'blockExporterTools_hiddenWorkspace',
@@ -68,10 +65,10 @@ BlockExporterTools.prototype.getDefinedBlock = function(blockType) {
 /**
  * Return the given language code of each block type in an array.
  *
- * @param {!Object} blockXmlMap - map of block type to xml
+ * @param {!Object} blockXmlMap - Map of block type to xml.
  * @param {string} definitionFormat - 'JSON' or 'JavaScript'
- * @return {string} in the desired format, the concatenation of each block's
- *    language code.
+ * @return {string} The concatenation of each block's language code in the
+ *    desired format.
  */
 BlockExporterTools.prototype.getBlockDefs =
     function(blockXmlMap, definitionFormat) {
@@ -100,11 +97,11 @@ BlockExporterTools.prototype.getBlockDefs =
 /**
  * Return the generator code of each block type in an array in a given language.
  *
- * @param {!Object} blockXmlMap - map of block type to xml
+ * @param {!Object} blockXmlMap - Map of block type to xml.
  * @param {string} generatorLanguage - e.g.'JavaScript', 'Python', 'PHP', 'Lua',
  *     'Dart'
- * @return {string} in the desired format, the concatenation of each block's
- * generator code.
+ * @return {string} The concatenation of each block's generator code in the
+ * desired format.
  */
 BlockExporterTools.prototype.getGeneratorCode =
     function(blockXmlMap, generatorLanguage) {
@@ -153,19 +150,18 @@ BlockExporterTools.prototype.initializeAllBlocks = function(blockLibStorage) {
  * Pulls information about all blocks in the block library to generate xml
  * for the selector workpace's toolbox.
  *
- * @return {!Element} xml representation of the toolbox
+ * @return {!Element} Xml representation of the toolbox.
  */
- // TODO(quacht):pass in blocks. move to tools
 BlockExporterTools.prototype.generateToolboxFromLibrary
     = function(blockLibStorage) {
       // Create DOM for XML.
       var xmlDom = goog.dom.createDom('xml',
         {
-          'id' : this.containerID + '_toolbox',
+          'id' : 'blockExporterTools_toolbox',
           'style' : 'display:none'
         });
 
-      // Object mapping block type to XML
+      // Object mapping block type to XML.
       var blocks = blockLibStorage.blocks;
       this.initializeAllBlocks(blockLibStorage);
 
@@ -177,13 +173,18 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
         // Get block.
         var block = this.getDefinedBlock(blockType);
 
-        // Get preview block XML
+        // Get preview block XML.
         var blockChild = Blockly.Xml.blockToDom(block);
         blockChild.removeAttribute('id');
 
-        // Add block to category and category to XML
+        // Add block to category and category to XML.
         categoryElement.appendChild(blockChild);
         xmlDom.appendChild(categoryElement);
       }
+
+      // If there are no blocks in library, append dummy category.
+      var categoryElement = goog.dom.createDom('category');
+      categoryElement.setAttribute('name','Next Saved Block');
+      xmlDom.appendChild(categoryElement);
       return xmlDom;
     };

@@ -7,7 +7,7 @@
  */
 goog.provide('BlockFactoryExpansion');
 goog.require('BlockFactory');
-goog.require('BlockLibrary.Controller');
+goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
 
@@ -40,19 +40,19 @@ BlockFactoryExpansion.init = function() {
     linkButton.style.display = 'inline-block';
     linkButton.addEventListener('click',
         function() {
-            BlocklyStorage.link(BlockLibrary.Controller.mainWorkspace);});
+            BlocklyStorage.link(BlockFactory.mainWorkspace);});
     BlockFactory.disableEnableLink();
   }
 
   // Initialize Block Library
   BlockFactoryExpansion.blockLibraryName = 'blockLibrary';
   BlockFactoryExpansion.blockLibraryController =
-      new BlockLibrary.Controller(BlockFactoryExpansion.blockLibraryName);
+      new BlockLibraryController(BlockFactoryExpansion.blockLibraryName);
   BlockFactoryExpansion.blockLibraryController.populateBlockLibrary();
 
   // Initialize Block Exporter
   BlockFactoryExpansion.exporter = new BlockExporterController(
-      'blockLibraryExporter', BlockFactoryExpansion.blockLibraryController.storage);
+      BlockFactoryExpansion.blockLibraryController.storage);
 
   // Assign button click handlers for Block Exporter.
   document.getElementById('exporterSubmitButton').addEventListener('click',

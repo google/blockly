@@ -12,33 +12,33 @@
  */
 'use strict';
 
-goog.provide('BlockLibrary.Controller');
+goog.provide('BlockLibraryController');
 
-goog.require('BlockLibrary.Storage');
-goog.require('BlockLibrary.UI');
+goog.require('BlockLibraryStorage');
+goog.require('BlockLibraryView');
 goog.require('BlockFactory');
 
 /**
  * Block Library Controller Class
  * @constructor
  *
- * @param {string} blockLibraryName - desired name of Block Library, also used
- * to create the key for where it's stored in local storage.
- * @param {blockLibrary} blockLibraryName - desired name of Block Library, also used
- * to create the key for where it's stored in local storage.
+ * @param {string} blockLibraryName - Desired name of Block Library, also used
+ *    to create the key for where it's stored in local storage.
+ * @param {blockLibrary} blockLibraryName - Desired name of Block Library, also
+ *    used to create the key for where it's stored in local storage.
  */
-BlockLibrary.Controller = function(blockLibraryName) {
+BlockLibraryController = function(blockLibraryName) {
   this.name = blockLibraryName;
   // Create a new, empty Block Library Storage object, or load existing one.
-  this.storage = new BlockLibrary.Storage(this.name);
+  this.storage = new BlockLibraryStorage(this.name);
 };
 
 /**
  * Returns the block type of the block the user is building.
  *
- * @return {string} the current block's type
+ * @return {string} The current block's type.
  */
-BlockLibrary.Controller.prototype.getCurrentBlockType = function() {
+BlockLibraryController.prototype.getCurrentBlockType = function() {
   var rootBlock = BlockFactory.getRootBlock(BlockFactory.mainWorkspace);
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   // Replace white space with underscores
@@ -48,9 +48,9 @@ BlockLibrary.Controller.prototype.getCurrentBlockType = function() {
 /**
  * Removes current block from Block Library
  *
- * @param {string} blockType - type of block
+ * @param {string} blockType - Type of block.
  */
-BlockLibrary.Controller.prototype.removeFromBlockLibrary = function() {
+BlockLibraryController.prototype.removeFromBlockLibrary = function() {
   var blockType = this.getCurrentBlockType();
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
@@ -60,9 +60,9 @@ BlockLibrary.Controller.prototype.removeFromBlockLibrary = function() {
 /**
  * Updates the workspace to show the block user selected from library
  *
- * @param {string} blockType - block to edit on block factory
+ * @param {string} blockType - Block to edit on block factory.
  */
-BlockLibrary.Controller.prototype.openBlock = function(blockType) {
+BlockLibraryController.prototype.openBlock = function(blockType) {
    var xml = this.storage.getBlockXml(blockType);
    BlockFactory.mainWorkspace.clear();
    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
@@ -71,30 +71,31 @@ BlockLibrary.Controller.prototype.openBlock = function(blockType) {
 /**
  * Updates the workspace to show the block user selected from library
  *
- * @param {Element} blockLibraryDropdown - your block library dropdown
+ * @param {Element} blockLibraryDropdown - The block library dropdown.
  */
-BlockLibrary.Controller.prototype.onSelectedBlockChanged = function(blockLibraryDropdown) {
-  var blockType = BlockLibrary.UI.getSelected(blockLibraryDropdown);
-  this.openBlock(blockType);
-};
+BlockLibraryController.prototype.onSelectedBlockChanged =
+    function(blockLibraryDropdown) {
+      var blockType = BlockLibraryView.getSelected(blockLibraryDropdown);
+      this.openBlock(blockType);
+    };
 
 /**
  * Clears the block library in local storage and updates the dropdown.
  */
-BlockLibrary.Controller.prototype.clearBlockLibrary = function() {
+BlockLibraryController.prototype.clearBlockLibrary = function() {
   var check = prompt(
       'Are you sure you want to clear your Block Library? ("yes" or "no")');
   if (check == "yes") {
     this.storage.clear();
     this.storage.saveToLocalStorage();
-    BlockLibrary.UI.clearOptions('blockLibraryDropdown');
+    BlockLibraryView.clearOptions('blockLibraryDropdown');
   }
 };
 
 /**
  * Saves current block to local storage and updates dropdown.
  */
-BlockLibrary.Controller.prototype.saveToBlockLibrary = function() {
+BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var blockType = this.getCurrentBlockType();
   if (this.isInBlockLibrary(blockType)) {
     alert('You already have a block called ' + blockType + ' in your library.' +
@@ -103,17 +104,18 @@ BlockLibrary.Controller.prototype.saveToBlockLibrary = function() {
     var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
     this.storage.addBlock(blockType, xmlElement);
     this.storage.saveToLocalStorage();
-    BlockLibrary.UI.addOption(blockType, blockType, 'blockLibraryDropdown', true);
+    BlockLibraryView.addOption(
+        blockType, blockType, 'blockLibraryDropdown', true);
   }
 };
 
 /**
  * Checks to see if the given blockType is already in Block Library
  *
- * @param {string} blockType - type of block
- * @return {boolean} indicates whether or not block is in the library
+ * @param {string} blockType - Type of block.
+ * @return {boolean} Boolean indicating whether or not block is in the library.
  */
-BlockLibrary.Controller.prototype.isInBlockLibrary = function(blockType) {
+BlockLibraryController.prototype.isInBlockLibrary = function(blockType) {
   var blockLibrary = this.storage.blocks;
   return (blockType in blockLibrary && blockLibrary[blockType] != null);
 };
@@ -121,17 +123,17 @@ BlockLibrary.Controller.prototype.isInBlockLibrary = function(blockType) {
 /**
  *  Populates the dropdown menu.
  */
-BlockLibrary.Controller.prototype.populateBlockLibrary = function() {
+BlockLibraryController.prototype.populateBlockLibrary = function() {
   if (this.storage.isEmpty()) {
     alert('Your block library is empty! Click "Save to Block Library" so ' +
          'you can reopen it the next time you visit Block Factory!');
   }
-  BlockLibrary.UI.clearOptions('blockLibraryDropdown');
+  BlockLibraryView.clearOptions('blockLibraryDropdown');
   var blockLibrary = this.storage.blocks;
   for (var block in blockLibrary) {
     // Make sure the block wasn't deleted.
     if (blockLibrary[block] != null) {
-      BlockLibrary.UI.addOption(block, block, 'blockLibraryDropdown', false);
+      BlockLibraryView.addOption(block, block, 'blockLibraryDropdown', false);
     }
   }
 };

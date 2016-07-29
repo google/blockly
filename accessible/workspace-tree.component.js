@@ -71,10 +71,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             </label>
             <ol role="group">
               <li *ngFor="#fieldButtonInfo of fieldButtonsInfo"
-                  [id]="idMap[fieldButtonInfo.baseIdKey]" role="treeitem"
+                  [id]="idMap[fieldButtonInfo.baseIdKey + i]" role="treeitem"
                   [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[fieldButtonInfo.baseIdKey + 'Button'], 'blockly-button', fieldButtonInfo.isDisabled(inputBlock.connection))"
                   [attr.aria-level]="level + 2">
-                <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button']"
+                <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button' + i]"
                         (click)="fieldButtonInfo.action(inputBlock.connection)"
                         [disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)">
                   {{fieldButtonInfo.translationIdForText|translate}}
@@ -321,14 +321,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         that.idKeys.push(buttonInfo.baseIdKey, buttonInfo.baseIdKey + 'Button');
       });
       this.fieldButtonsInfo.forEach(function(buttonInfo) {
-        that.idKeys.push(buttonInfo.baseIdKey, buttonInfo.baseIdKey + 'Button');
+        for (var i = 0; i < that.block.inputList.length; i++) {
+          that.idKeys.push(
+              buttonInfo.baseIdKey + i, buttonInfo.baseIdKey + 'Button' + i);
+        }
       });
       for (var i = 0; i < this.block.inputList.length; i++) {
         var inputBlock = this.block.inputList[i];
         that.idKeys.push(
-            'inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
-            'markSpotButton' + i, 'paste' + i, 'pasteButton' + i,
-            'listItem' + i);
+            'inputList' + i, 'inputMenuLabel' + i, 'listItem' + i);
       }
     },
     ngDoCheck: function() {

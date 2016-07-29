@@ -28,13 +28,13 @@ blocklyApp.FieldComponent = ng.core
   .Component({
     selector: 'blockly-field',
     template: `
-    <input *ngIf="isTextInput()" [id]="mainFieldId"
+    <input *ngIf="isTextInput()" [id]="mainFieldId" type="text" [disabled]="disabled"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [disabled]="disabled" type="text" aria-label="Press Enter to edit text">
+           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text'">
 
-    <input *ngIf="isNumberInput()" [id]="mainFieldId"
+    <input *ngIf="isNumberInput()" [id]="mainFieldId" type="number" [disabled]="disabled"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [disabled]="disabled" type="number" aria-label="Press Enter to edit number">
+           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number'">
 
     <div *ngIf="isDropdown()"
          [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])">

@@ -65,8 +65,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
           </ol>
         </li>
         <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
-          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1">
-            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [disabled]="true">
+          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" ng-if="inputBlock.fieldRow.length"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
+            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [disabled]="true" [mainFieldId]="idMap['fieldLabel' + i]">
             </blockly-field>
           </li>
 
@@ -117,7 +118,8 @@ blocklyApp.ToolboxTreeComponent = ng.core
             'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
       }
       for (var i = 0; i < this.block.inputList.length; i++){
-        elementsNeedingIds.push('listItem' + i, 'inputList' + i);
+        elementsNeedingIds.push(
+            'listItem' + i, 'inputList' + i, 'fieldLabel' + i);
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
       if (this.isTopLevel) {

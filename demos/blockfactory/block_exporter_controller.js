@@ -24,8 +24,9 @@ BlockExporterController = function(blockLibStorage) {
   this.blockLibStorage = blockLibStorage;
   // Utils for generating code to export
   this.tools = new BlockExporterTools();
-  // Xml representation of the toolbox
+  // View provides the selector workspace and export settings UI.
   this.view = new BlockExporterView(
+      //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
 };
 

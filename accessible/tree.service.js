@@ -246,12 +246,13 @@ blocklyApp.TreeService = ng.core
         if (e.keyCode == 13) {
           // Enter key. The user wants to interact with a button or an input
           // field.
-          if (activeDesc.children.length == 1) {
-            var child = activeDesc.children[0];
-            if (child.tagName == 'BUTTON') {
-              child.click();
-            } else if (child.tagName == 'INPUT') {
-              child.focus();
+          var currentChild = activeDesc;
+          while (currentChild.children.length) {
+            currentChild = currentChild.children[0];
+            if (currentChild.tagName == 'BUTTON') {
+              currentChild.click();
+            } else if (currentChild.tagName == 'INPUT') {
+              currentChild.focus();
             }
           }
         } else if (e.keyCode == 9) {

@@ -48,13 +48,10 @@ blocklyApp.UtilsService = ng.core
       return attrValue;
     },
     getInputTypeLabel: function(connection) {
-      // Returns an upper case string in the case of official input type names.
-      // Returns the lower case string 'any' if any official input type qualifies.
-      // The differentiation between upper and lower case signifies the difference
-      // between an input type (BOOLEAN, LIST, etc) and the colloquial english term
-      // 'any'.
+      // Returns the input type name, or 'any' if any official input type
+      // qualifies.
       if (connection.check_) {
-        return connection.check_.join(', ').toUpperCase();
+        return connection.check_.join(', ');
       } else {
         return Blockly.Msg.ANY;
       }

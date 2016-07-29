@@ -58,6 +58,7 @@ Blockly.Msg.COPY_TO_MARKED_SPOT = 'copy to marked spot';
 Blockly.Msg.TOOLBOX = 'Toolbox';
 Blockly.Msg.WORKSPACE = 'Workspace';
 Blockly.Msg.ANY = 'any';
+Blockly.Msg.FOR = 'for';
 Blockly.Msg.STATEMENT = 'statement';
 Blockly.Msg.VALUE = 'value';
 Blockly.Msg.CUT_BLOCK_MSG = 'Cut block: ';

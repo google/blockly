@@ -40,57 +40,51 @@ blocklyApp.ToolboxTreeComponent = ng.core
             [attr.aria-level]="level + 1">
           <label #label [id]="idMap['label']">{{'BLOCK_ACTION_LIST'|translate}}</label>
           <ol role="group" *ngIf="displayBlockMenu">
-            <li #workspaceCopy [id]="idMap['workspaceCopy']" role="treeitem"
+            <li [id]="idMap['workspaceCopy']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
                 [attr.aria-level]="level + 2">
-              <button #workspaceCopyButton [id]="idMap['workspaceCopyButton']"
-                      (click)="copyToWorkspace()">
+              <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()">
                 {{'COPY_TO_WORKSPACE'|translate}}
               </button>
             </li>
-            <li #blockCopy [id]="idMap['blockCopy']" role="treeitem"
+            <li [id]="idMap['blockCopy']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
                 [attr.aria-level]="level + 2">
-              <button #blockCopyButton
-                      [id]="idMap['blockCopyButton']"
-                      (click)="copyToClipboard()">
+              <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()">
                 {{'COPY_TO_CLIPBOARD'|translate}}
               </button>
             </li>
-            <li #sendToSelected [id]="idMap['sendToSelected']" role="treeitem"
+            <li [id]="idMap['sendToSelected']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
                 [attr.aria-level]="level + 2">
-              <button #sendToSelectedButton
-                      [id]="idMap['sendToSelectedButton']"
-                      (click)="copyToMarkedSpot()"
+              <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
                       [disabled]="!canBeCopiedToMarkedConnection()">
                 {{'COPY_TO_MARKED_SPOT'|translate}}
               </button>
             </li>
           </ol>
         </li>
-        <div *ngFor="#inputBlock of block.inputList; #i=index">
-          <blockly-field *ngFor="#field of inputBlock.fieldRow; #j=index"
-                         [field]="field" [level]="level + 1" [disabled]="true">
-          </blockly-field>
+        <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
+          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1">
+            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [disabled]="true">
+            </blockly-field>
+          </li>
+
           <blockly-toolbox-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
-                                [block]="inputBlock.connection.targetBlock()"
-                                [displayBlockMenu]="false"
-                                [level]="level + 1">
+                                [block]="inputBlock.connection.targetBlock()" [level]="level + 1"
+                                [displayBlockMenu]="false">
           </blockly-toolbox-tree>
-          <li #listItem1 [id]="idMap['listItem' + i]" role="treeitem"
+          <li [id]="idMap['inputList' + i]" role="treeitem"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
-              [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])"
               [attr.aria-level]="level + 1">
-            <!--TODO(madeeha): i18n here will need to happen in a different way due to the way grammar changes based on language.-->
-            <label #label [id]="idMap['listItem' + i + 'Label']">
-              {{utilsService.getInputTypeLabel(inputBlock.connection)}}
-              {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
+            <label>
+              {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
             </label>
           </li>
-        </div>
+        </template>
       </ol>
     </li>
+
     <blockly-toolbox-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
                           [level]="level"
                           [block]="block.nextConnection.targetBlock()"
@@ -123,7 +117,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
             'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
       }
       for (var i = 0; i < this.block.inputList.length; i++){
-        elementsNeedingIds.push('listItem' + i, 'listItem' + i + 'Label')
+        elementsNeedingIds.push('listItem' + i, 'inputList' + i);
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
       if (this.isTopLevel) {

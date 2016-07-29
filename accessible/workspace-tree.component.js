@@ -51,17 +51,24 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           </ol>
         </li>
 
-        <div *ngFor="#inputBlock of block.inputList; #i = index">
-          <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [level]="level + 1"></blockly-field>
+        <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
+          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="inputBlock.fieldRow.length">
+            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field">
+            </blockly-field>
+          </li>
+
           <blockly-workspace-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
                                   [block]="inputBlock.connection.targetBlock()" [level]="level + 1"
                                   [tree]="tree">
           </blockly-workspace-tree>
-          <li #inputList [attr.aria-level]="level + 1" [id]="idMap['inputList' + i]"
+          <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
+              *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])"
-              *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()" (keydown)="treeService.onKeypress($event, tree)">
-            <!-- TODO(madeeha): i18n here will need to happen in a different way due to the way grammar changes based on language. -->
-            <label [id]="idMap['inputMenuLabel' + i]"> {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed: </label>
+              [attr.aria-level]="level + 1"
+              (keydown)="treeService.onKeypress($event, tree)">
+            <label [id]="idMap['inputMenuLabel' + i]">
+              {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
+            </label>
             <ol role="group">
               <li *ngFor="#fieldButtonInfo of fieldButtonsInfo"
                   [id]="idMap[fieldButtonInfo.baseIdKey]" role="treeitem"
@@ -75,7 +82,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
               </li>
             </ol>
           </li>
-        </div>
+        </template>
       </ol>
     </li>
 
@@ -318,11 +325,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       });
       for (var i = 0; i < this.block.inputList.length; i++) {
         var inputBlock = this.block.inputList[i];
-        if (inputBlock.connection && !inputBlock.connection.targetBlock()) {
-          that.idKeys.push(
-              'inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
-              'markSpotButton' + i, 'paste' + i, 'pasteButton' + i);
-        }
+        that.idKeys.push(
+            'inputList' + i, 'inputMenuLabel' + i, 'markSpot' + i,
+            'markSpotButton' + i, 'paste' + i, 'pasteButton' + i,
+            'listItem' + i);
       }
     },
     ngDoCheck: function() {

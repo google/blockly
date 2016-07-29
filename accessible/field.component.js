@@ -28,44 +28,37 @@ blocklyApp.FieldComponent = ng.core
   .Component({
     selector: 'blockly-field',
     template: `
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
-        [attr.aria-level]="level">
-      <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-             [disabled]="disabled" type="text" aria-label="text">
-    </li>
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isNumberInput()"
-        [attr.aria-level]="level">
-      <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-             [disabled]="disabled" type="number" aria-label="number">
-    </li>
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isDropdown()"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])"
-        [attr.aria-level]="level">
+    <input *ngIf="isTextInput()" [id]="idMap['input']"
+           [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
+           [disabled]="disabled" type="text" aria-label="Press Enter to edit text">
+
+    <input *ngIf="isNumberInput()" [id]="idMap['input']"
+           [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
+           [disabled]="disabled" type="number" aria-label="Press Enter to edit number">
+
+    <div *ngIf="isDropdown()"
+         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])">
       <label [id]="idMap['label']">{{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}</label>
       <ol role="group">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
-            [attr.aria-level]="level + 1">
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)"
                   [disabled]="disabled">
             {{optionText[optionValue]}}
           </button>
         </li>
       </ol>
-    </li>
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isCheckbox()"
-        [attr.aria-level]="level">
+    </div>
+
+    <div *ngIf="isCheckbox()">
       // Checkboxes are not currently supported.
-    </li>
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextField() && hasVisibleText()"
-        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])"
-        [attr.aria-level]="level">
-      <label [id]="idMap['label']">
-        {{field.getText()}}
-      </label>
-    </li>
+    </div>
+
+    <label [id]="idMap['label']" *ngIf="isTextField() && hasVisibleText()">
+      {{field.getText()}}
+    </label>
     `,
-    inputs: ['field', 'level', 'index', 'parentId', 'disabled'],
+    inputs: ['field', 'index', 'parentId', 'disabled'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({

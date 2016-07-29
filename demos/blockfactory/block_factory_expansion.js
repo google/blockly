@@ -56,7 +56,6 @@ BlockFactoryExpansion.init = function() {
 
   // Assign button click handlers for Block Exporter.
   document.getElementById('exporterSubmitButton').addEventListener('click',
-      // Bind exporter instance to 'this' for the function.
       function() {
         BlockFactoryExpansion.exporter.exportBlocks();
       });

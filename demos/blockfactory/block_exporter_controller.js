@@ -29,60 +29,7 @@ BlockExporterController = function(blockExporterContainerID, blockLibStorage) {
   this.tools = new BlockExporterTools();
   // Xml representation of the toolbox
   this.view = new BlockExporterView(blockExporterContainerID,
-      this.generateToolboxFromLibrary());
-};
-
-/**
- * Initializes all saved blocks by evaluating block definition code. Called in
- * order to be able to create instances of the blocks in the exporter workspace.
- */
- // TODO(quachtina96): move to tools
-BlockExporterController.prototype.initializeAllBlocks =
-    function() {
-      var allBlockTypes = this.blockLibStorage.getBlockTypes();
-      var blockXmlMap = this.blockLibStorage.getBlockXmls(allBlockTypes);
-      var blockDefs =
-          this.tools.getBlockDefs(blockXmlMap, 'JavaScript');
-      eval(blockDefs);
-    };
-
-/**
- * Pulls information about all blocks in the block library to generate xml
- * for the selector workpace's toolbox.
- *
- * @return {!Element} xml representation of the toolbox
- */
- // TODO(quacht):pass in blocks. move to tools
-BlockExporterController.prototype.generateToolboxFromLibrary = function() {
-  // Create DOM for XML.
-  var xmlDom = goog.dom.createDom('xml',
-    {
-      'id' : this.containerID + '_toolbox',
-      'style' : 'display:none'
-    });
-
-  // Object mapping block type to XML
-  var blocks = this.blockLibStorage.blocks;
-  this.initializeAllBlocks();
-
-  for (var blockType in blocks) {
-    // Create category DOM element.
-    var categoryElement = goog.dom.createDom('category');
-    categoryElement.setAttribute('name',blockType);
-
-    // Render block in hidden workspace.
-    this.tools.hiddenWorkspace.clear();
-    var block = this.tools.hiddenWorkspace.newBlock(blockType);
-
-    // Get preview block XML
-    var blockChild = Blockly.Xml.blockToDom(block);
-    blockChild.removeAttribute('id');
-
-    // Add block to category and category to XML
-    categoryElement.appendChild(blockChild);
-    xmlDom.appendChild(categoryElement);
-  }
-  return xmlDom;
+      this.tools.generateToolboxFromLibrary(this.blockLibStorage));
 };
 
 /**
@@ -147,7 +94,8 @@ BlockExporterController.prototype.exportBlocks = function() {
  * workspace
  */
 BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
-  var updatedToolbox = opt_toolboxXml || this.generateToolboxFromLibrary();
+  var updatedToolbox = opt_toolboxXml ||
+      this.tools.generateToolboxFromLibrary(this.blockLibStorage);
   this.view.setToolbox(updatedToolbox);
   this.view.renderToolbox(updatedToolbox);
 };

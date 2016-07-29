@@ -30,10 +30,14 @@ BlockFactoryExpansion = function() {
  * @param {!Element} blockLibraryDropdown - HTML select element from which the
  *    user selects a block to work on.
  */
-BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
-  var blockType
-      = this.blockLibraryController.getSelectedBlockType(blockLibraryDropdown);
-  this.blockLibraryController.openBlock(blockType);
+BlockFactoryExpansion.prototype.onSelectedBlockChanged = function(blockLibraryDropdown) {
+  var self = this;
+  var onSelect = function(blockLibraryDropdown) {
+    var blockType
+        = self.blockLibraryController.getSelectedBlockType(blockLibraryDropdown);
+    self.blockLibraryController.openBlock(blockType);
+  };
+  onSelect(blockLibraryDropdown);
 };
 
 /**
@@ -56,19 +60,22 @@ BlockFactoryExpansion.prototype.onFactoryTab =
  * Tied to 'Block Exporter' Tab. Shows Block Exporter.
  */
 BlockFactoryExpansion.prototype.onExporterTab =
-    function(blockFactoryTab, blockExporterTab) {
-      // Turn exporter tab on and factory tab off.
-      goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-      goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+    function(blockFactoryTab, blockExporterTab, bfeSelf) {
+      var onTab = function(blockFactoryTab, blockExporterTab) {
+        // Turn exporter tab on and factory tab off.
+        goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+        goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
-      // Update toolbox to reflect current block library.
-      this.export.updateToolbox();
+        // Update toolbox to reflect current block library.
+        bfeSelf.exporter.updateToolbox();
 
-      // Show container of exporter.
-      BlockFactory.show('blockLibraryExporter');
+        // Show container of exporter.
+        BlockFactory.show('blockLibraryExporter');
 
-      // Resize to render workspaces' toolboxes correctly.
-      window.dispatchEvent(new Event('resize'));
+        // Resize to render workspaces' toolboxes correctly.
+        window.dispatchEvent(new Event('resize'));
+      };
+      onTab(blockFactoryTab, blockExporterTab);
     };
 
 /**
@@ -81,27 +88,32 @@ BlockFactoryExpansion.prototype.onExporterTab =
  */
 BlockFactoryExpansion.prototype.addTabHandlers =
     function(blockFactoryTabID, blockExporterTabID) {
-      // Get div elements representing tabs
-      var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-      var blockExporterTab = goog.dom.getElement(blockExporterTabID);
-      blockFactoryTab.addEventListener('click',
-          function() {
-            this.onFactoryTab(blockFactoryTab, blockExporterTab);
-          });
-      blockExporterTab.addEventListener('click',
-          function() {
-            this.onExporterTab(blockFactoryTab, blockExporterTab);
-          });
+      var self = this;
+      var addTabHandler = function(blockFactoryTabID, blockExporterTabID){
+        // Get div elements representing tabs
+        var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+        var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+        blockFactoryTab.addEventListener('click',
+            function() {
+              self.onFactoryTab(blockFactoryTab, blockExporterTab);
+            });
+        blockExporterTab.addEventListener('click',
+            function() {
+              self.onExporterTab(blockFactoryTab, blockExporterTab, self);
+            });
+      };
+      addTabHandler(blockFactoryTabID, blockExporterTabID);
     };
 
 /**
  * Assign button click handlers for the exporter.
  */
 BlockFactoryExpansion.prototype.assignExporterClickHandlers = function() {
+  var self = this;
   // Export blocks when the user submits the export settings.
   document.getElementById('exporterSubmitButton').addEventListener('click',
       function() {
-        this.exporter.exportBlocks();
+        self.exporter.exportBlocks();
       });
 };
 
@@ -109,21 +121,28 @@ BlockFactoryExpansion.prototype.assignExporterClickHandlers = function() {
  * Assign button click handlers for the block library.
  */
 BlockFactoryExpansion.prototype.assignLibraryClickHandlers = function() {
+  var self = this;
   // Assign button click handlers for Block Library.
   document.getElementById('saveToBlockLibraryButton').addEventListener('click',
       function() {
-        this.blockLibraryController.saveToBlockLibrary();
+        self.blockLibraryController.saveToBlockLibrary();
       });
 
   document.getElementById('removeBlockFromLibraryButton').addEventListener(
     'click',
       function() {
-        this.blockLibraryController.removeFromBlockLibrary();
+        self.blockLibraryController.removeFromBlockLibrary();
       });
 
   document.getElementById('clearBlockLibraryButton').addEventListener('click',
       function() {
-        this.blockLibraryController.clearBlockLibrary();
+        self.blockLibraryController.clearBlockLibrary();
+      });
+
+  var dropdown = document.getElementById('blockLibraryDropdown');
+  dropdown.addEventListener('changed',
+      function() {
+        self.onSelectedBlockChanged(dropdown);
       });
 };
 

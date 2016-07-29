@@ -24,25 +24,81 @@
 
 blocklyApp.ClipboardService = ng.core
   .Class({
-    constructor: function() {
+    constructor: [blocklyApp.UtilsService, function(_utilsService) {
       this.clipboardBlockXml_ = null;
       this.clipboardBlockSuperiorConnection_ = null;
       this.clipboardBlockNextConnection_ = null;
       this.markedConnection_ = null;
+      this.utilsService = _utilsService;
+    }],
+    areConnectionsCompatible_: function(blockConnection, connection) {
+      // Check that both connections exist, that it's the right kind of
+      // connection, and that the types match.
+      return Boolean(
+          connection && blockConnection &&
+          Blockly.OPPOSITE_TYPE[blockConnection.type] == connection.type &&
+          connection.checkType_(blockConnection));
+    },
+    isCompatibleWithClipboard: function(connection) {
+      var superiorConnection = this.clipboardBlockSuperiorConnection_;
+      var nextConnection = this.clipboardBlockNextConnection_;
+      return Boolean(
+          this.areConnectionsCompatible_(connection, superiorConnection) ||
+          this.areConnectionsCompatible_(connection, nextConnection));
+    },
+    isMovableToMarkedConnection: function(block) {
+      // It should not be possible to move any ancestor of the block containing
+      // the marked spot to the marked spot.
+      if (!this.markedConnection_) {
+        return false;
+      }
+
+      var markedSpotAncestorBlock = this.markedConnection_.getSourceBlock();
+      while (markedSpotAncestorBlock) {
+        if (markedSpotAncestorBlock.id == block.id) {
+          return false;
+        }
+        markedSpotAncestorBlock = markedSpotAncestorBlock.getParent();
+      }
+
+      return this.canBeCopiedToMarkedConnection(block);
+    },
+    canBeCopiedToMarkedConnection: function(block) {
+      if (!this.markedConnection_ ||
+          !this.markedConnection_.getSourceBlock().workspace) {
+        return false;
+      }
+
+      var potentialConnections = [
+          block.outputConnection,
+          block.previousConnection,
+          block.nextConnection
+      ];
+
+      var that = this;
+      return potentialConnections.some(function(connection) {
+        return that.areConnectionsCompatible_(
+            connection, that.markedConnection_);
+      });
+    },
+    markConnection: function(connection) {
+      this.markedConnection_ = connection;
+      alert(Blockly.Msg.MARKED_SPOT_MSG);
     },
     cut: function(block) {
-      var blockSummary = block.toString();
       this.copy(block, false);
       block.dispose(true);
-      alert(Blockly.Msg.CUT_BLOCK_MSG + blockSummary);
     },
     copy: function(block, announce) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
       this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
           block.previousConnection;
       this.clipboardBlockNextConnection_ = block.nextConnection;
+
       if (announce) {
-        alert(Blockly.Msg.COPIED_BLOCK_MSG + block.toString());
+        alert(
+            Blockly.Msg.COPIED_BLOCK_MSG +
+            this.utilsService.getBlockDescription(block));
       }
     },
     pasteFromClipboard: function(connection) {
@@ -60,46 +116,37 @@ blocklyApp.ClipboardService = ng.core
       }
       alert(
           Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
-          reconstitutedBlock.toString());
+          this.utilsService.getBlockDescription(reconstitutedBlock));
+      return reconstitutedBlock.id;
     },
-    pasteToMarkedConnection: function(block, announce) {
+    pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
-      var reconstitutedBlock =
-          Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      this.markedConnection_.connect(
-          reconstitutedBlock.outputConnection ||
-          reconstitutedBlock.previousConnection);
-      if (announce) {
-        alert(
-            Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
-            reconstitutedBlock.toString());
+      var reconstitutedBlock = Blockly.Xml.domToBlock(
+          blocklyApp.workspace, xml);
+
+      var potentialConnections = [
+          reconstitutedBlock.outputConnection,
+          reconstitutedBlock.previousConnection,
+          reconstitutedBlock.nextConnection
+      ];
+
+      var connectionSuccessful = false;
+      for (var i = 0; i < potentialConnections.length; i++) {
+        if (this.areConnectionsCompatible_(
+            this.markedConnection_, potentialConnections[i])) {
+          this.markedConnection_.connect(potentialConnections[i]);
+          connectionSuccessful = true;
+          break;
+        }
       }
-    },
-    markConnection: function(connection) {
-      this.markedConnection_ = connection;
-      alert(Blockly.Msg.MARKED_SPOT_MSG);
-    },
-    isCompatibleWithConnection_: function(blockConnection, connection) {
-      // Check that both connections exist, that the types match, and that it's
-      // the right kind of connection.
-      return Boolean(
-          connection && blockConnection &&
-          Blockly.OPPOSITE_TYPE[blockConnection.type] == connection.type &&
-          connection.checkType_(blockConnection));
-    },
-    isBlockCompatibleWithMarkedConnection: function(block) {
-      var blockConnection = block.outputConnection || block.previousConnection;
-      return Boolean(
-          this.markedConnection_ &&
-          this.markedConnection_.sourceBlock_.workspace &&
-          this.isCompatibleWithConnection_(
-              blockConnection, this.markedConnection_));
-    },
-    isClipboardCompatibleWithConnection: function(connection) {
-      var superiorConnection = this.clipboardBlockSuperiorConnection_;
-      var nextConnection = this.clipboardBlockNextConnection_;
-      return Boolean(
-          this.isCompatibleWithConnection_(connection, superiorConnection) ||
-          this.isCompatibleWithConnection_(connection, nextConnection));
+
+      if (!connectionSuccessful) {
+        console.error('ERROR: Could not connect block to marked spot.');
+        return;
+      }
+
+      this.markedConnection_ = null;
+
+      return reconstitutedBlock.id;
     }
   });

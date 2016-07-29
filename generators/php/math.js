@@ -47,20 +47,14 @@ Blockly.PHP['math_arithmetic'] = function(block) {
     'MINUS': [' - ', Blockly.PHP.ORDER_SUBTRACTION],
     'MULTIPLY': [' * ', Blockly.PHP.ORDER_MULTIPLICATION],
     'DIVIDE': [' / ', Blockly.PHP.ORDER_DIVISION],
-    'POWER': [null, Blockly.PHP.ORDER_COMMA]  // Handle power separately.
+    'POWER': [' ** ', Blockly.PHP.ORDER_POWER]
   };
   var tuple = OPERATORS[block.getFieldValue('OP')];
   var operator = tuple[0];
   var order = tuple[1];
   var argument0 = Blockly.PHP.valueToCode(block, 'A', order) || '0';
   var argument1 = Blockly.PHP.valueToCode(block, 'B', order) || '0';
-  var code;
-  // Power in PHP requires a special case since it has no operator.
-  if (!operator) {
-    code = 'pow(' + argument0 + ', ' + argument1 + ')';
-    return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
-  }
-  code = argument0 + operator + argument1;
+  var code = argument0 + operator + argument1;
   return [code, order];
 };
 
@@ -172,25 +166,25 @@ Blockly.PHP['math_number_property'] = function(block) {
     // Prime is a special case as it is not a one-liner test.
     var functionName = Blockly.PHP.provideFunction_(
         'math_isPrime',
-        [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($n) {',
-          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-          '  if ($n == 2 || $n == 3) {',
-          '    return true;',
-          '  }',
-          '  // False if n is NaN, negative, is 1, or not whole.',
-          '  // And false if n is divisible by 2 or 3.',
-          '  if (!is_numeric($n) || $n <= 1 || $n % 1 != 0 || $n % 2 == 0 ||' +
-          ' $n % 3 == 0) {',
-          '    return false;',
-          '  }',
-          '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-          '  for ($x = 6; $x <= sqrt($n) + 1; $x += 6) {',
-          '    if ($n % ($x - 1) == 0 || $n % ($x + 1) == 0) {',
-          '      return false;',
-          '    }',
-          '  }',
-          '  return true;',
-          '}']);
+        ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ + '($n) {',
+         '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+         '  if ($n == 2 || $n == 3) {',
+         '    return true;',
+         '  }',
+         '  // False if n is NaN, negative, is 1, or not whole.',
+         '  // And false if n is divisible by 2 or 3.',
+         '  if (!is_numeric($n) || $n <= 1 || $n % 1 != 0 || $n % 2 == 0 ||' +
+            ' $n % 3 == 0) {',
+         '    return false;',
+         '  }',
+         '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+         '  for ($x = 6; $x <= sqrt($n) + 1; $x += 6) {',
+         '    if ($n % ($x - 1) == 0 || $n % ($x + 1) == 0) {',
+         '      return false;',
+         '    }',
+         '  }',
+         '  return true;',
+         '}']);
     code = functionName + '(' + number_to_check + ')';
     return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
@@ -256,10 +250,10 @@ Blockly.PHP['math_on_list'] = function(block) {
     case 'AVERAGE':
       var functionName = Blockly.PHP.provideFunction_(
           'math_mean',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($myList) {',
-            '  return array_sum($myList) / count($myList);',
-            '}']);
+           '  return array_sum($myList) / count($myList);',
+           '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || 'array()';
       code = functionName + '(' + list + ')';
@@ -267,12 +261,13 @@ Blockly.PHP['math_on_list'] = function(block) {
     case 'MEDIAN':
       var functionName = Blockly.PHP.provideFunction_(
           'math_median',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($arr) {',
-            '  sort($arr,SORT_NUMERIC);',
-            '  return (count($arr) % 2) ? $arr[floor(count($arr)/2)] : ',
-            '      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2) - 1]) / 2;',
-            '}']);
+           '  sort($arr,SORT_NUMERIC);',
+           '  return (count($arr) % 2) ? $arr[floor(count($arr)/2)] : ',
+           '      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2)' +
+              ' - 1]) / 2;',
+           '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
@@ -283,13 +278,14 @@ Blockly.PHP['math_on_list'] = function(block) {
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
       var functionName = Blockly.PHP.provideFunction_(
           'math_modes',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($values) {',
-            '  $v = array_count_values($values);',
-            '  arsort($v);',
-            '  foreach($v as $k => $v){$total = $k; break;}',
-            '  return array($total);',
-            '}']);
+           '  if (empty($values)) return array();',
+           '  $counts = array_count_values($values);',
+           '  arsort($counts); // Sort counts in descending order',
+           '  $modes = array_keys($counts, current($counts), true);',
+           '  return $modes;',
+           '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
@@ -297,14 +293,15 @@ Blockly.PHP['math_on_list'] = function(block) {
     case 'STD_DEV':
       var functionName = Blockly.PHP.provideFunction_(
           'math_standard_deviation',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
-          '($numbers) {',
-            '  $n = count($numbers);',
-            '  if (!$n) return null;',
-            '  $mean = array_sum($numbers) / count($numbers);',
-            '  foreach($numbers as $key => $num) $devs[$key] = pow($num - $mean, 2);',
-            '  return sqrt(array_sum($devs) / (count($devs) - 1));',
-            '}']);
+          ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+              '($numbers) {',
+           '  $n = count($numbers);',
+           '  if (!$n) return null;',
+           '  $mean = array_sum($numbers) / count($numbers);',
+           '  foreach($numbers as $key => $num) $devs[$key] = ' +
+              'pow($num - $mean, 2);',
+           '  return sqrt(array_sum($devs) / (count($devs) - 1));',
+           '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
               Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
@@ -312,11 +309,11 @@ Blockly.PHP['math_on_list'] = function(block) {
     case 'RANDOM':
       var functionName = Blockly.PHP.provideFunction_(
           'math_random_list',
-          [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+          ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
               '($list) {',
-            '  $x = rand(0, count($list)-1);',
-            '  return $list[$x];',
-            '}']);
+           '  $x = rand(0, count($list)-1);',
+           '  return $list[$x];',
+           '}']);
       list = Blockly.PHP.valueToCode(block, 'LIST',
           Blockly.PHP.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
@@ -358,13 +355,13 @@ Blockly.PHP['math_random_int'] = function(block) {
       Blockly.PHP.ORDER_COMMA) || '0';
   var functionName = Blockly.PHP.provideFunction_(
       'math_random_int',
-      [ 'function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + Blockly.PHP.FUNCTION_NAME_PLACEHOLDER_ +
           '($a, $b) {',
-        '  if ($a > $b) {',
-        '    return rand($b, $a);',
-        '  }',
-        '  return rand($a, $b);',
-        '}']);
+       '  if ($a > $b) {',
+       '    return rand($b, $a);',
+       '  }',
+       '  return rand($a, $b);',
+       '}']);
   var code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.PHP.ORDER_FUNCTION_CALL];
 };

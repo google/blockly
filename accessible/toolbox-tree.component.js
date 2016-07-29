@@ -31,68 +31,62 @@ blocklyApp.ToolboxTreeComponent = ng.core
     <li #parentList [id]="idMap['parentList']" role="treeitem"
         [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && noCategories}"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])"
-        [attr.aria-selected]="index == 0 && tree.getAttribute('aria-activedescendant') == 'blockly-toolbox-tree-node0'"
         [attr.aria-level]="level">
-      <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{block.toString()}}</label>
-      <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0"
-          [attr.aria-level]="level+1">
+      <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
+      <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0">
         <li #listItem class="blocklyHasChildren" [id]="idMap['listItem']"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummaryLabel'])"
             *ngIf="displayBlockMenu" role="treeitem"
-            aria-selected=false [attr.aria-level]="level+1">
+            [attr.aria-level]="level + 1">
           <label #label [id]="idMap['label']">{{'BLOCK_ACTION_LIST'|translate}}</label>
-          <ol role="group" *ngIf="displayBlockMenu"  [attr.aria-level]="level+2">
-            <li #workspaceCopy [id]="idMap['workspaceCopy']" role="treeitem"
+          <ol role="group" *ngIf="displayBlockMenu">
+            <li [id]="idMap['workspaceCopy']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
-                [attr.aria-level]="level+2" aria-selected=false>
-              <button #workspaceCopyButton [id]="idMap['workspaceCopyButton']"
-                      (click)="copyToWorkspace(block)">
+                [attr.aria-level]="level + 2">
+              <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()">
                 {{'COPY_TO_WORKSPACE'|translate}}
               </button>
             </li>
-            <li #blockCopy [id]="idMap['blockCopy']" role="treeitem"
+            <li [id]="idMap['blockCopy']" role="treeitem"
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
-                [attr.aria-level]="level+2" aria-selected=false>
-              <button #blockCopyButton [id]="idMap['blockCopyButton']"
-                      (click)="clipboardService.copy(block, true)">
+                [attr.aria-level]="level + 2">
+              <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()">
                 {{'COPY_TO_CLIPBOARD'|translate}}
               </button>
             </li>
-            <li #sendToSelected [id]="idMap['sendToSelected']" role="treeitem"
-                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !clipboardService.isBlockCompatibleWithMarkedConnection(block))"
-                [attr.aria-level]="level+2" aria-selected=false>
-              <button #sendToSelectedButton
-                      [id]="idMap['sendToSelectedButton']"
-                      (click)="copyToMarked(block)"
-                      [disabled]="!clipboardService.isBlockCompatibleWithMarkedConnection(block)">
+            <li [id]="idMap['sendToSelected']" role="treeitem"
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
+                [attr.aria-level]="level + 2">
+              <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
+                      [disabled]="!canBeCopiedToMarkedConnection()">
                 {{'COPY_TO_MARKED_SPOT'|translate}}
               </button>
             </li>
           </ol>
         </li>
-        <div *ngFor="#inputBlock of block.inputList; #i=index">
-          <blockly-field *ngFor="#field of inputBlock.fieldRow; #j=index"
-                      [attr.aria-level]="level+1" [field]="field"
-                      [level]="level+1">
-          </blockly-field>
+        <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
+          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" ng-if="inputBlock.fieldRow.length"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
+            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [disabled]="true" [mainFieldId]="idMap['fieldLabel' + i]">
+            </blockly-field>
+          </li>
+
           <blockly-toolbox-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
-                                [block]="inputBlock.connection.targetBlock()"
-                                [displayBlockMenu]="false"
-                                [level]="level+1">
+                                [block]="inputBlock.connection.targetBlock()" [level]="level + 1"
+                                [displayBlockMenu]="false">
           </blockly-toolbox-tree>
-          <li #listItem1 [id]="idMap['listItem' + i]" role="treeitem"
+          <li [id]="idMap['inputList' + i]" role="treeitem"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
-              [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-text', idMap['listItem' + i + 'Label'])"
-              [attr.aria-level]="level+1" aria-selected=false>
-            <!--TODO(madeeha): i18n here will need to happen in a different way due to the way grammar changes based on language.-->
-            <label #label [id]="idMap['listItem' + i + 'Label']">
-              {{utilsService.getInputTypeLabel(inputBlock.connection)}}
-              {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
+              [attr.aria-level]="level + 1"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputListLabel' + i])">
+            <label [id]="idMap['inputListLabel' + i]">
+              {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
             </label>
           </li>
-        </div>
+        </template>
       </ol>
     </li>
+
     <blockly-toolbox-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
                           [level]="level"
                           [block]="block.nextConnection.targetBlock()"
@@ -125,7 +119,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
             'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
       }
       for (var i = 0; i < this.block.inputList.length; i++){
-        elementsNeedingIds.push('listItem' + i, 'listItem' + i + 'Label')
+        elementsNeedingIds.push(
+            'listItem' + i, 'inputList' + i, 'fieldLabel' + i,
+            'inputListLabel' + i);
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
       if (this.isTopLevel) {
@@ -134,23 +130,43 @@ blocklyApp.ToolboxTreeComponent = ng.core
         this.idMap['parentList'] = this.utilsService.generateUniqueId();
       }
     },
+    getBlockDescription: function() {
+      return this.utilsService.getBlockDescription(this.block);
+    },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
       return this.utilsService.generateAriaLabelledByAttr(
           mainLabel, secondLabel, isDisabled);
     },
-    copyToWorkspace: function(block) {
-      var xml = Blockly.Xml.blockToDom(block);
+    canBeCopiedToMarkedConnection: function() {
+      return this.clipboardService.canBeCopiedToMarkedConnection(this.block);
+    },
+    copyToWorkspace: function() {
+      var xml = Blockly.Xml.blockToDom(this.block);
       Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      alert('Added block to workspace: ' + block.toString());
+      alert('Added block to workspace: ' + this.getBlockDescription());
     },
-    copyToClipboard: function(block) {
-      if (this.clipboardService) {
-        this.clipboardService.copy(block, true);
-      }
+    copyToClipboard: function() {
+      this.clipboardService.copy(this.block, true);
     },
-    copyToMarked: function(block) {
-      if (this.clipboardService) {
-        this.clipboardService.pasteToMarkedConnection(block);
-      }
+    copyToMarkedSpot: function() {
+      // This involves two steps:
+      // - Put the block on the destination tree.
+      // - Change the current tree-level focus to the destination tree, and the
+      // screenreader focus for the destination tree to the block just moved.
+      var blockDescription = this.getBlockDescription();
+
+      var newBlockId = this.clipboardService.pasteToMarkedConnection(
+          this.block);
+
+      // Invoke a digest cycle, so that the DOM settles.
+      var that = this;
+      setTimeout(function() {
+        var destinationTreeId = that.treeService.getTreeIdForBlock(newBlockId);
+        document.getElementById(destinationTreeId).focus();
+        that.treeService.setActiveDesc(
+            newBlockId + 'blockRoot', destinationTreeId);
+
+        alert('Block copied to marked spot: ' + blockDescription);
+      });
     }
   });

@@ -10,7 +10,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">variable</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">variable</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="variables_get">
                 <field name="VAR">item</field>
@@ -31,7 +35,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">reserved variable</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">reserved variable</field>
+                       </block>
+                     </value>
                     <value name="ACTUAL">
                       <block type="variables_get">
                         <field name="VAR">if</field>

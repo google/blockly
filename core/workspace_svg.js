@@ -84,9 +84,12 @@ Blockly.WorkspaceSvg.prototype.isFlyout = false;
 
 /**
  * Is this workspace currently being dragged around?
- * @type {boolean}
+ * DRAG_NONE - No drag operation.
+ * DRAG_BEGIN - Still inside the initial DRAG_RADIUS.
+ * DRAG_FREE - Workspace has been dragged further than DRAG_RADIUS.
+ * @private
  */
-Blockly.WorkspaceSvg.prototype.isScrolling = false;
+Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
 
 /**
  * Current horizontal scrolling offset.
@@ -656,9 +659,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     // Right-click.
     this.showContextMenu_(e);
   } else if (this.scrollbar) {
-    // If the workspace is editable, only allow scrolling when gripping empty
-    // space.  Otherwise, allow scrolling when gripping anywhere.
-    this.isScrolling = true;
+    this.dragMode_ = Blockly.DRAG_BEGIN;
     // Record the current mouse position.
     this.startDragMouseX = e.clientX;
     this.startDragMouseY = e.clientY;
@@ -714,6 +715,17 @@ Blockly.WorkspaceSvg.prototype.moveDrag = function(e) {
 };
 
 /**
+ * Is the user currently dragging a block or scrolling the flyout/workspace?
+ * @return {boolean} True if currently dragging or scrolling.
+ */
+Blockly.WorkspaceSvg.prototype.isDragging = function() {
+  return Blockly.dragMode_ == Blockly.DRAG_FREE ||
+      (Blockly.Flyout.startFlyout_ &&
+          Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) ||
+      this.dragMode_ == Blockly.DRAG_FREE;
+};
+
+/**
  * Handle a mouse-wheel on SVG drawing surface.
  * @param {!Event} e Mouse wheel event.
  * @private
@@ -735,7 +747,7 @@ Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
  *   containing the blocks on the workspace.
  */
 Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
-  var topBlocks = this.getTopBlocks();
+  var topBlocks = this.getTopBlocks(false);
   // There are no blocks, return empty rectangle.
   if (!topBlocks.length) {
     return {x: 0, y: 0, width: 0, height: 0};
@@ -974,7 +986,7 @@ Blockly.WorkspaceSvg.prototype.preloadAudio_ = function() {
 };
 
 /**
- * Play an audio file at specified value.  If volume is not specified,
+ * Play a named sound at specified volume.  If volume is not specified,
  * use full volume (1).
  * @param {string} name Name of sound.
  * @param {number=} opt_volume Volume of sound (0-1).

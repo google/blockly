@@ -45,16 +45,28 @@ Blockly.Dart = new Blockly.Generator('Dart');
 Blockly.Dart.addReservedWords(
     // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
     // Section 16.1.1
-    'assert,break,case,catch,class,const,continue,default,do,else,enum,extends,false,final,finally,for,if,in,is,new,null,rethrow,return,super,switch,this,throw,true,try,var,void,while,with,' +
+    'assert,break,case,catch,class,const,continue,default,do,else,enum,' +
+    'extends,false,final,finally,for,if,in,is,new,null,rethrow,return,super,' +
+    'switch,this,throw,true,try,var,void,while,with,' +
     // https://api.dartlang.org/dart_core.html
-    'print,identityHashCode,identical,BidirectionalIterator,Comparable,double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,ArgumentError,AssertionError,CastError,ConcurrentModificationError,CyclicInitializationError,Error,Exception,FallThroughError,FormatException,IntegerDivisionByZeroException,NoSuchMethodError,NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,StateError,TypeError,UnimplementedError,UnsupportedError');
+    'print,identityHashCode,identical,BidirectionalIterator,Comparable,' +
+    'double,Function,int,Invocation,Iterable,Iterator,List,Map,Match,num,' +
+    'Pattern,RegExp,Set,StackTrace,String,StringSink,Type,bool,DateTime,' +
+    'Deprecated,Duration,Expando,Null,Object,RuneIterator,Runes,Stopwatch,' +
+    'StringBuffer,Symbol,Uri,Comparator,AbstractClassInstantiationError,' +
+    'ArgumentError,AssertionError,CastError,ConcurrentModificationError,' +
+    'CyclicInitializationError,Error,Exception,FallThroughError,' +
+    'FormatException,IntegerDivisionByZeroException,NoSuchMethodError,' +
+    'NullThrownError,OutOfMemoryError,RangeError,StackOverflowError,' +
+    'StateError,TypeError,UnimplementedError,UnsupportedError'
+);
 
 /**
  * Order of operation ENUMs.
  * https://www.dartlang.org/docs/dart-up-and-running/ch02.html#operator_table
  */
 Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
-Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] .
+Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
 Blockly.Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
 Blockly.Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
 Blockly.Dart.ORDER_ADDITIVE = 4;       // + -
@@ -66,10 +78,17 @@ Blockly.Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
 Blockly.Dart.ORDER_EQUALITY = 10;      // == !=
 Blockly.Dart.ORDER_LOGICAL_AND = 11;   // &&
 Blockly.Dart.ORDER_LOGICAL_OR = 12;    // ||
-Blockly.Dart.ORDER_CONDITIONAL = 13;   // expr ? expr : expr
-Blockly.Dart.ORDER_CASCADE = 14;       // ..
-Blockly.Dart.ORDER_ASSIGNMENT = 15;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+Blockly.Dart.ORDER_IF_NULL = 13;       // ??
+Blockly.Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
+Blockly.Dart.ORDER_CASCADE = 15;       // ..
+Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
 Blockly.Dart.ORDER_NONE = 99;          // (...)
+
+/**
+ * Allow for switching between one and zero based indexing for lists and text,
+ * one based by default.
+ */
+Blockly.Dart.ONE_BASED_INDEXING = true;
 
 /**
  * Initialise the database of variable names.
@@ -172,6 +191,7 @@ Blockly.Dart.scrub_ = function(block, code) {
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
     var comment = block.getCommentText();
+    comment = Blockly.utils.wrap(comment, Blockly.Dart.COMMENT_WRAP - 3);
     if (comment) {
       if (block.getProcedureDef) {
         // Use documentation comment for function comments.
@@ -182,9 +202,9 @@ Blockly.Dart.scrub_ = function(block, code) {
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
-        var childBlock = block.inputList[x].connection.targetBlock();
+    for (var i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+        var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.Dart.allNestedComments(childBlock);
           if (comment) {
@@ -197,4 +217,64 @@ Blockly.Dart.scrub_ = function(block, code) {
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   var nextCode = Blockly.Dart.blockToCode(nextBlock);
   return commentCode + code + nextCode;
+};
+
+/**
+ * Gets a property and adjusts the value while taking into account indexing.
+ * @param {!Blockly.Block} block The block.
+ * @param {string} atId The property ID of the element to get.
+ * @param {number=} opt_delta Value to add.
+ * @param {boolean=} opt_negate Whether to negate the value.
+ * @param {number=} opt_order The highest order acting on this value.
+ * @return {string|number}
+ */
+Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
+    opt_order) {
+  var delta = opt_delta || 0;
+  var order = opt_order || Blockly.Dart.ORDER_NONE;
+  if (Blockly.Dart.ONE_BASED_INDEXING) {
+    delta--;
+  }
+  var defaultAtIndex = Blockly.Dart.ONE_BASED_INDEXING ? '1' : '0';
+  if (delta) {
+    var at = Blockly.Dart.valueToCode(block, atId,
+        Blockly.Dart.ORDER_ADDITIVE) || defaultAtIndex;
+  } else if (opt_negate) {
+    var at = Blockly.Dart.valueToCode(block, atId,
+        Blockly.Dart.ORDER_UNARY_PREFIX) || defaultAtIndex;
+  } else {
+    var at = Blockly.Dart.valueToCode(block, atId, order) ||
+        defaultAtIndex;
+  }
+
+  if (Blockly.isNumber(at)) {
+    // If the index is a naked number, adjust it right now.
+    at = parseInt(at, 10) + delta;
+    if (opt_negate) {
+      at = -at;
+    }
+  } else {
+    // If the index is dynamic, adjust it in code.
+    if (delta > 0) {
+      at = at + ' + ' + delta;
+      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
+    } else if (delta < 0) {
+      at = at + ' - ' + -delta;
+      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
+    }
+    if (opt_negate) {
+      if (delta) {
+        at = '-(' + at + ')';
+      } else {
+        at = '-' + at;
+      }
+      var innerOrder = Blockly.Dart.ORDER_UNARY_PREFIX;
+    }
+    innerOrder = Math.floor(innerOrder);
+    order = Math.floor(order);
+    if (innerOrder && order >= innerOrder) {
+      at = '(' + at + ')';
+    }
+  }
+  return at;
 };

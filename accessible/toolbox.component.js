@@ -29,17 +29,17 @@ blocklyApp.ToolboxComponent = ng.core
     template: `
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
       <ol #tree
-          id="blockly-toolbox-tree" role="group" class="blocklyTree"
+          id="blockly-toolbox-tree" role="tree" class="blocklyTree"
           *ngIf="toolboxCategories && toolboxCategories.length > 0" tabIndex="0"
           [attr.aria-labelledby]="toolboxTitle.id"
-          [attr.aria-activedescendant]="tree.getAttribute('aria-activedescendant') || tree.id + '-node0' "
+          [attr.aria-activedescendant]="getActiveDescId()"
           (keydown)="treeService.onKeypress($event, tree)">
         <template [ngIf]="xmlHasCategories">
           <li #parent
               [id]="idMap['Parent' + i]" role="treeitem"
               [ngClass]="{blocklyHasChildren: true, blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}"
               *ngFor="#category of toolboxCategories; #i=index"
-              aria-level="1" aria-selected=false
+              aria-level="1"
               [attr.aria-label]="category.attributes.name.value">
             <div *ngIf="category && category.attributes">
               <label [id]="idMap['Label' + i]" #name>
@@ -47,7 +47,7 @@ blocklyApp.ToolboxComponent = ng.core
               </label>
               <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
                 <blockly-toolbox-tree *ngFor="#block of getToolboxWorkspace(category).topBlocks_"
-                                      [level]=2 [block]="block"
+                                      [level]="2" [block]="block"
                                       [displayBlockMenu]="true"
                                       [tree]="tree">
                 </blockly-toolbox-tree>
@@ -57,7 +57,7 @@ blocklyApp.ToolboxComponent = ng.core
         </template>
         <div *ngIf="!xmlHasCategories">
           <blockly-toolbox-tree *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index"
-                                [level]=1 [block]="block"
+                                [level]="1" [block]="block"
                                 [displayBlockMenu]="true"
                                 [index]="i" [tree]="tree"
                                 [noCategories]="true"
@@ -98,7 +98,7 @@ blocklyApp.ToolboxComponent = ng.core
           this.idMap['Parent' + i] = 'blockly-toolbox-tree-node' + i;
         }
       } else {
-        // Create a single category is created with all the top-level blocks.
+        // Create a single category with all the top-level blocks.
         this.xmlHasCategories = false;
         this.toolboxCategories = [Array.from(xmlToolboxElt.children)];
       }
@@ -106,11 +106,18 @@ blocklyApp.ToolboxComponent = ng.core
     ngAfterViewInit: function() {
       // If this is a top-level tree in the toolbox, set its active
       // descendant after the ids have been computed.
+      // Note that a timeout is needed here in order to trigger Angular
+      // change detection.
       if (this.xmlHasCategories) {
-        this.treeService.setActiveDesc(
-            document.getElementById('blockly-toolbox-tree-node0'),
-            document.getElementById('blockly-toolbox-tree'));
+        var that = this;
+        setTimeout(function() {
+          that.treeService.setActiveDesc(
+              'blockly-toolbox-tree-node0', 'blockly-toolbox-tree');
+        });
       }
+    },
+    getActiveDescId: function() {
+      return this.treeService.getActiveDescId('blockly-toolbox-tree');
     },
     getToolboxWorkspace: function(categoryNode) {
       if (categoryNode.attributes && categoryNode.attributes.name) {

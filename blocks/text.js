@@ -322,7 +322,9 @@ Blockly.Blocks['text_indexOf'] = {
       this.appendDummyInput().appendField(Blockly.Msg.TEXT_INDEXOF_TAIL);
     }
     this.setInputsInline(true);
-    this.setTooltip(Blockly.Msg.TEXT_INDEXOF_TOOLTIP);
+    var tooltip = Blockly.Msg.TEXT_INDEXOF_TOOLTIP
+        .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '0' : '-1');
+    this.setTooltip(tooltip);
   }
 };
 
@@ -347,7 +349,17 @@ Blockly.Blocks['text_charAt'] = {
     this.appendDummyInput('AT');
     this.setInputsInline(true);
     this.updateAt_(true);
-    this.setTooltip(Blockly.Msg.TEXT_CHARAT_TOOLTIP);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var where = thisBlock.getFieldValue('WHERE');
+      var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
+      if (where == 'FROM_START' || where == 'FROM_END') {
+        tooltip += '  ' + Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP
+            .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '#1' : '#0');
+      }
+      return tooltip;
+    });
   },
   /**
    * Create XML to represent whether there is an 'AT' input.

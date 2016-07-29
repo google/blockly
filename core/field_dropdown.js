@@ -108,12 +108,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     var menuItem = e.target;
     if (menuItem) {
       var value = menuItem.getValue();
-      if (thisField.sourceBlock_ && thisField.validator_) {
+      if (thisField.sourceBlock_) {
         // Call any validation function, and allow it to override.
-        var override = thisField.validator_(value);
-        if (override !== undefined) {
-          value = override;
-        }
+        value = thisField.callValidator(value);
       }
       if (value !== null) {
         thisField.setValue(value);
@@ -125,9 +122,9 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   var menu = new goog.ui.Menu();
   menu.setRightToLeft(this.sourceBlock_.RTL);
   var options = this.getOptions_();
-  for (var x = 0; x < options.length; x++) {
-    var text = options[x][0];  // Human-readable text.
-    var value = options[x][1]; // Language-neutral value.
+  for (var i = 0; i < options.length; i++) {
+    var text = options[i][0];  // Human-readable text.
+    var value = options[i][1]; // Language-neutral value.
     var menuItem = new goog.ui.MenuItem(text);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setValue(value);
@@ -226,11 +223,11 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   }
   // Remove the prefix and suffix from the options.
   var newOptions = [];
-  for (var x = 0; x < options.length; x++) {
-    var text = options[x][0];
-    var value = options[x][1];
+  for (var i = 0; i < options.length; i++) {
+    var text = options[i][0];
+    var value = options[i][1];
     text = text.substring(prefixLength, text.length - suffixLength);
-    newOptions[x] = [text, value];
+    newOptions[i] = [text, value];
   }
   this.menuGenerator_ = newOptions;
 };
@@ -271,10 +268,10 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
   this.value_ = newValue;
   // Look up and display the human-readable text.
   var options = this.getOptions_();
-  for (var x = 0; x < options.length; x++) {
+  for (var i = 0; i < options.length; i++) {
     // Options are tuples of human-readable text and language-neutral values.
-    if (options[x][1] == newValue) {
-      this.setText(options[x][0]);
+    if (options[i][1] == newValue) {
+      this.setText(options[i][0]);
       return;
     }
   }

@@ -3,7 +3,11 @@
     <field name="NAME">test colour picker</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">static colour</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">static colour</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="colour_picker">
             <field name="COLOUR">#ff6600</field>
@@ -21,7 +25,11 @@
     <field name="NAME">test rgb</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">from rgb</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">from rgb</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="colour_rgb" inline="false">
             <value name="RED">
@@ -88,7 +96,11 @@
             </value>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">test name</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">test name</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="text_length" inline="false">
                     <value name="VALUE">
@@ -105,7 +117,11 @@
                 </value>
                 <next>
                   <block type="unittest_assertequals" inline="false">
-                    <field name="MESSAGE">test name</field>
+                    <value name="MESSAGE">
+                       <block type="text">
+                         <field name="TEXT">test name</field>
+                       </block>
+                     </value>
                     <value name="ACTUAL">
                       <block type="text_charAt">
                         <mutation at="false"></mutation>
@@ -137,7 +153,11 @@
                         </value>
                         <statement name="DO">
                           <block type="unittest_assertvalue" inline="false">
-                            <field name="MESSAGE">test name</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">test name</field>
+                               </block>
+                             </value>
                             <field name="EXPECTED">TRUE</field>
                             <value name="ACTUAL">
                               <block type="logic_compare">
@@ -192,7 +212,11 @@
     <field name="NAME">test blend</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">blend</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">blend</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="colour_blend" inline="false">
             <value name="COLOUR1">

@@ -31,7 +31,7 @@ goog.require('goog.math');
 
 /**
  * Class for an editable number field.
- * @param {string} value The initial content of the field.
+ * @param {number|string} value The initial content of the field.
  * @param {number|string|undefined} opt_min Minimum value.
  * @param {number|string|undefined} opt_max Maximum value.
  * @param {number|string|undefined} opt_precision Precision for value.
@@ -44,6 +44,7 @@ goog.require('goog.math');
  */
 Blockly.FieldNumber =
     function(value, opt_min, opt_max, opt_precision, opt_validator) {
+  value = String(value);
   Blockly.FieldNumber.superClass_.constructor.call(this, value, opt_validator);
   this.setConstraints(opt_min, opt_max, opt_precision);
 };
@@ -67,36 +68,7 @@ Blockly.FieldNumber.prototype.setConstraints = function(min, max, precision) {
   this.min_ = isNaN(min) ? -Infinity : min;
   max = parseFloat(max);
   this.max_ = isNaN(max) ? Infinity : max;
-  this.setValue(this.numberValidator(this.getValue));
-};
-
-/**
- * Sets a new change handler for number field.
- * @param {Function} handler New change handler, or null.
- */
-Blockly.FieldNumber.prototype.setValidator = function(handler) {
-  var wrappedHandler;
-  if (handler) {
-    // Wrap the user's change handler together with the angle validator.
-    wrappedHandler = function(value) {
-      var v1 = handler.call(this, value);
-      if (v1 === null) {
-        var v2 = v1;
-      } else {
-        if (v1 === undefined) {
-          v1 = value;
-        }
-        var v2 = this.numberValidator(v1);
-        if (v2 === undefined) {
-          v2 = v1;
-        }
-      }
-      return v2 === value ? undefined : v2;
-    };
-  } else {
-    wrappedHandler = this.numberValidator;
-  }
-  Blockly.FieldNumber.superClass_.setValidator.call(this, wrappedHandler);
+  this.setValue(this.callValidator(this.getValue()));
 };
 
 /**
@@ -104,7 +76,7 @@ Blockly.FieldNumber.prototype.setValidator = function(handler) {
  * @param {string} text The user's text.
  * @return {?string} A string representing a valid number, or null if invalid.
  */
-Blockly.FieldNumber.prototype.numberValidator = function(text) {
+Blockly.FieldNumber.prototype.classValidator = function(text) {
   if (text === null) {
     return null;
   }

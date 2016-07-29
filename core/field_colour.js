@@ -213,12 +213,9 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       function(event) {
         var colour = event.target.getSelectedColor() || '#000000';
         Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_ && thisField.validator_) {
+        if (thisField.sourceBlock_) {
           // Call any validation function, and allow it to override.
-          var override = thisField.validator_(colour);
-          if (override !== undefined) {
-            colour = override;
-          }
+          colour = thisField.callValidator(colour);
         }
         if (colour !== null) {
           thisField.setValue(colour);

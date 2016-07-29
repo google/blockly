@@ -25,9 +25,6 @@
 
 blocklyApp.workspace = new Blockly.Workspace();
 
-// If the debug flag is true, print console.logs to help with debugging.
-blocklyApp.debug = false;
-
 blocklyApp.AppView = ng.core
   .Component({
     selector: 'blockly-app',
@@ -47,10 +44,10 @@ blocklyApp.AppView = ng.core
     <label aria-hidden="true" hidden id="blockly-argument-input">{{'ARGUMENT_INPUT'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-argument-menu">{{'ARGUMENT_OPTIONS_LIST'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-argument-text">{{'TEXT'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-block-menu">{{'BLOCK_ACTION_LIST'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-block-menu">{{'BLOCK_ACTION_LIST'|translate}} {{'FOR'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-block-summary">{{'BLOCK_SUMMARY'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-button">{{'BUTTON'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-disabled">{{'UNAVAILABLE'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-disabled">{{'DISABLED'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-menu">{{'OPTION_LIST'|translate}}</label>
     `,
     directives: [blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent],

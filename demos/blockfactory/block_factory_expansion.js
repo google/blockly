@@ -17,11 +17,6 @@ BlockFactoryExpansion.blockLibraryName = null;
 BlockFactoryExpansion.blockLibraryController = null;
 BlockFactoryExpansion.exporter = null;
 
-BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
-  var blockType = BlockLibrary.UI.getSelected(blockLibraryDropdown);
-  BlockFactoryExpansion.blockLibraryController.openBlock(blockType);
-};
-
 // TODO(quachtina96): Split up into multiple functions.
 /**
  * Initialize Blockly and layout.  Called on page load.
@@ -76,6 +71,11 @@ BlockFactoryExpansion.init = function() {
       function() {
             BlockFactoryExpansion.blockLibraryController.clearBlockLibrary();
       });
+
+  BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
+    var blockType = BlockFactoryExpansion.blockLibraryController.getSelectedBlockType(blockLibraryDropdown);
+    BlockFactoryExpansion.blockLibraryController.openBlock(blockType);
+  };
 
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')

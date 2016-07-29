@@ -77,8 +77,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
           </blockly-toolbox-tree>
           <li [id]="idMap['inputList' + i]" role="treeitem"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
-              [attr.aria-level]="level + 1">
-            <label>
+              [attr.aria-level]="level + 1"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputListLabel' + i])">
+            <label [id]="idMap['inputListLabel' + i]">
               {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
             </label>
           </li>
@@ -119,7 +120,8 @@ blocklyApp.ToolboxTreeComponent = ng.core
       }
       for (var i = 0; i < this.block.inputList.length; i++){
         elementsNeedingIds.push(
-            'listItem' + i, 'inputList' + i, 'fieldLabel' + i);
+            'listItem' + i, 'inputList' + i, 'fieldLabel' + i,
+            'inputListLabel' + i);
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
       if (this.isTopLevel) {

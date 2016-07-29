@@ -135,7 +135,7 @@ Blockly.Css.CONTENT = [
     'background-color: #fff;',
     'outline: none;',
     'overflow: hidden;',  /* IE overflows by default. */
-	'display: block;', 
+    'display: block;', 
   '}',
 
   '.blocklyWidgetDiv {',
@@ -143,10 +143,12 @@ Blockly.Css.CONTENT = [
     'position: absolute;',
     'z-index: 99999;', /* big value for bootstrap3 compatibility */
   '}',
+
   '.injectionDiv {',
     'height: 100%;',
     'position: relative;',
   '}',
+
   '.blocklyNonSelectable {',
     'user-select: none;',
     '-moz-user-select: none;',

@@ -50,9 +50,10 @@ Blockly.inject = function(container, opt_options) {
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
   }
-  var options = new Blockly.Options(opt_options || {});  
+  var options = new Blockly.Options(opt_options || {});
   var subContainer = goog.dom.createDom('div', 'injectionDiv');
-  container.appendChild(subContainer);   var svg = Blockly.createDom_(subContainer, options);
+  container.appendChild(subContainer);
+  var svg = Blockly.createDom_(subContainer, options);
   var workspace = Blockly.createMainWorkspace_(svg, options);
   Blockly.init_(workspace);
   workspace.markFocused();

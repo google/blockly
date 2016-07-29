@@ -232,28 +232,23 @@ Blockly.Toolbox.prototype.position = function() {
   var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.horizontalLayout_) {
-    treeDiv.style.left = '0px';
+    treeDiv.style.left = '0';
     treeDiv.style.height = 'auto';
     treeDiv.style.width = svgSize.width + 'px';
     this.height = treeDiv.offsetHeight;
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
-      treeDiv.style.top ='0px';
+      treeDiv.style.top = '0';
     } else {  // Bottom
-      treeDiv.style.bottom = '0px';
+      treeDiv.style.bottom = '0';
     }
   } else {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {  // Right
-      treeDiv.style.right = '0px';
+      treeDiv.style.right = '0';
     } else {  // Left
-      treeDiv.style.left = '0px';
+      treeDiv.style.left = '0';
     }
     treeDiv.style.height = svgSize.height + 'px';
-    //treeDiv.style.top = svgPosition.y + 'px';
     this.width = treeDiv.offsetWidth;
-    /*if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-      // For some reason the LTR toolbox now reports as 1px too wide.
-      this.width -= 1;
-    }*/
   }
   this.flyout_.position();
 };

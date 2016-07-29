@@ -41,7 +41,7 @@ blocklyApp.UtilsService = ng.core
       return idMap;
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
-      var attrValue = mainLabel + ' ' + secondLabel;
+      var attrValue = mainLabel + (secondLabel ? ' ' + secondLabel : '');
       if (isDisabled) {
         attrValue += ' blockly-disabled';
       }

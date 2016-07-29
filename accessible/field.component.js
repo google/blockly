@@ -28,17 +28,17 @@ blocklyApp.FieldComponent = ng.core
   .Component({
     selector: 'blockly-field',
     template: `
-    <input *ngIf="isTextInput()" [id]="idMap['input']"
+    <input *ngIf="isTextInput()" [id]="mainFieldId"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
            [disabled]="disabled" type="text" aria-label="Press Enter to edit text">
 
-    <input *ngIf="isNumberInput()" [id]="idMap['input']"
+    <input *ngIf="isNumberInput()" [id]="mainFieldId"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
            [disabled]="disabled" type="number" aria-label="Press Enter to edit number">
 
     <div *ngIf="isDropdown()"
          [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])">
-      <label [id]="idMap['label']">{{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}</label>
+      <label [id]="mainFieldId">{{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}</label>
       <ol role="group">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">
@@ -54,11 +54,11 @@ blocklyApp.FieldComponent = ng.core
       // Checkboxes are not currently supported.
     </div>
 
-    <label [id]="idMap['label']" *ngIf="isTextField() && hasVisibleText()">
+    <label [id]="mainFieldId" *ngIf="isTextField() && hasVisibleText()">
       {{field.getText()}}
     </label>
     `,
-    inputs: ['field', 'index', 'parentId', 'disabled'],
+    inputs: ['field', 'index', 'parentId', 'disabled', 'mainFieldId'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
@@ -78,17 +78,12 @@ blocklyApp.FieldComponent = ng.core
       return mainLabel + ' ' + secondLabel;
     },
     generateElementNames: function() {
-      var elementNames = ['listItem'];
-      if (this.isTextInput() || this.isNumberInput()) {
-        elementNames.push('input');
-      } else if (this.isDropdown()) {
-        elementNames.push('label');
+      var elementNames = [];
+      if (this.isDropdown()) {
         var keys = this.getOptions();
         for (var i = 0; i < keys.length; i++){
           elementNames.push(keys[i], keys[i] + 'Button');
         }
-      } else if (this.isTextField() && this.hasVisibleText()) {
-        elementNames.push('label');
       }
       return elementNames;
     },

@@ -11,6 +11,8 @@ goog.require('BlockLibrary.Controller');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
 
+// TODO(quachtina96): Refactor into object.
+
 BlockFactoryExpansion.blockLibraryName = null;
 BlockFactoryExpansion.blockLibraryController = null;
 BlockFactoryExpansion.exporter = null;
@@ -20,6 +22,7 @@ BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
   BlockFactoryExpansion.blockLibraryController.openBlock(blockType);
 };
 
+// TODO(quachtina96): Split up into multiple functions.
 /**
  * Initialize Blockly and layout.  Called on page load.
  */

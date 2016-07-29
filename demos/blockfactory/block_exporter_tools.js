@@ -11,7 +11,6 @@
 goog.provide('BlockExporterTools');
 
 goog.require('BlockFactory');
-goog.require('BlockLibrary.Controller');
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
 
@@ -99,7 +98,6 @@ BlockExporterTools.prototype.getGeneratorCode =
           // Render the preview block in the hidden workspace.
           this.hiddenWorkspace.clear();
           var tempBlock = this.hiddenWorkspace.newBlock(blockType);
-          this.hiddenWorkspace.clearUndo();
           // Get generator stub for the given block and add to  generator code.
           var blockGenCode =
               BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
@@ -115,18 +113,4 @@ BlockExporterTools.prototype.getGeneratorCode =
       return multiblockCode.join("\n\n");
     };
 
-// TODO(quachtina96): Figure out what to do with this-- I dont actually use this
-// function in the code. Should I just save it somewhere in case I want it in
-// the future?
-BlockExporterTools.prototype.getBlockTypeFromStoredXml = function(storedXml) {
-  var storedXml = Blockly.Options.parseToolboxTree(storedXml);
-  // Find factory base block.
-  var factoryBaseBlockXml = storedXml.getElementsByTagName('block')[0];
-  // Get field elements from factory base.
-  var fields = factoryBaseBlockXml.getElementsByTagName('field');
-  for (var i = 0; i < fields.length; i++) {
-    if (fields[i].getAttribute('name') == 'NAME') {
-      return fields[i].childNodes[0].nodeValue;
-    }
-  }
-};
+// TODO(quachtina96): create function to render block in hidden workspace

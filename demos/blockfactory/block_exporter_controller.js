@@ -36,9 +36,9 @@ BlockExporterController = function(blockExporterContainerID, blockLibStorage) {
  * Initializes all saved blocks by evaluating block definition code. Called in
  * order to be able to create instances of the blocks in the exporter workspace.
  */
+ // TODO(quachtina96): move to tools
 BlockExporterController.prototype.initializeAllBlocks =
     function() {
-      // Define the custom blocks in order to be able to
       var allBlockTypes = this.blockLibStorage.getBlockTypes();
       var blockXmlMap = this.blockLibStorage.getBlockXmls(allBlockTypes);
       var blockDefs =
@@ -52,6 +52,7 @@ BlockExporterController.prototype.initializeAllBlocks =
  *
  * @return {!Element} xml representation of the toolbox
  */
+ // TODO(quacht):pass in blocks. move to tools
 BlockExporterController.prototype.generateToolboxFromLibrary = function() {
   // Create DOM for XML.
   var xmlDom = goog.dom.createDom('xml',

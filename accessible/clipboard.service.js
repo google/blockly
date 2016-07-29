@@ -98,7 +98,7 @@ blocklyApp.ClipboardService = ng.core
       if (announce) {
         alert(
             Blockly.Msg.COPIED_BLOCK_MSG +
-            utilsService.getBlockDescription(block));
+            this.utilsService.getBlockDescription(block));
       }
     },
     pasteFromClipboard: function(connection) {
@@ -116,7 +116,7 @@ blocklyApp.ClipboardService = ng.core
       }
       alert(
           Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
-          utilsService.getBlockDescription(reconstitutedBlock));
+          this.utilsService.getBlockDescription(reconstitutedBlock));
       return reconstitutedBlock.id;
     },
     pasteToMarkedConnection: function(block) {

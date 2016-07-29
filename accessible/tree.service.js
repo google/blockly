@@ -107,13 +107,11 @@ blocklyApp.TreeService = ng.core
       var activeDesc = document.getElementById(activeDescId);
       if (activeDesc) {
         activeDesc.classList.remove('blocklyActiveDescendant');
-        activeDesc.setAttribute('aria-selected', 'false');
       }
     },
     markActiveDesc_: function(activeDescId) {
       var newActiveDesc = document.getElementById(activeDescId);
       newActiveDesc.classList.add('blocklyActiveDescendant');
-      newActiveDesc.setAttribute('aria-selected', 'true');
     },
     // Runs the given function while preserving the focus and active descendant
     // for the given tree.
@@ -133,11 +131,35 @@ blocklyApp.TreeService = ng.core
         document.getElementById(treeId).focus();
       }, 0);
     },
+    // This clears the active descendant of the given tree. It is used just
+    // before the tree is deleted.
+    clearActiveDesc: function(treeId) {
+      this.unmarkActiveDesc_(this.getActiveDescId(treeId));
+      delete this.activeDescendantIds_[treeId];
+    },
     // Make a given node the active descendant of a given tree.
     setActiveDesc: function(newActiveDescId, treeId) {
       this.unmarkActiveDesc_(this.getActiveDescId(treeId));
       this.markActiveDesc_(newActiveDescId);
       this.activeDescendantIds_[treeId] = newActiveDescId;
+
+      // Scroll the new active desc into view, if needed. This has no effect
+      // for blind users, but is helpful for sighted onlookers.
+      var activeDescNode = document.getElementById(newActiveDescId);
+      var documentNode = document.body || document.documentElement;
+      if (activeDescNode.offsetTop < documentNode.scrollTop ||
+          activeDescNode.offsetTop >
+              documentNode.scrollTop + window.innerHeight) {
+        window.scrollTo(0, activeDescNode.offsetTop);
+      }
+    },
+    getTreeIdForBlock: function(blockId) {
+      // Walk up the DOM until we get to the root node of the tree.
+      var domNode = document.getElementById(blockId + 'blockRoot');
+      while (!domNode.classList.contains('blocklyTree')) {
+        domNode = domNode.parentNode;
+      }
+      return domNode.id;
     },
     onWorkspaceToolbarKeypress: function(e, treeId) {
       if (e.keyCode == 9) {
@@ -224,12 +246,13 @@ blocklyApp.TreeService = ng.core
         if (e.keyCode == 13) {
           // Enter key. The user wants to interact with a button or an input
           // field.
-          if (activeDesc.children.length == 1) {
-            var child = activeDesc.children[0];
-            if (child.tagName == 'BUTTON') {
-              child.click();
-            } else if (child.tagName == 'INPUT') {
-              child.focus();
+          var currentChild = activeDesc;
+          while (currentChild.children.length) {
+            currentChild = currentChild.children[0];
+            if (currentChild.tagName == 'BUTTON') {
+              currentChild.click();
+            } else if (currentChild.tagName == 'INPUT') {
+              currentChild.focus();
             }
           }
         } else if (e.keyCode == 9) {

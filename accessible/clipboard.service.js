@@ -24,12 +24,13 @@
 
 blocklyApp.ClipboardService = ng.core
   .Class({
-    constructor: function() {
+    constructor: [blocklyApp.UtilsService, function(_utilsService) {
       this.clipboardBlockXml_ = null;
       this.clipboardBlockSuperiorConnection_ = null;
       this.clipboardBlockNextConnection_ = null;
       this.markedConnection_ = null;
-    },
+      this.utilsService = _utilsService;
+    }],
     areConnectionsCompatible_: function(blockConnection, connection) {
       // Check that both connections exist, that it's the right kind of
       // connection, and that the types match.
@@ -85,18 +86,19 @@ blocklyApp.ClipboardService = ng.core
       alert(Blockly.Msg.MARKED_SPOT_MSG);
     },
     cut: function(block) {
-      var blockSummary = block.toString();
       this.copy(block, false);
       block.dispose(true);
-      alert(Blockly.Msg.CUT_BLOCK_MSG + blockSummary);
     },
     copy: function(block, announce) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
       this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
           block.previousConnection;
       this.clipboardBlockNextConnection_ = block.nextConnection;
+
       if (announce) {
-        alert(Blockly.Msg.COPIED_BLOCK_MSG + block.toString());
+        alert(
+            Blockly.Msg.COPIED_BLOCK_MSG +
+            this.utilsService.getBlockDescription(block));
       }
     },
     pasteFromClipboard: function(connection) {
@@ -114,9 +116,10 @@ blocklyApp.ClipboardService = ng.core
       }
       alert(
           Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
-          reconstitutedBlock.toString());
+          this.utilsService.getBlockDescription(reconstitutedBlock));
+      return reconstitutedBlock.id;
     },
-    pasteToMarkedConnection: function(block, announce) {
+    pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       var reconstitutedBlock = Blockly.Xml.domToBlock(
           blocklyApp.workspace, xml);
@@ -142,12 +145,8 @@ blocklyApp.ClipboardService = ng.core
         return;
       }
 
-      if (announce) {
-        alert(
-            Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
-            reconstitutedBlock.toString());
-      }
-
       this.markedConnection_ = null;
+
+      return reconstitutedBlock.id;
     }
   });

@@ -1,7 +1,7 @@
 /**
- * @fileoverview Uses the BlockFactoryExpansion namespace and defines the init
- * function called on load of the BlockFactory Page and binds it to the onload
- * event as its handler.
+ * @fileoverview The BlockFactoryExpansion Class brings together the Block
+ * Factory, Block Library, and Block Exporter functionality into a single web
+ * app.
  *
  * @author quachtina96 (Tina Quach)
  */
@@ -11,72 +11,126 @@ goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
 
-// TODO(quachtina96): Refactor into object.
-
-BlockFactoryExpansion.blockLibraryName = null;
-BlockFactoryExpansion.blockLibraryController = null;
-BlockFactoryExpansion.exporter = null;
-
-// TODO(quachtina96): Split up into multiple functions.
-/**
- * Initialize Blockly and layout.  Called on page load.
- */
-BlockFactoryExpansion.init = function() {
-  if ('BlocklyStorage' in window) {
-    BlocklyStorage.HTTPREQUEST_ERROR =
-        'There was a problem with the request.\n';
-    BlocklyStorage.LINK_ALERT =
-        'Share your blocks with this link:\n\n%1';
-    BlocklyStorage.HASH_ERROR =
-        'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +
-        'Perhaps it was created with a different version of Blockly?';
-    var linkButton = document.getElementById('linkButton');
-    linkButton.style.display = 'inline-block';
-    linkButton.addEventListener('click',
-        function() {
-            BlocklyStorage.link(BlockFactory.mainWorkspace);});
-    BlockFactory.disableEnableLink();
-  }
-
+BlockFactoryExpansion = function() {
   // Initialize Block Library
-  BlockFactoryExpansion.blockLibraryName = 'blockLibrary';
-  BlockFactoryExpansion.blockLibraryController =
-      new BlockLibraryController(BlockFactoryExpansion.blockLibraryName);
-  BlockFactoryExpansion.blockLibraryController.populateBlockLibrary();
+  this.blockLibraryName = 'blockLibrary';
+  this.blockLibraryController =
+      new BlockLibraryController(this.blockLibraryName);
+  this.blockLibraryController.populateBlockLibrary();
 
   // Initialize Block Exporter
-  BlockFactoryExpansion.exporter = new BlockExporterController(
-      BlockFactoryExpansion.blockLibraryController.storage);
+  this.exporter =
+      new BlockExporterController(this.blockLibraryController.storage);
+};
 
-  // Assign button click handlers for Block Exporter.
+/**
+ * Updates the Block Factory tab to show selected block when user selects a
+ * different block in the block library dropdown.
+ *
+ * @param {!Element} blockLibraryDropdown - HTML select element from which the
+ *    user selects a block to work on.
+ */
+BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
+  var blockType
+      = this.blockLibraryController.getSelectedBlockType(blockLibraryDropdown);
+  this.blockLibraryController.openBlock(blockType);
+};
+
+/**
+ * Tied to 'Block Factory' Tab. Shows Block Factory and Block Library.
+ */
+BlockFactoryExpansion.prototype.onFactoryTab =
+    function(blockFactoryTab, blockExporterTab) {
+      // Turn factory tab on and exporter tab off.
+      goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
+      goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
+
+      // Hide container of exporter.
+      BlockFactory.hide('blockLibraryExporter');
+
+      // Resize to render workspaces' toolboxes correctly.
+      window.dispatchEvent(new Event('resize'));
+    };
+
+/**
+ * Tied to 'Block Exporter' Tab. Shows Block Exporter.
+ */
+BlockFactoryExpansion.prototype.onExporterTab =
+    function(blockFactoryTab, blockExporterTab) {
+      // Turn exporter tab on and factory tab off.
+      goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+      goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+
+      // Update toolbox to reflect current block library.
+      this.export.updateToolbox();
+
+      // Show container of exporter.
+      BlockFactory.show('blockLibraryExporter');
+
+      // Resize to render workspaces' toolboxes correctly.
+      window.dispatchEvent(new Event('resize'));
+    };
+
+/**
+ * Add tab handlers to allow switching between the Block Factory
+ * tab and the Block Exporter tab.
+ *
+ * @param {string} blockFactoryTabID - ID of element containing Block Factory
+ * @param {string} blockExporterTabID - ID of element containing Block
+ *    Exporter
+ */
+BlockFactoryExpansion.prototype.addTabHandlers =
+    function(blockFactoryTabID, blockExporterTabID) {
+      // Get div elements representing tabs
+      var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+      var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+      blockFactoryTab.addEventListener('click',
+          function() {
+            this.onFactoryTab(blockFactoryTab, blockExporterTab);
+          });
+      blockExporterTab.addEventListener('click',
+          function() {
+            this.onExporterTab(blockFactoryTab, blockExporterTab);
+          });
+    };
+
+/**
+ * Assign button click handlers for the exporter.
+ */
+BlockFactoryExpansion.prototype.assignExporterClickHandlers = function() {
+  // Export blocks when the user submits the export settings.
   document.getElementById('exporterSubmitButton').addEventListener('click',
       function() {
-        BlockFactoryExpansion.exporter.exportBlocks();
+        this.exporter.exportBlocks();
       });
+};
 
+/**
+ * Assign button click handlers for the block library.
+ */
+BlockFactoryExpansion.prototype.assignLibraryClickHandlers = function() {
   // Assign button click handlers for Block Library.
   document.getElementById('saveToBlockLibraryButton').addEventListener('click',
       function() {
-        BlockFactoryExpansion.blockLibraryController.saveToBlockLibrary()
+        this.blockLibraryController.saveToBlockLibrary();
       });
 
   document.getElementById('removeBlockFromLibraryButton').addEventListener(
     'click',
       function() {
-        BlockFactoryExpansion.blockLibraryController.removeFromBlockLibrary();
+        this.blockLibraryController.removeFromBlockLibrary();
       });
 
   document.getElementById('clearBlockLibraryButton').addEventListener('click',
       function() {
-            BlockFactoryExpansion.blockLibraryController.clearBlockLibrary();
+        this.blockLibraryController.clearBlockLibrary();
       });
+};
 
-  BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
-    var blockType = BlockFactoryExpansion.blockLibraryController.getSelectedBlockType(blockLibraryDropdown);
-    BlockFactoryExpansion.blockLibraryController.openBlock(blockType);
-  };
-
+/**
+ * Assign button click handlers for the block factory.
+ */
+BlockFactoryExpansion.prototype.assignFactoryClickHandlers = function() {
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')
     .addEventListener('click', BlockFactory.saveWorkspaceToFile);
@@ -104,7 +158,34 @@ BlockFactoryExpansion.init = function() {
       // want to reload the workspace with its contents.
       this.value = null;
     });
+};
 
+/**
+ * Initialize Blockly and layout.  Called on page load.
+ */
+BlockFactoryExpansion.prototype.init = function() {
+  // Handle Blockly Storage with App Engine
+  if ('BlocklyStorage' in window) {
+    BlocklyStorage.HTTPREQUEST_ERROR =
+        'There was a problem with the request.\n';
+    BlocklyStorage.LINK_ALERT =
+        'Share your blocks with this link:\n\n%1';
+    BlocklyStorage.HASH_ERROR =
+        'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
+    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +
+        'Perhaps it was created with a different version of Blockly?';
+    var linkButton = document.getElementById('linkButton');
+    linkButton.style.display = 'inline-block';
+    linkButton.addEventListener('click',
+        function() {
+            BlocklyStorage.link(BlockFactory.mainWorkspace);});
+    BlockFactory.disableEnableLink();
+  }
+  this.assignExporterClickHandlers();
+  this.assignLibraryClickHandlers();
+  this.assignFactoryClickHandlers();
+
+  // ---- BBS----
   // Handle resizing of elements.
   var expandList = [
     document.getElementById('blockly'),
@@ -121,56 +202,19 @@ BlockFactoryExpansion.init = function() {
       expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
     }
   };
+  //--- BBF ---
   onresize();
   window.addEventListener('resize', onresize);
 
+  // --- BBS
   // Inject Block Factory Main Workspace
   var toolbox = document.getElementById('toolbox');
   BlockFactory.mainWorkspace = Blockly.inject('blockly',
       {collapse: false,
        toolbox: toolbox,
        media: '../../media/'});
-
-  /**
-   * Add tab handlers to allow switching between the Block Factory
-   * tab and the Block Exporter tab.
-   *
-   * @param {string} blockFactoryTabID - ID of element containing Block Factory
-   * @param {string} blockExporterTabID - ID of element containing Block Exporter
-   */
-  var addTabHandlers =
-      function(blockFactoryTabID, blockExporterTabID) {
-        var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-        var blockExporterTab = goog.dom.getElement(blockExporterTabID);
-
-        blockFactoryTab.addEventListener('click',
-          function() {
-            goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
-            goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
-
-            // Hide container of exporter.
-            BlockFactory.hide('blockLibraryExporter');
-
-            // Resize to render workspaces' toolboxes correctly.
-            window.dispatchEvent(new Event('resize'));
-          });
-
-        blockExporterTab.addEventListener('click',
-          function() {
-            goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-            goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
-
-            // Update toolbox to reflect current block library.
-            BlockFactoryExpansion.exporter.updateToolbox();
-
-            // Show container of exporter.
-            BlockFactory.show('blockLibraryExporter');
-
-            // Resize to render workspaces' toolboxes correctly.
-            window.dispatchEvent(new Event('resize'));
-          });
-      };
-  addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
+  // --- BBF
+  this.addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
 
   // Create the root block.on main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
@@ -196,4 +240,3 @@ BlockFactoryExpansion.init = function() {
   document.getElementById('language')
       .addEventListener('change', BlockFactory.updatePreview);
 };
-window.addEventListener('load', BlockFactoryExpansion.init);

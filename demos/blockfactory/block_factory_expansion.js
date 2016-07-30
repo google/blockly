@@ -6,6 +6,7 @@
  * @author quachtina96 (Tina Quach)
  */
 goog.provide('BlockFactoryExpansion');
+
 goog.require('BlockFactory');
 goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
@@ -72,10 +73,12 @@ BlockFactoryExpansion.init = function() {
             BlockFactoryExpansion.blockLibraryController.clearBlockLibrary();
       });
 
-  BlockFactoryExpansion.onSelectedBlockChanged = function(blockLibraryDropdown) {
-    var blockType = BlockFactoryExpansion.blockLibraryController.getSelectedBlockType(blockLibraryDropdown);
-    BlockFactoryExpansion.blockLibraryController.openBlock(blockType);
-  };
+  // Defines the select (block libary dropdown) handler.
+  BlockFactoryExpansion.onSelectedBlockChanged
+      = function(blockLibraryDropdown) {
+        var blockType = BlockFactoryExpansion.blockLibraryController.
+            onSelectedBlockChanged(blockLibraryDropdown);
+      };
 
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')

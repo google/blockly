@@ -8,6 +8,7 @@
 'use strict';
 
 goog.provide('BlockExporterView');
+
 goog.require('goog.dom');
 
 /**

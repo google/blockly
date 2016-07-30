@@ -81,7 +81,7 @@ BlockLibraryStorage.prototype.removeBlock = function(blockType) {
  * Returns the xml of given block type stored in current block library
  * (this.blocks).
  *
- * @param {string} blockType - Ttype of block.
+ * @param {string} blockType - Type of block.
  * @return {Element} The xml that represents the block type or null.
  */
 BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
@@ -94,20 +94,20 @@ BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
 
 
 /**
- * Returns array of xmls of given block types stored in current block library
- * (this.blocks).
+ * Returns map of each block type to its corresponding xml stored in current
+ * block library (this.blocks).
  *
- * @param {string} blockType - Type of block.
+ * @param {Array.<!string>} blockTypes - Types of blocks.
  * @return {!Object} Map of block type to corresponding xml.
  */
-BlockLibraryStorage.prototype.getBlockXmls = function(blockTypes) {
-  var blockXmls = {};
+BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
+  var blockXmlMap = {};
   for (var i = 0; i < blockTypes.length; i++) {
     var blockType = blockTypes[i];
     var xml = this.getBlockXml(blockType);
-    blockXmls[blockType] = xml;
+    blockXmlMap[blockType] = xml;
   }
-  return blockXmls;
+  return blockXmlMap;
 };
 
 /**

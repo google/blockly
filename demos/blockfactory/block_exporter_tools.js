@@ -9,6 +9,7 @@
 'use strict';
 
 goog.provide('BlockExporterTools');
+
 goog.require('BlockFactory');
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
@@ -19,13 +20,11 @@ goog.require('goog.dom.xml');
 */
 BlockExporterTools = function() {
   // Create container for hidden workspace.
-  this.container = goog.dom.createDom('div',
-    {
-      'id': 'blockExporterTools_hiddenWorkspace',
-      'display': 'none'
-    },
-    '' // Empty div
-    );
+  this.container = goog.dom.createDom('div', {
+    'id': 'blockExporterTools_hiddenWorkspace',
+    'display': 'none'
+  }, ''); // Empty quotes for empty div.
+
   goog.dom.appendChild(document.body, this.container);
   /**
    * Hidden workspace for the Block Exporter that holds pieces that make
@@ -52,12 +51,13 @@ BlockExporterTools.prototype.getRootBlockFromXml = function(xml) {
 };
 
 /**
- * Get Blockly Blcokfrom the xml saved in block library.
+ * Get Blockly Block by rendering pre-defined block in workspace.
+ * @private
  *
- * @param {!Element} xml - Xml element saved in block library for that block.
- * @return {!Blockly.Block} - Root block (factory_base block).
+ * @param {!Element} blockType - Type of block.
+ * @return {!Blockly.Block} the Blockly.Block of desired type.
  */
-BlockExporterTools.prototype.getDefinedBlock = function(blockType) {
+BlockExporterTools.prototype.getDefinedBlock_ = function(blockType) {
   this.hiddenWorkspace.clear();
   return this.hiddenWorkspace.newBlock(blockType);
 };
@@ -115,7 +115,7 @@ BlockExporterTools.prototype.getGeneratorCode =
         var xml = blockXmlMap[blockType];
         if (xml) {
           // Render the preview block in the hidden workspace.
-          var tempBlock = this.getDefinedBlock(blockType);
+          var tempBlock = this.getDefinedBlock_(blockType);
           // Get generator stub for the given block and add to  generator code.
           var blockGenCode =
               BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
@@ -132,15 +132,16 @@ BlockExporterTools.prototype.getGeneratorCode =
     };
 
 /**
- * Initializes all saved blocks by evaluating block definition code. Called in
- * order to be able to create instances of the blocks in the exporter workspace.
+ * Evaluating block definition code of all saved blocks. Called in order to be
+ * able to create instances of the blocks in the exporter workspace.
+ * @private
  *
  * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage object
  *    that contains all the blocks.
  */
-BlockExporterTools.prototype.initializeAllBlocks = function(blockLibStorage) {
+BlockExporterTools.prototype.addBlockDefinitions_ = function(blockLibStorage) {
       var allBlockTypes = blockLibStorage.getBlockTypes();
-      var blockXmlMap = blockLibStorage.getBlockXmls(allBlockTypes);
+      var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
       var blockDefs =
           this.getBlockDefs(blockXmlMap, 'JavaScript');
       eval(blockDefs);
@@ -155,15 +156,14 @@ BlockExporterTools.prototype.initializeAllBlocks = function(blockLibStorage) {
 BlockExporterTools.prototype.generateToolboxFromLibrary
     = function(blockLibStorage) {
       // Create DOM for XML.
-      var xmlDom = goog.dom.createDom('xml',
-        {
-          'id' : 'blockExporterTools_toolbox',
-          'style' : 'display:none'
-        });
+      var xmlDom = goog.dom.createDom('xml', {
+        'id' : 'blockExporterTools_toolbox',
+        'style' : 'display:none'
+      });
 
       // Object mapping block type to XML.
       var blocks = blockLibStorage.blocks;
-      this.initializeAllBlocks(blockLibStorage);
+      this.addBlockDefinitions_(blockLibStorage);
 
       for (var blockType in blocks) {
         // Create category DOM element.
@@ -171,7 +171,7 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
         categoryElement.setAttribute('name',blockType);
 
         // Get block.
-        var block = this.getDefinedBlock(blockType);
+        var block = this.getDefinedBlock_(blockType);
 
         // Get preview block XML.
         var blockChild = Blockly.Xml.blockToDom(block);

@@ -51,7 +51,7 @@ BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
  */
 BlockExporterController.prototype.exportBlocks = function() {
   var blockTypes = this.getSelectedBlockTypes_();
-  var blockXmlMap = this.blockLibStorage.getBlockXmls(blockTypes);
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
 
   // Pull inputs from the Export Settings form.
   var definitionFormat = document.getElementById('exportFormat').value;

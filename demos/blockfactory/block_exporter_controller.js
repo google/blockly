@@ -37,7 +37,7 @@ BlockExporterController = function(blockLibStorage) {
  * @return {!Array.<string>} Types of blocks in workspace.
  */
 BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
-  var selectedBlocks = this.view.selectorWorkspace.getAllBlocks();
+  var selectedBlocks = this.view.getSelectedBlocks();
   var blockTypes = [];
   for (var i = 0; i < selectedBlocks.length; i++) {
     blockTypes.push(selectedBlocks[i].type);
@@ -94,7 +94,8 @@ BlockExporterController.prototype.exportBlocks = function() {
 };
 
 /**
- * Update the Exporter's toolbox.
+ * Update the Exporter's toolbox with either the given toolbox xml or toolbox
+ * xml generated from blocks stored in block library.
  *
  * @param {Element} opt_toolboxXml - Xml to define toolbox of the selector
  *    workspace.
@@ -102,6 +103,8 @@ BlockExporterController.prototype.exportBlocks = function() {
 BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
   var updatedToolbox = opt_toolboxXml ||
       this.tools.generateToolboxFromLibrary(this.blockLibStorage);
+  // Update the view's toolbox.
   this.view.setToolbox(updatedToolbox);
+  // Render the toolbox in the selector workspace.
   this.view.renderToolbox(updatedToolbox);
 };

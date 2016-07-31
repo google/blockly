@@ -166,7 +166,7 @@ BlockExporterController.prototype.onSelectBlockForExport = function(event) {
     // code per block.
     this.disableBlock(blockType);
     // Edit helper text (currently selected)
-    var selectedBlocksText = this.getSelectedBlockTypes().join(', ');
+    var selectedBlocksText = this.getSelectedBlockTypes_().join(', ');
     this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);
   }
 };
@@ -187,9 +187,27 @@ BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
     // Enable the deselected block.
     this.enableBlock(blockType);
     // Edit helper text (currently selected)
-    var selectedBlocksText = this.getSelectedBlockTypes().join(', ');
+    var selectedBlocksText = this.getSelectedBlockTypes_().join(', ');
     this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);
   }
 };
 
-
+/**
+ * Add change listeners to the exporter's selector workspace.
+ */
+BlockExporterController.prototype.addChangeListenersToSelectorWorkspace
+    = function() {
+      // Assign the BlockExporterController to 'self' to be called in the change
+      // listeners. This keeps it in scope--otherwise, 'this' in the change
+      // listeners refers to the wrong thing.
+      var self = this;
+      var selector = this.view.selectorWorkspace;
+      selector.addChangeListener(
+        function(event) {
+          self.onSelectBlockForExport(event);
+        });
+      selector.addChangeListener(
+        function(event) {
+          self.onDeselectBlockForExport(event);
+        });
+    };

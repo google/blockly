@@ -175,21 +175,7 @@ BlockFactoryExpansion.init = function() {
       };
   addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
 
-  /**
-   * Add change listeners to the exporter's selector workspace.
-   */
-  var addChangeListenersToSelectorWorkspace = function() {
-    var selector = BlockFactoryExpansion.exporter.view.selectorWorkspace;
-    selector.addChangeListener(
-      function(event) {
-        BlockFactoryExpansion.exporter.onSelectBlockForExport(event);
-      });
-    selector.addChangeListener(
-      function(event) {
-        BlockFactoryExpansion.exporter.onDeselectBlockForExport(event);
-      });
-  };
-  addChangeListenersToSelectorWorkspace();
+  BlockFactoryExpansion.exporter.addChangeListenersToSelectorWorkspace();
 
   // Create the root block.on main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

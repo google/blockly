@@ -132,16 +132,14 @@ BlockExporterTools.prototype.getGeneratorCode =
     };
 
 /**
- * Evaluating block definition code of all saved blocks. Called in order to be
- * able to create instances of the blocks in the exporter workspace.
+ * Evaluates block definition code of each block in given object mapping
+ * block type to xml. Called in order to be able to create instances of the
+ * blocks in the exporter workspace.
  * @private
  *
- * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage object
- *    that contains all the blocks.
+ * @param {!Object} blockXmlMap - Map of block type to xml.
  */
-BlockExporterTools.prototype.addBlockDefinitions_ = function(blockLibStorage) {
-      var allBlockTypes = blockLibStorage.getBlockTypes();
-      var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
+BlockExporterTools.prototype.addBlockDefinitions_ = function(blockXmlMap) {
       var blockDefs =
           this.getBlockDefs(blockXmlMap, 'JavaScript');
       eval(blockDefs);
@@ -161,11 +159,15 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
         'style' : 'display:none'
       });
 
+      var allBlockTypes = blockLibStorage.getBlockTypes();
       // Object mapping block type to XML.
-      var blocks = blockLibStorage.blocks;
-      this.addBlockDefinitions_(blockLibStorage);
+      var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
 
-      for (var blockType in blocks) {
+      // Define the custom blocks in order to be able to create instances of
+      // them in the exporter workspace.
+      this.addBlockDefinitions_(blockXmlMap);
+
+      for (var blockType in blockXmlMap) {
         // Create category DOM element.
         var categoryElement = goog.dom.createDom('category');
         categoryElement.setAttribute('name',blockType);

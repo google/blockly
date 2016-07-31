@@ -144,11 +144,12 @@ Blockly.Toolbox.prototype.lastCategory_ = null;
  */
 Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
+  var svg = this.workspace_.getParentSvg();
 
   // Create an HTML container for the Toolbox menu.
   this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
-  document.body.appendChild(this.HtmlDiv);
+  svg.parentNode.insertBefore(this.HtmlDiv, svg);
 
   // Clicking on toolbox closes popups.
   Blockly.bindEvent_(this.HtmlDiv, 'mousedown', this,
@@ -231,30 +232,23 @@ Blockly.Toolbox.prototype.position = function() {
   var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.horizontalLayout_) {
-    treeDiv.style.left = svgPosition.x + 'px';
+    treeDiv.style.left = '0';
     treeDiv.style.height = 'auto';
     treeDiv.style.width = svgSize.width + 'px';
     this.height = treeDiv.offsetHeight;
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
-      treeDiv.style.top = svgPosition.y + 'px';
+      treeDiv.style.top = '0';
     } else {  // Bottom
-      var topOfToolbox = svgPosition.y + svgSize.height - treeDiv.offsetHeight;
-      treeDiv.style.top = topOfToolbox + 'px';
+      treeDiv.style.bottom = '0';
     }
   } else {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {  // Right
-      treeDiv.style.left =
-          (svgPosition.x + svgSize.width - treeDiv.offsetWidth) + 'px';
+      treeDiv.style.right = '0';
     } else {  // Left
-      treeDiv.style.left = svgPosition.x + 'px';
+      treeDiv.style.left = '0';
     }
     treeDiv.style.height = svgSize.height + 'px';
-    treeDiv.style.top = svgPosition.y + 'px';
     this.width = treeDiv.offsetWidth;
-    if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-      // For some reason the LTR toolbox now reports as 1px too wide.
-      this.width -= 1;
-    }
   }
   this.flyout_.position();
 };

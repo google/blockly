@@ -108,3 +108,18 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
   // Render the toolbox in the selector workspace.
   this.view.renderToolbox(updatedToolbox);
 };
+
+/**
+ * Tied to the 'Clear Selected Blocks' button in the Block Exporter.
+ * Deselects all blocks on the selector workspace by deleting them and updating
+ * text accordingly.
+ */
+BlockExporterController.prototype.clearSelectedBlocks = function() {
+  // Clear selector workspace.
+  this.view.clearSelectorWorkspace();
+  // Edit helper text
+  this.view.updateHelperText('No blocks selected. Drag block into workspace' +
+      ' to select.');
+  // TODO(quacht): After mergeing enable/disable blocks, throw delete events
+  // for each block.
+};

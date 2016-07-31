@@ -108,7 +108,7 @@ BlockFactoryExpansion.init = function() {
       this.value = null;
     });
 
-  // Handle resizing of elements.
+  // Handle resizing of Block Factory elements.
   var expandList = [
     document.getElementById('blockly'),
     document.getElementById('blocklyMask'),
@@ -127,7 +127,7 @@ BlockFactoryExpansion.init = function() {
   onresize();
   window.addEventListener('resize', onresize);
 
-  // Inject Block Factory Main Workspace
+  // Inject Block Factory Main Workspace.
   var toolbox = document.getElementById('toolbox');
   BlockFactory.mainWorkspace = Blockly.inject('blockly',
       {collapse: false,
@@ -174,6 +174,22 @@ BlockFactoryExpansion.init = function() {
           });
       };
   addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
+
+  /**
+   * Add change listeners to the exporter's selector workspace.
+   */
+  var addChangeListenersToSelectorWorkspace = function() {
+    var selector = BlockFactoryExpansion.exporter.view.selectorWorkspace;
+    selector.addChangeListener(
+      function(event) {
+        BlockFactoryExpansion.exporter.onSelectBlockForExport(event);
+      });
+    selector.addChangeListener(
+      function(event) {
+        BlockFactoryExpansion.exporter.onDeselectBlockForExport(event);
+      });
+  };
+  addChangeListenersToSelectorWorkspace();
 
   // Create the root block.on main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

@@ -57,7 +57,7 @@ BlockExporterView.prototype.setToolbox = function(toolboxXml) {
  * switching between Block Factory tab and Block Exporter Tab.
  */
 BlockExporterView.prototype.renderToolbox = function() {
-  this.selectorWorkspace.toolbox_.populate_(this.toolbox);
+  this.selectorWorkspace.updateToolbox(this.toolbox);
 };
 
 /**

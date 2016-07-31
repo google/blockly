@@ -22,9 +22,9 @@ BlockExporterTools = function() {
   // Create container for hidden workspace.
   this.container = goog.dom.createDom('div', {
     'id': 'blockExporterTools_hiddenWorkspace',
-    'display': 'none'
   }, ''); // Empty quotes for empty div.
-
+  // Hide the container.
+  this.container.style.display = 'none';
   goog.dom.appendChild(document.body, this.container);
   /**
    * Hidden workspace for the Block Exporter that holds pieces that make

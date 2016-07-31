@@ -47,7 +47,7 @@ BlockExporterTools.prototype.getRootBlockFromXml = function(xml) {
   this.hiddenWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
   // Get root block.
-  return BlockFactory.getRootBlock(this.hiddenWorkspace);
+  return this.hiddenWorkspace.getTopBlocks()[0];
 };
 
 /**

@@ -28,6 +28,7 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Flyout');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.html.SafeHtml');
@@ -147,7 +148,8 @@ Blockly.Toolbox.prototype.init = function() {
   var svg = this.workspace_.getParentSvg();
 
   // Create an HTML container for the Toolbox menu.
-  this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
+  this.HtmlDiv =
+      goog.dom.createDom(goog.dom.TagName.DIV, 'blocklyToolboxDiv');
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
 

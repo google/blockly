@@ -9,10 +9,6 @@
 
 goog.provide('BlockLibraryView');
 
-goog.require('goog.dom.DomHelper');
-goog.require('goog.ui.ComboBox');
-goog.require('goog.ui.ComboBoxItem');
-
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *
@@ -20,7 +16,7 @@ goog.require('goog.ui.ComboBoxItem');
  * @param {boolean} selected - Whether or not the option should be selected on the
  *     dropdown.
  */
-BlockLibraryView.prototype.addOption = function(optionName, selected) {
+BlockLibraryView.addOption = function(optionName, selected) {
   // Create new dropdown item to represent saved block.
   var newBlockItem = new goog.ui.ComboBoxItem(optionName);
   this.dropdown.addItem(newBlockItem);
@@ -35,7 +31,7 @@ BlockLibraryView.prototype.addOption = function(optionName, selected) {
  * @param {string} dropdownID - ID of HTML select element within which to find
  *     the selected option.
  */
-BlockLibraryView.prototype.removeSelectedOption = function(dropdownID) {
+BlockLibraryView.removeSelectedOption = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   if (dropdown) {
     dropdown.remove(dropdown.selectedIndex);
@@ -47,7 +43,7 @@ BlockLibraryView.prototype.removeSelectedOption = function(dropdownID) {
  *
  * @param {string} dropdownID - ID of HTML select element to clear options of.
  */
-BlockLibraryView.prototype.clearOptions = function(dropdownID) {
+BlockLibraryView.clearOptions = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   while (dropdown.length > 0) {
     dropdown.remove(dropdown.length - 1);
@@ -60,7 +56,7 @@ BlockLibraryView.prototype.clearOptions = function(dropdownID) {
  * @param {Element} dropdown - HTML select element.
  * @return {string} Type of block selected.
  */
-BlockLibraryView.prototype.getSelected = function(dropdown) {
+BlockLibraryView.getSelected = function(dropdown) {
   var index = dropdown.selectedIndex;
   return dropdown.options[index].value;
 };

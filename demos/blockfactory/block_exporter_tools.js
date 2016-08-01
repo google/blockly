@@ -37,10 +37,13 @@ BlockExporterTools = function() {
 };
 
 /**
- * Get Blockly Block object from the xml saved in block library.
+ * Get Blockly Block object from xml that encodes the blocks used to design
+ * the block.
  *
- * @param {!Element} xml - Xml element saved in block library for that block.
- * @return {!Blockly.Block} - Root block (factory_base block).
+ * @param {!Element} xml - Xml element that encodes the blocks used to design
+ *    the block. For example, the block xmls saved in block library.
+ * @return {!Blockly.Block} - Root block (factory_base block) which contains
+ *    all information needed to generate block definition.
  */
 BlockExporterTools.prototype.getRootBlockFromXml = function(xml) {
   // Render xml in hidden workspace.

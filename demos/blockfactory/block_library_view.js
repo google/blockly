@@ -13,12 +13,6 @@ goog.require('goog.dom.DomHelper');
 goog.require('goog.ui.ComboBox');
 goog.require('goog.ui.ComboBoxItem');
 
-BlockLibraryView = function() {
-  this.domHelper = new goog.dom.DomHelper(document);
-  this.dropdown = new goog.ui.ComboBox(this.domHelper);
-  this.dropdown.setDefaultText('Your Saved Block');
-  this.dropdown.setUseDropdownArrow(true);
-};
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *

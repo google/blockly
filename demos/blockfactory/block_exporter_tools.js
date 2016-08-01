@@ -37,12 +37,16 @@ BlockExporterTools = function() {
 };
 
 /**
- * Get Blockly Block object from the xml saved in block library.
+ * Get Blockly Block object from xml that encodes the blocks used to design
+ * the block.
+ * @private
  *
- * @param {!Element} xml - Xml element saved in block library for that block.
- * @return {!Blockly.Block} - Root block (factory_base block).
+ * @param {!Element} xml - Xml element that encodes the blocks used to design
+ *    the block. For example, the block xmls saved in block library.
+ * @return {!Blockly.Block} - Root block (factory_base block) which contains
+ *    all information needed to generate block definition.
  */
-BlockExporterTools.prototype.getRootBlockFromXml = function(xml) {
+BlockExporterTools.prototype.getRootBlockFromXml_ = function(xml) {
   // Render xml in hidden workspace.
   this.hiddenWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
@@ -77,7 +81,7 @@ BlockExporterTools.prototype.getBlockDefs =
         var xml = blockXmlMap[blockType];
         if (xml) {
           // Render and get block from hidden workspace.
-          var rootBlock = this.getRootBlockFromXml(xml);
+          var rootBlock = this.getRootBlockFromXml_(xml);
           // Generate the block's definition.
           var code = BlockFactory.getBlockDefinition(blockType, rootBlock,
               definitionFormat);

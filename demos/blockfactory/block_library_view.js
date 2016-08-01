@@ -13,16 +13,18 @@ goog.provide('BlockLibraryView');
  * Creates a node of a given element type and appends to the node with given id.
  *
  * @param {string} optionName - Value of option.
+ * @param {string} optionText - Text in option.
+ * @param {string} dropdownID - ID for HTML select element.
  * @param {boolean} selected - Whether or not the option should be selected on the
  *     dropdown.
  */
-BlockLibraryView.addOption = function(optionName, selected) {
-  // Create new dropdown item to represent saved block.
-  var newBlockItem = new goog.ui.ComboBoxItem(optionName);
-  this.dropdown.addItem(newBlockItem);
-  if (selected) {
-    this.dropdown.setValue(optionName);
-  }
+BlockLibraryView.addOption = function(optionName, optionText, dropdownID, selected) {
+  var dropdown = document.getElementById(dropdownID);
+  var option = document.createElement('option');
+  option.text = optionText;
+  option.value = optionName;
+  option.selected = selected;
+  dropdown.add(option);
 };
 
 /**

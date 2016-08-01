@@ -46,16 +46,6 @@ BlockFactoryExpansion.init = function() {
       new BlockLibraryController(BlockFactoryExpansion.blockLibraryName);
   BlockFactoryExpansion.blockLibraryController.populateBlockLibrary();
 
-  // Initialize Block Exporter
-  BlockFactoryExpansion.exporter = new BlockExporterController(
-      BlockFactoryExpansion.blockLibraryController.storage);
-
-  // Assign button click handlers for Block Exporter.
-  document.getElementById('exporterSubmitButton').addEventListener('click',
-      function() {
-        BlockFactoryExpansion.exporter.exportBlocks();
-      });
-
   // Assign button click handlers for Block Library.
   document.getElementById('saveToBlockLibraryButton').addEventListener('click',
       function() {
@@ -133,6 +123,16 @@ BlockFactoryExpansion.init = function() {
       {collapse: false,
        toolbox: toolbox,
        media: '../../media/'});
+
+  // Initialize Block Exporter
+  BlockFactoryExpansion.exporter = new BlockExporterController(
+      BlockFactoryExpansion.blockLibraryController.storage);
+
+  // Assign button click handlers for Block Exporter.
+  document.getElementById('exporterSubmitButton').addEventListener('click',
+      function() {
+        BlockFactoryExpansion.exporter.exportBlocks();
+      });
 
   /**
    * Add tab handlers to allow switching between the Block Factory

@@ -9,22 +9,24 @@
 
 goog.provide('BlockLibraryView');
 
+goog.require('goog.dom.DomHelper');
+goog.require('goog.ui.ComboBox');
+goog.require('goog.ui.ComboBoxItem');
+
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *
  * @param {string} optionName - Value of option.
- * @param {string} optionText - Text in option.
- * @param {string} dropdownID - ID for HTML select element.
  * @param {boolean} selected - Whether or not the option should be selected on the
  *     dropdown.
  */
-BlockLibraryView.addOption = function(optionName, optionText, dropdownID, selected) {
-  var dropdown = document.getElementById(dropdownID);
-  var option = document.createElement('option');
-  option.text = optionText;
-  option.value = optionName;
-  option.selected = selected;
-  dropdown.add(option);
+BlockLibraryView.prototype.addOption = function(optionName, selected) {
+  // Create new dropdown item to represent saved block.
+  var newBlockItem = new goog.ui.ComboBoxItem(optionName);
+  this.dropdown.addItem(newBlockItem);
+  if (selected) {
+    this.dropdown.setValue(optionName);
+  }
 };
 
 /**
@@ -33,7 +35,7 @@ BlockLibraryView.addOption = function(optionName, optionText, dropdownID, select
  * @param {string} dropdownID - ID of HTML select element within which to find
  *     the selected option.
  */
-BlockLibraryView.removeSelectedOption = function(dropdownID) {
+BlockLibraryView.prototype.removeSelectedOption = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   if (dropdown) {
     dropdown.remove(dropdown.selectedIndex);
@@ -45,7 +47,7 @@ BlockLibraryView.removeSelectedOption = function(dropdownID) {
  *
  * @param {string} dropdownID - ID of HTML select element to clear options of.
  */
-BlockLibraryView.clearOptions = function(dropdownID) {
+BlockLibraryView.prototype.clearOptions = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   while (dropdown.length > 0) {
     dropdown.remove(dropdown.length - 1);
@@ -58,7 +60,7 @@ BlockLibraryView.clearOptions = function(dropdownID) {
  * @param {Element} dropdown - HTML select element.
  * @return {string} Type of block selected.
  */
-BlockLibraryView.getSelected = function(dropdown) {
+BlockLibraryView.prototype.getSelected = function(dropdown) {
   var index = dropdown.selectedIndex;
   return dropdown.options[index].value;
 };

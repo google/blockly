@@ -39,6 +39,7 @@ BlockExporterTools = function() {
 /**
  * Get Blockly Block object from xml that encodes the blocks used to design
  * the block.
+
  * @private
  *
  * @param {!Element} xml - Xml element that encodes the blocks used to design

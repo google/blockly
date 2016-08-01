@@ -7,39 +7,33 @@
 
 'use strict';
 
-goog.provide('BlockLibrary.Storage');
-goog.require('BlockLibrary');
+goog.provide('BlockLibraryStorage');
 
 /**
  * Represents a block library's storage.
  * @constructor
  *
- * @param {string} blockLibraryName - desired name of Block Library, also used
- * to create the key for where it's stored in local storage.
+ * @param {string} blockLibraryName - Desired name of Block Library, also used
+ *    to create the key for where it's stored in local storage.
  */
-BlockLibrary.Storage = function(blockLibraryName) {
+BlockLibraryStorage = function(blockLibraryName) {
   // Add prefix to this.name to avoid collisions in local storage.
-  this.name = 'BlockLibrary.Storage.' + blockLibraryName;
+  this.name = 'BlockLibraryStorage.' + blockLibraryName;
   // Initialize this.blocks by loading from local storage.
   this.loadFromLocalStorage();
   if (this.blocks == null) {
     this.blocks = Object.create(null);
-    /**
-     * The line above is equivalent of {} except that this object is TRULY
-     * empty. It doesn't have built-in attributes/functions such as length
-     * or toString.
-     */
+    // The line above is equivalent of {} except that this object is TRULY
+    // empty. It doesn't have built-in attributes/functions such as length or
+    // toString.
     this.saveToLocalStorage();
   }
 };
 
 /**
  * Reads the named block library from local storage and saves it in this.blocks.
- * @private
- * TODO(quacht): add semicolon to the end
  */
-
-BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
+BlockLibraryStorage.prototype.loadFromLocalStorage = function() {
   // goog.global is synonymous to window, and  allows for flexibility
   // between browsers.
   var object = goog.global.localStorage[this.name];
@@ -48,17 +42,15 @@ BlockLibrary.Storage.prototype.loadFromLocalStorage = function() {
 
 /**
  * Writes the current block library (this.blocks) to local storage.
- * @private
- * TODO(quacht): add semicolon to the end
  */
-BlockLibrary.Storage.prototype.saveToLocalStorage = function() {
+BlockLibraryStorage.prototype.saveToLocalStorage = function() {
   goog.global.localStorage[this.name] = JSON.stringify(this.blocks);
 };
 
 /**
  * Clears the current block library.
  */
-BlockLibrary.Storage.prototype.clear = function() {
+BlockLibraryStorage.prototype.clear = function() {
   this.blocks = Object.create(null);
   // The line above is equivalent of {} except that this object is TRULY
   // empty. It doesn't have built-in attributes/functions such as length or
@@ -68,10 +60,10 @@ BlockLibrary.Storage.prototype.clear = function() {
 /**
  * Saves block to block library.
  *
- * @param {string} blockType - type of block
- * @param {Element} blockXML - the block's XML pulled from workspace
+ * @param {string} blockType - Type of block.
+ * @param {Element} blockXML - The block's XML pulled from workspace.
  */
-BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
+BlockLibraryStorage.prototype.addBlock = function(blockType, blockXML) {
   var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
   this.blocks[blockType] = prettyXml;
 };
@@ -79,9 +71,9 @@ BlockLibrary.Storage.prototype.addBlock = function(blockType, blockXML) {
 /**
  * Removes block from current block library (this.blocks).
  *
- * @param {string} blockType - type of block
+ * @param {string} blockType - Type of block.
  */
-BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
+BlockLibraryStorage.prototype.removeBlock = function(blockType) {
   delete this.blocks[blockType];
 };
 
@@ -89,21 +81,50 @@ BlockLibrary.Storage.prototype.removeBlock = function(blockType) {
  * Returns the xml of given block type stored in current block library
  * (this.blocks).
  *
- * @param {string} blockType - type of block
- * @return {Element} the xml that represents the block type or null
+ * @param {string} blockType - Type of block.
+ * @return {Element} The xml that represents the block type or null.
  */
-BlockLibrary.Storage.prototype.getBlockXML = function(blockType) {
-  var xmlText = this.blocks[blockType];
-  var xml = Blockly.Xml.textToDom(xmlText) || null;
+BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
+  var xml = this.blocks[blockType] || null;
+  if (xml) {
+    var xml = Blockly.Xml.textToDom(xml);
+  }
   return xml;
+};
+
+
+/**
+ * Returns map of each block type to its corresponding xml stored in current
+ * block library (this.blocks).
+ *
+ * @param {Array.<!string>} blockTypes - Types of blocks.
+ * @return {!Object} Map of block type to corresponding xml.
+ */
+BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
+  var blockXmlMap = {};
+  for (var i = 0; i < blockTypes.length; i++) {
+    var blockType = blockTypes[i];
+    var xml = this.getBlockXml(blockType);
+    blockXmlMap[blockType] = xml;
+  }
+  return blockXmlMap;
+};
+
+/**
+ * Returns array of all block types stored in current block library.
+ *
+ * @return {!Array.<string>} Array of block types stored in library.
+ */
+BlockLibraryStorage.prototype.getBlockTypes = function() {
+  return Object.keys(this.blocks);
 };
 
 /**
  * Checks to see if block library is empty.
  *
- * @return {Boolean} true if empty, false otherwise.
+ * @return {boolean} True if empty, false otherwise.
  */
-BlockLibrary.Storage.prototype.isEmpty = function() {
+BlockLibraryStorage.prototype.isEmpty = function() {
   for (var blockType in this.blocks) {
     return false;
   }

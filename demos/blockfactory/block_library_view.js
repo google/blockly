@@ -7,19 +7,18 @@
 
 'use strict';
 
-goog.provide('BlockLibrary.UI');
-goog.require('BlockLibrary');
+goog.provide('BlockLibraryView');
 
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *
- * @param {string} optionName - value of option
- * @param {string} optionText - text in option
- * @param {string} dropdownID - id for HTML select element
- * @param {boolean} selected - whether or not the option should be selected on the
- *     dropdown
+ * @param {string} optionName - Value of option.
+ * @param {string} optionText - Text in option.
+ * @param {string} dropdownID - ID for HTML select element.
+ * @param {boolean} selected - Whether or not the option should be selected on the
+ *     dropdown.
  */
-BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID, selected) {
+BlockLibraryView.addOption = function(optionName, optionText, dropdownID, selected) {
   var dropdown = document.getElementById(dropdownID);
   var option = document.createElement('option');
   option.text = optionText;
@@ -31,10 +30,10 @@ BlockLibrary.UI.addOption = function(optionName, optionText, dropdownID, selecte
 /**
  * Removes option currently selected in dropdown from dropdown menu.
  *
- * @param {string} dropdownID - id of HTML select element within which to find
+ * @param {string} dropdownID - ID of HTML select element within which to find
  *     the selected option.
  */
-BlockLibrary.UI.removeSelectedOption = function(dropdownID) {
+BlockLibraryView.removeSelectedOption = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   if (dropdown) {
     dropdown.remove(dropdown.selectedIndex);
@@ -44,9 +43,9 @@ BlockLibrary.UI.removeSelectedOption = function(dropdownID) {
 /**
  * Removes all options from dropdown.
  *
- * @param {string} dropdownID - id of HTML select element to clear options of.
+ * @param {string} dropdownID - ID of HTML select element to clear options of.
  */
-BlockLibrary.UI.clearOptions = function(dropdownID) {
+BlockLibraryView.clearOptions = function(dropdownID) {
   var dropdown = document.getElementById(dropdownID);
   while (dropdown.length > 0) {
     dropdown.remove(dropdown.length - 1);
@@ -56,10 +55,10 @@ BlockLibrary.UI.clearOptions = function(dropdownID) {
 /**
  * Returns block type of selected block.
  *
- * @param {Element} dropdown - HTML select element
- * @return {string} type of block selected
+ * @param {Element} dropdown - HTML select element.
+ * @return {string} Type of block selected.
  */
-BlockLibrary.UI.getSelected = function(dropdown) {
+BlockLibraryView.getSelected = function(dropdown) {
   var index = dropdown.selectedIndex;
   return dropdown.options[index].value;
 };

@@ -121,8 +121,7 @@ BlockExporterTools.prototype.getGeneratorCode =
       var multiblockCode = [];
       // Define the custom blocks in order to be able to create instances of
       // them in the exporter workspace.
-      var blockDefs = this.getBlockDefs(blockXmlMap, 'JavaScript');
-      eval(blockDefs);
+      this.addBlockDefinitions_(blockXmlMap);
 
       for (var blockType in blockXmlMap) {
         var xml = blockXmlMap[blockType];

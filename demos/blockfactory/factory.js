@@ -79,16 +79,17 @@ BlockFactory.formatChange = function() {
  * @param {!Blockly.Block} rootBlock - RootBlock from main workspace in which
  *    user uses Block Factory Blocks to create a custom block.
  * @param {string} format - 'JSON' or 'JavaScript'.
+ * @param {!Blockly.Workspace} workspace - Where the root block lives.
  * @return {string} Block definition.
  */
-BlockFactory.getBlockDefinition = function(blockType, rootBlock, format) {
+BlockFactory.getBlockDefinition = function(blockType, rootBlock, format, workspace) {
   blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
   switch (format) {
     case 'JSON':
       var code = BlockFactory.formatJson_(blockType, rootBlock);
       break;
     case 'JavaScript':
-      var code = BlockFactory.formatJavaScript_(blockType, rootBlock);
+      var code = BlockFactory.formatJavaScript_(blockType, rootBlock, workspace);
       break;
   }
   return code;
@@ -107,7 +108,8 @@ BlockFactory.updateLanguage = function() {
     blockType = BlockFactory.UNNAMED;
   }
   var format = document.getElementById('format').value;
-  var code = BlockFactory.getBlockDefinition(blockType, rootBlock, format);
+  var code = BlockFactory.getBlockDefinition(blockType, rootBlock, format,
+      BlockFactory.mainWorkspace);
   BlockFactory.injectCode(code, 'languagePre');
   BlockFactory.updatePreview();
 };
@@ -225,10 +227,12 @@ BlockFactory.formatJson_ = function(blockType, rootBlock) {
  * Update the language code as JavaScript.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @param {!Blockly.Workspace} workspace - Where the root block lives.
+
+ * @return {string} Generated language code.
  * @private
  */
-BlockFactory.formatJavaScript_ = function(blockType, rootBlock) {
+BlockFactory.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   var code = [];
   code.push("Blockly.Blocks['" + blockType + "'] = {");
   code.push("  init: function() {");
@@ -274,21 +278,21 @@ BlockFactory.formatJavaScript_ = function(blockType, rootBlock) {
   // Generate output, or next/previous connections.
   switch (rootBlock.getFieldValue('CONNECTIONS')) {
     case 'LEFT':
-      code.push(BlockFactory.connectionLineJs_('setOutput', 'OUTPUTTYPE'));
+      code.push(BlockFactory.connectionLineJs_('setOutput', 'OUTPUTTYPE', workspace));
       break;
     case 'BOTH':
       code.push(
-          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
+          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE', workspace));
       code.push(
-          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE', workspace));
       break;
     case 'TOP':
       code.push(
-          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
+          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE', workspace));
       break;
     case 'BOTTOM':
       code.push(
-          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE', workspace));
       break;
   }
   // Generate colour.
@@ -310,12 +314,13 @@ BlockFactory.formatJavaScript_ = function(blockType, rootBlock) {
  * Create JS code required to create a top, bottom, or value connection.
  * @param {string} functionName JavaScript function name.
  * @param {string} typeName Name of type input.
+ * @param {!Blockly.Workspace} workspace - Where the root block lives.
  * @return {string} Line of JavaScript code to create connection.
  * @private
  */
-BlockFactory.connectionLineJs_ = function(functionName, typeName) {
+BlockFactory.connectionLineJs_ = function(functionName, typeName, workspace) {
   var type = BlockFactory.getOptTypesFrom(
-      BlockFactory.getRootBlock(BlockFactory.mainWorkspace), typeName);
+      BlockFactory.getRootBlock(workspace), typeName);
   if (type) {
     type = ', ' + type;
   } else {
@@ -557,7 +562,7 @@ BlockFactory.getTypesFrom_ = function(block, name) {
     types = [BlockFactory.escapeString(typeBlock.valueType)];
   }
   return types;
-}
+};
 
 /**
  * Get the generator code for a given block.
@@ -768,7 +773,7 @@ BlockFactory.injectCode = function(code, id) {
  * Return the uneditable container block that everything else attaches to in
  * given workspace
  *
- * @param {!Blockly.Workspace} workspace - where the root block lives
+ * @param {!Blockly.Workspace} workspace - Where the root block lives.
  * @return {Blockly.Block} root block
  */
 BlockFactory.getRootBlock = function(workspace) {

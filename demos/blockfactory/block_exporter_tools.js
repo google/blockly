@@ -86,7 +86,7 @@ BlockExporterTools.prototype.getBlockDefs =
           if (rootBlock) {
             // Generate the block's definition.
             var code = BlockFactory.getBlockDefinition(blockType, rootBlock,
-                definitionFormat);
+                definitionFormat, this.hiddenWorkspace);
             // Add block's definition to the definitions to return.
           } else {
             // Append warning comment and write to console.

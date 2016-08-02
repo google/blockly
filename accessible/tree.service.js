@@ -153,6 +153,11 @@ blocklyApp.TreeService = ng.core
         window.scrollTo(0, activeDescNode.offsetTop);
       }
     },
+    initActiveDesc: function(treeId) {
+      // Set the active desc to the first child in this tree.
+      var tree = document.getElementById(treeId);
+      this.setActiveDesc(this.getFirstChild(tree).id, treeId);
+    },
     getTreeIdForBlock: function(blockId) {
       // Walk up the DOM until we get to the root node of the tree.
       var domNode = document.getElementById(blockId + 'blockRoot');
@@ -160,6 +165,24 @@ blocklyApp.TreeService = ng.core
         domNode = domNode.parentNode;
       }
       return domNode.id;
+    },
+    focusOnBlock: function(blockId) {
+      // Set focus to the tree containing the given block, and set the active
+      // desc for this tree to the given block.
+      var domNode = document.getElementById(blockId + 'blockRoot');
+      // Walk up the DOM until we get to the root node of the tree.
+      while (!domNode.classList.contains('blocklyTree')) {
+        domNode = domNode.parentNode;
+      }
+      domNode.focus();
+
+      // We need to wait a while to set the active desc, because domNode takes
+      // a while to be given an ID if a new tree has just been created.
+      // TODO(sll): Make this more deterministic.
+      var that = this;
+      setTimeout(function() {
+        that.setActiveDesc(blockId + 'blockRoot', domNode.id);
+      }, 100);
     },
     onWorkspaceToolbarKeypress: function(e, treeId) {
       if (e.keyCode == 9) {
@@ -208,17 +231,7 @@ blocklyApp.TreeService = ng.core
       var activeDesc = document.getElementById(this.getActiveDescId(treeId));
       if (!activeDesc) {
         console.error('ERROR: no active descendant for current tree.');
-
-        // TODO(sll): Generalize this to other trees (outside the workspace).
-        var workspaceTreeNodes = this.getWorkspaceTreeNodes_();
-        for (var i = 0; i < workspaceTreeNodes.length; i++) {
-          if (workspaceTreeNodes[i].id == treeId) {
-            // Set the active desc to the first child in this tree.
-            this.setActiveDesc(
-                this.getFirstChild(workspaceTreeNodes[i]).id, treeId);
-            break;
-          }
-        }
+        this.initActiveDesc(treeId);
         return;
       }
 

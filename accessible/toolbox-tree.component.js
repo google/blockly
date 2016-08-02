@@ -64,8 +64,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
             </li>
           </ol>
         </li>
+
         <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
-          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" ng-if="inputBlock.fieldRow.length"
+          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="inputBlock.fieldRow.length"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
             <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [disabled]="true" [mainFieldId]="idMap['fieldLabel' + i]">
             </blockly-field>
@@ -141,23 +142,25 @@ blocklyApp.ToolboxTreeComponent = ng.core
       return this.clipboardService.canBeCopiedToMarkedConnection(this.block);
     },
     copyToWorkspace: function() {
+      var blockDescription = this.getBlockDescription();
       var xml = Blockly.Xml.blockToDom(this.block);
-      Blockly.Xml.domToBlock(blocklyApp.workspace, xml);
-      alert('Added block to workspace: ' + this.getBlockDescription());
+      var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;
+
+      var that = this;
+      setTimeout(function() {
+        that.treeService.focusOnBlock(newBlockId);
+        alert('Added block to workspace: ' + blockDescription);
+      });
     },
     copyToClipboard: function() {
       this.clipboardService.copy(this.block, true);
     },
     copyToMarkedSpot: function() {
-      // This involves the following steps:
-      // - Clear screenreader focus on the destination tree.
-      // - Put the block on the destination tree.
-      // - Change the current tree-level focus to the destination tree, and the
-      // screenreader focus for the destination tree to the block just moved.
       var blockDescription = this.getBlockDescription();
-      var destinationTreeId = this.treeService.getTreeIdForBlock(
+      // Clean up the active desc for the destination tree.
+      var oldDestinationTreeId = this.treeService.getTreeIdForBlock(
           this.clipboardService.getMarkedConnectionBlock().id);
-      this.treeService.clearActiveDesc(destinationTreeId);
+      this.treeService.clearActiveDesc(oldDestinationTreeId);
 
       var newBlockId = this.clipboardService.pasteToMarkedConnection(
           this.block);
@@ -165,9 +168,17 @@ blocklyApp.ToolboxTreeComponent = ng.core
       // Invoke a digest cycle, so that the DOM settles.
       var that = this;
       setTimeout(function() {
-        document.getElementById(destinationTreeId).focus();
-        that.treeService.setActiveDesc(
-            newBlockId + 'blockRoot', destinationTreeId);
+        that.treeService.focusOnBlock(newBlockId);
+
+        var newDestinationTreeId = that.treeService.getTreeIdForBlock(
+            newBlockId);
+        if (newDestinationTreeId != oldDestinationTreeId) {
+          // It is possible for the tree ID for the pasted block to change
+          // after the paste operation, e.g. when inserting a block between two
+          // existing blocks that are joined together. In this case, we need to
+          // also reset the active desc for the old destination tree.
+          that.treeService.initActiveDesc(oldDestinationTreeId);
+        }
 
         alert('Block copied to marked spot: ' + blockDescription);
       });

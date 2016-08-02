@@ -167,45 +167,23 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       alert('Block deleted: ' + blockDescription);
     },
     pasteToConnection_: function(connection) {
-      // This involves two steps:
-      // - Put the block on the destination tree.
-      // - Change the current tree-level focus to the destination tree, and the
-      // screenreader focus for the destination tree to the block just moved.
-      var newBlockId = null;
+      var destinationTreeId = this.treeService.getTreeIdForBlock(
+          connection.getSourceBlock().id);
+      this.treeService.clearActiveDesc(destinationTreeId);
 
-      this.treeService.clearActiveDesc(this.tree.id);
-
-      // If the connection is a 'previousConnection' and that connection is
-      // already joined to something, use the 'nextConnection' of the
-      // previous block instead in order to do an insertion.
-      if (connection.type == Blockly.PREVIOUS_STATEMENT &&
-          connection.isConnected()) {
-        newBlockId = this.clipboardService.pasteFromClipboard(
-            connection.targetConnection);
-      } else {
-        newBlockId = this.clipboardService.pasteFromClipboard(connection);
-      }
+      var newBlockId = this.clipboardService.pasteFromClipboard(connection);
 
       // Invoke a digest cycle, so that the DOM settles.
       var that = this;
       setTimeout(function() {
-        // Move the focus to the current tree.
-        document.getElementById(that.tree.id).focus();
-        // Move the screenreader focus to the newly-pasted block.
-        that.treeService.setActiveDesc(newBlockId + 'blockRoot', that.tree.id);
+        that.treeService.focusOnBlock(newBlockId);
       });
     },
     moveToMarkedSpot_: function() {
-      // This involves three steps:
-      // - Put the block on the destination tree.
-      // - Remove the block from the source tree, while preserving the
-      // screenreader focus for that tree.
-      // - Change the current tree-level focus to the destination tree, and the
-      // screenreader focus for the destination tree to the block just moved.
       var blockDescription = this.getBlockDescription();
-      var destinationTreeId = this.treeService.getTreeIdForBlock(
+      var oldDestinationTreeId = this.treeService.getTreeIdForBlock(
           this.clipboardService.getMarkedConnectionBlock().id);
-      this.treeService.clearActiveDesc(destinationTreeId);
+      this.treeService.clearActiveDesc(oldDestinationTreeId);
 
       var newBlockId = this.clipboardService.pasteToMarkedConnection(
           this.block);
@@ -217,9 +195,17 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
       // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
-        document.getElementById(destinationTreeId).focus();
-        that.treeService.setActiveDesc(
-            newBlockId + 'blockRoot', destinationTreeId);
+        that.treeService.focusOnBlock(newBlockId);
+
+        var newDestinationTreeId = that.treeService.getTreeIdForBlock(
+            newBlockId);
+        if (newDestinationTreeId != oldDestinationTreeId) {
+          // It is possible for the tree ID for the pasted block to change
+          // after the paste operation, e.g. when inserting a block between two
+          // existing blocks that are joined together. In this case, we need to
+          // also reset the active desc for the old destination tree.
+          that.treeService.initActiveDesc(oldDestinationTreeId);
+        }
 
         alert('Block moved to marked spot: ' + blockDescription);
       });

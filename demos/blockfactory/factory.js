@@ -608,6 +608,8 @@ BlockFactory.getTypesFrom_ = function(block, name) {
 
 // Generator Code
 
+// Generator Code
+
 /**
  * Get the generator code for a given block.
  *

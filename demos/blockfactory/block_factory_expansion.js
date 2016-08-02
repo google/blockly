@@ -34,8 +34,10 @@ BlockFactoryExpansion = function() {
  */
 BlockFactoryExpansion.prototype.onSelectedBlockChanged
     = function(blockLibraryDropdown) {
+    // Get selected block type.
     var blockType = this.blockLibraryController.getSelectedBlockType(
         blockLibraryDropdown);
+    // Update Block Factory page by showing the selected block.
     this.blockLibraryController.openBlock(blockType);
 };
 

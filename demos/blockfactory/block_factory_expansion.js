@@ -25,20 +25,49 @@ BlockFactoryExpansion = function() {
 
 /**
  * Updates the Block Factory tab to show selected block when user selects a
- * different block in the block library dropdown.
+ * different block in the block library dropdown. Tied to block library dropdown
+ * in index.html.
  *
  * @param {!Element} blockLibraryDropdown - HTML select element from which the
  *    user selects a block to work on.
  */
-BlockFactoryExpansion.prototype.onSelectedBlockChanged = function(blockLibraryDropdown) {
+BlockFactoryExpansion.prototype.onSelectedBlockChanged
+    = function(blockLibraryDropdown) {
   var self = this;
   var onSelect = function(blockLibraryDropdown) {
-    var blockType
-        = self.blockLibraryController.getSelectedBlockType(blockLibraryDropdown);
+    var blockType = self.blockLibraryController.getSelectedBlockType(
+        blockLibraryDropdown);
     self.blockLibraryController.openBlock(blockType);
   };
   onSelect(blockLibraryDropdown);
 };
+
+/**
+ * Add tab handlers to allow switching between the Block Factory
+ * tab and the Block Exporter tab.
+ *
+ * @param {string} blockFactoryTabID - ID of element containing Block Factory
+ * @param {string} blockExporterTabID - ID of element containing Block
+ *    Exporter
+ */
+BlockFactoryExpansion.prototype.addTabHandlers =
+    function(blockFactoryTabID, blockExporterTabID) {
+      var self = this;
+      var addTabHandler = function(blockFactoryTabID, blockExporterTabID){
+        // Get div elements representing tabs
+        var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+        var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+        blockFactoryTab.addEventListener('click',
+            function() {
+              self.onFactoryTab(blockFactoryTab, blockExporterTab);
+            });
+        blockExporterTab.addEventListener('click',
+            function() {
+              self.onExporterTab(blockFactoryTab, blockExporterTab, self);
+            });
+      };
+      addTabHandler(blockFactoryTabID, blockExporterTabID);
+    };
 
 /**
  * Tied to 'Block Factory' Tab. Shows Block Factory and Block Library.
@@ -76,33 +105,6 @@ BlockFactoryExpansion.prototype.onExporterTab =
         window.dispatchEvent(new Event('resize'));
       };
       onTab(blockFactoryTab, blockExporterTab);
-    };
-
-/**
- * Add tab handlers to allow switching between the Block Factory
- * tab and the Block Exporter tab.
- *
- * @param {string} blockFactoryTabID - ID of element containing Block Factory
- * @param {string} blockExporterTabID - ID of element containing Block
- *    Exporter
- */
-BlockFactoryExpansion.prototype.addTabHandlers =
-    function(blockFactoryTabID, blockExporterTabID) {
-      var self = this;
-      var addTabHandler = function(blockFactoryTabID, blockExporterTabID){
-        // Get div elements representing tabs
-        var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-        var blockExporterTab = goog.dom.getElement(blockExporterTabID);
-        blockFactoryTab.addEventListener('click',
-            function() {
-              self.onFactoryTab(blockFactoryTab, blockExporterTab);
-            });
-        blockExporterTab.addEventListener('click',
-            function() {
-              self.onExporterTab(blockFactoryTab, blockExporterTab, self);
-            });
-      };
-      addTabHandler(blockFactoryTabID, blockExporterTabID);
     };
 
 /**
@@ -180,32 +182,56 @@ BlockFactoryExpansion.prototype.assignFactoryClickHandlers = function() {
 };
 
 /**
+ * Add event listeners for the block factory.
+ */
+BlockFactoryExpansion.prototype.addFactoryEventListeners = function() {
+  BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
+  document.getElementById('direction')
+      .addEventListener('change', BlockFactory.updatePreview);
+  document.getElementById('languageTA')
+      .addEventListener('change', BlockFactory.updatePreview);
+  document.getElementById('languageTA')
+      .addEventListener('keyup', BlockFactory.updatePreview);
+  document.getElementById('format')
+      .addEventListener('change', BlockFactory.formatChange);
+  document.getElementById('language')
+      .addEventListener('change', BlockFactory.updatePreview);
+};
+
+/**
+ * Handle Blockly Storage with App Engine.
+ */
+BlockFactoryExpansion.prototype.initializeBlocklyStorage = function() {
+  BlocklyStorage.HTTPREQUEST_ERROR =
+      'There was a problem with the request.\n';
+  BlocklyStorage.LINK_ALERT =
+      'Share your blocks with this link:\n\n%1';
+  BlocklyStorage.HASH_ERROR =
+      'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
+  BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +
+      'Perhaps it was created with a different version of Blockly?';
+  var linkButton = document.getElementById('linkButton');
+  linkButton.style.display = 'inline-block';
+  linkButton.addEventListener('click',
+      function() {
+          BlocklyStorage.link(BlockFactory.mainWorkspace);});
+  BlockFactory.disableEnableLink();
+};
+/**
  * Initialize Blockly and layout.  Called on page load.
  */
 BlockFactoryExpansion.prototype.init = function() {
   // Handle Blockly Storage with App Engine
   if ('BlocklyStorage' in window) {
-    BlocklyStorage.HTTPREQUEST_ERROR =
-        'There was a problem with the request.\n';
-    BlocklyStorage.LINK_ALERT =
-        'Share your blocks with this link:\n\n%1';
-    BlocklyStorage.HASH_ERROR =
-        'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n' +
-        'Perhaps it was created with a different version of Blockly?';
-    var linkButton = document.getElementById('linkButton');
-    linkButton.style.display = 'inline-block';
-    linkButton.addEventListener('click',
-        function() {
-            BlocklyStorage.link(BlockFactory.mainWorkspace);});
-    BlockFactory.disableEnableLink();
+    this.initializeBlocklyStorage();
   }
+
+  // Assign click handlers.
   this.assignExporterClickHandlers();
   this.assignLibraryClickHandlers();
   this.assignFactoryClickHandlers();
 
-  // ---- BBS----
-  // Handle resizing of elements.
+  // Handle resizing of Block Factory elements.
   var expandList = [
     document.getElementById('blockly'),
     document.getElementById('blocklyMask'),
@@ -221,21 +247,20 @@ BlockFactoryExpansion.prototype.init = function() {
       expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
     }
   };
-  //--- BBF ---
   onresize();
   window.addEventListener('resize', onresize);
 
-  // --- BBS
   // Inject Block Factory Main Workspace
   var toolbox = document.getElementById('toolbox');
   BlockFactory.mainWorkspace = Blockly.inject('blockly',
       {collapse: false,
        toolbox: toolbox,
        media: '../../media/'});
-  // --- BBF
+
+  // Add tab handlers for switching between Block Factory and Block Exporter.
   this.addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
 
-  // Create the root block.on main workspace.
+  // Create the root block on Block Factory main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                BlockFactory.mainWorkspace);
@@ -247,15 +272,6 @@ BlockFactoryExpansion.prototype.init = function() {
   }
   BlockFactory.mainWorkspace.clearUndo();
 
-  BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
-  document.getElementById('direction')
-      .addEventListener('change', BlockFactory.updatePreview);
-  document.getElementById('languageTA')
-      .addEventListener('change', BlockFactory.updatePreview);
-  document.getElementById('languageTA')
-      .addEventListener('keyup', BlockFactory.updatePreview);
-  document.getElementById('format')
-      .addEventListener('change', BlockFactory.formatChange);
-  document.getElementById('language')
-      .addEventListener('change', BlockFactory.updatePreview);
+  // Add Block Factory event listeners.
+  this.addFactoryEventListeners();
 };

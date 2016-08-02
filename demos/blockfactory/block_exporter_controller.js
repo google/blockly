@@ -135,11 +135,11 @@ BlockExporterController.prototype.addChangeListenersToSelectorWorkspace
   var selector = this.view.selectorWorkspace;
   selector.addChangeListener(
     function(event) {
-      self.onSelectBlockForExport(event);
+      self.onSelectBlockForExport_(event);
     });
   selector.addChangeListener(
     function(event) {
-      self.onDeselectBlockForExport(event);
+      self.onDeselectBlockForExport_(event);
     });
 };
 
@@ -148,10 +148,11 @@ BlockExporterController.prototype.addChangeListenersToSelectorWorkspace
  * workspace. Disables selected block so that the user only exports one
  * copy of starter code per block. Attached to the blockly create event in block
  * factory expansion's init.
+ * @private
  *
  * @param {!Blockly.Events} event - The fired Blockly event.
  */
-BlockExporterController.prototype.onSelectBlockForExport = function(event) {
+BlockExporterController.prototype.onSelectBlockForExport_ = function(event) {
   // The user created a block in selector workspace.
   if (event.type == Blockly.Events.CREATE) {
     // Get type of block created.
@@ -169,10 +170,11 @@ BlockExporterController.prototype.onSelectBlockForExport = function(event) {
  * Callback function for when a user deselects a block in selector
  * workspace by deleting it. Re-enables block so that the user may select it for
  * export
+ * @private
  *
  * @param {!Blockly.Events} event - The fired Blockly event.
  */
-BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
+BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
   // The user deleted a block in selector workspace.
   if (event.type == Blockly.Events.DELETE) {
     // Get type of block created.

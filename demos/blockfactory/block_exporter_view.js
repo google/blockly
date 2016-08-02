@@ -77,7 +77,7 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
 };
 
 /**
- * Updates the helper text to show currently selected blocks.
+ * Updates the helper text to show list of currently selected blocks.
  *
  * @param {!Array} selectedBlockTypes - Array of blocks selected in workspace.
  */

@@ -17,13 +17,15 @@ goog.provide('BlockLibraryView');
  * @param {string} dropdownID - ID for HTML select element.
  * @param {boolean} selected - Whether or not the option should be selected on the
  *     dropdown.
+ * @param {boolean} enabled - Whether or not the option should be enabled.
  */
-BlockLibraryView.addOption = function(optionName, optionText, dropdownID, selected) {
+BlockLibraryView.addOption = function(optionName, optionText, dropdownID, selected, enabled) {
   var dropdown = document.getElementById(dropdownID);
   var option = document.createElement('option');
   option.text = optionText;
   option.value = optionName;
   option.selected = selected;
+  option.disabled = !enabled;
   dropdown.add(option);
 };
 
@@ -50,6 +52,20 @@ BlockLibraryView.clearOptions = function(dropdownID) {
   while (dropdown.length > 0) {
     dropdown.remove(dropdown.length - 1);
   }
+  // Default blank option for when no block from library is selected.
+  BlockLibraryView.addOption(
+      'BLOCK_LIBRARY_DEFAULT_BLANK', '', 'blockLibraryDropdown', true, false);
+};
+
+/**
+ * Adds a default, blank option to dropdown for when no block from library is
+ * selected.
+ *
+ * @param {string} dropdownID - ID of HTML select element
+ */
+BlockLibraryView.addDefaultOption = function(dropdownID) {
+  BlockLibraryView.addOption(
+      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, false);
 };
 
 /**

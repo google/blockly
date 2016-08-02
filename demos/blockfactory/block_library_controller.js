@@ -80,15 +80,24 @@ BlockLibraryController.prototype.getSelectedBlockType =
     };
 
 /**
- * Clears the block library in local storage and updates the dropdown.
+ * Confirms with user before clearing the block library in local storage and
+ * updating the dropdown.
  */
 BlockLibraryController.prototype.clearBlockLibrary = function() {
-  var check = prompt(
-      'Are you sure you want to clear your Block Library? ("yes" or "no")');
-  if (check == "yes") {
+  var check = confirm(
+      'Click OK to clear your block library.');
+  if (check) {
+    // Clear Block Library Storage.
     this.storage.clear();
     this.storage.saveToLocalStorage();
+    // Update dropdown.
     BlockLibraryView.clearOptions('blockLibraryDropdown');
+<<<<<<< HEAD
+    // Add a default, blank option to dropdown for when no block from library is
+    // selected.
+    BlockLibraryView.addDefaultOption('blockLibraryDropdown');
+=======
+>>>>>>> 4606074... moved call to addOption from lib controller to view
   }
 };
 
@@ -105,7 +114,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
     this.storage.addBlock(blockType, xmlElement);
     this.storage.saveToLocalStorage();
     BlockLibraryView.addOption(
-        blockType, blockType, 'blockLibraryDropdown', true);
+        blockType, blockType, 'blockLibraryDropdown', true, true);
   }
 };
 
@@ -129,11 +138,17 @@ BlockLibraryController.prototype.populateBlockLibrary = function() {
          'you can reopen it the next time you visit Block Factory!');
   }
   BlockLibraryView.clearOptions('blockLibraryDropdown');
+  // Add a default, blank option to dropdown for when no block from library is
+  // selected.
+  BlockLibraryView.addDefaultOption('blockLibraryDropdown');
+  // Add option for each saved block.
   var blockLibrary = this.storage.blocks;
   for (var block in blockLibrary) {
     // Make sure the block wasn't deleted.
     if (blockLibrary[block] != null) {
-      BlockLibraryView.addOption(block, block, 'blockLibraryDropdown', false);
+      BlockLibraryView.addOption(
+          block, block, 'blockLibraryDropdown', false, true);
     }
   }
 };
+

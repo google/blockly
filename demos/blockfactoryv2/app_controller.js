@@ -11,7 +11,12 @@ goog.require('BlockFactory');
 goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
+goog.require('goog.string');
 
+/**
+ * Controller for the Blockly Factory
+ * @constructor
+ */
 AppController = function() {
   // Initialize Block Library
   this.blockLibraryName = 'blockLibrary';
@@ -25,6 +30,137 @@ AppController = function() {
 };
 
 /**
+ * Tied to the 'Import Block Library' button. Imports block library from file to
+ * Block Factory. Expects user to upload a single file of JSON mapping each
+ * block type to its xml text representation.
+ */
+AppController.prototype.importBlockLibraryFromFile = function() {
+  var self = this;
+  var files = document.getElementById('files');
+  // If the file list is empty, the user likely canceled in the dialog.
+  if (files.files.length > 0) {
+    // The input tag doesn't have the "multiple" attribute
+    // so the user can only choose 1 file.
+    var file = files.files[0];
+    var fileReader = new FileReader();
+
+    // Create a map of block type to xml text from the file when it has been
+    // read.
+    fileReader.addEventListener('load', function(event) {
+      var fileContents = event.target.result;
+      // Create empty object to hold the read block library information.
+      var blockXmlTextMap = Object.create(null);
+      try {
+        // Parse the file to get map of block type to xml text.
+        blockXmlTextMap = self.formatBlockLibForImport_(fileContents);
+      } catch (e) {
+        var message = 'Could not load your block library file.\n'
+        window.alert(message + '\nFile Name: ' + file.name);
+        return;
+      }
+
+      // Create a new block library storage object with inputted block library.
+      var blockLibStorage = new BlockLibraryStorage(
+          self.blockLibraryName, blockXmlTextMap);
+
+      // Update block library controller with the new block library
+      // storage.
+      self.blockLibraryController.setBlockLibStorage(blockLibStorage);
+      // Update the block library dropdown.
+      self.blockLibraryController.populateBlockLibrary();
+      // Update the exporter's block library storage.
+      self.exporter.setBlockLibStorage(blockLibStorage);
+    });
+    // Read the file.
+    fileReader.readAsText(file);
+  }
+};
+
+/**
+ * Tied to the 'Export Block Library' button. Exports block library to file that
+ * contains JSON mapping each block type to its xml text representation.
+ */
+AppController.prototype.exportBlockLibraryToFile = function() {
+  // Get map of block type to xml.
+  var blockLib = this.blockLibraryController.getBlockLibrary();
+  // Concatenate the xmls, each separated by a blank line.
+  var blockLibText = this.formatBlockLibForExport_(blockLib);
+  // Get file name.
+  var filename = prompt('Enter the file name under which to save your block' +
+      'library.');
+  // Download file if all necessary parameters are provided.
+  if (filename) {
+    BlockFactory.createAndDownloadFile_(blockLibText, filename, 'xml');
+  } else {
+    alert('Could not export Block Library without file name under which to ' +
+      'save library.');
+  }
+};
+
+/**
+ * Converts an object mapping block type to xml to text file for output.
+ * @private
+ *
+ * @param {!Object} blockXmlMap - object mapping block type to xml
+ * @return {string} String of each block's xml separated by a new line.
+ */
+AppController.prototype.formatBlockLibForExport_ = function(blockXmlMap) {
+  var blockXmls = [];
+  for (var blockType in blockXmlMap) {
+    blockXmls.push(blockXmlMap[blockType]);
+  }
+  return blockXmls.join("\n\n");
+};
+
+/**
+ * Converts imported block library to an object mapping block type to block xml.
+ * @private
+ *
+ * @param {string} xmlText - String containing each block's xml optionally
+ *    separated by whitespace.
+ * @return {!Object} object mapping block type to xml text.
+ */
+AppController.prototype.formatBlockLibForImport_ = function(xmlText) {
+  // Get array of xmls.
+  var xmlText = goog.string.collapseWhitespace(xmlText);
+  var blockXmls = goog.string.splitLimit(xmlText, '</xml>', 500);
+
+  // Create and populate map.
+  var blockXmlTextMap = Object.create(null);
+  // The line above is equivalent of {} except that this object is TRULY
+  // empty. It doesn't have built-in attributes/functions such as length or
+  // toString.
+  for (var i = 0, xml; xml = blockXmls[i]; i++) {
+    var blockType = this.getBlockTypeFromXml_(xml);
+    blockXmlTextMap[blockType] = xml;
+  }
+
+  return blockXmlTextMap;
+};
+
+/**
+ * Extracts out block type from xml text, the kind that is saved in block
+ * library storage.
+ * @private
+ *
+ * @param {!string} xmlText - A block's xml text.
+ * @return {string} The block type that corresponds to the provided xml text.
+ */
+AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
+  var xmlText = Blockly.Options.parseToolboxTree(xmlText);
+  // Find factory base block.
+  var factoryBaseBlockXml = xmlText.getElementsByTagName('block')[0];
+  // Get field elements from factory base.
+  var fields = factoryBaseBlockXml.getElementsByTagName('field');
+  for (var i = 0; i < fields.length; i++) {
+    // The field whose name is 'NAME' holds the block type as its value.
+    if (fields[i].getAttribute('name') == 'NAME') {
+      return fields[i].childNodes[0].nodeValue;
+    }
+  }
+};
+
+/**
  * Updates the Block Factory tab to show selected block when user selects a
  * different block in the block library dropdown. Tied to block library dropdown
  * in index.html.
@@ -32,8 +168,7 @@ AppController = function() {
  * @param {!Element} blockLibraryDropdown - HTML select element from which the
  *    user selects a block to work on.
  */
-AppController.prototype.onSelectedBlockChanged
-    = function(blockLibraryDropdown) {
+AppController.prototype.onSelectedBlockChanged = function(blockLibraryDropdown) {
   // Get selected block type.
   var blockType = this.blockLibraryController.getSelectedBlockType(
       blockLibraryDropdown);
@@ -163,9 +298,12 @@ AppController.prototype.assignLibraryClickHandlers = function() {
  * Assign button click handlers for the block factory.
  */
 AppController.prototype.assignFactoryClickHandlers = function() {
+  var self = this;
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')
-      .addEventListener('click', BlockFactory.saveWorkspaceToFile);
+      .addEventListener('click', function() {
+        self.exportBlockLibraryToFile();
+      });
   document.getElementById('helpButton').addEventListener('click',
       function() {
         open('https://developers.google.com/blockly/custom-blocks/block-factory',
@@ -181,11 +319,16 @@ AppController.prototype.assignFactoryClickHandlers = function() {
       });
   document.getElementById('files').addEventListener('change',
       function() {
-        BlockFactory.importBlockFromFile();
-        // Clear this so that the change event still fires even if the
-        // same file is chosen again. If the user re-imports a file, we
-        // want to reload the workspace with its contents.
-        this.value = null;
+        // Warn user.
+        var replace = confirm('This imported block library will ' +
+            'replace your current block library.');
+        if (replace) {
+          self.importBlockLibraryFromFile();
+          // Clear this so that the change event still fires even if the
+          // same file is chosen again. If the user re-imports a file, we
+          // want to reload the workspace with its contents.
+          this.value = null;
+        }
       });
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {

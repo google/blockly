@@ -95,4 +95,3 @@ BlockLibraryView.clearOptions = function(dropdownID) {
   }
 };
 
-

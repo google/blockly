@@ -210,6 +210,21 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         alert('Block moved to marked spot: ' + blockDescription);
       });
     },
+    copyBlock_: function() {
+      this.clipboardService.copy(this.block, true);
+    },
+    markSpotBelow_: function() {
+      this.clipboardService.markConnection(this.block.nextConnection);
+    },
+    markSpotAbove_: function() {
+      this.clipboardService.markConnection(this.block.previousConnection);
+    },
+    pasteToNextConnection_: function() {
+      this.pasteToConnection_(this.block.nextConnection);
+    },
+    pasteToPreviousConnection_: function() {
+      this.pasteToConnection_(this.block.previousConnection);
+    },
     ngOnInit: function() {
       var that = this;
 
@@ -224,15 +239,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       }, {
         baseIdKey: 'copy',
         translationIdForText: 'COPY_BLOCK',
-        action: that.clipboardService.copy.bind(
-            that.clipboardService, that.block, true),
+        action: that.copyBlock_.bind(that),
         isDisabled: function() {
           return false;
         }
       }, {
         baseIdKey: 'pasteBelow',
         translationIdForText: 'PASTE_BELOW',
-        action: that.pasteToConnection_.bind(that, that.block.nextConnection),
+        action: that.pasteToNextConnection_.bind(that),
         isDisabled: function() {
           return Boolean(
               !that.block.nextConnection ||
@@ -241,8 +255,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       }, {
         baseIdKey: 'pasteAbove',
         translationIdForText: 'PASTE_ABOVE',
-        action: that.pasteToConnection_.bind(
-            that, that.block.previousConnection),
+        action: that.pasteToPreviousConnection_.bind(that),
         isDisabled: function() {
           return Boolean(
               !that.block.previousConnection ||
@@ -251,16 +264,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       }, {
         baseIdKey: 'markBelow',
         translationIdForText: 'MARK_SPOT_BELOW',
-        action: that.clipboardService.markConnection.bind(
-            that.clipboardService, that.block.nextConnection),
+        action: that.markSpotBelow_.bind(that),
         isDisabled: function() {
           return !that.block.nextConnection;
         }
       }, {
         baseIdKey: 'markAbove',
         translationIdForText: 'MARK_SPOT_ABOVE',
-        action: that.clipboardService.markConnection.bind(
-            that.clipboardService, that.block.previousConnection),
+        action: that.markSpotAbove_.bind(that),
         isDisabled: function() {
           return !that.block.previousConnection;
         }

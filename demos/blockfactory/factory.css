@@ -164,11 +164,6 @@ button, .buttonStyle {
  display: none;
 }
 
-#gap {
-  height: 100px;
-  clear: both;
-}
-
 /* Tabs */
 
 .tab {

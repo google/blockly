@@ -96,19 +96,19 @@ AppController.prototype.onFactoryTab =
  */
 AppController.prototype.onExporterTab =
     function(blockFactoryTab, blockExporterTab) {
-        // Turn exporter tab on and factory tab off.
-        goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-        goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+    // Turn exporter tab on and factory tab off.
+    goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+    goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
-        // Update toolbox to reflect current block library.
-        this.exporter.updateToolbox();
+    // Update toolbox to reflect current block library.
+    this.exporter.updateToolbox();
 
-        // Show container of exporter.
-        BlockFactory.show('blockLibraryExporter');
+    // Show container of exporter.
+    BlockFactory.show('blockLibraryExporter');
 
-        // Resize to render workspaces' toolboxes correctly.
-        window.dispatchEvent(new Event('resize'));
-    };
+    // Resize to render workspaces' toolboxes correctly.
+    window.dispatchEvent(new Event('resize'));
+};
 
 /**
  * Assign button click handlers for the exporter.

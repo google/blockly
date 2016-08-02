@@ -140,7 +140,7 @@ BlockFactoryExpansion.prototype.assignLibraryClickHandlers = function() {
       });
 
   var dropdown = document.getElementById('blockLibraryDropdown');
-  dropdown.addEventListener('changed',
+  dropdown.addEventListener('change',
       function() {
         self.onSelectedBlockChanged(dropdown);
       });

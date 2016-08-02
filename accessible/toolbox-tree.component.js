@@ -149,11 +149,15 @@ blocklyApp.ToolboxTreeComponent = ng.core
       this.clipboardService.copy(this.block, true);
     },
     copyToMarkedSpot: function() {
-      // This involves two steps:
+      // This involves the following steps:
+      // - Clear screenreader focus on the destination tree.
       // - Put the block on the destination tree.
       // - Change the current tree-level focus to the destination tree, and the
       // screenreader focus for the destination tree to the block just moved.
       var blockDescription = this.getBlockDescription();
+      var destinationTreeId = this.treeService.getTreeIdForBlock(
+          this.clipboardService.getMarkedConnectionBlock().id);
+      this.treeService.clearActiveDesc(destinationTreeId);
 
       var newBlockId = this.clipboardService.pasteToMarkedConnection(
           this.block);
@@ -161,7 +165,6 @@ blocklyApp.ToolboxTreeComponent = ng.core
       // Invoke a digest cycle, so that the DOM settles.
       var that = this;
       setTimeout(function() {
-        var destinationTreeId = that.treeService.getTreeIdForBlock(newBlockId);
         document.getElementById(destinationTreeId).focus();
         that.treeService.setActiveDesc(
             newBlockId + 'blockRoot', destinationTreeId);

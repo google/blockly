@@ -203,6 +203,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // - Change the current tree-level focus to the destination tree, and the
       // screenreader focus for the destination tree to the block just moved.
       var blockDescription = this.getBlockDescription();
+      var destinationTreeId = this.treeService.getTreeIdForBlock(
+          this.clipboardService.getMarkedConnectionBlock().id);
+      this.treeService.clearActiveDesc(destinationTreeId);
 
       var newBlockId = this.clipboardService.pasteToMarkedConnection(
           this.block);
@@ -214,9 +217,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
       // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
-        var destinationTreeId = that.treeService.getTreeIdForBlock(newBlockId);
-        that.treeService.clearActiveDesc(destinationTreeId);
-
         document.getElementById(destinationTreeId).focus();
         that.treeService.setActiveDesc(
             newBlockId + 'blockRoot', destinationTreeId);

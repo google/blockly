@@ -134,6 +134,11 @@ BlockFactoryExpansion.init = function() {
         BlockFactoryExpansion.exporter.exportBlocks();
       });
 
+  document.getElementById('clearSelectedButton').addEventListener('click',
+      function() {
+        BlockFactoryExpansion.exporter.clearSelectedBlocks();
+      });
+
   /**
    * Add tab handlers to allow switching between the Block Factory
    * tab and the Block Exporter tab.

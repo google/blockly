@@ -86,5 +86,20 @@ BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
   this.updateHelperText('Currently Selected: ' + selectedBlocksText);
 };
 
+/**
+ * Clears selector workspace.
+ */
+BlockExporterView.prototype.clearSelectorWorkspace = function() {
+  this.selectorWorkspace.clear();
+};
+
+/**
+ * Returns array of selected blocks.
+ *
+ * @return {Array.<Blockly.Block>} Array of all blocks in selector workspace.
+ */
+BlockExporterView.prototype.getSelectedBlocks = function() {
+  return this.selectorWorkspace.getAllBlocks();
+};
 
 

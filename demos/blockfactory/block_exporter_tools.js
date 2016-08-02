@@ -37,17 +37,22 @@ BlockExporterTools = function() {
 };
 
 /**
- * Get Blockly Block object from the xml saved in block library.
+ * Get Blockly Block object from xml that encodes the blocks used to design
+ * the block.
+ * @private
  *
- * @param {!Element} xml - Xml element saved in block library for that block.
- * @return {!Blockly.Block} - Root block (factory_base block).
+ * @param {!Element} xml - Xml element that encodes the blocks used to design
+ *    the block. For example, the block xmls saved in block library.
+ * @return {!Blockly.Block} - Root block (factory_base block) which contains
+ *    all information needed to generate block definition or null.
  */
-BlockExporterTools.prototype.getRootBlockFromXml = function(xml) {
+BlockExporterTools.prototype.getRootBlockFromXml_ = function(xml) {
   // Render xml in hidden workspace.
   this.hiddenWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
   // Get root block.
-  return this.hiddenWorkspace.getTopBlocks()[0];
+  var rootBlock = this.hiddenWorkspace.getTopBlocks()[0] || null;
+  return rootBlock;
 };
 
 /**
@@ -77,11 +82,19 @@ BlockExporterTools.prototype.getBlockDefs =
         var xml = blockXmlMap[blockType];
         if (xml) {
           // Render and get block from hidden workspace.
-          var rootBlock = this.getRootBlockFromXml(xml);
-          // Generate the block's definition.
-          var code = BlockFactory.getBlockDefinition(blockType, rootBlock,
-              definitionFormat);
-          // Add block's definition to the definitions to return.
+          var rootBlock = this.getRootBlockFromXml_(xml);
+          if (rootBlock) {
+            // Generate the block's definition.
+            var code = BlockFactory.getBlockDefinition(blockType, rootBlock,
+                definitionFormat, this.hiddenWorkspace);
+            // Add block's definition to the definitions to return.
+          } else {
+            // Append warning comment and write to console.
+            var code = '// No block definition generated for ' + blockType +
+              '. Could not find root block in xml stored for this block.';
+            console.log('No block definition generated for ' + blockType +
+              '. Could not find root block in xml stored for this block.');
+          }
         } else {
           // Append warning comment and write to console.
           var code = '// No block definition generated for ' + blockType +
@@ -108,8 +121,7 @@ BlockExporterTools.prototype.getGeneratorCode =
       var multiblockCode = [];
       // Define the custom blocks in order to be able to create instances of
       // them in the exporter workspace.
-      var blockDefs = this.getBlockDefs(blockXmlMap, 'JavaScript');
-      eval(blockDefs);
+      this.addBlockDefinitions_(blockXmlMap);
 
       for (var blockType in blockXmlMap) {
         var xml = blockXmlMap[blockType];
@@ -140,8 +152,7 @@ BlockExporterTools.prototype.getGeneratorCode =
  * @param {!Object} blockXmlMap - Map of block type to xml.
  */
 BlockExporterTools.prototype.addBlockDefinitions_ = function(blockXmlMap) {
-      var blockDefs =
-          this.getBlockDefs(blockXmlMap, 'JavaScript');
+      var blockDefs = this.getBlockDefs(blockXmlMap, 'JavaScript');
       eval(blockDefs);
     };
 

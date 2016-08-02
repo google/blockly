@@ -34,13 +34,9 @@ BlockFactoryExpansion = function() {
  */
 BlockFactoryExpansion.prototype.onSelectedBlockChanged
     = function(blockLibraryDropdown) {
-  // var self = this;
-  // var onSelect = function(blockLibraryDropdown) {
     var blockType = this.blockLibraryController.getSelectedBlockType(
         blockLibraryDropdown);
     this.blockLibraryController.openBlock(blockType);
-  // };
-  // onSelect(blockLibraryDropdown);
 };
 
 /**

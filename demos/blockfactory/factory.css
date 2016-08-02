@@ -145,7 +145,6 @@ button, .buttonStyle {
   clear: both;
   display: none;
   height: 100%;
-  margin-bottom: 20px;
 }
 
 #exportSelector {

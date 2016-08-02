@@ -29,8 +29,6 @@ BlockExporterController = function(blockLibStorage) {
   this.view = new BlockExporterView(
       //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
-  // Object mapping disabled block types to their enabled xmls
-  this.disabledBlocks = Object.create(null);
 };
 
 /**
@@ -112,41 +110,17 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
 /**
  * Enable or Disable block in selector workspace's toolbox.
  *
- * @param {string} blockType - type of block to disable
+ * @param {!string} blockType - Type of block to disable or enable.
+ * @param {!boolean} disable - True to disable the block, false to enable block.
  */
-BlockExporterController.prototype.disableBlock = function(blockType) {
+BlockExporterController.prototype.setBlockDisabled =
+    function(blockType, disable) {
   var toolboxXml = this.view.toolbox;
   var category = goog.dom.xml.selectSingleNode(toolboxXml,
       '//category[@name="' + blockType + '"]');
   var block = goog.dom.getFirstElementChild(category);
-  // Save enabled block xml.
-  var clonedBlock = block.cloneNode(true);
-  this.disabledBlocks[blockType] = clonedBlock;
   // Disable block.
-  goog.dom.xml.setAttributes(block, {disabled: true});
-};
-
-/**
- * Enable block in selector workspace's toolbox.
- *
- * @param {string} blockType - type of block to enable
- */
-BlockExporterController.prototype.enableBlock = function(blockType) {
-  var toolboxXml = this.view.toolbox;
-  var category = goog.dom.xml.selectSingleNode(toolboxXml,
-      '//category[@name="' + blockType + '"]');
-  var block = goog.dom.getFirstElementChild(category);
-  goog.dom.xml.setAttributes(block, {disabled: false});
-  // // Remove disabled block xml from toolbox.
-  // goog.dom.removeNode(block);
-  // // Get enabled block xml and add to toolbox, replacing disabled block xml
-  // // within category.
-  // var enabledBlock = this.disabledBlocks[blockType];
-  // goog.dom.appendChild(category, enabledBlock);
-  // // Remove block from map of disabled blocks.
-  // delete this.disabledBlocks[blockType];
-  // // Update toolbox.
-  // this.updateToolbox(toolboxXml);
+  goog.dom.xml.setAttributes(block, {disabled: disable});
 };
 
 /**
@@ -154,20 +128,20 @@ BlockExporterController.prototype.enableBlock = function(blockType) {
  */
 BlockExporterController.prototype.addChangeListenersToSelectorWorkspace
     = function() {
-      // Assign the BlockExporterController to 'self' to be called in the change
-      // listeners. This keeps it in scope--otherwise, 'this' in the change
-      // listeners refers to the wrong thing.
-      var self = this;
-      var selector = this.view.selectorWorkspace;
-      selector.addChangeListener(
-        function(event) {
-          self.onSelectBlockForExport(event);
-        });
-      selector.addChangeListener(
-        function(event) {
-          self.onDeselectBlockForExport(event);
-        });
-    };
+  // Assign the BlockExporterController to 'self' to be called in the change
+  // listeners. This keeps it in scope--otherwise, 'this' in the change
+  // listeners refers to the wrong thing.
+  var self = this;
+  var selector = this.view.selectorWorkspace;
+  selector.addChangeListener(
+    function(event) {
+      self.onSelectBlockForExport(event);
+    });
+  selector.addChangeListener(
+    function(event) {
+      self.onDeselectBlockForExport(event);
+    });
+};
 
 /**
  * Callback function for when a user selects a block for export in selector
@@ -185,7 +159,7 @@ BlockExporterController.prototype.onSelectBlockForExport = function(event) {
     var blockType = block.type;
     // Disable the selected block. Users can only export one copy of starter
     // code per block.
-    this.disableBlock(blockType);
+    this.setBlockDisabled(blockType, true);
     // Edit helper text (currently selected)
     var selectedBlocksText = this.getSelectedBlockTypes_().join(', ');
     this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);
@@ -206,7 +180,7 @@ BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
     var deletedBlockXml = event.oldXml;
     var blockType = deletedBlockXml.getAttribute('type');
     // Enable the deselected block.
-    this.enableBlock(blockType);
+    this.setBlockDisabled(blockType, false);
     // Edit helper text (currently selected)
     var selectedBlocksText = this.getSelectedBlockTypes_().join(', ');
     this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);

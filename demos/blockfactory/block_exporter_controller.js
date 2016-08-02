@@ -160,9 +160,8 @@ BlockExporterController.prototype.onSelectBlockForExport = function(event) {
     // Disable the selected block. Users can only export one copy of starter
     // code per block.
     this.setBlockDisabled(blockType, true);
-    // Edit helper text (currently selected)
-    var selectedBlocksText = this.getSelectedBlockTypes_().join(', ');
-    this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);
+    // Show currently selected blocks in helper text.
+    this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
   }
 };
 
@@ -181,9 +180,8 @@ BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
     var blockType = deletedBlockXml.getAttribute('type');
     // Enable the deselected block.
     this.setBlockDisabled(blockType, false);
-    // Edit helper text (currently selected)
-    var selectedBlocksText = this.getSelectedBlockTypes_().join(', ');
-    this.view.updateHelperText('Currently Selected: ' + selectedBlocksText);
+    // Show currently selected blocks in helper text.
+    this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
   }
 };
 

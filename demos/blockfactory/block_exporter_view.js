@@ -76,5 +76,15 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
   }
 };
 
+/**
+ * Updates the helper text to show currently selected blocks.
+ *
+ * @param {!Array} selectedBlockTypes - Array of blocks selected in workspace.
+ */
+BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
+  var selectedBlocksText = selectedBlockTypes.join(', ');
+  this.updateHelperText('Currently Selected: ' + selectedBlocksText);
+};
+
 
 

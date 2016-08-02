@@ -111,16 +111,16 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
  * Enable or Disable block in selector workspace's toolbox.
  *
  * @param {!string} blockType - Type of block to disable or enable.
- * @param {!boolean} disable - True to disable the block, false to enable block.
+ * @param {!boolean} enable - True to enable the block, false to disable block.
  */
-BlockExporterController.prototype.setBlockDisabled =
-    function(blockType, disable) {
+BlockExporterController.prototype.setBlockEnabled =
+    function(blockType, enable) {
   var toolboxXml = this.view.toolbox;
   var category = goog.dom.xml.selectSingleNode(toolboxXml,
       '//category[@name="' + blockType + '"]');
   var block = goog.dom.getFirstElementChild(category);
-  // Disable block.
-  goog.dom.xml.setAttributes(block, {disabled: disable});
+  // Enable block.
+  goog.dom.xml.setAttributes(block, {disabled: !enable});
 };
 
 /**
@@ -160,7 +160,7 @@ BlockExporterController.prototype.onSelectBlockForExport_ = function(event) {
     var blockType = block.type;
     // Disable the selected block. Users can only export one copy of starter
     // code per block.
-    this.setBlockDisabled(blockType, true);
+    this.setBlockEnabled(blockType, false);
     // Show currently selected blocks in helper text.
     this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
   }
@@ -181,9 +181,8 @@ BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
     var deletedBlockXml = event.oldXml;
     var blockType = deletedBlockXml.getAttribute('type');
     // Enable the deselected block.
-    this.setBlockDisabled(blockType, false);
+    this.setBlockEnabled(blockType, true);
     // Show currently selected blocks in helper text.
     this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
   }
 };
-

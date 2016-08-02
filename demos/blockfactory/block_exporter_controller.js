@@ -110,7 +110,7 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
 };
 
 /**
- * Disable block in selector workspace's toolbox.
+ * Enable or Disable block in selector workspace's toolbox.
  *
  * @param {string} blockType - type of block to disable
  */
@@ -136,17 +136,38 @@ BlockExporterController.prototype.enableBlock = function(blockType) {
   var category = goog.dom.xml.selectSingleNode(toolboxXml,
       '//category[@name="' + blockType + '"]');
   var block = goog.dom.getFirstElementChild(category);
-  // Remove disabled block xml from toolbox.
-  goog.dom.removeNode(block);
-  // Get enabled block xml and add to toolbox, replacing disabled block xml
-  // within category.
-  var enabledBlock = this.disabledBlocks[blockType];
-  goog.dom.appendChild(category, enabledBlock);
-  // Remove block from map of disabled blocks.
-  delete this.disabledBlocks[blockType];
-  // Update toolbox.
-  this.updateToolbox(toolboxXml);
+  goog.dom.xml.setAttributes(block, {disabled: false});
+  // // Remove disabled block xml from toolbox.
+  // goog.dom.removeNode(block);
+  // // Get enabled block xml and add to toolbox, replacing disabled block xml
+  // // within category.
+  // var enabledBlock = this.disabledBlocks[blockType];
+  // goog.dom.appendChild(category, enabledBlock);
+  // // Remove block from map of disabled blocks.
+  // delete this.disabledBlocks[blockType];
+  // // Update toolbox.
+  // this.updateToolbox(toolboxXml);
 };
+
+/**
+ * Add change listeners to the exporter's selector workspace.
+ */
+BlockExporterController.prototype.addChangeListenersToSelectorWorkspace
+    = function() {
+      // Assign the BlockExporterController to 'self' to be called in the change
+      // listeners. This keeps it in scope--otherwise, 'this' in the change
+      // listeners refers to the wrong thing.
+      var self = this;
+      var selector = this.view.selectorWorkspace;
+      selector.addChangeListener(
+        function(event) {
+          self.onSelectBlockForExport(event);
+        });
+      selector.addChangeListener(
+        function(event) {
+          self.onDeselectBlockForExport(event);
+        });
+    };
 
 /**
  * Callback function for when a user selects a block for export in selector
@@ -192,22 +213,3 @@ BlockExporterController.prototype.onDeselectBlockForExport = function(event) {
   }
 };
 
-/**
- * Add change listeners to the exporter's selector workspace.
- */
-BlockExporterController.prototype.addChangeListenersToSelectorWorkspace
-    = function() {
-      // Assign the BlockExporterController to 'self' to be called in the change
-      // listeners. This keeps it in scope--otherwise, 'this' in the change
-      // listeners refers to the wrong thing.
-      var self = this;
-      var selector = this.view.selectorWorkspace;
-      selector.addChangeListener(
-        function(event) {
-          self.onSelectBlockForExport(event);
-        });
-      selector.addChangeListener(
-        function(event) {
-          self.onDeselectBlockForExport(event);
-        });
-    };

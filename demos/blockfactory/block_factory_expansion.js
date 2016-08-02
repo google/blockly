@@ -158,6 +158,7 @@ BlockFactoryExpansion.init = function() {
 
             // Hide container of exporter.
             BlockFactory.hide('blockLibraryExporter');
+            BlockFactory.hide('gap');
 
             // Resize to render workspaces' toolboxes correctly.
             window.dispatchEvent(new Event('resize'));
@@ -173,6 +174,7 @@ BlockFactoryExpansion.init = function() {
 
             // Show container of exporter.
             BlockFactory.show('blockLibraryExporter');
+            BlockFactory.show('gap');
 
             // Resize to render workspaces' toolboxes correctly.
             window.dispatchEvent(new Event('resize'));

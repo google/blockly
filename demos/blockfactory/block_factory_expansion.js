@@ -121,7 +121,7 @@ BlockFactoryExpansion.prototype.assignExporterClickHandlers = function() {
       });
   document.getElementById('clearSelectedButton').addEventListener('click',
       function() {
-        this.exporter.clearSelectedBlocks();
+        self.exporter.clearSelectedBlocks();
       });
 };
 

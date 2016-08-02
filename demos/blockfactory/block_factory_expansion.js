@@ -34,13 +34,13 @@ BlockFactoryExpansion = function() {
  */
 BlockFactoryExpansion.prototype.onSelectedBlockChanged
     = function(blockLibraryDropdown) {
-  var self = this;
-  var onSelect = function(blockLibraryDropdown) {
-    var blockType = self.blockLibraryController.getSelectedBlockType(
+  // var self = this;
+  // var onSelect = function(blockLibraryDropdown) {
+    var blockType = this.blockLibraryController.getSelectedBlockType(
         blockLibraryDropdown);
-    self.blockLibraryController.openBlock(blockType);
-  };
-  onSelect(blockLibraryDropdown);
+    this.blockLibraryController.openBlock(blockType);
+  // };
+  // onSelect(blockLibraryDropdown);
 };
 
 /**

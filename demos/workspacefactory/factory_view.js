@@ -1,6 +1,6 @@
 /**
  * Controls the UI elements for workspace factory, mainly the category tabs.
- * Also includes downlaoding files because that interacts directly with the DOM.
+ * Also includes downloading files because that interacts directly with the DOM.
  * Depends on FactoryController (for adding mouse listeners). Tabs for each
  * category are stored in tab map, which associates a unique ID for a
  * category with a particular tab.
@@ -13,7 +13,8 @@
   * @constructor
   */
 
-FactoryView = function(){
+FactoryView = function() {
+  // For each tab, maps ID of a ListElement to the td DOM element.
   this.tabMap = Object.create(null);
 };
 
@@ -51,7 +52,7 @@ FactoryView.prototype.addCategoryRow = function(name, id, firstCategory) {
  * @param {!string} id ID of category to be deleted.
  * @param {!string} name The name of the category to be deleted.
  */
-FactoryView.prototype.deleteCategoryRow = function(id, index) {
+FactoryView.prototype.deleteElementRow = function(id, index) {
   // Delete tab entry.
   delete this.tabMap[id];
   // Delete tab row.
@@ -74,10 +75,14 @@ FactoryView.prototype.deleteCategoryRow = function(id, index) {
  *
  * TODO(evd2014): Switch to using CSS to add/remove styles.
  *
- * @param {int} selectedIndex The index of the currently selected category.
+ * @param {int} selectedIndex The index of the currently selected category,
+ * -1 if no categories created.
+ * @param {!string} selectedType The type of the selected ListElement.
+ * ListElement.TYPE_CATEGORY or ListElement.TYPE_SEPARATOR.
  */
-FactoryView.prototype.updateState = function(selectedIndex) {
-  document.getElementById('button_edit').disabled = selectedIndex < 0;
+FactoryView.prototype.updateState = function(selectedIndex, selectedType) {
+  document.getElementById('button_edit').disabled = selectedIndex < 0 ||
+      selectedType != ListElement.TYPE_CATEGORY;
   document.getElementById('button_remove').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled =
       selectedIndex <= 0 ? true : false;
@@ -198,4 +203,37 @@ FactoryView.prototype.setBorderColor = function(id, color) {
   tab.style.borderLeftWidth = "8px";
   tab.style.borderLeftStyle = "solid";
   tab.style.borderColor = color;
-}
+};
+
+/**
+ * Given a separator ID, creates a corresponding tab in the view, updates
+ * tab map, and returns the tab.
+ *
+ * @param {!string} id The ID of the separator.
+ * @param {!Element} The td DOM element representing the separator.
+ */
+FactoryView.prototype.addSeparatorTab = function(id) {
+  // Create separator.
+  var table = document.getElementById('categoryTable');
+  var count = table.rows.length;
+  var row = table.insertRow(count);
+  var nextEntry = row.insertCell(0);
+  // Configure separator.
+  nextEntry.style.height = '10px';
+  // Store and return separator.
+  this.tabMap[id] = table.rows[count].cells[0];
+  return nextEntry;
+};
+
+/**
+ * Disables or enables the workspace by putting a div over or under the
+ * toolbox workspace, depending on the value of disable. Used when switching
+ * to/from separators where the user shouldn't be able to drag blocks into
+ * the workspace.
+ *
+ * @param {boolean} disable True if the workspace should be disabled, false
+ * if it should be enabled.
+ */
+FactoryView.prototype.disableWorkspace = function(disable) {
+  document.getElementById('disable_div').style.zIndex = disable ? 1 : -1;
+};

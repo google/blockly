@@ -259,13 +259,27 @@ blocklyApp.TreeService = ng.core
         if (e.keyCode == 13) {
           // Enter key. The user wants to interact with a button or an input
           // field.
-          var currentChild = activeDesc;
-          while (currentChild.children.length) {
-            currentChild = currentChild.children[0];
-            if (currentChild.tagName == 'BUTTON') {
-              currentChild.click();
-            } else if (currentChild.tagName == 'INPUT') {
-              currentChild.focus();
+          // Algorithm to find the field: do a DFS through the children until
+          // we find an INPUT or BUTTON element (in which case we use it).
+          // Truncate the search at child LI elements.
+          var dfsStack = Array.from(activeDesc.children);
+          while (dfsStack.length) {
+            var currentNode = dfsStack.shift();
+            if (currentNode.tagName == 'BUTTON') {
+              currentNode.click();
+              break;
+            } else if (currentNode.tagName == 'INPUT') {
+              currentNode.focus();
+              break;
+            } else if (currentNode.tagName == 'LI') {
+              continue;
+            }
+
+            if (currentNode.children) {
+              var reversedChildren = Array.from(currentNode.children).reverse();
+              reversedChildren.forEach(function(childNode) {
+                dfsStack.unshift(childNode);
+              });
             }
           }
         } else if (e.keyCode == 9) {

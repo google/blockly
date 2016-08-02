@@ -76,11 +76,13 @@ td {
 }
 
 #toolbox_section {
+  height: 480px;
   width: 80%;
+  position: relative;
 }
 
 #toolbox_blocks {
-  height: 480px;
+  height: 100%;
   width: 100%;
 }
 
@@ -101,6 +103,17 @@ td {
   width: 20%;
 }
 
+#disable_div {
+  background-color: white;
+  height: 100%;
+  left: 0;
+  opacity: .5;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;  /* Start behind workspace */
+}
+
 /* Rules for Closure popup color picker */
 .goog-palette {
   outline: none;
@@ -119,10 +132,10 @@ td {
 }
 
 .goog-palette-colorswatch {
-  position: relative;
-  height: 13px;
-  width: 15px;
   border: 1px solid #000000;
+  height: 13px;
+  position: relative;
+  width: 15px;
 }
 
 .goog-palette-cell-hover .goog-palette-colorswatch {
@@ -135,7 +148,7 @@ td {
 }
 
 .goog-palette-table {
-  border: 1px solid #000000;
+  border: 1px solid #000;
   border-collapse: collapse;
 }
 

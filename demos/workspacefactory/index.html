@@ -41,6 +41,7 @@ goog.require('goog.ui.ColorPicker');
   <p>Drag blocks into your toolbox</p>
   <section id="toolbox_section">
     <div id="toolbox_blocks" class="content"></div>
+    <div id='disable_div'></div>
   </section>
   <aside id="category_section">
     <table id="categoryTable">
@@ -52,6 +53,7 @@ goog.require('goog.ui.ColorPicker');
     <div id="dropdown_add" class="dropdown-content">
       <a id='dropdown_newCategory'>New Category</a>
       <a id='dropdown_loadCategory'>Standard Category</a>
+      <a id='dropdown_separator'>Separator</a>
     </div>
     </div>
     <button id="button_remove">-</button>
@@ -479,8 +481,12 @@ goog.require('goog.ui.ColorPicker');
     controller.loadCategory();
     document.getElementById('dropdown_add').classList.remove("show");
   };
+  var separatorWrapper = function() {
+    controller.addSeparator();
+    document.getElementById('dropdown_add').classList.remove("show");
+  };
   var removeWrapper = function() {
-    controller.removeCategory();
+    controller.removeElement();
   };
   var exportWrapper = function() {
     controller.exportConfig();
@@ -489,16 +495,16 @@ goog.require('goog.ui.ColorPicker');
     controller.printConfig();
   };
   var upWrapper = function() {
-    controller.moveCategory(-1);
+    controller.moveElement(-1);
   };
   var downWrapper = function() {
-    controller.moveCategory(1);
+    controller.moveElement(1);
   };
   var editWrapper = function() {
     document.getElementById('dropdown_edit').classList.toggle("show");
   };
   var nameWrapper = function() {
-    controller.changeName();
+    controller.changeCategoryName();
     document.getElementById('dropdown_edit').classList.remove("show");
   };
 
@@ -508,6 +514,8 @@ goog.require('goog.ui.ColorPicker');
       ('click', newCategoryWrapper);
   document.getElementById('dropdown_loadCategory').addEventListener
       ('click', loadCategoryWrapper);
+  document.getElementById('dropdown_separator').addEventListener
+      ('click', separatorWrapper);
   document.getElementById('button_remove').addEventListener
       ('click', removeWrapper);
   document.getElementById('button_export').addEventListener
@@ -535,15 +543,17 @@ goog.require('goog.ui.ColorPicker');
         controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
         document.getElementById('dropdown_edit').classList.remove("show");
       });
+
   // Disable category editing buttons until categories are created.
   document.getElementById('button_remove').disabled = true;
   document.getElementById('button_edit').disabled = true;
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
+
   // Listen for Blockly move and delete events to update preview.
   // Not listening for Blockly create events because causes the user to drop
-  // blocks when dragging them into workspace. Could cause problems if ever load
-  // blocks into workspace directly without calling updatePreview.
+  // blocks when dragging them into workspace. Could cause problems if
+  // blocks loaded into workspace directly without calling updatePreview.
   toolboxWorkspace.addChangeListener(function(e) {
     if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
       controller.updatePreview();

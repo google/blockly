@@ -16,6 +16,12 @@
 FactoryModel = function() {
   // Ordered list of ListElement objects.
   this.toolboxList = [];
+  // String name of current selected list element, null if no list elements.
+  this.selected = null;
+  // Boolean for if a Variable category has been added.
+  this.hasVariableCategory = false;
+  // Boolean for if a Procedure category has been added.
+  this.hasProcedureCategory = false;
 };
 
 // String name of current selected list element, null if no list elements.
@@ -39,6 +45,26 @@ FactoryModel.prototype.hasCategoryByName = function(name) {
 };
 
 /**
+ * Determines if a category with the 'VARIABLE' tag exists.
+ *
+ * @return {boolean} True if there exists a category with the Variables tag,
+ * false otherwise.
+ */
+FactoryModel.prototype.hasVariables = function() {
+  return this.hasVariableCategory;
+};
+
+/**
+ * Determines if a category with the 'PROCEDURE' tag exists.
+ *
+ * @return {boolean} True if there exists a category with the Procedures tag,
+ * false otherwise.
+ */
+FactoryModel.prototype.hasProcedures = function() {
+  return this.hasFunctionCategory;
+};
+
+/**
  * Determines if the user has any elements in the toolbox. Uses the length of
  * toolboxList.
  *
@@ -54,6 +80,10 @@ FactoryModel.prototype.hasToolbox = function() {
  * @param {!ListElement} element The element to be added to the list.
  */
 FactoryModel.prototype.addElementToList = function(element) {
+  this.hasVariableCategory = element.custom == 'VARIABLE' ? true :
+      this.hasVariableCategory;
+  this.hasProcedureCategory = element.custom == 'PROCEDURE' ? true :
+      this.hasProcedureCategory;
   this.toolboxList.push(element);
 };
 
@@ -63,9 +93,16 @@ FactoryModel.prototype.addElementToList = function(element) {
  * @param {int} index The index of the list element to delete.
  */
 FactoryModel.prototype.deleteElementFromList = function(index) {
+  // Check if index is out of bounds.
   if (index < 0 || index >= this.toolboxList.length) {
     return; // No entry to delete.
   }
+  // Check if need to update flags.
+  this.hasVariableCategory = this.toolboxList[index].custom == 'VARIABLE' ?
+      false : this.hasVariableCategory;
+  this.hasProcedureCategory = this.toolboxList[index].custom == 'PROCEDURE' ?
+      false : this.hasProcedureCategory;
+  // Remove element.
   this.toolboxList.splice(index, 1);
 };
 
@@ -211,31 +248,7 @@ FactoryModel.prototype.getCategoryIdByName = function(name) {
 };
 
 /**
- * Makes a copy of the original element, adds it to the toolboxList, and
- * returns it. Everything about the copy is identical except for its ID. Throws
- * an error if the original element is null.
- *
- * @param {!ListElement} original The category that should be copied.
- * @return {!ListElement} The copy of original.
- */
-FactoryModel.prototype.copyElement = function(original) {
-  if (!original) {
-    throw new Error('Trying to copy null category.');
-  }
-  copy = new ListElement(ListElement.TYPE_CATEGORY, original.name);
-  // Copy all attributes except ID.
-  copy.type = original.type;
-  copy.xml = original.xml;
-  copy.color = original.color;
-  copy.custom = original.custom;
-  // Add copy to the category list and return it.
-  this.toolboxList.push(copy);
-  return copy;
-};
-
-
-/**
- * Class for a ListElement.
+ * Class for a ListElement
  * @constructor
  */
 ListElement = function(type, opt_name) {

@@ -68,27 +68,29 @@ FactoryView.prototype.deleteElementRow = function(id, index) {
 };
 
 /**
- * Given the index of the currently selected category, updates the state of
- * the buttons that allow the user to edit the categories. Updates the edit
- * name and arrow buttons. Should be called when adding or removing categories
- * or when changing to a new category or when swapping to a different category.
+ * Given the index of the currently selected element, updates the state of
+ * the buttons that allow the user to edit the list elements. Updates the edit
+ * and arrow buttons. Should be called when adding or removing elements
+ * or when changing to a new element or when swapping to a different element.
  *
  * TODO(evd2014): Switch to using CSS to add/remove styles.
  *
  * @param {int} selectedIndex The index of the currently selected category,
  * -1 if no categories created.
- * @param {!string} selectedType The type of the selected ListElement.
- * ListElement.TYPE_CATEGORY or ListElement.TYPE_SEPARATOR.
+ * @param {ListElement} selected The selected ListElement.
  */
-FactoryView.prototype.updateState = function(selectedIndex, selectedType) {
+FactoryView.prototype.updateState = function(selectedIndex, selected) {
+  // Disable/enable editing buttons as necessary.
   document.getElementById('button_edit').disabled = selectedIndex < 0 ||
-      selectedType != ListElement.TYPE_CATEGORY;
+      selected.type != ListElement.TYPE_CATEGORY;
   document.getElementById('button_remove').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled =
       selectedIndex <= 0 ? true : false;
   var table = document.getElementById('categoryTable');
   document.getElementById('button_down').disabled = selectedIndex >=
       table.rows.length - 1 || selectedIndex < 0 ? true : false;
+  // Disable/enable the workspace as necessary.
+  this.disableWorkspace(this.shouldDisableWorkspace(selected));
 };
 
 /**
@@ -236,4 +238,15 @@ FactoryView.prototype.addSeparatorTab = function(id) {
  */
 FactoryView.prototype.disableWorkspace = function(disable) {
   document.getElementById('disable_div').style.zIndex = disable ? 1 : -1;
+};
+
+/**
+ * Determines if the workspace should be disabled. The workspace should be
+ * disabled if category is a separator or has VARIABLE or PROCEDURE tags.
+ *
+ * @return {boolean} True if the workspace should be disabled, false otherwise.
+ */
+FactoryView.prototype.shouldDisableWorkspace = function(category) {
+  return category != null && (category.type == ListElement.SEPARATOR ||
+      category.custom == 'VARIABLE' || category.custom == 'PROCEDURE');
 };

@@ -57,7 +57,7 @@ BlockExporterView.prototype.setToolbox = function(toolboxXml) {
  * switching between Block Factory tab and Block Exporter Tab.
  */
 BlockExporterView.prototype.renderToolbox = function() {
-  this.selectorWorkspace.toolbox_.populate_(this.toolbox);
+  this.selectorWorkspace.updateToolbox(this.toolbox);
 };
 
 /**
@@ -74,6 +74,16 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
   } else {
     goog.dom.getElement('helperText').textContent = newText;
   }
+};
+
+/**
+ * Updates the helper text to show list of currently selected blocks.
+ *
+ * @param {!Array} selectedBlockTypes - Array of blocks selected in workspace.
+ */
+BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
+  var selectedBlocksText = selectedBlockTypes.join(', ');
+  this.updateHelperText('Currently Selected: ' + selectedBlocksText);
 };
 
 /**

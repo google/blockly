@@ -12,6 +12,7 @@
 goog.provide('BlockExporterController');
 goog.require('BlockExporterView');
 goog.require('BlockExporterTools');
+goog.require('goog.dom.xml');
 
 /**
  * BlockExporter Controller Class
@@ -110,6 +111,86 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
 };
 
 /**
+ * Enable or Disable block in selector workspace's toolbox.
+ *
+ * @param {!string} blockType - Type of block to disable or enable.
+ * @param {!boolean} enable - True to enable the block, false to disable block.
+ */
+BlockExporterController.prototype.setBlockEnabled =
+    function(blockType, enable) {
+  var toolboxXml = this.view.toolbox;
+  var category = goog.dom.xml.selectSingleNode(toolboxXml,
+      '//category[@name="' + blockType + '"]');
+  var block = goog.dom.getFirstElementChild(category);
+  // Enable block.
+  goog.dom.xml.setAttributes(block, {disabled: !enable});
+};
+
+/**
+ * Add change listeners to the exporter's selector workspace.
+ */
+BlockExporterController.prototype.addChangeListenersToSelectorWorkspace
+    = function() {
+  // Assign the BlockExporterController to 'self' to be called in the change
+  // listeners. This keeps it in scope--otherwise, 'this' in the change
+  // listeners refers to the wrong thing.
+  var self = this;
+  var selector = this.view.selectorWorkspace;
+  selector.addChangeListener(
+    function(event) {
+      self.onSelectBlockForExport_(event);
+    });
+  selector.addChangeListener(
+    function(event) {
+      self.onDeselectBlockForExport_(event);
+    });
+};
+
+/**
+ * Callback function for when a user selects a block for export in selector
+ * workspace. Disables selected block so that the user only exports one
+ * copy of starter code per block. Attached to the blockly create event in block
+ * factory expansion's init.
+ * @private
+ *
+ * @param {!Blockly.Events} event - The fired Blockly event.
+ */
+BlockExporterController.prototype.onSelectBlockForExport_ = function(event) {
+  // The user created a block in selector workspace.
+  if (event.type == Blockly.Events.CREATE) {
+    // Get type of block created.
+    var block = this.view.selectorWorkspace.getBlockById(event.blockId);
+    var blockType = block.type;
+    // Disable the selected block. Users can only export one copy of starter
+    // code per block.
+    this.setBlockEnabled(blockType, false);
+    // Show currently selected blocks in helper text.
+    this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
+  }
+};
+
+/**
+ * Callback function for when a user deselects a block in selector
+ * workspace by deleting it. Re-enables block so that the user may select it for
+ * export
+ * @private
+ *
+ * @param {!Blockly.Events} event - The fired Blockly event.
+ */
+BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
+  // The user deleted a block in selector workspace.
+  if (event.type == Blockly.Events.DELETE) {
+    // Get type of block created.
+    var deletedBlockXml = event.oldXml;
+    var blockType = deletedBlockXml.getAttribute('type');
+    // Enable the deselected block.
+    this.setBlockEnabled(blockType, true);
+    // Show currently selected blocks in helper text.
+    this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
+  }
+};
+
+/**
  * Tied to the 'Clear Selected Blocks' button in the Block Exporter.
  * Deselects all blocks on the selector workspace by deleting them and updating
  * text accordingly.
@@ -117,9 +198,6 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
 BlockExporterController.prototype.clearSelectedBlocks = function() {
   // Clear selector workspace.
   this.view.clearSelectorWorkspace();
-  // Edit helper text
-  this.view.updateHelperText('No blocks selected. Drag block into workspace' +
-      ' to select.');
-  // TODO(quacht): After mergeing enable/disable blocks, throw delete events
+  // TODO(quacht): After merging enable/disable blocks, throw delete events
   // for each block.
 };

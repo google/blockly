@@ -782,9 +782,8 @@ Blockly.WorkspaceSvg.prototype.getBlocksBoundingBox = function() {
 
 /**
  * Clean up the workspace by ordering all the blocks in a column.
- * @private
  */
-Blockly.WorkspaceSvg.prototype.cleanUp_ = function() {
+Blockly.WorkspaceSvg.prototype.cleanUp = function() {
   Blockly.Events.setGroup(true);
   var topBlocks = this.getTopBlocks(true);
   var cursorY = 0;
@@ -830,7 +829,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     var cleanOption = {};
     cleanOption.text = Blockly.Msg.CLEAN_UP;
     cleanOption.enabled = topBlocks.length > 1;
-    cleanOption.callback = this.cleanUp_.bind(this);
+    cleanOption.callback = this.cleanUp.bind(this);
     menuOptions.push(cleanOption);
   }
 

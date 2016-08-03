@@ -55,8 +55,7 @@ FactoryController.prototype.addCategory = function() {
       if (!name) {  // Exit if cancelled.
         return;
       }
-      this.model.addNewCategoryEntry(name);
-      this.addCategoryToView(name, this.model.getCategoryIdByName(name), true);
+      this.createCategory(name, true);
       this.model.setSelectedById(this.model.getCategoryIdByName(name));
     }
   }
@@ -68,9 +67,7 @@ FactoryController.prototype.addCategory = function() {
     return;
   }
   // Create category.
-  this.model.addNewCategoryEntry(name);
-  this.addCategoryToView(name, this.model.getCategoryIdByName(name),
-      firstCategory);
+  this.createCategory(name, firstCategory);
   // Switch to category.
   this.switchElement(this.model.getCategoryIdByName(name));
   // Update preview.

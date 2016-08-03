@@ -52,9 +52,17 @@ BlockLibraryView.clearOptions = function(dropdownID) {
   while (dropdown.length > 0) {
     dropdown.remove(dropdown.length - 1);
   }
-  // Default blank option for when no block from library is selected.
+};
+
+/**
+ * Adds a default, blank option to dropdown for when no block from library is
+ * selected.
+ *
+ * @param {string} dropdownID - ID of HTML select element
+ */
+BlockLibraryView.addDefaultOption = function(dropdownID) {
   BlockLibraryView.addOption(
-      'BLOCK_LIBRARY_DEFAULT_BLANK', '', 'blockLibraryDropdown', true, false);
+      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, false);
 };
 
 /**

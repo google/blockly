@@ -92,12 +92,9 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
     this.storage.saveToLocalStorage();
     // Update dropdown.
     BlockLibraryView.clearOptions('blockLibraryDropdown');
-<<<<<<< HEAD
     // Add a default, blank option to dropdown for when no block from library is
     // selected.
     BlockLibraryView.addDefaultOption('blockLibraryDropdown');
-=======
->>>>>>> 4606074... moved call to addOption from lib controller to view
   }
 };
 

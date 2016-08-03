@@ -69,14 +69,14 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
  };
 
 /**
- * Updates the workspace to show the block user selected from library
+ * Returns type of block selected from library.
  *
  * @param {Element} blockLibraryDropdown - The block library dropdown.
+ * @return {string} Type of block selected.
  */
-BlockLibraryController.prototype.onSelectedBlockChanged =
+BlockLibraryController.prototype.getSelectedBlockType =
     function(blockLibraryDropdown) {
-      var blockType = BlockLibraryView.getSelected(blockLibraryDropdown);
-      this.openBlock(blockType);
+      return BlockLibraryView.getSelected(blockLibraryDropdown);
     };
 
 /**

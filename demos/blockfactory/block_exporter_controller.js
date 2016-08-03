@@ -198,6 +198,4 @@ BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
 BlockExporterController.prototype.clearSelectedBlocks = function() {
   // Clear selector workspace.
   this.view.clearSelectorWorkspace();
-  // TODO(quacht): After merging enable/disable blocks, throw delete events
-  // for each block.
 };

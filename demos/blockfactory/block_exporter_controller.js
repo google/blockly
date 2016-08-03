@@ -29,6 +29,8 @@ BlockExporterController = function(blockLibStorage) {
   this.view = new BlockExporterView(
       //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
+  // Selected blocks are disabled in the selector toolbox.
+  this.disabledBlocks = new Set();
 };
 
 /**
@@ -102,13 +104,20 @@ BlockExporterController.prototype.exportBlocks = function() {
  *    workspace.
  */
 BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
+  // Use given xml or xml generated from updated block library.
   var updatedToolbox = opt_toolboxXml ||
       this.tools.generateToolboxFromLibrary(this.blockLibStorage);
   // Update the view's toolbox.
   this.view.setToolbox(updatedToolbox);
   // Render the toolbox in the selector workspace.
   this.view.renderToolbox(updatedToolbox);
+  // Disable any selected blocks.
+  var selectedBlocks = this.getSelectedBlockTypes_();
+  for (var i = 0; i < selectedBlocks.length; i++) {
+    this.setBlockEnabled(selectedBlocks[i], false);
+  }
 };
+
 
 /**
  * Enable or Disable block in selector workspace's toolbox.
@@ -118,6 +127,7 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
  */
 BlockExporterController.prototype.setBlockEnabled =
     function(blockType, enable) {
+  // Get toolbox xml, category, and block elements.
   var toolboxXml = this.view.toolbox;
   var category = goog.dom.xml.selectSingleNode(toolboxXml,
       '//category[@name="' + blockType + '"]');

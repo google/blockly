@@ -496,6 +496,7 @@ FactoryController.prototype.importFile = function(file) {
   if (!file) {
     return;
   }
+
   var reader = new FileReader();
   // To be executed when the reader has read the file.
   reader.onload = function() {
@@ -508,6 +509,7 @@ FactoryController.prototype.importFile = function(file) {
       alert('Cannot load XML from file.');
     }
   }
+
   // Read the file.
   reader.readAsText(file);
 };
@@ -536,7 +538,7 @@ FactoryController.prototype.importFromTree_ = function(tree) {
     // Categories/separators present.
     for (var i = 0, item; item = tree.children[i]; i++) {
       if (item.tagName == 'category') {
-      // If the element is a category, create a new category and switch to it.
+        // If the element is a category, create a new category and switch to it.
         this.createCategory(item.getAttribute('name'), false);
         var category = this.model.getElementByIndex(i);
         this.switchElement(category.id);
@@ -556,7 +558,7 @@ FactoryController.prototype.importFromTree_ = function(tree) {
           category.changeColor(item.color);
         }
       } else {
-      // If the element is a separator, add the separator and switch to it.
+        // If the element is a separator, add the separator and switch to it.
         this.addSeparator();
         this.switchElement(this.model.getElementByIndex(i).id);
       }

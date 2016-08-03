@@ -252,7 +252,7 @@ FactoryModel.prototype.getCategoryIdByName = function(name) {
  */
 FactoryModel.prototype.clearToolboxList = function() {
   this.toolboxList = [];
-  // TODO: When merge changes, also clear shadowList.
+  // TODO(evd2014): When merge changes, also clear shadowList.
 };
 
 /**

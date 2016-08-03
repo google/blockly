@@ -27,12 +27,8 @@ FactoryGenerator = function(model) {
 };
 
 /**
- * Generates the xml for the toolbox or flyout. If there is only a flyout,
- * only the current blocks are needed, and these are included without
- * a category. If there are categories, then each category is briefly loaded
- * to the hidden workspace, the user-generated shadow blocks are set as real
- * shadow blocks, and the top blocks are used to generate the xml for the flyout
- * for that category.
+ * Generates the xml for the toolbox or flyout with information from
+ * toolboxWorkspace and the model. Uses the hiddenWorkspace to generate XML.
  *
  * @param {!Blockly.workspace} toolboxWorkspace Toolbox editing workspace where
  * blocks are added by user to be part of the toolbox.

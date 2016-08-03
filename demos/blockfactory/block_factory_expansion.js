@@ -52,25 +52,22 @@ BlockFactoryExpansion.prototype.onSelectedBlockChanged
  */
 BlockFactoryExpansion.prototype.addTabHandlers =
     function(blockFactoryTabID, blockExporterTabID) {
-      // Assign this instance of Block Factory Expansion to self in order to
-      // keep the reference to this object upon tab click.
-      var self = this;
-      var addTabHandler = function(blockFactoryTabID, blockExporterTabID){
-        // Get div elements representing tabs
-        var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-        var blockExporterTab = goog.dom.getElement(blockExporterTabID);
-        // Add event listeners.
-        blockFactoryTab.addEventListener('click',
-            function() {
-              self.onFactoryTab(blockFactoryTab, blockExporterTab);
-            });
-        blockExporterTab.addEventListener('click',
-            function() {
-              self.onExporterTab(blockFactoryTab, blockExporterTab);
-            });
-      };
-      addTabHandler(blockFactoryTabID, blockExporterTabID);
-    };
+  // Assign this instance of Block Factory Expansion to self in order to
+  // keep the reference to this object upon tab click.
+  var self = this;
+  // Get div elements representing tabs
+  var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
+  var blockExporterTab = goog.dom.getElement(blockExporterTabID);
+  // Add event listeners.
+  blockFactoryTab.addEventListener('click',
+      function() {
+        self.onFactoryTab(blockFactoryTab, blockExporterTab);
+      });
+  blockExporterTab.addEventListener('click',
+      function() {
+        self.onExporterTab(blockFactoryTab, blockExporterTab);
+      });
+  };
 
 /**
  * Tied to 'Block Factory' Tab. Shows Block Factory and Block Library.

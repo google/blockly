@@ -32,7 +32,7 @@ FactoryController = function(toolboxWorkspace, previewWorkspace) {
   // Updates the category tabs.
   this.view = new FactoryView();
   // Generates XML for categories.
-  this.generator = new FactoryGenerator(this.model, this.toolboxWorkspace);
+  this.generator = new FactoryGenerator(this.model);
 };
 
 /**
@@ -174,6 +174,9 @@ FactoryController.prototype.promptForNewCategoryName = function(promptString) {
  * @param {!string} id ID of tab to be opened, must be valid element ID.
  */
 FactoryController.prototype.switchElement = function(id) {
+  // Disables events while switching so that Blockly delete and create events
+  // don't update the preview repeatedly.
+  Blockly.Events.disable();
   // Caches information to reload or generate xml if switching to/from element.
   // Only saves if a category is selected.
   if (this.model.getSelectedId() != null && id != null) {
@@ -181,6 +184,8 @@ FactoryController.prototype.switchElement = function(id) {
   }
   // Load element.
   this.clearAndLoadElement(id);
+  // Enable Blockly events again.
+  Blockly.Events.enable();
 };
 
 /**
@@ -214,6 +219,8 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
       this.view.disableWorkspace(true);
     }
   }
+  this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
+        (toolboxWorkspace.getAllBlocks()));
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
       (this.model.getSelectedId()), this.model.getSelected());
@@ -226,7 +233,7 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
 FactoryController.prototype.exportConfig = function() {
   // Generate XML.
   var configXml = Blockly.Xml.domToPrettyText
-      (this.generator.generateConfigXml());
+      (this.generator.generateConfigXml(this.toolboxWorkspace));
   // Get file name.
   var fileName = prompt("File Name: ");
   if (!fileName) { // If cancelled
@@ -243,7 +250,7 @@ FactoryController.prototype.exportConfig = function() {
  */
 FactoryController.prototype.printConfig = function() {
   window.console.log(Blockly.Xml.domToPrettyText
-      (this.generator.generateConfigXml()));
+      (this.generator.generateConfigXml(this.toolboxWorkspace)));
 };
 
 /**
@@ -259,7 +266,7 @@ FactoryController.prototype.updatePreview = function() {
   // through event handlers.
   Blockly.Events.disable();
   var tree = Blockly.Options.parseToolboxTree
-      (this.generator.generateConfigXml());
+      (this.generator.generateConfigXml(this.toolboxWorkspace));
   // No categories, creates a simple flyout.
   if (tree.getElementsByTagName('category').length == 0) {
     if (this.previewWorkspace.toolbox_) {
@@ -425,6 +432,7 @@ FactoryController.prototype.loadCategory = function() {
         + '. Rename your category and try again.');
     return;
   }
+
   // Copy the standard category in the model.
   var copy = standardCategory.copy();
   this.model.addElementToList(copy);
@@ -479,4 +487,137 @@ FactoryController.prototype.addSeparator = function() {
   // Switch to the separator and update the preview.
   this.switchElement(separator.id);
   this.updatePreview();
+};
+
+/**
+ * Connected to the import button. Given the file path inputted by the user
+ * from file input, this function loads that toolbox XML to the workspace,
+ * creating category and separator tabs as necessary. This allows the user
+ * to be able to edit toolboxes given their XML form. Catches errors from
+ * file reading and prints an error message alerting the user.
+ *
+ * @param {string} file The path for the file to be imported into the workspace.
+ * Should contain valid toolbox XML.
+ */
+FactoryController.prototype.importFile = function(file) {
+  // Exit if cancelled.
+  if (!file) {
+    return;
+  }
+
+  var reader = new FileReader();
+  // To be executed when the reader has read the file.
+  reader.onload = function() {
+    // Try to parse XML from file and load it into toolbox editing area.
+    // Print error message if fail.
+    try {
+      var tree = Blockly.Xml.textToDom(reader.result);
+      controller.importFromTree_(tree);
+    } catch(e) {
+      alert('Cannot load XML from file.');
+    }
+  }
+
+  // Read the file.
+  reader.readAsText(file);
+};
+
+/**
+ * Given a XML DOM tree, loads it into the toolbox editing area so that the
+ * user can continue editing their work. Assumes that tree is in valid toolbox
+ * XML format.
+ * @private
+ *
+ * @param {!Element} tree XML tree to be loaded to toolbox editing area.
+ */
+FactoryController.prototype.importFromTree_ = function(tree) {
+  // Clear current editing area.
+  this.model.clearToolboxList();
+  this.view.clearToolboxTabs();
+
+  if (tree.getElementsByTagName('category').length == 0) {
+    // No categories present.
+    // Load all the blocks into a single category evenly spaced.
+    Blockly.Xml.domToWorkspace(tree, this.toolboxWorkspace);
+    this.toolboxWorkspace.cleanUp_();
+    // Add message to denote empty category.
+    this.view.addEmptyCategoryMessage();
+  } else {
+    // Categories/separators present.
+    for (var i = 0, item; item = tree.children[i]; i++) {
+      if (item.tagName == 'category') {
+        // If the element is a category, create a new category and switch to it.
+        this.createCategory(item.getAttribute('name'), false);
+        var category = this.model.getElementByIndex(i);
+        this.switchElement(category.id);
+
+        // Load all blocks in that category to the workspace to be evenly
+        // spaced and saved to that category.
+        for (var j = 0, blockXml; blockXml = item.children[j]; j++) {
+          Blockly.Xml.domToBlock(blockXml, this.toolboxWorkspace);
+        }
+
+        // Evenly space the blocks.
+        // TODO(evd2014): Change to cleanUp once cleanUp_ is made public in
+        // master.
+        this.toolboxWorkspace.cleanUp_();
+        // Set category color.
+        if (item.color) {
+          category.changeColor(item.color);
+        }
+      } else {
+        // If the element is a separator, add the separator and switch to it.
+        this.addSeparator();
+        this.switchElement(this.model.getElementByIndex(i).id);
+      }
+    }
+  }
+
+  this.updatePreview();
+};
+
+/**
+ * Clears the toolbox editing area completely, deleting all categories and all
+ * blocks in the model and view.
+ */
+FactoryController.prototype.clear = function() {
+  this.model.clearToolboxList();
+  this.view.clearToolboxTabs();
+  this.view.addEmptyCategoryMessage();
+  this.toolboxWorkspace.clear();
+  this.toolboxWorkspace.clearUndo();
+  this.updatePreview();
+};
+
+/*
+ * Makes the currently selected block a user-generated shadow block. These
+ * blocks are not made into real shadow blocks, but recorded in the model
+ * and visually marked as shadow blocks, allowing the user to move and edit
+ * them (which would be impossible with actual shadow blocks). Updates the
+ * preview when done.
+ *
+ */
+FactoryController.prototype.addShadow = function() {
+  // No block selected to make a shadow block.
+  if (!Blockly.selected) {
+    return;
+  }
+  this.view.markShadowBlock(Blockly.selected);
+  this.model.addShadowBlock(Blockly.selected.id);
+  this.updatePreview();
+};
+
+/**
+ * If the currently selected block is a user-generated shadow block, this
+ * function makes it a normal block again, removing it from the list of
+ * shadow blocks and loading the workspace again. Updates the preview again.
+ *
+ */
+FactoryController.prototype.removeShadow = function() {
+  // No block selected to modify.
+  if (!Blockly.selected) {
+    return;
+  }
+  this.model.removeShadowBlock(Blockly.selected.id);
+  this.view.unmarkShadowBlock(Blockly.selected);
 };

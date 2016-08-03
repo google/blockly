@@ -226,3 +226,13 @@ td {
 .show {
   display: block;
 }
+
+.shadowBlock>.blocklyPath {
+  fill-opacity: .5;
+  stroke-opacity: .5;
+}
+
+.shadowBlock>.blocklyPathLight,
+.shadowBlock>.blocklyPathDark {
+  display: none;
+}

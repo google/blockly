@@ -51,6 +51,7 @@ goog.require('goog.ui.ColorPicker');
       <td id="tab_help">Your categories will appear here</td>
     </table>
     <p>&nbsp;</p>
+
     <div class='dropdown'>
     <button id="button_add">+</button>
     <div id="dropdown_add" class="dropdown-content">
@@ -59,17 +60,31 @@ goog.require('goog.ui.ColorPicker');
       <a id='dropdown_separator'>Separator</a>
     </div>
     </div>
+
     <button id="button_remove">-</button>
+
+    <button id="button_up">&#8593;</button>
+    <button id="button_down">&#8595;</button>
+
     <p>&nbsp;</p>
     <div class='dropdown'>
-    <button id="button_edit">Edit</button>
-    <div id="dropdown_edit" class="dropdown-content">
+    <button id="button_editCategory">Edit Category</button>
+    <div id="dropdown_editCategory" class="dropdown-content">
       <a id='dropdown_name'>Name</a>
       <a id='dropdown_color'>Color</a>
     </div>
     </div>
-    <button id="button_up">&#8593;</button>
-    <button id="button_down">&#8595;</button>
+
+    <div class='dropdown'>
+    <button id="button_editShadow">Edit Block</button>
+    <div id="dropdown_editShadowAdd" class="dropdown-content">
+      <a id='dropdown_addShadow'>Add Shadow</a>
+    </div>
+    <div id="dropdown_editShadowRemove" class="dropdown-content">
+      <a id='dropdown_removeShadow'>Remove Shadow</a>
+    </div>
+    </div>
+
   </aside>
 </section>
 
@@ -503,12 +518,39 @@ goog.require('goog.ui.ColorPicker');
   var downWrapper = function() {
     controller.moveElement(1);
   };
-  var editWrapper = function() {
-    document.getElementById('dropdown_edit').classList.toggle("show");
+  var editCategoryWrapper = function() {
+    document.getElementById('dropdown_editCategory').classList.toggle("show");
   };
   var nameWrapper = function() {
     controller.changeCategoryName();
-    document.getElementById('dropdown_edit').classList.remove("show");
+    document.getElementById('dropdown_editCategory').classList.remove("show");
+  };
+  var shadowAddWrapper = function() {
+    controller.addShadow();
+    document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+  };
+    var shadowRemoveWrapper = function() {
+    controller.removeShadow();
+    document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+  };
+  var editShadowWrapper = function() {
+    // Allow the user to make a block a shadow block only if a block is selected
+    // and the block has a surrounding parent (necessary for the block to be
+    // a valid shadow block).
+    if (Blockly.selected && Blockly.selected.getSurroundParent() != null) {
+      // If the block is not a shadow block, let the user make it a shadow block.
+      // Use toggle instead of add so that the user can click the button again
+      // to make the dropdown disappear without clicking one of the options.
+      if (!controller.model.isShadowBlock(Blockly.selected.id)) {
+
+        document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+        document.getElementById('dropdown_editShadowAdd').classList.toggle("show");
+      // If the block is a shadow block, let the user make it a normal block.
+      } else {
+        document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+        document.getElementById('dropdown_editShadowRemove').classList.toggle("show");
+      }
+    }
   };
   var importWrapper = function(event) {
     controller.importFile(event.target.files[0]);
@@ -535,14 +577,20 @@ goog.require('goog.ui.ColorPicker');
       ('click', upWrapper);
   document.getElementById('button_down').addEventListener
       ('click', downWrapper);
-  document.getElementById('button_edit').addEventListener
-      ('click', editWrapper);
+  document.getElementById('button_editCategory').addEventListener
+      ('click', editCategoryWrapper);
+  document.getElementById('button_editShadow').addEventListener
+      ('click', editShadowWrapper);
   document.getElementById('dropdown_name').addEventListener
       ('click', nameWrapper);
   document.getElementById('input_import').addEventListener
       ('change', importWrapper);
   document.getElementById('button_clear').addEventListener
       ('click', clearWrapper);
+  document.getElementById('dropdown_editShadowAdd').addEventListener
+      ('click', shadowAddWrapper);
+    document.getElementById('dropdown_editShadowRemove').addEventListener
+      ('click', shadowRemoveWrapper);
 
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
@@ -554,22 +602,41 @@ goog.require('goog.ui.ColorPicker');
   popupPicker.setFocusable(true);
   goog.events.listen(popupPicker, 'change', function(e) {
         controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
-        document.getElementById('dropdown_edit').classList.remove("show");
+        document.getElementById('dropdown_editCategory').classList.remove
+            ("show");
       });
 
   // Disable category editing buttons until categories are created.
   document.getElementById('button_remove').disabled = true;
-  document.getElementById('button_edit').disabled = true;
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
+  document.getElementById('button_editCategory').disabled = true;
+  document.getElementById('button_editShadow').disabled = true;
 
-  // Listen for Blockly move and delete events to update preview.
-  // Not listening for Blockly create events because causes the user to drop
-  // blocks when dragging them into workspace. Could cause problems if
-  // blocks loaded into workspace directly without calling updatePreview.
   toolboxWorkspace.addChangeListener(function(e) {
+    // Listen for Blockly move and delete events to update preview.
+    // Not listening for Blockly create events because causes the user to drop
+    // blocks when dragging them into workspace. Could cause problems if ever load
+    // blocks into workspace directly without calling updatePreview.
     if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
       controller.updatePreview();
+    }
+    // Listen for Blockly UI events to correctly enable the "Edit Block" button.
+    // Only enable "Edit Block" when a block is selected and it has a surrounding
+    // parent, meaning it is nested in another block (blocks that are not
+    // nested in parents cannot be shadow blocks).
+    // TODO(evd2014): Listen for when the user has moved a block to be nested inside
+    // another (currently have to unselect and reselect that block).
+    if (e.type == Blockly.Events.MOVE || (e.type == Blockly.Events.UI &&
+        e.element == 'selected')) {
+      var selected = toolboxWorkspace.getBlockById(e.newValue);
+      if (selected != null && selected.getSurroundParent() != null) {
+        document.getElementById('button_editShadow').disabled = false;
+      } else {
+        document.getElementById('button_editShadow').disabled = true;
+        document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+        document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+      }
     }
   });
 

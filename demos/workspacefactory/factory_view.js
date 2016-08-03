@@ -92,7 +92,7 @@ FactoryView.prototype.addEmptyCategoryMessage = function() {
  */
 FactoryView.prototype.updateState = function(selectedIndex, selected) {
   // Disable/enable editing buttons as necessary.
-  document.getElementById('button_edit').disabled = selectedIndex < 0 ||
+  document.getElementById('button_editCategory').disabled = selectedIndex < 0 ||
       selected.type != ListElement.TYPE_CATEGORY;
   document.getElementById('button_remove').disabled = selectedIndex < 0;
   document.getElementById('button_up').disabled =
@@ -261,6 +261,7 @@ FactoryView.prototype.shouldDisableWorkspace = function(category) {
   return category != null && (category.type == ListElement.SEPARATOR ||
       category.custom == 'VARIABLE' || category.custom == 'PROCEDURE');
 };
+
 /*
  * Removes all categories and separators in the view. Clears the tabMap to
  * reflect this.
@@ -272,4 +273,44 @@ FactoryView.prototype.clearToolboxTabs = function() {
   newCategoryTable.id = 'categoryTable';
   oldCategoryTable.parentElement.replaceChild(newCategoryTable,
       oldCategoryTable);
+};
+
+/**
+ * Given a set of blocks currently loaded user-generated shadow blocks, visually
+ * marks them without making them actual shadow blocks (allowing them to still
+ * be editable and movable).
+ *
+ * @param {!<Blockly.Block>} blocks Array of user-generated shadow blocks
+ * currently loaded.
+ */
+FactoryView.prototype.markShadowBlocks = function(blocks) {
+  for (var i = 0; i < blocks.length; i++) {
+    this.markShadowBlock(blocks[i]);
+  }
+};
+
+/**
+ * Visually marks a user-generated shadow block as a shadow block in the
+ * workspace without making the block an actual shadow block (allowing it
+ * to be moved and edited).
+ *
+ * @param {!Blockly.Block} block The block that should be marked as a shadow
+ *    block (must be rendered).
+ */
+FactoryView.prototype.markShadowBlock = function(block) {
+  // Add Blockly CSS for user-generated shadow blocks.
+  Blockly.addClass_(block.svgGroup_, 'shadowBlock');
+};
+
+/**
+ * Removes visual marking for a shadow block given a rendered block.
+ *
+ * @param {!Blockly.Block} block The block that should be unmarked as a shadow
+ *    block (must be rendered).
+ */
+FactoryView.prototype.unmarkShadowBlock = function(block) {
+  // Remove Blockly CSS for user-generated shadow blocks.
+  if (Blockly.hasClass_(block.svgGroup_, 'shadowBlock')) {
+    Blockly.removeClass_(block.svgGroup_, 'shadowBlock');
+  }
 };

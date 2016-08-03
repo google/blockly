@@ -3,8 +3,9 @@
  * in workspace factory. Each list element is either a separator or a category,
  * and each category stores its name, XML to load that category, color,
  * custom tags, and a unique ID making it possible to change category names and
- * move categories easily. Also keeps track of the currently selected list
- * element.
+ * move categories easily. Keeps track of the currently selected list
+ * element. Also keeps track of all the user-created shadow blocks and
+ * manipulates them as necessary.
  *
  * @author Emma Dauterman (evd2014)
  */
@@ -16,6 +17,8 @@
 FactoryModel = function() {
   // Ordered list of ListElement objects.
   this.toolboxList = [];
+  // Array of block IDs for all user created shadow blocks.
+  this.shadowBlocks = [];
   // String name of current selected list element, null if no list elements.
   this.selected = null;
   // Boolean for if a Variable category has been added.
@@ -80,10 +83,12 @@ FactoryModel.prototype.hasToolbox = function() {
  * @param {!ListElement} element The element to be added to the list.
  */
 FactoryModel.prototype.addElementToList = function(element) {
+  // Update state if the copied category has a custom tag.
   this.hasVariableCategory = element.custom == 'VARIABLE' ? true :
       this.hasVariableCategory;
   this.hasProcedureCategory = element.custom == 'PROCEDURE' ? true :
       this.hasProcedureCategory;
+  // Add element to toolboxList.
   this.toolboxList.push(element);
 };
 
@@ -172,8 +177,9 @@ FactoryModel.prototype.setSelectedById = function(id) {
  *
  * @param {!string} id The ID of list element to search for.
  * @return {int} The index of the list element in toolboxList, or -1 if it
- *     doesn't exist.
+ * doesn't exist.
  */
+
 FactoryModel.prototype.getIndexByElementId = function(id) {
   for (var i = 0; i < this.toolboxList.length; i++) {
     if (this.toolboxList[i].id == id) {
@@ -257,6 +263,64 @@ FactoryModel.prototype.clearToolboxList = function() {
 
 /**
  * Class for a ListElement
+ * Adds a shadow block to the list of shadow blocks.
+ *
+ * @param {!string} blockId The unique ID of block to be added.
+ */
+FactoryModel.prototype.addShadowBlock = function(blockId) {
+  this.shadowBlocks.push(blockId);
+};
+
+/**
+ * Removes a shadow block ID from the list of shadow block IDs if that ID is
+ * in the list.
+ *
+ * @param {!string} blockId The unique ID of block to be removed.
+ */
+FactoryModel.prototype.removeShadowBlock = function(blockId) {
+  for (var i = 0; i < this.shadowBlocks.length; i++) {
+    if (this.shadowBlocks[i] == blockId) {
+      this.shadowBlocks.splice(i, 1);
+      return;
+    }
+  }
+};
+
+/**
+ * Determines if a block is a shadow block given a unique block ID.
+ *
+ * @param {!string} blockId The unique ID of the block to examine.
+ */
+FactoryModel.prototype.isShadowBlock = function(blockId) {
+  for (var i = 0; i < this.shadowBlocks.length; i++) {
+    if (this.shadowBlocks[i] == blockId) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
+ * Given a set of blocks currently loaded, returns all blocks in the workspace
+ * that are user generated shadow blocks.
+ *
+ * @param {!<Blockly.Block>} blocks Array of blocks currently loaded.
+ * @return {!<Blockly.Block>} Array of user-generated shadow blocks currently
+ * loaded.
+ */
+FactoryModel.prototype.getShadowBlocksInWorkspace = function(workspaceBlocks) {
+  var shadowsInWorkspace = [];
+  for (var i = 0; i < workspaceBlocks.length; i++) {
+    if (this.isShadowBlock(workspaceBlocks[i].id)) {
+      shadowsInWorkspace.push(workspaceBlocks[i]);
+    }
+  }
+  return shadowsInWorkspace;
+};
+
+
+/**
+ * Class for a ListElement.
  * @constructor
  */
 ListElement = function(type, opt_name) {
@@ -272,6 +336,7 @@ ListElement = function(type, opt_name) {
   // Stores a custom tag, if necessary. Null if no custom tag or separator.
   this.custom = null;
 };
+
 // List element types.
 ListElement.TYPE_CATEGORY = 'category';
 ListElement.TYPE_SEPARATOR = 'separator';
@@ -327,6 +392,8 @@ ListElement.prototype.changeColor = function (color) {
  */
 ListElement.prototype.copy = function() {
   copy = new ListElement(this.type);
+  // Generate a unique ID for the element.
+  copy.id = Blockly.genUid();
   // Copy all attributes except ID.
   copy.name = this.name;
   copy.xml = this.xml;

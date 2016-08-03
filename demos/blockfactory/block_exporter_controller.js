@@ -29,8 +29,6 @@ BlockExporterController = function(blockLibStorage) {
   this.view = new BlockExporterView(
       //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
-  // Selected blocks are disabled in the selector toolbox.
-  this.disabledBlocks = new Set();
 };
 
 /**
@@ -117,7 +115,6 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
     this.setBlockEnabled(selectedBlocks[i], false);
   }
 };
-
 
 /**
  * Enable or Disable block in selector workspace's toolbox.

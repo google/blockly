@@ -46,8 +46,9 @@ BlockFactoryExpansion.prototype.onSelectedBlockChanged
  * tab and the Block Exporter tab.
  *
  * @param {string} blockFactoryTabID - ID of element containing Block Factory
+ *    tab
  * @param {string} blockExporterTabID - ID of element containing Block
- *    Exporter
+ *    Exporter tab
  */
 BlockFactoryExpansion.prototype.addTabHandlers =
     function(blockFactoryTabID, blockExporterTabID) {
@@ -65,7 +66,7 @@ BlockFactoryExpansion.prototype.addTabHandlers =
             });
         blockExporterTab.addEventListener('click',
             function() {
-              self.onExporterTab(blockFactoryTab, blockExporterTab, self);
+              self.onExporterTab(blockFactoryTab, blockExporterTab);
             });
       };
       addTabHandler(blockFactoryTabID, blockExporterTabID);
@@ -73,6 +74,9 @@ BlockFactoryExpansion.prototype.addTabHandlers =
 
 /**
  * Tied to 'Block Factory' Tab. Shows Block Factory and Block Library.
+ *
+ * @param {string} blockFactoryTab - div element that is the Block Factory tab
+ * @param {string} blockExporterTab - div element that is the Block Exporter tab
  */
 BlockFactoryExpansion.prototype.onFactoryTab =
     function(blockFactoryTab, blockExporterTab) {
@@ -89,24 +93,24 @@ BlockFactoryExpansion.prototype.onFactoryTab =
 
 /**
  * Tied to 'Block Exporter' Tab. Shows Block Exporter.
+ *
+ * @param {string} blockFactoryTab - div element that is the Block Factory tab
+ * @param {string} blockExporterTab - div element that is the Block Exporter tab
  */
 BlockFactoryExpansion.prototype.onExporterTab =
-    function(blockFactoryTab, blockExporterTab, bfeSelf) {
-      var onTab = function(blockFactoryTab, blockExporterTab) {
+    function(blockFactoryTab, blockExporterTab) {
         // Turn exporter tab on and factory tab off.
         goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
         goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
         // Update toolbox to reflect current block library.
-        bfeSelf.exporter.updateToolbox();
+        this.exporter.updateToolbox();
 
         // Show container of exporter.
         BlockFactory.show('blockLibraryExporter');
 
         // Resize to render workspaces' toolboxes correctly.
         window.dispatchEvent(new Event('resize'));
-      };
-      onTab(blockFactoryTab, blockExporterTab);
     };
 
 /**

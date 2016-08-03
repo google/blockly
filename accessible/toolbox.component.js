@@ -120,7 +120,7 @@ blocklyApp.ToolboxComponent = ng.core
       return this.treeService.getActiveDescId('blockly-toolbox-tree');
     },
     getCategoryAriaLabel: function(categoryName) {
-      return 'toolbox category ' + categoryName;
+      return categoryName + ' category';
     },
     getToolboxWorkspace: function(categoryNode) {
       if (categoryNode.attributes && categoryNode.attributes.name) {

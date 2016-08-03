@@ -59,13 +59,24 @@ FactoryView.prototype.deleteElementRow = function(id, index) {
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
   table.deleteRow(index);
+
   // If last category removed, add category help text and disable category
   // buttons.
-  if (count == 1) {
+  this.addEmptyCategoryMessage();
+};
+
+/**
+ * If there are no toolbox elements created, adds a help message to show
+ * where categories will appear. Should be called when deleting list elements
+ * in case the last element is deleted.
+ */
+FactoryView.prototype.addEmptyCategoryMessage = function() {
+  var table = document.getElementById('categoryTable');
+  if (table.rows.length == 0) {
     var row = table.insertRow(0);
     row.textContent = 'Your categories will appear here';
   }
-};
+}
 
 /**
  * Given the index of the currently selected element, updates the state of
@@ -249,4 +260,16 @@ FactoryView.prototype.disableWorkspace = function(disable) {
 FactoryView.prototype.shouldDisableWorkspace = function(category) {
   return category != null && (category.type == ListElement.SEPARATOR ||
       category.custom == 'VARIABLE' || category.custom == 'PROCEDURE');
+};
+/*
+ * Removes all categories and separators in the view. Clears the tabMap to
+ * reflect this.
+ */
+FactoryView.prototype.clearToolboxTabs = function() {
+  this.tabMap = [];
+  var oldCategoryTable = document.getElementById('categoryTable');
+  var newCategoryTable = document.createElement('table');
+  newCategoryTable.id = 'categoryTable';
+  oldCategoryTable.parentElement.replaceChild(newCategoryTable,
+      oldCategoryTable);
 };

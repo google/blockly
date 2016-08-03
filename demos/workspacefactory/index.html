@@ -30,8 +30,11 @@ goog.require('goog.ui.ColorPicker');
   <tr>
     <td>
       <p>
-        <button id="button_export">Export Config</button>
-        <button id="button_print">Print Config</button>
+        <input type="file" id="input_import" class="inputfile"></input>
+        <label for="input_import">Import</label>
+        <button id="button_export">Export</button>
+        <button id="button_print">Print</button>
+        <button id="button_clear">Clear</button>
       </p>
     </td>
   </tr>
@@ -507,6 +510,12 @@ goog.require('goog.ui.ColorPicker');
     controller.changeCategoryName();
     document.getElementById('dropdown_edit').classList.remove("show");
   };
+  var importWrapper = function(event) {
+    controller.importFile(event.target.files[0]);
+  };
+  var clearWrapper = function() {
+    controller.clear();
+  }
 
   document.getElementById('button_add').addEventListener
       ('click', addWrapper);
@@ -530,6 +539,10 @@ goog.require('goog.ui.ColorPicker');
       ('click', editWrapper);
   document.getElementById('dropdown_name').addEventListener
       ('click', nameWrapper);
+  document.getElementById('input_import').addEventListener
+      ('change', importWrapper);
+  document.getElementById('button_clear').addEventListener
+      ('click', clearWrapper);
 
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
@@ -559,5 +572,6 @@ goog.require('goog.ui.ColorPicker');
       controller.updatePreview();
     }
   });
+
 </script>
 </html>

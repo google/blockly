@@ -883,7 +883,18 @@ BlockFactory.disableEnableLink = function() {
   saveBlockButton.disabled = disabled;
   saveToLibButton.disabled = disabled;
 };
+
 // Block Factory Expansion View Utils
+
+/**
+ * Render starter block (math_foo).
+ */
+ BlockFactory.showStarterBlock = function() {
+    var xml = '<xml><block type="factory_base" deletable="false" ' +
+        'movable="false"></block></xml>';
+    Blockly.Xml.domToWorkspace(
+        Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
+};
 
 /**
  * Hides element so that it's invisible and doesn't take up space.
@@ -900,7 +911,7 @@ BlockFactory.hide = function(elementID) {
  * @param {string} elementID - ID of element to hide.
  */
 BlockFactory.show = function(elementID) {
-  document.getElementById(elementID).style.display = 'block';
+  document.getElementById(elementID).style.display = 'inline';
 };
 
 /**

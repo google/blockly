@@ -162,7 +162,6 @@ AppController.prototype.assignFactoryClickHandlers = function() {
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')
       .addEventListener('click', BlockFactory.saveWorkspaceToFile);
-
   document.getElementById('helpButton').addEventListener('click',
       function() {
         open('https://developers.google.com/blockly/custom-blocks/block-factory',
@@ -172,12 +171,10 @@ AppController.prototype.assignFactoryClickHandlers = function() {
       function() {
         BlockFactory.downloadTextArea('blocks', 'languagePre');
       });
-
   document.getElementById('downloadGenerator').addEventListener('click',
       function() {
         BlockFactory.downloadTextArea('generator', 'generatorPre');
       });
-
   document.getElementById('files').addEventListener('change',
       function() {
         BlockFactory.importBlockFromFile();
@@ -186,6 +183,11 @@ AppController.prototype.assignFactoryClickHandlers = function() {
         // want to reload the workspace with its contents.
         this.value = null;
       });
+  document.getElementById('createNewBlockButton')
+    .addEventListener('click', function() {
+        BlockFactory.mainWorkspace.clear();
+        BlockFactory.showStarterBlock();
+    });
 };
 
 /**
@@ -274,10 +276,7 @@ AppController.prototype.init = function() {
     BlocklyStorage.retrieveXml(window.location.hash.substring(1),
                                BlockFactory.mainWorkspace);
   } else {
-    var xml = '<xml><block type="factory_base" deletable="false" ' +
-        'movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(
-        Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
+    BlockFactory.showStarterBlock();
   }
   BlockFactory.mainWorkspace.clearUndo();
 

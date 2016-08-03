@@ -34,11 +34,11 @@ AppController = function() {
  */
 AppController.prototype.onSelectedBlockChanged
     = function(blockLibraryDropdown) {
-    // Get selected block type.
-    var blockType = this.blockLibraryController.getSelectedBlockType(
-        blockLibraryDropdown);
-    // Update Block Factory page by showing the selected block.
-    this.blockLibraryController.openBlock(blockType);
+  // Get selected block type.
+  var blockType = this.blockLibraryController.getSelectedBlockType(
+      blockLibraryDropdown);
+  // Update Block Factory page by showing the selected block.
+  this.blockLibraryController.openBlock(blockType);
 };
 
 /**
@@ -67,7 +67,7 @@ AppController.prototype.addTabHandlers =
       function() {
         self.onExporterTab(blockFactoryTab, blockExporterTab);
       });
-  };
+};
 
 /**
  * Tied to 'Block Factory' Tab. Shows Block Factory and Block Library.
@@ -77,16 +77,16 @@ AppController.prototype.addTabHandlers =
  */
 AppController.prototype.onFactoryTab =
     function(blockFactoryTab, blockExporterTab) {
-      // Turn factory tab on and exporter tab off.
-      goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
-      goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
+  // Turn factory tab on and exporter tab off.
+  goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
+  goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
 
-      // Hide container of exporter.
-      BlockFactory.hide('blockLibraryExporter');
+  // Hide container of exporter.
+  BlockFactory.hide('blockLibraryExporter');
 
-      // Resize to render workspaces' toolboxes correctly.
-      window.dispatchEvent(new Event('resize'));
-    };
+  // Resize to render workspaces' toolboxes correctly.
+  window.dispatchEvent(new Event('resize'));
+};
 
 /**
  * Tied to 'Block Exporter' Tab. Shows Block Exporter.
@@ -96,19 +96,19 @@ AppController.prototype.onFactoryTab =
  */
 AppController.prototype.onExporterTab =
     function(blockFactoryTab, blockExporterTab) {
-        // Turn exporter tab on and factory tab off.
-        goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-        goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+    // Turn exporter tab on and factory tab off.
+    goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+    goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
 
-        // Update toolbox to reflect current block library.
-        this.exporter.updateToolbox();
+    // Update toolbox to reflect current block library.
+    this.exporter.updateToolbox();
 
-        // Show container of exporter.
-        BlockFactory.show('blockLibraryExporter');
+    // Show container of exporter.
+    BlockFactory.show('blockLibraryExporter');
 
-        // Resize to render workspaces' toolboxes correctly.
-        window.dispatchEvent(new Event('resize'));
-    };
+    // Resize to render workspaces' toolboxes correctly.
+    window.dispatchEvent(new Event('resize'));
+};
 
 /**
  * Assign button click handlers for the exporter.
@@ -161,31 +161,31 @@ AppController.prototype.assignLibraryClickHandlers = function() {
 AppController.prototype.assignFactoryClickHandlers = function() {
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')
-    .addEventListener('click', BlockFactory.saveWorkspaceToFile);
+      .addEventListener('click', BlockFactory.saveWorkspaceToFile);
 
   document.getElementById('helpButton').addEventListener('click',
-    function() {
-      open('https://developers.google.com/blockly/custom-blocks/block-factory',
-           'BlockFactoryHelp');
-    });
+      function() {
+        open('https://developers.google.com/blockly/custom-blocks/block-factory',
+             'BlockFactoryHelp');
+      });
   document.getElementById('downloadBlocks').addEventListener('click',
-    function() {
-      BlockFactory.downloadTextArea('blocks', 'languagePre');
-    });
+      function() {
+        BlockFactory.downloadTextArea('blocks', 'languagePre');
+      });
 
   document.getElementById('downloadGenerator').addEventListener('click',
-    function() {
-      BlockFactory.downloadTextArea('generator', 'generatorPre');
-    });
+      function() {
+        BlockFactory.downloadTextArea('generator', 'generatorPre');
+      });
 
   document.getElementById('files').addEventListener('change',
-    function() {
-      BlockFactory.importBlockFromFile();
-      // Clear this so that the change event still fires even if the
-      // same file is chosen again. If the user re-imports a file, we
-      // want to reload the workspace with its contents.
-      this.value = null;
-    });
+      function() {
+        BlockFactory.importBlockFromFile();
+        // Clear this so that the change event still fires even if the
+        // same file is chosen again. If the user re-imports a file, we
+        // want to reload the workspace with its contents.
+        this.value = null;
+      });
 };
 
 /**

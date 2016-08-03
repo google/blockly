@@ -72,6 +72,7 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
  * Returns type of block selected from library.
  *
  * @param {Element} blockLibraryDropdown - The block library dropdown.
+ * @return {string} Type of block selected.
  */
 BlockLibraryController.prototype.getSelectedBlockType =
     function(blockLibraryDropdown) {

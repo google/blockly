@@ -64,6 +64,8 @@ blocklyApp.UtilsService = ng.core
       }
     },
     getBlockDescription: function(block) {
-      return block.toString();
+      // We use 'BLANK' instead of the default '?' so that the string is read
+      // out. (By default, screen readers tend to ignore punctuation.)
+      return block.toString(undefined, 'BLANK');
     }
   });

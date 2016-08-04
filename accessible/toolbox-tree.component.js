@@ -29,11 +29,11 @@ blocklyApp.ToolboxTreeComponent = ng.core
     selector: 'blockly-toolbox-tree',
     template: `
     <li #parentList [id]="idMap['parentList']" role="treeitem"
-        [ngClass]="{blocklyHasChildren: displayBlockMenu || block.inputList.length > 0, blocklyActiveDescendant: index == 0 && noCategories}"
+        [ngClass]="{blocklyHasChildren: displayBlockMenu, blocklyActiveDescendant: index == 0 && noCategories}"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummaryLabel'])"
         [attr.aria-level]="level">
       <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
-      <ol role="group" *ngIf="displayBlockMenu || block.inputList.length > 0">
+      <ol role="group" *ngIf="displayBlockMenu">
         <li #listItem class="blocklyHasChildren" [id]="idMap['listItem']"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummaryLabel'])"
             *ngIf="displayBlockMenu" role="treeitem"
@@ -64,27 +64,6 @@ blocklyApp.ToolboxTreeComponent = ng.core
             </li>
           </ol>
         </li>
-
-        <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
-          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="inputBlock.fieldRow.length"
-              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
-            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [disabled]="true" [mainFieldId]="idMap['fieldLabel' + i]">
-            </blockly-field>
-          </li>
-
-          <blockly-toolbox-tree *ngIf="inputBlock.connection && inputBlock.connection.targetBlock()"
-                                [block]="inputBlock.connection.targetBlock()" [level]="level + 1"
-                                [displayBlockMenu]="false">
-          </blockly-toolbox-tree>
-          <li [id]="idMap['inputList' + i]" role="treeitem"
-              *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
-              [attr.aria-level]="level + 1"
-              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputListLabel' + i])">
-            <label [id]="idMap['inputListLabel' + i]">
-              {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
-            </label>
-          </li>
-        </template>
       </ol>
     </li>
 
@@ -114,15 +93,10 @@ blocklyApp.ToolboxTreeComponent = ng.core
     }],
     ngOnInit: function() {
       var elementsNeedingIds = ['blockSummaryLabel'];
-      if (this.displayBlockMenu || this.block.inputList.length){
+      if (this.displayBlockMenu) {
         elementsNeedingIds = elementsNeedingIds.concat(['listItem', 'label',
             'workspaceCopy', 'workspaceCopyButton', 'blockCopy',
             'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
-      }
-      for (var i = 0; i < this.block.inputList.length; i++){
-        elementsNeedingIds.push(
-            'listItem' + i, 'inputList' + i, 'fieldLabel' + i,
-            'inputListLabel' + i);
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
       if (this.isTopLevel) {

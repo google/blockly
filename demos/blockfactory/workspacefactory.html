@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<title>Blockly Workspace Factory</title>
+<script src="../../blockly_compressed.js"></script>
+<script src="../../javascript_compressed.js"></script>
+<script src="../../msg/messages.js"></script>
+<script src="../../blocks_compressed.js"></script>
+<script src="wfactory_model.js"></script>
+<script src="wfactory_controller.js"></script>
+<script src="wfactory_view.js"></script>
+<script src="wfactory_generator.js"></script>
+<script src="standard_categories.js"></script>
+<script src="../../../closure-library/closure/goog/base.js"></script>
+<link rel="stylesheet" href="style.css">
+
+<script>
+goog.require('goog.ui.PopupColorPicker');
+goog.require('goog.ui.ColorPicker');
+</script>
+
+<table width="100%" height="100%">
+  <tr>
+    <td>
+      <h1><a href="https://developers.google.com/blockly/">Blockly</a>&rlm; &gt;
+        <a href="../index.html">Demos</a>&rlm; &gt;
+        <span id="title">Workspace Factory</span>
+      </h1>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p>
+        <input type="file" id="input_import" class="inputfile"></input>
+        <label for="input_import">Import</label>
+        <button id="button_export">Export</button>
+        <button id="button_print">Print</button>
+        <button id="button_clear">Clear</button>
+      </p>
+    </td>
+  </tr>
+</table>
+
+<section id="createDiv">
+  <p>Drag blocks into your toolbox:</p>
+  <section id="toolbox_section">
+    <div id="toolbox_blocks" class="content"></div>
+    <div id='disable_div'></div>
+  </section>
+  <aside id="category_section">
+    <table id="categoryTable">
+      <td id="tab_help">Your categories will appear here</td>
+    </table>
+    <p>&nbsp;</p>
+
+    <div class='dropdown'>
+    <button id="button_add">+</button>
+    <div id="dropdown_add" class="dropdown-content">
+      <a id='dropdown_newCategory'>New Category</a>
+      <a id='dropdown_loadCategory'>Standard Category</a>
+      <a id='dropdown_separator'>Separator</a>
+    </div>
+    </div>
+
+    <button id="button_remove">-</button>
+
+    <button id="button_up">&#8593;</button>
+    <button id="button_down">&#8595;</button>
+
+    <p>&nbsp;</p>
+    <div class='dropdown'>
+    <button id="button_editCategory">Edit Category</button>
+    <div id="dropdown_editCategory" class="dropdown-content">
+      <a id='dropdown_name'>Name</a>
+      <a id='dropdown_color'>Color</a>
+    </div>
+    </div>
+
+    <div class='dropdown'>
+    <button id="button_editShadow">Edit Block</button>
+    <div id="dropdown_editShadowAdd" class="dropdown-content">
+      <a id='dropdown_addShadow'>Add Shadow</a>
+    </div>
+    <div id="dropdown_editShadowRemove" class="dropdown-content">
+      <a id='dropdown_removeShadow'>Remove Shadow</a>
+    </div>
+    </div>
+
+  </aside>
+</section>
+
+<aside id="previewDiv">
+  <p>Preview your workspace:</p>
+  <div id="preview_blocks" class="content"></div>
+</aside>
+
+<xml id="toolbox" style="display: none">
+  <category name="Logic" colour="210">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+    <block type="logic_null"></block>
+    <block type="logic_ternary"></block>
+  </category>
+  <category name="Loops" colour="120">
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_whileUntil"></block>
+    <block type="controls_for">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <value name="BY">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_forEach"></block>
+    <block type="controls_flow_statements"></block>
+  </category>
+  <category name="Math" colour="230">
+    <block type="math_number"></block>
+    <block type="math_arithmetic">
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_single">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">9</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_trig">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">45</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constant"></block>
+    <block type="math_number_property">
+      <value name="NUMBER_TO_CHECK">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_change">
+      <value name="DELTA">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_round">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">3.1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_on_list"></block>
+    <block type="math_modulo">
+      <value name="DIVIDEND">
+        <shadow type="math_number">
+          <field name="NUM">64</field>
+        </shadow>
+      </value>
+      <value name="DIVISOR">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constrain">
+      <value name="VALUE">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="LOW">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="HIGH">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_float"></block>
+  </category>
+  <category name="Text" colour="160">
+    <block type="text"></block>
+    <block type="text_join"></block>
+    <block type="text_append">
+      <value name="TEXT">
+        <shadow type="text"></shadow>
+      </value>
+    </block>
+    <block type="text_length">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_isEmpty">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT"></field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_indexOf">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+      <value name="FIND">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_charAt">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_getSubstring">
+      <value name="STRING">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_changeCase">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_trim">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_print">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_prompt_ext">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <category name="Lists" colour="260">
+    <block type="lists_create_with">
+      <mutation items="0"></mutation>
+    </block>
+    <block type="lists_create_with"></block>
+    <block type="lists_repeat">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">5</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="lists_length"></block>
+    <block type="lists_isEmpty"></block>
+    <block type="lists_indexOf">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_getIndex">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_setIndex">
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_getSublist">
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_split">
+      <value name="DELIM">
+        <shadow type="text">
+          <field name="TEXT">,</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="lists_sort"></block>
+  </category>
+  <category name="Colour" colour="20">
+    <block type="colour_picker"></block>
+    <block type="colour_random"></block>
+    <block type="colour_rgb">
+      <value name="RED">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+      <value name="GREEN">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="BLUE">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="colour_blend">
+      <value name="COLOUR1">
+        <shadow type="colour_picker">
+          <field name="COLOUR">#ff0000</field>
+        </shadow>
+      </value>
+      <value name="COLOUR2">
+        <shadow type="colour_picker">
+          <field name="COLOUR">#3333ff</field>
+        </shadow>
+      </value>
+      <value name="RATIO">
+        <shadow type="math_number">
+          <field name="NUM">0.5</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <sep></sep>
+  <category name="Variables" colour="330" custom="VARIABLE"></category>
+  <category name="Functions" colour="290" custom="PROCEDURE"></category>
+</xml>
+<script type="text/javascript">
+  // Array of Blockly category colors, variety of hues with saturation 45%
+  // and value 65% as specified in Blockly Developer documentation:
+  // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
+  var colors = ['#A65C5C',
+      '#A6635C',
+      '#A66A5C',
+      '#A6725C',
+      '#A6795C',
+      '#A6815C',
+      '#A6885C',
+      '#A6905C',
+      '#A6975C',
+      '#A69F5C',
+      '#A6A65C',
+      '#9FA65C',
+      '#97A65C',
+      '#90A65C',
+      '#88A65C',
+      '#81A65C',
+      '#79A65C',
+      '#6FA65C',
+      '#66A65C',
+      '#5EA65C',
+      '#5CA661',
+      '#5CA668',
+      '#5CA66F',
+      '#5CA677',
+      '#5CA67E',
+      '#5CA686',
+      '#5CA68D',
+      '#5CA695',
+      '#5CA69C',
+      '#5CA6A4',
+      '#5CA1A6',
+      '#5C9AA6',
+      '#5C92A6',
+      '#5C8BA6',
+      '#5C83A6',
+      '#5C7CA6',
+      '#5C74A6',
+      '#5C6AA6',
+      '#5C61A6',
+      '#5E5CA6',
+      '#665CA6',
+      '#6D5CA6',
+      '#745CA6',
+      '#7C5CA6',
+      '#835CA6',
+      '#8B5CA6',
+      '#925CA6',
+      '#9A5CA6',
+      '#A15CA6',
+      '#A65CA4',
+      '#A65C9C',
+      '#A65C95',
+      '#A65C8D',
+      '#A65C86',
+      '#A65C7E',
+      '#A65C77',
+      '#A65C6F',
+      '#A65C66',
+      '#A65C61',
+      '#A65C5E'];
+
+  // Create empty workspace for configuring workspace.
+  var toolboxWorkspace = Blockly.inject('toolbox_blocks',
+    {grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+       media: '../../media/',
+       toolbox: toolbox,
+     });
+  // Create empty workspace for previewing created workspace.
+  var previewWorkspace = Blockly.inject('preview_blocks',
+    {grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+     media: '../../media/',
+     toolbox: '<xml></xml>',
+     zoom:
+       {controls: true,
+        wheel: true}
+    });
+
+  var controller = new FactoryController(toolboxWorkspace, previewWorkspace);
+
+  // Wrappers to attach buttons to method calls for the controller object
+  var addWrapper = function() {
+    document.getElementById('dropdown_add').classList.toggle("show");
+  };
+  var newCategoryWrapper = function() {
+    controller.addCategory();
+    document.getElementById('dropdown_add').classList.remove("show");
+  };
+  var loadCategoryWrapper = function() {
+    controller.loadCategory();
+    document.getElementById('dropdown_add').classList.remove("show");
+  };
+  var separatorWrapper = function() {
+    controller.addSeparator();
+    document.getElementById('dropdown_add').classList.remove("show");
+  };
+  var removeWrapper = function() {
+    controller.removeElement();
+  };
+  var exportWrapper = function() {
+    controller.exportConfig();
+  };
+  var printWrapper = function() {
+    controller.printConfig();
+  };
+  var upWrapper = function() {
+    controller.moveElement(-1);
+  };
+  var downWrapper = function() {
+    controller.moveElement(1);
+  };
+  var editCategoryWrapper = function() {
+    document.getElementById('dropdown_editCategory').classList.toggle("show");
+  };
+  var nameWrapper = function() {
+    controller.changeCategoryName();
+    document.getElementById('dropdown_editCategory').classList.remove("show");
+  };
+  var shadowAddWrapper = function() {
+    controller.addShadow();
+    document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+  };
+    var shadowRemoveWrapper = function() {
+    controller.removeShadow();
+    document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+  };
+  var editShadowWrapper = function() {
+    // Allow the user to make a block a shadow block only if a block is selected
+    // and the block has a surrounding parent (necessary for the block to be
+    // a valid shadow block).
+    if (Blockly.selected && Blockly.selected.getSurroundParent() != null) {
+      // If the block is not a shadow block, let the user make it a shadow block.
+      // Use toggle instead of add so that the user can click the button again
+      // to make the dropdown disappear without clicking one of the options.
+      if (!controller.model.isShadowBlock(Blockly.selected.id)) {
+
+        document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+        document.getElementById('dropdown_editShadowAdd').classList.toggle("show");
+      // If the block is a shadow block, let the user make it a normal block.
+      } else {
+        document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+        document.getElementById('dropdown_editShadowRemove').classList.toggle("show");
+      }
+    }
+  };
+  var importWrapper = function(event) {
+    controller.importFile(event.target.files[0]);
+  };
+  var clearWrapper = function() {
+    controller.clear();
+  }
+
+  document.getElementById('button_add').addEventListener
+      ('click', addWrapper);
+  document.getElementById('dropdown_newCategory').addEventListener
+      ('click', newCategoryWrapper);
+  document.getElementById('dropdown_loadCategory').addEventListener
+      ('click', loadCategoryWrapper);
+  document.getElementById('dropdown_separator').addEventListener
+      ('click', separatorWrapper);
+  document.getElementById('button_remove').addEventListener
+      ('click', removeWrapper);
+  document.getElementById('button_export').addEventListener
+      ('click', exportWrapper);
+  document.getElementById('button_print').addEventListener
+      ('click', printWrapper);
+  document.getElementById('button_up').addEventListener
+      ('click', upWrapper);
+  document.getElementById('button_down').addEventListener
+      ('click', downWrapper);
+  document.getElementById('button_editCategory').addEventListener
+      ('click', editCategoryWrapper);
+  document.getElementById('button_editShadow').addEventListener
+      ('click', editShadowWrapper);
+  document.getElementById('dropdown_name').addEventListener
+      ('click', nameWrapper);
+  document.getElementById('input_import').addEventListener
+      ('change', importWrapper);
+  document.getElementById('button_clear').addEventListener
+      ('click', clearWrapper);
+  document.getElementById('dropdown_editShadowAdd').addEventListener
+      ('click', shadowAddWrapper);
+    document.getElementById('dropdown_editShadowRemove').addEventListener
+      ('click', shadowRemoveWrapper);
+
+  // Create color picker with specific set of Blockly colors.
+  var colorPicker = new goog.ui.ColorPicker();
+  colorPicker.setColors(colors);
+  // Create and render the popup color picker and attach to button.
+  var popupPicker = new goog.ui.PopupColorPicker(null, colorPicker);
+  popupPicker.render();
+  popupPicker.attach(document.getElementById('dropdown_color'));
+  popupPicker.setFocusable(true);
+  goog.events.listen(popupPicker, 'change', function(e) {
+        controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
+        document.getElementById('dropdown_editCategory').classList.remove
+            ("show");
+      });
+
+  // Disable category editing buttons until categories are created.
+  document.getElementById('button_remove').disabled = true;
+  document.getElementById('button_up').disabled = true;
+  document.getElementById('button_down').disabled = true;
+  document.getElementById('button_editCategory').disabled = true;
+  document.getElementById('button_editShadow').disabled = true;
+
+  toolboxWorkspace.addChangeListener(function(e) {
+    // Listen for Blockly move and delete events to update preview.
+    // Not listening for Blockly create events because causes the user to drop
+    // blocks when dragging them into workspace. Could cause problems if ever load
+    // blocks into workspace directly without calling updatePreview.
+    if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
+      controller.updatePreview();
+    }
+    // Listen for Blockly UI events to correctly enable the "Edit Block" button.
+    // Only enable "Edit Block" when a block is selected and it has a surrounding
+    // parent, meaning it is nested in another block (blocks that are not
+    // nested in parents cannot be shadow blocks).
+    // TODO(evd2014): Listen for when the user has moved a block to be nested inside
+    // another (currently have to unselect and reselect that block).
+    if (e.type == Blockly.Events.MOVE || (e.type == Blockly.Events.UI &&
+        e.element == 'selected')) {
+      var selected = toolboxWorkspace.getBlockById(e.newValue);
+      if (selected != null && selected.getSurroundParent() != null) {
+        document.getElementById('button_editShadow').disabled = false;
+      } else {
+        document.getElementById('button_editShadow').disabled = true;
+        document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+        document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+      }
+    }
+  });
+
+</script>
+</html>

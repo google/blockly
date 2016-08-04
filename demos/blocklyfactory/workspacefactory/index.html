@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <title>Blockly Workspace Factory</title>
-<script src="../../blockly_compressed.js"></script>
-<script src="../../javascript_compressed.js"></script>
-<script src="../../msg/messages.js"></script>
-<script src="../../blocks_compressed.js"></script>
-<script src="factory_model.js"></script>
-<script src="factory_controller.js"></script>
-<script src="factory_view.js"></script>
-<script src="factory_generator.js"></script>
+<script src="../../../blockly_compressed.js"></script>
+<script src="../../../javascript_compressed.js"></script>
+<script src="../../../msg/messages.js"></script>
+<script src="../../../blocks_compressed.js"></script>
+<script src="wfactory_model.js"></script>
+<script src="wfactory_controller.js"></script>
+<script src="wfactory_view.js"></script>
+<script src="wfactory_generator.js"></script>
 <script src="standard_categories.js"></script>
-<script src="../../../closure-library/closure/goog/base.js"></script>
+<script src="../../../../closure-library/closure/goog/base.js"></script>
 <link rel="stylesheet" href="style.css">
 
 <script>
@@ -41,7 +41,7 @@ goog.require('goog.ui.ColorPicker');
 </table>
 
 <section id="createDiv">
-  <p>Drag blocks into your toolbox</p>
+  <p>Drag blocks into your toolbox:</p>
   <section id="toolbox_section">
     <div id="toolbox_blocks" class="content"></div>
     <div id='disable_div'></div>
@@ -89,7 +89,7 @@ goog.require('goog.ui.ColorPicker');
 </section>
 
 <aside id="previewDiv">
-  <p>Preview your workspace</p>
+  <p>Preview your workspace:</p>
   <div id="preview_blocks" class="content"></div>
 </aside>
 
@@ -468,7 +468,7 @@ goog.require('goog.ui.ColorPicker');
        length: 3,
        colour: '#ccc',
        snap: true},
-       media: '../../media/',
+       media: '../../../media/',
        toolbox: toolbox,
      });
   // Create empty workspace for previewing created workspace.
@@ -478,7 +478,7 @@ goog.require('goog.ui.ColorPicker');
        length: 3,
        colour: '#ccc',
        snap: true},
-     media: '../../media/',
+     media: '../../../media/',
      toolbox: '<xml></xml>',
      zoom:
        {controls: true,

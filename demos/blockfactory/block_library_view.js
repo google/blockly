@@ -30,6 +30,43 @@ BlockLibraryView.addOption = function(optionName, optionText, dropdownID, select
 };
 
 /**
+ * Adds a default, blank option to dropdown for when no block from library is
+ * selected.
+ *
+ * @param {string} dropdownID - ID of HTML select element
+ */
+BlockLibraryView.addDefaultOption = function(dropdownID) {
+  BlockLibraryView.addOption(
+      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, false);
+};
+
+/**
+ * Selects the default, blank option in dropdown identified by given ID.
+ *
+ * @param {string} dropdownID - ID of HTML select element
+ */
+BlockLibraryView.selectDefaultOption = function(dropdownID) {
+  var dropdown = document.getElementById(dropdownID);
+  // Deselect currently selected option.
+  var index = dropdown.selectedIndex;
+  dropdown.options[index].selected = false;
+  // Select default option, always the first in the dropdown.
+  var defaultOption = dropdown.options[0];
+  defaultOption.selected = true;
+};
+
+/**
+ * Returns block type of selected block.
+ *
+ * @param {Element} dropdown - HTML select element.
+ * @return {string} Type of block selected.
+ */
+BlockLibraryView.getSelected = function(dropdown) {
+  var index = dropdown.selectedIndex;
+  return dropdown.options[index].value;
+};
+
+/**
  * Removes option currently selected in dropdown from dropdown menu.
  *
  * @param {string} dropdownID - ID of HTML select element within which to find
@@ -54,25 +91,4 @@ BlockLibraryView.clearOptions = function(dropdownID) {
   }
 };
 
-/**
- * Adds a default, blank option to dropdown for when no block from library is
- * selected.
- *
- * @param {string} dropdownID - ID of HTML select element
- */
-BlockLibraryView.addDefaultOption = function(dropdownID) {
-  BlockLibraryView.addOption(
-      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, false);
-};
-
-/**
- * Returns block type of selected block.
- *
- * @param {Element} dropdown - HTML select element.
- * @return {string} Type of block selected.
- */
-BlockLibraryView.getSelected = function(dropdown) {
-  var index = dropdown.selectedIndex;
-  return dropdown.options[index].value;
-};
 

@@ -187,6 +187,7 @@ AppController.prototype.assignFactoryClickHandlers = function() {
     .addEventListener('click', function() {
         BlockFactory.mainWorkspace.clear();
         BlockFactory.showStarterBlock();
+        BlockLibraryView.selectDefaultOption('blockLibraryDropdown');
     });
 };
 

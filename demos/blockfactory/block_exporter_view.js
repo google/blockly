@@ -1,6 +1,7 @@
 /**
  * @fileoverview Javascript for the Block Exporter View class. Takes care of
- * generating the workspace through which users can select blocks to export.
+ * generating the selector workspace through which users select blocks to
+ * export.
  *
  * @author quachtina96 (Tina Quach)
  */

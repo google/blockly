@@ -446,7 +446,8 @@ FactoryController.prototype.loadCategory = function() {
   this.model.addElementToList(copy);
 
   // Update the copy in the view.
-  var tab = this.view.addCategoryRow(copy.name, copy.id, this.model.getSelected() == null);
+  var tab = this.view.addCategoryRow(copy.name, copy.id,
+      this.model.getSelected() == null);
   this.addClickToSwitch(tab, copy.id);
   // Color the category tab in the view.
   if (copy.color) {
@@ -454,6 +455,8 @@ FactoryController.prototype.loadCategory = function() {
   }
   // Switch to loaded category.
   this.switchElement(copy.id);
+  // Convert actual shadow blocks to user-generated shadow blocks.
+  this.convertShadowBlocks_();
   // Update preview.
   this.updatePreview();
 };
@@ -548,6 +551,10 @@ FactoryController.prototype.importFromTree_ = function(tree) {
     // Load all the blocks into a single category evenly spaced.
     Blockly.Xml.domToWorkspace(tree, this.toolboxWorkspace);
     this.toolboxWorkspace.cleanUp_();
+
+    // Convert actual shadow blocks to user-generated shadow blocks.
+    this.convertShadowBlocks_();
+
     // Add message to denote empty category.
     this.view.addEmptyCategoryMessage();
   } else {
@@ -569,6 +576,10 @@ FactoryController.prototype.importFromTree_ = function(tree) {
         // TODO(evd2014): Change to cleanUp once cleanUp_ is made public in
         // master.
         this.toolboxWorkspace.cleanUp_();
+
+        // Convert actual shadow blocks to user-generated shadow blocks.
+        this.convertShadowBlocks_();
+
         // Set category color.
         if (item.color) {
           category.changeColor(item.color);
@@ -628,4 +639,23 @@ FactoryController.prototype.removeShadow = function() {
   }
   this.model.removeShadowBlock(Blockly.selected.id);
   this.view.unmarkShadowBlock(Blockly.selected);
+  this.updatePreview();
+};
+
+/**
+ * Call when importing XML containing real shadow blocks. This function turns
+ * all real shadow blocks loaded in the workspace into user-generated shadow
+ * blocks, meaning they are marked as shadow blocks by the model and appear as
+ * shadow blocks in the view but are still editable and movable.
+ * @private
+ */
+FactoryController.prototype.convertShadowBlocks_ = function() {
+  var blocks = this.toolboxWorkspace.getAllBlocks();
+  for (var i = 0, block; block = blocks[i]; i++) {
+    if (block.isShadow()) {
+      block.setShadow(false);
+      this.model.addShadowBlock(block.id);
+      this.view.markShadowBlock(block);
+    }
+  }
 };

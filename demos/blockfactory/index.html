@@ -23,8 +23,9 @@
   <link rel="stylesheet" href="../prettify.css">
   <script src="../prettify.js"></script>
   <script>
-    var init = function () {
-      var blocklyDevTools = new AppController();
+    var blocklyDevTools;
+    var init = function() {
+      blocklyDevTools = new AppController();
       blocklyDevTools.init();
     };
     window.addEventListener('load', init);

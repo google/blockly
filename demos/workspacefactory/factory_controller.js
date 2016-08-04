@@ -199,16 +199,20 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
   if (this.model.getSelectedId() != null && id != null) {
     this.view.setCategoryTabSelection(this.model.getSelectedId(), false);
   }
+
   // If switching from a separator, enable workspace in view.
   if (this.model.getSelectedId() != null && this.model.getSelected().type ==
       ListElement.TYPE_SEPARATOR) {
     this.view.disableWorkspace(false);
   }
+
   // Set next category.
   this.model.setSelectedById(id);
+
   // Clear workspace.
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
+
   // Loads next category if switching to an element.
   if (id != null) {
     this.view.setCategoryTabSelection(id, true);
@@ -219,10 +223,12 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
       this.view.disableWorkspace(true);
     }
   }
+
+  // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
   this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
         (toolboxWorkspace.getAllBlocks()));
-  // Order blocks as if shown in a flyout.
   this.toolboxWorkspace.cleanUp_();
+
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
       (this.model.getSelectedId()), this.model.getSelected());

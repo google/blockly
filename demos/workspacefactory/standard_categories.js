@@ -15,13 +15,13 @@ FactoryController.prototype.standardCategories['logic'] =
 FactoryController.prototype.standardCategories['logic'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
-    '<block type="controls_if" x="13" y="13"></block>' +
-    '<block type="logic_compare" x="13" y="88"></block>' +
-    '<block type="logic_operation" x="13" y="138"></block>' +
-    '<block type="logic_negate" x="13" y="188"></block>' +
-    '<block type="logic_boolean" x="13" y="238"></block>' +
-    '<block type="logic_null" x="13" y="288"></block>' +
-    '<block type="logic_ternary" x="13" y="338"></block>' +
+    '<block type="controls_if"></block>' +
+    '<block type="logic_compare"></block>' +
+    '<block type="logic_operation"></block>' +
+    '<block type="logic_negate"></block>' +
+    '<block type="logic_boolean"></block>' +
+    '<block type="logic_null"></block>' +
+    '<block type="logic_ternary"></block>' +
     '</xml>');
 FactoryController.prototype.standardCategories['logic'].color = '#5C81A6';
 
@@ -30,15 +30,15 @@ FactoryController.prototype.standardCategories['loops'] =
 FactoryController.prototype.standardCategories['loops'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
-    '<block type="controls_repeat_ext" x="13" y="13">' +
+    '<block type="controls_repeat_ext">' +
       '<value name="TIMES">' +
         '<shadow type="math_number">' +
           '<field name="NUM">10</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="controls_whileUntil" x="12" y="113"></block>' +
-    '<block type="controls_for" x="12" y="213">' +
+    '<block type="controls_whileUntil"></block>' +
+    '<block type="controls_for">' +
       '<value name="FROM">' +
         '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
@@ -55,8 +55,8 @@ FactoryController.prototype.standardCategories['loops'].xml =
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="controls_forEach" x="12" y="313"></block>' +
-    '<block type="controls_flow_statements" x="12" y="413"></block>' +
+    '<block type="controls_forEach"></block>' +
+    '<block type="controls_flow_statements"></block>' +
     '</xml>');
 FactoryController.prototype.standardCategories['loops'].color = '#5CA65C';
 
@@ -65,8 +65,8 @@ FactoryController.prototype.standardCategories['math'] =
 FactoryController.prototype.standardCategories['math'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
-    '<block type="math_number" x="13" y="13"></block>' +
-    '<block type="math_arithmetic" x="13" y="63">' +
+    '<block type="math_number"></block>' +
+    '<block type="math_arithmetic">' +
       '<value name="A">' +
         '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
@@ -78,44 +78,44 @@ FactoryController.prototype.standardCategories['math'].xml =
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_single" x="13" y="113">' +
+    '<block type="math_single">' +
       '<value name="NUM">' +
         '<shadow type="math_number">' +
           '<field name="NUM">9</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_trig" x="13" y="163">' +
+    '<block type="math_trig">' +
       '<value name="NUM">' +
         '<shadow type="math_number">' +
           '<field name="NUM">45</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_constant" x="13" y="213"></block>' +
-    '<block type="math_number_property" x="13" y="263">' +
+    '<block type="math_constant"></block>' +
+    '<block type="math_number_property">' +
       '<value name="NUMBER_TO_CHECK">' +
         '<shadow type="math_number">' +
           '<field name="NUM">0</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_change" x="13" y="313">' +
+    '<block type="math_change">' +
       '<value name="DELTA">' +
         '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_round" x="13" y="363">' +
+    '<block type="math_round">' +
       '<value name="NUM">' +
         '<shadow type="math_number">' +
           '<field name="NUM">3.1</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_on_list" x="13" y="413"></block>' +
-    '<block type="math_modulo" x="13" y="463">' +
+    '<block type="math_on_list"></block>' +
+    '<block type="math_modulo">' +
       '<value name="DIVIDEND">' +
         '<shadow type="math_number">' +
           '<field name="NUM">64</field>' +
@@ -127,7 +127,7 @@ FactoryController.prototype.standardCategories['math'].xml =
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_constrain" x="13" y="512">' +
+    '<block type="math_constrain">' +
       '<value name="VALUE">' +
         '<shadow type="math_number">' +
           '<field name="NUM">50</field>' +
@@ -144,7 +144,7 @@ FactoryController.prototype.standardCategories['math'].xml =
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_random_int" x="13" y="562">' +
+    '<block type="math_random_int">' +
       '<value name="FROM">' +
         '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +
@@ -156,7 +156,7 @@ FactoryController.prototype.standardCategories['math'].xml =
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="math_random_float" x="13" y="612"></block>' +
+    '<block type="math_random_float"></block>' +
     '</xml>');
 FactoryController.prototype.standardCategories['math'].color = '#5C68A6';
 
@@ -165,28 +165,28 @@ FactoryController.prototype.standardCategories['text'] =
 FactoryController.prototype.standardCategories['text'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
-    '<block type="text" x="13" y="13"></block>' +
-    '<block type="text_join" x="13" y="63"></block>' +
-    '<block type="text_append" x="13" y="138">' +
+    '<block type="text"></block>' +
+    '<block type="text_join"></block>' +
+    '<block type="text_append">' +
       '<value name="TEXT">' +
         '<shadow type="text"></shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="text_length" x="13" y="188">' +
+    '<block type="text_length">' +
       '<value name="VALUE">' +
         '<shadow type="text">' +
           '<field name="TEXT">abc</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="text_isEmpty" x="13" y="238">' +
+    '<block type="text_isEmpty">' +
       '<value name="VALUE">' +
         '<shadow type="text">' +
           '<field name="TEXT"></field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="text_indexOf" x="13" y="288">' +
+    '<block type="text_indexOf">' +
       '<value name="VALUE">' +
         '<block type="variables_get">' +
           '<field name="VAR">text</field>' +
@@ -198,42 +198,42 @@ FactoryController.prototype.standardCategories['text'].xml =
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="text_charAt" x="13" y="337">' +
+    '<block type="text_charAt">' +
       '<value name="VALUE">' +
         '<block type="variables_get">' +
           '<field name="VAR">text</field>' +
         '</block>' +
       '</value>' +
     '</block>' +
-    '<block type="text_getSubstring" x="13" y="387">' +
+    '<block type="text_getSubstring">' +
       '<value name="STRING">' +
         '<block type="variables_get">' +
           '<field name="VAR">text</field>' +
         '</block>' +
       '</value>' +
     '</block>' +
-    '<block type="text_changeCase" x="13" y="437">' +
+    '<block type="text_changeCase">' +
       '<value name="TEXT">' +
         '<shadow type="text">' +
           '<field name="TEXT">abc</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="text_trim" x="13" y="488">' +
+    '<block type="text_trim">' +
       '<value name="TEXT">' +
         '<shadow type="text">' +
           '<field name="TEXT">abc</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="text_print" x="13" y="538">' +
+    '<block type="text_print">' +
       '<value name="TEXT">' +
         '<shadow type="text">' +
           '<field name="TEXT">abc</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="text_prompt_ext" x="13" y="588">' +
+    '<block type="text_prompt_ext">' +
       '<value name="TEXT">' +
         '<shadow type="text">' +
           '<field name="TEXT">abc</field>' +
@@ -248,55 +248,55 @@ FactoryController.prototype.standardCategories['lists'] =
 FactoryController.prototype.standardCategories['lists'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
-    '<block type="lists_create_with" x="13" y="-187">' +
+    '<block type="lists_create_with">' +
       '<mutation items="0"></mutation>' +
     '</block>' +
-    '<block type="lists_create_with"  x="13" y="-137"></block>' +
-    '<block type="lists_repeat" x="13" y="-37">' +
+    '<block type="lists_create_with"></block>' +
+    '<block type="lists_repeat">' +
       '<value name="NUM">' +
         '<shadow type="math_number">' +
           '<field name="NUM">5</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="lists_length" x="13" y="13" ></block>' +
-    '<block type="lists_isEmpty" x="13" y="63"></block>' +
-    '<block type="lists_indexOf" x="13" y="113">' +
+    '<block type="lists_length"></block>' +
+    '<block type="lists_isEmpty"></block>' +
+    '<block type="lists_indexOf">' +
       '<value name="VALUE">' +
         '<block type="variables_get">' +
           '<field name="VAR">list</field>' +
         '</block>' +
       '</value>' +
     '</block>' +
-    '<block type="lists_getIndex" x="13" y="162">' +
+    '<block type="lists_getIndex">' +
       '<value name="VALUE">' +
         '<block type="variables_get">' +
           '<field name="VAR">list</field>' +
         '</block>' +
       '</value>' +
     '</block>' +
-    '<block type="lists_setIndex" x="13" y="212">' +
+    '<block type="lists_setIndex">' +
       '<value name="LIST">' +
         '<block type="variables_get">' +
           '<field name="VAR">list</field>' +
         '</block>' +
       '</value>' +
     '</block>' +
-    '<block type="lists_getSublist" x="13" y="262">' +
+    '<block type="lists_getSublist">' +
       '<value name="LIST">' +
         '<block type="variables_get">' +
           '<field name="VAR">list</field>' +
         '</block>' +
       '</value>' +
     '</block>' +
-    '<block type="lists_split" x="13" y="312">' +
+    '<block type="lists_split">' +
       '<value name="DELIM">' +
         '<shadow type="text">' +
           '<field name="TEXT">,</field>' +
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="lists_sort" x="13" y="362"></block>' +
+    '<block type="lists_sort"></block>' +
     '</xml>');
 FactoryController.prototype.standardCategories['lists'].color = '#745CA6';
 
@@ -305,9 +305,9 @@ FactoryController.prototype.standardCategories['colour'] =
 FactoryController.prototype.standardCategories['colour'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
-    '<block type="colour_picker" x="13" y="13"></block>' +
-    '<block type="colour_random" x="13" y="63"></block>' +
-    '<block type="colour_rgb" x="13" y="113">' +
+    '<block type="colour_picker"></block>' +
+    '<block type="colour_random"></block>' +
+    '<block type="colour_rgb">' +
       '<value name="RED">' +
         '<shadow type="math_number">' +
           '<field name="NUM">100</field>' +
@@ -324,7 +324,7 @@ FactoryController.prototype.standardCategories['colour'].xml =
         '</shadow>' +
       '</value>' +
     '</block>' +
-    '<block type="colour_blend" x="13" y="213">' +
+    '<block type="colour_blend">' +
       '<value name="COLOUR1">' +
         '<shadow type="colour_picker">' +
           '<field name="COLOUR">#ff0000</field>' +

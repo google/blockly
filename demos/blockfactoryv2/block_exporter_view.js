@@ -80,7 +80,7 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
 /**
  * Updates the helper text to show list of currently selected blocks.
  *
- * @param {!Array} selectedBlockTypes - Array of blocks selected in workspace.
+ * @param {!Array.<string>} selectedBlockTypes - Array of blocks selected in workspace.
  */
 BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
   var selectedBlocksText = selectedBlockTypes.join(', ');
@@ -88,10 +88,29 @@ BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
 };
 
 /**
+ * Renders block of given type on selector workspace assuming block has already
+ * been defined.
+ *
+ * @param {string} blockType - Type of block to select.
+ */
+BlockExporterView.prototype.selectBlock = function(blockType) {
+  var selectedBlock = this.selectorWorkspace.newBlock(blockType);
+  selectedBlock.initSvg();
+  selectedBlock.render();
+};
+
+/**
  * Clears selector workspace.
  */
 BlockExporterView.prototype.clearSelectorWorkspace = function() {
   this.selectorWorkspace.clear();
+};
+
+/**
+ * Neatly layout the blocks in selector workspace.
+ */
+BlockExporterView.prototype.cleanSelectorWorkspace = function() {
+  this.selectorWorkspace.cleanUp_();
 };
 
 /**

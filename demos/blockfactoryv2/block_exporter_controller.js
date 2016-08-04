@@ -206,3 +206,25 @@ BlockExporterController.prototype.clearSelectedBlocks = function() {
   // Clear selector workspace.
   this.view.clearSelectorWorkspace();
 };
+
+/**
+ * Tied to the 'Select All Blocks' button in the Block Exporter.
+ * Selects all blocks on the selector workspace.
+ */
+BlockExporterController.prototype.selectAllBlocks = function() {
+  // Clear selector workspace.
+  this.view.clearSelectorWorkspace();
+
+  // Add and evaluate all blocks' definitions.
+  var allBlockTypes = this.blockLibStorage.getBlockTypes();
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(allBlockTypes);
+  this.tools.addBlockDefinitions(blockXmlMap);
+
+  // For every block, render in selector workspace.
+  for (var i = 0; i < allBlockTypes.length; i++) {
+    this.view.selectBlock(allBlockTypes[i]);
+  }
+
+  // Clean up workspace.
+  this.view.cleanSelectorWorkspace();
+};

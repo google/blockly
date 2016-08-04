@@ -64,10 +64,9 @@ FactoryGenerator.prototype.generateConfigXml = function(toolboxWorkspace) {
     // groups in the flyout.
     for (var i = 0; i < toolboxList.length; i++) {
       var element = toolboxList[i];
-      if (element.type == ListElement.SEPARATOR) {
+      if (element.type == ListElement.TYPE_SEPARATOR) {
         // If the next element is a separator.
         var nextElement = goog.dom.createDom('sep');
-        xmlDom.appendChild(sepElement);
       } else {
         // If the next element is a category.
         var nextElement = goog.dom.createDom('category');

@@ -40,8 +40,8 @@ BlockExporterController = function(blockLibStorage) {
 BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
   var selectedBlocks = this.view.getSelectedBlocks();
   var blockTypes = [];
-  for (var i = 0; i < selectedBlocks.length; i++) {
-    blockTypes.push(selectedBlocks[i].type);
+  for (var i = 0, block; block = selectedBlocks[i]; i++) {
+    blockTypes.push(block.type);
   }
   return blockTypes;
 };
@@ -111,8 +111,8 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
   this.view.renderToolbox(updatedToolbox);
   // Disable any selected blocks.
   var selectedBlocks = this.getSelectedBlockTypes_();
-  for (var i = 0; i < selectedBlocks.length; i++) {
-    this.setBlockEnabled(selectedBlocks[i], false);
+  for (var i = 0, blockType; blockType = selectedBlocks[i]; i++) {
+    this.setBlockEnabled(blockType, false);
   }
 };
 
@@ -221,8 +221,8 @@ BlockExporterController.prototype.selectAllBlocks = function() {
   this.tools.addBlockDefinitions(blockXmlMap);
 
   // For every block, render in selector workspace.
-  for (var i = 0; i < allBlockTypes.length; i++) {
-    this.view.selectBlock(allBlockTypes[i]);
+  for (var i = 0, blockType; blockType = allBlockTypes[i]; i++) {
+    this.view.selectBlock(blockType);
   }
 
   // Clean up workspace.

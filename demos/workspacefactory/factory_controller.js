@@ -221,6 +221,8 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
   }
   this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
         (toolboxWorkspace.getAllBlocks()));
+  // Order blocks as if shown in a flyout.
+  this.toolboxWorkspace.cleanUp_();
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
       (this.model.getSelectedId()), this.model.getSelected());

@@ -532,21 +532,26 @@ goog.require('goog.ui.ColorPicker');
     var shadowRemoveWrapper = function() {
     controller.removeShadow();
     document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+    // If turning invalid shadow block back to normal block, remove warning and disable
+    // block editing privileges.
+    Blockly.selected.setWarningText(null);
+    if (!Blockly.selected.getSurroundParent()) {
+      document.getElementById('button_editShadow').disabled = true;
+    }
   };
   var editShadowWrapper = function() {
-    // Allow the user to make a block a shadow block only if a block is selected
-    // and the block has a surrounding parent (necessary for the block to be
-    // a valid shadow block).
-    if (Blockly.selected && Blockly.selected.getSurroundParent() != null) {
-      // If the block is not a shadow block, let the user make it a shadow block.
-      // Use toggle instead of add so that the user can click the button again
-      // to make the dropdown disappear without clicking one of the options.
-      if (!controller.model.isShadowBlock(Blockly.selected.id)) {
+    if (Blockly.selected) {
+      // Can only edit blocks when a block is selected.
 
+      if (!controller.model.isShadowBlock(Blockly.selected.id) && Blockly.selected.getSurroundParent() != null) {
+        // If a block is selected that could be a valid shadow block (not a shadow block,
+        // has a surrounding parent), let the user make it a shadow block.
+        // Use toggle instead of add so that the user can click the button again
+        // to make the dropdown disappear without clicking one of the options.
         document.getElementById('dropdown_editShadowRemove').classList.remove("show");
         document.getElementById('dropdown_editShadowAdd').classList.toggle("show");
-      // If the block is a shadow block, let the user make it a normal block.
       } else {
+        // If the block is a shadow block, let the user make it a normal block.
         document.getElementById('dropdown_editShadowAdd').classList.remove("show");
         document.getElementById('dropdown_editShadowRemove').classList.toggle("show");
       }
@@ -621,21 +626,38 @@ goog.require('goog.ui.ColorPicker');
     if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
       controller.updatePreview();
     }
+
     // Listen for Blockly UI events to correctly enable the "Edit Block" button.
     // Only enable "Edit Block" when a block is selected and it has a surrounding
     // parent, meaning it is nested in another block (blocks that are not
     // nested in parents cannot be shadow blocks).
-    // TODO(evd2014): Listen for when the user has moved a block to be nested inside
-    // another (currently have to unselect and reselect that block).
     if (e.type == Blockly.Events.MOVE || (e.type == Blockly.Events.UI &&
         e.element == 'selected')) {
-      var selected = toolboxWorkspace.getBlockById(e.newValue);
+      var selected = Blockly.selected;
+
       if (selected != null && selected.getSurroundParent() != null) {
+
+        // A valid shadow block is selected. Enable block editing and remove warnings.
         document.getElementById('button_editShadow').disabled = false;
+        Blockly.selected.setWarningText(null);
       } else {
-        document.getElementById('button_editShadow').disabled = true;
-        document.getElementById('dropdown_editShadowRemove').classList.remove("show");
-        document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+        if (selected != null && controller.model.isShadowBlock(selected.id)) {
+
+        // Provide warning if shadow block is moved and is no longer a valid shadow block.
+          Blockly.selected.setWarningText('Shadow blocks must be nested inside other' +
+              ' blocks to be displayed.');
+
+          // Give editing options so that the user can make an invalid shadow block
+          // a normal block.
+          document.getElementById('button_editShadow').disabled = false;
+        } else {
+
+          // No block selected that is a shadow block or could be a valid shadow block.
+          // Disable block editing.
+          document.getElementById('button_editShadow').disabled = true;
+          document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+          document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+        }
       }
     }
   });

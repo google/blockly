@@ -55,7 +55,6 @@ Blockly.JavaScript['procedures_defreturn'] = function(block) {
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
       branch + returnValue + '}';
-  code = Blockly.JavaScript.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.JavaScript.definitions_['%' + funcName] = code;
   return null;

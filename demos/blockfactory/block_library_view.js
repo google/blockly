@@ -66,17 +66,6 @@ BlockLibraryView.addDefaultOption = function(dropdownID) {
 };
 
 /**
- * Adds a default, blank option to dropdown for when no block from library is
- * selected.
- *
- * @param {string} dropdownID - ID of HTML select element
- */
-BlockLibraryView.addDefaultOption = function(dropdownID) {
-  BlockLibraryView.addOption(
-      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, false);
-};
-
-/**
  * Returns block type of selected block.
  *
  * @param {Element} dropdown - HTML select element.

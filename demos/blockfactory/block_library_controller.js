@@ -103,16 +103,28 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
  */
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var blockType = this.getCurrentBlockType();
+  // If block under that name already exists, confirm that user wants to replace
+  // saved block.
   if (this.isInBlockLibrary(blockType)) {
-    alert('You already have a block called ' + blockType + ' in your library.' +
-      ' Please rename your block or delete the old one.');
-  } else {
-    var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
-    this.storage.addBlock(blockType, xmlElement);
-    this.storage.saveToLocalStorage();
-    BlockLibraryView.addOption(
-        blockType, blockType, 'blockLibraryDropdown', true, true);
+    var replace = confirm('You already have a block called ' + blockType +
+      ' in your library. Click OK to replace.');
+    if (!replace) {
+      // Do not save if user doesn't want to replace the saved block.
+      return;
+    }
   }
+
+  // Save block.
+  var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
+  this.storage.addBlock(blockType, xmlElement);
+  this.storage.saveToLocalStorage();
+
+  // Do not add another option to dropdown if replacing.
+  if (replace) {
+    return;
+  }
+  BlockLibraryView.addOption(
+      blockType, blockType, 'blockLibraryDropdown', true, true);
 };
 
 /**

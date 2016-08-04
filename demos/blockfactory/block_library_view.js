@@ -12,19 +12,22 @@ goog.provide('BlockLibraryView');
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *
- * @param {string} optionName - Value of option.
- * @param {string} optionText - Text in option.
+ * @param {string} optionIdentifier - String used to identify option.
+ * @param {string} optionText - Text to display in the dropdown for the option.
  * @param {string} dropdownID - ID for HTML select element.
  * @param {boolean} selected - Whether or not the option should be selected on
  *    the dropdown.
  * @param {boolean} enabled - Whether or not the option should be enabled.
  */
-BlockLibraryView.addOption =
-    function(optionName, optionText, dropdownID, selected, enabled) {
+BlockLibraryView.addOption
+    = function(optionIdentifier, optionText, dropdownID, selected, enabled) {
   var dropdown = document.getElementById(dropdownID);
   var option = document.createElement('option');
+  // The value attribute of a dropdown's option is not visible in the UI, but is
+  // useful for identifying different options that may have the same text.
+  option.value = optionIdentifier;
+  // The text attribute is what the user sees in the dropdown for the option.
   option.text = optionText;
-  option.value = optionName;
   option.selected = selected;
   option.disabled = !enabled;
   dropdown.add(option);

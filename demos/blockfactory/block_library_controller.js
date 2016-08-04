@@ -113,10 +113,12 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
       return;
     }
   }
+
   // Save block.
   var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
   this.storage.addBlock(blockType, xmlElement);
   this.storage.saveToLocalStorage();
+
   // Do not add another option to dropdown if replacing.
   if (replace) {
     return;

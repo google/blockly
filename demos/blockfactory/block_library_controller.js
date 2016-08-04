@@ -24,8 +24,6 @@ goog.require('BlockFactory');
  *
  * @param {string} blockLibraryName - Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {blockLibrary} blockLibraryName - Desired name of Block Library, also
- *    used to create the key for where it's stored in local storage.
  */
 BlockLibraryController = function(blockLibraryName) {
   this.name = blockLibraryName;
@@ -67,7 +65,7 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
    var xml = this.storage.getBlockXml(blockType);
    BlockFactory.mainWorkspace.clear();
    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
- };
+};
 
 /**
  * Returns type of block selected from library.
@@ -77,8 +75,8 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
  */
 BlockLibraryController.prototype.getSelectedBlockType =
     function(blockLibraryDropdown) {
-      return BlockLibraryView.getSelected(blockLibraryDropdown);
-    };
+  return BlockLibraryView.getSelected(blockLibraryDropdown);
+};
 
 /**
  * Confirms with user before clearing the block library in local storage and

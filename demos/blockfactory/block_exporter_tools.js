@@ -77,35 +77,35 @@ BlockExporterTools.prototype.getDefinedBlock_ = function(blockType) {
  */
 BlockExporterTools.prototype.getBlockDefs =
     function(blockXmlMap, definitionFormat) {
-      var blockCode = [];
-      for (var blockType in blockXmlMap) {
-        var xml = blockXmlMap[blockType];
-        if (xml) {
-          // Render and get block from hidden workspace.
-          var rootBlock = this.getRootBlockFromXml_(xml);
-          if (rootBlock) {
-            // Generate the block's definition.
-            var code = BlockFactory.getBlockDefinition(blockType, rootBlock,
-                definitionFormat, this.hiddenWorkspace);
-            // Add block's definition to the definitions to return.
-          } else {
-            // Append warning comment and write to console.
-            var code = '// No block definition generated for ' + blockType +
-              '. Could not find root block in xml stored for this block.';
-            console.log('No block definition generated for ' + blockType +
-              '. Could not find root block in xml stored for this block.');
-          }
-        } else {
-          // Append warning comment and write to console.
-          var code = '// No block definition generated for ' + blockType +
-            '. Block was not found in Block Library Storage.';
-          console.log('No block definition generated for ' + blockType +
-            '. Block was not found in Block Library Storage.');
-        }
-        blockCode.push(code);
+  var blockCode = [];
+  for (var blockType in blockXmlMap) {
+    var xml = blockXmlMap[blockType];
+    if (xml) {
+      // Render and get block from hidden workspace.
+      var rootBlock = this.getRootBlockFromXml_(xml);
+      if (rootBlock) {
+        // Generate the block's definition.
+        var code = BlockFactory.getBlockDefinition(blockType, rootBlock,
+            definitionFormat, this.hiddenWorkspace);
+        // Add block's definition to the definitions to return.
+      } else {
+        // Append warning comment and write to console.
+        var code = '// No block definition generated for ' + blockType +
+          '. Could not find root block in xml stored for this block.';
+        console.log('No block definition generated for ' + blockType +
+          '. Could not find root block in xml stored for this block.');
       }
-      return blockCode.join("\n\n");
-    };
+    } else {
+      // Append warning comment and write to console.
+      var code = '// No block definition generated for ' + blockType +
+        '. Block was not found in Block Library Storage.';
+      console.log('No block definition generated for ' + blockType +
+        '. Block was not found in Block Library Storage.');
+    }
+    blockCode.push(code);
+  }
+  return blockCode.join("\n\n");
+};
 
 /**
  * Return the generator code of each block type in an array in a given language.
@@ -118,30 +118,30 @@ BlockExporterTools.prototype.getBlockDefs =
  */
 BlockExporterTools.prototype.getGeneratorCode =
     function(blockXmlMap, generatorLanguage) {
-      var multiblockCode = [];
-      // Define the custom blocks in order to be able to create instances of
-      // them in the exporter workspace.
-      this.addBlockDefinitions_(blockXmlMap);
+  var multiblockCode = [];
+  // Define the custom blocks in order to be able to create instances of
+  // them in the exporter workspace.
+  this.addBlockDefinitions_(blockXmlMap);
 
-      for (var blockType in blockXmlMap) {
-        var xml = blockXmlMap[blockType];
-        if (xml) {
-          // Render the preview block in the hidden workspace.
-          var tempBlock = this.getDefinedBlock_(blockType);
-          // Get generator stub for the given block and add to  generator code.
-          var blockGenCode =
-              BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
-        } else {
-          // Append warning comment and write to console.
-          var blockGenCode = '// No generator stub generated for ' + blockType +
-            '. Block was not found in Block Library Storage.';
-          console.log('No block generator stub generated for ' + blockType +
-            '. Block was not found in Block Library Storage.');
-        }
-        multiblockCode.push(blockGenCode);
-      }
-      return multiblockCode.join("\n\n");
-    };
+  for (var blockType in blockXmlMap) {
+    var xml = blockXmlMap[blockType];
+    if (xml) {
+      // Render the preview block in the hidden workspace.
+      var tempBlock = this.getDefinedBlock_(blockType);
+      // Get generator stub for the given block and add to  generator code.
+      var blockGenCode =
+          BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
+    } else {
+      // Append warning comment and write to console.
+      var blockGenCode = '// No generator stub generated for ' + blockType +
+        '. Block was not found in Block Library Storage.';
+      console.log('No block generator stub generated for ' + blockType +
+        '. Block was not found in Block Library Storage.');
+    }
+    multiblockCode.push(blockGenCode);
+  }
+  return multiblockCode.join("\n\n");
+};
 
 /**
  * Evaluates block definition code of each block in given object mapping
@@ -152,9 +152,9 @@ BlockExporterTools.prototype.getGeneratorCode =
  * @param {!Object} blockXmlMap - Map of block type to xml.
  */
 BlockExporterTools.prototype.addBlockDefinitions_ = function(blockXmlMap) {
-      var blockDefs = this.getBlockDefs(blockXmlMap, 'JavaScript');
-      eval(blockDefs);
-    };
+  var blockDefs = this.getBlockDefs(blockXmlMap, 'JavaScript');
+  eval(blockDefs);
+};
 
 /**
  * Pulls information about all blocks in the block library to generate xml
@@ -164,40 +164,40 @@ BlockExporterTools.prototype.addBlockDefinitions_ = function(blockXmlMap) {
  */
 BlockExporterTools.prototype.generateToolboxFromLibrary
     = function(blockLibStorage) {
-      // Create DOM for XML.
-      var xmlDom = goog.dom.createDom('xml', {
-        'id' : 'blockExporterTools_toolbox',
-        'style' : 'display:none'
-      });
+  // Create DOM for XML.
+  var xmlDom = goog.dom.createDom('xml', {
+    'id' : 'blockExporterTools_toolbox',
+    'style' : 'display:none'
+  });
 
-      var allBlockTypes = blockLibStorage.getBlockTypes();
-      // Object mapping block type to XML.
-      var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
+  var allBlockTypes = blockLibStorage.getBlockTypes();
+  // Object mapping block type to XML.
+  var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
 
-      // Define the custom blocks in order to be able to create instances of
-      // them in the exporter workspace.
-      this.addBlockDefinitions_(blockXmlMap);
+  // Define the custom blocks in order to be able to create instances of
+  // them in the exporter workspace.
+  this.addBlockDefinitions_(blockXmlMap);
 
-      for (var blockType in blockXmlMap) {
-        // Create category DOM element.
-        var categoryElement = goog.dom.createDom('category');
-        categoryElement.setAttribute('name',blockType);
+  for (var blockType in blockXmlMap) {
+    // Create category DOM element.
+    var categoryElement = goog.dom.createDom('category');
+    categoryElement.setAttribute('name',blockType);
 
-        // Get block.
-        var block = this.getDefinedBlock_(blockType);
+    // Get block.
+    var block = this.getDefinedBlock_(blockType);
 
-        // Get preview block XML.
-        var blockChild = Blockly.Xml.blockToDom(block);
-        blockChild.removeAttribute('id');
+    // Get preview block XML.
+    var blockChild = Blockly.Xml.blockToDom(block);
+    blockChild.removeAttribute('id');
 
-        // Add block to category and category to XML.
-        categoryElement.appendChild(blockChild);
-        xmlDom.appendChild(categoryElement);
-      }
+    // Add block to category and category to XML.
+    categoryElement.appendChild(blockChild);
+    xmlDom.appendChild(categoryElement);
+  }
 
-      // If there are no blocks in library, append dummy category.
-      var categoryElement = goog.dom.createDom('category');
-      categoryElement.setAttribute('name','Next Saved Block');
-      xmlDom.appendChild(categoryElement);
-      return xmlDom;
-    };
+  // If there are no blocks in library, append dummy category.
+  var categoryElement = goog.dom.createDom('category');
+  categoryElement.setAttribute('name','Next Saved Block');
+  xmlDom.appendChild(categoryElement);
+  return xmlDom;
+};

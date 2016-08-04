@@ -545,8 +545,10 @@ FactoryController.prototype.importFromTree_ = function(tree) {
     // Load all the blocks into a single category evenly spaced.
     Blockly.Xml.domToWorkspace(tree, this.toolboxWorkspace);
     this.toolboxWorkspace.cleanUp_();
+
     // Convert actual shadow blocks to user-generated shadow blocks.
     this.convertShadowBlocks_();
+
     // Add message to denote empty category.
     this.view.addEmptyCategoryMessage();
   } else {
@@ -568,8 +570,10 @@ FactoryController.prototype.importFromTree_ = function(tree) {
         // TODO(evd2014): Change to cleanUp once cleanUp_ is made public in
         // master.
         this.toolboxWorkspace.cleanUp_();
+
         // Convert actual shadow blocks to user-generated shadow blocks.
         this.convertShadowBlocks_();
+
         // Set category color.
         if (item.color) {
           category.changeColor(item.color);
@@ -634,7 +638,7 @@ FactoryController.prototype.removeShadow = function() {
 
 /**
  * Call when importing XML containing real shadow blocks. This function turns
- * all real shadow blocks loaded in the workspaceinto user-generated shadow
+ * all real shadow blocks loaded in the workspace into user-generated shadow
  * blocks, meaning they are marked as shadow blocks by the model and appear as
  * shadow blocks in the view but are still editable and movable.
  * @private

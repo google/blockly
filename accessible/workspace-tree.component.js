@@ -34,23 +34,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
 
       <ol role="group">
-        <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', 'blockly-submenu-indicator')"
-            [attr.aria-level]="level + 1">
-          <label [id]="idMap['label']">{{'BLOCK_ACTION_LIST'|translate}}</label>
-          <ol role="group">
-            <li *ngFor="#buttonInfo of actionButtonsInfo"
-                [id]="idMap[buttonInfo.baseIdKey]" role="treeitem"
-                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[buttonInfo.baseIdKey + 'Button'], 'blockly-button', buttonInfo.isDisabled())"
-                [attr.aria-level]="level + 2">
-              <button [id]="idMap[buttonInfo.baseIdKey + 'Button']" (click)="buttonInfo.action()"
-                      [disabled]="buttonInfo.isDisabled()">
-                {{buttonInfo.translationIdForText|translate}}
-              </button>
-            </li>
-          </ol>
-        </li>
-
         <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
           <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="inputBlock.fieldRow.length"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
@@ -64,7 +47,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           </blockly-workspace-tree>
           <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
-              [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-menu', idMap['inputMenuLabel' + i])"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
               [attr.aria-level]="level + 1"
               (keydown)="treeService.onKeypress($event, tree)">
             <label [id]="idMap['inputMenuLabel' + i]">
@@ -84,6 +67,23 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             </ol>
           </li>
         </template>
+
+        <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-other-actions', 'blockly-submenu-indicator')"
+            [attr.aria-level]="level + 1">
+          <label [id]="idMap['label']">{{'OTHER_ACTIONS'|translate}}</label>
+          <ol role="group">
+            <li *ngFor="#buttonInfo of actionButtonsInfo"
+                [id]="idMap[buttonInfo.baseIdKey]" role="treeitem"
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[buttonInfo.baseIdKey + 'Button'], 'blockly-button', buttonInfo.isDisabled())"
+                [attr.aria-level]="level + 2">
+              <button [id]="idMap[buttonInfo.baseIdKey + 'Button']" (click)="buttonInfo.action()"
+                      [disabled]="buttonInfo.isDisabled()">
+                {{buttonInfo.translationIdForText|translate}}
+              </button>
+            </li>
+          </ol>
+        </li>
       </ol>
     </li>
 

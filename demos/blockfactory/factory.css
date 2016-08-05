@@ -78,7 +78,7 @@ button:disabled, .buttonStyle:disabled {
 }
 
 button>*, .buttonStyle>* {
-  opacity: 0.6;
+  opacity: 1;
   vertical-align: text-bottom;
 }
 

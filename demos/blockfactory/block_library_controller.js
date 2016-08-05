@@ -24,8 +24,6 @@ goog.require('BlockFactory');
  *
  * @param {string} blockLibraryName - Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {blockLibrary} blockLibraryName - Desired name of Block Library, also
- *    used to create the key for where it's stored in local storage.
  */
 BlockLibraryController = function(blockLibraryName) {
   this.name = blockLibraryName;
@@ -35,10 +33,11 @@ BlockLibraryController = function(blockLibraryName) {
 
 /**
  * Returns the block type of the block the user is building.
+ * @private
  *
  * @return {string} The current block's type.
  */
-BlockLibraryController.prototype.getCurrentBlockType = function() {
+BlockLibraryController.prototype.getCurrentBlockType_ = function() {
   var rootBlock = BlockFactory.getRootBlock(BlockFactory.mainWorkspace);
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   // Replace white space with underscores
@@ -51,7 +50,7 @@ BlockLibraryController.prototype.getCurrentBlockType = function() {
  * @param {string} blockType - Type of block.
  */
 BlockLibraryController.prototype.removeFromBlockLibrary = function() {
-  var blockType = this.getCurrentBlockType();
+  var blockType = this.getCurrentBlockType_();
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
   this.populateBlockLibrary();
@@ -66,7 +65,7 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
    var xml = this.storage.getBlockXml(blockType);
    BlockFactory.mainWorkspace.clear();
    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
- };
+};
 
 /**
  * Returns type of block selected from library.
@@ -76,8 +75,8 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
  */
 BlockLibraryController.prototype.getSelectedBlockType =
     function(blockLibraryDropdown) {
-      return BlockLibraryView.getSelected(blockLibraryDropdown);
-    };
+  return BlockLibraryView.getSelected(blockLibraryDropdown);
+};
 
 /**
  * Confirms with user before clearing the block library in local storage and
@@ -102,7 +101,7 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
  * Saves current block to local storage and updates dropdown.
  */
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
-  var blockType = this.getCurrentBlockType();
+  var blockType = this.getCurrentBlockType_();
   // If block under that name already exists, confirm that user wants to replace
   // saved block.
   if (this.isInBlockLibrary(blockType)) {

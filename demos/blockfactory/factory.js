@@ -887,7 +887,7 @@ BlockFactory.disableEnableLink = function() {
 // Block Factory Expansion View Utils
 
 /**
- * Render starter block (math_foo).
+ * Render starter block (factory_base).
  */
  BlockFactory.showStarterBlock = function() {
     var xml = '<xml><block type="factory_base" deletable="false" ' +

@@ -311,7 +311,7 @@ FactoryController.prototype.reinjectPreview = function(tree) {
        length: 3,
        colour: '#ccc',
        snap: true},
-     media: '../../media/',
+     media: '../../../media/',
      toolbox: previewToolbox,
      zoom:
        {controls: true,

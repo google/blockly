@@ -126,7 +126,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
       });
   document.getElementById('selectAllButton').addEventListener('click',
       function() {
-        self.exporter.selectAllBlocks();
+        self.exporter.addAllBlocksToWorkspace();
       });
 };
 

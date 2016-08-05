@@ -35,7 +35,7 @@ p {
   -webkit-margin-after: 0em;
   -webkit-margin-start: 0px;
   -webkit-margin-end: 0px;
-  padding: 16px 0px;
+  padding: 5px 0px;
 }
 
 
@@ -88,7 +88,7 @@ button, .buttonStyle {
   background-color: #eee;
   color: #000;
   padding: 10px;
-  margin: 0 5px;
+  margin: 10px 5px;
   font-size: small;
 }
 
@@ -149,7 +149,7 @@ button, .buttonStyle {
 
 #exportSelector {
   float: left;
-  height: 80%;
+  height: 75%;
   width: 60%;
 }
 
@@ -176,8 +176,4 @@ button, .buttonStyle {
 
 .tab.taboff {
   cursor: pointer;
-}
-
-#helperText {
-  clear: both;
 }

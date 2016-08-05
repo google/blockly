@@ -209,9 +209,9 @@ BlockExporterController.prototype.clearSelectedBlocks = function() {
 
 /**
  * Tied to the 'Select All Blocks' button in the Block Exporter.
- * Selects all blocks on the selector workspace.
+ * Adds all blocks stored in block library to the selector workspace.
  */
-BlockExporterController.prototype.selectAllBlocks = function() {
+BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
   // Clear selector workspace.
   this.view.clearSelectorWorkspace();
 

@@ -42,7 +42,13 @@
   </div>
 
   <div id="blockLibraryExporter">
-    <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+    <div id="exporterButtons">
+      <button id="clearSelectedButton"> Clear Blocks </button>
+      <button id="selectAllButton"> Add All Stored Blocks </button>
+    </div>
+    <div id="helperTextDiv">
+      <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+    </div>
     <!-- Inject exportSelectorWorkspace into this div -->
     <div id="exportSelector"></div>
     <!-- Users may customize export settings through this form -->
@@ -74,10 +80,6 @@
           <br>
       </form>
         <button id="exporterSubmitButton"> Export </button>
-        <br>
-        <br>
-        <button id="clearSelectedButton"> Clear Selected Blocks </button>
-        <button id="selectAllButton">Select All Blocks </button>
     </div>
   </div>
 

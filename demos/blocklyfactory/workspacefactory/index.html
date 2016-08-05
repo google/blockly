@@ -54,7 +54,7 @@ goog.require('goog.ui.ColorPicker');
 
     <div class='dropdown'>
     <button id="button_add">+</button>
-    <div id="dropdown_add" class="dropdown-content">
+    <div id="dropdownDiv_add" class="dropdown-content">
       <a id='dropdown_newCategory'>New Category</a>
       <a id='dropdown_loadCategory'>Standard Category</a>
       <a id='dropdown_separator'>Separator</a>
@@ -69,7 +69,7 @@ goog.require('goog.ui.ColorPicker');
     <p>&nbsp;</p>
     <div class='dropdown'>
     <button id="button_editCategory">Edit Category</button>
-    <div id="dropdown_editCategory" class="dropdown-content">
+    <div id="dropdownDiv_editCategory" class="dropdown-content">
       <a id='dropdown_name'>Name</a>
       <a id='dropdown_color'>Color</a>
     </div>
@@ -77,10 +77,10 @@ goog.require('goog.ui.ColorPicker');
 
     <div class='dropdown'>
     <button id="button_editShadow">Edit Block</button>
-    <div id="dropdown_editShadowAdd" class="dropdown-content">
+    <div id="dropdownDiv_editShadowAdd" class="dropdown-content">
       <a id='dropdown_addShadow'>Add Shadow</a>
     </div>
-    <div id="dropdown_editShadowRemove" class="dropdown-content">
+    <div id="dropdownDiv_editShadowRemove" class="dropdown-content">
       <a id='dropdown_removeShadow'>Remove Shadow</a>
     </div>
     </div>
@@ -489,19 +489,19 @@ goog.require('goog.ui.ColorPicker');
 
   // Wrappers to attach buttons to method calls for the controller object
   var addWrapper = function() {
-    document.getElementById('dropdown_add').classList.toggle("show");
+    document.getElementById('dropdownDiv_add').classList.toggle("show");
   };
   var newCategoryWrapper = function() {
     controller.addCategory();
-    document.getElementById('dropdown_add').classList.remove("show");
+    document.getElementById('dropdownDiv_add').classList.remove("show");
   };
   var loadCategoryWrapper = function() {
     controller.loadCategory();
-    document.getElementById('dropdown_add').classList.remove("show");
+    document.getElementById('dropdownDiv_add').classList.remove("show");
   };
   var separatorWrapper = function() {
     controller.addSeparator();
-    document.getElementById('dropdown_add').classList.remove("show");
+    document.getElementById('dropdownDiv_add').classList.remove("show");
   };
   var removeWrapper = function() {
     controller.removeElement();
@@ -519,19 +519,19 @@ goog.require('goog.ui.ColorPicker');
     controller.moveElement(1);
   };
   var editCategoryWrapper = function() {
-    document.getElementById('dropdown_editCategory').classList.toggle("show");
+    document.getElementById('dropdownDiv_editCategory').classList.toggle("show");
   };
   var nameWrapper = function() {
     controller.changeCategoryName();
-    document.getElementById('dropdown_editCategory').classList.remove("show");
+    document.getElementById('dropdownDiv_editCategory').classList.remove("show");
   };
   var shadowAddWrapper = function() {
     controller.addShadow();
-    document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+    document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
   };
-    var shadowRemoveWrapper = function() {
+  var shadowRemoveWrapper = function() {
     controller.removeShadow();
-    document.getElementById('dropdown_editShadowRemove').classList.remove("show");
+    document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
     // If turning invalid shadow block back to normal block, remove warning and disable
     // block editing privileges.
     Blockly.selected.setWarningText(null);
@@ -548,12 +548,12 @@ goog.require('goog.ui.ColorPicker');
         // has a surrounding parent), let the user make it a shadow block.
         // Use toggle instead of add so that the user can click the button again
         // to make the dropdown disappear without clicking one of the options.
-        document.getElementById('dropdown_editShadowRemove').classList.remove("show");
-        document.getElementById('dropdown_editShadowAdd').classList.toggle("show");
+        document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
+        document.getElementById('dropdownDiv_editShadowAdd').classList.toggle("show");
       } else {
         // If the block is a shadow block, let the user make it a normal block.
-        document.getElementById('dropdown_editShadowAdd').classList.remove("show");
-        document.getElementById('dropdown_editShadowRemove').classList.toggle("show");
+        document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
+        document.getElementById('dropdownDiv_editShadowRemove').classList.toggle("show");
       }
     }
   };
@@ -562,7 +562,7 @@ goog.require('goog.ui.ColorPicker');
   };
   var clearWrapper = function() {
     controller.clear();
-  }
+  };
 
   document.getElementById('button_add').addEventListener
       ('click', addWrapper);
@@ -592,10 +592,21 @@ goog.require('goog.ui.ColorPicker');
       ('change', importWrapper);
   document.getElementById('button_clear').addEventListener
       ('click', clearWrapper);
-  document.getElementById('dropdown_editShadowAdd').addEventListener
+  document.getElementById('dropdown_addShadow').addEventListener
       ('click', shadowAddWrapper);
-    document.getElementById('dropdown_editShadowRemove').addEventListener
+  document.getElementById('dropdown_removeShadow').addEventListener
       ('click', shadowRemoveWrapper);
+
+  // Use up and down arrow keys to move categories.
+  // TODO(evd2014): When merge with next CL for editing preloaded blocks, make sure
+  // mode is toolbox.
+  window.addEventListener('keydown', function(e) {
+    if (e.keyCode == 38) {    // Arrow up.
+      upWrapper();
+    } else if (e.keyCode == 40) {   // Arrow down.
+      downWrapper();
+    }
+  });
 
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
@@ -607,7 +618,7 @@ goog.require('goog.ui.ColorPicker');
   popupPicker.setFocusable(true);
   goog.events.listen(popupPicker, 'change', function(e) {
         controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
-        document.getElementById('dropdown_editCategory').classList.remove
+        document.getElementById('dropdownDiv_editCategory').classList.remove
             ("show");
       });
 
@@ -655,8 +666,8 @@ goog.require('goog.ui.ColorPicker');
           // No block selected that is a shadow block or could be a valid shadow block.
           // Disable block editing.
           document.getElementById('button_editShadow').disabled = true;
-          document.getElementById('dropdown_editShadowRemove').classList.remove("show");
-          document.getElementById('dropdown_editShadowAdd').classList.remove("show");
+          document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
+          document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
         }
       }
     }

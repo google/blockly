@@ -1,0 +1,183 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  margin: 0 5px;
+  overflow: hidden
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+
+h3 {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+table {
+  height: 100%;
+  width: 100%;
+}
+
+td {
+  vertical-align: top;
+  padding: 0;
+}
+
+p {
+  display: block;
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  padding: 16px 0px;
+}
+
+
+#blockly {
+  position: fixed;
+}
+
+#blocklyMask {
+  background-color: #000;
+  cursor: not-allowed;
+  display: none;
+  position: fixed;
+  opacity: 0.2;
+  z-index: 9;
+}
+
+#preview {
+  position: absolute;
+}
+
+pre,
+#languageTA {
+  border: #ddd 1px solid;
+  margin-top: 0;
+  position: absolute;
+  overflow: scroll;
+}
+
+#languageTA {
+  display: none;
+  font: 10pt monospace;
+}
+
+.downloadButton {
+  padding: 5px;
+}
+
+button:disabled, .buttonStyle:disabled {
+  opacity: 0.6;
+}
+
+button>*, .buttonStyle>* {
+  opacity: 1;
+  vertical-align: text-bottom;
+}
+
+button, .buttonStyle {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #eee;
+  color: #000;
+  padding: 10px;
+  margin: 0 5px;
+  font-size: small;
+}
+
+.buttonStyle:hover:not(:disabled), button:hover:not(:disabled) {
+  box-shadow: 2px 2px 5px #888;
+}
+
+.buttonStyle:hover:not(:disabled)>*, button:hover:not(:disabled)>* {
+  opacity: 1;
+}
+
+#linkButton {
+  display: none;
+}
+
+#blockFactoryContent {
+  height: 87%;
+}
+
+#blockLibraryContainer {
+  vertical-align: bottom;
+}
+
+#blockLibraryControls {
+  text-align: right;
+  vertical-align: middle;
+}
+
+#previewContainer {
+  vertical-align: bottom;
+}
+
+#buttonContainer {
+  text-align: right;
+  vertical-align: middle;
+}
+
+#files {
+  position: absolute;
+  visibility: hidden;
+}
+
+#toolbox {
+  display: none;
+}
+
+#blocklyWorkspaceContainer {
+  height: 95%;
+  padding: 2px;
+  width: 50%;
+}
+
+#blockLibraryExporter {
+  clear: both;
+  display: none;
+  height: 100%;
+}
+
+#exportSelector {
+  float: left;
+  height: 80%;
+  width: 60%;
+}
+
+#exportSettings {
+  margin: auto;
+  padding: 16px;
+  overflow: hidden;
+}
+
+#exporterHiddenWorkspace {
+ display: none;
+}
+
+/* Tabs */
+
+.tab {
+  float: left;
+  padding: 5px 19px;
+}
+
+.tab.tabon {
+  background-color: #ddd;
+}
+
+.tab.taboff {
+  cursor: pointer;
+}
+
+#helperText {
+  clear: both;
+}

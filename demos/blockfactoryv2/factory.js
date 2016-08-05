@@ -24,26 +24,84 @@
 'use strict';
 
 /**
+ * Namespace for Block Factory.
+ */
+goog.provide('BlockFactory');
+
+goog.require('goog.dom.classes');
+
+/**
  * Workspace for user to build block.
  * @type {Blockly.Workspace}
  */
-var mainWorkspace = null;
+BlockFactory.mainWorkspace = null;
 
 /**
  * Workspace for preview of block.
  * @type {Blockly.Workspace}
  */
-var previewWorkspace = null;
+BlockFactory.previewWorkspace = null;
 
 /**
  * Name of block if not named.
  */
-var UNNAMED = 'unnamed';
+BlockFactory.UNNAMED = 'unnamed';
+
+/**
+ * Existing direction ('ltr' vs 'rtl') of preview.
+ */
+BlockFactory.oldDir = null;
+
+// UI
+
+/**
+ * Inject code into a pre tag, with syntax highlighting.
+ * Safe from HTML/script injection.
+ * @param {string} code Lines of code.
+ * @param {string} id ID of <pre> element to inject into.
+ */
+BlockFactory.injectCode = function(code, id) {
+  var pre = document.getElementById(id);
+  pre.textContent = code;
+  code = pre.innerHTML;
+  code = prettyPrintOne(code, 'js');
+  pre.innerHTML = code;
+};
+
+// Utils
+
+/**
+ * Escape a string.
+ * @param {string} string String to escape.
+ * @return {string} Escaped string surrouned by quotes.
+ */
+BlockFactory.escapeString = function(string) {
+  return JSON.stringify(string);
+};
+
+/**
+ * Return the uneditable container block that everything else attaches to in
+ * given workspace
+ *
+ * @param {!Blockly.Workspace} workspace - where the root block lives
+ * @return {Blockly.Block} root block
+ */
+BlockFactory.getRootBlock = function(workspace) {
+  var blocks = workspace.getTopBlocks(false);
+  for (var i = 0, block; block = blocks[i]; i++) {
+    if (block.type == 'factory_base') {
+      return block;
+    }
+  }
+  return null;
+};
+
+// Language Code: Block Definitions
 
 /**
  * Change the language code format.
  */
-function formatChange() {
+BlockFactory.formatChange = function() {
   var mask = document.getElementById('blocklyMask');
   var languagePre = document.getElementById('languagePre');
   var languageTA = document.getElementById('languageTA');
@@ -55,40 +113,57 @@ function formatChange() {
     var code = languagePre.textContent.trim();
     languageTA.value = code;
     languageTA.focus();
-    updatePreview();
+    BlockFactory.updatePreview();
   } else {
     mask.style.display = 'none';
     languageTA.style.display = 'none';
     languagePre.style.display = 'block';
-    updateLanguage();
+    BlockFactory.updateLanguage();
   }
-  disableEnableLink();
-}
+  BlockFactory.disableEnableLink();
+};
+
+/**
+ * Get block definition code for the current block.
+ *
+ * @param {string} blockType - Type of block.
+ * @param {!Blockly.Block} rootBlock - RootBlock from main workspace in which
+ *    user uses Block Factory Blocks to create a custom block.
+ * @param {string} format - 'JSON' or 'JavaScript'.
+ * @param {!Blockly.Workspace} workspace - Where the root block lives.
+ * @return {string} Block definition.
+ */
+BlockFactory.getBlockDefinition = function(blockType, rootBlock, format, workspace) {
+  blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
+  switch (format) {
+    case 'JSON':
+      var code = BlockFactory.formatJson_(blockType, rootBlock);
+      break;
+    case 'JavaScript':
+      var code = BlockFactory.formatJavaScript_(blockType, rootBlock, workspace);
+      break;
+  }
+  return code;
+};
 
 /**
  * Update the language code based on constructs made in Blockly.
  */
-function updateLanguage() {
-  var rootBlock = getRootBlock();
+BlockFactory.updateLanguage = function() {
+  var rootBlock = BlockFactory.getRootBlock(BlockFactory.mainWorkspace);
   if (!rootBlock) {
     return;
   }
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   if (!blockType) {
-    blockType = UNNAMED;
+    blockType = BlockFactory.UNNAMED;
   }
-  blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
-  switch (document.getElementById('format').value) {
-    case 'JSON':
-      var code = formatJson_(blockType, rootBlock);
-      break;
-    case 'JavaScript':
-      var code = formatJavaScript_(blockType, rootBlock);
-      break;
-  }
-  injectCode(code, 'languagePre');
-  updatePreview();
-}
+  var format = document.getElementById('format').value;
+  var code = BlockFactory.getBlockDefinition(blockType, rootBlock, format,
+      BlockFactory.mainWorkspace);
+  BlockFactory.injectCode(code, 'languagePre');
+  BlockFactory.updatePreview();
+};
 
 /**
  * Update the language code as JSON.
@@ -97,7 +172,7 @@ function updateLanguage() {
  * @return {string} Generanted language code.
  * @private
  */
-function formatJson_(blockType, rootBlock) {
+BlockFactory.formatJson_ = function(blockType, rootBlock) {
   var JS = {};
   // Type is not used by Blockly, but may be used by a loader.
   JS.type = blockType;
@@ -108,7 +183,8 @@ function formatJson_(blockType, rootBlock) {
   var lastInput = null;
   while (contentsBlock) {
     if (!contentsBlock.disabled && !contentsBlock.getInheritedDisabled()) {
-      var fields = getFieldsJson_(contentsBlock.getInputTargetBlock('FIELDS'));
+      var fields = BlockFactory.getFieldsJson_(
+          contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
         if (typeof fields[i] == 'string') {
           message.push(fields[i].replace(/%/g, '%%'));
@@ -123,7 +199,8 @@ function formatJson_(blockType, rootBlock) {
       if (contentsBlock.type != 'input_dummy') {
         input.name = contentsBlock.getFieldValue('INPUTNAME');
       }
-      var check = JSON.parse(getOptTypesFrom(contentsBlock, 'TYPE') || 'null');
+      var check = JSON.parse(
+          BlockFactory.getOptTypesFrom(contentsBlock, 'TYPE') || 'null');
       if (check) {
         input.check = check;
       }
@@ -141,7 +218,7 @@ function formatJson_(blockType, rootBlock) {
   // Remove last input if dummy and not empty.
   if (lastInput && lastInput.type == 'input_dummy') {
     var fields = lastInput.getInputTargetBlock('FIELDS');
-    if (fields && getFieldsJson_(fields).join('').trim() != '') {
+    if (fields && BlockFactory.getFieldsJson_(fields).join('').trim() != '') {
       var align = lastInput.getFieldValue('ALIGN');
       if (align != 'LEFT') {
         JS.lastDummyAlign0 = align;
@@ -164,21 +241,26 @@ function formatJson_(blockType, rootBlock) {
   switch (rootBlock.getFieldValue('CONNECTIONS')) {
     case 'LEFT':
       JS.output =
-          JSON.parse(getOptTypesFrom(rootBlock, 'OUTPUTTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'OUTPUTTYPE') || 'null');
       break;
     case 'BOTH':
       JS.previousStatement =
-          JSON.parse(getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
       JS.nextStatement =
-          JSON.parse(getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
       break;
     case 'TOP':
       JS.previousStatement =
-          JSON.parse(getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'TOPTYPE') || 'null');
       break;
     case 'BOTTOM':
       JS.nextStatement =
-          JSON.parse(getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
+          JSON.parse(
+              BlockFactory.getOptTypesFrom(rootBlock, 'BOTTOMTYPE') || 'null');
       break;
   }
   // Generate colour.
@@ -190,16 +272,18 @@ function formatJson_(blockType, rootBlock) {
   JS.tooltip = '';
   JS.helpUrl = 'http://www.example.com/';
   return JSON.stringify(JS, null, '  ');
-}
+};
 
 /**
  * Update the language code as JavaScript.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @return {string} Generanted language code.
+ * @param {!Blockly.Workspace} workspace - Where the root block lives.
+
+ * @return {string} Generated language code.
  * @private
  */
-function formatJavaScript_(blockType, rootBlock) {
+BlockFactory.formatJavaScript_ = function(blockType, rootBlock, workspace) {
   var code = [];
   code.push("Blockly.Blocks['" + blockType + "'] = {");
   code.push("  init: function() {");
@@ -213,10 +297,11 @@ function formatJavaScript_(blockType, rootBlock) {
       var name = '';
       // Dummy inputs don't have names.  Other inputs do.
       if (contentsBlock.type != 'input_dummy') {
-        name = escapeString(contentsBlock.getFieldValue('INPUTNAME'));
+        name =
+            BlockFactory.escapeString(contentsBlock.getFieldValue('INPUTNAME'));
       }
       code.push('    this.' + TYPES[contentsBlock.type] + '(' + name + ')');
-      var check = getOptTypesFrom(contentsBlock, 'TYPE');
+      var check = BlockFactory.getOptTypesFrom(contentsBlock, 'TYPE');
       if (check) {
         code.push('        .setCheck(' + check + ')');
       }
@@ -224,7 +309,8 @@ function formatJavaScript_(blockType, rootBlock) {
       if (align != 'LEFT') {
         code.push('        .setAlign(Blockly.ALIGN_' + align + ')');
       }
-      var fields = getFieldsJs_(contentsBlock.getInputTargetBlock('FIELDS'));
+      var fields = BlockFactory.getFieldsJs_(
+          contentsBlock.getInputTargetBlock('FIELDS'));
       for (var i = 0; i < fields.length; i++) {
         code.push('        .appendField(' + fields[i] + ')');
       }
@@ -243,17 +329,21 @@ function formatJavaScript_(blockType, rootBlock) {
   // Generate output, or next/previous connections.
   switch (rootBlock.getFieldValue('CONNECTIONS')) {
     case 'LEFT':
-      code.push(connectionLineJs_('setOutput', 'OUTPUTTYPE'));
+      code.push(BlockFactory.connectionLineJs_('setOutput', 'OUTPUTTYPE', workspace));
       break;
     case 'BOTH':
-      code.push(connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
-      code.push(connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+      code.push(
+          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE', workspace));
+      code.push(
+          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE', workspace));
       break;
     case 'TOP':
-      code.push(connectionLineJs_('setPreviousStatement', 'TOPTYPE'));
+      code.push(
+          BlockFactory.connectionLineJs_('setPreviousStatement', 'TOPTYPE', workspace));
       break;
     case 'BOTTOM':
-      code.push(connectionLineJs_('setNextStatement', 'BOTTOMTYPE'));
+      code.push(
+          BlockFactory.connectionLineJs_('setNextStatement', 'BOTTOMTYPE', workspace));
       break;
   }
   // Generate colour.
@@ -269,24 +359,26 @@ function formatJavaScript_(blockType, rootBlock) {
   code.push('  }');
   code.push('};');
   return code.join('\n');
-}
+};
 
 /**
  * Create JS code required to create a top, bottom, or value connection.
  * @param {string} functionName JavaScript function name.
  * @param {string} typeName Name of type input.
+ * @param {!Blockly.Workspace} workspace - Where the root block lives.
  * @return {string} Line of JavaScript code to create connection.
  * @private
  */
-function connectionLineJs_(functionName, typeName) {
-  var type = getOptTypesFrom(getRootBlock(), typeName);
+BlockFactory.connectionLineJs_ = function(functionName, typeName, workspace) {
+  var type = BlockFactory.getOptTypesFrom(
+      BlockFactory.getRootBlock(workspace), typeName);
   if (type) {
     type = ', ' + type;
   } else {
     type = '';
   }
   return '    this.' + functionName + '(true' + type + ');';
-}
+};
 
 /**
  * Returns field strings and any config.
@@ -294,20 +386,20 @@ function connectionLineJs_(functionName, typeName) {
  * @return {!Array.<string>} Field strings.
  * @private
  */
-function getFieldsJs_(block) {
+BlockFactory.getFieldsJs_ = function(block) {
   var fields = [];
   while (block) {
     if (!block.disabled && !block.getInheritedDisabled()) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
-          fields.push(escapeString(block.getFieldValue('TEXT')));
+          fields.push(BlockFactory.escapeString(block.getFieldValue('TEXT')));
           break;
         case 'field_input':
           // Result: new Blockly.FieldTextInput('Hello'), 'GREET'
           fields.push('new Blockly.FieldTextInput(' +
-              escapeString(block.getFieldValue('TEXT')) + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
+              BlockFactory.escapeString(block.getFieldValue('TEXT')) + '), ' +
+              BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_number':
           // Result: new Blockly.FieldNumber(10, 0, 100, 1), 'NUMBER'
@@ -333,53 +425,58 @@ function getFieldsJs_(block) {
         case 'field_angle':
           // Result: new Blockly.FieldAngle(90), 'ANGLE'
           fields.push('new Blockly.FieldAngle(' +
-              Number(block.getFieldValue('ANGLE')) + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
+              parseFloat(block.getFieldValue('ANGLE')) + '), ' +
+              BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_checkbox':
           // Result: new Blockly.FieldCheckbox('TRUE'), 'CHECK'
           fields.push('new Blockly.FieldCheckbox(' +
-              escapeString(block.getFieldValue('CHECKED')) + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
+              BlockFactory.escapeString(block.getFieldValue('CHECKED')) +
+               '), ' +
+              BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_colour':
           // Result: new Blockly.FieldColour('#ff0000'), 'COLOUR'
           fields.push('new Blockly.FieldColour(' +
-              escapeString(block.getFieldValue('COLOUR')) + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
+              BlockFactory.escapeString(block.getFieldValue('COLOUR')) +
+              '), ' +
+              BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_date':
           // Result: new Blockly.FieldDate('2015-02-04'), 'DATE'
           fields.push('new Blockly.FieldDate(' +
-              escapeString(block.getFieldValue('DATE')) + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
+              BlockFactory.escapeString(block.getFieldValue('DATE')) + '), ' +
+              BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_variable':
           // Result: new Blockly.FieldVariable('item'), 'VAR'
-          var varname = escapeString(block.getFieldValue('TEXT') || null);
+          var varname
+              = BlockFactory.escapeString(block.getFieldValue('TEXT') || null);
           fields.push('new Blockly.FieldVariable(' + varname + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
+              BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_dropdown':
           // Result:
           // new Blockly.FieldDropdown([['yes', '1'], ['no', '0']]), 'TOGGLE'
           var options = [];
           for (var i = 0; i < block.optionCount_; i++) {
-            options[i] = '[' + escapeString(block.getFieldValue('USER' + i)) +
-                ', ' + escapeString(block.getFieldValue('CPU' + i)) + ']';
+            options[i] = '[' +
+                BlockFactory.escapeString(block.getFieldValue('USER' + i)) +
+                ', ' +
+                BlockFactory.escapeString(block.getFieldValue('CPU' + i)) + ']';
           }
           if (options.length) {
             fields.push('new Blockly.FieldDropdown([' +
                 options.join(', ') + ']), ' +
-                escapeString(block.getFieldValue('FIELDNAME')));
+                BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           }
           break;
         case 'field_image':
-          // Result: new Blockly.FieldImage('http://...', 80, 60, '*')
-          var src = escapeString(block.getFieldValue('SRC'));
+          // Result: new Blockly.FieldImage('http://...', 80, 60)
+          var src = BlockFactory.escapeString(block.getFieldValue('SRC'));
           var width = Number(block.getFieldValue('WIDTH'));
           var height = Number(block.getFieldValue('HEIGHT'));
-          var alt = escapeString(block.getFieldValue('ALT'));
+          var alt = BlockFactory.escapeString(block.getFieldValue('ALT'));
           fields.push('new Blockly.FieldImage(' +
               src + ', ' + width + ', ' + height + ', ' + alt + ')');
           break;
@@ -388,7 +485,7 @@ function getFieldsJs_(block) {
     block = block.nextConnection && block.nextConnection.targetBlock();
   }
   return fields;
-}
+};
 
 /**
  * Returns field strings and any config.
@@ -396,7 +493,7 @@ function getFieldsJs_(block) {
  * @return {!Array.<string|!Object>} Array of static text and field configs.
  * @private
  */
-function getFieldsJson_(block) {
+BlockFactory.getFieldsJson_ = function(block) {
   var fields = [];
   while (block) {
     if (!block.disabled && !block.getInheritedDisabled()) {
@@ -495,16 +592,7 @@ function getFieldsJson_(block) {
     block = block.nextConnection && block.nextConnection.targetBlock();
   }
   return fields;
-}
-
-/**
- * Escape a string.
- * @param {string} string String to escape.
- * @return {string} Escaped string surrouned by quotes.
- */
-function escapeString(string) {
-  return JSON.stringify(string);
-}
+};
 
 /**
  * Fetch the type(s) defined in the given input.
@@ -513,8 +601,8 @@ function escapeString(string) {
  * @param {string} name Name of the input.
  * @return {?string} String defining the types.
  */
-function getOptTypesFrom(block, name) {
-  var types = getTypesFrom_(block, name);
+BlockFactory.getOptTypesFrom = function(block, name) {
+  var types = BlockFactory.getTypesFrom_(block, name);
   if (types.length == 0) {
     return undefined;
   } else if (types.indexOf('null') != -1) {
@@ -524,7 +612,7 @@ function getOptTypesFrom(block, name) {
   } else {
     return '[' + types.join(', ') + ']';
   }
-}
+};
 
 /**
  * Fetch the type(s) defined in the given input.
@@ -533,17 +621,17 @@ function getOptTypesFrom(block, name) {
  * @return {!Array.<string>} List of types.
  * @private
  */
-function getTypesFrom_(block, name) {
+BlockFactory.getTypesFrom_ = function(block, name) {
   var typeBlock = block.getInputTargetBlock(name);
   var types;
   if (!typeBlock || typeBlock.disabled) {
     types = [];
   } else if (typeBlock.type == 'type_other') {
-    types = [escapeString(typeBlock.getFieldValue('TYPE'))];
+    types = [BlockFactory.escapeString(typeBlock.getFieldValue('TYPE'))];
   } else if (typeBlock.type == 'type_group') {
     types = [];
-    for (var i = 0; i < typeBlock.typeCount_; i++) {
-      types = types.concat(getTypesFrom_(typeBlock, 'TYPE' + i));
+    for (var n = 0; n < typeBlock.typeCount_; n++) {
+      types = types.concat(BlockFactory.getTypesFrom_(typeBlock, 'TYPE' + n));
     }
     // Remove duplicates.
     var hash = Object.create(null);
@@ -554,21 +642,28 @@ function getTypesFrom_(block, name) {
       hash[types[n]] = true;
     }
   } else {
-    types = [escapeString(typeBlock.valueType)];
+    types = [BlockFactory.escapeString(typeBlock.valueType)];
   }
   return types;
-}
+};
+
+// Generator Code
 
 /**
- * Update the generator code.
- * @param {!Blockly.Block} block Rendered block in preview workspace.
+ * Get the generator code for a given block.
+ *
+ * @param {!Blockly.Block} block - Rendered block in preview workspace.
+ * @param {string} generatorLanguage - 'JavaScript', 'Python', 'PHP', 'Lua',
+ *     'Dart'.
+ * @return {string} Generator code for multiple blocks.
  */
-function updateGenerator(block) {
+BlockFactory.getGeneratorStub = function(block, generatorLanguage) {
   function makeVar(root, name) {
     name = name.toLowerCase().replace(/\W/g, '_');
     return '  var ' + root + '_' + name;
   }
-  var language = document.getElementById('language').value;
+  // The makevar function lives in the original update generator.
+  var language = generatorLanguage;
   var code = [];
   code.push("Blockly." + language + "['" + block.type +
             "'] = function(block) {");
@@ -642,32 +737,39 @@ function updateGenerator(block) {
   }
   code.push("};");
 
-  injectCode(code.join('\n'), 'generatorPre');
-}
+  return code.join('\n');
+};
 
 /**
- * Existing direction ('ltr' vs 'rtl') of preview.
+ * Update the generator code.
+ * @param {!Blockly.Block} block Rendered block in preview workspace.
  */
-var oldDir = null;
+BlockFactory.updateGenerator = function(block) {
+  var language = document.getElementById('language').value;
+  var generatorStub = BlockFactory.getGeneratorStub(block, language);
+  BlockFactory.injectCode(generatorStub, 'generatorPre');
+};
+
+// Preview Block
 
 /**
  * Update the preview display.
  */
-function updatePreview() {
+BlockFactory.updatePreview = function() {
   // Toggle between LTR/RTL if needed (also used in first display).
   var newDir = document.getElementById('direction').value;
-  if (oldDir != newDir) {
-    if (previewWorkspace) {
-      previewWorkspace.dispose();
+  if (BlockFactory.oldDir != newDir) {
+    if (BlockFactory.previewWorkspace) {
+      BlockFactory.previewWorkspace.dispose();
     }
     var rtl = newDir == 'rtl';
-    previewWorkspace = Blockly.inject('preview',
+    BlockFactory.previewWorkspace = Blockly.inject('preview',
         {rtl: rtl,
          media: '../../media/',
          scrollbars: true});
-    oldDir = newDir;
+    BlockFactory.oldDir = newDir;
   }
-  previewWorkspace.clear();
+  BlockFactory.previewWorkspace.clear();
 
   // Fetch the code and determine its format (JSON or JavaScript).
   var format = document.getElementById('format').value;
@@ -700,7 +802,7 @@ function updatePreview() {
 
     if (format == 'JSON') {
       var json = JSON.parse(code);
-      Blockly.Blocks[json.type || UNNAMED] = {
+      Blockly.Blocks[json.id || BlockFactory.UNNAMED] = {
         init: function() {
           this.jsonInit(json);
         }
@@ -725,126 +827,152 @@ function updatePreview() {
     }
 
     // Create the preview block.
-    var previewBlock = previewWorkspace.newBlock(blockType);
+    var previewBlock = BlockFactory.previewWorkspace.newBlock(blockType);
     previewBlock.initSvg();
     previewBlock.render();
     previewBlock.setMovable(false);
     previewBlock.setDeletable(false);
     previewBlock.moveBy(15, 10);
-    previewWorkspace.clearUndo();
-
-    updateGenerator(previewBlock);
+    BlockFactory.previewWorkspace.clearUndo();
+    BlockFactory.updateGenerator(previewBlock);
   } finally {
     Blockly.Blocks = backupBlocks;
   }
-}
+};
+
+// File Import, Creation, Download
 
 /**
- * Inject code into a pre tag, with syntax highlighting.
- * Safe from HTML/script injection.
- * @param {string} code Lines of code.
- * @param {string} id ID of <pre> element to inject into.
- */
-function injectCode(code, id) {
-  var pre = document.getElementById(id);
-  pre.textContent = code;
-  code = pre.innerHTML;
-  code = prettyPrintOne(code, 'js');
-  pre.innerHTML = code;
-}
+ * Generate a file from the contents of a given text area and
+ * download that file.
+ * @param {string} filename The name of the file to create.
+ * @param {string} id The text area to download.
+*/
+BlockFactory.downloadTextArea = function(filename, id) {
+  var code = document.getElementById(id).textContent;
+  BlockFactory.createAndDownloadFile_(code, filename, 'plain');
+};
 
 /**
- * Return the uneditable container block that everything else attaches to.
- * @return {Blockly.Block}
+ * Create a file with the given attributes and download it.
+ * @param {string} contents - The contents of the file.
+ * @param {string} filename - The name of the file to save to.
+ * @param {string} fileType - The type of the file to save.
+ * @private
  */
-function getRootBlock() {
-  var blocks = mainWorkspace.getTopBlocks(false);
-  for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.type == 'factory_base') {
-      return block;
-    }
-  }
-  return null;
-}
+BlockFactory.createAndDownloadFile_ = function(contents, filename, fileType) {
+  var data = new Blob([contents], {type: 'text/' + fileType});
+  var clickEvent = new MouseEvent("click", {
+    "view": window,
+    "bubbles": true,
+    "cancelable": false
+  });
+
+  var a = document.createElement('a');
+  a.href = window.URL.createObjectURL(data);
+  a.download = filename;
+  a.textContent = 'Download file!';
+  a.dispatchEvent(clickEvent);
+};
 
 /**
- * Disable the link button if the format is 'Manual', enable otherwise.
+ * Save the workspace's xml representation to a file.
+ * @private
  */
-function disableEnableLink() {
-  var linkButton = document.getElementById('linkButton');
-  linkButton.disabled = document.getElementById('format').value == 'Manual';
-}
+BlockFactory.saveWorkspaceToFile = function() {
+  var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
+  var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
+  BlockFactory.createAndDownloadFile_(prettyXml, 'blockXml', 'xml');
+};
 
 /**
- * Initialize Blockly and layout.  Called on page load.
+ * Imports xml file for a block to the workspace.
  */
-function init() {
-  if ('BlocklyStorage' in window) {
-    BlocklyStorage.HTTPREQUEST_ERROR =
-        'There was a problem with the request.\n';
-    BlocklyStorage.LINK_ALERT =
-        'Share your blocks with this link:\n\n%1';
-    BlocklyStorage.HASH_ERROR =
-        'Sorry, "%1" doesn\'t correspond with any saved Blockly file.';
-    BlocklyStorage.XML_ERROR = 'Could not load your saved file.\n'+
-        'Perhaps it was created with a different version of Blockly?';
-    var linkButton = document.getElementById('linkButton');
-    linkButton.style.display = 'inline-block';
-    linkButton.addEventListener('click',
-        function() {BlocklyStorage.link(mainWorkspace);});
-    disableEnableLink();
-  }
-
-  document.getElementById('helpButton').addEventListener('click',
-    function() {
-      open('https://developers.google.com/blockly/guides/create-custom-blocks/block-factory',
-           'BlockFactoryHelp');
+BlockFactory.importBlockFromFile = function() {
+  var files = document.getElementById('files');
+  // If the file list is empty, they user likely canceled in the dialog.
+  if (files.files.length > 0) {
+    // The input tag doesn't have the "mulitple" attribute
+    // so the user can only choose 1 file.
+    var file = files.files[0];
+    var fileReader = new FileReader();
+    fileReader.addEventListener('load', function(event) {
+      var fileContents = event.target.result;
+      var xml = '';
+      try {
+        xml = Blockly.Xml.textToDom(fileContents);
+      } catch (e) {
+        var message = 'Could not load your saved file.\n'+
+          'Perhaps it was created with a different version of Blockly?';
+        window.alert(message + '\nXML: ' + fileContents);
+        return;
+      }
+      BlockFactory.mainWorkspace.clear();
+      Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     });
 
-  var expandList = [
-    document.getElementById('blockly'),
-    document.getElementById('blocklyMask'),
-    document.getElementById('preview'),
-    document.getElementById('languagePre'),
-    document.getElementById('languageTA'),
-    document.getElementById('generatorPre')
-  ];
-  var onresize = function(e) {
-    for (var i = 0, expand; expand = expandList[i]; i++) {
-      expand.style.width = (expand.parentNode.offsetWidth - 2) + 'px';
-      expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
-    }
-  };
-  onresize();
-  window.addEventListener('resize', onresize);
-
-  var toolbox = document.getElementById('toolbox');
-  mainWorkspace = Blockly.inject('blockly',
-      {collapse: false,
-       toolbox: toolbox,
-       media: '../../media/'});
-
-  // Create the root block.
-  if ('BlocklyStorage' in window && window.location.hash.length > 1) {
-    BlocklyStorage.retrieveXml(window.location.hash.substring(1),
-                               mainWorkspace);
-  } else {
-    var xml = '<xml><block type="factory_base" deletable="false" movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), mainWorkspace);
+    fileReader.readAsText(file);
   }
-  mainWorkspace.clearUndo();
+};
 
-  mainWorkspace.addChangeListener(Blockly.Events.disableOrphans);
-  mainWorkspace.addChangeListener(updateLanguage);
-  document.getElementById('direction')
-      .addEventListener('change', updatePreview);
-  document.getElementById('languageTA')
-      .addEventListener('change', updatePreview);
-  document.getElementById('languageTA')
-      .addEventListener('keyup', updatePreview);
-  document.getElementById('format')
-      .addEventListener('change', formatChange);
-  document.getElementById('language')
-      .addEventListener('change', updatePreview);
-}
-window.addEventListener('load', init);
+/**
+ * Disable link and save buttons if the format is 'Manual', enable otherwise.
+ */
+BlockFactory.disableEnableLink = function() {
+  var linkButton = document.getElementById('linkButton');
+  var saveBlockButton = document.getElementById('localSaveButton');
+  var saveToLibButton = document.getElementById('saveToBlockLibraryButton');
+  var disabled = document.getElementById('format').value == 'Manual';
+  linkButton.disabled = disabled;
+  saveBlockButton.disabled = disabled;
+  saveToLibButton.disabled = disabled;
+};
+
+// Block Factory Expansion View Utils
+
+/**
+ * Render starter block (factory_base).
+ */
+ BlockFactory.showStarterBlock = function() {
+    var xml = '<xml><block type="factory_base" deletable="false" ' +
+        'movable="false"></block></xml>';
+    Blockly.Xml.domToWorkspace(
+        Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
+};
+
+/**
+ * Hides element so that it's invisible and doesn't take up space.
+ *
+ * @param {string} elementID - ID of element to hide.
+ */
+BlockFactory.hide = function(elementID) {
+  document.getElementById(elementID).style.display = 'none';
+};
+
+/**
+ * Un-hides an element.
+ *
+ * @param {string} elementID - ID of element to hide.
+ */
+BlockFactory.show = function(elementID) {
+  document.getElementById(elementID).style.display = 'block';
+};
+
+/**
+ * Hides element so that it's invisible but still takes up space.
+ *
+ * @param {string} elementID - ID of element to hide.
+ */
+BlockFactory.makeInvisible = function(elementID) {
+  document.getElementById(elementID).visibility = 'hidden';
+};
+
+/**
+ * Makes element visible.
+ *
+ * @param {string} elementID - ID of element to hide.
+ */
+BlockFactory.makeVisible = function(elementID) {
+  document.getElementById(elementID).visibility = 'visible';
+};
+

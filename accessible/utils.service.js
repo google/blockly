@@ -67,5 +67,8 @@ blocklyApp.UtilsService = ng.core
       // We use 'BLANK' instead of the default '?' so that the string is read
       // out. (By default, screen readers tend to ignore punctuation.)
       return block.toString(undefined, 'BLANK');
+    },
+    isWorkspaceEmpty: function() {
+      return !blocklyApp.workspace.topBlocks_.length;
     }
   });

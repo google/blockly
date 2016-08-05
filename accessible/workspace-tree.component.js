@@ -29,13 +29,13 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     selector: 'blockly-workspace-tree',
     template: `
     <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-summary', idMap['blockSummary'])"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-workspace-block')"
         [attr.aria-level]="level">
       <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
 
       <ol role="group">
         <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', idMap['blockSummary'])"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-block-menu', 'blockly-submenu-indicator')"
             [attr.aria-level]="level + 1">
           <label [id]="idMap['label']">{{'BLOCK_ACTION_LIST'|translate}}</label>
           <ol role="group">
@@ -100,11 +100,13 @@ blocklyApp.WorkspaceTreeComponent = ng.core
   })
   .Class({
     constructor: [
-        blocklyApp.ClipboardService, blocklyApp.TreeService,
-        blocklyApp.UtilsService,
-        function(_clipboardService, _treeService, _utilsService) {
-      this.infoBlocks = Object.create(null);
+        blocklyApp.ClipboardService, blocklyApp.NotificationsService,
+        blocklyApp.TreeService, blocklyApp.UtilsService,
+        function(
+            _clipboardService, _notificationsService, _treeService,
+            _utilsService) {
       this.clipboardService = _clipboardService;
+      this.notificationsService = _notificationsService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
     }],
@@ -154,7 +156,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         that.clipboardService.cut(that.block);
       });
 
-      alert(Blockly.Msg.CUT_BLOCK_MSG + blockDescription);
+      setTimeout(function() {
+        if (that.utilsService.isWorkspaceEmpty()) {
+          that.notificationsService.setStatusMessage(
+              blockDescription + ' cut. Workspace is empty.');
+        } else {
+          that.notificationsService.setStatusMessage(
+              blockDescription + ' cut. Now on workspace.');
+        }
+      });
     },
     deleteBlock_: function() {
       var blockDescription = this.getBlockDescription();
@@ -164,7 +174,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         that.block.dispose(true);
       });
 
-      alert('Block deleted: ' + blockDescription);
+      setTimeout(function() {
+        if (that.utilsService.isWorkspaceEmpty()) {
+          that.notificationsService.setStatusMessage(
+              blockDescription + ' deleted. Workspace is empty.');
+        } else {
+          that.notificationsService.setStatusMessage(
+              blockDescription + ' deleted. Now on workspace.');
+        }
+      });
     },
     pasteToConnection_: function(connection) {
       var destinationTreeId = this.treeService.getTreeIdForBlock(
@@ -207,11 +225,16 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           that.treeService.initActiveDesc(oldDestinationTreeId);
         }
 
-        alert('Block moved to marked spot: ' + blockDescription);
+        that.notificationsService.setStatusMessage(
+            blockDescription + ' ' +
+            Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
+            '. Now on moved block in workspace.');
       });
     },
     copyBlock_: function() {
-      this.clipboardService.copy(this.block, true);
+      this.clipboardService.copy(this.block);
+      this.notificationsService.setStatusMessage(
+          this.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
     },
     markSpotBelow_: function() {
       this.clipboardService.markConnection(this.block.nextConnection);

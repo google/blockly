@@ -24,12 +24,15 @@
 
 blocklyApp.ClipboardService = ng.core
   .Class({
-    constructor: [blocklyApp.UtilsService, function(_utilsService) {
+    constructor: [
+        blocklyApp.NotificationsService, blocklyApp.UtilsService,
+        function(_notificationsService, _utilsService) {
       this.clipboardBlockXml_ = null;
       this.clipboardBlockPreviousConnection_ = null;
       this.clipboardBlockNextConnection_ = null;
       this.clipboardBlockOutputConnection_ = null;
       this.markedConnection_ = null;
+      this.notificationsService = _notificationsService;
       this.utilsService = _utilsService;
     }],
     areConnectionsCompatible_: function(blockConnection, connection) {
@@ -93,23 +96,17 @@ blocklyApp.ClipboardService = ng.core
     },
     markConnection: function(connection) {
       this.markedConnection_ = connection;
-      alert(Blockly.Msg.MARKED_SPOT_MSG);
+      this.notificationsService.setStatusMessage(Blockly.Msg.MARKED_SPOT_MSG);
     },
     cut: function(block) {
-      this.copy(block, false);
+      this.copy(block);
       block.dispose(true);
     },
-    copy: function(block, announce) {
+    copy: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
       this.clipboardBlockPreviousConnection_ = block.previousConnection;
       this.clipboardBlockNextConnection_ = block.nextConnection;
       this.clipboardBlockOutputConnection_ = block.outputConnection;
-
-      if (announce) {
-        alert(
-            Blockly.Msg.COPIED_BLOCK_MSG +
-            this.utilsService.getBlockDescription(block));
-      }
     },
     pasteFromClipboard: function(inputConnection) {
       var connection = inputConnection;
@@ -133,9 +130,9 @@ blocklyApp.ClipboardService = ng.core
         default:
           connection.connect(reconstitutedBlock.outputConnection);
       }
-      alert(
-          Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
-          this.utilsService.getBlockDescription(reconstitutedBlock));
+      this.notificationsService.setStatusMessage(
+          this.utilsService.getBlockDescription(reconstitutedBlock) + ' ' +
+          Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG);
       return reconstitutedBlock.id;
     },
     pasteToMarkedConnection: function(block) {

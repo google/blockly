@@ -60,7 +60,9 @@ blocklyApp.WorkspaceComponent = ng.core
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
-    constructor: [blocklyApp.TreeService, function(_treeService) {
+    constructor: [
+        blocklyApp.TreeService, blocklyApp.UtilsService,
+        function(_treeService, _utilsService) {
       // ACCESSIBLE_GLOBALS is a global variable defined by the containing
       // page. It should contain a key, toolbarButtonConfig, whose
       // corresponding value is an Array with two keys: 'text' and 'action'.
@@ -71,6 +73,7 @@ blocklyApp.WorkspaceComponent = ng.core
           ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
       this.workspace = blocklyApp.workspace;
       this.treeService = _treeService;
+      this.utilsService = _utilsService;
     }],
     clearWorkspace: function() {
       this.workspace.clear();
@@ -86,6 +89,6 @@ blocklyApp.WorkspaceComponent = ng.core
       this.treeService.onKeypress(e, tree);
     },
     isWorkspaceEmpty: function() {
-      return !this.workspace.topBlocks_.length;
+      return this.utilsService.isWorkspaceEmpty();
     }
   });

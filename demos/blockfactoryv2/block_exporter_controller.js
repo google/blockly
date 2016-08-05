@@ -222,7 +222,7 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
 
   // For every block, render in selector workspace.
   for (var i = 0, blockType; blockType = allBlockTypes[i]; i++) {
-    this.view.selectBlock(blockType);
+    this.view.addBlock(blockType);
   }
 
   // Clean up workspace.

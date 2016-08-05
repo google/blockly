@@ -91,12 +91,12 @@ BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
  * Renders block of given type on selector workspace assuming block has already
  * been defined.
  *
- * @param {string} blockType - Type of block to select.
+ * @param {string} blockType - Type of block to add to selector workspce.
  */
-BlockExporterView.prototype.selectBlock = function(blockType) {
-  var selectedBlock = this.selectorWorkspace.newBlock(blockType);
-  selectedBlock.initSvg();
-  selectedBlock.render();
+BlockExporterView.prototype.addBlock = function(blockType) {
+  var newBlock = this.selectorWorkspace.newBlock(blockType);
+  newBlock.initSvg();
+  newBlock.render();
 };
 
 /**

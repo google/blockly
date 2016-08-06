@@ -235,7 +235,10 @@ blocklyApp.TreeService = ng.core
         return;
       }
 
-      if (document.activeElement.tagName == 'INPUT') {
+      if (e.altKey || e.ctrlKey) {
+        // Do not intercept combinations such as Alt+Home.
+        return;
+      } else if (document.activeElement.tagName == 'INPUT') {
         // For input fields, only Esc and Tab keystrokes are handled specially.
         if (e.keyCode == 27 || e.keyCode == 9) {
           // For Esc and Tab keys, the focus is removed from the input field.

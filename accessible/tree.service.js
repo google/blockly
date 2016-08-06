@@ -266,6 +266,7 @@ blocklyApp.TreeService = ng.core
           while (dfsStack.length) {
             var currentNode = dfsStack.shift();
             if (currentNode.tagName == 'BUTTON') {
+              this.moveActiveDescToParent(treeId);
               currentNode.click();
               break;
             } else if (currentNode.tagName == 'INPUT') {
@@ -307,16 +308,7 @@ blocklyApp.TreeService = ng.core
             }
           } else if (e.keyCode == 37) {
             // Left arrow key. Go up a level, if possible.
-            var nextNode = activeDesc.parentNode;
-            if (this.isButtonOrFieldNode_(activeDesc)) {
-              nextNode = nextNode.parentNode;
-            }
-            while (nextNode && nextNode.tagName != 'LI') {
-              nextNode = nextNode.parentNode;
-            }
-            if (nextNode) {
-              this.setActiveDesc(nextNode.id, treeId);
-            }
+            this.moveActiveDescToParent(treeId);
           } else if (e.keyCode == 38) {
             // Up arrow key. Go to the previous sibling, if possible.
             var prevSibling = this.getPreviousSibling(activeDesc);
@@ -340,6 +332,19 @@ blocklyApp.TreeService = ng.core
           e.preventDefault();
           e.stopPropagation();
         }
+      }
+    },
+    moveActiveDescToParent: function(treeId) {
+      var activeDesc = document.getElementById(this.getActiveDescId(treeId));
+      var nextNode = activeDesc.parentNode;
+      if (this.isButtonOrFieldNode_(activeDesc)) {
+        nextNode = nextNode.parentNode;
+      }
+      while (nextNode && nextNode.tagName != 'LI') {
+        nextNode = nextNode.parentNode;
+      }
+      if (nextNode) {
+        this.setActiveDesc(nextNode.id, treeId);
       }
     },
     getFirstChild: function(element) {

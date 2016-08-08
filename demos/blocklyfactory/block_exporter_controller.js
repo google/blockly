@@ -90,20 +90,47 @@ BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
 
 /**
  * Get selected blocks from selector workspace, pulls info from the Export
- * Settings form in Block Exporter, and downloads block code accordingly.
+ * Settings form in Block Exporter, and downloads code accordingly.
+ *
+ * TODO(quachtina96): allow export as zip.
  */
-BlockExporterController.prototype.exportBlocks = function() {
+BlockExporterController.prototype.export = function() {
+  // Get selected blocks' information.
   var blockTypes = this.getSelectedBlockTypes_();
   var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
 
-  // Pull inputs from the Export Settings form.
+  // Pull workspace-related settings from the Export Settings form.
+  var wantToolbox = document.getElementById('toolboxCheck').checked;
+  var wantPreloadedWorkspace =
+      document.getElementById('preloadedWorkspaceCheck').checked;
+  var wantWorkspaceOptions =
+      document.getElementById('workspaceOptsCheck').checked;
+
+  // Pull block definition(s) settings from the Export Settings form.
+  var wantBlockDef = document.getElementById('blockDefCheck').checked;
   var definitionFormat = document.getElementById('exportFormat').value;
-  var language = document.getElementById('exportLanguage').value;
   var blockDef_filename = document.getElementById('blockDef_filename').value;
+
+  // Pull block generator stub(s) settings from the Export Settings form.
+  var wantGenStub = document.getElementById('genStubCheck').checked;
+  var language = document.getElementById('exportLanguage').value;
   var generatorStub_filename = document.getElementById(
       'generatorStub_filename').value;
-  var wantBlockDef = document.getElementById('blockDefCheck').checked;
-  var wantGenStub = document.getElementById('genStubCheck').checked;
+
+  if (wantToolbox) {
+    // TODO(quachtina96): create and download file once wfactory has been
+    // integrated.
+  }
+
+  if (wantPreloadedWorkspace) {
+    // TODO(quachtina96): create and download file once wfactory has been
+    // integrated.
+  }
+
+  if (wantWorkspaceOptions) {
+    // TODO(quachtina96): create and download file once wfactory has been
+    // integrated.
+  }
 
   if (wantBlockDef) {
     // User wants to export selected blocks' definitions.
@@ -134,6 +161,7 @@ BlockExporterController.prototype.exportBlocks = function() {
           genStubs, generatorStub_filename, language);
     }
   }
+
 };
 
 /**

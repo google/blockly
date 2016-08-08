@@ -47,6 +47,16 @@ AppController = function() {
   // Initialize Block Exporter
   this.exporter =
       new BlockExporterController(this.blockLibraryController.storage);
+
+  // Map of tab type to the div element for the tab.
+  this.tabMap = {
+    'BLOCK_FACTORY' : goog.dom.getElement('blockFactory_tab'),
+    'WORKSPACE_FACTORY': goog.dom.getElement('workspaceFactory_tab'),
+    'EXPORTER' : goog.dom.getElement('blocklibraryExporter_tab')
+  };
+
+  // Selected tab.
+  this.selectedTab = 'BLOCK_FACTORY';
 };
 
 /**
@@ -197,71 +207,90 @@ AppController.prototype.onSelectedBlockChanged = function(blockLibraryDropdown) 
 };
 
 /**
- * Add tab handlers to allow switching between the Block Factory
- * tab and the Block Exporter tab.
+ * Add click handlers to each tab to allow switching between the Block Factory,
+ * Workspace Factory, and Block Exporter tab.
  *
- * @param {string} blockFactoryTabID - ID of element containing Block Factory
- *    tab
- * @param {string} blockExporterTabID - ID of element containing Block
- *    Exporter tab
+ * @param {!Object} tabMap - Map of tab name to div element that is the tab.
  */
-AppController.prototype.addTabHandlers =
-    function(blockFactoryTabID, blockExporterTabID) {
-  // Assign this instance of Block Factory Expansion to self in order to
-  // keep the reference to this object upon tab click.
+AppController.prototype.addTabHandlers = function(tabMap) {
   var self = this;
-  // Get div elements representing tabs
-  var blockFactoryTab = goog.dom.getElement(blockFactoryTabID);
-  var blockExporterTab = goog.dom.getElement(blockExporterTabID);
-  // Add event listeners.
-  blockFactoryTab.addEventListener('click',
-      function() {
-        self.onFactoryTab(blockFactoryTab, blockExporterTab);
-      });
-  blockExporterTab.addEventListener('click',
-      function() {
-        self.onExporterTab(blockFactoryTab, blockExporterTab);
-      });
+  for (var tabName in tabMap) {
+    var tab = tabMap[tabName];
+    // Use an additional closure to correctly assign the tab callback.
+    tab.addEventListener('click', self.makeTabClickHandler_(tabName));
+  }
 };
 
 /**
- * Tied to 'Block Factory' Tab. Shows Block Factory and Block Library.
+ * Set the selected tab.
+ * @private
  *
- * @param {string} blockFactoryTab - div element that is the Block Factory tab
- * @param {string} blockExporterTab - div element that is the Block Exporter tab
+ * @param {string} tabName 'BLOCK_FACTORY', 'WORKSPACE_FACTORY', or 'EXPORTER'
  */
-AppController.prototype.onFactoryTab =
-    function(blockFactoryTab, blockExporterTab) {
-  // Turn factory tab on and exporter tab off.
-  goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
-  goog.dom.classlist.addRemove(blockExporterTab, 'tabon', 'taboff');
-
-  // Hide container of exporter.
-  BlockFactory.hide('blockLibraryExporter');
-
-  // Resize to render workspaces' toolboxes correctly.
-  window.dispatchEvent(new Event('resize'));
+AppController.prototype.setSelected_ = function(tabName) {
+  this.selectedTab = tabName;
 };
 
 /**
- * Tied to 'Block Exporter' Tab. Shows Block Exporter.
+ * Creates the tab click handler specific to the tab specified.
+ * @private
  *
- * @param {string} blockFactoryTab - div element that is the Block Factory tab
- * @param {string} blockExporterTab - div element that is the Block Exporter tab
+ * @param {string} tabName 'BLOCK_FACTORY', 'WORKSPACE_FACTORY', or 'EXPORTER'
+ * @return {Function} The tab click handler.
  */
-AppController.prototype.onExporterTab =
-    function(blockFactoryTab, blockExporterTab) {
-  // Turn exporter tab on and factory tab off.
-  goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-  goog.dom.classlist.addRemove(blockExporterTab, 'taboff', 'tabon');
+AppController.prototype.makeTabClickHandler_ = function(tabName) {
+  var self = this;
+  return function() {
+    self.setSelected_(tabName);
+    self.onTab();
+  };
+};
 
-  // Update toolbox to reflect current block library.
-  this.exporter.updateToolbox();
+/**
+ * Called on each tab click. Hides and shows specific content based on which tab
+ * (Block Factory, Workspace Factory, or Exporter) is selected.
+ */
+AppController.prototype.onTab = function() {
+  // Get tab div elements.
+  var blockFactoryTab = this.tabMap['BLOCK_FACTORY'];
+  var exporterTab = this.tabMap['EXPORTER'];
+  var workspaceFactoryTab = this.tabMap['WORKSPACE_FACTORY'];
 
-  // Show container of exporter.
-  BlockFactory.show('blockLibraryExporter');
+  if (this.selectedTab == 'EXPORTER') {
+    // Turn exporter tab on and other tabs off.
+    goog.dom.classlist.addRemove(exporterTab, 'taboff', 'tabon');
+    goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+    goog.dom.classlist.addRemove(workspaceFactoryTab, 'tabon', 'taboff');
 
-  // Resize to render workspaces' toolboxes correctly.
+    // Update toolbox to reflect current block library.
+    this.exporter.updateToolbox();
+
+    // Show container of exporter.
+    BlockFactory.show('blockLibraryExporter');
+    BlockFactory.hide('workspaceFactoryContent');
+
+  } else if (this.selectedTab ==  'BLOCK_FACTORY') {
+    // Turn factory tab on and other tabs off.
+    goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
+    goog.dom.classlist.addRemove(exporterTab, 'tabon', 'taboff');
+    goog.dom.classlist.addRemove(workspaceFactoryTab, 'tabon', 'taboff');
+
+    // Hide container of exporter.
+    BlockFactory.hide('blockLibraryExporter');
+    BlockFactory.hide('workspaceFactoryContent');
+
+  } else if (this.selectedTab == 'WORKSPACE_FACTORY') {
+    console.log('workspaceFactoryTab');
+    goog.dom.classlist.addRemove(workspaceFactoryTab, 'taboff', 'tabon');
+    goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
+    goog.dom.classlist.addRemove(exporterTab, 'tabon', 'taboff');
+    // Hide container of exporter.
+    BlockFactory.hide('blockLibraryExporter');
+    // Show workspace factory container.
+    BlockFactory.show('workspaceFactoryContent');
+  }
+
+  // Resize to render workspaces' toolboxes correctly for all tabs.
   window.dispatchEvent(new Event('resize'));
 };
 
@@ -273,13 +302,13 @@ AppController.prototype.assignExporterClickHandlers = function() {
   // Export blocks when the user submits the export settings.
   document.getElementById('exporterSubmitButton').addEventListener('click',
       function() {
-        self.exporter.exportBlocks();
+        self.exporter.export();
       });
   document.getElementById('clearSelectedButton').addEventListener('click',
       function() {
         self.exporter.clearSelectedBlocks();
       });
-  document.getElementById('addAllButton').addEventListener('click',
+  document.getElementById('addAllFromLibButton').addEventListener('click',
       function() {
         self.exporter.addAllBlocksToWorkspace();
       });
@@ -435,7 +464,7 @@ AppController.prototype.init = function() {
        media: '../../media/'});
 
   // Add tab handlers for switching between Block Factory and Block Exporter.
-  this.addTabHandlers("blockfactory_tab", "blocklibraryExporter_tab");
+  this.addTabHandlers(this.tabMap);
 
   this.exporter.addChangeListenersToSelectorWorkspace();
 

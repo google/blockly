@@ -117,75 +117,76 @@ Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
 Blockly.Variables.flyoutCategory = function(workspace) {
   var variableList = workspace.variableList;
   variableList.sort(goog.string.caseInsensitiveCompare);
-  // In addition to the user's variables, we also want to display the default
-  // variable name at the top.  We also don't want this duplicated if the
-  // user has created a variable of the same name.
-  goog.array.remove(variableList, Blockly.Msg.VARIABLES_DEFAULT_NAME);
-  variableList.unshift(Blockly.Msg.VARIABLES_DEFAULT_NAME);
 
   var xmlList = [];
   var button = goog.dom.createDom('button');
   button.setAttribute('text', 'Create variable');
   xmlList.push(button);
 
-  if (Blockly.Blocks['variables_set']) {
-    // <block type="variables_set" gap="20">
-    //   <field name="VAR">item</field>
-    // </block>
-    var block = goog.dom.createDom('block');
-    block.setAttribute('type', 'variables_set');
-    if (Blockly.Blocks['math_change']) {
-      block.setAttribute('gap', 8);
-    } else {
-      block.setAttribute('gap', 24);
-    }
-    var field = goog.dom.createDom('field', null, variableList[0]);
-    field.setAttribute('name', 'VAR');
-    block.appendChild(field);
-    xmlList.push(block);
-  }
-  if (Blockly.Blocks['math_change']) {
-    // <block type="math_change">
-    //   <value name="DELTA">
-    //     <shadow type="math_number">
-    //       <field name="NUM">1</field>
-    //     </shadow>
-    //   </value>
-    // </block>
-    var block = goog.dom.createDom('block');
-    block.setAttribute('type', 'math_change');
-    if (Blockly.Blocks['variables_get']) {
-      block.setAttribute('gap', 20);
-    }
-    var value = goog.dom.createDom('value');
-    value.setAttribute('name', 'DELTA');
-    block.appendChild(value);
-
-    var shadowBlock = goog.dom.createDom('shadow');
-    shadowBlock.setAttribute('type', 'math_number');
-    value.appendChild(shadowBlock);
-
-    var field = goog.dom.createDom('field', null, '1');
-    field.setAttribute('name', 'NUM');
-    shadowBlock.appendChild(field);
-
-    xmlList.push(block);
-  }
-
-  for (var i = 0; i < variableList.length; i++) {
-    if (Blockly.Blocks['variables_get']) {
-      // <block type="variables_get" gap="8">
+  if (variableList.length > 0) {
+    if (Blockly.Blocks['variables_set']) {
+      // <block type="variables_set" gap="20">
       //   <field name="VAR">item</field>
       // </block>
       var block = goog.dom.createDom('block');
-      block.setAttribute('type', 'variables_get');
-      if (Blockly.Blocks['variables_set']) {
+      block.setAttribute('type', 'variables_set');
+      if (Blockly.Blocks['math_change']) {
         block.setAttribute('gap', 8);
+      } else {
+        block.setAttribute('gap', 24);
       }
-      var field = goog.dom.createDom('field', null, variableList[i]);
+      var field = goog.dom.createDom('field', null, variableList[0]);
       field.setAttribute('name', 'VAR');
       block.appendChild(field);
       xmlList.push(block);
+    }
+    if (Blockly.Blocks['math_change']) {
+      // <block type="math_change">
+      //   <value name="DELTA">
+      //     <shadow type="math_number">
+      //       <field name="NUM">1</field>
+      //     </shadow>
+      //   </value>
+      // </block>
+      var block = goog.dom.createDom('block');
+      block.setAttribute('type', 'math_change');
+      if (Blockly.Blocks['variables_get']) {
+        block.setAttribute('gap', 20);
+      }
+      var value = goog.dom.createDom('value');
+      value.setAttribute('name', 'DELTA');
+      block.appendChild(value);
+
+      var field = goog.dom.createDom('field', null, variableList[0]);
+      field.setAttribute('name', 'VAR');
+      block.appendChild(field);
+
+      var shadowBlock = goog.dom.createDom('shadow');
+      shadowBlock.setAttribute('type', 'math_number');
+      value.appendChild(shadowBlock);
+
+      var numberField = goog.dom.createDom('field', null, '1');
+      numberField.setAttribute('name', 'NUM');
+      shadowBlock.appendChild(numberField);
+
+      xmlList.push(block);
+    }
+
+    for (var i = 0; i < variableList.length; i++) {
+      if (Blockly.Blocks['variables_get']) {
+        // <block type="variables_get" gap="8">
+        //   <field name="VAR">item</field>
+        // </block>
+        var block = goog.dom.createDom('block');
+        block.setAttribute('type', 'variables_get');
+        if (Blockly.Blocks['variables_set']) {
+          block.setAttribute('gap', 8);
+        }
+        var field = goog.dom.createDom('field', null, variableList[i]);
+        field.setAttribute('name', 'VAR');
+        block.appendChild(field);
+        xmlList.push(block);
+      }
     }
   }
   return xmlList;
@@ -267,11 +268,9 @@ Blockly.Variables.getUses = function(name, workspace) {
 
 /**
  * When a variable is deleted, find and dispose of all uses of it.
- * @param {string} name Name of deleted variable.
- * @param {!Blockly.Workspace} workspace The workspace to delete uses from.
+ * @param {!Array.<!Blockly.Block>} uses An array of blocks using the variable.
  */
-Blockly.Variables.disposeUses = function(name, workspace) {
-  var uses = Blockly.Variables.getUses(name, workspace);
+Blockly.Variables.disposeUses = function(uses) {
   Blockly.Events.setGroup(true);
   for (var i = 0; i < uses.length; i++) {
     uses[i].dispose(true, false);
@@ -287,10 +286,16 @@ Blockly.Variables.disposeUses = function(name, workspace) {
 Blockly.Variables.delete = function(name, workspace) {
   var variableIndex = workspace.variableList.indexOf(name);
   if (variableIndex != -1) {
+    var uses = Blockly.Variables.getUses(name, workspace);
+    if (uses.length > 1) {
+      window.confirm(
+        Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
+            replace('%2', name));
+    }
+    Blockly.Variables.disposeUses(uses);
     workspace.variableList.splice(variableIndex, 1);
   }
 
-  Blockly.Variables.disposeUses(name, workspace);
 };
 
 /**

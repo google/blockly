@@ -62,6 +62,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Yew erc xırabo se tay beyanati
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Yew erc raşto se yu beyanat bıd.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Wa %1 çengey heme besteri yè?";
 Blockly.Msg.DELETE_BLOCK = "Bloki bestere";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 çengan bestern";
 Blockly.Msg.DISABLE_BLOCK = "Çengi devre ra vec";
 Blockly.Msg.DUPLICATE_BLOCK = "Zewnc";

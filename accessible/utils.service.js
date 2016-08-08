@@ -41,20 +41,17 @@ blocklyApp.UtilsService = ng.core
       return idMap;
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
-      var attrValue = mainLabel + ' ' + secondLabel;
+      var attrValue = mainLabel + (secondLabel ? ' ' + secondLabel : '');
       if (isDisabled) {
         attrValue += ' blockly-disabled';
       }
       return attrValue;
     },
     getInputTypeLabel: function(connection) {
-      // Returns an upper case string in the case of official input type names.
-      // Returns the lower case string 'any' if any official input type qualifies.
-      // The differentiation between upper and lower case signifies the difference
-      // between an input type (BOOLEAN, LIST, etc) and the colloquial english term
-      // 'any'.
+      // Returns the input type name, or 'any' if any official input type
+      // qualifies.
       if (connection.check_) {
-        return connection.check_.join(', ').toUpperCase();
+        return connection.check_.join(', ');
       } else {
         return Blockly.Msg.ANY;
       }
@@ -65,5 +62,13 @@ blocklyApp.UtilsService = ng.core
       } else {
         return Blockly.Msg.VALUE;
       }
+    },
+    getBlockDescription: function(block) {
+      // We use 'BLANK' instead of the default '?' so that the string is read
+      // out. (By default, screen readers tend to ignore punctuation.)
+      return block.toString(undefined, 'BLANK');
+    },
+    isWorkspaceEmpty: function() {
+      return !blocklyApp.workspace.topBlocks_.length;
     }
   });

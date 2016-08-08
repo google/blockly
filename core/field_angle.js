@@ -205,7 +205,7 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
     angle = Math.round(angle / Blockly.FieldAngle.ROUND) *
         Blockly.FieldAngle.ROUND;
   }
-  angle = Blockly.FieldAngle.classValidator(angle);
+  angle = this.callValidator(angle);
   Blockly.FieldTextInput.htmlInput_.value = angle;
   this.setValue(angle);
   this.validate_();
@@ -274,9 +274,8 @@ Blockly.FieldAngle.prototype.updateGraph_ = function() {
  * Ensure that only an angle may be entered.
  * @param {string} text The user's text.
  * @return {?string} A string representing a valid angle, or null if invalid.
- * @this {!Blockly.FieldAngle}
  */
-Blockly.FieldAngle.classValidator = function(text) {
+Blockly.FieldAngle.prototype.classValidator = function(text) {
   if (text === null) {
     return null;
   }

@@ -144,11 +144,12 @@ Blockly.Toolbox.prototype.lastCategory_ = null;
  */
 Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
+  var svg = this.workspace_.getParentSvg();
 
   // Create an HTML container for the Toolbox menu.
   this.HtmlDiv = goog.dom.createDom('div', 'blocklyToolboxDiv');
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
-  document.body.appendChild(this.HtmlDiv);
+  svg.parentNode.insertBefore(this.HtmlDiv, svg);
 
   // Clicking on toolbox closes popups.
   Blockly.bindEvent_(this.HtmlDiv, 'mousedown', this,
@@ -231,30 +232,23 @@ Blockly.Toolbox.prototype.position = function() {
   var svgPosition = goog.style.getPageOffset(svg);
   var svgSize = Blockly.svgSize(svg);
   if (this.horizontalLayout_) {
-    treeDiv.style.left = svgPosition.x + 'px';
+    treeDiv.style.left = '0';
     treeDiv.style.height = 'auto';
     treeDiv.style.width = svgSize.width + 'px';
     this.height = treeDiv.offsetHeight;
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {  // Top
-      treeDiv.style.top = svgPosition.y + 'px';
+      treeDiv.style.top = '0';
     } else {  // Bottom
-      var topOfToolbox = svgPosition.y + svgSize.height - treeDiv.offsetHeight;
-      treeDiv.style.top = topOfToolbox + 'px';
+      treeDiv.style.bottom = '0';
     }
   } else {
     if (this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {  // Right
-      treeDiv.style.left =
-          (svgPosition.x + svgSize.width - treeDiv.offsetWidth) + 'px';
+      treeDiv.style.right = '0';
     } else {  // Left
-      treeDiv.style.left = svgPosition.x + 'px';
+      treeDiv.style.left = '0';
     }
     treeDiv.style.height = svgSize.height + 'px';
-    treeDiv.style.top = svgPosition.y + 'px';
     this.width = treeDiv.offsetWidth;
-    if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
-      // For some reason the LTR toolbox now reports as 1px too wide.
-      this.width -= 1;
-    }
   }
   this.flyout_.position();
 };
@@ -554,6 +548,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
 Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
   if (toolbox) {
+    this.horizontalLayout_ = toolbox.horizontalLayout_;
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
       // surface of the workspace has, so we may need to reposition everything.
@@ -603,6 +598,28 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
  */
 Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
   // NOP.
+};
+
+/**
+ * Remap event.keyCode in horizontalLayout so that arrow
+ * keys work properly and call original onKeyDown handler.
+ * @param {!goog.events.BrowserEvent} e The browser event.
+ * @return {boolean} The handled value.
+ * @override
+ * @private
+ */
+Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
+  if (this.horizontalLayout_) {
+    var map = {};
+    map[goog.events.KeyCodes.RIGHT] = goog.events.KeyCodes.DOWN;
+    map[goog.events.KeyCodes.LEFT] = goog.events.KeyCodes.UP;
+    map[goog.events.KeyCodes.UP] = goog.events.KeyCodes.LEFT;
+    map[goog.events.KeyCodes.DOWN] = goog.events.KeyCodes.RIGHT;
+
+    var newKeyCode = map[e.keyCode];
+    e.keyCode = newKeyCode || e.keyCode;
+  }
+  return Blockly.Toolbox.TreeNode.superClass_.onKeyDown.call(this, e);
 };
 
 /**

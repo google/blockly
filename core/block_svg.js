@@ -945,11 +945,9 @@ Blockly.BlockSvg.prototype.setMovable = function(movable) {
  */
 Blockly.BlockSvg.prototype.setEditable = function(editable) {
   Blockly.BlockSvg.superClass_.setEditable.call(this, editable);
-  if (this.rendered) {
-    var icons = this.getIcons();
-    for (var i = 0; i < icons.length; i++) {
-      icons[i].updateEditable();
-    }
+  var icons = this.getIcons();
+  for (var i = 0; i < icons.length; i++) {
+    icons[i].updateEditable();
   }
 };
 

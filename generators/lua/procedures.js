@@ -57,7 +57,6 @@ Blockly.Lua['procedures_defreturn'] = function(block) {
   }
   var code = 'function ' + funcName + '(' + args.join(', ') + ')\n' +
       branch + returnValue + 'end\n';
-  code = Blockly.Lua.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Lua.definitions_['%' + funcName] = code;
   return null;

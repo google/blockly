@@ -128,9 +128,8 @@ Blockly.FieldVariable.dropdownCreate = function() {
  * @return {null|undefined|string} An acceptable new variable name, or null if
  *     change is to be either aborted (cancel button) or has been already
  *     handled (rename), or undefined if an existing variable was chosen.
- * @this {!Blockly.FieldVariable}
  */
-Blockly.FieldVariable.classValidator = function(text) {
+Blockly.FieldVariable.prototype.classValidator = function(text) {
   var workspace = this.sourceBlock_.workspace;
   if (text == Blockly.Msg.RENAME_VARIABLE) {
     var oldVar = this.getText();

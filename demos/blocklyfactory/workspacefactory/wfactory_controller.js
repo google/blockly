@@ -659,7 +659,6 @@ FactoryController.prototype.isUserGenShadowBlock = function(blockId) {
  * all real shadow blocks loaded in the workspace into user-generated shadow
  * blocks, meaning they are marked as shadow blocks by the model and appear as
  * shadow blocks in the view but are still editable and movable.
- * @private
  */
 FactoryController.prototype.convertShadowBlocks = function() {
   var blocks = this.toolboxWorkspace.getAllBlocks();

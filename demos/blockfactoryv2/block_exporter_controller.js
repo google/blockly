@@ -226,5 +226,5 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
   }
 
   // Clean up workspace.
-  this.view.cleanSelectorWorkspace();
+  this.view.cleanUpSelectorWorkspace();
 };

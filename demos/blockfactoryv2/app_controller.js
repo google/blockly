@@ -124,7 +124,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
       function() {
         self.exporter.clearSelectedBlocks();
       });
-  document.getElementById('selectAllButton').addEventListener('click',
+  document.getElementById('addAllButton').addEventListener('click',
       function() {
         self.exporter.addAllBlocksToWorkspace();
       });

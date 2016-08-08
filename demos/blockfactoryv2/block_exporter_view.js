@@ -109,7 +109,7 @@ BlockExporterView.prototype.clearSelectorWorkspace = function() {
 /**
  * Neatly layout the blocks in selector workspace.
  */
-BlockExporterView.prototype.cleanSelectorWorkspace = function() {
+BlockExporterView.prototype.cleanUpSelectorWorkspace = function() {
   this.selectorWorkspace.cleanUp_();
 };
 

@@ -543,7 +543,7 @@ goog.require('goog.ui.ColorPicker');
     if (Blockly.selected) {
       // Can only edit blocks when a block is selected.
 
-      if (!controller.model.isShadowBlock(Blockly.selected.id) && Blockly.selected.getSurroundParent() != null) {
+      if (!controller.isUserGenShadowBlock(Blockly.selected.id) && Blockly.selected.getSurroundParent() != null) {
         // If a block is selected that could be a valid shadow block (not a shadow block,
         // has a surrounding parent), let the user make it a shadow block.
         // Use toggle instead of add so that the user can click the button again
@@ -652,7 +652,7 @@ goog.require('goog.ui.ColorPicker');
         document.getElementById('button_editShadow').disabled = false;
         Blockly.selected.setWarningText(null);
       } else {
-        if (selected != null && controller.model.isShadowBlock(selected.id)) {
+        if (selected != null && controller.isUserGenShadowBlock(selected.id)) {
 
         // Provide warning if shadow block is moved and is no longer a valid shadow block.
           Blockly.selected.setWarningText('Shadow blocks must be nested inside other' +

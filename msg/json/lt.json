@@ -110,7 +110,7 @@
 	"MATH_TRIG_TOOLTIP_ASIN": "Grąžinti skaičiaus arksinusą.",
 	"MATH_TRIG_TOOLTIP_ACOS": "Grąžinti skaičiaus arkkosinusą.",
 	"MATH_TRIG_TOOLTIP_ATAN": "Grąžinti skaičiaus arktangentą.",
-	"MATH_CONSTANT_HELPURL": "https://lt.wikipedia.org/wiki/Matematin%C4%97_konstanta",
+	"MATH_CONSTANT_HELPURL": "https://en.wikipedia.org/wiki/Mathematical_constant",
 	"MATH_IS_EVEN": "yra lyginis",
 	"MATH_IS_ODD": "yra nelyginis",
 	"MATH_IS_PRIME": "yra pirminis",

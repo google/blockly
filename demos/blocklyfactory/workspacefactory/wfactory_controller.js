@@ -456,7 +456,7 @@ FactoryController.prototype.loadCategory = function() {
   // Switch to loaded category.
   this.switchElement(copy.id);
   // Convert actual shadow blocks to user-generated shadow blocks.
-  this.convertShadowBlocks_();
+  this.convertShadowBlocks();
   // Update preview.
   this.updatePreview();
 };
@@ -553,7 +553,7 @@ FactoryController.prototype.importFromTree_ = function(tree) {
     this.toolboxWorkspace.cleanUp_();
 
     // Convert actual shadow blocks to user-generated shadow blocks.
-    this.convertShadowBlocks_();
+    this.convertShadowBlocks();
 
     // Add message to denote empty category.
     this.view.addEmptyCategoryMessage();
@@ -578,7 +578,7 @@ FactoryController.prototype.importFromTree_ = function(tree) {
         this.toolboxWorkspace.cleanUp_();
 
         // Convert actual shadow blocks to user-generated shadow blocks.
-        this.convertShadowBlocks_();
+        this.convertShadowBlocks();
 
         // Set category color.
         if (item.color) {
@@ -661,7 +661,7 @@ FactoryController.prototype.isUserGenShadowBlock = function(blockId) {
  * shadow blocks in the view but are still editable and movable.
  * @private
  */
-FactoryController.prototype.convertShadowBlocks_ = function() {
+FactoryController.prototype.convertShadowBlocks = function() {
   var blocks = this.toolboxWorkspace.getAllBlocks();
   for (var i = 0, block; block = blocks[i]; i++) {
     if (block.isShadow()) {

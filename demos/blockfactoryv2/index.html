@@ -42,7 +42,13 @@
   </div>
 
   <div id="blockLibraryExporter">
-    <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+    <div id="exporterButtons">
+      <button id="clearSelectedButton"> Clear Blocks </button>
+      <button id="addAllButton"> Add All Stored Blocks </button>
+    </div>
+    <div id="helperTextDiv">
+      <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+    </div>
     <!-- Inject exportSelectorWorkspace into this div -->
     <div id="exportSelector"></div>
     <!-- Users may customize export settings through this form -->
@@ -54,8 +60,8 @@
         <input type="checkbox" id="blockDefCheck"><br>
               Language code:
                 <select id="exportFormat">
-                  <option value="JavaScript">JavaScript</option>
                   <option value="JSON">JSON</option>
+                  <option value="JavaScript">JavaScript</option>
                 </select><br>
           Block Definition(s) File Name:<br>
           <input type="text" id="blockDef_filename"><br>
@@ -74,7 +80,6 @@
           <br>
       </form>
         <button id="exporterSubmitButton"> Export </button>
-        <button id="clearSelectedButton"> Clear Selected Blocks </button>
     </div>
   </div>
 
@@ -157,8 +162,8 @@
             <td height="5%">
               <h3>Language code:
                 <select id="format">
-                  <option value="JavaScript">JavaScript</option>
                   <option value="JSON">JSON</option>
+                  <option value="JavaScript">JavaScript</option>
                   <option value="Manual">Manual edit&hellip;</option>
                 </select>
                 <button class ="downloadButton" id="downloadBlocks"

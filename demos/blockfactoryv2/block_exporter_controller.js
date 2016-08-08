@@ -40,8 +40,8 @@ BlockExporterController = function(blockLibStorage) {
 BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
   var selectedBlocks = this.view.getSelectedBlocks();
   var blockTypes = [];
-  for (var i = 0; i < selectedBlocks.length; i++) {
-    blockTypes.push(selectedBlocks[i].type);
+  for (var i = 0, block; block = selectedBlocks[i]; i++) {
+    blockTypes.push(block.type);
   }
   return blockTypes;
 };
@@ -111,8 +111,8 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
   this.view.renderToolbox(updatedToolbox);
   // Disable any selected blocks.
   var selectedBlocks = this.getSelectedBlockTypes_();
-  for (var i = 0; i < selectedBlocks.length; i++) {
-    this.setBlockEnabled(selectedBlocks[i], false);
+  for (var i = 0, blockType; blockType = selectedBlocks[i]; i++) {
+    this.setBlockEnabled(blockType, false);
   }
 };
 
@@ -205,4 +205,26 @@ BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
 BlockExporterController.prototype.clearSelectedBlocks = function() {
   // Clear selector workspace.
   this.view.clearSelectorWorkspace();
+};
+
+/**
+ * Tied to the 'Add All Stored Blocks' button in the Block Exporter.
+ * Adds all blocks stored in block library to the selector workspace.
+ */
+BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
+  // Clear selector workspace.
+  this.view.clearSelectorWorkspace();
+
+  // Add and evaluate all blocks' definitions.
+  var allBlockTypes = this.blockLibStorage.getBlockTypes();
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(allBlockTypes);
+  this.tools.addBlockDefinitions(blockXmlMap);
+
+  // For every block, render in selector workspace.
+  for (var i = 0, blockType; blockType = allBlockTypes[i]; i++) {
+    this.view.addBlock(blockType);
+  }
+
+  // Clean up workspace.
+  this.view.cleanUpSelectorWorkspace();
 };

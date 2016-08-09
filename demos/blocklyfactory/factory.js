@@ -1,11 +1,12 @@
 /**
- * Blockly Demos: Block Factory
+ * @license
+ * Visual Blocks Editor
  *
- * Copyright 2012 Google Inc.
+ * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * You may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -18,8 +19,12 @@
  */
 
 /**
- * @fileoverview JavaScript for Blockly's Block Factory application.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview JavaScript for Blockly's Block Factory application through
+ * which users can build blocks using a visual interface and dynamically
+ * generate a preview block and starter code for the block (block definition and
+ * generator stub. Uses the Block Factory namespace.
+ *
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
  */
 'use strict';
 

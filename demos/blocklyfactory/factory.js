@@ -425,7 +425,7 @@ BlockFactory.getFieldsJs_ = function(block) {
             }
           }
           fields.push('new Blockly.FieldNumber(' + args.join(', ') + '), ' +
-              escapeString(block.getFieldValue('FIELDNAME')));
+              BlockFactory.escapeString(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_angle':
           // Result: new Blockly.FieldAngle(90), 'ANGLE'

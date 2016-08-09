@@ -655,8 +655,8 @@ goog.require('goog.ui.ColorPicker');
         if (selected != null && controller.isUserGenShadowBlock(selected.id)) {
 
         // Provide warning if shadow block is moved and is no longer a valid shadow block.
-          // Blockly.selected.setWarningText('Shadow blocks must be nested inside other' +
-          //     ' blocks to be displayed.');
+          Blockly.selected.setWarningText('Shadow blocks must be nested inside other' +
+              ' blocks to be displayed.');
 
           // Give editing options so that the user can make an invalid shadow block
           // a normal block.

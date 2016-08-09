@@ -269,8 +269,9 @@ Blockly.Variables.getUses = function(name, workspace) {
 /**
  * When a variable is deleted, find and dispose of all uses of it.
  * @param {!Array.<!Blockly.Block>} uses An array of blocks using the variable.
+ * @private
  */
-Blockly.Variables.disposeUses = function(uses) {
+Blockly.Variables.disposeUses_ = function(uses) {
   Blockly.Events.setGroup(true);
   for (var i = 0; i < uses.length; i++) {
     uses[i].dispose(true, false);
@@ -292,7 +293,7 @@ Blockly.Variables.delete = function(name, workspace) {
         Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
             replace('%2', name));
     }
-    Blockly.Variables.disposeUses(uses);
+    Blockly.Variables.disposeUses_(uses);
     workspace.variableList.splice(variableIndex, 1);
   }
 

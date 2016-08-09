@@ -292,6 +292,8 @@ FactoryModel.prototype.removeShadowBlock = function(blockId) {
  * Determines if a block is a shadow block given a unique block ID.
  *
  * @param {!string} blockId The unique ID of the block to examine.
+ * @return {boolean} True if the block is a user-generated shadow block, false
+ *    otherwise.
  */
 FactoryModel.prototype.isShadowBlock = function(blockId) {
   for (var i = 0; i < this.shadowBlocks.length; i++) {

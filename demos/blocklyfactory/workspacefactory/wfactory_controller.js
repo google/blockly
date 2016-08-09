@@ -655,6 +655,18 @@ FactoryController.prototype.removeShadow = function() {
 };
 
 /**
+ * Given a unique block ID, uses the model to determine if a block is a
+ * user-generated shadow block.
+ *
+ * @param {!string} blockId The unique ID of the block to examine.
+ * @return {boolean} True if the block is a user-generated shadow block, false
+ *    otherwise.
+ */
+FactoryController.prototype.isUserGenShadowBlock = function(blockId) {
+  return this.model.isShadowBlock(blockId);
+}
+
+/**
  * Call when importing XML containing real shadow blocks. This function turns
  * all real shadow blocks loaded in the workspace into user-generated shadow
  * blocks, meaning they are marked as shadow blocks by the model and appear as

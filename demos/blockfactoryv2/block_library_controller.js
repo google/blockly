@@ -24,11 +24,13 @@ goog.require('BlockFactory');
  *
  * @param {string} blockLibraryName - Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
+ * @param {!BlockLibraryStorage} opt_blockLibraryStorage - optional storage
+ *    object that allows user to import a block library.
  */
-BlockLibraryController = function(blockLibraryName) {
+BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
   this.name = blockLibraryName;
   // Create a new, empty Block Library Storage object, or load existing one.
-  this.storage = new BlockLibraryStorage(this.name);
+  this.storage = opt_blockLibraryStorage || new BlockLibraryStorage(this.name);
 };
 
 /**
@@ -158,5 +160,36 @@ BlockLibraryController.prototype.populateBlockLibrary = function() {
           block, block, 'blockLibraryDropdown', false, true);
     }
   }
+};
+
+/**
+ * Return block library mapping block type to xml.
+ *
+ * @return {Object} Object mapping block type to xml text.
+ */
+BlockLibraryController.prototype.getBlockLibrary = function() {
+  return this.storage.getBlockXmlTextMap();
+};
+
+/**
+ * Set the block library storage object from which exporter exports.
+ *
+ * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage
+ *    object.
+ */
+BlockLibraryController.prototype.setBlockLibStorage
+    = function(blockLibStorage) {
+  this.storage = blockLibStorage;
+};
+
+/**
+ * Get the block library storage object from which exporter exports.
+ *
+ * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
+ *    that stores the blocks.
+ */
+BlockLibraryController.prototype.getBlockLibStorage =
+    function(blockLibStorage) {
+  return this.blockLibStorage;
 };
 

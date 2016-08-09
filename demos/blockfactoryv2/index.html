@@ -23,10 +23,10 @@
   <link rel="stylesheet" href="../prettify.css">
   <script src="../prettify.js"></script>
   <script>
-    var blocklyDevTools;
+    var blocklyFactory;
     var init = function() {
-      blocklyDevTools = new AppController();
-      blocklyDevTools.init();
+      blocklyFactory = new AppController();
+      blocklyFactory.init();
     };
     window.addEventListener('load', init);
 </script>
@@ -131,12 +131,12 @@
                 <span> Create New Block</span>
               </button>
               <label for="files" class="buttonStyle">
-                <span class=>Import block</span>
+                <span class=>Import Block Library</span>
               </label>
               <input id="files" type="file" name="files"
                   accept="application/xml">
-              <button id="localSaveButton" title="Save block xml to a local file.">
-                <span>Download block</span>
+              <button id="localSaveButton" title="Save block library xml to a local file.">
+                <span>Download Block Library</span>
               </button>
               <button id="helpButton" title="View documentation in new window.">
                 <span>Help</span>

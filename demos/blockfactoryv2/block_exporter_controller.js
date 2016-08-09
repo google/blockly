@@ -32,6 +32,28 @@ BlockExporterController = function(blockLibStorage) {
 };
 
 /**
+ * Set the block library storage object from which exporter exports.
+ *
+ * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
+ *    that stores the blocks.
+ */
+BlockExporterController.prototype.setBlockLibStorage =
+    function(blockLibStorage) {
+  this.blockLibStorage = blockLibStorage;
+};
+
+/**
+ * Get the block library storage object from which exporter exports.
+ *
+ * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
+ *    that stores the blocks.
+ */
+BlockExporterController.prototype.getBlockLibStorage =
+    function(blockLibStorage) {
+  return this.blockLibStorage;
+};
+
+/**
  * Get the selected block types.
  * @private
  *

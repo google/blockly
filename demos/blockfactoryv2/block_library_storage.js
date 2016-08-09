@@ -15,17 +15,23 @@ goog.provide('BlockLibraryStorage');
  *
  * @param {string} blockLibraryName - Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
+ * @param {Object} opt_blocks - Object mapping block type to xml.
  */
-BlockLibraryStorage = function(blockLibraryName) {
+BlockLibraryStorage = function(blockLibraryName, opt_blocks) {
   // Add prefix to this.name to avoid collisions in local storage.
   this.name = 'BlockLibraryStorage.' + blockLibraryName;
-  // Initialize this.blocks by loading from local storage.
-  this.loadFromLocalStorage();
-  if (this.blocks == null) {
-    this.blocks = Object.create(null);
-    // The line above is equivalent of {} except that this object is TRULY
-    // empty. It doesn't have built-in attributes/functions such as length or
-    // toString.
+  if (!opt_blocks) {
+    // Initialize this.blocks by loading from local storage.
+    this.loadFromLocalStorage();
+    if (this.blocks == null) {
+      this.blocks = Object.create(null);
+      // The line above is equivalent of {} except that this object is TRULY
+      // empty. It doesn't have built-in attributes/functions such as length or
+      // toString.
+      this.saveToLocalStorage();
+    }
+  } else {
+    this.blocks = opt_blocks;
     this.saveToLocalStorage();
   }
 };
@@ -34,7 +40,7 @@ BlockLibraryStorage = function(blockLibraryName) {
  * Reads the named block library from local storage and saves it in this.blocks.
  */
 BlockLibraryStorage.prototype.loadFromLocalStorage = function() {
-  // goog.global is synonymous to window, and  allows for flexibility
+  // goog.global is synonymous to window, and allows for flexibility
   // between browsers.
   var object = goog.global.localStorage[this.name];
   this.blocks = object ? JSON.parse(object) : null;
@@ -129,4 +135,13 @@ BlockLibraryStorage.prototype.isEmpty = function() {
     return false;
   }
   return true;
+};
+
+/**
+ * Returns array of all block types stored in current block library.
+ *
+ * @return {!Array.<string>} Map of block type to corresponding xml text.
+ */
+BlockLibraryStorage.prototype.getBlockXmlTextMap = function() {
+  return this.blocks;
 };

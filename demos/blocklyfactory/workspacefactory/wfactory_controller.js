@@ -443,11 +443,15 @@ FactoryController.prototype.loadCategory = function() {
 
   // Copy the standard category in the model.
   var copy = standardCategory.copy();
+
+  // Add the copy in the view.
+  var tab = this.view.addCategoryRow(copy.name, copy.id,
+      !this.model.hasToolbox());
+
+  // Add it to the model.
   this.model.addElementToList(copy);
 
-  // Update the copy in the view.
-  var tab = this.view.addCategoryRow(copy.name, copy.id,
-      this.model.getSelected() == null);
+  // Update the view.
   this.addClickToSwitch(tab, copy.id);
   // Color the category tab in the view.
   if (copy.color) {
@@ -526,6 +530,7 @@ FactoryController.prototype.importFile = function(file) {
       controller.importFromTree_(tree);
     } catch(e) {
       alert('Cannot load XML from file.');
+      console.log(e);
     }
   }
 
@@ -581,8 +586,13 @@ FactoryController.prototype.importFromTree_ = function(tree) {
         this.convertShadowBlocks_();
 
         // Set category color.
-        if (item.color) {
-          category.changeColor(item.color);
+        if (item.getAttribute('colour')) {
+          category.changeColor(item.getAttribute('colour'));
+          this.view.setBorderColor(category.id, category.color);
+        }
+        // Set any custom tags.
+        if (item.getAttribute('custom')) {
+          this.model.addCustomTag(category, item.getAttribute('custom'));
         }
       } else {
         // If the element is a separator, add the separator and switch to it.
@@ -591,7 +601,8 @@ FactoryController.prototype.importFromTree_ = function(tree) {
       }
     }
   }
-
+  this.view.updateState(this.model.getIndexByElementId
+      (this.model.getSelectedId()), this.model.getSelected());
   this.updatePreview();
 };
 
@@ -603,6 +614,7 @@ FactoryController.prototype.clear = function() {
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
   this.view.addEmptyCategoryMessage();
+  this.view.updateState(-1, null);
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
   this.updatePreview();

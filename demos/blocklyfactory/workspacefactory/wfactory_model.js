@@ -258,6 +258,8 @@ FactoryModel.prototype.getCategoryIdByName = function(name) {
  */
 FactoryModel.prototype.clearToolboxList = function() {
   this.toolboxList = [];
+  this.hasVariableCategory = false;
+  this.hasVariableCategory = false;
   // TODO(evd2014): When merge changes, also clear shadowList.
 };
 
@@ -316,6 +318,28 @@ FactoryModel.prototype.getShadowBlocksInWorkspace = function(workspaceBlocks) {
     }
   }
   return shadowsInWorkspace;
+};
+
+/**
+ * Adds a custom tag to a category, updating state variables accordingly.
+ * Only accepts 'VARIABLE' and 'PROCEDURE' tags.
+ *
+ * @param {!ListElement} category The category to add the tag to.
+ * @param {!string} tag The custom tag to add to the category.
+ */
+FactoryModel.prototype.addCustomTag = function(category, tag) {
+  // Only update list elements that are categories.
+  if (category.type != ListElement.TYPE_CATEGORY) {
+    return;
+  }
+  // Only update the tag to be 'VARIABLE' or 'PROCEDURE'.
+  if (tag == 'VARIABLE') {
+    this.hasVariableCategory = true;
+    category.custom = 'VARIABLE';
+  } else if (tag == 'PROCEDURE') {
+    this.hasProcedureCategory = true;
+    category.custom = 'PROCEDURE';
+  }
 };
 
 

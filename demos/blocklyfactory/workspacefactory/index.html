@@ -671,6 +671,11 @@ goog.require('goog.ui.ColorPicker');
         }
       }
     }
+
+    // Convert actual shadow blocks added from the toolbox to user-generated shadow blocks.
+    if (e.type == Blockly.Events.CREATE) {
+      controller.convertShadowBlocks();
+    }
   });
 
 </script>

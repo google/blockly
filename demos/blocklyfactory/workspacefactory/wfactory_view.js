@@ -300,6 +300,11 @@ FactoryView.prototype.markShadowBlocks = function(blocks) {
 FactoryView.prototype.markShadowBlock = function(block) {
   // Add Blockly CSS for user-generated shadow blocks.
   Blockly.addClass_(block.svgGroup_, 'shadowBlock');
+  // If not a valid shadow block, add a warning message.
+  if (!block.getSurroundParent()) {
+      block.setWarningText('Shadow blocks must be nested inside' +
+          ' other blocks to be displayed.');
+  }
 };
 
 /**

@@ -238,7 +238,7 @@
 	"LISTS_INLIST": "A(z)",
 	"LISTS_INDEX_OF_FIRST": "listában első előfordulásaː",
 	"LISTS_INDEX_OF_LAST": "listában utolsó előfordulásaː",
-	"LISTS_INDEX_OF_TOOLTIP": "A megadott elem első vagy utolsó előfordulásával tér vissza. %1-val tér vissza, ha nem talál ilyen elemet.",
+	"LISTS_INDEX_OF_TOOLTIP": "A megadott elem első vagy utolsó előfordulásával tér vissza. Ha nem talál ilyen elemet, akkor %1 a visszatérési érték.",
 	"LISTS_GET_INDEX_GET": "listából értéke",
 	"LISTS_GET_INDEX_GET_REMOVE": "listából kivétele",
 	"LISTS_GET_INDEX_REMOVE": "listából törlése",

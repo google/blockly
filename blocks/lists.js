@@ -389,12 +389,9 @@ Blockly.Blocks['lists_getIndex'] = {
           tooltip = Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM;
           break;
       }
-      if (where == 'FROM_START') {
+      if (where == 'FROM_START' || where == 'FROM_END') {
         tooltip += '  ' + Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP
             .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '#1' : '#0');
-      } else if (where == 'FROM_END') {
-        tooltip += '  ' + Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP
-            .replace('%1', '#1');  // The end is always 1-indexed.
       }
       return tooltip;
     });
@@ -552,12 +549,9 @@ Blockly.Blocks['lists_setIndex'] = {
           tooltip = Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM;
           break;
       }
-      if (where == 'FROM_START') {
+      if (where == 'FROM_START' || where == 'FROM_END') {
         tooltip += '  ' + Blockly.Msg.LISTS_INDEX_FROM_START_TOOLTIP
             .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '#1' : '#0');
-      } else if (where == 'FROM_END') {
-        tooltip += '  ' + Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP
-            .replace('%1', '#1');  // The end is always 1-indexed.
       }
       return tooltip;
     });

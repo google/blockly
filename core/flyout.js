@@ -639,16 +639,32 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   var gaps = [];
   this.permanentlyDisabled_.length = 0;
   for (var i = 0, xml; xml = xmlList[i]; i++) {
-    if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-      var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
-      if (curBlock.disabled) {
-        // Record blocks that were initially disabled.
-        // Do not enable these blocks as a result of capacity filtering.
-        this.permanentlyDisabled_.push(curBlock);
+    if (xml.tagName) {
+      if (xml.tagName.toUpperCase() == 'BLOCK') {
+        var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
+        if (curBlock.disabled) {
+          // Record blocks that were initially disabled.
+          // Do not enable these blocks as a result of capacity filtering.
+          this.permanentlyDisabled_.push(curBlock);
+        }
+        blocks.push(curBlock);
+        var gap = parseInt(xml.getAttribute('gap'), 10);
+        gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
+      } else if (xml.tagName.toUpperCase() == 'SEP') {
+        // Change the gap between two blocks.
+        // <sep gap="36"></sep>
+        // The default gap is 24, can be set larger or smaller.
+        // This overwrites the gap attribute on the previous block.
+        // Note that a deprecated method is to add a gap to a block.
+        // <block type="math_arithmetic" gap="8"></block>
+        var newGap = parseInt(xml.getAttribute('gap'), 10);
+        // Ignore gaps before the first block.
+        if (!isNaN(newGap) && gaps.length > 0) {
+          gaps[gaps.length - 1] = newGap;
+        } else {
+          gaps.push(this.MARGIN * 3);
+        }
       }
-      blocks.push(curBlock);
-      var gap = parseInt(xml.getAttribute('gap'), 10);
-      gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
     }
   }
 

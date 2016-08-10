@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "بما ان القيمة صحي
 Blockly.Msg.DELETE_ALL_BLOCKS = "حذف كل مناعات %1؟";
 Blockly.Msg.DELETE_BLOCK = "إحذف القطعة";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "إحذف قطع %1";
 Blockly.Msg.DISABLE_BLOCK = "عطّل القطعة";
 Blockly.Msg.DUPLICATE_BLOCK = "ادمج";

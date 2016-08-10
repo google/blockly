@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Interis su valori est berus, ta
 Blockly.Msg.DELETE_ALL_BLOCKS = "Scancellu su %1 de is brocus?";
 Blockly.Msg.DELETE_BLOCK = "Fùlia Blocu";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Fulia %1 Blocus";
 Blockly.Msg.DISABLE_BLOCK = "Disabìlita Blocu";
 Blockly.Msg.DUPLICATE_BLOCK = "Dùplica";

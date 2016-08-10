@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "While a value is true, then do 
 Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";
 Blockly.Msg.DELETE_BLOCK = "Delete Block";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";
 Blockly.Msg.DELETE_X_BLOCKS = "Delete %1 Blocks";
 Blockly.Msg.DISABLE_BLOCK = "Disable Block";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplicate";

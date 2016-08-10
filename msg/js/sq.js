@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Përderisa një vlerë është 
 Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "Fshij bllokun";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Fshij %1 blloqe";
 Blockly.Msg.DISABLE_BLOCK = "Çaktivizo bllokun";
 Blockly.Msg.DUPLICATE_BLOCK = "Kopjo";

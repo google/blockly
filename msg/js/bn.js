@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "While a value is true, then do 
 Blockly.Msg.DELETE_ALL_BLOCKS = "Delete all %1 blocks?";  // untranslated
 Blockly.Msg.DELETE_BLOCK = "ব্লকটি মুছে ফেল";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 ব্লক অপসারণ কর";
 Blockly.Msg.DISABLE_BLOCK = "ব্লকটি বিকল কর";
 Blockly.Msg.DUPLICATE_BLOCK = "প্রতিলিপি";

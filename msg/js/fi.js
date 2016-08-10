@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Niin kauan kuin arvo on tosi, s
 Blockly.Msg.DELETE_ALL_BLOCKS = "Poistetaanko kaikki %1 lohkoa?";
 Blockly.Msg.DELETE_BLOCK = "Poista lohko";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Poista %1 lohkoa";
 Blockly.Msg.DISABLE_BLOCK = "Passivoi lohko";
 Blockly.Msg.DUPLICATE_BLOCK = "Kopioi";

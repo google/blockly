@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "כל עוד הערך הוא א�
 Blockly.Msg.DELETE_ALL_BLOCKS = "האם למחוק את כל %1 קטעי הקוד?";
 Blockly.Msg.DELETE_BLOCK = "מחק קטע קוד";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "מחק %1 קטעי קוד";
 Blockly.Msg.DISABLE_BLOCK = "נטרל קטע קוד";
 Blockly.Msg.DUPLICATE_BLOCK = "שכפל";

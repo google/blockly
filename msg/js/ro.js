@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "În timp ce o valoare este adev
 Blockly.Msg.DELETE_ALL_BLOCKS = "Ștergi toate cele %1 (de) blocuri?";
 Blockly.Msg.DELETE_BLOCK = "Șterge Bloc";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Ștergeți %1 Blocuri";
 Blockly.Msg.DISABLE_BLOCK = "Dezactivaţi bloc";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplicati";

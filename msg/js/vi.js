@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Miễn là điều kiện còn 
 Blockly.Msg.DELETE_ALL_BLOCKS = "Xóa hết %1 mảnh?";
 Blockly.Msg.DELETE_BLOCK = "Xóa Mảnh Này";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Xóa %1 Mảnh";
 Blockly.Msg.DISABLE_BLOCK = "Ngưng Tác Dụng";
 Blockly.Msg.DUPLICATE_BLOCK = "Tạo Bản Sao";

@@ -976,6 +976,10 @@ Blockly.BlockSvg.prototype.getSvgRoot = function() {
  * @param {boolean} animate If true, show a disposal animation and sound.
  */
 Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
+  if (!this.workspace) {
+    // The block has already been deleted.
+    return;
+  }
   Blockly.Tooltip.hide();
   Blockly.Field.startCache();
   // Save the block's workspace temporarily so we can resize the

@@ -25,6 +25,7 @@
 	"NEW_VARIABLE_TITLE": "prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].",
 	"RENAME_VARIABLE": "dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to rename the current variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].",
 	"RENAME_VARIABLE_TITLE": "prompt - Prompts the user to enter the new name for the selected variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.",
+	"DELETE_VARIABLE_CONFIRMATION": "confirm -  Ask the user to confirm their deletion of multiple uses of a variable.",
 	"COLOUR_PICKER_HELPURL": "url - Information about colour.",
 	"COLOUR_PICKER_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Colour#picking-a-colour-from-a-palette https://github.com/google/blockly/wiki/Colour#picking-a-colour-from-a-palette].",
 	"COLOUR_RANDOM_HELPURL": "url - A link that displays a random colour each time you visit it.",

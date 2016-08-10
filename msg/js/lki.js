@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "تا زمانی که یک مق�
 Blockly.Msg.DELETE_ALL_BLOCKS = "حةذف کؤل %1 بلاکةل?";
 Blockly.Msg.DELETE_BLOCK = "پاک کردن بلاک";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "حةذف %1 بلاکةل";
 Blockly.Msg.DISABLE_BLOCK = "إ کار کةتن(غیرفعال‌سازی) بلاک";
 Blockly.Msg.DUPLICATE_BLOCK = "کؤپی کردن";

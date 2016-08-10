@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "ಈ ತಿರ್ತ್‌ದ �
 Blockly.Msg.DELETE_ALL_BLOCKS = "ಮಾತ %1 ನಿರ್ಬಂದೊಲೆನ್ ದೆತ್ತ್ ಪಾಡ್ಲೆ ?";
 Blockly.Msg.DELETE_BLOCK = "ಮಾಜಯರ ತಡೆಯಾತ್ಂಡ್";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "ಮಾಜಯರ ಶೇಕಡಾ ೧ ತಡೆಯಾತ್ಂಡ್";
 Blockly.Msg.DISABLE_BLOCK = "ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಾದ್ ತಡೆಪತ್ತುನೆ";
 Blockly.Msg.DUPLICATE_BLOCK = "ನಕಲ್";

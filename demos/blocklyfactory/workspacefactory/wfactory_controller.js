@@ -53,7 +53,16 @@ FactoryController = function(toolboxWorkspace, previewWorkspace) {
   this.view = new FactoryView();
   // Generates XML for categories.
   this.generator = new FactoryGenerator(this.model);
+  // Tracks which editing mode the user is in. Toolbox mode on start.
+  this.selectedMode = FactoryController.MODE_TOOLBOX;
 };
+
+// Toolbox editing mode. Changes the user makes to the workspace updates the
+// toolbox.
+FactoryController.MODE_TOOLBOX = 'toolbox';
+// Pre-loaded workspace editing mode. Changes the user makes to the workspace
+// udpates the pre-loaded blocks.
+FactoryController.MODE_PRELOAD = 'preload';
 
 /**
  * Currently prompts the user for a name, checking that it's valid (not used
@@ -61,10 +70,10 @@ FactoryController = function(toolboxWorkspace, previewWorkspace) {
  */
 FactoryController.prototype.addCategory = function() {
   // Check if it's the first category added.
-  var firstCategory = !this.model.hasToolbox();
+  var isFirstCategory = !this.model.hasElements();
   // Give the option to save blocks if their workspace is not empty and they
   // are creating their first category.
-  if (firstCategory && this.toolboxWorkspace.getAllBlocks().length > 0) {
+  if (isFirstCategory && this.toolboxWorkspace.getAllBlocks().length > 0) {
     var confirmCreate = confirm('Do you want to save your work in another '
         + 'category? If you don\'t, the blocks in your workspace will be ' +
         'deleted.');
@@ -80,14 +89,14 @@ FactoryController.prototype.addCategory = function() {
     }
   }
   // After possibly creating a category, check again if it's the first category.
-  firstCategory = !this.model.hasToolbox();
+  isFirstCategory = !this.model.hasElements();
   // Get name from user.
   name = this.promptForNewCategoryName('Enter the name of your new category: ');
   if (!name) {  //Exit if cancelled.
     return;
   }
   // Create category.
-  this.createCategory(name, firstCategory);
+  this.createCategory(name, isFirstCategory);
   // Switch to category.
   this.switchElement(this.model.getCategoryIdByName(name));
   // Update preview.
@@ -101,15 +110,15 @@ FactoryController.prototype.addCategory = function() {
  *
  * @param {!string} name Name of category being added.
  * @param {!string} id The ID of the category being added.
- * @param {boolean} firstCategory True if it's the first category created,
+ * @param {boolean} isFirstCategory True if it's the first category created,
  * false otherwise.
  */
-FactoryController.prototype.createCategory = function(name, firstCategory) {
+FactoryController.prototype.createCategory = function(name, isFirstCategory) {
   // Create empty category
   var category = new ListElement(ListElement.TYPE_CATEGORY, name);
   this.model.addElementToList(category);
   // Create new category.
-  var tab = this.view.addCategoryRow(name, category.id, firstCategory);
+  var tab = this.view.addCategoryRow(name, category.id, isFirstCategory);
   this.addClickToSwitch(tab, category.id);
 };
 
@@ -142,30 +151,41 @@ FactoryController.prototype.removeElement = function() {
   if (!this.model.getSelected()) {
     return;
   }
+
   // Check if user wants to remove current category.
   var check = confirm('Are you sure you want to delete the currently selected '
         + this.model.getSelected().type + '?');
   if (!check) { // If cancelled, exit.
     return;
   }
+
   var selectedId = this.model.getSelectedId();
   var selectedIndex = this.model.getIndexByElementId(selectedId);
   // Delete element visually.
   this.view.deleteElementRow(selectedId, selectedIndex);
   // Delete element in model.
   this.model.deleteElementFromList(selectedIndex);
+
   // Find next logical element to switch to.
   var next = this.model.getElementByIndex(selectedIndex);
-  if (!next && this.model.hasToolbox()) {
+  if (!next && this.model.hasElements()) {
     next = this.model.getElementByIndex(selectedIndex - 1);
   }
   var nextId = next ? next.id : null;
+
   // Open next element.
   this.clearAndLoadElement(nextId);
+
+  // If no element to switch to, display message, clear the workspace, and
+  // set a default selected element not in toolbox list in the model.
   if (!nextId) {
     alert('You currently have no categories or separators. All your blocks' +
         ' will be displayed in a single flyout.');
+    this.toolboxWorkspace.clear();
+    this.toolboxWorkspace.clearUndo();
+    this.model.createDefaultSelectedIfEmpty();
   }
+
   // Update preview.
   this.updatePreview();
 };
@@ -226,28 +246,21 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
     this.view.disableWorkspace(false);
   }
 
-  // Set next category.
-  this.model.setSelectedById(id);
-
-  // Clear workspace.
-  this.toolboxWorkspace.clear();
-  this.toolboxWorkspace.clearUndo();
-
-  // Loads next category if switching to an element.
+  // If switching to another category, set category selection in the model and
+  // view.
   if (id != null) {
-    this.view.setCategoryTabSelection(id, true);
-    Blockly.Xml.domToWorkspace(this.model.getSelectedXml(),
-        this.toolboxWorkspace);
-    // Disable workspace if switching to a separator.
-    if (this.model.getSelected().type == ListElement.TYPE_SEPARATOR) {
-      this.view.disableWorkspace(true);
-    }
-  }
+    // Set next category.
+    this.model.setSelectedById(id);
 
-  // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
-  this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
-        (toolboxWorkspace.getAllBlocks()));
-  this.toolboxWorkspace.cleanUp_();
+    // Clears workspace and loads next category.
+    this.clearAndLoadXml_(this.model.getSelectedXml());
+
+    // Selects the next tab.
+    this.view.setCategoryTabSelection(id, true);
+
+    // Order blocks as if shown in the flyout.
+    this.toolboxWorkspace.cleanUp_();
+  }
 
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
@@ -255,15 +268,35 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
 };
 
 /**
- * Tied to "Export Config" button. Gets a file name from the user and downloads
+ * Tied to "Export" button. Gets a file name from the user and downloads
  * the corresponding configuration xml to that file.
+ *
+ * @param {!string} exportMode The type of file to export
+ *    (FactoryController.MODE_TOOLBOX for the toolbox configuration, and
+ *    FactoryController.MODE_PRELOAD for the pre-loaded workspace configuration)
  */
-FactoryController.prototype.exportConfig = function() {
+FactoryController.prototype.exportFile = function(exportMode) {
+  // Save workspace in current state.
+  this.saveStateFromWorkspace();
+
   // Generate XML.
-  var configXml = Blockly.Xml.domToPrettyText
-      (this.generator.generateConfigXml(this.toolboxWorkspace));
+  if (exportMode == FactoryController.MODE_TOOLBOX) {
+    // Export the toolbox XML.
+    var configXml = Blockly.Xml.domToPrettyText
+        (this.generator.generateToolboxXml());
+  } else if (exportMode == FactoryController.MODE_PRELOAD) {
+    // Export the pre-loaded block XML.
+    var configXml = Blockly.Xml.domToPrettyText
+        (this.generator.generateWorkspaceXml());
+  } else {
+    // Unknown mode. Throw error.
+    throw new Error ("Unknown export mode: " + exportMode);
+  }
+
   // Get file name.
-  var fileName = prompt("File Name: ");
+  var fileName = prompt('File Name for ' + (exportMode ==
+      FactoryController.MODE_TOOLBOX ? 'toolbox XML: ' :
+      'pre-loaded workspace XML: '));
   if (!fileName) { // If cancelled
     return;
   }
@@ -273,12 +306,15 @@ FactoryController.prototype.exportConfig = function() {
  };
 
 /**
- * Tied to "Print Config" button. Mainly used for debugging purposes. Prints
+ * Tied to "Print" button. Mainly used for debugging purposes. Prints
  * the configuration XML to the console.
  */
 FactoryController.prototype.printConfig = function() {
+  // Capture any changes made by user before generating XML.
+  this.saveStateFromWorkspace();
+  // Print XML.
   window.console.log(Blockly.Xml.domToPrettyText
-      (this.generator.generateConfigXml(this.toolboxWorkspace)));
+      (this.generator.generateToolboxXml()));
 };
 
 /**
@@ -287,31 +323,68 @@ FactoryController.prototype.printConfig = function() {
  * Blockly with reinjectPreview, otherwise just updates without reinjecting.
  * Called whenever a list element is created, removed, or modified and when
  * Blockly move and delete events are fired. Do not call on create events
- * or disabling will cause the user to "drop" their current blocks.
+ * or disabling will cause the user to "drop" their current blocks. Make sure
+ * that no changes have been made to the workspace since updating the model
+ * (if this might be the case, call saveStateFromWorkspace).
  */
 FactoryController.prototype.updatePreview = function() {
   // Disable events to stop updatePreview from recursively calling itself
   // through event handlers.
   Blockly.Events.disable();
-  var tree = Blockly.Options.parseToolboxTree
-      (this.generator.generateConfigXml(this.toolboxWorkspace));
-  // No categories, creates a simple flyout.
-  if (tree.getElementsByTagName('category').length == 0) {
-    if (this.previewWorkspace.toolbox_) {
-      this.reinjectPreview(tree); // Switch to simple flyout, more expensive.
+
+  if (this.selectedMode == FactoryController.MODE_TOOLBOX) {
+    // If currently editing the toolbox.
+    // Get toolbox XML.
+    var tree = Blockly.Options.parseToolboxTree
+        (this.generator.generateToolboxXml());
+    // No categories, creates a simple flyout.
+    if (tree.getElementsByTagName('category').length == 0) {
+      // No categories, creates a simple flyout.
+      if (this.previewWorkspace.toolbox_) {
+        this.reinjectPreview(tree); // Switch to simple flyout, more expensive.
+      } else {
+        this.previewWorkspace.flyout_.show(tree.childNodes);
+      }
+
     } else {
-      this.previewWorkspace.flyout_.show(tree.childNodes);
+      // Uses categories, creates a toolbox.
+      if (!previewWorkspace.toolbox_) {
+        this.reinjectPreview(tree); // Create a toolbox, more expensive.
+      } else {
+        this.previewWorkspace.toolbox_.populate_(tree);
+      }
     }
-  // Uses categories, creates a toolbox.
-  } else {
-    if (!previewWorkspace.toolbox_) {
-      this.reinjectPreview(tree); // Create a toolbox, more expensive.
-    } else {
-      this.previewWorkspace.toolbox_.populate_(tree);
-    }
+
+    // Update pre-loaded blocks in the preview workspace to make sure that
+    // blocks don't get cleared when updating preview from event listeners while
+    // switching modes.
+    this.previewWorkspace.clear();
+    Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
+        this.previewWorkspace);
+  } else if (this.selectedMode == FactoryController.MODE_PRELOAD){
+    // If currently editing the pre-loaded workspace.
+    this.previewWorkspace.clear();
+    Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
+        this.previewWorkspace);
   }
+
   // Reenable events.
   Blockly.Events.enable();
+};
+
+/**
+ * Saves the state from the workspace depending on the current mode. Should
+ * be called after making changes to the workspace.
+ */
+FactoryController.prototype.saveStateFromWorkspace = function() {
+  if (this.selectedMode == FactoryController.MODE_TOOLBOX) {
+    // If currently editing the toolbox.
+    this.model.getSelected().saveFromWorkspace(toolboxWorkspace);
+  } else if (this.selectedMode == FactoryController.MODE_PRELOAD) {
+    // If currently editing the pre-loaded workspace.
+    this.model.savePreloadXml
+        (Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
+  }
 };
 
 /**
@@ -345,9 +418,8 @@ FactoryController.prototype.reinjectPreview = function(tree) {
  * currently in use, exits if user presses cancel.
  */
 FactoryController.prototype.changeCategoryName = function() {
-  // Return if no category selected or element a separator.
-  if (!this.model.getSelected() ||
-      this.model.getSelected().type == ListElement.TYPE_SEPARATOR) {
+  // Return if a category is not selected.
+  if (this.model.getSelected().type != ListElement.TYPE_CATEGORY) {
     return;
   }
   // Get new name from user.
@@ -415,9 +487,8 @@ FactoryController.prototype.moveElementToIndex = function(element, newIndex,
  * a valid CSS string.
  */
 FactoryController.prototype.changeSelectedCategoryColor = function(color) {
-  // Return if no category selected or element a separator.
-  if (!this.model.getSelected() ||
-      this.model.getSelected().type == ListElement.TYPE_SEPARATOR) {
+  // Return if category is not selected.
+  if (this.model.getSelected().type != ListElement.TYPE_CATEGORY) {
     return;
   }
   // Change color of selected category.
@@ -461,17 +532,15 @@ FactoryController.prototype.loadCategory = function() {
     return;
   }
 
+  var isFirstCategory = !this.model.hasElements();
   // Copy the standard category in the model.
   var copy = standardCategory.copy();
-
-  // Add the copy in the view.
-  var tab = this.view.addCategoryRow(copy.name, copy.id,
-      !this.model.hasToolbox());
 
   // Add it to the model.
   this.model.addElementToList(copy);
 
-  // Update the view.
+  // Update the copy in the view.
+  var tab = this.view.addCategoryRow(copy.name, copy.id, isFirstCategory);
   this.addClickToSwitch(tab, copy.id);
   // Color the category tab in the view.
   if (copy.color) {
@@ -480,7 +549,9 @@ FactoryController.prototype.loadCategory = function() {
   // Switch to loaded category.
   this.switchElement(copy.id);
   // Convert actual shadow blocks to user-generated shadow blocks.
-  this.convertShadowBlocks();
+  this.convertShadowBlocks_();
+  // Save state from workspace before updating preview.
+  this.saveStateFromWorkspace();
   // Update preview.
   this.updatePreview();
 };
@@ -509,7 +580,7 @@ FactoryController.prototype.isStandardCategoryName = function(name) {
  */
 FactoryController.prototype.addSeparator = function() {
   // Don't allow the user to add a separator if a category has not been created.
-  if (!this.model.hasToolbox()) {
+  if (!this.model.hasElements()) {
     alert('Add a category before adding a separator.');
     return;
   }
@@ -526,15 +597,20 @@ FactoryController.prototype.addSeparator = function() {
 
 /**
  * Connected to the import button. Given the file path inputted by the user
- * from file input, this function loads that toolbox XML to the workspace,
- * creating category and separator tabs as necessary. This allows the user
- * to be able to edit toolboxes given their XML form. Catches errors from
+ * from file input, if the import mode is for the toolbox, this function loads
+ * that toolbox XML to the workspace, creating category and separator tabs as
+ * necessary. If the import mode is for pre-loaded blocks in the workspace,
+ * this function loads that XML to the workspace to be edited further. This
+ * function switches mode to whatever the import mode is. Catches errors from
  * file reading and prints an error message alerting the user.
  *
  * @param {string} file The path for the file to be imported into the workspace.
  * Should contain valid toolbox XML.
+ * @param {!string} importMode The mode corresponding to the type of file the
+ *    user is importing (FactoryController.MODE_TOOLBOX or
+ *    FactoryController.MODE_PRELOAD).
  */
-FactoryController.prototype.importFile = function(file) {
+FactoryController.prototype.importFile = function(file, importMode) {
   // Exit if cancelled.
   if (!file) {
     return;
@@ -547,26 +623,37 @@ FactoryController.prototype.importFile = function(file) {
     // Print error message if fail.
     try {
       var tree = Blockly.Xml.textToDom(reader.result);
-      controller.importFromTree_(tree);
+      if (importMode == FactoryController.MODE_TOOLBOX) {
+        // Switch mode and import toolbox XML.
+        controller.setMode(FactoryController.MODE_TOOLBOX);
+        controller.importToolboxFromTree_(tree);
+      } else if (importMode == FactoryController.MODE_PRELOAD) {
+        // Switch mode and import pre-loaded workspace XML.
+        controller.setMode(FactoryController.MODE_PRELOAD);
+        controller.importPreloadFromTree_(tree);
+      } else {
+        // Throw error if invalid mode.
+        throw new Error("Unknown import mode: " + importMode);
+      }
     } catch(e) {
       alert('Cannot load XML from file.');
       console.log(e);
     }
   }
 
-  // Read the file.
+  // Read the file asynchronously.
   reader.readAsText(file);
 };
 
 /**
  * Given a XML DOM tree, loads it into the toolbox editing area so that the
  * user can continue editing their work. Assumes that tree is in valid toolbox
- * XML format.
+ * XML format. Assumes that the mode is MODE_TOOLBOX.
  * @private
  *
  * @param {!Element} tree XML tree to be loaded to toolbox editing area.
  */
-FactoryController.prototype.importFromTree_ = function(tree) {
+FactoryController.prototype.importToolboxFromTree_ = function(tree) {
   // Clear current editing area.
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
@@ -623,20 +710,40 @@ FactoryController.prototype.importFromTree_ = function(tree) {
   }
   this.view.updateState(this.model.getIndexByElementId
       (this.model.getSelectedId()), this.model.getSelected());
+
+  this.saveStateFromWorkspace();
+
   this.updatePreview();
 };
 
 /**
- * Clears the toolbox editing area completely, deleting all categories and all
- * blocks in the model and view.
+ * Given a XML DOM tree, loads it into the pre-loaded workspace editing area.
+ * Assumes that tree is in valid XML format and that the selected mode is
+ * MODE_PRELOAD.
+ *
+ * @param {!Element} tree XML tree to be loaded to pre-loaded block editing
+ *    area.
  */
-FactoryController.prototype.clear = function() {
+FactoryController.prototype.importPreloadFromTree_ = function(tree) {
+  this.clearAndLoadXml_(tree);
+  this.model.savePreloadXml(tree);
+  this.saveStateFromWorkspace();
+  this.updatePreview();
+}
+
+/**
+ * Clears the toolbox editing area completely, deleting all categories and all
+ * blocks in the model and view. Sets the mode to toolbox mode.
+ */
+FactoryController.prototype.clearToolbox = function() {
+  this.setMode(FactoryController.MODE_TOOLBOX);
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
   this.view.addEmptyCategoryMessage();
   this.view.updateState(-1, null);
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
+  this.saveStateFromWorkspace();
   this.updatePreview();
 };
 
@@ -655,6 +762,7 @@ FactoryController.prototype.addShadow = function() {
   }
   this.view.markShadowBlock(Blockly.selected);
   this.model.addShadowBlock(Blockly.selected.id);
+  this.saveStateFromWorkspace();
   this.updatePreview();
 };
 
@@ -671,6 +779,7 @@ FactoryController.prototype.removeShadow = function() {
   }
   this.model.removeShadowBlock(Blockly.selected.id);
   this.view.unmarkShadowBlock(Blockly.selected);
+  this.saveStateFromWorkspace();
   this.updatePreview();
 };
 
@@ -702,3 +811,60 @@ FactoryController.prototype.convertShadowBlocks = function() {
     }
   }
 };
+
+/**
+ * Sets the currently selected mode that determines what the toolbox workspace
+ * is being used to edit. Updates the view and then saves and loads XML
+ * to and from the toolbox and updates the help text.
+ *
+ * @param {!string} tab The type of tab being switched to
+ *    (FactoryController.MODE_TOOLBOX or FactoryController.MODE_PRELOAD).
+ */
+FactoryController.prototype.setMode = function(mode) {
+  // No work to change mode that's currently set.
+  if (this.selectedMode == mode) {
+    return;
+  }
+
+  // Set tab selection and display appropriate tab.
+  this.view.setModeSelection(mode);
+
+  // Update selected tab.
+  this.selectedMode = mode;
+
+  // Update help text above workspace.
+  this.view.updateHelpText(mode);
+
+  if (mode == FactoryController.MODE_TOOLBOX) {
+    // Open the toolbox editing space.
+    document.getElementById('editHelpText').textContent =
+        'Drag blocks into your toolbox:';
+    this.model.savePreloadXml
+        (Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
+    this.clearAndLoadXml_(this.model.getSelectedXml());
+    this.view.disableWorkspace(this.view.shouldDisableWorkspace
+        (this.model.getSelected()));
+  } else {
+    // Open the pre-loaded workspace editing space.
+    if (this.model.getSelected()) {
+      this.model.getSelected().saveFromWorkspace(this.toolboxWorkspace);
+    }
+    this.clearAndLoadXml_(this.model.getPreloadXml());
+    this.view.disableWorkspace(false);
+  }
+};
+
+/**
+ * Clears the toolbox workspace and loads XML to it, marking shadow blocks
+ * as necessary.
+ * @private
+ *
+ * @param {!Element} xml The XML to be loaded to the workspace.
+ */
+FactoryController.prototype.clearAndLoadXml_ = function(xml) {
+  this.toolboxWorkspace.clear();
+  this.toolboxWorkspace.clearUndo();
+  Blockly.Xml.domToWorkspace(xml, this.toolboxWorkspace);
+  this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
+      (this.toolboxWorkspace.getAllBlocks()));
+}

@@ -339,3 +339,33 @@ FactoryView.prototype.unmarkShadowBlock = function(block) {
     Blockly.removeClass_(block.svgGroup_, 'shadowBlock');
   }
 };
+
+/**
+ * Sets the tabs for modes according to which mode the user is currenly
+ * editing in.
+ *
+ * @param {!string} mode The mode being switched to
+ *    (FactoryController.MODE_TOOLBOX or FactoryController.MODE_PRELOAD).
+ */
+FactoryView.prototype.setModeSelection = function(mode) {
+  document.getElementById('tab_preload').className = mode ==
+      FactoryController.MODE_PRELOAD ? 'tabon' : 'taboff';
+  document.getElementById('preload_div').style.display = mode ==
+      FactoryController.MODE_PRELOAD ? 'block' : 'none';
+  document.getElementById('tab_toolbox').className = mode ==
+      FactoryController.MODE_TOOLBOX ? 'tabon' : 'taboff';
+  document.getElementById('toolbox_div').style.display = mode ==
+      FactoryController.MODE_TOOLBOX ? 'block' : 'none';
+};
+
+/**
+ * Updates the help text above the workspace depending on the selected mode.
+ *
+ * @param {!string} mode The selected mode (FactoryController.MODE_TOOLBOX or
+ *    FactoryController.MODE_PRELOAD).
+ */
+FactoryView.prototype.updateHelpText = function(mode) {
+  var helpText = 'Drag your blocks into your ' + (mode ==
+      FactoryController.MODE_TOOLBOX ? 'toolbox: ' : 'pre-loaded workspace: ');
+  document.getElementById('editHelpText').textContent = helpText;
+};

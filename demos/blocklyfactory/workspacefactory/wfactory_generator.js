@@ -49,23 +49,24 @@ FactoryGenerator = function(model) {
 /**
  * Generates the xml for the toolbox or flyout with information from
  * toolboxWorkspace and the model. Uses the hiddenWorkspace to generate XML.
+ * Save state of workspace in model (saveFromWorkspace) before calling if
+ * changes might have been made to the selected category.
  *
  * @param {!Blockly.workspace} toolboxWorkspace Toolbox editing workspace where
  * blocks are added by user to be part of the toolbox.
  * @return {!Element} XML element representing toolbox or flyout corresponding
  * to toolbox workspace.
  */
-FactoryGenerator.prototype.generateConfigXml = function(toolboxWorkspace) {
+FactoryGenerator.prototype.generateToolboxXml = function() {
   // Create DOM for XML.
   var xmlDom = goog.dom.createDom('xml',
       {
         'id' : 'toolbox',
         'style' : 'display:none'
       });
-  if (!this.model.hasToolbox()) {
+  if (!this.model.hasElements()) {
     // Toolbox has no categories. Use XML directly from workspace.
-    this.loadToHiddenWorkspaceAndSave_
-        (Blockly.Xml.workspaceToDom(toolboxWorkspace), xmlDom);
+    this.loadToHiddenWorkspaceAndSave_(this.model.getSelectedXml(), xmlDom);
   } else {
     // Toolbox has categories.
     // Assert that selected != null
@@ -73,8 +74,6 @@ FactoryGenerator.prototype.generateConfigXml = function(toolboxWorkspace) {
       throw new Error('Selected is null when the toolbox is empty.');
     }
 
-    // Capture any changes made by user before generating XML.
-    this.model.getSelected().saveFromWorkspace(toolboxWorkspace);
     var xml = this.model.getSelectedXml();
     var toolboxList = this.model.getToolboxList();
 
@@ -87,7 +86,7 @@ FactoryGenerator.prototype.generateConfigXml = function(toolboxWorkspace) {
       if (element.type == ListElement.TYPE_SEPARATOR) {
         // If the next element is a separator.
         var nextElement = goog.dom.createDom('sep');
-      } else {
+      } else if (element.type == ListElement.TYPE_CATEGORY) {
         // If the next element is a category.
         var nextElement = goog.dom.createDom('category');
         nextElement.setAttribute('name', element.name);
@@ -108,6 +107,26 @@ FactoryGenerator.prototype.generateConfigXml = function(toolboxWorkspace) {
   }
   return xmlDom;
  };
+
+ /**
+  * Generates XML for the workspace (different from generateConfigXml in that
+  * it includes XY and ID attributes). Uses a workspace and converts user
+  * generated shadow blocks to actual shadow blocks.
+  *
+  */
+FactoryGenerator.prototype.generateWorkspaceXml = function() {
+  // Load workspace XML to hidden workspace with user-generated shadow blocks
+  // as actual shadow blocks.
+  this.hiddenWorkspace.clear();
+  Blockly.Xml.domToWorkspace(this.model.getPreloadXml(), this.hiddenWorkspace);
+  this.setShadowBlocksInHiddenWorkspace_();
+
+  // Generate XML and set attributes.
+  var generatedXml = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
+  generatedXml.setAttribute('id', 'preload_blocks');
+  generatedXml.setAttribute('style', 'display:none');
+  return generatedXml;
+ }
 
 /**
  * Load the given XML to the hidden workspace, set any user-generated shadow

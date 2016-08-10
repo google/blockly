@@ -163,10 +163,6 @@ BlockLibraryController.prototype.isInBlockLibrary = function(blockType) {
  *  Populates the dropdown menu.
  */
 BlockLibraryController.prototype.populateBlockLibrary = function() {
-  if (this.storage.isEmpty()) {
-    alert('Your block library is empty! Click "Save to Block Library" so ' +
-         'you can reopen it the next time you visit Block Factory!');
-  }
   BlockLibraryView.clearOptions('blockLibraryDropdown');
   // Add a default, blank option to dropdown for when no block from library is
   // selected.
@@ -213,3 +209,11 @@ BlockLibraryController.prototype.getBlockLibStorage =
   return this.blockLibStorage;
 };
 
+/**
+ * Get the block library storage object from which exporter exports.
+ *
+ * @return {boolean} True if the Block Library is empty, false otherwise.
+ */
+BlockLibraryController.prototype.hasEmptyBlockLib = function() {
+  return this.storage.isEmpty();
+};

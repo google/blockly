@@ -637,12 +637,10 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // Create the blocks to be shown in this flyout.
   var blocks = [];
   var gaps = [];
-  var lastBlock = null;
   this.permanentlyDisabled_.length = 0;
   for (var i = 0, xml; xml = xmlList[i]; i++) {
     if (xml.tagName) {
       if (xml.tagName.toUpperCase() == 'BLOCK') {
-        lastBlock = xml;
         var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
         if (curBlock.disabled) {
           // Record blocks that were initially disabled.
@@ -656,14 +654,13 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         // Change the gap between two blocks.
         // <sep gap="36"></sep>
         // The default gap is 24, can be set larger or smaller.
+        // This overwrites the gap attribute on the previous block.
         // Note that a deprecated method is to add a gap to a block.
         // <block type="math_arithmetic" gap="8"></block>
         var newGap = parseInt(xml.getAttribute('gap'), 10);
         // Ignore gaps before the first block.
-        if (!isNaN(newGap) && lastBlock) {
-          var oldGap = parseInt(lastBlock.getAttribute('gap'));
-          var gap = isNaN(oldGap) ? newGap : oldGap + newGap;
-          gaps[gaps.length - 1] = gap;
+        if (!isNaN(newGap) && gaps.length > 0) {
+          gaps[gaps.length - 1] = newGap;
         } else {
           gaps.push(this.MARGIN * 3);
         }

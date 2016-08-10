@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Keit ha ma vez gwir un dalvoude
 Blockly.Msg.DELETE_ALL_BLOCKS = "Diverkañ an holl vloc'hoù %1 ?";
 Blockly.Msg.DELETE_BLOCK = "Dilemel ar bloc'h";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Dilemel %1 bloc'h";
 Blockly.Msg.DISABLE_BLOCK = "Diweredekaat ar bloc'h";
 Blockly.Msg.DUPLICATE_BLOCK = "Eiladuriñ";

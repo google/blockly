@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Док је вредност т
 Blockly.Msg.DELETE_ALL_BLOCKS = "Обрисати %1 блокова?";
 Blockly.Msg.DELETE_BLOCK = "Обриши блок";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Обриши %1 блокова";
 Blockly.Msg.DISABLE_BLOCK = "Онемогући блок";
 Blockly.Msg.DUPLICATE_BLOCK = "Дуплирај";

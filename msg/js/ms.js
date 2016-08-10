@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Lakukan beberapa perintah apabi
 Blockly.Msg.DELETE_ALL_BLOCKS = "Hapuskan kesemua %1 blok?";
 Blockly.Msg.DELETE_BLOCK = "Hapuskan Blok";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Hapuskan %1 Blok";
 Blockly.Msg.DISABLE_BLOCK = "Matikan Blok";
 Blockly.Msg.DUPLICATE_BLOCK = "Pendua";

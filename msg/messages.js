@@ -106,6 +106,8 @@ Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 Blockly.Msg.RENAME_VARIABLE = 'Rename variable...';
 /// prompt - Prompts the user to enter the new name for the selected variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
 Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
+/// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = 'Delete %1 uses of the %2 variable?';
 
 // Colour Blocks.
 /// url - Information about colour.

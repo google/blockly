@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Enquanto um valor for verdadeir
 Blockly.Msg.DELETE_ALL_BLOCKS = "Apagar todos os %1 blocos?";
 Blockly.Msg.DELETE_BLOCK = "Remover bloco";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Remover %1 blocos";
 Blockly.Msg.DISABLE_BLOCK = "Desabilitar bloco";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplicar";

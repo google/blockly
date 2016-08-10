@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Endurtaka eitthvað á meðan g
 Blockly.Msg.DELETE_ALL_BLOCKS = "Eyða öllum %1 kubbunum?";
 Blockly.Msg.DELETE_BLOCK = "Eyða kubbi";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Eyða %1 kubbum";
 Blockly.Msg.DISABLE_BLOCK = "Óvirkja kubb";
 Blockly.Msg.DUPLICATE_BLOCK = "Afrita";

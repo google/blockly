@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Füahr die Oonweisung solang au
 Blockly.Msg.DELETE_ALL_BLOCKS = "All %1 Bausten lösche?";
 Blockly.Msg.DELETE_BLOCK = "Block lösche";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Block %1 lösche";
 Blockly.Msg.DISABLE_BLOCK = "Block deaktivieren";
 Blockly.Msg.DUPLICATE_BLOCK = "Kopieren";

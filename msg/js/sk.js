@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Kým je hodnota pravdivá, vyko
 Blockly.Msg.DELETE_ALL_BLOCKS = "Zmazať všetkých %1 dielcov?";
 Blockly.Msg.DELETE_BLOCK = "Odstrániť blok";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Odstrániť %1 blokov";
 Blockly.Msg.DISABLE_BLOCK = "Vypnúť blok";
 Blockly.Msg.DUPLICATE_BLOCK = "Duplikovať";

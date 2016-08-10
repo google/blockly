@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Bir değer doğru olduğunda ba
 Blockly.Msg.DELETE_ALL_BLOCKS = "Tüm %1 blok silinsin mi?";
 Blockly.Msg.DELETE_BLOCK = "Bloğu Sil";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 Blokları Sil";
 Blockly.Msg.DISABLE_BLOCK = "Bloğu Devre Dışı Bırak";
 Blockly.Msg.DUPLICATE_BLOCK = "Çoğalt";

@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Kartoja veiksmus, kol sąlyga t
 Blockly.Msg.DELETE_ALL_BLOCKS = "Ištrinti visus %1 blokus?";
 Blockly.Msg.DELETE_BLOCK = "Ištrinti bloką";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Ištrinti %1 blokus";
 Blockly.Msg.DISABLE_BLOCK = "Išjungti bloką";
 Blockly.Msg.DUPLICATE_BLOCK = "Kopijuoti";

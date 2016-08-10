@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Amíg a feltétel igaz, végreh
 Blockly.Msg.DELETE_ALL_BLOCKS = "Az összes %1 blokk törlése?";
 Blockly.Msg.DELETE_BLOCK = "Blokk törlése";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 blokk törlése";
 Blockly.Msg.DISABLE_BLOCK = "Blokk letiltása";
 Blockly.Msg.DUPLICATE_BLOCK = "Másolat";

@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "値は true のあいだ、い�
 Blockly.Msg.DELETE_ALL_BLOCKS = "%1件のすべてのブロックを消しますか？";
 Blockly.Msg.DELETE_BLOCK = "ブロックを消す";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 個のブロックを消す";
 Blockly.Msg.DISABLE_BLOCK = "ブロックを無効にします。";
 Blockly.Msg.DUPLICATE_BLOCK = "複製";

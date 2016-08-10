@@ -63,6 +63,7 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "மாறி உண்மை �
 Blockly.Msg.DELETE_ALL_BLOCKS = "அனைத்து %1 நிரல் துண்டுகளையும் அழிக்கவா??";
 Blockly.Msg.DELETE_BLOCK = "உறுப்பை நீக்கு";
 Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the %2 variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "%1 உறுப்பை நீக்கு";
 Blockly.Msg.DISABLE_BLOCK = "உறுப்பை இயங்காது செய்";
 Blockly.Msg.DUPLICATE_BLOCK = "மறுநகல்";

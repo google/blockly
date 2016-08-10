@@ -102,13 +102,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     constructor: [
         blocklyApp.ClipboardService, blocklyApp.NotificationsService,
         blocklyApp.TreeService, blocklyApp.UtilsService,
+        blocklyApp.AudioService,
         function(
             _clipboardService, _notificationsService, _treeService,
-            _utilsService) {
+            _utilsService, _audioService) {
       this.clipboardService = _clipboardService;
       this.notificationsService = _notificationsService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
+      this.audioService = _audioService;
     }],
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
@@ -172,6 +174,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       var that = this;
       this.removeBlockAndSetFocus_(this.block, function() {
         that.block.dispose(true);
+        that.audioService.playDeleteSound();
       });
 
       setTimeout(function() {

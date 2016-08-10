@@ -64,7 +64,8 @@ blocklyApp.AppView = ng.core
     // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
     providers: [
         blocklyApp.ClipboardService, blocklyApp.NotificationsService,
-        blocklyApp.TreeService, blocklyApp.UtilsService]
+        blocklyApp.TreeService, blocklyApp.UtilsService,
+        blocklyApp.AudioService]
   })
   .Class({
     constructor: [blocklyApp.NotificationsService, function(_notificationsService) {

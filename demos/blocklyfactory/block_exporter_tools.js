@@ -179,6 +179,7 @@ BlockExporterTools.prototype.addBlockDefinitions = function(blockXmlMap) {
  * Pulls information about all blocks in the block library to generate xml
  * for the selector workpace's toolbox.
  *
+ * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
  * @return {!Element} Xml representation of the toolbox.
  */
 BlockExporterTools.prototype.generateToolboxFromLibrary

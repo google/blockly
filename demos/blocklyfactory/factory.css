@@ -161,6 +161,16 @@ button, .buttonStyle {
   width: 50%;
 }
 
+/* Workspace Factory */
+
+#workspaceFactoryContent {
+  clear: both;
+  display: none;
+  height: 100%;
+}
+
+/* Exporter */
+
 #blockLibraryExporter {
   clear: both;
   display: none;
@@ -170,17 +180,25 @@ button, .buttonStyle {
 #exportSelector {
   float: left;
   height: 75%;
-  width: 60%;
+  width: 30%;
 }
 
 #exportSettings {
-  margin: auto;
+  float: left;
   padding: 16px;
+  width: 30%;
   overflow: hidden;
 }
 
 #exporterHiddenWorkspace {
  display: none;
+}
+
+#exporterPreview {
+  float: right;
+  padding: 16px;
+  overflow: hidden;
+  background-color: blue;
 }
 
 /* Tabs */

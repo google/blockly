@@ -40,27 +40,41 @@
     <a href="../index.html">Demos</a> &gt; Blockly Factory</h1>
 
   <div id="tabContainer">
-    <div id="blockfactory_tab" class="tab tabon"> Block Factory</div>
+    <div id="blockFactory_tab" class="tab tabon"> Block Factory</div>
     <div class="tabGap"></div>
-    <div id="blocklibraryExporter_tab" class="tab taboff"> Block Library Exporter</div>
+    <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
+    <div class="tabGap"></div>
+    <div id="blocklibraryExporter_tab" class="tab taboff"> Exporter</div>
   </div>
 
   <div id="blockLibraryExporter">
-    <div id="exporterButtons">
-      <button id="clearSelectedButton"> Clear Blocks </button>
-      <button id="addAllButton"> Add All Stored Blocks </button>
-    </div>
+    <h3> Block Selector </h3>
     <div id="helperTextDiv">
       <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+    </div>
+    <div id="exporterButtons">
+      <button id="clearSelectedButton"> Clear Blocks </button>
+      <button id="addAllFromLibButton"> Add All Stored Blocks </button>
+      <button id="addAllUsedButton"> Add All Used Blocks </button>
     </div>
     <!-- Inject exportSelectorWorkspace into this div -->
     <div id="exportSelector"></div>
     <!-- Users may customize export settings through this form -->
     <div id="exportSettings">
-      <h3> Block Export Settings </h3>
+      <h3> Export Settings </h3>
       <br>
       <form id="exportSettingsForm">
-        Download Block Definition:
+        Toolbox Xml:
+        <input type="checkbox" id="toolboxCheck">
+        <br>
+        Pre-loaded Workspace:
+        <input type="checkbox" id="preloadedWorkspaceCheck">
+        <br>
+        Workspace Option(s):
+        <input type="checkbox" id="workspaceOptsCheck">
+        <br>
+        <br>
+        Block Definition(s):
         <input type="checkbox" id="blockDefCheck"><br>
               Language code:
                 <select id="exportFormat">
@@ -68,9 +82,10 @@
                   <option value="JavaScript">JavaScript</option>
                 </select><br>
           Block Definition(s) File Name:<br>
-          <input type="text" id="blockDef_filename"><br>
+          <input type="text" id="blockDef_filename">
           <br>
-        Download Generator Stubs:
+          <br>
+        Generator Stub(s):
         <input type="checkbox" id="genStubCheck"><br>
                 <select id="exportLanguage">
                   <option value="JavaScript">JavaScript</option>
@@ -85,6 +100,9 @@
       </form>
         <button id="exporterSubmitButton"> Export </button>
     </div>
+  </div>
+
+  <div id="workspaceFactoryContent">
   </div>
 
   <table id="blockFactoryContent">

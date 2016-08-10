@@ -249,6 +249,8 @@ AppController.prototype.makeTabClickHandler_ = function(tabName) {
 /**
  * Called on each tab click. Hides and shows specific content based on which tab
  * (Block Factory, Workspace Factory, or Exporter) is selected.
+ *
+ * TODO(quachtina96): Refactor the code to avoid repetition of addRemove.
  */
 AppController.prototype.onTab = function() {
   // Get tab div elements.

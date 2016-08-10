@@ -798,16 +798,17 @@ BlockFactory.updatePreview = function() {
   // Backup Blockly.Blocks object so that main workspace and preview don't
   // collide if user creates a 'factory_base' block, for instance.
   var backupBlocks = Blockly.Blocks;
+  console.log(backupBlocks);
   try {
     // Make a shallow copy.
-    Blockly.Blocks = {};
+    Blockly.Blocks = Object.create(null);
     for (var prop in backupBlocks) {
       Blockly.Blocks[prop] = backupBlocks[prop];
     }
 
     if (format == 'JSON') {
       var json = JSON.parse(code);
-      Blockly.Blocks[json.id || BlockFactory.UNNAMED] = {
+      Blockly.Blocks[json.type || BlockFactory.UNNAMED] = {
         init: function() {
           this.jsonInit(json);
         }
@@ -820,14 +821,19 @@ BlockFactory.updatePreview = function() {
 
     // Look for a block on Blockly.Blocks that does not match the backup.
     var blockType = null;
+    console.log('Blockly Blocks types');
     for (var type in Blockly.Blocks) {
+      console.log(type);
       if (typeof Blockly.Blocks[type].init == 'function' &&
           Blockly.Blocks[type] != backupBlocks[type]) {
         blockType = type;
+        console.log('found non matching type');
+        console.log(blockType);
         break;
       }
     }
     if (!blockType) {
+      console.log('non matching type NOT FOUND');
       return;
     }
 

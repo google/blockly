@@ -275,8 +275,9 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_ = null;
   }
   if (!this.options.parentWorkspace) {
-    // Top-most workspace.  Dispose of the SVG too.
-    goog.dom.removeNode(this.getParentSvg());
+    // Top-most workspace.  Dispose of the div that the
+    // svg is injected into (i.e. injectionDiv).
+    goog.dom.removeNode(this.getParentSvg().parentNode);
   }
   if (this.resizeHandlerWrapper_) {
     Blockly.unbindEvent_(this.resizeHandlerWrapper_);

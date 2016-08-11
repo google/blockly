@@ -38,7 +38,7 @@ h3 {
   margin-top: 5px;
   margin-bottom: 0;
 }
-
+/* Unify table styles*/
 table {
   height: 100%;
   width: 100%;
@@ -235,6 +235,7 @@ aside {
 #categoryTable>table {
   border: 1px solid #ccc;
   border-bottom: none;
+  width: auto;
 }
 
 td.tabon {
@@ -252,7 +253,11 @@ td.taboff:hover {
   background-color: #eee;
 }
 
-label {
+.large {
+  font-size: large;
+}
+
+/*label {
   border-radius: 4px;
   border: 1px solid #ddd;
   background-color: #eee;
@@ -277,7 +282,7 @@ label>* {
 
 label:hover:not(:disabled)>* {
   opacity: 1;
-}
+}*/
 
 td {
   padding: 0;

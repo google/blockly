@@ -324,6 +324,8 @@ FactoryController.prototype.updatePreview = function() {
  */
 FactoryController.prototype.reinjectPreview = function(tree) {
   this.previewWorkspace.dispose();
+  var previewElement = document.getElementById('preview_blocks');
+  previewElement.removeChild(previewElement.childNodes[0]);
   previewToolbox = Blockly.Xml.domToPrettyText(tree);
   this.previewWorkspace = Blockly.inject('preview_blocks',
     {grid:

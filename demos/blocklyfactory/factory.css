@@ -38,9 +38,13 @@ h3 {
   margin-top: 5px;
   margin-bottom: 0;
 }
-/* Unify table styles*/
+
 table {
+  border: none;
+  border-collapse: collapse;
   height: 100%;
+  margin: 0;
+  padding: 0;
   width: 100%;
 }
 
@@ -57,7 +61,6 @@ p {
   -webkit-margin-end: 0px;
   padding: 5px 0px;
 }
-
 
 #blockly {
   position: fixed;
@@ -257,43 +260,9 @@ td.taboff:hover {
   font-size: large;
 }
 
-/*label {
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  background-color: #eee;
-  color: #000;
-  font-size: small;
-  margin: 0 5px;
-  padding: 10px;
-}
-
-label:hover:not(:disabled) {
-  box-shadow: 2px 2px 5px #888;
-}
-
-label:disabled {
-  opacity: .6;
-}
-
-label>* {
-  opacity: .6;
-  vertical-align: text-bottom;
-}
-
-label:hover:not(:disabled)>* {
-  opacity: 1;
-}*/
-
 td {
   padding: 0;
   vertical-align: top;
-}
-
-table {
-  border: none;
-  border-collapse: collapse;
-  margin: 0;
-  padding: 0;
 }
 
 .inputfile {

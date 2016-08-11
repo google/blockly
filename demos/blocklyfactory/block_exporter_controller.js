@@ -42,7 +42,7 @@ goog.require('goog.dom.xml');
  *
  * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage.
  */
-BlockExporterController = function(blockLibStorage, workspaceGenerator) {
+BlockExporterController = function(blockLibStorage) {
   // BlockLibrary.Storage object containing user's saved blocks
   this.blockLibStorage = blockLibStorage;
   // Utils for generating code to export
@@ -51,8 +51,6 @@ BlockExporterController = function(blockLibStorage, workspaceGenerator) {
   this.view = new BlockExporterView(
       //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
-  // Generator for the workspace factory.
-  this.workspaceGenerator = workspaceGenerator;
 };
 
 /**
@@ -302,7 +300,3 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
   // Clean up workspace.
   this.view.cleanUpSelectorWorkspace();
 };
-
-BlockExporterController.prototype.updateExporterView = function() {
-  this.view.updatePreviewWorkspace(this.workspaceGenerator.generateConfigXml());
-}

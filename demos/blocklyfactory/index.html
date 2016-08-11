@@ -6,9 +6,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly Demo: Blockly Factory</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/messages.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="workspacefactory/wfactory_model.js"></script>
+  <script src="workspacefactory/wfactory_controller.js"></script>
+  <script src="workspacefactory/wfactory_view.js"></script>
+  <script src="workspacefactory/wfactory_generator.js"></script>
+  <script src="workspacefactory/standard_categories.js"></script>
   <script src="/storage.js"></script>
-  <script src="../../blockly_uncompressed.js"></script>
-  <script src="../../generators/javascript.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
   <script src="factory.js"></script>
   <script src="block_library_view.js"></script>
@@ -103,12 +110,78 @@
   </div>
 
   <div id="workspaceFactoryContent">
+<!--     <table>
+      <tr>
+        <td> -->
+          <p>
+            <input type="file" id="input_import" class="inputfile"></input>
+            <label for="input_import">Import</label>
+            <button id="button_export">Export</button>
+            <button id="button_print">Print</button>
+            <button id="button_clear">Clear</button>
+          </p>
+<!--         </td>
+      </tr>
+    </table> -->
+
+    <section id="createDiv">
+      <p>Drag blocks into your toolbox:</p>
+      <section id="toolbox_section">
+        <div id="toolbox_blocks" class="content"></div>
+        <div id='disable_div'></div>
+      </section>
+      <aside id="category_section">
+        <table id="categoryTable" height="auto" width="auto">
+          <td id="tab_help">Your categories will appear here</td>
+        </table>
+        <p>&nbsp;</p>
+
+        <div class='dropdown'>
+        <button id="button_add">+</button>
+        <div id="dropdownDiv_add" class="dropdown-content">
+          <a id='dropdown_newCategory'>New Category</a>
+          <a id='dropdown_loadCategory'>Standard Category</a>
+          <a id='dropdown_separator'>Separator</a>
+        </div>
+        </div>
+
+        <button id="button_remove">-</button>
+
+        <button id="button_up">&#8593;</button>
+        <button id="button_down">&#8595;</button>
+
+        <p>&nbsp;</p>
+        <div class='dropdown'>
+        <button id="button_editCategory">Edit Category</button>
+        <div id="dropdownDiv_editCategory" class="dropdown-content">
+          <a id='dropdown_name'>Name</a>
+          <a id='dropdown_color'>Color</a>
+        </div>
+        </div>
+
+        <div class='dropdown'>
+        <button id="button_editShadow">Edit Block</button>
+        <div id="dropdownDiv_editShadowAdd" class="dropdown-content">
+          <a id='dropdown_addShadow'>Add Shadow</a>
+        </div>
+        <div id="dropdownDiv_editShadowRemove" class="dropdown-content">
+          <a id='dropdown_removeShadow'>Remove Shadow</a>
+        </div>
+        </div>
+
+      </aside>
+    </section>
+
+    <aside id="previewDiv">
+      <p>Preview your workspace:</p>
+      <div id="preview_blocks" class="content"></div>
+    </aside>
   </div>
 
   <table id="blockFactoryContent">
     <tr>
       <td width="50%" height="5%">
-        <table>
+        <table width=100% height=100%>
           <tr id="blockLibrary">
             <td id="blockLibraryContainer">
             <span>
@@ -132,7 +205,7 @@
         </table>
       </td>
       <td>
-        <table>
+        <table id="blockFactoryPreview" width=100% height=100%>
           <tr>
             <td id="previewContainer">
               <h3>Preview:

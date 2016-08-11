@@ -246,7 +246,7 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
 
   // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
   this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
-        (toolboxWorkspace.getAllBlocks()));
+        (this.toolboxWorkspace.getAllBlocks()));
   this.toolboxWorkspace.cleanUp_();
 
   // Update category editing buttons.
@@ -304,7 +304,7 @@ FactoryController.prototype.updatePreview = function() {
     }
   // Uses categories, creates a toolbox.
   } else {
-    if (!previewWorkspace.toolbox_) {
+    if (!this.previewWorkspace.toolbox_) {
       this.reinjectPreview(tree); // Create a toolbox, more expensive.
     } else {
       this.previewWorkspace.toolbox_.populate_(tree);
@@ -331,7 +331,7 @@ FactoryController.prototype.reinjectPreview = function(tree) {
        length: 3,
        colour: '#ccc',
        snap: true},
-     media: '../../../media/',
+     media: '../../media/',
      toolbox: previewToolbox,
      zoom:
        {controls: true,

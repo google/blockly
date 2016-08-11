@@ -83,6 +83,13 @@ Blockly.WorkspaceSvg.prototype.rendered = true;
 Blockly.WorkspaceSvg.prototype.isFlyout = false;
 
 /**
+ * Is this workspace the surface for a mutator?
+ * @type {boolean}
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.isMutator = false;
+
+/**
  * Is this workspace currently being dragged around?
  * DRAG_NONE - No drag operation.
  * DRAG_BEGIN - Still inside the initial DRAG_RADIUS.

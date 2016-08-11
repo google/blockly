@@ -128,6 +128,9 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {boolean} */
   this.isInFlyout = workspace.isFlyout;
   /** @type {boolean} */
+  this.isInMutator = workspace.isMutator;
+
+  /** @type {boolean} */
   this.RTL = workspace.RTL;
 
   // Copy the type-specific functions and data from the prototype.

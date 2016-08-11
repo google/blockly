@@ -38,7 +38,7 @@ goog.require('goog.dom');
  *
  * @param {Element} toolbox - Xml for the toolbox of the selector workspace.
  */
-BlockExporterView = function(selectorToolbox, workspaceToolbox) {
+BlockExporterView = function(selectorToolbox) {
   // Xml representation of the toolbox
   if (selectorToolbox.hasChildNodes) {
     this.toolbox = selectorToolbox;
@@ -61,19 +61,6 @@ BlockExporterView = function(selectorToolbox, workspaceToolbox) {
           colour: '#ccc',
           snap: true}
         });
-  // Preview workspace to show users what they're exporting.
-  // TODO(evd2014): When merge with options pull request, inject
-  // generator options.
-  this.previewWorkspace =
-      Blockly.inject('exportpreview_blocks',
-        {collapse: false,
-         toolbox: workspaceToolbox,
-         grid:
-           {spacing: 20,
-            length: 3,
-            colour: '#ccc',
-            snap: true}
-          });
 };
 
 /**
@@ -154,31 +141,4 @@ BlockExporterView.prototype.cleanUpSelectorWorkspace = function() {
 BlockExporterView.prototype.getSelectedBlocks = function() {
   return this.selectorWorkspace.getAllBlocks();
 };
-
-/**
- * Updates the preview workspace using information from the
- * generator in workspace factory.
- *
- * @param {!Element} workspaceToolbox XML DOM element for the toolbox
- *    created by the user in workspace factory to be injected into
- *    the preview workspace.
- */
-BlockExporterView.prototype.updatePreviewWorkspace = function(workspaceToolbox) {
-  this.previewWorkspace.dispose();
-  var previewElement = document.getElementById('preview_blocks');
-  previewElement.removeChild(previewElement.childNodes[0]);
-  // TODO(evd2014): When merge with options pull request, inject
-  // generator options.
-  this.previewWorkspace =
-      Blockly.inject('exportpreview_blocks',
-        {collapse: false,
-         toolbox: workspaceToolbox,
-         grid:
-           {spacing: 20,
-            length: 3,
-            colour: '#ccc',
-            snap: true}
-          });
-};
-
 

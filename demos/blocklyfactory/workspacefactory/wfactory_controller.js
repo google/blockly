@@ -324,6 +324,8 @@ FactoryController.prototype.updatePreview = function() {
  */
 FactoryController.prototype.reinjectPreview = function(tree) {
   this.previewWorkspace.dispose();
+  // TODO(evd2014): Remove call to remove child after CL to fix dispose
+  // is submitted to develop.
   var previewElement = document.getElementById('preview_blocks');
   previewElement.removeChild(previewElement.childNodes[0]);
   previewToolbox = Blockly.Xml.domToPrettyText(tree);

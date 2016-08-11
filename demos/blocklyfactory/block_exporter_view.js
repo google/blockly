@@ -38,17 +38,17 @@ goog.require('goog.dom');
  *
  * @param {Element} toolbox - Xml for the toolbox of the selector workspace.
  */
-BlockExporterView = function(toolbox) {
+BlockExporterView = function(selectorToolbox, workspaceToolbox) {
   // Xml representation of the toolbox
-  if (toolbox.hasChildNodes) {
-    this.toolbox = toolbox;
+  if (selectorToolbox.hasChildNodes) {
+    this.toolbox = selectorToolbox;
   } else {
     // Toolbox is empty. Append dummy category to toolbox because toolbox
     // cannot switch between category and flyout-only mode after injection.
     var categoryElement = goog.dom.createDom('category');
     categoryElement.setAttribute('name', 'Next Saved Block');
-    toolbox.appendChild(categoryElement);
-    this.toolbox = toolbox;
+    selectorToolbox.appendChild(categoryElement);
+    this.toolbox = selectorToolbox;
   }
   // Workspace users use to select blocks for export
   this.selectorWorkspace =
@@ -61,6 +61,19 @@ BlockExporterView = function(toolbox) {
           colour: '#ccc',
           snap: true}
         });
+  // Preview workspace to show users what they're exporting.
+  // TODO(evd2014): When merge with options pull request, inject
+  // generator options.
+  this.previewWorkspace =
+      Blockly.inject('exportpreview_blocks',
+        {collapse: false,
+         toolbox: workspaceToolbox,
+         grid:
+           {spacing: 20,
+            length: 3,
+            colour: '#ccc',
+            snap: true}
+          });
 };
 
 /**
@@ -140,6 +153,32 @@ BlockExporterView.prototype.cleanUpSelectorWorkspace = function() {
  */
 BlockExporterView.prototype.getSelectedBlocks = function() {
   return this.selectorWorkspace.getAllBlocks();
+};
+
+/**
+ * Updates the preview workspace using information from the
+ * generator in workspace factory.
+ *
+ * @param {!Element} workspaceToolbox XML DOM element for the toolbox
+ *    created by the user in workspace factory to be injected into
+ *    the preview workspace.
+ */
+BlockExporterView.prototype.updatePreviewWorkspace = function(workspaceToolbox) {
+  this.previewWorkspace.dispose();
+  var previewElement = document.getElementById('preview_blocks');
+  previewElement.removeChild(previewElement.childNodes[0]);
+  // TODO(evd2014): When merge with options pull request, inject
+  // generator options.
+  this.previewWorkspace =
+      Blockly.inject('exportpreview_blocks',
+        {collapse: false,
+         toolbox: workspaceToolbox,
+         grid:
+           {spacing: 20,
+            length: 3,
+            colour: '#ccc',
+            snap: true}
+          });
 };
 
 

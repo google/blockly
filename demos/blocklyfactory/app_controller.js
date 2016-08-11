@@ -47,11 +47,8 @@ AppController = function() {
       new BlockLibraryController(this.blockLibraryName);
   this.blockLibraryController.populateBlockLibrary();
 
-  // Initialize Block Exporter
-  this.exporter =
-      new BlockExporterController(this.blockLibraryController.storage);
-
   // Create empty workspace for configuring workspace.
+  var toolbox = document.getElementById('workspacefactory_toolbox');
   var toolboxWorkspace = Blockly.inject('toolbox_blocks',
     {grid:
       {spacing: 25,
@@ -77,6 +74,11 @@ AppController = function() {
   // Construct Workspace Factory Controller.
   this.workspaceFactoryController =
       new FactoryController(toolboxWorkspace, previewWorkspace);
+
+  // Initialize Block Exporter
+  this.exporter =
+      new BlockExporterController(this.blockLibraryController.storage,
+      this.workspaceFactoryController.generator);
 
   // Map of tab type to the div element for the tab.
   this.tabMap = {
@@ -492,7 +494,7 @@ AppController.prototype.init = function() {
   window.addEventListener('resize', onresize);
 
   // Inject Block Factory Main Workspace.
-  var toolbox = document.getElementById('toolbox');
+  var toolbox = document.getElementById('blockfactory_toolbox');
   BlockFactory.mainWorkspace = Blockly.inject('blockly',
       {collapse: false,
        toolbox: toolbox,
@@ -520,6 +522,20 @@ AppController.prototype.init = function() {
 };
 
 AppController.prototype.initWorkspaceFactory_ = function() {
+  // Disable category editing buttons until categories are created.
+  document.getElementById('button_remove').disabled = true;
+  document.getElementById('button_up').disabled = true;
+  document.getElementById('button_down').disabled = true;
+  document.getElementById('button_editCategory').disabled = true;
+  document.getElementById('button_editShadow').disabled = true;
+
+  this.initColorPicker_();
+  this.addWorkspaceFactoryEventListeners_();
+  this.assignWorkspaceFactoryClickHandlers_();
+
+};
+
+AppController.prototype.initColorPicker_ = function() {
   // Array of Blockly category colors, variety of hues with saturation 45%
   // and value 65% as specified in Blockly Developer documentation:
   // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
@@ -597,20 +613,9 @@ AppController.prototype.initWorkspaceFactory_ = function() {
     document.getElementById('dropdownDiv_editCategory').classList.remove
         ("show");
   });
+};
 
-  // Disable category editing buttons until categories are created.
-  document.getElementById('button_remove').disabled = true;
-  document.getElementById('button_up').disabled = true;
-  document.getElementById('button_down').disabled = true;
-  document.getElementById('button_editCategory').disabled = true;
-  document.getElementById('button_editShadow').disabled = true;
-
-  this.addWorkspaceFactoryEventListeners();
-  this.assignWorkspaceFactoryClickHandlers();
-
-  };
-
-AppController.prototype.assignWorkspaceFactoryClickHandlers = function() {
+AppController.prototype.assignWorkspaceFactoryClickHandlers_ = function() {
   var controller = this.workspaceFactoryController;
   document.getElementById('button_add').addEventListener
       ('click',
@@ -736,23 +741,23 @@ AppController.prototype.assignWorkspaceFactoryClickHandlers = function() {
       });
 };
 
-AppController.prototype.addWorkspaceFactoryEventListeners = function() {
+AppController.prototype.addWorkspaceFactoryEventListeners_ = function() {
   var controller = this.workspaceFactoryController;
   // Use up and down arrow keys to move categories.
   // TODO(evd2014): When merge with next CL for editing preloaded blocks, make
   // sure mode is toolbox.
   window.addEventListener('keydown', function(e) {
     if (this.selectedTab != 'WORKSPACE_FACTORY' && e.keyCode == 38) {
-      // Arrow up. TODO!!!!
-      upWrapper();
+      // Arrow up.
+      controller.moveElement(-1);
     } else if (this.selectedTab != 'WORKSPACE_FACTORY' && e.keyCode == 40) {
       // Arrow down.
-      downWrapper();
+      controller.moveElement(1);
     }
   });
 
   // Add change listeners for toolbox workspace in workspace factory.
-  this.workspaceFactoryController.toolboxWorkspace.addChangeListener(
+  controller.toolboxWorkspace.addChangeListener(
     function(e) {
     // Listen for Blockly move and delete events to update preview.
     // Not listening for Blockly create events because causes the user to drop

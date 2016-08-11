@@ -276,9 +276,10 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
     // Selects the next tab.
     this.view.setCategoryTabSelection(id, true);
 
-    // Order blocks as if shown in the flyout.
-    this.toolboxWorkspace.cleanUp_();
-  }
+  // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
+  this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
+        (this.toolboxWorkspace.getAllBlocks()));
+  this.toolboxWorkspace.cleanUp_();
 
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
@@ -380,7 +381,6 @@ FactoryController.prototype.updatePreview = function() {
       } else {
         this.previewWorkspace.flyout_.show(tree.childNodes);
       }
-
     } else {
       // Uses categories, creates a toolbox.
 

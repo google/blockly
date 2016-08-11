@@ -423,6 +423,50 @@ FactoryModel.prototype.setOptionsAttribute = function(name, value) {
   this.options[name] = value;
 };
 
+/*
+ * Returns an array of all the block types currently being used in the toolbox
+ * and the pre-loaded blocks. No duplicates.
+ * TODO(evd2014): Move pushBlockTypesToList to FactoryUtils.
+ *
+ * @return {!Array<!string>} Array of block types currently being used.
+ */
+FactoryModel.prototype.getAllUsedBlockTypes = function() {
+  var blockTypeList = [];
+
+  // Given XML for the workspace, adds all block types included in the XML
+  // to the list, not including duplicates.
+  var pushBlockTypesToList = function (xml, list) {
+    // Get all block XML nodes.
+    var blocks = xml.getElementsByTagName('block');
+
+    // Add block types if not already in list.
+    for (var i = 0; i < blocks.length; i++) {
+      var type = blocks[i].getAttribute('type');
+      if (list.indexOf(type) == -1) {
+        list.push(type);
+      }
+    }
+  };
+
+  if (this.flyout) {
+    // If has a single flyout, add block types for the single flyout.
+    this.pushBlockTypesToList(this.getSelectedXml(), blockTypeList);
+  } else {
+    // If has categories, add block types for each category.
+
+    for (var i = 0, category; category = this.toolboxList[i]; i++) {
+      if (category.type == ListElement.TYPE_CATEGORY) {
+        this.pushBlockTypesToList(category.xml, blockTypeList);
+      }
+    }
+  }
+
+  // Add the block types from any pre-loaded blocks.
+  this.pushBlockTypesToList(this.getPreloadXml(), blockTypeList);
+
+  return blockTypeList;
+}
+
 /**
  * Class for a ListElement.
  * @constructor

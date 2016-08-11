@@ -66,7 +66,8 @@ FactoryGenerator.prototype.generateToolboxXml = function() {
       });
   if (!this.model.hasElements()) {
     // Toolbox has no categories. Use XML directly from workspace.
-    this.loadToHiddenWorkspaceAndSave_(this.model.getSelectedXml(), xmlDom);
+    this.loadToHiddenWorkspace_(this.model.getSelectedXml());
+    this.appendHiddenWorkspaceToDom_(xmlDom);
   } else {
     // Toolbox has categories.
     // Assert that selected != null
@@ -100,7 +101,8 @@ FactoryGenerator.prototype.generateToolboxXml = function() {
         }
         // Load that category to hidden workspace, setting user-generated shadow
         // blocks as real shadow blocks.
-        this.loadToHiddenWorkspaceAndSave_(element.xml, nextElement);
+        this.loadToHiddenWorkspace_(element.xml);
+        this.appendHiddenWorkspaceToDom_(nextElement);
       }
       xmlDom.appendChild(nextElement);
     }
@@ -127,22 +129,19 @@ FactoryGenerator.prototype.generateWorkspaceXml = function() {
   generatedXml.setAttribute('id', 'preload_blocks');
   generatedXml.setAttribute('style', 'display:none');
   return generatedXml;
- }
+ };
 
 /**
- * Load the given XML to the hidden workspace, set any user-generated shadow
- * blocks to be actual shadow blocks, then append the XML from the workspace
- * to the DOM element passed in.
+ * Loads the given XML to the hidden workspace and sets any user-generated
+ * shadow blocks to be actual shadow blocks.
  * @private
  *
  * @param {!Element} xml The XML to be loaded to the hidden workspace.
- * @param {!Element} dom The DOM element to append the generated XML to.
  */
-FactoryGenerator.prototype.loadToHiddenWorkspaceAndSave_ = function(xml, dom) {
+FactoryGenerator.prototype.loadToHiddenWorkspace_ = function(xml) {
   this.hiddenWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
   this.setShadowBlocksInHiddenWorkspace_();
-  this.appendHiddenWorkspaceToDom_(dom);
 }
 
  /**

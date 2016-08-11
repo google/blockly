@@ -148,6 +148,15 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
 Blockly.WorkspaceSvg.prototype.lastSound_ = null;
 
 /**
+ * Last known position of the page scroll.
+ * This is used to determine whether we have recalculated screen coordinate
+ * stuff since the page scrolled.
+ * @type {!goog.math.Coordinate}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
+
+/**
  * Inverted screen CTM, for use in mouseToSvg.
  * @type {SVGMatrix}
  * @private
@@ -344,6 +353,16 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
 };
 
 /**
+ * Update items that use screen coordinate calculations
+ * because something has changed (e.g. scroll position, window size).
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
+  this.updateInverseScreenCTM();
+  this.recordDeleteAreas();
+};
+
+/**
  * Resize the parts of the workspace that change when the workspace
  * contents (e.g. block positions) change.  This will also scroll the
  * workspace contents if needed.
@@ -382,10 +401,24 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.scrollbar) {
     this.scrollbar.resize();
   }
-
-  this.updateInverseScreenCTM();
-  this.recordDeleteAreas();
+  this.updateScreenCalculations_();
 };
+
+/**
+ * Resizes and repositions workspace chrome if the page has a new
+ * scroll position.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.updateScreenCalculationsIfScrolled
+    = function() {
+  /* eslint-disable indent */
+  var currScroll = goog.dom.getDocumentScroll();
+  if (!goog.math.Coordinate.equals(this.lastRecordedPageScroll_,
+     currScroll)) {
+    this.lastRecordedPageScroll_ = currScroll;
+    this.updateScreenCalculations_();
+  }
+}; /* eslint-enable indent */
 
 /**
  * Get the SVG element that forms the drawing surface.

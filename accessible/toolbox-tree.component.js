@@ -37,14 +37,14 @@ blocklyApp.ToolboxTreeComponent = ng.core
         <li [id]="idMap['workspaceCopy']" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
             [attr.aria-level]="level + 2">
-          <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()">
+          <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
             {{'COPY_TO_WORKSPACE'|translate}}
           </button>
         </li>
         <li [id]="idMap['blockCopy']" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
             [attr.aria-level]="level + 2">
-          <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()">
+          <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()" tabindex="-1">
             {{'COPY_TO_CLIPBOARD'|translate}}
           </button>
         </li>
@@ -52,7 +52,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
             [attr.aria-level]="level + 2">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
-                  [disabled]="!canBeCopiedToMarkedConnection()">
+                  [disabled]="!canBeCopiedToMarkedConnection()" tabindex="-1">
             {{'COPY_TO_MARKED_SPOT'|translate}}
           </button>
         </li>

@@ -82,21 +82,19 @@ blocklyApp.TreeService = ng.core
       }
       return null;
     },
-    focusOnNextTree_: function(treeId) {
+    getIdOfNextTree_: function(treeId) {
       var trees = this.getAllTreeNodes_();
       for (var i = 0; i < trees.length - 1; i++) {
         if (trees[i].id == treeId) {
-          trees[i + 1].focus();
           return trees[i + 1].id;
         }
       }
       return null;
     },
-    focusOnPreviousTree_: function(treeId) {
+    getIdOfPreviousTree_: function(treeId) {
       var trees = this.getAllTreeNodes_();
       for (var i = trees.length - 1; i > 0; i--) {
         if (trees[i].id == treeId) {
-          trees[i - 1].focus();
           return trees[i - 1].id;
         }
       }
@@ -190,12 +188,11 @@ blocklyApp.TreeService = ng.core
       if (e.keyCode == 9) {
         // Tab key.
         var destinationTreeId =
-            e.shiftKey ? this.focusOnPreviousTree_(treeId) :
-            this.focusOnNextTree_(treeId);
-        this.notifyUserAboutCurrentTree_(destinationTreeId);
-
-        e.preventDefault();
-        e.stopPropagation();
+            e.shiftKey ? this.getIdOfPreviousTree_(treeId) :
+            this.getIdOfNextTree_(treeId);
+        if (destinationTreeId) {
+          this.notifyUserAboutCurrentTree_(destinationTreeId);
+        }
       }
     },
     isButtonOrFieldNode_: function(node) {
@@ -260,16 +257,20 @@ blocklyApp.TreeService = ng.core
           // For Esc and Tab keys, the focus is removed from the input field.
           this.focusOnCurrentTree_(treeId);
 
-          // In addition, for Tab keys, the user tabs to the previous/next tree.
           if (e.keyCode == 9) {
             var destinationTreeId =
-                e.shiftKey ? this.focusOnPreviousTree_(treeId) :
-                this.focusOnNextTree_(treeId);
-            this.notifyUserAboutCurrentTree_(destinationTreeId);
+                e.shiftKey ? this.getIdOfPreviousTree_(treeId) :
+                this.getIdOfNextTree_(treeId);
+            if (destinationTreeId) {
+              this.notifyUserAboutCurrentTree_(destinationTreeId);
+            }
           }
 
-          e.preventDefault();
-          e.stopPropagation();
+          // Allow Tab keypresses to go through.
+          if (e.keyCode == 27) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
         }
       } else {
         // Outside an input field, Enter, Tab and navigation keys are all
@@ -302,14 +303,14 @@ blocklyApp.TreeService = ng.core
             }
           }
         } else if (e.keyCode == 9) {
-          // Tab key.
+          // Tab key. Note that allowing the event to propagate through is
+          // intentional.
           var destinationTreeId =
-              e.shiftKey ? this.focusOnPreviousTree_(treeId) :
-              this.focusOnNextTree_(treeId);
-          this.notifyUserAboutCurrentTree_(destinationTreeId);
-
-          e.preventDefault();
-          e.stopPropagation();
+              e.shiftKey ? this.getIdOfPreviousTree_(treeId) :
+              this.getIdOfNextTree_(treeId);
+          if (destinationTreeId) {
+            this.notifyUserAboutCurrentTree_(destinationTreeId);
+          }
         } else if (e.keyCode >= 35 && e.keyCode <= 40) {
           // End, home, and arrow keys.
           if (e.keyCode == 35) {

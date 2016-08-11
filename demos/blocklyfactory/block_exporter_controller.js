@@ -30,6 +30,8 @@
 'use strict';
 
 goog.provide('BlockExporterController');
+
+goog.require('FactoryUtils');
 goog.require('BlockExporterView');
 goog.require('BlockExporterTools');
 goog.require('goog.dom.xml');
@@ -39,6 +41,8 @@ goog.require('goog.dom.xml');
  * @constructor
  *
  * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage.
+ * @param {!FactoryGenerator} factoryGenerator - Workspace Factory
+ *    generator.
  */
 BlockExporterController = function(blockLibStorage) {
   // BlockLibrary.Storage object containing user's saved blocks
@@ -142,7 +146,7 @@ BlockExporterController.prototype.export = function() {
       var blockDefs = this.tools.getBlockDefs(blockXmlMap,
           definitionFormat);
       // Download the file.
-      BlockFactory.createAndDownloadFile_(
+      FactoryUtils.createAndDownloadFile(
           blockDefs, blockDef_filename, definitionFormat);
     }
   }
@@ -157,7 +161,7 @@ BlockExporterController.prototype.export = function() {
       var genStubs = this.tools.getGeneratorCode(blockXmlMap,
           language);
       // Download the file.
-      BlockFactory.createAndDownloadFile_(
+      FactoryUtils.createAndDownloadFile(
           genStubs, generatorStub_filename, language);
     }
   }

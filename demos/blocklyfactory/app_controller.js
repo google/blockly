@@ -28,6 +28,7 @@
 goog.provide('AppController');
 
 goog.require('BlockFactory');
+goog.require('FactoryUtils');
 goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
@@ -120,7 +121,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
       'library.');
   // Download file if all necessary parameters are provided.
   if (filename) {
-    BlockFactory.createAndDownloadFile_(blockLibText, filename, 'xml');
+    FactoryUtils.createAndDownloadFile(blockLibText, filename, 'xml');
   } else {
     alert('Could not export Block Library without file name under which to ' +
       'save library.');
@@ -160,9 +161,10 @@ AppController.prototype.formatBlockLibForImport_ = function(xmlText) {
   // The line above is equivalent of {} except that this object is TRULY
   // empty. It doesn't have built-in attributes/functions such as length or
   // toString.
-  for (var i = 0, xml; xml = blockXmls[i]; i++) {
-    var blockType = this.getBlockTypeFromXml_(xml);
-    blockXmlTextMap[blockType] = xml;
+  for (var i = 0, xmlText; xmlText = blockXmls[i]; i++) {
+    var blockType = this.getBlockTypeFromXml_(xmlText);
+    // TODO(quachtina96): Make the xml pretty before storing in map.
+    blockXmlTextMap[blockType] = xmlText;
   }
 
   return blockXmlTextMap;
@@ -264,19 +266,19 @@ AppController.prototype.onTab = function() {
     this.exporter.updateToolbox();
 
     // Show container of exporter.
-    BlockFactory.show('blockLibraryExporter');
-    BlockFactory.hide('workspaceFactoryContent');
+    FactoryUtils.show('blockLibraryExporter');
+    FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab ==  'BLOCK_FACTORY') {
     // Hide container of exporter.
-    BlockFactory.hide('blockLibraryExporter');
-    BlockFactory.hide('workspaceFactoryContent');
+    FactoryUtils.hide('blockLibraryExporter');
+    FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab == 'WORKSPACE_FACTORY') {
     // Hide container of exporter.
-    BlockFactory.hide('blockLibraryExporter');
+    FactoryUtils.hide('blockLibraryExporter');
     // Show workspace factory container.
-    BlockFactory.show('workspaceFactoryContent');
+    FactoryUtils.show('workspaceFactoryContent');
   }
 
   // Resize to render workspaces' toolboxes correctly for all tabs.
@@ -376,7 +378,6 @@ AppController.prototype.assignFactoryClickHandlers = function() {
       });
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
-        BlockFactory.mainWorkspace.clear();
         BlockFactory.showStarterBlock();
         BlockLibraryView.selectDefaultOption('blockLibraryDropdown');
     });

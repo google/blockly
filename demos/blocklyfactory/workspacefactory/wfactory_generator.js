@@ -23,7 +23,8 @@
  * workspace or print to the console or download to a file. Leverages
  * Blockly.Xml and depends on information in the model (holds a reference).
  * Depends on a hidden workspace created in the generator to load saved XML in
- * order to generate toolbox XML.
+ * order to generate toolbox XML. Depends on FactoryUtils for category xml
+ * generation.
  *
  * @author Emma Dauterman (evd2014)
  */
@@ -177,3 +178,4 @@ FactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ = function() {
     }
   }
 };
+

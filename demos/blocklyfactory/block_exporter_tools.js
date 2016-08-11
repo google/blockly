@@ -21,7 +21,7 @@
 /**
  * @fileoverview Javascript for the BlockExporter Tools class, which generates
  * block definitions and generator stubs for given block types. Also generates
- * toolbox xml for the exporter's workspace. Depends on the BlockFactory for
+ * toolbox xml for the exporter's workspace. Depends on the FactoryUtils for
  * its code generation functions.
  *
  * @author quachtina96 (Tina Quach)
@@ -30,7 +30,7 @@
 
 goog.provide('BlockExporterTools');
 
-goog.require('BlockFactory');
+goog.require('FactoryUtils');
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
 
@@ -76,18 +76,6 @@ BlockExporterTools.prototype.getRootBlockFromXml_ = function(xml) {
 };
 
 /**
- * Get Blockly Block by rendering pre-defined block in workspace.
- * @private
- *
- * @param {!Element} blockType - Type of block.
- * @return {!Blockly.Block} the Blockly.Block of desired type.
- */
-BlockExporterTools.prototype.getDefinedBlock_ = function(blockType) {
-  this.hiddenWorkspace.clear();
-  return this.hiddenWorkspace.newBlock(blockType);
-};
-
-/**
  * Return the given language code of each block type in an array.
  *
  * @param {!Object} blockXmlMap - Map of block type to xml.
@@ -105,7 +93,7 @@ BlockExporterTools.prototype.getBlockDefs =
       var rootBlock = this.getRootBlockFromXml_(xml);
       if (rootBlock) {
         // Generate the block's definition.
-        var code = BlockFactory.getBlockDefinition(blockType, rootBlock,
+        var code = FactoryUtils.getBlockDefinition(blockType, rootBlock,
             definitionFormat, this.hiddenWorkspace);
         // Add block's definition to the definitions to return.
       } else {
@@ -147,10 +135,11 @@ BlockExporterTools.prototype.getGeneratorCode =
     var xml = blockXmlMap[blockType];
     if (xml) {
       // Render the preview block in the hidden workspace.
-      var tempBlock = this.getDefinedBlock_(blockType);
+      var tempBlock =
+          FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
       // Get generator stub for the given block and add to  generator code.
       var blockGenCode =
-          BlockFactory.getGeneratorStub(tempBlock, generatorLanguage);
+          FactoryUtils.getGeneratorStub(tempBlock, generatorLanguage);
     } else {
       // Append warning comment and write to console.
       var blockGenCode = '// No generator stub generated for ' + blockType +
@@ -204,7 +193,7 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
     categoryElement.setAttribute('name',blockType);
 
     // Get block.
-    var block = this.getDefinedBlock_(blockType);
+    var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
 
     // Get preview block XML.
     var blockChild = Blockly.Xml.blockToDom(block);
@@ -220,4 +209,62 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
   categoryElement.setAttribute('name','Next Saved Block');
   xmlDom.appendChild(categoryElement);
   return xmlDom;
+};
+
+/**
+ * Generate xml for the workspace factory's category from imported block
+ * definitions.
+ *
+ * @return {!Element} Xml representation of a category.
+ */
+BlockExporterTools.prototype.generateCategoryFromBlockLib = function() {
+  // Create category DOM element.
+  var categoryElement = goog.dom.createDom('category');
+  categoryElement.setAttribute('name', 'Block Library');
+
+  var allBlockTypes = blockLibStorage.getBlockTypes();
+  // Object mapping block type to XML.
+  var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
+
+  // Define the custom blocks in order to be able to create instances of
+  // them in the exporter workspace.
+  this.addBlockDefinitions(blockXmlMap);
+
+  for (var blockType in blockXmlMap) {
+    // Get block.
+    var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
+
+    // Get preview block XML.
+    var blockChild = Blockly.Xml.blockToDom(block);
+    blockChild.removeAttribute('id');
+
+    // Add block to category and category to XML.
+    categoryElement.appendChild(blockChild);
+  }
+  return categoryElement;
+};
+
+/**
+ * Given two lists of blocktypes, will return the list of blockTypes that
+ * are found in both lists.
+ * @private
+ *
+ * @param {!Array.<string>} blockTypesOne - types of blocks.
+ *    workspace from Workspace FactoryTwo.
+ * @param {!Array.<string>} blockTypes - array of types of blocks.
+ * TODO(quachtina96): Use as helper function in handler for  'Add All Used
+ *    Blocks' Button, to figure out which blocks used in the workspace factory
+ *    are stored in the block library. Probably more efficient if blockTypesTwo
+ *    is the block types stored in library.
+ */
+BlockExporterTools.prototype.getSharedTypes_ = function(blockTypesOne, blockTypesTwo) {
+    var referenceSet = new Set(blockTypesTwo);
+    var sharedBlockTypes = [];
+    for (var i = 0; i < blockTypesOne.length; i++) {
+      var blockType = blockTypesOne[i];
+      if (referenceSet.has(blockType)) {
+        sharedBlockTypes.push(blockType);
+      }
+    }
+    return sharedBlockTypes;
 };

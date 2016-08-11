@@ -60,7 +60,7 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
  * @return {string} The current block's type.
  */
 BlockLibraryController.prototype.getCurrentBlockType_ = function() {
-  var rootBlock = BlockFactory.getRootBlock(BlockFactory.mainWorkspace);
+  var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   // Replace white space with underscores
   return blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
@@ -76,6 +76,7 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
   this.populateBlockLibrary();
+  BlockFactory.showStarterBlock();
 };
 
 /**
@@ -116,6 +117,8 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
     // Add a default, blank option to dropdown for when no block from library is
     // selected.
     BlockLibraryView.addDefaultOption('blockLibraryDropdown');
+    // Show default block.
+    BlockFactory.showStarterBlock();
   }
 };
 

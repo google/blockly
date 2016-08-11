@@ -32,29 +32,38 @@
 </script>
 </head>
 <body>
-  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
-    <a href="../index.html">Demos</a> &gt; Blockly Factory</h1>
-
-  <div id="tabContainer">
+<h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+  <a href="../index.html">Demos</a> &gt; Blockly Factory
+  <button id="helpButton" title="View documentation in new window." style="float:right;">
+    <span>Help</span>
+  </button>
+</h1>
+ <div id="tabContainer">
     <div id="blockFactory_tab" class="tab tabon"> Block Factory</div>
-    <div class="tabGap"></div>
     <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
-    <div class="tabGap"></div>
     <div id="blocklibraryExporter_tab" class="tab taboff"> Exporter</div>
   </div>
 
+
+  <!-- Exporter tab -->
   <div id="blockLibraryExporter">
-    <h3> Block Selector </h3>
-    <div id="helperTextDiv">
+    <div id="exportSelector" style="display:inline-block;">
+      <h3> Block Selector </h3>
       <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
+        <div class='dropdown'>
+        <button id="button_setBlocks">Select</button>
+        <div id="dropdownDiv_setBlocks" class="dropdown-content">
+          <a id='dropdown_addAllFromLib'>Add All Stored</a>
+          <a id='dropdown_addAllUsed'>Add All Used</a>
+          <a id='dropdown_clearSelected'>Remove All</a>
+        </div>
+        </div>
+
+      <!-- Inject exportSelectorWorkspace into this div -->
+      <div id="selectorWorkspace"></div>
+
     </div>
-    <div id="exporterButtons">
-      <button id="clearSelectedButton"> Clear Blocks </button>
-      <button id="addAllFromLibButton"> Add All Stored Blocks </button>
-      <button id="addAllUsedButton"> Add All Used Blocks </button>
-    </div>
-    <!-- Inject exportSelectorWorkspace into this div -->
-    <div id="exportSelector"></div>
+
     <!-- Users may customize export settings through this form -->
     <div id="exportSettings">
       <h3> Export Settings </h3>
@@ -98,9 +107,12 @@
     </div>
   </div>
 
+  <!-- Workspace Factory tab -->
+
   <div id="workspaceFactoryContent">
   </div>
 
+  <!-- Blockly Factory Tab -->
   <table id="blockFactoryContent">
     <tr>
       <td width="50%" height="5%">
@@ -155,9 +167,6 @@
                   accept="application/xml">
               <button id="localSaveButton" title="Save block library xml to a local file.">
                 <span>Download Block Library</span>
-              </button>
-              <button id="helpButton" title="View documentation in new window.">
-                <span>Help</span>
               </button>
             </td>
           </tr>

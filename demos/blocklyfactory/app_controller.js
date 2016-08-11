@@ -303,17 +303,27 @@ AppController.prototype.styleTabs_ = function() {
 AppController.prototype.assignExporterClickHandlers = function() {
   var self = this;
   // Export blocks when the user submits the export settings.
-  document.getElementById('exporterSubmitButton').addEventListener('click',
+  document.getElementById('button_setBlocks').addEventListener('click',
+      function() {
+        document.getElementById('dropdownDiv_setBlocks').classList.toggle("show");
+      });
+
+  document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
         self.exporter.export();
+        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
-  document.getElementById('clearSelectedButton').addEventListener('click',
+
+  document.getElementById('dropdown_clearSelected').addEventListener('click',
       function() {
         self.exporter.clearSelectedBlocks();
+        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
-  document.getElementById('addAllFromLibButton').addEventListener('click',
+
+  document.getElementById('dropdown_addAllFromLib').addEventListener('click',
       function() {
         self.exporter.addAllBlocksToWorkspace();
+        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 };
 

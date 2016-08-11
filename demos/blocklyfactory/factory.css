@@ -161,8 +161,6 @@ button, .buttonStyle {
   width: 50%;
 }
 
-/* Workspace Factory */
-
 #workspaceFactoryContent {
   clear: both;
   display: none;
@@ -178,6 +176,7 @@ button, .buttonStyle {
 }
 
 #exportSelector {
+  display: inline-block;
   float: left;
   height: 75%;
   width: 30%;
@@ -185,7 +184,7 @@ button, .buttonStyle {
 
 #exportSettings {
   float: left;
-  padding: 16px;
+  padding-left: 16px;
   width: 30%;
   overflow: hidden;
 }
@@ -208,10 +207,22 @@ button, .buttonStyle {
   padding: 5px 19px;
 }
 
+.tab:hover:not(.tabon){
+  background-color: #e8e8e8;
+}
+
 .tab.tabon {
-  background-color: #ddd;
+  background-color: #ccc;
 }
 
 .tab.taboff {
   cursor: pointer;
+}
+
+#tabContainer {
+  background-color: #f8f8f8;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  display: table;
+  width: 100%;
 }

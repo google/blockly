@@ -269,6 +269,9 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
       } else {
         // Validation function has changed the text.
         text = text1;
+        if (thisField.onFinishEditing_) {
+          thisField.onFinishEditing_(text);
+        }
       }
     }
     thisField.setValue(text);

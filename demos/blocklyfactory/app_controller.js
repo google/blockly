@@ -71,14 +71,14 @@ AppController = function() {
        {controls: true,
         wheel: true}
     });
+
   // Construct Workspace Factory Controller.
   this.workspaceFactoryController =
       new FactoryController(toolboxWorkspace, previewWorkspace);
 
   // Initialize Block Exporter
   this.exporter =
-      new BlockExporterController(this.blockLibraryController.storage,
-      this.workspaceFactoryController.generator);
+      new BlockExporterController(this.blockLibraryController.storage);
 
   // Map of tab type to the div element for the tab.
   this.tabMap = {
@@ -399,11 +399,26 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
       .addEventListener('click', function() {
         self.exportBlockLibraryToFile();
       });
+
   document.getElementById('helpButton').addEventListener('click',
       function() {
         open('https://developers.google.com/blockly/custom-blocks/block-factory',
              'BlockFactoryHelp');
       });
+<<<<<<< 8e447fb98949296a9bd421573897a37313235ef1
+=======
+
+  document.getElementById('downloadBlocks').addEventListener('click',
+      function() {
+        BlockFactory.downloadTextArea('blocks', 'languagePre');
+      });
+
+  document.getElementById('downloadGenerator').addEventListener('click',
+      function() {
+        BlockFactory.downloadTextArea('generator', 'generatorPre');
+      });
+
+>>>>>>> Tab for workspace factory working
   document.getElementById('files').addEventListener('change',
       function() {
         // Warn user.
@@ -417,6 +432,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
           this.value = null;
         }
       });
+
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
         BlockFactory.showStarterBlock();
@@ -460,6 +476,7 @@ AppController.prototype.initializeBlocklyStorage = function() {
           BlocklyStorage.link(BlockFactory.mainWorkspace);});
   BlockFactory.disableEnableLink();
 };
+
 /**
  * Initialize Blockly and layout.  Called on page load.
  */
@@ -521,6 +538,10 @@ AppController.prototype.init = function() {
   this.initWorkspaceFactory_();
 };
 
+/**
+ * Initialization for workspace factory tab.
+ * @private
+ */
 AppController.prototype.initWorkspaceFactory_ = function() {
   // Disable category editing buttons until categories are created.
   document.getElementById('button_remove').disabled = true;
@@ -535,6 +556,10 @@ AppController.prototype.initWorkspaceFactory_ = function() {
 
 };
 
+/**
+ * Initialize the color picker in workspace factory.
+ * @private
+ */
 AppController.prototype.initColorPicker_ = function() {
   // Array of Blockly category colors, variety of hues with saturation 45%
   // and value 65% as specified in Blockly Developer documentation:
@@ -603,6 +628,7 @@ AppController.prototype.initColorPicker_ = function() {
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
   colorPicker.setColors(colors);
+
   // Create and render the popup color picker and attach to button.
   var popupPicker = new goog.ui.PopupColorPicker(null, colorPicker);
   popupPicker.render();
@@ -615,6 +641,10 @@ AppController.prototype.initColorPicker_ = function() {
   });
 };
 
+/**
+ * Assign click handlers for workspace factory.
+ * @private
+ */
 AppController.prototype.assignWorkspaceFactoryClickHandlers_ = function() {
   var controller = this.workspaceFactoryController;
   document.getElementById('button_add').addEventListener
@@ -677,7 +707,8 @@ AppController.prototype.assignWorkspaceFactoryClickHandlers_ = function() {
   document.getElementById('button_editCategory').addEventListener
       ('click',
       function() {
-        document.getElementById('dropdownDiv_editCategory').classList.toggle("show");
+        document.getElementById('dropdownDiv_editCategory').classList.
+        toggle("show");
       });
 
   document.getElementById('button_editShadow').addEventListener
@@ -686,17 +717,24 @@ AppController.prototype.assignWorkspaceFactoryClickHandlers_ = function() {
         if (Blockly.selected) {
           // Can only edit blocks when a block is selected.
 
-          if (!controller.isUserGenShadowBlock(Blockly.selected.id) && Blockly.selected.getSurroundParent() != null) {
-            // If a block is selected that could be a valid shadow block (not a shadow block,
-            // has a surrounding parent), let the user make it a shadow block.
-            // Use toggle instead of add so that the user can click the button again
-            // to make the dropdown disappear without clicking one of the options.
-            document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
-            document.getElementById('dropdownDiv_editShadowAdd').classList.toggle("show");
+          if (!controller.isUserGenShadowBlock(Blockly.selected.id) &&
+              Blockly.selected.getSurroundParent() != null) {
+            // If a block is selected that could be a valid shadow block (not a
+            // shadow block, has a surrounding parent), let the user make it a
+            // shadow block. Use toggle instead of add so that the user can
+            // click the button again to make the dropdown disappear without
+            // clicking one of the options.
+            document.getElementById('dropdownDiv_editShadowRemove').classList.
+                remove("show");
+            document.getElementById('dropdownDiv_editShadowAdd').classList.
+                toggle("show");
           } else {
-            // If the block is a shadow block, let the user make it a normal block.
-            document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
-            document.getElementById('dropdownDiv_editShadowRemove').classList.toggle("show");
+            // If the block is a shadow block, let the user make it a normal
+            // block.
+            document.getElementById('dropdownDiv_editShadowAdd').classList.
+                remove("show");
+            document.getElementById('dropdownDiv_editShadowRemove').classList.
+                toggle("show");
           }
         }
       });
@@ -705,7 +743,8 @@ AppController.prototype.assignWorkspaceFactoryClickHandlers_ = function() {
       ('click',
       function() {
         controller.changeCategoryName();
-        document.getElementById('dropdownDiv_editCategory').classList.remove("show");
+        document.getElementById('dropdownDiv_editCategory').classList.
+            remove("show");
       });
 
   document.getElementById('input_import').addEventListener
@@ -724,16 +763,18 @@ AppController.prototype.assignWorkspaceFactoryClickHandlers_ = function() {
       ('click',
       function() {
         controller.addShadow();
-        document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
+        document.getElementById('dropdownDiv_editShadowAdd').classList.
+            remove("show");
       });
 
   document.getElementById('dropdown_removeShadow').addEventListener
       ('click',
       function() {
         controller.removeShadow();
-        document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
-        // If turning invalid shadow block back to normal block, remove warning and disable
-        // block editing privileges.
+        document.getElementById('dropdownDiv_editShadowRemove').classList.
+            remove("show");
+        // If turning invalid shadow block back to normal block, remove
+        // warning and disable block editing privileges.
         Blockly.selected.setWarningText(null);
         if (!Blockly.selected.getSurroundParent()) {
           document.getElementById('button_editShadow').disabled = true;
@@ -741,6 +782,10 @@ AppController.prototype.assignWorkspaceFactoryClickHandlers_ = function() {
       });
 };
 
+/**
+ * Add event listeners for worokspace factory.
+ * @private
+ */
 AppController.prototype.addWorkspaceFactoryEventListeners_ = function() {
   var controller = this.workspaceFactoryController;
   // Use up and down arrow keys to move categories.
@@ -813,5 +858,4 @@ AppController.prototype.addWorkspaceFactoryEventListeners_ = function() {
       controller.convertShadowBlocks();
     }
   });
-
 };

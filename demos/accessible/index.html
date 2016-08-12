@@ -19,6 +19,7 @@
   <script src="../../accessible/libs/angular2-all.umd.min.js"></script>
 
   <script src="../../accessible/utils.service.js"></script>
+  <script src="../../accessible/audio.service.js"></script>
   <script src="../../accessible/notifications.service.js"></script>
   <script src="../../accessible/clipboard.service.js"></script>
   <script src="../../accessible/tree.service.js"></script>
@@ -31,7 +32,7 @@
   <script src="../../accessible/workspace.component.js"></script>
   <script src="../../accessible/app.component.js"></script>
 
-  <link rel="stylesheet" href="../../media/accessible.css">
+  <link rel="stylesheet" href="../../accessible/media/accessible.css">
   <style>
     body {
       background-color: #fff;
@@ -48,8 +49,10 @@
   </style>
 </head>
 <body>
-  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
-    <a href="../index.html">Demos</a> &gt; Accessible Blockly</h1>
+  <h1>
+    <a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Accessible Blockly
+  </h1>
 
   <p>This is a simple demo of a version of Blockly designed for screen readers.</p>
 
@@ -70,7 +73,9 @@
     var ACCESSIBLE_GLOBALS = {
       // Additional buttons for the workspace toolbar that
       // go before the "Clear Workspace" button.
-      toolbarButtonConfig: []
+      toolbarButtonConfig: [],
+      // Prefix of path to sound files.
+      mediaPathPrefix: '../../accessible/media/'
     };
     document.addEventListener('DOMContentLoaded', function() {
       ng.platform.browser.bootstrap(blocklyApp.AppView);

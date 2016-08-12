@@ -30,7 +30,7 @@ blocklyApp.ToolboxComponent = ng.core
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
       <ol #tree
           id="blockly-toolbox-tree" role="tree" class="blocklyTree"
-          *ngIf="toolboxCategories && toolboxCategories.length > 0" tabIndex="0"
+          *ngIf="toolboxCategories && toolboxCategories.length > 0" tabindex="0"
           [attr.aria-labelledby]="toolboxTitle.id"
           [attr.aria-activedescendant]="getActiveDescId()"
           (keydown)="treeService.onKeypress($event, tree)">

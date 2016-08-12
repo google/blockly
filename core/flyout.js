@@ -657,8 +657,21 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         contents.push({type: 'block', block: curBlock});
         var gap = parseInt(xml.getAttribute('gap'), 10);
         gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
-      }
-      else if (tagName == 'BUTTON') {
+      } else if (xml.tagName.toUpperCase() == 'SEP') {
+        // Change the gap between two blocks.
+        // <sep gap="36"></sep>
+        // The default gap is 24, can be set larger or smaller.
+        // This overwrites the gap attribute on the previous block.
+        // Note that a deprecated method is to add a gap to a block.
+        // <block type="math_arithmetic" gap="8"></block>
+        var newGap = parseInt(xml.getAttribute('gap'), 10);
+        // Ignore gaps before the first block.
+        if (!isNaN(newGap) && gaps.length > 0) {
+          gaps[gaps.length - 1] = newGap;
+        } else {
+          gaps.push(this.MARGIN * 3);
+        }
+      } else if (tagName == 'BUTTON') {
         var label = xml.getAttribute('text');
         var curButton = new Blockly.FlyoutButton(this.workspace_,
             this.targetWorkspace_, label);

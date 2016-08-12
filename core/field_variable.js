@@ -65,6 +65,12 @@ Blockly.FieldVariable.prototype.init = function() {
             this.sourceBlock_.workspace;
     this.setValue(Blockly.Variables.generateUniqueName(workspace));
   }
+  // If the selected variable doesn't exist yet, create it.
+  // For instance, some blocks in the toolbox have variable dropdowns filled
+  // in by default.
+  if (!this.sourceBlock_.isInFlyout) {
+    this.sourceBlock_.workspace.createVariable(this.getValue());
+  }
 };
 
 /**

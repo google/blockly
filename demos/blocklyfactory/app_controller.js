@@ -46,34 +46,9 @@ AppController = function() {
       new BlockLibraryController(this.blockLibraryName);
   this.blockLibraryController.populateBlockLibrary();
 
-  // Create empty workspace for configuring workspace.
-  var toolbox = document.getElementById('workspacefactory_toolbox');
-  var toolboxWorkspace = Blockly.inject('toolbox_blocks',
-    {grid:
-      {spacing: 25,
-       length: 3,
-       colour: '#ccc',
-       snap: true},
-       media: '../../media/',
-       toolbox: toolbox,
-     });
-  // Create empty workspace for previewing created workspace.
-  var previewWorkspace = Blockly.inject('preview_blocks',
-    {grid:
-      {spacing: 25,
-       length: 3,
-       colour: '#ccc',
-       snap: true},
-     media: '../../media/',
-     toolbox: '<xml></xml>',
-     zoom:
-       {controls: true,
-        wheel: true}
-    });
-
   // Construct Workspace Factory Controller.
-  this.workspaceFactoryController =
-      new FactoryController(toolboxWorkspace, previewWorkspace);
+  this.workspaceFactoryController = new FactoryController
+      ('workspacefactory_toolbox', 'toolbox_blocks', 'preview_blocks');
 
   // Initialize Block Exporter
   this.exporter =

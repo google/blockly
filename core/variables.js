@@ -289,9 +289,19 @@ Blockly.Variables.delete = function(name, workspace) {
   if (variableIndex != -1) {
     var uses = Blockly.Variables.getUses(name, workspace);
     if (uses.length > 1) {
+      for (var i = 0, block; block = uses[i]; i++) {
+        if (block.type == 'procedures_defnoreturn' ||
+          block.type == 'procedures_defreturn') {
+          var procedureName = block.getFieldValue('NAME');
+          window.alert(
+              Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.replace('%1', name).
+              replace('%2', procedureName));
+          return;
+        }
+      }
       window.confirm(
-        Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
-            replace('%2', name));
+          Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
+          replace('%2', name));
     }
     Blockly.Variables.disposeUses_(uses);
     workspace.variableList.splice(variableIndex, 1);

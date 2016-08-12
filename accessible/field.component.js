@@ -30,11 +30,13 @@ blocklyApp.FieldComponent = ng.core
     template: `
     <input *ngIf="isTextInput()" [id]="mainFieldId" type="text" [disabled]="disabled"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text'">
+           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text'"
+           tabindex="-1">
 
     <input *ngIf="isNumberInput()" [id]="mainFieldId" type="number" [disabled]="disabled"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number'">
+           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number'"
+           tabindex="-1">
 
     <div *ngIf="isDropdown()"
          [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])">
@@ -43,7 +45,7 @@ blocklyApp.FieldComponent = ng.core
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)"
-                  [disabled]="disabled">
+                  [disabled]="disabled" tabindex="-1">
             {{optionText[optionValue]}}
           </button>
         </li>

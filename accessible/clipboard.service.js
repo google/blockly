@@ -26,7 +26,8 @@ blocklyApp.ClipboardService = ng.core
   .Class({
     constructor: [
         blocklyApp.NotificationsService, blocklyApp.UtilsService,
-        function(_notificationsService, _utilsService) {
+        blocklyApp.AudioService,
+        function(_notificationsService, _utilsService, _audioService) {
       this.clipboardBlockXml_ = null;
       this.clipboardBlockPreviousConnection_ = null;
       this.clipboardBlockNextConnection_ = null;
@@ -34,6 +35,7 @@ blocklyApp.ClipboardService = ng.core
       this.markedConnection_ = null;
       this.notificationsService = _notificationsService;
       this.utilsService = _utilsService;
+      this.audioService = _audioService;
     }],
     areConnectionsCompatible_: function(blockConnection, connection) {
       // Check that both connections exist, that it's the right kind of
@@ -130,6 +132,7 @@ blocklyApp.ClipboardService = ng.core
         default:
           connection.connect(reconstitutedBlock.outputConnection);
       }
+      this.audioService.playConnectSound();
       this.notificationsService.setStatusMessage(
           this.utilsService.getBlockDescription(reconstitutedBlock) + ' ' +
           Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG);
@@ -151,6 +154,7 @@ blocklyApp.ClipboardService = ng.core
         if (this.areConnectionsCompatible_(
             this.markedConnection_, potentialConnections[i])) {
           this.markedConnection_.connect(potentialConnections[i]);
+          this.audioService.playConnectSound();
           connectionSuccessful = true;
           break;
         }

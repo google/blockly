@@ -333,10 +333,8 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
             // Note that a deprecated method is to add a gap to a block.
             // <block type="math_arithmetic" gap="8"></block>
             var newGap = parseFloat(childIn.getAttribute('gap'));
-            if (!isNaN(newGap)) {
-              var oldGap = parseFloat(lastElement.getAttribute('gap'));
-              var gap = isNaN(oldGap) ? newGap : oldGap + newGap;
-              lastElement.setAttribute('gap', gap);
+            if (!isNaN(newGap) && lastElement) {
+              lastElement.setAttribute('gap', newGap);
             }
           }
         }

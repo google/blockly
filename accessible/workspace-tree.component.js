@@ -60,7 +60,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
                   [attr.aria-level]="level + 2">
                 <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button' + i]"
                         (click)="fieldButtonInfo.action(inputBlock.connection)"
-                        [disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)">
+                        [disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)" tabindex="-1">
                   {{fieldButtonInfo.translationIdForText|translate}}
                 </button>
               </li>
@@ -78,7 +78,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[buttonInfo.baseIdKey + 'Button'], 'blockly-button', buttonInfo.isDisabled())"
                 [attr.aria-level]="level + 2">
               <button [id]="idMap[buttonInfo.baseIdKey + 'Button']" (click)="buttonInfo.action()"
-                      [disabled]="buttonInfo.isDisabled()">
+                      [disabled]="buttonInfo.isDisabled()" tabindex="-1">
                 {{buttonInfo.translationIdForText|translate}}
               </button>
             </li>
@@ -102,13 +102,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     constructor: [
         blocklyApp.ClipboardService, blocklyApp.NotificationsService,
         blocklyApp.TreeService, blocklyApp.UtilsService,
+        blocklyApp.AudioService,
         function(
             _clipboardService, _notificationsService, _treeService,
-            _utilsService) {
+            _utilsService, _audioService) {
       this.clipboardService = _clipboardService;
       this.notificationsService = _notificationsService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
+      this.audioService = _audioService;
     }],
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
@@ -172,6 +174,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       var that = this;
       this.removeBlockAndSetFocus_(this.block, function() {
         that.block.dispose(true);
+        that.audioService.playDeleteSound();
       });
 
       setTimeout(function() {

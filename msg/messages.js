@@ -108,6 +108,8 @@ Blockly.Msg.RENAME_VARIABLE = 'Rename variable...';
 Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
 /// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.
 Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = 'Delete %1 uses of the %2 variable?';
+/// alert - Tell the user that they can't delete a variable because it's part of the definition of a procedure.
+Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE = 'Can\'t delete the variable \'%1\' because it is part of the definition of the procedure \'%2\'';
 
 // Colour Blocks.
 /// url - Information about colour.

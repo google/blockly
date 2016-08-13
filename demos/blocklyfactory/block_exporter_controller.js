@@ -41,8 +41,6 @@ goog.require('goog.dom.xml');
  * @constructor
  *
  * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage.
- * @param {!FactoryGenerator} factoryGenerator - Workspace Factory
- *    generator.
  */
 BlockExporterController = function(blockLibStorage) {
   // BlockLibrary.Storage object containing user's saved blocks

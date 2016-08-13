@@ -76,6 +76,8 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
   this.populateBlockLibrary();
+  // Show default block.
+  BlockFactory.showStarterBlock();
 };
 
 /**
@@ -102,7 +104,7 @@ BlockLibraryController.prototype.getSelectedBlockType =
 
 /**
  * Confirms with user before clearing the block library in local storage and
- * updating the dropdown.
+ * updating the dropdown and displaying the starter block (factory_base).
  */
 BlockLibraryController.prototype.clearBlockLibrary = function() {
   var check = confirm(
@@ -116,6 +118,8 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
     // Add a default, blank option to dropdown for when no block from library is
     // selected.
     BlockLibraryView.addDefaultOption('blockLibraryDropdown');
+    // Show default block.
+    BlockFactory.showStarterBlock();
   }
 };
 

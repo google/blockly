@@ -945,6 +945,7 @@ BlockFactory.disableEnableLink = function() {
  * Render starter block (factory_base).
  */
  BlockFactory.showStarterBlock = function() {
+    BlockFactory.mainWorkspace.clear();
     var xml = '<xml><block type="factory_base" deletable="false" ' +
         'movable="false"></block></xml>';
     Blockly.Xml.domToWorkspace(

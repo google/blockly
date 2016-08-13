@@ -26,10 +26,8 @@
  * order to generate toolbox XML. Depends on FactoryUtils for category xml
  * generation.
  *
- * @author Emma Dauterman (evd2014), Tina Quach (quachtina96)
+ * @author Emma Dauterman (evd2014)
  */
-
- goog.require('FactoryUtils');
 
 /**
  * Class for a FactoryGenerator
@@ -159,82 +157,5 @@ FactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ = function() {
       blocks[i].setShadow(true);
     }
   }
-};
-
-/**
- * Generate category xml from imported block definitions. Assumes that each
- * block definition is separated by a single empty line.
- *
- * @param {!string} blockDefs - Block definition(s) each separated by a new
- *    line.
- * @param {!string} format - Block definition format ('JSON' or 'JavaScript').
- * @param {!string} categoryName - Name for the generated category.
- * @return {!Element} Xml representation of a category.
- */
-FactoryGenerator.prototype.generateCategoryFromBlockDefs =
-    function(blockDefs, format, categoryName) {
-  // Create category DOM element.
-  var categoryElement = goog.dom.createDom('category');
-  categoryElement.setAttribute('name', categoryName);
-
-  var blockDefArray = goog.string.splitLimit(blockDefs, '\n\n', 500);
-  var blockTypes = [];
-
-  if (format == 'JSON') {
-    // Populate array of blocktypes and define each block.
-    for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
-      var json = JSON.parse(blockDef);
-      blockTypes.push(json.type);
-      FactoryUtils.defineBlockWithJson_(json);
-    }
-  } else if (format == 'JavaScript') {
-    // Populate array of block types.
-    for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
-      var blockType = FactoryUtils.getBlockTypeFromJSDef_(blockDef);
-      blockTypes.push(blockType);
-    }
-    // Define all blocks.
-    eval(blockDefs);
-  }
-
-  // For each block, add block element to category.
-  for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
-    // Get block.
-    var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
-
-    // Get preview block XML.
-    var blockChild = Blockly.Xml.blockToDom(block);
-    blockChild.removeAttribute('id');
-
-    // Add block to category and category to XML.
-    categoryElement.appendChild(blockChild);
-  }
-  return categoryElement;
-}
-
-/**
- * Parses a block definition get the type of the block it defines.
- * @private
- *
- * @param {string} blockDef - A single block definition.
- */
-FactoryUtils.prototype.getBlockTypeFromJSDef_ = function(blockDef) {
-  var indexOfStartBracket = blockDef.indexOf('[\'');
-  var indexOfEndBracket = blockDef.indexOf('\']');
-  return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
-};
-
-/**
- * Defines a block given its JSON definition.
- * @private
- *
- * @param {string} json - Single block's definition in JSON format.
- */
-FactoryUtils.prototype.defineBlockWithJson_ = function(json) {
-  Blockly.Blocks[json.type || UNNAMED] = {
-    init: function() {
-      this.jsonInit(json);
-    }
-  };
 };
 

@@ -1,7 +1,35 @@
-'use strict';
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2016 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 /**
- * Namespace for Block Factory.
+ * @fileoverview FactoryUtils is a namespace that holds block starter code
+ * generation functions shared by the Block Factory, Workspace Factory, and
+ * Exporter applications within Blockly Factory. Holds functions to generate
+ * block definitions and generator stubs and to create and download files.
+ *
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
+ */
+ 'use strict';
+
+/**
+ * Namespace for FactoryUtils.
  */
 goog.provide('FactoryUtils');
 
@@ -629,6 +657,9 @@ FactoryUtils.getRootBlock = function(workspace) {
   }
   return null;
 };
+
+// TODO(quachtina96): Move hide, show, makeInvisible, and makeVisible to a new
+// AppView namespace.
 
 /**
  * Hides element so that it's invisible and doesn't take up space.

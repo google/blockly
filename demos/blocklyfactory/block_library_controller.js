@@ -76,7 +76,6 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
   this.populateBlockLibrary();
-  BlockFactory.showStarterBlock();
 };
 
 /**
@@ -117,8 +116,6 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
     // Add a default, blank option to dropdown for when no block from library is
     // selected.
     BlockLibraryView.addDefaultOption('blockLibraryDropdown');
-    // Show default block.
-    BlockFactory.showStarterBlock();
   }
 };
 

@@ -216,60 +216,6 @@ BlockFactory.updatePreview = function() {
 };
 
 /**
- * Generate a file from the contents of a given text area and
- * download that file.
- * @deprecated
- *
- * @param {string} filename The name of the file to create.
- * @param {string} id The text area to download.
-*/
-BlockFactory.downloadTextArea = function(filename, id) {
-  var code = document.getElementById(id).textContent;
-  BlockFactory.createAndDownloadFile_(code, filename, 'plain');
-};
-
-/**
- * Save the workspace's xml representation to a file.
- * @deprecated since the addition of Block Exporter.
- */
-BlockFactory.saveWorkspaceToFile = function() {
-  var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
-  var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
-  BlockFactory.createAndDownloadFile_(prettyXml, 'blockXml', 'xml');
-};
-
-/**
- * Imports xml file for a block to the workspace.
- * @deprecated since the addition of Block Exporter.
- */
-BlockFactory.importBlockFromFile = function() {
-  var files = document.getElementById('files');
-  // If the file list is empty, they user likely canceled in the dialog.
-  if (files.files.length > 0) {
-    // The input tag doesn't have the "mulitple" attribute
-    // so the user can only choose 1 file.
-    var file = files.files[0];
-    var fileReader = new FileReader();
-    fileReader.addEventListener('load', function(event) {
-      var fileContents = event.target.result;
-      var xml = '';
-      try {
-        xml = Blockly.Xml.textToDom(fileContents);
-      } catch (e) {
-        var message = 'Could not load your saved file.\n'+
-          'Perhaps it was created with a different version of Blockly?';
-        window.alert(message + '\nXML: ' + fileContents);
-        return;
-      }
-      BlockFactory.mainWorkspace.clear();
-      Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
-    });
-
-    fileReader.readAsText(file);
-  }
-};
-
-/**
  * Disable link and save buttons if the format is 'Manual', enable otherwise.
  */
 BlockFactory.disableEnableLink = function() {

@@ -284,7 +284,6 @@ AppController.prototype.onTab = function() {
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab == 'WORKSPACE_FACTORY') {
-    console.log('workspaceFactoryTab');
     goog.dom.classlist.addRemove(workspaceFactoryTab, 'taboff', 'tabon');
     goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
     goog.dom.classlist.addRemove(exporterTab, 'tabon', 'taboff');

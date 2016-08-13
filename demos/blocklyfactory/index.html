@@ -1,4 +1,4 @@
-<!-- TODO(quacht): move the CSS out to a separate file -->
+<!-- TODO(quachtina96): move the CSS out to a separate file -->
 
 <!DOCTYPE html>
 <html>
@@ -10,6 +10,7 @@
   <script src="../../blockly_uncompressed.js"></script>
   <script src="../../generators/javascript.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
+  <script src="factory_utils.js"></script>
   <script src="factory.js"></script>
   <script src="block_library_view.js"></script>
   <script src="block_library_storage.js"></script>
@@ -27,10 +28,6 @@
     var init = function() {
       blocklyFactory = new AppController();
       blocklyFactory.init();
-    if (blocklyFactory.blockLibraryController.hasEmptyBlockLib()) {
-      alert('Your block library is empty! Click "Save to Block Library" so ' +
-         'you can reopen it the next time you visit Block Factory!');
-    }
     };
     window.addEventListener('load', init);
 </script>
@@ -150,7 +147,7 @@
                 <img src="link.png" height="21" width="21">
               </button>
               <button id="createNewBlockButton" title="Create a new block.">
-                <span> Create New Block</span>
+                <span> Create Block</span>
               </button>
               <label for="files" class="buttonStyle">
                 <span class=>Import Block Library</span>
@@ -188,10 +185,6 @@
                   <option value="JavaScript">JavaScript</option>
                   <option value="Manual">Manual edit&hellip;</option>
                 </select>
-                <button class ="downloadButton" id="downloadBlocks"
-                        title="Download block definition to a file.">
-                 <span>Download</span>
-               </button>
               </h3>
             </td>
           </tr>
@@ -211,10 +204,6 @@
                   <option value="Lua">Lua</option>
                   <option value="Dart">Dart</option>
                 </select>
-                <button id="downloadGenerator" class="downloadButton"
-                        title="Downloadgenerator stub to a file.">
-                  <span>Download</span>
-                </button>
               </h3>
             </td>
           </tr>

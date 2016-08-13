@@ -360,14 +360,6 @@ AppController.prototype.assignFactoryClickHandlers = function() {
         open('https://developers.google.com/blockly/custom-blocks/block-factory',
              'BlockFactoryHelp');
       });
-  document.getElementById('downloadBlocks').addEventListener('click',
-      function() {
-        BlockFactory.downloadTextArea('blocks', 'languagePre');
-      });
-  document.getElementById('downloadGenerator').addEventListener('click',
-      function() {
-        BlockFactory.downloadTextArea('generator', 'generatorPre');
-      });
   document.getElementById('files').addEventListener('change',
       function() {
         // Warn user.

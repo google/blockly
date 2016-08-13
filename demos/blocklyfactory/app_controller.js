@@ -251,8 +251,6 @@ AppController.prototype.makeTabClickHandler_ = function(tabName) {
 /**
  * Called on each tab click. Hides and shows specific content based on which tab
  * (Block Factory, Workspace Factory, or Exporter) is selected.
- *
- * TODO(quachtina96): Refactor the code to avoid repetition of addRemove.
  */
 AppController.prototype.onTab = function() {
   // Get tab div elements.
@@ -260,12 +258,10 @@ AppController.prototype.onTab = function() {
   var exporterTab = this.tabMap['EXPORTER'];
   var workspaceFactoryTab = this.tabMap['WORKSPACE_FACTORY'];
 
-  if (this.selectedTab == 'EXPORTER') {
-    // Turn exporter tab on and other tabs off.
-    goog.dom.classlist.addRemove(exporterTab, 'taboff', 'tabon');
-    goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-    goog.dom.classlist.addRemove(workspaceFactoryTab, 'tabon', 'taboff');
+  // Turn selected tab on and other tabs off.
+  this.styleTabs_();
 
+  if (this.selectedTab == 'EXPORTER') {
     // Update toolbox to reflect current block library.
     this.exporter.updateToolbox();
 
@@ -274,19 +270,11 @@ AppController.prototype.onTab = function() {
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab ==  'BLOCK_FACTORY') {
-    // Turn factory tab on and other tabs off.
-    goog.dom.classlist.addRemove(blockFactoryTab, 'taboff', 'tabon');
-    goog.dom.classlist.addRemove(exporterTab, 'tabon', 'taboff');
-    goog.dom.classlist.addRemove(workspaceFactoryTab, 'tabon', 'taboff');
-
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab == 'WORKSPACE_FACTORY') {
-    goog.dom.classlist.addRemove(workspaceFactoryTab, 'taboff', 'tabon');
-    goog.dom.classlist.addRemove(blockFactoryTab, 'tabon', 'taboff');
-    goog.dom.classlist.addRemove(exporterTab, 'tabon', 'taboff');
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     // Show workspace factory container.
@@ -295,6 +283,20 @@ AppController.prototype.onTab = function() {
 
   // Resize to render workspaces' toolboxes correctly for all tabs.
   window.dispatchEvent(new Event('resize'));
+};
+
+/**
+ * Called on each tab click. Styles the tabs to reflect which tab is selected.
+ * @private
+ */
+AppController.prototype.styleTabs_ = function() {
+  for (var tabName in this.tabMap) {
+    if (this.selectedTab == tabName) {
+      goog.dom.classlist.addRemove(this.tabMap[tabName], 'taboff', 'tabon');
+    } else {
+      goog.dom.classlist.addRemove(this.tabMap[tabName], 'tabon', 'taboff');
+    }
+  }
 };
 
 /**

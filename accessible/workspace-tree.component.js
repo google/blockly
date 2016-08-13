@@ -60,7 +60,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
                   [attr.aria-level]="level + 2">
                 <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button' + i]"
                         (click)="fieldButtonInfo.action(inputBlock.connection)"
-                        [disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)">
+                        [disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)" tabindex="-1">
                   {{fieldButtonInfo.translationIdForText|translate}}
                 </button>
               </li>
@@ -78,7 +78,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
                 [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[buttonInfo.baseIdKey + 'Button'], 'blockly-button', buttonInfo.isDisabled())"
                 [attr.aria-level]="level + 2">
               <button [id]="idMap[buttonInfo.baseIdKey + 'Button']" (click)="buttonInfo.action()"
-                      [disabled]="buttonInfo.isDisabled()">
+                      [disabled]="buttonInfo.isDisabled()" tabindex="-1">
                 {{buttonInfo.translationIdForText|translate}}
               </button>
             </li>

@@ -533,6 +533,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   if (this.isInFlyout) {
     return;
   }
+  this.workspace.updateScreenCalculationsIfScrolled();
   this.workspace.markFocused();
   Blockly.terminateDrag_();
   this.select();

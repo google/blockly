@@ -21,6 +21,10 @@ aside {
   border-bottom: none;
 }
 
+#workspaceTabs>table {
+  float: right;
+}
+
 td.tabon {
   border-bottom-color: #ddd !important;
   background-color: #ddd;
@@ -61,6 +65,10 @@ button>* {
 
 button:hover:not(:disabled)>* {
   opacity: 1;
+}
+
+button.small {
+  font-size: small;
 }
 
 table {
@@ -109,6 +117,10 @@ td {
 }
 
 #toolbox_div {
+  width: 20%;
+}
+
+#preload_div {
   width: 20%;
 }
 
@@ -198,11 +210,7 @@ td {
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #f1f1f1
-}
-
-.dropdown-content label:hover {
+.dropdown-content a:hover, .dropdown-content label:hover {
   background-color: #f1f1f1
 }
 

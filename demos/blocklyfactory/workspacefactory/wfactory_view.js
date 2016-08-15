@@ -339,3 +339,83 @@ FactoryView.prototype.unmarkShadowBlock = function(block) {
     Blockly.removeClass_(block.svgGroup_, 'shadowBlock');
   }
 };
+
+/**
+ * Sets the tabs for modes according to which mode the user is currenly
+ * editing in.
+ *
+ * @param {!string} mode The mode being switched to
+ *    (FactoryController.MODE_TOOLBOX or FactoryController.MODE_PRELOAD).
+ */
+FactoryView.prototype.setModeSelection = function(mode) {
+  document.getElementById('tab_preload').className = mode ==
+      FactoryController.MODE_PRELOAD ? 'tabon' : 'taboff';
+  document.getElementById('preload_div').style.display = mode ==
+      FactoryController.MODE_PRELOAD ? 'block' : 'none';
+  document.getElementById('tab_toolbox').className = mode ==
+      FactoryController.MODE_TOOLBOX ? 'tabon' : 'taboff';
+  document.getElementById('toolbox_div').style.display = mode ==
+      FactoryController.MODE_TOOLBOX ? 'block' : 'none';
+};
+
+/**
+ * Updates the help text above the workspace depending on the selected mode.
+ *
+ * @param {!string} mode The selected mode (FactoryController.MODE_TOOLBOX or
+ *    FactoryController.MODE_PRELOAD).
+ */
+FactoryView.prototype.updateHelpText = function(mode) {
+  var helpText = 'Drag your blocks into your ' + (mode ==
+      FactoryController.MODE_TOOLBOX ? 'toolbox: ' : 'pre-loaded workspace: ');
+  document.getElementById('editHelpText').textContent = helpText;
+};
+
+/**
+ * Sets the basic options that are not dependent on if there are categories
+ * or a single flyout of blocks. Updates checkboxes and text fields.
+ */
+FactoryView.prototype.setBaseOptions = function() {
+  // Set basic options.
+  document.getElementById('option_css_checkbox').checked = true;
+  document.getElementById('option_maxBlocks_text').value = Infinity;
+  document.getElementById('option_media_text').value =
+      'https://blockly-demo.appspot.com/static/media/';
+  document.getElementById('option_readOnly_checkbox').checked = false;
+  document.getElementById('option_rtl_checkbox').checked = false;
+  document.getElementById('option_sounds_checkbox').checked = true;
+
+  // Uncheck grid and zoom options and hide suboptions.
+  document.getElementById('option_grid_checkbox').checked = false;
+  document.getElementById('grid_options').style.display = 'none';
+  document.getElementById('option_zoom_checkbox').checked = false;
+  document.getElementById('zoom_options').style.display = 'none';
+
+  // Set grid options.
+  document.getElementById('gridOption_spacing_text').value = 0;
+  document.getElementById('gridOption_length_text').value = 1;
+  document.getElementById('gridOption_colour_text').value = '#888';
+  document.getElementById('gridOption_snap_checkbox').checked = false;
+
+  // Set zoom options.
+  document.getElementById('zoomOption_controls_checkbox').checked = false;
+  document.getElementById('zoomOption_wheel_checkbox').checked = false;
+  document.getElementById('zoomOption_startScale_text').value = 1.0;
+  document.getElementById('zoomOption_maxScale_text').value = 3;
+  document.getElementById('zoomOption_minScale_text').value = 0.3;
+  document.getElementById('zoomOption_scaleSpeed_text').value = 1.2;
+};
+
+/**
+ * Updates category specific options depending on if there are categories
+ * currently present. Updates checkboxes and text fields in the view.
+ *
+ * @param {boolean} hasCategories True if categories are present, false if all
+ *    blocks are displayed in a single flyout.
+ */
+FactoryView.prototype.setCategoryOptions = function(hasCategories) {
+  document.getElementById('option_collapse_checkbox').checked = hasCategories;
+  document.getElementById('option_comments_checkbox').checked = hasCategories;
+  document.getElementById('option_disable_checkbox').checked = hasCategories;
+  document.getElementById('option_scrollbars_checkbox').checked = hasCategories;
+  document.getElementById('option_trashcan_checkbox').checked = hasCategories;
+}

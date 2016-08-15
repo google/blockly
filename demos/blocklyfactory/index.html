@@ -28,10 +28,6 @@
     var init = function() {
       blocklyFactory = new AppController();
       blocklyFactory.init();
-      if (blocklyFactory.blockLibraryController.hasEmptyBlockLib()) {
-        alert('Your block library is empty! Click "Save to Block Library" so ' +
-          'you can reopen it the next time you visit Block Factory!');
-      }
     };
     window.addEventListener('load', init);
 </script>

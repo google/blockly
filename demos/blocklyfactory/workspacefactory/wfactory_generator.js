@@ -108,6 +108,7 @@ FactoryGenerator.prototype.generateToolboxXml = function() {
   return xmlDom;
  };
 
+
  /**
   * Generates XML for the workspace (different from generateConfigXml in that
   * it includes XY and ID attributes). Uses a workspace and converts user

@@ -51,6 +51,8 @@ FactoryModel = function() {
   this.hasProcedureCategory = false;
   // XML to be pre-loaded to workspace. Empty on default;
   this.preloadXml = Blockly.Xml.textToDom('<xml></xml>');
+  // Options object to be configured for Blockly inject call.
+  this.options = new Object(null);
 };
 
 /**
@@ -137,8 +139,10 @@ FactoryModel.prototype.deleteElementFromList = function(index) {
 };
 
 /**
- * Sets selected to be an empty single flyout if toolbox list is empty. Should
- * be called when removing the last element from toolbox list.
+ * Sets selected to be an empty category not in toolbox list if toolbox list
+ * is empty. Should be called when removing the last element from toolbox list.
+ * If the toolbox list is empty, selected stores the XML for the single flyout
+ * of blocks displayed.
  *
  */
 FactoryModel.prototype.createDefaultSelectedIfEmpty = function() {
@@ -381,7 +385,8 @@ FactoryModel.prototype.addCustomTag = function(category, tag) {
   }
 };
 
-/*
+/**
+ * Have basic pre-loaded workspace working
  * Saves XML as XML to be pre-loaded into the workspace.
  *
  * @param {!Element} xml The XML to be saved.
@@ -397,6 +402,25 @@ FactoryModel.prototype.savePreloadXml = function(xml) {
  */
 FactoryModel.prototype.getPreloadXml = function() {
   return this.preloadXml;
+};
+
+/**
+ * Sets a new options object for injecting a Blockly workspace.
+ *
+ * @param {Object} options Options object for injecting a Blockly workspace.
+ */
+FactoryModel.prototype.setOptions = function(options) {
+  this.options = options;
+};
+
+/**
+ * Sets an attribute of the options object.
+ *
+ * @param {!string} name Name of the attribute to add.
+ * @param {Object} value The value of the attribute to add.
+ */
+FactoryModel.prototype.setOptionsAttribute = function(name, value) {
+  this.options[name] = value;
 };
 
 /**

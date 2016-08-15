@@ -185,8 +185,8 @@ button, .buttonStyle {
 #exportSettings {
   float: left;
   padding-left: 16px;
-  width: 30%;
   overflow: hidden;
+  width: 30%;
 }
 
 #exporterHiddenWorkspace {

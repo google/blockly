@@ -209,7 +209,7 @@ td {
   text-decoration: none;
 }
 
-/* Change color of dropdown links on hover */
+/* Change color of dropdown links on hover. */
 .dropdown-content a:hover, .dropdown-content label:hover {
   background-color: #f1f1f1
 }

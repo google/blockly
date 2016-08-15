@@ -306,6 +306,7 @@
 	"LISTS_SORT_ORDER_DESCENDING": "azalan",
 	"LISTS_SORT_TYPE_NUMERIC": "sayısal",
 	"LISTS_SORT_TYPE_TEXT": "alfabetik",
+	"LISTS_SORT_TYPE_IGNORECASE": "alfabetik, gözardı et",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "metinden liste yap",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "listeden metin yap",
 	"LISTS_SPLIT_WITH_DELIMITER": "sınırlayıcı ile",

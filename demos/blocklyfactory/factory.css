@@ -188,8 +188,8 @@ button, .buttonStyle {
 
 #exportSettings {
   float: left;
-  padding-left: 16px;
   overflow: hidden;
+  padding-left: 16px;
   width: 30%;
 }
 

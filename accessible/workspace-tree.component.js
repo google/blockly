@@ -69,9 +69,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         </template>
 
         <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-other-actions', 'blockly-submenu-indicator')"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-more-options', 'blockly-submenu-indicator')"
             [attr.aria-level]="level + 1">
-          <label [id]="idMap['label']">{{'OTHER_ACTIONS'|translate}}</label>
+          <label [id]="idMap['label']">{{'MORE_OPTIONS'|translate}}</label>
           <ol role="group">
             <li *ngFor="#buttonInfo of actionButtonsInfo"
                 [id]="idMap[buttonInfo.baseIdKey]" role="treeitem"
@@ -289,14 +289,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         }
       }, {
         baseIdKey: 'markBelow',
-        translationIdForText: 'MARK_SPOT_BELOW',
+        translationIdForText: 'MARK_SPOT_BEFORE',
         action: that.markSpotBelow_.bind(that),
         isDisabled: function() {
           return !that.block.nextConnection;
         }
       }, {
         baseIdKey: 'markAbove',
-        translationIdForText: 'MARK_SPOT_ABOVE',
+        translationIdForText: 'MARK_SPOT_AFTER',
         action: that.markSpotAbove_.bind(that),
         isDisabled: function() {
           return !that.block.previousConnection;

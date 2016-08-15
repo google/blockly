@@ -284,7 +284,7 @@ FactoryInit.assignWorkspaceFactoryClickHandlers_ = function(controller) {
 };
 
 /**
- * Add event listeners for worokspace factory.
+ * Add event listeners for workspace factory.
  * @private
  *
  * @param {!FactoryController} controller The controller for the workspace

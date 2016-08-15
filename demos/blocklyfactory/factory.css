@@ -124,6 +124,10 @@ button, .buttonStyle {
   display: none;
 }
 
+#helpButton {
+  float: right;
+}
+
 #blockFactoryContent {
   height: 87%;
 }

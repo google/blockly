@@ -33,6 +33,8 @@ goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
 goog.require('goog.string');
+goog.require('goog.ui.PopupColorPicker');
+goog.require('goog.ui.ColorPicker');
 
 /**
  * Controller for the Blockly Factory
@@ -44,6 +46,10 @@ AppController = function() {
   this.blockLibraryController =
       new BlockLibraryController(this.blockLibraryName);
   this.blockLibraryController.populateBlockLibrary();
+
+  // Construct Workspace Factory Controller.
+  this.workspaceFactoryController = new FactoryController
+      ('workspacefactory_toolbox', 'toolbox_blocks', 'preview_blocks');
 
   // Initialize Block Exporter
   this.exporter =
@@ -361,18 +367,20 @@ AppController.prototype.assignLibraryClickHandlers = function() {
 /**
  * Assign button click handlers for the block factory.
  */
-AppController.prototype.assignFactoryClickHandlers = function() {
+AppController.prototype.assignBlockFactoryClickHandlers = function() {
   var self = this;
   // Assign button event handlers for Block Factory.
   document.getElementById('localSaveButton')
       .addEventListener('click', function() {
         self.exportBlockLibraryToFile();
       });
+
   document.getElementById('helpButton').addEventListener('click',
       function() {
         open('https://developers.google.com/blockly/custom-blocks/block-factory',
              'BlockFactoryHelp');
       });
+
   document.getElementById('files').addEventListener('change',
       function() {
         // Warn user.
@@ -386,6 +394,7 @@ AppController.prototype.assignFactoryClickHandlers = function() {
           this.value = null;
         }
       });
+
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
         BlockFactory.showStarterBlock();
@@ -396,7 +405,7 @@ AppController.prototype.assignFactoryClickHandlers = function() {
 /**
  * Add event listeners for the block factory.
  */
-AppController.prototype.addFactoryEventListeners = function() {
+AppController.prototype.addBlockFactoryEventListeners = function() {
   BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);
@@ -429,6 +438,7 @@ AppController.prototype.initializeBlocklyStorage = function() {
           BlocklyStorage.link(BlockFactory.mainWorkspace);});
   BlockFactory.disableEnableLink();
 };
+
 /**
  * Initialize Blockly and layout.  Called on page load.
  */
@@ -441,7 +451,7 @@ AppController.prototype.init = function() {
   // Assign click handlers.
   this.assignExporterClickHandlers();
   this.assignLibraryClickHandlers();
-  this.assignFactoryClickHandlers();
+  this.assignBlockFactoryClickHandlers();
 
   // Handle resizing of Block Factory elements.
   var expandList = [
@@ -463,7 +473,7 @@ AppController.prototype.init = function() {
   window.addEventListener('resize', onresize);
 
   // Inject Block Factory Main Workspace.
-  var toolbox = document.getElementById('toolbox');
+  var toolbox = document.getElementById('blockfactory_toolbox');
   BlockFactory.mainWorkspace = Blockly.inject('blockly',
       {collapse: false,
        toolbox: toolbox,
@@ -484,5 +494,10 @@ AppController.prototype.init = function() {
   BlockFactory.mainWorkspace.clearUndo();
 
   // Add Block Factory event listeners.
-  this.addFactoryEventListeners();
+  this.addBlockFactoryEventListeners();
+
+  // Workspace Factory init.
+  FactoryInit.initWorkspaceFactory(this.workspaceFactoryController);
 };
+
+

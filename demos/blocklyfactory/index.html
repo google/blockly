@@ -6,9 +6,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly Demo: Blockly Factory</title>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/messages.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="workspacefactory/wfactory_model.js"></script>
+  <script src="workspacefactory/wfactory_controller.js"></script>
+  <script src="workspacefactory/wfactory_view.js"></script>
+  <script src="workspacefactory/wfactory_generator.js"></script>
+  <script src="workspacefactory/wfactory_init.js"></script>
+  <script src="workspacefactory/standard_categories.js"></script>
   <script src="/storage.js"></script>
-  <script src="../../blockly_uncompressed.js"></script>
-  <script src="../../generators/javascript.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
   <script src="factory_utils.js"></script>
   <script src="factory.js"></script>
@@ -106,11 +114,77 @@
       </form>
         <button id="exporterSubmitButton"> Export </button>
     </div>
+    <div id="exportPreview">
+      <h3>Preview Workspace: </h3>
+      <div id="exportpreview_blocks">
+      </div>
+    </div>
   </div>
 
   <!-- Workspace Factory tab -->
 
   <div id="workspaceFactoryContent">
+    <p>
+      <input type="file" id="input_import" class="inputfile" class="large"></input>
+      <label for="input_import" class="buttonStyle large">Import</label>
+      <button id="button_export" class="large">Export</button>
+      <button id="button_print" class="large">Print</button>
+      <button id="button_clear" class="large">Clear</button>
+    </p>
+
+    <section id="createDiv">
+      <h3>Workspace Editor:</h3>
+      <p>Drag blocks into your toolbox.</p>
+      <section id="toolbox_section">
+        <div id="toolbox_blocks" class="content"></div>
+        <div id='disable_div'></div>
+      </section>
+      <aside id="category_section">
+        <table id="categoryTable" style="width:auto">
+          <td id="tab_help">Your categories will appear here</td>
+        </table>
+        <p>&nbsp;</p>
+
+        <div class='dropdown'>
+        <button id="button_add" class="large">+</button>
+        <div id="dropdownDiv_add" class="dropdown-content">
+          <a id='dropdown_newCategory'>New Category</a>
+          <a id='dropdown_loadCategory'>Standard Category</a>
+          <a id='dropdown_separator'>Separator</a>
+        </div>
+        </div>
+
+        <button id="button_remove" class="large">-</button>
+
+        <button id="button_up" class="large">&#8593;</button>
+        <button id="button_down" class="large">&#8595;</button>
+
+        <p>&nbsp;</p>
+        <div class='dropdown'>
+        <button id="button_editCategory" class="large">Edit Category</button>
+        <div id="dropdownDiv_editCategory" class="dropdown-content">
+          <a id='dropdown_name'>Name</a>
+          <a id='dropdown_color'>Color</a>
+        </div>
+        </div>
+
+        <div class='dropdown'>
+        <button id="button_editShadow" class="large">Edit Block</button>
+        <div id="dropdownDiv_editShadowAdd" class="dropdown-content">
+          <a id='dropdown_addShadow'>Add Shadow</a>
+        </div>
+        <div id="dropdownDiv_editShadowRemove" class="dropdown-content">
+          <a id='dropdown_removeShadow'>Remove Shadow</a>
+        </div>
+        </div>
+
+      </aside>
+    </section>
+
+    <aside id="previewDiv">
+      <h3>Preview Workspace:</h3>
+      <div id="preview_blocks" class="content"></div>
+    </aside>
   </div>
 
   <!-- Blockly Factory Tab -->
@@ -141,7 +215,7 @@
         </table>
       </td>
       <td>
-        <table>
+        <table id="blockFactoryPreview">
           <tr>
             <td id="previewContainer">
               <h3>Preview:
@@ -225,7 +299,7 @@
       </td>
   </table>
 
-  <xml id="toolbox">
+  <xml id="blockfactory_toolbox">
     <category name="Input">
       <block type="input_value">
         <value name="TYPE">
@@ -276,5 +350,310 @@
       <block type="colour_hue"><mutation colour="330"></mutation><field name="HUE">330</field></block>
     </category>
   </xml>
+
+  <xml id="workspacefactory_toolbox" style="display: none">
+    <category name="Logic" colour="210">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_null"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops" colour="120">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math" colour="230">
+      <block type="math_number"></block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_single">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">9</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_trig">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">45</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constant"></block>
+      <block type="math_number_property">
+        <value name="NUMBER_TO_CHECK">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_change">
+        <value name="DELTA">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constrain">
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="LOW">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="HIGH">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text" colour="160">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <shadow type="text"></shadow>
+        </value>
+      </block>
+      <block type="text_length">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_isEmpty">
+        <value name="VALUE">
+          <shadow type="text">
+            <field name="TEXT"></field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+        <value name="FIND">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_trim">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <shadow type="text">
+            <field name="TEXT">abc</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Lists" colour="260">
+      <block type="lists_create_with">
+        <mutation items="0"></mutation>
+      </block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">5</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_split">
+        <value name="DELIM">
+          <shadow type="text">
+            <field name="TEXT">,</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="lists_sort"></block>
+    </category>
+    <category name="Colour" colour="20">
+      <block type="colour_picker"></block>
+      <block type="colour_random"></block>
+      <block type="colour_rgb">
+        <value name="RED">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+        <value name="GREEN">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="BLUE">
+          <shadow type="math_number">
+            <field name="NUM">0</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="colour_blend">
+        <value name="COLOUR1">
+          <shadow type="colour_picker">
+            <field name="COLOUR">#ff0000</field>
+          </shadow>
+        </value>
+        <value name="COLOUR2">
+          <shadow type="colour_picker">
+            <field name="COLOUR">#3333ff</field>
+          </shadow>
+        </value>
+        <value name="RATIO">
+          <shadow type="math_number">
+            <field name="NUM">0.5</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" colour="330" custom="VARIABLE"></category>
+    <category name="Functions" colour="290" custom="PROCEDURE"></category>
+  </xml>
+
 </body>
 </html>

@@ -38,17 +38,17 @@ goog.require('goog.dom');
  *
  * @param {Element} toolbox - Xml for the toolbox of the selector workspace.
  */
-BlockExporterView = function(toolbox) {
+BlockExporterView = function(selectorToolbox) {
   // Xml representation of the toolbox
-  if (toolbox.hasChildNodes) {
-    this.toolbox = toolbox;
+  if (selectorToolbox.hasChildNodes) {
+    this.toolbox = selectorToolbox;
   } else {
     // Toolbox is empty. Append dummy category to toolbox because toolbox
     // cannot switch between category and flyout-only mode after injection.
     var categoryElement = goog.dom.createDom('category');
     categoryElement.setAttribute('name', 'Next Saved Block');
-    toolbox.appendChild(categoryElement);
-    this.toolbox = toolbox;
+    selectorToolbox.appendChild(categoryElement);
+    this.toolbox = selectorToolbox;
   }
   // Workspace users use to select blocks for export
   this.selectorWorkspace =
@@ -141,5 +141,4 @@ BlockExporterView.prototype.cleanUpSelectorWorkspace = function() {
 BlockExporterView.prototype.getSelectedBlocks = function() {
   return this.selectorWorkspace.getAllBlocks();
 };
-
 

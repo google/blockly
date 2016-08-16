@@ -40,7 +40,11 @@ h3 {
 }
 
 table {
+  border: none;
+  border-collapse: collapse;
   height: 100%;
+  margin: 0;
+  padding: 0;
   width: 100%;
 }
 
@@ -57,7 +61,6 @@ p {
   -webkit-margin-end: 0px;
   padding: 5px 0px;
 }
-
 
 #blockly {
   position: fixed;
@@ -130,6 +133,12 @@ button, .buttonStyle {
 
 #blockFactoryContent {
   height: 87%;
+  width: 100%;
+}
+
+#blockFactoryPreview {
+  height: 100%;
+  width: 100%;
 }
 
 #blockLibraryContainer {
@@ -230,3 +239,180 @@ button, .buttonStyle {
   display: table;
   width: 100%;
 }
+
+/* Workspace Factory */
+
+section {
+  float: left;
+}
+
+aside {
+  float: right;
+}
+
+#categoryTable>table {
+  border: 1px solid #ccc;
+  border-bottom: none;
+  width: auto;
+}
+
+td.tabon {
+  border-bottom-color: #ddd !important;
+  background-color: #ddd;
+  padding: 5px 19px;
+}
+
+td.taboff {
+  cursor: pointer;
+  padding: 5px 19px;
+}
+
+td.taboff:hover {
+  background-color: #eee;
+}
+
+.large {
+  font-size: large;
+}
+
+td {
+  padding: 0;
+  vertical-align: top;
+}
+
+.inputfile {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  z-index: -1;
+}
+
+#toolbox_section {
+  height: 480px;
+  width: 80%;
+  position: relative;
+}
+
+#toolbox_blocks {
+  height: 100%;
+  width: 100%;
+}
+
+#preview_blocks {
+  height: 300px;
+  width: 100%;
+}
+
+#createDiv {
+  width: 70%;
+}
+
+#previewDiv {
+  width: 30%;
+}
+
+#category_section {
+  width: 20%;
+}
+
+#disable_div {
+  background-color: white;
+  height: 100%;
+  left: 0;
+  opacity: .5;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;  /* Start behind workspace */
+}
+
+/* Rules for Closure popup color picker */
+.goog-palette {
+  outline: none;
+  cursor: default;
+}
+
+.goog-palette-cell {
+  height: 13px;
+  width: 15px;
+  margin: 0;
+  border: 0;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 1px solid #000000;
+  font-size: 1px;
+}
+
+.goog-palette-colorswatch {
+  border: 1px solid #000000;
+  height: 13px;
+  position: relative;
+  width: 15px;
+}
+
+.goog-palette-cell-hover .goog-palette-colorswatch {
+  border: 1px solid #FFF;
+}
+
+.goog-palette-cell-selected .goog-palette-colorswatch {
+  border: 1px solid #000;
+  color: #fff;
+}
+
+.goog-palette-table {
+  border: 1px solid #000;
+  border-collapse: collapse;
+}
+
+.goog-popupcolorpicker {
+  position: absolute;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,.2);
+    display: none;
+    min-width: 170px;
+    opacity: 1;
+    position: absolute;
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    display: block;
+    padding: 12px 16px;
+    text-decoration: none;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu */
+.show {
+  display: block;
+}
+
+.shadowBlock>.blocklyPath {
+  fill-opacity: .5;
+  stroke-opacity: .5;
+}
+
+.shadowBlock>.blocklyPathLight,
+.shadowBlock>.blocklyPathDark {
+  display: none;
+}
+
+>>>>>>> Starting to integrate workspacefactory

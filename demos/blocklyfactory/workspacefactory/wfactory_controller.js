@@ -35,18 +35,41 @@
  */
 
 /**
- * Class for a FactoryController
+ * Class for a FactoryController.
  * @constructor
- * @param {!Blockly.workspace} toolboxWorkspace workspace where blocks are
- * dragged into corresponding categories
- * @param {!Blockly.workspace} previewWorkspace workspace that shows preview
- * of what workspace would look like using generated XML
+ *
+ * @param {!string} toolboxName Name of workspace toolbox XML.
+ * @param {!string} toolboxDiv Name of div to inject toolbox workspace in.
+ * @param {!string} previewDiv Name of div to inject preview workspace in.
  */
-FactoryController = function(toolboxWorkspace, previewWorkspace) {
+FactoryController = function(toolboxName, toolboxDiv, previewDiv) {
+  var toolbox = document.getElementById(toolboxName);
+
   // Workspace for user to drag blocks in for a certain category.
-  this.toolboxWorkspace = toolboxWorkspace;
+  this.toolboxWorkspace = Blockly.inject(toolboxDiv,
+    {grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+       media: '../../media/',
+       toolbox: toolbox,
+     });
+
   // Workspace for user to preview their changes.
-  this.previewWorkspace = previewWorkspace;
+  this.previewWorkspace = Blockly.inject(previewDiv,
+    {grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+     media: '../../media/',
+     toolbox: '<xml></xml>',
+     zoom:
+       {controls: true,
+        wheel: true}
+    });
+
   // Model to keep track of categories and blocks.
   this.model = new FactoryModel();
   // Updates the category tabs.
@@ -275,10 +298,12 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
 
     // Selects the next tab.
     this.view.setCategoryTabSelection(id, true);
-
-    // Order blocks as if shown in the flyout.
-    this.toolboxWorkspace.cleanUp_();
   }
+
+  // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
+  this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
+        (this.toolboxWorkspace.getAllBlocks()));
+  this.toolboxWorkspace.cleanUp_();
 
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
@@ -380,11 +405,9 @@ FactoryController.prototype.updatePreview = function() {
       } else {
         this.previewWorkspace.flyout_.show(tree.childNodes);
       }
-
     } else {
       // Uses categories, creates a toolbox.
-
-      if (!previewWorkspace.toolbox_) {
+      if (!this.previewWorkspace.toolbox_) {
         this.reinjectPreview(tree); // Create a toolbox, more expensive.
       } else {
         this.previewWorkspace.toolbox_.populate_(tree);
@@ -397,7 +420,7 @@ FactoryController.prototype.updatePreview = function() {
     this.previewWorkspace.clear();
     Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
         this.previewWorkspace);
-  } else if (this.selectedMode == FactoryController.MODE_PRELOAD){
+  } else if (this.selectedMode == FactoryController.MODE_PRELOAD) {
     // If currently editing the pre-loaded workspace.
     this.previewWorkspace.clear();
     Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
@@ -720,8 +743,6 @@ FactoryController.prototype.importToolboxFromTree_ = function(tree) {
         }
 
         // Evenly space the blocks.
-        // TODO(evd2014): Change to cleanUp once cleanUp_ is made public in
-        // master.
         this.toolboxWorkspace.cleanUp_();
 
         // Convert actual shadow blocks to user-generated shadow blocks.

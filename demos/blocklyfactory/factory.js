@@ -150,8 +150,7 @@ BlockFactory.updateGenerator = function(block) {
 };
 
 /**
- * Update the preview display. Add warning to the factory_base block in the
- * main workspace if the block type is a standard block.
+ * Update the preview display.
  */
 BlockFactory.updatePreview = function() {
   // Toggle between LTR/RTL if needed (also used in first display).

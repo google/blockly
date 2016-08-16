@@ -407,7 +407,7 @@ FactoryController.prototype.updatePreview = function() {
       }
     } else {
       // Uses categories, creates a toolbox.
-      if (!previewWorkspace.toolbox_) {
+      if (!this.previewWorkspace.toolbox_) {
         this.reinjectPreview(tree); // Create a toolbox, more expensive.
       } else {
         this.previewWorkspace.toolbox_.populate_(tree);

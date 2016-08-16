@@ -29,10 +29,10 @@
  */
 
 /**
- * Class for a FactoryGenerator
+ * Class for a WorkspaceFactoryGenerator
  * @constructor
  */
-FactoryGenerator = function(model) {
+WorkspaceFactoryGenerator = function(model) {
   // Model to share information about categories and shadow blocks.
   this.model = model;
   // Create hidden workspace to load saved XML to generate toolbox XML.
@@ -57,7 +57,7 @@ FactoryGenerator = function(model) {
  * @return {!Element} XML element representing toolbox or flyout corresponding
  * to toolbox workspace.
  */
-FactoryGenerator.prototype.generateToolboxXml = function() {
+WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
   // Create DOM for XML.
   var xmlDom = goog.dom.createDom('xml',
       {
@@ -117,7 +117,7 @@ FactoryGenerator.prototype.generateToolboxXml = function() {
   * generated shadow blocks to actual shadow blocks.
   *
   */
-FactoryGenerator.prototype.generateWorkspaceXml = function() {
+WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
   // Load workspace XML to hidden workspace with user-generated shadow blocks
   // as actual shadow blocks.
   this.hiddenWorkspace.clear();
@@ -138,7 +138,7 @@ FactoryGenerator.prototype.generateWorkspaceXml = function() {
  *
  * @param {!Element} xml The XML to be loaded to the hidden workspace.
  */
-FactoryGenerator.prototype.loadToHiddenWorkspace_ = function(xml) {
+WorkspaceFactoryGenerator.prototype.loadToHiddenWorkspace_ = function(xml) {
   this.hiddenWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
   this.setShadowBlocksInHiddenWorkspace_();
@@ -152,7 +152,8 @@ FactoryGenerator.prototype.loadToHiddenWorkspace_ = function(xml) {
  *
  * @param {!Element} xmlDom Tree of XML elements to be appended to.
  */
-FactoryGenerator.prototype.appendHiddenWorkspaceToDom_ = function(xmlDom) {
+WorkspaceFactoryGenerator.prototype.appendHiddenWorkspaceToDom_ =
+    function(xmlDom) {
   var blocks = this.hiddenWorkspace.getTopBlocks();
   for (var i = 0, block; block = blocks[i]; i++) {
     var blockChild = Blockly.Xml.blockToDom(block);
@@ -168,7 +169,8 @@ FactoryGenerator.prototype.appendHiddenWorkspaceToDom_ = function(xmlDom) {
  * @private
  *
  */
-FactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ = function() {
+WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
+    function() {
   var blocks = this.hiddenWorkspace.getAllBlocks();
   for (var i = 0; i < blocks.length; i++) {
     if (this.model.isShadowBlock(blocks[i].id)) {

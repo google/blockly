@@ -883,17 +883,15 @@ BlockFactory.updatePreview = function() {
 };
 
 /**
- * Creates a JavaScript Object that stores items as attributes on an object so
- * that the object may be used as a set. Allows for IE compatibility since
- * using "new Set([iterable])" is not supported in IE.
+ * Returns whether or not the block type already exists in Block Factory's list
+ * of standard blocks.
  *
  * @param {!string} blockType - Type of block.
- * @return {boolean} Whether or not the block type already exists in Block
- *   Factory's list of standard blocks.
+ * @return {boolean} Whether or not the block type is a standard block type.
  */
 BlockFactory.isStandardBlockType = function(blockType) {
   for (var i = 0; i < BlockFactory.standardBlockTypes.length; i++) {
-    if (blockType == standardBlockTypes[i]) {
+    if (blockType == BlockFactory.standardBlockTypes[i]) {
       return true;
     }
   }

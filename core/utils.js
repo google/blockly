@@ -360,7 +360,8 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
         return wordPrefix;
       }
     }
-    if (letter == ' ') {
+    // Chinese and Japanese don't use whitespace to break words.
+    if (letter == ' ' || letter.match(/^[\u3400-\u9FBF]$/)) {
       wordPrefix = len + 1;
     }
   }
@@ -395,7 +396,7 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
         return wordPrefix;
       }
     }
-    if (letter == ' ') {
+    if (letter == ' ' || letter.match(/^[\u3400-\u9FBF]$/)) {
       wordPrefix = len + 1;
     }
   }

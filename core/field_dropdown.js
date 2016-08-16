@@ -216,10 +216,18 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
     return;
   }
   if (prefixLength) {
-    this.prefixField = strings[0].substring(0, prefixLength - 1);
+    var actualLength = prefixLength;
+    if (strings[0][actualLength - 1] == ' ') {
+      actualLength--;
+    }
+    this.prefixField = strings[0].substring(0, actualLength);
   }
   if (suffixLength) {
-    this.suffixField = strings[0].substr(1 - suffixLength);
+    var actualLength = suffixLength;
+    if (strings[0][strings[0].length - actualLength] == ' ') {
+      actualLength--;
+    }
+    this.suffixField = strings[0].substr(0 - actualLength);
   }
   // Remove the prefix and suffix from the options.
   var newOptions = [];

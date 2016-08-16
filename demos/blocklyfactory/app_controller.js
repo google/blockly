@@ -153,8 +153,7 @@ AppController.prototype.formatBlockLibForExport_ = function(blockXmlMap) {
  */
 AppController.prototype.formatBlockLibForImport_ = function(xmlText) {
   // Get array of xmls.
-  var xmlText = goog.string.collapseWhitespace(xmlText);
-  var blockXmls = goog.string.splitLimit(xmlText, '</xml>', 500);
+  var blockXmls = FactoryUtils.splitXmls(xmlText);
 
   // Create and populate map.
   var blockXmlTextMap = Object.create(null);

@@ -730,3 +730,26 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
   workspace.clear();
   return workspace.newBlock(blockType);
 };
+
+/**
+ * Parse a string of xml elements to return an array of xml strings.
+ *
+ * @param {!string} stringOfXmls - Single string of xml texts.
+ * @return {!Array.<strint>} the Blockly.Block of desired type.
+ */
+FactoryUtils.splitXmls = function(stringOfXmls) {
+  var xmlTextArray = [];
+  var startOfXml = stringOfXmls.indexOf('<xml');
+
+  while (stringOfXmls.indexOf('<xml', startOfXml) != -1) {
+    var nextStart = stringOfXmls.indexOf('<xml', startOfXml + 1);
+    if (nextStart == -1) {
+      // This is the xml element.
+      nextStart = stringOfXmls.length;
+    }
+    var blockDef = stringOfXmls.substring(startOfXml, nextStart);
+    xmlTextArray.push(blockDef);
+    startOfXml = nextStart;
+  }
+  return xmlTextArray;
+};

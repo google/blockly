@@ -177,3 +177,4 @@ FactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ = function() {
     }
   }
 };
+

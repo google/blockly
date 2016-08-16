@@ -735,7 +735,7 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
  * Parse a string of xml elements to return an array of xml strings.
  *
  * @param {!string} stringOfXmls - Single string of xml texts.
- * @return {!Array.<strint>} the Blockly.Block of desired type.
+ * @return {!Array.<string>} the Blockly.Block of desired type.
  */
 FactoryUtils.splitXmls = function(stringOfXmls) {
   var xmlTextArray = [];

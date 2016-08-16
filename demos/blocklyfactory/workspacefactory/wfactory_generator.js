@@ -182,19 +182,18 @@ FactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ = function() {
  * Generate category xml from imported block definitions. Assumes that each
  * block definition is separated by a single empty line.
  *
- * @param {!string} blockDefs - Block definition(s)
+ * @param {!string} blockDefsString - Block definition(s).
  * @param {!string} format - Block definition format ('JSON' or 'JavaScript').
  * @param {!string} categoryName - Name for the generated category.
  * @return {!Element} Xml representation of a category.
  */
 FactoryGenerator.prototype.generateCategoryFromBlockDefs =
-    function(blockDefs, format, categoryName) {
+    function(blockDefsString, format, categoryName) {
   var blockTypes = [];
-  var blockDefArray;
 
   // Define blocks and get block types.
   if (format == 'JSON') {
-    blockDefArray = FactoryUtils.splitJSONBlockDefs(blockDefs);
+    var blockDefArray = FactoryUtils.splitJsonBlockDefs(blockDefsString);
     // Populate array of blocktypes and define each block.
     for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
       var json = JSON.parse(blockDef);
@@ -202,14 +201,14 @@ FactoryGenerator.prototype.generateCategoryFromBlockDefs =
       FactoryUtils.defineBlockWithJson(json);
     }
   } else if (format == 'JavaScript') {
-    blockDefArray = FactoryUtils.splitJSBlockDefs(blockDefs);
+    var blockDefArray = FactoryUtils.splitJsBlockDefs(blockDefsString);
     // Populate array of block types.
     for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
-      var blockType = FactoryUtils.getBlockTypeFromJSDef(blockDef);
+      var blockType = FactoryUtils.getBlockTypeFromJsDef(blockDef);
       blockTypes.push(blockType);
     }
     // Define all blocks.
-    eval(blockDefs);
+    eval(blockDefsString);
   }
 
   return FactoryUtils.generateCategoryXml(blockTypes, categoryName,

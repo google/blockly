@@ -736,7 +736,7 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
  *
  * @param {string} blockDef - A single block definition.
  */
-FactoryUtils.getBlockTypeFromJSDef = function(blockDef) {
+FactoryUtils.getBlockTypeFromJsDef = function(blockDef) {
   var indexOfStartBracket = blockDef.indexOf('[\'');
   var indexOfEndBracket = blockDef.indexOf('\']');
   return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
@@ -790,25 +790,21 @@ FactoryUtils.generateCategoryXml =
  * Parses string containing JavaScript block definition(s) to create an array of
  * block definitions.
  *
- * @param {!string} blockDefs - JavaScript block definition(s) each separated by a new
- *    line.
+ * @param {!string} blockDefsString - JavaScript block definition(s).
  * @return {!Array.<string>} - Array of block definitions.
  */
-FactoryUtils.splitJSBlockDefs = function(blockDefs) {
+FactoryUtils.splitJsBlockDefs = function(blockDefsString) {
   var blockDefArray = [];
-  var blockDefs = goog.string.collapseBreakingSpaces(blockDefs);
-  var defStart = blockDefs.indexOf('Blockly.Blocks');
+  var blockDefsString = goog.string.collapseBreakingSpaces(blockDefsString);
+  var defStart = blockDefsString.indexOf('Blockly.Blocks');
 
-  while (blockDefs.indexOf('Blockly.Blocks', defStart) != -1) {
-    var nextStart = blockDefs.indexOf('Blockly.Blocks', defStart + 1);
+  while (blockDefsString.indexOf('Blockly.Blocks', defStart) != -1) {
+    var nextStart = blockDefsString.indexOf('Blockly.Blocks', defStart + 1);
     if (nextStart == -1) {
       // This is the last block definition.
-      var blockDef = blockDefs.substring(defStart, blockDefs.length);
-      blockDefArray.push(blockDef);
-      break;
-    } else {
-      var blockDef = blockDefs.substring(defStart, nextStart);
+      nextStart = blockDefsString.length;
     }
+    var blockDef = blockDefsString.substring(defStart, nextStart);
     blockDefArray.push(blockDef);
     defStart = nextStart;
   }
@@ -819,33 +815,31 @@ FactoryUtils.splitJSBlockDefs = function(blockDefs) {
  * Parses string containing JSON block definition(s) to create an array of
  * the block definitions.
  *
- * @param {!string} blockDefs - JSON block definition(s) each separated by a new
- *    line.
+ * @param {!string} blockDefs - JSON block definition(s).
  * @return {!Array.<string>} - Array of block definitions.
  */
-FactoryUtils.splitJSONBlockDefs = function(blockDefs) {
-  var blockDefs = goog.string.collapseWhitespace(blockDefs);
+FactoryUtils.splitJsonBlockDefs = function(blockDefsString) {
+  //
+  var blockDefsString = goog.string.collapseWhitespace(blockDefsString);
   var blockDefArray = [];
-  var stack = [];
+  var unbalancedBracketCount = 0;
   var defStart = 0;
   // Iterate through the blockDefs string. Keep track of whether brackets
   // are balanced.
-  var i = 0;
-  while (i < blockDefs.length) {
-    var currentChar = blockDefs[i];
+  for (var i = 0; i < blockDefsString.length; i++) {
+    var currentChar = blockDefsString[i];
     if (currentChar == '{') {
-      stack.push(currentChar);
+      unbalancedBracketCount++;
     }
     else if (currentChar == '}') {
-      stack.pop(currentChar);
+      unbalancedBracketCount--;
+      if (unbalancedBracketCount == 0 && i > 0) {
+        // The brackets are balanced. We've got a complete block defintion.
+        var blockDef = blockDefsString.substring(defStart, i + 1);
+        blockDefArray.push(blockDef);
+        defStart = i + 1;
+      }
     }
-    if (stack.length == 0 && i > 0 && currentChar != " ") {
-      // The brackets are balanced. We've got a complete block defintion.
-      var blockDef = blockDefs.substring(defStart, i + 1);
-      blockDefArray.push(blockDef);
-      defStart = i + 1;
-    }
-    i++;
   }
   return blockDefArray;
 };

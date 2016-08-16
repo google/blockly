@@ -533,6 +533,12 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   if (this.isInFlyout) {
     return;
   }
+  if (this.isInMutator) {
+    // Mutator's coordinate system could be out of date because the bubble was
+    // dragged, the block was moved, the parent workspace zoomed, etc.
+    this.workspace.resize();
+  }
+
   this.workspace.updateScreenCalculationsIfScrolled();
   this.workspace.markFocused();
   Blockly.terminateDrag_();

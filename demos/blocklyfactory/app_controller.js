@@ -48,7 +48,7 @@ AppController = function() {
   this.blockLibraryController.populateBlockLibrary();
 
   // Construct Workspace Factory Controller.
-  this.workspaceFactoryController = new FactoryController
+  this.workspaceFactoryController = new WorkspaceFactoryController
       ('workspacefactory_toolbox', 'toolbox_blocks', 'preview_blocks');
 
   // Initialize Block Exporter

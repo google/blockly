@@ -60,6 +60,28 @@ BlockFactory.UNNAMED = 'unnamed';
 BlockFactory.oldDir = null;
 
 /**
+ * List of block types in standard categories.
+ * TODO(quachtina96): Get this list from FactoryController since each
+ * FactoryControlelr object has a dictionary containing its standard categories.
+ */
+ BlockFactory.standardBlockTypes = ["controls_if", "logic_compare",
+    "logic_operation", "logic_negate", "logic_boolean", "logic_null",
+    "logic_ternary", "controls_repeat_ext", "controls_whileUntil",
+    "controls_for", "controls_forEach", "controls_flow_statements",
+    "math_number", "math_arithmetic", "math_single", "math_trig",
+    "math_constant", "math_number_property", "math_change", "math_round",
+    "math_on_list", "math_modulo", "math_constrain", "math_random_int",
+    "math_random_float", "text", "text_join", "text_append", "text_length",
+    "text_isEmpty", "text_indexOf", "variables_get", "text_charAt",
+    "text_getSubstring", "text_changeCase", "text_trim", "text_print",
+    "text_prompt_ext", "colour_picker", "colour_random", "colour_rgb",
+    "colour_blend", "lists_create_with", "lists_repeat", "lists_length",
+    "lists_isEmpty", "lists_indexOf", "lists_getIndex", "lists_setIndex",
+    "lists_getSublist", "lists_split", "lists_sort", "variables_set",
+    "procedures_defreturn", "procedures_ifreturn", "procedures_defnoreturn",
+    "procedures_callreturn"];
+
+/**
  * Inject code into a pre tag, with syntax highlighting.
  * Safe from HTML/script injection.
  * @param {string} code Lines of code.
@@ -210,6 +232,14 @@ BlockFactory.updatePreview = function() {
     previewBlock.moveBy(15, 10);
     BlockFactory.previewWorkspace.clearUndo();
     BlockFactory.updateGenerator(previewBlock);
+
+    // Warn user if their block type is already exists in Blockly's standard
+    // library.
+    if (BlockFactory.standardBlockTypes.indexOf(blockType) != -1)
+      var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
+      rootBlock.setWarningText('A standard Blockly.Block already exists ' +
+          'under this name.');
+    }
   } finally {
     Blockly.Blocks = backupBlocks;
   }

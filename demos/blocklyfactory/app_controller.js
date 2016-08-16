@@ -370,20 +370,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
         open('https://developers.google.com/blockly/custom-blocks/block-factory',
              'BlockFactoryHelp');
       });
-<<<<<<< 8e447fb98949296a9bd421573897a37313235ef1
-=======
 
-  document.getElementById('downloadBlocks').addEventListener('click',
-      function() {
-        BlockFactory.downloadTextArea('blocks', 'languagePre');
-      });
-
-  document.getElementById('downloadGenerator').addEventListener('click',
-      function() {
-        BlockFactory.downloadTextArea('generator', 'generatorPre');
-      });
-
->>>>>>> Tab for workspace factory working
   document.getElementById('files').addEventListener('change',
       function() {
         // Warn user.

@@ -120,7 +120,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
 
   var xmlList = [];
   var button = goog.dom.createDom('button');
-  button.setAttribute('text', 'Create variable');
+  button.setAttribute('text', Blockly.Msg.NEW_VARIABLE);
   xmlList.push(button);
 
   if (variableList.length > 0) {

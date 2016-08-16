@@ -542,7 +542,7 @@ goog.require('goog.ui.ColorPicker');
         wheel: true}
     });
 
-  var controller = new FactoryController(toolboxWorkspace, previewWorkspace);
+  var controller = new WorkspaceFactoryController(toolboxWorkspace, previewWorkspace);
 
   // Wrappers to attach buttons to method calls for the controller object
   var addWrapper = function() {
@@ -623,31 +623,31 @@ goog.require('goog.ui.ColorPicker');
     controller.clearToolbox();
   };
   var editToolboxWrapper = function() {
-    controller.setMode(FactoryController.MODE_TOOLBOX);
+    controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
   };
   var editPreloadWrapper = function() {
-    controller.setMode(FactoryController.MODE_PRELOAD);
+    controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
   };
   var importToolboxWrapper = function(e) {
-    controller.importFile(event.target.files[0], FactoryController.MODE_TOOLBOX);
+    controller.importFile(event.target.files[0], WorkspaceFactoryController.MODE_TOOLBOX);
     document.getElementById('dropdownDiv_import').classList.remove("show");
   };
   var importPreloadWrapper = function(e) {
-    controller.importFile(event.target.files[0], FactoryController.MODE_PRELOAD);
+    controller.importFile(event.target.files[0], WorkspaceFactoryController.MODE_PRELOAD);
     document.getElementById('dropdownDiv_import').classList.remove("show");
   };
   var editToolboxWrapper = function() {
-    controller.setMode(FactoryController.MODE_TOOLBOX);
+    controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
   };
   var editPreloadWrapper = function() {
-    controller.setMode(FactoryController.MODE_PRELOAD);
+    controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
   };
   var exportToolboxWrapper = function() {
-    controller.exportFile(FactoryController.MODE_TOOLBOX);
+    controller.exportFile(WorkspaceFactoryController.MODE_TOOLBOX);
     document.getElementById('dropdownDiv_export').classList.remove("show");
   }
   var exportPreloadWrapper = function() {
-    controller.exportXmlFile(FactoryController.MODE_PRELOAD);
+    controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
     document.getElementById('dropdownDiv_export').classList.remove("show");
   }
   var exportOptionsWrapper = function() {
@@ -655,8 +655,8 @@ goog.require('goog.ui.ColorPicker');
     document.getElementById('dropdownDiv_export').classList.remove("show");
   }
   var exportAllWrapper = function() {
-    controller.exportXmlFile(FactoryController.MODE_TOOLBOX);
-    controller.exportXmlFile(FactoryController.MODE_PRELOAD);
+    controller.exportXmlFile(WorkspaceFactoryController.MODE_TOOLBOX);
+    controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
     controller.exportOptionsFile();
     document.getElementById('dropdownDiv_export').classList.remove("show");
   }

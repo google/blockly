@@ -730,3 +730,122 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
   workspace.clear();
   return workspace.newBlock(blockType);
 };
+
+/**
+ * Parses a block definition get the type of the block it defines.
+ *
+ * @param {string} blockDef - A single block definition.
+ */
+FactoryUtils.getBlockTypeFromJSDef = function(blockDef) {
+  var indexOfStartBracket = blockDef.indexOf('[\'');
+  var indexOfEndBracket = blockDef.indexOf('\']');
+  return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
+};
+
+/**
+ * Defines a block given its JSON definition.
+ *
+ * @param {string} json - Single block's definition in JSON format.
+ */
+FactoryUtils.defineBlockWithJson = function(json) {
+  Blockly.Blocks[json.type || UNNAMED] = {
+    init: function() {
+      this.jsonInit(json);
+    }
+  };
+};
+
+/**
+ * Generates a category containing blocks of the specified block types, assuming
+ * the given blocks have already been defined.
+ *
+ * @param {!Array.<string>} blockTypes - Types of the blocks to include in the
+ *    category.
+ * @param {string} categoryName - Name to use for the generated category.
+ * @param {!Blockly.Workspace} - Hidden blockly workspace.
+ * @return {Element} - Category xml containing the given block types.
+ */
+FactoryUtils.generateCategoryXml =
+    function(blockTypes, categoryName, hiddenWorkspace) {
+  // Create category DOM element.
+  var categoryElement = goog.dom.createDom('category');
+  categoryElement.setAttribute('name', categoryName);
+
+  // For each block, add block element to category.
+  for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
+    // Get block.
+    var block = FactoryUtils.getDefinedBlock(blockType, hiddenWorkspace);
+
+    // Get preview block XML.
+    var blockXml = Blockly.Xml.blockToDom(block);
+    blockXml.removeAttribute('id');
+
+    // Add block to category and category to XML.
+    categoryElement.appendChild(blockXml);
+  }
+  return categoryElement;
+};
+
+/**
+ * Parses string containing JavaScript block definition(s) to create an array of
+ * block definitions.
+ *
+ * @param {!string} blockDefs - JavaScript block definition(s) each separated by a new
+ *    line.
+ * @return {!Array.<string>} - Array of block definitions.
+ */
+FactoryUtils.splitJSBlockDefs = function(blockDefs) {
+  var blockDefArray = [];
+  var blockDefs = goog.string.collapseBreakingSpaces(blockDefs);
+  var defStart = blockDefs.indexOf('Blockly.Blocks');
+
+  while (blockDefs.indexOf('Blockly.Blocks', defStart) != -1) {
+    var nextStart = blockDefs.indexOf('Blockly.Blocks', defStart + 1);
+    if (nextStart == -1) {
+      // This is the last block definition.
+      var blockDef = blockDefs.substring(defStart, blockDefs.length);
+      blockDefArray.push(blockDef);
+      break;
+    } else {
+      var blockDef = blockDefs.substring(defStart, nextStart);
+    }
+    blockDefArray.push(blockDef);
+    defStart = nextStart;
+  }
+  return blockDefArray;
+};
+
+/**
+ * Parses string containing JSON block definition(s) to create an array of
+ * the block definitions.
+ *
+ * @param {!string} blockDefs - JSON block definition(s) each separated by a new
+ *    line.
+ * @return {!Array.<string>} - Array of block definitions.
+ */
+FactoryUtils.splitJSONBlockDefs = function(blockDefs) {
+  var blockDefs = goog.string.collapseWhitespace(blockDefs);
+  var blockDefArray = [];
+  var stack = [];
+  var defStart = 0;
+  // Iterate through the blockDefs string. Keep track of whether brackets
+  // are balanced.
+  var i = 0;
+  while (i < blockDefs.length) {
+    var currentChar = blockDefs[i];
+    if (currentChar == '{') {
+      stack.push(currentChar);
+    }
+    else if (currentChar == '}') {
+      stack.pop(currentChar);
+    }
+    if (stack.length == 0 && i > 0 && currentChar != " ") {
+      // The brackets are balanced. We've got a complete block defintion.
+      var blockDef = blockDefs.substring(defStart, i + 1);
+      blockDefArray.push(blockDef);
+      defStart = i + 1;
+    }
+    i++;
+  }
+  return blockDefArray;
+};

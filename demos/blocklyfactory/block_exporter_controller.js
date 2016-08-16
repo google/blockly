@@ -300,3 +300,12 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
   // Clean up workspace.
   this.view.cleanUpSelectorWorkspace();
 };
+
+/**
+ * Returns the category xml containing all blocks in the block library.
+ *
+ * @return {Element} Xml for a category to be used in toolbox.
+ */
+BlockExporterController.prototype.getBlockLibCategory = function() {
+  return this.tools.generateCategoryFromBlockLib(this.blockLibStorage);
+};

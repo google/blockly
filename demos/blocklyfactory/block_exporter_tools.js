@@ -210,3 +210,24 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
   xmlDom.appendChild(categoryElement);
   return xmlDom;
 };
+
+/**
+ * Generate xml for the workspace factory's category from imported block
+ * definitions.
+ *
+ * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
+ * @return {!Element} Xml representation of a category.
+ */
+BlockExporterTools.prototype.generateCategoryFromBlockLib =
+    function(blockLibStorage) {
+  var allBlockTypes = blockLibStorage.getBlockTypes();
+  // Object mapping block type to XML.
+  var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
+
+  // Define the custom blocks in order to be able to create instances of
+  // them in the exporter workspace.
+  this.addBlockDefinitions(blockXmlMap);
+
+  return FactoryUtils.generateCategoryXml(allBlockTypes,'Block Library',
+      this.hiddenWorkspace);
+};

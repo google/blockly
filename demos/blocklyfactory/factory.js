@@ -236,26 +236,13 @@ BlockFactory.updatePreview = function() {
 
     // Warn user if their block type is already exists in Blockly's standard
     // library.
-    if (BlockFactory.isStandardBlockType(blockType)) {
+    if (BlockFactory.standardBlockTypes.indexOf(blockType) != -1)
       var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
       rootBlock.setWarningText('A standard Blockly.Block already exists ' +
           'under this name.');
     }
   } finally {
     Blockly.Blocks = backupBlocks;
-  }
-};
-
-/**
- * Returns whether or not the block type already exists in Block Factory's list
- * of standard blocks.
- *
- * @param {!string} blockType - Type of block.
- * @return {boolean} Whether or not the block type is a standard block type.
- */
-BlockFactory.isStandardBlockType = function(blockType) {
-  if (BlockFactory.standardBlockTypes.indexOf(blockType) != -1) {
-    return true;
   }
 };
 

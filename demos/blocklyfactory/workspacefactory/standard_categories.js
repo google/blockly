@@ -27,11 +27,11 @@
  * @author Emma Dauterman (evd2014)
  */
 
-FactoryController.prototype.standardCategories = Object.create(null);
+WorkspaceFactoryController.prototype.standardCategories = Object.create(null);
 
-FactoryController.prototype.standardCategories['logic'] =
+WorkspaceFactoryController.prototype.standardCategories['logic'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Logic');
-FactoryController.prototype.standardCategories['logic'].xml =
+WorkspaceFactoryController.prototype.standardCategories['logic'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
     '<block type="controls_if"></block>' +
@@ -42,11 +42,12 @@ FactoryController.prototype.standardCategories['logic'].xml =
     '<block type="logic_null"></block>' +
     '<block type="logic_ternary"></block>' +
     '</xml>');
-FactoryController.prototype.standardCategories['logic'].color = '#5C81A6';
+WorkspaceFactoryController.prototype.standardCategories['logic'].color =
+    '#5C81A6';
 
-FactoryController.prototype.standardCategories['loops'] =
+WorkspaceFactoryController.prototype.standardCategories['loops'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Loops');
-FactoryController.prototype.standardCategories['loops'].xml =
+WorkspaceFactoryController.prototype.standardCategories['loops'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
     '<block type="controls_repeat_ext">' +
@@ -77,11 +78,12 @@ FactoryController.prototype.standardCategories['loops'].xml =
     '<block type="controls_forEach"></block>' +
     '<block type="controls_flow_statements"></block>' +
     '</xml>');
-FactoryController.prototype.standardCategories['loops'].color = '#5CA65C';
+WorkspaceFactoryController.prototype.standardCategories['loops'].color =
+    '#5CA65C';
 
-FactoryController.prototype.standardCategories['math'] =
+WorkspaceFactoryController.prototype.standardCategories['math'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Math');
-FactoryController.prototype.standardCategories['math'].xml =
+WorkspaceFactoryController.prototype.standardCategories['math'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
     '<block type="math_number"></block>' +
@@ -177,11 +179,12 @@ FactoryController.prototype.standardCategories['math'].xml =
     '</block>' +
     '<block type="math_random_float"></block>' +
     '</xml>');
-FactoryController.prototype.standardCategories['math'].color = '#5C68A6';
+WorkspaceFactoryController.prototype.standardCategories['math'].color =
+    '#5C68A6';
 
-FactoryController.prototype.standardCategories['text'] =
+WorkspaceFactoryController.prototype.standardCategories['text'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Text');
-FactoryController.prototype.standardCategories['text'].xml =
+WorkspaceFactoryController.prototype.standardCategories['text'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
     '<block type="text"></block>' +
@@ -260,11 +263,12 @@ FactoryController.prototype.standardCategories['text'].xml =
       '</value>' +
     '</block>' +
     '</xml>');
-FactoryController.prototype.standardCategories['text'].color = '#5CA68D';
+WorkspaceFactoryController.prototype.standardCategories['text'].color =
+    '#5CA68D';
 
-FactoryController.prototype.standardCategories['lists'] =
+WorkspaceFactoryController.prototype.standardCategories['lists'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Lists');
-FactoryController.prototype.standardCategories['lists'].xml =
+WorkspaceFactoryController.prototype.standardCategories['lists'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
     '<block type="lists_create_with">' +
@@ -317,11 +321,12 @@ FactoryController.prototype.standardCategories['lists'].xml =
     '</block>' +
     '<block type="lists_sort"></block>' +
     '</xml>');
-FactoryController.prototype.standardCategories['lists'].color = '#745CA6';
+WorkspaceFactoryController.prototype.standardCategories['lists'].color =
+    '#745CA6';
 
-FactoryController.prototype.standardCategories['colour'] =
+WorkspaceFactoryController.prototype.standardCategories['colour'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Colour');
-FactoryController.prototype.standardCategories['colour'].xml =
+WorkspaceFactoryController.prototype.standardCategories['colour'].xml =
     Blockly.Xml.textToDom(
     '<xml>' +
     '<block type="colour_picker"></block>' +
@@ -361,15 +366,19 @@ FactoryController.prototype.standardCategories['colour'].xml =
       '</value>' +
     '</block>' +
     '</xml>');
-FactoryController.prototype.standardCategories['colour'].color = '#A6745C';
+WorkspaceFactoryController.prototype.standardCategories['colour'].color =
+    '#A6745C';
 
-FactoryController.prototype.standardCategories['functions'] =
+WorkspaceFactoryController.prototype.standardCategories['functions'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Functions');
-FactoryController.prototype.standardCategories['functions'].color = '#9A5CA6'
-FactoryController.prototype.standardCategories['functions'].custom =
+WorkspaceFactoryController.prototype.standardCategories['functions'].color =
+    '#9A5CA6'
+WorkspaceFactoryController.prototype.standardCategories['functions'].custom =
     'PROCEDURE';
 
-FactoryController.prototype.standardCategories['variables'] =
+WorkspaceFactoryController.prototype.standardCategories['variables'] =
     new ListElement(ListElement.TYPE_CATEGORY, 'Variables');
-FactoryController.prototype.standardCategories['variables'].color = '#A65C81';
-FactoryController.prototype.standardCategories['variables'].custom = 'VARIABLE';
+WorkspaceFactoryController.prototype.standardCategories['variables'].color =
+    '#A65C81';
+WorkspaceFactoryController.prototype.standardCategories['variables'].custom =
+    'VARIABLE';

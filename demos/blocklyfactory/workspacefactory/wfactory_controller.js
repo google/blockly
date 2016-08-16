@@ -298,11 +298,12 @@ FactoryController.prototype.clearAndLoadElement = function(id) {
 
     // Selects the next tab.
     this.view.setCategoryTabSelection(id, true);
+  }
 
   // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
   this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
         (this.toolboxWorkspace.getAllBlocks()));
-  this.toolboxWorkspace.cleanUp();
+  this.toolboxWorkspace.cleanUp_();
 
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
@@ -406,7 +407,6 @@ FactoryController.prototype.updatePreview = function() {
       }
     } else {
       // Uses categories, creates a toolbox.
-
       if (!previewWorkspace.toolbox_) {
         this.reinjectPreview(tree); // Create a toolbox, more expensive.
       } else {
@@ -420,7 +420,7 @@ FactoryController.prototype.updatePreview = function() {
     this.previewWorkspace.clear();
     Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
         this.previewWorkspace);
-  } else if (this.selectedMode == FactoryController.MODE_PRELOAD){
+  } else if (this.selectedMode == FactoryController.MODE_PRELOAD) {
     // If currently editing the pre-loaded workspace.
     this.previewWorkspace.clear();
     Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
@@ -718,7 +718,7 @@ FactoryController.prototype.importToolboxFromTree_ = function(tree) {
     // No categories present.
     // Load all the blocks into a single category evenly spaced.
     Blockly.Xml.domToWorkspace(tree, this.toolboxWorkspace);
-    this.toolboxWorkspace.cleanUp();
+    this.toolboxWorkspace.cleanUp_();
 
     // Convert actual shadow blocks to user-generated shadow blocks.
     this.convertShadowBlocks();
@@ -743,7 +743,7 @@ FactoryController.prototype.importToolboxFromTree_ = function(tree) {
         }
 
         // Evenly space the blocks.
-        this.toolboxWorkspace.cleanUp();
+        this.toolboxWorkspace.cleanUp_();
 
         // Convert actual shadow blocks to user-generated shadow blocks.
         this.convertShadowBlocks();

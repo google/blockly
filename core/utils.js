@@ -338,8 +338,8 @@ Blockly.shortestStringLength = function(array) {
   return len;
 };
 
-Blockly.isCJKChar = function(char) {
-  return (char >= \u3400 && char <= \u9FBF);
+Blockly.isCJKLetter = function(letter) {
+  return letter.match(/^[\u3400-\u9FBF]$/);
 };
 
 /**
@@ -364,8 +364,8 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
         return wordPrefix;
       }
     }
-    // Chinese and Japanese don't use whitespace to break words.
-    if (letter == ' ' || Blockly.isCJKChar(letter)) {
+    // CJK strings don't use the whitespace to break words.
+    if (letter == ' ' || Blockly.isCJKLetter(letter)) {
       wordPrefix = len + 1;
     }
   }
@@ -400,7 +400,8 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
         return wordPrefix;
       }
     }
-    if (letter == ' ' || Blockly.isCJKChar(letter)) {
+    // CJK strings don't use the whitespace to break words.
+    if (letter == ' ' || Blockly.isCJKLetter(letter)) {
       wordPrefix = len + 1;
     }
   }

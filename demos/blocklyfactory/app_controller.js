@@ -117,7 +117,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
   // Concatenate the xmls, each separated by a blank line.
   var blockLibText = this.formatBlockLibForExport_(blockLib);
   // Get file name.
-  var filename = prompt('Enter the file name under which to save your block' +
+  var filename = prompt('Enter the file name under which to save your block ' +
       'library.');
   // Download file if all necessary parameters are provided.
   if (filename) {
@@ -136,11 +136,20 @@ AppController.prototype.exportBlockLibraryToFile = function() {
  * @return {string} String of each block's xml separated by a new line.
  */
 AppController.prototype.formatBlockLibForExport_ = function(blockXmlMap) {
-  var blockXmls = [];
+  // Create DOM for XML.
+  var xmlDom = goog.dom.createDom('xml', {
+    'xmlns':"http://www.w3.org/1999/xhtml"
+  });
+
+  // Append each block node to xml dom.
   for (var blockType in blockXmlMap) {
-    blockXmls.push(blockXmlMap[blockType]);
+    var blockXmlDom = Blockly.Xml.textToDom(blockXmlMap[blockType]);
+    var blockNode = blockXmlDom.firstElementChild;
+    xmlDom.appendChild(blockNode);
   }
-  return blockXmls.join("\n\n");
+
+  // Return the xml text.
+  return Blockly.Xml.domToText(xmlDom);
 };
 
 /**
@@ -152,17 +161,31 @@ AppController.prototype.formatBlockLibForExport_ = function(blockXmlMap) {
  * @return {!Object} object mapping block type to xml text.
  */
 AppController.prototype.formatBlockLibForImport_ = function(xmlText) {
-  // Get array of xmls.
-  var blockXmls = FactoryUtils.splitXmls(xmlText);
+  var xmlDom = Blockly.Xml.textToDom(xmlText);
 
-  // Create and populate map.
+  // Get array of xmls. Use an asterisk (*) instead of a tag name for the XPath
+  // selector, to match all elements at that level and get all factory_base
+  // blocks.
+  var blockNodes = goog.dom.xml.selectNodes(xmlDom, '*');
+
+  // Create empty map. The line below creates a  truly empy object. It doesn't
+  // have built-in attributes/functions such as length or toString.
   var blockXmlTextMap = Object.create(null);
-  // The line above is equivalent of {} except that this object is TRULY
-  // empty. It doesn't have built-in attributes/functions such as length or
-  // toString.
-  for (var i = 0, xmlText; xmlText = blockXmls[i]; i++) {
+
+  // Populate map.
+  for (var i = 0, blockNode; blockNode = blockNodes[i]; i++) {
+
+    // Add outer xml tag to the block for proper injection in to the
+    // main workspace.
+    // Create DOM for XML.
+    var xmlDom = goog.dom.createDom('xml', {
+      'xmlns':"http://www.w3.org/1999/xhtml"
+    });
+    xmlDom.appendChild(blockNode);
+
+    var xmlText = Blockly.Xml.domToText(xmlDom);
     var blockType = this.getBlockTypeFromXml_(xmlText);
-    // TODO(quachtina96): Make the xml pretty before storing in map.
+
     blockXmlTextMap[blockType] = xmlText;
   }
 
@@ -178,9 +201,9 @@ AppController.prototype.formatBlockLibForImport_ = function(xmlText) {
  * @return {string} The block type that corresponds to the provided xml text.
  */
 AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
-  var xmlText = Blockly.Options.parseToolboxTree(xmlText);
+  var xmlDom = Blockly.Xml.textToDom(xmlText);
   // Find factory base block.
-  var factoryBaseBlockXml = xmlText.getElementsByTagName('block')[0];
+  var factoryBaseBlockXml = xmlDom.getElementsByTagName('block')[0];
   // Get field elements from factory base.
   var fields = factoryBaseBlockXml.getElementsByTagName('field');
   for (var i = 0; i < fields.length; i++) {
@@ -199,7 +222,8 @@ AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
  * @param {!Element} blockLibraryDropdown - HTML select element from which the
  *    user selects a block to work on.
  */
-AppController.prototype.onSelectedBlockChanged = function(blockLibraryDropdown) {
+AppController.prototype.onSelectedBlockChanged
+    = function(blockLibraryDropdown) {
   // Get selected block type.
   var blockType = this.blockLibraryController.getSelectedBlockType(
       blockLibraryDropdown);

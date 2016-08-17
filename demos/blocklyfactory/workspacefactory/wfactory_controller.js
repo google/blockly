@@ -117,6 +117,8 @@ WorkspaceFactoryController.prototype.addCategory = function() {
       this.view.setCategoryTabSelection(id, true);
       // Allow user to use the default options for injecting with categories.
       this.allowToSetDefaultOptions();
+      // Update preview here in case exit early.
+      this.updatePreview();
     }
   }
 

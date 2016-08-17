@@ -755,8 +755,7 @@ FactoryUtils.getBlockTypeFromJsDef = function(blockDef) {
  * @param {string} categoryName - Name to use for the generated category.
  * @return {Element} - Category xml containing the given block types.
  */
-FactoryUtils.generateCategoryXml =
-    function(blocks, categoryName) {
+FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
   // Create category DOM element.
   var categoryElement = goog.dom.createDom('category');
   categoryElement.setAttribute('name', categoryName);
@@ -775,8 +774,8 @@ FactoryUtils.generateCategoryXml =
 };
 
 /**
- * Parses string containing JavaScript block definition(s) to create an array of
- * block definitions.
+ * Parses a string containing JavaScript block definition(s) to create an array
+ * in which each element is a single block definition.
  *
  * @param {!string} blockDefsString - JavaScript block definition(s).
  * @return {!Array.<string>} - Array of block definitions.
@@ -799,10 +798,13 @@ FactoryUtils.parseJsBlockDefs = function(blockDefsString) {
 };
 
 /**
- * Parses string containing JSON block definition(s) to create an array of
- * the block definitions.
+ * Parses a string containing JSON block definition(s) to create an array
+ * in which each element is a single block definition. Expected input is
+ * one or more block definitions in the form of concatenated, stringified
+ * JSON objects.
  *
- * @param {!string} blockDefs - JSON block definition(s).
+ * @param {!string} blockDefsString - String containing JSON block
+ *    definition(s).
  * @return {!Array.<string>} - Array of block definitions.
  */
 FactoryUtils.parseJsonBlockDefs = function(blockDefsString) {

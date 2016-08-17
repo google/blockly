@@ -734,39 +734,33 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
 /**
  * Parses a block definition get the type of the block it defines.
  *
- * @param {string} blockDef - A single block definition.
+ * @param {!string} blockDef - A single block definition.
+ * @return {string} Type of block defined by the given definition.
  */
 FactoryUtils.getBlockTypeFromJsDef = function(blockDef) {
   var indexOfStartBracket = blockDef.indexOf('[\'');
   var indexOfEndBracket = blockDef.indexOf('\']');
-  return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
-};
-
-/**
- * Defines a block given its JSON definition.
- *
- * @param {string} json - Single block's definition in JSON format.
- */
-FactoryUtils.defineBlockWithJson = function(json) {
-  Blockly.Blocks[json.type || UNNAMED] = {
-    init: function() {
-      this.jsonInit(json);
-    }
-  };
+  if (indexOfStartBracket != -1 && indexOfEndBracket != -1) {
+    return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
+  } else {
+    throw new Error ('Could not parse block type out of JavaScript block ' +
+        'definition. Brackets normally enclosing block type not found.');
+  }
 };
 
 /**
  * Generates a category containing blocks of the specified block types, assuming
- * the given blocks have already been defined.
+ * the given blocks have already been defined. Needs a Blockly Workspace in
+ * order to get the block's xml.
  *
  * @param {!Array.<string>} blockTypes - Types of the blocks to include in the
  *    category.
  * @param {string} categoryName - Name to use for the generated category.
- * @param {!Blockly.Workspace} - Hidden blockly workspace.
+ * @param {!Blockly.Workspace} - Blockly workspace.
  * @return {Element} - Category xml containing the given block types.
  */
 FactoryUtils.generateCategoryXml =
-    function(blockTypes, categoryName, hiddenWorkspace) {
+    function(blockTypes, categoryName, workspace) {
   // Create category DOM element.
   var categoryElement = goog.dom.createDom('category');
   categoryElement.setAttribute('name', categoryName);
@@ -774,7 +768,7 @@ FactoryUtils.generateCategoryXml =
   // For each block, add block element to category.
   for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
     // Get block.
-    var block = FactoryUtils.getDefinedBlock(blockType, hiddenWorkspace);
+    var block = FactoryUtils.getDefinedBlock(blockType, workspace);
 
     // Get preview block XML.
     var blockXml = Blockly.Xml.blockToDom(block);
@@ -793,9 +787,8 @@ FactoryUtils.generateCategoryXml =
  * @param {!string} blockDefsString - JavaScript block definition(s).
  * @return {!Array.<string>} - Array of block definitions.
  */
-FactoryUtils.splitJsBlockDefs = function(blockDefsString) {
+FactoryUtils.parseJsBlockDefs = function(blockDefsString) {
   var blockDefArray = [];
-  var blockDefsString = goog.string.collapseBreakingSpaces(blockDefsString);
   var defStart = blockDefsString.indexOf('Blockly.Blocks');
 
   while (blockDefsString.indexOf('Blockly.Blocks', defStart) != -1) {
@@ -818,9 +811,7 @@ FactoryUtils.splitJsBlockDefs = function(blockDefsString) {
  * @param {!string} blockDefs - JSON block definition(s).
  * @return {!Array.<string>} - Array of block definitions.
  */
-FactoryUtils.splitJsonBlockDefs = function(blockDefsString) {
-  //
-  var blockDefsString = goog.string.collapseWhitespace(blockDefsString);
+FactoryUtils.parseJsonBlockDefs = function(blockDefsString) {
   var blockDefArray = [];
   var unbalancedBracketCount = 0;
   var defStart = 0;
@@ -842,4 +833,46 @@ FactoryUtils.splitJsonBlockDefs = function(blockDefsString) {
     }
   }
   return blockDefArray;
+};
+
+/**
+ * Define blocks from imported block definitions.
+ *
+ * @param {!string} blockDefsString - Block definition(s).
+ * @param {!string} format - Block definition format ('JSON' or 'JavaScript').
+ * @return {!Element} Array of block types defined.
+ */
+FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
+  var blockTypes = [];
+
+  // Define blocks and get block types.
+  if (format == 'JSON') {
+    var blockDefArray = FactoryUtils.parseJsonBlockDefs(blockDefsString);
+
+    // Populate array of blocktypes and define each block.
+    for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
+      var json = JSON.parse(blockDef);
+      blockTypes.push(json.type);
+
+      // Define the block.
+      Blockly.Blocks[json.type] = {
+        init: function() {
+          this.jsonInit(json);
+        }
+      };
+    }
+  } else if (format == 'JavaScript') {
+    var blockDefArray = FactoryUtils.parseJsBlockDefs(blockDefsString);
+
+    // Populate array of block types.
+    for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
+      var blockType = FactoryUtils.getBlockTypeFromJsDef(blockDef);
+      blockTypes.push(blockType);
+    }
+
+    // Define all blocks.
+    eval(blockDefsString);
+  }
+
+  return blockTypes;
 };

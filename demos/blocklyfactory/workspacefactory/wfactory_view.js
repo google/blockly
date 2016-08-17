@@ -21,8 +21,8 @@
 /**
  * Controls the UI elements for workspace factory, mainly the category tabs.
  * Also includes downloading files because that interacts directly with the DOM.
- * Depends on FactoryController (for adding mouse listeners). Tabs for each
- * category are stored in tab map, which associates a unique ID for a
+ * Depends on WorkspaceFactoryController (for adding mouse listeners). Tabs for
+ * each category are stored in tab map, which associates a unique ID for a
  * category with a particular tab.
  *
  * @author Emma Dauterman (edauterman)
@@ -349,28 +349,28 @@ WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
  * editing in.
  *
  * @param {!string} mode The mode being switched to
- *    (FactoryController.MODE_TOOLBOX or FactoryController.MODE_PRELOAD).
+ *    (WorkspaceFactoryController.MODE_TOOLBOX or WorkspaceFactoryController.MODE_PRELOAD).
  */
 WorkspaceFactoryView.prototype.setModeSelection = function(mode) {
   document.getElementById('tab_preload').className = mode ==
-      FactoryController.MODE_PRELOAD ? 'tabon' : 'taboff';
+      WorkspaceFactoryController.MODE_PRELOAD ? 'tabon' : 'taboff';
   document.getElementById('preload_div').style.display = mode ==
-      FactoryController.MODE_PRELOAD ? 'block' : 'none';
+      WorkspaceFactoryController.MODE_PRELOAD ? 'block' : 'none';
   document.getElementById('tab_toolbox').className = mode ==
-      FactoryController.MODE_TOOLBOX ? 'tabon' : 'taboff';
+      WorkspaceFactoryController.MODE_TOOLBOX ? 'tabon' : 'taboff';
   document.getElementById('toolbox_div').style.display = mode ==
-      FactoryController.MODE_TOOLBOX ? 'block' : 'none';
+      WorkspaceFactoryController.MODE_TOOLBOX ? 'block' : 'none';
 };
 
 /**
  * Updates the help text above the workspace depending on the selected mode.
  *
- * @param {!string} mode The selected mode (FactoryController.MODE_TOOLBOX or
- *    FactoryController.MODE_PRELOAD).
+ * @param {!string} mode The selected mode (WorkspaceFactoryController.MODE_TOOLBOX or
+ *    WorkspaceFactoryController.MODE_PRELOAD).
  */
 WorkspaceFactoryView.prototype.updateHelpText = function(mode) {
   var helpText = 'Drag your blocks into your ' + (mode ==
-      FactoryController.MODE_TOOLBOX ? 'toolbox: ' : 'pre-loaded workspace: ');
+      WorkspaceFactoryController.MODE_TOOLBOX ? 'toolbox: ' : 'pre-loaded workspace: ');
   document.getElementById('editHelpText').textContent = helpText;
 };
 

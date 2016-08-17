@@ -497,7 +497,7 @@ AppController.prototype.init = function() {
   this.addBlockFactoryEventListeners();
 
   // Workspace Factory init.
-  FactoryInit.initWorkspaceFactory(this.workspaceFactoryController);
+  WorkspaceFactoryInit.initWorkspaceFactory(this.workspaceFactoryController);
 };
 
 

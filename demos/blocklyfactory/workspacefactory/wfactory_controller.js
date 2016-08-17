@@ -305,7 +305,7 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
   // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
   this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
         (this.toolboxWorkspace.getAllBlocks()));
-  this.toolboxWorkspace.cleanUp_();
+  this.toolboxWorkspace.cleanUp();
 
   // Update category editing buttons.
   this.view.updateState(this.model.getIndexByElementId
@@ -441,7 +441,7 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
 WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // If currently editing the toolbox.
-    this.model.getSelected().saveFromWorkspace(toolboxWorkspace);
+    this.model.getSelected().saveFromWorkspace(this.toolboxWorkspace);
   } else if (this.selectedMode == WorkspaceFactoryController.MODE_PRELOAD) {
     // If currently editing the pre-loaded workspace.
     this.model.savePreloadXml
@@ -675,6 +675,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     return;
   }
 
+  var controller = this;
   var reader = new FileReader();
 
   // To be executed when the reader has read the file.
@@ -722,7 +723,7 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
     // No categories present.
     // Load all the blocks into a single category evenly spaced.
     Blockly.Xml.domToWorkspace(tree, this.toolboxWorkspace);
-    this.toolboxWorkspace.cleanUp_();
+    this.toolboxWorkspace.cleanUp();
 
     // Convert actual shadow blocks to user-generated shadow blocks.
     this.convertShadowBlocks();
@@ -747,7 +748,7 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
         }
 
         // Evenly space the blocks.
-        this.toolboxWorkspace.cleanUp_();
+        this.toolboxWorkspace.cleanUp();
 
         // Convert actual shadow blocks to user-generated shadow blocks.
         this.convertShadowBlocks();

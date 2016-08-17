@@ -38,9 +38,10 @@ blocklyApp.FieldComponent = ng.core
            [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number'"
            tabindex="-1">
 
-    <div *ngIf="isDropdown()"
-         [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])">
-      <label [id]="mainFieldId">{{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}</label>
+    <div *ngIf="isDropdown()">
+      <label [id]="mainFieldId" [attr.aria-label]="('CURRENT_ARGUMENT_VALUE'|translate) + ' ' + field.getText() + ' Move right to view submenu'">
+        {{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}
+      </label>
       <ol role="group">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">

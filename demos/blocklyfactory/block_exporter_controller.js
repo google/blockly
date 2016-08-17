@@ -51,6 +51,8 @@ BlockExporterController = function(blockLibStorage) {
   this.view = new BlockExporterView(
       //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
+  // Array to hold the block types used in workspace factory.
+  this.usedBlockTypes = [];
 };
 
 /**
@@ -325,4 +327,41 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
  */
 BlockExporterController.prototype.getBlockLibCategory = function() {
   return this.tools.generateCategoryFromBlockLib(this.blockLibStorage);
+};
+
+/**
+ * Tied to the 'Add All Stored Blocks' button in the Block Exporter.
+ * Adds all blocks stored in block library to the selector workspace.
+ * TODO:(quachtina96): Do integration tests once the CL with the updated
+ * Workspace Factory is merged.
+ */
+BlockExporterController.prototype.addUsedBlocksToWorkspace =
+    function() {
+  // Clear selector workspace.
+  this.view.clearSelectorWorkspace();
+
+  // Add and evaluate all blocks' definitions.
+  var storedBlockTypes = this.blockLibStorage.getBlockTypes();
+  var sharedTypes =
+      FactoryUtils.getSharedTypes(storedBlockTypes, this.usedBlockTypes);
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(sharedTypes);
+  this.tools.addBlockDefinitions(blockXmlMap);
+
+  // For every block, render in selector workspace.
+  for (var i = 0, blockType; blockType = sharedTypes[i]; i++) {
+    this.view.addBlock(blockType);
+  }
+
+  // Clean up workspace.
+  this.view.cleanUpSelectorWorkspace();
+};
+
+/**
+ * Set the array that holds the block types used in workspace factory.
+ *
+ * @param {!Array.<!string>} usedBlockTypes - Block types used in
+ */
+BlockExporterController.prototype.setUsedBlockTypes =
+    function(usedBlockTypes) {
+  this.usedBlockTypes = usedBlockTypes;
 };

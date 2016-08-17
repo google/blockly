@@ -872,3 +872,22 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
 
   return blockTypes;
 };
+
+/**
+ * Given two lists of block types, will return the list of block types that
+ * are found in both lists.
+ *
+ * @param {!Array.<string>} blockTypesOne - Array of block types.
+ * @param {!Array.<string>} blockTypesTwo - Array of block types.
+ */
+FactoryUtils.getSharedTypes = function(blockTypesOne, blockTypesTwo) {
+    var referenceSet = new Set(blockTypesTwo);
+    var sharedBlockTypes = [];
+    for (var i = 0; i < blockTypesOne.length; i++) {
+      var blockType = blockTypesOne[i];
+      if (referenceSet.has(blockType)) {
+        sharedBlockTypes.push(blockType);
+      }
+    }
+    return sharedBlockTypes;
+};

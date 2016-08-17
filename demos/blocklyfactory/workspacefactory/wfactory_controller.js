@@ -53,7 +53,7 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
        colour: '#ccc',
        snap: true},
        media: '../../media/',
-       toolbox: toolbox,
+       toolbox: toolbox
      });
 
   // Workspace for user to preview their changes.
@@ -1076,3 +1076,12 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
       (this.generator.generateToolboxXml()));
 };
 
+/**
+ * Return the block types used in the custom toolbox and pre-loaded workspace.
+ *
+ * @return {!Array.<!string>} Block types used in the custom toolbox and
+ *    pre-loaded workspace.
+ */
+WorkspaceFactoryController.prototype.getAllUsedBlockTypes = function() {
+  return this.model.getAllUsedBlockTypes();
+};

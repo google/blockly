@@ -209,7 +209,7 @@ BlockLibraryController.prototype.setBlockLibStorage
  *    that stores the blocks.
  */
 BlockLibraryController.prototype.getBlockLibStorage =
-    function(blockLibStorage) {
+    function() {
   return this.blockLibStorage;
 };
 

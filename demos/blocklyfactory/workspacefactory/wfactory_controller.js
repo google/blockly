@@ -862,7 +862,9 @@ WorkspaceFactoryController.prototype.addShadow = function() {
   if (!Blockly.selected) {
     return;
   }
-
+  // Clear any previous warnings on the block (would only have warnings on
+  // a non-shadow block if it was nested inside another shadow block).
+  Blockly.selected.setWarningText(null);
   // Set selected block and all children as shadow blocks.
   this.addShadowForBlockAndChildren_(Blockly.selected);
 

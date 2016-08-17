@@ -860,10 +860,58 @@ WorkspaceFactoryController.prototype.addShadow = function() {
   if (!Blockly.selected) {
     return;
   }
-  this.view.markShadowBlock(Blockly.selected);
-  this.model.addShadowBlock(Blockly.selected.id);
+
+  // Set selected block and all children as shadow blocks.
+  this.addShadowForBlockAndChildren_(Blockly.selected);
+
+  // Save and update the preview.
   this.saveStateFromWorkspace();
   this.updatePreview();
+};
+
+/**
+ * Sets a block and all of its children to be user-generated shadow blocks,
+ * both in the model and view.
+ * @private
+ *
+ * @param {!Blockly.Block} block The block to be converted to a user-generated
+ *    shadow block.
+ */
+WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
+    function(block) {
+  // Convert to shadow block.
+  this.view.markShadowBlock(block);
+  this.model.addShadowBlock(block.id);
+
+  if (this.hasVariableField(block)) {
+    block.setWarningText('Cannot make variable blocks shadow blocks.');
+  }
+
+  // Convert all children to shadow blocks recursively.
+  var children = block.getChildren();
+  for (var i = 0; i < children.length; i++) {
+    this.addShadowForBlockAndChildren_(children[i]);
+  }
+};
+
+/**
+ * Checks if a block has a variable field. Blocks with variable fields cannot
+ * be shadow blocks.
+ *
+ * @param {Blockly.Block} block The block to check if a variable field exists.
+ * @return {boolean} True if the block has a variable field, false otherwise.
+ */
+WorkspaceFactoryController.prototype.hasVariableField = function(block) {
+  if (!block) {
+    return false;
+  }
+  for (var i = 0; i < block.inputList.length; i++) {
+    if (block.inputList[i].fieldRow.length > 0 &&
+        block.inputList[i].fieldRow[0].name == 'VAR') {
+      return true;
+    }
+  }
+  return false;
 };
 
 /**
@@ -879,6 +927,10 @@ WorkspaceFactoryController.prototype.removeShadow = function() {
   }
   this.model.removeShadowBlock(Blockly.selected.id);
   this.view.unmarkShadowBlock(Blockly.selected);
+
+  // If turning invalid shadow block back to normal block, remove warning.
+  Blockly.selected.setWarningText(null);
+
   this.saveStateFromWorkspace();
   this.updatePreview();
 };

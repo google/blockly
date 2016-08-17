@@ -294,6 +294,10 @@ AppController.prototype.onTab = function() {
     // Update toolbox to reflect current block library.
     this.exporter.updateToolbox();
 
+    // Udpate exporter's list of the types of blocks used in workspace factory.
+    var usedBlockTypes = this.workspaceFactoryController.getAllUsedBlockTypes();
+    this.exporter.setUsedBlockTypes(usedBlockTypes);
+
     // Show container of exporter.
     FactoryUtils.show('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
@@ -341,7 +345,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
 
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
-        self.exporter.export();
+        self.exporter.addUsedBlocksToWorkspace();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 

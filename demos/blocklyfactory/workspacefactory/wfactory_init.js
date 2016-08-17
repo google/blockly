@@ -153,6 +153,18 @@ WorkspaceFactoryInit.initColorPicker_ = function(controller) {
  */
 WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
     function(controller) {
+  document.getElementById('tab_toolbox').addEventListener
+      ('click',
+      function() {
+        controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+      });
+
+  document.getElementById('tab_preload').addEventListener
+      ('click',
+      function() {
+        controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
+      });
+
   document.getElementById('button_add').addEventListener
       ('click',
       function() {
@@ -189,7 +201,7 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
   document.getElementById('dropdown_exportToolbox').addEventListener
       ('click',
       function() {
-        controller.exportFile(WorkspaceFactoryController.MODE_TOOLBOX);
+        controller.exportXmlFile(WorkspaceFactoryController.MODE_TOOLBOX);
         document.getElementById('dropdownDiv_export').classList.remove("show");
       });
 
@@ -310,7 +322,7 @@ document.getElementById('button_import').addEventListener
   document.getElementById('button_clear').addEventListener
       ('click',
       function() {
-        controller.clear();
+        controller.clearToolbox();
       });
 
   document.getElementById('dropdown_addShadow').addEventListener
@@ -333,6 +345,11 @@ document.getElementById('button_import').addEventListener
         if (!Blockly.selected.getSurroundParent()) {
           document.getElementById('button_editShadow').disabled = true;
         }
+      });
+
+  document.getElementById('button_standardOptions').addEventListener
+      ('click', function() {
+        controller.setStandardOptionsAndUpdate();
       });
 };
 

@@ -127,22 +127,22 @@
     <p>
         <div class="dropdown">
         <button id="button_import">Import</button>
-        <div id="dropdownDiv_import" class="dropdown-content">
-          <input type="file" id="input_importToolbox" class="inputfile"></input>
-          <label for="input_importToolbox">Toolbox</label>
-          <input type="file" id="input_importPreload" class="inputfile"></input>
-          <label for="input_importPreload">Workspace Blocks</label>
-        </div>
+          <div id="dropdownDiv_import" class="dropdown-content">
+            <input type="file" id="input_importToolbox" class="inputfile"></input>
+            <label for="input_importToolbox">Toolbox</label>
+            <input type="file" id="input_importPreload" class="inputfile"</input>
+            <label for="input_importPreload">Workspace Blocks</label>
+          </div>
         </div>
 
         <div class="dropdown">
         <button id="button_export">Export</button>
-        <div id="dropdownDiv_export" class="dropdown-content">
-          <a id='dropdown_exportToolbox'>Toolbox</a>
-          <a id='dropdown_exportPreload'>Workspace Blocks</a>
-          <a id='dropdown_exportOptions'>Inject Options</a>
-          <a id='dropdown_exportAll'>All</a>
-        </div>
+          <div id="dropdownDiv_export" class="dropdown-content">
+            <a id='dropdown_exportToolbox'>Toolbox</a>
+            <a id='dropdown_exportPreload'>Workspace Blocks</a>
+            <a id='dropdown_exportOptions'>Inject Options</a>
+            <a id='dropdown_exportAll'>All</a>
+          </div>
         </div>
 
       <button id="button_print">Print Toolbox</button>
@@ -152,11 +152,15 @@
     <section id="createDiv">
       <h3>Workspace Editor:</h3>
       <p id="editHelpText">Drag blocks into your toolbox:</p>
+      <table id='workspaceTabs' style="width:auto">
+        <td id="tab_toolbox" class="tabon">Toolbox</td>
+        <td id="tab_preload" class="taboff">Workspace</td>
+      </table>
       <section id="toolbox_section">
         <div id="toolbox_blocks" class="content"></div>
         <div id='disable_div'></div>
       </section>
-      <aside id="category_section">
+      <aside id="toolbox_div">
         <table id="categoryTable" style="width:auto">
           <td id="tab_help">Your categories will appear here</td>
         </table>

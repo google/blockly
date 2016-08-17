@@ -313,7 +313,7 @@ td {
   width: 30%;
 }
 
-#category_section {
+#toolbox_div, #preload_div {
   width: 20%;
 }
 
@@ -395,9 +395,16 @@ td {
     text-decoration: none;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
+.dropdown-content label {
+  color: black;
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+}
+
+/* Change color of dropdown links on hover. */
+.dropdown-content a:hover, .dropdown-content label:hover {
+  background-color: #f1f1f1
 }
 
 /* Show the dropdown menu */

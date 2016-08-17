@@ -150,6 +150,7 @@ Blockly.FlyoutButton.prototype.dispose = function() {
     this.svgGroup_ = null;
   }
   this.workspace_ = null;
+  this.targetWorkspace_ = null;
 };
 
 /**

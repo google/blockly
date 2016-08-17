@@ -143,12 +143,12 @@ Blockly.FieldVariable.prototype.classValidator = function(text) {
     text = Blockly.Variables.promptName(
         Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar), oldVar);
     if (text) {
-      Blockly.Variables.renameVariable(oldVar, text, workspace);
+      workspace.renameVariable(oldVar, text);
     }
     return null;
   } else if (text == Blockly.Msg.DELETE_VARIABLE.replace('%1',
       this.getText())) {
-    Blockly.Variables.delete(this.getText(), this.sourceBlock_.workspace);
+    workspace.deleteVariable(this.getText());
     return null;
   }
   return undefined;

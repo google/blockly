@@ -89,6 +89,8 @@ Blockly.Flyout = function(workspaceOptions) {
 
   /**
    * List of visible buttons.
+   * @type {!Array.<!Blockly.FlyoutButton>}
+   * @private
    */
   this.buttons_ = [];
 

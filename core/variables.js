@@ -92,24 +92,6 @@ Blockly.Variables.allVariables = function(root) {
 };
 
 /**
- * Find all instances of the specified variable and rename them.
- * @param {string} oldName Variable to rename.
- * @param {string} newName New variable name.
- * @param {!Blockly.Workspace} workspace Workspace rename variables in.
- */
-Blockly.Variables.renameVariable = function(oldName, newName, workspace) {
-  Blockly.Events.setGroup(true);
-  var blocks = workspace.getAllBlocks();
-  // Iterate through every block.
-  for (var i = 0; i < blocks.length; i++) {
-    blocks[i].renameVar(oldName, newName);
-  }
-  Blockly.Events.setGroup(false);
-
-  workspace.renameVariable(oldName, newName);
-};
-
-/**
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Blockly.Workspace} workspace The workspace contianing variables.
  * @return {!Array.<!Element>} Array of XML block elements.
@@ -242,74 +224,6 @@ Blockly.Variables.generateUniqueName = function(workspace) {
 };
 
 /**
- * Find all the uses of a named variable.
- * @param {string} name Name of variable.
- * @param {!Blockly.Workspace} workspace The workspace to find uses in.
- * @return {!Array.<!Blockly.Block>} Array of block usages.
- */
-Blockly.Variables.getUses = function(name, workspace) {
-  var uses = [];
-  var blocks = workspace.getAllBlocks();
-  // Iterate through every block and check the name.
-  for (var i = 0; i < blocks.length; i++) {
-    var blockVariables = blocks[i].getVars();
-    if (blockVariables) {
-      for (var j = 0; j < blockVariables.length; j++) {
-        var varName = blockVariables[j];
-        // Variable name may be null if the block is only half-built.
-        if (varName && Blockly.Names.equals(varName, name)) {
-          uses.push(blocks[i]);
-        }
-      }
-    }
-  }
-  return uses;
-};
-
-/**
- * When a variable is deleted, find and dispose of all uses of it.
- * @param {!Array.<!Blockly.Block>} uses An array of blocks using the variable.
- * @private
- */
-Blockly.Variables.disposeUses_ = function(uses) {
-  Blockly.Events.setGroup(true);
-  for (var i = 0; i < uses.length; i++) {
-    uses[i].dispose(true, false);
-  }
-  Blockly.Events.setGroup(false);
-};
-
-/**
- * Delete a variables and all of its uses from the given workspace.
- * @param {string} name Name of variable to delete.
- * @param {!Blockly.Workspace} workspace The workspace to delete uses from.
- */
-Blockly.Variables.delete = function(name, workspace) {
-  var variableIndex = workspace.variableList.indexOf(name);
-  if (variableIndex != -1) {
-    var uses = Blockly.Variables.getUses(name, workspace);
-    if (uses.length > 1) {
-      for (var i = 0, block; block = uses[i]; i++) {
-        if (block.type == 'procedures_defnoreturn' ||
-          block.type == 'procedures_defreturn') {
-          var procedureName = block.getFieldValue('NAME');
-          window.alert(
-              Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.replace('%1', name).
-              replace('%2', procedureName));
-          return;
-        }
-      }
-      window.confirm(
-          Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
-          replace('%2', name));
-    }
-    Blockly.Variables.disposeUses_(uses);
-    workspace.variableList.splice(variableIndex, 1);
-  }
-
-};
-
-/**
  * Create a new variable on the given workspace.
  * @param {!Blockly.Workspace} workspace The workspace on which to create the
  *     variable.
@@ -318,14 +232,22 @@ Blockly.Variables.delete = function(name, workspace) {
  *     variable was chosen.
  */
 Blockly.Variables.createVariable = function(workspace) {
-  var text = Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
-  // Since variables are case-insensitive, ensure that if the new variable
-  // matches with an existing variable, the new case prevails throughout.
-  if (text) {
-    workspace.createVariable(text);
-    return text;
+  while (true) {
+    var text = Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
+    if (text) {
+      if (workspace.variableIndexOf(text) != -1) {
+        window.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
+            text.toLowerCase()));
+      } else {
+        workspace.createVariable(text);
+        break;
+      }
+    } else {
+      text = null;
+      break;
+    }
   }
-  return null;
+  return text;
 };
 
 /**

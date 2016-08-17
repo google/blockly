@@ -96,14 +96,18 @@ Blockly.Msg.REDO = 'Redo';
 // Variable renaming.
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.
 Blockly.Msg.CHANGE_VALUE_TITLE = 'Change value:';
-/// button text - Text on the button used to launch the variable creation dialogue.
-Blockly.Msg.NEW_VARIABLE = 'Create variable...';
-/// prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
-Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
 /// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to rename the current variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
 Blockly.Msg.RENAME_VARIABLE = 'Rename variable...';
 /// prompt - Prompts the user to enter the new name for the selected variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
 Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
+
+// Variable creation
+/// button text - Text on the button used to launch the variable creation dialogue.
+Blockly.Msg.NEW_VARIABLE = 'Create variable...';
+/// prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
+Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
+/// alert - Tells the user that the name they entered is already in use.
+Blockly.Msg.VARIABLE_ALREADY_EXISTS = 'A variable named "%1" already exists.'
 
 // Variable deletion.
 /// confirm -  Ask the user to confirm their deletion of multiple uses of a variable.

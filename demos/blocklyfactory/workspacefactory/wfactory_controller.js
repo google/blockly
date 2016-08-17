@@ -1192,3 +1192,12 @@ WorkspaceFactoryController.prototype.setBlockLibCategory =
   this.toolboxWorkspace.updateToolbox(this.toolbox);
 };
 
+/**
+ * Return the block types used in the custom toolbox and pre-loaded workspace.
+ *
+ * @return {!Array.<!string>} Block types used in the custom toolbox and
+ *    pre-loaded workspace.
+ */
+WorkspaceFactoryController.prototype.getAllUsedBlockTypes = function() {
+  return this.model.getAllUsedBlockTypes();
+};

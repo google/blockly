@@ -51,6 +51,8 @@ BlockExporterController = function(blockLibStorage) {
   this.view = new BlockExporterView(
       //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
+  // Array to hold the block types used in workspace factory.
+  this.usedBlockTypes = [];
 };
 
 /**
@@ -277,7 +279,7 @@ BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
     var deletedBlockXml = event.oldXml;
     var blockType = deletedBlockXml.getAttribute('type');
     // Do not try to enable any blocks deleted from the block library.
-    if (this.blockLibStorage[blockType]) {
+    if (this.blockLibStorage.has(blockType)) {
       // Enable the deselected block.
       this.setBlockEnabled(blockType, true);
     }
@@ -325,4 +327,62 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
  */
 BlockExporterController.prototype.getBlockLibCategory = function() {
   return this.tools.generateCategoryFromBlockLib(this.blockLibStorage);
+};
+
+/**
+ * Tied to the 'Add All Stored Blocks' button in the Block Exporter.
+ * Adds all blocks stored in block library to the selector workspace.
+ */
+BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
+  // Clear selector workspace.
+  this.view.clearSelectorWorkspace();
+
+  // Get list of block types that are in block library and used in workspace
+  // factory.
+  var storedBlockTypes = this.blockLibStorage.getBlockTypes();
+  var sharedBlockTypes = [];
+  // Keep list of custom block types used but not in library.
+  var unstoredCustomBlockTypes = [];
+  var warnForStandardBlockTypes = false;
+
+  for (var i = 0, blockType; blockType = this.usedBlockTypes[i]; i++) {
+    if (storedBlockTypes.indexOf(blockType) != -1) {
+      sharedBlockTypes.push(blockType);
+    } else if (BlockFactory.standardBlockTypes.indexOf(blockType) == -1) {
+        unstoredCustomBlockTypes.push(blockType);
+    }
+  }
+
+  // Add and evaluate the shared blocks' definitions.
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(sharedBlockTypes);
+  this.tools.addBlockDefinitions(blockXmlMap);
+
+  // For every block, render in selector workspace.
+  for (var i = 0, blockType; blockType = sharedBlockTypes[i]; i++) {
+    this.view.addBlock(blockType);
+  }
+
+  // Clean up workspace.
+  this.view.cleanUpSelectorWorkspace();
+
+  if (unstoredCustomBlockTypes.length > 0){
+    // Warn user to import block definitions and generator code for blocks
+    // not in their Block Library nor Blockly's standard library.
+    var blockTypesText = unstoredCustomBlockTypes.join(', ');
+    var customWarning = 'Custom blocks used in workspace factory but not ' +
+        'stored in block library:\n ' + blockTypesText +
+        '\n\nDon\'t forget to include block definitions and generator code ' +
+        'for these blocks.';
+    alert(customWarning);
+  }
+};
+
+/**
+ * Set the array that holds the block types used in workspace factory.
+ *
+ * @param {!Array.<!string>} usedBlockTypes - Block types used in
+ */
+BlockExporterController.prototype.setUsedBlockTypes =
+    function(usedBlockTypes) {
+  this.usedBlockTypes = usedBlockTypes;
 };

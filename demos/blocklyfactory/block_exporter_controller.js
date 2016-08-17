@@ -177,13 +177,27 @@ BlockExporterController.prototype.updateToolbox = function(opt_toolboxXml) {
   // Use given xml or xml generated from updated block library.
   var updatedToolbox = opt_toolboxXml ||
       this.tools.generateToolboxFromLibrary(this.blockLibStorage);
+
   // Update the view's toolbox.
   this.view.setToolbox(updatedToolbox);
+
   // Render the toolbox in the selector workspace.
   this.view.renderToolbox(updatedToolbox);
+
+  // Do not try to disable any selected blocks deleted from the block library.
+  // Instead, deselect them.
+  var selectedBlocks = this.view.getSelectedBlocks();
+  var updatedSelectedBlocks = [];
+  for (var i = 0, selectedBlock; selectedBlock = selectedBlocks[i]; i++) {
+    if (this.blockLibStorage[selectedBlock.type]) {
+      updatedSelectedBlocks.push(selectedBlock);
+    } else {
+      this.view.removeBlock(selectedBlock);
+    }
+  }
   // Disable any selected blocks.
-  var selectedBlocks = this.getSelectedBlockTypes_();
-  for (var i = 0, blockType; blockType = selectedBlocks[i]; i++) {
+  var selectedBlockTypes = this.getSelectedBlockTypes_();
+  for (var i = 0, blockType; blockType = selectedBlockTypes[i]; i++) {
     this.setBlockEnabled(blockType, false);
   }
 };
@@ -262,8 +276,11 @@ BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
     // Get type of block created.
     var deletedBlockXml = event.oldXml;
     var blockType = deletedBlockXml.getAttribute('type');
-    // Enable the deselected block.
-    this.setBlockEnabled(blockType, true);
+    // Do not try to enable any blocks deleted from the block library.
+    if (this.blockLibStorage[blockType]) {
+      // Enable the deselected block.
+      this.setBlockEnabled(blockType, true);
+    }
     // Show currently selected blocks in helper text.
     this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
   }
@@ -299,4 +316,13 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
 
   // Clean up workspace.
   this.view.cleanUpSelectorWorkspace();
+};
+
+/**
+ * Returns the category xml containing all blocks in the block library.
+ *
+ * @return {Element} Xml for a category to be used in toolbox.
+ */
+BlockExporterController.prototype.getBlockLibCategory = function() {
+  return this.tools.generateCategoryFromBlockLib(this.blockLibStorage);
 };

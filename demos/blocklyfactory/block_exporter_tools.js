@@ -188,25 +188,45 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
   this.addBlockDefinitions(blockXmlMap);
 
   for (var blockType in blockXmlMap) {
-    // Create category DOM element.
-    var categoryElement = goog.dom.createDom('category');
-    categoryElement.setAttribute('name',blockType);
-
     // Get block.
     var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
-
-    // Get preview block XML.
-    var blockChild = Blockly.Xml.blockToDom(block);
-    blockChild.removeAttribute('id');
-
-    // Add block to category and category to XML.
-    categoryElement.appendChild(blockChild);
-    xmlDom.appendChild(categoryElement);
+    var category = FactoryUtils.generateCategoryXml([block], blockType);
+    xmlDom.appendChild(category);
   }
 
-  // If there are no blocks in library, append dummy category.
-  var categoryElement = goog.dom.createDom('category');
-  categoryElement.setAttribute('name','Next Saved Block');
-  xmlDom.appendChild(categoryElement);
+  // If there are no blocks in library and the map is empty, append dummy
+  // category.
+  if (Object.keys(blockXmlMap).length == 0) {
+    var category = goog.dom.createDom('category');
+    category.setAttribute('name','Next Saved Block');
+    xmlDom.appendChild(category);
+  }
   return xmlDom;
+};
+
+/**
+ * Generate xml for the workspace factory's category from imported block
+ * definitions.
+ *
+ * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
+ * @return {!Element} Xml representation of a category.
+ */
+BlockExporterTools.prototype.generateCategoryFromBlockLib =
+    function(blockLibStorage) {
+  var allBlockTypes = blockLibStorage.getBlockTypes();
+  // Object mapping block type to XML.
+  var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
+
+  // Define the custom blocks in order to be able to create instances of
+  // them in the exporter workspace.
+  this.addBlockDefinitions(blockXmlMap);
+
+  // Get array of defined blocks.
+  var blocks = [];
+  for (var blockType in blockXmlMap) {
+    var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
+    blocks.push(block);
+  }
+
+  return FactoryUtils.generateCategoryXml(blocks,'Block Library');
 };

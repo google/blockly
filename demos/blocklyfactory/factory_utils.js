@@ -730,3 +730,145 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
   workspace.clear();
   return workspace.newBlock(blockType);
 };
+
+/**
+ * Parses a block definition get the type of the block it defines.
+ *
+ * @param {!string} blockDef - A single block definition.
+ * @return {string} Type of block defined by the given definition.
+ */
+FactoryUtils.getBlockTypeFromJsDef = function(blockDef) {
+  var indexOfStartBracket = blockDef.indexOf('[\'');
+  var indexOfEndBracket = blockDef.indexOf('\']');
+  if (indexOfStartBracket != -1 && indexOfEndBracket != -1) {
+    return blockDef.substring(indexOfStartBracket + 2, indexOfEndBracket);
+  } else {
+    throw new Error ('Could not parse block type out of JavaScript block ' +
+        'definition. Brackets normally enclosing block type not found.');
+  }
+};
+
+/**
+ * Generates a category containing blocks of the specified block types.
+ *
+ * @param {!Array.<Blockly.Block>} blocks - Blocks to include in the category.
+ * @param {string} categoryName - Name to use for the generated category.
+ * @return {Element} - Category xml containing the given block types.
+ */
+FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
+  // Create category DOM element.
+  var categoryElement = goog.dom.createDom('category');
+  categoryElement.setAttribute('name', categoryName);
+
+  // For each block, add block element to category.
+  for (var i = 0, block; block = blocks[i]; i++) {
+
+    // Get preview block XML.
+    var blockXml = Blockly.Xml.blockToDom(block);
+    blockXml.removeAttribute('id');
+
+    // Add block to category and category to XML.
+    categoryElement.appendChild(blockXml);
+  }
+  return categoryElement;
+};
+
+/**
+ * Parses a string containing JavaScript block definition(s) to create an array
+ * in which each element is a single block definition.
+ *
+ * @param {!string} blockDefsString - JavaScript block definition(s).
+ * @return {!Array.<string>} - Array of block definitions.
+ */
+FactoryUtils.parseJsBlockDefs = function(blockDefsString) {
+  var blockDefArray = [];
+  var defStart = blockDefsString.indexOf('Blockly.Blocks');
+
+  while (blockDefsString.indexOf('Blockly.Blocks', defStart) != -1) {
+    var nextStart = blockDefsString.indexOf('Blockly.Blocks', defStart + 1);
+    if (nextStart == -1) {
+      // This is the last block definition.
+      nextStart = blockDefsString.length;
+    }
+    var blockDef = blockDefsString.substring(defStart, nextStart);
+    blockDefArray.push(blockDef);
+    defStart = nextStart;
+  }
+  return blockDefArray;
+};
+
+/**
+ * Parses a string containing JSON block definition(s) to create an array
+ * in which each element is a single block definition. Expected input is
+ * one or more block definitions in the form of concatenated, stringified
+ * JSON objects.
+ *
+ * @param {!string} blockDefsString - String containing JSON block
+ *    definition(s).
+ * @return {!Array.<string>} - Array of block definitions.
+ */
+FactoryUtils.parseJsonBlockDefs = function(blockDefsString) {
+  var blockDefArray = [];
+  var unbalancedBracketCount = 0;
+  var defStart = 0;
+  // Iterate through the blockDefs string. Keep track of whether brackets
+  // are balanced.
+  for (var i = 0; i < blockDefsString.length; i++) {
+    var currentChar = blockDefsString[i];
+    if (currentChar == '{') {
+      unbalancedBracketCount++;
+    }
+    else if (currentChar == '}') {
+      unbalancedBracketCount--;
+      if (unbalancedBracketCount == 0 && i > 0) {
+        // The brackets are balanced. We've got a complete block defintion.
+        var blockDef = blockDefsString.substring(defStart, i + 1);
+        blockDefArray.push(blockDef);
+        defStart = i + 1;
+      }
+    }
+  }
+  return blockDefArray;
+};
+
+/**
+ * Define blocks from imported block definitions.
+ *
+ * @param {!string} blockDefsString - Block definition(s).
+ * @param {!string} format - Block definition format ('JSON' or 'JavaScript').
+ * @return {!Element} Array of block types defined.
+ */
+FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
+  var blockTypes = [];
+
+  // Define blocks and get block types.
+  if (format == 'JSON') {
+    var blockDefArray = FactoryUtils.parseJsonBlockDefs(blockDefsString);
+
+    // Populate array of blocktypes and define each block.
+    for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
+      var json = JSON.parse(blockDef);
+      blockTypes.push(json.type);
+
+      // Define the block.
+      Blockly.Blocks[json.type] = {
+        init: function() {
+          this.jsonInit(json);
+        }
+      };
+    }
+  } else if (format == 'JavaScript') {
+    var blockDefArray = FactoryUtils.parseJsBlockDefs(blockDefsString);
+
+    // Populate array of block types.
+    for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
+      var blockType = FactoryUtils.getBlockTypeFromJsDef(blockDef);
+      blockTypes.push(blockType);
+    }
+
+    // Define all blocks.
+    eval(blockDefsString);
+  }
+
+  return blockTypes;
+};

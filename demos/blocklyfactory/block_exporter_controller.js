@@ -91,17 +91,6 @@ BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
 };
 
 /**
- * Unselect a block for export.
- * @private
- *
- * @param {!Blockly.Block} block - block to unselect.
- */
-BlockExporterController.prototype.unselectBlock = function(block) {
-  this.view.removeBlock(block);
-};
-
-
-/**
  * Get selected blocks from selector workspace, pulls info from the Export
  * Settings form in Block Exporter, and downloads code accordingly.
  *

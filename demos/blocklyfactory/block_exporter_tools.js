@@ -194,10 +194,13 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
     xmlDom.appendChild(category);
   }
 
-  // If there are no blocks in library, append dummy category.
-  var category = goog.dom.createDom('category');
-  category.setAttribute('name','Next Saved Block');
-  xmlDom.appendChild(category);
+  // If there are no blocks in library and the map is empty, append dummy
+  // category.
+  if (Object.keys(blockXmlMap).length == 0) {
+    var category = goog.dom.createDom('category');
+    category.setAttribute('name','Next Saved Block');
+    xmlDom.appendChild(category);
+  }
   return xmlDom;
 };
 

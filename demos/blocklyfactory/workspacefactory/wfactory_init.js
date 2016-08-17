@@ -18,20 +18,20 @@
  * limitations under the License.
  */
 
- /**
-  * @fileoverview Contains the init functions for the workspace factory tab.
-  * Adds click handlers to buttons and dropdowns, adds event listeners for
-  * keydown events and Blockly events, and configures the initial setup of
-  * the page.
-  *
-  * @author Emma Dauterman (evd2014)
-  */
+/**
+ * @fileoverview Contains the init functions for the workspace factory tab.
+ * Adds click handlers to buttons and dropdowns, adds event listeners for
+ * keydown events and Blockly events, and configures the initial setup of
+ * the page.
+ *
+ * @author Emma Dauterman (evd2014)
+ */
 
 /**
  * Namespace for workspace factory initialization methods.
  * @namespace
  */
-FactoryInit = {};
+WorkspaceFactoryInit = {};
 
 /**
  * Initialization for workspace factory tab.
@@ -39,7 +39,7 @@ FactoryInit = {};
  * @param {!FactoryController} controller The controller for the workspace
  *    factory tab.
  */
-FactoryInit.initWorkspaceFactory = function(controller) {
+WorkspaceFactoryInit.initWorkspaceFactory = function(controller) {
   // Disable category editing buttons until categories are created.
   document.getElementById('button_remove').disabled = true;
   document.getElementById('button_up').disabled = true;
@@ -50,6 +50,10 @@ FactoryInit.initWorkspaceFactory = function(controller) {
   this.initColorPicker_(controller);
   this.addWorkspaceFactoryEventListeners_(controller);
   this.assignWorkspaceFactoryClickHandlers_(controller);
+  this.addWorkspaceFactoryOptionsListeners_(controller);
+
+  // Check standard options and apply the changes to update the view.
+  controller.setStandardOptionsAndUpdate();
 };
 
 /**
@@ -59,7 +63,7 @@ FactoryInit.initWorkspaceFactory = function(controller) {
  * @param {!FactoryController} controller The controller for the workspace
  *    factory tab.
  */
-FactoryInit.initColorPicker_ = function(controller) {
+WorkspaceFactoryInit.initColorPicker_ = function(controller) {
   // Array of Blockly category colors, variety of hues with saturation 45%
   // and value 65% as specified in Blockly Developer documentation:
   // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
@@ -147,7 +151,8 @@ FactoryInit.initColorPicker_ = function(controller) {
  * @param {!FactoryController} controller The controller for the workspace
  *    factory tab.
  */
-FactoryInit.assignWorkspaceFactoryClickHandlers_ = function(controller) {
+WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
+    function(controller) {
   document.getElementById('button_add').addEventListener
       ('click',
       function() {
@@ -181,11 +186,42 @@ FactoryInit.assignWorkspaceFactoryClickHandlers_ = function(controller) {
         controller.removeElement();
       });
 
+  document.getElementById('dropdown_exportToolbox').addEventListener
+      ('click',
+      function() {
+        controller.exportFile(WorkspaceFactoryController.MODE_TOOLBOX);
+        document.getElementById('dropdownDiv_export').classList.remove("show");
+      });
+
+  document.getElementById('dropdown_exportPreload').addEventListener
+      ('click',
+      function() {
+        controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
+        document.getElementById('dropdownDiv_export').classList.remove("show");
+      });
+
+  document.getElementById('dropdown_exportOptions').addEventListener
+      ('click',
+      function() {
+        controller.exportOptionsFile();
+        document.getElementById('dropdownDiv_export').classList.remove("show");
+      });
+
+  document.getElementById('dropdown_exportAll').addEventListener
+      ('click',
+      function() {
+        controller.exportXmlFile(WorkspaceFactoryController.MODE_TOOLBOX);
+        controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
+        controller.exportOptionsFile();
+        document.getElementById('dropdownDiv_export').classList.remove("show");
+      });
+
   document.getElementById('button_export').addEventListener
       ('click',
       function() {
-        controller.exportConfig();
-      });
+        document.getElementById('dropdownDiv_export').classList.toggle("show");
+        document.getElementById('dropdownDiv_import').classList.remove("show");
+      })
 
   document.getElementById('button_print').addEventListener
       ('click',
@@ -248,10 +284,27 @@ FactoryInit.assignWorkspaceFactoryClickHandlers_ = function(controller) {
             remove("show");
       });
 
-  document.getElementById('input_import').addEventListener
+document.getElementById('button_import').addEventListener
+      ('click',
+      function() {
+        document.getElementById('dropdownDiv_import').classList.toggle("show");
+        document.getElementById('dropdownDiv_export').classList.remove("show");
+      });
+
+  document.getElementById('input_importToolbox').addEventListener
       ('change',
-      function(event) {
-        controller.importFile(event.target.files[0]);
+      function() {
+        controller.importFile(event.target.files[0],
+            WorkspaceFactoryController.MODE_TOOLBOX);
+        document.getElementById('dropdownDiv_import').classList.remove("show");
+      });
+
+  document.getElementById('input_importPreload').addEventListener
+      ('change',
+      function() {
+        controller.importFile(event.target.files[0],
+            WorkspaceFactoryController.MODE_PRELOAD);
+        document.getElementById('dropdownDiv_import').classList.remove("show");
       });
 
   document.getElementById('button_clear').addEventListener
@@ -290,7 +343,7 @@ FactoryInit.assignWorkspaceFactoryClickHandlers_ = function(controller) {
  * @param {!FactoryController} controller The controller for the workspace
  *    factory tab.
  */
-FactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
+WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
   // Use up and down arrow keys to move categories.
   // TODO(evd2014): When merge with next CL for editing preloaded blocks, make
   // sure mode is toolbox.
@@ -305,18 +358,19 @@ FactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
   });
 
   // Add change listeners for toolbox workspace in workspace factory.
-  controller.toolboxWorkspace.addChangeListener(
-    function(e) {
+  controller.toolboxWorkspace.addChangeListener(function(e) {
     // Listen for Blockly move and delete events to update preview.
     // Not listening for Blockly create events because causes the user to drop
     // blocks when dragging them into workspace. Could cause problems if ever
     // load blocks into workspace directly without calling updatePreview.
-    if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
+    if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE ||
+          e.type == Blockly.Events.CHANGE) {
+      controller.saveStateFromWorkspace();
       controller.updatePreview();
     }
 
-    // Listen for Blockly UI events to correctly enable the "Edit Block"
-    // button. Only enable "Edit Block" when a block is selected and it has a
+    // Listen for Blockly UI events to correctly enable the "Edit Block" button.
+    // Only enable "Edit Block" when a block is selected and it has a
     // surrounding parent, meaning it is nested in another block (blocks that
     // are not nested in parents cannot be shadow blocks).
     if (e.type == Blockly.Events.MOVE || (e.type == Blockly.Events.UI &&
@@ -330,8 +384,7 @@ FactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         document.getElementById('button_editShadow').disabled = false;
         Blockly.selected.setWarningText(null);
       } else {
-        if (selected != null &&
-            controller.isUserGenShadowBlock(selected.id)) {
+        if (selected != null && controller.isUserGenShadowBlock(selected.id)) {
 
         // Provide warning if shadow block is moved and is no longer a valid
         // shadow block.
@@ -343,9 +396,8 @@ FactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
           document.getElementById('button_editShadow').disabled = false;
         } else {
 
-          // No block selected that is a shadow block or could be a valid
-          // shadow block.
-          // Disable block editing.
+          // No block selected that is a shadow block or could be a valid shadow
+          // block. Disable block editing.
           document.getElementById('button_editShadow').disabled = true;
           document.getElementById('dropdownDiv_editShadowRemove').classList.
               remove("show");
@@ -361,4 +413,62 @@ FactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
       controller.convertShadowBlocks();
     }
   });
+};
+
+/**
+ * Add listeners for workspace factory options input elements.
+ * @private
+ *
+ * @param {!FactoryController} controller The controller for the workspace
+ *    factory tab.
+ */
+WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
+    function(controller) {
+  var optionListener = function() {
+    controller.generateNewOptions();
+  };
+
+  // Add event listeners to generate new options for each options input field.
+  document.getElementById('option_collapse_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_comments_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_css_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_disable_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('gridOption_spacing_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('gridOption_length_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('gridOption_colour_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('gridOption_snap_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_maxBlocks_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_media_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_readOnly_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_rtl_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_scrollbars_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_sounds_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('option_trashcan_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('zoomOption_controls_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('zoomOption_wheel_checkbox').addEventListener
+      ('change', optionListener);
+  document.getElementById('zoomOption_startScale_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('zoomOption_maxScale_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('zoomOption_minScale_text').addEventListener
+      ('change', optionListener);
+  document.getElementById('zoomOption_scaleSpeed_text').addEventListener
+      ('change', optionListener);
 };

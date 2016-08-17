@@ -749,26 +749,20 @@ FactoryUtils.getBlockTypeFromJsDef = function(blockDef) {
 };
 
 /**
- * Generates a category containing blocks of the specified block types, assuming
- * the given blocks have already been defined. Needs a Blockly Workspace in
- * order to get the block's xml.
+ * Generates a category containing blocks of the specified block types.
  *
- * @param {!Array.<string>} blockTypes - Types of the blocks to include in the
- *    category.
+ * @param {!Array.<Blockly.Block>} blocks - Blocks to include in the category.
  * @param {string} categoryName - Name to use for the generated category.
- * @param {!Blockly.Workspace} - Blockly workspace.
  * @return {Element} - Category xml containing the given block types.
  */
 FactoryUtils.generateCategoryXml =
-    function(blockTypes, categoryName, workspace) {
+    function(blocks, categoryName) {
   // Create category DOM element.
   var categoryElement = goog.dom.createDom('category');
   categoryElement.setAttribute('name', categoryName);
 
   // For each block, add block element to category.
-  for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
-    // Get block.
-    var block = FactoryUtils.getDefinedBlock(blockType, workspace);
+  for (var i = 0, block; block = blocks[i]; i++) {
 
     // Get preview block XML.
     var blockXml = Blockly.Xml.blockToDom(block);

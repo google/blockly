@@ -188,26 +188,16 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
   this.addBlockDefinitions(blockXmlMap);
 
   for (var blockType in blockXmlMap) {
-    // Create category DOM element.
-    var categoryElement = goog.dom.createDom('category');
-    categoryElement.setAttribute('name',blockType);
-
     // Get block.
     var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
-
-    // Get preview block XML.
-    var blockChild = Blockly.Xml.blockToDom(block);
-    blockChild.removeAttribute('id');
-
-    // Add block to category and category to XML.
-    categoryElement.appendChild(blockChild);
-    xmlDom.appendChild(categoryElement);
+    var category = FactoryUtils.generateCategoryXml([block], blockType);
+    xmlDom.appendChild(category);
   }
 
   // If there are no blocks in library, append dummy category.
-  var categoryElement = goog.dom.createDom('category');
-  categoryElement.setAttribute('name','Next Saved Block');
-  xmlDom.appendChild(categoryElement);
+  var category = goog.dom.createDom('category');
+  category.setAttribute('name','Next Saved Block');
+  xmlDom.appendChild(category);
   return xmlDom;
 };
 
@@ -228,6 +218,12 @@ BlockExporterTools.prototype.generateCategoryFromBlockLib =
   // them in the exporter workspace.
   this.addBlockDefinitions(blockXmlMap);
 
-  return FactoryUtils.generateCategoryXml(allBlockTypes,'Block Library',
-      this.hiddenWorkspace);
+  // Get array of defined blocks.
+  var blocks = [];
+  for (var blockType in blockXmlMap) {
+    var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
+    blocks.push(block);
+  }
+
+  return FactoryUtils.generateCategoryXml(blocks,'Block Library');
 };

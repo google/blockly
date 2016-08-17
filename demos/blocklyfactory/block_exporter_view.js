@@ -120,6 +120,16 @@ BlockExporterView.prototype.addBlock = function(blockType) {
 };
 
 /**
+ * Deletes a block from the selector workspace.
+ *
+ * @param {!Blockly.Block} block - Type of block to add to selector workspce.
+ */
+BlockExporterView.prototype.removeBlock = function(block) {
+  block.dispose();
+};
+
+
+/**
  * Clears selector workspace.
  */
 BlockExporterView.prototype.clearSelectorWorkspace = function() {

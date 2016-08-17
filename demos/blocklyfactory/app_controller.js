@@ -314,7 +314,7 @@ AppController.prototype.styleTabs_ = function() {
  */
 AppController.prototype.assignExporterClickHandlers = function() {
   var self = this;
-  // Export blocks when the user submits the export settings.
+
   document.getElementById('button_setBlocks').addEventListener('click',
       function() {
         document.getElementById('dropdownDiv_setBlocks').classList.toggle("show");
@@ -336,6 +336,12 @@ AppController.prototype.assignExporterClickHandlers = function() {
       function() {
         self.exporter.addAllBlocksToWorkspace();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
+      });
+
+  // Export blocks when the user submits the export settings.
+  document.getElementById('exporterSubmitButton').addEventListener('click',
+      function() {
+        self.exporter.export();
       });
 };
 

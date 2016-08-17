@@ -239,11 +239,11 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       this.notificationsService.setStatusMessage(
           this.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
     },
-    markSpotBelow_: function() {
-      this.clipboardService.markConnection(this.block.nextConnection);
-    },
-    markSpotAbove_: function() {
+    markSpotBefore_: function() {
       this.clipboardService.markConnection(this.block.previousConnection);
+    },
+    markSpotAfter_: function() {
+      this.clipboardService.markConnection(this.block.nextConnection);
     },
     pasteToNextConnection_: function() {
       this.pasteToConnection_(this.block.nextConnection);
@@ -270,17 +270,8 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           return false;
         }
       }, {
-        baseIdKey: 'pasteBelow',
-        translationIdForText: 'PASTE_BELOW',
-        action: that.pasteToNextConnection_.bind(that),
-        isDisabled: function() {
-          return Boolean(
-              !that.block.nextConnection ||
-              !that.isCompatibleWithClipboard(that.block.nextConnection));
-        }
-      }, {
-        baseIdKey: 'pasteAbove',
-        translationIdForText: 'PASTE_ABOVE',
+        baseIdKey: 'pasteBefore',
+        translationIdForText: 'PASTE_BEFORE',
         action: that.pasteToPreviousConnection_.bind(that),
         isDisabled: function() {
           return Boolean(
@@ -288,18 +279,27 @@ blocklyApp.WorkspaceTreeComponent = ng.core
               !that.isCompatibleWithClipboard(that.block.previousConnection));
         }
       }, {
-        baseIdKey: 'markBelow',
-        translationIdForText: 'MARK_SPOT_BEFORE',
-        action: that.markSpotBelow_.bind(that),
+        baseIdKey: 'pasteAfter',
+        translationIdForText: 'PASTE_AFTER',
+        action: that.pasteToNextConnection_.bind(that),
         isDisabled: function() {
-          return !that.block.nextConnection;
+          return Boolean(
+              !that.block.nextConnection ||
+              !that.isCompatibleWithClipboard(that.block.nextConnection));
         }
       }, {
-        baseIdKey: 'markAbove',
-        translationIdForText: 'MARK_SPOT_AFTER',
-        action: that.markSpotAbove_.bind(that),
+        baseIdKey: 'markBefore',
+        translationIdForText: 'MARK_SPOT_BEFORE',
+        action: that.markSpotBefore_.bind(that),
         isDisabled: function() {
           return !that.block.previousConnection;
+        }
+      }, {
+        baseIdKey: 'markAfter',
+        translationIdForText: 'MARK_SPOT_AFTER',
+        action: that.markSpotAfter_.bind(that),
+        isDisabled: function() {
+          return !that.block.nextConnection;
         }
       }, {
         baseIdKey: 'moveToMarkedSpot',

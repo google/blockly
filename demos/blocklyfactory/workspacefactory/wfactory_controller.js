@@ -675,6 +675,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     return;
   }
 
+  var controller = this;
   var reader = new FileReader();
 
   // To be executed when the reader has read the file.

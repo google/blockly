@@ -441,51 +441,28 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
  */
 WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
     function(controller) {
-  var optionListener = function() {
-    controller.generateNewOptions();
-  };
 
-  // Add event listeners to generate new options for each options input field.
-  document.getElementById('option_collapse_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_comments_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_css_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_disable_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('gridOption_spacing_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('gridOption_length_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('gridOption_colour_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('gridOption_snap_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_maxBlocks_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_media_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_readOnly_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_rtl_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_scrollbars_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_sounds_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('option_trashcan_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('zoomOption_controls_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('zoomOption_wheel_checkbox').addEventListener
-      ('change', optionListener);
-  document.getElementById('zoomOption_startScale_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('zoomOption_maxScale_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('zoomOption_minScale_text').addEventListener
-      ('change', optionListener);
-  document.getElementById('zoomOption_scaleSpeed_text').addEventListener
-      ('change', optionListener);
+  // Checking the grid checkbox displays grid options.
+  document.getElementById('option_grid_checkbox').addEventListener('change',
+      function(e) {
+        document.getElementById('grid_options').style.display =
+            document.getElementById('option_grid_checkbox').checked ?
+            'block' : 'none';
+      });
+
+  // Checking the grid checkbox displays zoom options.
+  document.getElementById('option_zoom_checkbox').addEventListener('change',
+      function(e) {
+        document.getElementById('zoom_options').style.display =
+            document.getElementById('option_zoom_checkbox').checked ?
+            'block' : 'none';
+      });
+
+  // Generate new options every time an options input is updated.
+  var optionsElements = document.getElementsByClassName('optionsInput');
+  for (var i = 0; i < optionsElements.length; i++) {
+    optionsElements[i].addEventListener('change', function() {
+      controller.generateNewOptions();
+    });
+  }
 };

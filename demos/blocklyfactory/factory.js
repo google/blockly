@@ -233,12 +233,14 @@ BlockFactory.updatePreview = function() {
     BlockFactory.previewWorkspace.clearUndo();
     BlockFactory.updateGenerator(previewBlock);
 
-    // Warn user if their block type is already exists in Blockly's standard
-    // library.
+    // Warn user only if their block type is already exists in Blockly's
+    // standard library.
+    var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
     if (BlockFactory.standardBlockTypes.indexOf(blockType) != -1) {
-      var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
       rootBlock.setWarningText('A standard Blockly.Block already exists ' +
           'under this name.');
+    } else {
+      rootBlock.setWarningText(null);
     }
   } finally {
     Blockly.Blocks = backupBlocks;

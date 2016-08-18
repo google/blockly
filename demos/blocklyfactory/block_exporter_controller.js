@@ -168,7 +168,7 @@ BlockExporterController.prototype.export = function() {
       // User needs to enter filename.
       alert('Please enter a filename for your workspace options download.');
     } else {
-      // Get Blockly options object to donwload.
+      // Get Blockly options object to download.
       // TODO(evd2014): Prettify JSON by parsing with regex.
       var options = JSON.stringify(this.workspaceGenerator.getOptions());
       // Download the file.

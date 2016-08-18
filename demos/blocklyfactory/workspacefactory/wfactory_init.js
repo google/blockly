@@ -339,9 +339,8 @@ document.getElementById('button_import').addEventListener
         controller.removeShadow();
         document.getElementById('dropdownDiv_editShadowRemove').classList.
             remove("show");
-        // If turning invalid shadow block back to normal block, remove
-        // warning and disable block editing privileges.
-        Blockly.selected.setWarningText(null);
+        // Disable shadow editing button if turning invalid shadow block back
+        // to normal block.
         if (!Blockly.selected.getSurroundParent()) {
           document.getElementById('button_editShadow').disabled = true;
         }
@@ -374,6 +373,16 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     }
   });
 
+  // Determines if a block breaks shadow block placement rules.
+  // Breaks rules if (1) a shadow block no longer has a valid
+  // parent, or (2) a normal block is inside of a shadow block.
+  var isInvalidBlockPlacement = function(block) {
+    return ((controller.isUserGenShadowBlock(block.id) &&
+        !block.getSurroundParent()) ||
+        (!controller.isUserGenShadowBlock(block.id) && block.getSurroundParent()
+        && controller.isUserGenShadowBlock(block.getSurroundParent().id)));
+  }
+
   // Add change listeners for toolbox workspace in workspace factory.
   controller.toolboxWorkspace.addChangeListener(function(e) {
     // Listen for Blockly move and delete events to update preview.
@@ -394,24 +403,48 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         e.element == 'selected')) {
       var selected = Blockly.selected;
 
-      if (selected != null && selected.getSurroundParent() != null) {
+      if (selected != null && selected.getSurroundParent() != null &&
+          !controller.isUserGenShadowBlock(selected.getSurroundParent().id)) {
+        // Selected block is a valid shadow block or could be a valid shadow
+        // block.
 
-        // A valid shadow block is selected. Enable block editing and remove
-        // warnings.
+        // Enable block editing and remove warnings if the block is not a
+        // variable user-generated shadow block.
         document.getElementById('button_editShadow').disabled = false;
-        Blockly.selected.setWarningText(null);
+        if (!controller.hasVariableField(selected)) {
+          selected.setWarningText(null);
+        }
       } else {
-        if (selected != null && controller.isUserGenShadowBlock(selected.id)) {
+        // Selected block cannot be a valid shadow block.
 
-        // Provide warning if shadow block is moved and is no longer a valid
-        // shadow block.
-          Blockly.selected.setWarningText('Shadow blocks must be nested' +
-              ' inside other blocks to be displayed.');
+        if (selected != null && isInvalidBlockPlacement(selected)) {
+          // Selected block breaks shadow block rules.
+          // Invalid shadow block if (1) a shadow block no longer has a valid
+          // parent, or (2) a normal block is inside of a shadow block.
+
+          if (!controller.isUserGenShadowBlock(selected.id)) {
+            // Warn if a non-shadow block is nested inside a shadow block.
+            selected.setWarningText('Only shadow blocks can be nested inside '
+                + 'other shadow blocks.');
+          } else if (!controller.hasVariableField(selected)) {
+            // Warn if a shadow block is invalid only if not replacing
+            // warning for variables.
+            selected.setWarningText('Shadow blocks must be nested inside other'
+                + ' blocks.')
+          }
 
           // Give editing options so that the user can make an invalid shadow
           // block a normal block.
           document.getElementById('button_editShadow').disabled = false;
         } else {
+          // Selected block does not break any shadow block rules, but cannot
+          // be a shadow block.
+
+          // Remove possible 'invalid shadow block placement' warning.
+          if (selected != null && (!controller.hasVariableField(selected) ||
+              !controller.isUserGenShadowBlock(selected.id))) {
+            selected.setWarningText(null);
+          }
 
           // No block selected that is a shadow block or could be a valid shadow
           // block. Disable block editing.

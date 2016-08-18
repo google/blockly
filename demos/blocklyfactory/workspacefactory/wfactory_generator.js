@@ -28,6 +28,8 @@
  * @author Emma Dauterman (evd2014)
  */
 
+goog.require('FactoryUtils');
+
 /**
  * Class for a WorkspaceFactoryGenerator
  * @constructor
@@ -177,5 +179,14 @@ WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
       blocks[i].setShadow(true);
     }
   }
+};
+
+WorkspaceFactoryGenerator.prototype.defineBlocks = function(blockTypes) {
+  var blocks = [];
+  for (var i = 0; i < blockTypes.length ; i++) {
+    blocks.push(FactoryUtils.getDefinedBlock(blockTypes[i],
+        this.hiddenWorkspace));
+  }
+  return blocks;
 };
 

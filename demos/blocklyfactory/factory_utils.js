@@ -836,7 +836,7 @@ FactoryUtils.parseJsonBlockDefs = function(blockDefsString) {
  *
  * @param {!string} blockDefsString - Block definition(s).
  * @param {!string} format - Block definition format ('JSON' or 'JavaScript').
- * @return {!Element} Array of block types defined.
+ * @return {!Array<!Element>} Array of block types defined.
  */
 FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
   var blockTypes = [];

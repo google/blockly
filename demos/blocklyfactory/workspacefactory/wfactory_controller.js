@@ -34,6 +34,8 @@
  * @author Emma Dauterman (evd2014)
  */
 
+ goog.require('FactoryUtils');
+
 /**
  * Class for a WorkspaceFactoryController
  * @constructor
@@ -43,7 +45,8 @@
  * @param {!string} previewDiv Name of div to inject preview workspace in.
  */
 WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
-  var toolbox = document.getElementById(toolboxName);
+  // Toolbox XML element for the editing workspace.
+  this.toolbox = document.getElementById(toolboxName);
 
   // Workspace for user to drag blocks in for a certain category.
   this.toolboxWorkspace = Blockly.inject(toolboxDiv,
@@ -53,7 +56,7 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
        colour: '#ccc',
        snap: true},
        media: '../../media/',
-       toolbox: toolbox,
+       toolbox: this.toolbox,
      });
 
   // Workspace for user to preview their changes.
@@ -1074,5 +1077,40 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
 
   this.reinjectPreview(Blockly.Options.parseToolboxTree
       (this.generator.generateToolboxXml()));
+};
+
+/**
+ * Imports blocks from a file, generating a category in the toolbox workspace
+ * to allow the user to use imported blocks in the toolbox and in pre-loaded
+ * blocks.
+ *
+ * @param {!File} file File object for the blocks to import.
+ * @param {!string} format The format of the file to import, either 'JSON' or
+ *    'JavaScript'.
+ */
+WorkspaceFactoryController.prototype.importBlocks =
+    function(file, format) {
+  // Generate category name from file name.
+  var categoryName = file.name + ' blocks';
+
+  var controller = this;
+  var reader = new FileReader();
+
+  // To be executed when the reader has read the file.
+  reader.onload = function() {
+    // Define blocks using block types from file.
+    var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result, format);
+    var blocks = controller.generator.defineBlocks(blockTypes);
+
+    // Generate category XML and append to toolbox.
+    var categoryXml = FactoryUtils.generateCategoryXml(blocks, categoryName);
+    categoryXml.setAttribute('colour', '260');
+    controller.toolbox.appendChild(categoryXml);
+    controller.toolboxWorkspace.toolbox_.populate_(controller.toolbox);
+  }
+
+  // Read the file asynchronously.
+  reader.readAsText(file);
+
 };
 

@@ -1119,6 +1119,5 @@ WorkspaceFactoryController.prototype.importBlocks =
 
   // Read the file asynchronously.
   reader.readAsText(file);
-
 };
 

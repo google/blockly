@@ -132,6 +132,15 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
  };
 
 /**
+ * Get the configured options object to be used to inject a workspace.
+ *
+ * @return {!Object} Blockly options object.
+ */
+WorkspaceFactoryGenerator.prototype.getOptions = function() {
+  return this.model.options;
+};
+
+/**
  * Loads the given XML to the hidden workspace and sets any user-generated
  * shadow blocks to be actual shadow blocks.
  * @private

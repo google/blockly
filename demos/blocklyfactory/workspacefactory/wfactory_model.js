@@ -424,6 +424,15 @@ WorkspaceFactoryModel.prototype.setOptionsAttribute = function(name, value) {
   this.options[name] = value;
 };
 
+/**
+ * Removes an attribute of the options object.
+ *
+ * @param {!string} name Name of the attribute to delete.
+ */
+WorkspaceFactoryModel.prototype.removeOptionsAttribute = function(name) {
+  delete this.options[name];
+};
+
 /*
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.

@@ -41,8 +41,10 @@ goog.require('goog.dom.xml');
  * @constructor
  *
  * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage.
+ * @param {!WorkspaceFactoryGenerator} workspaceGenerator - Generator for
+ *    workspace factory.
  */
-BlockExporterController = function(blockLibStorage) {
+BlockExporterController = function(blockLibStorage, workspaceGenerator) {
   // BlockLibrary.Storage object containing user's saved blocks
   this.blockLibStorage = blockLibStorage;
   // Utils for generating code to export
@@ -51,6 +53,8 @@ BlockExporterController = function(blockLibStorage) {
   this.view = new BlockExporterView(
       //Xml representation of the toolbox
       this.tools.generateToolboxFromLibrary(this.blockLibStorage));
+  // Generator for workspace factory.
+  this.workspaceGenerator = workspaceGenerator;
 };
 
 /**
@@ -101,12 +105,21 @@ BlockExporterController.prototype.export = function() {
   var blockTypes = this.getSelectedBlockTypes_();
   var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
 
-  // Pull workspace-related settings from the Export Settings form.
+  // Pull toolbox settings from the Export Settings form.
   var wantToolbox = document.getElementById('toolboxCheck').checked;
+  var toolbox_filename = document.getElementById('toolbox_filename').value;
+
+  // Pull pre-loaded workspace blocks settings from Export Settings form.
   var wantPreloadedWorkspace =
       document.getElementById('preloadedWorkspaceCheck').checked;
+  var preloadedWorkspace_filename =
+      document.getElementById('preloadedWorkspace_filename').value;
+
+  // Pull workspace inject options from Export Settings form.
   var wantWorkspaceOptions =
       document.getElementById('workspaceOptsCheck').checked;
+  var workspaceOptions_filename =
+      document.getElementById('workspaceOpts_filename').value;
 
   // Pull block definition(s) settings from the Export Settings form.
   var wantBlockDef = document.getElementById('blockDefCheck').checked;
@@ -120,18 +133,48 @@ BlockExporterController.prototype.export = function() {
       'generatorStub_filename').value;
 
   if (wantToolbox) {
-    // TODO(quachtina96): create and download file once wfactory has been
-    // integrated.
+    // User wants to export toolbox.
+    if (!toolbox_filename) {
+      // User needs to enter filename.
+      alert('Please enter a filename for your toolbox download.');
+    } else {
+      // Get toolbox XML to download.
+      var toolboxXml = Blockly.Xml.domToPrettyText
+          (this.workspaceGenerator.generateToolboxXml());
+      // Download the file.
+      FactoryUtils.createAndDownloadFile(
+          toolboxXml, toolbox_filename, 'text/xml');
+    }
   }
 
   if (wantPreloadedWorkspace) {
-    // TODO(quachtina96): create and download file once wfactory has been
-    // integrated.
+    // User wants to export pre-loaded blocks.
+    if (!preloadedWorkspace_filename) {
+      // User needs to enter filename.
+      alert('Please enter a filename for your pre-loaded workspace download.');
+    } else {
+      // Get pre-loaded block XML to download.
+      var workspaceXml = Blockly.Xml.domToPrettyText
+          (this.workspaceGenerator.generateWorkspaceXml());
+      // Download the file.
+      FactoryUtils.createAndDownloadFile(
+          workspaceXml, preloadedWorkspace_filename, 'text/xml');
+    }
   }
 
   if (wantWorkspaceOptions) {
-    // TODO(quachtina96): create and download file once wfactory has been
-    // integrated.
+    // User wants to export workspace options.
+    if (!workspaceOptions_filename) {
+      // User needs to enter filename.
+      alert('Please enter a filename for your workspace options download.');
+    } else {
+      // Get Blockly options object to donwload.
+      // TODO(evd2014): Prettify JSON by parsing with regex.
+      var options = JSON.stringify(this.workspaceGenerator.getOptions());
+      // Download the file.
+      FactoryUtils.createAndDownloadFile(
+          options, workspaceOptions_filename, 'text/json');
+    }
   }
 
   if (wantBlockDef) {

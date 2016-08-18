@@ -1177,3 +1177,22 @@ WorkspaceFactoryController.prototype.importBlocks =
   reader.readAsText(file);
 };
 
+/*
+ * Updates the block library category in the toolbox workspace toolbox.
+ *
+ * @param {!Element} categoryXml XML for the block library category.
+ */
+WorkspaceFactoryController.prototype.setBlockLibCategory =
+    function(categoryXml) {
+  var blockLibCategory = document.getElementById('blockLibCategory');
+
+  // Set category id so that it can be easily replaced, and set a standard,
+  // arbitrary block library color.
+  categoryXml.setAttribute('id', 'blockLibCategory');
+  categoryXml.setAttribute('colour', 260);
+
+  // Update the toolbox and toolboxWorkspace.
+  this.toolbox.replaceChild(categoryXml, blockLibCategory);
+  this.toolboxWorkspace.updateToolbox(this.toolbox);
+};
+

@@ -1,4 +1,4 @@
-/**
+get/**
  * @license
  * Visual Blocks Editor
  *
@@ -208,8 +208,7 @@ BlockLibraryController.prototype.setBlockLibStorage
  * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
  *    that stores the blocks.
  */
-BlockLibraryController.prototype.getBlockLibStorage =
-    function() {
+BlockLibraryController.prototype.getBlockLibStorage = function() {
   return this.blockLibStorage;
 };
 

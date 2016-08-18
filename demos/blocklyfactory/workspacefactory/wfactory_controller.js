@@ -1098,15 +1098,20 @@ WorkspaceFactoryController.prototype.importBlocks =
 
   // To be executed when the reader has read the file.
   reader.onload = function() {
-    // Define blocks using block types from file.
-    var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result, format);
-    var blocks = controller.generator.defineBlocks(blockTypes);
+    try {
+      // Define blocks using block types from file.
+      var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result, format);
+      var blocks = controller.generator.defineBlocks(blockTypes);
 
-    // Generate category XML and append to toolbox.
-    var categoryXml = FactoryUtils.generateCategoryXml(blocks, categoryName);
-    categoryXml.setAttribute('colour', '260');
-    controller.toolbox.appendChild(categoryXml);
-    controller.toolboxWorkspace.toolbox_.populate_(controller.toolbox);
+      // Generate category XML and append to toolbox.
+      var categoryXml = FactoryUtils.generateCategoryXml(blocks, categoryName);
+      categoryXml.setAttribute('colour', '260');
+      controller.toolbox.appendChild(categoryXml);
+      controller.toolboxWorkspace.toolbox_.populate_(controller.toolbox);
+    } catch (e) {
+      alert('Cannot read blocks from file.');
+      window.console.log(e);
+    }
   }
 
   // Read the file asynchronously.

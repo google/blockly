@@ -417,6 +417,18 @@ Blockly.Toolbox.prototype.getClientRect = function() {
   }
 };
 
+/**
+ * Update the flyout's contents without closing it.  Should be used in response
+ * to a change in one of the dynamic categories, such as variables or
+ * procedures.
+ */
+Blockly.Toolbox.prototype.refreshSelection = function() {
+  var selectedItem = this.tree_.getSelectedItem();
+  if (selectedItem && selectedItem.blocks) {
+    this.flyout_.show(selectedItem.blocks);
+  }
+};
+
 // Extending Closure's Tree UI.
 
 /**

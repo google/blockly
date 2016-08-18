@@ -235,13 +235,16 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (this.options.zoomOptions && this.options.zoomOptions.controls) {
     bottom = this.addZoomControls_(bottom);
   }
-  Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
-  var thisWorkspace = this;
-  Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
-                     function(e) {Blockly.longStart_(e, thisWorkspace);});
-  if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
-    // Mouse-wheel.
-    Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.onMouseWheel_);
+
+  if (!this.isFlyout) {
+    Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
+    var thisWorkspace = this;
+    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
+                       function(e) {Blockly.longStart_(e, thisWorkspace);});
+    if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
+      // Mouse-wheel.
+      Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.onMouseWheel_);
+    }
   }
 
   // Determine if there needs to be a category tree, or a simple list of
@@ -631,6 +634,19 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
     Blockly.Events.fire(new Blockly.Events.Create(block));
   }
   block.select();
+};
+
+/**
+ * Create a new variable with the given name.  Update the flyout to show the new
+ *     variable immediately.
+ * TODO: #468
+ * @param {string} name The new variable's name.
+ */
+Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
+  Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
+  if (this.toolbox_ && this.toolbox_.flyout_) {
+    this.toolbox_.refreshSelection();
+  }
 };
 
 /**

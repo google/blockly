@@ -197,6 +197,10 @@ Blockly.Block.prototype.colour_ = '#000000';
  *     all children of this block.
  */
 Blockly.Block.prototype.dispose = function(healStack) {
+  if (!this.workspace) {
+    // Already deleted.
+    return;
+  }
   // Terminate onchange event calls.
   if (this.onchangeWrapper_) {
     this.workspace.removeChangeListener(this.onchangeWrapper_);

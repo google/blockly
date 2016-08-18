@@ -62,6 +62,8 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "Kartoja veiksmus, kol bus pasie
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "Kartoja veiksmus, kol sąlyga tenkinama.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "Ištrinti visus %1 blokus?";
 Blockly.Msg.DELETE_BLOCK = "Ištrinti bloką";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "Ištrinti %1 blokus";
 Blockly.Msg.DISABLE_BLOCK = "Išjungti bloką";
 Blockly.Msg.DUPLICATE_BLOCK = "Kopijuoti";
@@ -366,6 +368,7 @@ Blockly.Msg.VARIABLES_SET = "priskirk %1 = %2";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "Sukurti 'kintamasis %1'";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";  // untranslated
+Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

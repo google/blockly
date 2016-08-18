@@ -319,6 +319,20 @@ document.getElementById('button_import').addEventListener
         document.getElementById('dropdownDiv_import').classList.remove("show");
       });
 
+  document.getElementById('input_importCategoryJson').addEventListener
+      ('change',
+      function() {
+        controller.importBlocks(event.target.files[0],'JSON');
+        document.getElementById('dropdownDiv_import').classList.remove("show");
+      });
+
+  document.getElementById('input_importCategoryJs').addEventListener
+      ('change',
+      function() {
+        controller.importBlocks(event.target.files[0],'JavaScript');
+        document.getElementById('dropdownDiv_import').classList.remove("show");
+      });
+
   document.getElementById('button_clear').addEventListener
       ('click',
       function() {

@@ -28,6 +28,8 @@
  * @author Emma Dauterman (evd2014)
  */
 
+goog.require('FactoryUtils');
+
 /**
  * Class for a WorkspaceFactoryGenerator
  * @constructor
@@ -177,5 +179,22 @@ WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
       blocks[i].setShadow(true);
     }
   }
+};
+
+/**
+ * Given a set of block types, gets the Blockly.Block objects for each block
+ * type.
+ *
+ * @param {!Array<!Element>} blockTypes Array of blocks that have been defined.
+ * @return {!Array<!Blockly.Block>} Array of Blockly.Block objects corresponding
+ *    to the array of blockTypes.
+ */
+WorkspaceFactoryGenerator.prototype.getDefinedBlocks = function(blockTypes) {
+  var blocks = [];
+  for (var i = 0; i < blockTypes.length ; i++) {
+    blocks.push(FactoryUtils.getDefinedBlock(blockTypes[i],
+        this.hiddenWorkspace));
+  }
+  return blocks;
 };
 

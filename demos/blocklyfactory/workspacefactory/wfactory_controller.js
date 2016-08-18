@@ -43,7 +43,8 @@
  * @param {!string} previewDiv Name of div to inject preview workspace in.
  */
 WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
-  var toolbox = document.getElementById(toolboxName);
+  // Toolbox XML for toolboxWorkspace.
+  this.toolbox = document.getElementById(toolboxName);
 
   // Workspace for user to drag blocks in for a certain category.
   this.toolboxWorkspace = Blockly.inject(toolboxDiv,
@@ -53,7 +54,7 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
        colour: '#ccc',
        snap: true},
        media: '../../media/',
-       toolbox: toolbox,
+       toolbox: this.toolbox,
      });
 
   // Workspace for user to preview their changes.
@@ -1074,5 +1075,24 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
 
   this.reinjectPreview(Blockly.Options.parseToolboxTree
       (this.generator.generateToolboxXml()));
+};
+
+/**
+ * Updates the block library category in the toolbox workspace toolbox.
+ *
+ * @param {!Element} categoryXml XML for the block library category.
+ */
+WorkspaceFactoryController.prototype.setBlockLibCategory =
+    function(categoryXml) {
+  var blockLibCategory = document.getElementById('blockLibCategory');
+
+  // Set category id so that it can be easily replaced, and set a standard,
+  // arbitrary block library color.
+  categoryXml.setAttribute('id', 'blockLibCategory');
+  categoryXml.setAttribute('colour', 260);
+
+  // Update the toolbox and toolboxWorkspace.
+  this.toolbox.replaceChild(categoryXml, blockLibCategory);
+  this.toolboxWorkspace.updateToolbox(this.toolbox);
 };
 

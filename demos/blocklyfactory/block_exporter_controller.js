@@ -376,16 +376,18 @@ BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
   // Warn user to import blocks_compressed.js if they are using block(s)
   // Blockly's standard library.
   if (warnForStandardBlockTypes){
-    this.view.showStandardBlockWarning();
-  }
+    alert('You are using one or more blocks from ' +
+        'Blockly\'s standard library. Remember to import blocks_compressed.js');
 
+  }
   if (unstoredCustomBlockTypes.length > 0){
-    this.view.listUnstoredCustomBlocks(unstoredCustomBlockTypes);
     // Warn user to import block definitions and generator code for blocks
     // not in their Block Library nor Blockly's standard library.
-    var customWarning = '\nRemember to import block definitions and generator' +
-        'code for custom, unstored blocks.';
-    this.updateHelperText(customWarning, true);
+    var blockTypesText = unstoredCustomBlockTypes.join(', ');
+    var customWarning = 'Used Custom Blocks Not In Library: ' +
+        blockTypesText + '\n\nDon\'t forget to import block definitions and ' +
+        'generator code for custom blocks that cannot be exported from library.';
+    alert(customWarning);
   }
 };
 

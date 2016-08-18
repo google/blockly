@@ -108,31 +108,6 @@ BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
 };
 
 /**
- * Updates the helper text to warn user to import blocks_compressed.js if they
- * are using block(s) Blockly's standard library.
- */
-BlockExporterView.prototype.showStandardBlockWarning = function() {
-  var standardWarning = '\nYou are using one or more blocks from ' +
-      'Blockly\'s standard library. Remember to import blocks_compressed.js';
-  // Append warning.
-  this.updateHelperText(standardWarning, true);
-};
-
-/**
- * Updates the helper text to show list of blocks not in their Block Library nor
- * Blockly's standard library.
- *
- * @param {!Array.<string>} blockTypes - Array of custom block types used in
- *    workspace factory but not found in block library.
- */
-BlockExporterView.prototype.listUnstoredCustomBlocks = function(blockTypes) {
-  var blockTypesText = blockTypes.join(', ');
-  var customWarning = '\nUsed Custom Blocks Not In Library: ' +
-      blockTypesText;
-  this.updateHelperText(customWarning, true);
-};
-
-/**
  * Renders block of given type on selector workspace assuming block has already
  * been defined.
  *

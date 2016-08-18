@@ -1101,7 +1101,7 @@ WorkspaceFactoryController.prototype.importBlocks =
     try {
       // Define blocks using block types from file.
       var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result, format);
-      var blocks = controller.generator.defineBlocks(blockTypes);
+      var blocks = controller.generator.getDefinedBlocks(blockTypes);
 
       // Generate category XML and append to toolbox.
       var categoryXml = FactoryUtils.generateCategoryXml(blocks, categoryName);

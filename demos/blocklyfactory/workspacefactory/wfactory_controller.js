@@ -1105,9 +1105,12 @@ WorkspaceFactoryController.prototype.importBlocks =
 
       // Generate category XML and append to toolbox.
       var categoryXml = FactoryUtils.generateCategoryXml(blocks, categoryName);
-      categoryXml.setAttribute('colour', '260');
+      // Get random color for category between 0 and 360. Gives each imported
+      // category a different color.
+      var randomColor = Math.floor(Math.random() * 360);
+      categoryXml.setAttribute('colour', randomColor);
       controller.toolbox.appendChild(categoryXml);
-      controller.toolboxWorkspace.toolbox_.populate_(controller.toolbox);
+      controller.toolboxWorkspace.updateToolbox(controller.toolbox);
     } catch (e) {
       alert('Cannot read blocks from file.');
       window.console.log(e);

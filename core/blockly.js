@@ -122,7 +122,8 @@ Blockly.onTouchUpWrapper_ = null;
 
 /**
  * Which touch events are we currently paying attention to?
- * @type {?DOMString}
+ * @type {DOMString}
+ * @private
  */
 Blockly.touchIdentifier_ = null;
 
@@ -168,15 +169,14 @@ Blockly.resizeSvgContents = function(workspace) {
  */
 Blockly.checkTouchIdentifier = function(e) {
   var identifier = (e.changedTouches && e.changedTouches.item(0) &&
-      e.changedTouches.item(0).identifier != undefined) ?
-      e.changedTouches.item(0).identifier : "mouse";
-  if (Blockly.touchIdentifier_ != null &&
-      Blockly.touchIdentifier_ != undefined) {
+      e.changedTouches.item(0).identifier) || 'mouse';
+
+  if (Blockly.touchIdentifier_) {
     // We're already tracking some touch/mouse event.  Is this from the same
     // source?
     return Blockly.touchIdentifier_ == identifier;
   }
-  if (e.type == "mousedown" || e.type == "touchstart") {
+  if (e.type == 'mousedown' || e.type == 'touchstart') {
     // No identifier set yet, and this is the start of a drag.  Set it and
     // return.
     Blockly.touchIdentifier_ = identifier;
@@ -226,8 +226,11 @@ Blockly.svgResize = function(workspace) {
  * @private
  */
 Blockly.onMouseUp_ = function(e) {
-  Blockly.touchIdentifier_ = null;
   var workspace = Blockly.getMainWorkspace();
+  if (workspace.dragMode_ == Blockly.DRAG_NONE) {
+    return;
+  }
+  Blockly.touchIdentifier_ = null;
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;
   // Unbind the touch event if it exists.

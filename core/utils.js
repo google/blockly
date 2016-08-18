@@ -103,16 +103,14 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
     var events = Blockly.bindEvent_.splitEventByTouches(e);
-    for (var i = 0; i < events.length; i++) {
-      var event = events[i];
+    for (var i = 0, event; event = events[i]; i++) {
       if (!Blockly.checkTouchIdentifier(event)) {
         return;
       }
       Blockly.bindEvent_.setClientFromTouch(event);
       if (thisObject) {
         func.call(thisObject, event);
-      }
-      else {
+      } else {
         func(event);
       }
     }
@@ -154,7 +152,7 @@ if (goog.events.BrowserFeature.TOUCH_ENABLED) {
 /**
  * Set an event's clientX and clientY from its first changed touch.  Use this to
  * make a touch event work in a mouse event handler.
- * @param {Event} e A touch event.
+ * @param {!Event} e A touch event.
  */
 Blockly.bindEvent_.setClientFromTouch = function(e) {
   if (e.type.indexOf('touch') == 0) {
@@ -168,17 +166,17 @@ Blockly.bindEvent_.setClientFromTouch = function(e) {
 /**
  * Split an event into an array of events, one per changed touch or mouse
  * point.
- * @param {Event} e A mouse event or a touch event with one or more changed
+ * @param {!Event} e A mouse event or a touch event with one or more changed
  * touches.
- * @return {Array.<Event>} An array of mouse or touch events.  Each touch event
- *     will have exactly one changed touch.
+ * @return {!Array.<!Event>} An array of mouse or touch events.  Each touch
+ *     event will have exactly one changed touch.
  */
 Blockly.bindEvent_.splitEventByTouches = function(e) {
   var events = [];
   if (e.changedTouches && e.changedTouches.length > 1) {
     for (var i = 0; i < e.changedTouches.length; i++) {
       var newEvent = new TouchEvent(e.type,
-          { "changedTouches": [e.changedTouches[i]] });
+          { 'changedTouches': [e.changedTouches[i]] });
       events.push(newEvent);
     }
   } else {

@@ -373,6 +373,16 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     }
   });
 
+  // Determines if a block breaks shadow block placement rules.
+  // Breaks rules if (1) a shadow block no longer has a valid
+  // parent, or (2) a normal block is inside of a shadow block.
+  var isInvalidBlockPlacement = function(block) {
+    return ((controller.isUserGenShadowBlock(block.id) &&
+        !block.getSurroundParent()) ||
+        (!controller.isUserGenShadowBlock(block.id) && block.getSurroundParent()
+        && controller.isUserGenShadowBlock(block.getSurroundParent().id)));
+  }
+
   // Add change listeners for toolbox workspace in workspace factory.
   controller.toolboxWorkspace.addChangeListener(function(e) {
     // Listen for Blockly move and delete events to update preview.
@@ -407,12 +417,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
       } else {
         // Selected block cannot be a valid shadow block.
 
-        if (selected != null &&
-            ((controller.isUserGenShadowBlock(selected.id) &&
-            !selected.getSurroundParent()) ||
-            (!controller.isUserGenShadowBlock(selected.id) &&
-            selected.getSurroundParent() &&
-            controller.isUserGenShadowBlock(selected.getSurroundParent().id)))) {
+        if (selected != null && isInvalidBlockPlacement(selected)) {
           // Selected block breaks shadow block rules.
           // Invalid shadow block if (1) a shadow block no longer has a valid
           // parent, or (2) a normal block is inside of a shadow block.
@@ -436,7 +441,8 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
           // be a shadow block.
 
           // Remove possible 'invalid shadow block placement' warning.
-          if (selected != null && !controller.hasVariableField(selected)) {
+          if (selected != null && (!controller.hasVariableField(selected) ||
+              !controller.isUserGenShadowBlock(selected.id))) {
             selected.setWarningText(null);
           }
 

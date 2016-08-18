@@ -456,9 +456,16 @@ WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
  */
 WorkspaceFactoryController.prototype.reinjectPreview = function(tree) {
   this.previewWorkspace.dispose();
+
+  // Add the toolbox attribute for the Blockly inject call to ensure that a
+  // toolbox or single flyout is created as necessary. Remove toolbox attribute
+  // afterwards so that when options are exported, the toolbox attribute is
+  // not there (assumed that the user will want to store the toolbox XML
+  // elsewhere).
   this.model.setOptionsAttribute('toolbox', Blockly.Xml.domToPrettyText(tree));
   this.previewWorkspace = Blockly.inject('preview_blocks', this.model.options);
   this.model.removeOptionsAttribute('toolbox');
+
   Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
       this.previewWorkspace);
 };

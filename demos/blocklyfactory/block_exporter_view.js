@@ -138,11 +138,9 @@ BlockExporterView.prototype.clearSelectorWorkspace = function() {
 
 /**
  * Neatly layout the blocks in selector workspace.
- * TODO(quachtina96): Call cleanUp rather than private cleanUp_ when the new
- * changes to Blockly core are brought into the compressed version.
  */
 BlockExporterView.prototype.cleanUpSelectorWorkspace = function() {
-  this.selectorWorkspace.cleanUp_();
+  this.selectorWorkspace.cleanUp();
 };
 
 /**

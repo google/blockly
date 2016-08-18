@@ -294,6 +294,10 @@ AppController.prototype.onTab = function() {
     // Update toolbox to reflect current block library.
     this.exporter.updateToolbox();
 
+    // Need accurate state in order to know which blocks are used in workspace
+    // factory.
+    this.workspaceFactoryController.saveStateFromWorkspace();
+
     // Udpate exporter's list of the types of blocks used in workspace factory.
     var usedBlockTypes = this.workspaceFactoryController.getAllUsedBlockTypes();
     this.exporter.setUsedBlockTypes(usedBlockTypes);
@@ -303,6 +307,9 @@ AppController.prototype.onTab = function() {
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab ==  'BLOCK_FACTORY') {
+    // Save state in case you are switching from workspace factory tab.
+    this.workspaceFactoryController.saveStateFromWorkspace();
+
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');

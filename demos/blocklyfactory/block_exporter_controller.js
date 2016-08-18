@@ -332,8 +332,6 @@ BlockExporterController.prototype.getBlockLibCategory = function() {
 /**
  * Tied to the 'Add All Stored Blocks' button in the Block Exporter.
  * Adds all blocks stored in block library to the selector workspace.
- * TODO:(quachtina96): Do integration tests once the CL with the updated
- * Workspace Factory is merged.
  */
 BlockExporterController.prototype.addUsedBlocksToWorkspace =
     function() {

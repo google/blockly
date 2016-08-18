@@ -115,7 +115,7 @@ BlockExporterView.prototype.showStandardBlockWarning = function() {
   var standardWarning = '\nYou are using one or more blocks from ' +
       'Blockly\'s standard library. Remember to import blocks_compressed.js';
   // Append warning.
-  this.view.updateHelperText(standardWarning, true);
+  this.updateHelperText(standardWarning, true);
 };
 
 /**

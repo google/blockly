@@ -165,3 +165,14 @@ BlockLibraryStorage.prototype.isEmpty = function() {
 BlockLibraryStorage.prototype.getBlockXmlTextMap = function() {
   return this.blocks;
 };
+
+/**
+ * Returns boolean of whether or not a given blockType is stored in block
+ * library.
+ *
+ * @param {string} blockType - Type of block.
+ * @return {boolean} Whether or not blockType is stored in block library.
+ */
+BlockLibraryStorage.prototype.has = function(blockType) {
+  return this.blocks[blockType] ? true : false;
+};

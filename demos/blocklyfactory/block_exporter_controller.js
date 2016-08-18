@@ -279,7 +279,7 @@ BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
     var deletedBlockXml = event.oldXml;
     var blockType = deletedBlockXml.getAttribute('type');
     // Do not try to enable any blocks deleted from the block library.
-    if (this.blockLibStorage[blockType]) {
+    if (this.blockLibStorage.has(blockType)) {
       // Enable the deselected block.
       this.setBlockEnabled(blockType, true);
     }
@@ -354,7 +354,7 @@ BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
       // Remind user to import blocks_compressed.js if they are using block(s)
       // Blockly's standard library.
       if (BlockFactory.standardBlockTypes.indexOf(blockType) != -1) {
-        warnForStandardBlocksTypes = true;
+        warnForStandardBlockTypes = true;
       } else {
         unstoredCustomBlockTypes.push(blockType);
       }

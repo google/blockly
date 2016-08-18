@@ -333,25 +333,60 @@ BlockExporterController.prototype.getBlockLibCategory = function() {
  * Tied to the 'Add All Stored Blocks' button in the Block Exporter.
  * Adds all blocks stored in block library to the selector workspace.
  */
-BlockExporterController.prototype.addUsedBlocksToWorkspace =
-    function() {
+BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
   // Clear selector workspace.
   this.view.clearSelectorWorkspace();
 
-  // Add and evaluate all blocks' definitions.
+  // Get list of block types that are in block library and used in workspace
+  // factory.
   var storedBlockTypes = this.blockLibStorage.getBlockTypes();
-  var sharedTypes =
-      FactoryUtils.getSharedTypes(storedBlockTypes, this.usedBlockTypes);
-  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(sharedTypes);
+  var sharedBlockTypes = [];
+  // Keep list of custom block types used but not in library.
+  var unstoredCustomBlockTypes = [];
+  var warnForStandardBlockTypes = false;
+
+  for (var i = 0; i < this.usedBlockTypes.length; i++) {
+    var blockType = this.usedBlockTypes[i];
+    if (storedBlockTypes.indexOf(blockType) != -1) {
+      sharedBlockTypes.push(blockType);
+    } else if (
+        !(warnForStandardBlockTypes && unstoredCustomBlockTypes.length > 0)) {
+      // Remind user to import blocks_compressed.js if they are using block(s)
+      // Blockly's standard library.
+      if (BlockFactory.standardBlockTypes.indexOf(blockType) != -1) {
+        warnForStandardBlocksTypes = true;
+      } else {
+        unstoredCustomBlockTypes.push(blockType);
+      }
+    }
+  }
+
+  // Add and evaluate the shared blocks' definitions.
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(sharedBlockTypes);
   this.tools.addBlockDefinitions(blockXmlMap);
 
   // For every block, render in selector workspace.
-  for (var i = 0, blockType; blockType = sharedTypes[i]; i++) {
+  for (var i = 0, blockType; blockType = sharedBlockTypes[i]; i++) {
     this.view.addBlock(blockType);
   }
 
   // Clean up workspace.
   this.view.cleanUpSelectorWorkspace();
+
+  // Warn user to import blocks_compressed.js if they are using block(s)
+  // Blockly's standard library.
+  if (warnForStandardBlockTypes){
+    this.view.showStandardBlockWarning();
+  }
+
+  if (unstoredCustomBlockTypes.length > 0){
+    this.view.listUnstoredCustomBlocks(unstoredCustomBlockTypes);
+    // Warn user to import block definitions and generator code for blocks
+    // not in their Block Library nor Blockly's standard library.
+    var customWarning = '\nRemember to import block definitions and generator' +
+        'code for custom, unstored blocks.';
+    this.updateHelperText(customWarning, true);
+  }
 };
 
 /**

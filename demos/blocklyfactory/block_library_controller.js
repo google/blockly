@@ -1,4 +1,4 @@
-get/**
+/**
  * @license
  * Visual Blocks Editor
  *

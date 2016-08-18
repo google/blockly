@@ -307,9 +307,6 @@ AppController.prototype.onTab = function() {
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab ==  'BLOCK_FACTORY') {
-    // Save state in case you are switching from workspace factory tab.
-    this.workspaceFactoryController.saveStateFromWorkspace();
-
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');

@@ -397,7 +397,9 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
   Blockly.Events.disable();
 
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-    // If currently editing the toolbox.
+    this.previewWorkspace.updateToolbox(Blockly.Options.parseToolboxTree
+        (this.generator.generateToolboxXml()));
+    /*// If currently editing the toolbox.
     // Get toolbox XML.
     var tree = Blockly.Options.parseToolboxTree
         (this.generator.generateToolboxXml());
@@ -416,7 +418,7 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
       } else {
         this.previewWorkspace.toolbox_.populate_(tree);
       }
-    }
+    }*/
 
     // Update pre-loaded blocks in the preview workspace to make sure that
     // blocks don't get cleared when updating preview from event listeners while

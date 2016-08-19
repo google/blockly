@@ -53,20 +53,23 @@
     <div id="blocklibraryExporter_tab" class="tab taboff"> Exporter</div>
   </div>
 
-
   <!-- Exporter tab -->
   <div id="blockLibraryExporter">
     <div id="exportSelector">
       <h3> Block Selector </h3>
-      <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
-        <div class='dropdown'>
-        <button id="button_setBlocks">Select</button>
+      <p id="helperText"> Select blocks from your block library by dragging them into your workspace.
+        <br>
+        <br>
+       Use the Export Settings form to download starter code for selected blocks.
+      </p>
+      <div class='dropdown'>
+        <button id="button_setBlocks">Select From Library</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
           <a id='dropdown_addAllFromLib'>All Stored</a>
           <a id='dropdown_addAllUsed'>All Used</a>
           <a id='dropdown_clearSelected'>Remove All</a>
         </div>
-        </div>
+      </div>
 
       <!-- Inject exportSelectorWorkspace into this div -->
       <div id="selectorWorkspace"></div>
@@ -268,9 +271,9 @@
             <button id="removeBlockFromLibraryButton" title="Remove block from Block Library.">
               <span>Delete Block</span>
             </button>
-            <button id="clearBlockLibraryButton" title="Clear Block Library.">
-              <span>Clear Library</span>
-            </button>
+            <button id="createNewBlockButton" title="Create a new block.">
+              <span> Create Block</span>
+             </button>
             </td>
           </tr>
         </table>
@@ -293,8 +296,8 @@
               <button id="linkButton" title="Save and link to blocks.">
                 <img src="link.png" height="21" width="21">
               </button>
-              <button id="createNewBlockButton" title="Create a new block.">
-                <span> Create Block</span>
+              <button id="clearBlockLibraryButton" title="Clear Block Library.">
+                <span>Clear Library</span>
               </button>
               <label for="files" class="buttonStyle">
                 <span class=>Import Block Library</span>

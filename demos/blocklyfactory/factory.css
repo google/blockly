@@ -343,6 +343,7 @@ td {
 
 #tab_categoryHeader {
   border-bottom: 1px solid black;
+  height: 8px;
 }
 
 #disable_div {

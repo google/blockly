@@ -164,7 +164,7 @@ button, .buttonStyle {
   visibility: hidden;
 }
 
-#toolbox {
+.toolbox {
   display: none;
 }
 
@@ -415,5 +415,3 @@ td {
 .shadowBlock>.blocklyPathDark {
   display: none;
 }
-
->>>>>>> Starting to integrate workspacefactory

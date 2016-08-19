@@ -56,6 +56,7 @@
   <!-- Exporter tab -->
   <div id="blockLibraryExporter">
     <div id="exportSelector">
+      <br>
       <h3> Block Selector </h3>
       <p id="helperText"> Select blocks from your block library by dragging them into your workspace.
         <br>
@@ -78,6 +79,7 @@
 
     <!-- Users may customize export settings through this form -->
     <div id="exportSettings">
+      <br>
       <h3> Export Settings </h3>
       <br>
       <form id="exportSettingsForm">
@@ -118,6 +120,7 @@
         <button id="exporterSubmitButton"> Export </button>
     </div>
     <div id="exportPreview">
+      <br>
       <h3>Preview Workspace: </h3>
       <div id="exportpreview_blocks">
       </div>
@@ -363,7 +366,7 @@
       </td>
   </table>
 
-  <xml id="blockfactory_toolbox">
+  <xml id="blockfactory_toolbox" class="toolbox">
     <category name="Input">
       <block type="input_value">
         <value name="TYPE">
@@ -415,7 +418,7 @@
     </category>
   </xml>
 
-  <xml id="workspacefactory_toolbox" style="display: none">
+  <xml id="workspacefactory_toolbox" class="toolbox">
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>

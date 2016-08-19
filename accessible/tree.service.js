@@ -290,6 +290,8 @@ blocklyApp.TreeService = ng.core
               break;
             } else if (currentNode.tagName == 'INPUT') {
               currentNode.focus();
+              this.notificationsService.setStatusMessage(
+                'Type a value, then press Escape to exit');
               break;
             } else if (currentNode.tagName == 'LI') {
               continue;

@@ -46,7 +46,8 @@ blocklyApp.FieldComponent = ng.core
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)"
-                  [disabled]="disabled" tabindex="-1">
+                  [disabled]="disabled" tabindex="-1"
+                  [attr.aria-label]="optionText[optionValue] + ' Press Enter to select this value'">
             {{optionText[optionValue]}}
           </button>
         </li>

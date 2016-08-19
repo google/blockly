@@ -52,7 +52,8 @@ WorkspaceFactoryView.prototype.addCategoryRow =
   var table = document.getElementById('categoryTable');
   // Delete help label and enable category buttons if it's the first category.
   if (firstCategory) {
-    table.deleteRow(0);
+    table.rows[0].textContent = 'Categories: ';
+    table.rows[0].id = 'tab_categoryHeader';
   }
   // Create tab.
   var count = table.rows.length;
@@ -93,9 +94,9 @@ WorkspaceFactoryView.prototype.deleteElementRow = function(id, index) {
  */
 WorkspaceFactoryView.prototype.addEmptyCategoryMessage = function() {
   var table = document.getElementById('categoryTable');
-  if (table.rows.length == 0) {
-    var row = table.insertRow(0);
-    row.textContent = 'Your categories will appear here';
+  if (table.rows.length == 1) {
+    table.rows[0].textContent = 'Your categories will appear here';
+    table.rows[0].id = 'tab_help';
   }
 }
 
@@ -370,8 +371,13 @@ WorkspaceFactoryView.prototype.setModeSelection = function(mode) {
  *    WorkspaceFactoryController.MODE_PRELOAD).
  */
 WorkspaceFactoryView.prototype.updateHelpText = function(mode) {
-  var helpText = 'Drag your blocks into your ' + (mode ==
-      WorkspaceFactoryController.MODE_TOOLBOX ? 'toolbox: ' : 'pre-loaded workspace: ');
+  if (mode == WorkspaceFactoryController.MODE_TOOLBOX) {
+    var helpText = 'Drag blocks into the workspace to configure the toolbox '
+        + 'in your custom workspace.';
+  } else {
+    var helpText = 'Drag blocks into the workspace to pre-load them in your '
+        + 'custom workspace.'
+  }
   document.getElementById('editHelpText').textContent = helpText;
 };
 

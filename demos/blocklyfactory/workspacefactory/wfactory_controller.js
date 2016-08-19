@@ -828,15 +828,15 @@ WorkspaceFactoryController.prototype.importPreloadFromTree_ = function(tree) {
 }
 
 /**
- * Clears the toolbox editing area completely, deleting all categories and all
- * blocks in the model and view. Sets the mode to toolbox mode. Tied to "Clear
- * Toolbox" button.
+ * Clears the editing area completely, deleting all categories and all
+ * blocks in the model and view and all pre-loaded blocks. Tied to the
+ * "Clear" button.
  */
-WorkspaceFactoryController.prototype.clearToolbox = function() {
-  this.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+WorkspaceFactoryController.prototype.clearAll = function() {
   var hasCategories = this.model.hasElements();
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
+  this.model.savePreloadXml(Blockly.Xml.textToDom('<xml></xml>'));
   this.view.addEmptyCategoryMessage();
   this.view.updateState(-1, null);
   this.toolboxWorkspace.clear();
@@ -998,8 +998,6 @@ WorkspaceFactoryController.prototype.setMode = function(mode) {
 
   if (mode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // Open the toolbox editing space.
-    document.getElementById('editHelpText').textContent =
-        'Drag blocks into your toolbox:';
     this.model.savePreloadXml
         (Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
     this.clearAndLoadXml_(this.model.getSelectedXml());
@@ -1007,8 +1005,6 @@ WorkspaceFactoryController.prototype.setMode = function(mode) {
         (this.model.getSelected()));
   } else {
     // Open the pre-loaded workspace editing space.
-    document.getElementById('editHelpText').textContent =
-        'Drag blocks into your pre-loaded workspace:';
     if (this.model.getSelected()) {
       this.model.getSelected().saveFromWorkspace(this.toolboxWorkspace);
     }

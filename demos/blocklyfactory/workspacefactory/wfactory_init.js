@@ -233,12 +233,6 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
       function() {
         document.getElementById('dropdownDiv_export').classList.toggle("show");
         document.getElementById('dropdownDiv_import').classList.remove("show");
-      })
-
-  document.getElementById('button_print').addEventListener
-      ('click',
-      function() {
-        controller.printConfig();
       });
 
   document.getElementById('button_up').addEventListener
@@ -336,7 +330,7 @@ document.getElementById('button_import').addEventListener
   document.getElementById('button_clear').addEventListener
       ('click',
       function() {
-        controller.clearToolbox();
+        controller.clearAll();
       });
 
   document.getElementById('dropdown_addShadow').addEventListener

@@ -288,7 +288,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
       parentBlock.render(true);
     } else {
       // Top-most block.  Fire an event to allow scrollbars to resize.
-      Blockly.resizeSvgContents(this.workspace);
+      this.workspace.resizeContents();
     }
   }
   Blockly.Field.stopCache();

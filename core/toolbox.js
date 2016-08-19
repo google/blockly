@@ -269,7 +269,7 @@ Blockly.Toolbox.prototype.populate_ = function(newTree) {
   }
 
   // Fire a resize event since the toolbox may have changed width and height.
-  Blockly.resizeSvgContents(this.workspace_);
+  this.workspace_.resizeContents();
 };
 
 /**

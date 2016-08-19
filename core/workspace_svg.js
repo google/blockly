@@ -50,8 +50,10 @@ goog.require('goog.userAgent');
  */
 Blockly.WorkspaceSvg = function(options) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
-  this.getMetrics = options.getMetrics;
-  this.setMetrics = options.setMetrics;
+  this.getMetrics =
+      options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
+  this.setMetrics =
+      options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
   Blockly.ConnectionDB.init(this);
 
@@ -853,7 +855,7 @@ Blockly.WorkspaceSvg.prototype.cleanUp = function() {
   }
   Blockly.Events.setGroup(false);
   // Fire an event to allow scrollbars to resize.
-  Blockly.resizeSvgContents(this);
+  this.resizeContents();
 };
 
 /**
@@ -1273,6 +1275,126 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
   }
 };
 
+
+/**
+ * Return an object with all the metrics required to size scrollbars for a
+ * top level workspace.  The following properties are computed:
+ * .viewHeight: Height of the visible rectangle,
+ * .viewWidth: Width of the visible rectangle,
+ * .contentHeight: Height of the contents,
+ * .contentWidth: Width of the content,
+ * .viewTop: Offset of top edge of visible rectangle from parent,
+ * .viewLeft: Offset of left edge of visible rectangle from parent,
+ * .contentTop: Offset of the top-most content from the y=0 coordinate,
+ * .contentLeft: Offset of the left-most content from the x=0 coordinate.
+ * .absoluteTop: Top-edge of view.
+ * .absoluteLeft: Left-edge of view.
+ * .toolboxWidth: Width of toolbox, if it exists.  Otherwise zero.
+ * .toolboxHeight: Height of toolbox, if it exists.  Otherwise zero.
+ * .flyoutWidth: Width of the flyout if it is always open.  Otherwise zero.
+ * .flyoutHeight: Height of flyout if it is always open.  Otherwise zero.
+ * .toolboxPosition: Top, bottom, left or right.
+ * @return {Object} Contains size and position metrics of a top level workspace.
+ * @private
+ */
+Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
+  var svgSize = Blockly.svgSize(this.getParentSvg());
+  if (this.toolbox_) {
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+      svgSize.height -= this.toolbox_.getHeight();
+    } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+      svgSize.width -= this.toolbox_.getWidth();
+    }
+  }
+  // Set the margin to match the flyout's margin so that the workspace does
+  // not jump as blocks are added.
+  var MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS - 1;
+  var viewWidth = svgSize.width - MARGIN;
+  var viewHeight = svgSize.height - MARGIN;
+  var blockBox = this.getBlocksBoundingBox();
+
+  // Fix scale.
+  var contentWidth = blockBox.width * this.scale;
+  var contentHeight = blockBox.height * this.scale;
+  var contentX = blockBox.x * this.scale;
+  var contentY = blockBox.y * this.scale;
+  if (this.scrollbar) {
+    // Add a border around the content that is at least half a screenful wide.
+    // Ensure border is wide enough that blocks can scroll over entire screen.
+    var leftEdge = Math.min(contentX - viewWidth / 2,
+                            contentX + contentWidth - viewWidth);
+    var rightEdge = Math.max(contentX + contentWidth + viewWidth / 2,
+                             contentX + viewWidth);
+    var topEdge = Math.min(contentY - viewHeight / 2,
+                           contentY + contentHeight - viewHeight);
+    var bottomEdge = Math.max(contentY + contentHeight + viewHeight / 2,
+                              contentY + viewHeight);
+  } else {
+    var leftEdge = blockBox.x;
+    var rightEdge = leftEdge + blockBox.width;
+    var topEdge = blockBox.y;
+    var bottomEdge = topEdge + blockBox.height;
+  }
+  var absoluteLeft = 0;
+  if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    absoluteLeft = this.toolbox_.getWidth();
+  }
+  var absoluteTop = 0;
+  if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    absoluteTop = this.toolbox_.getHeight();
+  }
+
+  var metrics = {
+    viewHeight: svgSize.height,
+    viewWidth: svgSize.width,
+    contentHeight: bottomEdge - topEdge,
+    contentWidth: rightEdge - leftEdge,
+    viewTop: -this.scrollY,
+    viewLeft: -this.scrollX,
+    contentTop: topEdge,
+    contentLeft: leftEdge,
+    absoluteTop: absoluteTop,
+    absoluteLeft: absoluteLeft,
+    toolboxWidth: this.toolbox_ ? this.toolbox_.getWidth() : 0,
+    toolboxHeight: this.toolbox_ ? this.toolbox_.getHeight() : 0,
+    flyoutWidth: this.flyout_ ? this.flyout_.getWidth() : 0,
+    flyoutHeight: this.flyout_ ? this.flyout_.getHeight() : 0,
+    toolboxPosition: this.toolboxPosition
+  };
+  return metrics;
+};
+
+/**
+ * Sets the X/Y translations of a top level workspace to match the scrollbars.
+ * @param {!Object} xyRatio Contains an x and/or y property which is a float
+ *     between 0 and 1 specifying the degree of scrolling.
+ * @private
+ */
+Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
+  if (!this.scrollbar) {
+    throw 'Attempt to set top level workspace scroll without scrollbars.';
+  }
+  var metrics = this.getMetrics();
+  if (goog.isNumber(xyRatio.x)) {
+    this.scrollX = -metrics.contentWidth * xyRatio.x - metrics.contentLeft;
+  }
+  if (goog.isNumber(xyRatio.y)) {
+    this.scrollY = -metrics.contentHeight * xyRatio.y - metrics.contentTop;
+  }
+  var x = this.scrollX + metrics.absoluteLeft;
+  var y = this.scrollY + metrics.absoluteTop;
+  this.translate(x, y);
+  if (this.options.gridPattern) {
+    this.options.gridPattern.setAttribute('x', x);
+    this.options.gridPattern.setAttribute('y', y);
+    if (goog.userAgent.IE) {
+      // IE doesn't notice that the x/y offsets have changed.  Force an update.
+      this.updateGridPattern_();
+    }
+  }
+};
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['setVisible'] =
     Blockly.WorkspaceSvg.prototype.setVisible;

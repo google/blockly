@@ -282,7 +282,8 @@ WorkspaceFactoryView.prototype.disableWorkspace = function(disable) {
  * @return {boolean} True if the workspace should be disabled, false otherwise.
  */
 WorkspaceFactoryView.prototype.shouldDisableWorkspace = function(category) {
-  return category != null && (category.type == ListElement.TYPE_SEPARATOR ||
+  return category != null && category.type != ListElement.TYPE_FLYOUT &&
+      (category.type == ListElement.TYPE_SEPARATOR ||
       category.custom == 'VARIABLE' || category.custom == 'PROCEDURE');
 };
 

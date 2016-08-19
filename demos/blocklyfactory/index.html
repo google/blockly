@@ -76,17 +76,7 @@
     <!-- Users may customize export settings through this form -->
     <div id="exportSettings">
       <h3> Export Settings </h3>
-      <br>
       <form id="exportSettingsForm">
-        Toolbox Xml:
-        <input type="checkbox" id="toolboxCheck">
-        <br>
-        Pre-loaded Workspace:
-        <input type="checkbox" id="preloadedWorkspaceCheck">
-        <br>
-        Workspace Option(s):
-        <input type="checkbox" id="workspaceOptsCheck">
-        <br>
         <br>
         Block Definition(s):
         <input type="checkbox" id="blockDefCheck"><br>
@@ -115,9 +105,15 @@
         <button id="exporterSubmitButton"> Export </button>
     </div>
     <div id="exportPreview">
-      <h3>Preview Workspace: </h3>
-      <div id="exportpreview_blocks">
-      </div>
+      <h3>Export Preview </h3>
+        <div id="blockDefs" class="exportPreviewTextArea">
+          <p id="blockDefs_label">Block Definitions:</p>
+          <pre id="blockDefs_textArea"></pre>
+        </div>
+        <div id="genStubs" class="exportPreviewTextArea">
+          <p id="genStubs_label">Generator Stubs:</p>
+          <pre id="genStubs_textArea"></pre>
+        </div>
     </div>
   </div>
 

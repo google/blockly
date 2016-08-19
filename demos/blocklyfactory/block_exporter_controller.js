@@ -101,13 +101,6 @@ BlockExporterController.prototype.export = function() {
   var blockTypes = this.getSelectedBlockTypes_();
   var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
 
-  // Pull workspace-related settings from the Export Settings form.
-  var wantToolbox = document.getElementById('toolboxCheck').checked;
-  var wantPreloadedWorkspace =
-      document.getElementById('preloadedWorkspaceCheck').checked;
-  var wantWorkspaceOptions =
-      document.getElementById('workspaceOptsCheck').checked;
-
   // Pull block definition(s) settings from the Export Settings form.
   var wantBlockDef = document.getElementById('blockDefCheck').checked;
   var definitionFormat = document.getElementById('exportFormat').value;
@@ -118,21 +111,6 @@ BlockExporterController.prototype.export = function() {
   var language = document.getElementById('exportLanguage').value;
   var generatorStub_filename = document.getElementById(
       'generatorStub_filename').value;
-
-  if (wantToolbox) {
-    // TODO(quachtina96): create and download file once wfactory has been
-    // integrated.
-  }
-
-  if (wantPreloadedWorkspace) {
-    // TODO(quachtina96): create and download file once wfactory has been
-    // integrated.
-  }
-
-  if (wantWorkspaceOptions) {
-    // TODO(quachtina96): create and download file once wfactory has been
-    // integrated.
-  }
 
   if (wantBlockDef) {
     // User wants to export selected blocks' definitions.
@@ -259,6 +237,7 @@ BlockExporterController.prototype.onSelectBlockForExport_ = function(event) {
     this.setBlockEnabled(blockType, false);
     // Show currently selected blocks in helper text.
     this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
+    this.updatePreview();
   }
 };
 
@@ -283,6 +262,7 @@ BlockExporterController.prototype.onDeselectBlockForExport_ = function(event) {
     }
     // Show currently selected blocks in helper text.
     this.view.listSelectedBlocks(this.getSelectedBlockTypes_());
+    this.updatePreview();
   }
 };
 
@@ -325,4 +305,60 @@ BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
  */
 BlockExporterController.prototype.getBlockLibCategory = function() {
   return this.tools.generateCategoryFromBlockLib(this.blockLibStorage);
+};
+
+/**
+ * Updates preview code (block definitions and generator stubs) in the exporter
+ * preview to reflect selected blocks.
+ */
+BlockExporterController.prototype.updatePreview = function() {
+  // Get selected blocks' information.
+  var blockTypes = this.getSelectedBlockTypes_();
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
+
+  // Get block definition code in the selected format for the blocks.
+  var definitionFormat = document.getElementById('exportFormat').value;
+  var blockDefs = this.tools.getBlockDefs(blockXmlMap, definitionFormat);
+
+  // Get generator stub code in the selected language for the blocks.
+  var language = document.getElementById('exportLanguage').value;
+  var genStubs = this.tools.getGeneratorCode(blockXmlMap, language);
+
+  // Update the text areas containing the code.
+  BlockFactory.injectCode(blockDefs, 'blockDefs_textArea');
+  BlockFactory.injectCode(genStubs, 'genStubs_textArea');
+};
+
+/**
+ * Sets format of block definitions in the exporter preview to the format
+ * selected by the user.
+ */
+BlockExporterController.prototype.updateBlockDefsFormat = function() {
+  // Get selected blocks' information.
+  var blockTypes = this.getSelectedBlockTypes_();
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
+
+  // Get block definition code in the selected format for the blocks.
+  var definitionFormat = document.getElementById('exportFormat').value;
+  var blockDefs = this.tools.getBlockDefs(blockXmlMap, definitionFormat);
+
+  // Update the text area containing the code.
+  BlockFactory.injectCode(blockDefs, 'blockDefs_textArea');
+};
+
+/**
+ * Sets language of block definitions in the exporter preview to the format
+ * selected by the user.
+ */
+BlockExporterController.prototype.updateGenStubsLanguage = function() {
+  // Get selected blocks' information.
+  var blockTypes = this.getSelectedBlockTypes_();
+  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
+
+  // Get generator stub code in the selected language for the blocks.
+  var language = document.getElementById('exportLanguage').value;
+  var genStubs = this.tools.getGeneratorCode(blockXmlMap, language);
+
+  // Update the text area containing the code.
+  BlockFactory.injectCode(genStubs, 'genStubs_textArea');
 };

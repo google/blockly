@@ -307,6 +307,9 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
     // Update category editing buttons.
     this.view.updateState(this.model.getIndexByElementId
         (this.model.getSelectedId()), this.model.getSelected());
+  } else {
+    // Update category editing buttons for no categories.
+    this.view.updateState(-1, null);
   }
 };
 

@@ -87,7 +87,7 @@ BlockFactory.oldDir = null;
  * @param {string} code Lines of code.
  * @param {string} id ID of <pre> element to inject into.
  */
-BlockFactory.injectCode = function(code, id) {
+FactoryUtils.injectCode = function(code, id) {
   var pre = document.getElementById(id);
   pre.textContent = code;
   code = pre.innerHTML;
@@ -135,7 +135,7 @@ BlockFactory.updateLanguage = function() {
   var format = document.getElementById('format').value;
   var code = FactoryUtils.getBlockDefinition(blockType, rootBlock, format,
       BlockFactory.mainWorkspace);
-  BlockFactory.injectCode(code, 'languagePre');
+  FactoryUtils.injectCode(code, 'languagePre');
   BlockFactory.updatePreview();
 };
 
@@ -146,7 +146,7 @@ BlockFactory.updateLanguage = function() {
 BlockFactory.updateGenerator = function(block) {
   var language = document.getElementById('language').value;
   var generatorStub = FactoryUtils.getGeneratorStub(block, language);
-  BlockFactory.injectCode(generatorStub, 'generatorPre');
+  FactoryUtils.injectCode(generatorStub, 'generatorPre');
 };
 
 /**

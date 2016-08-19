@@ -232,7 +232,6 @@ WorkspaceFactoryController.prototype.removeElement = function() {
     // when there are no categories.
     this.allowToSetDefaultOptions();
   }
-
   // Update preview.
   this.updatePreview();
 };
@@ -288,12 +287,6 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
     this.view.setCategoryTabSelection(this.model.getSelectedId(), false);
   }
 
-  // If switching from a separator, enable workspace in view.
-  if (this.model.getSelectedId() != null && this.model.getSelected().type ==
-      ListElement.TYPE_SEPARATOR) {
-    this.view.disableWorkspace(false);
-  }
-
   // If switching to another category, set category selection in the model and
   // view.
   if (id != null) {
@@ -305,16 +298,16 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
 
     // Selects the next tab.
     this.view.setCategoryTabSelection(id, true);
+
+    // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
+    this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
+          (this.toolboxWorkspace.getAllBlocks()));
+    this.toolboxWorkspace.cleanUp();
+
+    // Update category editing buttons.
+    this.view.updateState(this.model.getIndexByElementId
+        (this.model.getSelectedId()), this.model.getSelected());
   }
-
-  // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
-  this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
-        (this.toolboxWorkspace.getAllBlocks()));
-  this.toolboxWorkspace.cleanUp();
-
-  // Update category editing buttons.
-  this.view.updateState(this.model.getIndexByElementId
-      (this.model.getSelectedId()), this.model.getSelected());
 };
 
 /**
@@ -608,7 +601,7 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
   // Switch to loaded category.
   this.switchElement(copy.id);
   // Convert actual shadow blocks to user-generated shadow blocks.
-  this.convertShadowBlocks_();
+  this.convertShadowBlocks();
   // Save state from workspace before updating preview.
   this.saveStateFromWorkspace();
   if (isFirstCategory) {

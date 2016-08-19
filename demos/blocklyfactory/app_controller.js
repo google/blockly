@@ -336,7 +336,6 @@ AppController.prototype.styleTabs_ = function() {
  */
 AppController.prototype.assignExporterClickHandlers = function() {
   var self = this;
-  // Export blocks when the user submits the export settings.
   document.getElementById('button_setBlocks').addEventListener('click',
       function() {
         document.getElementById('dropdownDiv_setBlocks').classList.toggle("show");
@@ -359,6 +358,51 @@ AppController.prototype.assignExporterClickHandlers = function() {
         self.exporter.addAllBlocksToWorkspace();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
+};
+
+/**
+ * Assign change listeners for the exporter. These allow for the dynamic update
+ * of the exporter preview.
+ */
+AppController.prototype.assignExporterChangeListeners = function() {
+  var self = this;
+
+  // Select the block definitions and generator stubs on default.
+  document.getElementById('blockDefCheck').checked = true;
+  document.getElementById('genStubCheck').checked = true;
+  // Checking the block definitions checkbox displays preview of code to export.
+  document.getElementById('blockDefCheck').addEventListener('change',
+      function(e) {
+        document.getElementById('blockDefs_label').style.display =
+            document.getElementById('blockDefCheck').checked ?
+            'block' : 'none';
+        document.getElementById('blockDefs_textArea').style.display =
+            document.getElementById('blockDefCheck').checked ?
+            'block' : 'none';
+      });
+
+  document.getElementById('exportFormat').addEventListener('change',
+      function(e) {
+        self.exporter.updateBlockDefsFormat();
+      });
+
+  // Checking the generator stub checkbox displays preview of code to export.
+  document.getElementById('genStubCheck').addEventListener('change',
+      function(e) {
+        document.getElementById('genStubs_label').style.display =
+            document.getElementById('genStubCheck').checked ?
+            'block' : 'none';
+        document.getElementById('genStubs_textArea').style.display =
+            document.getElementById('genStubCheck').checked ?
+            'block' : 'none';
+      });
+
+  document.getElementById('exportLanguage').addEventListener('change',
+      function(e) {
+        self.exporter.updateGenStubsLanguage();
+      });
+
+  self.exporter.addChangeListenersToSelectorWorkspace();
 };
 
 /**
@@ -508,7 +552,8 @@ AppController.prototype.init = function() {
   // Add tab handlers for switching between Block Factory and Block Exporter.
   this.addTabHandlers(this.tabMap);
 
-  this.exporter.addChangeListenersToSelectorWorkspace();
+  // Assign exporter change listeners.
+  this.assignExporterChangeListeners();
 
   // Create the root block on Block Factory main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

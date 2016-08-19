@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly Demo: Blockly Factory</title>
+  <script src="/storage.js"></script>
   <script src="../../blockly_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
   <script src="../../msg/messages.js"></script>
@@ -16,7 +17,6 @@
   <script src="workspacefactory/wfactory_generator.js"></script>
   <script src="workspacefactory/wfactory_init.js"></script>
   <script src="workspacefactory/standard_categories.js"></script>
-  <script src="/storage.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
   <script src="factory_utils.js"></script>
   <script src="factory.js"></script>
@@ -76,17 +76,7 @@
     <!-- Users may customize export settings through this form -->
     <div id="exportSettings">
       <h3> Export Settings </h3>
-      <br>
       <form id="exportSettingsForm">
-        Toolbox Xml:
-        <input type="checkbox" id="toolboxCheck">
-        <br>
-        Pre-loaded Workspace:
-        <input type="checkbox" id="preloadedWorkspaceCheck">
-        <br>
-        Workspace Option(s):
-        <input type="checkbox" id="workspaceOptsCheck">
-        <br>
         <br>
         Block Definition(s):
         <input type="checkbox" id="blockDefCheck"><br>
@@ -115,9 +105,15 @@
         <button id="exporterSubmitButton"> Export </button>
     </div>
     <div id="exportPreview">
-      <h3>Preview Workspace: </h3>
-      <div id="exportpreview_blocks">
-      </div>
+      <h3>Export Preview </h3>
+        <div id="blockDefs" class="exportPreviewTextArea">
+          <p id="blockDefs_label">Block Definitions:</p>
+          <pre id="blockDefs_textArea"></pre>
+        </div>
+        <div id="genStubs" class="exportPreviewTextArea">
+          <p id="genStubs_label">Generator Stubs:</p>
+          <pre id="genStubs_textArea"></pre>
+        </div>
     </div>
   </div>
 

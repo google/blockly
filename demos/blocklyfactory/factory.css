@@ -20,6 +20,7 @@
 
 html, body {
   height: 100%;
+  min-height: 375px;
 }
 
 body {
@@ -199,18 +200,37 @@ button, .buttonStyle {
   float: left;
   overflow: hidden;
   padding-left: 16px;
-  width: 30%;
+  width: 20%;
 }
 
 #exporterHiddenWorkspace {
  display: none;
 }
 
-#exporterPreview {
+#exportPreview {
   float: right;
-  padding: 16px;
+  height: 90%;
   overflow: hidden;
-  background-color: blue;
+  width: 45%;
+}
+
+#blockDefs .exportPreviewTextArea, #genStubs .exportPreviewTextArea {
+  display: block;
+  float: right;
+  height: 40%;
+  width: 100%;
+}
+
+#genStubs_textArea, #blockDefs_textArea {
+  display: block;
+  height: 80%;
+  max-height: 300px;
+  overflow: scroll;
+  position: static;
+}
+
+#blockDefs_label, #genStubs_label {
+  display: block;
 }
 
 /* Tabs */

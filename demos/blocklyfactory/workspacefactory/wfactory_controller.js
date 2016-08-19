@@ -35,6 +35,7 @@
  */
 
  goog.require('FactoryUtils');
+ goog.require('StandardCategories');
 
 /**
  * Class for a WorkspaceFactoryController
@@ -555,8 +556,7 @@ WorkspaceFactoryController.prototype.changeSelectedCategoryColor =
 /**
  * Tied to the "Standard Category" dropdown option, this function prompts
  * the user for a name of a standard Blockly category (case insensitive) and
- * loads it as a new category and switches to it. Leverages standardCategories
- * map in standard_categories.js.
+ * loads it as a new category and switches to it. Leverages StandardCategories.
  */
 WorkspaceFactoryController.prototype.loadCategory = function() {
   // Prompt user for the name of the standard category to load.
@@ -580,7 +580,7 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
     return;
   }
   // Check if the user can create a category with that name.
-  var standardCategory = this.standardCategories[name.toLowerCase()]
+  var standardCategory = StandardCategories.categoryMap[name.toLowerCase()]
   if (this.model.hasCategoryByName(standardCategory.name)) {
     alert('You already have a category with the name ' + standardCategory.name
         + '. Rename your category and try again.');
@@ -621,11 +621,11 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
  * category (case insensitive).
  *
  * @param {string} name The name of the category that should be checked if it's
- * in standardCategories
+ * in StandardCategories categoryMap
  * @return {boolean} True if name is a standard category name, false otherwise.
  */
 WorkspaceFactoryController.prototype.isStandardCategoryName = function(name) {
-  for (var category in this.standardCategories) {
+  for (var category in StandardCategories.categoryMap) {
     if (name.toLowerCase() == category) {
       return true;
     }

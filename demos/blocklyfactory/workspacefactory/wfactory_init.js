@@ -235,12 +235,6 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         document.getElementById('dropdownDiv_load').classList.remove("show");
         document.getElementById('dropdownDiv_importBlocks').classList.
             remove("show");
-      })
-
-  document.getElementById('button_print').addEventListener
-      ('click',
-      function() {
-        controller.printConfig();
       });
 
   document.getElementById('button_up').addEventListener
@@ -351,11 +345,11 @@ document.getElementById('button_importBlocks').addEventListener
   document.getElementById('button_clear').addEventListener
       ('click',
       function() {
-        controller.clearToolbox();
         document.getElementById('dropdownDiv_importBlocks').classList.
             remove("show");
         document.getElementById('dropdownDiv_export').classList.remove("show");
         document.getElementById('dropdownDiv_load').classList.remove("show");
+        controller.clearAll();
       });
 
   document.getElementById('dropdown_addShadow').addEventListener

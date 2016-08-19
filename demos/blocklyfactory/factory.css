@@ -273,8 +273,8 @@ aside {
 }
 
 td.tabon {
-  border-bottom-color: #ddd !important;
-  background-color: #ddd;
+  border-bottom-color: #ccc !important;
+  background-color: #ccc;
   padding: 5px 19px;
 }
 
@@ -305,9 +305,15 @@ td {
   z-index: -1;
 }
 
+#workspaceTabs {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  display: table;
+}
+
 #toolbox_section {
   height: 480px;
-  width: 80%;
+  width: 60%;
   position: relative;
 }
 
@@ -322,15 +328,21 @@ td {
 }
 
 #createDiv {
-  width: 70%;
+  padding: 0.5%;
+  width: 60%;
 }
 
 #previewDiv {
-  width: 30%;
+  padding: 0.5%;
+  width: 36%;
 }
 
 #toolbox_div, #preload_div {
-  width: 20%;
+  width: 40%;
+}
+
+#tab_categoryHeader {
+  border-bottom: 1px solid black;
 }
 
 #disable_div {

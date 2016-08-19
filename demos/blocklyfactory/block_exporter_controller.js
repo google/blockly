@@ -345,19 +345,11 @@ BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
   var unstoredCustomBlockTypes = [];
   var warnForStandardBlockTypes = false;
 
-  for (var i = 0; i < this.usedBlockTypes.length; i++) {
-    var blockType = this.usedBlockTypes[i];
+  for (var i = 0, blockType; blockType = this.usedBlockTypes[i]; i++) {
     if (storedBlockTypes.indexOf(blockType) != -1) {
       sharedBlockTypes.push(blockType);
-    } else if (
-        !(warnForStandardBlockTypes && unstoredCustomBlockTypes.length > 0)) {
-      // Remind user to import blocks_compressed.js if they are using block(s)
-      // Blockly's standard library.
-      if (BlockFactory.standardBlockTypes.indexOf(blockType) != -1) {
-        warnForStandardBlockTypes = true;
-      } else {
+    } else if (BlockFactory.standardBlockTypes.indexOf(blockType) == -1) {
         unstoredCustomBlockTypes.push(blockType);
-      }
     }
   }
 
@@ -373,20 +365,14 @@ BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
   // Clean up workspace.
   this.view.cleanUpSelectorWorkspace();
 
-  // Warn user to import blocks_compressed.js if they are using block(s)
-  // Blockly's standard library.
-  if (warnForStandardBlockTypes){
-    alert('You are using one or more blocks from ' +
-        'Blockly\'s standard library. Remember to import blocks_compressed.js');
-
-  }
   if (unstoredCustomBlockTypes.length > 0){
     // Warn user to import block definitions and generator code for blocks
     // not in their Block Library nor Blockly's standard library.
     var blockTypesText = unstoredCustomBlockTypes.join(', ');
-    var customWarning = 'Used Custom Blocks Not In Library: ' +
-        blockTypesText + '\n\nDon\'t forget to import block definitions and ' +
-        'generator code for custom blocks that cannot be exported from library.';
+    var customWarning = 'Custom blocks used in workspace factory but not ' +
+        'stored in block library:\n ' + blockTypesText +
+        '\n\nDon\'t forget to include block definitions and generator code ' +
+        'for these blocks.';
     alert(customWarning);
   }
 };

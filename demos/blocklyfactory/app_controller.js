@@ -298,7 +298,7 @@ AppController.prototype.onTab = function() {
     // factory.
     this.workspaceFactoryController.saveStateFromWorkspace();
 
-    // Udpate exporter's list of the types of blocks used in workspace factory.
+    // Update exporter's list of the types of blocks used in workspace factory.
     var usedBlockTypes = this.workspaceFactoryController.getAllUsedBlockTypes();
     this.exporter.setUsedBlockTypes(usedBlockTypes);
 

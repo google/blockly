@@ -224,10 +224,6 @@ Blockly.ZoomControls.prototype.position = function() {
   } else {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
         this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
-
-    if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
-      this.left_ -= metrics.flyoutWidth;
-    }
   }
   this.top_ = metrics.viewHeight + metrics.absoluteTop -
       this.HEIGHT_ - this.bottom_;

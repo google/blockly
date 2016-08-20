@@ -413,7 +413,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
   }
 };
 
-/**
+/*
  * When something in Blockly's workspace changes, call a function.
  * @param {!Function} func Function to call.
  * @return {!Array.<!Array>} Opaque data that can be passed to

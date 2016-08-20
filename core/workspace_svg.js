@@ -1307,6 +1307,14 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
         this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
       svgSize.width -= this.toolbox_.getWidth();
     }
+  } else if (this.flyout_) {
+    if (this.toolboxPosition == Blockly.TOOLBOX_AT_TOP ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
+      svgSize.height -= this.flyout_.getHeight();
+    } else if (this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT ||
+        this.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+      svgSize.width -= this.flyout_.getWidth();
+    }
   }
   // Set the margin to match the flyout's margin so that the workspace does
   // not jump as blocks are added.
@@ -1340,10 +1348,14 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
   var absoluteLeft = 0;
   if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
     absoluteLeft = this.toolbox_.getWidth();
+  } else if (this.flyout_ && this.toolboxPosition == Blockly.TOOLBOX_AT_LEFT) {
+    absoluteLeft = this.flyout_.getWidth();
   }
   var absoluteTop = 0;
   if (this.toolbox_ && this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
     absoluteTop = this.toolbox_.getHeight();
+  } else if (this.flyout_ && this.toolboxPosition == Blockly.TOOLBOX_AT_TOP) {
+    absoluteTop = this.flyout_.getHeight();
   }
 
   var metrics = {

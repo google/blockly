@@ -435,15 +435,19 @@ Blockly.Flyout.prototype.position = function() {
       targetWorkspaceMetrics.viewHeight);
 
   var x = targetWorkspaceMetrics.absoluteLeft;
+  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+    x -= this.width;
+  }
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     x += targetWorkspaceMetrics.viewWidth;
-    x -= this.width_;
   }
 
   var y = targetWorkspaceMetrics.absoluteTop;
+  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+    y -= this.height;
+  }
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
     y += targetWorkspaceMetrics.viewHeight;
-    y -= this.height_;
   }
 
   this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');

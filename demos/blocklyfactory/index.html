@@ -19,6 +19,7 @@
   <script src="/storage.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
   <script src="factory_utils.js"></script>
+  <script src="block_option.js"></script>
   <script src="factory.js"></script>
   <script src="block_library_view.js"></script>
   <script src="block_library_storage.js"></script>
@@ -38,7 +39,7 @@
       blocklyFactory.init();
     };
     window.addEventListener('load', init);
-</script>
+  </script>
 </head>
 <body>
 <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
@@ -69,10 +70,7 @@
           <a id='dropdown_clearSelected'>Remove All</a>
         </div>
       </div>
-
-      <!-- Inject exportSelectorWorkspace into this div -->
-      <div id="selectorWorkspace"></div>
-
+      <div id="blockSelector"></div>
     </div>
 
     <!-- Users may customize export settings through this form -->
@@ -81,6 +79,7 @@
       <h3> Export Settings </h3>
       <br>
       <form id="exportSettingsForm">
+
         <div id="selectedBlocksTextContainer">
           <p>Currently Selected:</p>
           <p id="selectedBlocksText"></p>

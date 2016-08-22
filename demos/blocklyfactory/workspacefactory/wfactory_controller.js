@@ -366,7 +366,7 @@ WorkspaceFactoryController.prototype.exportOptionsFile = function() {
   this.generateNewOptions();
   // TODO(evd2014): Use Regex to prettify JSON generated.
   var data = new Blob([JSON.stringify(this.model.options)],
-      {type: 'text/plain'});
+      {type: 'text/javascript'});
   this.view.createAndDownloadFile(fileName, data);
 };
 

@@ -126,16 +126,22 @@
   <div id="workspaceFactoryContent">
     <p>
         <div class="dropdown">
-        <button id="button_import">Import</button>
-          <div id="dropdownDiv_import" class="dropdown-content">
-            <input type="file" id="input_importToolbox" class="inputfile"></input>
-            <label for="input_importToolbox">Toolbox</label>
-            <input type="file" id="input_importPreload" class="inputfile"</input>
-            <label for="input_importPreload">Workspace Blocks</label>
-            <input type="file" id="input_importCategoryJson" class="inputfile"</input>
-            <label for="input_importCategoryJson">Blocks from JSON</label>
-            <input type="file" id="input_importCategoryJs" class="inputfile"</input>
-            <label for="input_importCategoryJs">Blocks from Javascript</label>
+        <button id="button_importBlocks">Import Custom Blocks</button>
+          <div id="dropdownDiv_importBlocks" class="dropdown-content">
+            <input type="file" id="input_importBlocksJson" accept=".js, .json, .txt" class="inputfile"</input>
+            <label for="input_importBlocksJson">from JSON</label>
+            <input type="file" id="input_importBlocksJs" accept=".js, .txt" class="inputfile"</input>
+            <label for="input_importBlocksJs">from Javascript</label>
+          </div>
+        </div>
+
+        <div class="dropdown">
+        <button id="button_load">Load to Edit</button>
+          <div id="dropdownDiv_load" class="dropdown-content">
+            <input type="file" id="input_loadToolbox" accept=".xml" class="inputfile"></input>
+            <label for="input_loadToolbox">Toolbox</label>
+            <input type="file" id="input_loadPreload" accept=".xml" class="inputfile"</input>
+            <label for="input_loadPreload">Workspace Blocks</label>
           </div>
         </div>
 

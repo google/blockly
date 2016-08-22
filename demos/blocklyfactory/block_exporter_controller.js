@@ -141,11 +141,12 @@ BlockExporterController.prototype.export = function() {
       alert('Please enter a filename for your block definition(s) download.');
     } else {
       // Get block definition code in the selected format for the blocks.
+      console.log(definitionFormat);
       var blockDefs = this.tools.getBlockDefs(blockXmlMap,
           definitionFormat);
       // Download the file.
       FactoryUtils.createAndDownloadFile(
-          blockDefs, blockDef_filename, definitionFormat);
+          blockDefs, blockDef_filename, 'javascript');
     }
   }
 
@@ -158,9 +159,15 @@ BlockExporterController.prototype.export = function() {
       // Get generator stub code in the selected language for the blocks.
       var genStubs = this.tools.getGeneratorCode(blockXmlMap,
           language);
+      // Get the correct file extension.
+      if (language == 'JavaScript') {
+        var fileType = 'javascript';
+      } else {
+        var fileType = 'plain';
+      }
       // Download the file.
       FactoryUtils.createAndDownloadFile(
-          genStubs, generatorStub_filename, language);
+          genStubs, generatorStub_filename, fileType);
     }
   }
 

@@ -466,6 +466,34 @@ AppController.prototype.initializeBlocklyStorage = function() {
 };
 
 /**
+ * Adds keydown event listener for workspace factory. Needs to be initialized
+ * in app controller instead of workspace factory init so that it can
+ * check the selectedTab in app controller.
+ */
+AppController.prototype.addWorkspaceFactoryKeyEventListeners = function() {
+  var self = this;
+  var controller = this.workspaceFactoryController;
+
+  // Use up and down arrow keys to move categories.
+  window.addEventListener('keydown', function(e) {
+    // Don't let arrow keys have any effect if not in Workspace Factory
+    // editing the toolbox.
+    if (self.selectedTab != 'WORKSPACE_FACTORY' || controller.selectedMode
+        != WorkspaceFactoryController.MODE_TOOLBOX) {
+      return;
+    }
+
+    if (e.keyCode == 38) {
+      // Arrow up.
+      controller.moveElement(-1);
+    } else if (e.keyCode == 40) {
+      // Arrow down.
+      controller.moveElement(1);
+    }
+  });
+}
+
+/**
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
@@ -524,6 +552,7 @@ AppController.prototype.init = function() {
 
   // Workspace Factory init.
   WorkspaceFactoryInit.initWorkspaceFactory(this.workspaceFactoryController);
+  this.addWorkspaceFactoryKeyEventListeners();
 };
 
 

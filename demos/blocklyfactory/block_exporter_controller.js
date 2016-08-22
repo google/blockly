@@ -141,10 +141,9 @@ BlockExporterController.prototype.export = function() {
       alert('Please enter a filename for your block definition(s) download.');
     } else {
       // Get block definition code in the selected format for the blocks.
-      console.log(definitionFormat);
       var blockDefs = this.tools.getBlockDefs(blockXmlMap,
           definitionFormat);
-      // Download the file.
+      // Download the file, using .js file ending for JSON or Javascript.
       FactoryUtils.createAndDownloadFile(
           blockDefs, blockDef_filename, 'javascript');
     }

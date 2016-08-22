@@ -30,55 +30,39 @@
 
 goog.provide('BlockExporterView');
 
+goog.require('BlockExporterTools');
+goog.require('BlockOption');
 goog.require('goog.dom');
 
 /**
  * BlockExporter View Class
  * @constructor
  *
- * @param {Element} toolbox - Xml for the toolbox of the selector workspace.
+ * @param {!Object} blockOptions - Map of block types to BlockOption objects.
  */
-BlockExporterView = function(selectorToolbox) {
-  // Xml representation of the toolbox
-  if (selectorToolbox.hasChildNodes) {
-    this.toolbox = selectorToolbox;
-  } else {
-    // Toolbox is empty. Append dummy category to toolbox because toolbox
-    // cannot switch between category and flyout-only mode after injection.
-    var categoryElement = goog.dom.createDom('category');
-    categoryElement.setAttribute('name', 'Next Saved Block');
-    selectorToolbox.appendChild(categoryElement);
-    this.toolbox = selectorToolbox;
-  }
-  // Workspace users use to select blocks for export
-  this.selectorWorkspace =
-      Blockly.inject('exportSelector',
-      {collapse: false,
-       toolbox: this.toolbox,
-       grid:
-         {spacing: 20,
-          length: 3,
-          colour: '#ccc',
-          snap: true}
-        });
+BlockExporterView = function(blockOptions) {
+  //  Map of block types to BlockOption objects to select from.
+  this.blockOptions = blockOptions;
 };
 
 /**
- * Update the toolbox of this instance of BlockExporterView.
+ * Set the block options in the selector of this instance of
+ * BlockExporterView.
  *
- * @param {Element} toolboxXml - Xml for the toolbox of the selector workspace.
+ * @param {!Object} blockOptions - Map of block types to BlockOption objects.
  */
-BlockExporterView.prototype.setToolbox = function(toolboxXml) {
-  // Parse the provided toolbox tree into a consistent DOM format.
-  this.toolbox = Blockly.Options.parseToolboxTree(toolboxXml);
+BlockExporterView.prototype.setBlockOptions = function(blockOpts) {
+  this.blockOptions = blockOpts;
 };
 
 /**
- * Renders the toolbox in the workspace. Used to update the toolbox upon
- * switching between Block Factory tab and Block Exporter Tab.
+ * Set the block options in the selector of this instance of
+ * BlockExporterView.
+ *
+ * @param {!Object} blockOptions - Map of block types to BlockOption objects.
  */
-BlockExporterView.prototype.renderToolbox = function() {
-  this.selectorWorkspace.updateToolbox(this.toolbox);
+BlockExporterView.prototype.getBlockOptions = function(blockOpts) {
+  this.blockOptions = blockOpts;
 };
 
 /**
@@ -99,24 +83,20 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
 
 /**
  * Updates the helper text to show list of currently selected blocks.
- *
- * @param {!Array.<string>} selectedBlockTypes - Array of blocks selected in workspace.
  */
-BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
+BlockExporterView.prototype.listSelectedBlocks = function() {
+  var selectedBlockTypes = this.getSelectedBlockTypes();
   var selectedBlocksText = selectedBlockTypes.join(', ');
   this.updateHelperText('Currently Selected: ' + selectedBlocksText);
 };
 
 /**
- * Renders block of given type on selector workspace assuming block has already
- * been defined.
+ * Selects a given block type in the selector.
  *
- * @param {string} blockType - Type of block to add to selector workspce.
+ * @param {string} blockType - Type of block to selector.
  */
-BlockExporterView.prototype.addBlock = function(blockType) {
-  var newBlock = this.selectorWorkspace.newBlock(blockType);
-  newBlock.initSvg();
-  newBlock.render();
+BlockExporterView.prototype.select = function(blockType) {
+  this.blockOptions[blockType].setSelected(true);
 };
 
 /**
@@ -124,31 +104,53 @@ BlockExporterView.prototype.addBlock = function(blockType) {
  *
  * @param {!Blockly.Block} block - Type of block to add to selector workspce.
  */
-BlockExporterView.prototype.removeBlock = function(block) {
-  block.dispose();
+BlockExporterView.prototype.deselect = function(blockType) {
+  this.blockOptions[blockType].setSelected(false);
 };
 
 
 /**
- * Clears selector workspace.
+ * Deselects all blocks.
  */
-BlockExporterView.prototype.clearSelectorWorkspace = function() {
-  this.selectorWorkspace.clear();
+BlockExporterView.prototype.deselectAllBlocks = function() {
+  for (var blockType in this.blockOptions) {
+    this.deselect(blockType);
+  }
 };
 
 /**
- * Neatly layout the blocks in selector workspace.
+ * Given an array of selected blocks, selects these blocks in the view, marking
+ * the checkboxes accordingly.
+ *
+ * @param {Array.<Blockly.Block>} blockTypes - Array of block types to select.
  */
-BlockExporterView.prototype.cleanUpSelectorWorkspace = function() {
-  this.selectorWorkspace.cleanUp();
+BlockExporterView.prototype.setSelectedBlockTypes = function(blockTypes) {
+  for (var i =0, blockType; blockType = blockTypes[i]; i++) {
+    this.select(blockType);
+  }
 };
 
 /**
  * Returns array of selected blocks.
  *
- * @return {Array.<Blockly.Block>} Array of all blocks in selector workspace.
+ * @return {!Array.<!string>} Array of all selected block types.
  */
-BlockExporterView.prototype.getSelectedBlocks = function() {
-  return this.selectorWorkspace.getAllBlocks();
+BlockExporterView.prototype.getSelectedBlockTypes = function() {
+  var selectedTypes = [];
+  for (var blockType in this.blockOptions) {
+    var blockOption = this.blockOptions[blockType];
+    if (blockOption.isSelected()) {
+      selectedTypes.push(blockOption.blockType);
+    }
+  }
+  return selectedTypes;
 };
 
+/**
+ * Centers the preview block of each block option in the exporter selector.
+ */
+BlockExporterView.prototype.centerPreviewBlocks = function() {
+  for (var blockType in this.blockOptions) {
+    this.blockOptions[blockType].centerBlock();
+  }
+};

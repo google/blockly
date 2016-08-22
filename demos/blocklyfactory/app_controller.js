@@ -291,12 +291,12 @@ AppController.prototype.onTab = function() {
   this.styleTabs_();
 
   if (this.selectedTab == 'EXPORTER') {
-    // Update toolbox to reflect current block library.
-    this.exporter.updateToolbox();
-
     // Show container of exporter.
     FactoryUtils.show('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
+
+    // Update exporter's block selector to reflect current block library.
+    this.exporter.updateSelector();
 
   } else if (this.selectedTab ==  'BLOCK_FACTORY') {
     // Hide container of exporter.
@@ -466,6 +466,28 @@ AppController.prototype.initializeBlocklyStorage = function() {
 };
 
 /**
+ * Handle resizing of elements.
+ */
+AppController.prototype.onresize = function(event) {
+  // Handle resizing of Block Factory elements.
+  var expandList = [
+    document.getElementById('blockly'),
+    document.getElementById('blocklyMask'),
+    document.getElementById('preview'),
+    document.getElementById('languagePre'),
+    document.getElementById('languageTA'),
+    document.getElementById('generatorPre')
+  ];
+  for (var i = 0, expand; expand = expandList[i]; i++) {
+    expand.style.width = (expand.parentNode.offsetWidth - 2) + 'px';
+    expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
+  }
+
+  // Handle resize of Exporter block options.
+  this.exporter.view.centerPreviewBlocks();
+};
+
+/**
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
@@ -479,24 +501,11 @@ AppController.prototype.init = function() {
   this.assignLibraryClickHandlers();
   this.assignBlockFactoryClickHandlers();
 
-  // Handle resizing of Block Factory elements.
-  var expandList = [
-    document.getElementById('blockly'),
-    document.getElementById('blocklyMask'),
-    document.getElementById('preview'),
-    document.getElementById('languagePre'),
-    document.getElementById('languageTA'),
-    document.getElementById('generatorPre')
-  ];
-
-  var onresize = function(e) {
-    for (var i = 0, expand; expand = expandList[i]; i++) {
-      expand.style.width = (expand.parentNode.offsetWidth - 2) + 'px';
-      expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
-    }
-  };
-  onresize();
-  window.addEventListener('resize', onresize);
+  this.onresize();
+  self = this;
+  window.addEventListener('resize', function() {
+    self.onresize();
+  });
 
   // Inject Block Factory Main Workspace.
   var toolbox = document.getElementById('blockfactory_toolbox');
@@ -507,8 +516,6 @@ AppController.prototype.init = function() {
 
   // Add tab handlers for switching between Block Factory and Block Exporter.
   this.addTabHandlers(this.tabMap);
-
-  this.exporter.addChangeListenersToSelectorWorkspace();
 
   // Create the root block on Block Factory main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

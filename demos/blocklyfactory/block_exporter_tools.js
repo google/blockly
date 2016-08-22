@@ -31,6 +31,7 @@
 goog.provide('BlockExporterTools');
 
 goog.require('FactoryUtils');
+goog.require('BlockOption');
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
 
@@ -230,3 +231,46 @@ BlockExporterTools.prototype.generateCategoryFromBlockLib =
 
   return FactoryUtils.generateCategoryXml(blocks,'Block Library');
 };
+
+/**
+ * Generate selector dom from block library storage. For each block in the
+ * library, it has a block option, which consists of a checkbox, a label,
+ * and a fixed size preview workspace.
+ *
+ * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
+ * @param {!string} blockSelectorID - ID of the div element that will contain
+ *    the block options.
+ * @return {!Object} Map of block type to Block Option object.
+ */
+BlockExporterTools.prototype.createBlockSelectorFromLib =
+    function(blockLibStorage, blockSelectorID) {
+  // Object mapping each stored block type to XML.
+  var allBlockTypes = blockLibStorage.getBlockTypes();
+  var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
+
+  // Define the custom blocks in order to be able to create instances of
+  // them in the exporter workspace.
+  this.addBlockDefinitions(blockXmlMap);
+
+  var blockSelector = goog.dom.getElement(blockSelectorID);
+  // Clear the block selector.
+  goog.dom.removeChildren(blockSelector);
+
+  // Append each block option's dom to the selector.
+  var blockOptions = Object.create(null);
+  for (var blockType in blockXmlMap) {
+    // Get preview block's xml.
+    var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
+    var previewBlockXml = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
+
+    // Create block option, inject block into preview workspace, and append
+    // option to block selector.
+    var blockOpt = new BlockOption(blockSelector, blockType, previewBlockXml);
+    blockOpt.createDom();
+    goog.dom.appendChild(blockSelector, blockOpt.dom);
+    blockOpt.showPreviewBlock();
+    blockOptions[blockType] = blockOpt;
+  }
+  return blockOptions;
+};
+

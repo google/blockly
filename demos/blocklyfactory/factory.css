@@ -213,6 +213,46 @@ button, .buttonStyle {
   background-color: blue;
 }
 
+#blockSelector {
+  background-color: lightgrey;
+  width: 80%;
+  height: 90%;
+  overflow-y: scroll;
+  position: relative;
+}
+
+/* Exporter Block Option */
+
+.blockOption {
+  background-color: lightgrey;
+  padding-bottom: 30px;
+  padding-left: 10px;
+  width: 95%;
+}
+
+.blockOption_check_label {
+  position: relative;
+  display: none;
+}
+
+.blockOption_check {
+    float: left;
+    padding: 4px;
+}
+
+.blockOption_label {
+    float: left;
+    max-width: inherit;
+    word-wrap: break-word;
+    overflow-y: scroll;
+}
+
+.blockOption_preview {
+    height: 100px;
+    padding-top: 10px;
+    width: 90%;
+}
+
 /* Tabs */
 
 .tab {

@@ -211,7 +211,7 @@
 
       <aside id='preload_div' style='display:none'>
         <p>Configure the <a href="https://developers.google.com/blockly/guides/get-started/web">options</a> for your Blockly inject call.</p>
-        <button class="small" id="button_standardOptions">Standard Options</button>
+        <button class="small" id="button_standardOptions">Reset Options</button>
         <form id="workspace_options">
           <input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks<br>
           <input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks<br>
@@ -247,9 +247,11 @@
     </section>
 
     <aside id="previewDiv">
-      <h3>Preview</h3>
-      <p>This is what your custom workspace will look like.</p>
-      <div id="preview_blocks" class="content"></div>
+      <div id="previewBorder">
+        <h3>Preview</h3>
+        <p>This is what your custom workspace will look like.</p>
+        <div id="preview_blocks" class="content"></div>
+      </div>
     </aside>
   </div>
 

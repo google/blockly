@@ -20,6 +20,7 @@
 
 html, body {
   height: 100%;
+  min-height: 375px;
 }
 
 body {
@@ -312,7 +313,7 @@ td {
 }
 
 #toolbox_section {
-  height: 480px;
+  height: 405px;
   width: 60%;
   position: relative;
 }
@@ -333,12 +334,24 @@ td {
 }
 
 #previewDiv {
-  padding: 0.5%;
-  width: 36%;
+  border: 4px solid #eee;
+  margin-right: 0.5%;
+  width: 35%;
+}
+
+#previewBorder {
+  border: 2px solid #ddd;
+  padding: 1%;
 }
 
 #toolbox_div, #preload_div {
-  width: 40%;
+  margin-right: 5%;
+  width: 35%;
+}
+
+#workspace_options {
+  max-height: 250px;
+  overflow-y: scroll;
 }
 
 #tab_categoryHeader {

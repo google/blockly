@@ -214,7 +214,7 @@ button, .buttonStyle {
   width: 45%;
 }
 
-#blockDefs .exportPreviewTextArea, #genStubs .exportPreviewTextArea {
+.exportPreviewTextArea {
   display: block;
   float: right;
   height: 40%;

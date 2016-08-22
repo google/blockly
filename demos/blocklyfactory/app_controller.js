@@ -294,6 +294,9 @@ AppController.prototype.onTab = function() {
     // Update toolbox to reflect current block library.
     this.exporter.updateToolbox();
 
+    // Update the preview to reflect any changes made to the blocks.
+    this.exporter.updatePreview();
+
     // Show container of exporter.
     FactoryUtils.show('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');

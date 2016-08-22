@@ -52,8 +52,9 @@ WorkspaceFactoryView.prototype.addCategoryRow =
   var table = document.getElementById('categoryTable');
   // Delete help label and enable category buttons if it's the first category.
   if (firstCategory) {
-    table.rows[0].textContent = 'Categories: ';
-    table.rows[0].id = 'tab_categoryHeader';
+    var labelTab = table.rows[0].cells[0];
+    labelTab.textContent = 'Your Categories:';
+    labelTab.id = 'tab_categoryHeader';
   }
   // Create tab.
   var count = table.rows.length;
@@ -95,8 +96,9 @@ WorkspaceFactoryView.prototype.deleteElementRow = function(id, index) {
 WorkspaceFactoryView.prototype.addEmptyCategoryMessage = function() {
   var table = document.getElementById('categoryTable');
   if (table.rows.length == 1) {
-    table.rows[0].textContent = 'Your categories will appear here';
-    table.rows[0].id = 'tab_help';
+    var helpLabel = table.rows[0].cells[0];
+    helpLabel.textContent = 'Your categories will appear here';
+    helpLabel.id = 'tab_help';
   }
 }
 
@@ -218,13 +220,13 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
     throw new Error('Index out of bounds when moving tab in the view.');
   }
   if (newIndex < oldIndex) {  // Inserting before.
-    var row = table.insertRow(newIndex);
-    row.appendChild(this.tabMap[id]);
-    table.deleteRow(oldIndex + 1);
-  } else {  // Inserting after.
     var row = table.insertRow(newIndex + 1);
     row.appendChild(this.tabMap[id]);
-    table.deleteRow(oldIndex);
+    table.deleteRow(oldIndex + 2);
+  } else {  // Inserting after.
+    var row = table.insertRow(newIndex + 2);
+    row.appendChild(this.tabMap[id]);
+    table.deleteRow(oldIndex + 1);
   }
 };
 

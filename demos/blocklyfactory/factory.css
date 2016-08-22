@@ -258,8 +258,8 @@ aside {
 }
 
 td.tabon {
-  border-bottom-color: #ccc !important;
   background-color: #ccc;
+  border-bottom-color: #ccc !important;
   padding: 5px 19px;
 }
 
@@ -341,6 +341,7 @@ td {
 #tab_categoryHeader {
   border-bottom: 1px solid black;
   height: 8px;
+  padding: 5px;
 }
 
 #disable_div {

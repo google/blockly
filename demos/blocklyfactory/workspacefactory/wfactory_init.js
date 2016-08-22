@@ -368,19 +368,6 @@ document.getElementById('button_import').addEventListener
  *    factory tab.
  */
 WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
-  // Use up and down arrow keys to move categories.
-  // TODO(evd2014): When merge with next CL for editing preloaded blocks, make
-  // sure mode is toolbox.
-  window.addEventListener('keydown', function(e) {
-    if (this.selectedTab != 'WORKSPACE_FACTORY' && e.keyCode == 38) {
-      // Arrow up.
-      controller.moveElement(-1);
-    } else if (this.selectedTab != 'WORKSPACE_FACTORY' && e.keyCode == 40) {
-      // Arrow down.
-      controller.moveElement(1);
-    }
-  });
-
   // Determines if a block breaks shadow block placement rules.
   // Breaks rules if (1) a shadow block no longer has a valid
   // parent, or (2) a normal block is inside of a shadow block.

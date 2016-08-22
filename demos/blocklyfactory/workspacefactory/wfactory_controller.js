@@ -35,6 +35,7 @@
  */
 
  goog.require('FactoryUtils');
+ goog.require('StandardCategories');
 
 /**
  * Class for a WorkspaceFactoryController
@@ -232,7 +233,6 @@ WorkspaceFactoryController.prototype.removeElement = function() {
     // when there are no categories.
     this.allowToSetDefaultOptions();
   }
-
   // Update preview.
   this.updatePreview();
 };
@@ -288,12 +288,6 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
     this.view.setCategoryTabSelection(this.model.getSelectedId(), false);
   }
 
-  // If switching from a separator, enable workspace in view.
-  if (this.model.getSelectedId() != null && this.model.getSelected().type ==
-      ListElement.TYPE_SEPARATOR) {
-    this.view.disableWorkspace(false);
-  }
-
   // If switching to another category, set category selection in the model and
   // view.
   if (id != null) {
@@ -305,16 +299,19 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
 
     // Selects the next tab.
     this.view.setCategoryTabSelection(id, true);
+
+    // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
+    this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
+          (this.toolboxWorkspace.getAllBlocks()));
+    this.toolboxWorkspace.cleanUp();
+
+    // Update category editing buttons.
+    this.view.updateState(this.model.getIndexByElementId
+        (this.model.getSelectedId()), this.model.getSelected());
+  } else {
+    // Update category editing buttons for no categories.
+    this.view.updateState(-1, null);
   }
-
-  // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
-  this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
-        (this.toolboxWorkspace.getAllBlocks()));
-  this.toolboxWorkspace.cleanUp();
-
-  // Update category editing buttons.
-  this.view.updateState(this.model.getIndexByElementId
-      (this.model.getSelectedId()), this.model.getSelected());
 };
 
 /**
@@ -559,8 +556,7 @@ WorkspaceFactoryController.prototype.changeSelectedCategoryColor =
 /**
  * Tied to the "Standard Category" dropdown option, this function prompts
  * the user for a name of a standard Blockly category (case insensitive) and
- * loads it as a new category and switches to it. Leverages standardCategories
- * map in standard_categories.js.
+ * loads it as a new category and switches to it. Leverages StandardCategories.
  */
 WorkspaceFactoryController.prototype.loadCategory = function() {
   // Prompt user for the name of the standard category to load.
@@ -584,7 +580,7 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
     return;
   }
   // Check if the user can create a category with that name.
-  var standardCategory = this.standardCategories[name.toLowerCase()]
+  var standardCategory = StandardCategories.categoryMap[name.toLowerCase()]
   if (this.model.hasCategoryByName(standardCategory.name)) {
     alert('You already have a category with the name ' + standardCategory.name
         + '. Rename your category and try again.');
@@ -608,7 +604,7 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
   // Switch to loaded category.
   this.switchElement(copy.id);
   // Convert actual shadow blocks to user-generated shadow blocks.
-  this.convertShadowBlocks_();
+  this.convertShadowBlocks();
   // Save state from workspace before updating preview.
   this.saveStateFromWorkspace();
   if (isFirstCategory) {
@@ -625,11 +621,11 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
  * category (case insensitive).
  *
  * @param {string} name The name of the category that should be checked if it's
- * in standardCategories
+ * in StandardCategories categoryMap
  * @return {boolean} True if name is a standard category name, false otherwise.
  */
 WorkspaceFactoryController.prototype.isStandardCategoryName = function(name) {
-  for (var category in this.standardCategories) {
+  for (var category in StandardCategories.categoryMap) {
     if (name.toLowerCase() == category) {
       return true;
     }
@@ -1175,5 +1171,24 @@ WorkspaceFactoryController.prototype.importBlocks =
 
   // Read the file asynchronously.
   reader.readAsText(file);
+};
+
+/*
+ * Updates the block library category in the toolbox workspace toolbox.
+ *
+ * @param {!Element} categoryXml XML for the block library category.
+ */
+WorkspaceFactoryController.prototype.setBlockLibCategory =
+    function(categoryXml) {
+  var blockLibCategory = document.getElementById('blockLibCategory');
+
+  // Set category id so that it can be easily replaced, and set a standard,
+  // arbitrary block library color.
+  categoryXml.setAttribute('id', 'blockLibCategory');
+  categoryXml.setAttribute('colour', 260);
+
+  // Update the toolbox and toolboxWorkspace.
+  this.toolbox.replaceChild(categoryXml, blockLibCategory);
+  this.toolboxWorkspace.updateToolbox(this.toolbox);
 };
 

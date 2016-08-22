@@ -304,6 +304,9 @@ AppController.prototype.onTab = function() {
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab == 'WORKSPACE_FACTORY') {
+    // Update block library category.
+    var categoryXml = this.exporter.getBlockLibCategory();
+    this.workspaceFactoryController.setBlockLibCategory(categoryXml);
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     // Show workspace factory container.

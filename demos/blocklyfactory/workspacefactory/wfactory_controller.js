@@ -397,28 +397,9 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
   Blockly.Events.disable();
 
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
+    // If currently editing the toolbox.
     this.previewWorkspace.updateToolbox(Blockly.Options.parseToolboxTree
         (this.generator.generateToolboxXml()));
-    /*// If currently editing the toolbox.
-    // Get toolbox XML.
-    var tree = Blockly.Options.parseToolboxTree
-        (this.generator.generateToolboxXml());
-    // No categories, creates a simple flyout.
-    if (tree.getElementsByTagName('category').length == 0) {
-      // No categories, creates a simple flyout.
-      if (this.previewWorkspace.toolbox_) {
-        this.reinjectPreview(tree); // Switch to simple flyout, more expensive.
-      } else {
-        this.previewWorkspace.flyout_.show(tree.childNodes);
-      }
-    } else {
-      // Uses categories, creates a toolbox.
-      if (!this.previewWorkspace.toolbox_) {
-        this.reinjectPreview(tree); // Create a toolbox, more expensive.
-      } else {
-        this.previewWorkspace.toolbox_.populate_(tree);
-      }
-    }*/
 
     // Update pre-loaded blocks in the preview workspace to make sure that
     // blocks don't get cleared when updating preview from event listeners while
@@ -426,6 +407,7 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
     this.previewWorkspace.clear();
     Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
         this.previewWorkspace);
+
   } else if (this.selectedMode == WorkspaceFactoryController.MODE_PRELOAD){
     // If currently editing the pre-loaded workspace.
     this.previewWorkspace.clear();
@@ -774,8 +756,6 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
   }
   this.view.updateState(this.model.getIndexByElementId
       (this.model.getSelectedId()), this.model.getSelected());
-
-  this.saveStateFromWorkspace();
 
   this.saveStateFromWorkspace();
   // Allow the user to set default configuration options for a single flyout

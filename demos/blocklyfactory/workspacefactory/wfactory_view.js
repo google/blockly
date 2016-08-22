@@ -219,11 +219,16 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
       oldIndex >= table.rows.length) {
     throw new Error('Index out of bounds when moving tab in the view.');
   }
-  if (newIndex < oldIndex) {  // Inserting before.
+
+  // Add 1 to newIndex and oldIndex to get the row with the corresponding tab
+  // in the view to account for the help tab at position 0.
+  if (newIndex < oldIndex) {
+    // Inserting before.
     var row = table.insertRow(newIndex + 1);
     row.appendChild(this.tabMap[id]);
     table.deleteRow(oldIndex + 2);
-  } else {  // Inserting after.
+  } else {
+    // Inserting after.
     var row = table.insertRow(newIndex + 2);
     row.appendChild(this.tabMap[id]);
     table.deleteRow(oldIndex + 1);

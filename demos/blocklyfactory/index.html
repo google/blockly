@@ -55,14 +55,12 @@
 
   <!-- Exporter tab -->
   <div id="blockLibraryExporter">
+    <br>
+    <p id="helperText"> First, select blocks from your block library by dragging them into your workspace. Then, use the Export Settings form to download starter code for selected blocks.
+    </p>
     <div id="exportSelector">
       <br>
       <h3> Block Selector </h3>
-      <p id="helperText"> Select blocks from your block library by dragging them into your workspace.
-        <br>
-        <br>
-       Use the Export Settings form to download starter code for selected blocks.
-      </p>
       <div class='dropdown'>
         <button id="button_setBlocks">Select From Library</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
@@ -83,16 +81,10 @@
       <h3> Export Settings </h3>
       <br>
       <form id="exportSettingsForm">
-        Toolbox Xml:
-        <input type="checkbox" id="toolboxCheck">
-        <br>
-        Pre-loaded Workspace:
-        <input type="checkbox" id="preloadedWorkspaceCheck">
-        <br>
-        Workspace Option(s):
-        <input type="checkbox" id="workspaceOptsCheck">
-        <br>
-        <br>
+        <div id="selectedBlocksTextContainer">
+          <p>Currently Selected:</p>
+          <p id="selectedBlocksText"></p>
+        </div>
         Block Definition(s):
         <input type="checkbox" id="blockDefCheck"><br>
               Language code:

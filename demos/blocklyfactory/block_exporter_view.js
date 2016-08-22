@@ -103,8 +103,8 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
  * @param {!Array.<string>} selectedBlockTypes - Array of blocks selected in workspace.
  */
 BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
-  var selectedBlocksText = selectedBlockTypes.join(', ');
-  this.updateHelperText('Currently Selected: ' + selectedBlocksText);
+  var selectedBlocksText = selectedBlockTypes.join(",\n ");
+  goog.dom.getElement('selectedBlocksText').textContent = selectedBlocksText;
 };
 
 /**

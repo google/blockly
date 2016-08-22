@@ -53,7 +53,8 @@ AppController = function() {
 
   // Initialize Block Exporter
   this.exporter =
-      new BlockExporterController(this.blockLibraryController.storage);
+      new BlockExporterController(this.blockLibraryController.storage,
+      this.workspaceFactoryController.generator);
 
   // Map of tab type to the div element for the tab.
   this.tabMap = {
@@ -344,7 +345,6 @@ AppController.prototype.assignExporterClickHandlers = function() {
 
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
-        self.exporter.export();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
@@ -358,6 +358,11 @@ AppController.prototype.assignExporterClickHandlers = function() {
       function() {
         self.exporter.addAllBlocksToWorkspace();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
+      });
+
+  document.getElementById('exporterSubmitButton').addEventListener('click',
+      function() {
+        self.exporter.export();
       });
 };
 

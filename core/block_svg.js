@@ -276,7 +276,7 @@ Blockly.BlockSvg.terminateDrag = function() {
         Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
       // Fire an event to allow scrollbars to resize.
-      Blockly.resizeSvgContents(selected.workspace);
+      selected.workspace.resizeContents();
     }
   }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
@@ -346,7 +346,7 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
       'translate(' + (xy.x + dx) + ',' + (xy.y + dy) + ')');
   this.moveConnections_(dx, dy);
   event.recordNew();
-  Blockly.resizeSvgContents(this.workspace);
+  this.workspace.resizeContents();
   Blockly.Events.fire(event);
 };
 
@@ -1021,7 +1021,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
   Blockly.BlockSvg.superClass_.dispose.call(this, healStack);
 
   goog.dom.removeNode(this.svgGroup_);
-  Blockly.resizeSvgContents(blockWorkspace);
+  blockWorkspace.resizeContents();
   // Sever JavaScript to DOM connections.
   this.svgGroup_ = null;
   this.svgPath_ = null;

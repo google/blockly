@@ -436,7 +436,7 @@ Blockly.Flyout.prototype.position = function() {
 
   var x = targetWorkspaceMetrics.absoluteLeft;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-    x -= this.width;
+    x -= this.width_;
   }
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
     x += targetWorkspaceMetrics.viewWidth;
@@ -444,7 +444,7 @@ Blockly.Flyout.prototype.position = function() {
 
   var y = targetWorkspaceMetrics.absoluteTop;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-    y -= this.height;
+    y -= this.height_;
   }
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_BOTTOM) {
     y += targetWorkspaceMetrics.viewHeight;

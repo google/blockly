@@ -227,9 +227,6 @@ Blockly.ZoomControls.prototype.position = function() {
   }
   this.top_ = metrics.viewHeight + metrics.absoluteTop -
       this.HEIGHT_ - this.bottom_;
-  if (metrics.toolboxPosition == Blockly.TOOLBOX_AT_BOTTOM) {
-    this.top_ -= metrics.flyoutHeight;
-  }
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
 };

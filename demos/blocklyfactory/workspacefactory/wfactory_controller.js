@@ -398,8 +398,12 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
 
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // If currently editing the toolbox.
-    this.previewWorkspace.updateToolbox(Blockly.Options.parseToolboxTree
-        (this.generator.generateToolboxXml()));
+
+    // Only update the toolbox if not in read only mode.
+    if (!this.model.options['readOnly']) {
+      this.previewWorkspace.updateToolbox(Blockly.Options.parseToolboxTree
+          (this.generator.generateToolboxXml()));
+    }
 
     // Update pre-loaded blocks in the preview workspace to make sure that
     // blocks don't get cleared when updating preview from event listeners while

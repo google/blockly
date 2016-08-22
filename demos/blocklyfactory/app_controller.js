@@ -305,8 +305,9 @@ AppController.prototype.onTab = function() {
       this.selectedTab == AppController.WORKSPACE_FACTORY;
 
   if (this.selectedTab == AppController.EXPORTER) {
-    // Update toolbox to reflect current block library.
-    this.exporter.updateToolbox();
+    // Show container of exporter.
+    FactoryUtils.show('blockLibraryExporter');
+    FactoryUtils.hide('workspaceFactoryContent');
 
     // Need accurate state in order to know which blocks are used in workspace
     // factory.
@@ -316,12 +317,11 @@ AppController.prototype.onTab = function() {
     var usedBlockTypes = this.workspaceFactoryController.getAllUsedBlockTypes();
     this.exporter.setUsedBlockTypes(usedBlockTypes);
 
+    // Update exporter's block selector to reflect current block library.
+    this.exporter.updateSelector();
+
     // Update the preview to reflect any changes made to the blocks.
     this.exporter.updatePreview();
-
-    // Show container of exporter.
-    FactoryUtils.show('blockLibraryExporter');
-    FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab ==  AppController.BLOCK_FACTORY) {
     // Hide container of exporter.
@@ -368,7 +368,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
 
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
-        self.exporter.addUsedBlocksToWorkspace();
+        self.exporter.selectUsedBlocks();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
@@ -380,7 +380,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
 
   document.getElementById('dropdown_addAllFromLib').addEventListener('click',
       function() {
-        self.exporter.addAllBlocksToWorkspace();
+        self.exporter.selectAllBlocks();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
@@ -558,6 +558,28 @@ AppController.prototype.initializeBlocklyStorage = function() {
 };
 
 /**
+ * Handle resizing of elements.
+ */
+AppController.prototype.onresize = function(event) {
+  // Handle resizing of Block Factory elements.
+  var expandList = [
+    document.getElementById('blockly'),
+    document.getElementById('blocklyMask'),
+    document.getElementById('preview'),
+    document.getElementById('languagePre'),
+    document.getElementById('languageTA'),
+    document.getElementById('generatorPre')
+  ];
+  for (var i = 0, expand; expand = expandList[i]; i++) {
+    expand.style.width = (expand.parentNode.offsetWidth - 2) + 'px';
+    expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
+  }
+
+  // Handle resize of Exporter block options.
+  this.exporter.view.centerPreviewBlocks();
+};
+
+/**
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
@@ -571,24 +593,11 @@ AppController.prototype.init = function() {
   this.assignLibraryClickHandlers();
   this.assignBlockFactoryClickHandlers();
 
-  // Handle resizing of Block Factory elements.
-  var expandList = [
-    document.getElementById('blockly'),
-    document.getElementById('blocklyMask'),
-    document.getElementById('preview'),
-    document.getElementById('languagePre'),
-    document.getElementById('languageTA'),
-    document.getElementById('generatorPre')
-  ];
-
-  var onresize = function(e) {
-    for (var i = 0, expand; expand = expandList[i]; i++) {
-      expand.style.width = (expand.parentNode.offsetWidth - 2) + 'px';
-      expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
-    }
-  };
-  onresize();
-  window.addEventListener('resize', onresize);
+  this.onresize();
+  self = this;
+  window.addEventListener('resize', function() {
+    self.onresize();
+  });
 
   // Inject Block Factory Main Workspace.
   var toolbox = document.getElementById('blockfactory_toolbox');

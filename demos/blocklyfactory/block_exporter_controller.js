@@ -198,14 +198,9 @@ BlockExporterController.prototype.getBlockLibCategory = function() {
  */
 BlockExporterController.prototype.addBlockOptionSelectHandlers = function() {
   var self = this;
-  /**
-   * Click handler for a block option. Toggles whether or not it's selected and
-   * updates helper text accordingly.
-   * @private
-   *
-   * @param {!BlockOption} blockOption - A block option object belonging to the
-   * exporter's selector.
-   */
+
+  // Click handler for a block option. Toggles whether or not it's selected and
+  // updates helper text accordingly.
   var updateSelectedBlockTypes_ = function(blockOption) {
     // Toggle selected.
     blockOption.setSelected(!blockOption.isSelected());
@@ -214,14 +209,7 @@ BlockExporterController.prototype.addBlockOptionSelectHandlers = function() {
     self.view.listSelectedBlocks();
   };
 
-  /**
-   * Creates the block option select handler.
-   * @private
-   *
-   * @param {!BlockOption} blockOption - A block option object belonging to the
-   * exporter's selector.
-   * @return {!Function} The select handler for a block option.
-   */
+  // Returns a block option select handler.
   var makeBlockOptionSelectHandler_ = function(blockOption) {
     return function() {
       updateSelectedBlockTypes_(blockOption);
@@ -229,6 +217,7 @@ BlockExporterController.prototype.addBlockOptionSelectHandlers = function() {
     };
   };
 
+  // Assign a click handler to each block option.
   for (var blockType in this.blockOptions) {
     var blockOption = this.blockOptions[blockType];
     // Use an additional closure to correctly assign the tab callback.
@@ -236,7 +225,6 @@ BlockExporterController.prototype.addBlockOptionSelectHandlers = function() {
         'click', makeBlockOptionSelectHandler_(blockOption));
   }
 };
-
 
 /**
  * Tied to the 'All Used' button in the Block Exporter's 'Select' button.

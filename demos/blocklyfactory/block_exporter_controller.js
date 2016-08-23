@@ -142,10 +142,23 @@ BlockExporterController.prototype.export = function() {
  * stored in block library.
  */
 BlockExporterController.prototype.updateSelector = function() {
+  // Get previously selected block types.
+  var oldSelectedTypes = this.view.getSelectedBlockTypes();
+
+  // Generate options from block library and assign to view.
   this.blockOptions = this.tools.createBlockSelectorFromLib(
       this.blockLibStorage, this.selectorID);
   this.addBlockOptionSelectHandlers();
   this.view.setBlockOptions(this.blockOptions);
+
+  // Select all previously selected blocks.
+  for (var i = 0, blockType; blockType = oldSelectedTypes[i]; i++) {
+    if (this.blockOptions[blockType]) {
+      this.view.select(blockType);
+    }
+  }
+
+  this.view.listSelectedBlocks();
 };
 
 /**

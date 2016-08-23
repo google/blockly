@@ -707,9 +707,9 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         // Throw error if invalid mode.
         throw new Error("Unknown import mode: " + importMode);
       }
-     // } catch(e) {
-     //   alert('Cannot load XML from file.');
-     //   console.log(e);
+      } catch(e) {
+        alert('Cannot load XML from file.');
+        console.log(e);
      } finally {
       Blockly.Events.enable();
      }

@@ -19,9 +19,8 @@
  */
 
 /**
- * @fileoverview Javascript for the Block Exporter View class. Takes care of
- * generating the selector workspace through which users select blocks to
- * export.
+ * @fileoverview Javascript for the Block Exporter View class. Reads from and
+ * manages a block selector through which users select blocks to export.
  *
  * @author quachtina96 (Tina Quach)
  */
@@ -100,7 +99,7 @@ BlockExporterView.prototype.select = function(blockType) {
 };
 
 /**
- * Deletes a block from the selector workspace.
+ * Deselects a block in the selector.
  *
  * @param {!Blockly.Block} block - Type of block to add to selector workspce.
  */

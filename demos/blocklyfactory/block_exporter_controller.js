@@ -50,9 +50,9 @@ BlockExporterController = function(blockLibStorage) {
   this.selectorID = 'blockSelector';
   // Map of block types stored in block library to their corresponding Block
   // Option objects.
-  this.blockOptions = this.tools.createBlockSelectorFromLib(this.blockLibStorage,
-    this.selectorID);
-  // View provides the selector workspace and export settings UI.
+  this.blockOptions = this.tools.createBlockSelectorFromLib(
+      this.blockLibStorage, this.selectorID);
+  // View provides the block selector and export settings UI.
   this.view = new BlockExporterView(this.blockOptions);
 };
 
@@ -82,17 +82,15 @@ BlockExporterController.prototype.getBlockLibStorage =
  * Get the selected block types.
  * @private
  *
- * @return {!Array.<string>} Types of blocks in workspace.
+ * @return {!Array.<string>} Types of blocks selected.
  */
 BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
   return this.view.getSelectedBlockTypes();
 };
 
 /**
- * Get selected blocks from selector workspace, pulls info from the Export
+ * Get selected blocks from block selector, pulls info from the Export
  * Settings form in Block Exporter, and downloads code accordingly.
- *
- * TODO(quachtina96): allow export as zip.
  */
 BlockExporterController.prototype.export = function() {
   // Get selected blocks' information.
@@ -147,8 +145,8 @@ BlockExporterController.prototype.export = function() {
  * stored in block library.
  */
 BlockExporterController.prototype.updateSelector = function() {
-  this.blockOptions = this.tools.createBlockSelectorFromLib(this.blockLibStorage,
-    this.selectorID);
+  this.blockOptions = this.tools.createBlockSelectorFromLib(
+      this.blockLibStorage, this.selectorID);
   this.addBlockOptSelectHandlers();
   this.view.setBlockOptions(this.blockOptions);
 };
@@ -163,11 +161,10 @@ BlockExporterController.prototype.clearSelectedBlocks = function() {
 };
 
 /**
- * Tied to the 'Add All Stored Blocks' button in the Block Exporter.
- * Adds all blocks stored in block library to the selector workspace.
+ * Tied to the 'All Stored' button in the Block Exporter 'Select' dropdown.
+ * Selects all blocks stored in block library for export.
  */
-BlockExporterController.prototype.addAllBlocksToWorkspace = function() {
-  // For every block, render in selector workspace.
+BlockExporterController.prototype.selectAllBlocks = function() {
   var allBlockTypes = this.blockLibStorage.getBlockTypes();
   for (var i = 0, blockType; blockType = allBlockTypes[i]; i++) {
     this.view.select(blockType);
@@ -190,47 +187,46 @@ BlockExporterController.prototype.getBlockLibCategory = function() {
  */
 BlockExporterController.prototype.addBlockOptSelectHandlers = function() {
   var self = this;
+  /**
+   * Click handler for a block option. Toggles whether or not it's selected and
+   * updates helper text accordingly.
+   * @private
+   *
+   * @param {!BlockOption} blockOption - A block option object belonging to the
+   * exporter's selector.
+   */
+  var updateSelectedBlockTypes_ = function(blockOption) {
+    // Toggle selected.
+    var selected = blockOption.isSelected() ? false : true;
+    blockOption.setSelected(selected);
+
+    // Show currently selected blocks in helper text.
+    var selectedBlockTypes = self.view.getSelectedBlockTypes();
+    self.view.listSelectedBlocks(selectedBlockTypes);
+  };
+
+  /**
+   * Creates the block option select handler.
+   * @private
+   *
+   * @param {!BlockOption} blockOption - A block option object belonging to the
+   * exporter's selector.
+   * @return {!Function} The select handler for a block option.
+   */
+  var makeBlockOptSelectHandler_ = function(blockOption) {
+    return function() {
+      updateSelectedBlockTypes_(blockOption);
+      // TODO(quachtiana96): uncomment line below once CL is merged.
+      // self.updatePreview();
+    };
+  };
+
   for (var blockType in this.blockOptions) {
     var blockOption = this.blockOptions[blockType];
     // Use an additional closure to correctly assign the tab callback.
     blockOption.dom.addEventListener(
-        'click', self.makeBlockOptSelectHandler_(blockOption));
+        'click', makeBlockOptSelectHandler_(blockOption));
   }
 };
 
-/**
- * Click handler for a block option. Toggles whether or not it's selected and
- * updates helper text accordingly.
- * @private
- *
- * @param {!BlockOption} A block option object belonging to the exporter's
- *    selector.
- */
-BlockExporterController.prototype.updateSelectedBlockTypes_ =
-    function(blockOption) {
-  // Toggle selected.
-  var selected = blockOption.isSelected() ? false : true;
-  blockOption.setSelected(selected);
-
-  // Show currently selected blocks in helper text.
-  var selectedBlockTypes = this.view.getSelectedBlockTypes();
-  this.view.listSelectedBlocks(this.selectedBlockTypes);
-};
-
-/**
- * Creates the block option select handler.
- * @private
- *
- * @param {!BlockOption} A block option object belonging to the exporter's
- *    selector.
- * @return {!Function} The select handler for a block option.
- */
-BlockExporterController.prototype.makeBlockOptSelectHandler_ = function(blockOption) {
-  var self = this;
-  return function() {
-    self.updateSelectedBlockTypes_(blockOption);
-    // TODO(quachtiana96): uncomment line below once CL is merged.
-    // self.updatePreview();
-  };
-};
 

@@ -872,3 +872,4 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
 
   return blockTypes;
 };
+

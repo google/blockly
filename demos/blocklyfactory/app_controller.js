@@ -294,6 +294,14 @@ AppController.prototype.onTab = function() {
     // Update toolbox to reflect current block library.
     this.exporter.updateToolbox();
 
+    // Need accurate state in order to know which blocks are used in workspace
+    // factory.
+    this.workspaceFactoryController.saveStateFromWorkspace();
+
+    // Update exporter's list of the types of blocks used in workspace factory.
+    var usedBlockTypes = this.workspaceFactoryController.getAllUsedBlockTypes();
+    this.exporter.setUsedBlockTypes(usedBlockTypes);
+
     // Show container of exporter.
     FactoryUtils.show('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
@@ -336,7 +344,7 @@ AppController.prototype.styleTabs_ = function() {
  */
 AppController.prototype.assignExporterClickHandlers = function() {
   var self = this;
-  // Export blocks when the user submits the export settings.
+
   document.getElementById('button_setBlocks').addEventListener('click',
       function() {
         document.getElementById('dropdownDiv_setBlocks').classList.toggle("show");
@@ -344,7 +352,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
 
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
-        self.exporter.export();
+        self.exporter.addUsedBlocksToWorkspace();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
@@ -358,6 +366,12 @@ AppController.prototype.assignExporterClickHandlers = function() {
       function() {
         self.exporter.addAllBlocksToWorkspace();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
+      });
+
+  // Export blocks when the user submits the export settings.
+  document.getElementById('exporterSubmitButton').addEventListener('click',
+      function() {
+        self.exporter.export();
       });
 };
 

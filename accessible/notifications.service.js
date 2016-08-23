@@ -36,9 +36,11 @@ blocklyApp.NotificationsService = ng.core
       // operations are done in succession, both messages will be read.
       this.statusMessage_ = '';
 
+      // We need a non-zero timeout here, otherwise NVDA does not read the
+      // notification messages properly.
       var that = this;
       setTimeout(function() {
         that.statusMessage_ = newMessage;
-      });
+      }, 20);
     }
   });

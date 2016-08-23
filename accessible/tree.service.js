@@ -233,7 +233,7 @@ blocklyApp.TreeService = ng.core
         for (var i = 0; i < workspaceTreeNodes.length; i++) {
           if (workspaceTreeNodes[i].id == treeId) {
             this.notificationsService.setStatusMessage(
-                'Now in workspace component ' + (i + 1) + ' of ' +
+                'Now in workspace group ' + (i + 1) + ' of ' +
                 workspaceTreeNodes.length);
           }
         }

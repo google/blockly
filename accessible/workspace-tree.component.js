@@ -29,7 +29,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     selector: 'blockly-workspace-tree',
     template: `
     <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-workspace-block')"
+        [attr.aria-label]="getBlockDescription() + ' ' + ('WORKSPACE_BLOCK'|translate) + ' ' + ('SUBMENU_INDICATOR'|translate)"
         [attr.aria-level]="level">
       <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
 

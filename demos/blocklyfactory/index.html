@@ -164,13 +164,13 @@
           </div>
         </div>
 
-      <button id="button_print">Print Toolbox</button>
-      <button id="button_clear">Clear Toolbox</button>
+        <button id="button_clear">Clear</button>
+
     </p>
 
     <section id="createDiv">
-      <h3>Workspace Editor:</h3>
-      <p id="editHelpText">Drag blocks into your toolbox:</p>
+      <h3>Edit</h3>
+      <p id="editHelpText">Drag blocks into the workspace to configure the toolbox in your custom workspace.</p>
       <table id='workspaceTabs' style="width:auto">
         <td id="tab_toolbox" class="tabon">Toolbox</td>
         <td id="tab_preload" class="taboff">Workspace</td>
@@ -180,8 +180,8 @@
         <div id='disable_div'></div>
       </section>
       <aside id="toolbox_div">
+        <p id="categoryHeader">Your categories will appear here</p>
         <table id="categoryTable" style="width:auto">
-          <td id="tab_help">Your categories will appear here</td>
         </table>
         <p>&nbsp;</p>
 
@@ -199,7 +199,7 @@
         <button id="button_up" class="large">&#8593;</button>
         <button id="button_down" class="large">&#8595;</button>
 
-        <p>&nbsp;</p>
+        <br>
         <div class='dropdown'>
         <button id="button_editCategory">Edit Category</button>
         <div id="dropdownDiv_editCategory" class="dropdown-content">
@@ -222,7 +222,7 @@
 
       <aside id='preload_div' style='display:none'>
         <p>Configure the <a href="https://developers.google.com/blockly/guides/get-started/web">options</a> for your Blockly inject call.</p>
-        <button class="small" id="button_standardOptions">Standard Options</button>
+        <button class="small" id="button_standardOptions">Reset Options</button>
         <form id="workspace_options">
           <input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks<br>
           <input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks<br>
@@ -258,8 +258,11 @@
     </section>
 
     <aside id="previewDiv">
-      <h3>Preview Workspace:</h3>
-      <div id="preview_blocks" class="content"></div>
+      <div id="previewBorder">
+        <h3>Preview</h3>
+        <p>This is what your custom workspace will look like.</p>
+        <div id="preview_blocks" class="content"></div>
+      </div>
     </aside>
   </div>
 

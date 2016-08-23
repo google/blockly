@@ -299,8 +299,8 @@ aside {
 }
 
 td.tabon {
-  border-bottom-color: #ddd !important;
-  background-color: #ddd;
+  background-color: #ccc;
+  border-bottom-color: #ccc;
   padding: 5px 19px;
 }
 
@@ -331,9 +331,15 @@ td {
   z-index: -1;
 }
 
+#workspaceTabs {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  display: table;
+}
+
 #toolbox_section {
-  height: 480px;
-  width: 80%;
+  height: 405px;
+  width: 60%;
   position: relative;
 }
 
@@ -343,20 +349,34 @@ td {
 }
 
 #preview_blocks {
-  height: 300px;
+  height: 395px;
   width: 100%;
 }
 
 #createDiv {
-  width: 70%;
+  padding: 0.5%;
+  width: 60%;
 }
 
 #previewDiv {
-  width: 30%;
+  border: 10px solid #eee;
+  margin-right: 0.5%;
+  width: 35%;
+}
+
+#previewBorder {
+  border: 5px solid #ddd;
+  padding: 2%;
 }
 
 #toolbox_div, #preload_div {
-  width: 20%;
+  margin-right: 5%;
+  width: 35%;
+}
+
+#workspace_options {
+  max-height: 250px;
+  overflow-y: scroll;
 }
 
 #disable_div {

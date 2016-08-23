@@ -235,12 +235,6 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         document.getElementById('dropdownDiv_load').classList.remove("show");
         document.getElementById('dropdownDiv_importBlocks').classList.
             remove("show");
-      })
-
-  document.getElementById('button_print').addEventListener
-      ('click',
-      function() {
-        controller.printConfig();
       });
 
   document.getElementById('button_up').addEventListener
@@ -351,11 +345,11 @@ document.getElementById('button_importBlocks').addEventListener
   document.getElementById('button_clear').addEventListener
       ('click',
       function() {
-        controller.clearToolbox();
         document.getElementById('dropdownDiv_importBlocks').classList.
             remove("show");
         document.getElementById('dropdownDiv_export').classList.remove("show");
         document.getElementById('dropdownDiv_load').classList.remove("show");
+        controller.clearAll();
       });
 
   document.getElementById('dropdown_addShadow').addEventListener
@@ -394,13 +388,18 @@ document.getElementById('button_importBlocks').addEventListener
  */
 WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
   // Use up and down arrow keys to move categories.
-  // TODO(evd2014): When merge with next CL for editing preloaded blocks, make
-  // sure mode is toolbox.
   window.addEventListener('keydown', function(e) {
-    if (this.selectedTab != 'WORKSPACE_FACTORY' && e.keyCode == 38) {
+    // Don't let arrow keys have any effect if not in Workspace Factory
+    // editing the toolbox.
+    if (!(controller.keyEventsEnabled && controller.selectedMode
+        == WorkspaceFactoryController.MODE_TOOLBOX)) {
+      return;
+    }
+
+    if (e.keyCode == 38) {
       // Arrow up.
       controller.moveElement(-1);
-    } else if (this.selectedTab != 'WORKSPACE_FACTORY' && e.keyCode == 40) {
+    } else if (e.keyCode == 40) {
       // Arrow down.
       controller.moveElement(1);
     }
@@ -414,7 +413,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         !block.getSurroundParent()) ||
         (!controller.isUserGenShadowBlock(block.id) && block.getSurroundParent()
         && controller.isUserGenShadowBlock(block.getSurroundParent().id)));
-  }
+  };
 
   // Add change listeners for toolbox workspace in workspace factory.
   controller.toolboxWorkspace.addChangeListener(function(e) {

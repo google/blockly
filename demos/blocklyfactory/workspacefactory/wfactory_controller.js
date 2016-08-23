@@ -82,6 +82,8 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
   this.generator = new WorkspaceFactoryGenerator(this.model);
   // Tracks which editing mode the user is in. Toolbox mode on start.
   this.selectedMode = WorkspaceFactoryController.MODE_TOOLBOX;
+  // True if key events are enabled, false otherwise.
+  this.keyEventsEnabled = true;
 };
 
 // Toolbox editing mode. Changes the user makes to the workspace updates the
@@ -399,24 +401,30 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
 
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // If currently editing the toolbox.
-    // Get toolbox XML.
-    var tree = Blockly.Options.parseToolboxTree
-        (this.generator.generateToolboxXml());
-    // No categories, creates a simple flyout.
-    if (tree.getElementsByTagName('category').length == 0) {
+
+    // Only update the toolbox if not in read only mode.
+    if (!this.model.options['readOnly']) {
+      // Get toolbox XML.
+      var tree = Blockly.Options.parseToolboxTree
+          (this.generator.generateToolboxXml());
+
       // No categories, creates a simple flyout.
-      if (this.previewWorkspace.toolbox_) {
-        this.reinjectPreview(tree); // Switch to simple flyout, more expensive.
+      if (tree.getElementsByTagName('category').length == 0) {
+        // No categories, creates a simple flyout.
+        if (this.previewWorkspace.toolbox_) {
+          this.reinjectPreview(tree); // Switch to simple flyout, expensive.
+        } else {
+          this.previewWorkspace.updateToolbox(tree);
+        }
       } else {
-        this.previewWorkspace.flyout_.show(tree.childNodes);
+        // Uses categories, creates a toolbox.
+        if (!this.previewWorkspace.toolbox_) {
+          this.reinjectPreview(tree); // Create a toolbox, expensive.
+        } else {
+          this.previewWorkspace.updateToolbox(tree);
+        }
       }
-    } else {
-      // Uses categories, creates a toolbox.
-      if (!this.previewWorkspace.toolbox_) {
-        this.reinjectPreview(tree); // Create a toolbox, more expensive.
-      } else {
-        this.previewWorkspace.toolbox_.populate_(tree);
-      }
+
     }
 
     // Update pre-loaded blocks in the preview workspace to make sure that
@@ -425,6 +433,7 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
     this.previewWorkspace.clear();
     Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
         this.previewWorkspace);
+
   } else if (this.selectedMode == WorkspaceFactoryController.MODE_PRELOAD){
     // If currently editing the pre-loaded workspace.
     this.previewWorkspace.clear();
@@ -676,6 +685,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     return;
   }
 
+  Blockly.Events.disable();
   var controller = this;
   var reader = new FileReader();
 
@@ -697,9 +707,11 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         // Throw error if invalid mode.
         throw new Error("Unknown import mode: " + importMode);
       }
-     } catch(e) {
-       alert('Cannot load XML from file.');
-       console.log(e);
+      } catch(e) {
+        alert('Cannot load XML from file.');
+        console.log(e);
+     } finally {
+      Blockly.Events.enable();
      }
   }
 
@@ -774,8 +786,6 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
       (this.model.getSelectedId()), this.model.getSelected());
 
   this.saveStateFromWorkspace();
-
-  this.saveStateFromWorkspace();
   // Allow the user to set default configuration options for a single flyout
   // or multiple categories.
   this.allowToSetDefaultOptions();
@@ -828,15 +838,15 @@ WorkspaceFactoryController.prototype.importPreloadFromTree_ = function(tree) {
 }
 
 /**
- * Clears the toolbox editing area completely, deleting all categories and all
- * blocks in the model and view. Sets the mode to toolbox mode. Tied to "Clear
- * Toolbox" button.
+ * Clears the editing area completely, deleting all categories and all
+ * blocks in the model and view and all pre-loaded blocks. Tied to the
+ * "Clear" button.
  */
-WorkspaceFactoryController.prototype.clearToolbox = function() {
-  this.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+WorkspaceFactoryController.prototype.clearAll = function() {
   var hasCategories = this.model.hasElements();
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
+  this.model.savePreloadXml(Blockly.Xml.textToDom('<xml></xml>'));
   this.view.addEmptyCategoryMessage();
   this.view.updateState(-1, null);
   this.toolboxWorkspace.clear();
@@ -998,8 +1008,6 @@ WorkspaceFactoryController.prototype.setMode = function(mode) {
 
   if (mode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // Open the toolbox editing space.
-    document.getElementById('editHelpText').textContent =
-        'Drag blocks into your toolbox:';
     this.model.savePreloadXml
         (Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
     this.clearAndLoadXml_(this.model.getSelectedXml());
@@ -1007,8 +1015,6 @@ WorkspaceFactoryController.prototype.setMode = function(mode) {
         (this.model.getSelected()));
   } else {
     // Open the pre-loaded workspace editing space.
-    document.getElementById('editHelpText').textContent =
-        'Drag blocks into your pre-loaded workspace:';
     if (this.model.getSelected()) {
       this.model.getSelected().saveFromWorkspace(this.toolboxWorkspace);
     }

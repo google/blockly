@@ -56,15 +56,22 @@ AppController = function() {
       new BlockExporterController(this.blockLibraryController.storage);
 
   // Map of tab type to the div element for the tab.
-  this.tabMap = {
-    'BLOCK_FACTORY' : goog.dom.getElement('blockFactory_tab'),
-    'WORKSPACE_FACTORY': goog.dom.getElement('workspaceFactory_tab'),
-    'EXPORTER' : goog.dom.getElement('blocklibraryExporter_tab')
-  };
+  this.tabMap = Object.create(null);
+  this.tabMap[AppController.BLOCK_FACTORY] =
+      goog.dom.getElement('blockFactory_tab');
+  this.tabMap[AppController.WORKSPACE_FACTORY] =
+      goog.dom.getElement('workspaceFactory_tab');
+  this.tabMap[AppController.EXPORTER] =
+      goog.dom.getElement('blocklibraryExporter_tab');
 
   // Selected tab.
-  this.selectedTab = 'BLOCK_FACTORY';
+  this.selectedTab = AppController.BLOCK_FACTORY;
 };
+
+// Constant values representing the three tabs in the controller.
+AppController.BLOCK_FACTORY = 'BLOCK_FACTORY';
+AppController.WORKSPACE_FACTORY = 'WORKSPACE_FACTORY';
+AppController.EXPORTER = 'EXPORTER';
 
 /**
  * Tied to the 'Import Block Library' button. Imports block library from file to
@@ -256,7 +263,8 @@ AppController.prototype.addTabHandlers = function(tabMap) {
  * Set the selected tab.
  * @private
  *
- * @param {string} tabName 'BLOCK_FACTORY', 'WORKSPACE_FACTORY', or 'EXPORTER'
+ * @param {string} tabName AppController.BLOCK_FACTORY,
+ *    AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
  */
 AppController.prototype.setSelected_ = function(tabName) {
   this.selectedTab = tabName;
@@ -266,7 +274,8 @@ AppController.prototype.setSelected_ = function(tabName) {
  * Creates the tab click handler specific to the tab specified.
  * @private
  *
- * @param {string} tabName 'BLOCK_FACTORY', 'WORKSPACE_FACTORY', or 'EXPORTER'
+ * @param {string} tabName AppController.BLOCK_FACTORY,
+ *    AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
  * @return {Function} The tab click handler.
  */
 AppController.prototype.makeTabClickHandler_ = function(tabName) {
@@ -283,14 +292,19 @@ AppController.prototype.makeTabClickHandler_ = function(tabName) {
  */
 AppController.prototype.onTab = function() {
   // Get tab div elements.
-  var blockFactoryTab = this.tabMap['BLOCK_FACTORY'];
-  var exporterTab = this.tabMap['EXPORTER'];
-  var workspaceFactoryTab = this.tabMap['WORKSPACE_FACTORY'];
+  var blockFactoryTab = this.tabMap[AppController.BLOCK_FACTORY];
+  var exporterTab = this.tabMap[AppController.EXPORTER];
+  var workspaceFactoryTab = this.tabMap[AppController.WORKSPACE_FACTORY];
 
   // Turn selected tab on and other tabs off.
   this.styleTabs_();
 
-  if (this.selectedTab == 'EXPORTER') {
+  // Only enable key events in workspace factory if workspace factory tab is
+  // selected.
+  this.workspaceFactoryController.keyEventsEnabled =
+      this.selectedTab == AppController.WORKSPACE_FACTORY;
+
+  if (this.selectedTab == AppController.EXPORTER) {
     // Update toolbox to reflect current block library.
     this.exporter.updateToolbox();
 
@@ -309,12 +323,12 @@ AppController.prototype.onTab = function() {
     FactoryUtils.show('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
 
-  } else if (this.selectedTab ==  'BLOCK_FACTORY') {
+  } else if (this.selectedTab ==  AppController.BLOCK_FACTORY) {
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
 
-  } else if (this.selectedTab == 'WORKSPACE_FACTORY') {
+  } else if (this.selectedTab == AppController.WORKSPACE_FACTORY) {
     // Update block library category.
     var categoryXml = this.exporter.getBlockLibCategory();
     this.workspaceFactoryController.setBlockLibCategory(categoryXml);

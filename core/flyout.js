@@ -745,7 +745,8 @@ Blockly.Flyout.prototype.layout_ = function(contents, gaps) {
       if (this.horizontalLayout_) {
         cursorX += tab;
       }
-      block.moveBy((this.horizontalLayout_ && this.RTL) ? -cursorX : cursorX,
+      block.moveBy((this.horizontalLayout_ && this.RTL) ?
+          cursorX + blockHW.width - tab : cursorX,
           cursorY);
       if (this.horizontalLayout_) {
         cursorX += (blockHW.width + gaps[i] - tab);

@@ -305,7 +305,7 @@ WorkspaceFactoryModel.prototype.getCategoryIdByName = function(name) {
 WorkspaceFactoryModel.prototype.clearToolboxList = function() {
   this.toolboxList = [];
   this.hasVariableCategory = false;
-  this.hasVariableCategory = false;
+  this.hasProcedureCategory = false;
   this.shadowBlocks = [];
   this.selected.xml = Blockly.Xml.textToDom('<xml></xml>');
 };

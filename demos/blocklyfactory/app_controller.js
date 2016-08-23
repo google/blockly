@@ -369,18 +369,21 @@ AppController.prototype.assignExporterClickHandlers = function() {
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
         self.exporter.selectUsedBlocks();
+        self.exporter.updatePreview();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
   document.getElementById('dropdown_clearSelected').addEventListener('click',
       function() {
         self.exporter.clearSelectedBlocks();
+        self.exporter.updatePreview();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
   document.getElementById('dropdown_addAllFromLib').addEventListener('click',
       function() {
         self.exporter.selectAllBlocks();
+        self.exporter.updatePreview();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
@@ -436,8 +439,6 @@ AppController.prototype.assignExporterChangeListeners = function() {
       function(e) {
         self.exporter.updatePreview();
       });
-
-  self.exporter.addChangeListenersToSelectorWorkspace();
 };
 
 /**

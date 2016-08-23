@@ -192,7 +192,7 @@ button, .buttonStyle {
 #exportSelector {
   display: inline-block;
   float: left;
-  height: 60%;
+  height: 70%;
   width: 30%;
 }
 
@@ -257,6 +257,7 @@ button, .buttonStyle {
 
 #blockSelector {
   background-color: #eee;
+  border: 1px solid lightgrey;
   width: 80%;
   height: 90%;
   overflow-y: scroll;
@@ -267,7 +268,7 @@ button, .buttonStyle {
 
 .blockOption {
   background-color: #eee;
-  padding: 10px 20px;
+  padding: 15px 20px;
   width: 95%;
 }
 

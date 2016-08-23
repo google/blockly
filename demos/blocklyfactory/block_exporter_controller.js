@@ -144,7 +144,7 @@ BlockExporterController.prototype.export = function() {
 BlockExporterController.prototype.updateSelector = function() {
   this.blockOptions = this.tools.createBlockSelectorFromLib(
       this.blockLibStorage, this.selectorID);
-  this.addBlockOptSelectHandlers();
+  this.addBlockOptionSelectHandlers();
   this.view.setBlockOptions(this.blockOptions);
 };
 
@@ -183,7 +183,7 @@ BlockExporterController.prototype.getBlockLibCategory = function() {
  * Add select handlers to each block option to update the view and the selected
  * blocks accordingly.
  */
-BlockExporterController.prototype.addBlockOptSelectHandlers = function() {
+BlockExporterController.prototype.addBlockOptionSelectHandlers = function() {
   var self = this;
   /**
    * Click handler for a block option. Toggles whether or not it's selected and
@@ -209,11 +209,11 @@ BlockExporterController.prototype.addBlockOptSelectHandlers = function() {
    * exporter's selector.
    * @return {!Function} The select handler for a block option.
    */
-  var makeBlockOptSelectHandler_ = function(blockOption) {
+  var makeBlockOptionSelectHandler_ = function(blockOption) {
+    console.log(self);
     return function() {
       updateSelectedBlockTypes_(blockOption);
-      // TODO(quachtiana96): uncomment line below once CL is merged.
-      // self.updatePreview();
+      self.updatePreview();
     };
   };
 
@@ -221,7 +221,7 @@ BlockExporterController.prototype.addBlockOptSelectHandlers = function() {
     var blockOption = this.blockOptions[blockType];
     // Use an additional closure to correctly assign the tab callback.
     blockOption.dom.addEventListener(
-        'click', makeBlockOptSelectHandler_(blockOption));
+        'click', makeBlockOptionSelectHandler_(blockOption));
   }
 };
 
@@ -298,7 +298,7 @@ BlockExporterController.prototype.updatePreview = function() {
  * corresponding xml element.
  */
 BlockExporterController.prototype.getSelectedBlockXmlMap = function() {
-  var blockTypes = this.getSelectedBlockTypes_();
+  var blockTypes = this.view.getSelectedBlockTypes();
   return this.blockLibStorage.getBlockXmlMap(blockTypes);
 };
 

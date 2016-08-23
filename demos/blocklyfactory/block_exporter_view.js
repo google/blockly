@@ -50,8 +50,8 @@ BlockExporterView = function(blockOptions) {
  *
  * @param {!Object} blockOptions - Map of block types to BlockOption objects.
  */
-BlockExporterView.prototype.setBlockOptions = function(blockOpts) {
-  this.blockOptions = blockOpts;
+BlockExporterView.prototype.setBlockOptions = function(blockOptions) {
+  this.blockOptions = blockOptions;
 };
 
 /**

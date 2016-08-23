@@ -223,7 +223,6 @@ BlockExporterController.prototype.addBlockOptionSelectHandlers = function() {
    * @return {!Function} The select handler for a block option.
    */
   var makeBlockOptionSelectHandler_ = function(blockOption) {
-    console.log(self);
     return function() {
       updateSelectedBlockTypes_(blockOption);
       self.updatePreview();

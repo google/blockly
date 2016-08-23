@@ -57,6 +57,9 @@ var BlockOption = function(blockSelector, blockType, previewBlockXml) {
   this.previewWorkspace = null;
   // Whether or not block the option is selected.
   this.selected = false;
+  // Using this.selected rather than this.checkbox.checked allows for proper
+  // handling of click events on the block option; Without this, clicking
+  // directly on the checkbox does not toggle selection.
 };
 
 /**

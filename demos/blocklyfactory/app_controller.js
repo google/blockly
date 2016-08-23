@@ -386,7 +386,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
 
   document.getElementById('exportFormat').addEventListener('change',
       function(e) {
-        self.exporter.updateBlockDefsFormat();
+        self.exporter.updateBlockDefs();
       });
 
   // Checking the generator stub checkbox displays preview of code to export.
@@ -402,7 +402,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
 
   document.getElementById('exportLanguage').addEventListener('change',
       function(e) {
-        self.exporter.updateGenStubsLanguage();
+        self.exporter.updateGenStubs();
       });
 
   self.exporter.addChangeListenersToSelectorWorkspace();

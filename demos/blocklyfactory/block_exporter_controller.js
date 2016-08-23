@@ -312,53 +312,72 @@ BlockExporterController.prototype.getBlockLibCategory = function() {
  * preview to reflect selected blocks.
  */
 BlockExporterController.prototype.updatePreview = function() {
-  // Get selected blocks' information.
-  var blockTypes = this.getSelectedBlockTypes_();
-  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
-
-  // Get block definition code in the selected format for the blocks.
-  var definitionFormat = document.getElementById('exportFormat').value;
-  var blockDefs = this.tools.getBlockDefs(blockXmlMap, definitionFormat);
-
-  // Get generator stub code in the selected language for the blocks.
-  var language = document.getElementById('exportLanguage').value;
-  var genStubs = this.tools.getGeneratorCode(blockXmlMap, language);
+  // Generate preview code for selected blocks.
+  var blockDefs = this.getBlockDefsOfSelected();
+  var genStubs = this.getGenStubsOfSelected();
 
   // Update the text areas containing the code.
-  BlockFactory.injectCode(blockDefs, 'blockDefs_textArea');
-  BlockFactory.injectCode(genStubs, 'genStubs_textArea');
+  FactoryUtils.injectCode(blockDefs, 'blockDefs_textArea');
+  FactoryUtils.injectCode(genStubs, 'genStubs_textArea');
 };
 
 /**
- * Sets format of block definitions in the exporter preview to the format
- * selected by the user.
+ * Updates block definitions in the exporter preview.
  */
-BlockExporterController.prototype.updateBlockDefsFormat = function() {
-  // Get selected blocks' information.
+BlockExporterController.prototype.updateBlockDefs = function() {
+  // Get block definitions of selected blocks.
+  var blockDefs = this.getBlockDefsOfSelected();
+  // Update the text area containing the code.
+  FactoryUtils.injectCode(blockDefs, 'blockDefs_textArea');
+};
+
+/**
+ * Updates generator stubs in the exporter preview.
+ */
+BlockExporterController.prototype.updateGenStubs = function() {
+  // Get generator stubs of selected blocks.
+  var genStubs = this.getGenStubsOfSelected();
+  // Update the text area containing the code.
+  FactoryUtils.injectCode(genStubs, 'genStubs_textArea');
+};
+
+/**
+ * Returns a map of each selected block's type to its corresponding xml.
+ *
+ * @return {!Object} a map of each selected block's type (a string) to its
+ * corresponding xml element.
+ */
+BlockExporterController.prototype.getSelectedBlockXmlMap = function() {
   var blockTypes = this.getSelectedBlockTypes_();
-  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
+  return this.blockLibStorage.getBlockXmlMap(blockTypes);
+};
+
+/**
+ * Get block definition code in the selected format for selected blocks.
+ *
+ * @return {!string} The concatenation of each selected block's language code
+ * in the format specified in export settings.
+ */
+BlockExporterController.prototype.getBlockDefsOfSelected = function() {
+  // Get selected blocks' information.
+  var blockXmlMap = this.getSelectedBlockXmlMap();
 
   // Get block definition code in the selected format for the blocks.
   var definitionFormat = document.getElementById('exportFormat').value;
-  var blockDefs = this.tools.getBlockDefs(blockXmlMap, definitionFormat);
-
-  // Update the text area containing the code.
-  BlockFactory.injectCode(blockDefs, 'blockDefs_textArea');
+  return this.tools.getBlockDefs(blockXmlMap, definitionFormat);
 };
 
 /**
- * Sets language of block definitions in the exporter preview to the format
- * selected by the user.
+ * Get generator stubs in the selected language for selected blocks.
+ *
+ * @return {!string} The concatenation of each selected block's generator stub
+ * in the language specified in export settings.
  */
-BlockExporterController.prototype.updateGenStubsLanguage = function() {
+BlockExporterController.prototype.getGenStubsOfSelected = function() {
   // Get selected blocks' information.
-  var blockTypes = this.getSelectedBlockTypes_();
-  var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
+  var blockXmlMap = this.getSelectedBlockXmlMap();
 
   // Get generator stub code in the selected language for the blocks.
   var language = document.getElementById('exportLanguage').value;
-  var genStubs = this.tools.getGeneratorCode(blockXmlMap, language);
-
-  // Update the text area containing the code.
-  BlockFactory.injectCode(genStubs, 'genStubs_textArea');
+  return this.tools.getGeneratorCode(blockXmlMap, language);
 };

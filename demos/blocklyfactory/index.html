@@ -19,6 +19,7 @@
   <script src="/storage.js"></script>
   <script src="../../../closure-library/closure/goog/base.js"></script>
   <script src="factory_utils.js"></script>
+  <script src="block_option.js"></script>
   <script src="factory.js"></script>
   <script src="block_library_view.js"></script>
   <script src="block_library_storage.js"></script>
@@ -38,7 +39,7 @@
       blocklyFactory.init();
     };
     window.addEventListener('load', init);
-</script>
+  </script>
 </head>
 <body>
 <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
@@ -50,7 +51,7 @@
  <div id="tabContainer">
     <div id="blockFactory_tab" class="tab tabon"> Block Factory</div>
     <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
-    <div id="blocklibraryExporter_tab" class="tab taboff"> Exporter</div>
+    <div id="blocklibraryExporter_tab" class="tab taboff"> Block Exporter</div>
   </div>
 
   <!-- Exporter tab -->
@@ -64,15 +65,12 @@
       <div class='dropdown'>
         <button id="button_setBlocks">Select From Library</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
-          <a id='dropdown_addAllFromLib'>All Stored</a>
-          <a id='dropdown_addAllUsed'>All Used</a>
-          <a id='dropdown_clearSelected'>Remove All</a>
+          <a id='dropdown_addAllFromLib' title="Select all block library blocks.">All Stored</a>
+          <a id='dropdown_addAllUsed' title="Select all block library blocks used in workspace factory.">All Used</a>
+          <a id='dropdown_clearSelected' title="Clear selected blocks.">Clear</a>
         </div>
       </div>
-
-      <!-- Inject exportSelectorWorkspace into this div -->
-      <div id="selectorWorkspace"></div>
-
+      <div id="blockSelector"></div>
     </div>
 
     <!-- Users may customize export settings through this form -->
@@ -80,6 +78,7 @@
       <br>
       <h3> Export Settings </h3>
       <form id="exportSettingsForm">
+
         <div id="selectedBlocksTextContainer">
           <p>Currently Selected:</p>
           <p id="selectedBlocksText"></p>
@@ -114,7 +113,7 @@
         </div>
           <br>
       </form>
-        <button id="exporterSubmitButton"> Export </button>
+        <button id="exporterSubmitButton" title="Download block starter code as specified in export settings."> Export </button>
     </div>
     <div id="exportPreview">
       <br>
@@ -305,9 +304,6 @@
               </h3>
             </td>
             <td id="buttonContainer">
-              <button id="linkButton" title="Save and link to blocks.">
-                <img src="link.png" height="21" width="21">
-              </button>
               <button id="linkButton" title="Save and link to blocks.">
                 <img src="link.png" height="21" width="21">
               </button>

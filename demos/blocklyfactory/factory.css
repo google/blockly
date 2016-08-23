@@ -192,7 +192,7 @@ button, .buttonStyle {
 #exportSelector {
   display: inline-block;
   float: left;
-  height: 60%;
+  height: 70%;
   width: 30%;
 }
 
@@ -253,6 +253,45 @@ button, .buttonStyle {
 
 #blockDefs_label, #genStubs_label {
   display: block;
+}
+
+#blockSelector {
+  background-color: #eee;
+  border: 1px solid lightgrey;
+  width: 80%;
+  height: 90%;
+  overflow-y: scroll;
+  position: relative;
+}
+
+/* Exporter Block Option */
+
+.blockOption {
+  background-color: #eee;
+  padding: 15px 20px;
+  width: 95%;
+}
+
+.blockOption_check_label {
+  position: relative;
+}
+
+.blockOption_check {
+  float: left;
+  padding: 4px;
+}
+
+.blockOption_label {
+  float: left;
+  max-width: inherit;
+  overflow-y: scroll;
+  word-wrap: break-word;
+}
+
+.blockOption_preview {
+  height: 100px;
+  padding-top: 10px;
+  width: 90%;
 }
 
 /* Tabs */
@@ -434,19 +473,19 @@ td {
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,.2);
-    display: none;
-    min-width: 170px;
-    opacity: 1;
-    position: absolute;
-    z-index: 1;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,.2);
+  display: none;
+  min-width: 170px;
+  opacity: 1;
+  position: absolute;
+  z-index: 1;
 }
 
 /* Links inside the dropdown */

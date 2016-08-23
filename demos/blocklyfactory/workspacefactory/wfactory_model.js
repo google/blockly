@@ -305,7 +305,7 @@ WorkspaceFactoryModel.prototype.getCategoryIdByName = function(name) {
 WorkspaceFactoryModel.prototype.clearToolboxList = function() {
   this.toolboxList = [];
   this.hasVariableCategory = false;
-  this.hasVariableCategory = false;
+  this.hasProcedureCategory = false;
   // TODO(evd2014): When merge changes, also clear shadowList.
 };
 

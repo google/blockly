@@ -343,13 +343,12 @@ BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
   var sharedBlockTypes = [];
   // Keep list of custom block types used but not in library.
   var unstoredCustomBlockTypes = [];
-  var warnForStandardBlockTypes = false;
 
   for (var i = 0, blockType; blockType = this.usedBlockTypes[i]; i++) {
     if (storedBlockTypes.indexOf(blockType) != -1) {
       sharedBlockTypes.push(blockType);
     } else if (BlockFactory.standardBlockTypes.indexOf(blockType) == -1) {
-        unstoredCustomBlockTypes.push(blockType);
+      unstoredCustomBlockTypes.push(blockType);
     }
   }
 

@@ -391,8 +391,8 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
   window.addEventListener('keydown', function(e) {
     // Don't let arrow keys have any effect if not in Workspace Factory
     // editing the toolbox.
-    if (!controller.keyEventsEnabled || controller.selectedMode
-        != WorkspaceFactoryController.MODE_TOOLBOX) {
+    if (!(controller.keyEventsEnabled && controller.selectedMode
+        == WorkspaceFactoryController.MODE_TOOLBOX)) {
       return;
     }
 

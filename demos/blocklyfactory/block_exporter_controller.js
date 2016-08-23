@@ -195,8 +195,7 @@ BlockExporterController.prototype.addBlockOptSelectHandlers = function() {
    */
   var updateSelectedBlockTypes_ = function(blockOption) {
     // Toggle selected.
-    var selected = blockOption.isSelected() ? false : true;
-    blockOption.setSelected(selected);
+    blockOption.setSelected(!blockOption.isSelected());
 
     // Show currently selected blocks in helper text.
     self.view.listSelectedBlocks();

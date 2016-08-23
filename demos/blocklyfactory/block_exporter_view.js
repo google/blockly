@@ -129,7 +129,7 @@ BlockExporterView.prototype.getSelectedBlockTypes = function() {
   for (var blockType in this.blockOptions) {
     var blockOption = this.blockOptions[blockType];
     if (blockOption.isSelected()) {
-      selectedTypes.push(blockOption.blockType);
+      selectedTypes.push(blockType);
     }
   }
   return selectedTypes;

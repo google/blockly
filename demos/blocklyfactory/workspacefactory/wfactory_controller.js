@@ -399,47 +399,34 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
   // through event handlers.
   Blockly.Events.disable();
 
-  if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-    // If currently editing the toolbox.
+  // Only update the toolbox if not in read only mode.
+  if (!this.model.options['readOnly']) {
+    // Get toolbox XML.
+    var tree = Blockly.Options.parseToolboxTree
+        (this.generator.generateToolboxXml());
 
-    // Only update the toolbox if not in read only mode.
-    if (!this.model.options['readOnly']) {
-      // Get toolbox XML.
-      var tree = Blockly.Options.parseToolboxTree
-          (this.generator.generateToolboxXml());
-
+    // No categories, creates a simple flyout.
+    if (tree.getElementsByTagName('category').length == 0) {
       // No categories, creates a simple flyout.
-      if (tree.getElementsByTagName('category').length == 0) {
-        // No categories, creates a simple flyout.
-        if (this.previewWorkspace.toolbox_) {
-          this.reinjectPreview(tree); // Switch to simple flyout, expensive.
-        } else {
-          this.previewWorkspace.updateToolbox(tree);
-        }
+      if (this.previewWorkspace.toolbox_) {
+        this.reinjectPreview(tree); // Switch to simple flyout, expensive.
       } else {
-        // Uses categories, creates a toolbox.
-        if (!this.previewWorkspace.toolbox_) {
-          this.reinjectPreview(tree); // Create a toolbox, expensive.
-        } else {
-          this.previewWorkspace.updateToolbox(tree);
-        }
+        this.previewWorkspace.updateToolbox(tree);
       }
-
+    } else {
+      // Uses categories, creates a toolbox.
+      if (!this.previewWorkspace.toolbox_) {
+        this.reinjectPreview(tree); // Create a toolbox, expensive.
+      } else {
+        this.previewWorkspace.updateToolbox(tree);
+      }
     }
-
-    // Update pre-loaded blocks in the preview workspace to make sure that
-    // blocks don't get cleared when updating preview from event listeners while
-    // switching modes.
-    this.previewWorkspace.clear();
-    Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
-        this.previewWorkspace);
-
-  } else if (this.selectedMode == WorkspaceFactoryController.MODE_PRELOAD){
-    // If currently editing the pre-loaded workspace.
-    this.previewWorkspace.clear();
-    Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
-        this.previewWorkspace);
   }
+
+  // Update pre-loaded blocks in the preview workspace.
+  this.previewWorkspace.clear();
+  Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
+      this.previewWorkspace);
 
   // Reenable events.
   Blockly.Events.enable();

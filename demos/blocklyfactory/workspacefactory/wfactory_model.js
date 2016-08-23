@@ -301,7 +301,8 @@ WorkspaceFactoryModel.prototype.clearToolboxList = function() {
   this.toolboxList = [];
   this.hasVariableCategory = false;
   this.hasVariableCategory = false;
-  // TODO(evd2014): When merge changes, also clear shadowList.
+  this.shadowBlocks = [];
+  this.selected.xml = Blockly.Xml.textToDom('<xml></xml>');
 };
 
 /**

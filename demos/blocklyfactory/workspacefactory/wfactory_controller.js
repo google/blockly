@@ -82,6 +82,8 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
   this.generator = new WorkspaceFactoryGenerator(this.model);
   // Tracks which editing mode the user is in. Toolbox mode on start.
   this.selectedMode = WorkspaceFactoryController.MODE_TOOLBOX;
+  // True if key events are enabled, false otherwise.
+  this.keyEventsEnabled = true;
 };
 
 // Toolbox editing mode. Changes the user makes to the workspace updates the
@@ -402,8 +404,27 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
 
     // Only update the toolbox if not in read only mode.
     if (!this.model.options['readOnly']) {
-      this.previewWorkspace.updateToolbox(Blockly.Options.parseToolboxTree
-          (this.generator.generateToolboxXml()));
+      // Get toolbox XML.
+      var tree = Blockly.Options.parseToolboxTree
+          (this.generator.generateToolboxXml());
+
+      // No categories, creates a simple flyout.
+      if (tree.getElementsByTagName('category').length == 0) {
+        // No categories, creates a simple flyout.
+        if (this.previewWorkspace.toolbox_) {
+          this.reinjectPreview(tree); // Switch to simple flyout, expensive.
+        } else {
+          this.previewWorkspace.updateToolbox(tree);
+        }
+      } else {
+        // Uses categories, creates a toolbox.
+        if (!this.previewWorkspace.toolbox_) {
+          this.reinjectPreview(tree); // Create a toolbox, expensive.
+        } else {
+          this.previewWorkspace.updateToolbox(tree);
+        }
+      }
+
     }
 
     // Update pre-loaded blocks in the preview workspace to make sure that
@@ -664,6 +685,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     return;
   }
 
+  Blockly.Events.disable();
   var controller = this;
   var reader = new FileReader();
 
@@ -685,9 +707,11 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         // Throw error if invalid mode.
         throw new Error("Unknown import mode: " + importMode);
       }
-     } catch(e) {
-       alert('Cannot load XML from file.');
-       console.log(e);
+     // } catch(e) {
+     //   alert('Cannot load XML from file.');
+     //   console.log(e);
+     } finally {
+      Blockly.Events.enable();
      }
   }
 

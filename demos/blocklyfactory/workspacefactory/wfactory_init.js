@@ -387,6 +387,24 @@ document.getElementById('button_importBlocks').addEventListener
  *    factory tab.
  */
 WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
+  // Use up and down arrow keys to move categories.
+  window.addEventListener('keydown', function(e) {
+    // Don't let arrow keys have any effect if not in Workspace Factory
+    // editing the toolbox.
+    if (!controller.keyEventsEnabled || controller.selectedMode
+        != WorkspaceFactoryController.MODE_TOOLBOX) {
+      return;
+    }
+
+    if (e.keyCode == 38) {
+      // Arrow up.
+      controller.moveElement(-1);
+    } else if (e.keyCode == 40) {
+      // Arrow down.
+      controller.moveElement(1);
+    }
+  });
+
   // Determines if a block breaks shadow block placement rules.
   // Breaks rules if (1) a shadow block no longer has a valid
   // parent, or (2) a normal block is inside of a shadow block.
@@ -395,7 +413,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         !block.getSurroundParent()) ||
         (!controller.isUserGenShadowBlock(block.id) && block.getSurroundParent()
         && controller.isUserGenShadowBlock(block.getSurroundParent().id)));
-  }
+  };
 
   // Add change listeners for toolbox workspace in workspace factory.
   controller.toolboxWorkspace.addChangeListener(function(e) {

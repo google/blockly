@@ -164,7 +164,7 @@ button, .buttonStyle {
   visibility: hidden;
 }
 
-#toolbox {
+.toolbox {
   display: none;
 }
 
@@ -191,7 +191,7 @@ button, .buttonStyle {
 #exportSelector {
   display: inline-block;
   float: left;
-  height: 75%;
+  height: 60%;
   width: 30%;
 }
 
@@ -199,7 +199,23 @@ button, .buttonStyle {
   float: left;
   overflow: hidden;
   padding-left: 16px;
-  width: 30%;
+  width: 20%;
+}
+
+#selectedBlocksTextContainer {
+  max-height: 200px;
+  overflow-y: scroll;
+  padding-bottom: 2em;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #ccc;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
 
 #exporterHiddenWorkspace {
@@ -415,5 +431,3 @@ td {
 .shadowBlock>.blocklyPathDark {
   display: none;
 }
-
->>>>>>> Starting to integrate workspacefactory

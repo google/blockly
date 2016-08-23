@@ -53,20 +53,22 @@
     <div id="blocklibraryExporter_tab" class="tab taboff"> Exporter</div>
   </div>
 
-
   <!-- Exporter tab -->
   <div id="blockLibraryExporter">
+    <br>
+    <p id="helperText"> First, select blocks from your block library by dragging them into your workspace. Then, use the Export Settings form to download starter code for selected blocks.
+    </p>
     <div id="exportSelector">
+      <br>
       <h3> Block Selector </h3>
-      <p id="helperText"> Drag blocks into your workspace to select them for download.</p>
-        <div class='dropdown'>
-        <button id="button_setBlocks">Select</button>
+      <div class='dropdown'>
+        <button id="button_setBlocks">Select From Library</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
           <a id='dropdown_addAllFromLib'>All Stored</a>
           <a id='dropdown_addAllUsed'>All Used</a>
           <a id='dropdown_clearSelected'>Remove All</a>
         </div>
-        </div>
+      </div>
 
       <!-- Inject exportSelectorWorkspace into this div -->
       <div id="selectorWorkspace"></div>
@@ -75,19 +77,14 @@
 
     <!-- Users may customize export settings through this form -->
     <div id="exportSettings">
+      <br>
       <h3> Export Settings </h3>
       <br>
       <form id="exportSettingsForm">
-        Toolbox Xml:
-        <input type="checkbox" id="toolboxCheck">
-        <br>
-        Pre-loaded Workspace:
-        <input type="checkbox" id="preloadedWorkspaceCheck">
-        <br>
-        Workspace Option(s):
-        <input type="checkbox" id="workspaceOptsCheck">
-        <br>
-        <br>
+        <div id="selectedBlocksTextContainer">
+          <p>Currently Selected:</p>
+          <p id="selectedBlocksText"></p>
+        </div>
         Block Definition(s):
         <input type="checkbox" id="blockDefCheck"><br>
               Language code:
@@ -115,6 +112,7 @@
         <button id="exporterSubmitButton"> Export </button>
     </div>
     <div id="exportPreview">
+      <br>
       <h3>Preview Workspace: </h3>
       <div id="exportpreview_blocks">
       </div>
@@ -268,8 +266,8 @@
             <button id="removeBlockFromLibraryButton" title="Remove block from Block Library.">
               <span>Delete Block</span>
             </button>
-            <button id="clearBlockLibraryButton" title="Clear Block Library.">
-              <span>Clear Library</span>
+            <button id="createNewBlockButton" title="Create a new block.">
+              <span> Create Block</span>
             </button>
             </td>
           </tr>
@@ -293,8 +291,8 @@
               <button id="linkButton" title="Save and link to blocks.">
                 <img src="link.png" height="21" width="21">
               </button>
-              <button id="createNewBlockButton" title="Create a new block.">
-                <span> Create Block</span>
+              <button id="clearBlockLibraryButton" title="Clear Block Library.">
+                <span>Clear Library</span>
               </button>
               <label for="files" class="buttonStyle">
                 <span class=>Import Block Library</span>
@@ -360,7 +358,7 @@
       </td>
   </table>
 
-  <xml id="blockfactory_toolbox">
+  <xml id="blockfactory_toolbox" class="toolbox">
     <category name="Input">
       <block type="input_value">
         <value name="TYPE">
@@ -412,7 +410,7 @@
     </category>
   </xml>
 
-  <xml id="workspacefactory_toolbox" style="display: none">
+  <xml id="workspacefactory_toolbox" class="toolbox">
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>

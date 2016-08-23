@@ -883,7 +883,7 @@ WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
   this.view.markShadowBlock(block);
   this.model.addShadowBlock(block.id);
 
-  if (this.hasVariableField(block)) {
+  if (FactoryUtils.hasVariableField(block)) {
     block.setWarningText('Cannot make variable blocks shadow blocks.');
   }
 
@@ -892,26 +892,6 @@ WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
   for (var i = 0; i < children.length; i++) {
     this.addShadowForBlockAndChildren_(children[i]);
   }
-};
-
-/**
- * Checks if a block has a variable field. Blocks with variable fields cannot
- * be shadow blocks.
- *
- * @param {Blockly.Block} block The block to check if a variable field exists.
- * @return {boolean} True if the block has a variable field, false otherwise.
- */
-WorkspaceFactoryController.prototype.hasVariableField = function(block) {
-  if (!block) {
-    return false;
-  }
-  for (var i = 0; i < block.inputList.length; i++) {
-    if (block.inputList[i].fieldRow.length > 0 &&
-        block.inputList[i].fieldRow[0].name == 'VAR') {
-      return true;
-    }
-  }
-  return false;
 };
 
 /**

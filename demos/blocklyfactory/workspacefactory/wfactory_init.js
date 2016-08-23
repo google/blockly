@@ -27,6 +27,8 @@
  * @author Emma Dauterman (evd2014)
  */
 
+ goog.require('FactoryUtils');
+
 /**
  * Namespace for workspace factory initialization methods.
  * @namespace
@@ -443,7 +445,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         // Enable block editing and remove warnings if the block is not a
         // variable user-generated shadow block.
         document.getElementById('button_editShadow').disabled = false;
-        if (!controller.hasVariableField(selected)) {
+        if (!FactoryUtils.hasVariableField(selected)) {
           selected.setWarningText(null);
         }
       } else {
@@ -458,7 +460,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
             // Warn if a non-shadow block is nested inside a shadow block.
             selected.setWarningText('Only shadow blocks can be nested inside '
                 + 'other shadow blocks.');
-          } else if (!controller.hasVariableField(selected)) {
+          } else if (!FactoryUtils.hasVariableField(selected)) {
             // Warn if a shadow block is invalid only if not replacing
             // warning for variables.
             selected.setWarningText('Shadow blocks must be nested inside other'
@@ -473,7 +475,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
           // be a shadow block.
 
           // Remove possible 'invalid shadow block placement' warning.
-          if (selected != null && (!controller.hasVariableField(selected) ||
+          if (selected != null && (!FactoryUtils.hasVariableField(selected) ||
               !controller.isUserGenShadowBlock(selected.id))) {
             selected.setWarningText(null);
           }

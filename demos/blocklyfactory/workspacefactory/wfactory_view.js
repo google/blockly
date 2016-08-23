@@ -28,6 +28,8 @@
  * @author Emma Dauterman (edauterman)
  */
 
+ goog.require('FactoryUtils');
+
  /**
   * Class for a WorkspaceFactoryView
   * @constructor
@@ -333,6 +335,10 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
   if (!block.getSurroundParent()) {
       block.setWarningText('Shadow blocks must be nested inside' +
           ' other blocks to be displayed.');
+  }
+
+  if (FactoryUtils.hasVariableField(block)) {
+    block.setWarningText('Cannot make variable blocks shadow blocks.');
   }
 };
 

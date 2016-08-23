@@ -913,3 +913,22 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   return blockXmlText1 == blockXmlText2;
 };
 
+/*
+ * Checks if a block has a variable field. Blocks with variable fields cannot
+ * be shadow blocks.
+ *
+ * @param {Blockly.Block} block The block to check if a variable field exists.
+ * @return {boolean} True if the block has a variable field, false otherwise.
+ */
+FactoryUtils.hasVariableField = function(block) {
+  if (!block) {
+    return false;
+  }
+  for (var i = 0; i < block.inputList.length; i++) {
+    if (block.inputList[i].fieldRow.length > 0 &&
+        block.inputList[i].fieldRow[0].name == 'VAR') {
+      return true;
+    }
+  }
+  return false;
+};

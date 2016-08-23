@@ -47,6 +47,8 @@ BlockExporterController = function(blockLibStorage) {
   this.blockLibStorage = blockLibStorage;
   // Utils for generating code to export.
   this.tools = new BlockExporterTools();
+  // The ID of the block selector, a div element that will be populated with the
+  // block options.
   this.selectorID = 'blockSelector';
   // Map of block types stored in block library to their corresponding Block
   // Option objects.
@@ -73,19 +75,8 @@ BlockExporterController.prototype.setBlockLibStorage =
  * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
  *    that stores the blocks.
  */
-BlockExporterController.prototype.getBlockLibStorage =
-    function(blockLibStorage) {
+BlockExporterController.prototype.getBlockLibStorage = function() {
   return this.blockLibStorage;
-};
-
-/**
- * Get the selected block types.
- * @private
- *
- * @return {!Array.<string>} Types of blocks selected.
- */
-BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
-  return this.view.getSelectedBlockTypes();
 };
 
 /**
@@ -94,7 +85,7 @@ BlockExporterController.prototype.getSelectedBlockTypes_ = function() {
  */
 BlockExporterController.prototype.export = function() {
   // Get selected blocks' information.
-  var blockTypes = this.getSelectedBlockTypes_();
+  var blockTypes = this.view.getSelectedBlockTypes();
   var blockXmlMap = this.blockLibStorage.getBlockXmlMap(blockTypes);
 
   // Pull block definition(s) settings from the Export Settings form.

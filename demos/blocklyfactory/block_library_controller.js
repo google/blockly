@@ -140,9 +140,12 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   }
 
   // Save block.
-  var xmlElement = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
+  var xmlElement = goog.dom.createDom('xml');
+  var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
+  xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
   this.storage.addBlock(blockType, xmlElement);
   this.storage.saveToLocalStorage();
+  this.openBlock(blockType);
 
   // Do not add another option to dropdown if replacing.
   if (replace) {

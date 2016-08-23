@@ -197,7 +197,8 @@ AppController.prototype.formatBlockLibForImport_ = function(xmlText) {
     xmlDom.appendChild(blockNode);
 
     var xmlText = Blockly.Xml.domToText(xmlDom);
-    var blockType = this.getBlockTypeFromXml_(xmlText);
+    // All block types should be lowercase.
+    var blockType = this.getBlockTypeFromXml_(xmlText).toLowerCase();
 
     blockXmlTextMap[blockType] = xmlText;
   }

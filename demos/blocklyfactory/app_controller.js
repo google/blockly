@@ -291,6 +291,8 @@ AppController.prototype.onTab = function() {
   this.styleTabs_();
 
   if (this.selectedTab == 'EXPORTER') {
+    // Disable key events in workspace factory.
+    this.workspaceFactoryController.keyEventsEnabled = false;
     // Update toolbox to reflect current block library.
     this.exporter.updateToolbox();
 
@@ -299,6 +301,8 @@ AppController.prototype.onTab = function() {
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab ==  'BLOCK_FACTORY') {
+    // Disable key events in workspace factory.
+    this.workspaceFactoryController.keyEventsEnabled = false;
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
@@ -307,6 +311,8 @@ AppController.prototype.onTab = function() {
     // Update block library category.
     var categoryXml = this.exporter.getBlockLibCategory();
     this.workspaceFactoryController.setBlockLibCategory(categoryXml);
+    // Enable key events.
+    this.workspaceFactoryController.keyEventsEnabled = true;
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     // Show workspace factory container.
@@ -466,34 +472,6 @@ AppController.prototype.initializeBlocklyStorage = function() {
 };
 
 /**
- * Adds keydown event listener for workspace factory. Needs to be initialized
- * in app controller instead of workspace factory init so that it can
- * check the selectedTab in app controller.
- */
-AppController.prototype.addWorkspaceFactoryKeyEventListeners = function() {
-  var self = this;
-  var controller = this.workspaceFactoryController;
-
-  // Use up and down arrow keys to move categories.
-  window.addEventListener('keydown', function(e) {
-    // Don't let arrow keys have any effect if not in Workspace Factory
-    // editing the toolbox.
-    if (self.selectedTab != 'WORKSPACE_FACTORY' || controller.selectedMode
-        != WorkspaceFactoryController.MODE_TOOLBOX) {
-      return;
-    }
-
-    if (e.keyCode == 38) {
-      // Arrow up.
-      controller.moveElement(-1);
-    } else if (e.keyCode == 40) {
-      // Arrow down.
-      controller.moveElement(1);
-    }
-  });
-}
-
-/**
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
@@ -552,7 +530,6 @@ AppController.prototype.init = function() {
 
   // Workspace Factory init.
   WorkspaceFactoryInit.initWorkspaceFactory(this.workspaceFactoryController);
-  this.addWorkspaceFactoryKeyEventListeners();
 };
 
 

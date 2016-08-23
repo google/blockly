@@ -52,9 +52,7 @@ WorkspaceFactoryView.prototype.addCategoryRow =
   var table = document.getElementById('categoryTable');
   // Delete help label and enable category buttons if it's the first category.
   if (firstCategory) {
-    var labelTab = table.rows[0].cells[0];
-    labelTab.textContent = 'Your Categories:';
-    labelTab.id = 'tab_categoryHeader';
+    document.getElementById('categoryHeader').textContent = 'Your Categories:';
   }
   // Create tab.
   var count = table.rows.length;
@@ -95,10 +93,9 @@ WorkspaceFactoryView.prototype.deleteElementRow = function(id, index) {
  */
 WorkspaceFactoryView.prototype.addEmptyCategoryMessage = function() {
   var table = document.getElementById('categoryTable');
-  if (table.rows.length == 1) {
-    var helpLabel = table.rows[0].cells[0];
-    helpLabel.textContent = 'Your categories will appear here';
-    helpLabel.id = 'tab_help';
+  if (table.rows.length == 0) {
+    document.getElementById('categoryHeader').textContent =
+        'Your categories will appear here';
   }
 }
 
@@ -220,18 +217,16 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
     throw new Error('Index out of bounds when moving tab in the view.');
   }
 
-  // Add 1 to newIndex and oldIndex to get the row with the corresponding tab
-  // in the view to account for the help tab at position 0.
   if (newIndex < oldIndex) {
     // Inserting before.
-    var row = table.insertRow(newIndex + 1);
-    row.appendChild(this.tabMap[id]);
-    table.deleteRow(oldIndex + 2);
-  } else {
-    // Inserting after.
-    var row = table.insertRow(newIndex + 2);
+    var row = table.insertRow(newIndex);
     row.appendChild(this.tabMap[id]);
     table.deleteRow(oldIndex + 1);
+  } else {
+    // Inserting after.
+    var row = table.insertRow(newIndex + 1);
+    row.appendChild(this.tabMap[id]);
+    table.deleteRow(oldIndex);
   }
 };
 
@@ -304,6 +299,7 @@ WorkspaceFactoryView.prototype.clearToolboxTabs = function() {
   var oldCategoryTable = document.getElementById('categoryTable');
   var newCategoryTable = document.createElement('table');
   newCategoryTable.id = 'categoryTable';
+  newCategoryTable.style.width = 'auto';
   oldCategoryTable.parentElement.replaceChild(newCategoryTable,
       oldCategoryTable);
 };

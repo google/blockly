@@ -333,10 +333,16 @@ AppController.prototype.onTab = function() {
     // Update block library category.
     var categoryXml = this.exporter.getBlockLibraryCategory();
     this.workspaceFactoryController.setBlockLibraryCategory(categoryXml);
+
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     // Show workspace factory container.
     FactoryUtils.show('workspaceFactoryContent');
+    // Update block library category.
+    var categoryXml = this.exporter.getBlockLibCategory();
+    var blockTypes = this.blockLibraryController.getStoredBlockTypes();
+    this.workspaceFactoryController.setBlockLibCategory(categoryXml,
+        blockTypes);
   }
 
   // Resize to render workspaces' toolboxes correctly for all tabs.

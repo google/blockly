@@ -53,6 +53,11 @@ WorkspaceFactoryModel = function() {
   this.preloadXml = Blockly.Xml.textToDom('<xml></xml>');
   // Options object to be configured for Blockly inject call.
   this.options = new Object(null);
+  // Block Library block types.
+  this.libBlockTypes = [];
+  // Imported block types.
+  this.importedBlockTypes = [];
+  //
 };
 
 /**
@@ -468,6 +473,39 @@ WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
 
   return blockTypeList;
 };
+
+/**
+ * Adds new imported block types to the list of current imported block types.
+ *
+ * @param {!Array<!string>} blockTypes Array of block types imported.
+ */
+WorkspaceFactoryModel.prototype.addImportedBlockTypes = function(blockTypes) {
+  this.importedBlockTypes = this.importedBlockTypes.concat(blockTypes);
+};
+
+/**
+ * Updates block types in block library.
+ *
+ * @param {!Array<!string>} blockTypes Array of block types in block library.
+ */
+WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
+  this.libBlockTypes = blockTypes;
+};
+
+/**
+ * Determines if a block type is defined as a standard block, in the block
+ * library, or as an imported block.
+ *
+ * @param {!string} blockType Block type to check.
+ * @return {boolean} True if blockType is defined, false otherwise.
+ */
+WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
+  var isStandardBlock = StandardCategories.coreBlockTypes.indexOf(blockType)
+      != -1;
+  var isLibBlock = this.libBlockTypes.indexOf(blockType) != -1;
+  var isImportedBlock = this.importedBlockTypes.indexOf(blockType) != -1;
+  return (isStandardBlock || isLibBlock || isImportedBlock);
+}
 
 /**
  * Class for a ListElement.

@@ -370,20 +370,28 @@ AppController.prototype.assignExporterClickHandlers = function() {
 AppController.prototype.assignExporterChangeListeners = function() {
   var self = this;
 
+  var blockDefCheck = document.getElementById('blockDefCheck');
+  var genStubCheck = document.getElementById('genStubCheck');
+
+  var blockDefs = document.getElementById('blockDefs');
+  var blockDefSettings = document.getElementById('blockDefSettings');
+  var blockDefElements = [blockDefs, blockDefSettings];
+
+  var genStubs = document.getElementById('genStubs');
+  var genStubSettings = document.getElementById('genStubSettings');
+  var genStubElements = [genStubs, genStubSettings];
+
   // Select the block definitions and generator stubs on default.
-  document.getElementById('blockDefCheck').checked = true;
-  document.getElementById('genStubCheck').checked = true;
+  blockDefCheck.checked = true;
+  genStubCheck.checked = true;
+
   // Checking the block definitions checkbox displays preview of code to export.
   document.getElementById('blockDefCheck').addEventListener('change',
       function(e) {
-        document.getElementById('blockDefs_label').style.display =
-            document.getElementById('blockDefCheck').checked ?
-            'block' : 'none';
-        document.getElementById('blockDefs_textArea').style.display =
-            document.getElementById('blockDefCheck').checked ?
-            'block' : 'none';
+        self.ifCheckedDisplay(blockDefCheck, blockDefElements);
       });
 
+  // Preview updates when user selects different block definition format.
   document.getElementById('exportFormat').addEventListener('change',
       function(e) {
         self.exporter.updateBlockDefs();
@@ -392,20 +400,29 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Checking the generator stub checkbox displays preview of code to export.
   document.getElementById('genStubCheck').addEventListener('change',
       function(e) {
-        document.getElementById('genStubs_label').style.display =
-            document.getElementById('genStubCheck').checked ?
-            'block' : 'none';
-        document.getElementById('genStubs_textArea').style.display =
-            document.getElementById('genStubCheck').checked ?
-            'block' : 'none';
+        self.ifCheckedDisplay(genStubCheck, genStubElements);
       });
 
+  // Preview updates when user selects different generator stub language.
   document.getElementById('exportLanguage').addEventListener('change',
       function(e) {
         self.exporter.updateGenStubs();
       });
 
   self.exporter.addChangeListenersToSelectorWorkspace();
+};
+
+/**
+ * If given checkbox is checked, display given elements. Otherwise, hide.
+ *
+ * @param {!Element} checkbox - Input element of type checkbox.
+ * @param {!Array.<!Element>} elementArray - Array of elements to show when
+ *    block is checked.
+ */
+AppController.prototype.ifCheckedDisplay = function(checkbox, elementArray) {
+  for (var i = 0, element; element = elementArray[i]; i++) {
+    element.style.display = checkbox.checked ? 'block' : 'none';
+  }
 };
 
 /**

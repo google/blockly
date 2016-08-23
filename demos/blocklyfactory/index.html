@@ -78,28 +78,34 @@
       <h3> Export Settings </h3>
       <form id="exportSettingsForm">
         <br>
-        Block Definition(s):
-        <input type="checkbox" id="blockDefCheck"><br>
-              Language code:
-                <select id="exportFormat">
-                  <option value="JSON">JSON</option>
-                  <option value="JavaScript">JavaScript</option>
-                </select><br>
-          Block Definition(s) File Name:<br>
+        <input type="checkbox" id="blockDefCheck">Block Definition(s)<br>
+        <div id="blockDefSettings" class="subsettings">
+          Format:
+          <select id="exportFormat">
+            <option value="JSON">JSON</option>
+            <option value="JavaScript">JavaScript</option>
+          </select>
+          <br>
+          File Name:
+          <br>
           <input type="text" id="blockDef_filename">
+        </div>
           <br>
+        <input type="checkbox" id="genStubCheck">Generator Stub(s)<br>
+        <div id="genStubSettings" class="subsettings">
+          Language:
+          <select id="exportLanguage">
+            <option value="JavaScript">JavaScript</option>
+            <option value="Python">Python</option>
+            <option value="PHP">PHP</option>
+            <option value="Lua">Lua</option>
+            <option value="Dart">Dart</option>
+          </select>
           <br>
-        Generator Stub(s):
-        <input type="checkbox" id="genStubCheck"><br>
-                <select id="exportLanguage">
-                  <option value="JavaScript">JavaScript</option>
-                  <option value="Python">Python</option>
-                  <option value="PHP">PHP</option>
-                  <option value="Lua">Lua</option>
-                  <option value="Dart">Dart</option>
-                </select><br>
-          Block Generator Stub(s) File Name: <br>
+          File Name:
+          <br>
           <input type="text" id="generatorStub_filename"><br>
+        </div>
           <br>
       </form>
         <button id="exporterSubmitButton"> Export </button>

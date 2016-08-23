@@ -203,6 +203,10 @@ button, .buttonStyle {
   width: 20%;
 }
 
+.subsettings {
+  margin: 0px 25px;
+}
+
 #exporterHiddenWorkspace {
  display: none;
 }

@@ -263,7 +263,8 @@ AppController.prototype.addTabHandlers = function(tabMap) {
  * Set the selected tab.
  * @private
  *
- * @param {string} tabName AppController.BLOCK_FACTORY, AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
+ * @param {string} tabName AppController.BLOCK_FACTORY,
+ *    AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
  */
 AppController.prototype.setSelected_ = function(tabName) {
   this.selectedTab = tabName;
@@ -273,7 +274,8 @@ AppController.prototype.setSelected_ = function(tabName) {
  * Creates the tab click handler specific to the tab specified.
  * @private
  *
- * @param {string} tabName AppController.BLOCK_FACTORY, AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
+ * @param {string} tabName AppController.BLOCK_FACTORY,
+ *    AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
  * @return {Function} The tab click handler.
  */
 AppController.prototype.makeTabClickHandler_ = function(tabName) {

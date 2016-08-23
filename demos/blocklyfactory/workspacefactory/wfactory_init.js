@@ -232,7 +232,9 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
       ('click',
       function() {
         document.getElementById('dropdownDiv_export').classList.toggle("show");
-        document.getElementById('dropdownDiv_import').classList.remove("show");
+        document.getElementById('dropdownDiv_load').classList.remove("show");
+        document.getElementById('dropdownDiv_importBlocks').classList.
+            remove("show");
       })
 
   document.getElementById('button_print').addEventListener
@@ -296,47 +298,64 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
             remove("show");
       });
 
-document.getElementById('button_import').addEventListener
+document.getElementById('button_importBlocks').addEventListener
       ('click',
       function() {
-        document.getElementById('dropdownDiv_import').classList.toggle("show");
+        document.getElementById('dropdownDiv_importBlocks').classList.
+            toggle("show");
         document.getElementById('dropdownDiv_export').classList.remove("show");
+        document.getElementById('dropdownDiv_load').classList.remove("show");
       });
 
-  document.getElementById('input_importToolbox').addEventListener
+  document.getElementById('button_load').addEventListener
+      ('click',
+      function() {
+        document.getElementById('dropdownDiv_load').classList.toggle("show");
+        document.getElementById('dropdownDiv_export').classList.remove("show");
+        document.getElementById('dropdownDiv_importBlocks').classList.
+            remove("show");
+      });
+
+  document.getElementById('input_loadToolbox').addEventListener
       ('change',
       function() {
         controller.importFile(event.target.files[0],
             WorkspaceFactoryController.MODE_TOOLBOX);
-        document.getElementById('dropdownDiv_import').classList.remove("show");
+        document.getElementById('dropdownDiv_load').classList.remove("show");
       });
 
-  document.getElementById('input_importPreload').addEventListener
+  document.getElementById('input_loadPreload').addEventListener
       ('change',
       function() {
         controller.importFile(event.target.files[0],
             WorkspaceFactoryController.MODE_PRELOAD);
-        document.getElementById('dropdownDiv_import').classList.remove("show");
+        document.getElementById('dropdownDiv_load').classList.remove("show");
       });
 
-  document.getElementById('input_importCategoryJson').addEventListener
+  document.getElementById('input_importBlocksJson').addEventListener
       ('change',
       function() {
         controller.importBlocks(event.target.files[0],'JSON');
-        document.getElementById('dropdownDiv_import').classList.remove("show");
+        document.getElementById('dropdownDiv_importBlocks').classList.
+            remove("show");
       });
 
-  document.getElementById('input_importCategoryJs').addEventListener
+  document.getElementById('input_importBlocksJs').addEventListener
       ('change',
       function() {
         controller.importBlocks(event.target.files[0],'JavaScript');
-        document.getElementById('dropdownDiv_import').classList.remove("show");
+        document.getElementById('dropdownDiv_importBlocks').classList.
+            remove("show");
       });
 
   document.getElementById('button_clear').addEventListener
       ('click',
       function() {
         controller.clearToolbox();
+        document.getElementById('dropdownDiv_importBlocks').classList.
+            remove("show");
+        document.getElementById('dropdownDiv_export').classList.remove("show");
+        document.getElementById('dropdownDiv_load').classList.remove("show");
       });
 
   document.getElementById('dropdown_addShadow').addEventListener

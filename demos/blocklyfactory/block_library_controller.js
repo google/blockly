@@ -139,12 +139,17 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
     }
   }
 
-  // Save block.
+  // Create block xml.
   var xmlElement = goog.dom.createDom('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
+
+  // Save block.
   this.storage.addBlock(blockType, xmlElement);
   this.storage.saveToLocalStorage();
+
+  // Show saved block without other stray blocks sitting in Block Factory's
+  // main workspace.
   this.openBlock(blockType);
 
   // Do not add another option to dropdown if replacing.

@@ -32,6 +32,7 @@
 goog.provide('BlockExporterController');
 
 goog.require('FactoryUtils');
+goog.require('StandardCategories');
 goog.require('BlockExporterView');
 goog.require('BlockExporterTools');
 goog.require('goog.dom.xml');
@@ -64,7 +65,7 @@ BlockExporterController = function(blockLibStorage) {
  * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
  *    that stores the blocks.
  */
-BlockExporterController.prototype.setBlockLibStorage =
+BlockExporterController.prototype.setBlockLibraryStorage =
     function(blockLibStorage) {
   this.blockLibStorage = blockLibStorage;
 };
@@ -75,7 +76,8 @@ BlockExporterController.prototype.setBlockLibStorage =
  * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
  *    that stores the blocks.
  */
-BlockExporterController.prototype.getBlockLibStorage = function() {
+BlockExporterController.prototype.getBlockLibraryStorage =
+    function(blockLibStorage) {
   return this.blockLibStorage;
 };
 
@@ -187,8 +189,7 @@ BlockExporterController.prototype.selectAllBlocks = function() {
  *
  * @return {Element} Xml for a category to be used in toolbox.
  */
-
-BlockExporterController.prototype.getBlockLibCategory = function() {
+BlockExporterController.prototype.getBlockLibraryCategory = function() {
   return this.tools.generateCategoryFromBlockLib(this.blockLibStorage);
 };
 
@@ -244,7 +245,7 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
   for (var i = 0, blockType; blockType = this.usedBlockTypes[i]; i++) {
     if (storedBlockTypes.indexOf(blockType) != -1) {
       sharedBlockTypes.push(blockType);
-    } else if (BlockFactory.standardBlockTypes.indexOf(blockType) == -1) {
+    } else if (StandardCategories.coreBlockTypes.indexOf(blockType) == -1) {
       unstoredCustomBlockTypes.push(blockType);
     }
   }

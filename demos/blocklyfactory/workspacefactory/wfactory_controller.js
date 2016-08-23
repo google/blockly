@@ -1184,7 +1184,7 @@ WorkspaceFactoryController.prototype.importBlocks =
  *
  * @param {!Element} categoryXml XML for the block library category.
  */
-WorkspaceFactoryController.prototype.setBlockLibCategory =
+WorkspaceFactoryController.prototype.setBlockLibraryCategory =
     function(categoryXml) {
   var blockLibCategory = document.getElementById('blockLibCategory');
 

@@ -1240,7 +1240,7 @@ WorkspaceFactoryController.prototype.warnForUndefinedBlocks_ = function() {
   for (var i = 0, block; block = blocks[i]; i++) {
     if (!this.isDefinedBlock(block)) {
       block.setWarningText(block.type + ' is not defined (it is not a standard '
-          + 'block, in your block library, or an imported block)');
+          + 'block, \nin your block library, or an imported block)');
     }
   }
 };

@@ -302,6 +302,9 @@ AppController.prototype.onTab = function() {
     var usedBlockTypes = this.workspaceFactoryController.getAllUsedBlockTypes();
     this.exporter.setUsedBlockTypes(usedBlockTypes);
 
+    // Update the preview to reflect any changes made to the blocks.
+    this.exporter.updatePreview();
+
     // Show container of exporter.
     FactoryUtils.show('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
@@ -344,7 +347,6 @@ AppController.prototype.styleTabs_ = function() {
  */
 AppController.prototype.assignExporterClickHandlers = function() {
   var self = this;
-
   document.getElementById('button_setBlocks').addEventListener('click',
       function() {
         document.getElementById('dropdownDiv_setBlocks').classList.toggle("show");
@@ -373,6 +375,68 @@ AppController.prototype.assignExporterClickHandlers = function() {
       function() {
         self.exporter.export();
       });
+};
+
+/**
+ * Assign change listeners for the exporter. These allow for the dynamic update
+ * of the exporter preview.
+ */
+AppController.prototype.assignExporterChangeListeners = function() {
+  var self = this;
+
+  var blockDefCheck = document.getElementById('blockDefCheck');
+  var genStubCheck = document.getElementById('genStubCheck');
+
+  var blockDefs = document.getElementById('blockDefs');
+  var blockDefSettings = document.getElementById('blockDefSettings');
+  var blockDefElements = [blockDefs, blockDefSettings];
+
+  var genStubs = document.getElementById('genStubs');
+  var genStubSettings = document.getElementById('genStubSettings');
+  var genStubElements = [genStubs, genStubSettings];
+
+  // Select the block definitions and generator stubs on default.
+  blockDefCheck.checked = true;
+  genStubCheck.checked = true;
+
+  // Checking the block definitions checkbox displays preview of code to export.
+  document.getElementById('blockDefCheck').addEventListener('change',
+      function(e) {
+        self.ifCheckedDisplay(blockDefCheck, blockDefElements);
+      });
+
+  // Preview updates when user selects different block definition format.
+  document.getElementById('exportFormat').addEventListener('change',
+      function(e) {
+        self.exporter.updatePreview();
+      });
+
+  // Checking the generator stub checkbox displays preview of code to export.
+  document.getElementById('genStubCheck').addEventListener('change',
+      function(e) {
+        self.ifCheckedDisplay(genStubCheck, genStubElements);
+      });
+
+  // Preview updates when user selects different generator stub language.
+  document.getElementById('exportLanguage').addEventListener('change',
+      function(e) {
+        self.exporter.updatePreview();
+      });
+
+  self.exporter.addChangeListenersToSelectorWorkspace();
+};
+
+/**
+ * If given checkbox is checked, display given elements. Otherwise, hide.
+ *
+ * @param {!Element} checkbox - Input element of type checkbox.
+ * @param {!Array.<!Element>} elementArray - Array of elements to show when
+ *    block is checked.
+ */
+AppController.prototype.ifCheckedDisplay = function(checkbox, elementArray) {
+  for (var i = 0, element; element = elementArray[i]; i++) {
+    element.style.display = checkbox.checked ? 'block' : 'none';
+  }
 };
 
 /**
@@ -522,7 +586,8 @@ AppController.prototype.init = function() {
   // Add tab handlers for switching between Block Factory and Block Exporter.
   this.addTabHandlers(this.tabMap);
 
-  this.exporter.addChangeListenersToSelectorWorkspace();
+  // Assign exporter change listeners.
+  this.assignExporterChangeListeners();
 
   // Create the root block on Block Factory main workspace.
   if ('BlocklyStorage' in window && window.location.hash.length > 1) {

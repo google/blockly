@@ -20,6 +20,7 @@
 
 html, body {
   height: 100%;
+  min-height: 375px;
 }
 
 body {
@@ -209,24 +210,49 @@ button, .buttonStyle {
 }
 
 ::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 7px;
+  -webkit-appearance: none;
+  width: 7px;
 }
+
 ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: #ccc;
-    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  border-radius: 4px;
+  background-color: #ccc;
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+.subsettings {
+  margin: 0px 25px;
 }
 
 #exporterHiddenWorkspace {
  display: none;
 }
 
-#exporterPreview {
+#exportPreview {
   float: right;
-  padding: 16px;
+  height: 90%;
   overflow: hidden;
-  background-color: blue;
+  width: 45%;
+}
+
+.exportPreviewTextArea {
+  display: block;
+  float: right;
+  height: 40%;
+  width: 100%;
+}
+
+#genStubs_textArea, #blockDefs_textArea {
+  display: block;
+  height: 80%;
+  margin-right: 20px;
+  max-height: 300px;
+  overflow: scroll;
+  position: static;
+}
+
+#blockDefs_label, #genStubs_label {
+  display: block;
 }
 
 /* Tabs */

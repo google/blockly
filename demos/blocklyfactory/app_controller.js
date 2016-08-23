@@ -394,7 +394,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Preview updates when user selects different block definition format.
   document.getElementById('exportFormat').addEventListener('change',
       function(e) {
-        self.exporter.updateBlockDefs();
+        self.exporter.updatePreview();
       });
 
   // Checking the generator stub checkbox displays preview of code to export.
@@ -406,7 +406,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Preview updates when user selects different generator stub language.
   document.getElementById('exportLanguage').addEventListener('change',
       function(e) {
-        self.exporter.updateGenStubs();
+        self.exporter.updatePreview();
       });
 
   self.exporter.addChangeListenersToSelectorWorkspace();

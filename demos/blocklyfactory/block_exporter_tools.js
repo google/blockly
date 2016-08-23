@@ -83,7 +83,7 @@ BlockExporterTools.prototype.getRootBlockFromXml_ = function(xml) {
  * @return {string} The concatenation of each block's language code in the
  *    desired format.
  */
-BlockExporterTools.prototype.getBlockDefs =
+BlockExporterTools.prototype.getBlockDefinitions =
     function(blockXmlMap, definitionFormat) {
   var blockCode = [];
   for (var blockType in blockXmlMap) {
@@ -160,7 +160,7 @@ BlockExporterTools.prototype.getGeneratorCode =
  * @param {!Object} blockXmlMap - Map of block type to xml.
  */
 BlockExporterTools.prototype.addBlockDefinitions = function(blockXmlMap) {
-  var blockDefs = this.getBlockDefs(blockXmlMap, 'JavaScript');
+  var blockDefs = this.getBlockDefinitions(blockXmlMap, 'JavaScript');
   eval(blockDefs);
 };
 

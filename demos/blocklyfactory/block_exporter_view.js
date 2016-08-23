@@ -73,8 +73,9 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
 /**
  * Updates the helper text to show list of currently selected blocks.
  */
-BlockExporterView.prototype.listSelectedBlocks = function(selectedBlockTypes) {
-  var selectedBlocksText = selectedBlockTypes.join(",\n ");
+BlockExporterView.prototype.listSelectedBlocks = function() {
+
+  var selectedBlocksText = this.getSelectedBlockTypes().join(",\n ");
   goog.dom.getElement('selectedBlocksText').textContent = selectedBlocksText;
 };
 

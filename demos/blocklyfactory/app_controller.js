@@ -352,7 +352,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
 
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
-        self.exporter.addUsedBlocksToWorkspace();
+        self.exporter.selectUsedBlocks();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
@@ -364,7 +364,7 @@ AppController.prototype.assignExporterClickHandlers = function() {
 
   document.getElementById('dropdown_addAllFromLib').addEventListener('click',
       function() {
-        self.exporter.addAllBlocksToWorkspace();
+        self.exporter.selectAllBlocks();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 

@@ -208,8 +208,7 @@ BlockExporterController.prototype.addBlockOptSelectHandlers = function() {
     blockOption.setSelected(selected);
 
     // Show currently selected blocks in helper text.
-    var selectedBlockTypes = self.view.getSelectedBlockTypes();
-    self.view.listSelectedBlocks(selectedBlockTypes);
+    self.view.listSelectedBlocks();
   };
 
   /**
@@ -238,10 +237,10 @@ BlockExporterController.prototype.addBlockOptSelectHandlers = function() {
 
 
 /**
- * Tied to the 'Add All Stored Blocks' button in the Block Exporter.
- * Adds all blocks stored in block library to the selector workspace.
+ * Tied to the 'All Used' button in the Block Exporter's 'Select' button.
+ * Selects all blocks stored in block library and used in workspace factory.
  */
-BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
+BlockExporterController.prototype.selectUsedBlocks = function() {
   // Deselect all blocks.
   this.view.deselectAllBlocks();
 
@@ -260,10 +259,11 @@ BlockExporterController.prototype.addUsedBlocksToWorkspace = function() {
     }
   }
 
-  // For every block, render in selector workspace.
+  // Select each shared block type.
   for (var i = 0, blockType; blockType = sharedBlockTypes[i]; i++) {
     this.view.select(blockType);
   }
+  this.view.listSelectedBlocks();
 
   if (unstoredCustomBlockTypes.length > 0){
     // Warn user to import block defifnitions and generator code for blocks

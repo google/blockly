@@ -1173,6 +1173,8 @@ WorkspaceFactoryController.prototype.importBlocks =
  * Updates the block library category in the toolbox workspace toolbox.
  *
  * @param {!Element} categoryXml XML for the block library category.
+ * @param {!Array<!string>} libBlockTypes Array of block types from the block
+ *    library.
  */
 WorkspaceFactoryController.prototype.setBlockLibCategory =
     function(categoryXml, libBlockTypes) {

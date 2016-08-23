@@ -55,16 +55,6 @@ BlockExporterView.prototype.setBlockOptions = function(blockOpts) {
 };
 
 /**
- * Set the block options in the selector of this instance of
- * BlockExporterView.
- *
- * @param {!Object} blockOptions - Map of block types to BlockOption objects.
- */
-BlockExporterView.prototype.getBlockOptions = function(blockOpts) {
-  this.blockOptions = blockOpts;
-};
-
-/**
  * Updates the helper text.
  *
  * @param {string} newText - New helper text.
@@ -124,7 +114,7 @@ BlockExporterView.prototype.deselectAllBlocks = function() {
  * @param {Array.<Blockly.Block>} blockTypes - Array of block types to select.
  */
 BlockExporterView.prototype.setSelectedBlockTypes = function(blockTypes) {
-  for (var i =0, blockType; blockType = blockTypes[i]; i++) {
+  for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
     this.select(blockType);
   }
 };

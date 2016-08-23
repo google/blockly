@@ -63,8 +63,8 @@ var BlockOption = function(blockSelector, blockType, previewBlockXml) {
  * Creates the dom for a single block option. Includes checkbox, label, and div
  * in which to inject the preview block.
  *
- * @return {!Element} Root node of the selector dom which consists of a checkbox,
- *  a label, and a fixed size preview workspace per block.
+ * @return {!Element} Root node of the selector dom which consists of a
+ * checkbox, a label, and a fixed size preview workspace per block.
  */
 BlockOption.prototype.createDom = function() {
   // Create the div for the block option.
@@ -73,8 +73,8 @@ BlockOption.prototype.createDom = function() {
     'class': 'blockOption'
   }, ''); // Empty quotes for empty div.
 
-  // Create and append div in which to inject the workspace for viewing the block
-  // option.
+  // Create and append div in which to inject the workspace for viewing the
+  // block option.
   var blockOptionPreview = goog.dom.createDom('div', {
     'id' : this.blockType + '_workspace',
     'class': 'blockOption_preview'

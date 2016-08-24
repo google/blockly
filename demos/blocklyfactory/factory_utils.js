@@ -924,11 +924,29 @@ FactoryUtils.hasVariableField = function(block) {
   if (!block) {
     return false;
   }
-  for (var i = 0; i < block.inputList.length; i++) {
-    if (block.inputList[i].fieldRow.length > 0 &&
-        block.inputList[i].fieldRow[0].name == 'VAR') {
-      return true;
+  for (var i = 0, input; input = block.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field.name == 'VAR') {
+        return true;
+      }
     }
   }
   return false;
+};
+
+/**
+ * Checks if a block is a procedures block. If procedures block names are
+ * ever updated or expanded, this function should be updated as well (no
+ * other known markers for procedure blocks beyond name).
+ *
+ * @param {Blockly.Block} block The block to check.
+ * @return {boolean} True if hte block is a procedure block, false otherwise.
+ */
+FactoryUtils.isProcedureBlock = function(block) {
+  return block &&
+      (block.type == 'procedures_defnoreturn' ||
+      block.type == 'procedures_defreturn' ||
+      block.type == 'procedures_callnoreturn' ||
+      block.type == 'procedures_callreturn' ||
+      block.type == 'procedures_ifreturn');
 };

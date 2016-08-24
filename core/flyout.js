@@ -189,6 +189,20 @@ Blockly.Flyout.prototype.DRAG_RADIUS = 10;
 Blockly.Flyout.prototype.MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS;
 
 /**
+ * Gap between items in horizontal flyouts. Can be overridden with the "sep"
+ * element.
+ * @const {number}
+ */
+Blockly.Flyout.prototype.GAP_X = Blockly.Flyout.prototype.MARGIN * 3;
+
+/**
+ * Gap between items in vertical flyouts. Can be overridden with the "sep"
+ * element.
+ * @const {number}
+ */
+Blockly.Flyout.prototype.GAP_Y = Blockly.Flyout.prototype.MARGIN * 3;
+
+/**
  * Top/bottom padding between scrollbar and edge of flyout background.
  * @type {number}
  * @const
@@ -649,6 +663,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   for (var i = 0, xml; xml = xmlList[i]; i++) {
     if (xml.tagName) {
       var tagName = xml.tagName.toUpperCase();
+      var default_gap = this.horizontalLayout_ ? this.GAP_X : this.GAP_Y;
       if (tagName == 'BLOCK') {
         var curBlock = Blockly.Xml.domToBlock(xml, this.workspace_);
         if (curBlock.disabled) {
@@ -658,7 +673,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         }
         contents.push({type: 'block', block: curBlock});
         var gap = parseInt(xml.getAttribute('gap'), 10);
-        gaps.push(isNaN(gap) ? this.MARGIN * 3 : gap);
+        gaps.push(isNaN(gap) ? default_gap : gap);
       } else if (xml.tagName.toUpperCase() == 'SEP') {
         // Change the gap between two blocks.
         // <sep gap="36"></sep>
@@ -671,14 +686,14 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         if (!isNaN(newGap) && gaps.length > 0) {
           gaps[gaps.length - 1] = newGap;
         } else {
-          gaps.push(this.MARGIN * 3);
+          gaps.push(default_gap);
         }
       } else if (tagName == 'BUTTON') {
         var label = xml.getAttribute('text');
         var curButton = new Blockly.FlyoutButton(this.workspace_,
             this.targetWorkspace_, label);
         contents.push({type: 'button', button: curButton});
-        gaps.push(this.MARGIN);
+        gaps.push(default_gap);
       }
     }
   }

@@ -96,7 +96,7 @@ AppController.prototype.importBlockLibraryFromFile = function() {
       var blockXmlTextMap = Object.create(null);
       try {
         // Parse the file to get map of block type to xml text.
-        blockXmlTextMap = self.formatBlockLibForImport_(fileContents);
+        blockXmlTextMap = self.formatBlockLibraryForImport_(fileContents);
       } catch (e) {
         var message = 'Could not load your block library file.\n'
         window.alert(message + '\nFile Name: ' + file.name);
@@ -109,11 +109,11 @@ AppController.prototype.importBlockLibraryFromFile = function() {
 
       // Update block library controller with the new block library
       // storage.
-      self.blockLibraryController.setBlockLibStorage(blockLibStorage);
+      self.blockLibraryController.setBlockLibraryStorage(blockLibStorage);
       // Update the block library dropdown.
       self.blockLibraryController.populateBlockLibrary();
       // Update the exporter's block library storage.
-      self.exporter.setBlockLibStorage(blockLibStorage);
+      self.exporter.setBlockLibraryStorage(blockLibStorage);
     });
     // Read the file.
     fileReader.readAsText(file);
@@ -128,7 +128,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
   // Get map of block type to xml.
   var blockLib = this.blockLibraryController.getBlockLibrary();
   // Concatenate the xmls, each separated by a blank line.
-  var blockLibText = this.formatBlockLibForExport_(blockLib);
+  var blockLibText = this.formatBlockLibraryForExport_(blockLib);
   // Get file name.
   var filename = prompt('Enter the file name under which to save your block ' +
       'library.');
@@ -148,7 +148,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
  * @param {!Object} blockXmlMap - Object mapping block type to xml.
  * @return {string} Xml text containing the block xmls.
  */
-AppController.prototype.formatBlockLibForExport_ = function(blockXmlMap) {
+AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
   // Create DOM for XML.
   var xmlDom = goog.dom.createDom('xml', {
     'xmlns':"http://www.w3.org/1999/xhtml"
@@ -173,7 +173,7 @@ AppController.prototype.formatBlockLibForExport_ = function(blockXmlMap) {
  *    a child node.
  * @return {!Object} object mapping block type to xml text.
  */
-AppController.prototype.formatBlockLibForImport_ = function(xmlText) {
+AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
   var xmlDom = Blockly.Xml.textToDom(xmlText);
 
   // Get array of xmls. Use an asterisk (*) instead of a tag name for the XPath
@@ -331,8 +331,8 @@ AppController.prototype.onTab = function() {
 
   } else if (this.selectedTab == AppController.WORKSPACE_FACTORY) {
     // Update block library category.
-    var categoryXml = this.exporter.getBlockLibCategory();
-    this.workspaceFactoryController.setBlockLibCategory(categoryXml);
+    var categoryXml = this.exporter.getBlockLibraryCategory();
+    this.workspaceFactoryController.setBlockLibraryCategory(categoryXml);
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     // Show workspace factory container.

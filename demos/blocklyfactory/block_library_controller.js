@@ -205,7 +205,7 @@ BlockLibraryController.prototype.getBlockLibrary = function() {
  * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage
  *    object.
  */
-BlockLibraryController.prototype.setBlockLibStorage
+BlockLibraryController.prototype.setBlockLibraryStorage
     = function(blockLibStorage) {
   this.storage = blockLibStorage;
 };
@@ -216,7 +216,7 @@ BlockLibraryController.prototype.setBlockLibStorage
  * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
  *    that stores the blocks.
  */
-BlockLibraryController.prototype.getBlockLibStorage = function() {
+BlockLibraryController.prototype.getBlockLibraryStorage = function() {
   return this.blockLibStorage;
 };
 
@@ -225,6 +225,6 @@ BlockLibraryController.prototype.getBlockLibStorage = function() {
  *
  * @return {boolean} True if the Block Library is empty, false otherwise.
  */
-BlockLibraryController.prototype.hasEmptyBlockLib = function() {
+BlockLibraryController.prototype.hasEmptyBlockLibrary = function() {
   return this.storage.isEmpty();
 };

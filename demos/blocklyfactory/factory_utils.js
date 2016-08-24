@@ -737,7 +737,7 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
  * @param {!string} blockDef - A single block definition.
  * @return {string} Type of block defined by the given definition.
  */
-FactoryUtils.getBlockTypeFromJsDef = function(blockDef) {
+FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
   var indexOfStartBracket = blockDef.indexOf('[\'');
   var indexOfEndBracket = blockDef.indexOf('\']');
   if (indexOfStartBracket != -1 && indexOfEndBracket != -1) {
@@ -780,7 +780,7 @@ FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
  * @param {!string} blockDefsString - JavaScript block definition(s).
  * @return {!Array.<string>} - Array of block definitions.
  */
-FactoryUtils.parseJsBlockDefs = function(blockDefsString) {
+FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
   var defStart = blockDefsString.indexOf('Blockly.Blocks');
 
@@ -807,7 +807,7 @@ FactoryUtils.parseJsBlockDefs = function(blockDefsString) {
  *    definition(s).
  * @return {!Array.<string>} - Array of block definitions.
  */
-FactoryUtils.parseJsonBlockDefs = function(blockDefsString) {
+FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
   var unbalancedBracketCount = 0;
   var defStart = 0;
@@ -843,7 +843,7 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
 
   // Define blocks and get block types.
   if (format == 'JSON') {
-    var blockDefArray = FactoryUtils.parseJsonBlockDefs(blockDefsString);
+    var blockDefArray = FactoryUtils.parseJsonBlockDefinitions(blockDefsString);
 
     // Populate array of blocktypes and define each block.
     for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
@@ -858,11 +858,11 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
       };
     }
   } else if (format == 'JavaScript') {
-    var blockDefArray = FactoryUtils.parseJsBlockDefs(blockDefsString);
+    var blockDefArray = FactoryUtils.parseJsBlockDefinitions(blockDefsString);
 
     // Populate array of block types.
     for (var i = 0, blockDef; blockDef = blockDefArray[i]; i++) {
-      var blockType = FactoryUtils.getBlockTypeFromJsDef(blockDef);
+      var blockType = FactoryUtils.getBlockTypeFromJsDefinition(blockDef);
       blockTypes.push(blockType);
     }
 

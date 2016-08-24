@@ -306,6 +306,12 @@ AppController.prototype.onTab = function() {
       this.selectedTab == AppController.WORKSPACE_FACTORY;
 
   if (this.selectedTab == AppController.EXPORTER) {
+    // Warn user that they will lose unsaved changes upon creating a
+    // new block.
+    if (!confirm('You will lose any unsaved changes.')) {
+      return;
+    }
+
     // Show container of exporter.
     FactoryUtils.show('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
@@ -321,7 +327,7 @@ AppController.prototype.onTab = function() {
     // Update exporter's block selector to reflect current block library.
     this.exporter.updateSelector();
 
-    // Update the preview to reflect any changes made to the blocks.
+    // Update the exporter's preview to reflect any changes made to the blocks.
     this.exporter.updatePreview();
 
   } else if (this.selectedTab ==  AppController.BLOCK_FACTORY) {
@@ -330,6 +336,12 @@ AppController.prototype.onTab = function() {
     FactoryUtils.hide('workspaceFactoryContent');
 
   } else if (this.selectedTab == AppController.WORKSPACE_FACTORY) {
+    // Warn user that they will lose unsaved changes upon creating a
+    // new block.
+    if (!confirm('You will lose any unsaved changes.')) {
+      return;
+    }
+
     // Hide container of exporter.
     FactoryUtils.hide('blockLibraryExporter');
     // Show workspace factory container.

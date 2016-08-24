@@ -519,8 +519,12 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
 
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
+      // Warn user that they will lose unsaved changes upon creating a
+      // new block.
+      if (confirm('You will lose any unsaved changes.')) {
         BlockFactory.showStarterBlock();
         BlockLibraryView.selectDefaultOption('blockLibraryDropdown');
+      }
     });
 };
 
@@ -529,6 +533,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
  */
 AppController.prototype.addBlockFactoryEventListeners = function() {
   BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
+  BlockFactory.mainWorkspace.addChangeListener(Blockly.Events.disableOrphans);
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);
   document.getElementById('languageTA')

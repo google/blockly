@@ -302,9 +302,7 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
     // Selects the next tab.
     this.view.setCategoryTabSelection(id, true);
 
-    // Mark all shadow blocks laoded and order blocks as if shown in a flyout.
-    this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
-          (this.toolboxWorkspace.getAllBlocks()));
+    // Order blocks as shown in flyout.
     this.toolboxWorkspace.cleanUp();
 
     // Update category editing buttons.
@@ -1023,6 +1021,7 @@ WorkspaceFactoryController.prototype.clearAndLoadXml_ = function(xml) {
   Blockly.Xml.domToWorkspace(xml, this.toolboxWorkspace);
   this.view.markShadowBlocks(this.model.getShadowBlocksInWorkspace
       (this.toolboxWorkspace.getAllBlocks()));
+  this.warnForUndefinedBlocks_();
 };
 
 /**
@@ -1156,6 +1155,10 @@ WorkspaceFactoryController.prototype.importBlocks =
       categoryXml.setAttribute('colour', randomColor);
       controller.toolbox.appendChild(categoryXml);
       controller.toolboxWorkspace.updateToolbox(controller.toolbox);
+      // Update imported block types.
+      this.model.addImportedBlocks(blockTypes);
+      // Reload current category to possibly reflect any newly defined blocks.
+      this.clearAndLoadXml_(Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
     } catch (e) {
       alert('Cannot read blocks from file.');
       window.console.log(e);
@@ -1170,9 +1173,11 @@ WorkspaceFactoryController.prototype.importBlocks =
  * Updates the block library category in the toolbox workspace toolbox.
  *
  * @param {!Element} categoryXml XML for the block library category.
+ * @param {!Array<!string>} libBlockTypes Array of block types from the block
+ *    library.
  */
-WorkspaceFactoryController.prototype.setBlockLibraryCategory =
-    function(categoryXml) {
+WorkspaceFactoryController.prototype.setBlockLibCategory =
+    function(categoryXml, libBlockTypes) {
   var blockLibCategory = document.getElementById('blockLibCategory');
 
   // Set category id so that it can be easily replaced, and set a standard,
@@ -1183,6 +1188,13 @@ WorkspaceFactoryController.prototype.setBlockLibraryCategory =
   // Update the toolbox and toolboxWorkspace.
   this.toolbox.replaceChild(categoryXml, blockLibCategory);
   this.toolboxWorkspace.updateToolbox(this.toolbox);
+
+  // Update the block library types.
+  this.model.updateLibBlockTypes(libBlockTypes);
+
+  // Reload XML on page to account for blocks now defined or undefined in block
+  // library.
+  this.clearAndLoadXml_(Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
 };
 
 /**
@@ -1193,4 +1205,29 @@ WorkspaceFactoryController.prototype.setBlockLibraryCategory =
  */
 WorkspaceFactoryController.prototype.getAllUsedBlockTypes = function() {
   return this.model.getAllUsedBlockTypes();
+};
+
+/**
+ * Determines if a block loaded in the workspace has a definition (if it
+ * is a standard block, is defined in the block library, or has a definition
+ * imported).
+ *
+ * @param {!Blockly.Block} block The block to examine.
+ */
+WorkspaceFactoryController.prototype.isDefinedBlock = function(block) {
+  return this.model.isDefinedBlockType(block.type);
+};
+
+/**
+ * Sets a warning on blocks loaded to the workspace that are not defined.
+ * @private
+ */
+WorkspaceFactoryController.prototype.warnForUndefinedBlocks_ = function() {
+  var blocks = this.toolboxWorkspace.getAllBlocks();
+  for (var i = 0, block; block = blocks[i]; i++) {
+    if (!this.isDefinedBlock(block)) {
+      block.setWarningText(block.type + ' is not defined (it is not a standard '
+          + 'block, \nin your block library, or an imported block)');
+    }
+  }
 };

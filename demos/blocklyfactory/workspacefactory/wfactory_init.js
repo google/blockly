@@ -443,7 +443,8 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         // Enable block editing and remove warnings if the block is not a
         // variable user-generated shadow block.
         document.getElementById('button_editShadow').disabled = false;
-        if (!controller.hasVariableField(selected)) {
+        if (!controller.hasVariableField(selected) &&
+            controller.isDefinedBlock(selected)) {
           selected.setWarningText(null);
         }
       } else {
@@ -473,7 +474,8 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
           // be a shadow block.
 
           // Remove possible 'invalid shadow block placement' warning.
-          if (selected != null && (!controller.hasVariableField(selected) ||
+          if (selected != null && controller.isDefinedBlock(selected) &&
+              (!controller.hasVariableField(selected) ||
               !controller.isUserGenShadowBlock(selected.id))) {
             selected.setWarningText(null);
           }

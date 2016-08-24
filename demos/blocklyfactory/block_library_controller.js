@@ -228,3 +228,12 @@ BlockLibraryController.prototype.getBlockLibraryStorage = function() {
 BlockLibraryController.prototype.hasEmptyBlockLibrary = function() {
   return this.storage.isEmpty();
 };
+
+/**
+ * Get all block types stored in block library.
+ *
+ * @return {!Array<!string>} Array of block types.
+ */
+BlockLibraryController.prototype.getStoredBlockTypes = function() {
+  return this.storage.getBlockTypes();
+};

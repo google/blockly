@@ -495,6 +495,51 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     // shadow blocks.
     if (e.type == Blockly.Events.CREATE) {
       controller.convertShadowBlocks();
+
+      // Let the user create a Variables or Functions category if they use
+      // blocks from either category.
+      var newBaseBlock = controller.toolboxWorkspace.getBlockById(e.blockId);
+
+      // Get all children of the newly created block.
+      var getAllChildren = function(block, childList) {
+        childList.push(block);
+        var children = block.getChildren();
+        for (var i = 0, child; child = children[i]; i++) {
+          getAllChildren(child, childList);
+        }
+      };
+
+      var allNewBlocks = [];
+      getAllChildren(newBaseBlock, allNewBlocks);
+      var variableCreated = false;
+      var procedureCreated = false;
+
+      // Check if the newly created block or any of its children are variable
+      // or procedure blocks.
+      for (var i = 0, block; block = allNewBlocks[i]; i++) {
+        if (FactoryUtils.hasVariableField(block)) {
+          variableCreated = true;
+        } else if (FactoryUtils.isProcedureBlock(block)) {
+          procedureCreated = true;
+        }
+      }
+
+      // If any of the newly created blocks are variable or procedure blocks,
+      // prompt the user to create the corresponding standard category.
+      if (variableCreated && !controller.hasVariablesCategory()) {
+        if (confirm('Your new block has a variables field. To use this block '
+            + 'fully, you will need a Variables category. Click OK to add '
+            + 'a Variables category to your custom toolbox.')) {
+          controller.loadCategoryByName('variables');
+        }
+
+      } else if (procedureCreated && !controller.hasProceduresCategory()) {
+        if (confirm('Your new block is a function block. To use this block '
+            + 'fully, you will need a Functions category. Click OK to add '
+            + 'a Functions category to your custom toolbox.')) {
+          controller.loadCategoryByName('functions');
+        }
+      }
     }
   });
 };

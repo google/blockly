@@ -56,6 +56,7 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
       branch + returnValue + '}';
+  code = Blockly.Dart.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
   Blockly.Dart.definitions_['%' + funcName] = code;
   return null;

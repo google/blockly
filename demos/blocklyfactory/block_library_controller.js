@@ -59,7 +59,7 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
  *
  * @return {string} The current block's type.
  */
-BlockLibraryController.prototype.getCurrentBlockType_ = function() {
+BlockLibraryController.prototype.getCurrentBlockType = function() {
   var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   // Replace white space with underscores
@@ -72,7 +72,7 @@ BlockLibraryController.prototype.getCurrentBlockType_ = function() {
  * @param {string} blockType - Type of block.
  */
 BlockLibraryController.prototype.removeFromBlockLibrary = function() {
-  var blockType = this.getCurrentBlockType_();
+  var blockType = this.getCurrentBlockType();
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
   this.populateBlockLibrary();
@@ -127,10 +127,10 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
  * Saves current block to local storage and updates dropdown.
  */
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
-  var blockType = this.getCurrentBlockType_();
+  var blockType = this.getCurrentBlockType();
   // If block under that name already exists, confirm that user wants to replace
   // saved block.
-  if (this.isInBlockLibrary(blockType)) {
+  if (this.has(blockType)) {
     var replace = confirm('You already have a block called ' + blockType +
       ' in your library. Click OK to replace.');
     if (!replace) {
@@ -166,7 +166,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
  * @param {string} blockType - Type of block.
  * @return {boolean} Boolean indicating whether or not block is in the library.
  */
-BlockLibraryController.prototype.isInBlockLibrary = function(blockType) {
+BlockLibraryController.prototype.has = function(blockType) {
   var blockLibrary = this.storage.blocks;
   return (blockType in blockLibrary && blockLibrary[blockType] != null);
 };
@@ -197,6 +197,16 @@ BlockLibraryController.prototype.populateBlockLibrary = function() {
  */
 BlockLibraryController.prototype.getBlockLibrary = function() {
   return this.storage.getBlockXmlTextMap();
+};
+
+/**
+ * Return stored xml of a given block type.
+ *
+ * @param {!string} blockType - The type of block.
+ * @return {!Element} Xml element of a given block type or null.
+ */
+BlockLibraryController.prototype.getBlockXml = function(blockType) {
+  return this.storage.getBlockXml(blockType);
 };
 
 /**

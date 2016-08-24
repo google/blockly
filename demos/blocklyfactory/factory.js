@@ -60,19 +60,12 @@ BlockFactory.UNNAMED = 'unnamed';
  */
 BlockFactory.oldDir = null;
 
-/**
- * Inject code into a pre tag, with syntax highlighting.
- * Safe from HTML/script injection.
- * @param {string} code Lines of code.
- * @param {string} id ID of <pre> element to inject into.
+/*
+ * The starting xml for the Block Factory main workspace. Contains the
+ * unmovable, undeletable factory_base block.
  */
-FactoryUtils.injectCode = function(code, id) {
-  var pre = document.getElementById(id);
-  pre.textContent = code;
-  code = pre.innerHTML;
-  code = prettyPrintOne(code, 'js');
-  pre.innerHTML = code;
-};
+BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
+    'deletable="false" movable="false"></block></xml>';
 
 /**
  * Change the language code format.
@@ -243,10 +236,29 @@ BlockFactory.disableEnableLink = function() {
  * Render starter block (factory_base).
  */
 BlockFactory.showStarterBlock = function() {
-    BlockFactory.mainWorkspace.clear();
-    var xml = '<xml><block type="factory_base" deletable="false" ' +
-        'movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(
-        Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
+  BlockFactory.mainWorkspace.clear();
+  var xml = Blockly.Xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
+  Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+};
+
+/**
+ * Returns whether or not the current block open is the starter block.
+ */
+BlockFactory.isStarterBlock = function() {
+  var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
+  // The starter block does not have blocks nested into the factory_base block.
+  if (rootBlock.getChildren().length > 0) {
+    return false;
+  }
+  if (rootBlock.getFieldValue('NAME').trim().toLowerCase() != 'math_foo') {
+    return false;
+  }
+  if (rootBlock.getFieldValue('CONNECTIONS') != 'NONE') {
+    return false;
+  }
+  if (rootBlock.getFieldValue('INLINE') != 'AUTO') {
+    return false;
+  }
+  return true;
 };
 

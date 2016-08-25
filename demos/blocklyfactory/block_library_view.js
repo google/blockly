@@ -61,7 +61,7 @@ BlockLibraryView.addOption
  */
 BlockLibraryView.addDefaultOption = function(dropdownID) {
   BlockLibraryView.addOption(
-      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, false);
+      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, true);
 };
 
 /**

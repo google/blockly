@@ -86,10 +86,14 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
  * @param {string} blockType - Block to edit on block factory.
  */
 BlockLibraryController.prototype.openBlock = function(blockType) {
-  var xml = this.storage.getBlockXml(blockType);
-  BlockFactory.mainWorkspace.clear();
-  Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
-  BlockFactory.mainWorkspace.clearUndo();
+  if (blockType =='BLOCK_LIBRARY_DEFAULT_BLANK') {
+    BlockFactory.showStarterBlock();
+  } else {
+    var xml = this.storage.getBlockXml(blockType);
+    BlockFactory.mainWorkspace.clear();
+    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+    BlockFactory.mainWorkspace.clearUndo();
+  }
 };
 
 /**
@@ -132,8 +136,9 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   // If block under that name already exists, confirm that user wants to replace
   // saved block.
   if (this.isInBlockLibrary(blockType)) {
-    if(!confirm('You already have a block called "' + blockType +
-      '" in your library. Replace this block?')) {
+    var replace = confirm('You already have a block called "' + blockType +
+      '" in your library. Replace this block?');
+    if ( !replace) {
       // Do not save if user doesn't want to replace the saved block.
       return;
     }

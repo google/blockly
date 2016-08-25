@@ -467,10 +467,6 @@ td {
   margin-top: 2%;
 }
 
-#button_addShadow, #button_removeShadow {
-  display: inline-block;
-}
-
 #disable_div {
   background-color: white;
   height: 100%;

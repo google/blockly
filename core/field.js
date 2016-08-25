@@ -457,7 +457,6 @@ Blockly.Field.prototype.setValue = function(newText) {
  * @private
  */
 Blockly.Field.prototype.onMouseUp_ = function(e) {
-  Blockly.touchIdentifier_ = null;
   if ((goog.userAgent.IPHONE || goog.userAgent.IPAD) &&
       !goog.userAgent.isVersionOrHigher('537.51.2') &&
       e.layerX !== 0 && e.layerY !== 0) {
@@ -473,6 +472,9 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
   } else if (this.sourceBlock_.isEditable()) {
     // Non-abstract sub-classes must define a showEditor_ method.
     this.showEditor_();
+    // The field is handling the touch, but we also want the blockSvg onMouseUp
+    // handler to fire, so we will leave the touch identifier as it is.
+    // The next onMouseUp is responsible for nulling it out.
   }
 };
 

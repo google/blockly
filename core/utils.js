@@ -104,7 +104,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
     // will hand back an array with one element, which we're fine handling.
     var events = Blockly.bindEvent_.splitEventByTouches(e);
     for (var i = 0, event; event = events[i]; i++) {
-      if (!Blockly.checkTouchIdentifier(event)) {
+      if (!Blockly.shouldHandleEvent(event)) {
         return;
       }
       Blockly.bindEvent_.setClientFromTouch(event);
@@ -161,6 +161,15 @@ Blockly.bindEvent_.setClientFromTouch = function(e) {
     e.clientX = touchPoint.clientX;
     e.clientY = touchPoint.clientY;
   }
+};
+
+/**
+ * Check whether a given event is a mouse or touch event.
+ * @param {!Event} e An event.
+ * @return {boolean} true if it is a mouse or touch event; false otherwise.
+ */
+Blockly.isMouseOrTouchEvent = function(e) {
+  return e.type.indexOf('touch') == 0 || e.type.indexOf('mouse') == 0;
 };
 
 /**

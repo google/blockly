@@ -157,6 +157,18 @@ Blockly.resizeSvgContents = function(workspace) {
 };
 
 /**
+ * Decide whether Blockly should handle or ignore this event.
+ * Mouse and touch events require special checks because we only want to deal
+ * with one touch stream at a time.  All other events should always be handled.
+ * @param {!Event} e The event to check.
+ * @return {boolean} True if this event should be passed through to the
+ *    registered handler; false if it should be blocked.
+ */
+Blockly.shouldHandleEvent = function(e) {
+  return !Blockly.isMouseOrTouchEvent(e) || Blockly.checkTouchIdentifier(e);
+};
+
+/**
  * Check whether the touch identifier on the event matches the current saved
  * identifier.  If there is no identifier, that means it's a mouse event and
  * we'll use the identifier "mouse".  This means we won't deal well with

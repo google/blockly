@@ -500,9 +500,8 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
       // Let the user create a Variables or Functions category if they use
       // blocks from either category.
-      var newBaseBlock = controller.toolboxWorkspace.getBlockById(e.blockId);
 
-      // Get all children of the newly created block.
+      // Get all children of a block and add them to childList.
       var getAllChildren = function(block, childList) {
         childList.push(block);
         var children = block.getChildren();
@@ -511,6 +510,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         }
       };
 
+      var newBaseBlock = controller.toolboxWorkspace.getBlockById(e.blockId);
       var allNewBlocks = [];
       getAllChildren(newBaseBlock, allNewBlocks);
       var variableCreated = false;
@@ -530,15 +530,15 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
       // prompt the user to create the corresponding standard category.
       if (variableCreated && !controller.hasVariablesCategory()) {
         if (confirm('Your new block has a variables field. To use this block '
-            + 'fully, you will need a Variables category. Click OK to add '
-            + 'a Variables category to your custom toolbox.')) {
+            + 'fully, you will need a Variables category. Do you want to add '
+            + 'a Variables category to your custom toolbox?')) {
           controller.loadCategoryByName('variables');
         }
 
       } else if (procedureCreated && !controller.hasProceduresCategory()) {
         if (confirm('Your new block is a function block. To use this block '
-            + 'fully, you will need a Functions category. Click OK to add '
-            + 'a Functions category to your custom toolbox.')) {
+            + 'fully, you will need a Functions category. Do you want to add '
+            + 'a Functions category to your custom toolbox?')) {
           controller.loadCategoryByName('functions');
         }
       }

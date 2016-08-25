@@ -69,7 +69,7 @@ p {
 }
 
 #blockly {
-  position: fixed;
+  position: absolute;
 }
 
 #blocklyMask {
@@ -138,10 +138,9 @@ button, .buttonStyle {
 }
 
 #blockFactoryContent {
-  height: 87%;
+  height: 85%;
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden;
 }
 
 #blockFactoryPreview {
@@ -177,8 +176,6 @@ button, .buttonStyle {
 }
 
 #blocklyWorkspaceContainer {
-  height: 95%;
-  padding: 2px;
   width: 50%;
 }
 

@@ -306,10 +306,11 @@ AppController.prototype.onTab = function() {
       this.selectedTab == AppController.WORKSPACE_FACTORY;
 
   if (this.selectedTab == AppController.EXPORTER) {
-    // Show container of exporter.
-    FactoryUtils.show('blockLibraryExporter');
+    // Hide other tabs.
     FactoryUtils.hide('workspaceFactoryContent');
-    document.getElementById('blockFactoryContent').style.visibility = 'hidden';
+    FactoryUtils.hide('blockFactoryContent');
+    // Show exporter tab.
+    FactoryUtils.show('blockLibraryExporter');
 
     // Need accurate state in order to know which blocks are used in workspace
     // factory.
@@ -326,15 +327,16 @@ AppController.prototype.onTab = function() {
     this.exporter.updatePreview();
 
   } else if (this.selectedTab ==  AppController.BLOCK_FACTORY) {
-    // Hide container of exporter.
+    // Hide other tabs.
     FactoryUtils.hide('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
-    document.getElementById('blockFactoryContent').style.visibility = 'visible';
+    // Show Block Factory.
+    FactoryUtils.show('blockFactoryContent');
 
   } else if (this.selectedTab == AppController.WORKSPACE_FACTORY) {
-    // Hide container of exporter.
+    // Hide other tabs.
     FactoryUtils.hide('blockLibraryExporter');
-    document.getElementById('blockFactoryContent').style.visibility = 'hidden';
+    FactoryUtils.hide('blockFactoryContent');
     // Show workspace factory container.
     FactoryUtils.show('workspaceFactoryContent');
     // Update block library category.
@@ -571,6 +573,7 @@ AppController.prototype.onresize = function(event) {
   if (this.selectedTab == AppController.BLOCK_FACTORY) {
     // Handle resizing of Block Factory elements.
     var expandList = [
+      document.getElementById('blocklyPreviewContainer'),
       document.getElementById('blockly'),
       document.getElementById('blocklyMask'),
       document.getElementById('preview'),

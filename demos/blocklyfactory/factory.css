@@ -294,6 +294,23 @@ button, .buttonStyle {
   width: 90%;
 }
 
+/* Block Library */
+
+#button_blockLib {
+  border-color: darkgrey;
+  font-size: large;
+}
+
+.button_alert {
+  background-color: #ffcccc;
+  border-color: #ff9999;
+}
+
+.button_warn {
+  background-color: #adebad;
+  border-color: #5cd65c;
+}
+
 /* Tabs */
 
 .tab {
@@ -500,6 +517,11 @@ td {
 /* Change color of dropdown links on hover. */
 .dropdown-content a:hover, .dropdown-content label:hover {
   background-color: #f1f1f1
+}
+
+/* Change color of dropdown links on selected. */
+.dropdown-content-selected {
+  background-color: #d8d8d8
 }
 
 /* Show the dropdown menu */

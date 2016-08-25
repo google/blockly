@@ -33,8 +33,6 @@
  */
 goog.provide('FactoryUtils');
 
-goog.require('goog.dom.classes');
-
 /**
  * Get block definition code for the current block.
  *
@@ -886,3 +884,30 @@ FactoryUtils.injectCode = function(code, id) {
   code = prettyPrintOne(code, 'js');
   pre.innerHTML = code;
 };
+
+/**
+ * Returns whether or not two blocks are the same based on their xml. Expects
+ * xml with a single child node that is a factory_base block. The xml found on
+ * Block Factory's main workspace.
+ *
+ * @param {!Element} blockXml1 - An xml element with a single child node that
+ *    is a factory_base block.
+ * @param {!Element} blockXml2 - An xml element with a single child node that
+ *    is a factory_base block.
+ * @return {boolean} Whether or not two blocks are the same based on their xml.
+ */
+FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
+  // Each block xml has only one child.
+  var blockXmlText1 = Blockly.Xml.domToText(
+      blockXml1.getElementsByTagName('block')[0]);
+  var blockXmlText2 = Blockly.Xml.domToText(
+      blockXml2.getElementsByTagName('block')[0]);
+
+  // Strip white space.
+  blockXmlText1 = blockXmlText1.replace(/\s+/g, '');
+  blockXmlText2 = blockXmlText2.replace(/\s+/g, '');
+
+  // Return whether or not changes have been saved.
+  return blockXmlText1 == blockXmlText2;
+};
+

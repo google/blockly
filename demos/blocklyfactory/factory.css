@@ -418,10 +418,6 @@ td {
   overflow-y: scroll;
 }
 
-#button_addShadow, #button_removeShadow {
-  display: inline-block;
-}
-
 #disable_div {
   background-color: white;
   height: 100%;

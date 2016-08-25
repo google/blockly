@@ -542,7 +542,6 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
 Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
   if (toolbox) {
-    this.horizontalLayout_ = toolbox.horizontalLayout_;
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
       // surface of the workspace has, so we may need to reposition everything.
@@ -603,7 +602,7 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
  * @private
  */
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
-  if (this.horizontalLayout_) {
+  if (this.tree.toolbox_.horizontalLayout_) {
     var map = {};
     var next = goog.events.KeyCodes.DOWN
     var prev = goog.events.KeyCodes.UP

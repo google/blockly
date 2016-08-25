@@ -399,9 +399,8 @@ WorkspaceFactoryController.prototype.exportOptionsFile = function() {
   // Generate new options to remove toolbox XML from options object (if
   // necessary).
   this.generateNewOptions();
-  // TODO(evd2014): Use Regex to prettify JSON generated.
-  var data = new Blob([JSON.stringify(this.model.options)],
-      {type: 'text/javascript'});
+  var printableOptions = this.generator.generateOptionsString()
+  var data = new Blob([printableOptions], {type: 'text/javascript'});
   this.view.createAndDownloadFile(fileName, data);
 };
 
@@ -1109,8 +1108,13 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
   optionsObj['css'] = document.getElementById('option_css_checkbox').checked;
   optionsObj['disable'] =
       document.getElementById('option_disable_checkbox').checked;
-  optionsObj['maxBlocks'] =
-      parseInt(document.getElementById('option_maxBlocks_text').value);
+  if (document.getElementById('option_infiniteBlocks_checkbox').checked) {
+    optionsObj['maxBlocks'] = Infinity;
+  } else {
+    var maxBlocksValue = document.getElementById('option_maxBlocks_number').value;
+    optionsObj['maxBlocks'] = typeof maxBlocksValue == 'string' ?
+        parseInt(maxBlocksValue) : maxBlocksValue;
+  }
   optionsObj['media'] = document.getElementById('option_media_text').value;
   optionsObj['readOnly'] =
       document.getElementById('option_readOnly_checkbox').checked;
@@ -1127,10 +1131,12 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
   // If using a grid, add all grid options.
   if (document.getElementById('option_grid_checkbox').checked) {
     var grid = Object.create(null);
-    grid['spacing'] =
-        parseInt(document.getElementById('gridOption_spacing_text').value);
-    grid['length'] =
-        parseInt(document.getElementById('gridOption_length_text').value);
+    var spacingValue = document.getElementById('gridOption_spacing_number').value;
+    grid['spacing'] = typeof spacingValue == 'string' ?
+        parseInt(spacingValue) : spacingValue;
+    var lengthValue = document.getElementById('gridOption_length_number').value;
+    grid['length'] = typeof lengthValue == 'string' ?
+        parseInt(lengthValue) : lengthValue;
     grid['colour'] = document.getElementById('gridOption_colour_text').value;
     grid['snap'] = document.getElementById('gridOption_snap_checkbox').checked;
     optionsObj['grid'] = grid;
@@ -1143,14 +1149,18 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
         document.getElementById('zoomOption_controls_checkbox').checked;
     zoom['wheel'] =
         document.getElementById('zoomOption_wheel_checkbox').checked;
-    zoom['startScale'] =
-        parseFloat(document.getElementById('zoomOption_startScale_text').value);
-    zoom['maxScale'] =
-        parseFloat(document.getElementById('zoomOption_maxScale_text').value);
-    zoom['minScale'] =
-        parseFloat(document.getElementById('zoomOption_minScale_text').value);
-    zoom['scaleSpeed'] =
-        parseFloat(document.getElementById('zoomOption_scaleSpeed_text').value);
+    var startScaleValue = document.getElementById('zoomOption_startScale_number').value;
+    zoom['startScale'] = typeof startScaleValue == 'string' ?
+        parseFloat(startScaleValue) : startScaleValue;
+    var maxScaleValue = document.getElementById('zoomOption_maxScale_number').value;
+    zoom['maxcale'] = typeof maxScaleValue == 'string' ?
+        parseFloat(maxScaleValue) : maxScaleValue;
+    var minScaleValue = document.getElementById('zoomOption_minScale_number').value;
+    zoom['minScale'] = typeof minScaleValue == 'string' ?
+        parseFloat(minScaleValue) : minScaleValue;
+    var scaleSpeedValue = document.getElementById('zoomOption_scaleSpeed_number').value;
+    zoom['startScale'] = typeof startScaleValue == 'string' ?
+        parseFloat(scaleSpeedValue) : scaleSpeedValue;
     optionsObj['zoom'] = zoom;
   }
 

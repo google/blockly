@@ -407,7 +407,8 @@ WorkspaceFactoryView.prototype.updateHelpText = function(mode) {
 WorkspaceFactoryView.prototype.setBaseOptions = function() {
   // Set basic options.
   document.getElementById('option_css_checkbox').checked = true;
-  document.getElementById('option_maxBlocks_text').value = Infinity;
+    document.getElementById('option_infiniteBlocks_checkbox').checked = true;
+  document.getElementById('option_maxBlocks_number').value = 100;
   document.getElementById('option_media_text').value =
       'https://blockly-demo.appspot.com/static/media/';
   document.getElementById('option_readOnly_checkbox').checked = false;
@@ -421,18 +422,18 @@ WorkspaceFactoryView.prototype.setBaseOptions = function() {
   document.getElementById('zoom_options').style.display = 'none';
 
   // Set grid options.
-  document.getElementById('gridOption_spacing_text').value = 0;
-  document.getElementById('gridOption_length_text').value = 1;
+  document.getElementById('gridOption_spacing_number').value = 0;
+  document.getElementById('gridOption_length_number').value = 1;
   document.getElementById('gridOption_colour_text').value = '#888';
   document.getElementById('gridOption_snap_checkbox').checked = false;
 
   // Set zoom options.
   document.getElementById('zoomOption_controls_checkbox').checked = true;
   document.getElementById('zoomOption_wheel_checkbox').checked = true;
-  document.getElementById('zoomOption_startScale_text').value = 1.0;
-  document.getElementById('zoomOption_maxScale_text').value = 3;
-  document.getElementById('zoomOption_minScale_text').value = 0.3;
-  document.getElementById('zoomOption_scaleSpeed_text').value = 1.2;
+  document.getElementById('zoomOption_startScale_number').value = 1.0;
+  document.getElementById('zoomOption_maxScale_number').value = 3;
+  document.getElementById('zoomOption_minScale_number').value = 0.3;
+  document.getElementById('zoomOption_scaleSpeed_number').value = 1.2;
 };
 
 /**

@@ -351,6 +351,11 @@ document.getElementById('button_importBlocks').addEventListener
       ('click', function() {
         controller.setStandardOptionsAndUpdate();
       });
+
+  document.getElementById('button_optionsHelp').addEventListener
+      ('click', function() {
+        open('https://developers.google.com/blockly/guides/get-started/web');
+      });
 };
 
 /**
@@ -577,6 +582,13 @@ WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
             document.getElementById('option_zoom_checkbox').checked ?
             'block' : 'none';
       });
+
+  document.getElementById('option_readOnly_checkbox').addEventListener('change',
+    function(e) {
+      document.getElementById('trashcan_option').style.display =
+          document.getElementById('option_readOnly_checkbox').checked ?
+            'none' : 'block';
+    });
 
   // Generate new options every time an options input is updated.
   var optionsElements = document.getElementsByClassName('optionsInput');

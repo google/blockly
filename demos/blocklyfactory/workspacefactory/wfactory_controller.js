@@ -57,7 +57,7 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
        colour: '#ccc',
        snap: true},
        media: '../../media/',
-       toolbox: this.toolbox,
+       toolbox: this.toolbox
      });
 
   // Workspace for user to preview their changes.
@@ -99,6 +99,36 @@ WorkspaceFactoryController.MODE_PRELOAD = 'preload';
  */
 WorkspaceFactoryController.prototype.addCategory = function() {
   this.allowToTransferFlyoutBlocksToCategory();
+  // Check if it's the first category added.
+  var isFirstCategory = !this.model.hasElements();
+  // Give the option to save blocks if their workspace is not empty and they
+  // are creating their first category.
+  if (isFirstCategory && this.toolboxWorkspace.getAllBlocks().length > 0) {
+    var confirmCreate = confirm('Do you want to save your work in another '
+        + 'category? If you don\'t, the blocks in your workspace will be ' +
+        'deleted.');
+
+    // Create a new category for current blocks.
+    if (confirmCreate) {
+      var name = prompt('Enter the name of the category for your ' +
+          'current blocks: ');
+      if (!name) {  // Exit if cancelled.
+        return;
+      }
+
+      // Create the new category.
+      this.createCategory(name, true);
+      // Set the new category as selected.
+      var id = this.model.getCategoryIdByName(name);
+      this.model.setSelectedById(id);
+      this.view.setCategoryTabSelection(id, true);
+      // Set default options if switching from single flyout to categories.
+      this.view.setCategoryOptions(this.model.hasElements());
+      this.generateNewOptions();
+      // Update preview here in case exit early.
+      this.updatePreview();
+    }
+  }
 
   // After possibly creating a category, check again if it's the first category.
   var isFirstCategory = !this.model.hasElements();
@@ -112,10 +142,11 @@ WorkspaceFactoryController.prototype.addCategory = function() {
   // Switch to category.
   this.switchElement(this.model.getCategoryIdByName(name));
 
-   // Allow the user to use the default options for injecting the workspace
+   // Sets the default options for injecting the workspace
   // when there are categories if adding the first category.
   if (isFirstCategory) {
-    this.allowToSetDefaultOptions();
+    this.view.setCategoryOptions(this.model.hasElements());
+    this.generateNewOptions();
   }
   // Update preview.
   this.updatePreview();
@@ -238,9 +269,6 @@ WorkspaceFactoryController.prototype.removeElement = function() {
     this.toolboxWorkspace.clear();
     this.toolboxWorkspace.clearUndo();
     this.model.createDefaultSelectedIfEmpty();
-    // Allow the user to use the default options for injecting the workspace
-    // when there are no categories.
-    this.allowToSetDefaultOptions();
   }
   // Update preview.
   this.updatePreview();
@@ -465,8 +493,9 @@ WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
  */
 WorkspaceFactoryController.prototype.reinjectPreview = function(tree) {
   this.previewWorkspace.dispose();
-  this.model.setOptionsAttribute('toolbox', Blockly.Xml.domToPrettyText(tree));
-  this.previewWorkspace = Blockly.inject('preview_blocks', this.model.options);
+  var injectOptions = this.readOptions_();
+  injectOptions['toolbox'] = Blockly.Xml.domToPrettyText(tree);
+  this.previewWorkspace = Blockly.inject('preview_blocks', injectOptions);
   Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
       this.previewWorkspace);
 };
@@ -630,7 +659,8 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
   if (isFirstCategory) {
     // Allow the user to use the default options for injecting the workspace
     // when there are categories.
-    this.allowToSetDefaultOptions();
+    this.view.setCategoryOptions(this.model.hasElements());
+    this.generateNewOptions();
   }
   // Update preview.
   this.updatePreview();
@@ -795,9 +825,11 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
       (this.model.getSelectedId()), this.model.getSelected());
 
   this.saveStateFromWorkspace();
-  // Allow the user to set default configuration options for a single flyout
-  // or multiple categories.
-  this.allowToSetDefaultOptions();
+
+  // Set default configuration options for a single flyout or multiple
+  // categories.
+  this.view.setCategoryOptions(this.model.hasElements());
+  this.generateNewOptions();
 
   this.updatePreview();
 };
@@ -861,9 +893,8 @@ WorkspaceFactoryController.prototype.clearAll = function() {
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
   this.saveStateFromWorkspace();
-  if (hasCategories) {
-    this.allowToSetDefaultOptions();
-  }
+  this.view.setCategoryOptions(this.model.hasElements());
+  this.generateNewOptions();
   this.updatePreview();
 };
 
@@ -1048,34 +1079,26 @@ WorkspaceFactoryController.prototype.setStandardOptionsAndUpdate = function() {
  };
 
 /**
- * Asks the user if they want to use default configuration options specific
- * to categories or a single flyout of blocks. If desired, makes the necessary
- * changes to the options object depending on if there are categories and then
- * updates the preview workspace. Only updates category/flyout specific
- * options, not the base default options that are set regardless of if
- * categories or a single flyout are used.
- */
-WorkspaceFactoryController.prototype.allowToSetDefaultOptions = function() {
-  if (!this.model.hasElements() && !confirm('Do you want to use the default ' +
-      'workspace configuration options for injecting a workspace without ' +
-      'categories?')) {
-    return;
-  } else if (this.model.hasElements() && !confirm('Do you want to use the ' +
-      'default workspace configuration options for injecting a workspace ' +
-      'with categories?')) {
-    return;
-  }
-  this.view.setCategoryOptions(this.model.hasElements());
-  this.generateNewOptions();
-};
-
-/**
  * Generates a new options object for injecting a Blockly workspace based
  * on user input. Should be called every time a change has been made to
  * an input field. Updates the model and reinjects the preview workspace.
  */
 WorkspaceFactoryController.prototype.generateNewOptions = function() {
-  var optionsObj = new Object(null);
+  this.model.setOptions(this.readOptions_());
+
+  this.reinjectPreview(Blockly.Options.parseToolboxTree
+      (this.generator.generateToolboxXml()));
+};
+
+/**
+ * Generates a new options object for injecting a Blockly workspace based on
+ * user input.
+ * @private
+ *
+ * @return {!Object} Blockly injection options object.
+ */
+WorkspaceFactoryController.prototype.readOptions_ = function() {
+  var optionsObj = Object.create(null);
 
   // Add all standard options to the options object.
   // Use parse int to get numbers from value inputs.
@@ -1096,12 +1119,14 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
       document.getElementById('option_scrollbars_checkbox').checked;
   optionsObj['sounds'] =
       document.getElementById('option_sounds_checkbox').checked;
-  optionsObj['trashcan'] =
-      document.getElementById('option_trashcan_checkbox').checked;
+  if (!optionsObj['readOnly']) {
+    optionsObj['trashcan'] =
+        document.getElementById('option_trashcan_checkbox').checked;
+  }
 
   // If using a grid, add all grid options.
   if (document.getElementById('option_grid_checkbox').checked) {
-    var grid = new Object(null);
+    var grid = Object.create(null);
     grid['spacing'] =
         parseInt(document.getElementById('gridOption_spacing_text').value);
     grid['length'] =
@@ -1113,26 +1138,23 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
 
   // If using zoom, add all zoom options.
   if (document.getElementById('option_zoom_checkbox').checked) {
-    var zoom = new Object(null);
+    var zoom = Object.create(null);
     zoom['controls'] =
         document.getElementById('zoomOption_controls_checkbox').checked;
     zoom['wheel'] =
         document.getElementById('zoomOption_wheel_checkbox').checked;
     zoom['startScale'] =
-        parseInt(document.getElementById('zoomOption_startScale_text').value);
+        parseFloat(document.getElementById('zoomOption_startScale_text').value);
     zoom['maxScale'] =
-        parseInt(document.getElementById('zoomOption_maxScale_text').value);
+        parseFloat(document.getElementById('zoomOption_maxScale_text').value);
     zoom['minScale'] =
-        parseInt(document.getElementById('zoomOption_minScale_text').value);
+        parseFloat(document.getElementById('zoomOption_minScale_text').value);
     zoom['scaleSpeed'] =
-        parseInt(document.getElementById('zoomOption_scaleSpeed_text').value);
+        parseFloat(document.getElementById('zoomOption_scaleSpeed_text').value);
     optionsObj['zoom'] = zoom;
   }
 
-  this.model.setOptions(optionsObj);
-
-  this.reinjectPreview(Blockly.Options.parseToolboxTree
-      (this.generator.generateToolboxXml()));
+  return optionsObj;
 };
 
 /**

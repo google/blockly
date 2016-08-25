@@ -416,15 +416,12 @@ td {
   width: 60%;
 }
 
-#createHeader {
-}
-
 #previewDiv {
   border: 10px solid #eee;
+  height: 77%;
   margin-right: 0.5%;
   padding-bottom: 10px;
   width: 35%;
-  height: 77%;
 }
 
 #previewBorder {

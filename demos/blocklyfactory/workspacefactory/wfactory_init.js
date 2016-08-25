@@ -45,7 +45,6 @@ WorkspaceFactoryInit.initWorkspaceFactory = function(controller) {
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
   document.getElementById('button_editCategory').disabled = true;
-  document.getElementById('button_editShadow').disabled = true;
 
   this.initColorPicker_(controller);
   this.addWorkspaceFactoryEventListeners_(controller);
@@ -256,34 +255,6 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         toggle("show");
       });
 
-  document.getElementById('button_editShadow').addEventListener
-      ('click',
-      function() {
-        if (Blockly.selected) {
-          // Can only edit blocks when a block is selected.
-
-          if (!controller.isUserGenShadowBlock(Blockly.selected.id) &&
-              Blockly.selected.getSurroundParent() != null) {
-            // If a block is selected that could be a valid shadow block (not a
-            // shadow block, has a surrounding parent), let the user make it a
-            // shadow block. Use toggle instead of add so that the user can
-            // click the button again to make the dropdown disappear without
-            // clicking one of the options.
-            document.getElementById('dropdownDiv_editShadowRemove').classList.
-                remove("show");
-            document.getElementById('dropdownDiv_editShadowAdd').classList.
-                toggle("show");
-          } else {
-            // If the block is a shadow block, let the user make it a normal
-            // block.
-            document.getElementById('dropdownDiv_editShadowAdd').classList.
-                remove("show");
-            document.getElementById('dropdownDiv_editShadowRemove').classList.
-                toggle("show");
-          }
-        }
-      });
-
   document.getElementById('dropdown_name').addEventListener
       ('click',
       function() {
@@ -352,24 +323,25 @@ document.getElementById('button_importBlocks').addEventListener
         controller.clearAll();
       });
 
-  document.getElementById('dropdown_addShadow').addEventListener
+  document.getElementById('button_addShadow').addEventListener
       ('click',
       function() {
         controller.addShadow();
-        document.getElementById('dropdownDiv_editShadowAdd').classList.
-            remove("show");
+        WorkspaceFactoryInit.displayAddShadow_(false);
+        WorkspaceFactoryInit.displayRemoveShadow_(true);
       });
 
-  document.getElementById('dropdown_removeShadow').addEventListener
+  document.getElementById('button_removeShadow').addEventListener
       ('click',
       function() {
         controller.removeShadow();
-        document.getElementById('dropdownDiv_editShadowRemove').classList.
-            remove("show");
+        WorkspaceFactoryInit.displayAddShadow_(true);
+        WorkspaceFactoryInit.displayRemoveShadow_(false);
+
         // Disable shadow editing button if turning invalid shadow block back
         // to normal block.
         if (!Blockly.selected.getSurroundParent()) {
-          document.getElementById('button_editShadow').disabled = true;
+          document.getElementById('button_addShadow').disabled = true;
         }
       });
 
@@ -435,6 +407,18 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         e.element == 'selected')) {
       var selected = Blockly.selected;
 
+      // Show shadow button if a block is selected. Show "Add Shadow" if
+      // a block is not a shadow block, show "Remove Shadow" if it is a
+      // shadow block.
+      if (selected) {
+        var isShadow = controller.isUserGenShadowBlock(selected.id);
+        WorkspaceFactoryInit.displayAddShadow_(!isShadow);
+        WorkspaceFactoryInit.displayRemoveShadow_(isShadow);
+      } else {
+        WorkspaceFactoryInit.displayAddShadow_(false);
+        WorkspaceFactoryInit.displayRemoveShadow_(false);
+      }
+
       if (selected != null && selected.getSurroundParent() != null &&
           !controller.isUserGenShadowBlock(selected.getSurroundParent().id)) {
         // Selected block is a valid shadow block or could be a valid shadow
@@ -442,7 +426,9 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
         // Enable block editing and remove warnings if the block is not a
         // variable user-generated shadow block.
-        document.getElementById('button_editShadow').disabled = false;
+        document.getElementById('button_addShadow').disabled = false;
+        document.getElementById('button_removeShadow').disabled = false;
+
         if (!controller.hasVariableField(selected) &&
             controller.isDefinedBlock(selected)) {
           selected.setWarningText(null);
@@ -457,7 +443,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
           if (!controller.isUserGenShadowBlock(selected.id)) {
             // Warn if a non-shadow block is nested inside a shadow block.
-            selected.setWarningText('Only shadow blocks can be nested inside '
+            selected.setWarningText('Only shadow blocks can be nested inside\n'
                 + 'other shadow blocks.');
           } else if (!controller.hasVariableField(selected)) {
             // Warn if a shadow block is invalid only if not replacing
@@ -468,7 +454,8 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
           // Give editing options so that the user can make an invalid shadow
           // block a normal block.
-          document.getElementById('button_editShadow').disabled = false;
+          document.getElementById('button_removeShadow').disabled = false;
+          document.getElementById('button_addShadow').disabled = true;
         } else {
           // Selected block does not break any shadow block rules, but cannot
           // be a shadow block.
@@ -482,11 +469,8 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
           // No block selected that is a shadow block or could be a valid shadow
           // block. Disable block editing.
-          document.getElementById('button_editShadow').disabled = true;
-          document.getElementById('dropdownDiv_editShadowRemove').classList.
-              remove("show");
-          document.getElementById('dropdownDiv_editShadowAdd').classList.
-              remove("show");
+          document.getElementById('button_addShadow').disabled = true;
+          document.getElementById('button_removeShadow').disabled = true;
         }
       }
     }
@@ -498,6 +482,28 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     }
   });
 };
+
+/**
+ * Display or hide the add shadow button.
+ *
+ * @param {boolean} show True if the add shadow button should be shown, false
+ *    otherwise.
+ */
+WorkspaceFactoryInit.displayAddShadow_ = function(show) {
+  document.getElementById('button_addShadow').style.display =
+      show ? 'inline-block' : 'none';
+};
+
+/**
+ * Display or hide the remove shadow button.
+ *
+ * @param {boolean} show True if the remove shadow button should be shown, false
+ *    otherwise.
+ */
+WorkspaceFactoryInit.displayRemoveShadow_ = function(show) {
+  document.getElementById('button_removeShadow').style.display =
+      show ? 'inline-block' : 'none';
+}
 
 /**
  * Add listeners for workspace factory options input elements.

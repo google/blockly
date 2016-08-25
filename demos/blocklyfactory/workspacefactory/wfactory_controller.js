@@ -416,6 +416,9 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
       if (!this.previewWorkspace.toolbox_) {
         this.reinjectPreview(tree); // Create a toolbox, expensive.
       } else {
+        // Close the toolbox before updating it so that the user has to reopen
+        // the flyout and see their updated toolbox (open flyout doesn't update)
+        this.previewWorkspace.toolbox_.clearSelection();
         this.previewWorkspace.updateToolbox(tree);
       }
     }

@@ -191,7 +191,11 @@ Blockly.Generator.prototype.blockToCode = function(block) {
       code = this.STATEMENT_PREFIX.replace(/%1/g, '\'' + block.id + '\'') +
           code;
     }
-    return this.scrub_(block, code);
+    if(block.preventNext){
+      return code;
+    }else{
+      return this.scrub_(block, code);
+    }
   } else if (code === null) {
     // Block has handled code generation itself.
     return '';

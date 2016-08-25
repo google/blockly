@@ -220,9 +220,11 @@
       </div>
 
       <aside id='preload_div' style='display:none'>
-        <p>Configure the <a href="https://developers.google.com/blockly/guides/get-started/web">options</a> for your Blockly inject call.</p>
-        <button class="small" id="button_standardOptions">Reset Options</button>
+        <p>Configure the options for your Blockly inject call.</p>
+        <button id="button_optionsHelp">Help</button>
+        <button class="small" id="button_standardOptions">Restore</button>
         <form id="workspace_options">
+          <input type="checkbox" id="option_readOnly_checkbox" class="optionsInput">Read Only<br>
           <input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks<br>
           <input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks<br>
           <input type="checkbox" id="option_css_checkbox" class="optionsInput">Use Blockly CSS<br>
@@ -236,11 +238,12 @@
           </div>
           Max Blocks <input type="text" id="option_maxBlocks_text" class="optionsInput" value="Infinity"><br>
           Path to Blockly Media <input type="text" id="option_media_text" class="optionsInput"><br>
-          <input type="checkbox" id="option_readOnly_checkbox" class="optionsInput">Read Only<br>
           <input type="checkbox" id="option_rtl_checkbox" class="optionsInput">Layout with RTL<br>
           <input type="checkbox" id="option_scrollbars_checkbox" class="optionsInput">Scrollbars<br>
           <input type="checkbox" id="option_sounds_checkbox" class="optionsInput">Sounds<br>
-          <input type="checkbox" id="option_trashcan_checkbox" class="optionsInput">Trashcan<br>
+          <div id="trashcan_option">
+            <input type="checkbox" id="option_trashcan_checkbox" class="optionsInput">Trashcan<br>
+          </div>
           <input type="checkbox" id="option_zoom_checkbox" class="optionsInput">Zoom<br>
           <div id="zoom_options" name="zoom" style="display:none">
             <input type="checkbox" id="zoomOption_controls_checkbox" class="optionsInput">Zoom Controls<br>

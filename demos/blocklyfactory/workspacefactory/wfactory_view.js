@@ -411,8 +411,8 @@ WorkspaceFactoryView.prototype.setBaseOptions = function() {
   document.getElementById('gridOption_snap_checkbox').checked = false;
 
   // Set zoom options.
-  document.getElementById('zoomOption_controls_checkbox').checked = false;
-  document.getElementById('zoomOption_wheel_checkbox').checked = false;
+  document.getElementById('zoomOption_controls_checkbox').checked = true;
+  document.getElementById('zoomOption_wheel_checkbox').checked = true;
   document.getElementById('zoomOption_startScale_text').value = 1.0;
   document.getElementById('zoomOption_maxScale_text').value = 3;
   document.getElementById('zoomOption_minScale_text').value = 0.3;

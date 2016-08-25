@@ -249,4 +249,3 @@ BlockFactory.showStarterBlock = function() {
     Blockly.Xml.domToWorkspace(
         Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
 };
-

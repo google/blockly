@@ -86,9 +86,14 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
  * @param {string} blockType - Block to edit on block factory.
  */
 BlockLibraryController.prototype.openBlock = function(blockType) {
-   var xml = this.storage.getBlockXml(blockType);
-   BlockFactory.mainWorkspace.clear();
-   Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+  if (blockType =='BLOCK_LIBRARY_DEFAULT_BLANK') {
+    BlockFactory.showStarterBlock();
+  } else {
+    var xml = this.storage.getBlockXml(blockType);
+    BlockFactory.mainWorkspace.clear();
+    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+    BlockFactory.mainWorkspace.clearUndo();
+  }
 };
 
 /**
@@ -107,8 +112,7 @@ BlockLibraryController.prototype.getSelectedBlockType =
  * updating the dropdown and displaying the starter block (factory_base).
  */
 BlockLibraryController.prototype.clearBlockLibrary = function() {
-  var check = confirm(
-      'Click OK to clear your block library.');
+  var check = confirm('Delete all blocks from library?');
   if (check) {
     // Clear Block Library Storage.
     this.storage.clear();
@@ -128,12 +132,13 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
  */
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var blockType = this.getCurrentBlockType_();
+
   // If block under that name already exists, confirm that user wants to replace
   // saved block.
   if (this.isInBlockLibrary(blockType)) {
-    var replace = confirm('You already have a block called ' + blockType +
-      ' in your library. Click OK to replace.');
-    if (!replace) {
+    var replace = confirm('You already have a block called "' + blockType +
+      '" in your library. Replace this block?');
+    if ( !replace) {
       // Do not save if user doesn't want to replace the saved block.
       return;
     }

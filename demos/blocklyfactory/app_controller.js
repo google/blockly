@@ -321,7 +321,7 @@ AppController.prototype.onTab = function() {
     // Update exporter's block selector to reflect current block library.
     this.exporter.updateSelector();
 
-    // Update the preview to reflect any changes made to the blocks.
+    // Update the exporter's preview to reflect any changes made to the blocks.
     this.exporter.updatePreview();
 
   } else if (this.selectedTab ==  AppController.BLOCK_FACTORY) {
@@ -519,8 +519,8 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
 
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
-        BlockFactory.showStarterBlock();
-        BlockLibraryView.selectDefaultOption('blockLibraryDropdown');
+      BlockFactory.showStarterBlock();
+      BlockLibraryView.selectDefaultOption('blockLibraryDropdown');
     });
 };
 
@@ -529,6 +529,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
  */
 AppController.prototype.addBlockFactoryEventListeners = function() {
   BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
+  BlockFactory.mainWorkspace.addChangeListener(Blockly.Events.disableOrphans);
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);
   document.getElementById('languageTA')

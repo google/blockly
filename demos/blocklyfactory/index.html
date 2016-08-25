@@ -132,7 +132,8 @@
   <!-- Workspace Factory tab -->
 
   <div id="workspaceFactoryContent">
-    <p>
+    <div id="factoryHeader">
+      <p>
         <div class="dropdown">
         <button id="button_importBlocks">Import Custom Blocks</button>
           <div id="dropdownDiv_importBlocks" class="dropdown-content">
@@ -165,22 +166,25 @@
 
         <button id="button_clear">Clear</button>
 
-    </p>
+      </p>
+    </div>
 
     <section id="createDiv">
-      <h3>Edit</h3>
-      <p id="editHelpText">Drag blocks into the workspace to configure the toolbox in your custom workspace.</p>
-      <table id='workspaceTabs' style="width:auto">
+      <div id="createHeader">
+        <h3>Edit</h3>
+        <p id="editHelpText">Drag blocks into the workspace to configure the toolbox in your custom workspace.</p>
+      </div>
+      <table id='workspaceTabs' style="width:auto; height:auto">
         <td id="tab_toolbox" class="tabon">Toolbox</td>
         <td id="tab_preload" class="taboff">Workspace</td>
       </table>
       <section id="toolbox_section">
-        <div id="toolbox_blocks" class="content"></div>
+        <div id="toolbox_blocks"></div>
         <div id='disable_div'></div>
       </section>
       <aside id="toolbox_div">
         <p id="categoryHeader">Your categories will appear here</p>
-        <table id="categoryTable" style="width:auto">
+        <table id="categoryTable" style="width:auto; height:auto">
         </table>
         <p>&nbsp;</p>
 
@@ -209,7 +213,7 @@
 
       </aside>
 
-      <div class='dropdown'>
+      <div id="shadowBlockDropdown" class='dropdown'>
       <button id="button_editShadow">Edit Block</button>
       <div id="dropdownDiv_editShadowAdd" class="dropdown-content">
         <a id='dropdown_addShadow'>Add Shadow</a>
@@ -220,9 +224,11 @@
       </div>
 
       <aside id='preload_div' style='display:none'>
-        <p>Configure the <a href="https://developers.google.com/blockly/guides/get-started/web">options</a> for your Blockly inject call.</p>
-        <button class="small" id="button_standardOptions">Reset Options</button>
-        <form id="workspace_options">
+        <div id="preloadHelp">
+          <p>Configure the <a href="https://developers.google.com/blockly/guides/get-started/web">options</a> for your Blockly inject call.</p>
+          <button class="small" id="button_standardOptions">Reset Options</button>
+        </div>
+        <div id="workspace_options">
           <input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks<br>
           <input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks<br>
           <input type="checkbox" id="option_css_checkbox" class="optionsInput">Use Blockly CSS<br>
@@ -250,7 +256,7 @@
             Min Scale <input type="text" id="zoomOption_minScale_text" class="optionsInput" value="0.3"><br>
             Scale Speed <input type="text" id="zoomOption_scaleSpeed_text" class="optionsInput" value="1.2"><br>
           </div>
-        </form>
+        </div>
       </aside>
 
 
@@ -258,8 +264,10 @@
 
     <aside id="previewDiv">
       <div id="previewBorder">
-        <h3>Preview</h3>
-        <p>This is what your custom workspace will look like.</p>
+        <div id="previewHelp">
+          <h3>Preview</h3>
+          <p>This is what your custom workspace will look like.</p>
+        </div>
         <div id="preview_blocks" class="content"></div>
       </div>
     </aside>
@@ -267,7 +275,7 @@
 
   <!-- Blockly Factory Tab -->
   <table id="blockFactoryContent">
-    <tr>
+    <tr width="100%" height="10%">
       <td width="50%" height="5%">
         <table>
           <tr id="blockLibrary">
@@ -292,7 +300,7 @@
           </tr>
         </table>
       </td>
-      <td>
+      <td height="5%">
         <table id="blockFactoryPreview">
           <tr>
             <td id="previewContainer">
@@ -323,13 +331,13 @@
         </table>
       </td>
     </tr>
-    <tr>
+    <tr height="80%">
       <td id="blocklyWorkspaceContainer">
         <div id="blockly"></div>
         <div id="blocklyMask"></div>
       </td>
-      <td width="50%" height="95%">
-        <table>
+      <td width="50%">
+        <table id="blocklyPreviewContainer">
           <tr>
             <td height="30%">
               <div id="preview"></div>
@@ -372,6 +380,7 @@
           </tr>
         </table>
       </td>
+      </tr>
   </table>
 
   <xml id="blockfactory_toolbox" class="toolbox">

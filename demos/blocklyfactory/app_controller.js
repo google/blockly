@@ -306,9 +306,11 @@ AppController.prototype.onTab = function() {
       this.selectedTab == AppController.WORKSPACE_FACTORY;
 
   if (this.selectedTab == AppController.EXPORTER) {
-    // Show container of exporter.
-    FactoryUtils.show('blockLibraryExporter');
+    // Hide other tabs.
     FactoryUtils.hide('workspaceFactoryContent');
+    FactoryUtils.hide('blockFactoryContent');
+    // Show exporter tab.
+    FactoryUtils.show('blockLibraryExporter');
 
     // Need accurate state in order to know which blocks are used in workspace
     // factory.
@@ -325,13 +327,16 @@ AppController.prototype.onTab = function() {
     this.exporter.updatePreview();
 
   } else if (this.selectedTab ==  AppController.BLOCK_FACTORY) {
-    // Hide container of exporter.
+    // Hide other tabs.
     FactoryUtils.hide('blockLibraryExporter');
     FactoryUtils.hide('workspaceFactoryContent');
+    // Show Block Factory.
+    FactoryUtils.show('blockFactoryContent');
 
   } else if (this.selectedTab == AppController.WORKSPACE_FACTORY) {
-    // Hide container of exporter.
+    // Hide other tabs.
     FactoryUtils.hide('blockLibraryExporter');
+    FactoryUtils.hide('blockFactoryContent');
     // Show workspace factory container.
     FactoryUtils.show('workspaceFactoryContent');
     // Update block library category.
@@ -566,22 +571,25 @@ AppController.prototype.initializeBlocklyStorage = function() {
  * Handle resizing of elements.
  */
 AppController.prototype.onresize = function(event) {
-  // Handle resizing of Block Factory elements.
-  var expandList = [
-    document.getElementById('blockly'),
-    document.getElementById('blocklyMask'),
-    document.getElementById('preview'),
-    document.getElementById('languagePre'),
-    document.getElementById('languageTA'),
-    document.getElementById('generatorPre')
-  ];
-  for (var i = 0, expand; expand = expandList[i]; i++) {
-    expand.style.width = (expand.parentNode.offsetWidth - 2) + 'px';
-    expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
+  if (this.selectedTab == AppController.BLOCK_FACTORY) {
+    // Handle resizing of Block Factory elements.
+    var expandList = [
+      document.getElementById('blocklyPreviewContainer'),
+      document.getElementById('blockly'),
+      document.getElementById('blocklyMask'),
+      document.getElementById('preview'),
+      document.getElementById('languagePre'),
+      document.getElementById('languageTA'),
+      document.getElementById('generatorPre'),
+    ];
+    for (var i = 0, expand; expand = expandList[i]; i++) {
+      expand.style.width = (expand.parentNode.offsetWidth - 2) + 'px';
+      expand.style.height = (expand.parentNode.offsetHeight - 2) + 'px';
+    }
+  } else if (this.selectedTab == AppController.EXPORTER) {
+    // Handle resize of Exporter block options.
+    this.exporter.view.centerPreviewBlocks();
   }
-
-  // Handle resize of Exporter block options.
-  this.exporter.view.centerPreviewBlocks();
 };
 
 /**

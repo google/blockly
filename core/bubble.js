@@ -144,6 +144,17 @@ Blockly.Bubble.unbindDragEvents_ = function() {
   }
 };
 
+/*
+ * Handle a mouse-up event while dragging a bubble's border.
+ * @param {!Event} e Mouse up event.
+ * @private
+ */
+Blockly.Bubble.bubbleMouseUp_ = function(e) {
+  Blockly.touchIdentifier_ = null;
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+  Blockly.Bubble.unbindDragEvents_();
+};
+
 /**
  * Flag to stop incremental rendering during construction.
  * @private
@@ -275,7 +286,7 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
       this.relativeTop_));
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
-      'mouseup', this, Blockly.Bubble.unbindDragEvents_);
+      'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
   Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
       'mousemove', this, this.bubbleMouseMove_);
   Blockly.hideChaff();

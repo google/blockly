@@ -92,7 +92,7 @@ Blockly.FieldNumber.prototype.classValidator = function(text) {
     return null;
   }
   // Round to nearest multiple of precision.
-  if (this.precision_ && Number.isFinite(n)) {
+  if (this.precision_ && isFinite(n)) {
     n = Math.round(n / this.precision_) * this.precision_;
   }
   // Get the value in range.

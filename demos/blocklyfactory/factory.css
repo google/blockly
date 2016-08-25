@@ -467,6 +467,21 @@ td {
   margin-top: 2%;
 }
 
+#button_addShadow, #button_removeShadow {
+  display: inline-block;
+}
+
+#disable_div {
+  background-color: white;
+  height: 100%;
+  left: 0;
+  opacity: .5;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;  /* Start behind workspace */
+}
+
 /* Rules for Closure popup color picker */
 .goog-palette {
   outline: none;

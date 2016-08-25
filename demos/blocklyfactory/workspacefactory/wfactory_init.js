@@ -537,6 +537,13 @@ WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
             'none' : 'block';
     });
 
+    document.getElementById('option_infiniteBlocks_checkbox').addEventListener('change',
+    function(e) {
+      document.getElementById('maxBlockNumber_option').style.display =
+          document.getElementById('option_infiniteBlocks_checkbox').checked ?
+            'none' : 'block';
+    });
+
   // Generate new options every time an options input is updated.
   var optionsElements = document.getElementsByClassName('optionsInput');
   for (var i = 0; i < optionsElements.length; i++) {

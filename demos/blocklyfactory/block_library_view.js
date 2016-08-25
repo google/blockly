@@ -19,8 +19,8 @@
  */
 
 /**
- * @fileoverview Javascript for Block Library's UI for pulling blocks from the
- * Block Library's storage to edit in Block Factory.
+ * @fileoverview Javascript for BlockLibraryView class. It manages display of
+ * the Block Library dropdown, save, and delete buttons.
  *
  * @author quachtina96 (Tina Quach)
  */
@@ -29,89 +29,170 @@
 
 goog.provide('BlockLibraryView');
 
+goog.require('goog.dom');
+goog.require('goog.dom.classlist');
+
+/**
+ * BlockLibraryView Class
+ * @constructor
+ *
+ * @param {!string} blockLibraryViewId - Id of the div element for the block
+ *    library view.
+ */
+var BlockLibraryView = function(blockLibraryViewDivId) {
+  // Div element to contain the block types to choose from.
+  this.dropdown = goog.dom.getElement(blockLibraryViewDivId);
+  // Map of block type to corresponding 'a' element that is the option in the
+  // dropdown. Used to quickly and easily get a specific option.
+  this.optionMap = Object.create(null);
+  this.saveButton = goog.dom.getElement('saveToBlockLibraryButton');
+  this.deleteButton = goog.dom.getElement('removeBlockFromLibraryButton');
+  // Initially, user should not be able to delete a block. They must save a
+  // block or select a stored block first.
+  this.deleteButton.disabled = true;
+};
+
 /**
  * Creates a node of a given element type and appends to the node with given id.
  *
- * @param {string} optionIdentifier - String used to identify option.
- * @param {string} optionText - Text to display in the dropdown for the option.
- * @param {string} dropdownID - ID for HTML select element.
+ * @param {!string} blockType - Type of block.
  * @param {boolean} selected - Whether or not the option should be selected on
  *    the dropdown.
- * @param {boolean} enabled - Whether or not the option should be enabled.
  */
-BlockLibraryView.addOption
-    = function(optionIdentifier, optionText, dropdownID, selected, enabled) {
-  var dropdown = document.getElementById(dropdownID);
-  var option = document.createElement('option');
-  // The value attribute of a dropdown's option is not visible in the UI, but is
-  // useful for identifying different options that may have the same text.
-  option.value = optionIdentifier;
-  // The text attribute is what the user sees in the dropdown for the option.
-  option.text = optionText;
-  option.selected = selected;
-  option.disabled = !enabled;
-  dropdown.add(option);
+BlockLibraryView.prototype.addOption = function(blockType, selected) {
+  // Create option.
+  var option = goog.dom.createDom('a', {
+    'id': 'dropdown_' + blockType,
+    'class': 'blockLibOpt'
+  }, blockType);
+
+  // Add option to dropdown.
+  this.dropdown.appendChild(option);
+  this.optionMap[blockType] = option;
+
+  // Select the block.
+  if (selected) {
+    this.setSelectedBlockType(blockType);
+  }
 };
 
 /**
- * Adds a default, blank option to dropdown for when no block from library is
- * selected.
+ * Sets a given block type to selected and all other blocks to deselected.
+ * If null, deselects all blocks.
  *
- * @param {string} dropdownID - ID of HTML select element
+ * @param {string} blockTypeToSelect - Type of block to select or null.
  */
-BlockLibraryView.addDefaultOption = function(dropdownID) {
-  BlockLibraryView.addOption(
-      'BLOCK_LIBRARY_DEFAULT_BLANK', '', dropdownID, true, true);
+BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
+  if (this.optionMap[blockTypeToSelect]) {
+    // Select given block type and deselect all others.
+    for (var blockType in this.optionMap) {
+      var option = this.optionMap[blockType];
+      if (blockType == blockTypeToSelect) {
+        this.select_(option);
+      } else {
+        this.deselect_(option);
+      }
+    }
+  } else {
+    // Deselect all buttons.
+    for (var blockType in this.optionMap) {
+      var option = this.optionMap[blockType];
+      this.deselect_(option);
+    }
+  }
+  // Update save and delete buttons.
+  this.updateButtons(blockTypeToSelect);
 };
 
 /**
- * Selects the default, blank option in dropdown identified by given ID.
+ * Selects a given option.
  *
- * @param {string} dropdownID - ID of HTML select element
+ * @param {!Element} option - HTML 'a' element in the dropdown that represents
+ *    a particular block type.
  */
-BlockLibraryView.selectDefaultOption = function(dropdownID) {
-  var dropdown = document.getElementById(dropdownID);
-  // Deselect currently selected option.
-  var index = dropdown.selectedIndex;
-  dropdown.options[index].selected = false;
-  // Select default option, always the first in the dropdown.
-  var defaultOption = dropdown.options[0];
-  defaultOption.selected = true;
+BlockLibraryView.prototype.select_ = function(option) {
+  goog.dom.classlist.add(option, 'dropdown-content-selected');
+};
+
+/**
+ * Deselects a given option.
+ *
+ * @param {!Element} option - HTML 'a' element in the dropdown that represents
+ *    a particular block type.
+ */
+BlockLibraryView.prototype.deselect_ = function(option) {
+  goog.dom.classlist.remove(option, 'dropdown-content-selected');
+};
+
+/**
+ * Updates the save and delete buttons to represent how the current block will
+ * be saved by including the block type in the button text as well as indicating
+ * whether the block is being saved or updated.
+ *
+ * @param {!Element} option - HTML 'a' element in the dropdown that represents
+ *    a particular block type.
+ * @param {boolean} saved - Whether the current block has already been saved.
+ */
+BlockLibraryView.prototype.updateButtons = function(blockType, saved) {
+  if (blockType) {
+    // User is editing a block.
+    if (!saved) {
+      // Block type has not been saved to library yet.
+      this.saveButton.textContent = 'Save "' + blockType + '"';
+      this.deleteButton.textContent = 'Delete "' + blockType + '"';
+      this.deleteButton.disabled = true;
+    } else {
+      // Block type has already been saved.
+      this.saveButton.textContent = 'Update "' + blockType + '"';
+      this.deleteButton.textContent = 'Delete "' + blockType + '"';
+      this.deleteButton.disabled = false;
+    }
+  } else {
+    // User has created new block.
+    this.saveButton.textContent = 'Save "block_type"';
+    this.deleteButton.textContent = 'Delete Block';
+    this.deleteButton.disabled = true;
+  }
+};
+
+/**
+ * Removes option currently selected in dropdown from dropdown menu.
+ */
+BlockLibraryView.prototype.removeSelectedOption = function() {
+  var selectedOption = this.getSelectedOption();
+  this.dropdown.removeNode(selectedOption);
 };
 
 /**
  * Returns block type of selected block.
  *
- * @param {Element} dropdown - HTML select element.
  * @return {string} Type of block selected.
  */
-BlockLibraryView.getSelected = function(dropdown) {
-  var index = dropdown.selectedIndex;
-  return dropdown.options[index].value;
+BlockLibraryView.prototype.getSelectedBlockType = function() {
+  var selectedOption = this.getSelectedOption();
+  var blockType = selectedOption.textContent;
+  return blockType;
 };
 
 /**
- * Removes option currently selected in dropdown from dropdown menu.
+ * Returns selected option.
  *
- * @param {string} dropdownID - ID of HTML select element within which to find
- *     the selected option.
+ * @return {!Element} HTML 'a' element that is the option for a block type.
  */
-BlockLibraryView.removeSelectedOption = function(dropdownID) {
-  var dropdown = document.getElementById(dropdownID);
-  if (dropdown) {
-    dropdown.remove(dropdown.selectedIndex);
-  }
+BlockLibraryView.prototype.getSelectedOption = function() {
+  return goog.dom.getElementByClass('dropdown-content-selected', this.dropdown);
 };
 
 /**
  * Removes all options from dropdown.
- *
- * @param {string} dropdownID - ID of HTML select element to clear options of.
  */
-BlockLibraryView.clearOptions = function(dropdownID) {
-  var dropdown = document.getElementById(dropdownID);
-  while (dropdown.length > 0) {
-    dropdown.remove(dropdown.length - 1);
+BlockLibraryView.prototype.clearOptions = function() {
+  var blockOpts = goog.dom.getElementsByClass('blockLibOpt', this.dropdown);
+  if (blockOpts) {
+    for (var i = 0, option; option = blockOpts[i]; i++) {
+      goog.dom.removeNode(option);
+    }
   }
 };
+
 

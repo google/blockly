@@ -51,6 +51,11 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
   this.name = blockLibraryName;
   // Create a new, empty Block Library Storage object, or load existing one.
   this.storage = opt_blockLibraryStorage || new BlockLibraryStorage(this.name);
+  // Id of the div that holds the block library.
+  this.blockLibraryViewDivID = 'dropdownDiv_blockLib';
+  // The BlockLibraryView object handles the proper updating and formatting of
+  // the dropdown.
+  this.view = new BlockLibraryView(this.blockLibraryViewDivID);
 };
 
 /**
@@ -76,8 +81,7 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
   this.populateBlockLibrary();
-  // Show default block.
-  BlockFactory.showStarterBlock();
+  this.view.setSelectedBlockType(blockType);
 };
 
 /**
@@ -86,25 +90,25 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
  * @param {string} blockType - Block to edit on block factory.
  */
 BlockLibraryController.prototype.openBlock = function(blockType) {
-  if (blockType =='BLOCK_LIBRARY_DEFAULT_BLANK') {
-    BlockFactory.showStarterBlock();
-  } else {
+  if (blockType) {
     var xml = this.storage.getBlockXml(blockType);
     BlockFactory.mainWorkspace.clear();
     Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
     BlockFactory.mainWorkspace.clearUndo();
+  } else {
+    BlockFactory.showStarterBlock();
+    this.view.setSelectedBlockType(null);
   }
 };
 
 /**
  * Returns type of block selected from library.
  *
- * @param {Element} blockLibraryDropdown - The block library dropdown.
  * @return {string} Type of block selected.
  */
 BlockLibraryController.prototype.getSelectedBlockType =
-    function(blockLibraryDropdown) {
-  return BlockLibraryView.getSelected(blockLibraryDropdown);
+    function() {
+  return this.view.getSelectedBlockType();
 };
 
 /**
@@ -118,12 +122,10 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
     this.storage.clear();
     this.storage.saveToLocalStorage();
     // Update dropdown.
-    BlockLibraryView.clearOptions('blockLibraryDropdown');
-    // Add a default, blank option to dropdown for when no block from library is
-    // selected.
-    BlockLibraryView.addDefaultOption('blockLibraryDropdown');
+    this.view.clearOptions();
     // Show default block.
     BlockFactory.showStarterBlock();
+    this.view.updateButtons(null);
   }
 };
 
@@ -132,6 +134,14 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
  */
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var blockType = this.getCurrentBlockType_();
+
+  // If user has not changed the name of the starter block.
+  if (blockType == 'block_type') {
+    // Do not save if the user doesn't want their block saved under the default name.
+    if (!confirm('Are you sure you want to save your block as "block_type"?')) {
+      return;
+    }
+  }
 
   // If block under that name already exists, confirm that user wants to replace
   // saved block.
@@ -161,8 +171,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   if (replace) {
     return;
   }
-  BlockLibraryView.addOption(
-      blockType, blockType, 'blockLibraryDropdown', true, true);
+  this.view.addOption(blockType, true);
 };
 
 /**
@@ -180,19 +189,13 @@ BlockLibraryController.prototype.isInBlockLibrary = function(blockType) {
  *  Populates the dropdown menu.
  */
 BlockLibraryController.prototype.populateBlockLibrary = function() {
-  BlockLibraryView.clearOptions('blockLibraryDropdown');
-  // Add a default, blank option to dropdown for when no block from library is
-  // selected.
-  BlockLibraryView.addDefaultOption('blockLibraryDropdown');
+  this.view.clearOptions();
   // Add option for each saved block.
   var blockLibrary = this.storage.blocks;
-  for (var block in blockLibrary) {
-    // Make sure the block wasn't deleted.
-    if (blockLibrary[block] != null) {
-      BlockLibraryView.addOption(
-          block, block, 'blockLibraryDropdown', false, true);
-    }
+  for (var blockType in blockLibrary) {
+    this.view.addOption(blockType, false);
   }
+  this.addOptionSelectHandlers();
 };
 
 /**
@@ -241,4 +244,54 @@ BlockLibraryController.prototype.hasEmptyBlockLibrary = function() {
  */
 BlockLibraryController.prototype.getStoredBlockTypes = function() {
   return this.storage.getBlockTypes();
+};
+
+/**
+ * Sets the currently selected block option to none.
+ */
+BlockLibraryController.prototype.setNoneSelected = function() {
+  this.view.setSelectedBlockType(null);
+};
+
+/**
+ * Add select handlers to each option to update the view and the selected
+ * blocks accordingly.
+ */
+BlockLibraryController.prototype.addOptionSelectHandlers = function() {
+  var self = this;
+
+  // Click handler for a block option. Sets the block option as the selected
+  // option and opens the block for edit in Block Factory.
+  var setSelectedAndOpen_ = function(blockOption) {
+    var blockType = blockOption.textContent;
+    self.view.setSelectedBlockType(blockType);
+    self.openBlock(blockType);
+    self.view.updateButtons(blockType, true);
+    goog.dom.getElement(self.blockLibraryViewDivID).classList.remove("show");
+  };
+
+  // Returns a block option select handler.
+  var makeOptionSelectHandler_ = function(blockOption) {
+    return function() {
+      setSelectedAndOpen_(blockOption);
+    };
+  };
+
+  // Assign a click handler to each block option.
+  for (var blockType in this.view.optionMap) {
+    var blockOption = this.view.optionMap[blockType];
+    // Use an additional closure to correctly assign the tab callback.
+    blockOption.addEventListener(
+        'click', makeOptionSelectHandler_(blockOption));
+  }
+};
+
+/**
+ * Update the save and delete buttons based on the current block type of the
+ * block the user is currently editing.
+ */
+BlockLibraryController.prototype.updateButtons = function() {
+  var blockType = this.getCurrentBlockType_();
+  var saved = this.isInBlockLibrary(blockType);
+  this.view.updateButtons(blockType, saved);
 };

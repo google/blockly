@@ -605,8 +605,10 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
   if (this.horizontalLayout_) {
     var map = {};
-    map[goog.events.KeyCodes.RIGHT] = goog.events.KeyCodes.DOWN;
-    map[goog.events.KeyCodes.LEFT] = goog.events.KeyCodes.UP;
+    var next = goog.events.KeyCodes.DOWN
+    var prev = goog.events.KeyCodes.UP
+    map[goog.events.KeyCodes.RIGHT] = this.rightToLeft_ ? prev : next;
+    map[goog.events.KeyCodes.LEFT] = this.rightToLeft_ ? next : prev;
     map[goog.events.KeyCodes.UP] = goog.events.KeyCodes.LEFT;
     map[goog.events.KeyCodes.DOWN] = goog.events.KeyCodes.RIGHT;
 

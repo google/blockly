@@ -143,17 +143,6 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
     }
   }
 
-  // If block under that name already exists, confirm that user wants to replace
-  // saved block.
-  if (this.isInBlockLibrary(blockType)) {
-    var replace = confirm('You already have a block called "' + blockType +
-      '" in your library. Replace this block?');
-    if ( !replace) {
-      // Do not save if user doesn't want to replace the saved block.
-      return;
-    }
-  }
-
   // Create block xml.
   var xmlElement = goog.dom.createDom('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);

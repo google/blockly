@@ -8,7 +8,8 @@
 			"Sfyrakis",
 			"Glavkos",
 			"Gchr",
-			"아라"
+			"아라",
+			"Geraki"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -291,6 +292,7 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "έως # από το τέλος",
 	"LISTS_GET_SUBLIST_END_LAST": "έως το τελευταίο",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Δημιουργεί ένα αντίγραφο του καθορισμένου τμήματος μιας λίστας.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "κάνετε λίστα από το κείμενο",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "κάνετε κείμενο από τη λίστα",
 	"LISTS_SPLIT_WITH_DELIMITER": "με διαχωριστικό",

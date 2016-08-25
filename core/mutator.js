@@ -110,10 +110,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
       null);
   // Convert the list of names into a list of XML objects for the flyout.
   if (this.quarkNames_.length) {
-    var quarkXml = goog.dom.createUntypedDom('xml');
+    var quarkXml = goog.dom.createDom('xml');
     for (var i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
-      quarkXml.appendChild(
-          goog.dom.createUntypedDom('block', {'type': quarkName}));
+      quarkXml.appendChild(goog.dom.createDom('block', {'type': quarkName}));
     }
   } else {
     var quarkXml = null;
@@ -130,6 +129,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     setMetrics: null
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
+  this.workspace_.isMutator = true;
   this.svgDialog_.appendChild(
       this.workspace_.createDom('blocklyMutatorBackground'));
   return this.svgDialog_;
@@ -139,17 +139,23 @@ Blockly.Mutator.prototype.createEditor_ = function() {
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
 Blockly.Mutator.prototype.updateEditable = function() {
-  if (this.block_.isEditable()) {
-    // Default behaviour for an icon.
-    Blockly.Icon.prototype.updateEditable.call(this);
-  } else {
-    // Close any mutator bubble.  Icon is not clickable.
-    this.setVisible(false);
-    if (this.iconGroup_) {
-      Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
-                        'blocklyIconGroupReadonly');
+  if (!this.block_.isInFlyout) {
+    if (this.block_.isEditable()) {
+      if (this.iconGroup_) {
+        Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
+                             'blocklyIconGroupReadonly');
+      }
+    } else {
+      // Close any mutator bubble.  Icon is not clickable.
+      this.setVisible(false);
+      if (this.iconGroup_) {
+        Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+                          'blocklyIconGroupReadonly');
+      }
     }
   }
+  // Default behaviour for an icon.
+  Blockly.Icon.prototype.updateEditable.call(this);
 };
 
 /**

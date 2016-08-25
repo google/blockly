@@ -19,6 +19,8 @@
   <script src="../../accessible/libs/angular2-all.umd.min.js"></script>
 
   <script src="../../accessible/utils.service.js"></script>
+  <script src="../../accessible/audio.service.js"></script>
+  <script src="../../accessible/notifications.service.js"></script>
   <script src="../../accessible/clipboard.service.js"></script>
   <script src="../../accessible/tree.service.js"></script>
   <script src="../../accessible/translate.pipe.js"></script>
@@ -30,7 +32,7 @@
   <script src="../../accessible/workspace.component.js"></script>
   <script src="../../accessible/app.component.js"></script>
 
-  <link rel="stylesheet" href="../../media/accessible.css">
+  <link rel="stylesheet" href="../../accessible/media/accessible.css">
   <style>
     body {
       background-color: #fff;
@@ -40,13 +42,26 @@
       font-weight: normal;
       font-size: 140%;
     }
+
+    *:focus {
+      background: yellow;
+    }
   </style>
 </head>
 <body>
-  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
-    <a href="../index.html">Demos</a> &gt; Accessible Blockly</h1>
+  <h1>
+    <a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Accessible Blockly
+  </h1>
 
   <p>This is a simple demo of a version of Blockly designed for screen readers.</p>
+
+  <p>
+    In Blockly, you can move blocks from the toolbox to the workspace and join
+    them to create programs. To navigate between components, use Tab or
+    Shift-Tab. When you're on a block, move right to access its submenus, and
+    move up or down to go to the next or previous block in the sequence.
+  </p>
 
   <!--
   <p>&rarr; More info on <a href="https://developers.google.com/blockly/">accessible Blockly</a>&hellip;</p>
@@ -58,7 +73,9 @@
     var ACCESSIBLE_GLOBALS = {
       // Additional buttons for the workspace toolbar that
       // go before the "Clear Workspace" button.
-      toolbarButtonConfig: []
+      toolbarButtonConfig: [],
+      // Prefix of path to sound files.
+      mediaPathPrefix: '../../accessible/media/'
     };
     document.addEventListener('DOMContentLoaded', function() {
       ng.platform.browser.bootstrap(blocklyApp.AppView);
@@ -72,7 +89,6 @@
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
-      <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
     <category name="Loops" colour="120">
@@ -83,7 +99,6 @@
           </block>
         </value>
       </block>
-      <block type="controls_repeat" disabled="true"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for">
         <value name="FROM">
@@ -326,9 +341,6 @@
         </value>
       </block>
     </category>
-    <sep></sep>
-    <category name="Variables" colour="330" custom="VARIABLE"></category>
-    <category name="Functions" colour="290" custom="PROCEDURE"></category>
   </xml>
 
 </body>

@@ -95,7 +95,6 @@ Blockly.WidgetDiv.hide = function() {
     Blockly.WidgetDiv.DIV.style.display = 'none';
     Blockly.WidgetDiv.DIV.style.left = '';
     Blockly.WidgetDiv.DIV.style.top = '';
-    Blockly.WidgetDiv.DIV.style.height = '';
     Blockly.WidgetDiv.dispose_ && Blockly.WidgetDiv.dispose_();
     Blockly.WidgetDiv.dispose_ = null;
     goog.dom.removeChildren(Blockly.WidgetDiv.DIV);
@@ -149,6 +148,5 @@ Blockly.WidgetDiv.position = function(anchorX, anchorY, windowSize,
   }
   Blockly.WidgetDiv.DIV.style.left = anchorX + 'px';
   Blockly.WidgetDiv.DIV.style.top = anchorY + 'px';
-  Blockly.WidgetDiv.DIV.style.height =
-      (windowSize.height - anchorY + scrollOffset.y) + 'px';
+  Blockly.WidgetDiv.DIV.style.height = windowSize.height + 'px';
 };

@@ -36,7 +36,7 @@ goog.require('goog.dom');
  * @return {!Element} XML document.
  */
 Blockly.Xml.workspaceToDom = function(workspace) {
-  var xml = goog.dom.createUntypedDom('xml');
+  var xml = goog.dom.createDom('xml');
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
     xml.appendChild(Blockly.Xml.blockToDomWithXY(block));
@@ -68,8 +68,7 @@ Blockly.Xml.blockToDomWithXY = function(block) {
  * @return {!Element} Tree of XML elements.
  */
 Blockly.Xml.blockToDom = function(block) {
-  var element = goog.dom.createUntypedDom(
-      block.isShadow() ? 'shadow' : 'block');
+  var element = goog.dom.createDom(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
   element.setAttribute('id', block.id);
   if (block.mutationToDom) {
@@ -81,8 +80,7 @@ Blockly.Xml.blockToDom = function(block) {
   }
   function fieldToDom(field) {
     if (field.name && field.EDITABLE) {
-      var container =
-          goog.dom.createUntypedDom('field', null, field.getValue());
+      var container = goog.dom.createDom('field', null, field.getValue());
       container.setAttribute('name', field.name);
       element.appendChild(container);
     }
@@ -95,8 +93,7 @@ Blockly.Xml.blockToDom = function(block) {
 
   var commentText = block.getCommentText();
   if (commentText) {
-    var commentElement =
-        goog.dom.createUntypedDom('comment', null, commentText);
+    var commentElement = goog.dom.createDom('comment', null, commentText);
     if (typeof block.comment == 'object') {
       commentElement.setAttribute('pinned', block.comment.isVisible());
       var hw = block.comment.getBubbleSize();
@@ -107,7 +104,7 @@ Blockly.Xml.blockToDom = function(block) {
   }
 
   if (block.data) {
-    var dataElement = goog.dom.createUntypedDom('data', null, block.data);
+    var dataElement = goog.dom.createDom('data', null, block.data);
     element.appendChild(dataElement);
   }
 
@@ -119,9 +116,9 @@ Blockly.Xml.blockToDom = function(block) {
     } else {
       var childBlock = input.connection.targetBlock();
       if (input.type == Blockly.INPUT_VALUE) {
-        container = goog.dom.createUntypedDom('value');
+        container = goog.dom.createDom('value');
       } else if (input.type == Blockly.NEXT_STATEMENT) {
-        container = goog.dom.createUntypedDom('statement');
+        container = goog.dom.createDom('statement');
       }
       var shadow = input.connection.getShadowDom();
       if (shadow && (!childBlock || !childBlock.isShadow())) {
@@ -158,8 +155,8 @@ Blockly.Xml.blockToDom = function(block) {
 
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
-    var container = goog.dom.createUntypedDom(
-        'next', null, Blockly.Xml.blockToDom(nextBlock));
+    var container = goog.dom.createDom('next', null,
+        Blockly.Xml.blockToDom(nextBlock));
     element.appendChild(container);
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();
@@ -316,6 +313,8 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
     Blockly.Events.setGroup(false);
   }
   Blockly.Field.stopCache();
+
+  workspace.updateVariableList(false);
 };
 
 /**
@@ -359,7 +358,7 @@ Blockly.Xml.domToBlock = function(xmlBlock, workspace) {
       topBlock.updateDisabled();
       // Allow the scrollbars to resize and move based on the new contents.
       // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
-      Blockly.resizeSvgContents(workspace);
+      workspace.resizeContents();
     }
   } finally {
     Blockly.Events.enable();

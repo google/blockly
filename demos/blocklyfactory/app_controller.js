@@ -231,23 +231,6 @@ AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
 };
 
 /**
- * Updates the Block Factory tab to show selected block when user selects a
- * different block in the block library dropdown. Tied to block library dropdown
- * in index.html.
- *
- * @param {!Element} blockLibraryDropdown - HTML select element from which the
- *    user selects a block to work on.
- */
-AppController.prototype.onSelectedBlockChanged
-    = function(blockLibraryDropdown) {
-  // Get selected block type.
-  var blockType = this.blockLibraryController.getSelectedBlockType(
-      blockLibraryDropdown);
-  // Update Block Factory page by showing the selected block.
-  this.blockLibraryController.openBlock(blockType);
-};
-
-/**
  * Add click handlers to each tab to allow switching between the Block Factory,
  * Workspace Factory, and Block Exporter tab.
  *
@@ -303,14 +286,16 @@ AppController.prototype.onTab = function() {
   // Warn user if they have unsaved changes when leaving Block Factory.
   if (this.lastSelectedTab == AppController.BLOCK_FACTORY &&
       this.selectedTab != AppController.BLOCK_FACTORY) {
-    if (!BlockFactory.isStarterBlock() && !this.savedBlockChanges()) {
-      if (!confirm('You have unsaved changes in Block Factory.')) {
-        // If the user doesn't want to switch tabs with unsaved changes,
-        // stay on Block Factory Tab.
-        this.setSelected_(AppController.BLOCK_FACTORY);
-        this.lastSelectedTab == AppController.BLOCK_FACTORY;
-        return;
-      }
+
+    var hasUnsavedChanges = !BlockFactory.isStarterBlock() &&
+        !FactoryUtils.savedBlockChanges(this.blockLibraryController);
+    if (hasUnsavedChanges &&
+        !confirm('You have unsaved changes in Block Factory.')) {
+      // If the user doesn't want to switch tabs with unsaved changes,
+      // stay on Block Factory Tab.
+      this.setSelected_(AppController.BLOCK_FACTORY);
+      this.lastSelectedTab = AppController.BLOCK_FACTORY;
+      return;
     }
   }
 
@@ -480,49 +465,34 @@ AppController.prototype.ifCheckedDisplay = function(checkbox, elementArray) {
 };
 
 /**
- * Returns whether or not a block's changes has been saved to the Block Library.
- *
- * @return {boolean} True if all changes made to the block have been saved to
- *    the Block Library.
- */
-AppController.prototype.savedBlockChanges = function() {
-  var blockType = this.blockLibraryController.getCurrentBlockType();
-  var currentXml = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
-
-  if (this.blockLibraryController.has(blockType)) {
-    // Block is saved in block library.
-    var savedXml = this.blockLibraryController.getBlockXml(blockType);
-    return FactoryUtils.sameBlockXml(savedXml, currentXml);
-  }
-  return false;
-};
-
-/**
  * Assign button click handlers for the block library.
  */
 AppController.prototype.assignLibraryClickHandlers = function() {
   var self = this;
-  // Assign button click handlers for Block Library.
+
+  // Button for saving block to library.
   document.getElementById('saveToBlockLibraryButton').addEventListener('click',
       function() {
         self.blockLibraryController.saveToBlockLibrary();
       });
 
+  // Button for removing selected block from library.
   document.getElementById('removeBlockFromLibraryButton').addEventListener(
     'click',
       function() {
         self.blockLibraryController.removeFromBlockLibrary();
       });
 
+  // Button for clearing the block library.
   document.getElementById('clearBlockLibraryButton').addEventListener('click',
       function() {
         self.blockLibraryController.clearBlockLibrary();
       });
 
-  var dropdown = document.getElementById('blockLibraryDropdown');
-  dropdown.addEventListener('change',
+  // Hide and show the block library dropdown.
+  document.getElementById('button_blockLib').addEventListener('click',
       function() {
-        self.onSelectedBlockChanged(dropdown);
+        document.getElementById('dropdownDiv_blockLib').classList.toggle("show");
       });
 };
 
@@ -559,26 +529,39 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
 
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
-      // If there are unsaved changes to the block in open in Block Factory,
-      // warn user that proceeding to create a new block will cause them to lose
-      // their changes if they don't save.
-      if (!self.savedBlockChanges()) {
-        if(!confirm('You have unsaved changes. By proceeding without saving ' +
-          ' your block first, you will lose these changes.')) {
-          return;
-        }
+      // If there are unsaved changes warn user, check if they'd like to
+      // proceed with unsaved changes, and act accordingly.
+      var proceedWithUnsavedChanges = FactoryUtils.warnIfUnsavedChanges();
+      if (!proceedWithUnsavedChanges) {
+        return;
       }
-        BlockFactory.showStarterBlock();
-        BlockLibraryView.selectDefaultOption('blockLibraryDropdown');
-      });
+
+      BlockFactory.showStarterBlock();
+      self.blockLibraryController.setNoneSelected();
+
+      // Close the Block Library Dropdown.
+      goog.dom.getElement('dropdownDiv_blockLib').classList.remove("show");
+    });
 };
 
 /**
  * Add event listeners for the block factory.
  */
 AppController.prototype.addBlockFactoryEventListeners = function() {
+  // Update code on changes to block being edited.
   BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
+
+  // Disable blocks not attached to the factory_base block.
   BlockFactory.mainWorkspace.addChangeListener(Blockly.Events.disableOrphans);
+
+  // Update the buttons on the screen based on whether
+  // changes have been saved.
+  var self = this;
+  BlockFactory.mainWorkspace.addChangeListener(function() {
+    self.blockLibraryController.updateButtons(FactoryUtils.savedBlockChanges(
+        self.blockLibraryController));
+    });
+
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);
   document.getElementById('languageTA')

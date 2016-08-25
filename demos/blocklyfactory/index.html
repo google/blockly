@@ -279,20 +279,23 @@
           <tr id="blockLibrary">
             <td id="blockLibraryContainer">
             <span>
-              <h3>Block Library:</h3>
-              <select id="blockLibraryDropdown">
+<!--               <h3>Block Library:</h3> -->
+              <div class='dropdown'>
+                <button id="button_blockLib">Block Library</button>
+                <div id="dropdownDiv_blockLib" class="dropdown-content">
+                  <a id='createNewBlockButton'>Create New Block</a>
+                </div>
+              </div>
+              <select id="blockLibraryDropdown" style="display:none">
               </select>
             </span>
             </td>
             <td id="blockLibraryControls">
             <button id="saveToBlockLibraryButton" title="Save block to Block Library.">
-              <span>Save Block</span>
+              Save "block_type"
             </button>
             <button id="removeBlockFromLibraryButton" title="Remove block from Block Library.">
-              <span>Delete Block</span>
-            </button>
-            <button id="createNewBlockButton" title="Create a new block.">
-              <span> Create Block</span>
+              Delete "block_type"
             </button>
             </td>
           </tr>

@@ -33,8 +33,6 @@
  */
 goog.provide('FactoryUtils');
 
-goog.require('goog.dom.classes');
-
 /**
  * Get block definition code for the current block.
  *
@@ -889,7 +887,7 @@ FactoryUtils.injectCode = function(code, id) {
 
 /**
  * Returns whether or not two blocks are the same based on their xml. Expects
- * xml with a single child node that is a factory_base block. The xml found on
+ * xml with a single child node that is a factory_base block, the xml found on
  * Block Factory's main workspace.
  *
  * @param {!Element} blockXml1 - An xml element with a single child node that
@@ -899,18 +897,31 @@ FactoryUtils.injectCode = function(code, id) {
  * @return {boolean} Whether or not two blocks are the same based on their xml.
  */
 FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
-  // Each block xml has only one child.
-  var blockXmlText1 = Blockly.Xml.domToText(
-      blockXml1.getElementsByTagName('block')[0]);
-  var blockXmlText2 = Blockly.Xml.domToText(
-      blockXml2.getElementsByTagName('block')[0]);
+    // Each xml element should contain a single child element with a 'block' tag
+    if (goog.string.caseInsensitiveCompare(blockXml1.tagName, 'xml') ||
+        goog.string.caseInsensitiveCompare(blockXml2.tagName, 'xml')) {
+      throw new Error('Expected two xml elements, recieved elements with tag ' +
+          'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
+    }
 
-  // Strip white space.
-  blockXmlText1 = blockXmlText1.replace(/\s+/g, '');
-  blockXmlText2 = blockXmlText2.replace(/\s+/g, '');
+    // Compare the block elements directly. The xml tags may include other meta
+    // information we want to igrore.
+    var blockElement1 = blockXml1.getElementsByTagName('block')[0];
+    var blockElement2 = blockXml2.getElementsByTagName('block')[0];
 
-  // Return whether or not changes have been saved.
-  return blockXmlText1 == blockXmlText2;
+    if (!(blockElement1 && blockElement2)) {
+      throw new Error('Could not get find block element in xml.');
+    }
+
+    var blockXmlText1 = Blockly.Xml.domToText(blockElement1);
+    var blockXmlText2 = Blockly.Xml.domToText(blockElement2);
+
+    // Strip white space.
+    blockXmlText1 = blockXmlText1.replace(/\s+/g, '');
+    blockXmlText2 = blockXmlText2.replace(/\s+/g, '');
+
+    // Return whether or not changes have been saved.
+    return blockXmlText1 == blockXmlText2;
 };
 
 /*
@@ -949,4 +960,41 @@ FactoryUtils.isProcedureBlock = function(block) {
       block.type == 'procedures_callnoreturn' ||
       block.type == 'procedures_callreturn' ||
       block.type == 'procedures_ifreturn');
+};
+
+/**
+ * Returns whether or not a block's changes has been saved to the Block Library.
+ * TODO: move into the Block Factory Controller once made.
+ *
+ * @param {!BlockLibraryController} blockLibraryController - Block Library Controller storing
+ *    custom blocks.
+ * @return {boolean} True if all changes made to the block have been saved to
+ *    the given Block Library.
+ */
+FactoryUtils.savedBlockChanges = function(blockLibraryController) {
+  var blockType = blockLibraryController.getCurrentBlockType();
+  var currentXml = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
+
+  if (blockLibraryController.has(blockType)) {
+    // Block is saved in block library.
+    var savedXml = blockLibraryController.getBlockXml(blockType);
+    return FactoryUtils.sameBlockXml(savedXml, currentXml);
+  }
+  return false;
+};
+
+/**
+ * If there are unsaved changes to the block in open in Block Factory
+ * and the block is not the starter block, check if user wants to proceed,
+ * knowing that it will cause them to lose their changes.
+ *
+ * @return {boolean} Whether or not to proceed.
+ */
+FactoryUtils.warnIfUnsavedChanges = function() {
+  if (!BlockFactory.isStarterBlock() &&
+      !FactoryUtils.savedBlockChanges(self.blockLibraryController)) {
+    return confirm('You have unsaved changes. By proceeding without saving ' +
+      ' your block first, you will lose these changes.');
+  }
+  return true;
 };

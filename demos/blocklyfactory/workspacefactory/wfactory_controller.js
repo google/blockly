@@ -968,7 +968,7 @@ WorkspaceFactoryController.prototype.convertShadowBlocks = function() {
           block.outputConnection.targetConnection :
           block.previousConnection.targetConnection;
       if (parentConnection) {
-        parentConnection.shadowDom_ = null;
+        parentConnection.setShadowDom(null);
       }
       this.model.addShadowBlock(block.id);
       this.view.markShadowBlock(block);

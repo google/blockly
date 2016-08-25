@@ -302,6 +302,23 @@ button, .buttonStyle {
   width: 90%;
 }
 
+/* Block Library */
+
+#button_blockLib {
+  border-color: darkgrey;
+  font-size: large;
+}
+
+.button_alert {
+  background-color: #fcc;
+  border-color: #f99;
+}
+
+.button_warn {
+  background-color: #aea;
+  border-color: #5d5;
+}
+
 /* Tabs */
 
 .tab {
@@ -531,7 +548,7 @@ td {
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-  background-color: #f9f9f9;
+  background-color: #FFF;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,.2);
   display: none;
   min-width: 170px;
@@ -549,9 +566,14 @@ td {
   text-decoration: none;
 }
 
-/* Change color of dropdown links on hover. */
+/* Change color  of dropdown links on hover. */
 .dropdown-content a:hover, .dropdown-content label:hover {
-  background-color: #f1f1f1
+  background-color: #EEE;
+}
+
+/* Change color of dropdown links on selected. */
+.dropdown-content-selected {
+  background-color: #DDD;
 }
 
 /* Show the dropdown menu */

@@ -45,19 +45,18 @@ WorkspaceFactoryView = function() {
  *
  * @param {!string} name The name of the category being created
  * @param {!string} id ID of category being created
- * @param {boolean} firstCategory true if it's the first category, false
- * otherwise
  * @return {!Element} DOM element created for tab
  */
-WorkspaceFactoryView.prototype.addCategoryRow =
-    function(name, id, firstCategory) {
+WorkspaceFactoryView.prototype.addCategoryRow = function(name, id) {
   var table = document.getElementById('categoryTable');
+  var count = table.rows.length;
+
   // Delete help label and enable category buttons if it's the first category.
-  if (firstCategory) {
+  if (count == 0) {
     document.getElementById('categoryHeader').textContent = 'Your Categories:';
   }
+
   // Create tab.
-  var count = table.rows.length;
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
   // Configure tab.
@@ -255,9 +254,13 @@ WorkspaceFactoryView.prototype.setBorderColor = function(id, color) {
  * @param {!Element} The td DOM element representing the separator.
  */
 WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
-  // Create separator.
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
+
+  if (count == 0) {
+    document.getElementById('categoryHeader').textContent = 'Your Categories:';
+  }
+  // Create separator.
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
   // Configure separator.
@@ -277,7 +280,14 @@ WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
  * if it should be enabled.
  */
 WorkspaceFactoryView.prototype.disableWorkspace = function(disable) {
-  document.getElementById('disable_div').style.zIndex = disable ? 1 : -1;
+  if (disable) {
+    document.getElementById('toolbox_section').className = 'disabled';
+    document.getElementById('toolbox_blocks').style.pointerEvents = 'none';
+  } else {
+    document.getElementById('toolbox_section').className = '';
+    document.getElementById('toolbox_blocks').style.pointerEvents = 'auto';
+  }
+
 };
 
 /**

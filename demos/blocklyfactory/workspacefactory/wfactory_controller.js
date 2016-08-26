@@ -108,7 +108,7 @@ WorkspaceFactoryController.prototype.addCategory = function() {
     return;
   }
   // Create category.
-  this.createCategory(name, isFirstCategory);
+  this.createCategory(name);
   // Switch to category.
   this.switchElement(this.model.getCategoryIdByName(name));
 
@@ -128,16 +128,13 @@ WorkspaceFactoryController.prototype.addCategory = function() {
  *
  * @param {!string} name Name of category being added.
  * @param {!string} id The ID of the category being added.
- * @param {boolean} isFirstCategory True if it's the first category created,
- * false otherwise.
  */
-WorkspaceFactoryController.prototype.createCategory = function(name,
-    isFirstCategory) {
+WorkspaceFactoryController.prototype.createCategory = function(name) {
   // Create empty category
   var category = new ListElement(ListElement.TYPE_CATEGORY, name);
   this.model.addElementToList(category);
   // Create new category.
-  var tab = this.view.addCategoryRow(name, category.id, isFirstCategory);
+  var tab = this.view.addCategoryRow(name, category.id);
   this.addClickToSwitch(tab, category.id);
 };
 
@@ -615,7 +612,7 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
   this.model.addElementToList(copy);
 
   // Update the copy in the view.
-  var tab = this.view.addCategoryRow(copy.name, copy.id, isFirstCategory);
+  var tab = this.view.addCategoryRow(copy.name, copy.id);
   this.addClickToSwitch(tab, copy.id);
   // Color the category tab in the view.
   if (copy.color) {

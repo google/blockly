@@ -430,8 +430,9 @@ td {
   padding-right: 20px;
 }
 
-.test {
-  border: 1px solid black;
+.disabled {
+  background-color: white;
+  opacity: 0.5;
 }
 
 #toolbox_div {
@@ -464,17 +465,6 @@ td {
 #workspace_options {
   display: table-row;
   margin-top: 2%;
-}
-
-#disable_div {
-  background-color: white;
-  height: 100%;
-  left: 0;
-  opacity: .5;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: -1;  /* Start behind workspace */
 }
 
 /* Rules for Closure popup color picker */

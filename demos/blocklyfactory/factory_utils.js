@@ -33,8 +33,6 @@
  */
 goog.provide('FactoryUtils');
 
-goog.require('goog.dom.classes');
-
 /**
  * Get block definition code for the current block.
  *

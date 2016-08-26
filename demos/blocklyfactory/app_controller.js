@@ -229,23 +229,6 @@ AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
 };
 
 /**
- * Updates the Block Factory tab to show selected block when user selects a
- * different block in the block library dropdown. Tied to block library dropdown
- * in index.html.
- *
- * @param {!Element} blockLibraryDropdown - HTML select element from which the
- *    user selects a block to work on.
- */
-AppController.prototype.onSelectedBlockChanged
-    = function(blockLibraryDropdown) {
-  // Get selected block type.
-  var blockType = this.blockLibraryController.getSelectedBlockType(
-      blockLibraryDropdown);
-  // Update Block Factory page by showing the selected block.
-  this.blockLibraryController.openBlock(blockType);
-};
-
-/**
  * Add click handlers to each tab to allow switching between the Block Factory,
  * Workspace Factory, and Block Exporter tab.
  *
@@ -467,27 +450,30 @@ AppController.prototype.ifCheckedDisplay = function(checkbox, elementArray) {
  */
 AppController.prototype.assignLibraryClickHandlers = function() {
   var self = this;
-  // Assign button click handlers for Block Library.
+
+  // Button for saving block to library.
   document.getElementById('saveToBlockLibraryButton').addEventListener('click',
       function() {
         self.blockLibraryController.saveToBlockLibrary();
       });
 
+  // Button for removing selected block from library.
   document.getElementById('removeBlockFromLibraryButton').addEventListener(
     'click',
       function() {
         self.blockLibraryController.removeFromBlockLibrary();
       });
 
+  // Button for clearing the block library.
   document.getElementById('clearBlockLibraryButton').addEventListener('click',
       function() {
         self.blockLibraryController.clearBlockLibrary();
       });
 
-  var dropdown = document.getElementById('blockLibraryDropdown');
-  dropdown.addEventListener('change',
+  // Hide and show the block library dropdown.
+  document.getElementById('button_blockLib').addEventListener('click',
       function() {
-        self.onSelectedBlockChanged(dropdown);
+        document.getElementById('dropdownDiv_blockLib').classList.toggle("show");
       });
 };
 
@@ -524,8 +510,9 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
 
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
-      BlockFactory.showStarterBlock();
-      BlockLibraryView.selectDefaultOption('blockLibraryDropdown');
+        BlockFactory.showStarterBlock();
+        self.blockLibraryController.setNoneSelected();
+        goog.dom.getElement('dropdownDiv_blockLib').classList.remove("show");
     });
 };
 
@@ -535,6 +522,10 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
 AppController.prototype.addBlockFactoryEventListeners = function() {
   BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
   BlockFactory.mainWorkspace.addChangeListener(Blockly.Events.disableOrphans);
+  var self = this;
+  BlockFactory.mainWorkspace.addChangeListener(function() {
+      self.blockLibraryController.updateButtons();
+    });
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);
   document.getElementById('languageTA')

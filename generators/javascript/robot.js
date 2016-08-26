@@ -122,6 +122,19 @@ Blockly.JavaScript['robot_perception_object_attributes'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_MEMBER];
 };
 
+Blockly.JavaScript['robot_perception_custom_landmarks'] = function(block) {
+  var dropdown_landmark_id = block.getFieldValue('LANDMARK');
+  var code = Blockly.JavaScript.quote_(dropdown_landmark_id);
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['robot_perception_find_custom_landmark'] = function(block) {
+  var value_landmark = Blockly.JavaScript.valueToCode(block, 'LANDMARK', Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  var checkbox_is_tabletop = block.getFieldValue('IS_TABLETOP') == 'TRUE';
+  var code = 'robot.findCustomLandmark(' + value_landmark + ', ' + checkbox_is_tabletop + ')';
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
 Blockly.JavaScript['robot_movement_tuck_arms'] = function(block) {
   var dropdown_left_action = block.getFieldValue('LEFT_ACTION');
   var dropdown_right_action = block.getFieldValue('RIGHT_ACTION');

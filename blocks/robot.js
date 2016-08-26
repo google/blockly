@@ -237,6 +237,74 @@ Blockly.Blocks['robot_perception_object_attributes'] = {
   }
 };
 
+Blockly.Blocks['robot_perception_find_custom_landmark'] = {
+  init: function() {
+    this.appendValueInput("LANDMARK")
+        .setCheck("String")
+        .appendField("find custom landmark");
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "IS_TABLETOP")
+        .appendField("on tabletop");
+    this.setInputsInline(false);
+    this.setOutput(true, "Array");
+    this.setColour(230);
+    this.setTooltip('Searches for a custom landmark. More than one may be found. Check "on tabletop" if you know the landmark is in a tabletop scene.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.robot.customLandmarks = [['<No landmarks yet>', '<No landmarks yet>']];
+Blockly.robot.getCustomLandmarkOptions = function() {
+  var options = [];
+  var client = new ROSLIB.Service({
+    ros: ROS,
+    name: '/mongo_msg_db/list',
+    serviceType : 'mongo_msg_db_msgs/List'
+  });
+
+  var request = new ROSLIB.ServiceRequest({
+    collection: {
+      db: 'object_search',
+      collection: 'objects'
+    }
+  });
+  client.callService(request, function(result) {
+    for (var i=0; i<result.messages.length; ++i) {
+      var message = result.messages[i];
+      var landmark = JSON.parse(message.json);
+      options.push([landmark.name, message.id]);
+    }
+    Blockly.robot.customLandmarks = options;
+  });
+};
+
+Blockly.robot.getCustomLandmarkOptions();
+
+Blockly.Blocks['robot_perception_custom_landmarks'] = {
+  init: function() {
+    Blockly.robot.getCustomLandmarkOptions();
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(Blockly.robot.customLandmarks), "LANDMARK");
+    this.setOutput(true, "String");
+    this.setColour(230);
+    this.setTooltip('Select a custom landmark from the list');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    if (this.getFieldValue('LANDMARK') === '<No landmarks yet>') {
+      if (Blockly.robot.customLandmarks.length === 1) {
+        this.setWarningText('No custom landmarks are available to search for.');
+      } else {
+        this.setWarningText('Select a custom landmark from the list.');
+      }
+    } else {
+      this.setWarningText(null);
+    }
+  },
+};
+
 Blockly.Blocks['robot_movement_tuck_arms'] = {
   init: function() {
     this.appendDummyInput()

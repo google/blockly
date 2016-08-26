@@ -274,10 +274,10 @@ Blockly.Blocks['logic_compare'] = {
     var rtlOperators = [
       ['=', 'EQ'],
       ['\u2260', 'NEQ'],
-      ['>', 'LT'],
-      ['\u2265', 'LTE'],
-      ['<', 'GT'],
-      ['\u2264', 'GTE']
+      ['\u200F<\u200F', 'LT'],
+      ['\u200F\u2264\u200F', 'LTE'],
+      ['\u200F>\u200F', 'GT'],
+      ['\u200F\u2265\u200F', 'GTE']
     ];
     var ltrOperators = [
       ['=', 'EQ'],

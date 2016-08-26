@@ -1,0 +1,224 @@
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+
+section {
+  float: left;
+}
+
+aside {
+  float: right;
+}
+
+#categoryTable>table {
+  border: 1px solid #ccc;
+  border-bottom: none;
+}
+
+#workspaceTabs>table {
+  float: right;
+}
+
+td.tabon {
+  border-bottom-color: #ddd !important;
+  background-color: #ddd;
+  padding: 5px 19px;
+}
+
+td.taboff {
+  cursor: pointer;
+  padding: 5px 19px;
+}
+
+td.taboff:hover {
+  background-color: #eee;
+}
+
+button {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #eee;
+  color: #000;
+  font-size: large;
+  margin: 0 5px;
+  padding: 10px;
+}
+
+button:hover:not(:disabled) {
+  box-shadow: 2px 2px 5px #888;
+}
+
+button:disabled {
+  opacity: .6;
+}
+
+button>* {
+  opacity: .6;
+  vertical-align: text-bottom;
+}
+
+button:hover:not(:disabled)>* {
+  opacity: 1;
+}
+
+button.small {
+  font-size: small;
+}
+
+table {
+  border: none;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+td {
+  padding: 0;
+  vertical-align: top;
+}
+
+.inputfile {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  z-index: -1;
+}
+
+#toolbox_section {
+  height: 480px;
+  width: 80%;
+  position: relative;
+}
+
+#toolbox_blocks {
+  height: 100%;
+  width: 100%;
+}
+
+#preview_blocks {
+  height: 300px;
+  width: 100%;
+}
+
+#createDiv {
+  width: 70%;
+}
+
+#previewDiv {
+  width: 30%;
+}
+
+#toolbox_div {
+  width: 20%;
+}
+
+#preload_div {
+  width: 20%;
+}
+
+#disable_div {
+  background-color: white;
+  height: 100%;
+  left: 0;
+  opacity: .5;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;  /* Start behind workspace */
+}
+
+/* Rules for Closure popup color picker */
+.goog-palette {
+  outline: none;
+  cursor: default;
+}
+
+.goog-palette-cell {
+  height: 13px;
+  width: 15px;
+  margin: 0;
+  border: 0;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 1px solid #000000;
+  font-size: 1px;
+}
+
+.goog-palette-colorswatch {
+  border: 1px solid #000000;
+  height: 13px;
+  position: relative;
+  width: 15px;
+}
+
+.goog-palette-cell-hover .goog-palette-colorswatch {
+  border: 1px solid #FFF;
+}
+
+.goog-palette-cell-selected .goog-palette-colorswatch {
+  border: 1px solid #000;
+  color: #fff;
+}
+
+.goog-palette-table {
+  border: 1px solid #000;
+  border-collapse: collapse;
+}
+
+.goog-popupcolorpicker {
+  position: absolute;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,.2);
+  display: none;
+  min-width: 170px;
+  opacity: 1;
+  position: absolute;
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a, .dropdown-content label {
+  color: black;
+  display: block;
+  font-size: small;
+  padding: 12px 16px;
+  text-decoration: none;
+}
+
+/* Change color of dropdown links on hover. */
+.dropdown-content a:hover, .dropdown-content label:hover {
+  background-color: #f1f1f1
+}
+
+/* Show the dropdown menu */
+.show {
+  display: block;
+}
+
+.shadowBlock>.blocklyPath {
+  fill-opacity: .5;
+  stroke-opacity: .5;
+}
+
+.shadowBlock>.blocklyPathLight,
+.shadowBlock>.blocklyPathDark {
+  display: none;
+}

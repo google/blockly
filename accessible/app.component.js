@@ -29,6 +29,9 @@ blocklyApp.AppView = ng.core
   .Component({
     selector: 'blockly-app',
     template: `
+    <div aria-hidden="true">
+      Status: <span aria-live="polite" role="status">{{getStatusMessage()}}</span>
+    </div>
     <table>
       <tr>
         <td class="blocklyTable">
@@ -46,19 +49,29 @@ blocklyApp.AppView = ng.core
     <label aria-hidden="true" hidden id="blockly-argument-text">{{'TEXT'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-block-menu">{{'BLOCK_ACTION_LIST'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-block-summary">{{'BLOCK_SUMMARY'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-more-options">{{'MORE_OPTIONS'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-submenu-indicator">{{'SUBMENU_INDICATOR'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-toolbox-block">{{'TOOLBOX_BLOCK'|translate}} {{'SUBMENU_INDICATOR'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-workspace-block">{{'WORKSPACE_BLOCK'|translate}} {{'SUBMENU_INDICATOR'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-button">{{'BUTTON'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-disabled">{{'UNAVAILABLE'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-disabled">{{'DISABLED'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-menu">{{'OPTION_LIST'|translate}}</label>
     `,
     directives: [blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent],
     pipes: [blocklyApp.TranslatePipe],
-    // The clipboard, tree and utils services are declared here, so that all
-    // components in the application use the same instance of the service.
+    // All services are declared here, so that all components in the
+    // application use the same instance of the service.
     // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
     providers: [
-        blocklyApp.ClipboardService, blocklyApp.TreeService,
-        blocklyApp.UtilsService]
+        blocklyApp.ClipboardService, blocklyApp.NotificationsService,
+        blocklyApp.TreeService, blocklyApp.UtilsService,
+        blocklyApp.AudioService]
   })
   .Class({
-    constructor: [function() {}]
+    constructor: [blocklyApp.NotificationsService, function(_notificationsService) {
+      this.notificationsService = _notificationsService;
+    }],
+    getStatusMessage: function() {
+      return this.notificationsService.getStatusMessage();
+    }
   });

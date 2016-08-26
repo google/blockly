@@ -178,20 +178,17 @@ Blockly.Field.prototype.dispose = function() {
  * Add or remove the UI indicating if this field is editable or not.
  */
 Blockly.Field.prototype.updateEditable = function() {
-  if (!this.EDITABLE || !this.fieldGroup_) {
+  var group = this.fieldGroup_;
+  if (!this.EDITABLE || !group) {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
-    Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
-                      'blocklyEditableText');
-    Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_),
-                         'blocklyNonEditableText');
+    Blockly.addClass_(group, 'blocklyEditableText');
+    Blockly.removeClass_(group, 'blocklyNonEditableText');
     this.fieldGroup_.style.cursor = this.CURSOR;
   } else {
-    Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_),
-                      'blocklyNonEditableText');
-    Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_),
-                         'blocklyEditableText');
+    Blockly.addClass_(group, 'blocklyNonEditableText');
+    Blockly.removeClass_(group, 'blocklyEditableText');
     this.fieldGroup_.style.cursor = '';
   }
 };

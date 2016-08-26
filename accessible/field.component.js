@@ -28,40 +28,41 @@ blocklyApp.FieldComponent = ng.core
   .Component({
     selector: 'blockly-field',
     template: `
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextInput()"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-input', idMap['input'])"
-        [attr.aria-level]="level" aria-selected="false">
-      <input [id]="idMap['input']" [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-             [disabled]="disabled">
-    </li>
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isDropdown()"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-argument-menu', idMap['label'])"
-        [attr.aria-level]="level" aria-selected="false">
-      <label [id]="idMap['label']">{{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}</label>
+    <input *ngIf="isTextInput()" [id]="mainFieldId" type="text" [disabled]="disabled"
+           [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
+           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text'"
+           tabindex="-1">
+
+    <input *ngIf="isNumberInput()" [id]="mainFieldId" type="number" [disabled]="disabled"
+           [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
+           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number'"
+           tabindex="-1">
+
+    <div *ngIf="isDropdown()">
+      <label [id]="mainFieldId" [attr.aria-label]="('CURRENT_ARGUMENT_VALUE'|translate) + ' ' + field.getText() + ' Move right to view submenu'">
+        {{'CURRENT_ARGUMENT_VALUE'|translate}} {{field.getText()}}
+      </label>
       <ol role="group">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
-            [attr.aria-level]="level + 1" aria-selected="false">
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)"
-                  [disabled]="disabled">
+                  [disabled]="disabled" tabindex="-1"
+                  [attr.aria-label]="optionText[optionValue] + ' Press Enter to select this value'">
             {{optionText[optionValue]}}
           </button>
         </li>
       </ol>
-    </li>
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isCheckbox()"
-        [attr.aria-level]="level" aria-selected="false">
+    </div>
+
+    <div *ngIf="isCheckbox()">
       // Checkboxes are not currently supported.
-    </li>
-    <li [id]="idMap['listItem']" role="treeitem" *ngIf="isTextField() && hasVisibleText()"
-        [attr.aria-labelledBy]="utilsService.generateAriaLabelledByAttr('blockly-argument-text', idMap['label'])"
-        [attr.aria-level]="level" aria-selected="false">
-      <label [id]="idMap['label']">
-        {{field.getText()}}
-      </label>
-    </li>
+    </div>
+
+    <label [id]="mainFieldId" *ngIf="isTextField() && hasVisibleText()">
+      {{field.getText()}}
+    </label>
     `,
-    inputs: ['field', 'level', 'index', 'parentId', 'disabled'],
+    inputs: ['field', 'index', 'parentId', 'disabled', 'mainFieldId'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
@@ -81,22 +82,21 @@ blocklyApp.FieldComponent = ng.core
       return mainLabel + ' ' + secondLabel;
     },
     generateElementNames: function() {
-      var elementNames = ['listItem'];
-      if (this.isTextInput()) {
-        elementNames.push('input');
-      } else if (this.isDropdown()) {
-        elementNames.push('label');
+      var elementNames = [];
+      if (this.isDropdown()) {
         var keys = this.getOptions();
         for (var i = 0; i < keys.length; i++){
           elementNames.push(keys[i], keys[i] + 'Button');
         }
-      } else if (this.isTextField() && this.hasVisibleText()) {
-        elementNames.push('label');
       }
       return elementNames;
     },
+    isNumberInput: function() {
+      return this.field instanceof Blockly.FieldNumber;
+    },
     isTextInput: function() {
-      return this.field instanceof Blockly.FieldTextInput;
+      return this.field instanceof Blockly.FieldTextInput &&
+          !(this.field instanceof Blockly.FieldNumber);
     },
     isDropdown: function() {
       return this.field instanceof Blockly.FieldDropdown;

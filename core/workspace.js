@@ -73,6 +73,12 @@ Blockly.Workspace = function(opt_options) {
    * @private
    */
   this.blockDB_ = Object.create(null);
+  /*
+   * @type {!Array.<!string>}
+   * A list of all of the named variables in the workspace, including variables
+   * that are not currently in use.
+   */
+  this.variableList = [];
 };
 
 /**
@@ -112,6 +118,17 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
   this.topBlocks_.push(block);
+  if (this.isFlyout) {
+    // This is for the (unlikely) case where you have a variable in a block in
+    // an always-open flyout.  It needs to be possible to edit the block in the
+    // flyout, so the contents of the dropdown need to be correct.
+    var variables = Blockly.Variables.allUsedVariables(block);
+    for (var i = 0; i < variables.length; i++) {
+      if (this.variableList.indexOf(variables[i]) == -1) {
+        this.variableList.push(variables[i]);
+      }
+    }
+  }
 };
 
 /**
@@ -181,6 +198,158 @@ Blockly.Workspace.prototype.clear = function() {
   if (!existingGroup) {
     Blockly.Events.setGroup(false);
   }
+
+  this.variableList.length = 0;
+};
+
+/**
+ * Walk the workspace and update the list of variables to only contain ones in
+ * use on the workspace.  Use when loading new workspaces from disk.
+ * @param {boolean} clearList True if the old variable list should be cleared.
+ */
+Blockly.Workspace.prototype.updateVariableList = function(clearList) {
+  // TODO: Sort
+  if (!this.isFlyout) {
+    // Update the list in place so that the flyout's references stay correct.
+    if (clearList) {
+      this.variableList.length = 0;
+    }
+    var allVariables = Blockly.Variables.allUsedVariables(this);
+    for (var i = 0; i < allVariables.length; i++) {
+      this.createVariable(allVariables[i]);
+    }
+  }
+};
+
+/**
+ * Rename a variable by updating its name in the variable list.
+ * TODO: #468
+ * @param {string} oldName Variable to rename.
+ * @param {string} newName New variable name.
+ */
+Blockly.Workspace.prototype.renameVariable = function(oldName, newName) {
+  // Find the old name in the list.
+  var variableIndex = this.variableIndexOf(oldName);
+  var newVariableIndex = this.variableIndexOf(newName);
+
+  // We might be renaming to an existing name but with different case.  If so,
+  // we will also update all of the blocks using the new name to have the
+  // correct case.
+  if (newVariableIndex != -1 &&
+      this.variableList[newVariableIndex] != newName) {
+    var oldCase = this.variableList[newVariableIndex];
+  }
+
+  Blockly.Events.setGroup(true);
+  var blocks = this.getAllBlocks();
+  // Iterate through every block.
+  for (var i = 0; i < blocks.length; i++) {
+    blocks[i].renameVar(oldName, newName);
+    if (oldCase) {
+      blocks[i].renameVar(oldCase, newName);
+    }
+  }
+  Blockly.Events.setGroup(false);
+
+
+  if (variableIndex == newVariableIndex ||
+      variableIndex != -1 && newVariableIndex == -1) {
+    // Only changing case, or renaming to a completely novel name.
+    this.variableList[variableIndex] = newName;
+  } else if (variableIndex != -1 && newVariableIndex != -1) {
+    // Renaming one existing variable to another existing variable.
+    this.variableList.splice(variableIndex, 1);
+    // The case might have changed.
+    this.variableList[newVariableIndex] = newName;
+  } else {
+    this.variableList.push(newName);
+    console.log('Tried to rename an non-existent variable.');
+  }
+};
+
+/**
+ * Create a variable with the given name.
+ * TODO: #468
+ * @param {string} name The new variable's name.
+ */
+Blockly.Workspace.prototype.createVariable = function(name) {
+  var index = this.variableIndexOf(name);
+  if (index == -1) {
+    this.variableList.push(name);
+  }
+};
+
+/**
+ * Find all the uses of a named variable.
+ * @param {string} name Name of variable.
+ * @return {!Array.<!Blockly.Block>} Array of block usages.
+ */
+Blockly.Workspace.prototype.getVariableUses = function(name) {
+  var uses = [];
+  var blocks = this.getAllBlocks();
+  // Iterate through every block and check the name.
+  for (var i = 0; i < blocks.length; i++) {
+    var blockVariables = blocks[i].getVars();
+    if (blockVariables) {
+      for (var j = 0; j < blockVariables.length; j++) {
+        var varName = blockVariables[j];
+        // Variable name may be null if the block is only half-built.
+        if (varName && Blockly.Names.equals(varName, name)) {
+          uses.push(blocks[i]);
+        }
+      }
+    }
+  }
+  return uses;
+};
+
+/**
+ * Delete a variables and all of its uses from this workspace.
+ * @param {string} name Name of variable to delete.
+ */
+Blockly.Workspace.prototype.deleteVariable = function(name) {
+  var variableIndex = this.variableIndexOf(name);
+  if (variableIndex != -1) {
+    var uses = this.getVariableUses(name);
+    if (uses.length > 1) {
+      for (var i = 0, block; block = uses[i]; i++) {
+        if (block.type == 'procedures_defnoreturn' ||
+          block.type == 'procedures_defreturn') {
+          var procedureName = block.getFieldValue('NAME');
+          window.alert(
+              Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.replace('%1', name).
+              replace('%2', procedureName));
+          return;
+        }
+      }
+      window.confirm(
+          Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
+          replace('%2', name));
+    }
+
+    Blockly.Events.setGroup(true);
+    for (var i = 0; i < uses.length; i++) {
+      uses[i].dispose(true, false);
+    }
+    Blockly.Events.setGroup(false);
+    this.variableList.splice(variableIndex, 1);
+  }
+};
+
+/**
+ * Check whether a variable exists with the given name.  The check is
+ * case-insensitive.
+ * @param {string} name The name to check for.
+ * @return {number} The index of the name in the variable list, or -1 if it is
+ *     not present.
+ */
+Blockly.Workspace.prototype.variableIndexOf = function(name) {
+  for (var i = 0, varname; varname = this.variableList[i]; i++) {
+    if (Blockly.Names.equals(varname, name)) {
+      return i;
+    }
+  }
+  return -1;
 };
 
 /**

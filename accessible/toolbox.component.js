@@ -30,7 +30,7 @@ blocklyApp.ToolboxComponent = ng.core
       <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
       <ol #tree
           id="blockly-toolbox-tree" role="tree" class="blocklyTree"
-          *ngIf="toolboxCategories && toolboxCategories.length > 0" tabIndex="0"
+          *ngIf="toolboxCategories && toolboxCategories.length > 0" tabindex="0"
           [attr.aria-labelledby]="toolboxTitle.id"
           [attr.aria-activedescendant]="getActiveDescId()"
           (keydown)="treeService.onKeypress($event, tree)">
@@ -39,8 +39,8 @@ blocklyApp.ToolboxComponent = ng.core
               [id]="idMap['Parent' + i]" role="treeitem"
               [ngClass]="{blocklyHasChildren: true, blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}"
               *ngFor="#category of toolboxCategories; #i=index"
-              aria-level="1" aria-selected="false"
-              [attr.aria-label]="category.attributes.name.value">
+              aria-level="1"
+              [attr.aria-label]="getCategoryAriaLabel(category)">
             <div *ngIf="category && category.attributes">
               <label [id]="idMap['Label' + i]" #name>
                 {{category.attributes.name.value}}
@@ -118,6 +118,11 @@ blocklyApp.ToolboxComponent = ng.core
     },
     getActiveDescId: function() {
       return this.treeService.getActiveDescId('blockly-toolbox-tree');
+    },
+    getCategoryAriaLabel: function(category) {
+      var numBlocks = this.getToolboxWorkspace(category).topBlocks_.length;
+      return category.attributes.name.value + ' category. ' +
+          'Move right to access ' + numBlocks + ' blocks in this category.';
     },
     getToolboxWorkspace: function(categoryNode) {
       if (categoryNode.attributes && categoryNode.attributes.name) {

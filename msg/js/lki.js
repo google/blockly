@@ -62,6 +62,8 @@ Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = "تا زمانی که یک مق�
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = "تا زمانی که یک مقدار صحیح است، چند عبارت را انجام بده.";
 Blockly.Msg.DELETE_ALL_BLOCKS = "حةذف کؤل %1 بلاکةل?";
 Blockly.Msg.DELETE_BLOCK = "پاک کردن بلاک";
+Blockly.Msg.DELETE_VARIABLE = "Delete the '%1' variable";  // untranslated
+Blockly.Msg.DELETE_VARIABLE_CONFIRMATION = "Delete %1 uses of the '%2' variable?";  // untranslated
 Blockly.Msg.DELETE_X_BLOCKS = "حةذف %1 بلاکةل";
 Blockly.Msg.DISABLE_BLOCK = "إ کار کةتن(غیرفعال‌سازی) بلاک";
 Blockly.Msg.DUPLICATE_BLOCK = "کؤپی کردن";
@@ -366,6 +368,7 @@ Blockly.Msg.VARIABLES_SET = "مجموعه %1 به %2";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "درست‌کردن «گرفتن %1»";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://github.com/google/blockly/wiki/Variables#set";  // untranslated
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "متغیر برابر با خروجی را مشخص می‌کند.";
+Blockly.Msg.VARIABLE_ALREADY_EXISTS = "A variable named '%1' already exists.";  // untranslated
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

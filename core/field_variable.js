@@ -65,6 +65,12 @@ Blockly.FieldVariable.prototype.init = function() {
             this.sourceBlock_.workspace;
     this.setValue(Blockly.Variables.generateUniqueName(workspace));
   }
+  // If the selected variable doesn't exist yet, create it.
+  // For instance, some blocks in the toolbox have variable dropdowns filled
+  // in by default.
+  if (!this.sourceBlock_.isInFlyout) {
+    this.sourceBlock_.workspace.createVariable(this.getValue());
+  }
 };
 
 /**
@@ -97,8 +103,9 @@ Blockly.FieldVariable.prototype.setValue = function(newValue) {
  */
 Blockly.FieldVariable.dropdownCreate = function() {
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
-    var variableList =
-        Blockly.Variables.allVariables(this.sourceBlock_.workspace);
+    // Get a copy of the list, so that adding rename and new variable options
+    // doesn't modify the workspace's list.
+    var variableList = this.sourceBlock_.workspace.variableList.slice(0);
   } else {
     var variableList = [];
   }
@@ -109,7 +116,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
   }
   variableList.sort(goog.string.caseInsensitiveCompare);
   variableList.push(Blockly.Msg.RENAME_VARIABLE);
-  variableList.push(Blockly.Msg.NEW_VARIABLE);
+  variableList.push(Blockly.Msg.DELETE_VARIABLE.replace('%1', name));
   // Variables are not language-specific, use the name as both the user-facing
   // text and the internal representation.
   var options = [];
@@ -121,46 +128,27 @@ Blockly.FieldVariable.dropdownCreate = function() {
 
 /**
  * Event handler for a change in variable name.
- * Special case the 'New variable...' and 'Rename variable...' options.
- * In both of these special cases, prompt the user for a new name.
+ * Special case the 'Rename variable...' and 'Delete variable...' options.
+ * In the rename case, prompt the user for a new name.
  * @param {string} text The selected dropdown menu option.
  * @return {null|undefined|string} An acceptable new variable name, or null if
  *     change is to be either aborted (cancel button) or has been already
  *     handled (rename), or undefined if an existing variable was chosen.
  */
 Blockly.FieldVariable.prototype.classValidator = function(text) {
-  function promptName(promptText, defaultText) {
-    Blockly.hideChaff();
-    var newVar = window.prompt(promptText, defaultText);
-    // Merge runs of whitespace.  Strip leading and trailing whitespace.
-    // Beyond this, all names are legal.
-    if (newVar) {
-      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-      if (newVar == Blockly.Msg.RENAME_VARIABLE ||
-          newVar == Blockly.Msg.NEW_VARIABLE) {
-        // Ok, not ALL names are legal...
-        newVar = null;
-      }
-    }
-    return newVar;
-  }
   var workspace = this.sourceBlock_.workspace;
   if (text == Blockly.Msg.RENAME_VARIABLE) {
     var oldVar = this.getText();
-    text = promptName(Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar),
-                      oldVar);
+    Blockly.hideChaff();
+    text = Blockly.Variables.promptName(
+        Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar), oldVar);
     if (text) {
-      Blockly.Variables.renameVariable(oldVar, text, workspace);
+      workspace.renameVariable(oldVar, text);
     }
     return null;
-  } else if (text == Blockly.Msg.NEW_VARIABLE) {
-    text = promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
-    // Since variables are case-insensitive, ensure that if the new variable
-    // matches with an existing variable, the new case prevails throughout.
-    if (text) {
-      Blockly.Variables.renameVariable(text, text, workspace);
-      return text;
-    }
+  } else if (text == Blockly.Msg.DELETE_VARIABLE.replace('%1',
+      this.getText())) {
+    workspace.deleteVariable(this.getText());
     return null;
   }
   return undefined;

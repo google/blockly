@@ -24,12 +24,19 @@
 
 blocklyApp.ClipboardService = ng.core
   .Class({
-    constructor: function() {
+    constructor: [
+        blocklyApp.NotificationsService, blocklyApp.UtilsService,
+        blocklyApp.AudioService,
+        function(_notificationsService, _utilsService, _audioService) {
       this.clipboardBlockXml_ = null;
-      this.clipboardBlockSuperiorConnection_ = null;
+      this.clipboardBlockPreviousConnection_ = null;
       this.clipboardBlockNextConnection_ = null;
+      this.clipboardBlockOutputConnection_ = null;
       this.markedConnection_ = null;
-    },
+      this.notificationsService = _notificationsService;
+      this.utilsService = _utilsService;
+      this.audioService = _audioService;
+    }],
     areConnectionsCompatible_: function(blockConnection, connection) {
       // Check that both connections exist, that it's the right kind of
       // connection, and that the types match.
@@ -39,11 +46,20 @@ blocklyApp.ClipboardService = ng.core
           connection.checkType_(blockConnection));
     },
     isCompatibleWithClipboard: function(connection) {
-      var superiorConnection = this.clipboardBlockSuperiorConnection_;
+      var previousConnection = this.clipboardBlockPreviousConnection_;
       var nextConnection = this.clipboardBlockNextConnection_;
+      var outputConnection = this.clipboardBlockOutputConnection_;
       return Boolean(
-          this.areConnectionsCompatible_(connection, superiorConnection) ||
-          this.areConnectionsCompatible_(connection, nextConnection));
+          this.areConnectionsCompatible_(connection, previousConnection) ||
+          this.areConnectionsCompatible_(connection, nextConnection) ||
+          this.areConnectionsCompatible_(connection, outputConnection));
+    },
+    getMarkedConnectionBlock: function() {
+      if (!this.markedConnection_) {
+        return null;
+      } else {
+        return this.markedConnection_.getSourceBlock();
+      }
     },
     isMovableToMarkedConnection: function(block) {
       // It should not be possible to move any ancestor of the block containing
@@ -52,7 +68,7 @@ blocklyApp.ClipboardService = ng.core
         return false;
       }
 
-      var markedSpotAncestorBlock = this.markedConnection_.getSourceBlock();
+      var markedSpotAncestorBlock = this.getMarkedConnectionBlock();
       while (markedSpotAncestorBlock) {
         if (markedSpotAncestorBlock.id == block.id) {
           return false;
@@ -82,24 +98,28 @@ blocklyApp.ClipboardService = ng.core
     },
     markConnection: function(connection) {
       this.markedConnection_ = connection;
-      alert(Blockly.Msg.MARKED_SPOT_MSG);
+      this.notificationsService.setStatusMessage(Blockly.Msg.MARKED_SPOT_MSG);
     },
     cut: function(block) {
-      var blockSummary = block.toString();
-      this.copy(block, false);
+      this.copy(block);
       block.dispose(true);
-      alert(Blockly.Msg.CUT_BLOCK_MSG + blockSummary);
     },
-    copy: function(block, announce) {
+    copy: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
-      this.clipboardBlockSuperiorConnection_ = block.outputConnection ||
-          block.previousConnection;
+      this.clipboardBlockPreviousConnection_ = block.previousConnection;
       this.clipboardBlockNextConnection_ = block.nextConnection;
-      if (announce) {
-        alert(Blockly.Msg.COPIED_BLOCK_MSG + block.toString());
-      }
+      this.clipboardBlockOutputConnection_ = block.outputConnection;
     },
-    pasteFromClipboard: function(connection) {
+    pasteFromClipboard: function(inputConnection) {
+      var connection = inputConnection;
+      // If the connection is a 'previousConnection' and that connection is
+      // already joined to something, use the 'nextConnection' of the
+      // previous block instead in order to do an insertion.
+      if (inputConnection.type == Blockly.PREVIOUS_STATEMENT &&
+          inputConnection.isConnected()) {
+        connection = inputConnection.targetConnection;
+      }
+
       var reconstitutedBlock = Blockly.Xml.domToBlock(blocklyApp.workspace,
           this.clipboardBlockXml_);
       switch (connection.type) {
@@ -112,11 +132,13 @@ blocklyApp.ClipboardService = ng.core
         default:
           connection.connect(reconstitutedBlock.outputConnection);
       }
-      alert(
-          Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG +
-          reconstitutedBlock.toString());
+      this.audioService.playConnectSound();
+      this.notificationsService.setStatusMessage(
+          this.utilsService.getBlockDescription(reconstitutedBlock) + ' ' +
+          Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG);
+      return reconstitutedBlock.id;
     },
-    pasteToMarkedConnection: function(block, announce) {
+    pasteToMarkedConnection: function(block) {
       var xml = Blockly.Xml.blockToDom(block);
       var reconstitutedBlock = Blockly.Xml.domToBlock(
           blocklyApp.workspace, xml);
@@ -132,6 +154,7 @@ blocklyApp.ClipboardService = ng.core
         if (this.areConnectionsCompatible_(
             this.markedConnection_, potentialConnections[i])) {
           this.markedConnection_.connect(potentialConnections[i]);
+          this.audioService.playConnectSound();
           connectionSuccessful = true;
           break;
         }
@@ -142,12 +165,8 @@ blocklyApp.ClipboardService = ng.core
         return;
       }
 
-      if (announce) {
-        alert(
-            Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
-            reconstitutedBlock.toString());
-      }
-
       this.markedConnection_ = null;
+
+      return reconstitutedBlock.id;
     }
   });

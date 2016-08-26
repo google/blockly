@@ -30,6 +30,7 @@ goog.require('Blockly.Field');
 goog.require('Blockly.Msg');
 goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.userAgent');
 
 
@@ -124,7 +125,8 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput) {
   Blockly.WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_());
   var div = Blockly.WidgetDiv.DIV;
   // Create the input.
-  var htmlInput = goog.dom.createDom('input', 'blocklyHtmlInput');
+  var htmlInput =
+      goog.dom.createDom(goog.dom.TagName.INPUT, 'blocklyHtmlInput');
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   var fontSize =
       (Blockly.FieldTextInput.FONTSIZE * this.workspace_.scale) + 'pt';
@@ -269,6 +271,9 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
       } else {
         // Validation function has changed the text.
         text = text1;
+        if (thisField.onFinishEditing_) {
+          thisField.onFinishEditing_(text);
+        }
       }
     }
     thisField.setValue(text);

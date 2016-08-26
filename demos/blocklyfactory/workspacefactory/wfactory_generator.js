@@ -144,8 +144,10 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
 WorkspaceFactoryGenerator.prototype.generateOptionsString = function() {
 
   var addAttributes = function(obj, tabChar) {
+    if (!obj) {
+      return '{}\n';
+    }
     var str = '';
-    var total = obj.length;
     for (var key in obj) {
       if (key == 'grid' || key == 'zoom') {
         var temp = tabChar + key + ' : {\n' + addAttributes(obj[key],

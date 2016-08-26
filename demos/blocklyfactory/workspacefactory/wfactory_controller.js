@@ -1070,7 +1070,8 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
   if (document.getElementById('option_infiniteBlocks_checkbox').checked) {
     optionsObj['maxBlocks'] = Infinity;
   } else {
-    var maxBlocksValue = document.getElementById('option_maxBlocks_number').value;
+    var maxBlocksValue =
+        document.getElementById('option_maxBlocks_number').value;
     optionsObj['maxBlocks'] = typeof maxBlocksValue == 'string' ?
         parseInt(maxBlocksValue) : maxBlocksValue;
   }
@@ -1090,7 +1091,8 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
   // If using a grid, add all grid options.
   if (document.getElementById('option_grid_checkbox').checked) {
     var grid = Object.create(null);
-    var spacingValue = document.getElementById('gridOption_spacing_number').value;
+    var spacingValue =
+        document.getElementById('gridOption_spacing_number').value;
     grid['spacing'] = typeof spacingValue == 'string' ?
         parseInt(spacingValue) : spacingValue;
     var lengthValue = document.getElementById('gridOption_length_number').value;
@@ -1108,16 +1110,20 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
         document.getElementById('zoomOption_controls_checkbox').checked;
     zoom['wheel'] =
         document.getElementById('zoomOption_wheel_checkbox').checked;
-    var startScaleValue = document.getElementById('zoomOption_startScale_number').value;
+    var startScaleValue =
+        document.getElementById('zoomOption_startScale_number').value;
     zoom['startScale'] = typeof startScaleValue == 'string' ?
         parseFloat(startScaleValue) : startScaleValue;
-    var maxScaleValue = document.getElementById('zoomOption_maxScale_number').value;
+    var maxScaleValue =
+        document.getElementById('zoomOption_maxScale_number').value;
     zoom['maxcale'] = typeof maxScaleValue == 'string' ?
         parseFloat(maxScaleValue) : maxScaleValue;
-    var minScaleValue = document.getElementById('zoomOption_minScale_number').value;
+    var minScaleValue =
+        document.getElementById('zoomOption_minScale_number').value;
     zoom['minScale'] = typeof minScaleValue == 'string' ?
         parseFloat(minScaleValue) : minScaleValue;
-    var scaleSpeedValue = document.getElementById('zoomOption_scaleSpeed_number').value;
+    var scaleSpeedValue =
+        document.getElementById('zoomOption_scaleSpeed_number').value;
     zoom['startScale'] = typeof startScaleValue == 'string' ?
         parseFloat(scaleSpeedValue) : scaleSpeedValue;
     optionsObj['zoom'] = zoom;
@@ -1147,7 +1153,8 @@ WorkspaceFactoryController.prototype.importBlocks =
   reader.onload = function() {
     try {
       // Define blocks using block types from file.
-      var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result, format);
+      var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result,
+          format);
       var blocks = controller.generator.getDefinedBlocks(blockTypes);
 
       // Generate category XML and append to toolbox.

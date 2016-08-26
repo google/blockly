@@ -157,7 +157,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   this.openBlock(blockType);
 
   // Do not add an option if block type is already in library.
-  if (this.has(blockType)) {
+  if (!this.has(blockType)) {
     this.view.addOption(blockType, true, true);
   }
   this.addOptionSelectHandlers();

@@ -50,8 +50,8 @@
 </h1>
  <div id="tabContainer">
     <div id="blockFactory_tab" class="tab tabon"> Block Factory</div>
-    <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
     <div id="blocklibraryExporter_tab" class="tab taboff"> Block Exporter</div>
+    <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
   </div>
 
   <!-- Exporter tab -->
@@ -63,13 +63,14 @@
       <br>
       <h3> Block Selector </h3>
       <div class='dropdown'>
-        <button id="button_setBlocks">Select From Library</button>
+        <button id="button_setBlocks">Select</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
-          <a id='dropdown_addAllFromLib' title="Select all block library blocks.">All Stored</a>
-          <a id='dropdown_addAllUsed' title="Select all block library blocks used in workspace factory.">All Used</a>
-          <a id='dropdown_clearSelected' title="Clear selected blocks.">Clear</a>
+          <a id='dropdown_addAllFromLib' title="Select all block library blocks.">All Stored in Block Library</a>
+          <a id='dropdown_addAllUsed' title="Select all block library blocks used in workspace factory.">All Used in Workspace Factory</a>
         </div>
+          <button id='clearSelectedButton' title="Clear selected blocks.">Clear Selected</a>
       </div>
+
       <div id="blockSelector"></div>
     </div>
 

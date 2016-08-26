@@ -398,16 +398,16 @@ AppController.prototype.assignExporterClickHandlers = function() {
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
-  document.getElementById('dropdown_clearSelected').addEventListener('click',
+  document.getElementById('dropdown_addAllFromLib').addEventListener('click',
       function() {
-        self.exporter.clearSelectedBlocks();
+        self.exporter.selectAllBlocks();
         self.exporter.updatePreview();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
-  document.getElementById('dropdown_addAllFromLib').addEventListener('click',
+  document.getElementById('clearSelectedButton').addEventListener('click',
       function() {
-        self.exporter.selectAllBlocks();
+        self.exporter.clearSelectedBlocks();
         self.exporter.updatePreview();
         document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });

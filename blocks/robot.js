@@ -395,6 +395,68 @@ Blockly.Blocks['robot_manipulation_pbd_actions'] = {
   },
 };
 
+Blockly.Blocks['robot_manipulation_pbd_preregistered_landmarks'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("pre-registered landmarks");
+    this.appendStatementInput("STACK")
+        .setCheck(null);
+    this.setColour(20);
+    this.setTooltip('Drag landmarks you would like to use in this action here.');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['robot_manipulation_pbd_landmark'] = {
+  init: function() {
+    this.appendDummyInput("DROPDOWN")
+        .appendField("landmark")
+        .appendField(new Blockly.FieldDropdown([["<Drag this to the right>", "<Drag this to the right>"]]), "LANDMARK_ID");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('A landmark you would like to use in this action.');
+    this.setHelpUrl('');
+    this.landmarks_ = [];
+  },
+
+  areLandmarksSame_: function(a, b) {
+    if (a.length != b.length) {
+      return false;
+    }
+    var id_names = {};
+    for (var i=0; i<a.length; i++) {
+      var name = a[i][0];
+      var id = a[i][1];
+      id_names[id] = name;
+    }
+    for (var i=0; i<b.length; i++) {
+      var name = b[i][0];
+      var id = b[i][1];
+      if (id_names[id] === undefined) {
+        return false;
+      }
+      if (id_names[id] !== name) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  setPossibleLandmarks: function(landmarks) {
+    // This check is important to avoid an infinite recursion. This causes the
+    // mutator's workspace to change, which causes setPossibleLandmarks to be
+    // called, etc.
+    if (!this.areLandmarksSame_(this.landmarks_, landmarks)) {
+      this.landmarks_ = landmarks;
+      this.removeInput('DROPDOWN');
+      this.appendDummyInput("DROPDOWN")
+          .appendField("landmark")
+          .appendField(new Blockly.FieldDropdown(landmarks), "LANDMARK_ID");
+    }
+  },
+};
+
 Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   init: function() {
     this.appendValueInput("ACTION_ID")
@@ -404,7 +466,130 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
     this.setColour(20);
     this.setTooltip('Executes an action created using the Programming by Demonstration interface.');
     this.setHelpUrl('');
-  }
+    this.setMutator(new Blockly.Mutator(['robot_manipulation_pbd_landmark']));
+    this.possibleLandmarks_ = [];
+    this.landmarks_ = []; // Names and IDs of pre-registered landmarks.
+  },
+
+  // Given the ID of a PbD action, returns a list of landmark names and IDs
+  // used in the action. The value is returned as the argument of the callback.
+  // E.g., [['bowl rim', 'id1234'], ['box', 'id2345']]
+  getLandmarksForAction_: function(action_id, callback) {
+    var options = [];
+    var client = new ROSLIB.Service({
+      ros: ROS,
+      name: '/pr2_pbd/landmarks_for_action',
+      serviceType : 'pr2_pbd_interaction/GetLandmarksForAction'
+    });
+
+    var request = new ROSLIB.ServiceRequest({
+      action_id: action_id
+    });
+    client.callService(request, function(result) {
+      for (var i=0; i<result.landmarks.length; ++i) {
+        var landmark = result.landmarks[i];
+        options.push([landmark.name, landmark.db_id]);
+      }
+      callback(options);
+    });
+  },
+
+  onchange: function() {
+    var actionInput = this.getInputTargetBlock('ACTION_ID');
+    var action_id = actionInput.getFieldValue('ACTION_ID');
+    var that = this;
+    this.getLandmarksForAction_(action_id, function(landmarks) {
+      that.possibleLandmarks_ = landmarks;
+    });
+  },
+
+  // Update the display of landmarks for this PbD action.
+  // @private
+  // @this Blockly.Block
+  updateLandmarks_: function() {
+    // Check for duplicate landmarks.
+    var badArg = false;
+    var hash = {};
+    for (var i = 0; i < this.landmarks_.length; i++) {
+      if (hash['landmark_' + this.landmarks_[i][0]]) {
+        badArg = true;
+        break;
+      }
+      hash['landmark_' + this.landmarks_[i][0]] = true;
+    }
+    if (badArg) {
+      this.setWarningText('This block should not have duplicate landmarks.');
+    } else {
+      this.setWarningText(null);
+    }
+    
+    for (var i=0; i<this.landmarks_.length; i++) {
+      this.appendValueInput("LANDMARK" + i)
+          .setCheck("String")
+          .setAlign(Blockly.ALIGN_RIGHT)
+          .appendField(this.landmarks_[i][0]);
+    }
+  },
+
+  // Write to XML
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    for (var i=0; i<this.landmarks_.length; ++i) {
+      var landmark = document.createElement('landmark');
+      landmark.setAttribute('name', this.landmarks_[i][0]);
+      landmark.setAttribute('id', this.landmarks_[i][1]);
+      container.appendChild(landmark);
+    }
+    return container;
+  },
+
+  // Load from XML
+  domToMutation: function(xmlElement) {
+    this.landmarks_ = [];
+    for (var i = 0, childNode; childNode = xmlElement.childNodes[i]; i++) {
+      if (childNode.nodeName.toLowerCase() == 'landmark') {
+        this.landmarks_.push([childNode.getAttribute('name'), childNode.getAttribute('id')]);
+      }
+    }
+
+    this.updateLandmarks_();
+  },
+
+  // Show the mini-editor
+  decompose: function(workspace) {
+    var topBlock = workspace.newBlock('robot_manipulation_pbd_preregistered_landmarks');
+    topBlock.initSvg();
+
+    var connection = topBlock.getInput('STACK').connection
+    for (var i = 0; i < this.landmarks_.length; i++) {
+      var paramBlock = workspace.newBlock('robot_manipulation_pbd_landmark');
+      paramBlock.setPossibleLandmarks(this.possibleLandmarks_);
+      paramBlock.initSvg();
+      paramBlock.setFieldValue(this.landmarks_[i][1], 'LANDMARK_ID');
+      // Store the old location.
+      paramBlock.oldLocation = i;
+      connection.connect(paramBlock.previousConnection);
+      connection = paramBlock.nextConnection;
+    }
+    return topBlock;
+  },
+
+  // Update the block when the mini-editor changes
+  compose: function(topBlock) {
+    for (var i = 0; i < this.landmarks_.length; i++) {
+      this.removeInput('LANDMARK' + i);
+    }
+    this.landmarks_ = [];
+    var paramBlock = topBlock.getInputTargetBlock('STACK');
+    while (paramBlock) {
+      paramBlock.setPossibleLandmarks(this.possibleLandmarks_);
+      var dropdown = paramBlock.getField('LANDMARK_ID');
+      this.landmarks_.push([dropdown.text_, dropdown.getValue()]);
+      paramBlock = paramBlock.nextConnection &&
+          paramBlock.nextConnection.targetBlock();
+    }
+    this.updateLandmarks_();
+  },
 };
 
 Blockly.Blocks['robot_manipulation_set_gripper'] = {

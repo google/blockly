@@ -4,7 +4,8 @@
 			"Gkostov",
 			"Vodnokon4e",
 			"Alpinistbg",
-			"Miroslav35232"
+			"Miroslav35232",
+			"StanProg"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "елемент",
@@ -25,6 +26,8 @@
 	"DISABLE_BLOCK": "Деактивирай блок",
 	"ENABLE_BLOCK": "Активирай блок",
 	"HELP": "Помощ",
+	"UNDO": "Отмяна",
+	"REDO": "Повторение",
 	"CHANGE_VALUE_TITLE": "Промени стойността:",
 	"NEW_VARIABLE": "Нова променлива...",
 	"NEW_VARIABLE_TITLE": "Ново име на променливата:",
@@ -266,6 +269,13 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "до № открая",
 	"LISTS_GET_SUBLIST_END_LAST": "до края",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Копира част от списък.",
+	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_TOOLTIP": "Подреди копие на списъка.",
+	"LISTS_SORT_ORDER_ASCENDING": "възходящо",
+	"LISTS_SORT_ORDER_DESCENDING": "низходящо",
+	"LISTS_SORT_TYPE_NUMERIC": "в числов ред",
+	"LISTS_SORT_TYPE_TEXT": "по азбучен ред",
+	"LISTS_SORT_TYPE_IGNORECASE": "по азбучен ред, без отчитане на малки и главни букви",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "Направи списък от текст",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "направи текст от списък",
 	"LISTS_SPLIT_WITH_DELIMITER": "с разделител",

@@ -98,11 +98,76 @@ WorkspaceFactoryController.MODE_PRELOAD = 'preload';
  * before), and then creates a tab and switches to it.
  */
 WorkspaceFactoryController.prototype.addCategory = function() {
-  // Check if it's the first category added.
+  this.allowToTransferFlyoutBlocksToCategory();
+
+  // After possibly creating a category, check again if it's the first category.
   var isFirstCategory = !this.model.hasElements();
+  // Get name from user.
+  name = this.promptForNewCategoryName('Enter the name of your new category: ');
+  if (!name) {  //Exit if cancelled.
+    return;
+  }
+  // Create category.
+  this.createCategory(name);
+  // Switch to category.
+  this.switchElement(this.model.getCategoryIdByName(name));
+
+   // Allow the user to use the default options for injecting the workspace
+  // when there are categories if adding the first category.
+  if (isFirstCategory) {
+    this.allowToSetDefaultOptions();
+  }
+  // Update preview.
+  this.updatePreview();
+};
+
+/**
+ * Helper method for addCategory. Adds a category to the view given a name, ID,
+ * and a boolean for if it's the first category created. Assumes the category
+ * has already been created in the model. Does not switch to category.
+ *
+ * @param {!string} name Name of category being added.
+ * @param {!string} id The ID of the category being added.
+ */
+WorkspaceFactoryController.prototype.createCategory = function(name) {
+  // Create empty category
+  var category = new ListElement(ListElement.TYPE_CATEGORY, name);
+  this.model.addElementToList(category);
+  // Create new category.
+  var tab = this.view.addCategoryRow(name, category.id);
+  this.addClickToSwitch(tab, category.id);
+};
+
+/**
+ * Given a tab and a ID to be associated to that tab, adds a listener to
+ * that tab so that when the user clicks on the tab, it switches to the
+ * element associated with that ID.
+ *
+ * @param {!Element} tab The DOM element to add the listener to.
+ * @param {!string} id The ID of the element to switch to when tab is clicked.
+ */
+WorkspaceFactoryController.prototype.addClickToSwitch = function(tab, id) {
+  var self = this;
+  var clickFunction = function(id) {  // Keep this in scope for switchElement
+    return function() {
+      self.switchElement(id);
+    };
+  };
+  this.view.bindClick(tab, clickFunction(id));
+};
+
+/**
+ * Allows the user to transfer blocks in their flyout to a new category if
+ * the user is creating their first category and their workspace is not
+ * empty. Should be called whenever it is possible to switch from single flyout
+ * to categories (not including importing).
+ */
+WorkspaceFactoryController.prototype.allowToTransferFlyoutBlocksToCategory =
+    function() {
   // Give the option to save blocks if their workspace is not empty and they
   // are creating their first category.
-  if (isFirstCategory && this.toolboxWorkspace.getAllBlocks().length > 0) {
+  if (!this.model.hasElements() &&
+        this.toolboxWorkspace.getAllBlocks().length > 0) {
     var confirmCreate = confirm('Do you want to save your work in another '
         + 'category? If you don\'t, the blocks in your workspace will be ' +
         'deleted.');
@@ -127,64 +192,6 @@ WorkspaceFactoryController.prototype.addCategory = function() {
       this.updatePreview();
     }
   }
-
-  // After possibly creating a category, check again if it's the first category.
-  isFirstCategory = !this.model.hasElements();
-  // Get name from user.
-  name = this.promptForNewCategoryName('Enter the name of your new category: ');
-  if (!name) {  //Exit if cancelled.
-    return;
-  }
-  // Create category.
-  this.createCategory(name, isFirstCategory);
-  // Switch to category.
-  this.switchElement(this.model.getCategoryIdByName(name));
-
-   // Allow the user to use the default options for injecting the workspace
-  // when there are categories if adding the first category.
-  if (isFirstCategory) {
-    this.allowToSetDefaultOptions();
-  }
-  // Update preview.
-  this.updatePreview();
-};
-
-/**
- * Helper method for addCategory. Adds a category to the view given a name, ID,
- * and a boolean for if it's the first category created. Assumes the category
- * has already been created in the model. Does not switch to category.
- *
- * @param {!string} name Name of category being added.
- * @param {!string} id The ID of the category being added.
- * @param {boolean} isFirstCategory True if it's the first category created,
- * false otherwise.
- */
-WorkspaceFactoryController.prototype.createCategory = function(name,
-    isFirstCategory) {
-  // Create empty category
-  var category = new ListElement(ListElement.TYPE_CATEGORY, name);
-  this.model.addElementToList(category);
-  // Create new category.
-  var tab = this.view.addCategoryRow(name, category.id, isFirstCategory);
-  this.addClickToSwitch(tab, category.id);
-};
-
-/**
- * Given a tab and a ID to be associated to that tab, adds a listener to
- * that tab so that when the user clicks on the tab, it switches to the
- * element associated with that ID.
- *
- * @param {!Element} tab The DOM element to add the listener to.
- * @param {!string} id The ID of the element to switch to when tab is clicked.
- */
-WorkspaceFactoryController.prototype.addClickToSwitch = function(tab, id) {
-  var self = this;
-  var clickFunction = function(id) {  // Keep this in scope for switchElement
-    return function() {
-      self.switchElement(id);
-    };
-  };
-  this.view.bindClick(tab, clickFunction(id));
 };
 
 /**
@@ -562,7 +569,21 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
     }
   } while (!this.isStandardCategoryName(name));
 
-  // Check if the user can create that standard category.
+  // Load category.
+  this.loadCategoryByName(name);
+};
+
+/**
+ * Loads a Standard Category by name and switches to it. Leverages
+ * StandardCategories. Returns if cannot load standard category.
+ *
+ * @param {string} name Name of the standard category to load.
+ */
+WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
+  // Check if the user can load that standard category.
+  if (!this.isStandardCategoryName(name)) {
+    return;
+  }
   if (this.model.hasVariables() && name.toLowerCase() == 'variables') {
     alert('A Variables category already exists. You cannot create multiple' +
         ' variables categories.');
@@ -580,6 +601,8 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
         + '. Rename your category and try again.');
     return;
   }
+  // Allow user to transfer current flyout blocks to a category.
+  this.allowToTransferFlyoutBlocksToCategory();
 
   var isFirstCategory = !this.model.hasElements();
   // Copy the standard category in the model.
@@ -589,7 +612,7 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
   this.model.addElementToList(copy);
 
   // Update the copy in the view.
-  var tab = this.view.addCategoryRow(copy.name, copy.id, isFirstCategory);
+  var tab = this.view.addCategoryRow(copy.name, copy.id);
   this.addClickToSwitch(tab, copy.id);
   // Color the category tab in the view.
   if (copy.color) {
@@ -633,11 +656,9 @@ WorkspaceFactoryController.prototype.isStandardCategoryName = function(name) {
  * the separator, and updates the preview.
  */
 WorkspaceFactoryController.prototype.addSeparator = function() {
-  // Don't allow the user to add a separator if a category has not been created.
-  if (!this.model.hasElements()) {
-    alert('Add a category before adding a separator.');
-    return;
-  }
+  // If adding the first element in the toolbox, allow the user to transfer
+  // their flyout blocks to a category.
+  this.allowToTransferFlyoutBlocksToCategory();
   // Create the separator in the model.
   var separator = new ListElement(ListElement.TYPE_SEPARATOR);
   this.model.addElementToList(separator);
@@ -881,7 +902,7 @@ WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
   this.view.markShadowBlock(block);
   this.model.addShadowBlock(block.id);
 
-  if (this.hasVariableField(block)) {
+  if (FactoryUtils.hasVariableField(block)) {
     block.setWarningText('Cannot make variable blocks shadow blocks.');
   }
 
@@ -890,26 +911,6 @@ WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
   for (var i = 0; i < children.length; i++) {
     this.addShadowForBlockAndChildren_(children[i]);
   }
-};
-
-/**
- * Checks if a block has a variable field. Blocks with variable fields cannot
- * be shadow blocks.
- *
- * @param {Blockly.Block} block The block to check if a variable field exists.
- * @return {boolean} True if the block has a variable field, false otherwise.
- */
-WorkspaceFactoryController.prototype.hasVariableField = function(block) {
-  if (!block) {
-    return false;
-  }
-  for (var i = 0; i < block.inputList.length; i++) {
-    if (block.inputList[i].fieldRow.length > 0 &&
-        block.inputList[i].fieldRow[0].name == 'VAR') {
-      return true;
-    }
-  }
-  return false;
 };
 
 /**
@@ -956,6 +957,14 @@ WorkspaceFactoryController.prototype.convertShadowBlocks = function() {
   for (var i = 0, block; block = blocks[i]; i++) {
     if (block.isShadow()) {
       block.setShadow(false);
+      // Delete the shadow DOM attached to the block so that the shadow block
+      // does not respawn. Dependent on implementation details.
+      var parentConnection = block.outputConnection ?
+          block.outputConnection.targetConnection :
+          block.previousConnection.targetConnection;
+      if (parentConnection) {
+        parentConnection.setShadowDom(null);
+      }
       this.model.addShadowBlock(block.id);
       this.view.markShadowBlock(block);
     }
@@ -1230,4 +1239,22 @@ WorkspaceFactoryController.prototype.warnForUndefinedBlocks_ = function() {
           + 'block, \nin your block library, or an imported block)');
     }
   }
+};
+
+/*
+ * Determines if a standard variable category is in the custom toolbox.
+ *
+ * @return {boolean} True if a variables category is in use, false otherwise.
+ */
+WorkspaceFactoryController.prototype.hasVariablesCategory = function() {
+  return this.model.hasVariables();
+};
+
+/**
+ * Determines if a standard procedures category is in the custom toolbox.
+ *
+ * @return {boolean} True if a procedures category is in use, false otherwise.
+ */
+WorkspaceFactoryController.prototype.hasProceduresCategory = function() {
+  return this.model.hasProcedures();
 };

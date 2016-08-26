@@ -27,6 +27,8 @@
  * @author Emma Dauterman (evd2014)
  */
 
+ goog.require('FactoryUtils');
+
 /**
  * Namespace for workspace factory initialization methods.
  * @namespace
@@ -443,7 +445,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         // Enable block editing and remove warnings if the block is not a
         // variable user-generated shadow block.
         document.getElementById('button_editShadow').disabled = false;
-        if (!controller.hasVariableField(selected) &&
+        if (!FactoryUtils.hasVariableField(selected) &&
             controller.isDefinedBlock(selected)) {
           selected.setWarningText(null);
         }
@@ -459,7 +461,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
             // Warn if a non-shadow block is nested inside a shadow block.
             selected.setWarningText('Only shadow blocks can be nested inside '
                 + 'other shadow blocks.');
-          } else if (!controller.hasVariableField(selected)) {
+          } else if (!FactoryUtils.hasVariableField(selected)) {
             // Warn if a shadow block is invalid only if not replacing
             // warning for variables.
             selected.setWarningText('Shadow blocks must be nested inside other'
@@ -475,7 +477,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
           // Remove possible 'invalid shadow block placement' warning.
           if (selected != null && controller.isDefinedBlock(selected) &&
-              (!controller.hasVariableField(selected) ||
+              (!FactoryUtils.hasVariableField(selected) ||
               !controller.isUserGenShadowBlock(selected.id))) {
             selected.setWarningText(null);
           }
@@ -495,6 +497,51 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     // shadow blocks.
     if (e.type == Blockly.Events.CREATE) {
       controller.convertShadowBlocks();
+
+      // Let the user create a Variables or Functions category if they use
+      // blocks from either category.
+
+      // Get all children of a block and add them to childList.
+      var getAllChildren = function(block, childList) {
+        childList.push(block);
+        var children = block.getChildren();
+        for (var i = 0, child; child = children[i]; i++) {
+          getAllChildren(child, childList);
+        }
+      };
+
+      var newBaseBlock = controller.toolboxWorkspace.getBlockById(e.blockId);
+      var allNewBlocks = [];
+      getAllChildren(newBaseBlock, allNewBlocks);
+      var variableCreated = false;
+      var procedureCreated = false;
+
+      // Check if the newly created block or any of its children are variable
+      // or procedure blocks.
+      for (var i = 0, block; block = allNewBlocks[i]; i++) {
+        if (FactoryUtils.hasVariableField(block)) {
+          variableCreated = true;
+        } else if (FactoryUtils.isProcedureBlock(block)) {
+          procedureCreated = true;
+        }
+      }
+
+      // If any of the newly created blocks are variable or procedure blocks,
+      // prompt the user to create the corresponding standard category.
+      if (variableCreated && !controller.hasVariablesCategory()) {
+        if (confirm('Your new block has a variables field. To use this block '
+            + 'fully, you will need a Variables category. Do you want to add '
+            + 'a Variables category to your custom toolbox?')) {
+          controller.loadCategoryByName('variables');
+        }
+
+      } else if (procedureCreated && !controller.hasProceduresCategory()) {
+        if (confirm('Your new block is a function block. To use this block '
+            + 'fully, you will need a Functions category. Do you want to add '
+            + 'a Functions category to your custom toolbox?')) {
+          controller.loadCategoryByName('functions');
+        }
+      }
     }
   });
 };

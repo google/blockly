@@ -913,3 +913,40 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   return blockXmlText1 == blockXmlText2;
 };
 
+/*
+ * Checks if a block has a variable field. Blocks with variable fields cannot
+ * be shadow blocks.
+ *
+ * @param {Blockly.Block} block The block to check if a variable field exists.
+ * @return {boolean} True if the block has a variable field, false otherwise.
+ */
+FactoryUtils.hasVariableField = function(block) {
+  if (!block) {
+    return false;
+  }
+  for (var i = 0, input; input = block.inputList[i]; i++) {
+    for (var j = 0, field; field = input.fieldRow[j]; j++) {
+      if (field.name == 'VAR') {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+/**
+ * Checks if a block is a procedures block. If procedures block names are
+ * ever updated or expanded, this function should be updated as well (no
+ * other known markers for procedure blocks beyond name).
+ *
+ * @param {Blockly.Block} block The block to check.
+ * @return {boolean} True if hte block is a procedure block, false otherwise.
+ */
+FactoryUtils.isProcedureBlock = function(block) {
+  return block &&
+      (block.type == 'procedures_defnoreturn' ||
+      block.type == 'procedures_defreturn' ||
+      block.type == 'procedures_callnoreturn' ||
+      block.type == 'procedures_callreturn' ||
+      block.type == 'procedures_ifreturn');
+};

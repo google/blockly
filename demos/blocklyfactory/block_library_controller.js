@@ -272,6 +272,15 @@ BlockLibraryController.prototype.addOptionSelectHandlers = function() {
   // Returns a block option select handler.
   var makeOptionSelectHandler_ = function(blockOption) {
     return function() {
+      // If there are unsaved changes to the block in open in Block Factory,
+      // warn user that proceeding to create a new block will cause them to lose
+      // their changes if they don't save.
+      if (!FactoryUtils.savedBlockChanges(self)) {
+        if(!confirm('You have unsaved changes. By proceeding without saving ' +
+          ' your block first, you will lose these changes.')) {
+          return;
+        }
+      }
       setSelectedAndOpen_(blockOption);
     };
   };

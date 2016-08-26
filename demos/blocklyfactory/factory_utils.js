@@ -911,3 +911,24 @@ FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   return blockXmlText1 == blockXmlText2;
 };
 
+
+/**
+ * Returns whether or not a block's changes has been saved to the Block Library.
+ * TODO: move into the Block Factory Controller once made.
+ *
+ * @param {!BlockLibraryController} blockLibraryController - Block Library Controller storing
+ *    custom blocks.
+ * @return {boolean} True if all changes made to the block have been saved to
+ *    the given Block Library.
+ */
+FactoryUtils.savedBlockChanges = function(blockLibraryController) {
+  var blockType = blockLibraryController.getCurrentBlockType();
+  var currentXml = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
+
+  if (blockLibraryController.has(blockType)) {
+    // Block is saved in block library.
+    var savedXml = blockLibraryController.getBlockXml(blockType);
+    return FactoryUtils.sameBlockXml(savedXml, currentXml);
+  }
+  return false;
+};

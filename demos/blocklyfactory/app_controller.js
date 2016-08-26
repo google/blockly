@@ -286,7 +286,9 @@ AppController.prototype.onTab = function() {
   // Warn user if they have unsaved changes when leaving Block Factory.
   if (this.lastSelectedTab == AppController.BLOCK_FACTORY &&
       this.selectedTab != AppController.BLOCK_FACTORY) {
-    if (!BlockFactory.isStarterBlock() && !this.savedBlockChanges()) {
+    // TODO: move savedBlockChanges to a Controller for the Block Factory Tab
+    if (!BlockFactory.isStarterBlock() &&
+        !FactoryUtils.savedBlockChanges(this.blockLibraryController)) {
       if (!confirm('You have unsaved changes in Block Factory.')) {
         // If the user doesn't want to switch tabs with unsaved changes,
         // stay on Block Factory Tab.
@@ -458,24 +460,6 @@ AppController.prototype.ifCheckedDisplay = function(checkbox, elementArray) {
 };
 
 /**
- * Returns whether or not a block's changes has been saved to the Block Library.
- *
- * @return {boolean} True if all changes made to the block have been saved to
- *    the Block Library.
- */
-AppController.prototype.savedBlockChanges = function() {
-  var blockType = this.blockLibraryController.getCurrentBlockType();
-  var currentXml = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
-
-  if (this.blockLibraryController.has(blockType)) {
-    // Block is saved in block library.
-    var savedXml = this.blockLibraryController.getBlockXml(blockType);
-    return FactoryUtils.sameBlockXml(savedXml, currentXml);
-  }
-  return false;
-};
-
-/**
  * Assign button click handlers for the block library.
  */
 AppController.prototype.assignLibraryClickHandlers = function() {
@@ -540,18 +524,21 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
 
   document.getElementById('createNewBlockButton')
     .addEventListener('click', function() {
-      BlockFactory.showStarterBlock();
-      self.blockLibraryController.setNoneSelected();
-      goog.dom.getElement('dropdownDiv_blockLib').classList.remove("show");
       // If there are unsaved changes to the block in open in Block Factory,
       // warn user that proceeding to create a new block will cause them to lose
       // their changes if they don't save.
-      if (!self.savedBlockChanges()) {
+      if (!FactoryUtils.savedBlockChanges(self.blockLibraryController)) {
         if(!confirm('You have unsaved changes. By proceeding without saving ' +
           ' your block first, you will lose these changes.')) {
           return;
         }
       }
+
+      BlockFactory.showStarterBlock();
+      self.blockLibraryController.setNoneSelected();
+
+      // Close the Block Library Dropdown.
+      goog.dom.getElement('dropdownDiv_blockLib').classList.remove("show");
     });
 };
 
@@ -564,7 +551,8 @@ AppController.prototype.addBlockFactoryEventListeners = function() {
   var self = this;
   BlockFactory.mainWorkspace.addChangeListener(function() {
       // Update the buttons on the screen based on whether changes have been saved.
-      self.blockLibraryController.updateButtons(self.savedBlockChanges());
+      self.blockLibraryController.updateButtons(FactoryUtils.savedBlockChanges(
+          self.blockLibraryController));
     });
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);

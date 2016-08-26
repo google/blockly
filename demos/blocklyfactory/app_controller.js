@@ -546,14 +546,20 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
  * Add event listeners for the block factory.
  */
 AppController.prototype.addBlockFactoryEventListeners = function() {
+  // Update code on changes to block being edited.
   BlockFactory.mainWorkspace.addChangeListener(BlockFactory.updateLanguage);
+
+  // Disable blocks not attached to the factory_base block.
   BlockFactory.mainWorkspace.addChangeListener(Blockly.Events.disableOrphans);
+
+  // Update the buttons on the screen based on whether
+  // changes have been saved.
   var self = this;
   BlockFactory.mainWorkspace.addChangeListener(function() {
-      // Update the buttons on the screen based on whether changes have been saved.
-      self.blockLibraryController.updateButtons(FactoryUtils.savedBlockChanges(
-          self.blockLibraryController));
+    self.blockLibraryController.updateButtons(FactoryUtils.savedBlockChanges(
+        self.blockLibraryController));
     });
+
   document.getElementById('direction')
       .addEventListener('change', BlockFactory.updatePreview);
   document.getElementById('languageTA')

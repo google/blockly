@@ -51,10 +51,10 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
   this.name = blockLibraryName;
   // Create a new, empty Block Library Storage object, or load existing one.
   this.storage = opt_blockLibraryStorage || new BlockLibraryStorage(this.name);
-  // Id of the div that holds the block library.
+  // Id of the div that holds the block library view.
   this.blockLibraryViewDivID = 'dropdownDiv_blockLib';
   // The BlockLibraryView object handles the proper updating and formatting of
-  // the dropdown.
+  // the block library dropdown.
   this.view = new BlockLibraryView(this.blockLibraryViewDivID);
 };
 
@@ -72,7 +72,8 @@ BlockLibraryController.prototype.getCurrentBlockType = function() {
 };
 
 /**
- * Removes current block from Block Library
+ * Removes current block from Block Library and updates the save and delete
+ * buttons so that user may save block to library and but not delete.
  *
  * @param {string} blockType - Type of block.
  */
@@ -106,8 +107,7 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
  *
  * @return {string} Type of block selected.
  */
-BlockLibraryController.prototype.getSelectedBlockType =
-    function() {
+BlockLibraryController.prototype.getSelectedBlockType = function() {
   return this.view.getSelectedBlockType();
 };
 
@@ -125,6 +125,8 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
     this.view.clearOptions();
     // Show default block.
     BlockFactory.showStarterBlock();
+    // User may not save the starter block, but will get explicit instructions
+    // upon clicking the red save button.
     this.view.updateButtons(null);
   }
 };
@@ -136,7 +138,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var blockType = this.getCurrentBlockType();
   // If user has not changed the name of the starter block.
   if (blockType == 'block_type') {
-    // Do not save block is is has the default type.
+    // Do not save block if it has the default type, 'block_type'.
     alert('You cannot save a block under the name "block_type". Try changing ' +
         'the name before saving. Then, click on the "Block Library" button ' +
         'to view your saved blocks.');
@@ -179,7 +181,7 @@ BlockLibraryController.prototype.has = function(blockType) {
  */
 BlockLibraryController.prototype.populateBlockLibrary = function() {
   this.view.clearOptions();
-  // Add option for each saved block.
+  // Add an unselected option for each saved block.
   var blockLibrary = this.storage.blocks;
   for (var blockType in blockLibrary) {
     this.view.addOption(blockType, false);
@@ -265,6 +267,10 @@ BlockLibraryController.prototype.addOptionSelectHandlers = function() {
     var blockType = blockOption.textContent;
     self.view.setSelectedBlockType(blockType);
     self.openBlock(blockType);
+    //The block is saved in the block library and all changes have been saved
+    // when the users opens a block from the block library dropdown.
+    //Thus, the buttons show up as a disabled update  button and an enabled
+    //delete.
     self.view.updateButtons(blockType, true, true);
     goog.dom.getElement(self.blockLibraryViewDivID).classList.remove("show");
   };

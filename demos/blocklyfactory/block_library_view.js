@@ -19,8 +19,8 @@
  */
 
 /**
- * @fileoverview Javascript for BlockLibraryView class. It manages display of
- * the Block Library dropdown, save, and delete buttons.
+ * @fileoverview Javascript for BlockLibraryView class. It manages the display
+ * of the Block Library dropdown, save, and delete buttons.
  *
  * @author quachtina96 (Tina Quach)
  */
@@ -45,6 +45,7 @@ var BlockLibraryView = function(blockLibraryViewDivId) {
   // Map of block type to corresponding 'a' element that is the option in the
   // dropdown. Used to quickly and easily get a specific option.
   this.optionMap = Object.create(null);
+  // Save and delete buttons.
   this.saveButton = goog.dom.getElement('saveToBlockLibraryButton');
   this.deleteButton = goog.dom.getElement('removeBlockFromLibraryButton');
   // Initially, user should not be able to delete a block. They must save a
@@ -96,6 +97,7 @@ BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
   // Update save and delete buttons.
   // Block type is in library and has saved all changes.
   this.updateButtons(blockTypeToSelect, true, true);
+
   } else {
     // Deselect all buttons.
     for (var blockType in this.optionMap) {
@@ -143,22 +145,25 @@ BlockLibraryView.prototype.updateButtons =
     // User is editing a block.
 
     if (!inLib) {
-      // Block type has not been saved to library yet.
+      // Block type has not been saved to library yet. Disable the delete button
+      // and allow user to save.
       this.saveButton.textContent = 'Save "' + blockType + '"';
       this.saveButton.disabled = false;
       this.deleteButton.disabled = true;
     } else {
-      // Block type has already been saved.
+      // Block type has already been saved. Disable the save button unless the
+      // there are unsaved changes (checked below).
       this.saveButton.textContent = 'Update "' + blockType + '"';
       this.saveButton.disabled = true;
       this.deleteButton.disabled = false;
     }
     this.deleteButton.textContent = 'Delete "' + blockType + '"';
 
+    // If changes to block have been made and are not saved, make button
+    // green to encourage user to save the block.
     if (!savedChanges) {
-      // If changes to block have been made and are not saved, make button
-      // green to encourage user to save the block.
       var buttonFormatClass = 'button_warn';
+
       // If block type is the default, 'block_type', make button red to alert
       // user.
       if (blockType == 'block_type') {
@@ -166,7 +171,9 @@ BlockLibraryView.prototype.updateButtons =
       }
       goog.dom.classlist.add(this.saveButton, buttonFormatClass);
       this.saveButton.disabled = false;
+
     } else {
+      // No changes to save.
       var classesToRemove = ['button_alert', 'button_warn'];
       goog.dom.classlist.removeAll(this.saveButton, classesToRemove);
       this.saveButton.disabled = true;

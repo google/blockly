@@ -887,7 +887,7 @@ FactoryUtils.injectCode = function(code, id) {
 
 /**
  * Returns whether or not two blocks are the same based on their xml. Expects
- * xml with a single child node that is a factory_base block. The xml found on
+ * xml with a single child node that is a factory_base block, the xml found on
  * Block Factory's main workspace.
  *
  * @param {!Element} blockXml1 - An xml element with a single child node that

@@ -478,6 +478,10 @@ td {
   z-index: -1;  /* Start behind workspace */
 }
 
+#grid_options, #zoom_options, #maxBlockNumber_option {
+  padding-left: 15px;
+}
+
 /* Rules for Closure popup color picker */
 .goog-palette {
   outline: none;

@@ -420,16 +420,6 @@ WorkspaceFactoryModel.prototype.setOptions = function(options) {
   this.options = options;
 };
 
-/**
- * Sets an attribute of the options object.
- *
- * @param {!string} name Name of the attribute to add.
- * @param {Object} value The value of the attribute to add.
- */
-WorkspaceFactoryModel.prototype.setOptionsAttribute = function(name, value) {
-  this.options[name] = value;
-};
-
 /*
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.

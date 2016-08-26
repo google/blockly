@@ -118,6 +118,8 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
   * it includes XY and ID attributes). Uses a workspace and converts user
   * generated shadow blocks to actual shadow blocks.
   *
+  * @return {!Element} XML element representing toolbox or flyout corresponding
+  * to toolbox workspace.
   */
 WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
   // Load workspace XML to hidden workspace with user-generated shadow blocks
@@ -132,6 +134,38 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
   generatedXml.setAttribute('style', 'display:none');
   return generatedXml;
  };
+
+/**
+ * Generates a string representation of the options object for injecting the
+ * workspace.
+ *
+ * @return {!string} String representation of options object.
+ */
+WorkspaceFactoryGenerator.prototype.generateOptionsString = function() {
+
+  var addAttributes = function(obj, tabChar) {
+    if (!obj) {
+      return '{}\n';
+    }
+    var str = '';
+    for (var key in obj) {
+      if (key == 'grid' || key == 'zoom') {
+        var temp = tabChar + key + ' : {\n' + addAttributes(obj[key],
+            tabChar + '\t') + tabChar + '}, \n';
+      } else if (typeof obj[key] == 'string') {
+        var temp = tabChar + key + ' : \'' + obj[key] + '\', \n';
+      } else {
+        var temp = tabChar + key + ' : ' + obj[key] + ', \n';
+      }
+      str = str.concat(temp);
+    }
+    var lastCommaIndex = str.lastIndexOf(',');
+    str = str.slice(0, lastCommaIndex) + '\n';
+    return str;
+  };
+
+  return 'var options = { \n' + addAttributes(this.model.options, '\t') + '};';
+}
 
 /**
  * Loads the given XML to the hidden workspace and sets any user-generated

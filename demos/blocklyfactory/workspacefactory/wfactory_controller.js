@@ -199,6 +199,7 @@ WorkspaceFactoryController.prototype.allowToTransferFlyoutBlocksToCategory =
   // are creating their first category.
   if (!this.model.hasElements() &&
         this.toolboxWorkspace.getAllBlocks().length > 0) {
+
     // Create the new category.
     this.createCategory('Category 1', true);
     // Set the new category as selected.
@@ -206,7 +207,8 @@ WorkspaceFactoryController.prototype.allowToTransferFlyoutBlocksToCategory =
     this.model.setSelectedById(id);
     this.view.setCategoryTabSelection(id, true);
     // Allow user to use the default options for injecting with categories.
-    this.allowToSetDefaultOptions();
+    this.view.setCategoryOptions(this.model.hasElements());
+    this.generateNewOptions();
     // Update preview here in case exit early.
     this.updatePreview();
   }
@@ -1194,9 +1196,9 @@ WorkspaceFactoryController.prototype.importBlocks =
       controller.toolbox.appendChild(categoryXml);
       controller.toolboxWorkspace.updateToolbox(controller.toolbox);
       // Update imported block types.
-      this.model.addImportedBlocks(blockTypes);
+      controller.model.addImportedBlockTypes(blockTypes);
       // Reload current category to possibly reflect any newly defined blocks.
-      this.clearAndLoadXml_(Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
+      controller.clearAndLoadXml_(Blockly.Xml.workspaceToDom(controller.toolboxWorkspace));
     } catch (e) {
       alert('Cannot read blocks from file.');
       window.console.log(e);

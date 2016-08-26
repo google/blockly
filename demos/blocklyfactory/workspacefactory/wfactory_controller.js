@@ -199,29 +199,16 @@ WorkspaceFactoryController.prototype.allowToTransferFlyoutBlocksToCategory =
   // are creating their first category.
   if (!this.model.hasElements() &&
         this.toolboxWorkspace.getAllBlocks().length > 0) {
-    var confirmCreate = confirm('Do you want to save your work in another '
-        + 'category? If you don\'t, the blocks in your workspace will be ' +
-        'deleted.');
-
-    // Create a new category for current blocks.
-    if (confirmCreate) {
-      var name = prompt('Enter the name of the category for your ' +
-          'current blocks: ');
-      if (!name) {  // Exit if cancelled.
-        return;
-      }
-
-      // Create the new category.
-      this.createCategory(name, true);
-      // Set the new category as selected.
-      var id = this.model.getCategoryIdByName(name);
-      this.model.setSelectedById(id);
-      this.view.setCategoryTabSelection(id, true);
-      // Allow user to use the default options for injecting with categories.
-      this.allowToSetDefaultOptions();
-      // Update preview here in case exit early.
-      this.updatePreview();
-    }
+    // Create the new category.
+    this.createCategory('Category 1', true);
+    // Set the new category as selected.
+    var id = this.model.getCategoryIdByName('Category 1');
+    this.model.setSelectedById(id);
+    this.view.setCategoryTabSelection(id, true);
+    // Allow user to use the default options for injecting with categories.
+    this.allowToSetDefaultOptions();
+    // Update preview here in case exit early.
+    this.updatePreview();
   }
 };
 

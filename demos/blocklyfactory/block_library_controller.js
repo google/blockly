@@ -150,6 +150,11 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
 
+  // Do not add agin option if block type is already in library.
+  if (!this.has(blockType)) {
+    this.view.addOption(blockType, true, true);
+  }
+
   // Save block.
   this.storage.addBlock(blockType, xmlElement);
   this.storage.saveToLocalStorage();
@@ -158,10 +163,6 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   // main workspace.
   this.openBlock(blockType);
 
-  // Do not add an option if block type is already in library.
-  if (!this.has(blockType)) {
-    this.view.addOption(blockType, true, true);
-  }
   this.addOptionSelectHandlers();
 };
 

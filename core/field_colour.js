@@ -66,10 +66,9 @@ Blockly.FieldColour.prototype.columns_ = 0;
 
 /**
  * Install this field on a block.
- * @param {!Blockly.Block} block The block containing this field.
  */
-Blockly.FieldColour.prototype.init = function(block) {
-  Blockly.FieldColour.superClass_.init.call(this, block);
+Blockly.FieldColour.prototype.init = function() {
+  Blockly.FieldColour.superClass_.init.call(this);
   this.borderRect_.style['fillOpacity'] = 1;
   this.setValue(this.getValue());
 };
@@ -214,12 +213,9 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
       function(event) {
         var colour = event.target.getSelectedColor() || '#000000';
         Blockly.WidgetDiv.hide();
-        if (thisField.sourceBlock_ && thisField.validator_) {
+        if (thisField.sourceBlock_) {
           // Call any validation function, and allow it to override.
-          var override = thisField.validator_(colour);
-          if (override !== undefined) {
-            colour = override;
-          }
+          colour = thisField.callValidator(colour);
         }
         if (colour !== null) {
           thisField.setValue(colour);

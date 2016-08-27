@@ -122,10 +122,14 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
     RTL: this.block_.RTL,
+    toolboxPosition: this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
+        Blockly.TOOLBOX_AT_LEFT,
+    horizontalLayout: false,
     getMetrics: this.getFlyoutMetrics_.bind(this),
     setMetrics: null
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
+  this.workspace_.isMutator = true;
   this.svgDialog_.appendChild(
       this.workspace_.createDom('blocklyMutatorBackground'));
   return this.svgDialog_;
@@ -135,17 +139,23 @@ Blockly.Mutator.prototype.createEditor_ = function() {
  * Add or remove the UI indicating if this icon may be clicked or not.
  */
 Blockly.Mutator.prototype.updateEditable = function() {
-  if (this.block_.isEditable()) {
-    // Default behaviour for an icon.
-    Blockly.Icon.prototype.updateEditable.call(this);
-  } else {
-    // Close any mutator bubble.  Icon is not clickable.
-    this.setVisible(false);
-    if (this.iconGroup_) {
-      Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
-                        'blocklyIconGroupReadonly');
+  if (!this.block_.isInFlyout) {
+    if (this.block_.isEditable()) {
+      if (this.iconGroup_) {
+        Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
+                             'blocklyIconGroupReadonly');
+      }
+    } else {
+      // Close any mutator bubble.  Icon is not clickable.
+      this.setVisible(false);
+      if (this.iconGroup_) {
+        Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+                          'blocklyIconGroupReadonly');
+      }
     }
   }
+  // Default behaviour for an icon.
+  Blockly.Icon.prototype.updateEditable.call(this);
 };
 
 /**
@@ -303,9 +313,9 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
       // Ensure that any bump is part of this mutation's event group.
       var group = Blockly.Events.getGroup();
       setTimeout(function() {
-          Blockly.Events.setGroup(group);
-          block.bumpNeighbours_();
-          Blockly.Events.setGroup(false);
+        Blockly.Events.setGroup(group);
+        block.bumpNeighbours_();
+        Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
     }
     if (block.rendered) {

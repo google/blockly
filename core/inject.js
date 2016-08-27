@@ -51,11 +51,14 @@ Blockly.inject = function(container, opt_options) {
     throw 'Error: container is not in current document.';
   }
   var options = new Blockly.Options(opt_options || {});
-  var svg = Blockly.createDom_(container, options);
+  var subContainer = goog.dom.createDom('div', 'injectionDiv');
+  container.appendChild(subContainer);
+  var svg = Blockly.createDom_(subContainer, options);
   var workspace = Blockly.createMainWorkspace_(svg, options);
   Blockly.init_(workspace);
   workspace.markFocused();
   Blockly.bindEvent_(svg, 'focus', workspace, workspace.markFocused);
+  Blockly.svgResize(workspace);
   return workspace;
 };
 
@@ -182,8 +185,6 @@ Blockly.createDom_ = function(container, options) {
  */
 Blockly.createMainWorkspace_ = function(svg, options) {
   options.parentWorkspace = null;
-  options.getMetrics = Blockly.getMainWorkspaceMetrics_;
-  options.setMetrics = Blockly.setMainWorkspaceMetrics_;
   var mainWorkspace = new Blockly.WorkspaceSvg(options);
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
@@ -211,26 +212,27 @@ Blockly.createMainWorkspace_ = function(svg, options) {
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
             // Bump any block that's above the top back inside.
-            var overflow = edgeTop + MARGIN - blockHW.height - blockXY.y;
-            if (overflow > 0) {
-              block.moveBy(0, overflow);
+            var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
+            if (overflowTop > 0) {
+              block.moveBy(0, overflowTop);
             }
             // Bump any block that's below the bottom back inside.
-            var overflow = edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
-            if (overflow < 0) {
-              block.moveBy(0, overflow);
+            var overflowBottom =
+                edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+            if (overflowBottom < 0) {
+              block.moveBy(0, overflowBottom);
             }
             // Bump any block that's off the left back inside.
-            var overflow = MARGIN + edgeLeft -
+            var overflowLeft = MARGIN + edgeLeft -
                 blockXY.x - (options.RTL ? 0 : blockHW.width);
-            if (overflow > 0) {
-              block.moveBy(overflow, 0);
+            if (overflowLeft > 0) {
+              block.moveBy(overflowLeft, 0);
             }
             // Bump any block that's off the right back inside.
-            var overflow = edgeLeft + metrics.viewWidth - MARGIN -
+            var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
                 blockXY.x + (options.RTL ? blockHW.width : 0);
-            if (overflow < 0) {
-              block.moveBy(overflow, 0);
+            if (overflowRight < 0) {
+              block.moveBy(overflowRight, 0);
             }
           }
         }
@@ -262,8 +264,12 @@ Blockly.init_ = function(mainWorkspace) {
         }
       });
 
-  Blockly.bindEvent_(window, 'resize', null,
-                     function() {Blockly.svgResize(mainWorkspace);});
+  var workspaceResizeHandler = Blockly.bindEvent_(window, 'resize', null,
+       function() {
+         Blockly.hideChaff(true);
+         Blockly.svgResize(mainWorkspace);
+       });
+  mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
   Blockly.inject.bindDocumentEvents_();
 
@@ -274,9 +280,10 @@ Blockly.init_ = function(mainWorkspace) {
       // Build a fixed flyout with the root blocks.
       mainWorkspace.flyout_.init(mainWorkspace);
       mainWorkspace.flyout_.show(options.languageTree.childNodes);
+      mainWorkspace.flyout_.scrollToStart();
       // Translate the workspace sideways to avoid the fixed flyout.
       mainWorkspace.scrollX = mainWorkspace.flyout_.width_;
-      if (options.RTL) {
+      if (options.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
         mainWorkspace.scrollX *= -1;
       }
       mainWorkspace.translate(mainWorkspace.scrollX, 0);
@@ -317,7 +324,8 @@ Blockly.inject.bindDocumentEvents_ = function() {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (goog.userAgent.IPAD) {
       Blockly.bindEvent_(window, 'orientationchange', document, function() {
-        Blockly.fireUiEvent(window, 'resize');
+        // TODO(#397): Fix for multiple blockly workspaces.
+        Blockly.svgResize(Blockly.getMainWorkspace());
       });
     }
   }

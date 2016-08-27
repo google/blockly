@@ -8,7 +8,11 @@
             <mutation name="test function"></mutation>
             <next>
               <block type="unittest_assertequals" inline="false">
-                <field name="MESSAGE">test recurse</field>
+                <value name="MESSAGE">
+                   <block type="text">
+                     <field name="TEXT">test recurse</field>
+                   </block>
+                 </value>
                 <value name="ACTUAL">
                   <block type="procedures_callreturn" inline="false">
                     <mutation name="recurse">
@@ -53,7 +57,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">procedure with global</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">procedure with global</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="variables_get">
                 <field name="VAR">proc z</field>
@@ -84,7 +92,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertvalue" inline="false">
-                        <field name="MESSAGE">procedure no return</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">procedure no return</field>
+                           </block>
+                         </value>
                         <field name="EXPECTED">TRUE</field>
                         <value name="ACTUAL">
                           <block type="variables_get">
@@ -111,7 +123,11 @@
                                 </value>
                                 <next>
                                   <block type="unittest_assertvalue" inline="false">
-                                    <field name="MESSAGE">procedure return</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">procedure return</field>
+                                       </block>
+                                     </value>
                                     <field name="EXPECTED">FALSE</field>
                                     <value name="ACTUAL">
                                       <block type="variables_get">
@@ -192,7 +208,11 @@
     <field name="NAME">test function</field>
     <statement name="STACK">
       <block type="unittest_assertequals" inline="false">
-        <field name="MESSAGE">function with arguments</field>
+        <value name="MESSAGE">
+           <block type="text">
+             <field name="TEXT">function with arguments</field>
+           </block>
+         </value>
         <value name="ACTUAL">
           <block type="procedures_callreturn" inline="false">
             <mutation name="function 1">
@@ -218,7 +238,11 @@
         </value>
         <next>
           <block type="unittest_assertequals" inline="false">
-            <field name="MESSAGE">function with side effect</field>
+            <value name="MESSAGE">
+               <block type="text">
+                 <field name="TEXT">function with side effect</field>
+               </block>
+             </value>
             <value name="ACTUAL">
               <block type="variables_get">
                 <field name="VAR">func z</field>
@@ -247,7 +271,11 @@
                     </value>
                     <next>
                       <block type="unittest_assertequals" inline="false">
-                        <field name="MESSAGE">function with global</field>
+                        <value name="MESSAGE">
+                           <block type="text">
+                             <field name="TEXT">function with global</field>
+                           </block>
+                         </value>
                         <value name="ACTUAL">
                           <block type="procedures_callreturn" inline="false">
                             <mutation name="function 2">
@@ -267,7 +295,11 @@
                         </value>
                         <next>
                           <block type="unittest_assertequals" inline="false">
-                            <field name="MESSAGE">function with scope</field>
+                            <value name="MESSAGE">
+                               <block type="text">
+                                 <field name="TEXT">function with scope</field>
+                               </block>
+                             </value>
                             <value name="ACTUAL">
                               <block type="variables_get">
                                 <field name="VAR">func a</field>
@@ -280,7 +312,11 @@
                             </value>
                             <next>
                               <block type="unittest_assertvalue" inline="false">
-                                <field name="MESSAGE">function return</field>
+                                <value name="MESSAGE">
+                                   <block type="text">
+                                     <field name="TEXT">function return</field>
+                                   </block>
+                                 </value>
                                 <field name="EXPECTED">TRUE</field>
                                 <value name="ACTUAL">
                                   <block type="procedures_callreturn" inline="false">
@@ -296,7 +332,11 @@
                                 </value>
                                 <next>
                                   <block type="unittest_assertvalue" inline="false">
-                                    <field name="MESSAGE">function no return</field>
+                                    <value name="MESSAGE">
+                                       <block type="text">
+                                         <field name="TEXT">function no return</field>
+                                       </block>
+                                     </value>
                                     <field name="EXPECTED">FALSE</field>
                                     <value name="ACTUAL">
                                       <block type="procedures_callreturn" inline="false">

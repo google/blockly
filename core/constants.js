@@ -53,6 +53,12 @@ Blockly.COLLAPSE_CHARS = 30;
 Blockly.LONGPRESS = 750;
 
 /**
+ * Prevent a sound from playing if another sound preceded it within this many
+ * miliseconds.
+ */
+Blockly.SOUND_LIMIT = 100;
+
+/**
  * The richness of block colours, regardless of the hue.
  * Must be in the range of 0 (inclusive) to 1 (exclusive).
  */
@@ -148,7 +154,14 @@ Blockly.DRAG_NONE = 0;
 Blockly.DRAG_STICKY = 1;
 
 /**
- * ENUM for freely draggable.
+ * ENUM for inside the non-sticky DRAG_RADIUS, for differentiating between
+ * clicks and drags.
+ * @const
+ */
+Blockly.DRAG_BEGIN = 1;
+
+/**
+ * ENUM for freely draggable (outside the DRAG_RADIUS, if one applies).
  * @const
  */
 Blockly.DRAG_FREE = 2;
@@ -162,3 +175,28 @@ Blockly.OPPOSITE_TYPE[Blockly.INPUT_VALUE] = Blockly.OUTPUT_VALUE;
 Blockly.OPPOSITE_TYPE[Blockly.OUTPUT_VALUE] = Blockly.INPUT_VALUE;
 Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
 Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
+
+
+/**
+ * ENUM for toolbox and flyout at top of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_TOP = 0;
+
+/**
+ * ENUM for toolbox and flyout at bottom of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_BOTTOM = 1;
+
+/**
+ * ENUM for toolbox and flyout at left of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_LEFT = 2;
+
+/**
+ * ENUM for toolbox and flyout at right of screen.
+ * @const
+ */
+Blockly.TOOLBOX_AT_RIGHT = 3;

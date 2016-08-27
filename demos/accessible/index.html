@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Accessible Blockly Demo</title>
+
+  <!-- Load Blockly -->
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <script src="../../msg/messages.js"></script>
+  <script src="../../accessible/messages.js"></script>
+
+  <!-- Load accessibleBlockly -->
+  <script src="../../accessible/libs/es6-shim.min.js"></script>
+  <script src="../../accessible/libs/angular2-polyfills.min.js"></script>
+  <script src="../../accessible/libs/Rx.umd.min.js"></script>
+  <script src="../../accessible/libs/angular2-all.umd.min.js"></script>
+
+  <script src="../../accessible/utils.service.js"></script>
+  <script src="../../accessible/audio.service.js"></script>
+  <script src="../../accessible/notifications.service.js"></script>
+  <script src="../../accessible/clipboard.service.js"></script>
+  <script src="../../accessible/tree.service.js"></script>
+  <script src="../../accessible/translate.pipe.js"></script>
+
+  <script src="../../accessible/field.component.js"></script>
+  <script src="../../accessible/toolbox-tree.component.js"></script>
+  <script src="../../accessible/toolbox.component.js"></script>
+  <script src="../../accessible/workspace-tree.component.js"></script>
+  <script src="../../accessible/workspace.component.js"></script>
+  <script src="../../accessible/app.component.js"></script>
+
+  <link rel="stylesheet" href="../../accessible/media/accessible.css">
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+
+    *:focus {
+      background: yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Accessible Blockly
+  </h1>
+
+  <p>This is a simple demo of a version of Blockly designed for screen readers.</p>
+
+  <p>
+    In Blockly, you can move blocks from the toolbox to the workspace and join
+    them to create programs. To navigate between components, use Tab or
+    Shift-Tab. When you're on a block, move right to access its submenus, and
+    move up or down to go to the next or previous block in the sequence.
+  </p>
+
+  <!--
+  <p>&rarr; More info on <a href="https://developers.google.com/blockly/">accessible Blockly</a>&hellip;</p>
+  -->
+
+  <blockly-app></blockly-app>
+
+  <script>
+    var ACCESSIBLE_GLOBALS = {
+      // Additional buttons for the workspace toolbar that
+      // go before the "Clear Workspace" button.
+      toolbarButtonConfig: [],
+      // Prefix of path to sound files.
+      mediaPathPrefix: '../../accessible/media/'
+    };
+    document.addEventListener('DOMContentLoaded', function() {
+      ng.platform.browser.bootstrap(blocklyApp.AppView);
+    });
+  </script>
+
+  <xml id="blockly-toolbox-xml" style="display: none">
+    <category name="Logic" colour="210">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_ternary"></block>
+    </category>
+    <category name="Loops" colour="120">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Math" colour="230">
+      <block type="math_number" gap="32"></block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="B">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_single">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">9</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_trig">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">45</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_constant"></block>
+      <block type="math_number_property">
+        <value name="NUMBER_TO_CHECK">
+          <block type="math_number">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_change">
+        <value name="DELTA">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_round">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">3.1</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_on_list"></block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <block type="math_number">
+            <field name="NUM">64</field>
+          </block>
+        </value>
+        <value name="DIVISOR">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_constrain">
+        <value name="VALUE">
+          <block type="math_number">
+            <field name="NUM">50</field>
+          </block>
+        </value>
+        <value name="LOW">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="HIGH">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <block type="math_number">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="math_number">
+            <field name="NUM">100</field>
+          </block>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <category name="Text" colour="160">
+      <block type="text"></block>
+      <block type="text_join"></block>
+      <block type="text_append">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+      <block type="text_length">
+        <value name="VALUE">
+          <block type="text">
+            <field name="TEXT">abc</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_isEmpty">
+        <value name="VALUE">
+          <block type="text">
+            <field name="TEXT"></field>
+          </block>
+        </value>
+      </block>
+      <block type="text_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+        <value name="FIND">
+          <block type="text">
+            <field name="TEXT">abc</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_charAt">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_getSubstring">
+        <value name="STRING">
+          <block type="variables_get">
+            <field name="VAR">text</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_changeCase">
+        <value name="TEXT">
+          <block type="text">
+            <field name="TEXT">abc</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_trim">
+        <value name="TEXT">
+          <block type="text">
+            <field name="TEXT">abc</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_print">
+        <value name="TEXT">
+          <block type="text">
+            <field name="TEXT">abc</field>
+          </block>
+        </value>
+      </block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text">
+            <field name="TEXT">abc</field>
+          </block>
+        </value>
+      </block>
+    </category>
+    <category name="Lists" colour="260">
+      <block type="lists_create_with">
+        <mutation items="0"></mutation>
+      </block>
+      <block type="lists_create_with"></block>
+      <block type="lists_repeat">
+        <value name="NUM">
+          <block type="math_number">
+            <field name="NUM">5</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_length"></block>
+      <block type="lists_isEmpty"></block>
+      <block type="lists_indexOf">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getIndex">
+        <value name="VALUE">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_setIndex">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_getSublist">
+        <value name="LIST">
+          <block type="variables_get">
+            <field name="VAR">list</field>
+          </block>
+        </value>
+      </block>
+      <block type="lists_split">
+        <value name="DELIM">
+          <block type="text">
+            <field name="TEXT">,</field>
+          </block>
+        </value>
+      </block>
+    </category>
+  </xml>
+
+</body>
+</html>

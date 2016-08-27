@@ -167,26 +167,26 @@ Blockly.JavaScript['math_number_property'] = function(block) {
   if (dropdown_property == 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     var functionName = Blockly.JavaScript.provideFunction_(
-        'math_isPrime',
-        [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
-          '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-          '  if (n == 2 || n == 3) {',
-          '    return true;',
-          '  }',
-          '  // False if n is NaN, negative, is 1, or not whole.',
-          '  // And false if n is divisible by 2 or 3.',
-          '  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
+        'mathIsPrime',
+        ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
+         '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
+         '  if (n == 2 || n == 3) {',
+         '    return true;',
+         '  }',
+         '  // False if n is NaN, negative, is 1, or not whole.',
+         '  // And false if n is divisible by 2 or 3.',
+         '  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 == 0 ||' +
             ' n % 3 == 0) {',
-          '    return false;',
-          '  }',
-          '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-          '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
-          '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
-          '      return false;',
-          '    }',
-          '  }',
-          '  return true;',
-          '}']);
+         '    return false;',
+         '  }',
+         '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
+         '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
+         '    if (n % (x - 1) == 0 || n % (x + 1) == 0) {',
+         '      return false;',
+         '    }',
+         '  }',
+         '  return true;',
+         '}']);
     code = functionName + '(' + number_to_check + ')';
     return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
   }
@@ -251,10 +251,10 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       code = 'Math.max.apply(null, ' + list + ')';
       break;
     case 'AVERAGE':
-      // math_median([null,null,1,3]) == 2.0.
+      // mathMean([null,null,1,3]) == 2.0.
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_mean',
-          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          'mathMean',
+          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(myList) {',
             '  return myList.reduce(function(x, y) {return x + y;}) / ' +
                   'myList.length;',
@@ -264,10 +264,10 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       code = functionName + '(' + list + ')';
       break;
     case 'MEDIAN':
-      // math_median([null,null,1,3]) == 2.0.
+      // mathMedian([null,null,1,3]) == 2.0.
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_median',
-          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          'mathMedian',
+          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(myList) {',
             '  var localList = myList.filter(function (x) ' +
               '{return typeof x == \'number\';});',
@@ -289,8 +289,8 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_modes',
-          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          'mathModes',
+          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(values) {',
             '  var modes = [];',
             '  var counts = [];',
@@ -325,8 +325,8 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       break;
     case 'STD_DEV':
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_standard_deviation',
-          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          'mathStandardDeviation',
+          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(numbers) {',
             '  var n = numbers.length;',
             '  if (!n) return null;',
@@ -344,8 +344,8 @@ Blockly.JavaScript['math_on_list'] = function(block) {
       break;
     case 'RANDOM':
       var functionName = Blockly.JavaScript.provideFunction_(
-          'math_random_list',
-          [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          'mathRandomList',
+          ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
               '(list) {',
             '  var x = Math.floor(Math.random() * list.length);',
             '  return list[x];',
@@ -390,17 +390,17 @@ Blockly.JavaScript['math_random_int'] = function(block) {
   var argument1 = Blockly.JavaScript.valueToCode(block, 'TO',
       Blockly.JavaScript.ORDER_COMMA) || '0';
   var functionName = Blockly.JavaScript.provideFunction_(
-      'math_random_int',
-      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      'mathRandomInt',
+      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(a, b) {',
-        '  if (a > b) {',
-        '    // Swap a and b to ensure a is smaller.',
-        '    var c = a;',
-        '    a = b;',
-        '    b = c;',
-        '  }',
-        '  return Math.floor(Math.random() * (b - a + 1) + a);',
-        '}']);
+       '  if (a > b) {',
+       '    // Swap a and b to ensure a is smaller.',
+       '    var c = a;',
+       '    a = b;',
+       '    b = c;',
+       '  }',
+       '  return Math.floor(Math.random() * (b - a + 1) + a);',
+       '}']);
   var code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };

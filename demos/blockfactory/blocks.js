@@ -29,7 +29,7 @@ Blockly.Blocks['factory_base'] = {
     this.setColour(120);
     this.appendDummyInput()
         .appendField('name')
-        .appendField(new Blockly.FieldTextInput('math_foo'), 'NAME');
+        .appendField(new Blockly.FieldTextInput('block_type'), 'NAME');
     this.appendStatementInput('INPUTS')
         .setCheck('Input')
         .appendField('inputs');
@@ -56,7 +56,7 @@ Blockly.Blocks['factory_base'] = {
     this.setTooltip('Build a custom block by plugging\n' +
         'fields, inputs and other blocks here.');
     this.setHelpUrl(
-        'https://developers.google.com/blockly/custom-blocks/block-factory');
+        'https://developers.google.com/blockly/guides/create-custom-blocks/block-factory');
   },
   mutationToDom: function() {
     var container = document.createElement('mutation');
@@ -236,6 +236,32 @@ Blockly.Blocks['field_input'] = {
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
     this.setTooltip('An input field for the user to enter text.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=319');
+  },
+  onchange: function() {
+    fieldNameCheck(this);
+  }
+};
+
+Blockly.Blocks['field_number'] = {
+  // Numeric input.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput()
+        .appendField('numeric input')
+        .appendField(new Blockly.FieldNumber(0), 'VALUE')
+        .appendField(',')
+        .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
+    this.appendDummyInput()
+        .appendField('min')
+        .appendField(new Blockly.FieldNumber(-Infinity), 'MIN')
+        .appendField('max')
+        .appendField(new Blockly.FieldNumber(Infinity), 'MAX')
+        .appendField('precision')
+        .appendField(new Blockly.FieldNumber(0, 0), 'PRECISION');
+    this.setPreviousStatement(true, 'Field');
+    this.setNextStatement(true, 'Field');
+    this.setTooltip('An input field for the user to enter a number.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=319');
   },
   onchange: function() {
@@ -470,11 +496,9 @@ Blockly.Blocks['field_image'] = {
         .appendField(new Blockly.FieldTextInput(src), 'SRC');
     this.appendDummyInput()
         .appendField('width')
-        .appendField(new Blockly.FieldTextInput('15',
-            Blockly.FieldTextInput.numberValidator), 'WIDTH')
+        .appendField(new Blockly.FieldNumber('15', 0, NaN, 1), 'WIDTH')
         .appendField('height')
-        .appendField(new Blockly.FieldTextInput('15',
-            Blockly.FieldTextInput.numberValidator), 'HEIGHT')
+        .appendField(new Blockly.FieldNumber('15', 0, NaN, 1), 'HEIGHT')
         .appendField('alt text')
         .appendField(new Blockly.FieldTextInput('*'), 'ALT');
     this.setPreviousStatement(true, 'Field');
@@ -507,13 +531,13 @@ Blockly.Blocks['type_group'] = {
     // Parse XML to restore the group of types.
     this.typeCount_ = parseInt(container.getAttribute('types'), 10);
     this.updateShape_();
-    for (var x = 0; x < this.typeCount_; x++) {
-      this.removeInput('TYPE' + x);
+    for (var i = 0; i < this.typeCount_; i++) {
+      this.removeInput('TYPE' + i);
     }
-    for (var x = 0; x < this.typeCount_; x++) {
-      var input = this.appendValueInput('TYPE' + x)
+    for (var i = 0; i < this.typeCount_; i++) {
+      var input = this.appendValueInput('TYPE' + i)
                       .setCheck('Type');
-      if (x == 0) {
+      if (i == 0) {
         input.appendField('any of');
       }
     }

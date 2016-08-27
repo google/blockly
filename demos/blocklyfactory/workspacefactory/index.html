@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+<title>Blockly Workspace Factory</title>
+<script src="../../../blockly_compressed.js"></script>
+<script src="../../../javascript_compressed.js"></script>
+<script src="../../../msg/messages.js"></script>
+<script src="../../../blocks_compressed.js"></script>
+<script src="wfactory_model.js"></script>
+<script src="wfactory_controller.js"></script>
+<script src="wfactory_view.js"></script>
+<script src="wfactory_generator.js"></script>
+<script src="standard_categories.js"></script>
+<script src="../../../../closure-library/closure/goog/base.js"></script>
+<link rel="stylesheet" href="style.css">
+
+<script>
+goog.require('goog.ui.PopupColorPicker');
+goog.require('goog.ui.ColorPicker');
+</script>
+
+<table width="100%" height="100%">
+  <tr>
+    <td>
+      <h1><a href="https://developers.google.com/blockly/">Blockly</a>&rlm; &gt;
+        <a href="../index.html">Demos</a>&rlm; &gt;
+        <span id="title">Workspace Factory</span>
+      </h1>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p>
+        <div class="dropdown">
+        <button id="button_import">Import</button>
+        <div id="dropdownDiv_import" class="dropdown-content">
+          <input type="file" id="input_importToolbox" class="inputfile"></input>
+          <label for="input_importToolbox">Toolbox</label>
+          <input type="file" id="input_importPreload" class="inputfile"></input>
+          <label for="input_importPreload">Workspace Blocks</label>
+        </div>
+        </div>
+
+        <div class="dropdown">
+        <button id="button_export">Export</button>
+        <div id="dropdownDiv_export" class="dropdown-content">
+          <a id='dropdown_exportToolbox'>Toolbox</a>
+          <a id='dropdown_exportPreload'>Workspace Blocks</a>
+          <a id='dropdown_exportOptions'>Inject Options</a>
+          <a id='dropdown_exportAll'>All</a>
+        </div>
+        </div>
+
+        <button id="button_print">Print Toolbox</button>
+        <button id="button_clear">Clear Toolbox</button>
+      </p>
+    </td>
+  </tr>
+</table>
+
+<section id="createDiv">
+  <p id="editHelpText">Drag blocks into your toolbox:</p>
+  <table id='workspaceTabs'>
+    <td id="tab_toolbox" class="tabon">Toolbox</td>
+    <td id="tab_preload" class="taboff">Workspace</td>
+  </table>
+  <section id="toolbox_section">
+    <div id="toolbox_blocks" class="content"></div>
+    <div id='disable_div'></div>
+  </section>
+
+  <aside id="toolbox_div">
+    <table id="categoryTable">
+      <td id="tab_help">Your categories will appear here</td>
+    </table>
+    <p>&nbsp;</p>
+
+    <div class='dropdown'>
+    <button id="button_add">+</button>
+    <div id="dropdownDiv_add" class="dropdown-content">
+      <a id='dropdown_newCategory'>New Category</a>
+      <a id='dropdown_loadCategory'>Standard Category</a>
+      <a id='dropdown_separator'>Separator</a>
+    </div>
+    </div>
+
+    <button id="button_remove">-</button>
+
+    <button id="button_up">&#8593;</button>
+    <button id="button_down">&#8595;</button>
+
+    <p>&nbsp;</p>
+    <div class='dropdown'>
+    <button id="button_editCategory">Edit Category</button>
+    <div id="dropdownDiv_editCategory" class="dropdown-content">
+      <a id='dropdown_name'>Name</a>
+      <a id='dropdown_color'>Color</a>
+    </div>
+    </div>
+
+  </aside>
+
+  <div class='dropdown'>
+    <button id="button_editShadow">Edit Block</button>
+    <div id="dropdownDiv_editShadowAdd" class="dropdown-content">
+      <a id='dropdown_addShadow'>Add Shadow</a>
+    </div>
+    <div id="dropdownDiv_editShadowRemove" class="dropdown-content">
+      <a id='dropdown_removeShadow'>Remove Shadow</a>
+    </div>
+  </div>
+
+  <aside id='preload_div' style='display:none'>
+    <p>Configure the <a href="https://developers.google.com/blockly/guides/get-started/web">options</a> for your Blockly inject call.</p>
+    <button class="small" id="button_standardOptions">Standard Options</button>
+    <form id="workspace_options">
+      <input type="checkbox" id="option_collapse_checkbox" name="collapse">Collapsible Blocks<br>
+      <input type="checkbox" id="option_comments_checkbox" name="comments">Comments for Blocks<br>
+      <input type="checkbox" id="option_css_checkbox" name="css">Use Blockly CSS<br>
+      <input type="checkbox" id="option_disable_checkbox" name="disable">Disabled Blocks<br>
+      <input type="checkbox" id="option_grid_checkbox" name="grid">Use Grid<br>
+      <div id="grid_options" name="grid" style="display:none">
+        Spacing <input type="text" id="gridOption_spacing_text" name="spacing" value="0"><br>
+        Length <input type="text" id="gridOption_length_text" name="length" value="1"><br>
+        Color <input type="text" id="gridOption_colour_text" name="colour" value="#888"><br>
+        <input type="checkbox" id="gridOption_snap_checkbox" value="grid_snap_checkbox" name="snap">Snap<br>
+      </div>
+      Max Blocks <input type="text" id="option_maxBlocks_text" name="maxBlocks" value="Infinity"><br>
+      Path to Blockly Media <input type="text" id="option_media_text" name="media"><br>
+      <input type="checkbox" id="option_readOnly_checkbox" name="readOnly">Read Only<br>
+      <input type="checkbox" id="option_rtl_checkbox" name="rtl">Layout with RTL<br>
+      <input type="checkbox" id="option_scrollbars_checkbox" name="scrollbars">Scrollbars<br>
+      <input type="checkbox" id="option_sounds_checkbox" name="sounds">Sounds<br>
+      <input type="checkbox" id="option_trashcan_checkbox" name="trashcan">Trashcan<br>
+      <input type="checkbox" id="option_zoom_checkbox" name="zoom">Zoom<br>
+      <div id="zoom_options" name="zoom" style="display:none">
+        <input type="checkbox" id="zoomOption_controls_checkbox" name="controls">Zoom Controls<br>
+        <input type="checkbox" id="zoomOption_wheel_checkbox" name="wheel">Zoom Wheel<br>
+        Start Scale <input type="text" id="zoomOption_startScale_text" name="startScale" value="1.0"><br>
+        Max Scale <input type="text" id="zoomOption_maxScale_text" name="maxScale" value="3"><br>
+        Min Scale <input type="text" id="zoomOption_minScale_text" name="minScale" value="0.3"><br>
+        Scale Speed <input type="text" id="zoomOption_scaleSpeed_text" name="scaleSpeed" value="1.2"><br>
+      </div>
+    </form>
+  </aside>
+
+</section>
+
+<aside id="previewDiv">
+  <p>Preview your workspace:</p>
+  <div id="preview_blocks" class="content"></div>
+</aside>
+
+<xml id="toolbox" style="display: none">
+  <category name="Logic" colour="210">
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+    <block type="logic_null"></block>
+    <block type="logic_ternary"></block>
+  </category>
+  <category name="Loops" colour="120">
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_whileUntil"></block>
+    <block type="controls_for">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <value name="BY">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_forEach"></block>
+    <block type="controls_flow_statements"></block>
+  </category>
+  <category name="Math" colour="230">
+    <block type="math_number"></block>
+    <block type="math_arithmetic">
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_single">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">9</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_trig">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">45</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constant"></block>
+    <block type="math_number_property">
+      <value name="NUMBER_TO_CHECK">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_change">
+      <value name="DELTA">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_round">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">3.1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_on_list"></block>
+    <block type="math_modulo">
+      <value name="DIVIDEND">
+        <shadow type="math_number">
+          <field name="NUM">64</field>
+        </shadow>
+      </value>
+      <value name="DIVISOR">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constrain">
+      <value name="VALUE">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="LOW">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="HIGH">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_float"></block>
+  </category>
+  <category name="Text" colour="160">
+    <block type="text"></block>
+    <block type="text_join"></block>
+    <block type="text_append">
+      <value name="TEXT">
+        <shadow type="text"></shadow>
+      </value>
+    </block>
+    <block type="text_length">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_isEmpty">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT"></field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_indexOf">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+      <value name="FIND">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_charAt">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_getSubstring">
+      <value name="STRING">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_changeCase">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_trim">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_print">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_prompt_ext">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <category name="Lists" colour="260">
+    <block type="lists_create_with">
+      <mutation items="0"></mutation>
+    </block>
+    <block type="lists_create_with"></block>
+    <block type="lists_repeat">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">5</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="lists_length"></block>
+    <block type="lists_isEmpty"></block>
+    <block type="lists_indexOf">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_getIndex">
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_setIndex">
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_getSublist">
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_split">
+      <value name="DELIM">
+        <shadow type="text">
+          <field name="TEXT">,</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="lists_sort"></block>
+  </category>
+  <category name="Colour" colour="20">
+    <block type="colour_picker"></block>
+    <block type="colour_random"></block>
+    <block type="colour_rgb">
+      <value name="RED">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+      <value name="GREEN">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="BLUE">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="colour_blend">
+      <value name="COLOUR1">
+        <shadow type="colour_picker">
+          <field name="COLOUR">#ff0000</field>
+        </shadow>
+      </value>
+      <value name="COLOUR2">
+        <shadow type="colour_picker">
+          <field name="COLOUR">#3333ff</field>
+        </shadow>
+      </value>
+      <value name="RATIO">
+        <shadow type="math_number">
+          <field name="NUM">0.5</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <sep></sep>
+  <category name="Variables" colour="330" custom="VARIABLE"></category>
+  <category name="Functions" colour="290" custom="PROCEDURE"></category>
+</xml>
+<script type="text/javascript">
+  // Array of Blockly category colors, variety of hues with saturation 45%
+  // and value 65% as specified in Blockly Developer documentation:
+  // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
+  var colors = ['#A65C5C',
+      '#A6635C',
+      '#A66A5C',
+      '#A6725C',
+      '#A6795C',
+      '#A6815C',
+      '#A6885C',
+      '#A6905C',
+      '#A6975C',
+      '#A69F5C',
+      '#A6A65C',
+      '#9FA65C',
+      '#97A65C',
+      '#90A65C',
+      '#88A65C',
+      '#81A65C',
+      '#79A65C',
+      '#6FA65C',
+      '#66A65C',
+      '#5EA65C',
+      '#5CA661',
+      '#5CA668',
+      '#5CA66F',
+      '#5CA677',
+      '#5CA67E',
+      '#5CA686',
+      '#5CA68D',
+      '#5CA695',
+      '#5CA69C',
+      '#5CA6A4',
+      '#5CA1A6',
+      '#5C9AA6',
+      '#5C92A6',
+      '#5C8BA6',
+      '#5C83A6',
+      '#5C7CA6',
+      '#5C74A6',
+      '#5C6AA6',
+      '#5C61A6',
+      '#5E5CA6',
+      '#665CA6',
+      '#6D5CA6',
+      '#745CA6',
+      '#7C5CA6',
+      '#835CA6',
+      '#8B5CA6',
+      '#925CA6',
+      '#9A5CA6',
+      '#A15CA6',
+      '#A65CA4',
+      '#A65C9C',
+      '#A65C95',
+      '#A65C8D',
+      '#A65C86',
+      '#A65C7E',
+      '#A65C77',
+      '#A65C6F',
+      '#A65C66',
+      '#A65C61',
+      '#A65C5E'];
+
+  // Create empty workspace for configuring workspace.
+  var toolboxWorkspace = Blockly.inject('toolbox_blocks',
+    {grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+       media: '../../../media/',
+       toolbox: toolbox,
+     });
+  // Create empty workspace for previewing created workspace.
+  var previewWorkspace = Blockly.inject('preview_blocks',
+    {grid:
+      {spacing: 25,
+       length: 3,
+       colour: '#ccc',
+       snap: true},
+     media: '../../../media/',
+     toolbox: '<xml></xml>',
+     zoom:
+       {controls: true,
+        wheel: true}
+    });
+
+  var controller = new WorkspaceFactoryController(toolboxWorkspace, previewWorkspace);
+
+  // Wrappers to attach buttons to method calls for the controller object
+  var addWrapper = function() {
+    document.getElementById('dropdownDiv_add').classList.toggle("show");
+  };
+  var newCategoryWrapper = function() {
+    controller.addCategory();
+    document.getElementById('dropdownDiv_add').classList.remove("show");
+  };
+  var loadCategoryWrapper = function() {
+    controller.loadCategory();
+    document.getElementById('dropdownDiv_add').classList.remove("show");
+  };
+  var separatorWrapper = function() {
+    controller.addSeparator();
+    document.getElementById('dropdownDiv_add').classList.remove("show");
+  };
+  var removeWrapper = function() {
+    controller.removeElement();
+  };
+  var exportWrapper = function() {
+    document.getElementById('dropdownDiv_export').classList.toggle("show");
+    document.getElementById('dropdownDiv_import').classList.remove("show");
+  };
+  var printWrapper = function() {
+    controller.printConfig();
+  };
+  var upWrapper = function() {
+    controller.moveElement(-1);
+  };
+  var downWrapper = function() {
+    controller.moveElement(1);
+  };
+  var editCategoryWrapper = function() {
+    document.getElementById('dropdownDiv_editCategory').classList.toggle("show");
+  };
+  var nameWrapper = function() {
+    controller.changeCategoryName();
+    document.getElementById('dropdownDiv_editCategory').classList.remove("show");
+  };
+  var shadowAddWrapper = function() {
+    controller.addShadow();
+    document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
+  };
+  var shadowRemoveWrapper = function() {
+    controller.removeShadow();
+    document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
+    // If turning invalid shadow block back to normal block, remove warning and disable
+    // block editing privileges.
+    Blockly.selected.setWarningText(null);
+    if (!Blockly.selected.getSurroundParent()) {
+      document.getElementById('button_editShadow').disabled = true;
+    }
+  };
+  var editShadowWrapper = function() {
+    if (Blockly.selected) {
+      // Can only edit blocks when a block is selected.
+
+      if (!controller.isUserGenShadowBlock(Blockly.selected.id) && Blockly.selected.getSurroundParent() != null) {
+        // If a block is selected that could be a valid shadow block (not a shadow block,
+        // has a surrounding parent), let the user make it a shadow block.
+        // Use toggle instead of add so that the user can click the button again
+        // to make the dropdown disappear without clicking one of the options.
+        document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
+        document.getElementById('dropdownDiv_editShadowAdd').classList.toggle("show");
+      } else {
+        // If the block is a shadow block, let the user make it a normal block.
+        document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
+        document.getElementById('dropdownDiv_editShadowRemove').classList.toggle("show");
+      }
+    }
+  };
+  var importWrapper = function() {
+    document.getElementById('dropdownDiv_import').classList.toggle("show");
+    document.getElementById('dropdownDiv_export').classList.remove("show");
+  };
+  var clearWrapper = function() {
+    controller.clearToolbox();
+  };
+  var editToolboxWrapper = function() {
+    controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+  };
+  var editPreloadWrapper = function() {
+    controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
+  };
+  var importToolboxWrapper = function(e) {
+    controller.importFile(event.target.files[0], WorkspaceFactoryController.MODE_TOOLBOX);
+    document.getElementById('dropdownDiv_import').classList.remove("show");
+  };
+  var importPreloadWrapper = function(e) {
+    controller.importFile(event.target.files[0], WorkspaceFactoryController.MODE_PRELOAD);
+    document.getElementById('dropdownDiv_import').classList.remove("show");
+  };
+  var editToolboxWrapper = function() {
+    controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+  };
+  var editPreloadWrapper = function() {
+    controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
+  };
+  var exportToolboxWrapper = function() {
+    controller.exportFile(WorkspaceFactoryController.MODE_TOOLBOX);
+    document.getElementById('dropdownDiv_export').classList.remove("show");
+  }
+  var exportPreloadWrapper = function() {
+    controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
+    document.getElementById('dropdownDiv_export').classList.remove("show");
+  }
+  var exportOptionsWrapper = function() {
+    controller.exportOptionsFile();
+    document.getElementById('dropdownDiv_export').classList.remove("show");
+  }
+  var exportAllWrapper = function() {
+    controller.exportXmlFile(WorkspaceFactoryController.MODE_TOOLBOX);
+    controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
+    controller.exportOptionsFile();
+    document.getElementById('dropdownDiv_export').classList.remove("show");
+  }
+  var standardOptionsWrapper = function() {
+    controller.setStandardOptionsAndUpdate();
+  };
+
+  document.getElementById('button_add').addEventListener
+      ('click', addWrapper);
+  document.getElementById('dropdown_newCategory').addEventListener
+      ('click', newCategoryWrapper);
+  document.getElementById('dropdown_loadCategory').addEventListener
+      ('click', loadCategoryWrapper);
+  document.getElementById('dropdown_separator').addEventListener
+      ('click', separatorWrapper);
+  document.getElementById('button_remove').addEventListener
+      ('click', removeWrapper);
+  document.getElementById('dropdown_exportToolbox').addEventListener
+      ('click', exportToolboxWrapper);
+  document.getElementById('dropdown_exportPreload').addEventListener
+      ('click', exportPreloadWrapper);
+  document.getElementById('dropdown_exportOptions').addEventListener
+      ('click', exportOptionsWrapper);
+  document.getElementById('dropdown_exportAll').addEventListener
+      ('click', exportAllWrapper);
+  document.getElementById('button_export').addEventListener
+      ('click', exportWrapper);
+  document.getElementById('button_print').addEventListener
+      ('click', printWrapper);
+  document.getElementById('button_up').addEventListener
+      ('click', upWrapper);
+  document.getElementById('button_down').addEventListener
+      ('click', downWrapper);
+  document.getElementById('button_editCategory').addEventListener
+      ('click', editCategoryWrapper);
+  document.getElementById('button_editShadow').addEventListener
+      ('click', editShadowWrapper);
+  document.getElementById('dropdown_name').addEventListener
+      ('click', nameWrapper);
+  document.getElementById('button_import').addEventListener
+      ('click', importWrapper);
+  document.getElementById('input_importToolbox').addEventListener
+      ('change', importToolboxWrapper);
+  document.getElementById('input_importPreload').addEventListener
+      ('change', importPreloadWrapper);
+  document.getElementById('button_clear').addEventListener
+      ('click', clearWrapper);
+  document.getElementById('dropdown_addShadow').addEventListener
+      ('click', shadowAddWrapper);
+  document.getElementById('dropdown_removeShadow').addEventListener
+      ('click', shadowRemoveWrapper);
+  document.getElementById('tab_toolbox').addEventListener
+      ('click', editToolboxWrapper);
+  document.getElementById('tab_preload').addEventListener
+      ('click', editPreloadWrapper);
+  document.getElementById('button_standardOptions').addEventListener
+      ('click', standardOptionsWrapper);
+
+  // Use up and down arrow keys to move categories.
+  // TODO(evd2014): When merge with next CL for editing preloaded blocks, make sure
+  // mode is toolbox.
+  window.addEventListener('keydown', function(e) {
+    if (e.keyCode == 38) {    // Arrow up.
+      upWrapper();
+    } else if (e.keyCode == 40) {   // Arrow down.
+      downWrapper();
+    }
+  });
+
+  // Create color picker with specific set of Blockly colors.
+  var colorPicker = new goog.ui.ColorPicker();
+  colorPicker.setColors(colors);
+  // Create and render the popup color picker and attach to button.
+  var popupPicker = new goog.ui.PopupColorPicker(null, colorPicker);
+  popupPicker.render();
+  popupPicker.attach(document.getElementById('dropdown_color'));
+  popupPicker.setFocusable(true);
+  goog.events.listen(popupPicker, 'change', function(e) {
+        controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
+        document.getElementById('dropdownDiv_editCategory').classList.remove
+            ("show");
+      });
+
+  // Disable category editing buttons until categories are created.
+  document.getElementById('button_remove').disabled = true;
+  document.getElementById('button_up').disabled = true;
+  document.getElementById('button_down').disabled = true;
+  document.getElementById('button_editCategory').disabled = true;
+  document.getElementById('button_editShadow').disabled = true;
+
+  toolboxWorkspace.addChangeListener(function(e) {
+    // Listen for Blockly move and delete events to update preview.
+    // Not listening for Blockly create events because causes the user to drop
+    // blocks when dragging them into workspace. Could cause problems if ever load
+    // blocks into workspace directly without calling updatePreview.
+    if (e.type == Blockly.Events.MOVE || e.type == Blockly.Events.DELETE) {
+      controller.saveStateFromWorkspace();
+      controller.updatePreview();
+    }
+
+    // Listen for Blockly UI events to correctly enable the "Edit Block" button.
+    // Only enable "Edit Block" when a block is selected and it has a surrounding
+    // parent, meaning it is nested in another block (blocks that are not
+    // nested in parents cannot be shadow blocks).
+    if (e.type == Blockly.Events.MOVE || (e.type == Blockly.Events.UI &&
+        e.element == 'selected')) {
+      var selected = Blockly.selected;
+
+      if (selected != null && selected.getSurroundParent() != null) {
+
+        // A valid shadow block is selected. Enable block editing and remove warnings.
+        document.getElementById('button_editShadow').disabled = false;
+        Blockly.selected.setWarningText(null);
+      } else {
+        if (selected != null && controller.isUserGenShadowBlock(selected.id)) {
+
+        // Provide warning if shadow block is moved and is no longer a valid shadow block.
+          Blockly.selected.setWarningText('Shadow blocks must be nested inside other' +
+              ' blocks to be displayed.');
+
+          // Give editing options so that the user can make an invalid shadow block
+          // a normal block.
+          document.getElementById('button_editShadow').disabled = false;
+        } else {
+
+          // No block selected that is a shadow block or could be a valid shadow block.
+          // Disable block editing.
+          document.getElementById('button_editShadow').disabled = true;
+          document.getElementById('dropdownDiv_editShadowRemove').classList.remove("show");
+          document.getElementById('dropdownDiv_editShadowAdd').classList.remove("show");
+        }
+      }
+    }
+
+    // Convert actual shadow blocks added from the toolbox to user-generated shadow blocks.
+    if (e.type == Blockly.Events.CREATE) {
+      controller.convertShadowBlocks();
+    }
+  });
+
+  // Add event listeners for checkboxes and text fields for configuring the Options object.
+
+  // Checking the grid checkbox displays grid options and updates the options
+  // object.
+  document.getElementById('option_grid_checkbox').addEventListener('change', function(e) {
+      document.getElementById('grid_options').style.display = document.getElementById('option_grid_checkbox').checked ? 'block' : 'none';
+      controller.generateNewOptions();
+  });
+
+  // Checking the grid checkbox displays zoom options and updates the options
+  // object.
+  document.getElementById('option_zoom_checkbox').addEventListener('change', function(e) {
+      document.getElementById('zoom_options').style.display = document.getElementById('option_zoom_checkbox').checked ? 'block' : 'none';
+      controller.generateNewOptions();
+  });
+
+  var optionListener = function() {
+    controller.generateNewOptions();
+  };
+
+  // Add event listeners to generate new options for each options input field.
+  document.getElementById('option_collapse_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_comments_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_css_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_disable_checkbox').addEventListener('change', optionListener);
+  document.getElementById('gridOption_spacing_text').addEventListener('change', optionListener);
+  document.getElementById('gridOption_length_text').addEventListener('change', optionListener);
+  document.getElementById('gridOption_colour_text').addEventListener('change', optionListener);
+  document.getElementById('gridOption_snap_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_maxBlocks_text').addEventListener('change', optionListener);
+  document.getElementById('option_media_text').addEventListener('change', optionListener);
+  document.getElementById('option_readOnly_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_rtl_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_scrollbars_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_sounds_checkbox').addEventListener('change', optionListener);
+  document.getElementById('option_trashcan_checkbox').addEventListener('change', optionListener);
+  document.getElementById('zoomOption_controls_checkbox').addEventListener('change', optionListener);
+  document.getElementById('zoomOption_wheel_checkbox').addEventListener('change', optionListener);
+  document.getElementById('zoomOption_startScale_text').addEventListener('change', optionListener);
+  document.getElementById('zoomOption_maxScale_text').addEventListener('change', optionListener);
+  document.getElementById('zoomOption_minScale_text').addEventListener('change', optionListener);
+  document.getElementById('zoomOption_scaleSpeed_text').addEventListener('change', optionListener);
+
+  // Check standard options and apply the changes to update the view.
+  controller.setStandardOptionsAndUpdate();
+
+</script>
+</html>

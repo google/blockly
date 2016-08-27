@@ -37,7 +37,10 @@ goog.require('goog.dom');
  * @constructor
  */
 Blockly.Connection = function(source, type) {
-  /** @type {!Blockly.Block} */
+  /**
+   * @type {!Blockly.Block}
+   * @private
+   */
   this.sourceBlock_ = source;
   /** @type {number} */
   this.type = type;
@@ -59,127 +62,7 @@ Blockly.Connection.REASON_WRONG_TYPE = 2;
 Blockly.Connection.REASON_TARGET_NULL = 3;
 Blockly.Connection.REASON_CHECKS_FAILED = 4;
 Blockly.Connection.REASON_DIFFERENT_WORKSPACES = 5;
-
-/**
- * Connect two connections together.
- * @param {!Blockly.Connection} parentConnection Connection on superior block.
- * @param {!Blockly.Connection} childConnection Connection on inferior block.
- * @private
- */
-Blockly.Connection.connect_ = function(parentConnection, childConnection) {
-  var parentBlock = parentConnection.getSourceBlock();
-  var childBlock = childConnection.getSourceBlock();
-  // Disconnect any existing parent on the child connection.
-  if (childConnection.isConnected()) {
-    childConnection.disconnect();
-  }
-  if (parentConnection.isConnected()) {
-    // Other connection is already connected to something.
-    // Disconnect it and reattach it or bump it as needed.
-    var orphanBlock = parentConnection.targetBlock();
-    var shadowDom = parentConnection.getShadowDom();
-    // Temporarily set the shadow DOM to null so it does not respawn.
-    parentConnection.setShadowDom(null);
-    // Displaced shadow blocks dissolve rather than reattaching or bumping.
-    if (orphanBlock.isShadow()) {
-      // Save the shadow block so that field values are preserved.
-      shadowDom = Blockly.Xml.blockToDom(orphanBlock);
-      orphanBlock.dispose();
-      orphanBlock = null;
-    } else if (parentConnection.type == Blockly.INPUT_VALUE) {
-      // Value connections.
-      // If female block is already connected, disconnect and bump the male.
-      if (!orphanBlock.outputConnection) {
-        throw 'Orphan block does not have an output connection.';
-      }
-      // Attempt to reattach the orphan at the end of the newly inserted
-      // block.  Since this block may be a row, walk down to the end
-      // or to the first (and only) shadow block.
-      var connection = Blockly.Connection.lastConnectionInRow_(
-          childBlock, orphanBlock);
-      if (connection) {
-        orphanBlock.outputConnection.connect(connection);
-        orphanBlock = null;
-      }
-    } else if (parentConnection.type == Blockly.NEXT_STATEMENT) {
-      // Statement connections.
-      // Statement blocks may be inserted into the middle of a stack.
-      // Split the stack.
-      if (!orphanBlock.previousConnection) {
-        throw 'Orphan block does not have a previous connection.';
-      }
-      // Attempt to reattach the orphan at the bottom of the newly inserted
-      // block.  Since this block may be a stack, walk down to the end.
-      var newBlock = childBlock;
-      while (newBlock.nextConnection) {
-        if (newBlock.nextConnection.isConnected()) {
-          newBlock = newBlock.getNextBlock();
-        } else {
-          if (orphanBlock.previousConnection.checkType_(
-              newBlock.nextConnection)) {
-            newBlock.nextConnection.connect(orphanBlock.previousConnection);
-            orphanBlock = null;
-          }
-          break;
-        }
-      }
-    }
-    if (orphanBlock) {
-      // Unable to reattach orphan.
-      parentConnection.disconnect();
-      if (Blockly.Events.recordUndo) {
-        // Bump it off to the side after a moment.
-        var group = Blockly.Events.getGroup();
-        setTimeout(function() {
-          // Verify orphan hasn't been deleted or reconnected (user on meth).
-          if (orphanBlock.workspace && !orphanBlock.getParent()) {
-            Blockly.Events.setGroup(group);
-            if (orphanBlock.outputConnection) {
-              orphanBlock.outputConnection.bumpAwayFrom_(parentConnection);
-            } else if (orphanBlock.previousConnection) {
-              orphanBlock.previousConnection.bumpAwayFrom_(parentConnection);
-            }
-            Blockly.Events.setGroup(false);
-          }
-        }, Blockly.BUMP_DELAY);
-      }
-    }
-    // Restore the shadow DOM.
-    parentConnection.setShadowDom(shadowDom);
-  }
-
-  var event;
-  if (Blockly.Events.isEnabled()) {
-    event = new Blockly.Events.Move(childBlock);
-  }
-  // Establish the connections.
-  Blockly.Connection.connectReciprocally_(parentConnection, childConnection);
-  // Demote the inferior block so that one is a child of the superior one.
-  childBlock.setParent(parentBlock);
-  if (event) {
-    event.recordNew();
-    Blockly.Events.fire(event);
-  }
-
-  if (parentBlock.rendered) {
-    parentBlock.updateDisabled();
-  }
-  if (childBlock.rendered) {
-    childBlock.updateDisabled();
-  }
-  if (parentBlock.rendered && childBlock.rendered) {
-    if (parentConnection.type == Blockly.NEXT_STATEMENT ||
-        parentConnection.type == Blockly.PREVIOUS_STATEMENT) {
-      // Child block may need to square off its corners if it is in a stack.
-      // Rendering a child will render its parent.
-      childBlock.render();
-    } else {
-      // Child block does not change shape.  Rendering the parent node will
-      // move its connected children into position.
-      parentBlock.render();
-    }
-  }
-};
+Blockly.Connection.REASON_SHADOW_PARENT = 6;
 
 /**
  * Connection this connection connects to.  Null if not connected.
@@ -245,6 +128,110 @@ Blockly.Connection.prototype.dbOpposite_ = null;
 Blockly.Connection.prototype.hidden_ = null;
 
 /**
+ * Connect two connections together.  This is the connection on the superior
+ * block.
+ * @param {!Blockly.Connection} childConnection Connection on inferior block.
+ * @private
+ */
+Blockly.Connection.prototype.connect_ = function(childConnection) {
+  var parentConnection = this;
+  var parentBlock = parentConnection.getSourceBlock();
+  var childBlock = childConnection.getSourceBlock();
+  // Disconnect any existing parent on the child connection.
+  if (childConnection.isConnected()) {
+    childConnection.disconnect();
+  }
+  if (parentConnection.isConnected()) {
+    // Other connection is already connected to something.
+    // Disconnect it and reattach it or bump it as needed.
+    var orphanBlock = parentConnection.targetBlock();
+    var shadowDom = parentConnection.getShadowDom();
+    // Temporarily set the shadow DOM to null so it does not respawn.
+    parentConnection.setShadowDom(null);
+    // Displaced shadow blocks dissolve rather than reattaching or bumping.
+    if (orphanBlock.isShadow()) {
+      // Save the shadow block so that field values are preserved.
+      shadowDom = Blockly.Xml.blockToDom(orphanBlock);
+      orphanBlock.dispose();
+      orphanBlock = null;
+    } else if (parentConnection.type == Blockly.INPUT_VALUE) {
+      // Value connections.
+      // If female block is already connected, disconnect and bump the male.
+      if (!orphanBlock.outputConnection) {
+        throw 'Orphan block does not have an output connection.';
+      }
+      // Attempt to reattach the orphan at the end of the newly inserted
+      // block.  Since this block may be a row, walk down to the end
+      // or to the first (and only) shadow block.
+      var connection = Blockly.Connection.lastConnectionInRow_(
+          childBlock, orphanBlock);
+      if (connection) {
+        orphanBlock.outputConnection.connect(connection);
+        orphanBlock = null;
+      }
+    } else if (parentConnection.type == Blockly.NEXT_STATEMENT) {
+      // Statement connections.
+      // Statement blocks may be inserted into the middle of a stack.
+      // Split the stack.
+      if (!orphanBlock.previousConnection) {
+        throw 'Orphan block does not have a previous connection.';
+      }
+      // Attempt to reattach the orphan at the bottom of the newly inserted
+      // block.  Since this block may be a stack, walk down to the end.
+      var newBlock = childBlock;
+      while (newBlock.nextConnection) {
+        var nextBlock = newBlock.getNextBlock();
+        if (nextBlock && !nextBlock.isShadow()) {
+          newBlock = nextBlock;
+        } else {
+          if (orphanBlock.previousConnection.checkType_(
+              newBlock.nextConnection)) {
+            newBlock.nextConnection.connect(orphanBlock.previousConnection);
+            orphanBlock = null;
+          }
+          break;
+        }
+      }
+    }
+    if (orphanBlock) {
+      // Unable to reattach orphan.
+      parentConnection.disconnect();
+      if (Blockly.Events.recordUndo) {
+        // Bump it off to the side after a moment.
+        var group = Blockly.Events.getGroup();
+        setTimeout(function() {
+          // Verify orphan hasn't been deleted or reconnected (user on meth).
+          if (orphanBlock.workspace && !orphanBlock.getParent()) {
+            Blockly.Events.setGroup(group);
+            if (orphanBlock.outputConnection) {
+              orphanBlock.outputConnection.bumpAwayFrom_(parentConnection);
+            } else if (orphanBlock.previousConnection) {
+              orphanBlock.previousConnection.bumpAwayFrom_(parentConnection);
+            }
+            Blockly.Events.setGroup(false);
+          }
+        }, Blockly.BUMP_DELAY);
+      }
+    }
+    // Restore the shadow DOM.
+    parentConnection.setShadowDom(shadowDom);
+  }
+
+  var event;
+  if (Blockly.Events.isEnabled()) {
+    event = new Blockly.Events.Move(childBlock);
+  }
+  // Establish the connections.
+  Blockly.Connection.connectReciprocally_(parentConnection, childConnection);
+  // Demote the inferior block so that one is a child of the superior one.
+  childBlock.setParent(parentBlock);
+  if (event) {
+    event.recordNew();
+    Blockly.Events.fire(event);
+  }
+};
+
+/**
  * Sever all links to this connection (not including from the source object).
  */
 Blockly.Connection.prototype.dispose = function() {
@@ -290,18 +277,6 @@ Blockly.Connection.prototype.isConnected = function() {
 };
 
 /**
- * Returns the distance between this connection and another connection.
- * @param {!Blockly.Connection} otherConnection The other connection to measure
- *     the distance to.
- * @return {number} The distance between connections.
- */
-Blockly.Connection.prototype.distanceFrom = function(otherConnection) {
-  var xDiff = this.x_ - otherConnection.x_;
-  var yDiff = this.y_ - otherConnection.y_;
-  return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-};
-
-/**
  * Checks whether the current connection can connect with the target
  * connection.
  * @param {Blockly.Connection} target Connection to check compatibility with.
@@ -312,16 +287,24 @@ Blockly.Connection.prototype.distanceFrom = function(otherConnection) {
 Blockly.Connection.prototype.canConnectWithReason_ = function(target) {
   if (!target) {
     return Blockly.Connection.REASON_TARGET_NULL;
-  } else if (this.sourceBlock_ &&
-      target.getSourceBlock() == this.sourceBlock_) {
+  }
+  if (this.isSuperior()) {
+    var blockA = this.sourceBlock_;
+    var blockB = target.getSourceBlock();
+  } else {
+    var blockB = this.sourceBlock_;
+    var blockA = target.getSourceBlock();
+  }
+  if (blockA && blockA == blockB) {
     return Blockly.Connection.REASON_SELF_CONNECTION;
   } else if (target.type != Blockly.OPPOSITE_TYPE[this.type]) {
     return Blockly.Connection.REASON_WRONG_TYPE;
-  } else if (this.sourceBlock_ && target.getSourceBlock() &&
-      this.sourceBlock_.workspace !== target.getSourceBlock().workspace) {
+  } else if (blockA && blockB && blockA.workspace !== blockB.workspace) {
     return Blockly.Connection.REASON_DIFFERENT_WORKSPACES;
   } else if (!this.checkType_(target)) {
     return Blockly.Connection.REASON_CHECKS_FAILED;
+  } else if (blockA.isShadow() && !blockB.isShadow()) {
+    return Blockly.Connection.REASON_SHADOW_PARENT;
   }
   return Blockly.Connection.CAN_CONNECT;
 };
@@ -348,6 +331,8 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
       throw 'Target connection is null.';
     case Blockly.Connection.REASON_CHECKS_FAILED:
       throw 'Connection checks failed.';
+    case Blockly.Connection.REASON_SHADOW_PARENT:
+      throw 'Connecting non-shadow to shadow block.';
     default:
       throw 'Unknown connection failure: this should never happen!';
   }
@@ -356,19 +341,12 @@ Blockly.Connection.prototype.checkConnection_ = function(target) {
 /**
  * Check if the two connections can be dragged to connect to each other.
  * @param {!Blockly.Connection} candidate A nearby connection to check.
- * @param {number} maxRadius The maximum radius allowed for connections.
  * @return {boolean} True if the connection is allowed, false otherwise.
  */
-Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
-    maxRadius) {
-  if (this.distanceFrom(candidate) > maxRadius) {
-    return false;
-  }
-
+Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
   // Type checking.
   var canConnect = this.canConnectWithReason_(candidate);
-  if (canConnect != Blockly.Connection.CAN_CONNECT &&
-      canConnect != Blockly.Connection.REASON_MUST_DISCONNECT) {
+  if (canConnect != Blockly.Connection.CAN_CONNECT) {
     return false;
   }
 
@@ -392,23 +370,20 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate,
   }
 
   // Don't let a block with no next connection bump other blocks out of the
-  // stack.
+  // stack.  But covering up a shadow block or stack of shadow blocks is fine.
+  // Similarly, replacing a terminal statement with another terminal statement
+  // is allowed.
   if (this.type == Blockly.PREVIOUS_STATEMENT &&
       candidate.isConnected() &&
-      !this.sourceBlock_.nextConnection) {
+      !this.sourceBlock_.nextConnection &&
+      !candidate.targetBlock().isShadow() &&
+      candidate.targetBlock().nextConnection) {
     return false;
   }
 
   // Don't let blocks try to connect to themselves or ones they nest.
-  var targetSourceBlock = candidate.getSourceBlock();
-  var sourceBlock = this.sourceBlock_;
-  if (targetSourceBlock && sourceBlock) {
-    do {
-      if (sourceBlock == targetSourceBlock) {
-        return false;
-      }
-      targetSourceBlock = targetSourceBlock.getParent();
-    } while (targetSourceBlock);
+  if (Blockly.draggingConnections_.indexOf(candidate) != -1) {
+    return false;
   }
 
   return true;
@@ -425,13 +400,12 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
   }
   this.checkConnection_(otherConnection);
   // Determine which block is superior (higher in the source stack).
-  var parentBlock, childBlock;
   if (this.isSuperior()) {
     // Superior block.
-    Blockly.Connection.connect_(this, otherConnection);
+    this.connect_(otherConnection);
   } else {
     // Inferior block.
-    Blockly.Connection.connect_(otherConnection, this);
+    otherConnection.connect_(this);
   }
 };
 
@@ -518,11 +492,23 @@ Blockly.Connection.prototype.disconnect = function() {
     childBlock = this.sourceBlock_;
     parentConnection = otherConnection;
   }
+  this.disconnectInternal_(parentBlock, childBlock);
+  parentConnection.respawnShadow_();
+};
 
+/**
+ * Disconnect two blocks that are connected by this connection.
+ * @param {!Blockly.Block} parentBlock The superior block.
+ * @param {!Blockly.Block} childBlock The inferior block.
+ * @private
+ */
+Blockly.Connection.prototype.disconnectInternal_ = function(parentBlock,
+    childBlock) {
   var event;
   if (Blockly.Events.isEnabled()) {
     event = new Blockly.Events.Move(childBlock);
   }
+  var otherConnection = this.targetConnection;
   otherConnection.targetConnection = null;
   this.targetConnection = null;
   childBlock.setParent(null);
@@ -530,32 +516,25 @@ Blockly.Connection.prototype.disconnect = function() {
     event.recordNew();
     Blockly.Events.fire(event);
   }
+};
 
-  // Respawn the shadow block if there is one.
-  var shadow = parentConnection.getShadowDom();
+/**
+ * Respawn the shadow block if there was one connected to the this connection.
+ * @private
+ */
+Blockly.Connection.prototype.respawnShadow_ = function() {
+  var parentBlock = this.getSourceBlock();
+  var shadow = this.getShadowDom();
   if (parentBlock.workspace && shadow && Blockly.Events.recordUndo) {
     var blockShadow =
         Blockly.Xml.domToBlock(shadow, parentBlock.workspace);
     if (blockShadow.outputConnection) {
-      parentConnection.connect(blockShadow.outputConnection);
+      this.connect(blockShadow.outputConnection);
     } else if (blockShadow.previousConnection) {
-      parentConnection.connect(blockShadow.previousConnection);
+      this.connect(blockShadow.previousConnection);
     } else {
       throw 'Child block does not have output or previous statement.';
     }
-    if (blockShadow.initSvg) {
-      blockShadow.initSvg();
-    }
-    blockShadow.render(false);
-  }
-
-  // Rerender the parent so that it may reflow.
-  if (parentBlock.rendered) {
-    parentBlock.render();
-  }
-  if (childBlock.rendered) {
-    childBlock.updateDisabled();
-    childBlock.render();
   }
 };
 
@@ -568,110 +547,6 @@ Blockly.Connection.prototype.targetBlock = function() {
     return this.targetConnection.getSourceBlock();
   }
   return null;
-};
-
-/**
- * Move the block(s) belonging to the connection to a point where they don't
- * visually interfere with the specified connection.
- * @param {!Blockly.Connection} staticConnection The connection to move away
- *     from.
- * @private
- */
-Blockly.Connection.prototype.bumpAwayFrom_ = function(staticConnection) {
-  if (Blockly.dragMode_ != Blockly.DRAG_NONE) {
-    // Don't move blocks around while the user is doing the same.
-    return;
-  }
-  // Move the root block.
-  var rootBlock = this.sourceBlock_.getRootBlock();
-  if (rootBlock.isInFlyout) {
-    // Don't move blocks around in a flyout.
-    return;
-  }
-  var reverse = false;
-  if (!rootBlock.isMovable()) {
-    // Can't bump an uneditable block away.
-    // Check to see if the other block is movable.
-    rootBlock = staticConnection.getSourceBlock().getRootBlock();
-    if (!rootBlock.isMovable()) {
-      return;
-    }
-    // Swap the connections and move the 'static' connection instead.
-    staticConnection = this;
-    reverse = true;
-  }
-  // Raise it to the top for extra visibility.
-  rootBlock.getSvgRoot().parentNode.appendChild(rootBlock.getSvgRoot());
-  var dx = (staticConnection.x_ + Blockly.SNAP_RADIUS) - this.x_;
-  var dy = (staticConnection.y_ + Blockly.SNAP_RADIUS) - this.y_;
-  if (reverse) {
-    // When reversing a bump due to an uneditable block, bump up.
-    dy = -dy;
-  }
-  if (rootBlock.RTL) {
-    dx = -dx;
-  }
-  rootBlock.moveBy(dx, dy);
-};
-
-/**
- * Change the connection's coordinates.
- * @param {number} x New absolute x coordinate.
- * @param {number} y New absolute y coordinate.
- */
-Blockly.Connection.prototype.moveTo = function(x, y) {
-  // Remove it from its old location in the database (if already present)
-  if (this.inDB_) {
-    this.db_.removeConnection_(this);
-  }
-  this.x_ = x;
-  this.y_ = y;
-  // Insert it into its new location in the database.
-  if (!this.hidden_) {
-    this.db_.addConnection(this);
-  }
-};
-
-/**
- * Change the connection's coordinates.
- * @param {number} dx Change to x coordinate.
- * @param {number} dy Change to y coordinate.
- */
-Blockly.Connection.prototype.moveBy = function(dx, dy) {
-  this.moveTo(this.x_ + dx, this.y_ + dy);
-};
-
-/**
- * Move the blocks on either side of this connection right next to each other.
- * @private
- */
-Blockly.Connection.prototype.tighten_ = function() {
-  var dx = this.targetConnection.x_ - this.x_;
-  var dy = this.targetConnection.y_ - this.y_;
-  if (dx != 0 || dy != 0) {
-    var block = this.targetBlock();
-    var svgRoot = block.getSvgRoot();
-    if (!svgRoot) {
-      throw 'block is not rendered.';
-    }
-    var xy = Blockly.getRelativeXY_(svgRoot);
-    block.getSvgRoot().setAttribute('transform',
-        'translate(' + (xy.x - dx) + ',' + (xy.y - dy) + ')');
-    block.moveConnections_(-dx, -dy);
-  }
-};
-
-/**
- * Find the closest compatible connection to this connection.
- * @param {number} maxLimit The maximum radius to another connection.
- * @param {!goog.math.Coordinate} dxy Offset between this connection's location
- *     in the database and the current location (as a result of dragging).
- * @return {!{connection: ?Blockly.Connection, radius: number}} Contains two
- *     properties:' connection' which is either another connection or null,
- *     and 'radius' which is the distance.
- */
-Blockly.Connection.prototype.closest = function(maxLimit, dxy) {
-  return this.dbOpposite_.searchForClosest(this, maxLimit, dxy);
 };
 
 /**
@@ -737,128 +612,4 @@ Blockly.Connection.prototype.setShadowDom = function(shadow) {
  */
 Blockly.Connection.prototype.getShadowDom = function() {
   return this.shadowDom_;
-};
-
-/**
- * Find all nearby compatible connections to this connection.
- * Type checking does not apply, since this function is used for bumping.
- * @param {number} maxLimit The maximum radius to another connection.
- * @return {!Array.<Blockly.Connection>} List of connections.
- * @private
- */
-Blockly.Connection.prototype.neighbours_ = function(maxLimit) {
-  return this.dbOpposite_.getNeighbours(this, maxLimit);
-};
-
-// Appearance or lack thereof.
-
-/**
- * Set whether this connections is hidden (not tracked in a database) or not.
- * @param {boolean} hidden True if connection is hidden.
- */
-Blockly.Connection.prototype.setHidden = function(hidden) {
-  this.hidden_ = hidden;
-  if (hidden && this.inDB_) {
-    this.db_.removeConnection_(this);
-  } else if (!hidden && !this.inDB_) {
-    this.db_.addConnection(this);
-  }
-};
-
-/**
- * Hide this connection, as well as all down-stream connections on any block
- * attached to this connection.  This happens when a block is collapsed.
- * Also hides down-stream comments.
- */
-Blockly.Connection.prototype.hideAll = function() {
-  this.setHidden(true);
-  if (this.isConnected()) {
-    var blocks = this.targetBlock().getDescendants();
-    for (var b = 0; b < blocks.length; b++) {
-      var block = blocks[b];
-      // Hide all connections of all children.
-      var connections = block.getConnections_(true);
-      for (var c = 0; c < connections.length; c++) {
-        connections[c].setHidden(true);
-      }
-      // Close all bubbles of all children.
-      var icons = block.getIcons();
-      for (var i = 0; i < icons.length; i++) {
-        icons[i].setVisible(false);
-      }
-    }
-  }
-};
-
-/**
- * Unhide this connection, as well as all down-stream connections on any block
- * attached to this connection.  This happens when a block is expanded.
- * Also unhides down-stream comments.
- * @return {!Array.<!Blockly.Block>} List of blocks to render.
- */
-Blockly.Connection.prototype.unhideAll = function() {
-  this.setHidden(false);
-  // All blocks that need unhiding must be unhidden before any rendering takes
-  // place, since rendering requires knowing the dimensions of lower blocks.
-  // Also, since rendering a block renders all its parents, we only need to
-  // render the leaf nodes.
-  var renderList = [];
-  if (this.type != Blockly.INPUT_VALUE && this.type != Blockly.NEXT_STATEMENT) {
-    // Only spider down.
-    return renderList;
-  }
-  var block = this.targetBlock();
-  if (block) {
-    var connections;
-    if (block.isCollapsed()) {
-      // This block should only be partially revealed since it is collapsed.
-      connections = [];
-      block.outputConnection && connections.push(block.outputConnection);
-      block.nextConnection && connections.push(block.nextConnection);
-      block.previousConnection && connections.push(block.previousConnection);
-    } else {
-      // Show all connections of this block.
-      connections = block.getConnections_(true);
-    }
-    for (var c = 0; c < connections.length; c++) {
-      renderList.push.apply(renderList, connections[c].unhideAll());
-    }
-    if (!renderList.length) {
-      // Leaf block.
-      renderList[0] = block;
-    }
-  }
-  return renderList;
-};
-
-/**
- * Add highlighting around this connection.
- */
-Blockly.Connection.prototype.highlight = function() {
-  var steps;
-  if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
-        Blockly.BlockSvg.TAB_WIDTH;
-    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
-
-  } else {
-    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
-  }
-  var xy = this.sourceBlock_.getRelativeToSurfaceXY();
-  var x = this.x_ - xy.x;
-  var y = this.y_ - xy.y;
-  Blockly.Connection.highlightedPath_ = Blockly.createSvgElement('path',
-      {'class': 'blocklyHighlightedConnectionPath',
-       'd': steps,
-       transform: 'translate(' + x + ',' + y + ')' +
-           (this.sourceBlock_.RTL ? ' scale(-1 1)' : '')},
-      this.sourceBlock_.getSvgRoot());
-};
-
-/**
- * Remove the highlighting around this connection.
- */
-Blockly.Connection.prototype.unhighlight = function() {
-  goog.dom.removeNode(Blockly.Connection.highlightedPath_);
-  delete Blockly.Connection.highlightedPath_;
 };

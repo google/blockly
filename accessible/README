@@ -1,0 +1,54 @@
+Accessible Blockly
+==================
+
+Google's Blockly is a web-based, visual programming editor that is accessible
+to blind users.
+
+The code in this directory renders a version of the Blockly toolbox and
+workspace that is fully keyboard-navigable, and compatible with most screen
+readers.
+
+In the future, Accessible Blockly may be modified to suit accessibility needs
+other than visual impairments. Note that deaf users are expected to continue
+using Blockly over Accessible Blockly.
+
+
+Using Accessible Blockly in Your Web App
+----------------------------------------
+The demo at blockly/demos/accessible covers the absolute minimum required to
+import Accessible Blockly into your web app. You will need to import the files
+in the same order as in the demo: utils.service.js will need to be the first
+Angular file imported.
+
+When the DOMContentLoaded event fires, call ng.platform.browser.bootstrap() on
+the main component to be loaded. This will usually be blocklyApp.AppView, but
+if you have another component that wraps it, use that one instead.
+
+
+Customizing the Toolbar and Audio
+---------------------------------
+The Accessible Blockly workspace comes with a customizable toolbar.
+
+To customize the toolbar, you will need to declare an ACCESSIBLE_GLOBALS object
+in the global scope that looks like this:
+
+    var ACCESSIBLE_GLOBALS = {
+      toolbarButtonConfig: [],
+      mediaPathPrefix: null
+    };
+
+The value corresponding to 'toolbarButtonConfig' can be modified by adding
+objects representing buttons on the toolbar. Each of these objects should have
+two keys:
+
+  - 'text' (the text to display on the button)
+  - 'action' (the function that gets run when the button is clicked)
+
+In addition, if you want audio to be played, set mediaPathPrefix to the
+location of the accessible/media folder.
+
+
+Limitations
+-----------
+- We do not support having multiple Accessible Blockly apps in a single webpage.
+- Accessible Blockly does not support the use of shadow blocks.

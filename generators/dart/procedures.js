@@ -50,14 +50,15 @@ Blockly.Dart['procedures_defreturn'] = function(block) {
   }
   var returnType = returnValue ? 'dynamic' : 'void';
   var args = [];
-  for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.Dart.variableDB_.getName(block.arguments_[x],
+  for (var i = 0; i < block.arguments_.length; i++) {
+    args[i] = Blockly.Dart.variableDB_.getName(block.arguments_[i],
         Blockly.Variables.NAME_TYPE);
   }
   var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
       branch + returnValue + '}';
   code = Blockly.Dart.scrub_(block, code);
-  Blockly.Dart.definitions_[funcName] = code;
+  // Add % so as not to collide with helper functions in definitions list.
+  Blockly.Dart.definitions_['%' + funcName] = code;
   return null;
 };
 
@@ -70,8 +71,8 @@ Blockly.Dart['procedures_callreturn'] = function(block) {
   var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var args = [];
-  for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.Dart.valueToCode(block, 'ARG' + x,
+  for (var i = 0; i < block.arguments_.length; i++) {
+    args[i] = Blockly.Dart.valueToCode(block, 'ARG' + i,
         Blockly.Dart.ORDER_NONE) || 'null';
   }
   var code = funcName + '(' + args.join(', ') + ')';
@@ -83,8 +84,8 @@ Blockly.Dart['procedures_callnoreturn'] = function(block) {
   var funcName = Blockly.Dart.variableDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var args = [];
-  for (var x = 0; x < block.arguments_.length; x++) {
-    args[x] = Blockly.Dart.valueToCode(block, 'ARG' + x,
+  for (var i = 0; i < block.arguments_.length; i++) {
+    args[i] = Blockly.Dart.valueToCode(block, 'ARG' + i,
         Blockly.Dart.ORDER_NONE) || 'null';
   }
   var code = funcName + '(' + args.join(', ') + ');\n';

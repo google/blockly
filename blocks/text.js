@@ -52,7 +52,8 @@ Blockly.Blocks['text'] = {
     // Text block is trivial.  Use tooltip of parent block if it exists.
     this.setTooltip(function() {
       var parent = thisBlock.getParent();
-      return (parent && parent.tooltip) || Blockly.Msg.TEXT_TEXT_TOOLTIP;
+      return (parent && parent.getInputsInline() && parent.tooltip) ||
+          Blockly.Msg.TEXT_TEXT_TOOLTIP;
     });
   },
   /**
@@ -321,7 +322,9 @@ Blockly.Blocks['text_indexOf'] = {
       this.appendDummyInput().appendField(Blockly.Msg.TEXT_INDEXOF_TAIL);
     }
     this.setInputsInline(true);
-    this.setTooltip(Blockly.Msg.TEXT_INDEXOF_TOOLTIP);
+    var tooltip = Blockly.Msg.TEXT_INDEXOF_TOOLTIP
+        .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '0' : '-1');
+    this.setTooltip(tooltip);
   }
 };
 
@@ -346,7 +349,17 @@ Blockly.Blocks['text_charAt'] = {
     this.appendDummyInput('AT');
     this.setInputsInline(true);
     this.updateAt_(true);
-    this.setTooltip(Blockly.Msg.TEXT_CHARAT_TOOLTIP);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var where = thisBlock.getFieldValue('WHERE');
+      var tooltip = Blockly.Msg.TEXT_CHARAT_TOOLTIP;
+      if (where == 'FROM_START' || where == 'FROM_END') {
+        tooltip += '  ' + Blockly.Msg.LISTS_INDEX_FROM_END_TOOLTIP
+            .replace('%1', Blockly.Blocks.ONE_BASED_INDEXING ? '#1' : '#0');
+      }
+      return tooltip;
+    });
   },
   /**
    * Create XML to represent whether there is an 'AT' input.
@@ -497,17 +510,20 @@ Blockly.Blocks['text_getSubstring'] = {
     }
     var menu = new Blockly.FieldDropdown(this['WHERE_OPTIONS_' + n],
         function(value) {
-      var newAt = (value == 'FROM_START') || (value == 'FROM_END');
-      // The 'isAt' variable is available due to this function being a closure.
-      if (newAt != isAt) {
-        var block = this.sourceBlock_;
-        block.updateAt_(n, newAt);
-        // This menu has been destroyed and replaced.  Update the replacement.
-        block.setFieldValue(value, 'WHERE' + n);
-        return null;
-      }
-      return undefined;
-    });
+          var newAt = (value == 'FROM_START') || (value == 'FROM_END');
+          // The 'isAt' variable is available due to this function being a
+          // closure.
+          if (newAt != isAt) {
+            var block = this.sourceBlock_;
+            block.updateAt_(n, newAt);
+            // This menu has been destroyed and replaced.
+            // Update the replacement.
+            block.setFieldValue(value, 'WHERE' + n);
+            return null;
+          }
+          return undefined;
+        });
+
     this.getInput('AT' + n)
         .appendField(menu, 'WHERE' + n);
     if (n == 1) {
@@ -643,7 +659,7 @@ Blockly.Blocks['text_prompt'] = {
     var TYPES =
         [[Blockly.Msg.TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
          [Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']];
-    // Assign 'this' to a variable for use in the closure below.
+    // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
     this.setColour(Blockly.Blocks.texts.HUE);
@@ -656,8 +672,6 @@ Blockly.Blocks['text_prompt'] = {
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
         .appendField(this.newQuote_(false));
     this.setOutput(true, 'String');
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
     this.setTooltip(function() {
       return (thisBlock.getFieldValue('TYPE') == 'TEXT') ?
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT :

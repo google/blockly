@@ -322,9 +322,12 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
           return;
         }
       }
-      window.confirm(
+      var ok = window.confirm(
           Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
           replace('%2', name));
+      if (!ok) {
+        return;
+      }
     }
 
     Blockly.Events.setGroup(true);

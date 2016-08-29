@@ -209,7 +209,7 @@ BlockFactory.updatePreview = function() {
     // standard library.
     var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
     if (StandardCategories.coreBlockTypes.indexOf(blockType) != -1) {
-      rootBlock.setWarningText('A standard Blockly.Block already exists ' +
+      rootBlock.setWarningText('A core Blockly block already exists ' +
           'under this name.');
 
     } else if (blockType == 'block_type') {

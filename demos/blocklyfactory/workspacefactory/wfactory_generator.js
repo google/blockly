@@ -164,9 +164,12 @@ WorkspaceFactoryGenerator.prototype.generateInjectString = function() {
     return str;
   };
 
-  var attributes = '\ttoolbox : toolbox, /* TODO: Change toolbox XML ID if ' +
+  var attributes = addAttributes(this.model.options, '\t');
+  if (!this.model.options['readOnly']) {
+    attributes = '\ttoolbox : toolbox, /* TODO: Change toolbox XML ID if ' +
       'necessary. Can export toolbox XML from Workspace Factory. */\n' +
-      addAttributes(this.model.options, '\t');
+      attributes;
+  }
   var finalStr = 'var options = { \n' + attributes + '};';
   finalStr += '\n\n/* Inject your workspace */ \nvar workspace = Blockly.' +
       'inject(/* TODO: Add ID of div to inject Blockly into */, options);';

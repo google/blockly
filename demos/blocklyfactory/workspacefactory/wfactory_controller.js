@@ -720,7 +720,6 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
             !confirm('Are you sure you want to import? You will lose your '
             + 'current toolbox. ')) {
             return;
-          }
         }
         // Import toolbox XML.
         controller.importToolboxFromTree_(tree);
@@ -734,7 +733,6 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
             !confirm('Are you sure you want to import? You will lose your '
             + 'current workspace blocks. ')) {
             return;
-          }
         }
 
         // Import pre-loaded workspace XML.
@@ -1206,7 +1204,6 @@ WorkspaceFactoryController.prototype.importBlocks =
           + 'already in your toolbox. Are you sure you want to override the '
           + 'currently defined block?')) {
           return;
-        }
       }
 
       var blocks = controller.generator.getDefinedBlocks(blockTypes);

@@ -964,10 +964,10 @@ FactoryUtils.isProcedureBlock = function(block) {
 
 /**
  * Returns whether or not a block's changes has been saved to the Block Library.
- * TODO: move into the Block Factory Controller once made.
+ * TODO(quachtina96): move into the Block Factory Controller once made.
  *
- * @param {!BlockLibraryController} blockLibraryController - Block Library Controller storing
- *    custom blocks.
+ * @param {!BlockLibraryController} blockLibraryController - Block Library
+ *    Controller storing custom blocks.
  * @return {boolean} True if all changes made to the block have been saved to
  *    the given Block Library.
  */

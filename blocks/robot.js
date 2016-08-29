@@ -255,7 +255,7 @@ Blockly.Blocks['robot_perception_find_custom_landmark'] = {
 };
 
 Blockly.robot.customLandmarks = [['<No landmarks yet>', '<No landmarks yet>']];
-Blockly.robot.getCustomLandmarkOptions = function() {
+Blockly.robot.getCustomLandmarkOptions = function(callback) {
   var options = [];
   var client = new ROSLIB.Service({
     ros: ROS,
@@ -276,6 +276,7 @@ Blockly.robot.getCustomLandmarkOptions = function() {
       options.push([landmark.name, message.id]);
     }
     Blockly.robot.customLandmarks = options;
+    callback();
   });
 };
 
@@ -283,8 +284,13 @@ Blockly.robot.getCustomLandmarkOptions();
 
 Blockly.Blocks['robot_perception_custom_landmarks'] = {
   init: function() {
-    Blockly.robot.getCustomLandmarkOptions();
-    this.appendDummyInput()
+    var that = this;
+    Blockly.robot.getCustomLandmarkOptions(function() {
+      that.removeInput("DROPDOWN");
+      that.appendDummyInput()
+          .appendField(new Blockly.FieldDropdown(Blockly.robot.customLandmarks), "LANDMARK");
+    });
+    this.appendDummyInput("DROPDOWN")
         .appendField(new Blockly.FieldDropdown(Blockly.robot.customLandmarks), "LANDMARK");
     this.setOutput(true, "String");
     this.setColour(230);
@@ -365,7 +371,6 @@ Blockly.robot.getPbdActions = function() {
       options.push([program.name, message.id]);
     }
     Blockly.robot.pbdActions = options;
-    return options;
   });
 };
 
@@ -497,10 +502,12 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   onchange: function() {
     var actionInput = this.getInputTargetBlock('ACTION_ID');
     var action_id = actionInput.getFieldValue('ACTION_ID');
-    var that = this;
-    this.getLandmarksForAction_(action_id, function(landmarks) {
-      that.possibleLandmarks_ = landmarks;
-    });
+    if (action_id) {
+      var that = this;
+      this.getLandmarksForAction_(action_id, function(landmarks) {
+        that.possibleLandmarks_ = landmarks;
+      });
+    }
   },
 
   // Update the display of landmarks for this PbD action.

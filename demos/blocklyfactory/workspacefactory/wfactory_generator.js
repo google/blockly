@@ -130,18 +130,18 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
 
   // Generate XML and set attributes.
   var generatedXml = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
-  generatedXml.setAttribute('id', 'preload_blocks');
+  generatedXml.setAttribute('id', 'workspaceBlocks');
   generatedXml.setAttribute('style', 'display:none');
   return generatedXml;
  };
 
 /**
  * Generates a string representation of the options object for injecting the
- * workspace.
+ * workspace and starter code.
  *
- * @return {!string} String representation of options object.
+ * @return {!string} String representation of starter code for injecting.
  */
-WorkspaceFactoryGenerator.prototype.generateOptionsString = function() {
+WorkspaceFactoryGenerator.prototype.generateInjectString = function() {
 
   var addAttributes = function(obj, tabChar) {
     if (!obj) {
@@ -157,14 +157,28 @@ WorkspaceFactoryGenerator.prototype.generateOptionsString = function() {
       } else {
         var temp = tabChar + key + ' : ' + obj[key] + ', \n';
       }
-      str = str.concat(temp);
+      str += temp;
     }
     var lastCommaIndex = str.lastIndexOf(',');
     str = str.slice(0, lastCommaIndex) + '\n';
     return str;
   };
 
-  return 'var options = { \n' + addAttributes(this.model.options, '\t') + '};';
+  var attributes = addAttributes(this.model.options, '\t');
+  if (!this.model.options['readOnly']) {
+    attributes = '\ttoolbox : toolbox, /* TODO: Change toolbox XML ID if ' +
+      'necessary. Can export toolbox XML from Workspace Factory. */\n' +
+      attributes;
+  }
+  var finalStr = 'var options = { \n' + attributes + '};';
+  finalStr += '\n\n/* Inject your workspace */ \nvar workspace = Blockly.' +
+      'inject(/* TODO: Add ID of div to inject Blockly into */, options);';
+  finalStr += '\n\n/* Load Workspace Blocks from XML to workspace. ' +
+      'Remove if no blocks to load */' +
+      '\nBlockly.Xml.domToWorkspace(workspace, workspaceBlocks/*' +
+      ' TODO: Change workspace blocks XML ID if necessary. Can export' +
+      ' workspace blocks XML from Workspace Factory. */);';
+  return finalStr;
 }
 
 /**

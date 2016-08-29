@@ -495,6 +495,22 @@ WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
   var isLibBlock = this.libBlockTypes.indexOf(blockType) != -1;
   var isImportedBlock = this.importedBlockTypes.indexOf(blockType) != -1;
   return (isStandardBlock || isLibBlock || isImportedBlock);
+};
+
+/**
+ * Checks if any of the block types are already defined.
+ *
+ * @param {!Array<!string>} blockTypes Array of block types.
+ * @return {boolean} True if a block type in the array is already defined,
+ *    false if none of the blocks are already defined.
+ */
+WorkspaceFactoryModel.prototype.hasDefinedBlockTypes = function(blockTypes) {
+  for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
+    if (this.isDefinedBlockType(blockType)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**

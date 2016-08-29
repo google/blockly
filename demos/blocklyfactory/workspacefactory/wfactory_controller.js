@@ -98,37 +98,8 @@ WorkspaceFactoryController.MODE_PRELOAD = 'preload';
  * before), and then creates a tab and switches to it.
  */
 WorkspaceFactoryController.prototype.addCategory = function() {
-  this.allowToTransferFlyoutBlocksToCategory();
-  // Check if it's the first category added.
-  var isFirstCategory = !this.model.hasElements();
-  // Give the option to save blocks if their workspace is not empty and they
-  // are creating their first category.
-  if (isFirstCategory && this.toolboxWorkspace.getAllBlocks().length > 0) {
-    var confirmCreate = confirm('Do you want to save your work in another '
-        + 'category? If you don\'t, the blocks in your workspace will be ' +
-        'deleted.');
-
-    // Create a new category for current blocks.
-    if (confirmCreate) {
-      var name = prompt('Enter the name of the category for your ' +
-          'current blocks: ');
-      if (!name) {  // Exit if cancelled.
-        return;
-      }
-
-      // Create the new category.
-      this.createCategory(name, true);
-      // Set the new category as selected.
-      var id = this.model.getCategoryIdByName(name);
-      this.model.setSelectedById(id);
-      this.view.setCategoryTabSelection(id, true);
-      // Set default options if switching from single flyout to categories.
-      this.view.setCategoryOptions(this.model.hasElements());
-      this.generateNewOptions();
-      // Update preview here in case exit early.
-      this.updatePreview();
-    }
-  }
+  // Transfers the user's blocks to a flyout if it's the first category created.
+  this.transferFlyoutBlocksToCategory();
 
   // After possibly creating a category, check again if it's the first category.
   var isFirstCategory = !this.model.hasElements();
@@ -188,40 +159,28 @@ WorkspaceFactoryController.prototype.addClickToSwitch = function(tab, id) {
 };
 
 /**
- * Allows the user to transfer blocks in their flyout to a new category if
+ * Transfers the blocks in the user's flyout to a new category if
  * the user is creating their first category and their workspace is not
  * empty. Should be called whenever it is possible to switch from single flyout
  * to categories (not including importing).
  */
-WorkspaceFactoryController.prototype.allowToTransferFlyoutBlocksToCategory =
+WorkspaceFactoryController.prototype.transferFlyoutBlocksToCategory =
     function() {
-  // Give the option to save blocks if their workspace is not empty and they
-  // are creating their first category.
+  // Saves the user's blocks from the flyout in a category if there is no
+  // toolbox and the user has dragged in blocks.
   if (!this.model.hasElements() &&
         this.toolboxWorkspace.getAllBlocks().length > 0) {
-    var confirmCreate = confirm('Do you want to save your work in another '
-        + 'category? If you don\'t, the blocks in your workspace will be ' +
-        'deleted.');
-
-    // Create a new category for current blocks.
-    if (confirmCreate) {
-      var name = prompt('Enter the name of the category for your ' +
-          'current blocks: ');
-      if (!name) {  // Exit if cancelled.
-        return;
-      }
-
-      // Create the new category.
-      this.createCategory(name, true);
-      // Set the new category as selected.
-      var id = this.model.getCategoryIdByName(name);
-      this.model.setSelectedById(id);
-      this.view.setCategoryTabSelection(id, true);
-      // Allow user to use the default options for injecting with categories.
-      this.allowToSetDefaultOptions();
-      // Update preview here in case exit early.
-      this.updatePreview();
-    }
+    // Create the new category.
+    this.createCategory('Category 1', true);
+    // Set the new category as selected.
+    var id = this.model.getCategoryIdByName('Category 1');
+    this.model.setSelectedById(id);
+    this.view.setCategoryTabSelection(id, true);
+    // Allow user to use the default options for injecting with categories.
+    this.view.setCategoryOptions(this.model.hasElements());
+    this.generateNewOptions();
+    // Update preview here in case exit early.
+    this.updatePreview();
   }
 };
 
@@ -391,15 +350,15 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
  * Export the options object to be used for the Blockly inject call. Gets a
  * file name from the user and downloads the options object to that file.
  */
-WorkspaceFactoryController.prototype.exportOptionsFile = function() {
-  var fileName = prompt('File Name for options object for injecting: ');
+WorkspaceFactoryController.prototype.exportInjectFile = function() {
+  var fileName = prompt('File Name for starter Blockly workspace code: ');
   if (!fileName) {  // If cancelled.
     return;
   }
   // Generate new options to remove toolbox XML from options object (if
   // necessary).
   this.generateNewOptions();
-  var printableOptions = this.generator.generateOptionsString()
+  var printableOptions = this.generator.generateInjectString()
   var data = new Blob([printableOptions], {type: 'text/javascript'});
   this.view.createAndDownloadFile(fileName, data);
 };
@@ -632,8 +591,9 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
         + '. Rename your category and try again.');
     return;
   }
-  // Allow user to transfer current flyout blocks to a category.
-  this.allowToTransferFlyoutBlocksToCategory();
+  // Transfers current flyout blocks to a category if it's the first category
+  // created.
+  this.transferFlyoutBlocksToCategory();
 
   var isFirstCategory = !this.model.hasElements();
   // Copy the standard category in the model.
@@ -666,6 +626,22 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
 };
 
 /**
+ * Loads the standard Blockly toolbox into the editing space. Should only
+ * be called when the mode is set to toolbox.
+ */
+WorkspaceFactoryController.prototype.loadStandardToolbox = function() {
+  this.loadCategoryByName('Logic');
+  this.loadCategoryByName('Loops');
+  this.loadCategoryByName('Math');
+  this.loadCategoryByName('Text');
+  this.loadCategoryByName('Lists');
+  this.loadCategoryByName('Colour');
+  this.addSeparator();
+  this.loadCategoryByName('Variables');
+  this.loadCategoryByName('Functions');
+}
+
+/**
  * Given the name of a category, determines if it's the name of a standard
  * category (case insensitive).
  *
@@ -688,9 +664,9 @@ WorkspaceFactoryController.prototype.isStandardCategoryName = function(name) {
  * the separator, and updates the preview.
  */
 WorkspaceFactoryController.prototype.addSeparator = function() {
-  // If adding the first element in the toolbox, allow the user to transfer
-  // their flyout blocks to a category.
-  this.allowToTransferFlyoutBlocksToCategory();
+  // If adding the first element in the toolbox, transfers the user's blocks
+  // in a flyout to a category.
+  this.transferFlyoutBlocksToCategory();
   // Create the separator in the model.
   var separator = new ListElement(ListElement.TYPE_SEPARATOR);
   this.model.addElementToList(separator);
@@ -734,12 +710,32 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     try {
       var tree = Blockly.Xml.textToDom(reader.result);
       if (importMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-        // Switch mode and import toolbox XML.
+        // Switch mode.
         controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+
+        // Confirm that the user wants to override their current toolbox.
+        var hasToolboxElements = controller.model.hasElements() ||
+            controller.getAllBlocks().length > 0;
+        if (hasToolboxElements &&
+            !confirm('Are you sure you want to import? You will lose your '
+            + 'current toolbox. ')) {
+            return;
+        }
+        // Import toolbox XML.
         controller.importToolboxFromTree_(tree);
+
       } else if (importMode == WorkspaceFactoryController.MODE_PRELOAD) {
-        // Switch mode and import pre-loaded workspace XML.
+        // Switch mode.
         controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
+
+        // Confirm that the user wants to override their current blocks.
+        if (controller.toolboxWorkspace.getAllBlocks().length > 0 &&
+            !confirm('Are you sure you want to import? You will lose your '
+            + 'current workspace blocks. ')) {
+            return;
+        }
+
+        // Import pre-loaded workspace XML.
         controller.importPreloadFromTree_(tree);
       } else {
         // Throw error if invalid mode.
@@ -883,6 +879,10 @@ WorkspaceFactoryController.prototype.importPreloadFromTree_ = function(tree) {
  * "Clear" button.
  */
 WorkspaceFactoryController.prototype.clearAll = function() {
+  if (!confirm('Are you sure you want to clear all of your work in Workspace' +
+      ' Factory?')) {
+    return;
+  }
   var hasCategories = this.model.hasElements();
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
@@ -1196,8 +1196,17 @@ WorkspaceFactoryController.prototype.importBlocks =
       // Define blocks using block types from file.
       var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result,
           format);
-      var blocks = controller.generator.getDefinedBlocks(blockTypes);
 
+      // If an imported block type is already defined, check if the user wants
+      // to override the current block definition.
+      if (controller.model.hasDefinedBlockTypes(blockTypes) &&
+          !confirm('An imported block uses the same name as a block '
+          + 'already in your toolbox. Are you sure you want to override the '
+          + 'currently defined block?')) {
+          return;
+      }
+
+      var blocks = controller.generator.getDefinedBlocks(blockTypes);
       // Generate category XML and append to toolbox.
       var categoryXml = FactoryUtils.generateCategoryXml(blocks, categoryName);
       // Get random color for category between 0 and 360. Gives each imported
@@ -1207,9 +1216,10 @@ WorkspaceFactoryController.prototype.importBlocks =
       controller.toolbox.appendChild(categoryXml);
       controller.toolboxWorkspace.updateToolbox(controller.toolbox);
       // Update imported block types.
-      this.model.addImportedBlocks(blockTypes);
+      controller.model.addImportedBlockTypes(blockTypes);
       // Reload current category to possibly reflect any newly defined blocks.
-      this.clearAndLoadXml_(Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
+      controller.clearAndLoadXml_
+          (Blockly.Xml.workspaceToDom(controller.toolboxWorkspace));
     } catch (e) {
       alert('Cannot read blocks from file.');
       window.console.log(e);

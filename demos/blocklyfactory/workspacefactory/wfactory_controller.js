@@ -714,10 +714,11 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
 
         // Confirm that the user wants to override their current toolbox.
-        if (controller.model.hasElements() ||
-            controller.toolboxWorkspace.getAllBlocks().length > 0) {
-          if (!confirm('Are you sure you want to import? You will lose your '
-              + 'current toolbox. ')) {
+        var hasToolboxElements = controller.model.hasElements() ||
+            controller.getAllBlocks().length > 0;
+        if (hasToolboxElements &&
+            !confirm('Are you sure you want to import? You will lose your '
+            + 'current toolbox. ')) {
             return;
           }
         }
@@ -729,9 +730,9 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
         controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
 
         // Confirm that the user wants to override their current blocks.
-        if (controller.toolboxWorkspace.getAllBlocks().length > 0) {
-          if (!confirm('Are you sure you want to import? You will lose your '
-              + 'current workspace blocks. ')) {
+        if (controller.toolboxWorkspace.getAllBlocks().length > 0 &&
+            !confirm('Are you sure you want to import? You will lose your '
+            + 'current workspace blocks. ')) {
             return;
           }
         }
@@ -1200,10 +1201,10 @@ WorkspaceFactoryController.prototype.importBlocks =
 
       // If an imported block type is already defined, check if the user wants
       // to override the current block definition.
-      if (controller.model.hasDefinedBlockTypes(blockTypes)) {
-        if (!confirm('An imported block uses the same name as a block '
-            + 'already in your toolbox. Are you sure you want to override the '
-            + 'currently defined block?')) {
+      if (controller.model.hasDefinedBlockTypes(blockTypes) &&
+          !confirm('An imported block uses the same name as a block '
+          + 'already in your toolbox. Are you sure you want to override the '
+          + 'currently defined block?')) {
           return;
         }
       }

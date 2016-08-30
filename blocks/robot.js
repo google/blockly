@@ -494,7 +494,7 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
     });
   },
 
-  onchange: function() {
+  onchange: function(evt) {
     var inputBlock = this.getInput('ACTION_ID');
     if (!inputBlock || !inputBlock.connection.targetConnection) {
       return;

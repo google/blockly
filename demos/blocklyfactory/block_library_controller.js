@@ -266,10 +266,10 @@ BlockLibraryController.prototype.addOptionSelectHandlers = function() {
     var blockType = blockOption.textContent;
     self.view.setSelectedBlockType(blockType);
     self.openBlock(blockType);
-    //The block is saved in the block library and all changes have been saved
-    // when the users opens a block from the block library dropdown.
-    //Thus, the buttons show up as a disabled update  button and an enabled
-    //delete.
+    // The block is saved in the block library and all changes have been saved
+    // when the user opens a block from the block library dropdown.
+    // Thus, the buttons show up as a disabled update button and an enabled
+    // delete.
     self.view.updateButtons(blockType, true, true);
     self.view.hide();
   };

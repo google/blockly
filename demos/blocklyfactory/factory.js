@@ -213,8 +213,8 @@ BlockFactory.updatePreview = function() {
           'under this name.');
 
     } else if (blockType == 'block_type') {
-      // Warn user to let them know they can't save a block under the default name
-      // 'block_type'
+      // Warn user to let them know they can't save a block under the default
+      // name 'block_type'
       rootBlock.setWarningText('You cannot save a block with the default ' +
           'name, "block_type"');
 

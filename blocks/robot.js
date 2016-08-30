@@ -240,7 +240,7 @@ Blockly.Blocks['robot_perception_object_attributes'] = {
 Blockly.Blocks['robot_perception_find_custom_landmark'] = {
   init: function() {
     this.appendValueInput("LANDMARK")
-        .setCheck("String")
+        .setCheck("Custom landmark ID")
         .appendField("find custom landmark");
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_RIGHT)
@@ -287,7 +287,7 @@ Blockly.Blocks['robot_perception_custom_landmarks'] = {
     Blockly.robot.getCustomLandmarkOptions();
     this.appendDummyInput("DROPDOWN")
         .appendField(new Blockly.FieldDropdown(Blockly.robot.customLandmarks), "LANDMARK");
-    this.setOutput(true, "String");
+    this.setOutput(true, "Custom landmark ID");
     this.setColour(230);
     this.setTooltip('Select a custom landmark from the list');
     this.setHelpUrl('');
@@ -376,7 +376,7 @@ Blockly.Blocks['robot_manipulation_pbd_actions'] = {
     Blockly.robot.getPbdActions();
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(Blockly.robot.pbdActions), "ACTION_ID");
-    this.setOutput(true, "String");
+    this.setOutput(true, "PbD action ID");
     this.setColour(20);
     this.setTooltip('The Programming by Demonstration actions the robot knows.');
     this.setHelpUrl('');
@@ -460,7 +460,7 @@ Blockly.Blocks['robot_manipulation_pbd_landmark'] = {
 Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   init: function() {
     this.appendValueInput("ACTION_ID")
-        .setCheck("String")
+        .setCheck("PbD action ID")
         .appendField("run PbD action");
     this.setOutput(true, "Boolean");
     this.setColour(20);
@@ -495,6 +495,19 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   },
 
   onchange: function() {
+    var inputBlock = this.getInput('ACTION_ID');
+    if (!inputBlock || !inputBlock.connection.targetConnection) {
+      return;
+    }
+    var actionIdBlock = inputBlock.connection.targetConnection.sourceBlock_;
+    // onchange gets called when *any* change happens in the workspace, not just for
+    // changes in this block. As a result, this could call the GetLandmarksForAction
+    // service really quickly and cause it to fail.
+    // Filter out those events.
+    if (evt.blockId !== actionIdBlock.id) {
+      return;
+    }
+
     var actionInput = this.getInputTargetBlock('ACTION_ID');
     var action_id = actionInput.getFieldValue('ACTION_ID');
     if (action_id) {

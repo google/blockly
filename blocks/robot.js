@@ -255,7 +255,7 @@ Blockly.Blocks['robot_perception_find_custom_landmark'] = {
 };
 
 Blockly.robot.customLandmarks = [['<No landmarks yet>', '<No landmarks yet>']];
-Blockly.robot.getCustomLandmarkOptions = function(callback) {
+Blockly.robot.getCustomLandmarkOptions = function() {
   var options = [];
   var client = new ROSLIB.Service({
     ros: ROS,
@@ -276,7 +276,6 @@ Blockly.robot.getCustomLandmarkOptions = function(callback) {
       options.push([landmark.name, message.id]);
     }
     Blockly.robot.customLandmarks = options;
-    callback();
   });
 };
 
@@ -285,11 +284,7 @@ Blockly.robot.getCustomLandmarkOptions();
 Blockly.Blocks['robot_perception_custom_landmarks'] = {
   init: function() {
     var that = this;
-    Blockly.robot.getCustomLandmarkOptions(function() {
-      that.removeInput("DROPDOWN");
-      that.appendDummyInput()
-          .appendField(new Blockly.FieldDropdown(Blockly.robot.customLandmarks), "LANDMARK");
-    });
+    Blockly.robot.getCustomLandmarkOptions();
     this.appendDummyInput("DROPDOWN")
         .appendField(new Blockly.FieldDropdown(Blockly.robot.customLandmarks), "LANDMARK");
     this.setOutput(true, "String");

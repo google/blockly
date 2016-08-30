@@ -468,12 +468,14 @@ goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
 Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
   Blockly.Toolbox.TreeControl.superClass_.enterDocument.call(this);
 
+  var el = this.getElement();
   // Add touch handler.
   if (goog.events.BrowserFeature.TOUCH_ENABLED) {
-    var el = this.getElement();
     Blockly.bindEvent_(el, goog.events.EventType.TOUCHSTART, this,
         this.handleTouchEvent_);
   }
+
+  Blockly.bindEvent_(el, 'mouseup', this, Blockly.clearTouchIdentifier);
 };
 
 /**

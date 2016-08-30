@@ -157,6 +157,14 @@ Blockly.resizeSvgContents = function(workspace) {
 };
 
 /**
+ * Clear the touch identifier that tracks which touch stream to pay attention
+ * to.
+ */
+Blockly.clearTouchIdentifier = function() {
+  Blockly.touchIdentifier_ = null;
+};
+
+/**
  * Decide whether Blockly should handle or ignore this event.
  * Mouse and touch events require special checks because we only want to deal
  * with one touch stream at a time.  All other events should always be handled.
@@ -181,9 +189,14 @@ Blockly.shouldHandleEvent = function(e) {
  */
 Blockly.checkTouchIdentifier = function(e) {
   var identifier = (e.changedTouches && e.changedTouches.item(0) &&
-      e.changedTouches.item(0).identifier) || 'mouse';
+      e.changedTouches.item(0).identifier != undefined &&
+      e.changedTouches.item(0).identifier != null) ?
+      e.changedTouches.item(0).identifier : 'mouse';
 
-  if (Blockly.touchIdentifier_) {
+  // if (Blockly.touchIdentifier_ )is insufficient because android touch
+  // identifiers may be zero.
+  if (Blockly.touchIdentifier_ != undefined &&
+      Blockly.touchIdentifier_ != null) {
     // We're already tracking some touch/mouse event.  Is this from the same
     // source?
     return Blockly.touchIdentifier_ == identifier;

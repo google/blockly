@@ -1248,6 +1248,7 @@ WorkspaceFactoryController.prototype.setBlockLibCategory =
 
   // Update the toolbox and toolboxWorkspace.
   this.toolbox.replaceChild(categoryXml, blockLibCategory);
+  this.toolboxWorkspace.toolbox_.clearSelection();
   this.toolboxWorkspace.updateToolbox(this.toolbox);
 
   // Update the block library types.

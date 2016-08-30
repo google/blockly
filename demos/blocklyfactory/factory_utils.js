@@ -994,7 +994,7 @@ FactoryUtils.warnIfUnsavedChanges = function() {
   if (!BlockFactory.isStarterBlock() &&
       !FactoryUtils.savedBlockChanges(self.blockLibraryController)) {
     return confirm('You have unsaved changes. By proceeding without saving ' +
-      ' your block first, you will lose these changes.');
+        ' your block first, you will lose these changes.');
   }
   return true;
 };

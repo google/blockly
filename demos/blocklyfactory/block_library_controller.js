@@ -161,7 +161,8 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   // main workspace.
   this.openBlock(blockType);
 
-  this.addOptionSelectHandlers();
+  // Add select handler to the new option.
+  this.addOptionSelectHandler(blockType);
 };
 
 /**
@@ -254,10 +255,13 @@ BlockLibraryController.prototype.setNoneSelected = function() {
 };
 
 /**
- * Add select handlers to each option to update the view and the selected
- * blocks accordingly.
+ * Add select handler for an option of a given block type. The handler will to
+ * update the view and the selected block accordingly.
+ *
+ * @param {!string} blockType - The type of block represented by the option is
+ * for.
  */
-BlockLibraryController.prototype.addOptionSelectHandlers = function() {
+BlockLibraryController.prototype.addOptionSelectHandler = function(blockType) {
   var self = this;
 
   // Click handler for a block option. Sets the block option as the selected
@@ -287,12 +291,21 @@ BlockLibraryController.prototype.addOptionSelectHandlers = function() {
     };
   };
 
+  // Assign a click handler to the block option.
+  var blockOption = this.view.optionMap[blockType];
+  // Use an additional closure to correctly assign the tab callback.
+  blockOption.addEventListener(
+      'click', makeOptionSelectHandler_(blockOption));
+};
+
+/**
+ * Add select handlers to each option to update the view and the selected
+ * blocks accordingly.
+ */
+BlockLibraryController.prototype.addOptionSelectHandlers = function() {
   // Assign a click handler to each block option.
   for (var blockType in this.view.optionMap) {
-    var blockOption = this.view.optionMap[blockType];
-    // Use an additional closure to correctly assign the tab callback.
-    blockOption.addEventListener(
-        'click', makeOptionSelectHandler_(blockOption));
+    this.addOptionSelectHandler(blockType);
   }
 };
 

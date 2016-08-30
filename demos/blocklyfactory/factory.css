@@ -304,6 +304,11 @@ button, .buttonStyle {
 
 /* Block Library */
 
+#dropdownDiv_blockLib {
+  max-height: 65%;
+  overflow-y: scroll;
+}
+
 #button_blockLib {
   border-color: darkgrey;
   font-size: large;

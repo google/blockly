@@ -166,18 +166,22 @@ WorkspaceFactoryGenerator.prototype.generateInjectString = function() {
 
   var attributes = addAttributes(this.model.options, '\t');
   if (!this.model.options['readOnly']) {
-    attributes = '\ttoolbox : toolbox, /* TODO: Change toolbox XML ID if ' +
-      'necessary. Can export toolbox XML from Workspace Factory. */\n' +
+    attributes = '\ttoolbox : toolbox, \n' +
       attributes;
   }
-  var finalStr = 'var options = { \n' + attributes + '};';
+  var finalStr = '/* TODO: Change toolbox XML ID if necessary. Can export ' +
+      'toolbox XML from Workspace Factory. */\n' +
+      'var toolbox = document.getElementById("toolbox");\n\n';
+  finalStr += 'var options = { \n' + attributes + '};';
   finalStr += '\n\n/* Inject your workspace */ \nvar workspace = Blockly.' +
       'inject(/* TODO: Add ID of div to inject Blockly into */, options);';
   finalStr += '\n\n/* Load Workspace Blocks from XML to workspace. ' +
-      'Remove if no blocks to load */' +
-      '\nBlockly.Xml.domToWorkspace(workspace, workspaceBlocks/*' +
-      ' TODO: Change workspace blocks XML ID if necessary. Can export' +
-      ' workspace blocks XML from Workspace Factory. */);';
+      'Remove all code below if no blocks to load */\n\n' +
+      '/* TODO: Change workspace blocks XML ID if necessary. Can export' +
+      ' workspace blocks XML from Workspace Factory. */\n' +
+      'var workspaceBlocks = document.getElementById("workspaceBlocks"); \n\n' +
+      '/* Load blocks to workspace. */\n' +
+      'Blockly.Xml.domToWorkspace(workspace, workspaceBlocks);';
   return finalStr;
 }
 

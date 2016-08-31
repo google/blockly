@@ -528,13 +528,16 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         if (confirm('Your new block has a variables field. To use this block '
             + 'fully, you will need a Variables category. Do you want to add '
             + 'a Variables category to your custom toolbox?')) {
+          controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
           controller.loadCategoryByName('variables');
         }
+      }
 
-      } else if (procedureCreated && !controller.hasProceduresCategory()) {
+      if (procedureCreated && !controller.hasProceduresCategory()) {
         if (confirm('Your new block is a function block. To use this block '
             + 'fully, you will need a Functions category. Do you want to add '
             + 'a Functions category to your custom toolbox?')) {
+          controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
           controller.loadCategoryByName('functions');
         }
       }

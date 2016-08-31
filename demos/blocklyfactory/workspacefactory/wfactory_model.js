@@ -94,7 +94,7 @@ WorkspaceFactoryModel.prototype.hasVariables = function() {
  * false otherwise.
  */
 WorkspaceFactoryModel.prototype.hasProcedures = function() {
-  return this.hasFunctionCategory;
+  return this.hasProcedureCategory;
 };
 
 /**

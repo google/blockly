@@ -625,9 +625,7 @@ AppController.prototype.onresize = function(event) {
  * before actually refreshing.
  */
 AppController.prototype.confirmLeavePage = function() {
-  console.log('confirmLeavePage');
   if (!FactoryUtils.savedBlockChanges(this.blockLibraryController)) {
-    console.log('nOT savedBlockChanges');
     return 'You will lose any unsaved changes. Are you sure you want ' +
         'to exit this page?';
   }

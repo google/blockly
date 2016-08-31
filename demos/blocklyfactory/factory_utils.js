@@ -988,11 +988,13 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
  * and the block is not the starter block, check if user wants to proceed,
  * knowing that it will cause them to lose their changes.
  *
+ * @param {!BlockLibraryController} blockLibraryController - Block Library
+ *    Controller storing custom blocks.
  * @return {boolean} Whether or not to proceed.
  */
-FactoryUtils.warnIfUnsavedChanges = function() {
+FactoryUtils.warnIfUnsavedChanges = function(blockLibraryController) {
   if (!BlockFactory.isStarterBlock() &&
-      !FactoryUtils.savedBlockChanges(self.blockLibraryController)) {
+      !FactoryUtils.savedBlockChanges(blockLibraryController)) {
     return confirm('You have unsaved changes. By proceeding without saving ' +
         ' your block first, you will lose these changes.');
   }

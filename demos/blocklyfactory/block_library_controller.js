@@ -283,7 +283,7 @@ BlockLibraryController.prototype.addOptionSelectHandler = function(blockType) {
     return function() {
       // If there are unsaved changes warn user, check if they'd like to
       // proceed with unsaved changes, and act accordingly.
-      var proceedWithUnsavedChanges = FactoryUtils.warnIfUnsavedChanges();
+      var proceedWithUnsavedChanges = FactoryUtils.warnIfUnsavedChanges(self);
       if (!proceedWithUnsavedChanges) {
         return;
       }

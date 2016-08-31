@@ -531,7 +531,8 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
     .addEventListener('click', function() {
       // If there are unsaved changes warn user, check if they'd like to
       // proceed with unsaved changes, and act accordingly.
-      var proceedWithUnsavedChanges = FactoryUtils.warnIfUnsavedChanges();
+      var proceedWithUnsavedChanges =
+          FactoryUtils.warnIfUnsavedChanges(self.blockLibraryController);
       if (!proceedWithUnsavedChanges) {
         return;
       }
@@ -649,7 +650,7 @@ AppController.prototype.init = function() {
   this.assignBlockFactoryClickHandlers();
 
   this.onresize();
-  self = this;
+  var self = this;
   window.addEventListener('resize', function() {
     self.onresize();
   });

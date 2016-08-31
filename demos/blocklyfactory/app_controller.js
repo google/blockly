@@ -620,6 +620,20 @@ AppController.prototype.onresize = function(event) {
 };
 
 /**
+ * Handler for the window's 'onbeforeunload' event. When a user has unsaved
+ * changes and refreshes or leaves the page, confirm that they want to do so
+ * before actually refreshing.
+ */
+AppController.prototype.confirmLeavePage = function() {
+  console.log('confirmLeavePage');
+  if (!FactoryUtils.savedBlockChanges(this.blockLibraryController)) {
+    console.log('nOT savedBlockChanges');
+    return 'You will lose any unsaved changes. Are you sure you want ' +
+        'to exit this page?';
+  }
+};
+
+/**
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {

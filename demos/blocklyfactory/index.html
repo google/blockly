@@ -39,15 +39,9 @@
       blocklyFactory.init();
     };
     window.addEventListener('load', init);
-
-    function confirmLeavePage() {
-      return 'You will lose any unsaved changes. Are you sure you want ' +
-          'to exit this page?';
-    }
-
   </script>
 </head>
-<body onbeforeunload="return confirmLeavePage()">
+<body onbeforeunload="return blocklyFactory.confirmLeavePage()">
 <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
   <a href="../index.html">Demos</a> &gt; Blockly Factory
   <button id="helpButton" title="View documentation in new window.">

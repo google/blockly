@@ -201,19 +201,20 @@ Blockly.JavaScript['robot_manipulation_pbd_actions'] = function(block) {
 
 Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
   var value_action_id = Blockly.JavaScript.valueToCode(block, 'ACTION_ID', Blockly.JavaScript.ORDER_NONE) || '\'\'';
-  var preregistered = '['
+  var preregistered = '{'
   for (var i=0; i<block.landmarks_.length; i++) {
+    var id = block.landmarks_[i][1];
     var value_landmark = Blockly.JavaScript.valueToCode(block, 'LANDMARK' + i, Blockly.JavaScript.ORDER_COMMA) || 'null';
-    preregistered += value_landmark;
+    preregistered += '\'' + id  + '\': ' + value_landmark;
     if (i < block.landmarks_.length-1) {
       preregistered += ', ';
     }
   }
-  preregistered += ']';
-
+  preregistered += '}';
   var code = 'robot.runPbdAction(' + value_action_id + ', ' + preregistered + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
 
 Blockly.JavaScript['robot_wait_for_seconds'] = function(block) {
   var value_seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_NONE) || 0;

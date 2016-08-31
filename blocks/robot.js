@@ -623,6 +623,20 @@ Blockly.Blocks['robot_manipulation_set_gripper'] = {
   }
 };
 
+Blockly.Blocks['robot_manipulation_set_right_gripper_with_effort'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("close right gripper with at most")
+        .appendField(new Blockly.FieldNumber(30, 0, 100), "FORCE")
+        .appendField("N force");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(20);
+    this.setTooltip('Closes the right gripper with a maximum amount of force.');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['robot_manipulation_is_gripper_open'] = {
   init: function() {
     this.appendDummyInput()

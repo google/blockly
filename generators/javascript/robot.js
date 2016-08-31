@@ -171,6 +171,14 @@ Blockly.JavaScript['robot_manipulation_set_gripper'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['robot_manipulation_set_right_gripper_with_effort'] = function(block) {
+  var number_force = block.getFieldValue('FORCE') || -1;
+  var side = 2; // Right side
+  var action = 2; // Close action
+  var code = 'robot.setGripper(' + side + ', ' + action + ', ' + number_force + ');\n';
+  return code;
+};
+
 Blockly.JavaScript['robot_manipulation_is_gripper_open'] = function(block) {
   var dropdown_gripper = block.getFieldValue('GRIPPER') || '';
   var dropdown_state = block.getFieldValue('STATE') || 'OPEN';

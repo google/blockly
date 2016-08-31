@@ -86,6 +86,28 @@ Blockly.Blocks['robot_display_ask_multiple_choice'] = {
   }
 };
 
+Blockly.Blocks['robot_display_wait_for_button_press'] = {
+  init: function() {
+    this.appendValueInput("TEXT")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("wait for button press");
+    this.appendValueInput("BUTTON")
+        .setCheck("String")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("button text");
+    this.appendValueInput("TIMEOUT")
+        .setCheck("Number")
+        .setAlign(Blockly.ALIGN_RIGHT)
+        .appendField("timeout (seconds)");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(260);
+    this.setTooltip('Waits for a button to be pressed.');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['robot_movement_go_to'] = {
   init: function() {
     this.appendValueInput("LOCATION")

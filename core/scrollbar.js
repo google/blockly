@@ -675,7 +675,7 @@ Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
-  Blockly.touchIdentifier_ = null;
+  Blockly.clearTouchIdentifier();
   this.cleanUp_();
 };
 

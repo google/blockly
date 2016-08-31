@@ -98,13 +98,15 @@ Blockly.hasClass_ = function(element, className) {
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
  * @private
  */
-Blockly.bindEvent_ = function(node, name, thisObject, func) {
+Blockly.bindEvent_ = function(node, name, thisObject, func,
+    opt_noCaptureIdentifier) {
   var wrapFunc = function(e) {
+    var captureIdentifier = opt_noCaptureIdentifier || true;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
     var events = Blockly.bindEvent_.splitEventByTouches(e);
     for (var i = 0, event; event = events[i]; i++) {
-      if (!Blockly.shouldHandleEvent(event)) {
+      if (captureIdentifier && !Blockly.shouldHandleEvent(event)) {
         return;
       }
       Blockly.bindEvent_.setClientFromTouch(event);

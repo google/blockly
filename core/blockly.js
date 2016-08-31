@@ -161,6 +161,10 @@ Blockly.resizeSvgContents = function(workspace) {
  * to.
  */
 Blockly.clearTouchIdentifier = function() {
+  console.trace('\tclearing touch identifier');
+  if (Blockly.touchIdentifier_ == null) {
+    console.log('\t\ttouch identifier was already null');
+  }
   Blockly.touchIdentifier_ = null;
 };
 
@@ -204,6 +208,7 @@ Blockly.checkTouchIdentifier = function(e) {
   if (e.type == 'mousedown' || e.type == 'touchstart') {
     // No identifier set yet, and this is the start of a drag.  Set it and
     // return.
+    console.trace('setting touch identfier');
     Blockly.touchIdentifier_ = identifier;
     return true;
   }
@@ -255,7 +260,7 @@ Blockly.onMouseUp_ = function(e) {
   if (workspace.dragMode_ == Blockly.DRAG_NONE) {
     return;
   }
-  Blockly.touchIdentifier_ = null;
+  Blockly.clearTouchIdentifier();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;
   // Unbind the touch event if it exists.

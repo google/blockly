@@ -547,6 +547,8 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   if (Blockly.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
+    // Click, not drag, so stop waiting for other touches from this identifier.
+    Blockly.clearTouchIdentifier();
   } else if (!this.isMovable()) {
     // Allow immovable blocks to be selected and context menued, but not
     // dragged.  Let this event bubble up to document, so the workspace may be
@@ -592,7 +594,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
-  Blockly.touchIdentifier_ = null;
+  Blockly.clearTouchIdentifier();
   if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
       !Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.fire(

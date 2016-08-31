@@ -440,6 +440,7 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
 WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // If currently editing the toolbox.
+    // Update flags if toolbox has been changed.
     if (this.model.getSelectedXml() !=
         Blockly.Xml.workspaceToDom(this.toolboxWorkspace)) {
       this.hasUnsavedToolboxChanges = true;
@@ -449,6 +450,7 @@ WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
 
   } else if (this.selectedMode == WorkspaceFactoryController.MODE_PRELOAD) {
     // If currently editing the pre-loaded workspace.
+    // Update flags if preloaded blocks have been changed.
     if (this.model.getPreloadXml() !=
         Blockly.Xml.workspaceToDom(this.toolboxWorkspace)) {
       this.hasUnsavedPreloadChanges = true;
@@ -910,6 +912,8 @@ WorkspaceFactoryController.prototype.clearAll = function() {
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
   this.saveStateFromWorkspace();
+  this.hasUnsavedToolboxChanges = false;
+  this.hasUnsavedPreloadChanges = false;
   this.view.setCategoryOptions(this.model.hasElements());
   this.generateNewOptions();
   this.updatePreview();

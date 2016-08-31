@@ -41,7 +41,7 @@
     window.addEventListener('load', init);
   </script>
 </head>
-<body>
+<body onbeforeunload="return blocklyFactory.confirmLeavePage()">
 <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
   <a href="../index.html">Demos</a> &gt; Blockly Factory
   <button id="helpButton" title="View documentation in new window.">

@@ -255,6 +255,21 @@ BlockLibraryController.prototype.setNoneSelected = function() {
 };
 
 /**
+ * If there are unsaved changes to the block in open in Block Factory
+ * and the block is not the starter block, check if user wants to proceed,
+ * knowing that it will cause them to lose their changes.
+ *
+ * @return {boolean} Whether or not to proceed.
+ */
+BlockLibraryController.prototype.warnIfUnsavedChanges = function() {
+  if (!FactoryUtils.savedBlockChanges(this)) {
+    return confirm('You have unsaved changes. By proceeding without saving ' +
+        ' your block first, you will lose these changes.');
+  }
+  return true;
+};
+
+/**
  * Add select handler for an option of a given block type. The handler will to
  * update the view and the selected block accordingly.
  *
@@ -283,7 +298,7 @@ BlockLibraryController.prototype.addOptionSelectHandler = function(blockType) {
     return function() {
       // If there are unsaved changes warn user, check if they'd like to
       // proceed with unsaved changes, and act accordingly.
-      var proceedWithUnsavedChanges = FactoryUtils.warnIfUnsavedChanges();
+      var proceedWithUnsavedChanges = self.warnIfUnsavedChanges();
       if (!proceedWithUnsavedChanges) {
         return;
       }

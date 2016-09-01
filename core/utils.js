@@ -101,7 +101,7 @@ Blockly.hasClass_ = function(element, className) {
 Blockly.bindEvent_ = function(node, name, thisObject, func,
     opt_noCaptureIdentifier) {
   var wrapFunc = function(e) {
-    var captureIdentifier = opt_noCaptureIdentifier || true;
+    var captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
     var events = Blockly.bindEvent_.splitEventByTouches(e);
@@ -175,6 +175,7 @@ Blockly.isMouseOrTouchEvent = function(e) {
 };
 
 /**
+ * TODO (rachel-fenichel): consider moving all of this to touch.js
  * Split an event into an array of events, one per changed touch or mouse
  * point.
  * @param {!Event} e A mouse event or a touch event with one or more changed

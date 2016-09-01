@@ -359,13 +359,14 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
     while (soundBinds.length) {
       Blockly.unbindEvent_(soundBinds.pop());
     }
-    // These are bound on mouse/touch events with Blockly.bindEvent_, so they
-    // restrict the touch identifier that will be recognized.  But this is
-    // really something that happens on a click, not a drag, so that's not
-    // necessary.
-    //Blockly.clearTouchIdentifier();
     workspace.preloadAudio_();
   };
+
+  // These are bound on mouse/touch events with Blockly.bindEvent_, so they
+  // restrict the touch identifier that will be recognized.  But this is
+  // really something that happens on a click, not a drag, so that's not
+  // necessary.
+
   // Android ignores any sound not loaded as a result of a user action.
   soundBinds.push(
       Blockly.bindEvent_(document, 'mousemove', null, unbindSounds, true));

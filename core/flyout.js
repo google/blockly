@@ -844,6 +844,13 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
       block.removeSelect));
 };
 
+Blockly.Flyout.blockRightClick_ = function(e, block) {
+  Blockly.terminateDrag_();
+  Blockly.hideChaff(true);
+  block.showContextMenu_(e);
+  Blockly.clearTouchIdentifier();
+};
+
 /**
  * Handle a mouse-down on an SVG block in a non-closing flyout.
  * @param {!Blockly.Block} block The flyout block to copy.
@@ -853,13 +860,11 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
 Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
   var flyout = this;
   return function(e) {
-    Blockly.terminateDrag_();
-    Blockly.hideChaff(true);
     if (Blockly.isRightButton(e)) {
-      // Right-click.
-      block.showContextMenu_(e);
-      Blockly.clearTouchIdentifier();
+      Blockly.Flyout.blockRightClick_(e, block);
     } else {
+      Blockly.terminateDrag_();
+      Blockly.hideChaff(true);
       // Left-click (or middle click)
       Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
       // Record the current mouse position.
@@ -911,8 +916,8 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.Flyout.prototype.onMouseUp_ = function(e) {
-  Blockly.clearTouchIdentifier();
   if (!this.workspace_.isDragging()) {
+    Blockly.clearTouchIdentifier();
     if (this.autoClose) {
       this.createBlockFunc_(Blockly.Flyout.startBlock_)(
           Blockly.Flyout.startDownEvent_);
@@ -976,9 +981,11 @@ Blockly.Flyout.prototype.onMouseMoveBlock_ = function(e) {
 
   var createBlock = this.determineDragIntention_(dx, dy);
   if (createBlock) {
+    Blockly.longStop_();
     this.createBlockFunc_(Blockly.Flyout.startBlock_)(
         Blockly.Flyout.startDownEvent_);
   } else if (this.dragMode_ == Blockly.DRAG_FREE) {
+    Blockly.longStop_();
     // Do a scroll.
     this.onMouseMove_(e);
   }

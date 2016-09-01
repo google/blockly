@@ -287,7 +287,7 @@ AppController.prototype.onTab = function() {
   if (this.lastSelectedTab == AppController.BLOCK_FACTORY &&
       this.selectedTab != AppController.BLOCK_FACTORY) {
 
-    var hasUnsavedChanges = !BlockFactory.isStarterBlock() &&
+    var hasUnsavedChanges =
         !FactoryUtils.savedBlockChanges(this.blockLibraryController);
     if (hasUnsavedChanges &&
         !confirm('You have unsaved changes in Block Factory.')) {
@@ -532,7 +532,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
       // If there are unsaved changes warn user, check if they'd like to
       // proceed with unsaved changes, and act accordingly.
       var proceedWithUnsavedChanges =
-          FactoryUtils.warnIfUnsavedChanges(self.blockLibraryController);
+          self.blockLibraryController.warnIfUnsavedChanges();
       if (!proceedWithUnsavedChanges) {
         return;
       }
@@ -626,8 +626,7 @@ AppController.prototype.onresize = function(event) {
  * before actually refreshing.
  */
 AppController.prototype.confirmLeavePage = function() {
-  if (!BlockFactory.isStarterBlock() &&
-      !FactoryUtils.savedBlockChanges(this.blockLibraryController)) {
+  if (!FactoryUtils.savedBlockChanges(this.blockLibraryController)) {
     // When a string is assigned to the returnValue Event property, a dialog box
     // appears, asking the users for confirmation to leave the page.
     return 'You will lose any unsaved changes. Are you sure you want ' +

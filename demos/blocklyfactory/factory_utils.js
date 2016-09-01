@@ -963,7 +963,8 @@ FactoryUtils.isProcedureBlock = function(block) {
 };
 
 /**
- * Returns whether or not a block's changes has been saved to the Block Library.
+ * Returns whether or not a modified block's changes has been saved to the
+ * Block Library.
  * TODO(quachtina96): move into the Block Factory Controller once made.
  *
  * @param {!BlockLibraryController} blockLibraryController - Block Library
@@ -972,6 +973,9 @@ FactoryUtils.isProcedureBlock = function(block) {
  *    the given Block Library.
  */
 FactoryUtils.savedBlockChanges = function(blockLibraryController) {
+  if (BlockFactory.isStarterBlock()) {
+    return true;
+  }
   var blockType = blockLibraryController.getCurrentBlockType();
   var currentXml = Blockly.Xml.workspaceToDom(BlockFactory.mainWorkspace);
 
@@ -983,20 +987,3 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
   return false;
 };
 
-/**
- * If there are unsaved changes to the block in open in Block Factory
- * and the block is not the starter block, check if user wants to proceed,
- * knowing that it will cause them to lose their changes.
- *
- * @param {!BlockLibraryController} blockLibraryController - Block Library
- *    Controller storing custom blocks.
- * @return {boolean} Whether or not to proceed.
- */
-FactoryUtils.warnIfUnsavedChanges = function(blockLibraryController) {
-  if (!BlockFactory.isStarterBlock() &&
-      !FactoryUtils.savedBlockChanges(blockLibraryController)) {
-    return confirm('You have unsaved changes. By proceeding without saving ' +
-        ' your block first, you will lose these changes.');
-  }
-  return true;
-};

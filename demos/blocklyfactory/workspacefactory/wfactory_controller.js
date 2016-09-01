@@ -84,6 +84,10 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
   this.selectedMode = WorkspaceFactoryController.MODE_TOOLBOX;
   // True if key events are enabled, false otherwise.
   this.keyEventsEnabled = true;
+  // True if there are unsaved changes in the toolbox, false otherwise.
+  this.hasUnsavedToolboxChanges = false;
+  // True if there are unsaved changes in the preloaded blocks, false otherwise.
+  this.hasUnsavedPreloadChanges = false;
 };
 
 // Toolbox editing mode. Changes the user makes to the workspace updates the
@@ -318,29 +322,32 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
  *    configuration)
  */
 WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
-  // Generate XML.
-  if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-    // Export the toolbox XML.
-
-    var configXml = Blockly.Xml.domToPrettyText
-        (this.generator.generateToolboxXml());
-  } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
-    // Export the pre-loaded block XML.
-
-    var configXml = Blockly.Xml.domToPrettyText
-        (this.generator.generateWorkspaceXml());
-  } else {
-    // Unknown mode. Throw error.
-    throw new Error ("Unknown export mode: " + exportMode);
-  }
-
-  // Get file name.
+    // Get file name.
   var fileName = prompt('File Name for ' + (exportMode ==
       WorkspaceFactoryController.MODE_TOOLBOX ? 'toolbox XML: ' :
       'pre-loaded workspace XML: '));
   if (!fileName) { // If cancelled
     return;
   }
+
+  // Generate XML.
+  if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
+    // Export the toolbox XML.
+
+    var configXml = Blockly.Xml.domToPrettyText
+        (this.generator.generateToolboxXml());
+    this.hasUnsavedToolboxChanges = false;
+  } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
+    // Export the pre-loaded block XML.
+
+    var configXml = Blockly.Xml.domToPrettyText
+        (this.generator.generateWorkspaceXml());
+    this.hasUnsavedPreloadChanges = false;
+  } else {
+    // Unknown mode. Throw error.
+    throw new Error ("Unknown export mode: " + exportMode);
+  }
+
   // Download file.
   var data = new Blob([configXml], {type: 'text/xml'});
   this.view.createAndDownloadFile(fileName, data);
@@ -433,9 +440,22 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
 WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // If currently editing the toolbox.
+    // Update flags if toolbox has been changed.
+    if (this.model.getSelectedXml() !=
+        Blockly.Xml.workspaceToDom(this.toolboxWorkspace)) {
+      this.hasUnsavedToolboxChanges = true;
+    }
+
     this.model.getSelected().saveFromWorkspace(this.toolboxWorkspace);
+
   } else if (this.selectedMode == WorkspaceFactoryController.MODE_PRELOAD) {
     // If currently editing the pre-loaded workspace.
+    // Update flags if preloaded blocks have been changed.
+    if (this.model.getPreloadXml() !=
+        Blockly.Xml.workspaceToDom(this.toolboxWorkspace)) {
+      this.hasUnsavedPreloadChanges = true;
+    }
+
     this.model.savePreloadXml
         (Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
   }
@@ -892,6 +912,8 @@ WorkspaceFactoryController.prototype.clearAll = function() {
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
   this.saveStateFromWorkspace();
+  this.hasUnsavedToolboxChanges = false;
+  this.hasUnsavedPreloadChanges = false;
   this.view.setCategoryOptions(this.model.hasElements());
   this.generateNewOptions();
   this.updatePreview();
@@ -1185,7 +1207,7 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
 WorkspaceFactoryController.prototype.importBlocks =
     function(file, format) {
   // Generate category name from file name.
-  var categoryName = file.name + ' blocks';
+  var categoryName = file.name;
 
   var controller = this;
   var reader = new FileReader();
@@ -1310,4 +1332,13 @@ WorkspaceFactoryController.prototype.hasVariablesCategory = function() {
  */
 WorkspaceFactoryController.prototype.hasProceduresCategory = function() {
   return this.model.hasProcedures();
+};
+
+/**
+ * Determines if there are any unsaved changes in workspace factory.
+ *
+ * @return {boolean} True if there are unsaved changes, false otherwise.
+ */
+WorkspaceFactoryController.prototype.hasUnsavedChanges = function() {
+  return this.hasUnsavedToolboxChanges || this.hasUnsavedPreloadChanges;
 };

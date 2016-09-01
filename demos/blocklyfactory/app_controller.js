@@ -628,7 +628,7 @@ AppController.prototype.onresize = function(event) {
 AppController.prototype.confirmLeavePage = function() {
   if ((!BlockFactory.isStarterBlock() &&
       !FactoryUtils.savedBlockChanges(this.blockLibraryController)) ||
-      this.workspaceFactoryController.hasUnsavedChanges()) {>>>>>>> Bug fix for adding variables and procedures categories with prompt, removed blocks from category name, check if unsaved changes in workspace factory before leave
+      this.workspaceFactoryController.hasUnsavedChanges()) {
     // When a string is assigned to the returnValue Event property, a dialog box
     // appears, asking the users for confirmation to leave the page.
     return 'You will lose any unsaved changes. Are you sure you want ' +

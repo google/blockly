@@ -766,14 +766,90 @@ function getRootBlock() {
   }
   return null;
 }
+/**
+ * Generate a file from the contents of a given text area and
+ * download that file.
+ * @param {string} filename The name of the file to create.
+ * @param {string} id The text area to download.
+*/
+function downloadTextArea(filename, id) {
+  var code = document.getElementById(id).textContent;
+  createAndDownloadFile_(code, filename, 'plain');
+}
 
 /**
- * Disable the link button if the format is 'Manual', enable otherwise.
+ * Create a file with the given attributes and download it.
+ * @param {string} contents The contents of the file.
+ * @param {string} filename The name of the file to save to.
+ * @param {string} The type of the file to save.
+ * @private
+ */
+function createAndDownloadFile_(contents, filename, fileType) {
+  var data = new Blob([contents], {type: 'text/' + fileType});
+  var clickEvent = new MouseEvent("click", {
+    "view": window,
+    "bubbles": true,
+    "cancelable": false
+  });
+
+  var a = document.createElement('a');
+  a.href = window.URL.createObjectURL(data);
+  a.download = filename;
+  a.textContent = 'Download file!';
+  a.dispatchEvent(clickEvent); 
+}
+
+/**
+ * Save the workspace's xml representation to a file.
+ * @private
+ */
+function saveWorkspaceToFile() {
+  var xmlElement = Blockly.Xml.workspaceToDom(mainWorkspace);
+  var prettyXml = Blockly.Xml.domToPrettyText(xmlElement);
+  createAndDownloadFile_(prettyXml, 'blockXml', 'xml'); 
+}
+
+/**
+ * Disable link and save buttons if the format is 'Manual', enable otherwise.
  */
 function disableEnableLink() {
   var linkButton = document.getElementById('linkButton');
-  linkButton.disabled = document.getElementById('format').value == 'Manual';
+  var saveBlockButton = document.getElementById('localSaveButton');
+  var disabled = document.getElementById('format').value == 'Manual';
+  linkButton.disabled = buttonDisabled;
+  saveBlockButton.disabled = buttonDisabled;
 }
+
+/**
+ * Imports xml file for a block to the workspace.
+ */
+function importBlockFromFile() {
+  var files = document.getElementById('files');
+  // If the file list is empty, they user likely canceled in the dialog.
+  if (files.files.length > 0) {
+    // The input tag doesn't have the "mulitple" attribute
+    // so the user can only choose 1 file.
+    var file = files.files[0];
+    var fileReader = new FileReader();
+    fileReader.addEventListener('load', function(event) {
+      var fileContents = event.target.result;
+      var xml = '';
+      try {
+        xml = Blockly.Xml.textToDom(fileContents);
+      } catch (e) {
+        var message = 'Could not load your saved file.\n'+
+          'Perhaps it was created with a different version of Blockly?';
+        window.alert(message + '\nXML: ' + fileContents);
+        return;
+      }
+      mainWorkspace.clear();
+      Blockly.Xml.domToWorkspace(xml, mainWorkspace);
+    });
+
+    fileReader.readAsText(file);
+  }
+}
+
 
 /**
  * Initialize Blockly and layout.  Called on page load.
@@ -795,10 +871,31 @@ function init() {
     disableEnableLink();
   }
 
+  document.getElementById('localSaveButton')
+    .addEventListener('click', saveWorkspaceToFile);
+
+  document.getElementById('files').addEventListener('change',
+    function() {
+      importBlockFromFile();      
+      // Clear this so that the change event still fires even if the
+      // same file is chosen again. If the user re-imports a file, we
+      // want to reload the workspace with its contents.
+      this.value = null;
+    });
+
   document.getElementById('helpButton').addEventListener('click',
     function() {
       open('https://developers.google.com/blockly/guides/create-custom-blocks/block-factory',
            'BlockFactoryHelp');
+    });
+  document.getElementById('downloadBlocks').addEventListener('click',
+    function() {
+      downloadTextArea('blocks', 'languagePre');
+    });
+
+  document.getElementById('downloadGenerator').addEventListener('click',
+    function() {
+      downloadTextArea('generator', 'generatorPre')
     });
 
   var expandList = [

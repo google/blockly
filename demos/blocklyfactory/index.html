@@ -41,7 +41,7 @@
     window.addEventListener('load', init);
   </script>
 </head>
-<body>
+<body onbeforeunload="return blocklyFactory.confirmLeavePage()">
 <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
   <a href="../index.html">Demos</a> &gt; Blockly Factory
   <button id="helpButton" title="View documentation in new window.">
@@ -50,26 +50,27 @@
 </h1>
  <div id="tabContainer">
     <div id="blockFactory_tab" class="tab tabon"> Block Factory</div>
-    <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
     <div id="blocklibraryExporter_tab" class="tab taboff"> Block Exporter</div>
+    <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
   </div>
 
   <!-- Exporter tab -->
   <div id="blockLibraryExporter">
     <br>
-    <p id="helperText"> First, select blocks from your block library by dragging them into your workspace. Then, use the Export Settings form to download starter code for selected blocks.
+    <p id="helperText"> First, select blocks from your block library by clicking on them. Then, use the Export Settings form to download starter code for selected blocks.
     </p>
     <div id="exportSelector">
       <br>
       <h3> Block Selector </h3>
       <div class='dropdown'>
-        <button id="button_setBlocks">Select From Library</button>
+        <button id="button_setBlocks">Select</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
-          <a id='dropdown_addAllFromLib' title="Select all block library blocks.">All Stored</a>
-          <a id='dropdown_addAllUsed' title="Select all block library blocks used in workspace factory.">All Used</a>
-          <a id='dropdown_clearSelected' title="Clear selected blocks.">Clear</a>
+          <a id='dropdown_addAllFromLib' title="Select all block library blocks.">All Stored in Block Library</a>
+          <a id='dropdown_addAllUsed' title="Select all block library blocks used in workspace factory.">All Used in Workspace Factory</a>
         </div>
+          <button id='clearSelectedButton' title="Clear selected blocks.">Clear Selected</a>
       </div>
+
       <div id="blockSelector"></div>
     </div>
 
@@ -157,9 +158,9 @@
         <div class="dropdown">
         <button id="button_export">Export</button>
           <div id="dropdownDiv_export" class="dropdown-content">
+            <a id='dropdown_exportOptions'>Starter Code</a>
             <a id='dropdown_exportToolbox'>Toolbox</a>
             <a id='dropdown_exportPreload'>Workspace Blocks</a>
-            <a id='dropdown_exportOptions'>Inject Options</a>
             <a id='dropdown_exportAll'>All</a>
           </div>
         </div>
@@ -193,6 +194,7 @@
           <a id='dropdown_newCategory'>New Category</a>
           <a id='dropdown_loadCategory'>Standard Category</a>
           <a id='dropdown_separator'>Separator</a>
+          <a id='dropdown_loadStandardToolbox'>Standard Toolbox</a>
         </div>
         </div>
 
@@ -219,7 +221,7 @@
         <div id="preloadHelp">
           <p>Configure the options for your Blockly inject call.</p>
           <button id="button_optionsHelp">Help</button>
-          <button class="small" id="button_standardOptions">Restore</button>
+          <button class="small" id="button_standardOptions">Reset to Default</button>
         </div>
         <div id="workspace_options">
           <input type="checkbox" id="option_readOnly_checkbox" class="optionsInput">Read Only<br>
@@ -279,20 +281,22 @@
           <tr id="blockLibrary">
             <td id="blockLibraryContainer">
             <span>
-              <h3>Block Library:</h3>
-              <select id="blockLibraryDropdown">
+              <div class='dropdown'>
+                <button id="button_blockLib">Block Library</button>
+                <div id="dropdownDiv_blockLib" class="dropdown-content">
+                  <a id='createNewBlockButton'>Create New Block</a>
+                </div>
+              </div>
+              <select id="blockLibraryDropdown" style="display:none">
               </select>
             </span>
             </td>
             <td id="blockLibraryControls">
             <button id="saveToBlockLibraryButton" title="Save block to Block Library.">
-              <span>Save Block</span>
+              Save "block_type"
             </button>
             <button id="removeBlockFromLibraryButton" title="Remove block from Block Library.">
-              <span>Delete Block</span>
-            </button>
-            <button id="createNewBlockButton" title="Create a new block.">
-              <span> Create Block</span>
+              Delete "block_type"
             </button>
             </td>
           </tr>

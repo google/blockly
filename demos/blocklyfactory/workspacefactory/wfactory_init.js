@@ -193,6 +193,13 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         document.getElementById('dropdownDiv_add').classList.remove("show");
       });
 
+  document.getElementById('dropdown_loadStandardToolbox').addEventListener
+      ('click',
+      function() {
+        controller.loadStandardToolbox();
+        document.getElementById('dropdownDiv_add').classList.remove("show");
+      });
+
   document.getElementById('button_remove').addEventListener
       ('click',
       function() {
@@ -216,16 +223,16 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
   document.getElementById('dropdown_exportOptions').addEventListener
       ('click',
       function() {
-        controller.exportOptionsFile();
+        controller.exportInjectFile();
         document.getElementById('dropdownDiv_export').classList.remove("show");
       });
 
   document.getElementById('dropdown_exportAll').addEventListener
       ('click',
       function() {
+        controller.exportInjectFile();
         controller.exportXmlFile(WorkspaceFactoryController.MODE_TOOLBOX);
         controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
-        controller.exportOptionsFile();
         document.getElementById('dropdownDiv_export').classList.remove("show");
       });
 
@@ -521,13 +528,16 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         if (confirm('Your new block has a variables field. To use this block '
             + 'fully, you will need a Variables category. Do you want to add '
             + 'a Variables category to your custom toolbox?')) {
+          controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
           controller.loadCategoryByName('variables');
         }
+      }
 
-      } else if (procedureCreated && !controller.hasProceduresCategory()) {
+      if (procedureCreated && !controller.hasProceduresCategory()) {
         if (confirm('Your new block is a function block. To use this block '
             + 'fully, you will need a Functions category. Do you want to add '
             + 'a Functions category to your custom toolbox?')) {
+          controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
           controller.loadCategoryByName('functions');
         }
       }

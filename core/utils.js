@@ -100,6 +100,7 @@ Blockly.hasClass_ = function(element, className) {
  */
 Blockly.bindEvent_ = function(node, name, thisObject, func,
     opt_noCaptureIdentifier) {
+  var handled = false;
   var wrapFunc = function(e) {
     var captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
@@ -107,7 +108,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func,
     var events = Blockly.bindEvent_.splitEventByTouches(e);
     for (var i = 0, event; event = events[i]; i++) {
       if (captureIdentifier && !Blockly.shouldHandleEvent(event)) {
-        return;
+        continue;
       }
       Blockly.bindEvent_.setClientFromTouch(event);
       if (thisObject) {
@@ -115,6 +116,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func,
       } else {
         func(event);
       }
+      handled = true;
     }
   };
 
@@ -126,7 +128,9 @@ Blockly.bindEvent_ = function(node, name, thisObject, func,
     var touchWrapFunc = function(e) {
       wrapFunc(e);
       // Stop the browser from scrolling/zooming the page.
-      e.preventDefault();
+      if (handled) {
+        e.preventDefault();
+      }
     };
     for (var i = 0, eventName;
          eventName = Blockly.bindEvent_.TOUCH_MAP[name][i]; i++) {

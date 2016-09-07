@@ -647,7 +647,8 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
   Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
-  if (this.toolbox_ && this.toolbox_.flyout_) {
+  // Don't refresh the toolbox if there's a drag in progress.
+  if (this.toolbox_ && this.toolbox_.flyout_ && !Blockly.Flyout.startFlyout_) {
     this.toolbox_.refreshSelection();
   }
 };

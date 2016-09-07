@@ -191,8 +191,12 @@ Blockly.bindEvent_.splitEventByTouches = function(e) {
   var events = [];
   if (e.changedTouches && e.changedTouches.length > 1) {
     for (var i = 0; i < e.changedTouches.length; i++) {
-      var newEvent = new TouchEvent(e.type,
-          { 'changedTouches': [e.changedTouches[i]] });
+      var newEvent = {
+        type: e.type,
+        changedTouches: [e.changedTouches[i]],
+        stopPropagation: function(){ e.stopPropagation(); },
+        preventDefault: function(){ e.preventDefault(); }
+      };
       events.push(newEvent);
     }
   } else {

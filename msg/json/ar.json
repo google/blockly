@@ -26,6 +26,7 @@
 	"DISABLE_BLOCK": "عطّل القطعة",
 	"ENABLE_BLOCK": "أعد تفعيل القطعة",
 	"HELP": "مساعدة",
+	"UNDO": "رجوع",
 	"CHANGE_VALUE_TITLE": "تغيير قيمة:",
 	"RENAME_VARIABLE": "إعادة تسمية المتغير...",
 	"RENAME_VARIABLE_TITLE": "إعادة تسمية كافة المتغيرات '%1' إلى:",

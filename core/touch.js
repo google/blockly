@@ -158,10 +158,6 @@ Blockly.onMouseMove_ = function(e) {
  * captured.
  */
 Blockly.Touch.clearTouchIdentifier = function() {
-  console.trace('\tclearing touch identifier');
-  if (Blockly.Touch.touchIdentifier_ == null) {
-    console.log('\t\ttouch identifier was already null');
-  }
   Blockly.Touch.touchIdentifier_ = null;
 };
 

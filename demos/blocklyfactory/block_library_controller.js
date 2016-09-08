@@ -51,6 +51,9 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
   this.name = blockLibraryName;
   // Create a new, empty Block Library Storage object, or load existing one.
   this.storage = opt_blockLibraryStorage || new BlockLibraryStorage(this.name);
+  // The BlockLibraryView object handles the proper updating and formatting of
+  // the block library dropdown.
+  this.view = new BlockLibraryView();
 };
 
 /**
@@ -59,7 +62,7 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
  *
  * @return {string} The current block's type.
  */
-BlockLibraryController.prototype.getCurrentBlockType_ = function() {
+BlockLibraryController.prototype.getCurrentBlockType = function() {
   var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
   // Replace white space with underscores
@@ -67,17 +70,17 @@ BlockLibraryController.prototype.getCurrentBlockType_ = function() {
 };
 
 /**
- * Removes current block from Block Library
+ * Removes current block from Block Library and updates the save and delete
+ * buttons so that user may save block to library and but not delete.
  *
  * @param {string} blockType - Type of block.
  */
 BlockLibraryController.prototype.removeFromBlockLibrary = function() {
-  var blockType = this.getCurrentBlockType_();
+  var blockType = this.getCurrentBlockType();
   this.storage.removeBlock(blockType);
   this.storage.saveToLocalStorage();
   this.populateBlockLibrary();
-  // Show default block.
-  BlockFactory.showStarterBlock();
+  this.view.updateButtons(blockType, false, false);
 };
 
 /**
@@ -86,20 +89,24 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
  * @param {string} blockType - Block to edit on block factory.
  */
 BlockLibraryController.prototype.openBlock = function(blockType) {
-   var xml = this.storage.getBlockXml(blockType);
-   BlockFactory.mainWorkspace.clear();
-   Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+  if (blockType) {
+    var xml = this.storage.getBlockXml(blockType);
+    BlockFactory.mainWorkspace.clear();
+    Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
+    BlockFactory.mainWorkspace.clearUndo();
+  } else {
+    BlockFactory.showStarterBlock();
+    this.view.setSelectedBlockType(null);
+  }
 };
 
 /**
  * Returns type of block selected from library.
  *
- * @param {Element} blockLibraryDropdown - The block library dropdown.
  * @return {string} Type of block selected.
  */
-BlockLibraryController.prototype.getSelectedBlockType =
-    function(blockLibraryDropdown) {
-  return BlockLibraryView.getSelected(blockLibraryDropdown);
+BlockLibraryController.prototype.getSelectedBlockType = function() {
+  return this.view.getSelectedBlockType();
 };
 
 /**
@@ -107,19 +114,18 @@ BlockLibraryController.prototype.getSelectedBlockType =
  * updating the dropdown and displaying the starter block (factory_base).
  */
 BlockLibraryController.prototype.clearBlockLibrary = function() {
-  var check = confirm(
-      'Click OK to clear your block library.');
+  var check = confirm('Delete all blocks from library?');
   if (check) {
     // Clear Block Library Storage.
     this.storage.clear();
     this.storage.saveToLocalStorage();
     // Update dropdown.
-    BlockLibraryView.clearOptions('blockLibraryDropdown');
-    // Add a default, blank option to dropdown for when no block from library is
-    // selected.
-    BlockLibraryView.addDefaultOption('blockLibraryDropdown');
+    this.view.clearOptions();
     // Show default block.
     BlockFactory.showStarterBlock();
+    // User may not save the starter block, but will get explicit instructions
+    // upon clicking the red save button.
+    this.view.updateButtons(null);
   }
 };
 
@@ -127,22 +133,25 @@ BlockLibraryController.prototype.clearBlockLibrary = function() {
  * Saves current block to local storage and updates dropdown.
  */
 BlockLibraryController.prototype.saveToBlockLibrary = function() {
-  var blockType = this.getCurrentBlockType_();
-  // If block under that name already exists, confirm that user wants to replace
-  // saved block.
-  if (this.isInBlockLibrary(blockType)) {
-    var replace = confirm('You already have a block called ' + blockType +
-      ' in your library. Click OK to replace.');
-    if (!replace) {
-      // Do not save if user doesn't want to replace the saved block.
-      return;
-    }
+  var blockType = this.getCurrentBlockType();
+  // If user has not changed the name of the starter block.
+  if (blockType == 'block_type') {
+    // Do not save block if it has the default type, 'block_type'.
+    alert('You cannot save a block under the name "block_type". Try changing ' +
+        'the name before saving. Then, click on the "Block Library" button ' +
+        'to view your saved blocks.');
+    return;
   }
 
   // Create block xml.
   var xmlElement = goog.dom.createDom('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
+
+  // Do not add option again if block type is already in library.
+  if (!this.has(blockType)) {
+    this.view.addOption(blockType, true, true);
+  }
 
   // Save block.
   this.storage.addBlock(blockType, xmlElement);
@@ -152,12 +161,8 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
   // main workspace.
   this.openBlock(blockType);
 
-  // Do not add another option to dropdown if replacing.
-  if (replace) {
-    return;
-  }
-  BlockLibraryView.addOption(
-      blockType, blockType, 'blockLibraryDropdown', true, true);
+  // Add select handler to the new option.
+  this.addOptionSelectHandler(blockType);
 };
 
 /**
@@ -166,7 +171,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
  * @param {string} blockType - Type of block.
  * @return {boolean} Boolean indicating whether or not block is in the library.
  */
-BlockLibraryController.prototype.isInBlockLibrary = function(blockType) {
+BlockLibraryController.prototype.has = function(blockType) {
   var blockLibrary = this.storage.blocks;
   return (blockType in blockLibrary && blockLibrary[blockType] != null);
 };
@@ -175,19 +180,13 @@ BlockLibraryController.prototype.isInBlockLibrary = function(blockType) {
  *  Populates the dropdown menu.
  */
 BlockLibraryController.prototype.populateBlockLibrary = function() {
-  BlockLibraryView.clearOptions('blockLibraryDropdown');
-  // Add a default, blank option to dropdown for when no block from library is
-  // selected.
-  BlockLibraryView.addDefaultOption('blockLibraryDropdown');
-  // Add option for each saved block.
+  this.view.clearOptions();
+  // Add an unselected option for each saved block.
   var blockLibrary = this.storage.blocks;
-  for (var block in blockLibrary) {
-    // Make sure the block wasn't deleted.
-    if (blockLibrary[block] != null) {
-      BlockLibraryView.addOption(
-          block, block, 'blockLibraryDropdown', false, true);
-    }
+  for (var blockType in blockLibrary) {
+    this.view.addOption(blockType, false);
   }
+  this.addOptionSelectHandlers();
 };
 
 /**
@@ -197,6 +196,16 @@ BlockLibraryController.prototype.populateBlockLibrary = function() {
  */
 BlockLibraryController.prototype.getBlockLibrary = function() {
   return this.storage.getBlockXmlTextMap();
+};
+
+/**
+ * Return stored xml of a given block type.
+ *
+ * @param {!string} blockType - The type of block.
+ * @return {!Element} Xml element of a given block type or null.
+ */
+BlockLibraryController.prototype.getBlockXml = function(blockType) {
+  return this.storage.getBlockXml(blockType);
 };
 
 /**
@@ -236,4 +245,93 @@ BlockLibraryController.prototype.hasEmptyBlockLibrary = function() {
  */
 BlockLibraryController.prototype.getStoredBlockTypes = function() {
   return this.storage.getBlockTypes();
+};
+
+/**
+ * Sets the currently selected block option to none.
+ */
+BlockLibraryController.prototype.setNoneSelected = function() {
+  this.view.setSelectedBlockType(null);
+};
+
+/**
+ * If there are unsaved changes to the block in open in Block Factory
+ * and the block is not the starter block, check if user wants to proceed,
+ * knowing that it will cause them to lose their changes.
+ *
+ * @return {boolean} Whether or not to proceed.
+ */
+BlockLibraryController.prototype.warnIfUnsavedChanges = function() {
+  if (!FactoryUtils.savedBlockChanges(this)) {
+    return confirm('You have unsaved changes. By proceeding without saving ' +
+        ' your block first, you will lose these changes.');
+  }
+  return true;
+};
+
+/**
+ * Add select handler for an option of a given block type. The handler will to
+ * update the view and the selected block accordingly.
+ *
+ * @param {!string} blockType - The type of block represented by the option is
+ * for.
+ */
+BlockLibraryController.prototype.addOptionSelectHandler = function(blockType) {
+  var self = this;
+
+  // Click handler for a block option. Sets the block option as the selected
+  // option and opens the block for edit in Block Factory.
+  var setSelectedAndOpen_ = function(blockOption) {
+    var blockType = blockOption.textContent;
+    self.view.setSelectedBlockType(blockType);
+    self.openBlock(blockType);
+    // The block is saved in the block library and all changes have been saved
+    // when the user opens a block from the block library dropdown.
+    // Thus, the buttons show up as a disabled update button and an enabled
+    // delete.
+    self.view.updateButtons(blockType, true, true);
+    self.view.hide();
+  };
+
+  // Returns a block option select handler.
+  var makeOptionSelectHandler_ = function(blockOption) {
+    return function() {
+      // If there are unsaved changes warn user, check if they'd like to
+      // proceed with unsaved changes, and act accordingly.
+      var proceedWithUnsavedChanges = self.warnIfUnsavedChanges();
+      if (!proceedWithUnsavedChanges) {
+        return;
+      }
+      setSelectedAndOpen_(blockOption);
+    };
+  };
+
+  // Assign a click handler to the block option.
+  var blockOption = this.view.optionMap[blockType];
+  // Use an additional closure to correctly assign the tab callback.
+  blockOption.addEventListener(
+      'click', makeOptionSelectHandler_(blockOption));
+};
+
+/**
+ * Add select handlers to each option to update the view and the selected
+ * blocks accordingly.
+ */
+BlockLibraryController.prototype.addOptionSelectHandlers = function() {
+  // Assign a click handler to each block option.
+  for (var blockType in this.view.optionMap) {
+    this.addOptionSelectHandler(blockType);
+  }
+};
+
+/**
+ * Update the save and delete buttons based on the current block type of the
+ * block the user is currently editing.
+ *
+ * @param {boolean} Whether changes to the block have been saved.
+ */
+BlockLibraryController.prototype.updateButtons = function(savedChanges) {
+  var blockType = this.getCurrentBlockType();
+  var isInLibrary = this.has(blockType);
+  this.view.updateButtons(blockType, isInLibrary, savedChanges);
 };

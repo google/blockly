@@ -28,6 +28,8 @@
  * @author Emma Dauterman (edauterman)
  */
 
+ goog.require('FactoryUtils');
+
  /**
   * Class for a WorkspaceFactoryView
   * @constructor
@@ -43,19 +45,18 @@ WorkspaceFactoryView = function() {
  *
  * @param {!string} name The name of the category being created
  * @param {!string} id ID of category being created
- * @param {boolean} firstCategory true if it's the first category, false
- * otherwise
  * @return {!Element} DOM element created for tab
  */
-WorkspaceFactoryView.prototype.addCategoryRow =
-    function(name, id, firstCategory) {
+WorkspaceFactoryView.prototype.addCategoryRow = function(name, id) {
   var table = document.getElementById('categoryTable');
+  var count = table.rows.length;
+
   // Delete help label and enable category buttons if it's the first category.
-  if (firstCategory) {
+  if (count == 0) {
     document.getElementById('categoryHeader').textContent = 'Your Categories:';
   }
+
   // Create tab.
-  var count = table.rows.length;
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
   // Configure tab.
@@ -253,9 +254,13 @@ WorkspaceFactoryView.prototype.setBorderColor = function(id, color) {
  * @param {!Element} The td DOM element representing the separator.
  */
 WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
-  // Create separator.
   var table = document.getElementById('categoryTable');
   var count = table.rows.length;
+
+  if (count == 0) {
+    document.getElementById('categoryHeader').textContent = 'Your Categories:';
+  }
+  // Create separator.
   var row = table.insertRow(count);
   var nextEntry = row.insertCell(0);
   // Configure separator.
@@ -275,7 +280,14 @@ WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
  * if it should be enabled.
  */
 WorkspaceFactoryView.prototype.disableWorkspace = function(disable) {
-  document.getElementById('disable_div').style.zIndex = disable ? 1 : -1;
+  if (disable) {
+    document.getElementById('toolbox_section').className = 'disabled';
+    document.getElementById('toolbox_blocks').style.pointerEvents = 'none';
+  } else {
+    document.getElementById('toolbox_section').className = '';
+    document.getElementById('toolbox_blocks').style.pointerEvents = 'auto';
+  }
+
 };
 
 /**
@@ -334,6 +346,10 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
       block.setWarningText('Shadow blocks must be nested inside' +
           ' other blocks to be displayed.');
   }
+
+  if (FactoryUtils.hasVariableField(block)) {
+    block.setWarningText('Cannot make variable blocks shadow blocks.');
+  }
 };
 
 /**
@@ -391,7 +407,8 @@ WorkspaceFactoryView.prototype.updateHelpText = function(mode) {
 WorkspaceFactoryView.prototype.setBaseOptions = function() {
   // Set basic options.
   document.getElementById('option_css_checkbox').checked = true;
-  document.getElementById('option_maxBlocks_text').value = Infinity;
+    document.getElementById('option_infiniteBlocks_checkbox').checked = true;
+  document.getElementById('option_maxBlocks_number').value = 100;
   document.getElementById('option_media_text').value =
       'https://blockly-demo.appspot.com/static/media/';
   document.getElementById('option_readOnly_checkbox').checked = false;
@@ -405,18 +422,18 @@ WorkspaceFactoryView.prototype.setBaseOptions = function() {
   document.getElementById('zoom_options').style.display = 'none';
 
   // Set grid options.
-  document.getElementById('gridOption_spacing_text').value = 0;
-  document.getElementById('gridOption_length_text').value = 1;
+  document.getElementById('gridOption_spacing_number').value = 0;
+  document.getElementById('gridOption_length_number').value = 1;
   document.getElementById('gridOption_colour_text').value = '#888';
   document.getElementById('gridOption_snap_checkbox').checked = false;
 
   // Set zoom options.
-  document.getElementById('zoomOption_controls_checkbox').checked = false;
-  document.getElementById('zoomOption_wheel_checkbox').checked = false;
-  document.getElementById('zoomOption_startScale_text').value = 1.0;
-  document.getElementById('zoomOption_maxScale_text').value = 3;
-  document.getElementById('zoomOption_minScale_text').value = 0.3;
-  document.getElementById('zoomOption_scaleSpeed_text').value = 1.2;
+  document.getElementById('zoomOption_controls_checkbox').checked = true;
+  document.getElementById('zoomOption_wheel_checkbox').checked = true;
+  document.getElementById('zoomOption_startScale_number').value = 1.0;
+  document.getElementById('zoomOption_maxScale_number').value = 3;
+  document.getElementById('zoomOption_minScale_number').value = 0.3;
+  document.getElementById('zoomOption_scaleSpeed_number').value = 1.2;
 };
 
 /**

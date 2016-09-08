@@ -27,6 +27,8 @@
  * @author Emma Dauterman (evd2014)
  */
 
+ goog.require('FactoryUtils');
+
 /**
  * Namespace for workspace factory initialization methods.
  * @namespace
@@ -45,7 +47,6 @@ WorkspaceFactoryInit.initWorkspaceFactory = function(controller) {
   document.getElementById('button_up').disabled = true;
   document.getElementById('button_down').disabled = true;
   document.getElementById('button_editCategory').disabled = true;
-  document.getElementById('button_editShadow').disabled = true;
 
   this.initColorPicker_(controller);
   this.addWorkspaceFactoryEventListeners_(controller);
@@ -192,6 +193,13 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         document.getElementById('dropdownDiv_add').classList.remove("show");
       });
 
+  document.getElementById('dropdown_loadStandardToolbox').addEventListener
+      ('click',
+      function() {
+        controller.loadStandardToolbox();
+        document.getElementById('dropdownDiv_add').classList.remove("show");
+      });
+
   document.getElementById('button_remove').addEventListener
       ('click',
       function() {
@@ -215,16 +223,16 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
   document.getElementById('dropdown_exportOptions').addEventListener
       ('click',
       function() {
-        controller.exportOptionsFile();
+        controller.exportInjectFile();
         document.getElementById('dropdownDiv_export').classList.remove("show");
       });
 
   document.getElementById('dropdown_exportAll').addEventListener
       ('click',
       function() {
+        controller.exportInjectFile();
         controller.exportXmlFile(WorkspaceFactoryController.MODE_TOOLBOX);
         controller.exportXmlFile(WorkspaceFactoryController.MODE_PRELOAD);
-        controller.exportOptionsFile();
         document.getElementById('dropdownDiv_export').classList.remove("show");
       });
 
@@ -254,34 +262,6 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
       function() {
         document.getElementById('dropdownDiv_editCategory').classList.
         toggle("show");
-      });
-
-  document.getElementById('button_editShadow').addEventListener
-      ('click',
-      function() {
-        if (Blockly.selected) {
-          // Can only edit blocks when a block is selected.
-
-          if (!controller.isUserGenShadowBlock(Blockly.selected.id) &&
-              Blockly.selected.getSurroundParent() != null) {
-            // If a block is selected that could be a valid shadow block (not a
-            // shadow block, has a surrounding parent), let the user make it a
-            // shadow block. Use toggle instead of add so that the user can
-            // click the button again to make the dropdown disappear without
-            // clicking one of the options.
-            document.getElementById('dropdownDiv_editShadowRemove').classList.
-                remove("show");
-            document.getElementById('dropdownDiv_editShadowAdd').classList.
-                toggle("show");
-          } else {
-            // If the block is a shadow block, let the user make it a normal
-            // block.
-            document.getElementById('dropdownDiv_editShadowAdd').classList.
-                remove("show");
-            document.getElementById('dropdownDiv_editShadowRemove').classList.
-                toggle("show");
-          }
-        }
       });
 
   document.getElementById('dropdown_name').addEventListener
@@ -352,30 +332,36 @@ document.getElementById('button_importBlocks').addEventListener
         controller.clearAll();
       });
 
-  document.getElementById('dropdown_addShadow').addEventListener
+  document.getElementById('button_addShadow').addEventListener
       ('click',
       function() {
         controller.addShadow();
-        document.getElementById('dropdownDiv_editShadowAdd').classList.
-            remove("show");
+        WorkspaceFactoryInit.displayAddShadow_(false);
+        WorkspaceFactoryInit.displayRemoveShadow_(true);
       });
 
-  document.getElementById('dropdown_removeShadow').addEventListener
+  document.getElementById('button_removeShadow').addEventListener
       ('click',
       function() {
         controller.removeShadow();
-        document.getElementById('dropdownDiv_editShadowRemove').classList.
-            remove("show");
+        WorkspaceFactoryInit.displayAddShadow_(true);
+        WorkspaceFactoryInit.displayRemoveShadow_(false);
+
         // Disable shadow editing button if turning invalid shadow block back
         // to normal block.
         if (!Blockly.selected.getSurroundParent()) {
-          document.getElementById('button_editShadow').disabled = true;
+          document.getElementById('button_addShadow').disabled = true;
         }
       });
 
   document.getElementById('button_standardOptions').addEventListener
       ('click', function() {
         controller.setStandardOptionsAndUpdate();
+      });
+
+  document.getElementById('button_optionsHelp').addEventListener
+      ('click', function() {
+        open('https://developers.google.com/blockly/guides/get-started/web');
       });
 };
 
@@ -435,6 +421,18 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
         e.element == 'selected')) {
       var selected = Blockly.selected;
 
+      // Show shadow button if a block is selected. Show "Add Shadow" if
+      // a block is not a shadow block, show "Remove Shadow" if it is a
+      // shadow block.
+      if (selected) {
+        var isShadow = controller.isUserGenShadowBlock(selected.id);
+        WorkspaceFactoryInit.displayAddShadow_(!isShadow);
+        WorkspaceFactoryInit.displayRemoveShadow_(isShadow);
+      } else {
+        WorkspaceFactoryInit.displayAddShadow_(false);
+        WorkspaceFactoryInit.displayRemoveShadow_(false);
+      }
+
       if (selected != null && selected.getSurroundParent() != null &&
           !controller.isUserGenShadowBlock(selected.getSurroundParent().id)) {
         // Selected block is a valid shadow block or could be a valid shadow
@@ -442,8 +440,10 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
         // Enable block editing and remove warnings if the block is not a
         // variable user-generated shadow block.
-        document.getElementById('button_editShadow').disabled = false;
-        if (!controller.hasVariableField(selected) &&
+        document.getElementById('button_addShadow').disabled = false;
+        document.getElementById('button_removeShadow').disabled = false;
+
+        if (!FactoryUtils.hasVariableField(selected) &&
             controller.isDefinedBlock(selected)) {
           selected.setWarningText(null);
         }
@@ -457,9 +457,9 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
           if (!controller.isUserGenShadowBlock(selected.id)) {
             // Warn if a non-shadow block is nested inside a shadow block.
-            selected.setWarningText('Only shadow blocks can be nested inside '
+            selected.setWarningText('Only shadow blocks can be nested inside\n'
                 + 'other shadow blocks.');
-          } else if (!controller.hasVariableField(selected)) {
+          } else if (!FactoryUtils.hasVariableField(selected)) {
             // Warn if a shadow block is invalid only if not replacing
             // warning for variables.
             selected.setWarningText('Shadow blocks must be nested inside other'
@@ -468,25 +468,23 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
 
           // Give editing options so that the user can make an invalid shadow
           // block a normal block.
-          document.getElementById('button_editShadow').disabled = false;
+          document.getElementById('button_removeShadow').disabled = false;
+          document.getElementById('button_addShadow').disabled = true;
         } else {
           // Selected block does not break any shadow block rules, but cannot
           // be a shadow block.
 
           // Remove possible 'invalid shadow block placement' warning.
           if (selected != null && controller.isDefinedBlock(selected) &&
-              (!controller.hasVariableField(selected) ||
+              (!FactoryUtils.hasVariableField(selected) ||
               !controller.isUserGenShadowBlock(selected.id))) {
             selected.setWarningText(null);
           }
 
           // No block selected that is a shadow block or could be a valid shadow
           // block. Disable block editing.
-          document.getElementById('button_editShadow').disabled = true;
-          document.getElementById('dropdownDiv_editShadowRemove').classList.
-              remove("show");
-          document.getElementById('dropdownDiv_editShadowAdd').classList.
-              remove("show");
+          document.getElementById('button_addShadow').disabled = true;
+          document.getElementById('button_removeShadow').disabled = true;
         }
       }
     }
@@ -495,9 +493,79 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
     // shadow blocks.
     if (e.type == Blockly.Events.CREATE) {
       controller.convertShadowBlocks();
+
+      // Let the user create a Variables or Functions category if they use
+      // blocks from either category.
+
+      // Get all children of a block and add them to childList.
+      var getAllChildren = function(block, childList) {
+        childList.push(block);
+        var children = block.getChildren();
+        for (var i = 0, child; child = children[i]; i++) {
+          getAllChildren(child, childList);
+        }
+      };
+
+      var newBaseBlock = controller.toolboxWorkspace.getBlockById(e.blockId);
+      var allNewBlocks = [];
+      getAllChildren(newBaseBlock, allNewBlocks);
+      var variableCreated = false;
+      var procedureCreated = false;
+
+      // Check if the newly created block or any of its children are variable
+      // or procedure blocks.
+      for (var i = 0, block; block = allNewBlocks[i]; i++) {
+        if (FactoryUtils.hasVariableField(block)) {
+          variableCreated = true;
+        } else if (FactoryUtils.isProcedureBlock(block)) {
+          procedureCreated = true;
+        }
+      }
+
+      // If any of the newly created blocks are variable or procedure blocks,
+      // prompt the user to create the corresponding standard category.
+      if (variableCreated && !controller.hasVariablesCategory()) {
+        if (confirm('Your new block has a variables field. To use this block '
+            + 'fully, you will need a Variables category. Do you want to add '
+            + 'a Variables category to your custom toolbox?')) {
+          controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+          controller.loadCategoryByName('variables');
+        }
+      }
+
+      if (procedureCreated && !controller.hasProceduresCategory()) {
+        if (confirm('Your new block is a function block. To use this block '
+            + 'fully, you will need a Functions category. Do you want to add '
+            + 'a Functions category to your custom toolbox?')) {
+          controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+          controller.loadCategoryByName('functions');
+        }
+      }
     }
   });
 };
+
+/**
+ * Display or hide the add shadow button.
+ *
+ * @param {boolean} show True if the add shadow button should be shown, false
+ *    otherwise.
+ */
+WorkspaceFactoryInit.displayAddShadow_ = function(show) {
+  document.getElementById('button_addShadow').style.display =
+      show ? 'inline-block' : 'none';
+};
+
+/**
+ * Display or hide the remove shadow button.
+ *
+ * @param {boolean} show True if the remove shadow button should be shown, false
+ *    otherwise.
+ */
+WorkspaceFactoryInit.displayRemoveShadow_ = function(show) {
+  document.getElementById('button_removeShadow').style.display =
+      show ? 'inline-block' : 'none';
+}
 
 /**
  * Add listeners for workspace factory options input elements.
@@ -524,6 +592,20 @@ WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
             document.getElementById('option_zoom_checkbox').checked ?
             'block' : 'none';
       });
+
+  document.getElementById('option_readOnly_checkbox').addEventListener('change',
+    function(e) {
+      document.getElementById('trashcan_option').style.display =
+          document.getElementById('option_readOnly_checkbox').checked ?
+            'none' : 'block';
+    });
+
+    document.getElementById('option_infiniteBlocks_checkbox').addEventListener('change',
+    function(e) {
+      document.getElementById('maxBlockNumber_option').style.display =
+          document.getElementById('option_infiniteBlocks_checkbox').checked ?
+            'none' : 'block';
+    });
 
   // Generate new options every time an options input is updated.
   var optionsElements = document.getElementsByClassName('optionsInput');

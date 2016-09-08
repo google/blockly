@@ -57,7 +57,7 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
        colour: '#ccc',
        snap: true},
        media: '../../media/',
-       toolbox: this.toolbox,
+       toolbox: this.toolbox
      });
 
   // Workspace for user to preview their changes.
@@ -84,6 +84,10 @@ WorkspaceFactoryController = function(toolboxName, toolboxDiv, previewDiv) {
   this.selectedMode = WorkspaceFactoryController.MODE_TOOLBOX;
   // True if key events are enabled, false otherwise.
   this.keyEventsEnabled = true;
+  // True if there are unsaved changes in the toolbox, false otherwise.
+  this.hasUnsavedToolboxChanges = false;
+  // True if there are unsaved changes in the preloaded blocks, false otherwise.
+  this.hasUnsavedPreloadChanges = false;
 };
 
 // Toolbox editing mode. Changes the user makes to the workspace updates the
@@ -98,52 +102,26 @@ WorkspaceFactoryController.MODE_PRELOAD = 'preload';
  * before), and then creates a tab and switches to it.
  */
 WorkspaceFactoryController.prototype.addCategory = function() {
-  // Check if it's the first category added.
-  var isFirstCategory = !this.model.hasElements();
-  // Give the option to save blocks if their workspace is not empty and they
-  // are creating their first category.
-  if (isFirstCategory && this.toolboxWorkspace.getAllBlocks().length > 0) {
-    var confirmCreate = confirm('Do you want to save your work in another '
-        + 'category? If you don\'t, the blocks in your workspace will be ' +
-        'deleted.');
-
-    // Create a new category for current blocks.
-    if (confirmCreate) {
-      var name = prompt('Enter the name of the category for your ' +
-          'current blocks: ');
-      if (!name) {  // Exit if cancelled.
-        return;
-      }
-
-      // Create the new category.
-      this.createCategory(name, true);
-      // Set the new category as selected.
-      var id = this.model.getCategoryIdByName(name);
-      this.model.setSelectedById(id);
-      this.view.setCategoryTabSelection(id, true);
-      // Allow user to use the default options for injecting with categories.
-      this.allowToSetDefaultOptions();
-      // Update preview here in case exit early.
-      this.updatePreview();
-    }
-  }
+  // Transfers the user's blocks to a flyout if it's the first category created.
+  this.transferFlyoutBlocksToCategory();
 
   // After possibly creating a category, check again if it's the first category.
-  isFirstCategory = !this.model.hasElements();
+  var isFirstCategory = !this.model.hasElements();
   // Get name from user.
   name = this.promptForNewCategoryName('Enter the name of your new category: ');
   if (!name) {  //Exit if cancelled.
     return;
   }
   // Create category.
-  this.createCategory(name, isFirstCategory);
+  this.createCategory(name);
   // Switch to category.
   this.switchElement(this.model.getCategoryIdByName(name));
 
-   // Allow the user to use the default options for injecting the workspace
+   // Sets the default options for injecting the workspace
   // when there are categories if adding the first category.
   if (isFirstCategory) {
-    this.allowToSetDefaultOptions();
+    this.view.setCategoryOptions(this.model.hasElements());
+    this.generateNewOptions();
   }
   // Update preview.
   this.updatePreview();
@@ -156,16 +134,13 @@ WorkspaceFactoryController.prototype.addCategory = function() {
  *
  * @param {!string} name Name of category being added.
  * @param {!string} id The ID of the category being added.
- * @param {boolean} isFirstCategory True if it's the first category created,
- * false otherwise.
  */
-WorkspaceFactoryController.prototype.createCategory = function(name,
-    isFirstCategory) {
+WorkspaceFactoryController.prototype.createCategory = function(name) {
   // Create empty category
   var category = new ListElement(ListElement.TYPE_CATEGORY, name);
   this.model.addElementToList(category);
   // Create new category.
-  var tab = this.view.addCategoryRow(name, category.id, isFirstCategory);
+  var tab = this.view.addCategoryRow(name, category.id);
   this.addClickToSwitch(tab, category.id);
 };
 
@@ -185,6 +160,32 @@ WorkspaceFactoryController.prototype.addClickToSwitch = function(tab, id) {
     };
   };
   this.view.bindClick(tab, clickFunction(id));
+};
+
+/**
+ * Transfers the blocks in the user's flyout to a new category if
+ * the user is creating their first category and their workspace is not
+ * empty. Should be called whenever it is possible to switch from single flyout
+ * to categories (not including importing).
+ */
+WorkspaceFactoryController.prototype.transferFlyoutBlocksToCategory =
+    function() {
+  // Saves the user's blocks from the flyout in a category if there is no
+  // toolbox and the user has dragged in blocks.
+  if (!this.model.hasElements() &&
+        this.toolboxWorkspace.getAllBlocks().length > 0) {
+    // Create the new category.
+    this.createCategory('Category 1', true);
+    // Set the new category as selected.
+    var id = this.model.getCategoryIdByName('Category 1');
+    this.model.setSelectedById(id);
+    this.view.setCategoryTabSelection(id, true);
+    // Allow user to use the default options for injecting with categories.
+    this.view.setCategoryOptions(this.model.hasElements());
+    this.generateNewOptions();
+    // Update preview here in case exit early.
+    this.updatePreview();
+  }
 };
 
 /**
@@ -231,9 +232,6 @@ WorkspaceFactoryController.prototype.removeElement = function() {
     this.toolboxWorkspace.clear();
     this.toolboxWorkspace.clearUndo();
     this.model.createDefaultSelectedIfEmpty();
-    // Allow the user to use the default options for injecting the workspace
-    // when there are no categories.
-    this.allowToSetDefaultOptions();
   }
   // Update preview.
   this.updatePreview();
@@ -324,29 +322,32 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
  *    configuration)
  */
 WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
-  // Generate XML.
-  if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-    // Export the toolbox XML.
-
-    var configXml = Blockly.Xml.domToPrettyText
-        (this.generator.generateToolboxXml());
-  } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
-    // Export the pre-loaded block XML.
-
-    var configXml = Blockly.Xml.domToPrettyText
-        (this.generator.generateWorkspaceXml());
-  } else {
-    // Unknown mode. Throw error.
-    throw new Error ("Unknown export mode: " + exportMode);
-  }
-
-  // Get file name.
+    // Get file name.
   var fileName = prompt('File Name for ' + (exportMode ==
       WorkspaceFactoryController.MODE_TOOLBOX ? 'toolbox XML: ' :
       'pre-loaded workspace XML: '));
   if (!fileName) { // If cancelled
     return;
   }
+
+  // Generate XML.
+  if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
+    // Export the toolbox XML.
+
+    var configXml = Blockly.Xml.domToPrettyText
+        (this.generator.generateToolboxXml());
+    this.hasUnsavedToolboxChanges = false;
+  } else if (exportMode == WorkspaceFactoryController.MODE_PRELOAD) {
+    // Export the pre-loaded block XML.
+
+    var configXml = Blockly.Xml.domToPrettyText
+        (this.generator.generateWorkspaceXml());
+    this.hasUnsavedPreloadChanges = false;
+  } else {
+    // Unknown mode. Throw error.
+    throw new Error ("Unknown export mode: " + exportMode);
+  }
+
   // Download file.
   var data = new Blob([configXml], {type: 'text/xml'});
   this.view.createAndDownloadFile(fileName, data);
@@ -356,17 +357,16 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
  * Export the options object to be used for the Blockly inject call. Gets a
  * file name from the user and downloads the options object to that file.
  */
-WorkspaceFactoryController.prototype.exportOptionsFile = function() {
-  var fileName = prompt('File Name for options object for injecting: ');
+WorkspaceFactoryController.prototype.exportInjectFile = function() {
+  var fileName = prompt('File Name for starter Blockly workspace code: ');
   if (!fileName) {  // If cancelled.
     return;
   }
   // Generate new options to remove toolbox XML from options object (if
   // necessary).
   this.generateNewOptions();
-  // TODO(evd2014): Use Regex to prettify JSON generated.
-  var data = new Blob([JSON.stringify(this.model.options)],
-      {type: 'text/javascript'});
+  var printableOptions = this.generator.generateInjectString()
+  var data = new Blob([printableOptions], {type: 'text/javascript'});
   this.view.createAndDownloadFile(fileName, data);
 };
 
@@ -416,6 +416,9 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
       if (!this.previewWorkspace.toolbox_) {
         this.reinjectPreview(tree); // Create a toolbox, expensive.
       } else {
+        // Close the toolbox before updating it so that the user has to reopen
+        // the flyout and see their updated toolbox (open flyout doesn't update)
+        this.previewWorkspace.toolbox_.clearSelection();
         this.previewWorkspace.updateToolbox(tree);
       }
     }
@@ -437,9 +440,22 @@ WorkspaceFactoryController.prototype.updatePreview = function() {
 WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
   if (this.selectedMode == WorkspaceFactoryController.MODE_TOOLBOX) {
     // If currently editing the toolbox.
+    // Update flags if toolbox has been changed.
+    if (this.model.getSelectedXml() !=
+        Blockly.Xml.workspaceToDom(this.toolboxWorkspace)) {
+      this.hasUnsavedToolboxChanges = true;
+    }
+
     this.model.getSelected().saveFromWorkspace(this.toolboxWorkspace);
+
   } else if (this.selectedMode == WorkspaceFactoryController.MODE_PRELOAD) {
     // If currently editing the pre-loaded workspace.
+    // Update flags if preloaded blocks have been changed.
+    if (this.model.getPreloadXml() !=
+        Blockly.Xml.workspaceToDom(this.toolboxWorkspace)) {
+      this.hasUnsavedPreloadChanges = true;
+    }
+
     this.model.savePreloadXml
         (Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
   }
@@ -455,8 +471,9 @@ WorkspaceFactoryController.prototype.saveStateFromWorkspace = function() {
  */
 WorkspaceFactoryController.prototype.reinjectPreview = function(tree) {
   this.previewWorkspace.dispose();
-  this.model.setOptionsAttribute('toolbox', Blockly.Xml.domToPrettyText(tree));
-  this.previewWorkspace = Blockly.inject('preview_blocks', this.model.options);
+  var injectOptions = this.readOptions_();
+  injectOptions['toolbox'] = Blockly.Xml.domToPrettyText(tree);
+  this.previewWorkspace = Blockly.inject('preview_blocks', injectOptions);
   Blockly.Xml.domToWorkspace(this.generator.generateWorkspaceXml(),
       this.previewWorkspace);
 };
@@ -562,7 +579,21 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
     }
   } while (!this.isStandardCategoryName(name));
 
-  // Check if the user can create that standard category.
+  // Load category.
+  this.loadCategoryByName(name);
+};
+
+/**
+ * Loads a Standard Category by name and switches to it. Leverages
+ * StandardCategories. Returns if cannot load standard category.
+ *
+ * @param {string} name Name of the standard category to load.
+ */
+WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
+  // Check if the user can load that standard category.
+  if (!this.isStandardCategoryName(name)) {
+    return;
+  }
   if (this.model.hasVariables() && name.toLowerCase() == 'variables') {
     alert('A Variables category already exists. You cannot create multiple' +
         ' variables categories.');
@@ -580,6 +611,9 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
         + '. Rename your category and try again.');
     return;
   }
+  // Transfers current flyout blocks to a category if it's the first category
+  // created.
+  this.transferFlyoutBlocksToCategory();
 
   var isFirstCategory = !this.model.hasElements();
   // Copy the standard category in the model.
@@ -589,7 +623,7 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
   this.model.addElementToList(copy);
 
   // Update the copy in the view.
-  var tab = this.view.addCategoryRow(copy.name, copy.id, isFirstCategory);
+  var tab = this.view.addCategoryRow(copy.name, copy.id);
   this.addClickToSwitch(tab, copy.id);
   // Color the category tab in the view.
   if (copy.color) {
@@ -604,11 +638,28 @@ WorkspaceFactoryController.prototype.loadCategory = function() {
   if (isFirstCategory) {
     // Allow the user to use the default options for injecting the workspace
     // when there are categories.
-    this.allowToSetDefaultOptions();
+    this.view.setCategoryOptions(this.model.hasElements());
+    this.generateNewOptions();
   }
   // Update preview.
   this.updatePreview();
 };
+
+/**
+ * Loads the standard Blockly toolbox into the editing space. Should only
+ * be called when the mode is set to toolbox.
+ */
+WorkspaceFactoryController.prototype.loadStandardToolbox = function() {
+  this.loadCategoryByName('Logic');
+  this.loadCategoryByName('Loops');
+  this.loadCategoryByName('Math');
+  this.loadCategoryByName('Text');
+  this.loadCategoryByName('Lists');
+  this.loadCategoryByName('Colour');
+  this.addSeparator();
+  this.loadCategoryByName('Variables');
+  this.loadCategoryByName('Functions');
+}
 
 /**
  * Given the name of a category, determines if it's the name of a standard
@@ -633,11 +684,9 @@ WorkspaceFactoryController.prototype.isStandardCategoryName = function(name) {
  * the separator, and updates the preview.
  */
 WorkspaceFactoryController.prototype.addSeparator = function() {
-  // Don't allow the user to add a separator if a category has not been created.
-  if (!this.model.hasElements()) {
-    alert('Add a category before adding a separator.');
-    return;
-  }
+  // If adding the first element in the toolbox, transfers the user's blocks
+  // in a flyout to a category.
+  this.transferFlyoutBlocksToCategory();
   // Create the separator in the model.
   var separator = new ListElement(ListElement.TYPE_SEPARATOR);
   this.model.addElementToList(separator);
@@ -681,12 +730,32 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
     try {
       var tree = Blockly.Xml.textToDom(reader.result);
       if (importMode == WorkspaceFactoryController.MODE_TOOLBOX) {
-        // Switch mode and import toolbox XML.
+        // Switch mode.
         controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
+
+        // Confirm that the user wants to override their current toolbox.
+        var hasToolboxElements = controller.model.hasElements() ||
+            controller.getAllBlocks().length > 0;
+        if (hasToolboxElements &&
+            !confirm('Are you sure you want to import? You will lose your '
+            + 'current toolbox. ')) {
+            return;
+        }
+        // Import toolbox XML.
         controller.importToolboxFromTree_(tree);
+
       } else if (importMode == WorkspaceFactoryController.MODE_PRELOAD) {
-        // Switch mode and import pre-loaded workspace XML.
+        // Switch mode.
         controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
+
+        // Confirm that the user wants to override their current blocks.
+        if (controller.toolboxWorkspace.getAllBlocks().length > 0 &&
+            !confirm('Are you sure you want to import? You will lose your '
+            + 'current workspace blocks. ')) {
+            return;
+        }
+
+        // Import pre-loaded workspace XML.
         controller.importPreloadFromTree_(tree);
       } else {
         // Throw error if invalid mode.
@@ -771,9 +840,11 @@ WorkspaceFactoryController.prototype.importToolboxFromTree_ = function(tree) {
       (this.model.getSelectedId()), this.model.getSelected());
 
   this.saveStateFromWorkspace();
-  // Allow the user to set default configuration options for a single flyout
-  // or multiple categories.
-  this.allowToSetDefaultOptions();
+
+  // Set default configuration options for a single flyout or multiple
+  // categories.
+  this.view.setCategoryOptions(this.model.hasElements());
+  this.generateNewOptions();
 
   this.updatePreview();
 };
@@ -828,6 +899,10 @@ WorkspaceFactoryController.prototype.importPreloadFromTree_ = function(tree) {
  * "Clear" button.
  */
 WorkspaceFactoryController.prototype.clearAll = function() {
+  if (!confirm('Are you sure you want to clear all of your work in Workspace' +
+      ' Factory?')) {
+    return;
+  }
   var hasCategories = this.model.hasElements();
   this.model.clearToolboxList();
   this.view.clearToolboxTabs();
@@ -837,9 +912,10 @@ WorkspaceFactoryController.prototype.clearAll = function() {
   this.toolboxWorkspace.clear();
   this.toolboxWorkspace.clearUndo();
   this.saveStateFromWorkspace();
-  if (hasCategories) {
-    this.allowToSetDefaultOptions();
-  }
+  this.hasUnsavedToolboxChanges = false;
+  this.hasUnsavedPreloadChanges = false;
+  this.view.setCategoryOptions(this.model.hasElements());
+  this.generateNewOptions();
   this.updatePreview();
 };
 
@@ -881,7 +957,7 @@ WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
   this.view.markShadowBlock(block);
   this.model.addShadowBlock(block.id);
 
-  if (this.hasVariableField(block)) {
+  if (FactoryUtils.hasVariableField(block)) {
     block.setWarningText('Cannot make variable blocks shadow blocks.');
   }
 
@@ -890,26 +966,6 @@ WorkspaceFactoryController.prototype.addShadowForBlockAndChildren_ =
   for (var i = 0; i < children.length; i++) {
     this.addShadowForBlockAndChildren_(children[i]);
   }
-};
-
-/**
- * Checks if a block has a variable field. Blocks with variable fields cannot
- * be shadow blocks.
- *
- * @param {Blockly.Block} block The block to check if a variable field exists.
- * @return {boolean} True if the block has a variable field, false otherwise.
- */
-WorkspaceFactoryController.prototype.hasVariableField = function(block) {
-  if (!block) {
-    return false;
-  }
-  for (var i = 0; i < block.inputList.length; i++) {
-    if (block.inputList[i].fieldRow.length > 0 &&
-        block.inputList[i].fieldRow[0].name == 'VAR') {
-      return true;
-    }
-  }
-  return false;
 };
 
 /**
@@ -956,6 +1012,14 @@ WorkspaceFactoryController.prototype.convertShadowBlocks = function() {
   for (var i = 0, block; block = blocks[i]; i++) {
     if (block.isShadow()) {
       block.setShadow(false);
+      // Delete the shadow DOM attached to the block so that the shadow block
+      // does not respawn. Dependent on implementation details.
+      var parentConnection = block.outputConnection ?
+          block.outputConnection.targetConnection :
+          block.previousConnection.targetConnection;
+      if (parentConnection) {
+        parentConnection.setShadowDom(null);
+      }
       this.model.addShadowBlock(block.id);
       this.view.markShadowBlock(block);
     }
@@ -1036,34 +1100,26 @@ WorkspaceFactoryController.prototype.setStandardOptionsAndUpdate = function() {
  };
 
 /**
- * Asks the user if they want to use default configuration options specific
- * to categories or a single flyout of blocks. If desired, makes the necessary
- * changes to the options object depending on if there are categories and then
- * updates the preview workspace. Only updates category/flyout specific
- * options, not the base default options that are set regardless of if
- * categories or a single flyout are used.
- */
-WorkspaceFactoryController.prototype.allowToSetDefaultOptions = function() {
-  if (!this.model.hasElements() && !confirm('Do you want to use the default ' +
-      'workspace configuration options for injecting a workspace without ' +
-      'categories?')) {
-    return;
-  } else if (this.model.hasElements() && !confirm('Do you want to use the ' +
-      'default workspace configuration options for injecting a workspace ' +
-      'with categories?')) {
-    return;
-  }
-  this.view.setCategoryOptions(this.model.hasElements());
-  this.generateNewOptions();
-};
-
-/**
  * Generates a new options object for injecting a Blockly workspace based
  * on user input. Should be called every time a change has been made to
  * an input field. Updates the model and reinjects the preview workspace.
  */
 WorkspaceFactoryController.prototype.generateNewOptions = function() {
-  var optionsObj = new Object(null);
+  this.model.setOptions(this.readOptions_());
+
+  this.reinjectPreview(Blockly.Options.parseToolboxTree
+      (this.generator.generateToolboxXml()));
+};
+
+/**
+ * Generates a new options object for injecting a Blockly workspace based on
+ * user input.
+ * @private
+ *
+ * @return {!Object} Blockly injection options object.
+ */
+WorkspaceFactoryController.prototype.readOptions_ = function() {
+  var optionsObj = Object.create(null);
 
   // Add all standard options to the options object.
   // Use parse int to get numbers from value inputs.
@@ -1074,8 +1130,14 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
   optionsObj['css'] = document.getElementById('option_css_checkbox').checked;
   optionsObj['disable'] =
       document.getElementById('option_disable_checkbox').checked;
-  optionsObj['maxBlocks'] =
-      parseInt(document.getElementById('option_maxBlocks_text').value);
+  if (document.getElementById('option_infiniteBlocks_checkbox').checked) {
+    optionsObj['maxBlocks'] = Infinity;
+  } else {
+    var maxBlocksValue =
+        document.getElementById('option_maxBlocks_number').value;
+    optionsObj['maxBlocks'] = typeof maxBlocksValue == 'string' ?
+        parseInt(maxBlocksValue) : maxBlocksValue;
+  }
   optionsObj['media'] = document.getElementById('option_media_text').value;
   optionsObj['readOnly'] =
       document.getElementById('option_readOnly_checkbox').checked;
@@ -1084,16 +1146,21 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
       document.getElementById('option_scrollbars_checkbox').checked;
   optionsObj['sounds'] =
       document.getElementById('option_sounds_checkbox').checked;
-  optionsObj['trashcan'] =
-      document.getElementById('option_trashcan_checkbox').checked;
+  if (!optionsObj['readOnly']) {
+    optionsObj['trashcan'] =
+        document.getElementById('option_trashcan_checkbox').checked;
+  }
 
   // If using a grid, add all grid options.
   if (document.getElementById('option_grid_checkbox').checked) {
-    var grid = new Object(null);
-    grid['spacing'] =
-        parseInt(document.getElementById('gridOption_spacing_text').value);
-    grid['length'] =
-        parseInt(document.getElementById('gridOption_length_text').value);
+    var grid = Object.create(null);
+    var spacingValue =
+        document.getElementById('gridOption_spacing_number').value;
+    grid['spacing'] = typeof spacingValue == 'string' ?
+        parseInt(spacingValue) : spacingValue;
+    var lengthValue = document.getElementById('gridOption_length_number').value;
+    grid['length'] = typeof lengthValue == 'string' ?
+        parseInt(lengthValue) : lengthValue;
     grid['colour'] = document.getElementById('gridOption_colour_text').value;
     grid['snap'] = document.getElementById('gridOption_snap_checkbox').checked;
     optionsObj['grid'] = grid;
@@ -1101,26 +1168,31 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
 
   // If using zoom, add all zoom options.
   if (document.getElementById('option_zoom_checkbox').checked) {
-    var zoom = new Object(null);
+    var zoom = Object.create(null);
     zoom['controls'] =
         document.getElementById('zoomOption_controls_checkbox').checked;
     zoom['wheel'] =
         document.getElementById('zoomOption_wheel_checkbox').checked;
-    zoom['startScale'] =
-        parseInt(document.getElementById('zoomOption_startScale_text').value);
-    zoom['maxScale'] =
-        parseInt(document.getElementById('zoomOption_maxScale_text').value);
-    zoom['minScale'] =
-        parseInt(document.getElementById('zoomOption_minScale_text').value);
-    zoom['scaleSpeed'] =
-        parseInt(document.getElementById('zoomOption_scaleSpeed_text').value);
+    var startScaleValue =
+        document.getElementById('zoomOption_startScale_number').value;
+    zoom['startScale'] = typeof startScaleValue == 'string' ?
+        parseFloat(startScaleValue) : startScaleValue;
+    var maxScaleValue =
+        document.getElementById('zoomOption_maxScale_number').value;
+    zoom['maxcale'] = typeof maxScaleValue == 'string' ?
+        parseFloat(maxScaleValue) : maxScaleValue;
+    var minScaleValue =
+        document.getElementById('zoomOption_minScale_number').value;
+    zoom['minScale'] = typeof minScaleValue == 'string' ?
+        parseFloat(minScaleValue) : minScaleValue;
+    var scaleSpeedValue =
+        document.getElementById('zoomOption_scaleSpeed_number').value;
+    zoom['startScale'] = typeof startScaleValue == 'string' ?
+        parseFloat(scaleSpeedValue) : scaleSpeedValue;
     optionsObj['zoom'] = zoom;
   }
 
-  this.model.setOptions(optionsObj);
-
-  this.reinjectPreview(Blockly.Options.parseToolboxTree
-      (this.generator.generateToolboxXml()));
+  return optionsObj;
 };
 
 /**
@@ -1135,7 +1207,7 @@ WorkspaceFactoryController.prototype.generateNewOptions = function() {
 WorkspaceFactoryController.prototype.importBlocks =
     function(file, format) {
   // Generate category name from file name.
-  var categoryName = file.name + ' blocks';
+  var categoryName = file.name;
 
   var controller = this;
   var reader = new FileReader();
@@ -1144,9 +1216,19 @@ WorkspaceFactoryController.prototype.importBlocks =
   reader.onload = function() {
     try {
       // Define blocks using block types from file.
-      var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result, format);
-      var blocks = controller.generator.getDefinedBlocks(blockTypes);
+      var blockTypes = FactoryUtils.defineAndGetBlockTypes(reader.result,
+          format);
 
+      // If an imported block type is already defined, check if the user wants
+      // to override the current block definition.
+      if (controller.model.hasDefinedBlockTypes(blockTypes) &&
+          !confirm('An imported block uses the same name as a block '
+          + 'already in your toolbox. Are you sure you want to override the '
+          + 'currently defined block?')) {
+          return;
+      }
+
+      var blocks = controller.generator.getDefinedBlocks(blockTypes);
       // Generate category XML and append to toolbox.
       var categoryXml = FactoryUtils.generateCategoryXml(blocks, categoryName);
       // Get random color for category between 0 and 360. Gives each imported
@@ -1156,9 +1238,10 @@ WorkspaceFactoryController.prototype.importBlocks =
       controller.toolbox.appendChild(categoryXml);
       controller.toolboxWorkspace.updateToolbox(controller.toolbox);
       // Update imported block types.
-      this.model.addImportedBlocks(blockTypes);
+      controller.model.addImportedBlockTypes(blockTypes);
       // Reload current category to possibly reflect any newly defined blocks.
-      this.clearAndLoadXml_(Blockly.Xml.workspaceToDom(this.toolboxWorkspace));
+      controller.clearAndLoadXml_
+          (Blockly.Xml.workspaceToDom(controller.toolboxWorkspace));
     } catch (e) {
       alert('Cannot read blocks from file.');
       window.console.log(e);
@@ -1187,6 +1270,7 @@ WorkspaceFactoryController.prototype.setBlockLibCategory =
 
   // Update the toolbox and toolboxWorkspace.
   this.toolbox.replaceChild(categoryXml, blockLibCategory);
+  this.toolboxWorkspace.toolbox_.clearSelection();
   this.toolboxWorkspace.updateToolbox(this.toolbox);
 
   // Update the block library types.
@@ -1230,4 +1314,31 @@ WorkspaceFactoryController.prototype.warnForUndefinedBlocks_ = function() {
           + 'block, \nin your block library, or an imported block)');
     }
   }
+};
+
+/*
+ * Determines if a standard variable category is in the custom toolbox.
+ *
+ * @return {boolean} True if a variables category is in use, false otherwise.
+ */
+WorkspaceFactoryController.prototype.hasVariablesCategory = function() {
+  return this.model.hasVariables();
+};
+
+/**
+ * Determines if a standard procedures category is in the custom toolbox.
+ *
+ * @return {boolean} True if a procedures category is in use, false otherwise.
+ */
+WorkspaceFactoryController.prototype.hasProceduresCategory = function() {
+  return this.model.hasProcedures();
+};
+
+/**
+ * Determines if there are any unsaved changes in workspace factory.
+ *
+ * @return {boolean} True if there are unsaved changes, false otherwise.
+ */
+WorkspaceFactoryController.prototype.hasUnsavedChanges = function() {
+  return this.hasUnsavedToolboxChanges || this.hasUnsavedPreloadChanges;
 };

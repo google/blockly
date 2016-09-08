@@ -60,19 +60,12 @@ BlockFactory.UNNAMED = 'unnamed';
  */
 BlockFactory.oldDir = null;
 
-/**
- * Inject code into a pre tag, with syntax highlighting.
- * Safe from HTML/script injection.
- * @param {string} code Lines of code.
- * @param {string} id ID of <pre> element to inject into.
+/*
+ * The starting xml for the Block Factory main workspace. Contains the
+ * unmovable, undeletable factory_base block.
  */
-FactoryUtils.injectCode = function(code, id) {
-  var pre = document.getElementById(id);
-  pre.textContent = code;
-  code = pre.innerHTML;
-  code = prettyPrintOne(code, 'js');
-  pre.innerHTML = code;
-};
+BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
+    'deletable="false" movable="false"></block></xml>';
 
 /**
  * Change the language code format.
@@ -216,11 +209,19 @@ BlockFactory.updatePreview = function() {
     // standard library.
     var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
     if (StandardCategories.coreBlockTypes.indexOf(blockType) != -1) {
-      rootBlock.setWarningText('A standard Blockly.Block already exists ' +
+      rootBlock.setWarningText('A core Blockly block already exists ' +
           'under this name.');
+
+    } else if (blockType == 'block_type') {
+      // Warn user to let them know they can't save a block under the default
+      // name 'block_type'
+      rootBlock.setWarningText('You cannot save a block with the default ' +
+          'name, "block_type"');
+
     } else {
       rootBlock.setWarningText(null);
     }
+
   } finally {
     Blockly.Blocks = backupBlocks;
   }
@@ -243,10 +244,22 @@ BlockFactory.disableEnableLink = function() {
  * Render starter block (factory_base).
  */
 BlockFactory.showStarterBlock = function() {
-    BlockFactory.mainWorkspace.clear();
-    var xml = '<xml><block type="factory_base" deletable="false" ' +
-        'movable="false"></block></xml>';
-    Blockly.Xml.domToWorkspace(
-        Blockly.Xml.textToDom(xml), BlockFactory.mainWorkspace);
+  BlockFactory.mainWorkspace.clear();
+  var xml = Blockly.Xml.textToDom(BlockFactory.STARTER_BLOCK_XML_TEXT);
+  Blockly.Xml.domToWorkspace(xml, BlockFactory.mainWorkspace);
 };
 
+/**
+ * Returns whether or not the current block open is the starter block.
+ */
+BlockFactory.isStarterBlock = function() {
+  var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
+  // The starter block does not have blocks nested into the factory_base block.
+  return !(rootBlock.getChildren().length > 0 ||
+    // The starter block's name is the default, 'block_type'.
+    rootBlock.getFieldValue('NAME').trim().toLowerCase() != 'block_type' ||
+    // The starter block has no connections.
+    rootBlock.getFieldValue('CONNECTIONS') != 'NONE' ||
+    // The starter block has automatic inputs.
+    rootBlock.getFieldValue('INLINE') != 'AUTO');
+};

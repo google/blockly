@@ -94,7 +94,7 @@ WorkspaceFactoryModel.prototype.hasVariables = function() {
  * false otherwise.
  */
 WorkspaceFactoryModel.prototype.hasProcedures = function() {
-  return this.hasFunctionCategory;
+  return this.hasProcedureCategory;
 };
 
 /**
@@ -420,16 +420,6 @@ WorkspaceFactoryModel.prototype.setOptions = function(options) {
   this.options = options;
 };
 
-/**
- * Sets an attribute of the options object.
- *
- * @param {!string} name Name of the attribute to add.
- * @param {Object} value The value of the attribute to add.
- */
-WorkspaceFactoryModel.prototype.setOptionsAttribute = function(name, value) {
-  this.options[name] = value;
-};
-
 /*
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.
@@ -505,6 +495,22 @@ WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
   var isLibBlock = this.libBlockTypes.indexOf(blockType) != -1;
   var isImportedBlock = this.importedBlockTypes.indexOf(blockType) != -1;
   return (isStandardBlock || isLibBlock || isImportedBlock);
+};
+
+/**
+ * Checks if any of the block types are already defined.
+ *
+ * @param {!Array<!string>} blockTypes Array of block types.
+ * @return {boolean} True if a block type in the array is already defined,
+ *    false if none of the blocks are already defined.
+ */
+WorkspaceFactoryModel.prototype.hasDefinedBlockTypes = function(blockTypes) {
+  for (var i = 0, blockType; blockType = blockTypes[i]; i++) {
+    if (this.isDefinedBlockType(blockType)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**

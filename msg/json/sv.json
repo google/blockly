@@ -63,7 +63,7 @@
 	"CONTROLS_FOREACH_TOOLTIP": "För varje objekt i en lista, ange variabeln '%1' till objektet, och utför sedan några kommandon.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "bryt ut ur loop",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE": "fortsätta med nästa upprepning av loop",
-	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "Bryta ut ur den innehållande upprepningen.",
+	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK": "Bryt ut ur den innehållande upprepningen.",
 	"CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE": "Hoppa över resten av denna loop och fortsätt med nästa loop.",
 	"CONTROLS_FLOW_STATEMENTS_WARNING": "Varning: Detta block kan endast användas i en loop.",
 	"CONTROLS_IF_TOOLTIP_1": "Om ett värde är sant, utför några kommandon.",

@@ -9,7 +9,8 @@
 			"Glavkos",
 			"Gchr",
 			"아라",
-			"Geraki"
+			"Geraki",
+			"Ανώνυμος Βικιπαιδιστής"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "αντικείμενο",
@@ -29,6 +30,8 @@
 	"DISABLE_BLOCK": "Απενεργοποίησε Το Μπλοκ",
 	"ENABLE_BLOCK": "Ενεργοποίησε Το Μπλοκ",
 	"HELP": "Βοήθεια",
+	"UNDO": "Αναίρεση",
+	"REDO": "Ακύρωση αναίρεσης",
 	"CHANGE_VALUE_TITLE": "Άλλαξε την τιμή:",
 	"NEW_VARIABLE": "Νέα μεταβλητή...",
 	"NEW_VARIABLE_TITLE": "Νέο όνομα μεταβλητής:",
@@ -293,6 +296,10 @@
 	"LISTS_GET_SUBLIST_END_LAST": "έως το τελευταίο",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Δημιουργεί ένα αντίγραφο του καθορισμένου τμήματος μιας λίστας.",
 	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
+	"LISTS_SORT_ORDER_ASCENDING": "Αύξουσα",
+	"LISTS_SORT_ORDER_DESCENDING": "Φθίνουσα",
+	"LISTS_SORT_TYPE_NUMERIC": "αριθμητικό",
+	"LISTS_SORT_TYPE_TEXT": "Αλφαβητικά",
 	"LISTS_SPLIT_LIST_FROM_TEXT": "κάνετε λίστα από το κείμενο",
 	"LISTS_SPLIT_TEXT_FROM_LIST": "κάνετε κείμενο από τη λίστα",
 	"LISTS_SPLIT_WITH_DELIMITER": "με διαχωριστικό",

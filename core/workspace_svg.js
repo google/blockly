@@ -32,6 +32,7 @@ goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
+goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');

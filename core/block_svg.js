@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.Touch');
 goog.require('Blockly.RenderedConnection');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
@@ -532,10 +533,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   }
   if (this.isInFlyout) {
     // longStart's simulation of right-clicks for longpresses on touch devices
-    // calls the object's onMouseDown, so its code path passes through here only
-    // on touch.
-    // definitely want to show the context menu, clear touch identifier, etc.
-    // what about hideChaff, select, and so on?
+    // calls the object's onMouseDown, instead of the flyout's onMouseDown.
     if (e.type == 'touchstart' && Blockly.isRightButton(e)) {
       Blockly.Flyout.blockRightClick_(e, this);
       e.stopPropagation();

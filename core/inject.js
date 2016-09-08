@@ -355,7 +355,6 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
   // Bind temporary hooks that preload the sounds.
   var soundBinds = [];
   var unbindSounds = function() {
-    console.log("unbinding sounds");
     while (soundBinds.length) {
       Blockly.unbindEvent_(soundBinds.pop());
     }

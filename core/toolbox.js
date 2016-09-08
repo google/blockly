@@ -27,6 +27,7 @@
 goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Flyout');
+goog.require('Blockly.Touch');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');

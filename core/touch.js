@@ -26,6 +26,8 @@
 
 goog.provide('Blockly.Touch');
 
+goog.require('goog.events');
+goog.require('goog.events.BrowserFeature');
 
 /**
  * Which touch events are we currently paying attention to?
@@ -262,6 +264,7 @@ Blockly.Touch.splitEventByTouches = function(e) {
       var newEvent = {
         type: e.type,
         changedTouches: [e.changedTouches[i]],
+        target: e.target,
         stopPropagation: function(){ e.stopPropagation(); },
         preventDefault: function(){ e.preventDefault(); }
       };

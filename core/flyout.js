@@ -30,6 +30,7 @@ goog.require('Blockly.Block');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Events');
 goog.require('Blockly.FlyoutButton');
+goog.require('Blockly.Touch');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -898,6 +899,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  */
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   if (Blockly.isRightButton(e)) {
+    // Don't start drags with right clicks.
     Blockly.Touch.clearTouchIdentifier();
     return;
   }

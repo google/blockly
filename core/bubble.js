@@ -150,7 +150,7 @@ Blockly.Bubble.unbindDragEvents_ = function() {
  * @private
  */
 Blockly.Bubble.bubbleMouseUp_ = function(/*e*/) {
-  Blockly.clearTouchIdentifier();
+  Blockly.Touch.clearTouchIdentifier();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   Blockly.Bubble.unbindDragEvents_();
 };

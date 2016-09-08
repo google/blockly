@@ -844,11 +844,18 @@ Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
       block.removeSelect));
 };
 
+/**
+ * Actions to take when a block in the flyout is right-clicked.
+ * @param {!Event} e Event that triggered the right-click.  Could originate from
+ *     a long-press in a touch environment.
+ * @param {Blockly.BlockSvg} block The block that was clicked.
+ */
 Blockly.Flyout.blockRightClick_ = function(e, block) {
   Blockly.terminateDrag_();
   Blockly.hideChaff(true);
   block.showContextMenu_(e);
-  Blockly.clearTouchIdentifier();
+  // This was a right-click, so end the gesture immediately.
+  Blockly.Touch.clearTouchIdentifier();
 };
 
 /**
@@ -891,7 +898,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
  */
 Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   if (Blockly.isRightButton(e)) {
-    Blockly.clearTouchIdentifier();
+    Blockly.Touch.clearTouchIdentifier();
     return;
   }
   Blockly.hideChaff(true);
@@ -917,7 +924,8 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
  */
 Blockly.Flyout.prototype.onMouseUp_ = function(e) {
   if (!this.workspace_.isDragging()) {
-    Blockly.clearTouchIdentifier();
+    // This was a click, not a drag.  End the gesture.
+    Blockly.Touch.clearTouchIdentifier();
     if (this.autoClose) {
       this.createBlockFunc_(Blockly.Flyout.startBlock_)(
           Blockly.Flyout.startDownEvent_);
@@ -1237,7 +1245,7 @@ Blockly.Flyout.terminateDrag_ = function() {
   if (Blockly.Flyout.startFlyout_) {
     // User was dragging the flyout background, and has stopped.
     if (Blockly.Flyout.startFlyout_.dragMode_ == Blockly.DRAG_FREE) {
-      Blockly.clearTouchIdentifier();
+      Blockly.Touch.clearTouchIdentifier();
     }
     Blockly.Flyout.startFlyout_.dragMode_ = Blockly.DRAG_NONE;
     Blockly.Flyout.startFlyout_ = null;

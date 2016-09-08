@@ -44,6 +44,7 @@ goog.require('Blockly.Generator');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Procedures');
 goog.require('Blockly.Toolbox');
+goog.require('Blockly.Touch');
 goog.require('Blockly.WidgetDiv');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('Blockly.constants');
@@ -114,20 +115,6 @@ Blockly.clipboardSource_ = null;
 Blockly.dragMode_ = Blockly.DRAG_NONE;
 
 /**
- * Wrapper function called when a touch mouseUp occurs during a drag operation.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.onTouchUpWrapper_ = null;
-
-/**
- * Which touch events are we currently paying attention to?
- * @type {DOMString}
- * @private
- */
-Blockly.touchIdentifier_ = null;
-
-/**
  * Convert a hue (HSV model) into an RGB hex triplet.
  * @param {number} hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
@@ -154,68 +141,6 @@ Blockly.svgSize = function(svg) {
  */
 Blockly.resizeSvgContents = function(workspace) {
   workspace.resizeContents();
-};
-
-/**
- * Clear the touch identifier that tracks which touch stream to pay attention
- * to.
- */
-Blockly.clearTouchIdentifier = function() {
-  console.trace('\tclearing touch identifier');
-  if (Blockly.touchIdentifier_ == null) {
-    console.log('\t\ttouch identifier was already null');
-  }
-  Blockly.touchIdentifier_ = null;
-};
-
-/**
- * Decide whether Blockly should handle or ignore this event.
- * Mouse and touch events require special checks because we only want to deal
- * with one touch stream at a time.  All other events should always be handled.
- * @param {!Event} e The event to check.
- * @return {boolean} True if this event should be passed through to the
- *    registered handler; false if it should be blocked.
- */
-Blockly.shouldHandleEvent = function(e) {
-  return !Blockly.isMouseOrTouchEvent(e) || Blockly.checkTouchIdentifier(e);
-};
-
-/**
- * Check whether the touch identifier on the event matches the current saved
- * identifier.  If there is no identifier, that means it's a mouse event and
- * we'll use the identifier "mouse".  This means we won't deal well with
- * multiple mice being used at the same time.  That seems okay.
- * If the current identifier was unset, save the identifier from the
- * event.
- * @param {!Event} e Mouse event or touch event.
- * @return {boolean} Whether the identifier on the event matches the current
- *     saved identifier.
- */
-Blockly.checkTouchIdentifier = function(e) {
-  var identifier = (e.changedTouches && e.changedTouches.item(0) &&
-      e.changedTouches.item(0).identifier != undefined &&
-      e.changedTouches.item(0).identifier != null) ?
-      e.changedTouches.item(0).identifier : 'mouse';
-
-  // if (Blockly.touchIdentifier_ )is insufficient because android touch
-  // identifiers may be zero.
-  if (Blockly.touchIdentifier_ != undefined &&
-      Blockly.touchIdentifier_ != null) {
-    // We're already tracking some touch/mouse event.  Is this from the same
-    // source?
-    return Blockly.touchIdentifier_ == identifier;
-  }
-  if (e.type == 'mousedown' || e.type == 'touchstart') {
-    // No identifier set yet, and this is the start of a drag.  Set it and
-    // return.
-    console.trace('setting touch identfier');
-    Blockly.touchIdentifier_ = identifier;
-    return true;
-  }
-  // There was no identifier yet, but this wasn't a start event so we're going
-  // to ignore it.  This probably means that another drag finished while this
-  // pointer was down.
-  return false;
 };
 
 /**
@@ -248,63 +173,6 @@ Blockly.svgResize = function(workspace) {
     svg.cachedHeight_ = height;
   }
   mainWorkspace.resize();
-};
-
-/**
- * Handle a mouse-up anywhere on the page.
- * @param {!Event} e Mouse up event.
- * @private
- */
-Blockly.onMouseUp_ = function(e) {
-  var workspace = Blockly.getMainWorkspace();
-  if (workspace.dragMode_ == Blockly.DRAG_NONE) {
-    return;
-  }
-  Blockly.clearTouchIdentifier();
-  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
-  workspace.dragMode_ = Blockly.DRAG_NONE;
-  // Unbind the touch event if it exists.
-  if (Blockly.onTouchUpWrapper_) {
-    Blockly.unbindEvent_(Blockly.onTouchUpWrapper_);
-    Blockly.onTouchUpWrapper_ = null;
-  }
-  if (Blockly.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(Blockly.onMouseMoveWrapper_);
-    Blockly.onMouseMoveWrapper_ = null;
-  }
-};
-
-/**
- * Handle a mouse-move on SVG drawing surface.
- * @param {!Event} e Mouse move event.
- * @private
- */
-Blockly.onMouseMove_ = function(e) {
-  var workspace = Blockly.getMainWorkspace();
-  if (workspace.dragMode_ != Blockly.DRAG_NONE) {
-    var dx = e.clientX - workspace.startDragMouseX;
-    var dy = e.clientY - workspace.startDragMouseY;
-    var metrics = workspace.startDragMetrics;
-    var x = workspace.startScrollX + dx;
-    var y = workspace.startScrollY + dy;
-    x = Math.min(x, -metrics.contentLeft);
-    y = Math.min(y, -metrics.contentTop);
-    x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-                 metrics.contentWidth);
-    y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-                 metrics.contentHeight);
-
-    // Move the scrollbars and the page will scroll automatically.
-    workspace.scrollbar.set(-x - metrics.contentLeft,
-                            -y - metrics.contentTop);
-    // Cancel the long-press if the drag has moved too far.
-    if (Math.sqrt(dx * dx + dy * dy) > Blockly.DRAG_RADIUS) {
-      Blockly.longStop_();
-      workspace.dragMode_ = Blockly.DRAG_FREE;
-    }
-    e.stopPropagation();
-    e.preventDefault();
-  }
 };
 
 /**
@@ -378,43 +246,6 @@ Blockly.onKeyDown_ = function(e) {
 Blockly.terminateDrag_ = function() {
   Blockly.BlockSvg.terminateDrag();
   Blockly.Flyout.terminateDrag_();
-};
-
-/**
- * PID of queued long-press task.
- * @private
- */
-Blockly.longPid_ = 0;
-
-/**
- * Context menus on touch devices are activated using a long-press.
- * Unfortunately the contextmenu touch event is currently (2015) only suported
- * by Chrome.  This function is fired on any touchstart event, queues a task,
- * which after about a second opens the context menu.  The tasks is killed
- * if the touch event terminates early.
- * @param {!Event} e Touch start event.
- * @param {!Blockly.Block|!Blockly.WorkspaceSvg} uiObject The block or workspace
- *   under the touchstart event.
- * @private
- */
-Blockly.longStart_ = function(e, uiObject) {
-  Blockly.longStop_();
-  Blockly.longPid_ = setTimeout(function() {
-    e.button = 2;  // Simulate a right button click.
-    uiObject.onMouseDown_(e);
-  }, Blockly.LONGPRESS);
-};
-
-/**
- * Nope, that's not a long-press.  Either touchend or touchcancel was fired,
- * or a drag hath begun.  Kill the queued long-press task.
- * @private
- */
-Blockly.longStop_ = function() {
-  if (Blockly.longPid_) {
-    clearTimeout(Blockly.longPid_);
-    Blockly.longPid_ = 0;
-  }
 };
 
 /**

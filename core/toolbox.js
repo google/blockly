@@ -163,7 +163,7 @@ Blockly.Toolbox.prototype.init = function() {
           // Just close popups.
           Blockly.hideChaff(true);
         }
-        Blockly.clearTouchIdentifier(); // Don't block future drags.
+        Blockly.Touch.clearTouchIdentifier(); // Don't block future drags.
       });
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
@@ -476,7 +476,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
         this.handleTouchEvent_);
   }
 
-  Blockly.bindEvent_(el, 'mouseup', this, Blockly.clearTouchIdentifier);
+  Blockly.bindEvent_(el, 'mouseup', this, Blockly.Touch.clearTouchIdentifier);
 };
 
 /**

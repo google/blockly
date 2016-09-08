@@ -599,7 +599,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
-  Blockly.clearTouchIdentifier(); // This is really a click.
+  Blockly.Touch.clearTouchIdentifier(); // This is really a click.
   this.cleanUp_();
   if (Blockly.isRightButton(e)) {
     // Right-click.
@@ -676,7 +676,7 @@ Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
-  Blockly.clearTouchIdentifier();
+  Blockly.Touch.clearTouchIdentifier();
   this.cleanUp_();
 };
 

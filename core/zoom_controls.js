@@ -165,19 +165,19 @@ Blockly.ZoomControls.prototype.createDom = function() {
   Blockly.bindEvent_(zoomresetSvg, 'mousedown', null, function(e) {
     workspace.setScale(1);
     workspace.scrollCenter();
-    Blockly.clearTouchIdentifier(); // Don't block future drags.
+    Blockly.Touch.clearTouchIdentifier(); // Don't block future drags.
     e.stopPropagation();  // Don't start a workspace scroll.
     e.preventDefault();  // Stop double-clicking from selecting text.
   });
   Blockly.bindEvent_(zoominSvg, 'mousedown', null, function(e) {
     workspace.zoomCenter(1);
-    Blockly.clearTouchIdentifier(); // Don't block future drags.
+    Blockly.Touch.clearTouchIdentifier(); // Don't block future drags.
     e.stopPropagation();  // Don't start a workspace scroll.
     e.preventDefault();  // Stop double-clicking from selecting text.
   });
   Blockly.bindEvent_(zoomoutSvg, 'mousedown', null, function(e) {
     workspace.zoomCenter(-1);
-    Blockly.clearTouchIdentifier(); // Don't block future drags.
+    Blockly.Touch.clearTouchIdentifier(); // Don't block future drags.
     e.stopPropagation();  // Don't start a workspace scroll.
     e.preventDefault();  // Stop double-clicking from selecting text.
   });

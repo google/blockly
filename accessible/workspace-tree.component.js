@@ -71,7 +71,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-more-options', 'blockly-submenu-indicator')"
             [attr.aria-level]="level + 1">
-          <label [id]="idMap['label']">{{'MORE_OPTIONS'|translate}}</label>
+          <label [id]="idMap['label']">{{'BLOCK_OPTIONS'|translate}}</label>
           <ol role="group">
             <li *ngFor="#buttonInfo of actionButtonsInfo"
                 [id]="idMap[buttonInfo.baseIdKey]" role="treeitem"

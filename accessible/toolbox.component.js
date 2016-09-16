@@ -55,13 +55,12 @@ blocklyApp.ToolboxComponent = ng.core
             </div>
           </li>
         </template>
+
         <div *ngIf="!xmlHasCategories">
           <blockly-toolbox-tree *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index"
-                                [level]="1" [block]="block"
-                                [displayBlockMenu]="true"
-                                [index]="i" [tree]="tree"
-                                [noCategories]="true"
-                                [isTopLevel]="true">
+                                role="treeitem" [level]="1" [block]="block"
+                                [tree]="tree" [displayBlockMenu]="true"
+                                [isFirstToolboxTree]="i === 0">
           </blockly-toolbox-tree>
         </div>
       </ol>

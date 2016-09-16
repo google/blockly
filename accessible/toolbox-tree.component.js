@@ -29,7 +29,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
     selector: 'blockly-toolbox-tree',
     template: `
     <li #parentList [id]="idMap['parentList']" role="treeitem"
-        [ngClass]="{blocklyHasChildren: displayBlockMenu, blocklyActiveDescendant: index == 0 && noCategories}"
+        [ngClass]="{blocklyHasChildren: displayBlockMenu}"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummaryLabel'], 'blockly-toolbox-block')"
         [attr.aria-level]="level">
       <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
@@ -69,7 +69,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       return blocklyApp.ToolboxTreeComponent;
     })],
     inputs: [
-        'block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories', 'isTopLevel'],
+        'block', 'displayBlockMenu', 'level', 'tree', 'isFirstToolboxTree'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
@@ -92,10 +92,19 @@ blocklyApp.ToolboxTreeComponent = ng.core
             'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
       }
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
-      if (this.isTopLevel) {
-        this.idMap['parentList'] = 'blockly-toolbox-tree-node0';
-      } else {
-        this.idMap['parentList'] = this.utilsService.generateUniqueId();
+      this.idMap['parentList'] = this.utilsService.generateUniqueId();
+    },
+    ngAfterViewInit: function() {
+      // If this is the first tree in the category-less toolbox, set its active
+      // descendant after the ids have been computed.
+      // Note that a timeout is needed here in order to trigger Angular
+      // change detection.
+      if (this.isFirstToolboxTree) {
+        var that = this;
+        setTimeout(function() {
+          that.treeService.setActiveDesc(
+              that.idMap['parentList'], 'blockly-toolbox-tree');
+        });
       }
     },
     getBlockDescription: function() {

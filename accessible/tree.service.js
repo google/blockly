@@ -35,19 +35,19 @@ blocklyApp.TreeService = ng.core
     getToolboxTreeNode_: function() {
       return document.getElementById('blockly-toolbox-tree');
     },
-    getWorkspaceToolbarButtonNodes_: function() {
-      return Array.from(document.querySelectorAll(
-          'button.blocklyWorkspaceToolbarButton'));
-    },
     // Returns a list of all top-level workspace tree nodes on the page.
     getWorkspaceTreeNodes_: function() {
       return Array.from(document.querySelectorAll('ol.blocklyWorkspaceTree'));
     },
+    getWorkspaceToolbarButtonNodes_: function() {
+      return Array.from(document.querySelectorAll(
+          'button.blocklyWorkspaceToolbarButton'));
+    },
     // Returns a list of all top-level tree nodes on the page.
     getAllTreeNodes_: function() {
       var treeNodes = [this.getToolboxTreeNode_()];
-      treeNodes = treeNodes.concat(this.getWorkspaceToolbarButtonNodes_());
       treeNodes = treeNodes.concat(this.getWorkspaceTreeNodes_());
+      treeNodes = treeNodes.concat(this.getWorkspaceToolbarButtonNodes_());
       return treeNodes;
     },
     isTopLevelWorkspaceTree: function(treeId) {

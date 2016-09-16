@@ -58,7 +58,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, text) {
   this.text_ = text;
 
   /**
-   * @type {goog.math.Coordinate}
+   * @type {!goog.math.Coordinate}
    * @private
    */
   this.position_ = new goog.math.Coordinate(0, 0);
@@ -89,10 +89,14 @@ Blockly.FlyoutButton.prototype.createDom = function() {
   this.svgGroup_ = Blockly.createSvgElement('g',
       {'class': 'blocklyFlyoutButton'}, this.workspace_.getCanvas());
 
-  // Rect with rounded corners.
+  // Shadow rectangle (light source does not mirror in RTL).
+  var shadow = Blockly.createSvgElement('rect',
+      {'class': 'blocklyFlyoutButtonShadow',
+       'rx': 4, 'ry': 4, 'x': 1, 'y': 1},
+       this.svgGroup_);
+  // Background rectangle.
   var rect = Blockly.createSvgElement('rect',
-      {'rx': 4, 'ry': 4,
-       'height': 0, 'width': 0},
+      {'class': 'blocklyFlyoutButtonBackground', 'rx': 4, 'ry': 4},
        this.svgGroup_);
 
   var svgText = Blockly.createSvgElement('text',
@@ -102,8 +106,10 @@ Blockly.FlyoutButton.prototype.createDom = function() {
 
   this.width = svgText.getComputedTextLength() +
       2 * Blockly.FlyoutButton.MARGIN;
-  this.height = 20; // Can't compute it :(
+  this.height = 20;  // Can't compute it :(
 
+  shadow.setAttribute('width', this.width);
+  shadow.setAttribute('height', this.height);
   rect.setAttribute('width', this.width);
   rect.setAttribute('height', this.height);
 
@@ -124,10 +130,11 @@ Blockly.FlyoutButton.prototype.show = function() {
 
 /**
  * Update svg attributes to match internal state.
+ * @private
  */
 Blockly.FlyoutButton.prototype.updateTransform_ = function() {
-  this.svgGroup_.setAttribute('transform', 'translate(' + this.position_.x +
-      ',' + this.position_.y + ')');
+  this.svgGroup_.setAttribute('transform',
+      'translate(' + this.position_.x + ',' + this.position_.y + ')');
 };
 
 /**

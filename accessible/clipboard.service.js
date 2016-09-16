@@ -106,6 +106,7 @@ blocklyApp.ClipboardService = ng.core
     },
     copy: function(block) {
       this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
+      Blockly.Xml.deleteNext(this.clipboardBlockXml_);
       this.clipboardBlockPreviousConnection_ = block.previousConnection;
       this.clipboardBlockNextConnection_ = block.nextConnection;
       this.clipboardBlockOutputConnection_ = block.outputConnection;

@@ -34,26 +34,26 @@ blocklyApp.ToolboxTreeComponent = ng.core
         [attr.aria-level]="level">
       <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu">
-        <li [id]="idMap['workspaceCopy']" role="treeitem"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
-            [attr.aria-level]="level + 2">
-          <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
-            {{'COPY_TO_WORKSPACE'|translate}}
-          </button>
-        </li>
-        <li [id]="idMap['blockCopy']" role="treeitem"
+        <li [id]="idMap['blockCopy']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
             [attr.aria-level]="level + 2">
           <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()" tabindex="-1">
             {{'COPY_TO_CLIPBOARD'|translate}}
           </button>
         </li>
-        <li [id]="idMap['sendToSelected']" role="treeitem"
+        <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
             [attr.aria-level]="level + 2">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
                   [disabled]="!canBeCopiedToMarkedConnection()" tabindex="-1">
             {{'COPY_TO_MARKED_SPOT'|translate}}
+          </button>
+        </li>
+        <li [id]="idMap['workspaceCopy']" role="treeitem"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
+            [attr.aria-level]="level + 2">
+          <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
+            {{'COPY_TO_WORKSPACE'|translate}}
           </button>
         </li>
       </ol>
@@ -106,6 +106,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
               that.idMap['parentList'], 'blockly-toolbox-tree');
         });
       }
+    },
+    isWorkspaceEmpty: function() {
+      return this.utilsService.isWorkspaceEmpty();
     },
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);

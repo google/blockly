@@ -48,8 +48,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
-              [attr.aria-level]="level + 1"
-              (keydown)="treeService.onKeypress($event, tree)">
+              [attr.aria-level]="level + 1">
             <label [id]="idMap['inputMenuLabel' + i]">
               {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
             </label>
@@ -115,40 +114,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
     },
-    isIsolatedTopLevelBlock_: function(block) {
-      // Returns whether the given block is at the top level, and has no
-      // siblings.
-      var blockIsAtTopLevel = !block.getParent();
-      var blockHasNoSiblings = (
-          (!block.nextConnection ||
-           !block.nextConnection.targetConnection) &&
-          (!block.previousConnection ||
-           !block.previousConnection.targetConnection));
-      return blockIsAtTopLevel && blockHasNoSiblings;
-    },
     removeBlockAndSetFocus_: function(block, deleteBlockFunc) {
-      // This method runs the given function and then does one of two things:
-      // - If the block is an isolated top-level block, it shifts the tree
-      //   focus.
-      // - Otherwise, it sets the correct new active desc for the current tree.
-      if (this.isIsolatedTopLevelBlock_(block)) {
-        var nextNodeToFocusOn =
-            this.treeService.getNodeToFocusOnWhenTreeIsDeleted(this.tree.id);
-
-        this.treeService.clearActiveDesc(this.tree.id);
-        deleteBlockFunc();
-        // Invoke a digest cycle, so that the DOM settles.
-        setTimeout(function() {
-          nextNodeToFocusOn.focus();
-        });
-      } else {
-        var blockRootNode = document.getElementById(this.idMap['blockRoot']);
-        var nextActiveDesc =
-            this.treeService.getNextActiveDescWhenBlockIsDeleted(
-                blockRootNode);
-        this.treeService.runWhilePreservingFocus(
-            deleteBlockFunc, this.tree.id, nextActiveDesc.id);
-      }
+      this.treeService.removeBlockAndSetFocus(
+          block, document.getElementById(this.idMap['blockRoot']),
+          deleteBlockFunc);
     },
     cutBlock_: function() {
       var blockDescription = this.getBlockDescription();

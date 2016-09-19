@@ -74,7 +74,6 @@ blocklyApp.ToolboxComponent = ng.core
         blocklyApp.TreeService, blocklyApp.UtilsService,
         function(_treeService, _utilsService) {
       this.toolboxCategories = [];
-      this.toolboxWorkspaces = Object.create(null);
       this.treeService = _treeService;
       this.utilsService = _utilsService;
 
@@ -126,24 +125,6 @@ blocklyApp.ToolboxComponent = ng.core
           'Move right to access ' + numBlocks + ' blocks in this category.';
     },
     getToolboxWorkspace: function(categoryNode) {
-      if (categoryNode.attributes && categoryNode.attributes.name) {
-        var categoryName = categoryNode.attributes.name.value;
-      } else {
-        var categoryName = 'no-category';
-      }
-      if (this.toolboxWorkspaces[categoryName]) {
-        return this.toolboxWorkspaces[categoryName];
-      } else {
-        var categoryWorkspace = new Blockly.Workspace();
-        if (categoryName == 'no-category') {
-          for (var i = 0; i < categoryNode.length; i++) {
-            Blockly.Xml.domToBlock(categoryWorkspace, categoryNode[i]);
-          }
-        } else {
-          Blockly.Xml.domToWorkspace(categoryNode, categoryWorkspace);
-        }
-        this.toolboxWorkspaces[categoryName] = categoryWorkspace;
-        return this.toolboxWorkspaces[categoryName];
-      }
+      return this.treeService.getToolboxWorkspace(categoryNode);
     }
   });

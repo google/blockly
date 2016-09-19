@@ -28,7 +28,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
   .Component({
     selector: 'blockly-toolbox-tree',
     template: `
-    <li #parentList [id]="idMap['parentList']" role="treeitem"
+    <li [id]="idMap['toolboxBlockRoot']" role="treeitem"
         [ngClass]="{blocklyHasChildren: displayBlockMenu}"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummaryLabel'], 'blockly-toolbox-block')"
         [attr.aria-level]="level">
@@ -85,14 +85,17 @@ blocklyApp.ToolboxTreeComponent = ng.core
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {
-      var elementsNeedingIds = ['blockSummaryLabel'];
+      var idKeys = ['toolboxBlockRoot', 'blockSummaryLabel'];
       if (this.displayBlockMenu) {
-        elementsNeedingIds = elementsNeedingIds.concat(['blockSummarylabel',
+        idKeys = idKeys.concat([
             'workspaceCopy', 'workspaceCopyButton', 'blockCopy',
             'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
       }
-      this.idMap = this.utilsService.generateIds(elementsNeedingIds);
-      this.idMap['parentList'] = this.utilsService.generateUniqueId();
+
+      this.idMap = {};
+      for (var i = 0; i < idKeys.length; i++) {
+        this.idMap[idKeys[i]] = this.block.id + idKeys[i];
+      }
     },
     ngAfterViewInit: function() {
       // If this is the first tree in the category-less toolbox, set its active
@@ -103,7 +106,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
         var that = this;
         setTimeout(function() {
           that.treeService.setActiveDesc(
-              that.idMap['parentList'], 'blockly-toolbox-tree');
+              that.idMap['toolboxBlockRoot'], 'blockly-toolbox-tree');
         });
       }
     },
@@ -129,7 +132,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
         that.notificationsService.setStatusMessage(
-            blockDescription + ' copied to workspace. ' +
+            blockDescription + ' copied to new workspace group. ' +
             'Now on copied block in workspace.');
       });
     },

@@ -30,12 +30,12 @@ blocklyApp.FieldComponent = ng.core
     template: `
     <input *ngIf="isTextInput()" [id]="mainFieldId" type="text" [disabled]="disabled"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text'"
+           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text: ' + field.getValue()"
            tabindex="-1">
 
     <input *ngIf="isNumberInput()" [id]="mainFieldId" type="number" [disabled]="disabled"
-           [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number'"
+           [ngModel]="field.getValue()" (ngModelChange)="setNumberValue($event)"
+           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number: ' + field.getValue()"
            tabindex="-1">
 
     <div *ngIf="isDropdown()">
@@ -77,6 +77,10 @@ blocklyApp.FieldComponent = ng.core
       // Warning: this assumes that the elements returned by
       // this.generateElementNames() are unique.
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+    },
+    setNumberValue: function(newValue) {
+      // Do not permit a residual value of NaN after a backspace event.
+      this.field.setValue(newValue || 0);
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
       return mainLabel + ' ' + secondLabel;

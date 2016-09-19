@@ -454,6 +454,7 @@ blocklyApp.TreeService = ng.core
               break;
             } else if (currentNode.tagName == 'INPUT') {
               currentNode.focus();
+              currentNode.select();
               this.notificationsService.setStatusMessage(
                 'Type a value, then press Escape to exit');
               break;

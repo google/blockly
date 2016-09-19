@@ -119,24 +119,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           block, document.getElementById(this.idMap['blockRoot']),
           deleteBlockFunc);
     },
-    cutBlock_: function() {
-      var blockDescription = this.getBlockDescription();
-
-      var that = this;
-      this.removeBlockAndSetFocus_(this.block, function() {
-        that.clipboardService.cut(that.block);
-      });
-
-      setTimeout(function() {
-        if (that.utilsService.isWorkspaceEmpty()) {
-          that.notificationsService.setStatusMessage(
-              blockDescription + ' cut. Workspace is empty.');
-        } else {
-          that.notificationsService.setStatusMessage(
-              blockDescription + ' cut. Now on workspace.');
-        }
-      });
-    },
     deleteBlock_: function() {
       var blockDescription = this.getBlockDescription();
 
@@ -154,19 +136,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           that.notificationsService.setStatusMessage(
               blockDescription + ' deleted. Now on workspace.');
         }
-      });
-    },
-    pasteToConnection_: function(connection) {
-      var destinationTreeId = this.treeService.getTreeIdForBlock(
-          connection.getSourceBlock().id);
-      this.treeService.clearActiveDesc(destinationTreeId);
-
-      var newBlockId = this.clipboardService.pasteFromClipboard(connection);
-
-      // Invoke a digest cycle, so that the DOM settles.
-      var that = this;
-      setTimeout(function() {
-        that.treeService.focusOnBlock(newBlockId);
       });
     },
     moveToMarkedSpot_: function() {
@@ -203,60 +172,17 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             '. Now on moved block in workspace.');
       });
     },
-    copyBlock_: function() {
-      this.clipboardService.copy(this.block);
-      this.notificationsService.setStatusMessage(
-          this.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
-    },
     markSpotBefore_: function() {
       this.clipboardService.markConnection(this.block.previousConnection);
     },
     markSpotAfter_: function() {
       this.clipboardService.markConnection(this.block.nextConnection);
     },
-    pasteToNextConnection_: function() {
-      this.pasteToConnection_(this.block.nextConnection);
-    },
-    pasteToPreviousConnection_: function() {
-      this.pasteToConnection_(this.block.previousConnection);
-    },
     ngOnInit: function() {
       var that = this;
 
       // Generate a list of action buttons.
       this.actionButtonsInfo = [{
-        baseIdKey: 'cut',
-        translationIdForText: 'CUT_BLOCK',
-        action: that.cutBlock_.bind(that),
-        isDisabled: function() {
-          return false;
-        }
-      }, {
-        baseIdKey: 'copy',
-        translationIdForText: 'COPY_BLOCK',
-        action: that.copyBlock_.bind(that),
-        isDisabled: function() {
-          return false;
-        }
-      }, {
-        baseIdKey: 'pasteBefore',
-        translationIdForText: 'PASTE_BEFORE',
-        action: that.pasteToPreviousConnection_.bind(that),
-        isDisabled: function() {
-          return Boolean(
-              !that.block.previousConnection ||
-              !that.isCompatibleWithClipboard(that.block.previousConnection));
-        }
-      }, {
-        baseIdKey: 'pasteAfter',
-        translationIdForText: 'PASTE_AFTER',
-        action: that.pasteToNextConnection_.bind(that),
-        isDisabled: function() {
-          return Boolean(
-              !that.block.nextConnection ||
-              !that.isCompatibleWithClipboard(that.block.nextConnection));
-        }
-      }, {
         baseIdKey: 'markBefore',
         translationIdForText: 'MARK_SPOT_BEFORE',
         action: that.markSpotBefore_.bind(that),
@@ -301,7 +227,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         baseIdKey: 'paste',
         translationIdForText: 'PASTE',
         action: function(connection) {
-          that.pasteToConnection_(connection);
+          that.treeService.pasteToConnection(that.block, connection);
         },
         isDisabled: function(connection) {
           return !that.isCompatibleWithClipboard(connection);

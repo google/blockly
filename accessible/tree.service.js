@@ -335,13 +335,16 @@ blocklyApp.TreeService = ng.core
       this.notificationsService.setStatusMessage(
           blockDescription + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
     },
-    pasteToConnection_: function(block, connection) {
+    pasteToConnection: function(block, connection) {
+      if (this.clipboardService.isClipboardEmpty()) {
+        return;
+      }
+
       var destinationTreeId = this.getTreeIdForBlock(
           connection.getSourceBlock().id);
       this.clearActiveDesc(destinationTreeId);
 
       var newBlockId = this.clipboardService.pasteFromClipboard(connection);
-
       // Invoke a digest cycle, so that the DOM settles.
       var that = this;
       setTimeout(function() {
@@ -410,7 +413,7 @@ blocklyApp.TreeService = ng.core
           // Paste block, if possible.
           var targetConnection =
               e.shiftKey ? block.previousConnection : block.nextConnection;
-          this.pasteToConnection_(block, targetConnection);
+          this.pasteToConnection(block, targetConnection);
         }
       } else if (document.activeElement.tagName == 'INPUT') {
         // For input fields, only Esc and Tab keystrokes are handled specially.

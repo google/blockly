@@ -111,6 +111,9 @@ blocklyApp.ClipboardService = ng.core
       this.clipboardBlockNextConnection_ = block.nextConnection;
       this.clipboardBlockOutputConnection_ = block.outputConnection;
     },
+    isClipboardEmpty: function() {
+      return !this.clipboardBlockXml_;
+    },
     pasteFromClipboard: function(inputConnection) {
       var connection = inputConnection;
       // If the connection is a 'previousConnection' and that connection is

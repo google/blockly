@@ -34,13 +34,6 @@ blocklyApp.ToolboxTreeComponent = ng.core
         [attr.aria-level]="level">
       <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu">
-        <li [id]="idMap['blockCopy']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
-            [attr.aria-level]="level + 2">
-          <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()" tabindex="-1">
-            {{'COPY_TO_CLIPBOARD'|translate}}
-          </button>
-        </li>
         <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
             [attr.aria-level]="level + 2">
@@ -88,8 +81,8 @@ blocklyApp.ToolboxTreeComponent = ng.core
       var idKeys = ['toolboxBlockRoot', 'blockSummaryLabel'];
       if (this.displayBlockMenu) {
         idKeys = idKeys.concat([
-            'workspaceCopy', 'workspaceCopyButton', 'blockCopy',
-            'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
+            'workspaceCopy', 'workspaceCopyButton', 'sendToSelected',
+            'sendToSelectedButton']);
       }
 
       this.idMap = {};
@@ -135,11 +128,6 @@ blocklyApp.ToolboxTreeComponent = ng.core
             blockDescription + ' copied to new workspace group. ' +
             'Now on copied block in workspace.');
       });
-    },
-    copyToClipboard: function() {
-      this.clipboardService.copy(this.block);
-      this.notificationsService.setStatusMessage(
-          this.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
     },
     copyToMarkedSpot: function() {
       var blockDescription = this.getBlockDescription();

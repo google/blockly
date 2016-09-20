@@ -476,8 +476,6 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
     Blockly.bindEvent_(el, goog.events.EventType.TOUCHSTART, this,
         this.handleTouchEvent_);
   }
-
-  Blockly.bindEvent_(el, 'mouseup', this, Blockly.Touch.clearTouchIdentifier);
 };
 
 /**

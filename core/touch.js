@@ -212,7 +212,6 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
   if (e.type == 'mousedown' || e.type == 'touchstart') {
     // No identifier set yet, and this is the start of a drag.  Set it and
     // return.
-    console.trace('setting touch identfier');
     Blockly.Touch.touchIdentifier_ = identifier;
     return true;
   }

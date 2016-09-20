@@ -44,7 +44,8 @@ blocklyApp.FieldComponent = ng.core
       </label>
       <ol role="group">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
+            [attr.aria-level]="level" [attr.aria-selected]="field.getValue() == optionValue">
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)"
                   [disabled]="disabled" tabindex="-1"
                   [attr.aria-label]="optionText[optionValue] + ' Press Enter to select this value'">
@@ -62,7 +63,7 @@ blocklyApp.FieldComponent = ng.core
       {{field.getText()}}
     </label>
     `,
-    inputs: ['field', 'index', 'parentId', 'disabled', 'mainFieldId'],
+    inputs: ['field', 'index', 'parentId', 'disabled', 'mainFieldId', 'level'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({

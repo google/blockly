@@ -37,7 +37,8 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
           <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="inputBlock.fieldRow.length"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
-            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [mainFieldId]="idMap['fieldLabel' + i]">
+            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [mainFieldId]="idMap['fieldLabel' + i]"
+                           [level]="level + 2">
             </blockly-field>
           </li>
 

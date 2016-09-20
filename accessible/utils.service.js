@@ -70,5 +70,13 @@ blocklyApp.UtilsService = ng.core
     },
     isWorkspaceEmpty: function() {
       return !blocklyApp.workspace.topBlocks_.length;
+    },
+    getBlockById: function(blockId) {
+      return this.getBlockByIdFromWorkspace(blockId, blocklyApp.workspace);
+    },
+    getBlockByIdFromWorkspace: function(blockId, workspace) {
+      // This is used for non-default workspaces, such as those comprising the
+      // toolbox.
+      return workspace.getBlockById(blockId);
     }
   });

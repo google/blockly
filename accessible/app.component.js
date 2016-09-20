@@ -32,16 +32,11 @@ blocklyApp.AppView = ng.core
     <div aria-hidden="true">
       Status: <span aria-live="polite" role="status">{{getStatusMessage()}}</span>
     </div>
-    <table>
-      <tr>
-        <td class="blocklyTable">
-          <blockly-toolbox>{{'TOOLBOX_LOAD'|translate}}</blockly-toolbox>
-        </td>
-        <td class="blocklyTable">
-          <blockly-workspace>{{'WORKSPACE_LOAD'|translate}}</blockly-workspace>
-        </td>
-      </tr>
-    </table>
+
+    <div>
+      <blockly-toolbox>{{'TOOLBOX_LOAD'|translate}}</blockly-toolbox>
+      <blockly-workspace>{{'WORKSPACE_LOAD'|translate}}</blockly-workspace>
+    </div>
 
     <label aria-hidden="true" hidden id="blockly-argument-block-menu">{{'ARGUMENT_BLOCK_ACTION_LIST'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-argument-input">{{'ARGUMENT_INPUT'|translate}}</label>

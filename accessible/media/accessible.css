@@ -1,6 +1,17 @@
-.blocklyTable {
-  vertical-align: top;
+.blocklyToolboxColumn {
+  float: left;
+  width: 350px;
 }
+.blocklyWorkspaceColumn {
+  float: left;
+  width: 350px;
+}
+.blocklyToolbarColumn {
+  float: left;
+  margin-top: 20px;
+  width: 200px;
+}
+
 .blocklyTree .blocklyActiveDescendant > label,
 .blocklyTree .blocklyActiveDescendant > div > label,
 .blocklyActiveDescendant > button,

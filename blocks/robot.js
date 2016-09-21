@@ -258,7 +258,7 @@ Blockly.Blocks['robot_perception_find_custom_landmark'] = {
 
 Blockly.robot.customLandmarks = [['<No landmarks yet>', '<No landmarks yet>']];
 Blockly.robot.getCustomLandmarkOptions = function() {
-  var options = [];
+  var options = [['<No landmarks yet>', '<No landmarks yet>']];
   var client = new ROSLIB.Service({
     ros: ROS,
     name: '/mongo_msg_db/list',
@@ -272,6 +272,9 @@ Blockly.robot.getCustomLandmarkOptions = function() {
     }
   });
   client.callService(request, function(result) {
+    if (result.messages.length > 0) {
+      options = [];
+    }
     for (var i=0; i<result.messages.length; ++i) {
       var message = result.messages[i];
       var landmark = JSON.parse(message.json);
@@ -287,6 +290,9 @@ Blockly.Blocks['robot_perception_custom_landmarks'] = {
   init: function() {
     var that = this;
     Blockly.robot.getCustomLandmarkOptions();
+    if (!Blockly.robot.customLandmarks) {
+      Blockly.robot.customLandmarks = [['<No landmarks yet>', '<No landmarks yet>']];
+    }
     this.appendDummyInput("DROPDOWN")
         .appendField(new Blockly.FieldDropdown(Blockly.robot.customLandmarks), "LANDMARK");
     this.setOutput(true, "Custom landmark ID");
@@ -348,7 +354,7 @@ Blockly.Blocks['robot_manipulation_place_default'] = {
 
 Blockly.robot.pbdActions = [['<Select an action>', '<Select an action>']];
 Blockly.robot.getPbdActions = function() {
-  var options = [];
+  var options = [['<Select an action>', '<Select an action>']];
   var client = new ROSLIB.Service({
     ros: ROS,
     name: '/mongo_msg_db/list',
@@ -362,6 +368,9 @@ Blockly.robot.getPbdActions = function() {
     }
   });
   client.callService(request, function(result) {
+    if (result.messages.length > 0) {
+      options = [];
+    }
     for (var i=0; i<result.messages.length; ++i) {
       var message = result.messages[i];
       var program = JSON.parse(message.json);
@@ -376,6 +385,9 @@ Blockly.robot.getPbdActions();
 Blockly.Blocks['robot_manipulation_pbd_actions'] = {
   init: function() {
     Blockly.robot.getPbdActions();
+    if (!Blockly.robot.pbdActions) {
+      Blockly.robot.pbdActions = [['<Select an action>', '<Select an action>']];
+    }
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(Blockly.robot.pbdActions), "ACTION_ID");
     this.setOutput(true, "PbD action ID");
@@ -477,7 +489,7 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   // used in the action. The value is returned as the argument of the callback.
   // E.g., [['bowl rim', 'id1234'], ['box', 'id2345']]
   getLandmarksForAction_: function(action_id, callback) {
-    var options = [];
+    var options = [[]];
     var client = new ROSLIB.Service({
       ros: ROS,
       name: '/pr2_pbd/landmarks_for_action',
@@ -488,6 +500,9 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
       action_id: action_id
     });
     client.callService(request, function(result) {
+      if (result.landmarks.length > 0) {
+        options = [];
+      }
       for (var i=0; i<result.landmarks.length; ++i) {
         var landmark = result.landmarks[i];
         options.push([landmark.name, landmark.db_id]);

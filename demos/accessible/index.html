@@ -71,11 +71,11 @@
 
   <script>
     var ACCESSIBLE_GLOBALS = {
+      // Prefix of path to sound files.
+      mediaPathPrefix: '../../accessible/media/',
       // Additional buttons for the workspace toolbar that
       // go before the "Clear Workspace" button.
-      toolbarButtonConfig: [],
-      // Prefix of path to sound files.
-      mediaPathPrefix: '../../accessible/media/'
+      toolbarButtonConfig: []
     };
     document.addEventListener('DOMContentLoaded', function() {
       ng.platform.browser.bootstrap(blocklyApp.AppView);

@@ -36,7 +36,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       <ol role="group" *ngIf="displayBlockMenu">
         <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
-            [attr.aria-level]="level + 2">
+            [attr.aria-level]="level + 1">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
                   [disabled]="!canBeCopiedToMarkedConnection()" tabindex="-1">
             {{'COPY_TO_MARKED_SPOT'|translate}}
@@ -44,19 +44,13 @@ blocklyApp.ToolboxTreeComponent = ng.core
         </li>
         <li [id]="idMap['workspaceCopy']" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
-            [attr.aria-level]="level + 2">
+            [attr.aria-level]="level + 1">
           <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
             {{'COPY_TO_WORKSPACE'|translate}}
           </button>
         </li>
       </ol>
     </li>
-
-    <blockly-toolbox-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-                          [level]="level"
-                          [block]="block.nextConnection.targetBlock()"
-                          [displayBlockMenu]="false">
-    </blockly-toolbox-tree>
     `,
     directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
       return blocklyApp.ToolboxTreeComponent;

@@ -184,6 +184,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
       // Generate a list of action buttons.
       this.actionButtonsInfo = [{
+        baseIdKey: 'moveToMarkedSpot',
+        translationIdForText: 'MOVE_TO_MARKED_SPOT',
+        action: that.moveToMarkedSpot_.bind(that),
+        isDisabled: function() {
+          return !that.clipboardService.isMovableToMarkedConnection(
+              that.block);
+        }
+      }, {
         baseIdKey: 'markBefore',
         translationIdForText: 'MARK_SPOT_BEFORE',
         action: that.markSpotBefore_.bind(that),
@@ -196,14 +204,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         action: that.markSpotAfter_.bind(that),
         isDisabled: function() {
           return !that.block.nextConnection;
-        }
-      }, {
-        baseIdKey: 'moveToMarkedSpot',
-        translationIdForText: 'MOVE_TO_MARKED_SPOT',
-        action: that.moveToMarkedSpot_.bind(that),
-        isDisabled: function() {
-          return !that.clipboardService.isMovableToMarkedConnection(
-              that.block);
         }
       }, {
         baseIdKey: 'delete',

@@ -68,14 +68,16 @@ Blockly.WorkspaceSvg = function(options) {
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
 /**
- * Wrapper function called when a resize event occurs.
- * @type {Array.<!Array>} Data that can be passed to unbindEvent_
+ * A wrapper function called when a resize event occurs. It can be passed to 
+ * `unbindEvent_`.
+ * @type {Array.<!Array>}
  */
 Blockly.WorkspaceSvg.prototype.resizeHandlerWrapper_ = null;
 
 /**
+ * Returns `true` if visible, and `false` if headless. 
  * Svg workspaces are user-visible (as opposed to a headless workspace).
- * @type {boolean} True if visible.  False if headless.
+ * @type {boolean}
  */
 Blockly.WorkspaceSvg.prototype.rendered = true;
 
@@ -311,7 +313,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
  * Obtain a newly created block.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
- * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new id.
  * @return {!Blockly.BlockSvg} The created block.
  */

@@ -110,13 +110,15 @@ Blockly.Flyout = function(workspaceOptions) {
 
   /**
    * y coordinate of mousedown - used to calculate scroll distances.
-   * @private {number}
+   * @type {number}
+   * @private
    */
   this.startDragMouseY_ = 0;
 
   /**
    * x coordinate of mousedown - used to calculate scroll distances.
-   * @private {number}
+   * @type {number}
+   * @private
    */
   this.startDragMouseX_ = 0;
 };
@@ -124,40 +126,46 @@ Blockly.Flyout = function(workspaceOptions) {
 /**
  * When a flyout drag is in progress, this is a reference to the flyout being
  * dragged. This is used by Flyout.terminateDrag_ to reset dragMode_.
- * @private {Blockly.Flyout}
+ * @type {Blockly.Flyout}
+ * @private
  */
 Blockly.Flyout.startFlyout_ = null;
 
 /**
  * Event that started a drag. Used to determine the drag distance/direction and
  * also passed to BlockSvg.onMouseDown_() after creating a new block.
- * @private {Event}
+ * @type {Event}
+ * @private
  */
 Blockly.Flyout.startDownEvent_ = null;
 
 /**
  * Flyout block where the drag/click was initiated. Used to fire click events or
  * create a new block.
- * @private {Event}
+ * @type {Event}
+ * @private
  */
 Blockly.Flyout.startBlock_ = null;
 
 /**
  * Wrapper function called when a mouseup occurs during a background or block
  * drag operation.
- * @private {Array.<!Array>}
+ * @type {Array.<!Array>}
+ * @private
  */
 Blockly.Flyout.onMouseUpWrapper_ = null;
 
 /**
  * Wrapper function called when a mousemove occurs during a background drag.
- * @private {Array.<!Array>}
+ * @type {Array.<!Array>}
+ * @private
  */
 Blockly.Flyout.onMouseMoveWrapper_ = null;
 
 /**
  * Wrapper function called when a mousemove occurs during a block drag.
- * @private {Array.<!Array>}
+ * @type {Array.<!Array>}
+ * @private
  */
 Blockly.Flyout.onMouseMoveBlockWrapper_ = null;
 

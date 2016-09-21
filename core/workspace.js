@@ -82,14 +82,13 @@ Blockly.Workspace = function(opt_options) {
 };
 
 /**
- * Workspaces may be headless.
- * @type {boolean} True if visible.  False if headless.
+ * Returns `true` if the workspace is visible and `false` if it's headless.
+ *@type {boolean}
  */
 Blockly.Workspace.prototype.rendered = false;
 
 /**
- * Maximum number of undo events in stack.
- * @type {number} 0 to turn off undo, Infinity for unlimited.
+ * Maximum number of undo events in stack. `0` turns off undo, `Infinity` sets it to unlimited.
  */
 Blockly.Workspace.prototype.MAX_UNDO = 1024;
 
@@ -369,7 +368,7 @@ Blockly.Workspace.prototype.getWidth = function() {
  * Obtain a newly created block.
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
- * @param {=string} opt_id Optional ID.  Use this ID if provided, otherwise
+ * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new id.
  * @return {!Blockly.Block} The created block.
  */

@@ -28,6 +28,7 @@ goog.provide('Blockly.Touch');
 
 goog.require('goog.events');
 goog.require('goog.events.BrowserFeature');
+goog.require('goog.string');
 
 /**
  * Which touch events are we currently paying attention to?
@@ -71,7 +72,7 @@ Blockly.longPid_ = 0;
  * if the touch event terminates early.
  * @param {!Event} e Touch start event.
  * @param {!Blockly.Block|!Blockly.WorkspaceSvg} uiObject The block or workspace
- *   under the touchstart event.
+ *     under the touchstart event.
  * @private
  */
 Blockly.longStart_ = function(e, uiObject) {
@@ -167,7 +168,7 @@ Blockly.Touch.clearTouchIdentifier = function() {
  * with one touch stream at a time.  All other events should always be handled.
  * @param {!Event} e The event to check.
  * @return {boolean} True if this event should be passed through to the
- *    registered handler; false if it should be blocked.
+ *     registered handler; false if it should be blocked.
  */
 Blockly.Touch.shouldHandleEvent = function(e) {
   return !Blockly.Touch.isMouseOrTouchEvent(e) ||
@@ -218,7 +219,7 @@ Blockly.Touch.checkTouchIdentifier = function(e) {
  * @param {!Event} e A touch event.
  */
 Blockly.Touch.setClientFromTouch = function(e) {
-  if (e.type.indexOf('touch') == 0) {
+  if (goog.string.startsWith(e.type, 'touch')) {
     // Map the touch event's properties to the event.
     var touchPoint = e.changedTouches[0];
     e.clientX = touchPoint.clientX;
@@ -232,7 +233,8 @@ Blockly.Touch.setClientFromTouch = function(e) {
  * @return {boolean} true if it is a mouse or touch event; false otherwise.
  */
 Blockly.Touch.isMouseOrTouchEvent = function(e) {
-  return e.type.indexOf('touch') == 0 || e.type.indexOf('mouse') == 0;
+  return goog.string.startsWith(e.type, 'touch') ||
+      goog.string.startsWith(e.type, 'mouse');
 };
 
 /**
@@ -254,7 +256,7 @@ Blockly.Touch.splitEventByTouches = function(e) {
         stopPropagation: function(){ e.stopPropagation(); },
         preventDefault: function(){ e.preventDefault(); }
       };
-      events.push(newEvent);
+      events[i] = newEvent;
     }
   } else {
     events.push(e);

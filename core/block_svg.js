@@ -533,7 +533,11 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   }
   if (this.isInFlyout) {
     // longStart's simulation of right-clicks for longpresses on touch devices
-    // calls the object's onMouseDown, instead of the flyout's onMouseDown.
+    // calls the onMouseDown_ function defined on the prototype of the object
+    // the was longpressed (in this case, a Blockly.BlockSvg).  In this case
+    // that behaviour is wrong, because Blockly.Flyout.prototype.blockMouseDown
+    // should be called for a mousedown on a block in the flyout, which blocks
+    // execution of the block's onMouseDown_ function.
     if (e.type == 'touchstart' && Blockly.isRightButton(e)) {
       Blockly.Flyout.blockRightClick_(e, this);
       e.stopPropagation();

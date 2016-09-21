@@ -96,6 +96,9 @@ Blockly.hasClass_ = function(element, className) {
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
+ * @param {boolean} opt_noCaptureIdentifier True if triggering on this event
+ *     should not block execution of other event handlers on this touch or other
+ *     simultaneous touches.
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
  * @private
  */

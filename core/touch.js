@@ -187,19 +187,10 @@ Blockly.Touch.shouldHandleEvent = function(e) {
  *     saved identifier.
  */
 Blockly.Touch.checkTouchIdentifier = function(e) {
-  var identifier;
-  // TODO (fenichel): Improve splitEventByTouches to get rid of this try/catch.
-  try {
-    identifier = (e.changedTouches && e.changedTouches.item(0) &&
-        e.changedTouches.item(0).identifier != undefined &&
-        e.changedTouches.item(0).identifier != null) ?
-        e.changedTouches.item(0).identifier : 'mouse';
-  } catch (ex) {
-    identifier = (e.changedTouches && e.changedTouches[0] &&
+  var identifier = (e.changedTouches && e.changedTouches[0] &&
         e.changedTouches[0].identifier != undefined &&
         e.changedTouches[0].identifier != null) ?
         e.changedTouches[0].identifier : 'mouse';
-  }
 
   // if (Blockly.touchIdentifier_ )is insufficient because android touch
   // identifiers may be zero.

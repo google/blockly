@@ -70,4 +70,4 @@ Blockly.Msg.BLOCK_MOVED_TO_MARKED_SPOT_MSB = 'Block moved to marked spot: ';
 Blockly.Msg.TOOLBOX_BLOCK = 'toolbox block';
 Blockly.Msg.WORKSPACE_BLOCK = 'workspace block';
 Blockly.Msg.SUBMENU_INDICATOR = 'move right to view submenu';
-Blockly.Msg.MORE_OPTIONS = 'More options';
+Blockly.Msg.BLOCK_OPTIONS = 'Block options';

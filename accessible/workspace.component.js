@@ -27,33 +27,37 @@ blocklyApp.WorkspaceComponent = ng.core
   .Component({
     selector: 'blockly-workspace',
     template: `
-    <label>
+    <div class="blocklyWorkspaceColumn">
       <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
-    </label>
 
-    <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
-      <span *ngFor="#buttonConfig of toolbarButtonConfig">
-        <button (click)="buttonConfig.action()"
-                class="blocklyTree blocklyWorkspaceToolbarButton">
-          {{buttonConfig.text}}
-        </button>
-      </span>
-      <button id="clear-workspace" (click)="clearWorkspace()"
-              [attr.aria-disabled]="isWorkspaceEmpty()"
-              class="blocklyTree blocklyWorkspaceToolbarButton">
-        {{'CLEAR_WORKSPACE'|translate}}
-      </button>
+      <div *ngIf="workspace" class="blocklyWorkspace">
+        <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
+            tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceTree"
+            [attr.aria-activedescendant]="getActiveDescId(tree.id)"
+            [attr.aria-labelledby]="workspaceTitle.id"
+            (keydown)="onKeypress($event, tree)">
+          <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree" [isTopLevel]="true">
+          </blockly-workspace-tree>
+        </ol>
+      </div>
     </div>
 
-    <div *ngIf="workspace">
-      <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
-          tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceTree"
-          [attr.aria-activedescendant]="getActiveDescId(tree.id)"
-          [attr.aria-labelledby]="workspaceTitle.id"
-          (keydown)="onKeypress($event, tree)">
-        <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree" [isTopLevel]="true">
-        </blockly-workspace-tree>
-      </ol>
+    <div class="blocklyToolbarColumn">
+      <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
+        <span *ngFor="#buttonConfig of toolbarButtonConfig">
+          <button *ngIf="!buttonConfig.isHidden()"
+                  (click)="buttonConfig.action()"
+                  [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
+                  class="blocklyTree blocklyWorkspaceToolbarButton">
+            {{buttonConfig.text}}
+          </button>
+        </span>
+        <button id="clear-workspace" (click)="clearWorkspace()"
+                [attr.aria-disabled]="isWorkspaceEmpty()"
+                class="blocklyTree blocklyWorkspaceToolbarButton">
+          {{'CLEAR_WORKSPACE'|translate}}
+        </button>
+      </div>
     </div>
     `,
     directives: [blocklyApp.WorkspaceTreeComponent],

@@ -5,7 +5,8 @@
 			"Test Create account",
 			"아라",
 			"Diyariq",
-			"محمد أحمد عبد الفتاح"
+			"محمد أحمد عبد الفتاح",
+			"Moud hosny"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "البند",
@@ -25,11 +26,13 @@
 	"DISABLE_BLOCK": "عطّل القطعة",
 	"ENABLE_BLOCK": "أعد تفعيل القطعة",
 	"HELP": "مساعدة",
+	"UNDO": "رجوع",
 	"CHANGE_VALUE_TITLE": "تغيير قيمة:",
-	"NEW_VARIABLE": "متغير جديد...",
-	"NEW_VARIABLE_TITLE": "اسم المتغير الجديد:",
 	"RENAME_VARIABLE": "إعادة تسمية المتغير...",
 	"RENAME_VARIABLE_TITLE": "إعادة تسمية كافة المتغيرات '%1' إلى:",
+	"NEW_VARIABLE": "متغير جديد...",
+	"NEW_VARIABLE_TITLE": "اسم المتغير الجديد:",
+	"VARIABLE_ALREADY_EXISTS": "المتغير '%1' موجود بالفعل",
 	"COLOUR_PICKER_HELPURL": "https://ar.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "اختر لون من اللوحة.",
 	"COLOUR_RANDOM_TITLE": "لون عشوائي",

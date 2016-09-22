@@ -12,7 +12,8 @@
 			"Gurkanht",
 			"HakanIST",
 			"Imabadplayer",
-			"Kumkumuk"
+			"Kumkumuk",
+			"Alpkant"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "öge",
@@ -36,10 +37,13 @@
 	"UNDO": "Geri al",
 	"REDO": "Yinele",
 	"CHANGE_VALUE_TITLE": "Değeri değiştir:",
-	"NEW_VARIABLE": "Yeni değişken...",
-	"NEW_VARIABLE_TITLE": "Yeni değişken ismi :",
 	"RENAME_VARIABLE": "Değişkeni yeniden adlandır...",
 	"RENAME_VARIABLE_TITLE": "Tüm '%1' değişkenlerini yeniden isimlendir:",
+	"NEW_VARIABLE": "Değişken oluştur...",
+	"NEW_VARIABLE_TITLE": "Yeni değişken ismi :",
+	"VARIABLE_ALREADY_EXISTS": "'%1' isimli değişken adı zaten var.",
+	"DELETE_VARIABLE_CONFIRMATION": "'%2' değişkeninin %1 kullanımını silmek istiyor musunuz?",
+	"DELETE_VARIABLE": "'%1' değişkenini silmek istiyor musunuz?",
 	"COLOUR_PICKER_HELPURL": "https://tr.wikipedia.org/wiki/Renk",
 	"COLOUR_PICKER_TOOLTIP": "Paletten bir renk seçin.",
 	"COLOUR_RANDOM_TITLE": "rastgele renk",

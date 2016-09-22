@@ -37,7 +37,8 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         <template ngFor #inputBlock [ngForOf]="block.inputList" #i="index">
           <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="inputBlock.fieldRow.length"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
-            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [mainFieldId]="idMap['fieldLabel' + i]">
+            <blockly-field *ngFor="#field of inputBlock.fieldRow" [field]="field" [mainFieldId]="idMap['fieldLabel' + i]"
+                           [level]="level + 2">
             </blockly-field>
           </li>
 
@@ -48,8 +49,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
               *ngIf="inputBlock.connection && !inputBlock.connection.targetBlock()"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
-              [attr.aria-level]="level + 1"
-              (keydown)="treeService.onKeypress($event, tree)">
+              [attr.aria-level]="level + 1">
             <label [id]="idMap['inputMenuLabel' + i]">
               {{utilsService.getInputTypeLabel(inputBlock.connection)}} {{utilsService.getBlockTypeLabel(inputBlock)}} needed:
             </label>
@@ -71,7 +71,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         <li [id]="idMap['listItem']" class="blocklyHasChildren" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr('blockly-more-options', 'blockly-submenu-indicator')"
             [attr.aria-level]="level + 1">
-          <label [id]="idMap['label']">{{'MORE_OPTIONS'|translate}}</label>
+          <label [id]="idMap['label']">{{'BLOCK_OPTIONS'|translate}}</label>
           <ol role="group">
             <li *ngFor="#buttonInfo of actionButtonsInfo"
                 [id]="idMap[buttonInfo.baseIdKey]" role="treeitem"
@@ -115,58 +115,10 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
     },
-    isIsolatedTopLevelBlock_: function(block) {
-      // Returns whether the given block is at the top level, and has no
-      // siblings.
-      var blockIsAtTopLevel = !block.getParent();
-      var blockHasNoSiblings = (
-          (!block.nextConnection ||
-           !block.nextConnection.targetConnection) &&
-          (!block.previousConnection ||
-           !block.previousConnection.targetConnection));
-      return blockIsAtTopLevel && blockHasNoSiblings;
-    },
     removeBlockAndSetFocus_: function(block, deleteBlockFunc) {
-      // This method runs the given function and then does one of two things:
-      // - If the block is an isolated top-level block, it shifts the tree
-      //   focus.
-      // - Otherwise, it sets the correct new active desc for the current tree.
-      if (this.isIsolatedTopLevelBlock_(block)) {
-        var nextNodeToFocusOn =
-            this.treeService.getNodeToFocusOnWhenTreeIsDeleted(this.tree.id);
-
-        this.treeService.clearActiveDesc(this.tree.id);
-        deleteBlockFunc();
-        // Invoke a digest cycle, so that the DOM settles.
-        setTimeout(function() {
-          nextNodeToFocusOn.focus();
-        });
-      } else {
-        var blockRootNode = document.getElementById(this.idMap['blockRoot']);
-        var nextActiveDesc =
-            this.treeService.getNextActiveDescWhenBlockIsDeleted(
-                blockRootNode);
-        this.treeService.runWhilePreservingFocus(
-            deleteBlockFunc, this.tree.id, nextActiveDesc.id);
-      }
-    },
-    cutBlock_: function() {
-      var blockDescription = this.getBlockDescription();
-
-      var that = this;
-      this.removeBlockAndSetFocus_(this.block, function() {
-        that.clipboardService.cut(that.block);
-      });
-
-      setTimeout(function() {
-        if (that.utilsService.isWorkspaceEmpty()) {
-          that.notificationsService.setStatusMessage(
-              blockDescription + ' cut. Workspace is empty.');
-        } else {
-          that.notificationsService.setStatusMessage(
-              blockDescription + ' cut. Now on workspace.');
-        }
-      });
+      this.treeService.removeBlockAndSetFocus(
+          block, document.getElementById(this.idMap['blockRoot']),
+          deleteBlockFunc);
     },
     deleteBlock_: function() {
       var blockDescription = this.getBlockDescription();
@@ -185,19 +137,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           that.notificationsService.setStatusMessage(
               blockDescription + ' deleted. Now on workspace.');
         }
-      });
-    },
-    pasteToConnection_: function(connection) {
-      var destinationTreeId = this.treeService.getTreeIdForBlock(
-          connection.getSourceBlock().id);
-      this.treeService.clearActiveDesc(destinationTreeId);
-
-      var newBlockId = this.clipboardService.pasteFromClipboard(connection);
-
-      // Invoke a digest cycle, so that the DOM settles.
-      var that = this;
-      setTimeout(function() {
-        that.treeService.focusOnBlock(newBlockId);
       });
     },
     moveToMarkedSpot_: function() {
@@ -234,58 +173,23 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             '. Now on moved block in workspace.');
       });
     },
-    copyBlock_: function() {
-      this.clipboardService.copy(this.block);
-      this.notificationsService.setStatusMessage(
-          this.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
-    },
     markSpotBefore_: function() {
       this.clipboardService.markConnection(this.block.previousConnection);
     },
     markSpotAfter_: function() {
       this.clipboardService.markConnection(this.block.nextConnection);
     },
-    pasteToNextConnection_: function() {
-      this.pasteToConnection_(this.block.nextConnection);
-    },
-    pasteToPreviousConnection_: function() {
-      this.pasteToConnection_(this.block.previousConnection);
-    },
     ngOnInit: function() {
       var that = this;
 
       // Generate a list of action buttons.
       this.actionButtonsInfo = [{
-        baseIdKey: 'cut',
-        translationIdForText: 'CUT_BLOCK',
-        action: that.cutBlock_.bind(that),
+        baseIdKey: 'moveToMarkedSpot',
+        translationIdForText: 'MOVE_TO_MARKED_SPOT',
+        action: that.moveToMarkedSpot_.bind(that),
         isDisabled: function() {
-          return false;
-        }
-      }, {
-        baseIdKey: 'copy',
-        translationIdForText: 'COPY_BLOCK',
-        action: that.copyBlock_.bind(that),
-        isDisabled: function() {
-          return false;
-        }
-      }, {
-        baseIdKey: 'pasteBefore',
-        translationIdForText: 'PASTE_BEFORE',
-        action: that.pasteToPreviousConnection_.bind(that),
-        isDisabled: function() {
-          return Boolean(
-              !that.block.previousConnection ||
-              !that.isCompatibleWithClipboard(that.block.previousConnection));
-        }
-      }, {
-        baseIdKey: 'pasteAfter',
-        translationIdForText: 'PASTE_AFTER',
-        action: that.pasteToNextConnection_.bind(that),
-        isDisabled: function() {
-          return Boolean(
-              !that.block.nextConnection ||
-              !that.isCompatibleWithClipboard(that.block.nextConnection));
+          return !that.clipboardService.isMovableToMarkedConnection(
+              that.block);
         }
       }, {
         baseIdKey: 'markBefore',
@@ -300,14 +204,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         action: that.markSpotAfter_.bind(that),
         isDisabled: function() {
           return !that.block.nextConnection;
-        }
-      }, {
-        baseIdKey: 'moveToMarkedSpot',
-        translationIdForText: 'MOVE_TO_MARKED_SPOT',
-        action: that.moveToMarkedSpot_.bind(that),
-        isDisabled: function() {
-          return !that.clipboardService.isMovableToMarkedConnection(
-              that.block);
         }
       }, {
         baseIdKey: 'delete',
@@ -332,7 +228,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         baseIdKey: 'paste',
         translationIdForText: 'PASTE',
         action: function(connection) {
-          that.pasteToConnection_(connection);
+          that.treeService.pasteToConnection(that.block, connection);
         },
         isDisabled: function(connection) {
           return !that.isCompatibleWithClipboard(connection);

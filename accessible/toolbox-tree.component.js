@@ -28,48 +28,35 @@ blocklyApp.ToolboxTreeComponent = ng.core
   .Component({
     selector: 'blockly-toolbox-tree',
     template: `
-    <li #parentList [id]="idMap['parentList']" role="treeitem"
-        [ngClass]="{blocklyHasChildren: displayBlockMenu, blocklyActiveDescendant: index == 0 && noCategories}"
+    <li [id]="idMap['toolboxBlockRoot']" role="treeitem"
+        [ngClass]="{blocklyHasChildren: displayBlockMenu}"
         [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummaryLabel'], 'blockly-toolbox-block')"
         [attr.aria-level]="level">
       <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu">
-        <li [id]="idMap['workspaceCopy']" role="treeitem"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
-            [attr.aria-level]="level + 2">
-          <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
-            {{'COPY_TO_WORKSPACE'|translate}}
-          </button>
-        </li>
-        <li [id]="idMap['blockCopy']" role="treeitem"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
-            [attr.aria-level]="level + 2">
-          <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()" tabindex="-1">
-            {{'COPY_TO_CLIPBOARD'|translate}}
-          </button>
-        </li>
-        <li [id]="idMap['sendToSelected']" role="treeitem"
+        <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
-            [attr.aria-level]="level + 2">
+            [attr.aria-level]="level + 1">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
                   [disabled]="!canBeCopiedToMarkedConnection()" tabindex="-1">
             {{'COPY_TO_MARKED_SPOT'|translate}}
           </button>
         </li>
+        <li [id]="idMap['workspaceCopy']" role="treeitem"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
+            [attr.aria-level]="level + 1">
+          <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
+            {{'COPY_TO_WORKSPACE'|translate}}
+          </button>
+        </li>
       </ol>
     </li>
-
-    <blockly-toolbox-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-                          [level]="level"
-                          [block]="block.nextConnection.targetBlock()"
-                          [displayBlockMenu]="false">
-    </blockly-toolbox-tree>
     `,
     directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
       return blocklyApp.ToolboxTreeComponent;
     })],
     inputs: [
-        'block', 'displayBlockMenu', 'level', 'index', 'tree', 'noCategories', 'isTopLevel'],
+        'block', 'displayBlockMenu', 'level', 'tree', 'isFirstToolboxTree'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
@@ -85,18 +72,33 @@ blocklyApp.ToolboxTreeComponent = ng.core
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {
-      var elementsNeedingIds = ['blockSummaryLabel'];
+      var idKeys = ['toolboxBlockRoot', 'blockSummaryLabel'];
       if (this.displayBlockMenu) {
-        elementsNeedingIds = elementsNeedingIds.concat(['blockSummarylabel',
-            'workspaceCopy', 'workspaceCopyButton', 'blockCopy',
-            'blockCopyButton', 'sendToSelected', 'sendToSelectedButton']);
+        idKeys = idKeys.concat([
+            'workspaceCopy', 'workspaceCopyButton', 'sendToSelected',
+            'sendToSelectedButton']);
       }
-      this.idMap = this.utilsService.generateIds(elementsNeedingIds);
-      if (this.isTopLevel) {
-        this.idMap['parentList'] = 'blockly-toolbox-tree-node0';
-      } else {
-        this.idMap['parentList'] = this.utilsService.generateUniqueId();
+
+      this.idMap = {};
+      for (var i = 0; i < idKeys.length; i++) {
+        this.idMap[idKeys[i]] = this.block.id + idKeys[i];
       }
+    },
+    ngAfterViewInit: function() {
+      // If this is the first tree in the category-less toolbox, set its active
+      // descendant after the ids have been computed.
+      // Note that a timeout is needed here in order to trigger Angular
+      // change detection.
+      if (this.isFirstToolboxTree) {
+        var that = this;
+        setTimeout(function() {
+          that.treeService.setActiveDesc(
+              that.idMap['toolboxBlockRoot'], 'blockly-toolbox-tree');
+        });
+      }
+    },
+    isWorkspaceEmpty: function() {
+      return this.utilsService.isWorkspaceEmpty();
     },
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
@@ -117,14 +119,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
         that.notificationsService.setStatusMessage(
-            blockDescription + ' copied to workspace. ' +
+            blockDescription + ' copied to new workspace group. ' +
             'Now on copied block in workspace.');
       });
-    },
-    copyToClipboard: function() {
-      this.clipboardService.copy(this.block);
-      this.notificationsService.setStatusMessage(
-          this.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
     },
     copyToMarkedSpot: function() {
       var blockDescription = this.getBlockDescription();

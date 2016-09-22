@@ -30,12 +30,12 @@ blocklyApp.FieldComponent = ng.core
     template: `
     <input *ngIf="isTextInput()" [id]="mainFieldId" type="text" [disabled]="disabled"
            [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text'"
+           [attr.aria-label]="disabled ? 'Disabled text field' : 'Press Enter to edit text: ' + field.getValue()"
            tabindex="-1">
 
     <input *ngIf="isNumberInput()" [id]="mainFieldId" type="number" [disabled]="disabled"
-           [ngModel]="field.getValue()" (ngModelChange)="field.setValue($event)"
-           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number'"
+           [ngModel]="field.getValue()" (ngModelChange)="setNumberValue($event)"
+           [attr.aria-label]="disabled ? 'Disabled number field' : 'Press Enter to edit number: ' + field.getValue()"
            tabindex="-1">
 
     <div *ngIf="isDropdown()">
@@ -44,7 +44,8 @@ blocklyApp.FieldComponent = ng.core
       </label>
       <ol role="group">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')">
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
+            [attr.aria-level]="level" [attr.aria-selected]="field.getValue() == optionValue">
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(field, optionValue)"
                   [disabled]="disabled" tabindex="-1"
                   [attr.aria-label]="optionText[optionValue] + ' Press Enter to select this value'">
@@ -62,7 +63,7 @@ blocklyApp.FieldComponent = ng.core
       {{field.getText()}}
     </label>
     `,
-    inputs: ['field', 'index', 'parentId', 'disabled', 'mainFieldId'],
+    inputs: ['field', 'index', 'parentId', 'disabled', 'mainFieldId', 'level'],
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
@@ -77,6 +78,10 @@ blocklyApp.FieldComponent = ng.core
       // Warning: this assumes that the elements returned by
       // this.generateElementNames() are unique.
       this.idMap = this.utilsService.generateIds(elementsNeedingIds);
+    },
+    setNumberValue: function(newValue) {
+      // Do not permit a residual value of NaN after a backspace event.
+      this.field.setValue(newValue || 0);
     },
     generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
       return mainLabel + ' ' + secondLabel;

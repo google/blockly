@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Bubble');
 
+goog.require('Blockly.Touch');
 goog.require('Blockly.Workspace');
 goog.require('goog.dom');
 goog.require('goog.math');
@@ -142,6 +143,17 @@ Blockly.Bubble.unbindDragEvents_ = function() {
     Blockly.unbindEvent_(Blockly.Bubble.onMouseMoveWrapper_);
     Blockly.Bubble.onMouseMoveWrapper_ = null;
   }
+};
+
+/*
+ * Handle a mouse-up event while dragging a bubble's border or resize handle.
+ * @param {!Event} e Mouse up event.
+ * @private
+ */
+Blockly.Bubble.bubbleMouseUp_ = function(/*e*/) {
+  Blockly.Touch.clearTouchIdentifier();
+  Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
+  Blockly.Bubble.unbindDragEvents_();
 };
 
 /**
@@ -275,7 +287,7 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
       this.relativeTop_));
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
-      'mouseup', this, Blockly.Bubble.unbindDragEvents_);
+      'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
   Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
       'mousemove', this, this.bubbleMouseMove_);
   Blockly.hideChaff();
@@ -317,7 +329,7 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
       this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
   Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
-      'mouseup', this, Blockly.Bubble.unbindDragEvents_);
+      'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
   Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
       'mousemove', this, this.resizeMouseMove_);
   Blockly.hideChaff();

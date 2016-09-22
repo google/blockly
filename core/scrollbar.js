@@ -297,7 +297,7 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Scrollbar.prototype.dispose = function() {
-  this.cleanUp_();
+  this.onMouseUpHandle_();
   Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
   this.onMouseDownBarWrapper_ = null;
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
@@ -599,8 +599,7 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
-  Blockly.Touch.clearTouchIdentifier();  // This is really a click.
-  this.cleanUp_();
+  this.onMouseUpHandle_();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -638,7 +637,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
-  this.cleanUp_();
+  this.onMouseUpHandle_();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -672,20 +671,10 @@ Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
 };
 
 /**
- * Release the scrollbar handle and reset state accordingly.
+ * Stop binding to the global mouseup and mousemove events.
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
-  Blockly.Touch.clearTouchIdentifier();
-  this.cleanUp_();
-};
-
-/**
- * Hide chaff and stop binding to mouseup and mousemove events.  Call this to
- * wrap up lose ends associated with the scrollbar.
- * @private
- */
-Blockly.Scrollbar.prototype.cleanUp_ = function() {
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);

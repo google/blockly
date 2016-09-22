@@ -28,7 +28,6 @@
 
 goog.provide('Blockly.utils');
 
-goog.require('Blockly.Touch');
 goog.require('goog.dom');
 goog.require('goog.events.BrowserFeature');
 goog.require('goog.math.Coordinate');
@@ -96,54 +95,55 @@ Blockly.hasClass_ = function(element, className) {
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @param {boolean} opt_noCaptureIdentifier True if triggering on this event
- *     should not block execution of other event handlers on this touch or other
- *     simultaneous touches.
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
  * @private
  */
-Blockly.bindEvent_ = function(node, name, thisObject, func,
-    opt_noCaptureIdentifier) {
-  var handled = false;
-  var wrapFunc = function(e) {
-    var captureIdentifier = !opt_noCaptureIdentifier;
-    // Handle each touch point separately.  If the event was a mouse event, this
-    // will hand back an array with one element, which we're fine handling.
-    var events = Blockly.Touch.splitEventByTouches(e);
-    for (var i = 0, event; event = events[i]; i++) {
-      if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
-        continue;
-      }
-      Blockly.Touch.setClientFromTouch(event);
-      if (thisObject) {
-        func.call(thisObject, event);
-      } else {
-        func(event);
-      }
-      handled = true;
-    }
-  };
-
+Blockly.bindEvent_ = function(node, name, thisObject, func) {
+  if (thisObject) {
+    var wrapFunc = function(e) {
+      func.call(thisObject, e);
+    };
+  } else {
+    var wrapFunc = func;
+  }
   node.addEventListener(name, wrapFunc, false);
   var bindData = [[node, name, wrapFunc]];
-
   // Add equivalent touch event.
-  if (name in Blockly.Touch.TOUCH_MAP) {
-    var touchWrapFunc = function(e) {
-      wrapFunc(e);
-      // Stop the browser from scrolling/zooming the page.
-      if (handled) {
-        e.preventDefault();
+  if (name in Blockly.bindEvent_.TOUCH_MAP) {
+    wrapFunc = function(e) {
+      // Punt on multitouch events.
+      if (e.changedTouches.length == 1) {
+        // Map the touch event's properties to the event.
+        var touchPoint = e.changedTouches[0];
+        e.clientX = touchPoint.clientX;
+        e.clientY = touchPoint.clientY;
       }
+      func.call(thisObject, e);
+      // Stop the browser from scrolling/zooming the page.
+      e.preventDefault();
     };
     for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
+         eventName = Blockly.bindEvent_.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(eventName, wrapFunc, false);
+      bindData.push([node, eventName, wrapFunc]);
     }
   }
   return bindData;
 };
+
+/**
+ * The TOUCH_MAP lookup dictionary specifies additional touch events to fire,
+ * in conjunction with mouse events.
+ * @type {Object}
+ */
+Blockly.bindEvent_.TOUCH_MAP = {};
+if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+  Blockly.bindEvent_.TOUCH_MAP = {
+    'mousedown': ['touchstart'],
+    'mousemove': ['touchmove'],
+    'mouseup': ['touchend', 'touchcancel']
+  };
+}
 
 /**
  * Unbind one or more events event from a function call.

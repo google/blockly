@@ -27,7 +27,6 @@
 goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Flyout');
-goog.require('Blockly.Touch');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.events');
@@ -164,7 +163,6 @@ Blockly.Toolbox.prototype.init = function() {
           // Just close popups.
           Blockly.hideChaff(true);
         }
-        Blockly.Touch.clearTouchIdentifier();  // Don't block future drags.
       });
   var workspaceOptions = {
     disabledPatternId: workspace.options.disabledPatternId,
@@ -470,9 +468,9 @@ goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
 Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
   Blockly.Toolbox.TreeControl.superClass_.enterDocument.call(this);
 
-  var el = this.getElement();
   // Add touch handler.
   if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+    var el = this.getElement();
     Blockly.bindEvent_(el, goog.events.EventType.TOUCHSTART, this,
         this.handleTouchEvent_);
   }

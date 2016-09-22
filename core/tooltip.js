@@ -133,11 +133,7 @@ Blockly.Tooltip.createDom = function() {
 Blockly.Tooltip.bindMouseEvents = function(element) {
   Blockly.bindEvent_(element, 'mouseover', null, Blockly.Tooltip.onMouseOver_);
   Blockly.bindEvent_(element, 'mouseout', null, Blockly.Tooltip.onMouseOut_);
-
-  // Don't use bindEvent_ for mousemove since that would create a
-  // corresponding touch handler, even though this only makes sense in the
-  // context of a mouseover/mouseout.
-  element.addEventListener('mousemove', Blockly.Tooltip.onMouseMove_, false);
+  Blockly.bindEvent_(element, 'mousemove', null, Blockly.Tooltip.onMouseMove_);
 };
 
 /**

@@ -28,6 +28,7 @@ goog.provide('Blockly.BlockSvg');
 
 goog.require('Blockly.Block');
 goog.require('Blockly.ContextMenu');
+goog.require('Blockly.Touch');
 goog.require('Blockly.RenderedConnection');
 goog.require('goog.Timer');
 goog.require('goog.asserts');
@@ -523,7 +524,7 @@ Blockly.BlockSvg.prototype.tab = function(start, forward) {
 
 /**
  * Handle a mouse-down on an SVG block.
- * @param {!Event} e Mouse down event.
+ * @param {!Event} e Mouse down event or touch start event.
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
@@ -531,6 +532,17 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     return;
   }
   if (this.isInFlyout) {
+    // longStart's simulation of right-clicks for longpresses on touch devices
+    // calls the onMouseDown_ function defined on the prototype of the object
+    // the was longpressed (in this case, a Blockly.BlockSvg).  In this case
+    // that behaviour is wrong, because Blockly.Flyout.prototype.blockMouseDown
+    // should be called for a mousedown on a block in the flyout, which blocks
+    // execution of the block's onMouseDown_ function.
+    if (e.type == 'touchstart' && Blockly.isRightButton(e)) {
+      Blockly.Flyout.blockRightClick_(e, this);
+      e.stopPropagation();
+      e.preventDefault();
+    }
     return;
   }
   if (this.isInMutator) {
@@ -547,6 +559,8 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   if (Blockly.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
+    // Click, not drag, so stop waiting for other touches from this identifier.
+    Blockly.Touch.clearTouchIdentifier();
   } else if (!this.isMovable()) {
     // Allow immovable blocks to be selected and context menued, but not
     // dragged.  Let this event bubble up to document, so the workspace may be
@@ -592,6 +606,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
+  Blockly.Touch.clearTouchIdentifier();
   if (Blockly.dragMode_ != Blockly.DRAG_FREE &&
       !Blockly.WidgetDiv.isVisible()) {
     Blockly.Events.fire(

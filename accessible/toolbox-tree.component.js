@@ -30,13 +30,14 @@ blocklyApp.ToolboxTreeComponent = ng.core
     template: `
     <li [id]="idMap['toolboxBlockRoot']" role="treeitem"
         [ngClass]="{blocklyHasChildren: displayBlockMenu}"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummaryLabel'], 'blockly-toolbox-block')"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-toolbox-block')"
         [attr.aria-level]="level">
-      <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
+      <label #blockSummary [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu">
         <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
-            [attr.aria-level]="level + 1">
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button')"
+            [attr.aria-level]="level + 1"
+            [attr.aria-disabled]="!canBeCopiedToMarkedConnection()">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
                   [disabled]="!canBeCopiedToMarkedConnection()" tabindex="-1">
             {{'COPY_TO_MARKED_SPOT'|translate}}
@@ -72,7 +73,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {
-      var idKeys = ['toolboxBlockRoot', 'blockSummaryLabel'];
+      var idKeys = ['toolboxBlockRoot', 'blockSummary'];
       if (this.displayBlockMenu) {
         idKeys = idKeys.concat([
             'workspaceCopy', 'workspaceCopyButton', 'sendToSelected',
@@ -103,9 +104,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
     },
-    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
       return this.utilsService.generateAriaLabelledByAttr(
-          mainLabel, secondLabel, isDisabled);
+          mainLabel, secondLabel);
     },
     canBeCopiedToMarkedConnection: function() {
       return this.clipboardService.canBeCopiedToMarkedConnection(this.block);

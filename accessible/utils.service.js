@@ -40,12 +40,8 @@ blocklyApp.UtilsService = ng.core
       }
       return idMap;
     },
-    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
-      var attrValue = mainLabel + (secondLabel ? ' ' + secondLabel : '');
-      if (isDisabled) {
-        attrValue += ' blockly-disabled';
-      }
-      return attrValue;
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
+      return mainLabel + (secondLabel ? ' ' + secondLabel : '');
     },
     getInputTypeLabel: function(connection) {
       // Returns the input type name, or 'any' if any official input type

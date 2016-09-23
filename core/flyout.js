@@ -285,14 +285,15 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.hide();
 
   Array.prototype.push.apply(this.eventWrappers_,
-      Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.wheel_));
+      Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this, this.wheel_));
   if (!this.autoClose) {
     this.filterWrapper_ = this.filterForCapacity_.bind(this);
     this.targetWorkspace_.addChangeListener(this.filterWrapper_);
   }
   // Dragging the flyout up and down.
   Array.prototype.push.apply(this.eventWrappers_,
-      Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_));
+      Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
+      this.onMouseDown_));
 };
 
 /**
@@ -710,8 +711,8 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     }
   };
 
-  this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
-      this, deselectAll));
+  this.listeners_.push(Blockly.bindEventWithChecks_(this.svgBackground_,
+      'mouseover', this, deselectAll));
 
   if (this.horizontalLayout_) {
     this.height_ = 0;
@@ -786,7 +787,8 @@ Blockly.Flyout.prototype.layout_ = function(contents, gaps) {
       var buttonSvg = button.createDom();
       button.moveTo(cursorX, cursorY);
       button.show();
-      Blockly.bindEvent_(buttonSvg, 'mouseup', button, button.onMouseUp);
+      Blockly.bindEventWithChecks_(buttonSvg, 'mouseup', button,
+          button.onMouseUp);
 
       this.buttons_.push(button);
       if (this.horizontalLayout_) {
@@ -831,17 +833,17 @@ Blockly.Flyout.prototype.clearOldBlocks_ = function() {
  * @private
  */
 Blockly.Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
-  this.listeners_.push(Blockly.bindEvent_(root, 'mousedown', null,
+  this.listeners_.push(Blockly.bindEventWithChecks_(root, 'mousedown', null,
       this.blockMouseDown_(block)));
-  this.listeners_.push(Blockly.bindEvent_(rect, 'mousedown', null,
+  this.listeners_.push(Blockly.bindEventWithChecks_(rect, 'mousedown', null,
       this.blockMouseDown_(block)));
-  this.listeners_.push(Blockly.bindEvent_(root, 'mouseover', block,
+  this.listeners_.push(Blockly.bindEventWithChecks_(root, 'mouseover', block,
       block.addSelect));
-  this.listeners_.push(Blockly.bindEvent_(root, 'mouseout', block,
+  this.listeners_.push(Blockly.bindEventWithChecks_(root, 'mouseout', block,
       block.removeSelect));
-  this.listeners_.push(Blockly.bindEvent_(rect, 'mouseover', block,
+  this.listeners_.push(Blockly.bindEventWithChecks_(rect, 'mouseover', block,
       block.addSelect));
-  this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block,
+  this.listeners_.push(Blockly.bindEventWithChecks_(rect, 'mouseout', block,
       block.removeSelect));
 };
 
@@ -881,10 +883,10 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
       Blockly.Flyout.startDownEvent_ = e;
       Blockly.Flyout.startBlock_ = block;
       Blockly.Flyout.startFlyout_ = flyout;
-      Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+      Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
           'mouseup', flyout, flyout.onMouseUp_);
-      Blockly.Flyout.onMouseMoveBlockWrapper_ = Blockly.bindEvent_(document,
-          'mousemove', flyout, flyout.onMouseMoveBlock_);
+      Blockly.Flyout.onMouseMoveBlockWrapper_ = Blockly.bindEventWithChecks_(
+          document, 'mousemove', flyout, flyout.onMouseMoveBlock_);
     }
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
@@ -908,10 +910,10 @@ Blockly.Flyout.prototype.onMouseDown_ = function(e) {
   this.startDragMouseY_ = e.clientY;
   this.startDragMouseX_ = e.clientX;
   Blockly.Flyout.startFlyout_ = this;
-  Blockly.Flyout.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove',
-      this, this.onMouseMove_);
-  Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEvent_(document, 'mouseup',
-      this, Blockly.Flyout.terminateDrag_);
+  Blockly.Flyout.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
+      'mousemove', this, this.onMouseMove_);
+  Blockly.Flyout.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
+      'mouseup', this, Blockly.Flyout.terminateDrag_);
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();

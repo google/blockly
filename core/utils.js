@@ -91,7 +91,9 @@ Blockly.hasClass_ = function(element, className) {
 };
 
 /**
- * Bind an event to a function call.
+ * Bind an event to a function call.  When calling the function, verify that
+ * it belongs to the touch stream that is currently being processsed, and split
+ * multitouch events into multiple events as needed.
  * @param {!Node} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
  * @param {Object} thisObject The value of 'this' in the function.
@@ -102,7 +104,7 @@ Blockly.hasClass_ = function(element, className) {
  * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
  * @private
  */
-Blockly.bindEvent_ = function(node, name, thisObject, func,
+Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
     opt_noCaptureIdentifier) {
   var handled = false;
   var wrapFunc = function(e) {
@@ -135,6 +137,56 @@ Blockly.bindEvent_ = function(node, name, thisObject, func,
       if (handled) {
         e.preventDefault();
       }
+    };
+    for (var i = 0, eventName;
+         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(eventName, touchWrapFunc, false);
+      bindData.push([node, eventName, touchWrapFunc]);
+    }
+  }
+  return bindData;
+};
+
+
+/**
+ * Bind an event to a function call.  Handle multitouch events by using the
+ * coordinates of the first changed touch, and don't do any safety checks for
+ * simultaneous event processing.
+ * @deprecated in favor of bindEventWithChecks_, but preserved for external
+ * users.
+ * @param {!Node} node Node upon which to listen.
+ * @param {string} name Event name to listen to (e.g. 'mousedown').
+ * @param {Object} thisObject The value of 'this' in the function.
+ * @param {!Function} func Function to call when event is triggered.
+ * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @private
+ */
+Blockly.bindEvent_ = function(node, name, thisObject, func) {
+  var wrapFunc = function(e) {
+    if (thisObject) {
+      func.call(thisObject, e);
+    } else {
+      func(e);
+    }
+  };
+
+  node.addEventListener(name, wrapFunc, false);
+  var bindData = [[node, name, wrapFunc]];
+
+  // Add equivalent touch event.
+  if (name in Blockly.Touch.TOUCH_MAP) {
+    var touchWrapFunc = function(e) {
+      // Punt on multitouch events.
+      if (e.changedTouches.length == 1) {
+        // Map the touch event's properties to the event.
+        var touchPoint = e.changedTouches[0];
+        e.clientX = touchPoint.clientX;
+        e.clientY = touchPoint.clientY;
+      }
+      wrapFunc(e);
+
+      // Stop the browser from scrolling/zooming the page.
+      e.preventDefault();
     };
     for (var i = 0, eventName;
          eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {

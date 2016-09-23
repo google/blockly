@@ -153,7 +153,8 @@ Blockly.Field.prototype.init = function() {
   this.updateEditable();
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseUpWrapper_ =
-      Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
+      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mouseup', this,
+      this.onMouseUp_);
   // Force a render.
   this.updateTextNode_();
 };

@@ -91,8 +91,8 @@ Blockly.hasClass_ = function(element, className) {
 };
 
 /**
- * Bind an event to a function call.  When calling the function, verify that
- * it belongs to the touch stream that is currently being processsed, and split
+ * Bind an event to a function call.  When calling the function, verifies that
+ * it belongs to the touch stream that is currently being processsed, and splits
  * multitouch events into multiple events as needed.
  * @param {!Node} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
@@ -149,8 +149,8 @@ Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
 
 
 /**
- * Bind an event to a function call.  Handle multitouch events by using the
- * coordinates of the first changed touch, and don't do any safety checks for
+ * Bind an event to a function call.  Handles multitouch events by using the
+ * coordinates of the first changed touch, and doesn't do any safety checks for
  * simultaneous event processing.
  * @deprecated in favor of bindEventWithChecks_, but preserved for external
  * users.

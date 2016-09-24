@@ -30,9 +30,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
     template: `
     <li [id]="idMap['toolboxBlockRoot']" role="treeitem"
         [ngClass]="{blocklyHasChildren: displayBlockMenu}"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-toolbox-block')"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['toolboxBlockSummary'], 'blockly-toolbox-block')"
         [attr.aria-level]="level">
-      <label #blockSummary [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
+      <label #toolboxBlockSummary [id]="idMap['toolboxBlockSummary']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu">
         <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button')"
@@ -73,7 +73,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {
-      var idKeys = ['toolboxBlockRoot', 'blockSummary'];
+      var idKeys = ['toolboxBlockRoot', 'toolboxBlockSummary'];
       if (this.displayBlockMenu) {
         idKeys = idKeys.concat([
             'workspaceCopy', 'workspaceCopyButton', 'sendToSelected',

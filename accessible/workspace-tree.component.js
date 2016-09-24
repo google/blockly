@@ -115,7 +115,16 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       this.audioService = _audioService;
     }],
     getBlockDescription: function() {
-      return this.utilsService.getBlockDescription(this.block);
+      var blockDescription = this.utilsService.getBlockDescription(this.block);
+
+      var parentBlock = this.block.getSurroundParent();
+      if (parentBlock) {
+        var fullDescription = blockDescription + ' inside ' +
+            this.utilsService.getBlockDescription(parentBlock);
+        return fullDescription;
+      } else {
+        return blockDescription;
+      }
     },
     removeBlockAndSetFocus_: function(block, deleteBlockFunc) {
       this.treeService.removeBlockAndSetFocus(

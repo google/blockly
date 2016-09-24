@@ -29,6 +29,7 @@ goog.provide('Blockly.FieldVariable');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Variables');
+goog.require('goog.asserts');
 goog.require('goog.string');
 
 
@@ -71,6 +72,16 @@ Blockly.FieldVariable.prototype.init = function() {
   if (!this.sourceBlock_.isInFlyout) {
     this.sourceBlock_.workspace.createVariable(this.getValue());
   }
+};
+
+/**
+ * Attach this field to a block.
+ * @param {!Blockly.Block} block The block containing this field.
+ */
+Blockly.FieldVariable.prototype.setSourceBlock = function(block) {
+  goog.asserts.assert(!block.isShadow(),
+      'Variable fields are not allowed to exist on shadow blocks.');
+  Blockly.FieldVariable.superClass_.setSourceBlock.call(this, block);
 };
 
 /**

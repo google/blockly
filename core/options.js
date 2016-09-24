@@ -125,8 +125,8 @@ Blockly.Options = function(options) {
 };
 
 /**
- * @type {Blockly.Workspace} the parent of the current workspace, or null if
- *    there is no parent workspace.
+ *The parent of the current workspace, or null if there is no parent workspace.
+ *@type {Blockly.Workspace}
  **/
 Blockly.Options.prototype.parentWorkspace = null;
 

@@ -24,7 +24,10 @@
  */
 'use strict';
 
-// Top level object for Blockly.
+/** 
+ *The top level namespace that allows access to the Blockly library.
+ *@namespace Blockly
+ */
 goog.provide('Blockly');
 
 goog.require('Blockly.BlockSvg.render');

@@ -502,7 +502,7 @@ blocklyApp.TreeService = ng.core
               this.setActiveDesc(prevSibling.id, treeId);
             } else {
               this.notificationsService.setStatusMessage(
-                  'Reached top of list');
+                  'Reached top of list. Press left to go to parent list.');
             }
           } else if (e.keyCode == 39) {
             // Right arrow key. Go down a level, if possible.
@@ -517,7 +517,7 @@ blocklyApp.TreeService = ng.core
               this.setActiveDesc(nextSibling.id, treeId);
             } else {
               this.notificationsService.setStatusMessage(
-                  'Reached bottom of list');
+                  'Reached bottom of list.');
             }
           }
 

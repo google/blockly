@@ -367,3 +367,35 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
   }
   return this.functionNames_[desiredName];
 };
+
+/**
+ * Hook before code generation starts. Used to initialise the database of variable names.
+ * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ */
+Blockly.Generator.prototype.init = undefined;
+
+/**
+ * Common tasks for generating code from blocks.
+ * Handles comments for the specified block and any connected value blocks.
+ * Calls any statements following this block.
+ * @param {!Blockly.Block} block The current block.
+ * @param {string} code The JavaScript code created for this block.
+ * @return {string} JavaScript code with comments and subsequent blocks added.
+ * @private
+ */
+Blockly.Generator.prototype.scrub_ = undefined;
+
+/**
+ * Hook at end of code generation. Used to prepend the generated code with the variable definitions.
+ * @param {string} code Generated code.
+ * @return {string} Completed code.
+ */
+Blockly.Generator.prototype.finish = undefined;
+
+/**
+ * Naked values are top-level blocks with outputs that aren't plugged into
+ * anything.  This is a hook to make line legal for a generator's language.
+ * @param {string} line Line of generated code.
+ * @return {string} Legal line of code.
+ */
+Blockly.Generator.prototype.scrubNakedValue = undefined;

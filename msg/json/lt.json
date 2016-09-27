@@ -31,7 +31,7 @@
 	"RENAME_VARIABLE_TITLE": "Pervadinti visus '%1' kintamuosius į:",
 	"NEW_VARIABLE": "Naujas kintamasis...",
 	"NEW_VARIABLE_TITLE": "Naujo kintamojo pavadinimas:",
-	"DELETE_VARIABLE": "Ištrinti '%1' kintamąjį",
+	"DELETE_VARIABLE": "Ištrinti „%1“ kintamąjį",
 	"COLOUR_PICKER_HELPURL": "https://lt.wikipedia.org/wiki/Spalva",
 	"COLOUR_PICKER_TOOLTIP": "Pasirinkti spalvą iš paletės.",
 	"COLOUR_RANDOM_TITLE": "atsitiktinė spalva",

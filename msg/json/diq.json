@@ -126,6 +126,7 @@
 	"TEXT_CHANGECASE_OPERATOR_LOWERCASE": "Herfanê werdiyana",
 	"TEXT_CHANGECASE_OPERATOR_TITLECASE": "Ser herf gırd",
 	"LISTS_CREATE_EMPTY_TITLE": "lista venge vıraze",
+	"LISTS_CREATE_WITH_INPUT_WITH": "Liste ya vıraz",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "liste",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "Yew nesne dekerê lista miyan",
 	"LISTS_LENGTH_TOOLTIP": "Derganiya yu lister dano.",

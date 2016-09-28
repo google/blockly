@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Block');
 
+goog.require('Blockly.Instrument'); // lyn's instrumentation code
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
@@ -1200,7 +1201,7 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
  */
 Blockly.Block.prototype.appendInput_ = function(type, name) {
   var connection = null;
-  if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
+  if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT || type == Blockly.INDENTED_VALUE) {
     connection = this.makeConnection_(type);
   }
   var input = new Blockly.Input(type, name, this, connection);

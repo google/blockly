@@ -141,7 +141,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
   if (block.workspace == Blockly.mainWorkspace) //Do not reset arrangements for the flyout
-    Blockly.resetWorkspaceArrangements();
+    this.resetArrangements();
   var found = false;
   for (var child, i = 0; child = this.topBlocks_[i]; i++) {
     if (child == block) {

@@ -263,6 +263,49 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.Field.startCache();
   this.rendered = true;
 
+  this.renderHere();
+
+  // Render all blocks above this one (propagate a reflow).
+  var parentBlock = this.getParent();
+  if (parentBlock) {
+    parentBlock.render();
+  }
+
+  Blockly.Field.stopCache();
+};
+
+/**
+ * [lyn, 04/01/14] Render a tree of blocks.
+ * In general, this is more efficient than calling render() on all the leaves of the tree,
+ * because that will:
+ *   (1) repeat the rendering of all internal nodes; and
+ *   (2) will unnecessarily call Blockly.fireUiEvent(window, 'resize') in the
+ *       case where the parentPointer hasn't been set yet (particularly for
+ *       value, statement, and next connections in Xml.domToBlock).
+ *  These two factors account for much of the slow project loading times in Blockly
+ *  and previous versions of AI2.
+ */
+Blockly.BlockSvg.prototype.renderDown = function() {
+  this.rendered = true;
+
+  // Recursively renderDown all my children (as long as I'm not collapsed)
+  if (! (Blockly.Instrument.avoidRenderDownOnCollapsedSubblocks && this.isCollapsed())) {
+    var childBlocks = this.childBlocks_;
+    for (var c = 0, childBlock; childBlock = childBlocks[c]; c++) {
+      childBlock.renderDown();
+    }
+  }
+
+  // Render me after all my children have been rendered.
+  this.renderHere();
+};
+
+/**
+ * Render this block. Assumes descendants have already been rendered.
+ */
+Blockly.BlockSvg.prototype.renderHere = function() {
+  var start = new Date().getTime();
+  // Now render me (even if I am collapsed, since still need to show collapsed block)
   var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
   if (this.RTL) {
     cursorX = -cursorX;
@@ -282,16 +325,16 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   this.renderMoveConnections_();
 
   if (opt_bubble !== false) {
-    // Render all blocks above this one (propagate a reflow).
     var parentBlock = this.getParent();
-    if (parentBlock) {
-      parentBlock.render(true);
-    } else {
+    if (!parentBlock) {
       // Top-most block.  Fire an event to allow scrollbars to resize.
       this.workspace.resizeContents();
     }
   }
-  Blockly.Field.stopCache();
+  var stop = new Date().getTime();
+  var timeDiff = stop - start;
+  Blockly.Instrument.stats.renderHereCalls++;
+  Blockly.Instrument.stats.renderHereTime += timeDiff;
 };
 
 /**
@@ -368,6 +411,9 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
       row = [];
       if (isInline && input.type != Blockly.NEXT_STATEMENT) {
         row.type = Blockly.BlockSvg.INLINE;
+      } else if (input.subtype) {
+        row.type = input.type;
+        row.subtype = input.subtype;
       } else {
         row.type = input.type;
       }
@@ -758,9 +804,37 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
         }
       }
       this.renderFields_(input.fieldRow, fieldX, fieldY);
-      steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
-      var v = row.height - Blockly.BlockSvg.TAB_HEIGHT;
-      steps.push('v', v);
+      if (row.subtype == Blockly.INDENTED_VALUE){
+        cursorX = inputRows.statementEdge;
+        steps.push('H', cursorX+input.fieldWidth+8);
+        steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+        steps.push('V',cursorY+row.height);
+        steps.push('H', inputRows.rightEdge);
+        steps.push('v 8');
+        if (this.RTL) {
+          highlightSteps.push('M',
+              (cursorX - Blockly.BlockSvg.NOTCH_WIDTH +
+                  Blockly.BlockSvg.DISTANCE_45_OUTSIDE) +
+                  ',' + (cursorY + Blockly.BlockSvg.DISTANCE_45_OUTSIDE));
+          highlightSteps.push(
+              Blockly.BlockSvg.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL);
+          highlightSteps.push('v',
+              row.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
+          highlightSteps.push(
+              Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL);
+          highlightSteps.push('H', inputRows.rightEdge - 1);
+        } else {
+          highlightSteps.push('M',
+              (cursorX + 9 + input.fieldWidth) + ',' +
+                  (cursorY + row.height));
+          highlightSteps.push('H', inputRows.rightEdge);
+        }
+        cursorY+=8;
+      } else {
+        steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+        var v = row.height - Blockly.BlockSvg.TAB_HEIGHT
+        steps.push('v', v);
+      }
       if (this.RTL) {
         // Highlight around back of tab.
         highlightSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
@@ -773,8 +847,15 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
             ',-2.1');
       }
       // Create external input connection.
-      connectionX = this.RTL ? -inputRows.rightEdge - 1 :
-          inputRows.rightEdge + 1;
+      if (row.subtype == Blockly.INDENTED_VALUE) {
+        connectionX = connectionsXY.x +
+          (this.RTL ? -inputRows.statementEdge - 1: inputRows.statementEdge + 9 + input.fieldWidth);
+        connectionY = connectionsXY.y + cursorY-8;
+      } else {
+        connectionX = connectionsXY.x +
+          (this.RTL ? -inputRows.rightEdge - 1: inputRows.rightEdge + 1);
+        connectionY = connectionsXY.y + cursorY;
+      }
       input.connection.setOffsetInBlock(connectionX, cursorY);
       if (input.connection.isConnected()) {
         this.width = Math.max(this.width, inputRows.rightEdge +

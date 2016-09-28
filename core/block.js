@@ -1060,7 +1060,8 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
       'Message does not reference all %s arg(s).', args.length);
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
-      elements[elements.length - 1]['type'].indexOf('field_') == 0)) {
+      goog.string.startsWith(elements[elements.length - 1]['type'],
+                             'field_'))) {
     var dummyInput = {type: 'input_dummy'};
     if (lastDummyAlign) {
       dummyInput['align'] = lastDummyAlign;

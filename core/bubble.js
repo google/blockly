@@ -93,7 +93,7 @@ Blockly.Bubble.BORDER_WIDTH = 6;
  * Determines the thickness of the base of the arrow in relation to the size
  * of the bubble.  Higher numbers result in thinner arrows.
  */
-Blockly.Bubble.ARROW_THICKNESS = 10;
+Blockly.Bubble.ARROW_THICKNESS = 5;
 
 /**
  * The number of degrees that the arrow bends counter-clockwise.
@@ -530,7 +530,7 @@ Blockly.Bubble.prototype.renderArrow_ = function() {
     var bubbleSize = this.getBubbleSize();
     var thickness = (bubbleSize.width + bubbleSize.height) /
                     Blockly.Bubble.ARROW_THICKNESS;
-    thickness = Math.min(thickness, bubbleSize.width, bubbleSize.height) / 2;
+    thickness = Math.min(thickness, bubbleSize.width, bubbleSize.height) / 4;
 
     // Back the tip of the arrow off of the anchor.
     var backoffRatio = 1 - Blockly.Bubble.ANCHOR_RADIUS / hypotenuse;

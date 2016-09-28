@@ -64,21 +64,6 @@ var CLOSURE_DEFINES = {'goog.DEBUG': false};
 Blockly.mainWorkspace = null;
 
 /**
- * Workspace blocks arrangements
- */
-Blockly.BLKS_HORIZONTAL = 0;
-Blockly.BLKS_VERTICAL = 1;
-Blockly.BLKS_CATEGORY = 2;
-
-/**
- * Current Workspace arrangement state for position (horizontal or vertical),
- * and for type (category)
- */
-Blockly.workspace_arranged_position = null;
-Blockly.workspace_arranged_latest_position = null; //used to default to (previous is used for menus)
-Blockly.workspace_arranged_type = null;
-
-/**
  * Currently selected block.
  * @type {Blockly.Block}
  */

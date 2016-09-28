@@ -1,0 +1,17 @@
+***************
+*** 30,36 ****
+  
+  // TODO(scr): Fix circular dependencies
+  // goog.require('Blockly.Block');
+- goog.require('Blockly.Toolbox');
+  goog.require('Blockly.Workspace');
+  
+  
+--- 30,36 ----
+  
+  // TODO(scr): Fix circular dependencies
+  // goog.require('Blockly.Block');
++ //goog.require('Blockly.Toolbox');
+  goog.require('Blockly.Workspace');
+  
+  

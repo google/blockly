@@ -102,10 +102,6 @@ Blockly.Input.prototype.appendField = function(field, opt_name) {
     this.appendField(field.suffixField);
   }
 
-  //If it's a COLLAPSE_TEXT input, hide it by default
-  if (opt_name === 'COLLAPSED_TEXT')
-    this.sourceBlock_.getTitle_(opt_name).getRootElement().style.display = 'none';
-
   if (this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     // Adding a field will cause the block to change shape.

@@ -1,0 +1,231 @@
+***************
+*** 26,31 ****
+  
+  goog.provide('Blockly.BlockSvg');
+  
+  goog.require('goog.userAgent');
+  
+  
+--- 26,32 ----
+  
+  goog.provide('Blockly.BlockSvg');
+  
++ goog.require('Blockly.Instrument'); // lyn's instrumentation code
+  goog.require('goog.userAgent');
+  
+  
+***************
+*** 154,167 ****
+   * @const
+   */
+  Blockly.BlockSvg.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
+-       (Blockly.BlockSvg.CORNER_RADIUS - 1) + 1;
+  /**
+   * Distance from shape edge to intersect with a curved corner at 45 degrees.
+   * Applies to highlighting on around the outside of a curve.
+   * @const
+   */
+  Blockly.BlockSvg.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
+-       (Blockly.BlockSvg.CORNER_RADIUS + 1) - 1;
+  /**
+   * SVG path for drawing next/previous notch from left to right.
+   * @const
+--- 155,168 ----
+   * @const
+   */
+  Blockly.BlockSvg.DISTANCE_45_INSIDE = (1 - Math.SQRT1_2) *
++     (Blockly.BlockSvg.CORNER_RADIUS - 1) + 1;
+  /**
+   * Distance from shape edge to intersect with a curved corner at 45 degrees.
+   * Applies to highlighting on around the outside of a curve.
+   * @const
+   */
+  Blockly.BlockSvg.DISTANCE_45_OUTSIDE = (1 - Math.SQRT1_2) *
++     (Blockly.BlockSvg.CORNER_RADIUS + 1) - 1;
+  /**
+   * SVG path for drawing next/previous notch from left to right.
+   * @const
+***************
+*** 483,488 ****
+  Blockly.BlockSvg.prototype.render = function() {
+    this.block_.rendered = true;
+  
+    var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
+    if (Blockly.RTL) {
+      cursorX = -cursorX;
+--- 484,530 ----
+  Blockly.BlockSvg.prototype.render = function() {
+    this.block_.rendered = true;
+  
++   this.renderHere();
++ 
++   // Render all blocks above this one (propagate a reflow).
++   var parentBlock = this.block_.getParent();
++   if (parentBlock) {
++     parentBlock.render();
++   }
++ };
++ 
++ /**
++  * [lyn, 04/01/14] Render a tree of blocks.
++  * In general, this is more efficient than calling render() on all the leaves of the tree,
++  * because that will:
++  *   (1) repeat the rendering of all internal nodes; and
++  *   (2) will unnecessarily call Blockly.fireUiEvent(window, 'resize') in the
++  *       case where the parentPointer hasn't been set yet (particularly for
++  *       value, statement, and next connections in Xml.domToBlock).
++  *  These two factors account for much of the slow project loading times in Blockly
++  *  and previous versions of AI2.
++  */
++ Blockly.BlockSvg.prototype.renderDown = function() {
++   this.block_.rendered = true;
++ 
++   // Recursively renderDown all my children (as long as I'm not collapsed)
++   if (! (Blockly.Instrument.avoidRenderDownOnCollapsedSubblocks && this.block_.isCollapsed())) {
++     var childBlocks = this.block_.childBlocks_;
++     for (var c = 0, childBlock; childBlock = childBlocks[c]; c++) {
++       childBlock.renderDown();
++     }
++   }
++ 
++   // Render me after all my children have been rendered.
++   this.renderHere();
++ };
++ 
++ /**
++  * Render this block. Assumes descendants have already been rendered.
++  */
++ Blockly.BlockSvg.prototype.renderHere = function() {
++   var start = new Date().getTime();
++   // Now render me (even if I am collapsed, since still need to show collapsed block)
+    var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
+    if (Blockly.RTL) {
+      cursorX = -cursorX;
+***************
+*** 500,514 ****
+    var inputRows = this.renderCompute_(cursorX);
+    this.renderDraw_(cursorX, inputRows);
+  
+-   // Render all blocks above this one (propagate a reflow).
+    var parentBlock = this.block_.getParent();
+-   if (parentBlock) {
+-     parentBlock.render();
+-   } else {
+      // Top-most block.  Fire an event to allow scrollbars to resize.
+      Blockly.fireUiEvent(window, 'resize');
+    }
+- };
+  
+  /**
+   * Render a list of fields starting at the specified location.
+--- 542,557 ----
+    var inputRows = this.renderCompute_(cursorX);
+    this.renderDraw_(cursorX, inputRows);
+  
+    var parentBlock = this.block_.getParent();
++   if (!parentBlock) {
+      // Top-most block.  Fire an event to allow scrollbars to resize.
+      Blockly.fireUiEvent(window, 'resize');
+    }
++   var stop = new Date().getTime();
++   var timeDiff = stop-start;
++   Blockly.Instrument.stats.renderHereCalls++;
++   Blockly.Instrument.stats.renderHereTime += timeDiff;
++ }
+  
+  /**
+   * Render a list of fields starting at the specified location.
+***************
+*** 578,583 ****
+        row = [];
+        if (isInline && input.type != Blockly.NEXT_STATEMENT) {
+          row.type = Blockly.BlockSvg.INLINE;
+        } else {
+          row.type = input.type;
+        }
+--- 621,629 ----
+        row = [];
+        if (isInline && input.type != Blockly.NEXT_STATEMENT) {
+          row.type = Blockly.BlockSvg.INLINE;
++       } else if (input.subtype) {
++         row.type = input.type;
++         row.subtype = input.subtype;
+        } else {
+          row.type = input.type;
+        }
+***************
+*** 924,932 ****
+          }
+        }
+        this.renderFields_(input.fieldRow, fieldX, fieldY);
+-       steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
+-       var v = row.height - Blockly.BlockSvg.TAB_HEIGHT
+-       steps.push('v', v);
+        if (Blockly.RTL) {
+          // Highlight around back of tab.
+          highlightSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
+--- 970,1006 ----
+          }
+        }
+        this.renderFields_(input.fieldRow, fieldX, fieldY);
++       if (row.subtype == Blockly.INDENTED_VALUE){
++         cursorX = inputRows.statementEdge;
++         steps.push('H', cursorX+input.fieldWidth+8);
++         steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
++         steps.push('V',cursorY+row.height);
++         steps.push('H', inputRows.rightEdge);
++         steps.push('v 8');
++         if (Blockly.RTL) {
++           highlightSteps.push('M',
++               (cursorX - Blockly.BlockSvg.NOTCH_WIDTH +
++                   Blockly.BlockSvg.DISTANCE_45_OUTSIDE) +
++                   ',' + (cursorY + Blockly.BlockSvg.DISTANCE_45_OUTSIDE));
++           highlightSteps.push(
++               Blockly.BlockSvg.INNER_TOP_LEFT_CORNER_HIGHLIGHT_RTL);
++           highlightSteps.push('v',
++               row.height - 2 * Blockly.BlockSvg.CORNER_RADIUS);
++           highlightSteps.push(
++               Blockly.BlockSvg.INNER_BOTTOM_LEFT_CORNER_HIGHLIGHT_RTL);
++           highlightSteps.push('H', inputRows.rightEdge - 1);
++         } else {
++           highlightSteps.push('M',
++               (cursorX + 9 + input.fieldWidth) + ',' +
++                   (cursorY + row.height));
++           highlightSteps.push('H', inputRows.rightEdge);
++         }
++         cursorY+=8;
++       } else {
++         steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
++         var v = row.height - Blockly.BlockSvg.TAB_HEIGHT
++         steps.push('v', v);
++       }
+        if (Blockly.RTL) {
+          // Highlight around back of tab.
+          highlightSteps.push(Blockly.BlockSvg.TAB_PATH_DOWN_HIGHLIGHT_RTL);
+***************
+*** 939,947 ****
+              ',-1.8');
+        }
+        // Create external input connection.
+-       connectionX = connectionsXY.x +
+-           (Blockly.RTL ? -inputRows.rightEdge - 1 : inputRows.rightEdge + 1);
+-       connectionY = connectionsXY.y + cursorY;
+        input.connection.moveTo(connectionX, connectionY);
+        if (input.connection.targetConnection) {
+          input.connection.tighten_();
+--- 1013,1027 ----
+              ',-1.8');
+        }
+        // Create external input connection.
++       if (row.subtype == Blockly.INDENTED_VALUE){
++         connectionX = connectionsXY.x +
++           (Blockly.RTL ? -inputRows.statementEdge - 1: inputRows.statementEdge + 9 + input.fieldWidth);
++         connectionY = connectionsXY.y + cursorY-8;
++       } else {
++         connectionX = connectionsXY.x +
++            (Blockly.RTL ? -inputRows.rightEdge - 1 : inputRows.rightEdge + 1);
++         connectionY = connectionsXY.y + cursorY;
++       }
+        input.connection.moveTo(connectionX, connectionY);
+        if (input.connection.targetConnection) {
+          input.connection.tighten_();

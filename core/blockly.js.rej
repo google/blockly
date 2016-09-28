@@ -1,0 +1,461 @@
+***************
+*** 24,32 ****
+   */
+  'use strict';
+  
+  // Top level object for Blockly.
+  goog.provide('Blockly');
+  
+  // Blockly core dependencies.
+  goog.require('Blockly.Block');
+  goog.require('Blockly.Connection');
+--- 24,38 ----
+   */
+  'use strict';
+  
++ /**
++  * [lyn, 10/10/13] Modified Blockly.hideChaff() method to hide single instance of Blockly.FieldFlydown.
++  */
++ 
+  // Top level object for Blockly.
+  goog.provide('Blockly');
+  
++ goog.require('Blockly.Instrument'); // lyn's instrumentation code
++ 
+  // Blockly core dependencies.
+  goog.require('Blockly.Block');
+  goog.require('Blockly.Connection');
+***************
+*** 41,47 ****
+  goog.require('Blockly.Msg');
+  goog.require('Blockly.Procedures');
+  goog.require('Blockly.Realtime');
+- goog.require('Blockly.Toolbox');
+  goog.require('Blockly.WidgetDiv');
+  goog.require('Blockly.Workspace');
+  goog.require('Blockly.inject');
+--- 47,54 ----
+  goog.require('Blockly.Msg');
+  goog.require('Blockly.Procedures');
+  goog.require('Blockly.Realtime');
++ //goog.require('Blockly.Toolbox');
++ goog.require('Blockly.TypeBlock');
+  goog.require('Blockly.WidgetDiv');
+  goog.require('Blockly.Workspace');
+  goog.require('Blockly.inject');
+***************
+*** 99,107 ****
+   * @param {number} hue Hue on a colour wheel (0-360).
+   * @return {string} RGB code, e.g. '#5ba65b'.
+   */
+- Blockly.makeColour = function(hue) {
+-   return goog.color.hsvToHex(hue, Blockly.HSV_SATURATION,
+        Blockly.HSV_VALUE * 256);
+  };
+  
+  /**
+--- 106,118 ----
+   * @param {number} hue Hue on a colour wheel (0-360).
+   * @return {string} RGB code, e.g. '#5ba65b'.
+   */
++ Blockly.makeColour = function(hueOrRGBArray) {
++   if(Array.isArray(hueOrRGBArray)){
++     return goog.color.rgbArrayToHex(hueOrRGBArray);
++   } else {
++     return goog.color.hsvToHex(hueOrRGBArray, Blockly.HSV_SATURATION,
+        Blockly.HSV_VALUE * 256);
++   }
+  };
+  
+  /**
+***************
+*** 131,136 ****
+  Blockly.DUMMY_INPUT = 5;
+  
+  /**
+   * ENUM for left alignment.
+   * @const
+   */
+--- 142,154 ----
+  Blockly.DUMMY_INPUT = 5;
+  
+  /**
++  * ENUM for an indented value input.  Similar to next_statement but with value
++  * input shape.
++  * @const
++  */
++ Blockly.INDENTED_VALUE = 6;
++ 
++ /**
+   * ENUM for left alignment.
+   * @const
+   */
+***************
+*** 163,176 ****
+  };
+  
+  /**
+   * Handle a mouse-down on SVG drawing surface.
+   * @param {!Event} e Mouse down event.
+   * @private
+   */
+  Blockly.onMouseDown_ = function(e) {
+    Blockly.svgResize();
+    Blockly.terminateDrag_();  // In case mouse-up event was lost.
+    Blockly.hideChaff();
+    var isTargetSvg = e.target && e.target.nodeName &&
+        e.target.nodeName.toLowerCase() == 'svg';
+    if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
+--- 196,237 ----
+  };
+  
+  /**
++  * latest clicked position is used to open the type blocking suggestions window
++  * Initial position is 0,0
++  * @type {{x: number, y:number}}
++  */
++ Blockly.latestClick = { x: 0, y: 0 };
++ 
++ /**
+   * Handle a mouse-down on SVG drawing surface.
+   * @param {!Event} e Mouse down event.
+   * @private
+   */
+  Blockly.onMouseDown_ = function(e) {
++   Blockly.latestClick = { x: e.clientX, y: e.clientY }; // Might be needed?
+    Blockly.svgResize();
+    Blockly.terminateDrag_();  // In case mouse-up event was lost.
+    Blockly.hideChaff();
++   //if drawer exists and supposed to close
++   if(Blockly.Drawer && Blockly.Drawer.flyout_.autoClose) {
++     Blockly.Drawer.hide();
++   }
++ 
++   //Closes mutators
++   var blocks = Blockly.mainWorkspace.getAllBlocks();
++   var numBlocks = blocks.length;
++   var temp_block = null;
++   for(var i =0; i<numBlocks; i++){
++     temp_block = blocks[i];
++     if(temp_block.mutator){
++       //deselect block in mutator workspace
++       if(Blockly.selected && Blockly.selected.workspace && Blockly.selected.workspace!=Blockly.mainWorkspace){
++         Blockly.selected.unselect();
++       }
++       blocks[i].mutator.setVisible(false);
++     }
++   }
++ 
+    var isTargetSvg = e.target && e.target.nodeName &&
+        e.target.nodeName.toLowerCase() == 'svg';
+    if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
+***************
+*** 265,272 ****
+      // Delete or backspace.
+      try {
+        if (Blockly.selected && Blockly.selected.isDeletable()) {
+-         Blockly.hideChaff();
+-         Blockly.selected.dispose(true, true);
+        }
+      } finally {
+        // Stop the browser from going back to the previous page.
+--- 326,347 ----
+      // Delete or backspace.
+      try {
+        if (Blockly.selected && Blockly.selected.isDeletable()) {
++         var descendantCount = Blockly.selected.getDescendants().length;
++         if (Blockly.selected.nextConnection && Blockly.selected.nextConnection.targetConnection) {
++           descendantCount -= Blockly.selected.nextConnection.targetBlock().
++             getDescendants().length;
++         }
++         // Ask for confirmation before deleting 3 or more blocks
++         if (descendantCount >= 3) {
++           if (confirm("Are you sure you want to delete all " + descendantCount + " of these blocks?")) {
++             Blockly.hideChaff();
++             Blockly.selected.dispose(true, true);
++           }
++         }
++         else {
++           Blockly.hideChaff();
++           Blockly.selected.dispose(true, true);
++         }
+        }
+      } finally {
+        // Stop the browser from going back to the previous page.
+***************
+*** 363,368 ****
+            ms += COLLAPSE_DELAY;
+          }
+        }
+      };
+      options.push(collapseOption);
+  
+--- 438,444 ----
+            ms += COLLAPSE_DELAY;
+          }
+        }
++       Blockly.resetWorkspaceArrangements();
+      };
+      options.push(collapseOption);
+  
+***************
+*** 370,390 ****
+      var expandOption = {enabled: hasCollapsedBlocks};
+      expandOption.text = Blockly.Msg.EXPAND_ALL;
+      expandOption.callback = function() {
+-       var ms = 0;
+-       for (var i = 0; i < topBlocks.length; i++) {
+-         var block = topBlocks[i];
+-         while (block) {
+-           setTimeout(block.setCollapsed.bind(block, false), ms);
+-           block = block.getNextBlock();
+-           ms += COLLAPSE_DELAY;
+-         }
+-       }
+      };
+      options.push(expandOption);
+    }
+  
+    Blockly.ContextMenu.show(e, options);
+  };
+  
+  /**
+   * Cancel the native context menu, unless the focus is on an HTML input widget.
+--- 446,621 ----
+      var expandOption = {enabled: hasCollapsedBlocks};
+      expandOption.text = Blockly.Msg.EXPAND_ALL;
+      expandOption.callback = function() {
++       Blockly.Instrument.initializeStats("expandAllCollapsedBlocks");
++       Blockly.Instrument.timer(
++           function () {
++             var ms = 0;
++             for (var i = 0; i < topBlocks.length; i++) {
++               var block = topBlocks[i];
++               while (block) {
++                 setTimeout(block.setCollapsed.bind(block, false), ms);
++                 block = block.getNextBlock();
++                 ms += COLLAPSE_DELAY;
++               }
++             }
++             Blockly.resetWorkspaceArrangements();
++           },
++           function (result, timeDiff) {
++             Blockly.Instrument.stats.totalTime = timeDiff;
++             Blockly.Instrument.displayStats("expandAllCollapsedBlocks");
++           }
++       );
+      };
+      options.push(expandOption);
+    }
+  
++   // Arrange blocks in row order.
++   var arrangeOptionH = {enabled: (Blockly.workspace_arranged_position !== Blockly.BLKS_HORIZONTAL)};
++   arrangeOptionH.text = Blockly.Msg.ARRANGE_H;
++   arrangeOptionH.callback = function() {
++     Blockly.workspace_arranged_position = Blockly.BLKS_HORIZONTAL;
++     Blockly.workspace_arranged_latest_position= Blockly.BLKS_HORIZONTAL;
++     arrangeBlocks(Blockly.BLKS_HORIZONTAL);
++   };
++   options.push(arrangeOptionH);
++ 
++   // Arrange blocks in column order.
++   var arrangeOptionV = {enabled: (Blockly.workspace_arranged_position !== Blockly.BLKS_VERTICAL)};
++   arrangeOptionV.text = Blockly.Msg.ARRANGE_V;
++   arrangeOptionV.callback = function() {
++     Blockly.workspace_arranged_position = Blockly.BLKS_VERTICAL;
++     Blockly.workspace_arranged_latest_position = Blockly.BLKS_VERTICAL;
++     arrangeBlocks(Blockly.BLKS_VERTICAL);
++   };
++   options.push(arrangeOptionV);
++ 
++   /**
++    * Function that returns a name to be used to sort blocks.
++    * The general comparator is the block.category attribute.
++    * In the case of 'Components' the comparator is the instanceName of the component if it exists
++    * (it does not exist for generic components).
++    * In the case of Procedures the comparator is the NAME(for definitions) or PROCNAME (for calls)
++    * @param {!Blockly.Block} the block that will be compared in the sortByCategory function
++    * @returns {string} text to be used in the comparison
++    */
++   function comparisonName(block){
++     if (block.category === 'Component' && block.instanceName)
++       return block.instanceName;
++     if (block.category === 'Procedures')
++       return (block.getFieldValue('NAME') || block.getFieldValue('PROCNAME'));
++     return block.category;
++   }
++ 
++   /**
++    * Function used to sort blocks by Category.
++    * @param {!Blockly.Block} a first block to be compared
++    * @param {!Blockly.Block} b second block to be compared
++    * @returns {number} returns 0 if the blocks are equal, and -1 or 1 if they are not
++    */
++   function sortByCategory(a,b) {
++     var comparatorA = comparisonName(a).toLowerCase();
++     var comparatorB = comparisonName(b).toLowerCase();
++ 
++     if (comparatorA < comparatorB) return -1;
++     else if (comparatorA > comparatorB) return +1;
++     else return 0;
++   }
++ 
++   // Arranges block in layout (Horizontal or Vertical).
++   function arrangeBlocks(layout) {
++     var SPACER = 25;
++     var topblocks = Blockly.mainWorkspace.getTopBlocks(false);
++     // If the blocks are arranged by Category, sort the array
++     if (Blockly.workspace_arranged_type === Blockly.BLKS_CATEGORY){
++       topblocks.sort(sortByCategory);
++     }
++     var metrics = Blockly.mainWorkspace.getMetrics();
++     var viewLeft = metrics.viewLeft + 5;
++     var viewTop = metrics.viewTop + 5;
++     var x = viewLeft;
++     var y = viewTop;
++     var wsRight = viewLeft + metrics.viewWidth;
++     var wsBottom = viewTop + metrics.viewHeight;
++     var maxHgt = 0;
++     var maxWidth = 0;
++     for (var i = 0, len = topblocks.length; i < len; i++) {
++       var blk = topblocks[i];
++       var blkXY = blk.getRelativeToSurfaceXY();
++       var blockHW = blk.getHeightWidth();
++       var blkHgt = blockHW.height;
++       var blkWidth = blockHW.width;
++       switch (layout) {
++         case Blockly.BLKS_HORIZONTAL:
++           if (x < wsRight) {
++             blk.moveBy(x - blkXY.x, y - blkXY.y);
++             blk.select();
++             x += blkWidth + SPACER;
++             if (blkHgt > maxHgt) // Remember highest block
++               maxHgt = blkHgt;
++           } else {
++             y += maxHgt + SPACER;
++             maxHgt = blkHgt;
++             x = viewLeft;
++             blk.moveBy(x - blkXY.x, y - blkXY.y);
++             blk.select();
++             x += blkWidth + SPACER;
++           }
++           break;
++         case Blockly.BLKS_VERTICAL:
++           if (y < wsBottom) {
++             blk.moveBy(x - blkXY.x, y - blkXY.y);
++             blk.select();
++             y += blkHgt + SPACER;
++             if (blkWidth > maxWidth)  // Remember widest block
++               maxWidth = blkWidth;
++           } else {
++             x += maxWidth + SPACER;
++             maxWidth = blkWidth;
++             y = viewTop;
++             blk.moveBy(x - blkXY.x, y - blkXY.y);
++             blk.select();
++             y += blkHgt + SPACER;
++           }
++           break;
++       }
++     }
++   }
++ 
++   // Sort by Category.
++   var sortOptionCat = {enabled: (Blockly.workspace_arranged_type !== Blockly.BLKS_CATEGORY)};
++   sortOptionCat.text = Blockly.Msg.SORT_C;
++   sortOptionCat.callback = function() {
++     Blockly.workspace_arranged_type = Blockly.BLKS_CATEGORY;
++     rearrangeWorkspace();
++   };
++   options.push(sortOptionCat);
++ 
++   // Called after a sort or collapse/expand to redisplay blocks.
++   function rearrangeWorkspace() {
++     //default arrangement position set to Horizontal if it hasn't been set yet (is null)
++     if (Blockly.workspace_arranged_latest_position === null || Blockly.workspace_arranged_latest_position === Blockly.BLKS_HORIZONTAL)
++       arrangeOptionH.callback();
++     else if (Blockly.workspace_arranged_latest_position === Blockly.BLKS_VERTICAL)
++       arrangeOptionV.callback();
++   }
++ 
++   // Option to get help.
++   var helpOption = {enabled: false};
++   helpOption.text = Blockly.Msg.HELP;
++   helpOption.callback = function() {};
++   options.push(helpOption);
++ 
+    Blockly.ContextMenu.show(e, options);
+  };
++ /**
++  * reset arrangement state; to be called when blocks in the workspace change
++  */
++ Blockly.resetWorkspaceArrangements = function(){
++   // reset the variables used for menus, but keep the latest position, so the current horizontal or
++   // vertical state can be kept
++   Blockly.workspace_arranged_type = null;
++   Blockly.workspace_arranged_position = null;
++ };
+  
+  /**
+   * Cancel the native context menu, unless the focus is on an HTML input widget.
+***************
+*** 404,414 ****
+   */
+  Blockly.hideChaff = function(opt_allowToolbox) {
+    Blockly.Tooltip.hide();
+    Blockly.WidgetDiv.hide();
+-   if (!opt_allowToolbox &&
+-       Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
+-     Blockly.Toolbox.clearSelection();
+-   }
+  };
+  
+  /**
+--- 635,643 ----
+   */
+  Blockly.hideChaff = function(opt_allowToolbox) {
+    Blockly.Tooltip.hide();
++   Blockly.FieldFlydown && Blockly.FieldFlydown.hide(); // [lyn, 10/06/13] for handling parameter & procedure flydowns
+    Blockly.WidgetDiv.hide();
++   Blockly.TypeBlock && Blockly.TypeBlock.hide();
+  };
+  
+  /**
+***************
+*** 556,562 ****
+   */
+  Blockly.getMainWorkspaceMetrics_ = function() {
+    var svgSize = Blockly.svgSize();
+-   svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
+    var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
+    var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
+    try {
+--- 785,793 ----
+   */
+  Blockly.getMainWorkspaceMetrics_ = function() {
+    var svgSize = Blockly.svgSize();
++   //We don't use Blockly.Toolbox in our version of Blockly instead we use drawer.js
++   //svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
++   svgSize.width -= 0;  // Zero if no Toolbox.
+    var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
+    var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
+    try {
+***************
+*** 582,588 ****
+      var topEdge = blockBox.y;
+      var bottomEdge = topEdge + blockBox.height;
+    }
+-   var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
+    var metrics = {
+      viewHeight: svgSize.height,
+      viewWidth: svgSize.width,
+--- 813,821 ----
+      var topEdge = blockBox.y;
+      var bottomEdge = topEdge + blockBox.height;
+    }
++   //We don't use Blockly.Toolbox in our version of Blockly instead we use drawer.js
++   //var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
++   var absoluteLeft = Blockly.RTL ? 0 : 0;
+    var metrics = {
+      viewHeight: svgSize.height,
+      viewWidth: svgSize.width,

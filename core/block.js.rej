@@ -1,0 +1,510 @@
+***************
+*** 26,40 ****
+  
+  goog.provide('Blockly.Block');
+  
+  goog.require('Blockly.BlockSvg');
+  goog.require('Blockly.Blocks');
+  goog.require('Blockly.Comment');
+  goog.require('Blockly.Connection');
+  goog.require('Blockly.ContextMenu');
+  goog.require('Blockly.Input');
+  goog.require('Blockly.Msg');
+  goog.require('Blockly.Mutator');
+  goog.require('Blockly.Warning');
+  goog.require('Blockly.Workspace');
+  goog.require('Blockly.Xml');
+  goog.require('goog.Timer');
+--- 26,43 ----
+  
+  goog.provide('Blockly.Block');
+  
++ goog.require('Blockly.Instrument'); // lyn's instrumentation code
+  goog.require('Blockly.BlockSvg');
+  goog.require('Blockly.Blocks');
+  goog.require('Blockly.Comment');
+  goog.require('Blockly.Connection');
+  goog.require('Blockly.ContextMenu');
++ goog.require('Blockly.ErrorIcon');
+  goog.require('Blockly.Input');
+  goog.require('Blockly.Msg');
+  goog.require('Blockly.Mutator');
+  goog.require('Blockly.Warning');
++ goog.require('Blockly.WarningHandler');
+  goog.require('Blockly.Workspace');
+  goog.require('Blockly.Xml');
+  goog.require('goog.Timer');
+***************
+*** 149,154 ****
+  
+    this.workspace = workspace;
+    this.isInFlyout = workspace.isFlyout;
+  
+    // Copy the type-specific functions and data from the prototype.
+    if (prototypeName) {
+--- 152,159 ----
+  
+    this.workspace = workspace;
+    this.isInFlyout = workspace.isFlyout;
++   // This is missing from our latest version
++   //workspace.addTopBlock(this);
+  
+    // Copy the type-specific functions and data from the prototype.
+    if (prototypeName) {
+***************
+*** 202,207 ****
+  Blockly.Block.prototype.warning = null;
+  
+  /**
+   * Returns a list of mutator, comment, and warning icons.
+   * @return {!Array} List of icons.
+   */
+--- 212,223 ----
+  Blockly.Block.prototype.warning = null;
+  
+  /**
++  * Block's error icon (if any).
++  * @type {Blockly.ErrorIcon}
++  */
++ Blockly.Block.prototype.errorIcon = null;
++ 
++ /**
+   * Returns a list of mutator, comment, and warning icons.
+   * @return {!Array} List of icons.
+   */
+***************
+*** 216,221 ****
+    if (this.warning) {
+      icons.push(this.warning);
+    }
+    return icons;
+  };
+  
+--- 232,240 ----
+    if (this.warning) {
+      icons.push(this.warning);
+    }
++   if (this.errorIcon) {
++     icons.push(this.errorIcon);
++   }
+    return icons;
+  };
+  
+***************
+*** 374,379 ****
+    for (var x = 0; x < icons.length; x++) {
+      icons[x].dispose();
+    }
+    // Dispose of all inputs and their fields.
+    for (var x = 0, input; input = this.inputList[x]; x++) {
+      input.dispose();
+--- 393,402 ----
+    for (var x = 0; x < icons.length; x++) {
+      icons[x].dispose();
+    }
++   if (this.errorIcon) {
++     this.errorIcon.dispose();
++   }
++ 
+    // Dispose of all inputs and their fields.
+    for (var x = 0, input; input = this.inputList[x]; x++) {
+      input.dispose();
+***************
+*** 448,464 ****
+   * @return {!Object} Object with height and width properties.
+   */
+  Blockly.Block.prototype.getHeightWidth = function() {
+    var height = this.svg_.height;
+    var width = this.svg_.width;
+    // Recursively add size of subsequent blocks.
+    var nextBlock = this.getNextBlock();
+    if (nextBlock) {
+-     var nextHeightWidth = nextBlock.getHeightWidth();
+      height += nextHeightWidth.height - 4;  // Height of tab.
+      width = Math.max(width, nextHeightWidth.width);
+    }
+    return {height: height, width: width};
+- };
+  
+  /**
+   * Handle a mouse-down on an SVG block.
+--- 473,534 ----
+   * @return {!Object} Object with height and width properties.
+   */
+  Blockly.Block.prototype.getHeightWidth = function() {
++   var start = new Date().getTime();
++   var result;
++   if (Blockly.Instrument.useNeilGetHeightWidthFix) {
++     result = this.getHeightWidthNeil();
++   } else {
++     // Old inexplicably quadratic version of getHeightWidth
++     // The quadratic nature has something to do with getBBox that Lyn
++     // and others never figured out.
++     try {
++       // var bBox = this.getSvgRoot().getBBox();
++       var root = this.getSvgRoot();  //***lyn
++       var bBox = root.getBBox();    //***lyn
++       var height = bBox.height;
++ 
++     } catch (e) {
++       // Firefox has trouble with hidden elements (Bug 528969).
++       return {height: 0, width: 0};
++     }
++     if (Blockly.BROKEN_CONTROL_POINTS) {
++       /* HACK:
++        WebKit bug 67298 causes control points to be included in the reported
++        bounding box.  The render functions (below) add two 5px spacer control
++        points that we need to subtract.
++        */
++       height -= 10;
++       if (this.nextConnection) {
++         // Bottom control point partially masked by lower tab.
++         height += 4;
++       }
++     }
++     // Subtract one from the height due to the shadow.
++     height -= 1;
++     result = {height: height, width: bBox.width}; //Why is width handled differently here
++   }
++   var stop = new Date().getTime();
++   var timeDiff = stop - start;
++   Blockly.Instrument.stats.getHeightWidthCalls++;
++   Blockly.Instrument.stats.getHeightWidthTime += timeDiff;
++   return result;
++ };
++ 
++ /**
++  * Neil's getHeightWidth
++  */
++ Blockly.Block.prototype.getHeightWidthNeil = function() {
+    var height = this.svg_.height;
+    var width = this.svg_.width;
+    // Recursively add size of subsequent blocks.
+    var nextBlock = this.getNextBlock();
+    if (nextBlock) {
++     var nextHeightWidth = nextBlock.getHeightWidthNeil();
+      height += nextHeightWidth.height - 4;  // Height of tab.
+      width = Math.max(width, nextHeightWidth.width);
+    }
+    return {height: height, width: width};
++ }
+  
+  /**
+   * Handle a mouse-down on an SVG block.
+***************
+*** 474,480 ****
+   * @private
+   */
+  Blockly.Block.prototype.onMouseUp_ = function(e) {
+    var this_ = this;
+    Blockly.doCommand(function() {
+      Blockly.terminateDrag_();
+      if (Blockly.selected && Blockly.highlightedConnection_) {
+--- 549,558 ----
+   * @private
+   */
+  Blockly.Block.prototype.onMouseUp_ = function(e) {
++   var start = new Date().getTime();
++   Blockly.Instrument.initializeStats("onMouseUp");
+    var this_ = this;
++   Blockly.resetWorkspaceArrangements();
+    Blockly.doCommand(function() {
+      Blockly.terminateDrag_();
+      if (Blockly.selected && Blockly.highlightedConnection_) {
+***************
+*** 509,514 ****
+        Blockly.highlightedConnection_ = null;
+      }
+    });
+  };
+  
+  /**
+--- 587,602 ----
+        Blockly.highlightedConnection_ = null;
+      }
+    });
++   if (! Blockly.Instrument.avoidRenderWorkspaceInMouseUp) {
++     // [lyn, 04/01/14] rendering a workspace takes a *long* time and is *not* necessary!
++     // This is the key source of the laggy drag problem. Remove it!
++     Blockly.mainWorkspace.render();
++   }
++   Blockly.WarningHandler.checkAllBlocksForWarningsAndErrors();
++   var stop = new Date().getTime();
++   var timeDiff = stop - start;
++   Blockly.Instrument.stats.totalTime = timeDiff;
++   Blockly.Instrument.displayStats("onMouseUp");
+  };
+  
+  /**
+***************
+*** 833,850 ****
+  
+  /**
+   * Get the colour of a block.
+-  * @return {number} HSV hue value.
+   */
+  Blockly.Block.prototype.getColour = function() {
+-   return this.colourHue_;
+  };
+  
+  /**
+   * Change the colour of a block.
+-  * @param {number} colourHue HSV hue value.
+   */
+- Blockly.Block.prototype.setColour = function(colourHue) {
+-   this.colourHue_ = colourHue;
+    if (this.svg_) {
+      this.svg_.updateColour();
+    }
+--- 924,954 ----
+  
+  /**
+   * Get the colour of a block.
++  * @return {number|Array} HSV hue value or RGB Array.
+   */
+  Blockly.Block.prototype.getColour = function() {
++   return (this.rgbArray_ == null ? this.colourHue_ : this.rgbArray_);
+  };
+  
+  /**
+   * Change the colour of a block.
++  * @param {number|Array} hueOrRGBArray HSV hue value or array of RGB values.
+   */
++ Blockly.Block.prototype.setColour = function(hueOrRGBArray) {
++   if(Array.isArray(hueOrRGBArray)) {
++     this.rgbArray_ = hueOrRGBArray;
++     this.colourHue_ = null;
++   } else {
++     this.colourHue_ = hueOrRGBArray;
++     this.rgbArray_ = null;
++   }
++   this.updateColour();
++ };
++ 
++ /**
++  * Update the colour of a block.
++  */
++ Blockly.Block.prototype.updateColour = function() {
+    if (this.svg_) {
+      this.svg_.updateColour();
+    }
+***************
+*** 852,857 ****
+    for (var x = 0; x < icons.length; x++) {
+      icons[x].updateColour();
+    }
+    if (this.rendered) {
+      // Bump every dropdown to change its colour.
+      for (var x = 0, input; input = this.inputList[x]; x++) {
+--- 956,964 ----
+    for (var x = 0; x < icons.length; x++) {
+      icons[x].updateColour();
+    }
++   if (this.errorIcon) {
++     this.errorIcon.updateColour();
++   }
+    if (this.rendered) {
+      // Bump every dropdown to change its colour.
+      for (var x = 0, input; input = this.inputList[x]; x++) {
+***************
+*** 1095,1105 ****
+    if (this.collapsed_ == collapsed) {
+      return;
+    }
+    this.collapsed_ = collapsed;
+    var renderList = [];
+    // Show/hide the inputs.
+-   for (var x = 0, input; input = this.inputList[x]; x++) {
+      renderList.push.apply(renderList, input.setVisible(!collapsed));
+    }
+  
+    var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+--- 1202,1225 ----
+    if (this.collapsed_ == collapsed) {
+      return;
+    }
++   var start = new Date().getTime();
+    this.collapsed_ = collapsed;
+    var renderList = [];
++ //  //Prepare the string for collapsing if needed
++ //  if (collapsed){
++ //    if (this.prepareCollapsedText && goog.isFunction(this.prepareCollapsedText))
++ //      this.prepareCollapsedText();
++ //  }
+    // Show/hide the inputs.
++   if (Blockly.Instrument.useRenderDown) {
++     for (var x = 0, input; input = this.inputList[x]; x++) {
++       // No need to collect renderList if rendering down.
++       input.setVisible(!collapsed);
++     }
++   } else {
++     for (var x = 0, input; input = this.inputList[x]; x++) {
+      renderList.push.apply(renderList, input.setVisible(!collapsed));
++     }
+    }
+  
+    var COLLAPSED_INPUT_NAME = '_TEMP_COLLAPSED_INPUT';
+***************
+*** 1108,1113 ****
+      for (var x = 0; x < icons.length; x++) {
+        icons[x].setVisible(false);
+      }
+      var text = this.toString(Blockly.COLLAPSE_CHARS);
+      this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text);
+    } else {
+--- 1228,1236 ----
+      for (var x = 0; x < icons.length; x++) {
+        icons[x].setVisible(false);
+      }
++     if (this.errorIcon) {
++       this.errorIcon.setVisible(false);
++     }
+      var text = this.toString(Blockly.COLLAPSE_CHARS);
+      this.appendDummyInput(COLLAPSED_INPUT_NAME).appendField(text);
+    } else {
+***************
+*** 1118,1129 ****
+      // No child blocks, just render this block.
+      renderList[0] = this;
+    }
+    if (this.rendered) {
+-     for (var x = 0, block; block = renderList[x]; x++) {
+-       block.render();
+      }
+      this.bumpNeighbours_();
+    }
+  };
+  
+  /**
+--- 1241,1264 ----
+      // No child blocks, just render this block.
+      renderList[0] = this;
+    }
++ 
+    if (this.rendered) {
++     if (Blockly.Instrument.useRenderDown) {
++       this.renderDown();
++     } else {
++       for (var x = 0, block; block = renderList[x]; x++) {
++         block.render();
++       }
+      }
+      this.bumpNeighbours_();
+    }
++ 
++   var stop = new Date().getTime();
++   var timeDiff = stop - start;
++   if (! collapsed) {
++     Blockly.Instrument.stats.expandCollapsedCalls++;
++     Blockly.Instrument.stats.expandCollapsedTime += timeDiff;
++   }
+  };
+  
+  /**
+***************
+*** 1174,1180 ****
+   */
+  Blockly.Block.prototype.appendInput_ = function(type, name) {
+    var connection = null;
+-   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT) {
+      connection = new Blockly.Connection(this, type);
+    }
+    var input = new Blockly.Input(type, name, this, connection);
+--- 1320,1326 ----
+   */
+  Blockly.Block.prototype.appendInput_ = function(type, name) {
+    var connection = null;
++   if (type == Blockly.INPUT_VALUE || type == Blockly.NEXT_STATEMENT || type == Blockly.INDENTED_VALUE) {
+      connection = new Blockly.Connection(this, type);
+    }
+    var input = new Blockly.Input(type, name, this, connection);
+***************
+*** 1389,1400 ****
+  };
+  
+  /**
+   * Render the block.
+   * Lays out and reflows a block based on its contents and settings.
+   */
+  Blockly.Block.prototype.render = function() {
+-   goog.asserts.assertObject(this.svg_,
+-       'Uninitialized block cannot be rendered.  Call block.initSvg()');
+-   this.svg_.render();
+-   Blockly.Realtime.blockChanged(this);
+  };
+--- 1535,1609 ----
+  };
+  
+  /**
++  * Set this block's warning text.
++  * @param {?string} text The text, or null to delete.
++  */
++ Blockly.Block.prototype.setErrorIconText = function(text) {
++   if (!Blockly.ErrorIcon) {
++     throw 'Warnings not supported.';
++   }
++   var changedState = false;
++   if (goog.isString(text)) {
++     if (!this.errorIcon) {
++       this.errorIcon = new Blockly.ErrorIcon(this);
++       changedState = true;
++     }
++     this.errorIcon.setText(/** @type {string} */ (text));
++   } else {
++     if (this.errorIcon) {
++       this.errorIcon.dispose();
++       changedState = true;
++     }
++   }
++   if (this.rendered) {
++     this.render();
++     if (changedState) {
++       // Adding or removing a warning icon will cause the block to change shape.
++       this.bumpNeighbours_();
++     }
++   }
++ };
++ 
++ /**
++  * [lyn, 04/01/14] Global flag to control whether rendering is done.
++  * There is no need to render blocks in Blocky.SaveFile.load.
++  * We only need to render them when a Screen is loaded in the Blockly editor.
++  * This flag is used to turn off rendering for first case and turn it on for the second.
++  * @type {boolean}
++ */
++ Blockly.Block.isRenderingOn = true;
++ 
++ /**
+   * Render the block.
+   * Lays out and reflows a block based on its contents and settings.
+   */
+  Blockly.Block.prototype.render = function() {
++   if (Blockly.Block.isRenderingOn) {
++     goog.asserts.assertObject(this.svg_,
++        'Uninitialized block cannot be rendered.  Call block.initSvg()');
++     this.svg_.render();
++     if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
++       Blockly.Realtime.blockChanged(this);
++     }
++     Blockly.Instrument.stats.renderCalls++;
++     // [lyn, 04/08/14] Because render is recursive, doesn't make sense to track its time here.
++   }
++ };
++ 
++ /**
++  * [lyn, 04/01/14] Render a tree of blocks from top down rather than bottom up.
++  * This is in contrast to render(), which renders a block and all its antecedents.
++  */
++ Blockly.Block.prototype.renderDown = function() {
++   if (Blockly.Block.isRenderingOn) {
++     goog.asserts.assertObject(this.svg_,
++       ' Uninitialized block cannot be renderedDown.  Call block.initSvg()');
++     this.svg_.renderDown();
++     Blockly.Instrument.stats.renderDownCalls++; //***lyn
++     if (Blockly.Realtime.isEnabled() && !Blockly.Realtime.withinSync) {
++       Blockly.Realtime.blockChanged(this);
++     }
++   }
++   // [lyn, 04/08/14] Because renderDown is recursive, doesn't make sense to track its time here.
+  };
++ 

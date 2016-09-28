@@ -1,0 +1,46 @@
+***************
+*** 99,104 ****
+      // Flyouts can have multiple procedures called 'procedure'.
+      return name;
+    }
+    while (!Blockly.Procedures.isLegalName(name, block.workspace, block)) {
+      // Collision with another procedure.
+      var r = name.match(/^(.*?)(\d+)$/);
+--- 99,105 ----
+      // Flyouts can have multiple procedures called 'procedure'.
+      return name;
+    }
++   name = name.replace(/\s+/g, '');
+    while (!Blockly.Procedures.isLegalName(name, block.workspace, block)) {
+      // Collision with another procedure.
+      var r = name.match(/^(.*?)(\d+)$/);
+***************
+*** 255,266 ****
+   * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
+   * @param {!Array.<string>} paramNames Array of new parameter names.
+   * @param {!Array.<string>} paramIds Array of unique parameter IDs.
+   */
+  Blockly.Procedures.mutateCallers = function(name, workspace,
+-                                             paramNames, paramIds) {
+    var callers = Blockly.Procedures.getCallers(name, workspace);
+    for (var x = 0; x < callers.length; x++) {
+-     callers[x].setProcedureParameters(paramNames, paramIds);
+    }
+  };
+  
+--- 256,270 ----
+   * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
+   * @param {!Array.<string>} paramNames Array of new parameter names.
+   * @param {!Array.<string>} paramIds Array of unique parameter IDs.
++  * @param {boolean} opt_intializeTracking indicate whether paramId tracking should start
++  *    Is undefined (falsey) as default. // [lyn, 10/26/13] added this.
+   */
+  Blockly.Procedures.mutateCallers = function(name, workspace,
++                                             paramNames, paramIds,
++                                             opt_initializeTracking) {
+    var callers = Blockly.Procedures.getCallers(name, workspace);
+    for (var x = 0; x < callers.length; x++) {
++     callers[x].setProcedureParameters(paramNames, paramIds, opt_initializeTracking);
+    }
+  };
+  

@@ -1,0 +1,17 @@
+***************
+*** 304,310 ****
+          var block = Blockly.Xml.domToBlock(
+              /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
+          blocks.push(block);
+-         gaps.push(margin * 3);
+        }
+      }
+    }
+--- 318,324 ----
+          var block = Blockly.Xml.domToBlock(
+              /** @type {!Blockly.Workspace} */ (this.workspace_), xml);
+          blocks.push(block);
++         gaps.push(margin * this.VERTICAL_SEPARATION_FACTOR); // [lyn, 10/06/13] introduced VERTICAL_SEPARATION_FACTOR
+        }
+      }
+    }

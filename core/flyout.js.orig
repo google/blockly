@@ -36,20 +36,6 @@ goog.require('goog.events');
 goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
 
-/**
- * Factor by which margin is multiplied to vertically separate blocks in flyout
- * [lyn, 10/06/13] introduced so can change in flydown subclass.)
- * @type {number}
- * @const
- */
-Blockly.Flyout.prototype.VERTICAL_SEPARATION_FACTOR = 2;
-
-/*
- * Wrapper function called when a resize occurs.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.prototype.onResizeWrapper_ = null;
 
 /**
  * Class for a flyout.

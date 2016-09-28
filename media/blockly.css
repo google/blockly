@@ -1,0 +1,255 @@
+.blocklySvg {
+  background-color: #fff;
+}
+.blocklyWidgetDiv {
+  position: absolute;
+  display: none;
+  z-index: 999;
+}
+.blocklyDraggable {
+  cursor: url(handopen.cur) 8 5 , auto;
+}
+.blocklyResizeSE {
+  fill: #aaa;
+  cursor: se-resize;
+}
+.blocklyResizeSW {
+  fill: #aaa;
+  cursor: sw-resize;
+}
+.blocklyResizeLine {
+  stroke-width: 1;
+  stroke: #888;
+}
+.blocklyHighlightedConnectionPath {
+  stroke-width: 4px;
+  stroke: #fc3;
+  fill: none;
+}
+.blocklyPathLight {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.blocklySelected>.blocklyPath {
+  stroke-width: 3px;
+  stroke: #fc3;
+}
+.blocklySelected>.blocklyPathLight {
+  display: none;
+}
+.blocklyDragging>.blocklyPath, .blocklyDragging>.blocklyPathLight {
+  fill-opacity: .8;
+  stroke-opacity: .8;
+}
+.blocklyDragging>.blocklyPathDark {
+  display: none;
+}
+.blocklyDisabled>.blocklyPath {
+  fill-opacity: .5;
+  stroke-opacity: .5;
+}
+.blocklyDisabled>.blocklyPathLight, .blocklyDisabled>.blocklyPathDark {
+  display: none;
+}
+.blocklyText {
+  cursor: default;
+  font-family: sans-serif;
+  font-size: 11pt;
+  fill: #fff;
+}
+.blocklyNonEditableText>text {
+  pointer-events: none;
+}
+.blocklyNonEditableText>rect, .blocklyEditableText>rect {
+  fill: #fff;
+  fill-opacity: .6;
+}
+.blocklyNonEditableText>text, .blocklyEditableText>text {
+  fill: #000;
+}
+.blocklyEditableText:hover>rect {
+  stroke-width: 2;
+  stroke: #fff;
+}
+.blocklySvg text {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: inherit;
+}
+.blocklyHidden {
+  display: none;
+}
+.blocklyTooltipBackground {
+  fill: #ffffc7;
+  stroke-width: 1px;
+  stroke: #d8d8d8;
+}
+.blocklyTooltipShadow, .blocklyContextMenuShadow, .blocklyDropdownMenuShadow {
+  fill: #bbb;
+  filter: url(#blocklyShadowFilter);
+}
+.blocklyTooltipText {
+  font-family: sans-serif;
+  font-size: 9pt;
+  fill: #000;
+}
+.blocklyIconShield {
+  cursor: default;
+  fill: #00c;
+  stroke-width: 1px;
+  stroke: #ccc;
+}
+.blocklyIconGroup:hover>.blocklyIconShield {
+  fill: #00f;
+  stroke: #fff;
+}
+.blocklyIconGroup:hover>.blocklyIconMark {
+  fill: #fff;
+}
+.blocklyIconMark {
+  cursor: default !important;
+  font-family: sans-serif;
+  font-size: 9pt;
+  font-weight: bold;
+  fill: #ccc;
+  text-anchor: middle;
+}
+.blocklyMinimalBody {
+  margin: 0;
+  padding: 0;
+}
+.blocklyCommentTextarea {
+  margin: 0;
+  padding: 2px;
+  border: 0;
+  resize: none;
+  background-color: #ffc;
+}
+.blocklyHtmlInput {
+  font-family: sans-serif;
+  font-size: 11pt;
+  border: none;
+  outline: none;
+}
+.blocklyContextMenuBackground, .blocklyMutatorBackground {
+  fill: #fff;
+  stroke-width: 1;
+  stroke: #ddd;
+}
+.blocklyContextMenuOptions>.blocklyMenuDiv, .blocklyContextMenuOptions>.blocklyMenuDivDisabled, .blocklyDropdownMenuOptions>.blocklyMenuDiv {
+  fill: #fff;
+}
+.blocklyToolboxOptions>.blocklyMenuDiv {
+  fill: #ddd;
+}
+.blocklyToolboxOptions>.blocklyMenuDiv:hover {
+  fill: #e4e4e4;
+}
+.blocklyContextMenuOptions>.blocklyMenuDiv:hover>rect, .blocklyDropdownMenuOptions>.blocklyMenuDiv:hover>rect, .blocklyMenuSelected>rect {
+  fill: #57e;
+}
+.blocklyMenuText {
+  cursor: default !important;
+  font-family: sans-serif;
+  font-size: 15px;
+  fill: #000;
+}
+.blocklyContextMenuOptions>.blocklyMenuDiv:hover>.blocklyMenuText, .blocklyDropdownMenuOptions>.blocklyMenuDiv:hover>.blocklyMenuText, .blocklyMenuSelected>.blocklyMenuText {
+  fill: #fff;
+}
+.blocklyMenuDivDisabled>.blocklyMenuText {
+  fill: #ccc;
+}
+.blocklyToolboxBackground {
+  fill: #ddd;
+}
+.blocklyFlyoutBackground {
+  fill: #ddd;
+  fill-opacity: .8;
+}
+.blocklyColourBackground {
+  fill: #666;
+}
+.blocklyScrollbarBackground {
+  fill: #fff;
+  stroke-width: 1;
+  stroke: #e4e4e4;
+}
+.blocklyScrollbarKnob {
+  fill: #ccc;
+}
+.blocklyScrollbarBackground:hover+.blocklyScrollbarKnob, .blocklyScrollbarKnob:hover {
+  fill: #bbb;
+}
+.blocklyInvalidInput {
+  background: #faa;
+}
+.goog-palette {
+  outline: none;
+  cursor: default;
+}
+.goog-palette-table {
+  border: 1px solid #666;
+  border-collapse: collapse;
+}
+.goog-palette-cell {
+  height: 13px;
+  width: 15px;
+  margin: 0;
+  border: 0;
+  text-align: center;
+  vertical-align: middle;
+  border-right: 1px solid #666;
+  font-size: 1px;
+}
+.goog-palette-colorswatch {
+  position: relative;
+  height: 13px;
+  width: 15px;
+  border: 1px solid #666;
+}
+.goog-palette-cell-hover .goog-palette-colorswatch {
+  border: 1px solid #fff;
+}
+.goog-palette-cell-selected .goog-palette-colorswatch {
+  border: 1px solid #000;
+  color: #fff;
+}
+
+
+.blocklyErrorIconShield {
+  cursor: default;
+  fill: #f00;
+  stroke-width: 1px;
+  stroke: #ccc;
+}
+.blocklyIconGroup:hover>.blocklyErrorIconShield {
+  fill: #f00;
+  stroke: #fff;
+}
+
+.blocklyWarningIconShield {
+  cursor: default;
+  fill: #ff5;
+  stroke-width: 1px;
+  stroke: #555;
+}
+.blocklyIconGroup:hover>.blocklyWarningIconShield {
+  fill: #ff0;
+  stroke: #000;
+}
+
+.blocklyWarningIconMark {
+  cursor: default !important;
+  font-family: sans-serif;
+  font-size: 9pt;
+  font-weight: bold;
+  fill: #555;
+  text-anchor: middle;
+}
+
+.blocklyIconGroup:hover>.blocklyWarningIconMark {
+  fill: #000;
+}

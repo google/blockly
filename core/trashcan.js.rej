@@ -1,0 +1,16 @@
+***************
+*** 218,223 ****
+   * @private
+   */
+  Blockly.Trashcan.prototype.position_ = function() {
+    var metrics = this.workspace_.getMetrics();
+    if (!metrics) {
+      // There are no metrics available (workspace is probably not visible).
+--- 219,225 ----
+   * @private
+   */
+  Blockly.Trashcan.prototype.position_ = function() {
++   var start = new Date().getTime();
+    var metrics = this.workspace_.getMetrics();
+    if (!metrics) {
+      // There are no metrics available (workspace is probably not visible).

@@ -1,0 +1,129 @@
+***************
+*** 108,113 ****
+      if (hasCollapse === undefined) {
+        hasCollapse = hasCategories;
+      }
+      var hasComments = options['comments'];
+      if (hasComments === undefined) {
+        hasComments = hasCategories;
+--- 108,114 ----
+      if (hasCollapse === undefined) {
+        hasCollapse = hasCategories;
+      }
++     var configForTypeBlock = options['typeblock_config'];
+      var hasComments = options['comments'];
+      if (hasComments === undefined) {
+        hasComments = hasCategories;
+***************
+*** 125,134 ****
+      if (hasScrollbars === undefined) {
+        hasScrollbars = true;
+      }
+    }
+    var enableRealtime = !!options['realtime'];
+    var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
+- 
+    Blockly.RTL = !!options['rtl'];
+    Blockly.collapse = hasCollapse;
+    Blockly.comments = hasComments;
+--- 126,135 ----
+      if (hasScrollbars === undefined) {
+        hasScrollbars = true;
+      }
++     var configForTypeBlock = null;
+    }
+    var enableRealtime = !!options['realtime'];
+    var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
+    Blockly.RTL = !!options['rtl'];
+    Blockly.collapse = hasCollapse;
+    Blockly.comments = hasComments;
+***************
+*** 140,145 ****
+    Blockly.hasScrollbars = hasScrollbars;
+    Blockly.hasTrashcan = hasTrashcan;
+    Blockly.languageTree = tree;
+    Blockly.enableRealtime = enableRealtime;
+    Blockly.realtimeOptions = realtimeOptions;
+  };
+--- 141,147 ----
+    Blockly.hasScrollbars = hasScrollbars;
+    Blockly.hasTrashcan = hasTrashcan;
+    Blockly.languageTree = tree;
++   Blockly.configForTypeBlock = configForTypeBlock;
+    Blockly.enableRealtime = enableRealtime;
+    Blockly.realtimeOptions = realtimeOptions;
+  };
+***************
+*** 271,276 ****
+         * @type {!Blockly.Flyout}
+         * @private
+         */
+        Blockly.mainWorkspace.flyout_ = new Blockly.Flyout();
+        var flyout = Blockly.mainWorkspace.flyout_;
+        var flyoutSvg = flyout.createDom();
+--- 273,280 ----
+         * @type {!Blockly.Flyout}
+         * @private
+         */
++ 
++        /*
+        Blockly.mainWorkspace.flyout_ = new Blockly.Flyout();
+        var flyout = Blockly.mainWorkspace.flyout_;
+        var flyoutSvg = flyout.createDom();
+***************
+*** 329,334 ****
+          }
+        };
+        Blockly.addChangeListener(workspaceChanged);
+      }
+    }
+  
+--- 333,339 ----
+          }
+        };
+        Blockly.addChangeListener(workspaceChanged);
++         */
+      }
+    }
+  
+***************
+*** 398,407 ****
+        Blockly.Toolbox.init();
+      } else {
+        // Build a fixed flyout with the root blocks.
+-       Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace, true);
+-       Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
+-       // Translate the workspace sideways to avoid the fixed flyout.
+-       Blockly.mainWorkspace.scrollX = Blockly.mainWorkspace.flyout_.width_;
+        if (Blockly.RTL) {
+          Blockly.mainWorkspace.scrollX *= -1;
+        }
+--- 403,414 ----
+        Blockly.Toolbox.init();
+      } else {
+        // Build a fixed flyout with the root blocks.
++       //if (Blockly.mainWorkspace.flyout_) {
++         Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace, true);
++         Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
++         // Translate the workspace sideways to avoid the fixed flyout.
++         Blockly.mainWorkspace.scrollX = Blockly.mainWorkspace.flyout_.width_;
++       //}
+        if (Blockly.RTL) {
+          Blockly.mainWorkspace.scrollX *= -1;
+        }
+***************
+*** 418,423 ****
+    }
+  
+    Blockly.mainWorkspace.addTrashcan();
+  
+    // Load the sounds.
+    Blockly.loadAudio_(
+--- 425,431 ----
+    }
+  
+    Blockly.mainWorkspace.addTrashcan();
++   Blockly.mainWorkspace.addWarningIndicator(Blockly.mainWorkspace);
+  
+    // Load the sounds.
+    Blockly.loadAudio_(

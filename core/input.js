@@ -41,8 +41,14 @@ goog.require('goog.asserts');
  * @constructor
  */
 Blockly.Input = function(type, name, block, connection) {
-  /** @type {number} */
-  this.type = type;
+  if (type == Blockly.INDENTED_VALUE) {
+    /** @type {number} */
+    this.type = Blockly.INPUT_VALUE;
+    /** @type {number} */
+    this.subtype = Blockly.INDENTED_VALUE;
+  } else {
+    this.type = type;
+  }
   /** @type {string} */
   this.name = name;
   /**

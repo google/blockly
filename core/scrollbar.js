@@ -74,7 +74,6 @@ Blockly.ScrollbarPair.prototype.dispose = function() {
  * Also reposition the corner rectangle.
  */
 Blockly.ScrollbarPair.prototype.resize = function() {
-  var start = new Date().getTime();
   // Look up the host metrics once, and use for both scrollbars.
   var hostMetrics = this.workspace_.getMetrics();
   if (!hostMetrics) {
@@ -128,10 +127,6 @@ Blockly.ScrollbarPair.prototype.resize = function() {
   }
   // Cache the current metrics to potentially short-cut the next resize event.
   this.oldHostMetrics_ = hostMetrics;
-  var stop = new Date().getTime();
-  var timeDiff = stop - start;
-  Blockly.Instrument.stats.scrollBarResizeCalls++; //***lyn
-  Blockly.Instrument.stats.scrollBarResizeTime += timeDiff; //***lyn
 };
 
 /**

@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.Trashcan');
 
-goog.require('Blockly.Instrument'); // lyn's instrumentation code
 goog.require('goog.Timer');
 goog.require('goog.dom');
 goog.require('goog.math');
@@ -259,10 +258,6 @@ Blockly.Trashcan.prototype.position = function() {
   }
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
-  var stop = new Date().getTime();
-  var timeDiff = stop - start;
-  Blockly.Instrument.stats.trashCanPositionCalls++; //***lyn
-  Blockly.Instrument.stats.trashCanPositionTime += timeDiff; //***lyn
 };
 
 /**

@@ -207,14 +207,14 @@ Blockly.Flyout.prototype.MARGIN = Blockly.Flyout.prototype.CORNER_RADIUS;
  * element.
  * @const {number}
  */
-Blockly.Flyout.prototype.GAP_X = Blockly.Flyout.prototype.MARGIN * 3;
+Blockly.Flyout.prototype.GAP_X = Blockly.Flyout.prototype.MARGIN * Blockly.Flyout.prototype.VERTICAL_SEPARATION_FACTOR;
 
 /**
  * Gap between items in vertical flyouts. Can be overridden with the "sep"
  * element.
  * @const {number}
  */
-Blockly.Flyout.prototype.GAP_Y = Blockly.Flyout.prototype.MARGIN * 3;
+Blockly.Flyout.prototype.GAP_Y = Blockly.Flyout.prototype.MARGIN * Blockly.Flyout.prototype.VERTICAL_SEPARATION_FACTOR;
 
 /**
  * Top/bottom padding between scrollbar and edge of flyout background.

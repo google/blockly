@@ -440,23 +440,26 @@ blocklyApp.TreeService = ng.core
         // Outside an input field, Enter, Tab and navigation keys are all
         // recognized.
         if (e.keyCode == 13) {
-          // Enter key. The user wants to interact with a button or an input
-          // field.
+          // Enter key. The user wants to interact with a button, interact with
+          // an input field, or move down one level.
           // Algorithm to find the field: do a DFS through the children until
           // we find an INPUT or BUTTON element (in which case we use it).
           // Truncate the search at child LI elements.
+          var found = false;
           var dfsStack = Array.from(activeDesc.children);
           while (dfsStack.length) {
             var currentNode = dfsStack.shift();
             if (currentNode.tagName == 'BUTTON') {
-              this.moveActiveDescToParent(treeId);
+              this.moveUpOneLevel_(treeId);
               currentNode.click();
+              found = true;
               break;
             } else if (currentNode.tagName == 'INPUT') {
               currentNode.focus();
               currentNode.select();
               this.notificationsService.setStatusMessage(
                 'Type a value, then press Escape to exit');
+              found = true;
               break;
             } else if (currentNode.tagName == 'LI') {
               continue;
@@ -469,6 +472,12 @@ blocklyApp.TreeService = ng.core
               });
             }
           }
+
+          // If we cannot find a field to interact with, we try moving down a
+          // level instead.
+          if (!found) {
+            this.moveDownOneLevel_(treeId);
+          }
         } else if (e.keyCode == 9) {
           // Tab key. Note that allowing the event to propagate through is
           // intentional.
@@ -478,6 +487,8 @@ blocklyApp.TreeService = ng.core
           if (destinationTreeId) {
             this.notifyUserAboutCurrentTree_(destinationTreeId);
           }
+        } else if (e.keyCode == 27) {
+          this.moveUpOneLevel_(treeId);
         } else if (e.keyCode >= 35 && e.keyCode <= 40) {
           // End, home, and arrow keys.
           if (e.keyCode == 35) {
@@ -494,22 +505,22 @@ blocklyApp.TreeService = ng.core
             }
           } else if (e.keyCode == 37) {
             // Left arrow key. Go up a level, if possible.
-            this.moveActiveDescToParent(treeId);
+            this.moveUpOneLevel_(treeId);
           } else if (e.keyCode == 38) {
             // Up arrow key. Go to the previous sibling, if possible.
             var prevSibling = this.getPreviousSibling(activeDesc);
             if (prevSibling) {
               this.setActiveDesc(prevSibling.id, treeId);
             } else {
-              this.notificationsService.setStatusMessage(
-                  'Reached top of list. Press left to go to parent list.');
+              var statusMessage = 'Reached top of list.';
+              if (this.getParentListElement_(activeDesc)) {
+                statusMessage += ' Press left to go to parent list.';
+              }
+              this.notificationsService.setStatusMessage(statusMessage);
             }
           } else if (e.keyCode == 39) {
             // Right arrow key. Go down a level, if possible.
-            var firstChild = this.getFirstChild(activeDesc);
-            if (firstChild) {
-              this.setActiveDesc(firstChild.id, treeId);
-            }
+            this.moveDownOneLevel_(treeId);
           } else if (e.keyCode == 40) {
             // Down arrow key. Go to the next sibling, if possible.
             var nextSibling = this.getNextSibling(activeDesc);
@@ -526,18 +537,26 @@ blocklyApp.TreeService = ng.core
         }
       }
     },
-    moveActiveDescToParent: function(treeId) {
+    moveDownOneLevel_: function(treeId) {
       var activeDesc = document.getElementById(this.getActiveDescId(treeId));
-      var nextNode = activeDesc.parentNode;
-      if (this.isButtonOrFieldNode_(activeDesc)) {
-        nextNode = nextNode.parentNode;
+      var firstChild = this.getFirstChild(activeDesc);
+      if (firstChild) {
+        this.setActiveDesc(firstChild.id, treeId);
       }
-      while (nextNode && nextNode.tagName != 'LI') {
-        nextNode = nextNode.parentNode;
-      }
+    },
+    moveUpOneLevel_: function(treeId) {
+      var activeDesc = document.getElementById(this.getActiveDescId(treeId));
+      var nextNode = this.getParentListElement_(activeDesc);
       if (nextNode) {
         this.setActiveDesc(nextNode.id, treeId);
       }
+    },
+    getParentListElement_: function(element) {
+      var nextNode = element.parentNode;
+      while (nextNode && nextNode.tagName != 'LI') {
+        nextNode = nextNode.parentNode;
+      }
+      return nextNode;
     },
     getFirstChild: function(element) {
       if (!element) {

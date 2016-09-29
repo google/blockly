@@ -40,7 +40,7 @@ blocklyApp.ToolboxComponent = ng.core
                 [id]="idMap['Parent' + i]" role="treeitem"
                 [ngClass]="{blocklyHasChildren: true, blocklyActiveDescendant: tree.getAttribute('aria-activedescendant') == idMap['Parent' + i]}"
                 *ngFor="#category of toolboxCategories; #i=index"
-                aria-level="1"
+                aria-level="0"
                 [attr.aria-label]="getCategoryAriaLabel(category)">
               <div *ngIf="category && category.attributes">
                 <label [id]="idMap['Label' + i]" #name>
@@ -48,7 +48,7 @@ blocklyApp.ToolboxComponent = ng.core
                 </label>
                 <ol role="group" *ngIf="getToolboxWorkspace(category).topBlocks_.length > 0">
                   <blockly-toolbox-tree *ngFor="#block of getToolboxWorkspace(category).topBlocks_"
-                                        [level]="2" [block]="block"
+                                        [level]="1" [block]="block"
                                         [displayBlockMenu]="true"
                                         [tree]="tree">
                   </blockly-toolbox-tree>
@@ -59,7 +59,7 @@ blocklyApp.ToolboxComponent = ng.core
 
           <div *ngIf="!xmlHasCategories">
             <blockly-toolbox-tree *ngFor="#block of getToolboxWorkspace(toolboxCategories[0]).topBlocks_; #i=index"
-                                  role="treeitem" [level]="1" [block]="block"
+                                  role="treeitem" [level]="0" [block]="block"
                                   [tree]="tree" [displayBlockMenu]="true"
                                   [isFirstToolboxTree]="i === 0">
             </blockly-toolbox-tree>

@@ -36,7 +36,7 @@ blocklyApp.WorkspaceComponent = ng.core
             [attr.aria-activedescendant]="getActiveDescId(tree.id)"
             [attr.aria-labelledby]="workspaceTitle.id"
             (keydown)="onKeypress($event, tree)">
-          <blockly-workspace-tree [level]=1 [block]="block" [tree]="tree" [isTopLevel]="true">
+          <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
           </blockly-workspace-tree>
         </ol>
       </div>

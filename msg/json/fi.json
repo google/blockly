@@ -9,7 +9,8 @@
 			"Espeox",
 			"SNuutti",
 			"PStudios",
-			"Mikahama"
+			"Mikahama",
+			"Pyscowicz"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "kohde",
@@ -35,8 +36,9 @@
 	"CHANGE_VALUE_TITLE": "Muuta arvoa:",
 	"RENAME_VARIABLE": "Nimeä uudelleen muuttuja...",
 	"RENAME_VARIABLE_TITLE": "Nimeä uudelleen kaikki '%1' muuttujaa:",
-	"NEW_VARIABLE": "Uusi muuttuja...",
+	"NEW_VARIABLE": "Luo muuttuja...",
 	"NEW_VARIABLE_TITLE": "Uuden muuttujan nimi:",
+	"VARIABLE_ALREADY_EXISTS": "Muuttuja nimeltään '%1' jo olemassa.",
 	"COLOUR_PICKER_HELPURL": "https://fi.wikipedia.org/wiki/V%C3%A4ri",
 	"COLOUR_PICKER_TOOLTIP": "Valitse väri paletista.",
 	"COLOUR_RANDOM_TITLE": "satunnainen väri",

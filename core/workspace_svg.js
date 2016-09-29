@@ -32,6 +32,7 @@ goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.constants');
 goog.require('Blockly.Options');
 goog.require('Blockly.ScrollbarPair');
+goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
@@ -647,7 +648,8 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  */
 Blockly.WorkspaceSvg.prototype.createVariable = function(name) {
   Blockly.WorkspaceSvg.superClass_.createVariable.call(this, name);
-  if (this.toolbox_ && this.toolbox_.flyout_) {
+  // Don't refresh the toolbox if there's a drag in progress.
+  if (this.toolbox_ && this.toolbox_.flyout_ && !Blockly.Flyout.startFlyout_) {
     this.toolbox_.refreshSelection();
   }
 };
@@ -704,6 +706,7 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   this.markFocused();
   if (Blockly.isTargetInput_(e)) {
+    Blockly.Touch.clearTouchIdentifier();
     return;
   }
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
@@ -718,6 +721,8 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   if (Blockly.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
+    // Since this was a click, not a drag, end the gesture immediately.
+    Blockly.Touch.clearTouchIdentifier();
   } else if (this.scrollbar) {
     this.dragMode_ = Blockly.DRAG_BEGIN;
     // Record the current mouse position.
@@ -731,9 +736,9 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     // is turned off and double move events are not performed on a block.
     // See comment in inject.js Blockly.init_ as to why mouseup events are
     // bound to the document instead of the SVG's surface.
-    if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
-      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_ || [];
-      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_.concat(
+    if ('mouseup' in Blockly.Touch.TOUCH_MAP) {
+      Blockly.Touch.onTouchUpWrapper_ = Blockly.Touch.onTouchUpWrapper_ || [];
+      Blockly.Touch.onTouchUpWrapper_ = Blockly.Touch.onTouchUpWrapper_.concat(
           Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_));
     }
     Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_ || [];

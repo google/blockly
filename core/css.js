@@ -263,7 +263,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyFlyoutButtonShadow {',
-    'fill: #444;',
+    'fill: #666;',
   '}',
 
   '.blocklyFlyoutButton:hover {',

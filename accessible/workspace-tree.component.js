@@ -29,7 +29,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
     selector: 'blockly-workspace-tree',
     template: `
     <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
-        [attr.aria-label]="getBlockDescription() + ' ' + ('WORKSPACE_BLOCK'|translate) + ' ' + ('SUBMENU_INDICATOR'|translate)"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-workspace-block')"
         [attr.aria-level]="level">
       <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
 
@@ -56,8 +56,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
             <ol role="group">
               <li *ngFor="#fieldButtonInfo of fieldButtonsInfo"
                   [id]="idMap[fieldButtonInfo.baseIdKey + i]" role="treeitem"
-                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[fieldButtonInfo.baseIdKey + 'Button' + i], 'blockly-button', fieldButtonInfo.isDisabled(inputBlock.connection))"
-                  [attr.aria-level]="level + 2">
+                  [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[fieldButtonInfo.baseIdKey + 'Button' + i], 'blockly-button')"
+                  [attr.aria-level]="level + 2"
+                  [attr.aria-disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)">
                 <button [id]="idMap[fieldButtonInfo.baseIdKey + 'Button' + i]"
                         (click)="fieldButtonInfo.action(inputBlock.connection)"
                         [disabled]="fieldButtonInfo.isDisabled(inputBlock.connection)" tabindex="-1">
@@ -75,8 +76,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
           <ol role="group">
             <li *ngFor="#buttonInfo of actionButtonsInfo"
                 [id]="idMap[buttonInfo.baseIdKey]" role="treeitem"
-                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[buttonInfo.baseIdKey + 'Button'], 'blockly-button', buttonInfo.isDisabled())"
-                [attr.aria-level]="level + 2">
+                [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[buttonInfo.baseIdKey + 'Button'], 'blockly-button')"
+                [attr.aria-level]="level + 2"
+                [attr.aria-disabled]="buttonInfo.isDisabled()">
               <button [id]="idMap[buttonInfo.baseIdKey + 'Button']" (click)="buttonInfo.action()"
                       [disabled]="buttonInfo.isDisabled()" tabindex="-1">
                 {{buttonInfo.translationIdForText|translate}}
@@ -113,7 +115,16 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       this.audioService = _audioService;
     }],
     getBlockDescription: function() {
-      return this.utilsService.getBlockDescription(this.block);
+      var blockDescription = this.utilsService.getBlockDescription(this.block);
+
+      var parentBlock = this.block.getSurroundParent();
+      if (parentBlock) {
+        var fullDescription = blockDescription + ' inside ' +
+            this.utilsService.getBlockDescription(parentBlock);
+        return fullDescription;
+      } else {
+        return blockDescription;
+      }
     },
     removeBlockAndSetFocus_: function(block, deleteBlockFunc) {
       this.treeService.removeBlockAndSetFocus(
@@ -184,6 +195,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
 
       // Generate a list of action buttons.
       this.actionButtonsInfo = [{
+        baseIdKey: 'moveToMarkedSpot',
+        translationIdForText: 'MOVE_TO_MARKED_SPOT',
+        action: that.moveToMarkedSpot_.bind(that),
+        isDisabled: function() {
+          return !that.clipboardService.isMovableToMarkedConnection(
+              that.block);
+        }
+      }, {
         baseIdKey: 'markBefore',
         translationIdForText: 'MARK_SPOT_BEFORE',
         action: that.markSpotBefore_.bind(that),
@@ -196,14 +215,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         action: that.markSpotAfter_.bind(that),
         isDisabled: function() {
           return !that.block.nextConnection;
-        }
-      }, {
-        baseIdKey: 'moveToMarkedSpot',
-        translationIdForText: 'MOVE_TO_MARKED_SPOT',
-        action: that.moveToMarkedSpot_.bind(that),
-        isDisabled: function() {
-          return !that.clipboardService.isMovableToMarkedConnection(
-              that.block);
         }
       }, {
         baseIdKey: 'delete',
@@ -278,9 +289,9 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         }
       });
     },
-    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
       return this.utilsService.generateAriaLabelledByAttr(
-          mainLabel, secondLabel, isDisabled);
+          mainLabel, secondLabel);
     },
     isCompatibleWithClipboard: function(connection) {
       return this.clipboardService.isCompatibleWithClipboard(connection);

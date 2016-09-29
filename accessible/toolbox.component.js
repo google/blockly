@@ -28,7 +28,7 @@ blocklyApp.ToolboxComponent = ng.core
     selector: 'blockly-toolbox',
     template: `
       <div class="blocklyToolboxColumn">
-        <h3 #toolboxTitle id="blockly-toolbox-title">Toolbox</h3>
+        <h3 #toolboxTitle id="blockly-toolbox-title">{{'TOOLBOX'|translate}}</h3>
         <ol #tree
             id="blockly-toolbox-tree" role="tree" class="blocklyTree"
             *ngIf="toolboxCategories && toolboxCategories.length > 0" tabindex="0"
@@ -67,7 +67,8 @@ blocklyApp.ToolboxComponent = ng.core
         </ol>
       </div>
     `,
-    directives: [blocklyApp.ToolboxTreeComponent]
+    directives: [blocklyApp.ToolboxTreeComponent],
+    pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
     constructor: [

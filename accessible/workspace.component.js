@@ -45,7 +45,9 @@ blocklyApp.WorkspaceComponent = ng.core
     <div class="blocklyToolbarColumn">
       <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
         <span *ngFor="#buttonConfig of toolbarButtonConfig">
-          <button (click)="buttonConfig.action()"
+          <button *ngIf="!buttonConfig.isHidden()"
+                  (click)="buttonConfig.action()"
+                  [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
                   class="blocklyTree blocklyWorkspaceToolbarButton">
             {{buttonConfig.text}}
           </button>

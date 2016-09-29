@@ -30,13 +30,14 @@ blocklyApp.ToolboxTreeComponent = ng.core
     template: `
     <li [id]="idMap['toolboxBlockRoot']" role="treeitem"
         [ngClass]="{blocklyHasChildren: displayBlockMenu}"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummaryLabel'], 'blockly-toolbox-block')"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['toolboxBlockSummary'], 'blockly-toolbox-block')"
         [attr.aria-level]="level">
-      <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
+      <label #toolboxBlockSummary [id]="idMap['toolboxBlockSummary']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu">
         <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
-            [attr.aria-level]="level + 2">
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button')"
+            [attr.aria-level]="level + 1"
+            [attr.aria-disabled]="!canBeCopiedToMarkedConnection()">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
                   [disabled]="!canBeCopiedToMarkedConnection()" tabindex="-1">
             {{'COPY_TO_MARKED_SPOT'|translate}}
@@ -44,19 +45,13 @@ blocklyApp.ToolboxTreeComponent = ng.core
         </li>
         <li [id]="idMap['workspaceCopy']" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
-            [attr.aria-level]="level + 2">
+            [attr.aria-level]="level + 1">
           <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
             {{'COPY_TO_WORKSPACE'|translate}}
           </button>
         </li>
       </ol>
     </li>
-
-    <blockly-toolbox-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-                          [level]="level"
-                          [block]="block.nextConnection.targetBlock()"
-                          [displayBlockMenu]="false">
-    </blockly-toolbox-tree>
     `,
     directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
       return blocklyApp.ToolboxTreeComponent;
@@ -78,7 +73,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {
-      var idKeys = ['toolboxBlockRoot', 'blockSummaryLabel'];
+      var idKeys = ['toolboxBlockRoot', 'toolboxBlockSummary'];
       if (this.displayBlockMenu) {
         idKeys = idKeys.concat([
             'workspaceCopy', 'workspaceCopyButton', 'sendToSelected',
@@ -109,9 +104,9 @@ blocklyApp.ToolboxTreeComponent = ng.core
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
     },
-    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
       return this.utilsService.generateAriaLabelledByAttr(
-          mainLabel, secondLabel, isDisabled);
+          mainLabel, secondLabel);
     },
     canBeCopiedToMarkedConnection: function() {
       return this.clipboardService.canBeCopiedToMarkedConnection(this.block);
@@ -125,7 +120,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
         that.notificationsService.setStatusMessage(
-            blockDescription + ' copied to new workspace group. ' +
+            blockDescription + ' copied to new group in workspace. ' +
             'Now on copied block in workspace.');
       });
     },
@@ -155,7 +150,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
         }
 
         that.notificationsService.setStatusMessage(
-            blockDescription + ' copied to marked spot. ' +
+            blockDescription + ' connected. ' +
             'Now on copied block in workspace.');
       });
     }

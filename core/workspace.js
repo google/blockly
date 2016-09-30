@@ -117,6 +117,8 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
+  if (block.workspace == Blockly.mainWorkspace) //Do not reset arrangements for the flyout
+    this.resetArrangements();
   this.topBlocks_.push(block);
   if (this.isFlyout) {
     // This is for the (unlikely) case where you have a variable in a block in

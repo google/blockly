@@ -269,25 +269,23 @@ Blockly.onKeyDown_ = function(e) {
     Blockly.hideChaff();
   } else if (e.keyCode == 8 || e.keyCode == 46) {
     // Delete or backspace.
-    try {
-      // Stop the browser from going back to the previous page.
-      // Do this first to prevent an error in the delete code from resulting in
-      // data loss.
-      e.preventDefault();
-      if (Blockly.selected && Blockly.selected.isDeletable()) {
-        var descendantCount = Blockly.selected.getDescendants().length;
-        if (Blockly.selected.nextConnection && Blockly.selected.nextConnection.targetConnection) {
-          descendantCount -= Blockly.selected.nextConnection.targetBlock().
-            getDescendants().length;
-        }
-        // Ask for confirmation before deleting 3 or more blocks
-        if (descendantCount >= 3) {
-          if (confirm("Are you sure you want to delete all " + descendantCount + " of these blocks?")) {
-            deleteBlock = true;
-          }
-        } else {
+    // Stop the browser from going back to the previous page.
+    // Do this first to prevent an error in the delete code from resulting in
+    // data loss.
+    e.preventDefault();
+    if (Blockly.selected && Blockly.selected.isDeletable()) {
+      var descendantCount = Blockly.selected.getDescendants().length;
+      if (Blockly.selected.nextConnection && Blockly.selected.nextConnection.targetConnection) {
+        descendantCount -= Blockly.selected.nextConnection.targetBlock().
+          getDescendants().length;
+      }
+      // Ask for confirmation before deleting 3 or more blocks
+      if (descendantCount >= 3) {
+        if (confirm("Are you sure you want to delete all " + descendantCount + " of these blocks?")) {
           deleteBlock = true;
         }
+      } else {
+        deleteBlock = true;
       }
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {

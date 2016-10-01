@@ -26,7 +26,6 @@
 
 goog.provide('Blockly.Block');
 
-goog.require('Blockly.Instrument'); // lyn's instrumentation code
 goog.require('Blockly.Blocks');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');

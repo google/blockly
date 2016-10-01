@@ -156,7 +156,7 @@ Blockly.Xml.blockToDom = function(block) {
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var container = goog.dom.createDom('next', null,
-        Blockly.Xml.blockToDom(nextBlock));
+      Blockly.Xml.blockToDom(nextBlock));
     element.appendChild(container);
   }
   var shadow = block.nextConnection && block.nextConnection.getShadowDom();

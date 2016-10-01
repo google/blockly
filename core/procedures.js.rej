@@ -1,20 +1,4 @@
 ***************
-*** 99,104 ****
-      // Flyouts can have multiple procedures called 'procedure'.
-      return name;
-    }
-    while (!Blockly.Procedures.isLegalName(name, block.workspace, block)) {
-      // Collision with another procedure.
-      var r = name.match(/^(.*?)(\d+)$/);
---- 99,105 ----
-      // Flyouts can have multiple procedures called 'procedure'.
-      return name;
-    }
-+   name = name.replace(/\s+/g, '');
-    while (!Blockly.Procedures.isLegalName(name, block.workspace, block)) {
-      // Collision with another procedure.
-      var r = name.match(/^(.*?)(\d+)$/);
-***************
 *** 255,266 ****
    * @param {!Blockly.Workspace} workspace The workspace to delete callers from.
    * @param {!Array.<string>} paramNames Array of new parameter names.

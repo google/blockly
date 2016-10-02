@@ -37,21 +37,6 @@ goog.require('goog.math.Rect');
 goog.require('goog.userAgent');
 
 /**
- * Factor by which margin is multiplied to vertically separate blocks in flyout
- * [lyn, 10/06/13] introduced so can change in flydown subclass.)
- * @type {number}
- * @const
- */
-Blockly.Flyout.prototype.VERTICAL_SEPARATION_FACTOR = 2;
-
-/*
- * Wrapper function called when a resize occurs.
- * @type {Array.<!Array>}
- * @private
- */
-Blockly.Flyout.prototype.onResizeWrapper_ = null;
-
-/**
  * Class for a flyout.
  * @param {!Object} workspaceOptions Dictionary of options for the workspace.
  * @constructor
@@ -134,6 +119,21 @@ Blockly.Flyout = function(workspaceOptions) {
    */
   this.startDragMouseX_ = 0;
 };
+
+/**
+ * Factor by which margin is multiplied to vertically separate blocks in flyout
+ * [lyn, 10/06/13] introduced so can change in flydown subclass.)
+ * @type {number}
+ * @const
+ */
+Blockly.Flyout.prototype.VERTICAL_SEPARATION_FACTOR = 2;
+
+/*
+ * Wrapper function called when a resize occurs.
+ * @type {Array.<!Array>}
+ * @private
+ */
+Blockly.Flyout.prototype.onResizeWrapper_ = null;
 
 /**
  * When a flyout drag is in progress, this is a reference to the flyout being

@@ -263,7 +263,7 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.Field.startCache();
   this.rendered = true;
 
-  this.renderHere();
+  this.renderHere(opt_bubble);
 
   // Render all blocks above this one (propagate a reflow).
   var parentBlock = this.getParent();
@@ -285,25 +285,25 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
  *  These two factors account for much of the slow project loading times in Blockly
  *  and previous versions of AI2.
  */
-Blockly.BlockSvg.prototype.renderDown = function() {
+Blockly.BlockSvg.prototype.renderDown = function(opt_bubble) {
   this.rendered = true;
 
   // Recursively renderDown all my children (as long as I'm not collapsed)
   if (! (Blockly.Instrument.avoidRenderDownOnCollapsedSubblocks && this.isCollapsed())) {
     var childBlocks = this.childBlocks_;
     for (var c = 0, childBlock; childBlock = childBlocks[c]; c++) {
-      childBlock.renderDown();
+      childBlock.renderDown(opt_bubble);
     }
   }
 
   // Render me after all my children have been rendered.
-  this.renderHere();
+  this.renderHere(opt_bubble);
 };
 
 /**
  * Render this block. Assumes descendants have already been rendered.
  */
-Blockly.BlockSvg.prototype.renderHere = function() {
+Blockly.BlockSvg.prototype.renderHere = function(opt_bubble) {
   var start = new Date().getTime();
   // Now render me (even if I am collapsed, since still need to show collapsed block)
   var cursorX = Blockly.BlockSvg.SEP_SPACE_X;

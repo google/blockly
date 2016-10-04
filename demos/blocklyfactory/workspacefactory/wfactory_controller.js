@@ -735,7 +735,7 @@ WorkspaceFactoryController.prototype.importFile = function(file, importMode) {
 
         // Confirm that the user wants to override their current toolbox.
         var hasToolboxElements = controller.model.hasElements() ||
-            controller.getAllBlocks().length > 0;
+            controller.toolboxWorkspace.getAllBlocks().length > 0;
         if (hasToolboxElements &&
             !confirm('Are you sure you want to import? You will lose your '
             + 'current toolbox. ')) {

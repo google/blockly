@@ -131,10 +131,6 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
       }
     }
   }
-  if (this.warningIndicator) {
-    this.warningIndicator.dispose();
-    this.warningIndicator = null;
-  }
 };
 
 /**

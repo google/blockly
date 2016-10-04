@@ -848,13 +848,11 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
       }
       // Create external input connection.
       if (row.subtype == Blockly.INDENTED_VALUE) {
-        connectionX = connectionsXY.x +
-          (this.RTL ? -inputRows.statementEdge - 1: inputRows.statementEdge + 9 + input.fieldWidth);
-        connectionY = connectionsXY.y + cursorY-8;
+        connectionX = (this.RTL ? -inputRows.statementEdge - 1: inputRows.statementEdge + 9 + input.fieldWidth);
+        connectionY = cursorY-8;
       } else {
-        connectionX = connectionsXY.x +
-          (this.RTL ? -inputRows.rightEdge - 1: inputRows.rightEdge + 1);
-        connectionY = connectionsXY.y + cursorY;
+        connectionX = (this.RTL ? -inputRows.rightEdge - 1: inputRows.rightEdge + 1);
+        connectionY = cursorY;
       }
       input.connection.setOffsetInBlock(connectionX, cursorY);
       if (input.connection.isConnected()) {

@@ -998,7 +998,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     Blockly.workspace_arranged_latest_position= Blockly.BLKS_HORIZONTAL;
     arrangeBlocks(Blockly.BLKS_HORIZONTAL);
   };
-  options.push(arrangeOptionH);
+  menuOptions.push(arrangeOptionH);
 
   // Arrange blocks in column order.
   var arrangeOptionV = {enabled: (Blockly.workspace_arranged_position !== Blockly.BLKS_VERTICAL)};
@@ -1008,7 +1008,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     Blockly.workspace_arranged_latest_position = Blockly.BLKS_VERTICAL;
     arrangeBlocks(Blockly.BLKS_VERTICAL);
   };
-  options.push(arrangeOptionV);
+  menuOptions.push(arrangeOptionV);
 
   /**
    * Function that returns a name to be used to sort blocks.
@@ -1109,7 +1109,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     Blockly.workspace_arranged_type = Blockly.BLKS_CATEGORY;
     rearrangeWorkspace();
   };
-  options.push(sortOptionCat);
+  menuOptions.push(sortOptionCat);
 
   // Called after a sort or collapse/expand to redisplay blocks.
   function rearrangeWorkspace() {
@@ -1124,7 +1124,7 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   var helpOption = {enabled: false};
   helpOption.text = Blockly.Msg.HELP;
   helpOption.callback = function() {};
-  options.push(helpOption);
+  menuOptions.push(helpOption);
 
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
 };

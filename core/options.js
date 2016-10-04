@@ -56,7 +56,6 @@ Blockly.Options = function(options) {
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
     }
-    var configForTypeBlock = options['typeblock_config'];
     var hasComments = options['comments'];
     if (hasComments === undefined) {
       hasComments = hasCategories;
@@ -97,7 +96,6 @@ Blockly.Options = function(options) {
     if (hasScrollbars === undefined) {
       hasScrollbars = hasCategories;
     }
-    var configForTypeBlock = null;
   }
   var hasCss = options['css'];
   if (hasCss === undefined) {
@@ -125,10 +123,14 @@ Blockly.Options = function(options) {
   this.hasCss = hasCss;
   this.horizontalLayout = horizontalLayout;
   this.languageTree = languageTree;
-  this.configForTypeBlock = configForTypeBlock;
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
   this.toolboxPosition = toolboxPosition;
+
+  // AppInventor configuration
+  this.configForTypeBlock = options['configForTypeBlock'] !== undefined ? options['configForTypeBlock'] : null;
+  this.hasBackpack = !!options['backpack'];
+  this.enableWarningIndicator = !!options['warningIndicator'];
 };
 
 /**

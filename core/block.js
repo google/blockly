@@ -467,9 +467,9 @@ Blockly.Block.prototype.setParent = function(newParent) {
         children.splice(x, 1);
         break;
       }
-      if (descendant.errorIcon) {
-        var data = descendant.errorIcon.getIconLocation();
-        data.bubble = descendant.errorIcon;
+      if (child.errorIcon) {
+        var data = child.errorIcon.getIconLocation();
+        data.bubble = child.errorIcon;
         this.draggedBubbles_.push(data);
       }
     }

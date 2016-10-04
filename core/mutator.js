@@ -131,9 +131,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
-  this.flyout_ = new Blockly.Flyout();
-  this.flyout_.autoClose = false;
-  this.svgDialog_.appendChild(this.flyout_.createDom());
+  //this.flyout_ = new Blockly.Flyout();
+  //this.flyout_.autoClose = false;
+  //this.svgDialog_.appendChild(this.flyout_.createDom());
   this.svgDialog_.appendChild(
     this.workspace_.createDom('blocklyMutatorBackground'));
 

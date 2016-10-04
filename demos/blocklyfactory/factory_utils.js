@@ -935,14 +935,7 @@ FactoryUtils.hasVariableField = function(block) {
   if (!block) {
     return false;
   }
-  for (var i = 0, input; input = block.inputList[i]; i++) {
-    for (var j = 0, field; field = input.fieldRow[j]; j++) {
-      if (field.name == 'VAR') {
-        return true;
-      }
-    }
-  }
-  return false;
+  return block.getVars().length > 0;
 };
 
 /**

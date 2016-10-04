@@ -113,6 +113,11 @@ BlockExporterTools.prototype.getBlockDefinitions =
     }
     blockCode.push(code);
   }
+
+  // Surround json with [] and comma separate items.
+  if (definitionFormat == "JSON") {
+    return "[" + blockCode.join(",\n") + "]";
+  }
   return blockCode.join("\n\n");
 };
 

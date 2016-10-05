@@ -26,6 +26,7 @@
 
 goog.provide('Blockly.Workspace');
 
+goog.require('goog.array');
 goog.require('goog.math');
 
 
@@ -136,15 +137,7 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
-  var found = false;
-  for (var child, i = 0; child = this.topBlocks_[i]; i++) {
-    if (child == block) {
-      this.topBlocks_.splice(i, 1);
-      found = true;
-      break;
-    }
-  }
-  if (!found) {
+  if (!goog.array.remove(this.topBlocks_, block)) {
     throw 'Block not present in workspace\'s list of top-most blocks.';
   }
 };
@@ -444,10 +437,7 @@ Blockly.Workspace.prototype.addChangeListener = function(func) {
  * @param {Function} func Function to stop calling.
  */
 Blockly.Workspace.prototype.removeChangeListener = function(func) {
-  var i = this.listeners_.indexOf(func);
-  if (i != -1) {
-    this.listeners_.splice(i, 1);
-  }
+  goog.array.remove(this.listeners_, func);
 };
 
 /**

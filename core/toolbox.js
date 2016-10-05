@@ -155,7 +155,7 @@ Blockly.Toolbox.prototype.init = function() {
   svg.parentNode.insertBefore(this.HtmlDiv, svg);
 
   // Clicking on toolbox closes popups.
-  Blockly.bindEvent_(this.HtmlDiv, 'mousedown', this,
+  Blockly.bindEventWithChecks_(this.HtmlDiv, 'mousedown', this,
       function(e) {
         if (Blockly.isRightButton(e) || e.target == this.HtmlDiv) {
           // Close flyout.
@@ -473,7 +473,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
   var el = this.getElement();
   // Add touch handler.
   if (goog.events.BrowserFeature.TOUCH_ENABLED) {
-    Blockly.bindEvent_(el, goog.events.EventType.TOUCHSTART, this,
+    Blockly.bindEventWithChecks_(el, goog.events.EventType.TOUCHSTART, this,
         this.handleTouchEvent_);
   }
 };

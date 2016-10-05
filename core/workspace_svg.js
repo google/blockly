@@ -241,13 +241,15 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   }
 
   if (!this.isFlyout) {
-    Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
+    Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
+        this.onMouseDown_);
     var thisWorkspace = this;
-    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
+    Blockly.bindEventWithChecks_(this.svgGroup_, 'touchstart', null,
                        function(e) {Blockly.longStart_(e, thisWorkspace);});
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
-      Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.onMouseWheel_);
+      Blockly.bindEventWithChecks_(this.svgGroup_, 'wheel', this,
+          this.onMouseWheel_);
     }
   }
 
@@ -536,7 +538,7 @@ Blockly.WorkspaceSvg.prototype.traceOn = function(armed) {
     this.traceWrapper_ = null;
   }
   if (armed) {
-    this.traceWrapper_ = Blockly.bindEvent_(this.svgBlockCanvas_,
+    this.traceWrapper_ = Blockly.bindEventWithChecks_(this.svgBlockCanvas_,
         'blocklySelectChange', this, function() {this.traceOn_ = false;});
   }
 };
@@ -739,11 +741,13 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     if ('mouseup' in Blockly.Touch.TOUCH_MAP) {
       Blockly.Touch.onTouchUpWrapper_ = Blockly.Touch.onTouchUpWrapper_ || [];
       Blockly.Touch.onTouchUpWrapper_ = Blockly.Touch.onTouchUpWrapper_.concat(
-          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_));
+          Blockly.bindEventWithChecks_(document, 'mouseup', null,
+          Blockly.onMouseUp_));
     }
     Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_ || [];
     Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_.concat(
-        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_));
+        Blockly.bindEventWithChecks_(document, 'mousemove', null,
+        Blockly.onMouseMove_));
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();

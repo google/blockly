@@ -219,9 +219,9 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
     this.positionAttribute_ = 'y';
   }
   var scrollbar = this;
-  this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
-      'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-  this.onMouseDownHandleWrapper_ = Blockly.bindEvent_(this.svgHandle_,
+  this.onMouseDownBarWrapper_ = Blockly.bindEventWithChecks_(
+      this.svgBackground_, 'mousedown', scrollbar, scrollbar.onMouseDownBar_);
+  this.onMouseDownHandleWrapper_ = Blockly.bindEventWithChecks_(this.svgHandle_,
       'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
 
@@ -649,9 +649,9 @@ Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
   this.startDragHandle = this.handlePosition_;
   // Record the current mouse position.
   this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
-  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
       'mouseup', this, this.onMouseUpHandle_);
-  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
       'mousemove', this, this.onMouseMoveHandle_);
   e.stopPropagation();
   e.preventDefault();

@@ -75,10 +75,10 @@ Blockly.Bubble = function(workspace, content, shape, anchorXY,
   this.rendered_ = true;
 
   if (!workspace.options.readOnly) {
-    Blockly.bindEvent_(this.bubbleBack_, 'mousedown', this,
+    Blockly.bindEventWithChecks_(this.bubbleBack_, 'mousedown', this,
                        this.bubbleMouseDown_);
     if (this.resizeGroup_) {
-      Blockly.bindEvent_(this.resizeGroup_, 'mousedown', this,
+      Blockly.bindEventWithChecks_(this.resizeGroup_, 'mousedown', this,
                          this.resizeMouseDown_);
     }
   }
@@ -286,9 +286,9 @@ Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
       this.workspace_.RTL ? -this.relativeLeft_ : this.relativeLeft_,
       this.relativeTop_));
 
-  Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
       'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
-  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
       'mousemove', this, this.bubbleMouseMove_);
   Blockly.hideChaff();
   // This event has been handled.  No need to bubble up to the document.
@@ -328,9 +328,9 @@ Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   this.workspace_.startDrag(e, new goog.math.Coordinate(
       this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
-  Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Bubble.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
       'mouseup', this, Blockly.Bubble.bubbleMouseUp_);
-  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Bubble.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
       'mousemove', this, this.resizeMouseMove_);
   Blockly.hideChaff();
   // This event has been handled.  No need to bubble up to the document.

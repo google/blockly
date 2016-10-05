@@ -127,10 +127,10 @@ Blockly.BlockSvg.prototype.initSvg = function() {
   this.updateColour();
   this.updateMovable();
   if (!this.workspace.options.readOnly && !this.eventsInit_) {
-    Blockly.bindEvent_(this.getSvgRoot(), 'mousedown', this,
+    Blockly.bindEventWithChecks_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
     var thisBlock = this;
-    Blockly.bindEvent_(this.getSvgRoot(), 'touchstart', null,
+    Blockly.bindEventWithChecks_(this.getSvgRoot(), 'touchstart', null,
                        function(e) {Blockly.longStart_(e, thisBlock);});
   }
   this.eventsInit_ = true;
@@ -577,10 +577,10 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     this.workspace.startDrag(e, this.dragStartXY_);
 
     Blockly.dragMode_ = Blockly.DRAG_STICKY;
-    Blockly.BlockSvg.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+    Blockly.BlockSvg.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
         'mouseup', this, this.onMouseUp_);
-    Blockly.BlockSvg.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
-        'mousemove', this, this.onMouseMove_);
+    Blockly.BlockSvg.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(
+        document, 'mousemove', this, this.onMouseMove_);
     // Build a list of bubbles that need to be moved and where they started.
     this.draggedBubbles_ = [];
     var descendants = this.getDescendants();

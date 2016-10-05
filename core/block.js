@@ -371,8 +371,6 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
       }
     }
   }
-  // Remove any associated errors or warnings.
-  Blockly.WarningHandler.checkDisposedBlock.call(this);
 };
 
 /**

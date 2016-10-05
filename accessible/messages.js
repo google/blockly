@@ -49,7 +49,6 @@ Blockly.Msg.STATEMENT = 'statement';
 Blockly.Msg.VALUE = 'value';
 
 Blockly.Msg.BLOCK_OPTIONS = 'Block options: ';
-Blockly.Msg.CURRENT_ARGUMENT_VALUE = 'Current argument value: ';
 
 Blockly.Msg.BLOCK_MOVED_TO_MARKED_SPOT_MSB = 'Block moved to marked spot: ';
 Blockly.Msg.COPIED_BLOCK_MSG = 'Copied: ';

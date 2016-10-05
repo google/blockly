@@ -16,8 +16,7 @@
 .blocklyTree .blocklyActiveDescendant > div > label,
 .blocklyActiveDescendant > button,
 .blocklyActiveDescendant > input,
-.blocklyActiveDescendant > blockly-field > label,
-.blocklyActiveDescendant > blockly-field > input,
-.blocklyActiveDescendant > blockly-field > div > label {
+.blocklyActiveDescendant > blockly-field-segment > label,
+.blocklyActiveDescendant > blockly-field-segment > input {
   outline: 2px dotted #00f;
 }

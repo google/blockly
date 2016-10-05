@@ -53,7 +53,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
       </ol>
     </li>
     `,
-    directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
+    directives: [ng.core.forwardRef(function() {
       return blocklyApp.ToolboxTreeComponent;
     })],
     inputs: [

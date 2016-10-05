@@ -46,15 +46,15 @@ Blockly.Connection = function(source, type) {
     /** @type {number} */
     this.type = Blockly.INPUT_VALUE;
     /** @subtype {number} */
-    thissubtype = Blockly.INDENTED_VALUE;
+    this.subtype = Blockly.INDENTED_VALUE;
   } else {
     this.type = type;
   }
   // Shortcut for the databases for this connection's workspace.
   if (source.workspace.connectionDBList) {
-    this.db_ = source.workspace.connectionDBList[type];
+    this.db_ = source.workspace.connectionDBList[this.type];
     this.dbOpposite_ =
-        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[type]];
+        source.workspace.connectionDBList[Blockly.OPPOSITE_TYPE[this.type]];
     this.hidden_ = !this.db_;
   }
 };

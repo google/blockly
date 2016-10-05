@@ -29,8 +29,8 @@ blocklyApp.AppView = ng.core
   .Component({
     selector: 'blockly-app',
     template: `
-    <div aria-hidden="true">
-      Status: <span aria-live="polite" role="status">{{getStatusMessage()}}</span>
+    <div *ngIf="getStatusMessage()" aria-hidden="true" class="blocklyAriaLiveStatus">
+      <span aria-live="polite" role="status">{{getStatusMessage()}}</span>
     </div>
 
     <div>

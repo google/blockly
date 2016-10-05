@@ -8,8 +8,19 @@
 }
 .blocklyToolbarColumn {
   float: left;
+  margin-left: 10px;
   margin-top: 20px;
-  width: 200px;
+  width: 150px;
+}
+
+.blocklyAriaLiveStatus {
+  background: #c8f7be;
+  border-radius: 10px;
+  bottom: 80px;
+  left: 20px;
+  max-width: 300px;
+  padding: 10px;
+  position: fixed;
 }
 
 .blocklyTree .blocklyActiveDescendant > label,

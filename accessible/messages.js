@@ -51,7 +51,7 @@ Blockly.Msg.VALUE = 'value';
 Blockly.Msg.BLOCK_OPTIONS = 'Block options: ';
 
 Blockly.Msg.BLOCK_MOVED_TO_MARKED_SPOT_MSB = 'Block moved to marked spot: ';
-Blockly.Msg.COPIED_BLOCK_MSG = 'Copied: ';
-Blockly.Msg.MARKED_SPOT_MSG = 'Marked spot: ';
-Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG = 'Pasted: ';
-Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG = 'Moved to marked spot: ';
+Blockly.Msg.COPIED_BLOCK_MSG = 'copied. ';
+Blockly.Msg.MARKED_SPOT_MSG = 'Marked spot. ';
+Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG = 'pasted. ';
+Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG = 'moved to marked spot. ';

@@ -47,6 +47,8 @@ Blockly.Blocks['factory_base'] = {
         ['↓ bottom connection', 'BOTTOM']],
         function(option) {
           this.sourceBlock_.updateShape_(option);
+          // Connect a shadow block to this new input. 
+          this.sourceBlock_.spawnOutputShadow_(option);
         });
     this.appendDummyInput()
         .appendField(dropdown, 'CONNECTIONS');
@@ -66,6 +68,33 @@ Blockly.Blocks['factory_base'] = {
   domToMutation: function(xmlElement) {
     var connections = xmlElement.getAttribute('connections');
     this.updateShape_(connections);
+  },
+  spawnOutputShadow_: function(option) {
+    // Helper method for deciding which type of outputs this block needs
+    // to attach shaddow blocks to.
+    switch (option) {
+      case 'LEFT':
+        this.connectOutputShadow_('OUTPUTTYPE');
+        break;
+      case 'TOP':
+        this.connectOutputShadow_('TOPTYPE');
+        break;
+      case 'BOTTOM':
+        this.connectOutputShadow_('BOTTOMTYPE');
+        break;
+      case 'BOTH':
+        this.connectOutputShadow_('TOPTYPE');
+        this.connectOutputShadow_('BOTTOMTYPE');
+        break;
+    }
+  },
+  connectOutputShadow_: function(outputType) {
+    // Helper method to create & connect shadow block.
+    var type = this.workspace.newBlock('type_null');
+    type.setShadow(true);
+    type.outputConnection.connect(this.getInput(outputType).connection);
+    type.initSvg();
+    type.render();
   },
   updateShape_: function(option) {
     var outputExists = this.getInput('OUTPUTTYPE');
@@ -98,11 +127,6 @@ Blockly.Blocks['factory_base'] = {
         .setCheck('Type')
         .appendField(label);
     this.moveInputBefore(name, 'COLOUR');
-    var type = this.workspace.newBlock('type_null');
-    type.setShadow(true);
-    type.outputConnection.connect(this.getInput(name).connection);
-    type.initSvg();
-    type.render();
   }
 };
 

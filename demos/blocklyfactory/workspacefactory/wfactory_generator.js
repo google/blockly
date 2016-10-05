@@ -210,8 +210,7 @@ WorkspaceFactoryGenerator.prototype.appendHiddenWorkspaceToDom_ =
     function(xmlDom) {
   var blocks = this.hiddenWorkspace.getTopBlocks();
   for (var i = 0, block; block = blocks[i]; i++) {
-    var blockChild = Blockly.Xml.blockToDom(block);
-    blockChild.removeAttribute('id');
+    var blockChild = Blockly.Xml.blockToDom(block, /* opt_noId */ true);
     xmlDom.appendChild(blockChild);
   }
 };

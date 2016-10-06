@@ -167,6 +167,11 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
     }, svg);
   }
   svg.style.marginLeft = (15 - Blockly.FieldAngle.RADIUS) + 'px';
+
+  // The angle picker is different from other fields in that it updates on
+  // mousemove even if it's not in the middle of a drag.  In future we may
+  // change this behavior.  For now, using bindEvent_ instead of
+  // bindEventWithChecks_ allows it to work without a mousedown/touchstart.
   this.clickWrapper_ =
       Blockly.bindEvent_(svg, 'click', this, Blockly.WidgetDiv.hide);
   this.moveWrapper1_ =

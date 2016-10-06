@@ -131,9 +131,9 @@ Blockly.Tooltip.createDom = function() {
  * @param {!Element} element SVG element onto which tooltip is to be bound.
  */
 Blockly.Tooltip.bindMouseEvents = function(element) {
-  Blockly.bindEventWithChecks_(element, 'mouseover', null,
+  Blockly.bindEvent_(element, 'mouseover', null,
       Blockly.Tooltip.onMouseOver_);
-  Blockly.bindEventWithChecks_(element, 'mouseout', null,
+  Blockly.bindEvent_(element, 'mouseout', null,
       Blockly.Tooltip.onMouseOut_);
 
   // Don't use bindEvent_ for mousemove since that would create a

@@ -39,6 +39,10 @@ blocklyApp.WorkspaceComponent = ng.core
           <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
           </blockly-workspace-tree>
         </ol>
+
+        <span *ngIf="workspace.topBlocks_.length === 0">
+          <i>Workspace is empty.</i>
+        </span>
       </div>
     </div>
 

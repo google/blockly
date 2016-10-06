@@ -31,3 +31,7 @@
 .blocklyActiveDescendant > blockly-field-segment > input {
   outline: 2px dotted #00f;
 }
+
+.blocklyDropdownListItem[aria-selected="true"] button {
+  font-weight: bold;
+}

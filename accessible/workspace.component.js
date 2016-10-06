@@ -50,7 +50,7 @@ blocklyApp.WorkspaceComponent = ng.core
       <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
         <span *ngFor="#buttonConfig of toolbarButtonConfig">
           <button *ngIf="!buttonConfig.isHidden()"
-                  (click)="buttonConfig.action()"
+                  (click)="handleButtonClick(buttonConfig)"
                   [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
                   class="blocklyTree blocklyWorkspaceToolbarButton">
             {{buttonConfig.text}}
@@ -69,8 +69,9 @@ blocklyApp.WorkspaceComponent = ng.core
   })
   .Class({
     constructor: [
-        blocklyApp.TreeService, blocklyApp.UtilsService,
-        function(_treeService, _utilsService) {
+        blocklyApp.NotificationsService, blocklyApp.TreeService,
+        blocklyApp.UtilsService,
+        function(_notificationsService, _treeService, _utilsService) {
       // ACCESSIBLE_GLOBALS is a global variable defined by the containing
       // page. It should contain a key, toolbarButtonConfig, whose
       // corresponding value is an Array with two keys: 'text' and 'action'.
@@ -80,6 +81,7 @@ blocklyApp.WorkspaceComponent = ng.core
           ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
           ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
       this.workspace = blocklyApp.workspace;
+      this.notificationsService = _notificationsService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
     }],
@@ -88,6 +90,13 @@ blocklyApp.WorkspaceComponent = ng.core
     },
     getActiveDescId: function(treeId) {
       return this.treeService.getActiveDescId(treeId);
+    },
+    handleButtonClick: function(buttonConfig) {
+      buttonConfig.action();
+      if (buttonConfig.onClickNotification) {
+        this.notificationsService.setStatusMessage(
+            buttonConfig.onClickNotification);
+      }
     },
     onWorkspaceToolbarKeypress: function(e) {
       this.treeService.onWorkspaceToolbarKeypress(

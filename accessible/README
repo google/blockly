@@ -46,6 +46,8 @@ keys:
 
   - 'text' (the text to display on the button)
   - 'ariaDescribedBy' (the value of the button's aria-describedby attribute)
+  - 'onClickNotification' (a notification that the screenreader should read
+        when the button is clicked)
   - 'isHidden' (a function that returns true if the button should not be
         displayed, and false otherwise)
   - 'action' (the function that gets run when the button is clicked)

@@ -56,7 +56,8 @@ blocklyApp.FieldSegmentComponent = ng.core
         <ol role="group">
           <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
               [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
-              [attr.aria-level]="level" [attr.aria-selected]="mainField.getValue() == optionValue">
+              [attr.aria-level]="level" [attr.aria-selected]="mainField.getValue() == optionValue"
+              class="blocklyDropdownListItem">
             <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(mainField, optionValue)"
                     [disabled]="disabled" tabindex="-1"
                     [attr.aria-label]="optionText[optionValue] + ' Press Enter to select this value'">
@@ -71,10 +72,13 @@ blocklyApp.FieldSegmentComponent = ng.core
     pipes: [blocklyApp.TranslatePipe]
   })
   .Class({
-    constructor: [blocklyApp.UtilsService, function(_utilsService) {
+    constructor: [
+        blocklyApp.NotificationsService, blocklyApp.UtilsService,
+        function(_notificationsService, _utilsService) {
       this.optionText = {
         keys: []
       };
+      this.notificationsService = _notificationsService;
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {
@@ -147,14 +151,17 @@ blocklyApp.FieldSegmentComponent = ng.core
       }
       return this.optionText.keys;
     },
-    handleDropdownChange: function(field, text) {
-      if (text == 'NO_ACTION') {
+    handleDropdownChange: function(field, optionValue) {
+      if (optionValue == 'NO_ACTION') {
         return;
       }
       if (this.mainField instanceof Blockly.FieldVariable) {
-        Blockly.FieldVariable.dropdownChange.call(this.mainField, text);
+        Blockly.FieldVariable.dropdownChange.call(this.mainField, optionValue);
       } else {
-        this.mainField.setValue(text);
+        this.mainField.setValue(optionValue);
       }
+
+      this.notificationsService.setStatusMessage(
+          'Selected option ' + this.optionText[optionValue]);
     }
   });

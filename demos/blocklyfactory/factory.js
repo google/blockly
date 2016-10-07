@@ -61,7 +61,7 @@ BlockFactory.UNNAMED = 'unnamed';
 BlockFactory.oldDir = null;
 
 /*
- * The starting xml for the Block Factory main workspace. Contains the
+ * The starting XML for the Block Factory main workspace. Contains the
  * unmovable, undeletable factory_base block.
  */
 BlockFactory.STARTER_BLOCK_XML_TEXT = '<xml><block type="factory_base" ' +
@@ -256,10 +256,10 @@ BlockFactory.isStarterBlock = function() {
   var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   // The starter block does not have blocks nested into the factory_base block.
   return !(rootBlock.getChildren().length > 0 ||
-    // The starter block's name is the default, 'block_type'.
-    rootBlock.getFieldValue('NAME').trim().toLowerCase() != 'block_type' ||
-    // The starter block has no connections.
-    rootBlock.getFieldValue('CONNECTIONS') != 'NONE' ||
-    // The starter block has automatic inputs.
-    rootBlock.getFieldValue('INLINE') != 'AUTO');
+      // The starter block's name is the default, 'block_type'.
+      rootBlock.getFieldValue('NAME').trim().toLowerCase() != 'block_type' ||
+      // The starter block has no connections.
+      rootBlock.getFieldValue('CONNECTIONS') != 'NONE' ||
+      // The starter block has automatic inputs.
+      rootBlock.getFieldValue('INLINE') != 'AUTO');
 };

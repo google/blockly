@@ -34,6 +34,7 @@
  */
 goog.provide('StandardCategories');
 
+
 // Map of standard category information necessary to add a standard category
 // to the toolbox.
 StandardCategories.categoryMap = Object.create(null);
@@ -392,4 +393,3 @@ StandardCategories.coreBlockTypes =  ["controls_if", "logic_compare",
     "lists_getSublist", "lists_split", "lists_sort", "variables_set",
     "procedures_defreturn", "procedures_ifreturn", "procedures_defnoreturn",
     "procedures_callreturn"];
-

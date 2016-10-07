@@ -20,8 +20,8 @@
 
 /**
  * @fileoverview Javascript for the BlockExporter Tools class, which generates
- * block definitions and generator stubs for given block types. Also generates
- * toolbox xml for the exporter's workspace. Depends on the FactoryUtils for
+ * block definitions and generator stubs for given block types.  Also generates
+ * toolbox XML for the exporter's workspace.  Depends on the FactoryUtils for
  * its code generation functions.
  *
  * @author quachtina96 (Tina Quach)
@@ -34,6 +34,7 @@ goog.require('FactoryUtils');
 goog.require('BlockOption');
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
+
 
 /**
 * Block Exporter Tools Class
@@ -58,17 +59,16 @@ BlockExporterTools = function() {
 };
 
 /**
- * Get Blockly Block object from xml that encodes the blocks used to design
+ * Get Blockly Block object from XML that encodes the blocks used to design
  * the block.
- * @private
- *
- * @param {!Element} xml - Xml element that encodes the blocks used to design
- *    the block. For example, the block xmls saved in block library.
- * @return {!Blockly.Block} - Root block (factory_base block) which contains
+ * @param {!Element} xml XML element that encodes the blocks used to design
+ *    the block. For example, the block XMLs saved in block library.
+ * @return {!Blockly.Block} Root block (factory_base block) which contains
  *    all information needed to generate block definition or null.
+ * @private
  */
 BlockExporterTools.prototype.getRootBlockFromXml_ = function(xml) {
-  // Render xml in hidden workspace.
+  // Render XML in hidden workspace.
   this.hiddenWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
   // Get root block.
@@ -78,9 +78,8 @@ BlockExporterTools.prototype.getRootBlockFromXml_ = function(xml) {
 
 /**
  * Return the given language code of each block type in an array.
- *
- * @param {!Object} blockXmlMap - Map of block type to xml.
- * @param {string} definitionFormat - 'JSON' or 'JavaScript'
+ * @param {!Object} blockXmlMap Map of block type to XML.
+ * @param {string} definitionFormat 'JSON' or 'JavaScript'
  * @return {string} The concatenation of each block's language code in the
  *    desired format.
  */
@@ -100,9 +99,9 @@ BlockExporterTools.prototype.getBlockDefinitions =
       } else {
         // Append warning comment and write to console.
         var code = '// No block definition generated for ' + blockType +
-          '. Could not find root block in xml stored for this block.';
+          '. Could not find root block in XML stored for this block.';
         console.log('No block definition generated for ' + blockType +
-          '. Could not find root block in xml stored for this block.');
+          '. Could not find root block in XML stored for this block.');
       }
     } else {
       // Append warning comment and write to console.
@@ -123,9 +122,8 @@ BlockExporterTools.prototype.getBlockDefinitions =
 
 /**
  * Return the generator code of each block type in an array in a given language.
- *
- * @param {!Object} blockXmlMap - Map of block type to xml.
- * @param {string} generatorLanguage - e.g.'JavaScript', 'Python', 'PHP', 'Lua',
+ * @param {!Object} blockXmlMap Map of block type to XML.
+ * @param {string} generatorLanguage E.g. 'JavaScript', 'Python', 'PHP', 'Lua',
  *     'Dart'
  * @return {string} The concatenation of each block's generator code in the
  * desired format.
@@ -160,10 +158,9 @@ BlockExporterTools.prototype.getGeneratorCode =
 
 /**
  * Evaluates block definition code of each block in given object mapping
- * block type to xml. Called in order to be able to create instances of the
+ * block type to XML. Called in order to be able to create instances of the
  * blocks in the exporter workspace.
- *
- * @param {!Object} blockXmlMap - Map of block type to xml.
+ * @param {!Object} blockXmlMap Map of block type to XML.
  */
 BlockExporterTools.prototype.addBlockDefinitions = function(blockXmlMap) {
   var blockDefs = this.getBlockDefinitions(blockXmlMap, 'JavaScript');
@@ -171,11 +168,10 @@ BlockExporterTools.prototype.addBlockDefinitions = function(blockXmlMap) {
 };
 
 /**
- * Pulls information about all blocks in the block library to generate xml
+ * Pulls information about all blocks in the block library to generate XML
  * for the selector workpace's toolbox.
- *
- * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
- * @return {!Element} Xml representation of the toolbox.
+ * @param {!BlockLibraryStorage} blockLibStorage Block Library Storage object.
+ * @return {!Element} XML representation of the toolbox.
  */
 BlockExporterTools.prototype.generateToolboxFromLibrary
     = function(blockLibStorage) {
@@ -211,11 +207,10 @@ BlockExporterTools.prototype.generateToolboxFromLibrary
 };
 
 /**
- * Generate xml for the workspace factory's category from imported block
+ * Generate XML for the workspace factory's category from imported block
  * definitions.
- *
- * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
- * @return {!Element} Xml representation of a category.
+ * @param {!BlockLibraryStorage} blockLibStorage Block Library Storage object.
+ * @return {!Element} XML representation of a category.
  */
 BlockExporterTools.prototype.generateCategoryFromBlockLib =
     function(blockLibStorage) {
@@ -241,9 +236,8 @@ BlockExporterTools.prototype.generateCategoryFromBlockLib =
  * Generate selector dom from block library storage. For each block in the
  * library, it has a block option, which consists of a checkbox, a label,
  * and a fixed size preview workspace.
- *
  * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
- * @param {!string} blockSelectorID - ID of the div element that will contain
+ * @param {string} blockSelectorID - ID of the div element that will contain
  *    the block options.
  * @return {!Object} Map of block type to Block Option object.
  */
@@ -264,7 +258,7 @@ BlockExporterTools.prototype.createBlockSelectorFromLib =
   // Append each block option's dom to the selector.
   var blockOptions = Object.create(null);
   for (var blockType in blockXmlMap) {
-    // Get preview block's xml.
+    // Get preview block's XML.
     var block = FactoryUtils.getDefinedBlock(blockType, this.hiddenWorkspace);
     var previewBlockXml = Blockly.Xml.workspaceToDom(this.hiddenWorkspace);
 
@@ -278,4 +272,3 @@ BlockExporterTools.prototype.createBlockSelectorFromLib =
   }
   return blockOptions;
 };
-

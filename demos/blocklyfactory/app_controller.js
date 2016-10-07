@@ -36,6 +36,7 @@ goog.require('goog.string');
 goog.require('goog.ui.PopupColorPicker');
 goog.require('goog.ui.ColorPicker');
 
+
 /**
  * Controller for the Blockly Factory
  * @constructor
@@ -78,7 +79,7 @@ AppController.EXPORTER = 'EXPORTER';
 /**
  * Tied to the 'Import Block Library' button. Imports block library from file to
  * Block Factory. Expects user to upload a single file of JSON mapping each
- * block type to its xml text representation.
+ * block type to its XML text representation.
  */
 AppController.prototype.importBlockLibraryFromFile = function() {
   var self = this;
@@ -90,14 +91,14 @@ AppController.prototype.importBlockLibraryFromFile = function() {
     var file = files.files[0];
     var fileReader = new FileReader();
 
-    // Create a map of block type to xml text from the file when it has been
+    // Create a map of block type to XML text from the file when it has been
     // read.
     fileReader.addEventListener('load', function(event) {
       var fileContents = event.target.result;
       // Create empty object to hold the read block library information.
       var blockXmlTextMap = Object.create(null);
       try {
-        // Parse the file to get map of block type to xml text.
+        // Parse the file to get map of block type to XML text.
         blockXmlTextMap = self.formatBlockLibraryForImport_(fileContents);
       } catch (e) {
         var message = 'Could not load your block library file.\n'
@@ -124,12 +125,12 @@ AppController.prototype.importBlockLibraryFromFile = function() {
 
 /**
  * Tied to the 'Export Block Library' button. Exports block library to file that
- * contains JSON mapping each block type to its xml text representation.
+ * contains JSON mapping each block type to its XML text representation.
  */
 AppController.prototype.exportBlockLibraryToFile = function() {
-  // Get map of block type to xml.
+  // Get map of block type to XML.
   var blockLib = this.blockLibraryController.getBlockLibrary();
-  // Concatenate the xmls, each separated by a blank line.
+  // Concatenate the XMLs, each separated by a blank line.
   var blockLibText = this.formatBlockLibraryForExport_(blockLib);
   // Get file name.
   var filename = prompt('Enter the file name under which to save your block ' +
@@ -144,11 +145,10 @@ AppController.prototype.exportBlockLibraryToFile = function() {
 };
 
 /**
- * Converts an object mapping block type to xml to text file for output.
+ * Converts an object mapping block type to XML to text file for output.
+ * @param {!Object} blockXmlMap - Object mapping block type to XML.
+ * @return {string} XML text containing the block XMLs.
  * @private
- *
- * @param {!Object} blockXmlMap - Object mapping block type to xml.
- * @return {string} Xml text containing the block xmls.
  */
 AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
   // Create DOM for XML.
@@ -156,29 +156,28 @@ AppController.prototype.formatBlockLibraryForExport_ = function(blockXmlMap) {
     'xmlns':"http://www.w3.org/1999/xhtml"
   });
 
-  // Append each block node to xml dom.
+  // Append each block node to XML DOM.
   for (var blockType in blockXmlMap) {
     var blockXmlDom = Blockly.Xml.textToDom(blockXmlMap[blockType]);
     var blockNode = blockXmlDom.firstElementChild;
     xmlDom.appendChild(blockNode);
   }
 
-  // Return the xml text.
+  // Return the XML text.
   return Blockly.Xml.domToText(xmlDom);
 };
 
 /**
- * Converts imported block library to an object mapping block type to block xml.
- * @private
- *
- * @param {string} xmlText - String representation of an xml with each block as
+ * Converts imported block library to an object mapping block type to block XML.
+ * @param {string} xmlText String representation of an XML with each block as
  *    a child node.
- * @return {!Object} object mapping block type to xml text.
+ * @return {!Object} Object mapping block type to XML text.
+ * @private
  */
 AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
   var xmlDom = Blockly.Xml.textToDom(xmlText);
 
-  // Get array of xmls. Use an asterisk (*) instead of a tag name for the XPath
+  // Get array of XMLs. Use an asterisk (*) instead of a tag name for the XPath
   // selector, to match all elements at that level and get all factory_base
   // blocks.
   var blockNodes = goog.dom.xml.selectNodes(xmlDom, '*');
@@ -190,7 +189,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
   // Populate map.
   for (var i = 0, blockNode; blockNode = blockNodes[i]; i++) {
 
-    // Add outer xml tag to the block for proper injection in to the
+    // Add outer XML tag to the block for proper injection in to the
     // main workspace.
     // Create DOM for XML.
     var xmlDom = goog.dom.createDom('xml', {
@@ -198,7 +197,7 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
     });
     xmlDom.appendChild(blockNode);
 
-    var xmlText = Blockly.Xml.domToText(xmlDom);
+    xmlText = Blockly.Xml.domToText(xmlDom);
     // All block types should be lowercase.
     var blockType = this.getBlockTypeFromXml_(xmlText).toLowerCase();
 
@@ -209,12 +208,11 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
 };
 
 /**
- * Extracts out block type from xml text, the kind that is saved in block
+ * Extracts out block type from XML text, the kind that is saved in block
  * library storage.
+ * @param {string} xmlText A block's XML text.
+ * @return {string} The block type that corresponds to the provided XML text.
  * @private
- *
- * @param {!string} xmlText - A block's xml text.
- * @return {string} The block type that corresponds to the provided xml text.
  */
 AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
   var xmlDom = Blockly.Xml.textToDom(xmlText);
@@ -233,8 +231,7 @@ AppController.prototype.getBlockTypeFromXml_ = function(xmlText) {
 /**
  * Add click handlers to each tab to allow switching between the Block Factory,
  * Workspace Factory, and Block Exporter tab.
- *
- * @param {!Object} tabMap - Map of tab name to div element that is the tab.
+ * @param {!Object} tabMap Map of tab name to div element that is the tab.
  */
 AppController.prototype.addTabHandlers = function(tabMap) {
   var self = this;
@@ -247,10 +244,9 @@ AppController.prototype.addTabHandlers = function(tabMap) {
 
 /**
  * Set the selected tab.
- * @private
- *
  * @param {string} tabName AppController.BLOCK_FACTORY,
  *    AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
+ * @private
  */
 AppController.prototype.setSelected_ = function(tabName) {
   this.lastSelectedTab = this.selectedTab;
@@ -259,11 +255,10 @@ AppController.prototype.setSelected_ = function(tabName) {
 
 /**
  * Creates the tab click handler specific to the tab specified.
- * @private
- *
  * @param {string} tabName AppController.BLOCK_FACTORY,
  *    AppController.WORKSPACE_FACTORY, or AppController.EXPORTER
- * @return {Function} The tab click handler.
+ * @return {!Function} The tab click handler.
+ * @private
  */
 AppController.prototype.makeTabClickHandler_ = function(tabName) {
   var self = this;
@@ -453,7 +448,6 @@ AppController.prototype.assignExporterChangeListeners = function() {
 
 /**
  * If given checkbox is checked, display given elements. Otherwise, hide.
- *
  * @param {!Element} checkbox - Input element of type checkbox.
  * @param {!Array.<!Element>} elementArray - Array of elements to show when
  *    block is checked.
@@ -640,21 +634,21 @@ AppController.prototype.confirmLeavePage = function() {
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
-  // Blockly factory has a dependency on bits of closure that core blockly
-  // doesn't have. When you run this from file:// without a copy of closure,
+  // Blockly factory has a dependency on bits of Closure that core Blockly
+  // doesn't have. When you run this from file:// without a copy of Closure,
   // it breaks it non-obvious ways.  Warning about this for now until the
   // dependency is broken.
   // TODO: #668.
   if (!window.goog.dom.xml) {
     alert('Sorry: Closure dependency not found. We are working on removing ' +
-      'this dependency.  In the meantime, you can use our hosted demo\n ' + 
+      'this dependency.  In the meantime, you can use our hosted demo\n ' +
       'https://blockly-demo.appspot.com/static/demos/blocklyfactory/index.html' +
       '\nor use these instructions to continue running locally:\n' +
       'https:developers.google.com/blockly/guides/modify/web/closure');
     return;
   }
 
-  // Handle Blockly Storage with App Engine
+  // Handle Blockly Storage with App Engine.
   if ('BlocklyStorage' in window) {
     this.initializeBlocklyStorage();
   }
@@ -698,5 +692,3 @@ AppController.prototype.init = function() {
   // Workspace Factory init.
   WorkspaceFactoryInit.initWorkspaceFactory(this.workspaceFactoryController);
 };
-
-

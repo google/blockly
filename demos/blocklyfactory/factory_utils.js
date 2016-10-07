@@ -33,9 +33,9 @@
  */
 goog.provide('FactoryUtils');
 
+
 /**
  * Get block definition code for the current block.
- *
  * @param {string} blockType - Type of block.
  * @param {!Blockly.Block} rootBlock - RootBlock from main workspace in which
  *    user uses Block Factory Blocks to create a custom block.
@@ -58,10 +58,9 @@ FactoryUtils.getBlockDefinition = function(blockType, rootBlock, format, workspa
 
 /**
  * Get the generator code for a given block.
- *
- * @param {!Blockly.Block} block - Rendered block in preview workspace.
- * @param {string} generatorLanguage - 'JavaScript', 'Python', 'PHP', 'Lua',
- *     'Dart'.
+ * @param {!Blockly.Block} block Rendered block in preview workspace.
+ * @param {string} generatorLanguage 'JavaScript', 'Python', 'PHP', 'Lua',
+ *   'Dart'.
  * @return {string} Generator code for multiple blocks.
  */
 FactoryUtils.getGeneratorStub = function(block, generatorLanguage) {
@@ -261,7 +260,6 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
  * @param {!Blockly.Workspace} workspace - Where the root block lives.
-
  * @return {string} Generated language code.
  * @private
  */
@@ -642,7 +640,6 @@ FactoryUtils.escapeString = function(string) {
 /**
  * Return the uneditable container block that everything else attaches to in
  * given workspace
- *
  * @param {!Blockly.Workspace} workspace - where the root block lives
  * @return {Blockly.Block} root block
  */
@@ -661,8 +658,7 @@ FactoryUtils.getRootBlock = function(workspace) {
 
 /**
  * Hides element so that it's invisible and doesn't take up space.
- *
- * @param {string} elementID - ID of element to hide.
+ * @param {string} elementID ID of element to hide.
  */
 FactoryUtils.hide = function(elementID) {
   document.getElementById(elementID).style.display = 'none';
@@ -670,8 +666,7 @@ FactoryUtils.hide = function(elementID) {
 
 /**
  * Un-hides an element.
- *
- * @param {string} elementID - ID of element to hide.
+ * @param {string} elementID ID of element to hide.
  */
 FactoryUtils.show = function(elementID) {
   document.getElementById(elementID).style.display = 'block';
@@ -679,8 +674,7 @@ FactoryUtils.show = function(elementID) {
 
 /**
  * Hides element so that it's invisible but still takes up space.
- *
- * @param {string} elementID - ID of element to hide.
+ * @param {string} elementID ID of element to hide.
  */
 FactoryUtils.makeInvisible = function(elementID) {
   document.getElementById(elementID).visibility = 'hidden';
@@ -688,8 +682,7 @@ FactoryUtils.makeInvisible = function(elementID) {
 
 /**
  * Makes element visible.
- *
- * @param {string} elementID - ID of element to hide.
+ * @param {string} elementID ID of element to hide.
  */
 FactoryUtils.makeVisible = function(elementID) {
   document.getElementById(elementID).visibility = 'visible';
@@ -697,9 +690,9 @@ FactoryUtils.makeVisible = function(elementID) {
 
 /**
  * Create a file with the given attributes and download it.
- * @param {string} contents - The contents of the file.
- * @param {string} filename - The name of the file to save to.
- * @param {string} fileType - The type of the file to save.
+ * @param {string} contents The contents of the file.
+ * @param {string} filename The name of the file to save to.
+ * @param {string} fileType The type of the file to save.
  */
 FactoryUtils.createAndDownloadFile = function(contents, filename, fileType) {
   var data = new Blob([contents], {type: 'text/' + fileType});
@@ -718,11 +711,10 @@ FactoryUtils.createAndDownloadFile = function(contents, filename, fileType) {
 
 /**
  * Get Blockly Block by rendering pre-defined block in workspace.
- *
- * @param {!Element} blockType - Type of block that has already been defined.
- * @param {!Blockly.Workspace} workspace - Workspace on which to render
+ * @param {!Element} blockType Type of block that has already been defined.
+ * @param {!Blockly.Workspace} workspace Workspace on which to render
  *    the block.
- * @return {!Blockly.Block} the Blockly.Block of desired type.
+ * @return {!Blockly.Block} The Blockly.Block of desired type.
  */
 FactoryUtils.getDefinedBlock = function(blockType, workspace) {
   workspace.clear();
@@ -731,8 +723,7 @@ FactoryUtils.getDefinedBlock = function(blockType, workspace) {
 
 /**
  * Parses a block definition get the type of the block it defines.
- *
- * @param {!string} blockDef - A single block definition.
+ * @param {string} blockDef A single block definition.
  * @return {string} Type of block defined by the given definition.
  */
 FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
@@ -748,10 +739,9 @@ FactoryUtils.getBlockTypeFromJsDefinition = function(blockDef) {
 
 /**
  * Generates a category containing blocks of the specified block types.
- *
- * @param {!Array.<Blockly.Block>} blocks - Blocks to include in the category.
- * @param {string} categoryName - Name to use for the generated category.
- * @return {Element} - Category xml containing the given block types.
+ * @param {!Array.<!Blockly.Block>} blocks Blocks to include in the category.
+ * @param {string} categoryName Name to use for the generated category.
+ * @return {!Element} Category XML containing the given block types.
  */
 FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
   // Create category DOM element.
@@ -774,9 +764,8 @@ FactoryUtils.generateCategoryXml = function(blocks, categoryName) {
 /**
  * Parses a string containing JavaScript block definition(s) to create an array
  * in which each element is a single block definition.
- *
- * @param {!string} blockDefsString - JavaScript block definition(s).
- * @return {!Array.<string>} - Array of block definitions.
+ * @param {string} blockDefsString JavaScript block definition(s).
+ * @return {!Array.<string>} Array of block definitions.
  */
 FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
@@ -800,10 +789,9 @@ FactoryUtils.parseJsBlockDefinitions = function(blockDefsString) {
  * in which each element is a single block definition. Expected input is
  * one or more block definitions in the form of concatenated, stringified
  * JSON objects.
- *
- * @param {!string} blockDefsString - String containing JSON block
+ * @param {string} blockDefsString String containing JSON block
  *    definition(s).
- * @return {!Array.<string>} - Array of block definitions.
+ * @return {!Array.<string>} Array of block definitions.
  */
 FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
   var blockDefArray = [];
@@ -831,10 +819,9 @@ FactoryUtils.parseJsonBlockDefinitions = function(blockDefsString) {
 
 /**
  * Define blocks from imported block definitions.
- *
- * @param {!string} blockDefsString - Block definition(s).
- * @param {!string} format - Block definition format ('JSON' or 'JavaScript').
- * @return {!Array<!Element>} Array of block types defined.
+ * @param {string} blockDefsString Block definition(s).
+ * @param {string} format Block definition format ('JSON' or 'JavaScript').
+ * @return {!Array.<!Element>} Array of block types defined.
  */
 FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
   var blockTypes = [];
@@ -886,48 +873,46 @@ FactoryUtils.injectCode = function(code, id) {
 };
 
 /**
- * Returns whether or not two blocks are the same based on their xml. Expects
- * xml with a single child node that is a factory_base block, the xml found on
+ * Returns whether or not two blocks are the same based on their XML. Expects
+ * XML with a single child node that is a factory_base block, the XML found on
  * Block Factory's main workspace.
- *
- * @param {!Element} blockXml1 - An xml element with a single child node that
+ * @param {!Element} blockXml1 An XML element with a single child node that
  *    is a factory_base block.
- * @param {!Element} blockXml2 - An xml element with a single child node that
+ * @param {!Element} blockXml2 An XML element with a single child node that
  *    is a factory_base block.
- * @return {boolean} Whether or not two blocks are the same based on their xml.
+ * @return {boolean} Whether or not two blocks are the same based on their XML.
  */
 FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
-    // Each xml element should contain a single child element with a 'block' tag
-    if (goog.string.caseInsensitiveCompare(blockXml1.tagName, 'xml') ||
-        goog.string.caseInsensitiveCompare(blockXml2.tagName, 'xml')) {
-      throw new Error('Expected two xml elements, recieved elements with tag ' +
-          'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
-    }
+  // Each XML element should contain a single child element with a 'block' tag
+  if (goog.string.caseInsensitiveCompare(blockXml1.tagName, 'xml') ||
+      goog.string.caseInsensitiveCompare(blockXml2.tagName, 'xml')) {
+    throw new Error('Expected two XML elements, recieved elements with tag ' +
+        'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
+  }
 
-    // Compare the block elements directly. The xml tags may include other meta
-    // information we want to igrore.
-    var blockElement1 = blockXml1.getElementsByTagName('block')[0];
-    var blockElement2 = blockXml2.getElementsByTagName('block')[0];
+  // Compare the block elements directly. The XML tags may include other meta
+  // information we want to igrore.
+  var blockElement1 = blockXml1.getElementsByTagName('block')[0];
+  var blockElement2 = blockXml2.getElementsByTagName('block')[0];
 
-    if (!(blockElement1 && blockElement2)) {
-      throw new Error('Could not get find block element in xml.');
-    }
+  if (!(blockElement1 && blockElement2)) {
+    throw new Error('Could not get find block element in XML.');
+  }
 
-    var blockXmlText1 = Blockly.Xml.domToText(blockElement1);
-    var blockXmlText2 = Blockly.Xml.domToText(blockElement2);
+  var blockXmlText1 = Blockly.Xml.domToText(blockElement1);
+  var blockXmlText2 = Blockly.Xml.domToText(blockElement2);
 
-    // Strip white space.
-    blockXmlText1 = blockXmlText1.replace(/\s+/g, '');
-    blockXmlText2 = blockXmlText2.replace(/\s+/g, '');
+  // Strip white space.
+  blockXmlText1 = blockXmlText1.replace(/\s+/g, '');
+  blockXmlText2 = blockXmlText2.replace(/\s+/g, '');
 
-    // Return whether or not changes have been saved.
-    return blockXmlText1 == blockXmlText2;
+  // Return whether or not changes have been saved.
+  return blockXmlText1 == blockXmlText2;
 };
 
 /*
  * Checks if a block has a variable field. Blocks with variable fields cannot
  * be shadow blocks.
- *
  * @param {Blockly.Block} block The block to check if a variable field exists.
  * @return {boolean} True if the block has a variable field, false otherwise.
  */
@@ -942,9 +927,8 @@ FactoryUtils.hasVariableField = function(block) {
  * Checks if a block is a procedures block. If procedures block names are
  * ever updated or expanded, this function should be updated as well (no
  * other known markers for procedure blocks beyond name).
- *
  * @param {Blockly.Block} block The block to check.
- * @return {boolean} True if hte block is a procedure block, false otherwise.
+ * @return {boolean} True if the block is a procedure block, false otherwise.
  */
 FactoryUtils.isProcedureBlock = function(block) {
   return block &&
@@ -959,7 +943,6 @@ FactoryUtils.isProcedureBlock = function(block) {
  * Returns whether or not a modified block's changes has been saved to the
  * Block Library.
  * TODO(quachtina96): move into the Block Factory Controller once made.
- *
  * @param {!BlockLibraryController} blockLibraryController - Block Library
  *    Controller storing custom blocks.
  * @return {boolean} True if all changes made to the block have been saved to
@@ -979,4 +962,3 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
   }
   return false;
 };
-

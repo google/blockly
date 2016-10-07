@@ -29,13 +29,13 @@
 
 goog.provide('BlockLibraryStorage');
 
+
 /**
  * Represents a block library's storage.
- * @constructor
- *
- * @param {string} blockLibraryName - Desired name of Block Library, also used
+ * @param {string} blockLibraryName Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {Object} opt_blocks - Object mapping block type to xml.
+ * @param {Object} opt_blocks Object mapping block type to XML.
+ * @constructor
  */
 BlockLibraryStorage = function(blockLibraryName, opt_blocks) {
   // Add prefix to this.name to avoid collisions in local storage.
@@ -85,9 +85,8 @@ BlockLibraryStorage.prototype.clear = function() {
 
 /**
  * Saves block to block library.
- *
- * @param {string} blockType - Type of block.
- * @param {Element} blockXML - The block's XML pulled from workspace.
+ * @param {string} blockType Type of block.
+ * @param {Element} blockXML The block's XML pulled from workspace.
  */
 BlockLibraryStorage.prototype.addBlock = function(blockType, blockXML) {
   var prettyXml = Blockly.Xml.domToPrettyText(blockXML);
@@ -96,19 +95,17 @@ BlockLibraryStorage.prototype.addBlock = function(blockType, blockXML) {
 
 /**
  * Removes block from current block library (this.blocks).
- *
- * @param {string} blockType - Type of block.
+ * @param {string} blockType Type of block.
  */
 BlockLibraryStorage.prototype.removeBlock = function(blockType) {
   delete this.blocks[blockType];
 };
 
 /**
- * Returns the xml of given block type stored in current block library
+ * Returns the XML of given block type stored in current block library
  * (this.blocks).
- *
- * @param {string} blockType - Type of block.
- * @return {Element} The xml that represents the block type or null.
+ * @param {string} blockType Type of block.
+ * @return {Element} The XML that represents the block type or null.
  */
 BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
   var xml = this.blocks[blockType] || null;
@@ -120,11 +117,10 @@ BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
 
 
 /**
- * Returns map of each block type to its corresponding xml stored in current
+ * Returns map of each block type to its corresponding XML stored in current
  * block library (this.blocks).
- *
- * @param {Array.<!string>} blockTypes - Types of blocks.
- * @return {!Object} Map of block type to corresponding xml.
+ * @param {!Array.<string>} blockTypes Types of blocks.
+ * @return {!Object} Map of block type to corresponding XML.
  */
 BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
   var blockXmlMap = {};
@@ -138,7 +134,6 @@ BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
 
 /**
  * Returns array of all block types stored in current block library.
- *
  * @return {!Array.<string>} Array of block types stored in library.
  */
 BlockLibraryStorage.prototype.getBlockTypes = function() {
@@ -147,7 +142,6 @@ BlockLibraryStorage.prototype.getBlockTypes = function() {
 
 /**
  * Checks to see if block library is empty.
- *
  * @return {boolean} True if empty, false otherwise.
  */
 BlockLibraryStorage.prototype.isEmpty = function() {
@@ -159,8 +153,7 @@ BlockLibraryStorage.prototype.isEmpty = function() {
 
 /**
  * Returns array of all block types stored in current block library.
- *
- * @return {!Array.<string>} Map of block type to corresponding xml text.
+ * @return {!Array.<string>} Map of block type to corresponding XML text.
  */
 BlockLibraryStorage.prototype.getBlockXmlTextMap = function() {
   return this.blocks;
@@ -169,8 +162,7 @@ BlockLibraryStorage.prototype.getBlockXmlTextMap = function() {
 /**
  * Returns boolean of whether or not a given blockType is stored in block
  * library.
- *
- * @param {string} blockType - Type of block.
+ * @param {string} blockType Type of block.
  * @return {boolean} Whether or not blockType is stored in block library.
  */
 BlockLibraryStorage.prototype.has = function(blockType) {

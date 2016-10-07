@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Generates the configuration xml used to update the preview
+ * @fileoverview Generates the configuration XML used to update the preview
  * workspace or print to the console or download to a file. Leverages
  * Blockly.Xml and depends on information in the model (holds a reference).
  * Depends on a hidden workspace created in the generator to load saved XML in
@@ -29,6 +29,7 @@
  */
 
 goog.require('FactoryUtils');
+
 
 /**
  * Class for a WorkspaceFactoryGenerator
@@ -49,11 +50,10 @@ WorkspaceFactoryGenerator = function(model) {
 };
 
 /**
- * Generates the xml for the toolbox or flyout with information from
+ * Generates the XML for the toolbox or flyout with information from
  * toolboxWorkspace and the model. Uses the hiddenWorkspace to generate XML.
  * Save state of workspace in model (saveFromWorkspace) before calling if
  * changes might have been made to the selected category.
- *
  * @param {!Blockly.workspace} toolboxWorkspace Toolbox editing workspace where
  * blocks are added by user to be part of the toolbox.
  * @return {!Element} XML element representing toolbox or flyout corresponding
@@ -117,7 +117,6 @@ WorkspaceFactoryGenerator.prototype.generateToolboxXml = function() {
   * Generates XML for the workspace (different from generateConfigXml in that
   * it includes XY and ID attributes). Uses a workspace and converts user
   * generated shadow blocks to actual shadow blocks.
-  *
   * @return {!Element} XML element representing toolbox or flyout corresponding
   * to toolbox workspace.
   */
@@ -133,16 +132,14 @@ WorkspaceFactoryGenerator.prototype.generateWorkspaceXml = function() {
   generatedXml.setAttribute('id', 'workspaceBlocks');
   generatedXml.setAttribute('style', 'display:none');
   return generatedXml;
- };
+};
 
 /**
  * Generates a string representation of the options object for injecting the
  * workspace and starter code.
- *
- * @return {!string} String representation of starter code for injecting.
+ * @return {string} String representation of starter code for injecting.
  */
 WorkspaceFactoryGenerator.prototype.generateInjectString = function() {
-
   var addAttributes = function(obj, tabChar) {
     if (!obj) {
       return '{}\n';
@@ -183,27 +180,25 @@ WorkspaceFactoryGenerator.prototype.generateInjectString = function() {
       '/* Load blocks to workspace. */\n' +
       'Blockly.Xml.domToWorkspace(workspace, workspaceBlocks);';
   return finalStr;
-}
+};
 
 /**
  * Loads the given XML to the hidden workspace and sets any user-generated
  * shadow blocks to be actual shadow blocks.
- * @private
- *
  * @param {!Element} xml The XML to be loaded to the hidden workspace.
+ * @private
  */
 WorkspaceFactoryGenerator.prototype.loadToHiddenWorkspace_ = function(xml) {
   this.hiddenWorkspace.clear();
   Blockly.Xml.domToWorkspace(xml, this.hiddenWorkspace);
   this.setShadowBlocksInHiddenWorkspace_();
-}
+};
 
- /**
+/**
  * Encodes blocks in the hidden workspace in a XML DOM element. Very
  * similar to workspaceToDom, but doesn't capture IDs. Uses the top-level
  * blocks loaded in hiddenWorkspace.
  * @private
- *
  * @param {!Element} xmlDom Tree of XML elements to be appended to.
  */
 WorkspaceFactoryGenerator.prototype.appendHiddenWorkspaceToDom_ =
@@ -220,7 +215,6 @@ WorkspaceFactoryGenerator.prototype.appendHiddenWorkspaceToDom_ =
  * actual shadow blocks. This is done so that blockToDom records them as
  * shadow blocks instead of regular blocks.
  * @private
- *
  */
 WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
     function() {
@@ -235,9 +229,8 @@ WorkspaceFactoryGenerator.prototype.setShadowBlocksInHiddenWorkspace_ =
 /**
  * Given a set of block types, gets the Blockly.Block objects for each block
  * type.
- *
- * @param {!Array<!Element>} blockTypes Array of blocks that have been defined.
- * @return {!Array<!Blockly.Block>} Array of Blockly.Block objects corresponding
+ * @param {!Array.<!Element>} blockTypes Array of blocks that have been defined.
+ * @return {!Array.<!Blockly.Block>} Array of Blockly.Block objects corresponding
  *    to the array of blockTypes.
  */
 WorkspaceFactoryGenerator.prototype.getDefinedBlocks = function(blockTypes) {
@@ -248,4 +241,3 @@ WorkspaceFactoryGenerator.prototype.getDefinedBlocks = function(blockTypes) {
   }
   return blocks;
 };
-

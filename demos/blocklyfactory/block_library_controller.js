@@ -38,14 +38,14 @@ goog.require('BlockLibraryStorage');
 goog.require('BlockLibraryView');
 goog.require('BlockFactory');
 
+
 /**
  * Block Library Controller Class
- * @constructor
- *
- * @param {string} blockLibraryName - Desired name of Block Library, also used
+ * @param {string} blockLibraryName Desired name of Block Library, also used
  *    to create the key for where it's stored in local storage.
- * @param {!BlockLibraryStorage} opt_blockLibraryStorage - optional storage
+ * @param {!BlockLibraryStorage} opt_blockLibraryStorage Optional storage
  *    object that allows user to import a block library.
+ * @constructor
  */
 BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
   this.name = blockLibraryName;
@@ -58,9 +58,8 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
 
 /**
  * Returns the block type of the block the user is building.
- * @private
- *
  * @return {string} The current block's type.
+ * @private
  */
 BlockLibraryController.prototype.getCurrentBlockType = function() {
   var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
@@ -72,8 +71,7 @@ BlockLibraryController.prototype.getCurrentBlockType = function() {
 /**
  * Removes current block from Block Library and updates the save and delete
  * buttons so that user may save block to library and but not delete.
- *
- * @param {string} blockType - Type of block.
+ * @param {string} blockType Type of block.
  */
 BlockLibraryController.prototype.removeFromBlockLibrary = function() {
   var blockType = this.getCurrentBlockType();
@@ -85,8 +83,7 @@ BlockLibraryController.prototype.removeFromBlockLibrary = function() {
 
 /**
  * Updates the workspace to show the block user selected from library
- *
- * @param {string} blockType - Block to edit on block factory.
+ * @param {string} blockType Block to edit on block factory.
  */
 BlockLibraryController.prototype.openBlock = function(blockType) {
   if (blockType) {
@@ -102,7 +99,6 @@ BlockLibraryController.prototype.openBlock = function(blockType) {
 
 /**
  * Returns type of block selected from library.
- *
  * @return {string} Type of block selected.
  */
 BlockLibraryController.prototype.getSelectedBlockType = function() {
@@ -143,7 +139,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
     return;
   }
 
-  // Create block xml.
+  // Create block XML.
   var xmlElement = goog.dom.createDom('xml');
   var block = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   xmlElement.appendChild(Blockly.Xml.blockToDomWithXY(block));
@@ -167,8 +163,7 @@ BlockLibraryController.prototype.saveToBlockLibrary = function() {
 
 /**
  * Checks to see if the given blockType is already in Block Library
- *
- * @param {string} blockType - Type of block.
+ * @param {string} blockType Type of block.
  * @return {boolean} Boolean indicating whether or not block is in the library.
  */
 BlockLibraryController.prototype.has = function(blockType) {
@@ -177,7 +172,7 @@ BlockLibraryController.prototype.has = function(blockType) {
 };
 
 /**
- *  Populates the dropdown menu.
+ * Populates the dropdown menu.
  */
 BlockLibraryController.prototype.populateBlockLibrary = function() {
   this.view.clearOptions();
@@ -190,19 +185,17 @@ BlockLibraryController.prototype.populateBlockLibrary = function() {
 };
 
 /**
- * Return block library mapping block type to xml.
- *
- * @return {Object} Object mapping block type to xml text.
+ * Return block library mapping block type to XML.
+ * @return {Object} Object mapping block type to XML text.
  */
 BlockLibraryController.prototype.getBlockLibrary = function() {
   return this.storage.getBlockXmlTextMap();
 };
 
 /**
- * Return stored xml of a given block type.
- *
- * @param {!string} blockType - The type of block.
- * @return {!Element} Xml element of a given block type or null.
+ * Return stored XML of a given block type.
+ * @param {string} blockType The type of block.
+ * @return {!Element} XML element of a given block type or null.
  */
 BlockLibraryController.prototype.getBlockXml = function(blockType) {
   return this.storage.getBlockXml(blockType);
@@ -210,7 +203,6 @@ BlockLibraryController.prototype.getBlockXml = function(blockType) {
 
 /**
  * Set the block library storage object from which exporter exports.
- *
  * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage
  *    object.
  */
@@ -221,8 +213,7 @@ BlockLibraryController.prototype.setBlockLibraryStorage
 
 /**
  * Get the block library storage object from which exporter exports.
- *
- * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
+ * @return {!BlockLibraryStorage} blockLibStorage Block Library Storage object
  *    that stores the blocks.
  */
 BlockLibraryController.prototype.getBlockLibraryStorage = function() {
@@ -231,7 +222,6 @@ BlockLibraryController.prototype.getBlockLibraryStorage = function() {
 
 /**
  * Get the block library storage object from which exporter exports.
- *
  * @return {boolean} True if the Block Library is empty, false otherwise.
  */
 BlockLibraryController.prototype.hasEmptyBlockLibrary = function() {
@@ -240,8 +230,7 @@ BlockLibraryController.prototype.hasEmptyBlockLibrary = function() {
 
 /**
  * Get all block types stored in block library.
- *
- * @return {!Array<!string>} Array of block types.
+ * @return {!Array.<string>} Array of block types.
  */
 BlockLibraryController.prototype.getStoredBlockTypes = function() {
   return this.storage.getBlockTypes();
@@ -258,7 +247,6 @@ BlockLibraryController.prototype.setNoneSelected = function() {
  * If there are unsaved changes to the block in open in Block Factory
  * and the block is not the starter block, check if user wants to proceed,
  * knowing that it will cause them to lose their changes.
- *
  * @return {boolean} Whether or not to proceed.
  */
 BlockLibraryController.prototype.warnIfUnsavedChanges = function() {
@@ -272,9 +260,7 @@ BlockLibraryController.prototype.warnIfUnsavedChanges = function() {
 /**
  * Add select handler for an option of a given block type. The handler will to
  * update the view and the selected block accordingly.
- *
- * @param {!string} blockType - The type of block represented by the option is
- * for.
+ * @param {string} blockType The type of block represented by the option is for.
  */
 BlockLibraryController.prototype.addOptionSelectHandler = function(blockType) {
   var self = this;
@@ -327,7 +313,6 @@ BlockLibraryController.prototype.addOptionSelectHandlers = function() {
 /**
  * Update the save and delete buttons based on the current block type of the
  * block the user is currently editing.
- *
  * @param {boolean} Whether changes to the block have been saved.
  */
 BlockLibraryController.prototype.updateButtons = function(savedChanges) {

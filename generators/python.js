@@ -91,12 +91,6 @@ Blockly.Python.ORDER_LAMBDA = 16;           // lambda
 Blockly.Python.ORDER_NONE = 99;             // (...)
 
 /**
- * Allow for switching between one and zero based indexing for lists and text,
- * one based by default.
- */
-Blockly.Python.ONE_BASED_INDEXING = true;
-
-/**
  * List of outer-inner pairings that do NOT require parentheses.
  * @type {!Array.<!Array.<number>>}
  */
@@ -258,10 +252,10 @@ Blockly.Python.scrub_ = function(block, code) {
  */
 Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   var delta = opt_delta || 0;
-  if (Blockly.Python.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = Blockly.Python.ONE_BASED_INDEXING ? '1' : '0';
+  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
   var atOrder = delta ? Blockly.Python.ORDER_ADDITIVE :
       Blockly.Python.ORDER_NONE;
   var at = Blockly.Python.valueToCode(block, atId, atOrder) || defaultAtIndex;
@@ -287,4 +281,3 @@ Blockly.Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   }
   return at;
 };
-

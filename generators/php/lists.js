@@ -105,7 +105,7 @@ Blockly.PHP['lists_indexOf'] = function(block) {
       Blockly.PHP.ORDER_NONE) || '\'\'';
   var argument1 = Blockly.PHP.valueToCode(block, 'VALUE',
       Blockly.PHP.ORDER_MEMBER) || '[]';
-  if (Blockly.PHP.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     var errorIndex = ' 0';
     var indexAdjustment = ' + 1';
   } else {

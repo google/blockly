@@ -80,7 +80,7 @@ Blockly.Dart['lists_indexOf'] = function(block) {
   var list = Blockly.Dart.valueToCode(block, 'VALUE',
       Blockly.Dart.ORDER_UNARY_POSTFIX) || '[]';
   var code = list + '.' + operator + '(' + item + ')';
-  if (Blockly.Dart.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Blockly.Dart.ORDER_ADDITIVE];
   }
   return [code, Blockly.Dart.ORDER_UNARY_POSTFIX];

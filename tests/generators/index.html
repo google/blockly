@@ -86,6 +86,7 @@ function start() {
        toolbox: document.getElementById('toolbox'),
        zoom: {controls: true, wheel: true}
        });
+  changeIndex();
 }
 
 function loadXml() {
@@ -153,23 +154,17 @@ function toXml() {
 }
 
 function toJavaScript() {
-  var oneBasedIndexing = document.getElementById('indexing').checked;
-  Blockly.JavaScript.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = '\'use strict\';\n\n'
   code += Blockly.JavaScript.workspaceToCode(workspace);
   setOutput(code);
 }
 
 function toPython() {
-  var oneBasedIndexing = document.getElementById('indexing').checked;
-  Blockly.Python.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.Python.workspaceToCode(workspace);
   setOutput(code);
 }
 
 function toPhp() {
-  var oneBasedIndexing = document.getElementById('indexing').checked;
-  Blockly.PHP.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.PHP.workspaceToCode(workspace);
   setOutput(code);
 }
@@ -180,10 +175,14 @@ function toLua() {
 }
 
 function toDart() {
-  var oneBasedIndexing = document.getElementById('indexing').checked;
-  Blockly.Dart.ONE_BASED_INDEXING = oneBasedIndexing;
   var code = Blockly.Dart.workspaceToCode(workspace);
   setOutput(code);
+}
+
+function changeIndex() {
+  var oneBasedIndex = document.getElementById('indexing').checked;
+  workspace.options.oneBasedIndex = oneBasedIndex;
+  workspace.toolbox_.flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
 </script>
 
@@ -326,7 +325,8 @@ h1 {
     </p>
 
     <p>
-      <input id="indexing" type="checkbox" checked> Generate with one-based indexing
+      <input id="indexing" type="checkbox" onchange="changeIndex()" checked>
+      <label for="indexing">Generate with one-based indexing</label>
     </p>
 
     <p>

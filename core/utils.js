@@ -543,12 +543,13 @@ Blockly.genUid = function() {
 };
 
 /**
- * Legal characters for the unique ID.
- * Should be all on a US keyboard.  No XML special characters or control codes.
- * Removed $ due to issue 251.
+ * Legal characters for the unique ID.  Should be all on a US keyboard.
+ * No characters that conflict with XML or JSON.  Requests to remove additional
+ * 'problematic' characters from this soup will be denied.  That's your failure
+ * to properly escape in your own environment.  Issues #251, #625, #682.
  * @private
  */
-Blockly.genUid.soup_ = '!#%()*+,-./:;=?@[]^_`{|}~' +
+Blockly.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 /**

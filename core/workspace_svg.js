@@ -1305,7 +1305,8 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
  * .flyoutWidth: Width of the flyout if it is always open.  Otherwise zero.
  * .flyoutHeight: Height of flyout if it is always open.  Otherwise zero.
  * .toolboxPosition: Top, bottom, left or right.
- * @return {Object} Contains size and position metrics of a top level workspace.
+ * @return {!Object} Contains size and position metrics of a top level
+ *   workspace.
  * @private
  * @this Blockly.WorkspaceSvg
  */

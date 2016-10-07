@@ -1307,6 +1307,7 @@ Blockly.WorkspaceSvg.prototype.updateGridPattern_ = function() {
  * .toolboxPosition: Top, bottom, left or right.
  * @return {Object} Contains size and position metrics of a top level workspace.
  * @private
+ * @this Blockly.WorkspaceSvg
  */
 Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize(this.getParentSvg());
@@ -1382,6 +1383,7 @@ Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_ = function() {
  * @param {!Object} xyRatio Contains an x and/or y property which is a float
  *     between 0 and 1 specifying the degree of scrolling.
  * @private
+ * @this Blockly.WorkspaceSvg
  */
 Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   if (!this.scrollbar) {

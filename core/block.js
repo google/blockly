@@ -160,11 +160,6 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     this.onchangeWrapper_ = this.onchange.bind(this);
     this.workspace.addChangeListener(this.onchangeWrapper_);
   }
-  // Bind an onchange function, if it exists.
-  if ((!this.isInFlyout) && goog.isFunction(this.onchange)) {
-    Blockly.bindEvent_(workspace.getCanvas(), 'blocklyWorkspaceChange', this,
-                       this.onchange);
-  }
 };
 
 /**

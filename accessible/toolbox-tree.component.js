@@ -120,8 +120,8 @@ blocklyApp.ToolboxTreeComponent = ng.core
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
         that.notificationsService.setStatusMessage(
-            blockDescription + ' copied to new group in workspace. ' +
-            'Now on copied block in workspace.');
+            blockDescription + ' added to workspace. ' +
+            'Now on added block in workspace.');
       });
     },
     copyToMarkedSpot: function() {

@@ -29,13 +29,13 @@ Blockly.Msg.WORKSPACE = 'Workspace';
 Blockly.Msg.TOOLBOX_BLOCK = 'toolbox block. Move right to view submenu.';
 Blockly.Msg.WORKSPACE_BLOCK = 'workspace block. Move right to view submenu.';
 
-Blockly.Msg.CLEAR_WORKSPACE = 'Clear Workspace';
+Blockly.Msg.CLEAR_WORKSPACE = 'Erase Workspace';
 Blockly.Msg.RUN_CODE = 'Run Code';
 
 Blockly.Msg.COPY_TO_MARKED_SPOT = 'Copy to marked spot.';
-Blockly.Msg.COPY_TO_WORKSPACE = 'Create new group with this block.';
+Blockly.Msg.COPY_TO_WORKSPACE = 'Add to workspace.';
 
-Blockly.Msg.DELETE = 'Delete.';
+Blockly.Msg.DELETE = 'Delete block.';
 Blockly.Msg.MARK_SPOT_BEFORE = 'Mark spot before.';
 Blockly.Msg.MARK_SPOT_AFTER = 'Mark spot after.';
 Blockly.Msg.MARK_THIS_SPOT = 'Mark this spot.';

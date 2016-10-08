@@ -163,7 +163,7 @@ Blockly.ZoomControls.prototype.createDom = function() {
 
   // Attach event listeners.
   Blockly.bindEvent_(zoomresetSvg, 'mousedown', null, function(e) {
-    workspace.setScale(1);
+    workspace.setScale(workspace.options.zoomOptions.startScale);
     workspace.scrollCenter();
     e.stopPropagation();  // Don't start a workspace scroll.
     e.preventDefault();  // Stop double-clicking from selecting text.

@@ -30,7 +30,6 @@ Blockly.Msg.TOOLBOX_BLOCK = 'toolbox block. Move right to view submenu.';
 Blockly.Msg.WORKSPACE_BLOCK = 'workspace block. Move right to view submenu.';
 
 Blockly.Msg.CLEAR_WORKSPACE = 'Erase Workspace';
-Blockly.Msg.RUN_CODE = 'Run Code';
 
 Blockly.Msg.COPY_TO_MARKED_SPOT = 'Copy to marked spot.';
 Blockly.Msg.COPY_TO_WORKSPACE = 'Add to workspace.';

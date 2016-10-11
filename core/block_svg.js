@@ -581,7 +581,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
-  e.preventDefault();
+  //e.preventDefault();
 };
 
 /**
@@ -737,6 +737,20 @@ Blockly.BlockSvg.prototype.showContextMenu_ = function(e) {
       };
       menuOptions.push(disableOption);
     }
+
+    // Option to copy to backpack.
+    var backpackOption = {
+      enabled:true,
+      text: Blockly.Msg.COPY_TO_BACKPACK +
+        " (" + Blockly.getMainWorkspace().backpack.count() + ")",
+      callback: function() {
+        if (Blockly.selected && Blockly.selected.isDeletable() &&
+            Blockly.selected.workspace == Blockly.mainWorkspace) {
+          Blockly.getMainWorkspace().backpack.addToBackpack(Blockly.selected);
+        }
+      }
+    };
+    menuOptions.push(backpackOption);
 
     // Option to delete this block.
     // Count the number of blocks that are nested in this block.

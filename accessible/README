@@ -33,19 +33,24 @@ To customize the toolbar, you will need to declare an ACCESSIBLE_GLOBALS object
 in the global scope that looks like this:
 
     var ACCESSIBLE_GLOBALS = {
-      toolbarButtonConfig: [],
-      mediaPathPrefix: null
+      mediaPathPrefix: null,
+      toolbarButtonConfig: []
     };
 
-The value corresponding to 'toolbarButtonConfig' can be modified by adding
-objects representing buttons on the toolbar. Each of these objects should have
-two keys:
+The value of mediaPathPrefix should be the location of the accessible/media
+folder.
+
+The value of 'toolbarButtonConfig' should be a list of objects, each
+representing buttons on the toolbar. Each of these objects should have four
+keys:
 
   - 'text' (the text to display on the button)
+  - 'ariaDescribedBy' (the value of the button's aria-describedby attribute)
+  - 'onClickNotification' (a notification that the screenreader should read
+        when the button is clicked)
+  - 'isHidden' (a function that returns true if the button should not be
+        displayed, and false otherwise)
   - 'action' (the function that gets run when the button is clicked)
-
-In addition, if you want audio to be played, set mediaPathPrefix to the
-location of the accessible/media folder.
 
 
 Limitations

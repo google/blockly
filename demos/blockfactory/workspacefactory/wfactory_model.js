@@ -1,6 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
+ * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -63,7 +63,6 @@ WorkspaceFactoryModel = function() {
 /**
  * Given a name, determines if it is the name of a category already present.
  * Used when getting a valid category name from the user.
- *
  * @param {string} name String name to be compared against.
  * @return {boolean} True if string is a used category name, false otherwise.
  */
@@ -79,7 +78,6 @@ WorkspaceFactoryModel.prototype.hasCategoryByName = function(name) {
 
 /**
  * Determines if a category with the 'VARIABLE' tag exists.
- *
  * @return {boolean} True if there exists a category with the Variables tag,
  * false otherwise.
  */
@@ -89,7 +87,6 @@ WorkspaceFactoryModel.prototype.hasVariables = function() {
 
 /**
  * Determines if a category with the 'PROCEDURE' tag exists.
- *
  * @return {boolean} True if there exists a category with the Procedures tag,
  * false otherwise.
  */
@@ -100,7 +97,6 @@ WorkspaceFactoryModel.prototype.hasProcedures = function() {
 /**
  * Determines if the user has any elements in the toolbox. Uses the length of
  * toolboxList.
- *
  * @return {boolean} True if elements exist, false otherwise.
  */
 WorkspaceFactoryModel.prototype.hasElements = function() {
@@ -109,7 +105,6 @@ WorkspaceFactoryModel.prototype.hasElements = function() {
 
 /**
  * Given a ListElement, adds it to the toolbox list.
- *
  * @param {!ListElement} element The element to be added to the list.
  */
 WorkspaceFactoryModel.prototype.addElementToList = function(element) {
@@ -126,8 +121,7 @@ WorkspaceFactoryModel.prototype.addElementToList = function(element) {
 
 /**
  * Given an index, deletes a list element and all associated data.
- *
- * @param {int} index The index of the list element to delete.
+ * @param {number} index The index of the list element to delete.
  */
 WorkspaceFactoryModel.prototype.deleteElementFromList = function(index) {
   // Check if index is out of bounds.
@@ -148,24 +142,22 @@ WorkspaceFactoryModel.prototype.deleteElementFromList = function(index) {
  * is empty. Should be called when removing the last element from toolbox list.
  * If the toolbox list is empty, selected stores the XML for the single flyout
  * of blocks displayed.
- *
  */
 WorkspaceFactoryModel.prototype.createDefaultSelectedIfEmpty = function() {
   if (this.toolboxList.length == 0) {
     this.flyout = new ListElement(ListElement.TYPE_FLYOUT);
     this.selected = this.flyout;
   }
-}
+};
 
 /**
  * Moves a list element to a certain position in toolboxList by removing it
  * and then inserting it at the correct index. Checks that indices are in
  * bounds (throws error if not), but assumes that oldIndex is the correct index
  * for list element.
- *
  * @param {!ListElement} element The element to move in toolboxList.
- * @param {int} newIndex The index to insert the element at.
- * @param {int} oldIndex The index the element is currently at.
+ * @param {number} newIndex The index to insert the element at.
+ * @param {number} oldIndex The index the element is currently at.
  */
 WorkspaceFactoryModel.prototype.moveElementToIndex = function(element, newIndex,
     oldIndex) {
@@ -176,12 +168,11 @@ WorkspaceFactoryModel.prototype.moveElementToIndex = function(element, newIndex,
   }
   this.deleteElementFromList(oldIndex);
   this.toolboxList.splice(newIndex, 0, element);
-}
+};
 
 /**
  * Returns the ID of the currently selected element. Returns null if there are
  * no categories (if selected == null).
- *
  * @return {string} The ID of the element currently selected.
  */
 WorkspaceFactoryModel.prototype.getSelectedId = function() {
@@ -192,7 +183,6 @@ WorkspaceFactoryModel.prototype.getSelectedId = function() {
  * Returns the name of the currently selected category. Returns null if there
  * are no categories (if selected == null) or the selected element is not
  * a category (in which case its name is null).
- *
  * @return {string} The name of the category currently selected.
  */
 WorkspaceFactoryModel.prototype.getSelectedName = function() {
@@ -201,7 +191,6 @@ WorkspaceFactoryModel.prototype.getSelectedName = function() {
 
 /**
  * Returns the currently selected list element object.
- *
  * @return {ListElement} The currently selected ListElement
  */
 WorkspaceFactoryModel.prototype.getSelected = function() {
@@ -210,7 +199,6 @@ WorkspaceFactoryModel.prototype.getSelected = function() {
 
 /**
  * Sets list element currently selected by id.
- *
  * @param {string} id ID of list element that should now be selected.
  */
 WorkspaceFactoryModel.prototype.setSelectedById = function(id) {
@@ -220,12 +208,10 @@ WorkspaceFactoryModel.prototype.setSelectedById = function(id) {
 /**
  * Given an ID of a list element, returns the index of that list element in
  * toolboxList. Returns -1 if ID is not present.
- *
- * @param {!string} id The ID of list element to search for.
- * @return {int} The index of the list element in toolboxList, or -1 if it
+ * @param {string} id The ID of list element to search for.
+ * @return {number} The index of the list element in toolboxList, or -1 if it
  * doesn't exist.
  */
-
 WorkspaceFactoryModel.prototype.getIndexByElementId = function(id) {
   for (var i = 0; i < this.toolboxList.length; i++) {
     if (this.toolboxList[i].id == id) {
@@ -237,8 +223,7 @@ WorkspaceFactoryModel.prototype.getIndexByElementId = function(id) {
 
 /**
  * Given the ID of a list element, returns that ListElement object.
- *
- * @param {!string} id The ID of element to search for.
+ * @param {string} id The ID of element to search for.
  * @return {ListElement} Corresponding ListElement object in toolboxList, or
  *     null if that element does not exist.
  */
@@ -254,8 +239,7 @@ WorkspaceFactoryModel.prototype.getElementById = function(id) {
 /**
  * Given the index of a list element in toolboxList, returns that ListElement
  * object.
- *
- * @param {int} index The index of the element to return.
+ * @param {number} index The index of the element to return.
  * @return {ListElement} The corresponding ListElement object in toolboxList.
  */
 WorkspaceFactoryModel.prototype.getElementByIndex = function(index) {
@@ -266,8 +250,7 @@ WorkspaceFactoryModel.prototype.getElementByIndex = function(index) {
 };
 
 /**
- * Returns the xml to load the selected element.
- *
+ * Returns the XML to load the selected element.
  * @return {!Element} The XML of the selected element, or null if there is
  * no selected element.
  */
@@ -277,8 +260,7 @@ WorkspaceFactoryModel.prototype.getSelectedXml = function() {
 
 /**
  * Return ordered list of ListElement objects.
- *
- * @return {!Array<!ListElement>} ordered list of ListElement objects
+ * @return {!Array.<!ListElement>} ordered list of ListElement objects
  */
 WorkspaceFactoryModel.prototype.getToolboxList = function() {
   return this.toolboxList;
@@ -286,9 +268,8 @@ WorkspaceFactoryModel.prototype.getToolboxList = function() {
 
 /**
  * Gets the ID of a category given its name.
- *
  * @param {string} name Name of category.
- * @return {int} ID of category
+ * @return {number} ID of category
  */
 WorkspaceFactoryModel.prototype.getCategoryIdByName = function(name) {
   for (var i = 0; i < this.toolboxList.length; i++) {
@@ -313,8 +294,7 @@ WorkspaceFactoryModel.prototype.clearToolboxList = function() {
 /**
  * Class for a ListElement
  * Adds a shadow block to the list of shadow blocks.
- *
- * @param {!string} blockId The unique ID of block to be added.
+ * @param {string} blockId The unique ID of block to be added.
  */
 WorkspaceFactoryModel.prototype.addShadowBlock = function(blockId) {
   this.shadowBlocks.push(blockId);
@@ -323,8 +303,7 @@ WorkspaceFactoryModel.prototype.addShadowBlock = function(blockId) {
 /**
  * Removes a shadow block ID from the list of shadow block IDs if that ID is
  * in the list.
- *
- * @param {!string} blockId The unique ID of block to be removed.
+ * @param {string} blockId The unique ID of block to be removed.
  */
 WorkspaceFactoryModel.prototype.removeShadowBlock = function(blockId) {
   for (var i = 0; i < this.shadowBlocks.length; i++) {
@@ -337,8 +316,7 @@ WorkspaceFactoryModel.prototype.removeShadowBlock = function(blockId) {
 
 /**
  * Determines if a block is a shadow block given a unique block ID.
- *
- * @param {!string} blockId The unique ID of the block to examine.
+ * @param {string} blockId The unique ID of the block to examine.
  * @return {boolean} True if the block is a user-generated shadow block, false
  *    otherwise.
  */
@@ -354,10 +332,9 @@ WorkspaceFactoryModel.prototype.isShadowBlock = function(blockId) {
 /**
  * Given a set of blocks currently loaded, returns all blocks in the workspace
  * that are user generated shadow blocks.
- *
  * @param {!<Blockly.Block>} blocks Array of blocks currently loaded.
  * @return {!<Blockly.Block>} Array of user-generated shadow blocks currently
- * loaded.
+ *   loaded.
  */
 WorkspaceFactoryModel.prototype.getShadowBlocksInWorkspace =
     function(workspaceBlocks) {
@@ -373,9 +350,8 @@ WorkspaceFactoryModel.prototype.getShadowBlocksInWorkspace =
 /**
  * Adds a custom tag to a category, updating state variables accordingly.
  * Only accepts 'VARIABLE' and 'PROCEDURE' tags.
- *
  * @param {!ListElement} category The category to add the tag to.
- * @param {!string} tag The custom tag to add to the category.
+ * @param {string} tag The custom tag to add to the category.
  */
 WorkspaceFactoryModel.prototype.addCustomTag = function(category, tag) {
   // Only update list elements that are categories.
@@ -395,7 +371,6 @@ WorkspaceFactoryModel.prototype.addCustomTag = function(category, tag) {
 /**
  * Have basic pre-loaded workspace working
  * Saves XML as XML to be pre-loaded into the workspace.
- *
  * @param {!Element} xml The XML to be saved.
  */
 WorkspaceFactoryModel.prototype.savePreloadXml = function(xml) {
@@ -404,7 +379,6 @@ WorkspaceFactoryModel.prototype.savePreloadXml = function(xml) {
 
 /**
  * Gets the XML to be pre-loaded into the workspace.
- *
  * @return {!Element} The XML for the workspace.
  */
 WorkspaceFactoryModel.prototype.getPreloadXml = function() {
@@ -413,7 +387,6 @@ WorkspaceFactoryModel.prototype.getPreloadXml = function() {
 
 /**
  * Sets a new options object for injecting a Blockly workspace.
- *
  * @param {Object} options Options object for injecting a Blockly workspace.
  */
 WorkspaceFactoryModel.prototype.setOptions = function(options) {
@@ -424,8 +397,7 @@ WorkspaceFactoryModel.prototype.setOptions = function(options) {
  * Returns an array of all the block types currently being used in the toolbox
  * and the pre-loaded blocks. No duplicates.
  * TODO(evd2014): Move pushBlockTypesToList to FactoryUtils.
- *
- * @return {!Array<!string>} Array of block types currently being used.
+ * @return {!Array.<string>} Array of block types currently being used.
  */
 WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
   var blockTypeList = [];
@@ -466,8 +438,7 @@ WorkspaceFactoryModel.prototype.getAllUsedBlockTypes = function() {
 
 /**
  * Adds new imported block types to the list of current imported block types.
- *
- * @param {!Array<!string>} blockTypes Array of block types imported.
+ * @param {!Array.<string>} blockTypes Array of block types imported.
  */
 WorkspaceFactoryModel.prototype.addImportedBlockTypes = function(blockTypes) {
   this.importedBlockTypes = this.importedBlockTypes.concat(blockTypes);
@@ -475,8 +446,7 @@ WorkspaceFactoryModel.prototype.addImportedBlockTypes = function(blockTypes) {
 
 /**
  * Updates block types in block library.
- *
- * @param {!Array<!string>} blockTypes Array of block types in block library.
+ * @param {!Array.<string>} blockTypes Array of block types in block library.
  */
 WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
   this.libBlockTypes = blockTypes;
@@ -485,8 +455,7 @@ WorkspaceFactoryModel.prototype.updateLibBlockTypes = function(blockTypes) {
 /**
  * Determines if a block type is defined as a standard block, in the block
  * library, or as an imported block.
- *
- * @param {!string} blockType Block type to check.
+ * @param {string} blockType Block type to check.
  * @return {boolean} True if blockType is defined, false otherwise.
  */
 WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
@@ -499,8 +468,7 @@ WorkspaceFactoryModel.prototype.isDefinedBlockType = function(blockType) {
 
 /**
  * Checks if any of the block types are already defined.
- *
- * @param {!Array<!string>} blockTypes Array of block types.
+ * @param {!Array.<string>} blockTypes Array of block types.
  * @return {boolean} True if a block type in the array is already defined,
  *    false if none of the blocks are already defined.
  */
@@ -511,7 +479,7 @@ WorkspaceFactoryModel.prototype.hasDefinedBlockTypes = function(blockTypes) {
     }
   }
   return false;
-}
+};
 
 /**
  * Class for a ListElement.
@@ -539,7 +507,6 @@ ListElement.TYPE_FLYOUT = 'flyout';
 /**
  * Saves a category by updating its XML (does not save XML for
  * elements that are not categories).
- *
  * @param {!Blockly.workspace} workspace The workspace to save category entry
  * from.
  */
@@ -555,7 +522,6 @@ ListElement.prototype.saveFromWorkspace = function(workspace) {
 /**
  * Changes the name of a category object given a new name. Returns if
  * not a category.
- *
  * @param {string} name New name of category.
  */
 ListElement.prototype.changeName = function (name) {
@@ -569,8 +535,7 @@ ListElement.prototype.changeName = function (name) {
 /**
  * Sets the color of a category. If tries to set the color of something other
  * than a category, returns.
- *
- * @param {!string} color The color that should be used for that category.
+ * @param {string} color The color that should be used for that category.
  */
 ListElement.prototype.changeColor = function (color) {
   if (this.type != ListElement.TYPE_CATEGORY) {
@@ -582,7 +547,6 @@ ListElement.prototype.changeColor = function (color) {
 /**
  * Makes a copy of the original element and returns it. Everything about the
  * copy is identical except for its ID.
- *
  * @return {!ListElement} The copy of the ListElement.
  */
 ListElement.prototype.copy = function() {

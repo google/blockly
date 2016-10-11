@@ -1,12 +1,12 @@
 /**
  * @license
- * Visual Blocks Editor
+ * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * You may not use this file except in compliance with the License.
+ * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -37,11 +37,11 @@ goog.require('BlockExporterView');
 goog.require('BlockExporterTools');
 goog.require('goog.dom.xml');
 
+
 /**
  * BlockExporter Controller Class
- * @constructor
- *
  * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage.
+ * @constructor
  */
 BlockExporterController = function(blockLibStorage) {
   // BlockLibrary.Storage object containing user's saved blocks.
@@ -61,7 +61,6 @@ BlockExporterController = function(blockLibStorage) {
 
 /**
  * Set the block library storage object from which exporter exports.
- *
  * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
  *    that stores the blocks.
  */
@@ -72,7 +71,6 @@ BlockExporterController.prototype.setBlockLibraryStorage =
 
 /**
  * Get the block library storage object from which exporter exports.
- *
  * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
  *    that stores the blocks.
  */
@@ -126,11 +124,7 @@ BlockExporterController.prototype.export = function() {
       var genStubs = this.tools.getGeneratorCode(blockXmlMap,
           language);
       // Get the correct file extension.
-      if (language == 'JavaScript') {
-        var fileType = 'javascript';
-      } else {
-        var fileType = 'plain';
-      }
+      var fileType = (language == 'JavaScript') ? 'javascript' : 'plain';
       // Download the file.
       FactoryUtils.createAndDownloadFile(
           genStubs, generatorStub_filename, fileType);
@@ -185,9 +179,8 @@ BlockExporterController.prototype.selectAllBlocks = function() {
 };
 
 /**
- * Returns the category xml containing all blocks in the block library.
- *
- * @return {Element} Xml for a category to be used in toolbox.
+ * Returns the category XML containing all blocks in the block library.
+ * @return {Element} XML for a category to be used in toolbox.
  */
 BlockExporterController.prototype.getBlockLibraryCategory = function() {
   return this.tools.generateCategoryFromBlockLib(this.blockLibStorage);
@@ -270,8 +263,7 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
 
 /**
  * Set the array that holds the block types used in workspace factory.
- *
- * @param {!Array.<!string>} usedBlockTypes - Block types used in
+ * @param {!Array.<string>} usedBlockTypes - Block types used in
  */
 BlockExporterController.prototype.setUsedBlockTypes =
     function(usedBlockTypes) {
@@ -293,10 +285,9 @@ BlockExporterController.prototype.updatePreview = function() {
 };
 
 /**
- * Returns a map of each selected block's type to its corresponding xml.
- *
- * @return {!Object} a map of each selected block's type (a string) to its
- * corresponding xml element.
+ * Returns a map of each selected block's type to its corresponding XML.
+ * @return {!Object} A map of each selected block's type (a string) to its
+ * corresponding XML element.
  */
 BlockExporterController.prototype.getSelectedBlockXmlMap = function() {
   var blockTypes = this.view.getSelectedBlockTypes();
@@ -305,8 +296,7 @@ BlockExporterController.prototype.getSelectedBlockXmlMap = function() {
 
 /**
  * Get block definition code in the selected format for selected blocks.
- *
- * @return {!string} The concatenation of each selected block's language code
+ * @return {string} The concatenation of each selected block's language code
  * in the format specified in export settings.
  */
 BlockExporterController.prototype.getBlockDefinitionsOfSelected = function() {
@@ -320,8 +310,7 @@ BlockExporterController.prototype.getBlockDefinitionsOfSelected = function() {
 
 /**
  * Get generator stubs in the selected language for selected blocks.
- *
- * @return {!string} The concatenation of each selected block's generator stub
+ * @return {string} The concatenation of each selected block's generator stub
  * in the language specified in export settings.
  */
 BlockExporterController.prototype.getGeneratorStubsOfSelected = function() {
@@ -332,4 +321,3 @@ BlockExporterController.prototype.getGeneratorStubsOfSelected = function() {
   var language = document.getElementById('exportLanguage').value;
   return this.tools.getGeneratorCode(blockXmlMap, language);
 };
-

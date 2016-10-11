@@ -153,7 +153,8 @@ Blockly.Field.prototype.init = function() {
   this.updateEditable();
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
   this.mouseUpWrapper_ =
-      Blockly.bindEvent_(this.fieldGroup_, 'mouseup', this, this.onMouseUp_);
+      Blockly.bindEventWithChecks_(this.fieldGroup_, 'mouseup', this,
+      this.onMouseUp_);
   // Force a render.
   this.updateTextNode_();
 };
@@ -472,6 +473,9 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
   } else if (this.sourceBlock_.isEditable()) {
     // Non-abstract sub-classes must define a showEditor_ method.
     this.showEditor_();
+    // The field is handling the touch, but we also want the blockSvg onMouseUp
+    // handler to fire, so we will leave the touch identifier as it is.
+    // The next onMouseUp is responsible for nulling it out.
   }
 };
 

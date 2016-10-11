@@ -24,8 +24,13 @@
  */
 'use strict';
 
+/**
+ * Events fired as a result of actions in Blockly's editor.
+ * @namespace Blockly.Events
+ */
 goog.provide('Blockly.Events');
 
+goog.require('goog.array');
 goog.require('goog.math.Coordinate');
 
 

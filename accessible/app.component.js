@@ -29,28 +29,19 @@ blocklyApp.AppView = ng.core
   .Component({
     selector: 'blockly-app',
     template: `
-    <div aria-hidden="true">
-      Status: <span aria-live="polite" role="status">{{getStatusMessage()}}</span>
+    <div *ngIf="getStatusMessage()" aria-hidden="true" class="blocklyAriaLiveStatus">
+      <span aria-live="polite" role="status">{{getStatusMessage()}}</span>
     </div>
 
     <div>
-      <blockly-toolbox>{{'TOOLBOX_LOAD'|translate}}</blockly-toolbox>
-      <blockly-workspace>{{'WORKSPACE_LOAD'|translate}}</blockly-workspace>
+      <blockly-toolbox></blockly-toolbox>
+      <blockly-workspace></blockly-workspace>
     </div>
 
-    <label aria-hidden="true" hidden id="blockly-argument-block-menu">{{'ARGUMENT_BLOCK_ACTION_LIST'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-argument-input">{{'ARGUMENT_INPUT'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-argument-menu">{{'ARGUMENT_OPTIONS_LIST'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-argument-text">{{'TEXT'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-block-menu">{{'BLOCK_ACTION_LIST'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-block-summary">{{'BLOCK_SUMMARY'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-more-options">{{'MORE_OPTIONS'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-submenu-indicator">{{'SUBMENU_INDICATOR'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-toolbox-block">{{'TOOLBOX_BLOCK'|translate}} {{'SUBMENU_INDICATOR'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-workspace-block">{{'WORKSPACE_BLOCK'|translate}} {{'SUBMENU_INDICATOR'|translate}}</label>
     <label aria-hidden="true" hidden id="blockly-button">{{'BUTTON'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-disabled">{{'DISABLED'|translate}}</label>
-    <label aria-hidden="true" hidden id="blockly-menu">{{'OPTION_LIST'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-more-options">{{'MORE_OPTIONS'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-toolbox-block">{{'TOOLBOX_BLOCK'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-workspace-block">{{'WORKSPACE_BLOCK'|translate}}</label>
     `,
     directives: [blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent],
     pipes: [blocklyApp.TranslatePipe],

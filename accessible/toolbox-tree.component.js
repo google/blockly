@@ -30,13 +30,21 @@ blocklyApp.ToolboxTreeComponent = ng.core
     template: `
     <li [id]="idMap['toolboxBlockRoot']" role="treeitem"
         [ngClass]="{blocklyHasChildren: displayBlockMenu}"
-        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummaryLabel'], 'blockly-toolbox-block')"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['toolboxBlockSummary'], 'blockly-toolbox-block')"
         [attr.aria-level]="level">
-      <label #blockSummaryLabel [id]="idMap['blockSummaryLabel']">{{getBlockDescription()}}</label>
+      <label #toolboxBlockSummary [id]="idMap['toolboxBlockSummary']">{{getBlockDescription()}}</label>
       <ol role="group" *ngIf="displayBlockMenu">
+        <li [id]="idMap['blockCopy']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockCopyButton'], 'blockly-button')"
+            [attr.aria-level]="level + 1">
+          <button [id]="idMap['blockCopyButton']" (click)="copyToClipboard()" tabindex="-1">
+            {{'COPY_TO_CLIPBOARD'|translate}}
+          </button>
+        </li>
         <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button', !canBeCopiedToMarkedConnection())"
-            [attr.aria-level]="level + 2">
+            [attr.aria-label]="getAriaLabelForCopyToMarkedSpotButton()"
+            [attr.aria-level]="level + 1"
+            [attr.aria-disabled]="!canBeCopiedToMarkedConnection()">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
                   [disabled]="!canBeCopiedToMarkedConnection()" tabindex="-1">
             {{'COPY_TO_MARKED_SPOT'|translate}}
@@ -44,21 +52,15 @@ blocklyApp.ToolboxTreeComponent = ng.core
         </li>
         <li [id]="idMap['workspaceCopy']" role="treeitem"
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['workspaceCopyButton'], 'blockly-button')"
-            [attr.aria-level]="level + 2">
+            [attr.aria-level]="level + 1">
           <button [id]="idMap['workspaceCopyButton']" (click)="copyToWorkspace()" tabindex="-1">
             {{'COPY_TO_WORKSPACE'|translate}}
           </button>
         </li>
       </ol>
     </li>
-
-    <blockly-toolbox-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-                          [level]="level"
-                          [block]="block.nextConnection.targetBlock()"
-                          [displayBlockMenu]="false">
-    </blockly-toolbox-tree>
     `,
-    directives: [blocklyApp.FieldComponent, ng.core.forwardRef(function() {
+    directives: [ng.core.forwardRef(function() {
       return blocklyApp.ToolboxTreeComponent;
     })],
     inputs: [
@@ -78,11 +80,11 @@ blocklyApp.ToolboxTreeComponent = ng.core
       this.utilsService = _utilsService;
     }],
     ngOnInit: function() {
-      var idKeys = ['toolboxBlockRoot', 'blockSummaryLabel'];
+      var idKeys = ['toolboxBlockRoot', 'toolboxBlockSummary'];
       if (this.displayBlockMenu) {
         idKeys = idKeys.concat([
             'workspaceCopy', 'workspaceCopyButton', 'sendToSelected',
-            'sendToSelectedButton']);
+            'sendToSelectedButton', 'blockCopy', 'blockCopyButton']);
       }
 
       this.idMap = {};
@@ -103,18 +105,31 @@ blocklyApp.ToolboxTreeComponent = ng.core
         });
       }
     },
+    getAriaLabelForCopyToMarkedSpotButton: function() {
+      // TODO(sll): Find a way to make this more like the other buttons.
+      var ariaLabel = 'Attach to link button';
+      if (!this.clipboardService.isAnyConnectionMarked()) {
+        ariaLabel += ', unavailable. Add a link in the workspace first.';
+      }
+      return ariaLabel;
+    },
     isWorkspaceEmpty: function() {
       return this.utilsService.isWorkspaceEmpty();
     },
     getBlockDescription: function() {
       return this.utilsService.getBlockDescription(this.block);
     },
-    generateAriaLabelledByAttr: function(mainLabel, secondLabel, isDisabled) {
+    generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
       return this.utilsService.generateAriaLabelledByAttr(
-          mainLabel, secondLabel, isDisabled);
+          mainLabel, secondLabel);
     },
     canBeCopiedToMarkedConnection: function() {
       return this.clipboardService.canBeCopiedToMarkedConnection(this.block);
+    },
+    copyToClipboard: function() {
+      this.clipboardService.copy(this.block);
+      this.notificationsService.setStatusMessage(
+          this.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
     },
     copyToWorkspace: function() {
       var blockDescription = this.getBlockDescription();
@@ -125,8 +140,8 @@ blocklyApp.ToolboxTreeComponent = ng.core
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
         that.notificationsService.setStatusMessage(
-            blockDescription + ' copied to new workspace group. ' +
-            'Now on copied block in workspace.');
+            blockDescription + ' added to workspace. ' +
+            'Now on added block in workspace.');
       });
     },
     copyToMarkedSpot: function() {
@@ -155,7 +170,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
         }
 
         that.notificationsService.setStatusMessage(
-            blockDescription + ' copied to marked spot. ' +
+            blockDescription + ' connected. ' +
             'Now on copied block in workspace.');
       });
     }

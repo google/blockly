@@ -1,6 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
+ * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -33,6 +33,7 @@
  * Namespace for StandardCategories
  */
 goog.provide('StandardCategories');
+
 
 // Map of standard category information necessary to add a standard category
 // to the toolbox.
@@ -392,4 +393,3 @@ StandardCategories.coreBlockTypes =  ["controls_if", "logic_compare",
     "lists_getSublist", "lists_split", "lists_sort", "variables_set",
     "procedures_defreturn", "procedures_ifreturn", "procedures_defnoreturn",
     "procedures_callreturn"];
-

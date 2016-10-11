@@ -30,18 +30,14 @@ goog.require('Blockly.PHP');
 
 Blockly.PHP['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  // First, add a 'global' statement for every variable that is assigned.
-  var globals = block.workspace.variableList;
-  for (var i = globals.length - 1; i >= 0; i--) {
-      var varName = globals[i];
-      if (block.arguments_.indexOf(varName) == -1) {
-          globals[i] = Blockly.PHP.variableDB_.getName(varName,
-              Blockly.Variables.NAME_TYPE);
-      } else {
-          // This variable is actually a parameter name.  Do not include it in
-          // the list of globals, thus allowing it be of local scope.
-          globals.splice(i, 1);
-      }
+  // First, add a 'global' statement for every variable that is not shadowed by
+  // a local parameter.
+  var globals = [];
+  for (var i = 0, varName; varName = block.workspace.variableList[i]; i++) {
+    if (block.arguments_.indexOf(varName) == -1) {
+      globals.push(Blockly.PHP.variableDB_.getName(varName,
+          Blockly.Variables.NAME_TYPE));
+    }
   }
   globals = globals.length ? '  global ' + globals.join(', ') + ';\n' : '';
 

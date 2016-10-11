@@ -132,12 +132,6 @@ Blockly.PHP.ORDER_OVERRIDES = [
 ];
 
 /**
- * Allow for switching between one and zero based indexing for lists and text,
- * one based by default.
- */
-Blockly.PHP.ONE_BASED_INDEXING = true;
-
-/**
  * Initialise the database of variable names.
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
@@ -257,10 +251,10 @@ Blockly.PHP.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
   var delta = opt_delta || 0;
   var order = opt_order || Blockly.PHP.ORDER_NONE;
-  if (Blockly.PHP.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = Blockly.PHP.ONE_BASED_INDEXING ? '1' : '0';
+  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
   if (delta > 0) {
     var at = Blockly.PHP.valueToCode(block, atId,
             Blockly.PHP.ORDER_ADDITION) || defaultAtIndex;

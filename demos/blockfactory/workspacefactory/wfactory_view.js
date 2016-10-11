@@ -1,6 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
+ * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -28,13 +28,12 @@
  * @author Emma Dauterman (edauterman)
  */
 
- goog.require('FactoryUtils');
+goog.require('FactoryUtils');
 
- /**
-  * Class for a WorkspaceFactoryView
-  * @constructor
-  */
-
+/**
+ * Class for a WorkspaceFactoryView
+ * @constructor
+ */
 WorkspaceFactoryView = function() {
   // For each tab, maps ID of a ListElement to the td DOM element.
   this.tabMap = Object.create(null);
@@ -42,9 +41,8 @@ WorkspaceFactoryView = function() {
 
 /**
  * Adds a category tab to the UI, and updates tabMap accordingly.
- *
- * @param {!string} name The name of the category being created
- * @param {!string} id ID of category being created
+ * @param {string} name The name of the category being created
+ * @param {string} id ID of category being created
  * @return {!Element} DOM element created for tab
  */
 WorkspaceFactoryView.prototype.addCategoryRow = function(name, id) {
@@ -70,9 +68,8 @@ WorkspaceFactoryView.prototype.addCategoryRow = function(name, id) {
 
 /**
  * Deletes a category tab from the UI and updates tabMap accordingly.
- *
- * @param {!string} id ID of category to be deleted.
- * @param {!string} name The name of the category to be deleted.
+ * @param {string} id ID of category to be deleted.
+ * @param {string} name The name of the category to be deleted.
  */
 WorkspaceFactoryView.prototype.deleteElementRow = function(id, index) {
   // Delete tab entry.
@@ -98,18 +95,16 @@ WorkspaceFactoryView.prototype.addEmptyCategoryMessage = function() {
     document.getElementById('categoryHeader').textContent =
         'Your categories will appear here';
   }
-}
+};
 
 /**
  * Given the index of the currently selected element, updates the state of
  * the buttons that allow the user to edit the list elements. Updates the edit
  * and arrow buttons. Should be called when adding or removing elements
  * or when changing to a new element or when swapping to a different element.
- *
  * TODO(evd2014): Switch to using CSS to add/remove styles.
- *
- * @param {int} selectedIndex The index of the currently selected category,
- * -1 if no categories created.
+ * @param {number} selectedIndex The index of the currently selected category,
+ *   -1 if no categories created.
  * @param {ListElement} selected The selected ListElement.
  */
 WorkspaceFactoryView.prototype.updateState = function(selectedIndex, selected) {
@@ -117,20 +112,18 @@ WorkspaceFactoryView.prototype.updateState = function(selectedIndex, selected) {
   document.getElementById('button_editCategory').disabled = selectedIndex < 0 ||
       selected.type != ListElement.TYPE_CATEGORY;
   document.getElementById('button_remove').disabled = selectedIndex < 0;
-  document.getElementById('button_up').disabled =
-      selectedIndex <= 0 ? true : false;
+  document.getElementById('button_up').disabled = selectedIndex <= 0;
   var table = document.getElementById('categoryTable');
   document.getElementById('button_down').disabled = selectedIndex >=
-      table.rows.length - 1 || selectedIndex < 0 ? true : false;
+      table.rows.length - 1 || selectedIndex < 0;
   // Disable/enable the workspace as necessary.
   this.disableWorkspace(this.shouldDisableWorkspace(selected));
 };
 
 /**
  * Determines the DOM id for a category given its name.
- *
- * @param {!string} name Name of category
- * @return {!string} ID of category tab
+ * @param {string} name Name of category
+ * @return {string} ID of category tab
  */
 WorkspaceFactoryView.prototype.createCategoryIdName = function(name) {
   return 'tab_' + name;
@@ -138,8 +131,7 @@ WorkspaceFactoryView.prototype.createCategoryIdName = function(name) {
 
 /**
  * Switches a tab on or off.
- *
- * @param {!string} id ID of the tab to switch on or off.
+ * @param {string} id ID of the tab to switch on or off.
  * @param {boolean} selected True if tab should be on, false if tab should be
  * off.
  */
@@ -154,7 +146,6 @@ WorkspaceFactoryView.prototype.setCategoryTabSelection =
 /**
  * Used to bind a click to a certain DOM element (used for category tabs).
  * Taken directly from code.js
- *
  * @param {string|!Element} e1 tab element or corresponding id string
  * @param {!Function} func Function to be executed on click
  */
@@ -169,31 +160,28 @@ WorkspaceFactoryView.prototype.bindClick = function(el, func) {
 /**
  * Creates a file and downloads it. In some browsers downloads, and in other
  * browsers, opens new tab with contents.
- *
- * @param {!string} filename Name of file
+ * @param {string} filename Name of file
  * @param {!Blob} data Blob containing contents to download
  */
 WorkspaceFactoryView.prototype.createAndDownloadFile =
     function(filename, data) {
-   var clickEvent = new MouseEvent("click", {
-     "view": window,
-     "bubbles": true,
-     "cancelable": false
-   });
-   var a = document.createElement('a');
-   a.href = window.URL.createObjectURL(data);
-   a.download = filename;
-   a.textContent = 'Download file!';
-   a.dispatchEvent(clickEvent);
- };
+  var clickEvent = new MouseEvent('click', {
+    'view': window,
+    'bubbles': true,
+    'cancelable': false
+  });
+  var a = document.createElement('a');
+  a.href = window.URL.createObjectURL(data);
+  a.download = filename;
+  a.textContent = 'Download file!';
+  a.dispatchEvent(clickEvent);
+};
 
 /**
  * Given the ID of a certain category, updates the corresponding tab in
  * the DOM to show a new name.
- *
- * @param {!string} newName Name of string to be displayed on tab
- * @param {!string} id ID of category to be updated
- *
+ * @param {string} newName Name of string to be displayed on tab
+ * @param {string} id ID of category to be updated
  */
 WorkspaceFactoryView.prototype.updateCategoryName = function(newName, id) {
   this.tabMap[id].textContent = newName;
@@ -204,15 +192,14 @@ WorkspaceFactoryView.prototype.updateCategoryName = function(newName, id) {
  * Moves a tab from one index to another. Adjusts index inserting before
  * based on if inserting before or after. Checks that the indexes are in
  * bounds, throws error if not.
- *
- * @param {!string} id The ID of the category to move.
- * @param {int} newIndex The index to move the category to.
- * @param {int} oldIndex The index the category is currently at.
+ * @param {string} id The ID of the category to move.
+ * @param {number} newIndex The index to move the category to.
+ * @param {number} oldIndex The index the category is currently at.
  */
 WorkspaceFactoryView.prototype.moveTabToIndex =
     function(id, newIndex, oldIndex) {
   var table = document.getElementById('categoryTable');
-  // Check that indexes are in bounds
+  // Check that indexes are in bounds.
   if (newIndex < 0 || newIndex >= table.rows.length || oldIndex < 0 ||
       oldIndex >= table.rows.length) {
     throw new Error('Index out of bounds when moving tab in the view.');
@@ -234,23 +221,21 @@ WorkspaceFactoryView.prototype.moveTabToIndex =
 /**
  * Given a category ID and color, use that color to color the left border of the
  * tab for that category.
- *
- * @param {!string} id The ID of the category to color.
- * @param {!string} color The color for to be used for the border of the tab.
+ * @param {string} id The ID of the category to color.
+ * @param {string} color The color for to be used for the border of the tab.
  * Must be a valid CSS string.
  */
 WorkspaceFactoryView.prototype.setBorderColor = function(id, color) {
   var tab = this.tabMap[id];
-  tab.style.borderLeftWidth = "8px";
-  tab.style.borderLeftStyle = "solid";
+  tab.style.borderLeftWidth = '8px';
+  tab.style.borderLeftStyle = 'solid';
   tab.style.borderColor = color;
 };
 
 /**
  * Given a separator ID, creates a corresponding tab in the view, updates
  * tab map, and returns the tab.
- *
- * @param {!string} id The ID of the separator.
+ * @param {string} id The ID of the separator.
  * @param {!Element} The td DOM element representing the separator.
  */
 WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
@@ -275,7 +260,6 @@ WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
  * toolbox workspace, depending on the value of disable. Used when switching
  * to/from separators where the user shouldn't be able to drag blocks into
  * the workspace.
- *
  * @param {boolean} disable True if the workspace should be disabled, false
  * if it should be enabled.
  */
@@ -293,7 +277,6 @@ WorkspaceFactoryView.prototype.disableWorkspace = function(disable) {
 /**
  * Determines if the workspace should be disabled. The workspace should be
  * disabled if category is a separator or has VARIABLE or PROCEDURE tags.
- *
  * @return {boolean} True if the workspace should be disabled, false otherwise.
  */
 WorkspaceFactoryView.prototype.shouldDisableWorkspace = function(category) {
@@ -302,7 +285,7 @@ WorkspaceFactoryView.prototype.shouldDisableWorkspace = function(category) {
       category.custom == 'VARIABLE' || category.custom == 'PROCEDURE');
 };
 
-/*
+/**
  * Removes all categories and separators in the view. Clears the tabMap to
  * reflect this.
  */
@@ -320,8 +303,7 @@ WorkspaceFactoryView.prototype.clearToolboxTabs = function() {
  * Given a set of blocks currently loaded user-generated shadow blocks, visually
  * marks them without making them actual shadow blocks (allowing them to still
  * be editable and movable).
- *
- * @param {!<Blockly.Block>} blocks Array of user-generated shadow blocks
+ * @param {!Array.<!Blockly.Block>} blocks Array of user-generated shadow blocks
  * currently loaded.
  */
 WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {
@@ -334,9 +316,8 @@ WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {
  * Visually marks a user-generated shadow block as a shadow block in the
  * workspace without making the block an actual shadow block (allowing it
  * to be moved and edited).
- *
  * @param {!Blockly.Block} block The block that should be marked as a shadow
- *    block (must be rendered).
+ *   block (must be rendered).
  */
 WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
   // Add Blockly CSS for user-generated shadow blocks.
@@ -346,7 +327,6 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
       block.setWarningText('Shadow blocks must be nested inside' +
           ' other blocks to be displayed.');
   }
-
   if (FactoryUtils.hasVariableField(block)) {
     block.setWarningText('Cannot make variable blocks shadow blocks.');
   }
@@ -354,9 +334,8 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
 
 /**
  * Removes visual marking for a shadow block given a rendered block.
- *
  * @param {!Blockly.Block} block The block that should be unmarked as a shadow
- *    block (must be rendered).
+ *   block (must be rendered).
  */
 WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
   // Remove Blockly CSS for user-generated shadow blocks.
@@ -368,9 +347,8 @@ WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
 /**
  * Sets the tabs for modes according to which mode the user is currenly
  * editing in.
- *
- * @param {!string} mode The mode being switched to
- *    (WorkspaceFactoryController.MODE_TOOLBOX or WorkspaceFactoryController.MODE_PRELOAD).
+ * @param {string} mode The mode being switched to
+ *   (WorkspaceFactoryController.MODE_TOOLBOX or WorkspaceFactoryController.MODE_PRELOAD).
  */
 WorkspaceFactoryView.prototype.setModeSelection = function(mode) {
   document.getElementById('tab_preload').className = mode ==
@@ -385,17 +363,16 @@ WorkspaceFactoryView.prototype.setModeSelection = function(mode) {
 
 /**
  * Updates the help text above the workspace depending on the selected mode.
- *
- * @param {!string} mode The selected mode (WorkspaceFactoryController.MODE_TOOLBOX or
- *    WorkspaceFactoryController.MODE_PRELOAD).
+ * @param {string} mode The selected mode (WorkspaceFactoryController.MODE_TOOLBOX or
+ *   WorkspaceFactoryController.MODE_PRELOAD).
  */
 WorkspaceFactoryView.prototype.updateHelpText = function(mode) {
   if (mode == WorkspaceFactoryController.MODE_TOOLBOX) {
-    var helpText = 'Drag blocks into the workspace to configure the toolbox '
-        + 'in your custom workspace.';
+    var helpText = 'Drag blocks into the workspace to configure the toolbox ' +
+        'in your custom workspace.';
   } else {
-    var helpText = 'Drag blocks into the workspace to pre-load them in your '
-        + 'custom workspace.'
+    var helpText = 'Drag blocks into the workspace to pre-load them in your ' +
+        'custom workspace.'
   }
   document.getElementById('editHelpText').textContent = helpText;
 };
@@ -407,7 +384,7 @@ WorkspaceFactoryView.prototype.updateHelpText = function(mode) {
 WorkspaceFactoryView.prototype.setBaseOptions = function() {
   // Set basic options.
   document.getElementById('option_css_checkbox').checked = true;
-    document.getElementById('option_infiniteBlocks_checkbox').checked = true;
+  document.getElementById('option_infiniteBlocks_checkbox').checked = true;
   document.getElementById('option_maxBlocks_number').value = 100;
   document.getElementById('option_media_text').value =
       'https://blockly-demo.appspot.com/static/media/';
@@ -439,7 +416,6 @@ WorkspaceFactoryView.prototype.setBaseOptions = function() {
 /**
  * Updates category specific options depending on if there are categories
  * currently present. Updates checkboxes and text fields in the view.
- *
  * @param {boolean} hasCategories True if categories are present, false if all
  *    blocks are displayed in a single flyout.
  */
@@ -449,4 +425,4 @@ WorkspaceFactoryView.prototype.setCategoryOptions = function(hasCategories) {
   document.getElementById('option_disable_checkbox').checked = hasCategories;
   document.getElementById('option_scrollbars_checkbox').checked = hasCategories;
   document.getElementById('option_trashcan_checkbox').checked = hasCategories;
-}
+};

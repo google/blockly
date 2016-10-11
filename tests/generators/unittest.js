@@ -111,7 +111,7 @@ Blockly.Blocks['unittest_adjustindex'] = {
       "output": "Number",
       "colour": 65,
       "tooltip": "Adjusts the value based on whether generated code is using " +
-          "zero or one based indexing"
+          "zero or one based indexing."
     });
   }
 };

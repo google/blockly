@@ -103,7 +103,7 @@ Blockly.Python['text_indexOf'] = function(block) {
   var text = Blockly.Python.valueToCode(block, 'VALUE',
       Blockly.Python.ORDER_MEMBER) || '\'\'';
   var code = text + '.' + operator + '(' + substring + ')';
-  if (Blockly.Python.ONE_BASED_INDEXING) {
+  if (block.workspace.options.oneBasedIndex) {
     return [code + ' + 1', Blockly.Python.ORDER_ADDITIVE];
   }
   return [code, Blockly.Python.ORDER_FUNCTION_CALL];

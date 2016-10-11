@@ -219,9 +219,9 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
     this.positionAttribute_ = 'y';
   }
   var scrollbar = this;
-  this.onMouseDownBarWrapper_ = Blockly.bindEvent_(this.svgBackground_,
-      'mousedown', scrollbar, scrollbar.onMouseDownBar_);
-  this.onMouseDownHandleWrapper_ = Blockly.bindEvent_(this.svgHandle_,
+  this.onMouseDownBarWrapper_ = Blockly.bindEventWithChecks_(
+      this.svgBackground_, 'mousedown', scrollbar, scrollbar.onMouseDownBar_);
+  this.onMouseDownHandleWrapper_ = Blockly.bindEventWithChecks_(this.svgHandle_,
       'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
 
@@ -297,7 +297,7 @@ Blockly.Scrollbar.metricsAreEquivalent_ = function(first, second) {
  * Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Scrollbar.prototype.dispose = function() {
-  this.onMouseUpHandle_();
+  this.cleanUp_();
   Blockly.unbindEvent_(this.onMouseDownBarWrapper_);
   this.onMouseDownBarWrapper_ = null;
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
@@ -599,7 +599,8 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
-  this.onMouseUpHandle_();
+  Blockly.Touch.clearTouchIdentifier();  // This is really a click.
+  this.cleanUp_();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -637,7 +638,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
-  this.onMouseUpHandle_();
+  this.cleanUp_();
   if (Blockly.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
@@ -648,9 +649,9 @@ Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
   this.startDragHandle = this.handlePosition_;
   // Record the current mouse position.
   this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
-  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
       'mouseup', this, this.onMouseUpHandle_);
-  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEvent_(document,
+  Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
       'mousemove', this, this.onMouseMoveHandle_);
   e.stopPropagation();
   e.preventDefault();
@@ -671,10 +672,20 @@ Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
 };
 
 /**
- * Stop binding to the global mouseup and mousemove events.
+ * Release the scrollbar handle and reset state accordingly.
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
+  Blockly.Touch.clearTouchIdentifier();
+  this.cleanUp_();
+};
+
+/**
+ * Hide chaff and stop binding to mouseup and mousemove events.  Call this to
+ * wrap up lose ends associated with the scrollbar.
+ * @private
+ */
+Blockly.Scrollbar.prototype.cleanUp_ = function() {
   Blockly.hideChaff(true);
   if (Blockly.Scrollbar.onMouseUpWrapper_) {
     Blockly.unbindEvent_(Blockly.Scrollbar.onMouseUpWrapper_);

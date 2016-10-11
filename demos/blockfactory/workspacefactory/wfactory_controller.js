@@ -277,7 +277,7 @@ WorkspaceFactoryController.prototype.switchElement = function(id) {
 /**
  * Switches to a new tab for the element by ID. Helper for switchElement.
  * Updates selected, clears the workspace and clears undo, loads a new element.
- * @param {string} id ID of category to load
+ * @param {string} id ID of category to load.
  */
 WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
   // Unselect current tab if switching to and from an element.
@@ -1242,7 +1242,7 @@ WorkspaceFactoryController.prototype.setBlockLibCategory =
     function(categoryXml, libBlockTypes) {
   var blockLibCategory = document.getElementById('blockLibCategory');
 
-  // Set category id so that it can be easily replaced, and set a standard,
+  // Set category ID so that it can be easily replaced, and set a standard,
   // arbitrary block library color.
   categoryXml.setAttribute('id', 'blockLibCategory');
   categoryXml.setAttribute('colour', 260);

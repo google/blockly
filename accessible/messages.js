@@ -32,7 +32,7 @@ Blockly.Msg.WORKSPACE_BLOCK = 'workspace block. Move right to view submenu.';
 Blockly.Msg.CLEAR_WORKSPACE = 'Erase Workspace';
 
 Blockly.Msg.COPY_TO_CLIPBOARD = 'Copy to clipboard.';
-Blockly.Msg.COPY_TO_MARKED_SPOT = 'Copy to link.';
+Blockly.Msg.COPY_TO_MARKED_SPOT = 'Attach to link.';
 Blockly.Msg.COPY_TO_WORKSPACE = 'Add to workspace.';
 
 Blockly.Msg.COPY_BLOCK = 'Copy block.';

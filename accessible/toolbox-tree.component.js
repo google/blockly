@@ -42,7 +42,7 @@ blocklyApp.ToolboxTreeComponent = ng.core
           </button>
         </li>
         <li [id]="idMap['sendToSelected']" role="treeitem" *ngIf="!isWorkspaceEmpty()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['sendToSelectedButton'], 'blockly-button')"
+            [attr.aria-label]="getAriaLabelForCopyToMarkedSpotButton()"
             [attr.aria-level]="level + 1"
             [attr.aria-disabled]="!canBeCopiedToMarkedConnection()">
           <button [id]="idMap['sendToSelectedButton']" (click)="copyToMarkedSpot()"
@@ -104,6 +104,14 @@ blocklyApp.ToolboxTreeComponent = ng.core
               that.idMap['toolboxBlockRoot'], 'blockly-toolbox-tree');
         });
       }
+    },
+    getAriaLabelForCopyToMarkedSpotButton: function() {
+      // TODO(sll): Find a way to make this more like the other buttons.
+      var ariaLabel = 'Attach to link button';
+      if (!this.clipboardService.isAnyConnectionMarked()) {
+        ariaLabel += ', unavailable. Add a link in the workspace first.';
+      }
+      return ariaLabel;
     },
     isWorkspaceEmpty: function() {
       return this.utilsService.isWorkspaceEmpty();

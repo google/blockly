@@ -61,6 +61,9 @@ blocklyApp.ClipboardService = ng.core
         return this.markedConnection_.getSourceBlock();
       }
     },
+    isAnyConnectionMarked: function() {
+      return Boolean(this.markedConnection_);
+    },
     isMovableToMarkedConnection: function(block) {
       // It should not be possible to move any ancestor of the block containing
       // the marked spot to the marked spot.

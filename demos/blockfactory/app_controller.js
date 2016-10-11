@@ -1,12 +1,12 @@
 /**
  * @license
- * Visual Blocks Editor
+ * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * You may not use this file except in compliance with the License.
+ * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
@@ -134,7 +134,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
   var blockLibText = this.formatBlockLibraryForExport_(blockLib);
   // Get file name.
   var filename = prompt('Enter the file name under which to save your block ' +
-      'library.');
+      'library.', 'library.xml');
   // Download file if all necessary parameters are provided.
   if (filename) {
     FactoryUtils.createAndDownloadFile(blockLibText, filename, 'xml');

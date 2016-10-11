@@ -1,6 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
+ * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -112,11 +112,10 @@ WorkspaceFactoryView.prototype.updateState = function(selectedIndex, selected) {
   document.getElementById('button_editCategory').disabled = selectedIndex < 0 ||
       selected.type != ListElement.TYPE_CATEGORY;
   document.getElementById('button_remove').disabled = selectedIndex < 0;
-  document.getElementById('button_up').disabled =
-      selectedIndex <= 0 ? true : false;
+  document.getElementById('button_up').disabled = selectedIndex <= 0;
   var table = document.getElementById('categoryTable');
   document.getElementById('button_down').disabled = selectedIndex >=
-      table.rows.length - 1 || selectedIndex < 0 ? true : false;
+      table.rows.length - 1 || selectedIndex < 0;
   // Disable/enable the workspace as necessary.
   this.disableWorkspace(this.shouldDisableWorkspace(selected));
 };

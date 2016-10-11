@@ -75,8 +75,8 @@ goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 Blockly.WorkspaceSvg.prototype.resizeHandlerWrapper_ = null;
 
 /**
- * The render status of an SVG workspace. 
- * Returns `true` for visible workspaces and `false` for non-visible, or headless, workspaces. 
+ * The render status of an SVG workspace.
+ * Returns `true` for visible workspaces and `false` for non-visible, or headless, workspaces.
  * @type {boolean}
  */
 Blockly.WorkspaceSvg.prototype.rendered = true;
@@ -316,7 +316,7 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
  * @param {?string} prototypeName Name of the language object containing
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
- *     create a new id.
+ *     create a new ID.
  * @return {!Blockly.BlockSvg} The created block.
  */
 Blockly.WorkspaceSvg.prototype.newBlock = function(prototypeName, opt_id) {

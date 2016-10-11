@@ -1,6 +1,6 @@
 /**
  * @license
- * Visual Blocks Editor
+ * Blockly Demos: Block Factory
  *
  * Copyright 2016 Google Inc.
  * https://developers.google.com/blockly/
@@ -108,8 +108,8 @@ WorkspaceFactoryController.prototype.addCategory = function() {
   // After possibly creating a category, check again if it's the first category.
   var isFirstCategory = !this.model.hasElements();
   // Get name from user.
-  name = this.promptForNewCategoryName('Enter the name of your new category: ');
-  if (!name) {  //Exit if cancelled.
+  name = this.promptForNewCategoryName('Enter the name of your new category:');
+  if (!name) {  // Exit if cancelled.
     return;
   }
   // Create category.
@@ -117,7 +117,7 @@ WorkspaceFactoryController.prototype.addCategory = function() {
   // Switch to category.
   this.switchElement(this.model.getCategoryIdByName(name));
 
-   // Sets the default options for injecting the workspace
+  // Sets the default options for injecting the workspace
   // when there are categories if adding the first category.
   if (isFirstCategory) {
     this.view.setCategoryOptions(this.model.hasElements());
@@ -152,7 +152,7 @@ WorkspaceFactoryController.prototype.createCategory = function(name) {
  */
 WorkspaceFactoryController.prototype.addClickToSwitch = function(tab, id) {
   var self = this;
-  var clickFunction = function(id) {  // Keep this in scope for switchElement
+  var clickFunction = function(id) {  // Keep this in scope for switchElement.
     return function() {
       self.switchElement(id);
     };
@@ -237,15 +237,18 @@ WorkspaceFactoryController.prototype.removeElement = function() {
 /**
  * Gets a valid name for a new category from the user.
  * @param {string} promptString Prompt for the user to enter a name.
+ * @param {string=} opt_oldName The current name.
  * @return {string} Valid name for a new category, or null if cancelled.
  */
 WorkspaceFactoryController.prototype.promptForNewCategoryName =
-    function(promptString) {
+    function(promptString, opt_oldName) {
+  var defaultName = opt_oldName;
   do {
-    var name = prompt(promptString);
+    var name = prompt(promptString, defaultName);
     if (!name) {  // If cancelled.
       return null;
     }
+    defaultName = name;
   } while (this.model.hasCategoryByName(name));
   return name;
 };
@@ -316,9 +319,12 @@ WorkspaceFactoryController.prototype.clearAndLoadElement = function(id) {
  */
 WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
   // Get file name.
-  var fileName = prompt('File Name for ' + (exportMode ==
-      WorkspaceFactoryController.MODE_TOOLBOX ? 'toolbox XML: ' :
-      'pre-loaded workspace XML: '));
+  if (exportMode == WorkspaceFactoryController.MODE_TOOLBOX) {
+    var fileName = prompt('File Name for toolbox XML:', 'toolbox.xml');
+  } else {
+    var fileName = prompt('File Name for pre-loaded workspace XML:',
+                          'workspace.xml');
+  }
   if (!fileName) {  // If cancelled.
     return;
   }
@@ -349,7 +355,8 @@ WorkspaceFactoryController.prototype.exportXmlFile = function(exportMode) {
  * file name from the user and downloads the options object to that file.
  */
 WorkspaceFactoryController.prototype.exportInjectFile = function() {
-  var fileName = prompt('File Name for starter Blockly workspace code: ');
+  var fileName = prompt('File Name for starter Blockly workspace code:',
+                        'workspace.js');
   if (!fileName) {  // If cancelled.
     return;
   }
@@ -474,18 +481,20 @@ WorkspaceFactoryController.prototype.reinjectPreview = function(tree) {
  * currently in use, exits if user presses cancel.
  */
 WorkspaceFactoryController.prototype.changeCategoryName = function() {
+  var selected = this.model.getSelected();
   // Return if a category is not selected.
-  if (this.model.getSelected().type != ListElement.TYPE_CATEGORY) {
+  if (selected.type != ListElement.TYPE_CATEGORY) {
     return;
   }
   // Get new name from user.
+  window.foo = selected;
   var newName = this.promptForNewCategoryName('What do you want to change this'
-    + ' category\'s name to?');
+    + ' category\'s name to?', selected.name);
   if (!newName) {  // If cancelled.
     return;
   }
   // Change category name.
-  this.model.getSelected().changeName(newName);
+  selected.changeName(newName);
   this.view.updateCategoryName(newName, this.model.getSelectedId());
   // Update preview.
   this.updatePreview();

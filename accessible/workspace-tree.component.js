@@ -162,12 +162,39 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // Generate a list of action buttons.
       var that = this;
       this.actionButtonsInfo = [{
-        baseIdKey: 'moveToMarkedSpot',
-        translationIdForText: 'MOVE_TO_MARKED_SPOT',
-        action: that.moveToMarkedSpot_.bind(that),
+        baseIdKey: 'copy',
+        translationIdForText: 'COPY_BLOCK',
+        action: function() {
+          that.clipboardService.copy(that.block);
+          that.notificationsService.setStatusMessage(
+              that.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
+        },
         isDisabled: function() {
-          return !that.clipboardService.isMovableToMarkedConnection(
-              that.block);
+         return false;
+        }
+      }, {
+        baseIdKey: 'pasteBefore',
+        translationIdForText: 'PASTE_BEFORE',
+        action: function() {
+          that.treeService.pasteToConnection(
+              that.block, that.block.previousConnection);
+        },
+        isDisabled: function() {
+          return Boolean(
+              !that.block.previousConnection ||
+              !that.isCompatibleWithClipboard(that.block.previousConnection));
+        }
+      }, {
+        baseIdKey: 'pasteAfter',
+        translationIdForText: 'PASTE_AFTER',
+        action: function() {
+          that.treeService.pasteToConnection(
+              that.block, that.block.nextConnection);
+        },
+        isDisabled: function() {
+          return Boolean(
+             !that.block.nextConnection ||
+              !that.isCompatibleWithClipboard(that.block.nextConnection));
         }
       }, {
         baseIdKey: 'markBefore',
@@ -182,6 +209,14 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         action: that.markSpotAfter_.bind(that),
         isDisabled: function() {
           return !that.block.nextConnection;
+        }
+      }, {
+        baseIdKey: 'moveToMarkedSpot',
+        translationIdForText: 'MOVE_TO_MARKED_SPOT',
+        action: that.moveToMarkedSpot_.bind(that),
+        isDisabled: function() {
+          return !that.clipboardService.isMovableToMarkedConnection(
+              that.block);
         }
       }, {
         baseIdKey: 'delete',
@@ -204,7 +239,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         }
       }, {
         baseIdKey: 'paste',
-        translationIdForText: 'PASTE',
+        translationIdForText: 'PASTE_INSIDE',
         action: function(connection) {
           that.treeService.pasteToConnection(that.block, connection);
         },

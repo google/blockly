@@ -31,20 +31,24 @@ Blockly.Msg.WORKSPACE_BLOCK = 'workspace block. Move right to view submenu.';
 
 Blockly.Msg.CLEAR_WORKSPACE = 'Erase Workspace';
 
-Blockly.Msg.COPY_TO_MARKED_SPOT = 'Copy to marked spot.';
+Blockly.Msg.COPY_TO_CLIPBOARD = 'Copy to clipboard.';
+Blockly.Msg.COPY_TO_MARKED_SPOT = 'Copy to link.';
 Blockly.Msg.COPY_TO_WORKSPACE = 'Add to workspace.';
 
+Blockly.Msg.COPY_BLOCK = 'Copy block.';
 Blockly.Msg.DELETE = 'Delete block.';
-Blockly.Msg.MARK_SPOT_BEFORE = 'Mark spot before.';
-Blockly.Msg.MARK_SPOT_AFTER = 'Mark spot after.';
-Blockly.Msg.MARK_THIS_SPOT = 'Mark this spot.';
-Blockly.Msg.MOVE_TO_MARKED_SPOT = 'Move to marked spot.';
-Blockly.Msg.PASTE = 'Paste.';
+Blockly.Msg.MARK_SPOT_BEFORE = 'Add link before.';
+Blockly.Msg.MARK_SPOT_AFTER = 'Add link after.';
+Blockly.Msg.MARK_THIS_SPOT = 'Add link inside.';
+Blockly.Msg.MOVE_TO_MARKED_SPOT = 'Attach to link.';
+Blockly.Msg.PASTE_AFTER = 'Paste after.';
+Blockly.Msg.PASTE_BEFORE = 'Paste before.';
+Blockly.Msg.PASTE_INSIDE = 'Paste inside.';
 
 Blockly.Msg.ANY = 'any';
+Blockly.Msg.BLOCK = 'block';
 Blockly.Msg.BUTTON = 'Button.';
 Blockly.Msg.FOR = 'for';
-Blockly.Msg.STATEMENT = 'statement';
 Blockly.Msg.VALUE = 'value';
 
 Blockly.Msg.BLOCK_OPTIONS = 'Block options: ';

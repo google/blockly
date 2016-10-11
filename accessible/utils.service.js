@@ -54,7 +54,7 @@ blocklyApp.UtilsService = ng.core
     },
     getBlockTypeLabel: function(inputBlock) {
       if (inputBlock.type == Blockly.NEXT_STATEMENT) {
-        return Blockly.Msg.STATEMENT;
+        return Blockly.Msg.BLOCK;
       } else {
         return Blockly.Msg.VALUE;
       }

@@ -41,13 +41,13 @@ var BlockLibraryView = function() {
   // Div element to contain the block types to choose from.
   // Id of the div that holds the block library view.
   this.blockLibraryViewDivID = 'dropdownDiv_blockLib';
-  this.dropdown = goog.dom.getElement('dropdownDiv_blockLib');
+  this.dropdown = document.getElementById('dropdownDiv_blockLib');
   // Map of block type to corresponding 'a' element that is the option in the
   // dropdown. Used to quickly and easily get a specific option.
   this.optionMap = Object.create(null);
   // Save and delete buttons.
-  this.saveButton = goog.dom.getElement('saveToBlockLibraryButton');
-  this.deleteButton = goog.dom.getElement('removeBlockFromLibraryButton');
+  this.saveButton = document.getElementById('saveToBlockLibraryButton');
+  this.deleteButton = document.getElementById('removeBlockFromLibraryButton');
   // Initially, user should not be able to delete a block. They must save a
   // block or select a stored block first.
   this.deleteButton.disabled = true;
@@ -202,17 +202,15 @@ BlockLibraryView.prototype.getSelectedBlockType = function() {
  * @return {!Element} HTML 'a' element that is the option for a block type.
  */
 BlockLibraryView.prototype.getSelectedOption = function() {
-  return goog.dom.getElementByClass('dropdown-content-selected', this.dropdown);
+  return this.dropdown.getElementsByClassName('dropdown-content-selected')[0];
 };
 
 /**
  * Removes all options from dropdown.
  */
 BlockLibraryView.prototype.clearOptions = function() {
-  var blockOpts = goog.dom.getElementsByClass('blockLibOpt', this.dropdown);
-  if (blockOpts) {
-    for (var i = 0, option; option = blockOpts[i]; i++) {
-      goog.dom.removeNode(option);
-    }
+  var blockOpts = this.dropdown.getElementsByClassName('blockLibOpt');
+  for (var i = 0, option; option = blockOpts[i]; i++) {
+    option.parentNode.removeChild(option);
   }
 };

@@ -121,7 +121,7 @@ WorkspaceFactoryView.prototype.updateState = function(selectedIndex, selected) {
 };
 
 /**
- * Determines the DOM id for a category given its name.
+ * Determines the DOM ID for a category given its name.
  * @param {string} name Name of category
  * @return {string} ID of category tab
  */
@@ -146,8 +146,8 @@ WorkspaceFactoryView.prototype.setCategoryTabSelection =
 /**
  * Used to bind a click to a certain DOM element (used for category tabs).
  * Taken directly from code.js
- * @param {string|!Element} e1 tab element or corresponding id string
- * @param {!Function} func Function to be executed on click
+ * @param {string|!Element} e1 Tab element or corresponding ID string.
+ * @param {!Function} func Function to be executed on click.
  */
 WorkspaceFactoryView.prototype.bindClick = function(el, func) {
   if (typeof el == 'string') {

@@ -47,7 +47,7 @@ BlockExporterTools = function() {
   }, ''); // Empty quotes for empty div.
   // Hide hidden workspace.
   this.container.style.display = 'none';
-  goog.dom.appendChild(document.body, this.container);
+  document.body.appendChild(this.container);
   /**
    * Hidden workspace for the Block Exporter that holds pieces that make
    * up the block
@@ -251,9 +251,12 @@ BlockExporterTools.prototype.createBlockSelectorFromLib =
   // them in the exporter workspace.
   this.addBlockDefinitions(blockXmlMap);
 
-  var blockSelector = goog.dom.getElement(blockSelectorID);
+  var blockSelector = document.getElementById(blockSelectorID);
   // Clear the block selector.
-  goog.dom.removeChildren(blockSelector);
+  var child;
+  while ((child = blockSelector.firstChild)) {
+    blockSelector.removeChild(child);
+  }
 
   // Append each block option's dom to the selector.
   var blockOptions = Object.create(null);
@@ -266,7 +269,7 @@ BlockExporterTools.prototype.createBlockSelectorFromLib =
     // option to block selector.
     var blockOpt = new BlockOption(blockSelector, blockType, previewBlockXml);
     blockOpt.createDom();
-    goog.dom.appendChild(blockSelector, blockOpt.dom);
+    blockSelector.appendChild(blockOpt.dom);
     blockOpt.showPreviewBlock();
     blockOptions[blockType] = blockOpt;
   }

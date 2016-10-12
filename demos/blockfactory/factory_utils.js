@@ -884,8 +884,8 @@ FactoryUtils.injectCode = function(code, id) {
  */
 FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   // Each XML element should contain a single child element with a 'block' tag
-  if (goog.string.caseInsensitiveCompare(blockXml1.tagName, 'xml') ||
-      goog.string.caseInsensitiveCompare(blockXml2.tagName, 'xml')) {
+  if (!blockXml1.tagName.toLowerCase() == 'xml' ||
+      !blockXml2.tagName.toLowerCase() == 'xml') {
     throw new Error('Expected two XML elements, recieved elements with tag ' +
         'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
   }

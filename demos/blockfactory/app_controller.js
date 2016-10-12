@@ -32,7 +32,6 @@ goog.require('FactoryUtils');
 goog.require('BlockLibraryController');
 goog.require('BlockExporterController');
 goog.require('goog.dom.classlist');
-goog.require('goog.string');
 goog.require('goog.ui.PopupColorPicker');
 goog.require('goog.ui.ColorPicker');
 
@@ -59,11 +58,11 @@ AppController = function() {
   // Map of tab type to the div element for the tab.
   this.tabMap = Object.create(null);
   this.tabMap[AppController.BLOCK_FACTORY] =
-      goog.dom.getElement('blockFactory_tab');
+      document.getElementById('blockFactory_tab');
   this.tabMap[AppController.WORKSPACE_FACTORY] =
-      goog.dom.getElement('workspaceFactory_tab');
+      document.getElementById('workspaceFactory_tab');
   this.tabMap[AppController.EXPORTER] =
-      goog.dom.getElement('blocklibraryExporter_tab');
+      document.getElementById('blocklibraryExporter_tab');
 
   // Last selected tab.
   this.lastSelectedTab = null;
@@ -535,7 +534,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
       self.blockLibraryController.setNoneSelected();
 
       // Close the Block Library Dropdown.
-      goog.dom.getElement('dropdownDiv_blockLib').classList.remove("show");
+      document.getElementById('dropdownDiv_blockLib').classList.remove('show');
     });
 };
 

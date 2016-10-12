@@ -61,10 +61,10 @@ BlockExporterView.prototype.setBlockOptions = function(blockOptions) {
  */
 BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
   if (opt_append) {
-    goog.dom.getElement('helperText').textContent =
-        goog.dom.getElement('helperText').textContent + newText;
+    document.getElementById('helperText').textContent =
+        document.getElementById('helperText').textContent + newText;
   } else {
-    goog.dom.getElement('helperText').textContent = newText;
+    document.getElementById('helperText').textContent = newText;
   }
 };
 
@@ -74,7 +74,7 @@ BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
 BlockExporterView.prototype.listSelectedBlocks = function() {
 
   var selectedBlocksText = this.getSelectedBlockTypes().join(",\n ");
-  goog.dom.getElement('selectedBlocksText').textContent = selectedBlocksText;
+  document.getElementById('selectedBlocksText').textContent = selectedBlocksText;
 };
 
 /**

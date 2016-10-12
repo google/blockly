@@ -884,8 +884,8 @@ FactoryUtils.injectCode = function(code, id) {
  */
 FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   // Each XML element should contain a single child element with a 'block' tag
-  if (blockXml1.tagName.toLowerCase() == 'xml' ||
-      blockXml2.tagName.toLowerCase() == 'xml') {
+  if (!blockXml1.tagName.toLowerCase() == 'xml' ||
+      !blockXml2.tagName.toLowerCase() == 'xml') {
     throw new Error('Expected two XML elements, recieved elements with tag ' +
         'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
   }

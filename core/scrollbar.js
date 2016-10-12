@@ -125,6 +125,7 @@ Blockly.ScrollbarPair.prototype.resize = function() {
       this.oldHostMetrics_.absoluteTop != hostMetrics.absoluteTop) {
     this.corner_.setAttribute('y', this.hScroll.position_.y);
   }
+
   // Cache the current metrics to potentially short-cut the next resize event.
   this.oldHostMetrics_ = hostMetrics;
 };

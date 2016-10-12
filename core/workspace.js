@@ -117,8 +117,6 @@ Blockly.Workspace.SCAN_ANGLE = 3;
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
-  if (block.workspace == Blockly.mainWorkspace) //Do not reset arrangements for the flyout
-    this.resetArrangements();
   this.topBlocks_.push(block);
   if (this.isFlyout) {
     // This is for the (unlikely) case where you have a variable in a block in
@@ -138,8 +136,6 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  * @param {!Blockly.Block} block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
-  if (block.workspace == Blockly.mainWorkspace) //Do not reset arrangements for the flyout
-    this.resetArrangements();
   var found = false;
   for (var child, i = 0; child = this.topBlocks_[i]; i++) {
     if (child == block) {
@@ -160,7 +156,6 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
  * @return {!Array.<!Blockly.Block>} The top-level block objects.
  */
 Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
-  var start = new Date().getTime(); //*** lyn instrumentation
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
   if (ordered && blocks.length > 1) {
@@ -174,10 +169,6 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
       return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
     });
   }
-  var stop = new Date().getTime(); //*** lyn instrumentation
-  var timeDiff = stop - start; //*** lyn instrumentation
-  Blockly.Instrument.stats.getTopBlocksCalls++;
-  Blockly.Instrument.stats.getTopBlocksTime += timeDiff;
   return blocks;
 };
 

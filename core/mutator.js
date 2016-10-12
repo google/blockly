@@ -118,32 +118,20 @@ Blockly.Mutator.prototype.createEditor_ = function() {
     var quarkXml = null;
   }
   var workspaceOptions = {
-    horizontalLayout: false,
     languageTree: quarkXml,
     parentWorkspace: this.block_.workspace,
     pathToMedia: this.block_.workspace.options.pathToMedia,
     RTL: this.block_.RTL,
-    hasCategories: false,
     toolboxPosition: this.block_.RTL ? Blockly.TOOLBOX_AT_RIGHT :
         Blockly.TOOLBOX_AT_LEFT,
+    horizontalLayout: false,
     getMetrics: this.getFlyoutMetrics_.bind(this),
     setMetrics: null
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
-  //this.flyout_ = new Blockly.Flyout();
-  //this.flyout_.autoClose = false;
-  //this.svgDialog_.appendChild(this.flyout_.createDom());
   this.svgDialog_.appendChild(
-    this.workspace_.createDom('blocklyMutatorBackground'));
-
-  //when mutator bubble is clicked, do not close mutator
-  Blockly.bindEvent_(this.svgDialog_, 'mousedown', this.svgDialog_,
-      function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-      });
-
+      this.workspace_.createDom('blocklyMutatorBackground'));
   return this.svgDialog_;
 };
 
@@ -177,12 +165,7 @@ Blockly.Mutator.prototype.updateEditable = function() {
  */
 Blockly.Mutator.prototype.resizeBubble_ = function() {
   var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
-  try {
-    var workspaceSize = this.workspace_.getCanvas().getBBox();
-  } catch (e) {
-    // Firefox has trouble with hidden elements (Bug 528969).
-    return;
-  }
+  var workspaceSize = this.workspace_.getCanvas().getBBox();
   var width;
   if (this.block_.RTL) {
     width = -workspaceSize.x;

@@ -947,7 +947,13 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
     var expandOption = {enabled: hasCollapsedBlocks};
     expandOption.text = Blockly.Msg.EXPAND_ALL;
     expandOption.callback = function() {
-      toggleOption(false);
+      Blockly.Instrument.initializeStats('expandAllCollapsedBlocks');
+      Blockly.Instrument.timer(
+        function() { toggleOption(false); },
+        function(result, timeDiff) {
+          Blockly.Instrument.stats.totalTime = timeDiff;
+          Blockly.Instrument.displayStats('expandAllCollapsedBlocks');
+        });
     };
     menuOptions.push(expandOption);
   }

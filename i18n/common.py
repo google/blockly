@@ -3,7 +3,7 @@
 # Code shared by translation conversion scripts.
 #
 # Copyright 2013 Google Inc.
-# https://blockly.googlecode.com/
+# https://developers.google.com/blockly/
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ def read_json_file(filename):
     return defs
   except ValueError, e:
     print('Error reading ' + filename)
-    raise InputError(file, str(e))
+    raise InputError(filename, str(e))
 
 
 def _create_qqq_file(output_dir):

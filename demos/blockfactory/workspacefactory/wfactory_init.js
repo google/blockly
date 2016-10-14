@@ -67,22 +67,21 @@ WorkspaceFactoryInit.initColorPicker_ = function(controller) {
   // and value 65% as specified in Blockly Developer documentation:
   // developers.google.com/blockly/guides/create-custom-blocks/define-blocks
   var colors = [
-    '#A65C5C', '#A6635C', '#A66A5C', '#A6725C', '#A6795C',
-    '#A6815C', '#A6885C', '#A6905C', '#A6975C', '#A69F5C',
-    '#A6A65C', '#9FA65C', '#97A65C', '#90A65C', '#88A65C',
-    '#81A65C', '#79A65C', '#6FA65C', '#66A65C', '#5EA65C',
-    '#5CA661', '#5CA668', '#5CA66F', '#5CA677', '#5CA67E',
-    '#5CA686', '#5CA68D', '#5CA695', '#5CA69C', '#5CA6A4',
-    '#5CA1A6', '#5C9AA6', '#5C92A6', '#5C8BA6', '#5C83A6',
-    '#5C7CA6', '#5C74A6', '#5C6AA6', '#5C61A6', '#5E5CA6',
-    '#665CA6', '#6D5CA6', '#745CA6', '#7C5CA6', '#835CA6',
-    '#8B5CA6', '#925CA6', '#9A5CA6', '#A15CA6', '#A65CA4',
-    '#A65C9C', '#A65C95', '#A65C8D', '#A65C86', '#A65C7E',
-    '#A65C77', '#A65C6F', '#A65C66', '#A65C61', '#A65C5E'
+    '#A6795C', '#A69F5C', '#88A65C', '#5EA65C', '#5CA67E', '#5CA6A4', '#5C83A6',
+        '#5E5CA6', '#835CA6', '#A65CA4', '#A65C7E', '#A65C5E',
+    '#A6725C', '#A6975C', '#90A65C', '#66A65C', '#5CA677', '#5CA69C', '#5C8BA6',
+        '#5C61A6', '#7C5CA6', '#A15CA6', '#A65C86', '#A65C61',
+    '#A66A5C', '#A6905C', '#97A65C', '#6FA65C', '#5CA66F', '#5CA695', '#5C92A6',
+        '#5C6AA6', '#745CA6', '#9A5CA6', '#A65C8D', '#A65C66',
+    '#A6635C', '#A6885C', '#9FA65C', '#79A65C', '#5CA668', '#5CA68D', '#5C9AA6',
+        '#5C74A6', '#6D5CA6', '#925CA6', '#A65C95', '#A65C6F',
+    '#A65C5C', '#A6815C', '#A6A65C', '#81A65C', '#5CA661', '#5CA686', '#5CA1A6',
+        '#5C7CA6', '#665CA6', '#8B5CA6', '#A65C9C', '#A65C77'
   ];
 
   // Create color picker with specific set of Blockly colors.
   var colorPicker = new goog.ui.ColorPicker();
+  colorPicker.setSize(12);
   colorPicker.setColors(colors);
 
   // Create and render the popup color picker and attach to button.

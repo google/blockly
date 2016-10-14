@@ -104,7 +104,11 @@ Blockly.Options = function(options) {
     // 'path' is a deprecated option which has been replaced by 'media'.
     pathToMedia = options['path'] + 'media/';
   }
-  var oneBasedIndex = !options['oneBasedIndex'];
+  if (options['oneBasedIndex'] === undefined) {
+    var oneBasedIndex = true;
+  } else {
+    var oneBasedIndex = !!options['oneBasedIndex'];
+  }
 
   this.RTL = rtl;
   this.oneBasedIndex = oneBasedIndex;

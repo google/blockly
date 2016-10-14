@@ -386,11 +386,6 @@ td.taboff:hover {
   font-size: large;
 }
 
-td {
-  padding: 0;
-  vertical-align: top;
-}
-
 .inputfile {
   height: 0;
   opacity: 0;

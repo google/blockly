@@ -62,13 +62,13 @@
     <div id="exportSelector">
       <br>
       <h3> Block Selector </h3>
-      <div class='dropdown'>
+      <div class="dropdown">
         <button id="button_setBlocks">Select</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
-          <a id='dropdown_addAllFromLib' title="Select all block library blocks.">All Stored in Block Library</a>
-          <a id='dropdown_addAllUsed' title="Select all block library blocks used in workspace factory.">All Used in Workspace Factory</a>
+          <a id="dropdown_addAllFromLib" title="Select all block library blocks.">All Stored in Block Library</a>
+          <a id="dropdown_addAllUsed" title="Select all block library blocks used in workspace factory.">All Used in Workspace Factory</a>
         </div>
-          <button id='clearSelectedButton' title="Clear selected blocks.">Clear Selected</a>
+          <button id="clearSelectedButton" title="Clear selected blocks.">Clear Selected</a>
       </div>
 
       <div id="blockSelector"></div>
@@ -158,10 +158,10 @@
         <div class="dropdown">
         <button id="button_export">Export</button>
           <div id="dropdownDiv_export" class="dropdown-content">
-            <a id='dropdown_exportOptions'>Starter Code</a>
-            <a id='dropdown_exportToolbox'>Toolbox</a>
-            <a id='dropdown_exportPreload'>Workspace Blocks</a>
-            <a id='dropdown_exportAll'>All</a>
+            <a id="dropdown_exportOptions">Starter Code</a>
+            <a id="dropdown_exportToolbox">Toolbox</a>
+            <a id="dropdown_exportPreload">Workspace Blocks</a>
+            <a id="dropdown_exportAll">All</a>
           </div>
         </div>
 
@@ -175,7 +175,7 @@
         <h3>Edit</h3>
         <p id="editHelpText">Drag blocks into the workspace to configure the toolbox in your custom workspace.</p>
       </div>
-      <table id='workspaceTabs' style="width:auto; height:auto">
+      <table id="workspaceTabs" style="width:auto; height:auto">
         <td id="tab_toolbox" class="tabon">Toolbox</td>
         <td id="tab_preload" class="taboff">Workspace</td>
       </table>
@@ -183,18 +183,18 @@
         <div id="toolbox_blocks"></div>
       </section>
       <aside id="toolbox_div">
-        <p id="categoryHeader">Your categories will appear here</p>
+        <p id="categoryHeader">You currently have no categories.</p>
         <table id="categoryTable" style="width:auto; height:auto">
         </table>
         <p>&nbsp;</p>
 
-        <div class='dropdown'>
+        <div class="dropdown">
         <button id="button_add" class="large">+</button>
         <div id="dropdownDiv_add" class="dropdown-content">
-          <a id='dropdown_newCategory'>New Category</a>
-          <a id='dropdown_loadCategory'>Standard Category</a>
-          <a id='dropdown_separator'>Separator</a>
-          <a id='dropdown_loadStandardToolbox'>Standard Toolbox</a>
+          <a id="dropdown_newCategory">New Category</a>
+          <a id="dropdown_loadCategory">Standard Category</a>
+          <a id="dropdown_separator">Separator</a>
+          <a id="dropdown_loadStandardToolbox">Standard Toolbox</a>
         </div>
         </div>
 
@@ -204,20 +204,20 @@
         <button id="button_down" class="large">&#8595;</button>
 
         <br>
-        <div class='dropdown'>
         <button id="button_editCategory">Edit Category</button>
         <div id="dropdownDiv_editCategory" class="dropdown-content">
           <a id='dropdown_name'>Name</a>
           <a id='dropdown_color'>Color</a>
         </div>
+        <div class="dropdown">
         </div>
 
       </aside>
 
-      <button id='button_addShadow' style='display:none'>Make Shadow</button>
-      <button id='button_removeShadow' style='display:none'>Remove Shadow</button>
+      <button id="button_addShadow" style="display:none">Make Shadow</button>
+      <button id="button_removeShadow" style="display:none">Remove Shadow</button>
 
-      <aside id='preload_div' style='display:none'>
+      <aside id="preload_div" style="display:none">
         <div id="preloadHelp">
           <p>Configure the options for your Blockly inject call.</p>
           <button id="button_optionsHelp">Help</button>
@@ -281,10 +281,10 @@
           <tr id="blockLibrary">
             <td id="blockLibraryContainer">
             <span>
-              <div class='dropdown'>
+              <div class="dropdown">
                 <button id="button_blockLib">Block Library</button>
                 <div id="dropdownDiv_blockLib" class="dropdown-content">
-                  <a id='createNewBlockButton'>Create New Block</a>
+                  <a id="createNewBlockButton">Create New Block</a>
                 </div>
               </div>
               <select id="blockLibraryDropdown" style="display:none">

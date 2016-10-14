@@ -92,8 +92,7 @@ WorkspaceFactoryInit.initColorPicker_ = function(controller) {
   popupPicker.setFocusable(true);
   goog.events.listen(popupPicker, 'change', function(e) {
     controller.changeSelectedCategoryColor(popupPicker.getSelectedColor());
-    document.getElementById('dropdownDiv_editCategory').classList.remove
-        ('show');
+    blocklyFactory.closeModal();
   });
 };
 
@@ -190,85 +189,82 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         controller.clearAll();
       });
 
+  // Toolbox and Workspace tabs.
   document.getElementById('tab_toolbox').addEventListener
       ('click',
       function() {
         controller.setMode(WorkspaceFactoryController.MODE_TOOLBOX);
       });
-
   document.getElementById('tab_preload').addEventListener
       ('click',
       function() {
         controller.setMode(WorkspaceFactoryController.MODE_PRELOAD);
       });
 
+  // '+' button.
   document.getElementById('button_add').addEventListener
       ('click',
       function() {
-        document.getElementById('dropdownDiv_add').classList.toggle('show');
+        blocklyFactory.openModal('dropdownDiv_add');
       });
-
   document.getElementById('dropdown_newCategory').addEventListener
       ('click',
       function() {
         controller.addCategory();
-        document.getElementById('dropdownDiv_add').classList.remove('show');
+        blocklyFactory.closeModal();
       });
-
   document.getElementById('dropdown_loadCategory').addEventListener
       ('click',
       function() {
         controller.loadCategory();
-        document.getElementById('dropdownDiv_add').classList.remove('show');
+        blocklyFactory.closeModal();
       });
-
   document.getElementById('dropdown_separator').addEventListener
       ('click',
       function() {
         controller.addSeparator();
-        document.getElementById('dropdownDiv_add').classList.remove('show');
+        blocklyFactory.closeModal();
       });
-
   document.getElementById('dropdown_loadStandardToolbox').addEventListener
       ('click',
       function() {
         controller.loadStandardToolbox();
-        document.getElementById('dropdownDiv_add').classList.remove('show');
+        blocklyFactory.closeModal();
       });
 
+  // '-' button.
   document.getElementById('button_remove').addEventListener
       ('click',
       function() {
         controller.removeElement();
       });
 
+  // Up/Down buttons.
   document.getElementById('button_up').addEventListener
       ('click',
       function() {
         controller.moveElement(-1);
       });
-
   document.getElementById('button_down').addEventListener
       ('click',
       function() {
         controller.moveElement(1);
       });
 
+  // Edit Category button.
   document.getElementById('button_editCategory').addEventListener
       ('click',
       function() {
-        document.getElementById('dropdownDiv_editCategory').classList.
-        toggle('show');
+        blocklyFactory.openModal('dropdownDiv_editCategory');
       });
-
   document.getElementById('dropdown_name').addEventListener
       ('click',
       function() {
         controller.changeCategoryName();
-        document.getElementById('dropdownDiv_editCategory').classList
-            .remove('show');
+        blocklyFactory.closeModal();
       });
 
+  // Make/Remove Shadow buttons.
   document.getElementById('button_addShadow').addEventListener
       ('click',
       function() {
@@ -276,7 +272,6 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         WorkspaceFactoryInit.displayAddShadow_(false);
         WorkspaceFactoryInit.displayRemoveShadow_(true);
       });
-
   document.getElementById('button_removeShadow').addEventListener
       ('click',
       function() {
@@ -291,14 +286,16 @@ WorkspaceFactoryInit.assignWorkspaceFactoryClickHandlers_ =
         }
       });
 
-  document.getElementById('button_standardOptions').addEventListener
-      ('click', function() {
-        controller.setStandardOptionsAndUpdate();
-      });
-
+  // Help button on workspace tab.
   document.getElementById('button_optionsHelp').addEventListener
       ('click', function() {
         open('https://developers.google.com/blockly/guides/get-started/web');
+      });
+
+  // Reset to Default button on workspace tab.
+  document.getElementById('button_standardOptions').addEventListener
+      ('click', function() {
+        controller.setStandardOptionsAndUpdate();
       });
 };
 

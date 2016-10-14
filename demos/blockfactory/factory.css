@@ -550,6 +550,7 @@ td.taboff:hover {
 
 .goog-popupcolorpicker {
   position: absolute;
+  z-index: 101;  /* On top of the modal Shadow. */
 }
 
 /* The container <div> - needed to position the dropdown content */
@@ -565,7 +566,7 @@ td.taboff:hover {
   min-width: 170px;
   opacity: 1;
   position: absolute;
-  z-index: 101;
+  z-index: 101;  /* On top of the modal Shadow. */
 }
 
 /* Links inside the dropdown */

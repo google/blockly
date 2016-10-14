@@ -367,28 +367,27 @@ AppController.prototype.assignExporterClickHandlers = function() {
   var self = this;
   document.getElementById('button_setBlocks').addEventListener('click',
       function() {
-        document.getElementById('dropdownDiv_setBlocks').classList.toggle("show");
+        self.openModal('dropdownDiv_setBlocks');
       });
 
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
         self.exporter.selectUsedBlocks();
         self.exporter.updatePreview();
-        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
+        self.closeModal();
       });
 
   document.getElementById('dropdown_addAllFromLib').addEventListener('click',
       function() {
         self.exporter.selectAllBlocks();
         self.exporter.updatePreview();
-        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
+        self.closeModal();
       });
 
   document.getElementById('clearSelectedButton').addEventListener('click',
       function() {
         self.exporter.clearSelectedBlocks();
         self.exporter.updatePreview();
-        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
   // Export blocks when the user submits the export settings.

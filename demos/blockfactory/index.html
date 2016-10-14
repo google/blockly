@@ -6,19 +6,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly Demo: Blockly Factory</title>
-  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blockly_uncompressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
-  <script src="../../msg/messages.js"></script>
+  <script src="../../msg/js/en.js"></script>
   <script src="../../blocks_compressed.js"></script>
+  <script src="../../../closure-library/closure/goog/base.js"></script>
+  <script src="factory_utils.js"></script>
   <script src="workspacefactory/wfactory_model.js"></script>
+  <script src="standard_categories.js"></script>
   <script src="workspacefactory/wfactory_controller.js"></script>
   <script src="workspacefactory/wfactory_view.js"></script>
   <script src="workspacefactory/wfactory_generator.js"></script>
   <script src="workspacefactory/wfactory_init.js"></script>
-  <script src="standard_categories.js"></script>
-  <script src="/storage.js"></script>
-  <script src="../../../closure-library/closure/goog/base.js"></script>
-  <script src="factory_utils.js"></script>
   <script src="block_option.js"></script>
   <script src="factory.js"></script>
   <script src="block_library_view.js"></script>
@@ -29,6 +28,7 @@
   <script src="block_exporter_controller.js"></script>
   <script src="blocks.js"></script>
   <script src="app_controller.js"></script>
+  <script src="/storage.js"></script>
   <link rel="stylesheet" href="factory.css">
   <link rel="stylesheet" href="../prettify.css">
   <script src="../prettify.js"></script>
@@ -42,33 +42,34 @@
   </script>
 </head>
 <body onbeforeunload="return blocklyFactory.confirmLeavePage()">
-<h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
-  <a href="../index.html">Demos</a> &gt; Blockly Developer Tools
-  <button id="helpButton" title="View documentation in new window.">
-    <span>Help</span>
-  </button>
-</h1>
- <div id="tabContainer">
-    <div id="blockFactory_tab" class="tab tabon"> Block Factory</div>
-    <div id="blocklibraryExporter_tab" class="tab taboff"> Block Exporter</div>
-    <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Blockly Developer Tools
+    <button id="helpButton" title="View documentation in new window.">
+      <span>Help</span>
+    </button>
+  </h1>
+  <div id="tabContainer">
+    <div id="blockFactory_tab" class="tab tabon">Block Factory</div>
+    <div id="blocklibraryExporter_tab" class="tab taboff">Block Exporter</div>
+    <div id="workspaceFactory_tab" class="tab taboff">Workspace Factory</div>
   </div>
 
   <!-- Exporter tab -->
   <div id="blockLibraryExporter">
     <br>
-    <p id="helperText"> First, select blocks from your block library by clicking on them. Then, use the Export Settings form to download starter code for selected blocks.
+    <p>
+      First, select blocks from your block library by clicking on them. Then, use the Export Settings form to download starter code for selected blocks.
     </p>
     <div id="exportSelector">
       <br>
-      <h3> Block Selector </h3>
+      <h3>Block Selector</h3>
       <div class="dropdown">
         <button id="button_setBlocks">Select</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
           <a id="dropdown_addAllFromLib" title="Select all block library blocks.">All Stored in Block Library</a>
           <a id="dropdown_addAllUsed" title="Select all block library blocks used in workspace factory.">All Used in Workspace Factory</a>
         </div>
-          <button id="clearSelectedButton" title="Clear selected blocks.">Clear Selected</a>
+        <button id="clearSelectedButton" title="Clear selected blocks.">Clear Selected</a>
       </div>
 
       <div id="blockSelector"></div>
@@ -96,7 +97,7 @@
           <br>
           <input type="text" id="blockDef_filename">
         </div>
-          <br>
+        <br>
         <input type="checkbox" id="genStubCheck">Generator Stub(s)<br>
         <div id="genStubSettings" class="subsettings">
           Language:
@@ -112,21 +113,21 @@
           <br>
           <input type="text" id="generatorStub_filename"><br>
         </div>
-          <br>
+        <br>
       </form>
-        <button id="exporterSubmitButton" title="Download block starter code as specified in export settings."> Export </button>
+      <button id="exporterSubmitButton" title="Download block starter code as specified in export settings."> Export </button>
     </div>
     <div id="exportPreview">
       <br>
       <h3>Export Preview </h3>
-        <div id="blockDefs" class="exportPreviewTextArea">
-          <p id="blockDefs_label">Block Definitions:</p>
-          <pre id="blockDefs_textArea"></pre>
-        </div>
-        <div id="genStubs" class="exportPreviewTextArea">
-          <p id="genStubs_label">Generator Stubs:</p>
-          <pre id="genStubs_textArea"></pre>
-        </div>
+      <div id="blockDefs" class="exportPreviewTextArea">
+        <p id="blockDefs_label">Block Definitions:</p>
+        <pre id="blockDefs_textArea"></pre>
+      </div>
+      <div id="genStubs" class="exportPreviewTextArea">
+        <p id="genStubs_label">Generator Stubs:</p>
+        <pre id="genStubs_textArea"></pre>
+      </div>
     </div>
   </div>
 
@@ -166,7 +167,6 @@
         </div>
 
         <button id="button_clear">Clear</button>
-
       </p>
     </div>
 
@@ -176,8 +176,10 @@
         <p id="editHelpText">Drag blocks into the workspace to configure the toolbox in your custom workspace.</p>
       </div>
       <table id="workspaceTabs" style="width:auto; height:auto">
-        <td id="tab_toolbox" class="tabon">Toolbox</td>
-        <td id="tab_preload" class="taboff">Workspace</td>
+        <tr>
+          <td id="tab_toolbox" class="tabon">Toolbox</td>
+          <td id="tab_preload" class="taboff">Workspace</td>
+        </tr>
       </table>
       <section id="toolbox_section">
         <div id="toolbox_blocks"></div>
@@ -189,13 +191,13 @@
         <p>&nbsp;</p>
 
         <div class="dropdown">
-        <button id="button_add" class="large">+</button>
-        <div id="dropdownDiv_add" class="dropdown-content">
-          <a id="dropdown_newCategory">New Category</a>
-          <a id="dropdown_loadCategory">Standard Category</a>
-          <a id="dropdown_separator">Separator</a>
-          <a id="dropdown_loadStandardToolbox">Standard Toolbox</a>
-        </div>
+          <button id="button_add" class="large">+</button>
+          <div id="dropdownDiv_add" class="dropdown-content">
+            <a id="dropdown_newCategory">New Category</a>
+            <a id="dropdown_loadCategory">Standard Category</a>
+            <a id="dropdown_separator">Separator</a>
+            <a id="dropdown_loadStandardToolbox">Standard Toolbox</a>
+          </div>
         </div>
 
         <button id="button_remove" class="large">-</button>
@@ -204,12 +206,12 @@
         <button id="button_down" class="large">&#8595;</button>
 
         <br>
-        <button id="button_editCategory">Edit Category</button>
-        <div id="dropdownDiv_editCategory" class="dropdown-content">
-          <a id='dropdown_name'>Name</a>
-          <a id='dropdown_color'>Color</a>
-        </div>
         <div class="dropdown">
+          <button id="button_editCategory">Edit Category</button>
+          <div id="dropdownDiv_editCategory" class="dropdown-content">
+            <a id='dropdown_name'>Name</a>
+            <a id='dropdown_color'>Color</a>
+          </div>
         </div>
 
       </aside>
@@ -258,7 +260,6 @@
           </div>
         </div>
       </aside>
-
 
     </section>
 

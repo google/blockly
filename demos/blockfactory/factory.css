@@ -512,19 +512,19 @@ td.taboff:hover {
   border: 0;
   text-align: center;
   vertical-align: middle;
-  border-right: 1px solid #000000;
+  border-right: 1px solid #000;
   font-size: 1px;
 }
 
 .goog-palette-colorswatch {
-  border: 1px solid #000000;
+  border: 1px solid #000;
   height: 13px;
   position: relative;
   width: 15px;
 }
 
 .goog-palette-cell-hover .goog-palette-colorswatch {
-  border: 1px solid #FFF;
+  border: 1px solid #fff;
 }
 
 .goog-palette-cell-selected .goog-palette-colorswatch {
@@ -548,7 +548,7 @@ td.taboff:hover {
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-  background-color: #FFF;
+  background-color: #fff;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,.2);
   display: none;
   min-width: 170px;

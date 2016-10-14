@@ -145,7 +145,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
 
 /**
  * Converts an object mapping block type to XML to text file for output.
- * @param {!Object} blockXmlMap - Object mapping block type to XML.
+ * @param {!Object} blockXmlMap Object mapping block type to XML.
  * @return {string} XML text containing the block XMLs.
  * @private
  */
@@ -407,14 +407,6 @@ AppController.prototype.assignExporterChangeListeners = function() {
   var blockDefCheck = document.getElementById('blockDefCheck');
   var genStubCheck = document.getElementById('genStubCheck');
 
-  var blockDefs = document.getElementById('blockDefs');
-  var blockDefSettings = document.getElementById('blockDefSettings');
-  var blockDefElements = [blockDefs, blockDefSettings];
-
-  var genStubs = document.getElementById('genStubs');
-  var genStubSettings = document.getElementById('genStubSettings');
-  var genStubElements = [genStubs, genStubSettings];
-
   // Select the block definitions and generator stubs on default.
   blockDefCheck.checked = true;
   genStubCheck.checked = true;
@@ -422,7 +414,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Checking the block definitions checkbox displays preview of code to export.
   document.getElementById('blockDefCheck').addEventListener('change',
       function(e) {
-        self.ifCheckedDisplay(blockDefCheck, blockDefElements);
+        self.ifCheckedDisplay(blockDefCheck, ['blockDefs', 'blockDefSettings']);
       });
 
   // Preview updates when user selects different block definition format.
@@ -434,7 +426,7 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Checking the generator stub checkbox displays preview of code to export.
   document.getElementById('genStubCheck').addEventListener('change',
       function(e) {
-        self.ifCheckedDisplay(genStubCheck, genStubElements);
+        self.ifCheckedDisplay(genStubCheck, ['genStubs', 'genStubSettings']);
       });
 
   // Preview updates when user selects different generator stub language.
@@ -446,13 +438,23 @@ AppController.prototype.assignExporterChangeListeners = function() {
 
 /**
  * If given checkbox is checked, display given elements. Otherwise, hide.
- * @param {!Element} checkbox - Input element of type checkbox.
- * @param {!Array.<!Element>} elementArray - Array of elements to show when
+ * @param {!Element} checkbox Input element of type checkbox.
+ * @param {!Array.<string>} idArray Array of element IDs to show when
  *    block is checked.
  */
-AppController.prototype.ifCheckedDisplay = function(checkbox, elementArray) {
-  for (var i = 0, element; element = elementArray[i]; i++) {
-    element.style.display = checkbox.checked ? 'block' : 'none';
+AppController.prototype.ifCheckedDisplay = function(checkbox, idArray) {
+  for (var i = 0, id; id = idArray[i]; i++) {
+    var element = document.getElementById(id);
+    if (checkbox.checked) {
+      element.classList.remove('disabled');
+    } else {
+      element.classList.add('disabled');
+    }
+    var fields = element.querySelectorAll('input, textarea, select');
+    for (var j = 0, field; field = fields[j]; j++) {
+      field.disabled = !checkbox.checked;
+    }
+    //element.style.display = checkbox.checked ? 'block' : 'none';
   }
 };
 

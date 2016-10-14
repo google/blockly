@@ -40,7 +40,7 @@ goog.require('goog.dom.xml');
 
 /**
  * BlockExporter Controller Class
- * @param {!BlockLibrary.Storage} blockLibStorage - Block Library Storage.
+ * @param {!BlockLibrary.Storage} blockLibStorage Block Library Storage.
  * @constructor
  */
 BlockExporterController = function(blockLibStorage) {
@@ -61,7 +61,7 @@ BlockExporterController = function(blockLibStorage) {
 
 /**
  * Set the block library storage object from which exporter exports.
- * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
+ * @param {!BlockLibraryStorage} blockLibStorage Block Library Storage object
  *    that stores the blocks.
  */
 BlockExporterController.prototype.setBlockLibraryStorage =
@@ -71,7 +71,7 @@ BlockExporterController.prototype.setBlockLibraryStorage =
 
 /**
  * Get the block library storage object from which exporter exports.
- * @return {!BlockLibraryStorage} blockLibStorage - Block Library Storage object
+ * @return {!BlockLibraryStorage} blockLibStorage Block Library Storage object
  *    that stores the blocks.
  */
 BlockExporterController.prototype.getBlockLibraryStorage =
@@ -263,7 +263,7 @@ BlockExporterController.prototype.selectUsedBlocks = function() {
 
 /**
  * Set the array that holds the block types used in workspace factory.
- * @param {!Array.<string>} usedBlockTypes - Block types used in
+ * @param {!Array.<string>} usedBlockTypes Block types used in
  */
 BlockExporterController.prototype.setUsedBlockTypes =
     function(usedBlockTypes) {

@@ -52,9 +52,9 @@ var BlockLibraryView = function() {
 };
 
 /**
- * Creates a node of a given element type and appends to the node with given id.
- * @param {string} blockType - Type of block.
- * @param {boolean} selected - Whether or not the option should be selected on
+ * Creates a node of a given element type and appends to the node with given ID.
+ * @param {string} blockType Type of block.
+ * @param {boolean} selected Whether or not the option should be selected on
  *    the dropdown.
  */
 BlockLibraryView.prototype.addOption = function(blockType, selected) {
@@ -77,7 +77,7 @@ BlockLibraryView.prototype.addOption = function(blockType, selected) {
 /**
  * Sets a given block type to selected and all other blocks to deselected.
  * If null, deselects all blocks.
- * @param {string} blockTypeToSelect - Type of block to select or null.
+ * @param {string} blockTypeToSelect Type of block to select or null.
  */
 BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
   // Select given block type and deselect all others. Will deselect all blocks

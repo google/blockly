@@ -35,10 +35,10 @@ goog.require('goog.dom');
  * BlockOption Class
  * A block option includes checkbox, label, and div element that shows a preview
  * of the block.
- * @param {!Element} blockSelector - Scrollable div that will contain the
+ * @param {!Element} blockSelector Scrollable div that will contain the
  *    block options for the selector.
- * @param {string} blockType - Type of block for which to create an option.
- * @param {!Element} previewBlockXml - Xml element containing the preview block.
+ * @param {string} blockType Type of block for which to create an option.
+ * @param {!Element} previewBlockXml XML element containing the preview block.
  * @constructor
  */
 var BlockOption = function(blockSelector, blockType, previewBlockXml) {

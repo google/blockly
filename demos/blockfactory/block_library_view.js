@@ -39,8 +39,6 @@ goog.require('goog.dom.classlist');
  */
 var BlockLibraryView = function() {
   // Div element to contain the block types to choose from.
-  // Id of the div that holds the block library view.
-  this.blockLibraryViewDivID = 'dropdownDiv_blockLib';
   this.dropdown = document.getElementById('dropdownDiv_blockLib');
   // Map of block type to corresponding 'a' element that is the option in the
   // dropdown. Used to quickly and easily get a specific option.
@@ -51,20 +49,6 @@ var BlockLibraryView = function() {
   // Initially, user should not be able to delete a block. They must save a
   // block or select a stored block first.
   this.deleteButton.disabled = true;
-};
-
-/**
- * Open the Block Library dropdown.
- */
-BlockLibraryView.prototype.show = function() {
-  this.dropdown.classList.add("show");
-};
-
-/**
- * Close the Block Library dropdown.
- */
-BlockLibraryView.prototype.hide = function() {
-  this.dropdown.classList.remove("show");
 };
 
 /**
@@ -210,7 +194,8 @@ BlockLibraryView.prototype.getSelectedOption = function() {
  */
 BlockLibraryView.prototype.clearOptions = function() {
   var blockOpts = this.dropdown.getElementsByClassName('blockLibOpt');
-  for (var i = 0, option; option = blockOpts[i]; i++) {
+  var option;
+  while ((option = blockOpts[0])) {
     option.parentNode.removeChild(option);
   }
 };

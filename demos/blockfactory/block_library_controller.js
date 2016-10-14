@@ -276,7 +276,7 @@ BlockLibraryController.prototype.addOptionSelectHandler = function(blockType) {
     // Thus, the buttons show up as a disabled update button and an enabled
     // delete.
     self.view.updateButtons(blockType, true, true);
-    self.view.hide();
+    blocklyFactory.closeModal();
   };
 
   // Returns a block option select handler.

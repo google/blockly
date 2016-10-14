@@ -485,7 +485,7 @@ AppController.prototype.assignLibraryClickHandlers = function() {
   // Hide and show the block library dropdown.
   document.getElementById('button_blockLib').addEventListener('click',
       function() {
-        document.getElementById('dropdownDiv_blockLib').classList.toggle("show");
+        self.openModal('dropdownDiv_blockLib');
       });
 };
 
@@ -534,7 +534,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
       self.blockLibraryController.setNoneSelected();
 
       // Close the Block Library Dropdown.
-      document.getElementById('dropdownDiv_blockLib').classList.remove('show');
+      self.closeModal();
     });
 };
 
@@ -630,6 +630,37 @@ AppController.prototype.confirmLeavePage = function() {
 };
 
 /**
+ * Show a modal element, usually a dropdown list.
+ * @param {string} id ID of element to show.
+ */
+AppController.prototype.openModal = function(id) {
+  Blockly.hideChaff();
+  this.modalName_ = id;
+  document.getElementById(id).style.display = 'block';
+  document.getElementById('modalShadow').style.display = 'block';
+};
+
+/**
+ * Hide a previously shown modal element.
+ */
+AppController.prototype.closeModal = function() {
+  var id = this.modalName_;
+  if (!id) {
+    return;
+  }
+  document.getElementById(id).style.display = 'none';
+  document.getElementById('modalShadow').style.display = 'none';
+  this.modalName_ = null;
+};
+
+/**
+ * Name of currently open modal.
+ * @type {string?}
+ * @private
+ */
+AppController.prototype.modalName_ = null;
+
+/**
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
@@ -647,6 +678,7 @@ AppController.prototype.init = function() {
     return;
   }
 
+  var self = this;
   // Handle Blockly Storage with App Engine.
   if ('BlocklyStorage' in window) {
     this.initializeBlocklyStorage();
@@ -656,9 +688,13 @@ AppController.prototype.init = function() {
   this.assignExporterClickHandlers();
   this.assignLibraryClickHandlers();
   this.assignBlockFactoryClickHandlers();
+  // Hide and show the block library dropdown.
+  document.getElementById('modalShadow').addEventListener('click',
+      function() {
+        self.closeModal();
+      });
 
   this.onresize();
-  var self = this;
   window.addEventListener('resize', function() {
     self.onresize();
   });

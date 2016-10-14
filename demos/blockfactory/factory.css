@@ -499,6 +499,17 @@ td.taboff:hover {
   padding-left: 15px;
 }
 
+#modalShadow {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
 /* Rules for Closure popup color picker */
 .goog-palette {
   outline: none;
@@ -554,7 +565,7 @@ td.taboff:hover {
   min-width: 170px;
   opacity: 1;
   position: absolute;
-  z-index: 1;
+  z-index: 101;
 }
 
 /* Links inside the dropdown */

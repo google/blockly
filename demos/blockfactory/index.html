@@ -226,10 +226,16 @@
         </div>
         <div id="workspace_options">
           <label><input type="checkbox" id="option_readOnly_checkbox" class="optionsInput">Read Only</label><br>
-          <label><input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks</label><br>
-          <label><input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks</label><br>
+          <div id="readonly1">
+            <label><input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks</label><br>
+          </div>
+          <div id="readonly2">
+            <label><input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks</label><br>
+          </div>
           <label><input type="checkbox" id="option_css_checkbox" class="optionsInput">Use Blockly CSS</label><br>
-          <label><input type="checkbox" id="option_disable_checkbox" class="optionsInput">Disabled Blocks</label><br>
+          <div id="readonly3">
+            <label><input type="checkbox" id="option_disable_checkbox" class="optionsInput">Disabled Blocks</label><br>
+          </div>
           <label><input type="checkbox" id="option_grid_checkbox" class="optionsInput">Use Grid</label><br>
           <div id="grid_options" name="grid" style="display: none">
             <label>Spacing <input type="number" id="gridOption_spacing_number" class="optionsInput" value="0"></label><br>
@@ -237,25 +243,31 @@
             <label>Colour <input type="text" id="gridOption_colour_text" class="optionsInput" value="#888"></label><br>
             <label><input type="checkbox" id="gridOption_snap_checkbox" class="optionsInput" value="grid_snap_checkbox">Snap</label><br>
           </div>
-          <label><input type="checkbox" id="option_infiniteBlocks_checkbox" class="optionsInput" value="checked">Infinite Blocks</label><br>
-          <div id="maxBlockNumber_option" style="display: none">
-            <label>Max Blocks <input type="number" id="option_maxBlocks_number" class="optionsInput" value=100></label><br>
+          <div id="readonly4">
+            <label><input type="checkbox" id="option_infiniteBlocks_checkbox" class="optionsInput" value="checked">Infinite Blocks</label><br>
+            <div id="maxBlockNumber_option" style="display: none">
+              <label>Max Blocks <input type="number" id="option_maxBlocks_number" class="optionsInput" value=100></label><br>
+            </div>
           </div>
           <label>Path to Blockly Media <input type="text" id="option_media_text" class="optionsInput"></label><br>
           <label><input type="checkbox" id="option_rtl_checkbox" class="optionsInput">Layout with RTL</label><br>
           <label><input type="checkbox" id="option_scrollbars_checkbox" class="optionsInput">Scrollbars</label><br>
-          <label><input type="checkbox" id="option_sounds_checkbox" class="optionsInput">Sounds<br>
-          <div id="trashcan_option">
+          <div id="readonly5">
+            <label><input type="checkbox" id="option_sounds_checkbox" class="optionsInput">Sounds<br>
+          </div>
+          <div id="readonly6">
             <label><input type="checkbox" id="option_trashcan_checkbox" class="optionsInput">Trashcan</label><br>
           </div>
-          <label><input type="checkbox" id="option_zoom_checkbox" class="optionsInput">Zoom</label><br>
-          <div id="zoom_options" name="zoom" style="display: none">
-            <label><input type="checkbox" id="zoomOption_controls_checkbox" class="optionsInput">Zoom Controls</label><br>
-            <label><input type="checkbox" id="zoomOption_wheel_checkbox" class="optionsInput">Zoom Wheel</label><br>
-            <label>Start Scale <input type="number" id="zoomOption_startScale_number" class="optionsInput" name="startScale" value="1.0"></label><br>
-            <label>Max Scale <input type="number" id="zoomOption_maxScale_number" class="optionsInput" value="3"></label><br>
-            <label>Min Scale <input type="number" id="zoomOption_minScale_number" class="optionsInput" value="0.3"></label><br>
-            <label>Scale Speed <input type="number" id="zoomOption_scaleSpeed_number" class="optionsInput" value="1.2"></label><br>
+          <div id="readonly7">
+            <label><input type="checkbox" id="option_zoom_checkbox" class="optionsInput">Zoom</label><br>
+            <div id="zoom_options" name="zoom" style="display: none">
+              <label><input type="checkbox" id="zoomOption_controls_checkbox" class="optionsInput">Zoom Controls</label><br>
+              <label><input type="checkbox" id="zoomOption_wheel_checkbox" class="optionsInput">Zoom Wheel</label><br>
+              <label>Start Scale <input type="number" id="zoomOption_startScale_number" class="optionsInput" name="startScale" value="1.0"></label><br>
+              <label>Max Scale <input type="number" id="zoomOption_maxScale_number" class="optionsInput" value="3"></label><br>
+              <label>Min Scale <input type="number" id="zoomOption_minScale_number" class="optionsInput" value="0.3"></label><br>
+              <label>Scale Speed <input type="number" id="zoomOption_scaleSpeed_number" class="optionsInput" value="1.2"></label><br>
+            </div>
           </div>
         </div>
       </aside>

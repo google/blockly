@@ -466,12 +466,13 @@ td.taboff:hover {
 
 #preload_div {
   display: table;
-  height: 70%;
-  margin-right: 5%;
+  height: 75%;
+  margin-left: 2%;
+  margin-right: 2%;
   max-height: 500px;
   overflow: hidden;
   overflow-y: scroll;
-  width: 35%;
+  width: 30%;
 }
 
 #shadowBlockDropdown {

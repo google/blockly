@@ -523,9 +523,10 @@ WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
 
   document.getElementById('option_readOnly_checkbox').addEventListener('change',
     function(e) {
-      document.getElementById('trashcan_option').style.display =
-          document.getElementById('option_readOnly_checkbox').checked ?
-            'none' : 'block';
+      var checkbox = document.getElementById('option_readOnly_checkbox');
+      blocklyFactory.ifCheckedEnable(!checkbox.checked,
+          ['readonly1', 'readonly2', 'readonly3', 'readonly4', 'readonly5',
+           'readonly6', 'readonly7']);
     });
 
     document.getElementById('option_infiniteBlocks_checkbox').addEventListener('change',

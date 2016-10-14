@@ -414,7 +414,8 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Checking the block definitions checkbox displays preview of code to export.
   document.getElementById('blockDefCheck').addEventListener('change',
       function(e) {
-        self.ifCheckedDisplay(blockDefCheck, ['blockDefs', 'blockDefSettings']);
+        self.ifCheckedEnable(blockDefCheck.checked,
+            ['blockDefs', 'blockDefSettings']);
       });
 
   // Preview updates when user selects different block definition format.
@@ -426,7 +427,8 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Checking the generator stub checkbox displays preview of code to export.
   document.getElementById('genStubCheck').addEventListener('change',
       function(e) {
-        self.ifCheckedDisplay(genStubCheck, ['genStubs', 'genStubSettings']);
+        self.ifCheckedEnable(genStubCheck.checked,
+            ['genStubs', 'genStubSettings']);
       });
 
   // Preview updates when user selects different generator stub language.
@@ -437,24 +439,23 @@ AppController.prototype.assignExporterChangeListeners = function() {
 };
 
 /**
- * If given checkbox is checked, display given elements. Otherwise, hide.
- * @param {!Element} checkbox Input element of type checkbox.
- * @param {!Array.<string>} idArray Array of element IDs to show when
- *    block is checked.
+ * If given checkbox is checked, enable the given elements.  Otherwise, disable.
+ * @param {boolean} enabled True if enabled, false otherwise.
+ * @param {!Array.<string>} idArray Array of element IDs to enable when
+ *    checkbox is checked.
  */
-AppController.prototype.ifCheckedDisplay = function(checkbox, idArray) {
+AppController.prototype.ifCheckedEnable = function(enabled, idArray) {
   for (var i = 0, id; id = idArray[i]; i++) {
     var element = document.getElementById(id);
-    if (checkbox.checked) {
+    if (enabled) {
       element.classList.remove('disabled');
     } else {
       element.classList.add('disabled');
     }
     var fields = element.querySelectorAll('input, textarea, select');
     for (var j = 0, field; field = fields[j]; j++) {
-      field.disabled = !checkbox.checked;
+      field.disabled = !enabled;
     }
-    //element.style.display = checkbox.checked ? 'block' : 'none';
   }
 };
 

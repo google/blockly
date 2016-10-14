@@ -236,13 +236,13 @@ BlockExporterTools.prototype.generateCategoryFromBlockLib =
  * Generate selector dom from block library storage. For each block in the
  * library, it has a block option, which consists of a checkbox, a label,
  * and a fixed size preview workspace.
- * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage object.
- * @param {string} blockSelectorID - ID of the div element that will contain
+ * @param {!BlockLibraryStorage} blockLibStorage Block Library Storage object.
+ * @param {string} blockSelectorId ID of the div element that will contain
  *    the block options.
  * @return {!Object} Map of block type to Block Option object.
  */
 BlockExporterTools.prototype.createBlockSelectorFromLib =
-    function(blockLibStorage, blockSelectorID) {
+    function(blockLibStorage, blockSelectorId) {
   // Object mapping each stored block type to XML.
   var allBlockTypes = blockLibStorage.getBlockTypes();
   var blockXmlMap = blockLibStorage.getBlockXmlMap(allBlockTypes);
@@ -251,7 +251,7 @@ BlockExporterTools.prototype.createBlockSelectorFromLib =
   // them in the exporter workspace.
   this.addBlockDefinitions(blockXmlMap);
 
-  var blockSelector = document.getElementById(blockSelectorID);
+  var blockSelector = document.getElementById(blockSelectorId);
   // Clear the block selector.
   var child;
   while ((child = blockSelector.firstChild)) {

@@ -39,8 +39,6 @@ goog.require('goog.dom.classlist');
  */
 var BlockLibraryView = function() {
   // Div element to contain the block types to choose from.
-  // Id of the div that holds the block library view.
-  this.blockLibraryViewDivID = 'dropdownDiv_blockLib';
   this.dropdown = document.getElementById('dropdownDiv_blockLib');
   // Map of block type to corresponding 'a' element that is the option in the
   // dropdown. Used to quickly and easily get a specific option.
@@ -54,23 +52,9 @@ var BlockLibraryView = function() {
 };
 
 /**
- * Open the Block Library dropdown.
- */
-BlockLibraryView.prototype.show = function() {
-  this.dropdown.classList.add("show");
-};
-
-/**
- * Close the Block Library dropdown.
- */
-BlockLibraryView.prototype.hide = function() {
-  this.dropdown.classList.remove("show");
-};
-
-/**
- * Creates a node of a given element type and appends to the node with given id.
- * @param {string} blockType - Type of block.
- * @param {boolean} selected - Whether or not the option should be selected on
+ * Creates a node of a given element type and appends to the node with given ID.
+ * @param {string} blockType Type of block.
+ * @param {boolean} selected Whether or not the option should be selected on
  *    the dropdown.
  */
 BlockLibraryView.prototype.addOption = function(blockType, selected) {
@@ -93,7 +77,7 @@ BlockLibraryView.prototype.addOption = function(blockType, selected) {
 /**
  * Sets a given block type to selected and all other blocks to deselected.
  * If null, deselects all blocks.
- * @param {string} blockTypeToSelect - Type of block to select or null.
+ * @param {string} blockTypeToSelect Type of block to select or null.
  */
 BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
   // Select given block type and deselect all others. Will deselect all blocks
@@ -210,7 +194,8 @@ BlockLibraryView.prototype.getSelectedOption = function() {
  */
 BlockLibraryView.prototype.clearOptions = function() {
   var blockOpts = this.dropdown.getElementsByClassName('blockLibOpt');
-  for (var i = 0, option; option = blockOpts[i]; i++) {
+  var option;
+  while ((option = blockOpts[0])) {
     option.parentNode.removeChild(option);
   }
 };

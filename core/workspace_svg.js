@@ -187,7 +187,10 @@ Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
  * Update the inverted screen CTM.
  */
 Blockly.WorkspaceSvg.prototype.updateInverseScreenCTM = function() {
-  this.inverseScreenCTM_ = this.getParentSvg().getScreenCTM().inverse();
+  var ctm = this.getParentSvg().getScreenCTM();
+  if (ctm) {
+    this.inverseScreenCTM_ = ctm.inverse();
+  }
 };
 
 /**

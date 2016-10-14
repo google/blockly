@@ -54,21 +54,6 @@ BlockExporterView.prototype.setBlockOptions = function(blockOptions) {
 };
 
 /**
- * Updates the helper text.
- * @param {string} newText New helper text.
- * @param {boolean} opt_append True if appending to helper Text, false if
- *    replacing.
- */
-BlockExporterView.prototype.updateHelperText = function(newText, opt_append) {
-  if (opt_append) {
-    document.getElementById('helperText').textContent =
-        document.getElementById('helperText').textContent + newText;
-  } else {
-    document.getElementById('helperText').textContent = newText;
-  }
-};
-
-/**
  * Updates the helper text to show list of currently selected blocks.
  */
 BlockExporterView.prototype.listSelectedBlocks = function() {

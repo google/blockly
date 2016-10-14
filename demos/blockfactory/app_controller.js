@@ -145,7 +145,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
 
 /**
  * Converts an object mapping block type to XML to text file for output.
- * @param {!Object} blockXmlMap - Object mapping block type to XML.
+ * @param {!Object} blockXmlMap Object mapping block type to XML.
  * @return {string} XML text containing the block XMLs.
  * @private
  */
@@ -367,28 +367,27 @@ AppController.prototype.assignExporterClickHandlers = function() {
   var self = this;
   document.getElementById('button_setBlocks').addEventListener('click',
       function() {
-        document.getElementById('dropdownDiv_setBlocks').classList.toggle("show");
+        self.openModal('dropdownDiv_setBlocks');
       });
 
   document.getElementById('dropdown_addAllUsed').addEventListener('click',
       function() {
         self.exporter.selectUsedBlocks();
         self.exporter.updatePreview();
-        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
+        self.closeModal();
       });
 
   document.getElementById('dropdown_addAllFromLib').addEventListener('click',
       function() {
         self.exporter.selectAllBlocks();
         self.exporter.updatePreview();
-        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
+        self.closeModal();
       });
 
   document.getElementById('clearSelectedButton').addEventListener('click',
       function() {
         self.exporter.clearSelectedBlocks();
         self.exporter.updatePreview();
-        document.getElementById('dropdownDiv_setBlocks').classList.remove("show");
       });
 
   // Export blocks when the user submits the export settings.
@@ -408,14 +407,6 @@ AppController.prototype.assignExporterChangeListeners = function() {
   var blockDefCheck = document.getElementById('blockDefCheck');
   var genStubCheck = document.getElementById('genStubCheck');
 
-  var blockDefs = document.getElementById('blockDefs');
-  var blockDefSettings = document.getElementById('blockDefSettings');
-  var blockDefElements = [blockDefs, blockDefSettings];
-
-  var genStubs = document.getElementById('genStubs');
-  var genStubSettings = document.getElementById('genStubSettings');
-  var genStubElements = [genStubs, genStubSettings];
-
   // Select the block definitions and generator stubs on default.
   blockDefCheck.checked = true;
   genStubCheck.checked = true;
@@ -423,7 +414,8 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Checking the block definitions checkbox displays preview of code to export.
   document.getElementById('blockDefCheck').addEventListener('change',
       function(e) {
-        self.ifCheckedDisplay(blockDefCheck, blockDefElements);
+        self.ifCheckedEnable(blockDefCheck.checked,
+            ['blockDefs', 'blockDefSettings']);
       });
 
   // Preview updates when user selects different block definition format.
@@ -435,7 +427,8 @@ AppController.prototype.assignExporterChangeListeners = function() {
   // Checking the generator stub checkbox displays preview of code to export.
   document.getElementById('genStubCheck').addEventListener('change',
       function(e) {
-        self.ifCheckedDisplay(genStubCheck, genStubElements);
+        self.ifCheckedEnable(genStubCheck.checked,
+            ['genStubs', 'genStubSettings']);
       });
 
   // Preview updates when user selects different generator stub language.
@@ -446,14 +439,23 @@ AppController.prototype.assignExporterChangeListeners = function() {
 };
 
 /**
- * If given checkbox is checked, display given elements. Otherwise, hide.
- * @param {!Element} checkbox - Input element of type checkbox.
- * @param {!Array.<!Element>} elementArray - Array of elements to show when
- *    block is checked.
+ * If given checkbox is checked, enable the given elements.  Otherwise, disable.
+ * @param {boolean} enabled True if enabled, false otherwise.
+ * @param {!Array.<string>} idArray Array of element IDs to enable when
+ *    checkbox is checked.
  */
-AppController.prototype.ifCheckedDisplay = function(checkbox, elementArray) {
-  for (var i = 0, element; element = elementArray[i]; i++) {
-    element.style.display = checkbox.checked ? 'block' : 'none';
+AppController.prototype.ifCheckedEnable = function(enabled, idArray) {
+  for (var i = 0, id; id = idArray[i]; i++) {
+    var element = document.getElementById(id);
+    if (enabled) {
+      element.classList.remove('disabled');
+    } else {
+      element.classList.add('disabled');
+    }
+    var fields = element.querySelectorAll('input, textarea, select');
+    for (var j = 0, field; field = fields[j]; j++) {
+      field.disabled = !enabled;
+    }
   }
 };
 
@@ -485,7 +487,7 @@ AppController.prototype.assignLibraryClickHandlers = function() {
   // Hide and show the block library dropdown.
   document.getElementById('button_blockLib').addEventListener('click',
       function() {
-        document.getElementById('dropdownDiv_blockLib').classList.toggle("show");
+        self.openModal('dropdownDiv_blockLib');
       });
 };
 
@@ -534,7 +536,7 @@ AppController.prototype.assignBlockFactoryClickHandlers = function() {
       self.blockLibraryController.setNoneSelected();
 
       // Close the Block Library Dropdown.
-      document.getElementById('dropdownDiv_blockLib').classList.remove('show');
+      self.closeModal();
     });
 };
 
@@ -630,10 +632,41 @@ AppController.prototype.confirmLeavePage = function() {
 };
 
 /**
+ * Show a modal element, usually a dropdown list.
+ * @param {string} id ID of element to show.
+ */
+AppController.prototype.openModal = function(id) {
+  Blockly.hideChaff();
+  this.modalName_ = id;
+  document.getElementById(id).style.display = 'block';
+  document.getElementById('modalShadow').style.display = 'block';
+};
+
+/**
+ * Hide a previously shown modal element.
+ */
+AppController.prototype.closeModal = function() {
+  var id = this.modalName_;
+  if (!id) {
+    return;
+  }
+  document.getElementById(id).style.display = 'none';
+  document.getElementById('modalShadow').style.display = 'none';
+  this.modalName_ = null;
+};
+
+/**
+ * Name of currently open modal.
+ * @type {string?}
+ * @private
+ */
+AppController.prototype.modalName_ = null;
+
+/**
  * Initialize Blockly and layout.  Called on page load.
  */
 AppController.prototype.init = function() {
-  // Blockly factory has a dependency on bits of Closure that core Blockly
+  // Block Factory has a dependency on bits of Closure that core Blockly
   // doesn't have. When you run this from file:// without a copy of Closure,
   // it breaks it non-obvious ways.  Warning about this for now until the
   // dependency is broken.
@@ -641,12 +674,13 @@ AppController.prototype.init = function() {
   if (!window.goog.dom.xml) {
     alert('Sorry: Closure dependency not found. We are working on removing ' +
       'this dependency.  In the meantime, you can use our hosted demo\n ' +
-      'https://blockly-demo.appspot.com/static/demos/blocklyfactory/index.html' +
+      'https://blockly-demo.appspot.com/static/demos/blockfactory/index.html' +
       '\nor use these instructions to continue running locally:\n' +
-      'https:developers.google.com/blockly/guides/modify/web/closure');
+      'https://developers.google.com/blockly/guides/modify/web/closure');
     return;
   }
 
+  var self = this;
   // Handle Blockly Storage with App Engine.
   if ('BlocklyStorage' in window) {
     this.initializeBlocklyStorage();
@@ -656,9 +690,13 @@ AppController.prototype.init = function() {
   this.assignExporterClickHandlers();
   this.assignLibraryClickHandlers();
   this.assignBlockFactoryClickHandlers();
+  // Hide and show the block library dropdown.
+  document.getElementById('modalShadow').addEventListener('click',
+      function() {
+        self.closeModal();
+      });
 
   this.onresize();
-  var self = this;
   window.addEventListener('resize', function() {
     self.onresize();
   });

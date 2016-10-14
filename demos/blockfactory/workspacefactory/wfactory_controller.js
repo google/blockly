@@ -108,7 +108,7 @@ WorkspaceFactoryController.prototype.addCategory = function() {
   // After possibly creating a category, check again if it's the first category.
   var isFirstCategory = !this.model.hasElements();
   // Get name from user.
-  name = this.promptForNewCategoryName('Enter the name of your new category:');
+  var name = this.promptForNewCategoryName('Enter the name of your new category:');
   if (!name) {  // Exit if cancelled.
     return;
   }
@@ -238,7 +238,7 @@ WorkspaceFactoryController.prototype.removeElement = function() {
  * Gets a valid name for a new category from the user.
  * @param {string} promptString Prompt for the user to enter a name.
  * @param {string=} opt_oldName The current name.
- * @return {string} Valid name for a new category, or null if cancelled.
+ * @return {string?} Valid name for a new category, or null if cancelled.
  */
 WorkspaceFactoryController.prototype.promptForNewCategoryName =
     function(promptString, opt_oldName) {

@@ -203,8 +203,7 @@ BlockLibraryController.prototype.getBlockXml = function(blockType) {
 
 /**
  * Set the block library storage object from which exporter exports.
- * @param {!BlockLibraryStorage} blockLibStorage - Block Library Storage
- *    object.
+ * @param {!BlockLibraryStorage} blockLibStorage Block Library Storage object.
  */
 BlockLibraryController.prototype.setBlockLibraryStorage
     = function(blockLibStorage) {
@@ -276,7 +275,7 @@ BlockLibraryController.prototype.addOptionSelectHandler = function(blockType) {
     // Thus, the buttons show up as a disabled update button and an enabled
     // delete.
     self.view.updateButtons(blockType, true, true);
-    self.view.hide();
+    blocklyFactory.closeModal();
   };
 
   // Returns a block option select handler.

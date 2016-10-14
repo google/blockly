@@ -5,20 +5,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Blockly Demo: Blockly Factory</title>
+  <title>Blockly Demo: Blockly Developer Tools</title>
   <script src="../../blockly_compressed.js"></script>
   <script src="../../javascript_compressed.js"></script>
-  <script src="../../msg/messages.js"></script>
+  <script src="../../msg/js/en.js"></script>
   <script src="../../blocks_compressed.js"></script>
+  <script src="../../../closure-library/closure/goog/base.js"></script>
+  <script src="factory_utils.js"></script>
   <script src="workspacefactory/wfactory_model.js"></script>
+  <script src="standard_categories.js"></script>
   <script src="workspacefactory/wfactory_controller.js"></script>
   <script src="workspacefactory/wfactory_view.js"></script>
   <script src="workspacefactory/wfactory_generator.js"></script>
   <script src="workspacefactory/wfactory_init.js"></script>
-  <script src="standard_categories.js"></script>
-  <script src="/storage.js"></script>
-  <script src="../../../closure-library/closure/goog/base.js"></script>
-  <script src="factory_utils.js"></script>
   <script src="block_option.js"></script>
   <script src="factory.js"></script>
   <script src="block_library_view.js"></script>
@@ -29,6 +28,7 @@
   <script src="block_exporter_controller.js"></script>
   <script src="blocks.js"></script>
   <script src="app_controller.js"></script>
+  <script src="/storage.js"></script>
   <link rel="stylesheet" href="factory.css">
   <link rel="stylesheet" href="../prettify.css">
   <script src="../prettify.js"></script>
@@ -42,33 +42,34 @@
   </script>
 </head>
 <body onbeforeunload="return blocklyFactory.confirmLeavePage()">
-<h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
-  <a href="../index.html">Demos</a> &gt; Blockly Developer Tools
-  <button id="helpButton" title="View documentation in new window.">
-    <span>Help</span>
-  </button>
-</h1>
- <div id="tabContainer">
-    <div id="blockFactory_tab" class="tab tabon"> Block Factory</div>
-    <div id="blocklibraryExporter_tab" class="tab taboff"> Block Exporter</div>
-    <div id="workspaceFactory_tab" class="tab taboff"> Workspace Factory</div>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Blockly Developer Tools
+    <button id="helpButton" title="View documentation in new window.">
+      <span>Help</span>
+    </button>
+  </h1>
+  <div id="tabContainer">
+    <div id="blockFactory_tab" class="tab tabon">Block Factory</div>
+    <div id="blocklibraryExporter_tab" class="tab taboff">Block Exporter</div>
+    <div id="workspaceFactory_tab" class="tab taboff">Workspace Factory</div>
   </div>
 
   <!-- Exporter tab -->
   <div id="blockLibraryExporter">
     <br>
-    <p id="helperText"> First, select blocks from your block library by clicking on them. Then, use the Export Settings form to download starter code for selected blocks.
+    <p>
+      First, select blocks from your block library by clicking on them. Then, use the Export Settings form to download starter code for selected blocks.
     </p>
     <div id="exportSelector">
       <br>
-      <h3> Block Selector </h3>
-      <div class='dropdown'>
+      <h3>Block Selector</h3>
+      <div class="dropdown">
         <button id="button_setBlocks">Select</button>
         <div id="dropdownDiv_setBlocks" class="dropdown-content">
-          <a id='dropdown_addAllFromLib' title="Select all block library blocks.">All Stored in Block Library</a>
-          <a id='dropdown_addAllUsed' title="Select all block library blocks used in workspace factory.">All Used in Workspace Factory</a>
+          <a id="dropdown_addAllFromLib" title="Select all block library blocks.">All Stored in Block Library</a>
+          <a id="dropdown_addAllUsed" title="Select all block library blocks used in workspace factory.">All Used in Workspace Factory</a>
         </div>
-          <button id='clearSelectedButton' title="Clear selected blocks.">Clear Selected</a>
+        <button id="clearSelectedButton" title="Clear selected blocks.">Clear Selected</a>
       </div>
 
       <div id="blockSelector"></div>
@@ -84,49 +85,48 @@
           <p>Currently Selected:</p>
           <p id="selectedBlocksText"></p>
         </div>
-        <input type="checkbox" id="blockDefCheck">Block Definition(s)<br>
+        <label><input type="checkbox" id="blockDefCheck">Block Definition(s)</label><br>
         <div id="blockDefSettings" class="subsettings">
-          Format:
+          <label>Format:
           <select id="exportFormat">
             <option value="JSON">JSON</option>
             <option value="JavaScript">JavaScript</option>
-          </select>
+          </select></label>
           <br>
-          File Name:
-          <br>
-          <input type="text" id="blockDef_filename">
+          <label>File Name:<br>
+          <input type="text" id="blockDef_filename"></label>
         </div>
-          <br>
-        <input type="checkbox" id="genStubCheck">Generator Stub(s)<br>
+        <br>
+
+        <label><input type="checkbox" id="genStubCheck">Generator Stub(s)</label><br>
         <div id="genStubSettings" class="subsettings">
-          Language:
+          <label>Language:
           <select id="exportLanguage">
             <option value="JavaScript">JavaScript</option>
             <option value="Python">Python</option>
             <option value="PHP">PHP</option>
             <option value="Lua">Lua</option>
             <option value="Dart">Dart</option>
-          </select>
+          </select></label>
           <br>
-          File Name:
-          <br>
-          <input type="text" id="generatorStub_filename"><br>
+          <label>File Name:<br>
+          <input type="text" id="generatorStub_filename"></label><br>
         </div>
-          <br>
+        <br>
       </form>
-        <button id="exporterSubmitButton" title="Download block starter code as specified in export settings."> Export </button>
+      <button id="exporterSubmitButton" title="Download block starter code as specified in export settings.">Export</button>
     </div>
     <div id="exportPreview">
       <br>
-      <h3>Export Preview </h3>
-        <div id="blockDefs" class="exportPreviewTextArea">
-          <p id="blockDefs_label">Block Definitions:</p>
-          <pre id="blockDefs_textArea"></pre>
-        </div>
-        <div id="genStubs" class="exportPreviewTextArea">
-          <p id="genStubs_label">Generator Stubs:</p>
-          <pre id="genStubs_textArea"></pre>
-        </div>
+      <h3>Export Preview</h3>
+      <div id="blockDefs" class="exportPreviewTextArea">
+        <p id="blockDefs_label">Block Definitions:</p>
+        <pre id="blockDefs_textArea"></pre>
+      </div>
+      <div id="genStubs" class="exportPreviewTextArea">
+        <p id="genStubs_label">Generator Stubs:</p>
+        <pre id="genStubs_textArea"></pre>
+      </div>
     </div>
   </div>
 
@@ -158,15 +158,14 @@
         <div class="dropdown">
         <button id="button_export">Export</button>
           <div id="dropdownDiv_export" class="dropdown-content">
-            <a id='dropdown_exportOptions'>Starter Code</a>
-            <a id='dropdown_exportToolbox'>Toolbox</a>
-            <a id='dropdown_exportPreload'>Workspace Blocks</a>
-            <a id='dropdown_exportAll'>All</a>
+            <a id="dropdown_exportOptions">Starter Code</a>
+            <a id="dropdown_exportToolbox">Toolbox</a>
+            <a id="dropdown_exportPreload">Workspace Blocks</a>
+            <a id="dropdown_exportAll">All</a>
           </div>
         </div>
 
         <button id="button_clear">Clear</button>
-
       </p>
     </div>
 
@@ -175,27 +174,29 @@
         <h3>Edit</h3>
         <p id="editHelpText">Drag blocks into the workspace to configure the toolbox in your custom workspace.</p>
       </div>
-      <table id='workspaceTabs' style="width:auto; height:auto">
-        <td id="tab_toolbox" class="tabon">Toolbox</td>
-        <td id="tab_preload" class="taboff">Workspace</td>
+      <table id="workspaceTabs" style="width:auto; height:auto">
+        <tr>
+          <td id="tab_toolbox" class="tabon">Toolbox</td>
+          <td id="tab_preload" class="taboff">Workspace</td>
+        </tr>
       </table>
       <section id="toolbox_section">
         <div id="toolbox_blocks"></div>
       </section>
       <aside id="toolbox_div">
-        <p id="categoryHeader">Your categories will appear here</p>
+        <p id="categoryHeader">You currently have no categories.</p>
         <table id="categoryTable" style="width:auto; height:auto">
         </table>
         <p>&nbsp;</p>
 
-        <div class='dropdown'>
-        <button id="button_add" class="large">+</button>
-        <div id="dropdownDiv_add" class="dropdown-content">
-          <a id='dropdown_newCategory'>New Category</a>
-          <a id='dropdown_loadCategory'>Standard Category</a>
-          <a id='dropdown_separator'>Separator</a>
-          <a id='dropdown_loadStandardToolbox'>Standard Toolbox</a>
-        </div>
+        <div class="dropdown">
+          <button id="button_add" class="large">+</button>
+          <div id="dropdownDiv_add" class="dropdown-content">
+            <a id="dropdown_newCategory">New Category</a>
+            <a id="dropdown_loadCategory">Standard Category</a>
+            <a id="dropdown_separator">Separator</a>
+            <a id="dropdown_loadStandardToolbox">Standard Toolbox</a>
+          </div>
         </div>
 
         <button id="button_remove" class="large">-</button>
@@ -204,61 +205,72 @@
         <button id="button_down" class="large">&#8595;</button>
 
         <br>
-        <div class='dropdown'>
-        <button id="button_editCategory">Edit Category</button>
-        <div id="dropdownDiv_editCategory" class="dropdown-content">
-          <a id='dropdown_name'>Name</a>
-          <a id='dropdown_color'>Color</a>
-        </div>
+        <div class="dropdown">
+          <button id="button_editCategory">Edit Category</button>
+          <div id="dropdownDiv_editCategory" class="dropdown-content">
+            <a id='dropdown_name'>Name</a>
+            <a id='dropdown_color'>Colour</a>
+          </div>
         </div>
 
       </aside>
 
-      <button id='button_addShadow' style='display:none'>Make Shadow</button>
-      <button id='button_removeShadow' style='display:none'>Remove Shadow</button>
+      <button id="button_addShadow" style="display: none">Make Shadow</button>
+      <button id="button_removeShadow" style="display: none">Remove Shadow</button>
 
-      <aside id='preload_div' style='display:none'>
+      <aside id="preload_div" style="display:none">
         <div id="preloadHelp">
           <p>Configure the options for your Blockly inject call.</p>
           <button id="button_optionsHelp">Help</button>
           <button class="small" id="button_standardOptions">Reset to Default</button>
         </div>
         <div id="workspace_options">
-          <input type="checkbox" id="option_readOnly_checkbox" class="optionsInput">Read Only<br>
-          <input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks<br>
-          <input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks<br>
-          <input type="checkbox" id="option_css_checkbox" class="optionsInput">Use Blockly CSS<br>
-          <input type="checkbox" id="option_disable_checkbox" class="optionsInput">Disabled Blocks<br>
-          <input type="checkbox" id="option_grid_checkbox" class="optionsInput">Use Grid<br>
-          <div id="grid_options" name="grid" style="display:none">
-            Spacing <input type="number" id="gridOption_spacing_number" class="optionsInput" value="0"><br>
-            Length <input type="number" id="gridOption_length_number" class="optionsInput" value="1"><br>
-            Color <input type="text" id="gridOption_colour_text" class="optionsInput" value="#888"><br>
-            <input type="checkbox" id="gridOption_snap_checkbox" class="optionsInput" value="grid_snap_checkbox">Snap<br>
+          <label><input type="checkbox" id="option_readOnly_checkbox" class="optionsInput">Read Only</label><br>
+          <div id="readonly1">
+            <label><input type="checkbox" id="option_collapse_checkbox" class="optionsInput">Collapsible Blocks</label><br>
           </div>
-          <input type="checkbox" id="option_infiniteBlocks_checkbox" class="optionsInput" value="checked">Infinite Blocks<br>
-          <div id="maxBlockNumber_option" style="display:none">
-            Max Blocks <input type="number" id="option_maxBlocks_number" class="optionsInput" value=100><br>
+          <div id="readonly2">
+            <label><input type="checkbox" id="option_comments_checkbox" class="optionsInput">Comments for Blocks</label><br>
           </div>
-          Path to Blockly Media <input type="text" id="option_media_text" class="optionsInput"><br>
-          <input type="checkbox" id="option_rtl_checkbox" class="optionsInput">Layout with RTL<br>
-          <input type="checkbox" id="option_scrollbars_checkbox" class="optionsInput">Scrollbars<br>
-          <input type="checkbox" id="option_sounds_checkbox" class="optionsInput">Sounds<br>
-          <div id="trashcan_option">
-            <input type="checkbox" id="option_trashcan_checkbox" class="optionsInput">Trashcan<br>
+          <label><input type="checkbox" id="option_css_checkbox" class="optionsInput">Use Blockly CSS</label><br>
+          <div id="readonly3">
+            <label><input type="checkbox" id="option_disable_checkbox" class="optionsInput">Disabled Blocks</label><br>
           </div>
-          <input type="checkbox" id="option_zoom_checkbox" class="optionsInput">Zoom<br>
-          <div id="zoom_options" name="zoom" style="display:none">
-            <input type="checkbox" id="zoomOption_controls_checkbox" class="optionsInput">Zoom Controls<br>
-            <input type="checkbox" id="zoomOption_wheel_checkbox" class="optionsInput">Zoom Wheel<br>
-            Start Scale <input type="number" id="zoomOption_startScale_number" class="optionsInput" name="startScale" value="1.0"><br>
-            Max Scale <input type="number" id="zoomOption_maxScale_number" class="optionsInput" value="3"><br>
-            Min Scale <input type="number" id="zoomOption_minScale_number" class="optionsInput" value="0.3"><br>
-            Scale Speed <input type="number" id="zoomOption_scaleSpeed_number" class="optionsInput" value="1.2"><br>
+          <label><input type="checkbox" id="option_grid_checkbox" class="optionsInput">Use Grid</label><br>
+          <div id="grid_options" name="grid" style="display: none">
+            <label>Spacing <input type="number" id="gridOption_spacing_number" class="optionsInput" value="0"></label><br>
+            <label>Length <input type="number" id="gridOption_length_number" class="optionsInput" value="1"></label><br>
+            <label>Colour <input type="text" id="gridOption_colour_text" class="optionsInput" value="#888"></label><br>
+            <label><input type="checkbox" id="gridOption_snap_checkbox" class="optionsInput" value="grid_snap_checkbox">Snap</label><br>
+          </div>
+          <div id="readonly4">
+            <label><input type="checkbox" id="option_infiniteBlocks_checkbox" class="optionsInput" value="checked">Infinite Blocks</label><br>
+            <div id="maxBlockNumber_option" style="display: none">
+              <label>Max Blocks <input type="number" id="option_maxBlocks_number" class="optionsInput" value=100></label><br>
+            </div>
+          </div>
+          <label>Path to Blockly Media <input type="text" id="option_media_text" class="optionsInput"></label><br>
+          <label><input type="checkbox" id="option_rtl_checkbox" class="optionsInput">Layout with RTL</label><br>
+          <label><input type="checkbox" id="option_scrollbars_checkbox" class="optionsInput">Scrollbars</label><br>
+          <div id="readonly5">
+            <label><input type="checkbox" id="option_sounds_checkbox" class="optionsInput">Sounds<br>
+          </div>
+          <div id="readonly6">
+            <label><input type="checkbox" id="option_trashcan_checkbox" class="optionsInput">Trashcan</label><br>
+          </div>
+          <div id="readonly7">
+            <label><input type="checkbox" id="option_zoom_checkbox" class="optionsInput">Zoom</label><br>
+            <div id="zoom_options" name="zoom" style="display: none">
+              <label><input type="checkbox" id="zoomOption_controls_checkbox" class="optionsInput">Zoom Controls</label><br>
+              <label><input type="checkbox" id="zoomOption_wheel_checkbox" class="optionsInput">Zoom Wheel</label><br>
+              <label>Start Scale <input type="number" id="zoomOption_startScale_number" class="optionsInput" name="startScale" value="1.0"></label><br>
+              <label>Max Scale <input type="number" id="zoomOption_maxScale_number" class="optionsInput" value="3"></label><br>
+              <label>Min Scale <input type="number" id="zoomOption_minScale_number" class="optionsInput" value="0.3"></label><br>
+              <label>Scale Speed <input type="number" id="zoomOption_scaleSpeed_number" class="optionsInput" value="1.2"></label><br>
+            </div>
           </div>
         </div>
       </aside>
-
 
     </section>
 
@@ -281,10 +293,10 @@
           <tr id="blockLibrary">
             <td id="blockLibraryContainer">
             <span>
-              <div class='dropdown'>
+              <div class="dropdown">
                 <button id="button_blockLib">Block Library</button>
                 <div id="dropdownDiv_blockLib" class="dropdown-content">
-                  <a id='createNewBlockButton'>Create New Block</a>
+                  <a id="createNewBlockButton">Create New Block</a>
                 </div>
               </div>
               <select id="blockLibraryDropdown" style="display:none">
@@ -384,6 +396,8 @@
       </td>
       </tr>
   </table>
+
+  <div id="modalShadow"></div>
 
   <xml id="blockfactory_toolbox" class="toolbox">
     <category name="Input">

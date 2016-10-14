@@ -51,7 +51,7 @@ WorkspaceFactoryView.prototype.addCategoryRow = function(name, id) {
 
   // Delete help label and enable category buttons if it's the first category.
   if (count == 0) {
-    document.getElementById('categoryHeader').textContent = 'Your Categories:';
+    document.getElementById('categoryHeader').textContent = 'Your categories:';
   }
 
   // Create tab.
@@ -91,9 +91,9 @@ WorkspaceFactoryView.prototype.deleteElementRow = function(id, index) {
  */
 WorkspaceFactoryView.prototype.addEmptyCategoryMessage = function() {
   var table = document.getElementById('categoryTable');
-  if (table.rows.length == 0) {
+  if (!table.rows.length) {
     document.getElementById('categoryHeader').textContent =
-        'Your categories will appear here';
+        'You currently have no categories.';
   }
 };
 
@@ -243,7 +243,7 @@ WorkspaceFactoryView.prototype.addSeparatorTab = function(id) {
   var count = table.rows.length;
 
   if (count == 0) {
-    document.getElementById('categoryHeader').textContent = 'Your Categories:';
+    document.getElementById('categoryHeader').textContent = 'Your categories:';
   }
   // Create separator.
   var row = table.insertRow(count);

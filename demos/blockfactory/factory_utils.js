@@ -36,11 +36,11 @@ goog.provide('FactoryUtils');
 
 /**
  * Get block definition code for the current block.
- * @param {string} blockType - Type of block.
- * @param {!Blockly.Block} rootBlock - RootBlock from main workspace in which
+ * @param {string} blockType Type of block.
+ * @param {!Blockly.Block} rootBlock RootBlock from main workspace in which
  *    user uses Block Factory Blocks to create a custom block.
- * @param {string} format - 'JSON' or 'JavaScript'.
- * @param {!Blockly.Workspace} workspace - Where the root block lives.
+ * @param {string} format 'JSON' or 'JavaScript'.
+ * @param {!Blockly.Workspace} workspace Where the root block lives.
  * @return {string} Block definition.
  */
 FactoryUtils.getBlockDefinition = function(blockType, rootBlock, format, workspace) {
@@ -259,7 +259,7 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
  * Update the language code as JavaScript.
  * @param {string} blockType Name of block.
  * @param {!Blockly.Block} rootBlock Factory_base block.
- * @param {!Blockly.Workspace} workspace - Where the root block lives.
+ * @param {!Blockly.Workspace} workspace Where the root block lives.
  * @return {string} Generated language code.
  * @private
  */
@@ -345,7 +345,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
  * Create JS code required to create a top, bottom, or value connection.
  * @param {string} functionName JavaScript function name.
  * @param {string} typeName Name of type input.
- * @param {!Blockly.Workspace} workspace - Where the root block lives.
+ * @param {!Blockly.Workspace} workspace Where the root block lives.
  * @return {string} Line of JavaScript code to create connection.
  * @private
  */
@@ -639,9 +639,9 @@ FactoryUtils.escapeString = function(string) {
 
 /**
  * Return the uneditable container block that everything else attaches to in
- * given workspace
- * @param {!Blockly.Workspace} workspace - where the root block lives
- * @return {Blockly.Block} root block
+ * given workspace.
+ * @param {!Blockly.Workspace} workspace Where the root block lives.
+ * @return {Blockly.Block} Root block.
  */
 FactoryUtils.getRootBlock = function(workspace) {
   var blocks = workspace.getTopBlocks(false);
@@ -884,8 +884,8 @@ FactoryUtils.injectCode = function(code, id) {
  */
 FactoryUtils.sameBlockXml = function(blockXml1, blockXml2) {
   // Each XML element should contain a single child element with a 'block' tag
-  if (!blockXml1.tagName.toLowerCase() == 'xml' ||
-      !blockXml2.tagName.toLowerCase() == 'xml') {
+  if (blockXml1.tagName.toLowerCase() != 'xml' ||
+      blockXml2.tagName.toLowerCase() != 'xml') {
     throw new Error('Expected two XML elements, recieved elements with tag ' +
         'names: ' + blockXml1.tagName + ' and ' + blockXml2.tagName + '.');
   }
@@ -943,7 +943,7 @@ FactoryUtils.isProcedureBlock = function(block) {
  * Returns whether or not a modified block's changes has been saved to the
  * Block Library.
  * TODO(quachtina96): move into the Block Factory Controller once made.
- * @param {!BlockLibraryController} blockLibraryController - Block Library
+ * @param {!BlockLibraryController} blockLibraryController Block Library
  *    Controller storing custom blocks.
  * @return {boolean} True if all changes made to the block have been saved to
  *    the given Block Library.

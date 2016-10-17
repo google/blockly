@@ -251,9 +251,9 @@ Blockly.Workspace.prototype.renameVariable = function(oldName, newName) {
     this.variableList[variableIndex] = newName;
   } else if (variableIndex != -1 && newVariableIndex != -1) {
     // Renaming one existing variable to another existing variable.
-    this.variableList.splice(variableIndex, 1);
-    // The case might have changed.
+    // The case might have changed, so we update the destination ID.
     this.variableList[newVariableIndex] = newName;
+    this.variableList.splice(variableIndex, 1);
   } else {
     this.variableList.push(newName);
     console.log('Tried to rename an non-existent variable.');

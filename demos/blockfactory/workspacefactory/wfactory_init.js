@@ -513,7 +513,7 @@ WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
             'block' : 'none';
       });
 
-  // Checking the grid checkbox displays zoom options.
+  // Checking the zoom checkbox displays zoom options.
   document.getElementById('option_zoom_checkbox').addEventListener('change',
       function(e) {
         document.getElementById('zoom_options').style.display =
@@ -521,12 +521,12 @@ WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
             'block' : 'none';
       });
 
+  // Checking the readonly checkbox enables/disables other options.
   document.getElementById('option_readOnly_checkbox').addEventListener('change',
     function(e) {
       var checkbox = document.getElementById('option_readOnly_checkbox');
       blocklyFactory.ifCheckedEnable(!checkbox.checked,
-          ['readonly1', 'readonly2', 'readonly3', 'readonly4', 'readonly5',
-           'readonly6', 'readonly7']);
+          ['readonly1', 'readonly2']);
     });
 
     document.getElementById('option_infiniteBlocks_checkbox').addEventListener('change',
@@ -537,9 +537,10 @@ WorkspaceFactoryInit.addWorkspaceFactoryOptionsListeners_ =
     });
 
   // Generate new options every time an options input is updated.
-  var optionsElements = document.getElementsByClassName('optionsInput');
-  for (var i = 0; i < optionsElements.length; i++) {
-    optionsElements[i].addEventListener('change', function() {
+  var div = document.getElementById('workspace_options');
+  var options = div.getElementsByTagName('input');
+  for (var i = 0, option; option = options[i]; i++) {
+    option.addEventListener('change', function() {
       controller.generateNewOptions();
     });
   }

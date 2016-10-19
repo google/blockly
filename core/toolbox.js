@@ -148,7 +148,10 @@ Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
   var svg = this.workspace_.getParentSvg();
 
-  // Create an HTML container for the Toolbox menu.
+  /**
+   * HTML container for the Toolbox menu.
+   * @type {Element}
+   */
   this.HtmlDiv =
       goog.dom.createDom(goog.dom.TagName.DIV, 'blocklyToolboxDiv');
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');

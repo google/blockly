@@ -170,6 +170,24 @@ Blockly.Css.CONTENT = [
     'z-index: 100000;', /* big value for bootstrap3 compatibility */
   '}',
 
+  '.blocklyWsDragSurface {',
+    'display: none;',
+    'position: absolute;',
+    'top: 0;',
+    'left: 0;',
+    'right: 0;',
+    'bottom: 0;',
+    'overflow: visible !important;',
+    'z-index: 5000;', /* Always display on top */
+    '-webkit-backface-visibility: hidden;',
+    'backface-visibility: hidden;',
+    '-webkit-perspective: 1000;',
+    'perspective: 1000;',
+    'border: 1px solid green;',
+    'background-color: rgb(204, 204, 255);',
+  '}',
+
+
   '.blocklyResizeSE {',
     'cursor: se-resize;',
     'fill: #aaa;',

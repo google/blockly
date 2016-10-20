@@ -37,6 +37,7 @@ goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
+goog.require('Blockly.WsDragSurfaceSvg');
 
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
@@ -47,10 +48,11 @@ goog.require('goog.userAgent');
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  * @param {!Blockly.Options} options Dictionary of options.
+  * @param {Blockly.WsDragSurfaceSvg} opt_wsDragSurface optional drag surface
  * @extends {Blockly.Workspace}
  * @constructor
  */
-Blockly.WorkspaceSvg = function(options) {
+Blockly.WorkspaceSvg = function(options, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
   this.getMetrics =
       options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
@@ -59,6 +61,9 @@ Blockly.WorkspaceSvg = function(options) {
 
   Blockly.ConnectionDB.init(this);
 
+  if (opt_wsDragSurface) {
+    this.wsDragSurface_ = opt_wsDragSurface;
+  }
   /**
    * Database of pre-loaded sounds.
    * @private
@@ -158,6 +163,13 @@ Blockly.WorkspaceSvg.prototype.scrollbar = null;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.lastSound_ = null;
+
+/**
+ * This workspace's drag surface, if it exists.
+ * @type {Blockly.DragSurfaceSvg}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.wsDragSurface_ = null;
 
 /**
  * Last known position of the page scroll.
@@ -483,10 +495,15 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  var translation = 'translate(' + x + ',' + y + ') ' +
-      'scale(' + this.scale + ')';
-  this.svgBlockCanvas_.setAttribute('transform', translation);
-  this.svgBubbleCanvas_.setAttribute('transform', translation);
+  if (this.wsDragSurface_) {
+    this.wsDragSurface_.translateSurface(x,y);
+    //this.svgBlockCanvas.style.display = no
+  } else {
+    var translation = 'translate(' + x + ',' + y + ') ' +
+        'scale(' + this.scale + ')';
+    this.svgBlockCanvas_.setAttribute('transform', translation);
+    this.svgBubbleCanvas_.setAttribute('transform', translation);
+  }
 };
 
 /**
@@ -705,6 +722,9 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   return false;
 };
 
+Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
+  this.wsDragSurface_.clearAndHide(this.getParentSvg());
+};
 /**
  * Handle a mouse-down on SVG drawing surface.
  * @param {!Event} e Mouse down event.
@@ -738,6 +758,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     this.startDragMetrics = this.getMetrics();
     this.startScrollX = this.scrollX;
     this.startScrollY = this.scrollY;
+    this.wsDragSurface_.setBlocksAndShow(this.svgBlockCanvas_);
 
     // If this is a touch event then bind to the mouseup so workspace drag mode
     // is turned off and double move events are not performed on a block.
@@ -765,6 +786,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
  * @param {!goog.math.Coordinate} xy Starting location of object.
  */
 Blockly.WorkspaceSvg.prototype.startDrag = function(e, xy) {
+
   // Record the starting offset between the bubble's location and the mouse.
   var point = Blockly.mouseToSvg(e, this.getParentSvg(),
       this.getInverseScreenCTM());

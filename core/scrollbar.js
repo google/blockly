@@ -648,7 +648,7 @@ Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
   // Look up the current translation and record it.
   this.startDragHandle = this.handlePosition_;
   // Record the current mouse position.
-  this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
+  this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;  
   Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
       'mouseup', this, this.onMouseUpHandle_);
   Blockly.Scrollbar.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,

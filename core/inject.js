@@ -32,6 +32,7 @@ goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
+goog.require('Blockly.WsDragSurfaceSvg')
 
 
 /**
@@ -54,7 +55,10 @@ Blockly.inject = function(container, opt_options) {
   var subContainer = goog.dom.createDom('div', 'injectionDiv');
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);
-  var workspace = Blockly.createMainWorkspace_(svg, options);
+  var wsDragSurface = new Blockly.WsDragSurfaceSvg(subContainer);
+  wsDragSurface.createDom();
+
+  var workspace = Blockly.createMainWorkspace_(svg, options, wsDragSurface);
   Blockly.init_(workspace);
   workspace.markFocused();
   Blockly.bindEventWithChecks_(svg, 'focus', workspace, workspace.markFocused);
@@ -98,6 +102,7 @@ Blockly.createDom_ = function(container, options) {
     'version': '1.1',
     'class': 'blocklySvg'
   }, container);
+
   /*
   <defs>
     ... filters go here ...
@@ -183,9 +188,9 @@ Blockly.createDom_ = function(container, options) {
  * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */
-Blockly.createMainWorkspace_ = function(svg, options) {
+Blockly.createMainWorkspace_ = function(svg, options, dragSurface) {
   options.parentWorkspace = null;
-  var mainWorkspace = new Blockly.WorkspaceSvg(options);
+  var mainWorkspace = new Blockly.WorkspaceSvg(options, dragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   // A null translation will also apply the correct initial scale.

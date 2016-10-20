@@ -107,6 +107,7 @@ Blockly.onMouseUp_ = function(e) {
     return;
   }
   Blockly.Touch.clearTouchIdentifier();
+  workspace.resetDragSurface();
   Blockly.Css.setCursor(Blockly.Css.Cursor.OPEN);
   workspace.dragMode_ = Blockly.DRAG_NONE;
   // Unbind the touch event if it exists.

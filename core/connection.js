@@ -574,7 +574,7 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
   // or if the check is a function, evaluate the function.
   for (var i = 0; i < this.check_.length; i++) {
     if ((otherConnection.check_.indexOf(this.check_[i]) != -1) ||
-        (typeof this.check_[x] == "function" && this.check_[x](this,other))) {
+        (typeof this.check_[i] == "function" && this.check_[i](this,otherConnection))) {
       return true;
     }
   }

@@ -985,10 +985,16 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
     enabled: deleteList.length > 0,
     callback: function() {
-      if (deleteList.length < 2 ||
-          window.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1',
-          String(deleteList.length)))) {
+      if (deleteList.length < 2 ) {
         deleteNext();
+      } else {
+        Blockly.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.
+            replace('%1',String(deleteList.length)),
+            function(ok) {
+              if (ok) {
+                deleteNext();
+              }
+            });
       }
     }
   };

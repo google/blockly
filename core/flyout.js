@@ -1056,34 +1056,21 @@ Blockly.Flyout.prototype.isDragTowardWorkspace_ = function(dx, dy) {
   // Direction goes from -180 to 180, with 0 toward the right and 90 on top.
   var dragDirection = Math.atan2(dy, dx) / Math.PI * 180;
 
-  var draggingTowardWorkspace = false;
   var range = this.dragAngleRange_;
   if (this.horizontalLayout_) {
-    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-      // Horizontal at top.
-      if (dragDirection < 90 + range && dragDirection > 90 - range) {
-        draggingTowardWorkspace = true;
-      }
-    } else {
-      // Horizontal at bottom.
-      if (dragDirection > -90 - range && dragDirection < -90 + range) {
-        draggingTowardWorkspace = true;
-      }
+    // Check for up or down dragging.
+    if ((dragDirection < 90 + range && dragDirection > 90 - range) ||
+        (dragDirection > -90 - range && dragDirection < -90 + range)) {
+      return true;
     }
   } else {
-    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
-      // Vertical at left.
-      if (dragDirection < range && dragDirection > -range) {
-        draggingTowardWorkspace = true;
-      }
-    } else {
-      // Vertical at right.
-      if (dragDirection < -180 + range || dragDirection > 180 - range) {
-        draggingTowardWorkspace = true;
-      }
+    // Check for left or right dragging.
+    if ((dragDirection < range && dragDirection > -range) ||
+        (dragDirection < -180 + range || dragDirection > 180 - range)) {
+      return true;
     }
   }
-  return draggingTowardWorkspace;
+  return false;
 };
 
 /**

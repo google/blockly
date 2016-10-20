@@ -338,6 +338,41 @@ Blockly.getMainWorkspace = function() {
   return Blockly.mainWorkspace;
 };
 
+/**
+ * Wrapper to window.alert() that app developers may override to 
+ * provide alternatives to the modal browser window.
+ * @param {!String} message The message to display to the user.
+ * @param {function()} opt_callback The callback when the alert is dismissed.
+ */
+Blockly.alert = function(message, opt_callback) {
+  window.alert(message);
+  if (opt_callback) {
+    opt_callback();
+  }
+};
+
+/**
+ * Wrapper to window.confirm() that app developers may override to 
+ * provide alternatives to the modal browser window.
+ * @param {!string} message The message to display to the user.
+ * @param {!function(boolean)} callback The callback for handling user response.
+ */
+Blockly.confirm = function(message, callback) {
+  callback(window.confirm(message));
+};
+
+/**
+ * Wrapper to window.prompt() that app developers may override to provide
+ * alternatives to the modal browser window. Built-in browser prompts are
+ * often used for better text input experience on mobile device. We strongly
+ * recommend testing mobile when overriding this.
+ * @param {!string} message The message to display to the user.
+ * @param {!function(string)} callback The callback for handling user reponse.
+ */
+Blockly.prompt = function(message, defaultValue, callback) {
+  callback(window.prompt(message, defaultValue));
+};
+
 // IE9 does not have a console.  Create a stub to stop errors.
 if (!goog.global['console']) {
   goog.global['console'] = {

@@ -183,7 +183,6 @@ Blockly.Css.CONTENT = [
     'backface-visibility: hidden;',
     '-webkit-perspective: 1000;',
     'perspective: 1000;',
-    'border: 1px solid green;',
     'background-color: rgb(204, 204, 255);',
   '}',
 

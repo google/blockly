@@ -309,26 +309,29 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
         if (block.type == 'procedures_defnoreturn' ||
           block.type == 'procedures_defreturn') {
           var procedureName = block.getFieldValue('NAME');
-          window.alert(
+          Blockly.alert(
               Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.replace('%1', name).
-              replace('%2', procedureName));
+                  replace('%2', procedureName));
           return;
         }
       }
-      var ok = window.confirm(
+      var workspace = this;
+      Blockly.confirm(
           Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
-          replace('%2', name));
-      if (!ok) {
-        return;
-      }
-    }
+          replace('%2', name),
+          function(ok) {
+            if (!ok) {
+              return;
+            }
 
-    Blockly.Events.setGroup(true);
-    for (var i = 0; i < uses.length; i++) {
-      uses[i].dispose(true, false);
+            Blockly.Events.setGroup(true);
+            for (var i = 0; i < uses.length; i++) {
+              uses[i].dispose(true, false);
+            }
+            Blockly.Events.setGroup(false);
+            workspace.variableList.splice(variableIndex, 1);
+          });
     }
-    Blockly.Events.setGroup(false);
-    this.variableList.splice(variableIndex, 1);
   }
 };
 

@@ -93,13 +93,16 @@ Blockly.WsDragSurfaceSvg.prototype.createDom = function() {
   if (this.SVG_) {
     return;  // Already created.
   }
+  this.outerDiv_ = document.createElement('div');
+  this.outerDiv_.id = 'wsDragLayerWrapper';
   this.SVG_ = Blockly.createSvgElement('svg', {
     'xmlns': Blockly.SVG_NS,
     'xmlns:html': Blockly.HTML_NS,
     'xmlns:xlink': 'http://www.w3.org/1999/xlink',
     'version': '1.1',
     'class': 'blocklyWsDragSurface'
-  }, this.container_);
+  }, this.outerDiv_);
+  this.container_.appendChild(this.outerDiv_);
   //var defs = Blockly.createSvgElement('defs', {}, this.SVG_);
 //  this.dragShadowFilterId_ = this.createDropShadowDom_(defs);
   // not sure if we need a <g> to put stuff in.  Maybe it can just go inside
@@ -171,7 +174,9 @@ Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   } else {
     newSurface.appendChild(this.getChildGroup());
   }
+  // check th oerder of how we do this dom manipulation.
   this.SVG_.style.display = 'none';
+  this.outerDiv_.style.display = 'none';
   // if defs goes back in, this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Drag group was not cleared.');
   this.SVG_.style.transform = '';
@@ -184,13 +189,20 @@ Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
  * @param {?Element} sibling The element to insert the block canvas & bubble canvas after
     when it goes back in the dom at the end of a drag.
  */
-Blockly.WsDragSurfaceSvg.prototype.setBlocksAndShow = function(guts, previousSibling) {
+Blockly.WsDragSurfaceSvg.prototype.setBlocksAndShow = function(guts, previousSibling, width, height) {
   this.previousSibling_ = previousSibling;
   guts.setAttribute('transform', 'translate(0, 0)');
   // if defs goes back in this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Already dragging a block.');
   // appendChild removes the blocks from the previous parent
+  this.outerDiv_.style.width = width;
+  this.outerDiv_.style.height = height;
+  this.SVG_.setAttribute('width', width);
+  this.SVG_.setAttribute('height', height);
+  // check the order of this stuff. ie. when appending to dom matters.
   this.SVG_.appendChild(guts);
+
   this.SVG_.style.display = 'block';
+  this.outerDiv_.style.display = 'block';
 };
 

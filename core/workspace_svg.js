@@ -735,13 +735,14 @@ Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
 };
 
 Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
-    // Figure out where we want to put the canvas back.
-    var previousElement = this.svgBlockCanvas_.previousSibling;
-
-    var coord = Blockly.getRelativeXY_(this.svgBlockCanvas_);
-    this.wsDragSurface_.setBlocksAndShow(this.svgBlockCanvas_, previousElement);
-    window.console.log('relativeXY block canvas: ' + coord.x + ', ' + coord.y);
-    this.wsDragSurface_.translateSurface(coord.x, coord.y);
+  // Figure out where we want to put the canvas back.
+  var previousElement = this.svgBlockCanvas_.previousSibling;
+  var w = this.getParentSvg().getAttribute("width")
+  var h = this.getParentSvg().getAttribute("height")
+  var coord = Blockly.getRelativeXY_(this.svgBlockCanvas_);
+  this.wsDragSurface_.setBlocksAndShow(this.svgBlockCanvas_,
+    previousElement, w, h);
+  this.wsDragSurface_.translateSurface(coord.x, coord.y);
 };
 
 /**

@@ -169,21 +169,24 @@ Blockly.Css.CONTENT = [
     'position: absolute;',
     'z-index: 100000;', /* big value for bootstrap3 compatibility */
   '}',
-
+  '#wsDragLayerWrapper {',
+    'overflow:hidden;',
+    'position:absolute;',
+    'left:0;',
+    'top:0;',
+  '}',
   '.blocklyWsDragSurface {',
     'display: none;',
     'position: absolute;',
+    'overflow:visible;',
     'top: 0;',
     'left: 0;',
     'right: 0;',
     'bottom: 0;',
-    'overflow: visible !important;',
-    'z-index: 5000;', /* Always display on top */
     '-webkit-backface-visibility: hidden;',
     'backface-visibility: hidden;',
     '-webkit-perspective: 1000;',
     'perspective: 1000;',
-    'background-color: rgb(204, 204, 255);',
   '}',
 
 
@@ -448,6 +451,7 @@ Blockly.Css.CONTENT = [
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
+    'z-index: 100;',
   '}',
 
   '.blocklyTreeRoot {',

@@ -104,6 +104,14 @@ Blockly.WorkspaceSvg.prototype.isMutator = false;
 Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
 
 /**
+ * Whether this workspace has resizes enabled.
+ * Disable during batch operations for a performance improvement.
+ * @type {boolean}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.resizesEnabled_ = true;
+
+/**
  * Current horizontal scrolling offset.
  * @type {number}
  */
@@ -260,7 +268,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
-    /** 
+    /**
      * @type {Blockly.Toolbox}
      * @private
      */
@@ -389,12 +397,15 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
 };
 
 /**
- * Resize the parts of the workspace that change when the workspace
+ * If enabled, resize the parts of the workspace that change when the workspace
  * contents (e.g. block positions) change.  This will also scroll the
  * workspace contents if needed.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
+  if (!this.resizesEnabled_) {
+    return;
+  }
   if (this.scrollbar) {
     // TODO(picklesrus): Once rachel-fenichel's scrollbar refactoring
     // is complete, call the method that only resizes scrollbar
@@ -1423,6 +1434,32 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
     }
   }
 };
+
+/**
+ * Update whether this workspace has resizes enabled.
+ * If enabled, workspace will resize when appropriate.
+ * If disabled, workspace will not resize until re-enabled.
+ * Use to avoid resizing during a batch operation, for performance.
+ * @param {boolean} enabled Whether resizes should be enabled.
+ */
+Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
+  var reenabled = (!this.resizesEnabled_ && enabled);
+  this.resizesEnabled_ = enabled;
+  if (reenabled) {
+    // Newly enabled.  Trigger a resize.
+    this.resizeContents();
+  }
+};
+
+/**
+ * Dispose of all blocks in workspace, with an optimization to prevent resizes.
+ */
+Blockly.WorkspaceSvg.prototype.clear = function() {
+  this.setResizesEnabled(false);
+  Blockly.WorkspaceSvg.superClass_.clear.call(this);
+  this.setResizesEnabled(true);
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['setVisible'] =
     Blockly.WorkspaceSvg.prototype.setVisible;

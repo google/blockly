@@ -118,6 +118,7 @@ Blockly.WsDragSurfaceSvg.prototype.createDom = function() {
  * @param {Number} y Y translation for the entire surface
  */
 Blockly.WsDragSurfaceSvg.prototype.translateSurface = function(x, y) {
+
   var transform;
   x *= this.scale_; // have I set these? Maybe not?
   y *= this.scale_;
@@ -158,6 +159,7 @@ Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   this.SVG_.style.display = 'none';
   // if defs goes back in, this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Drag group was not cleared.');
+  this.SVG_.style.transform = '';
 };
 
 /**
@@ -165,6 +167,7 @@ Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
  * @param {!Element} guts Block or group of blocks to place on the drag surface
  */
 Blockly.WsDragSurfaceSvg.prototype.setBlocksAndShow = function(guts) {
+  guts.setAttribute('transform', 'translate(0, 0)');
   // if defs goes back in this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Already dragging a block.');
   // appendChild removes the blocks from the previous parent

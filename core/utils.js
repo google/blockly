@@ -257,15 +257,32 @@ Blockly.getRelativeXY_ = function(element) {
   if (y) {
     xy.y = parseInt(y, 10);
   }
+  
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  var r = transform && transform.match(Blockly.getRelativeXY_.XY_REGEXP_);
-  if (r) {
-    xy.x += parseFloat(r[1]);
-    if (r[3]) {
-      xy.y += parseFloat(r[3]);
+   if (transform) {
+    var transformComponents =
+        transform.match(Blockly.getRelativeXY_.XY_REGEXP_);
+    if (transformComponents) {
+      xy.x += parseFloat(transformComponents[1]);
+      if (transformComponents[3]) {
+        xy.y += parseFloat(transformComponents[3]);
+      }
     }
   }
+
+  // Third, check for style="transform: translate3d(...)".
+  var style = element.getAttribute('style');
+  if (style && style.indexOf('translate3d') > -1) {
+    var styleComponents = style.match(Blockly.getRelativeXY_.XY_3D_REGEXP_);
+    if (styleComponents) {
+      xy.x += parseFloat(styleComponents[1]);
+      if (styleComponents[3]) {
+        xy.y += parseFloat(styleComponents[3]);
+      }
+    }
+  }
+
   return xy;
 };
 
@@ -280,6 +297,15 @@ Blockly.getRelativeXY_ = function(element) {
  */
 Blockly.getRelativeXY_.XY_REGEXP_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
+
+/**
+ * Static regex to pull the x,y,z values out of a translate3d() style property.
+ * Accounts for same exceptions as XY_REGEXP_.
+ * @type {!RegExp}
+ * @private
+ */
+Blockly.getRelativeXY_.XY_3D_REGEXP_ =
+  /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 /**
  * Return the absolute coordinates of the top-left corner of this element,

@@ -495,7 +495,8 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  if (this.wsDragSurface_) {
+  console.log('in ws translate: ' + x + ', ' + y);
+  if (this.wsDragSurface_ && this.dragMode_ != Blockly.DRAG_NONE) {
     this.wsDragSurface_.translateSurface(x,y);
     //this.svgBlockCanvas.style.display = no
   } else {
@@ -723,7 +724,17 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
 };
 
 Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
+  var trans = this.wsDragSurface_.getSurfaceTranslation();
   this.wsDragSurface_.clearAndHide(this.getParentSvg());
+  var x = trans.x;
+  var translation = 'translate(' + x + ',' + trans.y + ') ' +
+        'scale(' + this.scale + ')';
+  window.console.log('translation in reset: ' + translation);
+  this.svgBlockCanvas_.setAttribute('transform', translation);
+  this.svgBubbleCanvas_.setAttribute('transform', translation);
+
+
+
 };
 /**
  * Handle a mouse-down on SVG drawing surface.
@@ -758,7 +769,15 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     this.startDragMetrics = this.getMetrics();
     this.startScrollX = this.scrollX;
     this.startScrollY = this.scrollY;
+
+
+
+    // drag surface stuff
+    var coord = Blockly.getRelativeXY_(this.svgBlockCanvas_);
     this.wsDragSurface_.setBlocksAndShow(this.svgBlockCanvas_);
+    window.console.log('relativeXY block canvas: ' + coord.x + ', ' + coord.y);
+    this.wsDragSurface_.translateSurface(coord.x, coord.y);
+
 
     // If this is a touch event then bind to the mouseup so workspace drag mode
     // is turned off and double move events are not performed on a block.

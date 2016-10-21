@@ -148,25 +148,44 @@ Blockly.WsDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
  * @return {Element} Drag surface block DOM element
  */
 Blockly.WsDragSurfaceSvg.prototype.getChildGroup = function() {
+  // For now there is only 1.  Change when there is a bubble canvas???
   return this.SVG_.childNodes[0];
 };
 /**
  * Clear the group and hide the surface;  Move everything back to newSurface.
  */
 Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
-  // appendChild removes the node from this.dragGroup_
-  newSurface.appendChild(this.getChildGroup());
+  
+  // This is ugly and needs some more testing and reworking.  A unittest is
+  // actually probably the easiest way to verify.
+  if (this.previousSibling_ != null) {
+    if (this.previousSibling_.nextSibling != null)  {
+      // There is no insertAfter so we do some sill dom stuff to get the same effect.
+      newSurface.insertBefore(this.getChildGroup(), this.previousSibling_.nextSibling);
+    } else {
+      // there is nothing to insert it before so we stick it at the end.
+      newSurface.appendChild(this.getChildGroup());
+    }
+  } else if (newSurface.firstChild != null) {
+    newSurface.insertBefore(this.getChildGroup(), newSurface.firstChild);
+  } else {
+    newSurface.appendChild(this.getChildGroup());
+  }
   this.SVG_.style.display = 'none';
   // if defs goes back in, this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Drag group was not cleared.');
   this.SVG_.style.transform = '';
+  this.previousSibling_ = null;
 };
 
 /**
  * Set the SVG to have everything on it and how the surface.
  * @param {!Element} guts Block or group of blocks to place on the drag surface
+ * @param {?Element} sibling The element to insert the block canvas & bubble canvas after
+    when it goes back in the dom at the end of a drag.
  */
-Blockly.WsDragSurfaceSvg.prototype.setBlocksAndShow = function(guts) {
+Blockly.WsDragSurfaceSvg.prototype.setBlocksAndShow = function(guts, previousSibling) {
+  this.previousSibling_ = previousSibling;
   guts.setAttribute('transform', 'translate(0, 0)');
   // if defs goes back in this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Already dragging a block.');

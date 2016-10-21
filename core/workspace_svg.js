@@ -725,17 +725,25 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
 
 Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
   var trans = this.wsDragSurface_.getSurfaceTranslation();
-  this.wsDragSurface_.clearAndHide(this.getParentSvg());
+  this.wsDragSurface_.clearAndHide(this.svgGroup_);
   var x = trans.x;
   var translation = 'translate(' + x + ',' + trans.y + ') ' +
         'scale(' + this.scale + ')';
   window.console.log('translation in reset: ' + translation);
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
-
-
-
 };
+
+Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
+    // Figure out where we want to put the canvas back.
+    var previousElement = this.svgBlockCanvas_.previousSibling;
+
+    var coord = Blockly.getRelativeXY_(this.svgBlockCanvas_);
+    this.wsDragSurface_.setBlocksAndShow(this.svgBlockCanvas_, previousElement);
+    window.console.log('relativeXY block canvas: ' + coord.x + ', ' + coord.y);
+    this.wsDragSurface_.translateSurface(coord.x, coord.y);
+};
+
 /**
  * Handle a mouse-down on SVG drawing surface.
  * @param {!Event} e Mouse down event.
@@ -770,14 +778,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     this.startScrollX = this.scrollX;
     this.startScrollY = this.scrollY;
 
-
-
-    // drag surface stuff
-    var coord = Blockly.getRelativeXY_(this.svgBlockCanvas_);
-    this.wsDragSurface_.setBlocksAndShow(this.svgBlockCanvas_);
-    window.console.log('relativeXY block canvas: ' + coord.x + ', ' + coord.y);
-    this.wsDragSurface_.translateSurface(coord.x, coord.y);
-
+    this.setupDragSurface();
 
     // If this is a touch event then bind to the mouseup so workspace drag mode
     // is turned off and double move events are not performed on a block.

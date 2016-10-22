@@ -136,6 +136,7 @@ Blockly.Css.CONTENT = [
     'outline: none;',
     'overflow: hidden;',  /* IE overflows by default. */
     'display: block;',
+    'position:absolute;',
   '}',
 
   '.blocklyWidgetDiv {',
@@ -174,6 +175,7 @@ Blockly.Css.CONTENT = [
     'position:absolute;',
     'left:0;',
     'top:0;',
+    'z-index:2;',
   '}',
   '.blocklyWsDragSurface {',
     'display: none;',
@@ -362,7 +364,17 @@ Blockly.Css.CONTENT = [
     'stroke: #ddd;',
     'stroke-width: 1;',
   '}',
-
+'.blocklyScrollbarVertical {',
+     'position:absolute;',
+     'outline: none;',
+     'z-index:3;',
+   '}',
+ 
+   '.blocklyScrollbarHorizontal {',
+     'position:absolute;',
+     'outline: none;',
+     'z-index: 3;',
+   '}',
   '.blocklyFlyoutBackground {',
     'fill: #ddd;',
     'fill-opacity: .8;',

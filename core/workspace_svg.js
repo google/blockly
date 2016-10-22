@@ -495,7 +495,6 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  console.log('in ws translate: ' + x + ', ' + y);
   if (this.wsDragSurface_ && this.dragMode_ != Blockly.DRAG_NONE) {
     this.wsDragSurface_.translateSurface(x,y);
     //this.svgBlockCanvas.style.display = no
@@ -729,7 +728,6 @@ Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
   var x = trans.x;
   var translation = 'translate(' + x + ',' + trans.y + ') ' +
         'scale(' + this.scale + ')';
-  window.console.log('translation in reset: ' + translation);
   this.svgBlockCanvas_.setAttribute('transform', translation);
   this.svgBubbleCanvas_.setAttribute('transform', translation);
 };

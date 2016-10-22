@@ -202,6 +202,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   if (horizontal) {
     this.svgBackground_.setAttribute('height',
         Blockly.Scrollbar.scrollbarThickness);
+    this.outerSvg_.setAttribute('height',
+          Blockly.Scrollbar.scrollbarThickness);
     this.svgHandle_.setAttribute('height',
         Blockly.Scrollbar.scrollbarThickness - 5);
     this.svgHandle_.setAttribute('y', 2.5);
@@ -211,6 +213,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   } else {
     this.svgBackground_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness);
+    this.outerSvg_.setAttribute('width',
+          Blockly.Scrollbar.scrollbarThickness);
     this.svgHandle_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness - 5);
     this.svgHandle_.setAttribute('x', 2.5);
@@ -303,7 +307,8 @@ Blockly.Scrollbar.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
-  goog.dom.removeNode(this.svgGroup_);
+  goog.dom.removeNode(this.outerSvg_);
+  this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;
   this.svgHandle_ = null;
@@ -338,6 +343,7 @@ Blockly.Scrollbar.prototype.setHandlePosition = function(newPosition) {
  */
 Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
   this.scrollViewSize_ = newSize;
+  this.outerSvg_.setAttribute(this.lengthAttribute_, this.scrollViewSize_);
   this.svgBackground_.setAttribute(this.lengthAttribute_, this.scrollViewSize_);
 };
 
@@ -349,9 +355,9 @@ Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
 Blockly.Scrollbar.prototype.setPosition = function(x, y) {
   this.position_.x = x;
   this.position_.y = y;
-
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + this.position_.x + ',' + this.position_.y + ')');
+  var transform = 'translate(' + this.position_.x + 'px,' + this.position_.y + 'px)';
+  console.log(transform);
+  this.outerSvg_.style.transform = transform;
 };
 
 /**
@@ -546,15 +552,18 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   */
   var className = 'blocklyScrollbar' +
       (this.horizontal_ ? 'Horizontal' : 'Vertical');
-  this.svgGroup_ = Blockly.createSvgElement('g', {'class': className}, null);
+   this.outerSvg_ = Blockly.createSvgElement('svg',
+     {'class': className},
+     null);
+  this.svgGroup_ = Blockly.createSvgElement('g', {}, this.outerSvg_);
   this.svgBackground_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
   this.svgHandle_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
       this.svgGroup_);
-  Blockly.Scrollbar.insertAfter_(this.svgGroup_,
-                                 this.workspace_.getBubbleCanvas());
+  Blockly.Scrollbar.insertAfter_(this.outerSvg_,
+                                 this.workspace_.getParentSvg());
 };
 
 /**
@@ -584,11 +593,11 @@ Blockly.Scrollbar.prototype.setVisible = function(visible) {
   this.isVisible_ = visible;
 
   if (visible) {
-    this.svgGroup_.setAttribute('display', 'block');
+    this.outerSvg_.setAttribute('display', 'block');
   } else {
     // Hide the scrollbar.
     this.workspace_.setMetrics({x: 0, y: 0});
-    this.svgGroup_.setAttribute('display', 'none');
+    this.outerSvg_.setAttribute('display', 'none');
   }
 };
 

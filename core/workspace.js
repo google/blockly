@@ -75,7 +75,7 @@ Blockly.Workspace = function(opt_options) {
    */
   this.blockDB_ = Object.create(null);
   /*
-   * @type {!Array.<!string>}
+   * @type {!Array.<string>}
    * A list of all of the named variables in the workspace, including variables
    * that are not currently in use.
    */

@@ -115,7 +115,7 @@ Blockly.FieldVariable.dropdownCreate = function() {
     variableList.push(name);
   }
   variableList.sort(goog.string.caseInsensitiveCompare);
-  variableList.push(Blockly.Msg.RENAME_VARIABLE);
+  variableList.push(Blockly.Msg.RENAME_VARIABLE.replace('%1', name));
   variableList.push(Blockly.Msg.DELETE_VARIABLE.replace('%1', name));
   // Variables are not language-specific, use the name as both the user-facing
   // text and the internal representation.
@@ -137,18 +137,17 @@ Blockly.FieldVariable.dropdownCreate = function() {
  */
 Blockly.FieldVariable.prototype.classValidator = function(text) {
   var workspace = this.sourceBlock_.workspace;
-  if (text == Blockly.Msg.RENAME_VARIABLE) {
-    var oldVar = this.getText();
+  var oldText = this.getText();
+  if (text == Blockly.Msg.RENAME_VARIABLE.replace('%1', oldText)) {
     Blockly.hideChaff();
     text = Blockly.Variables.promptName(
-        Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldVar), oldVar);
+        Blockly.Msg.RENAME_VARIABLE_TITLE.replace('%1', oldText), oldText);
     if (text) {
-      workspace.renameVariable(oldVar, text);
+      workspace.renameVariable(oldText, text);
     }
     return null;
-  } else if (text == Blockly.Msg.DELETE_VARIABLE.replace('%1',
-      this.getText())) {
-    workspace.deleteVariable(this.getText());
+  } else if (text == Blockly.Msg.DELETE_VARIABLE.replace('%1', oldText)) {
+    workspace.deleteVariable(oldText);
     return null;
   }
   return undefined;

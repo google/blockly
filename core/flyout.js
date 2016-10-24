@@ -482,6 +482,8 @@ Blockly.Flyout.prototype.position = function() {
 
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
+    this.scrollbar_.setOrigin(x, y);
+    this.scrollbar_.setVisible(true);
     this.scrollbar_.resize();
   }
 };
@@ -633,6 +635,7 @@ Blockly.Flyout.prototype.hide = function() {
     return;
   }
   this.svgGroup_.style.display = 'none';
+  this.scrollbar_.setVisible(false);
   // Delete all the event listeners.
   for (var x = 0, listen; listen = this.listeners_[x]; x++) {
     Blockly.unbindEvent_(listen);

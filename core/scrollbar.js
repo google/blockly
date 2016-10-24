@@ -189,6 +189,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   this.pair_ = opt_pair || false;
   this.horizontal_ = horizontal;
   this.oldHostMetrics_ = null;
+  this.originX_ = 0;
+  this.originY_ = 0;
 
   this.createDom_();
 
@@ -266,6 +268,11 @@ Blockly.Scrollbar.scrollbarThickness = 15;
 if (goog.events.BrowserFeature.TOUCH_ENABLED) {
   Blockly.Scrollbar.scrollbarThickness = 25;
 }
+
+Blockly.Scrollbar.prototype.setOrigin = function(x, y) {
+  this.originX_ = x;
+  this.originY_ = y;
+};
 
 /**
  * @param {!Object} first An object containing computed measurements of a
@@ -355,7 +362,9 @@ Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
 Blockly.Scrollbar.prototype.setPosition = function(x, y) {
   this.position_.x = x;
   this.position_.y = y;
-  var transform = 'translate(' + this.position_.x + 'px,' + this.position_.y + 'px)';
+  var tempX = this.position_.x + this.originX_;
+  var tempY = this.position_.y + this.originY_;
+  var transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
   console.log(transform);
   this.outerSvg_.style.transform = transform;
 };

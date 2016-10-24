@@ -483,7 +483,6 @@ Blockly.Flyout.prototype.position = function() {
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
     this.scrollbar_.setOrigin(x, y);
-    this.scrollbar_.setVisible(true);
     this.scrollbar_.resize();
   }
 };
@@ -669,6 +668,17 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   }
 
   this.svgGroup_.style.display = 'block';
+
+
+  // This needs to be called before reflow because reflow calls resize on the
+  // target workspace which calls it on the flyout which calls it on the scrollbar
+  // and isVisible is false. The logic to decide how tall it is short-circuits
+  // when visibility is false.  Setting the visiblilty to true doesn't try and
+  // resize the scrollbar.
+  if (this.scrollbar_) {
+    this.scrollbar_.setVisible(true);
+  }
+
   // Create the blocks to be shown in this flyout.
   var contents = [];
   var gaps = [];
@@ -730,6 +740,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   } else {
     this.width_ = 0;
   }
+
   this.reflow();
 
   this.filterForCapacity_();

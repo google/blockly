@@ -44,7 +44,7 @@ Blockly.ScrollbarPair = function(workspace) {
       {'height': Blockly.Scrollbar.scrollbarThickness,
       'width': Blockly.Scrollbar.scrollbarThickness,
       'class': 'blocklyScrollbarBackground'}, null);
-  Blockly.Scrollbar.insertAfter_(this.corner_, workspace.getBubbleCanvas());
+  Blockly.utils.insertAfter_(this.corner_, workspace.getBubbleCanvas());
 };
 
 /**
@@ -569,6 +569,7 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
  */
 Blockly.Scrollbar.prototype.createDom_ = function() {
   /* Create the following DOM:
+  // TODO: Update comment.
   <g class="blocklyScrollbarHorizontal">
     <rect class="blocklyScrollbarBackground" />
     <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
@@ -586,7 +587,7 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   this.svgHandle_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
       this.svgGroup_);
-  Blockly.Scrollbar.insertAfter_(this.outerSvg_,
+  Blockly.utils.insertAfter_(this.outerSvg_,
                                  this.workspace_.getParentSvg());
 };
 
@@ -796,22 +797,4 @@ Blockly.Scrollbar.prototype.set = function(value) {
   this.onScroll_();
 };
 
-/**
- * Insert a node after a reference node.
- * Contrast with node.insertBefore function.
- * @param {!Element} newNode New element to insert.
- * @param {!Element} refNode Existing element to precede new node.
- * @private
- */
-Blockly.Scrollbar.insertAfter_ = function(newNode, refNode) {
-  var siblingNode = refNode.nextSibling;
-  var parentNode = refNode.parentNode;
-  if (!parentNode) {
-    throw 'Reference node has no parent.';
-  }
-  if (siblingNode) {
-    parentNode.insertBefore(newNode, siblingNode);
-  } else {
-    parentNode.appendChild(newNode);
-  }
-};
+

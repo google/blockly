@@ -745,3 +745,23 @@ Blockly.utils.wrapToText_ = function(words, wordBreaks) {
   }
   return text.join('');
 };
+
+/**
+ * Insert a node after a reference node.
+ * Contrast with node.insertBefore function.
+ * @param {!Element} newNode New element to insert.
+ * @param {!Element} refNode Existing element to precede new node.
+ * @private
+ */
+Blockly.utils.insertAfter_ = function(newNode, refNode) {
+  var siblingNode = refNode.nextSibling;
+  var parentNode = refNode.parentNode;
+  if (!parentNode) {
+    throw 'Reference node has no parent.';
+  }
+  if (siblingNode) {
+    parentNode.insertBefore(newNode, siblingNode);
+  } else {
+    parentNode.appendChild(newNode);
+  }
+};

@@ -70,6 +70,15 @@ Blockly.ScrollbarPair.prototype.dispose = function() {
 };
 
 /**
+ * Set whether this scrollbar's container is visible.
+ * @param {boolean} visible Whether the container is visible.
+ */
+Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
+  this.hScroll.setContainerVisible(visible);
+  this.vScroll.setContainerVisible(visible);
+};
+
+/**
  * Recalculate both of the scrollbars' locations and lengths.
  * Also reposition the corner rectangle.
  */
@@ -260,6 +269,13 @@ Blockly.Scrollbar.prototype.handlePosition_ = 0;
 Blockly.Scrollbar.prototype.isVisible_ = true;
 
 /**
+ * Whether the workspace containing this scrollbar is visible.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Scrollbar.prototype.containerVisible_ = true;
+
+/**
  * Width of vertical scrollbar or height of horizontal scrollbar.
  * Increase the size of scrollbars on touch devices.
  * Don't define if there is no document object (e.g. node.js).
@@ -365,7 +381,6 @@ Blockly.Scrollbar.prototype.setPosition = function(x, y) {
   var tempX = this.position_.x + this.originX_;
   var tempY = this.position_.y + this.originY_;
   var transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
-  console.log(transform);
   this.outerSvg_.style.transform = transform;
 };
 
@@ -590,23 +605,46 @@ Blockly.Scrollbar.prototype.isVisible = function() {
  * @param {boolean} visible True if visible.
  */
 Blockly.Scrollbar.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
-    return;
-  }
+  var visibilityChanged = (visible != this.isVisible());
   // Ideally this would also apply to scrollbar pairs, but that's a bigger
   // headache (due to interactions with the corner square).
   if (this.pair_) {
     throw 'Unable to toggle visibility of paired scrollbars.';
   }
-
   this.isVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
 
-  if (visible) {
+/**
+ * Set whether this scrollbar's container is visible.
+ * @param {boolean} visible Whether the container is visible.
+ */
+Blockly.Scrollbar.prototype.setContainerVisible = function(visible) {
+  var visibilityChanged = (visible != this.containerVisible_);
+
+  this.containerVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
+
+/**
+ * Update the visibility of the scrollbar based whether it thinks it should
+ * be visible and whether its containing workspace is visible.
+ */
+Blockly.Scrollbar.prototype.updateDisplay_ = function() {
+  var show = true;
+  if (!this.containerVisible_) {
+    show = false; 
+  } else {
+    show = this.isVisible();
+  }
+  if (show) {
     this.outerSvg_.setAttribute('display', 'block');
   } else {
-    // Hide the scrollbar.
-    this.workspace_.setMetrics({x: 0, y: 0});
-    this.outerSvg_.setAttribute('display', 'none');
+    this.outerSvg_.setAttribute('display', 'none');    
   }
 };
 

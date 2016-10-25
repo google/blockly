@@ -634,7 +634,7 @@ Blockly.Flyout.prototype.hide = function() {
     return;
   }
   this.svgGroup_.style.display = 'none';
-  this.scrollbar_.setVisible(false);
+  this.scrollbar_.setContainerVisible(false);
   // Delete all the event listeners.
   for (var x = 0, listen; listen = this.listeners_[x]; x++) {
     Blockly.unbindEvent_(listen);
@@ -676,7 +676,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   // when visibility is false.  Setting the visiblilty to true doesn't try and
   // resize the scrollbar.
   if (this.scrollbar_) {
-    this.scrollbar_.setVisible(true);
+    this.scrollbar_.setContainerVisible(true);
   }
 
   // Create the blocks to be shown in this flyout.

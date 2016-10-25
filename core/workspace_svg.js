@@ -523,6 +523,9 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
   this.getParentSvg().style.display = isVisible ? 'block' : 'none';
+  if (this.scrollbar) {
+    this.scrollbar.setContainerVisible(isVisible);
+  }
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.
     this.toolbox_.HtmlDiv.style.display = isVisible ? 'block' : 'none';

@@ -380,7 +380,7 @@ Blockly.Scrollbar.prototype.setPosition = function(x, y) {
   this.position_.y = y;
   var tempX = this.position_.x + this.originX_;
   var tempY = this.position_.y + this.originY_;
-  var transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
+  var transform = 'translate3d(' + tempX + 'px,' + tempY + 'px,0px)';
   this.outerSvg_.style.transform = transform;
 };
 

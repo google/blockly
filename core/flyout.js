@@ -1161,9 +1161,23 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   }
   // Figure out where the original block is on the screen, relative to the upper
   // left corner of the main workspace.
-  var xyOld = Blockly.getSvgXY_(svgRootOld, this.workspace_);
-  xyOld.x += this.x_;
-  xyOld.y += this.y_;
+   //Blockly.getSvgXY_(svgRootOld, this.workspace_);
+
+   var element = svgRootOld;
+  var xtemp = 0;
+  var ytemp = 0;
+  do {
+    // Loop through this block and every parent.
+    var xy = Blockly.getRelativeXY_(element);
+    xtemp += xy.x;
+    ytemp += xy.y;
+    element = element.parentNode;
+  } while (element && element != this.workspace_.getParentSvg());
+  var xyOld = new goog.math.Coordinate(xtemp, ytemp);
+
+
+   xyOld.x += this.x_;
+   xyOld.y += this.y_;
   console.log('xyOld:' + xyOld);
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).

@@ -196,6 +196,22 @@ Blockly.WorkspaceSvg.prototype.getInverseScreenCTM = function() {
 };
 
 /**
+ * Getter for the flyout associated with this workspace.  This flyout may be
+ * owned by either the toolbox or the workspace, depending on toolbox
+ * configuration.  It will be null if there is no flyout.
+ * @return {Blockly.Flyout} The flyout on this workspace.
+ */
+Blockly.WorkspaceSvg.prototype.getFlyout = function() {
+  if (this.flyout_) {
+    return this.flyout_;
+  }
+  if (this.toolbox_) {
+    return this.toolbox_.flyout_;
+  }
+  return null;
+};
+
+/**
  * Update the inverted screen CTM.
  */
 Blockly.WorkspaceSvg.prototype.updateInverseScreenCTM = function() {

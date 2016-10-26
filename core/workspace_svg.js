@@ -260,7 +260,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
-    /** 
+    /**
      * @type {Blockly.Toolbox}
      * @private
      */

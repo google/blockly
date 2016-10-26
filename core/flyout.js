@@ -265,12 +265,12 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
  */
 Blockly.Flyout.prototype.createDom = function() {
   /*
-  <g>
+  <svg>
     <path class="blocklyFlyoutBackground"/>
     <g class="blocklyFlyout"></g>
-  </g>
+  </svg>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g',
+  this.svgGroup_ = Blockly.createSvgElement('svg',
       {'class': 'blocklyFlyout'}, null);
   this.svgBackground_ = Blockly.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
@@ -469,8 +469,7 @@ Blockly.Flyout.prototype.position = function() {
     y += targetWorkspaceMetrics.viewHeight;
     y -= this.height_;
   }
-
-  this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
+ //  this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
 
   // Record the height for Blockly.Flyout.getMetrics_, or width if the layout is
   // horizontal.
@@ -479,6 +478,14 @@ Blockly.Flyout.prototype.position = function() {
   } else {
     this.height_ = targetWorkspaceMetrics.viewHeight;
   }
+  this.svgGroup_.setAttribute("width", this.width_);
+  this.svgGroup_.setAttribute("height", this.height_);
+  // offset from the target workspace svg's 0,0.
+  // put somewhere better.
+  this.x_ = x;
+  this.y_ = y;
+  var transform = 'translate3d(' + x + 'px,' + y + 'px,0px)';  
+  this.svgGroup_.style.transform = transform;
 
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
@@ -496,6 +503,7 @@ Blockly.Flyout.prototype.position = function() {
  * @private
  */
 Blockly.Flyout.prototype.setBackgroundPath_ = function(width, height) {
+
   if (this.horizontalLayout_) {
     this.setBackgroundPathHorizontal_(width, height);
   } else {
@@ -1153,7 +1161,10 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   }
   // Figure out where the original block is on the screen, relative to the upper
   // left corner of the main workspace.
-  var xyOld = Blockly.getSvgXY_(svgRootOld, targetWorkspace);
+  var xyOld = Blockly.getSvgXY_(svgRootOld, this.workspace_);
+  xyOld.x += this.x_;
+  xyOld.y += this.y_;
+  console.log('xyOld:' + xyOld);
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).
   // Generally a no-op in vertical mode but likely to happen in horizontal

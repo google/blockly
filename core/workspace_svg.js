@@ -274,7 +274,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (this.options.hasCategories) {
     this.toolbox_ = new Blockly.Toolbox(this);
   } else if (this.options.languageTree) {
-    this.addFlyout_();
+    //this.addFlyout_();
   }
   this.updateGridPattern_();
   this.recordDeleteAreas();
@@ -383,7 +383,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   this.flyout_ = new Blockly.Flyout(workspaceOptions);
   this.flyout_.autoClose = false;
   var svgFlyout = this.flyout_.createDom();
-  this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
+  Blockly.utils.insertAfter_(svgFlyout, this.getParentSvg());
+//  this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
 };
 
 /**

@@ -193,6 +193,9 @@ Blockly.createMainWorkspace_ = function(svg, options, dragSurface) {
   var mainWorkspace = new Blockly.WorkspaceSvg(options, dragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
+  if (!options.hasCategories && options.languageTree) {
+    mainWorkspace.addFlyout_();
+  }
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
   mainWorkspace.markFocused();
@@ -284,6 +287,7 @@ Blockly.init_ = function(mainWorkspace) {
       mainWorkspace.toolbox_.init(mainWorkspace);
     } else if (mainWorkspace.flyout_) {
       // Build a fixed flyout with the root blocks.
+      //mainWorkspace.addFlyout_();
       mainWorkspace.flyout_.init(mainWorkspace);
       mainWorkspace.flyout_.show(options.languageTree.childNodes);
       mainWorkspace.flyout_.scrollToStart();

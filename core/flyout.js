@@ -260,6 +260,21 @@ Blockly.Flyout.prototype.dragMode_ = Blockly.DRAG_NONE;
 Blockly.Flyout.prototype.dragAngleRange_ = 70;
 
 /**
+ * Whether the scrollbar handle is visible.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Flyout.prototype.isVisible_ = false;
+
+/**
+ * Whether the workspace containing this scrollbar is visible.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Flyout.prototype.containerVisible_ = true;
+
+
+/**
  * Creates the flyout's DOM.  Only needs to be called once.
  * @return {!Element} The flyout's SVG group.
  */
@@ -629,14 +644,57 @@ Blockly.Flyout.prototype.wheel_ = function(e) {
   e.stopPropagation();
 };
 
+
 /**
- * Is the flyout visible?
+ * Is the scrollbar visible.  Non-paired scrollbars disappear when they aren't
+ * needed.
  * @return {boolean} True if visible.
  */
 Blockly.Flyout.prototype.isVisible = function() {
-  return this.svgGroup_ && this.svgGroup_.style.display == 'block';
+  return this.isVisible_;
 };
 
+/**
+ * Set whether the scrollbar is visible.
+ * Only applies to non-paired scrollbars.
+ * @param {boolean} visible True if visible.
+ */
+Blockly.Flyout.prototype.setVisible = function(visible) {
+  var visibilityChanged = (visible != this.isVisible());
+
+  this.isVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
+
+/**
+ * Set whether this scrollbar's container is visible.
+ * @param {boolean} visible Whether the container is visible.
+ */
+Blockly.Flyout.prototype.setContainerVisible = function(visible) {
+  var visibilityChanged = (visible != this.containerVisible_);
+  this.containerVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
+
+/**
+ * Update the visibility of the scrollbar based whether it thinks it should
+ * be visible and whether its containing workspace is visible.
+ */
+Blockly.Flyout.prototype.updateDisplay_ = function() {
+  var show = true;
+  if (!this.containerVisible_) {
+    show = false; 
+  } else {
+    show = this.isVisible();
+  }
+  this.svgGroup_.style.display = show ? 'block' : 'none';
+  this.scrollbar_.setContainerVisible(show);
+
+};
 /**
  * Hide and empty the flyout.
  */
@@ -644,8 +702,7 @@ Blockly.Flyout.prototype.hide = function() {
   if (!this.isVisible()) {
     return;
   }
-  this.svgGroup_.style.display = 'none';
-  this.scrollbar_.setContainerVisible(false);
+  this.setVisible(false);
   // Delete all the event listeners.
   for (var x = 0, listen; listen = this.listeners_[x]; x++) {
     Blockly.unbindEvent_(listen);
@@ -678,17 +735,15 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
   }
 
-  this.svgGroup_.style.display = 'block';
-
-
+  this.setVisible(true);
   // This needs to be called before reflow because reflow calls resize on the
   // target workspace which calls it on the flyout which calls it on the scrollbar
   // and isVisible is false. The logic to decide how tall it is short-circuits
   // when visibility is false.  Setting the visiblilty to true doesn't try and
   // resize the scrollbar.
-  if (this.scrollbar_) {
-    this.scrollbar_.setContainerVisible(true);
-  }
+  // if (this.scrollbar_) {
+  //   this.scrollbar_.setContainerVisible(true);
+  // }
 
   // Create the blocks to be shown in this flyout.
   var contents = [];

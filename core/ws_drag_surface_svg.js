@@ -200,10 +200,10 @@ Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
     when it goes back in the dom at the end of a drag.
  */
 Blockly.WsDragSurfaceSvg.prototype.setContentsAndShow = function(
-    blockCanvas, bubbleCanvas, previousSibling, width, height) {
+    blockCanvas, bubbleCanvas, previousSibling, width, height, scale) {
   this.previousSibling_ = previousSibling;
-  blockCanvas.setAttribute('transform', 'translate(0, 0)');
-  bubbleCanvas.setAttribute('transform', 'translate(0, 0)');
+  blockCanvas.setAttribute('transform', 'translate(0, 0) scale(' + scale + ')');
+  bubbleCanvas.setAttribute('transform', 'translate(0, 0) scale(' + scale + ')');
   // if defs goes back in this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Already dragging a block.');
   // appendChild removes the blocks from the previous parent

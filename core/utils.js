@@ -287,6 +287,26 @@ Blockly.getRelativeXY_ = function(element) {
 };
 
 /**
+ * Return the scale of this element.
+ * @param {!Element} element  The element to find the coordinates of.
+ * @return {!number} number represending the scale applied to the element.
+ * @private
+ */
+Blockly.getScale_ = function(element) {
+  var scale = 1;  
+  var transform = element.getAttribute('transform');
+   if (transform) {
+    var transformComponents =
+        transform.match(Blockly.getScale_.REGEXP_);
+    if (transformComponents && transformComponents[0]) {
+      scale = parseFloat(transformComponents[0]);
+    }
+  }
+  // Add in 3d scale parsing.
+  return scale;
+};
+
+/**
  * Static regex to pull the x,y values out of an SVG translate() directive.
  * Note that Firefox and IE (9,10) return 'translate(12)' instead of
  * 'translate(12, 0)'.
@@ -298,6 +318,8 @@ Blockly.getRelativeXY_ = function(element) {
 Blockly.getRelativeXY_.XY_REGEXP_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
 
+Blockly.getScale_REGEXP_ = /scale\(\s*([-+\d.e]+)\s*\)/;
+
 /**
  * Static regex to pull the x,y,z values out of a translate3d() style property.
  * Accounts for same exceptions as XY_REGEXP_.
@@ -306,6 +328,25 @@ Blockly.getRelativeXY_.XY_REGEXP_ =
  */
 Blockly.getRelativeXY_.XY_3D_REGEXP_ =
   /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
+
+Blockly.getInjectionDivXY_ = function(element) {
+  var injectionDiv = document.getElementsByClassName('injectionDiv')[0];
+  var x = 0;
+  var y = 0;
+  var scale = 1;
+  while (element) {
+    var xy = Blockly.getRelativeXY_(element);
+    // what is scale?!
+    var scale = Blockly.getScale_(element);
+    x = (x * scale) + xy.x;
+    y = (y * scale) + xy.y;
+    if (element == injectionDiv) {
+      break;
+    }
+    element = element.parentNode;
+  }
+  return new goog.math.Coordinate(x, y);    
+};
 
 /**
  * Return the absolute coordinates of the top-left corner of this element,

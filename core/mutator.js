@@ -130,6 +130,7 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
+  this.workspace_.addFlyout_();
   this.svgDialog_.appendChild(
       this.workspace_.createDom('blocklyMutatorBackground'));
   return this.svgDialog_;
@@ -200,6 +201,17 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
 };
 
 /**
+ * Callback function triggered when the bubble has repositioned.
+ * Relocate workspace elements appropriately.
+ * @private
+ */
+Blockly.Mutator.prototype.positionBubble_ = function() {
+  if (this.workspace_.getFlyout()) {
+    this.workspace_.getFlyout().position();
+  }
+};  
+
+/**
  * Show or hide the mutator bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
@@ -215,6 +227,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
+    this.bubble_.registerRepositionEvent(this.positionBubble_.bind(this));
     var tree = this.workspace_.options.languageTree;
     if (tree) {
       this.workspace_.flyout_.init(this.workspace_);
@@ -338,11 +351,15 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
  * @private
  */
 Blockly.Mutator.prototype.getFlyoutMetrics_ = function() {
+  var xy = Blockly.getInjectionDivXY_(this.workspace_.svgGroup_);
+  var absTop = xy.y;
+  var absLeft = xy.x;
+
   return {
     viewHeight: this.workspaceHeight_,
     viewWidth: this.workspaceWidth_,
-    absoluteTop: 0,
-    absoluteLeft: 0
+    absoluteTop: absTop,
+    absoluteLeft: absLeft
   };
 };
 

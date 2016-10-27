@@ -399,7 +399,8 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   this.flyout_ = new Blockly.Flyout(workspaceOptions);
   this.flyout_.autoClose = false;
   var svgFlyout = this.flyout_.createDom();
-  Blockly.utils.insertAfter_(svgFlyout, this.getParentSvg());
+  document.getElementsByClassName('injectionDiv')[0].appendChild(svgFlyout);
+//  Blockly.utils.insertAfter_(svgFlyout, this.getParentSvg());
 //  this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
 };
 

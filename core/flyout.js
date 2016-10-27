@@ -1221,23 +1221,8 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   // left corner of the main workspace.
    //Blockly.getSvgXY_(svgRootOld, this.workspace_);
 
-   var element = svgRootOld;
-  var xtemp = 0;
-  var ytemp = 0;
-  do {
-    // Loop through this block and every parent.
-    var xy = Blockly.getRelativeXY_(element);
-    xtemp += xy.x;
-    ytemp += xy.y;
-    element = element.parentNode;
-  } while (element && element != this.workspace_.getParentSvg());
-  var xyOld = new goog.math.Coordinate(xtemp, ytemp);
-
-
-   xyOld.x += this.x_;
-   xyOld.y += this.y_;
-  console.log('xyOld:' + xyOld);
-
+  var element = svgRootOld;
+  var xyOld = Blockly.getInjectionDivXY_(svgRootOld);
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).
   // Generally a no-op in vertical mode but likely to happen in horizontal
@@ -1281,7 +1266,7 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   // upper left corner of the workspace.  This may not be the same as the
   // original block because the flyout's origin may not be the same as the
   // main workspace's origin.
-  var xyNew = Blockly.getSvgXY_(svgRootNew, targetWorkspace);
+  var xyNew = Blockly.getInjectionDivXY_(svgRootNew);
   // Scale the scroll (getSvgXY_ did not do this).
   xyNew.x +=
       targetWorkspace.scrollX / targetWorkspace.scale - targetWorkspace.scrollX;

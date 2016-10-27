@@ -830,12 +830,14 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
     var group = this.getSvgRoot();
     group.translate_ = '';
     group.skew_ = '';
-    this.addDragging();
     Blockly.draggingConnections_ =
         Blockly.draggingConnections_.concat(this.getConnections_(true));
+    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDragging');
   } else {
-    this.removeDragging();
     Blockly.draggingConnections_ = [];
+    Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+                         'blocklyDragging');
   }
   // Recurse through all blocks attached under this one.
   for (var i = 0; i < this.childBlocks_.length; i++) {
@@ -1431,6 +1433,21 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
 };
 
 /**
+ * Set whether the block is highlighted or not.
+ * @param {boolean} highlighted True if highlighted.
+ */
+Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
+  if (highlighted) {
+    this.svgPath_.setAttribute('filter',
+        'url(#' + this.workspace.options.embossFilterId + ')');
+    this.svgPathLight_.style.display = 'none';
+  } else {
+    this.svgPath_.removeAttribute('filter');
+    this.svgPathLight_.style.display = 'block';
+  }
+};
+
+/**
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
@@ -1451,23 +1468,6 @@ Blockly.BlockSvg.prototype.addSelect = function() {
 Blockly.BlockSvg.prototype.removeSelect = function() {
   Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
                        'blocklySelected');
-};
-
-/**
- * Adds the dragging class to this block.
- * Also disables the highlights/shadows to improve performance.
- */
-Blockly.BlockSvg.prototype.addDragging = function() {
-  Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
-                    'blocklyDragging');
-};
-
-/**
- * Removes the dragging class from this block.
- */
-Blockly.BlockSvg.prototype.removeDragging = function() {
-  Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
-                       'blocklyDragging');
 };
 
 // Overrides of functions on Blockly.Block that take into account whether the

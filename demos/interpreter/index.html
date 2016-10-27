@@ -172,7 +172,6 @@
       alert('Ready to execute this code:\n\n' + code);
       document.getElementById('stepButton').disabled = '';
       highlightPause = false;
-      workspace.traceOn(true);
       workspace.highlightBlock(null);
     }
 
@@ -183,6 +182,7 @@
         if (!ok) {
           // Program complete, no more code to execute.
           document.getElementById('stepButton').disabled = 'disabled';
+          workspace.highlightBlock(null);
           return;
         }
       }

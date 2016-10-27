@@ -71,7 +71,7 @@ Blockly.WorkspaceSvg = function(options) {
    * @type !Array.<!Blockly.BlockSvg>
    * @private
    */
-  this.highlighted_ = [];
+  this.highlightedBlocks_ = [];
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -555,7 +555,8 @@ Blockly.WorkspaceSvg.prototype.traceOn = function() {
 
 /**
  * Highlight or unhighlight a block in the workspace.
- * @param {?string} id ID of block to find, null for no block.
+ * @param {?string} id ID of block to highlight/unhighlight,
+ *   or null for no block (used to unhighlight all blocks).
  * @param {boolean=} opt_state If undefined, highlight specified block and
  * automatically unhighlight all others.  If true or false, manually
  * highlight/unhighlight the specified block.
@@ -563,10 +564,10 @@ Blockly.WorkspaceSvg.prototype.traceOn = function() {
 Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
   if (opt_state === undefined) {
     // Unhighlight all blocks.
-    for (var i = 0, block; block = this.highlighted_[i]; i++) {
+    for (var i = 0, block; block = this.highlightedBlocks_[i]; i++) {
       block.setHighlighted(false);
     }
-    this.highlighted_.length = 0;
+    this.highlightedBlocks_.length = 0;
   }
   // Highlight/unhighlight the specified block.
   var block = id ? this.getBlockById(id) : null;
@@ -574,9 +575,9 @@ Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
     var state = (opt_state === undefined) || opt_state;
     // Using Set here would be great, but at the cost of IE10 support.
     if (!state) {
-      goog.array.remove(this.highlighted_, block);
-    } else if (this.highlighted_.indexOf(block) == -1) {
-      this.highlighted_.push(block);
+      goog.array.remove(this.highlightedBlocks_, block);
+    } else if (this.highlightedBlocks_.indexOf(block) == -1) {
+      this.highlightedBlocks_.push(block);
     }
     block.setHighlighted(state);
   }

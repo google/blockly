@@ -105,7 +105,7 @@ Blockly.createDom_ = function(container, options) {
   */
   var defs = Blockly.createSvgElement('defs', {}, svg);
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
-  // instances on a page.  Brower behaviour becomes undefined otherwise.
+  // instances on a page.  Browser behaviour becomes undefined otherwise.
   // https://neil.fraser.name/news/2015/11/01/
   var rnd = String(Math.random()).substring(2);
   /*

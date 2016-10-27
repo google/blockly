@@ -2,8 +2,8 @@
  * @license
  * Visual Blocks Editor
  *
- * Copyright 2016 Massachusetts Institute of Technology
- * All rights reserved.
+ * Copyright 2016 Google Inc.
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
  * @fileoverview An SVG that floats on top of the workspace.
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated, so the blocks are never repainted during drag.
- * @author tmickel@mit.edu (Tim Mickel)
+ * @author katelyn@google.com (Katelyn Mann)
  */
 
 'use strict';
@@ -154,26 +154,36 @@ Blockly.WsDragSurfaceSvg.prototype.getChildGroup = function() {
   // For now there is only 1.  Change when there is a bubble canvas???
   return this.SVG_.childNodes[0];
 };
+
 /**
  * Clear the group and hide the surface;  Move everything back to newSurface.
  */
 Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
-  
+
+  var blockCanvas = this.SVG_.childNodes[0];
+  var bubbleCanvas = this.SVG_.childNodes[1];
+  if (!blockCanvas || !bubbleCanvas) {
+    throw 'Couldn\'t clear and hide the drag surface.  A node was missing.';
+  }
   // This is ugly and needs some more testing and reworking.  A unittest is
   // actually probably the easiest way to verify.
+  // Reattach the block canvas.
   if (this.previousSibling_ != null) {
     if (this.previousSibling_.nextSibling != null)  {
-      // There is no insertAfter so we do some sill dom stuff to get the same effect.
-      newSurface.insertBefore(this.getChildGroup(), this.previousSibling_.nextSibling);
+      // There is no insertAfter so we do some silly dom stuff to get the same effect.
+      newSurface.insertBefore(blockCanvas, this.previousSibling_.nextSibling);
     } else {
       // there is nothing to insert it before so we stick it at the end.
-      newSurface.appendChild(this.getChildGroup());
+      newSurface.appendChild(blockCanvas);
     }
   } else if (newSurface.firstChild != null) {
-    newSurface.insertBefore(this.getChildGroup(), newSurface.firstChild);
+    newSurface.insertBefore(blockCanvas, newSurface.firstChild);
   } else {
-    newSurface.appendChild(this.getChildGroup());
+    newSurface.appendChild(blockCanvas);
   }
+
+  // Reattach the bubble canvas.
+  Blockly.utils.insertAfter_(bubbleCanvas, blockCanvas);
   // check th oerder of how we do this dom manipulation.
   this.SVG_.style.display = 'none';
   this.outerDiv_.style.display = 'none';
@@ -189,9 +199,11 @@ Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
  * @param {?Element} sibling The element to insert the block canvas & bubble canvas after
     when it goes back in the dom at the end of a drag.
  */
-Blockly.WsDragSurfaceSvg.prototype.setBlocksAndShow = function(guts, previousSibling, width, height) {
+Blockly.WsDragSurfaceSvg.prototype.setContentsAndShow = function(
+    blockCanvas, bubbleCanvas, previousSibling, width, height) {
   this.previousSibling_ = previousSibling;
-  guts.setAttribute('transform', 'translate(0, 0)');
+  blockCanvas.setAttribute('transform', 'translate(0, 0)');
+  bubbleCanvas.setAttribute('transform', 'translate(0, 0)');
   // if defs goes back in this is the wrong assert
   goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Already dragging a block.');
   // appendChild removes the blocks from the previous parent
@@ -200,7 +212,8 @@ Blockly.WsDragSurfaceSvg.prototype.setBlocksAndShow = function(guts, previousSib
   this.SVG_.setAttribute('width', width);
   this.SVG_.setAttribute('height', height);
   // check the order of this stuff. ie. when appending to dom matters.
-  this.SVG_.appendChild(guts);
+  this.SVG_.appendChild(blockCanvas);
+  this.SVG_.appendChild(bubbleCanvas);
 
   this.SVG_.style.display = 'block';
   this.outerDiv_.style.display = 'block';

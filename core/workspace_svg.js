@@ -762,8 +762,8 @@ Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   var w = this.getParentSvg().getAttribute("width")
   var h = this.getParentSvg().getAttribute("height")
   var coord = Blockly.getRelativeXY_(this.svgBlockCanvas_);
-  this.wsDragSurface_.setBlocksAndShow(this.svgBlockCanvas_,
-    previousElement, w, h);
+  this.wsDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
+      this.svgBubbleCanvas_, previousElement, w, h);
   this.wsDragSurface_.translateSurface(coord.x, coord.y);
 };
 

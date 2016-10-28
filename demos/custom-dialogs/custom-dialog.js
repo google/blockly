@@ -118,7 +118,7 @@ CustomDialog.show = function(title, message, options) {
   dialogDiv.innerHTML =
       '<header class="customDialogTitle"></header>' +
       '<p class="customDialogMessage"></p>' +
-      (options.showInput? '<div><input id="customDialogInput"></div>' : '') +
+      (options.showInput ? '<div><input id="customDialogInput"></div>' : '') +
       '<div class="customDialogButtons">' +
       (options.showCancel ? '<button id="customDialogCancel">Cancel</button>': '') +
       (options.showOkay ? '<button id="customDialogOkay">OK</button>': '') +
@@ -161,10 +161,12 @@ CustomDialog.show = function(title, message, options) {
   }
 
   if (options.showOkay) {
-    document.getElementById('customDialogOkay').onclick = onOkay;
+    document.getElementById('customDialogOkay')
+        .addEventListener('click', onOkay);
   }
   if (options.showCancel) {
-    document.getElementById('customDialogCancel').onclick = onCancel;
+    document.getElementById('customDialogCancel')
+        .addEventListener('click', onCancel);
   }
 
   backdropDiv.onclick = onCancel;

@@ -49,6 +49,19 @@ Blockly.JavaScript['controls_if'] = function(block) {
   return code + '\n';
 };
 
+Blockly.JavaScript['controls_ifelse'] = function(block) {
+  // If/else condition, without mutation.
+  var argument = Blockly.JavaScript.valueToCode(block, 'IF',
+      Blockly.JavaScript.ORDER_NONE) || 'false';
+  var branch = Blockly.JavaScript.statementToCode(block, 'DO');
+  var code = 'if (' + argument + ') {\n' + branch + '}';
+  branch = Blockly.JavaScript.statementToCode(block, 'ELSE');
+  if (branch) {
+    code += ' else {\n' + branch + '}';
+  }
+  return code + '\n';
+};
+
 Blockly.JavaScript['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

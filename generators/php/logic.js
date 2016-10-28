@@ -49,6 +49,19 @@ Blockly.PHP['controls_if'] = function(block) {
   return code + '\n';
 };
 
+Blockly.PHP['controls_ifelse'] = function(block) {
+  // If/else condition, without mutation.
+  var argument = Blockly.PHP.valueToCode(block, 'IF',
+      Blockly.PHP.ORDER_NONE) || 'false';
+  var branch = Blockly.PHP.statementToCode(block, 'DO');
+  var code = 'if (' + argument + ') {\n' + branch + '}';
+  branch = Blockly.PHP.statementToCode(block, 'ELSE');
+  if (branch) {
+    code += ' else {\n' + branch + '}';
+  }
+  return code + '\n';
+};
+
 Blockly.PHP['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

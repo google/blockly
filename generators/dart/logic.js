@@ -49,6 +49,19 @@ Blockly.Dart['controls_if'] = function(block) {
   return code + '\n';
 };
 
+Blockly.Dart['controls_ifelse'] = function(block) {
+  // If/else condition, without mutation.
+  var argument = Blockly.Dart.valueToCode(block, 'IF',
+      Blockly.Dart.ORDER_NONE) || 'false';
+  var branch = Blockly.Dart.statementToCode(block, 'DO');
+  var code = 'if (' + argument + ') {\n' + branch + '}';
+  branch = Blockly.Dart.statementToCode(block, 'ELSE');
+  if (branch) {
+    code += ' else {\n' + branch + '}';
+  }
+    return code + '\n';
+};
+
 Blockly.Dart['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

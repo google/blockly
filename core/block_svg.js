@@ -264,7 +264,8 @@ Blockly.BlockSvg.terminateDrag = function() {
       delete selected.draggedBubbles_;
       selected.setDragging_(false);
       selected.render();
-      // Ensure that any stap and bump are part of this move's event group.
+      selected.workspace.setResizesEnabled(true);
+      // Ensure that any snap and bump are part of this move's event group.
       var group = Blockly.Events.getGroup();
       setTimeout(function() {
         Blockly.Events.setGroup(group);
@@ -276,8 +277,6 @@ Blockly.BlockSvg.terminateDrag = function() {
         selected.bumpNeighbours_();
         Blockly.Events.setGroup(false);
       }, Blockly.BUMP_DELAY);
-      // Fire an event to allow scrollbars to resize.
-      selected.workspace.resizeContents();
     }
   }
   Blockly.dragMode_ = Blockly.DRAG_NONE;
@@ -872,6 +871,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       // Switch to unrestricted dragging.
       Blockly.dragMode_ = Blockly.DRAG_FREE;
       Blockly.longStop_();
+      this.workspace.setResizesEnabled(false);
       if (this.parentBlock_) {
         // Push this block to the very top of the stack.
         this.unplug();

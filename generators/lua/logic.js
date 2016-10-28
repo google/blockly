@@ -40,11 +40,24 @@ Blockly.Lua['controls_if'] = function(block) {
     argument = Blockly.Lua.valueToCode(block, 'IF' + n,
         Blockly.Lua.ORDER_NONE) || 'false';
     branch = Blockly.Lua.statementToCode(block, 'DO' + n);
-    code += ' elseif ' + argument + ' then\n' + branch;
+    code += 'elseif ' + argument + ' then\n' + branch;
   }
   if (block.elseCount_) {
     branch = Blockly.Lua.statementToCode(block, 'ELSE');
-    code += ' else\n' + branch;
+    code += 'else\n' + branch;
+  }
+  return code + 'end\n';
+};
+
+Blockly.Lua['controls_ifelse'] = function(block) {
+  // If/else condition, without mutation.
+  var argument = Blockly.Lua.valueToCode(block, 'IF',
+      Blockly.Lua.ORDER_NONE) || 'false';
+  var branch = Blockly.Lua.statementToCode(block, 'DO');
+  var code = 'if ' + argument + ' then\n' + branch;
+  branch = Blockly.Lua.statementToCode(block, 'ELSE');
+  if (branch) {
+    code += 'else\n' + branch;
   }
   return code + 'end\n';
 };

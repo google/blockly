@@ -52,6 +52,19 @@ Blockly.Python['controls_if'] = function(block) {
   return code;
 };
 
+Blockly.Python['controls_ifelse'] = function(block) {
+  // If/else condition, without mutation.
+  var argument = Blockly.Python.valueToCode(block, 'IF',
+      Blockly.Python.ORDER_NONE) || 'false';
+  var branch = Blockly.Python.statementToCode(block, 'DO');
+  var code = 'if ' + argument + ':\n' + branch;
+  branch = Blockly.Python.statementToCode(block, 'ELSE');
+  if (branch) {
+    code += 'else:\n' + branch;
+  }
+  return code;
+};
+
 Blockly.Python['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

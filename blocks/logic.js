@@ -267,7 +267,7 @@ Blockly.Blocks['controls_if_else'] = {
 
 Blockly.Blocks['controls_ifelse'] = {
   /**
-   * If/else block that does not a mutator.
+   * If/else block that does not use a mutator.
    */
   init: function() {
     this.jsonInit({
@@ -275,13 +275,13 @@ Blockly.Blocks['controls_ifelse'] = {
       "args0": [
         {
           "type": "input_value",
-          "name": "IF",
+          "name": "IF0",
           "check": "Boolean",
           "align": "RIGHT"
         },
         {
           "type": "input_statement",
-          "name": "DO",
+          "name": "DO0",
           "check": "Boolean",
           "align": "RIGHT"
         },

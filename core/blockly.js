@@ -118,6 +118,28 @@ Blockly.clipboardSource_ = null;
 Blockly.dragMode_ = Blockly.DRAG_NONE;
 
 /**
+ * Map from function names to callbacks, for deciding what to do when a button
+ * is clicked.
+ * @type {!Object<string, function(!Blockly.FlyoutButton)}
+ */
+Blockly.flyoutButtonCallbacks_ = {};
+
+/**
+ * Register a callback function associated with a given key, for clicks on
+ * buttons and labels in the flyout.
+ * For instance, a button specified by the xml
+ * <button text="create variable" callbackKey="CREATE_VARIABLE"></button>
+ * should be matched by a call to
+ * registerButtonCallback("CREATE_VARIABLE", yourCallbackFunction).
+ * @param {string} key The name to use to look up this function.
+ * @param {function(!Blockly.FlyoutButton)} func The function to call when the
+ *     given button is clicked.
+ */
+Blockly.registerButtonCallback = function(key, func) {
+  Blockly.flyoutButtonCallbacks_[key] = func;
+};
+
+/**
  * Convert a hue (HSV model) into an RGB hex triplet.
  * @param {number} hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
@@ -342,7 +364,7 @@ Blockly.getMainWorkspace = function() {
 };
 
 /**
- * Wrapper to window.alert() that app developers may override to 
+ * Wrapper to window.alert() that app developers may override to
  * provide alternatives to the modal browser window.
  * @param {string} message The message to display to the user.
  * @param {function()=} opt_callback The callback when the alert is dismissed.
@@ -355,7 +377,7 @@ Blockly.alert = function(message, opt_callback) {
 };
 
 /**
- * Wrapper to window.confirm() that app developers may override to 
+ * Wrapper to window.confirm() that app developers may override to
  * provide alternatives to the modal browser window.
  * @param {string} message The message to display to the user.
  * @param {!function(boolean)} callback The callback for handling user response.

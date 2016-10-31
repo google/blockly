@@ -668,7 +668,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
       this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
-  var handleXY = Blockly.getSvgXY_(this.svgHandle_, this.workspace_);
+  var handleXY = Blockly.getInjectionDivXY_(this.svgHandle_);
   var handleStart = this.horizontal_ ? handleXY.x : handleXY.y;
   var handlePosition = this.handlePosition_;
 

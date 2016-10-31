@@ -698,11 +698,13 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         } else {
           gaps.push(default_gap);
         }
-      } else if (tagName == 'BUTTON') {
-        var label = xml.getAttribute('text');
+      } else if (tagName == 'BUTTON' || tagName == 'LABEL') {
+        // Labels behave the same as buttons, but are styled differently.
+        var isLabel = tagName == 'LABEL';
+        var text = xml.getAttribute('text');
         var callbackKey = xml.getAttribute('callbackKey');
         var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, label, callbackKey);
+            this.targetWorkspace_, text, callbackKey, isLabel);
         contents.push({type: 'button', button: curButton});
         gaps.push(default_gap);
       }

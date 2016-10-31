@@ -330,7 +330,6 @@ Blockly.getRelativeXY_.XY_3D_REGEXP_ =
   /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 Blockly.getInjectionDivXY_ = function(element) {
-  var injectionDiv = document.getElementsByClassName('injectionDiv')[0];
   var x = 0;
   var y = 0;
   var scale = 1;
@@ -340,7 +339,7 @@ Blockly.getInjectionDivXY_ = function(element) {
     var scale = Blockly.getScale_(element);
     x = (x * scale) + xy.x;
     y = (y * scale) + xy.y;
-    if (element == injectionDiv) {
+    if (Blockly.hasClass_(element, 'injectionDiv')) {
       break;
     }
     element = element.parentNode;

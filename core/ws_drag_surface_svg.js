@@ -129,8 +129,8 @@ Blockly.WsDragSurfaceSvg.prototype.translateSurface = function(x, y) {
   // This is a work-around to prevent a bug in Safari, where numbers close to 0
   // are sometimes reported as something like "2.9842794901924208e-12".
   // That is incompatible with translate3d, causing bugs.
-  x = x.toFixed(2);
-  y = y.toFixed(2);
+  x = x.toFixed(0);
+  y = y.toFixed(0);
   // Ignorning browesers that don't support translate3d at the moment.
   transform = 'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
   this.SVG_.setAttribute('style', transform);

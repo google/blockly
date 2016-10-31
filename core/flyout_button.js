@@ -32,15 +32,17 @@ goog.require('goog.math.Coordinate');
 
 /**
  * Class for a button in the flyout.
- * @param {!Blockly.Workspace} workspace The workspace in which to place this
+ * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
  *     button.
- * @param {!Blockly.Workspace} targetWorkspace The flyout's target workspace.
+ * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
  * @param {string} text The text to display on the button.
+ * @param {string} callbackKey The key to use when looking up the callback for a
+ *     click on this button.
  * @constructor
  */
-Blockly.FlyoutButton = function(workspace, targetWorkspace, text) {
+Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callbackKey) {
   /**
-   * @type {!Blockly.Workspace}
+   * @type {!Blockly.WorkspaceSvg}
    * @private
    */
   this.workspace_ = workspace;
@@ -62,6 +64,13 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, text) {
    * @private
    */
   this.position_ = new goog.math.Coordinate(0, 0);
+
+  /**
+   * Function to call when this button is clicked.
+   * @type {function(!Blockly.FlyoutButton)}
+   * @private
+   */
+  this.callback_ = Blockly.flyoutButtonCallbacks_[callbackKey];
 };
 
 /**
@@ -149,6 +158,15 @@ Blockly.FlyoutButton.prototype.moveTo = function(x, y) {
 };
 
 /**
+ * Get the button's target workspace.
+ * @return {!Blockly.WorkspaceSvg} The target workspace of the flyout where this
+ *     button resides.
+ */
+Blockly.FlyoutButton.prototype.getTargetWorkspace = function() {
+  return this.targetWorkspace_;
+};
+
+/**
  * Dispose of this button.
  */
 Blockly.FlyoutButton.prototype.dispose = function() {
@@ -172,5 +190,7 @@ Blockly.FlyoutButton.prototype.onMouseUp = function(e) {
   // Stop binding to mouseup and mousemove events--flyout mouseup would normally
   // do this, but we're skipping that.
   Blockly.Flyout.terminateDrag_();
-  Blockly.Variables.createVariable(this.targetWorkspace_);
+
+  // Call the callback registered to this button.
+  this.callback_(this);
 };

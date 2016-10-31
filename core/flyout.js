@@ -700,8 +700,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         }
       } else if (tagName == 'BUTTON') {
         var label = xml.getAttribute('text');
+        var callbackKey = xml.getAttribute('callbackKey');
         var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, label);
+            this.targetWorkspace_, label, callbackKey);
         contents.push({type: 'button', button: curButton});
         gaps.push(default_gap);
       }

@@ -362,6 +362,7 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         break;
       case 'BLOCK':
       case 'SHADOW':
+      case 'BUTTON':
         treeOut.blocks.push(childIn);
         lastElement = childIn;
         break;

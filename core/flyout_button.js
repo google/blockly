@@ -36,9 +36,11 @@ goog.require('goog.math.Coordinate');
  *     button.
  * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
  * @param {string} text The text to display on the button.
+ * @param {string} callbackKey The key to use when looking up the callback for a
+ *     click on this button.
  * @constructor
  */
-Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callback_key) {
+Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callbackKey) {
   /**
    * @type {!Blockly.WorkspaceSvg}
    * @private
@@ -68,7 +70,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callback_key) 
    * @type {function(!Blockly.FlyoutButton)}
    * @private
    */
-  this.callback_ = Blockly.flyoutButtonCallbacks_[callback_key];
+  this.callback_ = Blockly.flyoutButtonCallbacks_[callbackKey];
 };
 
 /**

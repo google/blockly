@@ -105,16 +105,10 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   var thisField = this;
 
   function callback(e) {
+    var menu = this;
     var menuItem = e.target;
     if (menuItem) {
-      var value = menuItem.getValue();
-      if (thisField.sourceBlock_) {
-        // Call any validation function, and allow it to override.
-        value = thisField.callValidator(value);
-      }
-      if (value !== null) {
-        thisField.setValue(value);
-      }
+      thisField.onItemSelected(menu, menuItem);
     }
     Blockly.WidgetDiv.hideIfOwner(thisField);
   }
@@ -191,6 +185,22 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   menu.setAllowAutoFocus(true);
   menuDom.focus();
 };
+
+/**
+ * Handle the selection of an item in the dropdown menu.
+ * @param {goog.ui.Menu} menu The Menu component clicked.
+ * @param {goog.ui.MenuItem} menuItem The MenuItem selected within menu.
+ */
+Blockly.FieldDropdown.prototype.onItemSelected = function(menu, menuItem) {
+  var value = menuItem.getValue();
+  if (this.sourceBlock_) {
+    // Call any validation function, and allow it to override.
+    value = this.callValidator(value);
+  }
+  if (value !== null) {
+    this.setValue(value);
+  }
+}
 
 /**
  * Factor out common words in statically defined options.

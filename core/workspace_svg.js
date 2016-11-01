@@ -384,9 +384,11 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
 
 /**
  * Add a flyout.
+ * @param {string} tagName What type of tag the flyout belongs in.
+ * @return {!Element} The element containing the flyout dom.
  * @private
  */
-Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
+Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
     parentWorkspace: this,
@@ -398,10 +400,10 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   /** @type {Blockly.Flyout} */
   this.flyout_ = new Blockly.Flyout(workspaceOptions);
   this.flyout_.autoClose = false;
-  var svgFlyout = this.flyout_.createDom();
-  document.getElementsByClassName('injectionDiv')[0].appendChild(svgFlyout);
-//  Blockly.utils.insertAfter_(svgFlyout, this.getParentSvg());
-//  this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
+  var svgFlyout = this.flyout_.createDom(tagName);
+  // Return the element so that callers can place it in their desired spot
+  // within the dom.  Unfortunately, mutators are special.
+  return svgFlyout;  
 };
 
 /**

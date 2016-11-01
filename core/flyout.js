@@ -276,18 +276,20 @@ Blockly.Flyout.prototype.containerVisible_ = true;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.
+ * @param {string} tagName The type of tag to put the flyout in. 
+ * This is usually an svg or g.
  * @return {!Element} The flyout's SVG group.
  */
-Blockly.Flyout.prototype.createDom = function() {
+Blockly.Flyout.prototype.createDom = function(tagName) {
   /*
-  <svg>
+  <svg | g>
     <path class="blocklyFlyoutBackground"/>
     <g class="blocklyFlyout"></g>
-  </svg>
+  </svg | g>
   */
   // Setting style to display none to start.  The toolbox and flyout
   // hide/show code  will set up the proper visibility and size later.
-  this.svgGroup_ = Blockly.createSvgElement('svg',
+  this.svgGroup_ = Blockly.createSvgElement(tagName,
       {'class': 'blocklyFlyout', 'style': 'display:none'}, null);
   this.svgBackground_ = Blockly.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
@@ -1225,6 +1227,10 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
 
   var element = svgRootOld;
   var xyOld = Blockly.getInjectionDivXY_(svgRootOld);
+  if (targetWorkspace.isMutator) {
+    xyOld = Blockly.getSvgXY_(svgRootOld, this.workspace_);
+  }
+
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).
   // Generally a no-op in vertical mode but likely to happen in horizontal
@@ -1269,6 +1275,10 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   // original block because the flyout's origin may not be the same as the
   // main workspace's origin.
   var xyNew = Blockly.getInjectionDivXY_(svgRootNew);
+   if (targetWorkspace.isMutator) {
+     xyNew = Blockly.getSvgXY_(svgRootNew, targetWorkspace);
+   }
+
   // Scale the scroll (getSvgXY_ did not do this).
   xyNew.x +=
       targetWorkspace.scrollX / targetWorkspace.scale - targetWorkspace.scrollX;

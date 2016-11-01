@@ -194,7 +194,9 @@ Blockly.createMainWorkspace_ = function(svg, options, dragSurface) {
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   if (!options.hasCategories && options.languageTree) {
-    mainWorkspace.addFlyout_();
+    // add flyout as its own <svg>
+    var flyout = mainWorkspace.addFlyout_('svg');
+    Blockly.utils.insertAfter_(flyout, svg);
   }
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);

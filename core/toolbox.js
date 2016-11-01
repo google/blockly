@@ -179,7 +179,7 @@ Blockly.Toolbox.prototype.init = function() {
    * @private
    */
   this.flyout_ = new Blockly.Flyout(workspaceOptions);
-  Blockly.utils.insertAfter_(this.flyout_.createDom(),
+  Blockly.utils.insertAfter_(this.flyout_.createDom('svg'),
                                  this.workspace_.getParentSvg());
   this.flyout_.init(workspace);
 

@@ -301,36 +301,42 @@ Blockly.Workspace.prototype.getVariableUses = function(name) {
  * @param {string} name Name of variable to delete.
  */
 Blockly.Workspace.prototype.deleteVariable = function(name) {
+  var workspace = this;
   var variableIndex = this.variableIndexOf(name);
   if (variableIndex != -1) {
     var uses = this.getVariableUses(name);
+    function doDeletion() {
+      Blockly.Events.setGroup(true);
+      for (var i = 0; i < uses.length; i++) {
+        uses[i].dispose(true, false);
+      }
+      Blockly.Events.setGroup(false);
+      workspace.variableList.splice(variableIndex, 1);
+    }
     if (uses.length > 1) {
+      // Confirm the deletion of multiple blocks
       for (var i = 0, block; block = uses[i]; i++) {
         if (block.type == 'procedures_defnoreturn' ||
           block.type == 'procedures_defreturn') {
           var procedureName = block.getFieldValue('NAME');
           Blockly.alert(
-              Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.replace('%1', name).
-                  replace('%2', procedureName));
+              Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
+              replace('%1', name).
+              replace('%2', procedureName));
           return;
         }
       }
-      var workspace = this;
       Blockly.confirm(
           Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
           replace('%2', name),
           function(ok) {
-            if (!ok) {
-              return;
+            if (ok) {
+              doDeletion();
             }
-
-            Blockly.Events.setGroup(true);
-            for (var i = 0; i < uses.length; i++) {
-              uses[i].dispose(true, false);
-            }
-            Blockly.Events.setGroup(false);
-            workspace.variableList.splice(variableIndex, 1);
           });
+    } else {
+      // No confirmation necessary for a single block.
+      doDeletion();
     }
   }
 };

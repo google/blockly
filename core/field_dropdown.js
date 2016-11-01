@@ -188,8 +188,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
 
 /**
  * Handle the selection of an item in the dropdown menu.
- * @param {goog.ui.Menu} menu
- * @param {goog.ui.MenuItem} menuItem
+ * @param {goog.ui.Menu} menu The Menu component clicked.
+ * @param {goog.ui.MenuItem} menuItem The MenuItem selected within menu.
  */
 Blockly.FieldDropdown.prototype.onItemSelected = function(menu, menuItem) {
   var value = menuItem.getValue();

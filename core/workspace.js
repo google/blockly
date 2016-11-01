@@ -304,7 +304,20 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
   var workspace = this;
   var variableIndex = this.variableIndexOf(name);
   if (variableIndex != -1) {
+    // Check whether this variable is a function parameter before deleting.
     var uses = this.getVariableUses(name);
+    for (var i = 0, block; block = uses[i]; i++) {
+      if (block.type == 'procedures_defnoreturn' ||
+        block.type == 'procedures_defreturn') {
+        var procedureName = block.getFieldValue('NAME');
+        Blockly.alert(
+            Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
+            replace('%1', name).
+            replace('%2', procedureName));
+        return;
+      }
+    }
+    
     function doDeletion() {
       Blockly.Events.setGroup(true);
       for (var i = 0; i < uses.length; i++) {
@@ -314,18 +327,7 @@ Blockly.Workspace.prototype.deleteVariable = function(name) {
       workspace.variableList.splice(variableIndex, 1);
     }
     if (uses.length > 1) {
-      // Confirm the deletion of multiple blocks
-      for (var i = 0, block; block = uses[i]; i++) {
-        if (block.type == 'procedures_defnoreturn' ||
-          block.type == 'procedures_defreturn') {
-          var procedureName = block.getFieldValue('NAME');
-          Blockly.alert(
-              Blockly.Msg.CANNOT_DELETE_VARIABLE_PROCEDURE.
-              replace('%1', name).
-              replace('%2', procedureName));
-          return;
-        }
-      }
+      // Confirm before deleting multiple blocks.
       Blockly.confirm(
           Blockly.Msg.DELETE_VARIABLE_CONFIRMATION.replace('%1', uses.length).
           replace('%2', name),

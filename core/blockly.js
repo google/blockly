@@ -399,6 +399,33 @@ Blockly.prompt = function(message, defaultValue, callback) {
   callback(window.prompt(message, defaultValue));
 };
 
+/**
+ * Helper function for defining a block from json.  The resulting function has
+ * the correct value of jsonDef at the point in code where jsonInit is called.
+ * @param {Object} jsonDef The JSON definition of a block.
+ * @return {function} A function that calls jsonInit with the correct value
+ *     of jsonDef.
+ */
+Blockly.jsonInitFactory_ = function(jsonDef) {
+  return function() {
+    this.jsonInit(jsonDef);
+  };
+};
+
+/**
+ * Define blocks from an array of JSON block definitions, as might be generated
+ * by the Blockly Developer Tools.
+ * @param {!Array<Object>} jsonArray An array of JSON block definitions.
+ */
+Blockly.defineBlocksWithJsonArray = function(jsonArray) {
+  for (var index = 0; index < jsonArray.length; index++) {
+    var elem = jsonArray[index];
+    Blockly.Blocks[elem.type] = {
+      init: Blockly.jsonInitFactory_(elem)
+    };
+  }
+};
+
 // IE9 does not have a console.  Create a stub to stop errors.
 if (!goog.global['console']) {
   goog.global['console'] = {

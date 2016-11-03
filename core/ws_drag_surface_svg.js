@@ -64,19 +64,6 @@ Blockly.WsDragSurfaceSvg.prototype.dragGroup_ = null;
  */
 Blockly.WsDragSurfaceSvg.prototype.container_ = null;
 
-/**
- * ID for the drag shadow filter, set in createDom.
- * @type {string}
- * @private
- */
-Blockly.WsDragSurfaceSvg.prototype.dragShadowFilterId_ = '';
-
-/**
- * Standard deviation for gaussian blur on drag shadow, in px.
- * @type {number}
- * @const
- */
-Blockly.WsDragSurfaceSvg.SHADOW_STD_DEVIATION = 6;
 
 /**
  * Create the drag surface and inject it into the container.
@@ -179,9 +166,14 @@ Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 
 /**
  * Set the SVG to have everything on it and how the surface.
- * @param {!Element} guts Block or group of blocks to place on the drag surface
- * @param {?Element} sibling The element to insert the block canvas & bubble canvas after
-    when it goes back in the dom at the end of a drag.
+ * @param {!Element} blockCanvas The block canvas <g> element from the workspace.
+ * @param {!Element} bubbleCanvas The <g> element that contains the bubbles.
+ * @param {?Element} previousSibling The element to insert the block canvas &
+   bubble canvas after when it goes back in the dom at the end of a drag.
+ * @param {number} width The width of the workspace svg element.
+ * @param {number} height The height of the workspace svg element.
+ * @param {number} scale The scale of the workspace being dragged.
+ * 
  */
 Blockly.WsDragSurfaceSvg.prototype.setContentsAndShow = function(
     blockCanvas, bubbleCanvas, previousSibling, width, height, scale) {
@@ -189,16 +181,17 @@ Blockly.WsDragSurfaceSvg.prototype.setContentsAndShow = function(
   blockCanvas.setAttribute('transform', 'translate(0, 0) scale(' + scale + ')');
   bubbleCanvas.setAttribute('transform', 'translate(0, 0) scale(' + scale + ')');
   // if defs goes back in this is the wrong assert
-  goog.asserts.assert(this.SVG_.childNodes.length == 0, 'Already dragging a block.');
+  goog.asserts.assert(this.SVG_.childNodes.length == 0,
+    'Already dragging a block.');
   // appendChild removes the blocks from the previous parent
+  // TODO: Cost of a layout on mousedown is high.  Try updating the height
+  // continuously while these elements are invisible will help. 
   this.outerDiv_.style.width = width;
   this.outerDiv_.style.height = height;
   this.SVG_.setAttribute('width', width);
   this.SVG_.setAttribute('height', height);
-  // check the order of this stuff. ie. when appending to dom matters.
   this.SVG_.appendChild(blockCanvas);
   this.SVG_.appendChild(bubbleCanvas);
-
   this.SVG_.style.display = 'block';
   this.outerDiv_.style.display = 'block';
 };

@@ -131,12 +131,6 @@ Blockly.Bubble.onMouseMoveWrapper_ = null;
 Blockly.Bubble.prototype.resizeCallback_ = null;
 
 /**
- * Function to call on position of bubble.
- * @type {Function}
- */
-Blockly.Bubble.prototype.repositionCallback_ = null;
-
-/**
  * Stop binding to the global mouseup and mousemove events.
  * @private
  */
@@ -367,14 +361,6 @@ Blockly.Bubble.prototype.registerResizeEvent = function(callback) {
 };
 
 /**
- * Register a function as a callback event for when the bubble is repositioned.
- * @param {!Function} callback The function to call on reposition.
- */
-Blockly.Bubble.prototype.registerRepositionEvent = function(callback) {
-  this.repositionCallback_ = callback;
-};
-
-/**
  * Move this bubble to the top of the stack.
  * @private
  */
@@ -455,10 +441,6 @@ Blockly.Bubble.prototype.positionBubble_ = function() {
   var top = this.relativeTop_ + this.anchorXY_.y;
   this.bubbleGroup_.setAttribute('transform',
       'translate(' + left + ',' + top + ')');
-
-  if (this.repositionCallback_){
-    this.repositionCallback_();
-  }
 };
 
 /**

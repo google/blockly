@@ -204,17 +204,7 @@ Blockly.Mutator.prototype.resizeBubble_ = function() {
   }
   this.workspace_.resize();
 };
-
-/**
- * Callback function triggered when the bubble has repositioned.
- * Relocate workspace elements appropriately.
- * @private
- */
-Blockly.Mutator.prototype.positionBubble_ = function() {
-  if (this.workspace_.getFlyout()) {
-    this.workspace_.getFlyout().position();
-  }
-};  
+ 
 
 /**
  * Show or hide the mutator bubble.
@@ -232,7 +222,6 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.WorkspaceSvg} */ (this.block_.workspace),
         this.createEditor_(), this.block_.svgPath_, this.iconXY_, null, null);
-    this.bubble_.registerRepositionEvent(this.positionBubble_.bind(this));
     var tree = this.workspace_.options.languageTree;
     if (tree) {
       this.workspace_.flyout_.init(this.workspace_);

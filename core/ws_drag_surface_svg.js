@@ -65,14 +65,6 @@ Blockly.WsDragSurfaceSvg.prototype.dragGroup_ = null;
 Blockly.WsDragSurfaceSvg.prototype.container_ = null;
 
 /**
- * Cached value for the scale of the drag surface.
- * Used to set/get the correct translation during and after a drag.
- * @type {Number}
- * @private
- */
-Blockly.WsDragSurfaceSvg.prototype.scale_ = 1;
-
-/**
  * ID for the drag shadow filter, set in createDom.
  * @type {string}
  * @private
@@ -103,12 +95,6 @@ Blockly.WsDragSurfaceSvg.prototype.createDom = function() {
     'class': 'blocklyWsDragSurface'
   }, this.outerDiv_);
   this.container_.appendChild(this.outerDiv_);
-  //var defs = Blockly.createSvgElement('defs', {}, this.SVG_);
-//  this.dragShadowFilterId_ = this.createDropShadowDom_(defs);
-  // not sure if we need a <g> to put stuff in.  Maybe it can just go inside
-  // the svg.
-  //this.dragGroup_ = Blockly.createSvgElement('g', {}, this.SVG_);
-  //this.dragGroup_.setAttribute('filter', 'url(#' + this.dragShadowFilterId_ + ')');
 };
 
 
@@ -121,18 +107,15 @@ Blockly.WsDragSurfaceSvg.prototype.createDom = function() {
  * @param {Number} y Y translation for the entire surface
  */
 Blockly.WsDragSurfaceSvg.prototype.translateSurface = function(x, y) {
-
-  var transform;
-  x *= this.scale_; // have I set these? Maybe not?
-  y *= this.scale_;
   // Force values to have two decimal points.
   // This is a work-around to prevent a bug in Safari, where numbers close to 0
   // are sometimes reported as something like "2.9842794901924208e-12".
   // That is incompatible with translate3d, causing bugs.
   x = x.toFixed(0);
   y = y.toFixed(0);
-  // Ignorning browesers that don't support translate3d at the moment.
-  transform = 'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
+  // Ignorning browsers that don't support translate3d at the moment.
+  var transform =
+    'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
   this.SVG_.setAttribute('style', transform);
 };
 
@@ -143,7 +126,7 @@ Blockly.WsDragSurfaceSvg.prototype.translateSurface = function(x, y) {
  */
 Blockly.WsDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
   var xy = Blockly.getRelativeXY_(this.SVG_);
-  return new goog.math.Coordinate(xy.x / this.scale_, xy.y / this.scale_);
+  return new goog.math.Coordinate(xy.x, xy.y);
 };
 
 /**
@@ -157,9 +140,10 @@ Blockly.WsDragSurfaceSvg.prototype.getChildGroup = function() {
 
 /**
  * Clear the group and hide the surface;  Move everything back to newSurface.
+ * @param {!SVGElement} newSurface The element to put the drag surface contents
+ * into.
  */
 Blockly.WsDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
-
   var blockCanvas = this.SVG_.childNodes[0];
   var bubbleCanvas = this.SVG_.childNodes[1];
   if (!blockCanvas || !bubbleCanvas) {

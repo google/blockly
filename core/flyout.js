@@ -488,7 +488,6 @@ Blockly.Flyout.prototype.position = function() {
     y += targetWorkspaceMetrics.viewHeight;
     y -= this.height_;
   }
- //  this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
 
   // Record the height for Blockly.Flyout.getMetrics_, or width if the layout is
   // horizontal.
@@ -499,10 +498,7 @@ Blockly.Flyout.prototype.position = function() {
   }
   this.svgGroup_.setAttribute("width", this.width_);
   this.svgGroup_.setAttribute("height", this.height_);
-  // offset from the target workspace svg's 0,0.
-  // put somewhere better.
-  this.x_ = x;
-  this.y_ = y;
+  // Fix for browsers that don't support translate3d.
   var transform = 'translate3d(' + x + 'px,' + y + 'px,0px)';  
   this.svgGroup_.style.transform = transform;
 
@@ -523,7 +519,6 @@ Blockly.Flyout.prototype.position = function() {
  * @private
  */
 Blockly.Flyout.prototype.setBackgroundPath_ = function(width, height) {
-
   if (this.horizontalLayout_) {
     this.setBackgroundPathHorizontal_(width, height);
   } else {

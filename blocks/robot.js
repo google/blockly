@@ -278,7 +278,7 @@ Blockly.robot.getCustomLandmarkOptions = function() {
     for (var i=0; i<result.messages.length; ++i) {
       var message = result.messages[i];
       var landmark = JSON.parse(message.json);
-      options.push([landmark.name, message.id]);
+      options.push([landmark.name, landmark.name]);
     }
     Blockly.robot.customLandmarks = options;
   });

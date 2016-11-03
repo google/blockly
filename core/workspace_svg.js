@@ -38,6 +38,7 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
 
+goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.math.Coordinate');
 goog.require('goog.userAgent');
@@ -65,6 +66,12 @@ Blockly.WorkspaceSvg = function(options) {
    * @const
    */
   this.SOUNDS_ = Object.create(null);
+  /**
+   * List of currently highlighted blocks.
+   * @type !Array.<!Blockly.BlockSvg>
+   * @private
+   */
+  this.highlightedBlocks_ = [];
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -102,6 +109,14 @@ Blockly.WorkspaceSvg.prototype.isMutator = false;
  * @private
  */
 Blockly.WorkspaceSvg.prototype.dragMode_ = Blockly.DRAG_NONE;
+
+/**
+ * Whether this workspace has resizes enabled.
+ * Disable during batch operations for a performance improvement.
+ * @type {boolean}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.resizesEnabled_ = true;
 
 /**
  * Current horizontal scrolling offset.
@@ -260,6 +275,10 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
+    /**
+     * @type {Blockly.Toolbox}
+     * @private
+     */
     this.toolbox_ = new Blockly.Toolbox(this);
   } else if (this.options.languageTree) {
     this.addFlyout_();
@@ -385,12 +404,15 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
 };
 
 /**
- * Resize the parts of the workspace that change when the workspace
+ * If enabled, resize the parts of the workspace that change when the workspace
  * contents (e.g. block positions) change.  This will also scroll the
  * workspace contents if needed.
  * @package
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
+  if (!this.resizesEnabled_) {
+    return;
+  }
   if (this.scrollbar) {
     // TODO(picklesrus): Once rachel-fenichel's scrollbar refactoring
     // is complete, call the method that only resizes scrollbar
@@ -533,53 +555,43 @@ Blockly.WorkspaceSvg.prototype.render = function() {
 };
 
 /**
- * Turn the visual trace functionality on or off.
- * @param {boolean} armed True if the trace should be on.
+ * Was used back when block highlighting (for execution) and block selection
+ * (for editing) were the same thing.
+ * Any calls of this function can be deleted.
+ * @deprecated October 2016
  */
-Blockly.WorkspaceSvg.prototype.traceOn = function(armed) {
-  this.traceOn_ = armed;
-  if (this.traceWrapper_) {
-    Blockly.unbindEvent_(this.traceWrapper_);
-    this.traceWrapper_ = null;
-  }
-  if (armed) {
-    this.traceWrapper_ = Blockly.bindEventWithChecks_(this.svgBlockCanvas_,
-        'blocklySelectChange', this, function() {this.traceOn_ = false;});
-  }
+Blockly.WorkspaceSvg.prototype.traceOn = function() {
+  console.warn('Deprecated call to traceOn, delete this.');
 };
 
 /**
- * Highlight a block in the workspace.
- * @param {?string} id ID of block to find.
+ * Highlight or unhighlight a block in the workspace.
+ * @param {?string} id ID of block to highlight/unhighlight,
+ *   or null for no block (used to unhighlight all blocks).
+ * @param {boolean=} opt_state If undefined, highlight specified block and
+ * automatically unhighlight all others.  If true or false, manually
+ * highlight/unhighlight the specified block.
  */
-Blockly.WorkspaceSvg.prototype.highlightBlock = function(id) {
-  if (this.traceOn_ && Blockly.dragMode_ != Blockly.DRAG_NONE) {
-    // The blocklySelectChange event normally prevents this, but sometimes
-    // there is a race condition on fast-executing apps.
-    this.traceOn(false);
-  }
-  if (!this.traceOn_) {
-    return;
-  }
-  var block = null;
-  if (id) {
-    block = this.getBlockById(id);
-    if (!block) {
-      return;
+Blockly.WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
+  if (opt_state === undefined) {
+    // Unhighlight all blocks.
+    for (var i = 0, block; block = this.highlightedBlocks_[i]; i++) {
+      block.setHighlighted(false);
     }
+    this.highlightedBlocks_.length = 0;
   }
-  // Temporary turn off the listener for selection changes, so that we don't
-  // trip the monitor for detecting user activity.
-  this.traceOn(false);
-  // Select the current block.
+  // Highlight/unhighlight the specified block.
+  var block = id ? this.getBlockById(id) : null;
   if (block) {
-    block.select();
-  } else if (Blockly.selected) {
-    Blockly.selected.unselect();
+    var state = (opt_state === undefined) || opt_state;
+    // Using Set here would be great, but at the cost of IE10 support.
+    if (!state) {
+      goog.array.remove(this.highlightedBlocks_, block);
+    } else if (this.highlightedBlocks_.indexOf(block) == -1) {
+      this.highlightedBlocks_.push(block);
+    }
+    block.setHighlighted(state);
   }
-  // Restore the monitor for user activity after the selection event has fired.
-  var thisWorkspace = this;
-  setTimeout(function() {thisWorkspace.traceOn(true);}, 1);
 };
 
 /**
@@ -994,10 +1006,16 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
         Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteList.length)),
     enabled: deleteList.length > 0,
     callback: function() {
-      if (deleteList.length < 2 ||
-          window.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1',
-          String(deleteList.length)))) {
+      if (deleteList.length < 2 ) {
         deleteNext();
+      } else {
+        Blockly.confirm(Blockly.Msg.DELETE_ALL_BLOCKS.
+            replace('%1', deleteList.length),
+            function(ok) {
+              if (ok) {
+                deleteNext();
+              }
+            });
       }
     }
   };
@@ -1413,6 +1431,32 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
     }
   }
 };
+
+/**
+ * Update whether this workspace has resizes enabled.
+ * If enabled, workspace will resize when appropriate.
+ * If disabled, workspace will not resize until re-enabled.
+ * Use to avoid resizing during a batch operation, for performance.
+ * @param {boolean} enabled Whether resizes should be enabled.
+ */
+Blockly.WorkspaceSvg.prototype.setResizesEnabled = function(enabled) {
+  var reenabled = (!this.resizesEnabled_ && enabled);
+  this.resizesEnabled_ = enabled;
+  if (reenabled) {
+    // Newly enabled.  Trigger a resize.
+    this.resizeContents();
+  }
+};
+
+/**
+ * Dispose of all blocks in workspace, with an optimization to prevent resizes.
+ */
+Blockly.WorkspaceSvg.prototype.clear = function() {
+  this.setResizesEnabled(false);
+  Blockly.WorkspaceSvg.superClass_.clear.call(this);
+  this.setResizesEnabled(true);
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.WorkspaceSvg.prototype['setVisible'] =
     Blockly.WorkspaceSvg.prototype.setVisible;

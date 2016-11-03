@@ -57,7 +57,6 @@ Blockly.inject = function(container, opt_options) {
   var svg = Blockly.createDom_(subContainer, options);
   var wsDragSurface = new Blockly.WsDragSurfaceSvg(subContainer);
   wsDragSurface.createDom();
-
   var workspace = Blockly.createMainWorkspace_(svg, options, wsDragSurface);
   Blockly.init_(workspace);
   workspace.markFocused();
@@ -102,7 +101,6 @@ Blockly.createDom_ = function(container, options) {
     'version': '1.1',
     'class': 'blocklySvg'
   }, container);
-
   /*
   <defs>
     ... filters go here ...
@@ -185,6 +183,8 @@ Blockly.createDom_ = function(container, options) {
  * Create a main workspace and add it to the SVG.
  * @param {!Element} svg SVG element with pattern defined.
  * @param {!Blockly.Options} options Dictionary of options.
+ * @param {?Blockly.WsDragSurfaceSvg} dragSurface  The surface to hold the
+ * workspace while dragging.
  * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */

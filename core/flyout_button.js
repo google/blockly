@@ -123,7 +123,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
       this.svgGroup_);
 
   var svgText = Blockly.createSvgElement('text',
-      {'class':  this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
+      {'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
         'x': 0, 'y': 0,
         'text-anchor': 'middle'}, this.svgGroup_);
   svgText.textContent = this.text_;

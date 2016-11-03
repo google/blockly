@@ -374,7 +374,7 @@ Blockly.robot.getPbdActions = function() {
     for (var i=0; i<result.messages.length; ++i) {
       var message = result.messages[i];
       var program = JSON.parse(message.json);
-      options.push([program.name, message.id]);
+      options.push([program.name, program.name]);
     }
     Blockly.robot.pbdActions = options;
   });
@@ -505,7 +505,7 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
       }
       for (var i=0; i<result.landmarks.length; ++i) {
         var landmark = result.landmarks[i];
-        options.push([landmark.name, landmark.db_id]);
+        options.push([landmark.name, landmark.name]);
       }
       callback(options);
     });

@@ -205,7 +205,8 @@ Blockly.JavaScript['robot_manipulation_run_pbd_action'] = function(block) {
   for (var i=0; i<block.landmarks_.length; i++) {
     var id = block.landmarks_[i][1];
     var value_landmark = Blockly.JavaScript.valueToCode(block, 'LANDMARK' + i, Blockly.JavaScript.ORDER_COMMA) || 'null';
-    preregistered += '\'' + id  + '\': ' + value_landmark;
+
+    preregistered += Blockly.JavaScript.quote_(id) + ': ' + value_landmark;
     if (i < block.landmarks_.length-1) {
       preregistered += ', ';
     }

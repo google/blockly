@@ -238,6 +238,14 @@ Blockly.isTargetInput_ = function(e) {
          e.target.type == 'tel' || e.target.type == 'url' ||
          e.target.isContentEditable;
 };
+/**
+ * Static regex to pull the x,y,z values out of a translate3d() style property.
+ * Accounts for same exceptions as XY_REGEXP_.
+ * @type {!RegExp}
+ * @private
+ */
+Blockly.XY_3D_REGEXP_ =
+  /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -264,6 +272,18 @@ Blockly.getRelativeXY_ = function(element) {
     xy.x += parseFloat(r[1]);
     if (r[3]) {
       xy.y += parseFloat(r[3]);
+    }
+  }
+
+    // Third, check for style="transform: translate3d(...)".
+  var style = element.getAttribute('style');
+  if (style && style.indexOf('translate3d') > -1) {
+    var styleComponents = style.match(Blockly.XY_3D_REGEXP_);
+    if (styleComponents) {
+      xy.x += parseFloat(styleComponents[1]);
+      if (styleComponents[3]) {
+        xy.y += parseFloat(styleComponents[3]);
+      }
     }
   }
   return xy;
@@ -718,4 +738,44 @@ Blockly.utils.wrapToText_ = function(words, wordBreaks) {
     }
   }
   return text.join('');
+};
+
+/**
+ * Check if 3D transforms are supported by adding an element
+ * and attempting to set the property.
+ * @return {boolean} true if 3D transforms are supported
+ */
+Blockly.is3dSupported = function() {
+  if (Blockly.cache3dSupported_ !== null) {
+    return Blockly.cache3dSupported_;
+  }
+  // CC-BY-SA Lorenzo Polidori
+  // https://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
+  if (!window.getComputedStyle) {
+    return false;
+  }
+
+  var el = document.createElement('p'),
+    has3d,
+    transforms = {
+      'webkitTransform': '-webkit-transform',
+      'OTransform': '-o-transform',
+      'msTransform': '-ms-transform',
+      'MozTransform': '-moz-transform',
+      'transform': 'transform'
+    };
+
+  // Add it to the body to get the computed style.
+  document.body.insertBefore(el, null);
+
+  for (var t in transforms) {
+    if (el.style[t] !== undefined) {
+      el.style[t] = 'translate3d(1px,1px,1px)';
+      has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+    }
+  }
+
+  document.body.removeChild(el);
+  Blockly.cache3dSupported_ = (has3d !== undefined && has3d.length > 0 && has3d !== "none");
+  return Blockly.cache3dSupported_;
 };

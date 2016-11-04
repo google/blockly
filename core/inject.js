@@ -27,6 +27,7 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.Css');
+goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.Options');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
@@ -54,7 +55,9 @@ Blockly.inject = function(container, opt_options) {
   var subContainer = goog.dom.createDom('div', 'injectionDiv');
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);
-  var workspace = Blockly.createMainWorkspace_(svg, options);
+  var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
+  blockDragSurface.createDom();
+  var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface);
   Blockly.init_(workspace);
   workspace.markFocused();
   Blockly.bindEventWithChecks_(svg, 'focus', workspace, workspace.markFocused);
@@ -183,12 +186,13 @@ Blockly.createDom_ = function(container, options) {
  * Create a main workspace and add it to the SVG.
  * @param {!Element} svg SVG element with pattern defined.
  * @param {!Blockly.Options} options Dictionary of options.
+ * @param {!Blockly.BlockDragSurfaceSvg} blockDragSurface Drag surface SVG for the workspace.
  * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */
-Blockly.createMainWorkspace_ = function(svg, options) {
+Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface) {
   options.parentWorkspace = null;
-  var mainWorkspace = new Blockly.WorkspaceSvg(options);
+  var mainWorkspace = new Blockly.WorkspaceSvg(options, blockDragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   // A null translation will also apply the correct initial scale.

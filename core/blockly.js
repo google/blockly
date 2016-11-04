@@ -125,6 +125,13 @@ Blockly.dragMode_ = Blockly.DRAG_NONE;
 Blockly.flyoutButtonCallbacks_ = {};
 
 /**
+ * Cached value for whether 3D is supported
+ * @type {boolean}
+ * @private
+ */
+Blockly.cache3dSupported_ = null;
+
+/**
  * Register a callback function associated with a given key, for clicks on
  * buttons and labels in the flyout.
  * For instance, a button specified by the XML

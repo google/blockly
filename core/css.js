@@ -147,6 +147,7 @@ Blockly.Css.CONTENT = [
   '.injectionDiv {',
     'height: 100%;',
     'position: relative;',
+    'overflow:hidden', /* So blocks in drag surface disappear at edges */
   '}',
 
   '.blocklyNonSelectable {',
@@ -154,6 +155,21 @@ Blockly.Css.CONTENT = [
     '-moz-user-select: none;',
     '-webkit-user-select: none;',
     '-ms-user-select: none;',
+  '}',
+
+  '.blocklyBlockDragSurface {',
+    'display: none;',
+    'position: absolute;',
+    'top: 0;',
+    'left: 0;',
+    'right: 0;',
+    'bottom: 0;',
+    'overflow: visible !important;',
+    'z-index: 50;', /* Display below toolbox, but everything else. */
+    '-webkit-backface-visibility: hidden;',
+    'backface-visibility: hidden;',
+    '-webkit-perspective: 1000;',
+    'perspective: 1000;',
   '}',
 
   '.blocklyTooltipDiv {',
@@ -447,6 +463,7 @@ Blockly.Css.CONTENT = [
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
+    'z-index:70;',
   '}',
 
   '.blocklyTreeRoot {',

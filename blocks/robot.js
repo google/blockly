@@ -251,7 +251,7 @@ Blockly.Blocks['robot_perception_find_custom_landmark'] = {
     this.setInputsInline(false);
     this.setOutput(true, "Array");
     this.setColour(230);
-    this.setTooltip('Searches for a custom landmark. More than one may be found. Check "on tabletop" if you know the landmark is in a tabletop scene.');
+    this.setTooltip('Searches for the given custom landmark and returns a (possibly empty) list of landmarks found in the scene. Check "on tabletop" if you know the landmark is in a tabletop scene.');
     this.setHelpUrl('');
   }
 };

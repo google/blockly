@@ -488,7 +488,7 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
   // Given the ID of a PbD action, returns a list of landmark names and IDs
   // used in the action. The value is returned as the argument of the callback.
   // E.g., [['bowl rim', 'id1234'], ['box', 'id2345']]
-  getLandmarksForAction_: function(action_id, callback) {
+  getLandmarksForAction_: function(name, callback) {
     var options = [[]];
     var client = new ROSLIB.Service({
       ros: ROS,
@@ -497,7 +497,8 @@ Blockly.Blocks['robot_manipulation_run_pbd_action'] = {
     });
 
     var request = new ROSLIB.ServiceRequest({
-      action_id: action_id
+      action_id: '',
+      name: name
     });
     client.callService(request, function(result) {
       if (result.landmarks.length > 0) {

@@ -45,7 +45,7 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Field = function(text, opt_validator) {
-  this.size_ = new goog.math.Size(0, 25);
+  this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValue(text);
   this.setValidator(opt_validator);
 };

@@ -120,6 +120,39 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     }
   },
   /**
+   * Rename parameters if duplicated. 
+   * Ensure two identically-named parameters don't exist.
+   * @param {string} name Proposed parameter name.
+   * @return {string} Non-colliding name.
+   */
+  getNoneDuplicatedParams_: function(name) {
+    while (!this.isDuplicatedParams_(name)) {
+      // Collision with another params.
+      var r = name.match(/^(.*?)(\d+)$/);
+      if (!r) {
+        name += '2';
+      } else {
+        name = r[1] + (parseInt(r[2], 10) + 1);
+      }
+    }
+    return name;
+  },
+  /**
+   * Does this parameter have a duplicated name?  Duplicated names include names of
+   * parameters already defined in the procedure.
+   * @param {string} name The questionable name.
+   * @return {boolean} True if the name is duplicated.
+   */
+  isDuplicatedParams_: function(name) {
+    for (var i = 0; i < this.arguments_.length; i++) {
+      var argName = this.arguments_[i].toLowerCase();
+      if (Blockly.Names.equals(argName, name)) {
+        return false;
+      }
+    }
+    return true;
+  },  
+  /**
    * Create XML to represent the argument inputs.
    * @param {=boolean} opt_paramIds If true include the IDs of the parameter
    *     quarks.  Used by Blockly.Procedures.mutateCallers for reconnection.
@@ -208,7 +241,12 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.paramIds_ = [];
     var paramBlock = containerBlock.getInputTargetBlock('STACK');
     while (paramBlock) {
-      this.arguments_.push(paramBlock.getFieldValue('NAME'));
+      // Rename duplicate parameter when creates duplicate parameter.      
+      var legalParams = this.getNoneDuplicatedParams_(
+      paramBlock.getFieldValue('NAME'));
+      this.arguments_.push(legalParams);
+      paramBlock.setFieldValue(legalParams, 'NAME');
+
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
           paramBlock.nextConnection.targetBlock();
@@ -365,6 +403,8 @@ Blockly.Blocks['procedures_defreturn'] = {
   domToMutation: Blockly.Blocks['procedures_defnoreturn'].domToMutation,
   decompose: Blockly.Blocks['procedures_defnoreturn'].decompose,
   compose: Blockly.Blocks['procedures_defnoreturn'].compose,
+  getNoneDuplicatedParams_: Blockly.Blocks['procedures_defnoreturn'].getNoneDuplicatedParams_,
+  isDuplicatedParams_: Blockly.Blocks['procedures_defnoreturn'].isDuplicatedParams_,    
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:

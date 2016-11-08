@@ -125,8 +125,8 @@ Blockly.dragMode_ = Blockly.DRAG_NONE;
 Blockly.flyoutButtonCallbacks_ = {};
 
 /**
- * Cached value for whether 3D is supported
- * @type {boolean}
+ * Cached value for whether 3D is supported.
+ * @type {!boolean}
  * @private
  */
 Blockly.cache3dSupported_ = null;

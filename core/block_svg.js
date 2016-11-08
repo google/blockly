@@ -82,10 +82,10 @@ Blockly.BlockSvg = function(workspace, prototypeName, opt_id) {
   /** @type {boolean} */
   this.rendered = false;
 
-  /** 
+  /**
    * Whether to move the block to the drag surface when it is dragged.
    * True if it should move, false if it should be translated directly.
-   * @type {boolean} 
+   * @type {boolean}
    * @private
    */
   this.useDragSurface_ = Blockly.is3dSupported() && workspace.blockDragSurface_;
@@ -331,7 +331,7 @@ Blockly.BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   var y = 0;
 
   var dragSurfaceGroup = this.useDragSurface_ ?
-    this.workspace.blockDragSurface_.getGroup() : null;
+      this.workspace.blockDragSurface_.getGroup() : null;
 
   var element = this.getSvgRoot();
   if (element) {
@@ -373,13 +373,13 @@ Blockly.BlockSvg.prototype.moveBy = function(dx, dy) {
 
 /**
  * Transforms a block by setting the translation on the transform attribute
- * of the block's svg.
+ * of the block's SVG.
  * @param {number} x The x coordinate of the translation.
  * @param {number} y The y coordinate of the translation.
  */
 Blockly.BlockSvg.prototype.translate = function(x, y) {
   this.getSvgRoot().setAttribute('transform',
-    'translate(' + x + ',' + y + ')');
+      'translate(' + x + ',' + y + ')');
 };
 
 /**
@@ -424,12 +424,8 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {
  * @private
  */
 Blockly.BlockSvg.prototype.clearTransformAttributes_ = function() {
-   if (this.getSvgRoot().hasAttribute('transform')) {
-      this.getSvgRoot().removeAttribute('transform');
-   }
-  if (this.getSvgRoot().hasAttribute('style')) {
-    this.getSvgRoot().removeAttribute('style');
-  }
+  this.getSvgRoot().removeAttribute('transform');
+  this.getSvgRoot().removeAttribute('style');
 };
 
 /**

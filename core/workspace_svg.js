@@ -61,11 +61,11 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface) {
       options.setMetrics || Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
   Blockly.ConnectionDB.init(this);
- 
- if (opt_blockDragSurface) {
+
+  if (opt_blockDragSurface) {
     this.blockDragSurface_ = opt_blockDragSurface;
- 
   }
+
   /**
    * Database of pre-loaded sounds.
    * @private

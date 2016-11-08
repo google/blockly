@@ -751,7 +751,7 @@ Blockly.is3dSupported = function() {
   }
   // CC-BY-SA Lorenzo Polidori
   // https://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!window.getComputedStyle) {
+  if (!goog.global.getComputedStyle) {
     return false;
   }
 
@@ -771,7 +771,7 @@ Blockly.is3dSupported = function() {
   for (var t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
+      has3d = goog.global.getComputedStyle(el).getPropertyValue(transforms[t]);
     }
   }
 

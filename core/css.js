@@ -147,7 +147,7 @@ Blockly.Css.CONTENT = [
   '.injectionDiv {',
     'height: 100%;',
     'position: relative;',
-    'overflow:hidden', /* So blocks in drag surface disappear at edges */
+    'overflow: hidden;', /* So blocks in drag surface disappear at edges */
   '}',
 
   '.blocklyNonSelectable {',
@@ -463,7 +463,7 @@ Blockly.Css.CONTENT = [
     'overflow-x: visible;',
     'overflow-y: auto;',
     'position: absolute;',
-    'z-index:70;',
+    'z-index: 70;', /* so blocks go under toolbox when dragging */
   '}',
 
   '.blocklyTreeRoot {',

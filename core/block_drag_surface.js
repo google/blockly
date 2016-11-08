@@ -116,9 +116,8 @@ Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, sc
   // That is incompatible with translate3d, causing bugs.
   x = x.toFixed(0);
   y = y.toFixed(0);
-  transform = 'transform: translate3d(' + x + 'px, ' + y + 'px, 0px)' +
-    'scale3d(' + scale + ',' + scale + ',' + scale + ')';
-  this.dragGroup_.setAttribute('style', transform);
+  this.dragGroup_.setAttribute('transform', 'translate('+ x + ','+ y + ')' +
+      ' scale(' + scale + ')');
 };
 
 /**

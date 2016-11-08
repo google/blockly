@@ -776,6 +776,6 @@ Blockly.is3dSupported = function() {
   }
 
   document.body.removeChild(el);
-  Blockly.cache3dSupported_ = (has3d !== undefined && has3d.length > 0 && has3d !== "none");
+  Blockly.cache3dSupported_ = !!(has3d && has3d !== 'none');
   return Blockly.cache3dSupported_;
 };

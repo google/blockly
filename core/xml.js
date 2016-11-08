@@ -417,10 +417,12 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
         // Custom data for an advanced block.
         if (block.domToMutation) {
           block.domToMutation(xmlChild);
+	  /* disabling due to this being _headless_
           if (block.initSvg) {
             // Mutation may have added some elements that need initalizing.
             block.initSvg();
           }
+	  */
         }
         break;
       case 'comment':

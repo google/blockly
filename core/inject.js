@@ -50,7 +50,7 @@ Blockly.inject = function(container, opt_options) {
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
   }
-  var options = new Blockly.Options(opt_options || {});
+  var options = (Blockly.mainWorkspace && Blockly.mainWorkspace.options) || new Blockly.Options(opt_options || {});
   var subContainer = goog.dom.createDom('div', 'injectionDiv');
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);
@@ -185,7 +185,7 @@ Blockly.createDom_ = function(container, options) {
  */
 Blockly.createMainWorkspace_ = function(svg, options) {
   options.parentWorkspace = null;
-  var mainWorkspace = new Blockly.WorkspaceSvg(options);
+  var mainWorkspace = Blockly.mainWorkspace || new Blockly.WorkspaceSvg(options);
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
   // A null translation will also apply the correct initial scale.

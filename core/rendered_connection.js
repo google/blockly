@@ -287,6 +287,9 @@ Blockly.RenderedConnection.prototype.hideAll = function() {
       for (var j = 0; j < icons.length; j++) {
         icons[j].setVisible(false);
       }
+      if (block.errorIcon) {
+        block.errorIcon.setVisible(false);
+      }
     }
   }
 };

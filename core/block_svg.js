@@ -615,10 +615,14 @@ Blockly.BlockSvg.prototype.onMouseUp_ = function(e) {
   } else if (!this.getParent() && Blockly.selected.isDeletable() &&
       this.workspace.isDeleteArea(e)) {
     var trashcan = this.workspace.trashcan;
-    if (trashcan) {
-      goog.Timer.callOnce(trashcan.close, 100, trashcan);
-    }
-    Blockly.selected.dispose(false, true);
+    Blockly.confirmDeletion(function(confirmedDelete) {
+      if (trashcan) {
+	goog.Timer.callOnce(trashcan.close, 100, trashcan);
+      }
+      if (confirmedDelete) {
+	Blockly.selected.dispose(false, true);
+      }
+    });
   }
   if (Blockly.highlightedConnection_) {
     Blockly.highlightedConnection_.unhighlight();

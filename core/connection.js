@@ -218,9 +218,6 @@ Blockly.Connection.prototype.connect_ = function(childConnection) {
           }
         }, Blockly.BUMP_DELAY);
       }
-      if (block.errorIcon) {
-        block.errorIcon.setVisible(false);
-      }
     }
     // Restore the shadow DOM.
     parentConnection.setShadowDom(shadowDom);

@@ -263,49 +263,6 @@ Blockly.BlockSvg.prototype.render = function(opt_bubble) {
   Blockly.Field.startCache();
   this.rendered = true;
 
-  this.renderHere(opt_bubble);
-
-  // Render all blocks above this one (propagate a reflow).
-  var parentBlock = this.getParent();
-  if (parentBlock) {
-    parentBlock.render();
-  }
-
-  Blockly.Field.stopCache();
-};
-
-/**
- * [lyn, 04/01/14] Render a tree of blocks.
- * In general, this is more efficient than calling render() on all the leaves of the tree,
- * because that will:
- *   (1) repeat the rendering of all internal nodes; and
- *   (2) will unnecessarily call Blockly.fireUiEvent(window, 'resize') in the
- *       case where the parentPointer hasn't been set yet (particularly for
- *       value, statement, and next connections in Xml.domToBlock).
- *  These two factors account for much of the slow project loading times in Blockly
- *  and previous versions of AI2.
- */
-Blockly.BlockSvg.prototype.renderDown = function(opt_bubble) {
-  this.rendered = true;
-
-  // Recursively renderDown all my children (as long as I'm not collapsed)
-  if (! (Blockly.Instrument.avoidRenderDownOnCollapsedSubblocks && this.isCollapsed())) {
-    var childBlocks = this.childBlocks_;
-    for (var c = 0, childBlock; childBlock = childBlocks[c]; c++) {
-      childBlock.renderDown(opt_bubble);
-    }
-  }
-
-  // Render me after all my children have been rendered.
-  this.renderHere(opt_bubble);
-};
-
-/**
- * Render this block. Assumes descendants have already been rendered.
- */
-Blockly.BlockSvg.prototype.renderHere = function(opt_bubble) {
-  var start = new Date().getTime();
-  // Now render me (even if I am collapsed, since still need to show collapsed block)
   var cursorX = Blockly.BlockSvg.SEP_SPACE_X;
   if (this.RTL) {
     cursorX = -cursorX;
@@ -325,16 +282,16 @@ Blockly.BlockSvg.prototype.renderHere = function(opt_bubble) {
   this.renderMoveConnections_();
 
   if (opt_bubble !== false) {
+    // Render all blocks above this one (propagate a reflow).
     var parentBlock = this.getParent();
-    if (!parentBlock) {
+    if (parentBlock) {
+      parentBlock.render(true);
+    } else {
       // Top-most block.  Fire an event to allow scrollbars to resize.
       this.workspace.resizeContents();
     }
   }
-  var stop = new Date().getTime();
-  var timeDiff = stop - start;
-  Blockly.Instrument.stats.renderHereCalls++;
-  Blockly.Instrument.stats.renderHereTime += timeDiff;
+  Blockly.Field.stopCache();
 };
 
 /**

@@ -32,25 +32,22 @@ goog.require('Blockly.PHP');
 Blockly.PHP['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
-  var code = '', branchCode, conditionCode;
-  do {
-    conditionCode = Blockly.PHP.valueToCode(block, 'IF' + n,
+  var argument = Blockly.PHP.valueToCode(block, 'IF' + n,
       Blockly.PHP.ORDER_NONE) || 'false';
-    branchCode = Blockly.PHP.statementToCode(block, 'DO' + n);
-    code += (n > 0 ? ' else ' : '') +
-        'if (' + conditionCode + ') {\n' + branchCode + '}';
-
-    ++n;
-  } while (block.getInput('IF' + n));
-
-  if (block.getInput('ELSE')) {
-    branchCode = Blockly.PHP.statementToCode(block, 'ELSE');
-    code += ' else {\n' + branchCode + '}';
+  var branch = Blockly.PHP.statementToCode(block, 'DO' + n);
+  var code = 'if (' + argument + ') {\n' + branch + '}';
+  for (n = 1; n <= block.elseifCount_; n++) {
+    argument = Blockly.PHP.valueToCode(block, 'IF' + n,
+        Blockly.PHP.ORDER_NONE) || 'false';
+    branch = Blockly.PHP.statementToCode(block, 'DO' + n);
+    code += ' else if (' + argument + ') {\n' + branch + '}';
+  }
+  if (block.elseCount_) {
+    branch = Blockly.PHP.statementToCode(block, 'ELSE');
+    code += ' else {\n' + branch + '}';
   }
   return code + '\n';
 };
-
-Blockly.PHP['controls_ifelse'] = Blockly.PHP['controls_if'];
 
 Blockly.PHP['logic_compare'] = function(block) {
   // Comparison operator.

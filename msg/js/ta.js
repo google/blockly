@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "பட்டியலில் உள்
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "மாறியை வைத்து எண்ண %1 %2 இல் இருந்து %3 வரை %4-இன் படியாக";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "முதல் எண்ணில்  இருந்து கடை எண் வரை எடுத்துக்கொள்ள  ஒரு மாறியை வைத்துக்கொள், குறித்த இடைவெளியை  சேர்த்தவறே தொகுதிகளை செயலாக்கு.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "ஆனால் தொகுப்பிற்கு நிபந்தனை சேர்க்க";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "ஆனால் தொகுப்பிற்கு விதிவிலக்கு காப்பை சேர்க்க";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

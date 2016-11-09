@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Aseta muuttujan %1 arvoksi kukin listan 
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "laske %1 Väli %2-%3 %4:n välein";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Aseta muuttujaan \"%1\" arvot alkuarvosta loppuarvoon annetun askeleen välein ja suorita joka askeleella annettu koodilohko.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Lisää ehto \"jos\" lohkoon.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Lisää lopullinen \"muuten\" lohko \"jos\" lohkoon.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

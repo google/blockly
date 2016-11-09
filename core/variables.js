@@ -103,12 +103,6 @@ Blockly.Variables.flyoutCategory = function(workspace) {
   var xmlList = [];
   var button = goog.dom.createDom('button');
   button.setAttribute('text', Blockly.Msg.NEW_VARIABLE);
-  button.setAttribute('callbackKey', 'CREATE_VARIABLE');
-
-  Blockly.registerButtonCallback('CREATE_VARIABLE', function(button) {
-    Blockly.Variables.createVariable(button.getTargetWorkspace());
-  });
-
   xmlList.push(button);
 
   if (variableList.length > 0) {
@@ -233,57 +227,47 @@ Blockly.Variables.generateUniqueName = function(workspace) {
  * Create a new variable on the given workspace.
  * @param {!Blockly.Workspace} workspace The workspace on which to create the
  *     variable.
- * @param {function(null|undefined|string)=} opt_callback A callback. It will
- *     return an acceptable new variable name, or null if change is to be
- *     aborted (cancel button), or undefined if an existing variable was chosen.
+ * @return {null|undefined|string} An acceptable new variable name, or null if
+ *     change is to be aborted (cancel button), or undefined if an existing
+ *     variable was chosen.
  */
-Blockly.Variables.createVariable = function(workspace, opt_callback) {
-  var promptAndCheckWithAlert = function(defaultName) {
-    Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, defaultName,
-      function(text) {
-        if (text) {
-          if (workspace.variableIndexOf(text) != -1) {
-            Blockly.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
-                text.toLowerCase()),
-                function() {
-                  promptAndCheckWithAlert(text);  // Recurse
-                });
-          } else {
-            workspace.createVariable(text);
-            if (opt_callback) {
-              opt_callback(text);
-            }
-          }
-        } else {
-          // User canceled prompt without a value.
-          if (opt_callback) {
-            opt_callback(null);
-          }
-        }
-      });
-  };
-  promptAndCheckWithAlert('');
+Blockly.Variables.createVariable = function(workspace) {
+  while (true) {
+    var text = Blockly.Variables.promptName(Blockly.Msg.NEW_VARIABLE_TITLE, '');
+    if (text) {
+      if (workspace.variableIndexOf(text) != -1) {
+        window.alert(Blockly.Msg.VARIABLE_ALREADY_EXISTS.replace('%1',
+            text.toLowerCase()));
+      } else {
+        workspace.createVariable(text);
+        break;
+      }
+    } else {
+      text = null;
+      break;
+    }
+  }
+  return text;
 };
 
 /**
  * Prompt the user for a new variable name.
  * @param {string} promptText The string of the prompt.
  * @param {string} defaultText The default value to show in the prompt's field.
- * @param {function(?string)} callback A callback. It will return the new
- *     variable name, or null if the user picked something illegal.
+ * @return {?string} The new variable name, or null if the user picked
+ *     something illegal.
  */
-Blockly.Variables.promptName = function(promptText, defaultText, callback) {
-  Blockly.prompt(promptText, defaultText, function(newVar) {
-    // Merge runs of whitespace.  Strip leading and trailing whitespace.
-    // Beyond this, all names are legal.
-    if (newVar) {
-      newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-      if (newVar == Blockly.Msg.RENAME_VARIABLE ||
-          newVar == Blockly.Msg.NEW_VARIABLE) {
-        // Ok, not ALL names are legal...
-        newVar = null;
-      }
+Blockly.Variables.promptName = function(promptText, defaultText) {
+  var newVar = window.prompt(promptText, defaultText);
+  // Merge runs of whitespace.  Strip leading and trailing whitespace.
+  // Beyond this, all names are legal.
+  if (newVar) {
+    newVar = newVar.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+    if (newVar == Blockly.Msg.RENAME_VARIABLE ||
+        newVar == Blockly.Msg.NEW_VARIABLE) {
+      // Ok, not ALL names are legal...
+      newVar = null;
     }
-    callback(newVar);
-  });
+  }
+  return newVar;
 };

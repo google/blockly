@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Po dònnia item in sa lista, ponit sa va
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "po %1 de %2 fintzas %3 a passus de %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Fait pigai a sa variàbili \"%1\" i valoris de su primu numeru a s'urtimu, a su passu impostau e fait su brocu.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Aciungi una cunditzioni a su brocu si.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Aciungi una urtima cunditzioni piga-totu a su brocu si.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

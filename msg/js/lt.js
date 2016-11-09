@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Kartok veiksmus, kol kintamasis \"%1\" p
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "kartok, kai %1 kinta nuo %2 iki %3 po %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Kartoti veiksmus su kiekvienu sąrašo elementu, priskirtu kintamajam \"%1\".";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Pridėti sąlygą „jei“ blokui.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Pridėti veiksmų vykdymo variantą/\"šaką\", kai netenkinama nė viena sąlyga.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

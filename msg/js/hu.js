@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "A '%1' változó minden lépésben megka
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "számolj %1 értékével %2 és %3 között %4 lépésközzel";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "A(z) '%1' változó felveszi a kezdőérték és a végérték közötti értékeket a meghatározott lépésközzel. Eközben a meghatározott blokkokat hajtja végre.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Feltétel hozzáadása a ha blokkhoz.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Végső feltétel hozzáadása a ha blokkhoz.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

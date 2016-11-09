@@ -148,10 +148,7 @@ Blockly.Toolbox.prototype.init = function() {
   var workspace = this.workspace_;
   var svg = this.workspace_.getParentSvg();
 
-  /**
-   * HTML container for the Toolbox menu.
-   * @type {Element}
-   */
+  // Create an HTML container for the Toolbox menu.
   this.HtmlDiv =
       goog.dom.createDom(goog.dom.TagName.DIV, 'blocklyToolboxDiv');
   this.HtmlDiv.setAttribute('dir', workspace.RTL ? 'RTL' : 'LTR');
@@ -362,8 +359,6 @@ Blockly.Toolbox.prototype.syncTrees_ = function(treeIn, treeOut, pathToMedia) {
         break;
       case 'BLOCK':
       case 'SHADOW':
-      case 'LABEL':
-      case 'BUTTON':
         treeOut.blocks.push(childIn);
         lastElement = childIn;
         break;
@@ -570,6 +565,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
 Blockly.Toolbox.TreeNode = function(toolbox, html, opt_config, opt_domHelper) {
   goog.ui.tree.TreeNode.call(this, html, opt_config, opt_domHelper);
   if (toolbox) {
+    this.horizontalLayout_ = toolbox.horizontalLayout_;
     var resize = function() {
       // Even though the div hasn't changed size, the visible workspace
       // surface of the workspace has, so we may need to reposition everything.
@@ -630,12 +626,10 @@ Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
  * @private
  */
 Blockly.Toolbox.TreeNode.prototype.onKeyDown = function(e) {
-  if (this.tree.toolbox_.horizontalLayout_) {
+  if (this.horizontalLayout_) {
     var map = {};
-    var next = goog.events.KeyCodes.DOWN
-    var prev = goog.events.KeyCodes.UP
-    map[goog.events.KeyCodes.RIGHT] = this.rightToLeft_ ? prev : next;
-    map[goog.events.KeyCodes.LEFT] = this.rightToLeft_ ? next : prev;
+    map[goog.events.KeyCodes.RIGHT] = goog.events.KeyCodes.DOWN;
+    map[goog.events.KeyCodes.LEFT] = goog.events.KeyCodes.UP;
     map[goog.events.KeyCodes.UP] = goog.events.KeyCodes.LEFT;
     map[goog.events.KeyCodes.DOWN] = goog.events.KeyCodes.RIGHT;
 

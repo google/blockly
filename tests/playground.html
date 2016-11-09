@@ -77,8 +77,8 @@ function start() {
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
           {comments: true,
-           collapse: true,
            disable: true,
+           collapse: true,
            grid:
              {spacing: 25,
               length: 3,
@@ -87,7 +87,6 @@ function start() {
            horizontalLayout: side == 'top' || side == 'bottom',
            maxBlocks: Infinity,
            media: '../media/',
-           oneBasedIndex: true,
            readOnly: false,
            rtl: rtl,
            scrollbars: true,
@@ -379,7 +378,7 @@ h1 {
   </p>
 
   <xml id="toolbox-simple" style="display: none">
-    <block type="controls_ifelse"></block>
+    <block type="controls_if"></block>
     <block type="logic_compare"></block>
     <!-- <block type="control_repeat"></block> -->
     <block type="logic_operation"></block>

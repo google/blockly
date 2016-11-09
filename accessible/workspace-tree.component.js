@@ -162,41 +162,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
       // Generate a list of action buttons.
       var that = this;
       this.actionButtonsInfo = [{
-        baseIdKey: 'copy',
-        translationIdForText: 'COPY_BLOCK',
-        action: function() {
-          that.clipboardService.copy(that.block);
-          that.notificationsService.setStatusMessage(
-              that.getBlockDescription() + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
-        },
-        isDisabled: function() {
-         return false;
-        }
-      }, {
-        baseIdKey: 'pasteBefore',
-        translationIdForText: 'PASTE_BEFORE',
-        action: function() {
-          that.treeService.pasteToConnection(
-              that.block, that.block.previousConnection);
-        },
-        isDisabled: function() {
-          return Boolean(
-              !that.block.previousConnection ||
-              !that.isCompatibleWithClipboard(that.block.previousConnection));
-        }
-      }, {
-        baseIdKey: 'pasteAfter',
-        translationIdForText: 'PASTE_AFTER',
-        action: function() {
-          that.treeService.pasteToConnection(
-              that.block, that.block.nextConnection);
-        },
-        isDisabled: function() {
-          return Boolean(
-             !that.block.nextConnection ||
-              !that.isCompatibleWithClipboard(that.block.nextConnection));
-        }
-      }, {
         baseIdKey: 'markBefore',
         translationIdForText: 'MARK_SPOT_BEFORE',
         action: that.markSpotBefore_.bind(that),
@@ -236,15 +201,6 @@ blocklyApp.WorkspaceTreeComponent = ng.core
         },
         isDisabled: function() {
           return false;
-        }
-      }, {
-        baseIdKey: 'paste',
-        translationIdForText: 'PASTE_INSIDE',
-        action: function(connection) {
-          that.treeService.pasteToConnection(that.block, connection);
-        },
-        isDisabled: function(connection) {
-          return !that.isCompatibleWithClipboard(connection);
         }
       }];
 

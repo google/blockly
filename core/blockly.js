@@ -400,11 +400,12 @@ Blockly.prompt = function(message, defaultValue, callback) {
 };
 
 /**
- * Helper function for defining a block from json.  The resulting function has
+ * Helper function for defining a block from JSON.  The resulting function has
  * the correct value of jsonDef at the point in code where jsonInit is called.
- * @param {Object} jsonDef The JSON definition of a block.
+ * @param {!Object} jsonDef The JSON definition of a block.
  * @return {function} A function that calls jsonInit with the correct value
  *     of jsonDef.
+ * @private
  */
 Blockly.jsonInitFactory_ = function(jsonDef) {
   return function() {
@@ -415,11 +416,10 @@ Blockly.jsonInitFactory_ = function(jsonDef) {
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
- * @param {!Array<Object>} jsonArray An array of JSON block definitions.
+ * @param {!Array.<!Object>} jsonArray An array of JSON block definitions.
  */
 Blockly.defineBlocksWithJsonArray = function(jsonArray) {
-  for (var index = 0; index < jsonArray.length; index++) {
-    var elem = jsonArray[index];
+  for (var i = 0, elem; elem = jsonArray[i]; i++) {
     Blockly.Blocks[elem.type] = {
       init: Blockly.jsonInitFactory_(elem)
     };

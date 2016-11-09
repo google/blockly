@@ -108,10 +108,8 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
  */
 Blockly.BlockDragSurfaceSvg.prototype.translateAndScaleGroup = function(x, y, scale) {
   this.scale_ = scale;
-  // Force values to have two decimal points.
-  // This is a work-around to prevent a bug in Safari, where numbers close to 0
-  // are sometimes reported as something like "2.9842794901924208e-12".
-  // That is incompatible with translate3d, causing bugs.
+  // This is a work-around to prevent a the blocks from rendering
+  // fuzzy while they are being dragged on the drag surface.
   x = x.toFixed(0);
   y = y.toFixed(0);
   this.dragGroup_.setAttribute('transform', 'translate('+ x + ','+ y + ')' +

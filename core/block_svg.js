@@ -419,13 +419,12 @@ Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {
 };
 
 /**
- * Clear the block of style="..." and transform="..." attributes.
+ * Clear the block of transform="..." attributes.
  * Used when the block is switching from 3d to 2d transform or vice versa.
  * @private
  */
 Blockly.BlockSvg.prototype.clearTransformAttributes_ = function() {
   this.getSvgRoot().removeAttribute('transform');
-  this.getSvgRoot().removeAttribute('style');
 };
 
 /**

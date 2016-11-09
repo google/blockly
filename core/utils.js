@@ -275,7 +275,7 @@ Blockly.getRelativeXY_ = function(element) {
     }
   }
 
-    // Third, check for style="transform: translate3d(...)".
+  // Third, check for style="transform: translate3d(...)".
   var style = element.getAttribute('style');
   if (style && style.indexOf('translate3d') > -1) {
     var styleComponents = style.match(Blockly.XY_3D_REGEXP_);

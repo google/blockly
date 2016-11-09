@@ -166,10 +166,6 @@ Blockly.Css.CONTENT = [
     'bottom: 0;',
     'overflow: visible !important;',
     'z-index: 50;', /* Display below toolbox, but everything else. */
-    '-webkit-backface-visibility: hidden;',
-    'backface-visibility: hidden;',
-    '-webkit-perspective: 1000;',
-    'perspective: 1000;',
   '}',
 
   '.blocklyTooltipDiv {',

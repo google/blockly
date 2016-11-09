@@ -86,11 +86,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
   // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
-  if (document.head.firstChild) {
-    document.head.insertBefore(cssNode, document.head.firstChild);
-  } else {
-    document.head.appendChild(cssNode);
-  }
+  document.head.insertBefore(cssNode, document.head.firstChild);
 
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);

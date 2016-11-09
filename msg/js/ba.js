@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Исемлектәге һәр элеме
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "count with %1 from %2 to %3 by %4";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Үҙгәреүсәнгә башынан аҙағына тиклем тәғәйен аҙым менән %1 мәғәнәне бирә һәм күрһәтелгән командаларҙы үтәй.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "\"Әгәр\" блогына шарт өҫтәй";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Бер шарт та дөрөҫ булмаған осраҡҡа йомғаҡлау ярҙамсы блогын өҫтәргә.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

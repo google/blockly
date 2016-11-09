@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "遍歷每個列表中的項目，將變�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "使用 %1 從範圍 %2 到 %3 每隔 %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "從起始數到結尾數中取出變數 \"%1\" 的值，按指定的時間間隔，執行指定的積木。";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "將條件添加到'如果'積木。";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "加入一個最終，所有條件下都都執行的區塊到'如果'積木中";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Dla każdego elementu listy ustaw zmienn
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "licz z %1 od %2 do %3 co %4 (wartość kroku)";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Przypisuje zmiennej %1 wartości od numeru startowego do numeru końcowego, licząc co określony interwał, wykonując określone bloki.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Dodaj warunek do bloku „jeśli”.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Dodaj ostatni warunek do bloku „jeśli”, gdy żaden wcześniejszy nie był spełniony.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

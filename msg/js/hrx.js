@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Füahr en Oonweisung für jede Weart in 
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "Zähl %1 von %2 bis %3 mit %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Zähl die Variable \"%1\" von enem Startweart bis zu enem Zielweart und füahrefür jede Weart en Oonweisung aus.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "En weitre Bedingung hinzufüche.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "En orrer Bedingung hinzufüche, füahrt en Oonweisung aus falls ken Bedingung zutrifft.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

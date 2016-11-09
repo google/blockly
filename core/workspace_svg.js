@@ -410,7 +410,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
-  if (!this.resizesEnabled_) {
+  if (!this.resizesEnabled_ || !this.rendered) {
     return;
   }
   if (this.scrollbar) {

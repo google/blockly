@@ -130,7 +130,7 @@ Blockly.BlockSvg.prototype.initSvg = function() {
     Blockly.bindEventWithChecks_(this.getSvgRoot(), 'mousedown', this,
                        this.onMouseDown_);
     var thisBlock = this;
-    Blockly.bindEventWithChecks_(this.getSvgRoot(), 'touchstart', null,
+    Blockly.bindEvent_(this.getSvgRoot(), 'touchstart', null,
                        function(e) {Blockly.longStart_(e, thisBlock);});
   }
   this.eventsInit_ = true;

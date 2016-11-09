@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "För varje objekt i en lista, ange varia
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "räkna med %1 från %2 till %3 med %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Låt variabeln \"%1\" ta värden från starttalet till sluttalet, beräknat med det angivna intervallet, och utför de angivna blocken.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Lägg till ett villkor blocket \"om\".";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Lägg till ett sista villkor som täcker alla alternativ som är kvar för \"if\"-blocket.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

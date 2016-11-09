@@ -32,26 +32,25 @@ goog.require('Blockly.Python');
 Blockly.Python['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
-  var code = '', branchCode, conditionCode;
-  do {
-    conditionCode = Blockly.Python.valueToCode(block, 'IF' + n,
-      Blockly.Python.ORDER_NONE) || 'false';
-    branchCode = Blockly.Python.statementToCode(block, 'DO' + n) ||
+  var argument = Blockly.Python.valueToCode(block, 'IF' + n,
+      Blockly.Python.ORDER_NONE) || 'False';
+  var branch = Blockly.Python.statementToCode(block, 'DO' + n) ||
+      Blockly.Python.PASS;
+  var code = 'if ' + argument + ':\n' + branch;
+  for (n = 1; n <= block.elseifCount_; n++) {
+    argument = Blockly.Python.valueToCode(block, 'IF' + n,
+        Blockly.Python.ORDER_NONE) || 'False';
+    branch = Blockly.Python.statementToCode(block, 'DO' + n) ||
         Blockly.Python.PASS;
-    code += (n == 0 ? 'if ' : 'elif ' ) + conditionCode + ':\n' + branchCode;
-
-    ++n;
-  } while (block.getInput('IF' + n));
-
-  if (block.getInput('ELSE')) {
-    branchCode = Blockly.Python.statementToCode(block, 'ELSE') ||
+    code += 'elif ' + argument + ':\n' + branch;
+  }
+  if (block.elseCount_) {
+    branch = Blockly.Python.statementToCode(block, 'ELSE') ||
         Blockly.Python.PASS;
-    code += 'else:\n' + branchCode;
+    code += 'else:\n' + branch;
   }
   return code;
 };
-
-Blockly.Python['controls_ifelse'] = Blockly.Python['controls_if'];
 
 Blockly.Python['logic_compare'] = function(block) {
   // Comparison operator.

@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Pentru fiecare element din listă, seta�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "numără cu %1 de la %2 la %3 prin %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Cu variablia \"%1\" ia o valoare din numărul început la numărul final, numara in intervalul specificat, apoi face blocurile specificate.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Adăugaţi o condiţie in blocul if.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Adauga o stare finala, cuprinde toata conditia din blocul if.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

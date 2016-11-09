@@ -403,6 +403,8 @@ Blockly.Field.prototype.updateTextNode_ = function() {
     // Truncate displayed string and add an ellipsis ('...').
     text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
   }
+  // Empty the text element.
+  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
   // Replace whitespace with non-breaking spaces so the text doesn't collapse.
   text = text.replace(/\s/g, Blockly.Field.NBSP);
   if (this.sourceBlock_.RTL && text) {
@@ -413,9 +415,6 @@ Blockly.Field.prototype.updateTextNode_ = function() {
     // Prevent the field from disappearing if empty.
     text = Blockly.Field.NBSP;
   }
-
-  // Replace the text.
-  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
   var textNode = document.createTextNode(text);
   this.textElement_.appendChild(textNode);
 

@@ -1105,42 +1105,33 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
 
   // Add all standard options to the options object.
   // Use parse int to get numbers from value inputs.
-  var readonly = document.getElementById('option_readOnly_checkbox').checked;
-  if (readonly) {
-    optionsObj['readOnly'] = true;
-  } else {
-    optionsObj['collapse'] =
-        document.getElementById('option_collapse_checkbox').checked;
-    optionsObj['comments'] =
-        document.getElementById('option_comments_checkbox').checked;
-    optionsObj['disable'] =
-        document.getElementById('option_disable_checkbox').checked;
-    if (document.getElementById('option_infiniteBlocks_checkbox').checked) {
-      optionsObj['maxBlocks'] = Infinity;
-    } else {
-      var maxBlocksValue =
-          document.getElementById('option_maxBlocks_number').value;
-      optionsObj['maxBlocks'] = typeof maxBlocksValue == 'string' ?
-          parseInt(maxBlocksValue) : maxBlocksValue;
-    }
-    optionsObj['trashcan'] =
-        document.getElementById('option_trashcan_checkbox').checked;
-    optionsObj['horizontalLayout'] =
-        document.getElementById('option_horizontalLayout_checkbox').checked;
-    optionsObj['toolboxPosition'] =
-        document.getElementById('option_toolboxPosition_checkbox').checked ?
-        'end' : 'start';
-  }
-
+  optionsObj['collapse'] =
+      document.getElementById('option_collapse_checkbox').checked;
+  optionsObj['comments'] =
+      document.getElementById('option_comments_checkbox').checked;
   optionsObj['css'] = document.getElementById('option_css_checkbox').checked;
+  optionsObj['disable'] =
+      document.getElementById('option_disable_checkbox').checked;
+  if (document.getElementById('option_infiniteBlocks_checkbox').checked) {
+    optionsObj['maxBlocks'] = Infinity;
+  } else {
+    var maxBlocksValue =
+        document.getElementById('option_maxBlocks_number').value;
+    optionsObj['maxBlocks'] = typeof maxBlocksValue == 'string' ?
+        parseInt(maxBlocksValue) : maxBlocksValue;
+  }
   optionsObj['media'] = document.getElementById('option_media_text').value;
+  optionsObj['readOnly'] =
+      document.getElementById('option_readOnly_checkbox').checked;
   optionsObj['rtl'] = document.getElementById('option_rtl_checkbox').checked;
   optionsObj['scrollbars'] =
       document.getElementById('option_scrollbars_checkbox').checked;
   optionsObj['sounds'] =
       document.getElementById('option_sounds_checkbox').checked;
-  optionsObj['oneBasedIndex'] =
-      document.getElementById('option_oneBasedIndex_checkbox').checked;
+  if (!optionsObj['readOnly']) {
+    optionsObj['trashcan'] =
+        document.getElementById('option_trashcan_checkbox').checked;
+  }
 
   // If using a grid, add all grid options.
   if (document.getElementById('option_grid_checkbox').checked) {
@@ -1153,10 +1144,7 @@ WorkspaceFactoryController.prototype.readOptions_ = function() {
     grid['length'] = typeof lengthValue == 'string' ?
         parseInt(lengthValue) : lengthValue;
     grid['colour'] = document.getElementById('gridOption_colour_text').value;
-    if (!readonly) {
-      grid['snap'] =
-        document.getElementById('gridOption_snap_checkbox').checked;
-    }
+    grid['snap'] = document.getElementById('gridOption_snap_checkbox').checked;
     optionsObj['grid'] = grid;
   }
 

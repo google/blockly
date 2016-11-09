@@ -385,7 +385,7 @@ Blockly.Flyout.prototype.getMetrics_ = function() {
     }
     var viewHeight = this.height_;
     if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
-      viewHeight -= this.SCROLLBAR_PADDING;
+      viewHeight += this.MARGIN - this.SCROLLBAR_PADDING;
     }
     var viewWidth = this.width_ - 2 * this.SCROLLBAR_PADDING;
   } else {
@@ -448,14 +448,15 @@ Blockly.Flyout.prototype.position = function() {
     return;
   }
   var edgeWidth = this.horizontalLayout_ ?
-      targetWorkspaceMetrics.viewWidth - 2 * this.CORNER_RADIUS :
-      this.width_ - this.CORNER_RADIUS;
+      targetWorkspaceMetrics.viewWidth : this.width_;
+  edgeWidth -= this.CORNER_RADIUS;
+  if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
+    edgeWidth *= -1;
+  }
 
-  var edgeHeight = this.horizontalLayout_ ?
-      this.height_ - this.CORNER_RADIUS :
-      targetWorkspaceMetrics.viewHeight - 2 * this.CORNER_RADIUS;
-
-  this.setBackgroundPath_(edgeWidth, edgeHeight);
+  this.setBackgroundPath_(edgeWidth,
+      this.horizontalLayout_ ? this.height_ :
+      targetWorkspaceMetrics.viewHeight);
 
   var x = targetWorkspaceMetrics.absoluteLeft;
   if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT) {
@@ -512,26 +513,24 @@ Blockly.Flyout.prototype.setBackgroundPath_ = function(width, height) {
  */
 Blockly.Flyout.prototype.setBackgroundPathVertical_ = function(width, height) {
   var atRight = this.toolboxPosition_ == Blockly.TOOLBOX_AT_RIGHT;
-  var totalWidth = width + this.CORNER_RADIUS;
-
   // Decide whether to start on the left or right.
-  var path = ['M ' + (atRight ? totalWidth : 0) + ',0'];
+  var path = ['M ' + (atRight ? this.width_ : 0) + ',0'];
   // Top.
-  path.push('h', atRight ? -width : width);
+  path.push('h', width);
   // Rounded corner.
   path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
       atRight ? 0 : 1,
       atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS,
       this.CORNER_RADIUS);
   // Side closest to workspace.
-  path.push('v', Math.max(0, height));
+  path.push('v', Math.max(0, height - this.CORNER_RADIUS * 2));
   // Rounded corner.
   path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0,
       atRight ? 0 : 1,
       atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS,
       this.CORNER_RADIUS);
   // Bottom.
-  path.push('h',  atRight ? width : -width);
+  path.push('h', -width);
   path.push('z');
   this.svgBackground_.setAttribute('d', path.join(' '));
 };
@@ -553,13 +552,13 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ = function(width,
 
   if (atTop) {
     // Top.
-    path.push('h', width + 2 * this.CORNER_RADIUS);
+    path.push('h', width + this.CORNER_RADIUS);
     // Right.
     path.push('v', height);
     // Bottom.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, this.CORNER_RADIUS);
-    path.push('h', -1 * width);
+    path.push('h', -1 * (width - this.CORNER_RADIUS));
     // Left.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         -this.CORNER_RADIUS, -this.CORNER_RADIUS);
@@ -568,13 +567,13 @@ Blockly.Flyout.prototype.setBackgroundPathHorizontal_ = function(width,
     // Top.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, -this.CORNER_RADIUS);
-    path.push('h', width);
+    path.push('h', width - this.CORNER_RADIUS);
      // Right.
     path.push('a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
         this.CORNER_RADIUS, this.CORNER_RADIUS);
-    path.push('v', height);
+    path.push('v', height - this.CORNER_RADIUS);
     // Bottom.
-    path.push('h', -width - 2 * this.CORNER_RADIUS);
+    path.push('h', -width - this.CORNER_RADIUS);
     // Left.
     path.push('z');
   }
@@ -699,13 +698,10 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         } else {
           gaps.push(default_gap);
         }
-      } else if (tagName == 'BUTTON' || tagName == 'LABEL') {
-        // Labels behave the same as buttons, but are styled differently.
-        var isLabel = tagName == 'LABEL';
-        var text = xml.getAttribute('text');
-        var callbackKey = xml.getAttribute('callbackKey');
+      } else if (tagName == 'BUTTON') {
+        var label = xml.getAttribute('text');
         var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, text, callbackKey, isLabel);
+            this.targetWorkspace_, label);
         contents.push({type: 'button', button: curButton});
         gaps.push(default_gap);
       }
@@ -1060,21 +1056,34 @@ Blockly.Flyout.prototype.isDragTowardWorkspace_ = function(dx, dy) {
   // Direction goes from -180 to 180, with 0 toward the right and 90 on top.
   var dragDirection = Math.atan2(dy, dx) / Math.PI * 180;
 
+  var draggingTowardWorkspace = false;
   var range = this.dragAngleRange_;
   if (this.horizontalLayout_) {
-    // Check for up or down dragging.
-    if ((dragDirection < 90 + range && dragDirection > 90 - range) ||
-        (dragDirection > -90 - range && dragDirection < -90 + range)) {
-      return true;
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_TOP) {
+      // Horizontal at top.
+      if (dragDirection < 90 + range && dragDirection > 90 - range) {
+        draggingTowardWorkspace = true;
+      }
+    } else {
+      // Horizontal at bottom.
+      if (dragDirection > -90 - range && dragDirection < -90 + range) {
+        draggingTowardWorkspace = true;
+      }
     }
   } else {
-    // Check for left or right dragging.
-    if ((dragDirection < range && dragDirection > -range) ||
-        (dragDirection < -180 + range || dragDirection > 180 - range)) {
-      return true;
+    if (this.toolboxPosition_ == Blockly.TOOLBOX_AT_LEFT) {
+      // Vertical at left.
+      if (dragDirection < range && dragDirection > -range) {
+        draggingTowardWorkspace = true;
+      }
+    } else {
+      // Vertical at right.
+      if (dragDirection < -180 + range || dragDirection > 180 - range) {
+        draggingTowardWorkspace = true;
+      }
     }
   }
-  return false;
+  return draggingTowardWorkspace;
 };
 
 /**
@@ -1113,8 +1122,6 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     block.onMouseDown_(e);
     Blockly.dragMode_ = Blockly.DRAG_FREE;
     block.setDragging_(true);
-    // Disable workspace resizing.  Reenable at the end of the drag.
-    flyout.targetWorkspace_.setResizesEnabled(false);
   };
 };
 

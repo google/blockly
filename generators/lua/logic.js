@@ -32,22 +32,25 @@ goog.require('Blockly.Lua');
 Blockly.Lua['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
-  var argument = Blockly.Lua.valueToCode(block, 'IF' + n,
+  var code = '', branchCode, conditionCode;
+  do {
+    conditionCode = Blockly.Lua.valueToCode(block, 'IF' + n,
       Blockly.Lua.ORDER_NONE) || 'false';
-  var branch = Blockly.Lua.statementToCode(block, 'DO' + n);
-  var code = 'if ' + argument + ' then\n' + branch;
-  for (n = 1; n <= block.elseifCount_; n++) {
-    argument = Blockly.Lua.valueToCode(block, 'IF' + n,
-        Blockly.Lua.ORDER_NONE) || 'false';
-    branch = Blockly.Lua.statementToCode(block, 'DO' + n);
-    code += ' elseif ' + argument + ' then\n' + branch;
-  }
-  if (block.elseCount_) {
-    branch = Blockly.Lua.statementToCode(block, 'ELSE');
-    code += ' else\n' + branch;
+    branchCode = Blockly.Lua.statementToCode(block, 'DO' + n);
+    code += (n > 0 ? 'else' : '') +
+        'if ' + conditionCode + ' then\n' + branchCode;
+
+    ++n;
+  } while (block.getInput('IF' + n));
+
+  if (block.getInput('ELSE')) {
+    branchCode = Blockly.Lua.statementToCode(block, 'ELSE');
+    code += 'else\n' + branchCode;
   }
   return code + 'end\n';
 };
+
+Blockly.Lua['controls_ifelse'] = Blockly.Lua['controls_if'];
 
 Blockly.Lua['logic_compare'] = function(block) {
   // Comparison operator.

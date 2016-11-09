@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Fyrir hvert atriði í lista er breyta '
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";
 Blockly.Msg.CONTROLS_FOR_TITLE = "telja með %1 frá %2 til %3 um %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Láta breytuna '%1' taka inn gildi frá fyrstu tölu til síðustu tölu, hlaupandi á tiltekna bilinu og gera tilteknu kubbana.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Bæta skilyrði við EF kubbinn.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Bæta við hluta EF kubbs sem grípur öll tilfelli sem uppfylla ekki hin skilyrðin.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";

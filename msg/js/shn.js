@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "For each item in a list, set the variabl
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "တႄႇဢၢၼ်ႇၵိုၵ်း %1 တေႃႇ %2 တေႃႇ %3 လူၺ်ႈ %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Have the variable '%1' take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.";  // untranslated
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "သင်ဝႃႈ ပလွၵ်ႉၸိုင် သႂ်ႇပၼ်လွင်ႈတၢင်းမၼ်း တမ်ႈ";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "သႂ်ႇၵမ်းလိုၼ်း, သင်ဝႃႈ ပလွၵ်ႉၸိုင် ဢဝ်လွင်ႈတၢင်းမၼ်းတင်းသဵင်ႈ တမ်ႈ";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

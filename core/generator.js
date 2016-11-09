@@ -360,11 +360,15 @@ Blockly.Generator.prototype.provideFunction_ = function(desiredName, code) {
     var codeText = code.join('\n').replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
     // Change all '  ' indents into the desired indent.
+    // To avoid an infinite loop of replacements, change all indents to '\0'
+    // character first, then replace them all with the indent.
+    // We are assuming that no provided functions contain a literal null char.
     var oldCodeText;
     while (oldCodeText != codeText) {
       oldCodeText = codeText;
-      codeText = codeText.replace(/^((  )*)  /gm, '$1' + this.INDENT);
+      codeText = codeText.replace(/^((  )*)  /gm, '$1\0');
     }
+    codeText = codeText.replace(/\0/g, this.INDENT);
     this.definitions_[desiredName] = codeText;
   }
   return this.functionNames_[desiredName];

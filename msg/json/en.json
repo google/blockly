@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-08-17 16:08:04.888607",
+		"lastupdated": "2016-11-08 16:18:10.080986",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -82,6 +82,7 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Add, remove, or reorder sections to reconfigure this if block.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Add a condition to the if block.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Add a final, catch-all condition to the if block.",
+	"CONTROLS_IFELSE_TITLE": "if %1 do %2 else %3",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Return true if both inputs equal each other.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Return true if both inputs are not equal to each other.",

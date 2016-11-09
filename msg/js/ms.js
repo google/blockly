@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Untuk setiap perkara dalam senarai, teta
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "kira dengan %1 dari %2 hingga %3 selang %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Gunakan pembolehubah '%1' pada nilai-nilai dari nombor pangkal hingga nombor hujung, mengira mengikut selang yang ditentukan, dan lakukan blok-blok yang tertentu.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Tambah satu syarat kepada blok jika.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Tambah yang terakhir, alihkan semua keadaan ke blok jika.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

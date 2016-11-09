@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "จากทุกรายการใ�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "นับด้วย %1 จาก %2 จนถึง %3 เปลี่ยนค่าทีละ %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "ตัวแปร '%1' จะเริ่มจากจำนวนเริ่มต้น ไปจนถึงจำนวนสุดท้าย ตามระยะที่กำหนด และ ทำบล็อกที่กำหนดไว้";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "กำหนดเงื่อนไขของบล็อก \"ถ้า\"";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "เพิ่มสิ่งสุดท้าย ที่จะตรวจจับความเป็นไปได้ทั้งหมดของบล็อก \"ถ้า\"";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

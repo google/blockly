@@ -867,7 +867,7 @@ FactoryUtils.defineAndGetBlockTypes = function(blockDefsString, format) {
 FactoryUtils.injectCode = function(code, id) {
   var pre = document.getElementById(id);
   pre.textContent = code;
-  code = pre.innerHTML;
+  code = pre.textContent;
   code = prettyPrintOne(code, 'js');
   pre.innerHTML = code;
 };

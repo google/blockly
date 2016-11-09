@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "리스트 안에 들어있는 각 아이
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://ko.wikipedia.org/wiki/For_%EB%A3%A8%ED%94%84";
 Blockly.Msg.CONTROLS_FOR_TITLE = "으로 계산 %1 %2에서 %4을 이용하여 %3로";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "변수 \"%1\"은 지정된 간격으로 시작 수에서 끝 수까지를 세어 지정된 블록을 수행해야 합니다.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "\"만약\" 블럭에 조건 검사를 추가합니다.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "\"만약\" 블럭의 마지막에, 모든 검사 결과가 거짓인 경우 실행할 부분을 추가합니다.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://ko.wikipedia.org/wiki/%EC%A1%B0%EA%B1%B4%EB%AC%B8";

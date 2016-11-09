@@ -120,7 +120,7 @@ Blockly.dragMode_ = Blockly.DRAG_NONE;
 /**
  * Map from function names to callbacks, for deciding what to do when a button
  * is clicked.
- * @type {!Object<string, function(!Blockly.FlyoutButton)}
+ * @type {!Object<string, function(!Blockly.FlyoutButton)>}
  */
 Blockly.flyoutButtonCallbacks_ = {};
 

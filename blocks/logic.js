@@ -265,6 +265,48 @@ Blockly.Blocks['controls_if_else'] = {
   }
 };
 
+Blockly.Blocks['controls_ifelse'] = {
+  /**
+   * If/else block that does not use a mutator.
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "IF0",
+          "check": "Boolean",
+          "align": "RIGHT"
+        }
+      ],
+      "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "DO0",
+          "check": "Boolean",
+          "align": "RIGHT"
+        }
+      ],
+      "message2": "%{BKY_CONTROLS_IF_MSG_ELSE} %1",
+      "args2": [
+        {
+          "type": "input_statement",
+          "name": "ELSE",
+          "check": "Boolean",
+          "align": "RIGHT"
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.logic.HUE,
+      "tooltip": Blockly.Msg.CONTROLS_IF_TOOLTIP_2,
+      "helpUrl": Blockly.Msg.CONTROLS_IF_HELPURL
+    });    
+  }
+};
+
 Blockly.Blocks['logic_compare'] = {
   /**
    * Block for comparison operator.

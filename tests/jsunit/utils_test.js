@@ -115,16 +115,66 @@ function test_commonWordSuffix() {
 function test_tokenizeInterpolation() {
   var tokens = Blockly.utils.tokenizeInterpolation('');
   assertArrayEquals('Null interpolation', [], tokens);
+
   tokens = Blockly.utils.tokenizeInterpolation('Hello');
   assertArrayEquals('No interpolation', ['Hello'], tokens);
+  
   tokens = Blockly.utils.tokenizeInterpolation('Hello%World');
   assertArrayEquals('Unescaped %.', ['Hello%World'], tokens);
+  
   tokens = Blockly.utils.tokenizeInterpolation('Hello%%World');
   assertArrayEquals('Escaped %.', ['Hello%World'], tokens);
+  
   tokens = Blockly.utils.tokenizeInterpolation('Hello %1 World');
   assertArrayEquals('Interpolation.', ['Hello ', 1, ' World'], tokens);
+  
   tokens = Blockly.utils.tokenizeInterpolation('%123Hello%456World%789');
   assertArrayEquals('Interpolations.', [123, 'Hello', 456, 'World', 789], tokens);
+  
   tokens = Blockly.utils.tokenizeInterpolation('%%%x%%0%00%01%');
   assertArrayEquals('Torture interpolations.', ['%%x%0', 0, 1, '%'], tokens);
+
+  Blockly.Msg = Blockly.Msg || {};
+
+  Blockly.Msg.STRING_REF = 'test string';
+  tokens = Blockly.utils.tokenizeInterpolation('%{bky_string_ref}');
+  assertArrayEquals('String table reference, lowercase', ['test string'], tokens);
+  tokens = Blockly.utils.tokenizeInterpolation('%{BKY_STRING_REF}');
+  assertArrayEquals('String table reference, uppercase', ['test string'], tokens);
+
+  Blockly.Msg.WITH_PARAM = 'before %1 after';
+  tokens = Blockly.utils.tokenizeInterpolation('%{bky_with_param}');
+  assertArrayEquals('String table reference, with parameter', ['before ', 1, ' after'], tokens);
+
+  Blockly.Msg.RECURSE = 'before %{bky_string_ref} after';
+  tokens = Blockly.utils.tokenizeInterpolation('%{bky_recurse}');
+  assertArrayEquals('String table reference, with subreference', ['before test string after'], tokens);
+
+  // Error cases...
+  tokens = Blockly.utils.tokenizeInterpolation('%{bky_undefined}');
+  assertArrayEquals('Undefined string table reference', ['%{bky_undefined}'], tokens);
+
+  Blockly.Msg['1'] = 'Will not match';
+  tokens = Blockly.utils.tokenizeInterpolation('before %{1} after');
+  assertArrayEquals('Invalid initial digit in string table reference', ['before %{1} after'], tokens);
+
+  Blockly.Msg['TWO WORDS'] = 'Will not match';
+  tokens = Blockly.utils.tokenizeInterpolation('before %{two words} after');
+  assertArrayEquals('Invalid character in string table reference: space', ['before %{two words} after'], tokens);
+
+  Blockly.Msg['TWO-WORDS'] = 'Will not match';
+  tokens = Blockly.utils.tokenizeInterpolation('before %{two-words} after');
+  assertArrayEquals('Invalid character in string table reference: dash', ['before %{two-words} after'], tokens);
+
+  Blockly.Msg['TWO.WORDS'] = 'Will not match';
+  tokens = Blockly.utils.tokenizeInterpolation('before %{two.words} after');
+  assertArrayEquals('Invalid character in string table reference: period', ['before %{two.words} after'], tokens);
+
+  Blockly.Msg['AB&C'] = 'Will not match';
+  tokens = Blockly.utils.tokenizeInterpolation('before %{ab&c} after');
+  assertArrayEquals('Invalid character in string table reference: &', ['before %{ab&c} after'], tokens);
+
+  Blockly.Msg['UNCLOSED'] = 'Will not match';
+  tokens = Blockly.utils.tokenizeInterpolation('before %{unclosed');
+  assertArrayEquals('String table reference, with parameter', ['before %{unclosed'], tokens);
 }

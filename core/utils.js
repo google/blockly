@@ -323,6 +323,7 @@ Blockly.utils.tokenizeInterpolation = function(message) {
   // 0 - Base case.
   // 1 - % found.
   // 2 - Digit found.
+  // 3 - Message ref found
   var state = 0;
   var buffer = [];
   var number = null;
@@ -330,6 +331,11 @@ Blockly.utils.tokenizeInterpolation = function(message) {
     var c = chars[i];
     if (state == 0) {
       if (c == '%') {
+        var text = buffer.join('');
+        if (text) {
+          tokens.push(text);
+        }
+        buffer.length = 0;
         state = 1;  // Start escape.
       } else {
         buffer.push(c);  // Regular char.
@@ -346,8 +352,10 @@ Blockly.utils.tokenizeInterpolation = function(message) {
           tokens.push(text);
         }
         buffer.length = 0;
+      } else if (c == '{') {
+        state = 3;
       } else {
-        buffer.push('%', c);  // Not an escape: %a
+        buffer.push('%', c);  // Not recognized. Return as literal.
         state = 0;
       }
     } else if (state == 2) {
@@ -358,13 +366,70 @@ Blockly.utils.tokenizeInterpolation = function(message) {
         i--;  // Parse this char again.
         state = 0;
       }
+    } else if (state == 3) {  // String table reference
+      if (c == '') {
+        // Premature end before closing '}'
+        buffer.splice(0, 0, '%{'); // Re-insert leading delimiter
+        i--;  // Parse this char again.
+        state = 0; // and parse as string literal.
+      } else if (c != '}') {
+        buffer.push(c);
+      } else  {
+        var rawKey = buffer.join('');
+        if (/[a-zA-Z][a-zA-Z0-9_]*/.test(rawKey)) {  // Strict matching
+          // Found a valid string key. Attempt case insensitive match.
+          var keyUpper = rawKey.toUpperCase();
+
+          // BKY_ is the prefix used to namespace the strings used in Blockly
+          // core files and the predefined blocks in ../blocks/. These strings
+          // are defined in ../msgs/ files.
+          var bklyKey = goog.string.startsWith(keyUpper, 'BKY_') ?
+              keyUpper.substring(4) : null;
+          if (bklyKey && bklyKey in Blockly.Msg) {
+            var rawValue = Blockly.Msg[bklyKey];
+            var subTokens = Blockly.utils.tokenizeInterpolation(rawValue);
+            tokens = tokens.concat(subTokens);
+          } else {
+            // No entry found in the string table. Pass reference as string.
+            tokens.push('%{' + rawKey + '}');
+          }
+          buffer.length = 0;  // Clear the array
+          state = 0;
+        } else {
+          tokens.push('%{' + rawKey + '}');
+          buffer.length = 0;
+          state = 0; // and parse as string literal.
+        }
+      }
     }
   }
   var text = buffer.join('');
   if (text) {
     tokens.push(text);
   }
-  return tokens;
+
+  // Merge adjacent text tokens into a single string.
+  var mergedTokens = [];
+  buffer.length = 0;
+  for (var i = 0; i < tokens.length; ++i) {
+    if (typeof tokens[i] == 'string') {
+      buffer.push(tokens[i]);
+    } else {
+      text = buffer.join('');
+      if (text) {
+        mergedTokens.push(text);
+      }
+      buffer.length = 0;
+      mergedTokens.push(tokens[i]);
+    }
+  }
+  text = buffer.join('');
+  if (text) {
+    mergedTokens.push(text);
+  }
+  buffer.length = 0;
+
+  return mergedTokens;
 };
 
 /**

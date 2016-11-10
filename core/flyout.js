@@ -280,6 +280,11 @@ Blockly.Flyout.prototype.createDom = function() {
   this.svgBackground_ = Blockly.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
+  Array.prototype.push.apply(this.eventWrappers_,
+      Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.wheel_));
+  // Dragging the flyout up and down.
+  Array.prototype.push.apply(this.eventWrappers_,
+      Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_));
   return this.svgGroup_;
 };
 
@@ -292,20 +297,17 @@ Blockly.Flyout.prototype.init = function(targetWorkspace) {
   this.targetWorkspace_ = targetWorkspace;
   this.workspace_.targetWorkspace = targetWorkspace;
   // Add scrollbar.
-  this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
-      this.horizontalLayout_, false);
+  if (this.workspace_.options.hasScrollbars) {
+    this.scrollbar_ = new Blockly.Scrollbar(this.workspace_,
+        this.horizontalLayout_, false);
+  }
 
   this.hide();
 
-  Array.prototype.push.apply(this.eventWrappers_,
-      Blockly.bindEvent_(this.svgGroup_, 'wheel', this, this.wheel_));
   if (!this.autoClose) {
     this.filterWrapper_ = this.filterForCapacity_.bind(this);
     this.targetWorkspace_.addChangeListener(this.filterWrapper_);
   }
-  // Dragging the flyout up and down.
-  Array.prototype.push.apply(this.eventWrappers_,
-      Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_));
 };
 
 /**

@@ -39,10 +39,12 @@ goog.require('goog.math.Coordinate');
  * @param {string} callbackKey The key to use when looking up the callback for a
  *     click on this button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
+ * @param {string=} opt_cssClass Optional parameter specifying a CSS class to
+ *     add to this button.
  * @constructor
  */
 Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callbackKey,
-    isLabel) {
+    isLabel, opt_cssClass) {
   /**
    * @type {!Blockly.WorkspaceSvg}
    * @private
@@ -80,6 +82,13 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callbackKey,
    * @private
    */
   this.isLabel_ = isLabel;
+
+  /**
+   * If specified, a CSS class to add to this button.
+   * @type {?string}
+   * @private
+   */
+  this.cssClass_ = opt_cssClass || null;
 };
 
 /**
@@ -104,8 +113,12 @@ Blockly.FlyoutButton.prototype.height = 0;
  * @return {!Element} The button's SVG group.
  */
 Blockly.FlyoutButton.prototype.createDom = function() {
-  this.svgGroup_ = Blockly.createSvgElement('g',
-      {'class': this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton'},
+  var cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
+  if (this.cssClass_) {
+    cssClass += ' ' + this.cssClass_;
+  }
+
+  this.svgGroup_ = Blockly.createSvgElement('g', {'class': cssClass},
       this.workspace_.getCanvas());
 
   if (!this.isLabel_) {
@@ -122,10 +135,14 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'rx': 4, 'ry': 4},
       this.svgGroup_);
 
+  cssClass = this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText';
+  if (this.isLabel_ && this.callback_) {
+    cssClass += ' clickable';
+  }
+
   var svgText = Blockly.createSvgElement('text',
-      {'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
-        'x': 0, 'y': 0,
-        'text-anchor': 'middle'}, this.svgGroup_);
+      {'class': cssClass, 'x': 0, 'y': 0, 'text-anchor': 'middle'},
+      this.svgGroup_);
   svgText.textContent = this.text_;
 
   this.width = svgText.getComputedTextLength() +

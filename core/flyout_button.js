@@ -35,16 +35,13 @@ goog.require('goog.math.Coordinate');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
  *     button.
  * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
- * @param {string} text The text to display on the button.
- * @param {string} callbackKey The key to use when looking up the callback for a
- *     click on this button.
+ * @param {!Element} xml The xml specifying the label/button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
- * @param {string=} opt_cssClass Optional parameter specifying a CSS class to
- *     add to this button.
  * @constructor
  */
-Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callbackKey,
-    isLabel, opt_cssClass) {
+Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
+  // Labels behave the same as buttons, but are styled differently.
+
   /**
    * @type {!Blockly.WorkspaceSvg}
    * @private
@@ -61,20 +58,13 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callbackKey,
    * @type {string}
    * @private
    */
-  this.text_ = text;
+  this.text_ = xml.getAttribute('text');
 
   /**
    * @type {!goog.math.Coordinate}
    * @private
    */
   this.position_ = new goog.math.Coordinate(0, 0);
-
-  /**
-   * Function to call when this button is clicked.
-   * @type {function(!Blockly.FlyoutButton)}
-   * @private
-   */
-  this.callback_ = Blockly.flyoutButtonCallbacks_[callbackKey];
 
   /**
    * Whether this button should be styled as a label.
@@ -84,11 +74,28 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, text, callbackKey,
   this.isLabel_ = isLabel;
 
   /**
+   * Function to call when this button is clicked.
+   * @type {function(!Blockly.FlyoutButton)}
+   * @private
+   */
+  this.callback_ = null;
+
+  var callbackKey = xml.getAttribute('callbackKey');
+  if (this.isLabel_ && callbackKey) {
+    console.log ('Labels should not have callbacks. Label text: ' + this.text_);
+  } else if (!this.isLabel_ &&
+      !(callbackKey && Blockly.flyoutButtonCallbacks_[callbackKey])) {
+    console.log('Buttons should have callbacks. Button text: ' + this.text_);
+  } else {
+    this.callback_ = Blockly.flyoutButtonCallbacks_[callbackKey];
+  }
+
+  /**
    * If specified, a CSS class to add to this button.
    * @type {?string}
    * @private
    */
-  this.cssClass_ = opt_cssClass || null;
+  this.cssClass_ = xml.getAttribute('class') || null;
 };
 
 /**
@@ -135,13 +142,9 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'rx': 4, 'ry': 4},
       this.svgGroup_);
 
-  cssClass = this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText';
-  if (this.isLabel_ && this.callback_) {
-    cssClass += ' clickable';
-  }
-
   var svgText = Blockly.createSvgElement('text',
-      {'class': cssClass, 'x': 0, 'y': 0, 'text-anchor': 'middle'},
+      {'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
+          'x': 0, 'y': 0, 'text-anchor': 'middle'},
       this.svgGroup_);
   svgText.textContent = this.text_;
 

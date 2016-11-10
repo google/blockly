@@ -295,7 +295,7 @@ Blockly.Css.CONTENT = [
     'fill: #000;',
   '}',
 
-  '.blocklyFlyoutLabelText:hover {',
+  '.blocklyFlyoutLabelText.clickable:hover {',
     'fill: #aaa;',
   '}',
 

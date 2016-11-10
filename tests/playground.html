@@ -115,7 +115,6 @@ function start() {
     logEvents(false);
   }
   taChange();
-  Blockly.registerButtonCallback('logStuff', function(){console.log('stuff!');});
 }
 
 function getToolboxElement() {
@@ -592,7 +591,7 @@ h1 {
           </shadow>
         </value>
       </block>
-      <label text="Input/Output:" class="ioLabel" callbackKey="logStuff"></label>
+      <label text="Input/Output:" class="ioLabel"></label>
       <block type="text_print">
         <value name="TEXT">
           <shadow type="text">

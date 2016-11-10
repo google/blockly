@@ -704,8 +704,9 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         var isLabel = tagName == 'LABEL';
         var text = xml.getAttribute('text');
         var callbackKey = xml.getAttribute('callbackKey');
+        var className = xml.getAttribute('class');
         var curButton = new Blockly.FlyoutButton(this.workspace_,
-            this.targetWorkspace_, text, callbackKey, isLabel);
+            this.targetWorkspace_, text, callbackKey, isLabel, className);
         contents.push({type: 'button', button: curButton});
         gaps.push(default_gap);
       }

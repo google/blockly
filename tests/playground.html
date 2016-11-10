@@ -115,6 +115,7 @@ function start() {
     logEvents(false);
   }
   taChange();
+  Blockly.registerButtonCallback('logStuff', function(){console.log('stuff!');});
 }
 
 function getToolboxElement() {
@@ -320,6 +321,11 @@ h1 {
 #importExport {
   font-family: monospace;
 }
+
+.ioLabel .blocklyFlyoutLabelText {
+  font-style: italic;
+}
+
 </style>
 </head>
 <body onload="start()">
@@ -586,6 +592,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <label text="Input/Output:" class="ioLabel" callbackKey="logStuff"></label>
       <block type="text_print">
         <value name="TEXT">
           <shadow type="text">

@@ -52,6 +52,12 @@ Blockly.Blocks['factory_base'] = {
         });
     this.appendDummyInput()
         .appendField(dropdown, 'CONNECTIONS');
+    this.appendValueInput('TOOLTIP')
+        .setCheck('String')
+        .appendField('tooltip');
+    this.appendValueInput('HELPURL')
+        .setCheck('String')
+        .appendField('help url');
     this.appendValueInput('COLOUR')
         .setCheck('Colour')
         .appendField('colour');

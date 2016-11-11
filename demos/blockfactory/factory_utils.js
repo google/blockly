@@ -250,8 +250,20 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     JS.colour = hue;
   }
-  JS.tooltip = '';
-  JS.helpUrl = 'http://www.example.com/';
+  // Tooltip.
+  var tooltipBlock = rootBlock.getInputTargetBlock('TOOLTIP');
+  if (tooltipBlock && !tooltipBlock.disabled) {
+    JS.tooltip = tooltipBlock.getFieldValue('TEXT');
+  } else {
+    JS.tooltip = '';
+  }
+  // Help URL.
+  var helpUrlBlock = rootBlock.getInputTargetBlock('HELPURL');
+  if (helpUrlBlock && !helpUrlBlock.disabled) {
+    JS.helpUrl = helpUrlBlock.getFieldValue('TEXT');
+  } else {
+    JS.helpUrl = 'http://www.example.com/';
+  }
   return JSON.stringify(JS, null, '  ');
 };
 
@@ -334,6 +346,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
       code.push('    this.setColour(' + hue + ');');
     }
   }
+  // TODO: Rachel: tooltip and helpurl
   code.push("    this.setTooltip('');");
   code.push("    this.setHelpUrl('http://www.example.com/');");
   code.push('  }');

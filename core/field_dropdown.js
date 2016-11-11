@@ -246,9 +246,10 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   var strings = [];
   for (var i = 0; i < options.length; i++) {
     var text = options[i][0];
-    if (typeof text == 'string') {
-      strings.push(text);
+    if (typeof text != 'string') {
+      return;  // No text splitting if there is an image in the list.
     }
+    strings.push(text);
   }
   var shortest = Blockly.shortestStringLength(strings);
   var prefixLength = Blockly.commonWordPrefix(strings, shortest);
@@ -270,11 +271,9 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   var newOptions = [];
   for (var i = 0; i < options.length; i++) {
     var text = options[i][0];
-    if (typeof text == 'string') {
-      var value = options[i][1];
-      text = text.substring(prefixLength, text.length - suffixLength);
-      newOptions[i] = [text, value];
-    }
+    var value = options[i][1];
+    text = text.substring(prefixLength, text.length - suffixLength);
+    newOptions[i] = [text, value];
   }
   this.menuGenerator_ = newOptions;
 };

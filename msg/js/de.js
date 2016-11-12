@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Führt eine Anweisung für jeden Wert in
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://de.wikipedia.org/wiki/For-Schleife";
 Blockly.Msg.CONTROLS_FOR_TITLE = "zähle %1 von %2 bis %3 in Schritten von %4:";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Zählt die Variable \"%1\" von einem Startwert bis zu einem Endwert und führt für jeden Wert eine Anweisung aus.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Eine weitere Bedingung hinzufügen.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Eine sonst-Bedingung hinzufügen. Führt eine Anweisung aus, falls keine Bedingung zutrifft.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

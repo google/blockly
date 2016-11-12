@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Для кожнага элемэнту �
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "лічыць з %1 ад %2 да %3 па %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Прысвойвае зьменнай \"%1\" значэньні ад пачатковага да канчатковага значэньня, улічваючы зададзены крок, і выконвае абраныя блёкі.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Дадаць умову да блёку «калі».";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Дадаць заключную ўмову для ўсіх астатніх варыянтаў блёку «калі».";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

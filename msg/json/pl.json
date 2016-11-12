@@ -11,7 +11,8 @@
 			"Expert3222",
 			"Cirasean",
 			"Fringoo",
-			"Chrumps"
+			"Chrumps",
+			"Woytecr"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
@@ -37,8 +38,9 @@
 	"CHANGE_VALUE_TITLE": "Zmień wartość:",
 	"RENAME_VARIABLE": "Zmień nazwę zmiennej...",
 	"RENAME_VARIABLE_TITLE": "Zmień nazwy wszystkich '%1' zmiennych na:",
-	"NEW_VARIABLE": "Nowa zmienna...",
+	"NEW_VARIABLE": "Stwórz zmienną...",
 	"NEW_VARIABLE_TITLE": "Nowa nazwa zmiennej:",
+	"VARIABLE_ALREADY_EXISTS": "Zmienna o nazwie '%1' już istnieje.",
 	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "Wybierz kolor z palety.",
 	"COLOUR_RANDOM_TITLE": "losowy kolor",

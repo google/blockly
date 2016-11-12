@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "सूची के प्रत्य�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "काउंट करें";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Have the variable '%1' take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.";  // untranslated
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "यदि ब्लॉक मे एक शर्त जोड़ें।";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Add a final, catch-all condition to the if block.";  // untranslated
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

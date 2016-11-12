@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Trong một danh sách, lấy từng th�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "đếm theo %1 từ %2 đến %3 mỗi lần thêm %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Đếm từ số đầu đến số cuối. Khi đến mỗi số, gán số vào biến \"%1\" rồi thực hiện các lệnh.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Thêm một điều kiện vào mảnh nếu.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Cuối cùng, khi không điều kiện nào đúng.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

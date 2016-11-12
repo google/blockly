@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Per a cada element en la llista, desar l
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "comptar amb %1 des de %2 fins a %3 en increments de %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Fer que la variable \"%1\" prengui els valors des del nombre inicial fins al nombre final, incrementant a cada pas l'interval indicat, i executar els blocs especificats.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Afegeix una condició al bloc 'si'.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Afegeix una condició final, que recull qualsevol altra possibilitat, al bloc 'si'.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

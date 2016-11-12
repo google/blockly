@@ -130,7 +130,7 @@ Blockly.FieldAngle.prototype.showEditor_ = function() {
   Blockly.FieldAngle.superClass_.showEditor_.call(this, noFocus);
   var div = Blockly.WidgetDiv.DIV;
   if (!div.firstChild) {
-    // Mobile interface uses window.prompt.
+    // Mobile interface uses Blockly.prompt.
     return;
   }
   // Build the SVG DOM.

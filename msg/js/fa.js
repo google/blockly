@@ -40,6 +40,7 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "برای هر مورد در این فه�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "با تعداد %1 از %2 به %3 با گام‌های %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "متغیر %1 را در مقادیر شروع‌شده از عدد انتهای  به عدد انتهایی را دارد، با فواصل مشخص‌شده می‌شمارد و این بلوک مشخص‌شده را انجام می‌دهد.";
+Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "افزودن یک شرط به بلوک اگر.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "اضافه کردن نهایی، گرفتن همهٔ شرایط به بلوک اگر.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

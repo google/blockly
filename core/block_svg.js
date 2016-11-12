@@ -405,6 +405,7 @@ Blockly.BlockSvg.prototype.moveToDragSurface_ = function() {
 /**
  * Move this block back to the workspace block canvas.
  * Generally should be called at the same time as setDragging_(false).
+ * Does nothing if useDragSurface_ is false.
  * @private
  */
 Blockly.BlockSvg.prototype.moveOffDragSurface_ = function() {

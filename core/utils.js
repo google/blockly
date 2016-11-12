@@ -238,6 +238,7 @@ Blockly.isTargetInput_ = function(e) {
          e.target.type == 'tel' || e.target.type == 'url' ||
          e.target.isContentEditable;
 };
+
 /**
  * Static regex to pull the x,y,z values out of a translate3d() style property.
  * Accounts for same exceptions as XY_REGEXP_.

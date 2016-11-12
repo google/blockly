@@ -19,7 +19,11 @@
  */
 
 /**
- * @fileoverview Functions for injecting Blockly into a web page.
+ * @fileoverview A class that manages a surface for dragging blocks.  When a
+ * block drag is started, we move the block (and children) to a separate dom
+ * element that we move around using translate3d. At the end of the drag, the
+ * blocks are put back in into the svg they came from. This helps performance by
+ * avoiding repainting the entire svg on every mouse move while dragging blocks.
  * @author picklesrus
  */
 
@@ -32,11 +36,16 @@ goog.require('goog.math.Coordinate');
 
 
 /**
- * Class for a Drag Surface SVG.
+ * Class for a drag surface for the currently dragged block. This is a separate
+ * SVG that contains only the currently moving block, or nothing.
  * @param {!Element} container Containing element.
  * @constructor
  */
 Blockly.BlockDragSurfaceSvg = function(container) {
+  /**
+   * @type {!Element}
+   * @private
+   */
   this.container_ = container;
 };
 
@@ -48,7 +57,8 @@ Blockly.BlockDragSurfaceSvg = function(container) {
 Blockly.BlockDragSurfaceSvg.prototype.SVG_ = null;
 
 /**
- * SVG group inside the drag surface. This is where blocks are moved to.
+ * This is where blocks live while they are being dragged if the drag surface
+ * is enabled.
  * @type {Element}
  * @private
  */
@@ -88,7 +98,7 @@ Blockly.BlockDragSurfaceSvg.prototype.createDom = function() {
 
 /**
  * Set the SVG blocks on the drag surface's group and show the surface.
- * Only one block should be on the drag surface at a time.
+ * Only one block group should be on the drag surface at a time.
  * @param {!Element} blocks Block or group of blocks to place on the drag
  * surface.
  */
@@ -101,7 +111,8 @@ Blockly.BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
 };
 
 /**
- * Translate and scale the entire drag surface group to keep in sync with the workspace.
+ * Translate and scale the entire drag surface group to keep in sync with the
+ * workspace.
  * @param {number} x X translation
  * @param {number} y Y translation
  * @param {number} scale Scale of the group.

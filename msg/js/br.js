@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Evit pep elfenn en ur roll, reiñ talvou
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "kontañ gant %1 eus %2 da %3 dre %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Ober e doare ma kemero an argemmenn \"%1\" an talvoudennoù adalek niverenn an deroù betek niverenn an dibenn, en ur inkremantiñ an esaouenn, ha seveniñ an urzhioù spisaet.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Ouzhpennañ un amplegad d'ar bloc'h ma.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Ouzhpennañ un amplegad dibenn lak-pep-tra d'ar bloc'h ma.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

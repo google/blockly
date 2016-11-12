@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Per cdo produkt ne nje \"liste\" \"vendo
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "numero me %1 nga %2 ne %3 me nga %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Bëje identifikuesin \"%1\" që ta ketë vlerat prej numrit të fillimit deri tek numri i fundit, duke numëruar nga intervali i specifikuar, dhe ti bëj blloqet e specifikuara.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "\"Vendos\" \"kushtein\"tek \"pjesa\" \"if\"";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Shto një përfundues, që i mbërrin të gjitha kushtet në bllokun nëse.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

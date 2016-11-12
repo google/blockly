@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "リストの各項目に対して変数 
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "で、カウントします。 %1 %2 から%3、 %4 で";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "変数 \"%1\"は、指定した間隔ごとのカウントを開始番号から 終了番号まで、値をとり、指定したブロックを行う必要があります。";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "場合に条件にブロック追加。";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Ifブロックに、すべてをキャッチする条件を追加。";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

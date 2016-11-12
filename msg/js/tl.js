@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Para sa bawat item sa isang list, i-set 
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "bilangin %1 mula %2 hanggang %3 ng %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Magkaroon ng mga variable na \"%1\" na tanggalin ng mga halaga mula sa simulang numero hanggang sa dulong numero, at bilangin sa pamamagitan ng tinukoy na agwat, at gawin ang mga tinukoy na mga blocks.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Mag dagdag ng condition sa if block.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Mag Add ng final, kunin lahat ng condition sa if block.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

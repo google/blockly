@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "За сваку ставку унута�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "преброј са %1 од %2 до %3 од %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Имај промењиву \"%1\" узми вредности од почетног броја до задњег броја, бројећи по одређеном интервалу, и изврши одређене блокове.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Додајте услов блоку „ако“.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Додај коначни, catch-all  (ухвати све) услове иф блока.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

@@ -3,7 +3,8 @@
 		"authors": [
 			"Jaroslav.micek",
 			"Marian.stano",
-			"Mark"
+			"Mark",
+			"Kusavica"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "prvok",
@@ -24,11 +25,14 @@
 	"DISABLE_BLOCK": "Vypnúť blok",
 	"ENABLE_BLOCK": "Povoliť blok",
 	"HELP": "Pomoc",
+	"UNDO": "Späť",
+	"REDO": "Znova",
 	"CHANGE_VALUE_TITLE": "Zmeniť hodnotu:",
 	"RENAME_VARIABLE": "Premenovať premennú...",
 	"RENAME_VARIABLE_TITLE": "Premenovať všetky premenné '%1' na:",
-	"NEW_VARIABLE": "Nová premenná...",
+	"NEW_VARIABLE": "Vytvoriť premennú...",
 	"NEW_VARIABLE_TITLE": "Názov novej premennej:",
+	"VARIABLE_ALREADY_EXISTS": "Premenná s názvom %1 už existuje.",
 	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "Zvoľte farbu z palety.",
 	"COLOUR_RANDOM_TITLE": "náhodná farba",

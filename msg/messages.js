@@ -238,7 +238,6 @@ Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = 'Add a condition to the if block.';
 Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 /// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
-
 /// block text - Evaluates a boolean condition (%1), and will either execute
 /// the statements in %2 if true, otherwise execute the statements in %3.
 /// The English word "otherwise" would probably be superior to "else", but the

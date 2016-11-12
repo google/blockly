@@ -843,9 +843,6 @@ Blockly.Blocks['procedures_ifreturn'] = {
    * @this Blockly.Block
    */
   onchange: function(e) {
-    if (this.workspace.isDragging()) {
-      return;  // Don't change state at the start of a drag.
-    }
     var legal = false;
     // Is the block nested in a procedure?
     var block = this;
@@ -871,14 +868,8 @@ Blockly.Blocks['procedures_ifreturn'] = {
         this.hasReturnValue_ = true;
       }
       this.setWarningText(null);
-      if (!this.isInFlyout) {
-        this.setDisabled(false);
-      }
     } else {
       this.setWarningText(Blockly.Msg.PROCEDURES_IFRETURN_WARNING);
-      if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setDisabled(true);
-      }
     }
   },
   /**

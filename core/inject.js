@@ -104,22 +104,19 @@ Blockly.createDom_ = function(container, options) {
   </defs>
   */
   var defs = Blockly.createSvgElement('defs', {}, svg);
-  // Each filter/pattern needs a unique ID for the case of multiple Blockly
-  // instances on a page.  Browser behaviour becomes undefined otherwise.
-  // https://neil.fraser.name/news/2015/11/01/
   var rnd = String(Math.random()).substring(2);
   /*
     <filter id="blocklyEmbossFilter837493">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur" />
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1" result="blur"/>
       <feSpecularLighting in="blur" surfaceScale="1" specularConstant="0.5"
                           specularExponent="10" lighting-color="white"
                           result="specOut">
-        <fePointLight x="-5000" y="-10000" z="20000" />
+        <fePointLight x="-5000" y="-10000" z="20000"/>
       </feSpecularLighting>
       <feComposite in="specOut" in2="SourceAlpha" operator="in"
-                   result="specOut" />
+                   result="specOut"/>
       <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic"
-                   k1="0" k2="1" k3="1" k4="0" />
+                   k1="0" k2="1" k3="1" k4="0"/>
     </filter>
   */
   var embossFilter = Blockly.createSvgElement('filter',

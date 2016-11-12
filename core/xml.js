@@ -296,11 +296,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
-
-  // Disable workspace resizes as an optimization.
-  if (workspace.setResizesEnabled) {
-    workspace.setResizesEnabled(false);
-  }
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
     var name = xmlChild.nodeName.toLowerCase();
@@ -325,10 +320,6 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   Blockly.Field.stopCache();
 
   workspace.updateVariableList(false);
-  // Re-enable workspace resizing.
-  if (workspace.setResizesEnabled) {
-    workspace.setResizesEnabled(true);
-  }
 };
 
 /**

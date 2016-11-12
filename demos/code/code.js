@@ -314,7 +314,7 @@ Code.renderContent = function() {
     var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.textContent;
+      code = content.innerHTML;
       code = prettyPrintOne(code, 'js');
       content.innerHTML = code;
     }
@@ -322,7 +322,7 @@ Code.renderContent = function() {
     code = Blockly.Python.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.textContent;
+      code = content.innerHTML;
       code = prettyPrintOne(code, 'py');
       content.innerHTML = code;
     }
@@ -330,7 +330,7 @@ Code.renderContent = function() {
     code = Blockly.PHP.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.textContent;
+      code = content.innerHTML;
       code = prettyPrintOne(code, 'php');
       content.innerHTML = code;
     }
@@ -338,7 +338,7 @@ Code.renderContent = function() {
     code = Blockly.Dart.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.textContent;
+      code = content.innerHTML;
       code = prettyPrintOne(code, 'dart');
       content.innerHTML = code;
     }
@@ -346,7 +346,7 @@ Code.renderContent = function() {
     code = Blockly.Lua.workspaceToCode(Code.workspace);
     content.textContent = code;
     if (typeof prettyPrintOne == 'function') {
-      code = content.textContent;
+      code = content.innerHTML;
       code = prettyPrintOne(code, 'lua');
       content.innerHTML = code;
     }

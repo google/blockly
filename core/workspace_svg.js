@@ -263,7 +263,7 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     Blockly.bindEventWithChecks_(this.svgGroup_, 'mousedown', this,
         this.onMouseDown_);
     var thisWorkspace = this;
-    Blockly.bindEventWithChecks_(this.svgGroup_, 'touchstart', null,
+    Blockly.bindEvent_(this.svgGroup_, 'touchstart', null,
                        function(e) {Blockly.longStart_(e, thisWorkspace);});
     if (this.options.zoomOptions && this.options.zoomOptions.wheel) {
       // Mouse-wheel.
@@ -410,7 +410,7 @@ Blockly.WorkspaceSvg.prototype.updateScreenCalculations_ = function() {
  * @package
  */
 Blockly.WorkspaceSvg.prototype.resizeContents = function() {
-  if (!this.resizesEnabled_) {
+  if (!this.resizesEnabled_ || !this.rendered) {
     return;
   }
   if (this.scrollbar) {
@@ -765,6 +765,9 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_.concat(
         Blockly.bindEventWithChecks_(document, 'mousemove', null,
         Blockly.onMouseMove_));
+  } else {
+    // It was a click, but the workspace isn't draggable.
+    Blockly.Touch.clearTouchIdentifier();
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();

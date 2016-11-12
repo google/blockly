@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Za vsak element v seznamu, nastavi sprem
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";
 Blockly.Msg.CONTROLS_FOR_TITLE = "štej s/z %1 od %2 do %3 s korakom %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Vrednost spremenljivke '%1' se spreminja od začetnega števila do končnega števila, z določenim korakom. Pri tem se izvedejo določene kocke.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Dodaj pogoj »če« kocki.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Dodaj končni pogoj »če« kocki.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";

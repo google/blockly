@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Bir listedeki her öğe için  '%1' değ
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "ile sayılır %1 %2 den %3 ye, her adımda %4 değişim";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Başlangıç sayısından bitiş sayısına kadar belirtilen aralık ve belirtilen engeller ile devam eden değerler alan '%1' değişkeni oluştur.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "If bloğuna bir koşul ekleyin.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "If bloğuna kalan durumları \"yakalayan\" bir son ekle.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

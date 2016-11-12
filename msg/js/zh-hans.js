@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "遍历每个列表中的项目，将变�
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "使用 %1 从范围 %2 到 %3 每隔 %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "从起始数到结尾数中取出变量“%1”的值，按指定的时间间隔，执行指定的块。";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "在if语句块中增加一个条件。";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "添加一个最终的，包括所有情况的节到if块中。";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

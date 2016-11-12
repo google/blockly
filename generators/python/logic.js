@@ -51,8 +51,6 @@ Blockly.Python['controls_if'] = function(block) {
   return code;
 };
 
-Blockly.Python['controls_ifelse'] = Blockly.Python['controls_if'];
-
 Blockly.Python['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

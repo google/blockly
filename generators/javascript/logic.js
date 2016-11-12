@@ -50,8 +50,6 @@ Blockly.JavaScript['controls_if'] = function(block) {
   return code + '\n';
 };
 
-Blockly.JavaScript['controls_ifelse'] = Blockly.JavaScript['controls_if'];
-
 Blockly.JavaScript['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

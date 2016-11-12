@@ -40,7 +40,6 @@ Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = "Pre každý prvok v zozname priraď jeho
 Blockly.Msg.CONTROLS_FOR_HELPURL = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
 Blockly.Msg.CONTROLS_FOR_TITLE = "počítať s %1 od %2 do %3 o %4";
 Blockly.Msg.CONTROLS_FOR_TOOLTIP = "Nechá premennú '%1' nadobúdať hodnoty od začiatočného čísla po konečné s daným medzikrokom a vykoná zadané bloky.";
-Blockly.Msg.CONTROLS_IFELSE_TITLE = "if %1 do %2 else %3";  // untranslated
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = "Pridať podmienku k \"ak\" bloku.";
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = "Pridať poslednú záchytnú podmienku k \"ak\" bloku.";
 Blockly.Msg.CONTROLS_IF_HELPURL = "https://github.com/google/blockly/wiki/IfElse";  // untranslated

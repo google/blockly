@@ -50,6 +50,8 @@ Blockly.Dart['controls_if'] = function(block) {
   return code + '\n';
 };
 
+Blockly.Dart['controls_ifelse'] = Blockly.Dart['controls_if'];
+
 Blockly.Dart['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

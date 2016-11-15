@@ -631,7 +631,7 @@ Blockly.Block.prototype.getColour = function() {
  * @param {number|string} colour HSV hue value, or #RRGGBB string.
  */
 Blockly.Block.prototype.setColour = function(colour) {
-  var hue = parseFloat(colour);
+  var hue = Number(colour);
   if (!isNaN(hue)) {
     this.colour_ = Blockly.hueToRgb(hue);
   } else if (goog.isString(colour) && colour.match(/^#[0-9a-fA-F]{6}$/)) {

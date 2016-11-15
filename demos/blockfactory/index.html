@@ -1,5 +1,3 @@
-<!-- TODO(quachtina96): move the CSS out to a separate file -->
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,11 +35,12 @@
     var init = function() {
       blocklyFactory = new AppController();
       blocklyFactory.init();
+      window.addEventListener('beforeunload', blocklyFactory.confirmLeavePage);
     };
     window.addEventListener('load', init);
   </script>
 </head>
-<body onbeforeunload="return blocklyFactory.confirmLeavePage()">
+<body>
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Blockly Developer Tools
     <button id="helpButton" title="View documentation in new window.">

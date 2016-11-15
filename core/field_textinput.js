@@ -219,9 +219,9 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
     valid = this.callValidator(htmlInput.value);
   }
   if (valid === null) {
-    Blockly.addClass_(htmlInput, 'blocklyInvalidInput');
+    Blockly.utils.addClass(htmlInput, 'blocklyInvalidInput');
   } else {
-    Blockly.removeClass_(htmlInput, 'blocklyInvalidInput');
+    Blockly.utils.removeClass(htmlInput, 'blocklyInvalidInput');
   }
 };
 

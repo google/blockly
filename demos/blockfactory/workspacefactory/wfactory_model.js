@@ -492,7 +492,7 @@ ListElement = function(type, opt_name) {
   // Name of category. Can be changed by user. Null if separator.
   this.name = opt_name ? opt_name : null;
   // Unique ID of element. Does not change.
-  this.id = Blockly.genUid();
+  this.id = Blockly.utils.genUid();
   // Color of category. Default is no color. Null if separator.
   this.color = null;
   // Stores a custom tag, if necessary. Null if no custom tag or separator.
@@ -552,7 +552,7 @@ ListElement.prototype.changeColor = function (color) {
 ListElement.prototype.copy = function() {
   copy = new ListElement(this.type);
   // Generate a unique ID for the element.
-  copy.id = Blockly.genUid();
+  copy.id = Blockly.utils.genUid();
   // Copy all attributes except ID.
   copy.name = this.name;
   copy.xml = this.xml;

@@ -40,16 +40,18 @@ goog.require('goog.userAgent');
  * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
  * @param {!Element} element DOM element to add class to.
  * @param {string} className Name of class to add.
- * @private
+ * @return {boolean} True if class was added, false if already present.
  */
-Blockly.addClass_ = function(element, className) {
+Blockly.utils.addClass = function(element, className) {
   var classes = element.getAttribute('class') || '';
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
-    if (classes) {
-      classes += ' ';
-    }
-    element.setAttribute('class', classes + className);
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
+    return false;
   }
+  if (classes) {
+    classes += ' ';
+  }
+  element.setAttribute('class', classes + className);
+  return true;
 };
 
 /**
@@ -57,162 +59,25 @@ Blockly.addClass_ = function(element, className) {
  * Similar to Closure's goog.dom.classes.remove, except it handles SVG elements.
  * @param {!Element} element DOM element to remove class from.
  * @param {string} className Name of class to remove.
- * @private
+ * @return {boolean} True if class was removed, false if never present.
  */
-Blockly.removeClass_ = function(element, className) {
+Blockly.utils.removeClass = function(element, className) {
   var classes = element.getAttribute('class');
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
-    var classList = classes.split(/\s+/);
-    for (var i = 0; i < classList.length; i++) {
-      if (!classList[i] || classList[i] == className) {
-        classList.splice(i, 1);
-        i--;
-      }
-    }
-    if (classList.length) {
-      element.setAttribute('class', classList.join(' '));
-    } else {
-      element.removeAttribute('class');
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
+    return false;
+  }
+  var classList = classes.split(/\s+/);
+  for (var i = 0; i < classList.length; i++) {
+    if (!classList[i] || classList[i] == className) {
+      classList.splice(i, 1);
+      i--;
     }
   }
-};
-
-/**
- * Checks if an element has the specified CSS class.
- * Similar to Closure's goog.dom.classes.has, except it handles SVG elements.
- * @param {!Element} element DOM element to check.
- * @param {string} className Name of class to check.
- * @return {boolean} True if class exists, false otherwise.
- * @private
- */
-Blockly.hasClass_ = function(element, className) {
-  var classes = element.getAttribute('class');
-  return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;
-};
-
-/**
- * Bind an event to a function call.  When calling the function, verifies that
- * it belongs to the touch stream that is currently being processed, and splits
- * multitouch events into multiple events as needed.
- * @param {!Node} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @param {boolean} opt_noCaptureIdentifier True if triggering on this event
- *     should not block execution of other event handlers on this touch or other
- *     simultaneous touches.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
- * @private
- */
-Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
-    opt_noCaptureIdentifier) {
-  var handled = false;
-  var wrapFunc = function(e) {
-    var captureIdentifier = !opt_noCaptureIdentifier;
-    // Handle each touch point separately.  If the event was a mouse event, this
-    // will hand back an array with one element, which we're fine handling.
-    var events = Blockly.Touch.splitEventByTouches(e);
-    for (var i = 0, event; event = events[i]; i++) {
-      if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
-        continue;
-      }
-      Blockly.Touch.setClientFromTouch(event);
-      if (thisObject) {
-        func.call(thisObject, event);
-      } else {
-        func(event);
-      }
-      handled = true;
-    }
-  };
-
-  node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
-
-  // Add equivalent touch event.
-  if (name in Blockly.Touch.TOUCH_MAP) {
-    var touchWrapFunc = function(e) {
-      wrapFunc(e);
-      // Stop the browser from scrolling/zooming the page.
-      if (handled) {
-        e.preventDefault();
-      }
-    };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
-    }
+  if (classList.length) {
+    element.setAttribute('class', classList.join(' '));
+  } else {
+    element.removeAttribute('class');
   }
-  return bindData;
-};
-
-
-/**
- * Bind an event to a function call.  Handles multitouch events by using the
- * coordinates of the first changed touch, and doesn't do any safety checks for
- * simultaneous event processing.
- * @deprecated in favor of bindEventWithChecks_, but preserved for external
- * users.
- * @param {!Node} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
- * @private
- */
-Blockly.bindEvent_ = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
-    if (thisObject) {
-      func.call(thisObject, e);
-    } else {
-      func(e);
-    }
-  };
-
-  node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
-
-  // Add equivalent touch event.
-  if (name in Blockly.Touch.TOUCH_MAP) {
-    var touchWrapFunc = function(e) {
-      // Punt on multitouch events.
-      if (e.changedTouches.length == 1) {
-        // Map the touch event's properties to the event.
-        var touchPoint = e.changedTouches[0];
-        e.clientX = touchPoint.clientX;
-        e.clientY = touchPoint.clientY;
-      }
-      wrapFunc(e);
-
-      // Stop the browser from scrolling/zooming the page.
-      e.preventDefault();
-    };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
-    }
-  }
-  return bindData;
-};
-
-/**
- * Unbind one or more events event from a function call.
- * @param {!Array.<!Array>} bindData Opaque data from bindEvent_.  This list is
- *     emptied during the course of calling this function.
- * @return {!Function} The function call.
- * @private
- */
-Blockly.unbindEvent_ = function(bindData) {
-  while (bindData.length) {
-    var bindDatum = bindData.pop();
-    var node = bindDatum[0];
-    var name = bindDatum[1];
-    var func = bindDatum[2];
-    node.removeEventListener(name, func, false);
-  }
-  return func;
 };
 
 /**
@@ -229,9 +94,8 @@ Blockly.utils.noEvent = function(e) {
  * Is this event targeting a text input widget?
  * @param {!Event} e An event.
  * @return {boolean} True if text input.
- * @private
  */
-Blockly.isTargetInput_ = function(e) {
+Blockly.utils.isTargetInput = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
@@ -240,22 +104,12 @@ Blockly.isTargetInput_ = function(e) {
 };
 
 /**
- * Static regex to pull the x,y,z values out of a translate3d() style property.
- * Accounts for same exceptions as XY_REGEXP_.
- * @type {!RegExp}
- * @private
- */
-Blockly.XY_3D_REGEXP_ =
-  /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
-
-/**
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.
- * @private
  */
-Blockly.getRelativeXY_ = function(element) {
+Blockly.utils.getRelativeXY = function(element) {
   var xy = new goog.math.Coordinate(0, 0);
   // First, check for x and y attributes.
   var x = element.getAttribute('x');
@@ -268,7 +122,7 @@ Blockly.getRelativeXY_ = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  var r = transform && transform.match(Blockly.getRelativeXY_.XY_REGEXP_);
+  var r = transform && transform.match(Blockly.utils.getRelativeXY.XY_REGEX_);
   if (r) {
     xy.x += parseFloat(r[1]);
     if (r[3]) {
@@ -279,7 +133,7 @@ Blockly.getRelativeXY_ = function(element) {
   // Third, check for style="transform: translate3d(...)".
   var style = element.getAttribute('style');
   if (style && style.indexOf('translate3d') > -1) {
-    var styleComponents = style.match(Blockly.XY_3D_REGEXP_);
+    var styleComponents = style.match(Blockly.utils.getRelativeXY.XY_3D_REGEX_);
     if (styleComponents) {
       xy.x += parseFloat(styleComponents[1]);
       if (styleComponents[3]) {
@@ -299,41 +153,17 @@ Blockly.getRelativeXY_ = function(element) {
  * @type {!RegExp}
  * @private
  */
-Blockly.getRelativeXY_.XY_REGEXP_ =
+Blockly.utils.getRelativeXY.XY_REGEX_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
 
 /**
- * Return the absolute coordinates of the top-left corner of this element,
- * scales that after canvas SVG element, if it's a descendant.
- * The origin (0,0) is the top-left corner of the Blockly SVG.
- * @param {!Element} element Element to find the coordinates of.
- * @param {!Blockly.Workspace} workspace Element must be in this workspace.
- * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ * Static regex to pull the x,y,z values out of a translate3d() style property.
+ * Accounts for same exceptions as XY_REGEXP_.
+ * @type {!RegExp}
  * @private
  */
-Blockly.getSvgXY_ = function(element, workspace) {
-  var x = 0;
-  var y = 0;
-  var scale = 1;
-  if (goog.dom.contains(workspace.getCanvas(), element) ||
-      goog.dom.contains(workspace.getBubbleCanvas(), element)) {
-    // Before the SVG canvas, scale the coordinates.
-    scale = workspace.scale;
-  }
-  do {
-    // Loop through this block and every parent.
-    var xy = Blockly.getRelativeXY_(element);
-    if (element == workspace.getCanvas() ||
-        element == workspace.getBubbleCanvas()) {
-      // After the SVG canvas, don't scale the coordinates.
-      scale = 1;
-    }
-    x += xy.x * scale;
-    y += xy.y * scale;
-    element = element.parentNode;
-  } while (element && element != workspace.getParentSvg());
-  return new goog.math.Coordinate(x, y);
-};
+Blockly.utils.getRelativeXY.XY_3D_REGEX_ =
+  /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 /**
  * Helper method for creating SVG elements.
@@ -344,7 +174,7 @@ Blockly.getSvgXY_ = function(element, workspace) {
  *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
+Blockly.utils.createSvgElement = function(name, attrs, parent, opt_workspace) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
@@ -367,7 +197,7 @@ Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.
  */
-Blockly.isRightButton = function(e) {
+Blockly.utils.isRightButton = function(e) {
   if (e.ctrlKey && goog.userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
@@ -378,13 +208,13 @@ Blockly.isRightButton = function(e) {
 
 /**
  * Return the converted coordinates of the given mouse event.
- * The origin (0,0) is the top-left corner of the Blockly svg.
+ * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Event} e Mouse event.
  * @param {!Element} svg SVG element.
  * @param {SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!Object} Object with .x and .y properties.
  */
-Blockly.mouseToSvg = function(e, svg, matrix) {
+Blockly.utils.mouseToSvg = function(e, svg, matrix) {
   var svgPoint = svg.createSVGPoint();
   svgPoint.x = e.clientX;
   svgPoint.y = e.clientY;
@@ -400,15 +230,13 @@ Blockly.mouseToSvg = function(e, svg, matrix) {
  * @param {!Array.<string>} array Array of strings.
  * @return {number} Length of shortest string.
  */
-Blockly.shortestStringLength = function(array) {
+Blockly.utils.shortestStringLength = function(array) {
   if (!array.length) {
     return 0;
   }
-  var len = array[0].length;
-  for (var i = 1; i < array.length; i++) {
-    len = Math.min(len, array[i].length);
-  }
-  return len;
+  return array.reduce(function (a, b) {
+    return a.length < b.length ? a : b;
+  }).length;
 };
 
 /**
@@ -418,14 +246,14 @@ Blockly.shortestStringLength = function(array) {
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common prefix.
  */
-Blockly.commonWordPrefix = function(array, opt_shortest) {
+Blockly.utils.commonWordPrefix = function(array, opt_shortest) {
   if (!array.length) {
     return 0;
   } else if (array.length == 1) {
     return array[0].length;
   }
   var wordPrefix = 0;
-  var max = opt_shortest || Blockly.shortestStringLength(array);
+  var max = opt_shortest || Blockly.utils.shortestStringLength(array);
   for (var len = 0; len < max; len++) {
     var letter = array[0][len];
     for (var i = 1; i < array.length; i++) {
@@ -453,14 +281,14 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
  * @param {number=} opt_shortest Length of shortest string.
  * @return {number} Length of common suffix.
  */
-Blockly.commonWordSuffix = function(array, opt_shortest) {
+Blockly.utils.commonWordSuffix = function(array, opt_shortest) {
   if (!array.length) {
     return 0;
   } else if (array.length == 1) {
     return array[0].length;
   }
   var wordPrefix = 0;
-  var max = opt_shortest || Blockly.shortestStringLength(array);
+  var max = opt_shortest || Blockly.utils.shortestStringLength(array);
   for (var len = 0; len < max; len++) {
     var letter = array[0].substr(-len - 1, 1);
     for (var i = 1; i < array.length; i++) {
@@ -479,15 +307,6 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
     }
   }
   return max;
-};
-
-/**
- * Is the given string a number (includes negative and decimals).
- * @param {string} str Input string.
- * @return {boolean} True if number, false otherwise.
- */
-Blockly.isNumber = function(str) {
-  return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
 };
 
 /**
@@ -553,12 +372,12 @@ Blockly.utils.tokenizeInterpolation = function(message) {
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
  * @return {string} A globally unique ID string.
  */
-Blockly.genUid = function() {
+Blockly.utils.genUid = function() {
   var length = 20;
-  var soupLength = Blockly.genUid.soup_.length;
+  var soupLength = Blockly.utils.genUid.soup_.length;
   var id = [];
   for (var i = 0; i < length; i++) {
-    id[i] = Blockly.genUid.soup_.charAt(Math.random() * soupLength);
+    id[i] = Blockly.utils.genUid.soup_.charAt(Math.random() * soupLength);
   }
   return id.join('');
 };
@@ -570,7 +389,7 @@ Blockly.genUid = function() {
  * to properly escape in your own environment.  Issues #251, #625, #682.
  * @private
  */
-Blockly.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
+Blockly.utils.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 /**
@@ -744,27 +563,27 @@ Blockly.utils.wrapToText_ = function(words, wordBreaks) {
 /**
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
- * @return {boolean} true if 3D transforms are supported
+ * @return {boolean} true if 3D transforms are supported.
  */
-Blockly.is3dSupported = function() {
-  if (Blockly.cache3dSupported_ !== null) {
-    return Blockly.cache3dSupported_;
+Blockly.utils.is3dSupported = function() {
+  if (Blockly.utils.is3dSupported.cached_ !== undefined) {
+    return Blockly.utils.is3dSupported.cached_;
   }
   // CC-BY-SA Lorenzo Polidori
-  // https://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
+  // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
   if (!goog.global.getComputedStyle) {
     return false;
   }
 
-  var el = document.createElement('p'),
-    has3d,
-    transforms = {
-      'webkitTransform': '-webkit-transform',
-      'OTransform': '-o-transform',
-      'msTransform': '-ms-transform',
-      'MozTransform': '-moz-transform',
-      'transform': 'transform'
-    };
+  var el = document.createElement('p');
+  var has3d = 'none';
+  var transforms = {
+    'webkitTransform': '-webkit-transform',
+    'OTransform': '-o-transform',
+    'msTransform': '-ms-transform',
+    'MozTransform': '-moz-transform',
+    'transform': 'transform'
+  };
 
   // Add it to the body to get the computed style.
   document.body.insertBefore(el, null);
@@ -777,6 +596,6 @@ Blockly.is3dSupported = function() {
   }
 
   document.body.removeChild(el);
-  Blockly.cache3dSupported_ = !!(has3d && has3d !== 'none');
-  return Blockly.cache3dSupported_;
+  Blockly.utils.is3dSupported.cached_ = has3d !== 'none';
+  return Blockly.utils.is3dSupported.cached_;
 };

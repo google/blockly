@@ -53,7 +53,7 @@ goog.require('goog.string');
 Blockly.Block = function(workspace, prototypeName, opt_id) {
   /** @type {string} */
   this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
-      opt_id : Blockly.genUid();
+      opt_id : Blockly.utils.genUid();
   workspace.blockDB_[this.id] = this;
   /** @type {Blockly.Connection} */
   this.outputConnection = null;
@@ -704,17 +704,6 @@ Blockly.Block.prototype.getFieldValue = function(name) {
 };
 
 /**
- * Returns the language-neutral value from the field of a block.
- * @param {string} name The name of the field.
- * @return {?string} Value from the field or null if field does not exist.
- * @deprecated December 2013
- */
-Blockly.Block.prototype.getTitleValue = function(name) {
-  console.warn('Deprecated call to getTitleValue, use getFieldValue instead.');
-  return this.getFieldValue(name);
-};
-
-/**
  * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
  * @param {string} newValue Value to be the new field.
  * @param {string} name The name of the field.
@@ -723,17 +712,6 @@ Blockly.Block.prototype.setFieldValue = function(newValue, name) {
   var field = this.getField(name);
   goog.asserts.assertObject(field, 'Field "%s" not found.', name);
   field.setValue(newValue);
-};
-
-/**
- * Change the field value for a block (e.g. 'CHOOSE' or 'REMOVE').
- * @param {string} newValue Value to be the new field.
- * @param {string} name The name of the field.
- * @deprecated December 2013
- */
-Blockly.Block.prototype.setTitleValue = function(newValue, name) {
-  console.warn('Deprecated call to setTitleValue, use setFieldValue instead.');
-  this.setFieldValue(newValue, name);
 };
 
 /**

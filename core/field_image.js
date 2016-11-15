@@ -19,7 +19,7 @@
  */
 
 /**
- * @fileoverview Image field.  Used for titles, labels, etc.
+ * @fileoverview Image field.  Used for pictures, icons, etc.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
@@ -54,13 +54,6 @@ Blockly.FieldImage = function(src, width, height, opt_alt) {
 goog.inherits(Blockly.FieldImage, Blockly.Field);
 
 /**
- * Rectangular mask used by Firefox.
- * @type {Element}
- * @private
- */
-Blockly.FieldImage.prototype.rectElement_ = null;
-
-/**
  * Editable fields are saved by the XML renderer, non-editable fields are not.
  */
 Blockly.FieldImage.prototype.EDITABLE = false;
@@ -75,21 +68,20 @@ Blockly.FieldImage.prototype.init = function() {
   }
   // Build the DOM.
   /** @type {SVGElement} */
-  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
+  this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
   if (!this.visible_) {
     this.fieldGroup_.style.display = 'none';
   }
   /** @type {SVGElement} */
-  this.imageElement_ = Blockly.createSvgElement('image',
+  this.imageElement_ = Blockly.utils.createSvgElement('image',
       {'height': this.height_ + 'px',
        'width': this.width_ + 'px'}, this.fieldGroup_);
   this.setValue(this.src_);
   this.sourceBlock_.getSvgRoot().appendChild(this.fieldGroup_);
 
   // Configure the field to be transparent with respect to tooltips.
-  var topElement = this.rectElement_ || this.imageElement_;
-  topElement.tooltip = this.sourceBlock_;
-  Blockly.Tooltip.bindMouseEvents(topElement);
+  this.setTooltip(this.sourceBlock_);
+  Blockly.Tooltip.bindMouseEvents(this.imageElement_);
 };
 
 /**
@@ -99,7 +91,6 @@ Blockly.FieldImage.prototype.dispose = function() {
   goog.dom.removeNode(this.fieldGroup_);
   this.fieldGroup_ = null;
   this.imageElement_ = null;
-  this.rectElement_ = null;
 };
 
 /**
@@ -108,8 +99,7 @@ Blockly.FieldImage.prototype.dispose = function() {
  *     link to for its tooltip.
  */
 Blockly.FieldImage.prototype.setTooltip = function(newTip) {
-  var topElement = this.rectElement_ || this.imageElement_;
-  topElement.tooltip = newTip;
+  this.imageElement_.tooltip = newTip;
 };
 
 /**
@@ -134,7 +124,7 @@ Blockly.FieldImage.prototype.setValue = function(src) {
   this.src_ = src;
   if (this.imageElement_) {
     this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
-        'xlink:href', goog.isString(src) ? src : '');
+        'xlink:href', src || '');
   }
 };
 

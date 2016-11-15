@@ -84,9 +84,10 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   // Strip off any trailing slash (either Unix or Windows).
   Blockly.Css.mediaPath_ = pathToMedia.replace(/[\\\/]$/, '');
   text = text.replace(/<<<PATH>>>/g, Blockly.Css.mediaPath_);
-  // Inject CSS tag.
+  // Inject CSS tag at start of head.
   var cssNode = document.createElement('style');
-  document.head.appendChild(cssNode);
+  document.head.insertBefore(cssNode, document.head.firstChild);
+
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   Blockly.Css.styleSheet_ = cssNode.sheet;
@@ -267,6 +268,22 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyFlyoutButton:hover {',
+    'fill: #aaa;',
+  '}',
+
+  '.blocklyFlyoutLabel {',
+    'cursor: default;',
+  '}',
+
+  '.blocklyFlyoutLabelBackground {',
+    'opacity: 0;',
+  '}',
+
+  '.blocklyFlyoutLabelText {',
+    'fill: #000;',
+  '}',
+
+  '.blocklyFlyoutLabelText:hover {',
     'fill: #aaa;',
   '}',
 

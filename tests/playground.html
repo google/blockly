@@ -77,8 +77,8 @@ function start() {
   // Create main workspace.
   workspace = Blockly.inject('blocklyDiv',
           {comments: true,
-           disable: true,
            collapse: true,
+           disable: true,
            grid:
              {spacing: 25,
               length: 3,
@@ -87,6 +87,7 @@ function start() {
            horizontalLayout: side == 'top' || side == 'bottom',
            maxBlocks: Infinity,
            media: '../media/',
+           oneBasedIndex: true,
            readOnly: false,
            rtl: rtl,
            scrollbars: true,

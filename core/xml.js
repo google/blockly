@@ -296,6 +296,11 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
+
+  // Disable workspace resizes as an optimization.
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(false);
+  }
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
     var name = xmlChild.nodeName.toLowerCase();
@@ -320,6 +325,10 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   Blockly.Field.stopCache();
 
   workspace.updateVariableList(false);
+  // Re-enable workspace resizing.
+  if (workspace.setResizesEnabled) {
+    workspace.setResizesEnabled(true);
+  }
 };
 
 /**
@@ -540,6 +549,9 @@ Blockly.Xml.domToBlockHeadless_ = function(xmlBlock, workspace) {
       goog.asserts.assert(child.isShadow(),
                           'Shadow block not allowed non-shadow child.');
     }
+    // Ensure this block doesn't have any variable inputs.
+    goog.asserts.assert(block.getVars().length == 0,
+        'Shadow blocks cannot have variable fields.');
     block.setShadow(true);
   }
   return block;

@@ -23,60 +23,60 @@
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
-blocklyApp.WorkspaceComponent = ng.core
-  .Component({
-    selector: 'blockly-workspace',
-    template: `
-    <div class="blocklyWorkspaceColumn">
-      <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
+blocklyApp.WorkspaceComponent = ng.core.Component({
+  selector: 'blockly-workspace',
+  template: `
+  <div class="blocklyWorkspaceColumn">
+    <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
 
-      <div *ngIf="workspace" class="blocklyWorkspace">
-        <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
-            tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceTree"
-            [attr.aria-activedescendant]="getActiveDescId(tree.id)"
-            [attr.aria-labelledby]="workspaceTitle.id"
-            (keydown)="onKeypress($event, tree)">
-          <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
-          </blockly-workspace-tree>
-        </ol>
+    <div *ngIf="workspace" class="blocklyWorkspace">
+      <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
+          tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceTree"
+          [attr.aria-activedescendant]="getActiveDescId(tree.id)"
+          [attr.aria-labelledby]="workspaceTitle.id"
+          (keydown)="onKeypress($event, tree)">
+        <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
+        </blockly-workspace-tree>
+      </ol>
 
-        <span *ngIf="workspace.topBlocks_.length === 0">
-          <i>Workspace is empty.</i>
-        </span>
-      </div>
+      <span *ngIf="workspace.topBlocks_.length === 0">
+        <i>Workspace is empty.</i>
+      </span>
     </div>
+  </div>
 
-    <div class="blocklyToolbarColumn">
-      <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
-        <span *ngFor="#buttonConfig of toolbarButtonConfig">
-          <button *ngIf="!buttonConfig.isHidden()"
-                  (click)="handleButtonClick(buttonConfig)"
-                  [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
-                  class="blocklyTree blocklyWorkspaceToolbarButton">
-            {{buttonConfig.text}}
-          </button>
-        </span>
-        <button id="clear-workspace" (click)="clearWorkspace()"
-                [attr.aria-disabled]="isWorkspaceEmpty()"
+  <div class="blocklyToolbarColumn">
+    <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
+      <span *ngFor="#buttonConfig of toolbarButtonConfig">
+        <button *ngIf="!buttonConfig.isHidden()"
+                (click)="handleButtonClick(buttonConfig)"
+                [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
                 class="blocklyTree blocklyWorkspaceToolbarButton">
-          {{'CLEAR_WORKSPACE'|translate}}
+          {{buttonConfig.text}}
         </button>
-      </div>
+      </span>
+      <button id="clear-workspace" (click)="clearWorkspace()"
+              [attr.aria-disabled]="isWorkspaceEmpty()"
+              class="blocklyTree blocklyWorkspaceToolbarButton">
+        {{'CLEAR_WORKSPACE'|translate}}
+      </button>
     </div>
-    `,
-    directives: [blocklyApp.WorkspaceTreeComponent],
-    pipes: [blocklyApp.TranslatePipe]
-  })
-  .Class({
-    constructor: [
-        blocklyApp.NotificationsService, blocklyApp.TreeService,
-        blocklyApp.UtilsService,
-        function(_notificationsService, _treeService, _utilsService) {
+  </div>
+  `,
+  directives: [blocklyApp.WorkspaceTreeComponent],
+  pipes: [blocklyApp.TranslatePipe]
+})
+.Class({
+  constructor: [
+    blocklyApp.NotificationsService, blocklyApp.TreeService,
+    blocklyApp.UtilsService, blocklyApp.ModalService,
+    function(
+      _notificationsService, _treeService, _utilsService, _modalService) {
       // ACCESSIBLE_GLOBALS is a global variable defined by the containing
       // page. It should contain a key, toolbarButtonConfig, whose
       // corresponding value is an Array with two keys: 'text' and 'action'.
-      // The first is the text to display on the button, and the second is the
-      // function that gets run when the button is clicked.
+      // The first is the text to display on the button, and the second is
+      // the function that gets run when the button is clicked.
       this.toolbarButtonConfig =
           ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
           ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
@@ -84,28 +84,33 @@ blocklyApp.WorkspaceComponent = ng.core
       this.notificationsService = _notificationsService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
-    }],
-    clearWorkspace: function() {
-      this.workspace.clear();
-    },
-    getActiveDescId: function(treeId) {
-      return this.treeService.getActiveDescId(treeId);
-    },
-    handleButtonClick: function(buttonConfig) {
-      buttonConfig.action();
-      if (buttonConfig.onClickNotification) {
-        this.notificationsService.setStatusMessage(
-            buttonConfig.onClickNotification);
-      }
-    },
-    onWorkspaceToolbarKeypress: function(e) {
-      this.treeService.onWorkspaceToolbarKeypress(
-          e, document.activeElement.id);
-    },
-    onKeypress: function(e, tree) {
-      this.treeService.onKeypress(e, tree);
-    },
-    isWorkspaceEmpty: function() {
-      return this.utilsService.isWorkspaceEmpty();
+      this.modalService = _modalService;
     }
-  });
+  ],
+  isModalShown: function() {
+    return this.modalService.isModalShown();
+  },
+  clearWorkspace: function() {
+    this.workspace.clear();
+  },
+  getActiveDescId: function(treeId) {
+    return this.treeService.getActiveDescId(treeId);
+  },
+  handleButtonClick: function(buttonConfig) {
+    buttonConfig.action();
+    if (buttonConfig.onClickNotification) {
+      this.notificationsService.setStatusMessage(
+          buttonConfig.onClickNotification);
+    }
+  },
+  onWorkspaceToolbarKeypress: function(e) {
+    this.treeService.onWorkspaceToolbarKeypress(
+        e, document.activeElement.id);
+  },
+  onKeypress: function(e, tree) {
+    this.treeService.onKeypress(e, tree);
+  },
+  isWorkspaceEmpty: function() {
+    return this.utilsService.isWorkspaceEmpty();
+  }
+});

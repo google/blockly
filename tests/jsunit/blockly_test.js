@@ -30,95 +30,85 @@ function test_genUid() {
 
 function test_addClass() {
   var p = document.createElement('p');
-  Blockly.addClass_(p, 'one');
+  Blockly.utils.addClass_(p, 'one');
   assertEquals('Adding "one"', 'one', p.className);
-  Blockly.addClass_(p, 'one');
+  Blockly.utils.addClass_(p, 'one');
   assertEquals('Adding duplicate "one"', 'one', p.className);
-  Blockly.addClass_(p, 'two');
+  Blockly.utils.addClass_(p, 'two');
   assertEquals('Adding "two"', 'one two', p.className);
-  Blockly.addClass_(p, 'two');
+  Blockly.utils.addClass_(p, 'two');
   assertEquals('Adding duplicate "two"', 'one two', p.className);
-  Blockly.addClass_(p, 'three');
+  Blockly.utils.addClass_(p, 'three');
   assertEquals('Adding "three"', 'one two three', p.className);
 }
 
 function test_removeClass() {
   var p = document.createElement('p');
   p.className = ' one three  two three  ';
-  Blockly.removeClass_(p, 'two');
+  Blockly.utils.removeClass_(p, 'two');
   assertEquals('Removing "two"', 'one three three', p.className);
-  Blockly.removeClass_(p, 'four');
+  Blockly.utils.removeClass_(p, 'four');
   assertEquals('Removing "four"', 'one three three', p.className);
-  Blockly.removeClass_(p, 'three');
+  Blockly.utils.removeClass_(p, 'three');
   assertEquals('Removing "three"', 'one', p.className);
-  Blockly.removeClass_(p, 'ne');
+  Blockly.utils.removeClass_(p, 'ne');
   assertEquals('Removing "ne"', 'one', p.className);
-  Blockly.removeClass_(p, 'one');
+  Blockly.utils.removeClass_(p, 'one');
   assertEquals('Removing "one"', '', p.className);
-  Blockly.removeClass_(p, 'zero');
+  Blockly.utils.removeClass_(p, 'zero');
   assertEquals('Removing "zero"', '', p.className);
 }
 
-function test_hasClass() {
-  var p = document.createElement('p');
-  p.className = ' one three  two three  ';
-  assertTrue('Has "one"', Blockly.hasClass_(p, 'one'));
-  assertTrue('Has "two"', Blockly.hasClass_(p, 'two'));
-  assertTrue('Has "three"', Blockly.hasClass_(p, 'three'));
-  assertFalse('Has no "four"', Blockly.hasClass_(p, 'four'));
-  assertFalse('Has no "t"', Blockly.hasClass_(p, 't'));
-}
-
 function test_shortestStringLength() {
-  var len = Blockly.shortestStringLength('one,two,three,four,five'.split(','));
+  var len = Blockly.utils.shortestStringLength('one,two,three,four,five'.split(','));
   assertEquals('Length of "one"', 3, len);
-  len = Blockly.shortestStringLength('one,two,three,four,five,'.split(','));
+  len = Blockly.utils.shortestStringLength('one,two,three,four,five,'.split(','));
   assertEquals('Length of ""', 0, len);
-  len = Blockly.shortestStringLength(['Hello World']);
+  len = Blockly.utils.shortestStringLength(['Hello World']);
   assertEquals('List of one', 11, len);
-  len = Blockly.shortestStringLength([]);
+  len = Blockly.utils.shortestStringLength([]);
   assertEquals('Empty list', 0, len);
 }
 
 function test_commonWordPrefix() {
-  var len = Blockly.commonWordPrefix('one,two,three,four,five'.split(','));
+  var len = Blockly.utils.commonWordPrefix('one,two,three,four,five'.split(','));
   assertEquals('No prefix', 0, len);
-  len = Blockly.commonWordPrefix('Xone,Xtwo,Xthree,Xfour,Xfive'.split(','));
+  len = Blockly.utils.commonWordPrefix('Xone,Xtwo,Xthree,Xfour,Xfive'.split(','));
   assertEquals('No word prefix', 0, len);
-  len = Blockly.commonWordPrefix('abc de,abc de,abc de,abc de'.split(','));
+  len = Blockly.utils.commonWordPrefix('abc de,abc de,abc de,abc de'.split(','));
   assertEquals('Full equality', 6, len);
-  len = Blockly.commonWordPrefix('abc deX,abc deY'.split(','));
+  len = Blockly.utils.commonWordPrefix('abc deX,abc deY'.split(','));
   assertEquals('One word prefix', 4, len);
-  len = Blockly.commonWordPrefix('abc de,abc deY'.split(','));
+  len = Blockly.utils.commonWordPrefix('abc de,abc deY'.split(','));
   assertEquals('Overflow no', 4, len);
-  len = Blockly.commonWordPrefix('abc de,abc de Y'.split(','));
+  len = Blockly.utils.commonWordPrefix('abc de,abc de Y'.split(','));
   assertEquals('Overflow yes', 6, len);
-  len = Blockly.commonWordPrefix(['Hello World']);
+  len = Blockly.utils.commonWordPrefix(['Hello World']);
   assertEquals('List of one', 11, len);
-  len = Blockly.commonWordPrefix([]);
+  len = Blockly.utils.commonWordPrefix([]);
   assertEquals('Empty list', 0, len);
-  len = Blockly.commonWordPrefix('turn&nbsp;left,turn&nbsp;right'.split(','));
+  len = Blockly.utils.commonWordPrefix('turn&nbsp;left,turn&nbsp;right'.split(','));
   assertEquals('No prefix due to &amp;nbsp;', 0, len);
-  len = Blockly.commonWordPrefix('turn\u00A0left,turn\u00A0right'.split(','));
+  len = Blockly.utils.commonWordPrefix('turn\u00A0left,turn\u00A0right'.split(','));
   assertEquals('No prefix due to \\u00A0', 0, len);
 }
 
 function test_commonWordSuffix() {
-  var len = Blockly.commonWordSuffix('one,two,three,four,five'.split(','));
+  var len = Blockly.utils.commonWordSuffix('one,two,three,four,five'.split(','));
   assertEquals('No prefix', 0, len);
-  len = Blockly.commonWordSuffix('oneX,twoX,threeX,fourX,fiveX'.split(','));
+  len = Blockly.utils.commonWordSuffix('oneX,twoX,threeX,fourX,fiveX'.split(','));
   assertEquals('No word prefix', 0, len);
-  len = Blockly.commonWordSuffix('abc de,abc de,abc de,abc de'.split(','));
+  len = Blockly.utils.commonWordSuffix('abc de,abc de,abc de,abc de'.split(','));
   assertEquals('Full equality', 6, len);
-  len = Blockly.commonWordSuffix('Xabc de,Yabc de'.split(','));
+  len = Blockly.utils.commonWordSuffix('Xabc de,Yabc de'.split(','));
   assertEquals('One word prefix', 3, len);
-  len = Blockly.commonWordSuffix('abc de,Yabc de'.split(','));
+  len = Blockly.utils.commonWordSuffix('abc de,Yabc de'.split(','));
   assertEquals('Overflow no', 3, len);
-  len = Blockly.commonWordSuffix('abc de,Y abc de'.split(','));
+  len = Blockly.utils.commonWordSuffix('abc de,Y abc de'.split(','));
   assertEquals('Overflow yes', 6, len);
-  len = Blockly.commonWordSuffix(['Hello World']);
+  len = Blockly.utils.commonWordSuffix(['Hello World']);
   assertEquals('List of one', 11, len);
-  len = Blockly.commonWordSuffix([]);
+  len = Blockly.utils.commonWordSuffix([]);
   assertEquals('Empty list', 0, len);
 }
 

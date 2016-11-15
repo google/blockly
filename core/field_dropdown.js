@@ -159,7 +159,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
   var menuDom = menu.getElement();
-  Blockly.addClass_(menuDom, 'blocklyDropdownMenu');
+  Blockly.utils.addClass_(menuDom, 'blocklyDropdownMenu');
   // Record menuSize after adding menu.
   var menuSize = goog.style.getSize(menuDom);
   // Recalculate height for the total content, not only box height.
@@ -222,9 +222,9 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
     return;
   }
   var strings = options.map(function(t) {return t[0];});
-  var shortest = Blockly.shortestStringLength(strings);
-  var prefixLength = Blockly.commonWordPrefix(strings, shortest);
-  var suffixLength = Blockly.commonWordSuffix(strings, shortest);
+  var shortest = Blockly.utils.shortestStringLength(strings);
+  var prefixLength = Blockly.utils.commonWordPrefix(strings, shortest);
+  var suffixLength = Blockly.utils.commonWordSuffix(strings, shortest);
   if (!prefixLength && !suffixLength) {
     return;
   }

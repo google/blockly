@@ -206,7 +206,7 @@ Blockly.svgResize = function(workspace) {
  * @private
  */
 Blockly.onKeyDown_ = function(e) {
-  if (Blockly.mainWorkspace.options.readOnly || Blockly.isTargetInput_(e)) {
+  if (Blockly.mainWorkspace.options.readOnly || Blockly.utils.isTargetInput_(e)) {
     // No key actions on readonly workspaces.
     // When focused on an HTML text input widget, don't trap any keys.
     return;
@@ -316,7 +316,7 @@ Blockly.duplicate_ = function(block) {
  * @private
  */
 Blockly.onContextMenu_ = function(e) {
-  if (!Blockly.isTargetInput_(e)) {
+  if (!Blockly.utils.isTargetInput_(e)) {
     // When focused on an HTML text input widget, don't cancel the context menu.
     e.preventDefault();
   }
@@ -347,7 +347,7 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * @deprecated April 2015
  */
 Blockly.addChangeListener = function(func) {
-  // Backwards compatability from before there could be multiple workspaces.
+  // Backwards compatibility from before there could be multiple workspaces.
   console.warn('Deprecated call to Blockly.addChangeListener, ' +
                'use workspace.addChangeListener instead.');
   return Blockly.getMainWorkspace().addChangeListener(func);
@@ -393,7 +393,7 @@ Blockly.confirm = function(message, callback) {
  * recommend testing mobile when overriding this.
  * @param {string} message The message to display to the user.
  * @param {string} defaultValue The value to initialize the prompt with.
- * @param {!function(string)} callback The callback for handling user reponse.
+ * @param {!function(string)} callback The callback for handling user response.
  */
 Blockly.prompt = function(message, defaultValue, callback) {
   callback(window.prompt(message, defaultValue));

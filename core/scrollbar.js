@@ -602,7 +602,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
   this.workspace_.markFocused();
   Blockly.Touch.clearTouchIdentifier();  // This is really a click.
   this.cleanUp_();
-  if (Blockly.isRightButton(e)) {
+  if (Blockly.utils.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
     e.stopPropagation();
@@ -612,7 +612,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
       this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
-  var handleXY = Blockly.getSvgXY_(this.svgHandle_, this.workspace_);
+  var handleXY = this.workspace_.getSvgXY(this.svgHandle_);
   var handleStart = this.horizontal_ ? handleXY.x : handleXY.y;
   var handlePosition = this.handlePosition_;
 
@@ -641,7 +641,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
 Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
   this.workspace_.markFocused();
   this.cleanUp_();
-  if (Blockly.isRightButton(e)) {
+  if (Blockly.utils.isRightButton(e)) {
     // Right-click.
     // Scrollbars have no context menu.
     e.stopPropagation();

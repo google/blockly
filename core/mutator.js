@@ -142,14 +142,14 @@ Blockly.Mutator.prototype.updateEditable = function() {
   if (!this.block_.isInFlyout) {
     if (this.block_.isEditable()) {
       if (this.iconGroup_) {
-        Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
+        Blockly.utils.removeClass_(/** @type {!Element} */ (this.iconGroup_),
                              'blocklyIconGroupReadonly');
       }
     } else {
       // Close any mutator bubble.  Icon is not clickable.
       this.setVisible(false);
       if (this.iconGroup_) {
-        Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+        Blockly.utils.addClass_(/** @type {!Element} */ (this.iconGroup_),
                           'blocklyIconGroupReadonly');
       }
     }

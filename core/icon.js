@@ -79,7 +79,7 @@ Blockly.Icon.prototype.createIcon = function() {
   this.iconGroup_ = Blockly.createSvgElement('g',
       {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
-    Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+    Blockly.utils.addClass_(/** @type {!Element} */ (this.iconGroup_),
                       'blocklyIconGroupReadonly');
   }
   this.drawIcon_(this.iconGroup_);
@@ -126,7 +126,7 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   }
-  if (!this.block_.isInFlyout && !Blockly.isRightButton(e)) {
+  if (!this.block_.isInFlyout && !Blockly.utils.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }
 };

@@ -537,7 +537,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     // that behaviour is wrong, because Blockly.Flyout.prototype.blockMouseDown
     // should be called for a mousedown on a block in the flyout, which blocks
     // execution of the block's onMouseDown_ function.
-    if (e.type == 'touchstart' && Blockly.isRightButton(e)) {
+    if (e.type == 'touchstart' && Blockly.utils.isRightButton(e)) {
       Blockly.Flyout.blockRightClick_(e, this);
       e.stopPropagation();
       e.preventDefault();
@@ -555,7 +555,7 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
   Blockly.terminateDrag_();
   this.select();
   Blockly.hideChaff();
-  if (Blockly.isRightButton(e)) {
+  if (Blockly.utils.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
     // Click, not drag, so stop waiting for other touches from this identifier.
@@ -831,11 +831,11 @@ Blockly.BlockSvg.prototype.setDragging_ = function(adding) {
     group.skew_ = '';
     Blockly.draggingConnections_ =
         Blockly.draggingConnections_.concat(this.getConnections_(true));
-    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+    Blockly.utils.addClass_(/** @type {!Element} */ (this.svgGroup_),
                       'blocklyDragging');
   } else {
     Blockly.draggingConnections_ = [];
-    Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+    Blockly.utils.removeClass_(/** @type {!Element} */ (this.svgGroup_),
                          'blocklyDragging');
   }
   // Recurse through all blocks attached under this one.
@@ -946,10 +946,10 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
  */
 Blockly.BlockSvg.prototype.updateMovable = function() {
   if (this.isMovable()) {
-    Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+    Blockly.utils.addClass_(/** @type {!Element} */ (this.svgGroup_),
                       'blocklyDraggable');
   } else {
-    Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+    Blockly.utils.removeClass_(/** @type {!Element} */ (this.svgGroup_),
                          'blocklyDraggable');
   }
 };
@@ -1053,8 +1053,7 @@ Blockly.BlockSvg.prototype.dispose = function(healStack, animate) {
 Blockly.BlockSvg.prototype.disposeUiEffect = function() {
   this.workspace.playAudio('delete');
 
-  var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_),
-                             this.workspace);
+  var xy = this.workspace.getSvgXY(/** @type {!Element} */ (this.svgGroup_));
   // Deeply clone the current block.
   var clone = this.svgGroup_.cloneNode(true);
   clone.translateX_ = xy.x;
@@ -1070,7 +1069,7 @@ Blockly.BlockSvg.prototype.disposeUiEffect = function() {
 
 /**
  * Animate a cloned block and eventually dispose of it.
- * This is a class method, not an instace method since the original block has
+ * This is a class method, not an instance method since the original block has
  * been destroyed and is no longer accessible.
  * @param {!Element} clone SVG element to animate and dispose of.
  * @param {boolean} rtl True if RTL, false if LTR.
@@ -1106,8 +1105,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
     return;  // Too small to care about visual effects.
   }
   // Determine the absolute coordinates of the inferior block.
-  var xy = Blockly.getSvgXY_(/** @type {!Element} */ (this.svgGroup_),
-                             this.workspace);
+  var xy = this.workspace.getSvgXY(/** @type {!Element} */ (this.svgGroup_));
   // Offset the coordinates based on the two connection types, fix scale.
   if (this.outputConnection) {
     xy.x += (this.RTL ? 3 : -3) * this.workspace.scale;
@@ -1262,21 +1260,15 @@ Blockly.BlockSvg.prototype.updateColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-  var hasClass = Blockly.hasClass_(/** @type {!Element} */ (this.svgGroup_),
-                                   'blocklyDisabled');
   if (this.disabled || this.getInheritedDisabled()) {
-    if (!hasClass) {
-      Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
-                        'blocklyDisabled');
-      this.svgPath_.setAttribute('fill',
-          'url(#' + this.workspace.options.disabledPatternId + ')');
-    }
+    Blockly.utils.addClass_(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDisabled');
+    this.svgPath_.setAttribute('fill',
+        'url(#' + this.workspace.options.disabledPatternId + ')');
   } else {
-    if (hasClass) {
-      Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
-                           'blocklyDisabled');
-      this.updateColour();
-    }
+    Blockly.utils.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+                         'blocklyDisabled');
+    this.updateColour();
   }
   var children = this.getChildren();
   for (var i = 0, child; child = children[i]; i++) {
@@ -1451,7 +1443,7 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
  * Select this block.  Highlight it visually.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
-  Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
+  Blockly.utils.addClass_(/** @type {!Element} */ (this.svgGroup_),
                     'blocklySelected');
   // Move the selected block to the top of the stack.
   var block = this;
@@ -1466,7 +1458,7 @@ Blockly.BlockSvg.prototype.addSelect = function() {
  * Unselect this block.  Remove its highlighting.
  */
 Blockly.BlockSvg.prototype.removeSelect = function() {
-  Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+  Blockly.utils.removeClass_(/** @type {!Element} */ (this.svgGroup_),
                        'blocklySelected');
 };
 

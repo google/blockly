@@ -262,7 +262,7 @@ Blockly.init_ = function(mainWorkspace) {
   // Supress the browser's context menu.
   Blockly.bindEventWithChecks_(svg, 'contextmenu', null,
       function(e) {
-        if (!Blockly.isTargetInput_(e)) {
+        if (!Blockly.utils.isTargetInput_(e)) {
           e.preventDefault();
         }
       });
@@ -384,6 +384,7 @@ Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
 /**
  * Modify the block tree on the existing toolbox.
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ * @deprecated April 2015
  */
 Blockly.updateToolbox = function(tree) {
   console.warn('Deprecated call to Blockly.updateToolbox, ' +

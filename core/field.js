@@ -184,12 +184,12 @@ Blockly.Field.prototype.updateEditable = function() {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
-    Blockly.addClass_(group, 'blocklyEditableText');
-    Blockly.removeClass_(group, 'blocklyNonEditableText');
+    Blockly.utils.addClass_(group, 'blocklyEditableText');
+    Blockly.utils.removeClass_(group, 'blocklyNonEditableText');
     this.fieldGroup_.style.cursor = this.CURSOR;
   } else {
-    Blockly.addClass_(group, 'blocklyNonEditableText');
-    Blockly.removeClass_(group, 'blocklyEditableText');
+    Blockly.utils.addClass_(group, 'blocklyNonEditableText');
+    Blockly.utils.removeClass_(group, 'blocklyEditableText');
     this.fieldGroup_.style.cursor = '';
   }
 };
@@ -465,7 +465,7 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
     // Old iOS spawns a bogus event on the next touch after a 'prompt()' edit.
     // Unlike the real events, these have a layerX and layerY set.
     return;
-  } else if (Blockly.isRightButton(e)) {
+  } else if (Blockly.utils.isRightButton(e)) {
     // Right-click.
     return;
   } else if (this.sourceBlock_.workspace.isDragging()) {

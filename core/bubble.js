@@ -271,11 +271,11 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
 Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   this.promote_();
   Blockly.Bubble.unbindDragEvents_();
-  if (Blockly.isRightButton(e)) {
+  if (Blockly.utils.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;
-  } else if (Blockly.isTargetInput_(e)) {
+  } else if (Blockly.utils.isTargetInput_(e)) {
     // When focused on an HTML text input widget, don't trap any events.
     return;
   }
@@ -317,7 +317,7 @@ Blockly.Bubble.prototype.bubbleMouseMove_ = function(e) {
 Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   this.promote_();
   Blockly.Bubble.unbindDragEvents_();
-  if (Blockly.isRightButton(e)) {
+  if (Blockly.utils.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;

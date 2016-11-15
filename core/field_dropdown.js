@@ -39,8 +39,8 @@ goog.require('goog.userAgent');
 
 /**
  * Class for an editable dropdown field.
- * @param {(!Array.<!Array.<string>>|!Function)} menuGenerator An array of
- *     options for a dropdown list, or a function which generates these options.
+ * @param {(!Array.<!Array>|!Function)} menuGenerator An array of options
+ *     for a dropdown list, or a function which generates these options.
  * @param {Function=} opt_validator A function that is executed when a new
  *     option is selected, with the newly selected value as its sole argument.
  *     If it returns a value, that value (which must be one of the options) will
@@ -76,11 +76,26 @@ Blockly.FieldDropdown.ARROW_CHAR = goog.userAgent.ANDROID ? '\u25BC' : '\u25BE';
 Blockly.FieldDropdown.prototype.CURSOR = 'default';
 
 /**
- * Language-neutral currently selected string.
- * @type {string}
+ * Language-neutral currently selected string or image object.
+ * @type {string|!Object}
  * @private
  */
 Blockly.FieldDropdown.prototype.value_ = '';
+
+/**
+ * SVG image element if currently selected option is an image, or null.
+ * @type {SVGElement}
+ * @private
+ */
+Blockly.FieldDropdown.prototype.imageElement_ = null;
+
+/**
+ * Object wih src, height, width, and alt attributes if currently selected
+ * option is an image, or null.
+ * @type {Object}
+ * @private
+ */
+Blockly.FieldDropdown.prototype.imageJson_ = null;
 
 /**
  * Install this dropdown on a block.
@@ -124,9 +139,16 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   menu.setRightToLeft(this.sourceBlock_.RTL);
   var options = this.getOptions_();
   for (var i = 0; i < options.length; i++) {
-    var text = options[i][0];  // Human-readable text.
-    var value = options[i][1]; // Language-neutral value.
-    var menuItem = new goog.ui.MenuItem(text);
+    var content = options[i][0]; // Human-readable text or image.
+    var value = options[i][1];   // Language-neutral value.
+    if (typeof content == 'object') {
+      // An image, not text.
+      var image = new Image(content['width'], content['height']);
+      image.src = content['src'];
+      image.alt = content['alt'] || '';
+      content = image;
+    }
+    var menuItem = new goog.ui.MenuItem(content);
     menuItem.setRightToLeft(this.sourceBlock_.RTL);
     menuItem.setValue(value);
     menuItem.setCheckable(true);
@@ -221,7 +243,14 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   if (!goog.isArray(options) || options.length < 2) {
     return;
   }
-  var strings = options.map(function(t) {return t[0];});
+  var strings = [];
+  for (var i = 0; i < options.length; i++) {
+    var text = options[i][0];
+    if (typeof text != 'string') {
+      return;  // No text splitting if there is an image in the list.
+    }
+    strings.push(text);
+  }
   var shortest = Blockly.shortestStringLength(strings);
   var prefixLength = Blockly.commonWordPrefix(strings, shortest);
   var suffixLength = Blockly.commonWordSuffix(strings, shortest);
@@ -251,8 +280,8 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
 
 /**
  * Return a list of the options for this dropdown.
- * @return {!Array.<!Array.<string>>} Array of option tuples:
- *     (human-readable text, language-neutral name).
+ * @return {!Array.<!Array>} Array of option tuples:
+ *     (human-readable text or image, language-neutral name).
  * @private
  */
 Blockly.FieldDropdown.prototype.getOptions_ = function() {
@@ -288,7 +317,14 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
   for (var i = 0; i < options.length; i++) {
     // Options are tuples of human-readable text and language-neutral values.
     if (options[i][1] == newValue) {
-      this.setText(options[i][0]);
+      var content = options[i][0];
+      if (typeof content == 'object') {
+        this.imageJson_ = content;
+        this.setText(content.alt);
+      } else {
+        this.imageJson_ = null;
+        this.setText(content);
+      }
       return;
     }
   }
@@ -298,34 +334,63 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
 };
 
 /**
- * Set the text in this field.  Trigger a rerender of the source block.
- * @param {?string} text New text.
+ * Draws the border with the correct width.
+ * @private
  */
-Blockly.FieldDropdown.prototype.setText = function(text) {
+Blockly.FieldDropdown.prototype.render_ = function() {
+  if (!this.visible_) {
+    this.size_.width = 0;
+    return;
+  }
   if (this.sourceBlock_ && this.arrow_) {
     // Update arrow's colour.
     this.arrow_.style.fill = this.sourceBlock_.getColour();
   }
-  if (text === null || text === this.text_) {
-    // No change if null.
-    return;
-  }
-  this.text_ = text;
-  this.updateTextNode_();
+  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+  goog.dom.removeNode(this.imageElement_);
+  this.imageElement_ = null;
 
-  if (this.textElement_) {
+  if (this.imageJson_) {
+    // Image option is selected.
+    this.imageElement_ = Blockly.createSvgElement('image',
+        {'y': 5,
+         'height': this.imageJson_.height + 'px',
+         'width': this.imageJson_.width + 'px'}, this.fieldGroup_);
+    this.imageElement_.setAttributeNS('http://www.w3.org/1999/xlink',
+                                      'xlink:href', this.imageJson_.src);
+    // Insert dropdown arrow.
+    this.textElement_.appendChild(this.arrow_);
+    var arrowWidth = Blockly.Field.getCachedWidth(this.arrow_);
+    this.size_.height = Number(this.imageJson_.height) + 19;
+    this.size_.width = Number(this.imageJson_.width) + arrowWidth;
+    if (this.sourceBlock_.RTL) {
+      this.imageElement_.setAttribute('x', arrowWidth);
+      this.textElement_.setAttribute('x', -1);
+    } else {
+      this.textElement_.setAttribute('text-anchor', 'end');
+      this.textElement_.setAttribute('x', this.size_.width + 1);
+    }
+
+  } else {
+    // Text option is selected.
+    // Replace the text.
+    var textNode = document.createTextNode(this.getDisplayText_());
+    this.textElement_.appendChild(textNode);
     // Insert dropdown arrow.
     if (this.sourceBlock_.RTL) {
       this.textElement_.insertBefore(this.arrow_, this.textElement_.firstChild);
     } else {
       this.textElement_.appendChild(this.arrow_);
     }
-  }
+    this.textElement_.setAttribute('text-anchor', 'start');
+    this.textElement_.setAttribute('x', 0);
 
-  if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-    this.sourceBlock_.render();
-    this.sourceBlock_.bumpNeighbours_();
+    this.size_.height = Blockly.BlockSvg.MIN_BLOCK_Y;
+    this.size_.width = Blockly.Field.getCachedWidth(this.textElement_);
   }
+  this.borderRect_.setAttribute('height', this.size_.height - 9);
+  this.borderRect_.setAttribute('width',
+      this.size_.width + Blockly.BlockSvg.SEP_SPACE_X);
 };
 
 /**

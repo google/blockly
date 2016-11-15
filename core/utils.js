@@ -92,7 +92,7 @@ Blockly.hasClass_ = function(element, className) {
 
 /**
  * Bind an event to a function call.  When calling the function, verifies that
- * it belongs to the touch stream that is currently being processsed, and splits
+ * it belongs to the touch stream that is currently being processed, and splits
  * multitouch events into multiple events as needed.
  * @param {!Node} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
@@ -219,7 +219,7 @@ Blockly.unbindEvent_ = function(bindData) {
  * Don't do anything for this event, just halt propagation.
  * @param {!Event} e An event.
  */
-Blockly.noEvent = function(e) {
+Blockly.utils.noEvent = function(e) {
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();
@@ -561,7 +561,7 @@ Blockly.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
 Blockly.utils.wrap = function(text, limit) {
   var lines = text.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    lines[i] = Blockly.utils.wrap_line_(lines[i], limit);
+    lines[i] = Blockly.utils.wrapLine_(lines[i], limit);
   }
   return lines.join('\n');
 };
@@ -573,7 +573,7 @@ Blockly.utils.wrap = function(text, limit) {
  * @return {string} Wrapped text.
  * @private
  */
-Blockly.utils.wrap_line_ = function(text, limit) {
+Blockly.utils.wrapLine_ = function(text, limit) {
   if (text.length <= limit) {
     // Short text, no need to wrap.
     return text;

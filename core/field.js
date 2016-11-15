@@ -45,7 +45,7 @@ goog.require('goog.userAgent');
  * @constructor
  */
 Blockly.Field = function(text, opt_validator) {
-  this.size_ = new goog.math.Size(0, 25);
+  this.size_ = new goog.math.Size(0, Blockly.BlockSvg.MIN_BLOCK_Y);
   this.setValue(text);
   this.setValidator(opt_validator);
 };
@@ -156,7 +156,7 @@ Blockly.Field.prototype.init = function() {
       Blockly.bindEventWithChecks_(this.fieldGroup_, 'mouseup', this,
       this.onMouseUp_);
   // Force a render.
-  this.updateTextNode_();
+  this.render_();
 };
 
 /**
@@ -285,31 +285,46 @@ Blockly.Field.prototype.getSvgRoot = function() {
  * @private
  */
 Blockly.Field.prototype.render_ = function() {
-  if (this.visible_ && this.textElement_) {
-    var key = this.textElement_.textContent + '\n' +
-        this.textElement_.className.baseVal;
-    if (Blockly.Field.cacheWidths_ && Blockly.Field.cacheWidths_[key]) {
-      var width = Blockly.Field.cacheWidths_[key];
-    } else {
-      try {
-        var width = this.textElement_.getComputedTextLength();
-      } catch (e) {
-        // MSIE 11 is known to throw "Unexpected call to method or property
-        // access." if Blockly is hidden.
-        var width = this.textElement_.textContent.length * 8;
-      }
-      if (Blockly.Field.cacheWidths_) {
-        Blockly.Field.cacheWidths_[key] = width;
-      }
-    }
-    if (this.borderRect_) {
-      this.borderRect_.setAttribute('width',
-          width + Blockly.BlockSvg.SEP_SPACE_X);
-    }
-  } else {
-    var width = 0;
+  if (!this.visible_) {
+    this.size_.width = 0;
+    return;
+  }
+
+  // Replace the text.
+  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+  var textNode = document.createTextNode(this.getDisplayText_());
+  this.textElement_.appendChild(textNode);
+
+  var width = Blockly.Field.getCachedWidth(this.textElement_);
+  if (this.borderRect_) {
+    this.borderRect_.setAttribute('width',
+        width + Blockly.BlockSvg.SEP_SPACE_X);
   }
   this.size_.width = width;
+};
+
+/**
+ * Gets the width of a text element, caching it in the process.
+ * @param {!Element} textElement An SVG 'text' element.
+ * @retur {number} Width of element.
+ */
+Blockly.Field.getCachedWidth = function(textElement) {
+  var key = textElement.textContent + '\n' + textElement.className.baseVal;
+  if (Blockly.Field.cacheWidths_ && Blockly.Field.cacheWidths_[key]) {
+    var width = Blockly.Field.cacheWidths_[key];
+  } else {
+    try {
+      var width = textElement.getComputedTextLength();
+    } catch (e) {
+      // MSIE 11 is known to throw "Unexpected call to method or property
+      // access." if Blockly is hidden.
+      var width = textElement.textContent.length * 8;
+    }
+    if (Blockly.Field.cacheWidths_) {
+      Blockly.Field.cacheWidths_[key] = width;
+    }
+  }
+  return width;
 };
 
 /**
@@ -359,6 +374,31 @@ Blockly.Field.prototype.getScaledBBox_ = function() {
 };
 
 /**
+ * Get the text from this field as displayed on screen.  May differ from getText
+ * due to ellipsis, and other formatting.
+ * @return {string} Currently displayed text.
+ * @private
+ */
+Blockly.Field.prototype.getDisplayText_ = function() {
+  var text = this.text_;
+  if (!text) {
+    // Prevent the field from disappearing if empty.
+    return Blockly.Field.NBSP;
+  }
+  if (text.length > this.maxDisplayLength) {
+    // Truncate displayed string and add an ellipsis ('...').
+    text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
+  }
+  // Replace whitespace with non-breaking spaces so the text doesn't collapse.
+  text = text.replace(/\s/g, Blockly.Field.NBSP);
+  if (this.sourceBlock_.RTL) {
+    // The SVG is LTR, force text to be RTL.
+    text += '\u200F';
+  }
+  return text;
+};
+
+/**
  * Get the text from this field.
  * @return {string} Current text.
  */
@@ -381,46 +421,13 @@ Blockly.Field.prototype.setText = function(text) {
     return;
   }
   this.text_ = text;
-  this.updateTextNode_();
+  // Set width to 0 to force a rerender of this field.
+  this.size_.width = 0;
 
   if (this.sourceBlock_ && this.sourceBlock_.rendered) {
     this.sourceBlock_.render();
     this.sourceBlock_.bumpNeighbours_();
   }
-};
-
-/**
- * Update the text node of this field to display the current text.
- * @private
- */
-Blockly.Field.prototype.updateTextNode_ = function() {
-  if (!this.textElement_) {
-    // Not rendered yet.
-    return;
-  }
-  var text = this.text_;
-  if (text.length > this.maxDisplayLength) {
-    // Truncate displayed string and add an ellipsis ('...').
-    text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
-  }
-  // Replace whitespace with non-breaking spaces so the text doesn't collapse.
-  text = text.replace(/\s/g, Blockly.Field.NBSP);
-  if (this.sourceBlock_.RTL && text) {
-    // The SVG is LTR, force text to be RTL.
-    text += '\u200F';
-  }
-  if (!text) {
-    // Prevent the field from disappearing if empty.
-    text = Blockly.Field.NBSP;
-  }
-
-  // Replace the text.
-  goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
-  var textNode = document.createTextNode(text);
-  this.textElement_.appendChild(textNode);
-
-  // Cached width is obsolete.  Clear it.
-  this.size_.width = 0;
 };
 
 /**

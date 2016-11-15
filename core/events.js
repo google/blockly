@@ -234,7 +234,7 @@ Blockly.Events.getGroup = function() {
  */
 Blockly.Events.setGroup = function(state) {
   if (typeof state == 'boolean') {
-    Blockly.Events.group_ = state ? Blockly.genUid() : '';
+    Blockly.Events.group_ = state ? Blockly.utils.genUid() : '';
   } else {
     Blockly.Events.group_ = state;
   }

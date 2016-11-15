@@ -40,7 +40,7 @@ Blockly.ScrollbarPair = function(workspace) {
   this.workspace_ = workspace;
   this.hScroll = new Blockly.Scrollbar(workspace, true, true);
   this.vScroll = new Blockly.Scrollbar(workspace, false, true);
-  this.corner_ = Blockly.createSvgElement('rect',
+  this.corner_ = Blockly.utils.createSvgElement('rect',
       {'height': Blockly.Scrollbar.scrollbarThickness,
       'width': Blockly.Scrollbar.scrollbarThickness,
       'class': 'blocklyScrollbarBackground'}, null);
@@ -546,11 +546,12 @@ Blockly.Scrollbar.prototype.createDom_ = function() {
   */
   var className = 'blocklyScrollbar' +
       (this.horizontal_ ? 'Horizontal' : 'Vertical');
-  this.svgGroup_ = Blockly.createSvgElement('g', {'class': className}, null);
-  this.svgBackground_ = Blockly.createSvgElement('rect',
+  this.svgGroup_ = Blockly.utils.createSvgElement('g', {'class': className},
+                                                  null);
+  this.svgBackground_ = Blockly.utils.createSvgElement('rect',
       {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
-  this.svgHandle_ = Blockly.createSvgElement('rect',
+  this.svgHandle_ = Blockly.utils.createSvgElement('rect',
       {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
       this.svgGroup_);
   Blockly.Scrollbar.insertAfter_(this.svgGroup_,
@@ -608,7 +609,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
     e.stopPropagation();
     return;
   }
-  var mouseXY = Blockly.mouseToSvg(e, this.workspace_.getParentSvg(),
+  var mouseXY = Blockly.utils.mouseToSvg(e, this.workspace_.getParentSvg(),
       this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 

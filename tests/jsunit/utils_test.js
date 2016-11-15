@@ -22,7 +22,7 @@
 function test_genUid() {
   var uuids = {};
   for (var i = 0; i < 1000; i++) {
-    var uuid = Blockly.genUid();
+    var uuid = Blockly.utils.genUid();
     assertFalse('UUID different: ' + uuid, uuid in uuids);
     uuids[uuid] = true;
   }
@@ -30,32 +30,32 @@ function test_genUid() {
 
 function test_addClass() {
   var p = document.createElement('p');
-  Blockly.utils.addClass_(p, 'one');
+  Blockly.utils.addClass(p, 'one');
   assertEquals('Adding "one"', 'one', p.className);
-  Blockly.utils.addClass_(p, 'one');
+  Blockly.utils.addClass(p, 'one');
   assertEquals('Adding duplicate "one"', 'one', p.className);
-  Blockly.utils.addClass_(p, 'two');
+  Blockly.utils.addClass(p, 'two');
   assertEquals('Adding "two"', 'one two', p.className);
-  Blockly.utils.addClass_(p, 'two');
+  Blockly.utils.addClass(p, 'two');
   assertEquals('Adding duplicate "two"', 'one two', p.className);
-  Blockly.utils.addClass_(p, 'three');
+  Blockly.utils.addClass(p, 'three');
   assertEquals('Adding "three"', 'one two three', p.className);
 }
 
 function test_removeClass() {
   var p = document.createElement('p');
   p.className = ' one three  two three  ';
-  Blockly.utils.removeClass_(p, 'two');
+  Blockly.utils.removeClass(p, 'two');
   assertEquals('Removing "two"', 'one three three', p.className);
-  Blockly.utils.removeClass_(p, 'four');
+  Blockly.utils.removeClass(p, 'four');
   assertEquals('Removing "four"', 'one three three', p.className);
-  Blockly.utils.removeClass_(p, 'three');
+  Blockly.utils.removeClass(p, 'three');
   assertEquals('Removing "three"', 'one', p.className);
-  Blockly.utils.removeClass_(p, 'ne');
+  Blockly.utils.removeClass(p, 'ne');
   assertEquals('Removing "ne"', 'one', p.className);
-  Blockly.utils.removeClass_(p, 'one');
+  Blockly.utils.removeClass(p, 'one');
   assertEquals('Removing "one"', '', p.className);
-  Blockly.utils.removeClass_(p, 'zero');
+  Blockly.utils.removeClass(p, 'zero');
   assertEquals('Removing "zero"', '', p.className);
 }
 

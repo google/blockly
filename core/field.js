@@ -135,18 +135,18 @@ Blockly.Field.prototype.init = function() {
     return;
   }
   // Build the DOM.
-  this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
+  this.fieldGroup_ = Blockly.utils.createSvgElement('g', {}, null);
   if (!this.visible_) {
     this.fieldGroup_.style.display = 'none';
   }
-  this.borderRect_ = Blockly.createSvgElement('rect',
+  this.borderRect_ = Blockly.utils.createSvgElement('rect',
       {'rx': 4,
        'ry': 4,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
        'y': 0,
        'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);
   /** @type {!Element} */
-  this.textElement_ = Blockly.createSvgElement('text',
+  this.textElement_ = Blockly.utils.createSvgElement('text',
       {'class': 'blocklyText', 'y': this.size_.height - 12.5},
       this.fieldGroup_);
 
@@ -184,12 +184,12 @@ Blockly.Field.prototype.updateEditable = function() {
     return;
   }
   if (this.sourceBlock_.isEditable()) {
-    Blockly.utils.addClass_(group, 'blocklyEditableText');
-    Blockly.utils.removeClass_(group, 'blocklyNonEditableText');
+    Blockly.utils.addClass(group, 'blocklyEditableText');
+    Blockly.utils.removeClass(group, 'blocklyNonEditableText');
     this.fieldGroup_.style.cursor = this.CURSOR;
   } else {
-    Blockly.utils.addClass_(group, 'blocklyNonEditableText');
-    Blockly.utils.removeClass_(group, 'blocklyEditableText');
+    Blockly.utils.addClass(group, 'blocklyNonEditableText');
+    Blockly.utils.removeClass(group, 'blocklyEditableText');
     this.fieldGroup_.style.cursor = '';
   }
 };

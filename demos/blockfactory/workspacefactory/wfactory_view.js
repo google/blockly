@@ -321,7 +321,7 @@ WorkspaceFactoryView.prototype.markShadowBlocks = function(blocks) {
  */
 WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
   // Add Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.addClass_(block.svgGroup_, 'shadowBlock');
+  Blockly.utils.addClass(block.svgGroup_, 'shadowBlock');
   // If not a valid shadow block, add a warning message.
   if (!block.getSurroundParent()) {
       block.setWarningText('Shadow blocks must be nested inside' +
@@ -339,7 +339,7 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
  */
 WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
   // Remove Blockly CSS for user-generated shadow blocks.
-  Blockly.utils.removeClass_(block.svgGroup_, 'shadowBlock');
+  Blockly.utils.removeClass(block.svgGroup_, 'shadowBlock');
 };
 
 /**

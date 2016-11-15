@@ -41,9 +41,8 @@ goog.require('goog.userAgent');
  * @param {!Element} element DOM element to add class to.
  * @param {string} className Name of class to add.
  * @return {boolean} True if class was added, false if already present.
- * @private
  */
-Blockly.utils.addClass_ = function(element, className) {
+Blockly.utils.addClass = function(element, className) {
   var classes = element.getAttribute('class') || '';
   if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
     return false;
@@ -61,9 +60,8 @@ Blockly.utils.addClass_ = function(element, className) {
  * @param {!Element} element DOM element to remove class from.
  * @param {string} className Name of class to remove.
  * @return {boolean} True if class was removed, false if never present.
- * @private
  */
-Blockly.utils.removeClass_ = function(element, className) {
+Blockly.utils.removeClass = function(element, className) {
   var classes = element.getAttribute('class');
   if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
     return false;
@@ -221,9 +219,8 @@ Blockly.utils.noEvent = function(e) {
  * Is this event targeting a text input widget?
  * @param {!Event} e An event.
  * @return {boolean} True if text input.
- * @private
  */
-Blockly.utils.isTargetInput_ = function(e) {
+Blockly.utils.isTargetInput = function(e) {
   return e.target.type == 'textarea' || e.target.type == 'text' ||
          e.target.type == 'number' || e.target.type == 'email' ||
          e.target.type == 'password' || e.target.type == 'search' ||
@@ -236,9 +233,8 @@ Blockly.utils.isTargetInput_ = function(e) {
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
  * @return {!goog.math.Coordinate} Object with .x and .y properties.
- * @private
  */
-Blockly.getRelativeXY_ = function(element) {
+Blockly.utils.getRelativeXY = function(element) {
   var xy = new goog.math.Coordinate(0, 0);
   // First, check for x and y attributes.
   var x = element.getAttribute('x');
@@ -251,7 +247,7 @@ Blockly.getRelativeXY_ = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  var r = transform && transform.match(Blockly.getRelativeXY_.XY_REGEXP_);
+  var r = transform && transform.match(Blockly.utils.getRelativeXY.XY_REGEXP_);
   if (r) {
     xy.x += parseFloat(r[1]);
     if (r[3]) {
@@ -270,7 +266,7 @@ Blockly.getRelativeXY_ = function(element) {
  * @type {!RegExp}
  * @private
  */
-Blockly.getRelativeXY_.XY_REGEXP_ =
+Blockly.utils.getRelativeXY.XY_REGEXP_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
 
 /**
@@ -282,7 +278,7 @@ Blockly.getRelativeXY_.XY_REGEXP_ =
  *     context (scale...).
  * @return {!SVGElement} Newly created SVG element.
  */
-Blockly.createSvgElement = function(name, attrs, parent, opt_workspace) {
+Blockly.utils.createSvgElement = function(name, attrs, parent, opt_workspace) {
   var e = /** @type {!SVGElement} */ (
       document.createElementNS(Blockly.SVG_NS, name));
   for (var key in attrs) {
@@ -322,7 +318,7 @@ Blockly.utils.isRightButton = function(e) {
  * @param {SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!Object} Object with .x and .y properties.
  */
-Blockly.mouseToSvg = function(e, svg, matrix) {
+Blockly.utils.mouseToSvg = function(e, svg, matrix) {
   var svgPoint = svg.createSVGPoint();
   svgPoint.x = e.clientX;
   svgPoint.y = e.clientY;
@@ -418,15 +414,6 @@ Blockly.utils.commonWordSuffix = function(array, opt_shortest) {
 };
 
 /**
- * Is the given string a number (includes negative and decimals).
- * @param {string} str Input string.
- * @return {boolean} True if number, false otherwise.
- */
-Blockly.isNumber = function(str) {
-  return !!str.match(/^\s*-?\d+(\.\d+)?\s*$/);
-};
-
-/**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
  * '%' characters may be self-escaped (%%).
  * @param {string} message Text containing interpolation tokens.
@@ -489,12 +476,12 @@ Blockly.utils.tokenizeInterpolation = function(message) {
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
  * @return {string} A globally unique ID string.
  */
-Blockly.genUid = function() {
+Blockly.utils.genUid = function() {
   var length = 20;
-  var soupLength = Blockly.genUid.soup_.length;
+  var soupLength = Blockly.utils.genUid.soup_.length;
   var id = [];
   for (var i = 0; i < length; i++) {
-    id[i] = Blockly.genUid.soup_.charAt(Math.random() * soupLength);
+    id[i] = Blockly.utils.genUid.soup_.charAt(Math.random() * soupLength);
   }
   return id.join('');
 };
@@ -506,7 +493,7 @@ Blockly.genUid = function() {
  * to properly escape in your own environment.  Issues #251, #625, #682.
  * @private
  */
-Blockly.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
+Blockly.utils.genUid.soup_ = '!#$%()*+,-./:;=?@[]^_`{|}~' +
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 /**

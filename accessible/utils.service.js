@@ -31,7 +31,7 @@ blocklyApp.UtilsService = ng.core
   .Class({
     constructor: function() {},
     generateUniqueId: function() {
-      return 'blockly-' + Blockly.genUid();
+      return 'blockly-' + Blockly.utils.genUid();
     },
     generateIds: function(elementsList) {
       var idMap = {};

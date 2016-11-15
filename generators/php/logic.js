@@ -50,6 +50,8 @@ Blockly.PHP['controls_if'] = function(block) {
   return code + '\n';
 };
 
+Blockly.PHP['controls_ifelse'] = Blockly.PHP['controls_if'];
+
 Blockly.PHP['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

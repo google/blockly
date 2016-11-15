@@ -113,7 +113,15 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
             },
             // Enter key: selects an action, performs it, and closes the
             // modal.
-            '13': function() {
+            '13': function(evt) {
+              var button = document.getElementById(
+                  that.getOptionId(that.activeActionButtonIndex));
+              if (button.disabled) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                return;
+              }
+
               if (that.activeActionButtonIndex <
                   that.actionButtonsInfo.length) {
                 that.actionButtonsInfo[that.activeActionButtonIndex].action();
@@ -155,11 +163,13 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
     }
   ],
   // Focuses on the button represented by the given index, if the button
-  // is not disabled.
+  // is not disabled. Otherwise, removes any existing focus.
   focusOnOptionIfPossible: function(index) {
     var button = document.getElementById(this.getOptionId(index));
     if (!button.disabled) {
       button.focus();
+    } else {
+      document.activeElement.blur();
     }
   },
   // Returns the ID for the corresponding option button.

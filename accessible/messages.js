@@ -27,8 +27,7 @@
 Blockly.Msg.TOOLBOX = 'Toolbox';
 Blockly.Msg.WORKSPACE = 'Workspace';
 Blockly.Msg.TOOLBOX_BLOCK = 'toolbox block. Move right to view submenu.';
-Blockly.Msg.WORKSPACE_BLOCK =
-    'workspace block. Move right to edit. Press Enter for more options.';
+Blockly.Msg.WORKSPACE_BLOCK = 'workspace block. Move right to view submenu.';
 
 Blockly.Msg.CLEAR_WORKSPACE = 'Erase Workspace';
 
@@ -53,7 +52,6 @@ Blockly.Msg.FOR = 'for';
 Blockly.Msg.VALUE = 'value';
 
 Blockly.Msg.BLOCK_OPTIONS = 'Block options: ';
-Blockly.Msg.CANCEL = 'Cancel.';
 
 Blockly.Msg.BLOCK_MOVED_TO_MARKED_SPOT_MSB = 'Block moved to marked spot: ';
 Blockly.Msg.COPIED_BLOCK_MSG = 'copied. ';

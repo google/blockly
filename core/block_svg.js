@@ -1261,14 +1261,16 @@ Blockly.BlockSvg.prototype.updateColour = function() {
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
   if (this.disabled || this.getInheritedDisabled()) {
-    Blockly.utils.addClass_(/** @type {!Element} */ (this.svgGroup_),
-                      'blocklyDisabled');
-    this.svgPath_.setAttribute('fill',
-        'url(#' + this.workspace.options.disabledPatternId + ')');
+    if (Blockly.utils.addClass_(/** @type {!Element} */ (this.svgGroup_),
+                      'blocklyDisabled')) {
+      this.svgPath_.setAttribute('fill',
+          'url(#' + this.workspace.options.disabledPatternId + ')');
+    }
   } else {
-    Blockly.utils.removeClass_(/** @type {!Element} */ (this.svgGroup_),
-                         'blocklyDisabled');
-    this.updateColour();
+    if (Blockly.utils.removeClass_(/** @type {!Element} */ (this.svgGroup_),
+                         'blocklyDisabled')) {
+      this.updateColour();
+    }
   }
   var children = this.getChildren();
   for (var i = 0, child; child = children[i]; i++) {

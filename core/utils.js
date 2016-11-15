@@ -40,16 +40,19 @@ goog.require('goog.userAgent');
  * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
  * @param {!Element} element DOM element to add class to.
  * @param {string} className Name of class to add.
+ * @return {boolean} True if class was added, false if already present.
  * @private
  */
 Blockly.utils.addClass_ = function(element, className) {
   var classes = element.getAttribute('class') || '';
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
-    if (classes) {
-      classes += ' ';
-    }
-    element.setAttribute('class', classes + className);
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
+    return false;
   }
+  if (classes) {
+    classes += ' ';
+  }
+  element.setAttribute('class', classes + className);
+  return true;
 };
 
 /**
@@ -57,23 +60,25 @@ Blockly.utils.addClass_ = function(element, className) {
  * Similar to Closure's goog.dom.classes.remove, except it handles SVG elements.
  * @param {!Element} element DOM element to remove class from.
  * @param {string} className Name of class to remove.
+ * @return {boolean} True if class was removed, false if never present.
  * @private
  */
 Blockly.utils.removeClass_ = function(element, className) {
   var classes = element.getAttribute('class');
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') != -1) {
-    var classList = classes.split(/\s+/);
-    for (var i = 0; i < classList.length; i++) {
-      if (!classList[i] || classList[i] == className) {
-        classList.splice(i, 1);
-        i--;
-      }
+  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') == -1) {
+    return false;
+  }
+  var classList = classes.split(/\s+/);
+  for (var i = 0; i < classList.length; i++) {
+    if (!classList[i] || classList[i] == className) {
+      classList.splice(i, 1);
+      i--;
     }
-    if (classList.length) {
-      element.setAttribute('class', classList.join(' '));
-    } else {
-      element.removeAttribute('class');
-    }
+  }
+  if (classList.length) {
+    element.setAttribute('class', classList.join(' '));
+  } else {
+    element.removeAttribute('class');
   }
 };
 

@@ -434,6 +434,131 @@ Blockly.defineBlocksWithJsonArray = function(jsonArray) {
 };
 
 /**
+ * Bind an event to a function call.  When calling the function, verifies that
+ * it belongs to the touch stream that is currently being processed, and splits
+ * multitouch events into multiple events as needed.
+ * @param {!Node} node Node upon which to listen.
+ * @param {string} name Event name to listen to (e.g. 'mousedown').
+ * @param {Object} thisObject The value of 'this' in the function.
+ * @param {!Function} func Function to call when event is triggered.
+ * @param {boolean} opt_noCaptureIdentifier True if triggering on this event
+ *     should not block execution of other event handlers on this touch or other
+ *     simultaneous touches.
+ * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @private
+ */
+Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
+    opt_noCaptureIdentifier) {
+  var handled = false;
+  var wrapFunc = function(e) {
+    var captureIdentifier = !opt_noCaptureIdentifier;
+    // Handle each touch point separately.  If the event was a mouse event, this
+    // will hand back an array with one element, which we're fine handling.
+    var events = Blockly.Touch.splitEventByTouches(e);
+    for (var i = 0, event; event = events[i]; i++) {
+      if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
+        continue;
+      }
+      Blockly.Touch.setClientFromTouch(event);
+      if (thisObject) {
+        func.call(thisObject, event);
+      } else {
+        func(event);
+      }
+      handled = true;
+    }
+  };
+
+  node.addEventListener(name, wrapFunc, false);
+  var bindData = [[node, name, wrapFunc]];
+
+  // Add equivalent touch event.
+  if (name in Blockly.Touch.TOUCH_MAP) {
+    var touchWrapFunc = function(e) {
+      wrapFunc(e);
+      // Stop the browser from scrolling/zooming the page.
+      if (handled) {
+        e.preventDefault();
+      }
+    };
+    for (var i = 0, eventName;
+         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(eventName, touchWrapFunc, false);
+      bindData.push([node, eventName, touchWrapFunc]);
+    }
+  }
+  return bindData;
+};
+
+
+/**
+ * Bind an event to a function call.  Handles multitouch events by using the
+ * coordinates of the first changed touch, and doesn't do any safety checks for
+ * simultaneous event processing.
+ * @deprecated in favor of bindEventWithChecks_, but preserved for external
+ * users.
+ * @param {!Node} node Node upon which to listen.
+ * @param {string} name Event name to listen to (e.g. 'mousedown').
+ * @param {Object} thisObject The value of 'this' in the function.
+ * @param {!Function} func Function to call when event is triggered.
+ * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
+ * @private
+ */
+Blockly.bindEvent_ = function(node, name, thisObject, func) {
+  var wrapFunc = function(e) {
+    if (thisObject) {
+      func.call(thisObject, e);
+    } else {
+      func(e);
+    }
+  };
+
+  node.addEventListener(name, wrapFunc, false);
+  var bindData = [[node, name, wrapFunc]];
+
+  // Add equivalent touch event.
+  if (name in Blockly.Touch.TOUCH_MAP) {
+    var touchWrapFunc = function(e) {
+      // Punt on multitouch events.
+      if (e.changedTouches.length == 1) {
+        // Map the touch event's properties to the event.
+        var touchPoint = e.changedTouches[0];
+        e.clientX = touchPoint.clientX;
+        e.clientY = touchPoint.clientY;
+      }
+      wrapFunc(e);
+
+      // Stop the browser from scrolling/zooming the page.
+      e.preventDefault();
+    };
+    for (var i = 0, eventName;
+         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(eventName, touchWrapFunc, false);
+      bindData.push([node, eventName, touchWrapFunc]);
+    }
+  }
+  return bindData;
+};
+
+/**
+ * Unbind one or more events event from a function call.
+ * @param {!Array.<!Array>} bindData Opaque data from bindEvent_.
+ *     This list is emptied during the course of calling this function.
+ * @return {!Function} The function call.
+ * @private
+ */
+Blockly.unbindEvent_ = function(bindData) {
+  while (bindData.length) {
+    var bindDatum = bindData.pop();
+    var node = bindDatum[0];
+    var name = bindDatum[1];
+    var func = bindDatum[2];
+    node.removeEventListener(name, func, false);
+  }
+  return func;
+};
+
+/**
  * Is the given string a number (includes negative and decimals).
  * @param {string} str Input string.
  * @return {boolean} True if number, false otherwise.

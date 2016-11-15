@@ -81,131 +81,6 @@ Blockly.utils.removeClass = function(element, className) {
 };
 
 /**
- * Bind an event to a function call.  When calling the function, verifies that
- * it belongs to the touch stream that is currently being processed, and splits
- * multitouch events into multiple events as needed.
- * @param {!Node} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @param {boolean} opt_noCaptureIdentifier True if triggering on this event
- *     should not block execution of other event handlers on this touch or other
- *     simultaneous touches.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
- * @private
- */
-Blockly.bindEventWithChecks_ = function(node, name, thisObject, func,
-    opt_noCaptureIdentifier) {
-  var handled = false;
-  var wrapFunc = function(e) {
-    var captureIdentifier = !opt_noCaptureIdentifier;
-    // Handle each touch point separately.  If the event was a mouse event, this
-    // will hand back an array with one element, which we're fine handling.
-    var events = Blockly.Touch.splitEventByTouches(e);
-    for (var i = 0, event; event = events[i]; i++) {
-      if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
-        continue;
-      }
-      Blockly.Touch.setClientFromTouch(event);
-      if (thisObject) {
-        func.call(thisObject, event);
-      } else {
-        func(event);
-      }
-      handled = true;
-    }
-  };
-
-  node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
-
-  // Add equivalent touch event.
-  if (name in Blockly.Touch.TOUCH_MAP) {
-    var touchWrapFunc = function(e) {
-      wrapFunc(e);
-      // Stop the browser from scrolling/zooming the page.
-      if (handled) {
-        e.preventDefault();
-      }
-    };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
-    }
-  }
-  return bindData;
-};
-
-
-/**
- * Bind an event to a function call.  Handles multitouch events by using the
- * coordinates of the first changed touch, and doesn't do any safety checks for
- * simultaneous event processing.
- * @deprecated in favor of bindEventWithChecks_, but preserved for external
- * users.
- * @param {!Node} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @return {!Array.<!Array>} Opaque data that can be passed to unbindEvent_.
- * @private
- */
-Blockly.bindEvent_ = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
-    if (thisObject) {
-      func.call(thisObject, e);
-    } else {
-      func(e);
-    }
-  };
-
-  node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
-
-  // Add equivalent touch event.
-  if (name in Blockly.Touch.TOUCH_MAP) {
-    var touchWrapFunc = function(e) {
-      // Punt on multitouch events.
-      if (e.changedTouches.length == 1) {
-        // Map the touch event's properties to the event.
-        var touchPoint = e.changedTouches[0];
-        e.clientX = touchPoint.clientX;
-        e.clientY = touchPoint.clientY;
-      }
-      wrapFunc(e);
-
-      // Stop the browser from scrolling/zooming the page.
-      e.preventDefault();
-    };
-    for (var i = 0, eventName;
-         eventName = Blockly.Touch.TOUCH_MAP[name][i]; i++) {
-      node.addEventListener(eventName, touchWrapFunc, false);
-      bindData.push([node, eventName, touchWrapFunc]);
-    }
-  }
-  return bindData;
-};
-
-/**
- * Unbind one or more events event from a function call.
- * @param {!Array.<!Array>} bindData Opaque data from bindEvent_.
- *     This list is emptied during the course of calling this function.
- * @return {!Function} The function call.
- * @private
- */
-Blockly.unbindEvent_ = function(bindData) {
-  while (bindData.length) {
-    var bindDatum = bindData.pop();
-    var node = bindDatum[0];
-    var name = bindDatum[1];
-    var func = bindDatum[2];
-    node.removeEventListener(name, func, false);
-  }
-  return func;
-};
-
-/**
  * Don't do anything for this event, just halt propagation.
  * @param {!Event} e An event.
  */
@@ -229,15 +104,6 @@ Blockly.utils.isTargetInput = function(e) {
 };
 
 /**
- * Static regex to pull the x,y,z values out of a translate3d() style property.
- * Accounts for same exceptions as XY_REGEXP_.
- * @type {!RegExp}
- * @private
- */
-Blockly.XY_3D_REGEXP_ =
-  /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
-
-/**
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  * @param {!Element} element SVG element to find the coordinates of.
@@ -256,7 +122,7 @@ Blockly.utils.getRelativeXY = function(element) {
   }
   // Second, check for transform="translate(...)" attribute.
   var transform = element.getAttribute('transform');
-  var r = transform && transform.match(Blockly.utils.getRelativeXY.XY_REGEXP_);
+  var r = transform && transform.match(Blockly.utils.getRelativeXY.XY_REGEX_);
   if (r) {
     xy.x += parseFloat(r[1]);
     if (r[3]) {
@@ -267,7 +133,7 @@ Blockly.utils.getRelativeXY = function(element) {
   // Third, check for style="transform: translate3d(...)".
   var style = element.getAttribute('style');
   if (style && style.indexOf('translate3d') > -1) {
-    var styleComponents = style.match(Blockly.XY_3D_REGEXP_);
+    var styleComponents = style.match(Blockly.utils.getRelativeXY.XY_3D_REGEX_);
     if (styleComponents) {
       xy.x += parseFloat(styleComponents[1]);
       if (styleComponents[3]) {
@@ -287,8 +153,17 @@ Blockly.utils.getRelativeXY = function(element) {
  * @type {!RegExp}
  * @private
  */
-Blockly.utils.getRelativeXY.XY_REGEXP_ =
+Blockly.utils.getRelativeXY.XY_REGEX_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
+
+/**
+ * Static regex to pull the x,y,z values out of a translate3d() style property.
+ * Accounts for same exceptions as XY_REGEXP_.
+ * @type {!RegExp}
+ * @private
+ */
+Blockly.utils.getRelativeXY.XY_3D_REGEX_ =
+  /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 /**
  * Helper method for creating SVG elements.
@@ -688,27 +563,27 @@ Blockly.utils.wrapToText_ = function(words, wordBreaks) {
 /**
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
- * @return {boolean} true if 3D transforms are supported
+ * @return {boolean} true if 3D transforms are supported.
  */
-Blockly.is3dSupported = function() {
-  if (Blockly.cache3dSupported_ !== null) {
-    return Blockly.cache3dSupported_;
+Blockly.utils.is3dSupported = function() {
+  if (Blockly.utils.is3dSupported.cached_ !== undefined) {
+    return Blockly.utils.is3dSupported.cached_;
   }
   // CC-BY-SA Lorenzo Polidori
-  // https://stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
+  // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
   if (!goog.global.getComputedStyle) {
     return false;
   }
 
-  var el = document.createElement('p'),
-    has3d,
-    transforms = {
-      'webkitTransform': '-webkit-transform',
-      'OTransform': '-o-transform',
-      'msTransform': '-ms-transform',
-      'MozTransform': '-moz-transform',
-      'transform': 'transform'
-    };
+  var el = document.createElement('p');
+  var has3d = 'none';
+  var transforms = {
+    'webkitTransform': '-webkit-transform',
+    'OTransform': '-o-transform',
+    'msTransform': '-ms-transform',
+    'MozTransform': '-moz-transform',
+    'transform': 'transform'
+  };
 
   // Add it to the body to get the computed style.
   document.body.insertBefore(el, null);
@@ -721,6 +596,6 @@ Blockly.is3dSupported = function() {
   }
 
   document.body.removeChild(el);
-  Blockly.cache3dSupported_ = !!(has3d && has3d !== 'none');
-  return Blockly.cache3dSupported_;
+  Blockly.utils.is3dSupported.cached_ = has3d !== 'none';
+  return Blockly.utils.is3dSupported.cached_;
 };

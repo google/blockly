@@ -22,36 +22,39 @@
  * @author sll@google.com (Sean Lip)
  */
 
-blocklyApp.AudioService = ng.core
-  .Class({
-    constructor: [function() {
-      // We do not play any audio unless a media path prefix is specified.
-      this.canPlayAudio = false;
-      if (ACCESSIBLE_GLOBALS.hasOwnProperty('mediaPathPrefix')) {
-        this.canPlayAudio = true;
-        var mediaPathPrefix = ACCESSIBLE_GLOBALS['mediaPathPrefix'];
-        this.AUDIO_PATHS_ = {
-          'connect': mediaPathPrefix + 'click.mp3',
-          'delete': mediaPathPrefix + 'delete.mp3'
-        };
-      }
-
-      // TODO(sll): Add ogg and mp3 fallbacks.
-      this.cachedAudioFiles_ = {};
-    }],
-    play_: function(audioId) {
-      if (this.canPlayAudio) {
-        if (!this.cachedAudioFiles_.hasOwnProperty(audioId)) {
-          this.cachedAudioFiles_[audioId] = new Audio(
-              this.AUDIO_PATHS_[audioId]);
-        }
-        this.cachedAudioFiles_[audioId].play();
-      }
-    },
-    playConnectSound: function() {
-      this.play_('connect');
-    },
-    playDeleteSound: function() {
-      this.play_('delete');
+blocklyApp.AudioService = ng.core.Class({
+  constructor: [function() {
+    // We do not play any audio unless a media path prefix is specified.
+    this.canPlayAudio = false;
+    if (ACCESSIBLE_GLOBALS.hasOwnProperty('mediaPathPrefix')) {
+      this.canPlayAudio = true;
+      var mediaPathPrefix = ACCESSIBLE_GLOBALS['mediaPathPrefix'];
+      this.AUDIO_PATHS_ = {
+        'connect': mediaPathPrefix + 'click.mp3',
+        'delete': mediaPathPrefix + 'delete.mp3',
+        'oops': mediaPathPrefix + 'oops.mp3'
+      };
     }
-  });
+
+    // TODO(sll): Add ogg and mp3 fallbacks.
+    this.cachedAudioFiles_ = {};
+  }],
+  play_: function(audioId) {
+    if (this.canPlayAudio) {
+      if (!this.cachedAudioFiles_.hasOwnProperty(audioId)) {
+        this.cachedAudioFiles_[audioId] = new Audio(
+            this.AUDIO_PATHS_[audioId]);
+      }
+      this.cachedAudioFiles_[audioId].play();
+    }
+  },
+  playConnectSound: function() {
+    this.play_('connect');
+  },
+  playDeleteSound: function() {
+    this.play_('delete');
+  },
+  playOopsSound: function() {
+    this.play_('oops');
+  }
+});

@@ -23,24 +23,23 @@
  * @author sll@google.com (Sean Lip)
  */
 
-blocklyApp.NotificationsService = ng.core
-  .Class({
-    constructor: [function() {
-      this.statusMessage_ = '';
-    }],
-    getStatusMessage: function() {
-      return this.statusMessage_;
-    },
-    setStatusMessage: function(newMessage) {
-      // Introduce a temporary status message, so that if, e.g., two "copy"
-      // operations are done in succession, both messages will be read.
-      this.statusMessage_ = '';
+blocklyApp.NotificationsService = ng.core.Class({
+  constructor: [function() {
+    this.statusMessage_ = '';
+  }],
+  getStatusMessage: function() {
+    return this.statusMessage_;
+  },
+  setStatusMessage: function(newMessage) {
+    // Introduce a temporary status message, so that if, e.g., two "copy"
+    // operations are done in succession, both messages will be read.
+    this.statusMessage_ = '';
 
-      // We need a non-zero timeout here, otherwise NVDA does not read the
-      // notification messages properly.
-      var that = this;
-      setTimeout(function() {
-        that.statusMessage_ = newMessage;
-      }, 20);
-    }
-  });
+    // We need a non-zero timeout here, otherwise NVDA does not read the
+    // notification messages properly.
+    var that = this;
+    setTimeout(function() {
+      that.statusMessage_ = newMessage;
+    }, 20);
+  }
+});

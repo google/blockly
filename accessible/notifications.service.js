@@ -26,6 +26,7 @@
 blocklyApp.NotificationsService = ng.core.Class({
   constructor: [function() {
     this.statusMessage_ = '';
+    this.timeouts = [];
   }],
   getStatusMessage: function() {
     return this.statusMessage_;
@@ -34,12 +35,19 @@ blocklyApp.NotificationsService = ng.core.Class({
     // Introduce a temporary status message, so that if, e.g., two "copy"
     // operations are done in succession, both messages will be read.
     this.statusMessage_ = '';
+    // Clear all existing timeouts.
+    this.timeouts.forEach(function(timeout) {
+      clearTimeout(timeout);
+    });
 
     // We need a non-zero timeout here, otherwise NVDA does not read the
     // notification messages properly.
     var that = this;
-    setTimeout(function() {
+    this.timeouts.push(setTimeout(function() {
       that.statusMessage_ = newMessage;
-    }, 20);
+    }, 20));
+    this.timeouts.push(setTimeout(function() {
+      that.statusMessage_ = '';
+    }, 2000));
   }
 });

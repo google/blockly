@@ -33,13 +33,13 @@ blocklyApp.SidebarComponent = ng.core.Component({
         <button *ngIf="!buttonConfig.isHidden()"
                 (click)="handleButtonClick(buttonConfig)"
                 [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
-                class="blocklyTree blocklySidebarButton">
+                class="blocklySidebarButton">
           {{buttonConfig.text}}
         </button>
       </span>
       <button id="clear-workspace" (click)="workspace.clear()"
               [attr.aria-disabled]="isWorkspaceEmpty()"
-              class="blocklyTree blocklySidebarButton">
+              class="blocklySidebarButton">
         {{'CLEAR_WORKSPACE'|translate}}
       </button>
     </div>

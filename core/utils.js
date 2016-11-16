@@ -78,6 +78,7 @@ Blockly.utils.removeClass = function(element, className) {
   } else {
     element.removeAttribute('class');
   }
+  return true;
 };
 
 /**

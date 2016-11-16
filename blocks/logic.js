@@ -236,7 +236,7 @@ Blockly.Blocks['controls_if_if'] = {
 
 Blockly.Blocks['controls_if_elseif'] = {
   /**
-   * Mutator bolck for else-if condition.
+   * Mutator block for else-if condition.
    * @this Blockly.Block
    */
   init: function() {
@@ -268,6 +268,7 @@ Blockly.Blocks['controls_if_else'] = {
 Blockly.Blocks['controls_ifelse'] = {
   /**
    * If/else block that does not use a mutator.
+   * @this Blockly.Block
    */
   init: function() {
     this.jsonInit({
@@ -303,7 +304,7 @@ Blockly.Blocks['controls_ifelse'] = {
       "colour": Blockly.Blocks.logic.HUE,
       "tooltip": Blockly.Msg.CONTROLS_IF_TOOLTIP_2,
       "helpUrl": Blockly.Msg.CONTROLS_IF_HELPURL
-    });    
+    });
   }
 };
 

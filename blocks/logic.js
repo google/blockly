@@ -277,26 +277,21 @@ Blockly.Blocks['controls_ifelse'] = {
         {
           "type": "input_value",
           "name": "IF0",
-          "check": "Boolean",
-          "align": "RIGHT"
+          "check": "Boolean"
         }
       ],
       "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
       "args1": [
         {
           "type": "input_statement",
-          "name": "DO0",
-          "check": "Boolean",
-          "align": "RIGHT"
+          "name": "DO0"
         }
       ],
       "message2": "%{BKY_CONTROLS_IF_MSG_ELSE} %1",
       "args2": [
         {
           "type": "input_statement",
-          "name": "ELSE",
-          "check": "Boolean",
-          "align": "RIGHT"
+          "name": "ELSE"
         }
       ],
       "previousStatement": null,

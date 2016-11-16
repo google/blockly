@@ -1520,7 +1520,7 @@ Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {
     this.svgPathLight_.style.display = 'none';
   } else {
     this.svgPath_.removeAttribute('filter');
-    this.svgPathLight_.style.display = 'block';
+    delete this.svgPathLight_.style.display;
   }
 };
 

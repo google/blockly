@@ -31,6 +31,7 @@
   <script src="../../accessible/block-options-modal.component.js"></script>
   <script src="../../accessible/toolbox-tree.component.js"></script>
   <script src="../../accessible/toolbox.component.js"></script>
+  <script src="../../accessible/sidebar.component.js"></script>
   <script src="../../accessible/workspace-tree.component.js"></script>
   <script src="../../accessible/workspace.component.js"></script>
   <script src="../../accessible/app.component.js"></script>
@@ -76,9 +77,8 @@
     var ACCESSIBLE_GLOBALS = {
       // Prefix of path to sound files.
       mediaPathPrefix: '../../accessible/media/',
-      // Additional buttons for the workspace toolbar that
-      // go before the "Clear Workspace" button.
-      toolbarButtonConfig: []
+      // Additional buttons for the sidebar.
+      customSidebarButtons: []
     };
     document.addEventListener('DOMContentLoaded', function() {
       ng.platform.browser.bootstrap(blocklyApp.AppView);

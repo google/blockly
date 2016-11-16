@@ -20,6 +20,7 @@
 /**
  * @fileoverview Angular2 Component that details how a Blockly.Workspace is
  * rendered in AccessibleBlockly.
+ *
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
@@ -44,73 +45,19 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
       </span>
     </div>
   </div>
-
-  <div class="blocklyToolbarColumn">
-    <div id="blockly-workspace-toolbar" (keydown)="onWorkspaceToolbarKeypress($event)">
-      <span *ngFor="#buttonConfig of toolbarButtonConfig">
-        <button *ngIf="!buttonConfig.isHidden()"
-                (click)="handleButtonClick(buttonConfig)"
-                [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
-                class="blocklyTree blocklyWorkspaceToolbarButton">
-          {{buttonConfig.text}}
-        </button>
-      </span>
-      <button id="clear-workspace" (click)="clearWorkspace()"
-              [attr.aria-disabled]="isWorkspaceEmpty()"
-              class="blocklyTree blocklyWorkspaceToolbarButton">
-        {{'CLEAR_WORKSPACE'|translate}}
-      </button>
-    </div>
-  </div>
   `,
   directives: [blocklyApp.WorkspaceTreeComponent],
   pipes: [blocklyApp.TranslatePipe]
 })
 .Class({
-  constructor: [
-    blocklyApp.NotificationsService, blocklyApp.TreeService,
-    blocklyApp.UtilsService, blocklyApp.ModalService,
-    function(
-      _notificationsService, _treeService, _utilsService, _modalService) {
-      // ACCESSIBLE_GLOBALS is a global variable defined by the containing
-      // page. It should contain a key, toolbarButtonConfig, whose
-      // corresponding value is an Array with two keys: 'text' and 'action'.
-      // The first is the text to display on the button, and the second is
-      // the function that gets run when the button is clicked.
-      this.toolbarButtonConfig =
-          ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.toolbarButtonConfig ?
-          ACCESSIBLE_GLOBALS.toolbarButtonConfig : [];
-      this.workspace = blocklyApp.workspace;
-      this.notificationsService = _notificationsService;
-      this.treeService = _treeService;
-      this.utilsService = _utilsService;
-      this.modalService = _modalService;
-    }
-  ],
-  isModalShown: function() {
-    return this.modalService.isModalShown();
-  },
-  clearWorkspace: function() {
-    this.workspace.clear();
-  },
+  constructor: [blocklyApp.TreeService, function(_treeService) {
+    this.treeService = _treeService;
+    this.workspace = blocklyApp.workspace;
+  }],
   getActiveDescId: function(treeId) {
     return this.treeService.getActiveDescId(treeId);
   },
-  handleButtonClick: function(buttonConfig) {
-    buttonConfig.action();
-    if (buttonConfig.onClickNotification) {
-      this.notificationsService.setStatusMessage(
-          buttonConfig.onClickNotification);
-    }
-  },
-  onWorkspaceToolbarKeypress: function(e) {
-    this.treeService.onWorkspaceToolbarKeypress(
-        e, document.activeElement.id);
-  },
   onKeypress: function(e, tree) {
     this.treeService.onKeypress(e, tree);
-  },
-  isWorkspaceEmpty: function() {
-    return this.utilsService.isWorkspaceEmpty();
   }
 });

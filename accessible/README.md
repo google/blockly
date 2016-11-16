@@ -25,23 +25,23 @@ the main component to be loaded. This will usually be blocklyApp.AppView, but
 if you have another component that wraps it, use that one instead.
 
 
-Customizing the Toolbar and Audio
+Customizing the Sidebar and Audio
 ---------------------------------
-The Accessible Blockly workspace comes with a customizable toolbar.
+The Accessible Blockly workspace comes with a customizable sidebar.
 
-To customize the toolbar, you will need to declare an ACCESSIBLE_GLOBALS object
+To customize the sidebar, you will need to declare an ACCESSIBLE_GLOBALS object
 in the global scope that looks like this:
 
     var ACCESSIBLE_GLOBALS = {
       mediaPathPrefix: null,
-      toolbarButtonConfig: []
+      customSidebarButtons: []
     };
 
 The value of mediaPathPrefix should be the location of the accessible/media
 folder.
 
-The value of 'toolbarButtonConfig' should be a list of objects, each
-representing buttons on the toolbar. Each of these objects should have four
+The value of 'customSidebarButtons' should be a list of objects, each
+representing buttons on the sidebar. Each of these objects should have five
 keys:
 
   - 'text' (the text to display on the button)

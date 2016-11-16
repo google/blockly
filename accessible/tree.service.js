@@ -49,9 +49,8 @@ blocklyApp.TreeService = ng.core.Class({
   getWorkspaceTreeNodes_: function() {
     return Array.from(document.querySelectorAll('ol.blocklyWorkspaceTree'));
   },
-  getWorkspaceToolbarButtonNodes_: function() {
-    return Array.from(document.querySelectorAll(
-        'button.blocklyWorkspaceToolbarButton'));
+  getSidebarButtonNodes_: function() {
+    return Array.from(document.querySelectorAll('button.blocklySidebarButton'));
   },
   getToolboxWorkspace: function(categoryNode) {
     if (categoryNode.attributes && categoryNode.attributes.name) {
@@ -90,7 +89,7 @@ blocklyApp.TreeService = ng.core.Class({
   getAllTreeNodes_: function() {
     var treeNodes = [this.getToolboxTreeNode_()];
     treeNodes = treeNodes.concat(this.getWorkspaceTreeNodes_());
-    treeNodes = treeNodes.concat(this.getWorkspaceToolbarButtonNodes_());
+    treeNodes = treeNodes.concat(this.getSidebarButtonNodes_());
     return treeNodes;
   },
   isTopLevelWorkspaceTree: function(treeId) {
@@ -227,7 +226,7 @@ blocklyApp.TreeService = ng.core.Class({
       that.setActiveDesc(blockId + 'blockRoot', domNode.id);
     }, 100);
   },
-  onWorkspaceToolbarKeypress: function(e, treeId) {
+  onSidebarKeypress: function(e, treeId) {
     if (e.keyCode == 9) {
       // Tab key.
       var destinationTreeId =

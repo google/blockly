@@ -352,7 +352,7 @@ Blockly.FieldDropdown.prototype.render_ = function() {
 
   if (this.imageJson_) {
     // Image option is selected.
-    this.imageElement_ = Blockly.createSvgElement('image',
+    this.imageElement_ = Blockly.utils.createSvgElement('image',
         {'y': 5,
          'height': this.imageJson_.height + 'px',
          'width': this.imageJson_.width + 'px'}, this.fieldGroup_);

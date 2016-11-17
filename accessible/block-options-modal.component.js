@@ -51,36 +51,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
       </div>
     </div>
   `,
-  pipes: [blocklyApp.TranslatePipe],
-  styles: [
-    `.blocklyModalCurtain {
-      background-color: rgba(0,0,0,0.4);
-      height: 100%;
-      left: 0;
-      overflow: auto;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1;
-    }
-  `, `
-    .blocklyModal {
-      background-color: #fefefe;
-      border: 1px solid #888;
-      margin: 15% auto;
-      max-width: 600px;
-      padding: 20px;
-      width: 60%;
-    }
-  `, `
-    .blocklyModalButtonContainer {
-      margin: 10px 0;
-    }
-  `, `
-    .blocklyModal .activeButton {
-      border: 1px solid blue;
-    }
-  `]
+  pipes: [blocklyApp.TranslatePipe]
 })
 .Class({
   constructor: [

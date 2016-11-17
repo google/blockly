@@ -37,6 +37,10 @@ blocklyApp.SidebarComponent = ng.core.Component({
           {{buttonConfig.text}}
         </button>
       </span>
+      <button (click)="showToolboxModal()"
+              class="blocklySidebarButton">
+        Create new block group...
+      </button>
       <button id="clear-workspace" (click)="workspace.clear()"
               [attr.aria-disabled]="isWorkspaceEmpty()"
               class="blocklySidebarButton">
@@ -50,8 +54,10 @@ blocklyApp.SidebarComponent = ng.core.Component({
 .Class({
   constructor: [
     blocklyApp.NotificationsService, blocklyApp.TreeService,
-    blocklyApp.UtilsService,
-    function(_notificationsService, _treeService, _utilsService) {
+    blocklyApp.UtilsService, blocklyApp.ToolboxModalService,
+    function(
+        _notificationsService, _treeService, _utilsService,
+        _toolboxModalService) {
       // ACCESSIBLE_GLOBALS is a global variable defined by the containing
       // page. It should contain a key, customSidebarButtons, describing
       // additional buttons that should be displayed after the default ones.
@@ -63,6 +69,7 @@ blocklyApp.SidebarComponent = ng.core.Component({
       this.notificationsService = _notificationsService;
       this.treeService = _treeService;
       this.utilsService = _utilsService;
+      this.toolboxModalService = _toolboxModalService;
     }
   ],
   handleButtonClick: function(buttonConfig) {
@@ -77,5 +84,8 @@ blocklyApp.SidebarComponent = ng.core.Component({
   },
   isWorkspaceEmpty: function() {
     return this.utilsService.isWorkspaceEmpty();
+  },
+  showToolboxModal: function() {
+    this.toolboxModalService.showModal();
   }
 });

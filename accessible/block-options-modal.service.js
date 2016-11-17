@@ -26,7 +26,11 @@
 blocklyApp.BlockOptionsModalService = ng.core.Class({
   constructor: [function() {
     this.actionButtonsInfo = [];
-    this.preShowHook = null;
+    this.preShowHook = function() {
+      throw Error(
+          'A pre-show hook must be defined for the block options modal ' +
+          'before it can be shown.');
+    };
     this.modalIsShown = false;
     this.onHideCallback = null;
   }],

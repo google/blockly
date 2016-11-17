@@ -33,6 +33,7 @@ blocklyApp.AppView = ng.core.Component({
   </div>
 
   <blockly-block-options-modal></blockly-block-options-modal>
+  <blockly-toolbox-modal></blockly-toolbox-modal>
 
   <div>
     <blockly-toolbox></blockly-toolbox>
@@ -47,7 +48,8 @@ blocklyApp.AppView = ng.core.Component({
   `,
   directives: [
       blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent,
-      blocklyApp.BlockOptionsModalComponent, blocklyApp.SidebarComponent],
+      blocklyApp.BlockOptionsModalComponent, blocklyApp.SidebarComponent,
+      blocklyApp.ToolboxModalComponent],
   pipes: [blocklyApp.TranslatePipe],
   // All services are declared here, so that all components in the
   // application use the same instance of the service.
@@ -56,7 +58,7 @@ blocklyApp.AppView = ng.core.Component({
       blocklyApp.ClipboardService, blocklyApp.NotificationsService,
       blocklyApp.TreeService, blocklyApp.UtilsService,
       blocklyApp.AudioService, blocklyApp.BlockOptionsModalService,
-      blocklyApp.KeyboardInputService]
+      blocklyApp.KeyboardInputService, blocklyApp.ToolboxModalService]
 })
 .Class({
   constructor: [

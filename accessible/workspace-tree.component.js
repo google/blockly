@@ -79,17 +79,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
 .Class({
   constructor: [
       blocklyApp.ClipboardService, blocklyApp.NotificationsService,
-      blocklyApp.TreeService, blocklyApp.UtilsService,
-      blocklyApp.AudioService, blocklyApp.ModalService,
+      blocklyApp.TreeService, blocklyApp.UtilsService, blocklyApp.AudioService,
       function(
           _clipboardService, _notificationsService, _treeService,
-          _utilsService, _audioService, _modalService) {
+          _utilsService, _audioService) {
     this.clipboardService = _clipboardService;
     this.notificationsService = _notificationsService;
     this.treeService = _treeService;
     this.utilsService = _utilsService;
     this.audioService = _audioService;
-    this.modalService = _modalService;
   }],
   ngOnInit: function() {
     var SUPPORTED_FIELDS = [

@@ -27,17 +27,17 @@
 blocklyApp.TreeService = ng.core.Class({
   constructor: [
     blocklyApp.NotificationsService, blocklyApp.UtilsService,
-    blocklyApp.ClipboardService, blocklyApp.ModalService,
+    blocklyApp.ClipboardService, blocklyApp.BlockOptionsModalService,
     blocklyApp.AudioService,
     function(
         _notificationsService, _utilsService, _clipboardService,
-        _modalService, _audioService) {
+        _blockOptionsModalService, _audioService) {
       // Stores active descendant ids for each tree in the page.
       this.activeDescendantIds_ = {};
       this.notificationsService = _notificationsService;
       this.utilsService = _utilsService;
       this.clipboardService = _clipboardService;
-      this.modalService = _modalService;
+      this.blockOptionsModalService = _blockOptionsModalService;
       this.audioService = _audioService;
       this.toolboxWorkspaces = {};
     }
@@ -357,7 +357,7 @@ blocklyApp.TreeService = ng.core.Class({
   },
   showBlockOptionsModal: function(block, blockRootNode) {
     var that = this;
-    this.modalService.showModal('Block options', [{
+    var actionButtonsInfo = [{
       translationIdForText: 'MARK_SPOT_BEFORE',
       action: function() {
         that.clipboardService.markConnection(block.previousConnection);
@@ -436,7 +436,9 @@ blocklyApp.TreeService = ng.core.Class({
       isDisabled: function() {
         return false;
       }
-    }], function() {
+    }];
+
+    this.blockOptionsModalService.showModal(actionButtonsInfo, function() {
       // TODO(sll): If there are no blocks in the workspace, focus on the
       // entire workspace instead.
       that.focusOnBlock(block.id);
@@ -464,7 +466,9 @@ blocklyApp.TreeService = ng.core.Class({
         this.utilsService.getBlockById(blockId);
   },
   onKeypress: function(e, tree) {
-    if (this.modalService.isModalShown()) {
+    // TODO(sll): Instead of this, have a common ActiveContextService which
+    // returns true if at least one modal is shown, and false otherwise.
+    if (this.blockOptionsModalService.isModalShown()) {
       return;
     }
 

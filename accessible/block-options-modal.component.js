@@ -26,12 +26,12 @@
 blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   selector: 'blockly-block-options-modal',
   template: `
-    <div *ngIf="modalIsVisible" id="modalId" role="dialog" tabindex="-1">
+    <div *ngIf="modalIsVisible" id="blockOptionsModal" role="dialog" tabindex="-1">
       <div (click)="hideModal()" class="blocklyModalCurtain">
         <!-- The $event.stopPropagation() here prevents the modal from
         closing when its interior is clicked. -->
         <div class="blocklyModal" (click)="$event.stopPropagation()" role="document">
-          <h3>{{modalHeaderHtml}}</h3>
+          <h3>Block Options</h3>
 
           <div class="blocklyModalButtonContainer"
                *ngFor="#buttonInfo of actionButtonsInfo; #i=index">
@@ -84,27 +84,23 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-    blocklyApp.ModalService, blocklyApp.KeyboardInputService,
+    blocklyApp.BlockOptionsModalService, blocklyApp.KeyboardInputService,
     blocklyApp.AudioService,
-    function(modalService_, keyboardInputService_, audioService_) {
-      this.modalService = modalService_;
+    function(blockOptionsModalService_, keyboardInputService_, audioService_) {
+      this.blockOptionsModalService = blockOptionsModalService_;
       this.keyboardInputService = keyboardInputService_;
       this.audioService = audioService_;
 
       this.modalIsVisible = false;
-      this.modalHeaderHtml = '';
       this.actionButtonsInfo = [];
       this.activeActionButtonIndex = 0;
-      this.onHideCallback = null;
 
       var that = this;
-      this.modalService.registerPreShowHook(
-        function(newModalHeaderHtml, newActionButtonsInfo, onHideCallback) {
+      this.blockOptionsModalService.registerPreShowHook(
+        function(newActionButtonsInfo) {
           that.modalIsVisible = true;
-          that.modalHeaderHtml = newModalHeaderHtml;
           that.actionButtonsInfo = newActionButtonsInfo;
           that.activeActionButtonIndex = 0;
-          that.onHideCallback = onHideCallback;
           that.keyboardInputService.setOverride({
             // Tab key: no-op.
             '9': function(evt) {
@@ -156,7 +152,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
           });
 
           setTimeout(function() {
-            document.getElementById('modalId').focus();
+            document.getElementById('blockOptionsModal').focus();
           }, 150);
         }
       );
@@ -184,6 +180,6 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   hideModal: function() {
     this.modalIsVisible = false;
     this.keyboardInputService.clearOverride();
-    this.modalService.hideModal();
+    this.blockOptionsModalService.hideModal();
   }
 });

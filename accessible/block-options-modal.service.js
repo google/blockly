@@ -18,30 +18,27 @@
  */
 
 /**
- * @fileoverview Angular2 Service that stores the content for custom modals.
- * This is a singleton service.
+ * @fileoverview Angular2 Service for the block options modal.
  *
  * @author sll@google.com (Sean Lip)
  */
 
-blocklyApp.ModalService = ng.core.Class({
+blocklyApp.BlockOptionsModalService = ng.core.Class({
   constructor: [function() {
-    this.modalHeaderHtml = '';
     this.actionButtonsInfo = [];
-    this.preShowHookHtml = null;
+    this.preShowHook = null;
     this.modalIsShown = false;
     this.onHideCallback = null;
   }],
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
-      preShowHook(this.modalHeaderHtml, this.actionButtonsInfo);
+      preShowHook(this.actionButtonsInfo);
     };
   },
   isModalShown: function() {
     return this.modalIsShown;
   },
-  showModal: function(modalHeaderHtml, actionButtonsInfo, onHideCallback) {
-    this.modalHeaderHtml = modalHeaderHtml;
+  showModal: function(actionButtonsInfo, onHideCallback) {
     this.actionButtonsInfo = actionButtonsInfo;
     this.onHideCallback = onHideCallback;
 

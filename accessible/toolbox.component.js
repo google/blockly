@@ -73,12 +73,11 @@ blocklyApp.ToolboxComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-    blocklyApp.TreeService, blocklyApp.UtilsService, blocklyApp.ModalService,
-    function(_treeService, _utilsService, _modalService) {
+    blocklyApp.TreeService, blocklyApp.UtilsService,
+    function(_treeService, _utilsService) {
       this.toolboxCategories = [];
       this.treeService = _treeService;
       this.utilsService = _utilsService;
-      this.modalService = _modalService;
 
       this.xmlHasCategories = false;
     }
@@ -119,9 +118,6 @@ blocklyApp.ToolboxComponent = ng.core.Component({
             'blockly-toolbox-tree-node0', 'blockly-toolbox-tree');
       });
     }
-  },
-  isModalShown: function() {
-    return this.modalService.isModalShown();
   },
   getActiveDescId: function() {
     return this.treeService.getActiveDescId('blockly-toolbox-tree');

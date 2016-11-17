@@ -55,7 +55,7 @@ blocklyApp.AppView = ng.core.Component({
   providers: [
       blocklyApp.ClipboardService, blocklyApp.NotificationsService,
       blocklyApp.TreeService, blocklyApp.UtilsService,
-      blocklyApp.AudioService, blocklyApp.ModalService,
+      blocklyApp.AudioService, blocklyApp.BlockOptionsModalService,
       blocklyApp.KeyboardInputService]
 })
 .Class({

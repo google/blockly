@@ -24,9 +24,7 @@
  */
 'use strict';
 
-Blockly.Msg.TOOLBOX = 'Toolbox';
 Blockly.Msg.WORKSPACE = 'Workspace';
-Blockly.Msg.TOOLBOX_BLOCK = 'toolbox block. Move right to view submenu.';
 Blockly.Msg.WORKSPACE_BLOCK =
     'workspace block. Move right to edit. Press Enter for more options.';
 

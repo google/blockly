@@ -36,20 +36,17 @@ blocklyApp.AppView = ng.core.Component({
   <blockly-toolbox-modal></blockly-toolbox-modal>
 
   <div>
-    <blockly-toolbox></blockly-toolbox>
     <blockly-workspace></blockly-workspace>
     <blockly-sidebar></blockly-sidebar>
   </div>
 
   <label aria-hidden="true" hidden id="blockly-button">{{'BUTTON'|translate}}</label>
   <label aria-hidden="true" hidden id="blockly-more-options">{{'MORE_OPTIONS'|translate}}</label>
-  <label aria-hidden="true" hidden id="blockly-toolbox-block">{{'TOOLBOX_BLOCK'|translate}}</label>
   <label aria-hidden="true" hidden id="blockly-workspace-block">{{'WORKSPACE_BLOCK'|translate}}</label>
   `,
   directives: [
-      blocklyApp.ToolboxComponent, blocklyApp.WorkspaceComponent,
-      blocklyApp.BlockOptionsModalComponent, blocklyApp.SidebarComponent,
-      blocklyApp.ToolboxModalComponent],
+      blocklyApp.WorkspaceComponent, blocklyApp.BlockOptionsModalComponent,
+      blocklyApp.SidebarComponent, blocklyApp.ToolboxModalComponent],
   pipes: [blocklyApp.TranslatePipe],
   // All services are declared here, so that all components in the
   // application use the same instance of the service.

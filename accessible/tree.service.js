@@ -39,12 +39,8 @@ blocklyApp.TreeService = ng.core.Class({
       this.clipboardService = _clipboardService;
       this.blockOptionsModalService = _blockOptionsModalService;
       this.audioService = _audioService;
-      this.toolboxWorkspaces = {};
     }
   ],
-  getToolboxTreeNode_: function() {
-    return document.getElementById('blockly-toolbox-tree');
-  },
   // Returns a list of all top-level workspace tree nodes on the page.
   getWorkspaceTreeNodes_: function() {
     return Array.from(document.querySelectorAll('ol.blocklyWorkspaceTree'));
@@ -52,45 +48,10 @@ blocklyApp.TreeService = ng.core.Class({
   getSidebarButtonNodes_: function() {
     return Array.from(document.querySelectorAll('button.blocklySidebarButton'));
   },
-  getToolboxWorkspace: function(categoryNode) {
-    if (categoryNode.attributes && categoryNode.attributes.name) {
-      var categoryName = categoryNode.attributes.name.value;
-    } else {
-      var categoryName = 'no-category';
-    }
-
-    if (this.toolboxWorkspaces.hasOwnProperty(categoryName)) {
-      return this.toolboxWorkspaces[categoryName];
-    } else {
-      var categoryWorkspace = new Blockly.Workspace();
-      if (categoryName == 'no-category') {
-        for (var i = 0; i < categoryNode.length; i++) {
-          Blockly.Xml.domToBlock(categoryWorkspace, categoryNode[i]);
-        }
-      } else {
-        Blockly.Xml.domToWorkspace(categoryNode, categoryWorkspace);
-      }
-
-      this.toolboxWorkspaces[categoryName] = categoryWorkspace;
-      return this.toolboxWorkspaces[categoryName];
-    }
-  },
-  getToolboxBlockById: function(blockId) {
-    for (var categoryName in this.toolboxWorkspaces) {
-      var putativeBlock = this.utilsService.getBlockByIdFromWorkspace(
-          blockId, this.toolboxWorkspaces[categoryName]);
-      if (putativeBlock) {
-        return putativeBlock;
-      }
-    }
-    return null;
-  },
   // Returns a list of all top-level tree nodes on the page.
   getAllTreeNodes_: function() {
-    var treeNodes = [this.getToolboxTreeNode_()];
-    treeNodes = treeNodes.concat(this.getWorkspaceTreeNodes_());
-    treeNodes = treeNodes.concat(this.getSidebarButtonNodes_());
-    return treeNodes;
+    return this.getWorkspaceTreeNodes_().concat(
+        this.getSidebarButtonNodes_());
   },
   isTopLevelWorkspaceTree: function(treeId) {
     return this.getWorkspaceTreeNodes_().some(function(tree) {
@@ -99,20 +60,15 @@ blocklyApp.TreeService = ng.core.Class({
   },
   getNodeToFocusOnWhenTreeIsDeleted: function(deletedTreeId) {
     // This returns the node to focus on after the deletion happens.
-    // We shift focus to the next tree (if it exists), otherwise we shift
-    // focus to the previous tree.
+    // We shift focus to the next tree (which may be a button in the sidebar).
     var trees = this.getAllTreeNodes_();
     for (var i = 0; i < trees.length; i++) {
       if (trees[i].id == deletedTreeId) {
         if (i + 1 < trees.length) {
           return trees[i + 1];
-        } else if (i > 0) {
-          return trees[i - 1];
         }
       }
     }
-
-    return this.getToolboxTreeNode_();
   },
   focusOnCurrentTree_: function(treeId) {
     var trees = this.getAllTreeNodes_();
@@ -268,16 +224,12 @@ blocklyApp.TreeService = ng.core.Class({
     console.error('Could not handle deletion of block.' + blockRootNode);
   },
   notifyUserAboutCurrentTree_: function(treeId) {
-    if (this.getToolboxTreeNode_().id == treeId) {
-      this.notificationsService.setStatusMessage('Now in toolbox.');
-    } else {
-      var workspaceTreeNodes = this.getWorkspaceTreeNodes_();
-      for (var i = 0; i < workspaceTreeNodes.length; i++) {
-        if (workspaceTreeNodes[i].id == treeId) {
-          this.notificationsService.setStatusMessage(
-              'Now in workspace group ' + (i + 1) + ' of ' +
-              workspaceTreeNodes.length);
-        }
+    var workspaceTreeNodes = this.getWorkspaceTreeNodes_();
+    for (var i = 0; i < workspaceTreeNodes.length; i++) {
+      if (workspaceTreeNodes[i].id == treeId) {
+        this.notificationsService.setStatusMessage(
+            'Now in workspace group ' + (i + 1) + ' of ' +
+            workspaceTreeNodes.length);
       }
     }
   },
@@ -444,26 +396,24 @@ blocklyApp.TreeService = ng.core.Class({
       that.focusOnBlock(block.id);
     });
   },
-  getBlockRootSuffix_: function(inToolbox) {
-    return inToolbox ? 'toolboxBlockRoot' : 'blockRoot';
+  getBlockRootSuffix_: function() {
+    return 'blockRoot';
   },
-  getCurrentBlockRootNode_: function(inToolbox, activeDesc) {
+  getCurrentBlockRootNode_: function(activeDesc) {
     // Starting from the activeDesc, walk up the tree until we find the
     // root of the current block.
-    var blockRootSuffix = this.getBlockRootSuffix_(inToolbox);
+    var blockRootSuffix = this.getBlockRootSuffix_();
     var putativeBlockRootNode = activeDesc;
     while (putativeBlockRootNode.id.indexOf(blockRootSuffix) === -1) {
       putativeBlockRootNode = putativeBlockRootNode.parentNode;
     }
     return putativeBlockRootNode;
   },
-  getBlockFromRootNode_: function(inToolbox, blockRootNode) {
-    var blockRootSuffix = this.getBlockRootSuffix_(inToolbox);
+  getBlockFromRootNode_: function(blockRootNode) {
+    var blockRootSuffix = this.getBlockRootSuffix_();
     var blockId = blockRootNode.id.substring(
         0, blockRootNode.id.length - blockRootSuffix.length);
-    return inToolbox ?
-        this.getToolboxBlockById(blockId) :
-        this.utilsService.getBlockById(blockId);
+    return this.utilsService.getBlockById(blockId);
   },
   onKeypress: function(e, tree) {
     // TODO(sll): Instead of this, have a common ActiveContextService which
@@ -485,36 +435,15 @@ blocklyApp.TreeService = ng.core.Class({
       return;
     }
 
-    // Scout up the tree to see whether we're in the toolbox or workspace.
-    var scoutNode = activeDesc;
-    var TARGET_TAG_NAMES = ['BLOCKLY-TOOLBOX', 'BLOCKLY-WORKSPACE'];
-    while (TARGET_TAG_NAMES.indexOf(scoutNode.tagName) === -1) {
-      scoutNode = scoutNode.parentNode;
-    }
-    var inToolbox = (scoutNode.tagName == 'BLOCKLY-TOOLBOX');
-
     if (e.ctrlKey) {
-      // Disallow cutting and pasting in the toolbox.
-      if (inToolbox && e.keyCode != 67) {
-        if (e.keyCode == 86) {
-          this.notificationsService.setStatusMessage(
-              'Cannot paste block in toolbox.');
-        } else if (e.keyCode == 88) {
-          this.notificationsService.setStatusMessage(
-              'Cannot cut block in toolbox. Try copying instead.');
-        }
-      }
-
-      var blockRootNode = this.getCurrentBlockRootNode_(
-          inToolbox, activeDesc);
-      var block = this.getBlockFromRootNode_(inToolbox, blockRootNode);
+      var blockRootNode = this.getCurrentBlockRootNode_(activeDesc);
+      var block = this.getBlockFromRootNode_(blockRootNode);
 
       if (e.keyCode == 88) {
         // Cut block.
         this.cutBlock_(block, blockRootNode);
       } else if (e.keyCode == 67) {
-        // Copy block. Note that, in this case, we might be in the workspace
-        // or toolbox.
+        // Copy block.
         this.copyBlock_(block);
       } else if (e.keyCode == 86) {
         // Paste block, if possible.
@@ -582,10 +511,9 @@ blocklyApp.TreeService = ng.core.Class({
 
         // If we cannot find a field to interact with, we open the modal for
         // the current block instead.
-        if (!found && !inToolbox) {
-          var blockRootNode = this.getCurrentBlockRootNode_(
-              false, activeDesc);
-          var block = this.getBlockFromRootNode_(false, blockRootNode);
+        if (!found) {
+          var blockRootNode = this.getCurrentBlockRootNode_(activeDesc);
+          var block = this.getBlockFromRootNode_(blockRootNode);
 
           e.stopPropagation();
           this.showBlockOptionsModal(block, blockRootNode);

@@ -1,10 +1,6 @@
-.blocklyToolboxColumn {
-  float: left;
-  width: 350px;
-}
 .blocklyWorkspaceColumn {
   float: left;
-  width: 350px;
+  width: 700px;
 }
 .blocklySidebarColumn {
   float: left;

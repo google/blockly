@@ -49,17 +49,22 @@ blocklyApp.ToolboxModalService = ng.core.Class({
         }
       );
     } else {
-      // If there are no top-level categories, we create a single category
-      // containing all the top-level blocks.
-      var workspace = new Blockly.Workspace();
-      Array.from(xmlToolboxElt.children).forEach(function(topLevelNode) {
-        Blockly.Xml.domToBlock(workspace, topLevelNode);
-      });
+      // A timeout seems to be needed in order for the .children accessor to
+      // work correctly.
+      var that = this;
+      setTimeout(function() {
+        // If there are no top-level categories, we create a single category
+        // containing all the top-level blocks.
+        var workspace = new Blockly.Workspace();
+        Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
+          Blockly.Xml.domToBlock(workspace, topLevelNode);
+        });
 
-      this.toolboxCategories = [{
-        categoryName: 'Available Blocks',
-        blocks: workspace.topBlocks_
-      }];
+        that.toolboxCategories = [{
+          categoryName: 'Available Blocks',
+          blocks: workspace.topBlocks_
+        }];
+      });
     }
   }],
   registerPreShowHook: function(preShowHook) {

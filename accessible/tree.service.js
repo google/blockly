@@ -556,6 +556,7 @@ blocklyApp.TreeService = ng.core.Class({
             if (this.getParentListElement_(activeDesc)) {
               statusMessage += ' Press left to go to parent list.';
             }
+            this.audioService.playOopsSound();
             this.notificationsService.setStatusMessage(statusMessage);
           }
         } else if (e.keyCode == 39) {
@@ -567,6 +568,7 @@ blocklyApp.TreeService = ng.core.Class({
           if (nextSibling) {
             this.setActiveDesc(nextSibling.id, treeId);
           } else {
+            this.audioService.playOopsSound();
             this.notificationsService.setStatusMessage(
                 'Reached bottom of list.');
           }
@@ -582,6 +584,8 @@ blocklyApp.TreeService = ng.core.Class({
     var firstChild = this.getFirstChild(activeDesc);
     if (firstChild) {
       this.setActiveDesc(firstChild.id, treeId);
+    } else {
+      this.audioService.playOopsSound();
     }
   },
   moveUpOneLevel_: function(treeId) {
@@ -589,6 +593,8 @@ blocklyApp.TreeService = ng.core.Class({
     var nextNode = this.getParentListElement_(activeDesc);
     if (nextNode) {
       this.setActiveDesc(nextNode.id, treeId);
+    } else {
+      this.audioService.playOopsSound();
     }
   },
   getParentListElement_: function(element) {

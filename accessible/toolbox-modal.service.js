@@ -27,6 +27,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   constructor: [function() {
     this.modalIsShown = false;
     this.onHideCallback = null;
+    this.isBlockAvailable = null;
     this.preShowHook = function() {
       throw Error(
           'A pre-show hook must be defined for the toolbox modal before it ' +
@@ -69,21 +70,20 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   }],
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
-      preShowHook(this.toolboxCategories);
+      preShowHook(this.toolboxCategories, this.isBlockAvailable);
     };
   },
   isModalShown: function() {
     return this.modalIsShown;
   },
-  showModal: function(onHideCallback) {
+  showModal: function(onHideCallback, isBlockAvailable) {
     this.onHideCallback = onHideCallback;
+    this.isBlockAvailable = isBlockAvailable;
     this.preShowHook();
     this.modalIsShown = true;
   },
-  hideModal: function() {
+  hideModal: function(opt_block) {
     this.modalIsShown = false;
-    if (this.onHideCallback) {
-      this.onHideCallback();
-    }
+    this.onHideCallback(opt_block);
   }
 });

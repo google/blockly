@@ -31,15 +31,17 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
         <!-- The $event.stopPropagation() here prevents the modal from
         closing when its interior is clicked. -->
         <div class="blocklyModal" (click)="$event.stopPropagation()" role="document">
-          <h3>Select a block for the new group...</h3>
+          <h3>Select a block...</h3>
 
           <div *ngFor="#toolboxCategory of toolboxCategories; #categoryIndex=index">
             <h4>{{toolboxCategory.categoryName}}</h4>
             <div class="blocklyModalButtonContainer"
                  *ngFor="#block of toolboxCategory.blocks; #blockIndex=index">
               <button [id]="getOptionId(getOverallIndex(categoryIndex, blockIndex))"
-                      (click)="selectBlock(categoryIndex, blockIndex); hideModal();"
-                      [ngClass]="{activeButton: activeButtonIndex == getOverallIndex(categoryIndex, blockIndex)}">
+                      (click)="hideModal(getBlock(categoryIndex, blockIndex))"
+                      [ngClass]="{activeButton: activeButtonIndex == getOverallIndex(categoryIndex, blockIndex)}"
+                      [attr.disabled]="isBlockAvailable(getBlock(categoryIndex, blockIndex)) ? undefined : 'disabled'"
+                      [attr.aria-disabled]="!isBlockAvailable(getBlock(categoryIndex, blockIndex))">
                 {{getBlockDescription(block)}}
               </button>
             </div>
@@ -77,12 +79,14 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
       this.firstBlockIndexes = [];
       this.activeButtonIndex = 0;
       this.totalNumBlocks = null;
+      this.isBlockAvailable = null;
 
       var that = this;
       this.toolboxModalService.registerPreShowHook(
-        function(toolboxCategories) {
+        function(toolboxCategories, isBlockAvailable) {
           that.modalIsVisible = true;
           that.toolboxCategories = toolboxCategories;
+          that.isBlockAvailable = isBlockAvailable;
 
           var cumulativeIndex = 0;
           that.toolboxCategories.forEach(function(category) {
@@ -105,14 +109,20 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
               var button = document.getElementById(
                   that.getOptionId(that.activeButtonIndex));
 
+              if (button.disabled) {
+                evt.preventDefault();
+                evt.stopPropagation();
+                return;
+              }
+
               for (var i = 0; i < that.toolboxCategories.length; i++) {
                 if (that.firstBlockIndexes[i + 1] > that.activeButtonIndex) {
                   var categoryIndex = i;
                   var blockIndex =
                       that.activeButtonIndex - that.firstBlockIndexes[i];
-
-                  that.selectBlock(categoryIndex, blockIndex);
-                  break;
+                  var block = that.getBlock(categoryIndex, blockIndex);
+                  that.hideModal(block);
+                  return;
                 }
               }
 
@@ -154,19 +164,8 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
   getOverallIndex: function(categoryIndex, blockIndex) {
     return this.firstBlockIndexes[categoryIndex] + blockIndex;
   },
-  selectBlock: function(categoryIndex, blockIndex) {
-    var block = this.toolboxCategories[categoryIndex].blocks[blockIndex];
-    var blockDescription = this.getBlockDescription(block);
-    var xml = Blockly.Xml.blockToDom(block);
-    var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;
-
-    var that = this;
-    setTimeout(function() {
-      that.treeService.focusOnBlock(newBlockId);
-      that.notificationsService.setStatusMessage(
-          blockDescription + ' added to workspace. ' +
-          'Now on added block in workspace.');
-    });
+  getBlock: function(categoryIndex, blockIndex) {
+    return this.toolboxCategories[categoryIndex].blocks[blockIndex];
   },
   getBlockDescription: function(block) {
     return this.utilsService.getBlockDescription(block);
@@ -189,9 +188,9 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
     return 'toolbox-modal-option-' + this.totalNumBlocks;
   },
   // Closes the modal.
-  hideModal: function() {
+  hideModal: function(opt_block) {
     this.modalIsVisible = false;
     this.keyboardInputService.clearOverride();
-    this.toolboxModalService.hideModal();
+    this.toolboxModalService.hideModal(opt_block);
   }
 });

@@ -263,7 +263,7 @@ Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
   var svg = mainWorkspace.getParentSvg();
 
-  // Supress the browser's context menu.
+  // Suppress the browser's context menu.
   Blockly.bindEventWithChecks_(svg, 'contextmenu', null,
       function(e) {
         if (!Blockly.utils.isTargetInput(e)) {
@@ -327,7 +327,7 @@ Blockly.inject.bindDocumentEvents_ = function() {
     Blockly.bindEventWithChecks_(document, 'touchcancel', null,
         Blockly.longStop_);
     // Don't use bindEvent_ for document's mouseup since that would create a
-    // corresponding touch handler that would squeltch the ability to interact
+    // corresponding touch handler that would squelch the ability to interact
     // with non-Blockly elements.
     document.addEventListener('mouseup', Blockly.onMouseUp_, false);
     // Some iPad versions don't fire resize after portrait to landscape change.

@@ -249,7 +249,7 @@ Blockly.Generator.prototype.valueToCode = function(block, name, outerOrder) {
       // In all known languages multiple such code blocks are not order
       // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
     } else {
-      // The operators outside this code are stonger than the operators
+      // The operators outside this code are stronger than the operators
       // inside this code.  To prevent the code from being pulled apart,
       // wrap the code in parentheses.
       parensNeeded = true;

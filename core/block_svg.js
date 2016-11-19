@@ -1413,7 +1413,7 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
   }
   var id = opt_id || '';
   if (!id) {
-    // Kill all previous pending processes, this edit supercedes them all.
+    // Kill all previous pending processes, this edit supersedes them all.
     for (var n in this.setWarningText.pid_) {
       clearTimeout(this.setWarningText.pid_[n]);
       delete this.setWarningText.pid_[n];

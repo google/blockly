@@ -303,7 +303,7 @@ Blockly.Mutator.prototype.workspaceChanged_ = function() {
     block.compose(this.rootBlock_);
     // Restore rendering and show the changes.
     block.rendered = savedRendered;
-    // Mutation may have added some elements that need initalizing.
+    // Mutation may have added some elements that need initializing.
     block.initSvg();
     var newMutationDom = block.mutationToDom();
     var newMutation = newMutationDom && Blockly.Xml.domToText(newMutationDom);

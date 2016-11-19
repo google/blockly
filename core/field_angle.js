@@ -192,7 +192,7 @@ Blockly.FieldAngle.prototype.onMouseMove = function(e) {
   var dy = e.clientY - bBox.top - Blockly.FieldAngle.HALF;
   var angle = Math.atan(-dy / dx);
   if (isNaN(angle)) {
-    // This shouldn't happen, but let's not let this error propogate further.
+    // This shouldn't happen, but let's not let this error propagate further.
     return;
   }
   angle = goog.math.toDegrees(angle);

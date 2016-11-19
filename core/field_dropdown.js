@@ -61,7 +61,7 @@ Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
 goog.inherits(Blockly.FieldDropdown, Blockly.Field);
 
 /**
- * Horizontal distance that a checkmark ovehangs the dropdown.
+ * Horizontal distance that a checkmark overhangs the dropdown.
  */
 Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
 
@@ -90,7 +90,7 @@ Blockly.FieldDropdown.prototype.value_ = '';
 Blockly.FieldDropdown.prototype.imageElement_ = null;
 
 /**
- * Object wih src, height, width, and alt attributes if currently selected
+ * Object with src, height, width, and alt attributes if currently selected
  * option is an image, or null.
  * @type {Object}
  * @private

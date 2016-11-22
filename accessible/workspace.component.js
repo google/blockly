@@ -41,7 +41,12 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
       </ol>
 
       <span *ngIf="workspace.topBlocks_.length === 0">
-        <i>Workspace is empty.</i>
+        <p>
+          There are no blocks in the workspace.
+          <button (click)="showToolboxModalForCreateNewGroup()">
+            Create new block group...
+          </button>
+        </p>
       </span>
     </div>
   </div>
@@ -50,14 +55,21 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
   pipes: [blocklyApp.TranslatePipe]
 })
 .Class({
-  constructor: [blocklyApp.TreeService, function(_treeService) {
-    this.treeService = _treeService;
-    this.workspace = blocklyApp.workspace;
-  }],
+  constructor: [
+    blocklyApp.TreeService, blocklyApp.ToolboxModalService,
+    function(_treeService, _toolboxModalService) {
+      this.treeService = _treeService;
+      this.toolboxModalService = _toolboxModalService;
+      this.workspace = blocklyApp.workspace;
+    }
+  ],
   getActiveDescId: function(treeId) {
     return this.treeService.getActiveDescId(treeId);
   },
   onKeypress: function(e, tree) {
     this.treeService.onKeypress(e, tree);
+  },
+  showToolboxModalForCreateNewGroup: function() {
+    this.toolboxModalService.showToolboxModalForCreateNewGroup();
   }
 });

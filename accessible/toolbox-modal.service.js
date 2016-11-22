@@ -24,50 +24,61 @@
  */
 
 blocklyApp.ToolboxModalService = ng.core.Class({
-  constructor: [function() {
-    this.modalIsShown = false;
-    this.onHideCallback = null;
-    this.isBlockAvailable = null;
-    this.preShowHook = function() {
-      throw Error(
-          'A pre-show hook must be defined for the toolbox modal before it ' +
-          'can be shown.');
-    };
-    this.toolboxCategories = [];
+  constructor: [
+    blocklyApp.TreeService, blocklyApp.UtilsService,
+    blocklyApp.NotificationsService, blocklyApp.ClipboardService,
+    function(
+        _treeService, _utilsService,
+        _notificationsService, _clipboardService) {
+      this.treeService = _treeService;
+      this.utilsService = _utilsService;
+      this.notificationsService = _notificationsService;
+      this.clipboardService = _clipboardService;
 
-    // Populate the toolbox categories.
-    var toolboxXmlElt = document.getElementById('blockly-toolbox-xml');
-    var toolboxCategoryElts = toolboxXmlElt.getElementsByTagName('category');
-    if (toolboxCategoryElts.length) {
-      this.toolboxCategories = Array.from(toolboxCategoryElts).map(
-        function(categoryElt) {
+      this.modalIsShown = false;
+      this.onHideCallback = null;
+      this.isBlockAvailable = null;
+      this.preShowHook = function() {
+        throw Error(
+            'A pre-show hook must be defined for the toolbox modal before it ' +
+            'can be shown.');
+      };
+      this.toolboxCategories = [];
+
+      // Populate the toolbox categories.
+      var toolboxXmlElt = document.getElementById('blockly-toolbox-xml');
+      var toolboxCategoryElts = toolboxXmlElt.getElementsByTagName('category');
+      if (toolboxCategoryElts.length) {
+        this.toolboxCategories = Array.from(toolboxCategoryElts).map(
+          function(categoryElt) {
+            var workspace = new Blockly.Workspace();
+            Blockly.Xml.domToWorkspace(categoryElt, workspace);
+            return {
+              categoryName: categoryElt.attributes.name.value,
+              blocks: workspace.topBlocks_
+            };
+          }
+        );
+      } else {
+        // A timeout seems to be needed in order for the .children accessor to
+        // work correctly.
+        var that = this;
+        setTimeout(function() {
+          // If there are no top-level categories, we create a single category
+          // containing all the top-level blocks.
           var workspace = new Blockly.Workspace();
-          Blockly.Xml.domToWorkspace(categoryElt, workspace);
-          return {
-            categoryName: categoryElt.attributes.name.value,
-            blocks: workspace.topBlocks_
-          };
-        }
-      );
-    } else {
-      // A timeout seems to be needed in order for the .children accessor to
-      // work correctly.
-      var that = this;
-      setTimeout(function() {
-        // If there are no top-level categories, we create a single category
-        // containing all the top-level blocks.
-        var workspace = new Blockly.Workspace();
-        Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
-          Blockly.Xml.domToBlock(workspace, topLevelNode);
-        });
+          Array.from(toolboxXmlElt.children).forEach(function(topLevelNode) {
+            Blockly.Xml.domToBlock(workspace, topLevelNode);
+          });
 
-        that.toolboxCategories = [{
-          categoryName: 'Available Blocks',
-          blocks: workspace.topBlocks_
-        }];
-      });
+          that.toolboxCategories = [{
+            categoryName: 'Available Blocks',
+            blocks: workspace.topBlocks_
+          }];
+        });
+      }
     }
-  }],
+  ],
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
       preShowHook(this.toolboxCategories, this.isBlockAvailable);
@@ -85,5 +96,65 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   hideModal: function(opt_block) {
     this.modalIsShown = false;
     this.onHideCallback(opt_block);
+  },
+  showToolboxModalForAttachToMarkedSpot: function() {
+    var that = this;
+    this.showModal(function(opt_block) {
+      if (!opt_block) {
+        return;
+      }
+
+      var block = opt_block;
+      var blockDescription = that.utilsService.getBlockDescription(block);
+
+      // Clean up the active desc for the destination tree.
+      var oldDestinationTreeId = that.treeService.getTreeIdForBlock(
+          that.clipboardService.getMarkedConnectionBlock().id);
+      that.treeService.clearActiveDesc(oldDestinationTreeId);
+      var newBlockId = that.clipboardService.pasteToMarkedConnection(block);
+
+      // Invoke a digest cycle, so that the DOM settles.
+      setTimeout(function() {
+        that.treeService.focusOnBlock(newBlockId);
+
+        var newDestinationTreeId = that.treeService.getTreeIdForBlock(
+            newBlockId);
+        if (newDestinationTreeId != oldDestinationTreeId) {
+          // It is possible for the tree ID for the pasted block to change
+          // after the paste operation, e.g. when inserting a block between two
+          // existing blocks that are joined together. In this case, we need to
+          // also reset the active desc for the old destination tree.
+          that.treeService.initActiveDesc(oldDestinationTreeId);
+        }
+
+        that.notificationsService.setStatusMessage(
+            blockDescription + ' connected. ' +
+            'Now on copied block in workspace.');
+      });
+    }, function(block) {
+      return that.clipboardService.canBeCopiedToMarkedConnection(block);
+    });
+  },
+  showToolboxModalForCreateNewGroup: function() {
+    var that = this;
+    this.showModal(function(opt_block) {
+      if (!opt_block) {
+        return;
+      }
+
+      var block = opt_block;
+      var blockDescription = that.utilsService.getBlockDescription(block);
+      var xml = Blockly.Xml.blockToDom(block);
+      var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;
+
+      setTimeout(function() {
+        that.treeService.focusOnBlock(newBlockId);
+        that.notificationsService.setStatusMessage(
+            blockDescription + ' added to workspace. ' +
+            'Now on added block in workspace.');
+      });
+    }, function(block) {
+      return true;
+    });
   }
 });

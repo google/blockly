@@ -32,19 +32,19 @@ blocklyApp.BlockOptionsModalService = ng.core.Class({
           'before it can be shown.');
     };
     this.modalIsShown = false;
-    this.onHideCallback = null;
+    this.onCancelCallback = null;
   }],
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
-      preShowHook(this.actionButtonsInfo);
+      preShowHook(this.actionButtonsInfo, this.onCancelCallback);
     };
   },
   isModalShown: function() {
     return this.modalIsShown;
   },
-  showModal: function(actionButtonsInfo, onHideCallback) {
+  showModal: function(actionButtonsInfo, onCancelCallback) {
     this.actionButtonsInfo = actionButtonsInfo;
-    this.onHideCallback = onHideCallback;
+    this.onCancelCallback = onCancelCallback;
 
     if (this.preShowHook) {
       this.preShowHook();
@@ -53,8 +53,5 @@ blocklyApp.BlockOptionsModalService = ng.core.Class({
   },
   hideModal: function() {
     this.modalIsShown = false;
-    if (this.onHideCallback) {
-      this.onHideCallback();
-    }
   }
 });

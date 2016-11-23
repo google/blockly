@@ -42,33 +42,17 @@ blocklyApp.TreeService = ng.core.Class({
     }
   ],
   // Returns a list of all top-level workspace tree nodes on the page.
-  getWorkspaceTreeNodes_: function() {
-    return Array.from(document.querySelectorAll('ol.blocklyWorkspaceTree'));
+  getWorkspaceFocusTargets_: function() {
+    return Array.from(
+        document.querySelectorAll('.blocklyWorkspaceFocusTarget'));
   },
   getSidebarButtonNodes_: function() {
     return Array.from(document.querySelectorAll('button.blocklySidebarButton'));
   },
   // Returns a list of all top-level tree nodes on the page.
   getAllTreeNodes_: function() {
-    return this.getWorkspaceTreeNodes_().concat(
+    return this.getWorkspaceFocusTargets_().concat(
         this.getSidebarButtonNodes_());
-  },
-  isTopLevelWorkspaceTree: function(treeId) {
-    return this.getWorkspaceTreeNodes_().some(function(tree) {
-      return tree.id == treeId;
-    });
-  },
-  getNodeToFocusOnWhenTreeIsDeleted: function(deletedTreeId) {
-    // This returns the node to focus on after the deletion happens.
-    // We shift focus to the next tree (which may be a button in the sidebar).
-    var trees = this.getAllTreeNodes_();
-    for (var i = 0; i < trees.length; i++) {
-      if (trees[i].id == deletedTreeId) {
-        if (i + 1 < trees.length) {
-          return trees[i + 1];
-        }
-      }
-    }
   },
   focusOnCurrentTree_: function(treeId) {
     var trees = this.getAllTreeNodes_();
@@ -224,12 +208,13 @@ blocklyApp.TreeService = ng.core.Class({
     console.error('Could not handle deletion of block.' + blockRootNode);
   },
   notifyUserAboutCurrentTree_: function(treeId) {
-    var workspaceTreeNodes = this.getWorkspaceTreeNodes_();
-    for (var i = 0; i < workspaceTreeNodes.length; i++) {
-      if (workspaceTreeNodes[i].id == treeId) {
+    var workspaceFocusTargets = this.getWorkspaceFocusTargets_();
+    for (var i = 0; i < workspaceFocusTargets.length; i++) {
+      if (workspaceFocusTargets[i].tagName == 'OL' &&
+          workspaceFocusTargets[i].id == treeId) {
         this.notificationsService.setStatusMessage(
             'Now in workspace group ' + (i + 1) + ' of ' +
-            workspaceTreeNodes.length);
+            workspaceFocusTargets.length);
       }
     }
   },
@@ -252,12 +237,26 @@ blocklyApp.TreeService = ng.core.Class({
     // - Otherwise, it sets the correct new active desc for the current tree.
     var treeId = this.getTreeIdForBlock(block.id);
     if (this.isIsolatedTopLevelBlock_(block)) {
-      var nextNodeToFocusOn = this.getNodeToFocusOnWhenTreeIsDeleted(treeId);
+      // Find the node to focus on after the deletion happens.
+      var nextNodeToFocusOn = null;
+      var focusTargets = this.getWorkspaceFocusTargets_();
+      for (var i = 0; i < focusTargets.length; i++) {
+        if (focusTargets[i].id == treeId) {
+          if (i + 1 < focusTargets.length) {
+            nextNodeToFocusOn = focusTargets[i + 1];
+          } else if (i > 0) {
+            nextNodeToFocusOn = focusTargets[i - 1];
+          }
+          break;
+        }
+      }
 
       this.clearActiveDesc(treeId);
       deleteBlockFunc();
       // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {
+        nextNodeToFocusOn = nextNodeToFocusOn || document.getElementById(
+            'blocklyEmptyWorkspaceButton');
         nextNodeToFocusOn.focus();
       });
     } else {
@@ -313,6 +312,7 @@ blocklyApp.TreeService = ng.core.Class({
       translationIdForText: 'MARK_SPOT_BEFORE',
       action: function() {
         that.clipboardService.markConnection(block.previousConnection);
+        that.focusOnBlock(block.id);
       },
       isDisabled: function() {
         return !block.previousConnection;
@@ -320,6 +320,7 @@ blocklyApp.TreeService = ng.core.Class({
     }, {
       action: function() {
         that.clipboardService.markConnection(block.nextConnection);
+        that.focusOnBlock(block.id);
       },
       translationIdForText: 'MARK_SPOT_AFTER',
       isDisabled: function() {
@@ -391,8 +392,6 @@ blocklyApp.TreeService = ng.core.Class({
     }];
 
     this.blockOptionsModalService.showModal(actionButtonsInfo, function() {
-      // TODO(sll): If there are no blocks in the workspace, focus on the
-      // entire workspace instead.
       that.focusOnBlock(block.id);
     });
   },

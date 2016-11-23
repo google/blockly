@@ -32,7 +32,7 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
 
     <div *ngIf="workspace" class="blocklyWorkspace">
       <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
-          tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceTree"
+          tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceFocusTarget"
           [attr.aria-activedescendant]="getActiveDescId(tree.id)"
           [attr.aria-labelledby]="workspaceTitle.id"
           (keydown)="onKeypress($event, tree)">
@@ -43,7 +43,9 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
       <span *ngIf="workspace.topBlocks_.length === 0">
         <p>
           There are no blocks in the workspace.
-          <button (click)="showToolboxModalForCreateNewGroup()">
+          <button (click)="showToolboxModalForCreateNewGroup()"
+                  class="blocklyWorkspaceFocusTarget"
+                  id="blocklyEmptyWorkspaceButton">
             Create new block group...
           </button>
         </p>

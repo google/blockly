@@ -119,6 +119,40 @@ Blockly.Blocks['procedures_defnoreturn'] = {
       Blockly.Events.enable();
     }
   },
+
+  /**
+   * Ensure two identically-named parameters don't exist.
+   * @param {string} name Proposed parameter name.
+   * @return {string} Non-colliding name.
+   */
+  findLegalParams_: function(name) {
+    while (!this.isLegalParams_(name)) {
+      // Collision with another params.
+      var r = name.match(/^(.*?)(\d+)$/);
+      if (!r) {
+        name += '2';
+      } else {
+        name = r[1] + (parseInt(r[2], 10) + 1);
+      }
+    }
+    return name;
+  },
+  /**
+   * Does this parameter have a legal name?  Illegal names include names of
+   * parameters already defined in the procedure.
+   * @param {string} name The questionable name.
+   * @return {boolean} True if the name is legal.
+   */
+  isLegalParams_: function(name) {
+    for (var i = 0; i < this.arguments_.length; i++) {
+      var argName = this.arguments_[i].toLowerCase();
+      if (Blockly.Names.equals(argName, name)) {
+        return false;
+      }
+    }
+
+    return true;
+  },
   /**
    * Create XML to represent the argument inputs.
    * @param {=boolean} opt_paramIds If true include the IDs of the parameter
@@ -207,8 +241,13 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     this.arguments_ = [];
     this.paramIds_ = [];
     var paramBlock = containerBlock.getInputTargetBlock('STACK');
-    while (paramBlock) {
-      this.arguments_.push(paramBlock.getFieldValue('NAME'));
+    while (paramBlock) {      
+      // Rename duplicate parameter when creates duplicate parameter.
+      var legalParamName = this.findLegalParams_(
+          paramBlock.getFieldValue('NAME'));
+      this.arguments_.push(legalParamName);
+      paramBlock.setFieldValue(legalParamName, 'NAME');
+      
       this.paramIds_.push(paramBlock.id);
       paramBlock = paramBlock.nextConnection &&
           paramBlock.nextConnection.targetBlock();
@@ -365,6 +404,8 @@ Blockly.Blocks['procedures_defreturn'] = {
   domToMutation: Blockly.Blocks['procedures_defnoreturn'].domToMutation,
   decompose: Blockly.Blocks['procedures_defnoreturn'].decompose,
   compose: Blockly.Blocks['procedures_defnoreturn'].compose,
+  findLegalParams_: Blockly.Blocks['procedures_defnoreturn'].findLegalParams_,
+  isLegalParams_: Blockly.Blocks['procedures_defnoreturn'].isLegalParams_,  
   /**
    * Return the signature of this procedure definition.
    * @return {!Array} Tuple containing three elements:

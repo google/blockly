@@ -408,19 +408,19 @@ Blockly.Field.prototype.getText = function() {
 
 /**
  * Set the text in this field.  Trigger a rerender of the source block.
- * @param {*} text New text.
+ * @param {*} newText New text.
  */
-Blockly.Field.prototype.setText = function(text) {
-  if (text === null) {
+Blockly.Field.prototype.setText = function(newText) {
+  if (newText === null) {
     // No change if null.
     return;
   }
-  text = String(text);
-  if (text === this.text_) {
+  newText = String(newText);
+  if (newText === this.text_) {
     // No change.
     return;
   }
-  this.text_ = text;
+  this.text_ = newText;
   // Set width to 0 to force a rerender of this field.
   this.size_.width = 0;
 
@@ -433,7 +433,7 @@ Blockly.Field.prototype.setText = function(text) {
 /**
  * By default there is no difference between the human-readable text and
  * the language-neutral values.  Subclasses (such as dropdown) may define this.
- * @return {string} Current text.
+ * @return {string} Current value.
  */
 Blockly.Field.prototype.getValue = function() {
   return this.getText();
@@ -442,22 +442,22 @@ Blockly.Field.prototype.getValue = function() {
 /**
  * By default there is no difference between the human-readable text and
  * the language-neutral values.  Subclasses (such as dropdown) may define this.
- * @param {string} newText New text.
+ * @param {string} newValue New value.
  */
-Blockly.Field.prototype.setValue = function(newText) {
-  if (newText === null) {
+Blockly.Field.prototype.setValue = function(newValue) {
+  if (newValue === null) {
     // No change if null.
     return;
   }
-  var oldText = this.getValue();
-  if (oldText == newText) {
+  var oldValue = this.getValue();
+  if (oldValue == newValue) {
     return;
   }
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Change(
-        this.sourceBlock_, 'field', this.name, oldText, newText));
+        this.sourceBlock_, 'field', this.name, oldValue, newValue));
   }
-  this.setText(newText);
+  this.setText(newValue);
 };
 
 /**

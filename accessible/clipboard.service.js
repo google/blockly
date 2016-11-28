@@ -78,9 +78,9 @@ blocklyApp.ClipboardService = ng.core.Class({
       markedSpotAncestorBlock = markedSpotAncestorBlock.getParent();
     }
 
-    return this.canBeCopiedToMarkedConnection(block);
+    return this.canBeAttachedToMarkedConnection(block);
   },
-  canBeCopiedToMarkedConnection: function(block) {
+  canBeAttachedToMarkedConnection: function(block) {
     if (!this.markedConnection_ ||
         !this.markedConnection_.getSourceBlock().workspace) {
       return false;

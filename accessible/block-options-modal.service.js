@@ -46,9 +46,7 @@ blocklyApp.BlockOptionsModalService = ng.core.Class({
     this.actionButtonsInfo = actionButtonsInfo;
     this.onCancelCallback = onCancelCallback;
 
-    if (this.preShowHook) {
-      this.preShowHook();
-    }
+    this.preShowHook();
     this.modalIsShown = true;
   },
   hideModal: function() {

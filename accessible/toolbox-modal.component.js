@@ -38,7 +38,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
             <div class="blocklyModalButtonContainer"
                  *ngFor="#block of toolboxCategory.blocks; #blockIndex=index">
               <button [id]="getOptionId(getOverallIndex(categoryIndex, blockIndex))"
-                      (click)="hideModal(getBlock(categoryIndex, blockIndex))"
+                      (click)="selectBlock(getBlock(categoryIndex, blockIndex))"
                       [ngClass]="{activeButton: activeButtonIndex == getOverallIndex(categoryIndex, blockIndex)}"
                       [attr.disabled]="isBlockAvailable(getBlock(categoryIndex, blockIndex)) ? undefined : 'disabled'"
                       [attr.aria-disabled]="!isBlockAvailable(getBlock(categoryIndex, blockIndex))">
@@ -83,10 +83,11 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
 
       var that = this;
       this.toolboxModalService.registerPreShowHook(
-        function(toolboxCategories, isBlockAvailable) {
+        function(toolboxCategories, isBlockAvailable, onSelectBlockCallback) {
           that.modalIsVisible = true;
           that.toolboxCategories = toolboxCategories;
           that.isBlockAvailable = isBlockAvailable;
+          that.onSelectBlockCallback = onSelectBlockCallback;
 
           var cumulativeIndex = 0;
           that.toolboxCategories.forEach(function(category) {
@@ -121,11 +122,12 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
                   var blockIndex =
                       that.activeButtonIndex - that.firstBlockIndexes[i];
                   var block = that.getBlock(categoryIndex, blockIndex);
-                  that.hideModal(block);
+                  that.selectBlock(block);
                   return;
                 }
               }
 
+              // The 'Cancel' button has been pressed.
               that.hideModal();
             },
             // Escape key: closes the modal.
@@ -187,10 +189,14 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
   getCancelOptionId: function() {
     return 'toolbox-modal-option-' + this.totalNumBlocks;
   },
+  selectBlock: function(block) {
+    this.onSelectBlockCallback(block);
+    this.hideModal();
+  },
   // Closes the modal.
-  hideModal: function(opt_block) {
+  hideModal: function() {
     this.modalIsVisible = false;
     this.keyboardInputService.clearOverride();
-    this.toolboxModalService.hideModal(opt_block);
+    this.toolboxModalService.hideModal();
   }
 });

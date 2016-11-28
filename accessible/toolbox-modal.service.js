@@ -36,8 +36,9 @@ blocklyApp.ToolboxModalService = ng.core.Class({
       this.clipboardService = _clipboardService;
 
       this.modalIsShown = false;
-      this.onHideCallback = null;
+
       this.isBlockAvailable = null;
+      this.onSelectBlockCallback = null;
       this.preShowHook = function() {
         throw Error(
             'A pre-show hook must be defined for the toolbox modal before it ' +
@@ -81,30 +82,29 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   ],
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
-      preShowHook(this.toolboxCategories, this.isBlockAvailable);
+      preShowHook(
+          this.toolboxCategories, this.isBlockAvailable,
+          this.onSelectBlockCallback);
     };
   },
   isModalShown: function() {
     return this.modalIsShown;
   },
-  showModal: function(onHideCallback, isBlockAvailable) {
-    this.onHideCallback = onHideCallback;
+  showModal_: function(isBlockAvailable, onSelectBlockCallback) {
     this.isBlockAvailable = isBlockAvailable;
+    this.onSelectBlockCallback = onSelectBlockCallback;
+
     this.preShowHook();
     this.modalIsShown = true;
   },
-  hideModal: function(opt_block) {
+  hideModal: function() {
     this.modalIsShown = false;
-    this.onHideCallback(opt_block);
   },
-  showToolboxModalForAttachToMarkedSpot: function() {
+  showToolboxModalForAttachToMarkedConnection: function() {
     var that = this;
-    this.showModal(function(opt_block) {
-      if (!opt_block) {
-        return;
-      }
-
-      var block = opt_block;
+    this.showModal_(function(block) {
+      return that.clipboardService.canBeAttachedToMarkedConnection(block);
+    }, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
 
       // Clean up the active desc for the destination tree.
@@ -131,18 +131,13 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             blockDescription + ' connected. ' +
             'Now on copied block in workspace.');
       });
-    }, function(block) {
-      return that.clipboardService.canBeCopiedToMarkedConnection(block);
     });
   },
   showToolboxModalForCreateNewGroup: function() {
     var that = this;
-    this.showModal(function(opt_block) {
-      if (!opt_block) {
-        return;
-      }
-
-      var block = opt_block;
+    this.showModal_(function(block) {
+      return true;
+    }, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
       var xml = Blockly.Xml.blockToDom(block);
       var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;
@@ -153,8 +148,6 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             blockDescription + ' added to workspace. ' +
             'Now on added block in workspace.');
       });
-    }, function(block) {
-      return true;
     });
   }
 });

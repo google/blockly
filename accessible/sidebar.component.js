@@ -37,7 +37,7 @@ blocklyApp.SidebarComponent = ng.core.Component({
           {{buttonConfig.text}}
         </button>
       </span>
-      <button (click)="showToolboxModalForAttachToMarkedSpot()"
+      <button (click)="showToolboxModalForAttachToMarkedConnection()"
               [attr.disabled]="isAnyConnectionMarked() ? undefined : 'disabled'"
               [attr.aria-disabled]="!isAnyConnectionMarked()"
               class="blocklySidebarButton">
@@ -97,8 +97,8 @@ blocklyApp.SidebarComponent = ng.core.Component({
   isWorkspaceEmpty: function() {
     return this.utilsService.isWorkspaceEmpty();
   },
-  showToolboxModalForAttachToMarkedSpot: function() {
-    this.toolboxModalService.showToolboxModalForAttachToMarkedSpot();
+  showToolboxModalForAttachToMarkedConnection: function() {
+    this.toolboxModalService.showToolboxModalForAttachToMarkedConnection();
   },
   showToolboxModalForCreateNewGroup: function() {
     this.toolboxModalService.showToolboxModalForCreateNewGroup();

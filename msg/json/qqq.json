@@ -321,7 +321,7 @@
 	"LISTS_GET_SUBLIST_END_LAST": "dropdown - Indicates that the '''last''' item in the given list should be [https://github.com/google/blockly/wiki/Lists#getting-a-sublist the end of the selected sublist]. [[File:Blockly-get-sublist.png]]",
 	"LISTS_GET_SUBLIST_TAIL": "block text - This appears in the rightmost position ('tail') of the sublist block, as described at [https://github.com/google/blockly/wiki/Lists#getting-a-sublist https://github.com/google/blockly/wiki/Lists#getting-a-sublist]. In English and most other languages, this is the empty string. [[File:Blockly-get-sublist.png]]",
 	"LISTS_GET_SUBLIST_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-sublist https://github.com/google/blockly/wiki/Lists#getting-a-sublist] for more information. [[File:Blockly-get-sublist.png]]",
-	"LISTS_SORT_HELPURL": "url - Information describing sorting a list.",
+	"LISTS_SORT_HELPURL": "{{optional}}\nurl - Information describing sorting a list.",
 	"LISTS_SORT_TITLE": "Sort as type %1 (numeric or alphabetic) in order %2 (ascending or descending) a list of items %3.\n{{Identical|Sort}}",
 	"LISTS_SORT_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Lists#sorting-a-list].",
 	"LISTS_SORT_ORDER_ASCENDING": "sorting order or direction from low to high value for numeric, or A-Z for alphabetic.\n{{Identical|Ascending}}",
@@ -367,6 +367,6 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "context menu - This appears on the context menu for function calls.  Selecting it causes the corresponding function definition to be highlighted (as shown at [[Translating:Blockly#context_menus]].",
 	"PROCEDURES_CREATE_DO": "context menu - This appears on the context menu for function definitions. Selecting it creates a block to call the function.\n\nParameters:\n* %1 - the name of the function.\n{{Identical|Create}}",
 	"PROCEDURES_IFRETURN_TOOLTIP": "tooltip - If the first value is true, this causes the second value to be returned immediately from the enclosing function.",
-	"PROCEDURES_IFRETURN_HELPURL": "url - Information about guard clauses.",
+	"PROCEDURES_IFRETURN_HELPURL": "{{optional}}\nurl - Information about guard clauses.",
 	"PROCEDURES_IFRETURN_WARNING": "warning - This appears if the user tries to use this block outside of a function definition."
 }

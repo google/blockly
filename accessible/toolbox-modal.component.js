@@ -34,14 +34,12 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
           <h3>Select a block...</h3>
 
           <div *ngFor="#toolboxCategory of toolboxCategories; #categoryIndex=index">
-            <h4>{{toolboxCategory.categoryName}}</h4>
+            <h4 *ngIf="toolboxCategory.categoryName">{{toolboxCategory.categoryName}}</h4>
             <div class="blocklyModalButtonContainer"
                  *ngFor="#block of toolboxCategory.blocks; #blockIndex=index">
               <button [id]="getOptionId(getOverallIndex(categoryIndex, blockIndex))"
                       (click)="selectBlock(getBlock(categoryIndex, blockIndex))"
-                      [ngClass]="{activeButton: activeButtonIndex == getOverallIndex(categoryIndex, blockIndex)}"
-                      [attr.disabled]="isBlockAvailable(getBlock(categoryIndex, blockIndex)) ? undefined : 'disabled'"
-                      [attr.aria-disabled]="!isBlockAvailable(getBlock(categoryIndex, blockIndex))">
+                      [ngClass]="{activeButton: activeButtonIndex == getOverallIndex(categoryIndex, blockIndex)}">
                 {{getBlockDescription(block)}}
               </button>
             </div>
@@ -76,21 +74,25 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
 
       this.modalIsVisible = false;
       this.toolboxCategories = [];
+      this.onSelectBlockCallback = null;
+      this.onDismissCallback = null;
+
       this.firstBlockIndexes = [];
       this.activeButtonIndex = 0;
-      this.totalNumBlocks = null;
-      this.isBlockAvailable = null;
+      this.totalNumBlocks = 0;
 
       var that = this;
       this.toolboxModalService.registerPreShowHook(
         function(
-            toolboxCategories, isBlockAvailable, onSelectBlockCallback,
-            onDismissCallback) {
+            toolboxCategories, onSelectBlockCallback, onDismissCallback) {
           that.modalIsVisible = true;
           that.toolboxCategories = toolboxCategories;
-          that.isBlockAvailable = isBlockAvailable;
           that.onSelectBlockCallback = onSelectBlockCallback;
           that.onDismissCallback = onDismissCallback;
+
+          that.firstBlockIndexes = [];
+          that.activeButtonIndex = 0;
+          that.totalNumBlocks = 0;
 
           var cumulativeIndex = 0;
           that.toolboxCategories.forEach(function(category) {
@@ -107,8 +109,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
               evt.preventDefault();
               evt.stopPropagation();
             },
-            // Enter key: selects an action, performs it, and closes the
-            // modal.
+            // Enter key: selects an action, performs it, and closes the modal.
             '13': function(evt) {
               evt.preventDefault();
               evt.stopPropagation();
@@ -142,7 +143,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
               } else {
                 that.activeButtonIndex--;
               }
-              that.focusOnOptionIfPossible(that.activeButtonIndex);
+              that.focusOnOption(that.activeButtonIndex);
             },
             // Down key: navigates to the next item in the list.
             '40': function(evt) {
@@ -152,12 +153,13 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
               } else {
                 that.activeButtonIndex++;
               }
-              that.focusOnOptionIfPossible(that.activeButtonIndex);
+              that.focusOnOption(that.activeButtonIndex);
             }
           });
 
           setTimeout(function() {
             document.getElementById('toolboxModal').focus();
+            that.focusOnOption(that.activeButtonIndex);
           }, 150);
         }
       );
@@ -179,13 +181,9 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
     return this.utilsService.getBlockDescription(block);
   },
   // Focuses on the button represented by the given index.
-  focusOnOptionIfPossible: function(index) {
+  focusOnOption: function(index) {
     var button = document.getElementById(this.getOptionId(index));
-    if (!button.disabled) {
-      button.focus();
-    } else {
-      document.activeElement.blur();
-    }
+    button.focus();
   },
   // Returns the ID for the corresponding option button.
   getOptionId: function(index) {

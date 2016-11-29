@@ -129,6 +129,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
 
           setTimeout(function() {
             document.getElementById('blockOptionsModal').focus();
+            that.focusOnOption(that.activeActionButtonIndex);
           }, 150);
         }
       );
@@ -136,9 +137,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   ],
   focusOnOption: function(index) {
     var button = document.getElementById(this.getOptionId(index));
-    if (button) {
-      button.focus();
-    }
+    button.focus();
   },
   // Returns the ID for the corresponding option button.
   getOptionId: function(index) {

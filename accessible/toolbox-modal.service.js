@@ -37,7 +37,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
 
       this.modalIsShown = false;
 
-      this.isBlockAvailable = null;
+      this.selectedToolboxCategories = null;
       this.onSelectBlockCallback = null;
       this.onDismissCallback = null;
       this.preShowHook = function() {
@@ -45,13 +45,13 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             'A pre-show hook must be defined for the toolbox modal before it ' +
             'can be shown.');
       };
-      this.toolboxCategories = [];
 
       // Populate the toolbox categories.
+      this.allToolboxCategories = [];
       var toolboxXmlElt = document.getElementById('blockly-toolbox-xml');
       var toolboxCategoryElts = toolboxXmlElt.getElementsByTagName('category');
       if (toolboxCategoryElts.length) {
-        this.toolboxCategories = Array.from(toolboxCategoryElts).map(
+        this.allToolboxCategories = Array.from(toolboxCategoryElts).map(
           function(categoryElt) {
             var workspace = new Blockly.Workspace();
             Blockly.Xml.domToWorkspace(categoryElt, workspace);
@@ -73,8 +73,8 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             Blockly.Xml.domToBlock(workspace, topLevelNode);
           });
 
-          that.toolboxCategories = [{
-            categoryName: 'Available Blocks',
+          that.allToolboxCategories = [{
+            categoryName: '',
             blocks: workspace.topBlocks_
           }];
         });
@@ -84,16 +84,16 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
       preShowHook(
-          this.toolboxCategories, this.isBlockAvailable,
-          this.onSelectBlockCallback, this.onDismissCallback);
+          this.selectedToolboxCategories, this.onSelectBlockCallback,
+          this.onDismissCallback);
     };
   },
   isModalShown: function() {
     return this.modalIsShown;
   },
   showModal_: function(
-      isBlockAvailable, onSelectBlockCallback, onDismissCallback) {
-    this.isBlockAvailable = isBlockAvailable;
+      selectedToolboxCategories, onSelectBlockCallback, onDismissCallback) {
+    this.selectedToolboxCategories = selectedToolboxCategories;
     this.onSelectBlockCallback = onSelectBlockCallback;
     this.onDismissCallback = onDismissCallback;
 
@@ -105,9 +105,22 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   },
   showToolboxModalForAttachToMarkedConnection: function(sourceButtonId) {
     var that = this;
-    this.showModal_(function(block) {
-      return that.clipboardService.canBeAttachedToMarkedConnection(block);
-    }, function(block) {
+
+    var selectedToolboxCategories = [];
+    this.allToolboxCategories.forEach(function(toolboxCategory) {
+      var selectedBlocks = toolboxCategory.blocks.filter(function(block) {
+        return that.clipboardService.canBeAttachedToMarkedConnection(block);
+      });
+
+      if (selectedBlocks.length > 0) {
+        selectedToolboxCategories.push({
+          categoryName: toolboxCategory.categoryName,
+          blocks: selectedBlocks
+        });
+      }
+    });
+
+    this.showModal_(selectedToolboxCategories, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
 
       // Clean up the active desc for the destination tree.
@@ -140,9 +153,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   },
   showToolboxModalForCreateNewGroup: function(sourceButtonId) {
     var that = this;
-    this.showModal_(function(block) {
-      return true;
-    }, function(block) {
+    this.showModal_(this.allToolboxCategories, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
       var xml = Blockly.Xml.blockToDom(block);
       var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;

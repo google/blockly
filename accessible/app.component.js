@@ -18,8 +18,7 @@
  */
 
 /**
- * @fileoverview Angular2 Component that details how the AccessibleBlockly
- * app is rendered on the page.
+ * @fileoverview Top-level component for the Accessible Blockly application.
  * @author madeeha@google.com (Madeeha Ghori)
  */
 
@@ -28,42 +27,46 @@ blocklyApp.workspace = new Blockly.Workspace();
 blocklyApp.AppView = ng.core.Component({
   selector: 'blockly-app',
   template: `
-  <div *ngIf="getStatusMessage()" aria-hidden="true" class="blocklyAriaLiveStatus">
-    <span aria-live="polite" role="status">{{getStatusMessage()}}</span>
-  </div>
+    <div>
+      <blockly-workspace></blockly-workspace>
+      <blockly-sidebar></blockly-sidebar>
+    </div>
 
-  <blockly-block-options-modal></blockly-block-options-modal>
-  <blockly-toolbox-modal></blockly-toolbox-modal>
+    <div *ngIf="getAriaLiveReadout()" aria-hidden="true"
+         class="blocklyAriaLiveStatus">
+      <span aria-live="polite" role="status">{{getAriaLiveReadout()}}</span>
+    </div>
 
-  <div>
-    <blockly-workspace></blockly-workspace>
-    <blockly-sidebar></blockly-sidebar>
-  </div>
+    <blockly-block-options-modal></blockly-block-options-modal>
+    <blockly-toolbox-modal></blockly-toolbox-modal>
 
-  <label aria-hidden="true" hidden id="blockly-button">{{'BUTTON'|translate}}</label>
-  <label aria-hidden="true" hidden id="blockly-more-options">{{'MORE_OPTIONS'|translate}}</label>
-  <label aria-hidden="true" hidden id="blockly-workspace-block">{{'WORKSPACE_BLOCK'|translate}}</label>
+    <label aria-hidden="true" hidden id="blockly-button">
+      {{'BUTTON'|translate}}
+    </label>
+    <label aria-hidden="true" hidden id="blockly-workspace-block">
+      {{'WORKSPACE_BLOCK'|translate}}
+    </label>
   `,
   directives: [
-      blocklyApp.WorkspaceComponent, blocklyApp.BlockOptionsModalComponent,
-      blocklyApp.SidebarComponent, blocklyApp.ToolboxModalComponent],
+      blocklyApp.BlockOptionsModalComponent, blocklyApp.SidebarComponent,
+      blocklyApp.ToolboxModalComponent, blocklyApp.WorkspaceComponent],
   pipes: [blocklyApp.TranslatePipe],
   // All services are declared here, so that all components in the
   // application use the same instance of the service.
   // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
   providers: [
-      blocklyApp.ClipboardService, blocklyApp.NotificationsService,
-      blocklyApp.TreeService, blocklyApp.UtilsService,
       blocklyApp.AudioService, blocklyApp.BlockOptionsModalService,
-      blocklyApp.KeyboardInputService, blocklyApp.ToolboxModalService]
+      blocklyApp.ClipboardService, blocklyApp.KeyboardInputService,
+      blocklyApp.NotificationsService, blocklyApp.ToolboxModalService,
+      blocklyApp.TreeService, blocklyApp.UtilsService]
 })
 .Class({
   constructor: [
-    blocklyApp.NotificationsService, function(_notificationsService) {
-      this.notificationsService = _notificationsService;
+    blocklyApp.NotificationsService, function(notificationsService) {
+      this.notificationsService = notificationsService;
     }
   ],
-  getStatusMessage: function() {
-    return this.notificationsService.getStatusMessage();
+  getAriaLiveReadout: function() {
+    return this.notificationsService.getAriaLiveReadout();
   }
 });

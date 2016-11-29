@@ -31,7 +31,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
         <!-- The $event.stopPropagation() here prevents the modal from
         closing when its interior is clicked. -->
         <div class="blocklyModal" (click)="$event.stopPropagation()" role="document">
-          <h3>Select a block...</h3>
+          <h3>{{'SELECT_A_BLOCK'|translate}}</h3>
 
           <div *ngFor="#toolboxCategory of toolboxCategories; #categoryIndex=index">
             <h4 *ngIf="toolboxCategory.categoryName">{{toolboxCategory.categoryName}}</h4>

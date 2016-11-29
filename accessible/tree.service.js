@@ -212,7 +212,7 @@ blocklyApp.TreeService = ng.core.Class({
     for (var i = 0; i < workspaceFocusTargets.length; i++) {
       if (workspaceFocusTargets[i].tagName == 'OL' &&
           workspaceFocusTargets[i].id == treeId) {
-        this.notificationsService.setStatusMessage(
+        this.notificationsService.setAriaLiveReadout(
             'Now in workspace group ' + (i + 1) + ' of ' +
             workspaceFocusTargets.length);
       }
@@ -276,10 +276,10 @@ blocklyApp.TreeService = ng.core.Class({
 
     setTimeout(function() {
       if (that.utilsService.isWorkspaceEmpty()) {
-        that.notificationsService.setStatusMessage(
+        that.notificationsService.setAriaLiveReadout(
             blockDescription + ' cut. Workspace is empty.');
       } else {
-        that.notificationsService.setStatusMessage(
+        that.notificationsService.setAriaLiveReadout(
             blockDescription + ' cut. Now on workspace.');
       }
     });
@@ -287,7 +287,7 @@ blocklyApp.TreeService = ng.core.Class({
   copyBlock_: function(block) {
     var blockDescription = this.utilsService.getBlockDescription(block);
     this.clipboardService.copy(block);
-    this.notificationsService.setStatusMessage(
+    this.notificationsService.setAriaLiveReadout(
         blockDescription + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
   },
   pasteToConnection: function(block, connection) {
@@ -360,10 +360,10 @@ blocklyApp.TreeService = ng.core.Class({
               that.initActiveDesc(oldDestinationTreeId);
             }
 
-            that.notificationsService.setStatusMessage(
+            that.notificationsService.setAriaLiveReadout(
                 blockDescription + ' ' +
-                Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
-                '. Now on moved block in workspace.');
+                Blockly.Msg.ATTACHED_BLOCK_TO_LINK_MSG +
+                '. Now on attached block in workspace.');
           });
         },
         translationIdForText: 'MOVE_TO_MARKED_SPOT'
@@ -381,10 +381,10 @@ blocklyApp.TreeService = ng.core.Class({
 
         setTimeout(function() {
           if (that.utilsService.isWorkspaceEmpty()) {
-            that.notificationsService.setStatusMessage(
+            that.notificationsService.setAriaLiveReadout(
                 blockDescription + ' deleted. Workspace is empty.');
           } else {
-            that.notificationsService.setStatusMessage(
+            that.notificationsService.setAriaLiveReadout(
                 blockDescription + ' deleted. Now on workspace.');
           }
         });
@@ -493,7 +493,7 @@ blocklyApp.TreeService = ng.core.Class({
           } else if (currentNode.tagName == 'INPUT') {
             currentNode.focus();
             currentNode.select();
-            this.notificationsService.setStatusMessage(
+            this.notificationsService.setAriaLiveReadout(
               'Type a value, then press Escape to exit');
             found = true;
             break;
@@ -557,7 +557,7 @@ blocklyApp.TreeService = ng.core.Class({
               statusMessage += ' Press left to go to parent list.';
             }
             this.audioService.playOopsSound();
-            this.notificationsService.setStatusMessage(statusMessage);
+            this.notificationsService.setAriaLiveReadout(statusMessage);
           }
         } else if (e.keyCode == 39) {
           // Right arrow key. Go down a level, if possible.
@@ -569,7 +569,7 @@ blocklyApp.TreeService = ng.core.Class({
             this.setActiveDesc(nextSibling.id, treeId);
           } else {
             this.audioService.playOopsSound();
-            this.notificationsService.setStatusMessage(
+            this.notificationsService.setAriaLiveReadout(
                 'Reached bottom of list.');
           }
         }

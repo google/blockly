@@ -42,18 +42,18 @@ blocklyApp.SidebarComponent = ng.core.Component({
               [attr.disabled]="isAnyConnectionMarked() ? undefined : 'disabled'"
               [attr.aria-disabled]="!isAnyConnectionMarked()"
               class="blocklySidebarButton">
-        Attach new block to link...
+        {{'ATTACH_NEW_BLOCK_TO_LINK'|translate}}
       </button>
       <button id="{{ID_FOR_CREATE_NEW_GROUP_BUTTON}}"
               (click)="showToolboxModalForCreateNewGroup()"
               class="blocklySidebarButton">
-        Create new block group...
+        {{'CREATE_NEW_BLOCK_GROUP'|translate}}
       </button>
       <button id="clear-workspace" (click)="clearWorkspace()"
               [attr.disabled]="isWorkspaceEmpty() ? 'disabled' : undefined"
               [attr.aria-disabled]="isWorkspaceEmpty()"
               class="blocklySidebarButton">
-        {{'CLEAR_WORKSPACE'|translate}}
+        {{'ERASE_WORKSPACE'|translate}}
       </button>
     </div>
   </div>
@@ -92,7 +92,7 @@ blocklyApp.SidebarComponent = ng.core.Component({
   handleButtonClick: function(buttonConfig) {
     buttonConfig.action();
     if (buttonConfig.onClickNotification) {
-      this.notificationsService.setStatusMessage(
+      this.notificationsService.setAriaLiveReadout(
           buttonConfig.onClickNotification);
     }
   },

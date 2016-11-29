@@ -31,7 +31,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
         <!-- The $event.stopPropagation() here prevents the modal from
         closing when its interior is clicked. -->
         <div class="blocklyModal" (click)="$event.stopPropagation()" role="document">
-          <h3>Block Options</h3>
+          <h3>{{'BLOCK_OPTIONS'|translate}}</h3>
 
           <div class="blocklyModalButtonContainer"
                *ngFor="#buttonInfo of actionButtonsInfo; #i=index">

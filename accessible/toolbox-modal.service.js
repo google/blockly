@@ -143,9 +143,8 @@ blocklyApp.ToolboxModalService = ng.core.Class({
           that.treeService.initActiveDesc(oldDestinationTreeId);
         }
 
-        that.notificationsService.setStatusMessage(
-            blockDescription + ' connected. ' +
-            'Now on copied block in workspace.');
+        that.notificationsService.setAriaLiveReadout(
+            'Attached. Now on, ' + blockDescription + ', block in workspace.');
       });
     }, function() {
       document.getElementById(sourceButtonId).focus();
@@ -160,9 +159,9 @@ blocklyApp.ToolboxModalService = ng.core.Class({
 
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
-        that.notificationsService.setStatusMessage(
-            blockDescription + ' added to workspace. ' +
-            'Now on added block in workspace.');
+        that.notificationsService.setAriaLiveReadout(
+            'Created new group in workspace. Now on, ' + blockDescription +
+            ', block in workspace.');
       });
     }, function() {
       document.getElementById(sourceButtonId).focus();

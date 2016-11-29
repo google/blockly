@@ -28,10 +28,10 @@ blocklyApp.NotificationsService = ng.core.Class({
     this.statusMessage_ = '';
     this.timeouts = [];
   }],
-  getStatusMessage: function() {
+  getAriaLiveReadout: function() {
     return this.statusMessage_;
   },
-  setStatusMessage: function(newMessage) {
+  setAriaLiveReadout: function(newMessage) {
     // Introduce a temporary status message, so that if, e.g., two "copy"
     // operations are done in succession, both messages will be read.
     this.statusMessage_ = '';

@@ -160,7 +160,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
       this.mainField.setValue(optionValue);
     }
 
-    this.notificationsService.setStatusMessage(
+    this.notificationsService.setAriaLiveReadout(
         'Selected option ' + this.optionText[optionValue]);
   }
 });

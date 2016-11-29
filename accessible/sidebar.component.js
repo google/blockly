@@ -37,17 +37,19 @@ blocklyApp.SidebarComponent = ng.core.Component({
           {{buttonConfig.text}}
         </button>
       </span>
-      <button (click)="showToolboxModalForAttachToMarkedConnection()"
+      <button id="{{ID_FOR_ATTACH_TO_LINK_BUTTON}}"
+              (click)="showToolboxModalForAttachToMarkedConnection()"
               [attr.disabled]="isAnyConnectionMarked() ? undefined : 'disabled'"
               [attr.aria-disabled]="!isAnyConnectionMarked()"
               class="blocklySidebarButton">
         Attach new block to link...
       </button>
-      <button (click)="showToolboxModalForCreateNewGroup()"
+      <button id="{{ID_FOR_CREATE_NEW_GROUP_BUTTON}}"
+              (click)="showToolboxModalForCreateNewGroup()"
               class="blocklySidebarButton">
         Create new block group...
       </button>
-      <button id="clear-workspace" (click)="workspace.clear()"
+      <button id="clear-workspace" (click)="clearWorkspace()"
               [attr.disabled]="isWorkspaceEmpty() ? 'disabled' : undefined"
               [attr.aria-disabled]="isWorkspaceEmpty()"
               class="blocklySidebarButton">
@@ -79,6 +81,9 @@ blocklyApp.SidebarComponent = ng.core.Component({
       this.utilsService = _utilsService;
       this.toolboxModalService = _toolboxModalService;
       this.clipboardService = _clipboardService;
+
+      this.ID_FOR_ATTACH_TO_LINK_BUTTON = 'blocklyAttachToLinkBtn';
+      this.ID_FOR_CREATE_NEW_GROUP_BUTTON = 'blocklyCreateNewGroupBtn';
     }
   ],
   isAnyConnectionMarked: function() {
@@ -91,6 +96,10 @@ blocklyApp.SidebarComponent = ng.core.Component({
           buttonConfig.onClickNotification);
     }
   },
+  clearWorkspace: function() {
+    this.workspace.clear();
+    document.getElementById(this.ID_FOR_CREATE_NEW_GROUP_BUTTON).focus();
+  },
   onSidebarKeypress: function(e) {
     this.treeService.onSidebarKeypress(e, document.activeElement.id);
   },
@@ -98,9 +107,11 @@ blocklyApp.SidebarComponent = ng.core.Component({
     return this.utilsService.isWorkspaceEmpty();
   },
   showToolboxModalForAttachToMarkedConnection: function() {
-    this.toolboxModalService.showToolboxModalForAttachToMarkedConnection();
+    this.toolboxModalService.showToolboxModalForAttachToMarkedConnection(
+        this.ID_FOR_ATTACH_TO_LINK_BUTTON);
   },
   showToolboxModalForCreateNewGroup: function() {
-    this.toolboxModalService.showToolboxModalForCreateNewGroup();
+    this.toolboxModalService.showToolboxModalForCreateNewGroup(
+        this.ID_FOR_CREATE_NEW_GROUP_BUTTON);
   }
 });

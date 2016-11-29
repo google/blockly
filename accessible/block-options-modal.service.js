@@ -32,19 +32,19 @@ blocklyApp.BlockOptionsModalService = ng.core.Class({
           'before it can be shown.');
     };
     this.modalIsShown = false;
-    this.onCancelCallback = null;
+    this.onDismissCallback = null;
   }],
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
-      preShowHook(this.actionButtonsInfo, this.onCancelCallback);
+      preShowHook(this.actionButtonsInfo, this.onDismissCallback);
     };
   },
   isModalShown: function() {
     return this.modalIsShown;
   },
-  showModal: function(actionButtonsInfo, onCancelCallback) {
+  showModal: function(actionButtonsInfo, onDismissCallback) {
     this.actionButtonsInfo = actionButtonsInfo;
-    this.onCancelCallback = onCancelCallback;
+    this.onDismissCallback = onDismissCallback;
 
     this.preShowHook();
     this.modalIsShown = true;

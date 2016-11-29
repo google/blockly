@@ -27,7 +27,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
   selector: 'blockly-toolbox-modal',
   template: `
     <div *ngIf="modalIsVisible" id="toolboxModal" role="dialog" tabindex="-1">
-      <div (click)="hideModal()" class="blocklyModalCurtain">
+      <div (click)="dismissModal()" class="blocklyModalCurtain">
         <!-- The $event.stopPropagation() here prevents the modal from
         closing when its interior is clicked. -->
         <div class="blocklyModal" (click)="$event.stopPropagation()" role="document">
@@ -48,7 +48,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
           </div>
           <hr>
           <div class="blocklyModalButtonContainer">
-            <button [id]="getCancelOptionId()" (click)="hideModal()"
+            <button [id]="getCancelOptionId()" (click)="dismissModal()"
                     [ngClass]="{activeButton: activeButtonIndex == totalNumBlocks}">
               {{'CANCEL'|translate}}
             </button>
@@ -83,11 +83,14 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
 
       var that = this;
       this.toolboxModalService.registerPreShowHook(
-        function(toolboxCategories, isBlockAvailable, onSelectBlockCallback) {
+        function(
+            toolboxCategories, isBlockAvailable, onSelectBlockCallback,
+            onDismissCallback) {
           that.modalIsVisible = true;
           that.toolboxCategories = toolboxCategories;
           that.isBlockAvailable = isBlockAvailable;
           that.onSelectBlockCallback = onSelectBlockCallback;
+          that.onDismissCallback = onDismissCallback;
 
           var cumulativeIndex = 0;
           that.toolboxCategories.forEach(function(category) {
@@ -107,14 +110,11 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
             // Enter key: selects an action, performs it, and closes the
             // modal.
             '13': function(evt) {
+              evt.preventDefault();
+              evt.stopPropagation();
+
               var button = document.getElementById(
                   that.getOptionId(that.activeButtonIndex));
-
-              if (button.disabled) {
-                evt.preventDefault();
-                evt.stopPropagation();
-                return;
-              }
 
               for (var i = 0; i < that.toolboxCategories.length; i++) {
                 if (that.firstBlockIndexes[i + 1] > that.activeButtonIndex) {
@@ -128,11 +128,11 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
               }
 
               // The 'Cancel' button has been pressed.
-              that.hideModal();
+              that.dismissModal();
             },
             // Escape key: closes the modal.
             '27': function() {
-              that.hideModal();
+              that.dismissModal();
             },
             // Up key: navigates to the previous item in the list.
             '38': function(evt) {
@@ -163,6 +163,12 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
       );
     }
   ],
+  // Closes the modal (on both success and failure).
+  hideModal_: function() {
+    this.modalIsVisible = false;
+    this.keyboardInputService.clearOverride();
+    this.toolboxModalService.hideModal();
+  },
   getOverallIndex: function(categoryIndex, blockIndex) {
     return this.firstBlockIndexes[categoryIndex] + blockIndex;
   },
@@ -191,12 +197,11 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
   },
   selectBlock: function(block) {
     this.onSelectBlockCallback(block);
-    this.hideModal();
+    this.hideModal_();
   },
-  // Closes the modal.
-  hideModal: function() {
-    this.modalIsVisible = false;
-    this.keyboardInputService.clearOverride();
-    this.toolboxModalService.hideModal();
+  // Dismisses and closes the modal.
+  dismissModal: function() {
+    this.hideModal_();
+    this.onDismissCallback();
   }
 });

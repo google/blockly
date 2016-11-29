@@ -39,6 +39,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
 
       this.isBlockAvailable = null;
       this.onSelectBlockCallback = null;
+      this.onDismissCallback = null;
       this.preShowHook = function() {
         throw Error(
             'A pre-show hook must be defined for the toolbox modal before it ' +
@@ -84,15 +85,17 @@ blocklyApp.ToolboxModalService = ng.core.Class({
     this.preShowHook = function() {
       preShowHook(
           this.toolboxCategories, this.isBlockAvailable,
-          this.onSelectBlockCallback);
+          this.onSelectBlockCallback, this.onDismissCallback);
     };
   },
   isModalShown: function() {
     return this.modalIsShown;
   },
-  showModal_: function(isBlockAvailable, onSelectBlockCallback) {
+  showModal_: function(
+      isBlockAvailable, onSelectBlockCallback, onDismissCallback) {
     this.isBlockAvailable = isBlockAvailable;
     this.onSelectBlockCallback = onSelectBlockCallback;
+    this.onDismissCallback = onDismissCallback;
 
     this.preShowHook();
     this.modalIsShown = true;
@@ -100,7 +103,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   hideModal: function() {
     this.modalIsShown = false;
   },
-  showToolboxModalForAttachToMarkedConnection: function() {
+  showToolboxModalForAttachToMarkedConnection: function(sourceButtonId) {
     var that = this;
     this.showModal_(function(block) {
       return that.clipboardService.canBeAttachedToMarkedConnection(block);
@@ -131,9 +134,11 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             blockDescription + ' connected. ' +
             'Now on copied block in workspace.');
       });
+    }, function() {
+      document.getElementById(sourceButtonId).focus();
     });
   },
-  showToolboxModalForCreateNewGroup: function() {
+  showToolboxModalForCreateNewGroup: function(sourceButtonId) {
     var that = this;
     this.showModal_(function(block) {
       return true;
@@ -148,6 +153,8 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             blockDescription + ' added to workspace. ' +
             'Now on added block in workspace.');
       });
+    }, function() {
+      document.getElementById(sourceButtonId).focus();
     });
   }
 });

@@ -64,15 +64,15 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
       this.modalIsVisible = false;
       this.actionButtonsInfo = [];
       this.activeActionButtonIndex = 0;
-      this.onCancelCallback = null;
+      this.onDismissCallback = null;
 
       var that = this;
       this.blockOptionsModalService.registerPreShowHook(
-        function(newActionButtonsInfo, onCancelCallback) {
+        function(newActionButtonsInfo, onDismissCallback) {
           that.modalIsVisible = true;
           that.actionButtonsInfo = newActionButtonsInfo;
           that.activeActionButtonIndex = 0;
-          that.onCancelCallback = onCancelCallback;
+          that.onDismissCallback = onDismissCallback;
 
           that.keyboardInputService.setOverride({
             // Tab key: no-op.
@@ -83,20 +83,23 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
             // Enter key: selects an action, performs it, and closes the
             // modal.
             '13': function(evt) {
+              evt.preventDefault();
+              evt.stopPropagation();
+
               var button = document.getElementById(
                   that.getOptionId(that.activeActionButtonIndex));
               if (that.activeActionButtonIndex <
                   that.actionButtonsInfo.length) {
                 that.actionButtonsInfo[that.activeActionButtonIndex].action();
               } else {
-                that.onCancelCallback();
+                that.onDismissCallback();
               }
 
               that.hideModal();
             },
             // Escape key: closes the modal.
             '27': function() {
-              that.onCancelCallback();
+              that.onDismissCallback();
               that.hideModal();
             },
             // Up key: navigates to the previous item in the list.

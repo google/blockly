@@ -308,65 +308,69 @@ blocklyApp.TreeService = ng.core.Class({
   },
   showBlockOptionsModal: function(block, blockRootNode) {
     var that = this;
-    var actionButtonsInfo = [{
-      translationIdForText: 'MARK_SPOT_BEFORE',
-      action: function() {
-        that.clipboardService.markConnection(block.previousConnection);
-        that.focusOnBlock(block.id);
-      },
-      isDisabled: function() {
-        return !block.previousConnection;
-      }
-    }, {
-      action: function() {
-        that.clipboardService.markConnection(block.nextConnection);
-        that.focusOnBlock(block.id);
-      },
-      translationIdForText: 'MARK_SPOT_AFTER',
-      isDisabled: function() {
-        return !block.nextConnection;
-      }
-    }, {
-      action: function() {
-        var blockDescription = that.utilsService.getBlockDescription(
-          block);
-        var oldDestinationTreeId = that.getTreeIdForBlock(
-            that.clipboardService.getMarkedConnectionBlock().id);
-        that.clearActiveDesc(oldDestinationTreeId);
+    var actionButtonsInfo = [];
 
-        var newBlockId = that.clipboardService.pasteToMarkedConnection(
+    if (block.previousConnection) {
+      actionButtonsInfo.push({
+        action: function() {
+          that.clipboardService.markConnection(block.previousConnection);
+          that.focusOnBlock(block.id);
+        },
+        translationIdForText: 'MARK_SPOT_BEFORE'
+      });
+    }
+
+    if (block.nextConnection) {
+      actionButtonsInfo.push({
+        action: function() {
+          that.clipboardService.markConnection(block.nextConnection);
+          that.focusOnBlock(block.id);
+        },
+        translationIdForText: 'MARK_SPOT_AFTER'
+      });
+    }
+
+    if (this.clipboardService.isMovableToMarkedConnection(block)) {
+      actionButtonsInfo.push({
+        action: function() {
+          var blockDescription = that.utilsService.getBlockDescription(
             block);
+          var oldDestinationTreeId = that.getTreeIdForBlock(
+              that.clipboardService.getMarkedConnectionBlock().id);
+          that.clearActiveDesc(oldDestinationTreeId);
 
-        that.removeBlockAndSetFocus(block, blockRootNode, function() {
-          block.dispose(true);
-        });
+          var newBlockId = that.clipboardService.pasteToMarkedConnection(
+              block);
 
-        // Invoke a digest cycle, so that the DOM settles.
-        setTimeout(function() {
-          that.focusOnBlock(newBlockId);
+          that.removeBlockAndSetFocus(block, blockRootNode, function() {
+            block.dispose(true);
+          });
 
-          var newDestinationTreeId = that.getTreeIdForBlock(newBlockId);
-          if (newDestinationTreeId != oldDestinationTreeId) {
-            // It is possible for the tree ID for the pasted block to
-            // change after the paste operation, e.g. when inserting a
-            // block between two existing blocks that are joined
-            // together. In this case, we need to also reset the active
-            // desc for the old destination tree.
-            that.initActiveDesc(oldDestinationTreeId);
-          }
+          // Invoke a digest cycle, so that the DOM settles.
+          setTimeout(function() {
+            that.focusOnBlock(newBlockId);
 
-          that.notificationsService.setStatusMessage(
-              blockDescription + ' ' +
-              Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
-              '. Now on moved block in workspace.');
-        });
-      },
-      translationIdForText: 'MOVE_TO_MARKED_SPOT',
-      isDisabled: function() {
-        return !that.clipboardService.isMovableToMarkedConnection(
-            block);
-      }
-    }, {
+            var newDestinationTreeId = that.getTreeIdForBlock(newBlockId);
+            if (newDestinationTreeId != oldDestinationTreeId) {
+              // It is possible for the tree ID for the pasted block to
+              // change after the paste operation, e.g. when inserting a
+              // block between two existing blocks that are joined
+              // together. In this case, we need to also reset the active
+              // desc for the old destination tree.
+              that.initActiveDesc(oldDestinationTreeId);
+            }
+
+            that.notificationsService.setStatusMessage(
+                blockDescription + ' ' +
+                Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG +
+                '. Now on moved block in workspace.');
+          });
+        },
+        translationIdForText: 'MOVE_TO_MARKED_SPOT'
+      });
+    }
+
+    actionButtonsInfo.push({
       action: function() {
         var blockDescription = that.utilsService.getBlockDescription(block);
 
@@ -385,11 +389,8 @@ blocklyApp.TreeService = ng.core.Class({
           }
         });
       },
-      translationIdForText: 'DELETE',
-      isDisabled: function() {
-        return false;
-      }
-    }];
+      translationIdForText: 'DELETE'
+    });
 
     this.blockOptionsModalService.showModal(actionButtonsInfo, function() {
       that.focusOnBlock(block.id);

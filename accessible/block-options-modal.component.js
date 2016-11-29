@@ -36,7 +36,6 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
           <div class="blocklyModalButtonContainer"
                *ngFor="#buttonInfo of actionButtonsInfo; #i=index">
             <button [id]="getOptionId(i)" (click)="buttonInfo.action(); hideModal();"
-                    [disabled]="buttonInfo.isDisabled()"
                     [ngClass]="{activeButton: activeActionButtonIndex == i}">
               {{buttonInfo.translationIdForText|translate}}
             </button>
@@ -86,12 +85,6 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
             '13': function(evt) {
               var button = document.getElementById(
                   that.getOptionId(that.activeActionButtonIndex));
-              if (button.disabled) {
-                evt.preventDefault();
-                evt.stopPropagation();
-                return;
-              }
-
               if (that.activeActionButtonIndex <
                   that.actionButtonsInfo.length) {
                 that.actionButtonsInfo[that.activeActionButtonIndex].action();
@@ -108,24 +101,26 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
             },
             // Up key: navigates to the previous item in the list.
             '38': function(evt) {
+              // Prevent the page from scrolling.
               evt.preventDefault();
               if (that.activeActionButtonIndex == 0) {
                 that.audioService.playOopsSound();
               } else {
                 that.activeActionButtonIndex--;
+                that.focusOnOption(that.activeActionButtonIndex);
               }
-              that.focusOnOptionIfPossible(that.activeActionButtonIndex);
             },
             // Down key: navigates to the next item in the list.
             '40': function(evt) {
+              // Prevent the page from scrolling.
               evt.preventDefault();
               if (that.activeActionButtonIndex ==
                   that.actionButtonsInfo.length) {
                 that.audioService.playOopsSound();
               } else {
                 that.activeActionButtonIndex++;
+                that.focusOnOption(that.activeActionButtonIndex);
               }
-              that.focusOnOptionIfPossible(that.activeActionButtonIndex);
             }
           });
 
@@ -136,14 +131,10 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
       );
     }
   ],
-  // Focuses on the button represented by the given index, if the button
-  // is not disabled. Otherwise, removes any existing focus.
-  focusOnOptionIfPossible: function(index) {
+  focusOnOption: function(index) {
     var button = document.getElementById(this.getOptionId(index));
-    if (!button.disabled) {
+    if (button) {
       button.focus();
-    } else {
-      document.activeElement.blur();
     }
   },
   // Returns the ID for the corresponding option button.

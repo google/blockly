@@ -6,7 +6,7 @@ to blind users.
 
 The code in this directory renders a version of the Blockly toolbox and
 workspace that is fully keyboard-navigable, and compatible with most screen
-readers.
+readers. It is optimized for NVDA on Firefox.
 
 In the future, Accessible Blockly may be modified to suit accessibility needs
 other than visual impairments. Note that deaf users are expected to continue

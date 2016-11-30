@@ -54,7 +54,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
       </label>
       <ol role="group">
         <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-button')"
+            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-translate-button')"
             [attr.aria-level]="level" [attr.aria-selected]="mainField.getValue() == optionValue"
             class="blocklyDropdownListItem">
           <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(mainField, optionValue)"
@@ -160,7 +160,7 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
       this.mainField.setValue(optionValue);
     }
 
-    this.notificationsService.setAriaLiveReadout(
+    this.notificationsService.speak(
         'Selected option ' + this.optionText[optionValue]);
   }
 });

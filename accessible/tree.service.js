@@ -212,7 +212,7 @@ blocklyApp.TreeService = ng.core.Class({
     for (var i = 0; i < workspaceFocusTargets.length; i++) {
       if (workspaceFocusTargets[i].tagName == 'OL' &&
           workspaceFocusTargets[i].id == treeId) {
-        this.notificationsService.setAriaLiveReadout(
+        this.notificationsService.speak(
             'Now in workspace group ' + (i + 1) + ' of ' +
             workspaceFocusTargets.length);
       }
@@ -276,10 +276,10 @@ blocklyApp.TreeService = ng.core.Class({
 
     setTimeout(function() {
       if (that.utilsService.isWorkspaceEmpty()) {
-        that.notificationsService.setAriaLiveReadout(
+        that.notificationsService.speak(
             blockDescription + ' cut. Workspace is empty.');
       } else {
-        that.notificationsService.setAriaLiveReadout(
+        that.notificationsService.speak(
             blockDescription + ' cut. Now on workspace.');
       }
     });
@@ -287,7 +287,7 @@ blocklyApp.TreeService = ng.core.Class({
   copyBlock_: function(block) {
     var blockDescription = this.utilsService.getBlockDescription(block);
     this.clipboardService.copy(block);
-    this.notificationsService.setAriaLiveReadout(
+    this.notificationsService.speak(
         blockDescription + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
   },
   pasteToConnection: function(block, connection) {
@@ -360,7 +360,7 @@ blocklyApp.TreeService = ng.core.Class({
               that.initActiveDesc(oldDestinationTreeId);
             }
 
-            that.notificationsService.setAriaLiveReadout(
+            that.notificationsService.speak(
                 blockDescription + ' ' +
                 Blockly.Msg.ATTACHED_BLOCK_TO_LINK_MSG +
                 '. Now on attached block in workspace.');
@@ -381,10 +381,10 @@ blocklyApp.TreeService = ng.core.Class({
 
         setTimeout(function() {
           if (that.utilsService.isWorkspaceEmpty()) {
-            that.notificationsService.setAriaLiveReadout(
+            that.notificationsService.speak(
                 blockDescription + ' deleted. Workspace is empty.');
           } else {
-            that.notificationsService.setAriaLiveReadout(
+            that.notificationsService.speak(
                 blockDescription + ' deleted. Now on workspace.');
           }
         });
@@ -493,7 +493,7 @@ blocklyApp.TreeService = ng.core.Class({
           } else if (currentNode.tagName == 'INPUT') {
             currentNode.focus();
             currentNode.select();
-            this.notificationsService.setAriaLiveReadout(
+            this.notificationsService.speak(
               'Type a value, then press Escape to exit');
             found = true;
             break;
@@ -557,7 +557,7 @@ blocklyApp.TreeService = ng.core.Class({
               statusMessage += ' Press left to go to parent list.';
             }
             this.audioService.playOopsSound();
-            this.notificationsService.setAriaLiveReadout(statusMessage);
+            this.notificationsService.speak(statusMessage);
           }
         } else if (e.keyCode == 39) {
           // Right arrow key. Go down a level, if possible.
@@ -569,8 +569,7 @@ blocklyApp.TreeService = ng.core.Class({
             this.setActiveDesc(nextSibling.id, treeId);
           } else {
             this.audioService.playOopsSound();
-            this.notificationsService.setAriaLiveReadout(
-                'Reached bottom of list.');
+            this.notificationsService.speak('Reached bottom of list.');
           }
         }
 

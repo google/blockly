@@ -28,7 +28,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
   selector: 'blockly-workspace-tree',
   template: `
   <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
-      [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-workspace-block')"
+      [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-translate-workspace-block')"
       [attr.aria-level]="level">
     <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
 
@@ -78,13 +78,11 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-      blocklyApp.ClipboardService, blocklyApp.NotificationsService,
-      blocklyApp.TreeService, blocklyApp.UtilsService, blocklyApp.AudioService,
+      blocklyApp.ClipboardService, blocklyApp.TreeService,
+      blocklyApp.UtilsService, blocklyApp.AudioService,
       function(
-          _clipboardService, _notificationsService, _treeService,
-          _utilsService, _audioService) {
+          _clipboardService, _treeService, _utilsService, _audioService) {
     this.clipboardService = _clipboardService;
-    this.notificationsService = _notificationsService;
     this.treeService = _treeService;
     this.utilsService = _utilsService;
     this.audioService = _audioService;

@@ -100,7 +100,7 @@ blocklyApp.ClipboardService = ng.core.Class({
   },
   markConnection: function(connection) {
     this.markedConnection_ = connection;
-    this.notificationsService.setAriaLiveReadout(Blockly.Msg.ADDED_LINK_MSG);
+    this.notificationsService.speak(Blockly.Msg.ADDED_LINK_MSG);
   },
   cut: function(block) {
     this.copy(block);
@@ -139,7 +139,7 @@ blocklyApp.ClipboardService = ng.core.Class({
         connection.connect(reconstitutedBlock.outputConnection);
     }
     this.audioService.playConnectSound();
-    this.notificationsService.setAriaLiveReadout(
+    this.notificationsService.speak(
         this.utilsService.getBlockDescription(reconstitutedBlock) + ' ' +
         Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG);
     return reconstitutedBlock.id;

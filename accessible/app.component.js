@@ -27,38 +27,43 @@ blocklyApp.workspace = new Blockly.Workspace();
 blocklyApp.AppComponent = ng.core.Component({
   selector: 'blockly-app',
   template: `
-    <div>
-      <blockly-workspace></blockly-workspace>
-      <blockly-sidebar></blockly-sidebar>
-    </div>
-
-    <div *ngIf="getAriaLiveReadout()" aria-hidden="true"
-         class="blocklyAriaLiveStatus">
+    <blockly-workspace></blockly-workspace>
+    <blockly-sidebar></blockly-sidebar>
+    <div *ngIf="getAriaLiveReadout()" class="blocklyAriaLiveStatus"
+         aria-hidden="true">
       <span aria-live="polite" role="status">{{getAriaLiveReadout()}}</span>
     </div>
 
     <blockly-block-options-modal></blockly-block-options-modal>
     <blockly-toolbox-modal></blockly-toolbox-modal>
 
-    <label aria-hidden="true" hidden id="blockly-button">
+    <label id="blockly-translate-button" aria-hidden="true" hidden>
       {{'BUTTON'|translate}}
     </label>
-    <label aria-hidden="true" hidden id="blockly-workspace-block">
+    <label id="blockly-translate-workspace-block" aria-hidden="true" hidden>
       {{'WORKSPACE_BLOCK'|translate}}
     </label>
   `,
   directives: [
-      blocklyApp.BlockOptionsModalComponent, blocklyApp.SidebarComponent,
-      blocklyApp.ToolboxModalComponent, blocklyApp.WorkspaceComponent],
+    blocklyApp.BlockOptionsModalComponent,
+    blocklyApp.SidebarComponent,
+    blocklyApp.ToolboxModalComponent,
+    blocklyApp.WorkspaceComponent
+  ],
   pipes: [blocklyApp.TranslatePipe],
-  // All services are declared here, so that all components in the
-  // application use the same instance of the service.
+  // All services are declared here, so that all components in the application
+  // use the same instance of the service.
   // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
   providers: [
-      blocklyApp.AudioService, blocklyApp.BlockOptionsModalService,
-      blocklyApp.ClipboardService, blocklyApp.KeyboardInputService,
-      blocklyApp.NotificationsService, blocklyApp.ToolboxModalService,
-      blocklyApp.TreeService, blocklyApp.UtilsService]
+    blocklyApp.AudioService,
+    blocklyApp.BlockOptionsModalService,
+    blocklyApp.ClipboardService,
+    blocklyApp.KeyboardInputService,
+    blocklyApp.NotificationsService,
+    blocklyApp.ToolboxModalService,
+    blocklyApp.TreeService,
+    blocklyApp.UtilsService
+  ]
 })
 .Class({
   constructor: [
@@ -67,6 +72,6 @@ blocklyApp.AppComponent = ng.core.Component({
     }
   ],
   getAriaLiveReadout: function() {
-    return this.notificationsService.getAriaLiveReadout();
+    return this.notificationsService.getDisplayedMessage();
   }
 });

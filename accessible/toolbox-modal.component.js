@@ -61,16 +61,14 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
   constructor: [
     blocklyApp.ToolboxModalService, blocklyApp.KeyboardInputService,
     blocklyApp.AudioService, blocklyApp.UtilsService, blocklyApp.TreeService,
-    blocklyApp.NotificationsService,
     function(
-        toolboxModalService_, keyboardInputService_,
-        audioService_, utilsService_, treeService_, notificationsService_) {
+        toolboxModalService_, keyboardInputService_, audioService_,
+        utilsService_, treeService_) {
       this.toolboxModalService = toolboxModalService_;
       this.keyboardInputService = keyboardInputService_;
       this.audioService = audioService_;
       this.utilsService = utilsService_;
       this.treeService = treeService_;
-      this.notificationsService = notificationsService_;
 
       this.modalIsVisible = false;
       this.toolboxCategories = [];

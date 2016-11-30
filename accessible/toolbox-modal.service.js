@@ -143,7 +143,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
           that.treeService.initActiveDesc(oldDestinationTreeId);
         }
 
-        that.notificationsService.setAriaLiveReadout(
+        that.notificationsService.speak(
             'Attached. Now on, ' + blockDescription + ', block in workspace.');
       });
     }, function() {
@@ -159,7 +159,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
 
       setTimeout(function() {
         that.treeService.focusOnBlock(newBlockId);
-        that.notificationsService.setAriaLiveReadout(
+        that.notificationsService.speak(
             'Created new group in workspace. Now on, ' + blockDescription +
             ', block in workspace.');
       });

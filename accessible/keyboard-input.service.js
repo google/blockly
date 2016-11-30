@@ -18,15 +18,15 @@
  */
 
 /**
- * @fileoverview Angular2 Service that handles keyboard input.
+ * @fileoverview Angular2 Service for handling keyboard input.
  *
  * @author sll@google.com (Sean Lip)
  */
 
 blocklyApp.KeyboardInputService = ng.core.Class({
   constructor: [function() {
-    // Default custom actions for global keystrokes. The keys are string
-    // representations of the key codes.
+    // Default custom actions for global keystrokes. The keys of this object
+    // are string representations of the key codes.
     this.keysToActions = {};
     // Override for the default keysToActions mapping (e.g. in a modal
     // context).
@@ -34,13 +34,12 @@ blocklyApp.KeyboardInputService = ng.core.Class({
 
     // Attach a keydown handler to the entire window.
     var that = this;
-
     document.addEventListener('keydown', function(evt) {
       var stringifiedKeycode = String(evt.keyCode);
       var actionsObject = that.keysToActionsOverride || that.keysToActions;
 
       if (actionsObject.hasOwnProperty(stringifiedKeycode)) {
-        that.keysToActionsOverride[stringifiedKeycode](evt);
+        actionsObject[stringifiedKeycode](evt);
       }
     });
   }],

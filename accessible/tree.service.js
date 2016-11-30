@@ -266,46 +266,6 @@ blocklyApp.TreeService = ng.core.Class({
           deleteBlockFunc, treeId, nextActiveDesc.id);
     }
   },
-  cutBlock_: function(block, blockRootNode) {
-    var blockDescription = this.utilsService.getBlockDescription(block);
-
-    var that = this;
-    this.removeBlockAndSetFocus(block, blockRootNode, function() {
-      that.clipboardService.cut(block);
-    });
-
-    setTimeout(function() {
-      if (that.utilsService.isWorkspaceEmpty()) {
-        that.notificationsService.speak(
-            blockDescription + ' cut. Workspace is empty.');
-      } else {
-        that.notificationsService.speak(
-            blockDescription + ' cut. Now on workspace.');
-      }
-    });
-  },
-  copyBlock_: function(block) {
-    var blockDescription = this.utilsService.getBlockDescription(block);
-    this.clipboardService.copy(block);
-    this.notificationsService.speak(
-        blockDescription + ' ' + Blockly.Msg.COPIED_BLOCK_MSG);
-  },
-  pasteToConnection: function(block, connection) {
-    if (this.clipboardService.isClipboardEmpty()) {
-      return;
-    }
-
-    var destinationTreeId = this.getTreeIdForBlock(
-        connection.getSourceBlock().id);
-    this.clearActiveDesc(destinationTreeId);
-
-    var newBlockId = this.clipboardService.pasteFromClipboard(connection);
-    // Invoke a digest cycle, so that the DOM settles.
-    var that = this;
-    setTimeout(function() {
-      that.focusOnBlock(newBlockId);
-    });
-  },
   showBlockOptionsModal: function(block, blockRootNode) {
     var that = this;
     var actionButtonsInfo = [];
@@ -430,28 +390,12 @@ blocklyApp.TreeService = ng.core.Class({
       return;
     }
 
-    if (e.altKey) {
+    if (e.altKey || e.ctrlKey) {
       // Do not intercept combinations such as Alt+Home.
       return;
     }
 
-    if (e.ctrlKey) {
-      var blockRootNode = this.getCurrentBlockRootNode_(activeDesc);
-      var block = this.getBlockFromRootNode_(blockRootNode);
-
-      if (e.keyCode == 88) {
-        // Cut block.
-        this.cutBlock_(block, blockRootNode);
-      } else if (e.keyCode == 67) {
-        // Copy block.
-        this.copyBlock_(block);
-      } else if (e.keyCode == 86) {
-        // Paste block, if possible.
-        var targetConnection =
-            e.shiftKey ? block.previousConnection : block.nextConnection;
-        this.pasteToConnection(block, targetConnection);
-      }
-    } else if (document.activeElement.tagName == 'INPUT') {
+    if (document.activeElement.tagName == 'INPUT') {
       // For input fields, only Esc and Tab keystrokes are handled specially.
       if (e.keyCode == 27 || e.keyCode == 9) {
         // For Esc and Tab keys, the focus is removed from the input field.

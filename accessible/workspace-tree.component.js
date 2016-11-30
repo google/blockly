@@ -198,8 +198,5 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
   generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
     return this.utilsService.generateAriaLabelledByAttr(
         mainLabel, secondLabel);
-  },
-  isCompatibleWithClipboard: function(connection) {
-    return this.clipboardService.isCompatibleWithClipboard(connection);
   }
 });

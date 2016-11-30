@@ -27,10 +27,6 @@ blocklyApp.ClipboardService = ng.core.Class({
       blocklyApp.NotificationsService, blocklyApp.UtilsService,
       blocklyApp.AudioService,
       function(_notificationsService, _utilsService, _audioService) {
-    this.clipboardBlockXml_ = null;
-    this.clipboardBlockPreviousConnection_ = null;
-    this.clipboardBlockNextConnection_ = null;
-    this.clipboardBlockOutputConnection_ = null;
     this.markedConnection_ = null;
     this.notificationsService = _notificationsService;
     this.utilsService = _utilsService;
@@ -43,15 +39,6 @@ blocklyApp.ClipboardService = ng.core.Class({
         connection && blockConnection &&
         Blockly.OPPOSITE_TYPE[blockConnection.type] == connection.type &&
         connection.checkType_(blockConnection));
-  },
-  isCompatibleWithClipboard: function(connection) {
-    var previousConnection = this.clipboardBlockPreviousConnection_;
-    var nextConnection = this.clipboardBlockNextConnection_;
-    var outputConnection = this.clipboardBlockOutputConnection_;
-    return Boolean(
-        this.areConnectionsCompatible_(connection, previousConnection) ||
-        this.areConnectionsCompatible_(connection, nextConnection) ||
-        this.areConnectionsCompatible_(connection, outputConnection));
   },
   getMarkedConnectionBlock: function() {
     if (!this.markedConnection_) {
@@ -101,48 +88,6 @@ blocklyApp.ClipboardService = ng.core.Class({
   markConnection: function(connection) {
     this.markedConnection_ = connection;
     this.notificationsService.speak(Blockly.Msg.ADDED_LINK_MSG);
-  },
-  cut: function(block) {
-    this.copy(block);
-    block.dispose(true);
-  },
-  copy: function(block) {
-    this.clipboardBlockXml_ = Blockly.Xml.blockToDom(block);
-    Blockly.Xml.deleteNext(this.clipboardBlockXml_);
-    this.clipboardBlockPreviousConnection_ = block.previousConnection;
-    this.clipboardBlockNextConnection_ = block.nextConnection;
-    this.clipboardBlockOutputConnection_ = block.outputConnection;
-  },
-  isClipboardEmpty: function() {
-    return !this.clipboardBlockXml_;
-  },
-  pasteFromClipboard: function(inputConnection) {
-    var connection = inputConnection;
-    // If the connection is a 'previousConnection' and that connection is
-    // already joined to something, use the 'nextConnection' of the
-    // previous block instead in order to do an insertion.
-    if (inputConnection.type == Blockly.PREVIOUS_STATEMENT &&
-        inputConnection.isConnected()) {
-      connection = inputConnection.targetConnection;
-    }
-
-    var reconstitutedBlock = Blockly.Xml.domToBlock(blocklyApp.workspace,
-        this.clipboardBlockXml_);
-    switch (connection.type) {
-      case Blockly.NEXT_STATEMENT:
-        connection.connect(reconstitutedBlock.previousConnection);
-        break;
-      case Blockly.PREVIOUS_STATEMENT:
-        connection.connect(reconstitutedBlock.nextConnection);
-        break;
-      default:
-        connection.connect(reconstitutedBlock.outputConnection);
-    }
-    this.audioService.playConnectSound();
-    this.notificationsService.speak(
-        this.utilsService.getBlockDescription(reconstitutedBlock) + ' ' +
-        Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG);
-    return reconstitutedBlock.id;
   },
   pasteToMarkedConnection: function(block) {
     var xml = Blockly.Xml.blockToDom(block);

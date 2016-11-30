@@ -21,8 +21,8 @@ in the same order as in the demo: utils.service.js will need to be the first
 Angular file imported.
 
 When the DOMContentLoaded event fires, call ng.platform.browser.bootstrap() on
-the main component to be loaded. This will usually be blocklyApp.AppView, but
-if you have another component that wraps it, use that one instead.
+the main component to be loaded. This will usually be blocklyApp.AppComponent,
+but if you have another component that wraps it, use that one instead.
 
 
 Customizing the Sidebar and Audio
@@ -41,16 +41,11 @@ The value of mediaPathPrefix should be the location of the accessible/media
 folder.
 
 The value of 'customSidebarButtons' should be a list of objects, each
-representing buttons on the sidebar. Each of these objects should have five
-keys:
-
+representing buttons on the sidebar. Each of these objects should have the
+following keys:
   - 'text' (the text to display on the button)
-  - 'ariaDescribedBy' (the value of the button's aria-describedby attribute)
-  - 'onClickNotification' (a notification that the screenreader should read
-        when the button is clicked)
-  - 'isHidden' (a function that returns true if the button should not be
-        displayed, and false otherwise)
   - 'action' (the function that gets run when the button is clicked)
+  - 'id' (optional; the id of the button)
 
 
 Limitations

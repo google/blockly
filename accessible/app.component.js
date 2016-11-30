@@ -24,7 +24,7 @@
 
 blocklyApp.workspace = new Blockly.Workspace();
 
-blocklyApp.AppView = ng.core.Component({
+blocklyApp.AppComponent = ng.core.Component({
   selector: 'blockly-app',
   template: `
     <div>

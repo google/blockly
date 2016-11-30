@@ -30,9 +30,8 @@ blocklyApp.SidebarComponent = ng.core.Component({
   <div class="blocklySidebarColumn">
     <div id="blockly-workspace-sidebar" (keydown)="onSidebarKeypress($event)">
       <span *ngFor="#buttonConfig of customSidebarButtons">
-        <button *ngIf="!buttonConfig.isHidden()"
+        <button id="{{buttonConfig.id || undefined}}"
                 (click)="handleButtonClick(buttonConfig)"
-                [attr.aria-describedby]="buttonConfig.ariaDescribedBy"
                 class="blocklySidebarButton">
           {{buttonConfig.text}}
         </button>
@@ -91,10 +90,6 @@ blocklyApp.SidebarComponent = ng.core.Component({
   },
   handleButtonClick: function(buttonConfig) {
     buttonConfig.action();
-    if (buttonConfig.onClickNotification) {
-      this.notificationsService.setAriaLiveReadout(
-          buttonConfig.onClickNotification);
-    }
   },
   clearWorkspace: function() {
     this.workspace.clear();

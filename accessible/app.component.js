@@ -56,8 +56,8 @@ blocklyApp.AppComponent = ng.core.Component({
   // https://www.sitepoint.com/angular-2-components-providers-classes-factories-values/
   providers: [
     blocklyApp.AudioService,
+    blocklyApp.BlockConnectionService,
     blocklyApp.BlockOptionsModalService,
-    blocklyApp.ClipboardService,
     blocklyApp.KeyboardInputService,
     blocklyApp.NotificationsService,
     blocklyApp.ToolboxModalService,

@@ -61,12 +61,13 @@ blocklyApp.SidebarComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-    blocklyApp.NotificationsService, blocklyApp.TreeService,
-    blocklyApp.UtilsService, blocklyApp.ToolboxModalService,
-    blocklyApp.ClipboardService,
+    blocklyApp.BlockConnectionService,
+    blocklyApp.ToolboxModalService,
+    blocklyApp.TreeService,
+    blocklyApp.UtilsService,
     function(
-        _notificationsService, _treeService, _utilsService,
-        _toolboxModalService, _clipboardService) {
+        blockConnectionService, toolboxModalService, treeService,
+        utilsService) {
       // ACCESSIBLE_GLOBALS is a global variable defined by the containing
       // page. It should contain a key, customSidebarButtons, describing
       // additional buttons that should be displayed after the default ones.
@@ -75,18 +76,18 @@ blocklyApp.SidebarComponent = ng.core.Component({
           ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.customSidebarButtons ?
           ACCESSIBLE_GLOBALS.customSidebarButtons : [];
       this.workspace = blocklyApp.workspace;
-      this.notificationsService = _notificationsService;
-      this.treeService = _treeService;
-      this.utilsService = _utilsService;
-      this.toolboxModalService = _toolboxModalService;
-      this.clipboardService = _clipboardService;
+
+      this.blockConnectionService = blockConnectionService;
+      this.toolboxModalService = toolboxModalService;
+      this.treeService = treeService;
+      this.utilsService = utilsService;
 
       this.ID_FOR_ATTACH_TO_LINK_BUTTON = 'blocklyAttachToLinkBtn';
       this.ID_FOR_CREATE_NEW_GROUP_BUTTON = 'blocklyCreateNewGroupBtn';
     }
   ],
   isAnyConnectionMarked: function() {
-    return this.clipboardService.isAnyConnectionMarked();
+    return this.blockConnectionService.isAnyConnectionMarked();
   },
   handleButtonClick: function(buttonConfig) {
     buttonConfig.action();

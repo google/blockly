@@ -78,15 +78,17 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-      blocklyApp.ClipboardService, blocklyApp.TreeService,
-      blocklyApp.UtilsService, blocklyApp.AudioService,
-      function(
-          _clipboardService, _treeService, _utilsService, _audioService) {
-    this.clipboardService = _clipboardService;
-    this.treeService = _treeService;
-    this.utilsService = _utilsService;
-    this.audioService = _audioService;
-  }],
+    blocklyApp.AudioService,
+    blocklyApp.BlockConnectionService,
+    blocklyApp.TreeService,
+    blocklyApp.UtilsService,
+    function(audioService, blockConnectionService, treeService, utilsService) {
+      this.audioService = audioService;
+      this.blockConnectionService = blockConnectionService;
+      this.treeService = treeService;
+      this.utilsService = utilsService;
+    }
+  ],
   ngOnInit: function() {
     var SUPPORTED_FIELDS = [
         Blockly.FieldTextInput, Blockly.FieldDropdown,
@@ -137,7 +139,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
       baseIdKey: 'markSpot',
       translationIdForText: 'MARK_THIS_SPOT',
       action: function(connection) {
-        that.clipboardService.markConnection(connection);
+        that.blockConnectionService.markConnection(connection);
       },
       isDisabled: function() {
         return false;

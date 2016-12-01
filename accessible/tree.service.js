@@ -26,19 +26,22 @@
 
 blocklyApp.TreeService = ng.core.Class({
   constructor: [
-    blocklyApp.NotificationsService, blocklyApp.UtilsService,
-    blocklyApp.ClipboardService, blocklyApp.BlockOptionsModalService,
     blocklyApp.AudioService,
+    blocklyApp.BlockConnectionService,
+    blocklyApp.BlockOptionsModalService,
+    blocklyApp.NotificationsService,
+    blocklyApp.UtilsService,
     function(
-        _notificationsService, _utilsService, _clipboardService,
-        _blockOptionsModalService, _audioService) {
+        audioService, blockConnectionService, blockOptionsModalService,
+        notificationsService, utilsService) {
+      this.audioService = audioService;
+      this.blockConnectionService = blockConnectionService;
+      this.blockOptionsModalService = blockOptionsModalService;
+      this.notificationsService = notificationsService;
+      this.utilsService = utilsService;
+
       // Stores active descendant ids for each tree in the page.
       this.activeDescendantIds_ = {};
-      this.notificationsService = _notificationsService;
-      this.utilsService = _utilsService;
-      this.clipboardService = _clipboardService;
-      this.blockOptionsModalService = _blockOptionsModalService;
-      this.audioService = _audioService;
     }
   ],
   // Returns a list of all top-level workspace tree nodes on the page.
@@ -273,7 +276,7 @@ blocklyApp.TreeService = ng.core.Class({
     if (block.previousConnection) {
       actionButtonsInfo.push({
         action: function() {
-          that.clipboardService.markConnection(block.previousConnection);
+          that.blockConnectionService.markConnection(block.previousConnection);
           that.focusOnBlock(block.id);
         },
         translationIdForText: 'MARK_SPOT_BEFORE'
@@ -283,23 +286,23 @@ blocklyApp.TreeService = ng.core.Class({
     if (block.nextConnection) {
       actionButtonsInfo.push({
         action: function() {
-          that.clipboardService.markConnection(block.nextConnection);
+          that.blockConnectionService.markConnection(block.nextConnection);
           that.focusOnBlock(block.id);
         },
         translationIdForText: 'MARK_SPOT_AFTER'
       });
     }
 
-    if (this.clipboardService.isMovableToMarkedConnection(block)) {
+    if (this.blockConnectionService.canBeMovedToMarkedConnection(block)) {
       actionButtonsInfo.push({
         action: function() {
           var blockDescription = that.utilsService.getBlockDescription(
             block);
           var oldDestinationTreeId = that.getTreeIdForBlock(
-              that.clipboardService.getMarkedConnectionBlock().id);
+              that.blockConnectionService.getMarkedConnectionSourceBlock().id);
           that.clearActiveDesc(oldDestinationTreeId);
 
-          var newBlockId = that.clipboardService.pasteToMarkedConnection(
+          var newBlockId = that.blockConnectionService.attachToMarkedConnection(
               block);
 
           that.removeBlockAndSetFocus(block, blockRootNode, function() {

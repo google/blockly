@@ -25,15 +25,17 @@
 
 blocklyApp.ToolboxModalService = ng.core.Class({
   constructor: [
-    blocklyApp.TreeService, blocklyApp.UtilsService,
-    blocklyApp.NotificationsService, blocklyApp.ClipboardService,
+    blocklyApp.BlockConnectionService,
+    blocklyApp.NotificationsService,
+    blocklyApp.TreeService,
+    blocklyApp.UtilsService,
     function(
-        _treeService, _utilsService,
-        _notificationsService, _clipboardService) {
-      this.treeService = _treeService;
-      this.utilsService = _utilsService;
-      this.notificationsService = _notificationsService;
-      this.clipboardService = _clipboardService;
+        blockConnectionService, notificationsService, treeService,
+        utilsService) {
+      this.blockConnectionService = blockConnectionService;
+      this.notificationsService = notificationsService;
+      this.treeService = treeService;
+      this.utilsService = utilsService;
 
       this.modalIsShown = false;
 
@@ -109,7 +111,8 @@ blocklyApp.ToolboxModalService = ng.core.Class({
     var selectedToolboxCategories = [];
     this.allToolboxCategories.forEach(function(toolboxCategory) {
       var selectedBlocks = toolboxCategory.blocks.filter(function(block) {
-        return that.clipboardService.canBeAttachedToMarkedConnection(block);
+        return that.blockConnectionService.canBeAttachedToMarkedConnection(
+            block);
       });
 
       if (selectedBlocks.length > 0) {
@@ -125,9 +128,10 @@ blocklyApp.ToolboxModalService = ng.core.Class({
 
       // Clean up the active desc for the destination tree.
       var oldDestinationTreeId = that.treeService.getTreeIdForBlock(
-          that.clipboardService.getMarkedConnectionBlock().id);
+          that.blockConnectionService.getMarkedConnectionSourceBlock().id);
       that.treeService.clearActiveDesc(oldDestinationTreeId);
-      var newBlockId = that.clipboardService.pasteToMarkedConnection(block);
+      var newBlockId = that.blockConnectionService.attachToMarkedConnection(
+          block);
 
       // Invoke a digest cycle, so that the DOM settles.
       setTimeout(function() {

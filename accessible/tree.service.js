@@ -180,9 +180,6 @@ blocklyApp.TreeService = ng.core.Class({
       }
     }
   },
-  isButtonOrFieldNode_: function(node) {
-    return ['BUTTON', 'INPUT'].indexOf(node.tagName) != -1;
-  },
   getNextActiveDescWhenBlockIsDeleted: function(blockRootNode) {
     // Go up a level, if possible.
     var nextNode = blockRootNode.parentNode;
@@ -426,7 +423,7 @@ blocklyApp.TreeService = ng.core.Class({
         // Enter key. The user wants to interact with a button, interact with
         // an input field, or open the block options modal.
         // Algorithm to find the field: do a DFS through the children until
-        // we find an INPUT or BUTTON element (in which case we use it).
+        // we find an INPUT, BUTTON or SELECT element (in which case we use it).
         // Truncate the search at child LI elements.
         var found = false;
         var dfsStack = Array.from(activeDesc.children);
@@ -444,6 +441,10 @@ blocklyApp.TreeService = ng.core.Class({
               'Type a value, then press Escape to exit');
             found = true;
             break;
+          } else if (currentNode.tagName == 'SELECT') {
+            currentNode.focus();
+            found = true;
+            return;
           } else if (currentNode.tagName == 'LI') {
             continue;
           }

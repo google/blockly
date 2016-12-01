@@ -49,21 +49,15 @@ blocklyApp.FieldSegmentComponent = ng.core.Component({
     </template>
 
     <template [ngIf]="isDropdown()">
-      <label [id]="mainFieldId" [attr.aria-label]="getFieldDescription() + ' Move right to view submenu'">
-        {{getFieldDescription()}}
-      </label>
-      <ol role="group">
-        <li [id]="idMap[optionValue]" role="treeitem" *ngFor="#optionValue of getOptions()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap[optionValue + 'Button'], 'blockly-translate-button')"
-            [attr.aria-level]="level" [attr.aria-selected]="mainField.getValue() == optionValue"
-            class="blocklyDropdownListItem">
-          <button [id]="idMap[optionValue + 'Button']" (click)="handleDropdownChange(mainField, optionValue)"
-                  [disabled]="disabled" tabindex="-1"
-                  [attr.aria-label]="optionText[optionValue] + ' Press Enter to select this value'">
-            {{optionText[optionValue]}}
-          </button>
-        </li>
-      </ol>
+      {{getPrefixText()}}
+      <select [id]="mainFieldId" [name]="mainFieldId" tabindex="-1"
+              [ngModel]="mainField.getValue()"
+              (ngModelChange)="handleDropdownChange(mainField, $event)">
+        <option *ngFor="#optionValue of getOptions()" value="{{optionValue}}"
+                [selected]="mainField.getValue() == optionValue">
+          {{optionText[optionValue]}}
+        </option>
+      </select>
     </template>
   </template>
   `,

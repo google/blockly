@@ -35,7 +35,7 @@ goog.require('goog.math.Coordinate');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to place this
  *     button.
  * @param {!Blockly.WorkspaceSvg} targetWorkspace The flyout's target workspace.
- * @param {!Element} xml The xml specifying the label/button.
+ * @param {!Element} xml The XML specifying the label/button.
  * @param {boolean} isLabel Whether this button should be styled as a label.
  * @constructor
  */
@@ -82,10 +82,10 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
 
   var callbackKey = xml.getAttribute('callbackKey');
   if (this.isLabel_ && callbackKey) {
-    console.log ('Labels should not have callbacks. Label text: ' + this.text_);
+    console.warn('Labels should not have callbacks. Label text: ' + this.text_);
   } else if (!this.isLabel_ &&
       !(callbackKey && Blockly.flyoutButtonCallbacks_[callbackKey])) {
-    console.log('Buttons should have callbacks. Button text: ' + this.text_);
+    console.warn('Buttons should have callbacks. Button text: ' + this.text_);
   } else {
     this.callback_ = Blockly.flyoutButtonCallbacks_[callbackKey];
   }

@@ -125,7 +125,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
     cssClass += ' ' + this.cssClass_;
   }
 
-  this.svgGroup_ = Blockly.createSvgElement('g', {'class': cssClass},
+  this.svgGroup_ = Blockly.utils.createSvgElement('g', {'class': cssClass},
       this.workspace_.getCanvas());
 
   if (!this.isLabel_) {
@@ -142,7 +142,7 @@ Blockly.FlyoutButton.prototype.createDom = function() {
         'rx': 4, 'ry': 4},
       this.svgGroup_);
 
-  var svgText = Blockly.createSvgElement('text',
+  var svgText = Blockly.utils.createSvgElement('text',
       {'class': this.isLabel_ ? 'blocklyFlyoutLabelText' : 'blocklyText',
           'x': 0, 'y': 0, 'text-anchor': 'middle'},
       this.svgGroup_);

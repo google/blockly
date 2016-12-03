@@ -73,7 +73,8 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface) {
    */
   this.SOUNDS_ = Object.create(null);
   /**
-   * List of currently highlighted blocks.
+   * List of currently highlighted blocks.  Block highlighting is often used to
+   * visually mark blocks currently being executed.
    * @type !Array.<!Blockly.BlockSvg>
    * @private
    */
@@ -82,14 +83,16 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface) {
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
 /**
- * A wrapper function called when a resize event occurs. You can pass the result to `unbindEvent_`.
+ * A wrapper function called when a resize event occurs.
+ * You can pass the result to `unbindEvent_`.
  * @type {Array.<!Array>}
  */
 Blockly.WorkspaceSvg.prototype.resizeHandlerWrapper_ = null;
 
 /**
  * The render status of an SVG workspace.
- * Returns `true` for visible workspaces and `false` for non-visible, or headless, workspaces.
+ * Returns `true` for visible workspaces and `false` for non-visible,
+ * or headless, workspaces.
  * @type {boolean}
  */
 Blockly.WorkspaceSvg.prototype.rendered = true;
@@ -613,7 +616,8 @@ Blockly.WorkspaceSvg.prototype.traceOn = function() {
 };
 
 /**
- * Highlight or unhighlight a block in the workspace.
+ * Highlight or unhighlight a block in the workspace.  Block highlighting is
+ * often used to visually mark blocks currently being executed.
  * @param {?string} id ID of block to highlight/unhighlight,
  *   or null for no block (used to unhighlight all blocks).
  * @param {boolean=} opt_state If undefined, highlight specified block and

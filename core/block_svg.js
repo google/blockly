@@ -1510,7 +1510,8 @@ Blockly.BlockSvg.prototype.setDisabled = function(disabled) {
 };
 
 /**
- * Set whether the block is highlighted or not.
+ * Set whether the block is highlighted or not.  Block highlighting is
+ * often used to visually mark blocks currently being executed.
  * @param {boolean} highlighted True if highlighted.
  */
 Blockly.BlockSvg.prototype.setHighlighted = function(highlighted) {

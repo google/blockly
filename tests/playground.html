@@ -320,6 +320,11 @@ h1 {
 #importExport {
   font-family: monospace;
 }
+
+.ioLabel>.blocklyFlyoutLabelText {
+  font-style: italic;
+}
+
 </style>
 </head>
 <body onload="start()">
@@ -586,6 +591,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <label text="Input/Output:" web-class="ioLabel"></label>
       <block type="text_print">
         <value name="TEXT">
           <shadow type="text">

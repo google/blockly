@@ -95,7 +95,7 @@ Blockly.FlyoutButton = function(workspace, targetWorkspace, xml, isLabel) {
    * @type {?string}
    * @private
    */
-  this.cssClass_ = xml.getAttribute('web-style') || null;
+  this.cssClass_ = xml.getAttribute('web-class') || null;
 };
 
 /**

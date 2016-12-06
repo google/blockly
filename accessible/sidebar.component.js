@@ -28,33 +28,30 @@ blocklyApp.SidebarComponent = ng.core.Component({
   selector: 'blockly-sidebar',
   template: `
   <div class="blocklySidebarColumn">
-    <div id="blockly-workspace-sidebar" (keydown)="onSidebarKeypress($event)">
-      <span *ngFor="#buttonConfig of customSidebarButtons">
-        <button id="{{buttonConfig.id || undefined}}"
-                (click)="handleButtonClick(buttonConfig)"
-                class="blocklySidebarButton">
-          {{buttonConfig.text}}
-        </button>
-      </span>
-      <button id="{{ID_FOR_ATTACH_TO_LINK_BUTTON}}"
-              (click)="showToolboxModalForAttachToMarkedConnection()"
-              [attr.disabled]="isAnyConnectionMarked() ? undefined : 'disabled'"
-              [attr.aria-disabled]="!isAnyConnectionMarked()"
-              class="blocklySidebarButton">
-        {{'ATTACH_NEW_BLOCK_TO_LINK'|translate}}
-      </button>
-      <button id="{{ID_FOR_CREATE_NEW_GROUP_BUTTON}}"
-              (click)="showToolboxModalForCreateNewGroup()"
-              class="blocklySidebarButton">
-        {{'CREATE_NEW_BLOCK_GROUP'|translate}}
-      </button>
-      <button id="clear-workspace" (click)="clearWorkspace()"
-              [attr.disabled]="isWorkspaceEmpty() ? 'disabled' : undefined"
-              [attr.aria-disabled]="isWorkspaceEmpty()"
-              class="blocklySidebarButton">
-        {{'ERASE_WORKSPACE'|translate}}
-      </button>
-    </div>
+    <button *ngFor="#buttonConfig of customSidebarButtons"
+            id="{{buttonConfig.id || undefined}}"
+            (click)="buttonConfig.action()"
+            class="blocklySidebarButton">
+      {{buttonConfig.text}}
+    </button>
+    <button id="{{ID_FOR_ATTACH_TO_LINK_BUTTON}}"
+            (click)="showToolboxModalForAttachToMarkedConnection()"
+            [attr.disabled]="!isAnyConnectionMarked() ? 'disabled' : undefined"
+            [attr.aria-disabled]="!isAnyConnectionMarked()"
+            class="blocklySidebarButton">
+      {{'ATTACH_NEW_BLOCK_TO_LINK'|translate}}
+    </button>
+    <button id="{{ID_FOR_CREATE_NEW_GROUP_BUTTON}}"
+            (click)="showToolboxModalForCreateNewGroup()"
+            class="blocklySidebarButton">
+      {{'CREATE_NEW_BLOCK_GROUP'|translate}}
+    </button>
+    <button id="clear-workspace" (click)="clearWorkspace()"
+            [attr.disabled]="isWorkspaceEmpty() ? 'disabled' : undefined"
+            [attr.aria-disabled]="isWorkspaceEmpty()"
+            class="blocklySidebarButton">
+      {{'ERASE_WORKSPACE'|translate}}
+    </button>
   </div>
   `,
   pipes: [blocklyApp.TranslatePipe]
@@ -75,7 +72,6 @@ blocklyApp.SidebarComponent = ng.core.Component({
       this.customSidebarButtons =
           ACCESSIBLE_GLOBALS && ACCESSIBLE_GLOBALS.customSidebarButtons ?
           ACCESSIBLE_GLOBALS.customSidebarButtons : [];
-      this.workspace = blocklyApp.workspace;
 
       this.blockConnectionService = blockConnectionService;
       this.toolboxModalService = toolboxModalService;
@@ -89,18 +85,12 @@ blocklyApp.SidebarComponent = ng.core.Component({
   isAnyConnectionMarked: function() {
     return this.blockConnectionService.isAnyConnectionMarked();
   },
-  handleButtonClick: function(buttonConfig) {
-    buttonConfig.action();
-  },
-  clearWorkspace: function() {
-    this.workspace.clear();
-    document.getElementById(this.ID_FOR_CREATE_NEW_GROUP_BUTTON).focus();
-  },
-  onSidebarKeypress: function(e) {
-    this.treeService.onSidebarKeypress(e, document.activeElement.id);
-  },
   isWorkspaceEmpty: function() {
     return this.utilsService.isWorkspaceEmpty();
+  },
+  clearWorkspace: function() {
+    blocklyApp.workspace.clear();
+    document.getElementById(this.ID_FOR_CREATE_NEW_GROUP_BUTTON).focus();
   },
   showToolboxModalForAttachToMarkedConnection: function() {
     this.toolboxModalService.showToolboxModalForAttachToMarkedConnection(

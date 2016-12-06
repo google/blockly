@@ -35,7 +35,8 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
           tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceFocusTarget"
           [attr.aria-activedescendant]="getActiveDescId(tree.id)"
           [attr.aria-labelledby]="workspaceTitle.id"
-          (keydown)="onKeypress($event, tree)">
+          (keydown)="onKeypress($event, tree)"
+          (focus)="speakLocation(i)">
         <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
         </blockly-workspace-tree>
       </ol>
@@ -58,12 +59,15 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
 })
 .Class({
   constructor: [
-    blocklyApp.TreeService, blocklyApp.ToolboxModalService,
-    function(_treeService, _toolboxModalService) {
-      this.treeService = _treeService;
-      this.toolboxModalService = _toolboxModalService;
-      this.workspace = blocklyApp.workspace;
+    blocklyApp.NotificationsService,
+    blocklyApp.ToolboxModalService,
+    blocklyApp.TreeService,
+    function(notificationsService, toolboxModalService, treeService) {
+      this.notificationsService = notificationsService;
+      this.toolboxModalService = toolboxModalService;
+      this.treeService = treeService;
 
+      this.workspace = blocklyApp.workspace;
       this.ID_FOR_EMPTY_WORKSPACE_BTN = 'blocklyEmptyWorkspaceButton';
     }
   ],
@@ -76,5 +80,10 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
   showToolboxModalForCreateNewGroup: function() {
     this.toolboxModalService.showToolboxModalForCreateNewGroup(
         this.ID_FOR_EMPTY_WORKSPACE_BTN);
+  },
+  speakLocation: function(index) {
+    this.notificationsService.speak(
+        'Now in workspace group ' + (index + 1) + ' of ' +
+        this.workspace.topBlocks_.length);
   }
 });

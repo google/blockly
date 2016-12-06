@@ -169,17 +169,6 @@ blocklyApp.TreeService = ng.core.Class({
       that.setActiveDesc(blockId + 'blockRoot', domNode.id);
     }, 100);
   },
-  onSidebarKeypress: function(e, treeId) {
-    if (e.keyCode == 9) {
-      // Tab key.
-      var destinationTreeId =
-          e.shiftKey ? this.getIdOfPreviousTree_(treeId) :
-          this.getIdOfNextTree_(treeId);
-      if (destinationTreeId) {
-        this.notifyUserAboutCurrentTree_(destinationTreeId);
-      }
-    }
-  },
   getNextActiveDescWhenBlockIsDeleted: function(blockRootNode) {
     // Go up a level, if possible.
     var nextNode = blockRootNode.parentNode;

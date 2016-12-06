@@ -63,6 +63,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             };
           }
         );
+        this.computeCategoriesForCreateNewGroupModal_();
       } else {
         // A timeout seems to be needed in order for the .children accessor to
         // work correctly.
@@ -79,10 +80,31 @@ blocklyApp.ToolboxModalService = ng.core.Class({
             categoryName: '',
             blocks: workspace.topBlocks_
           }];
+
+          that.computeCategoriesForCreateNewGroupModal_();
         });
       }
     }
   ],
+  computeCategoriesForCreateNewGroupModal_: function() {
+    // Precompute toolbox categories for blocks that have no output
+    // connection (and that can therefore be used as the base block of a
+    // "create new block group" action).
+    this.toolboxCategoriesForNewGroup = [];
+    var that = this;
+    this.allToolboxCategories.forEach(function(toolboxCategory) {
+      var baseBlocks = toolboxCategory.blocks.filter(function(block) {
+        return !block.outputConnection;
+      });
+
+      if (baseBlocks.length > 0) {
+        that.toolboxCategoriesForNewGroup.push({
+          categoryName: toolboxCategory.categoryName,
+          blocks: baseBlocks
+        });
+      }
+    });
+  },
   registerPreShowHook: function(preShowHook) {
     this.preShowHook = function() {
       preShowHook(
@@ -156,7 +178,7 @@ blocklyApp.ToolboxModalService = ng.core.Class({
   },
   showToolboxModalForCreateNewGroup: function(sourceButtonId) {
     var that = this;
-    this.showModal_(this.allToolboxCategories, function(block) {
+    this.showModal_(this.toolboxCategoriesForNewGroup, function(block) {
       var blockDescription = that.utilsService.getBlockDescription(block);
       var xml = Blockly.Xml.blockToDom(block);
       var newBlockId = Blockly.Xml.domToBlock(blocklyApp.workspace, xml).id;

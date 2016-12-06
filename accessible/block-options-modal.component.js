@@ -26,22 +26,26 @@
 blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   selector: 'blockly-block-options-modal',
   template: `
-    <div *ngIf="modalIsVisible" id="blockOptionsModal" role="dialog" tabindex="-1">
-      <div (click)="hideModal()" class="blocklyModalCurtain">
-        <!-- The $event.stopPropagation() here prevents the modal from
-        closing when its interior is clicked. -->
-        <div class="blocklyModal" (click)="$event.stopPropagation()" role="document">
+    <div *ngIf="modalIsVisible" class="blocklyModalCurtain"
+         (click)="hideModal()">
+      <!-- $event.stopPropagation() prevents the modal from closing when its
+      interior is clicked. -->
+      <div id="blockOptionsModal" class="blocklyModal" role="dialog"
+           (click)="$event.stopPropagation()" tabindex="-1">
+        <div role="document">
           <h3>{{'BLOCK_OPTIONS'|translate}}</h3>
 
           <div class="blocklyModalButtonContainer"
                *ngFor="#buttonInfo of actionButtonsInfo; #i=index">
-            <button [id]="getOptionId(i)" (click)="buttonInfo.action(); hideModal();"
+            <button [id]="getOptionId(i)"
+                    (click)="buttonInfo.action(); hideModal();"
                     [ngClass]="{activeButton: activeActionButtonIndex == i}">
               {{buttonInfo.translationIdForText|translate}}
             </button>
           </div>
           <div class="blocklyModalButtonContainer">
-            <button [id]="getCancelOptionId()" (click)="hideModal()"
+            <button [id]="getCancelOptionId()"
+                    (click)="hideModal()"
                     [ngClass]="{activeButton: activeActionButtonIndex == actionButtonsInfo.length}">
               {{'CANCEL'|translate}}
             </button>
@@ -129,7 +133,6 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
 
           setTimeout(function() {
             document.getElementById('blockOptionsModal').focus();
-            that.focusOnOption(that.activeActionButtonIndex);
           }, 150);
         }
       );

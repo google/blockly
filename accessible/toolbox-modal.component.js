@@ -26,11 +26,13 @@
 blocklyApp.ToolboxModalComponent = ng.core.Component({
   selector: 'blockly-toolbox-modal',
   template: `
-    <div *ngIf="modalIsVisible" id="toolboxModal" role="dialog" tabindex="-1">
-      <div (click)="dismissModal()" class="blocklyModalCurtain">
-        <!-- The $event.stopPropagation() here prevents the modal from
-        closing when its interior is clicked. -->
-        <div class="blocklyModal" (click)="$event.stopPropagation()" role="document">
+    <div *ngIf="modalIsVisible" class="blocklyModalCurtain"
+         (click)="dismissModal()">
+      <!-- $event.stopPropagation() prevents the modal from closing when its
+      interior is clicked. -->
+      <div id="toolboxModal" class="blocklyModal" role="dialog"
+           (click)="$event.stopPropagation()" tabindex="-1">
+        <div role="document">
           <h3>{{'SELECT_A_BLOCK'|translate}}</h3>
 
           <div *ngFor="#toolboxCategory of toolboxCategories; #categoryIndex=index">
@@ -157,7 +159,6 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
 
           setTimeout(function() {
             document.getElementById('toolboxModal').focus();
-            that.focusOnOption(that.activeButtonIndex);
           }, 150);
         }
       );

@@ -386,7 +386,7 @@ Code.init = function() {
   // Interpolate translated messages into toolbox.
   var toolboxText = document.getElementById('toolbox').outerHTML;
   toolboxText = toolboxText.replace(/{(\w+)}/g,
-      function(m, p1) {return MSG[p1]});
+      function(m, p1) {return MSG[p1];});
   var toolboxXml = Blockly.Xml.textToDom(toolboxText);
 
   Code.workspace = Blockly.inject('content_blocks',

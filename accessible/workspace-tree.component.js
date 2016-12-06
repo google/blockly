@@ -27,48 +27,48 @@
 blocklyApp.WorkspaceTreeComponent = ng.core.Component({
   selector: 'blockly-workspace-tree',
   template: `
-  <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
-      [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-translate-workspace-block')"
-      [attr.aria-level]="level">
-    <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
+    <li [id]="idMap['blockRoot']" role="treeitem" class="blocklyHasChildren"
+        [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['blockSummary'], 'blockly-translate-workspace-block')"
+        [attr.aria-level]="level">
+      <label [id]="idMap['blockSummary']">{{getBlockDescription()}}</label>
 
-    <ol role="group">
-      <template ngFor #blockInput [ngForOf]="block.inputList" #i="index">
-        <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="blockInput.fieldRow.length"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
-          <blockly-field-segment *ngFor="#fieldSegment of inputListAsFieldSegments[i]"
-                                 [prefixFields]="fieldSegment.prefixFields"
-                                 [mainField]="fieldSegment.mainField"
-                                 [mainFieldId]="idMap['fieldLabel' + i]"
-                                 [level]="level + 2">
-          </blockly-field-segment>
-        </li>
+      <ol role="group">
+        <template ngFor #blockInput [ngForOf]="block.inputList" #i="index">
+          <li role="treeitem" [id]="idMap['listItem' + i]" [attr.aria-level]="level + 1" *ngIf="blockInput.fieldRow.length"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['fieldLabel' + i])">
+            <blockly-field-segment *ngFor="#fieldSegment of inputListAsFieldSegments[i]"
+                                   [prefixFields]="fieldSegment.prefixFields"
+                                   [mainField]="fieldSegment.mainField"
+                                   [mainFieldId]="idMap['fieldLabel' + i]"
+                                   [level]="level + 2">
+            </blockly-field-segment>
+          </li>
 
-        <blockly-workspace-tree *ngIf="blockInput.connection && blockInput.connection.targetBlock()"
-                                [block]="blockInput.connection.targetBlock()" [level]="level + 1"
-                                [tree]="tree">
-        </blockly-workspace-tree>
-        <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
-            *ngIf="blockInput.connection && !blockInput.connection.targetBlock()"
-            [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
-            [attr.aria-level]="level + 1">
-          <label [id]="idMap['inputMenuLabel' + i]">
-            {{getBlockNeededLabel(blockInput)}}
-          </label>
-          <button [id]="idMap[fieldButtonsInfo[0].baseIdKey + 'Button' + i]"
-                  (click)="fieldButtonsInfo[0].action(blockInput.connection)"
-                  [disabled]="fieldButtonsInfo[0].isDisabled(blockInput.connection)" tabindex="-1">
-            {{fieldButtonsInfo[0].translationIdForText|translate}}
-          </button>
-        </li>
-      </template>
-    </ol>
-  </li>
+          <blockly-workspace-tree *ngIf="blockInput.connection && blockInput.connection.targetBlock()"
+                                  [block]="blockInput.connection.targetBlock()" [level]="level + 1"
+                                  [tree]="tree">
+          </blockly-workspace-tree>
+          <li #inputList [id]="idMap['inputList' + i]" role="treeitem"
+              *ngIf="blockInput.connection && !blockInput.connection.targetBlock()"
+              [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
+              [attr.aria-level]="level + 1">
+            <label [id]="idMap['inputMenuLabel' + i]">
+              {{getBlockNeededLabel(blockInput)}}
+            </label>
+            <button [id]="idMap[fieldButtonsInfo[0].baseIdKey + 'Button' + i]"
+                    (click)="fieldButtonsInfo[0].action(blockInput.connection)"
+                    [disabled]="fieldButtonsInfo[0].isDisabled(blockInput.connection)" tabindex="-1">
+              {{fieldButtonsInfo[0].translationIdForText|translate}}
+            </button>
+          </li>
+        </template>
+      </ol>
+    </li>
 
-  <blockly-workspace-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
-                          [block]="block.nextConnection.targetBlock()"
-                          [level]="level" [tree]="tree">
-  </blockly-workspace-tree>
+    <blockly-workspace-tree *ngIf= "block.nextConnection && block.nextConnection.targetBlock()"
+                            [block]="block.nextConnection.targetBlock()"
+                            [level]="level" [tree]="tree">
+    </blockly-workspace-tree>
   `,
   directives: [blocklyApp.FieldSegmentComponent, ng.core.forwardRef(function() {
     return blocklyApp.WorkspaceTreeComponent;

@@ -27,39 +27,39 @@
 blocklyApp.FieldSegmentComponent = ng.core.Component({
   selector: 'blockly-field-segment',
   template: `
-  <template [ngIf]="!mainField">
-    <label [id]="mainFieldId">{{getPrefixText()}}</label>
-  </template>
-
-  <template [ngIf]="mainField">
-    <template [ngIf]="isTextInput()">
-      {{getPrefixText()}}
-      <input [id]="mainFieldId" type="text" [disabled]="disabled"
-             [ngModel]="mainField.getValue()" (ngModelChange)="mainField.setValue($event)"
-             [attr.aria-label]="getFieldDescription() + (disabled ? 'Disabled text field' : 'Press Enter to edit text')"
-             tabindex="-1">
+    <template [ngIf]="!mainField">
+      <label [id]="mainFieldId">{{getPrefixText()}}</label>
     </template>
 
-    <template [ngIf]="isNumberInput()">
-      {{getPrefixText()}}
-      <input [id]="mainFieldId" type="number" [disabled]="disabled"
-             [ngModel]="mainField.getValue()" (ngModelChange)="setNumberValue($event)"
-             [attr.aria-label]="getFieldDescription() + (disabled ? 'Disabled number field' : 'Press Enter to edit number')"
-             tabindex="-1">
-    </template>
+    <template [ngIf]="mainField">
+      <template [ngIf]="isTextInput()">
+        {{getPrefixText()}}
+        <input [id]="mainFieldId" type="text" [disabled]="disabled"
+               [ngModel]="mainField.getValue()" (ngModelChange)="mainField.setValue($event)"
+               [attr.aria-label]="getFieldDescription() + (disabled ? 'Disabled text field' : 'Press Enter to edit text')"
+               tabindex="-1">
+      </template>
 
-    <template [ngIf]="isDropdown()">
-      {{getPrefixText()}}
-      <select [id]="mainFieldId" [name]="mainFieldId" tabindex="-1"
-              [ngModel]="mainField.getValue()"
-              (ngModelChange)="handleDropdownChange(mainField, $event)">
-        <option *ngFor="#optionValue of getOptions()" value="{{optionValue}}"
-                [selected]="mainField.getValue() == optionValue">
-          {{optionText[optionValue]}}
-        </option>
-      </select>
+      <template [ngIf]="isNumberInput()">
+        {{getPrefixText()}}
+        <input [id]="mainFieldId" type="number" [disabled]="disabled"
+               [ngModel]="mainField.getValue()" (ngModelChange)="setNumberValue($event)"
+               [attr.aria-label]="getFieldDescription() + (disabled ? 'Disabled number field' : 'Press Enter to edit number')"
+               tabindex="-1">
+      </template>
+
+      <template [ngIf]="isDropdown()">
+        {{getPrefixText()}}
+        <select [id]="mainFieldId" [name]="mainFieldId" tabindex="-1"
+                [ngModel]="mainField.getValue()"
+                (ngModelChange)="handleDropdownChange(mainField, $event)">
+          <option *ngFor="#optionValue of getOptions()" value="{{optionValue}}"
+                  [selected]="mainField.getValue() == optionValue">
+            {{optionText[optionValue]}}
+          </option>
+        </select>
+      </template>
     </template>
-  </template>
   `,
   inputs: ['prefixFields', 'mainField', 'mainFieldId', 'level'],
   pipes: [blocklyApp.TranslatePipe]

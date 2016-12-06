@@ -27,32 +27,32 @@
 blocklyApp.WorkspaceComponent = ng.core.Component({
   selector: 'blockly-workspace',
   template: `
-  <div class="blocklyWorkspaceColumn">
-    <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
+    <div class="blocklyWorkspaceColumn">
+      <h3 #workspaceTitle id="blockly-workspace-title">{{'WORKSPACE'|translate}}</h3>
 
-    <div *ngIf="workspace" class="blocklyWorkspace">
-      <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
-          tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceFocusTarget"
-          [attr.aria-activedescendant]="getActiveDescId(tree.id)"
-          [attr.aria-labelledby]="workspaceTitle.id"
-          (keydown)="onKeypress($event, tree)"
-          (focus)="speakLocation(i)">
-        <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
-        </blockly-workspace-tree>
-      </ol>
+      <div *ngIf="workspace" class="blocklyWorkspace">
+        <ol #tree *ngFor="#block of workspace.topBlocks_; #i = index"
+            tabindex="0" role="tree" class="blocklyTree blocklyWorkspaceFocusTarget"
+            [attr.aria-activedescendant]="getActiveDescId(tree.id)"
+            [attr.aria-labelledby]="workspaceTitle.id"
+            (keydown)="onKeypress($event, tree)"
+            (focus)="speakLocation(i)">
+          <blockly-workspace-tree [level]="0" [block]="block" [tree]="tree" [isTopLevel]="true">
+          </blockly-workspace-tree>
+        </ol>
 
-      <span *ngIf="workspace.topBlocks_.length === 0">
-        <p>
-          There are no blocks in the workspace.
-          <button (click)="showToolboxModalForCreateNewGroup()"
-                  class="blocklyWorkspaceFocusTarget"
-                  id="{{ID_FOR_EMPTY_WORKSPACE_BTN}}">
-            Create new block group...
-          </button>
-        </p>
-      </span>
+        <span *ngIf="workspace.topBlocks_.length === 0">
+          <p>
+            There are no blocks in the workspace.
+            <button (click)="showToolboxModalForCreateNewGroup()"
+                    class="blocklyWorkspaceFocusTarget"
+                    id="{{ID_FOR_EMPTY_WORKSPACE_BTN}}">
+              Create new block group...
+            </button>
+          </p>
+        </span>
+      </div>
     </div>
-  </div>
   `,
   directives: [blocklyApp.WorkspaceTreeComponent],
   pipes: [blocklyApp.TranslatePipe]

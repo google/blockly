@@ -27,32 +27,32 @@
 blocklyApp.SidebarComponent = ng.core.Component({
   selector: 'blockly-sidebar',
   template: `
-  <div class="blocklySidebarColumn">
-    <button *ngFor="#buttonConfig of customSidebarButtons"
-            id="{{buttonConfig.id || undefined}}"
-            (click)="buttonConfig.action()"
-            class="blocklySidebarButton">
-      {{buttonConfig.text}}
-    </button>
-    <button id="{{ID_FOR_ATTACH_TO_LINK_BUTTON}}"
-            (click)="showToolboxModalForAttachToMarkedConnection()"
-            [attr.disabled]="!isAnyConnectionMarked() ? 'disabled' : undefined"
-            [attr.aria-disabled]="!isAnyConnectionMarked()"
-            class="blocklySidebarButton">
-      {{'ATTACH_NEW_BLOCK_TO_LINK'|translate}}
-    </button>
-    <button id="{{ID_FOR_CREATE_NEW_GROUP_BUTTON}}"
-            (click)="showToolboxModalForCreateNewGroup()"
-            class="blocklySidebarButton">
-      {{'CREATE_NEW_BLOCK_GROUP'|translate}}
-    </button>
-    <button id="clear-workspace" (click)="clearWorkspace()"
-            [attr.disabled]="isWorkspaceEmpty() ? 'disabled' : undefined"
-            [attr.aria-disabled]="isWorkspaceEmpty()"
-            class="blocklySidebarButton">
-      {{'ERASE_WORKSPACE'|translate}}
-    </button>
-  </div>
+    <div class="blocklySidebarColumn">
+      <button *ngFor="#buttonConfig of customSidebarButtons"
+              id="{{buttonConfig.id || undefined}}"
+              (click)="buttonConfig.action()"
+              class="blocklySidebarButton">
+        {{buttonConfig.text}}
+      </button>
+      <button id="{{ID_FOR_ATTACH_TO_LINK_BUTTON}}"
+              (click)="showToolboxModalForAttachToMarkedConnection()"
+              [attr.disabled]="!isAnyConnectionMarked() ? 'disabled' : undefined"
+              [attr.aria-disabled]="!isAnyConnectionMarked()"
+              class="blocklySidebarButton">
+        {{'ATTACH_NEW_BLOCK_TO_LINK'|translate}}
+      </button>
+      <button id="{{ID_FOR_CREATE_NEW_GROUP_BUTTON}}"
+              (click)="showToolboxModalForCreateNewGroup()"
+              class="blocklySidebarButton">
+        {{'CREATE_NEW_BLOCK_GROUP'|translate}}
+      </button>
+      <button id="clear-workspace" (click)="clearWorkspace()"
+              [attr.disabled]="isWorkspaceEmpty() ? 'disabled' : undefined"
+              [attr.aria-disabled]="isWorkspaceEmpty()"
+              class="blocklySidebarButton">
+        {{'ERASE_WORKSPACE'|translate}}
+      </button>
+    </div>
   `,
   pipes: [blocklyApp.TranslatePipe]
 })

@@ -53,7 +53,7 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
             [attr.aria-labelledBy]="generateAriaLabelledByAttr(idMap['inputMenuLabel' + i], 'blockly-submenu-indicator')"
             [attr.aria-level]="level + 1">
           <label [id]="idMap['inputMenuLabel' + i]">
-            {{utilsService.getInputTypeLabel(blockInput.connection)}} {{utilsService.getBlockTypeLabel(blockInput)}} needed:
+            {{getBlockNeededLabel(blockInput)}}
           </label>
           <button [id]="idMap[fieldButtonsInfo[0].baseIdKey + 'Button' + i]"
                   (click)="fieldButtonsInfo[0].action(blockInput.connection)"
@@ -200,5 +200,15 @@ blocklyApp.WorkspaceTreeComponent = ng.core.Component({
   generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
     return this.utilsService.generateAriaLabelledByAttr(
         mainLabel, secondLabel);
+  },
+  getBlockNeededLabel: function(blockInput) {
+    // The input type name, or 'any' if any official input type qualifies.
+    var inputTypeLabel = (
+        blockInput.connection.check_ ?
+        blockInput.connection.check_.join(', ') : Blockly.Msg.ANY);
+    var blockTypeLabel = (
+        blockInput.type == Blockly.NEXT_STATEMENT ?
+        Blockly.Msg.BLOCK : Blockly.Msg.VALUE);
+    return inputTypeLabel + ' ' + blockTypeLabel + ' needed:';
   }
 });

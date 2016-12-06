@@ -28,7 +28,7 @@
 var blocklyApp = {};
 
 blocklyApp.UtilsService = ng.core.Class({
-  constructor: function() {},
+  constructor: [function() {}],
   generateUniqueId: function() {
     return 'blockly-' + Blockly.utils.genUid();
   },
@@ -42,22 +42,6 @@ blocklyApp.UtilsService = ng.core.Class({
   generateAriaLabelledByAttr: function(mainLabel, secondLabel) {
     return mainLabel + (secondLabel ? ' ' + secondLabel : '');
   },
-  getInputTypeLabel: function(connection) {
-    // Returns the input type name, or 'any' if any official input type
-    // qualifies.
-    if (connection.check_) {
-      return connection.check_.join(', ');
-    } else {
-      return Blockly.Msg.ANY;
-    }
-  },
-  getBlockTypeLabel: function(inputBlock) {
-    if (inputBlock.type == Blockly.NEXT_STATEMENT) {
-      return Blockly.Msg.BLOCK;
-    } else {
-      return Blockly.Msg.VALUE;
-    }
-  },
   getBlockDescription: function(block) {
     // We use 'BLANK' instead of the default '?' so that the string is read
     // out. (By default, screen readers tend to ignore punctuation.)
@@ -65,8 +49,5 @@ blocklyApp.UtilsService = ng.core.Class({
   },
   isWorkspaceEmpty: function() {
     return !blocklyApp.workspace.topBlocks_.length;
-  },
-  getBlockById: function(blockId) {
-    return blocklyApp.workspace.getBlockById(blockId);
   }
 });

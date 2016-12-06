@@ -362,7 +362,7 @@ blocklyApp.TreeService = ng.core.Class({
     var blockRootSuffix = this.getBlockRootSuffix_();
     var blockId = blockRootNode.id.substring(
         0, blockRootNode.id.length - blockRootSuffix.length);
-    return this.utilsService.getBlockById(blockId);
+    return blocklyApp.workspace.getBlockById(blockId);
   },
   onKeypress: function(e, tree) {
     // TODO(sll): Instead of this, have a common ActiveContextService which

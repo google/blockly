@@ -456,7 +456,7 @@ Blockly.Toolbox.prototype.refreshSelection = function() {
 // Extending Closure's Tree UI.
 
 /**
- * Extention of a TreeControl object that uses a custom tree node.
+ * Extension of a TreeControl object that uses a custom tree node.
  * @param {Blockly.Toolbox} toolbox The parent toolbox for this tree.
  * @param {Object} config The configuration for the tree. See
  *    goog.ui.tree.TreeControl.DefaultConfig.
@@ -476,9 +476,9 @@ goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
 Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
   Blockly.Toolbox.TreeControl.superClass_.enterDocument.call(this);
 
-  var el = this.getElement();
   // Add touch handler.
   if (goog.events.BrowserFeature.TOUCH_ENABLED) {
+    var el = this.getElement();
     Blockly.bindEventWithChecks_(el, goog.events.EventType.TOUCHSTART, this,
         this.handleTouchEvent_);
   }

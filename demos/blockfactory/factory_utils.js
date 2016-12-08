@@ -250,8 +250,10 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     JS.colour = hue;
   }
-  JS.tooltip = '';
-  JS.helpUrl = 'http://www.example.com/';
+
+  JS.tooltip = FactoryUtils.getTooltipFromRootBlock_(rootBlock);
+  JS.helpUrl = FactoryUtils.getHelpUrlFromRootBlock_(rootBlock);
+
   return JSON.stringify(JS, null, '  ');
 };
 
@@ -334,8 +336,11 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
       code.push('    this.setColour(' + hue + ');');
     }
   }
-  code.push("    this.setTooltip('');");
-  code.push("    this.setHelpUrl('http://www.example.com/');");
+
+  var tooltip = FactoryUtils.getTooltipFromRootBlock_(rootBlock);
+  var helpUrl = FactoryUtils.getHelpUrlFromRootBlock_(rootBlock);
+  code.push("    this.setTooltip('" + tooltip + "');");
+  code.push("    this.setHelpUrl('" + helpUrl + "');");
   code.push('  }');
   code.push('};');
   return code.join('\n');
@@ -950,4 +955,32 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
     return FactoryUtils.sameBlockXml(savedXml, currentXml);
   }
   return false;
+};
+
+/**
+ * Given the root block of the factory, return the tooltip specified by the user
+ * or the empty string if no tooltip is found.
+ * @param {!Blockly.Block} rootBlock Factory_base block.
+ * @return {string} The tooltip for the generated block, or the empty string.
+ */
+FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
+  var tooltipBlock = rootBlock.getInputTargetBlock('TOOLTIP');
+  if (tooltipBlock && !tooltipBlock.disabled) {
+    return tooltipBlock.getFieldValue('TEXT');
+  }
+  return '';
+};
+
+/**
+ * Given the root block of the factory, return the help url specified by the
+ * user or the empty string if no tooltip is found.
+ * @param {!Blockly.Block} rootBlock Factory_base block.
+ * @return {string} The help url for the generated block, or the empty string.
+ */
+FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
+  var helpUrlBlock = rootBlock.getInputTargetBlock('HELPURL');
+  if (helpUrlBlock && !helpUrlBlock.disabled) {
+    return helpUrlBlock.getFieldValue('TEXT');
+  }
+  return '';
 };

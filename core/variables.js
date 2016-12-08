@@ -105,7 +105,7 @@ Blockly.Variables.flyoutCategory = function(workspace) {
   button.setAttribute('text', Blockly.Msg.NEW_VARIABLE);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE');
 
-  Blockly.registerButtonCallback('CREATE_VARIABLE', function(button) {
+  workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
     Blockly.Variables.createVariable(button.getTargetWorkspace());
   });
 

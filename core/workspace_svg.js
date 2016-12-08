@@ -200,6 +200,14 @@ Blockly.WorkspaceSvg.prototype.lastSound_ = null;
 Blockly.WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
 
 /**
+ * Map from function names to callbacks, for deciding what to do when a button
+ * is clicked.
+ * @type {!Object<string, function(!Blockly.FlyoutButton)>}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.flyoutButtonCallbacks_ = {};
+
+/**
  * Inverted screen CTM, for use in mouseToSvg.
  * @type {SVGMatrix}
  * @private
@@ -1510,6 +1518,32 @@ Blockly.WorkspaceSvg.prototype.clear = function() {
   this.setResizesEnabled(false);
   Blockly.WorkspaceSvg.superClass_.clear.call(this);
   this.setResizesEnabled(true);
+};
+
+/**
+ * Register a callback function associated with a given key, for clicks on
+ * buttons and labels in the flyout.
+ * For instance, a button specified by the XML
+ * <button text="create variable" callbackKey="CREATE_VARIABLE"></button>
+ * should be matched by a call to
+ * registerButtonCallback("CREATE_VARIABLE", yourCallbackFunction).
+ * @param {string} key The name to use to look up this function.
+ * @param {function(!Blockly.FlyoutButton)} func The function to call when the
+ *     given button is clicked.
+ */
+Blockly.WorkspaceSvg.prototype.registerButtonCallback = function(key, func) {
+  this.flyoutButtonCallbacks_[key] = func;
+};
+
+/**
+ * Get the callback function associated with a given key, for clicks on buttons
+ * and labels in the flyout.
+ * @param {string} key The name to use to look up the function.
+ * @return {function(!Blockly.FlyoutButton)} The function corresponding to the
+ *     given key for this workspace.
+ */
+Blockly.WorkspaceSvg.prototype.getButtonCallback = function(key) {
+  return this.flyoutButtonCallbacks_[key];
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.

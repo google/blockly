@@ -493,8 +493,7 @@ blocklyApp.TreeService = ng.core.Class({
             if (this.getParentListElement_(activeDesc)) {
               statusMessage += ' Press left to go to parent list.';
             }
-            this.audioService.playOopsSound();
-            this.notificationsService.speak(statusMessage);
+            this.audioService.playOopsSound(statusMessage);
           }
         } else if (e.keyCode == 39) {
           // Right arrow key. Go down a level, if possible.
@@ -505,8 +504,7 @@ blocklyApp.TreeService = ng.core.Class({
           if (nextSibling) {
             this.setActiveDesc(nextSibling.id, treeId);
           } else {
-            this.audioService.playOopsSound();
-            this.notificationsService.speak('Reached bottom of list.');
+            this.audioService.playOopsSound('Reached bottom of list.');
           }
         }
 

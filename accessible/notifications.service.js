@@ -53,6 +53,6 @@ blocklyApp.NotificationsService = ng.core.Class({
     }, 20));
     this.timeouts.push(setTimeout(function() {
       that.setDisplayedMessage_('');
-    }, 2000));
+    }, 5000));
   }
 });

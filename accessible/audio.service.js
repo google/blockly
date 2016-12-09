@@ -23,27 +23,38 @@
  */
 
 blocklyApp.AudioService = ng.core.Class({
-  constructor: [function() {
-    // We do not play any audio unless a media path prefix is specified.
-    this.canPlayAudio = false;
+  constructor: [
+    blocklyApp.NotificationsService, function(notificationsService) {
+      this.notificationsService = notificationsService;
 
-    if (ACCESSIBLE_GLOBALS.hasOwnProperty('mediaPathPrefix')) {
-      this.canPlayAudio = true;
-      var mediaPathPrefix = ACCESSIBLE_GLOBALS['mediaPathPrefix'];
-      this.AUDIO_PATHS_ = {
-        'connect': mediaPathPrefix + 'click.mp3',
-        'delete': mediaPathPrefix + 'delete.mp3',
-        'oops': mediaPathPrefix + 'oops.mp3'
-      };
+      // We do not play any audio unless a media path prefix is specified.
+      this.canPlayAudio = false;
+
+      if (ACCESSIBLE_GLOBALS.hasOwnProperty('mediaPathPrefix')) {
+        this.canPlayAudio = true;
+        var mediaPathPrefix = ACCESSIBLE_GLOBALS['mediaPathPrefix'];
+        this.AUDIO_PATHS_ = {
+          'connect': mediaPathPrefix + 'click.mp3',
+          'delete': mediaPathPrefix + 'delete.mp3',
+          'oops': mediaPathPrefix + 'oops.mp3'
+        };
+      }
+
+      this.cachedAudioFiles_ = {};
     }
-
-    this.cachedAudioFiles_ = {};
-  }],
-  play_: function(audioId) {
+  ],
+  play_: function(audioId, onEndedCallback) {
     if (this.canPlayAudio) {
       if (!this.cachedAudioFiles_.hasOwnProperty(audioId)) {
         this.cachedAudioFiles_[audioId] = new Audio(this.AUDIO_PATHS_[audioId]);
       }
+      if (onEndedCallback) {
+        this.cachedAudioFiles_[audioId].addEventListener(
+            'ended', onEndedCallback);
+      } else {
+        this.cachedAudioFiles_[audioId].removeEventListener('ended');
+      }
+
       this.cachedAudioFiles_[audioId].play();
     }
   },
@@ -53,7 +64,14 @@ blocklyApp.AudioService = ng.core.Class({
   playDeleteSound: function() {
     this.play_('delete');
   },
-  playOopsSound: function() {
-    this.play_('oops');
+  playOopsSound: function(optionalStatusMessage) {
+    if (optionalStatusMessage) {
+      var that = this;
+      this.play_('oops', function() {
+        that.notificationsService.speak(optionalStatusMessage);
+      });
+    } else {
+      this.play_('oops');
+    }
   }
 });

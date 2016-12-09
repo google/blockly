@@ -29,8 +29,10 @@ blocklyApp.AppComponent = ng.core.Component({
   template: `
     <blockly-workspace></blockly-workspace>
     <blockly-sidebar></blockly-sidebar>
-    <div *ngIf="getAriaLiveReadout()" class="blocklyAriaLiveStatus"
-         aria-hidden="true">
+    <!-- Warning: Hiding this when there is no content looks visually nicer,
+    but it can have unexpected side effects. In particular, it sometimes stops
+    screenreaders from reading anything in this div. -->
+    <div class="blocklyAriaLiveStatus">
       <span aria-live="polite" role="status">{{getAriaLiveReadout()}}</span>
     </div>
 

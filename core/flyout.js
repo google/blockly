@@ -177,6 +177,20 @@ Blockly.Flyout.onMouseMoveBlockWrapper_ = null;
 Blockly.Flyout.prototype.autoClose = true;
 
 /**
+ * Whether the flyout handle is visible.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Flyout.prototype.isVisible_ = false;
+
+/**
+ * Whether the workspace containing this flyout is visible.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Flyout.prototype.containerVisible_ = true;
+
+/**
  * Corner radius of the flyout background.
  * @type {number}
  * @const
@@ -260,18 +274,24 @@ Blockly.Flyout.prototype.dragMode_ = Blockly.DRAG_NONE;
 Blockly.Flyout.prototype.dragAngleRange_ = 70;
 
 /**
- * Creates the flyout's DOM.  Only needs to be called once.
+ * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
+ * either exist as its own <svg> element or be a <g> nested inside a separate
+ * <svg> element.
+ * @param {string} tagName The type of tag to put the flyout in. This
+ * should be <svg> or <g>.
  * @return {!Element} The flyout's SVG group.
  */
-Blockly.Flyout.prototype.createDom = function() {
+Blockly.Flyout.prototype.createDom = function(tagName) {
   /*
-  <g>
+  <svg | g>
     <path class="blocklyFlyoutBackground"/>
     <g class="blocklyFlyout"></g>
-  </g>
+  </ svg | g>
   */
-  this.svgGroup_ = Blockly.utils.createSvgElement('g',
-      {'class': 'blocklyFlyout'}, null);
+  // Setting style to display none to start. The toolbox and flyout
+  // hide/show code will set up proper visibility and size later.
+  this.svgGroup_ = Blockly.utils.createSvgElement(tagName,
+      {'class': 'blocklyFlyout', 'style': 'display:none'}, null);
   this.svgBackground_ = Blockly.utils.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
@@ -469,8 +489,6 @@ Blockly.Flyout.prototype.position = function() {
     y -= this.height_;
   }
 
-  this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
-
   // Record the height for Blockly.Flyout.getMetrics_, or width if the layout is
   // horizontal.
   if (this.horizontalLayout_) {
@@ -479,8 +497,15 @@ Blockly.Flyout.prototype.position = function() {
     this.height_ = targetWorkspaceMetrics.viewHeight;
   }
 
+  this.svgGroup_.setAttribute("width", this.width_);
+  this.svgGroup_.setAttribute("height", this.height_);
+  var transform = 'translate(' + x + 'px,' + y + 'px)';  
+  this.svgGroup_.style.transform = transform;
+
   // Update the scrollbar (if one exists).
   if (this.scrollbar_) {
+    // Set the scrollbars origin to be the top left of the flyout.
+    this.scrollbar_.setOrigin(x, y);
     this.scrollbar_.resize();
   }
 };
@@ -623,7 +648,52 @@ Blockly.Flyout.prototype.wheel_ = function(e) {
  * @return {boolean} True if visible.
  */
 Blockly.Flyout.prototype.isVisible = function() {
-  return this.svgGroup_ && this.svgGroup_.style.display == 'block';
+  return this.isVisible_;
+};
+
+ /**
+ * Set whether the flyout is visible.  It might be invisible because
+ * it is in a closed toolbox or because the workspace it controls
+ * is invisible.
+ * Only applies to non-paired scrollbars.
+ * @param {boolean} visible True if visible.
+ */
+Blockly.Flyout.prototype.setVisible = function(visible) {
+  var visibilityChanged = (visible != this.isVisible());
+
+  this.isVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
+
+/**
+ * Set whether this flyout's container is visible.
+ * @param {boolean} visible Whether the container is visible.
+ */
+Blockly.Flyout.prototype.setContainerVisible = function(visible) {
+  var visibilityChanged = (visible != this.containerVisible_);
+  this.containerVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
+
+/**
++ * Update the visibility of the flyout based whether it thinks it should
++ * be visible and whether its containing workspace is visible.
++ */
+Blockly.Flyout.prototype.updateDisplay_ = function() {
+  var show = true;
+  if (!this.containerVisible_) {
+    show = false; 
+  } else {
+    show = this.isVisible();
+  }
+  this.svgGroup_.style.display = show ? 'block' : 'none';
+  // Update the scrollbar's visiblity too since it should mimic the
+  // flyout's visibility.
+  this.scrollbar_.setContainerVisible(show);
 };
 
 /**
@@ -633,7 +703,7 @@ Blockly.Flyout.prototype.hide = function() {
   if (!this.isVisible()) {
     return;
   }
-  this.svgGroup_.style.display = 'none';
+  this.setVisible(false);
   // Delete all the event listeners.
   for (var x = 0, listen; listen = this.listeners_[x]; x++) {
     Blockly.unbindEvent_(listen);
@@ -666,7 +736,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
         Blockly.Procedures.flyoutCategory(this.workspace_.targetWorkspace);
   }
 
-  this.svgGroup_.style.display = 'block';
+  this.setVisible(true);
   // Create the blocks to be shown in this flyout.
   var contents = [];
   var gaps = [];
@@ -1131,7 +1201,10 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   }
   // Figure out where the original block is on the screen, relative to the upper
   // left corner of the main workspace.
-  var xyOld = targetWorkspace.getSvgXY(svgRootOld);
+  var xyOld = Blockly.utils.getInjectionDivXY_(svgRootOld);
+  if (targetWorkspace.isMutator) {
+    xyOld = this.workspace_.getSvgXY(/** @type {!Element} */ (svgRootOld));
+  }
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).
   // Generally a no-op in vertical mode but likely to happen in horizontal
@@ -1175,7 +1248,10 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   // upper left corner of the workspace.  This may not be the same as the
   // original block because the flyout's origin may not be the same as the
   // main workspace's origin.
-  var xyNew = targetWorkspace.getSvgXY(svgRootNew);
+  var xyNew = Blockly.utils.getInjectionDivXY_(svgRootNew);
+    if (targetWorkspace.isMutator) {
+      xyNew = targetWorkspace.getSvgXY(/* @type {!Element} */(svgRootNew));
+  }
   // Scale the scroll (getSvgXY_ did not do this).
   xyNew.x +=
       targetWorkspace.scrollX / targetWorkspace.scale - targetWorkspace.scrollX;

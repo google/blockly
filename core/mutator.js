@@ -130,8 +130,16 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   };
   this.workspace_ = new Blockly.WorkspaceSvg(workspaceOptions);
   this.workspace_.isMutator = true;
-  this.svgDialog_.appendChild(
-      this.workspace_.createDom('blocklyMutatorBackground'));
+
+  // Mutator flyouts go inside the mutator workspace's <g> rather than in
+  // a top level svg.  because instead of handling scale themselves, mutators
+  // inherit scale from the parent workspace.
+  // To fix this, scale needs to be applied at a different level in the dom.
+  var flyoutSvg =  this.workspace_.addFlyout_('g');
+  var background = this.workspace_.createDom('blocklyMutatorBackground');
+  background.appendChild(flyoutSvg);
+  this.svgDialog_.appendChild(background);
+
   return this.svgDialog_;
 };
 

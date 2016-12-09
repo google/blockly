@@ -90,7 +90,11 @@ blocklyApp.SidebarComponent = ng.core.Component({
   },
   clearWorkspace: function() {
     blocklyApp.workspace.clear();
-    document.getElementById(this.ID_FOR_CREATE_NEW_GROUP_BUTTON).focus();
+    // The timeout is needed in order to give the blocks time to be cleared
+    // from the workspace, and for the 'workspace is empty' button to show up.
+    setTimeout(function() {
+      document.getElementById(blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN).focus();
+    }, 50);
   },
   showToolboxModalForAttachToMarkedConnection: function() {
     this.toolboxModalService.showToolboxModalForAttachToMarkedConnection(

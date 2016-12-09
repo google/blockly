@@ -26,6 +26,7 @@
  */
 
 var blocklyApp = {};
+blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN = 'blocklyEmptyWorkspaceBtn';
 
 blocklyApp.UtilsService = ng.core.Class({
   constructor: [function() {}],

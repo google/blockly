@@ -42,11 +42,12 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
         </ol>
 
         <span *ngIf="workspace.topBlocks_.length === 0">
-          <p>
+          <p id="emptyWorkspaceBtnLabel">
             There are no blocks in the workspace.
             <button (click)="showToolboxModalForCreateNewGroup()"
                     class="blocklyWorkspaceFocusTarget"
-                    id="{{ID_FOR_EMPTY_WORKSPACE_BTN}}">
+                    id="{{ID_FOR_EMPTY_WORKSPACE_BTN}}"
+                    aria-describedby="emptyWorkspaceBtnLabel">
               Create new block group...
             </button>
           </p>
@@ -68,7 +69,7 @@ blocklyApp.WorkspaceComponent = ng.core.Component({
       this.treeService = treeService;
 
       this.workspace = blocklyApp.workspace;
-      this.ID_FOR_EMPTY_WORKSPACE_BTN = 'blocklyEmptyWorkspaceButton';
+      this.ID_FOR_EMPTY_WORKSPACE_BTN = blocklyApp.ID_FOR_EMPTY_WORKSPACE_BTN;
     }
   ],
   getActiveDescId: function(treeId) {

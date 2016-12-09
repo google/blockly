@@ -30,29 +30,28 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
          (click)="dismissModal()">
       <!-- $event.stopPropagation() prevents the modal from closing when its
       interior is clicked. -->
-      <div id="toolboxModal" class="blocklyModal" role="dialog"
-           (click)="$event.stopPropagation()" tabindex="-1">
-        <div role="document">
-          <h3>{{'SELECT_A_BLOCK'|translate}}</h3>
+      <div id="toolboxModal" class="blocklyModal" role="alertdialog"
+           (click)="$event.stopPropagation()" tabindex="-1"
+           aria-labelledby="toolboxModalHeading">
+        <h3 id="toolboxModalHeading">{{'SELECT_A_BLOCK'|translate}}</h3>
 
-          <div *ngFor="#toolboxCategory of toolboxCategories; #categoryIndex=index">
-            <h4 *ngIf="toolboxCategory.categoryName">{{toolboxCategory.categoryName}}</h4>
-            <div class="blocklyModalButtonContainer"
-                 *ngFor="#block of toolboxCategory.blocks; #blockIndex=index">
-              <button [id]="getOptionId(getOverallIndex(categoryIndex, blockIndex))"
-                      (click)="selectBlock(getBlock(categoryIndex, blockIndex))"
-                      [ngClass]="{activeButton: activeButtonIndex == getOverallIndex(categoryIndex, blockIndex)}">
-                {{getBlockDescription(block)}}
-              </button>
-            </div>
-          </div>
-          <hr>
-          <div class="blocklyModalButtonContainer">
-            <button [id]="getCancelOptionId()" (click)="dismissModal()"
-                    [ngClass]="{activeButton: activeButtonIndex == totalNumBlocks}">
-              {{'CANCEL'|translate}}
+        <div *ngFor="#toolboxCategory of toolboxCategories; #categoryIndex=index">
+          <h4 *ngIf="toolboxCategory.categoryName">{{toolboxCategory.categoryName}}</h4>
+          <div class="blocklyModalButtonContainer"
+               *ngFor="#block of toolboxCategory.blocks; #blockIndex=index">
+            <button [id]="getOptionId(getOverallIndex(categoryIndex, blockIndex))"
+                    (click)="selectBlock(getBlock(categoryIndex, blockIndex))"
+                    [ngClass]="{activeButton: activeButtonIndex == getOverallIndex(categoryIndex, blockIndex)}">
+              {{getBlockDescription(block)}}
             </button>
           </div>
+        </div>
+        <hr>
+        <div class="blocklyModalButtonContainer">
+          <button [id]="getCancelOptionId()" (click)="dismissModal()"
+                  [ngClass]="{activeButton: activeButtonIndex == totalNumBlocks}">
+            {{'CANCEL'|translate}}
+          </button>
         </div>
       </div>
     </div>
@@ -78,7 +77,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
       this.onDismissCallback = null;
 
       this.firstBlockIndexes = [];
-      this.activeButtonIndex = 0;
+      this.activeButtonIndex = -1;
       this.totalNumBlocks = 0;
 
       var that = this;
@@ -91,7 +90,7 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
           that.onDismissCallback = onDismissCallback;
 
           that.firstBlockIndexes = [];
-          that.activeButtonIndex = 0;
+          that.activeButtonIndex = -1;
           that.totalNumBlocks = 0;
 
           var cumulativeIndex = 0;
@@ -102,12 +101,30 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
           that.firstBlockIndexes.push(cumulativeIndex);
           that.totalNumBlocks = cumulativeIndex;
 
-          that.activeButtonIndex = 0;
           that.keyboardInputService.setOverride({
-            // Tab key: no-op.
+            // Tab key: navigates to the previous or next item in the list.
             '9': function(evt) {
               evt.preventDefault();
               evt.stopPropagation();
+
+              if (evt.shiftKey) {
+                // Move to the previous item in the list.
+                if (that.activeButtonIndex <= 0) {
+                  that.activeActionButtonIndex = 0;
+                  that.audioService.playOopsSound();
+                } else {
+                  that.activeButtonIndex--;
+                }
+              } else {
+                // Move to the next item in the list.
+                if (that.activeButtonIndex == that.totalNumBlocks) {
+                  that.audioService.playOopsSound();
+                } else {
+                  that.activeButtonIndex++;
+                }
+              }
+
+              that.focusOnOption(that.activeButtonIndex);
             },
             // Enter key: selects an action, performs it, and closes the modal.
             '13': function(evt) {
@@ -135,25 +152,13 @@ blocklyApp.ToolboxModalComponent = ng.core.Component({
             '27': function() {
               that.dismissModal();
             },
-            // Up key: navigates to the previous item in the list.
+            // Up key: no-op.
             '38': function(evt) {
               evt.preventDefault();
-              if (that.activeButtonIndex == 0) {
-                that.audioService.playOopsSound();
-              } else {
-                that.activeButtonIndex--;
-              }
-              that.focusOnOption(that.activeButtonIndex);
             },
-            // Down key: navigates to the next item in the list.
+            // Down key: no-op.
             '40': function(evt) {
               evt.preventDefault();
-              if (that.activeButtonIndex == that.totalNumBlocks) {
-                that.audioService.playOopsSound();
-              } else {
-                that.activeButtonIndex++;
-              }
-              that.focusOnOption(that.activeButtonIndex);
             }
           });
 

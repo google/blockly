@@ -27,14 +27,14 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   selector: 'blockly-block-options-modal',
   template: `
     <div *ngIf="modalIsVisible" class="blocklyModalCurtain"
-         (click)="hideModal()">
+         (click)="dismissModal()">
       <!-- $event.stopPropagation() prevents the modal from closing when its
       interior is clicked. -->
-      <div id="blockOptionsModal" class="blocklyModal" role="dialog"
-           (click)="$event.stopPropagation()" tabindex="-1">
+      <div id="blockOptionsModal" class="blocklyModal" role="alertdialog"
+           (click)="$event.stopPropagation()" tabindex="-1"
+           aria-labelledby="blockOptionsModalHeading">
+        <h3 id="blockOptionsModalHeading">{{'BLOCK_OPTIONS'|translate}}</h3>
         <div role="document">
-          <h3>{{'BLOCK_OPTIONS'|translate}}</h3>
-
           <div class="blocklyModalButtonContainer"
                *ngFor="#buttonInfo of actionButtonsInfo; #i=index">
             <button [id]="getOptionId(i)"
@@ -43,13 +43,14 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
               {{buttonInfo.translationIdForText|translate}}
             </button>
           </div>
-          <div class="blocklyModalButtonContainer">
-            <button [id]="getCancelOptionId()"
-                    (click)="hideModal()"
-                    [ngClass]="{activeButton: activeActionButtonIndex == actionButtonsInfo.length}">
-              {{'CANCEL'|translate}}
-            </button>
-          </div>
+        </div>
+
+        <div class="blocklyModalButtonContainer">
+          <button [id]="getCancelOptionId()"
+                  (click)="dismissModal()"
+                  [ngClass]="{activeButton: activeActionButtonIndex == actionButtonsInfo.length}">
+            {{'CANCEL'|translate}}
+          </button>
         </div>
       </div>
     </div>
@@ -67,7 +68,7 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
 
       this.modalIsVisible = false;
       this.actionButtonsInfo = [];
-      this.activeActionButtonIndex = 0;
+      this.activeActionButtonIndex = -1;
       this.onDismissCallback = null;
 
       var that = this;
@@ -75,17 +76,36 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
         function(newActionButtonsInfo, onDismissCallback) {
           that.modalIsVisible = true;
           that.actionButtonsInfo = newActionButtonsInfo;
-          that.activeActionButtonIndex = 0;
+          that.activeActionButtonIndex = -1;
           that.onDismissCallback = onDismissCallback;
 
           that.keyboardInputService.setOverride({
-            // Tab key: no-op.
+            // Tab key: navigates to the previous or next item in the list.
             '9': function(evt) {
               evt.preventDefault();
               evt.stopPropagation();
+
+              if (evt.shiftKey) {
+                // Move to the previous item in the list.
+                if (that.activeActionButtonIndex <= 0) {
+                  that.activeActionButtonIndex = 0;
+                  that.audioService.playOopsSound();
+                } else {
+                  that.activeActionButtonIndex--;
+                }
+              } else {
+                // Move to the next item in the list.
+                if (that.activeActionButtonIndex ==
+                    that.actionButtonsInfo.length) {
+                  that.audioService.playOopsSound();
+                } else {
+                  that.activeActionButtonIndex++;
+                }
+              }
+
+              that.focusOnOption(that.activeActionButtonIndex);
             },
-            // Enter key: selects an action, performs it, and closes the
-            // modal.
+            // Enter key: selects an action, performs it, and closes the modal.
             '13': function(evt) {
               evt.preventDefault();
               evt.stopPropagation();
@@ -96,38 +116,24 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
                   that.actionButtonsInfo.length) {
                 that.actionButtonsInfo[that.activeActionButtonIndex].action();
               } else {
-                that.onDismissCallback();
+                that.dismissModal();
               }
 
               that.hideModal();
             },
             // Escape key: closes the modal.
             '27': function() {
-              that.onDismissCallback();
-              that.hideModal();
+              that.dismissModal();
             },
-            // Up key: navigates to the previous item in the list.
+            // Up key: no-op.
             '38': function(evt) {
               // Prevent the page from scrolling.
               evt.preventDefault();
-              if (that.activeActionButtonIndex == 0) {
-                that.audioService.playOopsSound();
-              } else {
-                that.activeActionButtonIndex--;
-                that.focusOnOption(that.activeActionButtonIndex);
-              }
             },
-            // Down key: navigates to the next item in the list.
+            // Down key: no-op.
             '40': function(evt) {
               // Prevent the page from scrolling.
               evt.preventDefault();
-              if (that.activeActionButtonIndex ==
-                  that.actionButtonsInfo.length) {
-                that.audioService.playOopsSound();
-              } else {
-                that.activeActionButtonIndex++;
-                that.focusOnOption(that.activeActionButtonIndex);
-              }
             }
           });
 
@@ -149,6 +155,10 @@ blocklyApp.BlockOptionsModalComponent = ng.core.Component({
   // Returns the ID for the "cancel" option button.
   getCancelOptionId: function() {
     return this.getOptionId(this.actionButtonsInfo.length);
+  },
+  dismissModal: function() {
+    this.onDismissCallback();
+    this.hideModal();
   },
   // Closes the modal.
   hideModal: function() {

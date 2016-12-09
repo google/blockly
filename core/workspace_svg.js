@@ -882,7 +882,9 @@ Blockly.WorkspaceSvg.prototype.isDragging = function() {
 Blockly.WorkspaceSvg.prototype.onMouseWheel_ = function(e) {
   // TODO: Remove terminateDrag and compensate for coordinate skew during zoom.
   Blockly.terminateDrag_();
-  var delta = e.deltaY > 0 ? -1 : 1;
+  // The vertical scroll distance that corresponds to a click of a zoom button.
+  const PIXELS_PER_ZOOM_STEP = 50;
+  var delta = -e.deltaY / PIXELS_PER_ZOOM_STEP;
   var position = Blockly.utils.mouseToSvg(e, this.getParentSvg(),
       this.getInverseScreenCTM());
   this.zoom(position.x, position.y, delta);
@@ -1219,9 +1221,10 @@ Blockly.WorkspaceSvg.prototype.markFocused = function() {
  * Zooming the blocks centered in (x, y) coordinate with zooming in or out.
  * @param {number} x X coordinate of center.
  * @param {number} y Y coordinate of center.
- * @param {number} type Type of zooming (-1 zooming out and 1 zooming in).
+ * @param {number} amount Amount of zooming
+ *                        (negative zooms out and positive zooms in).
  */
-Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
+Blockly.WorkspaceSvg.prototype.zoom = function(x, y, amount) {
   var speed = this.options.zoomOptions.scaleSpeed;
   var metrics = this.getMetrics();
   var center = this.getParentSvg().createSVGPoint();
@@ -1232,7 +1235,7 @@ Blockly.WorkspaceSvg.prototype.zoom = function(x, y, type) {
   y = center.y;
   var canvas = this.getCanvas();
   // Scale factor.
-  var scaleChange = (type == 1) ? speed : 1 / speed;
+  var scaleChange = Math.pow(speed, amount);
   // Clamp scale within valid range.
   var newScale = this.scale * scaleChange;
   if (newScale > this.options.zoomOptions.maxScale) {

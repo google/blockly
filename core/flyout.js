@@ -288,7 +288,7 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
     <g class="blocklyFlyout"></g>
   </ svg | g>
   */
-  // Setting style to display none to start. The toolbox and flyout
+  // Setting style to display:none to start. The toolbox and flyout
   // hide/show code will set up proper visibility and size later.
   this.svgGroup_ = Blockly.utils.createSvgElement(tagName,
       {'class': 'blocklyFlyout', 'style': 'display: none'}, null);

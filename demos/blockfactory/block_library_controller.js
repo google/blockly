@@ -64,7 +64,7 @@ BlockLibraryController = function(blockLibraryName, opt_blockLibraryStorage) {
 BlockLibraryController.prototype.getCurrentBlockType = function() {
   var rootBlock = FactoryUtils.getRootBlock(BlockFactory.mainWorkspace);
   var blockType = rootBlock.getFieldValue('NAME').trim().toLowerCase();
-  // Replace invalid characters
+  // Replace invalid characters.
   return FactoryUtils.cleanBlockType(blockType);
 };
 

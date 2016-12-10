@@ -44,7 +44,7 @@ goog.provide('FactoryUtils');
  * @return {string} Block definition.
  */
 FactoryUtils.getBlockDefinition = function(blockType, rootBlock, format, workspace) {
-  blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
+  blockType = FactoryUtils.cleanBlockType(blockType);
   switch (format) {
     case 'JSON':
       var code = FactoryUtils.formatJson_(blockType, rootBlock);
@@ -54,6 +54,19 @@ FactoryUtils.getBlockDefinition = function(blockType, rootBlock, format, workspa
       break;
   }
   return code;
+};
+
+/**
+ * Convert invalid block name to a valid one. Replaces whitespace
+ * and prepend names that start with a digit with an '_'.
+ * @param {string} blockType Type of block.
+ * @return {string} Cleaned up block type.
+ */
+FactoryUtils.cleanBlockType = function(blockType) {
+  if (!blockType) {
+    return '';
+  }
+  return blockType.replace(/\W/g, '_').replace(/^(\d)/, '_$1');
 };
 
 /**

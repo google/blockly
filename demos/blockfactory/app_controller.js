@@ -199,7 +199,9 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
     xmlText = Blockly.Xml.domToText(xmlDom);
     // All block types should be lowercase.
     var blockType = this.getBlockTypeFromXml_(xmlText).toLowerCase();
-
+    // Some names are invalid so fix them up.
+    blockType = FactoryUtils.cleanBlockType(blockType);
+    
     blockXmlTextMap[blockType] = xmlText;
   }
 

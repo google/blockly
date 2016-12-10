@@ -143,7 +143,7 @@ Blockly.utils.getRelativeXY = function(element) {
       xy.x += parseFloat(styleComponents[1]);
       if (styleComponents[3]) {
         xy.y += parseFloat(styleComponents[3]);
-       }
+      }
     }
   }
   return xy;

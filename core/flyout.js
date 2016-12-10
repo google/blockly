@@ -177,7 +177,7 @@ Blockly.Flyout.onMouseMoveBlockWrapper_ = null;
 Blockly.Flyout.prototype.autoClose = true;
 
 /**
- * Whether the flyout handle is visible.
+ * Whether the flyout is visible.
  * @type {boolean}
  * @private
  */
@@ -278,7 +278,7 @@ Blockly.Flyout.prototype.dragAngleRange_ = 70;
  * either exist as its own <svg> element or be a <g> nested inside a separate
  * <svg> element.
  * @param {string} tagName The type of tag to put the flyout in. This
- * should be <svg> or <g>.
+ *     should be <svg> or <g>.
  * @return {!Element} The flyout's SVG group.
  */
 Blockly.Flyout.prototype.createDom = function(tagName) {
@@ -291,7 +291,7 @@ Blockly.Flyout.prototype.createDom = function(tagName) {
   // Setting style to display none to start. The toolbox and flyout
   // hide/show code will set up proper visibility and size later.
   this.svgGroup_ = Blockly.utils.createSvgElement(tagName,
-      {'class': 'blocklyFlyout', 'style': 'display:none'}, null);
+      {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
   this.svgBackground_ = Blockly.utils.createSvgElement('path',
       {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
@@ -652,10 +652,8 @@ Blockly.Flyout.prototype.isVisible = function() {
 };
 
  /**
- * Set whether the flyout is visible.  It might be invisible because
- * it is in a closed toolbox or because the workspace it controls
- * is invisible.
- * Only applies to non-paired scrollbars.
+ * Set whether the flyout is visible. A value of true does not necessarily mean
+ * that the flyout is shown. It could be hidden because its container is hidden.
  * @param {boolean} visible True if visible.
  */
 Blockly.Flyout.prototype.setVisible = function(visible) {
@@ -680,9 +678,10 @@ Blockly.Flyout.prototype.setContainerVisible = function(visible) {
 };
 
 /**
-+ * Update the visibility of the flyout based whether it thinks it should
-+ * be visible and whether its containing workspace is visible.
-+ */
+ * Update the display property of the flyout based whether it thinks it should
+ * be visible and whether its containing workspace is visible.
+ * @private
+ */
 Blockly.Flyout.prototype.updateDisplay_ = function() {
   var show = true;
   if (!this.containerVisible_) {
@@ -1201,9 +1200,10 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   }
   // Figure out where the original block is on the screen, relative to the upper
   // left corner of the main workspace.
-  var xyOld = Blockly.utils.getInjectionDivXY_(svgRootOld);
   if (targetWorkspace.isMutator) {
-    xyOld = this.workspace_.getSvgXY(/** @type {!Element} */ (svgRootOld));
+    var xyOld = this.workspace_.getSvgXY(/** @type {!Element} */ (svgRootOld));
+  } else {
+    var xyOld = Blockly.utils.getInjectionDivXY_(svgRootOld);
   }
   // Take into account that the flyout might have been scrolled horizontally
   // (separately from the main workspace).
@@ -1248,10 +1248,12 @@ Blockly.Flyout.prototype.placeNewBlock_ = function(originBlock) {
   // upper left corner of the workspace.  This may not be the same as the
   // original block because the flyout's origin may not be the same as the
   // main workspace's origin.
-  var xyNew = Blockly.utils.getInjectionDivXY_(svgRootNew);
-    if (targetWorkspace.isMutator) {
-      xyNew = targetWorkspace.getSvgXY(/* @type {!Element} */(svgRootNew));
+  if (targetWorkspace.isMutator) {
+    var xyNew = targetWorkspace.getSvgXY(/* @type {!Element} */(svgRootNew));
+  } else {
+    var xyNew = Blockly.utils.getInjectionDivXY_(svgRootNew);
   }
+
   // Scale the scroll (getSvgXY_ did not do this).
   xyNew.x +=
       targetWorkspace.scrollX / targetWorkspace.scale - targetWorkspace.scrollX;

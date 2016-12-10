@@ -336,8 +336,6 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
      * @private
      */
     this.toolbox_ = new Blockly.Toolbox(this);
-  } else if (this.options.languageTree) {
-    this.addFlyout_();
   }
   this.updateGridPattern_();
   this.recordDeleteAreas();
@@ -430,10 +428,12 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
 };
 
 /**
- * Add a flyout.
+ * Add a flyout element in an element with the given tag name.
+ * @param {string} tagName What type of tag the flyout belongs in.
+ * @return {!Element} The element containing the flyout dom.
  * @private
  */
-Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
+Blockly.WorkspaceSvg.prototype.addFlyout_ = function(tagName) {
   var workspaceOptions = {
     disabledPatternId: this.options.disabledPatternId,
     parentWorkspace: this,
@@ -445,8 +445,28 @@ Blockly.WorkspaceSvg.prototype.addFlyout_ = function() {
   /** @type {Blockly.Flyout} */
   this.flyout_ = new Blockly.Flyout(workspaceOptions);
   this.flyout_.autoClose = false;
-  var svgFlyout = this.flyout_.createDom();
-  this.svgGroup_.insertBefore(svgFlyout, this.svgBlockCanvas_);
+
+  // Return the element  so that callers can place it in their desired
+  // spot in the dom.  For exmaple, mutator flyouts do not go in the same place
+  // as main workspace flyouts.
+  return this.flyout_.createDom(tagName);
+};
+
+/**
+ * Getter for the flyout associated with this workspace.  This flyout may be
+ * owned by either the toolbox or the workspace, depending on toolbox
+ * configuration.  It will be null if there is no flyout.
+ * @return {Blockly.Flyout} The flyout on this workspace.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.getFlyout_ = function() {
+  if (this.flyout_) {
+    return this.flyout_;
+  }
+  if (this.toolbox_) {
+    return this.toolbox_.flyout_;
+  }
+  return null;
 };
 
 /**
@@ -586,6 +606,19 @@ Blockly.WorkspaceSvg.prototype.getWidth = function() {
  * @param {boolean} isVisible True if workspace should be visible.
  */
 Blockly.WorkspaceSvg.prototype.setVisible = function(isVisible) {
+
+  // Tell the scrollbar whether its container is visible so it can
+  // tell when to hide itself.
+  if (this.scrollbar) {
+    this.scrollbar.setContainerVisible(isVisible);
+  }
+
+  // Tell the flyout whether its container is visible so it can
+  // tell when to hide itself.
+  if (this.getFlyout_()) {
+    this.getFlyout_().setContainerVisible(isVisible);
+  }
+
   this.getParentSvg().style.display = isVisible ? 'block' : 'none';
   if (this.toolbox_) {
     // Currently does not support toolboxes in mutators.

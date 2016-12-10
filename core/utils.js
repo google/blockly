@@ -131,10 +131,14 @@ Blockly.utils.getRelativeXY = function(element) {
     }
   }
 
-  // Third, check for style="transform: translate3d(...)".
+  // Then check for style = transform: translate(...) or translate3d(...) 
   var style = element.getAttribute('style');
-  if (style && style.indexOf('translate3d') > -1) {
-    var styleComponents = style.match(Blockly.utils.getRelativeXY.XY_3D_REGEX_);
+  if (style && style.indexOf('translate') > -1) {
+    var styleComponents = style.match(Blockly.utils.getRelativeXY.XY_2D_REGEX_);
+    // Try transform3d if 2d transform wasn't there.
+    if (!styleComponents) {
+      styleComponents = style.match(Blockly.utils.getRelativeXY.XY_3D_REGEX_);
+    }
     if (styleComponents) {
       xy.x += parseFloat(styleComponents[1]);
       if (styleComponents[3]) {
@@ -143,6 +147,51 @@ Blockly.utils.getRelativeXY = function(element) {
     }
   }
   return xy;
+};
+
+/**
+ * Return the coordinates of the top-left corner of this element relative to
+ * the div blockly was injected into. 
+ * @param {!Element} element SVG element to find the coordinates of. If this is
+ *     not a child of the div blockly was injected into, the behaviour is
+ *     undefined.
+ * @return {!goog.math.Coordinate} Object with .x and .y properties.
+ */
+Blockly.utils.getInjectionDivXY_ = function(element) {
+  var x = 0;
+  var y = 0;
+  var scale = 1;
+  while (element) {
+    var xy = Blockly.utils.getRelativeXY(element);
+    var scale = Blockly.utils.getScale_(element);
+    x = (x * scale) + xy.x;
+    y = (y * scale) + xy.y;
+    var classes = element.getAttribute('class') || '';
+    if ((' ' + classes + ' ').indexOf(' injectionDiv ') != -1) {
+      break;
+    }
+    element = element.parentNode;
+  }
+  return new goog.math.Coordinate(x, y);    
+};
+
+/**
+ * Return the scale of this element.
+ * @param {!Element} element  The element to find the coordinates of.
+ * @return {!number} number represending the scale applied to the element.
+ * @private
+ */
+Blockly.utils.getScale_ = function(element) {
+  var scale = 1;  
+  var transform = element.getAttribute('transform');
+   if (transform) {
+    var transformComponents =
+        transform.match(Blockly.utils.getScale_.REGEXP_);
+    if (transformComponents && transformComponents[0]) {
+      scale = parseFloat(transformComponents[0]);
+    }
+  }
+  return scale;
 };
 
 /**
@@ -157,6 +206,15 @@ Blockly.utils.getRelativeXY = function(element) {
 Blockly.utils.getRelativeXY.XY_REGEX_ =
     /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*\))?/;
 
+
+/**
+ * Static regex to pull the scale values out of a transform style property.
+ * Accounts for same exceptions as XY_REGEXP_.
+ * @type {!RegExp}
+ * @private
+ */
+Blockly.utils.getScale_REGEXP_ = /scale\(\s*([-+\d.e]+)\s*\)/;
+
 /**
  * Static regex to pull the x,y,z values out of a translate3d() style property.
  * Accounts for same exceptions as XY_REGEXP_.
@@ -165,6 +223,15 @@ Blockly.utils.getRelativeXY.XY_REGEX_ =
  */
 Blockly.utils.getRelativeXY.XY_3D_REGEX_ =
   /transform:\s*translate3d\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
+
+/**
+ * Static regex to pull the x,y,z values out of a translate3d() style property.
+ * Accounts for same exceptions as XY_REGEXP_.
+ * @type {!RegExp}
+ * @private
+ */
+Blockly.utils.getRelativeXY.XY_2D_REGEX_ =
+  /transform:\s*translate\(\s*([-+\d.e]+)px([ ,]\s*([-+\d.e]+)\s*)px\)?/;
 
 /**
  * Helper method for creating SVG elements.
@@ -664,4 +731,24 @@ Blockly.utils.is3dSupported = function() {
   document.body.removeChild(el);
   Blockly.utils.is3dSupported.cached_ = has3d !== 'none';
   return Blockly.utils.is3dSupported.cached_;
+};
+
+/**
+ * Insert a node after a reference node.
+ * Contrast with node.insertBefore function.
+ * @param {!Element} newNode New element to insert.
+ * @param {!Element} refNode Existing element to precede new node.
+ * @private
+ */
+Blockly.utils.insertAfter_ = function(newNode, refNode) {
+  var siblingNode = refNode.nextSibling;
+  var parentNode = refNode.parentNode;
+  if (!parentNode) {
+    throw 'Reference node has no parent.';
+  }
+  if (siblingNode) {
+    parentNode.insertBefore(newNode, siblingNode);
+  } else {
+    parentNode.appendChild(newNode);
+  }
 };

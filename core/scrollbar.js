@@ -44,7 +44,7 @@ Blockly.ScrollbarPair = function(workspace) {
       {'height': Blockly.Scrollbar.scrollbarThickness,
       'width': Blockly.Scrollbar.scrollbarThickness,
       'class': 'blocklyScrollbarBackground'}, null);
-  Blockly.Scrollbar.insertAfter_(this.corner_, workspace.getBubbleCanvas());
+  Blockly.utils.insertAfter_(this.corner_, workspace.getBubbleCanvas());
 };
 
 /**
@@ -202,6 +202,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   if (horizontal) {
     this.svgBackground_.setAttribute('height',
         Blockly.Scrollbar.scrollbarThickness);
+    this.outerSvg_.setAttribute('height',
+          Blockly.Scrollbar.scrollbarThickness);
     this.svgHandle_.setAttribute('height',
         Blockly.Scrollbar.scrollbarThickness - 5);
     this.svgHandle_.setAttribute('y', 2.5);
@@ -211,6 +213,8 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   } else {
     this.svgBackground_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness);
+    this.outerSvg_.setAttribute('width',
+       Blockly.Scrollbar.scrollbarThickness);
     this.svgHandle_.setAttribute('width',
         Blockly.Scrollbar.scrollbarThickness - 5);
     this.svgHandle_.setAttribute('x', 2.5);
@@ -224,6 +228,12 @@ Blockly.Scrollbar = function(workspace, horizontal, opt_pair) {
   this.onMouseDownHandleWrapper_ = Blockly.bindEventWithChecks_(this.svgHandle_,
       'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
+/**
+   * The coordinate of the upper left corner of the scrollbar SVG.
+   * @type {goog.math.Coordinate}
+   * @private
+   */
+Blockly.Scrollbar.prototype.origin_ = new goog.math.Coordinate(0, 0);
 
 /**
  * The size of the area within which the scrollbar handle can move.
@@ -252,6 +262,13 @@ Blockly.Scrollbar.prototype.handlePosition_ = 0;
  * @private
  */
 Blockly.Scrollbar.prototype.isVisible_ = true;
+
+/**
+ * Whether the workspace containing this scrollbar is visible.
+ * @type {boolean}
+ * @private
+ */
+Blockly.Scrollbar.prototype.containerVisible_ = true;
 
 /**
  * Width of vertical scrollbar or height of horizontal scrollbar.
@@ -303,7 +320,8 @@ Blockly.Scrollbar.prototype.dispose = function() {
   Blockly.unbindEvent_(this.onMouseDownHandleWrapper_);
   this.onMouseDownHandleWrapper_ = null;
 
-  goog.dom.removeNode(this.svgGroup_);
+  goog.dom.removeNode(this.outerSvg_);
+  this.outerSvg_ = null;
   this.svgGroup_ = null;
   this.svgBackground_ = null;
   this.svgHandle_ = null;
@@ -338,7 +356,17 @@ Blockly.Scrollbar.prototype.setHandlePosition = function(newPosition) {
  */
 Blockly.Scrollbar.prototype.setScrollViewSize_ = function(newSize) {
   this.scrollViewSize_ = newSize;
+  this.outerSvg_.setAttribute(this.lengthAttribute_, this.scrollViewSize_);
   this.svgBackground_.setAttribute(this.lengthAttribute_, this.scrollViewSize_);
+};
+
+/**
++ * Set whether this scrollbar's container is visible.
++ * @param {boolean} visible Whether the container is visible.
++ */
+Blockly.ScrollbarPair.prototype.setContainerVisible = function(visible) {
+  this.hScroll.setContainerVisible(visible);
+  this.vScroll.setContainerVisible(visible);
 };
 
 /**
@@ -350,8 +378,10 @@ Blockly.Scrollbar.prototype.setPosition = function(x, y) {
   this.position_.x = x;
   this.position_.y = y;
 
-  this.svgGroup_.setAttribute('transform',
-      'translate(' + this.position_.x + ',' + this.position_.y + ')');
+  var tempX = this.position_.x + this.origin_.x;
+  var tempY = this.position_.y + this.origin_.y;
+  var transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
+  this.outerSvg_.style.transform = transform;
 };
 
 /**
@@ -539,23 +569,26 @@ Blockly.Scrollbar.prototype.resizeContentVertical = function(hostMetrics) {
  */
 Blockly.Scrollbar.prototype.createDom_ = function() {
   /* Create the following DOM:
-  <g class="blocklyScrollbarHorizontal">
-    <rect class="blocklyScrollbarBackground" />
-    <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
-  </g>
+  <svg class="blocklyScrollbarHorizontal">
+    <g>
+      <rect class="blocklyScrollbarBackground" />
+      <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
+    </g>
+  </svg>
   */
   var className = 'blocklyScrollbar' +
       (this.horizontal_ ? 'Horizontal' : 'Vertical');
-  this.svgGroup_ = Blockly.utils.createSvgElement('g', {'class': className},
+  this.outerSvg_ = Blockly.utils.createSvgElement('svg', {'class': className},
                                                   null);
+  this.svgGroup_ = Blockly.utils.createSvgElement('g', {}, this.outerSvg_);
   this.svgBackground_ = Blockly.utils.createSvgElement('rect',
       {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
   var radius = Math.floor((Blockly.Scrollbar.scrollbarThickness - 5) / 2);
   this.svgHandle_ = Blockly.utils.createSvgElement('rect',
       {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
       this.svgGroup_);
-  Blockly.Scrollbar.insertAfter_(this.svgGroup_,
-                                 this.workspace_.getBubbleCanvas());
+  Blockly.utils.insertAfter_(this.outerSvg_,
+                                 this.workspace_.getParentSvg());
 };
 
 /**
@@ -568,28 +601,56 @@ Blockly.Scrollbar.prototype.isVisible = function() {
 };
 
 /**
+ * Set whether the scrollbar's container is visible and update
+ * display accordingly if visibility has changed.
+ * @param {boolean} visible Whether the container is visible
+ */
+Blockly.Scrollbar.prototype.setContainerVisible = function(visible) {
+  var visibilityChanged = (visible != this.containerVisible_);
+
+  this.containerVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
+
+/**
  * Set whether the scrollbar is visible.
  * Only applies to non-paired scrollbars.
  * @param {boolean} visible True if visible.
  */
 Blockly.Scrollbar.prototype.setVisible = function(visible) {
-  if (visible == this.isVisible()) {
-    return;
-  }
+  var visibilityChanged = (visible != this.isVisible());
+
   // Ideally this would also apply to scrollbar pairs, but that's a bigger
   // headache (due to interactions with the corner square).
   if (this.pair_) {
     throw 'Unable to toggle visibility of paired scrollbars.';
   }
-
   this.isVisible_ = visible;
+  if (visibilityChanged) {
+    this.updateDisplay_();
+  }
+};
 
-  if (visible) {
-    this.svgGroup_.setAttribute('display', 'block');
+/**
+ * Update visibility of scrollbar based on whether it thinks it should
+ * be visible and whether its containing workspace is visible.
+ * We cannot rely on the containing workspace being hidden to hide us
+ * because it is not necessarily our parent in the dom.
+ */
+ Blockly.Scrollbar.prototype.updateDisplay_ = function() {
+  var show = true;
+  // Check whether our parent/container is visible. 
+  if (!this.containerVisible_) {
+    show = false;
   } else {
-    // Hide the scrollbar.
-    this.workspace_.setMetrics({x: 0, y: 0});
-    this.svgGroup_.setAttribute('display', 'none');
+    show = this.isVisible();
+  }
+  if (show) {
+    this.outerSvg_.setAttribute('display', 'block');
+  } else {
+    this.outerSvg_.setAttribute('display', 'none');
   }
 };
 
@@ -613,7 +674,7 @@ Blockly.Scrollbar.prototype.onMouseDownBar_ = function(e) {
       this.workspace_.getInverseScreenCTM());
   var mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
-  var handleXY = this.workspace_.getSvgXY(this.svgHandle_);
+  var handleXY = Blockly.utils.getInjectionDivXY_(this.svgHandle_);
   var handleStart = this.horizontal_ ? handleXY.x : handleXY.y;
   var handlePosition = this.handlePosition_;
 
@@ -744,21 +805,12 @@ Blockly.Scrollbar.prototype.set = function(value) {
 };
 
 /**
- * Insert a node after a reference node.
- * Contrast with node.insertBefore function.
- * @param {!Element} newNode New element to insert.
- * @param {!Element} refNode Existing element to precede new node.
- * @private
+ * Set the origin of the upper left of the scrollbar. This if for times
+ * when the scrollbar is used in an object whose origin isn't the same
+ * as the main workspace (e.g. in a flyout.)
+ * @ param {number} x The x coordinate of the scrollbar's origin.
+ * @ param {number} y The y coordinate of the scrollbar's origin.
  */
-Blockly.Scrollbar.insertAfter_ = function(newNode, refNode) {
-  var siblingNode = refNode.nextSibling;
-  var parentNode = refNode.parentNode;
-  if (!parentNode) {
-    throw 'Reference node has no parent.';
-  }
-  if (siblingNode) {
-    parentNode.insertBefore(newNode, siblingNode);
-  } else {
-    parentNode.appendChild(newNode);
-  }
+Blockly.Scrollbar.prototype.setOrigin = function(x, y) {
+  this.origin_ = new goog.math.Coordinate(x, y);
 };

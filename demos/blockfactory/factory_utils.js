@@ -59,8 +59,8 @@ FactoryUtils.getBlockDefinition = function(blockType, rootBlock, format, workspa
 /**
  * Convert invalid block name to a valid one. Replaces whitespace
  * and prepend names that start with a digit with an '_'.
- * @param {string} blockType Type of block
- * @return {string} cleaned up block type.
+ * @param {string} blockType Type of block.
+ * @return {string} Cleaned up block type.
  */
 FactoryUtils.cleanBlockType = function(blockType) {
   if (!blockType) {

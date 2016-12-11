@@ -742,7 +742,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   }
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
-  //e.preventDefault();
+  e.preventDefault();
 };
 
 /**

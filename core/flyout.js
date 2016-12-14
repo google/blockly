@@ -1162,6 +1162,10 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
       return;
     }
     Blockly.Events.disable();
+    // Disable workspace resizing.  Reenable at the end of the drag. We do
+    // not need the workspace to resize in the middle of place new block
+    // we need to it happen at the end.
+    flyout.targetWorkspace_.setResizesEnabled(false);
     try {
       var block = flyout.placeNewBlock_(originBlock);
     } finally {
@@ -1181,8 +1185,6 @@ Blockly.Flyout.prototype.createBlockFunc_ = function(originBlock) {
     Blockly.dragMode_ = Blockly.DRAG_FREE;
     block.setDragging_(true);
     block.moveToDragSurface_();
-    // Disable workspace resizing.  Reenable at the end of the drag.
-    flyout.targetWorkspace_.setResizesEnabled(false);
   };
 };
 

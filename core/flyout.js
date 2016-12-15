@@ -499,7 +499,7 @@ Blockly.Flyout.prototype.position = function() {
 
   this.svgGroup_.setAttribute("width", this.width_);
   this.svgGroup_.setAttribute("height", this.height_);
-  var transform = 'translate(' + x + 'px,' + y + 'px)';  
+  var transform = 'translate(' + x + 'px,' + y + 'px)';
   this.svgGroup_.style.transform = transform;
 
   // Update the scrollbar (if one exists).
@@ -685,7 +685,7 @@ Blockly.Flyout.prototype.setContainerVisible = function(visible) {
 Blockly.Flyout.prototype.updateDisplay_ = function() {
   var show = true;
   if (!this.containerVisible_) {
-    show = false; 
+    show = false;
   } else {
     show = this.isVisible();
   }
@@ -722,6 +722,7 @@ Blockly.Flyout.prototype.hide = function() {
  *     Variables and procedures have a custom set of blocks.
  */
 Blockly.Flyout.prototype.show = function(xmlList) {
+  this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
 
@@ -798,6 +799,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
   } else {
     this.width_ = 0;
   }
+  this.workspace_.setResizesEnabled(true);
   this.reflow();
 
   this.filterForCapacity_();

@@ -89,7 +89,7 @@ Blockly.utils.removeClass = function(element, className) {
  * @return {boolean} True if class exists, false otherwise.   
  * @private   
  */   
- Blockly.utils.hasClass_ = function(element, className) {    
+ Blockly.utils.hasClass = function(element, className) {    
    var classes = element.getAttribute('class');    
    return (' ' + classes + ' ').indexOf(' ' + className + ' ') != -1;    
  };

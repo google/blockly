@@ -139,8 +139,8 @@ Blockly.workspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
   var blockCanvas = this.SVG_.childNodes[0];
   var bubbleCanvas = this.SVG_.childNodes[1];
   if (!blockCanvas || !bubbleCanvas ||
-      !Blockly.utils.hasClass_(blockCanvas, 'blocklyBlockCanvas') ||
-      !Blockly.utils.hasClass_(bubbleCanvas, 'blocklyBubbleCanvas')) {
+      !Blockly.utils.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
+      !Blockly.utils.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
     throw 'Couldn\'t clear and hide the drag surface.  A node was missing.';
   }
 

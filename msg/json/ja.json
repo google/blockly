@@ -37,6 +37,7 @@
 	"NEW_VARIABLE_TITLE": "新しい変数の、名前",
 	"VARIABLE_ALREADY_EXISTS": "変数名 '%1' は既に存在しています。",
 	"DELETE_VARIABLE_CONFIRMATION": "%1 ヶ所で使われている変数 '%2' を削除しますか？",
+	"DELETE_VARIABLE": "変数 '%1' を削除",
 	"COLOUR_PICKER_HELPURL": "https://ja.wikipedia.org/wiki/色",
 	"COLOUR_PICKER_TOOLTIP": "パレットから色を選んでください。",
 	"COLOUR_RANDOM_TITLE": "ランダムな色",

@@ -35,6 +35,7 @@ goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Touch');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Workspace');
+goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('Blockly.Xml');
 goog.require('Blockly.ZoomControls');
 
@@ -49,11 +50,13 @@ goog.require('goog.userAgent');
  * scrollbars, bubbles, and dragging.
  * @param {!Blockly.Options} options Dictionary of options.
  * @param {Blockly.BlockDragSurfaceSvg=} opt_blockDragSurface Drag surface for
- * the workspace.
+ *     blocks.
+ * @param {Blockly.workspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
+ *     the workspace.
  * @extends {Blockly.Workspace}
  * @constructor
  */
-Blockly.WorkspaceSvg = function(options, opt_blockDragSurface) {
+Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface) {
   Blockly.WorkspaceSvg.superClass_.constructor.call(this, options);
   this.getMetrics =
       options.getMetrics || Blockly.WorkspaceSvg.getTopLevelWorkspaceMetrics_;
@@ -65,6 +68,13 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface) {
   if (opt_blockDragSurface) {
     this.blockDragSurface_ = opt_blockDragSurface;
   }
+
+  if (opt_wsDragSurface) {
+    this.workspaceDragSurface_ = opt_wsDragSurface;
+  }
+
+  this.useWorkspaceDragSurface_ =
+      this.workspaceDragSurface_ && Blockly.utils.is3dSupported();
 
   /**
    * Database of pre-loaded sounds.
@@ -177,11 +187,26 @@ Blockly.WorkspaceSvg.prototype.trashcan = null;
 Blockly.WorkspaceSvg.prototype.scrollbar = null;
 
 /**
- * This workspace's drag surface, if it exists.
+ * This workspace's surface for dragging blocks, if it exists.
  * @type {Blockly.BlockDragSurfaceSvg}
  * @private
  */
 Blockly.WorkspaceSvg.prototype.blockDragSurface_ = null;
+
+/**
+ * This workspace's drag surface, if it exists.
+ * @type {Blockly.WorkspaceDragSurfaceSvg}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.workspaceDragSurface_ = null;
+
+/**
+  * Whether to move workspace to the drag surface when it is dragged.
+  * True if it should move, false if it should be translated directly.
+  * @type {boolean}
+  * @private
+  */
+ Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
 
 /**
  * Time that the last sound was played.
@@ -581,13 +606,61 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  var translation = 'translate(' + x + ',' + y + ') ' +
-      'scale(' + this.scale + ')';
-  this.svgBlockCanvas_.setAttribute('transform', translation);
-  this.svgBubbleCanvas_.setAttribute('transform', translation);
+  if (this.useWorkspaceDragSurface_ && this.dragMode_ != Blockly.DRAG_NONE) {
+    this.workspaceDragSurface_.translateSurface(x,y);
+  } else {
+    var translation = 'translate(' + x + ',' + y + ') ' +
+        'scale(' + this.scale + ')';
+    this.svgBlockCanvas_.setAttribute('transform', translation);
+    this.svgBubbleCanvas_.setAttribute('transform', translation);
+  }
+  // Now update the block drag surface if we're using one.
   if (this.blockDragSurface_) {
     this.blockDragSurface_.translateAndScaleGroup(x, y, this.scale);
   }
+};
+
+/**
+ * Called at the end of a workspace drag to take the contents
+ * out of the drag surface and put them back into the workspace svg.
+ * Does nothing if the workspace drag surface is not enabled.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
+  // Don't do anything if we aren't using a drag surface.
+  if (!this.useWorkspaceDragSurface_) {
+    return;
+  }
+
+  var trans = this.workspaceDragSurface_.getSurfaceTranslation();
+  this.workspaceDragSurface_.clearAndHide(this.svgGroup_);
+  var translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
+        'scale(' + this.scale + ')';
+  this.svgBlockCanvas_.setAttribute('transform', translation);
+  this.svgBubbleCanvas_.setAttribute('transform', translation);
+};
+
+/**
+ * Called at the beginning of a workspace drag to move contents of
+ * the workspace to the drag surface.
+ * Does nothing if the drag surface is not enabled.
+ * @package.
+ */
+Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
+  // Don't do anything if we aren't using a drag surface.
+  if (!this.useWorkspaceDragSurface_) {
+    return;
+  }
+
+  // Figure out where we want to put the canvas back.  The order
+  // in the is important because things are layered.
+  var previousElement = this.svgBlockCanvas_.previousSibling;
+  var width = this.getParentSvg().getAttribute("width")
+  var height = this.getParentSvg().getAttribute("height")
+  var coord = Blockly.utils.getRelativeXY(this.svgBlockCanvas_);
+  this.workspaceDragSurface_.setContentsAndShow(this.svgBlockCanvas_,
+      this.svgBubbleCanvas_, previousElement, width, height, this.scale);
+  this.workspaceDragSurface_.translateSurface(coord.x, coord.y);
 };
 
 /**
@@ -833,6 +906,10 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   if (Blockly.utils.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
+    // This is to handle the case where the event is pretending to be a right
+    // click event but it was really a long press. In that case, we want to make
+    // sure any in progress drags are stopped.
+    Blockly.onMouseUp_(e);
     // Since this was a click, not a drag, end the gesture immediately.
     Blockly.Touch.clearTouchIdentifier();
   } else if (this.scrollbar) {
@@ -844,6 +921,7 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     this.startScrollX = this.scrollX;
     this.startScrollY = this.scrollY;
 
+    this.setupDragSurface();
     // If this is a touch event then bind to the mouseup so workspace drag mode
     // is turned off and double move events are not performed on a block.
     // See comment in inject.js Blockly.init_ as to why mouseup events are

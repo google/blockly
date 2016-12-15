@@ -159,6 +159,14 @@ Blockly.Css.CONTENT = [
     '-ms-user-select: none;',
   '}',
 
+  '.blocklyWsDragSurface {',
+    'display: none;',
+    'position: absolute;',
+    'overflow: visible;',
+    'top: 0;',
+    'left: 0;',
+  '}',
+
   '.blocklyBlockDragSurface {',
     'display: none;',
     'position: absolute;',

@@ -30,6 +30,7 @@ goog.require('Blockly.BlockDragSurfaceSvg');
 goog.require('Blockly.Css');
 goog.require('Blockly.Options');
 goog.require('Blockly.WorkspaceSvg');
+goog.require('Blockly.WorkspaceDragSurfaceSvg');
 goog.require('goog.dom');
 goog.require('goog.ui.Component');
 goog.require('goog.userAgent');
@@ -55,9 +56,15 @@ Blockly.inject = function(container, opt_options) {
   var subContainer = goog.dom.createDom('div', 'injectionDiv');
   container.appendChild(subContainer);
   var svg = Blockly.createDom_(subContainer, options);
+
+  // Create surfaces for dragging things. These are optimizations
+  // so that the broowser does not repaint during the drag.
   var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
   blockDragSurface.createDom();
-  var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface);
+  var workspaceDragSurface = new Blockly.workspaceDragSurfaceSvg(subContainer);
+
+  var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
+      workspaceDragSurface);
   Blockly.init_(workspace);
   workspace.markFocused();
   Blockly.bindEventWithChecks_(svg, 'focus', workspace, workspace.markFocused);
@@ -186,13 +193,16 @@ Blockly.createDom_ = function(container, options) {
  * Create a main workspace and add it to the SVG.
  * @param {!Element} svg SVG element with pattern defined.
  * @param {!Blockly.Options} options Dictionary of options.
- * @param {!Blockly.BlockDragSurfaceSvg} blockDragSurface Drag surface SVG for the workspace.
+ * @param {!Blockly.BlockDragSurfaceSvg} blockDragSurface Drag surface SVG
+ *     for the blocks.
+ * @param {!Blockly.WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
+ *     SVG for the workspace.
  * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */
-Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface) {
+Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface, workspaceDragSurface) {
   options.parentWorkspace = null;
-  var mainWorkspace = new Blockly.WorkspaceSvg(options, blockDragSurface);
+  var mainWorkspace = new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   mainWorkspace.scale = options.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 

@@ -42,6 +42,16 @@ function test_addClass() {
   assertEquals('Adding "three"', 'one two three', p.className);
 }
 
+function test_hasClass() {   
+   var p = document.createElement('p');    
+   p.className = ' one three  two three  ';    
+   assertTrue('Has "one"', Blockly.utils.hasClass(p, 'one'));   
+   assertTrue('Has "two"', Blockly.utils.hasClass(p, 'two'));   
+   assertTrue('Has "three"', Blockly.utils.hasClass(p, 'three'));   
+   assertFalse('Has no "four"', Blockly.utils.hasClass(p, 'four'));   
+   assertFalse('Has no "t"', Blockly.utils.hasClass(p, 't'));   
+ }
+
 function test_removeClass() {
   var p = document.createElement('p');
   p.className = ' one three  two three  ';

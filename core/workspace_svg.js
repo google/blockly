@@ -620,7 +620,6 @@ Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
   }
 };
 
-
 /**
  * Called at the end of a workspace drag to take the contents
  * out of the drag surface and put them back into the workspace svg.

@@ -62,7 +62,6 @@ Blockly.inject = function(container, opt_options) {
   var blockDragSurface = new Blockly.BlockDragSurfaceSvg(subContainer);
   blockDragSurface.createDom();
   var workspaceDragSurface = new Blockly.workspaceDragSurfaceSvg(subContainer);
-  workspaceDragSurface.createDom();
 
   var workspace = Blockly.createMainWorkspace_(svg, options, blockDragSurface,
       workspaceDragSurface);

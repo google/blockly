@@ -166,6 +166,7 @@ Blockly.Css.CONTENT = [
     'top: 0;',
     'left: 0;',
   '}',
+
   '.blocklyBlockDragSurface {',
     'display: none;',
     'position: absolute;',

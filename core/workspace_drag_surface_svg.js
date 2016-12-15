@@ -21,7 +21,8 @@
 /**
  * @fileoverview An SVG that floats on top of the workspace.
  * Blocks are moved into this SVG during a drag, improving performance.
- * The entire SVG is translated, so the blocks are never repainted during drag.
+ * The entire SVG is translated using css translation instead of SVG so the
+ * blocks are never repainted during drag improving performance.
  * @author katelyn@google.com (Katelyn Mann)
  */
 
@@ -34,13 +35,17 @@ goog.require('Blockly.utils');
 goog.require('goog.asserts');
 goog.require('goog.math.Coordinate');
 
+
 /**
- * Class for a Drag Surface SVG.
- * @param {Element} container Containing element.
+ * Blocks are moved into this SVG during a drag, improving performance.
+ * The entire SVG is translated using css transforms instead of SVG so the
+ * blocks are never repainted during drag improving performance.
+ * @param {!Element} container Containing element.
  * @constructor
  */
 Blockly.workspaceDragSurfaceSvg = function(container) {
   this.container_ = container;
+  this.createDom();
 };
 
 /**
@@ -51,7 +56,10 @@ Blockly.workspaceDragSurfaceSvg = function(container) {
 Blockly.workspaceDragSurfaceSvg.prototype.SVG_ = null;
 
 /**
- * SVG group inside the drag surface. This is where blocks are moved to.
+ * SVG group inside the drag surface that holds blocks while a drag is in
+ * progress. Blocks are moved here by the workspace at start of a drag and moved
+ * back into the main SVG at the end of a drag.
+ *
  * @type {Element}
  * @private
  */
@@ -64,7 +72,6 @@ Blockly.workspaceDragSurfaceSvg.prototype.dragGroup_ = null;
  */
 Blockly.workspaceDragSurfaceSvg.prototype.container_ = null;
 
-
 /**
  * Create the drag surface and inject it into the container.
  */
@@ -74,7 +81,12 @@ Blockly.workspaceDragSurfaceSvg.prototype.createDom = function() {
   }
 
   /**
-  * FILL dom structure in!
+  * Dom structure when the workspace is being dragged. If there is no drag in
+  * progress, the SVG is empty and display: none.
+  * <svg class="blocklyWsDragSurface" style=transform:translate3d(...)>
+  *   <g class="blocklyBlockCanvas"></g>
+  *   <g class="blocklyBubbleCanvas">/g>
+  * </svg>
   */
   this.SVG_ = Blockly.utils.createSvgElement('svg', {
     'xmlns': Blockly.SVG_NS,
@@ -86,25 +98,21 @@ Blockly.workspaceDragSurfaceSvg.prototype.createDom = function() {
   this.container_.appendChild(this.SVG_);
 };
 
-
 /**
  * Translate the entire drag surface during a drag.
  * We translate the drag surface instead of the blocks inside the surface
  * so that the browser avoids repainting the SVG.
  * Because of this, the drag coordinates must be adjusted by scale.
- * @param {Number} x X translation for the entire surface
- * @param {Number} y Y translation for the entire surface
+ * @param {number} x X translation for the entire surface
+ * @param {number} y Y translation for the entire surface
  * @package
  */
 Blockly.workspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
-  // Force values to have two decimal points.
-  // This is a work-around to prevent a bug in Safari, where numbers close to 0
-  // are sometimes reported as something like "2.9842794901924208e-12".
-  // That is incompatible with translate3d, causing bugs.
+  // This is a work-around to prevent a the blocks from rendering
+  // fuzzy while they are being moved on the drag surface.
   x = x.toFixed(0);
   y = y.toFixed(0);
 
-  // Ignorning browsers that don't support translate3d at the moment.
   var transform =
     'transform: translate3d(' + x + 'px, ' + y + 'px, 0px); display: block;';
   this.SVG_.setAttribute('style', transform);
@@ -113,7 +121,7 @@ Blockly.workspaceDragSurfaceSvg.prototype.translateSurface = function(x, y) {
 /**
  * Reports the surface translation in scaled workspace coordinates.
  * Use this when finishing a drag to return blocks to the correct position.
- * @return {goog.math.Coordinate} Current translation of the surface
+ * @return {!goog.math.Coordinate} Current translation of the surface
  * @package
  */
 Blockly.workspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
@@ -121,10 +129,10 @@ Blockly.workspaceDragSurfaceSvg.prototype.getSurfaceTranslation = function() {
 };
 
 /**
- * Clear the  and hide the contents of the  surface;  Move everything back to
+ * Move the blockCanvas and bubbleCanvas out of the surface SVG and on to
  * newSurface.
  * @param {!SVGElement} newSurface The element to put the drag surface contents
- * into.
+ *     into.
  * @package
  */
 Blockly.workspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
@@ -146,6 +154,7 @@ Blockly.workspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 
   // Reattach the bubble canvas after the blockCanvas.
   Blockly.utils.insertAfter_(bubbleCanvas, blockCanvas);
+  // Hide the drag surface.
   this.SVG_.style.display = 'none';
   goog.asserts.assert(this.SVG_.childNodes.length == 0,
     'Drag surface was not cleared.');
@@ -154,11 +163,12 @@ Blockly.workspaceDragSurfaceSvg.prototype.clearAndHide = function(newSurface) {
 };
 
 /**
- * Set the SVG to have everything on it and show the surface.
+ * Set the SVG to have the block canvas and bubble canvas in it and then
+ * show the surface.
  * @param {!Element} blockCanvas The block canvas <g> element from the workspace.
  * @param {!Element} bubbleCanvas The <g> element that contains the bubbles.
  * @param {?Element} previousSibling The element to insert the block canvas &
-   bubble canvas after when it goes back in the dom at the end of a drag.
+       bubble canvas after when it goes back in the dom at the end of a drag.
  * @param {number} width The width of the workspace svg element.
  * @param {number} height The height of the workspace svg element.
  * @param {number} scale The scale of the workspace being dragged.

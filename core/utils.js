@@ -737,10 +737,20 @@ Blockly.utils.is3dSupported = function() {
   for (var t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      has3d = goog.global.getComputedStyle(el).getPropertyValue(transforms[t]);
+      var computedStyle = goog.global.getComputedStyle(el);
+      if (!computedStyle) {
+        // getComputedStyle in Firefox returns null when blockly is loaded
+        // inside an iframe with display: none.  Returning false and not
+        // caching is3dSupported means we try again later.  This is most likely
+        // when users are interacting with blocks which should mean blockly is
+        // visible again.
+        // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+        document.body.removeChild(el);
+        return false;
+      }
+      has3d = computedStyle.getPropertyValue(transforms[t]);
     }
   }
-
   document.body.removeChild(el);
   Blockly.utils.is3dSupported.cached_ = has3d !== 'none';
   return Blockly.utils.is3dSupported.cached_;

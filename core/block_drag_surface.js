@@ -47,6 +47,7 @@ Blockly.BlockDragSurfaceSvg = function(container) {
    * @private
    */
   this.container_ = container;
+  this.createDom();
 };
 
 /**

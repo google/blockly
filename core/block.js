@@ -1359,8 +1359,8 @@ Blockly.Block.prototype.makeConnection_ = function(type) {
 };
 
 /**
- * Checks whether all of the required inputs are filled.
- * @return {boolean}
+ * Checks whether all inputs are filled.
+ * @return {boolean} True if all inputs are filled.
  */
 Blockly.Block.prototype.isFilled = function() {
   for (var i = 0, input; input = this.inputList[i]; i++) {

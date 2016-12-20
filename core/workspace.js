@@ -178,6 +178,20 @@ Blockly.Workspace.prototype.getAllBlocks = function() {
 };
 
 /**
+ * Checks whether all of the required inputs are filled.
+ * @return {boolean}
+ */
+Blockly.Workspace.prototype.isFilled = function() {
+  var blocks = this.getTopBlocks(false);
+  for (var i = 0, block; block = blocks[i]; i++) {
+    if (!block.isFilled()) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/**
  * Dispose of all blocks in workspace.
  */
 Blockly.Workspace.prototype.clear = function() {

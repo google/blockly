@@ -4,7 +4,8 @@
 			"Bl707",
 			"संजीव कुमार",
 			"Phoenix303",
-			"Sfic"
+			"Sfic",
+			"Earlyengineers"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "आइटम",
@@ -23,11 +24,14 @@
 	"DISABLE_BLOCK": "ब्लॉक को अक्षम करें",
 	"ENABLE_BLOCK": "ब्लॉक को सक्षम करें",
 	"HELP": "सहायता",
+	"UNDO": "पूर्ववत करें",
+	"REDO": "dubara karen",
 	"CHANGE_VALUE_TITLE": "मान परिवर्तित करें:",
 	"RENAME_VARIABLE": "चर का नाम बदलें...",
 	"RENAME_VARIABLE_TITLE": "सभी '%1' चरों के नाम बदलें:",
-	"NEW_VARIABLE": "नया चर...",
+	"NEW_VARIABLE": "चर banayen...",
 	"NEW_VARIABLE_TITLE": "नए चर का नाम:",
+	"VARIABLE_ALREADY_EXISTS": "char naam %1 pahle se moujood hei",
 	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "पैलेट से एक रंग चुनें।",
 	"COLOUR_RANDOM_TITLE": "रैन्डम रंग",

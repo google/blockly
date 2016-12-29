@@ -39,6 +39,8 @@
 	"NEW_VARIABLE": "Luo muuttuja...",
 	"NEW_VARIABLE_TITLE": "Uuden muuttujan nimi:",
 	"VARIABLE_ALREADY_EXISTS": "Muuttuja nimeltään '%1' jo olemassa.",
+	"DELETE_VARIABLE_CONFIRMATION": "Poistetaanko %1 käyttöä muuttujalta '%2'?",
+	"DELETE_VARIABLE": "Poista muuttuja '%1'",
 	"COLOUR_PICKER_HELPURL": "https://fi.wikipedia.org/wiki/V%C3%A4ri",
 	"COLOUR_PICKER_TOOLTIP": "Valitse väri paletista.",
 	"COLOUR_RANDOM_TITLE": "satunnainen väri",

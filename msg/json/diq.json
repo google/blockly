@@ -3,7 +3,8 @@
 		"authors": [
 			"Kumkumuk",
 			"Marmase",
-			"Mirzali"
+			"Mirzali",
+			"Gırd"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "unsur",
@@ -167,6 +168,6 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Yew fonksiyono çap daye vırazeno",
 	"PROCEDURES_ALLOW_STATEMENTS": "Çıyan rê mısafe bıd",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "cıkewtışi",
-	"PROCEDURES_MUTATORARG_TITLE": "nameyê cıkewtışi:",
+	"PROCEDURES_MUTATORARG_TITLE": "namey cıkewtışi:",
 	"PROCEDURES_CREATE_DO": "'%1' vıraze"
 }

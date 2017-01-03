@@ -209,6 +209,16 @@ Blockly.WorkspaceSvg.prototype.workspaceDragSurface_ = null;
  Blockly.WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
 
 /**
+ * Whether the drag surface is actively in use. When true, calls to
+ * translate will translate the drag surface instead of the translating the
+ * workspace directly.
+ * This is set to true in setupDragSurface and to false in resetDragSurface.
+ * @type {boolean}
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.isDragSurfaceActive_ = false;
+
+/**
  * Time that the last sound was played.
  * @type {Date}
  * @private
@@ -606,7 +616,7 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
  * @param {number} y Vertical translation.
  */
 Blockly.WorkspaceSvg.prototype.translate = function(x, y) {
-  if (this.useWorkspaceDragSurface_ && this.dragMode_ != Blockly.DRAG_NONE) {
+  if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
     this.workspaceDragSurface_.translateSurface(x,y);
   } else {
     var translation = 'translate(' + x + ',' + y + ') ' +
@@ -632,6 +642,8 @@ Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
     return;
   }
 
+  this.isDragSurfaceActive_ = false;
+
   var trans = this.workspaceDragSurface_.getSurfaceTranslation();
   this.workspaceDragSurface_.clearAndHide(this.svgGroup_);
   var translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
@@ -644,13 +656,15 @@ Blockly.WorkspaceSvg.prototype.resetDragSurface = function() {
  * Called at the beginning of a workspace drag to move contents of
  * the workspace to the drag surface.
  * Does nothing if the drag surface is not enabled.
- * @package.
+ * @package
  */
 Blockly.WorkspaceSvg.prototype.setupDragSurface = function() {
   // Don't do anything if we aren't using a drag surface.
   if (!this.useWorkspaceDragSurface_) {
     return;
   }
+
+  this.isDragSurfaceActive_ = true;
 
   // Figure out where we want to put the canvas back.  The order
   // in the is important because things are layered.

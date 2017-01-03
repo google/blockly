@@ -711,6 +711,12 @@ Blockly.Scrollbar.prototype.onMouseDownHandle_ = function(e) {
   }
   // Look up the current translation and record it.
   this.startDragHandle = this.handlePosition_;
+
+  // Tell the workspace to setup its drag surface since it is about to move.
+  // onMouseMoveHandle will call onScroll which actually tells the workspace
+  // to move.
+  this.workspace_.setupDragSurface();
+
   // Record the current mouse position.
   this.startDragMouse = this.horizontal_ ? e.clientX : e.clientY;
   Blockly.Scrollbar.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
@@ -740,6 +746,8 @@ Blockly.Scrollbar.prototype.onMouseMoveHandle_ = function(e) {
  * @private
  */
 Blockly.Scrollbar.prototype.onMouseUpHandle_ = function() {
+  // Tell the workspace to clean up now that the workspace is done moving.
+  this.workspace_.resetDragSurface();
   Blockly.Touch.clearTouchIdentifier();
   this.cleanUp_();
 };

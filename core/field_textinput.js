@@ -95,6 +95,18 @@ Blockly.FieldTextInput.prototype.setValue = function(newValue) {
 };
 
 /**
+ * Set the text in this field and fire a change event.
+ * @param {*} newText New text.
+ */
+Blockly.FieldTextInput.prototype.setText = function(newText) {
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.text_, newText));
+  }
+  Blockly.Field.prototype.setText.call(this, newText);
+};
+
+/**
  * Set whether this field is spellchecked by the browser.
  * @param {boolean} check True if checked.
  */

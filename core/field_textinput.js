@@ -99,6 +99,15 @@ Blockly.FieldTextInput.prototype.setValue = function(newValue) {
  * @param {*} newText New text.
  */
 Blockly.FieldTextInput.prototype.setText = function(newText) {
+  if (newText === null) {
+    // No change if null.
+    return;
+  }
+  newText = String(newText);
+  if (newText === this.text_) {
+    // No change.
+    return;
+  }
   if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
     Blockly.Events.fire(new Blockly.Events.Change(
         this.sourceBlock_, 'field', this.name, this.text_, newText));

@@ -290,6 +290,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     thisField.workspace_.removeChangeListener(
         htmlInput.onWorkspaceChangeWrapper_);
     Blockly.FieldTextInput.htmlInput_ = null;
+    Blockly.Events.setGroup(false);
     // Delete style properties.
     var style = Blockly.WidgetDiv.DIV.style;
     style.width = 'auto';

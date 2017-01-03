@@ -133,6 +133,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
       thisField.onItemSelected(menu, menuItem);
     }
     Blockly.WidgetDiv.hideIfOwner(thisField);
+    Blockly.Events.setGroup(false);
   }
 
   var menu = new goog.ui.Menu();

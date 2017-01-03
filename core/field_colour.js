@@ -231,4 +231,5 @@ Blockly.FieldColour.widgetDispose_ = function() {
   if (Blockly.FieldColour.changeEventKey_) {
     goog.events.unlistenByKey(Blockly.FieldColour.changeEventKey_);
   }
+  Blockly.Events.setGroup(false);
 };

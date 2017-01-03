@@ -1616,8 +1616,9 @@ Blockly.WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   if (this.options.gridPattern) {
     this.options.gridPattern.setAttribute('x', x);
     this.options.gridPattern.setAttribute('y', y);
-    if (goog.userAgent.IE) {
-      // IE doesn't notice that the x/y offsets have changed.  Force an update.
+    if (goog.userAgent.IE || goog.userAgent.EDGE) {
+      // IE/Edge doesn't notice that the x/y offsets have changed.
+      // Force an update.
       this.updateGridPattern_();
     }
   }

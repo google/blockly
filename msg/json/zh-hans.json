@@ -141,7 +141,7 @@
 	"MATH_IS_NEGATIVE": "为负",
 	"MATH_IS_DIVISIBLE_BY": "可被整除",
 	"MATH_IS_TOOLTIP": "如果数字是偶数、奇数、非负整数、正数、负数或如果它可被某数字整除，则返回真或假。",
-	"MATH_CHANGE_HELPURL": "https://zh.wikipedia.org/wiki/%E5%8A%A0%E6%B3%95",
+	"MATH_CHANGE_HELPURL": "https://zh.wikipedia.org/wiki/加法",
 	"MATH_CHANGE_TITLE": "更改 %1 由 %2",
 	"MATH_CHANGE_TOOLTIP": "将一个数添加到变量“%1”。",
 	"MATH_ROUND_HELPURL": "https://zh.wikipedia.org/wiki/数值修约",

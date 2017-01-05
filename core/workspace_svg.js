@@ -500,6 +500,21 @@ Blockly.WorkspaceSvg.prototype.getParentSvg = function() {
 };
 
 /**
+ * Get a flyout associated with this workspace, if one exists.
+ * @return {?Blockly.Flyout} Flyout associated with this workspace.
+ */
+
+Blockly.WorkspaceSvg.prototype.getFlyout = function() {
+  if (this.flyout_) {
+    return this.flyout_;
+  }
+  if (this.toolbox_ && this.toolbox_.flyout_) {
+    return this.toolbox_.flyout_;
+  }
+  return null;
+};
+
+/**
  * Translate this workspace to new coordinates.
  * @param {number} x Horizontal translation.
  * @param {number} y Vertical translation.

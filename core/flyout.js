@@ -349,6 +349,14 @@ Blockly.Flyout.prototype.getHeight = function() {
 };
 
 /**
+ * Get the flyout's workspace.
+ * @return {!Blockly.Workspace} Workspace on which this flyout's blocks are placed.
+ */
+Blockly.Flyout.prototype.getWorkspace = function() {
+  return this.workspace_;
+};
+
+/**
  * Return an object with all the metrics required to size scrollbars for the
  * flyout.  The following properties are computed:
  * .viewHeight: Height of the visible rectangle,

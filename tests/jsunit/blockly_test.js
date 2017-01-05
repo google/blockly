@@ -101,17 +101,19 @@ function test_commonWordPrefix() {
   assertEquals('No prefix due to &amp;nbsp;', 0, len);
   len = Blockly.commonWordPrefix('turn\u00A0left,turn\u00A0right'.split(','));
   assertEquals('No prefix due to \\u00A0', 0, len);
+  len = Blockly.commonWordPrefix('向左转,向右转'.split(','));
+  assertEquals('One Chinese character prefix', 1, len);
 }
 
 function test_commonWordSuffix() {
   var len = Blockly.commonWordSuffix('one,two,three,four,five'.split(','));
-  assertEquals('No prefix', 0, len);
+  assertEquals('No suffix', 0, len);
   len = Blockly.commonWordSuffix('oneX,twoX,threeX,fourX,fiveX'.split(','));
-  assertEquals('No word prefix', 0, len);
+  assertEquals('No word suffix', 0, len);
   len = Blockly.commonWordSuffix('abc de,abc de,abc de,abc de'.split(','));
   assertEquals('Full equality', 6, len);
   len = Blockly.commonWordSuffix('Xabc de,Yabc de'.split(','));
-  assertEquals('One word prefix', 3, len);
+  assertEquals('One word suffix', 3, len);
   len = Blockly.commonWordSuffix('abc de,Yabc de'.split(','));
   assertEquals('Overflow no', 3, len);
   len = Blockly.commonWordSuffix('abc de,Y abc de'.split(','));
@@ -120,6 +122,8 @@ function test_commonWordSuffix() {
   assertEquals('List of one', 11, len);
   len = Blockly.commonWordSuffix([]);
   assertEquals('Empty list', 0, len);
+  len = Blockly.commonWordSuffix('向左转,向右转'.split(','));
+  assertEquals('One Chinese character suffix', 1, len);
 }
 
 function test_tokenizeInterpolation() {

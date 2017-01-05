@@ -390,6 +390,10 @@ Blockly.shortestStringLength = function(array) {
   return len;
 };
 
+Blockly.isCJKLetter = function(letter) {
+  return letter.match(/^[\u3400-\u9FBF]$/);
+};
+
 /**
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
@@ -412,7 +416,8 @@ Blockly.commonWordPrefix = function(array, opt_shortest) {
         return wordPrefix;
       }
     }
-    if (letter == ' ') {
+    // CJK strings don't use the whitespace to break words.
+    if (letter == ' ' || Blockly.isCJKLetter(letter)) {
       wordPrefix = len + 1;
     }
   }
@@ -447,7 +452,8 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
         return wordPrefix;
       }
     }
-    if (letter == ' ') {
+    // CJK strings don't use the whitespace to break words.
+    if (letter == ' ' || Blockly.isCJKLetter(letter)) {
       wordPrefix = len + 1;
     }
   }

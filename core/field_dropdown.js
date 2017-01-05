@@ -233,10 +233,10 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
     return;
   }
   if (prefixLength) {
-    this.prefixField = strings[0].substring(0, prefixLength - 1);
+    this.prefixField = strings[0].substring(0, prefixLength).trim();
   }
   if (suffixLength) {
-    this.suffixField = strings[0].substr(1 - suffixLength);
+    this.suffixField = strings[0].substr(0 - suffixLength).trim();
   }
   // Remove the prefix and suffix from the options.
   var newOptions = [];

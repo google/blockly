@@ -875,26 +875,18 @@ Blockly.WorkspaceSvg.prototype.recordDeleteAreas = function() {
  * Is the mouse event over a delete area (toolbox or non-closing flyout)?
  * Opens or closes the trashcan and sets the cursor as a side effect.
  * @param {!Event} e Mouse move event.
- * @return {boolean} True if event is in a delete area.
+ * @return {?number} Null if not over a delete area, or an enum representing
+ *     which delete area the event is over.
  */
 Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
   var xy = new goog.math.Coordinate(e.clientX, e.clientY);
-  if (this.deleteAreaTrash_) {
-    if (this.deleteAreaTrash_.contains(xy)) {
-      this.trashcan.setOpen_(true);
-      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
-      return true;
-    }
-    this.trashcan.setOpen_(false);
+  if (this.deleteAreaTrash_ && this.deleteAreaTrash_.contains(xy)) {
+    return Blockly.DELETE_AREA_TRASH;
   }
-  if (this.deleteAreaToolbox_) {
-    if (this.deleteAreaToolbox_.contains(xy)) {
-      Blockly.Css.setCursor(Blockly.Css.Cursor.DELETE);
-      return true;
-    }
+  if (this.deleteAreaToolbox_ && this.deleteAreaToolbox_.contains(xy)) {
+    return Blockly.DELETE_AREA_TOOLBOX;
   }
-  Blockly.Css.setCursor(Blockly.Css.Cursor.CLOSED);
-  return false;
+  return null;
 };
 
 /**

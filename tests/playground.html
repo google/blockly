@@ -320,6 +320,11 @@ h1 {
 #importExport {
   font-family: monospace;
 }
+
+.ioLabel>.blocklyFlyoutLabelText {
+  font-style: italic;
+}
+
 </style>
 </head>
 <body onload="start()">
@@ -379,7 +384,7 @@ h1 {
   </p>
 
   <xml id="toolbox-simple" style="display: none">
-    <block type="controls_if"></block>
+    <block type="controls_ifelse"></block>
     <block type="logic_compare"></block>
     <!-- <block type="control_repeat"></block> -->
     <block type="logic_operation"></block>
@@ -586,6 +591,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <label text="Input/Output:" web-class="ioLabel"></label>
       <block type="text_print">
         <value name="TEXT">
           <shadow type="text">

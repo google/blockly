@@ -44,7 +44,7 @@ goog.provide('FactoryUtils');
  * @return {string} Block definition.
  */
 FactoryUtils.getBlockDefinition = function(blockType, rootBlock, format, workspace) {
-  blockType = blockType.replace(/\W/g, '_').replace(/^(\d)/, '_\\1');
+  blockType = FactoryUtils.cleanBlockType(blockType);
   switch (format) {
     case 'JSON':
       var code = FactoryUtils.formatJson_(blockType, rootBlock);
@@ -54,6 +54,19 @@ FactoryUtils.getBlockDefinition = function(blockType, rootBlock, format, workspa
       break;
   }
   return code;
+};
+
+/**
+ * Convert invalid block name to a valid one. Replaces whitespace
+ * and prepend names that start with a digit with an '_'.
+ * @param {string} blockType Type of block.
+ * @return {string} Cleaned up block type.
+ */
+FactoryUtils.cleanBlockType = function(blockType) {
+  if (!blockType) {
+    return '';
+  }
+  return blockType.replace(/\W/g, '_').replace(/^(\d)/, '_$1');
 };
 
 /**
@@ -250,8 +263,10 @@ FactoryUtils.formatJson_ = function(blockType, rootBlock) {
     var hue = parseInt(colourBlock.getFieldValue('HUE'), 10);
     JS.colour = hue;
   }
-  JS.tooltip = '';
-  JS.helpUrl = 'http://www.example.com/';
+
+  JS.tooltip = FactoryUtils.getTooltipFromRootBlock_(rootBlock);
+  JS.helpUrl = FactoryUtils.getHelpUrlFromRootBlock_(rootBlock);
+
   return JSON.stringify(JS, null, '  ');
 };
 
@@ -278,7 +293,7 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
       // Dummy inputs don't have names.  Other inputs do.
       if (contentsBlock.type != 'input_dummy') {
         name =
-            FactoryUtils.escapeString(contentsBlock.getFieldValue('INPUTNAME'));
+            JSON.stringify(contentsBlock.getFieldValue('INPUTNAME'));
       }
       code.push('    this.' + TYPES[contentsBlock.type] + '(' + name + ')');
       var check = FactoryUtils.getOptTypesFrom(contentsBlock, 'TYPE');
@@ -334,8 +349,11 @@ FactoryUtils.formatJavaScript_ = function(blockType, rootBlock, workspace) {
       code.push('    this.setColour(' + hue + ');');
     }
   }
-  code.push("    this.setTooltip('');");
-  code.push("    this.setHelpUrl('http://www.example.com/');");
+
+  var tooltip = FactoryUtils.getTooltipFromRootBlock_(rootBlock);
+  var helpUrl = FactoryUtils.getHelpUrlFromRootBlock_(rootBlock);
+  code.push("    this.setTooltip('" + tooltip + "');");
+  code.push("    this.setHelpUrl('" + helpUrl + "');");
   code.push('  }');
   code.push('};');
   return code.join('\n');
@@ -373,13 +391,13 @@ FactoryUtils.getFieldsJs_ = function(block) {
       switch (block.type) {
         case 'field_static':
           // Result: 'hello'
-          fields.push(FactoryUtils.escapeString(block.getFieldValue('TEXT')));
+          fields.push(JSON.stringify(block.getFieldValue('TEXT')));
           break;
         case 'field_input':
           // Result: new Blockly.FieldTextInput('Hello'), 'GREET'
           fields.push('new Blockly.FieldTextInput(' +
-              FactoryUtils.escapeString(block.getFieldValue('TEXT')) + '), ' +
-              FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+              JSON.stringify(block.getFieldValue('TEXT')) + '), ' +
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_number':
           // Result: new Blockly.FieldNumber(10, 0, 100, 1), 'NUMBER'
@@ -400,63 +418,61 @@ FactoryUtils.getFieldsJs_ = function(block) {
             }
           }
           fields.push('new Blockly.FieldNumber(' + args.join(', ') + '), ' +
-              FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_angle':
           // Result: new Blockly.FieldAngle(90), 'ANGLE'
           fields.push('new Blockly.FieldAngle(' +
               parseFloat(block.getFieldValue('ANGLE')) + '), ' +
-              FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_checkbox':
           // Result: new Blockly.FieldCheckbox('TRUE'), 'CHECK'
           fields.push('new Blockly.FieldCheckbox(' +
-              FactoryUtils.escapeString(block.getFieldValue('CHECKED')) +
+              JSON.stringify(block.getFieldValue('CHECKED')) +
                '), ' +
-              FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_colour':
           // Result: new Blockly.FieldColour('#ff0000'), 'COLOUR'
           fields.push('new Blockly.FieldColour(' +
-              FactoryUtils.escapeString(block.getFieldValue('COLOUR')) +
+              JSON.stringify(block.getFieldValue('COLOUR')) +
               '), ' +
-              FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_date':
           // Result: new Blockly.FieldDate('2015-02-04'), 'DATE'
           fields.push('new Blockly.FieldDate(' +
-              FactoryUtils.escapeString(block.getFieldValue('DATE')) + '), ' +
-              FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+              JSON.stringify(block.getFieldValue('DATE')) + '), ' +
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_variable':
           // Result: new Blockly.FieldVariable('item'), 'VAR'
           var varname
-              = FactoryUtils.escapeString(block.getFieldValue('TEXT') || null);
+              = JSON.stringify(block.getFieldValue('TEXT') || null);
           fields.push('new Blockly.FieldVariable(' + varname + '), ' +
-              FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+              JSON.stringify(block.getFieldValue('FIELDNAME')));
           break;
         case 'field_dropdown':
           // Result:
           // new Blockly.FieldDropdown([['yes', '1'], ['no', '0']]), 'TOGGLE'
           var options = [];
-          for (var i = 0; i < block.optionCount_; i++) {
-            options[i] = '[' +
-                FactoryUtils.escapeString(block.getFieldValue('USER' + i)) +
-                ', ' +
-                FactoryUtils.escapeString(block.getFieldValue('CPU' + i)) + ']';
+          for (var i = 0; i < block.optionList_.length; i++) {
+            options[i] = JSON.stringify([block.getUserData(i),
+                                         block.getFieldValue('CPU' + i)]);
           }
           if (options.length) {
             fields.push('new Blockly.FieldDropdown([' +
                 options.join(', ') + ']), ' +
-                FactoryUtils.escapeString(block.getFieldValue('FIELDNAME')));
+                JSON.stringify(block.getFieldValue('FIELDNAME')));
           }
           break;
         case 'field_image':
-          // Result: new Blockly.FieldImage('http://...', 80, 60)
-          var src = FactoryUtils.escapeString(block.getFieldValue('SRC'));
+          // Result: new Blockly.FieldImage('http://...', 80, 60, '*')
+          var src = JSON.stringify(block.getFieldValue('SRC'));
           var width = Number(block.getFieldValue('WIDTH'));
           var height = Number(block.getFieldValue('HEIGHT'));
-          var alt = FactoryUtils.escapeString(block.getFieldValue('ALT'));
+          var alt = JSON.stringify(block.getFieldValue('ALT'));
           fields.push('new Blockly.FieldImage(' +
               src + ', ' + width + ', ' + height + ', ' + alt + ')');
           break;
@@ -546,8 +562,8 @@ FactoryUtils.getFieldsJson_ = function(block) {
           break;
         case 'field_dropdown':
           var options = [];
-          for (var i = 0; i < block.optionCount_; i++) {
-            options[i] = [block.getFieldValue('USER' + i),
+          for (var i = 0; i < block.optionList_.length; i++) {
+            options[i] = [block.getUserData(i),
                 block.getFieldValue('CPU' + i)];
           }
           if (options.length) {
@@ -608,7 +624,7 @@ FactoryUtils.getTypesFrom_ = function(block, name) {
   if (!typeBlock || typeBlock.disabled) {
     types = [];
   } else if (typeBlock.type == 'type_other') {
-    types = [FactoryUtils.escapeString(typeBlock.getFieldValue('TYPE'))];
+    types = [JSON.stringify(typeBlock.getFieldValue('TYPE'))];
   } else if (typeBlock.type == 'type_group') {
     types = [];
     for (var n = 0; n < typeBlock.typeCount_; n++) {
@@ -623,18 +639,9 @@ FactoryUtils.getTypesFrom_ = function(block, name) {
       hash[types[n]] = true;
     }
   } else {
-    types = [FactoryUtils.escapeString(typeBlock.valueType)];
+    types = [JSON.stringify(typeBlock.valueType)];
   }
   return types;
-};
-
-/**
- * Escape a string.
- * @param {string} string String to escape.
- * @return {string} Escaped string surrouned by quotes.
- */
-FactoryUtils.escapeString = function(string) {
-  return JSON.stringify(string);
 };
 
 /**
@@ -961,4 +968,32 @@ FactoryUtils.savedBlockChanges = function(blockLibraryController) {
     return FactoryUtils.sameBlockXml(savedXml, currentXml);
   }
   return false;
+};
+
+/**
+ * Given the root block of the factory, return the tooltip specified by the user
+ * or the empty string if no tooltip is found.
+ * @param {!Blockly.Block} rootBlock Factory_base block.
+ * @return {string} The tooltip for the generated block, or the empty string.
+ */
+FactoryUtils.getTooltipFromRootBlock_ = function(rootBlock) {
+  var tooltipBlock = rootBlock.getInputTargetBlock('TOOLTIP');
+  if (tooltipBlock && !tooltipBlock.disabled) {
+    return tooltipBlock.getFieldValue('TEXT');
+  }
+  return '';
+};
+
+/**
+ * Given the root block of the factory, return the help url specified by the
+ * user or the empty string if no tooltip is found.
+ * @param {!Blockly.Block} rootBlock Factory_base block.
+ * @return {string} The help url for the generated block, or the empty string.
+ */
+FactoryUtils.getHelpUrlFromRootBlock_ = function(rootBlock) {
+  var helpUrlBlock = rootBlock.getInputTargetBlock('HELPURL');
+  if (helpUrlBlock && !helpUrlBlock.disabled) {
+    return helpUrlBlock.getFieldValue('TEXT');
+  }
+  return '';
 };

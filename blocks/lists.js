@@ -195,7 +195,7 @@ Blockly.Blocks['lists_create_with_container'] = {
 
 Blockly.Blocks['lists_create_with_item'] = {
   /**
-   * Mutator bolck for adding items.
+   * Mutator block for adding items.
    * @this Blockly.Block
    */
   init: function() {

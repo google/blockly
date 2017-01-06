@@ -193,9 +193,18 @@ Blockly.Python.quote_ = function(string) {
   // Can't use goog.string.quote since % must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
-                 .replace(/\%/g, '\\%')
-                 .replace(/'/g, '\\\'');
-  return '\'' + string + '\'';
+                 .replace(/\%/g, '\\%');
+
+  // Follow the CPython behaviour of repr() for a non-byte string.
+  var quote = '\'';
+  if (string.indexOf('\'') !== -1) {
+    if (string.indexOf('"') === -1) {
+      quote = '"';
+    } else {
+      string = string.replace(/'/g, '\\\'');
+    }
+  };
+  return quote + string + quote;
 };
 
 /**

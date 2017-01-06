@@ -50,6 +50,8 @@ Blockly.Lua['controls_if'] = function(block) {
   return code + 'end\n';
 };
 
+Blockly.Lua['controls_ifelse'] = Blockly.Lua['controls_if'];
+
 Blockly.Lua['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

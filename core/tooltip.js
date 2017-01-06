@@ -160,7 +160,7 @@ Blockly.Tooltip.onMouseOver_ = function(e) {
     Blockly.Tooltip.poisonedElement_ = null;
     Blockly.Tooltip.element_ = element;
   }
-  // Forget about any immediately preceeding mouseOut event.
+  // Forget about any immediately preceding mouseOut event.
   clearTimeout(Blockly.Tooltip.mouseOutPid_);
 };
 

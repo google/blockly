@@ -164,17 +164,17 @@ Blockly.Trashcan.prototype.createDom = function() {
         clip-path="url(#blocklyTrashLidClipPath837493)"></image>
   </g>
   */
-  this.svgGroup_ = Blockly.createSvgElement('g',
+  this.svgGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyTrash'}, null);
   var rnd = String(Math.random()).substring(2);
-  var clip = Blockly.createSvgElement('clipPath',
+  var clip = Blockly.utils.createSvgElement('clipPath',
       {'id': 'blocklyTrashBodyClipPath' + rnd},
       this.svgGroup_);
-  Blockly.createSvgElement('rect',
+  Blockly.utils.createSvgElement('rect',
       {'width': this.WIDTH_, 'height': this.BODY_HEIGHT_,
        'y': this.LID_HEIGHT_},
       clip);
-  var body = Blockly.createSvgElement('image',
+  var body = Blockly.utils.createSvgElement('image',
       {'width': Blockly.SPRITE.width, 'x': -this.SPRITE_LEFT_,
        'height': Blockly.SPRITE.height, 'y': -this.SPRITE_TOP_,
        'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')'},
@@ -182,12 +182,12 @@ Blockly.Trashcan.prototype.createDom = function() {
   body.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
       this.workspace_.options.pathToMedia + Blockly.SPRITE.url);
 
-  var clip = Blockly.createSvgElement('clipPath',
+  var clip = Blockly.utils.createSvgElement('clipPath',
       {'id': 'blocklyTrashLidClipPath' + rnd},
       this.svgGroup_);
-  Blockly.createSvgElement('rect',
+  Blockly.utils.createSvgElement('rect',
       {'width': this.WIDTH_, 'height': this.LID_HEIGHT_}, clip);
-  this.svgLid_ = Blockly.createSvgElement('image',
+  this.svgLid_ = Blockly.utils.createSvgElement('image',
       {'width': Blockly.SPRITE.width, 'x': -this.SPRITE_LEFT_,
        'height': Blockly.SPRITE.height, 'y': -this.SPRITE_TOP_,
        'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')'},

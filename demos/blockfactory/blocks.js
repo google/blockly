@@ -47,11 +47,17 @@ Blockly.Blocks['factory_base'] = {
         ['↓ bottom connection', 'BOTTOM']],
         function(option) {
           this.sourceBlock_.updateShape_(option);
-          // Connect a shadow block to this new input. 
+          // Connect a shadow block to this new input.
           this.sourceBlock_.spawnOutputShadow_(option);
         });
     this.appendDummyInput()
         .appendField(dropdown, 'CONNECTIONS');
+    this.appendValueInput('TOOLTIP')
+        .setCheck('String')
+        .appendField('tooltip');
+    this.appendValueInput('HELPURL')
+        .setCheck('String')
+        .appendField('help url');
     this.appendValueInput('COLOUR')
         .setCheck('Colour')
         .appendField('colour');
@@ -318,11 +324,12 @@ Blockly.Blocks['field_dropdown'] = {
     this.appendDummyInput()
         .appendField('dropdown')
         .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME');
-    this.optionCount_ = 3;
+    this.optionList_ = ['text', 'text', 'text'];
     this.updateShape_();
     this.setPreviousStatement(true, 'Field');
     this.setNextStatement(true, 'Field');
-    this.setMutator(new Blockly.Mutator(['field_dropdown_option']));
+    this.setMutator(new Blockly.Mutator(['field_dropdown_option_text',
+                                         'field_dropdown_option_image']));
     this.setColour(160);
     this.setTooltip('Dropdown menu with a list of options.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386');
@@ -330,12 +337,21 @@ Blockly.Blocks['field_dropdown'] = {
   mutationToDom: function(workspace) {
     // Create XML to represent menu options.
     var container = document.createElement('mutation');
-    container.setAttribute('options', this.optionCount_);
+    container.setAttribute('options', JSON.stringify(this.optionList_));
     return container;
   },
   domToMutation: function(container) {
     // Parse XML to restore the menu options.
-    this.optionCount_ = parseInt(container.getAttribute('options'), 10);
+    var value = JSON.parse(container.getAttribute('options'));
+    if (typeof value == 'number') {
+      // Old format from before images were added.  November 2016.
+      this.optionList_ = [];
+      for (var i = 0; i < value; i++) {
+        this.optionList_.push('text');
+      }
+    } else {
+      this.optionList_ = value;
+    }
     this.updateShape_();
   },
   decompose: function(workspace) {
@@ -343,8 +359,9 @@ Blockly.Blocks['field_dropdown'] = {
     var containerBlock = workspace.newBlock('field_dropdown_container');
     containerBlock.initSvg();
     var connection = containerBlock.getInput('STACK').connection;
-    for (var i = 0; i < this.optionCount_; i++) {
-      var optionBlock = workspace.newBlock('field_dropdown_option');
+    for (var i = 0; i < this.optionList_.length; i++) {
+      var optionBlock = workspace.newBlock(
+          'field_dropdown_option_' + this.optionList_[i]);
       optionBlock.initSvg();
       connection.connect(optionBlock.previousConnection);
       connection = optionBlock.nextConnection;
@@ -355,26 +372,41 @@ Blockly.Blocks['field_dropdown'] = {
     // Reconfigure this block based on the mutator dialog's components.
     var optionBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
+    this.optionList_.length = 0;
     var data = [];
     while (optionBlock) {
+      if (optionBlock.type == 'field_dropdown_option_text') {
+        this.optionList_.push('text');
+      } else if (optionBlock.type == 'field_dropdown_option_image') {
+        this.optionList_.push('image');
+      }
       data.push([optionBlock.userData_, optionBlock.cpuData_]);
       optionBlock = optionBlock.nextConnection &&
           optionBlock.nextConnection.targetBlock();
     }
-    this.optionCount_ = data.length;
     this.updateShape_();
     // Restore any data.
-    for (var i = 0; i < this.optionCount_; i++) {
-      this.setFieldValue(data[i][0] || 'option', 'USER' + i);
-      this.setFieldValue(data[i][1] || 'OPTIONNAME', 'CPU' + i);
+    for (var i = 0; i < this.optionList_.length; i++) {
+      var userData = data[i][0];
+      if (userData !== undefined) {
+        if (typeof userData == 'string') {
+          this.setFieldValue(userData || 'option', 'USER' + i);
+        } else {
+          this.setFieldValue(userData.src, 'SRC' + i);
+          this.setFieldValue(userData.width, 'WIDTH' + i);
+          this.setFieldValue(userData.height, 'HEIGHT' + i);
+          this.setFieldValue(userData.alt, 'ALT' + i);
+        }
+        this.setFieldValue(data[i][1] || 'OPTIONNAME', 'CPU' + i);
+      }
     }
   },
   saveConnections: function(containerBlock) {
-    // Store names and values for each option.
+    // Store all data for each option.
     var optionBlock = containerBlock.getInputTargetBlock('STACK');
     var i = 0;
     while (optionBlock) {
-      optionBlock.userData_ = this.getFieldValue('USER' + i);
+      optionBlock.userData_ = this.getUserData(i);
       optionBlock.cpuData_ = this.getFieldValue('CPU' + i);
       i++;
       optionBlock = optionBlock.nextConnection &&
@@ -382,28 +414,61 @@ Blockly.Blocks['field_dropdown'] = {
     }
   },
   updateShape_: function() {
-    // Modify this block to have the correct number of options.
-    // Add new options.
-    for (var i = 0; i < this.optionCount_; i++) {
-      if (!this.getInput('OPTION' + i)) {
+    // Delete everything.
+    var i = 0;
+    while (this.getInput('OPTION' + i)) {
+      this.removeInput('OPTION' + i);
+      this.removeInput('OPTION_IMAGE' + i, true);
+      i++;
+    }
+    // Rebuild block.
+    var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif';
+    for (var i = 0; i <= this.optionList_.length; i++) {
+      var type = this.optionList_[i];
+      if (type == 'text') {
         this.appendDummyInput('OPTION' + i)
+            .appendField('•')
             .appendField(new Blockly.FieldTextInput('option'), 'USER' + i)
+            .appendField(',')
+            .appendField(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU' + i);
+      } else if (type == 'image') {
+        this.appendDummyInput('OPTION' + i)
+            .appendField('•')
+            .appendField('image')
+            .appendField(new Blockly.FieldTextInput(src), 'SRC' + i);
+        this.appendDummyInput('OPTION_IMAGE' + i)
+            .appendField(' ')
+            .appendField('width')
+            .appendField(new Blockly.FieldNumber('15', 0, NaN, 1), 'WIDTH' + i)
+            .appendField('height')
+            .appendField(new Blockly.FieldNumber('15', 0, NaN, 1), 'HEIGHT' + i)
+            .appendField('alt text')
+            .appendField(new Blockly.FieldTextInput('*'), 'ALT' + i)
             .appendField(',')
             .appendField(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU' + i);
       }
     }
-    // Remove deleted options.
-    while (this.getInput('OPTION' + i)) {
-      this.removeInput('OPTION' + i);
-      i++;
-    }
   },
   onchange: function() {
-    if (this.workspace && this.optionCount_ < 1) {
+    if (this.workspace && this.optionList_.length < 1) {
       this.setWarningText('Drop down menu must\nhave at least one option.');
     } else {
       fieldNameCheck(this);
     }
+  },
+  getUserData: function(n) {
+    if (this.optionList_[n] == 'text') {
+      return this.getFieldValue('USER' + n);
+    }
+    if (this.optionList_[n] == 'image') {
+      return {
+        src: this.getFieldValue('SRC' + n),
+        width: Number(this.getFieldValue('WIDTH' + n)),
+        height: Number(this.getFieldValue('HEIGHT' + n)),
+        alt: this.getFieldValue('ALT' + n)
+      };
+    }
+    throw 'Unknown dropdown type';
   }
 };
 
@@ -421,15 +486,29 @@ Blockly.Blocks['field_dropdown_container'] = {
   }
 };
 
-Blockly.Blocks['field_dropdown_option'] = {
-  // Add option.
+Blockly.Blocks['field_dropdown_option_text'] = {
+  // Add text option.
   init: function() {
     this.setColour(160);
     this.appendDummyInput()
-        .appendField('option');
+        .appendField('text option');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setTooltip('Add a new option to the dropdown menu.');
+    this.setTooltip('Add a new text option to the dropdown menu.');
+    this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386');
+    this.contextMenu = false;
+  }
+};
+
+Blockly.Blocks['field_dropdown_option_image'] = {
+  // Add image option.
+  init: function() {
+    this.setColour(160);
+    this.appendDummyInput()
+        .appendField('image option');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setTooltip('Add a new image option to the dropdown menu.');
     this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386');
     this.contextMenu = false;
   }

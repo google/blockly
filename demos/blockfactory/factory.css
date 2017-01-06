@@ -280,7 +280,7 @@ button, .buttonStyle {
 
 .blockOption {
   background-color: #eee;
-  padding: 15px 20px;
+  padding: 0px 20px;
   width: 95%;
 }
 
@@ -290,13 +290,13 @@ button, .buttonStyle {
 
 .blockOption_check {
   float: left;
+  display:inline;
   padding: 4px;
 }
 
 .blockOption_label {
-  float: left;
+  display:inline;
   max-width: inherit;
-  overflow-y: scroll;
   word-wrap: break-word;
 }
 

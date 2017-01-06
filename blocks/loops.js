@@ -257,7 +257,7 @@ Blockly.Blocks['controls_flow_statements'] = {
    * @this Blockly.Block
    */
   onchange: function(e) {
-    if (this.workspace.isDragging()) {
+    if (!this.workspace.isDragging || this.workspace.isDragging()) {
       return;  // Don't change state at the start of a drag.
     }
     var legal = false;

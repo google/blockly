@@ -75,23 +75,44 @@ Blockly.FieldTextInput.prototype.dispose = function() {
 };
 
 /**
- * Set the text in this field.
- * @param {?string} text New text.
+ * Set the value of this field.
+ * @param {?string} newValue New value.
  * @override
  */
-Blockly.FieldTextInput.prototype.setValue = function(text) {
-  if (text === null) {
+Blockly.FieldTextInput.prototype.setValue = function(newValue) {
+  if (newValue === null) {
     return;  // No change if null.
   }
   if (this.sourceBlock_) {
-    var validated = this.callValidator(text);
-    // If the new text is invalid, validation returns null.
+    var validated = this.callValidator(newValue);
+    // If the new value is invalid, validation returns null.
     // In this case we still want to display the illegal result.
     if (validated !== null) {
-      text = validated;
+      newValue = validated;
     }
   }
-  Blockly.Field.prototype.setValue.call(this, text);
+  Blockly.Field.prototype.setValue.call(this, newValue);
+};
+
+/**
+ * Set the text in this field and fire a change event.
+ * @param {*} newText New text.
+ */
+Blockly.FieldTextInput.prototype.setText = function(newText) {
+  if (newText === null) {
+    // No change if null.
+    return;
+  }
+  newText = String(newText);
+  if (newText === this.text_) {
+    // No change.
+    return;
+  }
+  if (this.sourceBlock_ && Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.Change(
+        this.sourceBlock_, 'field', this.name, this.text_, newText));
+  }
+  Blockly.Field.prototype.setText.call(this, newText);
 };
 
 /**
@@ -195,7 +216,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
   var text = htmlInput.value;
   if (text !== htmlInput.oldValue_) {
     htmlInput.oldValue_ = text;
-    this.setValue(text);
+    this.setText(text);
     this.validate_();
   } else if (goog.userAgent.WEBKIT) {
     // Cursor key.  Render the source block to show the caret moving.
@@ -219,9 +240,9 @@ Blockly.FieldTextInput.prototype.validate_ = function() {
     valid = this.callValidator(htmlInput.value);
   }
   if (valid === null) {
-    Blockly.addClass_(htmlInput, 'blocklyInvalidInput');
+    Blockly.utils.addClass(htmlInput, 'blocklyInvalidInput');
   } else {
-    Blockly.removeClass_(htmlInput, 'blocklyInvalidInput');
+    Blockly.utils.removeClass(htmlInput, 'blocklyInvalidInput');
   }
 };
 
@@ -282,7 +303,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
         }
       }
     }
-    thisField.setValue(text);
+    thisField.setText(text);
     thisField.sourceBlock_.rendered && thisField.sourceBlock_.render();
     Blockly.unbindEvent_(htmlInput.onKeyDownWrapper_);
     Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
@@ -290,6 +311,7 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
     thisField.workspace_.removeChangeListener(
         htmlInput.onWorkspaceChangeWrapper_);
     Blockly.FieldTextInput.htmlInput_ = null;
+    Blockly.Events.setGroup(false);
     // Delete style properties.
     var style = Blockly.WidgetDiv.DIV.style;
     style.width = 'auto';

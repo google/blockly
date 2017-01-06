@@ -222,7 +222,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
     [...content goes here...]
   </g>
   */
-  this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
+  this.bubbleGroup_ = Blockly.utils.createSvgElement('g', {}, null);
   var filter =
       {'filter': 'url(#' + this.workspace_.options.embossFilterId + ')'};
   if (goog.userAgent.getUserAgentString().indexOf('JavaFX') != -1) {
@@ -232,27 +232,27 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
     // https://github.com/google/blockly/issues/99
     filter = {};
   }
-  var bubbleEmboss = Blockly.createSvgElement('g',
+  var bubbleEmboss = Blockly.utils.createSvgElement('g',
       filter, this.bubbleGroup_);
-  this.bubbleArrow_ = Blockly.createSvgElement('path', {}, bubbleEmboss);
-  this.bubbleBack_ = Blockly.createSvgElement('rect',
+  this.bubbleArrow_ = Blockly.utils.createSvgElement('path', {}, bubbleEmboss);
+  this.bubbleBack_ = Blockly.utils.createSvgElement('rect',
       {'class': 'blocklyDraggable', 'x': 0, 'y': 0,
       'rx': Blockly.Bubble.BORDER_WIDTH, 'ry': Blockly.Bubble.BORDER_WIDTH},
       bubbleEmboss);
   if (hasResize) {
-    this.resizeGroup_ = Blockly.createSvgElement('g',
+    this.resizeGroup_ = Blockly.utils.createSvgElement('g',
         {'class': this.workspace_.RTL ?
                   'blocklyResizeSW' : 'blocklyResizeSE'},
         this.bubbleGroup_);
     var resizeSize = 2 * Blockly.Bubble.BORDER_WIDTH;
-    Blockly.createSvgElement('polygon',
+    Blockly.utils.createSvgElement('polygon',
         {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
         this.resizeGroup_);
-    Blockly.createSvgElement('line',
+    Blockly.utils.createSvgElement('line',
         {'class': 'blocklyResizeLine',
         'x1': resizeSize / 3, 'y1': resizeSize - 1,
         'x2': resizeSize - 1, 'y2': resizeSize / 3}, this.resizeGroup_);
-    Blockly.createSvgElement('line',
+    Blockly.utils.createSvgElement('line',
         {'class': 'blocklyResizeLine',
         'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
         'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3}, this.resizeGroup_);
@@ -271,11 +271,11 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
 Blockly.Bubble.prototype.bubbleMouseDown_ = function(e) {
   this.promote_();
   Blockly.Bubble.unbindDragEvents_();
-  if (Blockly.isRightButton(e)) {
+  if (Blockly.utils.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;
-  } else if (Blockly.isTargetInput_(e)) {
+  } else if (Blockly.utils.isTargetInput(e)) {
     // When focused on an HTML text input widget, don't trap any events.
     return;
   }
@@ -317,7 +317,7 @@ Blockly.Bubble.prototype.bubbleMouseMove_ = function(e) {
 Blockly.Bubble.prototype.resizeMouseDown_ = function(e) {
   this.promote_();
   Blockly.Bubble.unbindDragEvents_();
-  if (Blockly.isRightButton(e)) {
+  if (Blockly.utils.isRightButton(e)) {
     // No right-click.
     e.stopPropagation();
     return;

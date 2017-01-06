@@ -24,26 +24,27 @@
  */
 'use strict';
 
-Blockly.Msg.TOOLBOX = 'Toolbox';
 Blockly.Msg.WORKSPACE = 'Workspace';
-Blockly.Msg.TOOLBOX_BLOCK = 'toolbox block. Move right to view submenu.';
-Blockly.Msg.WORKSPACE_BLOCK = 'workspace block. Move right to view submenu.';
+Blockly.Msg.WORKSPACE_BLOCK =
+    'workspace block. Move right to edit. Press Enter for more options.';
 
-Blockly.Msg.CLEAR_WORKSPACE = 'Erase Workspace';
+Blockly.Msg.ATTACH_NEW_BLOCK_TO_LINK = 'Attach new block to link...';
+Blockly.Msg.CREATE_NEW_BLOCK_GROUP = 'Create new block group...';
+Blockly.Msg.ERASE_WORKSPACE = 'Erase Workspace';
 
-Blockly.Msg.COPY_TO_CLIPBOARD = 'Copy to clipboard.';
-Blockly.Msg.COPY_TO_MARKED_SPOT = 'Attach to link.';
-Blockly.Msg.COPY_TO_WORKSPACE = 'Add to workspace.';
+Blockly.Msg.COPY_BLOCK = 'Copy block';
+Blockly.Msg.DELETE = 'Delete block';
+Blockly.Msg.MARK_SPOT_BEFORE = 'Add link before';
+Blockly.Msg.MARK_SPOT_AFTER = 'Add link after';
+Blockly.Msg.MARK_THIS_SPOT = 'Add link inside';
+Blockly.Msg.MOVE_TO_MARKED_SPOT = 'Move to existing link';
+Blockly.Msg.PASTE_AFTER = 'Paste after';
+Blockly.Msg.PASTE_BEFORE = 'Paste before';
+Blockly.Msg.PASTE_INSIDE = 'Paste inside';
 
-Blockly.Msg.COPY_BLOCK = 'Copy block.';
-Blockly.Msg.DELETE = 'Delete block.';
-Blockly.Msg.MARK_SPOT_BEFORE = 'Add link before.';
-Blockly.Msg.MARK_SPOT_AFTER = 'Add link after.';
-Blockly.Msg.MARK_THIS_SPOT = 'Add link inside.';
-Blockly.Msg.MOVE_TO_MARKED_SPOT = 'Attach to link.';
-Blockly.Msg.PASTE_AFTER = 'Paste after.';
-Blockly.Msg.PASTE_BEFORE = 'Paste before.';
-Blockly.Msg.PASTE_INSIDE = 'Paste inside.';
+Blockly.Msg.BLOCK_OPTIONS = 'Block Options';
+Blockly.Msg.SELECT_A_BLOCK = 'Select a block...';
+Blockly.Msg.CANCEL = 'Cancel';
 
 Blockly.Msg.ANY = 'any';
 Blockly.Msg.BLOCK = 'block';
@@ -51,10 +52,7 @@ Blockly.Msg.BUTTON = 'Button.';
 Blockly.Msg.FOR = 'for';
 Blockly.Msg.VALUE = 'value';
 
-Blockly.Msg.BLOCK_OPTIONS = 'Block options: ';
-
-Blockly.Msg.BLOCK_MOVED_TO_MARKED_SPOT_MSB = 'Block moved to marked spot: ';
+Blockly.Msg.ADDED_LINK_MSG = 'Added link.';
+Blockly.Msg.ATTACHED_BLOCK_TO_LINK_MSG = 'attached to link. ';
 Blockly.Msg.COPIED_BLOCK_MSG = 'copied. ';
-Blockly.Msg.MARKED_SPOT_MSG = 'Marked spot. ';
 Blockly.Msg.PASTED_BLOCK_FROM_CLIPBOARD_MSG = 'pasted. ';
-Blockly.Msg.PASTED_BLOCK_TO_MARKED_SPOT_MSG = 'moved to marked spot. ';

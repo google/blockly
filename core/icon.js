@@ -76,10 +76,10 @@ Blockly.Icon.prototype.createIcon = function() {
     ...
   </g>
   */
-  this.iconGroup_ = Blockly.createSvgElement('g',
+  this.iconGroup_ = Blockly.utils.createSvgElement('g',
       {'class': 'blocklyIconGroup'}, null);
   if (this.block_.isInFlyout) {
-    Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
+    Blockly.utils.addClass(/** @type {!Element} */ (this.iconGroup_),
                       'blocklyIconGroupReadonly');
   }
   this.drawIcon_(this.iconGroup_);
@@ -126,7 +126,7 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
     // Drag operation is concluding.  Don't open the editor.
     return;
   }
-  if (!this.block_.isInFlyout && !Blockly.isRightButton(e)) {
+  if (!this.block_.isInFlyout && !Blockly.utils.isRightButton(e)) {
     this.setVisible(!this.isVisible());
   }
 };
@@ -186,7 +186,7 @@ Blockly.Icon.prototype.setIconLocation = function(xy) {
 Blockly.Icon.prototype.computeIconLocation = function() {
   // Find coordinates for the centre of the icon and update the arrow.
   var blockXY = this.block_.getRelativeToSurfaceXY();
-  var iconXY = Blockly.getRelativeXY_(this.iconGroup_);
+  var iconXY = Blockly.utils.getRelativeXY(this.iconGroup_);
   var newXY = new goog.math.Coordinate(
       blockXY.x + iconXY.x + this.SIZE / 2,
       blockXY.y + iconXY.y + this.SIZE / 2);

@@ -1,16 +1,32 @@
-.blocklyToolboxColumn {
-  float: left;
-  width: 350px;
-}
 .blocklyWorkspaceColumn {
   float: left;
-  width: 350px;
+  margin-right: 20px;
+  width: 800px;
 }
-.blocklyToolbarColumn {
+.blocklySidebarColumn {
+  border-left: 1px solid #888;
   float: left;
-  margin-left: 10px;
+  padding-left: 20px;
   margin-top: 20px;
-  width: 150px;
+  min-height: 700px;
+  width: 200px;
+}
+
+.blocklySidebarButton {
+  background-color: #fff;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #000;
+  font-size: 1em;
+  margin: 10px 0 10px 30px;
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.blocklySidebarButton[disabled] {
+  border: 1px solid #ccc;
+  opacity: 0.5;
 }
 
 .blocklyAriaLiveStatus {
@@ -27,11 +43,38 @@
 .blocklyTree .blocklyActiveDescendant > div > label,
 .blocklyActiveDescendant > button,
 .blocklyActiveDescendant > input,
+.blocklyActiveDescendant > select,
 .blocklyActiveDescendant > blockly-field-segment > label,
-.blocklyActiveDescendant > blockly-field-segment > input {
+.blocklyActiveDescendant > blockly-field-segment > input,
+.blocklyActiveDescendant > blockly-field-segment > select {
   outline: 2px dotted #00f;
 }
 
 .blocklyDropdownListItem[aria-selected="true"] button {
   font-weight: bold;
+}
+
+.blocklyModalCurtain {
+  background-color: rgba(0,0,0,0.4);
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+.blocklyModal {
+  background-color: #fefefe;
+  border: 1px solid #888;
+  margin: 10% auto;
+  max-width: 600px;
+  padding: 20px;
+  width: 60%;
+}
+.blocklyModalButtonContainer {
+  margin: 10px 0;
+}
+.blocklyModal .activeButton {
+  border: 1px solid blue;
 }

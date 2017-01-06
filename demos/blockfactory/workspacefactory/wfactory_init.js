@@ -385,8 +385,9 @@ WorkspaceFactoryInit.addWorkspaceFactoryEventListeners_ = function(controller) {
   var isInvalidBlockPlacement = function(block) {
     return ((controller.isUserGenShadowBlock(block.id) &&
         !block.getSurroundParent()) ||
-        (!controller.isUserGenShadowBlock(block.id) && block.getSurroundParent()
-        && controller.isUserGenShadowBlock(block.getSurroundParent().id)));
+        (!controller.isUserGenShadowBlock(block.id) &&
+         block.getSurroundParent() &&
+         controller.isUserGenShadowBlock(block.getSurroundParent().id)));
   };
 
   // Add change listeners for toolbox workspace in workspace factory.

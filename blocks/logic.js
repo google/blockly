@@ -236,7 +236,7 @@ Blockly.Blocks['controls_if_if'] = {
 
 Blockly.Blocks['controls_if_elseif'] = {
   /**
-   * Mutator bolck for else-if condition.
+   * Mutator block for else-if condition.
    * @this Blockly.Block
    */
   init: function() {
@@ -262,6 +262,44 @@ Blockly.Blocks['controls_if_else'] = {
     this.setPreviousStatement(true);
     this.setTooltip(Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP);
     this.contextMenu = false;
+  }
+};
+
+Blockly.Blocks['controls_ifelse'] = {
+  /**
+   * If/else block that does not use a mutator.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%{BKY_CONTROLS_IF_MSG_IF} %1",
+      "args0": [
+        {
+          "type": "input_value",
+          "name": "IF0",
+          "check": "Boolean"
+        }
+      ],
+      "message1": "%{BKY_CONTROLS_IF_MSG_THEN} %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "DO0"
+        }
+      ],
+      "message2": "%{BKY_CONTROLS_IF_MSG_ELSE} %1",
+      "args2": [
+        {
+          "type": "input_statement",
+          "name": "ELSE"
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": Blockly.Blocks.logic.HUE,
+      "tooltip": Blockly.Msg.CONTROLS_IF_TOOLTIP_2,
+      "helpUrl": Blockly.Msg.CONTROLS_IF_HELPURL
+    });
   }
 };
 

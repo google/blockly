@@ -200,3 +200,17 @@ Blockly.TOOLBOX_AT_LEFT = 2;
  * @const
  */
 Blockly.TOOLBOX_AT_RIGHT = 3;
+
+
+/**
+ * ENUM representing that an event is in the delete area of the trash can.
+ * @const
+ */
+Blockly.DELETE_AREA_TRASH = 1;
+
+/**
+ * ENUM representing that an event is in the delete area of the toolbox or
+ * flyout.
+ * @const
+ */
+Blockly.DELETE_AREA_TOOLBOX = 2;

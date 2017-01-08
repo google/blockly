@@ -54,9 +54,15 @@ Blockly.LONGPRESS = 750;
 
 /**
  * Prevent a sound from playing if another sound preceded it within this many
- * miliseconds.
+ * milliseconds.
  */
 Blockly.SOUND_LIMIT = 100;
+
+/**
+ * When dragging a block out of a stack, split the stack in two (true), or drag
+ * out the block healing the stack (false).
+ */
+Blockly.DRAG_STACK = true;
 
 /**
  * The richness of block colours, regardless of the hue.

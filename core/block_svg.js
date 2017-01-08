@@ -950,9 +950,16 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       Blockly.dragMode_ = Blockly.DRAG_FREE;
       Blockly.longStop_();
       this.workspace.setResizesEnabled(false);
-      if (this.parentBlock_) {
-        // Push this block to the very top of the stack.
-        this.unplug();
+
+      var disconnectEffect = !!this.parentBlock_;
+      // If in a stack, either split the stack, or pull out single block.
+      var healStack = !Blockly.DRAG_STACK;
+      if (e.metaKey) {
+        healStack = !healStack;
+      }
+      // Push this block to the very top of the stack.
+      this.unplug(healStack);
+      if (disconnectEffect) {
         var group = this.getSvgRoot();
         group.translate_ = 'translate(' + newXY.x + ',' + newXY.y + ')';
         this.disconnectUiEffect();

@@ -18,7 +18,7 @@
 	"EXTERNAL_INPUTS": "externe Eingänge",
 	"INLINE_INPUTS": "interne Eingänge",
 	"DELETE_BLOCK": "Baustein löschen",
-	"DELETE_X_BLOCKS": "Baustein %1 löschen",
+	"DELETE_X_BLOCKS": "%1 Bausteine löschen",
 	"DELETE_ALL_BLOCKS": "Alle %1 Bausteine löschen?",
 	"CLEAN_UP": "Bausteine aufräumen",
 	"COLLAPSE_BLOCK": "Baustein zusammenfalten",

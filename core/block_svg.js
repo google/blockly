@@ -954,7 +954,7 @@ Blockly.BlockSvg.prototype.onMouseMove_ = function(e) {
       var disconnectEffect = !!this.parentBlock_;
       // If in a stack, either split the stack, or pull out single block.
       var healStack = !Blockly.DRAG_STACK;
-      if (e.metaKey) {
+      if (e.altKey || e.ctrlKey || e.metaKey) {
         healStack = !healStack;
       }
       // Push this block to the very top of the stack.

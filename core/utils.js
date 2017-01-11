@@ -392,9 +392,12 @@ Blockly.utils.commonWordSuffix = function(array, opt_shortest) {
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
- * '%' characters may be self-escaped (%%). It will also replace string table
- * references (e.g., %{bky_my_msg} will be replaced with Blockly.Msg['MY_MSG']).
- * @param {string} message Text containing interpolation tokens.
+ * It will also replace string table references (e.g., %{bky_my_msg} and
+ * %{BKY_MY_MSG} will both be replaced with the value in
+ * Blockly.Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
+ * (e.g., '%%').
+ * @param {string} message Text which might contain string table references and
+ *     interpolation tokens.
  * @return {!Array.<string|number>} Array of strings and numbers.
  */
 Blockly.utils.tokenizeInterpolation = function(message) {
@@ -402,9 +405,10 @@ Blockly.utils.tokenizeInterpolation = function(message) {
 }
 
 /**
- * Parse a string with and replace string table references. For example,
- * %{bky_my_msg} will be replaced with the value in Blockly.Msg['MY_MSG'].
- * @param {string} message Text containing interpolation tokens.
+ * Replaces string table references in a message string. For example,
+ * %{bky_my_msg} and %{BKY_MY_MSG} will both be replaced with the value in
+ * Blockly.Msg['MY_MSG'].
+ * @param {string} message Text which might contain string table references.
  * @return {!string} String with message references replaced.
  */
 Blockly.utils.replaceMessageReferences = function(message) {
@@ -417,11 +421,12 @@ Blockly.utils.replaceMessageReferences = function(message) {
 /**
  * Internal implemention of the message reference and interpolation token
  * parsing used by tokenizeInterpolation() and replaceMessageReferences().
- * @param {string} message Text containing message references and interpolation
- *     tokens.
+ * @param {string} message Text which might contain string table references and
+ *     interpolation tokens.
  * @param {boolean} parseInterpolationTokens Option to parse numeric
  *     interpolation tokens (%1, %2, ...) when true.
  * @return {!Array.<string|number>} Array of strings and numbers.
+ * @private
  */
 Blockly.utils.tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   var tokens = [];

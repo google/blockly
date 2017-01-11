@@ -139,7 +139,7 @@ Blockly.Block = function(workspace, prototypeName, opt_id) {
     this.type = prototypeName;
     var prototype = Blockly.Blocks[prototypeName];
     goog.asserts.assertObject(prototype,
-        'Error: "%s" is an unknown language block.', prototypeName);
+        'Error: Unknown block type "%s".', prototypeName);
     goog.mixin(this, prototype);
   }
 
@@ -964,7 +964,10 @@ Blockly.Block.prototype.jsonInit = function(json) {
 
   // Set basic properties of block.
   if (json['colour'] !== undefined) {
-    this.setColour(json['colour']);
+    var rawValue = json['colour'];
+    var colour = goog.isString(rawValue) ?
+        Blockly.utils.replaceMessageReferences(rawValue) : rawValue;
+    this.setColour(colour);
   }
 
   // Interpolate the message blocks.
@@ -989,10 +992,14 @@ Blockly.Block.prototype.jsonInit = function(json) {
     this.setNextStatement(true, json['nextStatement']);
   }
   if (json['tooltip'] !== undefined) {
-    this.setTooltip(json['tooltip']);
+    var rawValue = json['tooltip'];
+    var localizedText = Blockly.utils.replaceMessageReferences(rawValue);
+    this.setTooltip(localizedText);
   }
   if (json['helpUrl'] !== undefined) {
-    this.setHelpUrl(json['helpUrl']);
+    var rawValue = json['helpUrl'];
+    var localizedValue = Blockly.utils.replaceMessageReferences(rawValue);
+    this.setHelpUrl(localizedValue);
   }
 };
 

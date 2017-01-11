@@ -85,7 +85,7 @@ var isNodeJS = !!(typeof module !== 'undefined' && module.exports &&
 
 if (isNodeJS) {
   var window = {};
-  require('../closure-library/closure/goog/bootstrap/nodejs');
+  require('closure-library');
 }
 
 window.BLOCKLY_DIR = (function() {
@@ -107,7 +107,7 @@ window.BLOCKLY_DIR = (function() {
 window.BLOCKLY_BOOT = function() {
   var dir = '';
   if (isNodeJS) {
-    require('../closure-library/closure/goog/bootstrap/nodejs');
+    require('closure-library');
     dir = 'blockly';
   } else {
     // Execute after Closure has loaded.

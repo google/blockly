@@ -21,6 +21,8 @@
   "private": true,
   "devDependencies": {
     "jshint": "latest"
+    "gulp": "^3.9.1",
+    "gulp-shell": "^0.5.2",
   },
   "jshintConfig": {
     "globalstrict": true,

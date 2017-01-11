@@ -445,8 +445,8 @@ Blockly.Blocks['logic_boolean'] = {
           "type": "field_dropdown",
           "name": "BOOL",
           "options": [
-            [Blockly.Msg.LOGIC_BOOLEAN_TRUE, "TRUE"],
-            [Blockly.Msg.LOGIC_BOOLEAN_FALSE, "FALSE"]
+            ["%{bky_logic_boolean_true}", "TRUE"],
+            ["%{bky_logic_boolean_false}", "FALSE"]
           ]
         }
       ],

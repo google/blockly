@@ -392,11 +392,43 @@ Blockly.utils.commonWordSuffix = function(array, opt_shortest) {
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
- * '%' characters may be self-escaped (%%).
- * @param {string} message Text containing interpolation tokens.
+ * It will also replace string table references (e.g., %{bky_my_msg} and
+ * %{BKY_MY_MSG} will both be replaced with the value in
+ * Blockly.Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
+ * (e.g., '%%').
+ * @param {string} message Text which might contain string table references and
+ *     interpolation tokens.
  * @return {!Array.<string|number>} Array of strings and numbers.
  */
 Blockly.utils.tokenizeInterpolation = function(message) {
+  return Blockly.utils.tokenizeInterpolation_(message, true);
+}
+
+/**
+ * Replaces string table references in a message string. For example,
+ * %{bky_my_msg} and %{BKY_MY_MSG} will both be replaced with the value in
+ * Blockly.Msg['MY_MSG'].
+ * @param {string} message Text which might contain string table references.
+ * @return {!string} String with message references replaced.
+ */
+Blockly.utils.replaceMessageReferences = function(message) {
+  var interpolatedResult = Blockly.utils.tokenizeInterpolation_(message, false);
+  // When parseInterpolationTokens == false, interpolatedResult should be at
+  // most length 1.
+  return interpolatedResult.length ? interpolatedResult[0] : "";
+}
+
+/**
+ * Internal implemention of the message reference and interpolation token
+ * parsing used by tokenizeInterpolation() and replaceMessageReferences().
+ * @param {string} message Text which might contain string table references and
+ *     interpolation tokens.
+ * @param {boolean} parseInterpolationTokens Option to parse numeric
+ *     interpolation tokens (%1, %2, ...) when true.
+ * @return {!Array.<string|number>} Array of strings and numbers.
+ * @private
+ */
+Blockly.utils.tokenizeInterpolation_ = function(message, parseInterpolationTokens) {
   var tokens = [];
   var chars = message.split('');
   chars.push('');  // End marker.
@@ -425,7 +457,7 @@ Blockly.utils.tokenizeInterpolation = function(message) {
       if (c == '%') {
         buffer.push(c);  // Escaped %: %%
         state = 0;
-      } else if ('0' <= c && c <= '9') {
+      } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
         state = 2;
         number = c;
         var text = buffer.join('');

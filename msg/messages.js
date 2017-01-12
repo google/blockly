@@ -48,6 +48,23 @@ goog.require('Blockly.Msg');
  * them to msg/json/qqq.json, and they show up in the translation console.
  */
 
+/// DO NOT TRANSLATE: Hue value for all logic blocks.
+Blockly.Msg.LOGIC_HUE = '210';
+/// DO NOT TRANSLATE: Hue value for all loop blocks.
+Blockly.Msg.LOOPS_HUE = '120';
+/// DO NOT TRANSLATE: Hue value for all math blocks.
+Blockly.Msg.MATH_HUE = '230';
+/// DO NOT TRANSLATE: Hue value for all text blocks.
+Blockly.Msg.TEXTS_HUE = '160';
+/// DO NOT TRANSLATE: Hue value for all list blocks.
+Blockly.Msg.LISTS_HUE = '260';
+/// DO NOT TRANSLATE: Hue value for all colour blocks.
+Blockly.Msg.COLOUR_HUE = '20';
+/// DO NOT TRANSLATE: Hue value for all variable blocks.
+Blockly.Msg.VARIABLES_HUE = '330';
+/// DO NOT TRANSLATE: Hue value for all procedure blocks.
+Blockly.Msg.PROCEDURES_HUE = '290';
+
 /// default name - A simple, general default name for a variable, preferably short.
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}

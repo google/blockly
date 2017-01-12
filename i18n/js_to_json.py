@@ -53,6 +53,9 @@ _INPUT_DEF_PATTERN = re.compile("""Blockly.Msg.(\w*)\s*=\s*'([^']*)';?$""")
 _INPUT_SYN_PATTERN = re.compile(
     """Blockly.Msg.(\w*)\s*=\s*Blockly.Msg.(\w*);""")
 
+_CONSTANT_DESCRIPTION_PATTERN = re.compile(
+    """DO NOT TRANSLATE.*""", re.IGNORECASE)
+
 def main():
   # Set up argument parser.
   parser = argparse.ArgumentParser(description='Create translation files.')
@@ -75,6 +78,7 @@ def main():
   # Read and parse input file.
   results = []
   synonyms = {}
+  constants = {}  # Values that are constant across all languages.
   description = ''
   infile = codecs.open(args.input_file, 'r', 'utf-8')
   for line in infile:
@@ -86,14 +90,21 @@ def main():
     else:
       match = _INPUT_DEF_PATTERN.match(line)
       if match:
-        result = {}
-        result['meaning'] = match.group(1)
-        result['source'] = match.group(2)
+        key = match.group(1)
+        value = match.group(2)
         if not description:
           print('Warning: No description for ' + result['meaning'])
-        result['description'] = description
+        if (description and _CONSTANT_DESCRIPTION_PATTERN.match(description)):
+          print('Found constant {0} with description: {1}'.
+                  format(key, description))
+          constants[key] = value
+        else:
+          result = {}
+          result['meaning'] = key
+          result['source'] = value
+          result['description'] = description
+          results.append(result)
         description = ''
-        results.append(result)
       else:
         match = _INPUT_SYN_PATTERN.match(line)
         if match:
@@ -115,6 +126,13 @@ def main():
     print("Wrote {0} synonym pairs to {1}.".format(
         len(synonyms), synonym_file_name))
 
+  # Create constants.json
+  constants_file_name = os.path.join(os.curdir, args.output_dir, 'constants.json')
+  with open(constants_file_name, 'w') as outfile:
+    json.dump(constants, outfile)
+  if not args.quiet:
+    print("Wrote {0} constant pairs to {1}.".format(
+        len(constants), synonym_file_name))
 
 if __name__ == '__main__':
   main()

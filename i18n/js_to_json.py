@@ -95,8 +95,6 @@ def main():
         if not description:
           print('Warning: No description for ' + result['meaning'])
         if (description and _CONSTANT_DESCRIPTION_PATTERN.match(description)):
-          print('Found constant {0} with description: {1}'.
-                  format(key, description))
           constants[key] = value
         else:
           result = {}

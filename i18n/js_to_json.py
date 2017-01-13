@@ -54,7 +54,7 @@ _INPUT_SYN_PATTERN = re.compile(
     """Blockly.Msg.(\w*)\s*=\s*Blockly.Msg.(\w*);""")
 
 _CONSTANT_DESCRIPTION_PATTERN = re.compile(
-    """DO NOT TRANSLATE.*""", re.IGNORECASE)
+    """{{Notranslate}}""", re.IGNORECASE)
 
 def main():
   # Set up argument parser.
@@ -94,7 +94,7 @@ def main():
         value = match.group(2)
         if not description:
           print('Warning: No description for ' + result['meaning'])
-        if (description and _CONSTANT_DESCRIPTION_PATTERN.match(description)):
+        if (description and _CONSTANT_DESCRIPTION_PATTERN.search(description)):
           constants[key] = value
         else:
           result = {}

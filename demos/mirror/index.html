@@ -21,7 +21,7 @@
   <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
     <a href="../index.html">Demos</a> &gt; Mirrored Blockly</h1>
 
-  <p>This is a simple demo of a master Blockly that controls a slave Blockly.
+  <p>This is a simple demo of a primary Blockly instance that controls a secondary Blockly instance with events.
   Open the JavaScript console to see the event passing.</p>
 
   <p>&rarr; More info on <a href="https://developers.google.com/blockly/guides/configure/web/events">events</a>&hellip;</p>
@@ -29,10 +29,10 @@
   <table width="100%">
     <tr>
       <td>
-        <div id="masterDiv" style="height: 480px; width: 600px;"></div>
+        <div id="primaryDiv" style="height: 480px; width: 600px;"></div>
       </td>
       <td>
-        <div id="slaveDiv" style="height: 480px; width: 430px;"></div>
+        <div id="secondaryDiv" style="height: 480px; width: 430px;"></div>
       </td>
     </tr>
   </table>
@@ -51,29 +51,29 @@
   </xml>
 
   <script>
-    // Inject master workspace.
-    var masterWorkspace = Blockly.inject('masterDiv',
+    // Inject primary workspace.
+    var primaryWorkspace = Blockly.inject('primaryDiv',
         {media: '../../media/',
          toolbox: document.getElementById('toolbox')});
-    // Inject slave workspace.
-    var slaveWorkspace = Blockly.inject('slaveDiv',
+    // Inject secondary workspace.
+    var seconaryWorkspace = Blockly.inject('secondaryDiv',
         {media: '../../media/',
          readOnly: true});
-    // Listen to events on master workspace.
-    masterWorkspace.addChangeListener(mirrorEvent);
+    // Listen to events on primary workspace.
+    primaryWorkspace.addChangeListener(mirrorEvent);
 
-    function mirrorEvent(masterEvent) {
-      if (masterEvent.type == Blockly.Events.UI) {
+    function mirrorEvent(primaryEvent) {
+      if (primaryEvent.type == Blockly.Events.UI) {
         return;  // Don't mirror UI events.
       }
       // Convert event to JSON.  This could then be transmitted across the net.
-      var json = masterEvent.toJson();
+      var json = primaryEvent.toJson();
       console.log(json);
       // Convert JSON back into an event, then execute it.
-      var slaveEvent = Blockly.Events.fromJson(json, slaveWorkspace);
-      slaveEvent.run(true);
+      var secondaryEvent = Blockly.Events.fromJson(json, seconaryWorkspace);
+      secondaryEvent.run(true);
     }
-  </script>
+</script>
 
 </body>
 </html>
